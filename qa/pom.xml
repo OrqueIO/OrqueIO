@@ -1,0 +1,199 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <artifactId>camunda-qa</artifactId>
+  <groupId>org.camunda.bpm.qa</groupId>
+
+  <packaging>pom</packaging>
+  <name>Camunda Platform - QA</name>
+
+  <parent>
+    <groupId>org.camunda.bpm</groupId>
+    <artifactId>camunda-database-settings</artifactId>
+    <relativePath>../database</relativePath>
+    <version>7.24.0-SNAPSHOT</version>
+  </parent>
+
+  <properties>
+    <!--
+      all maven properties used in QA/CI
+    -->
+    <!-- override mail port so subethawiser does not try to bind itself on port 25 -->
+    <mail.server.port>5025</mail.server.port>
+
+    <!-- wildfly -->
+    <wildfly.runtime.location>../wildfly-runtime/target/server/wildfly-${version.wildfly}</wildfly.runtime.location>
+    <wildfly26.runtime.location>../wildfly26-runtime/target/wildfly-${version.wildfly26}</wildfly26.runtime.location>
+
+    <jboss.http.port>38080</jboss.http.port>
+    <jboss.ajp.port>38009</jboss.ajp.port>
+    <jboss.https.port>38443</jboss.https.port>
+    <jboss.management-native.port>39999</jboss.management-native.port>
+    <jboss.management-http.port>39990</jboss.management-http.port>
+    <jboss.management-https.port>39443</jboss.management-https.port>
+    <jboss.osgi-http.port>38090</jboss.osgi-http.port>
+    <jboss.remoting.port>34447</jboss.remoting.port>
+    <jboss.txn-recovery-environment.port>34712</jboss.txn-recovery-environment.port>
+    <jboss.txn-status-manager.port>34713</jboss.txn-status-manager.port>
+    <jboss.mail-smtp.port>25</jboss.mail-smtp.port>
+
+    <!-- tomcat -->
+    <tomcat.connector.http.port>48080</tomcat.connector.http.port>
+    <tomcat.connector.http.redirectPort>48443</tomcat.connector.http.redirectPort>
+    <tomcat.connector.ajp.port>48009</tomcat.connector.ajp.port>
+    <tomcat.connector.ajp.redirectPort>48443</tomcat.connector.ajp.redirectPort>
+    <tomcat.server.port>48005</tomcat.server.port>
+
+    <tomcat.runtime.location>../tomcat-runtime/target/server/apache-tomcat-${version.tomcat}</tomcat.runtime.location>
+    <tomcat9.runtime.location>../tomcat9-runtime/target/server/apache-tomcat-${version.tomcat9}</tomcat9.runtime.location>
+
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.camunda.bpm</groupId>
+        <artifactId>camunda-core-internal-dependencies</artifactId>
+        <version>${project.version}</version>
+        <scope>import</scope>
+        <type>pom</type>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <modules>
+    <module>ensure-clean-db-plugin</module>
+  </modules>
+
+  <profiles>
+
+    <profile>
+      <id>distro</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <modules>
+        <module>wildfly-runtime</module>
+        <module>wildfly26-runtime</module>
+        <module>tomcat-runtime</module>
+        <module>tomcat9-runtime</module>
+        <module>integration-tests-webapps</module>
+        <module>integration-tests-engine</module>
+        <module>test-db-util</module>
+        <module>test-db-instance-migration</module>
+        <module>test-db-rolling-update</module>
+        <module>test-old-engine</module>
+        <module>performance-tests-engine</module>
+        <module>large-data-tests</module>
+        <module>integration-tests-engine-jakarta</module>
+      </modules>
+    </profile>
+
+    <!-- Server profiles -->
+
+    <profile>
+      <id>wildfly</id>
+      <modules>
+        <module>wildfly-runtime</module>
+      </modules>
+    </profile>
+    <profile>
+      <id>wildfly-domain</id>
+      <modules>
+        <module>wildfly-runtime</module>
+      </modules>
+    </profile>
+    
+    <profile>
+      <id>wildfly26</id>
+      <modules>
+        <module>wildfly26-runtime</module>
+      </modules>
+    </profile>
+    <profile>
+      <id>wildfly26-domain</id>
+      <modules>
+        <module>wildfly26-runtime</module>
+      </modules>
+    </profile>
+
+    <profile>
+      <id>tomcat9</id>
+      <modules>
+        <module>tomcat9-runtime</module>
+      </modules>
+    </profile>
+
+    <profile>
+      <id>tomcat</id>
+      <modules>
+        <module>tomcat-runtime</module>
+      </modules>
+    </profile>
+
+    <!-- Testsuite profiles -->
+
+    <profile>
+      <id>webapps-integration</id>
+      <modules>
+        <module>integration-tests-webapps</module>
+      </modules>
+    </profile>
+
+    <profile>
+      <id>engine-integration</id>
+      <modules>
+        <module>integration-tests-engine</module>
+      </modules>
+    </profile>
+    
+    <profile>
+      <id>engine-integration-jakarta</id>
+      <modules>
+        <module>integration-tests-engine-jakarta</module>
+      </modules>
+    </profile>
+
+    <profile>
+      <id>instance-migration</id>
+      <modules>
+        <module>test-db-util</module>
+        <module>test-db-instance-migration</module>
+      </modules>
+    </profile>
+
+    <profile>
+      <id>rolling-update</id>
+      <modules>
+        <module>test-db-util</module>
+        <module>test-db-rolling-update</module>
+      </modules>
+    </profile>
+
+    <profile>
+      <id>old-engine</id>
+      <modules>
+        <module>test-old-engine</module>
+      </modules>
+    </profile>
+
+    <profile>
+      <id>java11</id>
+      <activation>
+        <jdk>11</jdk>
+      </activation>
+      <dependencyManagement>
+        <dependencies>
+          <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-framework-bom</artifactId>
+            <version>${version.spring.framework}</version>
+            <type>pom</type>
+            <scope>import</scope>
+          </dependency>
+        </dependencies>
+      </dependencyManagement>
+    </profile>
+  </profiles>
+
+</project>

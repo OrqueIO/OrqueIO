@@ -1,0 +1,73 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>org.camunda.bpm.qa.upgrade</groupId>
+  <artifactId>camunda-qa-db-instance-migration</artifactId>
+
+  <packaging>pom</packaging>
+  <name>Camunda Platform - QA - upgrade - instance migration</name>
+
+  <parent>
+    <groupId>org.camunda.bpm.qa</groupId>
+    <artifactId>camunda-qa</artifactId>
+    <version>7.24.0-SNAPSHOT</version>
+  </parent>
+
+  <properties>
+    <jdbcBatchProcessing>true</jdbcBatchProcessing>
+    <!-- the `skip-test-fixture` property is used to skip the execution of `test-fixture`
+         modules for those versions that are not supported for a given database -->
+    <skip-test-fixture>false</skip-test-fixture>
+  </properties>
+
+  <modules>
+    <module>test-fixture-72</module>
+    <module>test-fixture-73</module>
+    <module>test-fixture-74</module>
+    <module>test-fixture-75</module>
+    <module>test-fixture-76</module>
+    <module>test-fixture-77</module>
+    <module>test-fixture-78</module>
+    <module>test-fixture-79</module>
+    <module>test-fixture-710</module>
+    <module>test-fixture-711</module>
+    <module>test-fixture-712</module>
+    <module>test-fixture-713</module>
+    <module>test-fixture-714</module>
+    <module>test-fixture-715</module>
+    <module>test-fixture-716</module>
+    <module>test-fixture-717</module>
+    <module>test-fixture-718</module>
+    <module>test-fixture-719</module>
+    <module>test-fixture-720</module>
+    <module>test-fixture-721</module>
+    <module>test-fixture-722</module>
+    <module>test-fixture-723</module>
+    <module>test-fixture-724</module>
+    <module>test-migration</module>
+  </modules>
+
+  <profiles>
+    <profile>
+      <id>cfgJdbcBatchProcessingOff</id>
+      <properties>
+        <jdbcBatchProcessing>false</jdbcBatchProcessing>
+      </properties>
+    </profile>
+  </profiles>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>sql-maven-plugin</artifactId>
+          <configuration>
+            <keepFormat>false</keepFormat>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+
+</project>
