@@ -1,0 +1,321 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+  <name>Camunda Platform - Java External Task Client - CLIENT</name>
+
+  <artifactId>camunda-external-task-client</artifactId>
+
+  <packaging>jar</packaging>
+
+  <parent>
+    <groupId>org.camunda.bpm</groupId>
+    <artifactId>camunda-external-task-client-root</artifactId>
+    <version>7.24.0-SNAPSHOT</version>
+  </parent>
+
+  <properties>
+    <engine.runtime>${project.build.directory}/camunda-tomcat</engine.runtime>
+    <tomcat.runtime>${engine.runtime}/server/apache-tomcat-${version.tomcat}</tomcat.runtime>
+    <http.port>${tomcat.connector.http.port}</http.port>
+
+    <tomcat.connector.http.port>50080</tomcat.connector.http.port>
+    <tomcat.connector.http.redirectPort>50443</tomcat.connector.http.redirectPort>
+    <tomcat.connector.ajp.port>50009</tomcat.connector.ajp.port>
+    <tomcat.connector.ajp.redirectPort>50443</tomcat.connector.ajp.redirectPort>
+    <tomcat.server.port>50005</tomcat.server.port>
+
+    <cargo.timeout>240000</cargo.timeout>
+    <cargo.deploy.timeout>60000</cargo.deploy.timeout>
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.camunda.bpm</groupId>
+        <artifactId>camunda-core-internal-dependencies</artifactId>
+        <version>${project.version}</version>
+        <scope>import</scope>
+        <type>pom</type>
+      </dependency>
+      <dependency>
+        <groupId>com.fasterxml.jackson</groupId>
+        <artifactId>jackson-bom</artifactId>
+        <version>${version.jackson}</version>
+        <scope>import</scope>
+        <type>pom</type>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+
+    <!-- mandatory dependencies -->
+    <dependency>
+      <groupId>org.camunda.commons</groupId>
+      <artifactId>camunda-commons-logging</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.camunda.commons</groupId>
+      <artifactId>camunda-commons-typed-values</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.httpcomponents.client5</groupId>
+      <artifactId>httpclient5</artifactId>
+      <version>${version.httpclient5}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+    </dependency>
+
+
+    <!-- test dependencies -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>jcl-over-slf4j</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.camunda.bpm.model</groupId>
+      <artifactId>camunda-bpmn-model</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.skyscreamer</groupId>
+      <artifactId>jsonassert</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.camunda.spin</groupId>
+      <artifactId>camunda-spin-dataformat-all</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.camunda.bpm.qa</groupId>
+      <artifactId>engine-variable-test</artifactId>
+      <version>${project.version}</version>
+      <classifier>classes</classifier>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.camunda.bpm.tomcat</groupId>
+      <artifactId>camunda-tomcat-assembly</artifactId>
+      <version>${project.version}</version>
+      <type>tar.gz</type>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>slf4j-api</artifactId>
+          <groupId>org.slf4j</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <dependency>
+      <groupId>org.camunda.bpm</groupId>
+      <artifactId>camunda-engine-rest-jakarta</artifactId>
+      <scope>test</scope>
+      <type>war</type>
+      <classifier>tomcat</classifier>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.camunda.bpm.qa</groupId>
+      <artifactId>engine-variable-test</artifactId>
+      <scope>test</scope>
+      <type>war</type>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.sun.xml.bind</groupId>
+      <artifactId>jaxb-impl</artifactId>
+      <version>${version.xml.jaxb-impl4}</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+  </dependencies>
+
+  <build>
+    <plugins>
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>add-it-source</id>
+            <phase>generate-test-sources</phase>
+            <goals>
+              <goal>add-test-source</goal>
+            </goals>
+            <configuration>
+              <sources>
+                <source>src/it/java</source>
+              </sources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <trimStackTrace>false</trimStackTrace>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>unpack</goal>
+            </goals>
+            <configuration>
+              <skip>${skipTests}</skip>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>org.camunda.bpm.tomcat</groupId>
+                  <artifactId>camunda-tomcat-assembly</artifactId>
+                  <version>${project.version}</version>
+                  <type>tar.gz</type>
+                  <outputDirectory>${engine.runtime}</outputDirectory>
+                  <overWrite>true</overWrite>
+                </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <configuration>
+          <redirectTestOutputToFile>true</redirectTestOutputToFile>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>integration-test</goal>
+              <goal>verify</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.codehaus.cargo</groupId>
+        <artifactId>cargo-maven3-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>start-container</id>
+            <phase>pre-integration-test</phase>
+            <goals>
+              <goal>start</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>stop-container</id>
+            <phase>post-integration-test</phase>
+            <goals>
+              <goal>stop</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <skip>${skipTests}</skip>
+          <!-- Container configuration -->
+          <container>
+            <type>installed</type>
+            <containerId>tomcat10x</containerId>
+            <append>false</append>
+            <home>${tomcat.runtime}</home>
+            <timeout>${cargo.timeout}</timeout>
+            <log>${tomcat.runtime}/logs/catalina.out</log>
+          </container>
+          <configuration>
+            <type>standalone</type>
+            <home>${project.build.directory}/cargo-config-tomcat</home>
+            <properties>
+              <cargo.servlet.port>${tomcat.connector.http.port}</cargo.servlet.port>
+              <cargo.tomcat.ajp.port>${tomcat.connector.ajp.port}</cargo.tomcat.ajp.port>
+              <cargo.start.jvmargs>-Djava.security.egd=file:/dev/./urandom</cargo.start.jvmargs>
+            </properties>
+            <files>
+              <copy>
+                <configfile>true</configfile>
+                <file>${project.basedir}/src/it/resources/tomcat/bpm-platform.xml</file>
+                <tofile>conf/bpm-platform.xml</tofile>
+                <overwrite>true</overwrite>
+              </copy>
+            </files>
+          </configuration>
+          <deployables>
+            <deployable>
+              <groupId>org.camunda.bpm</groupId>
+              <artifactId>camunda-engine-rest-jakarta</artifactId>
+              <type>war</type>
+              <classifier>tomcat</classifier>
+              <pingURL>
+                http://localhost:${tomcat.connector.http.port}/engine-rest/engine/default/process-definition
+              </pingURL>
+              <pingTimeout>${cargo.deploy.timeout}</pingTimeout>
+              <properties>
+                <context>engine-rest</context>
+              </properties>
+            </deployable>
+            <deployable>
+              <groupId>org.camunda.bpm.qa</groupId>
+              <artifactId>engine-variable-test</artifactId>
+              <type>war</type>
+            </deployable>
+          </deployables>
+          <wait>false</wait>
+        </configuration>
+      </plugin>
+
+    </plugins>
+
+    <testResources>
+      <testResource>
+        <directory>src/it/resources</directory>
+      </testResource>
+      <testResource>
+        <directory>src/test/resources</directory>
+      </testResource>
+    </testResources>
+
+  </build>
+
+</project>

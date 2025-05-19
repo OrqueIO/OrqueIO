@@ -1,0 +1,957 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <name>Camunda Platform - engine</name>
+  <artifactId>camunda-engine</artifactId>
+
+  <parent>
+    <groupId>org.camunda.bpm</groupId>
+    <artifactId>camunda-database-settings</artifactId>
+    <relativePath>../database</relativePath>
+    <version>7.24.0-SNAPSHOT</version>
+  </parent>
+
+  <dependencyManagement>
+    <dependencies>
+
+      <dependency>
+        <groupId>org.camunda.bpm</groupId>
+        <artifactId>camunda-core-internal-dependencies</artifactId>
+        <version>${project.version}</version>
+        <scope>import</scope>
+        <type>pom</type>
+      </dependency>
+
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-framework-bom</artifactId>
+        <version>${version.spring.framework6}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>jakarta.platform</groupId>
+        <artifactId>jakarta.jakartaee-bom</artifactId>
+        <version>${version.jakarta-ee-spec}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+
+    <!-- camunda dependencies -->
+
+    <dependency>
+      <groupId>org.camunda.bpm.model</groupId>
+      <artifactId>camunda-bpmn-model</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.camunda.bpm.model</groupId>
+      <artifactId>camunda-cmmn-model</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.camunda.bpm.juel</groupId>
+      <artifactId>camunda-juel</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.camunda.bpm.dmn</groupId>
+      <artifactId>camunda-engine-dmn</artifactId>
+      <exclusions>
+        <!-- these exclusions are needed when building with Maven >= 3.3
+          see CAM-11822 for details -->
+        <exclusion>
+          <groupId>com.lihaoyi</groupId>
+          <artifactId>fastparse_2.13</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.lihaoyi</groupId>
+          <artifactId>sourcecode_2.13</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.lihaoyi</groupId>
+          <artifactId>geny_2.13</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.scala-lang</groupId>
+          <artifactId>scala-library</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <dependency>
+      <groupId>org.camunda.commons</groupId>
+      <artifactId>camunda-commons-logging</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.camunda.commons</groupId>
+      <artifactId>camunda-commons-typed-values</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.mybatis</groupId>
+      <artifactId>mybatis</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-beans</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>joda-time</groupId>
+      <artifactId>joda-time</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+    </dependency>
+
+    <!-- provided dependencies -->
+
+    <dependency>
+      <groupId>org.apache.ant</groupId>
+      <artifactId>ant</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.geronimo.specs</groupId>
+      <artifactId>geronimo-jta_1.1_spec</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.fasterxml.uuid</groupId>
+      <artifactId>java-uuid-generator</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.jboss.spec</groupId>
+      <artifactId>jboss-javaee-web-6.0</artifactId>
+      <type>pom</type>
+      <scope>provided</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>org.jboss.spec.javax.xml.bind</groupId>
+          <artifactId>jboss-jaxb-api_2.2_spec</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.jboss.spec.javax.servlet.jsp</groupId>
+          <artifactId>jboss-jsp-api_2.2_spec</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <dependency>
+      <groupId>jakarta.transaction</groupId>
+      <artifactId>jakarta.transaction-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>jakarta.servlet</groupId>
+      <artifactId>jakarta.servlet-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>jakarta.ejb</groupId>
+      <artifactId>jakarta.ejb-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.tomcat</groupId>
+      <artifactId>catalina</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.jboss</groupId>
+      <artifactId>jboss-vfs</artifactId>
+      <version>3.1.0.Final</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-email</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <!-- test dependencies  -->
+
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>commons-collections</groupId>
+      <artifactId>commons-collections</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.subethamail</groupId>
+      <artifactId>subethasmtp-wiser</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <!-- required for DiagramQueryTest -->
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.camunda.commons</groupId>
+      <artifactId>camunda-commons-testing</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.camunda.bpm</groupId>
+      <artifactId>camunda-test-utils-testcontainers</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.hamcrest</groupId>
+      <artifactId>hamcrest-library</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>jcl-over-slf4j</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>jul-to-slf4j</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.github.tomakehurst</groupId>
+      <artifactId>wiremock</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>28.2-jre</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.groovy</groupId>
+      <artifactId>groovy-jsr223</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.python</groupId>
+      <artifactId>jython</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.jruby</groupId>
+      <artifactId>jruby-complete</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.graalvm.js</groupId>
+      <artifactId>js</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.graalvm.js</groupId>
+      <artifactId>js-scriptengine</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.camunda.bpm</groupId>
+      <artifactId>camunda-bpm-archunit</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.github.h-thurow</groupId>
+      <artifactId>simple-jndi</artifactId>
+      <version>0.24.0</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+
+  <properties>
+    <test.includes />
+    <!-- without a special test profile we don't want to exclude anything, this expressions should never match -->
+    <test.excludes>$.</test.excludes>
+    <history.level>full</history.level>
+    <mail.server.port>5025</mail.server.port>
+    <authorizationCheckRevokes>auto</authorizationCheckRevokes>
+    <jdbcBatchProcessing>true</jdbcBatchProcessing>
+
+    <!-- We shade artifacts into the jar, so we need to generate a dependency BOM
+    for the license book -->
+    <skip-third-party-bom>false</skip-third-party-bom>
+
+    <camunda.artifact>
+      org.camunda.bpm
+    </camunda.artifact>
+    <camunda.osgi.export.pkg>
+      !${camunda.artifact}.engine.variable.*,
+      ${camunda.artifact},
+      ${camunda.artifact}.application.*,
+      ${camunda.artifact}.container.*,
+      ${camunda.artifact}.engine.*
+    </camunda.osgi.export.pkg>
+    <camunda.osgi.import.additional>
+      !com.google.gson.*,
+      junit*;resolution:=optional,
+      org.junit*;resolution:=optional,
+      com.sun*;resolution:=optional,
+      javax.persistence*;resolution:=optional,
+      javax.servlet*;resolution:=optional,
+      javax.transaction*;resolution:=optional,
+      javax.ejb*;resolution:=optional,
+      javax.xml*;resolution:=optional,
+      javax.mail*;resolution:=optional,
+      org.apache.catalina*;resolution:=optional,
+      org.apache.commons.mail;resolution:=optional,
+      org.apache.tools.ant*;resolution:=optional,
+      org.apache.xerces*;resolution:=optional,
+      org.springframework*;resolution:=optional,
+      com.fasterxml*;resolution:=optional,
+      org.jboss.vfs*;resolution:=optional
+    </camunda.osgi.import.additional>
+  </properties>
+
+  <build>
+    <!-- filter test configurations to inject properties -->
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+      </resource>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+        <includes>
+          <include>org/camunda/bpm/engine/product-info.properties</include>
+        </includes>
+      </resource>
+    </resources>
+    <testResources>
+      <testResource>
+        <directory>src/test/resources</directory>
+      </testResource>
+      <testResource>
+        <directory>src/test/resources</directory>
+        <filtering>true</filtering>
+        <includes>
+          <include>**/camunda.cfg.xml</include>
+          <include>**/*camunda.cfg.xml</include>
+          <include>**/camunda.cfg.*.xml</include>
+          <include>testconfig.properties</include>
+          <include>database.properties</include>
+          <include>**/testcontainers.properties</include>
+        </includes>
+      </testResource>
+    </testResources>
+
+    <plugins>
+      <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <failIfNoTests>false</failIfNoTests>
+          <trimStackTrace>false</trimStackTrace>
+          <redirectTestOutputToFile>true</redirectTestOutputToFile>
+          <includes>
+           <include>%regex[.*(${test.includes}).*Test.*.class]</include>
+          </includes>
+          <excludes>
+            <exclude>**/*TestCase.java</exclude>
+            <exclude>%regex[.*(${test.excludes}).*Test.*.class]</exclude>
+          </excludes>
+          <dependenciesToScan>
+            <dependency>org.camunda.bpm:camunda-bpm-archunit</dependency>
+          </dependenciesToScan>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>cleanVersions</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>bundle-manifest</id>
+            <phase>process-classes</phase>
+            <goals>
+              <goal>manifest</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>test-jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <configuration>
+          <promoteTransitiveDependencies>false</promoteTransitiveDependencies>
+          <createSourcesJar>true</createSourcesJar>
+          <createDependencyReducedPom>true</createDependencyReducedPom>
+          <keepDependenciesWithProvidedScope>true</keepDependenciesWithProvidedScope>
+          <artifactSet>
+            <excludes>
+              <exclude>org.camunda.bpm.model:*</exclude>
+              <exclude>org.camunda.bpm.dmn:*</exclude>
+              <exclude>org.camunda.bpm.juel:*</exclude>
+              <exclude>org.camunda.commons:*</exclude>
+              <exclude>org.camunda.feel:*</exclude>
+
+              <exclude>org.springframework:*</exclude>
+              <exclude>org.slf4j:*</exclude>
+              <exclude>com.sun.mail:*</exclude>
+              <exclude>javax.activation:*</exclude>
+              <exclude>org.mybatis:mybatis:*</exclude>
+              <exclude>joda-time:*</exclude>
+            </excludes>
+          </artifactSet>
+          <relocations>
+            <relocation>
+              <pattern>com.google.gson</pattern>
+              <shadedPattern>camundajar.impl.com.google.gson</shadedPattern>
+            </relocation>
+          </relocations>
+          <transformers>
+            <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+          </transformers>
+          <shadeTestJar>true</shadeTestJar>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>copy-upgrade-scripts-liquibase</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <target>
+
+                <!-- copy all upgrade scripts after 7.15 -->
+                <mkdir dir="target/classes/org/camunda/bpm/engine/db/liquibase/upgrade" />
+                <copy todir="target/classes/org/camunda/bpm/engine/db/liquibase/upgrade">
+                  <fileset dir="target/classes/org/camunda/bpm/engine/db/upgrade" excludes="*_6.*_*,*_7.0_*,*_7.1_*,*_7.2_*,*_7.3_*,*_7.4_*,*_7.5_*,*_7.6_*,*_7.7_*, *_7.8_*,*_7.9_*,*_7.10_*,*_7.11_*,*_7.12_*,*_7.13_*,*_7.14_*,*_7.15_*" />
+                </copy>
+
+              </target>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+    <pluginManagement>
+      <plugins>
+        <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+        <plugin>
+          <groupId>org.eclipse.m2e</groupId>
+          <artifactId>lifecycle-mapping</artifactId>
+          <version>1.0.0</version>
+          <configuration>
+            <lifecycleMappingMetadata>
+              <pluginExecutions>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>
+                      maven-bundle-plugin
+                    </artifactId>
+                    <versionRange>
+                      [2.1.0,)
+                    </versionRange>
+                    <goals>
+                      <goal>cleanVersions</goal>
+                      <goal>manifest</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <ignore />
+                  </action>
+                </pluginExecution>
+              </pluginExecutions>
+            </lifecycleMappingMetadata>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+
+  <profiles>
+    <profile>
+      <id>distro</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-source-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>attach-sources</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>jar-no-fork</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <!--  database qa profile -->
+    <profile>
+      <id>database</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>database-test-drop-schema-before-test</id>
+                <phase>process-test-classes</phase>
+                <goals>
+                  <goal>java</goal>
+                </goals>
+              </execution>
+              <execution>
+                <id>database-test-drop-schema-after-test</id>
+                <phase>prepare-package</phase>
+                <goals>
+                  <goal>java</goal>
+                </goals>
+              </execution>
+            </executions>
+            <configuration>
+              <mainClass>org.camunda.bpm.engine.impl.db.DbSchemaDrop</mainClass>
+              <classpathScope>test</classpathScope>
+              <cleanupDaemonThreads>false</cleanupDaemonThreads>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <!--  check history audit -->
+    <profile>
+      <id>cfghistoryaudit</id>
+      <properties>
+        <history.level>audit</history.level>
+      </properties>
+    </profile>
+
+    <!--  check history activity -->
+    <profile>
+      <id>cfghistoryactivity</id>
+      <properties>
+        <history.level>activity</history.level>
+      </properties>
+    </profile>
+
+    <!--  check history none -->
+    <profile>
+      <id>cfghistorynone</id>
+      <properties>
+        <history.level>none</history.level>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>cfgJdbcBatchProcessingOff</id>
+      <properties>
+        <jdbcBatchProcessing>false</jdbcBatchProcessing>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>h2-in-memory</id>
+      <properties>
+        <forkCount>0.5C</forkCount>
+      </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <configuration>
+              <failIfNoTests>false</failIfNoTests>
+              <trimStackTrace>false</trimStackTrace>
+              <redirectTestOutputToFile>true</redirectTestOutputToFile>
+              <reuseForks>true</reuseForks>
+              <systemPropertyVariables>
+                <jdbcUrl>jdbc:h2:mem:camunda_${surefire.forkNumber};DB_CLOSE_DELAY=1000</jdbcUrl>
+              </systemPropertyVariables>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <profile>
+      <id>mysql</id>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <configuration>
+              <failIfNoTests>false</failIfNoTests>
+              <trimStackTrace>false</trimStackTrace>
+              <redirectTestOutputToFile>true</redirectTestOutputToFile>
+              <excludes combine.children="append">
+                <exclude>**/CompetingMessageCorrelationTest.java</exclude>
+              </excludes>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <!-- check for api differences between latest minor release -->
+    <profile>
+      <id>check-api-compatibility</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <configuration>
+              <skipTests>true</skipTests>
+            </configuration>
+          </plugin>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>clirr-maven-plugin</artifactId>
+            <configuration>
+              <comparisonVersion>${camunda.version.old}</comparisonVersion>
+              <logResults>true</logResults>
+              <excludes>
+                <exclude>org/camunda/bpm/*/impl/**</exclude>
+                <exclude>org/camunda/bpm/engine/test/ProcessEngineRule</exclude>
+                <exclude>camundajar/**/*</exclude>
+              </excludes>
+            </configuration>
+            <executions>
+              <execution>
+                <id>all</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>check-no-fork</goal>
+                </goals>
+                <configuration>
+                  <textOutputFile>${project.build.directory}/clirr-all.txt</textOutputFile>
+                  <failOnWarning>false</failOnWarning>
+                  <failOnError>false</failOnError>
+                </configuration>
+              </execution>
+              <execution>
+                <id>restrictive</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>check-no-fork</goal>
+                </goals>
+                <configuration>
+                  <textOutputFile>${project.build.directory}/clirr-restrictive.txt</textOutputFile>
+                  <failOnWarning>true</failOnWarning>
+                  <ignoredDifferencesFile>.clirr-jenkins-ignore.xml</ignoredDifferencesFile>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <profile>
+      <id>check-plugins</id>
+      <dependencies>
+        <dependency>
+          <groupId>org.camunda.bpm</groupId>
+          <artifactId>camunda-engine-plugin-spin</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>org.camunda.spin</groupId>
+          <artifactId>camunda-spin-dataformat-all</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>org.camunda.bpm</groupId>
+          <artifactId>camunda-engine-plugin-connect</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>org.camunda.connect</groupId>
+          <artifactId>camunda-connect-connectors-all</artifactId>
+          <exclusions>
+            <exclusion>
+              <groupId>org.camunda.connect</groupId>
+              <artifactId>camunda-connect-http-client</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>org.camunda.connect</groupId>
+              <artifactId>camunda-connect-soap-http-client</artifactId>
+            </exclusion>
+          </exclusions>
+        </dependency>
+      </dependencies>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>copy-camunda-cfg</id>
+                <phase>process-test-classes</phase>
+                <goals>
+                  <goal>run</goal>
+                </goals>
+                <configuration>
+                  <target>
+                    <echo message="Copying camunda.cfg.plugins.xml to camunda.cfg.xml" />
+                    <copy file="target/test-classes/camunda.cfg.plugins.xml" tofile="target/test-classes/camunda.cfg.xml" overwrite="true" />
+                  </target>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <configuration>
+              <argLine>-Xmx968m</argLine>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <!-- profile for running testsuite with database table prefix -->
+    <profile>
+      <id>db-table-prefix</id>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>database-test-create-schema</id>
+                <phase>process-test-classes</phase>
+                <goals>
+                  <goal>run</goal>
+                </goals>
+                <configuration>
+                  <target>
+                    <copy file="target/test-classes/camunda.cfg.prefix.xml" tofile="target/test-classes/camunda.cfg.xml" overwrite="true" />
+                  </target>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <configuration>
+              <excludes>
+                <exclude>**/*TestCase.java</exclude>
+                <!-- the test requires multiple process engines in parallel but
+                     the DbSchemaPrefixTestHelper will first drop the schema. So
+                     it cannot be used with this profile at the moment -->
+                <exclude>**/DeploymentAwareJobExecutorTest.java</exclude>
+                <!-- this test drops the database an creates two schemas and
+                     it can be excluded for this test profile as it tests
+                     the same except for the whole unit test suite -->
+                <exclude>**/DatabaseTablePrefixTest.java</exclude>
+                <exclude>**/DeploymentTest.java</exclude>
+				<exclude>**/DeploymentAutoHistoryTest.java</exclude>
+                <exclude>**/CustomHistoryLevelUserOperationLogTest.java</exclude>
+                <exclude>**/CustomHistoryLevelWithoutUserOperationLogTest.java</exclude>
+                <exclude>**/CustomHistoryLevelIncidentTest.java</exclude>
+                <exclude>**/CustomHistoryLevelIdentityLinkTest.java</exclude>
+                <exclude>**/removaltime/cleanup/HistoryCleanupScheduler*Test.java</exclude>
+                <exclude>**/HistoryCleanupDisabledOnBootstrapTest.java</exclude>
+                <exclude>**/LoginAttemptsTest.java</exclude>
+                <exclude>**/ConcurrentHistoryCleanupUpdateOfFailingJobTest.java</exclude>
+              </excludes>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <profile>
+     <id>exclude-post-jdk15-tests</id>
+      <activation>
+        <jdk>[15,)</jdk>
+      </activation>
+      <build>
+        <pluginManagement>
+          <plugins>
+            <plugin>
+              <artifactId>maven-surefire-plugin</artifactId>
+              <configuration>
+                <!-- Nashorn is not part of the JDK anymore in Java 15+ -->
+                <excludes combine.children="append">
+                  <exclude>**/*NashornTest.java</exclude>
+                </excludes>
+              </configuration>
+            </plugin>
+          </plugins>
+        </pluginManagement>
+      </build>
+    </profile>
+
+    <!-- test profiles -->
+    <profile>
+     <id>testBpmn</id>
+     <properties>
+      <test.includes>bpmn</test.includes>
+     </properties>
+    </profile>
+    <profile>
+     <id>testCmmn</id>
+     <properties>
+      <test.includes>cmmn</test.includes>
+     </properties>
+    </profile>
+    <profile>
+     <id>testDmn</id>
+     <properties>
+      <test.includes>dmn</test.includes>
+     </properties>
+    </profile>
+    <profile>
+     <id>testBpmnCmmn</id>
+     <properties>
+      <test.includes>bpmn|cmmn</test.includes>
+     </properties>
+    </profile>
+    <profile>
+     <id>testExceptBpmn</id>
+     <properties>
+      <test.excludes>bpmn</test.excludes>
+     </properties>
+    </profile>
+    <profile>
+     <id>testExceptCmmn</id>
+     <properties>
+      <test.excludes>cmmn</test.excludes>
+     </properties>
+    </profile>
+    <profile>
+     <id>testExceptDmn</id>
+     <properties>
+      <test.excludes>dmn</test.excludes>
+     </properties>
+    </profile>
+    <profile>
+     <id>testExceptBpmnCmmn</id>
+     <properties>
+      <test.excludes>bpmn|cmmn</test.excludes>
+     </properties>
+    </profile>
+
+    <profile>
+      <id>java11</id>
+      <activation>
+        <jdk>11</jdk>
+      </activation>
+      <dependencyManagement>
+        <dependencies>
+          <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-framework-bom</artifactId>
+            <version>${version.spring.framework}</version>
+            <type>pom</type>
+            <scope>import</scope>
+          </dependency>
+        </dependencies>
+      </dependencyManagement>
+    </profile>
+
+  </profiles>
+
+</project>
