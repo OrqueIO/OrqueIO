@@ -2,19 +2,19 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.camunda</groupId>
-    <artifactId>camunda-bpm-release-parent</artifactId>
+    <groupId>io.orqueio</groupId>
+    <artifactId>release-parent</artifactId>
     <version>2.5.0</version>
     <!-- do not remove empty tag - http://jira.codehaus.org/browse/MNG-4687 -->
     <relativePath />
   </parent>
 
-  <groupId>org.camunda.bpm</groupId>
-  <artifactId>camunda-root</artifactId>
-  <version>7.24.0-SNAPSHOT</version>
+  <groupId>io.orqueio.bpm</groupId>
+  <artifactId>orqueio-root</artifactId>
+  <version>1.0</version>
   <packaging>pom</packaging>
-  <name>Camunda Platform - Root Pom</name>
-  <inceptionYear>2013</inceptionYear>
+  <name>OrqueIO Platform - Root Pom</name>
+  <inceptionYear>2025</inceptionYear>
 
   <description>
     This pom defines the modules that make up the build.
@@ -318,7 +318,7 @@
   </profiles>
 
   <repositories>
-    <repository>
+<!--    <repository>
       <id>maven-central</id>
       <name>Maven Central</name>
       <url>https://repo1.maven.org/maven2</url>
@@ -327,16 +327,18 @@
       </snapshots>
     </repository>
     <repository>
-      <!-- Required for local builds by community users on master branch -->
+      &lt;!&ndash; Required for local builds by community users on master branch &ndash;&gt;
       <id>camunda-public-repository</id>
       <name>Camunda Platform Maven Repository</name>
       <url>https://artifacts.camunda.com/artifactory/public/</url>
-    </repository>
+    </repository>-->
     <repository>
       <!-- Required for local builds by developers on maintainance branches -->
-      <id>camunda-nexus</id>
-      <name>Camunda Nexus</name>
-      <url>https://artifacts.camunda.com/artifactory/internal</url>
+      <id>orque-io-repository</id>
+      <name>OrqueIO Nexus</name>
+<!--
+      <url>https://artifacts.camunda.com/artifactory/internal</url> // FIXME
+-->
     </repository>
   </repositories>
 
@@ -348,31 +350,31 @@
   </licenses>
 
   <organization>
-    <name>camunda services GmbH</name>
-    <url>http://www.camunda.com</url>
+    <name>OrqueIO services GmbH</name>
+    <url>https://www.codeonce.fr/</url>
   </organization>
 
-  <url>http://www.camunda.org</url>
+  <url>https://www.codeonce.fr/</url>
 
   <developers>
     <developer>
-      <id>camunda.org</id>
-      <name>Camunda Platform Community</name>
-      <organization>camunda.org</organization>
-      <organizationUrl>http://camunda.org</organizationUrl>
+      <id>OrqueIO</id>
+      <name>OrqueIO Community</name>
+      <organization>codeonce.fr</organization>
+      <organizationUrl>https://www.codeonce.fr/</organizationUrl>
     </developer>
   </developers>
 
   <scm>
-    <url>https://github.com/camunda/camunda-bpm-platform</url>
-    <connection>scm:git:git@github.com:camunda/camunda-bpm-platform.git</connection>
-    <developerConnection>scm:git:git@github.com:camunda/camunda-bpm-platform.git</developerConnection>
-    <tag>HEAD</tag>
+    <url>https://github.com/OrqueIO/OrqueIO</url>
+    <connection>scm:git:git@github.com:OrqueIO/OrqueIO.git</connection>
+    <developerConnection>scm:git:git@github.com:OrqueIO/OrqueIO.git</developerConnection>
+    <tag>OrqueIO-1.0</tag>
   </scm>
 
   <issueManagement>
-    <system>Jira</system>
-    <url>https://app.camunda.com/jira/browse/CAM/</url>
+    <system>GitHub Issues</system>
+    <url>https://github.com/OrqueIO/OrqueIO/issues</url>
   </issueManagement>
 
 </project>
