@@ -14,26 +14,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.example.invoice;
+package io.orqueio.bpm.example.invoice;
 
-import static org.camunda.bpm.engine.variable.Variables.createVariables;
-import static org.camunda.bpm.engine.variable.Variables.fileValue;
+import static io.orqueio.bpm.engine.variable.Variables.createVariables;
+import static io.orqueio.bpm.engine.variable.Variables.fileValue;
 
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.logging.Logger;
-import org.camunda.bpm.application.ProcessApplicationReference;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.RepositoryService;
-import org.camunda.bpm.engine.authorization.Groups;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.util.ClockUtil;
-import org.camunda.bpm.engine.impl.util.IoUtil;
-import org.camunda.bpm.engine.repository.ProcessDefinition;
-import org.camunda.bpm.engine.repository.ProcessDefinitionQuery;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.task.Task;
+import io.orqueio.bpm.application.ProcessApplicationReference;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.RepositoryService;
+import io.orqueio.bpm.engine.authorization.Groups;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.util.ClockUtil;
+import io.orqueio.bpm.engine.impl.util.IoUtil;
+import io.orqueio.bpm.engine.repository.ProcessDefinition;
+import io.orqueio.bpm.engine.repository.ProcessDefinitionQuery;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.task.Task;
 
 public class InvoiceApplicationHelper {
 

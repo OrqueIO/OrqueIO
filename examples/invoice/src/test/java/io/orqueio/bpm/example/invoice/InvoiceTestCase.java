@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.example.invoice;
+package io.orqueio.bpm.example.invoice;
 
-import static org.camunda.bpm.engine.variable.Variables.fileValue;
+import static io.orqueio.bpm.engine.variable.Variables.fileValue;
 
 import java.io.InputStream;
 import java.util.Arrays;
@@ -24,14 +24,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.camunda.bpm.engine.runtime.Job;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.task.IdentityLink;
-import org.camunda.bpm.engine.task.Task;
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.engine.test.ProcessEngineTestCase;
-import org.camunda.bpm.engine.variable.VariableMap;
-import org.camunda.bpm.engine.variable.Variables;
+import io.orqueio.bpm.engine.runtime.Job;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.task.IdentityLink;
+import io.orqueio.bpm.engine.task.Task;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.test.ProcessEngineTestCase;
+import io.orqueio.bpm.engine.variable.VariableMap;
+import io.orqueio.bpm.engine.variable.Variables;
 
 public class InvoiceTestCase extends ProcessEngineTestCase {
 
