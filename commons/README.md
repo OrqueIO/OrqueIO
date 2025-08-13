@@ -21,8 +21,8 @@ This will ensure that your project uses all commons libraries in the same versio
 <dependencyManagement>
   <dependencies>
     <dependency>
-      <groupId>org.camunda.commons</groupId>
-      <artifactId>camunda-commons-bom</artifactId>
+      <groupId>io.orqueio.commons</groupId>
+      <artifactId>orqueio-commons-bom</artifactId>
       <version>${version}</version>
       <type>pom</type>
       <scope>import</scope>
@@ -35,8 +35,8 @@ Now you can reference individual commons projects:
 
 ```xml
 <dependency>
-  <groupId>org.camunda.commons</groupId>
-  <artifactId>camunda-commons-logging</artifactId>
+  <groupId>io.orqueio.commons</groupId>
+  <artifactId>orqueio-commons-logging</artifactId>
 </dependency>
 ```
 

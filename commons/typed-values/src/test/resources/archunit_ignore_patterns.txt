@@ -1,4 +1,4 @@
-Static Initializer <org.camunda.bpm.engine.variable.type.ValueType.<clinit>\(\)> calls constructor <org\.camunda\.bpm\.engine\.variable\.impl\.type\.FileValueTypeImpl\.<init>\(\)> in \(ValueType\.java:67\)
+Static Initializer <io.orqueio.bpm.engine.variable.type.ValueType.<clinit>\(\)> calls constructor <org\.camunda\.bpm\.engine\.variable\.impl\.type\.FileValueTypeImpl\.<init>\(\)> in \(ValueType\.java:67\)
 Static Initializer <org\.camunda\.bpm\.engine\.variable\.type\.ValueType\.<clinit>\(\)> calls constructor <org\.camunda\.bpm\.engine\.variable\.impl\.type\.ObjectTypeImpl\.<init>\(\)> in \(ValueType\.java:65\)
 Static Initializer <org\.camunda\.bpm\.engine\.variable\.type\.ValueType\.<clinit>\(\)> calls constructor <org\.camunda\.bpm\.engine\.variable\.impl\.type\.PrimitiveValueTypeImpl\$BytesTypeImpl\.<init>\(\)> in \(ValueType\.java:61\)
 Static Initializer <org\.camunda\.bpm\.engine\.variable\.type\.ValueType\.<clinit>\(\)> calls constructor <org\.camunda\.bpm\.engine\.variable\.impl\.type\.PrimitiveValueTypeImpl\$DateTypeImpl\.<init>\(\)> in \(ValueType\.java:59\)

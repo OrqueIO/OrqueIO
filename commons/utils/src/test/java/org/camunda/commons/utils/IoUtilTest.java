@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.commons.utils;
+package io.orqueio.commons.utils;
 
 import org.junit.Test;
 
@@ -31,7 +31,7 @@ import static org.assertj.core.api.Assertions.fail;
  */
 public class IoUtilTest {
 
-  public final static String TEST_FILE_NAME = "org/camunda/commons/utils/testFile.txt";
+  public final static String TEST_FILE_NAME = "org/orqueio/commons/utils/testFile.txt";
 
   @Test
   public void shouldTransformBetweenInputStreamAndString() {

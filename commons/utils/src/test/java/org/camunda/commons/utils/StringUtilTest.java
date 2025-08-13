@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.commons.utils;
+package io.orqueio.commons.utils;
 
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.camunda.commons.utils.StringUtil.isExpression;
-import static org.camunda.commons.utils.StringUtil.join;
-import static org.camunda.commons.utils.StringUtil.split;
-import static org.camunda.commons.utils.StringUtil.defaultString;
-import static org.camunda.commons.utils.StringUtil.getStackTrace;
+import static io.orqueio.commons.utils.StringUtil.isExpression;
+import static io.orqueio.commons.utils.StringUtil.join;
+import static io.orqueio.commons.utils.StringUtil.split;
+import static io.orqueio.commons.utils.StringUtil.defaultString;
+import static io.orqueio.commons.utils.StringUtil.getStackTrace;
 
 /**
  * @author Sebastian Menski
@@ -82,7 +82,7 @@ public class StringUtilTest {
   public void testGetStacktrace() {
     Throwable th = new IllegalArgumentException("Wrong argument!", new NullPointerException("This shouldn't have been empty"));
     assertThat(getStackTrace(th)).containsSubsequence("java.lang.IllegalArgumentException: Wrong argument!",
-      "at org.camunda.commons.utils.StringUtilTest.testGetStacktrace(StringUtilTest.java:",
+      "at io.orqueio.commons.utils.StringUtilTest.testGetStacktrace(StringUtilTest.java:",
       "Caused by: java.lang.NullPointerException: This shouldn't have been empty");
   }
 
