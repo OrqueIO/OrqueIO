@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.templateengines.engine;
+package io.orqueio.templateengines.engine;
 
 import java.util.Arrays;
 import java.util.Collection;
 
 import javax.script.*;
 
-import org.camunda.templateengines.engine.util.Greeter;
+import io.orqueio.templateengines.engine.util.Greeter;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
