@@ -1,201 +1,239 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <artifactId>camunda-engine-rest-jakarta</artifactId>
-  <name>Camunda Platform - engine - REST - Assembly Jakarta</name>
-  <packaging>war</packaging>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>orqueio-engine-rest-jakarta</artifactId>
+    <name>OrqueIO - engine - REST - Assembly Jakarta</name>
+    <packaging>war</packaging>
 
-  <description>
-    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://camunda.com/contact/
-  </description>
 
-  <parent>
-    <groupId>org.camunda.bpm</groupId>
-    <artifactId>camunda-engine-rest-root</artifactId>
-    <version>7.24.0-SNAPSHOT</version>
-  </parent>
+    <parent>
+        <groupId>io.orqueio.bpm</groupId>
+        <artifactId>orqueio-engine-rest-root</artifactId>
+        <version>1.0</version>
+    </parent>
 
-  <properties>
-    <!-- generate a bom of dependencies for the license book.
-    We include compile and provided scope dependencies;
-    all the dependencies that we include in only one of the
-    runtime-specific-WARs are in provided scope -->
-    <skip-third-party-bom>false</skip-third-party-bom>
-    <third-party-bom-scopes>compile|provided</third-party-bom-scopes>
+    <properties>
+        <!-- generate a bom of dependencies for the license book.
+        We include compile and provided scope dependencies;
+        all the dependencies that we include in only one of the
+        runtime-specific-WARs are in provided scope -->
+        <skip-third-party-bom>false</skip-third-party-bom>
+        <third-party-bom-scopes>compile|provided</third-party-bom-scopes>
 
-    <version.resteasy>6.2.3.Final</version.resteasy>
-  </properties>
+        <version.resteasy>6.2.3.Final</version.resteasy>
+    </properties>
 
-  <dependencyManagement>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>jakarta.platform</groupId>
+                <artifactId>jakarta.jakartaee-bom</artifactId>
+                <version>${version.jakarta-ee-spec}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+
+            <dependency>
+                <groupId>org.jboss.resteasy</groupId>
+                <artifactId>resteasy-bom</artifactId>
+                <version>${version.resteasy}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
-      <dependency>
-        <groupId>jakarta.platform</groupId>
-        <artifactId>jakarta.jakartaee-bom</artifactId>
-        <version>${version.jakarta-ee-spec}</version>
-        <scope>import</scope>
-        <type>pom</type>
-      </dependency>
+        <dependency>
+            <groupId>io.orqueio.bpm</groupId>
+            <artifactId>orqueio-engine-rest-core-jakarta</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
-      <dependency>
-        <groupId>org.jboss.resteasy</groupId>
-        <artifactId>resteasy-bom</artifactId>
-        <version>${version.resteasy}</version>
-        <scope>import</scope>
-        <type>pom</type>
-      </dependency>
+        <!-- dependencies only used for assemblies should be scope provided -->
+        <dependency>
+            <groupId>io.orqueio.bpm</groupId>
+            <artifactId>orqueio-engine-rest-core-jakarta</artifactId>
+            <version>${project.version}</version>
+            <classifier>sources</classifier>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.orqueio.bpm</groupId>
+            <artifactId>orqueio-engine-rest-core-jakarta</artifactId>
+            <version>${project.version}</version>
+            <classifier>tests</classifier>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Jakarta API -->
+
+        <dependency>
+            <groupId>jakarta.ws.rs</groupId>
+            <artifactId>jakarta.ws.rs-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Resteasy -->
+
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-core</artifactId>
+            <scope>provided</scope>
+        </dependency>
 
     </dependencies>
-  </dependencyManagement>
 
-  <dependencies>
-    <dependency>
-      <groupId>org.camunda.bpm</groupId>
-      <artifactId>camunda-engine-rest-core-jakarta</artifactId>
-      <version>${project.version}</version>
-    </dependency>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>wildfly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <archive>
+                                <manifestEntries>
+                                    <!-- module dependencies for deployment on wildfly  -->
+                                    <Dependencies>
+                                        org.orqueio.bpm.orqueio-engine,org.orqueio.bpm.dmn.orqueio-engine-dmn,org.orqueio.commons.orqueio-commons-logging,org.orqueio.spin.orqueio-spin-core,org.orqueio.bpm.juel.orqueio-juel
+                                        services,org.graalvm.js.js-scriptengine services
+                                    </Dependencies>
+                                </manifestEntries>
+                            </archive>
+                            <descriptors>
+                                <descriptor>assembly-war-wildfly.xml</descriptor>
+                            </descriptors>
+                            <finalName>orqueio-engine-rest-jakarta-${project.version}</finalName>
+                            <attach>true</attach>
+                            <classifier>wildfly</classifier>
+                            <outputDirectory>target/</outputDirectory>
+                            <workDirectory>target/assembly/work</workDirectory>
+                        </configuration>
+                    </execution>
 
-    <!-- dependencies only used for assemblies should be scope provided -->
-    <dependency>
-      <groupId>org.camunda.bpm</groupId>
-      <artifactId>camunda-engine-rest-core-jakarta</artifactId>
-      <version>${project.version}</version>
-      <classifier>sources</classifier>
-      <scope>provided</scope>
-    </dependency>
+                    <execution>
+                        <id>tomcat</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <descriptors>
+                                <descriptor>assembly-war-tomcat.xml</descriptor>
+                            </descriptors>
+                            <finalName>orqueio-engine-rest-jakarta-${project.version}</finalName>
+                            <attach>true</attach>
+                            <classifier>tomcat</classifier>
+                            <outputDirectory>target/</outputDirectory>
+                            <workDirectory>target/assembly/work</workDirectory>
+                        </configuration>
+                    </execution>
 
-    <dependency>
-      <groupId>org.camunda.bpm</groupId>
-      <artifactId>camunda-engine-rest-core-jakarta</artifactId>
-      <version>${project.version}</version>
-      <classifier>tests</classifier>
-      <scope>provided</scope>
-    </dependency>
+                    <execution>
+                        <id>classes</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <descriptors>
+                                <descriptor>assembly-classes.xml</descriptor>
+                            </descriptors>
+                            <finalName>orqueio-engine-rest-jakarta-${project.version}</finalName>
+                            <attach>true</attach>
+                            <outputDirectory>target/</outputDirectory>
+                            <workDirectory>target/assembly/work</workDirectory>
+                        </configuration>
+                    </execution>
 
-    <!-- Jakarta API -->
+                    <execution>
+                        <id>sources</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <descriptors>
+                                <descriptor>assembly-sources.xml</descriptor>
+                            </descriptors>
+                            <finalName>orqueio-engine-rest-jakarta-${project.version}</finalName>
+                            <attach>true</attach>
+                            <outputDirectory>target/</outputDirectory>
+                            <workDirectory>target/assembly/work</workDirectory>
+                        </configuration>
+                    </execution>
 
-    <dependency>
-      <groupId>jakarta.ws.rs</groupId>
-      <artifactId>jakarta.ws.rs-api</artifactId>
-      <scope>provided</scope>
-    </dependency>
+                    <execution>
+                        <id>tests</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <descriptors>
+                                <descriptor>assembly-tests.xml</descriptor>
+                            </descriptors>
+                            <finalName>orqueio-engine-rest-jakarta-${project.version}</finalName>
+                            <attach>true</attach>
+                            <outputDirectory>target/</outputDirectory>
+                            <workDirectory>target/assembly/work</workDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
 
-    <dependency>
-      <groupId>jakarta.servlet</groupId>
-      <artifactId>jakarta.servlet-api</artifactId>
-      <scope>provided</scope>
-    </dependency>
+        </plugins>
+    </build>
 
-    <!-- Resteasy -->
 
-    <dependency>
-      <groupId>org.jboss.resteasy</groupId>
-      <artifactId>resteasy-core</artifactId>
-      <scope>provided</scope>
-    </dependency>
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
 
-  </dependencies>
+    <organization>
+        <name>OrqueIO services</name>
+        <url>https://www.orqueio.io/</url>
+    </organization>
 
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-assembly-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>wildfly</id>
-            <phase>package</phase>
-            <goals>
-              <goal>single</goal>
-            </goals>
-            <configuration>
-              <archive>
-                <manifestEntries>
-                  <!-- module dependencies for deployment on wildfly  -->
-                  <Dependencies>org.camunda.bpm.camunda-engine,org.camunda.bpm.dmn.camunda-engine-dmn,org.camunda.commons.camunda-commons-logging,org.camunda.spin.camunda-spin-core,org.camunda.bpm.juel.camunda-juel services,org.graalvm.js.js-scriptengine services</Dependencies>
-                </manifestEntries>
-              </archive>
-              <descriptors>
-                <descriptor>assembly-war-wildfly.xml</descriptor>
-              </descriptors>
-              <finalName>camunda-engine-rest-jakarta-${project.version}</finalName>
-              <attach>true</attach>
-              <classifier>wildfly</classifier>
-              <outputDirectory>target/</outputDirectory>
-              <workDirectory>target/assembly/work</workDirectory>
-            </configuration>
-          </execution>
+    <url>https://www.orqueio.io/</url>
 
-          <execution>
-            <id>tomcat</id>
-            <phase>package</phase>
-            <goals>
-              <goal>single</goal>
-            </goals>
-            <configuration>
-              <descriptors>
-                <descriptor>assembly-war-tomcat.xml</descriptor>
-              </descriptors>
-              <finalName>camunda-engine-rest-jakarta-${project.version}</finalName>
-              <attach>true</attach>
-              <classifier>tomcat</classifier>
-              <outputDirectory>target/</outputDirectory>
-              <workDirectory>target/assembly/work</workDirectory>
-            </configuration>
-          </execution>
+    <developers>
+        <developer>
+            <id>OrqueIO</id>
+            <name>OrqueIO Community</name>
+            <organization>orqueio.io</organization>
+            <organizationUrl>https://www.orqueio.io/</organizationUrl>
+        </developer>
+    </developers>
 
-          <execution>
-            <id>classes</id>
-            <phase>package</phase>
-            <goals>
-              <goal>single</goal>
-            </goals>
-            <configuration>
-              <descriptors>
-                <descriptor>assembly-classes.xml</descriptor>
-              </descriptors>
-              <finalName>camunda-engine-rest-jakarta-${project.version}</finalName>
-              <attach>true</attach>
-              <outputDirectory>target/</outputDirectory>
-              <workDirectory>target/assembly/work</workDirectory>
-            </configuration>
-          </execution>
+    <scm>
+        <url>https://github.com/OrqueIO/OrqueIO</url>
+        <connection>scm:git:git@github.com:OrqueIO/OrqueIO.git</connection>
+        <developerConnection>scm:git:git@github.com:OrqueIO/OrqueIO.git</developerConnection>
+        <tag>OrqueIO-1.0</tag>
+    </scm>
 
-          <execution>
-            <id>sources</id>
-            <phase>package</phase>
-            <goals>
-              <goal>single</goal>
-            </goals>
-            <configuration>
-              <descriptors>
-                <descriptor>assembly-sources.xml</descriptor>
-              </descriptors>
-              <finalName>camunda-engine-rest-jakarta-${project.version}</finalName>
-              <attach>true</attach>
-              <outputDirectory>target/</outputDirectory>
-              <workDirectory>target/assembly/work</workDirectory>
-            </configuration>
-          </execution>
+    <issueManagement>
+        <system>GitHub Issues</system>
+        <url>https://github.com/OrqueIO/OrqueIO/issues</url>
+    </issueManagement>
 
-          <execution>
-            <id>tests</id>
-            <phase>package</phase>
-            <goals>
-              <goal>single</goal>
-            </goals>
-            <configuration>
-              <descriptors>
-                <descriptor>assembly-tests.xml</descriptor>
-              </descriptors>
-              <finalName>camunda-engine-rest-jakarta-${project.version}</finalName>
-              <attach>true</attach>
-              <outputDirectory>target/</outputDirectory>
-              <workDirectory>target/assembly/work</workDirectory>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-
-    </plugins>
-  </build>
 </project>

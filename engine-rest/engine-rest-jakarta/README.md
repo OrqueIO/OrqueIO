@@ -1,7 +1,7 @@
 REST API Jakarta
 ================
 
-A Jakarta JAX-RS-based REST API for Camunda Platform.
+A Jakarta JAX-RS-based REST API for OrqueIO.
 
 > This module copies and transforms the `camunda-engine-rest-core` module.  
 > It contains only implementations for classes where there are breaking changes either in the updated dependencies or due to JakartaEE.
