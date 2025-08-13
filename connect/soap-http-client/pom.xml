@@ -124,17 +124,17 @@
 
     <organization>
         <name>OrqueIO services</name>
-        <url>https://www.codeonce.fr/</url>
+        <url>https://www.orqueio.io/</url>
     </organization>
 
-    <url>https://www.codeonce.fr/</url>
+    <url>https://www.orqueio.io/</url>
 
     <developers>
         <developer>
             <id>OrqueIO</id>
             <name>OrqueIO Community</name>
-            <organization>codeonce.fr</organization>
-            <organizationUrl>https://www.codeonce.fr/</organizationUrl>
+            <organization>orqueio.io</organization>
+            <organizationUrl>https://www.orqueio.io/</organizationUrl>
         </developer>
     </developers>
 
