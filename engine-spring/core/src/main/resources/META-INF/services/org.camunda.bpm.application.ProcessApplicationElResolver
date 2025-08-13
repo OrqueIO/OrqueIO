@@ -1,1 +1,1 @@
-org.camunda.bpm.engine.spring.application.SpringProcessApplicationElResolver
+io.orqueio.bpm.engine.spring.application.SpringProcessApplicationElResolver
