@@ -31,8 +31,8 @@ The **Camunda External Task Client (Java)** allows to set up remote Service Task
 The following Maven coordinate needs to be added to the projects `pom.xml`:
 ```xml
 <dependency>
-  <groupId>org.camunda.bpm</groupId>
-  <artifactId>camunda-external-task-client</artifactId>
+  <groupId>io.orqueio.bpm</groupId>
+  <artifactId>orqueio-external-task-client</artifactId>
   <version>${version}</version>
 </dependency>
 ```
