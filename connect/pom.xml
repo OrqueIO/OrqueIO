@@ -1,141 +1,166 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-  <parent>
-    <groupId>org.camunda.bpm</groupId>
-    <artifactId>camunda-parent</artifactId>
-    <relativePath>../parent</relativePath>
-    <version>7.24.0-SNAPSHOT</version>
-  </parent>
+    <parent>
+        <groupId>io.orqueio.bpm</groupId>
+        <artifactId>orqueio-parent</artifactId>
+        <relativePath>../parent</relativePath>
+        <version>1.0</version>
+    </parent>
 
-  <groupId>org.camunda.connect</groupId>
-  <artifactId>camunda-connect-root</artifactId>
-  <name>Camunda Platform - connect - root</name>
-  <inceptionYear>2014</inceptionYear>
-  <packaging>pom</packaging>
+    <groupId>io.orqueio.connect</groupId>
+    <artifactId>orqueio-connect-root</artifactId>
+    <name>OrqueIO - connect - root</name>
+    <inceptionYear>2025</inceptionYear>
+    <packaging>pom</packaging>
 
-  <description>
-    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://camunda.com/contact/
-  </description>
+    <properties>
+        <commons-codec.version>1.15</commons-codec.version>
+        <connect.version.old>7.23.0</connect.version.old>
+        <mockito.version>1.9.5</mockito.version>
+        <wiremock.version>1.58</wiremock.version>
+        <maven-bundle-plugin.version>5.1.1</maven-bundle-plugin.version>
 
-  <properties>
-    <commons-codec.version>1.15</commons-codec.version>
-    <connect.version.old>7.23.0</connect.version.old>
-    <mockito.version>1.9.5</mockito.version>
-    <wiremock.version>1.58</wiremock.version>
-    <maven-bundle-plugin.version>5.1.1</maven-bundle-plugin.version>
+        <license.includeTransitiveDependencies>false</license.includeTransitiveDependencies>
+        <additionalparam>-Xdoclint:none</additionalparam>
+    </properties>
 
-    <license.includeTransitiveDependencies>false</license.includeTransitiveDependencies>
-    <additionalparam>-Xdoclint:none</additionalparam>
-  </properties>
+    <modules>
+        <module>bom</module>
+        <module>core</module>
+        <module>http-client</module>
+        <module>soap-http-client</module>
+        <module>connectors-all</module>
+    </modules>
 
-  <modules>
-    <module>bom</module>
-    <module>core</module>
-    <module>http-client</module>
-    <module>soap-http-client</module>
-    <module>connectors-all</module>
-  </modules>
+    <dependencyManagement>
+        <dependencies>
 
-  <dependencyManagement>
-    <dependencies>
+            <dependency>
+                <groupId>org.apache.httpcomponents.client5</groupId>
+                <artifactId>httpclient5</artifactId>
+                <version>${version.httpclient5}</version>
+            </dependency>
 
-      <dependency>
-        <groupId>org.apache.httpcomponents.client5</groupId>
-        <artifactId>httpclient5</artifactId>
-        <version>${version.httpclient5}</version>
-      </dependency>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${version.junit}</version>
+            </dependency>
 
-      <dependency>
-        <groupId>junit</groupId>
-        <artifactId>junit</artifactId>
-        <version>${version.junit}</version>
-      </dependency>
+            <dependency>
+                <groupId>org.assertj</groupId>
+                <artifactId>assertj-core</artifactId>
+                <version>${version.assertj}</version>
+            </dependency>
 
-      <dependency>
-        <groupId>org.assertj</groupId>
-        <artifactId>assertj-core</artifactId>
-        <version>${version.assertj}</version>
-      </dependency>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>${version.logback}</version>
+            </dependency>
 
-      <dependency>
-        <groupId>ch.qos.logback</groupId>
-        <artifactId>logback-classic</artifactId>
-        <version>${version.logback}</version>
-      </dependency>
+            <dependency>
+                <groupId>com.github.tomakehurst</groupId>
+                <artifactId>wiremock</artifactId>
+                <version>${wiremock.version}</version>
+            </dependency>
 
-      <dependency>
-        <groupId>com.github.tomakehurst</groupId>
-        <artifactId>wiremock</artifactId>
-        <version>${wiremock.version}</version>
-      </dependency>
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-core</artifactId>
+                <version>${mockito.version}</version>
+            </dependency>
 
-      <dependency>
-        <groupId>org.mockito</groupId>
-        <artifactId>mockito-core</artifactId>
-        <version>${mockito.version}</version>
-      </dependency>
+        </dependencies>
+    </dependencyManagement>
 
-    </dependencies>
-  </dependencyManagement>
-
-  <build>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.apache.felix</groupId>
-          <artifactId>maven-bundle-plugin</artifactId>
-          <version>${maven-bundle-plugin.version}</version>
-          <configuration>
-            <instructions>
-              <Export-Package>
-                org.camunda.connect*
-              </Export-Package>
-            </instructions>
-          </configuration>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-surefire-plugin</artifactId>
-          <version>2.17</version>
-          <configuration>
-            <redirectTestOutputToFile>true</redirectTestOutputToFile>
-          </configuration>
-        </plugin>
-      </plugins>
-    </pluginManagement>
-    <plugins>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>license-maven-plugin</artifactId>
-        <version>1.14</version>
-        <configuration>
-          <acceptPomPackaging>true</acceptPomPackaging>
-          <excludedScopes>test</excludedScopes>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
-
-  <profiles>
-    <profile>
-      <id>license-header-check</id>
-      <build>
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>maven-bundle-plugin</artifactId>
+                    <version>${maven-bundle-plugin.version}</version>
+                    <configuration>
+                        <instructions>
+                            <Export-Package>
+                                io.orqueio.connect*
+                            </Export-Package>
+                        </instructions>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>2.17</version>
+                    <configuration>
+                        <redirectTestOutputToFile>true</redirectTestOutputToFile>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
         <plugins>
-          <plugin>
-            <groupId>com.mycila</groupId>
-            <artifactId>license-maven-plugin</artifactId>
-          </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <version>1.14</version>
+                <configuration>
+                    <acceptPomPackaging>true</acceptPomPackaging>
+                    <excludedScopes>test</excludedScopes>
+                </configuration>
+            </plugin>
         </plugins>
-      </build>
-    </profile>
-  </profiles>
+    </build>
 
-  <scm>
-    <url>https://github.com/camunda/camunda-bpm-platform</url>
-    <connection>scm:git:git@github.com:camunda/camunda-bpm-platform.git</connection>
-    <developerConnection>scm:git:git@github.com:camunda/camunda-bpm-platform.git</developerConnection>
-    <tag>HEAD</tag>
-  </scm>
+    <profiles>
+        <profile>
+            <id>license-header-check</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.mycila</groupId>
+                        <artifactId>license-maven-plugin</artifactId>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
+    <organization>
+        <name>OrqueIO services</name>
+        <url>https://www.codeonce.fr/</url>
+    </organization>
+
+    <url>https://www.codeonce.fr/</url>
+
+    <developers>
+        <developer>
+            <id>OrqueIO</id>
+            <name>OrqueIO Community</name>
+            <organization>codeonce.fr</organization>
+            <organizationUrl>https://www.codeonce.fr/</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <url>https://github.com/OrqueIO/OrqueIO</url>
+        <connection>scm:git:git@github.com:OrqueIO/OrqueIO.git</connection>
+        <developerConnection>scm:git:git@github.com:OrqueIO/OrqueIO.git</developerConnection>
+        <tag>OrqueIO-1.0</tag>
+    </scm>
+
+    <issueManagement>
+        <system>GitHub Issues</system>
+        <url>https://github.com/OrqueIO/OrqueIO/issues</url>
+    </issueManagement>
 
 </project>

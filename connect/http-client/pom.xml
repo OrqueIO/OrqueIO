@@ -1,132 +1,164 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-  <parent>
-    <artifactId>camunda-connect-root</artifactId>
-    <groupId>org.camunda.connect</groupId>
-    <version>7.24.0-SNAPSHOT</version>
-  </parent>
-  <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>orqueio-connect-root</artifactId>
+        <groupId>io.orqueio.connect</groupId>
+        <version>1.0</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
 
-  <description>
-    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://camunda.com/contact/
-  </description>
 
-  <artifactId>camunda-connect-http-client</artifactId>
-  <name>Camunda Platform - connect - http client</name>
+    <artifactId>orqueio-connect-http-client</artifactId>
+    <name>OrqueIO - connect - http client</name>
 
-  <dependencies>
+    <dependencies>
 
-    <dependency>
-      <groupId>org.camunda.connect</groupId>
-      <artifactId>camunda-connect-core</artifactId>
-    </dependency>
+        <dependency>
+            <groupId>io.orqueio.connect</groupId>
+            <artifactId>orqueio-connect-core</artifactId>
+        </dependency>
 
-    <dependency>
-      <groupId>org.apache.httpcomponents.client5</groupId>
-      <artifactId>httpclient5</artifactId>
-    </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents.client5</groupId>
+            <artifactId>httpclient5</artifactId>
+        </dependency>
 
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <scope>test</scope>
-    </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
 
-    <dependency>
-      <groupId>org.assertj</groupId>
-      <artifactId>assertj-core</artifactId>
-      <scope>test</scope>
-    </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <scope>test</scope>
+        </dependency>
 
-    <dependency>
-      <groupId>ch.qos.logback</groupId>
-      <artifactId>logback-classic</artifactId>
-      <scope>test</scope>
-    </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <scope>test</scope>
+        </dependency>
 
-    <dependency>
-      <groupId>com.github.tomakehurst</groupId>
-      <artifactId>wiremock</artifactId>
-      <scope>test</scope>
-    </dependency>
+        <dependency>
+            <groupId>com.github.tomakehurst</groupId>
+            <artifactId>wiremock</artifactId>
+            <scope>test</scope>
+        </dependency>
 
-    <dependency>
-      <groupId>org.mockito</groupId>
-      <artifactId>mockito-core</artifactId>
-      <scope>test</scope>
-    </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <scope>test</scope>
+        </dependency>
 
-  </dependencies>
+    </dependencies>
 
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.felix</groupId>
-        <artifactId>maven-bundle-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>bundle-manifest</id>
-            <phase>process-classes</phase>
-            <goals>
-              <goal>manifest</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
-
-  <!-- check for api differences between latest minor release -->
-  <profiles>
-    <profile>
-      <id>check-api-compatibility</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-      <build>
+    <build>
         <plugins>
-          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>clirr-maven-plugin</artifactId>
-            <version>2.8</version>
-            <configuration>
-              <comparisonVersion>${connect.version.old}</comparisonVersion>
-              <logResults>true</logResults>
-              <excludes>
-                <exclude>org/camunda/connect/httpclient/impl/**</exclude>
-              </excludes>
-            </configuration>
-            <executions>
-              <execution>
-                <id>all</id>
-                <phase>verify</phase>
-                <goals>
-                  <goal>check-no-fork</goal>
-                </goals>
-                <configuration>
-                  <textOutputFile>${project.build.directory}/clirr-all.txt</textOutputFile>
-                  <failOnWarning>false</failOnWarning>
-                  <failOnError>false</failOnError>
-                </configuration>
-              </execution>
-              <execution>
-                <id>restrictive</id>
-                <phase>verify</phase>
-                <goals>
-                  <goal>check-no-fork</goal>
-                </goals>
-                <configuration>
-                  <textOutputFile>${project.build.directory}/clirr-restrictive.txt</textOutputFile>
-                  <failOnWarning>true</failOnWarning>
-                  <ignoredDifferencesFile>../.clirr-jenkins-ignore.xml</ignoredDifferencesFile>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>bundle-manifest</id>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>manifest</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
-      </build>
-    </profile>
-  </profiles>
+    </build>
 
+    <!-- check for api differences between latest minor release -->
+    <profiles>
+        <profile>
+            <id>check-api-compatibility</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>clirr-maven-plugin</artifactId>
+                        <version>2.8</version>
+                        <configuration>
+                            <comparisonVersion>${connect.version.old}</comparisonVersion>
+                            <logResults>true</logResults>
+                            <excludes>
+                                <exclude>io/orqueio/connect/httpclient/impl/**</exclude>
+                            </excludes>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>all</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>check-no-fork</goal>
+                                </goals>
+                                <configuration>
+                                    <textOutputFile>${project.build.directory}/clirr-all.txt</textOutputFile>
+                                    <failOnWarning>false</failOnWarning>
+                                    <failOnError>false</failOnError>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>restrictive</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>check-no-fork</goal>
+                                </goals>
+                                <configuration>
+                                    <textOutputFile>${project.build.directory}/clirr-restrictive.txt</textOutputFile>
+                                    <failOnWarning>true</failOnWarning>
+                                    <ignoredDifferencesFile>../.clirr-jenkins-ignore.xml</ignoredDifferencesFile>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
+    <organization>
+        <name>OrqueIO services</name>
+        <url>https://www.codeonce.fr/</url>
+    </organization>
+
+    <url>https://www.codeonce.fr/</url>
+
+    <developers>
+        <developer>
+            <id>OrqueIO</id>
+            <name>OrqueIO Community</name>
+            <organization>codeonce.fr</organization>
+            <organizationUrl>https://www.codeonce.fr/</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <url>https://github.com/OrqueIO/OrqueIO</url>
+        <connection>scm:git:git@github.com:OrqueIO/OrqueIO.git</connection>
+        <developerConnection>scm:git:git@github.com:OrqueIO/OrqueIO.git</developerConnection>
+        <tag>OrqueIO-1.0</tag>
+    </scm>
+
+    <issueManagement>
+        <system>GitHub Issues</system>
+        <url>https://github.com/OrqueIO/OrqueIO/issues</url>
+    </issueManagement>
 </project>

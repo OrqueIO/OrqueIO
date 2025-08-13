@@ -1,60 +1,86 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-  <!-- HEADS-UP: Do not use camunda-parent as parent,
-  it would introduce a cyclic dependency to this bom -->
-  <parent>
-    <groupId>org.camunda.bpm</groupId>
-    <artifactId>camunda-root</artifactId>
-    <version>7.24.0-SNAPSHOT</version>
-    <relativePath>../../pom.xml</relativePath>
-  </parent>
+    <!-- HEADS-UP: Do not use camunda-parent as parent,
+    it would introduce a cyclic dependency to this bom -->
+    <parent>
+        <groupId>io.orqueio.bpm</groupId>
+        <artifactId>orqueio-root</artifactId>
+        <version>1.0</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
 
-  <groupId>org.camunda.connect</groupId>
-  <artifactId>camunda-connect-bom</artifactId>
-  <version>7.24.0-SNAPSHOT</version>
-  <name>Camunda Platform - connect - bom</name>
-  <packaging>pom</packaging>
+    <groupId>io.orqueio.connect</groupId>
+    <artifactId>orqueio-connect-bom</artifactId>
+    <version>1.0</version>
+    <name>OrqueIO - connect - bom</name>
+    <packaging>pom</packaging>
 
-  <description>
-    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://camunda.com/contact/
-  </description>
 
-  <dependencyManagement>
-    <dependencies>
+    <dependencyManagement>
+        <dependencies>
 
-      <dependency>
-        <groupId>org.camunda.connect</groupId>
-        <artifactId>camunda-connect-core</artifactId>
-        <version>${project.version}</version>
-      </dependency>
+            <dependency>
+                <groupId>io.orqueio.connect</groupId>
+                <artifactId>orqueio-connect-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
-      <dependency>
-        <groupId>org.camunda.connect</groupId>
-        <artifactId>camunda-connect-http-client</artifactId>
-        <version>${project.version}</version>
-      </dependency>
+            <dependency>
+                <groupId>io.orqueio.connect</groupId>
+                <artifactId>orqueio-connect-http-client</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
-      <dependency>
-        <groupId>org.camunda.connect</groupId>
-        <artifactId>camunda-connect-soap-http-client</artifactId>
-        <version>${project.version}</version>
-      </dependency>
+            <dependency>
+                <groupId>io.orqueio.connect</groupId>
+                <artifactId>orqueio-connect-soap-http-client</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
-      <dependency>
-        <groupId>org.camunda.connect</groupId>
-        <artifactId>camunda-connect-connectors-all</artifactId>
-        <version>${project.version}</version>
-      </dependency>
+            <dependency>
+                <groupId>io.orqueio.connect</groupId>
+                <artifactId>orqueio-connect-connectors-all</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
-    </dependencies>
-  </dependencyManagement>
+        </dependencies>
+    </dependencyManagement>
 
-  <scm>
-    <url>https://github.com/camunda/camunda-bpm-platform</url>
-    <connection>scm:git:git@github.com:camunda/camunda-bpm-platform.git</connection>
-    <developerConnection>scm:git:git@github.com:camunda/camunda-bpm-platform.git</developerConnection>
-    <tag>HEAD</tag>
-  </scm>
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
+    <organization>
+        <name>OrqueIO services</name>
+        <url>https://www.codeonce.fr/</url>
+    </organization>
+
+    <url>https://www.codeonce.fr/</url>
+
+    <developers>
+        <developer>
+            <id>OrqueIO</id>
+            <name>OrqueIO Community</name>
+            <organization>codeonce.fr</organization>
+            <organizationUrl>https://www.codeonce.fr/</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <url>https://github.com/OrqueIO/OrqueIO</url>
+        <connection>scm:git:git@github.com:OrqueIO/OrqueIO.git</connection>
+        <developerConnection>scm:git:git@github.com:OrqueIO/OrqueIO.git</developerConnection>
+        <tag>OrqueIO-1.0</tag>
+    </scm>
+
+    <issueManagement>
+        <system>GitHub Issues</system>
+        <url>https://github.com/OrqueIO/OrqueIO/issues</url>
+    </issueManagement>
 
 </project>
