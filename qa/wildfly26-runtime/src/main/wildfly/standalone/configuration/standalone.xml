@@ -38,7 +38,7 @@
         <extension module="org.wildfly.extension.request-controller"/>
         <extension module="org.wildfly.extension.security.manager"/>
         <extension module="org.wildfly.extension.undertow"/>
-        <extension module="io.orqueio.bpm.wildfly.camunda-wildfly-subsystem"/>
+        <extension module="io.orqueio.bpm.wildfly.orqueio-wildfly-subsystem"/>
     </extensions>
     <management>
         <audit-log>
