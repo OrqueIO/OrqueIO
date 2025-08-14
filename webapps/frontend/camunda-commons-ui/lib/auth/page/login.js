@@ -18,7 +18,7 @@
 'use strict';
 
 var template = require('./login.html?raw');
-var logo = require('svg-inline-loader?classPrefix&removeSVGTagAttrs=false!./logo.svg');
+var logo = require('svg-inline-loader?classPrefix&removeSVGTagAttrs=false!./OrqueIO-logo.svg');
 
 var Controller = [
   '$scope',
