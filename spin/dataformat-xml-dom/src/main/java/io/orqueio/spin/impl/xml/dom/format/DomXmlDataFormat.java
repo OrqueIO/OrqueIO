@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.impl.xml.dom.format;
+package io.orqueio.spin.impl.xml.dom.format;
 
 import java.io.InputStream;
 import java.util.Collections;
@@ -23,14 +23,14 @@ import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerFactory;
-import org.camunda.spin.impl.xml.dom.DomXmlAttribute;
-import org.camunda.spin.impl.xml.dom.DomXmlElement;
-import org.camunda.spin.impl.xml.dom.DomXmlLogger;
-import org.camunda.spin.impl.xml.dom.format.spi.DefaultJaxBContextProvider;
-import org.camunda.spin.impl.xml.dom.format.spi.JaxBContextProvider;
-import org.camunda.spin.spi.DataFormat;
-import org.camunda.spin.xml.SpinXmlAttribute;
-import org.camunda.spin.xml.SpinXmlElement;
+import io.orqueio.spin.impl.xml.dom.DomXmlAttribute;
+import io.orqueio.spin.impl.xml.dom.DomXmlElement;
+import io.orqueio.spin.impl.xml.dom.DomXmlLogger;
+import io.orqueio.spin.impl.xml.dom.format.spi.DefaultJaxBContextProvider;
+import io.orqueio.spin.impl.xml.dom.format.spi.JaxBContextProvider;
+import io.orqueio.spin.spi.DataFormat;
+import io.orqueio.spin.xml.SpinXmlAttribute;
+import io.orqueio.spin.xml.SpinXmlElement;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
 

@@ -14,18 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.impl.logging;
+package io.orqueio.spin.impl.logging;
 
 import java.io.IOException;
 import java.util.Collection;
 
-import org.camunda.spin.SpinFileNotFoundException;
-import org.camunda.spin.SpinRuntimeException;
-import org.camunda.spin.SpinScriptException;
-import org.camunda.spin.spi.DataFormat;
-import org.camunda.spin.spi.DataFormatConfigurator;
-import org.camunda.spin.spi.DataFormatProvider;
-import org.camunda.spin.spi.SpinDataFormatException;
+import io.orqueio.spin.SpinFileNotFoundException;
+import io.orqueio.spin.SpinRuntimeException;
+import io.orqueio.spin.SpinScriptException;
+import io.orqueio.spin.spi.DataFormat;
+import io.orqueio.spin.spi.DataFormatConfigurator;
+import io.orqueio.spin.spi.DataFormatProvider;
+import io.orqueio.spin.spi.SpinDataFormatException;
 
 
 /**

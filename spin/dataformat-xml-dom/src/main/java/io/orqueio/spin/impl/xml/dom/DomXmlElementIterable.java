@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.impl.xml.dom;
+package io.orqueio.spin.impl.xml.dom;
 
-import org.camunda.spin.impl.xml.dom.format.DomXmlDataFormat;
-import org.camunda.spin.xml.SpinXmlElement;
+import io.orqueio.spin.impl.xml.dom.format.DomXmlDataFormat;
+import io.orqueio.spin.xml.SpinXmlElement;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import java.util.Iterator;
 
-import static org.camunda.commons.utils.EnsureUtil.ensureNotNull;
+import static io.orqueio.commons.utils.EnsureUtil.ensureNotNull;
 
 /**
  * @author Sebastian Menski

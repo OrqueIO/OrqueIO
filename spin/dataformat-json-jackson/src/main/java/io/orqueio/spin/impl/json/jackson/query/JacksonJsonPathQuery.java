@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.impl.json.jackson.query;
+package io.orqueio.spin.impl.json.jackson.query;
 
 import com.jayway.jsonpath.InvalidPathException;
-import org.camunda.spin.SpinList;
-import org.camunda.spin.impl.json.jackson.JacksonJsonLogger;
-import org.camunda.spin.impl.json.jackson.JacksonJsonNode;
-import org.camunda.spin.impl.json.jackson.format.JacksonJsonDataFormat;
-import org.camunda.spin.json.SpinJsonNode;
-import org.camunda.spin.json.SpinJsonPathQuery;
+import io.orqueio.spin.SpinList;
+import io.orqueio.spin.impl.json.jackson.JacksonJsonLogger;
+import io.orqueio.spin.impl.json.jackson.JacksonJsonNode;
+import io.orqueio.spin.impl.json.jackson.format.JacksonJsonDataFormat;
+import io.orqueio.spin.json.SpinJsonNode;
+import io.orqueio.spin.json.SpinJsonPathQuery;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.jayway.jsonpath.JsonPath;

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.impl.xml.dom.format;
+package io.orqueio.spin.impl.xml.dom.format;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -23,8 +23,8 @@ import java.util.regex.Pattern;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.camunda.spin.impl.xml.dom.DomXmlLogger;
-import org.camunda.spin.spi.TextBasedDataFormatReader;
+import io.orqueio.spin.impl.xml.dom.DomXmlLogger;
+import io.orqueio.spin.spi.TextBasedDataFormatReader;
 import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;

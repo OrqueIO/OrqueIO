@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.json.mapping.dmn;
+package io.orqueio.spin.json.mapping.dmn;
 
 import java.io.Serializable;
 import java.util.Map;

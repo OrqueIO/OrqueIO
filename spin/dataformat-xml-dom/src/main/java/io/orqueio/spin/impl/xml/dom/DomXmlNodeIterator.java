@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.impl.xml.dom;
+package io.orqueio.spin.impl.xml.dom;
 
 import java.util.Iterator;
 
-import org.camunda.spin.xml.SpinXmlNode;
+import io.orqueio.spin.xml.SpinXmlNode;
 
 /**
  * @author Sebastian Menski

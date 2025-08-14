@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.spi;
+package io.orqueio.spin.spi;
 
 /**
  * <p>Can be used to configure data formats of a certain type.

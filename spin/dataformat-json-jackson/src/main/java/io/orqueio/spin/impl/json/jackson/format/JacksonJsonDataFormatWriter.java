@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.impl.json.jackson.format;
+package io.orqueio.spin.impl.json.jackson.format;
 
 import java.io.IOException;
 import java.io.Writer;
 
-import org.camunda.spin.impl.json.jackson.JacksonJsonLogger;
-import org.camunda.spin.spi.DataFormatWriter;
+import io.orqueio.spin.impl.json.jackson.JacksonJsonLogger;
+import io.orqueio.spin.spi.DataFormatWriter;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;

@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.json.tree;
+package io.orqueio.spin.json.tree;
 
 import static net.javacrumbs.jsonunit.fluent.JsonFluentAssert.assertThatJson;
-import static org.camunda.spin.Spin.S;
-import static org.camunda.spin.json.JsonTestConstants.EXAMPLE_JSON;
+import static io.orqueio.spin.Spin.S;
+import static io.orqueio.spin.json.JsonTestConstants.EXAMPLE_JSON;
 
 import java.io.StringWriter;
 
-import org.camunda.spin.impl.json.jackson.JacksonJsonNode;
+import io.orqueio.spin.impl.json.jackson.JacksonJsonNode;
 import org.junit.Before;
 import org.junit.Test;
 

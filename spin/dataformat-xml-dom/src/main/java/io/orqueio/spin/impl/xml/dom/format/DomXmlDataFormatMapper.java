@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.impl.xml.dom.format;
+package io.orqueio.spin.impl.xml.dom.format;
 
-import static org.camunda.commons.utils.EnsureUtil.ensureNotNull;
+import static io.orqueio.commons.utils.EnsureUtil.ensureNotNull;
 
 import java.beans.Introspector;
 import javax.xml.bind.JAXBElement;
@@ -28,12 +28,12 @@ import javax.xml.namespace.QName;
 import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.dom.DOMSource;
 
-import org.camunda.spin.DeserializationTypeValidator;
-import org.camunda.spin.SpinRuntimeException;
-import org.camunda.spin.impl.util.SpinReflectUtil;
-import org.camunda.spin.impl.xml.dom.DomXmlLogger;
-import org.camunda.spin.impl.xml.dom.format.spi.JaxBContextProvider;
-import org.camunda.spin.spi.DataFormatMapper;
+import io.orqueio.spin.DeserializationTypeValidator;
+import io.orqueio.spin.SpinRuntimeException;
+import io.orqueio.spin.impl.util.SpinReflectUtil;
+import io.orqueio.spin.impl.xml.dom.DomXmlLogger;
+import io.orqueio.spin.impl.xml.dom.format.spi.JaxBContextProvider;
+import io.orqueio.spin.spi.DataFormatMapper;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 

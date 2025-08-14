@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.impl.xml.dom.format;
+package io.orqueio.spin.impl.xml.dom.format;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,9 +28,9 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
-import org.camunda.spin.impl.xml.dom.DomXmlLogger;
-import org.camunda.spin.spi.DataFormatWriter;
-import org.camunda.spin.xml.SpinXmlElementException;
+import io.orqueio.spin.impl.xml.dom.DomXmlLogger;
+import io.orqueio.spin.spi.DataFormatWriter;
+import io.orqueio.spin.xml.SpinXmlElementException;
 import org.w3c.dom.Node;
 
 /**
@@ -42,7 +42,7 @@ public class DomXmlDataFormatWriter implements DataFormatWriter {
 
   protected static final DomXmlLogger LOG = DomXmlLogger.XML_DOM_LOGGER;
 
-  protected static final String STRIP_SPACE_XSL = "org/camunda/spin/impl/xml/dom/format/strip-space.xsl";
+  protected static final String STRIP_SPACE_XSL = "io/orqueio/spin/impl/xml/dom/format/strip-space.xsl";
 
   protected DomXmlDataFormat domXmlDataFormat;
   protected Templates formattingTemplates;

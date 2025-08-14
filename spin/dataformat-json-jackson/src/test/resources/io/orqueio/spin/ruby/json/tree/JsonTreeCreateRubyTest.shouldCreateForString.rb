@@ -1,4 +1,4 @@
-$json1 = S($input, org.camunda.spin.DataFormats.json())
+$json1 = S($input, io.orqueio.spin.DataFormats.json())
 
 $json2 = S($input, "application/json")
 

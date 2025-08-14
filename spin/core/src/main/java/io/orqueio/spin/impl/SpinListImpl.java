@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.impl;
+package io.orqueio.spin.impl;
 
-import org.camunda.spin.Spin;
-import org.camunda.spin.SpinList;
+import io.orqueio.spin.Spin;
+import io.orqueio.spin.SpinList;
 
 import java.util.ArrayList;
 import java.util.Collection;

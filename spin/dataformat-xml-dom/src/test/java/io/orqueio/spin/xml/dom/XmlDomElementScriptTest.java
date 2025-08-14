@@ -14,28 +14,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.xml.dom;
+package io.orqueio.spin.xml.dom;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
-import static org.camunda.spin.Spin.S;
-import static org.camunda.spin.Spin.XML;
-import static org.camunda.spin.xml.XmlTestConstants.EXAMPLE_NAMESPACE;
-import static org.camunda.spin.xml.XmlTestConstants.EXAMPLE_XML_FILE_NAME;
-import static org.camunda.spin.xml.XmlTestConstants.NON_EXISTING;
-import static org.camunda.spin.xml.XmlTestConstants.exampleXmlFileAsReader;
+import static io.orqueio.spin.Spin.S;
+import static io.orqueio.spin.Spin.XML;
+import static io.orqueio.spin.xml.XmlTestConstants.EXAMPLE_NAMESPACE;
+import static io.orqueio.spin.xml.XmlTestConstants.EXAMPLE_XML_FILE_NAME;
+import static io.orqueio.spin.xml.XmlTestConstants.NON_EXISTING;
+import static io.orqueio.spin.xml.XmlTestConstants.exampleXmlFileAsReader;
 
 import java.util.HashMap;
 import java.util.List;
 
-import org.camunda.spin.SpinList;
-import org.camunda.spin.impl.test.Script;
-import org.camunda.spin.impl.test.ScriptTest;
-import org.camunda.spin.impl.test.ScriptVariable;
-import org.camunda.spin.xml.SpinXmlAttribute;
-import org.camunda.spin.xml.SpinXmlAttributeException;
-import org.camunda.spin.xml.SpinXmlElement;
-import org.camunda.spin.xml.SpinXmlElementException;
+import io.orqueio.spin.SpinList;
+import io.orqueio.spin.impl.test.Script;
+import io.orqueio.spin.impl.test.ScriptTest;
+import io.orqueio.spin.impl.test.ScriptVariable;
+import io.orqueio.spin.xml.SpinXmlAttribute;
+import io.orqueio.spin.xml.SpinXmlAttributeException;
+import io.orqueio.spin.xml.SpinXmlElement;
+import io.orqueio.spin.xml.SpinXmlElementException;
 import org.junit.Test;
 
 /**

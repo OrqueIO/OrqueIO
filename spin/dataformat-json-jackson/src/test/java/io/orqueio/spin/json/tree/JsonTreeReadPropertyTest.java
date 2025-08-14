@@ -14,19 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.json.tree;
+package io.orqueio.spin.json.tree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
-import static org.camunda.spin.Spin.JSON;
-import static org.camunda.spin.json.JsonTestConstants.EXAMPLE_JSON;
+import static io.orqueio.spin.Spin.JSON;
+import static io.orqueio.spin.json.JsonTestConstants.EXAMPLE_JSON;
 
-import org.camunda.spin.SpinList;
-import org.camunda.spin.impl.util.SpinIoUtil;
-import org.camunda.spin.json.SpinJsonDataFormatException;
-import org.camunda.spin.json.SpinJsonNode;
-import org.camunda.spin.json.SpinJsonPropertyException;
-import org.camunda.spin.spi.SpinDataFormatException;
+import io.orqueio.spin.SpinList;
+import io.orqueio.spin.impl.util.SpinIoUtil;
+import io.orqueio.spin.json.SpinJsonDataFormatException;
+import io.orqueio.spin.json.SpinJsonNode;
+import io.orqueio.spin.json.SpinJsonPropertyException;
+import io.orqueio.spin.spi.SpinDataFormatException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -436,7 +436,7 @@ public class JsonTreeReadPropertyTest {
   @Test
   public void shouldNotFailWithJackson146Bug() {
     // this should not fail
-    SpinJsonNode node = JSON(SpinIoUtil.fileAsString("org/camunda/spin/json/jackson146.json"));
+    SpinJsonNode node = JSON(SpinIoUtil.fileAsString("io/orqueio/spin/json/jackson146.json"));
 
     // file has 4000 characters in length a
     // 20 characters per repeated JSON object

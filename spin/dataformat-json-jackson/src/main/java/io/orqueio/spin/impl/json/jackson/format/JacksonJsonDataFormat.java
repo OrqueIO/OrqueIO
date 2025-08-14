@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.impl.json.jackson.format;
+package io.orqueio.spin.impl.json.jackson.format;
 
-import static org.camunda.commons.utils.EnsureUtil.ensureNotNull;
+import static io.orqueio.commons.utils.EnsureUtil.ensureNotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,13 +24,13 @@ import java.util.Map;
 
 import com.jayway.jsonpath.spi.json.JacksonJsonProvider;
 import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider;
-import org.camunda.spin.DataFormats;
-import org.camunda.spin.impl.json.jackson.JacksonJsonLogger;
-import org.camunda.spin.impl.json.jackson.JacksonJsonNode;
-import org.camunda.spin.json.SpinJsonDataFormatException;
-import org.camunda.spin.json.SpinJsonNode;
-import org.camunda.spin.spi.DataFormat;
-import org.camunda.spin.spi.TypeDetector;
+import io.orqueio.spin.DataFormats;
+import io.orqueio.spin.impl.json.jackson.JacksonJsonLogger;
+import io.orqueio.spin.impl.json.jackson.JacksonJsonNode;
+import io.orqueio.spin.json.SpinJsonDataFormatException;
+import io.orqueio.spin.json.SpinJsonNode;
+import io.orqueio.spin.spi.DataFormat;
+import io.orqueio.spin.spi.TypeDetector;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;

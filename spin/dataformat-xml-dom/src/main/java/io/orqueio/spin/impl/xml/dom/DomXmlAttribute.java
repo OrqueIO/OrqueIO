@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.impl.xml.dom;
+package io.orqueio.spin.impl.xml.dom;
 
 import java.io.IOException;
 import java.io.Writer;
 
-import org.camunda.spin.impl.xml.dom.format.DomXmlDataFormat;
-import org.camunda.spin.spi.DataFormatMapper;
-import org.camunda.spin.xml.SpinXmlAttribute;
-import org.camunda.spin.xml.SpinXmlElement;
+import io.orqueio.spin.impl.xml.dom.format.DomXmlDataFormat;
+import io.orqueio.spin.spi.DataFormatMapper;
+import io.orqueio.spin.xml.SpinXmlAttribute;
+import io.orqueio.spin.xml.SpinXmlElement;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
 

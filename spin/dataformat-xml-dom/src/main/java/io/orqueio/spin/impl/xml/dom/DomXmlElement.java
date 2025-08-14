@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.impl.xml.dom;
+package io.orqueio.spin.impl.xml.dom;
 
-import static org.camunda.commons.utils.EnsureUtil.ensureNotNull;
-import static org.camunda.commons.utils.EnsureUtil.ensureParamInstanceOf;
-import static org.camunda.spin.impl.xml.dom.util.DomXmlEnsure.ensureChildElement;
+import static io.orqueio.commons.utils.EnsureUtil.ensureNotNull;
+import static io.orqueio.commons.utils.EnsureUtil.ensureParamInstanceOf;
+import static io.orqueio.spin.impl.xml.dom.util.DomXmlEnsure.ensureChildElement;
 
 import java.io.StringWriter;
 import java.io.Writer;
@@ -31,14 +31,14 @@ import javax.xml.transform.Transformer;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathFactory;
 
-import org.camunda.spin.SpinList;
-import org.camunda.spin.impl.SpinListImpl;
-import org.camunda.spin.impl.xml.dom.format.DomXmlDataFormat;
-import org.camunda.spin.impl.xml.dom.query.DomXPathQuery;
-import org.camunda.spin.spi.DataFormatMapper;
-import org.camunda.spin.xml.SpinXPathQuery;
-import org.camunda.spin.xml.SpinXmlAttribute;
-import org.camunda.spin.xml.SpinXmlElement;
+import io.orqueio.spin.SpinList;
+import io.orqueio.spin.impl.SpinListImpl;
+import io.orqueio.spin.impl.xml.dom.format.DomXmlDataFormat;
+import io.orqueio.spin.impl.xml.dom.query.DomXPathQuery;
+import io.orqueio.spin.spi.DataFormatMapper;
+import io.orqueio.spin.xml.SpinXPathQuery;
+import io.orqueio.spin.xml.SpinXmlAttribute;
+import io.orqueio.spin.xml.SpinXmlElement;
 import org.w3c.dom.Attr;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;

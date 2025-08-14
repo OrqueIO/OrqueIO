@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.impl.xml.dom.format;
+package io.orqueio.spin.impl.xml.dom.format;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -26,11 +26,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
-import org.camunda.spin.DataFormats;
-import org.camunda.spin.SpinFactory;
-import org.camunda.spin.spi.DataFormat;
-import org.camunda.spin.xml.JdkUtil;
-import org.camunda.spin.xml.SpinXmlElement;
+import io.orqueio.spin.DataFormats;
+import io.orqueio.spin.SpinFactory;
+import io.orqueio.spin.spi.DataFormat;
+import io.orqueio.spin.xml.JdkUtil;
+import io.orqueio.spin.xml.SpinXmlElement;
 import org.junit.Test;
 
 /**
@@ -59,7 +59,7 @@ public class DomXmlDataFormatWriterTest {
 
 
   // this is what execution.setVariable("test", spinXml); does
-  // see https://github.com/camunda/camunda-bpm-platform/blob/master/engine-plugins/spin-plugin/src/main/java/org/camunda/spin/plugin/impl/SpinValueSerializer.java
+  // see https://github.com/camunda/camunda-bpm-platform/blob/master/engine-plugins/spin-plugin/src/main/java/io/orqueio/spin/plugin/impl/SpinValueSerializer.java
   private byte[] serializeValue(SpinXmlElement spinXml) throws UnsupportedEncodingException {
     ByteArrayOutputStream out = new ByteArrayOutputStream();
     OutputStreamWriter outWriter = new OutputStreamWriter(out, "UTF-8");
@@ -214,7 +214,7 @@ public class DomXmlDataFormatWriterTest {
     final DataFormat<SpinXmlElement> dataFormat = new DomXmlDataFormat(DataFormats.XML_DATAFORMAT_NAME);
 
     try (final InputStream inputStream = DomXmlDataFormatWriterTest.class.getClassLoader()
-        .getResourceAsStream("org/camunda/spin/strip-space-preserve-space.xsl")) {
+        .getResourceAsStream("io/orqueio/spin/strip-space-preserve-space.xsl")) {
       ((DomXmlDataFormat) dataFormat).setFormattingConfiguration(inputStream);
     }
 

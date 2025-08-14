@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.impl.json.jackson.format;
+package io.orqueio.spin.impl.json.jackson.format;
 
 import static org.mockito.Mockito.times;
 
-import org.camunda.spin.DeserializationTypeValidator;
-import org.camunda.spin.SpinRuntimeException;
+import io.orqueio.spin.DeserializationTypeValidator;
+import io.orqueio.spin.SpinRuntimeException;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -85,7 +85,7 @@ public class JsonDeserializationValidationTest {
     format.getMapper().validateType(type, validator);
 
     // then
-    Mockito.verify(validator).validate("org.camunda.spin.impl.json.jackson.format.JsonDeserializationValidationTest$Complex");
+    Mockito.verify(validator).validate("io.orqueio.spin.impl.json.jackson.format.JsonDeserializationValidationTest$Complex");
     Mockito.verifyNoMoreInteractions(validator);
   }
 
@@ -171,7 +171,7 @@ public class JsonDeserializationValidationTest {
 
     // then
     thrown.expect(SpinRuntimeException.class);
-    thrown.expectMessage("[org.camunda.spin.impl.json.jackson.format.JsonDeserializationValidationTest$Complex]");
+    thrown.expectMessage("[io.orqueio.spin.impl.json.jackson.format.JsonDeserializationValidationTest$Complex]");
 
     // when
     format.getMapper().validateType(type, validator);

@@ -1,4 +1,4 @@
-import org.camunda.spin.DataFormats.json as json;
+import io.orqueio.spin.DataFormats.json as json;
 
 json1 = S(input, json())
 

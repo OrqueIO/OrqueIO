@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.xml.dom.format.spi;
+package io.orqueio.spin.xml.dom.format.spi;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import org.camunda.spin.DataFormats;
-import org.camunda.spin.impl.xml.dom.format.DomXmlDataFormat;
-import org.camunda.spin.xml.JdkUtil;
-import org.camunda.spin.xml.SpinXmlDataFormatException;
+import io.orqueio.spin.DataFormats;
+import io.orqueio.spin.impl.xml.dom.format.DomXmlDataFormat;
+import io.orqueio.spin.xml.JdkUtil;
+import io.orqueio.spin.xml.SpinXmlDataFormatException;
 import org.junit.Assume;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -44,7 +44,7 @@ public class DomXmlDataFormatProtectionTest {
     Assume.assumeFalse(JdkUtil.runsOnIbmJDK());
 
     // given
-    String testXml = "org/camunda/spin/xml/dom/format/spi/FeatureSecureProcessing.xml";
+    String testXml = "io/orqueio/spin/xml/dom/format/spi/FeatureSecureProcessing.xml";
     InputStream testXmlAsStream = this.getClass().getClassLoader().getResourceAsStream(testXml);
 
     // when
@@ -58,7 +58,7 @@ public class DomXmlDataFormatProtectionTest {
   @Test
   public void shouldThrowExceptionForDoctype() {
     // given
-    String testXml = "org/camunda/spin/xml/dom/format/spi/XxeProcessing.xml";
+    String testXml = "io/orqueio/spin/xml/dom/format/spi/XxeProcessing.xml";
     InputStream testXmlAsStream = this.getClass().getClassLoader().getResourceAsStream(testXml);
 
     // when

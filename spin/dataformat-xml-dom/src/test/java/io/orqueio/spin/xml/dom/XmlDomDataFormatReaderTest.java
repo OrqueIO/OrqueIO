@@ -14,18 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.xml.dom;
+package io.orqueio.spin.xml.dom;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.camunda.spin.xml.XmlTestConstants.EXAMPLE_XML;
+import static io.orqueio.spin.xml.XmlTestConstants.EXAMPLE_XML;
 
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 
-import org.camunda.spin.DataFormats;
-import org.camunda.spin.impl.xml.dom.format.DomXmlDataFormat;
-import org.camunda.spin.impl.xml.dom.format.DomXmlDataFormatReader;
+import io.orqueio.spin.DataFormats;
+import io.orqueio.spin.impl.xml.dom.format.DomXmlDataFormat;
+import io.orqueio.spin.impl.xml.dom.format.DomXmlDataFormatReader;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

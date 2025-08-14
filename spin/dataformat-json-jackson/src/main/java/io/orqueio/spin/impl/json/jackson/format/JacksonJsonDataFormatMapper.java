@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.impl.json.jackson.format;
+package io.orqueio.spin.impl.json.jackson.format;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.camunda.spin.DeserializationTypeValidator;
-import org.camunda.spin.SpinRuntimeException;
-import org.camunda.spin.impl.json.jackson.JacksonJsonLogger;
-import org.camunda.spin.spi.DataFormatMapper;
+import io.orqueio.spin.DeserializationTypeValidator;
+import io.orqueio.spin.SpinRuntimeException;
+import io.orqueio.spin.impl.json.jackson.JacksonJsonLogger;
+import io.orqueio.spin.spi.DataFormatMapper;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;

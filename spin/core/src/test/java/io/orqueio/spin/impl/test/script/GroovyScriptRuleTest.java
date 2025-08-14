@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.impl.test.script;
+package io.orqueio.spin.impl.test.script;
 
-import org.camunda.spin.impl.test.ScriptEngine;
-import org.camunda.spin.impl.test.ScriptRuleTest;
+import io.orqueio.spin.impl.test.ScriptEngine;
+import io.orqueio.spin.impl.test.ScriptRuleTest;
 
 /**
  * @author Sebastian Menski

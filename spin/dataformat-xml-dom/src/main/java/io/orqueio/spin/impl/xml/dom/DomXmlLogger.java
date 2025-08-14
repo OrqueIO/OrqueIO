@@ -14,18 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.impl.xml.dom;
+package io.orqueio.spin.impl.xml.dom;
 
 import java.util.NoSuchElementException;
-import org.camunda.commons.logging.BaseLogger;
-import org.camunda.spin.impl.logging.SpinLogger;
-import org.camunda.spin.xml.SpinXPathException;
-import org.camunda.spin.xml.SpinXmlAttribute;
-import org.camunda.spin.xml.SpinXmlAttributeException;
-import org.camunda.spin.xml.SpinXmlDataFormatException;
-import org.camunda.spin.xml.SpinXmlElement;
-import org.camunda.spin.xml.SpinXmlElementException;
-import org.camunda.spin.xml.SpinXmlElementImplementationException;
+import io.orqueio.commons.logging.BaseLogger;
+import io.orqueio.spin.impl.logging.SpinLogger;
+import io.orqueio.spin.xml.SpinXPathException;
+import io.orqueio.spin.xml.SpinXmlAttribute;
+import io.orqueio.spin.xml.SpinXmlAttributeException;
+import io.orqueio.spin.xml.SpinXmlDataFormatException;
+import io.orqueio.spin.xml.SpinXmlElement;
+import io.orqueio.spin.xml.SpinXmlElementException;
+import io.orqueio.spin.xml.SpinXmlElementImplementationException;
 import org.w3c.dom.Node;
 
 /**
@@ -35,7 +35,7 @@ import org.w3c.dom.Node;
 public class DomXmlLogger extends SpinLogger {
 
   public static final String PROJECT_CODE = SpinLogger.PROJECT_CODE + "/DOM-XML";
-  public static final DomXmlLogger XML_DOM_LOGGER = BaseLogger.createLogger(DomXmlLogger.class, PROJECT_CODE, "org.camunda.spin.xml", "01");
+  public static final DomXmlLogger XML_DOM_LOGGER = BaseLogger.createLogger(DomXmlLogger.class, PROJECT_CODE, "io.orqueio.spin.xml", "01");
 
   public void usingDocumentBuilderFactory(String name) {
     logDebug("001", "Using document builder factory '{}'", name);

@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.xml.dom;
+package io.orqueio.spin.xml.dom;
 
-import static org.camunda.spin.xml.XmlTestConstants.EXAMPLE_VALIDATION_XML_FILE_NAME;
-import static org.camunda.spin.xml.XmlTestConstants.assertIsExampleOrder;
+import static io.orqueio.spin.xml.XmlTestConstants.EXAMPLE_VALIDATION_XML_FILE_NAME;
+import static io.orqueio.spin.xml.XmlTestConstants.assertIsExampleOrder;
 
-import org.camunda.spin.impl.test.Script;
-import org.camunda.spin.impl.test.ScriptTest;
-import org.camunda.spin.impl.test.ScriptVariable;
-import org.camunda.spin.xml.SpinXmlDataFormatException;
-import org.camunda.spin.xml.mapping.Order;
+import io.orqueio.spin.impl.test.Script;
+import io.orqueio.spin.impl.test.ScriptTest;
+import io.orqueio.spin.impl.test.ScriptVariable;
+import io.orqueio.spin.xml.SpinXmlDataFormatException;
+import io.orqueio.spin.xml.mapping.Order;
 import org.junit.Test;
 
 /**

@@ -14,23 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.json.tree;
+package io.orqueio.spin.json.tree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
-import static org.camunda.spin.DataFormats.json;
-import static org.camunda.spin.Spin.JSON;
-import static org.camunda.spin.Spin.S;
-import static org.camunda.spin.impl.util.SpinIoUtil.stringAsReader;
-import static org.camunda.spin.json.JsonTestConstants.EXAMPLE_EMPTY_STRING;
-import static org.camunda.spin.json.JsonTestConstants.EXAMPLE_INVALID_JSON;
-import static org.camunda.spin.json.JsonTestConstants.EXAMPLE_JSON;
+import static io.orqueio.spin.DataFormats.json;
+import static io.orqueio.spin.Spin.JSON;
+import static io.orqueio.spin.Spin.S;
+import static io.orqueio.spin.impl.util.SpinIoUtil.stringAsReader;
+import static io.orqueio.spin.json.JsonTestConstants.EXAMPLE_EMPTY_STRING;
+import static io.orqueio.spin.json.JsonTestConstants.EXAMPLE_INVALID_JSON;
+import static io.orqueio.spin.json.JsonTestConstants.EXAMPLE_JSON;
 
 import java.io.Reader;
 
-import org.camunda.spin.DataFormats;
-import org.camunda.spin.json.SpinJsonNode;
-import org.camunda.spin.spi.SpinDataFormatException;
+import io.orqueio.spin.DataFormats;
+import io.orqueio.spin.json.SpinJsonNode;
+import io.orqueio.spin.spi.SpinDataFormatException;
 import org.junit.Test;
 
 /**

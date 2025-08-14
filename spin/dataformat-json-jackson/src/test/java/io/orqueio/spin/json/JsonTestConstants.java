@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.json;
+package io.orqueio.spin.json;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
@@ -22,16 +22,16 @@ import static org.assertj.core.api.Assertions.tuple;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.camunda.spin.impl.util.SpinIoUtil;
-import org.camunda.spin.json.mapping.Customer;
-import org.camunda.spin.json.mapping.Invoice;
-import org.camunda.spin.json.mapping.Order;
-import org.camunda.spin.json.mapping.OrderDetails;
-import org.camunda.spin.json.mapping.RegularCustomer;
+import io.orqueio.spin.impl.util.SpinIoUtil;
+import io.orqueio.spin.json.mapping.Customer;
+import io.orqueio.spin.json.mapping.Invoice;
+import io.orqueio.spin.json.mapping.Order;
+import io.orqueio.spin.json.mapping.OrderDetails;
+import io.orqueio.spin.json.mapping.RegularCustomer;
 
 public class JsonTestConstants {
 
-  public static final String EXAMPLE_JSON_FILE_NAME = "org/camunda/spin/json/example.json";
+  public static final String EXAMPLE_JSON_FILE_NAME = "io/orqueio/spin/json/example.json";
 
   public static final String EXAMPLE_JSON = SpinIoUtil.fileAsString(EXAMPLE_JSON_FILE_NAME);
 
@@ -44,11 +44,11 @@ public class JsonTestConstants {
   /**
    * A json file that can only be parsed when configuring Jackson correctly.
    */
-  public static final String EXAMPLE_JACKSON_READ_CONFIGURATION_JSON_FILE_NAME = "org/camunda/spin/json/example_jackson.json";
+  public static final String EXAMPLE_JACKSON_READ_CONFIGURATION_JSON_FILE_NAME = "io/orqueio/spin/json/example_jackson.json";
 
   public static final String EXAMPLE_JACKSON_READ_CONFIGURATION_JSON = SpinIoUtil.fileAsString(EXAMPLE_JACKSON_READ_CONFIGURATION_JSON_FILE_NAME);
 
-  public static final String EXAMPLE_JACKSON_TYPE_JSON_FILE_NAME = "org/camunda/spin/json/example_jackson_types.json";
+  public static final String EXAMPLE_JACKSON_TYPE_JSON_FILE_NAME = "io/orqueio/spin/json/example_jackson_types.json";
 
   public static final String EXAMPLE_JACKSON_TYPE_JSON = SpinIoUtil.fileAsString(EXAMPLE_JACKSON_TYPE_JSON_FILE_NAME);
 

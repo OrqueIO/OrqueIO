@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.xml;
+package io.orqueio.spin.xml;
 
 import java.io.Writer;
 import java.util.Collection;
 import java.util.List;
 
-import org.camunda.spin.SpinList;
+import io.orqueio.spin.SpinList;
 
 /**
  * An element in a tree-oriented XML data format.

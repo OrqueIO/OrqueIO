@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.spi;
+package io.orqueio.spin.spi;
 
 import java.io.Reader;
 
-import org.camunda.spin.Spin;
+import io.orqueio.spin.Spin;
 
 /**
  * Reads the internal representation of a {@link Spin} object from its serialized representation.

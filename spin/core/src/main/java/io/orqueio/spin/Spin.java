@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin;
+package io.orqueio.spin;
 
 import java.io.Writer;
 
-import org.camunda.spin.json.SpinJsonNode;
-import org.camunda.spin.spi.DataFormat;
-import org.camunda.spin.xml.SpinXmlElement;
+import io.orqueio.spin.json.SpinJsonNode;
+import io.orqueio.spin.spi.DataFormat;
+import io.orqueio.spin.xml.SpinXmlElement;
 
 /**
  *

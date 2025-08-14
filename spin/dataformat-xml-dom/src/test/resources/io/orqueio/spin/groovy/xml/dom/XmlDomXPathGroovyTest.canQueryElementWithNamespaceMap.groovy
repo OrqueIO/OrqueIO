@@ -1,4 +1,4 @@
-package org.camunda.spin.groovy.xml.dom
+package io.orqueio.spin.groovy.xml.dom
 def map = [
   a:"http://camunda.com"
 ]

@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.spi;
+package io.orqueio.spin.spi;
 
 import java.io.IOException;
 import java.io.Reader;
 import java.util.regex.Pattern;
 
-import org.camunda.spin.impl.logging.SpinCoreLogger;
+import io.orqueio.spin.impl.logging.SpinCoreLogger;
 
 /**
  * Can be used as a base class to determine whether an input reader

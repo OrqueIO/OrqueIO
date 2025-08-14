@@ -1,1 +1,1 @@
-order = S(input, "application/xml").mapTo("org.camunda.spin.xml.mapping.Order")
+order = S(input, "application/xml").mapTo("io.orqueio.spin.xml.mapping.Order")

@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.json;
+package io.orqueio.spin.json;
 
-import org.camunda.spin.DeserializationTypeValidator;
-import org.camunda.spin.spi.DataFormatMapper;
+import io.orqueio.spin.DeserializationTypeValidator;
+import io.orqueio.spin.spi.DataFormatMapper;
 import org.junit.Before;
 import org.mockito.Mockito;
 

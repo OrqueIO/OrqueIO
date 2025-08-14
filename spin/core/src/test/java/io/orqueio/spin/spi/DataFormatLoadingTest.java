@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.spi;
+package io.orqueio.spin.spi;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.powermock.api.mockito.PowerMockito.mock;
@@ -26,7 +26,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.ServiceLoader;
 
-import org.camunda.spin.DataFormats;
+import io.orqueio.spin.DataFormats;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

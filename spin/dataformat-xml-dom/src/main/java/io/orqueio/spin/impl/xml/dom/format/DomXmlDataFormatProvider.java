@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.impl.xml.dom.format;
+package io.orqueio.spin.impl.xml.dom.format;
 
 import java.util.Map;
 
-import org.camunda.spin.DataFormats;
-import org.camunda.spin.spi.DataFormat;
-import org.camunda.spin.spi.DataFormatProvider;
+import io.orqueio.spin.DataFormats;
+import io.orqueio.spin.spi.DataFormat;
+import io.orqueio.spin.spi.DataFormatProvider;
 
 /**
  * Provides the {@link DomXmlDataFormat} with default configuration.

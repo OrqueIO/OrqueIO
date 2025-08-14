@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin;
+package io.orqueio.spin;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -24,13 +24,13 @@ import java.util.Map;
 import java.util.ServiceLoader;
 import java.util.Set;
 
-import org.camunda.spin.impl.logging.SpinCoreLogger;
-import org.camunda.spin.impl.logging.SpinLogger;
-import org.camunda.spin.json.SpinJsonNode;
-import org.camunda.spin.spi.DataFormat;
-import org.camunda.spin.spi.DataFormatConfigurator;
-import org.camunda.spin.spi.DataFormatProvider;
-import org.camunda.spin.xml.SpinXmlElement;
+import io.orqueio.spin.impl.logging.SpinCoreLogger;
+import io.orqueio.spin.impl.logging.SpinLogger;
+import io.orqueio.spin.json.SpinJsonNode;
+import io.orqueio.spin.spi.DataFormat;
+import io.orqueio.spin.spi.DataFormatConfigurator;
+import io.orqueio.spin.spi.DataFormatProvider;
+import io.orqueio.spin.xml.SpinXmlElement;
 
 /**
  * Provides access to all builtin data formats.

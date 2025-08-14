@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.impl.logging;
+package io.orqueio.spin.impl.logging;
 
-import org.camunda.commons.logging.BaseLogger;
+import io.orqueio.commons.logging.BaseLogger;
 
 /**
  * @author Daniel Meyer
@@ -26,6 +26,6 @@ public abstract class SpinLogger extends BaseLogger {
 
   public static final String PROJECT_CODE = "SPIN";
 
-  public static final SpinCoreLogger CORE_LOGGER = BaseLogger.createLogger(SpinCoreLogger.class, PROJECT_CODE, "org.camunda.spin", "01");
+  public static final SpinCoreLogger CORE_LOGGER = BaseLogger.createLogger(SpinCoreLogger.class, PROJECT_CODE, "io.orqueio.spin", "01");
 
 }

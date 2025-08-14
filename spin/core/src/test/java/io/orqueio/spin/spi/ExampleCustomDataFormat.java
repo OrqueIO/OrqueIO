@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.spi;
+package io.orqueio.spin.spi;
 
-import org.camunda.spin.json.SpinJsonNode;
+import io.orqueio.spin.json.SpinJsonNode;
 
 /**
  * @author Thorben Lindhauer

@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.javascript.nashorn.xml.dom;
+package io.orqueio.spin.javascript.nashorn.xml.dom;
 
-import org.camunda.spin.impl.test.ScriptEngine;
-import org.camunda.spin.xml.dom.XmlDomAttributeScriptTest;
+import io.orqueio.spin.impl.test.ScriptEngine;
+import io.orqueio.spin.xml.dom.XmlDomAttributeScriptTest;
 
 @ScriptEngine("nashorn")
 public class XmlDomAttributeJavascriptTest extends XmlDomAttributeScriptTest {

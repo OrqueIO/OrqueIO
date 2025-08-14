@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.python.xml.dom;
+package io.orqueio.spin.python.xml.dom;
 
-import org.camunda.spin.impl.test.ScriptEngine;
-import org.camunda.spin.xml.dom.XmlDomMapXmlToJavaScriptTest;
+import io.orqueio.spin.impl.test.ScriptEngine;
+import io.orqueio.spin.xml.dom.XmlDomMapXmlToJavaScriptTest;
 
 /**
  * @author Stefan Hentschel.

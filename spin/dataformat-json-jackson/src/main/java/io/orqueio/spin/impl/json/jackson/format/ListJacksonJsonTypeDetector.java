@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.impl.json.jackson.format;
+package io.orqueio.spin.impl.json.jackson.format;
 
 import java.lang.reflect.TypeVariable;
 import java.util.List;

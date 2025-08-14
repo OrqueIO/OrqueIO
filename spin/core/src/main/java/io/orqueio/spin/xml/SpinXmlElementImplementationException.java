@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.xml;
+package io.orqueio.spin.xml;
 
 /**
  * Indicates an error in the underlying xml tree element implementation.

@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.impl.util;
+package io.orqueio.spin.impl.util;
 
-import org.camunda.spin.impl.logging.SpinCoreLogger;
-import org.camunda.spin.spi.DataFormat;
+import io.orqueio.spin.impl.logging.SpinCoreLogger;
+import io.orqueio.spin.spi.DataFormat;
 
 /**
  * @author Daniel Meyer

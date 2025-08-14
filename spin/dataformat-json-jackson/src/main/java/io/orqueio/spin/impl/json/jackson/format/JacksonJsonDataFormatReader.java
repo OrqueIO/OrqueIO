@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.impl.json.jackson.format;
+package io.orqueio.spin.impl.json.jackson.format;
 
 import java.io.IOException;
 import java.io.Reader;
 import java.util.regex.Pattern;
 
 import com.fasterxml.jackson.databind.node.MissingNode;
-import org.camunda.spin.impl.json.jackson.JacksonJsonLogger;
-import org.camunda.spin.spi.TextBasedDataFormatReader;
+import io.orqueio.spin.impl.json.jackson.JacksonJsonLogger;
+import io.orqueio.spin.spi.TextBasedDataFormatReader;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;

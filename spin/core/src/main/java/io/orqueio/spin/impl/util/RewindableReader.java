@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.impl.util;
+package io.orqueio.spin.impl.util;
 
 import java.io.IOException;
 import java.io.PushbackReader;
 import java.io.Reader;
 
-import org.camunda.spin.impl.logging.SpinCoreLogger;
-import org.camunda.spin.impl.logging.SpinLogger;
+import io.orqueio.spin.impl.logging.SpinCoreLogger;
+import io.orqueio.spin.impl.logging.SpinLogger;
 
 /**
  * Caches the initial characters that are read from the supplied {@link Reader} and

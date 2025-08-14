@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.scripting;
+package io.orqueio.spin.scripting;
 
-import org.camunda.spin.SpinScriptException;
-import org.camunda.spin.impl.logging.SpinCoreLogger;
-import org.camunda.spin.impl.logging.SpinLogger;
-import org.camunda.spin.impl.util.SpinIoUtil;
+import io.orqueio.spin.SpinScriptException;
+import io.orqueio.spin.impl.logging.SpinCoreLogger;
+import io.orqueio.spin.impl.logging.SpinLogger;
+import io.orqueio.spin.impl.util.SpinIoUtil;
 
 import javax.script.ScriptEngine;
 

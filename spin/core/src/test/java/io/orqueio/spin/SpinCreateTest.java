@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin;
+package io.orqueio.spin;
 
 import static org.assertj.core.api.Assertions.fail;
-import static org.camunda.spin.Spin.S;
+import static io.orqueio.spin.Spin.S;
 
-import org.camunda.spin.spi.DataFormat;
+import io.orqueio.spin.spi.DataFormat;
 import org.junit.Test;
 
 /**

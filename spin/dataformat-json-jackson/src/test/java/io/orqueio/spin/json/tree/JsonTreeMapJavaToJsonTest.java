@@ -14,23 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.json.tree;
+package io.orqueio.spin.json.tree;
 
 import static net.javacrumbs.jsonunit.fluent.JsonFluentAssert.assertThatJson;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
-import static org.camunda.spin.Spin.JSON;
-import static org.camunda.spin.json.JsonTestConstants.EXAMPLE_JSON;
-import static org.camunda.spin.json.JsonTestConstants.createExampleOrder;
+import static io.orqueio.spin.Spin.JSON;
+import static io.orqueio.spin.json.JsonTestConstants.EXAMPLE_JSON;
+import static io.orqueio.spin.json.JsonTestConstants.createExampleOrder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.spin.SpinList;
-import org.camunda.spin.json.SpinJsonNode;
-import org.camunda.spin.json.mapping.Order;
+import io.orqueio.spin.SpinList;
+import io.orqueio.spin.json.SpinJsonNode;
+import io.orqueio.spin.json.mapping.Order;
 import org.junit.Test;
 
 public class JsonTreeMapJavaToJsonTest {

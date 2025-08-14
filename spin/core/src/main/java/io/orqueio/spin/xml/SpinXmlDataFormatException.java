@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.xml;
+package io.orqueio.spin.xml;
 
-import org.camunda.spin.spi.SpinDataFormatException;
+import io.orqueio.spin.spi.SpinDataFormatException;
 
 /**
  * @author Daniel Meyer

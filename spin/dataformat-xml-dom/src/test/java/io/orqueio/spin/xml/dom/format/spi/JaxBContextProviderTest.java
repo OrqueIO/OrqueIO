@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.xml.dom.format.spi;
+package io.orqueio.spin.xml.dom.format.spi;
 
 import static org.assertj.core.api.Fail.fail;
 
@@ -24,12 +24,12 @@ import java.util.Set;
 
 import javax.xml.bind.JAXBException;
 
-import org.camunda.spin.DataFormats;
-import org.camunda.spin.Spin;
-import org.camunda.spin.impl.xml.dom.format.DomXmlDataFormat;
-import org.camunda.spin.xml.SpinXmlDataFormatException;
-import org.camunda.spin.xml.SpinXmlElement;
-import org.camunda.spin.xml.mapping.Customer;
+import io.orqueio.spin.DataFormats;
+import io.orqueio.spin.Spin;
+import io.orqueio.spin.impl.xml.dom.format.DomXmlDataFormat;
+import io.orqueio.spin.xml.SpinXmlDataFormatException;
+import io.orqueio.spin.xml.SpinXmlElement;
+import io.orqueio.spin.xml.mapping.Customer;
 import org.junit.After;
 import org.junit.Test;
 

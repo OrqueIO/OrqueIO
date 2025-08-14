@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.json;
+package io.orqueio.spin.json;
 
-import org.camunda.spin.Spin;
-import org.camunda.spin.SpinList;
-import org.camunda.spin.spi.SpinDataFormatException;
+import io.orqueio.spin.Spin;
+import io.orqueio.spin.SpinList;
+import io.orqueio.spin.spi.SpinDataFormatException;
 
 import java.util.List;
 import java.util.Map;

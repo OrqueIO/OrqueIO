@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.impl.test;
+package io.orqueio.spin.impl.test;
 
 import java.io.File;
 import java.io.Reader;
@@ -26,9 +26,9 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 import javax.script.SimpleBindings;
 
-import org.camunda.spin.SpinScriptException;
-import org.camunda.spin.impl.util.SpinIoUtil;
-import org.camunda.spin.scripting.SpinScriptEnv;
+import io.orqueio.spin.SpinScriptException;
+import io.orqueio.spin.impl.util.SpinIoUtil;
+import io.orqueio.spin.scripting.SpinScriptEnv;
 import org.graalvm.polyglot.Value;
 import org.junit.ClassRule;
 import org.junit.rules.TestRule;
@@ -37,7 +37,7 @@ import org.junit.runners.model.Statement;
 
 /**
  * A jUnit4 {@link TestRule} to load and execute a script. To
- * execute a {@link org.camunda.spin.impl.test.ScriptEngine} {@link ClassRule}
+ * execute a {@link io.orqueio.spin.impl.test.ScriptEngine} {@link ClassRule}
  * is used to obtain a {@link ScriptEngine}.
  *
  * @author Sebastian Menski

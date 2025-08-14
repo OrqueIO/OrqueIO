@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin;
+package io.orqueio.spin;
 
-import org.camunda.spin.impl.SpinFactoryImpl;
-import org.camunda.spin.spi.DataFormat;
+import io.orqueio.spin.impl.SpinFactoryImpl;
+import io.orqueio.spin.spi.DataFormat;
 
 /**
  *

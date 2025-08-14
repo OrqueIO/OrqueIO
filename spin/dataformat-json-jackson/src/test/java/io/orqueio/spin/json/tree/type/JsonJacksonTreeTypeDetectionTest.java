@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.json.tree.type;
+package io.orqueio.spin.json.tree.type;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
-import static org.camunda.spin.DataFormats.json;
+import static io.orqueio.spin.DataFormats.json;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,12 +27,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.camunda.spin.DataFormats;
-import org.camunda.spin.impl.json.jackson.format.JacksonJsonDataFormat;
-import org.camunda.spin.impl.json.jackson.format.MapJacksonJsonTypeDetector;
-import org.camunda.spin.impl.json.jackson.format.SetJacksonJsonTypeDetector;
-import org.camunda.spin.json.mapping.Customer;
-import org.camunda.spin.json.mapping.RegularCustomer;
+import io.orqueio.spin.DataFormats;
+import io.orqueio.spin.impl.json.jackson.format.JacksonJsonDataFormat;
+import io.orqueio.spin.impl.json.jackson.format.MapJacksonJsonTypeDetector;
+import io.orqueio.spin.impl.json.jackson.format.SetJacksonJsonTypeDetector;
+import io.orqueio.spin.json.mapping.Customer;
+import io.orqueio.spin.json.mapping.RegularCustomer;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -54,7 +54,7 @@ public class JsonJacksonTreeTypeDetectionTest {
   public void shouldDetectTypeFromObject() {
     RegularCustomer customer = new RegularCustomer();
     String canonicalTypeString = json().getMapper().getCanonicalTypeName(customer);
-    assertThat(canonicalTypeString).isEqualTo("org.camunda.spin.json.mapping.RegularCustomer");
+    assertThat(canonicalTypeString).isEqualTo("io.orqueio.spin.json.mapping.RegularCustomer");
   }
 
   @Test
@@ -63,7 +63,7 @@ public class JsonJacksonTreeTypeDetectionTest {
     customers.add(new RegularCustomer());
 
     String canonicalTypeString = json().getMapper().getCanonicalTypeName(customers);
-    assertThat(canonicalTypeString).isEqualTo("java.util.ArrayList<org.camunda.spin.json.mapping.RegularCustomer>");
+    assertThat(canonicalTypeString).isEqualTo("java.util.ArrayList<io.orqueio.spin.json.mapping.RegularCustomer>");
   }
 
   @Test
@@ -80,7 +80,7 @@ public class JsonJacksonTreeTypeDetectionTest {
     customers.add(new RegularCustomer());
 
     String canonicalTypeString = dataFormatWithSetTypeDetector.getCanonicalTypeName(customers);
-    assertThat(canonicalTypeString).isEqualTo("java.util.HashSet<org.camunda.spin.json.mapping.RegularCustomer>");
+    assertThat(canonicalTypeString).isEqualTo("java.util.HashSet<io.orqueio.spin.json.mapping.RegularCustomer>");
   }
 
   @Test
@@ -97,7 +97,7 @@ public class JsonJacksonTreeTypeDetectionTest {
     customers.put("foo", new RegularCustomer());
 
     String canonicalTypeString = dataFormatWithMapTypeDetector.getCanonicalTypeName(customers);
-    assertThat(canonicalTypeString).isEqualTo("java.util.Map<java.lang.String,org.camunda.spin.json.mapping.RegularCustomer>");
+    assertThat(canonicalTypeString).isEqualTo("java.util.Map<java.lang.String,io.orqueio.spin.json.mapping.RegularCustomer>");
   }
 
   @Test
@@ -126,7 +126,7 @@ public class JsonJacksonTreeTypeDetectionTest {
     nestedCustomers.add(customers);
 
     String canonicalTypeString = json().getMapper().getCanonicalTypeName(nestedCustomers);
-    assertThat(canonicalTypeString).isEqualTo("java.util.ArrayList<java.util.ArrayList<org.camunda.spin.json.mapping.RegularCustomer>>");
+    assertThat(canonicalTypeString).isEqualTo("java.util.ArrayList<java.util.ArrayList<io.orqueio.spin.json.mapping.RegularCustomer>>");
   }
 
   @Test
@@ -138,7 +138,7 @@ public class JsonJacksonTreeTypeDetectionTest {
 
     String canonicalTypeString =
         dataFormatWithSetTypeDetector.getCanonicalTypeName(nestedCustomers);
-    assertThat(canonicalTypeString).isEqualTo("java.util.HashSet<java.util.HashSet<org.camunda.spin.json.mapping.RegularCustomer>>");
+    assertThat(canonicalTypeString).isEqualTo("java.util.HashSet<java.util.HashSet<io.orqueio.spin.json.mapping.RegularCustomer>>");
   }
 
   @Test
@@ -150,7 +150,7 @@ public class JsonJacksonTreeTypeDetectionTest {
 
     String canonicalTypeString =
         dataFormatWithSetTypeDetector.getCanonicalTypeName(nestedCustomers);
-    assertThat(canonicalTypeString).isEqualTo("java.util.HashSet<java.util.ArrayList<org.camunda.spin.json.mapping.RegularCustomer>>");
+    assertThat(canonicalTypeString).isEqualTo("java.util.HashSet<java.util.ArrayList<io.orqueio.spin.json.mapping.RegularCustomer>>");
   }
 
   @Test
@@ -162,7 +162,7 @@ public class JsonJacksonTreeTypeDetectionTest {
 
     String canonicalTypeString =
         dataFormatWithMapTypeDetector.getCanonicalTypeName(nestedCustomers);
-    assertThat(canonicalTypeString).isEqualTo("java.util.Map<java.lang.String,java.util.Map<java.lang.Integer,org.camunda.spin.json.mapping.RegularCustomer>>");
+    assertThat(canonicalTypeString).isEqualTo("java.util.Map<java.lang.String,java.util.Map<java.lang.Integer,io.orqueio.spin.json.mapping.RegularCustomer>>");
   }
 
   @Test

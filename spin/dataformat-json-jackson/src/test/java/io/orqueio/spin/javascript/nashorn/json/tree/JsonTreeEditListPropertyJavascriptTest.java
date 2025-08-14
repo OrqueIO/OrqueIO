@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.javascript.nashorn.json.tree;
+package io.orqueio.spin.javascript.nashorn.json.tree;
 
-import org.camunda.spin.impl.test.ScriptEngine;
-import org.camunda.spin.json.tree.JsonTreeEditListPropertyScriptTest;
+import io.orqueio.spin.impl.test.ScriptEngine;
+import io.orqueio.spin.json.tree.JsonTreeEditListPropertyScriptTest;
 import org.junit.Ignore;
 import org.junit.Test;
 

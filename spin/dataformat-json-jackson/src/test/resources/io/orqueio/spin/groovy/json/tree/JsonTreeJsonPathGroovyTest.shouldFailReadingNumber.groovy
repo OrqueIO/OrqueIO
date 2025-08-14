@@ -1,4 +1,4 @@
-package org.camunda.spin.groovy.json.tree
+package io.orqueio.spin.groovy.json.tree
 
 jsonNode = S(input, "application/json");
 

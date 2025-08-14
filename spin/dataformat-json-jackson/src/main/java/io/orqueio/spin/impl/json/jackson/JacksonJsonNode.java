@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.impl.json.jackson;
+package io.orqueio.spin.impl.json.jackson;
 
-import static org.camunda.commons.utils.EnsureUtil.ensureNotNull;
+import static io.orqueio.commons.utils.EnsureUtil.ensureNotNull;
 
 import java.io.StringWriter;
 import java.io.Writer;
@@ -25,16 +25,16 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.spin.SpinList;
-import org.camunda.spin.impl.SpinListImpl;
-import org.camunda.spin.impl.json.jackson.format.JacksonJsonDataFormat;
-import org.camunda.spin.impl.json.jackson.format.JacksonJsonDataFormatMapper;
-import org.camunda.spin.impl.json.jackson.query.JacksonJsonPathQuery;
-import org.camunda.spin.json.SpinJsonDataFormatException;
-import org.camunda.spin.json.SpinJsonException;
-import org.camunda.spin.json.SpinJsonNode;
-import org.camunda.spin.json.SpinJsonPathQuery;
-import org.camunda.spin.spi.DataFormatMapper;
+import io.orqueio.spin.SpinList;
+import io.orqueio.spin.impl.SpinListImpl;
+import io.orqueio.spin.impl.json.jackson.format.JacksonJsonDataFormat;
+import io.orqueio.spin.impl.json.jackson.format.JacksonJsonDataFormatMapper;
+import io.orqueio.spin.impl.json.jackson.query.JacksonJsonPathQuery;
+import io.orqueio.spin.json.SpinJsonDataFormatException;
+import io.orqueio.spin.json.SpinJsonException;
+import io.orqueio.spin.json.SpinJsonNode;
+import io.orqueio.spin.json.SpinJsonPathQuery;
+import io.orqueio.spin.spi.DataFormatMapper;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;

@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.impl.json.jackson.format;
+package io.orqueio.spin.impl.json.jackson.format;
 
-import org.camunda.spin.spi.TypeDetector;
+import io.orqueio.spin.spi.TypeDetector;
 
 import java.util.Map;
 
-import static org.camunda.spin.impl.json.jackson.format.TypeHelper.constructType;
+import static io.orqueio.spin.impl.json.jackson.format.TypeHelper.constructType;
 
 /**
  * Detects erased types of Map classes.

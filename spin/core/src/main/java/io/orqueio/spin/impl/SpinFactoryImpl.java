@@ -14,23 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.impl;
+package io.orqueio.spin.impl;
 
-import static org.camunda.commons.utils.EnsureUtil.ensureNotNull;
+import static io.orqueio.commons.utils.EnsureUtil.ensureNotNull;
 
 import java.io.IOException;
 import java.io.Reader;
 
-import org.camunda.spin.DataFormats;
-import org.camunda.spin.Spin;
-import org.camunda.spin.SpinFactory;
-import org.camunda.spin.impl.logging.SpinCoreLogger;
-import org.camunda.spin.impl.util.RewindableReader;
-import org.camunda.spin.impl.util.SpinIoUtil;
-import org.camunda.spin.spi.DataFormat;
-import org.camunda.spin.spi.DataFormatMapper;
-import org.camunda.spin.spi.DataFormatReader;
-import org.camunda.spin.spi.SpinDataFormatException;
+import io.orqueio.spin.DataFormats;
+import io.orqueio.spin.Spin;
+import io.orqueio.spin.SpinFactory;
+import io.orqueio.spin.impl.logging.SpinCoreLogger;
+import io.orqueio.spin.impl.util.RewindableReader;
+import io.orqueio.spin.impl.util.SpinIoUtil;
+import io.orqueio.spin.spi.DataFormat;
+import io.orqueio.spin.spi.DataFormatMapper;
+import io.orqueio.spin.spi.DataFormatReader;
+import io.orqueio.spin.spi.SpinDataFormatException;
 
 /**
  * @author Daniel Meyer

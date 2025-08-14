@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.json;
+package io.orqueio.spin.json;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.camunda.spin.DataFormats.json;
+import static io.orqueio.spin.DataFormats.json;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -31,16 +31,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.camunda.spin.json.mapping.CustomerList;
-import org.camunda.spin.json.mapping.GenericCustomerList;
-import org.camunda.spin.json.mapping.Order;
-import org.camunda.spin.json.mapping.RegularCustomer;
-import org.camunda.spin.json.mapping.dmn.DmnDecisionResultEntries;
-import org.camunda.spin.json.mapping.dmn.DmnDecisionResultEntriesImpl;
-import org.camunda.spin.json.mapping.dmn.DmnDecisionResultImpl;
-import org.camunda.spin.spi.DataFormatMapper;
-import org.camunda.spin.spi.DataFormatReader;
-import org.camunda.spin.spi.DataFormatWriter;
+import io.orqueio.spin.json.mapping.CustomerList;
+import io.orqueio.spin.json.mapping.GenericCustomerList;
+import io.orqueio.spin.json.mapping.Order;
+import io.orqueio.spin.json.mapping.RegularCustomer;
+import io.orqueio.spin.json.mapping.dmn.DmnDecisionResultEntries;
+import io.orqueio.spin.json.mapping.dmn.DmnDecisionResultEntriesImpl;
+import io.orqueio.spin.json.mapping.dmn.DmnDecisionResultImpl;
+import io.orqueio.spin.spi.DataFormatMapper;
+import io.orqueio.spin.spi.DataFormatReader;
+import io.orqueio.spin.spi.DataFormatWriter;
 import org.junit.Test;
 
 public class JsonSerializationTest {

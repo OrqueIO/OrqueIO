@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.xml;
+package io.orqueio.spin.xml;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
@@ -32,10 +32,10 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
-import org.camunda.spin.impl.util.SpinIoUtil;
-import org.camunda.spin.xml.mapping.Customer;
-import org.camunda.spin.xml.mapping.Order;
-import org.camunda.spin.xml.mapping.OrderDetails;
+import io.orqueio.spin.impl.util.SpinIoUtil;
+import io.orqueio.spin.xml.mapping.Customer;
+import io.orqueio.spin.xml.mapping.Order;
+import io.orqueio.spin.xml.mapping.OrderDetails;
 import org.xml.sax.SAXException;
 
 /**
@@ -46,12 +46,12 @@ public class XmlTestConstants {
 
   public static final String EXAMPLE_NAMESPACE = "http://camunda.org/example";
 
-  public static final String EXAMPLE_XML_FILE_NAME = "org/camunda/spin/xml/example.xml";
+  public static final String EXAMPLE_XML_FILE_NAME = "io/orqueio/spin/xml/example.xml";
 
-  public static final String EXAMPLE_VALIDATION_XSD_FILE_NAME = "org/camunda/spin/xml/validation_schema.xsd";
-  public static final String EXAMPLE_VALIDATION_EXTENSION_XSD_FILE_NAME = "org/camunda/spin/xml/validation_schema_extension.xsd";
+  public static final String EXAMPLE_VALIDATION_XSD_FILE_NAME = "io/orqueio/spin/xml/validation_schema.xsd";
+  public static final String EXAMPLE_VALIDATION_EXTENSION_XSD_FILE_NAME = "io/orqueio/spin/xml/validation_schema_extension.xsd";
 
-  public static final String EXAMPLE_VALIDATION_XML_FILE_NAME = "org/camunda/spin/xml/validation_example.xml";
+  public static final String EXAMPLE_VALIDATION_XML_FILE_NAME = "io/orqueio/spin/xml/validation_example.xml";
 
   public static final String EXAMPLE_XML = SpinIoUtil.fileAsString(EXAMPLE_XML_FILE_NAME);
 

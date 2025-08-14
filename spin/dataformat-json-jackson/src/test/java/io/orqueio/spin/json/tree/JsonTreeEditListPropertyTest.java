@@ -14,18 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.json.tree;
+package io.orqueio.spin.json.tree;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
-import static org.camunda.spin.Spin.JSON;
-import static org.camunda.spin.json.JsonTestConstants.EXAMPLE_JSON;
+import static io.orqueio.spin.Spin.JSON;
+import static io.orqueio.spin.json.JsonTestConstants.EXAMPLE_JSON;
 
 import java.util.Date;
 
-import org.camunda.spin.json.SpinJsonException;
-import org.camunda.spin.json.SpinJsonNode;
-import org.camunda.spin.json.SpinJsonPropertyException;
+import io.orqueio.spin.json.SpinJsonException;
+import io.orqueio.spin.json.SpinJsonNode;
+import io.orqueio.spin.json.SpinJsonPropertyException;
 import org.junit.Before;
 import org.junit.Test;
 

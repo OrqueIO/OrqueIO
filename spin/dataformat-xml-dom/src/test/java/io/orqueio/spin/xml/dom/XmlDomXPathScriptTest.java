@@ -14,18 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.xml.dom;
+package io.orqueio.spin.xml.dom;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.camunda.spin.SpinList;
-import org.camunda.spin.impl.test.Script;
-import org.camunda.spin.impl.test.ScriptTest;
-import org.camunda.spin.impl.test.ScriptVariable;
-import org.camunda.spin.xml.SpinXPathException;
-import org.camunda.spin.xml.SpinXPathQuery;
-import org.camunda.spin.xml.SpinXmlAttribute;
-import org.camunda.spin.xml.SpinXmlElement;
+import io.orqueio.spin.SpinList;
+import io.orqueio.spin.impl.test.Script;
+import io.orqueio.spin.impl.test.ScriptTest;
+import io.orqueio.spin.impl.test.ScriptVariable;
+import io.orqueio.spin.xml.SpinXPathException;
+import io.orqueio.spin.xml.SpinXPathQuery;
+import io.orqueio.spin.xml.SpinXmlAttribute;
+import io.orqueio.spin.xml.SpinXmlElement;
 import org.junit.Test;
 
 /**

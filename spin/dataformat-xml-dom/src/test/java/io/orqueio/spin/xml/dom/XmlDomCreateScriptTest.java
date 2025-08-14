@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.xml.dom;
+package io.orqueio.spin.xml.dom;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.camunda.spin.xml.XmlTestConstants.EXAMPLE_XML_FILE_NAME;
+import static io.orqueio.spin.xml.XmlTestConstants.EXAMPLE_XML_FILE_NAME;
 
-import org.camunda.spin.impl.test.Script;
-import org.camunda.spin.impl.test.ScriptTest;
-import org.camunda.spin.impl.test.ScriptVariable;
-import org.camunda.spin.xml.SpinXmlElement;
+import io.orqueio.spin.impl.test.Script;
+import io.orqueio.spin.impl.test.ScriptTest;
+import io.orqueio.spin.impl.test.ScriptVariable;
+import io.orqueio.spin.xml.SpinXmlElement;
 import org.junit.Test;
 
 /**

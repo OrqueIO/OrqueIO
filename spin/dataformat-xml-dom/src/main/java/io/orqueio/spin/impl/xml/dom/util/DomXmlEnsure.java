@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.impl.xml.dom.util;
+package io.orqueio.spin.impl.xml.dom.util;
 
-import org.camunda.commons.utils.EnsureUtil;
-import org.camunda.spin.impl.xml.dom.DomXmlElement;
-import org.camunda.spin.impl.xml.dom.DomXmlLogger;
-import org.camunda.spin.xml.SpinXPathException;
-import org.camunda.spin.xml.SpinXmlElementException;
+import io.orqueio.commons.utils.EnsureUtil;
+import io.orqueio.spin.impl.xml.dom.DomXmlElement;
+import io.orqueio.spin.impl.xml.dom.DomXmlLogger;
+import io.orqueio.spin.xml.SpinXPathException;
+import io.orqueio.spin.xml.SpinXmlElementException;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 

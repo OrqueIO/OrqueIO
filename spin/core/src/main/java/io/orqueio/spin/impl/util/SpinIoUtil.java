@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.impl.util;
+package io.orqueio.spin.impl.util;
 
-import org.camunda.commons.utils.IoUtil;
-import org.camunda.spin.impl.logging.SpinCoreLogger;
-import org.camunda.spin.impl.logging.SpinLogger;
+import io.orqueio.commons.utils.IoUtil;
+import io.orqueio.spin.impl.logging.SpinCoreLogger;
+import io.orqueio.spin.impl.logging.SpinLogger;
 
 import java.io.*;
 import java.nio.charset.Charset;

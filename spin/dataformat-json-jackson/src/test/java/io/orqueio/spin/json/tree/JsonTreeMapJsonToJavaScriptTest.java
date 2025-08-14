@@ -14,25 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.json.tree;
+package io.orqueio.spin.json.tree;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.camunda.spin.json.JsonTestConstants.EXAMPLE_JSON_COLLECTION;
-import static org.camunda.spin.json.JsonTestConstants.EXAMPLE_JSON_FILE_NAME;
-import static org.camunda.spin.json.JsonTestConstants.assertIsExampleOrder;
+import static io.orqueio.spin.json.JsonTestConstants.EXAMPLE_JSON_COLLECTION;
+import static io.orqueio.spin.json.JsonTestConstants.EXAMPLE_JSON_FILE_NAME;
+import static io.orqueio.spin.json.JsonTestConstants.assertIsExampleOrder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.spin.impl.test.Script;
-import org.camunda.spin.impl.test.ScriptTest;
-import org.camunda.spin.impl.test.ScriptVariable;
-import org.camunda.spin.json.SpinJsonDataFormatException;
-import org.camunda.spin.json.SpinJsonException;
-import org.camunda.spin.json.mapping.Order;
-import org.camunda.spin.json.mapping.RegularCustomer;
+import io.orqueio.spin.impl.test.Script;
+import io.orqueio.spin.impl.test.ScriptTest;
+import io.orqueio.spin.impl.test.ScriptVariable;
+import io.orqueio.spin.json.SpinJsonDataFormatException;
+import io.orqueio.spin.json.SpinJsonException;
+import io.orqueio.spin.json.mapping.Order;
+import io.orqueio.spin.json.mapping.RegularCustomer;
 import org.junit.Test;
 
 public abstract class JsonTreeMapJsonToJavaScriptTest extends ScriptTest {

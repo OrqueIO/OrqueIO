@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.ruby.json.tree;
+package io.orqueio.spin.ruby.json.tree;
 
-import org.camunda.spin.impl.test.ScriptEngine;
-import org.camunda.spin.json.tree.JsonTreeCreateScriptTest;
+import io.orqueio.spin.impl.test.ScriptEngine;
+import io.orqueio.spin.json.tree.JsonTreeCreateScriptTest;
 
 /**
  * @author Daniel Meyer

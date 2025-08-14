@@ -1,4 +1,4 @@
-package org.camunda.spin.groovy.xml.dom
+package io.orqueio.spin.groovy.xml.dom
 
 child1 = S(child)
 child2 = S(child)

@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.xml.dom;
+package io.orqueio.spin.xml.dom;
 
 import static org.assertj.core.api.Assertions.fail;
-import static org.camunda.spin.Spin.XML;
-import static org.camunda.spin.xml.XmlTestConstants.EXAMPLE_VALIDATION_XML;
-import static org.camunda.spin.xml.XmlTestConstants.assertIsExampleOrder;
+import static io.orqueio.spin.Spin.XML;
+import static io.orqueio.spin.xml.XmlTestConstants.EXAMPLE_VALIDATION_XML;
+import static io.orqueio.spin.xml.XmlTestConstants.assertIsExampleOrder;
 
-import org.camunda.spin.xml.SpinXmlDataFormatException;
-import org.camunda.spin.xml.mapping.Order;
+import io.orqueio.spin.xml.SpinXmlDataFormatException;
+import io.orqueio.spin.xml.mapping.Order;
 import org.junit.Test;
 
 public class XmlDomMapXmlToJavaTest {

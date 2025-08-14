@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.impl.xml.dom.format.spi;
+package io.orqueio.spin.impl.xml.dom.format.spi;
 
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
-import org.camunda.spin.impl.xml.dom.format.DomXmlDataFormat;
+import io.orqueio.spin.impl.xml.dom.format.DomXmlDataFormat;
 
 /**
  * Provider for the Marshallers and Unmarshallers the {@link DomXmlDataFormat} uses to

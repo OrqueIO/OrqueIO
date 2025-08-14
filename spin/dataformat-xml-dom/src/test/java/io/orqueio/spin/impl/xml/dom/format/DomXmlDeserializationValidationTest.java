@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.impl.xml.dom.format;
+package io.orqueio.spin.impl.xml.dom.format;
 
-import org.camunda.spin.DeserializationTypeValidator;
-import org.camunda.spin.SpinRuntimeException;
+import io.orqueio.spin.DeserializationTypeValidator;
+import io.orqueio.spin.SpinRuntimeException;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -77,7 +77,7 @@ public class DomXmlDeserializationValidationTest {
     format.getMapper().validateType(Complex.class, validator);
 
     // then
-    Mockito.verify(validator).validate("org.camunda.spin.impl.xml.dom.format.DomXmlDeserializationValidationTest$Complex");
+    Mockito.verify(validator).validate("io.orqueio.spin.impl.xml.dom.format.DomXmlDeserializationValidationTest$Complex");
     Mockito.verifyNoMoreInteractions(validator);
   }
 
@@ -114,7 +114,7 @@ public class DomXmlDeserializationValidationTest {
 
     // then
     thrown.expect(SpinRuntimeException.class);
-    thrown.expectMessage("'org.camunda.spin.impl.xml.dom.format.DomXmlDeserializationValidationTest$Complex'");
+    thrown.expectMessage("'io.orqueio.spin.impl.xml.dom.format.DomXmlDeserializationValidationTest$Complex'");
 
     // when
     format.getMapper().validateType(Complex.class, validator);

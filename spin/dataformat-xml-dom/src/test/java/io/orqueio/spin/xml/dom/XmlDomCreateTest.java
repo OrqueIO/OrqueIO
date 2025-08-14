@@ -14,23 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.xml.dom;
+package io.orqueio.spin.xml.dom;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
-import static org.camunda.spin.DataFormats.xml;
-import static org.camunda.spin.Spin.S;
-import static org.camunda.spin.Spin.XML;
-import static org.camunda.spin.impl.util.SpinIoUtil.stringAsReader;
-import static org.camunda.spin.xml.XmlTestConstants.EXAMPLE_EMPTY_STRING;
-import static org.camunda.spin.xml.XmlTestConstants.EXAMPLE_INVALID_XML;
-import static org.camunda.spin.xml.XmlTestConstants.EXAMPLE_XML;
+import static io.orqueio.spin.DataFormats.xml;
+import static io.orqueio.spin.Spin.S;
+import static io.orqueio.spin.Spin.XML;
+import static io.orqueio.spin.impl.util.SpinIoUtil.stringAsReader;
+import static io.orqueio.spin.xml.XmlTestConstants.EXAMPLE_EMPTY_STRING;
+import static io.orqueio.spin.xml.XmlTestConstants.EXAMPLE_INVALID_XML;
+import static io.orqueio.spin.xml.XmlTestConstants.EXAMPLE_XML;
 
 import java.io.Reader;
 
-import org.camunda.spin.DataFormats;
-import org.camunda.spin.spi.SpinDataFormatException;
-import org.camunda.spin.xml.SpinXmlElement;
+import io.orqueio.spin.DataFormats;
+import io.orqueio.spin.spi.SpinDataFormatException;
+import io.orqueio.spin.xml.SpinXmlElement;
 import org.junit.Test;
 
 /**

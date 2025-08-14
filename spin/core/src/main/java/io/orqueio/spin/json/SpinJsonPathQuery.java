@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.json;
+package io.orqueio.spin.json;
 
-import org.camunda.spin.SpinList;
+import io.orqueio.spin.SpinList;
 
 /**
  * @author Stefan Hentschel

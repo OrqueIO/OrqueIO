@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.impl.xml.dom.query;
+package io.orqueio.spin.impl.xml.dom.query;
 
-import static org.camunda.spin.impl.xml.dom.util.DomXmlEnsure.ensureNotDocumentRootExpression;
-import static org.camunda.spin.impl.xml.dom.util.DomXmlEnsure.ensureXPathNotEmpty;
-import static org.camunda.spin.impl.xml.dom.util.DomXmlEnsure.ensureXPathNotNull;
+import static io.orqueio.spin.impl.xml.dom.util.DomXmlEnsure.ensureNotDocumentRootExpression;
+import static io.orqueio.spin.impl.xml.dom.util.DomXmlEnsure.ensureXPathNotEmpty;
+import static io.orqueio.spin.impl.xml.dom.util.DomXmlEnsure.ensureXPathNotNull;
 
 import java.util.Map;
 
@@ -26,16 +26,16 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 
-import org.camunda.spin.SpinList;
-import org.camunda.spin.impl.SpinListImpl;
-import org.camunda.spin.impl.xml.dom.DomXmlAttributeIterable;
-import org.camunda.spin.impl.xml.dom.DomXmlElement;
-import org.camunda.spin.impl.xml.dom.DomXmlElementIterable;
-import org.camunda.spin.impl.xml.dom.DomXmlLogger;
-import org.camunda.spin.impl.xml.dom.format.DomXmlDataFormat;
-import org.camunda.spin.xml.SpinXPathQuery;
-import org.camunda.spin.xml.SpinXmlAttribute;
-import org.camunda.spin.xml.SpinXmlElement;
+import io.orqueio.spin.SpinList;
+import io.orqueio.spin.impl.SpinListImpl;
+import io.orqueio.spin.impl.xml.dom.DomXmlAttributeIterable;
+import io.orqueio.spin.impl.xml.dom.DomXmlElement;
+import io.orqueio.spin.impl.xml.dom.DomXmlElementIterable;
+import io.orqueio.spin.impl.xml.dom.DomXmlLogger;
+import io.orqueio.spin.impl.xml.dom.format.DomXmlDataFormat;
+import io.orqueio.spin.xml.SpinXPathQuery;
+import io.orqueio.spin.xml.SpinXmlAttribute;
+import io.orqueio.spin.xml.SpinXmlElement;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;

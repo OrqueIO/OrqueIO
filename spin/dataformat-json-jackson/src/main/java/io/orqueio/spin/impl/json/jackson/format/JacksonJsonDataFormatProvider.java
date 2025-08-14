@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.impl.json.jackson.format;
+package io.orqueio.spin.impl.json.jackson.format;
 
-import static org.camunda.spin.DataFormats.JSON_DATAFORMAT_NAME;
+import static io.orqueio.spin.DataFormats.JSON_DATAFORMAT_NAME;
 
 import java.util.Set;
 
-import org.camunda.spin.spi.DataFormat;
-import org.camunda.spin.spi.DataFormatProvider;
+import io.orqueio.spin.spi.DataFormat;
+import io.orqueio.spin.spi.DataFormatProvider;
 
 /**
  * Provides the {@link JacksonJsonDataFormat} with default configuration.

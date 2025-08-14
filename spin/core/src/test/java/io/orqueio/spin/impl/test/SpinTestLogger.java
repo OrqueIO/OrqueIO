@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.impl.test;
+package io.orqueio.spin.impl.test;
 
-import org.camunda.commons.logging.BaseLogger;
-import org.camunda.spin.SpinRuntimeException;
-import org.camunda.spin.SpinScriptException;
-import org.camunda.spin.impl.logging.SpinLogger;
+import io.orqueio.commons.logging.BaseLogger;
+import io.orqueio.spin.SpinRuntimeException;
+import io.orqueio.spin.SpinScriptException;
+import io.orqueio.spin.impl.logging.SpinLogger;
 
 /**
  * Logger for test cases.
@@ -28,7 +28,7 @@ import org.camunda.spin.impl.logging.SpinLogger;
  */
 public class SpinTestLogger extends SpinLogger {
 
-  public static final SpinTestLogger TEST_LOGGER = BaseLogger.createLogger(SpinTestLogger.class, PROJECT_CODE, "org.camunda.spin.test", "02");
+  public static final SpinTestLogger TEST_LOGGER = BaseLogger.createLogger(SpinTestLogger.class, PROJECT_CODE, "io.orqueio.spin.test", "02");
 
   public void scriptEngineFoundForLanguage(String scriptLanguage) {
     logInfo("001", "Script engine found for script language '{}'", scriptLanguage);

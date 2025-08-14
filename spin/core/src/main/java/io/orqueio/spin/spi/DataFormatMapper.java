@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.spi;
+package io.orqueio.spin.spi;
 
-import org.camunda.spin.DeserializationTypeValidator;
+import io.orqueio.spin.DeserializationTypeValidator;
 
 /**
  * Maps a java object to the data format's internal representation and vice versa.

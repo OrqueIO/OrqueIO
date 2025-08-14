@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.impl.json.jackson;
+package io.orqueio.spin.impl.json.jackson;
 
-import org.camunda.commons.logging.BaseLogger;
-import org.camunda.spin.impl.logging.SpinLogger;
-import org.camunda.spin.json.SpinJsonDataFormatException;
-import org.camunda.spin.json.SpinJsonException;
-import org.camunda.spin.json.SpinJsonNode;
-import org.camunda.spin.json.SpinJsonPathException;
-import org.camunda.spin.json.SpinJsonPropertyException;
+import io.orqueio.commons.logging.BaseLogger;
+import io.orqueio.spin.impl.logging.SpinLogger;
+import io.orqueio.spin.json.SpinJsonDataFormatException;
+import io.orqueio.spin.json.SpinJsonException;
+import io.orqueio.spin.json.SpinJsonNode;
+import io.orqueio.spin.json.SpinJsonPathException;
+import io.orqueio.spin.json.SpinJsonPropertyException;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -36,7 +36,7 @@ import com.jayway.jsonpath.PathNotFoundException;
 public class JacksonJsonLogger extends SpinLogger {
 
   public static final String PROJECT_CODE = SpinLogger.PROJECT_CODE + "/JACKSON-JSON";
-  public static final JacksonJsonLogger JSON_TREE_LOGGER = BaseLogger.createLogger(JacksonJsonLogger.class, PROJECT_CODE, "org.camunda.spin.json", "01");
+  public static final JacksonJsonLogger JSON_TREE_LOGGER = BaseLogger.createLogger(JacksonJsonLogger.class, PROJECT_CODE, "io.orqueio.spin.json", "01");
 
   public SpinJsonDataFormatException unableToParseInput(Exception e) {
     return new SpinJsonDataFormatException(exceptionMessage("001", "Unable to parse input into json node"), e);
