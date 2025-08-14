@@ -1,128 +1,160 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <parent>
-    <groupId>org.camunda.bpm.quarkus</groupId>
-    <artifactId>camunda-bpm-quarkus-engine-parent</artifactId>
-    <version>7.24.0-SNAPSHOT</version>
-  </parent>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>io.orqueio.bpm.quarkus</groupId>
+        <artifactId>orqueio-bpm-quarkus-engine-parent</artifactId>
+        <version>1.0</version>
+    </parent>
 
-  <modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
-  <description>
-    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://camunda.com/contact/
-  </description>
 
-  <artifactId>camunda-bpm-quarkus-engine-qa</artifactId>
-  <name>Camunda Platform - Quarkus Extension - Engine - CDI QA</name>
+    <artifactId>orqueio-bpm-quarkus-engine-qa</artifactId>
+    <name>OrqueIO - Quarkus Extension - Engine - CDI QA</name>
 
-  <properties>
-    <arquillian.version>1.7.0.Final</arquillian.version>
-  </properties>
+    <properties>
+        <arquillian.version>1.7.0.Final</arquillian.version>
+    </properties>
 
-  <dependencyManagement>
+    <dependencyManagement>
+        <dependencies>
+            <!-- Add Quarkus BOM to fix Maven artifact dependencies overriden by Arquillian BOM -->
+            <dependency>
+                <groupId>io.quarkus</groupId>
+                <artifactId>quarkus-bom</artifactId>
+                <version>${version.quarkus}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.orqueio.bpm</groupId>
+                <artifactId>orqueio-core-internal-dependencies</artifactId>
+                <version>${project.version}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.arquillian</groupId>
+                <artifactId>arquillian-bom</artifactId>
+                <version>${arquillian.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <systemPropertyVariables>
+                        <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
+                    </systemPropertyVariables>
+
+                    <dependenciesToScan>
+                        <dependency>io.orqueio.bpm:orqueio-engine-cdi-jakarta</dependency>
+                    </dependenciesToScan>
+
+                    <excludes>
+                        <!-- See https://jira.camunda.com/browse/CAM-13751 -->
+                        <exclude>**/BeanPropertyElTest.java</exclude>
+
+                        <!-- See ProgrammaticBeanLookupTest in quarkus-extension/engine/deployment module -->
+                        <exclude>**/ProgrammaticBeanLookupTest.java</exclude>
+                        <!-- See https://github.com/camunda/camunda-bpm-platform/issues/3419 -->
+                        <exclude>**/TaskFormTest.java</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
     <dependencies>
-      <!-- Add Quarkus BOM to fix Maven artifact dependencies overriden by Arquillian BOM -->
-      <dependency>
-        <groupId>io.quarkus</groupId>
-        <artifactId>quarkus-bom</artifactId>
-        <version>${version.quarkus}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.camunda.bpm</groupId>
-        <artifactId>camunda-core-internal-dependencies</artifactId>
-        <version>${project.version}</version>
-        <scope>import</scope>
-        <type>pom</type>
-      </dependency>
-      <dependency>
-        <groupId>org.jboss.arquillian</groupId>
-        <artifactId>arquillian-bom</artifactId>
-        <version>${arquillian.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
+
+        <dependency>
+            <groupId>io.orqueio.bpm.quarkus</groupId>
+            <artifactId>orqueio-bpm-quarkus-engine</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.orqueio.bpm</groupId>
+            <artifactId>orqueio-engine-cdi-jakarta</artifactId>
+            <version>${project.version}</version>
+            <type>test-jar</type>
+            <classifier>tests-quarkus</classifier>
+        </dependency>
+
+        <!-- Quarkus dependencies -->
+
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-arquillian</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-jdbc-h2</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Test dependencies -->
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.arquillian.junit</groupId>
+            <artifactId>arquillian-junit-container</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
-  </dependencyManagement>
 
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <configuration>
-          <systemPropertyVariables>
-            <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
-          </systemPropertyVariables>
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
 
-          <dependenciesToScan>
-            <dependency>org.camunda.bpm:camunda-engine-cdi-jakarta</dependency>
-          </dependenciesToScan>
+    <organization>
+        <name>OrqueIO services</name>
+        <url>https://www.orqueio.io/</url>
+    </organization>
 
-          <excludes>
-            <!-- See https://jira.camunda.com/browse/CAM-13751 -->
-            <exclude>**/BeanPropertyElTest.java</exclude>
+    <url>https://www.orqueio.io/</url>
 
-            <!-- See ProgrammaticBeanLookupTest in quarkus-extension/engine/deployment module -->
-            <exclude>**/ProgrammaticBeanLookupTest.java</exclude>
-            <!-- See https://github.com/camunda/camunda-bpm-platform/issues/3419 -->
-            <exclude>**/TaskFormTest.java</exclude>
-          </excludes>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
+    <developers>
+        <developer>
+            <id>OrqueIO</id>
+            <name>OrqueIO Community</name>
+            <organization>orqueio.io</organization>
+            <organizationUrl>https://www.orqueio.io/</organizationUrl>
+        </developer>
+    </developers>
 
-  <dependencies>
-    <!-- Camunda dependencies -->
+    <scm>
+        <url>https://github.com/OrqueIO/OrqueIO</url>
+        <connection>scm:git:git@github.com:OrqueIO/OrqueIO.git</connection>
+        <developerConnection>scm:git:git@github.com:OrqueIO/OrqueIO.git</developerConnection>
+        <tag>OrqueIO-1.0</tag>
+    </scm>
 
-    <dependency>
-      <groupId>org.camunda.bpm.quarkus</groupId>
-      <artifactId>camunda-bpm-quarkus-engine</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.camunda.bpm</groupId>
-      <artifactId>camunda-engine-cdi-jakarta</artifactId>
-      <version>${project.version}</version>
-      <type>test-jar</type>
-      <classifier>tests-quarkus</classifier>
-    </dependency>
-
-    <!-- Quarkus dependencies -->
-
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-arquillian</artifactId>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-jdbc-h2</artifactId>
-      <scope>test</scope>
-    </dependency>
-
-    <!-- Test dependencies -->
-
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.jboss.arquillian.junit</groupId>
-      <artifactId>arquillian-junit-container</artifactId>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.assertj</groupId>
-      <artifactId>assertj-core</artifactId>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
+    <issueManagement>
+        <system>GitHub Issues</system>
+        <url>https://github.com/OrqueIO/OrqueIO/issues</url>
+    </issueManagement>
 
 </project>
