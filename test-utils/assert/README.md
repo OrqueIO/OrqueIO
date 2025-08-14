@@ -1,6 +1,6 @@
-# Camunda Platform Assert
+# OrqueIO Assert
 
-**Camunda Platform Assert** makes it easy to assert the status of your BPMN processes and CMMN cases when driving them forward in your typical unit test methods. Simply write code like
+**OrqueIO Assert** makes it easy to assert the status of your BPMN processes and CMMN cases when driving them forward in your typical unit test methods. Simply write code like
 
 ```groovy
 assertThat(instance).isWaitingAt("UserTask_InformCustomer");
@@ -15,8 +15,8 @@ complete(task(instance), withVariables("approved", true));
 
 ## Compatibility
 
-Camunda Platform Assert works with the corresponding version of Camunda Platform (i.e., Camunda Platform Assert 7.17.0 is compatible to Camunda Platform 7.17.0). The compatibility between earlier versions are as shown [in the documentation](https://docs.camunda.org/manual/latest/user-guide/testing/#assertions-version-compatibility).
-Camunda Platform Assert works with multiple Java versions (1.8+). All of this is continuously verified by executing around 500 test cases. 
+OrqueIO Assert works with the corresponding version of OrqueIO (i.e., OrqueIO Assert 7.17.0 is compatible to OrqueIO 7.17.0). The compatibility between earlier versions are as shown [in the documentation](https://docs.camunda.org/manual/latest/user-guide/testing/#assertions-version-compatibility).
+OrqueIO Assert works with multiple Java versions (1.8+). All of this is continuously verified by executing around 500 test cases. 
 
 ## Get started
 
@@ -24,8 +24,8 @@ Camunda Platform Assert works with multiple Java versions (1.8+). All of this is
 
 ```xml  
 <dependency>
-    <groupId>org.camunda.bpm</groupId>
-    <artifactId>camunda-bpm-assert</artifactId>
+    <groupId>io.orqueio.bpm</groupId>
+    <artifactId>orqueio-bpm-assert</artifactId>
     <version>${camunda.platform.version}</version>
     <scope>test</scope>
 </dependency>
@@ -37,7 +37,7 @@ Please note that if you use [Spring Boot](https://spring.io/projects/spring-boot
 
 2. Add a static import to your test class
 
-Create your test case just as described in the [Camunda Platform Testing Guide](https://docs.camunda.org/manual/latest/user-guide/testing/) and add Camunda Platform Assert by statically importing it in your test class:
+Create your test case just as described in the [OrqueIO Testing Guide](https://docs.camunda.org/manual/latest/user-guide/testing/) and add OrqueIO Assert by statically importing it in your test class:
 
 ```groovy  
 import static org.camunda.bpm.engine.test.assertions.ProcessEngineTests.*;
@@ -45,7 +45,7 @@ import static org.camunda.bpm.engine.test.assertions.ProcessEngineTests.*;
 
 3. Start using the assertions in your test methods
 
-You now have access to all the Camunda Platform assertions. Assuming you want to assert that your process instance is actually started, waiting at a specific user task and that task should yet be unassigned, but waiting to be assigned to a user of a specific group, just write:
+You now have access to all the OrqueIO assertions. Assuming you want to assert that your process instance is actually started, waiting at a specific user task and that task should yet be unassigned, but waiting to be assigned to a user of a specific group, just write:
 
 ```groovy
 assertThat(processInstance).isStarted()
@@ -54,7 +54,7 @@ assertThat(processInstance).isStarted()
     .isNotAssigned();
 ```
 
-In case you want to combine Camunda Platform Assert with the assertions provided by AssertJ, your imports should look like this:
+In case you want to combine OrqueIO Assert with the assertions provided by AssertJ, your imports should look like this:
 ```groovy  
 import static org.assertj.core.api.Assertions.*;
 import static org.camunda.bpm.engine.test.assertions.ProcessEngineTests.*;
@@ -62,7 +62,7 @@ import static org.camunda.bpm.engine.test.assertions.ProcessEngineTests.*;
 
 ## Credits
 
-The Camunda Platform Assert project used to be the community extension, created and supported by
+The OrqueIO Assert project used to be the community extension, created and supported by
 
 <img src="http://camunda.github.io/camunda-bpm-assert/resources/images/community-award.png" align="right" width="76">
 
@@ -76,7 +76,7 @@ The Camunda Platform Assert project used to be the community extension, created 
 
 ... and [many others](https://github.com/camunda/camunda-bpm-assert/graphs/contributors).
 
-In 2014, the library won the **Camunda Platform Community Award**.
+In 2014, the library won the **OrqueIO Community Award**.
 
-Starting from version 3.0.0 it was adopted as part of the Camunda Platform.
-Starting from version 7.17.0 it was merged into the Camunda Platform main repository.
+Starting from version 3.0.0 it was adopted as part of the OrqueIO.
+Starting from version 7.17.0 it was merged into the OrqueIO main repository.

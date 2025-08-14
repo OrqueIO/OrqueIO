@@ -57,14 +57,14 @@ import org.camunda.bpm.model.bpmn.instance.Gateway;
 /**
  * Convenience class to access only camunda *BPMN* related Assertions
  * PLUS helper methods. Usage is possible, if you only need BPMN Tests and
- * mandatory if you still use Camunda Platform lower than 7.2 version.
+ * mandatory if you still use OrqueIO lower than 7.2 version.
  *
  * Use it with a static import:
  *
  * import static org.camunda.bpm.engine.test.assertions.bpmn.BpmnAwareTests.*;
  *
  * @see org.camunda.bpm.engine.test.assertions.ProcessEngineTests
- *      for full Camunda Platform Assertions functionality
+ *      for full OrqueIO Assertions functionality
  *
  */
 public class BpmnAwareTests extends AbstractAssertions {
