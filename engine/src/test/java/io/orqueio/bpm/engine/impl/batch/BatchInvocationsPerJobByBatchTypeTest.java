@@ -71,7 +71,7 @@ public class BatchInvocationsPerJobByBatchTypeTest {
   }
 
   @Test
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
   public void shouldFallbackToDefaultConfigurationWhenBatchTypeIsNotConfigured() {
     // given
     runtimeService.startProcessInstanceByKey("oneTaskProcess");
@@ -87,7 +87,7 @@ public class BatchInvocationsPerJobByBatchTypeTest {
 
   @Test
   @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_ACTIVITY)
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
   public void shouldFallbackToGlobalConfigurationWhenBatchTypeIsNotConfigured() {
     // given
     Map<String, Integer> invocationsPerBatchJobByBatchType =

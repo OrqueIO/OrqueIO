@@ -90,7 +90,7 @@
               <comparisonVersion>${camunda.version.old}</comparisonVersion>
               <logResults>true</logResults>
               <excludes>
-                <exclude>org/camunda/bpm/dmn/feel/impl/**</exclude>
+                <exclude>io/orqueio/bpm/dmn/feel/impl/**</exclude>
                 <!-- exclude shaded dependencies -->
                 <exclude>camundafeel/**</exclude>
               </excludes>

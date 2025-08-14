@@ -402,7 +402,7 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
 
   public static final String DEFAULT_WS_SYNC_FACTORY = "io.orqueio.bpm.engine.impl.webservice.CxfWebServiceClientFactory";
 
-  public static final String DEFAULT_MYBATIS_MAPPING_FILE = "org/camunda/bpm/engine/impl/mapping/mappings.xml";
+  public static final String DEFAULT_MYBATIS_MAPPING_FILE = "io/orqueio/bpm/engine/impl/mapping/mappings.xml";
 
   public static final int DEFAULT_FAILED_JOB_LISTENER_MAX_RETRIES = 3;
 

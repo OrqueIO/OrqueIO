@@ -49,7 +49,7 @@ The structure of the template is:
  | | +--sort-params.ftl
  | | +--sort-props.ftl
  +--models
- | +--org/camunda/bpm/engine/rest/dto
+ | +--io/orqueio/bpm/engine/rest/dto
  | | +--ExceptionDto.ftl
  | | +--history
  | | | +--HistoricProcessInstanceQueryDto.ftl

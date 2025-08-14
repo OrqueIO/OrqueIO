@@ -73,7 +73,7 @@ public class CleanableHistoricCaseInstanceReportTest {
     caseService = engineRule.getCaseService();
     taskService = engineRule.getTaskService();
 
-    testRule.deploy("org/camunda/bpm/engine/test/repository/one.cmmn");
+    testRule.deploy("io/orqueio/bpm/engine/test/repository/one.cmmn");
   }
 
   @After
@@ -175,8 +175,8 @@ public class CleanableHistoricCaseInstanceReportTest {
   @Test
   public void testReportComplex() {
     // given
-    testRule.deploy("org/camunda/bpm/engine/test/api/cmmn/oneCaseTaskCase.cmmn", "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn",
-        "org/camunda/bpm/engine/test/api/cmmn/oneTaskCaseWithHistoryTimeToLive.cmmn");
+    testRule.deploy("io/orqueio/bpm/engine/test/api/cmmn/oneCaseTaskCase.cmmn", "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn",
+        "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCaseWithHistoryTimeToLive.cmmn");
     prepareCaseInstances(CASE_DEFINITION_KEY, 0, 5, 10);
     prepareCaseInstances(CASE_DEFINITION_KEY, -6, 5, 10);
     prepareCaseInstances(SECOND_CASE_DEFINITION_KEY, -6, null, 10);
@@ -269,7 +269,7 @@ public class CleanableHistoricCaseInstanceReportTest {
   @Test
   public void testReportOrderByFinishedAsc() {
     // given
-    testRule.deploy("org/camunda/bpm/engine/test/api/cmmn/oneCaseTaskCase.cmmn", "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn");
+    testRule.deploy("io/orqueio/bpm/engine/test/api/cmmn/oneCaseTaskCase.cmmn", "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn");
     prepareCaseInstances(THIRD_CASE_DEFINITION_KEY, -6, 5, 8);
     prepareCaseInstances(CASE_DEFINITION_KEY, -6, 5, 4);
     prepareCaseInstances(SECOND_CASE_DEFINITION_KEY, -6, 5, 6);

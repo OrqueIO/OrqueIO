@@ -10,7 +10,7 @@
       <planItem id="PI_HumanTask_1" definitionRef="HumanTask_1" />
       <humanTask id="HumanTask_1">
         <extensionElements>
-          <camunda:caseExecutionListener class="org.camunda.bpm.engine.test.history.DecisionServiceDelegate" event="start" />
+          <camunda:caseExecutionListener class="io.orqueio.bpm.engine.test.history.DecisionServiceDelegate" event="start" />
         </extensionElements>
         <defaultControl>
           <manualActivationRule>

@@ -65,7 +65,7 @@ public class CleanableHistoricDecisionInstanceReportTest {
     historyService = engineRule.getHistoryService();
     repositoryService = engineRule.getRepositoryService();
 
-    testRule.deploy("org/camunda/bpm/engine/test/repository/one.dmn");
+    testRule.deploy("io/orqueio/bpm/engine/test/repository/one.dmn");
   }
 
   @After
@@ -96,8 +96,8 @@ public class CleanableHistoricDecisionInstanceReportTest {
   @Test
   public void testReportComplex() {
     // given
-    testRule.deploy("org/camunda/bpm/engine/test/repository/two.dmn", "org/camunda/bpm/engine/test/api/dmn/Another_Example.dmn",
-        "org/camunda/bpm/engine/test/api/dmn/Example.dmn");
+    testRule.deploy("io/orqueio/bpm/engine/test/repository/two.dmn", "io/orqueio/bpm/engine/test/api/dmn/Another_Example.dmn",
+        "io/orqueio/bpm/engine/test/api/dmn/Example.dmn");
     prepareDecisionInstances(DECISION_DEFINITION_KEY, 0, 5, 10);
     prepareDecisionInstances(DECISION_DEFINITION_KEY, -6, 5, 10);
     prepareDecisionInstances(SECOND_DECISION_DEFINITION_KEY, -6, null, 10);

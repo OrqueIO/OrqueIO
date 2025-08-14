@@ -42,10 +42,10 @@ pipeline {
           runSteps: {
             cambpmCopyArtifacts(params.UPSTREAM_PROJECT_NAME, params.UPSTREAM_BUILD_NUMBER)
             cambpmStash("platform-stash-runtime",
-                        ".m2/org/camunda/**/*-SNAPSHOT/**",
+                        ".m2/io/orqueio/**/*-SNAPSHOT/**",
                         "**/qa/**,**/*qa*/**,**/*.zip,**/*.tar.gz")
             cambpmStash("platform-stash-qa",
-                        ".m2/org/camunda/bpm/**/qa/**/*-SNAPSHOT/**,.m2/org/camunda/bpm/**/*qa*/**/*-SNAPSHOT/**",
+                        ".m2/io/orqueio/bpm/**/qa/**/*-SNAPSHOT/**,.m2/io/orqueio/bpm/**/*qa*/**/*-SNAPSHOT/**",
                         "**/*.zip,**/*.tar.gz")
           }
         ])

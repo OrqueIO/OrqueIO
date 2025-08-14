@@ -84,7 +84,7 @@ public class CustomHistoryEventHandlerTest {
   }
 
   @Test
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
   public void shouldReceiveMigrateEvents() {
     // given
     VariableMap variables = Variables.createVariables().putValue("foo", "bar");

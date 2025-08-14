@@ -39,7 +39,7 @@ import org.junit.rules.RuleChain;
 
 public class CamundaFormDefinitionStrictParseTest {
 
-  private static final String FORM = "org/camunda/bpm/engine/test/bpmn/CamundaFormDefinitionStrictParseTest.anyForm.form";
+  private static final String FORM = "io/orqueio/bpm/engine/test/bpmn/CamundaFormDefinitionStrictParseTest.anyForm.form";
 
   public ProcessEngineRule engineRule = new ProvidedProcessEngineRule();
   public ProcessEngineTestRule testRule = new ProcessEngineTestRule(engineRule);
@@ -95,7 +95,7 @@ public class CamundaFormDefinitionStrictParseTest {
     assertThatThrownBy(() -> {
       testRule.deploy(FORM);
     }).isInstanceOf(ProcessEngineException.class)
-    .hasMessageContaining("ENGINE-09033 Could not parse Camunda Form resource org/camunda/bpm/engine/test/bpmn/CamundaFormDefinitionStrictParseTest.anyForm.form.");
+    .hasMessageContaining("ENGINE-09033 Could not parse Camunda Form resource io/orqueio/bpm/engine/test/bpmn/CamundaFormDefinitionStrictParseTest.anyForm.form.");
     assertThat(repositoryService.createDeploymentQuery().list()).hasSize(0);
   }
 }

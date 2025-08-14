@@ -41,7 +41,7 @@ public class SkipOutputMappingOnCanceledActitivitesTest extends PluggableProcess
   }
 
   @Test
-  @Deployment(resources = "org/camunda/bpm/engine/test/io/SkipOutputMappingOnCanceledActitivitesTest.oneExternalTaskWithOutputMappingAndCatchingErrorBoundaryEvent.bpmn")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/io/SkipOutputMappingOnCanceledActitivitesTest.oneExternalTaskWithOutputMappingAndCatchingErrorBoundaryEvent.bpmn")
   public void shouldSkipOutputMappingOnBpmnErrorAtExternalTask() {
     // given a process with one external task which has output mapping configured
     processEngineConfiguration.setSkipOutputMappingOnCanceledActivities(true);
@@ -63,7 +63,7 @@ public class SkipOutputMappingOnCanceledActitivitesTest extends PluggableProcess
   }
 
   @Test
-  @Deployment(resources = "org/camunda/bpm/engine/test/io/SkipOutputMappingOnCanceledActitivitesTest.oneExternalTaskWithOutputMappingAndCatchingErrorBoundaryEvent.bpmn")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/io/SkipOutputMappingOnCanceledActitivitesTest.oneExternalTaskWithOutputMappingAndCatchingErrorBoundaryEvent.bpmn")
   public void shouldNotSkipOutputMappingOnBpmnErrorAtExternalTask() {
     // given a process with one external task which has output mapping configured
     processEngineConfiguration.setSkipOutputMappingOnCanceledActivities(false);
@@ -80,7 +80,7 @@ public class SkipOutputMappingOnCanceledActitivitesTest extends PluggableProcess
   }
 
   @Test
-  @Deployment(resources = "org/camunda/bpm/engine/test/io/SkipOutputMappingOnCanceledActitivitesTest.oneSubprocessWithOutputMappingAndCatchingErrorBoundaryEvent.bpmn")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/io/SkipOutputMappingOnCanceledActitivitesTest.oneSubprocessWithOutputMappingAndCatchingErrorBoundaryEvent.bpmn")
   public void shouldSkipOutputMappingOnBpmnErrorInSubprocess() {
     // given a process with one external task which has output mapping configured
     processEngineConfiguration.setSkipOutputMappingOnCanceledActivities(true);
@@ -102,7 +102,7 @@ public class SkipOutputMappingOnCanceledActitivitesTest extends PluggableProcess
   }
 
   @Test
-  @Deployment(resources = "org/camunda/bpm/engine/test/io/SkipOutputMappingOnCanceledActitivitesTest.oneSubprocessWithOutputMappingAndCatchingErrorBoundaryEvent.bpmn")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/io/SkipOutputMappingOnCanceledActitivitesTest.oneSubprocessWithOutputMappingAndCatchingErrorBoundaryEvent.bpmn")
   public void shouldNotSkipOutputMappingOnBpmnErrorInSubprocess() {
     // given a process with one external task which has output mapping configured
     processEngineConfiguration.setSkipOutputMappingOnCanceledActivities(false);

@@ -44,7 +44,7 @@ public class BpmnParser extends Parser {
   /**
    * The location of the BPMN 2.0 XML schema.
    */
-  public static final String BPMN_20_SCHEMA_LOCATION = "org/camunda/bpm/engine/impl/bpmn/parser/BPMN20.xsd";
+  public static final String BPMN_20_SCHEMA_LOCATION = "io/orqueio/bpm/engine/impl/bpmn/parser/BPMN20.xsd";
 
   /**
    * The namespace of the camunda custom BPMN extensions.

@@ -23,7 +23,7 @@ import java.util.Properties;
  */
 public class ProductPropertiesUtil {
 
-  protected static final String PROPERTIES_FILE_PATH = "/org/camunda/bpm/engine/product-info.properties";
+  protected static final String PROPERTIES_FILE_PATH = "/io/orqueio/bpm/engine/product-info.properties";
   protected static final String VERSION_PROPERTY = "camunda.version";
   protected static final Properties INSTANCE = PropertiesUtil.getProperties(PROPERTIES_FILE_PATH);
 
