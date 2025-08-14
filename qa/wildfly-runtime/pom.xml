@@ -1,19 +1,17 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>camunda-qa-wildfly-runtime</artifactId>
+  <artifactId>orqueio-qa-wildfly-runtime</artifactId>
   <packaging>jar</packaging>
 
-  <description>
-    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://camunda.com/contact/
-  </description>
 
-  <name>Camunda Platform - QA Wildfly Test Runtime</name>
+
+  <name>OrqueIO - QA Wildfly Test Runtime</name>
 
   <parent>
-    <groupId>org.camunda.bpm.qa</groupId>
-    <artifactId>camunda-qa</artifactId>
-    <version>7.24.0-SNAPSHOT</version>
+    <groupId>io.orqueio.bpm.qa</groupId>
+    <artifactId>orqueio-qa</artifactId>
+    <version>1.0</version>
   </parent>
 
 
@@ -25,8 +23,8 @@
         <version>${version.spring.framework6}</version>
       </dependency>
       <dependency>
-        <groupId>org.camunda.bpm</groupId>
-        <artifactId>camunda-engine</artifactId>
+        <groupId>io.orqueio.bpm</groupId>
+        <artifactId>orqueio-engine</artifactId>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -54,8 +52,8 @@
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm.qa</groupId>
-      <artifactId>camunda-qa-ensure-clean-db</artifactId>
+      <groupId>io.orqueio.bpm.qa</groupId>
+      <artifactId>orqueio-qa-ensure-clean-db</artifactId>
       <version>${project.version}</version>
       <scope>runtime</scope>
     </dependency>
@@ -155,8 +153,8 @@
       <dependencies>
         <dependency>
           <!-- make sure it comes after assembly in the build -->
-          <groupId>org.camunda.bpm.wildfly</groupId>
-          <artifactId>camunda-wildfly-assembly</artifactId>
+          <groupId>io.orqueio.bpm.wildfly</groupId>
+          <artifactId>orqueio-wildfly-assembly</artifactId>
           <version>${project.version}</version>
           <type>pom</type>
           <scope>test</scope>
@@ -183,7 +181,7 @@
                       <message>
                         *****************************************************************************************************
                         *                                                                                                   *
-                        *               You must use at least JDK 11 to start Camunda Platform Wildfly!!!                  *
+                        *               You must use at least JDK 11 to start OrqueIO Wildfly!!!                  *
                         *                                                                                                   *
                         *****************************************************************************************************
                       </message>
@@ -209,8 +207,8 @@
                 <configuration>
                   <artifactItems>
                     <artifactItem>
-                      <groupId>org.camunda.bpm.wildfly</groupId>
-                      <artifactId>camunda-wildfly-assembly</artifactId>
+                      <groupId>io.orqueio.bpm.wildfly</groupId>
+                      <artifactId>orqueio-wildfly-assembly</artifactId>
                       <version>${project.version}</version>
                       <type>tar.gz</type>
                       <overWrite>true</overWrite>
@@ -279,7 +277,7 @@
                     </copy>
 
                     <delete>
-                      <fileset dir="${wildfly.runtime.location}/modules/org/camunda/bpm/qa" includes="**/*.jar" />
+                      <fileset dir="${wildfly.runtime.location}/modules/io/orqueio/bpm/qa" includes="**/*.jar" />
                     </delete>
                     <!-- copy all files again, but this only matches fox files and this treatment makes is maven 2/3 compatible => timestamped snapshot -->
                     <copy todir="${wildfly.runtime.location}/modules" flatten="false" verbose="true">
@@ -287,7 +285,7 @@
                       <mapper>
                         <chainedmapper>
                           <regexpmapper from="^(.*)/([^/]+)/([^/]*)$$" to="\1/main/\3" handledirsep="yes" />
-                          <regexpmapper from="^(org.camunda.bpm.qa.*)/((camunda-[A-Za-z-]*)[0-9\.]*).*.jar$$" to="\1/\3${project.version}.jar" handledirsep="yes" />
+                          <regexpmapper from="^(io.orqueio.bpm.qa.*)/((orqueio-[A-Za-z-]*)[0-9\.]*).*.jar$$" to="\1/\3${project.version}.jar" handledirsep="yes" />
                         </chainedmapper>
                       </mapper>
                     </copy>
@@ -314,8 +312,8 @@
       <dependencies>
         <dependency>
           <!-- make sure it comes after assembly in the build -->
-          <groupId>org.camunda.bpm.wildfly</groupId>
-          <artifactId>camunda-wildfly-assembly</artifactId>
+          <groupId>io.orqueio.bpm.wildfly</groupId>
+          <artifactId>orqueio-wildfly-assembly</artifactId>
           <version>${project.version}</version>
           <type>pom</type>
           <scope>test</scope>
@@ -338,8 +336,8 @@
                 <configuration>
                   <artifactItems>
                     <artifactItem>
-                      <groupId>org.camunda.bpm.wildfly</groupId>
-                      <artifactId>camunda-wildfly-assembly</artifactId>
+                      <groupId>io.orqueio.bpm.wildfly</groupId>
+                      <artifactId>orqueio-wildfly-assembly</artifactId>
                       <version>${project.version}</version>
                       <type>tar.gz</type>
                       <overWrite>true</overWrite>
@@ -408,7 +406,7 @@
                     </copy>
 
                     <delete>
-                      <fileset dir="${wildfly.runtime.location}/modules/org/camunda/bpm/qa" includes="**/*.jar" />
+                      <fileset dir="${wildfly.runtime.location}/modules/io/orqueio/bpm/qa" includes="**/*.jar" />
                     </delete>
                     <!-- copy all files again, but this only matches fox files and this treatment makes is maven 2/3 compatible => timestamped snapshot -->
                     <copy todir="${wildfly.runtime.location}/modules" flatten="false" verbose="true">
@@ -416,7 +414,7 @@
                       <mapper>
                         <chainedmapper>
                           <regexpmapper from="^(.*)/([^/]+)/([^/]*)$$" to="\1/main/\3" handledirsep="yes" />
-                          <regexpmapper from="^(org.camunda.bpm.qa.*)/((camunda-[A-Za-z-]*)[0-9\.]*).*.jar$$" to="\1/\3${project.version}.jar" handledirsep="yes" />
+                          <regexpmapper from="^(io.orqueio.bpm.qa.*)/((orqueio-[A-Za-z-]*)[0-9\.]*).*.jar$$" to="\1/\3${project.version}.jar" handledirsep="yes" />
                         </chainedmapper>
                       </mapper>
                     </copy>
@@ -437,4 +435,38 @@
       </build>
     </profile>
   </profiles>
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
+    <organization>
+        <name>OrqueIO services</name>
+        <url>https://www.orqueio.io/</url>
+    </organization>
+
+    <url>https://www.orqueio.io/</url>
+
+    <developers>
+        <developer>
+            <id>OrqueIO</id>
+            <name>OrqueIO Community</name>
+            <organization>orqueio.io</organization>
+            <organizationUrl>https://www.orqueio.io/</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <url>https://github.com/OrqueIO/OrqueIO</url>
+        <connection>scm:git:git@github.com:OrqueIO/OrqueIO.git</connection>
+        <developerConnection>scm:git:git@github.com:OrqueIO/OrqueIO.git</developerConnection>
+        <tag>OrqueIO-1.0</tag>
+    </scm>
+
+    <issueManagement>
+        <system>GitHub Issues</system>
+        <url>https://github.com/OrqueIO/OrqueIO/issues</url>
+    </issueManagement>
 </project>

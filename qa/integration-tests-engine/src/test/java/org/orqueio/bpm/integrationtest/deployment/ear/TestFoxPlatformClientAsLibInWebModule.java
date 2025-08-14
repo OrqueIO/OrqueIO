@@ -31,7 +31,7 @@ import org.junit.runner.RunWith;
 
 
 /**
- * This test verifies that a process archive packaging the Camunda Platform client
+ * This test verifies that a process archive packaging the OrqueIO client
  * can be packaged inside an EAR application.
  *
  *

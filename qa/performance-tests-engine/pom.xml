@@ -1,17 +1,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>camunda-qa-performance-tests-engine</artifactId>
+  <artifactId>orqueio-qa-performance-tests-engine</artifactId>
   <packaging>jar</packaging>
 
-  <description>
-    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://camunda.com/contact/
-  </description>
-  <name>Camunda Platform - QA Performance Tests Engine</name>
+  <name>OrqueIO - QA Performance Tests Engine</name>
 
   <parent>
-    <groupId>org.camunda.bpm.qa</groupId>
-    <artifactId>camunda-qa</artifactId>
-    <version>7.24.0-SNAPSHOT</version>
+    <groupId>io.orqueio.bpm.qa</groupId>
+    <artifactId>orqueio-qa</artifactId>
+    <version>1.0</version>
   </parent>
 
   <properties>
@@ -24,8 +21,8 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
-      <artifactId>camunda-engine</artifactId>
+      <groupId>io.orqueio.bpm</groupId>
+      <artifactId>orqueio-engine</artifactId>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
@@ -152,7 +149,7 @@
                         <include name="**/*.png" />
                       </fileset>
                     </copy>
-                    <java classname="org.camunda.bpm.qa.performance.engine.benchmark.BenchmarkReport" classpathref="maven.test.classpath" />
+                    <java classname="io.orqueio.bpm.qa.performance.engine.benchmark.BenchmarkReport" classpathref="maven.test.classpath" />
                   </tasks>
                 </configuration>
               </execution>
@@ -223,7 +220,7 @@
                         <include name="**/*.png" />
                       </fileset>
                     </copy>
-                    <java classname="org.camunda.bpm.qa.performance.engine.benchmark.BenchmarkReport" classpathref="maven.test.classpath" />
+                    <java classname="io.orqueio.bpm.qa.performance.engine.benchmark.BenchmarkReport" classpathref="maven.test.classpath" />
                   </tasks>
                 </configuration>
               </execution>
@@ -243,8 +240,8 @@
       <properties>
         <numberOfThreads>1</numberOfThreads>
         <numberOfRuns>1</numberOfRuns>
-        <testWatchers>org.camunda.bpm.qa.performance.engine.sqlstatementlog.StatementLogPerfTestWatcher</testWatchers>
-        <processEnginePlugins>org.camunda.bpm.qa.performance.engine.sqlstatementlog.StatementLogProcessEnginePlugin</processEnginePlugins>
+        <testWatchers>io.orqueio.bpm.qa.performance.engine.sqlstatementlog.StatementLogPerfTestWatcher</testWatchers>
+        <processEnginePlugins>io.orqueio.bpm.qa.performance.engine.sqlstatementlog.StatementLogProcessEnginePlugin</processEnginePlugins>
         <watchActivities />
         <test.excludes>query</test.excludes>
       </properties>
@@ -291,7 +288,7 @@
                         <include name="**/*.png" />
                       </fileset>
                     </copy>
-                    <java classname="org.camunda.bpm.qa.performance.engine.sqlstatementlog.SqlStatementLogReport" classpathref="maven.test.classpath" />
+                    <java classname="io.orqueio.bpm.qa.performance.engine.sqlstatementlog.SqlStatementLogReport" classpathref="maven.test.classpath" />
                   </tasks>
                 </configuration>
               </execution>
@@ -337,7 +334,7 @@
                 <configuration>
                   <tasks>
                     <echo message="Generating load" />
-                    <java classname="org.camunda.bpm.qa.performance.engine.query.DefaultLoadGenerator" classpathref="maven.test.classpath" failonerror="true" />
+                    <java classname="io.orqueio.bpm.qa.performance.engine.query.DefaultLoadGenerator" classpathref="maven.test.classpath" failonerror="true" />
                   </tasks>
                 </configuration>
               </execution>
@@ -361,8 +358,8 @@
       <properties>
         <numberOfThreads>1</numberOfThreads>
         <numberOfRuns>1</numberOfRuns>
-        <testWatchers>org.camunda.bpm.qa.performance.engine.sqlstatementlog.StatementLogPerfTestWatcher</testWatchers>
-        <processEnginePlugins>org.camunda.bpm.qa.performance.engine.sqlstatementlog.StatementLogProcessEnginePlugin</processEnginePlugins>
+        <testWatchers>io.orqueio.bpm.qa.performance.engine.sqlstatementlog.StatementLogPerfTestWatcher</testWatchers>
+        <processEnginePlugins>io.orqueio.bpm.qa.performance.engine.sqlstatementlog.StatementLogProcessEnginePlugin</processEnginePlugins>
         <watchActivities />
         <test.includes>query</test.includes>
         <skip.tests>false</skip.tests>
@@ -410,7 +407,7 @@
                         <include name="**/*.png" />
                       </fileset>
                     </copy>
-                    <java classname="org.camunda.bpm.qa.performance.engine.sqlstatementlog.SqlStatementLogReport" classpathref="maven.test.classpath" />
+                    <java classname="io.orqueio.bpm.qa.performance.engine.sqlstatementlog.SqlStatementLogReport" classpathref="maven.test.classpath" />
                   </tasks>
                 </configuration>
               </execution>
@@ -478,7 +475,7 @@
                         <include name="**/*.png" />
                       </fileset>
                     </copy>
-                    <java classname="org.camunda.bpm.qa.performance.engine.framework.activitylog.ActivityCountReporter" classpathref="maven.test.classpath" />
+                    <java classname="io.orqueio.bpm.qa.performance.engine.framework.activitylog.ActivityCountReporter" classpathref="maven.test.classpath" />
                   </tasks>
                 </configuration>
               </execution>
@@ -543,4 +540,38 @@
   </profiles>
 
 
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
+    <organization>
+        <name>OrqueIO services</name>
+        <url>https://www.orqueio.io/</url>
+    </organization>
+
+    <url>https://www.orqueio.io/</url>
+
+    <developers>
+        <developer>
+            <id>OrqueIO</id>
+            <name>OrqueIO Community</name>
+            <organization>orqueio.io</organization>
+            <organizationUrl>https://www.orqueio.io/</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <url>https://github.com/OrqueIO/OrqueIO</url>
+        <connection>scm:git:git@github.com:OrqueIO/OrqueIO.git</connection>
+        <developerConnection>scm:git:git@github.com:OrqueIO/OrqueIO.git</developerConnection>
+        <tag>OrqueIO-1.0</tag>
+    </scm>
+
+    <issueManagement>
+        <system>GitHub Issues</system>
+        <url>https://github.com/OrqueIO/OrqueIO/issues</url>
+    </issueManagement>
 </project>

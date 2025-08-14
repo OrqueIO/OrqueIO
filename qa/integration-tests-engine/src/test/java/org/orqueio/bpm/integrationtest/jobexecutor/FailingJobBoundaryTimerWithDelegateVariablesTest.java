@@ -33,7 +33,7 @@ import org.junit.runner.RunWith;
 
 
 /**
- * Test Camunda Platform container job exectuor.
+ * Test OrqueIO container job exectuor.
  * FAILING ATM!
  * Expected a job with an exception but it isn't left in db with 0 retries, instead it is completely removed from the job table!
  *
