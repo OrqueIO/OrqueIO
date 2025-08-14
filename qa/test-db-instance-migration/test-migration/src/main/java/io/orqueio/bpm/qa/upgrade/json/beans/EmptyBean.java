@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa.upgrade.json.beans;
+package io.orqueio.bpm.qa.upgrade.json.beans;
 
 public class EmptyBean {
 

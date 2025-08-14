@@ -14,28 +14,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa.largedata.util;
+package io.orqueio.bpm.qa.largedata.util;
 
 import com.google.common.collect.Lists;
-import org.camunda.bpm.engine.DecisionService;
-import org.camunda.bpm.engine.IdentityService;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.RepositoryService;
-import org.camunda.bpm.engine.RuntimeService;
-import org.camunda.bpm.engine.TaskService;
-import org.camunda.bpm.engine.identity.Group;
-import org.camunda.bpm.engine.identity.User;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.interceptor.Command;
-import org.camunda.bpm.engine.repository.DeploymentBuilder;
-import org.camunda.bpm.engine.task.Task;
-import org.camunda.bpm.model.bpmn.Bpmn;
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
-import org.camunda.bpm.model.dmn.DmnModelInstance;
+import io.orqueio.bpm.engine.DecisionService;
+import io.orqueio.bpm.engine.IdentityService;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.RepositoryService;
+import io.orqueio.bpm.engine.RuntimeService;
+import io.orqueio.bpm.engine.TaskService;
+import io.orqueio.bpm.engine.identity.Group;
+import io.orqueio.bpm.engine.identity.User;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.interceptor.Command;
+import io.orqueio.bpm.engine.repository.DeploymentBuilder;
+import io.orqueio.bpm.engine.task.Task;
+import io.orqueio.bpm.model.bpmn.Bpmn;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.bpm.model.dmn.DmnModelInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static org.camunda.bpm.qa.largedata.util.DmnHelper.createSimpleDmnModel;
+import static io.orqueio.bpm.qa.largedata.util.DmnHelper.createSimpleDmnModel;
 
 import java.util.Date;
 import java.util.HashMap;

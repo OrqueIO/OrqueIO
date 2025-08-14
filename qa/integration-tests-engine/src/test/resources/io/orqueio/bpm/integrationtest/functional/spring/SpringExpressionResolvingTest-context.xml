@@ -5,6 +5,6 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans   http://www.springframework.org/schema/beans/spring-beans.xsd">
        
     <!-- Spring bean to be invoked through the ApplicationContextElResolver -->
-    <bean id="exampleBean" class="org.camunda.bpm.integrationtest.functional.spring.beans.ExampleBean" />
+    <bean id="exampleBean" class="io.orqueio.bpm.integrationtest.functional.spring.beans.ExampleBean" />
     
 </beans>

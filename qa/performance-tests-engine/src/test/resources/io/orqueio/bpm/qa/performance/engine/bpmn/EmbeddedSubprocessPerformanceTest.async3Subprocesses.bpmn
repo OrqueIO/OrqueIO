@@ -23,7 +23,7 @@
           <bpmn2:sequenceFlow id="SequenceFlow_19" name="" sourceRef="StartEvent_2" targetRef="Task_1"/>
           <bpmn2:receiveTask id="Task_1" name="Wait">
             <bpmn2:extensionElements>
-              <camunda:executionListener class="org.camunda.bpm.qa.performance.engine.steps.ExecutionIdRecorder" event="start"/>
+              <camunda:executionListener class="io.orqueio.bpm.qa.performance.engine.steps.ExecutionIdRecorder" event="start"/>
             </bpmn2:extensionElements>
             <bpmn2:incoming>SequenceFlow_19</bpmn2:incoming>
             <bpmn2:outgoing>SequenceFlow_20</bpmn2:outgoing>

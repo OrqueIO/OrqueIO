@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa.upgrade.scenarios7120.useroperationlog.annotation;
+package io.orqueio.bpm.qa.upgrade.scenarios7120.useroperationlog.annotation;
 
-import org.camunda.bpm.engine.AuthorizationService;
-import org.camunda.bpm.engine.HistoryService;
-import org.camunda.bpm.engine.ProcessEngineConfiguration;
-import org.camunda.bpm.engine.authorization.Authorization;
-import org.camunda.bpm.engine.authorization.ProcessDefinitionPermissions;
-import org.camunda.bpm.engine.authorization.Resources;
-import org.camunda.bpm.engine.history.UserOperationLogEntry;
-import org.camunda.bpm.engine.test.ProcessEngineRule;
+import io.orqueio.bpm.engine.AuthorizationService;
+import io.orqueio.bpm.engine.HistoryService;
+import io.orqueio.bpm.engine.ProcessEngineConfiguration;
+import io.orqueio.bpm.engine.authorization.Authorization;
+import io.orqueio.bpm.engine.authorization.ProcessDefinitionPermissions;
+import io.orqueio.bpm.engine.authorization.Resources;
+import io.orqueio.bpm.engine.history.UserOperationLogEntry;
+import io.orqueio.bpm.engine.test.ProcessEngineRule;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;

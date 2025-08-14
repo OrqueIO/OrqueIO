@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.deployment.cfg;
+package io.orqueio.bpm.integrationtest.deployment.cfg;
 
 import java.util.List;
-import org.camunda.bpm.engine.RepositoryService;
-import org.camunda.bpm.engine.repository.ProcessDefinition;
-import org.camunda.bpm.engine.repository.ProcessDefinitionQuery;
-import org.camunda.bpm.engine.repository.Resource;
-import org.camunda.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
-import org.camunda.bpm.integrationtest.util.DeploymentHelper;
+import io.orqueio.bpm.engine.RepositoryService;
+import io.orqueio.bpm.engine.repository.ProcessDefinition;
+import io.orqueio.bpm.engine.repository.ProcessDefinitionQuery;
+import io.orqueio.bpm.engine.repository.Resource;
+import io.orqueio.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
+import io.orqueio.bpm.integrationtest.util.DeploymentHelper;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -43,14 +43,14 @@ public class TestAdditionalResourceSuffixes extends AbstractFoxPlatformIntegrati
   public static WebArchive processArchive() {
 
     WebArchive archive = ShrinkWrap.create(WebArchive.class, "test.war")
-        .addAsWebInfResource("org/camunda/bpm/integrationtest/beans.xml", "beans.xml")
+        .addAsWebInfResource("io/orqueio/bpm/integrationtest/beans.xml", "beans.xml")
         .addAsLibraries(DeploymentHelper.getEngineCdi())
-        .addAsResource("org/camunda/bpm/integrationtest/deployment/cfg/processes-additional-resource-suffixes.xml", "META-INF/processes.xml")
+        .addAsResource("io/orqueio/bpm/integrationtest/deployment/cfg/processes-additional-resource-suffixes.xml", "META-INF/processes.xml")
         .addClass(AbstractFoxPlatformIntegrationTest.class)
         .addClass(DummyProcessApplication.class)
-        .addAsResource("org/camunda/bpm/integrationtest/deployment/cfg/invoice-it.bpmn20.xml")
-        .addAsResource("org/camunda/bpm/integrationtest/deployment/cfg/hello.groovy")
-        .addAsResource("org/camunda/bpm/integrationtest/deployment/cfg/hello.py");
+        .addAsResource("io/orqueio/bpm/integrationtest/deployment/cfg/invoice-it.bpmn20.xml")
+        .addAsResource("io/orqueio/bpm/integrationtest/deployment/cfg/hello.groovy")
+        .addAsResource("io/orqueio/bpm/integrationtest/deployment/cfg/hello.py");
 
     return archive;
   }

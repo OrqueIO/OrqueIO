@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.deployment.war;
+package io.orqueio.bpm.integrationtest.deployment.war;
 
 import org.junit.Assert;
 
-import org.camunda.bpm.engine.repository.DeploymentQuery;
-import org.camunda.bpm.engine.repository.ProcessDefinition;
-import org.camunda.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
-import org.camunda.bpm.integrationtest.util.DeploymentHelper;
-import org.camunda.bpm.integrationtest.util.TestContainer;
-import org.camunda.bpm.integrationtest.util.TestHelper;
+import io.orqueio.bpm.engine.repository.DeploymentQuery;
+import io.orqueio.bpm.engine.repository.ProcessDefinition;
+import io.orqueio.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
+import io.orqueio.bpm.integrationtest.util.DeploymentHelper;
+import io.orqueio.bpm.integrationtest.util.TestContainer;
+import io.orqueio.bpm.integrationtest.util.TestHelper;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -101,7 +101,7 @@ public class TestWarDeploymentWithMultiplePasAsSubdeployment4 extends AbstractFo
        
     WebArchive deployment = ShrinkWrap.create(WebArchive.class, "test.war")
             .addAsResource(pa2ProcessesXml, "META-INF/processes.xml")
-            .addAsWebInfResource("org/camunda/bpm/integrationtest/beans.xml", "beans.xml")
+            .addAsWebInfResource("io/orqueio/bpm/integrationtest/beans.xml", "beans.xml")
             .addAsLibraries(DeploymentHelper.getEngineCdi())
             
             .addAsLibraries(pa2)

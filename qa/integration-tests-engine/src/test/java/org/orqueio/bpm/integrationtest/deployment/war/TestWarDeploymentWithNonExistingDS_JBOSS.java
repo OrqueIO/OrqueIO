@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.deployment.war;
+package io.orqueio.bpm.integrationtest.deployment.war;
 
 
-import org.camunda.bpm.integrationtest.deployment.war.apps.CustomServletPA;
-import org.camunda.bpm.integrationtest.util.DeploymentHelper;
-import org.camunda.bpm.integrationtest.util.TestContainer;
+import io.orqueio.bpm.integrationtest.deployment.war.apps.CustomServletPA;
+import io.orqueio.bpm.integrationtest.util.DeploymentHelper;
+import io.orqueio.bpm.integrationtest.util.TestContainer;
 import org.jboss.arquillian.container.test.api.Deployer;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
@@ -51,7 +51,7 @@ public class TestWarDeploymentWithNonExistingDS_JBOSS {
   @Deployment(managed=false, name=DEPLOYMENT_WITH_EJB_PA)
   public static WebArchive createDeployment1() {
     WebArchive archive = ShrinkWrap.create(WebArchive.class, "test1.war")
-        .addAsWebInfResource("org/camunda/bpm/integrationtest/beans.xml", "beans.xml")
+        .addAsWebInfResource("io/orqueio/bpm/integrationtest/beans.xml", "beans.xml")
         .addAsLibraries(DeploymentHelper.getEngineCdi())
         .addAsResource("META-INF/processes.xml", "META-INF/processes.xml")
         .addAsResource("persistence-nonexisting-ds.xml", "META-INF/persistence.xml");
@@ -64,7 +64,7 @@ public class TestWarDeploymentWithNonExistingDS_JBOSS {
   @Deployment(managed=false, name=DEPLOYMENT_WITH_SERVLET_PA)
   public static WebArchive createDeployment2() {
     WebArchive archive = ShrinkWrap.create(WebArchive.class, "test2.war")
-        .addAsWebInfResource("org/camunda/bpm/integrationtest/beans.xml", "beans.xml")
+        .addAsWebInfResource("io/orqueio/bpm/integrationtest/beans.xml", "beans.xml")
         .addAsLibraries(DeploymentHelper.getEngineCdi())
         .addAsResource("META-INF/processes.xml", "META-INF/processes.xml")
         .addAsResource("persistence-nonexisting-ds.xml", "META-INF/persistence.xml")

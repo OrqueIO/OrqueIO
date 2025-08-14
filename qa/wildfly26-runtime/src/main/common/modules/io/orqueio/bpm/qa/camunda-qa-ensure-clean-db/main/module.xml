@@ -1,4 +1,4 @@
-<module xmlns="urn:jboss:module:1.0" name="org.camunda.bpm.qa.camunda-qa-ensure-clean-db">
+<module xmlns="urn:jboss:module:1.0" name="io.orqueio.bpm.qa.camunda-qa-ensure-clean-db">
   <resources>
     <resource-root path="camunda-qa-ensure-clean-db-@project.version@.jar" />
   </resources>
@@ -6,7 +6,7 @@
   <dependencies>
 
     <module name="javax.api" />
-    <module name="org.camunda.bpm.camunda-engine" />
+    <module name="io.orqueio.bpm.camunda-engine" />
 
   </dependencies>
 </module>

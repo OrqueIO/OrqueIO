@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa.upgrade.scenarios7130.customretries;
+package io.orqueio.bpm.qa.upgrade.scenarios7130.customretries;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -26,11 +26,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import org.camunda.bpm.engine.ManagementService;
-import org.camunda.bpm.engine.impl.persistence.entity.JobEntity;
-import org.camunda.bpm.engine.impl.util.ClockUtil;
-import org.camunda.bpm.engine.runtime.Job;
-import org.camunda.bpm.engine.test.ProcessEngineRule;
+import io.orqueio.bpm.engine.ManagementService;
+import io.orqueio.bpm.engine.impl.persistence.entity.JobEntity;
+import io.orqueio.bpm.engine.impl.util.ClockUtil;
+import io.orqueio.bpm.engine.runtime.Job;
+import io.orqueio.bpm.engine.test.ProcessEngineRule;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;

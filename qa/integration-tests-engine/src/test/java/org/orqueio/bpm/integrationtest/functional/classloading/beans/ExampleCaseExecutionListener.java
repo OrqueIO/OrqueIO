@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.functional.classloading.beans;
+package io.orqueio.bpm.integrationtest.functional.classloading.beans;
 
 import javax.inject.Named;
 
-import org.camunda.bpm.engine.delegate.CaseExecutionListener;
-import org.camunda.bpm.engine.delegate.DelegateCaseExecution;
+import io.orqueio.bpm.engine.delegate.CaseExecutionListener;
+import io.orqueio.bpm.engine.delegate.DelegateCaseExecution;
 
 /**
  * @author Roman Smirnov

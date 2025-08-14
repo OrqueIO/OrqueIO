@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.functional.slf4j;
+package io.orqueio.bpm.integrationtest.functional.slf4j;
 
-import org.camunda.commons.logging.BaseLogger;
+import io.orqueio.commons.logging.BaseLogger;
 import org.slf4j.helpers.MessageFormatter;
 
 public class TestLogger extends BaseLogger {
 
-  public static final TestLogger INSTANCE = BaseLogger.createLogger(TestLogger.class, "QA", "org.camunda.bpm.qa", "01");
+  public static final TestLogger INSTANCE = BaseLogger.createLogger(TestLogger.class, "QA", "io.orqueio.bpm.qa", "01");
 
   /**
    * Verify that camunda commons log a messages with a single format parameter.

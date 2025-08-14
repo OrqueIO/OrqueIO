@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa.upgrade.scenarios.compensation;
+package io.orqueio.bpm.qa.upgrade.scenarios.compensation;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.task.Task;
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.qa.upgrade.DescribesScenario;
-import org.camunda.bpm.qa.upgrade.ExtendsScenario;
-import org.camunda.bpm.qa.upgrade.ScenarioSetup;
-import org.camunda.bpm.qa.upgrade.Times;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.task.Task;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.qa.upgrade.DescribesScenario;
+import io.orqueio.bpm.qa.upgrade.ExtendsScenario;
+import io.orqueio.bpm.qa.upgrade.ScenarioSetup;
+import io.orqueio.bpm.qa.upgrade.Times;
 
 /**
  * @author Thorben Lindhauer
@@ -32,7 +32,7 @@ public class SequentialMultiInstanceCompensationScenario {
 
   @Deployment
   public static String deploySingleActivityHandler() {
-    return "org/camunda/bpm/qa/upgrade/compensation/sequentialMultiInstanceCompensationSingleActivityHandlerProcess.bpmn20.xml";
+    return "io/orqueio/bpm/qa/upgrade/compensation/sequentialMultiInstanceCompensationSingleActivityHandlerProcess.bpmn20.xml";
   }
 
   @DescribesScenario("singleActivityHandler.multiInstancePartial")
@@ -97,7 +97,7 @@ public class SequentialMultiInstanceCompensationScenario {
 
   @Deployment
   public static String deployDefaultHandler() {
-    return "org/camunda/bpm/qa/upgrade/compensation/sequentialMultiInstanceCompensationDefaultHandlerProcess.bpmn20.xml";
+    return "io/orqueio/bpm/qa/upgrade/compensation/sequentialMultiInstanceCompensationDefaultHandlerProcess.bpmn20.xml";
   }
 
   @DescribesScenario("defaultHandler.multiInstancePartial")
@@ -162,7 +162,7 @@ public class SequentialMultiInstanceCompensationScenario {
 
   @Deployment
   public static String deploySubProcessHandler() {
-    return "org/camunda/bpm/qa/upgrade/compensation/sequentialMultiInstanceCompensationSubProcessHandlerProcess.bpmn20.xml";
+    return "io/orqueio/bpm/qa/upgrade/compensation/sequentialMultiInstanceCompensationSubProcessHandlerProcess.bpmn20.xml";
   }
 
   @DescribesScenario("subProcessHandler.multiInstancePartial")

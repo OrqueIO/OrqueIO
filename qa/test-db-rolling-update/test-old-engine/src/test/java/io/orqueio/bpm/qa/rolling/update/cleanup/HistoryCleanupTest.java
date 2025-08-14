@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa.rolling.update.cleanup;
+package io.orqueio.bpm.qa.rolling.update.cleanup;
 
-import org.camunda.bpm.engine.history.HistoricProcessInstance;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.util.ClockUtil;
-import org.camunda.bpm.engine.runtime.Job;
-import org.camunda.bpm.qa.rolling.update.AbstractRollingUpdateTestCase;
-import org.camunda.bpm.qa.rolling.update.RollingUpdateConstants;
-import org.camunda.bpm.qa.upgrade.ScenarioUnderTest;
+import io.orqueio.bpm.engine.history.HistoricProcessInstance;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.util.ClockUtil;
+import io.orqueio.bpm.engine.runtime.Job;
+import io.orqueio.bpm.qa.rolling.update.AbstractRollingUpdateTestCase;
+import io.orqueio.bpm.qa.rolling.update.RollingUpdateConstants;
+import io.orqueio.bpm.qa.upgrade.ScenarioUnderTest;
 import org.junit.After;
 import org.junit.Test;
 

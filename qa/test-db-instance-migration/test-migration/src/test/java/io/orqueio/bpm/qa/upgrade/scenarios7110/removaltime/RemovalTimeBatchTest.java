@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa.upgrade.scenarios7110.removaltime;
+package io.orqueio.bpm.qa.upgrade.scenarios7110.removaltime;
 
-import org.camunda.bpm.engine.HistoryService;
-import org.camunda.bpm.engine.batch.Batch;
-import org.camunda.bpm.engine.history.HistoricProcessInstance;
-import org.camunda.bpm.engine.history.HistoricProcessInstanceQuery;
-import org.camunda.bpm.engine.runtime.Job;
-import org.camunda.bpm.engine.test.ProcessEngineRule;
+import io.orqueio.bpm.engine.HistoryService;
+import io.orqueio.bpm.engine.batch.Batch;
+import io.orqueio.bpm.engine.history.HistoricProcessInstance;
+import io.orqueio.bpm.engine.history.HistoricProcessInstanceQuery;
+import io.orqueio.bpm.engine.runtime.Job;
+import io.orqueio.bpm.engine.test.ProcessEngineRule;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;

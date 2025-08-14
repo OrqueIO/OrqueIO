@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.functional.event;
+package io.orqueio.bpm.integrationtest.functional.event;
 
-import org.camunda.bpm.engine.delegate.TaskListener;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.task.Task;
-import org.camunda.bpm.integrationtest.functional.event.beans.TaskListenerProcessApplication;
-import org.camunda.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
-import org.camunda.bpm.integrationtest.util.DeploymentHelper;
-import org.camunda.bpm.integrationtest.util.TestContainer;
+import io.orqueio.bpm.engine.delegate.TaskListener;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.task.Task;
+import io.orqueio.bpm.integrationtest.functional.event.beans.TaskListenerProcessApplication;
+import io.orqueio.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
+import io.orqueio.bpm.integrationtest.util.DeploymentHelper;
+import io.orqueio.bpm.integrationtest.util.TestContainer;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -44,12 +44,12 @@ public class ProcessApplicationTaskListenerTest extends AbstractFoxPlatformInteg
   @Deployment
   public static WebArchive createDeployment() {
     WebArchive archive = ShrinkWrap.create(WebArchive.class, "test.war")
-        .addAsWebInfResource("org/camunda/bpm/integrationtest/beans.xml", "beans.xml")
+        .addAsWebInfResource("io/orqueio/bpm/integrationtest/beans.xml", "beans.xml")
         .addAsLibraries(DeploymentHelper.getEngineCdi())
         .addAsResource("META-INF/processes.xml", "META-INF/processes.xml")
         .addClass(AbstractFoxPlatformIntegrationTest.class)
         .addClass(TaskListenerProcessApplication.class)
-        .addAsResource("org/camunda/bpm/integrationtest/functional/event/ProcessApplicationEventSupportTest.testTaskListener.bpmn20.xml");
+        .addAsResource("io/orqueio/bpm/integrationtest/functional/event/ProcessApplicationEventSupportTest.testTaskListener.bpmn20.xml");
 
     TestContainer.addContainerSpecificResourcesForNonPa(archive);
 

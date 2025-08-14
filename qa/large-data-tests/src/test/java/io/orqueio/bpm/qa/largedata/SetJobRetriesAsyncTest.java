@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa.largedata;
+package io.orqueio.bpm.qa.largedata;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -22,16 +22,16 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.camunda.bpm.engine.ManagementService;
-import org.camunda.bpm.engine.RuntimeService;
-import org.camunda.bpm.engine.batch.Batch;
-import org.camunda.bpm.engine.runtime.Job;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.runtime.ProcessInstanceQuery;
-import org.camunda.bpm.engine.test.ProcessEngineRule;
-import org.camunda.bpm.engine.test.util.ProcessEngineTestRule;
-import org.camunda.bpm.qa.largedata.util.BatchModificationJobHelper;
-import org.camunda.bpm.qa.largedata.util.EngineDataGenerator;
+import io.orqueio.bpm.engine.ManagementService;
+import io.orqueio.bpm.engine.RuntimeService;
+import io.orqueio.bpm.engine.batch.Batch;
+import io.orqueio.bpm.engine.runtime.Job;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.runtime.ProcessInstanceQuery;
+import io.orqueio.bpm.engine.test.ProcessEngineRule;
+import io.orqueio.bpm.engine.test.util.ProcessEngineTestRule;
+import io.orqueio.bpm.qa.largedata.util.BatchModificationJobHelper;
+import io.orqueio.bpm.qa.largedata.util.EngineDataGenerator;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;

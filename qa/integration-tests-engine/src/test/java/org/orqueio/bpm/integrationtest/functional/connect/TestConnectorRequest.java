@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.functional.connect;
+package io.orqueio.bpm.integrationtest.functional.connect;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.camunda.connect.spi.ConnectorRequest;
+import io.orqueio.connect.spi.ConnectorRequest;
 
 public class TestConnectorRequest implements ConnectorRequest<TestConnectorResponse> {
 

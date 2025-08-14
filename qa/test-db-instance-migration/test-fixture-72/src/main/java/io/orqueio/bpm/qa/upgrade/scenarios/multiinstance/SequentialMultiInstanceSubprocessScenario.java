@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa.upgrade.scenarios.multiinstance;
+package io.orqueio.bpm.qa.upgrade.scenarios.multiinstance;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.qa.upgrade.DescribesScenario;
-import org.camunda.bpm.qa.upgrade.ScenarioSetup;
-import org.camunda.bpm.qa.upgrade.Times;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.qa.upgrade.DescribesScenario;
+import io.orqueio.bpm.qa.upgrade.ScenarioSetup;
+import io.orqueio.bpm.qa.upgrade.Times;
 
 /**
  * @author Thorben Lindhauer
@@ -30,12 +30,12 @@ public class SequentialMultiInstanceSubprocessScenario {
 
   @Deployment
   public static String deployProcess() {
-    return "org/camunda/bpm/qa/upgrade/multiinstance/sequentialMultiInstanceSubprocess.bpmn20.xml";
+    return "io/orqueio/bpm/qa/upgrade/multiinstance/sequentialMultiInstanceSubprocess.bpmn20.xml";
   }
 
   @Deployment
   public static String deployProcessWithNonInterruptingBoundaryEvent() {
-    return "org/camunda/bpm/qa/upgrade/multiinstance/sequentialMultiInstanceSubprocessNonInterruptingBoundaryEvent.bpmn20.xml";
+    return "io/orqueio/bpm/qa/upgrade/multiinstance/sequentialMultiInstanceSubprocessNonInterruptingBoundaryEvent.bpmn20.xml";
   }
 
   @DescribesScenario("init")

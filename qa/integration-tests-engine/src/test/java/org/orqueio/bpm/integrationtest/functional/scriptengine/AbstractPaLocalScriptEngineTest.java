@@ -14,21 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.functional.scriptengine;
+package io.orqueio.bpm.integrationtest.functional.scriptengine;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
-import org.camunda.bpm.application.ProcessApplicationInterface;
-import org.camunda.bpm.application.ProcessApplicationReference;
-import org.camunda.bpm.application.ProcessApplicationUnavailableException;
-import org.camunda.bpm.engine.impl.application.ProcessApplicationManager;
-import org.camunda.bpm.engine.impl.interceptor.Command;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity;
-import org.camunda.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
-import org.camunda.bpm.model.bpmn.Bpmn;
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.bpm.application.ProcessApplicationInterface;
+import io.orqueio.bpm.application.ProcessApplicationReference;
+import io.orqueio.bpm.application.ProcessApplicationUnavailableException;
+import io.orqueio.bpm.engine.impl.application.ProcessApplicationManager;
+import io.orqueio.bpm.engine.impl.interceptor.Command;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity;
+import io.orqueio.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
+import io.orqueio.bpm.model.bpmn.Bpmn;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.asset.StringAsset;
 import org.junit.runner.RunWith;
@@ -43,7 +43,7 @@ public abstract class AbstractPaLocalScriptEngineTest extends AbstractFoxPlatfor
   public static final String PROCESS_ID = "testProcess";
   public static final String SCRIPT_TEXT = "my-script";
   public static final String SCRIPT_FORMAT = "dummy";
-  public static final String DUMMY_SCRIPT_ENGINE_FACTORY_SPI = "org.camunda.bpm.integrationtest.functional.scriptengine.engine.DummyScriptEngineFactory";
+  public static final String DUMMY_SCRIPT_ENGINE_FACTORY_SPI = "io.orqueio.bpm.integrationtest.functional.scriptengine.engine.DummyScriptEngineFactory";
   public static final String SCRIPT_ENGINE_FACTORY_PATH = "META-INF/services/javax.script.ScriptEngineFactory";
 
   protected static StringAsset createScriptTaskProcess(String scriptFormat, String scriptText) {

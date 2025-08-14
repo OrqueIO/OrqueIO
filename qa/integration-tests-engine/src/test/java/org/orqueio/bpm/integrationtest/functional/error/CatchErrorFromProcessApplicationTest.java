@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.functional.error;
+package io.orqueio.bpm.integrationtest.functional.error;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -24,11 +24,11 @@ import static org.junit.Assert.assertTrue;
 import java.util.Collections;
 import java.util.Map;
 
-import org.camunda.bpm.engine.runtime.Execution;
-import org.camunda.bpm.engine.task.Task;
-import org.camunda.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
-import org.camunda.bpm.integrationtest.util.DeploymentHelper;
-import org.camunda.bpm.integrationtest.util.TestContainer;
+import io.orqueio.bpm.engine.runtime.Execution;
+import io.orqueio.bpm.engine.task.Task;
+import io.orqueio.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
+import io.orqueio.bpm.integrationtest.util.DeploymentHelper;
+import io.orqueio.bpm.integrationtest.util.TestContainer;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -45,18 +45,18 @@ public class CatchErrorFromProcessApplicationTest extends AbstractFoxPlatformInt
     return initWebArchiveDeployment()
       .addClass(ThrowErrorDelegate.class)
       .addClass(MyBusinessException.class)
-      .addAsResource("org/camunda/bpm/integrationtest/functional/error/CatchErrorFromProcessApplicationTest.bpmn20.xml")
-      .addAsResource("org/camunda/bpm/integrationtest/functional/error/CatchErrorFromProcessApplicationTest.delegateExpression.bpmn20.xml")
-      .addAsResource("org/camunda/bpm/integrationtest/functional/error/CatchErrorFromProcessApplicationTest.sequentialMultiInstance.bpmn20.xml")
-      .addAsResource("org/camunda/bpm/integrationtest/functional/error/CatchErrorFromProcessApplicationTest.delegateExpression.sequentialMultiInstance.bpmn20.xml")
-      .addAsResource("org/camunda/bpm/integrationtest/functional/error/CatchErrorFromProcessApplicationTest.parallelMultiInstance.bpmn20.xml")
-      .addAsResource("org/camunda/bpm/integrationtest/functional/error/CatchErrorFromProcessApplicationTest.delegateExpression.parallelMultiInstance.bpmn20.xml");
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/error/CatchErrorFromProcessApplicationTest.bpmn20.xml")
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/error/CatchErrorFromProcessApplicationTest.delegateExpression.bpmn20.xml")
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/error/CatchErrorFromProcessApplicationTest.sequentialMultiInstance.bpmn20.xml")
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/error/CatchErrorFromProcessApplicationTest.delegateExpression.sequentialMultiInstance.bpmn20.xml")
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/error/CatchErrorFromProcessApplicationTest.parallelMultiInstance.bpmn20.xml")
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/error/CatchErrorFromProcessApplicationTest.delegateExpression.parallelMultiInstance.bpmn20.xml");
   }
 
   @Deployment(name="clientDeployment")
   public static WebArchive clientDeployment() {
     WebArchive deployment = ShrinkWrap.create(WebArchive.class, "client.war")
-      .addAsWebInfResource("org/camunda/bpm/integrationtest/beans.xml", "beans.xml")
+      .addAsWebInfResource("io/orqueio/bpm/integrationtest/beans.xml", "beans.xml")
       .addClass(AbstractFoxPlatformIntegrationTest.class)
       .addAsLibraries(DeploymentHelper.getEngineCdi());
 

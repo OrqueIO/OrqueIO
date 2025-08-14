@@ -9,11 +9,11 @@
     <sequenceFlow sourceRef="theStart" targetRef="servicetask1" />
     
     <serviceTask id="servicetask1"    
-        camunda:class="org.camunda.bpm.integrationtest.functional.classloading.variables.beans.SetVariableDelegate" />
+        camunda:class="io.orqueio.bpm.integrationtest.functional.classloading.variables.beans.SetVariableDelegate" />
     <sequenceFlow sourceRef="servicetask1" targetRef="servicetask2" />
     
     <serviceTask id="servicetask2"    
-        camunda:class="org.camunda.bpm.integrationtest.functional.classloading.variables.beans.GetVariableDelegate"
+        camunda:class="io.orqueio.bpm.integrationtest.functional.classloading.variables.beans.GetVariableDelegate"
         camunda:async="true" />
     <sequenceFlow sourceRef="servicetask2" targetRef="endevent1" />
     

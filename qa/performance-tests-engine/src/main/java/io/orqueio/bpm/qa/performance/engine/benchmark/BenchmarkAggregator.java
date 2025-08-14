@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa.performance.engine.benchmark;
+package io.orqueio.bpm.qa.performance.engine.benchmark;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.camunda.bpm.qa.performance.engine.framework.PerfTestResult;
-import org.camunda.bpm.qa.performance.engine.framework.PerfTestResults;
-import org.camunda.bpm.qa.performance.engine.framework.aggregate.TabularResultAggregator;
-import org.camunda.bpm.qa.performance.engine.framework.aggregate.TabularResultSet;
+import io.orqueio.bpm.qa.performance.engine.framework.PerfTestResult;
+import io.orqueio.bpm.qa.performance.engine.framework.PerfTestResults;
+import io.orqueio.bpm.qa.performance.engine.framework.aggregate.TabularResultAggregator;
+import io.orqueio.bpm.qa.performance.engine.framework.aggregate.TabularResultSet;
 
 /**
  * The default benchmark aggregator records the duration

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa.upgrade.scenarios730.sentry;
+package io.orqueio.bpm.qa.upgrade.scenarios730.sentry;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
@@ -22,17 +22,17 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 
-import org.camunda.bpm.engine.CaseService;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.cmmn.entity.runtime.CaseSentryPartEntity;
-import org.camunda.bpm.engine.impl.cmmn.entity.runtime.CaseSentryPartQueryImpl;
-import org.camunda.bpm.engine.impl.interceptor.CommandExecutor;
-import org.camunda.bpm.engine.runtime.CaseExecution;
-import org.camunda.bpm.engine.runtime.CaseInstance;
-import org.camunda.bpm.qa.upgrade.Origin;
-import org.camunda.bpm.qa.upgrade.ScenarioUnderTest;
-import org.camunda.bpm.qa.upgrade.UpgradeTestRule;
+import io.orqueio.bpm.engine.CaseService;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.cmmn.entity.runtime.CaseSentryPartEntity;
+import io.orqueio.bpm.engine.impl.cmmn.entity.runtime.CaseSentryPartQueryImpl;
+import io.orqueio.bpm.engine.impl.interceptor.CommandExecutor;
+import io.orqueio.bpm.engine.runtime.CaseExecution;
+import io.orqueio.bpm.engine.runtime.CaseInstance;
+import io.orqueio.bpm.qa.upgrade.Origin;
+import io.orqueio.bpm.qa.upgrade.ScenarioUnderTest;
+import io.orqueio.bpm.qa.upgrade.UpgradeTestRule;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;

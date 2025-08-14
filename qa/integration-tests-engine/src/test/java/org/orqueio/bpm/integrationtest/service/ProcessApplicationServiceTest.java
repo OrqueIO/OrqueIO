@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.service;
+package io.orqueio.bpm.integrationtest.service;
 
 import java.util.Arrays;
 import java.util.Set;
 
-import org.camunda.bpm.BpmPlatform;
-import org.camunda.bpm.ProcessApplicationService;
-import org.camunda.bpm.application.ProcessApplicationInfo;
-import org.camunda.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
+import io.orqueio.bpm.BpmPlatform;
+import io.orqueio.bpm.ProcessApplicationService;
+import io.orqueio.bpm.application.ProcessApplicationInfo;
+import io.orqueio.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -42,13 +42,13 @@ public class ProcessApplicationServiceTest extends AbstractFoxPlatformIntegratio
   @Deployment(name="test1")
   public static WebArchive app1() {    
     return initWebArchiveDeployment("test1.war")
-            .addAsResource("org/camunda/bpm/integrationtest/testDeployProcessArchive.bpmn20.xml");
+            .addAsResource("io/orqueio/bpm/integrationtest/testDeployProcessArchive.bpmn20.xml");
   }
   
   @Deployment(name="test2")
   public static WebArchive app2() {    
     return initWebArchiveDeployment("test2.war")
-            .addAsResource("org/camunda/bpm/integrationtest/testDeployProcessArchiveWithoutActivitiCdi.bpmn20.xml");
+            .addAsResource("io/orqueio/bpm/integrationtest/testDeployProcessArchiveWithoutActivitiCdi.bpmn20.xml");
   }
   
   @Test

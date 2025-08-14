@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa.upgrade.scenarios730.job;
+package io.orqueio.bpm.qa.upgrade.scenarios730.job;
 
-import org.camunda.bpm.engine.runtime.Job;
-import org.camunda.bpm.qa.upgrade.Origin;
-import org.camunda.bpm.qa.upgrade.ScenarioUnderTest;
-import org.camunda.bpm.qa.upgrade.UpgradeTestRule;
+import io.orqueio.bpm.engine.runtime.Job;
+import io.orqueio.bpm.qa.upgrade.Origin;
+import io.orqueio.bpm.qa.upgrade.ScenarioUnderTest;
+import io.orqueio.bpm.qa.upgrade.UpgradeTestRule;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;

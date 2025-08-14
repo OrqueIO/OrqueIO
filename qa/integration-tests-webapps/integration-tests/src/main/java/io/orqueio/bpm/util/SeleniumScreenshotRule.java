@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.util;
+package io.orqueio.bpm.util;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.rules.TestRule;

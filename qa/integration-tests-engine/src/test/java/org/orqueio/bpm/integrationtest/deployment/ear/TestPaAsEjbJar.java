@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.deployment.ear;
+package io.orqueio.bpm.integrationtest.deployment.ear;
 
-import org.camunda.bpm.application.impl.ejb.DefaultEjbProcessApplication;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.cdi.impl.util.ProgrammaticBeanLookup;
-import org.camunda.bpm.integrationtest.deployment.ear.beans.NamedCdiBean;
-import org.camunda.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
-import org.camunda.bpm.integrationtest.util.DeploymentHelper;
+import io.orqueio.bpm.application.impl.ejb.DefaultEjbProcessApplication;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.cdi.impl.util.ProgrammaticBeanLookup;
+import io.orqueio.bpm.integrationtest.deployment.ear.beans.NamedCdiBean;
+import io.orqueio.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
+import io.orqueio.bpm.integrationtest.util.DeploymentHelper;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -47,7 +47,7 @@ public class TestPaAsEjbJar extends AbstractFoxPlatformIntegrationTest {
    *        |-- NamedCdiBean.class
    *        |-- AbstractFoxPlatformIntegrationTest.class
    *        |-- TestPaAsEjbJar.class
-   *        |-- org/camunda/bpm/integrationtest/deployment/ear/paAsEjbJar-process.bpmn20.xml
+   *        |-- io/orqueio/bpm/integrationtest/deployment/ear/paAsEjbJar-process.bpmn20.xml
    *        |-- META-INF/processes.xml
    *        |-- META-INF/beans.xml
    *
@@ -63,9 +63,9 @@ public class TestPaAsEjbJar extends AbstractFoxPlatformIntegrationTest {
       .addClass(NamedCdiBean.class)
       .addClass(AbstractFoxPlatformIntegrationTest.class)
       .addClass(TestPaAsEjbJar.class)
-      .addAsResource("org/camunda/bpm/integrationtest/deployment/ear/paAsEjbJar-process.bpmn20.xml")
+      .addAsResource("io/orqueio/bpm/integrationtest/deployment/ear/paAsEjbJar-process.bpmn20.xml")
       .addAsResource("META-INF/processes.xml", "META-INF/processes.xml")
-      .addAsManifestResource("org/camunda/bpm/integrationtest/beans.xml", "beans.xml");
+      .addAsManifestResource("io/orqueio/bpm/integrationtest/beans.xml", "beans.xml");
 
     return ShrinkWrap.create(EnterpriseArchive.class, "paAsEjbModule.ear")
       .addAsModule(processArchive1Jar)

@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa.upgrade.scenarios7110.gson;
+package io.orqueio.bpm.qa.upgrade.scenarios7110.gson;
 
-import org.camunda.bpm.engine.batch.Batch;
-import org.camunda.bpm.engine.runtime.Execution;
-import org.camunda.bpm.engine.runtime.Job;
-import org.camunda.bpm.engine.test.ProcessEngineRule;
-import org.camunda.bpm.qa.upgrade.Origin;
-import org.camunda.bpm.qa.upgrade.ScenarioUnderTest;
+import io.orqueio.bpm.engine.batch.Batch;
+import io.orqueio.bpm.engine.runtime.Execution;
+import io.orqueio.bpm.engine.runtime.Job;
+import io.orqueio.bpm.engine.test.ProcessEngineRule;
+import io.orqueio.bpm.qa.upgrade.Origin;
+import io.orqueio.bpm.qa.upgrade.ScenarioUnderTest;
 import org.junit.Rule;
 import org.junit.Test;
 

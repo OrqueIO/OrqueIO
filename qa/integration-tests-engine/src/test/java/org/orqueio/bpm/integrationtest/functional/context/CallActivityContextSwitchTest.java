@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.functional.context;
+package io.orqueio.bpm.integrationtest.functional.context;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,11 +26,11 @@ import javax.inject.Inject;
 
 import org.junit.Assert;
 
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.integrationtest.functional.context.beans.CalledProcessDelegate;
-import org.camunda.bpm.integrationtest.functional.context.beans.DelegateAfter;
-import org.camunda.bpm.integrationtest.functional.context.beans.DelegateBefore;
-import org.camunda.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.integrationtest.functional.context.beans.CalledProcessDelegate;
+import io.orqueio.bpm.integrationtest.functional.context.beans.DelegateAfter;
+import io.orqueio.bpm.integrationtest.functional.context.beans.DelegateBefore;
+import io.orqueio.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -55,20 +55,20 @@ public class CallActivityContextSwitchTest extends AbstractFoxPlatformIntegratio
     return initWebArchiveDeployment("mainDeployment.war")
       .addClass(DelegateBefore.class)
       .addClass(DelegateAfter.class)
-      .addAsResource("org/camunda/bpm/integrationtest/functional/context/CallActivityContextSwitchTest.mainProcessSync.bpmn20.xml")
-      .addAsResource("org/camunda/bpm/integrationtest/functional/context/CallActivityContextSwitchTest.mainProcessSyncNoWait.bpmn20.xml")
-      .addAsResource("org/camunda/bpm/integrationtest/functional/context/CallActivityContextSwitchTest.mainProcessASync.bpmn20.xml")
-      .addAsResource("org/camunda/bpm/integrationtest/functional/context/CallActivityContextSwitchTest.mainProcessASyncBefore.bpmn20.xml")
-      .addAsResource("org/camunda/bpm/integrationtest/functional/context/CallActivityContextSwitchTest.mainProcessASyncAfter.bpmn20.xml");
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/context/CallActivityContextSwitchTest.mainProcessSync.bpmn20.xml")
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/context/CallActivityContextSwitchTest.mainProcessSyncNoWait.bpmn20.xml")
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/context/CallActivityContextSwitchTest.mainProcessASync.bpmn20.xml")
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/context/CallActivityContextSwitchTest.mainProcessASyncBefore.bpmn20.xml")
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/context/CallActivityContextSwitchTest.mainProcessASyncAfter.bpmn20.xml");
   }
 
   @Deployment(name="calledDeployment")
   public static WebArchive createSecondProcessArchiveDeployment() {
     return initWebArchiveDeployment("calledDeployment.war")
       .addClass(CalledProcessDelegate.class)
-      .addAsResource("org/camunda/bpm/integrationtest/functional/context/CallActivityContextSwitchTest.calledProcessSync.bpmn20.xml")
-      .addAsResource("org/camunda/bpm/integrationtest/functional/context/CallActivityContextSwitchTest.calledProcessSyncNoWait.bpmn20.xml")
-      .addAsResource("org/camunda/bpm/integrationtest/functional/context/CallActivityContextSwitchTest.calledProcessASync.bpmn20.xml");
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/context/CallActivityContextSwitchTest.calledProcessSync.bpmn20.xml")
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/context/CallActivityContextSwitchTest.calledProcessSyncNoWait.bpmn20.xml")
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/context/CallActivityContextSwitchTest.calledProcessASync.bpmn20.xml");
   }
 
   @Inject

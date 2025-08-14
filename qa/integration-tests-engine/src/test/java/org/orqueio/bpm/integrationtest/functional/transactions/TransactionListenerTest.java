@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.functional.transactions;
+package io.orqueio.bpm.integrationtest.functional.transactions;
 
 import org.junit.Assert;
 
-import org.camunda.bpm.engine.impl.cfg.TransactionListener;
-import org.camunda.bpm.engine.impl.cfg.TransactionState;
-import org.camunda.bpm.engine.impl.interceptor.Command;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
+import io.orqueio.bpm.engine.impl.cfg.TransactionListener;
+import io.orqueio.bpm.engine.impl.cfg.TransactionState;
+import io.orqueio.bpm.engine.impl.interceptor.Command;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.spec.WebArchive;

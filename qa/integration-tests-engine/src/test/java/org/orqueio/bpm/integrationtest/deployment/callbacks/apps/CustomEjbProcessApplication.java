@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.deployment.callbacks.apps;
+package io.orqueio.bpm.integrationtest.deployment.callbacks.apps;
 
 import javax.ejb.ConcurrencyManagement;
 import javax.ejb.ConcurrencyManagementType;
@@ -24,15 +24,15 @@ import javax.ejb.Startup;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 
-import org.camunda.bpm.application.PostDeploy;
-import org.camunda.bpm.application.PreUndeploy;
-import org.camunda.bpm.application.ProcessApplication;
-import org.camunda.bpm.application.ProcessApplicationInterface;
-import org.camunda.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.application.PostDeploy;
+import io.orqueio.bpm.application.PreUndeploy;
+import io.orqueio.bpm.application.ProcessApplication;
+import io.orqueio.bpm.application.ProcessApplicationInterface;
+import io.orqueio.bpm.engine.ProcessEngine;
 import org.junit.Assert;
 
 /**
- * Custom {@link org.camunda.bpm.application.impl.EjbProcessApplication} with PA lifecycle callbacks
+ * Custom {@link io.orqueio.bpm.application.impl.EjbProcessApplication} with PA lifecycle callbacks
  *
  * @author Daniel Meyer
  *
@@ -44,7 +44,7 @@ import org.junit.Assert;
 @ProcessApplication
 @Local(ProcessApplicationInterface.class)
 // Using fully-qualified class name instead of import statement to allow for automatic Jakarta transformation
-public class CustomEjbProcessApplication extends org.camunda.bpm.application.impl.EjbProcessApplication {
+public class CustomEjbProcessApplication extends io.orqueio.bpm.application.impl.EjbProcessApplication {
 
   @PostDeploy
   public void postDeploy(ProcessEngine processEngine) {

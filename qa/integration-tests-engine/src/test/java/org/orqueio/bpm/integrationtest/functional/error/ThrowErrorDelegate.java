@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.functional.error;
+package io.orqueio.bpm.integrationtest.functional.error;
 
 import javax.inject.Named;
 
-import org.camunda.bpm.engine.delegate.BpmnError;
-import org.camunda.bpm.engine.impl.bpmn.behavior.AbstractBpmnActivityBehavior;
-import org.camunda.bpm.engine.impl.pvm.delegate.ActivityExecution;
+import io.orqueio.bpm.engine.delegate.BpmnError;
+import io.orqueio.bpm.engine.impl.bpmn.behavior.AbstractBpmnActivityBehavior;
+import io.orqueio.bpm.engine.impl.pvm.delegate.ActivityExecution;
 
 @Named
 public class ThrowErrorDelegate extends AbstractBpmnActivityBehavior {

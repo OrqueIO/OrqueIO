@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.deployment.war;
+package io.orqueio.bpm.integrationtest.deployment.war;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.RepositoryService;
-import org.camunda.bpm.engine.cdi.impl.util.ProgrammaticBeanLookup;
-import org.camunda.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
-import org.camunda.bpm.integrationtest.util.DeploymentHelper;
-import org.camunda.bpm.integrationtest.util.TestContainer;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.RepositoryService;
+import io.orqueio.bpm.engine.cdi.impl.util.ProgrammaticBeanLookup;
+import io.orqueio.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
+import io.orqueio.bpm.integrationtest.util.DeploymentHelper;
+import io.orqueio.bpm.integrationtest.util.TestContainer;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -57,11 +57,11 @@ public class TestWarDeploymentDeployChangedOnlyWithJarAsLib extends AbstractFoxP
   public static WebArchive archive1() {
 
     JavaArchive processArchiveJar = ShrinkWrap.create(JavaArchive.class, "test-v1.jar")
-      .addAsResource("org/camunda/bpm/integrationtest/deployment/war/testDeployProcessArchiveUnchanged.bpmn20.xml", "process.bpmn")
+      .addAsResource("io/orqueio/bpm/integrationtest/deployment/war/testDeployProcessArchiveUnchanged.bpmn20.xml", "process.bpmn")
       .addAsResource("META-INF/processes.xml");
 
     WebArchive archive = ShrinkWrap.create(WebArchive.class, "pa1.war")
-        .addAsWebInfResource("org/camunda/bpm/integrationtest/beans.xml", "beans.xml")
+        .addAsWebInfResource("io/orqueio/bpm/integrationtest/beans.xml", "beans.xml")
         .addAsLibraries(DeploymentHelper.getEngineCdi())
 
         .addAsLibraries(processArchiveJar)
@@ -88,11 +88,11 @@ public class TestWarDeploymentDeployChangedOnlyWithJarAsLib extends AbstractFoxP
   public static WebArchive archive2() {
 
     JavaArchive processArchiveJar = ShrinkWrap.create(JavaArchive.class, "test-v2.jar")
-      .addAsResource("org/camunda/bpm/integrationtest/deployment/war/testDeployProcessArchiveUnchanged.bpmn20.xml", "process.bpmn")
+      .addAsResource("io/orqueio/bpm/integrationtest/deployment/war/testDeployProcessArchiveUnchanged.bpmn20.xml", "process.bpmn")
       .addAsResource("META-INF/processes.xml");
 
     WebArchive archive = ShrinkWrap.create(WebArchive.class, "pa2.war")
-        .addAsWebInfResource("org/camunda/bpm/integrationtest/beans.xml", "beans.xml")
+        .addAsWebInfResource("io/orqueio/bpm/integrationtest/beans.xml", "beans.xml")
         .addAsLibraries(DeploymentHelper.getEngineCdi())
 
         .addAsLibraries(processArchiveJar)

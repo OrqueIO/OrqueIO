@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.functional.ejb;
+package io.orqueio.bpm.integrationtest.functional.ejb;
 
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.integrationtest.functional.ejb.beans.SFSBClientDelegate;
-import org.camunda.bpm.integrationtest.functional.ejb.beans.SFSBDelegate;
-import org.camunda.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.integrationtest.functional.ejb.beans.SFSBClientDelegate;
+import io.orqueio.bpm.integrationtest.functional.ejb.beans.SFSBDelegate;
+import io.orqueio.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
@@ -43,8 +43,8 @@ public class SFSBDelegateTest extends AbstractFoxPlatformIntegrationTest {
     return initWebArchiveDeployment()
       .addClass(SFSBDelegate.class)
       .addClass(SFSBClientDelegate.class)
-      .addAsResource("org/camunda/bpm/integrationtest/functional/ejb/SFSBDelegateTest.testBeanResolution.bpmn20.xml")
-      .addAsResource("org/camunda/bpm/integrationtest/functional/ejb/SFSBDelegateTest.testBeanResolutionFromClient.bpmn20.xml");
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/ejb/SFSBDelegateTest.testBeanResolution.bpmn20.xml")
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/ejb/SFSBDelegateTest.testBeanResolutionFromClient.bpmn20.xml");
   }
 
 

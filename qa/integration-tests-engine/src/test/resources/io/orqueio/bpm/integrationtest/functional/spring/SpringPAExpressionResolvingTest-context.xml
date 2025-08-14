@@ -5,9 +5,9 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans   http://www.springframework.org/schema/beans/spring-beans.xsd">
        
     <!-- Spring process application (handles bootstrapping) -->
-    <bean id="processApplication" class="org.camunda.bpm.engine.spring.application.SpringProcessApplication" />
+    <bean id="processApplication" class="io.orqueio.bpm.engine.spring.application.SpringProcessApplication" />
        
     <!-- Spring bean to be invoked through the ApplicationContextElResolver -->
-    <bean id="exampleBean" class="org.camunda.bpm.integrationtest.functional.spring.beans.ExampleBean" />
+    <bean id="exampleBean" class="io.orqueio.bpm.integrationtest.functional.spring.beans.ExampleBean" />
     
 </beans>

@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa.upgrade.scenarios.compensation;
+package io.orqueio.bpm.qa.upgrade.scenarios.compensation;
 
 import java.util.List;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.task.Task;
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.qa.upgrade.DescribesScenario;
-import org.camunda.bpm.qa.upgrade.ScenarioSetup;
-import org.camunda.bpm.qa.upgrade.Times;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.task.Task;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.qa.upgrade.DescribesScenario;
+import io.orqueio.bpm.qa.upgrade.ScenarioSetup;
+import io.orqueio.bpm.qa.upgrade.Times;
 
 /**
  * @author Thorben Lindhauer
@@ -33,12 +33,12 @@ public class NestedMultiInstanceCompensationScenario {
 
   @Deployment
   public static String deployThrowInnerProcess() {
-    return "org/camunda/bpm/qa/upgrade/compensation/nestedMultiInstanceCompensationThrowInnerProcess.bpmn20.xml";
+    return "io/orqueio/bpm/qa/upgrade/compensation/nestedMultiInstanceCompensationThrowInnerProcess.bpmn20.xml";
   }
 
   @Deployment
   public static String deployThrowOuterProcess() {
-    return "org/camunda/bpm/qa/upgrade/compensation/nestedMultiInstanceCompensationThrowOuterProcess.bpmn20.xml";
+    return "io/orqueio/bpm/qa/upgrade/compensation/nestedMultiInstanceCompensationThrowOuterProcess.bpmn20.xml";
   }
 
   @DescribesScenario("init.throwInner")

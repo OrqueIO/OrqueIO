@@ -14,20 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa.rolling.update.batch;
+package io.orqueio.bpm.qa.rolling.update.batch;
 
 import static org.junit.Assert.assertEquals;
 
 import java.util.Date;
 import java.util.List;
-import org.camunda.bpm.engine.ManagementService;
-import org.camunda.bpm.engine.RuntimeService;
-import org.camunda.bpm.engine.batch.Batch;
-import org.camunda.bpm.engine.history.HistoricActivityInstance;
-import org.camunda.bpm.engine.runtime.Job;
-import org.camunda.bpm.qa.rolling.update.AbstractRollingUpdateTestCase;
-import org.camunda.bpm.qa.rolling.update.RollingUpdateConstants;
-import org.camunda.bpm.qa.upgrade.ScenarioUnderTest;
+import io.orqueio.bpm.engine.ManagementService;
+import io.orqueio.bpm.engine.RuntimeService;
+import io.orqueio.bpm.engine.batch.Batch;
+import io.orqueio.bpm.engine.history.HistoricActivityInstance;
+import io.orqueio.bpm.engine.runtime.Job;
+import io.orqueio.bpm.qa.rolling.update.AbstractRollingUpdateTestCase;
+import io.orqueio.bpm.qa.rolling.update.RollingUpdateConstants;
+import io.orqueio.bpm.qa.upgrade.ScenarioUnderTest;
 import org.junit.Before;
 import org.junit.Test;
 

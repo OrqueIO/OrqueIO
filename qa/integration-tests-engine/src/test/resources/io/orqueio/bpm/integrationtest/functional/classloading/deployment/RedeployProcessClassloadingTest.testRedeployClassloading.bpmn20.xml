@@ -6,7 +6,7 @@
 
     <sequenceFlow sourceRef="StartEvent_1" targetRef="ServiceTask_1"/>
 
-    <serviceTask id="ServiceTask_1" camunda:class="org.camunda.bpm.integrationtest.functional.classloading.deployment.beans.MyCustomDelegate" />
+    <serviceTask id="ServiceTask_1" camunda:class="io.orqueio.bpm.integrationtest.functional.classloading.deployment.beans.MyCustomDelegate" />
 
     <sequenceFlow sourceRef="ServiceTask_1" targetRef="UserTask_1"/>
     

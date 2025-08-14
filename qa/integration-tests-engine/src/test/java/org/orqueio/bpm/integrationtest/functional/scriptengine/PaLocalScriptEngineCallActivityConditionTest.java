@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.functional.scriptengine;
+package io.orqueio.bpm.integrationtest.functional.scriptengine;
 
-import org.camunda.bpm.engine.task.Task;
-import org.camunda.bpm.integrationtest.functional.scriptengine.engine.AbstractScriptEngineFactory;
-import org.camunda.bpm.integrationtest.functional.scriptengine.engine.AlwaysTrueScriptEngineFactory;
-import org.camunda.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
-import org.camunda.bpm.integrationtest.util.TestContainer;
+import io.orqueio.bpm.engine.task.Task;
+import io.orqueio.bpm.integrationtest.functional.scriptengine.engine.AbstractScriptEngineFactory;
+import io.orqueio.bpm.integrationtest.functional.scriptengine.engine.AlwaysTrueScriptEngineFactory;
+import io.orqueio.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
+import io.orqueio.bpm.integrationtest.util.TestContainer;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -44,19 +44,19 @@ public class PaLocalScriptEngineCallActivityConditionTest extends AbstractFoxPla
       .addClass(AlwaysTrueScriptEngineFactory.class)
       .addAsResource(new StringAsset(AlwaysTrueScriptEngineFactory.class.getName()),
           PaLocalScriptEngineSupportTest.SCRIPT_ENGINE_FACTORY_PATH)
-      .addAsResource("org/camunda/bpm/integrationtest/functional/scriptengine/PaLocalScriptEngineCallActivityConditionTest.callingProcessScriptConditionalFlow.bpmn20.xml");
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/scriptengine/PaLocalScriptEngineCallActivityConditionTest.callingProcessScriptConditionalFlow.bpmn20.xml");
   }
 
   @Deployment(name="pa2")
   public static WebArchive createCalledProcessDeployment() {
     return initWebArchiveDeployment("pa2.war")
-      .addAsResource("org/camunda/bpm/integrationtest/functional/scriptengine/PaLocalScriptEngineCallActivityConditionTest.calledProcess.bpmn20.xml");
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/scriptengine/PaLocalScriptEngineCallActivityConditionTest.calledProcess.bpmn20.xml");
   }
 
   @Deployment(name="clientDeployment")
   public static WebArchive clientDeployment() {
     WebArchive deployment = ShrinkWrap.create(WebArchive.class, "client.war")
-            .addAsWebInfResource("org/camunda/bpm/integrationtest/beans.xml", "beans.xml")
+            .addAsWebInfResource("io/orqueio/bpm/integrationtest/beans.xml", "beans.xml")
             .addClass(AbstractFoxPlatformIntegrationTest.class);
 
     TestContainer.addContainerSpecificResourcesForNonPa(deployment);

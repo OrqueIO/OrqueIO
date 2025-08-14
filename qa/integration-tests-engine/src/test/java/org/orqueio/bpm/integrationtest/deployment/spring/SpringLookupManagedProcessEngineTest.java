@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.deployment.spring;
+package io.orqueio.bpm.integrationtest.deployment.spring;
 
-import org.camunda.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
-import org.camunda.bpm.integrationtest.util.DeploymentHelper;
+import io.orqueio.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
+import io.orqueio.bpm.integrationtest.util.DeploymentHelper;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -40,10 +40,10 @@ public class SpringLookupManagedProcessEngineTest extends AbstractFoxPlatformInt
   public static WebArchive processArchive() {    
     return ShrinkWrap.create(WebArchive.class, "test.war")
       .addClass(AbstractFoxPlatformIntegrationTest.class)
-      .addAsWebInfResource("org/camunda/bpm/integrationtest/deployment/spring/SpringLookupManagedProcessEngineTest-context.xml", "applicationContext.xml")
+      .addAsWebInfResource("io/orqueio/bpm/integrationtest/deployment/spring/SpringLookupManagedProcessEngineTest-context.xml", "applicationContext.xml")
       .addAsLibraries(DeploymentHelper.getEngineSpring())
-      .addAsManifestResource("org/camunda/bpm/integrationtest/deployment/spring/jboss-deployment-structure.xml", "jboss-deployment-structure.xml")
-      .addAsWebInfResource("org/camunda/bpm/integrationtest/deployment/spring/web.xml", "web.xml");
+      .addAsManifestResource("io/orqueio/bpm/integrationtest/deployment/spring/jboss-deployment-structure.xml", "jboss-deployment-structure.xml")
+      .addAsWebInfResource("io/orqueio/bpm/integrationtest/deployment/spring/web.xml", "web.xml");
   }
   
     

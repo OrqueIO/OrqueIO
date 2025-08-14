@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.deployment.war;
-import org.camunda.bpm.engine.RepositoryService;
-import org.camunda.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
+package io.orqueio.bpm.integrationtest.deployment.war;
+import io.orqueio.bpm.engine.RepositoryService;
+import io.orqueio.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -36,13 +36,13 @@ public class TestWarDeploymentDuplicateFiltering extends AbstractFoxPlatformInte
   @Deployment(order=1, name=PA1)
   public static WebArchive processArchive1() {
     return initWebArchiveDeployment("pa2.war")
-            .addAsResource("org/camunda/bpm/integrationtest/testDeployProcessArchive.bpmn20.xml");
+            .addAsResource("io/orqueio/bpm/integrationtest/testDeployProcessArchive.bpmn20.xml");
   }
 
   @Deployment(order=2, name=PA2)
   public static WebArchive processArchive2() {
     return initWebArchiveDeployment("pa1.war")
-            .addAsResource("org/camunda/bpm/integrationtest/testDeployProcessArchive.bpmn20.xml");
+            .addAsResource("io/orqueio/bpm/integrationtest/testDeployProcessArchive.bpmn20.xml");
 
   }
 

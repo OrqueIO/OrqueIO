@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.functional.event;
+package io.orqueio.bpm.integrationtest.functional.event;
 
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.task.Task;
-import org.camunda.bpm.integrationtest.functional.event.beans.CdiEventSupportProcessApplication;
-import org.camunda.bpm.integrationtest.functional.event.beans.EventObserverCdiBean;
-import org.camunda.bpm.integrationtest.functional.event.beans.ExecutionListenerProcessApplication;
-import org.camunda.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
-import org.camunda.bpm.integrationtest.util.DeploymentHelper;
-import org.camunda.bpm.integrationtest.util.TestContainer;
-import org.camunda.bpm.integrationtest.util.TestProcessApplication;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.task.Task;
+import io.orqueio.bpm.integrationtest.functional.event.beans.CdiEventSupportProcessApplication;
+import io.orqueio.bpm.integrationtest.functional.event.beans.EventObserverCdiBean;
+import io.orqueio.bpm.integrationtest.functional.event.beans.ExecutionListenerProcessApplication;
+import io.orqueio.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
+import io.orqueio.bpm.integrationtest.util.DeploymentHelper;
+import io.orqueio.bpm.integrationtest.util.TestContainer;
+import io.orqueio.bpm.integrationtest.util.TestProcessApplication;
 import org.jboss.arquillian.container.test.api.Deployer;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -45,13 +45,13 @@ public class CdiProcessApplicationEventSupportTest extends AbstractFoxPlatformIn
   @Deployment
   public static WebArchive createDeployment() {
     WebArchive archive = ShrinkWrap.create(WebArchive.class, "test.war")
-        .addAsWebInfResource("org/camunda/bpm/integrationtest/beans.xml", "beans.xml")
+        .addAsWebInfResource("io/orqueio/bpm/integrationtest/beans.xml", "beans.xml")
         .addAsLibraries(DeploymentHelper.getEngineCdi())
         .addAsResource("META-INF/processes.xml", "META-INF/processes.xml")
         .addClass(AbstractFoxPlatformIntegrationTest.class)
         .addClass(CdiEventSupportProcessApplication.class)
         .addClass(EventObserverCdiBean.class)
-        .addAsResource("org/camunda/bpm/integrationtest/functional/event/ProcessApplicationEventSupportTest.testExecutionListener.bpmn20.xml");
+        .addAsResource("io/orqueio/bpm/integrationtest/functional/event/ProcessApplicationEventSupportTest.testExecutionListener.bpmn20.xml");
 
     TestContainer.addContainerSpecificResourcesForNonPa(archive);
 

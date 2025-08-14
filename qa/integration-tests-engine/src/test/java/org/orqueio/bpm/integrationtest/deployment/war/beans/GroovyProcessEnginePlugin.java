@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.deployment.war.beans;
+package io.orqueio.bpm.integrationtest.deployment.war.beans;
 
 import javax.script.ScriptEngineManager;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.cfg.ProcessEnginePlugin;
-import org.camunda.bpm.engine.impl.scripting.engine.DefaultScriptEngineResolver;
-import org.camunda.bpm.engine.impl.scripting.engine.ScriptBindingsFactory;
-import org.camunda.bpm.engine.impl.scripting.engine.ScriptingEngines;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEnginePlugin;
+import io.orqueio.bpm.engine.impl.scripting.engine.DefaultScriptEngineResolver;
+import io.orqueio.bpm.engine.impl.scripting.engine.ScriptBindingsFactory;
+import io.orqueio.bpm.engine.impl.scripting.engine.ScriptingEngines;
 
 public class GroovyProcessEnginePlugin implements ProcessEnginePlugin {
 

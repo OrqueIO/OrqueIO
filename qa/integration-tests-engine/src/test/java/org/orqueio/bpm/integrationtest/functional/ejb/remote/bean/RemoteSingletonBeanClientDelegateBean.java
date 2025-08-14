@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.functional.ejb.remote.bean;
+package io.orqueio.bpm.integrationtest.functional.ejb.remote.bean;
 
 import javax.inject.Named;
 import javax.naming.InitialContext;
 
-import org.camunda.bpm.engine.delegate.DelegateExecution;
-import org.camunda.bpm.engine.delegate.JavaDelegate;
-import org.camunda.bpm.integrationtest.util.TestConstants;
+import io.orqueio.bpm.engine.delegate.DelegateExecution;
+import io.orqueio.bpm.engine.delegate.JavaDelegate;
+import io.orqueio.bpm.integrationtest.util.TestConstants;
 
 
 /**
@@ -39,7 +39,7 @@ public class RemoteSingletonBeanClientDelegateBean implements JavaDelegate {
     BusinessInterface businessInterface = (BusinessInterface) new InitialContext().lookup("java:global/" +
         TestConstants.getAppName() +
         "service/" +
-        "RemoteSingletonBean!org.camunda.bpm.integrationtest.functional.ejb.remote.bean.BusinessInterface");
+        "RemoteSingletonBean!io.orqueio.bpm.integrationtest.functional.ejb.remote.bean.BusinessInterface");
 
     execution.setVariable("result", businessInterface.doBusiness());
   }

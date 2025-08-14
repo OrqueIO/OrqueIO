@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.functional.bpmnmodelapi.beans;
+package io.orqueio.bpm.integrationtest.functional.bpmnmodelapi.beans;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;
 
-import org.camunda.bpm.engine.delegate.DelegateExecution;
-import org.camunda.bpm.engine.delegate.JavaDelegate;
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
-import org.camunda.bpm.model.bpmn.instance.FlowElement;
+import io.orqueio.bpm.engine.delegate.DelegateExecution;
+import io.orqueio.bpm.engine.delegate.JavaDelegate;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.bpm.model.bpmn.instance.FlowElement;
 
 /**
  * @author Daniel Meyer

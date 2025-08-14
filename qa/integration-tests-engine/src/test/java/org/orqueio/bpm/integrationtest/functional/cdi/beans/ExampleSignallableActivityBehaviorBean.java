@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.functional.cdi.beans;
+package io.orqueio.bpm.integrationtest.functional.cdi.beans;
 
 import javax.inject.Named;
 
-import org.camunda.bpm.engine.impl.bpmn.behavior.AbstractBpmnActivityBehavior;
-import org.camunda.bpm.engine.impl.pvm.delegate.ActivityExecution;
-import org.camunda.bpm.engine.impl.pvm.delegate.SignallableActivityBehavior;
+import io.orqueio.bpm.engine.impl.bpmn.behavior.AbstractBpmnActivityBehavior;
+import io.orqueio.bpm.engine.impl.pvm.delegate.ActivityExecution;
+import io.orqueio.bpm.engine.impl.pvm.delegate.SignallableActivityBehavior;
 
 /**
  * @author Daniel Meyer

@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.deployment.spring.timer;
+package io.orqueio.bpm.integrationtest.deployment.spring.timer;
 
-import org.camunda.bpm.BpmPlatform;
-import org.camunda.bpm.ProcessEngineService;
-import org.camunda.bpm.engine.HistoryService;
-import org.camunda.bpm.engine.ManagementService;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.RepositoryService;
-import org.camunda.bpm.engine.RuntimeService;
-import org.camunda.bpm.engine.TaskService;
-import org.camunda.bpm.engine.spring.application.SpringProcessApplication;
+import io.orqueio.bpm.BpmPlatform;
+import io.orqueio.bpm.ProcessEngineService;
+import io.orqueio.bpm.engine.HistoryService;
+import io.orqueio.bpm.engine.ManagementService;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.RepositoryService;
+import io.orqueio.bpm.engine.RuntimeService;
+import io.orqueio.bpm.engine.TaskService;
+import io.orqueio.bpm.engine.spring.application.SpringProcessApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

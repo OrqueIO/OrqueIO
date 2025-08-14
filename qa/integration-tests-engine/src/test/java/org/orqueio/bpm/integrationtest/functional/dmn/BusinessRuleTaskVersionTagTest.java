@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.functional.dmn;
+package io.orqueio.bpm.integrationtest.functional.dmn;
 
 import static org.junit.Assert.assertEquals;
 
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.integrationtest.functional.dmn.beans.VersionTagBean;
-import org.camunda.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
-import org.camunda.bpm.integrationtest.util.DeploymentHelper;
-import org.camunda.bpm.integrationtest.util.TestContainer;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.integrationtest.functional.dmn.beans.VersionTagBean;
+import io.orqueio.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
+import io.orqueio.bpm.integrationtest.util.DeploymentHelper;
+import io.orqueio.bpm.integrationtest.util.TestContainer;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -38,14 +38,14 @@ public class BusinessRuleTaskVersionTagTest extends AbstractFoxPlatformIntegrati
   public static WebArchive createProcessArchiveDeployment() {
     return initWebArchiveDeployment()
       .addClass(VersionTagBean.class)
-      .addAsResource("org/camunda/bpm/integrationtest/functional/dmn/BusinessRuleTaskVersionTagTest.testDecisionVersionTagOkay.dmn11.xml")
-      .addAsResource("org/camunda/bpm/integrationtest/functional/dmn/BusinessRuleTaskVersionTagTest.bpmn20.xml");
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/dmn/BusinessRuleTaskVersionTagTest.testDecisionVersionTagOkay.dmn11.xml")
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/dmn/BusinessRuleTaskVersionTagTest.bpmn20.xml");
   }
 
   @Deployment(name="clientDeployment")
   public static WebArchive clientDeployment() {
     WebArchive deployment = ShrinkWrap.create(WebArchive.class, "client.war")
-            .addAsWebInfResource("org/camunda/bpm/integrationtest/beans.xml", "beans.xml")
+            .addAsWebInfResource("io/orqueio/bpm/integrationtest/beans.xml", "beans.xml")
             .addClass(AbstractFoxPlatformIntegrationTest.class)
             .addAsLibraries(DeploymentHelper.getEngineCdi());
 

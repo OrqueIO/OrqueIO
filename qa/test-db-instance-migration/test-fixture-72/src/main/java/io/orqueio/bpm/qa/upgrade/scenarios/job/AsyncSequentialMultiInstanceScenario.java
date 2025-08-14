@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa.upgrade.scenarios.job;
+package io.orqueio.bpm.qa.upgrade.scenarios.job;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.qa.upgrade.DescribesScenario;
-import org.camunda.bpm.qa.upgrade.ScenarioSetup;
-import org.camunda.bpm.qa.upgrade.Times;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.qa.upgrade.DescribesScenario;
+import io.orqueio.bpm.qa.upgrade.ScenarioSetup;
+import io.orqueio.bpm.qa.upgrade.Times;
 
 /**
  * @author Thorben Lindhauer
@@ -30,12 +30,12 @@ public class AsyncSequentialMultiInstanceScenario {
 
   @Deployment
   public static String deployAsyncBeforeProcess() {
-    return "org/camunda/bpm/qa/upgrade/job/asyncBeforeSequentialMultiInstanceSubprocess.bpmn20.xml";
+    return "io/orqueio/bpm/qa/upgrade/job/asyncBeforeSequentialMultiInstanceSubprocess.bpmn20.xml";
   }
 
   @Deployment
   public static String deployAsyncBeforeTask() {
-    return "org/camunda/bpm/qa/upgrade/job/asyncBeforeSequentialMultiInstanceTask.bpmn20.xml";
+    return "io/orqueio/bpm/qa/upgrade/job/asyncBeforeSequentialMultiInstanceTask.bpmn20.xml";
   }
 
   @DescribesScenario("initAsyncBeforeSubprocess")

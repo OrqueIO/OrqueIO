@@ -14,20 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.functional.cdi;
+package io.orqueio.bpm.integrationtest.functional.cdi;
 
 import java.util.Arrays;
 import java.util.List;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.authorization.Authorization;
-import org.camunda.bpm.engine.authorization.Permission;
-import org.camunda.bpm.engine.authorization.Permissions;
-import org.camunda.bpm.engine.authorization.Resources;
-import org.camunda.bpm.engine.runtime.VariableInstance;
-import org.camunda.bpm.engine.task.Task;
-import org.camunda.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
-import org.camunda.bpm.integrationtest.util.DeploymentHelper;
-import org.camunda.bpm.integrationtest.util.TestContainer;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.authorization.Authorization;
+import io.orqueio.bpm.engine.authorization.Permission;
+import io.orqueio.bpm.engine.authorization.Permissions;
+import io.orqueio.bpm.engine.authorization.Resources;
+import io.orqueio.bpm.engine.runtime.VariableInstance;
+import io.orqueio.bpm.engine.task.Task;
+import io.orqueio.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
+import io.orqueio.bpm.integrationtest.util.DeploymentHelper;
+import io.orqueio.bpm.integrationtest.util.TestContainer;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -41,8 +41,8 @@ public class CdiBeanResolutionTwoEnginesTest extends AbstractFoxPlatformIntegrat
 
   @Deployment(name= "engine1", order = 1)
   public static WebArchive createDeployment() {
-    final WebArchive webArchive = initWebArchiveDeployment("paEngine1.war", "org/camunda/bpm/integrationtest/paOnEngine1.xml")
-      .addAsResource("org/camunda/bpm/integrationtest/functional/cdi/CdiBeanResolutionTwoEnginesTest.testResolveBean.bpmn20.xml")
+    final WebArchive webArchive = initWebArchiveDeployment("paEngine1.war", "io/orqueio/bpm/integrationtest/paOnEngine1.xml")
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/cdi/CdiBeanResolutionTwoEnginesTest.testResolveBean.bpmn20.xml")
       .addAsLibraries(DeploymentHelper.getEngineCdi());
 
     TestContainer.addContainerSpecificProcessEngineConfigurationClass(webArchive);

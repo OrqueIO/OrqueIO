@@ -14,19 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.functional.delegation;
+package io.orqueio.bpm.integrationtest.functional.delegation;
 
-import org.camunda.bpm.integrationtest.functional.delegation.beans.DelegateVarMapping;
+import io.orqueio.bpm.integrationtest.functional.delegation.beans.DelegateVarMapping;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.inject.Inject;
 import static junit.framework.TestCase.assertEquals;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.task.Task;
-import org.camunda.bpm.engine.task.TaskQuery;
-import org.camunda.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
-import org.camunda.bpm.integrationtest.util.DeploymentHelper;
-import org.camunda.bpm.integrationtest.util.TestConstants;
-import org.camunda.bpm.integrationtest.util.TestContainer;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.task.Task;
+import io.orqueio.bpm.engine.task.TaskQuery;
+import io.orqueio.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
+import io.orqueio.bpm.integrationtest.util.DeploymentHelper;
+import io.orqueio.bpm.integrationtest.util.TestConstants;
+import io.orqueio.bpm.integrationtest.util.TestContainer;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -45,14 +45,14 @@ public class DelegatedVariableMappingTest extends AbstractFoxPlatformIntegration
   @Deployment(name = "mainDeployment")
   public static WebArchive createProcessArchiveDeplyoment() {
     WebArchive webArchive = ShrinkWrap.create(WebArchive.class, "mainDeployment.war")
-        .addAsWebInfResource("org/camunda/bpm/integrationtest/beans.xml", "beans.xml")
+        .addAsWebInfResource("io/orqueio/bpm/integrationtest/beans.xml", "beans.xml")
         .addAsLibraries(DeploymentHelper.getEngineCdi())
         .addAsResource("META-INF/processes.xml", "META-INF/processes.xml")
         .addClass(AbstractFoxPlatformIntegrationTest.class)
         .addClass(TestConstants.class)
         .addClass(DelegateVarMapping.class)
-        .addAsResource("org/camunda/bpm/integrationtest/functional/delegation/DelegatedVariableMappingTest.testCallSubProcessWithDelegatedVariableMapping.bpmn20.xml")
-        .addAsResource("org/camunda/bpm/integrationtest/functional/delegation/DelegatedVariableMappingTest.testCallSubProcessWithDelegatedVariableMappingExpression.bpmn20.xml");
+        .addAsResource("io/orqueio/bpm/integrationtest/functional/delegation/DelegatedVariableMappingTest.testCallSubProcessWithDelegatedVariableMapping.bpmn20.xml")
+        .addAsResource("io/orqueio/bpm/integrationtest/functional/delegation/DelegatedVariableMappingTest.testCallSubProcessWithDelegatedVariableMappingExpression.bpmn20.xml");
 
     TestContainer.addContainerSpecificResourcesEmbedCdiLib(webArchive);
 
@@ -62,12 +62,12 @@ public class DelegatedVariableMappingTest extends AbstractFoxPlatformIntegration
   @Deployment(name = "calledDeployment")
   public static WebArchive createSecondProcessArchiveDeployment() {
     WebArchive webArchive = ShrinkWrap.create(WebArchive.class, "calledDeployment.war")
-        .addAsWebInfResource("org/camunda/bpm/integrationtest/beans.xml", "beans.xml")
+        .addAsWebInfResource("io/orqueio/bpm/integrationtest/beans.xml", "beans.xml")
         .addAsLibraries(DeploymentHelper.getEngineCdi())
         .addAsResource("META-INF/processes.xml", "META-INF/processes.xml")
         .addClass(AbstractFoxPlatformIntegrationTest.class)
         .addClass(TestConstants.class)
-        .addAsResource("org/camunda/bpm/integrationtest/functional/delegation/simpleSubProcess.bpmn20.xml");
+        .addAsResource("io/orqueio/bpm/integrationtest/functional/delegation/simpleSubProcess.bpmn20.xml");
 
     TestContainer.addContainerSpecificResourcesEmbedCdiLib(webArchive);
 

@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.functional.classloading.jobexecution;
+package io.orqueio.bpm.integrationtest.functional.classloading.jobexecution;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import java.util.List;
 
-import org.camunda.bpm.engine.runtime.Job;
-import org.camunda.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
-import org.camunda.bpm.integrationtest.util.TestContainer;
+import io.orqueio.bpm.engine.runtime.Job;
+import io.orqueio.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
+import io.orqueio.bpm.integrationtest.util.TestContainer;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -49,7 +49,7 @@ public class ClassloadingDuringJobExecutionTest extends AbstractFoxPlatformInteg
       "      <extensionElements>\r\n" +
       "        <camunda:inputOutput>\r\n" +
       "          <camunda:outputParameter name=\"output\">\r\n" +
-      "            <camunda:script scriptFormat=\"Javascript\">throw new org.camunda.bpm.engine.delegate.BpmnError(\"Test error thrown\");</camunda:script>\r\n" +
+      "            <camunda:script scriptFormat=\"Javascript\">throw new io.orqueio.bpm.engine.delegate.BpmnError(\"Test error thrown\");</camunda:script>\r\n" +
       "          </camunda:outputParameter>\r\n" +
       "        </camunda:inputOutput>\r\n" +
       "      </extensionElements>\r\n" +

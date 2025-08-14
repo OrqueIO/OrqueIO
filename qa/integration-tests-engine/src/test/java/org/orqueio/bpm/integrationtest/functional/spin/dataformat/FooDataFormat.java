@@ -14,19 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.functional.spin.dataformat;
+package io.orqueio.bpm.integrationtest.functional.spin.dataformat;
 
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
 import java.util.regex.Pattern;
 
-import org.camunda.spin.DeserializationTypeValidator;
-import org.camunda.spin.spi.DataFormat;
-import org.camunda.spin.spi.DataFormatMapper;
-import org.camunda.spin.spi.DataFormatReader;
-import org.camunda.spin.spi.DataFormatWriter;
-import org.camunda.spin.spi.TextBasedDataFormatReader;
+import io.orqueio.spin.DeserializationTypeValidator;
+import io.orqueio.spin.spi.DataFormat;
+import io.orqueio.spin.spi.DataFormatMapper;
+import io.orqueio.spin.spi.DataFormatReader;
+import io.orqueio.spin.spi.DataFormatWriter;
+import io.orqueio.spin.spi.TextBasedDataFormatReader;
 
 /**
  * @author Thorben Lindhauer

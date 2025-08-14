@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.functional.drools;
+package io.orqueio.bpm.integrationtest.functional.drools;
 
-import org.camunda.bpm.integrationtest.util.DeploymentHelper;
+import io.orqueio.bpm.integrationtest.util.DeploymentHelper;
 import org.jboss.arquillian.container.test.api.Deployer;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
@@ -46,10 +46,10 @@ public class TestDeploymentWithDroolsTaskFails {
   public static WebArchive processArchive() {    
     
     return  ShrinkWrap.create(WebArchive.class, "test.war")
-      .addAsWebInfResource("org/camunda/bpm/integrationtest/beans.xml", "beans.xml")
+      .addAsWebInfResource("io/orqueio/bpm/integrationtest/beans.xml", "beans.xml")
       .addAsLibraries(DeploymentHelper.getEjbClient())
       .addAsResource("META-INF/processes.xml", "META-INF/processes.xml")
-      .addAsResource("org/camunda/bpm/integrationtest/functional/drools/TestDeploymentWithDroolsTaskFails.testDeployDroolsFails.bpmn20.xml");           
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/drools/TestDeploymentWithDroolsTaskFails.testDeployDroolsFails.bpmn20.xml");           
   }
   
   @Test

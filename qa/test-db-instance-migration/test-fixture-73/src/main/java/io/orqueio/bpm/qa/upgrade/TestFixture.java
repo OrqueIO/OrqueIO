@@ -14,28 +14,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa.upgrade;
+package io.orqueio.bpm.qa.upgrade;
 
 
-import org.camunda.bpm.engine.ManagementService;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.ProcessEngineConfiguration;
-import org.camunda.bpm.engine.RepositoryService;
-import org.camunda.bpm.engine.RuntimeService;
-import org.camunda.bpm.engine.TaskService;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.qa.upgrade.scenarios.boundary.NonInterruptingBoundaryEventScenario;
-import org.camunda.bpm.qa.upgrade.scenarios.compensation.InterruptingEventSubProcessCompensationScenario;
-import org.camunda.bpm.qa.upgrade.scenarios.compensation.InterruptingEventSubProcessNestedCompensationScenario;
-import org.camunda.bpm.qa.upgrade.scenarios.compensation.NestedCompensationScenario;
-import org.camunda.bpm.qa.upgrade.scenarios.compensation.NestedMultiInstanceCompensationScenario;
-import org.camunda.bpm.qa.upgrade.scenarios.compensation.NonInterruptingEventSubProcessCompensationScenario;
-import org.camunda.bpm.qa.upgrade.scenarios.compensation.ParallelMultiInstanceCompensationScenario;
-import org.camunda.bpm.qa.upgrade.scenarios.compensation.SequentialMultiInstanceCompensationScenario;
-import org.camunda.bpm.qa.upgrade.scenarios.compensation.SingleActivityCompensationScenario;
-import org.camunda.bpm.qa.upgrade.scenarios.compensation.SingleActivityConcurrentCompensationScenario;
-import org.camunda.bpm.qa.upgrade.scenarios.job.JobMigrationScenario;
-import org.camunda.bpm.qa.upgrade.scenarios.sentry.SentryScenario;
+import io.orqueio.bpm.engine.ManagementService;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.ProcessEngineConfiguration;
+import io.orqueio.bpm.engine.RepositoryService;
+import io.orqueio.bpm.engine.RuntimeService;
+import io.orqueio.bpm.engine.TaskService;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.qa.upgrade.scenarios.boundary.NonInterruptingBoundaryEventScenario;
+import io.orqueio.bpm.qa.upgrade.scenarios.compensation.InterruptingEventSubProcessCompensationScenario;
+import io.orqueio.bpm.qa.upgrade.scenarios.compensation.InterruptingEventSubProcessNestedCompensationScenario;
+import io.orqueio.bpm.qa.upgrade.scenarios.compensation.NestedCompensationScenario;
+import io.orqueio.bpm.qa.upgrade.scenarios.compensation.NestedMultiInstanceCompensationScenario;
+import io.orqueio.bpm.qa.upgrade.scenarios.compensation.NonInterruptingEventSubProcessCompensationScenario;
+import io.orqueio.bpm.qa.upgrade.scenarios.compensation.ParallelMultiInstanceCompensationScenario;
+import io.orqueio.bpm.qa.upgrade.scenarios.compensation.SequentialMultiInstanceCompensationScenario;
+import io.orqueio.bpm.qa.upgrade.scenarios.compensation.SingleActivityCompensationScenario;
+import io.orqueio.bpm.qa.upgrade.scenarios.compensation.SingleActivityConcurrentCompensationScenario;
+import io.orqueio.bpm.qa.upgrade.scenarios.job.JobMigrationScenario;
+import io.orqueio.bpm.qa.upgrade.scenarios.sentry.SentryScenario;
 
 /**
  * Sets up scenarios for migration from 7.3.0

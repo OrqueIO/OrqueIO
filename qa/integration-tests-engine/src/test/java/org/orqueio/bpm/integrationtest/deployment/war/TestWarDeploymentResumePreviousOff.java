@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.deployment.war;
+package io.orqueio.bpm.integrationtest.deployment.war;
 import java.util.List;
 import java.util.Set;
 
-import org.camunda.bpm.BpmPlatform;
-import org.camunda.bpm.ProcessApplicationService;
-import org.camunda.bpm.application.ProcessApplicationDeploymentInfo;
-import org.camunda.bpm.application.ProcessApplicationInfo;
-import org.camunda.bpm.engine.RepositoryService;
-import org.camunda.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
+import io.orqueio.bpm.BpmPlatform;
+import io.orqueio.bpm.ProcessApplicationService;
+import io.orqueio.bpm.application.ProcessApplicationDeploymentInfo;
+import io.orqueio.bpm.application.ProcessApplicationInfo;
+import io.orqueio.bpm.engine.RepositoryService;
+import io.orqueio.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -43,13 +43,13 @@ public class TestWarDeploymentResumePreviousOff extends AbstractFoxPlatformInteg
   @Deployment(order=1, name=PA1)
   public static WebArchive processArchive1() {
     return initWebArchiveDeployment("pa1.war")
-      .addAsResource("org/camunda/bpm/integrationtest/deployment/war/testDeployProcessArchiveV1.bpmn20.xml");
+      .addAsResource("io/orqueio/bpm/integrationtest/deployment/war/testDeployProcessArchiveV1.bpmn20.xml");
   }
 
   @Deployment(order=2, name=PA2)
   public static WebArchive processArchive2() {
-    return initWebArchiveDeployment("pa2.war", "org/camunda/bpm/integrationtest/deployment/war/resumePreviousVersionsOff_processes.xml")
-      .addAsResource("org/camunda/bpm/integrationtest/deployment/war/testDeployProcessArchiveV2.bpmn20.xml");
+    return initWebArchiveDeployment("pa2.war", "io/orqueio/bpm/integrationtest/deployment/war/resumePreviousVersionsOff_processes.xml")
+      .addAsResource("io/orqueio/bpm/integrationtest/deployment/war/testDeployProcessArchiveV2.bpmn20.xml");
 
   }
 

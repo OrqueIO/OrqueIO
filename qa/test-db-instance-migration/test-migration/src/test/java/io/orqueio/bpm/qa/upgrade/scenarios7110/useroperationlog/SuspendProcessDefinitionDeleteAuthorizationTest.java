@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa.upgrade.scenarios7110.useroperationlog;
+package io.orqueio.bpm.qa.upgrade.scenarios7110.useroperationlog;
 
 
-import static org.camunda.bpm.engine.authorization.Resources.PROCESS_DEFINITION;
-import static org.camunda.bpm.engine.authorization.Permissions.DELETE_HISTORY;
+import static io.orqueio.bpm.engine.authorization.Resources.PROCESS_DEFINITION;
+import static io.orqueio.bpm.engine.authorization.Permissions.DELETE_HISTORY;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -26,16 +26,16 @@ import static org.junit.Assert.fail;
 import java.util.Date;
 import java.util.List;
 
-import org.camunda.bpm.engine.AuthorizationException;
-import org.camunda.bpm.engine.AuthorizationService;
-import org.camunda.bpm.engine.HistoryService;
-import org.camunda.bpm.engine.authorization.Authorization;
-import org.camunda.bpm.engine.authorization.Permissions;
-import org.camunda.bpm.engine.authorization.Resources;
-import org.camunda.bpm.engine.history.UserOperationLogEntry;
-import org.camunda.bpm.engine.history.UserOperationLogQuery;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.test.ProcessEngineRule;
+import io.orqueio.bpm.engine.AuthorizationException;
+import io.orqueio.bpm.engine.AuthorizationService;
+import io.orqueio.bpm.engine.HistoryService;
+import io.orqueio.bpm.engine.authorization.Authorization;
+import io.orqueio.bpm.engine.authorization.Permissions;
+import io.orqueio.bpm.engine.authorization.Resources;
+import io.orqueio.bpm.engine.history.UserOperationLogEntry;
+import io.orqueio.bpm.engine.history.UserOperationLogQuery;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.test.ProcessEngineRule;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;

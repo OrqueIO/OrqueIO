@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa.performance.engine.framework.activitylog;
+package io.orqueio.bpm.qa.performance.engine.framework.activitylog;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -23,13 +23,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.camunda.bpm.qa.performance.engine.framework.PerfTestConfiguration;
-import org.camunda.bpm.qa.performance.engine.framework.PerfTestResult;
-import org.camunda.bpm.qa.performance.engine.framework.PerfTestResults;
-import org.camunda.bpm.qa.performance.engine.framework.aggregate.TabularResultAggregator;
-import org.camunda.bpm.qa.performance.engine.framework.aggregate.TabularResultSet;
-import org.camunda.bpm.qa.performance.engine.framework.report.SectionedHtmlReportBuilder;
-import org.camunda.bpm.qa.performance.engine.framework.report.SectionedHtmlReportBuilder.TableCell;
+import io.orqueio.bpm.qa.performance.engine.framework.PerfTestConfiguration;
+import io.orqueio.bpm.qa.performance.engine.framework.PerfTestResult;
+import io.orqueio.bpm.qa.performance.engine.framework.PerfTestResults;
+import io.orqueio.bpm.qa.performance.engine.framework.aggregate.TabularResultAggregator;
+import io.orqueio.bpm.qa.performance.engine.framework.aggregate.TabularResultSet;
+import io.orqueio.bpm.qa.performance.engine.framework.report.SectionedHtmlReportBuilder;
+import io.orqueio.bpm.qa.performance.engine.framework.report.SectionedHtmlReportBuilder.TableCell;
 
 public class ActivityCountAggregator extends TabularResultAggregator {
 

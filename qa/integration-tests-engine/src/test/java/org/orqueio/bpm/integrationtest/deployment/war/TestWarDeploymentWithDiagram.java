@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.deployment.war;
+package io.orqueio.bpm.integrationtest.deployment.war;
 
-import org.camunda.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
-import org.camunda.bpm.integrationtest.util.TestHelper;
+import io.orqueio.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
+import io.orqueio.bpm.integrationtest.util.TestHelper;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
@@ -37,22 +37,22 @@ public class TestWarDeploymentWithDiagram extends AbstractFoxPlatformIntegration
   public static WebArchive processArchive() {    
     return initWebArchiveDeployment()
             .addClass(TestHelper.class)
-            .addAsResource("org/camunda/bpm/integrationtest/testDeployProcessArchive.bpmn20.xml")
-            .addAsResource("org/camunda/bpm/integrationtest/testDeployProcessArchive.png")
-            .addAsResource("org/camunda/bpm/integrationtest/invoice-it.bpmn20.xml")
-            .addAsResource("org/camunda/bpm/integrationtest/invoice-it.jpg");
+            .addAsResource("io/orqueio/bpm/integrationtest/testDeployProcessArchive.bpmn20.xml")
+            .addAsResource("io/orqueio/bpm/integrationtest/testDeployProcessArchive.png")
+            .addAsResource("io/orqueio/bpm/integrationtest/invoice-it.bpmn20.xml")
+            .addAsResource("io/orqueio/bpm/integrationtest/invoice-it.jpg");
   }
   
   @Test
   public void testDeployProcessArchive() throws IOException {
-    String expectedDiagramResource = "/org/camunda/bpm/integrationtest/testDeployProcessArchive.png";
+    String expectedDiagramResource = "/io/orqueio/bpm/integrationtest/testDeployProcessArchive.png";
     String processDefinitionKey = "testDeployProcessArchive";
     TestHelper.assertDiagramIsDeployed(true, getClass(), expectedDiagramResource, processDefinitionKey);
   }
 
   @Test
   public void testInvoiceProcess() throws IOException {
-    String expectedDiagramResource = "/org/camunda/bpm/integrationtest/invoice-it.jpg";
+    String expectedDiagramResource = "/io/orqueio/bpm/integrationtest/invoice-it.jpg";
     String processDefinitionKey = "invoice-it";
     TestHelper.assertDiagramIsDeployed(true, getClass(), expectedDiagramResource, processDefinitionKey);
   }

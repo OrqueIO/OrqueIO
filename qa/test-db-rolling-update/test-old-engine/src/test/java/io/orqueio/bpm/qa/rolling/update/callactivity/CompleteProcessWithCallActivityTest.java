@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa.rolling.update.callactivity;
+package io.orqueio.bpm.qa.rolling.update.callactivity;
 
-import org.camunda.bpm.engine.RuntimeService;
-import org.camunda.bpm.engine.runtime.Execution;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.task.Task;
-import org.camunda.bpm.engine.task.TaskQuery;
-import org.camunda.bpm.qa.rolling.update.AbstractRollingUpdateTestCase;
-import org.camunda.bpm.qa.upgrade.ScenarioUnderTest;
+import io.orqueio.bpm.engine.RuntimeService;
+import io.orqueio.bpm.engine.runtime.Execution;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.task.Task;
+import io.orqueio.bpm.engine.task.TaskQuery;
+import io.orqueio.bpm.qa.rolling.update.AbstractRollingUpdateTestCase;
+import io.orqueio.bpm.qa.upgrade.ScenarioUnderTest;
 import org.junit.Test;
 import org.junit.Before;
 import static org.junit.Assert.assertNotNull;

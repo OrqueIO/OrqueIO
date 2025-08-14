@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa.upgrade.scenarios7110.timestamp;
+package io.orqueio.bpm.qa.upgrade.scenarios7110.timestamp;
 
-import org.camunda.bpm.engine.ExternalTaskService;
-import org.camunda.bpm.engine.HistoryService;
-import org.camunda.bpm.engine.IdentityService;
-import org.camunda.bpm.engine.ManagementService;
-import org.camunda.bpm.engine.RepositoryService;
-import org.camunda.bpm.engine.RuntimeService;
-import org.camunda.bpm.engine.TaskService;
-import org.camunda.bpm.engine.test.ProcessEngineRule;
+import io.orqueio.bpm.engine.ExternalTaskService;
+import io.orqueio.bpm.engine.HistoryService;
+import io.orqueio.bpm.engine.IdentityService;
+import io.orqueio.bpm.engine.ManagementService;
+import io.orqueio.bpm.engine.RepositoryService;
+import io.orqueio.bpm.engine.RuntimeService;
+import io.orqueio.bpm.engine.TaskService;
+import io.orqueio.bpm.engine.test.ProcessEngineRule;
 import org.junit.Before;
 import org.junit.Rule;
 

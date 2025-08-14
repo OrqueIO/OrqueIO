@@ -14,25 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa.performance.engine.junit;
+package io.orqueio.bpm.qa.performance.engine.junit;
 
-import static org.camunda.bpm.engine.authorization.Authorization.ANY;
-import static org.camunda.bpm.engine.authorization.Authorization.AUTH_TYPE_GRANT;
+import static io.orqueio.bpm.engine.authorization.Authorization.ANY;
+import static io.orqueio.bpm.engine.authorization.Authorization.AUTH_TYPE_GRANT;
 
 import java.util.List;
 
-import org.camunda.bpm.engine.AuthorizationService;
-import org.camunda.bpm.engine.HistoryService;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.RepositoryService;
-import org.camunda.bpm.engine.RuntimeService;
-import org.camunda.bpm.engine.TaskService;
-import org.camunda.bpm.engine.authorization.Authorization;
-import org.camunda.bpm.engine.authorization.Permission;
-import org.camunda.bpm.engine.authorization.Resource;
-import org.camunda.bpm.engine.test.ProcessEngineRule;
-import org.camunda.bpm.qa.performance.engine.framework.PerfTestBuilder;
-import org.camunda.bpm.qa.performance.engine.framework.PerfTestConfiguration;
+import io.orqueio.bpm.engine.AuthorizationService;
+import io.orqueio.bpm.engine.HistoryService;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.RepositoryService;
+import io.orqueio.bpm.engine.RuntimeService;
+import io.orqueio.bpm.engine.TaskService;
+import io.orqueio.bpm.engine.authorization.Authorization;
+import io.orqueio.bpm.engine.authorization.Permission;
+import io.orqueio.bpm.engine.authorization.Resource;
+import io.orqueio.bpm.engine.test.ProcessEngineRule;
+import io.orqueio.bpm.qa.performance.engine.framework.PerfTestBuilder;
+import io.orqueio.bpm.qa.performance.engine.framework.PerfTestConfiguration;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;

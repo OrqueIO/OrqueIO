@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.deployment.ear;
+package io.orqueio.bpm.integrationtest.deployment.ear;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.RepositoryService;
-import org.camunda.bpm.engine.cdi.impl.util.ProgrammaticBeanLookup;
-import org.camunda.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
-import org.camunda.bpm.integrationtest.util.DeploymentHelper;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.RepositoryService;
+import io.orqueio.bpm.engine.cdi.impl.util.ProgrammaticBeanLookup;
+import io.orqueio.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
+import io.orqueio.bpm.integrationtest.util.DeploymentHelper;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -50,7 +50,7 @@ public class TestFoxPlatformClientAsEjbModule_onePaAsLib extends AbstractFoxPlat
    *    |-- lib /
    *        |-- processes.jar
    *          |-- META-INF/processes.xml
-   *          |-- org/camunda/bpm/integrationtest/testDeployProcessArchive.bpmn20.xml
+   *          |-- io/orqueio/bpm/integrationtest/testDeployProcessArchive.bpmn20.xml
    *
    *    |-- fox-platform-client.jar  <<===============================||
    *                                                                  ||  Class-Path reference
@@ -64,13 +64,13 @@ public class TestFoxPlatformClientAsEjbModule_onePaAsLib extends AbstractFoxPlat
   public static EnterpriseArchive onePaAsLib() {
 
     JavaArchive processArchiveJar = ShrinkWrap.create(JavaArchive.class, "processes.jar")
-      .addAsResource("org/camunda/bpm/integrationtest/testDeployProcessArchive.bpmn20.xml")
+      .addAsResource("io/orqueio/bpm/integrationtest/testDeployProcessArchive.bpmn20.xml")
       .addAsResource("META-INF/processes.xml", "META-INF/processes.xml");
 
     JavaArchive foxPlatformClientJar = DeploymentHelper.getEjbClient();
 
     WebArchive testJar = ShrinkWrap.create(WebArchive.class, "test.war")
-      .addAsWebInfResource("org/camunda/bpm/integrationtest/beans.xml", "beans.xml")
+      .addAsWebInfResource("io/orqueio/bpm/integrationtest/beans.xml", "beans.xml")
       .setManifest(new ByteArrayAsset(("Class-Path: " + foxPlatformClientJar.getName()+"\n").getBytes()))
       .addClass(AbstractFoxPlatformIntegrationTest.class)
       .addClass(TestFoxPlatformClientAsEjbModule_onePaAsLib.class);

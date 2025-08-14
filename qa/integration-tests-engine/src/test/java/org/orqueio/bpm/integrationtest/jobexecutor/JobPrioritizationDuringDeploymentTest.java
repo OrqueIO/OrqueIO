@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.jobexecutor;
+package io.orqueio.bpm.integrationtest.jobexecutor;
 
-import org.camunda.bpm.engine.runtime.Job;
-import org.camunda.bpm.integrationtest.jobexecutor.beans.PriorityBean;
-import org.camunda.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
+import io.orqueio.bpm.engine.runtime.Job;
+import io.orqueio.bpm.integrationtest.jobexecutor.beans.PriorityBean;
+import io.orqueio.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
 import org.jboss.arquillian.container.test.api.Deployer;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
@@ -53,7 +53,7 @@ public class JobPrioritizationDuringDeploymentTest extends AbstractFoxPlatformIn
   public static WebArchive createTimerStartDeployment() {
     return initWebArchiveDeployment()
       .addClass(PriorityBean.class)
-      .addAsResource("org/camunda/bpm/integrationtest/jobexecutor/JobPrioritizationDuringDeploymentTest.timerStart.bpmn20.xml");
+      .addAsResource("io/orqueio/bpm/integrationtest/jobexecutor/JobPrioritizationDuringDeploymentTest.timerStart.bpmn20.xml");
 
   }
 

@@ -8,7 +8,7 @@
   
     <startEvent id="start" />
     <sequenceFlow id="flow1" sourceRef="start" targetRef="serviceTask" />
-    <serviceTask id="serviceTask" camunda:class="org.camunda.bpm.integrationtest.functional.spin.RuntimeServiceDelegate"/>
+    <serviceTask id="serviceTask" camunda:class="io.orqueio.bpm.integrationtest.functional.spin.RuntimeServiceDelegate"/>
     <sequenceFlow id="flow2" sourceRef="serviceTask" targetRef="task" />
     <userTask id="task" />
     <sequenceFlow id="flow3" sourceRef="task" targetRef="end" />

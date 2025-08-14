@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.functional.ejb.remote;
+package io.orqueio.bpm.integrationtest.functional.ejb.remote;
 
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.integrationtest.functional.ejb.remote.bean.BusinessInterface;
-import org.camunda.bpm.integrationtest.functional.ejb.remote.bean.RemoteSingletonBean;
-import org.camunda.bpm.integrationtest.functional.ejb.remote.bean.RemoteSingletonBeanClientDelegateBean;
-import org.camunda.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
-import org.camunda.bpm.integrationtest.util.DeploymentHelper;
-import org.camunda.bpm.integrationtest.util.TestContainer;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.integrationtest.functional.ejb.remote.bean.BusinessInterface;
+import io.orqueio.bpm.integrationtest.functional.ejb.remote.bean.RemoteSingletonBean;
+import io.orqueio.bpm.integrationtest.functional.ejb.remote.bean.RemoteSingletonBeanClientDelegateBean;
+import io.orqueio.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
+import io.orqueio.bpm.integrationtest.util.DeploymentHelper;
+import io.orqueio.bpm.integrationtest.util.TestContainer;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -54,14 +54,14 @@ public class RemoteSingletonBeanInvocationTest extends AbstractFoxPlatformIntegr
     return initWebArchiveDeployment()
       .addClass(RemoteSingletonBeanClientDelegateBean.class)
       .addClass(BusinessInterface.class) // the business interface
-      .addAsResource("org/camunda/bpm/integrationtest/functional/ejb/remote/RemoteSingletonBeanInvocationTest.testInvokeBean.bpmn20.xml");
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/ejb/remote/RemoteSingletonBeanInvocationTest.testInvokeBean.bpmn20.xml");
   }
 
   @Deployment(order=1)
   public static WebArchive delegateDeployment() {
     WebArchive webArchive = ShrinkWrap.create(WebArchive.class, "service.war")
       .addAsLibraries(DeploymentHelper.getEjbClient())
-      .addAsWebInfResource("org/camunda/bpm/integrationtest/beans.xml", "beans.xml")
+      .addAsWebInfResource("io/orqueio/bpm/integrationtest/beans.xml", "beans.xml")
       .addClass(AbstractFoxPlatformIntegrationTest.class)
       .addClass(RemoteSingletonBean.class) // the EJB
       .addClass(BusinessInterface.class); // the business interface

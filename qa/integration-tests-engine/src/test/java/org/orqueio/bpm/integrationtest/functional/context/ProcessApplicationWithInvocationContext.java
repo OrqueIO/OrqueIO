@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.functional.context;
+package io.orqueio.bpm.integrationtest.functional.context;
 
 import java.util.concurrent.Callable;
-import org.camunda.bpm.application.InvocationContext;
-import org.camunda.bpm.application.ProcessApplication;
-import org.camunda.bpm.application.ProcessApplicationExecutionException;
+import io.orqueio.bpm.application.InvocationContext;
+import io.orqueio.bpm.application.ProcessApplication;
+import io.orqueio.bpm.application.ProcessApplicationExecutionException;
 
 @ProcessApplication("app")
 // Using fully-qualified class name instead of import statement to allow for automatic Jakarta transformation
-public class ProcessApplicationWithInvocationContext extends org.camunda.bpm.application.impl.ServletProcessApplication {
+public class ProcessApplicationWithInvocationContext extends io.orqueio.bpm.application.impl.ServletProcessApplication {
 
   private static InvocationContext invocationContext = null;
 

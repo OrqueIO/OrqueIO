@@ -12,14 +12,14 @@
       <bpmn:outgoing>SequenceFlow_0lbhk5d</bpmn:outgoing>
       <bpmn:messageEventDefinition messageRef="Message_0duwf66" />
     </bpmn:intermediateCatchEvent>
-    <bpmn:serviceTask id="waitingTask" name="a task" camunda:class="org.camunda.bpm.integrationtest.functional.context.beans.NoOpJavaDelegate">
+    <bpmn:serviceTask id="waitingTask" name="a task" camunda:class="io.orqueio.bpm.integrationtest.functional.context.beans.NoOpJavaDelegate">
       <bpmn:incoming>SequenceFlow_0ridj4w</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1u0ppci</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="SequenceFlow_0ridj4w" sourceRef="StartEvent_1" targetRef="waitingTask" />
     <bpmn:sequenceFlow id="SequenceFlow_1u0ppci" sourceRef="waitingTask" targetRef="IntermediateCatchEvent_0kqj125" />
     <bpmn:sequenceFlow id="SequenceFlow_0lbhk5d" sourceRef="IntermediateCatchEvent_0kqj125" targetRef="ServiceTask_09zpi4c" />
-    <bpmn:serviceTask id="ServiceTask_09zpi4c" name="another task" camunda:class="org.camunda.bpm.integrationtest.functional.context.beans.NoOpJavaDelegate">
+    <bpmn:serviceTask id="ServiceTask_09zpi4c" name="another task" camunda:class="io.orqueio.bpm.integrationtest.functional.context.beans.NoOpJavaDelegate">
       <bpmn:incoming>SequenceFlow_0lbhk5d</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1e28q1j</bpmn:outgoing>
     </bpmn:serviceTask>

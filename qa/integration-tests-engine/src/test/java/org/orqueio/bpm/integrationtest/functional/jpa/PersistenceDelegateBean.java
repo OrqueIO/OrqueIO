@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.functional.jpa;
+package io.orqueio.bpm.integrationtest.functional.jpa;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import org.camunda.bpm.engine.delegate.DelegateExecution;
-import org.camunda.bpm.engine.delegate.JavaDelegate;
+import io.orqueio.bpm.engine.delegate.DelegateExecution;
+import io.orqueio.bpm.engine.delegate.JavaDelegate;
 import org.junit.Assert;
 
 @Named

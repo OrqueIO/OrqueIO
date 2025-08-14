@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa.rolling.update;
+package io.orqueio.bpm.qa.rolling.update;
 
-import org.camunda.bpm.engine.repository.ProcessDefinition;
-import org.camunda.bpm.qa.upgrade.ScenarioUnderTest;
+import io.orqueio.bpm.engine.repository.ProcessDefinition;
+import io.orqueio.bpm.qa.upgrade.ScenarioUnderTest;
 import org.junit.Test;
 
 /**

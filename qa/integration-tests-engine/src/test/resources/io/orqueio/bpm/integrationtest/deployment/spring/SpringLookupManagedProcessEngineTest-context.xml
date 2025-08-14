@@ -7,7 +7,7 @@
        
        
     <!-- bind the process engine service as Spring Bean -->
-    <bean name="processEngineService" class="org.camunda.bpm.BpmPlatform" factory-method="getProcessEngineService" />
+    <bean name="processEngineService" class="io.orqueio.bpm.BpmPlatform" factory-method="getProcessEngineService" />
     
     <!-- bind the default process engine as Spring Bean -->
     <bean name="processEngine" factory-bean="processEngineService" factory-method="getDefaultProcessEngine" />

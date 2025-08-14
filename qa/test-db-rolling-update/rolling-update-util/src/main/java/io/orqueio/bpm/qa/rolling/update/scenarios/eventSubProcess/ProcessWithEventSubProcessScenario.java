@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa.rolling.update.scenarios.eventSubProcess;
+package io.orqueio.bpm.qa.rolling.update.scenarios.eventSubProcess;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.runtime.Job;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.qa.upgrade.DescribesScenario;
-import org.camunda.bpm.qa.upgrade.ScenarioSetup;
-import org.camunda.bpm.qa.upgrade.Times;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.runtime.Job;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.qa.upgrade.DescribesScenario;
+import io.orqueio.bpm.qa.upgrade.ScenarioSetup;
+import io.orqueio.bpm.qa.upgrade.Times;
 
 /**
  *
@@ -34,7 +34,7 @@ public class ProcessWithEventSubProcessScenario {
 
   @Deployment
   public static String deploy() {
-    return "org/camunda/bpm/qa/rolling/update/processWithEventSubProcess.bpmn20.xml";
+    return "io/orqueio/bpm/qa/rolling/update/processWithEventSubProcess.bpmn20.xml";
   }
 
   @DescribesScenario("init")

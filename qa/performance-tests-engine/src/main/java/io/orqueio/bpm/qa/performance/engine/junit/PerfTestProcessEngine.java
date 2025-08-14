@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa.performance.engine.junit;
+package io.orqueio.bpm.qa.performance.engine.junit;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -23,14 +23,14 @@ import java.util.Properties;
 
 import org.apache.tomcat.jdbc.pool.DataSource;
 import org.apache.tomcat.jdbc.pool.PoolProperties;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.ProcessEngineConfiguration;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.cfg.ProcessEnginePlugin;
-import org.camunda.bpm.engine.impl.cfg.StandaloneProcessEngineConfiguration;
-import org.camunda.bpm.engine.impl.util.IoUtil;
-import org.camunda.bpm.engine.impl.util.ReflectUtil;
-import org.camunda.bpm.qa.performance.engine.framework.PerfTestException;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.ProcessEngineConfiguration;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEnginePlugin;
+import io.orqueio.bpm.engine.impl.cfg.StandaloneProcessEngineConfiguration;
+import io.orqueio.bpm.engine.impl.util.IoUtil;
+import io.orqueio.bpm.engine.impl.util.ReflectUtil;
+import io.orqueio.bpm.qa.performance.engine.framework.PerfTestException;
 
 /**
  * @author Daniel Meyer

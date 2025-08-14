@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.functional.ejb.local;
+package io.orqueio.bpm.integrationtest.functional.ejb.local;
 
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.integrationtest.functional.ejb.local.bean.CallbackBean;
-import org.camunda.bpm.integrationtest.functional.ejb.local.bean.InvokeStartProcessDelegateSLSB;
-import org.camunda.bpm.integrationtest.functional.ejb.local.bean.StartProcessInterface;
-import org.camunda.bpm.integrationtest.functional.ejb.local.bean.StartProcessSLSB;
-import org.camunda.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
-import org.camunda.bpm.integrationtest.util.TestContainer;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.integrationtest.functional.ejb.local.bean.CallbackBean;
+import io.orqueio.bpm.integrationtest.functional.ejb.local.bean.InvokeStartProcessDelegateSLSB;
+import io.orqueio.bpm.integrationtest.functional.ejb.local.bean.StartProcessInterface;
+import io.orqueio.bpm.integrationtest.functional.ejb.local.bean.StartProcessSLSB;
+import io.orqueio.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
+import io.orqueio.bpm.integrationtest.util.TestContainer;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -77,19 +77,19 @@ public class LocalSLSBInvocationWithCallbackTest extends AbstractFoxPlatformInte
     return initWebArchiveDeployment()
       .addClass(InvokeStartProcessDelegateSLSB.class)
       .addClass(CallbackBean.class)
-      .addAsResource("org/camunda/bpm/integrationtest/functional/ejb/local/LocalSLSBInvocationTest.testStartProcess.bpmn20.xml")
-      .addAsResource("org/camunda/bpm/integrationtest/functional/ejb/local/LocalSLSBInvocationTest.callbackProcess.bpmn20.xml")
-      .addAsWebInfResource("org/camunda/bpm/integrationtest/functional/ejb/local/jboss-deployment-structure.xml","jboss-deployment-structure.xml");
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/ejb/local/LocalSLSBInvocationTest.testStartProcess.bpmn20.xml")
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/ejb/local/LocalSLSBInvocationTest.callbackProcess.bpmn20.xml")
+      .addAsWebInfResource("io/orqueio/bpm/integrationtest/functional/ejb/local/jboss-deployment-structure.xml","jboss-deployment-structure.xml");
   }
 
   @Deployment(order=1)
   public static WebArchive delegateDeployment() {
     WebArchive webArchive = ShrinkWrap.create(WebArchive.class, "service.war")
-      .addAsWebInfResource("org/camunda/bpm/integrationtest/beans.xml", "beans.xml")
+      .addAsWebInfResource("io/orqueio/bpm/integrationtest/beans.xml", "beans.xml")
       .addClass(AbstractFoxPlatformIntegrationTest.class)
       .addClass(StartProcessSLSB.class)
       .addClass(StartProcessInterface.class)
-      .addAsManifestResource(new StringAsset("Dependencies: org.camunda.bpm.camunda-engine"), "MANIFEST.MF"); // get access to engine classes
+      .addAsManifestResource(new StringAsset("Dependencies: io.orqueio.bpm.camunda-engine"), "MANIFEST.MF"); // get access to engine classes
 
     TestContainer.addContainerSpecificResourcesForNonPa(webArchive);
 

@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.functional.ejb.request.beans;
+package io.orqueio.bpm.integrationtest.functional.ejb.request.beans;
 
 import javax.inject.Named;
 import javax.naming.InitialContext;
 
-import org.camunda.bpm.engine.delegate.DelegateExecution;
-import org.camunda.bpm.engine.delegate.JavaDelegate;
-import org.camunda.bpm.integrationtest.util.TestConstants;
+import io.orqueio.bpm.engine.delegate.DelegateExecution;
+import io.orqueio.bpm.engine.delegate.JavaDelegate;
+import io.orqueio.bpm.integrationtest.util.TestConstants;
 
 
 /**
@@ -36,7 +36,7 @@ public class InvocationCounterDelegateBean implements JavaDelegate {
     InvocationCounterService invocationCounterService = (InvocationCounterService) new InitialContext().lookup("java:global/" +
         TestConstants.getAppName() +
         "service/" +
-        "InvocationCounterServiceBean!org.camunda.bpm.integrationtest.functional.ejb.request.beans.InvocationCounterService");
+        "InvocationCounterServiceBean!io.orqueio.bpm.integrationtest.functional.ejb.request.beans.InvocationCounterService");
 
     execution.setVariable("invocationCounter", invocationCounterService.getNumOfInvocations());
   }

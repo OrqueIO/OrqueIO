@@ -4,13 +4,13 @@
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>SequenceFlow_0ridj4w</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:serviceTask id="waitingTask" name="waiting task" camunda:class="org.camunda.bpm.integrationtest.functional.context.beans.SignalableTask">
+    <bpmn:serviceTask id="waitingTask" name="waiting task" camunda:class="io.orqueio.bpm.integrationtest.functional.context.beans.SignalableTask">
       <bpmn:incoming>SequenceFlow_0ridj4w</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_15rghx8</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="SequenceFlow_0ridj4w" sourceRef="StartEvent_1" targetRef="waitingTask" />
     <bpmn:sequenceFlow id="SequenceFlow_15rghx8" sourceRef="waitingTask" targetRef="ServiceTask_1xw6v5i" />
-    <bpmn:serviceTask id="ServiceTask_1xw6v5i" name="another task" camunda:class="org.camunda.bpm.integrationtest.functional.context.beans.NoOpJavaDelegate">
+    <bpmn:serviceTask id="ServiceTask_1xw6v5i" name="another task" camunda:class="io.orqueio.bpm.integrationtest.functional.context.beans.NoOpJavaDelegate">
       <bpmn:incoming>SequenceFlow_15rghx8</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1nxfe5y</bpmn:outgoing>
     </bpmn:serviceTask>

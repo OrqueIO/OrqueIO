@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.deployment.war.apps;
+package io.orqueio.bpm.integrationtest.deployment.war.apps;
 
-import org.camunda.bpm.application.ProcessApplication;
+import io.orqueio.bpm.application.ProcessApplication;
 
 /**
  * @author Thorben Lindhauer
@@ -24,7 +24,7 @@ import org.camunda.bpm.application.ProcessApplication;
  */
 @ProcessApplication(name = CustomNameServletPA.NAME)
 // Using fully-qualified class name instead of import statement to allow for automatic Jakarta transformation
-public class CustomNameServletPA extends org.camunda.bpm.application.impl.ServletProcessApplication {
+public class CustomNameServletPA extends io.orqueio.bpm.application.impl.ServletProcessApplication {
 
   public static final String NAME = "fooooooooooooo";
 }

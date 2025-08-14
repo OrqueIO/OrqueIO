@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.functional.transactions.beans;
+package io.orqueio.bpm.integrationtest.functional.transactions.beans;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.transaction.UserTransaction;
 
-import org.camunda.bpm.engine.delegate.DelegateExecution;
-import org.camunda.bpm.engine.delegate.JavaDelegate;
-import org.camunda.bpm.engine.impl.util.EnsureUtil;
+import io.orqueio.bpm.engine.delegate.DelegateExecution;
+import io.orqueio.bpm.engine.delegate.JavaDelegate;
+import io.orqueio.bpm.engine.impl.util.EnsureUtil;
 
 @Named
 public class TransactionRollbackDelegate implements JavaDelegate {

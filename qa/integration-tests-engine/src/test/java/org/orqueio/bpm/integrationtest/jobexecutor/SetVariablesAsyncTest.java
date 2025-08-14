@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.jobexecutor;
+package io.orqueio.bpm.integrationtest.jobexecutor;
 
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.repository.ProcessDefinition;
-import org.camunda.bpm.engine.runtime.Job;
-import org.camunda.bpm.engine.variable.Variables;
-import org.camunda.bpm.integrationtest.jobexecutor.classes.MyPojo;
-import org.camunda.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
-import org.camunda.bpm.integrationtest.util.TestContainer;
-import org.camunda.bpm.model.bpmn.Bpmn;
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.repository.ProcessDefinition;
+import io.orqueio.bpm.engine.runtime.Job;
+import io.orqueio.bpm.engine.variable.Variables;
+import io.orqueio.bpm.integrationtest.jobexecutor.classes.MyPojo;
+import io.orqueio.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
+import io.orqueio.bpm.integrationtest.util.TestContainer;
+import io.orqueio.bpm.model.bpmn.Bpmn;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -85,7 +85,7 @@ public class SetVariablesAsyncTest extends AbstractFoxPlatformIntegrationTest {
 
     runtimeService.setVariablesAsync(Collections.singletonList(pi),
         Variables.putValue("foo", Variables.serializedObjectValue()
-            .objectTypeName("org.camunda.bpm.integrationtest.functional.context.classes.MyPojo")
+            .objectTypeName("io.orqueio.bpm.integrationtest.functional.context.classes.MyPojo")
             .serializedValue("{\"name\": \"myName\", \"prio\": 5}")
             .serializationDataFormat("application/json")
             .create()));

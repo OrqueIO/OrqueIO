@@ -15,22 +15,22 @@
  * limitations under the License.
  */
 
-package org.camunda.bpm.qa.upgrade.scenarios7210.jobexecutor;
+package io.orqueio.bpm.qa.upgrade.scenarios7210.jobexecutor;
 
-import org.camunda.bpm.engine.HistoryService;
-import org.camunda.bpm.engine.ManagementService;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.RuntimeService;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.cmd.AcquireJobsCmd;
-import org.camunda.bpm.engine.impl.interceptor.CommandExecutor;
-import org.camunda.bpm.engine.impl.jobexecutor.AcquiredJobs;
-import org.camunda.bpm.engine.impl.jobexecutor.JobExecutor;
-import org.camunda.bpm.engine.runtime.Job;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.qa.upgrade.Origin;
-import org.camunda.bpm.qa.upgrade.ScenarioUnderTest;
-import org.camunda.bpm.qa.upgrade.UpgradeTestRule;
+import io.orqueio.bpm.engine.HistoryService;
+import io.orqueio.bpm.engine.ManagementService;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.RuntimeService;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.cmd.AcquireJobsCmd;
+import io.orqueio.bpm.engine.impl.interceptor.CommandExecutor;
+import io.orqueio.bpm.engine.impl.jobexecutor.AcquiredJobs;
+import io.orqueio.bpm.engine.impl.jobexecutor.JobExecutor;
+import io.orqueio.bpm.engine.runtime.Job;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.qa.upgrade.Origin;
+import io.orqueio.bpm.qa.upgrade.ScenarioUnderTest;
+import io.orqueio.bpm.qa.upgrade.UpgradeTestRule;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;

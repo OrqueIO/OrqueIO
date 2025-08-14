@@ -7,7 +7,7 @@
     <bpmn:endEvent id="EndEvent_16vbpat">
       <bpmn:incoming>SequenceFlow_0lx209y</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:serviceTask id="ServiceTask_0y1h6ha" name="Random Sleep" camunda:class="org.camunda.bpm.qa.performance.engine.bpmn.delegate.RandomSleepDelegate">
+    <bpmn:serviceTask id="ServiceTask_0y1h6ha" name="Random Sleep" camunda:class="io.orqueio.bpm.qa.performance.engine.bpmn.delegate.RandomSleepDelegate">
       <bpmn:incoming>SequenceFlow_0uhey6o</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0lx209y</bpmn:outgoing>
     </bpmn:serviceTask>

@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa.rolling.update;
+package io.orqueio.bpm.qa.rolling.update;
 
 import java.util.Arrays;
 import java.util.Collection;
-import org.camunda.bpm.qa.upgrade.UpgradeTestRule;
+import io.orqueio.bpm.qa.upgrade.UpgradeTestRule;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.runner.RunWith;

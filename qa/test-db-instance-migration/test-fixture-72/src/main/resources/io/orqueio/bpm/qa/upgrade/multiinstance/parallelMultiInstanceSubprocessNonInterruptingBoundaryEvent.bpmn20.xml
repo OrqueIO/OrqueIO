@@ -16,7 +16,7 @@
       <sequenceFlow sourceRef="subProcessStart" targetRef="subProcessTask" />
       <userTask id="subProcessTask" />
       <sequenceFlow sourceRef="subProcessTask" targetRef="throwErrorServiceTask" />
-      <serviceTask id="throwErrorServiceTask" camunda:class="org.camunda.bpm.qa.upgrade.util.ThrowBpmnErrorDelegate" />
+      <serviceTask id="throwErrorServiceTask" camunda:class="io.orqueio.bpm.qa.upgrade.util.ThrowBpmnErrorDelegate" />
       <sequenceFlow sourceRef="throwErrorServiceTask" targetRef="subProcessEnd" />
       <endEvent id="subProcessEnd" />
     </subProcess>

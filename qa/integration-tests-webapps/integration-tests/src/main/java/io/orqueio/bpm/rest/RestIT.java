@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.rest;
+package io.orqueio.bpm.rest;
 
 import kong.unirest.HttpResponse;
 import kong.unirest.JsonNode;
@@ -22,9 +22,9 @@ import kong.unirest.Unirest;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import org.camunda.bpm.AbstractWebIntegrationTest;
-import org.camunda.bpm.engine.rest.hal.Hal;
-import org.camunda.bpm.engine.rest.mapper.JacksonConfigurator;
+import io.orqueio.bpm.AbstractWebIntegrationTest;
+import io.orqueio.bpm.engine.rest.hal.Hal;
+import io.orqueio.bpm.engine.rest.mapper.JacksonConfigurator;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -245,7 +245,7 @@ public class RestIT extends AbstractWebIntegrationTest {
     // check that definition is also serialized
     for (int i = 0; i < definitionStatistics.length(); i++) {
       JSONObject definitionStatistic = definitionStatistics.getJSONObject(i);
-      assertEquals("org.camunda.bpm.engine.rest.dto.repository.ProcessDefinitionStatisticsResultDto", definitionStatistic.getString("@class"));
+      assertEquals("io.orqueio.bpm.engine.rest.dto.repository.ProcessDefinitionStatisticsResultDto", definitionStatistic.getString("@class"));
       assertEquals(0, definitionStatistic.getJSONArray("incidents").length());
       JSONObject definition = definitionStatistic.getJSONObject("definition");
       assertTrue(definition.getString("name").toLowerCase().contains("invoice"));

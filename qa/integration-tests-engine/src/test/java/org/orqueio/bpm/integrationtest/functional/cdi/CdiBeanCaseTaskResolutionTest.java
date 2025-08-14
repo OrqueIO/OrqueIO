@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.functional.cdi;
+package io.orqueio.bpm.integrationtest.functional.cdi;
 
-import org.camunda.bpm.engine.runtime.CaseExecution;
-import org.camunda.bpm.engine.runtime.CaseInstance;
-import org.camunda.bpm.engine.task.Task;
-import org.camunda.bpm.engine.variable.Variables;
-import org.camunda.bpm.integrationtest.functional.cdi.beans.CaseVariableBean;
-import org.camunda.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
-import org.camunda.bpm.integrationtest.util.DeploymentHelper;
-import org.camunda.bpm.integrationtest.util.TestContainer;
+import io.orqueio.bpm.engine.runtime.CaseExecution;
+import io.orqueio.bpm.engine.runtime.CaseInstance;
+import io.orqueio.bpm.engine.task.Task;
+import io.orqueio.bpm.engine.variable.Variables;
+import io.orqueio.bpm.integrationtest.functional.cdi.beans.CaseVariableBean;
+import io.orqueio.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
+import io.orqueio.bpm.integrationtest.util.DeploymentHelper;
+import io.orqueio.bpm.integrationtest.util.TestContainer;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -43,20 +43,20 @@ public class CdiBeanCaseTaskResolutionTest extends AbstractFoxPlatformIntegratio
   @Deployment(name="pa1")
   public static WebArchive createCallingProcessDeployment() {
     return initWebArchiveDeployment("pa1.war")
-            .addAsResource("org/camunda/bpm/integrationtest/functional/cdi/CdiBeanCallActivityResolutionTest.callingCase.cmmn");
+            .addAsResource("io/orqueio/bpm/integrationtest/functional/cdi/CdiBeanCallActivityResolutionTest.callingCase.cmmn");
   }
 
   @Deployment(name="pa2")
   public static WebArchive createCalledProcessDeployment() {
     return initWebArchiveDeployment("pa2.war")
             .addClass(CaseVariableBean.class)
-            .addAsResource("org/camunda/bpm/integrationtest/functional/cdi/CdiBeanCallActivityResolutionTest.calledCase.cmmn");
+            .addAsResource("io/orqueio/bpm/integrationtest/functional/cdi/CdiBeanCallActivityResolutionTest.calledCase.cmmn");
   }
 
   @Deployment(name="clientDeployment")
   public static WebArchive clientDeployment() {
     WebArchive deployment = ShrinkWrap.create(WebArchive.class, "client.war")
-            .addAsWebInfResource("org/camunda/bpm/integrationtest/beans.xml", "beans.xml")
+            .addAsWebInfResource("io/orqueio/bpm/integrationtest/beans.xml", "beans.xml")
             .addClass(AbstractFoxPlatformIntegrationTest.class)
             .addAsLibraries(DeploymentHelper.getEngineCdi());
 

@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa.upgrade.util;
+package io.orqueio.bpm.qa.upgrade.util;
 
-import org.camunda.bpm.engine.OptimisticLockingException;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.cmd.CompleteTaskCmd;
+import io.orqueio.bpm.engine.OptimisticLockingException;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.cmd.CompleteTaskCmd;
 
 /**
  * @author Thorben Lindhauer

@@ -14,23 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa.performance.engine.bpmn;
+package io.orqueio.bpm.qa.performance.engine.bpmn;
 
-import static org.camunda.bpm.qa.performance.engine.steps.PerfTestConstants.VARIABLE1;
-import static org.camunda.bpm.qa.performance.engine.steps.PerfTestConstants.VARIABLE10;
-import static org.camunda.bpm.qa.performance.engine.steps.PerfTestConstants.VARIABLE2;
-import static org.camunda.bpm.qa.performance.engine.steps.PerfTestConstants.VARIABLE3;
-import static org.camunda.bpm.qa.performance.engine.steps.PerfTestConstants.VARIABLE4;
-import static org.camunda.bpm.qa.performance.engine.steps.PerfTestConstants.VARIABLE5;
-import static org.camunda.bpm.qa.performance.engine.steps.PerfTestConstants.VARIABLE6;
-import static org.camunda.bpm.qa.performance.engine.steps.PerfTestConstants.VARIABLE7;
-import static org.camunda.bpm.qa.performance.engine.steps.PerfTestConstants.VARIABLE8;
-import static org.camunda.bpm.qa.performance.engine.steps.PerfTestConstants.VARIABLE9;
+import static io.orqueio.bpm.qa.performance.engine.steps.PerfTestConstants.VARIABLE1;
+import static io.orqueio.bpm.qa.performance.engine.steps.PerfTestConstants.VARIABLE10;
+import static io.orqueio.bpm.qa.performance.engine.steps.PerfTestConstants.VARIABLE2;
+import static io.orqueio.bpm.qa.performance.engine.steps.PerfTestConstants.VARIABLE3;
+import static io.orqueio.bpm.qa.performance.engine.steps.PerfTestConstants.VARIABLE4;
+import static io.orqueio.bpm.qa.performance.engine.steps.PerfTestConstants.VARIABLE5;
+import static io.orqueio.bpm.qa.performance.engine.steps.PerfTestConstants.VARIABLE6;
+import static io.orqueio.bpm.qa.performance.engine.steps.PerfTestConstants.VARIABLE7;
+import static io.orqueio.bpm.qa.performance.engine.steps.PerfTestConstants.VARIABLE8;
+import static io.orqueio.bpm.qa.performance.engine.steps.PerfTestConstants.VARIABLE9;
 
 import java.util.HashMap;
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.qa.performance.engine.junit.ProcessEnginePerformanceTestCase;
-import org.camunda.bpm.qa.performance.engine.steps.StartProcessInstanceStep;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.qa.performance.engine.junit.ProcessEnginePerformanceTestCase;
+import io.orqueio.bpm.qa.performance.engine.steps.StartProcessInstanceStep;
 import org.junit.Test;
 
 /**
@@ -42,7 +42,7 @@ public class VariablesPerformanceTest extends ProcessEnginePerformanceTestCase {
 
   @Test
   @Deployment(resources =
-    {"org/camunda/bpm/qa/performance/engine/bpmn/StartEventPerformanceTest.noneStartEvent.bpmn"})
+    {"io/orqueio/bpm/qa/performance/engine/bpmn/StartEventPerformanceTest.noneStartEvent.bpmn"})
   public void noneStartEventStringVar() {
     HashMap<String, Object> variables = new HashMap<String, Object>();
     variables.put(VARIABLE1, "someValue");
@@ -54,7 +54,7 @@ public class VariablesPerformanceTest extends ProcessEnginePerformanceTestCase {
 
   @Test
   @Deployment(resources =
-    {"org/camunda/bpm/qa/performance/engine/bpmn/StartEventPerformanceTest.noneStartEvent.bpmn"})
+    {"io/orqueio/bpm/qa/performance/engine/bpmn/StartEventPerformanceTest.noneStartEvent.bpmn"})
   public void noneStartEvent10StringVars() {
     HashMap<String, Object> variables = new HashMap<String, Object>();
     variables.put(VARIABLE1, "someValue");
@@ -75,7 +75,7 @@ public class VariablesPerformanceTest extends ProcessEnginePerformanceTestCase {
 
   @Test
   @Deployment(resources =
-    {"org/camunda/bpm/qa/performance/engine/bpmn/StartEventPerformanceTest.noneStartEvent.bpmn"})
+    {"io/orqueio/bpm/qa/performance/engine/bpmn/StartEventPerformanceTest.noneStartEvent.bpmn"})
   public void noneStartEventStringVar2() {
     HashMap<String, Object> variables = new HashMap<String, Object>();
     variables.put(VARIABLE1, "Some Text which is considerably longer than the first one.");
@@ -87,7 +87,7 @@ public class VariablesPerformanceTest extends ProcessEnginePerformanceTestCase {
 
   @Test
   @Deployment(resources =
-    {"org/camunda/bpm/qa/performance/engine/bpmn/StartEventPerformanceTest.noneStartEvent.bpmn"})
+    {"io/orqueio/bpm/qa/performance/engine/bpmn/StartEventPerformanceTest.noneStartEvent.bpmn"})
   public void noneStartEventDoubleVar() {
     HashMap<String, Object> variables = new HashMap<String, Object>();
     variables.put(VARIABLE1, 2d);
@@ -99,7 +99,7 @@ public class VariablesPerformanceTest extends ProcessEnginePerformanceTestCase {
 
   @Test
   @Deployment(resources =
-    {"org/camunda/bpm/qa/performance/engine/bpmn/StartEventPerformanceTest.noneStartEvent.bpmn"})
+    {"io/orqueio/bpm/qa/performance/engine/bpmn/StartEventPerformanceTest.noneStartEvent.bpmn"})
   public void noneStartEventByteVar() {
     HashMap<String, Object> variables = new HashMap<String, Object>();
     variables.put(VARIABLE1, "This string will be saved as a byte array.".getBytes());
@@ -111,7 +111,7 @@ public class VariablesPerformanceTest extends ProcessEnginePerformanceTestCase {
 
   @Test
   @Deployment(resources =
-    {"org/camunda/bpm/qa/performance/engine/bpmn/StartEventPerformanceTest.noneStartEvent.bpmn"})
+    {"io/orqueio/bpm/qa/performance/engine/bpmn/StartEventPerformanceTest.noneStartEvent.bpmn"})
   public void noneStartEvent10ByteVars() {
     HashMap<String, Object> variables = new HashMap<String, Object>();
     variables.put(VARIABLE1, "This string will be saved as a byte array.".getBytes());
@@ -132,7 +132,7 @@ public class VariablesPerformanceTest extends ProcessEnginePerformanceTestCase {
 
   @Test
   @Deployment(resources =
-    {"org/camunda/bpm/qa/performance/engine/bpmn/StartEventPerformanceTest.noneStartEvent.bpmn"})
+    {"io/orqueio/bpm/qa/performance/engine/bpmn/StartEventPerformanceTest.noneStartEvent.bpmn"})
   public void noneStartEventLargeByteVar() {
     HashMap<String, Object> variables = new HashMap<String, Object>();
     byte[] bytes = new byte[5*1024];

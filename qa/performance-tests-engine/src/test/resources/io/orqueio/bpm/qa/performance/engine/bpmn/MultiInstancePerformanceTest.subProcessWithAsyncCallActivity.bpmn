@@ -26,7 +26,7 @@
     </bpmn:subProcess>
     <bpmn:endEvent id="EndEvent_0c0qizg">
       <bpmn:extensionElements>
-        <camunda:executionListener class="org.camunda.bpm.qa.performance.engine.steps.SignalTestRunListener" event="end" />
+        <camunda:executionListener class="io.orqueio.bpm.qa.performance.engine.steps.SignalTestRunListener" event="end" />
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_0tp9z03</bpmn:incoming>
     </bpmn:endEvent>

@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.util;
+package io.orqueio.bpm.integrationtest.util;
 
-import org.camunda.bpm.application.ProcessApplication;
-import org.camunda.bpm.application.impl.ServletProcessApplication;
+import io.orqueio.bpm.application.ProcessApplication;
+import io.orqueio.bpm.application.impl.ServletProcessApplication;
 
 /**
  * @author meyerd
@@ -25,6 +25,6 @@ import org.camunda.bpm.application.impl.ServletProcessApplication;
  */
 @ProcessApplication
 // Using fully-qualified class name instead of import statement to allow for automatic Jakarta transformation
-public class TestProcessApplication extends org.camunda.bpm.application.impl.ServletProcessApplication {
+public class TestProcessApplication extends io.orqueio.bpm.application.impl.ServletProcessApplication {
 
 }

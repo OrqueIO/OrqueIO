@@ -14,19 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa.upgrade.scenarios7200.variables;
+package io.orqueio.bpm.qa.upgrade.scenarios7200.variables;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.Map;
 
-import org.camunda.bpm.engine.ManagementService;
-import org.camunda.bpm.engine.RuntimeService;
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.qa.upgrade.Origin;
-import org.camunda.bpm.qa.upgrade.ScenarioUnderTest;
-import org.camunda.bpm.qa.upgrade.UpgradeTestRule;
+import io.orqueio.bpm.engine.ManagementService;
+import io.orqueio.bpm.engine.RuntimeService;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.qa.upgrade.Origin;
+import io.orqueio.bpm.qa.upgrade.ScenarioUnderTest;
+import io.orqueio.bpm.qa.upgrade.UpgradeTestRule;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;

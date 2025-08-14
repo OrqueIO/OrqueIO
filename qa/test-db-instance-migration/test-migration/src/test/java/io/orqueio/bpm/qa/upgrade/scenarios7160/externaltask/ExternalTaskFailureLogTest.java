@@ -14,18 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa.upgrade.scenarios7160.externaltask;
+package io.orqueio.bpm.qa.upgrade.scenarios7160.externaltask;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.camunda.bpm.engine.ExternalTaskService;
-import org.camunda.bpm.engine.externaltask.ExternalTask;
-import org.camunda.bpm.engine.history.HistoricIncident;
-import org.camunda.bpm.engine.runtime.Incident;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.qa.upgrade.Origin;
-import org.camunda.bpm.qa.upgrade.ScenarioUnderTest;
-import org.camunda.bpm.qa.upgrade.UpgradeTestRule;
+import io.orqueio.bpm.engine.ExternalTaskService;
+import io.orqueio.bpm.engine.externaltask.ExternalTask;
+import io.orqueio.bpm.engine.history.HistoricIncident;
+import io.orqueio.bpm.engine.runtime.Incident;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.qa.upgrade.Origin;
+import io.orqueio.bpm.qa.upgrade.ScenarioUnderTest;
+import io.orqueio.bpm.qa.upgrade.UpgradeTestRule;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;

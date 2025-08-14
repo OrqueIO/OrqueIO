@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm;
+package io.orqueio.bpm;
 
 import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Locale;
 
-import org.camunda.bpm.util.SeleniumScreenshotRule;
+import io.orqueio.bpm.util.SeleniumScreenshotRule;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

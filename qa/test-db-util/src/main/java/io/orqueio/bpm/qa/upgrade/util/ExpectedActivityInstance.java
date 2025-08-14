@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa.upgrade.util;
+package io.orqueio.bpm.qa.upgrade.util;
 
 import java.io.StringWriter;
 import java.util.ArrayList;

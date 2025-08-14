@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.deployment.ear;
+package io.orqueio.bpm.integrationtest.deployment.ear;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.RepositoryService;
-import org.camunda.bpm.engine.cdi.impl.util.ProgrammaticBeanLookup;
-import org.camunda.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.RepositoryService;
+import io.orqueio.bpm.engine.cdi.impl.util.ProgrammaticBeanLookup;
+import io.orqueio.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -50,7 +50,7 @@ public class TestFoxPlatformClientAsLibInWebModule extends AbstractFoxPlatformIn
    *            |-- fox-platform-client.jar
    *        |-- WEB-INF/classes
    *            |-- META-INF/processes.xml
-   *        |-- org/camunda/bpm/integrationtest/testDeployProcessArchive.bpmn20.xml
+   *        |-- io/orqueio/bpm/integrationtest/testDeployProcessArchive.bpmn20.xml
    *
    */
   @Deployment
@@ -58,7 +58,7 @@ public class TestFoxPlatformClientAsLibInWebModule extends AbstractFoxPlatformIn
 
     // this creates the process archive as a WAR file
     WebArchive processArchive = initWebArchiveDeployment()
-      .addAsResource("org/camunda/bpm/integrationtest/testDeployProcessArchive.bpmn20.xml")
+      .addAsResource("io/orqueio/bpm/integrationtest/testDeployProcessArchive.bpmn20.xml")
       .addClass(TestFoxPlatformClientAsLibInWebModule.class);
 
     // this packages the WAR file inside an EAR file

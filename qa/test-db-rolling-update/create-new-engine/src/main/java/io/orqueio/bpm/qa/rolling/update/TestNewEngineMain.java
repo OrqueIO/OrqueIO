@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa.rolling.update;
+package io.orqueio.bpm.qa.rolling.update;
 
 /**
  * Creates process instances with the new engine for the rolling updates.
@@ -25,6 +25,6 @@ package org.camunda.bpm.qa.rolling.update;
 public class TestNewEngineMain {
 
   public static void main(String[] args) {
-    org.camunda.bpm.qa.rolling.update.TestFixture.main(new String[]{RollingUpdateConstants.NEW_ENGINE_TAG});
+    io.orqueio.bpm.qa.rolling.update.TestFixture.main(new String[]{RollingUpdateConstants.NEW_ENGINE_TAG});
   }
 }

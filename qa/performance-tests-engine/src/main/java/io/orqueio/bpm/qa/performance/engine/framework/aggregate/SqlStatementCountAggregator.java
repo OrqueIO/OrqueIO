@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa.performance.engine.framework.aggregate;
+package io.orqueio.bpm.qa.performance.engine.framework.aggregate;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import org.camunda.bpm.qa.performance.engine.framework.PerfTestResults;
-import org.camunda.bpm.qa.performance.engine.framework.PerfTestStepResult;
-import org.camunda.bpm.qa.performance.engine.sqlstatementlog.StatementLogSqlSession.SqlStatementType;
+import io.orqueio.bpm.qa.performance.engine.framework.PerfTestResults;
+import io.orqueio.bpm.qa.performance.engine.framework.PerfTestStepResult;
+import io.orqueio.bpm.qa.performance.engine.sqlstatementlog.StatementLogSqlSession.SqlStatementType;
 
 /**
  * Aggregates the results from a Sql Statement Test run.

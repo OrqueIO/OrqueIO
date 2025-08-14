@@ -14,23 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.jobexecutor;
+package io.orqueio.bpm.integrationtest.jobexecutor;
 
-import org.camunda.bpm.BpmPlatform;
-import org.camunda.bpm.ProcessEngineService;
-import org.camunda.bpm.application.ProcessApplicationDeploymentInfo;
-import org.camunda.bpm.application.ProcessApplicationInfo;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.impl.ProcessEngineImpl;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.cmd.AcquireJobsCmd;
-import org.camunda.bpm.engine.impl.interceptor.CommandExecutor;
-import org.camunda.bpm.engine.impl.jobexecutor.AcquiredJobs;
-import org.camunda.bpm.engine.impl.jobexecutor.JobExecutor;
-import org.camunda.bpm.engine.runtime.Job;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
-import org.camunda.bpm.integrationtest.util.TestContainer;
+import io.orqueio.bpm.BpmPlatform;
+import io.orqueio.bpm.ProcessEngineService;
+import io.orqueio.bpm.application.ProcessApplicationDeploymentInfo;
+import io.orqueio.bpm.application.ProcessApplicationInfo;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.impl.ProcessEngineImpl;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.cmd.AcquireJobsCmd;
+import io.orqueio.bpm.engine.impl.interceptor.CommandExecutor;
+import io.orqueio.bpm.engine.impl.jobexecutor.AcquiredJobs;
+import io.orqueio.bpm.engine.impl.jobexecutor.JobExecutor;
+import io.orqueio.bpm.engine.runtime.Job;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
+import io.orqueio.bpm.integrationtest.util.TestContainer;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -62,8 +62,8 @@ public class IndependentJobExecutionTest extends AbstractFoxPlatformIntegrationT
   @Deployment(order = 0, name="pa1")
   public static WebArchive processArchive1() {
 
-    WebArchive deployment = initWebArchiveDeployment("pa1.war", "org/camunda/bpm/integrationtest/jobexecutor/IndependentJobExecutionTest.pa1.xml")
-        .addAsResource("org/camunda/bpm/integrationtest/jobexecutor/IndependentJobExecutionTest.process1.bpmn20.xml")
+    WebArchive deployment = initWebArchiveDeployment("pa1.war", "io/orqueio/bpm/integrationtest/jobexecutor/IndependentJobExecutionTest.pa1.xml")
+        .addAsResource("io/orqueio/bpm/integrationtest/jobexecutor/IndependentJobExecutionTest.process1.bpmn20.xml")
         .setWebXML(new StringAsset(Descriptors.create(WebAppDescriptor.class).version("3.0").exportAsString()));
 
     TestContainer.addContainerSpecificProcessEngineConfigurationClass(deployment);
@@ -75,8 +75,8 @@ public class IndependentJobExecutionTest extends AbstractFoxPlatformIntegrationT
   @Deployment(order = 1, name="pa2")
   public static WebArchive processArchive2() {
 
-    return initWebArchiveDeployment("pa2.war", "org/camunda/bpm/integrationtest/jobexecutor/IndependentJobExecutionTest.pa2.xml")
-        .addAsResource("org/camunda/bpm/integrationtest/jobexecutor/IndependentJobExecutionTest.process2.bpmn20.xml")
+    return initWebArchiveDeployment("pa2.war", "io/orqueio/bpm/integrationtest/jobexecutor/IndependentJobExecutionTest.pa2.xml")
+        .addAsResource("io/orqueio/bpm/integrationtest/jobexecutor/IndependentJobExecutionTest.process2.bpmn20.xml")
         .setWebXML(new StringAsset(Descriptors.create(WebAppDescriptor.class).version("3.0").exportAsString()));
   }
 

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.jobexecutor.classes;
+package io.orqueio.bpm.integrationtest.jobexecutor.classes;
 
 public class MyPojo {
 

@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa.performance.engine.framework.activitylog;
+package io.orqueio.bpm.qa.performance.engine.framework.activitylog;
 
 import java.io.File;
 
-import org.camunda.bpm.qa.performance.engine.framework.report.SectionedHtmlReportBuilder;
-import org.camunda.bpm.qa.performance.engine.util.FileUtil;
+import io.orqueio.bpm.qa.performance.engine.framework.report.SectionedHtmlReportBuilder;
+import io.orqueio.bpm.qa.performance.engine.util.FileUtil;
 
 public class ActivityCountReporter {
 

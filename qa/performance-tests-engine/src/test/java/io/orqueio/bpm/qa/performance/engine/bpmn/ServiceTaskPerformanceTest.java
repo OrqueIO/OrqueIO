@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa.performance.engine.bpmn;
+package io.orqueio.bpm.qa.performance.engine.bpmn;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.camunda.bpm.engine.repository.Deployment;
-import org.camunda.bpm.model.bpmn.Bpmn;
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
-import org.camunda.bpm.qa.performance.engine.bpmn.delegate.NoopDelegate;
-import org.camunda.bpm.qa.performance.engine.junit.ProcessEnginePerformanceTestCase;
-import org.camunda.bpm.qa.performance.engine.steps.StartProcessInstanceStep;
+import io.orqueio.bpm.engine.repository.Deployment;
+import io.orqueio.bpm.model.bpmn.Bpmn;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.bpm.qa.performance.engine.bpmn.delegate.NoopDelegate;
+import io.orqueio.bpm.qa.performance.engine.junit.ProcessEnginePerformanceTestCase;
+import io.orqueio.bpm.qa.performance.engine.steps.StartProcessInstanceStep;
 import org.junit.Test;
 
 /**

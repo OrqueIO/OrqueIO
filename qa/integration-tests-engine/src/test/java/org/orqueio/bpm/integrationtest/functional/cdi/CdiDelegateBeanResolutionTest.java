@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.functional.cdi;
-import org.camunda.bpm.engine.cdi.impl.util.BeanManagerLookup;
-import org.camunda.bpm.engine.cdi.impl.util.ProgrammaticBeanLookup;
-import org.camunda.bpm.integrationtest.functional.cdi.beans.ExampleDelegateBean;
-import org.camunda.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
-import org.camunda.bpm.integrationtest.util.DeploymentHelper;
-import org.camunda.bpm.integrationtest.util.TestContainer;
+package io.orqueio.bpm.integrationtest.functional.cdi;
+import io.orqueio.bpm.engine.cdi.impl.util.BeanManagerLookup;
+import io.orqueio.bpm.engine.cdi.impl.util.ProgrammaticBeanLookup;
+import io.orqueio.bpm.integrationtest.functional.cdi.beans.ExampleDelegateBean;
+import io.orqueio.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
+import io.orqueio.bpm.integrationtest.util.DeploymentHelper;
+import io.orqueio.bpm.integrationtest.util.TestContainer;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -47,14 +47,14 @@ public class CdiDelegateBeanResolutionTest extends AbstractFoxPlatformIntegratio
   public static WebArchive processArchive() {
     return initWebArchiveDeployment()
             .addClass(ExampleDelegateBean.class)
-            .addAsResource("org/camunda/bpm/integrationtest/functional/cdi/CdiDelegateBeanResolutionTest.testResolveBean.bpmn20.xml")
-            .addAsResource("org/camunda/bpm/integrationtest/functional/cdi/CdiDelegateBeanResolutionTest.testResolveBeanFromJobExecutor.bpmn20.xml");
+            .addAsResource("io/orqueio/bpm/integrationtest/functional/cdi/CdiDelegateBeanResolutionTest.testResolveBean.bpmn20.xml")
+            .addAsResource("io/orqueio/bpm/integrationtest/functional/cdi/CdiDelegateBeanResolutionTest.testResolveBeanFromJobExecutor.bpmn20.xml");
   }
 
   @Deployment(name="clientDeployment")
   public static WebArchive clientDeployment() {
      WebArchive webArchive = ShrinkWrap.create(WebArchive.class, "client.war")
-            .addAsWebInfResource("org/camunda/bpm/integrationtest/beans.xml", "beans.xml")
+            .addAsWebInfResource("io/orqueio/bpm/integrationtest/beans.xml", "beans.xml")
             .addClass(ProgrammaticBeanLookup.class)
             .addClass(BeanManagerLookup.class)
             .addClass(AbstractFoxPlatformIntegrationTest.class)

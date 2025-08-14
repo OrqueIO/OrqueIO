@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.deployment.spring;
+package io.orqueio.bpm.integrationtest.deployment.spring;
 
-import org.camunda.bpm.application.PostDeploy;
-import org.camunda.bpm.application.PreUndeploy;
-import org.camunda.bpm.engine.spring.application.SpringServletProcessApplication;
+import io.orqueio.bpm.application.PostDeploy;
+import io.orqueio.bpm.application.PreUndeploy;
+import io.orqueio.bpm.engine.spring.application.SpringServletProcessApplication;
 import org.junit.Assert;
 
 /**

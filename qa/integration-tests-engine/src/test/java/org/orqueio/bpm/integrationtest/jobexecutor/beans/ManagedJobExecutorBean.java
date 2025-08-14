@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.jobexecutor.beans;
+package io.orqueio.bpm.integrationtest.jobexecutor.beans;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -22,8 +22,8 @@ import javax.annotation.Resource;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.enterprise.concurrent.ManagedExecutorService;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.cdi.impl.ManagedJobExecutor;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.cdi.impl.ManagedJobExecutor;
 
 @Startup
 @Singleton
@@ -38,8 +38,8 @@ public class ManagedJobExecutorBean {
   @PostConstruct
   public void startEngine() {
     // Using fully-qualified class name instead of import statement to allow for automatic Jakarta transformation
-    org.camunda.bpm.engine.impl.cfg.JtaProcessEngineConfiguration processEngineConfiguration =
-        new org.camunda.bpm.engine.impl.cfg.JtaProcessEngineConfiguration();
+    io.orqueio.bpm.engine.impl.cfg.JtaProcessEngineConfiguration processEngineConfiguration =
+        new io.orqueio.bpm.engine.impl.cfg.JtaProcessEngineConfiguration();
     processEngineConfiguration.setDatabaseSchemaUpdate("true")
       .setHistory("auto")
       .setDbMetricsReporterActivate(false)

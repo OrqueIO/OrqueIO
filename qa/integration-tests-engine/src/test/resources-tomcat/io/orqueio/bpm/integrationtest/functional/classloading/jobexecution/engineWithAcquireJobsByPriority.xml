@@ -6,7 +6,7 @@
 
   <process-engine name="engineWithJobPriority">
     <job-acquisition>default</job-acquisition>
-    <configuration>org.camunda.bpm.engine.impl.cfg.StandaloneProcessEngineConfiguration</configuration>
+    <configuration>io.orqueio.bpm.engine.impl.cfg.StandaloneProcessEngineConfiguration</configuration>
     <properties>
       <property name="history">full</property>
       <property name="historyCleanupEnabled">false</property>

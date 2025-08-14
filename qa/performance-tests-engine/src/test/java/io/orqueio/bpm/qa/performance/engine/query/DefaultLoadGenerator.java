@@ -14,19 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa.performance.engine.query;
+package io.orqueio.bpm.qa.performance.engine.query;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.model.bpmn.Bpmn;
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
-import org.camunda.bpm.model.bpmn.instance.Process;
-import org.camunda.bpm.qa.performance.engine.junit.PerfTestProcessEngine;
-import org.camunda.bpm.qa.performance.engine.loadgenerator.LoadGenerator;
-import org.camunda.bpm.qa.performance.engine.loadgenerator.LoadGeneratorConfiguration;
-import org.camunda.bpm.qa.performance.engine.loadgenerator.tasks.DeployModelInstancesTask;
-import org.camunda.bpm.qa.performance.engine.loadgenerator.tasks.GenerateMetricsTask;
-import org.camunda.bpm.qa.performance.engine.loadgenerator.tasks.StartProcessInstanceTask;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.model.bpmn.Bpmn;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.bpm.model.bpmn.instance.Process;
+import io.orqueio.bpm.qa.performance.engine.junit.PerfTestProcessEngine;
+import io.orqueio.bpm.qa.performance.engine.loadgenerator.LoadGenerator;
+import io.orqueio.bpm.qa.performance.engine.loadgenerator.LoadGeneratorConfiguration;
+import io.orqueio.bpm.qa.performance.engine.loadgenerator.tasks.DeployModelInstancesTask;
+import io.orqueio.bpm.qa.performance.engine.loadgenerator.tasks.GenerateMetricsTask;
+import io.orqueio.bpm.qa.performance.engine.loadgenerator.tasks.StartProcessInstanceTask;
 
 import java.util.ArrayList;
 import java.util.List;

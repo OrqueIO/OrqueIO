@@ -15,14 +15,14 @@
  * limitations under the License.
  */
 
-package org.camunda.bpm.qa.upgrade.scenarios7210.jobexecutor;
+package io.orqueio.bpm.qa.upgrade.scenarios7210.jobexecutor;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.interceptor.Command;
-import org.camunda.bpm.engine.impl.interceptor.CommandExecutor;
-import org.camunda.bpm.engine.impl.persistence.entity.JobEntity;
-import org.camunda.bpm.engine.runtime.Job;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.interceptor.Command;
+import io.orqueio.bpm.engine.impl.interceptor.CommandExecutor;
+import io.orqueio.bpm.engine.impl.persistence.entity.JobEntity;
+import io.orqueio.bpm.engine.runtime.Job;
 
 import java.util.Date;
 import java.util.HashMap;

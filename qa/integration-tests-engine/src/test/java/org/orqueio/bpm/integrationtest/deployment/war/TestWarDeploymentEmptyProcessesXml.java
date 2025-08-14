@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.deployment.war;
-import org.camunda.bpm.BpmPlatform;
-import org.camunda.bpm.engine.RepositoryService;
-import org.camunda.bpm.engine.repository.ProcessDefinition;
-import org.camunda.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
+package io.orqueio.bpm.integrationtest.deployment.war;
+import io.orqueio.bpm.BpmPlatform;
+import io.orqueio.bpm.engine.RepositoryService;
+import io.orqueio.bpm.engine.repository.ProcessDefinition;
+import io.orqueio.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
@@ -43,7 +43,7 @@ public class TestWarDeploymentEmptyProcessesXml extends AbstractFoxPlatformInteg
   @Deployment
   public static WebArchive processArchive() {
     return initWebArchiveDeployment("test.war", "META-INF/empty_processes.xml")
-        .addAsResource("org/camunda/bpm/integrationtest/testDeployProcessArchive.bpmn20.xml");
+        .addAsResource("io/orqueio/bpm/integrationtest/testDeployProcessArchive.bpmn20.xml");
   }
 
   @Test
@@ -56,7 +56,7 @@ public class TestWarDeploymentEmptyProcessesXml extends AbstractFoxPlatformInteg
       .list();
 
     Assert.assertEquals(1, processDefinitions.size());
-    org.camunda.bpm.engine.repository.Deployment deployment = repositoryService.createDeploymentQuery()
+    io.orqueio.bpm.engine.repository.Deployment deployment = repositoryService.createDeploymentQuery()
       .deploymentId(processDefinitions.get(0).getDeploymentId())
       .singleResult();
 
