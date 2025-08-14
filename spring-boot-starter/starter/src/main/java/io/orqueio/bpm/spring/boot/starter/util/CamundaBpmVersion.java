@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter.util;
+package io.orqueio.bpm.spring.boot.starter.util;
 
-import org.camunda.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.ProcessEngine;
 import org.springframework.core.env.PropertiesPropertySource;
 
 import java.util.Optional;
 import java.util.Properties;
 import java.util.function.Supplier;
 
-import static org.camunda.bpm.spring.boot.starter.property.CamundaBpmProperties.PREFIX;
+import static io.orqueio.bpm.spring.boot.starter.property.CamundaBpmProperties.PREFIX;
 
 /**
  * Return the full version string of the present Camunda codebase, or

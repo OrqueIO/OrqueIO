@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter.security.oauth2.impl;
+package io.orqueio.bpm.spring.boot.starter.security.oauth2.impl;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.atLeastOnce;
@@ -25,15 +25,15 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
 
-import org.camunda.bpm.engine.IdentityService;
-import org.camunda.bpm.engine.identity.Group;
-import org.camunda.bpm.engine.identity.GroupQuery;
-import org.camunda.bpm.engine.identity.User;
-import org.camunda.bpm.engine.identity.UserQuery;
-import org.camunda.bpm.engine.impl.identity.WritableIdentityProvider;
-import org.camunda.bpm.engine.impl.identity.db.DbGroupQueryImpl;
-import org.camunda.bpm.engine.impl.identity.db.DbUserQueryImpl;
-import org.camunda.bpm.spring.boot.starter.security.oauth2.AbstractSpringSecurityIT;
+import io.orqueio.bpm.engine.IdentityService;
+import io.orqueio.bpm.engine.identity.Group;
+import io.orqueio.bpm.engine.identity.GroupQuery;
+import io.orqueio.bpm.engine.identity.User;
+import io.orqueio.bpm.engine.identity.UserQuery;
+import io.orqueio.bpm.engine.impl.identity.WritableIdentityProvider;
+import io.orqueio.bpm.engine.impl.identity.db.DbGroupQueryImpl;
+import io.orqueio.bpm.engine.impl.identity.db.DbUserQueryImpl;
+import io.orqueio.bpm.spring.boot.starter.security.oauth2.AbstractSpringSecurityIT;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;

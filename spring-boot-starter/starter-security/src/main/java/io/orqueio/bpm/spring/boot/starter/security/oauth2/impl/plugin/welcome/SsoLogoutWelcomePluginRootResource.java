@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter.security.oauth2.impl.plugin.welcome;
+package io.orqueio.bpm.spring.boot.starter.security.oauth2.impl.plugin.welcome;
 
 import jakarta.ws.rs.Path;
-import org.camunda.bpm.spring.boot.starter.security.oauth2.impl.plugin.SsoLogoutPluginConstants;
-import org.camunda.bpm.welcome.resource.AbstractWelcomePluginRootResource;
+import io.orqueio.bpm.spring.boot.starter.security.oauth2.impl.plugin.SsoLogoutPluginConstants;
+import io.orqueio.bpm.welcome.resource.AbstractWelcomePluginRootResource;
 
 @Path("plugin/" + SsoLogoutPluginConstants.ID)
 public class SsoLogoutWelcomePluginRootResource extends AbstractWelcomePluginRootResource {

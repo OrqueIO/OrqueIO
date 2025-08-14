@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.springboot.project.qa.simple;
+package io.orqueio.bpm.springboot.project.qa.simple;
 
-import org.camunda.bpm.spring.boot.starter.annotation.EnableProcessApplication;
+import io.orqueio.bpm.spring.boot.starter.annotation.EnableProcessApplication;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

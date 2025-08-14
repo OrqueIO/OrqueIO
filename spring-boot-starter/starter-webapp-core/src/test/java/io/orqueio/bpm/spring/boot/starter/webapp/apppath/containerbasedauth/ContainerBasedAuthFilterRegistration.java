@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter.webapp.apppath.containerbasedauth;
+package io.orqueio.bpm.spring.boot.starter.webapp.apppath.containerbasedauth;
 
-import org.camunda.bpm.webapp.impl.security.auth.ContainerBasedAuthenticationFilter;
+import io.orqueio.bpm.webapp.impl.security.auth.ContainerBasedAuthenticationFilter;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -35,7 +35,7 @@ public class ContainerBasedAuthFilterRegistration {
             new FilterRegistrationBean<>();
         filterRegistration.setFilter(new ContainerBasedAuthenticationFilter());
         filterRegistration.setInitParameters(Collections.singletonMap("authentication-provider",
-            "org.camunda.bpm.engine.rest.security.auth.impl.ContainerBasedAuthenticationProvider"));
+            "io.orqueio.bpm.engine.rest.security.auth.impl.ContainerBasedAuthenticationProvider"));
         filterRegistration.addUrlPatterns(ChangedAppPathContainerBasedAuthIT.MY_APP_PATH + "/*");
         return filterRegistration;
     }

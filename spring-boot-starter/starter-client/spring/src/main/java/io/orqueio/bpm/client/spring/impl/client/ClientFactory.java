@@ -14,19 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.spring.impl.client;
+package io.orqueio.bpm.client.spring.impl.client;
 
-import static org.camunda.bpm.client.spring.annotation.EnableExternalTaskClient.STRING_ORDER_BY_ASC_VALUE;
-import static org.camunda.bpm.client.spring.annotation.EnableExternalTaskClient.STRING_ORDER_BY_DESC_VALUE;
+import static io.orqueio.bpm.client.spring.annotation.EnableExternalTaskClient.STRING_ORDER_BY_ASC_VALUE;
+import static io.orqueio.bpm.client.spring.annotation.EnableExternalTaskClient.STRING_ORDER_BY_DESC_VALUE;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.camunda.bpm.client.ExternalTaskClient;
-import org.camunda.bpm.client.ExternalTaskClientBuilder;
-import org.camunda.bpm.client.backoff.BackoffStrategy;
-import org.camunda.bpm.client.interceptor.ClientRequestInterceptor;
-import org.camunda.bpm.client.spring.exception.SpringExternalTaskClientException;
-import org.camunda.bpm.client.spring.impl.client.util.ClientLoggerUtil;
+import io.orqueio.bpm.client.ExternalTaskClient;
+import io.orqueio.bpm.client.ExternalTaskClientBuilder;
+import io.orqueio.bpm.client.backoff.BackoffStrategy;
+import io.orqueio.bpm.client.interceptor.ClientRequestInterceptor;
+import io.orqueio.bpm.client.spring.exception.SpringExternalTaskClientException;
+import io.orqueio.bpm.client.spring.impl.client.util.ClientLoggerUtil;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;

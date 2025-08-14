@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter.util;
+package io.orqueio.bpm.spring.boot.starter.util;
 
-import org.camunda.bpm.engine.filter.Filter;
-import org.camunda.bpm.engine.identity.User;
-import org.camunda.bpm.spring.boot.starter.property.GenericProperties;
-import org.camunda.commons.logging.BaseLogger;
+import io.orqueio.bpm.engine.filter.Filter;
+import io.orqueio.bpm.engine.identity.User;
+import io.orqueio.bpm.spring.boot.starter.property.GenericProperties;
+import io.orqueio.commons.logging.BaseLogger;
 import org.springframework.core.io.Resource;
 
 import java.net.URL;
@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 public class SpringBootProcessEngineLogger extends BaseLogger {
   public static final String PROJECT_CODE = "STARTER";
   public static final String PROJECT_ID = "SB";
-  public static final String PACKAGE = "org.camunda.bpm.spring.boot";
+  public static final String PACKAGE = "io.orqueio.bpm.spring.boot";
 
   public static final SpringBootProcessEngineLogger LOG = createLogger(SpringBootProcessEngineLogger.class, PROJECT_CODE, PACKAGE, PROJECT_ID);
 

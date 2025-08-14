@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter.webapp.filter;
+package io.orqueio.bpm.spring.boot.starter.webapp.filter;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -22,7 +22,7 @@ import java.util.Set;
 
 import jakarta.servlet.Filter;
 
-import org.camunda.bpm.spring.boot.starter.webapp.filter.LazyDelegateFilter.InitHook;
+import io.orqueio.bpm.spring.boot.starter.webapp.filter.LazyDelegateFilter.InitHook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;

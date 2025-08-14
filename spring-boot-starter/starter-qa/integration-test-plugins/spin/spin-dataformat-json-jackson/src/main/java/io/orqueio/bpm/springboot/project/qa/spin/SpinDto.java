@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.springboot.project.qa.spin;
+package io.orqueio.bpm.springboot.project.qa.spin;
 
 import java.sql.Date;
 

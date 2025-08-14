@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.spring.configuration;
+package io.orqueio.bpm.client.spring.configuration;
 
-import org.camunda.bpm.client.spring.annotation.EnableExternalTaskClient;
+import io.orqueio.bpm.client.spring.annotation.EnableExternalTaskClient;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration

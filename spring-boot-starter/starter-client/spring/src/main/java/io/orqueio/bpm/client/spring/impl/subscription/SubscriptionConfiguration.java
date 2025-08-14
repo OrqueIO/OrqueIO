@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.spring.impl.subscription;
+package io.orqueio.bpm.client.spring.impl.subscription;
 
-import org.camunda.bpm.client.spring.annotation.ExternalTaskSubscription;
+import io.orqueio.bpm.client.spring.annotation.ExternalTaskSubscription;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -24,9 +24,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static org.camunda.bpm.client.spring.annotation.ExternalTaskSubscription.LONG_NULL_VALUE;
-import static org.camunda.bpm.client.spring.annotation.ExternalTaskSubscription.ProcessVariable;
-import static org.camunda.bpm.client.spring.annotation.ExternalTaskSubscription.STRING_NULL_VALUE;
+import static io.orqueio.bpm.client.spring.annotation.ExternalTaskSubscription.LONG_NULL_VALUE;
+import static io.orqueio.bpm.client.spring.annotation.ExternalTaskSubscription.ProcessVariable;
+import static io.orqueio.bpm.client.spring.annotation.ExternalTaskSubscription.STRING_NULL_VALUE;
 
 public class SubscriptionConfiguration {
 

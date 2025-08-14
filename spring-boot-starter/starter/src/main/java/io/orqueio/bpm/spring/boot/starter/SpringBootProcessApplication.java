@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter;
+package io.orqueio.bpm.spring.boot.starter;
 
-import static org.camunda.bpm.application.ProcessApplicationInfo.PROP_SERVLET_CONTEXT_PATH;
-import static org.camunda.bpm.spring.boot.starter.util.GetProcessApplicationNameFromAnnotation.processApplicationNameFromAnnotation;
-import static org.camunda.bpm.spring.boot.starter.util.SpringBootProcessEngineLogger.LOG;
+import static io.orqueio.bpm.application.ProcessApplicationInfo.PROP_SERVLET_CONTEXT_PATH;
+import static io.orqueio.bpm.spring.boot.starter.util.GetProcessApplicationNameFromAnnotation.processApplicationNameFromAnnotation;
+import static io.orqueio.bpm.spring.boot.starter.util.SpringBootProcessEngineLogger.LOG;
 
 import java.util.Collections;
 import java.util.Optional;
@@ -26,16 +26,16 @@ import java.util.Set;
 
 import jakarta.servlet.ServletContext;
 
-import org.camunda.bpm.application.PostDeploy;
-import org.camunda.bpm.application.PreUndeploy;
-import org.camunda.bpm.container.RuntimeContainerDelegate;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.spring.application.SpringProcessApplication;
-import org.camunda.bpm.spring.boot.starter.configuration.CamundaDeploymentConfiguration;
-import org.camunda.bpm.spring.boot.starter.event.PostDeployEvent;
-import org.camunda.bpm.spring.boot.starter.event.PreUndeployEvent;
-import org.camunda.bpm.spring.boot.starter.property.CamundaBpmProperties;
+import io.orqueio.bpm.application.PostDeploy;
+import io.orqueio.bpm.application.PreUndeploy;
+import io.orqueio.bpm.container.RuntimeContainerDelegate;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.spring.application.SpringProcessApplication;
+import io.orqueio.bpm.spring.boot.starter.configuration.CamundaDeploymentConfiguration;
+import io.orqueio.bpm.spring.boot.starter.event.PostDeployEvent;
+import io.orqueio.bpm.spring.boot.starter.event.PreUndeployEvent;
+import io.orqueio.bpm.spring.boot.starter.property.CamundaBpmProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;

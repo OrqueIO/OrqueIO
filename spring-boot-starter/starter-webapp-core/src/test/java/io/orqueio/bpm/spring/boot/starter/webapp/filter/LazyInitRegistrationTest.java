@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter.webapp.filter;
+package io.orqueio.bpm.spring.boot.starter.webapp.filter;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -29,7 +29,7 @@ import java.util.Set;
 
 import jakarta.servlet.Filter;
 
-import org.camunda.bpm.spring.boot.starter.webapp.filter.LazyDelegateFilter.InitHook;
+import io.orqueio.bpm.spring.boot.starter.webapp.filter.LazyDelegateFilter.InitHook;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

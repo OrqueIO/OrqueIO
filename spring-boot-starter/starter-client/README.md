@@ -11,15 +11,15 @@ You need this dependency to get started:
 
 ```xml
 <dependency>
-  <groupId>org.camunda.bpm.springboot</groupId>
-  <artifactId>camunda-bpm-spring-boot-starter-external-task-client</artifactId>
+  <groupId>io.orqueio.bpm.springboot</groupId>
+  <artifactId>orqueio-bpm-spring-boot-starter-external-task-client</artifactId>
   <version>...</version>
 </dependency>
 ```
 
 ## Configuration
 
-You can configure the Camunda Platform Runtime REST API endpoint and other properties in the `application.yml` file:
+You can configure the OrqueIO Runtime REST API endpoint and other properties in the `application.yml` file:
 
 ```yaml
 camunda.bpm.client:
@@ -53,8 +53,8 @@ You can also use the basic Spring integration without the Spring Boot Starter:
 
 ```xml
 <dependency>
-  <groupId>org.camunda.bpm</groupId>
-  <artifactId>camunda-external-task-client-spring</artifactId>
+  <groupId>io.orqueio.bpm</groupId>
+  <artifactId>orqueio-external-task-client-spring</artifactId>
   <version>...</version>
 </dependency>
 ```

@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter.configuration.impl;
+package io.orqueio.bpm.spring.boot.starter.configuration.impl;
 
-import org.camunda.bpm.engine.spring.SpringProcessEngineConfiguration;
-import org.camunda.bpm.spring.boot.starter.property.AuthorizationProperty;
-import org.camunda.bpm.spring.boot.starter.configuration.CamundaAuthorizationConfiguration;
+import io.orqueio.bpm.engine.spring.SpringProcessEngineConfiguration;
+import io.orqueio.bpm.spring.boot.starter.property.AuthorizationProperty;
+import io.orqueio.bpm.spring.boot.starter.configuration.CamundaAuthorizationConfiguration;
 
 public class DefaultAuthorizationConfiguration extends AbstractCamundaConfiguration implements CamundaAuthorizationConfiguration {
 

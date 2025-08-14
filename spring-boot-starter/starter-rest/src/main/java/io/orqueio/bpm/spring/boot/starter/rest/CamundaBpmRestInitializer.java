@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter.rest;
+package io.orqueio.bpm.spring.boot.starter.rest;
 
-import org.camunda.bpm.engine.rest.filter.CacheControlFilter;
-import org.camunda.bpm.engine.rest.filter.EmptyBodyFilter;
-import org.camunda.bpm.spring.boot.starter.property.CamundaBpmProperties;
+import io.orqueio.bpm.engine.rest.filter.CacheControlFilter;
+import io.orqueio.bpm.engine.rest.filter.EmptyBodyFilter;
+import io.orqueio.bpm.spring.boot.starter.property.CamundaBpmProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.web.servlet.JerseyApplicationPath;

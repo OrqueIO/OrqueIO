@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.spring.impl.subscription;
+package io.orqueio.bpm.client.spring.impl.subscription;
 
-import org.camunda.bpm.client.ExternalTaskClient;
-import org.camunda.bpm.client.spring.SpringTopicSubscription;
-import org.camunda.bpm.client.spring.event.SubscriptionInitializedEvent;
-import org.camunda.bpm.client.spring.impl.client.util.ClientLoggerUtil;
-import org.camunda.bpm.client.spring.impl.subscription.util.SubscriptionLoggerUtil;
-import org.camunda.bpm.client.task.ExternalTaskHandler;
-import org.camunda.bpm.client.topic.TopicSubscription;
-import org.camunda.bpm.client.topic.TopicSubscriptionBuilder;
+import io.orqueio.bpm.client.ExternalTaskClient;
+import io.orqueio.bpm.client.spring.SpringTopicSubscription;
+import io.orqueio.bpm.client.spring.event.SubscriptionInitializedEvent;
+import io.orqueio.bpm.client.spring.impl.client.util.ClientLoggerUtil;
+import io.orqueio.bpm.client.spring.impl.subscription.util.SubscriptionLoggerUtil;
+import io.orqueio.bpm.client.task.ExternalTaskHandler;
+import io.orqueio.bpm.client.topic.TopicSubscription;
+import io.orqueio.bpm.client.topic.TopicSubscriptionBuilder;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEvent;

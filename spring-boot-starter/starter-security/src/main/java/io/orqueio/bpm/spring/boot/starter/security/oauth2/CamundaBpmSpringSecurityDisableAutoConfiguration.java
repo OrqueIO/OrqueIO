@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter.security.oauth2;
+package io.orqueio.bpm.spring.boot.starter.security.oauth2;
 
-import org.camunda.bpm.spring.boot.starter.security.oauth2.impl.ClientsNotConfiguredCondition;
+import io.orqueio.bpm.spring.boot.starter.security.oauth2.impl.ClientsNotConfiguredCondition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;

@@ -14,21 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter;
+package io.orqueio.bpm.spring.boot.starter;
 
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 
-import org.camunda.bpm.engine.impl.cfg.ProcessEnginePlugin;
-import org.camunda.bpm.spring.boot.starter.plugin.ApplicationContextClassloaderSwitchPlugin;
-import org.camunda.bpm.spring.boot.starter.spin.CamundaJacksonFormatConfiguratorJSR310;
-import org.camunda.bpm.spring.boot.starter.spin.CamundaJacksonFormatConfiguratorJdk8;
-import org.camunda.bpm.spring.boot.starter.spin.CamundaJacksonFormatConfiguratorParameterNames;
-import org.camunda.bpm.spring.boot.starter.spin.SpringBootSpinProcessEnginePlugin;
-import org.camunda.connect.plugin.impl.ConnectProcessEnginePlugin;
-import org.camunda.spin.impl.json.jackson.format.JacksonJsonDataFormat;
-import org.camunda.spin.plugin.impl.SpinProcessEnginePlugin;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEnginePlugin;
+import io.orqueio.bpm.spring.boot.starter.plugin.ApplicationContextClassloaderSwitchPlugin;
+import io.orqueio.bpm.spring.boot.starter.spin.CamundaJacksonFormatConfiguratorJSR310;
+import io.orqueio.bpm.spring.boot.starter.spin.CamundaJacksonFormatConfiguratorJdk8;
+import io.orqueio.bpm.spring.boot.starter.spin.CamundaJacksonFormatConfiguratorParameterNames;
+import io.orqueio.bpm.spring.boot.starter.spin.SpringBootSpinProcessEnginePlugin;
+import io.orqueio.connect.plugin.impl.ConnectProcessEnginePlugin;
+import io.orqueio.spin.impl.json.jackson.format.JacksonJsonDataFormat;
+import io.orqueio.spin.plugin.impl.SpinProcessEnginePlugin;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;

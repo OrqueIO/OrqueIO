@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.spring.client;
+package io.orqueio.bpm.client.spring.client;
 
-import org.camunda.bpm.client.ExternalTaskClient;
-import org.camunda.bpm.client.spring.MockedTest;
-import org.camunda.bpm.client.spring.client.configuration.StaticBeanConfiguration;
+import io.orqueio.bpm.client.ExternalTaskClient;
+import io.orqueio.bpm.client.spring.MockedTest;
+import io.orqueio.bpm.client.spring.client.configuration.StaticBeanConfiguration;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;

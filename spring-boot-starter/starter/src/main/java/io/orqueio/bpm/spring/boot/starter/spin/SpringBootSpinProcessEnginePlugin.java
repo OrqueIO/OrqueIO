@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter.spin;
+package io.orqueio.bpm.spring.boot.starter.spin;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.util.ClassLoaderUtil;
-import org.camunda.spin.DataFormats;
-import org.camunda.spin.plugin.impl.SpinProcessEnginePlugin;
-import org.camunda.spin.spi.DataFormatConfigurator;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.util.ClassLoaderUtil;
+import io.orqueio.spin.DataFormats;
+import io.orqueio.spin.plugin.impl.SpinProcessEnginePlugin;
+import io.orqueio.spin.spi.DataFormatConfigurator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.support.SpringFactoriesLoader;
 

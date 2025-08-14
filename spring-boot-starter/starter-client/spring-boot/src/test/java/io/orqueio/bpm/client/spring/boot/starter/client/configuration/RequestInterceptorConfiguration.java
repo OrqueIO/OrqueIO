@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.spring.boot.starter.client.configuration;
+package io.orqueio.bpm.client.spring.boot.starter.client.configuration;
 
-import org.camunda.bpm.client.interceptor.ClientRequestInterceptor;
+import io.orqueio.bpm.client.interceptor.ClientRequestInterceptor;
 import org.springframework.context.annotation.Bean;
 
 public class RequestInterceptorConfiguration {

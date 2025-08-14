@@ -14,28 +14,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter.event;
+package io.orqueio.bpm.spring.boot.starter.event;
 
-import org.camunda.bpm.engine.delegate.DelegateListener;
-import org.camunda.bpm.engine.delegate.ExecutionListener;
-import org.camunda.bpm.engine.delegate.TaskListener;
-import org.camunda.bpm.engine.impl.bpmn.behavior.UserTaskActivityBehavior;
-import org.camunda.bpm.engine.impl.bpmn.parser.AbstractBpmnParseListener;
-import org.camunda.bpm.engine.impl.core.model.CoreModelElement;
-import org.camunda.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity;
-import org.camunda.bpm.engine.impl.pvm.process.ActivityImpl;
-import org.camunda.bpm.engine.impl.pvm.process.ScopeImpl;
-import org.camunda.bpm.engine.impl.pvm.process.TransitionImpl;
-import org.camunda.bpm.engine.impl.task.TaskDefinition;
-import org.camunda.bpm.engine.impl.util.xml.Element;
-import org.camunda.bpm.spring.boot.starter.property.EventingProperty;
+import io.orqueio.bpm.engine.delegate.DelegateListener;
+import io.orqueio.bpm.engine.delegate.ExecutionListener;
+import io.orqueio.bpm.engine.delegate.TaskListener;
+import io.orqueio.bpm.engine.impl.bpmn.behavior.UserTaskActivityBehavior;
+import io.orqueio.bpm.engine.impl.bpmn.parser.AbstractBpmnParseListener;
+import io.orqueio.bpm.engine.impl.core.model.CoreModelElement;
+import io.orqueio.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity;
+import io.orqueio.bpm.engine.impl.pvm.process.ActivityImpl;
+import io.orqueio.bpm.engine.impl.pvm.process.ScopeImpl;
+import io.orqueio.bpm.engine.impl.pvm.process.TransitionImpl;
+import io.orqueio.bpm.engine.impl.task.TaskDefinition;
+import io.orqueio.bpm.engine.impl.util.xml.Element;
+import io.orqueio.bpm.spring.boot.starter.property.EventingProperty;
 import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static org.camunda.bpm.engine.delegate.ExecutionListener.*;
-import static org.camunda.bpm.engine.delegate.TaskListener.*;
+import static io.orqueio.bpm.engine.delegate.ExecutionListener.*;
+import static io.orqueio.bpm.engine.delegate.TaskListener.*;
 
 /**
  * Parse listener adding provided execution and task listeners.

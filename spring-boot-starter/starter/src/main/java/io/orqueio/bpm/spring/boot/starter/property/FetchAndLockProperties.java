@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter.property;
+package io.orqueio.bpm.spring.boot.starter.property;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringJoiner;
 
-import static org.camunda.bpm.spring.boot.starter.property.CamundaBpmProperties.joinOn;
+import static io.orqueio.bpm.spring.boot.starter.property.CamundaBpmProperties.joinOn;
 
 public class FetchAndLockProperties {
 

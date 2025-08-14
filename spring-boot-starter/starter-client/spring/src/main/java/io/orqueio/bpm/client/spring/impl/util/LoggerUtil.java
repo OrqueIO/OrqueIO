@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.spring.impl.util;
+package io.orqueio.bpm.client.spring.impl.util;
 
-import org.camunda.bpm.client.spring.impl.client.util.ClientLoggerUtil;
-import org.camunda.bpm.client.spring.impl.subscription.util.SubscriptionLoggerUtil;
-import org.camunda.commons.logging.BaseLogger;
+import io.orqueio.bpm.client.spring.impl.client.util.ClientLoggerUtil;
+import io.orqueio.bpm.client.spring.impl.subscription.util.SubscriptionLoggerUtil;
+import io.orqueio.commons.logging.BaseLogger;
 
 public class LoggerUtil extends BaseLogger {
 
   protected static final String PROJECT_CODE = "TASK/CLIENT/SPRING";
-  protected static final String PROJECT_LOGGER = "org.camunda.bpm.client.spring";
+  protected static final String PROJECT_LOGGER = "io.orqueio.bpm.client.spring";
 
   public static final ClientLoggerUtil CLIENT_LOGGER =
       createLogger(ClientLoggerUtil.class, PROJECT_CODE, PROJECT_LOGGER, "01");

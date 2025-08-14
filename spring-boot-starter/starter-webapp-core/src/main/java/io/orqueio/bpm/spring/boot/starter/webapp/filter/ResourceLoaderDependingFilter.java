@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter.webapp.filter;
+package io.orqueio.bpm.spring.boot.starter.webapp.filter;
 
 import jakarta.servlet.Filter;
-import org.camunda.bpm.spring.boot.starter.property.WebappProperty;
+import io.orqueio.bpm.spring.boot.starter.property.WebappProperty;
 
 import org.springframework.core.io.ResourceLoader;
 

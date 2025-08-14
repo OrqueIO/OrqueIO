@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter;
+package io.orqueio.bpm.spring.boot.starter;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import org.camunda.bpm.application.ProcessApplicationInfo;
-import org.camunda.bpm.engine.spring.application.SpringProcessApplication;
-import org.camunda.bpm.spring.boot.starter.test.pa.TestProcessApplication;
+import io.orqueio.bpm.application.ProcessApplicationInfo;
+import io.orqueio.bpm.engine.spring.application.SpringProcessApplication;
+import io.orqueio.bpm.spring.boot.starter.test.pa.TestProcessApplication;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.spring.boot.starter;
+package io.orqueio.bpm.client.spring.boot.starter;
 
-import org.camunda.bpm.client.ExternalTaskClient;
-import org.camunda.bpm.client.ExternalTaskClientBuilder;
+import io.orqueio.bpm.client.ExternalTaskClient;
+import io.orqueio.bpm.client.ExternalTaskClientBuilder;
 import org.mockito.MockedStatic;
 
 import static org.junit.Assume.assumeTrue;

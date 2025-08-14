@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter;
+package io.orqueio.bpm.spring.boot.starter;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertNotNull;
@@ -25,15 +25,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-import org.camunda.bpm.engine.ProcessEngineServices;
-import org.camunda.bpm.engine.impl.cfg.CompositeProcessEnginePlugin;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.cfg.ProcessEnginePlugin;
-import org.camunda.bpm.engine.impl.variable.serializer.TypedValueSerializer;
-import org.camunda.bpm.spring.boot.starter.test.nonpa.TestApplication;
-import org.camunda.connect.plugin.impl.ConnectProcessEnginePlugin;
-import org.camunda.spin.plugin.impl.SpinObjectValueSerializer;
-import org.camunda.spin.plugin.impl.SpinProcessEnginePlugin;
+import io.orqueio.bpm.engine.ProcessEngineServices;
+import io.orqueio.bpm.engine.impl.cfg.CompositeProcessEnginePlugin;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEnginePlugin;
+import io.orqueio.bpm.engine.impl.variable.serializer.TypedValueSerializer;
+import io.orqueio.bpm.spring.boot.starter.test.nonpa.TestApplication;
+import io.orqueio.connect.plugin.impl.ConnectProcessEnginePlugin;
+import io.orqueio.spin.plugin.impl.SpinObjectValueSerializer;
+import io.orqueio.spin.plugin.impl.SpinProcessEnginePlugin;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter.property.authcachettl;
+package io.orqueio.bpm.spring.boot.starter.property.authcachettl;
 
-import org.camunda.bpm.spring.boot.starter.property.ParsePropertiesHelper;
+import io.orqueio.bpm.spring.boot.starter.property.ParsePropertiesHelper;
 import org.junit.Test;
 import org.springframework.test.context.TestPropertySource;
 

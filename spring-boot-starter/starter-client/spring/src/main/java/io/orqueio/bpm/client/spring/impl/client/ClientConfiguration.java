@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.spring.impl.client;
+package io.orqueio.bpm.client.spring.impl.client;
 
-import static org.camunda.bpm.client.spring.annotation.EnableExternalTaskClient.INT_NULL_VALUE;
-import static org.camunda.bpm.client.spring.annotation.ExternalTaskSubscription.LONG_NULL_VALUE;
+import static io.orqueio.bpm.client.spring.annotation.EnableExternalTaskClient.INT_NULL_VALUE;
+import static io.orqueio.bpm.client.spring.annotation.ExternalTaskSubscription.LONG_NULL_VALUE;
 
-import org.camunda.bpm.client.spring.annotation.EnableExternalTaskClient;
-import org.camunda.bpm.client.spring.annotation.ExternalTaskSubscription;
+import io.orqueio.bpm.client.spring.annotation.EnableExternalTaskClient;
+import io.orqueio.bpm.client.spring.annotation.ExternalTaskSubscription;
 
 public class ClientConfiguration {
 

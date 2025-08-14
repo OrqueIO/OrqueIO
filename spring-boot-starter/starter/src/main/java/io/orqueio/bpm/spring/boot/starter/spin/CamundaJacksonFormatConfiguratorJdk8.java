@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter.spin;
+package io.orqueio.bpm.spring.boot.starter.spin;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
-import org.camunda.spin.impl.json.jackson.format.JacksonJsonDataFormat;
-import org.camunda.spin.spi.DataFormatConfigurator;
+import io.orqueio.spin.impl.json.jackson.format.JacksonJsonDataFormat;
+import io.orqueio.spin.spi.DataFormatConfigurator;
 
 
 public class CamundaJacksonFormatConfiguratorJdk8 implements DataFormatConfigurator<JacksonJsonDataFormat> {

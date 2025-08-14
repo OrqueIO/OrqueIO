@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.spring.boot.starter.subscription;
+package io.orqueio.bpm.client.spring.boot.starter.subscription;
 
-import org.camunda.bpm.client.ExternalTaskClient;
-import org.camunda.bpm.client.spring.SpringTopicSubscription;
-import org.camunda.bpm.client.spring.boot.starter.subscription.configuration.FullSubscriptionConfiguration;
-import org.camunda.bpm.client.spring.boot.starter.ParsePropertiesHelper;
-import org.camunda.bpm.client.spring.boot.starter.impl.ClientAutoConfiguration;
+import io.orqueio.bpm.client.ExternalTaskClient;
+import io.orqueio.bpm.client.spring.SpringTopicSubscription;
+import io.orqueio.bpm.client.spring.boot.starter.subscription.configuration.FullSubscriptionConfiguration;
+import io.orqueio.bpm.client.spring.boot.starter.ParsePropertiesHelper;
+import io.orqueio.bpm.client.spring.boot.starter.impl.ClientAutoConfiguration;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;

@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter.security.oauth2.impl.plugin.welcome;
+package io.orqueio.bpm.spring.boot.starter.security.oauth2.impl.plugin.welcome;
 
-import org.camunda.bpm.spring.boot.starter.security.oauth2.impl.plugin.SsoLogoutPluginConstants;
-import org.camunda.bpm.welcome.plugin.spi.impl.AbstractWelcomePlugin;
+import io.orqueio.bpm.spring.boot.starter.security.oauth2.impl.plugin.SsoLogoutPluginConstants;
+import io.orqueio.bpm.welcome.plugin.spi.impl.AbstractWelcomePlugin;
 
 import java.util.Set;
 

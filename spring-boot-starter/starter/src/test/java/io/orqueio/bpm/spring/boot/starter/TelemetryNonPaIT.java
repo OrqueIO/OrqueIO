@@ -14,18 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter;
+package io.orqueio.bpm.spring.boot.starter;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Set;
 
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.diagnostics.CamundaIntegration;
-import org.camunda.bpm.engine.impl.diagnostics.DiagnosticsRegistry;
-import org.camunda.bpm.engine.impl.telemetry.dto.ApplicationServerImpl;
-import org.camunda.bpm.engine.impl.telemetry.dto.TelemetryDataImpl;
-import org.camunda.bpm.spring.boot.starter.test.nonpa.TestApplication;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.diagnostics.CamundaIntegration;
+import io.orqueio.bpm.engine.impl.diagnostics.DiagnosticsRegistry;
+import io.orqueio.bpm.engine.impl.telemetry.dto.ApplicationServerImpl;
+import io.orqueio.bpm.engine.impl.telemetry.dto.TelemetryDataImpl;
+import io.orqueio.bpm.spring.boot.starter.test.nonpa.TestApplication;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;

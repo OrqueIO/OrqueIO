@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter.webapp.filter.csrf.it.properties;
+package io.orqueio.bpm.spring.boot.starter.webapp.filter.csrf.it.properties;
 
-import org.camunda.bpm.spring.boot.starter.property.WebappProperty;
-import org.camunda.bpm.spring.boot.starter.webapp.filter.util.HttpClientRule;
-import org.camunda.bpm.spring.boot.starter.webapp.filter.util.FilterTestApp;
+import io.orqueio.bpm.spring.boot.starter.property.WebappProperty;
+import io.orqueio.bpm.spring.boot.starter.webapp.filter.util.HttpClientRule;
+import io.orqueio.bpm.spring.boot.starter.webapp.filter.util.FilterTestApp;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;

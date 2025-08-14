@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter.configuration.impl.custom;
+package io.orqueio.bpm.spring.boot.starter.configuration.impl.custom;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.filter.Filter;
-import org.camunda.bpm.spring.boot.starter.configuration.impl.AbstractCamundaConfiguration;
-import org.camunda.bpm.spring.boot.starter.property.FilterProperty;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.filter.Filter;
+import io.orqueio.bpm.spring.boot.starter.configuration.impl.AbstractCamundaConfiguration;
+import io.orqueio.bpm.spring.boot.starter.property.FilterProperty;
 
 import jakarta.annotation.PostConstruct;
 import java.util.Collections;

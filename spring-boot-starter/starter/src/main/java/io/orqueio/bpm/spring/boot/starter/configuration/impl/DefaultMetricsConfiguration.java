@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter.configuration.impl;
+package io.orqueio.bpm.spring.boot.starter.configuration.impl;
 
-import org.camunda.bpm.engine.spring.SpringProcessEngineConfiguration;
-import org.camunda.bpm.spring.boot.starter.configuration.CamundaMetricsConfiguration;
-import org.camunda.bpm.spring.boot.starter.property.MetricsProperty;
+import io.orqueio.bpm.engine.spring.SpringProcessEngineConfiguration;
+import io.orqueio.bpm.spring.boot.starter.configuration.CamundaMetricsConfiguration;
+import io.orqueio.bpm.spring.boot.starter.property.MetricsProperty;
 
 import jakarta.annotation.PostConstruct;
 

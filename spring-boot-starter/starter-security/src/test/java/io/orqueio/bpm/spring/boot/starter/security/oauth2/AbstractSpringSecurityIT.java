@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter.security.oauth2;
+package io.orqueio.bpm.spring.boot.starter.security.oauth2;
 
 import static java.lang.String.format;
 import static org.mockito.Mockito.when;
@@ -23,7 +23,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
-import org.camunda.bpm.spring.boot.starter.security.SampleApplication;
+import io.orqueio.bpm.spring.boot.starter.security.SampleApplication;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.mockito.invocation.InvocationOnMock;

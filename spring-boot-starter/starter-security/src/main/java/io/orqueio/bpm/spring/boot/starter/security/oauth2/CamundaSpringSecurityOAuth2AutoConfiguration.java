@@ -14,22 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter.security.oauth2;
+package io.orqueio.bpm.spring.boot.starter.security.oauth2;
 
 import jakarta.annotation.Nullable;
 import jakarta.servlet.DispatcherType;
 import jakarta.servlet.Filter;
-import org.camunda.bpm.engine.rest.security.auth.ProcessEngineAuthenticationFilter;
-import org.camunda.bpm.engine.spring.SpringProcessEngineServicesConfiguration;
-import org.camunda.bpm.spring.boot.starter.CamundaBpmAutoConfiguration;
-import org.camunda.bpm.spring.boot.starter.property.CamundaBpmProperties;
-import org.camunda.bpm.spring.boot.starter.property.WebappProperty;
-import org.camunda.bpm.spring.boot.starter.security.oauth2.impl.AuthorizeTokenFilter;
-import org.camunda.bpm.spring.boot.starter.security.oauth2.impl.OAuth2AuthenticationProvider;
-import org.camunda.bpm.spring.boot.starter.security.oauth2.impl.OAuth2GrantedAuthoritiesMapper;
-import org.camunda.bpm.spring.boot.starter.security.oauth2.impl.OAuth2IdentityProviderPlugin;
-import org.camunda.bpm.spring.boot.starter.security.oauth2.impl.SsoLogoutSuccessHandler;
-import org.camunda.bpm.webapp.impl.security.auth.ContainerBasedAuthenticationFilter;
+import io.orqueio.bpm.engine.rest.security.auth.ProcessEngineAuthenticationFilter;
+import io.orqueio.bpm.engine.spring.SpringProcessEngineServicesConfiguration;
+import io.orqueio.bpm.spring.boot.starter.CamundaBpmAutoConfiguration;
+import io.orqueio.bpm.spring.boot.starter.property.CamundaBpmProperties;
+import io.orqueio.bpm.spring.boot.starter.property.WebappProperty;
+import io.orqueio.bpm.spring.boot.starter.security.oauth2.impl.AuthorizeTokenFilter;
+import io.orqueio.bpm.spring.boot.starter.security.oauth2.impl.OAuth2AuthenticationProvider;
+import io.orqueio.bpm.spring.boot.starter.security.oauth2.impl.OAuth2GrantedAuthoritiesMapper;
+import io.orqueio.bpm.spring.boot.starter.security.oauth2.impl.OAuth2IdentityProviderPlugin;
+import io.orqueio.bpm.spring.boot.starter.security.oauth2.impl.SsoLogoutSuccessHandler;
+import io.orqueio.bpm.webapp.impl.security.auth.ContainerBasedAuthenticationFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
