@@ -3,30 +3,28 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.camunda.bpm.run</groupId>
-    <artifactId>camunda-bpm-run-qa</artifactId>
-    <version>7.24.0-SNAPSHOT</version>
+    <groupId>io.orqueio.bpm.run</groupId>
+    <artifactId>orqueio-bpm-run-qa</artifactId>
+    <version>1.0</version>
     <relativePath>..</relativePath>
   </parent>
 
-  <artifactId>camunda-bpm-run-qa-runtime</artifactId>
-  <name>Camunda Platform - Run - QA - Runtime</name>
+  <artifactId>orqueio-bpm-run-qa-runtime</artifactId>
+  <name>OrqueIO - Run - QA - Runtime</name>
   <packaging>jar</packaging>
 
-  <description>
-    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://camunda.com/contact/
-  </description>
+
   
   <properties>
-    <run-home>${project.build.directory}/run/camunda-bpm-run-distro</run-home>
+    <run-home>${project.build.directory}/run/orqueio-bpm-run-distro</run-home>
     <example-plugin-home>${project.build.directory}/run/example-plugin</example-plugin-home>
   </properties>
 
   <dependencies>
 
     <dependency>
-      <groupId>org.camunda.bpm.run</groupId>
-      <artifactId>camunda-bpm-run</artifactId>
+      <groupId>io.orqueio.bpm.run</groupId>
+      <artifactId>orqueio-bpm-run</artifactId>
       <version>${project.version}</version>
       <type>zip</type>
       <scope>test</scope>
@@ -41,8 +39,8 @@
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm.run</groupId>
-      <artifactId>camunda-bpm-run-qa-integration-tests</artifactId>
+      <groupId>io.orqueio.bpm.run</groupId>
+      <artifactId>orqueio-bpm-run-qa-integration-tests</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
       <classifier>tests</classifier>
@@ -88,14 +86,14 @@
 
     <!-- Webapps -->
     <dependency>
-      <groupId>org.camunda.bpm.qa</groupId>
-      <artifactId>camunda-qa-integration-tests-webapps</artifactId>
+      <groupId>io.orqueio.bpm.qa</groupId>
+      <artifactId>orqueio-qa-integration-tests-webapps</artifactId>
       <version>${project.version}</version>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm.model</groupId>
-      <artifactId>camunda-bpmn-model</artifactId>
+      <groupId>io.orqueio.bpm.model</groupId>
+      <artifactId>orqueio-bpmn-model</artifactId>
       <scope>test</scope>
     </dependency>
 
@@ -136,7 +134,7 @@
 
   <profiles>
     <profile>
-      <id>integration-test-camunda-run</id>
+      <id>integration-test-orqueio-run</id>
       <build>
         <plugins>
           <plugin>
@@ -146,10 +144,10 @@
             <configuration>
               <redirectTestOutputToFile>true</redirectTestOutputToFile>
               <dependenciesToScan>
-                <dependenciesToScan>org.camunda.bpm.run:camunda-bpm-run-qa-integration-tests</dependenciesToScan>
+                <dependenciesToScan>io.orqueio.bpm.run:orqueio-bpm-run-qa-integration-tests</dependenciesToScan>
               </dependenciesToScan>
               <systemPropertyVariables>
-                <camunda.run.home>${run-home}</camunda.run.home>
+                <orqueio.run.home>${run-home}</orqueio.run.home>
                 <example.plugin.home>${example-plugin-home}</example.plugin.home>
                 <selenium.screenshot.directory>${project.build.directory}/selenium-screenshots</selenium.screenshot.directory>
               </systemPropertyVariables>
@@ -174,7 +172,7 @@
                 </goals>
                 <phase>generate-test-resources</phase>
                 <configuration>
-                  <includeArtifactIds>camunda-bpm-run</includeArtifactIds>
+                  <includeArtifactIds>orqueio-bpm-run</includeArtifactIds>
                   <overWriteSnapshots>true</overWriteSnapshots>
                   <excludeTransitive>true</excludeTransitive>
                   <outputDirectory>${run-home}</outputDirectory>
@@ -194,7 +192,7 @@
                 </goals>
                 <phase>generate-test-resources</phase>
                 <configuration>
-                  <artifact>org.camunda.bpm.run:camunda-bpm-run-example-plugin:${project.version}</artifact>
+                  <artifact>io.orqueio.bpm.run:orqueio-bpm-run-example-plugin:${project.version}</artifact>
                   <overWriteSnapshots>true</overWriteSnapshots>
                   <stripVersion>true</stripVersion>
                   <outputDirectory>${example-plugin-home}</outputDirectory>
@@ -247,5 +245,40 @@
       </properties>
     </profile>
   </profiles>
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
+    <organization>
+        <name>OrqueIO services</name>
+        <url>https://www.orqueio.io/</url>
+    </organization>
+
+    <url>https://www.orqueio.io/</url>
+
+    <developers>
+        <developer>
+            <id>OrqueIO</id>
+            <name>OrqueIO Community</name>
+            <organization>orqueio.io</organization>
+            <organizationUrl>https://www.orqueio.io/</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <url>https://github.com/OrqueIO/OrqueIO</url>
+        <connection>scm:git:git@github.com:OrqueIO/OrqueIO.git</connection>
+        <developerConnection>scm:git:git@github.com:OrqueIO/OrqueIO.git</developerConnection>
+        <tag>OrqueIO-1.0</tag>
+    </scm>
+
+    <issueManagement>
+        <system>GitHub Issues</system>
+        <url>https://github.com/OrqueIO/OrqueIO/issues</url>
+    </issueManagement>
 
 </project>

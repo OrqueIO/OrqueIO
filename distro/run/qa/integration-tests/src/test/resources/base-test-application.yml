@@ -1,4 +1,4 @@
-camunda.bpm:
+orqueio.bpm:
   admin-user:
     id: demo
     password: demo

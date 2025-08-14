@@ -3,19 +3,17 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.camunda.bpm.run</groupId>
-    <artifactId>camunda-bpm-run-modules</artifactId>
-    <version>7.24.0-SNAPSHOT</version>
+    <groupId>io.orqueio.bpm.run</groupId>
+    <artifactId>orqueio-bpm-run-modules</artifactId>
+    <version>1.0</version>
     <relativePath>..</relativePath>
   </parent>
 
-  <artifactId>camunda-bpm-run-modules-oauth2</artifactId>
-  <name>Camunda Platform - Run - Module Spring Security</name>
+  <artifactId>orqueio-bpm-run-modules-oauth2</artifactId>
+  <name>OrqueIO - Run - Module Spring Security</name>
   <packaging>pom</packaging>
 
-  <description>
-    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://camunda.com/contact/
-  </description>
+
   
   <properties>
     <!-- generate a bom of compile time dependencies for the license book.
@@ -27,8 +25,8 @@
   <dependencies>
 
     <dependency>
-      <groupId>org.camunda.bpm.springboot</groupId>
-      <artifactId>camunda-bpm-spring-boot-starter-security</artifactId>
+      <groupId>io.orqueio.bpm.springboot</groupId>
+      <artifactId>orqueio-bpm-spring-boot-starter-security</artifactId>
     </dependency>
 
   </dependencies>
@@ -41,5 +39,40 @@
       </plugin>
     </plugins>
   </build>
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
+    <organization>
+        <name>OrqueIO services</name>
+        <url>https://www.orqueio.io/</url>
+    </organization>
+
+    <url>https://www.orqueio.io/</url>
+
+    <developers>
+        <developer>
+            <id>OrqueIO</id>
+            <name>OrqueIO Community</name>
+            <organization>orqueio.io</organization>
+            <organizationUrl>https://www.orqueio.io/</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <url>https://github.com/OrqueIO/OrqueIO</url>
+        <connection>scm:git:git@github.com:OrqueIO/OrqueIO.git</connection>
+        <developerConnection>scm:git:git@github.com:OrqueIO/OrqueIO.git</developerConnection>
+        <tag>OrqueIO-1.0</tag>
+    </scm>
+
+    <issueManagement>
+        <system>GitHub Issues</system>
+        <url>https://github.com/OrqueIO/OrqueIO/issues</url>
+    </issueManagement>
 
 </project>

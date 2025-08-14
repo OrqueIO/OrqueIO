@@ -1,6 +1,6 @@
-<module xmlns="urn:jboss:module:1.0" name="org.camunda.bpm.model.camunda-xml-model">
+<module xmlns="urn:jboss:module:1.0" name="io.orqueio.bpm.model.orqueio-xml-model">
   <resources>
-    <resource-root path="camunda-xml-model-@project.version@.jar" />
+    <resource-root path="orqueio-xml-model-@project.version@.jar" />
   </resources>
 
   <dependencies>

@@ -10,7 +10,7 @@ else
 	BROWSERS="xdg-open gnome-www-browser x-www-browser firefox chromium chromium-browser google-chrome"
 fi
 
-echo "starting Camunda Platform ${project.version} on Wildfly Application Server ${version.wildfly}";
+echo "starting OrqueIO ${project.version} on Wildfly Application Server ${version.wildfly}";
 
 if [ -z "$BROWSER" ]; then
   for executable in $BROWSERS; do
@@ -22,9 +22,9 @@ if [ -z "$BROWSER" ]; then
 fi
 
 if [ -z "$BROWSER" ]; then
-  (sleep 15; echo -e "We are sorry... We tried all we could do but we couldn't locate your default browser... \nIf you want to see our default website please open your browser and insert this URL:\nhttp://localhost:8080/camunda-welcome/index.html";) &
+  (sleep 15; echo -e "We are sorry... We tried all we could do but we couldn't locate your default browser... \nIf you want to see our default website please open your browser and insert this URL:\nhttp://localhost:8080/orqueio-welcome/index.html";) &
 else
-  (sleep 15; $BROWSER "http://localhost:8080/camunda-welcome/index.html";) &
+  (sleep 15; $BROWSER "http://localhost:8080/orqueio-welcome/index.html";) &
 fi
 
 /bin/sh "$(dirname "$0")/server/wildfly-${version.wildfly}/bin/standalone.sh"

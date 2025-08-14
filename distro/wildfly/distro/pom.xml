@@ -2,63 +2,61 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.camunda.bpm.wildfly</groupId>
-    <artifactId>camunda-wildfly</artifactId>
-    <version>7.24.0-SNAPSHOT</version>
+    <groupId>io.orqueio.bpm.wildfly</groupId>
+    <artifactId>orqueio-wildfly</artifactId>
+    <version>1.0</version>
   </parent>
 
-  <artifactId>camunda-bpm-wildfly</artifactId>
+  <artifactId>orqueio-bpm-wildfly</artifactId>
   <packaging>pom</packaging>
 
-  <description>
-    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://camunda.com/contact/
-  </description>
 
-  <name>Camunda Platform - Wildfly Distro</name>
+
+  <name>OrqueIO - Wildfly Distro</name>
 
   <dependencies>
     <dependency>
       <!-- this dependency is to make sure that we are executed after the
         integration tests have passed in the reactor -->
-      <groupId>org.camunda.bpm.qa</groupId>
-      <artifactId>camunda-qa</artifactId>
+      <groupId>io.orqueio.bpm.qa</groupId>
+      <artifactId>orqueio-qa</artifactId>
       <version>${project.version}</version>
       <type>pom</type>
       <scope>provided</scope>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm.wildfly</groupId>
-      <artifactId>camunda-wildfly-assembly</artifactId>
+      <groupId>io.orqueio.bpm.wildfly</groupId>
+      <artifactId>orqueio-wildfly-assembly</artifactId>
       <version>${project.version}</version>
       <type>tar.gz</type>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm.distro</groupId>
-      <artifactId>camunda-sql-scripts</artifactId>
+      <groupId>io.orqueio.bpm.distro</groupId>
+      <artifactId>orqueio-sql-scripts</artifactId>
       <version>${project.version}</version>
       <type>jar</type>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
-      <artifactId>camunda-engine-rest-jakarta</artifactId>
+      <groupId>io.orqueio.bpm</groupId>
+      <artifactId>orqueio-engine-rest-jakarta</artifactId>
       <version>${project.version}</version>
       <classifier>wildfly</classifier>
       <type>war</type>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm.webapp</groupId>
-      <artifactId>camunda-webapp-wildfly</artifactId>
+      <groupId>io.orqueio.bpm.webapp</groupId>
+      <artifactId>orqueio-webapp-wildfly</artifactId>
       <version>${project.version}</version>
       <type>war</type>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm.example</groupId>
-      <artifactId>camunda-example-invoice-jakarta</artifactId>
+      <groupId>io.orqueio.bpm.example</groupId>
+      <artifactId>orqueio-example-invoice-jakarta</artifactId>
       <version>${project.version}</version>
       <type>war</type>
     </dependency>
@@ -82,7 +80,7 @@
               <descriptors>
                 <descriptor>assembly.xml</descriptor>
               </descriptors>
-              <finalName>camunda-bpm-wildfly-${project.version}</finalName>
+              <finalName>orqueio-bpm-wildfly-${project.version}</finalName>
               <attach>true</attach>
               <appendAssemblyId>false</appendAssemblyId>
               <outputDirectory>target/</outputDirectory>
@@ -94,5 +92,40 @@
       </plugin>
     </plugins>
   </build>
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
+    <organization>
+        <name>OrqueIO services</name>
+        <url>https://www.orqueio.io/</url>
+    </organization>
+
+    <url>https://www.orqueio.io/</url>
+
+    <developers>
+        <developer>
+            <id>OrqueIO</id>
+            <name>OrqueIO Community</name>
+            <organization>orqueio.io</organization>
+            <organizationUrl>https://www.orqueio.io/</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <url>https://github.com/OrqueIO/OrqueIO</url>
+        <connection>scm:git:git@github.com:OrqueIO/OrqueIO.git</connection>
+        <developerConnection>scm:git:git@github.com:OrqueIO/OrqueIO.git</developerConnection>
+        <tag>OrqueIO-1.0</tag>
+    </scm>
+
+    <issueManagement>
+        <system>GitHub Issues</system>
+        <url>https://github.com/OrqueIO/OrqueIO/issues</url>
+    </issueManagement>
 
 </project>

@@ -50,7 +50,7 @@ SET JAVA_VERSION=%JAVA_VERSION:"=%
 ECHO Java version is %JAVA_VERSION%
 FOR /f "delims=. tokens=1" %%v in ("%JAVA_VERSION%") do (
   IF %%v LSS %EXPECTED_JAVA_VERSION% (
-    ECHO You must use at least JDK 17 to start Camunda Platform Run.
+    ECHO You must use at least JDK 17 to start OrqueIO Run.
     GOTO :EOF
   )
 )
@@ -136,10 +136,10 @@ ECHO classpath: %classPath%
 REM start the application
 IF [%detachProcess%]==[true] (
   REM in the background
-  start "%APPNAME%" "%JAVA%" -Dloader.path="%classPath%" -Dcamunda.deploymentDir="%DEPLOYMENTDIR%" %JAVA_OPTS% -jar "%BASEDIR%camunda-bpm-run-core.jar" --spring.config.location=file:"%configuration%"
+  start "%APPNAME%" "%JAVA%" -Dloader.path="%classPath%" -Dorqueio.deploymentDir="%DEPLOYMENTDIR%" %JAVA_OPTS% -jar "%BASEDIR%orqueio-bpm-run-core.jar" --spring.config.location=file:"%configuration%"
 
 ) ELSE (
-  call "%JAVA%" -Dloader.path="%classPath%" -Dcamunda.deploymentDir="%DEPLOYMENTDIR%" %JAVA_OPTS% -jar "%BASEDIR%camunda-bpm-run-core.jar" --spring.config.location=file:"%configuration%"
+  call "%JAVA%" -Dloader.path="%classPath%" -Dorqueio.deploymentDir="%DEPLOYMENTDIR%" %JAVA_OPTS% -jar "%BASEDIR%orqueio-bpm-run-core.jar" --spring.config.location=file:"%configuration%"
 )
 
 GOTO End
@@ -158,8 +158,8 @@ GOTO End
 ECHO Usage: run.bat [start^|stop] (options...)
 :ArgsHelp
 ECHO Options:
-ECHO   --webapps    - Enables the Camunda Platform Webapps
-ECHO   --oauth2     - Enables the Camunda Platform Spring Security OAuth2 integration
+ECHO   --webapps    - Enables the OrqueIO Webapps
+ECHO   --oauth2     - Enables the OrqueIO Spring Security OAuth2 integration
 ECHO   --rest       - Enables the REST API
 ECHO   --example    - Enables the example application
 ECHO   --production - Applies the production.yaml configuration file

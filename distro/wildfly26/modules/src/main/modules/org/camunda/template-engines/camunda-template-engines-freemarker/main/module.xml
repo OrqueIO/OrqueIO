@@ -1,6 +1,6 @@
-<module xmlns="urn:jboss:module:1.0" name="org.camunda.template-engines.camunda-template-engines-freemarker">
+<module xmlns="urn:jboss:module:1.0" name="io.orqueio.template-engines.orqueio-template-engines-freemarker">
   <resources>
-    <resource-root path="camunda-template-engines-freemarker-@project.version@.jar" />
+    <resource-root path="orqueio-template-engines-freemarker-@project.version@.jar" />
   </resources>
 
   <dependencies>

@@ -2,21 +2,17 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.camunda.bpm.wildfly</groupId>
-    <artifactId>camunda-wildfly</artifactId>
-    <version>7.24.0-SNAPSHOT</version>
+    <groupId>io.orqueio.bpm.wildfly</groupId>
+    <artifactId>orqueio-wildfly</artifactId>
+    <version>1.0</version>
   </parent>
 
-  <artifactId>camunda-wildfly-assembly</artifactId>
+  <artifactId>orqueio-wildfly-assembly</artifactId>
   <packaging>pom</packaging>
 
-  <name>Camunda Platform - Wildfly Assembly</name>
+  <name>OrqueIO - Wildfly Assembly</name>
 
-  <description>
-    Assembles the Camunda Platform and makes it ready for qa.
-    The assembly is installed to maven later in the reactor, if the integration tests pass successfully.
-    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://camunda.com/contact/
-  </description>
+
   
   <properties>
     <!-- generate a bom of compile time dependencies for the license book.
@@ -34,39 +30,39 @@
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm.javaee</groupId>
-      <artifactId>camunda-ejb-client-jakarta</artifactId>
+      <groupId>io.orqueio.bpm.javaee</groupId>
+      <artifactId>orqueio-ejb-client-jakarta</artifactId>
     </dependency>
     
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
-      <artifactId>camunda-engine</artifactId>
+      <groupId>io.orqueio.bpm</groupId>
+      <artifactId>orqueio-engine</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm.identity</groupId>
-      <artifactId>camunda-identity-ldap</artifactId>
+      <groupId>io.orqueio.bpm.identity</groupId>
+      <artifactId>orqueio-identity-ldap</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
-      <artifactId>camunda-engine-cdi-jakarta</artifactId>
+      <groupId>io.orqueio.bpm</groupId>
+      <artifactId>orqueio-engine-cdi-jakarta</artifactId>
     </dependency>
     
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
-      <artifactId>camunda-engine-spring-6</artifactId>
+      <groupId>io.orqueio.bpm</groupId>
+      <artifactId>orqueio-engine-spring-6</artifactId>
     </dependency>
     
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
-      <artifactId>camunda-engine-rest-jakarta</artifactId>
+      <groupId>io.orqueio.bpm</groupId>
+      <artifactId>orqueio-engine-rest-jakarta</artifactId>
       <classifier>classes</classifier>
       <version>${project.version}</version>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
+      <groupId>io.orqueio.bpm</groupId>
       <artifactId>license-book</artifactId>
       <version>${project.version}</version>
       <type>zip</type>
@@ -116,10 +112,10 @@
     </dependency>
 
     <dependency>
-      <!-- this dependency is to make sure that we are executed after camunda-modules 
+      <!-- this dependency is to make sure that we are executed after orqueio-modules
         in the reactor -->
-      <groupId>org.camunda.bpm.wildfly</groupId>
-      <artifactId>camunda-wildfly-modules</artifactId>
+      <groupId>io.orqueio.bpm.wildfly</groupId>
+      <artifactId>orqueio-wildfly-modules</artifactId>
       <version>${project.version}</version>
       <scope>provided</scope>
     </dependency>
@@ -153,4 +149,39 @@
       </plugin>
     </plugins>
   </build>
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
+    <organization>
+        <name>OrqueIO services</name>
+        <url>https://www.orqueio.io/</url>
+    </organization>
+
+    <url>https://www.orqueio.io/</url>
+
+    <developers>
+        <developer>
+            <id>OrqueIO</id>
+            <name>OrqueIO Community</name>
+            <organization>orqueio.io</organization>
+            <organizationUrl>https://www.orqueio.io/</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <url>https://github.com/OrqueIO/OrqueIO</url>
+        <connection>scm:git:git@github.com:OrqueIO/OrqueIO.git</connection>
+        <developerConnection>scm:git:git@github.com:OrqueIO/OrqueIO.git</developerConnection>
+        <tag>OrqueIO-1.0</tag>
+    </scm>
+
+    <issueManagement>
+        <system>GitHub Issues</system>
+        <url>https://github.com/OrqueIO/OrqueIO/issues</url>
+    </issueManagement>
+
 </project>

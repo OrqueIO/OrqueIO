@@ -1,18 +1,18 @@
 This is a distribution of
 
-       Camunda Platform v${project.version}
+       OrqueIO v${project.version}
 
 visit
-       http://docs.camunda.org/
+       http://docs.orqueio.org/
 
-The Camunda Platform is a dual-license Java-based framework.
-This particular copy of the Camunda Platform is released either
+The OrqueIO is a dual-license Java-based framework.
+This particular copy of the OrqueIO is released either
 under the Apache License 2.0 (Community Platform) OR a commercial
 license agreement (Enterprise Platform).
 
 License information can be found in the LICENSE file.
 
-The Camunda Platform includes libraries developed by third
+The OrqueIO includes libraries developed by third
 parties. For license and attribution notices for these libraries,
 please refer to the documentation that accompanies this distribution
 (see the LICENSE_BOOK-${project.version} file).
@@ -35,7 +35,7 @@ Contents:
 
   server/
         This directory contains a preconfigured distribution 
-        of Wildfly Application Server with Camunda Platform readily
+        of Wildfly Application Server with OrqueIO readily
         installed.
 
         run the
@@ -45,7 +45,7 @@ Contents:
         After starting the server, you can access the 
         following web applications:
 
-        http://localhost:8080/camunda
+        http://localhost:8080/orqueio
         http://localhost:8080/engine-rest
 
     sql/
@@ -54,11 +54,11 @@ Contents:
         The engine create script contain the engine and history tables.
 
         Execute the current upgrade script to make the database compatible
-        with the newest Camunda Platform release.
+        with the newest OrqueIO release.
 
 ==================
 
-Camunda Platform version: ${project.version}
+OrqueIO version: ${project.version}
 Wildfly Application Server version: ${version.wildfly}
 
 =================
