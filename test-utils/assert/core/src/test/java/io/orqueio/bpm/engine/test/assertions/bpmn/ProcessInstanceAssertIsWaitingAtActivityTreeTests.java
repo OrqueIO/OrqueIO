@@ -14,19 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.assertions.bpmn;
+package io.orqueio.bpm.engine.test.assertions.bpmn;
 
-import static org.camunda.bpm.engine.test.assertions.bpmn.BpmnAwareTests.assertThat;
-import static org.camunda.bpm.engine.test.assertions.bpmn.BpmnAwareTests.complete;
-import static org.camunda.bpm.engine.test.assertions.bpmn.BpmnAwareTests.execute;
-import static org.camunda.bpm.engine.test.assertions.bpmn.BpmnAwareTests.job;
-import static org.camunda.bpm.engine.test.assertions.bpmn.BpmnAwareTests.runtimeService;
-import static org.camunda.bpm.engine.test.assertions.bpmn.BpmnAwareTests.task;
+import static io.orqueio.bpm.engine.test.assertions.bpmn.BpmnAwareTests.assertThat;
+import static io.orqueio.bpm.engine.test.assertions.bpmn.BpmnAwareTests.complete;
+import static io.orqueio.bpm.engine.test.assertions.bpmn.BpmnAwareTests.execute;
+import static io.orqueio.bpm.engine.test.assertions.bpmn.BpmnAwareTests.job;
+import static io.orqueio.bpm.engine.test.assertions.bpmn.BpmnAwareTests.runtimeService;
+import static io.orqueio.bpm.engine.test.assertions.bpmn.BpmnAwareTests.task;
 
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.engine.test.ProcessEngineRule;
-import org.camunda.bpm.engine.test.assertions.helpers.ProcessAssertTestCase;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.test.ProcessEngineRule;
+import io.orqueio.bpm.engine.test.assertions.helpers.ProcessAssertTestCase;
 import org.junit.Rule;
 import org.junit.Test;
 

@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.assertions.bpmn;
+package io.orqueio.bpm.engine.test.assertions.bpmn;
 
 import java.util.Date;
 
 import org.assertj.core.api.Assertions;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.runtime.Execution;
-import org.camunda.bpm.engine.runtime.ExecutionQuery;
-import org.camunda.bpm.engine.runtime.Job;
-import org.camunda.bpm.engine.runtime.JobQuery;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.runtime.Execution;
+import io.orqueio.bpm.engine.runtime.ExecutionQuery;
+import io.orqueio.bpm.engine.runtime.Job;
+import io.orqueio.bpm.engine.runtime.JobQuery;
 
 /**
  * Assertions for a {@link Job}.
@@ -48,7 +48,7 @@ public class JobAssert extends AbstractProcessAssert<JobAssert, Job> {
    *
    * @param   expectedId the expected job id
    * @return  this {@link JobAssert}
-   * @see     org.camunda.bpm.engine.runtime.Job#getId()
+   * @see     io.orqueio.bpm.engine.runtime.Job#getId()
    */
   public JobAssert hasId(final String expectedId) {
     Job current = getExistingCurrent();
@@ -68,7 +68,7 @@ public class JobAssert extends AbstractProcessAssert<JobAssert, Job> {
    *
    * @param   expectedDueDate the expected due date
    * @return  this {@link JobAssert}
-   * @see     org.camunda.bpm.engine.runtime.Job#getDuedate()
+   * @see     io.orqueio.bpm.engine.runtime.Job#getDuedate()
    */
   public JobAssert hasDueDate(final Date expectedDueDate) {
     Job current = getExistingCurrent();
@@ -88,7 +88,7 @@ public class JobAssert extends AbstractProcessAssert<JobAssert, Job> {
    *
    * @param   expectedProcessInstanceId the expected process instance id
    * @return  this {@link JobAssert}
-   * @see     org.camunda.bpm.engine.runtime.Job#getProcessInstanceId()
+   * @see     io.orqueio.bpm.engine.runtime.Job#getProcessInstanceId()
    */
   public JobAssert hasProcessInstanceId(final String expectedProcessInstanceId) {
     Job current = getExistingCurrent();
@@ -108,7 +108,7 @@ public class JobAssert extends AbstractProcessAssert<JobAssert, Job> {
    *
    * @param   expectedExecutionId the expected execution id
    * @return  this {@link JobAssert}
-   * @see     org.camunda.bpm.engine.runtime.Job#getExecutionId()
+   * @see     io.orqueio.bpm.engine.runtime.Job#getExecutionId()
    */
   public JobAssert hasExecutionId(final String expectedExecutionId) {
     Job current = getExistingCurrent();
@@ -127,7 +127,7 @@ public class JobAssert extends AbstractProcessAssert<JobAssert, Job> {
    * Verifies the expectation of a specific number of retries left for the {@link Job}.
    * @param   expectedRetries the expected number of retries
    * @return  this {@link JobAssert}
-   * @see     org.camunda.bpm.engine.runtime.Job#getExecutionId()
+   * @see     io.orqueio.bpm.engine.runtime.Job#getExecutionId()
    */
   public JobAssert hasRetries(final int expectedRetries) {
     Job current = getExistingCurrent();
@@ -146,7 +146,7 @@ public class JobAssert extends AbstractProcessAssert<JobAssert, Job> {
    * for the {@link Job}.
    *
    * @return  this {@link JobAssert}
-   * @see     org.camunda.bpm.engine.runtime.Job#getExceptionMessage()
+   * @see     io.orqueio.bpm.engine.runtime.Job#getExceptionMessage()
    */
   public JobAssert hasExceptionMessage() {
     Job current = getExistingCurrent();
@@ -165,7 +165,7 @@ public class JobAssert extends AbstractProcessAssert<JobAssert, Job> {
    *
    * @param   expectedDeploymentId the expected deployment id
    * @return  this {@link JobAssert}
-   * @see     org.camunda.bpm.engine.runtime.Job#getDeploymentId()
+   * @see     io.orqueio.bpm.engine.runtime.Job#getDeploymentId()
    */
   public JobAssert hasDeploymentId(final String expectedDeploymentId) {
     Job current = getExistingCurrent();

@@ -14,25 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.assertions.cmmn;
+package io.orqueio.bpm.engine.test.assertions.cmmn;
 
 import java.util.Arrays;
 import java.util.Map;
 
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.MapAssert;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.history.HistoricCaseActivityInstance;
-import org.camunda.bpm.engine.history.HistoricCaseActivityInstanceQuery;
-import org.camunda.bpm.engine.impl.cmmn.entity.runtime.CaseExecutionEntity;
-import org.camunda.bpm.engine.impl.cmmn.execution.CaseExecutionState;
-import org.camunda.bpm.engine.impl.persistence.entity.HistoricCaseActivityInstanceEntity;
-import org.camunda.bpm.engine.runtime.CaseExecution;
-import org.camunda.bpm.engine.runtime.CaseExecutionQuery;
-import org.camunda.bpm.engine.runtime.CaseInstance;
-import org.camunda.bpm.engine.test.assertions.bpmn.AbstractProcessAssert;
-import org.camunda.bpm.engine.test.assertions.bpmn.TaskAssert;
-import org.camunda.bpm.model.cmmn.impl.CmmnModelConstants;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.history.HistoricCaseActivityInstance;
+import io.orqueio.bpm.engine.history.HistoricCaseActivityInstanceQuery;
+import io.orqueio.bpm.engine.impl.cmmn.entity.runtime.CaseExecutionEntity;
+import io.orqueio.bpm.engine.impl.cmmn.execution.CaseExecutionState;
+import io.orqueio.bpm.engine.impl.persistence.entity.HistoricCaseActivityInstanceEntity;
+import io.orqueio.bpm.engine.runtime.CaseExecution;
+import io.orqueio.bpm.engine.runtime.CaseExecutionQuery;
+import io.orqueio.bpm.engine.runtime.CaseInstance;
+import io.orqueio.bpm.engine.test.assertions.bpmn.AbstractProcessAssert;
+import io.orqueio.bpm.engine.test.assertions.bpmn.TaskAssert;
+import io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants;
 
 public abstract class AbstractCaseAssert<S extends AbstractCaseAssert<S, A>, A extends CaseExecution> extends AbstractProcessAssert<S, A> {
 
@@ -226,7 +226,7 @@ public abstract class AbstractCaseAssert<S extends AbstractCaseAssert<S, A>, A e
    * 					actual 'parent' CaseExecution under test of this assertion.
    * @return  the only CaseExecution resulting  from the given search. A 'null'
    * 					CaseExecution in case no such CaseExecution is available.
-   * @throws  org.camunda.bpm.engine.ProcessEngineException in case more than
+   * @throws  io.orqueio.bpm.engine.ProcessEngineException in case more than
    *          one CaseExecution is delivered by the query (after being narrowed
    *          to the actual 'parent' CaseExecution)
    */
@@ -251,7 +251,7 @@ public abstract class AbstractCaseAssert<S extends AbstractCaseAssert<S, A>, A e
    * 					actual 'parent' CaseExecution under test of this assertion.
    * @return  the only CaseExecution resulting  from the given search. A 'null'
    * 					CaseExecution in case no such CaseExecution is available.
-   * @throws  org.camunda.bpm.engine.ProcessEngineException in case more than
+   * @throws  io.orqueio.bpm.engine.ProcessEngineException in case more than
    *          one CaseExecution is delivered by the query (after being narrowed
    *          to the actual 'parent' CaseExecution)
    */
@@ -280,7 +280,7 @@ public abstract class AbstractCaseAssert<S extends AbstractCaseAssert<S, A>, A e
    * 					to the type 'humanTask'.
    * @return  the only CaseExecution resulting from the given search. A 'null'
    * 					CaseExecution in case no such CaseExecution is available.
-   * @throws  org.camunda.bpm.engine.ProcessEngineException in case more than
+   * @throws  io.orqueio.bpm.engine.ProcessEngineException in case more than
    *          one CaseExecution is delivered by the query (after being narrowed
    *          to the actual 'parent' CaseExecution)
    */
@@ -305,7 +305,7 @@ public abstract class AbstractCaseAssert<S extends AbstractCaseAssert<S, A>, A e
    * 					to the type 'humanTask'.
    * @return  the only CaseExecution with the given activitiy id. A 'null'
    * 					CaseExecution in case no such CaseExecution is available.
-   * @throws  org.camunda.bpm.engine.ProcessEngineException in case more than
+   * @throws  io.orqueio.bpm.engine.ProcessEngineException in case more than
    *          one CaseExecution is delivered by the query (after being narrowed
    *          to the actual 'parent' CaseExecution)
    */
@@ -329,7 +329,7 @@ public abstract class AbstractCaseAssert<S extends AbstractCaseAssert<S, A>, A e
    * 					to the type 'caseTask'.
    * @return  the only CaseExecution resulting from the given search. A 'null'
    * 					CaseExecution in case no such CaseExecution is available.
-   * @throws  org.camunda.bpm.engine.ProcessEngineException in case more than
+   * @throws  io.orqueio.bpm.engine.ProcessEngineException in case more than
    *          one CaseExecution is delivered by the query (after being narrowed
    *          to the actual 'parent' CaseExecution)
    */
@@ -354,7 +354,7 @@ public abstract class AbstractCaseAssert<S extends AbstractCaseAssert<S, A>, A e
    * 					to the type 'caseTask'.
    * @return  the only CaseExecution with the given activitiy id. A 'null'
    * 					CaseExecution in case no such CaseExecution is available.
-   * @throws  org.camunda.bpm.engine.ProcessEngineException in case more than
+   * @throws  io.orqueio.bpm.engine.ProcessEngineException in case more than
    *          one CaseExecution is delivered by the query (after being narrowed
    *          to the actual 'parent' CaseExecution)
    */
@@ -378,7 +378,7 @@ public abstract class AbstractCaseAssert<S extends AbstractCaseAssert<S, A>, A e
    * 					to the type 'processTask'.
    * @return  the only CaseExecution resulting from the given search. A 'null'
    * 					CaseExecution in case no such CaseExecution is available.
-   * @throws  org.camunda.bpm.engine.ProcessEngineException in case more than
+   * @throws  io.orqueio.bpm.engine.ProcessEngineException in case more than
    *          one CaseExecution is delivered by the query (after being narrowed
    *          to the actual 'parent' CaseExecution)
    */
@@ -403,7 +403,7 @@ public abstract class AbstractCaseAssert<S extends AbstractCaseAssert<S, A>, A e
    * 					to the type 'processTask'.
    * @return  the only CaseExecution with the given activitiy id. A 'null'
    * 					CaseExecution in case no such CaseExecution is available.
-   * @throws  org.camunda.bpm.engine.ProcessEngineException in case more than
+   * @throws  io.orqueio.bpm.engine.ProcessEngineException in case more than
    *          one CaseExecution is delivered by the query (after being narrowed
    *          to the actual 'parent' CaseExecution)
    */
@@ -427,7 +427,7 @@ public abstract class AbstractCaseAssert<S extends AbstractCaseAssert<S, A>, A e
    * 					to the type 'stage'.
    * @return  the only CaseExecution resulting from the given search. A 'null'
    * 					CaseExecution in case no such CaseExecution is available.
-   * @throws  org.camunda.bpm.engine.ProcessEngineException in case more than
+   * @throws  io.orqueio.bpm.engine.ProcessEngineException in case more than
    *          one CaseExecution is delivered by the query (after being narrowed
    *          to the actual 'parent' CaseExecution)
    */
@@ -452,7 +452,7 @@ public abstract class AbstractCaseAssert<S extends AbstractCaseAssert<S, A>, A e
    * 					to the type 'stage'.
    * @return  the only CaseExecution with the given activitiy id. A 'null'
    * 					CaseExecution in case no such CaseExecution is available.
-   * @throws  org.camunda.bpm.engine.ProcessEngineException in case more than
+   * @throws  io.orqueio.bpm.engine.ProcessEngineException in case more than
    *          one CaseExecution is delivered by the query (after being narrowed
    *          to the actual 'parent' CaseExecution)
    */
@@ -476,7 +476,7 @@ public abstract class AbstractCaseAssert<S extends AbstractCaseAssert<S, A>, A e
    * 					to the type 'milestone'.
    * @return  the only CaseExecution resulting from the given search. A 'null'
    * 					CaseExecution in case no such CaseExecution is available.
-   * @throws  org.camunda.bpm.engine.ProcessEngineException in case more than
+   * @throws  io.orqueio.bpm.engine.ProcessEngineException in case more than
    *          one CaseExecution is delivered by the query (after being narrowed
    *          to the actual 'parent' CaseExecution)
    */
@@ -501,7 +501,7 @@ public abstract class AbstractCaseAssert<S extends AbstractCaseAssert<S, A>, A e
    * 					to the type 'milestone'.
    * @return  the only CaseExecution with the given activitiy id. A 'null'
    * 					CaseExecution in case no such CaseExecution is available.
-   * @throws  org.camunda.bpm.engine.ProcessEngineException in case more than
+   * @throws  io.orqueio.bpm.engine.ProcessEngineException in case more than
    *          one CaseExecution is delivered by the query (after being narrowed
    *          to the actual 'parent' CaseExecution)
    */

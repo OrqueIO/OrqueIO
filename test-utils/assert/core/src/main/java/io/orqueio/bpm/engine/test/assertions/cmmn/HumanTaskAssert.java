@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.assertions.cmmn;
+package io.orqueio.bpm.engine.test.assertions.cmmn;
 
 import org.assertj.core.api.MapAssert;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.impl.cmmn.execution.CaseExecutionState;
-import org.camunda.bpm.engine.runtime.CaseExecution;
-import org.camunda.bpm.model.cmmn.instance.HumanTask;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.impl.cmmn.execution.CaseExecutionState;
+import io.orqueio.bpm.engine.runtime.CaseExecution;
+import io.orqueio.bpm.model.cmmn.instance.HumanTask;
 
 public class HumanTaskAssert extends AbstractCaseAssert<HumanTaskAssert, CaseExecution> {
 

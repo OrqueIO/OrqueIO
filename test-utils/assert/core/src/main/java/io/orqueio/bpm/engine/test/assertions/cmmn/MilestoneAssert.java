@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.assertions.cmmn;
+package io.orqueio.bpm.engine.test.assertions.cmmn;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.runtime.CaseExecution;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.runtime.CaseExecution;
 
 public class MilestoneAssert extends AbstractCaseAssert<MilestoneAssert, CaseExecution> {
 

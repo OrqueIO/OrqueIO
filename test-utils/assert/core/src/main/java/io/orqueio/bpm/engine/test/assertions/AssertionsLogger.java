@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.assertions;
+package io.orqueio.bpm.engine.test.assertions;
 
-import org.camunda.bpm.engine.runtime.ActivityInstance;
-import org.camunda.bpm.engine.runtime.TransitionInstance;
-import org.camunda.commons.logging.BaseLogger;
+import io.orqueio.bpm.engine.runtime.ActivityInstance;
+import io.orqueio.bpm.engine.runtime.TransitionInstance;
+import io.orqueio.commons.logging.BaseLogger;
 
 public class AssertionsLogger extends BaseLogger {
 
   public static final AssertionsLogger INSTANCE = BaseLogger.createLogger(
-      AssertionsLogger.class, "BPM_ASSERT", "org.camunda.bpm.engine.test.assertions", "00");
+      AssertionsLogger.class, "BPM_ASSERT", "io.orqueio.bpm.engine.test.assertions", "00");
 
   public void collectTransitionInstances(ActivityInstance activityInstance) {
     logDebug("001", "Collecting transition instances for activity instance '{}' at activity with ID '{}' and name '{}'",

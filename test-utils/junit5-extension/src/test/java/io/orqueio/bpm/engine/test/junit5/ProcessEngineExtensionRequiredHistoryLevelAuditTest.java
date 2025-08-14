@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.junit5;
+package io.orqueio.bpm.engine.test.junit5;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import org.camunda.bpm.engine.ProcessEngineConfiguration;
-import org.camunda.bpm.engine.test.RequiredHistoryLevel;
+import io.orqueio.bpm.engine.ProcessEngineConfiguration;
+import io.orqueio.bpm.engine.test.RequiredHistoryLevel;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 

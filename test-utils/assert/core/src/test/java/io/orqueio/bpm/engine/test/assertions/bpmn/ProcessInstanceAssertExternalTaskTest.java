@@ -14,22 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.assertions.bpmn;
+package io.orqueio.bpm.engine.test.assertions.bpmn;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.camunda.bpm.engine.test.assertions.bpmn.BpmnAwareTests.assertThat;
-import static org.camunda.bpm.engine.test.assertions.bpmn.BpmnAwareTests.complete;
-import static org.camunda.bpm.engine.test.assertions.bpmn.BpmnAwareTests.externalTask;
-import static org.camunda.bpm.engine.test.assertions.bpmn.BpmnAwareTests.externalTaskQuery;
-import static org.camunda.bpm.engine.test.assertions.bpmn.BpmnAwareTests.runtimeService;
+import static io.orqueio.bpm.engine.test.assertions.bpmn.BpmnAwareTests.assertThat;
+import static io.orqueio.bpm.engine.test.assertions.bpmn.BpmnAwareTests.complete;
+import static io.orqueio.bpm.engine.test.assertions.bpmn.BpmnAwareTests.externalTask;
+import static io.orqueio.bpm.engine.test.assertions.bpmn.BpmnAwareTests.externalTaskQuery;
+import static io.orqueio.bpm.engine.test.assertions.bpmn.BpmnAwareTests.runtimeService;
 
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.externaltask.ExternalTaskQuery;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.engine.test.ProcessEngineRule;
-import org.camunda.bpm.engine.test.assertions.helpers.Failure;
-import org.camunda.bpm.engine.test.assertions.helpers.ProcessAssertTestCase;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.externaltask.ExternalTaskQuery;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.test.ProcessEngineRule;
+import io.orqueio.bpm.engine.test.assertions.helpers.Failure;
+import io.orqueio.bpm.engine.test.assertions.helpers.ProcessAssertTestCase;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -65,7 +65,7 @@ public class ProcessInstanceAssertExternalTaskTest extends ProcessAssertTestCase
     } catch (ProcessEngineException pe) {
       // Then
       assertThat(pe)
-        .hasStackTraceContaining("org.camunda.bpm.engine.impl.AbstractQuery.executeSingleResult");
+        .hasStackTraceContaining("io.orqueio.bpm.engine.impl.AbstractQuery.executeSingleResult");
     }
   }
 
@@ -107,7 +107,7 @@ public class ProcessInstanceAssertExternalTaskTest extends ProcessAssertTestCase
     } catch (ProcessEngineException pe) {
       // Then
       assertThat(pe)
-        .hasStackTraceContaining("org.camunda.bpm.engine.impl.AbstractQuery.executeSingleResult");
+        .hasStackTraceContaining("io.orqueio.bpm.engine.impl.AbstractQuery.executeSingleResult");
     }
   }
 
@@ -138,7 +138,7 @@ public class ProcessInstanceAssertExternalTaskTest extends ProcessAssertTestCase
     } catch (ProcessEngineException pe) {
       // Then
       assertThat(pe)
-      .hasStackTraceContaining("org.camunda.bpm.engine.impl.AbstractQuery.executeSingleResult");
+      .hasStackTraceContaining("io.orqueio.bpm.engine.impl.AbstractQuery.executeSingleResult");
     }
   }
 

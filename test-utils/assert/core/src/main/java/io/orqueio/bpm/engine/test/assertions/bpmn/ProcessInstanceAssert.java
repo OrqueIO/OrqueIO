@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.assertions.bpmn;
+package io.orqueio.bpm.engine.test.assertions.bpmn;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,23 +28,23 @@ import org.assertj.core.api.Assertions;
 import org.assertj.core.api.ListAssert;
 import org.assertj.core.api.MapAssert;
 import org.assertj.core.util.Lists;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.externaltask.ExternalTaskQuery;
-import org.camunda.bpm.engine.history.HistoricActivityInstance;
-import org.camunda.bpm.engine.history.HistoricActivityInstanceQuery;
-import org.camunda.bpm.engine.history.HistoricProcessInstanceQuery;
-import org.camunda.bpm.engine.history.HistoricVariableInstance;
-import org.camunda.bpm.engine.history.HistoricVariableInstanceQuery;
-import org.camunda.bpm.engine.repository.ProcessDefinition;
-import org.camunda.bpm.engine.repository.ProcessDefinitionQuery;
-import org.camunda.bpm.engine.runtime.ActivityInstance;
-import org.camunda.bpm.engine.runtime.Execution;
-import org.camunda.bpm.engine.runtime.ExecutionQuery;
-import org.camunda.bpm.engine.runtime.JobQuery;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.runtime.ProcessInstanceQuery;
-import org.camunda.bpm.engine.task.TaskQuery;
-import org.camunda.bpm.engine.test.assertions.AssertionsLogger;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.externaltask.ExternalTaskQuery;
+import io.orqueio.bpm.engine.history.HistoricActivityInstance;
+import io.orqueio.bpm.engine.history.HistoricActivityInstanceQuery;
+import io.orqueio.bpm.engine.history.HistoricProcessInstanceQuery;
+import io.orqueio.bpm.engine.history.HistoricVariableInstance;
+import io.orqueio.bpm.engine.history.HistoricVariableInstanceQuery;
+import io.orqueio.bpm.engine.repository.ProcessDefinition;
+import io.orqueio.bpm.engine.repository.ProcessDefinitionQuery;
+import io.orqueio.bpm.engine.runtime.ActivityInstance;
+import io.orqueio.bpm.engine.runtime.Execution;
+import io.orqueio.bpm.engine.runtime.ExecutionQuery;
+import io.orqueio.bpm.engine.runtime.JobQuery;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.runtime.ProcessInstanceQuery;
+import io.orqueio.bpm.engine.task.TaskQuery;
+import io.orqueio.bpm.engine.test.assertions.AssertionsLogger;
 
 /**
  * Assertions for a {@link ProcessInstance}.
@@ -494,7 +494,7 @@ public class ProcessInstanceAssert extends AbstractProcessAssert<ProcessInstance
    *
    * @return  TaskAssert inspecting the only task available. Inspecting a
    *          'null' Task in case no such Task is available.
-   * @throws  org.camunda.bpm.engine.ProcessEngineException in case more
+   * @throws  io.orqueio.bpm.engine.ProcessEngineException in case more
    *          than one task is delivered by the query (after being narrowed
    *          to actual ProcessInstance)
    */
@@ -511,7 +511,7 @@ public class ProcessInstanceAssert extends AbstractProcessAssert<ProcessInstance
    *          tasks
    * @return  TaskAssert inspecting the only task available. Inspecting a
    *          'null' Task in case no such Task is available.
-   * @throws  org.camunda.bpm.engine.ProcessEngineException in case more than one
+   * @throws  io.orqueio.bpm.engine.ProcessEngineException in case more than one
    *          task is delivered by the query (after being narrowed to actual
    *          ProcessInstance)
    */
@@ -535,7 +535,7 @@ public class ProcessInstanceAssert extends AbstractProcessAssert<ProcessInstance
    * @return  TaskAssert inspecting the only task resulting from the given
    *          search. Inspecting a 'null' Task in case no such Task is
    *          available.
-   * @throws  org.camunda.bpm.engine.ProcessEngineException in case more than
+   * @throws  io.orqueio.bpm.engine.ProcessEngineException in case more than
    *          one task is delivered by the query (after being narrowed to
    *          actual ProcessInstance)
    */
@@ -554,7 +554,7 @@ public class ProcessInstanceAssert extends AbstractProcessAssert<ProcessInstance
    *
    * @return  ExternalTaskAssert inspecting the only external task available. Inspecting a
    *          'null' external task in case no such external task is available.
-   * @throws  org.camunda.bpm.engine.ProcessEngineException in case more
+   * @throws  io.orqueio.bpm.engine.ProcessEngineException in case more
    *          than one external task is delivered by the query (after being narrowed
    *          to actual ProcessInstance)
    */
@@ -571,7 +571,7 @@ public class ProcessInstanceAssert extends AbstractProcessAssert<ProcessInstance
    *          tasks
    * @return  ExternalTaskAssert inspecting the only external task available. Inspecting a
    *          'null' external task in case no such external task is available.
-   * @throws  org.camunda.bpm.engine.ProcessEngineException in case more than one
+   * @throws  io.orqueio.bpm.engine.ProcessEngineException in case more than one
    *          external task is delivered by the query (after being narrowed to actual
    *          ProcessInstance)
    */
@@ -595,7 +595,7 @@ public class ProcessInstanceAssert extends AbstractProcessAssert<ProcessInstance
    * @return  ExternalTaskAssert inspecting the only external task resulting from the given
    *          search. Inspecting a 'null' external task in case no such external task is
    *          available.
-   * @throws  org.camunda.bpm.engine.ProcessEngineException in case more than
+   * @throws  io.orqueio.bpm.engine.ProcessEngineException in case more than
    *          one external task is delivered by the query (after being narrowed to
    *          actual ProcessInstance)
    */
@@ -615,7 +615,7 @@ public class ProcessInstanceAssert extends AbstractProcessAssert<ProcessInstance
    *
    * @return  ProcessInstanceAssert inspecting the only called process instance available. Inspecting a
    *          'null' process instance in case no such Task is available.
-   * @throws  org.camunda.bpm.engine.ProcessEngineException in case more
+   * @throws  io.orqueio.bpm.engine.ProcessEngineException in case more
    *          than one process instance is delivered by the query (after being narrowed
    *          to actual ProcessInstance)
    */
@@ -632,7 +632,7 @@ public class ProcessInstanceAssert extends AbstractProcessAssert<ProcessInstance
    *          process instances
    * @return  ProcessInstanceAssert inspecting the only such process instance available.
    *          Inspecting a 'null' ProcessInstance in case no such ProcessInstance is available.
-   * @throws  org.camunda.bpm.engine.ProcessEngineException in case more than one
+   * @throws  io.orqueio.bpm.engine.ProcessEngineException in case more than one
    *          process instance is delivered by the query (after being narrowed to actual
    *          ProcessInstance)
    */
@@ -652,7 +652,7 @@ public class ProcessInstanceAssert extends AbstractProcessAssert<ProcessInstance
    * @return  ProcessInstanceAssert inspecting the only such process instance resulting
    *          from the given search. Inspecting a 'null' ProcessInstance in case no such
    *          ProcessInstance is available.
-   * @throws  org.camunda.bpm.engine.ProcessEngineException in case more than
+   * @throws  io.orqueio.bpm.engine.ProcessEngineException in case more than
    *          one ProcessInstance is delivered by the query (after being narrowed to
    *          actual ProcessInstance)
    */
@@ -671,7 +671,7 @@ public class ProcessInstanceAssert extends AbstractProcessAssert<ProcessInstance
    *
    * @return  JobAssert inspecting the only job available. Inspecting
    *          a 'null' Job in case no such Job is available.
-   * @throws  org.camunda.bpm.engine.ProcessEngineException in case more
+   * @throws  io.orqueio.bpm.engine.ProcessEngineException in case more
    *          than one task is delivered by the query (after being narrowed
    *          to actual ProcessInstance)
    */
@@ -687,7 +687,7 @@ public class ProcessInstanceAssert extends AbstractProcessAssert<ProcessInstance
    * @param   activityId id narrowing down the search for jobs
    * @return  JobAssert inspecting the retrieved job. Inspecting a
    *          'null' Task in case no such Job is available.
-   * @throws  org.camunda.bpm.engine.ProcessEngineException in case more than one
+   * @throws  io.orqueio.bpm.engine.ProcessEngineException in case more than one
    *          job is delivered by the query (after being narrowed to actual
    *          ProcessInstance)
    */
@@ -710,7 +710,7 @@ public class ProcessInstanceAssert extends AbstractProcessAssert<ProcessInstance
    * @return  JobAssert inspecting the only job resulting from the
    *          given search. Inspecting a 'null' job in case no such job
    *          is available.
-   * @throws  org.camunda.bpm.engine.ProcessEngineException in case more
+   * @throws  io.orqueio.bpm.engine.ProcessEngineException in case more
    *          than one job is delivered by the query (after being narrowed
    *          to actual ProcessInstance)
    */

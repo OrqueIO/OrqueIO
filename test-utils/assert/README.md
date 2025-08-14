@@ -40,7 +40,7 @@ Please note that if you use [Spring Boot](https://spring.io/projects/spring-boot
 Create your test case just as described in the [OrqueIO Testing Guide](https://docs.camunda.org/manual/latest/user-guide/testing/) and add OrqueIO Assert by statically importing it in your test class:
 
 ```groovy  
-import static org.camunda.bpm.engine.test.assertions.ProcessEngineTests.*;
+import static io.orqueio.bpm.engine.test.assertions.ProcessEngineTests.*;
 ```
 
 3. Start using the assertions in your test methods
@@ -57,7 +57,7 @@ assertThat(processInstance).isStarted()
 In case you want to combine OrqueIO Assert with the assertions provided by AssertJ, your imports should look like this:
 ```groovy  
 import static org.assertj.core.api.Assertions.*;
-import static org.camunda.bpm.engine.test.assertions.ProcessEngineTests.*;
+import static io.orqueio.bpm.engine.test.assertions.ProcessEngineTests.*;
 ```
 
 ## Credits

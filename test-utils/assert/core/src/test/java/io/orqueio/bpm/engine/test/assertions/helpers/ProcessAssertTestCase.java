@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.assertions.helpers;
+package io.orqueio.bpm.engine.test.assertions.helpers;
 
 
 import static org.assertj.core.api.Assertions.fail;
-import static org.camunda.bpm.engine.test.assertions.bpmn.AbstractAssertions.reset;
+import static io.orqueio.bpm.engine.test.assertions.bpmn.AbstractAssertions.reset;
 
 import org.assertj.core.util.Lists;
 import org.junit.After;

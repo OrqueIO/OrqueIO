@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.archunit;
+package io.orqueio.bpm.engine.test.archunit;
 
 import com.tngtech.archunit.core.importer.ImportOption;
 import com.tngtech.archunit.junit.AnalyzeClasses;
@@ -31,7 +31,7 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
         ImportOption.DoNotIncludeJars.class,
         ImportOption.DoNotIncludeTests.class
     },
-    packages = "org.camunda.bpm"
+    packages = "io.orqueio.bpm"
 )
 public class ArchRulesTest {
 

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.assertions.bpmn;
+package io.orqueio.bpm.engine.test.assertions.bpmn;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
@@ -25,7 +25,7 @@ import java.lang.reflect.ParameterizedType;
 import java.util.Arrays;
 import java.util.Iterator;
 
-import org.camunda.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.ProcessEngine;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

@@ -14,25 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.assertions.cmmn;
+package io.orqueio.bpm.engine.test.assertions.cmmn;
 
-import static org.camunda.bpm.engine.test.assertions.bpmn.BpmnAwareTests.complete;
-import static org.camunda.bpm.engine.test.assertions.bpmn.BpmnAwareTests.processInstanceQuery;
-import static org.camunda.bpm.engine.test.assertions.bpmn.BpmnAwareTests.task;
-import static org.camunda.bpm.engine.test.assertions.cmmn.CmmnAwareTests.assertThat;
-import static org.camunda.bpm.engine.test.assertions.cmmn.CmmnAwareTests.caseExecution;
-import static org.camunda.bpm.engine.test.assertions.cmmn.CmmnAwareTests.caseInstanceQuery;
-import static org.camunda.bpm.engine.test.assertions.cmmn.CmmnAwareTests.caseService;
-import static org.camunda.bpm.engine.test.assertions.cmmn.CmmnAwareTests.complete;
-import static org.camunda.bpm.engine.test.assertions.cmmn.CmmnAwareTests.disable;
-import static org.camunda.bpm.engine.test.assertions.cmmn.CmmnAwareTests.manuallyStart;
+import static io.orqueio.bpm.engine.test.assertions.bpmn.BpmnAwareTests.complete;
+import static io.orqueio.bpm.engine.test.assertions.bpmn.BpmnAwareTests.processInstanceQuery;
+import static io.orqueio.bpm.engine.test.assertions.bpmn.BpmnAwareTests.task;
+import static io.orqueio.bpm.engine.test.assertions.cmmn.CmmnAwareTests.assertThat;
+import static io.orqueio.bpm.engine.test.assertions.cmmn.CmmnAwareTests.caseExecution;
+import static io.orqueio.bpm.engine.test.assertions.cmmn.CmmnAwareTests.caseInstanceQuery;
+import static io.orqueio.bpm.engine.test.assertions.cmmn.CmmnAwareTests.caseService;
+import static io.orqueio.bpm.engine.test.assertions.cmmn.CmmnAwareTests.complete;
+import static io.orqueio.bpm.engine.test.assertions.cmmn.CmmnAwareTests.disable;
+import static io.orqueio.bpm.engine.test.assertions.cmmn.CmmnAwareTests.manuallyStart;
 
-import org.camunda.bpm.engine.runtime.CaseExecution;
-import org.camunda.bpm.engine.runtime.CaseInstance;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.engine.test.ProcessEngineRule;
-import org.camunda.bpm.engine.test.assertions.helpers.ProcessAssertTestCase;
+import io.orqueio.bpm.engine.runtime.CaseExecution;
+import io.orqueio.bpm.engine.runtime.CaseInstance;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.test.ProcessEngineRule;
+import io.orqueio.bpm.engine.test.assertions.helpers.ProcessAssertTestCase;
 import org.junit.Rule;
 import org.junit.Test;
 

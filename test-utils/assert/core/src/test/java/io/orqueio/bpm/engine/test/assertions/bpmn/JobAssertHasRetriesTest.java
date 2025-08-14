@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.assertions.bpmn;
+package io.orqueio.bpm.engine.test.assertions.bpmn;
 
-import static org.camunda.bpm.engine.test.assertions.bpmn.BpmnAwareTests.assertThat;
-import static org.camunda.bpm.engine.test.assertions.bpmn.BpmnAwareTests.jobQuery;
-import static org.camunda.bpm.engine.test.assertions.bpmn.BpmnAwareTests.runtimeService;
+import static io.orqueio.bpm.engine.test.assertions.bpmn.BpmnAwareTests.assertThat;
+import static io.orqueio.bpm.engine.test.assertions.bpmn.BpmnAwareTests.jobQuery;
+import static io.orqueio.bpm.engine.test.assertions.bpmn.BpmnAwareTests.runtimeService;
 
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.engine.test.ProcessEngineRule;
-import org.camunda.bpm.engine.test.assertions.helpers.Failure;
-import org.camunda.bpm.engine.test.assertions.helpers.ProcessAssertTestCase;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.test.ProcessEngineRule;
+import io.orqueio.bpm.engine.test.assertions.helpers.Failure;
+import io.orqueio.bpm.engine.test.assertions.helpers.ProcessAssertTestCase;
 import org.junit.Rule;
 import org.junit.Test;
 

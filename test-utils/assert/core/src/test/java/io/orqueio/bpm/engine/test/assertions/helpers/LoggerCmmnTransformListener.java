@@ -14,19 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.assertions.helpers;
+package io.orqueio.bpm.engine.test.assertions.helpers;
 
-import org.camunda.bpm.engine.delegate.CaseExecutionListener;
-import org.camunda.bpm.engine.delegate.DelegateCaseExecution;
-import org.camunda.bpm.engine.impl.cmmn.model.CmmnActivity;
-import org.camunda.bpm.engine.impl.cmmn.transformer.AbstractCmmnTransformListener;
-import org.camunda.bpm.model.cmmn.instance.CaseTask;
-import org.camunda.bpm.model.cmmn.instance.HumanTask;
-import org.camunda.bpm.model.cmmn.instance.Milestone;
-import org.camunda.bpm.model.cmmn.instance.PlanItem;
-import org.camunda.bpm.model.cmmn.instance.ProcessTask;
-import org.camunda.bpm.model.cmmn.instance.Stage;
-import org.camunda.bpm.model.cmmn.instance.Task;
+import io.orqueio.bpm.engine.delegate.CaseExecutionListener;
+import io.orqueio.bpm.engine.delegate.DelegateCaseExecution;
+import io.orqueio.bpm.engine.impl.cmmn.model.CmmnActivity;
+import io.orqueio.bpm.engine.impl.cmmn.transformer.AbstractCmmnTransformListener;
+import io.orqueio.bpm.model.cmmn.instance.CaseTask;
+import io.orqueio.bpm.model.cmmn.instance.HumanTask;
+import io.orqueio.bpm.model.cmmn.instance.Milestone;
+import io.orqueio.bpm.model.cmmn.instance.PlanItem;
+import io.orqueio.bpm.model.cmmn.instance.ProcessTask;
+import io.orqueio.bpm.model.cmmn.instance.Stage;
+import io.orqueio.bpm.model.cmmn.instance.Task;
 
 /**
  * Created by Malte on 08.09.2015.

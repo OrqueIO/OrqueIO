@@ -14,33 +14,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.assertions.bpmn;
+package io.orqueio.bpm.engine.test.assertions.bpmn;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.camunda.bpm.engine.test.assertions.bpmn.BpmnAwareTests.DEFAULT_WORKER_EXTERNAL_TASK;
-import static org.camunda.bpm.engine.test.assertions.bpmn.BpmnAwareTests.assertThat;
-import static org.camunda.bpm.engine.test.assertions.bpmn.BpmnAwareTests.complete;
-import static org.camunda.bpm.engine.test.assertions.bpmn.BpmnAwareTests.externalTask;
-import static org.camunda.bpm.engine.test.assertions.bpmn.BpmnAwareTests.externalTaskQuery;
-import static org.camunda.bpm.engine.test.assertions.bpmn.BpmnAwareTests.fetchAndLock;
-import static org.camunda.bpm.engine.test.assertions.bpmn.BpmnAwareTests.historyService;
-import static org.camunda.bpm.engine.test.assertions.bpmn.BpmnAwareTests.runtimeService;
-import static org.camunda.bpm.engine.test.assertions.bpmn.BpmnAwareTests.withVariables;
+import static io.orqueio.bpm.engine.test.assertions.bpmn.BpmnAwareTests.DEFAULT_WORKER_EXTERNAL_TASK;
+import static io.orqueio.bpm.engine.test.assertions.bpmn.BpmnAwareTests.assertThat;
+import static io.orqueio.bpm.engine.test.assertions.bpmn.BpmnAwareTests.complete;
+import static io.orqueio.bpm.engine.test.assertions.bpmn.BpmnAwareTests.externalTask;
+import static io.orqueio.bpm.engine.test.assertions.bpmn.BpmnAwareTests.externalTaskQuery;
+import static io.orqueio.bpm.engine.test.assertions.bpmn.BpmnAwareTests.fetchAndLock;
+import static io.orqueio.bpm.engine.test.assertions.bpmn.BpmnAwareTests.historyService;
+import static io.orqueio.bpm.engine.test.assertions.bpmn.BpmnAwareTests.runtimeService;
+import static io.orqueio.bpm.engine.test.assertions.bpmn.BpmnAwareTests.withVariables;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.exception.NotFoundException;
-import org.camunda.bpm.engine.externaltask.ExternalTask;
-import org.camunda.bpm.engine.externaltask.LockedExternalTask;
-import org.camunda.bpm.engine.history.HistoricExternalTaskLog;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.engine.test.ProcessEngineRule;
-import org.camunda.bpm.engine.test.assertions.helpers.Failure;
-import org.camunda.bpm.engine.test.assertions.helpers.ProcessAssertTestCase;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.exception.NotFoundException;
+import io.orqueio.bpm.engine.externaltask.ExternalTask;
+import io.orqueio.bpm.engine.externaltask.LockedExternalTask;
+import io.orqueio.bpm.engine.history.HistoricExternalTaskLog;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.test.ProcessEngineRule;
+import io.orqueio.bpm.engine.test.assertions.helpers.Failure;
+import io.orqueio.bpm.engine.test.assertions.helpers.ProcessAssertTestCase;
 import org.junit.Rule;
 import org.junit.Test;
 
