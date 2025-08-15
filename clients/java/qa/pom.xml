@@ -5,14 +5,14 @@
     <modelVersion>4.0.0</modelVersion>
     <name>OrqueIO - Java External Task Client - QA</name>
 
-    <groupId>org.orqueio.bpm.qa</groupId>
+    <groupId>io.orqueio.bpm.qa</groupId>
     <artifactId>orqueio-external-task-client-qa</artifactId>
 
     <packaging>pom</packaging>
 
 
     <parent>
-        <groupId>org.orqueio.bpm</groupId>
+        <groupId>io.orqueio.bpm</groupId>
         <artifactId>orqueio-external-task-client-root</artifactId>
         <version>7.24.0-SNAPSHOT</version>
     </parent>

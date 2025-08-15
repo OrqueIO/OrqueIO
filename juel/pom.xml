@@ -70,7 +70,7 @@
                             <relocations>
                                 <relocation>
                                     <pattern>jakarta.el</pattern>
-                                    <shadedPattern>org.orqueio.bpm.impl.juel.jakarta.el</shadedPattern>
+                                    <shadedPattern>io.orqueio.bpm.impl.juel.jakarta.el</shadedPattern>
                                 </relocation>
                             </relocations>
                         </configuration>

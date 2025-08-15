@@ -214,7 +214,7 @@
                 </goals>
                 <phase>process-test-classes</phase>
                 <configuration>
-                  <mainClass>org.orqueio.bpm.qa.rolling.update.TestNewEngineMain</mainClass>
+                  <mainClass>io.orqueio.bpm.qa.rolling.update.TestNewEngineMain</mainClass>
                   <includePluginDependencies>false</includePluginDependencies>
                 </configuration>
               </execution>

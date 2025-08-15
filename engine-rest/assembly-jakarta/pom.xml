@@ -110,7 +110,7 @@
                                 <manifestEntries>
                                     <!-- module dependencies for deployment on wildfly  -->
                                     <Dependencies>
-                                        org.orqueio.bpm.orqueio-engine,org.orqueio.bpm.dmn.orqueio-engine-dmn,org.orqueio.commons.orqueio-commons-logging,org.orqueio.spin.orqueio-spin-core,org.orqueio.bpm.juel.orqueio-juel
+                                        io.orqueio.bpm.orqueio-engine,io.orqueio.bpm.dmn.orqueio-engine-dmn,io.orqueio.commons.orqueio-commons-logging,io.orqueio.spin.orqueio-spin-core,io.orqueio.bpm.juel.orqueio-juel
                                         services,org.graalvm.js.js-scriptengine services
                                     </Dependencies>
                                 </manifestEntries>
