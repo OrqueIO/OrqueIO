@@ -1,7 +1,7 @@
 # Vendor
 
 The scripts located in this directory are dependencies of the
-[camunda-commons-ui](http://github.com/camunda/camunda-commons-ui)
+[orqueio-commons-ui](http://github.com/camunda/camunda-commons-ui)
 and were downloaded manually.
 
 

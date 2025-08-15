@@ -248,7 +248,7 @@ Example for command line parameters:
 ```Shell
 mvn clean install -Pbenchmark,mysql \
                   -Ddatabase.driver=com.mysql.jdbc.Driver \
-                  -Ddatabase.url=jdbc:mysql://localhost:3306:camunda \
+                  -Ddatabase.url=jdbc:mysql://localhost:3306:orqueio \
                   -Ddatabase.username=oscar \
                   -Ddatabase.password=s3cret \
 ```

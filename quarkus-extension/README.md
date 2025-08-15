@@ -1,27 +1,23 @@
-# Camunda Platform Quarkus Extensions
+# OrqueIO Quarkus Extensions
 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.camunda.bpm.quarkus/camunda-bpm-quarkus-engine/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.camunda.bpm.quarkus/camunda-bpm-quarkus-engine) [![camunda manual latest](https://img.shields.io/badge/manual-latest-brown.svg)](https://docs.camunda.org/manual/develop/user-guide/quarkus-integration/)
-
-This sub-project provides Camunda Platform Quarkus Extensions that allow you to add behavior to your Quarkus 
+This sub-project provides OrqueIO Quarkus Extensions that allow you to add behavior to your Quarkus 
 application by adding dependencies to the classpath.
 
-You can find the documentation on the Camunda Platform Quarkus Extensions 
-[here](https://docs.camunda.org/manual/develop/user-guide/quarkus-integration/).
 
 We also provide some useful examples at our 
-[camunda-bpm-examples](https://github.com/camunda/camunda-bpm-examples/tree/master/quarkus-extension) repository.
+[orqueio-bpm-examples](https://github.com/orqueio/orqueio/tree/master/quarkus-extension) repository.
 
 ```xml
 <dependency>
   <dependency>
     <groupId>io.orqueio.bpm.quarkus</groupId>
-    <artifactId>camunda-bpm-quarkus-engine</artifactId>
-    <version>${version.camunda}</version><!-- place Camunda version here -->
+    <artifactId>orqueio-bpm-quarkus-engine</artifactId>
+    <version>${version.orqueio}</version><!-- place orqueio version here -->
   </dependency>
 </dependency>
 ```
 
-To configure a Camunda Platform Quarkus extension, you can use an `application.properties` file. It
+To configure a OrqueIO Quarkus extension, you can use an `application.properties` file. It
 can look like the following:
 
 ```properties
@@ -56,7 +52,7 @@ quarkus.orqueio.datasource=my-datasource
 ---------
 #### Quarkus and JUEL bytecode incompatibilities
 
-**Context**: JUEL was built with a different Java version. Quarkus won't pick up new build changes. For more information, check #3419 ([comment](https://github.com/camunda/camunda-bpm-platform/issues/3419#issuecomment-1720916174))
+**Context**: JUEL was built with a different Java version. Quarkus won't pick up new build changes.
 
 **Solution**: If you notice juel exceptions like below, delete `/juel/target` folder and run the Quarkus build again.
 

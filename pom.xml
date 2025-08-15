@@ -3,7 +3,7 @@
 
   <parent>
     <groupId>io.orqueio</groupId>
-    <artifactId>release-parent</artifactId>
+    <artifactId>orqueio-bpm-release-parent</artifactId>
     <version>1.0</version>
     <!-- do not remove empty tag - http://jira.codehaus.org/browse/MNG-4687 -->
     <relativePath />

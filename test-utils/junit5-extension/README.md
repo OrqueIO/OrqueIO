@@ -29,14 +29,7 @@ For further access provide a field where the process engine gets injected:
     public ProcessEngine processEngine; 
 ```
 
-Or register the extension from the builder:
 
-```java
-    @RegisterExtension
-    ProcessEngineExtension extension = ProcessEngineExtension.builder()
-      .configurationResource("audithistory.camunda.cfg.xml")
-      .build();
-```
 
 and access the process engine from the extension object:
 
@@ -49,7 +42,7 @@ If you don't want to create a configuration file, you can add a process engine, 
 ```java
     public ProcessEngine myProcessEngine = ProcessEngineConfiguration
         .createStandaloneInMemProcessEngineConfiguration()
-        .setJdbcUrl("jdbc:h2:mem:camunda;DB_CLOSE_DELAY=1000")
+        .setJdbcUrl("jdbc:h2:mem:orqueio;DB_CLOSE_DELAY=1000")
         .buildProcessEngine();
     
     @RegisterExtension

@@ -1,4 +1,4 @@
-# commons-ui-auth
+# camunda-ui-auth
 
 Authentication module for camunda webapps.
 

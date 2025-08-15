@@ -1,22 +1,22 @@
-# Camunda Webapp
+# OrqueIO Webapp
 
-This is the Camunda Platform web application source.
+This is the OrqueIO web application source.
 Clean, package and install it via [Maven](https://maven.apache.org/).
 
 ## Structure of this project
 
 The structure is as follows:
 
-* `assembly` - Java sources and tests for the Camunda web application based on `javax` namespace.
-* `assembly-jakarta` - Java sources and tests for the Camunda web application based on `jakarta` namespace.
+* `assembly` - Java sources and tests for the OrqueIO web application based on `javax` namespace.
+* `assembly-jakarta` - Java sources and tests for the OrqueIO web application based on `jakarta` namespace.
   * This module is created from the `assembly` module via code transformation.
-* `frontend` - HTML, CSS and Javascript sources as well as Plugins and tests for the Camunda webapplications Cockpit, Tasklist and Admin.
+* `frontend` - HTML, CSS and Javascript sources as well as Plugins and tests for the OrqueIO webapplications Cockpit, Tasklist and Admin.
 
 ## FRONTEND
 
 ### UI
 
-There are 3 web applications available for the Camunda Platform :
+There are 3 web applications available for the OrqueIO :
 
 * __cockpit__: an administration interface for processes and decisions
 * __tasklist__: provides an interface to process user tasks
@@ -24,30 +24,18 @@ There are 3 web applications available for the Camunda Platform :
 
 The webapps above are relying on 2 libraries:
 
-* __camunda-bpm-sdk-js__: provides tools for developers who want interact with the platform using Javascript
-* __camunda-commons-ui__: is a set of shared scripts, templates and assets, used in the different webapps
+* __orqueio-bpm-sdk-js__: provides tools for developers who want interact with the platform using Javascript
+* __orqueio-commons-ui__: is a set of shared scripts, templates and assets, used in the different webapps
 
 
 #### Plugins
 
 Parts of the web applications can be extended using plugins.
 
-See [plugin development guide](http://docs.camunda.org/latest/real-life/how-to/#cockpit-how-to-develop-a-cockpit-plugin) for details.
 
 #### Translations
 
-English and german translations are located in the `ui/<app>/client/locales` folders.  
-Translations for other languages are available in the [camunda-7-webapp-translations](https://github.com/camunda-community-hub/camunda-7-webapp-translations) repository.
-
-### Libraries
-
-#### [camunda-bpm-sdk-js](https://github.com/camunda/camunda-bpm-platform/tree/master/webapps/frontend/camunda-bpm-sdk-js)
-
-Has tools to work with the REST API and forms (included transitively via camunda-commons-ui).
-
-#### [camunda-commons-ui](https://github.com/camunda/camunda-bpm-platform/tree/master/webapps/frontend/camunda-commons-ui)
-
-Contains resources like images, [`.less`](http://lesscss.org) stylesheets as well as some [angular.js](http://angularjs.org) modules.
+English and german translations are located in the `ui/<app>/client/locales` folders. 
 
 ### Prerequisite
 
@@ -57,7 +45,7 @@ You need [node.js](http://nodejs.org) >= 17 and npm.
 
 #### Adjusting Maven Settings
 
-See https://github.com/camunda/camunda-bpm-platform/blob/master/CONTRIBUTING.md#build-from-source
+See https://github.com/orqueio/orqueio/blob/master/CONTRIBUTING.md#build-from-source
 
 #### Using Webpack
 
@@ -65,8 +53,8 @@ Build the web apps using Webpack:
 
 ```sh
 # cd <path to your workspace>
-git clone git@github.com:camunda/camunda-bpm-platform.git
-cd camunda-bpm-platform/webapps/frontend
+git clone git@github.com:orqueio/orqueio.git
+cd orqueio/webapps/frontend
 npm install
 npm start
 ```
@@ -74,7 +62,7 @@ npm start
 To start the server in development mode, call
 
 ```sh
-cd camunda-bpm-platform/webapps/assembly
+cd orqueio/webapps/assembly
 mvn jetty:run -Pdevelop
 ```
 
@@ -87,7 +75,7 @@ You can now start developing using the `npm run start` command in the frontend d
 In order to run the Jakarta Webapps start Jetty the same way from the `assembly-jakarta` folder
 
 ```sh
-cd camunda-bpm-platform/webapps/assembly
+cd orqueio/webapps/assembly
 mvn jetty:run -Pdevelop
 npm run start
 ```
@@ -148,14 +136,8 @@ The supported browsers are:
 
 ## Contributing
 
-Have a look at our [contribution guide](https://github.com/camunda/camunda-bpm-platform/blob/master/CONTRIBUTING.md) for how to contribute to this repository.
+Have a look at our [contribution guide](https://github.com/orqueio/orqueio/blob/master/CONTRIBUTING.md) for how to contribute to this repository.
 
-
-## Help and support
-
-* [Documentation](http://docs.camunda.org/manual/latest/)
-* [Forum](https://forum.camunda.org)
-* [Stackoverflow](https://stackoverflow.com/questions/tagged/camunda)
 
 ## License
 

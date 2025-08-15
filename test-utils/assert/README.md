@@ -15,7 +15,7 @@ complete(task(instance), withVariables("approved", true));
 
 ## Compatibility
 
-OrqueIO Assert works with the corresponding version of OrqueIO (i.e., OrqueIO Assert 7.17.0 is compatible to OrqueIO 7.17.0). The compatibility between earlier versions are as shown [in the documentation](https://docs.camunda.org/manual/latest/user-guide/testing/#assertions-version-compatibility).
+OrqueIO Assert works with the corresponding version of OrqueIO (i.e., OrqueIO Assert 7.17.0 is compatible to OrqueIO 7.17.0).
 OrqueIO Assert works with multiple Java versions (1.8+). All of this is continuously verified by executing around 500 test cases. 
 
 ## Get started
@@ -26,18 +26,14 @@ OrqueIO Assert works with multiple Java versions (1.8+). All of this is continuo
 <dependency>
     <groupId>io.orqueio.bpm</groupId>
     <artifactId>orqueio-bpm-assert</artifactId>
-    <version>${camunda.platform.version}</version>
+    <version>${orqueio.version}</version>
     <scope>test</scope>
 </dependency>
 ```
 
-Additionally, [AssertJ](https://assertj.github.io/doc/) needs to be provided as a dependency with a version that is compatible with the one documented in the [compatibility matrix](https://docs.camunda.org/manual/latest/user-guide/testing/#assertions-version-compatibility).
-
-Please note that if you use [Spring Boot](https://spring.io/projects/spring-boot) or the [Camunda Spring Boot Starter](https://docs.camunda.org/manual/latest/user-guide/spring-boot-integration/) in your project, AssertJ is already included in your project's setup.
-
 2. Add a static import to your test class
 
-Create your test case just as described in the [OrqueIO Testing Guide](https://docs.camunda.org/manual/latest/user-guide/testing/) and add OrqueIO Assert by statically importing it in your test class:
+Create your test case and add OrqueIO Assert by statically importing it in your test class:
 
 ```groovy  
 import static io.orqueio.bpm.engine.test.assertions.ProcessEngineTests.*;
@@ -58,25 +54,4 @@ In case you want to combine OrqueIO Assert with the assertions provided by Asser
 ```groovy  
 import static org.assertj.core.api.Assertions.*;
 import static io.orqueio.bpm.engine.test.assertions.ProcessEngineTests.*;
-```
-
-## Credits
-
-The OrqueIO Assert project used to be the community extension, created and supported by
-
-<img src="http://camunda.github.io/camunda-bpm-assert/resources/images/community-award.png" align="right" width="76">
-
-[Martin Schimak](https://github.com/martinschimak) (plexiti GmbH)<a href="http://plexiti.com">
-<img src="https://plexiti.com/images/plexiti-transparent.png" align="right"></img></a><br>
-[Jan Galinski](https://github.com/jangalinski) (Holisticon AG)<br>
-[Martin Günther](https://github.com/margue) (Holisticon AG)<br>
-[Malte Sörensen](https://github.com/malteser) (Holisticon AG)<br>
-<a href="http://www.holisticon.de"><img src="https://www.holisticon.de/wp-content/uploads/2020/08/logo2016_black_242.png" align="right" /></a>[Simon Zambrovski](https://github.com/zambrovski) (Holisticon AG)
-
-
-... and [many others](https://github.com/camunda/camunda-bpm-assert/graphs/contributors).
-
-In 2014, the library won the **OrqueIO Community Award**.
-
-Starting from version 3.0.0 it was adopted as part of the OrqueIO.
-Starting from version 7.17.0 it was merged into the OrqueIO main repository.
+version 7.17.0 it was merged into the OrqueIO main repository.

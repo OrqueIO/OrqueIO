@@ -1,11 +1,8 @@
-camunda-connect
+OrqueIO-connect
 ===============
 
 <p>
-  <a href="https://camunda.com/">Home</a> |
-  <a href="https://docs.camunda.org/manual/latest/reference/connect/">Documentation</a> |
-  <a href="https://forum.camunda.org/">Forum</a> |
-  <a href="https://jira.camunda.com/browse/CAM">Issues</a> |
+  <a href="https://orqueio.io/">Home</a> |
   <a href="../LICENSE">License</a> |
   <a href="../CONTRIBUTING.md">Contribute</a>
 </p>
@@ -19,12 +16,12 @@ Simple API for connecting HTTP Services and other things.
 
 # Using a Connector
 
-Camunda Connect API aims at two usage scenarios, usage in a generic system such as Camunda Platform
-process engine and standalone usage via API. Please see the [official documentation](https://docs.camunda.org/manual/latest/reference/connect/) for more information.
+OrqueIO Connect API aims at two usage scenarios, usage in a generic system such as OrqueIO
+process engine and standalone usage via API.
 
 # Contributing
 
-Have a look at our [contribution guide](https://github.com/camunda/camunda-bpm-platform/blob/master/CONTRIBUTING.md) for how to contribute to this repository.
+Have a look at our [contribution guide](https://github.com/orqueio/orqueio/blob/master/CONTRIBUTING.md) for how to contribute to this repository.
 
 
 # License

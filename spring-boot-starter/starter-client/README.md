@@ -1,9 +1,6 @@
-# Camunda External Task Client as Spring Boot Starter
+# OrqueIO External Task Client as Spring Boot Starter
 
-This project provides a Spring Boot Starter that allows you to implement an External Task Worker for Camunda. It uses the Camunda REST API to fetch, lock, and complete External Service Tasks. It is based on the [Java External Task Client](../../clients/java).
-
-* [Documentation](https://docs.camunda.org/manual/develop/user-guide/ext-client/spring-boot-starter/)
-* [Examples](https://github.com/camunda/camunda-bpm-examples/tree/master/spring-boot-starter/external-task-client)
+This project provides a Spring Boot Starter that allows you to implement an External Task Worker for orqueio. It uses the orqueio REST API to fetch, lock, and complete External Service Tasks. It is based on the [Java External Task Client](../../clients/java).
 
 ## Dependency
 
@@ -22,7 +19,7 @@ You need this dependency to get started:
 You can configure the OrqueIO Runtime REST API endpoint and other properties in the `application.yml` file:
 
 ```yaml
-camunda.bpm.client:
+orqueio.bpm.client:
   base-url: http://localhost:8080/engine-rest
   subscriptions:
     creditScoreChecker:
@@ -72,4 +69,4 @@ public class SimpleConfiguration {
 
 ## Credits
 
-The Camunda External Task Client Spring Boot Starter project used to be a community extension initially created by [Oliver Steinhauer](https://github.com/osteinhauer).
+The OrqueIO External Task Client Spring Boot Starter project used to be a community extension initially created by [Oliver Steinhauer](https://github.com/osteinhauer).

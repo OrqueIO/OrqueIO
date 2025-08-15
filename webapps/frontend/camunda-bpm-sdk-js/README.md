@@ -47,9 +47,7 @@ grunt mochacli
 grunt watch:mochacli
 ```
 
-### Issues
-
-https://app.camunda.com/jira/browse/CAM/component/12351
+ 
 
 ## Releasing
 

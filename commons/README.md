@@ -1,20 +1,18 @@
-# camunda commons
-
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.camunda.commons/camunda-commons-bom/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.camunda.commons/camunda-commons-bom)
+# orqueio commons
 
 
-camunda commons is a collection of shared libraries used by camunda open source projects.
+OrqueIO commons is a collection of shared libraries used by OrqueIO open source projects.
 
 ## List of libraries
 
-* [camunda commons logging][logging]
-* [camunda commons utils][utils]
-* [camunda-bpm-platform][typed-values]
+* [orqueio commons logging][logging]
+* [orqueio commons utils][utils]
+* [orqueio-bpm-platform][typed-values]
 
 
 ## Getting started
 
-If your project is a maven project, start by importing the `camunda-commons-bom`.
+If your project is a maven project, start by importing the `orqueio-commons-bom`.
 This will ensure that your project uses all commons libraries in the same version:
 
 ```xml
@@ -48,7 +46,7 @@ Java JRE 11+ is required.
 
 ## Contributing
 
-Have a look at our [contribution guide](https://github.com/camunda/camunda-bpm-platform/blob/master/CONTRIBUTING.md) for how to contribute to this repository.
+Have a look at our [contribution guide](https://github.com/orqueio/orqueio/blob/master/CONTRIBUTING.md) for how to contribute to this repository.
 
 
 ## License:

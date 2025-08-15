@@ -1,4 +1,4 @@
-# Camunda commons styling
+# Orqueio commons styling
 
 ## Scaffolding
 
