@@ -40,6 +40,12 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <dependency>
+                <groupId>xalan</groupId>
+                <artifactId>xalan</artifactId>
+                <version>2.7.1</version>
+                <scope>provided</scope>
+            </dependency>
 
         </dependencies>
     </dependencyManagement>
@@ -353,6 +359,7 @@
 
     <properties>
         <test.includes/>
+        <version.cronutils>9.2.0</version.cronutils>
         <!-- without a special test profile we don't want to exclude anything, this expressions should never match -->
         <test.excludes>$.</test.excludes>
         <history.level>full</history.level>

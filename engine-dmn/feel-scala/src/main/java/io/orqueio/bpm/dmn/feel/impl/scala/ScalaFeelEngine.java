@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.feel.impl.scala;
+package io.orqueio.bpm.dmn.feel.impl.scala;
 
-import org.camunda.bpm.dmn.feel.impl.FeelEngine;
-import org.camunda.bpm.dmn.feel.impl.scala.function.CustomFunctionTransformer;
-import org.camunda.bpm.dmn.feel.impl.scala.function.FeelCustomFunctionProvider;
-import org.camunda.bpm.dmn.feel.impl.scala.spin.SpinValueMapperFactory;
-import org.camunda.bpm.engine.variable.context.VariableContext;
+import io.orqueio.bpm.dmn.feel.impl.FeelEngine;
+import io.orqueio.bpm.dmn.feel.impl.scala.function.CustomFunctionTransformer;
+import io.orqueio.bpm.dmn.feel.impl.scala.function.FeelCustomFunctionProvider;
+import io.orqueio.bpm.dmn.feel.impl.scala.spin.SpinValueMapperFactory;
+import io.orqueio.bpm.engine.variable.context.VariableContext;
 import org.camunda.feel.FeelEngine$;
 import org.camunda.feel.FeelEngine.Builder;
 import org.camunda.feel.FeelEngine.Failure;

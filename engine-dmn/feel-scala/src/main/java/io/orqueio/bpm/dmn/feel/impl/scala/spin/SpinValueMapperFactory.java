@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.feel.impl.scala.spin;
+package io.orqueio.bpm.dmn.feel.impl.scala.spin;
 
-import org.camunda.bpm.dmn.feel.impl.scala.ScalaFeelLogger;
+import io.orqueio.bpm.dmn.feel.impl.scala.ScalaFeelLogger;
 import org.camunda.feel.valuemapper.CustomValueMapper;
 
 public class SpinValueMapperFactory {

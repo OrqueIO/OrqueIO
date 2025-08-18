@@ -7,7 +7,7 @@
         <groupId>io.orqueio.bpm</groupId>
         <artifactId>orqueio-root</artifactId>
         <version>1.0</version>
-        <relativePath>../</relativePath>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>orqueio-bom-root</artifactId>

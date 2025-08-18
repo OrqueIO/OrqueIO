@@ -5,8 +5,8 @@
 
     <parent>
         <groupId>io.orqueio.bpm</groupId>
-        <artifactId>camunda-parent</artifactId>
-        <relativePath>../parent</relativePath>
+        <artifactId>orqueio-parent</artifactId>
+        <relativePath>../parent/pom.xml</relativePath>
         <version>1.0</version>
     </parent>
 

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.feel.impl.scala.function;
+package io.orqueio.bpm.dmn.feel.impl.scala.function;
 
 import java.util.Collection;
 import java.util.Optional;

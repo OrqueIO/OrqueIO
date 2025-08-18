@@ -57,14 +57,14 @@
             <version>1.2.0</version>
             <optional>true</optional>
         </dependency>
-
+<!--
         <dependency>
             <groupId>io.orqueio.bpm</groupId>
             <artifactId>orqueio-bpm-archunit</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
-
+-->
     </dependencies>
 
     <build>

@@ -52,6 +52,7 @@
       <groupId>org.camunda.feel</groupId>
       <artifactId>feel-engine</artifactId>
       <classifier>scala-shaded</classifier>
+      <version>1.19.3</version>
     </dependency>
 
     <dependency>
@@ -106,14 +107,14 @@
       <artifactId>joda-time</artifactId>
       <scope>test</scope>
     </dependency>
-
+<!--
     <dependency>
       <groupId>io.orqueio.bpm</groupId>
       <artifactId>orqueio-bpm-archunit</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
     </dependency>
-
+-->
   </dependencies>
 
   <build>

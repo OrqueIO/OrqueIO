@@ -49,6 +49,19 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.apache.taglibs</groupId>
+            <artifactId>taglibs-standard-spec</artifactId>
+            <version>1.2.5</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.taglibs</groupId>
+            <artifactId>taglibs-standard-impl</artifactId>
+            <version>1.2.5</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
             <groupId>io.orqueio.bpm</groupId>
             <artifactId>orqueio-engine</artifactId>
             <exclusions>
@@ -244,6 +257,7 @@
             <plugin>
                 <groupId>org.eclipse.transformer</groupId>
                 <artifactId>transformer-maven-plugin</artifactId>
+                <version>0.5.0</version>
                 <executions>
                     <execution>
                         <id>transform-jakarta-sources</id>
@@ -252,8 +266,7 @@
                             <goal>transform</goal>
                         </goals>
                         <configuration>
-                            <transformDirectory>${project.build.directory}/generated-sources/jakarta
-                            </transformDirectory>
+                            <transformDirectory>${project.build.directory}/generated-sources/jakarta</transformDirectory>
                         </configuration>
                     </execution>
                     <execution>
@@ -263,8 +276,7 @@
                             <goal>transform</goal>
                         </goals>
                         <configuration>
-                            <transformDirectory>${project.build.directory}/generated-resources/jakarta
-                            </transformDirectory>
+                            <transformDirectory>${project.build.directory}/generated-resources/jakarta</transformDirectory>
                         </configuration>
                     </execution>
                     <execution>
@@ -274,8 +286,7 @@
                             <goal>transform</goal>
                         </goals>
                         <configuration>
-                            <transformDirectory>${project.build.directory}/generated-test-sources/jakarta
-                            </transformDirectory>
+                            <transformDirectory>${project.build.directory}/generated-test-sources/jakarta</transformDirectory>
                         </configuration>
                     </execution>
                     <execution>
@@ -285,12 +296,12 @@
                             <goal>transform</goal>
                         </goals>
                         <configuration>
-                            <transformDirectory>${project.build.directory}/generated-test-resources/jakarta
-                            </transformDirectory>
+                            <transformDirectory>${project.build.directory}/generated-test-resources/jakarta</transformDirectory>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
+
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>

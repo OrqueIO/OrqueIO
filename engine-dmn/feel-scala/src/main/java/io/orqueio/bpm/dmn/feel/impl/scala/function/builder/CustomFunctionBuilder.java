@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.feel.impl.scala.function.builder;
+package io.orqueio.bpm.dmn.feel.impl.scala.function.builder;
 
-import org.camunda.bpm.dmn.feel.impl.FeelException;
-import org.camunda.bpm.dmn.feel.impl.scala.function.CustomFunction;
-import org.camunda.bpm.dmn.feel.impl.scala.function.FeelCustomFunctionProvider;
+import io.orqueio.bpm.dmn.feel.impl.FeelException;
+import io.orqueio.bpm.dmn.feel.impl.scala.function.CustomFunction;
+import io.orqueio.bpm.dmn.feel.impl.scala.function.FeelCustomFunctionProvider;
 
 import java.util.List;
 import java.util.function.Function;

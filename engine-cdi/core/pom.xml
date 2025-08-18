@@ -43,6 +43,19 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.apache.taglibs</groupId>
+            <artifactId>taglibs-standard-spec</artifactId>
+            <version>1.2.5</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.taglibs</groupId>
+            <artifactId>taglibs-standard-impl</artifactId>
+            <version>1.2.5</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
             <groupId>io.orqueio.bpm</groupId>
             <artifactId>orqueio-engine</artifactId>
             <scope>provided</scope>
