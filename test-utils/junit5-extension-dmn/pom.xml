@@ -6,7 +6,7 @@
 
 
 
-  <name>OrqueIO DMN - JUnit 5 Extension</name>
+  <name>OrqueIO - DMN - JUnit 5 Extension</name>
 
   <parent>
     <groupId>io.orqueio.bpm</groupId>

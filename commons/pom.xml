@@ -11,7 +11,7 @@
 
     <groupId>io.orqueio.commons</groupId>
     <artifactId>orqueio-commons-root</artifactId>
-    <name>orqueio Commons - Root Pom</name>
+    <name>OrqueIO - Commons - Root Pom</name>
     <inceptionYear>2014</inceptionYear>
     <packaging>pom</packaging>
 

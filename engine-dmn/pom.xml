@@ -11,7 +11,7 @@
 
   <groupId>io.orqueio.bpm.dmn</groupId>
   <artifactId>orqueio-engine-dmn-root</artifactId>
-  <name>orqueio DMN - engine - root</name>
+  <name>OrqueIO - DMN - engine - root</name>
   <inceptionYear>2025</inceptionYear>
   <packaging>pom</packaging>
 

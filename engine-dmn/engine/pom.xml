@@ -10,7 +10,7 @@
   </parent>
 
   <artifactId>orqueio-engine-dmn</artifactId>
-  <name>orqueio DMN - engine</name>
+  <name>orqueio - DMN - engine</name>
   <properties>
     <orqueio.artifact>io.orqueio.bpm.dmn.engine</orqueio.artifact>
     <camunda.osgi.import.additional>

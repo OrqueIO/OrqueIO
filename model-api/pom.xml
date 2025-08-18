@@ -6,7 +6,7 @@
     <groupId>io.orqueio.bpm.model</groupId>
     <artifactId>orqueio-model-apis</artifactId>
 
-    <name>OrqueIO Model APIs</name>
+    <name>OrqueIO - Model APIs</name>
     <packaging>pom</packaging>
 
 

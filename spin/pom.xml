@@ -11,7 +11,7 @@
 
     <groupId>io.orqueio.spin</groupId>
     <artifactId>orqueio-spin-root</artifactId>
-    <name>orqueio Spin - root</name>
+    <name>Orqueio - Spin - root</name>
     <inceptionYear>2014</inceptionYear>
     <packaging>pom</packaging>
 

@@ -13,7 +13,7 @@
   <groupId>io.orqueio.bpm.dmn</groupId>
   <artifactId>orqueio-engine-dmn-bom</artifactId>
   <version>1.0</version>
-  <name>orqueio DMN - engine - bom</name>
+  <name>OrqueIO - DMN - engine - bom</name>
   <packaging>pom</packaging>
 
 

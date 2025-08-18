@@ -9,7 +9,7 @@
   </parent>
 
   <artifactId>orqueio-test-utils-testcontainers</artifactId>
-  <name>OrqueIO Test Utils - Testcontainers</name>
+  <name>OrqueIO - Test Utils - Testcontainers</name>
   <packaging>jar</packaging>
 
 

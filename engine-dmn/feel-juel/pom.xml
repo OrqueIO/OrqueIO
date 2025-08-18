@@ -10,7 +10,7 @@
   </parent>
 
   <artifactId>orqueio-engine-feel-juel</artifactId>
-  <name>orqueio DMN - engine FEEL - JUEL</name>
+  <name>OrqueIO - DMN - engine FEEL - JUEL</name>
 
   <properties>
     <camunda.artifact>io.orqueio.bpm.dmn.feel.impl.juel</camunda.artifact>

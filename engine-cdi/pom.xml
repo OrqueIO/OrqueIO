@@ -9,7 +9,7 @@
         <version>1.0</version>
     </parent>
 
-    <artifactId>camunda-cdi-compatibility-root</artifactId>
+    <artifactId>orqueio-cdi-compatibility-root</artifactId>
 
     <packaging>pom</packaging>
 

@@ -76,7 +76,7 @@
                     <comparisonVersion>${camunda.version.old}</comparisonVersion>
                     <logResults>true</logResults>
                     <excludes>
-                        <exclude>org/orqueio/bpm/engine/impl/**</exclude>
+                        <exclude>io/orqueio/bpm/engine/impl/**</exclude>
                     </excludes>
                 </configuration>
                 <executions>

@@ -11,7 +11,7 @@
   </parent>
 
   <artifactId>orqueio-engine-feel-api</artifactId>
-  <name>orqueio DMN - engine FEEL - API</name>
+  <name>OrqueIO - DMN - engine FEEL - API</name>
   <properties>
     <camunda.artifact>io.orqueio.bpm.dmn.feel.impl</camunda.artifact>
   </properties>

@@ -14,7 +14,7 @@
     <artifactId>orqueio-template-engines-freemarker</artifactId>
     <version>1.0</version>
 
-    <name>orqueio template engine jsr223 freemarker</name>
+    <name>OrqueIO - template engine jsr223 freemarker</name>
 
     <inceptionYear>2025</inceptionYear>
 

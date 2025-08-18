@@ -20,8 +20,8 @@
     <name>OrqueIO - Bom Root</name>
 
     <modules>
-        <module>camunda-only-bom</module>
-        <module>camunda-bom</module>
+        <module>orqueio-only-bom</module>
+        <module>orqueio-bom</module>
     </modules>
 
     <licenses>

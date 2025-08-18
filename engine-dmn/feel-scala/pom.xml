@@ -10,7 +10,7 @@
   </parent>
 
   <artifactId>orqueio-engine-feel-scala</artifactId>
-  <name>orqueio DMN - engine FEEL - SCALA</name>
+  <name>OrqueIO - DMN - engine FEEL - SCALA</name>
   <properties>
     <camunda.artifact>io.orqueio.bpm.dmn.feel.impl.scala</camunda.artifact>
   </properties>
