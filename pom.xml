@@ -2,30 +2,29 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.camunda</groupId>
-    <artifactId>camunda-bpm-release-parent</artifactId>
+    <groupId>io.orqueio</groupId>
+    <artifactId>orqueio-bpm-release-parent</artifactId>
     <version>2.5.0</version>
     <!-- do not remove empty tag - http://jira.codehaus.org/browse/MNG-4687 -->
     <relativePath />
   </parent>
 
-  <groupId>org.camunda.bpm</groupId>
-  <artifactId>camunda-root</artifactId>
-  <version>7.24.0-SNAPSHOT</version>
+  <groupId>io.orqueio.bpm</groupId>
+  <artifactId>orqueio-root</artifactId>
+  <version>0.24.0-SNAPSHOT</version>
   <packaging>pom</packaging>
-  <name>Camunda Platform - Root Pom</name>
+  <name>orqueio Platform - Root Pom</name>
   <inceptionYear>2013</inceptionYear>
 
   <description>
     This pom defines the modules that make up the build.
-    The parent pom for all Camunda Platform projects can be found in the parent directory relative to this file.
-    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://camunda.com/contact/
+    The parent pom for all 0rque IO Platform projects can be found in the parent directory relative to this file.
   </description>
 
   <properties>
     <license.includeTransitiveDependencies>false</license.includeTransitiveDependencies>
 
-    <!-- These properties are used in both the BOM as well as camunda-parent and subprojects -->
+    <!-- These properties are used in both the BOM as well as orqueio-parent and subprojects -->
     <version.mybatis>3.5.15</version.mybatis>
     <version.joda-time>2.12.5</version.joda-time>
     <version.uuid-generator>4.3.0</version.uuid-generator>
@@ -139,7 +138,7 @@
                 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
                   new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
                   j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-                  'https://ssgtm.camunda.org/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+                  'https://ssgtm.orqueio.org/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
                   })(window,document,'script','dataLayer','GTM-PP9MHKW');</script>
               ]]></top>
               <failOnError>false</failOnError>
@@ -148,8 +147,8 @@
                 <additionalJOption>--ignore-source-errors</additionalJOption>
                 <additionalJOption>--allow-script-in-comments</additionalJOption>
               </additionalJOptions>
-              <doctitle>Camunda Platform Javadocs ${project.version}</doctitle>
-              <windowtitle>Camunda Platform Javadocs ${project.version}</windowtitle>
+              <doctitle>orqueio Platform Javadocs ${project.version}</doctitle>
+              <windowtitle>orqueio Platform Javadocs ${project.version}</windowtitle>
             </configuration>
           </plugin>
         </plugins>
@@ -328,15 +327,15 @@
     </repository>
     <repository>
       <!-- Required for local builds by community users on master branch -->
-      <id>camunda-public-repository</id>
-      <name>Camunda Platform Maven Repository</name>
-      <url>https://artifacts.camunda.com/artifactory/public/</url>
+      <id>orqueio-public-repository</id>
+      <name>orqueio Platform Maven Repository</name>
+      <url>https://artifacts.orqueio.com/artifactory/public/</url>
     </repository>
     <repository>
       <!-- Required for local builds by developers on maintainance branches -->
-      <id>camunda-nexus</id>
-      <name>Camunda Nexus</name>
-      <url>https://artifacts.camunda.com/artifactory/internal</url>
+      <id>orqueio-nexus</id>
+      <name>orqueio Nexus</name>
+      <url>https://artifacts.orqueio.com/artifactory/internal</url>
     </repository>
   </repositories>
 
@@ -348,31 +347,31 @@
   </licenses>
 
   <organization>
-    <name>camunda services GmbH</name>
-    <url>http://www.camunda.com</url>
+    <name>Orque IO</name>
+    <url>https://www.orqueio.io</url>
   </organization>
 
-  <url>http://www.camunda.org</url>
+  <url>https://www.orqueio.io</url>
 
   <developers>
     <developer>
-      <id>camunda.org</id>
-      <name>Camunda Platform Community</name>
-      <organization>camunda.org</organization>
-      <organizationUrl>http://camunda.org</organizationUrl>
+      <id>orqueio.io</id>
+      <name>Orque IO Platform Community</name>
+      <organization>orqueio.io</organization>
+      <organizationUrl>https://www.orqueio.io</organizationUrl>
     </developer>
   </developers>
 
   <scm>
-    <url>https://github.com/camunda/camunda-bpm-platform</url>
-    <connection>scm:git:git@github.com:camunda/camunda-bpm-platform.git</connection>
-    <developerConnection>scm:git:git@github.com:camunda/camunda-bpm-platform.git</developerConnection>
+    <url>https://github.com/orqueio/orqueio</url>
+    <connection>scm:git:git@github.com:orqueio/orqueio.git</connection>
+    <developerConnection>scm:git:git@github.com:orqueio/orqueio.git</developerConnection>
     <tag>HEAD</tag>
   </scm>
 
   <issueManagement>
-    <system>Jira</system>
-    <url>https://app.camunda.com/jira/browse/CAM/</url>
+    <system>GitHub Issues</system>
+    <url>https://github.com/OrqueIO/OrqueIO/issues</url>
   </issueManagement>
 
 </project>
