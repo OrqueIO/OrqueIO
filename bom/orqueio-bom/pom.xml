@@ -5,7 +5,7 @@
   <parent>
     <groupId>io.orqueio.bpm</groupId>
     <artifactId>orqueio-bom-root</artifactId>
-    <version>7.24.0-SNAPSHOT</version>
+    <version>0.24.0-SNAPSHOT</version>
     <relativePath>../</relativePath>
   </parent>
 
@@ -16,7 +16,6 @@
 
   <description>
     orqueio Platform bill of material.
-    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://orqueio.com/contact/
   </description>
 
   <licenses>
