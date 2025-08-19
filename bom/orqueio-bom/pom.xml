@@ -3,20 +3,20 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.camunda.bpm</groupId>
-    <artifactId>camunda-bom-root</artifactId>
+    <groupId>io.orqueio.bpm</groupId>
+    <artifactId>orqueio-bom-root</artifactId>
     <version>7.24.0-SNAPSHOT</version>
     <relativePath>../</relativePath>
   </parent>
 
-  <artifactId>camunda-bom</artifactId>
+  <artifactId>orqueio-bom</artifactId>
   <packaging>pom</packaging>
-  <name>Camunda Platform - Bom</name>
-  <url>http://camunda.org</url>
+  <name>orqueio Platform - Bom</name>
+  <url>http://orqueio.org</url>
 
   <description>
-    Camunda Platform bill of material.
-    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://camunda.com/contact/
+    orqueio Platform bill of material.
+    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://orqueio.com/contact/
   </description>
 
   <licenses>
@@ -27,8 +27,8 @@
   </licenses>
 
   <organization>
-    <name>camunda services GmbH</name>
-    <url>http://www.camunda.com</url>
+    <name>Orque IO</name>
+    <url>http://www.orqueio.io</url>
   </organization>
 
   <dependencyManagement>
@@ -49,10 +49,10 @@
         <artifactId>java-uuid-generator</artifactId>
         <version>${version.uuid-generator}</version>
       </dependency>
-      <!-- Camunda Platform public artifacts -->
+      <!-- orqueio Platform public artifacts -->
       <dependency>
-        <groupId>org.camunda.bpm</groupId>
-        <artifactId>camunda-only-bom</artifactId>
+        <groupId>io.orqueio.bpm</groupId>
+        <artifactId>orqueio-only-bom</artifactId>
         <version>${project.version}</version>
         <scope>import</scope>
         <type>pom</type>
