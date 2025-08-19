@@ -58,7 +58,7 @@
 
     <dependency>
       <groupId>org.camunda.spin</groupId>
-      <artifactId>camunda-spin-dataformat-json-jackson</artifactId>
+      <artifactId>orqueio-spin-dataformat-json-jackson</artifactId>
       <optional>true</optional>
     </dependency>
 

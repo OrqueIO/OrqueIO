@@ -58,12 +58,12 @@
 
     <dependency>
       <groupId>org.camunda.spin</groupId>
-      <artifactId>camunda-spin-dataformat-json-jackson</artifactId>
+      <artifactId>orqueio-spin-dataformat-json-jackson</artifactId>
     </dependency>
 
     <dependency>
       <groupId>org.camunda.spin</groupId>
-      <artifactId>camunda-spin-dataformat-xml-dom</artifactId>
+      <artifactId>orqueio-spin-dataformat-xml-dom</artifactId>
     </dependency>
 
     <dependency>

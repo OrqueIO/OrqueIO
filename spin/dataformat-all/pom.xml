@@ -1,18 +1,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <description>
-    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://camunda.com/contact/
-  </description>
+
 
   <parent>
-    <groupId>org.camunda.spin</groupId>
-    <artifactId>camunda-spin-root</artifactId>
-    <version>7.24.0-SNAPSHOT</version>
+    <groupId>io.orqueio.spin</groupId>
+    <artifactId>orqueio-spin-root</artifactId>
+    <version>0.24.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>camunda-spin-dataformat-all</artifactId>
-  <name>camunda Spin - all dataformats in one</name>
+  <artifactId>orqueio-spin-dataformat-all</artifactId>
+  <name>Orque IO Spin - all dataformats in one</name>
 
   <properties>
     <!-- We shade artifacts into the jar, so we need to generate 
@@ -25,13 +23,13 @@
   <dependencies>
 
     <dependency>
-      <groupId>org.camunda.spin</groupId>
-      <artifactId>camunda-spin-dataformat-json-jackson</artifactId>
+      <groupId>io.orqueio.spin</groupId>
+      <artifactId>orqueio-spin-dataformat-json-jackson</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.spin</groupId>
-      <artifactId>camunda-spin-dataformat-xml-dom</artifactId>
+      <groupId>io.orqueio.spin</groupId>
+      <artifactId>orqueio-spin-dataformat-xml-dom</artifactId>
     </dependency>
 
     <dependency>
@@ -64,8 +62,8 @@
               <promoteTransitiveDependencies>true</promoteTransitiveDependencies>
               <artifactSet>
                 <excludes>
-                  <exclude>org.camunda.commons:*</exclude>
-                  <exclude>org.camunda.spin:camunda-spin-core</exclude>
+                  <exclude>io.orqueio.commons:*</exclude>
+                  <exclude>io.orqueio.spin:orqueio-spin-core</exclude>
                   <exclude>org.slf4j:*</exclude>
                 </excludes>
               </artifactSet>
@@ -140,7 +138,7 @@
         <configuration>
           <includeDependencySources>true</includeDependencySources>
           <includeTransitiveDependencySources>true</includeTransitiveDependencySources>
-          <dependencySourceIncludes><include>org.camunda.spin:*</include></dependencySourceIncludes>
+          <dependencySourceIncludes><include>io.orqueio.spin:*</include></dependencySourceIncludes>
           <additionalDependencies>
            <additionalDependency>
              <groupId>junit</groupId>
@@ -168,8 +166,8 @@
               !net.minidev.json*,
               !org.codehaus.jackson*,
               org.slf4j,
-              org.camunda.commons.utils,
-              org.camunda.commons.logging,
+              io.orqueio.commons.utils,
+              io.orqueio.commons.logging,
               *
             </Import-Package>
             <Bundle-ClassPath>.</Bundle-ClassPath>

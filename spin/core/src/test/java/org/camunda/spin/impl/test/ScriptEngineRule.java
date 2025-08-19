@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.impl.test;
+package io.orqueio.spin.impl.test;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -58,14 +58,14 @@ public class ScriptEngineRule implements TestRule {
   }
 
   /**
-   * Create script engine from {@literal @}{@link org.camunda.spin.impl.test.ScriptEngine} Annotation. The created
+   * Create script engine from {@literal @}{@link io.orqueio.spin.impl.test.ScriptEngine} Annotation. The created
    * script engines will be cached to speedup subsequent creations.
    *
    * @param description the {@link Description} of the test method
    * @return the script engine or null if no suitable found
    */
   private ScriptEngine createScriptEngine(Description description) {
-    org.camunda.spin.impl.test.ScriptEngine annotation = description.getTestClass().getAnnotation(org.camunda.spin.impl.test.ScriptEngine.class);
+    io.orqueio.spin.impl.test.ScriptEngine annotation = description.getTestClass().getAnnotation(io.orqueio.spin.impl.test.ScriptEngine.class);
     if (annotation == null) {
       return null;
     }
@@ -86,7 +86,7 @@ public class ScriptEngineRule implements TestRule {
   }
 
   /**
-   * Get the script engine defined by the {@literal @}{@link org.camunda.spin.impl.test.ScriptEngine} Annotation
+   * Get the script engine defined by the {@literal @}{@link io.orqueio.spin.impl.test.ScriptEngine} Annotation
    *
    * @return the script engine or null if no script engine was found
    */

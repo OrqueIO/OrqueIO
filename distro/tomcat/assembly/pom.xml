@@ -110,7 +110,7 @@
 
     <dependency>
       <groupId>org.camunda.spin</groupId>
-      <artifactId>camunda-spin-core</artifactId>
+      <artifactId>orqueio-spin-core</artifactId>
     </dependency>
 
     <dependency>
@@ -121,7 +121,7 @@
 
     <dependency>
       <groupId>org.camunda.spin</groupId>
-      <artifactId>camunda-spin-dataformat-all</artifactId>
+      <artifactId>orqueio-spin-dataformat-all</artifactId>
     </dependency>
 
     <dependency>

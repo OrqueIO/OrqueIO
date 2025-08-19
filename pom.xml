@@ -1,13 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <parent>
-    <groupId>io.orqueio</groupId>
-    <artifactId>orqueio-bpm-release-parent</artifactId>
-    <version>2.5.0</version>
-    <!-- do not remove empty tag - http://jira.codehaus.org/browse/MNG-4687 -->
-    <relativePath />
-  </parent>
+
 
   <groupId>io.orqueio.bpm</groupId>
   <artifactId>orqueio-root</artifactId>
@@ -317,7 +311,7 @@
   </profiles>
 
   <repositories>
-    <repository>
+   <!-- <repository>
       <id>maven-central</id>
       <name>Maven Central</name>
       <url>https://repo1.maven.org/maven2</url>
@@ -326,17 +320,17 @@
       </snapshots>
     </repository>
     <repository>
-      <!-- Required for local builds by community users on master branch -->
+
       <id>orqueio-public-repository</id>
       <name>orqueio Platform Maven Repository</name>
       <url>https://artifacts.orqueio.com/artifactory/public/</url>
     </repository>
     <repository>
-      <!-- Required for local builds by developers on maintainance branches -->
+
       <id>orqueio-nexus</id>
       <name>orqueio Nexus</name>
       <url>https://artifacts.orqueio.com/artifactory/internal</url>
-    </repository>
+    </repository> -->
   </repositories>
 
   <licenses>

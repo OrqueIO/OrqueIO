@@ -18,4 +18,4 @@
 /*
  * Bind the Spin S(...) function to the variable S.
  */
-S = org.camunda.spin.Spin.&S
+S = io.orqueio.spin.Spin.&S

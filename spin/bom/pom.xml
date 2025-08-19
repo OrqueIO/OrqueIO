@@ -1,54 +1,52 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <!-- HEADS-UP: Do not use camunda-parent as parent,
+  <!-- HEADS-UP: Do not use orqueio-parent as parent,
   it would introduce a cyclic dependency to this bom -->
   <parent>
-    <groupId>org.camunda.bpm</groupId>
-    <artifactId>camunda-root</artifactId>
-    <version>7.24.0-SNAPSHOT</version>
+    <groupId>io.orqueio.bpm</groupId>
+    <artifactId>orqueio-root</artifactId>
+    <version>0.24.0-SNAPSHOT</version>
     <relativePath>../../pom.xml</relativePath>
   </parent>
 
-  <groupId>org.camunda.spin</groupId>
-  <artifactId>camunda-spin-bom</artifactId>
-  <name>camunda spin - bom</name>
-  <version>7.24.0-SNAPSHOT</version>
+  <groupId>io.orqueio.spin</groupId>
+  <artifactId>orqueio-spin-bom</artifactId>
+  <name>orqueio spin - bom</name>
+  <version>0.24.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
-  <description>
-    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://camunda.com/contact/
-  </description>
+
 
   <dependencyManagement>
     <dependencies>
 
       <dependency>
-        <groupId>org.camunda.spin</groupId>
-        <artifactId>camunda-spin-core</artifactId>
+        <groupId>io.orqueio.spin</groupId>
+        <artifactId>orqueio-spin-core</artifactId>
         <version>${project.version}</version>
       </dependency>
       
       <dependency>
-        <groupId>org.camunda.spin</groupId>
-        <artifactId>camunda-spin-core</artifactId>
+        <groupId>io.orqueio.spin</groupId>
+        <artifactId>orqueio-spin-core</artifactId>
         <type>test-jar</type>
         <version>${project.version}</version>
       </dependency>
 
       <dependency>
-        <groupId>org.camunda.spin</groupId>
-        <artifactId>camunda-spin-dataformat-all</artifactId>
+        <groupId>io.orqueio.spin</groupId>
+        <artifactId>orqueio-spin-dataformat-all</artifactId>
         <version>${project.version}</version>
-        <!-- Excluding dependencies that are shaded in camunda-spin-dataformat-all -->
+        <!-- Excluding dependencies that are shaded in orqueio-spin-dataformat-all -->
         <exclusions>
           <exclusion>
-            <groupId>org.camunda.spin</groupId>
-            <artifactId>camunda-spin-dataformat-json-jackson</artifactId>
+            <groupId>io.orqueio.spin</groupId>
+            <artifactId>orqueio-spin-dataformat-json-jackson</artifactId>
           </exclusion>
           <exclusion>
-            <groupId>org.camunda.spin</groupId>
-            <artifactId>camunda-spin-dataformat-xml-dom</artifactId>
+            <groupId>io.orqueio.spin</groupId>
+            <artifactId>orqueio-spin-dataformat-xml-dom</artifactId>
           </exclusion>
           <exclusion>
             <groupId>jakarta.xml.bind</groupId>
@@ -62,29 +60,29 @@
       </dependency>
 
       <dependency>
-        <groupId>org.camunda.spin</groupId>
-        <artifactId>camunda-spin-dataformat-json-jackson</artifactId>
+        <groupId>io.orqueio.spin</groupId>
+        <artifactId>orqueio-spin-dataformat-json-jackson</artifactId>
         <version>${project.version}</version>
       </dependency>
 
       <dependency>
-        <groupId>org.camunda.spin</groupId>
-        <artifactId>camunda-spin-dataformat-xml-dom</artifactId>
+        <groupId>io.orqueio.spin</groupId>
+        <artifactId>orqueio-spin-dataformat-xml-dom</artifactId>
         <version>${project.version}</version>
       </dependency>
 
       <dependency>
-        <groupId>org.camunda.spin</groupId>
-        <artifactId>camunda-spin-dataformat-xml-dom-jakarta</artifactId>
+        <groupId>io.orqueio.spin</groupId>
+        <artifactId>orqueio-spin-dataformat-xml-dom-jakarta</artifactId>
         <version>${project.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
 
   <scm>
-    <url>https://github.com/camunda/camunda-bpm-platform</url>
-    <connection>scm:git:git@github.com:camunda/camunda-bpm-platform.git</connection>
-    <developerConnection>scm:git:git@github.com:camunda/camunda-bpm-platform.git</developerConnection>
+    <url>https://github.com/orqueio/orqueio</url>
+    <connection>scm:git:git@github.com:orqueio/orqueio.git</connection>
+    <developerConnection>scm:git:git@github.com:orqueio/orqueio-.git</developerConnection>
     <tag>HEAD</tag>
   </scm>
 

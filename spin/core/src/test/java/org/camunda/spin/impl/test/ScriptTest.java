@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.impl.test;
+package io.orqueio.spin.impl.test;
 
 import java.util.Map;
 
-import org.camunda.spin.SpinScriptException;
+import io.orqueio.spin.SpinScriptException;
 import org.junit.ClassRule;
 import org.junit.Rule;
 

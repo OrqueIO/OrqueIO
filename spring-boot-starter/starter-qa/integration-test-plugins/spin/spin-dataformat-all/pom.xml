@@ -25,14 +25,14 @@
       <exclusions>
         <exclusion>
           <groupId>org.camunda.spin</groupId>
-          <artifactId>camunda-spin-dataformat-json-jackson</artifactId>
+          <artifactId>orqueio-spin-dataformat-json-jackson</artifactId>
         </exclusion>
       </exclusions>
     </dependency>
 
     <dependency>
       <groupId>org.camunda.spin</groupId>
-      <artifactId>camunda-spin-dataformat-all</artifactId>
+      <artifactId>orqueio-spin-dataformat-all</artifactId>
     </dependency>
 
     <dependency>

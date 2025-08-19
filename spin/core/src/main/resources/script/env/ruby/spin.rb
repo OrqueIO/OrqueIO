@@ -16,6 +16,6 @@ limitations under the License.
 
 # expose Spin's S(...) function globally
 def S(*args)
-  org.camunda.spin.Spin.S(*args)
+  io.orqueio.spin.Spin.S(*args)
 end
 

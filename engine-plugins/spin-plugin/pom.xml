@@ -19,7 +19,7 @@
 
     <dependency>
       <groupId>org.camunda.spin</groupId>
-      <artifactId>camunda-spin-core</artifactId>
+      <artifactId>orqueio-spin-core</artifactId>
     </dependency>
 
     <dependency>
@@ -38,13 +38,13 @@
 
     <dependency>
       <groupId>org.camunda.spin</groupId>
-      <artifactId>camunda-spin-dataformat-json-jackson</artifactId>
+      <artifactId>orqueio-spin-dataformat-json-jackson</artifactId>
       <scope>test</scope>
     </dependency>
 
     <dependency>
       <groupId>org.camunda.spin</groupId>
-      <artifactId>camunda-spin-dataformat-xml-dom</artifactId>
+      <artifactId>orqueio-spin-dataformat-xml-dom</artifactId>
       <scope>test</scope>
     </dependency>
 
