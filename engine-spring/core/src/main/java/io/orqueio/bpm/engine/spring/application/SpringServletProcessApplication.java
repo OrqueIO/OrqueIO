@@ -16,7 +16,7 @@
  */
 package io.orqueio.bpm.engine.spring.application;
 
-import javax.servlet.ServletContext;
+import jakarta.servlet.ServletContext;
 
 import io.orqueio.bpm.application.ProcessApplication;
 import io.orqueio.bpm.application.ProcessApplicationInfo;

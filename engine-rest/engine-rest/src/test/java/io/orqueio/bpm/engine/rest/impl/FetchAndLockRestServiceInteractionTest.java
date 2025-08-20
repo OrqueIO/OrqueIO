@@ -42,7 +42,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-import javax.servlet.ServletContextEvent;
+import jakarta.servlet.ServletContextEvent;
 import javax.ws.rs.core.Response.Status;
 import io.orqueio.bpm.engine.ExternalTaskService;
 import io.orqueio.bpm.engine.IdentityService;

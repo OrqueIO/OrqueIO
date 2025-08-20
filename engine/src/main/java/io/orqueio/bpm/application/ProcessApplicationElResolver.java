@@ -16,10 +16,9 @@
  */
 package io.orqueio.bpm.application;
 
+import javax.el.ELResolver;
 import java.util.Comparator;
 import java.util.ServiceLoader;
-
-import io.orqueio.bpm.impl.juel.jakarta.el.ELResolver;
 
 /**
  * <p>SPI interface that allows providing a custom ElResolver implementation.</p>

@@ -17,9 +17,9 @@
 package io.orqueio.bpm.application.impl;
 
 import java.lang.ref.WeakReference;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletContextEvent;
+import jakarta.servlet.ServletContextListener;
 import io.orqueio.bpm.application.AbstractProcessApplication;
 import io.orqueio.bpm.engine.delegate.JavaDelegate;
 import io.orqueio.bpm.engine.impl.util.ClassLoaderUtil;

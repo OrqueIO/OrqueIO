@@ -18,7 +18,7 @@ package io.orqueio.bpm.webapp.impl.security.filter;
 
 import java.util.Arrays;
 
-import javax.servlet.FilterConfig;
+import jakarta.servlet.FilterConfig;
 
 import io.orqueio.bpm.engine.ProcessEngineException;
 import io.orqueio.bpm.webapp.impl.security.filter.util.CookieConstants;

@@ -44,7 +44,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.servlet.ServletContextEvent;
+import jakarta.servlet.ServletContextEvent;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response.Status;
 import io.orqueio.bpm.engine.AuthorizationException;

@@ -16,8 +16,8 @@
  */
 package io.orqueio.bpm.cockpit.impl.web.bootstrap;
 
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
+import jakarta.servlet.ServletContextEvent;
+import jakarta.servlet.ServletContextListener;
 
 import io.orqueio.bpm.cockpit.Cockpit;
 import io.orqueio.bpm.cockpit.impl.DefaultCockpitRuntimeDelegate;

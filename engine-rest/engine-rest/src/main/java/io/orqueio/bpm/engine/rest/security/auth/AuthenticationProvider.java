@@ -19,8 +19,8 @@ package io.orqueio.bpm.engine.rest.security.auth;
 import io.orqueio.bpm.engine.IdentityService;
 import io.orqueio.bpm.engine.ProcessEngine;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * A provider to handle the authentication of {@link HttpServletRequest}s.

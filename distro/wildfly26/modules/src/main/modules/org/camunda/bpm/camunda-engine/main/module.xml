@@ -11,7 +11,7 @@
     <module name="javax.inject.api" />
     <module name="javax.ejb.api" />
     <module name="javax.xml.bind.api" />
-    <module name="javax.servlet.api" />
+    <module name="jakarta.servlet.api" />
 
     <module name="org.jboss.vfs" />
     <module name="org.slf4j" />

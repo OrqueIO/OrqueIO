@@ -19,8 +19,8 @@ package io.orqueio.bpm.engine.rest.impl;
 import io.orqueio.bpm.engine.rest.exception.RestException;
 import io.orqueio.bpm.engine.rest.spi.FetchAndLockHandler;
 
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
+import jakarta.servlet.ServletContextEvent;
+import jakarta.servlet.ServletContextListener;
 import javax.ws.rs.core.Response;
 import java.util.Iterator;
 import java.util.ServiceLoader;

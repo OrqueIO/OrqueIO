@@ -16,7 +16,7 @@
  */
 package io.orqueio.bpm.webapp.impl.security.filter.headersec.provider;
 
-import javax.servlet.ServletContext;
+import jakarta.servlet.ServletContext;
 import java.util.HashMap;
 import java.util.Map;
 

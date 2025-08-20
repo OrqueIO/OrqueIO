@@ -19,7 +19,7 @@ package io.orqueio.bpm.engine.rest.spi;
 import io.orqueio.bpm.engine.ProcessEngine;
 import io.orqueio.bpm.engine.rest.dto.externaltask.FetchExternalTasksExtendedDto;
 
-import javax.servlet.ServletContextEvent;
+import jakarta.servlet.ServletContextEvent;
 import javax.ws.rs.container.AsyncResponse;
 
 /**

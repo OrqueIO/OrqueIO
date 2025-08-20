@@ -17,8 +17,8 @@
 package io.orqueio.bpm.application.impl.web;
 
 import javax.ejb.EJB;
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
+import jakarta.servlet.ServletContextEvent;
+import jakarta.servlet.ServletContextListener;
 
 import io.orqueio.bpm.application.ProcessApplicationInfo;
 import io.orqueio.bpm.application.ProcessApplicationInterface;

@@ -16,7 +16,7 @@
  */
 package io.orqueio.bpm.webapp.impl.security.filter.csrf;
 
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 
 import io.orqueio.bpm.engine.ProcessEngineException;
 import io.orqueio.bpm.webapp.impl.util.HeaderRule;

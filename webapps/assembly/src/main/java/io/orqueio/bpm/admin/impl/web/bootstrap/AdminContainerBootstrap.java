@@ -16,8 +16,8 @@
  */
 package io.orqueio.bpm.admin.impl.web.bootstrap;
 
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
+import jakarta.servlet.ServletContextEvent;
+import jakarta.servlet.ServletContextListener;
 
 import io.orqueio.bpm.admin.Admin;
 import io.orqueio.bpm.admin.impl.DefaultAdminRuntimeDelegate;

@@ -18,7 +18,7 @@ package io.orqueio.bpm.engine.impl.util;
 
 import java.security.AccessController;
 import java.security.PrivilegedAction;
-import javax.servlet.ServletContextEvent;
+import jakarta.servlet.ServletContextEvent;
 import io.orqueio.bpm.engine.ProcessEngine;
 
 /**

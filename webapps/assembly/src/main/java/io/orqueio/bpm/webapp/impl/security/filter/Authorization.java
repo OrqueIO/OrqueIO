@@ -17,7 +17,7 @@
 package io.orqueio.bpm.webapp.impl.security.filter;
 
 import java.util.Collection;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 
 import io.orqueio.bpm.webapp.impl.security.auth.Authentication;
 import io.orqueio.bpm.webapp.impl.security.auth.UserAuthentication;

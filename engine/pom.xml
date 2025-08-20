@@ -155,7 +155,7 @@
                     <artifactId>jboss-jaxb-api_2.2_spec</artifactId>
                 </exclusion>
                 <exclusion>
-                    <groupId>org.jboss.spec.javax.servlet.jsp</groupId>
+                    <groupId>org.jboss.spec.jakarta.servlet.jsp</groupId>
                     <artifactId>jboss-jsp-api_2.2_spec</artifactId>
                 </exclusion>
             </exclusions>
@@ -387,7 +387,7 @@
             org.junit*;resolution:=optional,
             com.sun*;resolution:=optional,
             javax.persistence*;resolution:=optional,
-            javax.servlet*;resolution:=optional,
+            jakarta.servlet*;resolution:=optional,
             javax.transaction*;resolution:=optional,
             javax.ejb*;resolution:=optional,
             javax.xml*;resolution:=optional,

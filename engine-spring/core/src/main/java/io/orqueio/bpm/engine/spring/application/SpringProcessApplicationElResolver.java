@@ -18,7 +18,7 @@ package io.orqueio.bpm.engine.spring.application;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.servlet.ServletContext;
+import jakarta.servlet.ServletContext;
 import io.orqueio.bpm.application.AbstractProcessApplication;
 import io.orqueio.bpm.application.ProcessApplicationElResolver;
 import io.orqueio.bpm.application.impl.EjbProcessApplication;

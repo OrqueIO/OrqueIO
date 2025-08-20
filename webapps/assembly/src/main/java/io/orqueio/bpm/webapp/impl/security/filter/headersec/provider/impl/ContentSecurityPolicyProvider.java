@@ -19,7 +19,7 @@ package io.orqueio.bpm.webapp.impl.security.filter.headersec.provider.impl;
 import io.orqueio.bpm.webapp.impl.security.filter.headersec.provider.HeaderSecurityProvider;
 import io.orqueio.bpm.webapp.impl.util.ServletFilterUtil;
 
-import javax.servlet.ServletContext;
+import jakarta.servlet.ServletContext;
 import java.util.Base64;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
