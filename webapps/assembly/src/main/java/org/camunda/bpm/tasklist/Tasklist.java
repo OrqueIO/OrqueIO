@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.tasklist;
+package io.orqueio.bpm.tasklist;
 
 /**
  * The tasklist application. Provides access to the tasklist core services.

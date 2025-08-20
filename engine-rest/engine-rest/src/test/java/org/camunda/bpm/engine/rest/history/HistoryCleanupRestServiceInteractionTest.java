@@ -14,21 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.history;
+package io.orqueio.bpm.engine.rest.history;
 
 import javax.ws.rs.core.Response.Status;
-import org.camunda.bpm.engine.HistoryService;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.jobexecutor.historycleanup.BatchWindowManager;
-import org.camunda.bpm.engine.impl.jobexecutor.historycleanup.DefaultBatchWindowManager;
-import org.camunda.bpm.engine.impl.jobexecutor.historycleanup.HistoryCleanupHelper;
-import org.camunda.bpm.engine.impl.util.ClockUtil;
-import org.camunda.bpm.engine.rest.AbstractRestServiceTest;
-import org.camunda.bpm.engine.rest.helper.MockProvider;
-import org.camunda.bpm.engine.rest.mapper.JacksonConfigurator;
-import org.camunda.bpm.engine.rest.util.DateTimeUtils;
-import org.camunda.bpm.engine.rest.util.container.TestContainerRule;
-import org.camunda.bpm.engine.runtime.Job;
+import io.orqueio.bpm.engine.HistoryService;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.jobexecutor.historycleanup.BatchWindowManager;
+import io.orqueio.bpm.engine.impl.jobexecutor.historycleanup.DefaultBatchWindowManager;
+import io.orqueio.bpm.engine.impl.jobexecutor.historycleanup.HistoryCleanupHelper;
+import io.orqueio.bpm.engine.impl.util.ClockUtil;
+import io.orqueio.bpm.engine.rest.AbstractRestServiceTest;
+import io.orqueio.bpm.engine.rest.helper.MockProvider;
+import io.orqueio.bpm.engine.rest.mapper.JacksonConfigurator;
+import io.orqueio.bpm.engine.rest.util.DateTimeUtils;
+import io.orqueio.bpm.engine.rest.util.container.TestContainerRule;
+import io.orqueio.bpm.engine.runtime.Job;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;

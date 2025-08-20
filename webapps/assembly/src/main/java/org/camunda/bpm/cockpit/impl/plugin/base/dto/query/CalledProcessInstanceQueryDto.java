@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.cockpit.impl.plugin.base.dto.query;
+package io.orqueio.bpm.cockpit.impl.plugin.base.dto.query;
 
 import javax.ws.rs.core.MultivaluedMap;
 
-import org.camunda.bpm.cockpit.impl.plugin.base.dto.CalledProcessInstanceDto;
+import io.orqueio.bpm.cockpit.impl.plugin.base.dto.CalledProcessInstanceDto;
 
 public class CalledProcessInstanceQueryDto extends AbstractProcessInstanceQueryDto<CalledProcessInstanceDto> {
 

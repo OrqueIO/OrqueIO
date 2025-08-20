@@ -14,36 +14,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.cmd;
+package io.orqueio.bpm.engine.impl.cmd;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.exception.NotValidException;
-import org.camunda.bpm.engine.impl.ActivityExecutionTreeMapping;
-import org.camunda.bpm.engine.impl.bpmn.behavior.SequentialMultiInstanceActivityBehavior;
-import org.camunda.bpm.engine.impl.bpmn.helper.BpmnProperties;
-import org.camunda.bpm.engine.impl.core.delegate.CoreActivityBehavior;
-import org.camunda.bpm.engine.impl.core.model.CoreModelElement;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.persistence.entity.ExecutionEntity;
-import org.camunda.bpm.engine.impl.pvm.PvmActivity;
-import org.camunda.bpm.engine.impl.pvm.PvmScope;
-import org.camunda.bpm.engine.impl.pvm.PvmTransition;
-import org.camunda.bpm.engine.impl.pvm.process.ActivityImpl;
-import org.camunda.bpm.engine.impl.pvm.process.ActivityStartBehavior;
-import org.camunda.bpm.engine.impl.pvm.process.ProcessDefinitionImpl;
-import org.camunda.bpm.engine.impl.pvm.process.ScopeImpl;
-import org.camunda.bpm.engine.impl.pvm.process.TransitionImpl;
-import org.camunda.bpm.engine.impl.tree.ActivityStackCollector;
-import org.camunda.bpm.engine.impl.tree.FlowScopeWalker;
-import org.camunda.bpm.engine.impl.tree.ReferenceWalker;
-import org.camunda.bpm.engine.impl.util.EnsureUtil;
-import org.camunda.bpm.engine.runtime.ActivityInstance;
-import org.camunda.bpm.engine.variable.VariableMap;
-import org.camunda.bpm.engine.variable.impl.VariableMapImpl;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.exception.NotValidException;
+import io.orqueio.bpm.engine.impl.ActivityExecutionTreeMapping;
+import io.orqueio.bpm.engine.impl.bpmn.behavior.SequentialMultiInstanceActivityBehavior;
+import io.orqueio.bpm.engine.impl.bpmn.helper.BpmnProperties;
+import io.orqueio.bpm.engine.impl.core.delegate.CoreActivityBehavior;
+import io.orqueio.bpm.engine.impl.core.model.CoreModelElement;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.impl.persistence.entity.ExecutionEntity;
+import io.orqueio.bpm.engine.impl.pvm.PvmActivity;
+import io.orqueio.bpm.engine.impl.pvm.PvmScope;
+import io.orqueio.bpm.engine.impl.pvm.PvmTransition;
+import io.orqueio.bpm.engine.impl.pvm.process.ActivityImpl;
+import io.orqueio.bpm.engine.impl.pvm.process.ActivityStartBehavior;
+import io.orqueio.bpm.engine.impl.pvm.process.ProcessDefinitionImpl;
+import io.orqueio.bpm.engine.impl.pvm.process.ScopeImpl;
+import io.orqueio.bpm.engine.impl.pvm.process.TransitionImpl;
+import io.orqueio.bpm.engine.impl.tree.ActivityStackCollector;
+import io.orqueio.bpm.engine.impl.tree.FlowScopeWalker;
+import io.orqueio.bpm.engine.impl.tree.ReferenceWalker;
+import io.orqueio.bpm.engine.impl.util.EnsureUtil;
+import io.orqueio.bpm.engine.runtime.ActivityInstance;
+import io.orqueio.bpm.engine.variable.VariableMap;
+import io.orqueio.bpm.engine.variable.impl.VariableMapImpl;
 
 /**
  * @author Thorben Lindhauer

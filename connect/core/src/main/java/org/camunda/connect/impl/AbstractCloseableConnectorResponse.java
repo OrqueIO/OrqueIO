@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.connect.impl;
+package io.orqueio.connect.impl;
 
 import java.io.Closeable;
 import java.io.IOException;
 
-import org.camunda.connect.spi.CloseableConnectorResponse;
+import io.orqueio.connect.spi.CloseableConnectorResponse;
 
 /**
  * This class is a base class for implementing closeable connector responses

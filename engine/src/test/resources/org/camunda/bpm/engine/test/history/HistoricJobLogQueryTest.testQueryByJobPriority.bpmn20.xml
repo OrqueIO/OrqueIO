@@ -13,7 +13,7 @@
     <serviceTask id="serviceTask" 
       camunda:asyncBefore="true" 
       camunda:asyncAfter="true" 
-      camunda:class="org.camunda.bpm.engine.test.api.runtime.FailingDelegate"
+      camunda:class="io.orqueio.bpm.engine.test.api.runtime.FailingDelegate"
       camunda:jobPriority="${priority}" />
 
     <sequenceFlow id="flow1" sourceRef="serviceTask" targetRef="theEnd" />

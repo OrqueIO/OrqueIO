@@ -14,52 +14,52 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.cfg.auth;
+package io.orqueio.bpm.engine.impl.cfg.auth;
 
-import static org.camunda.bpm.engine.ProcessEngineConfiguration.HISTORY_REMOVAL_TIME_STRATEGY_START;
-import static org.camunda.bpm.engine.authorization.Authorization.AUTH_TYPE_GRANT;
-import static org.camunda.bpm.engine.authorization.Permissions.ALL;
-import static org.camunda.bpm.engine.authorization.Permissions.DELETE;
-import static org.camunda.bpm.engine.authorization.Permissions.READ;
-import static org.camunda.bpm.engine.authorization.Resources.DEPLOYMENT;
-import static org.camunda.bpm.engine.authorization.Resources.FILTER;
-import static org.camunda.bpm.engine.authorization.Resources.GROUP;
-import static org.camunda.bpm.engine.authorization.Resources.HISTORIC_TASK;
-import static org.camunda.bpm.engine.authorization.Resources.TASK;
-import static org.camunda.bpm.engine.authorization.Resources.TENANT;
-import static org.camunda.bpm.engine.authorization.Resources.USER;
-import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureValidIndividualResourceId;
+import static io.orqueio.bpm.engine.ProcessEngineConfiguration.HISTORY_REMOVAL_TIME_STRATEGY_START;
+import static io.orqueio.bpm.engine.authorization.Authorization.AUTH_TYPE_GRANT;
+import static io.orqueio.bpm.engine.authorization.Permissions.ALL;
+import static io.orqueio.bpm.engine.authorization.Permissions.DELETE;
+import static io.orqueio.bpm.engine.authorization.Permissions.READ;
+import static io.orqueio.bpm.engine.authorization.Resources.DEPLOYMENT;
+import static io.orqueio.bpm.engine.authorization.Resources.FILTER;
+import static io.orqueio.bpm.engine.authorization.Resources.GROUP;
+import static io.orqueio.bpm.engine.authorization.Resources.HISTORIC_TASK;
+import static io.orqueio.bpm.engine.authorization.Resources.TASK;
+import static io.orqueio.bpm.engine.authorization.Resources.TENANT;
+import static io.orqueio.bpm.engine.authorization.Resources.USER;
+import static io.orqueio.bpm.engine.impl.util.EnsureUtil.ensureValidIndividualResourceId;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.camunda.bpm.engine.IdentityService;
-import org.camunda.bpm.engine.authorization.HistoricTaskPermissions;
-import org.camunda.bpm.engine.authorization.Permission;
-import org.camunda.bpm.engine.authorization.Resource;
-import org.camunda.bpm.engine.authorization.TaskPermissions;
-import org.camunda.bpm.engine.delegate.DelegateTask;
-import org.camunda.bpm.engine.filter.Filter;
-import org.camunda.bpm.engine.identity.Group;
-import org.camunda.bpm.engine.identity.Tenant;
-import org.camunda.bpm.engine.identity.User;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.engine.impl.db.entitymanager.DbEntityManager;
-import org.camunda.bpm.engine.impl.history.event.HistoricProcessInstanceEventEntity;
-import org.camunda.bpm.engine.impl.history.event.HistoryEvent;
-import org.camunda.bpm.engine.impl.identity.Authentication;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity;
-import org.camunda.bpm.engine.impl.persistence.entity.AuthorizationManager;
-import org.camunda.bpm.engine.impl.persistence.entity.ExecutionEntity;
-import org.camunda.bpm.engine.repository.DecisionDefinition;
-import org.camunda.bpm.engine.repository.DecisionRequirementsDefinition;
-import org.camunda.bpm.engine.repository.Deployment;
-import org.camunda.bpm.engine.repository.ProcessDefinition;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.task.Task;
+import io.orqueio.bpm.engine.IdentityService;
+import io.orqueio.bpm.engine.authorization.HistoricTaskPermissions;
+import io.orqueio.bpm.engine.authorization.Permission;
+import io.orqueio.bpm.engine.authorization.Resource;
+import io.orqueio.bpm.engine.authorization.TaskPermissions;
+import io.orqueio.bpm.engine.delegate.DelegateTask;
+import io.orqueio.bpm.engine.filter.Filter;
+import io.orqueio.bpm.engine.identity.Group;
+import io.orqueio.bpm.engine.identity.Tenant;
+import io.orqueio.bpm.engine.identity.User;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.impl.db.entitymanager.DbEntityManager;
+import io.orqueio.bpm.engine.impl.history.event.HistoricProcessInstanceEventEntity;
+import io.orqueio.bpm.engine.impl.history.event.HistoryEvent;
+import io.orqueio.bpm.engine.impl.identity.Authentication;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity;
+import io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationManager;
+import io.orqueio.bpm.engine.impl.persistence.entity.ExecutionEntity;
+import io.orqueio.bpm.engine.repository.DecisionDefinition;
+import io.orqueio.bpm.engine.repository.DecisionRequirementsDefinition;
+import io.orqueio.bpm.engine.repository.Deployment;
+import io.orqueio.bpm.engine.repository.ProcessDefinition;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.task.Task;
 
 /**
  * <p>Provides the default authorizations for Camunda Platform.</p>

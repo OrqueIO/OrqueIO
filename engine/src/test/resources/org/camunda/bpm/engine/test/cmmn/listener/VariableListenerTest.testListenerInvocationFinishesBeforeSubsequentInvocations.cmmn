@@ -8,14 +8,14 @@
 
     <casePlanModel id="CasePlanModel_1">
       <extensionElements>
-        <camunda:variableListener class="org.camunda.bpm.engine.test.cmmn.listener.LogAndUpdateVariableListener"/>
+        <camunda:variableListener class="io.orqueio.bpm.engine.test.cmmn.listener.LogAndUpdateVariableListener"/>
       </extensionElements>
 
       <planItem id="PI_HumanTask_1" definitionRef="HumanTask_1" />
 
       <humanTask id="HumanTask_1" name="A HumanTask">
         <extensionElements>
-          <camunda:variableListener class="org.camunda.bpm.engine.test.cmmn.listener.LogAndUpdateVariableListener"/>
+          <camunda:variableListener class="io.orqueio.bpm.engine.test.cmmn.listener.LogAndUpdateVariableListener"/>
         </extensionElements>
       </humanTask>
     </casePlanModel>

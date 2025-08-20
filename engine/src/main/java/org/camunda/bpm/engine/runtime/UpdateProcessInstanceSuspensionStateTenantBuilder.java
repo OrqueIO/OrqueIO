@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.runtime;
+package io.orqueio.bpm.engine.runtime;
 
 /**
  * Fluent builder to update the suspension state of process instances.

@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.helper;
+package io.orqueio.bpm.engine.rest.helper;
 
-import org.camunda.bpm.engine.variable.impl.value.ObjectValueImpl;
-import org.camunda.bpm.engine.variable.value.ObjectValue;
+import io.orqueio.bpm.engine.variable.impl.value.ObjectValueImpl;
+import io.orqueio.bpm.engine.variable.value.ObjectValue;
 
 /**
  * Subclass of {@link ObjectValueImpl} that allows to manipulate all of its properties

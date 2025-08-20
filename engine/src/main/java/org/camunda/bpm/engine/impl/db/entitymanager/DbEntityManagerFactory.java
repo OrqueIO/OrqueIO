@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.db.entitymanager;
+package io.orqueio.bpm.engine.impl.db.entitymanager;
 
-import org.camunda.bpm.engine.impl.cfg.IdGenerator;
-import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.engine.impl.db.PersistenceSession;
-import org.camunda.bpm.engine.impl.interceptor.SessionFactory;
+import io.orqueio.bpm.engine.impl.cfg.IdGenerator;
+import io.orqueio.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.impl.db.PersistenceSession;
+import io.orqueio.bpm.engine.impl.interceptor.SessionFactory;
 
 /**
  * @author Sebastian Menski

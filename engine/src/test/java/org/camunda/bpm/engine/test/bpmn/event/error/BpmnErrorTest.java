@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.bpmn.event.error;
+package io.orqueio.bpm.engine.test.bpmn.event.error;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.camunda.bpm.engine.delegate.BpmnError;
+import io.orqueio.bpm.engine.delegate.BpmnError;
 import org.junit.Test;
 
 /**

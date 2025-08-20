@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.migration;
+package io.orqueio.bpm.engine.impl.migration;
 
 import java.util.List;
 
-import org.camunda.bpm.engine.impl.migration.validation.activity.MigrationActivityValidator;
-import org.camunda.bpm.engine.impl.migration.validation.instruction.MigrationInstructionValidator;
-import org.camunda.bpm.engine.impl.migration.validation.instruction.ValidatingMigrationInstructions;
-import org.camunda.bpm.engine.impl.pvm.process.ProcessDefinitionImpl;
+import io.orqueio.bpm.engine.impl.migration.validation.activity.MigrationActivityValidator;
+import io.orqueio.bpm.engine.impl.migration.validation.instruction.MigrationInstructionValidator;
+import io.orqueio.bpm.engine.impl.migration.validation.instruction.ValidatingMigrationInstructions;
+import io.orqueio.bpm.engine.impl.pvm.process.ProcessDefinitionImpl;
 
 /**
  * Generates all migration instructions which represent a direct one

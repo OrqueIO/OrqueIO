@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.jobexecutor;
+package io.orqueio.bpm.engine.test.jobexecutor;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -28,13 +28,13 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.camunda.bpm.engine.ProcessEngineConfiguration;
-import org.camunda.bpm.engine.history.HistoricJobLog;
-import org.camunda.bpm.engine.impl.interceptor.Command;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.interceptor.CommandExecutor;
-import org.camunda.bpm.engine.impl.jobexecutor.AcquiredJobs;
-import org.camunda.bpm.engine.impl.persistence.entity.JobManager;
+import io.orqueio.bpm.engine.ProcessEngineConfiguration;
+import io.orqueio.bpm.engine.history.HistoricJobLog;
+import io.orqueio.bpm.engine.impl.interceptor.Command;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.impl.interceptor.CommandExecutor;
+import io.orqueio.bpm.engine.impl.jobexecutor.AcquiredJobs;
+import io.orqueio.bpm.engine.impl.persistence.entity.JobManager;
 import org.junit.Test;
 
 /**

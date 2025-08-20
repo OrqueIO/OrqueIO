@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine;
+package io.orqueio.bpm.engine;
 
-import org.camunda.bpm.engine.exception.NotAllowedException;
+import io.orqueio.bpm.engine.exception.NotAllowedException;
 
 /**
  * This exception is thrown, if an operation that requires a non-suspended entity (execution, task, process definition) 

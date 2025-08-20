@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.json;
+package io.orqueio.bpm.engine.impl.json;
 
-import org.camunda.bpm.engine.impl.QueryOperator;
-import org.camunda.bpm.engine.impl.TaskQueryVariableValue;
+import io.orqueio.bpm.engine.impl.QueryOperator;
+import io.orqueio.bpm.engine.impl.TaskQueryVariableValue;
 import com.google.gson.JsonObject;
-import org.camunda.bpm.engine.impl.util.JsonUtil;
+import io.orqueio.bpm.engine.impl.util.JsonUtil;
 
 /**
  * @author Sebastian Menski

@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.xml.type;
+package io.orqueio.bpm.model.xml.type;
 
-import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
-import org.camunda.bpm.model.xml.instance.ModelElementInstance;
-import org.camunda.bpm.model.xml.type.attribute.AttributeBuilder;
-import org.camunda.bpm.model.xml.type.attribute.StringAttributeBuilder;
-import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
+import io.orqueio.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
+import io.orqueio.bpm.model.xml.instance.ModelElementInstance;
+import io.orqueio.bpm.model.xml.type.attribute.AttributeBuilder;
+import io.orqueio.bpm.model.xml.type.attribute.StringAttributeBuilder;
+import io.orqueio.bpm.model.xml.type.child.SequenceBuilder;
 
 /**
  * @author Daniel Meyer

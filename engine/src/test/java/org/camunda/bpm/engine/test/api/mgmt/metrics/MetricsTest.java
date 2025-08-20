@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.mgmt.metrics;
+package io.orqueio.bpm.engine.test.api.mgmt.metrics;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.fail;
@@ -24,17 +24,17 @@ import static org.junit.Assert.assertTrue;
 import java.util.Collection;
 import java.util.Date;
 
-import org.camunda.bpm.engine.ManagementService;
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.RuntimeService;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.metrics.Meter;
-import org.camunda.bpm.engine.impl.util.ClockUtil;
-import org.camunda.bpm.engine.management.Metrics;
-import org.camunda.bpm.engine.test.ProcessEngineRule;
-import org.camunda.bpm.engine.test.util.ProcessEngineTestRule;
-import org.camunda.bpm.engine.test.util.ProvidedProcessEngineRule;
-import org.camunda.bpm.model.bpmn.Bpmn;
+import io.orqueio.bpm.engine.ManagementService;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.RuntimeService;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.metrics.Meter;
+import io.orqueio.bpm.engine.impl.util.ClockUtil;
+import io.orqueio.bpm.engine.management.Metrics;
+import io.orqueio.bpm.engine.test.ProcessEngineRule;
+import io.orqueio.bpm.engine.test.util.ProcessEngineTestRule;
+import io.orqueio.bpm.engine.test.util.ProvidedProcessEngineRule;
+import io.orqueio.bpm.model.bpmn.Bpmn;
 import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;

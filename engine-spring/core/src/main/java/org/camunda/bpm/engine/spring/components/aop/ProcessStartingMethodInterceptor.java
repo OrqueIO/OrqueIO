@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.spring.components.aop;
+package io.orqueio.bpm.engine.spring.components.aop;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -24,12 +24,12 @@ import java.util.logging.Logger;
 
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.RuntimeService;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.spring.annotations.BusinessKey;
-import org.camunda.bpm.engine.spring.annotations.ProcessVariable;
-import org.camunda.bpm.engine.spring.annotations.StartProcess;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.RuntimeService;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.spring.annotations.BusinessKey;
+import io.orqueio.bpm.engine.spring.annotations.ProcessVariable;
+import io.orqueio.bpm.engine.spring.annotations.StartProcess;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.util.Assert;
@@ -46,12 +46,12 @@ public class ProcessStartingMethodInterceptor implements MethodInterceptor {
 	private Logger log = Logger.getLogger(getClass().getName());
 
 	/**
-	 * injected reference - can be obtained via a {@link org.camunda.bpm.engine.spring.ProcessEngineFactoryBean}
+	 * injected reference - can be obtained via a {@link io.orqueio.bpm.engine.spring.ProcessEngineFactoryBean}
 	 */
 	protected ProcessEngine processEngine;
 
 	/**
-	 * @param processEngine takes a reference to a {@link org.camunda.bpm.engine.ProcessEngine}
+	 * @param processEngine takes a reference to a {@link io.orqueio.bpm.engine.ProcessEngine}
 	 */
 	public ProcessStartingMethodInterceptor(ProcessEngine processEngine) {
 		this.processEngine = processEngine;
@@ -151,7 +151,7 @@ public class ProcessStartingMethodInterceptor implements MethodInterceptor {
 
 
 	/**
-	 * if there any arguments with the {@link org.camunda.bpm.engine.annotations.ProcessVariable} annotation,
+	 * if there any arguments with the {@link io.orqueio.bpm.engine.annotations.ProcessVariable} annotation,
 	 * then we feed those parameters into the business process
 	 *
 	 * @param invocation the invocation of the method as passed to the {@link org.aopalliance.intercept.MethodInterceptor#invoke(org.aopalliance.intercept.MethodInvocation)} method

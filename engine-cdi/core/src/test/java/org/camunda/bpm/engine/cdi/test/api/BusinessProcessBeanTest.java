@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.cdi.test.api;
+package io.orqueio.bpm.engine.cdi.test.api;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -25,17 +25,17 @@ import static org.junit.Assert.fail;
 
 import java.util.Collections;
 
-import org.camunda.bpm.engine.TaskService;
-import org.camunda.bpm.engine.cdi.BusinessProcess;
-import org.camunda.bpm.engine.cdi.ProcessEngineCdiException;
-import org.camunda.bpm.engine.cdi.test.CdiProcessEngineTestCase;
-import org.camunda.bpm.engine.runtime.Execution;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.task.Task;
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.engine.variable.Variables;
-import org.camunda.bpm.engine.variable.type.ValueType;
-import org.camunda.bpm.engine.variable.value.TypedValue;
+import io.orqueio.bpm.engine.TaskService;
+import io.orqueio.bpm.engine.cdi.BusinessProcess;
+import io.orqueio.bpm.engine.cdi.ProcessEngineCdiException;
+import io.orqueio.bpm.engine.cdi.test.CdiProcessEngineTestCase;
+import io.orqueio.bpm.engine.runtime.Execution;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.task.Task;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.variable.Variables;
+import io.orqueio.bpm.engine.variable.type.ValueType;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
 import org.jboss.arquillian.junit.Arquillian;
 import org.junit.Test;
 import org.junit.runner.RunWith;

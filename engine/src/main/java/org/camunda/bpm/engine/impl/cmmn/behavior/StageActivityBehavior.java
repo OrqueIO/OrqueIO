@@ -14,21 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.cmmn.behavior;
+package io.orqueio.bpm.engine.impl.cmmn.behavior;
 
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
-import org.camunda.bpm.engine.impl.cmmn.entity.runtime.CaseExecutionEntity;
-import org.camunda.bpm.engine.impl.cmmn.execution.CaseExecutionState;
-import org.camunda.bpm.engine.impl.cmmn.execution.CmmnActivityExecution;
-import org.camunda.bpm.engine.impl.cmmn.execution.CmmnExecution;
-import org.camunda.bpm.engine.impl.cmmn.model.CmmnActivity;
+import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
+import io.orqueio.bpm.engine.impl.cmmn.entity.runtime.CaseExecutionEntity;
+import io.orqueio.bpm.engine.impl.cmmn.execution.CaseExecutionState;
+import io.orqueio.bpm.engine.impl.cmmn.execution.CmmnActivityExecution;
+import io.orqueio.bpm.engine.impl.cmmn.execution.CmmnExecution;
+import io.orqueio.bpm.engine.impl.cmmn.model.CmmnActivity;
 
 import java.util.List;
 
-import static org.camunda.bpm.engine.impl.cmmn.execution.CaseExecutionState.*;
-import static org.camunda.bpm.engine.impl.cmmn.handler.ItemHandler.PROPERTY_AUTO_COMPLETE;
-import static org.camunda.bpm.engine.impl.util.ActivityBehaviorUtil.getActivityBehavior;
-import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureInstanceOf;
+import static io.orqueio.bpm.engine.impl.cmmn.execution.CaseExecutionState.*;
+import static io.orqueio.bpm.engine.impl.cmmn.handler.ItemHandler.PROPERTY_AUTO_COMPLETE;
+import static io.orqueio.bpm.engine.impl.util.ActivityBehaviorUtil.getActivityBehavior;
+import static io.orqueio.bpm.engine.impl.util.EnsureUtil.ensureInstanceOf;
 
 /**
  * @author Roman Smirnov

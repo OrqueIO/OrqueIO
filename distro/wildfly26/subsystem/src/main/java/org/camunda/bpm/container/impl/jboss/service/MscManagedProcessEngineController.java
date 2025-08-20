@@ -14,21 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.jboss.service;
+package io.orqueio.bpm.container.impl.jboss.service;
 
-import org.camunda.bpm.container.impl.jboss.config.ManagedJtaProcessEngineConfiguration;
-import org.camunda.bpm.container.impl.jboss.config.ManagedProcessEngineMetadata;
-import org.camunda.bpm.container.impl.jboss.util.JBossCompatibilityExtension;
-import org.camunda.bpm.container.impl.jboss.util.Tccl;
-import org.camunda.bpm.container.impl.jboss.util.Tccl.Operation;
-import org.camunda.bpm.container.impl.jmx.services.JmxManagedProcessEngineController;
-import org.camunda.bpm.container.impl.metadata.PropertyHelper;
-import org.camunda.bpm.container.impl.metadata.spi.ProcessEnginePluginXml;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.ProcessEngineConfiguration;
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.impl.cfg.JtaProcessEngineConfiguration;
-import org.camunda.bpm.engine.impl.cfg.ProcessEnginePlugin;
+import io.orqueio.bpm.container.impl.jboss.config.ManagedJtaProcessEngineConfiguration;
+import io.orqueio.bpm.container.impl.jboss.config.ManagedProcessEngineMetadata;
+import io.orqueio.bpm.container.impl.jboss.util.JBossCompatibilityExtension;
+import io.orqueio.bpm.container.impl.jboss.util.Tccl;
+import io.orqueio.bpm.container.impl.jboss.util.Tccl.Operation;
+import io.orqueio.bpm.container.impl.jmx.services.JmxManagedProcessEngineController;
+import io.orqueio.bpm.container.impl.metadata.PropertyHelper;
+import io.orqueio.bpm.container.impl.metadata.spi.ProcessEnginePluginXml;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.ProcessEngineConfiguration;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.impl.cfg.JtaProcessEngineConfiguration;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEnginePlugin;
 import org.jboss.as.connector.subsystems.datasources.DataSourceReferenceFactoryService;
 import org.jboss.as.naming.deployment.ContextNames;
 import org.jboss.msc.inject.Injector;

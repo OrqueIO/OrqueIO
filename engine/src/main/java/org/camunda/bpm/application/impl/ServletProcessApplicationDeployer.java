@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.application.impl;
+package io.orqueio.bpm.application.impl;
 
 import java.util.Set;
 import javax.servlet.ServletContainerInitializer;
@@ -22,7 +22,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.HandlesTypes;
-import org.camunda.bpm.application.ProcessApplication;
+import io.orqueio.bpm.application.ProcessApplication;
 
 /**
  * <p>This class is an implementation of {@link ServletContainerInitializer} and

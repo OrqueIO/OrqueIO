@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.standalone.beans;
+package io.orqueio.bpm.engine.test.standalone.beans;
 
-import org.camunda.bpm.engine.ArtifactFactory;
-import org.camunda.bpm.engine.impl.DefaultArtifactFactory;
+import io.orqueio.bpm.engine.ArtifactFactory;
+import io.orqueio.bpm.engine.impl.DefaultArtifactFactory;
 import org.junit.Assert;
 import org.junit.Test;
 

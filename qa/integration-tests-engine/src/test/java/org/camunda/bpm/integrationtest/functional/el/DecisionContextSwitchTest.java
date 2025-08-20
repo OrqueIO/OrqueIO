@@ -14,20 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.functional.el;
+package io.orqueio.bpm.integrationtest.functional.el;
 
 import static org.junit.Assert.assertEquals;
 
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.dmn.engine.DmnDecisionTableResult;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.runtime.VariableInstance;
-import org.camunda.bpm.engine.variable.Variables;
-import org.camunda.bpm.integrationtest.functional.el.beans.GreeterBean;
-import org.camunda.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
-import org.camunda.bpm.integrationtest.util.TestContainer;
+import io.orqueio.bpm.dmn.engine.DmnDecisionTableResult;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.runtime.VariableInstance;
+import io.orqueio.bpm.engine.variable.Variables;
+import io.orqueio.bpm.integrationtest.functional.el.beans.GreeterBean;
+import io.orqueio.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
+import io.orqueio.bpm.integrationtest.util.TestContainer;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -95,12 +95,12 @@ public class DecisionContextSwitchTest extends AbstractFoxPlatformIntegrationTes
   public void shouldSwitchContextWhenUsingDecisionServiceAfterRedeployment() {
 
     // given
-    List<org.camunda.bpm.engine.repository.Deployment> deployments = repositoryService.createDeploymentQuery()
+    List<io.orqueio.bpm.engine.repository.Deployment> deployments = repositoryService.createDeploymentQuery()
         .list();
 
     // find dmn deployment
-    org.camunda.bpm.engine.repository.Deployment dmnDeployment = null;
-    for (org.camunda.bpm.engine.repository.Deployment deployment : deployments) {
+    io.orqueio.bpm.engine.repository.Deployment dmnDeployment = null;
+    for (io.orqueio.bpm.engine.repository.Deployment deployment : deployments) {
       List<String> resourceNames = repositoryService.getDeploymentResourceNames(deployment.getId());
       if(resourceNames.contains(DMN_RESOURCE_NAME)) {
         dmnDeployment = deployment;
@@ -111,7 +111,7 @@ public class DecisionContextSwitchTest extends AbstractFoxPlatformIntegrationTes
       Assert.fail("Expected to find DMN deployment");
     }
 
-    org.camunda.bpm.engine.repository.Deployment deployment2 = repositoryService
+    io.orqueio.bpm.engine.repository.Deployment deployment2 = repositoryService
       .createDeployment()
       .nameFromDeployment(dmnDeployment.getId())
       .addDeploymentResources(dmnDeployment.getId())
@@ -133,12 +133,12 @@ public class DecisionContextSwitchTest extends AbstractFoxPlatformIntegrationTes
   @OperateOnDeployment("clientDeployment")
   public void shouldSwitchContextWhenCallingFromBpmnAfterRedeployment() {
     // given
-    List<org.camunda.bpm.engine.repository.Deployment> deployments = repositoryService.createDeploymentQuery()
+    List<io.orqueio.bpm.engine.repository.Deployment> deployments = repositoryService.createDeploymentQuery()
         .list();
 
     // find dmn deployment
-    org.camunda.bpm.engine.repository.Deployment dmnDeployment = null;
-    for (org.camunda.bpm.engine.repository.Deployment deployment : deployments) {
+    io.orqueio.bpm.engine.repository.Deployment dmnDeployment = null;
+    for (io.orqueio.bpm.engine.repository.Deployment deployment : deployments) {
       List<String> resourceNames = repositoryService.getDeploymentResourceNames(deployment.getId());
       if(resourceNames.contains(DMN_RESOURCE_NAME)) {
         dmnDeployment = deployment;
@@ -149,7 +149,7 @@ public class DecisionContextSwitchTest extends AbstractFoxPlatformIntegrationTes
       Assert.fail("Expected to find DMN deployment");
     }
 
-    org.camunda.bpm.engine.repository.Deployment deployment2 = repositoryService
+    io.orqueio.bpm.engine.repository.Deployment deployment2 = repositoryService
       .createDeployment()
       .nameFromDeployment(dmnDeployment.getId())
       .addDeploymentResources(dmnDeployment.getId())

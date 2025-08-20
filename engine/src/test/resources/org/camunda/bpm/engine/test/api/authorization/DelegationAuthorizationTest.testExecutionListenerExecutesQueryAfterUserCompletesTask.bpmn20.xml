@@ -16,7 +16,7 @@
 
     <serviceTask id="serviceTask" camunda:expression="${true}">
       <extensionElements>
-        <camunda:executionListener event="start" class="org.camunda.bpm.engine.test.api.authorization.service.ExecuteQueryListener" />
+        <camunda:executionListener event="start" class="io.orqueio.bpm.engine.test.api.authorization.service.ExecuteQueryListener" />
       </extensionElements>
     </serviceTask>
 

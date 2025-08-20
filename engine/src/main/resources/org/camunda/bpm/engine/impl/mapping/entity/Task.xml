@@ -19,11 +19,11 @@
 -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="org.camunda.bpm.engine.impl.persistence.entity.TaskEntity">
+<mapper namespace="io.orqueio.bpm.engine.impl.persistence.entity.TaskEntity">
 
   <!-- TASK INSERT -->
 
-  <insert id="insertTask" parameterType="org.camunda.bpm.engine.impl.persistence.entity.TaskEntity">
+  <insert id="insertTask" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.TaskEntity">
     insert into ${prefix}ACT_RU_TASK (
       ID_,
       NAME_,
@@ -77,7 +77,7 @@
 
   <!-- TASK UPDATE -->
 
-  <update id="updateTask" parameterType="org.camunda.bpm.engine.impl.persistence.entity.TaskEntity">
+  <update id="updateTask" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.TaskEntity">
     update ${prefix}ACT_RU_TASK
     <set>
       REV_ = #{revisionNext, jdbcType=INTEGER},
@@ -106,7 +106,7 @@
       and REV_ = #{revision, jdbcType=INTEGER}
   </update>
 
-  <update id="updateTaskSuspensionStateByParameters" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject">
+  <update id="updateTaskSuspensionStateByParameters" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject">
     update ${prefix}ACT_RU_TASK set
       REV_ = 1 + REV_ ,
       SUSPENSION_STATE_ = #{parameter.suspensionState, jdbcType=INTEGER}
@@ -137,7 +137,7 @@
       </if>
       )
       <bind name="columnPrefix" value="''"/>
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheckWithPrefix" />
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheckWithPrefix" />
     </if>
     <if test="parameter.caseExecutionId != null">
       CASE_EXECUTION_ID_ = #{parameter.caseExecutionId, jdbcType=VARCHAR}
@@ -145,13 +145,13 @@
   </sql>
 
   <!-- TASK DELETE -->
-  <delete id="deleteTask" parameterType="org.camunda.bpm.engine.impl.persistence.entity.TaskEntity">
+  <delete id="deleteTask" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.TaskEntity">
     delete from ${prefix}ACT_RU_TASK where ID_ = #{id} and REV_ = #{revision}
   </delete>
 
   <!-- TASK RESULTMAP -->
 
-  <resultMap id="taskResultMap" type="org.camunda.bpm.engine.impl.persistence.entity.TaskEntity">
+  <resultMap id="taskResultMap" type="io.orqueio.bpm.engine.impl.persistence.entity.TaskEntity">
     <id property="id" column="ID_" jdbcType="VARCHAR"/>
     <result property="revision" column="REV_" jdbcType="INTEGER"/>
     <result property="nameWithoutCascade" column="NAME_" jdbcType="VARCHAR"/>
@@ -184,30 +184,30 @@
    select * from ${prefix}ACT_RU_TASK where ID_ = #{id}
   </select>
 
-  <select id="selectTasksByParentTaskId" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject" resultMap="taskResultMap">
+  <select id="selectTasksByParentTaskId" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject" resultMap="taskResultMap">
     select * from ${prefix}ACT_RU_TASK where PARENT_TASK_ID_ = #{parameter}
   </select>
 
-  <select id="selectTasksByExecutionId" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject" resultMap="taskResultMap">
+  <select id="selectTasksByExecutionId" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject" resultMap="taskResultMap">
     select distinct T.*
     from ${prefix}ACT_RU_TASK T
     where T.EXECUTION_ID_ = #{parameter}
   </select>
 
-  <select id="selectTaskByCaseExecutionId" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject" resultMap="taskResultMap">
+  <select id="selectTaskByCaseExecutionId" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject" resultMap="taskResultMap">
     select distinct T.*
     from ${prefix}ACT_RU_TASK T
     where T.CASE_EXECUTION_ID_ = #{parameter}
   </select>
 
-  <select id="selectTasksByProcessInstanceId" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject" resultMap="taskResultMap">
+  <select id="selectTasksByProcessInstanceId" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject" resultMap="taskResultMap">
     select T.*
     from ${prefix}ACT_RU_TASK T
     where T.PROC_INST_ID_ = #{parameter}
   </select>
 
-  <select id="selectTaskByQueryCriteria" parameterType="org.camunda.bpm.engine.impl.TaskQueryImpl" resultMap="taskResultMap">
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
+  <select id="selectTaskByQueryCriteria" parameterType="io.orqueio.bpm.engine.impl.TaskQueryImpl" resultMap="taskResultMap">
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
     ${limitBefore}
     select ${distinct}
     <include refid="columnSelection"/>
@@ -215,13 +215,13 @@
     <if test="taskNameCaseInsensitive">
       , lower(RES.NAME_) LOWER_NAME_
     </if>
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.orderBySelection"/>
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.orderBySelection"/>
     <include refid="selectTaskByQueryCriteriaSql"/>
     ${orderBy}
     ${limitAfter}
   </select>
 
-  <select id="selectTaskCountByQueryCriteria" parameterType="org.camunda.bpm.engine.impl.TaskQueryImpl" resultType="long">
+  <select id="selectTaskCountByQueryCriteria" parameterType="io.orqueio.bpm.engine.impl.TaskQueryImpl" resultType="long">
     ${countDistinctBeforeStart} RES.ID_ ${countDistinctBeforeEnd}
     <include refid="selectTaskByQueryCriteriaSql"/>
     ${countDistinctAfterEnd}
@@ -315,19 +315,19 @@
 
     <if test="authCheck.shouldPerformAuthorizatioCheck &amp;&amp; authCheck.authUserId != null">
       <if test="!authCheck.revokeAuthorizationCheckEnabled">    
-        <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoinWithoutOnClause" /> 
+        <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoinWithoutOnClause" />
         AUTH ON (AUTH.RESOURCE_ID_ ${authJoinStart} RES.ID_ ${authJoinSeparator} D.KEY_ ${authJoinSeparator} '*' ${authJoinEnd})
       </if>
     </if>
     
     <foreach collection="orderingProperties" item="orderingProperty" index="i">
       <if test="orderingProperty.relation != null">
-        <bind name="tableAlias" value="@org.camunda.bpm.engine.impl.db.sql.MybatisJoinHelper@tableAlias(orderingProperty.relation, i)"/>
+        <bind name="tableAlias" value="@io.orqueio.bpm.engine.impl.db.sql.MybatisJoinHelper@tableAlias(orderingProperty.relation, i)"/>
         left join 
-        ${prefix}${@org.camunda.bpm.engine.impl.db.sql.MybatisJoinHelper@tableMapping(orderingProperty.relation)} 
+        ${prefix}${@io.orqueio.bpm.engine.impl.db.sql.MybatisJoinHelper@tableMapping(orderingProperty.relation)}
         ${tableAlias}
         on
-        <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.filterOrderByRelations"/>
+        <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.filterOrderByRelations"/>
       </if>
     </foreach>
     <where>
@@ -677,7 +677,7 @@
               WHERE
               <bind name="varPrefix" value="''"/>
 
-              <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.variableNameEqualsCaseInsensitive" />
+              <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.variableNameEqualsCaseInsensitive" />
 
               <choose>
                 <when test="queryVariableValue.local">
@@ -701,7 +701,7 @@
               <bind name="varTypeField" value="'TYPE_'"/>
               <if test="queryVariableValue.valueConditions != null">
                 and
-                <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.variableValueConditions"/>
+                <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.variableValueConditions"/>
               </if>
               )
             </foreach>
@@ -721,8 +721,8 @@
       <!-- Task query does not use left join if cmmn is disabled, 
         so we don't need to account for case tasks in this case. -->
       <bind name="applyAuthorizationCheckForCaseInstances" value="authCheck.useLeftJoin" />
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.contextualAuthorizationCheck" /> 
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.contextualAuthorizationCheck" />
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
  
     </where>
   </sql>
@@ -753,12 +753,12 @@
 
   <!-- TASK GROUP ASSIGNMENT REPORT RESULT MAP -->
 
-  <resultMap id="taskCountByCandidateGroupReportResultMap" type="org.camunda.bpm.engine.impl.persistence.entity.TaskCountByCandidateGroupResultEntity">
+  <resultMap id="taskCountByCandidateGroupReportResultMap" type="io.orqueio.bpm.engine.impl.persistence.entity.TaskCountByCandidateGroupResultEntity">
     <result property="taskCount" column="TASK_COUNT_" jdbcType="INTEGER" />
     <result property="groupName" column="GROUP_NAME_" jdbcType="VARCHAR" />
   </resultMap>
 
-  <select id="selectTaskCountByCandidateGroupReportQuery" parameterType="org.camunda.bpm.engine.impl.TaskReportImpl" resultMap="taskCountByCandidateGroupReportResultMap">
+  <select id="selectTaskCountByCandidateGroupReportQuery" parameterType="io.orqueio.bpm.engine.impl.TaskReportImpl" resultMap="taskCountByCandidateGroupReportResultMap">
     SELECT
         COUNT(T.ID_) AS TASK_COUNT_,
         I.GROUP_ID_ AS GROUP_NAME_
@@ -772,7 +772,7 @@
     <where>
       T.ASSIGNEE_ IS NULL
       <bind name="columnPrefix" value="'T.'"/>
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheckWithPrefix" />
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheckWithPrefix" />
     </where>
 
     GROUP BY

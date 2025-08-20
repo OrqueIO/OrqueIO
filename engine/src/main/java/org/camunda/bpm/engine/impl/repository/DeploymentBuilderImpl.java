@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.repository;
+package io.orqueio.bpm.engine.impl.repository;
 
 import java.io.ByteArrayOutputStream;
-import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureNotContainsNull;
-import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureNotEmpty;
-import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
+import static io.orqueio.bpm.engine.impl.util.EnsureUtil.ensureNotContainsNull;
+import static io.orqueio.bpm.engine.impl.util.EnsureUtil.ensureNotEmpty;
+import static io.orqueio.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
 
 import java.io.InputStream;
 import java.io.Serializable;
@@ -34,29 +34,29 @@ import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.exception.NotValidException;
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
-import org.camunda.bpm.engine.impl.RepositoryServiceImpl;
-import org.camunda.bpm.engine.impl.bpmn.deployer.BpmnDeployer;
-import org.camunda.bpm.engine.impl.cmd.CommandLogger;
-import org.camunda.bpm.engine.impl.cmmn.deployer.CmmnDeployer;
-import org.camunda.bpm.engine.impl.dmn.deployer.DecisionDefinitionDeployer;
-import org.camunda.bpm.engine.impl.persistence.entity.DeploymentEntity;
-import org.camunda.bpm.engine.impl.persistence.entity.ResourceEntity;
-import org.camunda.bpm.engine.impl.util.CollectionUtil;
-import org.camunda.bpm.engine.impl.util.IoUtil;
-import org.camunda.bpm.engine.impl.util.ReflectUtil;
-import org.camunda.bpm.engine.impl.util.StringUtil;
-import org.camunda.bpm.engine.repository.Deployment;
-import org.camunda.bpm.engine.repository.DeploymentBuilder;
-import org.camunda.bpm.engine.repository.DeploymentWithDefinitions;
-import org.camunda.bpm.model.bpmn.Bpmn;
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
-import org.camunda.bpm.model.cmmn.Cmmn;
-import org.camunda.bpm.model.cmmn.CmmnModelInstance;
-import org.camunda.bpm.model.dmn.Dmn;
-import org.camunda.bpm.model.dmn.DmnModelInstance;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.exception.NotValidException;
+import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
+import io.orqueio.bpm.engine.impl.RepositoryServiceImpl;
+import io.orqueio.bpm.engine.impl.bpmn.deployer.BpmnDeployer;
+import io.orqueio.bpm.engine.impl.cmd.CommandLogger;
+import io.orqueio.bpm.engine.impl.cmmn.deployer.CmmnDeployer;
+import io.orqueio.bpm.engine.impl.dmn.deployer.DecisionDefinitionDeployer;
+import io.orqueio.bpm.engine.impl.persistence.entity.DeploymentEntity;
+import io.orqueio.bpm.engine.impl.persistence.entity.ResourceEntity;
+import io.orqueio.bpm.engine.impl.util.CollectionUtil;
+import io.orqueio.bpm.engine.impl.util.IoUtil;
+import io.orqueio.bpm.engine.impl.util.ReflectUtil;
+import io.orqueio.bpm.engine.impl.util.StringUtil;
+import io.orqueio.bpm.engine.repository.Deployment;
+import io.orqueio.bpm.engine.repository.DeploymentBuilder;
+import io.orqueio.bpm.engine.repository.DeploymentWithDefinitions;
+import io.orqueio.bpm.model.bpmn.Bpmn;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.bpm.model.cmmn.Cmmn;
+import io.orqueio.bpm.model.cmmn.CmmnModelInstance;
+import io.orqueio.bpm.model.dmn.Dmn;
+import io.orqueio.bpm.model.dmn.DmnModelInstance;
 
 /**
  * @author Tom Baeyens

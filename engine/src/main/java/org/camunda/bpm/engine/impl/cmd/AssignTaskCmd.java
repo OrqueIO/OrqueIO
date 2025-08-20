@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.cmd;
+package io.orqueio.bpm.engine.impl.cmd;
 
-import org.camunda.bpm.engine.history.UserOperationLogEntry;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.persistence.entity.TaskEntity;
-import org.camunda.bpm.engine.task.IdentityLinkType;
+import io.orqueio.bpm.engine.history.UserOperationLogEntry;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.impl.persistence.entity.TaskEntity;
+import io.orqueio.bpm.engine.task.IdentityLinkType;
 
 /**
  * @author Danny Gräf

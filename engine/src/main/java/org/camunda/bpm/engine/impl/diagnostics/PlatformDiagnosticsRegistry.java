@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.diagnostics;
+package io.orqueio.bpm.engine.impl.diagnostics;
 
-import org.camunda.bpm.engine.impl.telemetry.dto.ApplicationServerImpl;
+import io.orqueio.bpm.engine.impl.telemetry.dto.ApplicationServerImpl;
 
 public class PlatformDiagnosticsRegistry {
 

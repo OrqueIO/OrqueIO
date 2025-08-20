@@ -24,8 +24,8 @@
       <stage id="Stage_1">
 
         <extensionElements>
-          <camunda:caseExecutionListener event="enable" class="org.camunda.bpm.engine.test.cmmn.sentry.SentryTriggerListener" />
-          <camunda:caseExecutionListener event="start" class="org.camunda.bpm.engine.test.cmmn.sentry.SentryTriggerListener" />
+          <camunda:caseExecutionListener event="enable" class="io.orqueio.bpm.engine.test.cmmn.sentry.SentryTriggerListener" />
+          <camunda:caseExecutionListener event="start" class="io.orqueio.bpm.engine.test.cmmn.sentry.SentryTriggerListener" />
         </extensionElements>
         <defaultControl>
           <manualActivationRule>

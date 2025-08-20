@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.cdi;
+package io.orqueio.bpm.engine.cdi;
 
-import org.camunda.bpm.engine.delegate.DelegateTask;
-import org.camunda.bpm.engine.repository.ProcessDefinition;
-import org.camunda.bpm.engine.runtime.Execution;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.delegate.DelegateTask;
+import io.orqueio.bpm.engine.repository.ProcessDefinition;
+import io.orqueio.bpm.engine.runtime.Execution;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
 
 import java.util.Date;
 

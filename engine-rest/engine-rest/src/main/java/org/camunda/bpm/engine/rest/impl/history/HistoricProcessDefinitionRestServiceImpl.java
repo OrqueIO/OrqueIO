@@ -14,24 +14,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.impl.history;
+package io.orqueio.bpm.engine.rest.impl.history;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.core.UriInfo;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.history.CleanableHistoricProcessInstanceReport;
-import org.camunda.bpm.engine.history.CleanableHistoricProcessInstanceReportResult;
-import org.camunda.bpm.engine.history.HistoricActivityStatistics;
-import org.camunda.bpm.engine.history.HistoricActivityStatisticsQuery;
-import org.camunda.bpm.engine.rest.dto.CountResultDto;
-import org.camunda.bpm.engine.rest.dto.history.CleanableHistoricProcessInstanceReportDto;
-import org.camunda.bpm.engine.rest.dto.history.CleanableHistoricProcessInstanceReportResultDto;
-import org.camunda.bpm.engine.rest.dto.history.HistoricActivityStatisticsDto;
-import org.camunda.bpm.engine.rest.history.HistoricProcessDefinitionRestService;
-import org.camunda.bpm.engine.rest.impl.AbstractRestProcessEngineAware;
-import org.camunda.bpm.engine.rest.util.QueryUtil;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.history.CleanableHistoricProcessInstanceReport;
+import io.orqueio.bpm.engine.history.CleanableHistoricProcessInstanceReportResult;
+import io.orqueio.bpm.engine.history.HistoricActivityStatistics;
+import io.orqueio.bpm.engine.history.HistoricActivityStatisticsQuery;
+import io.orqueio.bpm.engine.rest.dto.CountResultDto;
+import io.orqueio.bpm.engine.rest.dto.history.CleanableHistoricProcessInstanceReportDto;
+import io.orqueio.bpm.engine.rest.dto.history.CleanableHistoricProcessInstanceReportResultDto;
+import io.orqueio.bpm.engine.rest.dto.history.HistoricActivityStatisticsDto;
+import io.orqueio.bpm.engine.rest.history.HistoricProcessDefinitionRestService;
+import io.orqueio.bpm.engine.rest.impl.AbstractRestProcessEngineAware;
+import io.orqueio.bpm.engine.rest.util.QueryUtil;
 
 public class HistoricProcessDefinitionRestServiceImpl extends AbstractRestProcessEngineAware implements HistoricProcessDefinitionRestService {
 

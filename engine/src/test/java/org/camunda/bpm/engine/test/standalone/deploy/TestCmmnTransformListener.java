@@ -14,31 +14,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.standalone.deploy;
+package io.orqueio.bpm.engine.test.standalone.deploy;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.camunda.bpm.engine.impl.cmmn.entity.repository.CaseDefinitionEntity;
-import org.camunda.bpm.engine.impl.cmmn.model.CmmnActivity;
-import org.camunda.bpm.engine.impl.cmmn.model.CmmnCaseDefinition;
-import org.camunda.bpm.engine.impl.cmmn.model.CmmnSentryDeclaration;
-import org.camunda.bpm.engine.impl.cmmn.transformer.CmmnTransformListener;
-import org.camunda.bpm.model.cmmn.instance.Case;
-import org.camunda.bpm.model.cmmn.instance.CasePlanModel;
-import org.camunda.bpm.model.cmmn.instance.CaseTask;
-import org.camunda.bpm.model.cmmn.instance.CmmnModelElementInstance;
-import org.camunda.bpm.model.cmmn.instance.DecisionTask;
-import org.camunda.bpm.model.cmmn.instance.Definitions;
-import org.camunda.bpm.model.cmmn.instance.EventListener;
-import org.camunda.bpm.model.cmmn.instance.HumanTask;
-import org.camunda.bpm.model.cmmn.instance.Milestone;
-import org.camunda.bpm.model.cmmn.instance.PlanItem;
-import org.camunda.bpm.model.cmmn.instance.ProcessTask;
-import org.camunda.bpm.model.cmmn.instance.Sentry;
-import org.camunda.bpm.model.cmmn.instance.Stage;
-import org.camunda.bpm.model.cmmn.instance.Task;
+import io.orqueio.bpm.engine.impl.cmmn.entity.repository.CaseDefinitionEntity;
+import io.orqueio.bpm.engine.impl.cmmn.model.CmmnActivity;
+import io.orqueio.bpm.engine.impl.cmmn.model.CmmnCaseDefinition;
+import io.orqueio.bpm.engine.impl.cmmn.model.CmmnSentryDeclaration;
+import io.orqueio.bpm.engine.impl.cmmn.transformer.CmmnTransformListener;
+import io.orqueio.bpm.model.cmmn.instance.Case;
+import io.orqueio.bpm.model.cmmn.instance.CasePlanModel;
+import io.orqueio.bpm.model.cmmn.instance.CaseTask;
+import io.orqueio.bpm.model.cmmn.instance.CmmnModelElementInstance;
+import io.orqueio.bpm.model.cmmn.instance.DecisionTask;
+import io.orqueio.bpm.model.cmmn.instance.Definitions;
+import io.orqueio.bpm.model.cmmn.instance.EventListener;
+import io.orqueio.bpm.model.cmmn.instance.HumanTask;
+import io.orqueio.bpm.model.cmmn.instance.Milestone;
+import io.orqueio.bpm.model.cmmn.instance.PlanItem;
+import io.orqueio.bpm.model.cmmn.instance.ProcessTask;
+import io.orqueio.bpm.model.cmmn.instance.Sentry;
+import io.orqueio.bpm.model.cmmn.instance.Stage;
+import io.orqueio.bpm.model.cmmn.instance.Task;
 
 /**
  * @author Sebastian Menski
@@ -62,8 +62,8 @@ public class TestCmmnTransformListener implements CmmnTransformListener {
     cmmnActivities.add(caseDefinition);
   }
 
-  public void transformCasePlanModel(org.camunda.bpm.model.cmmn.impl.instance.CasePlanModel casePlanModel, CmmnActivity caseActivity) {
-    transformCasePlanModel((org.camunda.bpm.model.cmmn.instance.CasePlanModel) casePlanModel, caseActivity);
+  public void transformCasePlanModel(io.orqueio.bpm.model.cmmn.impl.instance.CasePlanModel casePlanModel, CmmnActivity caseActivity) {
+    transformCasePlanModel((io.orqueio.bpm.model.cmmn.instance.CasePlanModel) casePlanModel, caseActivity);
   }
 
   public void transformCasePlanModel(CasePlanModel casePlanModel, CmmnActivity activity) {

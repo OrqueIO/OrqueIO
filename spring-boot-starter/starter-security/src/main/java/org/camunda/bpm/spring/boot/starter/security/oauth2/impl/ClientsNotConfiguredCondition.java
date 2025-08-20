@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter.security.oauth2.impl;
+package io.orqueio.bpm.spring.boot.starter.security.oauth2.impl;
 
 import org.springframework.boot.autoconfigure.condition.ConditionOutcome;
 import org.springframework.boot.autoconfigure.security.oauth2.client.ClientsConfiguredCondition;

@@ -14,24 +14,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.authorization;
+package io.orqueio.bpm.engine.test.api.authorization;
 
-import static org.camunda.bpm.engine.authorization.Authorization.ANY;
-import static org.camunda.bpm.engine.authorization.Permissions.CREATE;
-import static org.camunda.bpm.engine.authorization.Permissions.CREATE_INSTANCE;
-import static org.camunda.bpm.engine.authorization.Permissions.READ;
-import static org.camunda.bpm.engine.authorization.Resources.PROCESS_DEFINITION;
-import static org.camunda.bpm.engine.authorization.Resources.PROCESS_INSTANCE;
+import static io.orqueio.bpm.engine.authorization.Authorization.ANY;
+import static io.orqueio.bpm.engine.authorization.Permissions.CREATE;
+import static io.orqueio.bpm.engine.authorization.Permissions.CREATE_INSTANCE;
+import static io.orqueio.bpm.engine.authorization.Permissions.READ;
+import static io.orqueio.bpm.engine.authorization.Resources.PROCESS_DEFINITION;
+import static io.orqueio.bpm.engine.authorization.Resources.PROCESS_INSTANCE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.List;
 
-import org.camunda.bpm.engine.AuthorizationException;
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.AuthorizationException;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.test.Deployment;
 import org.junit.Test;
 
 public class ConditionStartEventAuthorizationTest extends AuthorizationTest {

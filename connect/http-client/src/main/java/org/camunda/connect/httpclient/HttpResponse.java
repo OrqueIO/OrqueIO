@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.connect.httpclient;
+package io.orqueio.connect.httpclient;
 
 import java.util.Map;
 
-import org.camunda.connect.spi.CloseableConnectorResponse;
+import io.orqueio.connect.spi.CloseableConnectorResponse;
 
 public interface HttpResponse extends CloseableConnectorResponse {
 

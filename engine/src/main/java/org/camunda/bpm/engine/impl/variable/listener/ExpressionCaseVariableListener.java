@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.variable.listener;
+package io.orqueio.bpm.engine.impl.variable.listener;
 
-import org.camunda.bpm.engine.delegate.CaseVariableListener;
-import org.camunda.bpm.engine.delegate.DelegateCaseVariableInstance;
-import org.camunda.bpm.engine.delegate.Expression;
+import io.orqueio.bpm.engine.delegate.CaseVariableListener;
+import io.orqueio.bpm.engine.delegate.DelegateCaseVariableInstance;
+import io.orqueio.bpm.engine.delegate.Expression;
 
 /**
  * @author Thorben Lindhauer

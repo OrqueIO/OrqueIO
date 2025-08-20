@@ -14,22 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.bpmn.multiinstance;
+package io.orqueio.bpm.engine.test.bpmn.multiinstance;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.camunda.bpm.engine.impl.bpmn.behavior.MultiInstanceActivityBehavior.NUMBER_OF_INSTANCES;
+import static io.orqueio.bpm.engine.impl.bpmn.behavior.MultiInstanceActivityBehavior.NUMBER_OF_INSTANCES;
 
 import java.util.List;
 
-import org.camunda.bpm.engine.task.Task;
-import org.camunda.bpm.engine.test.ProcessEngineRule;
-import org.camunda.bpm.engine.test.util.ProvidedProcessEngineRule;
-import org.camunda.bpm.model.bpmn.Bpmn;
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
-import org.camunda.bpm.model.bpmn.builder.CallActivityBuilder;
-import org.camunda.bpm.model.bpmn.instance.CallActivity;
-import org.camunda.bpm.model.bpmn.instance.camunda.CamundaIn;
-import org.camunda.bpm.model.bpmn.instance.camunda.CamundaOut;
+import io.orqueio.bpm.engine.task.Task;
+import io.orqueio.bpm.engine.test.ProcessEngineRule;
+import io.orqueio.bpm.engine.test.util.ProvidedProcessEngineRule;
+import io.orqueio.bpm.model.bpmn.Bpmn;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.bpm.model.bpmn.builder.CallActivityBuilder;
+import io.orqueio.bpm.model.bpmn.instance.CallActivity;
+import io.orqueio.bpm.model.bpmn.instance.camunda.CamundaIn;
+import io.orqueio.bpm.model.bpmn.instance.camunda.CamundaOut;
 import org.junit.Rule;
 import org.junit.Test;
 

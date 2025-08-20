@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.xml.type.reference;
+package io.orqueio.bpm.model.xml.type.reference;
 
-import org.camunda.bpm.model.xml.instance.ModelElementInstance;
-import org.camunda.bpm.model.xml.type.attribute.Attribute;
+import io.orqueio.bpm.model.xml.instance.ModelElementInstance;
+import io.orqueio.bpm.model.xml.type.attribute.Attribute;
 
 /**
  * @author Sebastian Menski

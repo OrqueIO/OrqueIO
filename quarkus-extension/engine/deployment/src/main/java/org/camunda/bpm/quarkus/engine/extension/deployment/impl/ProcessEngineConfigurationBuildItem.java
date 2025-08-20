@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.quarkus.engine.extension.deployment.impl;
+package io.orqueio.bpm.quarkus.engine.extension.deployment.impl;
 
 import io.quarkus.builder.item.SimpleBuildItem;
 import io.quarkus.runtime.RuntimeValue;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 
 public final class ProcessEngineConfigurationBuildItem extends SimpleBuildItem {
 

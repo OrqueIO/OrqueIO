@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.db;
+package io.orqueio.bpm.engine.impl.db;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.authorization.Permission;
-import org.camunda.bpm.engine.authorization.Resource;
-import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.engine.impl.persistence.entity.AuthorizationManager;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.authorization.Permission;
+import io.orqueio.bpm.engine.authorization.Resource;
+import io.orqueio.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationManager;
 
 /**
  * @author Thorben Lindhauer

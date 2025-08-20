@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.identity;
+package io.orqueio.bpm.engine.impl.identity;
 
-import org.camunda.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.ProcessEngineException;
 
 /**
  * <p>Marks an exception triggered inside an identity provider implementation</p>

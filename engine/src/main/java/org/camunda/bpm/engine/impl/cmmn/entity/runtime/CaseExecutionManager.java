@@ -14,19 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.cmmn.entity.runtime;
+package io.orqueio.bpm.engine.impl.cmmn.entity.runtime;
 
 import java.util.Arrays;
 import java.util.List;
 
-import org.camunda.bpm.engine.BadUserRequestException;
-import org.camunda.bpm.engine.impl.AbstractQuery;
-import org.camunda.bpm.engine.impl.Page;
-import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.persistence.AbstractManager;
-import org.camunda.bpm.engine.runtime.CaseExecution;
-import org.camunda.bpm.engine.runtime.CaseInstance;
+import io.orqueio.bpm.engine.BadUserRequestException;
+import io.orqueio.bpm.engine.impl.AbstractQuery;
+import io.orqueio.bpm.engine.impl.Page;
+import io.orqueio.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.impl.persistence.AbstractManager;
+import io.orqueio.bpm.engine.runtime.CaseExecution;
+import io.orqueio.bpm.engine.runtime.CaseInstance;
 
 /**
  * @author Roman Smirnov

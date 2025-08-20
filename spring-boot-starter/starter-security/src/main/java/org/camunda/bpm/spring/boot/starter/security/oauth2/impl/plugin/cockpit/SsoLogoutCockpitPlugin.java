@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter.security.oauth2.impl.plugin.cockpit;
+package io.orqueio.bpm.spring.boot.starter.security.oauth2.impl.plugin.cockpit;
 
-import org.camunda.bpm.cockpit.plugin.spi.impl.AbstractCockpitPlugin;
-import org.camunda.bpm.spring.boot.starter.security.oauth2.impl.plugin.SsoLogoutPluginConstants;
+import io.orqueio.bpm.cockpit.plugin.spi.impl.AbstractCockpitPlugin;
+import io.orqueio.bpm.spring.boot.starter.security.oauth2.impl.plugin.SsoLogoutPluginConstants;
 
 import java.util.Set;
 

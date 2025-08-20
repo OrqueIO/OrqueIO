@@ -14,22 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.history.useroperationlog;
+package io.orqueio.bpm.engine.test.history.useroperationlog;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.camunda.bpm.engine.history.UserOperationLogEntry.OPERATION_TYPE_ASSIGN;
-import static org.camunda.bpm.engine.history.UserOperationLogEntry.OPERATION_TYPE_CLAIM;
-import static org.camunda.bpm.engine.history.UserOperationLogEntry.OPERATION_TYPE_COMPLETE;
-import static org.camunda.bpm.engine.history.UserOperationLogEntry.OPERATION_TYPE_DELEGATE;
-import static org.camunda.bpm.engine.history.UserOperationLogEntry.OPERATION_TYPE_DELETE;
-import static org.camunda.bpm.engine.history.UserOperationLogEntry.OPERATION_TYPE_RESOLVE;
-import static org.camunda.bpm.engine.history.UserOperationLogEntry.OPERATION_TYPE_SET_OWNER;
-import static org.camunda.bpm.engine.history.UserOperationLogEntry.OPERATION_TYPE_SET_PRIORITY;
-import static org.camunda.bpm.engine.impl.persistence.entity.TaskEntity.ASSIGNEE;
-import static org.camunda.bpm.engine.impl.persistence.entity.TaskEntity.DELEGATION;
-import static org.camunda.bpm.engine.impl.persistence.entity.TaskEntity.DELETE;
-import static org.camunda.bpm.engine.impl.persistence.entity.TaskEntity.OWNER;
-import static org.camunda.bpm.engine.impl.persistence.entity.TaskEntity.PRIORITY;
+import static io.orqueio.bpm.engine.history.UserOperationLogEntry.OPERATION_TYPE_ASSIGN;
+import static io.orqueio.bpm.engine.history.UserOperationLogEntry.OPERATION_TYPE_CLAIM;
+import static io.orqueio.bpm.engine.history.UserOperationLogEntry.OPERATION_TYPE_COMPLETE;
+import static io.orqueio.bpm.engine.history.UserOperationLogEntry.OPERATION_TYPE_DELEGATE;
+import static io.orqueio.bpm.engine.history.UserOperationLogEntry.OPERATION_TYPE_DELETE;
+import static io.orqueio.bpm.engine.history.UserOperationLogEntry.OPERATION_TYPE_RESOLVE;
+import static io.orqueio.bpm.engine.history.UserOperationLogEntry.OPERATION_TYPE_SET_OWNER;
+import static io.orqueio.bpm.engine.history.UserOperationLogEntry.OPERATION_TYPE_SET_PRIORITY;
+import static io.orqueio.bpm.engine.impl.persistence.entity.TaskEntity.ASSIGNEE;
+import static io.orqueio.bpm.engine.impl.persistence.entity.TaskEntity.DELEGATION;
+import static io.orqueio.bpm.engine.impl.persistence.entity.TaskEntity.DELETE;
+import static io.orqueio.bpm.engine.impl.persistence.entity.TaskEntity.OWNER;
+import static io.orqueio.bpm.engine.impl.persistence.entity.TaskEntity.PRIORITY;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -39,18 +39,18 @@ import static org.junit.Assert.fail;
 import java.util.Date;
 import java.util.HashMap;
 
-import org.camunda.bpm.engine.EntityTypes;
-import org.camunda.bpm.engine.exception.NotValidException;
-import org.camunda.bpm.engine.history.UserOperationLogEntry;
-import org.camunda.bpm.engine.history.UserOperationLogQuery;
-import org.camunda.bpm.engine.impl.calendar.DateTimeUtil;
-import org.camunda.bpm.engine.impl.util.ClockUtil;
-import org.camunda.bpm.engine.repository.CaseDefinition;
-import org.camunda.bpm.engine.repository.ProcessDefinition;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.task.DelegationState;
-import org.camunda.bpm.engine.task.Task;
-import org.camunda.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.EntityTypes;
+import io.orqueio.bpm.engine.exception.NotValidException;
+import io.orqueio.bpm.engine.history.UserOperationLogEntry;
+import io.orqueio.bpm.engine.history.UserOperationLogQuery;
+import io.orqueio.bpm.engine.impl.calendar.DateTimeUtil;
+import io.orqueio.bpm.engine.impl.util.ClockUtil;
+import io.orqueio.bpm.engine.repository.CaseDefinition;
+import io.orqueio.bpm.engine.repository.ProcessDefinition;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.task.DelegationState;
+import io.orqueio.bpm.engine.task.Task;
+import io.orqueio.bpm.engine.test.Deployment;
 import org.joda.time.DateTime;
 import org.junit.Test;
 

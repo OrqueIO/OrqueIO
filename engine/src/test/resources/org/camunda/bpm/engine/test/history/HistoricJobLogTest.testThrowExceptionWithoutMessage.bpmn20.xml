@@ -10,7 +10,7 @@
 
     <sequenceFlow sourceRef="theStart" targetRef="serviceTask" />
 
-    <serviceTask id="serviceTask" camunda:asyncBefore="true" camunda:class="org.camunda.bpm.engine.test.history.ThrowExceptionWithoutMessageDelegate" />
+    <serviceTask id="serviceTask" camunda:asyncBefore="true" camunda:class="io.orqueio.bpm.engine.test.history.ThrowExceptionWithoutMessageDelegate" />
 
     <sequenceFlow sourceRef="serviceTask" targetRef="theEnd" />
 

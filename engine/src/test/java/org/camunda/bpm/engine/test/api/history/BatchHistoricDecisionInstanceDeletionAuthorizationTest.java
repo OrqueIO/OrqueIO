@@ -14,37 +14,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.history;
+package io.orqueio.bpm.engine.test.api.history;
 
-import static org.camunda.bpm.engine.test.api.authorization.util.AuthorizationScenario.scenario;
-import static org.camunda.bpm.engine.test.api.authorization.util.AuthorizationSpec.grant;
-import static org.camunda.bpm.engine.test.api.authorization.util.AuthorizationSpec.revoke;
+import static io.orqueio.bpm.engine.test.api.authorization.util.AuthorizationScenario.scenario;
+import static io.orqueio.bpm.engine.test.api.authorization.util.AuthorizationSpec.grant;
+import static io.orqueio.bpm.engine.test.api.authorization.util.AuthorizationSpec.revoke;
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.camunda.bpm.engine.DecisionService;
-import org.camunda.bpm.engine.HistoryService;
-import org.camunda.bpm.engine.ManagementService;
-import org.camunda.bpm.engine.ProcessEngineConfiguration;
-import org.camunda.bpm.engine.authorization.BatchPermissions;
-import org.camunda.bpm.engine.authorization.Permissions;
-import org.camunda.bpm.engine.authorization.Resources;
-import org.camunda.bpm.engine.batch.Batch;
-import org.camunda.bpm.engine.batch.history.HistoricBatch;
-import org.camunda.bpm.engine.history.HistoricDecisionInstance;
-import org.camunda.bpm.engine.history.HistoricDecisionInstanceQuery;
-import org.camunda.bpm.engine.runtime.Job;
-import org.camunda.bpm.engine.test.ProcessEngineRule;
-import org.camunda.bpm.engine.test.RequiredHistoryLevel;
-import org.camunda.bpm.engine.test.api.authorization.util.AuthorizationScenario;
-import org.camunda.bpm.engine.test.api.authorization.util.AuthorizationTestRule;
-import org.camunda.bpm.engine.test.util.ProcessEngineTestRule;
-import org.camunda.bpm.engine.test.util.ProvidedProcessEngineRule;
-import org.camunda.bpm.engine.variable.VariableMap;
-import org.camunda.bpm.engine.variable.Variables;
+import io.orqueio.bpm.engine.DecisionService;
+import io.orqueio.bpm.engine.HistoryService;
+import io.orqueio.bpm.engine.ManagementService;
+import io.orqueio.bpm.engine.ProcessEngineConfiguration;
+import io.orqueio.bpm.engine.authorization.BatchPermissions;
+import io.orqueio.bpm.engine.authorization.Permissions;
+import io.orqueio.bpm.engine.authorization.Resources;
+import io.orqueio.bpm.engine.batch.Batch;
+import io.orqueio.bpm.engine.batch.history.HistoricBatch;
+import io.orqueio.bpm.engine.history.HistoricDecisionInstance;
+import io.orqueio.bpm.engine.history.HistoricDecisionInstanceQuery;
+import io.orqueio.bpm.engine.runtime.Job;
+import io.orqueio.bpm.engine.test.ProcessEngineRule;
+import io.orqueio.bpm.engine.test.RequiredHistoryLevel;
+import io.orqueio.bpm.engine.test.api.authorization.util.AuthorizationScenario;
+import io.orqueio.bpm.engine.test.api.authorization.util.AuthorizationTestRule;
+import io.orqueio.bpm.engine.test.util.ProcessEngineTestRule;
+import io.orqueio.bpm.engine.test.util.ProvidedProcessEngineRule;
+import io.orqueio.bpm.engine.variable.VariableMap;
+import io.orqueio.bpm.engine.variable.Variables;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;

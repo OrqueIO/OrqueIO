@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.bpmn.async;
+package io.orqueio.bpm.engine.test.bpmn.async;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
@@ -28,19 +28,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import org.camunda.bpm.engine.ParseException;
-import org.camunda.bpm.engine.impl.persistence.entity.JobEntity;
-import org.camunda.bpm.engine.impl.pvm.runtime.operation.PvmAtomicOperation;
-import org.camunda.bpm.engine.runtime.Execution;
-import org.camunda.bpm.engine.runtime.Job;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.task.Task;
-import org.camunda.bpm.engine.task.TaskQuery;
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.engine.test.bpmn.event.error.ThrowBpmnErrorDelegate;
-import org.camunda.bpm.engine.test.util.PluggableProcessEngineTest;
-import org.camunda.bpm.model.bpmn.Bpmn;
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.bpm.engine.ParseException;
+import io.orqueio.bpm.engine.impl.persistence.entity.JobEntity;
+import io.orqueio.bpm.engine.impl.pvm.runtime.operation.PvmAtomicOperation;
+import io.orqueio.bpm.engine.runtime.Execution;
+import io.orqueio.bpm.engine.runtime.Job;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.task.Task;
+import io.orqueio.bpm.engine.task.TaskQuery;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.test.bpmn.event.error.ThrowBpmnErrorDelegate;
+import io.orqueio.bpm.engine.test.util.PluggableProcessEngineTest;
+import io.orqueio.bpm.model.bpmn.Bpmn;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;

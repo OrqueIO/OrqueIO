@@ -14,22 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.engine.api;
+package io.orqueio.bpm.dmn.engine.api;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.camunda.bpm.engine.variable.Variables.createVariables;
+import static io.orqueio.bpm.engine.variable.Variables.createVariables;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-import org.camunda.bpm.dmn.engine.DmnEngine;
-import org.camunda.bpm.dmn.engine.DmnEngineConfiguration;
-import org.camunda.bpm.dmn.engine.delegate.DmnDecisionTableEvaluationEvent;
-import org.camunda.bpm.dmn.engine.spi.DmnEngineMetricCollector;
-import org.camunda.bpm.dmn.engine.test.DecisionResource;
-import org.camunda.bpm.dmn.engine.test.DmnEngineTest;
-import org.camunda.bpm.engine.variable.VariableMap;
+import io.orqueio.bpm.dmn.engine.DmnEngine;
+import io.orqueio.bpm.dmn.engine.DmnEngineConfiguration;
+import io.orqueio.bpm.dmn.engine.delegate.DmnDecisionTableEvaluationEvent;
+import io.orqueio.bpm.dmn.engine.spi.DmnEngineMetricCollector;
+import io.orqueio.bpm.dmn.engine.test.DecisionResource;
+import io.orqueio.bpm.dmn.engine.test.DmnEngineTest;
+import io.orqueio.bpm.engine.variable.VariableMap;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

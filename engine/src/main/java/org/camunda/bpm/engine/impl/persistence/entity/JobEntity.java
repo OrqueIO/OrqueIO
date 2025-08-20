@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.persistence.entity;
+package io.orqueio.bpm.engine.impl.persistence.entity;
 
-import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
-import static org.camunda.bpm.engine.impl.util.ExceptionUtil.createJobExceptionByteArray;
-import static org.camunda.bpm.engine.impl.util.StringUtil.toByteArray;
+import static io.orqueio.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
+import static io.orqueio.bpm.engine.impl.util.ExceptionUtil.createJobExceptionByteArray;
+import static io.orqueio.bpm.engine.impl.util.StringUtil.toByteArray;
 
 import java.io.Serializable;
 import java.util.Collections;
@@ -28,28 +28,28 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.engine.impl.db.DbEntity;
-import org.camunda.bpm.engine.impl.db.DbEntityLifecycleAware;
-import org.camunda.bpm.engine.impl.db.EnginePersistenceLogger;
-import org.camunda.bpm.engine.impl.db.HasDbReferences;
-import org.camunda.bpm.engine.impl.db.HasDbRevision;
-import org.camunda.bpm.engine.impl.incident.IncidentContext;
-import org.camunda.bpm.engine.impl.incident.IncidentHandling;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.jobexecutor.DefaultJobPriorityProvider;
-import org.camunda.bpm.engine.impl.jobexecutor.JobHandler;
-import org.camunda.bpm.engine.impl.jobexecutor.JobHandlerConfiguration;
-import org.camunda.bpm.engine.impl.jobexecutor.historycleanup.HistoryCleanupHelper;
-import org.camunda.bpm.engine.impl.pvm.process.ProcessDefinitionImpl;
-import org.camunda.bpm.engine.impl.util.ExceptionUtil;
-import org.camunda.bpm.engine.impl.util.StringUtil;
-import org.camunda.bpm.engine.management.JobDefinition;
-import org.camunda.bpm.engine.repository.ResourceTypes;
-import org.camunda.bpm.engine.runtime.Incident;
-import org.camunda.bpm.engine.runtime.Job;
+import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.impl.db.DbEntity;
+import io.orqueio.bpm.engine.impl.db.DbEntityLifecycleAware;
+import io.orqueio.bpm.engine.impl.db.EnginePersistenceLogger;
+import io.orqueio.bpm.engine.impl.db.HasDbReferences;
+import io.orqueio.bpm.engine.impl.db.HasDbRevision;
+import io.orqueio.bpm.engine.impl.incident.IncidentContext;
+import io.orqueio.bpm.engine.impl.incident.IncidentHandling;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.impl.jobexecutor.DefaultJobPriorityProvider;
+import io.orqueio.bpm.engine.impl.jobexecutor.JobHandler;
+import io.orqueio.bpm.engine.impl.jobexecutor.JobHandlerConfiguration;
+import io.orqueio.bpm.engine.impl.jobexecutor.historycleanup.HistoryCleanupHelper;
+import io.orqueio.bpm.engine.impl.pvm.process.ProcessDefinitionImpl;
+import io.orqueio.bpm.engine.impl.util.ExceptionUtil;
+import io.orqueio.bpm.engine.impl.util.StringUtil;
+import io.orqueio.bpm.engine.management.JobDefinition;
+import io.orqueio.bpm.engine.repository.ResourceTypes;
+import io.orqueio.bpm.engine.runtime.Incident;
+import io.orqueio.bpm.engine.runtime.Job;
 
 /**
  * Stub of the common parts of a Job. You will normally work with a subclass of

@@ -14,20 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.functional.ejb.request;
+package io.orqueio.bpm.integrationtest.functional.ejb.request;
 
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.task.Task;
-import org.camunda.bpm.integrationtest.functional.cdi.beans.RequestScopedDelegateBean;
-import org.camunda.bpm.integrationtest.functional.ejb.request.beans.InvocationCounter;
-import org.camunda.bpm.integrationtest.functional.ejb.request.beans.InvocationCounterDelegateBean;
-import org.camunda.bpm.integrationtest.functional.ejb.request.beans.InvocationCounterDelegateBeanLocal;
-import org.camunda.bpm.integrationtest.functional.ejb.request.beans.InvocationCounterService;
-import org.camunda.bpm.integrationtest.functional.ejb.request.beans.InvocationCounterServiceBean;
-import org.camunda.bpm.integrationtest.functional.ejb.request.beans.InvocationCounterServiceLocal;
-import org.camunda.bpm.integrationtest.functional.ejb.request.beans.RequestScopedSFSBDelegate;
-import org.camunda.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
-import org.camunda.bpm.integrationtest.util.TestContainer;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.task.Task;
+import io.orqueio.bpm.integrationtest.functional.cdi.beans.RequestScopedDelegateBean;
+import io.orqueio.bpm.integrationtest.functional.ejb.request.beans.InvocationCounter;
+import io.orqueio.bpm.integrationtest.functional.ejb.request.beans.InvocationCounterDelegateBean;
+import io.orqueio.bpm.integrationtest.functional.ejb.request.beans.InvocationCounterDelegateBeanLocal;
+import io.orqueio.bpm.integrationtest.functional.ejb.request.beans.InvocationCounterService;
+import io.orqueio.bpm.integrationtest.functional.ejb.request.beans.InvocationCounterServiceBean;
+import io.orqueio.bpm.integrationtest.functional.ejb.request.beans.InvocationCounterServiceLocal;
+import io.orqueio.bpm.integrationtest.functional.ejb.request.beans.RequestScopedSFSBDelegate;
+import io.orqueio.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
+import io.orqueio.bpm.integrationtest.util.TestContainer;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -88,7 +88,7 @@ public class JobExecutorRequestContextLocalInvocationTest extends AbstractFoxPla
 //    InvocationCounterServiceLocal service = InitialContext.doLookup("java:/" +
 //    "global/" +
 //    "service/" +
-//    "InvocationCounterServiceBean!org.camunda.bpm.integrationtest.functional.cdi.beans.InvocationCounterServiceLocal");
+//    "InvocationCounterServiceBean!io.orqueio.bpm.integrationtest.functional.cdi.beans.InvocationCounterServiceLocal");
 //
 //    service.getNumOfInvocations();
 

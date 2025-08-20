@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.engine.feel;
+package io.orqueio.bpm.dmn.engine.feel;
 
-import org.camunda.bpm.dmn.engine.DmnEngineConfiguration;
-import org.camunda.bpm.dmn.engine.feel.helper.CustomFunctionProvider;
-import org.camunda.bpm.dmn.engine.impl.DefaultDmnEngineConfiguration;
-import org.camunda.bpm.dmn.engine.test.DecisionResource;
-import org.camunda.bpm.dmn.engine.test.DmnEngineTest;
-import org.camunda.bpm.dmn.feel.impl.scala.function.FeelCustomFunctionProvider;
+import io.orqueio.bpm.dmn.engine.DmnEngineConfiguration;
+import io.orqueio.bpm.dmn.engine.feel.helper.CustomFunctionProvider;
+import io.orqueio.bpm.dmn.engine.impl.DefaultDmnEngineConfiguration;
+import io.orqueio.bpm.dmn.engine.test.DecisionResource;
+import io.orqueio.bpm.dmn.engine.test.DmnEngineTest;
+import io.orqueio.bpm.dmn.feel.impl.scala.function.FeelCustomFunctionProvider;
 import org.junit.Test;
 
 import java.util.ArrayList;

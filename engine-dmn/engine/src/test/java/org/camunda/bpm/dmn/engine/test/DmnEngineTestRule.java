@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.engine.test;
+package io.orqueio.bpm.dmn.engine.test;
 
 import java.io.InputStream;
 import java.util.List;
 
-import org.camunda.bpm.dmn.engine.DmnDecision;
-import org.camunda.bpm.dmn.engine.DmnEngineConfiguration;
-import org.camunda.commons.utils.IoUtil;
+import io.orqueio.bpm.dmn.engine.DmnDecision;
+import io.orqueio.bpm.dmn.engine.DmnEngineConfiguration;
+import io.orqueio.commons.utils.IoUtil;
 import org.junit.runner.Description;
 
 /**

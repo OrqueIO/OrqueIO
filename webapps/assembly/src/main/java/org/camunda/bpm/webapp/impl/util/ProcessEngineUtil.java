@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.webapp.impl.util;
+package io.orqueio.bpm.webapp.impl.util;
 
 import java.util.Iterator;
 import java.util.ServiceLoader;
 
 import javax.ws.rs.core.Response.Status;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.rest.exception.RestException;
-import org.camunda.bpm.engine.rest.spi.ProcessEngineProvider;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.rest.exception.RestException;
+import io.orqueio.bpm.engine.rest.spi.ProcessEngineProvider;
 
 public class ProcessEngineUtil {
 

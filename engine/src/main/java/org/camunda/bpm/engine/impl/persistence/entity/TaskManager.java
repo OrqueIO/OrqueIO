@@ -14,23 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.persistence.entity;
+package io.orqueio.bpm.engine.impl.persistence.entity;
 
-import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
+import static io.orqueio.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.engine.authorization.Resources;
-import org.camunda.bpm.engine.impl.Page;
-import org.camunda.bpm.engine.impl.TaskQueryImpl;
-import org.camunda.bpm.engine.impl.cfg.auth.ResourceAuthorizationProvider;
-import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.engine.impl.db.ListQueryParameterObject;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.persistence.AbstractManager;
-import org.camunda.bpm.engine.task.Task;
+import io.orqueio.bpm.engine.authorization.Resources;
+import io.orqueio.bpm.engine.impl.Page;
+import io.orqueio.bpm.engine.impl.TaskQueryImpl;
+import io.orqueio.bpm.engine.impl.cfg.auth.ResourceAuthorizationProvider;
+import io.orqueio.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.impl.db.ListQueryParameterObject;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.impl.persistence.AbstractManager;
+import io.orqueio.bpm.engine.task.Task;
 
 
 /**

@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.resources;
+package io.orqueio.bpm.engine.test.api.resources;
 
-import static org.camunda.bpm.engine.repository.ResourceTypes.RUNTIME;
+import static io.orqueio.bpm.engine.repository.ResourceTypes.RUNTIME;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
@@ -28,30 +28,30 @@ import java.util.Map;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.ibatis.jdbc.RuntimeSqlException;
-import org.camunda.bpm.engine.ExternalTaskService;
-import org.camunda.bpm.engine.ManagementService;
-import org.camunda.bpm.engine.RepositoryService;
-import org.camunda.bpm.engine.RuntimeService;
-import org.camunda.bpm.engine.TaskService;
-import org.camunda.bpm.engine.externaltask.LockedExternalTask;
-import org.camunda.bpm.engine.impl.batch.BatchEntity;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.persistence.entity.ByteArrayEntity;
-import org.camunda.bpm.engine.impl.persistence.entity.ExternalTaskEntity;
-import org.camunda.bpm.engine.impl.persistence.entity.JobEntity;
-import org.camunda.bpm.engine.impl.persistence.entity.VariableInstanceEntity;
-import org.camunda.bpm.engine.impl.util.ClockUtil;
-import org.camunda.bpm.engine.task.Task;
-import org.camunda.bpm.engine.test.ProcessEngineRule;
-import org.camunda.bpm.engine.test.api.runtime.FailingDelegate;
-import org.camunda.bpm.engine.test.api.runtime.migration.MigrationTestRule;
-import org.camunda.bpm.engine.test.api.runtime.migration.batch.BatchMigrationHelper;
-import org.camunda.bpm.engine.test.util.ProcessEngineTestRule;
-import org.camunda.bpm.engine.test.util.ProvidedProcessEngineRule;
-import org.camunda.bpm.engine.variable.Variables;
-import org.camunda.bpm.engine.variable.value.FileValue;
-import org.camunda.bpm.model.bpmn.Bpmn;
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.bpm.engine.ExternalTaskService;
+import io.orqueio.bpm.engine.ManagementService;
+import io.orqueio.bpm.engine.RepositoryService;
+import io.orqueio.bpm.engine.RuntimeService;
+import io.orqueio.bpm.engine.TaskService;
+import io.orqueio.bpm.engine.externaltask.LockedExternalTask;
+import io.orqueio.bpm.engine.impl.batch.BatchEntity;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.persistence.entity.ByteArrayEntity;
+import io.orqueio.bpm.engine.impl.persistence.entity.ExternalTaskEntity;
+import io.orqueio.bpm.engine.impl.persistence.entity.JobEntity;
+import io.orqueio.bpm.engine.impl.persistence.entity.VariableInstanceEntity;
+import io.orqueio.bpm.engine.impl.util.ClockUtil;
+import io.orqueio.bpm.engine.task.Task;
+import io.orqueio.bpm.engine.test.ProcessEngineRule;
+import io.orqueio.bpm.engine.test.api.runtime.FailingDelegate;
+import io.orqueio.bpm.engine.test.api.runtime.migration.MigrationTestRule;
+import io.orqueio.bpm.engine.test.api.runtime.migration.batch.BatchMigrationHelper;
+import io.orqueio.bpm.engine.test.util.ProcessEngineTestRule;
+import io.orqueio.bpm.engine.test.util.ProvidedProcessEngineRule;
+import io.orqueio.bpm.engine.variable.Variables;
+import io.orqueio.bpm.engine.variable.value.FileValue;
+import io.orqueio.bpm.model.bpmn.Bpmn;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;

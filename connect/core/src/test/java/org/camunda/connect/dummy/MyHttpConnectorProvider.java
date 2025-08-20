@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.connect.dummy;
+package io.orqueio.connect.dummy;
 
-import org.camunda.connect.Connectors;
-import org.camunda.connect.spi.Connector;
-import org.camunda.connect.spi.ConnectorProvider;
+import io.orqueio.connect.Connectors;
+import io.orqueio.connect.spi.Connector;
+import io.orqueio.connect.spi.ConnectorProvider;
 
 public class MyHttpConnectorProvider implements ConnectorProvider {
 

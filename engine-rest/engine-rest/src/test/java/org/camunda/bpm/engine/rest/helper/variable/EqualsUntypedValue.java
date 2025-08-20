@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.helper.variable;
+package io.orqueio.bpm.engine.rest.helper.variable;
 
-import org.camunda.bpm.engine.variable.value.TypedValue;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 

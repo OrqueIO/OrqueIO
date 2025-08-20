@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.assertions.helpers;
+package io.orqueio.bpm.engine.test.assertions.helpers;
 
-import org.camunda.bpm.engine.runtime.CaseExecution;
-import org.camunda.bpm.engine.runtime.CaseExecutionQuery;
-import org.camunda.bpm.engine.runtime.CaseInstance;
+import io.orqueio.bpm.engine.runtime.CaseExecution;
+import io.orqueio.bpm.engine.runtime.CaseExecutionQuery;
+import io.orqueio.bpm.engine.runtime.CaseInstance;
 import org.mockito.ArgumentMatchers;
 
 public class CamundaMatchers extends ArgumentMatchers {

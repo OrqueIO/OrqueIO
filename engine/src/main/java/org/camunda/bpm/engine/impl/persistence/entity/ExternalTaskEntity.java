@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.persistence.entity;
+package io.orqueio.bpm.engine.impl.persistence.entity;
 
-import static org.camunda.bpm.engine.impl.util.ExceptionUtil.createExceptionByteArray;
-import static org.camunda.bpm.engine.impl.util.StringUtil.toByteArray;
+import static io.orqueio.bpm.engine.impl.util.ExceptionUtil.createExceptionByteArray;
+import static io.orqueio.bpm.engine.impl.util.StringUtil.toByteArray;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -26,27 +26,27 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.camunda.bpm.engine.EntityTypes;
-import org.camunda.bpm.engine.delegate.BpmnError;
-import org.camunda.bpm.engine.externaltask.ExternalTask;
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
-import org.camunda.bpm.engine.impl.bpmn.helper.BpmnExceptionHandler;
-import org.camunda.bpm.engine.impl.bpmn.helper.BpmnProperties;
-import org.camunda.bpm.engine.impl.bpmn.parser.CamundaErrorEventDefinition;
-import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.engine.impl.db.DbEntity;
-import org.camunda.bpm.engine.impl.db.EnginePersistenceLogger;
-import org.camunda.bpm.engine.impl.db.HasDbReferences;
-import org.camunda.bpm.engine.impl.db.HasDbRevision;
-import org.camunda.bpm.engine.impl.incident.IncidentContext;
-import org.camunda.bpm.engine.impl.incident.IncidentHandling;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.pvm.delegate.ActivityExecution;
-import org.camunda.bpm.engine.impl.util.ClockUtil;
-import org.camunda.bpm.engine.impl.util.EnsureUtil;
-import org.camunda.bpm.engine.impl.util.ExceptionUtil;
-import org.camunda.bpm.engine.repository.ResourceTypes;
-import org.camunda.bpm.engine.runtime.Incident;
+import io.orqueio.bpm.engine.EntityTypes;
+import io.orqueio.bpm.engine.delegate.BpmnError;
+import io.orqueio.bpm.engine.externaltask.ExternalTask;
+import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
+import io.orqueio.bpm.engine.impl.bpmn.helper.BpmnExceptionHandler;
+import io.orqueio.bpm.engine.impl.bpmn.helper.BpmnProperties;
+import io.orqueio.bpm.engine.impl.bpmn.parser.CamundaErrorEventDefinition;
+import io.orqueio.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.impl.db.DbEntity;
+import io.orqueio.bpm.engine.impl.db.EnginePersistenceLogger;
+import io.orqueio.bpm.engine.impl.db.HasDbReferences;
+import io.orqueio.bpm.engine.impl.db.HasDbRevision;
+import io.orqueio.bpm.engine.impl.incident.IncidentContext;
+import io.orqueio.bpm.engine.impl.incident.IncidentHandling;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.impl.pvm.delegate.ActivityExecution;
+import io.orqueio.bpm.engine.impl.util.ClockUtil;
+import io.orqueio.bpm.engine.impl.util.EnsureUtil;
+import io.orqueio.bpm.engine.impl.util.ExceptionUtil;
+import io.orqueio.bpm.engine.repository.ResourceTypes;
+import io.orqueio.bpm.engine.runtime.Incident;
 
 /**
  * @author Thorben Lindhauer

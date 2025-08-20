@@ -19,17 +19,17 @@
 -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="org.camunda.bpm.engine.impl.persistence.entity.EventSubscriptionEntity">
+<mapper namespace="io.orqueio.bpm.engine.impl.persistence.entity.EventSubscriptionEntity">
 
   <!-- DELETE -->
 
-  <delete id="deleteEventSubscription" parameterType="org.camunda.bpm.engine.impl.persistence.entity.EventSubscriptionEntity">
+  <delete id="deleteEventSubscription" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.EventSubscriptionEntity">
     delete from ${prefix}ACT_RU_EVENT_SUBSCR where ID_ = #{id} and REV_ = #{revision}
   </delete>
 
   <!-- RESULTMAP -->
 
-  <resultMap id="eventSubscriptionResultMap" type="org.camunda.bpm.engine.impl.persistence.entity.EventSubscriptionEntity">
+  <resultMap id="eventSubscriptionResultMap" type="io.orqueio.bpm.engine.impl.persistence.entity.EventSubscriptionEntity">
     <id property="id" column="ID_" jdbcType="VARCHAR" />
     <result property="revision" column="REV_" jdbcType="INTEGER" />
     <result property="eventType" column="EVENT_TYPE_" jdbcType="VARCHAR" />
@@ -48,8 +48,8 @@
     select * from ${prefix}ACT_RU_EVENT_SUBSCR where ID_ = #{id}
   </select>
 
-  <select id="selectEventSubscriptionByQueryCriteria" parameterType="org.camunda.bpm.engine.impl.EventSubscriptionQueryImpl" resultMap="eventSubscriptionResultMap">
-  	<include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
+  <select id="selectEventSubscriptionByQueryCriteria" parameterType="io.orqueio.bpm.engine.impl.EventSubscriptionQueryImpl" resultMap="eventSubscriptionResultMap">
+  	<include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
     ${limitBefore}
     select ${distinct} RES.*
     ${limitBetween}
@@ -58,7 +58,7 @@
     ${limitAfter}
   </select>
 
-  <select id="selectEventSubscriptionCountByQueryCriteria" parameterType="org.camunda.bpm.engine.impl.EventSubscriptionQueryImpl" resultType="long">
+  <select id="selectEventSubscriptionCountByQueryCriteria" parameterType="io.orqueio.bpm.engine.impl.EventSubscriptionQueryImpl" resultType="long">
     ${countDistinctBeforeStart} RES.ID_ ${countDistinctBeforeEnd}
     <include refid="selectEventSubscriptionByQueryCriteriaSql"/>
     ${countDistinctAfterEnd}
@@ -81,7 +81,7 @@
       on PROCDEF.ID_ = PROC_EXECUTION.PROC_DEF_ID_
 
       <if test="!authCheck.revokeAuthorizationCheckEnabled">
-        <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoinWithoutOnClause" />
+        <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoinWithoutOnClause" />
         AUTH ON (AUTH.RESOURCE_ID_ ${authJoinStart} RES.ID_ 
           ${authJoinSeparator} EXECUTION.ID_
           ${authJoinSeparator} PROCDEF.KEY_
@@ -129,13 +129,13 @@
         </if>
       </if>
 
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.queryAuthorizationCheck" />
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.queryAuthorizationCheck" />
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
 
     </where>
   </sql>
 
-  <select id="selectSignalEventSubscriptionsByEventName" resultMap="eventSubscriptionResultMap" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject">
+  <select id="selectSignalEventSubscriptionsByEventName" resultMap="eventSubscriptionResultMap" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject">
     select EVT.*
     from ${prefix}ACT_RU_EVENT_SUBSCR EVT
     left join ${prefix}ACT_RU_EXECUTION EXC on EVT.EXECUTION_ID_ = EXC.ID_
@@ -143,10 +143,10 @@
       and (EVENT_NAME_ = #{parameter})
       and (EVT.EXECUTION_ID_ is null or EXC.SUSPENSION_STATE_ = 1)
     <bind name="columnPrefix" value="'EVT.'"/>
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheckWithPrefix" />
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheckWithPrefix" />
   </select>
 
-  <select id="selectSignalEventSubscriptionsByEventNameAndTenantId" resultMap="eventSubscriptionResultMap" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject">
+  <select id="selectSignalEventSubscriptionsByEventNameAndTenantId" resultMap="eventSubscriptionResultMap" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject">
     select EVT.*
     from ${prefix}ACT_RU_EVENT_SUBSCR EVT
     left join ${prefix}ACT_RU_EXECUTION EXC on EVT.EXECUTION_ID_ = EXC.ID_
@@ -161,7 +161,7 @@
       </if>
   </select>
 
-  <select id="selectSignalEventSubscriptionsByEventNameAndTenantIdIncludeWithoutTenantId" resultMap="eventSubscriptionResultMap" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject">
+  <select id="selectSignalEventSubscriptionsByEventNameAndTenantIdIncludeWithoutTenantId" resultMap="eventSubscriptionResultMap" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject">
     select EVT.*
     from ${prefix}ACT_RU_EVENT_SUBSCR EVT
     left join ${prefix}ACT_RU_EXECUTION EXC on EVT.EXECUTION_ID_ = EXC.ID_
@@ -171,14 +171,14 @@
       and (EVT.TENANT_ID_ = #{parameter.tenantId} or EVT.TENANT_ID_ is null)
   </select>
 
-  <select id="selectSignalEventSubscriptionsByExecution" resultMap="eventSubscriptionResultMap" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject">
+  <select id="selectSignalEventSubscriptionsByExecution" resultMap="eventSubscriptionResultMap" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject">
     select *
     from ${prefix}ACT_RU_EVENT_SUBSCR
     where (EVENT_TYPE_ = 'signal')
     	and (EXECUTION_ID_ = #{parameter})
   </select>
 
-  <select id="selectSignalEventSubscriptionsByNameAndExecution" resultMap="eventSubscriptionResultMap" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject">
+  <select id="selectSignalEventSubscriptionsByNameAndExecution" resultMap="eventSubscriptionResultMap" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject">
     select *
     from ${prefix}ACT_RU_EVENT_SUBSCR
     where (EVENT_TYPE_ = 'signal')
@@ -186,19 +186,19 @@
     	and (EVENT_NAME_ = #{parameter.eventName})
   </select>
 
-  <select id="selectEventSubscriptionsByExecution" resultMap="eventSubscriptionResultMap" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject">
+  <select id="selectEventSubscriptionsByExecution" resultMap="eventSubscriptionResultMap" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject">
     select *
     from ${prefix}ACT_RU_EVENT_SUBSCR
     where (EXECUTION_ID_ = #{parameter})
   </select>
 
-  <select id="selectEventSubscriptionsByProcessInstanceId"  resultMap="eventSubscriptionResultMap" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject">
+  <select id="selectEventSubscriptionsByProcessInstanceId"  resultMap="eventSubscriptionResultMap" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject">
     select *
     from ${prefix}ACT_RU_EVENT_SUBSCR
     where (PROC_INST_ID_ = #{parameter})
   </select>
 
-  <select id="selectEventSubscriptionsByExecutionAndType" resultMap="eventSubscriptionResultMap" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject">
+  <select id="selectEventSubscriptionsByExecutionAndType" resultMap="eventSubscriptionResultMap" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject">
     select *
     from ${prefix}ACT_RU_EVENT_SUBSCR
     where (EVENT_TYPE_ = #{parameter.eventType})
@@ -208,7 +208,7 @@
     </if>
   </select>
 
-  <select id="selectEventSubscriptionsByExecutionAndType_mssql" resultMap="eventSubscriptionResultMap" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject">
+  <select id="selectEventSubscriptionsByExecutionAndType_mssql" resultMap="eventSubscriptionResultMap" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject">
     select *
     from ${prefix}ACT_RU_EVENT_SUBSCR
     <if test="parameter.lockResult">
@@ -218,7 +218,7 @@
       and (EXECUTION_ID_ = #{parameter.executionId})
   </select>
 
-  <select id="selectEventSubscriptionsByExecutionTypeAndActivity" resultMap="eventSubscriptionResultMap" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject">
+  <select id="selectEventSubscriptionsByExecutionTypeAndActivity" resultMap="eventSubscriptionResultMap" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject">
     select *
     from ${prefix}ACT_RU_EVENT_SUBSCR
     where (EVENT_TYPE_ = #{parameter.eventType})
@@ -226,21 +226,21 @@
     	and (ACTIVITY_ID_ = #{parameter.activityId})
   </select>
 
-  <select id="selectEventSubscriptionsByConfiguration" resultMap="eventSubscriptionResultMap" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject">
+  <select id="selectEventSubscriptionsByConfiguration" resultMap="eventSubscriptionResultMap" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject">
     select *
     from ${prefix}ACT_RU_EVENT_SUBSCR
     where (EVENT_TYPE_ = #{parameter.eventType})
     	and (CONFIGURATION_ = #{parameter.configuration})
   </select>
 
-  <select id="selectStartEventSubscriptionsByConfigurationLike" resultMap="eventSubscriptionResultMap" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject">
+  <select id="selectStartEventSubscriptionsByConfigurationLike" resultMap="eventSubscriptionResultMap" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject">
     select *
     from ${prefix}ACT_RU_EVENT_SUBSCR
     where (CONFIGURATION_ like #{parameter.configuration})
       and EXECUTION_ID_ is null
   </select>
 
-  <select id="selectEventSubscriptionsByNameAndTenantId" resultMap="eventSubscriptionResultMap" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject">
+  <select id="selectEventSubscriptionsByNameAndTenantId" resultMap="eventSubscriptionResultMap" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject">
     select *
     from ${prefix}ACT_RU_EVENT_SUBSCR
     where (EVENT_TYPE_ = #{parameter.eventType})
@@ -253,7 +253,7 @@
       </if>
   </select>
 
-  <select id="selectEventSubscriptionsByNameAndExecution" resultMap="eventSubscriptionResultMap" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject">
+  <select id="selectEventSubscriptionsByNameAndExecution" resultMap="eventSubscriptionResultMap" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject">
     select *
     from ${prefix}ACT_RU_EVENT_SUBSCR
     where (EVENT_TYPE_ = #{parameter.eventType})
@@ -264,7 +264,7 @@
     </if>
   </select>
 
-  <select id="selectEventSubscriptionsByNameAndExecution_mssql"  resultMap="eventSubscriptionResultMap" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject">
+  <select id="selectEventSubscriptionsByNameAndExecution_mssql"  resultMap="eventSubscriptionResultMap" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject">
     select *
     from ${prefix}ACT_RU_EVENT_SUBSCR
     <if test="parameter.lockResult">
@@ -275,13 +275,13 @@
       and (EXECUTION_ID_ = #{parameter.executionId})
   </select>
 
-  <select id="selectMessageStartEventSubscriptionByName" resultMap="eventSubscriptionResultMap" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject">
+  <select id="selectMessageStartEventSubscriptionByName" resultMap="eventSubscriptionResultMap" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject">
     select *
     from ${prefix}ACT_RU_EVENT_SUBSCR RES
     where (EVENT_TYPE_ = 'message')
         and (EVENT_NAME_ = #{parameter})
         and EXECUTION_ID_ is null
-        <include refid="org.camunda.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
+        <include refid="io.orqueio.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
   </select>
 
   <select id="selectMessageStartEventSubscriptionByNameAndTenantId" resultMap="eventSubscriptionResultMap" parameterType="string">
@@ -298,13 +298,13 @@
       </if>
   </select>
 
-  <select id="selectConditionalStartEventSubscription" resultMap="eventSubscriptionResultMap" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject">
+  <select id="selectConditionalStartEventSubscription" resultMap="eventSubscriptionResultMap" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject">
     select *
     from ${prefix}ACT_RU_EVENT_SUBSCR RES
     <if test="authCheck.shouldPerformAuthorizatioCheck &amp;&amp; authCheck.authUserId != null">
       inner join ${prefix}ACT_RE_PROCDEF P on RES.CONFIGURATION_ = P.ID_
       <if test="!authCheck.revokeAuthorizationCheckEnabled">
-        <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoinWithoutOnClause" />
+        <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoinWithoutOnClause" />
         AUTH ON (AUTH.RESOURCE_ID_ ${authJoinStart} P.KEY_ ${authJoinSeparator} '*' ${authJoinEnd})
       </if>
     </if>
@@ -312,9 +312,9 @@
       (EVENT_TYPE_ = 'conditional')
       and EXECUTION_ID_ is null
       <if test="authCheck.shouldPerformAuthorizatioCheck &amp;&amp; authCheck.authUserId != null">
-        <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.queryAuthorizationCheck" />
+        <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.queryAuthorizationCheck" />
       </if>
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
     </where>
   </select>
 
@@ -323,7 +323,7 @@
     from ${prefix}ACT_RU_EVENT_SUBSCR
     <if test="authCheck.shouldPerformAuthorizatioCheck &amp;&amp; !authCheck.revokeAuthorizationCheckEnabled &amp;&amp; authCheck.authUserId != null">
       inner join ${prefix}ACT_RE_PROCDEF P on RES.CONFIGURATION_ = P.ID_
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoinWithoutOnClause" />
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoinWithoutOnClause" />
       AUTH ON (AUTH.RESOURCE_ID_ ${authJoinStart} P.KEY_ ${authJoinSeparator} '*' ${authJoinEnd})
     </if>
     <where>
@@ -336,14 +336,14 @@
         and TENANT_ID_ is null
       </if>
       <if test="authCheck.shouldPerformAuthorizatioCheck &amp;&amp; !authCheck.revokeAuthorizationCheckEnabled &amp;&amp; authCheck.authUserId != null">
-        <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.queryAuthorizationCheck" />
+        <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.queryAuthorizationCheck" />
       </if>
     </where>
   </select>
 
   <!-- INSERT -->
 
-  <insert id="insertEventSubscription" parameterType="org.camunda.bpm.engine.impl.persistence.entity.EventSubscriptionEntity">
+  <insert id="insertEventSubscription" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.EventSubscriptionEntity">
  	insert into ${prefix}ACT_RU_EVENT_SUBSCR (
             ID_,
             EVENT_TYPE_,
@@ -371,7 +371,7 @@
 
   <!-- UPDATE -->
 
-  <update id="updateEventSubscription" parameterType="org.camunda.bpm.engine.impl.persistence.entity.EventSubscriptionEntity">
+  <update id="updateEventSubscription" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.EventSubscriptionEntity">
     update ${prefix}ACT_RU_EVENT_SUBSCR
     <set>
        REV_ =  #{revisionNext, jdbcType=INTEGER},

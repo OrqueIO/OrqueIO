@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.jboss.deployment.processor;
+package io.orqueio.bpm.container.impl.jboss.deployment.processor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,11 +22,11 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
-import org.camunda.bpm.application.PostDeploy;
-import org.camunda.bpm.application.PreUndeploy;
-import org.camunda.bpm.application.ProcessApplication;
-import org.camunda.bpm.application.impl.ServletProcessApplication;
-import org.camunda.bpm.container.impl.jboss.deployment.marker.ProcessApplicationAttachments;
+import io.orqueio.bpm.application.PostDeploy;
+import io.orqueio.bpm.application.PreUndeploy;
+import io.orqueio.bpm.application.ProcessApplication;
+import io.orqueio.bpm.application.impl.ServletProcessApplication;
+import io.orqueio.bpm.container.impl.jboss.deployment.marker.ProcessApplicationAttachments;
 import org.jboss.as.ee.component.Attachments;
 import org.jboss.as.ee.component.ComponentDescription;
 import org.jboss.as.ee.component.EEApplicationClasses;
@@ -105,7 +105,7 @@ public class ProcessApplicationProcessor implements DeploymentUnitProcessor {
 
     if (compositeIndex != null) {
       // allow coexistence of Javax- and Jakarta-based servlet process applications in deployments but only consider Javax-based ones here
-      unsupportedClasses = compositeIndex.getAllKnownSubclasses(DotName.createSimple("org.camunda.bpm.application.impl.JakartaServletProcessApplication"));
+      unsupportedClasses = compositeIndex.getAllKnownSubclasses(DotName.createSimple("io.orqueio.bpm.application.impl.JakartaServletProcessApplication"));
       processApplicationAnnotations = getAnnotationsFromSupportedClasses(compositeIndex, ProcessApplication.class, unsupportedClasses);
       postDeployAnnnotations = getAnnotationsFromSupportedClasses(compositeIndex, PostDeploy.class, unsupportedClasses);
       preUndeployAnnnotations = getAnnotationsFromSupportedClasses(compositeIndex, PreUndeploy.class, unsupportedClasses);

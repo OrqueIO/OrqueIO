@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.standalone;
+package io.orqueio.bpm.engine.rest.standalone;
 
-import org.camunda.bpm.engine.rest.util.container.TestContainerRule;
+import io.orqueio.bpm.engine.rest.util.container.TestContainerRule;
 import org.junit.ClassRule;
 
 public class ServletAuthenticationFilterTest extends AbstractAuthenticationFilterTest {

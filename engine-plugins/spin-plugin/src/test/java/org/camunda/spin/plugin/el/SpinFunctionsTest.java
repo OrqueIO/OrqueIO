@@ -14,20 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.plugin.el;
+package io.orqueio.spin.plugin.el;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.camunda.bpm.engine.delegate.Expression;
-import org.camunda.bpm.engine.impl.test.PluggableProcessEngineTestCase;
-import org.camunda.bpm.engine.repository.Deployment;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.model.bpmn.Bpmn;
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
-import org.camunda.spin.json.SpinJsonNode;
-import org.camunda.spin.plugin.script.TestVariableScope;
-import org.camunda.spin.xml.SpinXmlElement;
+import io.orqueio.bpm.engine.delegate.Expression;
+import io.orqueio.bpm.engine.impl.test.PluggableProcessEngineTestCase;
+import io.orqueio.bpm.engine.repository.Deployment;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.model.bpmn.Bpmn;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.spin.json.SpinJsonNode;
+import io.orqueio.spin.plugin.script.TestVariableScope;
+import io.orqueio.spin.xml.SpinXmlElement;
 
 /**
  * <p>Testcase ensuring integration of camunda Spin into Process Engine expression language.</p>

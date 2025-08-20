@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.topic.impl;
+package io.orqueio.bpm.client.topic.impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,22 +26,22 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
-import org.camunda.bpm.client.backoff.BackoffStrategy;
-import org.camunda.bpm.client.backoff.ErrorAwareBackoffStrategy;
-import org.camunda.bpm.client.exception.ExternalTaskClientException;
-import org.camunda.bpm.client.impl.EngineClient;
-import org.camunda.bpm.client.impl.EngineClientException;
-import org.camunda.bpm.client.impl.ExternalTaskClientLogger;
-import org.camunda.bpm.client.task.ExternalTask;
-import org.camunda.bpm.client.task.ExternalTaskHandler;
-import org.camunda.bpm.client.task.impl.ExternalTaskImpl;
-import org.camunda.bpm.client.task.impl.ExternalTaskServiceImpl;
-import org.camunda.bpm.client.topic.TopicSubscription;
-import org.camunda.bpm.client.topic.impl.dto.FetchAndLockResponseDto;
-import org.camunda.bpm.client.topic.impl.dto.TopicRequestDto;
-import org.camunda.bpm.client.variable.impl.TypedValueField;
-import org.camunda.bpm.client.variable.impl.TypedValues;
-import org.camunda.bpm.client.variable.impl.VariableValue;
+import io.orqueio.bpm.client.backoff.BackoffStrategy;
+import io.orqueio.bpm.client.backoff.ErrorAwareBackoffStrategy;
+import io.orqueio.bpm.client.exception.ExternalTaskClientException;
+import io.orqueio.bpm.client.impl.EngineClient;
+import io.orqueio.bpm.client.impl.EngineClientException;
+import io.orqueio.bpm.client.impl.ExternalTaskClientLogger;
+import io.orqueio.bpm.client.task.ExternalTask;
+import io.orqueio.bpm.client.task.ExternalTaskHandler;
+import io.orqueio.bpm.client.task.impl.ExternalTaskImpl;
+import io.orqueio.bpm.client.task.impl.ExternalTaskServiceImpl;
+import io.orqueio.bpm.client.topic.TopicSubscription;
+import io.orqueio.bpm.client.topic.impl.dto.FetchAndLockResponseDto;
+import io.orqueio.bpm.client.topic.impl.dto.TopicRequestDto;
+import io.orqueio.bpm.client.variable.impl.TypedValueField;
+import io.orqueio.bpm.client.variable.impl.TypedValues;
+import io.orqueio.bpm.client.variable.impl.VariableValue;
 
 /**
  * @author Tassilo Weidner

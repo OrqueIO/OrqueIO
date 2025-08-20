@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.sub.history.impl;
+package io.orqueio.bpm.engine.rest.sub.history.impl;
 
 import javax.ws.rs.core.Response.Status;
 
-import org.camunda.bpm.engine.HistoryService;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.history.HistoricDecisionInstance;
-import org.camunda.bpm.engine.history.HistoricDecisionInstanceQuery;
-import org.camunda.bpm.engine.rest.dto.history.HistoricDecisionInstanceDto;
-import org.camunda.bpm.engine.rest.exception.InvalidRequestException;
-import org.camunda.bpm.engine.rest.sub.history.HistoricDecisionInstanceResource;
+import io.orqueio.bpm.engine.HistoryService;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.history.HistoricDecisionInstance;
+import io.orqueio.bpm.engine.history.HistoricDecisionInstanceQuery;
+import io.orqueio.bpm.engine.rest.dto.history.HistoricDecisionInstanceDto;
+import io.orqueio.bpm.engine.rest.exception.InvalidRequestException;
+import io.orqueio.bpm.engine.rest.sub.history.HistoricDecisionInstanceResource;
 
 public class HistoricDecisionInstanceResourceImpl implements HistoricDecisionInstanceResource {
 

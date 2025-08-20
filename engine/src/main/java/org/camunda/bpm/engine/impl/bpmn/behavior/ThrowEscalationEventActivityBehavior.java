@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.bpmn.behavior;
+package io.orqueio.bpm.engine.impl.bpmn.behavior;
 
-import org.camunda.bpm.engine.impl.bpmn.helper.EscalationHandler;
-import org.camunda.bpm.engine.impl.bpmn.parser.Escalation;
-import org.camunda.bpm.engine.impl.bpmn.parser.EscalationEventDefinition;
-import org.camunda.bpm.engine.impl.persistence.entity.ExecutionEntity;
-import org.camunda.bpm.engine.impl.pvm.PvmActivity;
-import org.camunda.bpm.engine.impl.pvm.delegate.ActivityExecution;
+import io.orqueio.bpm.engine.impl.bpmn.helper.EscalationHandler;
+import io.orqueio.bpm.engine.impl.bpmn.parser.Escalation;
+import io.orqueio.bpm.engine.impl.bpmn.parser.EscalationEventDefinition;
+import io.orqueio.bpm.engine.impl.persistence.entity.ExecutionEntity;
+import io.orqueio.bpm.engine.impl.pvm.PvmActivity;
+import io.orqueio.bpm.engine.impl.pvm.delegate.ActivityExecution;
 
 /**
  * The activity behavior for an intermediate throwing escalation event and an escalation end event.

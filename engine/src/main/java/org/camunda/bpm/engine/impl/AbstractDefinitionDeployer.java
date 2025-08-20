@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl;
+package io.orqueio.bpm.engine.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -23,18 +23,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.impl.cfg.IdGenerator;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.cmd.CommandLogger;
-import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.engine.impl.core.model.Properties;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.persistence.deploy.Deployer;
-import org.camunda.bpm.engine.impl.persistence.deploy.cache.DeploymentCache;
-import org.camunda.bpm.engine.impl.persistence.entity.DeploymentEntity;
-import org.camunda.bpm.engine.impl.persistence.entity.ResourceEntity;
-import org.camunda.bpm.engine.impl.repository.ResourceDefinitionEntity;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.impl.cfg.IdGenerator;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.cmd.CommandLogger;
+import io.orqueio.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.impl.core.model.Properties;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.impl.persistence.deploy.Deployer;
+import io.orqueio.bpm.engine.impl.persistence.deploy.cache.DeploymentCache;
+import io.orqueio.bpm.engine.impl.persistence.entity.DeploymentEntity;
+import io.orqueio.bpm.engine.impl.persistence.entity.ResourceEntity;
+import io.orqueio.bpm.engine.impl.repository.ResourceDefinitionEntity;
 
 /**
  * {@link Deployer} responsible to parse resource files and create the proper entities.

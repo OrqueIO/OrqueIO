@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest;
+package io.orqueio.bpm.engine.rest;
 
 import java.util.List;
 
@@ -29,9 +29,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import org.camunda.bpm.engine.rest.dto.metrics.MetricsIntervalResultDto;
+import io.orqueio.bpm.engine.rest.dto.metrics.MetricsIntervalResultDto;
 
-import org.camunda.bpm.engine.rest.sub.metrics.MetricsResource;
+import io.orqueio.bpm.engine.rest.sub.metrics.MetricsResource;
 
 /**
  * @author Daniel Meyer

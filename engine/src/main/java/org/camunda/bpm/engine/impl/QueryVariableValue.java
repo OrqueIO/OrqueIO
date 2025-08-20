@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl;
+package io.orqueio.bpm.engine.impl;
 
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
-import org.camunda.bpm.engine.impl.variable.serializer.VariableSerializers;
-import org.camunda.bpm.engine.variable.Variables;
-import org.camunda.bpm.engine.variable.value.TypedValue;
+import io.orqueio.bpm.engine.impl.variable.serializer.VariableSerializers;
+import io.orqueio.bpm.engine.variable.Variables;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
 
 
 /**

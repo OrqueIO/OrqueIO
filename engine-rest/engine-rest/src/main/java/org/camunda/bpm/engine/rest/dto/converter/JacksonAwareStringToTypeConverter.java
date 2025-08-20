@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.dto.converter;
+package io.orqueio.bpm.engine.rest.dto.converter;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.camunda.bpm.engine.rest.exception.InvalidRequestException;
+import io.orqueio.bpm.engine.rest.exception.InvalidRequestException;
 
 import javax.ws.rs.core.Response.Status;
 import java.io.IOException;

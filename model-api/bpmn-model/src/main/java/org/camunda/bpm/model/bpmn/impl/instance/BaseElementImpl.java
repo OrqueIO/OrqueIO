@@ -14,28 +14,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.bpmn.impl.instance;
+package io.orqueio.bpm.model.bpmn.impl.instance;
 
-import org.camunda.bpm.model.bpmn.instance.BaseElement;
-import org.camunda.bpm.model.bpmn.instance.Documentation;
-import org.camunda.bpm.model.bpmn.instance.ExtensionElements;
-import org.camunda.bpm.model.bpmn.instance.di.DiagramElement;
-import org.camunda.bpm.model.xml.ModelBuilder;
-import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
-import org.camunda.bpm.model.xml.impl.util.ModelUtil;
-import org.camunda.bpm.model.xml.instance.ModelElementInstance;
-import org.camunda.bpm.model.xml.type.ModelElementType;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.attribute.Attribute;
-import org.camunda.bpm.model.xml.type.child.ChildElement;
-import org.camunda.bpm.model.xml.type.child.ChildElementCollection;
-import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
-import org.camunda.bpm.model.xml.type.reference.Reference;
+import io.orqueio.bpm.model.bpmn.instance.BaseElement;
+import io.orqueio.bpm.model.bpmn.instance.Documentation;
+import io.orqueio.bpm.model.bpmn.instance.ExtensionElements;
+import io.orqueio.bpm.model.bpmn.instance.di.DiagramElement;
+import io.orqueio.bpm.model.xml.ModelBuilder;
+import io.orqueio.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
+import io.orqueio.bpm.model.xml.impl.util.ModelUtil;
+import io.orqueio.bpm.model.xml.instance.ModelElementInstance;
+import io.orqueio.bpm.model.xml.type.ModelElementType;
+import io.orqueio.bpm.model.xml.type.ModelElementTypeBuilder;
+import io.orqueio.bpm.model.xml.type.attribute.Attribute;
+import io.orqueio.bpm.model.xml.type.child.ChildElement;
+import io.orqueio.bpm.model.xml.type.child.ChildElementCollection;
+import io.orqueio.bpm.model.xml.type.child.SequenceBuilder;
+import io.orqueio.bpm.model.xml.type.reference.Reference;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
-import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.*;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.*;
 
 /**
  * The BPMN baseElement element

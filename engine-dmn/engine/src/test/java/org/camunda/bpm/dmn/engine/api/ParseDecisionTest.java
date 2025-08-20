@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.engine.api;
+package io.orqueio.bpm.dmn.engine.api;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
@@ -23,15 +23,15 @@ import java.io.InputStream;
 import java.util.List;
 
 import org.assertj.core.api.Assertions;
-import org.camunda.bpm.dmn.engine.DmnDecision;
-import org.camunda.bpm.dmn.engine.DmnDecisionRequirementsGraph;
-import org.camunda.bpm.dmn.engine.impl.transform.DmnTransformException;
-import org.camunda.bpm.dmn.engine.test.DmnEngineTest;
-import org.camunda.bpm.model.dmn.Dmn;
-import org.camunda.bpm.model.dmn.DmnModelException;
-import org.camunda.bpm.model.dmn.DmnModelInstance;
-import org.camunda.bpm.model.xml.ModelException;
-import org.camunda.commons.utils.IoUtil;
+import io.orqueio.bpm.dmn.engine.DmnDecision;
+import io.orqueio.bpm.dmn.engine.DmnDecisionRequirementsGraph;
+import io.orqueio.bpm.dmn.engine.impl.transform.DmnTransformException;
+import io.orqueio.bpm.dmn.engine.test.DmnEngineTest;
+import io.orqueio.bpm.model.dmn.Dmn;
+import io.orqueio.bpm.model.dmn.DmnModelException;
+import io.orqueio.bpm.model.dmn.DmnModelInstance;
+import io.orqueio.bpm.model.xml.ModelException;
+import io.orqueio.commons.utils.IoUtil;
 import org.junit.Test;
 
 public class ParseDecisionTest extends DmnEngineTest {

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.standalone.entity;
+package io.orqueio.bpm.engine.test.standalone.entity;
 
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -22,16 +22,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.Date;
 import java.util.UUID;
 
-import org.camunda.bpm.engine.ProcessEngineConfiguration;
-import org.camunda.bpm.engine.impl.cmmn.entity.repository.CaseDefinitionEntity;
-import org.camunda.bpm.engine.impl.cmmn.entity.runtime.CaseExecutionEntity;
-import org.camunda.bpm.engine.impl.history.event.HistoricCaseActivityInstanceEventEntity;
-import org.camunda.bpm.engine.impl.history.event.HistoryEventTypes;
-import org.camunda.bpm.engine.impl.interceptor.Command;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.persistence.entity.HistoricCaseActivityInstanceEntity;
-import org.camunda.bpm.engine.test.RequiredHistoryLevel;
-import org.camunda.bpm.engine.test.util.PluggableProcessEngineTest;
+import io.orqueio.bpm.engine.ProcessEngineConfiguration;
+import io.orqueio.bpm.engine.impl.cmmn.entity.repository.CaseDefinitionEntity;
+import io.orqueio.bpm.engine.impl.cmmn.entity.runtime.CaseExecutionEntity;
+import io.orqueio.bpm.engine.impl.history.event.HistoricCaseActivityInstanceEventEntity;
+import io.orqueio.bpm.engine.impl.history.event.HistoryEventTypes;
+import io.orqueio.bpm.engine.impl.interceptor.Command;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.impl.persistence.entity.HistoricCaseActivityInstanceEntity;
+import io.orqueio.bpm.engine.test.RequiredHistoryLevel;
+import io.orqueio.bpm.engine.test.util.PluggableProcessEngineTest;
 import org.junit.Test;
 
 public class CaseDefinitionIdHistoryUpdateTest extends PluggableProcessEngineTest {

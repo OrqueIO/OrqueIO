@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.engine.impl.spi.type;
+package io.orqueio.bpm.dmn.engine.impl.spi.type;
 
-import org.camunda.bpm.engine.variable.value.TypedValue;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
 
 /**
  * The definition of a type used in the DMN engine to

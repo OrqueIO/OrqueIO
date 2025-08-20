@@ -10,7 +10,7 @@
       <bpmn2:startEvent id="StartEvent_2">
         <bpmn2:outgoing>SequenceFlow_3</bpmn2:outgoing>
       </bpmn2:startEvent>
-      <bpmn2:serviceTask id="ServiceTask_1" camunda:class="org.camunda.bpm.engine.test.bpmn.subprocess.util.GetActInstanceDelegate" name="Service&#xA;Task">
+      <bpmn2:serviceTask id="ServiceTask_1" camunda:class="io.orqueio.bpm.engine.test.bpmn.subprocess.util.GetActInstanceDelegate" name="Service&#xA;Task">
         <bpmn2:incoming>SequenceFlow_3</bpmn2:incoming>
         <bpmn2:outgoing>SequenceFlow_4</bpmn2:outgoing>
       </bpmn2:serviceTask>

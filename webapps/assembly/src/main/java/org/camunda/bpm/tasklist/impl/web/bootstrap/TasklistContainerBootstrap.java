@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.tasklist.impl.web.bootstrap;
+package io.orqueio.bpm.tasklist.impl.web.bootstrap;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-import org.camunda.bpm.container.RuntimeContainerDelegate;
-import org.camunda.bpm.engine.rest.util.WebApplicationUtil;
-import org.camunda.bpm.tasklist.Tasklist;
-import org.camunda.bpm.tasklist.impl.DefaultTasklistRuntimeDelegate;
+import io.orqueio.bpm.container.RuntimeContainerDelegate;
+import io.orqueio.bpm.engine.rest.util.WebApplicationUtil;
+import io.orqueio.bpm.tasklist.Tasklist;
+import io.orqueio.bpm.tasklist.impl.DefaultTasklistRuntimeDelegate;
 
 /**
  * @author Roman Smirnov

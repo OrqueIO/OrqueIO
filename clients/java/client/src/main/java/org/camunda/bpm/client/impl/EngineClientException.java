@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.impl;
+package io.orqueio.bpm.client.impl;
 
 /**
  * @author Tassilo Weidner

@@ -14,23 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.persistence.entity;
+package io.orqueio.bpm.engine.impl.persistence.entity;
 
-import static org.camunda.bpm.engine.authorization.Authorization.ANY;
-import static org.camunda.bpm.engine.authorization.Permissions.CREATE;
-import static org.camunda.bpm.engine.authorization.Permissions.DELETE;
-import static org.camunda.bpm.engine.authorization.Permissions.READ;
-import static org.camunda.bpm.engine.authorization.Permissions.UPDATE;
-import static org.camunda.bpm.engine.authorization.Resources.FILTER;
-import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
+import static io.orqueio.bpm.engine.authorization.Authorization.ANY;
+import static io.orqueio.bpm.engine.authorization.Permissions.CREATE;
+import static io.orqueio.bpm.engine.authorization.Permissions.DELETE;
+import static io.orqueio.bpm.engine.authorization.Permissions.READ;
+import static io.orqueio.bpm.engine.authorization.Permissions.UPDATE;
+import static io.orqueio.bpm.engine.authorization.Resources.FILTER;
+import static io.orqueio.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
 
 import java.util.List;
 
-import org.camunda.bpm.engine.filter.Filter;
-import org.camunda.bpm.engine.impl.AbstractQuery;
-import org.camunda.bpm.engine.impl.QueryValidators.StoredQueryValidator;
-import org.camunda.bpm.engine.impl.filter.FilterQueryImpl;
-import org.camunda.bpm.engine.impl.persistence.AbstractManager;
+import io.orqueio.bpm.engine.filter.Filter;
+import io.orqueio.bpm.engine.impl.AbstractQuery;
+import io.orqueio.bpm.engine.impl.QueryValidators.StoredQueryValidator;
+import io.orqueio.bpm.engine.impl.filter.FilterQueryImpl;
+import io.orqueio.bpm.engine.impl.persistence.AbstractManager;
 
 /**
  * @author Sebastian Menski

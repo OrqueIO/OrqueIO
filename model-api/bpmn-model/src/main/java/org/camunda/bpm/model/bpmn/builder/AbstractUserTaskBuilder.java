@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.bpmn.builder;
+package io.orqueio.bpm.model.bpmn.builder;
 
 import java.util.List;
 
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
-import org.camunda.bpm.model.bpmn.impl.BpmnModelConstants;
-import org.camunda.bpm.model.bpmn.instance.TimerEventDefinition;
-import org.camunda.bpm.model.bpmn.instance.UserTask;
-import org.camunda.bpm.model.bpmn.instance.camunda.CamundaFormData;
-import org.camunda.bpm.model.bpmn.instance.camunda.CamundaFormField;
-import org.camunda.bpm.model.bpmn.instance.camunda.CamundaTaskListener;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants;
+import io.orqueio.bpm.model.bpmn.instance.TimerEventDefinition;
+import io.orqueio.bpm.model.bpmn.instance.UserTask;
+import io.orqueio.bpm.model.bpmn.instance.camunda.CamundaFormData;
+import io.orqueio.bpm.model.bpmn.instance.camunda.CamundaFormField;
+import io.orqueio.bpm.model.bpmn.instance.camunda.CamundaTaskListener;
 
 /**
  * @author Sebastian Menski

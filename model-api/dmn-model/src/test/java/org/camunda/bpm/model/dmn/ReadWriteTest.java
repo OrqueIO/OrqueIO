@@ -14,23 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.dmn;
+package io.orqueio.bpm.model.dmn;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.camunda.bpm.model.dmn.DecisionTableOrientation.CrossTable;
-import static org.camunda.bpm.model.dmn.DecisionTableOrientation.Rule_as_Column;
-import static org.camunda.bpm.model.dmn.DecisionTableOrientation.Rule_as_Row;
-import static org.camunda.bpm.model.dmn.HitPolicy.ANY;
-import static org.camunda.bpm.model.dmn.HitPolicy.COLLECT;
-import static org.camunda.bpm.model.dmn.HitPolicy.FIRST;
-import static org.camunda.bpm.model.dmn.HitPolicy.OUTPUT_ORDER;
-import static org.camunda.bpm.model.dmn.HitPolicy.PRIORITY;
-import static org.camunda.bpm.model.dmn.HitPolicy.RULE_ORDER;
-import static org.camunda.bpm.model.dmn.HitPolicy.UNIQUE;
+import static io.orqueio.bpm.model.dmn.DecisionTableOrientation.CrossTable;
+import static io.orqueio.bpm.model.dmn.DecisionTableOrientation.Rule_as_Column;
+import static io.orqueio.bpm.model.dmn.DecisionTableOrientation.Rule_as_Row;
+import static io.orqueio.bpm.model.dmn.HitPolicy.ANY;
+import static io.orqueio.bpm.model.dmn.HitPolicy.COLLECT;
+import static io.orqueio.bpm.model.dmn.HitPolicy.FIRST;
+import static io.orqueio.bpm.model.dmn.HitPolicy.OUTPUT_ORDER;
+import static io.orqueio.bpm.model.dmn.HitPolicy.PRIORITY;
+import static io.orqueio.bpm.model.dmn.HitPolicy.RULE_ORDER;
+import static io.orqueio.bpm.model.dmn.HitPolicy.UNIQUE;
 
-import org.camunda.bpm.model.dmn.impl.instance.InputDataImpl;
-import org.camunda.bpm.model.dmn.instance.*;
-import org.camunda.bpm.model.dmn.util.DmnModelResource;
+import io.orqueio.bpm.model.dmn.impl.instance.InputDataImpl;
+import io.orqueio.bpm.model.dmn.instance.*;
+import io.orqueio.bpm.model.dmn.util.DmnModelResource;
 import org.junit.Test;
 
 import java.util.Collection;

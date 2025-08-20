@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.repository;
+package io.orqueio.bpm.engine.test.api.repository;
 
 import static org.junit.Assert.assertEquals;
 
-import org.camunda.bpm.engine.repository.DecisionDefinition;
-import org.camunda.bpm.engine.repository.ProcessDefinition;
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.engine.test.util.PluggableProcessEngineTest;
+import io.orqueio.bpm.engine.repository.DecisionDefinition;
+import io.orqueio.bpm.engine.repository.ProcessDefinition;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.test.util.PluggableProcessEngineTest;
 import org.junit.Test;
 
 /**

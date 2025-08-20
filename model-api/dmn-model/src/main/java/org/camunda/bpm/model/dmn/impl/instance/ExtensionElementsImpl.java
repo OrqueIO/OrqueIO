@@ -14,22 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.dmn.impl.instance;
+package io.orqueio.bpm.model.dmn.impl.instance;
 
-import static org.camunda.bpm.model.dmn.impl.DmnModelConstants.LATEST_DMN_NS;
-import static org.camunda.bpm.model.dmn.impl.DmnModelConstants.DMN_ELEMENT_EXTENSION_ELEMENTS;
+import static io.orqueio.bpm.model.dmn.impl.DmnModelConstants.LATEST_DMN_NS;
+import static io.orqueio.bpm.model.dmn.impl.DmnModelConstants.DMN_ELEMENT_EXTENSION_ELEMENTS;
 
 import java.util.Collection;
 
-import org.camunda.bpm.model.dmn.Query;
-import org.camunda.bpm.model.dmn.impl.QueryImpl;
-import org.camunda.bpm.model.dmn.instance.ExtensionElements;
-import org.camunda.bpm.model.xml.ModelBuilder;
-import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
-import org.camunda.bpm.model.xml.impl.util.ModelUtil;
-import org.camunda.bpm.model.xml.instance.ModelElementInstance;
-import org.camunda.bpm.model.xml.type.ModelElementType;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
+import io.orqueio.bpm.model.dmn.Query;
+import io.orqueio.bpm.model.dmn.impl.QueryImpl;
+import io.orqueio.bpm.model.dmn.instance.ExtensionElements;
+import io.orqueio.bpm.model.xml.ModelBuilder;
+import io.orqueio.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
+import io.orqueio.bpm.model.xml.impl.util.ModelUtil;
+import io.orqueio.bpm.model.xml.instance.ModelElementInstance;
+import io.orqueio.bpm.model.xml.type.ModelElementType;
+import io.orqueio.bpm.model.xml.type.ModelElementTypeBuilder;
 
 /**
  * The DMN extensionElements element

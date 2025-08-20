@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.spring.test.autodeployment;
+package io.orqueio.bpm.engine.spring.test.autodeployment;
 
-import org.camunda.bpm.engine.spring.SpringProcessEngineConfiguration;
+import io.orqueio.bpm.engine.spring.SpringProcessEngineConfiguration;
 
 public class DynamicResourceEngineConfiguration extends SpringProcessEngineConfiguration {
 

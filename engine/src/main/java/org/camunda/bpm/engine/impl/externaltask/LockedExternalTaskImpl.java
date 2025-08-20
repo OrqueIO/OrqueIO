@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.externaltask;
+package io.orqueio.bpm.engine.impl.externaltask;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -22,12 +22,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.engine.externaltask.LockedExternalTask;
-import org.camunda.bpm.engine.impl.bpmn.helper.BpmnProperties;
-import org.camunda.bpm.engine.impl.persistence.entity.ExecutionEntity;
-import org.camunda.bpm.engine.impl.persistence.entity.ExternalTaskEntity;
-import org.camunda.bpm.engine.variable.VariableMap;
-import org.camunda.bpm.engine.variable.impl.VariableMapImpl;
+import io.orqueio.bpm.engine.externaltask.LockedExternalTask;
+import io.orqueio.bpm.engine.impl.bpmn.helper.BpmnProperties;
+import io.orqueio.bpm.engine.impl.persistence.entity.ExecutionEntity;
+import io.orqueio.bpm.engine.impl.persistence.entity.ExternalTaskEntity;
+import io.orqueio.bpm.engine.variable.VariableMap;
+import io.orqueio.bpm.engine.variable.impl.VariableMapImpl;
 
 /**
  * @author Thorben Lindhauer
@@ -145,7 +145,7 @@ public class LockedExternalTaskImpl implements LockedExternalTask {
    * During mapping variables will be collected,during collection variables will not be deserialized
    * and scope will not be set to local.
    *
-   * @see {@link org.camunda.bpm.engine.impl.core.variable.scope.AbstractVariableScope#collectVariables(VariableMapImpl, Collection, boolean, boolean)}
+   * @see {@link io.orqueio.bpm.engine.impl.core.variable.scope.AbstractVariableScope#collectVariables(VariableMapImpl, Collection, boolean, boolean)}
    *
    * @param externalTaskEntity - source persistent entity to use for fields
    * @param variablesToFetch - list of variable names to fetch, if null then all variables will be fetched

@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.jobexecutor.historycleanup;
+package io.orqueio.bpm.engine.impl.jobexecutor.historycleanup;
 
 import java.util.Calendar;
 import java.util.Date;
-import org.camunda.bpm.engine.impl.jobexecutor.JobHandlerConfiguration;
+import io.orqueio.bpm.engine.impl.jobexecutor.JobHandlerConfiguration;
 import com.google.gson.JsonObject;
-import org.camunda.bpm.engine.impl.util.JsonUtil;
+import io.orqueio.bpm.engine.impl.util.JsonUtil;
 
 /**
  * @author Svetlana Dorokhova

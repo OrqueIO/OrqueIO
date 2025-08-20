@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.dto.converter;
+package io.orqueio.bpm.engine.rest.dto.converter;
 
-import org.camunda.bpm.engine.task.TaskCountByCandidateGroupResult;
+import io.orqueio.bpm.engine.task.TaskCountByCandidateGroupResult;
 
 import java.util.List;
 

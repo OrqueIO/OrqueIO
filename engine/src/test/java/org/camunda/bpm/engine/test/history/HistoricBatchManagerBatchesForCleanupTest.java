@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.history;
+package io.orqueio.bpm.engine.test.history;
 
 import static org.junit.Assert.assertEquals;
 
@@ -27,18 +27,18 @@ import java.util.Map;
 
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.time.DateUtils;
-import org.camunda.bpm.engine.HistoryService;
-import org.camunda.bpm.engine.ProcessEngineConfiguration;
-import org.camunda.bpm.engine.batch.Batch;
-import org.camunda.bpm.engine.batch.history.HistoricBatch;
-import org.camunda.bpm.engine.impl.interceptor.Command;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.util.ClockUtil;
-import org.camunda.bpm.engine.test.ProcessEngineRule;
-import org.camunda.bpm.engine.test.RequiredHistoryLevel;
-import org.camunda.bpm.engine.test.api.runtime.migration.MigrationTestRule;
-import org.camunda.bpm.engine.test.api.runtime.migration.batch.BatchMigrationHelper;
-import org.camunda.bpm.engine.test.util.ProvidedProcessEngineRule;
+import io.orqueio.bpm.engine.HistoryService;
+import io.orqueio.bpm.engine.ProcessEngineConfiguration;
+import io.orqueio.bpm.engine.batch.Batch;
+import io.orqueio.bpm.engine.batch.history.HistoricBatch;
+import io.orqueio.bpm.engine.impl.interceptor.Command;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.impl.util.ClockUtil;
+import io.orqueio.bpm.engine.test.ProcessEngineRule;
+import io.orqueio.bpm.engine.test.RequiredHistoryLevel;
+import io.orqueio.bpm.engine.test.api.runtime.migration.MigrationTestRule;
+import io.orqueio.bpm.engine.test.api.runtime.migration.batch.BatchMigrationHelper;
+import io.orqueio.bpm.engine.test.util.ProvidedProcessEngineRule;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;

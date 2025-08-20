@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl;
+package io.orqueio.bpm.engine.impl;
 
 import java.io.Serializable;
 import java.util.List;
 
-import org.camunda.bpm.engine.query.QueryProperty;
-import org.camunda.bpm.engine.runtime.VariableInstance;
-import org.camunda.bpm.engine.task.Task;
-import org.camunda.bpm.engine.task.TaskQuery;
+import io.orqueio.bpm.engine.query.QueryProperty;
+import io.orqueio.bpm.engine.runtime.VariableInstance;
+import io.orqueio.bpm.engine.task.Task;
+import io.orqueio.bpm.engine.task.TaskQuery;
 
 /**
  * <p>A QueryOrderingProperty specifies a condition by which the results of a query should be

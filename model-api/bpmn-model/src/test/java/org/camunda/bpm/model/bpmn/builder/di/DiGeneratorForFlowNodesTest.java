@@ -14,22 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.bpmn.builder.di;
+package io.orqueio.bpm.model.bpmn.builder.di;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.camunda.bpm.model.bpmn.BpmnTestConstants.BOUNDARY_ID;
-import static org.camunda.bpm.model.bpmn.BpmnTestConstants.CALL_ACTIVITY_ID;
-import static org.camunda.bpm.model.bpmn.BpmnTestConstants.CATCH_ID;
-import static org.camunda.bpm.model.bpmn.BpmnTestConstants.CONDITION_ID;
-import static org.camunda.bpm.model.bpmn.BpmnTestConstants.END_EVENT_ID;
-import static org.camunda.bpm.model.bpmn.BpmnTestConstants.SEND_TASK_ID;
-import static org.camunda.bpm.model.bpmn.BpmnTestConstants.SERVICE_TASK_ID;
-import static org.camunda.bpm.model.bpmn.BpmnTestConstants.START_EVENT_ID;
-import static org.camunda.bpm.model.bpmn.BpmnTestConstants.SUB_PROCESS_ID;
-import static org.camunda.bpm.model.bpmn.BpmnTestConstants.TASK_ID;
-import static org.camunda.bpm.model.bpmn.BpmnTestConstants.TEST_CONDITION;
-import static org.camunda.bpm.model.bpmn.BpmnTestConstants.TRANSACTION_ID;
-import static org.camunda.bpm.model.bpmn.BpmnTestConstants.USER_TASK_ID;
+import static io.orqueio.bpm.model.bpmn.BpmnTestConstants.BOUNDARY_ID;
+import static io.orqueio.bpm.model.bpmn.BpmnTestConstants.CALL_ACTIVITY_ID;
+import static io.orqueio.bpm.model.bpmn.BpmnTestConstants.CATCH_ID;
+import static io.orqueio.bpm.model.bpmn.BpmnTestConstants.CONDITION_ID;
+import static io.orqueio.bpm.model.bpmn.BpmnTestConstants.END_EVENT_ID;
+import static io.orqueio.bpm.model.bpmn.BpmnTestConstants.SEND_TASK_ID;
+import static io.orqueio.bpm.model.bpmn.BpmnTestConstants.SERVICE_TASK_ID;
+import static io.orqueio.bpm.model.bpmn.BpmnTestConstants.START_EVENT_ID;
+import static io.orqueio.bpm.model.bpmn.BpmnTestConstants.SUB_PROCESS_ID;
+import static io.orqueio.bpm.model.bpmn.BpmnTestConstants.TASK_ID;
+import static io.orqueio.bpm.model.bpmn.BpmnTestConstants.TEST_CONDITION;
+import static io.orqueio.bpm.model.bpmn.BpmnTestConstants.TRANSACTION_ID;
+import static io.orqueio.bpm.model.bpmn.BpmnTestConstants.USER_TASK_ID;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -38,11 +38,11 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
 
-import org.camunda.bpm.model.bpmn.Bpmn;
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
-import org.camunda.bpm.model.bpmn.builder.ProcessBuilder;
-import org.camunda.bpm.model.bpmn.instance.bpmndi.BpmnDiagram;
-import org.camunda.bpm.model.bpmn.instance.bpmndi.BpmnShape;
+import io.orqueio.bpm.model.bpmn.Bpmn;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.bpm.model.bpmn.builder.ProcessBuilder;
+import io.orqueio.bpm.model.bpmn.instance.bpmndi.BpmnDiagram;
+import io.orqueio.bpm.model.bpmn.instance.bpmndi.BpmnShape;
 import org.junit.After;
 import org.junit.Test;
 

@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.migration.validation.instruction;
+package io.orqueio.bpm.engine.impl.migration.validation.instruction;
 
 import java.util.List;
-import org.camunda.bpm.engine.impl.bpmn.helper.BpmnProperties;
-import org.camunda.bpm.engine.ActivityTypes;
-import org.camunda.bpm.engine.impl.pvm.process.ActivityImpl;
-import org.camunda.bpm.engine.impl.pvm.process.ScopeImpl;
+import io.orqueio.bpm.engine.impl.bpmn.helper.BpmnProperties;
+import io.orqueio.bpm.engine.ActivityTypes;
+import io.orqueio.bpm.engine.impl.pvm.process.ActivityImpl;
+import io.orqueio.bpm.engine.impl.pvm.process.ScopeImpl;
 
 public class SameEventScopeInstructionValidator implements MigrationInstructionValidator {
 

@@ -14,20 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.errorcode.conf;
+package io.orqueio.bpm.engine.test.errorcode.conf;
 
 import org.assertj.core.api.ThrowableAssert;
-import org.camunda.bpm.engine.IdentityService;
-import org.camunda.bpm.engine.RuntimeService;
-import org.camunda.bpm.engine.identity.User;
-import org.camunda.bpm.engine.impl.errorcode.BuiltinExceptionCode;
-import org.camunda.bpm.engine.test.errorcode.FailingJavaDelegateWithErrorCode;
-import org.camunda.bpm.engine.test.util.ProcessEngineBootstrapRule;
-import org.camunda.bpm.engine.test.util.ProcessEngineTestRule;
-import org.camunda.bpm.engine.test.util.ProvidedProcessEngineRule;
-import org.camunda.bpm.engine.variable.Variables;
-import org.camunda.bpm.model.bpmn.Bpmn;
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.bpm.engine.IdentityService;
+import io.orqueio.bpm.engine.RuntimeService;
+import io.orqueio.bpm.engine.identity.User;
+import io.orqueio.bpm.engine.impl.errorcode.BuiltinExceptionCode;
+import io.orqueio.bpm.engine.test.errorcode.FailingJavaDelegateWithErrorCode;
+import io.orqueio.bpm.engine.test.util.ProcessEngineBootstrapRule;
+import io.orqueio.bpm.engine.test.util.ProcessEngineTestRule;
+import io.orqueio.bpm.engine.test.util.ProvidedProcessEngineRule;
+import io.orqueio.bpm.engine.variable.Variables;
+import io.orqueio.bpm.model.bpmn.Bpmn;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.ClassRule;

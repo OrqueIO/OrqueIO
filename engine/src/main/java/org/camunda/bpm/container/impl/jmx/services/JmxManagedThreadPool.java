@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.jmx.services;
+package io.orqueio.bpm.container.impl.jmx.services;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-import org.camunda.bpm.container.impl.ContainerIntegrationLogger;
-import org.camunda.bpm.container.impl.spi.PlatformService;
-import org.camunda.bpm.container.impl.spi.PlatformServiceContainer;
-import org.camunda.bpm.container.impl.threading.se.SeExecutorService;
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
+import io.orqueio.bpm.container.impl.ContainerIntegrationLogger;
+import io.orqueio.bpm.container.impl.spi.PlatformService;
+import io.orqueio.bpm.container.impl.spi.PlatformServiceContainer;
+import io.orqueio.bpm.container.impl.threading.se.SeExecutorService;
+import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
 
 /**
  * @author Daniel Meyer

@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.tasklist;
+package io.orqueio.bpm.tasklist;
 
-import org.camunda.bpm.tasklist.plugin.spi.TasklistPlugin;
-import org.camunda.bpm.webapp.AppRuntimeDelegate;
+import io.orqueio.bpm.tasklist.plugin.spi.TasklistPlugin;
+import io.orqueio.bpm.webapp.AppRuntimeDelegate;
 
 /**
  * The tasklist application service runtime delegate. Provides access to the

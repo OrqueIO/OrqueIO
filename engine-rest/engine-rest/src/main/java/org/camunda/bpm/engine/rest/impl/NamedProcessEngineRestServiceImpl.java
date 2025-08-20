@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.impl;
+package io.orqueio.bpm.engine.rest.impl;
 
-import static org.camunda.bpm.engine.rest.util.EngineUtil.getProcessEngineProvider;
+import static io.orqueio.bpm.engine.rest.util.EngineUtil.getProcessEngineProvider;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -30,41 +30,41 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriBuilder;
 
-import org.camunda.bpm.engine.rest.AuthorizationRestService;
-import org.camunda.bpm.engine.rest.BatchRestService;
-import org.camunda.bpm.engine.rest.CaseDefinitionRestService;
-import org.camunda.bpm.engine.rest.CaseExecutionRestService;
-import org.camunda.bpm.engine.rest.CaseInstanceRestService;
-import org.camunda.bpm.engine.rest.ConditionRestService;
-import org.camunda.bpm.engine.rest.DecisionDefinitionRestService;
-import org.camunda.bpm.engine.rest.DecisionRequirementsDefinitionRestService;
-import org.camunda.bpm.engine.rest.DeploymentRestService;
-import org.camunda.bpm.engine.rest.EventSubscriptionRestService;
-import org.camunda.bpm.engine.rest.ExecutionRestService;
-import org.camunda.bpm.engine.rest.ExternalTaskRestService;
-import org.camunda.bpm.engine.rest.FilterRestService;
-import org.camunda.bpm.engine.rest.GroupRestService;
-import org.camunda.bpm.engine.rest.IdentityRestService;
-import org.camunda.bpm.engine.rest.IncidentRestService;
-import org.camunda.bpm.engine.rest.JobDefinitionRestService;
-import org.camunda.bpm.engine.rest.JobRestService;
-import org.camunda.bpm.engine.rest.MessageRestService;
-import org.camunda.bpm.engine.rest.MetricsRestService;
-import org.camunda.bpm.engine.rest.MigrationRestService;
-import org.camunda.bpm.engine.rest.ModificationRestService;
-import org.camunda.bpm.engine.rest.ProcessDefinitionRestService;
-import org.camunda.bpm.engine.rest.ProcessInstanceRestService;
-import org.camunda.bpm.engine.rest.SchemaLogRestService;
-import org.camunda.bpm.engine.rest.SignalRestService;
-import org.camunda.bpm.engine.rest.TaskRestService;
-import org.camunda.bpm.engine.rest.TelemetryRestService;
-import org.camunda.bpm.engine.rest.TenantRestService;
-import org.camunda.bpm.engine.rest.UserRestService;
-import org.camunda.bpm.engine.rest.VariableInstanceRestService;
-import org.camunda.bpm.engine.rest.dto.ProcessEngineDto;
-import org.camunda.bpm.engine.rest.history.HistoryRestService;
-import org.camunda.bpm.engine.rest.impl.optimize.OptimizeRestService;
-import org.camunda.bpm.engine.rest.spi.ProcessEngineProvider;
+import io.orqueio.bpm.engine.rest.AuthorizationRestService;
+import io.orqueio.bpm.engine.rest.BatchRestService;
+import io.orqueio.bpm.engine.rest.CaseDefinitionRestService;
+import io.orqueio.bpm.engine.rest.CaseExecutionRestService;
+import io.orqueio.bpm.engine.rest.CaseInstanceRestService;
+import io.orqueio.bpm.engine.rest.ConditionRestService;
+import io.orqueio.bpm.engine.rest.DecisionDefinitionRestService;
+import io.orqueio.bpm.engine.rest.DecisionRequirementsDefinitionRestService;
+import io.orqueio.bpm.engine.rest.DeploymentRestService;
+import io.orqueio.bpm.engine.rest.EventSubscriptionRestService;
+import io.orqueio.bpm.engine.rest.ExecutionRestService;
+import io.orqueio.bpm.engine.rest.ExternalTaskRestService;
+import io.orqueio.bpm.engine.rest.FilterRestService;
+import io.orqueio.bpm.engine.rest.GroupRestService;
+import io.orqueio.bpm.engine.rest.IdentityRestService;
+import io.orqueio.bpm.engine.rest.IncidentRestService;
+import io.orqueio.bpm.engine.rest.JobDefinitionRestService;
+import io.orqueio.bpm.engine.rest.JobRestService;
+import io.orqueio.bpm.engine.rest.MessageRestService;
+import io.orqueio.bpm.engine.rest.MetricsRestService;
+import io.orqueio.bpm.engine.rest.MigrationRestService;
+import io.orqueio.bpm.engine.rest.ModificationRestService;
+import io.orqueio.bpm.engine.rest.ProcessDefinitionRestService;
+import io.orqueio.bpm.engine.rest.ProcessInstanceRestService;
+import io.orqueio.bpm.engine.rest.SchemaLogRestService;
+import io.orqueio.bpm.engine.rest.SignalRestService;
+import io.orqueio.bpm.engine.rest.TaskRestService;
+import io.orqueio.bpm.engine.rest.TelemetryRestService;
+import io.orqueio.bpm.engine.rest.TenantRestService;
+import io.orqueio.bpm.engine.rest.UserRestService;
+import io.orqueio.bpm.engine.rest.VariableInstanceRestService;
+import io.orqueio.bpm.engine.rest.dto.ProcessEngineDto;
+import io.orqueio.bpm.engine.rest.history.HistoryRestService;
+import io.orqueio.bpm.engine.rest.impl.optimize.OptimizeRestService;
+import io.orqueio.bpm.engine.rest.spi.ProcessEngineProvider;
 
 
 @Path(NamedProcessEngineRestServiceImpl.PATH)

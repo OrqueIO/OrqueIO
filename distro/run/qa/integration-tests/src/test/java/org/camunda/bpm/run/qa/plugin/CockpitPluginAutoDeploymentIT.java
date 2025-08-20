@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.run.qa.plugin;
+package io.orqueio.bpm.run.qa.plugin;
 
 import static io.restassured.RestAssured.when;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -27,7 +27,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import org.camunda.bpm.run.qa.util.SpringBootManagedContainer;
+import io.orqueio.bpm.run.qa.util.SpringBootManagedContainer;
 import org.junit.After;
 import org.junit.Test;
 

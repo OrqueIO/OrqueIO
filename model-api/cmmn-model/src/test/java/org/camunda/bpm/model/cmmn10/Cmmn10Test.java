@@ -14,36 +14,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.cmmn10;
+package io.orqueio.bpm.model.cmmn10;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 
 import java.util.Collection;
 
-import org.camunda.bpm.model.cmmn.Cmmn;
-import org.camunda.bpm.model.cmmn.CmmnModelInstance;
-import org.camunda.bpm.model.cmmn.impl.CmmnModelConstants;
-import org.camunda.bpm.model.cmmn.instance.Case;
-import org.camunda.bpm.model.cmmn.instance.CasePlanModel;
-import org.camunda.bpm.model.cmmn.instance.CaseRole;
-import org.camunda.bpm.model.cmmn.instance.CaseRoles;
-import org.camunda.bpm.model.cmmn.instance.ConditionExpression;
-import org.camunda.bpm.model.cmmn.instance.Documentation;
-import org.camunda.bpm.model.cmmn.instance.EntryCriterion;
-import org.camunda.bpm.model.cmmn.instance.Event;
-import org.camunda.bpm.model.cmmn.instance.EventListener;
-import org.camunda.bpm.model.cmmn.instance.ExitCriterion;
-import org.camunda.bpm.model.cmmn.instance.HumanTask;
-import org.camunda.bpm.model.cmmn.instance.IfPart;
-import org.camunda.bpm.model.cmmn.instance.InputCaseParameter;
-import org.camunda.bpm.model.cmmn.instance.InputsCaseParameter;
-import org.camunda.bpm.model.cmmn.instance.OutputCaseParameter;
-import org.camunda.bpm.model.cmmn.instance.OutputsCaseParameter;
-import org.camunda.bpm.model.cmmn.instance.PlanItem;
-import org.camunda.bpm.model.cmmn.instance.Sentry;
-import org.camunda.bpm.model.cmmn.instance.TimerEvent;
-import org.camunda.bpm.model.cmmn.instance.UserEvent;
+import io.orqueio.bpm.model.cmmn.Cmmn;
+import io.orqueio.bpm.model.cmmn.CmmnModelInstance;
+import io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants;
+import io.orqueio.bpm.model.cmmn.instance.Case;
+import io.orqueio.bpm.model.cmmn.instance.CasePlanModel;
+import io.orqueio.bpm.model.cmmn.instance.CaseRole;
+import io.orqueio.bpm.model.cmmn.instance.CaseRoles;
+import io.orqueio.bpm.model.cmmn.instance.ConditionExpression;
+import io.orqueio.bpm.model.cmmn.instance.Documentation;
+import io.orqueio.bpm.model.cmmn.instance.EntryCriterion;
+import io.orqueio.bpm.model.cmmn.instance.Event;
+import io.orqueio.bpm.model.cmmn.instance.EventListener;
+import io.orqueio.bpm.model.cmmn.instance.ExitCriterion;
+import io.orqueio.bpm.model.cmmn.instance.HumanTask;
+import io.orqueio.bpm.model.cmmn.instance.IfPart;
+import io.orqueio.bpm.model.cmmn.instance.InputCaseParameter;
+import io.orqueio.bpm.model.cmmn.instance.InputsCaseParameter;
+import io.orqueio.bpm.model.cmmn.instance.OutputCaseParameter;
+import io.orqueio.bpm.model.cmmn.instance.OutputsCaseParameter;
+import io.orqueio.bpm.model.cmmn.instance.PlanItem;
+import io.orqueio.bpm.model.cmmn.instance.Sentry;
+import io.orqueio.bpm.model.cmmn.instance.TimerEvent;
+import io.orqueio.bpm.model.cmmn.instance.UserEvent;
 import org.junit.Test;
 
 /**

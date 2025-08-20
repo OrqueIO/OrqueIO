@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl;
+package io.orqueio.bpm.engine.impl;
 
 import java.util.ArrayList;
 
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.query.QueryProperty;
-import org.camunda.bpm.engine.variable.type.ValueType;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.query.QueryProperty;
+import io.orqueio.bpm.engine.variable.type.ValueType;
 
 /**
  * @author Thorben Lindhauer

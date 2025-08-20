@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.assertions.cmmn;
+package io.orqueio.bpm.engine.test.assertions.cmmn;
 
-import static org.camunda.bpm.engine.test.assertions.bpmn.BpmnAwareTests.withVariables;
+import static io.orqueio.bpm.engine.test.assertions.bpmn.BpmnAwareTests.withVariables;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.CALLS_REAL_METHODS;
@@ -27,18 +27,18 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 import org.assertj.core.api.Assertions;
-import org.camunda.bpm.engine.CaseService;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.RepositoryService;
-import org.camunda.bpm.engine.repository.CaseDefinition;
-import org.camunda.bpm.engine.repository.CaseDefinitionQuery;
-import org.camunda.bpm.engine.runtime.CaseExecution;
-import org.camunda.bpm.engine.runtime.CaseExecutionQuery;
-import org.camunda.bpm.engine.runtime.CaseInstance;
-import org.camunda.bpm.engine.runtime.CaseInstanceQuery;
-import org.camunda.bpm.engine.test.assertions.bpmn.AbstractAssertions;
-import org.camunda.bpm.engine.test.assertions.bpmn.BpmnAwareTests;
-import org.camunda.bpm.engine.test.assertions.helpers.CaseExecutionQueryFluentAnswer;
+import io.orqueio.bpm.engine.CaseService;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.RepositoryService;
+import io.orqueio.bpm.engine.repository.CaseDefinition;
+import io.orqueio.bpm.engine.repository.CaseDefinitionQuery;
+import io.orqueio.bpm.engine.runtime.CaseExecution;
+import io.orqueio.bpm.engine.runtime.CaseExecutionQuery;
+import io.orqueio.bpm.engine.runtime.CaseInstance;
+import io.orqueio.bpm.engine.runtime.CaseInstanceQuery;
+import io.orqueio.bpm.engine.test.assertions.bpmn.AbstractAssertions;
+import io.orqueio.bpm.engine.test.assertions.bpmn.BpmnAwareTests;
+import io.orqueio.bpm.engine.test.assertions.helpers.CaseExecutionQueryFluentAnswer;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;

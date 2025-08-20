@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.cmmn.instance;
+package io.orqueio.bpm.model.cmmn.instance;
 
 import java.util.Arrays;
 import java.util.Collection;
 
-import org.camunda.bpm.model.cmmn.MultiplicityEnum;
-import org.camunda.bpm.model.cmmn.impl.CmmnModelConstants;
+import io.orqueio.bpm.model.cmmn.MultiplicityEnum;
+import io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants;
 
 /**
  * @author Roman Smirnov

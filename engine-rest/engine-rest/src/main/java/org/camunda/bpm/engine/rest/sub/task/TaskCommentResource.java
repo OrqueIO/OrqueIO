@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.sub.task;
+package io.orqueio.bpm.engine.rest.sub.task;
 
 import java.util.List;
 import javax.ws.rs.Consumes;
@@ -28,7 +28,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
-import org.camunda.bpm.engine.rest.dto.task.CommentDto;
+import io.orqueio.bpm.engine.rest.dto.task.CommentDto;
 
 public interface TaskCommentResource {
 

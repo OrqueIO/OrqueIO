@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.deployment;
+package io.orqueio.bpm.container.impl.deployment;
 
-import org.camunda.bpm.application.AbstractProcessApplication;
-import org.camunda.bpm.container.impl.jmx.services.JmxManagedProcessApplication;
-import org.camunda.bpm.container.impl.spi.PlatformServiceContainer;
-import org.camunda.bpm.container.impl.spi.DeploymentOperation;
-import org.camunda.bpm.container.impl.spi.DeploymentOperationStep;
-import org.camunda.bpm.container.impl.spi.ServiceTypes;
+import io.orqueio.bpm.application.AbstractProcessApplication;
+import io.orqueio.bpm.container.impl.jmx.services.JmxManagedProcessApplication;
+import io.orqueio.bpm.container.impl.spi.PlatformServiceContainer;
+import io.orqueio.bpm.container.impl.spi.DeploymentOperation;
+import io.orqueio.bpm.container.impl.spi.DeploymentOperationStep;
+import io.orqueio.bpm.container.impl.spi.ServiceTypes;
 
 /**
  * <p>Deployment operations step responsible for removing the {@link JmxManagedProcessApplication} service.</p>

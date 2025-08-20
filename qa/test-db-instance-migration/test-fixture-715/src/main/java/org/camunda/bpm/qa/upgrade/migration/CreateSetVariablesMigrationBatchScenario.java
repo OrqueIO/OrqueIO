@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa.upgrade.migration;
+package io.orqueio.bpm.qa.upgrade.migration;
 
-import org.camunda.bpm.engine.RuntimeService;
-import org.camunda.bpm.engine.migration.MigrationPlan;
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.qa.upgrade.DescribesScenario;
-import org.camunda.bpm.qa.upgrade.ScenarioSetup;
+import io.orqueio.bpm.engine.RuntimeService;
+import io.orqueio.bpm.engine.migration.MigrationPlan;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.qa.upgrade.DescribesScenario;
+import io.orqueio.bpm.qa.upgrade.ScenarioSetup;
 
 public class CreateSetVariablesMigrationBatchScenario {
 

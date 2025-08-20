@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.exception;
+package io.orqueio.bpm.engine.rest.exception;
 
 import com.fasterxml.jackson.core.JsonParseException;
-import org.camunda.bpm.engine.rest.dto.ExceptionDto;
+import io.orqueio.bpm.engine.rest.dto.ExceptionDto;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;

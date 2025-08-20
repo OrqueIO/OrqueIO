@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.plugin.impl;
+package io.orqueio.spin.plugin.impl;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 
-import org.camunda.bpm.engine.impl.cfg.ProcessEnginePlugin;
-import org.camunda.bpm.engine.test.util.ProcessEngineBootstrapRule;
-import org.camunda.bpm.engine.test.util.ProvidedProcessEngineRule;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEnginePlugin;
+import io.orqueio.bpm.engine.test.util.ProcessEngineBootstrapRule;
+import io.orqueio.bpm.engine.test.util.ProvidedProcessEngineRule;
 import org.junit.Rule;
 import org.junit.Test;
 

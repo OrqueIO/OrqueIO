@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.repository;
+package io.orqueio.bpm.engine.impl.repository;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.camunda.bpm.engine.repository.ProcessDefinition;
-import org.camunda.bpm.engine.repository.CalledProcessDefinition;
+import io.orqueio.bpm.engine.repository.ProcessDefinition;
+import io.orqueio.bpm.engine.repository.CalledProcessDefinition;
 
 public class CalledProcessDefinitionImpl implements CalledProcessDefinition {
   protected String id;

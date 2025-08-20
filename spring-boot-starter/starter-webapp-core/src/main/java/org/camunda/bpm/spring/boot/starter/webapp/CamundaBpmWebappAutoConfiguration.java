@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter.webapp;
+package io.orqueio.bpm.spring.boot.starter.webapp;
 
-import org.camunda.bpm.spring.boot.starter.CamundaBpmAutoConfiguration;
-import org.camunda.bpm.spring.boot.starter.property.CamundaBpmProperties;
-import org.camunda.bpm.spring.boot.starter.property.WebappProperty;
-import org.camunda.bpm.spring.boot.starter.webapp.filter.LazyDelegateFilter.InitHook;
-import org.camunda.bpm.spring.boot.starter.webapp.filter.LazyInitRegistration;
-import org.camunda.bpm.spring.boot.starter.webapp.filter.ResourceLoaderDependingFilter;
+import io.orqueio.bpm.spring.boot.starter.CamundaBpmAutoConfiguration;
+import io.orqueio.bpm.spring.boot.starter.property.CamundaBpmProperties;
+import io.orqueio.bpm.spring.boot.starter.property.WebappProperty;
+import io.orqueio.bpm.spring.boot.starter.webapp.filter.LazyDelegateFilter.InitHook;
+import io.orqueio.bpm.spring.boot.starter.webapp.filter.LazyInitRegistration;
+import io.orqueio.bpm.spring.boot.starter.webapp.filter.ResourceLoaderDependingFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;

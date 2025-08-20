@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.assertions.cmmn;
+package io.orqueio.bpm.engine.test.assertions.cmmn;
 
 
 import static java.lang.String.format;
@@ -22,20 +22,20 @@ import static java.lang.String.format;
 import java.util.Map;
 
 import org.assertj.core.api.Assertions;
-import org.camunda.bpm.engine.CaseService;
-import org.camunda.bpm.engine.repository.CaseDefinition;
-import org.camunda.bpm.engine.repository.CaseDefinitionQuery;
-import org.camunda.bpm.engine.runtime.CaseExecution;
-import org.camunda.bpm.engine.runtime.CaseExecutionQuery;
-import org.camunda.bpm.engine.runtime.CaseInstance;
-import org.camunda.bpm.engine.runtime.CaseInstanceQuery;
-import org.camunda.bpm.engine.test.assertions.bpmn.BpmnAwareTests;
+import io.orqueio.bpm.engine.CaseService;
+import io.orqueio.bpm.engine.repository.CaseDefinition;
+import io.orqueio.bpm.engine.repository.CaseDefinitionQuery;
+import io.orqueio.bpm.engine.runtime.CaseExecution;
+import io.orqueio.bpm.engine.runtime.CaseExecutionQuery;
+import io.orqueio.bpm.engine.runtime.CaseInstance;
+import io.orqueio.bpm.engine.runtime.CaseInstanceQuery;
+import io.orqueio.bpm.engine.test.assertions.bpmn.BpmnAwareTests;
 
 /**
  * Convenience class to access camunda *BPMN* and *CMMN*
  * related Assertions PLUS helper methods. Use it with a static import:
  *
- * import static org.camunda.bpm.engine.test.assertions.cmmn.CmmnAwareTests.*;
+ * import static io.orqueio.bpm.engine.test.assertions.cmmn.CmmnAwareTests.*;
  *
  */
 public class CmmnAwareTests extends BpmnAwareTests {
@@ -74,7 +74,7 @@ public class CmmnAwareTests extends BpmnAwareTests {
    * Helper method to easily access CaseService
    *
    * @return  CaseService of process engine bound to this testing thread
-   * @see     org.camunda.bpm.engine.CaseService
+   * @see     io.orqueio.bpm.engine.CaseService
    */
   public static CaseService caseService() {
     return processEngine().getCaseService();

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.threading.ra.outbound;
+package io.orqueio.bpm.container.impl.threading.ra.outbound;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -32,9 +32,9 @@ import javax.resource.spi.ManagedConnectionMetaData;
 import javax.security.auth.Subject;
 import javax.transaction.xa.XAResource;
 
-import org.camunda.bpm.container.ExecutorService;
-import org.camunda.bpm.container.impl.threading.ra.JcaExecutorServiceConnector;
-import org.camunda.bpm.engine.impl.ProcessEngineImpl;
+import io.orqueio.bpm.container.ExecutorService;
+import io.orqueio.bpm.container.impl.threading.ra.JcaExecutorServiceConnector;
+import io.orqueio.bpm.engine.impl.ProcessEngineImpl;
 
 
 /**

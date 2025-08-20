@@ -14,19 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter.configuration.impl.custom;
+package io.orqueio.bpm.spring.boot.starter.configuration.impl.custom;
 
-import org.camunda.bpm.engine.AuthorizationService;
-import org.camunda.bpm.engine.IdentityService;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.authorization.Groups;
-import org.camunda.bpm.engine.authorization.Resource;
-import org.camunda.bpm.engine.authorization.Resources;
-import org.camunda.bpm.engine.identity.Group;
-import org.camunda.bpm.engine.identity.User;
-import org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity;
-import org.camunda.bpm.spring.boot.starter.configuration.impl.AbstractCamundaConfiguration;
-import org.camunda.bpm.spring.boot.starter.property.AdminUserProperty;
+import io.orqueio.bpm.engine.AuthorizationService;
+import io.orqueio.bpm.engine.IdentityService;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.authorization.Groups;
+import io.orqueio.bpm.engine.authorization.Resource;
+import io.orqueio.bpm.engine.authorization.Resources;
+import io.orqueio.bpm.engine.identity.Group;
+import io.orqueio.bpm.engine.identity.User;
+import io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity;
+import io.orqueio.bpm.spring.boot.starter.configuration.impl.AbstractCamundaConfiguration;
+import io.orqueio.bpm.spring.boot.starter.property.AdminUserProperty;
 import org.springframework.beans.BeanUtils;
 
 import jakarta.annotation.PostConstruct;
@@ -34,10 +34,10 @@ import java.util.Collections;
 import java.util.Optional;
 
 import static java.util.Objects.requireNonNull;
-import static org.camunda.bpm.engine.authorization.Authorization.ANY;
-import static org.camunda.bpm.engine.authorization.Authorization.AUTH_TYPE_GRANT;
-import static org.camunda.bpm.engine.authorization.Groups.CAMUNDA_ADMIN;
-import static org.camunda.bpm.engine.authorization.Permissions.ALL;
+import static io.orqueio.bpm.engine.authorization.Authorization.ANY;
+import static io.orqueio.bpm.engine.authorization.Authorization.AUTH_TYPE_GRANT;
+import static io.orqueio.bpm.engine.authorization.Groups.CAMUNDA_ADMIN;
+import static io.orqueio.bpm.engine.authorization.Permissions.ALL;
 
 public class CreateAdminUserConfiguration extends AbstractCamundaConfiguration {
 

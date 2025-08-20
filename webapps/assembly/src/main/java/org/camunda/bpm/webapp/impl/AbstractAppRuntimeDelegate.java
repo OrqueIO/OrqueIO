@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.webapp.impl;
+package io.orqueio.bpm.webapp.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,14 +22,14 @@ import java.util.NoSuchElementException;
 import java.util.ServiceLoader;
 import java.util.Set;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.rest.spi.ProcessEngineProvider;
-import org.camunda.bpm.webapp.AppRuntimeDelegate;
-import org.camunda.bpm.webapp.plugin.AppPluginRegistry;
-import org.camunda.bpm.webapp.plugin.impl.DefaultAppPluginRegistry;
-import org.camunda.bpm.webapp.plugin.resource.PluginResourceOverride;
-import org.camunda.bpm.webapp.plugin.spi.AppPlugin;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.rest.spi.ProcessEngineProvider;
+import io.orqueio.bpm.webapp.AppRuntimeDelegate;
+import io.orqueio.bpm.webapp.plugin.AppPluginRegistry;
+import io.orqueio.bpm.webapp.plugin.impl.DefaultAppPluginRegistry;
+import io.orqueio.bpm.webapp.plugin.resource.PluginResourceOverride;
+import io.orqueio.bpm.webapp.plugin.spi.AppPlugin;
 
 /**
  * @author Daniel Meyer

@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.dmn;
+package io.orqueio.bpm.model.dmn;
 
-import org.camunda.bpm.model.dmn.instance.Definitions;
-import org.camunda.bpm.model.xml.ModelInstance;
+import io.orqueio.bpm.model.dmn.instance.Definitions;
+import io.orqueio.bpm.model.xml.ModelInstance;
 
 
 public interface DmnModelInstance extends ModelInstance {

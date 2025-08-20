@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.delegate;
+package io.orqueio.bpm.engine.test.api.delegate;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.camunda.bpm.engine.delegate.DelegateTask;
-import org.camunda.bpm.engine.delegate.TaskListener;
+import io.orqueio.bpm.engine.delegate.DelegateTask;
+import io.orqueio.bpm.engine.delegate.TaskListener;
 
 public class AssertingTaskListener implements TaskListener {
 

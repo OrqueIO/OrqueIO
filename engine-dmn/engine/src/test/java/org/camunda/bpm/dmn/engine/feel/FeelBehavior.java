@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.engine.feel;
+package io.orqueio.bpm.dmn.engine.feel;
 
-import org.camunda.bpm.dmn.engine.DmnEngineException;
-import org.camunda.bpm.dmn.engine.test.DecisionResource;
-import org.camunda.bpm.dmn.engine.test.DmnEngineTest;
-import org.camunda.bpm.dmn.feel.impl.FeelException;
-import org.camunda.bpm.engine.variable.Variables;
+import io.orqueio.bpm.dmn.engine.DmnEngineException;
+import io.orqueio.bpm.dmn.engine.test.DecisionResource;
+import io.orqueio.bpm.dmn.engine.test.DmnEngineTest;
+import io.orqueio.bpm.dmn.feel.impl.FeelException;
+import io.orqueio.bpm.engine.variable.Variables;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;

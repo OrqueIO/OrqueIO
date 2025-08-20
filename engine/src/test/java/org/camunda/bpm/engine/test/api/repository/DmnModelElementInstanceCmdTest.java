@@ -14,21 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.repository;
+package io.orqueio.bpm.engine.test.api.repository;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.util.Collection;
 
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.engine.test.util.PluggableProcessEngineTest;
-import org.camunda.bpm.model.dmn.DmnModelInstance;
-import org.camunda.bpm.model.dmn.instance.Decision;
-import org.camunda.bpm.model.dmn.instance.DecisionTable;
-import org.camunda.bpm.model.dmn.instance.Input;
-import org.camunda.bpm.model.dmn.instance.Output;
-import org.camunda.bpm.model.dmn.instance.Rule;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.test.util.PluggableProcessEngineTest;
+import io.orqueio.bpm.model.dmn.DmnModelInstance;
+import io.orqueio.bpm.model.dmn.instance.Decision;
+import io.orqueio.bpm.model.dmn.instance.DecisionTable;
+import io.orqueio.bpm.model.dmn.instance.Input;
+import io.orqueio.bpm.model.dmn.instance.Output;
+import io.orqueio.bpm.model.dmn.instance.Rule;
 import org.junit.Test;
 
 public class DmnModelElementInstanceCmdTest extends PluggableProcessEngineTest {

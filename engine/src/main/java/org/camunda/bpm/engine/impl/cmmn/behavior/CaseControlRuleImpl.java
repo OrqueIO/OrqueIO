@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.cmmn.behavior;
+package io.orqueio.bpm.engine.impl.cmmn.behavior;
 
-import org.camunda.bpm.engine.delegate.Expression;
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
-import org.camunda.bpm.engine.impl.cmmn.CaseControlRule;
-import org.camunda.bpm.engine.impl.cmmn.execution.CmmnActivityExecution;
+import io.orqueio.bpm.engine.delegate.Expression;
+import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
+import io.orqueio.bpm.engine.impl.cmmn.CaseControlRule;
+import io.orqueio.bpm.engine.impl.cmmn.execution.CmmnActivityExecution;
 
-import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
+import static io.orqueio.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
 
 /**
  * @author Roman Smirnov

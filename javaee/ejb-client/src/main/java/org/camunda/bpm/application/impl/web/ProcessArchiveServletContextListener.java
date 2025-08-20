@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.application.impl.web;
+package io.orqueio.bpm.application.impl.web;
 
 import javax.ejb.EJB;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-import org.camunda.bpm.application.ProcessApplicationInfo;
-import org.camunda.bpm.application.ProcessApplicationInterface;
-import org.camunda.bpm.application.impl.ejb.DefaultEjbProcessApplication;
+import io.orqueio.bpm.application.ProcessApplicationInfo;
+import io.orqueio.bpm.application.ProcessApplicationInterface;
+import io.orqueio.bpm.application.impl.ejb.DefaultEjbProcessApplication;
 
 
 /**

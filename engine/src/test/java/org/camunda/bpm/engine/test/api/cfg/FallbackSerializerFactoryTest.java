@@ -14,20 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.cfg;
+package io.orqueio.bpm.engine.test.api.cfg;
 
 import java.util.Arrays;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.cfg.StandaloneInMemProcessEngineConfiguration;
-import org.camunda.bpm.engine.impl.variable.serializer.JavaObjectSerializer;
-import org.camunda.bpm.engine.impl.variable.serializer.TypedValueSerializer;
-import org.camunda.bpm.engine.impl.variable.serializer.VariableSerializerFactory;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.variable.Variables;
-import org.camunda.bpm.engine.variable.value.ObjectValue;
-import org.camunda.bpm.engine.variable.value.TypedValue;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.cfg.StandaloneInMemProcessEngineConfiguration;
+import io.orqueio.bpm.engine.impl.variable.serializer.JavaObjectSerializer;
+import io.orqueio.bpm.engine.impl.variable.serializer.TypedValueSerializer;
+import io.orqueio.bpm.engine.impl.variable.serializer.VariableSerializerFactory;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.variable.Variables;
+import io.orqueio.bpm.engine.variable.value.ObjectValue;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;

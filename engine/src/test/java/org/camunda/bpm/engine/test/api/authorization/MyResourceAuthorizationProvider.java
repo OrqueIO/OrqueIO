@@ -14,20 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.authorization;
+package io.orqueio.bpm.engine.test.api.authorization;
 
-import org.camunda.bpm.engine.filter.Filter;
-import org.camunda.bpm.engine.identity.Group;
-import org.camunda.bpm.engine.identity.Tenant;
-import org.camunda.bpm.engine.identity.User;
-import org.camunda.bpm.engine.impl.cfg.auth.ResourceAuthorizationProvider;
-import org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity;
-import org.camunda.bpm.engine.repository.DecisionDefinition;
-import org.camunda.bpm.engine.repository.DecisionRequirementsDefinition;
-import org.camunda.bpm.engine.repository.Deployment;
-import org.camunda.bpm.engine.repository.ProcessDefinition;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.task.Task;
+import io.orqueio.bpm.engine.filter.Filter;
+import io.orqueio.bpm.engine.identity.Group;
+import io.orqueio.bpm.engine.identity.Tenant;
+import io.orqueio.bpm.engine.identity.User;
+import io.orqueio.bpm.engine.impl.cfg.auth.ResourceAuthorizationProvider;
+import io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity;
+import io.orqueio.bpm.engine.repository.DecisionDefinition;
+import io.orqueio.bpm.engine.repository.DecisionRequirementsDefinition;
+import io.orqueio.bpm.engine.repository.Deployment;
+import io.orqueio.bpm.engine.repository.ProcessDefinition;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.task.Task;
 
 /**
  * @author Roman Smirnov

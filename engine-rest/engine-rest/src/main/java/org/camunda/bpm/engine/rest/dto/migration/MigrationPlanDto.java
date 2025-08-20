@@ -14,20 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.dto.migration;
+package io.orqueio.bpm.engine.rest.dto.migration;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.camunda.bpm.engine.migration.MigrationPlanBuilder;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.migration.MigrationInstruction;
-import org.camunda.bpm.engine.migration.MigrationInstructionBuilder;
-import org.camunda.bpm.engine.migration.MigrationPlan;
-import org.camunda.bpm.engine.rest.dto.VariableValueDto;
-import org.camunda.bpm.engine.variable.VariableMap;
+import io.orqueio.bpm.engine.migration.MigrationPlanBuilder;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.migration.MigrationInstruction;
+import io.orqueio.bpm.engine.migration.MigrationInstructionBuilder;
+import io.orqueio.bpm.engine.migration.MigrationPlan;
+import io.orqueio.bpm.engine.rest.dto.VariableValueDto;
+import io.orqueio.bpm.engine.variable.VariableMap;
 
 public class MigrationPlanDto {
 

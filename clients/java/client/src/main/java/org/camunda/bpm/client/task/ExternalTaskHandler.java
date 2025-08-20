@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.task;
+package io.orqueio.bpm.client.task;
 
 /**
  * <p>Interface for a custom implementation of the handler, which is invoked for each fetched and locked task</p>

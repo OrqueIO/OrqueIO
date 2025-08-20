@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.spring;
+package io.orqueio.bpm.engine.spring;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;

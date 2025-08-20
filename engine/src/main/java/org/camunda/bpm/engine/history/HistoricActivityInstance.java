@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.history;
+package io.orqueio.bpm.engine.history;
 
 import java.util.Date;
 
@@ -41,9 +41,9 @@ public interface HistoricActivityInstance {
    * The activity type of the activity.
    * Typically the activity type correspond to the XML tag used in the BPMN 2.0 process definition file.
    *
-   * All activity types are available in {@link org.camunda.bpm.engine.ActivityTypes}
+   * All activity types are available in {@link io.orqueio.bpm.engine.ActivityTypes}
    *
-   * @see org.camunda.bpm.engine.ActivityTypes
+   * @see io.orqueio.bpm.engine.ActivityTypes
    */
   String getActivityType();
 

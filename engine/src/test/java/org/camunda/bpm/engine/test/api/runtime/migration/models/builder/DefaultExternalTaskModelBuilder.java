@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.runtime.migration.models.builder;
+package io.orqueio.bpm.engine.test.api.runtime.migration.models.builder;
 
-import org.camunda.bpm.engine.test.api.runtime.migration.models.ProcessModels;
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.bpm.engine.test.api.runtime.migration.models.ProcessModels;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
 
 public class DefaultExternalTaskModelBuilder {
 

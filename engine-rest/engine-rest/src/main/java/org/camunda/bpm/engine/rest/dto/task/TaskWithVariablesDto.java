@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.dto.task;
+package io.orqueio.bpm.engine.rest.dto.task;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import java.util.Map;
-import org.camunda.bpm.engine.rest.dto.VariableValueDto;
-import org.camunda.bpm.engine.task.Task;
+import io.orqueio.bpm.engine.rest.dto.VariableValueDto;
+import io.orqueio.bpm.engine.task.Task;
 
 public class TaskWithVariablesDto extends TaskDto {
   @JsonInclude(JsonInclude.Include.NON_DEFAULT)

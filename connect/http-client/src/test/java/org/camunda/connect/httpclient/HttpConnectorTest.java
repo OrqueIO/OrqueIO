@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.connect.httpclient;
+package io.orqueio.connect.httpclient;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
@@ -31,12 +31,12 @@ import org.apache.hc.client5.http.classic.methods.HttpPut;
 import org.apache.hc.client5.http.classic.methods.HttpTrace;
 import org.apache.hc.core5.http.Header;
 import org.apache.hc.core5.http.message.BasicClassicHttpRequest;
-import org.camunda.commons.utils.IoUtil;
-import org.camunda.connect.ConnectorRequestException;
-import org.camunda.connect.Connectors;
-import org.camunda.connect.httpclient.impl.HttpConnectorImpl;
-import org.camunda.connect.impl.DebugRequestInterceptor;
-import org.camunda.connect.spi.Connector;
+import io.orqueio.commons.utils.IoUtil;
+import io.orqueio.connect.ConnectorRequestException;
+import io.orqueio.connect.Connectors;
+import io.orqueio.connect.httpclient.impl.HttpConnectorImpl;
+import io.orqueio.connect.impl.DebugRequestInterceptor;
+import io.orqueio.connect.spi.Connector;
 import org.junit.Before;
 import org.junit.Test;
 

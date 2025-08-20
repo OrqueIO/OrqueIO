@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.util;
+package io.orqueio.bpm.engine.impl.util;
 
-import static org.camunda.bpm.engine.impl.util.ExceptionUtil.DEADLOCK_CODES.DB2;
-import static org.camunda.bpm.engine.impl.util.ExceptionUtil.DEADLOCK_CODES.H2;
-import static org.camunda.bpm.engine.impl.util.ExceptionUtil.DEADLOCK_CODES.MSSQL;
-import static org.camunda.bpm.engine.impl.util.ExceptionUtil.DEADLOCK_CODES.MYSQL;
-import static org.camunda.bpm.engine.impl.util.ExceptionUtil.DEADLOCK_CODES.ORACLE;
-import static org.camunda.bpm.engine.impl.util.ExceptionUtil.DEADLOCK_CODES.POSTGRES;
+import static io.orqueio.bpm.engine.impl.util.ExceptionUtil.DEADLOCK_CODES.DB2;
+import static io.orqueio.bpm.engine.impl.util.ExceptionUtil.DEADLOCK_CODES.H2;
+import static io.orqueio.bpm.engine.impl.util.ExceptionUtil.DEADLOCK_CODES.MSSQL;
+import static io.orqueio.bpm.engine.impl.util.ExceptionUtil.DEADLOCK_CODES.MYSQL;
+import static io.orqueio.bpm.engine.impl.util.ExceptionUtil.DEADLOCK_CODES.ORACLE;
+import static io.orqueio.bpm.engine.impl.util.ExceptionUtil.DEADLOCK_CODES.POSTGRES;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -29,11 +29,11 @@ import java.sql.SQLException;
 import java.util.function.Supplier;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.ibatis.executor.BatchExecutorException;
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.ProcessEnginePersistenceException;
-import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.engine.impl.persistence.entity.ByteArrayEntity;
-import org.camunda.bpm.engine.repository.ResourceType;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.ProcessEnginePersistenceException;
+import io.orqueio.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.impl.persistence.entity.ByteArrayEntity;
+import io.orqueio.bpm.engine.repository.ResourceType;
 
 /**
  * @author Roman Smirnov

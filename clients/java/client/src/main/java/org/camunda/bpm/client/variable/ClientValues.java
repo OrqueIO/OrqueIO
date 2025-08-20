@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.variable;
+package io.orqueio.bpm.client.variable;
 
-import org.camunda.bpm.client.variable.impl.type.JsonTypeImpl;
-import org.camunda.bpm.client.variable.impl.type.XmlTypeImpl;
-import org.camunda.bpm.client.variable.impl.value.JsonValueImpl;
-import org.camunda.bpm.client.variable.impl.value.XmlValueImpl;
-import org.camunda.bpm.client.variable.value.JsonValue;
-import org.camunda.bpm.client.variable.value.XmlValue;
-import org.camunda.bpm.engine.variable.Variables;
-import org.camunda.bpm.engine.variable.type.PrimitiveValueType;
+import io.orqueio.bpm.client.variable.impl.type.JsonTypeImpl;
+import io.orqueio.bpm.client.variable.impl.type.XmlTypeImpl;
+import io.orqueio.bpm.client.variable.impl.value.JsonValueImpl;
+import io.orqueio.bpm.client.variable.impl.value.XmlValueImpl;
+import io.orqueio.bpm.client.variable.value.JsonValue;
+import io.orqueio.bpm.client.variable.value.XmlValue;
+import io.orqueio.bpm.engine.variable.Variables;
+import io.orqueio.bpm.engine.variable.type.PrimitiveValueType;
 
 public class ClientValues extends Variables {
 

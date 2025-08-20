@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.variable.impl.mapper;
+package io.orqueio.bpm.client.variable.impl.mapper;
 
-import org.camunda.bpm.client.variable.impl.TypedValueField;
-import org.camunda.bpm.engine.variable.Variables;
-import org.camunda.bpm.engine.variable.impl.value.UntypedValueImpl;
-import org.camunda.bpm.engine.variable.type.ValueType;
-import org.camunda.bpm.engine.variable.value.StringValue;
+import io.orqueio.bpm.client.variable.impl.TypedValueField;
+import io.orqueio.bpm.engine.variable.Variables;
+import io.orqueio.bpm.engine.variable.impl.value.UntypedValueImpl;
+import io.orqueio.bpm.engine.variable.type.ValueType;
+import io.orqueio.bpm.engine.variable.value.StringValue;
 
 public class StringValueMapper extends PrimitiveValueMapper<StringValue> {
 

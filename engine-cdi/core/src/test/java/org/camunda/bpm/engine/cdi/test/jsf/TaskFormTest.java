@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.cdi.test.jsf;
+package io.orqueio.bpm.engine.cdi.test.jsf;
 
 import java.util.Set;
 
 import javax.enterprise.inject.AmbiguousResolutionException;
 import javax.enterprise.inject.spi.Bean;
 
-import org.camunda.bpm.engine.cdi.compat.CamundaTaskForm;
-import org.camunda.bpm.engine.cdi.compat.FoxTaskForm;
-import org.camunda.bpm.engine.cdi.jsf.TaskForm;
-import org.camunda.bpm.engine.cdi.test.CdiProcessEngineTestCase;
+import io.orqueio.bpm.engine.cdi.compat.CamundaTaskForm;
+import io.orqueio.bpm.engine.cdi.compat.FoxTaskForm;
+import io.orqueio.bpm.engine.cdi.jsf.TaskForm;
+import io.orqueio.bpm.engine.cdi.test.CdiProcessEngineTestCase;
 import org.jboss.arquillian.junit.Arquillian;
 import org.junit.Assert;
 import org.junit.Test;

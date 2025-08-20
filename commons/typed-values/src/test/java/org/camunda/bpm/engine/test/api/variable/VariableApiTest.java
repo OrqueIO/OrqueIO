@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.variable;
+package io.orqueio.bpm.engine.test.api.variable;
 
-import static org.camunda.bpm.engine.variable.Variables.*;
+import static io.orqueio.bpm.engine.variable.Variables.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -31,12 +31,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.camunda.bpm.engine.variable.context.VariableContext;
-import org.camunda.bpm.engine.variable.VariableMap;
-import org.camunda.bpm.engine.variable.Variables;
-import org.camunda.bpm.engine.variable.Variables.SerializationDataFormats;
-import org.camunda.bpm.engine.variable.value.ObjectValue;
-import org.camunda.bpm.engine.variable.value.TypedValue;
+import io.orqueio.bpm.engine.variable.context.VariableContext;
+import io.orqueio.bpm.engine.variable.VariableMap;
+import io.orqueio.bpm.engine.variable.Variables;
+import io.orqueio.bpm.engine.variable.Variables.SerializationDataFormats;
+import io.orqueio.bpm.engine.variable.value.ObjectValue;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
 import org.junit.Test;
 
 /**

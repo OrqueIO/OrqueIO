@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.assertions.junit5;
+package io.orqueio.bpm.engine.test.assertions.junit5;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.camunda.bpm.engine.test.assertions.bpmn.BpmnAwareTests.assertThat;
-import static org.camunda.bpm.engine.test.assertions.bpmn.BpmnAwareTests.complete;
-import static org.camunda.bpm.engine.test.assertions.bpmn.BpmnAwareTests.task;
+import static io.orqueio.bpm.engine.test.assertions.bpmn.BpmnAwareTests.assertThat;
+import static io.orqueio.bpm.engine.test.assertions.bpmn.BpmnAwareTests.complete;
+import static io.orqueio.bpm.engine.test.assertions.bpmn.BpmnAwareTests.task;
 
-import org.camunda.bpm.engine.RuntimeService;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.engine.test.junit5.ProcessEngineExtension;
+import io.orqueio.bpm.engine.RuntimeService;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.test.junit5.ProcessEngineExtension;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;

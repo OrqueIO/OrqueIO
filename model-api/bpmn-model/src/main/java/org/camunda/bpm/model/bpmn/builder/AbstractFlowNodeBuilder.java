@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.bpmn.builder;
+package io.orqueio.bpm.model.bpmn.builder;
 
-import org.camunda.bpm.model.bpmn.AssociationDirection;
-import org.camunda.bpm.model.bpmn.BpmnModelException;
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
-import org.camunda.bpm.model.bpmn.instance.*;
-import org.camunda.bpm.model.bpmn.instance.bpmndi.BpmnShape;
-import org.camunda.bpm.model.bpmn.instance.camunda.CamundaExecutionListener;
-import org.camunda.bpm.model.bpmn.instance.camunda.CamundaFailedJobRetryTimeCycle;
-import org.camunda.bpm.model.xml.instance.ModelElementInstance;
+import io.orqueio.bpm.model.bpmn.AssociationDirection;
+import io.orqueio.bpm.model.bpmn.BpmnModelException;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.bpm.model.bpmn.instance.*;
+import io.orqueio.bpm.model.bpmn.instance.bpmndi.BpmnShape;
+import io.orqueio.bpm.model.bpmn.instance.camunda.CamundaExecutionListener;
+import io.orqueio.bpm.model.bpmn.instance.camunda.CamundaFailedJobRetryTimeCycle;
+import io.orqueio.bpm.model.xml.instance.ModelElementInstance;
 
 /**
  * @author Sebastian Menski

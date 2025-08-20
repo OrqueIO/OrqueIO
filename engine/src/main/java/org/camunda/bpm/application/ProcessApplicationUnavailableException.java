@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.application;
+package io.orqueio.bpm.application;
 
 /**
  * <p>Checked exception thrown by a {@link ProcessApplicationReference} if the referenced 

@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.spring.test.transaction;
+package io.orqueio.bpm.engine.spring.test.transaction;
 
-import org.camunda.bpm.engine.impl.pvm.delegate.ActivityExecution;
+import io.orqueio.bpm.engine.impl.pvm.delegate.ActivityExecution;
 
 
 /**

@@ -14,20 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.bpmn.instance.camunda;
+package io.orqueio.bpm.model.bpmn.instance.camunda;
 
-import static org.camunda.bpm.model.bpmn.BpmnTestConstants.PROCESS_ID;
+import static io.orqueio.bpm.model.bpmn.BpmnTestConstants.PROCESS_ID;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import java.util.Collection;
 
-import org.camunda.bpm.model.bpmn.Bpmn;
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
-import org.camunda.bpm.model.bpmn.CamundaExtensionsTest;
-import org.camunda.bpm.model.bpmn.impl.BpmnModelConstants;
-import org.camunda.bpm.model.bpmn.impl.instance.ProcessImpl;
-import org.camunda.bpm.model.bpmn.instance.ExtensionElements;
+import io.orqueio.bpm.model.bpmn.Bpmn;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.bpm.model.bpmn.CamundaExtensionsTest;
+import io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants;
+import io.orqueio.bpm.model.bpmn.impl.instance.ProcessImpl;
+import io.orqueio.bpm.model.bpmn.instance.ExtensionElements;
 import org.junit.Test;
 
 /**

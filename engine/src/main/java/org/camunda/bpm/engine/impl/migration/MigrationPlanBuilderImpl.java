@@ -14,21 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.migration;
+package io.orqueio.bpm.engine.impl.migration;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.engine.migration.MigrationPlanBuilder;
-import org.camunda.bpm.engine.impl.cmd.CreateMigrationPlanCmd;
-import org.camunda.bpm.engine.impl.interceptor.CommandExecutor;
-import org.camunda.bpm.engine.migration.MigrationInstructionBuilder;
-import org.camunda.bpm.engine.migration.MigrationInstructionsBuilder;
-import org.camunda.bpm.engine.migration.MigrationPlan;
-import org.camunda.bpm.engine.variable.VariableMap;
-import org.camunda.bpm.engine.variable.impl.VariableMapImpl;
+import io.orqueio.bpm.engine.migration.MigrationPlanBuilder;
+import io.orqueio.bpm.engine.impl.cmd.CreateMigrationPlanCmd;
+import io.orqueio.bpm.engine.impl.interceptor.CommandExecutor;
+import io.orqueio.bpm.engine.migration.MigrationInstructionBuilder;
+import io.orqueio.bpm.engine.migration.MigrationInstructionsBuilder;
+import io.orqueio.bpm.engine.migration.MigrationPlan;
+import io.orqueio.bpm.engine.variable.VariableMap;
+import io.orqueio.bpm.engine.variable.impl.VariableMapImpl;
 
 /**
  * @author Thorben Lindhauer

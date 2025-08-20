@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.pa;
+package io.orqueio.bpm.pa;
 
-import static org.camunda.bpm.engine.variable.Variables.createVariables;
-import static org.camunda.bpm.engine.variable.Variables.fileValue;
+import static io.orqueio.bpm.engine.variable.Variables.createVariables;
+import static io.orqueio.bpm.engine.variable.Variables.fileValue;
 
 import java.io.InputStream;
 import java.util.Arrays;
@@ -30,30 +30,30 @@ import java.util.logging.Logger;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.camunda.bpm.admin.impl.web.SetupResource;
-import org.camunda.bpm.application.PostDeploy;
-import org.camunda.bpm.application.ProcessApplication;
-import org.camunda.bpm.application.impl.ServletProcessApplication;
-import org.camunda.bpm.engine.CaseService;
-import org.camunda.bpm.engine.ExternalTaskService;
-import org.camunda.bpm.engine.externaltask.ExternalTask;
-import org.camunda.bpm.engine.externaltask.LockedExternalTask;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.RepositoryService;
-import org.camunda.bpm.engine.RuntimeService;
-import org.camunda.bpm.engine.TaskService;
-import org.camunda.bpm.engine.authorization.Groups;
-import org.camunda.bpm.engine.impl.ProcessEngineImpl;
-import org.camunda.bpm.engine.impl.util.ClockUtil;
-import org.camunda.bpm.engine.impl.util.IoUtil;
-import org.camunda.bpm.engine.rest.dto.identity.UserCredentialsDto;
-import org.camunda.bpm.engine.rest.dto.identity.UserDto;
-import org.camunda.bpm.engine.rest.dto.identity.UserProfileDto;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.task.Task;
-import org.camunda.bpm.model.bpmn.Bpmn;
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
-import org.camunda.bpm.pa.demo.InvoiceDemoDataGenerator;
+import io.orqueio.bpm.admin.impl.web.SetupResource;
+import io.orqueio.bpm.application.PostDeploy;
+import io.orqueio.bpm.application.ProcessApplication;
+import io.orqueio.bpm.application.impl.ServletProcessApplication;
+import io.orqueio.bpm.engine.CaseService;
+import io.orqueio.bpm.engine.ExternalTaskService;
+import io.orqueio.bpm.engine.externaltask.ExternalTask;
+import io.orqueio.bpm.engine.externaltask.LockedExternalTask;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.RepositoryService;
+import io.orqueio.bpm.engine.RuntimeService;
+import io.orqueio.bpm.engine.TaskService;
+import io.orqueio.bpm.engine.authorization.Groups;
+import io.orqueio.bpm.engine.impl.ProcessEngineImpl;
+import io.orqueio.bpm.engine.impl.util.ClockUtil;
+import io.orqueio.bpm.engine.impl.util.IoUtil;
+import io.orqueio.bpm.engine.rest.dto.identity.UserCredentialsDto;
+import io.orqueio.bpm.engine.rest.dto.identity.UserDto;
+import io.orqueio.bpm.engine.rest.dto.identity.UserProfileDto;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.task.Task;
+import io.orqueio.bpm.model.bpmn.Bpmn;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.bpm.pa.demo.InvoiceDemoDataGenerator;
 import org.joda.time.DateTime;
 
 /**
@@ -287,9 +287,9 @@ public class DevProcessApplication extends ServletProcessApplication {
     String topicName = "ATopic";
     long lockDuration = 5 * 60L * 1000L;
     String errorDetails = "java.lang.RuntimeException: A exception message!\n" +
-      "  at org.camunda.bpm.pa.service.FailingDelegate.execute(FailingDelegate.java:10)\n" +
-      "  at org.camunda.bpm.engine.impl.delegate.JavaDelegateInvocation.invoke(JavaDelegateInvocation.java:34)\n" +
-      "  at org.camunda.bpm.engine.impl.delegate.DelegateInvocation.proceed(DelegateInvocation.java:37)\n" +
+      "  at io.orqueio.bpm.pa.service.FailingDelegate.execute(FailingDelegate.java:10)\n" +
+      "  at io.orqueio.bpm.engine.impl.delegate.JavaDelegateInvocation.invoke(JavaDelegateInvocation.java:34)\n" +
+      "  at io.orqueio.bpm.engine.impl.delegate.DelegateInvocation.proceed(DelegateInvocation.java:37)\n" +
       "  ...\n";
 
 

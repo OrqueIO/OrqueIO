@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.history.event;
+package io.orqueio.bpm.engine.impl.history.event;
 import java.util.Date;
 
-import org.camunda.bpm.engine.history.JobState;
-import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.engine.impl.persistence.entity.ByteArrayEntity;
-import org.camunda.bpm.engine.impl.util.ExceptionUtil;
-import org.camunda.bpm.engine.impl.util.StringUtil;
+import io.orqueio.bpm.engine.history.JobState;
+import io.orqueio.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.impl.persistence.entity.ByteArrayEntity;
+import io.orqueio.bpm.engine.impl.util.ExceptionUtil;
+import io.orqueio.bpm.engine.impl.util.StringUtil;
 
 /**
  * @author Roman Smirnov

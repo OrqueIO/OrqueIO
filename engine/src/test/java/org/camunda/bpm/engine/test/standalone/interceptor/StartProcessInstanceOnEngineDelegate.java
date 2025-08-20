@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.standalone.interceptor;
+package io.orqueio.bpm.engine.test.standalone.interceptor;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.delegate.DelegateExecution;
-import org.camunda.bpm.engine.delegate.JavaDelegate;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.delegate.DelegateExecution;
+import io.orqueio.bpm.engine.delegate.JavaDelegate;
 
 /**
  * @author Daniel Meyer

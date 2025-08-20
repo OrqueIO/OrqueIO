@@ -14,47 +14,47 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.bpmn.impl.instance;
+package io.orqueio.bpm.model.bpmn.impl.instance;
 
-import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN20_NS;
-import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ATTRIBUTE_IS_CLOSED;
-import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ATTRIBUTE_IS_EXECUTABLE;
-import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ATTRIBUTE_PROCESS_TYPE;
-import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ELEMENT_PROCESS;
-import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_CANDIDATE_STARTER_GROUPS;
-import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_CANDIDATE_STARTER_USERS;
-import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_HISTORY_TIME_TO_LIVE;
-import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_IS_STARTABLE_IN_TASKLIST;
-import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_JOB_PRIORITY;
-import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_TASK_PRIORITY;
-import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_VERSION_TAG;
-import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.BPMN20_NS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ATTRIBUTE_IS_CLOSED;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ATTRIBUTE_IS_EXECUTABLE;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ATTRIBUTE_PROCESS_TYPE;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ELEMENT_PROCESS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_CANDIDATE_STARTER_GROUPS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_CANDIDATE_STARTER_USERS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_HISTORY_TIME_TO_LIVE;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_IS_STARTABLE_IN_TASKLIST;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_JOB_PRIORITY;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_TASK_PRIORITY;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_VERSION_TAG;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
 
 import java.util.Collection;
 import java.util.List;
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
-import org.camunda.bpm.model.bpmn.ProcessType;
-import org.camunda.bpm.model.bpmn.builder.ProcessBuilder;
-import org.camunda.bpm.model.bpmn.instance.Artifact;
-import org.camunda.bpm.model.bpmn.instance.Auditing;
-import org.camunda.bpm.model.bpmn.instance.CallableElement;
-import org.camunda.bpm.model.bpmn.instance.CorrelationSubscription;
-import org.camunda.bpm.model.bpmn.instance.FlowElement;
-import org.camunda.bpm.model.bpmn.instance.LaneSet;
-import org.camunda.bpm.model.bpmn.instance.Monitoring;
-import org.camunda.bpm.model.bpmn.instance.Process;
-import org.camunda.bpm.model.bpmn.instance.Property;
-import org.camunda.bpm.model.bpmn.instance.ResourceRole;
-import org.camunda.bpm.model.xml.ModelBuilder;
-import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
-import org.camunda.bpm.model.xml.impl.util.StringUtil;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
-import org.camunda.bpm.model.xml.type.attribute.Attribute;
-import org.camunda.bpm.model.xml.type.child.ChildElement;
-import org.camunda.bpm.model.xml.type.child.ChildElementCollection;
-import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
-import org.camunda.bpm.model.xml.type.reference.ElementReferenceCollection;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.bpm.model.bpmn.ProcessType;
+import io.orqueio.bpm.model.bpmn.builder.ProcessBuilder;
+import io.orqueio.bpm.model.bpmn.instance.Artifact;
+import io.orqueio.bpm.model.bpmn.instance.Auditing;
+import io.orqueio.bpm.model.bpmn.instance.CallableElement;
+import io.orqueio.bpm.model.bpmn.instance.CorrelationSubscription;
+import io.orqueio.bpm.model.bpmn.instance.FlowElement;
+import io.orqueio.bpm.model.bpmn.instance.LaneSet;
+import io.orqueio.bpm.model.bpmn.instance.Monitoring;
+import io.orqueio.bpm.model.bpmn.instance.Process;
+import io.orqueio.bpm.model.bpmn.instance.Property;
+import io.orqueio.bpm.model.bpmn.instance.ResourceRole;
+import io.orqueio.bpm.model.xml.ModelBuilder;
+import io.orqueio.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
+import io.orqueio.bpm.model.xml.impl.util.StringUtil;
+import io.orqueio.bpm.model.xml.type.ModelElementTypeBuilder;
+import io.orqueio.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
+import io.orqueio.bpm.model.xml.type.attribute.Attribute;
+import io.orqueio.bpm.model.xml.type.child.ChildElement;
+import io.orqueio.bpm.model.xml.type.child.ChildElementCollection;
+import io.orqueio.bpm.model.xml.type.child.SequenceBuilder;
+import io.orqueio.bpm.model.xml.type.reference.ElementReferenceCollection;
 
 /**
  * The BPMN process element

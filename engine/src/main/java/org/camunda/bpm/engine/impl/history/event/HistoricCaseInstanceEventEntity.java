@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.history.event;
+package io.orqueio.bpm.engine.impl.history.event;
 
-import static org.camunda.bpm.engine.impl.cmmn.execution.CaseExecutionState.ACTIVE;
-import static org.camunda.bpm.engine.impl.cmmn.execution.CaseExecutionState.CLOSED;
-import static org.camunda.bpm.engine.impl.cmmn.execution.CaseExecutionState.COMPLETED;
-import static org.camunda.bpm.engine.impl.cmmn.execution.CaseExecutionState.FAILED;
-import static org.camunda.bpm.engine.impl.cmmn.execution.CaseExecutionState.SUSPENDED;
-import static org.camunda.bpm.engine.impl.cmmn.execution.CaseExecutionState.TERMINATED;
+import static io.orqueio.bpm.engine.impl.cmmn.execution.CaseExecutionState.ACTIVE;
+import static io.orqueio.bpm.engine.impl.cmmn.execution.CaseExecutionState.CLOSED;
+import static io.orqueio.bpm.engine.impl.cmmn.execution.CaseExecutionState.COMPLETED;
+import static io.orqueio.bpm.engine.impl.cmmn.execution.CaseExecutionState.FAILED;
+import static io.orqueio.bpm.engine.impl.cmmn.execution.CaseExecutionState.SUSPENDED;
+import static io.orqueio.bpm.engine.impl.cmmn.execution.CaseExecutionState.TERMINATED;
 
 import java.util.Date;
 

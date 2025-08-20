@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.core.model;
+package io.orqueio.bpm.engine.impl.core.model;
 
 import java.util.List;
 
-import org.camunda.bpm.engine.delegate.BaseDelegateExecution;
-import org.camunda.bpm.engine.impl.core.delegate.CoreActivityBehavior;
-import org.camunda.bpm.engine.impl.core.variable.mapping.IoMapping;
+import io.orqueio.bpm.engine.delegate.BaseDelegateExecution;
+import io.orqueio.bpm.engine.impl.core.delegate.CoreActivityBehavior;
+import io.orqueio.bpm.engine.impl.core.variable.mapping.IoMapping;
 
 /**
  * @author Daniel Meyer

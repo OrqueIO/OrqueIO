@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.identity;
+package io.orqueio.bpm.engine.impl.identity;
 
-import org.camunda.bpm.engine.identity.Group;
-import org.camunda.bpm.engine.identity.GroupQuery;
-import org.camunda.bpm.engine.identity.NativeUserQuery;
-import org.camunda.bpm.engine.identity.Tenant;
-import org.camunda.bpm.engine.identity.TenantQuery;
-import org.camunda.bpm.engine.identity.User;
-import org.camunda.bpm.engine.identity.UserQuery;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.interceptor.Session;
+import io.orqueio.bpm.engine.identity.Group;
+import io.orqueio.bpm.engine.identity.GroupQuery;
+import io.orqueio.bpm.engine.identity.NativeUserQuery;
+import io.orqueio.bpm.engine.identity.Tenant;
+import io.orqueio.bpm.engine.identity.TenantQuery;
+import io.orqueio.bpm.engine.identity.User;
+import io.orqueio.bpm.engine.identity.UserQuery;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.impl.interceptor.Session;
 
 /**
  * <p>SPI interface for read-only identity Service Providers.</p>

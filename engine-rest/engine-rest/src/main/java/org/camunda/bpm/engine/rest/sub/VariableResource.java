@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.sub;
+package io.orqueio.bpm.engine.rest.sub;
 
 import java.util.Map;
 
@@ -31,9 +31,9 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.camunda.bpm.engine.rest.dto.PatchVariablesDto;
-import org.camunda.bpm.engine.rest.dto.VariableValueDto;
-import org.camunda.bpm.engine.rest.mapper.MultipartFormData;
+import io.orqueio.bpm.engine.rest.dto.PatchVariablesDto;
+import io.orqueio.bpm.engine.rest.dto.VariableValueDto;
+import io.orqueio.bpm.engine.rest.mapper.MultipartFormData;
 
 public interface VariableResource {
 

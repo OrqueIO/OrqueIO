@@ -23,7 +23,7 @@
 
       <milestone id="Milestone_1">
         <extensionElements>
-          <camunda:caseExecutionListener event="occur" class="org.camunda.bpm.engine.test.cmmn.sentry.SentryTriggerListener" />
+          <camunda:caseExecutionListener event="occur" class="io.orqueio.bpm.engine.test.cmmn.sentry.SentryTriggerListener" />
         </extensionElements>
       </milestone>
 

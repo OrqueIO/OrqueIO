@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.jboss.service;
+package io.orqueio.bpm.container.impl.jboss.service;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
@@ -27,19 +27,19 @@ import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.camunda.bpm.application.PostDeploy;
-import org.camunda.bpm.application.PreUndeploy;
-import org.camunda.bpm.application.ProcessApplicationDeploymentInfo;
-import org.camunda.bpm.application.ProcessApplicationInfo;
-import org.camunda.bpm.application.ProcessApplicationInterface;
-import org.camunda.bpm.application.impl.ProcessApplicationDeploymentInfoImpl;
-import org.camunda.bpm.application.impl.ProcessApplicationInfoImpl;
-import org.camunda.bpm.container.impl.deployment.util.InjectionUtil;
-import org.camunda.bpm.container.impl.plugin.BpmPlatformPlugin;
-import org.camunda.bpm.container.impl.plugin.BpmPlatformPlugins;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.repository.ProcessApplicationDeployment;
+import io.orqueio.bpm.application.PostDeploy;
+import io.orqueio.bpm.application.PreUndeploy;
+import io.orqueio.bpm.application.ProcessApplicationDeploymentInfo;
+import io.orqueio.bpm.application.ProcessApplicationInfo;
+import io.orqueio.bpm.application.ProcessApplicationInterface;
+import io.orqueio.bpm.application.impl.ProcessApplicationDeploymentInfoImpl;
+import io.orqueio.bpm.application.impl.ProcessApplicationInfoImpl;
+import io.orqueio.bpm.container.impl.deployment.util.InjectionUtil;
+import io.orqueio.bpm.container.impl.plugin.BpmPlatformPlugin;
+import io.orqueio.bpm.container.impl.plugin.BpmPlatformPlugins;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.repository.ProcessApplicationDeployment;
 import org.jboss.as.ee.component.ComponentView;
 import org.jboss.as.naming.ManagedReference;
 import org.jboss.jandex.AnnotationInstance;

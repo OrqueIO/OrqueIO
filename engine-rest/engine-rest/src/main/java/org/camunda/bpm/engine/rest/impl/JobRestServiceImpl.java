@@ -14,32 +14,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.impl;
+package io.orqueio.bpm.engine.rest.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
-import org.camunda.bpm.engine.BadUserRequestException;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.batch.Batch;
-import org.camunda.bpm.engine.exception.NullValueException;
-import org.camunda.bpm.engine.impl.util.EnsureUtil;
-import org.camunda.bpm.engine.management.SetJobRetriesByJobsAsyncBuilder;
-import org.camunda.bpm.engine.rest.JobRestService;
-import org.camunda.bpm.engine.rest.dto.CountResultDto;
-import org.camunda.bpm.engine.rest.dto.batch.BatchDto;
-import org.camunda.bpm.engine.rest.dto.runtime.JobDto;
-import org.camunda.bpm.engine.rest.dto.runtime.JobQueryDto;
-import org.camunda.bpm.engine.rest.dto.runtime.JobSuspensionStateDto;
-import org.camunda.bpm.engine.rest.dto.runtime.SetJobRetriesDto;
-import org.camunda.bpm.engine.rest.exception.InvalidRequestException;
-import org.camunda.bpm.engine.rest.sub.runtime.JobResource;
-import org.camunda.bpm.engine.rest.sub.runtime.impl.JobResourceImpl;
-import org.camunda.bpm.engine.rest.util.QueryUtil;
-import org.camunda.bpm.engine.runtime.Job;
-import org.camunda.bpm.engine.runtime.JobQuery;
+import io.orqueio.bpm.engine.BadUserRequestException;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.batch.Batch;
+import io.orqueio.bpm.engine.exception.NullValueException;
+import io.orqueio.bpm.engine.impl.util.EnsureUtil;
+import io.orqueio.bpm.engine.management.SetJobRetriesByJobsAsyncBuilder;
+import io.orqueio.bpm.engine.rest.JobRestService;
+import io.orqueio.bpm.engine.rest.dto.CountResultDto;
+import io.orqueio.bpm.engine.rest.dto.batch.BatchDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.JobDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.JobQueryDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.JobSuspensionStateDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.SetJobRetriesDto;
+import io.orqueio.bpm.engine.rest.exception.InvalidRequestException;
+import io.orqueio.bpm.engine.rest.sub.runtime.JobResource;
+import io.orqueio.bpm.engine.rest.sub.runtime.impl.JobResourceImpl;
+import io.orqueio.bpm.engine.rest.util.QueryUtil;
+import io.orqueio.bpm.engine.runtime.Job;
+import io.orqueio.bpm.engine.runtime.JobQuery;
 
 public class JobRestServiceImpl extends AbstractRestProcessEngineAware
     implements JobRestService {

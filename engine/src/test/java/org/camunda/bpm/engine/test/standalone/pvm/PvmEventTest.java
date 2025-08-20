@@ -14,21 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.standalone.pvm;
+package io.orqueio.bpm.engine.test.standalone.pvm;
 
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.camunda.bpm.engine.impl.pvm.ProcessDefinitionBuilder;
-import org.camunda.bpm.engine.impl.pvm.PvmProcessDefinition;
-import org.camunda.bpm.engine.impl.pvm.PvmProcessInstance;
-import org.camunda.bpm.engine.test.standalone.pvm.activities.Automatic;
-import org.camunda.bpm.engine.test.standalone.pvm.activities.EmbeddedSubProcess;
-import org.camunda.bpm.engine.test.standalone.pvm.activities.End;
-import org.camunda.bpm.engine.test.standalone.pvm.activities.ParallelGateway;
-import org.camunda.bpm.engine.test.standalone.pvm.activities.WaitState;
+import io.orqueio.bpm.engine.impl.pvm.ProcessDefinitionBuilder;
+import io.orqueio.bpm.engine.impl.pvm.PvmProcessDefinition;
+import io.orqueio.bpm.engine.impl.pvm.PvmProcessInstance;
+import io.orqueio.bpm.engine.test.standalone.pvm.activities.Automatic;
+import io.orqueio.bpm.engine.test.standalone.pvm.activities.EmbeddedSubProcess;
+import io.orqueio.bpm.engine.test.standalone.pvm.activities.End;
+import io.orqueio.bpm.engine.test.standalone.pvm.activities.ParallelGateway;
+import io.orqueio.bpm.engine.test.standalone.pvm.activities.WaitState;
 import org.junit.Test;
 
 
@@ -47,21 +47,21 @@ public class PvmEventTest {
     EventCollector eventCollector = new EventCollector();
 
     PvmProcessDefinition processDefinition = new ProcessDefinitionBuilder("events")
-      .executionListener(org.camunda.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_START, eventCollector)
-      .executionListener(org.camunda.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_END, eventCollector)
+      .executionListener(io.orqueio.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_START, eventCollector)
+      .executionListener(io.orqueio.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_END, eventCollector)
       .createActivity("start")
         .initial()
         .behavior(new Automatic())
-        .executionListener(org.camunda.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_START, eventCollector)
-        .executionListener(org.camunda.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_END, eventCollector)
+        .executionListener(io.orqueio.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_START, eventCollector)
+        .executionListener(io.orqueio.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_END, eventCollector)
         .startTransition("end")
           .executionListener(eventCollector)
         .endTransition()
       .endActivity()
       .createActivity("end")
         .behavior(new End())
-        .executionListener(org.camunda.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_START, eventCollector)
-        .executionListener(org.camunda.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_END, eventCollector)
+        .executionListener(io.orqueio.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_START, eventCollector)
+        .executionListener(io.orqueio.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_END, eventCollector)
       .endActivity()
     .buildProcessDefinition();
 
@@ -92,37 +92,37 @@ public class PvmEventTest {
     EventCollector eventCollector = new EventCollector();
 
     PvmProcessDefinition processDefinition = new ProcessDefinitionBuilder("events")
-      .executionListener(org.camunda.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_START, eventCollector)
-      .executionListener(org.camunda.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_END, eventCollector)
+      .executionListener(io.orqueio.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_START, eventCollector)
+      .executionListener(io.orqueio.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_END, eventCollector)
       .createActivity("start")
         .initial()
         .behavior(new Automatic())
-        .executionListener(org.camunda.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_START, eventCollector)
-        .executionListener(org.camunda.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_END, eventCollector)
+        .executionListener(io.orqueio.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_START, eventCollector)
+        .executionListener(io.orqueio.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_END, eventCollector)
         .transition("embeddedsubprocess")
       .endActivity()
       .createActivity("embeddedsubprocess")
         .scope()
         .behavior(new EmbeddedSubProcess())
-        .executionListener(org.camunda.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_START, eventCollector)
-        .executionListener(org.camunda.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_END, eventCollector)
+        .executionListener(io.orqueio.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_START, eventCollector)
+        .executionListener(io.orqueio.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_END, eventCollector)
         .createActivity("startInside")
           .behavior(new Automatic())
-          .executionListener(org.camunda.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_START, eventCollector)
-          .executionListener(org.camunda.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_END, eventCollector)
+          .executionListener(io.orqueio.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_START, eventCollector)
+          .executionListener(io.orqueio.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_END, eventCollector)
           .transition("endInside")
         .endActivity()
         .createActivity("endInside")
           .behavior(new End())
-          .executionListener(org.camunda.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_START, eventCollector)
-          .executionListener(org.camunda.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_END, eventCollector)
+          .executionListener(io.orqueio.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_START, eventCollector)
+          .executionListener(io.orqueio.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_END, eventCollector)
         .endActivity()
         .transition("end")
       .endActivity()
       .createActivity("end")
         .behavior(new End())
-        .executionListener(org.camunda.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_START, eventCollector)
-        .executionListener(org.camunda.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_END, eventCollector)
+        .executionListener(io.orqueio.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_START, eventCollector)
+        .executionListener(io.orqueio.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_END, eventCollector)
       .endActivity()
     .buildProcessDefinition();
 
@@ -165,44 +165,44 @@ public class PvmEventTest {
     EventCollector eventCollector = new EventCollector();
 
     PvmProcessDefinition processDefinition = new ProcessDefinitionBuilder("events")
-      .executionListener(org.camunda.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_START, eventCollector)
-      .executionListener(org.camunda.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_END, eventCollector)
+      .executionListener(io.orqueio.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_START, eventCollector)
+      .executionListener(io.orqueio.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_END, eventCollector)
       .createActivity("start")
         .initial()
         .behavior(new Automatic())
-        .executionListener(org.camunda.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_START, eventCollector)
-        .executionListener(org.camunda.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_END, eventCollector)
+        .executionListener(io.orqueio.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_START, eventCollector)
+        .executionListener(io.orqueio.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_END, eventCollector)
         .transition("fork")
       .endActivity()
       .createActivity("fork")
         .behavior(new ParallelGateway())
-        .executionListener(org.camunda.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_START, eventCollector)
-        .executionListener(org.camunda.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_END, eventCollector)
+        .executionListener(io.orqueio.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_START, eventCollector)
+        .executionListener(io.orqueio.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_END, eventCollector)
         .transition("c1")
         .transition("c2")
       .endActivity()
       .createActivity("c1")
         .behavior(new Automatic())
-        .executionListener(org.camunda.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_START, eventCollector)
-        .executionListener(org.camunda.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_END, eventCollector)
+        .executionListener(io.orqueio.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_START, eventCollector)
+        .executionListener(io.orqueio.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_END, eventCollector)
         .transition("join")
       .endActivity()
       .createActivity("c2")
         .behavior(new Automatic())
-        .executionListener(org.camunda.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_START, eventCollector)
-        .executionListener(org.camunda.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_END, eventCollector)
+        .executionListener(io.orqueio.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_START, eventCollector)
+        .executionListener(io.orqueio.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_END, eventCollector)
         .transition("join")
       .endActivity()
       .createActivity("join")
         .behavior(new ParallelGateway())
-        .executionListener(org.camunda.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_START, eventCollector)
-        .executionListener(org.camunda.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_END, eventCollector)
+        .executionListener(io.orqueio.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_START, eventCollector)
+        .executionListener(io.orqueio.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_END, eventCollector)
         .transition("end")
       .endActivity()
       .createActivity("end")
         .behavior(new End())
-        .executionListener(org.camunda.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_START, eventCollector)
-        .executionListener(org.camunda.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_END, eventCollector)
+        .executionListener(io.orqueio.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_START, eventCollector)
+        .executionListener(io.orqueio.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_END, eventCollector)
       .endActivity()
     .buildProcessDefinition();
 
@@ -242,43 +242,43 @@ public class PvmEventTest {
     EventCollector eventCollector = new EventCollector();
 
     PvmProcessDefinition processDefinition = new ProcessDefinitionBuilder("events")
-      .executionListener(org.camunda.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_START, eventCollector)
-      .executionListener(org.camunda.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_END, eventCollector)
+      .executionListener(io.orqueio.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_START, eventCollector)
+      .executionListener(io.orqueio.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_END, eventCollector)
       .createActivity("start")
         .initial()
         .behavior(new Automatic())
-        .executionListener(org.camunda.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_START, eventCollector)
-        .executionListener(org.camunda.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_END, eventCollector)
+        .executionListener(io.orqueio.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_START, eventCollector)
+        .executionListener(io.orqueio.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_END, eventCollector)
         .transition("embeddedsubprocess")
       .endActivity()
       .createActivity("embeddedsubprocess")
         .scope()
         .behavior(new EmbeddedSubProcess())
-        .executionListener(org.camunda.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_START, eventCollector)
-        .executionListener(org.camunda.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_END, eventCollector)
+        .executionListener(io.orqueio.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_START, eventCollector)
+        .executionListener(io.orqueio.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_END, eventCollector)
         .createActivity("startInside")
           .behavior(new Automatic())
-          .executionListener(org.camunda.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_START, eventCollector)
-          .executionListener(org.camunda.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_END, eventCollector)
+          .executionListener(io.orqueio.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_START, eventCollector)
+          .executionListener(io.orqueio.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_END, eventCollector)
           .transition("taskInside")
         .endActivity()
         .createActivity("taskInside")
           .behavior(new WaitState())
-          .executionListener(org.camunda.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_START, eventCollector)
-          .executionListener(org.camunda.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_END, eventCollector)
+          .executionListener(io.orqueio.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_START, eventCollector)
+          .executionListener(io.orqueio.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_END, eventCollector)
           .transition("endInside")
         .endActivity()
         .createActivity("endInside")
           .behavior(new End())
-          .executionListener(org.camunda.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_START, eventCollector)
-          .executionListener(org.camunda.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_END, eventCollector)
+          .executionListener(io.orqueio.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_START, eventCollector)
+          .executionListener(io.orqueio.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_END, eventCollector)
         .endActivity()
         .transition("end")
       .endActivity()
       .createActivity("end")
         .behavior(new End())
-        .executionListener(org.camunda.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_START, eventCollector)
-        .executionListener(org.camunda.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_END, eventCollector)
+        .executionListener(io.orqueio.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_START, eventCollector)
+        .executionListener(io.orqueio.bpm.engine.impl.pvm.PvmEvent.EVENTNAME_END, eventCollector)
       .endActivity()
     .buildProcessDefinition();
 

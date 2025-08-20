@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.connect.httpclient.impl;
+package io.orqueio.connect.httpclient.impl;
 
 import java.io.ByteArrayInputStream;
 import java.nio.charset.Charset;
@@ -39,10 +39,10 @@ import org.apache.hc.core5.http.ClassicHttpResponse;
 import org.apache.hc.core5.http.ContentType;
 import org.apache.hc.core5.http.io.entity.InputStreamEntity;
 import org.apache.hc.core5.http.message.BasicClassicHttpRequest;
-import org.camunda.connect.httpclient.HttpBaseRequest;
-import org.camunda.connect.httpclient.HttpResponse;
-import org.camunda.connect.httpclient.impl.util.ParseUtil;
-import org.camunda.connect.impl.AbstractConnector;
+import io.orqueio.connect.httpclient.HttpBaseRequest;
+import io.orqueio.connect.httpclient.HttpResponse;
+import io.orqueio.connect.httpclient.impl.util.ParseUtil;
+import io.orqueio.connect.impl.AbstractConnector;
 
 public abstract class AbstractHttpConnector<Q extends HttpBaseRequest<Q, R>, R extends HttpResponse> extends AbstractConnector<Q, R> {
 

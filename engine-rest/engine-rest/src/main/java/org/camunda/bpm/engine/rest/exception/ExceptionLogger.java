@@ -14,20 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.exception;
+package io.orqueio.bpm.engine.rest.exception;
 
-import static org.camunda.bpm.engine.impl.util.ExceptionUtil.PERSISTENCE_CONNECTION_ERROR_CLASS;
-import static org.camunda.bpm.engine.impl.util.ExceptionUtil.getExceptionStacktrace;
+import static io.orqueio.bpm.engine.impl.util.ExceptionUtil.PERSISTENCE_CONNECTION_ERROR_CLASS;
+import static io.orqueio.bpm.engine.impl.util.ExceptionUtil.getExceptionStacktrace;
 
 import java.sql.SQLException;
 import javax.ws.rs.core.Response;
-import org.camunda.bpm.engine.ProcessEnginePersistenceException;
-import org.camunda.commons.logging.BaseLogger;
+import io.orqueio.bpm.engine.ProcessEnginePersistenceException;
+import io.orqueio.commons.logging.BaseLogger;
 
 public class ExceptionLogger extends BaseLogger {
 
   public static final String PROJECT_CODE = "ENGINE-REST";
-  public static final String REST_API = "org.camunda.bpm.engine.rest.exception";
+  public static final String REST_API = "io.orqueio.bpm.engine.rest.exception";
 
   public static final ExceptionLogger REST_LOGGER = BaseLogger.createLogger(ExceptionLogger.class,
       PROJECT_CODE,

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.bpmn.behavior;
+package io.orqueio.bpm.engine.impl.bpmn.behavior;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,14 +22,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.camunda.bpm.engine.impl.Condition;
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
-import org.camunda.bpm.engine.impl.bpmn.parser.BpmnParse;
-import org.camunda.bpm.engine.impl.pvm.PvmActivity;
-import org.camunda.bpm.engine.impl.pvm.PvmTransition;
-import org.camunda.bpm.engine.impl.pvm.delegate.ActivityExecution;
-import org.camunda.bpm.engine.impl.pvm.process.ActivityImpl;
-import org.camunda.bpm.engine.impl.pvm.process.ScopeImpl;
+import io.orqueio.bpm.engine.impl.Condition;
+import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
+import io.orqueio.bpm.engine.impl.bpmn.parser.BpmnParse;
+import io.orqueio.bpm.engine.impl.pvm.PvmActivity;
+import io.orqueio.bpm.engine.impl.pvm.PvmTransition;
+import io.orqueio.bpm.engine.impl.pvm.delegate.ActivityExecution;
+import io.orqueio.bpm.engine.impl.pvm.process.ActivityImpl;
+import io.orqueio.bpm.engine.impl.pvm.process.ScopeImpl;
 
 /**
  * Implementation of the Inclusive Gateway/OR gateway/inclusive data-based

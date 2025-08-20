@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.concurrency;
+package io.orqueio.bpm.engine.test.concurrency;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -24,14 +24,14 @@ import static org.junit.Assume.assumeTrue;
 import java.sql.Connection;
 import java.util.List;
 
-import org.camunda.bpm.engine.impl.cmd.HistoryCleanupCmd;
-import org.camunda.bpm.engine.impl.db.sql.DbSqlSessionFactory;
-import org.camunda.bpm.engine.impl.interceptor.Command;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.persistence.entity.JobEntity;
-import org.camunda.bpm.engine.impl.test.RequiredDatabase;
-import org.camunda.bpm.engine.runtime.Job;
-import org.camunda.bpm.engine.test.util.DatabaseHelper;
+import io.orqueio.bpm.engine.impl.cmd.HistoryCleanupCmd;
+import io.orqueio.bpm.engine.impl.db.sql.DbSqlSessionFactory;
+import io.orqueio.bpm.engine.impl.interceptor.Command;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.impl.persistence.entity.JobEntity;
+import io.orqueio.bpm.engine.impl.test.RequiredDatabase;
+import io.orqueio.bpm.engine.runtime.Job;
+import io.orqueio.bpm.engine.test.util.DatabaseHelper;
 import org.junit.After;
 import org.junit.Test;
 

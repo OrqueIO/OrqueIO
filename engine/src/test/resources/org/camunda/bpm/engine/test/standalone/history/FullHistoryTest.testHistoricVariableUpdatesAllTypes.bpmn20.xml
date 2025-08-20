@@ -10,7 +10,7 @@
     <startEvent id="start" />
     <sequenceFlow id="flow1" sourceRef="start" targetRef="setVariables" />
 
-    <serviceTask id="setVariables" camunda:class="org.camunda.bpm.engine.test.standalone.history.VariableSetter" />
+    <serviceTask id="setVariables" camunda:class="io.orqueio.bpm.engine.test.standalone.history.VariableSetter" />
     <sequenceFlow id="flow2" sourceRef="setVariables" targetRef="task" />
     
     <userTask id="task" name="Schedule meeting" camunda:assignee="kermit" />

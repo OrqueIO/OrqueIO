@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.ejb;
+package io.orqueio.bpm.container.impl.ejb;
 
 import java.util.Set;
 
@@ -25,8 +25,8 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 
-import org.camunda.bpm.ProcessApplicationService;
-import org.camunda.bpm.application.ProcessApplicationInfo;
+import io.orqueio.bpm.ProcessApplicationService;
+import io.orqueio.bpm.application.ProcessApplicationInfo;
 
 /**
  * <p>Exposes the {@link ProcessApplicationService} as EJB inside the container.</p>

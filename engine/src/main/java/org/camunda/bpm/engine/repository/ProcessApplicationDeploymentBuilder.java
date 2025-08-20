@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.repository;
+package io.orqueio.bpm.engine.repository;
 
 import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
 import java.util.zip.ZipInputStream;
 
-import org.camunda.bpm.application.ProcessApplication;
-import org.camunda.bpm.application.ProcessApplicationInterface;
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.bpm.application.ProcessApplication;
+import io.orqueio.bpm.application.ProcessApplicationInterface;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
 
 /**
  * <p>Builder for a {@link ProcessApplication} deployment</p>

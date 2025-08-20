@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.run.qa;
+package io.orqueio.bpm.run.qa;
 
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -23,7 +23,7 @@ import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import org.camunda.bpm.run.qa.util.SpringBootManagedContainer;
+import io.orqueio.bpm.run.qa.util.SpringBootManagedContainer;
 import org.junit.Test;
 
 public class SqlAvailabilityIT {

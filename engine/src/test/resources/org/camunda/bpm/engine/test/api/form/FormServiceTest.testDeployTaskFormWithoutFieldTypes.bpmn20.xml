@@ -33,7 +33,7 @@
           </camunda:formField>
           <camunda:formField id="customField" label="A Third Field">
             <camunda:validation>
-              <camunda:constraint name="validator" config="org.camunda.bpm.engine.test.api.form.CustomValidator" />
+              <camunda:constraint name="validator" config="io.orqueio.bpm.engine.test.api.form.CustomValidator" />
             </camunda:validation>
           </camunda:formField>
         </camunda:formData>

@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.core.variable.event;
+package io.orqueio.bpm.engine.impl.core.variable.event;
 
-import org.camunda.bpm.engine.impl.core.variable.scope.AbstractVariableScope;
-import org.camunda.bpm.engine.runtime.VariableInstance;
+import io.orqueio.bpm.engine.impl.core.variable.scope.AbstractVariableScope;
+import io.orqueio.bpm.engine.runtime.VariableInstance;
 
 /**
  * @author Thorben Lindhauer

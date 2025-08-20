@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.test;
+package io.orqueio.bpm.engine.impl.test;
 
 import java.io.FileNotFoundException;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.ProcessEngineConfiguration;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.ProcessEngineConfiguration;
 
 
 /** Base class for the process engine test cases.
@@ -29,7 +29,7 @@ import org.camunda.bpm.engine.ProcessEngineConfiguration;
  * standalone or on a server etc.  Those requirements create some complications
  * so we think it's best to use a separate base class.  That way it is much easier
  * for us to maintain our own codebase and at the same time provide stability
- * on the test support classes that we offer as part of our api (in org.camunda.bpm.engine.test).
+ * on the test support classes that we offer as part of our api (in io.orqueio.bpm.engine.test).
  *
  * @author Tom Baeyens
  * @author Joram Barrez

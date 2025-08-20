@@ -19,11 +19,11 @@
 -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="org.camunda.bpm.engine.impl.dmn.entity.repository.DecisionRequirementsDefinitionEntity">
+<mapper namespace="io.orqueio.bpm.engine.impl.dmn.entity.repository.DecisionRequirementsDefinitionEntity">
 
   <!-- INSERT -->
 
-  <insert id="insertDecisionRequirementsDefinition" parameterType="org.camunda.bpm.engine.impl.dmn.entity.repository.DecisionRequirementsDefinitionEntity">
+  <insert id="insertDecisionRequirementsDefinition" parameterType="io.orqueio.bpm.engine.impl.dmn.entity.repository.DecisionRequirementsDefinitionEntity">
     insert into ${prefix}ACT_RE_DECISION_REQ_DEF(
       ID_, 
       CATEGORY_, 
@@ -50,7 +50,7 @@
 
   <!-- UPDATE -->
 
-  <update id="updateDecisionRequirementsDefinition" parameterType="org.camunda.bpm.engine.impl.dmn.entity.repository.DecisionRequirementsDefinitionEntity">
+  <update id="updateDecisionRequirementsDefinition" parameterType="io.orqueio.bpm.engine.impl.dmn.entity.repository.DecisionRequirementsDefinitionEntity">
     update ${prefix}ACT_RE_DECISION_REQ_DEF set
       REV_ = #{revisionNext, jdbcType=INTEGER}
     where ID_ = #{id, jdbcType=VARCHAR}
@@ -65,7 +65,7 @@
 
   <!-- RESULTMAP -->
 
-  <resultMap id="decisionRequirementsDefinitionsResultMap" type="org.camunda.bpm.engine.impl.dmn.entity.repository.DecisionRequirementsDefinitionEntity">
+  <resultMap id="decisionRequirementsDefinitionsResultMap" type="io.orqueio.bpm.engine.impl.dmn.entity.repository.DecisionRequirementsDefinitionEntity">
     <id property="id" column="ID_" jdbcType="VARCHAR" />
     <result property="revision" column="REV_" />
     <result property="category" column="CATEGORY_" />
@@ -95,14 +95,14 @@
       and KEY_ = #{decisionRequirementsDefinitionKey}
   </select>
 
-  <select id="selectLatestDecisionRequirementsDefinitionByKey" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject" resultMap="decisionRequirementsDefinitionsResultMap">
+  <select id="selectLatestDecisionRequirementsDefinitionByKey" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject" resultMap="decisionRequirementsDefinitionsResultMap">
     select *
     from ${prefix}ACT_RE_DECISION_REQ_DEF d1
       inner join
           (select KEY_, TENANT_ID_, max(VERSION_) as MAX_VERSION
           from ${prefix}ACT_RE_DECISION_REQ_DEF RES
           where KEY_ = #{parameter}
-            <include refid="org.camunda.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
+            <include refid="io.orqueio.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
           group by TENANT_ID_, KEY_) d2
         on d1.KEY_ = d2.KEY_
     where d1.VERSION_ = d2.MAX_VERSION and 
@@ -154,8 +154,8 @@
           AND VERSION_ &lt; #{version})
   </select>
 
-  <select id="selectDecisionRequirementsDefinitionsByQueryCriteria" parameterType="org.camunda.bpm.engine.impl.dmn.entity.repository.DecisionRequirementsDefinitionQueryImpl" resultMap="decisionRequirementsDefinitionsResultMap">
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
+  <select id="selectDecisionRequirementsDefinitionsByQueryCriteria" parameterType="io.orqueio.bpm.engine.impl.dmn.entity.repository.DecisionRequirementsDefinitionQueryImpl" resultMap="decisionRequirementsDefinitionsResultMap">
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
     ${limitBefore}
     select ${distinct} RES.*
     ${limitBetween}
@@ -164,15 +164,15 @@
     ${limitAfter}
   </select>
 
-  <select id="selectDecisionRequirementsDefinitionCountByQueryCriteria" parameterType="org.camunda.bpm.engine.impl.dmn.entity.repository.DecisionRequirementsDefinitionQueryImpl" resultType="long">
+  <select id="selectDecisionRequirementsDefinitionCountByQueryCriteria" parameterType="io.orqueio.bpm.engine.impl.dmn.entity.repository.DecisionRequirementsDefinitionQueryImpl" resultType="long">
     ${countDistinctBeforeStart} RES.ID_ ${countDistinctBeforeEnd}
     <include refid="selectDecisionRequirementsDefinitionsByQueryCriteriaSql"/>
     ${countDistinctAfterEnd}
   </select>
    
   <!-- mysql specific sql -->
-  <select id="selectDecisionRequirementsDefinitionsByQueryCriteria_mysql" parameterType="org.camunda.bpm.engine.impl.dmn.entity.repository.DecisionRequirementsDefinitionQueryImpl" resultMap="decisionRequirementsDefinitionsResultMap">
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
+  <select id="selectDecisionRequirementsDefinitionsByQueryCriteria_mysql" parameterType="io.orqueio.bpm.engine.impl.dmn.entity.repository.DecisionRequirementsDefinitionQueryImpl" resultMap="decisionRequirementsDefinitionsResultMap">
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
     ${limitBefore}
     select ${distinct} RES.*
     ${limitBetween}
@@ -181,7 +181,7 @@
     ${limitAfter}
   </select>
 
-  <select id="selectDecisionRequirementsDefinitionCountByQueryCriteria_mysql" parameterType="org.camunda.bpm.engine.impl.dmn.entity.repository.DecisionRequirementsDefinitionQueryImpl" resultType="long">
+  <select id="selectDecisionRequirementsDefinitionCountByQueryCriteria_mysql" parameterType="io.orqueio.bpm.engine.impl.dmn.entity.repository.DecisionRequirementsDefinitionQueryImpl" resultType="long">
     ${countDistinctBeforeStart} RES.ID_ ${countDistinctBeforeEnd}
     <include refid="selectDecisionRequirementsDefinitionsByQueryCriteriaSql"/>
     ${countDistinctAfterEnd}
@@ -204,7 +204,7 @@
     </if>
     
     <if test="authCheck.shouldPerformAuthorizatioCheck &amp;&amp; !authCheck.revokeAuthorizationCheckEnabled &amp;&amp; authCheck.authUserId != null">
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoinWithoutOnClause" /> 
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoinWithoutOnClause" />
       AUTH ON (AUTH.RESOURCE_ID_ ${authJoinStart} RES.ID_ ${authJoinSeparator} RES.KEY_ ${authJoinSeparator} '*' ${authJoinEnd})
     </if>
     
@@ -270,8 +270,8 @@
         </if>
       </if>
 
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.queryAuthorizationCheck" />
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.queryAuthorizationCheck" />
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
       
     </where>
   </sql>

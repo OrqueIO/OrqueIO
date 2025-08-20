@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.repository;
+package io.orqueio.bpm.engine.test.api.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -39,55 +39,55 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.assertj.core.groups.Tuple;
-import org.camunda.bpm.engine.BadUserRequestException;
-import org.camunda.bpm.engine.EntityTypes;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.ProcessEngineConfiguration;
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.RepositoryService;
-import org.camunda.bpm.engine.RuntimeService;
-import org.camunda.bpm.engine.TaskService;
-import org.camunda.bpm.engine.exception.NotAllowedException;
-import org.camunda.bpm.engine.exception.NotFoundException;
-import org.camunda.bpm.engine.exception.NotValidException;
-import org.camunda.bpm.engine.history.UserOperationLogEntry;
-import org.camunda.bpm.engine.history.UserOperationLogQuery;
-import org.camunda.bpm.engine.impl.RepositoryServiceImpl;
-import org.camunda.bpm.engine.impl.bpmn.behavior.CallActivityBehavior;
-import org.camunda.bpm.engine.impl.bpmn.deployer.BpmnDeployer;
-import org.camunda.bpm.engine.impl.bpmn.parser.BpmnParse;
-import org.camunda.bpm.engine.impl.cfg.StandaloneProcessEngineConfiguration;
-import org.camunda.bpm.engine.impl.core.model.CallableElement;
-import org.camunda.bpm.engine.impl.dmn.entity.repository.DecisionDefinitionEntity;
-import org.camunda.bpm.engine.impl.history.event.UserOperationLogEntryEventEntity;
-import org.camunda.bpm.engine.impl.interceptor.CommandExecutor;
-import org.camunda.bpm.engine.impl.jobexecutor.TimerActivateProcessDefinitionHandler;
-import org.camunda.bpm.engine.impl.persistence.deploy.cache.DeploymentCache;
-import org.camunda.bpm.engine.impl.pvm.PvmActivity;
-import org.camunda.bpm.engine.impl.pvm.PvmTransition;
-import org.camunda.bpm.engine.impl.pvm.ReadOnlyProcessDefinition;
-import org.camunda.bpm.engine.impl.pvm.process.ActivityImpl;
-import org.camunda.bpm.engine.impl.pvm.process.ProcessDefinitionImpl;
-import org.camunda.bpm.engine.impl.util.ClockUtil;
-import org.camunda.bpm.engine.impl.util.IoUtil;
-import org.camunda.bpm.engine.repository.CalledProcessDefinition;
-import org.camunda.bpm.engine.repository.CaseDefinition;
-import org.camunda.bpm.engine.repository.CaseDefinitionQuery;
-import org.camunda.bpm.engine.repository.DecisionDefinition;
-import org.camunda.bpm.engine.repository.DecisionDefinitionQuery;
-import org.camunda.bpm.engine.repository.DecisionRequirementsDefinition;
-import org.camunda.bpm.engine.repository.DecisionRequirementsDefinitionQuery;
-import org.camunda.bpm.engine.repository.DeploymentBuilder;
-import org.camunda.bpm.engine.repository.ProcessDefinition;
-import org.camunda.bpm.engine.runtime.Job;
-import org.camunda.bpm.engine.task.Task;
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.engine.test.RequiredHistoryLevel;
-import org.camunda.bpm.engine.test.bpmn.tasklistener.util.RecorderTaskListener;
-import org.camunda.bpm.engine.test.util.PluggableProcessEngineTest;
-import org.camunda.bpm.engine.test.util.TestExecutionListener;
-import org.camunda.bpm.model.bpmn.Bpmn;
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.bpm.engine.BadUserRequestException;
+import io.orqueio.bpm.engine.EntityTypes;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.ProcessEngineConfiguration;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.RepositoryService;
+import io.orqueio.bpm.engine.RuntimeService;
+import io.orqueio.bpm.engine.TaskService;
+import io.orqueio.bpm.engine.exception.NotAllowedException;
+import io.orqueio.bpm.engine.exception.NotFoundException;
+import io.orqueio.bpm.engine.exception.NotValidException;
+import io.orqueio.bpm.engine.history.UserOperationLogEntry;
+import io.orqueio.bpm.engine.history.UserOperationLogQuery;
+import io.orqueio.bpm.engine.impl.RepositoryServiceImpl;
+import io.orqueio.bpm.engine.impl.bpmn.behavior.CallActivityBehavior;
+import io.orqueio.bpm.engine.impl.bpmn.deployer.BpmnDeployer;
+import io.orqueio.bpm.engine.impl.bpmn.parser.BpmnParse;
+import io.orqueio.bpm.engine.impl.cfg.StandaloneProcessEngineConfiguration;
+import io.orqueio.bpm.engine.impl.core.model.CallableElement;
+import io.orqueio.bpm.engine.impl.dmn.entity.repository.DecisionDefinitionEntity;
+import io.orqueio.bpm.engine.impl.history.event.UserOperationLogEntryEventEntity;
+import io.orqueio.bpm.engine.impl.interceptor.CommandExecutor;
+import io.orqueio.bpm.engine.impl.jobexecutor.TimerActivateProcessDefinitionHandler;
+import io.orqueio.bpm.engine.impl.persistence.deploy.cache.DeploymentCache;
+import io.orqueio.bpm.engine.impl.pvm.PvmActivity;
+import io.orqueio.bpm.engine.impl.pvm.PvmTransition;
+import io.orqueio.bpm.engine.impl.pvm.ReadOnlyProcessDefinition;
+import io.orqueio.bpm.engine.impl.pvm.process.ActivityImpl;
+import io.orqueio.bpm.engine.impl.pvm.process.ProcessDefinitionImpl;
+import io.orqueio.bpm.engine.impl.util.ClockUtil;
+import io.orqueio.bpm.engine.impl.util.IoUtil;
+import io.orqueio.bpm.engine.repository.CalledProcessDefinition;
+import io.orqueio.bpm.engine.repository.CaseDefinition;
+import io.orqueio.bpm.engine.repository.CaseDefinitionQuery;
+import io.orqueio.bpm.engine.repository.DecisionDefinition;
+import io.orqueio.bpm.engine.repository.DecisionDefinitionQuery;
+import io.orqueio.bpm.engine.repository.DecisionRequirementsDefinition;
+import io.orqueio.bpm.engine.repository.DecisionRequirementsDefinitionQuery;
+import io.orqueio.bpm.engine.repository.DeploymentBuilder;
+import io.orqueio.bpm.engine.repository.ProcessDefinition;
+import io.orqueio.bpm.engine.runtime.Job;
+import io.orqueio.bpm.engine.task.Task;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.test.RequiredHistoryLevel;
+import io.orqueio.bpm.engine.test.bpmn.tasklistener.util.RecorderTaskListener;
+import io.orqueio.bpm.engine.test.util.PluggableProcessEngineTest;
+import io.orqueio.bpm.engine.test.util.TestExecutionListener;
+import io.orqueio.bpm.model.bpmn.Bpmn;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -146,7 +146,7 @@ public class RepositoryServiceTest extends PluggableProcessEngineTest {
     String instanceAsString = Bpmn.convertToString(instance);
 
     //when instance is deployed via addString method
-    org.camunda.bpm.engine.repository.Deployment deployment = repositoryService.createDeployment()
+    io.orqueio.bpm.engine.repository.Deployment deployment = repositoryService.createDeployment()
                                                                                .addString(resourceName, instanceAsString)
                                                                                .deploy();
 
@@ -397,7 +397,7 @@ public class RepositoryServiceTest extends PluggableProcessEngineTest {
     Date inThreeDays = new Date(startTime.getTime() + (3 * 24 * 60 * 60 * 1000));
 
     // Deploy process, but activate after three days
-    org.camunda.bpm.engine.repository.Deployment deployment = repositoryService.createDeployment()
+    io.orqueio.bpm.engine.repository.Deployment deployment = repositoryService.createDeployment()
             .addClasspathResource("org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
             .addClasspathResource("org/camunda/bpm/engine/test/api/twoTasksProcess.bpmn20.xml")
             .activateProcessDefinitionsOn(inThreeDays)
@@ -441,7 +441,7 @@ public class RepositoryServiceTest extends PluggableProcessEngineTest {
     Date inThreeDays = new Date(startTime.getTime() + (3 * 24 * 60 * 60 * 1000));
 
     // Deploy process, but activate after three days
-    org.camunda.bpm.engine.repository.Deployment deployment = repositoryService.createDeployment()
+    io.orqueio.bpm.engine.repository.Deployment deployment = repositoryService.createDeployment()
             .addClasspathResource("org/camunda/bpm/engine/test/api/oneAsyncTask.bpmn")
             .activateProcessDefinitionsOn(inThreeDays)
             .deploy();
@@ -489,7 +489,7 @@ public class RepositoryServiceTest extends PluggableProcessEngineTest {
   @Test
   public void testGetResourceAsStreamUnexistingResourceInExistingDeployment() {
     // Get hold of the deployment id
-    org.camunda.bpm.engine.repository.Deployment deployment = repositoryService.createDeploymentQuery().singleResult();
+    io.orqueio.bpm.engine.repository.Deployment deployment = repositoryService.createDeploymentQuery().singleResult();
 
     try {
       repositoryService.getResourceAsStream(deployment.getId(), "org/camunda/bpm/engine/test/api/unexistingProcess.bpmn.xml");
@@ -763,7 +763,7 @@ public class RepositoryServiceTest extends PluggableProcessEngineTest {
 
     // Setup both process engines
     ProcessEngine processEngine1 = new StandaloneProcessEngineConfiguration().setProcessEngineName("reboot-test-schema")
-        .setDatabaseSchemaUpdate(org.camunda.bpm.engine.ProcessEngineConfiguration.DB_SCHEMA_UPDATE_TRUE)
+        .setDatabaseSchemaUpdate(io.orqueio.bpm.engine.ProcessEngineConfiguration.DB_SCHEMA_UPDATE_TRUE)
         .setJdbcUrl("jdbc:h2:mem:activiti-process-cache-test;DB_CLOSE_DELAY=1000")
         .setJobExecutorActivate(false)
         .setEnforceHistoryTimeToLive(false)
@@ -772,7 +772,7 @@ public class RepositoryServiceTest extends PluggableProcessEngineTest {
     RepositoryService repositoryService1 = processEngine1.getRepositoryService();
 
     ProcessEngine processEngine2 = new StandaloneProcessEngineConfiguration().setProcessEngineName("reboot-test")
-        .setDatabaseSchemaUpdate(org.camunda.bpm.engine.ProcessEngineConfiguration.DB_SCHEMA_UPDATE_FALSE)
+        .setDatabaseSchemaUpdate(io.orqueio.bpm.engine.ProcessEngineConfiguration.DB_SCHEMA_UPDATE_FALSE)
         .setJdbcUrl("jdbc:h2:mem:activiti-process-cache-test;DB_CLOSE_DELAY=1000")
         .setJobExecutorActivate(false)
         .setEnforceHistoryTimeToLive(false)
@@ -824,14 +824,14 @@ public class RepositoryServiceTest extends PluggableProcessEngineTest {
 
   @Test
   public void testDeploymentPersistence() {
-    org.camunda.bpm.engine.repository.Deployment deployment = repositoryService
+    io.orqueio.bpm.engine.repository.Deployment deployment = repositoryService
       .createDeployment()
       .name("strings")
       .addString("org/camunda/bpm/engine/test/test/HelloWorld.string", "hello world")
       .addString("org/camunda/bpm/engine/test/test/TheAnswer.string", "42")
       .deploy();
 
-    List<org.camunda.bpm.engine.repository.Deployment> deployments
+    List<io.orqueio.bpm.engine.repository.Deployment> deployments
       = repositoryService.createDeploymentQuery().list();
     assertEquals(1, deployments.size());
     deployment = deployments.get(0);

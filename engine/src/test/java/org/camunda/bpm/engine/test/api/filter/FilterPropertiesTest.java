@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.filter;
+package io.orqueio.bpm.engine.test.api.filter;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
@@ -30,11 +30,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.engine.FilterService;
-import org.camunda.bpm.engine.filter.Filter;
-import org.camunda.bpm.engine.impl.persistence.entity.FilterEntity;
-import org.camunda.bpm.engine.test.ProcessEngineRule;
-import org.camunda.bpm.engine.test.util.ProvidedProcessEngineRule;
+import io.orqueio.bpm.engine.FilterService;
+import io.orqueio.bpm.engine.filter.Filter;
+import io.orqueio.bpm.engine.impl.persistence.entity.FilterEntity;
+import io.orqueio.bpm.engine.test.ProcessEngineRule;
+import io.orqueio.bpm.engine.test.util.ProvidedProcessEngineRule;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;

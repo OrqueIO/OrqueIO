@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest;
+package io.orqueio.bpm.engine.rest;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,21 +28,21 @@ import java.util.ServiceLoader;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.http.entity.ContentType;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.impl.persistence.entity.ActivityInstanceImpl;
-import org.camunda.bpm.engine.impl.persistence.entity.TransitionInstanceImpl;
-import org.camunda.bpm.engine.rest.hal.Hal;
-import org.camunda.bpm.engine.rest.helper.MockProvider;
-import org.camunda.bpm.engine.rest.spi.ProcessEngineProvider;
-import org.camunda.bpm.engine.rest.spi.impl.MockedProcessEngineProvider;
-import org.camunda.bpm.engine.runtime.ActivityInstance;
-import org.camunda.bpm.engine.runtime.Incident;
-import org.camunda.bpm.engine.runtime.TransitionInstance;
-import org.camunda.bpm.engine.variable.VariableMap;
-import org.camunda.bpm.engine.variable.Variables;
-import org.camunda.bpm.engine.variable.value.BytesValue;
-import org.camunda.bpm.engine.variable.value.TypedValue;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.impl.persistence.entity.ActivityInstanceImpl;
+import io.orqueio.bpm.engine.impl.persistence.entity.TransitionInstanceImpl;
+import io.orqueio.bpm.engine.rest.hal.Hal;
+import io.orqueio.bpm.engine.rest.helper.MockProvider;
+import io.orqueio.bpm.engine.rest.spi.ProcessEngineProvider;
+import io.orqueio.bpm.engine.rest.spi.impl.MockedProcessEngineProvider;
+import io.orqueio.bpm.engine.runtime.ActivityInstance;
+import io.orqueio.bpm.engine.runtime.Incident;
+import io.orqueio.bpm.engine.runtime.TransitionInstance;
+import io.orqueio.bpm.engine.variable.VariableMap;
+import io.orqueio.bpm.engine.variable.Variables;
+import io.orqueio.bpm.engine.variable.value.BytesValue;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
 import org.junit.Before;
 
 import io.restassured.RestAssured;

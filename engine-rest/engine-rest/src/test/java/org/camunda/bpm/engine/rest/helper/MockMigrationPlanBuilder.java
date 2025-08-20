@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.helper;
+package io.orqueio.bpm.engine.rest.helper;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -23,12 +23,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.engine.migration.MigrationInstruction;
-import org.camunda.bpm.engine.migration.MigrationInstructionBuilder;
-import org.camunda.bpm.engine.migration.MigrationInstructionsBuilder;
-import org.camunda.bpm.engine.migration.MigrationPlan;
-import org.camunda.bpm.engine.migration.MigrationPlanBuilder;
-import org.camunda.bpm.engine.variable.VariableMap;
+import io.orqueio.bpm.engine.migration.MigrationInstruction;
+import io.orqueio.bpm.engine.migration.MigrationInstructionBuilder;
+import io.orqueio.bpm.engine.migration.MigrationInstructionsBuilder;
+import io.orqueio.bpm.engine.migration.MigrationPlan;
+import io.orqueio.bpm.engine.migration.MigrationPlanBuilder;
+import io.orqueio.bpm.engine.variable.VariableMap;
 
 public class MockMigrationPlanBuilder {
 

@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.quarkus.engine.test.helper;
+package io.orqueio.bpm.quarkus.engine.test.helper;
 
 import io.quarkus.arc.Arc;
 import io.quarkus.test.QuarkusUnitTest;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.impl.test.TestHelper;
-import org.camunda.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.impl.test.TestHelper;
+import io.orqueio.bpm.engine.test.Deployment;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtensionContext;

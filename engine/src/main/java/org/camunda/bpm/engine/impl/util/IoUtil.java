@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.util;
+package io.orqueio.bpm.engine.impl.util;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -28,8 +28,8 @@ import java.io.InputStream;
 import java.net.URL;
 import java.nio.charset.Charset;
 
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
 
 
 /**

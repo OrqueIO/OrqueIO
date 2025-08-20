@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.persistence.entity;
+package io.orqueio.bpm.engine.impl.persistence.entity;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.camunda.bpm.engine.impl.db.ListQueryParameterObject;
-import org.camunda.bpm.engine.impl.db.entitymanager.operation.DbOperation;
-import org.camunda.bpm.engine.impl.persistence.AbstractManager;
-import org.camunda.bpm.engine.impl.util.ClockUtil;
+import io.orqueio.bpm.engine.impl.db.ListQueryParameterObject;
+import io.orqueio.bpm.engine.impl.db.entitymanager.operation.DbOperation;
+import io.orqueio.bpm.engine.impl.persistence.AbstractManager;
+import io.orqueio.bpm.engine.impl.util.ClockUtil;
 
 /**
  * @author Joram Barrez

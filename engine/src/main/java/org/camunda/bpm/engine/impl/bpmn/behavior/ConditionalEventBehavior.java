@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.bpmn.behavior;
+package io.orqueio.bpm.engine.impl.bpmn.behavior;
 
-import org.camunda.bpm.engine.impl.bpmn.parser.ConditionalEventDefinition;
-import org.camunda.bpm.engine.impl.core.variable.event.VariableEvent;
-import org.camunda.bpm.engine.impl.persistence.entity.EventSubscriptionEntity;
+import io.orqueio.bpm.engine.impl.bpmn.parser.ConditionalEventDefinition;
+import io.orqueio.bpm.engine.impl.core.variable.event.VariableEvent;
+import io.orqueio.bpm.engine.impl.persistence.entity.EventSubscriptionEntity;
 
 /**
  * Represents an interface for the condition event behaviors.

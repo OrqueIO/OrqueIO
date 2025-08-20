@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.openapi.generator.impl;
+package io.orqueio.bpm.engine.rest.openapi.generator.impl;
 
 import java.io.File;
 import java.io.IOException;

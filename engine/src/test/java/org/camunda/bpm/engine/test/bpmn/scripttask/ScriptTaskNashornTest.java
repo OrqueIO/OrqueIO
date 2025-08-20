@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.bpmn.scripttask;
+package io.orqueio.bpm.engine.test.bpmn.scripttask;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import java.util.Date;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
 import org.junit.Test;
 
 public class ScriptTaskNashornTest extends AbstractScriptTaskTest {
@@ -124,7 +124,7 @@ public class ScriptTaskNashornTest extends AbstractScriptTaskTest {
     Date date = (Date) runtimeService.getVariable(pi.getId(), "date");
     assertEquals(0, date.getTime());
 
-    deployProcess(NASHORN, "execution.setVariable('myVar', new org.camunda.bpm.engine.test.bpmn.scripttask.MySerializable('test'));");
+    deployProcess(NASHORN, "execution.setVariable('myVar', new io.orqueio.bpm.engine.test.bpmn.scripttask.MySerializable('test'));");
 
     pi = runtimeService.startProcessInstanceByKey("testProcess");
 

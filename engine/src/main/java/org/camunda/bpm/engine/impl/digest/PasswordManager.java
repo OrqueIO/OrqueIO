@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.digest;
+package io.orqueio.bpm.engine.impl.digest;
 
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
+import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
+import static io.orqueio.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
 
 /**
  * Different Camunda versions use different hashing algorithms. In addition, it is possible

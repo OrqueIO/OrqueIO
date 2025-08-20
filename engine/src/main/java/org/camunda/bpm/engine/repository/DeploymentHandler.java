@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.repository;
+package io.orqueio.bpm.engine.repository;
 
 import java.util.Set;
 
@@ -26,10 +26,10 @@ import java.util.Set;
  * constructor. Custom implementations of this interface should be coupled with an implementation
  * of the {@link DeploymentHandlerFactory} interface, which can then be wired to the Process Engine
  * through the
- * {@link org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl#setDeploymentHandlerFactory(DeploymentHandlerFactory)}
+ * {@link io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl#setDeploymentHandlerFactory(DeploymentHandlerFactory)}
  * method.</p>
  *
- * <p>See {@link org.camunda.bpm.engine.impl.repository.DefaultDeploymentHandler} for the default
+ * <p>See {@link io.orqueio.bpm.engine.impl.repository.DefaultDeploymentHandler} for the default
  * behavior of the deployment process.</p>
  */
 public interface DeploymentHandler {
@@ -44,7 +44,7 @@ public interface DeploymentHandler {
    *
    * <p>An implementation should define the comparison criteria for the two provided
    * Resources. For the default comparison criteria, see
-   * {@link org.camunda.bpm.engine.impl.repository.DefaultDeploymentHandler#shouldDeployResource(Resource, Resource)}.</p>
+   * {@link io.orqueio.bpm.engine.impl.repository.DefaultDeploymentHandler#shouldDeployResource(Resource, Resource)}.</p>
    *
    * <p>The output of this method (Boolean) will determine if <code>newResource</code> is
    * included in the list of Resources to be deployed (true), or not (false).</p>
@@ -113,7 +113,7 @@ public interface DeploymentHandler {
    *
    * @return a {@link Set} of deployment IDs of Deployments already present in the Process Engine
    * database, that should be resumed (registered with the
-   * {@link org.camunda.bpm.engine.impl.jobexecutor.JobExecutor} and registered with the newly
+   * {@link io.orqueio.bpm.engine.impl.jobexecutor.JobExecutor} and registered with the newly
    * deployed Process Application).
    */
   Set<String> determineDeploymentsToResumeByProcessDefinitionKey(String[] processDefinitionKeys);
@@ -137,7 +137,7 @@ public interface DeploymentHandler {
    *                            Deployments according to a given criteria.
    * @return a {@link Set} of deployment IDs of Deployments already present in the Process Engine
    * database, that should be resumed (registered with the
-   * {@link org.camunda.bpm.engine.impl.jobexecutor.JobExecutor} and registered with the newly
+   * {@link io.orqueio.bpm.engine.impl.jobexecutor.JobExecutor} and registered with the newly
    * deployed Process Application).
    */
   Set<String> determineDeploymentsToResumeByDeploymentName(CandidateDeployment candidateDeployment);

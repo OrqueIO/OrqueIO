@@ -14,32 +14,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.cmd;
+package io.orqueio.bpm.engine.impl.cmd;
 
-import static org.camunda.bpm.engine.impl.Direction.DESCENDING;
-import static org.camunda.bpm.engine.impl.ExternalTaskQueryProperty.PRIORITY;
+import static io.orqueio.bpm.engine.impl.Direction.DESCENDING;
+import static io.orqueio.bpm.engine.impl.ExternalTaskQueryProperty.PRIORITY;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import org.camunda.bpm.engine.externaltask.LockedExternalTask;
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
-import org.camunda.bpm.engine.impl.QueryOrderingProperty;
-import org.camunda.bpm.engine.impl.db.DbEntity;
-import org.camunda.bpm.engine.impl.db.EnginePersistenceLogger;
-import org.camunda.bpm.engine.impl.db.entitymanager.OptimisticLockingListener;
-import org.camunda.bpm.engine.impl.db.entitymanager.OptimisticLockingResult;
-import org.camunda.bpm.engine.impl.db.entitymanager.operation.DbEntityOperation;
-import org.camunda.bpm.engine.impl.db.entitymanager.operation.DbOperation;
-import org.camunda.bpm.engine.impl.externaltask.LockedExternalTaskImpl;
-import org.camunda.bpm.engine.impl.externaltask.TopicFetchInstruction;
-import org.camunda.bpm.engine.impl.interceptor.Command;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.persistence.entity.ExecutionEntity;
-import org.camunda.bpm.engine.impl.persistence.entity.ExternalTaskEntity;
-import org.camunda.bpm.engine.impl.util.EnsureUtil;
+import io.orqueio.bpm.engine.externaltask.LockedExternalTask;
+import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
+import io.orqueio.bpm.engine.impl.QueryOrderingProperty;
+import io.orqueio.bpm.engine.impl.db.DbEntity;
+import io.orqueio.bpm.engine.impl.db.EnginePersistenceLogger;
+import io.orqueio.bpm.engine.impl.db.entitymanager.OptimisticLockingListener;
+import io.orqueio.bpm.engine.impl.db.entitymanager.OptimisticLockingResult;
+import io.orqueio.bpm.engine.impl.db.entitymanager.operation.DbEntityOperation;
+import io.orqueio.bpm.engine.impl.db.entitymanager.operation.DbOperation;
+import io.orqueio.bpm.engine.impl.externaltask.LockedExternalTaskImpl;
+import io.orqueio.bpm.engine.impl.externaltask.TopicFetchInstruction;
+import io.orqueio.bpm.engine.impl.interceptor.Command;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.impl.persistence.entity.ExecutionEntity;
+import io.orqueio.bpm.engine.impl.persistence.entity.ExternalTaskEntity;
+import io.orqueio.bpm.engine.impl.util.EnsureUtil;
 
 /**
  * @author Thorben Lindhauer

@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter.security.oauth2;
+package io.orqueio.bpm.spring.boot.starter.security.oauth2;
 
-import org.camunda.bpm.spring.boot.starter.property.CamundaBpmProperties;
-import org.camunda.bpm.spring.boot.starter.security.oauth2.impl.OAuth2IdentityProvider;
+import io.orqueio.bpm.spring.boot.starter.property.CamundaBpmProperties;
+import io.orqueio.bpm.spring.boot.starter.security.oauth2.impl.OAuth2IdentityProvider;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 

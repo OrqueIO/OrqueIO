@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.quarkus.engine.extension.impl;
+package io.orqueio.bpm.quarkus.engine.extension.impl;
 
 import static com.arjuna.ats.jta.TransactionManager.transactionManager;
 import static io.quarkus.datasource.common.runtime.DataSourceUtil.DEFAULT_DATASOURCE_NAME;
@@ -29,17 +29,17 @@ import io.smallrye.context.SmallRyeManagedExecutor;
 import jakarta.enterprise.inject.spi.BeanManager;
 import java.util.ArrayList;
 import java.util.List;
-import org.camunda.bpm.container.RuntimeContainerDelegate;
-import org.camunda.bpm.container.impl.metadata.PropertyHelper;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.cdi.impl.event.CdiEventSupportBpmnParseListener;
-import org.camunda.bpm.engine.cdi.impl.util.BeanManagerLookup;
-import org.camunda.bpm.engine.impl.bpmn.parser.BpmnParseListener;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.jobexecutor.JobExecutor;
-import org.camunda.bpm.quarkus.engine.extension.CamundaEngineConfig;
-import org.camunda.bpm.quarkus.engine.extension.QuarkusProcessEngineConfiguration;
-import org.camunda.bpm.quarkus.engine.extension.event.CamundaEngineStartupEvent;
+import io.orqueio.bpm.container.RuntimeContainerDelegate;
+import io.orqueio.bpm.container.impl.metadata.PropertyHelper;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.cdi.impl.event.CdiEventSupportBpmnParseListener;
+import io.orqueio.bpm.engine.cdi.impl.util.BeanManagerLookup;
+import io.orqueio.bpm.engine.impl.bpmn.parser.BpmnParseListener;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.jobexecutor.JobExecutor;
+import io.orqueio.bpm.quarkus.engine.extension.CamundaEngineConfig;
+import io.orqueio.bpm.quarkus.engine.extension.QuarkusProcessEngineConfiguration;
+import io.orqueio.bpm.quarkus.engine.extension.event.CamundaEngineStartupEvent;
 import org.eclipse.microprofile.context.ManagedExecutor;
 
 @Recorder

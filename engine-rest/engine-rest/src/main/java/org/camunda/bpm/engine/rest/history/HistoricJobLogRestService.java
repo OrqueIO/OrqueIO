@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.history;
+package io.orqueio.bpm.engine.rest.history;
 
 import java.util.List;
 
@@ -29,10 +29,10 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
-import org.camunda.bpm.engine.rest.dto.CountResultDto;
-import org.camunda.bpm.engine.rest.dto.history.HistoricJobLogDto;
-import org.camunda.bpm.engine.rest.dto.history.HistoricJobLogQueryDto;
-import org.camunda.bpm.engine.rest.sub.history.HistoricJobLogResource;
+import io.orqueio.bpm.engine.rest.dto.CountResultDto;
+import io.orqueio.bpm.engine.rest.dto.history.HistoricJobLogDto;
+import io.orqueio.bpm.engine.rest.dto.history.HistoricJobLogQueryDto;
+import io.orqueio.bpm.engine.rest.sub.history.HistoricJobLogResource;
 
 /**
  * @author Roman Smirnov

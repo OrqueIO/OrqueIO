@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.engine.el;
+package io.orqueio.bpm.dmn.engine.el;
 
-import static org.camunda.bpm.engine.variable.Variables.emptyVariableContext;
+import static io.orqueio.bpm.engine.variable.Variables.emptyVariableContext;
 import static org.mockito.Mockito.*;
 
 import javax.script.CompiledScript;
@@ -24,12 +24,12 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import javax.script.SimpleBindings;
 
-import org.camunda.bpm.dmn.engine.impl.DefaultDmnEngineConfiguration;
-import org.camunda.bpm.dmn.engine.impl.DmnExpressionImpl;
-import org.camunda.bpm.dmn.engine.impl.el.DefaultScriptEngineResolver;
-import org.camunda.bpm.dmn.engine.impl.evaluation.ExpressionEvaluationHandler;
-import org.camunda.bpm.dmn.engine.impl.spi.el.ElExpression;
-import org.camunda.bpm.dmn.engine.impl.spi.el.ElProvider;
+import io.orqueio.bpm.dmn.engine.impl.DefaultDmnEngineConfiguration;
+import io.orqueio.bpm.dmn.engine.impl.DmnExpressionImpl;
+import io.orqueio.bpm.dmn.engine.impl.el.DefaultScriptEngineResolver;
+import io.orqueio.bpm.dmn.engine.impl.evaluation.ExpressionEvaluationHandler;
+import io.orqueio.bpm.dmn.engine.impl.spi.el.ElExpression;
+import io.orqueio.bpm.dmn.engine.impl.spi.el.ElProvider;
 import org.codehaus.groovy.jsr223.GroovyScriptEngineImpl;
 import org.junit.Before;
 import org.junit.Test;

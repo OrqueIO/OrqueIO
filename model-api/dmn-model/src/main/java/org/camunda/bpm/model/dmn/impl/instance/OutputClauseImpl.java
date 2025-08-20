@@ -14,24 +14,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.dmn.impl.instance;
+package io.orqueio.bpm.model.dmn.impl.instance;
 
-import static org.camunda.bpm.model.dmn.impl.DmnModelConstants.LATEST_DMN_NS;
-import static org.camunda.bpm.model.dmn.impl.DmnModelConstants.DMN_ATTRIBUTE_NAME;
-import static org.camunda.bpm.model.dmn.impl.DmnModelConstants.DMN_ATTRIBUTE_TYPE_REF;
-import static org.camunda.bpm.model.dmn.impl.DmnModelConstants.DMN_ELEMENT_OUTPUT_CLAUSE;
+import static io.orqueio.bpm.model.dmn.impl.DmnModelConstants.LATEST_DMN_NS;
+import static io.orqueio.bpm.model.dmn.impl.DmnModelConstants.DMN_ATTRIBUTE_NAME;
+import static io.orqueio.bpm.model.dmn.impl.DmnModelConstants.DMN_ATTRIBUTE_TYPE_REF;
+import static io.orqueio.bpm.model.dmn.impl.DmnModelConstants.DMN_ELEMENT_OUTPUT_CLAUSE;
 
-import org.camunda.bpm.model.dmn.instance.DefaultOutputEntry;
-import org.camunda.bpm.model.dmn.instance.DmnElement;
-import org.camunda.bpm.model.dmn.instance.OutputClause;
-import org.camunda.bpm.model.dmn.instance.OutputValues;
-import org.camunda.bpm.model.xml.ModelBuilder;
-import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
-import org.camunda.bpm.model.xml.type.attribute.Attribute;
-import org.camunda.bpm.model.xml.type.child.ChildElement;
-import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
+import io.orqueio.bpm.model.dmn.instance.DefaultOutputEntry;
+import io.orqueio.bpm.model.dmn.instance.DmnElement;
+import io.orqueio.bpm.model.dmn.instance.OutputClause;
+import io.orqueio.bpm.model.dmn.instance.OutputValues;
+import io.orqueio.bpm.model.xml.ModelBuilder;
+import io.orqueio.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
+import io.orqueio.bpm.model.xml.type.ModelElementTypeBuilder;
+import io.orqueio.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
+import io.orqueio.bpm.model.xml.type.attribute.Attribute;
+import io.orqueio.bpm.model.xml.type.child.ChildElement;
+import io.orqueio.bpm.model.xml.type.child.SequenceBuilder;
 
 public class OutputClauseImpl extends DmnElementImpl implements OutputClause {
 

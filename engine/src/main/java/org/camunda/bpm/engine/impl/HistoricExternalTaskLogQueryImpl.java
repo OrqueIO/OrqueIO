@@ -14,19 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl;
+package io.orqueio.bpm.engine.impl;
 
-import org.camunda.bpm.engine.exception.NotValidException;
-import org.camunda.bpm.engine.history.ExternalTaskState;
-import org.camunda.bpm.engine.history.HistoricExternalTaskLog;
-import org.camunda.bpm.engine.history.HistoricExternalTaskLogQuery;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.interceptor.CommandExecutor;
-import org.camunda.bpm.engine.impl.util.CollectionUtil;
+import io.orqueio.bpm.engine.exception.NotValidException;
+import io.orqueio.bpm.engine.history.ExternalTaskState;
+import io.orqueio.bpm.engine.history.HistoricExternalTaskLog;
+import io.orqueio.bpm.engine.history.HistoricExternalTaskLogQuery;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.impl.interceptor.CommandExecutor;
+import io.orqueio.bpm.engine.impl.util.CollectionUtil;
 
 import java.util.List;
 
-import static org.camunda.bpm.engine.impl.util.EnsureUtil.*;
+import static io.orqueio.bpm.engine.impl.util.EnsureUtil.*;
 
 public class HistoricExternalTaskLogQueryImpl extends AbstractQuery<HistoricExternalTaskLogQuery, HistoricExternalTaskLog> implements HistoricExternalTaskLogQuery {
 

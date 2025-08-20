@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.jboss.service;
+package io.orqueio.bpm.container.impl.jboss.service;
 
-import org.camunda.bpm.application.ProcessApplicationInfo;
-import org.camunda.bpm.application.ProcessApplicationReference;
-import org.camunda.bpm.container.impl.jmx.services.JmxManagedProcessApplication;
+import io.orqueio.bpm.application.ProcessApplicationInfo;
+import io.orqueio.bpm.application.ProcessApplicationReference;
+import io.orqueio.bpm.container.impl.jmx.services.JmxManagedProcessApplication;
 import org.jboss.msc.service.Service;
 import org.jboss.msc.service.StartContext;
 import org.jboss.msc.service.StartException;

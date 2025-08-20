@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.cockpit.impl.plugin.resources;
+package io.orqueio.bpm.cockpit.impl.plugin.resources;
 
-import org.camunda.bpm.cockpit.db.QueryParameters;
-import org.camunda.bpm.cockpit.impl.plugin.base.dto.ProcessDefinitionStatisticsDto;
-import org.camunda.bpm.cockpit.impl.plugin.base.dto.query.ProcessDefinitionStatisticsQueryDto;
-import org.camunda.bpm.cockpit.impl.plugin.base.sub.resources.ProcessDefinitionResource;
-import org.camunda.bpm.cockpit.plugin.resource.AbstractPluginResource;
-import org.camunda.bpm.engine.rest.dto.CountResultDto;
+import io.orqueio.bpm.cockpit.db.QueryParameters;
+import io.orqueio.bpm.cockpit.impl.plugin.base.dto.ProcessDefinitionStatisticsDto;
+import io.orqueio.bpm.cockpit.impl.plugin.base.dto.query.ProcessDefinitionStatisticsQueryDto;
+import io.orqueio.bpm.cockpit.impl.plugin.base.sub.resources.ProcessDefinitionResource;
+import io.orqueio.bpm.cockpit.plugin.resource.AbstractPluginResource;
+import io.orqueio.bpm.engine.rest.dto.CountResultDto;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -34,8 +34,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 import java.util.List;
 
-import static org.camunda.bpm.engine.authorization.Permissions.READ;
-import static org.camunda.bpm.engine.authorization.Resources.PROCESS_DEFINITION;
+import static io.orqueio.bpm.engine.authorization.Permissions.READ;
+import static io.orqueio.bpm.engine.authorization.Resources.PROCESS_DEFINITION;
 
 public class ProcessDefinitionRestService extends AbstractPluginResource {
 

@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.engine;
+package io.orqueio.bpm.dmn.engine;
 
 import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.engine.variable.context.VariableContext;
-import org.camunda.bpm.model.dmn.DmnModelInstance;
+import io.orqueio.bpm.engine.variable.context.VariableContext;
+import io.orqueio.bpm.model.dmn.DmnModelInstance;
 
 /**
  * A DMN engine which can parse DMN decision models

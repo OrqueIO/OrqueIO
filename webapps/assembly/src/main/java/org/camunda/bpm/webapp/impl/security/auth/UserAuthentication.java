@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.webapp.impl.security.auth;
+package io.orqueio.bpm.webapp.impl.security.auth;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-import org.camunda.bpm.engine.authorization.Authorization;
+import io.orqueio.bpm.engine.authorization.Authorization;
 
 
 /**

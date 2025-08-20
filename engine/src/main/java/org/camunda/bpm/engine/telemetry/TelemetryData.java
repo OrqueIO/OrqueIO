@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.telemetry;
+package io.orqueio.bpm.engine.telemetry;
 
-import org.camunda.bpm.engine.ManagementService;
+import io.orqueio.bpm.engine.ManagementService;
 
 /**
  * The engine collects information about multiple aspects of the installation.

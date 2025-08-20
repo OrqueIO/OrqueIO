@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.xml.testmodel;
+package io.orqueio.bpm.model.xml.testmodel;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-import org.camunda.bpm.model.xml.ModelInstance;
-import org.camunda.bpm.model.xml.testmodel.instance.Animal;
-import org.camunda.bpm.model.xml.testmodel.instance.Animals;
-import org.camunda.bpm.model.xml.testmodel.instance.Bird;
+import io.orqueio.bpm.model.xml.ModelInstance;
+import io.orqueio.bpm.model.xml.testmodel.instance.Animal;
+import io.orqueio.bpm.model.xml.testmodel.instance.Animals;
+import io.orqueio.bpm.model.xml.testmodel.instance.Bird;
 import org.junit.Test;
 
 public class TestModelInstanceTest {

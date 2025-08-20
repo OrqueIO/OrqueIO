@@ -7,7 +7,7 @@
   <process id="asyncStartEvent" isExecutable="true">
     <extensionElements>
 	    <camundabpm:executionListener event="start"
-	      class="org.camunda.bpm.engine.test.bpmn.async.AsyncListener"></camundabpm:executionListener>
+	      class="io.orqueio.bpm.engine.test.bpmn.async.AsyncListener"></camundabpm:executionListener>
 	  </extensionElements>
   
     <startEvent id="startEvent" camundabpm:async="true" />

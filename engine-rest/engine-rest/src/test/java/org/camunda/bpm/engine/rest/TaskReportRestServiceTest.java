@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest;
+package io.orqueio.bpm.engine.rest;
 
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
-import org.camunda.bpm.engine.AuthorizationException;
-import org.camunda.bpm.engine.rest.dto.converter.TaskReportResultToCsvConverter;
-import org.camunda.bpm.engine.rest.util.container.TestContainerRule;
-import org.camunda.bpm.engine.task.TaskCountByCandidateGroupResult;
-import org.camunda.bpm.engine.task.TaskReport;
+import io.orqueio.bpm.engine.AuthorizationException;
+import io.orqueio.bpm.engine.rest.dto.converter.TaskReportResultToCsvConverter;
+import io.orqueio.bpm.engine.rest.util.container.TestContainerRule;
+import io.orqueio.bpm.engine.task.TaskCountByCandidateGroupResult;
+import io.orqueio.bpm.engine.task.TaskReport;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.ClassRule;
@@ -33,9 +33,9 @@ import java.util.List;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.path.json.JsonPath.from;
-import static org.camunda.bpm.engine.rest.helper.MockProvider.EXAMPLE_GROUP_ID;
-import static org.camunda.bpm.engine.rest.helper.MockProvider.EXAMPLE_TASK_COUNT_BY_CANDIDATE_GROUP;
-import static org.camunda.bpm.engine.rest.helper.MockProvider.createMockTaskCountByCandidateGroupReport;
+import static io.orqueio.bpm.engine.rest.helper.MockProvider.EXAMPLE_GROUP_ID;
+import static io.orqueio.bpm.engine.rest.helper.MockProvider.EXAMPLE_TASK_COUNT_BY_CANDIDATE_GROUP;
+import static io.orqueio.bpm.engine.rest.helper.MockProvider.createMockTaskCountByCandidateGroupReport;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;

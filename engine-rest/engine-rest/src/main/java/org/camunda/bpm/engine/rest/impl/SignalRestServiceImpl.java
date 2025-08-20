@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.impl;
+package io.orqueio.bpm.engine.rest.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.camunda.bpm.engine.RuntimeService;
-import org.camunda.bpm.engine.exception.NotFoundException;
-import org.camunda.bpm.engine.rest.SignalRestService;
-import org.camunda.bpm.engine.rest.dto.SignalDto;
-import org.camunda.bpm.engine.rest.dto.VariableValueDto;
-import org.camunda.bpm.engine.rest.exception.InvalidRequestException;
-import org.camunda.bpm.engine.rest.exception.RestException;
-import org.camunda.bpm.engine.runtime.SignalEventReceivedBuilder;
+import io.orqueio.bpm.engine.RuntimeService;
+import io.orqueio.bpm.engine.exception.NotFoundException;
+import io.orqueio.bpm.engine.rest.SignalRestService;
+import io.orqueio.bpm.engine.rest.dto.SignalDto;
+import io.orqueio.bpm.engine.rest.dto.VariableValueDto;
+import io.orqueio.bpm.engine.rest.exception.InvalidRequestException;
+import io.orqueio.bpm.engine.rest.exception.RestException;
+import io.orqueio.bpm.engine.runtime.SignalEventReceivedBuilder;
 
 import javax.ws.rs.core.Response.Status;
 import java.util.Map;

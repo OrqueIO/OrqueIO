@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.impl;
+package io.orqueio.bpm.engine.rest.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
@@ -22,30 +22,30 @@ import java.util.List;
 import javax.ws.rs.container.AsyncResponse;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
-import org.camunda.bpm.engine.BadUserRequestException;
-import org.camunda.bpm.engine.ExternalTaskService;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.batch.Batch;
-import org.camunda.bpm.engine.exception.NotFoundException;
-import org.camunda.bpm.engine.externaltask.ExternalTask;
-import org.camunda.bpm.engine.externaltask.ExternalTaskQuery;
-import org.camunda.bpm.engine.externaltask.UpdateExternalTaskRetriesBuilder;
-import org.camunda.bpm.engine.history.HistoricProcessInstanceQuery;
-import org.camunda.bpm.engine.rest.ExternalTaskRestService;
-import org.camunda.bpm.engine.rest.dto.CountResultDto;
-import org.camunda.bpm.engine.rest.dto.batch.BatchDto;
-import org.camunda.bpm.engine.rest.dto.externaltask.ExternalTaskDto;
-import org.camunda.bpm.engine.rest.dto.externaltask.ExternalTaskQueryDto;
-import org.camunda.bpm.engine.rest.dto.externaltask.FetchExternalTasksExtendedDto;
-import org.camunda.bpm.engine.rest.dto.externaltask.SetRetriesForExternalTasksDto;
-import org.camunda.bpm.engine.rest.dto.history.HistoricProcessInstanceQueryDto;
-import org.camunda.bpm.engine.rest.dto.runtime.ProcessInstanceQueryDto;
-import org.camunda.bpm.engine.rest.exception.InvalidRequestException;
-import org.camunda.bpm.engine.rest.spi.FetchAndLockHandler;
-import org.camunda.bpm.engine.rest.sub.externaltask.ExternalTaskResource;
-import org.camunda.bpm.engine.rest.sub.externaltask.impl.ExternalTaskResourceImpl;
-import org.camunda.bpm.engine.rest.util.QueryUtil;
-import org.camunda.bpm.engine.runtime.ProcessInstanceQuery;
+import io.orqueio.bpm.engine.BadUserRequestException;
+import io.orqueio.bpm.engine.ExternalTaskService;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.batch.Batch;
+import io.orqueio.bpm.engine.exception.NotFoundException;
+import io.orqueio.bpm.engine.externaltask.ExternalTask;
+import io.orqueio.bpm.engine.externaltask.ExternalTaskQuery;
+import io.orqueio.bpm.engine.externaltask.UpdateExternalTaskRetriesBuilder;
+import io.orqueio.bpm.engine.history.HistoricProcessInstanceQuery;
+import io.orqueio.bpm.engine.rest.ExternalTaskRestService;
+import io.orqueio.bpm.engine.rest.dto.CountResultDto;
+import io.orqueio.bpm.engine.rest.dto.batch.BatchDto;
+import io.orqueio.bpm.engine.rest.dto.externaltask.ExternalTaskDto;
+import io.orqueio.bpm.engine.rest.dto.externaltask.ExternalTaskQueryDto;
+import io.orqueio.bpm.engine.rest.dto.externaltask.FetchExternalTasksExtendedDto;
+import io.orqueio.bpm.engine.rest.dto.externaltask.SetRetriesForExternalTasksDto;
+import io.orqueio.bpm.engine.rest.dto.history.HistoricProcessInstanceQueryDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.ProcessInstanceQueryDto;
+import io.orqueio.bpm.engine.rest.exception.InvalidRequestException;
+import io.orqueio.bpm.engine.rest.spi.FetchAndLockHandler;
+import io.orqueio.bpm.engine.rest.sub.externaltask.ExternalTaskResource;
+import io.orqueio.bpm.engine.rest.sub.externaltask.impl.ExternalTaskResourceImpl;
+import io.orqueio.bpm.engine.rest.util.QueryUtil;
+import io.orqueio.bpm.engine.runtime.ProcessInstanceQuery;
 
 /**
  * @author Thorben Lindhauer

@@ -14,40 +14,40 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.cmd;
+package io.orqueio.bpm.engine.impl.cmd;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.camunda.bpm.engine.BadUserRequestException;
-import org.camunda.bpm.engine.exception.NotFoundException;
-import org.camunda.bpm.engine.exception.NullValueException;
-import org.camunda.bpm.engine.impl.cfg.CommandChecker;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.core.variable.VariableUtil;
-import org.camunda.bpm.engine.impl.interceptor.Command;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.migration.MigrationInstructionGenerator;
-import org.camunda.bpm.engine.impl.migration.MigrationLogger;
-import org.camunda.bpm.engine.impl.migration.MigrationPlanBuilderImpl;
-import org.camunda.bpm.engine.impl.migration.MigrationPlanImpl;
-import org.camunda.bpm.engine.impl.migration.validation.instruction.MigrationInstructionValidationReportImpl;
-import org.camunda.bpm.engine.impl.migration.validation.instruction.MigrationInstructionValidator;
-import org.camunda.bpm.engine.impl.migration.validation.instruction.MigrationPlanValidationReportImpl;
-import org.camunda.bpm.engine.impl.migration.validation.instruction.MigrationVariableValidationReportImpl;
-import org.camunda.bpm.engine.impl.migration.validation.instruction.ValidatingMigrationInstruction;
-import org.camunda.bpm.engine.impl.migration.validation.instruction.ValidatingMigrationInstructionImpl;
-import org.camunda.bpm.engine.impl.migration.validation.instruction.ValidatingMigrationInstructions;
-import org.camunda.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity;
-import org.camunda.bpm.engine.impl.pvm.process.ActivityImpl;
-import org.camunda.bpm.engine.impl.pvm.process.ProcessDefinitionImpl;
-import org.camunda.bpm.engine.impl.util.EngineUtilLogger;
-import org.camunda.bpm.engine.impl.util.EnsureUtil;
-import org.camunda.bpm.engine.migration.MigrationInstruction;
-import org.camunda.bpm.engine.migration.MigrationPlan;
-import org.camunda.bpm.engine.variable.VariableMap;
-import org.camunda.bpm.engine.variable.value.TypedValue;
+import io.orqueio.bpm.engine.BadUserRequestException;
+import io.orqueio.bpm.engine.exception.NotFoundException;
+import io.orqueio.bpm.engine.exception.NullValueException;
+import io.orqueio.bpm.engine.impl.cfg.CommandChecker;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.core.variable.VariableUtil;
+import io.orqueio.bpm.engine.impl.interceptor.Command;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.impl.migration.MigrationInstructionGenerator;
+import io.orqueio.bpm.engine.impl.migration.MigrationLogger;
+import io.orqueio.bpm.engine.impl.migration.MigrationPlanBuilderImpl;
+import io.orqueio.bpm.engine.impl.migration.MigrationPlanImpl;
+import io.orqueio.bpm.engine.impl.migration.validation.instruction.MigrationInstructionValidationReportImpl;
+import io.orqueio.bpm.engine.impl.migration.validation.instruction.MigrationInstructionValidator;
+import io.orqueio.bpm.engine.impl.migration.validation.instruction.MigrationPlanValidationReportImpl;
+import io.orqueio.bpm.engine.impl.migration.validation.instruction.MigrationVariableValidationReportImpl;
+import io.orqueio.bpm.engine.impl.migration.validation.instruction.ValidatingMigrationInstruction;
+import io.orqueio.bpm.engine.impl.migration.validation.instruction.ValidatingMigrationInstructionImpl;
+import io.orqueio.bpm.engine.impl.migration.validation.instruction.ValidatingMigrationInstructions;
+import io.orqueio.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity;
+import io.orqueio.bpm.engine.impl.pvm.process.ActivityImpl;
+import io.orqueio.bpm.engine.impl.pvm.process.ProcessDefinitionImpl;
+import io.orqueio.bpm.engine.impl.util.EngineUtilLogger;
+import io.orqueio.bpm.engine.impl.util.EnsureUtil;
+import io.orqueio.bpm.engine.migration.MigrationInstruction;
+import io.orqueio.bpm.engine.migration.MigrationPlan;
+import io.orqueio.bpm.engine.variable.VariableMap;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
 
 /**
  * @author Thorben Lindhauer

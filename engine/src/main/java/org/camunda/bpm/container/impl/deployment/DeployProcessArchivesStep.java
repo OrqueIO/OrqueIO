@@ -14,18 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.deployment;
+package io.orqueio.bpm.container.impl.deployment;
 
-import static org.camunda.bpm.container.impl.deployment.Attachments.PROCESSES_XML_RESOURCES;
+import static io.orqueio.bpm.container.impl.deployment.Attachments.PROCESSES_XML_RESOURCES;
 
 import java.net.URL;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.camunda.bpm.application.impl.metadata.spi.ProcessArchiveXml;
-import org.camunda.bpm.application.impl.metadata.spi.ProcessesXml;
-import org.camunda.bpm.container.impl.spi.DeploymentOperation;
-import org.camunda.bpm.container.impl.spi.DeploymentOperationStep;
+import io.orqueio.bpm.application.impl.metadata.spi.ProcessArchiveXml;
+import io.orqueio.bpm.application.impl.metadata.spi.ProcessesXml;
+import io.orqueio.bpm.container.impl.spi.DeploymentOperation;
+import io.orqueio.bpm.container.impl.spi.DeploymentOperationStep;
 
 /**
  * <p>

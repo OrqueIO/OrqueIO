@@ -12,7 +12,7 @@
 
     <serviceTask id="task" camunda:expression="${true}">
       <extensionElements>
-        <camunda:executionListener class="org.camunda.bpm.engine.test.history.DecisionServiceDelegate" event="end" />
+        <camunda:executionListener class="io.orqueio.bpm.engine.test.history.DecisionServiceDelegate" event="end" />
       </extensionElements>
     </serviceTask>
 

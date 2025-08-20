@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.run.qa;
+package io.orqueio.bpm.run.qa;
 
 import static io.restassured.RestAssured.when;
 import static org.hamcrest.CoreMatchers.is;
 import java.io.IOException;
 
-import org.camunda.bpm.run.qa.util.SpringBootManagedContainer;
+import io.orqueio.bpm.run.qa.util.SpringBootManagedContainer;
 import org.junit.AfterClass;
 import org.junit.Test;
 import org.junit.BeforeClass;

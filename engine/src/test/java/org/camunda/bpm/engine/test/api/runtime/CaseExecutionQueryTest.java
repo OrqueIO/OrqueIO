@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.runtime;
+package io.orqueio.bpm.engine.test.api.runtime;
 
-import static org.camunda.bpm.engine.test.api.runtime.TestOrderingUtil.caseExecutionByDefinitionId;
-import static org.camunda.bpm.engine.test.api.runtime.TestOrderingUtil.caseExecutionByDefinitionKey;
-import static org.camunda.bpm.engine.test.api.runtime.TestOrderingUtil.caseExecutionById;
-import static org.camunda.bpm.engine.test.api.runtime.TestOrderingUtil.inverted;
+import static io.orqueio.bpm.engine.test.api.runtime.TestOrderingUtil.caseExecutionByDefinitionId;
+import static io.orqueio.bpm.engine.test.api.runtime.TestOrderingUtil.caseExecutionByDefinitionKey;
+import static io.orqueio.bpm.engine.test.api.runtime.TestOrderingUtil.caseExecutionById;
+import static io.orqueio.bpm.engine.test.api.runtime.TestOrderingUtil.inverted;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -31,16 +31,16 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.exception.NotValidException;
-import org.camunda.bpm.engine.impl.cmmn.entity.runtime.CaseExecutionEntity;
-import org.camunda.bpm.engine.runtime.CaseExecution;
-import org.camunda.bpm.engine.runtime.CaseExecutionQuery;
-import org.camunda.bpm.engine.runtime.CaseInstance;
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.engine.test.api.runtime.TestOrderingUtil.NullTolerantComparator;
-import org.camunda.bpm.engine.test.util.PluggableProcessEngineTest;
-import org.camunda.bpm.engine.variable.Variables;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.exception.NotValidException;
+import io.orqueio.bpm.engine.impl.cmmn.entity.runtime.CaseExecutionEntity;
+import io.orqueio.bpm.engine.runtime.CaseExecution;
+import io.orqueio.bpm.engine.runtime.CaseExecutionQuery;
+import io.orqueio.bpm.engine.runtime.CaseInstance;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.test.api.runtime.TestOrderingUtil.NullTolerantComparator;
+import io.orqueio.bpm.engine.test.util.PluggableProcessEngineTest;
+import io.orqueio.bpm.engine.variable.Variables;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -80,7 +80,7 @@ public class CaseExecutionQueryTest extends PluggableProcessEngineTest {
 
   @After
   public void tearDown() throws Exception {
-    for (org.camunda.bpm.engine.repository.Deployment deployment : repositoryService.createDeploymentQuery().list()) {
+    for (io.orqueio.bpm.engine.repository.Deployment deployment : repositoryService.createDeploymentQuery().list()) {
       repositoryService.deleteDeployment(deployment.getId(), true);
     }
 

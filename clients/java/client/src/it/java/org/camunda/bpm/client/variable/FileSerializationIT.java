@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.variable;
+package io.orqueio.bpm.client.variable;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.camunda.bpm.client.util.ProcessModels.EXTERNAL_TASK_TOPIC_BAR;
-import static org.camunda.bpm.client.util.ProcessModels.EXTERNAL_TASK_TOPIC_FOO;
-import static org.camunda.bpm.client.util.ProcessModels.PROCESS_KEY_2;
-import static org.camunda.bpm.client.util.ProcessModels.TWO_EXTERNAL_TASK_PROCESS;
-import static org.camunda.bpm.client.util.ProcessModels.USER_TASK_ID;
-import static org.camunda.bpm.client.util.ProcessModels.createProcessWithExclusiveGateway;
-import static org.camunda.bpm.engine.variable.type.ValueType.FILE;
+import static io.orqueio.bpm.client.util.ProcessModels.EXTERNAL_TASK_TOPIC_BAR;
+import static io.orqueio.bpm.client.util.ProcessModels.EXTERNAL_TASK_TOPIC_FOO;
+import static io.orqueio.bpm.client.util.ProcessModels.PROCESS_KEY_2;
+import static io.orqueio.bpm.client.util.ProcessModels.TWO_EXTERNAL_TASK_PROCESS;
+import static io.orqueio.bpm.client.util.ProcessModels.USER_TASK_ID;
+import static io.orqueio.bpm.client.util.ProcessModels.createProcessWithExclusiveGateway;
+import static io.orqueio.bpm.engine.variable.type.ValueType.FILE;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -33,27 +33,27 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.client.ExternalTaskClient;
-import org.camunda.bpm.client.dto.ProcessDefinitionDto;
-import org.camunda.bpm.client.dto.ProcessInstanceDto;
-import org.camunda.bpm.client.dto.TaskDto;
-import org.camunda.bpm.client.dto.VariableInstanceDto;
-import org.camunda.bpm.client.exception.ValueMapperException;
-import org.camunda.bpm.client.rule.ClientRule;
-import org.camunda.bpm.client.rule.EngineRule;
-import org.camunda.bpm.client.task.ExternalTask;
-import org.camunda.bpm.client.task.ExternalTaskService;
-import org.camunda.bpm.client.util.RecordingExternalTaskHandler;
-import org.camunda.bpm.client.util.RecordingInvocationHandler;
-import org.camunda.bpm.client.util.RecordingInvocationHandler.RecordedInvocation;
-import org.camunda.bpm.client.variable.impl.value.DeferredFileValueImpl;
-import org.camunda.bpm.client.variable.value.DeferredFileValue;
-import org.camunda.bpm.engine.variable.Variables;
-import org.camunda.bpm.engine.variable.value.FileValue;
-import org.camunda.bpm.engine.variable.value.TypedValue;
-import org.camunda.bpm.model.bpmn.Bpmn;
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
-import org.camunda.commons.utils.IoUtil;
+import io.orqueio.bpm.client.ExternalTaskClient;
+import io.orqueio.bpm.client.dto.ProcessDefinitionDto;
+import io.orqueio.bpm.client.dto.ProcessInstanceDto;
+import io.orqueio.bpm.client.dto.TaskDto;
+import io.orqueio.bpm.client.dto.VariableInstanceDto;
+import io.orqueio.bpm.client.exception.ValueMapperException;
+import io.orqueio.bpm.client.rule.ClientRule;
+import io.orqueio.bpm.client.rule.EngineRule;
+import io.orqueio.bpm.client.task.ExternalTask;
+import io.orqueio.bpm.client.task.ExternalTaskService;
+import io.orqueio.bpm.client.util.RecordingExternalTaskHandler;
+import io.orqueio.bpm.client.util.RecordingInvocationHandler;
+import io.orqueio.bpm.client.util.RecordingInvocationHandler.RecordedInvocation;
+import io.orqueio.bpm.client.variable.impl.value.DeferredFileValueImpl;
+import io.orqueio.bpm.client.variable.value.DeferredFileValue;
+import io.orqueio.bpm.engine.variable.Variables;
+import io.orqueio.bpm.engine.variable.value.FileValue;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
+import io.orqueio.bpm.model.bpmn.Bpmn;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.commons.utils.IoUtil;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;

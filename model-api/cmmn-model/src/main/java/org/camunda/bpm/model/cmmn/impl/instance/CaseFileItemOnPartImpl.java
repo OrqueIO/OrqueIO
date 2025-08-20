@@ -14,24 +14,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.cmmn.impl.instance;
+package io.orqueio.bpm.model.cmmn.impl.instance;
 
-import static org.camunda.bpm.model.cmmn.impl.CmmnModelConstants.CMMN11_NS;
-import static org.camunda.bpm.model.cmmn.impl.CmmnModelConstants.CMMN_ATTRIBUTE_SOURCE_REF;
-import static org.camunda.bpm.model.cmmn.impl.CmmnModelConstants.CMMN_ELEMENT_CASE_FILE_ITEM_ON_PART;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CMMN11_NS;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CMMN_ATTRIBUTE_SOURCE_REF;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CMMN_ELEMENT_CASE_FILE_ITEM_ON_PART;
 
-import org.camunda.bpm.model.cmmn.CaseFileItemTransition;
-import org.camunda.bpm.model.cmmn.instance.CaseFileItem;
-import org.camunda.bpm.model.cmmn.instance.CaseFileItemOnPart;
-import org.camunda.bpm.model.cmmn.instance.CaseFileItemTransitionStandardEvent;
-import org.camunda.bpm.model.cmmn.instance.OnPart;
-import org.camunda.bpm.model.xml.ModelBuilder;
-import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
-import org.camunda.bpm.model.xml.type.child.ChildElement;
-import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
-import org.camunda.bpm.model.xml.type.reference.AttributeReference;
+import io.orqueio.bpm.model.cmmn.CaseFileItemTransition;
+import io.orqueio.bpm.model.cmmn.instance.CaseFileItem;
+import io.orqueio.bpm.model.cmmn.instance.CaseFileItemOnPart;
+import io.orqueio.bpm.model.cmmn.instance.CaseFileItemTransitionStandardEvent;
+import io.orqueio.bpm.model.cmmn.instance.OnPart;
+import io.orqueio.bpm.model.xml.ModelBuilder;
+import io.orqueio.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
+import io.orqueio.bpm.model.xml.type.ModelElementTypeBuilder;
+import io.orqueio.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
+import io.orqueio.bpm.model.xml.type.child.ChildElement;
+import io.orqueio.bpm.model.xml.type.child.SequenceBuilder;
+import io.orqueio.bpm.model.xml.type.reference.AttributeReference;
 
 /**
  * @author Roman Smirnov

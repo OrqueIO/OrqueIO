@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.admin.plugin.spi.impl;
+package io.orqueio.bpm.admin.plugin.spi.impl;
 
-import org.camunda.bpm.admin.plugin.spi.AdminPlugin;
-import org.camunda.bpm.webapp.plugin.spi.impl.AbstractAppPlugin;
+import io.orqueio.bpm.admin.plugin.spi.AdminPlugin;
+import io.orqueio.bpm.webapp.plugin.spi.impl.AbstractAppPlugin;
 
 /**
  * Base class for implementing {@link AdminPlugin AdminPlugins}.

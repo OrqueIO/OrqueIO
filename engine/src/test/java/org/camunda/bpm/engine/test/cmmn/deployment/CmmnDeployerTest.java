@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.cmmn.deployment;
+package io.orqueio.bpm.engine.test.cmmn.deployment;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -25,19 +25,19 @@ import static org.junit.Assert.fail;
 import java.io.InputStream;
 import java.util.List;
 
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.RepositoryService;
-import org.camunda.bpm.engine.impl.util.IoUtil;
-import org.camunda.bpm.engine.repository.CaseDefinition;
-import org.camunda.bpm.engine.repository.CaseDefinitionQuery;
-import org.camunda.bpm.engine.repository.DeploymentQuery;
-import org.camunda.bpm.engine.repository.DeploymentWithDefinitions;
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.engine.test.util.PluggableProcessEngineTest;
-import org.camunda.bpm.model.cmmn.Cmmn;
-import org.camunda.bpm.model.cmmn.CmmnModelInstance;
-import org.camunda.bpm.model.cmmn.instance.Case;
-import org.camunda.bpm.model.cmmn.instance.CasePlanModel;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.RepositoryService;
+import io.orqueio.bpm.engine.impl.util.IoUtil;
+import io.orqueio.bpm.engine.repository.CaseDefinition;
+import io.orqueio.bpm.engine.repository.CaseDefinitionQuery;
+import io.orqueio.bpm.engine.repository.DeploymentQuery;
+import io.orqueio.bpm.engine.repository.DeploymentWithDefinitions;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.test.util.PluggableProcessEngineTest;
+import io.orqueio.bpm.model.cmmn.Cmmn;
+import io.orqueio.bpm.model.cmmn.CmmnModelInstance;
+import io.orqueio.bpm.model.cmmn.instance.Case;
+import io.orqueio.bpm.model.cmmn.instance.CasePlanModel;
 import org.junit.Test;
 
 /**
@@ -172,7 +172,7 @@ public class CmmnDeployerTest extends PluggableProcessEngineTest {
 
   protected static CmmnModelInstance createCmmnModelInstance() {
     final CmmnModelInstance modelInstance = Cmmn.createEmptyModel();
-    org.camunda.bpm.model.cmmn.instance.Definitions definitions = modelInstance.newInstance(org.camunda.bpm.model.cmmn.instance.Definitions.class);
+    io.orqueio.bpm.model.cmmn.instance.Definitions definitions = modelInstance.newInstance(io.orqueio.bpm.model.cmmn.instance.Definitions.class);
     definitions.setTargetNamespace("http://camunda.org/examples");
     modelInstance.setDefinitions(definitions);
 
@@ -214,7 +214,7 @@ public class CmmnDeployerTest extends PluggableProcessEngineTest {
 
     // given empty case model
     final CmmnModelInstance modelInstance = Cmmn.createEmptyModel();
-    org.camunda.bpm.model.cmmn.instance.Definitions definitions = modelInstance.newInstance(org.camunda.bpm.model.cmmn.instance.Definitions.class);
+    io.orqueio.bpm.model.cmmn.instance.Definitions definitions = modelInstance.newInstance(io.orqueio.bpm.model.cmmn.instance.Definitions.class);
     definitions.setTargetNamespace("http://camunda.org/examples");
     modelInstance.setDefinitions(definitions);
 

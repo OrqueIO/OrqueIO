@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest;
+package io.orqueio.bpm.engine.rest;
 
 
 import static io.restassured.RestAssured.given;
@@ -36,16 +36,16 @@ import java.util.Collections;
 
 import javax.ws.rs.core.Response.Status;
 
-import org.camunda.bpm.engine.DecisionService;
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.RepositoryService;
-import org.camunda.bpm.engine.impl.util.IoUtil;
-import org.camunda.bpm.engine.impl.util.ReflectUtil;
-import org.camunda.bpm.engine.repository.DecisionRequirementsDefinition;
-import org.camunda.bpm.engine.repository.DecisionRequirementsDefinitionQuery;
-import org.camunda.bpm.engine.rest.exception.RestException;
-import org.camunda.bpm.engine.rest.helper.MockProvider;
-import org.camunda.bpm.engine.rest.util.container.TestContainerRule;
+import io.orqueio.bpm.engine.DecisionService;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.RepositoryService;
+import io.orqueio.bpm.engine.impl.util.IoUtil;
+import io.orqueio.bpm.engine.impl.util.ReflectUtil;
+import io.orqueio.bpm.engine.repository.DecisionRequirementsDefinition;
+import io.orqueio.bpm.engine.repository.DecisionRequirementsDefinitionQuery;
+import io.orqueio.bpm.engine.rest.exception.RestException;
+import io.orqueio.bpm.engine.rest.helper.MockProvider;
+import io.orqueio.bpm.engine.rest.util.container.TestContainerRule;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.ClassRule;

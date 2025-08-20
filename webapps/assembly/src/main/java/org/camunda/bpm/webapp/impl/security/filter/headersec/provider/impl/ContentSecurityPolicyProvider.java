@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.webapp.impl.security.filter.headersec.provider.impl;
+package io.orqueio.bpm.webapp.impl.security.filter.headersec.provider.impl;
 
-import org.camunda.bpm.webapp.impl.security.filter.headersec.provider.HeaderSecurityProvider;
-import org.camunda.bpm.webapp.impl.util.ServletFilterUtil;
+import io.orqueio.bpm.webapp.impl.security.filter.headersec.provider.HeaderSecurityProvider;
+import io.orqueio.bpm.webapp.impl.util.ServletFilterUtil;
 
 import javax.servlet.ServletContext;
 import java.util.Base64;
@@ -42,7 +42,7 @@ public class ContentSecurityPolicyProvider extends HeaderSecurityProvider {
 
   public static final String DISABLED_PARAM = "contentSecurityPolicyDisabled";
   public static final String VALUE_PARAM = "contentSecurityPolicyValue";
-  public static final String ATTR_CSP_FILTER_NONCE = "org.camunda.bpm.csp.nonce";
+  public static final String ATTR_CSP_FILTER_NONCE = "io.orqueio.bpm.csp.nonce";
   public static final Base64.Encoder ENCODER = Base64.getUrlEncoder().withoutPadding();
 
   @Override

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.deployment.util;
+package io.orqueio.bpm.container.impl.deployment.util;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -23,17 +23,17 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.camunda.bpm.application.AbstractProcessApplication;
-import org.camunda.bpm.application.ProcessApplicationDeploymentInfo;
-import org.camunda.bpm.application.ProcessApplicationInfo;
-import org.camunda.bpm.container.impl.ContainerIntegrationLogger;
-import org.camunda.bpm.container.impl.deployment.Attachments;
-import org.camunda.bpm.container.impl.jmx.services.JmxManagedProcessApplication;
-import org.camunda.bpm.container.impl.spi.PlatformServiceContainer;
-import org.camunda.bpm.container.impl.spi.DeploymentOperation;
-import org.camunda.bpm.container.impl.spi.ServiceTypes;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
+import io.orqueio.bpm.application.AbstractProcessApplication;
+import io.orqueio.bpm.application.ProcessApplicationDeploymentInfo;
+import io.orqueio.bpm.application.ProcessApplicationInfo;
+import io.orqueio.bpm.container.impl.ContainerIntegrationLogger;
+import io.orqueio.bpm.container.impl.deployment.Attachments;
+import io.orqueio.bpm.container.impl.jmx.services.JmxManagedProcessApplication;
+import io.orqueio.bpm.container.impl.spi.PlatformServiceContainer;
+import io.orqueio.bpm.container.impl.spi.DeploymentOperation;
+import io.orqueio.bpm.container.impl.spi.ServiceTypes;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
 
 /**
  * @author Daniel Meyer

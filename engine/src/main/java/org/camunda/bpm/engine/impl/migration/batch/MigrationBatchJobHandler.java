@@ -14,26 +14,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.migration.batch;
+package io.orqueio.bpm.engine.impl.migration.batch;
 
-import org.camunda.bpm.engine.batch.Batch;
-import org.camunda.bpm.engine.impl.batch.AbstractBatchJobHandler;
-import org.camunda.bpm.engine.impl.batch.BatchJobContext;
-import org.camunda.bpm.engine.impl.batch.BatchJobDeclaration;
-import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.engine.impl.core.variable.VariableUtil;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.jobexecutor.JobDeclaration;
-import org.camunda.bpm.engine.impl.json.MigrationBatchConfigurationJsonConverter;
-import org.camunda.bpm.engine.impl.migration.MigrateProcessInstanceCmd;
-import org.camunda.bpm.engine.impl.migration.MigrationPlanExecutionBuilderImpl;
-import org.camunda.bpm.engine.impl.migration.MigrationPlanImpl;
-import org.camunda.bpm.engine.impl.persistence.entity.ExecutionEntity;
-import org.camunda.bpm.engine.impl.persistence.entity.JobEntity;
-import org.camunda.bpm.engine.impl.persistence.entity.MessageEntity;
-import org.camunda.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity;
-import org.camunda.bpm.engine.migration.MigrationPlanExecutionBuilder;
-import org.camunda.bpm.engine.variable.impl.VariableMapImpl;
+import io.orqueio.bpm.engine.batch.Batch;
+import io.orqueio.bpm.engine.impl.batch.AbstractBatchJobHandler;
+import io.orqueio.bpm.engine.impl.batch.BatchJobContext;
+import io.orqueio.bpm.engine.impl.batch.BatchJobDeclaration;
+import io.orqueio.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.impl.core.variable.VariableUtil;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.impl.jobexecutor.JobDeclaration;
+import io.orqueio.bpm.engine.impl.json.MigrationBatchConfigurationJsonConverter;
+import io.orqueio.bpm.engine.impl.migration.MigrateProcessInstanceCmd;
+import io.orqueio.bpm.engine.impl.migration.MigrationPlanExecutionBuilderImpl;
+import io.orqueio.bpm.engine.impl.migration.MigrationPlanImpl;
+import io.orqueio.bpm.engine.impl.persistence.entity.ExecutionEntity;
+import io.orqueio.bpm.engine.impl.persistence.entity.JobEntity;
+import io.orqueio.bpm.engine.impl.persistence.entity.MessageEntity;
+import io.orqueio.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity;
+import io.orqueio.bpm.engine.migration.MigrationPlanExecutionBuilder;
+import io.orqueio.bpm.engine.variable.impl.VariableMapImpl;
 
 import java.util.HashMap;
 import java.util.List;

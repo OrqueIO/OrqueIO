@@ -14,27 +14,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.cmd;
+package io.orqueio.bpm.engine.impl.cmd;
 
-import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureNotContainsNull;
-import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureNotEmpty;
-import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
+import static io.orqueio.bpm.engine.impl.util.EnsureUtil.ensureNotContainsNull;
+import static io.orqueio.bpm.engine.impl.util.EnsureUtil.ensureNotEmpty;
+import static io.orqueio.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.camunda.bpm.engine.BadUserRequestException;
-import org.camunda.bpm.engine.authorization.BatchPermissions;
-import org.camunda.bpm.engine.batch.Batch;
-import org.camunda.bpm.engine.impl.ModificationBatchConfiguration;
-import org.camunda.bpm.engine.impl.ModificationBuilderImpl;
-import org.camunda.bpm.engine.impl.batch.builder.BatchBuilder;
-import org.camunda.bpm.engine.impl.batch.BatchConfiguration;
-import org.camunda.bpm.engine.impl.batch.DeploymentMapping;
-import org.camunda.bpm.engine.impl.batch.DeploymentMappings;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity;
+import io.orqueio.bpm.engine.BadUserRequestException;
+import io.orqueio.bpm.engine.authorization.BatchPermissions;
+import io.orqueio.bpm.engine.batch.Batch;
+import io.orqueio.bpm.engine.impl.ModificationBatchConfiguration;
+import io.orqueio.bpm.engine.impl.ModificationBuilderImpl;
+import io.orqueio.bpm.engine.impl.batch.builder.BatchBuilder;
+import io.orqueio.bpm.engine.impl.batch.BatchConfiguration;
+import io.orqueio.bpm.engine.impl.batch.DeploymentMapping;
+import io.orqueio.bpm.engine.impl.batch.DeploymentMappings;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity;
 
 public class ProcessInstanceModificationBatchCmd extends AbstractModificationCmd<Batch> {
 

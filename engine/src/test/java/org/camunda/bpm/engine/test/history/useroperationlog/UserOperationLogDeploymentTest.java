@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.history.useroperationlog;
+package io.orqueio.bpm.engine.test.history.useroperationlog;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -24,14 +24,14 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
-import org.camunda.bpm.application.impl.EmbeddedProcessApplication;
-import org.camunda.bpm.engine.EntityTypes;
-import org.camunda.bpm.engine.history.UserOperationLogEntry;
-import org.camunda.bpm.engine.history.UserOperationLogQuery;
-import org.camunda.bpm.engine.repository.Deployment;
-import org.camunda.bpm.engine.repository.ProcessDefinition;
-import org.camunda.bpm.model.bpmn.Bpmn;
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.bpm.application.impl.EmbeddedProcessApplication;
+import io.orqueio.bpm.engine.EntityTypes;
+import io.orqueio.bpm.engine.history.UserOperationLogEntry;
+import io.orqueio.bpm.engine.history.UserOperationLogQuery;
+import io.orqueio.bpm.engine.repository.Deployment;
+import io.orqueio.bpm.engine.repository.ProcessDefinition;
+import io.orqueio.bpm.model.bpmn.Bpmn;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
 import org.junit.After;
 import org.junit.Test;
 

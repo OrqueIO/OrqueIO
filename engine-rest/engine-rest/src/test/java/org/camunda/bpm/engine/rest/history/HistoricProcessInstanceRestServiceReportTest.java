@@ -14,20 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.history;
+package io.orqueio.bpm.engine.rest.history;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.path.json.JsonPath.from;
-import static org.camunda.bpm.engine.query.PeriodUnit.MONTH;
-import static org.camunda.bpm.engine.query.PeriodUnit.QUARTER;
-import static org.camunda.bpm.engine.rest.helper.MockProvider.EXAMPLE_HISTORIC_PROCESS_INSTANCE_STARTED_AFTER;
-import static org.camunda.bpm.engine.rest.helper.MockProvider.EXAMPLE_HISTORIC_PROCESS_INSTANCE_STARTED_BEFORE;
-import static org.camunda.bpm.engine.rest.helper.MockProvider.EXAMPLE_HISTORIC_PROC_INST_DURATION_REPORT_AVG;
-import static org.camunda.bpm.engine.rest.helper.MockProvider.EXAMPLE_HISTORIC_PROC_INST_DURATION_REPORT_MAX;
-import static org.camunda.bpm.engine.rest.helper.MockProvider.EXAMPLE_HISTORIC_PROC_INST_DURATION_REPORT_MIN;
-import static org.camunda.bpm.engine.rest.helper.MockProvider.EXAMPLE_HISTORIC_PROC_INST_DURATION_REPORT_PERIOD;
-import static org.camunda.bpm.engine.rest.helper.MockProvider.createMockHistoricProcessInstanceDurationReportByMonth;
-import static org.camunda.bpm.engine.rest.helper.MockProvider.createMockHistoricProcessInstanceDurationReportByQuarter;
+import static io.orqueio.bpm.engine.query.PeriodUnit.MONTH;
+import static io.orqueio.bpm.engine.query.PeriodUnit.QUARTER;
+import static io.orqueio.bpm.engine.rest.helper.MockProvider.EXAMPLE_HISTORIC_PROCESS_INSTANCE_STARTED_AFTER;
+import static io.orqueio.bpm.engine.rest.helper.MockProvider.EXAMPLE_HISTORIC_PROCESS_INSTANCE_STARTED_BEFORE;
+import static io.orqueio.bpm.engine.rest.helper.MockProvider.EXAMPLE_HISTORIC_PROC_INST_DURATION_REPORT_AVG;
+import static io.orqueio.bpm.engine.rest.helper.MockProvider.EXAMPLE_HISTORIC_PROC_INST_DURATION_REPORT_MAX;
+import static io.orqueio.bpm.engine.rest.helper.MockProvider.EXAMPLE_HISTORIC_PROC_INST_DURATION_REPORT_MIN;
+import static io.orqueio.bpm.engine.rest.helper.MockProvider.EXAMPLE_HISTORIC_PROC_INST_DURATION_REPORT_PERIOD;
+import static io.orqueio.bpm.engine.rest.helper.MockProvider.createMockHistoricProcessInstanceDurationReportByMonth;
+import static io.orqueio.bpm.engine.rest.helper.MockProvider.createMockHistoricProcessInstanceDurationReportByQuarter;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.containsString;
 import static org.junit.Assert.assertTrue;
@@ -43,15 +43,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.engine.AuthorizationException;
-import org.camunda.bpm.engine.exception.NotValidException;
-import org.camunda.bpm.engine.history.DurationReportResult;
-import org.camunda.bpm.engine.history.HistoricProcessInstanceReport;
-import org.camunda.bpm.engine.impl.calendar.DateTimeUtil;
-import org.camunda.bpm.engine.rest.AbstractRestServiceTest;
-import org.camunda.bpm.engine.rest.dto.converter.ReportResultToCsvConverter;
-import org.camunda.bpm.engine.rest.exception.InvalidRequestException;
-import org.camunda.bpm.engine.rest.util.container.TestContainerRule;
+import io.orqueio.bpm.engine.AuthorizationException;
+import io.orqueio.bpm.engine.exception.NotValidException;
+import io.orqueio.bpm.engine.history.DurationReportResult;
+import io.orqueio.bpm.engine.history.HistoricProcessInstanceReport;
+import io.orqueio.bpm.engine.impl.calendar.DateTimeUtil;
+import io.orqueio.bpm.engine.rest.AbstractRestServiceTest;
+import io.orqueio.bpm.engine.rest.dto.converter.ReportResultToCsvConverter;
+import io.orqueio.bpm.engine.rest.exception.InvalidRequestException;
+import io.orqueio.bpm.engine.rest.util.container.TestContainerRule;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.ClassRule;

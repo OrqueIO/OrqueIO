@@ -1,4 +1,4 @@
-<module xmlns="urn:jboss:module:1.0" name="org.camunda.spin.camunda-spin-dataformat-xml-dom">
+<module xmlns="urn:jboss:module:1.0" name="io.orqueio.spin.camunda-spin-dataformat-xml-dom">
   <resources>
     <resource-root path="camunda-spin-dataformat-xml-dom-@project.version@.jar" />
   </resources>
@@ -6,10 +6,10 @@
   <dependencies>
     <module name="javax.api"/>
     <module name="javax.xml.bind.api"/>
-    <module name="org.camunda.spin.camunda-spin-core" />
-    <module name="org.camunda.commons.camunda-commons-logging" />
-    <module name="org.camunda.commons.camunda-commons-utils" />
-    <module name="org.camunda.commons.camunda-commons-typed-values" />
+    <module name="io.orqueio.spin.camunda-spin-core" />
+    <module name="io.orqueio.commons.camunda-commons-logging" />
+    <module name="io.orqueio.commons.camunda-commons-utils" />
+    <module name="io.orqueio.commons.camunda-commons-typed-values" />
   </dependencies>
 
 </module>

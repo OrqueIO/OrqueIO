@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.functional.ejb.request.beans;
+package io.orqueio.bpm.integrationtest.functional.ejb.request.beans;
 
 import javax.ejb.EJB;
 import javax.inject.Named;
 
-import org.camunda.bpm.engine.delegate.DelegateExecution;
-import org.camunda.bpm.engine.delegate.JavaDelegate;
+import io.orqueio.bpm.engine.delegate.DelegateExecution;
+import io.orqueio.bpm.engine.delegate.JavaDelegate;
 
 /**
  * 
@@ -32,7 +32,7 @@ public class InvocationCounterDelegateBeanLocal implements JavaDelegate {
   
   @EJB(lookup="java:global/" +
   	"service/" +
-  	"InvocationCounterServiceBean!org.camunda.bpm.integrationtest.functional.ejb.request.beans.InvocationCounterServiceLocal")
+  	"InvocationCounterServiceBean!io.orqueio.bpm.integrationtest.functional.ejb.request.beans.InvocationCounterServiceLocal")
   private InvocationCounterServiceLocal invocationCounterService;
 
   public void execute(DelegateExecution execution) throws Exception {    

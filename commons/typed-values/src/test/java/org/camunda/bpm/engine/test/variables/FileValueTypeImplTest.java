@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.variables;
+package io.orqueio.bpm.engine.test.variables;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.instanceOf;
@@ -36,11 +36,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-import org.camunda.bpm.engine.variable.Variables;
-import org.camunda.bpm.engine.variable.impl.type.FileValueTypeImpl;
-import org.camunda.bpm.engine.variable.value.FileValue;
-import org.camunda.bpm.engine.variable.value.TypedValue;
-import org.camunda.commons.utils.IoUtil;
+import io.orqueio.bpm.engine.variable.Variables;
+import io.orqueio.bpm.engine.variable.impl.type.FileValueTypeImpl;
+import io.orqueio.bpm.engine.variable.value.FileValue;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
+import io.orqueio.commons.utils.IoUtil;
 import org.junit.Before;
 import org.junit.Test;
 

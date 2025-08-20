@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.persistence.deploy.cache;
+package io.orqueio.bpm.engine.impl.persistence.deploy.cache;
 
-import org.camunda.bpm.engine.impl.cmmn.entity.repository.CaseDefinitionEntity;
-import org.camunda.bpm.engine.impl.cmmn.entity.repository.CaseDefinitionQueryImpl;
-import org.camunda.bpm.engine.repository.CaseDefinition;
-import org.camunda.bpm.model.cmmn.Cmmn;
-import org.camunda.bpm.model.cmmn.CmmnModelInstance;
+import io.orqueio.bpm.engine.impl.cmmn.entity.repository.CaseDefinitionEntity;
+import io.orqueio.bpm.engine.impl.cmmn.entity.repository.CaseDefinitionQueryImpl;
+import io.orqueio.bpm.engine.repository.CaseDefinition;
+import io.orqueio.bpm.model.cmmn.Cmmn;
+import io.orqueio.bpm.model.cmmn.CmmnModelInstance;
 
 import java.io.InputStream;
 import java.util.List;

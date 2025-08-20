@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.migration.instance;
+package io.orqueio.bpm.engine.impl.migration.instance;
 
-import org.camunda.bpm.engine.impl.jobexecutor.TimerDeclarationImpl;
-import org.camunda.bpm.engine.impl.jobexecutor.TimerEventJobHandler.TimerJobConfiguration;
-import org.camunda.bpm.engine.impl.jobexecutor.TimerStartEventSubprocessJobHandler;
-import org.camunda.bpm.engine.impl.persistence.entity.JobDefinitionEntity;
-import org.camunda.bpm.engine.impl.persistence.entity.JobEntity;
-import org.camunda.bpm.engine.impl.persistence.entity.TimerEntity;
-import org.camunda.bpm.engine.impl.pvm.process.ScopeImpl;
+import io.orqueio.bpm.engine.impl.jobexecutor.TimerDeclarationImpl;
+import io.orqueio.bpm.engine.impl.jobexecutor.TimerEventJobHandler.TimerJobConfiguration;
+import io.orqueio.bpm.engine.impl.jobexecutor.TimerStartEventSubprocessJobHandler;
+import io.orqueio.bpm.engine.impl.persistence.entity.JobDefinitionEntity;
+import io.orqueio.bpm.engine.impl.persistence.entity.JobEntity;
+import io.orqueio.bpm.engine.impl.persistence.entity.TimerEntity;
+import io.orqueio.bpm.engine.impl.pvm.process.ScopeImpl;
 
 /**
  * @author Thorben Lindhauer

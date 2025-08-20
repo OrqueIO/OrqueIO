@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.application.impl;
+package io.orqueio.bpm.application.impl;
 
 import java.util.HashMap;
 import java.util.List;
@@ -23,10 +23,10 @@ import java.util.Map;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 
-import org.camunda.bpm.application.ProcessApplicationInterface;
-import org.camunda.bpm.engine.impl.scripting.ExecutableScript;
-import org.camunda.bpm.engine.impl.scripting.engine.DefaultScriptEngineResolver;
-import org.camunda.bpm.engine.impl.scripting.engine.ScriptEngineResolver;
+import io.orqueio.bpm.application.ProcessApplicationInterface;
+import io.orqueio.bpm.engine.impl.scripting.ExecutableScript;
+import io.orqueio.bpm.engine.impl.scripting.engine.DefaultScriptEngineResolver;
+import io.orqueio.bpm.engine.impl.scripting.engine.ScriptEngineResolver;
 
 /**
  * @author Roman Smirnov

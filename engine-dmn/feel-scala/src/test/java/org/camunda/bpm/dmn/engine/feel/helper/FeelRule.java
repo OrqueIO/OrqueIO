@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.engine.feel.helper;
+package io.orqueio.bpm.dmn.engine.feel.helper;
 
-import org.camunda.bpm.dmn.engine.feel.function.helper.FunctionProvider;
-import org.camunda.bpm.dmn.feel.impl.scala.ScalaFeelEngine;
-import org.camunda.bpm.dmn.feel.impl.scala.function.FeelCustomFunctionProvider;
-import org.camunda.bpm.engine.variable.Variables;
-import org.camunda.bpm.engine.variable.context.VariableContext;
+import io.orqueio.bpm.dmn.engine.feel.function.helper.FunctionProvider;
+import io.orqueio.bpm.dmn.feel.impl.scala.ScalaFeelEngine;
+import io.orqueio.bpm.dmn.feel.impl.scala.function.FeelCustomFunctionProvider;
+import io.orqueio.bpm.engine.variable.Variables;
+import io.orqueio.bpm.engine.variable.context.VariableContext;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 

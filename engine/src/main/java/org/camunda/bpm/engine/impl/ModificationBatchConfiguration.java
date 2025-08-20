@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl;
+package io.orqueio.bpm.engine.impl;
 
 import java.util.List;
 
-import org.camunda.bpm.engine.impl.batch.BatchConfiguration;
-import org.camunda.bpm.engine.impl.batch.DeploymentMappings;
-import org.camunda.bpm.engine.impl.cmd.AbstractProcessInstanceModificationCommand;
+import io.orqueio.bpm.engine.impl.batch.BatchConfiguration;
+import io.orqueio.bpm.engine.impl.batch.DeploymentMappings;
+import io.orqueio.bpm.engine.impl.cmd.AbstractProcessInstanceModificationCommand;
 
 public class ModificationBatchConfiguration extends BatchConfiguration {
 

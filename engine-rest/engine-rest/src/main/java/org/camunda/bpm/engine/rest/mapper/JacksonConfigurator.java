@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.mapper;
+package io.orqueio.bpm.engine.rest.mapper;
 
 import java.text.SimpleDateFormat;
 
@@ -23,7 +23,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.ext.ContextResolver;
 import javax.ws.rs.ext.Provider;
 
-import org.camunda.bpm.engine.rest.hal.Hal;
+import io.orqueio.bpm.engine.rest.hal.Hal;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;

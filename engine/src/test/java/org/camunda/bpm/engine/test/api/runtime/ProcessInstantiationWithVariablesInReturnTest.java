@@ -14,36 +14,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.runtime;
+package io.orqueio.bpm.engine.test.api.runtime;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertNotNull;
 import static junit.framework.TestCase.assertNull;
 import static junit.framework.TestCase.assertTrue;
-import static org.camunda.bpm.engine.test.util.TypedValueAssert.assertObjectValueSerializedJava;
-import static org.camunda.bpm.engine.variable.Variables.serializedObjectValue;
+import static io.orqueio.bpm.engine.test.util.TypedValueAssert.assertObjectValueSerializedJava;
+import static io.orqueio.bpm.engine.variable.Variables.serializedObjectValue;
 
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectOutputStream;
 import java.util.Arrays;
 import java.util.List;
 
-import org.camunda.bpm.engine.history.HistoricVariableInstance;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.digest._apacheCommonsCodec.Base64;
-import org.camunda.bpm.engine.impl.util.StringUtil;
-import org.camunda.bpm.engine.runtime.ProcessInstanceWithVariables;
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.engine.test.ProcessEngineRule;
-import org.camunda.bpm.engine.test.RequiredHistoryLevel;
-import org.camunda.bpm.engine.test.api.variables.JavaSerializable;
-import org.camunda.bpm.engine.test.util.ProcessEngineBootstrapRule;
-import org.camunda.bpm.engine.test.util.ProcessEngineTestRule;
-import org.camunda.bpm.engine.test.util.ProvidedProcessEngineRule;
-import org.camunda.bpm.engine.variable.VariableMap;
-import org.camunda.bpm.engine.variable.Variables;
-import org.camunda.bpm.engine.variable.value.ObjectValue;
+import io.orqueio.bpm.engine.history.HistoricVariableInstance;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.digest._apacheCommonsCodec.Base64;
+import io.orqueio.bpm.engine.impl.util.StringUtil;
+import io.orqueio.bpm.engine.runtime.ProcessInstanceWithVariables;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.test.ProcessEngineRule;
+import io.orqueio.bpm.engine.test.RequiredHistoryLevel;
+import io.orqueio.bpm.engine.test.api.variables.JavaSerializable;
+import io.orqueio.bpm.engine.test.util.ProcessEngineBootstrapRule;
+import io.orqueio.bpm.engine.test.util.ProcessEngineTestRule;
+import io.orqueio.bpm.engine.test.util.ProvidedProcessEngineRule;
+import io.orqueio.bpm.engine.variable.VariableMap;
+import io.orqueio.bpm.engine.variable.Variables;
+import io.orqueio.bpm.engine.variable.value.ObjectValue;
 import org.junit.Assert;
 import org.junit.ClassRule;
 import org.junit.Rule;

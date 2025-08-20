@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.cockpit.impl.plugin.resources;
+package io.orqueio.bpm.cockpit.impl.plugin.resources;
 
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -23,8 +23,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.ext.Providers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.camunda.bpm.cockpit.plugin.resource.AbstractCockpitPluginRootResource;
-import org.camunda.bpm.engine.rest.util.ProvidersUtil;
+import io.orqueio.bpm.cockpit.plugin.resource.AbstractCockpitPluginRootResource;
+import io.orqueio.bpm.engine.rest.util.ProvidersUtil;
 
 /**
  *

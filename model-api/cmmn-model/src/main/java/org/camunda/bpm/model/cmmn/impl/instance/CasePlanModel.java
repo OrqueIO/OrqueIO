@@ -14,28 +14,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.cmmn.impl.instance;
+package io.orqueio.bpm.model.cmmn.impl.instance;
 
-import static org.camunda.bpm.model.cmmn.impl.CmmnModelConstants.CMMN11_NS;
-import static org.camunda.bpm.model.cmmn.impl.CmmnModelConstants.CMMN_ELEMENT_CASE_PLAN_MODEL;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CMMN11_NS;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CMMN_ELEMENT_CASE_PLAN_MODEL;
 
-import org.camunda.bpm.model.cmmn.instance.Stage;
-import org.camunda.bpm.model.xml.ModelBuilder;
-import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
+import io.orqueio.bpm.model.cmmn.instance.Stage;
+import io.orqueio.bpm.model.xml.ModelBuilder;
+import io.orqueio.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
+import io.orqueio.bpm.model.xml.type.ModelElementTypeBuilder;
 
 /**
  * @author Roman Smirnov
  *
  */
-public class CasePlanModel extends StageImpl implements org.camunda.bpm.model.cmmn.instance.CasePlanModel {
+public class CasePlanModel extends StageImpl implements io.orqueio.bpm.model.cmmn.instance.CasePlanModel {
 
   public CasePlanModel(ModelTypeInstanceContext instanceContext) {
     super(instanceContext);
   }
 
   public static void registerType(ModelBuilder modelBuilder) {
-    ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(org.camunda.bpm.model.cmmn.instance.CasePlanModel.class, CMMN_ELEMENT_CASE_PLAN_MODEL)
+    ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(io.orqueio.bpm.model.cmmn.instance.CasePlanModel.class, CMMN_ELEMENT_CASE_PLAN_MODEL)
       .namespaceUri(CMMN11_NS)
       .extendsType(Stage.class)
       .instanceProvider(new ModelElementTypeBuilder.ModelTypeInstanceProvider<CasePlanModel>() {

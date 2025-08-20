@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.bpmn.tasklistener.util;
+package io.orqueio.bpm.engine.test.bpmn.tasklistener.util;
 
 import java.util.Map;
 
-import org.camunda.bpm.engine.delegate.DelegateExecution;
-import org.camunda.bpm.engine.delegate.DelegateTask;
-import org.camunda.bpm.engine.delegate.TaskListener;
+import io.orqueio.bpm.engine.delegate.DelegateExecution;
+import io.orqueio.bpm.engine.delegate.DelegateTask;
+import io.orqueio.bpm.engine.delegate.TaskListener;
 
 
 /**

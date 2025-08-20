@@ -14,18 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter.configuration.impl.custom;
+package io.orqueio.bpm.spring.boot.starter.configuration.impl.custom;
 
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.spi.ILoggingEvent;
-import org.camunda.bpm.engine.identity.User;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.test.ProcessEngineRule;
-import org.camunda.bpm.spring.boot.starter.property.CamundaBpmProperties;
-import org.camunda.bpm.spring.boot.starter.test.helper.StandaloneInMemoryTestConfiguration;
-import org.camunda.bpm.spring.boot.starter.util.SpringBootProcessEngineLogger;
-import org.camunda.commons.testing.ProcessEngineLoggingRule;
+import io.orqueio.bpm.engine.identity.User;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.test.ProcessEngineRule;
+import io.orqueio.bpm.spring.boot.starter.property.CamundaBpmProperties;
+import io.orqueio.bpm.spring.boot.starter.test.helper.StandaloneInMemoryTestConfiguration;
+import io.orqueio.bpm.spring.boot.starter.util.SpringBootProcessEngineLogger;
+import io.orqueio.commons.testing.ProcessEngineLoggingRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.springframework.test.util.ReflectionTestUtils;

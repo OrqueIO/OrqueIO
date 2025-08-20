@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.impl;
+package io.orqueio.bpm.engine.rest.impl;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -24,22 +24,22 @@ import java.util.Set;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.camunda.bpm.engine.IdentityService;
-import org.camunda.bpm.engine.identity.PasswordPolicyResult;
-import org.camunda.bpm.engine.identity.Group;
-import org.camunda.bpm.engine.identity.GroupQuery;
-import org.camunda.bpm.engine.identity.User;
-import org.camunda.bpm.engine.rest.IdentityRestService;
-import org.camunda.bpm.engine.rest.dto.identity.BasicUserCredentialsDto;
-import org.camunda.bpm.engine.rest.dto.identity.CheckPasswordPolicyResultDto;
-import org.camunda.bpm.engine.rest.dto.identity.PasswordPolicyRequestDto;
-import org.camunda.bpm.engine.rest.dto.identity.PasswordPolicyDto;
-import org.camunda.bpm.engine.rest.dto.identity.UserProfileDto;
-import org.camunda.bpm.engine.rest.dto.task.GroupDto;
-import org.camunda.bpm.engine.rest.dto.task.GroupInfoDto;
-import org.camunda.bpm.engine.rest.dto.task.UserDto;
-import org.camunda.bpm.engine.rest.exception.InvalidRequestException;
-import org.camunda.bpm.engine.rest.security.auth.AuthenticationResult;
+import io.orqueio.bpm.engine.IdentityService;
+import io.orqueio.bpm.engine.identity.PasswordPolicyResult;
+import io.orqueio.bpm.engine.identity.Group;
+import io.orqueio.bpm.engine.identity.GroupQuery;
+import io.orqueio.bpm.engine.identity.User;
+import io.orqueio.bpm.engine.rest.IdentityRestService;
+import io.orqueio.bpm.engine.rest.dto.identity.BasicUserCredentialsDto;
+import io.orqueio.bpm.engine.rest.dto.identity.CheckPasswordPolicyResultDto;
+import io.orqueio.bpm.engine.rest.dto.identity.PasswordPolicyRequestDto;
+import io.orqueio.bpm.engine.rest.dto.identity.PasswordPolicyDto;
+import io.orqueio.bpm.engine.rest.dto.identity.UserProfileDto;
+import io.orqueio.bpm.engine.rest.dto.task.GroupDto;
+import io.orqueio.bpm.engine.rest.dto.task.GroupInfoDto;
+import io.orqueio.bpm.engine.rest.dto.task.UserDto;
+import io.orqueio.bpm.engine.rest.exception.InvalidRequestException;
+import io.orqueio.bpm.engine.rest.security.auth.AuthenticationResult;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 

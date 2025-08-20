@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.cmmn.util;
+package io.orqueio.bpm.model.cmmn.util;
 
-import org.camunda.bpm.model.cmmn.Cmmn;
-import org.camunda.bpm.model.xml.Model;
-import org.camunda.bpm.model.xml.ModelInstance;
-import org.camunda.bpm.model.xml.instance.ModelElementInstance;
-import org.camunda.bpm.model.xml.test.GetModelElementTypeRule;
-import org.camunda.bpm.model.xml.type.ModelElementType;
+import io.orqueio.bpm.model.cmmn.Cmmn;
+import io.orqueio.bpm.model.xml.Model;
+import io.orqueio.bpm.model.xml.ModelInstance;
+import io.orqueio.bpm.model.xml.instance.ModelElementInstance;
+import io.orqueio.bpm.model.xml.test.GetModelElementTypeRule;
+import io.orqueio.bpm.model.xml.type.ModelElementType;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 

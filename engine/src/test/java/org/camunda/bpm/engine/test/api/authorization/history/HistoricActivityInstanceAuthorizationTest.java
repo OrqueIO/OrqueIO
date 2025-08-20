@@ -14,23 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.authorization.history;
+package io.orqueio.bpm.engine.test.api.authorization.history;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.camunda.bpm.engine.authorization.Authorization.ANY;
-import static org.camunda.bpm.engine.authorization.Permissions.READ_HISTORY;
-import static org.camunda.bpm.engine.authorization.Resources.PROCESS_DEFINITION;
+import static io.orqueio.bpm.engine.authorization.Authorization.ANY;
+import static io.orqueio.bpm.engine.authorization.Permissions.READ_HISTORY;
+import static io.orqueio.bpm.engine.authorization.Resources.PROCESS_DEFINITION;
 
 import java.util.List;
-import org.camunda.bpm.engine.ProcessEngineConfiguration;
-import org.camunda.bpm.engine.authorization.HistoricProcessInstancePermissions;
-import org.camunda.bpm.engine.authorization.ProcessDefinitionPermissions;
-import org.camunda.bpm.engine.authorization.Resources;
-import org.camunda.bpm.engine.history.HistoricActivityInstanceQuery;
-import org.camunda.bpm.engine.history.HistoricProcessInstance;
-import org.camunda.bpm.engine.task.Task;
-import org.camunda.bpm.engine.test.RequiredHistoryLevel;
-import org.camunda.bpm.engine.test.api.authorization.AuthorizationTest;
+import io.orqueio.bpm.engine.ProcessEngineConfiguration;
+import io.orqueio.bpm.engine.authorization.HistoricProcessInstancePermissions;
+import io.orqueio.bpm.engine.authorization.ProcessDefinitionPermissions;
+import io.orqueio.bpm.engine.authorization.Resources;
+import io.orqueio.bpm.engine.history.HistoricActivityInstanceQuery;
+import io.orqueio.bpm.engine.history.HistoricProcessInstance;
+import io.orqueio.bpm.engine.task.Task;
+import io.orqueio.bpm.engine.test.RequiredHistoryLevel;
+import io.orqueio.bpm.engine.test.api.authorization.AuthorizationTest;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

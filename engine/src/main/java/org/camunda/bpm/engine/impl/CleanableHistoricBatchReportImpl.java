@@ -14,22 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl;
+package io.orqueio.bpm.engine.impl;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.camunda.bpm.engine.history.CleanableHistoricBatchReport;
-import org.camunda.bpm.engine.history.CleanableHistoricBatchReportResult;
-import org.camunda.bpm.engine.impl.batch.BatchJobHandler;
-import org.camunda.bpm.engine.impl.cfg.CommandChecker;
-import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.interceptor.CommandExecutor;
+import io.orqueio.bpm.engine.history.CleanableHistoricBatchReport;
+import io.orqueio.bpm.engine.history.CleanableHistoricBatchReportResult;
+import io.orqueio.bpm.engine.impl.batch.BatchJobHandler;
+import io.orqueio.bpm.engine.impl.cfg.CommandChecker;
+import io.orqueio.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.impl.interceptor.CommandExecutor;
 
-import static org.camunda.bpm.engine.ProcessEngineConfiguration.HISTORY_CLEANUP_STRATEGY_REMOVAL_TIME_BASED;
+import static io.orqueio.bpm.engine.ProcessEngineConfiguration.HISTORY_CLEANUP_STRATEGY_REMOVAL_TIME_BASED;
 
 public class CleanableHistoricBatchReportImpl extends AbstractQuery<CleanableHistoricBatchReport, CleanableHistoricBatchReportResult> implements CleanableHistoricBatchReport {
 

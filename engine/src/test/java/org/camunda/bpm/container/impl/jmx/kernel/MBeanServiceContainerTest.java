@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.jmx.kernel;
+package io.orqueio.bpm.container.impl.jmx.kernel;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -28,13 +28,13 @@ import javax.management.ObjectName;
 import java.util.List;
 import java.util.Set;
 
-import org.camunda.bpm.container.impl.jmx.MBeanServiceContainer;
-import org.camunda.bpm.container.impl.jmx.kernel.util.FailingDeploymentOperationStep;
-import org.camunda.bpm.container.impl.jmx.kernel.util.StartServiceDeploymentOperationStep;
-import org.camunda.bpm.container.impl.jmx.kernel.util.StopServiceDeploymentOperationStep;
-import org.camunda.bpm.container.impl.jmx.kernel.util.TestService;
-import org.camunda.bpm.container.impl.jmx.kernel.util.TestServiceType;
-import org.camunda.bpm.container.impl.spi.PlatformService;
+import io.orqueio.bpm.container.impl.jmx.MBeanServiceContainer;
+import io.orqueio.bpm.container.impl.jmx.kernel.util.FailingDeploymentOperationStep;
+import io.orqueio.bpm.container.impl.jmx.kernel.util.StartServiceDeploymentOperationStep;
+import io.orqueio.bpm.container.impl.jmx.kernel.util.StopServiceDeploymentOperationStep;
+import io.orqueio.bpm.container.impl.jmx.kernel.util.TestService;
+import io.orqueio.bpm.container.impl.jmx.kernel.util.TestServiceType;
+import io.orqueio.bpm.container.impl.spi.PlatformService;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

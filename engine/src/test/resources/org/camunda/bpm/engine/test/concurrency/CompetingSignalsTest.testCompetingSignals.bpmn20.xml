@@ -12,7 +12,7 @@
     <receiveTask id="waitOne" />
     <sequenceFlow id="flow2" sourceRef="waitOne" targetRef="controlledConcurrency" />
     
-    <serviceTask id="controlledConcurrency" camunda:class="org.camunda.bpm.engine.test.concurrency.CompetingSignalsTest$ControlledConcurrencyBehavior"/>
+    <serviceTask id="controlledConcurrency" camunda:class="io.orqueio.bpm.engine.test.concurrency.CompetingSignalsTest$ControlledConcurrencyBehavior"/>
     <sequenceFlow id="flow3" sourceRef="controlledConcurrency" targetRef="waitTwo" />
 
     <receiveTask id="waitTwo" />

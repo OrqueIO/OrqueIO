@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.application;
+package io.orqueio.bpm.engine.rest.application;
 
 import com.fasterxml.jackson.jaxrs.base.JsonMappingExceptionMapper;
 import com.fasterxml.jackson.jaxrs.base.JsonParseExceptionMapper;
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
-import org.camunda.bpm.engine.rest.exception.ExceptionHandler;
-import org.camunda.bpm.engine.rest.exception.ProcessEngineExceptionHandler;
-import org.camunda.bpm.engine.rest.exception.RestExceptionHandler;
-import org.camunda.bpm.engine.rest.mapper.JacksonConfigurator;
+import io.orqueio.bpm.engine.rest.exception.ExceptionHandler;
+import io.orqueio.bpm.engine.rest.exception.ProcessEngineExceptionHandler;
+import io.orqueio.bpm.engine.rest.exception.RestExceptionHandler;
+import io.orqueio.bpm.engine.rest.mapper.JacksonConfigurator;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;

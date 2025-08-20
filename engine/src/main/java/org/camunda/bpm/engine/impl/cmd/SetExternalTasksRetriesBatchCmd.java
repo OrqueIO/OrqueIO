@@ -14,18 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.cmd;
+package io.orqueio.bpm.engine.impl.cmd;
 
-import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureNotEmpty;
+import static io.orqueio.bpm.engine.impl.util.EnsureUtil.ensureNotEmpty;
 
-import org.camunda.bpm.engine.BadUserRequestException;
-import org.camunda.bpm.engine.authorization.BatchPermissions;
-import org.camunda.bpm.engine.batch.Batch;
-import org.camunda.bpm.engine.impl.batch.BatchConfiguration;
-import org.camunda.bpm.engine.impl.batch.BatchElementConfiguration;
-import org.camunda.bpm.engine.impl.batch.SetRetriesBatchConfiguration;
-import org.camunda.bpm.engine.impl.batch.builder.BatchBuilder;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.BadUserRequestException;
+import io.orqueio.bpm.engine.authorization.BatchPermissions;
+import io.orqueio.bpm.engine.batch.Batch;
+import io.orqueio.bpm.engine.impl.batch.BatchConfiguration;
+import io.orqueio.bpm.engine.impl.batch.BatchElementConfiguration;
+import io.orqueio.bpm.engine.impl.batch.SetRetriesBatchConfiguration;
+import io.orqueio.bpm.engine.impl.batch.builder.BatchBuilder;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
 
 public class SetExternalTasksRetriesBatchCmd extends AbstractSetExternalTaskRetriesCmd<Batch> {
 

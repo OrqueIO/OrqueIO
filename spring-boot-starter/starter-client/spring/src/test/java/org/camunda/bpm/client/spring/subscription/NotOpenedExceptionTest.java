@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.spring.subscription;
+package io.orqueio.bpm.client.spring.subscription;
 
-import org.camunda.bpm.client.spring.exception.NotOpenedException;
-import org.camunda.bpm.client.spring.MockedTest;
-import org.camunda.bpm.client.spring.subscription.configuration.NotOpenedExceptionConfiguration;
+import io.orqueio.bpm.client.spring.exception.NotOpenedException;
+import io.orqueio.bpm.client.spring.MockedTest;
+import io.orqueio.bpm.client.spring.subscription.configuration.NotOpenedExceptionConfiguration;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

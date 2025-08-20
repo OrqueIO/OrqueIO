@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.variable.impl.value;
+package io.orqueio.bpm.client.variable.impl.value;
 
-import static org.camunda.bpm.client.variable.ClientValues.JSON;
+import static io.orqueio.bpm.client.variable.ClientValues.JSON;
 
-import org.camunda.bpm.client.variable.value.JsonValue;
-import org.camunda.bpm.engine.variable.impl.value.PrimitiveTypeValueImpl;
+import io.orqueio.bpm.client.variable.value.JsonValue;
+import io.orqueio.bpm.engine.variable.impl.value.PrimitiveTypeValueImpl;
 
 public class JsonValueImpl extends PrimitiveTypeValueImpl<String> implements JsonValue {
 

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.jboss.service;
+package io.orqueio.bpm.container.impl.jboss.service;
 
 import java.util.List;
 import java.util.concurrent.RejectedExecutionException;
@@ -22,9 +22,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.camunda.bpm.container.ExecutorService;
-import org.camunda.bpm.engine.impl.ProcessEngineImpl;
-import org.camunda.bpm.engine.impl.jobexecutor.ExecuteJobsRunnable;
+import io.orqueio.bpm.container.ExecutorService;
+import io.orqueio.bpm.engine.impl.ProcessEngineImpl;
+import io.orqueio.bpm.engine.impl.jobexecutor.ExecuteJobsRunnable;
 import org.jboss.as.threads.ManagedQueueExecutorService;
 import org.jboss.msc.service.Service;
 import org.jboss.msc.service.StartContext;

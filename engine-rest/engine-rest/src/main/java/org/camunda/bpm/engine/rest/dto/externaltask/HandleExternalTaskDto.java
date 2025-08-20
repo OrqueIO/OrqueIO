@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.dto.externaltask;
+package io.orqueio.bpm.engine.rest.dto.externaltask;
 
 /**
  * Base DTO class for Worker-related External Task operations.

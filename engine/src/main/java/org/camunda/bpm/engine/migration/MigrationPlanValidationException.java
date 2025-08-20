@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.migration;
+package io.orqueio.bpm.engine.migration;
 
-import org.camunda.bpm.engine.BadUserRequestException;
-import org.camunda.bpm.engine.migration.MigrationPlanValidationReport;
+import io.orqueio.bpm.engine.BadUserRequestException;
+import io.orqueio.bpm.engine.migration.MigrationPlanValidationReport;
 
 /**
  * Thrown if a migration plan is not valid, e.g. because it contains instructions that can in general not be executed.

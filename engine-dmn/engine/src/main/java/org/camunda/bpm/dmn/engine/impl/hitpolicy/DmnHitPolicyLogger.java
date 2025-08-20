@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.engine.impl.hitpolicy;
+package io.orqueio.bpm.dmn.engine.impl.hitpolicy;
 
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.dmn.engine.delegate.DmnEvaluatedDecisionRule;
-import org.camunda.bpm.dmn.engine.delegate.DmnEvaluatedOutput;
-import org.camunda.bpm.dmn.engine.impl.DmnLogger;
-import org.camunda.bpm.engine.variable.value.TypedValue;
-import org.camunda.bpm.model.dmn.BuiltinAggregator;
-import org.camunda.bpm.model.dmn.HitPolicy;
+import io.orqueio.bpm.dmn.engine.delegate.DmnEvaluatedDecisionRule;
+import io.orqueio.bpm.dmn.engine.delegate.DmnEvaluatedOutput;
+import io.orqueio.bpm.dmn.engine.impl.DmnLogger;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
+import io.orqueio.bpm.model.dmn.BuiltinAggregator;
+import io.orqueio.bpm.model.dmn.HitPolicy;
 
 public class DmnHitPolicyLogger extends DmnLogger {
 

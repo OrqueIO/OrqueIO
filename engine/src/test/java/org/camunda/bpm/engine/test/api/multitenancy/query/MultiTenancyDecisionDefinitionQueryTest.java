@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.multitenancy.query;
+package io.orqueio.bpm.engine.test.api.multitenancy.query;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
@@ -24,10 +24,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.engine.exception.NullValueException;
-import org.camunda.bpm.engine.repository.DecisionDefinition;
-import org.camunda.bpm.engine.repository.DecisionDefinitionQuery;
-import org.camunda.bpm.engine.test.util.PluggableProcessEngineTest;
+import io.orqueio.bpm.engine.exception.NullValueException;
+import io.orqueio.bpm.engine.repository.DecisionDefinition;
+import io.orqueio.bpm.engine.repository.DecisionDefinitionQuery;
+import io.orqueio.bpm.engine.test.util.PluggableProcessEngineTest;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.standalone.history;
+package io.orqueio.bpm.engine.test.standalone.history;
 
-import static org.camunda.bpm.engine.EntityTypes.JOB;
-import static org.camunda.bpm.engine.EntityTypes.JOB_DEFINITION;
-import static org.camunda.bpm.engine.EntityTypes.PROCESS_DEFINITION;
-import static org.camunda.bpm.engine.EntityTypes.PROCESS_INSTANCE;
-import static org.camunda.bpm.engine.ProcessEngineConfiguration.DB_SCHEMA_UPDATE_CREATE_DROP;
-import static org.camunda.bpm.engine.history.UserOperationLogEntry.OPERATION_TYPE_SET_JOB_RETRIES;
+import static io.orqueio.bpm.engine.EntityTypes.JOB;
+import static io.orqueio.bpm.engine.EntityTypes.JOB_DEFINITION;
+import static io.orqueio.bpm.engine.EntityTypes.PROCESS_DEFINITION;
+import static io.orqueio.bpm.engine.EntityTypes.PROCESS_INSTANCE;
+import static io.orqueio.bpm.engine.ProcessEngineConfiguration.DB_SCHEMA_UPDATE_CREATE_DROP;
+import static io.orqueio.bpm.engine.history.UserOperationLogEntry.OPERATION_TYPE_SET_JOB_RETRIES;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -31,30 +31,30 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.camunda.bpm.engine.CaseService;
-import org.camunda.bpm.engine.EntityTypes;
-import org.camunda.bpm.engine.HistoryService;
-import org.camunda.bpm.engine.IdentityService;
-import org.camunda.bpm.engine.RepositoryService;
-import org.camunda.bpm.engine.RuntimeService;
-import org.camunda.bpm.engine.TaskService;
-import org.camunda.bpm.engine.history.HistoricVariableInstance;
-import org.camunda.bpm.engine.history.UserOperationLogEntry;
-import org.camunda.bpm.engine.history.UserOperationLogQuery;
-import org.camunda.bpm.engine.impl.ManagementServiceImpl;
-import org.camunda.bpm.engine.impl.RuntimeServiceImpl;
-import org.camunda.bpm.engine.impl.TaskServiceImpl;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.history.HistoryLevel;
-import org.camunda.bpm.engine.runtime.CaseInstance;
-import org.camunda.bpm.engine.runtime.Job;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.task.Task;
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.engine.test.api.authorization.util.AuthorizationTestBaseRule;
-import org.camunda.bpm.engine.test.util.ProcessEngineBootstrapRule;
-import org.camunda.bpm.engine.test.util.ProcessEngineTestRule;
-import org.camunda.bpm.engine.test.util.ProvidedProcessEngineRule;
+import io.orqueio.bpm.engine.CaseService;
+import io.orqueio.bpm.engine.EntityTypes;
+import io.orqueio.bpm.engine.HistoryService;
+import io.orqueio.bpm.engine.IdentityService;
+import io.orqueio.bpm.engine.RepositoryService;
+import io.orqueio.bpm.engine.RuntimeService;
+import io.orqueio.bpm.engine.TaskService;
+import io.orqueio.bpm.engine.history.HistoricVariableInstance;
+import io.orqueio.bpm.engine.history.UserOperationLogEntry;
+import io.orqueio.bpm.engine.history.UserOperationLogQuery;
+import io.orqueio.bpm.engine.impl.ManagementServiceImpl;
+import io.orqueio.bpm.engine.impl.RuntimeServiceImpl;
+import io.orqueio.bpm.engine.impl.TaskServiceImpl;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.history.HistoryLevel;
+import io.orqueio.bpm.engine.runtime.CaseInstance;
+import io.orqueio.bpm.engine.runtime.Job;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.task.Task;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.test.api.authorization.util.AuthorizationTestBaseRule;
+import io.orqueio.bpm.engine.test.util.ProcessEngineBootstrapRule;
+import io.orqueio.bpm.engine.test.util.ProcessEngineTestRule;
+import io.orqueio.bpm.engine.test.util.ProvidedProcessEngineRule;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.ClassRule;

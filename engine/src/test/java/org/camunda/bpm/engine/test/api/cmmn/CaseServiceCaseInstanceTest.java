@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.cmmn;
+package io.orqueio.bpm.engine.test.api.cmmn;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -27,16 +27,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.exception.NotAllowedException;
-import org.camunda.bpm.engine.exception.NotFoundException;
-import org.camunda.bpm.engine.exception.NotValidException;
-import org.camunda.bpm.engine.runtime.CaseExecution;
-import org.camunda.bpm.engine.runtime.CaseInstance;
-import org.camunda.bpm.engine.runtime.VariableInstance;
-import org.camunda.bpm.engine.runtime.VariableInstanceQuery;
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.engine.test.util.PluggableProcessEngineTest;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.exception.NotAllowedException;
+import io.orqueio.bpm.engine.exception.NotFoundException;
+import io.orqueio.bpm.engine.exception.NotValidException;
+import io.orqueio.bpm.engine.runtime.CaseExecution;
+import io.orqueio.bpm.engine.runtime.CaseInstance;
+import io.orqueio.bpm.engine.runtime.VariableInstance;
+import io.orqueio.bpm.engine.runtime.VariableInstanceQuery;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.test.util.PluggableProcessEngineTest;
 import org.junit.Test;
 
 /**

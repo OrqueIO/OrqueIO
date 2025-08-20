@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa.upgrade.variables;
+package io.orqueio.bpm.qa.upgrade.variables;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

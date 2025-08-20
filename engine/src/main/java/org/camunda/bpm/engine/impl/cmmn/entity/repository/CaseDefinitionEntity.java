@@ -14,25 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.cmmn.entity.repository;
+package io.orqueio.bpm.engine.impl.cmmn.entity.repository;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.cmmn.entity.runtime.CaseExecutionEntity;
-import org.camunda.bpm.engine.impl.cmmn.execution.CmmnExecution;
-import org.camunda.bpm.engine.impl.cmmn.model.CmmnCaseDefinition;
-import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.engine.impl.db.DbEntity;
-import org.camunda.bpm.engine.impl.db.EnginePersistenceLogger;
-import org.camunda.bpm.engine.impl.db.HasDbRevision;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.persistence.deploy.cache.DeploymentCache;
-import org.camunda.bpm.engine.impl.repository.ResourceDefinitionEntity;
-import org.camunda.bpm.engine.impl.task.TaskDefinition;
-import org.camunda.bpm.engine.repository.CaseDefinition;
+import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.cmmn.entity.runtime.CaseExecutionEntity;
+import io.orqueio.bpm.engine.impl.cmmn.execution.CmmnExecution;
+import io.orqueio.bpm.engine.impl.cmmn.model.CmmnCaseDefinition;
+import io.orqueio.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.impl.db.DbEntity;
+import io.orqueio.bpm.engine.impl.db.EnginePersistenceLogger;
+import io.orqueio.bpm.engine.impl.db.HasDbRevision;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.impl.persistence.deploy.cache.DeploymentCache;
+import io.orqueio.bpm.engine.impl.repository.ResourceDefinitionEntity;
+import io.orqueio.bpm.engine.impl.task.TaskDefinition;
+import io.orqueio.bpm.engine.repository.CaseDefinition;
 
 /**
  * @author Roman Smirnov

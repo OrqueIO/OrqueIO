@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.connect.plugin.util;
+package io.orqueio.connect.plugin.util;
 
-import org.camunda.connect.spi.Connector;
-import org.camunda.connect.spi.ConnectorProvider;
+import io.orqueio.connect.spi.Connector;
+import io.orqueio.connect.spi.ConnectorProvider;
 
 public class TestConnectorProvider implements ConnectorProvider {
 

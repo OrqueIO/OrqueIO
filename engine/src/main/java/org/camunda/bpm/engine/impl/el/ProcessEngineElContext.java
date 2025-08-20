@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.el;
+package io.orqueio.bpm.engine.impl.el;
 
-import org.camunda.bpm.impl.juel.jakarta.el.ELContext;
-import org.camunda.bpm.impl.juel.jakarta.el.ELResolver;
-import org.camunda.bpm.impl.juel.jakarta.el.FunctionMapper;
-import org.camunda.bpm.impl.juel.jakarta.el.VariableMapper;
+import io.orqueio.bpm.impl.juel.jakarta.el.ELContext;
+import io.orqueio.bpm.impl.juel.jakarta.el.ELResolver;
+import io.orqueio.bpm.impl.juel.jakarta.el.FunctionMapper;
+import io.orqueio.bpm.impl.juel.jakarta.el.VariableMapper;
 
 
 /**

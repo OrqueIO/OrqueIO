@@ -19,7 +19,7 @@
     <property name="dataSource" ref="dataSource" />
   </bean>
   
-  <bean id="processEngineConfiguration" class="org.camunda.bpm.engine.spring.SpringProcessEngineConfiguration">
+  <bean id="processEngineConfiguration" class="io.orqueio.bpm.engine.spring.SpringProcessEngineConfiguration">
     <property name="dataSource" ref="dataSource" />
     <property name="transactionManager" ref="transactionManager" />
     <property name="databaseSchemaUpdate" value="true" />
@@ -31,7 +31,7 @@
     
   </bean>
   
-  <bean id="processEngine" class="org.camunda.bpm.engine.spring.ProcessEngineFactoryBean">
+  <bean id="processEngine" class="io.orqueio.bpm.engine.spring.ProcessEngineFactoryBean">
     <property name="processEngineConfiguration" ref="processEngineConfiguration" />
   </bean>
   
@@ -43,23 +43,23 @@
 
   <tx:annotation-driven transaction-manager="transactionManager"/>
 
-  <bean id="userBean" class="org.camunda.bpm.engine.spring.test.transaction.UserBean">
+  <bean id="userBean" class="io.orqueio.bpm.engine.spring.test.transaction.UserBean">
     <property name="runtimeService" ref="runtimeService" />
     <property name="taskService" ref="taskService" />
     <property name="dataSource" ref="dataSource" />
   </bean>
 
-  <bean id="printer" class="org.camunda.bpm.engine.spring.test.transaction.Printer" />
+  <bean id="printer" class="io.orqueio.bpm.engine.spring.test.transaction.Printer" />
   
-  <bean id="beanWithException" class="org.camunda.bpm.engine.spring.test.transaction.BeanWithException" />
+  <bean id="beanWithException" class="io.orqueio.bpm.engine.spring.test.transaction.BeanWithException" />
   
-  <bean id="serviceTaskBean" class="org.camunda.bpm.engine.spring.test.transaction.ServiceTaskBean">
+  <bean id="serviceTaskBean" class="io.orqueio.bpm.engine.spring.test.transaction.ServiceTaskBean">
   	<property name="beanWithException" ref="beanWithException" />
   </bean>
   
-  <bean id="failingTransactionListenerDelegate" class="org.camunda.bpm.engine.spring.test.transaction.FailingTransactionListenerDelegate" />
+  <bean id="failingTransactionListenerDelegate" class="io.orqueio.bpm.engine.spring.test.transaction.FailingTransactionListenerDelegate" />
   
-  <bean id="transactionRollbackDelegate" class="org.camunda.bpm.engine.spring.test.transaction.TransactionRollbackDelegate">
+  <bean id="transactionRollbackDelegate" class="io.orqueio.bpm.engine.spring.test.transaction.TransactionRollbackDelegate">
     <property name="transactionManager" ref="transactionManager" />
   </bean>
 

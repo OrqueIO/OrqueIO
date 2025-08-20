@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.plugin.variable.type;
+package io.orqueio.spin.plugin.variable.type;
 
-import org.camunda.bpm.engine.variable.type.SerializableValueType;
-import org.camunda.spin.plugin.variable.type.impl.JsonValueTypeImpl;
-import org.camunda.spin.plugin.variable.type.impl.XmlValueTypeImpl;
+import io.orqueio.bpm.engine.variable.type.SerializableValueType;
+import io.orqueio.spin.plugin.variable.type.impl.JsonValueTypeImpl;
+import io.orqueio.spin.plugin.variable.type.impl.XmlValueTypeImpl;
 
 /**
  * @author Roman Smirnov

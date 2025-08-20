@@ -14,25 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.engine.hitpolicy;
+package io.orqueio.bpm.dmn.engine.hitpolicy;
 
 import static java.lang.Integer.MAX_VALUE;
 import static java.lang.Integer.MIN_VALUE;
 
 import static org.assertj.core.api.Assertions.entry;
 import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
-import static org.camunda.bpm.dmn.engine.test.asserts.DmnEngineTestAssertions.assertThat;
+import static io.orqueio.bpm.dmn.engine.test.asserts.DmnEngineTestAssertions.assertThat;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.camunda.bpm.dmn.engine.DmnDecisionRuleResult;
-import org.camunda.bpm.dmn.engine.DmnDecisionTableResult;
-import org.camunda.bpm.dmn.engine.impl.hitpolicy.DmnHitPolicyException;
-import org.camunda.bpm.dmn.engine.impl.transform.DmnTransformException;
-import org.camunda.bpm.dmn.engine.test.DecisionResource;
-import org.camunda.bpm.dmn.engine.test.DmnEngineTest;
-import org.camunda.bpm.dmn.engine.test.asserts.DmnDecisionTableResultAssert;
+import io.orqueio.bpm.dmn.engine.DmnDecisionRuleResult;
+import io.orqueio.bpm.dmn.engine.DmnDecisionTableResult;
+import io.orqueio.bpm.dmn.engine.impl.hitpolicy.DmnHitPolicyException;
+import io.orqueio.bpm.dmn.engine.impl.transform.DmnTransformException;
+import io.orqueio.bpm.dmn.engine.test.DecisionResource;
+import io.orqueio.bpm.dmn.engine.test.DmnEngineTest;
+import io.orqueio.bpm.dmn.engine.test.asserts.DmnDecisionTableResultAssert;
 import org.junit.Test;
 
 public class HitPolicyTest extends DmnEngineTest {

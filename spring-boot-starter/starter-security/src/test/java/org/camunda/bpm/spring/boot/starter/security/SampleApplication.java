@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter.security;
+package io.orqueio.bpm.spring.boot.starter.security;
 
 import java.util.HashMap;
 import java.util.List;

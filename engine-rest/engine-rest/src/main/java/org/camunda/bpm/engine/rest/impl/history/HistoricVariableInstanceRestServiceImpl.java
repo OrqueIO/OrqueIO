@@ -14,22 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.impl.history;
+package io.orqueio.bpm.engine.rest.impl.history;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.core.UriInfo;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.history.HistoricVariableInstance;
-import org.camunda.bpm.engine.history.HistoricVariableInstanceQuery;
-import org.camunda.bpm.engine.rest.dto.CountResultDto;
-import org.camunda.bpm.engine.rest.dto.history.HistoricVariableInstanceDto;
-import org.camunda.bpm.engine.rest.dto.history.HistoricVariableInstanceQueryDto;
-import org.camunda.bpm.engine.rest.history.HistoricVariableInstanceRestService;
-import org.camunda.bpm.engine.rest.sub.history.HistoricVariableInstanceResource;
-import org.camunda.bpm.engine.rest.sub.history.impl.HistoricVariableInstanceResourceImpl;
-import org.camunda.bpm.engine.rest.util.QueryUtil;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.history.HistoricVariableInstance;
+import io.orqueio.bpm.engine.history.HistoricVariableInstanceQuery;
+import io.orqueio.bpm.engine.rest.dto.CountResultDto;
+import io.orqueio.bpm.engine.rest.dto.history.HistoricVariableInstanceDto;
+import io.orqueio.bpm.engine.rest.dto.history.HistoricVariableInstanceQueryDto;
+import io.orqueio.bpm.engine.rest.history.HistoricVariableInstanceRestService;
+import io.orqueio.bpm.engine.rest.sub.history.HistoricVariableInstanceResource;
+import io.orqueio.bpm.engine.rest.sub.history.impl.HistoricVariableInstanceResourceImpl;
+import io.orqueio.bpm.engine.rest.util.QueryUtil;
 
 public class HistoricVariableInstanceRestServiceImpl implements HistoricVariableInstanceRestService {
 

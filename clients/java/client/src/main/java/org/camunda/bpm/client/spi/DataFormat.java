@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.spi;
+package io.orqueio.bpm.client.spi;
 
 /**
  * Maps a java object to the data format's internal representation and vice versa.

@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.bpmn.instance.dc;
+package io.orqueio.bpm.model.bpmn.instance.dc;
 
-import org.camunda.bpm.model.bpmn.instance.BpmnModelElementInstance;
+import io.orqueio.bpm.model.bpmn.instance.BpmnModelElementInstance;
 
 /**
  * The DC bounds element

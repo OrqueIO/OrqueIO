@@ -1,4 +1,4 @@
-<module xmlns="urn:jboss:module:1.0" name="org.camunda.bpm.wildfly.camunda-wildfly-subsystem">
+<module xmlns="urn:jboss:module:1.0" name="io.orqueio.bpm.wildfly.camunda-wildfly-subsystem">
   <resources>
     <resource-root path="camunda-wildfly26-subsystem-@project.version@.jar" />
   </resources>
@@ -33,12 +33,12 @@
     <module name="org.jboss.as.web-common" />
     <module name="org.jboss.invocation" />
 
-    <module name="org.camunda.bpm.camunda-engine" />
-    <module name="org.camunda.bpm.identity.camunda-identity-ldap" />
-    <module name="org.camunda.bpm.camunda-engine-plugin-spin" services="import" />
-    <module name="org.camunda.bpm.camunda-engine-plugin-connect" />
+    <module name="io.orqueio.bpm.camunda-engine" />
+    <module name="io.orqueio.bpm.identity.camunda-identity-ldap" />
+    <module name="io.orqueio.bpm.camunda-engine-plugin-spin" services="import" />
+    <module name="io.orqueio.bpm.camunda-engine-plugin-connect" />
 
-    <module name="org.camunda.bpm.camunda-engine-plugins" optional="true" />
+    <module name="io.orqueio.bpm.camunda-engine-plugins" optional="true" />
 
     <!-- for LDAP plugin only -->
     <module name="sun.jdk" />

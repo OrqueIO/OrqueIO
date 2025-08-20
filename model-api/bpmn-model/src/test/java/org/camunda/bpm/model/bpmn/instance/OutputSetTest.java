@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.bpmn.instance;
+package io.orqueio.bpm.model.bpmn.instance;
 
-import org.camunda.bpm.model.bpmn.impl.instance.DataOutputRefs;
-import org.camunda.bpm.model.bpmn.impl.instance.InputSetRefs;
-import org.camunda.bpm.model.bpmn.impl.instance.OptionalOutputRefs;
-import org.camunda.bpm.model.bpmn.impl.instance.WhileExecutingOutputRefs;
+import io.orqueio.bpm.model.bpmn.impl.instance.DataOutputRefs;
+import io.orqueio.bpm.model.bpmn.impl.instance.InputSetRefs;
+import io.orqueio.bpm.model.bpmn.impl.instance.OptionalOutputRefs;
+import io.orqueio.bpm.model.bpmn.impl.instance.WhileExecutingOutputRefs;
 
 import java.util.Arrays;
 import java.util.Collection;

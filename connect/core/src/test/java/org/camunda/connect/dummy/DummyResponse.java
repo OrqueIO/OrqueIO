@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.connect.dummy;
+package io.orqueio.connect.dummy;
 
 import java.util.Map;
 
-import org.camunda.connect.impl.AbstractConnectorResponse;
+import io.orqueio.connect.impl.AbstractConnectorResponse;
 
 public class DummyResponse extends AbstractConnectorResponse {
 

@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.pvm.runtime;
+package io.orqueio.bpm.engine.impl.pvm.runtime;
 
-import static org.camunda.bpm.engine.impl.bpmn.helper.CompensationUtil.SIGNAL_COMPENSATION_DONE;
+import static io.orqueio.bpm.engine.impl.bpmn.helper.CompensationUtil.SIGNAL_COMPENSATION_DONE;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,36 +25,36 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
-import org.camunda.bpm.engine.impl.bpmn.behavior.BpmnBehaviorLogger;
-import org.camunda.bpm.engine.impl.bpmn.behavior.CancelBoundaryEventActivityBehavior;
-import org.camunda.bpm.engine.impl.bpmn.behavior.CancelEndEventActivityBehavior;
-import org.camunda.bpm.engine.impl.bpmn.behavior.CompensationEventActivityBehavior;
-import org.camunda.bpm.engine.impl.bpmn.behavior.EventSubProcessActivityBehavior;
-import org.camunda.bpm.engine.impl.bpmn.behavior.MultiInstanceActivityBehavior;
-import org.camunda.bpm.engine.impl.bpmn.behavior.ReceiveTaskActivityBehavior;
-import org.camunda.bpm.engine.impl.bpmn.behavior.SequentialMultiInstanceActivityBehavior;
-import org.camunda.bpm.engine.impl.bpmn.behavior.SubProcessActivityBehavior;
-import org.camunda.bpm.engine.impl.bpmn.parser.BpmnParse;
-import org.camunda.bpm.engine.impl.cmd.GetActivityInstanceCmd;
-import org.camunda.bpm.engine.impl.jobexecutor.AsyncContinuationJobHandler;
-import org.camunda.bpm.engine.impl.persistence.entity.ActivityInstanceImpl;
-import org.camunda.bpm.engine.impl.persistence.entity.EventSubscriptionEntity;
-import org.camunda.bpm.engine.impl.persistence.entity.ExecutionEntity;
-import org.camunda.bpm.engine.impl.persistence.entity.JobDefinitionEntity;
-import org.camunda.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity;
-import org.camunda.bpm.engine.impl.persistence.entity.VariableInstanceEntity;
-import org.camunda.bpm.engine.impl.persistence.entity.VariableInstanceHistoryListener;
-import org.camunda.bpm.engine.impl.pvm.PvmActivity;
-import org.camunda.bpm.engine.impl.pvm.PvmScope;
-import org.camunda.bpm.engine.impl.pvm.delegate.ActivityBehavior;
-import org.camunda.bpm.engine.impl.pvm.delegate.ActivityExecution;
-import org.camunda.bpm.engine.impl.pvm.delegate.CompositeActivityBehavior;
-import org.camunda.bpm.engine.impl.pvm.process.ActivityImpl;
-import org.camunda.bpm.engine.impl.pvm.process.ScopeImpl;
-import org.camunda.bpm.engine.impl.tree.ExecutionWalker;
-import org.camunda.bpm.engine.impl.tree.ReferenceWalker;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
+import io.orqueio.bpm.engine.impl.bpmn.behavior.BpmnBehaviorLogger;
+import io.orqueio.bpm.engine.impl.bpmn.behavior.CancelBoundaryEventActivityBehavior;
+import io.orqueio.bpm.engine.impl.bpmn.behavior.CancelEndEventActivityBehavior;
+import io.orqueio.bpm.engine.impl.bpmn.behavior.CompensationEventActivityBehavior;
+import io.orqueio.bpm.engine.impl.bpmn.behavior.EventSubProcessActivityBehavior;
+import io.orqueio.bpm.engine.impl.bpmn.behavior.MultiInstanceActivityBehavior;
+import io.orqueio.bpm.engine.impl.bpmn.behavior.ReceiveTaskActivityBehavior;
+import io.orqueio.bpm.engine.impl.bpmn.behavior.SequentialMultiInstanceActivityBehavior;
+import io.orqueio.bpm.engine.impl.bpmn.behavior.SubProcessActivityBehavior;
+import io.orqueio.bpm.engine.impl.bpmn.parser.BpmnParse;
+import io.orqueio.bpm.engine.impl.cmd.GetActivityInstanceCmd;
+import io.orqueio.bpm.engine.impl.jobexecutor.AsyncContinuationJobHandler;
+import io.orqueio.bpm.engine.impl.persistence.entity.ActivityInstanceImpl;
+import io.orqueio.bpm.engine.impl.persistence.entity.EventSubscriptionEntity;
+import io.orqueio.bpm.engine.impl.persistence.entity.ExecutionEntity;
+import io.orqueio.bpm.engine.impl.persistence.entity.JobDefinitionEntity;
+import io.orqueio.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity;
+import io.orqueio.bpm.engine.impl.persistence.entity.VariableInstanceEntity;
+import io.orqueio.bpm.engine.impl.persistence.entity.VariableInstanceHistoryListener;
+import io.orqueio.bpm.engine.impl.pvm.PvmActivity;
+import io.orqueio.bpm.engine.impl.pvm.PvmScope;
+import io.orqueio.bpm.engine.impl.pvm.delegate.ActivityBehavior;
+import io.orqueio.bpm.engine.impl.pvm.delegate.ActivityExecution;
+import io.orqueio.bpm.engine.impl.pvm.delegate.CompositeActivityBehavior;
+import io.orqueio.bpm.engine.impl.pvm.process.ActivityImpl;
+import io.orqueio.bpm.engine.impl.pvm.process.ScopeImpl;
+import io.orqueio.bpm.engine.impl.tree.ExecutionWalker;
+import io.orqueio.bpm.engine.impl.tree.ReferenceWalker;
 
 /**
  * This class encapsulates legacy runtime behavior for the process engine.

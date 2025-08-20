@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm;
+package io.orqueio.bpm;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -28,7 +28,7 @@ import kong.unirest.Unirest;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import org.camunda.bpm.engine.rest.mapper.JacksonConfigurator;
+import io.orqueio.bpm.engine.rest.mapper.JacksonConfigurator;
 import org.junit.Before;
 import org.junit.Test;
 

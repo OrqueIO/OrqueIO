@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm;
+package io.orqueio.bpm;
 
 import java.util.Set;
 
-import org.camunda.bpm.application.ProcessApplicationInfo;
+import io.orqueio.bpm.application.ProcessApplicationInfo;
 
 /**
  * <p>The process application service provides access to all deployed process applications.</p>

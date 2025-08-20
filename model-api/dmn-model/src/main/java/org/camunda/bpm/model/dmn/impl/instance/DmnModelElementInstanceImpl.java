@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.dmn.impl.instance;
+package io.orqueio.bpm.model.dmn.impl.instance;
 
-import org.camunda.bpm.model.dmn.instance.DmnModelElementInstance;
-import org.camunda.bpm.model.xml.impl.instance.ModelElementInstanceImpl;
-import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
+import io.orqueio.bpm.model.dmn.instance.DmnModelElementInstance;
+import io.orqueio.bpm.model.xml.impl.instance.ModelElementInstanceImpl;
+import io.orqueio.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 
 public abstract class DmnModelElementInstanceImpl extends ModelElementInstanceImpl implements DmnModelElementInstance {
 

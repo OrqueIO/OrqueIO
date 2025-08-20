@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.bpmn.instance;
+package io.orqueio.bpm.model.bpmn.instance;
 
-import org.camunda.bpm.model.bpmn.impl.instance.ChildLaneSet;
-import org.camunda.bpm.model.bpmn.impl.instance.FlowNodeRef;
-import org.camunda.bpm.model.bpmn.impl.instance.PartitionElement;
+import io.orqueio.bpm.model.bpmn.impl.instance.ChildLaneSet;
+import io.orqueio.bpm.model.bpmn.impl.instance.FlowNodeRef;
+import io.orqueio.bpm.model.bpmn.impl.instance.PartitionElement;
 
 import java.util.Arrays;
 import java.util.Collection;

@@ -14,26 +14,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.diagnostics;
+package io.orqueio.bpm.engine.impl.diagnostics;
 
-import static org.camunda.bpm.engine.management.Metrics.ACTIVTY_INSTANCE_START;
-import static org.camunda.bpm.engine.management.Metrics.EXECUTED_DECISION_ELEMENTS;
-import static org.camunda.bpm.engine.management.Metrics.EXECUTED_DECISION_INSTANCES;
-import static org.camunda.bpm.engine.management.Metrics.ROOT_PROCESS_INSTANCE_START;
+import static io.orqueio.bpm.engine.management.Metrics.ACTIVTY_INSTANCE_START;
+import static io.orqueio.bpm.engine.management.Metrics.EXECUTED_DECISION_ELEMENTS;
+import static io.orqueio.bpm.engine.management.Metrics.EXECUTED_DECISION_INSTANCES;
+import static io.orqueio.bpm.engine.management.Metrics.ROOT_PROCESS_INSTANCE_START;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import org.camunda.bpm.engine.impl.metrics.Meter;
-import org.camunda.bpm.engine.impl.metrics.MetricsRegistry;
-import org.camunda.bpm.engine.impl.metrics.util.MetricsUtil;
-import org.camunda.bpm.engine.impl.telemetry.dto.ApplicationServerImpl;
-import org.camunda.bpm.engine.impl.telemetry.dto.CommandImpl;
-import org.camunda.bpm.engine.impl.telemetry.dto.InternalsImpl;
-import org.camunda.bpm.engine.impl.telemetry.dto.MetricImpl;
-import org.camunda.bpm.engine.impl.telemetry.dto.TelemetryDataImpl;
-import org.camunda.bpm.engine.telemetry.Command;
-import org.camunda.bpm.engine.telemetry.Metric;
+import io.orqueio.bpm.engine.impl.metrics.Meter;
+import io.orqueio.bpm.engine.impl.metrics.MetricsRegistry;
+import io.orqueio.bpm.engine.impl.metrics.util.MetricsUtil;
+import io.orqueio.bpm.engine.impl.telemetry.dto.ApplicationServerImpl;
+import io.orqueio.bpm.engine.impl.telemetry.dto.CommandImpl;
+import io.orqueio.bpm.engine.impl.telemetry.dto.InternalsImpl;
+import io.orqueio.bpm.engine.impl.telemetry.dto.MetricImpl;
+import io.orqueio.bpm.engine.impl.telemetry.dto.TelemetryDataImpl;
+import io.orqueio.bpm.engine.telemetry.Command;
+import io.orqueio.bpm.engine.telemetry.Metric;
 
 public class DiagnosticsCollector {
 

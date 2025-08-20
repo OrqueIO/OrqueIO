@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.migration;
+package io.orqueio.bpm.engine.impl.migration;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.camunda.bpm.engine.migration.MigrationInstruction;
-import org.camunda.bpm.engine.migration.MigrationPlan;
-import org.camunda.bpm.engine.variable.VariableMap;
+import io.orqueio.bpm.engine.migration.MigrationInstruction;
+import io.orqueio.bpm.engine.migration.MigrationPlan;
+import io.orqueio.bpm.engine.variable.VariableMap;
 
 /**
  * @author Thorben Lindhauer

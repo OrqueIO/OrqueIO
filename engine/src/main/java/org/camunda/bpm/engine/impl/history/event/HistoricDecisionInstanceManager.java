@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.history.event;
+package io.orqueio.bpm.engine.impl.history.event;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -24,22 +24,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import org.camunda.bpm.engine.authorization.Resources;
-import org.camunda.bpm.engine.history.CleanableHistoricDecisionInstanceReportResult;
-import org.camunda.bpm.engine.history.HistoricDecisionInputInstance;
-import org.camunda.bpm.engine.history.HistoricDecisionInstance;
-import org.camunda.bpm.engine.history.HistoricDecisionOutputInstance;
-import org.camunda.bpm.engine.impl.CleanableHistoricDecisionInstanceReportImpl;
-import org.camunda.bpm.engine.impl.HistoricDecisionInstanceQueryImpl;
-import org.camunda.bpm.engine.impl.Page;
-import org.camunda.bpm.engine.impl.db.DbEntity;
-import org.camunda.bpm.engine.impl.db.ListQueryParameterObject;
-import org.camunda.bpm.engine.impl.db.entitymanager.operation.DbOperation;
-import org.camunda.bpm.engine.impl.persistence.AbstractHistoricManager;
-import org.camunda.bpm.engine.impl.persistence.entity.ByteArrayEntity;
-import org.camunda.bpm.engine.impl.util.ClockUtil;
-import org.camunda.bpm.engine.impl.util.ImmutablePair;
-import org.camunda.bpm.engine.impl.variable.serializer.AbstractTypedValueSerializer;
+import io.orqueio.bpm.engine.authorization.Resources;
+import io.orqueio.bpm.engine.history.CleanableHistoricDecisionInstanceReportResult;
+import io.orqueio.bpm.engine.history.HistoricDecisionInputInstance;
+import io.orqueio.bpm.engine.history.HistoricDecisionInstance;
+import io.orqueio.bpm.engine.history.HistoricDecisionOutputInstance;
+import io.orqueio.bpm.engine.impl.CleanableHistoricDecisionInstanceReportImpl;
+import io.orqueio.bpm.engine.impl.HistoricDecisionInstanceQueryImpl;
+import io.orqueio.bpm.engine.impl.Page;
+import io.orqueio.bpm.engine.impl.db.DbEntity;
+import io.orqueio.bpm.engine.impl.db.ListQueryParameterObject;
+import io.orqueio.bpm.engine.impl.db.entitymanager.operation.DbOperation;
+import io.orqueio.bpm.engine.impl.persistence.AbstractHistoricManager;
+import io.orqueio.bpm.engine.impl.persistence.entity.ByteArrayEntity;
+import io.orqueio.bpm.engine.impl.util.ClockUtil;
+import io.orqueio.bpm.engine.impl.util.ImmutablePair;
+import io.orqueio.bpm.engine.impl.variable.serializer.AbstractTypedValueSerializer;
 
 /**
  * Data base operations for {@link HistoricDecisionInstanceEntity}.

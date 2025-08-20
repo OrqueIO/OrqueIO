@@ -8,7 +8,7 @@
 
     <casePlanModel id="CasePlanModel_1">
       <extensionElements>
-        <camunda:variableListener class="org.camunda.bpm.engine.test.cmmn.listener.LogVariableListener"/>
+        <camunda:variableListener class="io.orqueio.bpm.engine.test.cmmn.listener.LogVariableListener"/>
       </extensionElements>
 
       <planItem id="PI_ProcessTask_1" definitionRef="ProcessTask_1" />

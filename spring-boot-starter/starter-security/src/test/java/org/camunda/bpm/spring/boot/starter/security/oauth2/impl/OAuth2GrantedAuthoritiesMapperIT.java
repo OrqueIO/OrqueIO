@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter.security.oauth2.impl;
+package io.orqueio.bpm.spring.boot.starter.security.oauth2.impl;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -22,8 +22,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import org.camunda.bpm.spring.boot.starter.security.oauth2.AbstractSpringSecurityIT;
-import org.camunda.commons.testing.ProcessEngineLoggingRule;
+import io.orqueio.bpm.spring.boot.starter.security.oauth2.AbstractSpringSecurityIT;
+import io.orqueio.commons.testing.ProcessEngineLoggingRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;

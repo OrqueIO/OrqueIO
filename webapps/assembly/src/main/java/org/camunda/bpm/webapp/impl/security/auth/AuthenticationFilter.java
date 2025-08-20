@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.webapp.impl.security.auth;
+package io.orqueio.bpm.webapp.impl.security.auth;
 
 import java.io.IOException;
 
@@ -28,11 +28,11 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.camunda.bpm.webapp.impl.IllegalWebAppConfigurationException;
-import org.camunda.bpm.webapp.impl.security.SecurityActions;
-import org.camunda.bpm.webapp.impl.security.SecurityActions.SecurityAction;
-import org.camunda.bpm.webapp.impl.util.ServletContextUtil;
-import org.camunda.bpm.webapp.impl.util.ServletFilterUtil;
+import io.orqueio.bpm.webapp.impl.IllegalWebAppConfigurationException;
+import io.orqueio.bpm.webapp.impl.security.SecurityActions;
+import io.orqueio.bpm.webapp.impl.security.SecurityActions.SecurityAction;
+import io.orqueio.bpm.webapp.impl.util.ServletContextUtil;
+import io.orqueio.bpm.webapp.impl.util.ServletFilterUtil;
 
 /**
  * <p>Servlet {@link Filter} implementation responsible for populating the

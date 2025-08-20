@@ -13,19 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.spring.components.aop;
+package io.orqueio.bpm.engine.spring.components.aop;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.camunda.bpm.engine.spring.annotations.ProcessId;
-import org.camunda.bpm.engine.spring.annotations.ProcessVariable;
-import org.camunda.bpm.engine.spring.annotations.ProcessVariables;
-import org.camunda.bpm.engine.spring.annotations.State;
-import org.camunda.bpm.engine.spring.components.registry.ActivitiStateHandlerRegistration;
-import org.camunda.bpm.engine.spring.components.registry.ActivitiStateHandlerRegistry;
+import io.orqueio.bpm.engine.spring.annotations.ProcessId;
+import io.orqueio.bpm.engine.spring.annotations.ProcessVariable;
+import io.orqueio.bpm.engine.spring.annotations.ProcessVariables;
+import io.orqueio.bpm.engine.spring.annotations.State;
+import io.orqueio.bpm.engine.spring.components.registry.ActivitiStateHandlerRegistration;
+import io.orqueio.bpm.engine.spring.components.registry.ActivitiStateHandlerRegistry;
 import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanClassLoaderAware;
@@ -43,7 +43,7 @@ import org.springframework.util.StringUtils;
 
 /**
  * the idea is that this bean post processor is responsible for registering all beans
- * that have the {@link org.camunda.bpm.engine.annotations.State} annotation.
+ * that have the {@link io.orqueio.bpm.engine.annotations.State} annotation.
  *
  * @author Josh Long
  * @since 5.3
@@ -90,7 +90,7 @@ public class ActivitiStateAnnotationBeanPostProcessor implements BeanPostProcess
 		// then get all the annotations
 		// then build the metadata and register the metadata
 		final Class<?> targetClass = AopUtils.getTargetClass(bean);
-		final org.camunda.bpm.engine.spring.annotations.ProcessEngineComponent component = targetClass.getAnnotation(org.camunda.bpm.engine.spring.annotations.ProcessEngineComponent.class);
+		final io.orqueio.bpm.engine.spring.annotations.ProcessEngineComponent component = targetClass.getAnnotation(io.orqueio.bpm.engine.spring.annotations.ProcessEngineComponent.class);
 
 		ReflectionUtils.doWithMethods(targetClass,
 				new ReflectionUtils.MethodCallback() {

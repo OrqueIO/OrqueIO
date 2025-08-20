@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.el;
+package io.orqueio.bpm.engine.impl.el;
 
-import org.camunda.bpm.application.ProcessApplicationInterface;
-import org.camunda.bpm.application.ProcessApplicationReference;
-import org.camunda.bpm.application.ProcessApplicationUnavailableException;
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.impl.juel.jakarta.el.BeanELResolver;
-import org.camunda.bpm.impl.juel.jakarta.el.ELResolver;
+import io.orqueio.bpm.application.ProcessApplicationInterface;
+import io.orqueio.bpm.application.ProcessApplicationReference;
+import io.orqueio.bpm.application.ProcessApplicationUnavailableException;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.impl.juel.jakarta.el.BeanELResolver;
+import io.orqueio.bpm.impl.juel.jakarta.el.ELResolver;
 
 /**
  * <p>Resolves a {@link BeanELResolver} from the current process application.

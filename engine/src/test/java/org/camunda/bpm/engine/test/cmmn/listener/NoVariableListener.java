@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.cmmn.listener;
+package io.orqueio.bpm.engine.test.cmmn.listener;
 
-import org.camunda.bpm.engine.delegate.VariableListener;
+import io.orqueio.bpm.engine.delegate.VariableListener;
 
 /**
  * This class does not implement {@link VariableListener}.

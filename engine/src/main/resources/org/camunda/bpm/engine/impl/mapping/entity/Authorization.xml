@@ -19,10 +19,10 @@
 -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
 
-<mapper namespace="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity">
+<mapper namespace="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity">
 
   <!-- AUTHORIZATION INSERT -->
-  <insert id="insertAuthorization" parameterType="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity">
+  <insert id="insertAuthorization" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity">
     insert into ${prefix}ACT_RU_AUTHORIZATION (
       ID_,
       TYPE_,
@@ -51,7 +51,7 @@
 
   <!-- AUTHORIZATION UPDATE -->
 
-  <update id="updateAuthorization" parameterType="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity">
+  <update id="updateAuthorization" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity">
     update ${prefix}ACT_RU_AUTHORIZATION set
       REV_ = #{revisionNext, jdbcType=INTEGER},
       TYPE_ = #{authorizationType, jdbcType=INTEGER},
@@ -234,7 +234,7 @@
 
   <!-- AUTHORIZATION DELETE -->
 
-  <update id="deleteAuthorization" parameterType="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity">
+  <update id="deleteAuthorization" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity">
     DELETE FROM 
         ${prefix}ACT_RU_AUTHORIZATION 
     where
@@ -266,7 +266,7 @@
   </delete>
 
   <delete id="deleteAuthorizationsByRemovalTime"
-          parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject">
+          parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject">
     <bind name="date" value="'REMOVAL_TIME_'"/>
     <bind name="reportPeriodUnitName" value="'MINUTE'"/>
     delete ${limitBeforeWithoutOffset} from ${prefix}ACT_RU_AUTHORIZATION
@@ -276,7 +276,7 @@
   </delete>
 
   <delete id="deleteAuthorizationsByRemovalTime_oracle"
-          parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject">
+          parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject">
     <bind name="date" value="'REMOVAL_TIME_'"/>
     <bind name="reportPeriodUnitName" value="'MINUTE'"/>
     delete ${limitBeforeWithoutOffset} from ${prefix}ACT_RU_AUTHORIZATION
@@ -286,7 +286,7 @@
   </delete>
 
   <delete id="deleteAuthorizationsByRemovalTime_postgres_or_db2"
-          parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject">
+          parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject">
     <bind name="date" value="'REMOVAL_TIME_'"/>
     <bind name="reportPeriodUnitName" value="'MINUTE'"/>
     delete ${limitBeforeWithoutOffset} from ${prefix}ACT_RU_AUTHORIZATION
@@ -299,21 +299,21 @@
 
   <sql id="andWhereMinuteInDateBetweenSql">
     <if test="parameter.minuteFrom != null and parameter.minuteTo != null">
-      AND ${datepart1}<include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.periodUnitFunction"/>${datepart2}${date}${datepart3}
+      AND ${datepart1}<include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.periodUnitFunction"/>${datepart2}${date}${datepart3}
       between #{parameter.minuteFrom, jdbcType=INTEGER} and #{parameter.minuteTo, jdbcType=INTEGER}
     </if>
   </sql>
 
   <sql id="andWhereMinuteInDateBetweenSql_oracle">
     <if test="parameter.minuteFrom != null and parameter.minuteTo != null">
-      AND ${datepart1}${date}${datepart2}<include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.periodUnitFunction"/>${datepart3}
+      AND ${datepart1}${date}${datepart2}<include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.periodUnitFunction"/>${datepart3}
       between #{parameter.minuteFrom, jdbcType=INTEGER} and #{parameter.minuteTo, jdbcType=INTEGER}
     </if>
   </sql>
 
   <!-- AUTHORIZATION RESULTMAP -->
 
-  <resultMap id="authorizationResultMap" type="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity">
+  <resultMap id="authorizationResultMap" type="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity">
     <id property="id" column="ID_" jdbcType="VARCHAR" />
     <result property="revision" column="REV_" jdbcType="INTEGER" />
     <result property="authorizationType" column="TYPE_" jdbcType="INTEGER" />
@@ -376,8 +376,8 @@
     ) THEN 1 ELSE 0 END ${dbSpecificDummyTable}
   </select>
 
-  <select id="selectAuthorizationByQueryCriteria" parameterType="org.camunda.bpm.engine.impl.AuthorizationQueryImpl" resultMap="authorizationResultMap">
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
+  <select id="selectAuthorizationByQueryCriteria" parameterType="io.orqueio.bpm.engine.impl.AuthorizationQueryImpl" resultMap="authorizationResultMap">
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
     ${limitBefore}
     select ${distinct} RES.* 
     ${limitBetween}
@@ -386,7 +386,7 @@
     ${limitAfter}
   </select>
 
-  <select id="selectAuthorizationCountByQueryCriteria" parameterType="org.camunda.bpm.engine.impl.AuthorizationQueryImpl" resultType="long">
+  <select id="selectAuthorizationCountByQueryCriteria" parameterType="io.orqueio.bpm.engine.impl.AuthorizationQueryImpl" resultType="long">
     ${countDistinctBeforeStart} RES.ID_ ${countDistinctBeforeEnd}
     <include refid="selectAuthorizationByQueryCriteriaSql"/>
     ${countDistinctAfterEnd}
@@ -395,7 +395,7 @@
   <sql id="selectAuthorizationByQueryCriteriaSql">
     from ${prefix}ACT_RU_AUTHORIZATION RES
 
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoin" /> 
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoin" />
 
     <where>
       <if test="id != null">
@@ -445,7 +445,7 @@
         </foreach>
       </if>
 
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.queryAuthorizationCheck" />
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.queryAuthorizationCheck" />
 
     </where>
   </sql>
@@ -456,7 +456,7 @@
     SELECT
   </if>
 
-  <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.authorizationCheck" />
+  <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.authorizationCheck" />
 
   <if test="permissionChecks != null &amp;&amp; permissionChecks.atomicChecks.size > 1">
     ${dbSpecificDummyTable}
@@ -775,7 +775,7 @@
   <!-- reusable authorization check for queries. -->
   <sql id="queryAuthorizationCheck">
       <if test="authCheck.shouldPerformAuthorizatioCheck &amp;&amp; authCheck.authUserId != null">    
-        AND <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.queryAuthorizationCheckWithoutPrefix"/>
+        AND <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.queryAuthorizationCheckWithoutPrefix"/>
       </if>
   </sql>
   
@@ -787,7 +787,7 @@
             <bind name="authUserId" value="authCheck.authUserId" />
             <bind name="authGroupIds" value="authCheck.authGroupIds" />        
             <bind name="revokeAuthorizationCheckEnabled" value="authCheck.revokeAuthorizationCheckEnabled" />
-            (<include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.authorizationCheck" />) = 1
+            (<include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.authorizationCheck" />) = 1
           </when> 
           <otherwise>
             AUTH.RESOURCE_ID_ IS NOT NULL 
@@ -812,7 +812,7 @@
         <bind name="authGroupIds" value="authCheck.authGroupIds" />
         <bind name="permCheck" value="authCheck.permissionChecks.atomicChecks[0]" />
         <bind name="revokeAuthorizationCheckEnabled" value="authCheck.revokeAuthorizationCheckEnabled" />
-        (<include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheck" />) = 1
+        (<include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheck" />) = 1
     </if>
   </sql>
 
@@ -826,14 +826,14 @@
      not a mixture of both (i.e. if you need "a or (b and c)", wrap "a" in another CompositePermissionCheck 
   -->
   <sql id="authorizationCheck">
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.atomicChecks" />
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.compositeChecks" />
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.atomicChecks" />
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.compositeChecks" />
   </sql>
   
   
   <sql id="authCheckJoin">
     <if test="authCheck.shouldPerformAuthorizatioCheck &amp;&amp; !authCheck.revokeAuthorizationCheckEnabled &amp;&amp; authCheck.authUserId != null">      
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoinWithoutOnClause" />
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoinWithoutOnClause" />
       AUTH ON (AUTH.RESOURCE_ID_ ${authJoinStart} RES.ID_ ${authJoinSeparator} '*' ${authJoinEnd})
     </if>    
   </sql>
@@ -844,7 +844,7 @@
     <bind name="atomicChecks" value="authCheck.permissionChecks.atomicChecks" />
     <bind name="disjunctive" value="authCheck.permissionChecks.disjunctive" />
     <bind name="useLeftJoin" value="authCheck.useLeftJoin" />
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoinWithoutOnClauseWithBinding${authCheckMethodSuffix}" />
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoinWithoutOnClauseWithBinding${authCheckMethodSuffix}" />
     <!-- The suffix above is added to handle mssql differently (with UNION instead of OR for groups) -->
   </sql>
 
@@ -862,7 +862,7 @@
       OR A.GROUP_ID_ IN <foreach item="item" index="index" collection="authGroupIds" open="(" separator="," close=")">#{item}</foreach>
     </if>
     )
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.atomicChecksOnResourceTypeAndPerms"></include>
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.atomicChecksOnResourceTypeAndPerms"></include>
     )
   </sql>
 
@@ -876,14 +876,14 @@
     FROM ${prefix}ACT_RU_AUTHORIZATION A
     WHERE A.TYPE_ &lt; 2
     AND A.USER_ID_ in ( #{authCheck.authUserId, jdbcType=VARCHAR}, '*')
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.atomicChecksOnResourceTypeAndPerms"></include>
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.atomicChecksOnResourceTypeAndPerms"></include>
     <if test="authGroupIds != null &amp;&amp; authGroupIds.size > 0">
       UNION (
       SELECT A.*
       FROM ${prefix}ACT_RU_AUTHORIZATION A
       WHERE A.TYPE_ &lt; 2
       AND A.GROUP_ID_ IN <foreach item="item" index="index" collection="authGroupIds" open="(" separator="," close=")">#{item}</foreach>
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.atomicChecksOnResourceTypeAndPerms"></include>
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.atomicChecksOnResourceTypeAndPerms"></include>
       )
     </if>
     )
@@ -913,18 +913,18 @@
     <if test="permissionChecks.atomicChecks != null &amp;&amp; permissionChecks.atomicChecks.size == 1">
 
       <bind name="permCheck" value="permissionChecks.atomicChecks[0]" />
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheck"/>
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheck"/>
 
     </if>
 
     <if test="permissionChecks.atomicChecks != null &amp;&amp; permissionChecks.atomicChecks.size > 1">
       <if test="permissionChecks.disjunctive">
         <bind name="atomicChecks" value="permissionChecks.atomicChecks" />
-        <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.disjunctiveAtomicChecks" />
+        <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.disjunctiveAtomicChecks" />
       </if>
       <if test="!permissionChecks.disjunctive">
         <bind name="atomicChecks" value="permissionChecks.atomicChecks" />
-        <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.conjunctiveAtomicChecks" />
+        <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.conjunctiveAtomicChecks" />
       </if>
     </if>
   </sql>
@@ -936,11 +936,11 @@
     <if test="permissionChecks.compositeChecks != null &amp;&amp; permissionChecks.compositeChecks.size > 1">
       <if test="permissionChecks.disjunctive">
         <bind name="compositeChecks" value="permissionChecks.compositeChecks" />
-        <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.disjunctiveCompositeChecks"/>
+        <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.disjunctiveCompositeChecks"/>
       </if>
       <if test="!permissionChecks.disjunctive">
         <bind name="compositeChecks" value="permissionChecks.compositeChecks" />
-        <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.conjunctiveCompositeChecks"/>
+        <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.conjunctiveCompositeChecks"/>
       </if>
     </if>
   </sql>
@@ -950,7 +950,7 @@
   -->
   <sql id="disjunctiveAtomicChecks">
     <foreach item="permCheck" index="index" collection="atomicChecks" separator=",">
-      ${dbSpecificIfNullFunction}((<include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheck"/>)
+      ${dbSpecificIfNullFunction}((<include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheck"/>)
     </foreach>
     , 0
     <foreach item="permCheck" index="index" collection="atomicChecks">
@@ -963,7 +963,7 @@
   -->
   <sql id="disjunctiveCompositeChecks">
     <foreach item="permissionChecks" index="index" collection="compositeChecks" separator=",">
-      ${dbSpecificIfNullFunction}((<include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.atomicChecks" />)
+      ${dbSpecificIfNullFunction}((<include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.atomicChecks" />)
     </foreach>
     , 0
     <foreach item="permissionChecks" index="index" collection="compositeChecks">
@@ -984,7 +984,7 @@
     </foreach>
     <foreach  item="permCheck" index="i" collection="atomicChecks">
       ${dbSpecificIfNullFunction}(
-        (<include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheck"/>)
+        (<include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheck"/>)
       , 0)
       <if test="i &gt; 0">
         ${bitand3}
@@ -1007,7 +1007,7 @@
       </if>
     </foreach>
     <foreach  item="permissionChecks" index="i" collection="compositeChecks">
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.atomicChecks" />
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.atomicChecks" />
       <if test="i &gt; 0">
         ${bitand3}
       </if>
@@ -1036,7 +1036,7 @@
           <!-- EVERYTHING ELSE like standalone tasks and other -->
           (
           <bind name="permissionChecks" value="authCheck.permissionChecks" />
-          <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.authorizationCheck" />
+          <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.authorizationCheck" />
           )
           END ) = 1
         </when>

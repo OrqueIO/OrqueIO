@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.ejb;
+package io.orqueio.bpm.container.impl.ejb;
 
 import javax.ejb.MessageDriven;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 
-import org.camunda.bpm.container.impl.threading.ra.inflow.JobExecutionHandler;
-import org.camunda.bpm.engine.impl.cmd.ExecuteJobsCmd;
-import org.camunda.bpm.engine.impl.interceptor.CommandExecutor;
-import org.camunda.bpm.engine.impl.jobexecutor.ExecuteJobHelper;
-import org.camunda.bpm.engine.impl.jobexecutor.JobFailureCollector;
+import io.orqueio.bpm.container.impl.threading.ra.inflow.JobExecutionHandler;
+import io.orqueio.bpm.engine.impl.cmd.ExecuteJobsCmd;
+import io.orqueio.bpm.engine.impl.interceptor.CommandExecutor;
+import io.orqueio.bpm.engine.impl.jobexecutor.ExecuteJobHelper;
+import io.orqueio.bpm.engine.impl.jobexecutor.JobFailureCollector;
 
 
 /**

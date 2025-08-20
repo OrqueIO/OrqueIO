@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.dmn;
+package io.orqueio.bpm.engine.impl.dmn;
 
 import java.util.Collection;
 
-import org.camunda.bpm.dmn.engine.DmnDecisionResult;
-import org.camunda.bpm.dmn.engine.DmnEngineException;
-import org.camunda.bpm.engine.BadUserRequestException;
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
-import org.camunda.bpm.engine.impl.dmn.result.DecisionResultMapper;
+import io.orqueio.bpm.dmn.engine.DmnDecisionResult;
+import io.orqueio.bpm.dmn.engine.DmnEngineException;
+import io.orqueio.bpm.engine.BadUserRequestException;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
+import io.orqueio.bpm.engine.impl.dmn.result.DecisionResultMapper;
 
 /**
  * @author Roman Smirnov

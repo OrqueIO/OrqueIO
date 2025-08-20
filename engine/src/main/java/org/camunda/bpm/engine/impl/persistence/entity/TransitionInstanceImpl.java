@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.persistence.entity;
+package io.orqueio.bpm.engine.impl.persistence.entity;
 
-import org.camunda.bpm.engine.runtime.Incident;
-import org.camunda.bpm.engine.runtime.TransitionInstance;
+import io.orqueio.bpm.engine.runtime.Incident;
+import io.orqueio.bpm.engine.runtime.TransitionInstance;
 
 import java.util.Arrays;
 

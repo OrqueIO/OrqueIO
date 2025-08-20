@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest;
+package io.orqueio.bpm.engine.rest;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -32,15 +32,15 @@ import java.util.Map;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response.Status;
 
-import org.camunda.bpm.engine.IdentityService;
-import org.camunda.bpm.engine.ProcessEngineConfiguration;
-import org.camunda.bpm.engine.identity.PasswordPolicy;
-import org.camunda.bpm.engine.identity.PasswordPolicyResult;
-import org.camunda.bpm.engine.identity.PasswordPolicyRule;
-import org.camunda.bpm.engine.identity.User;
-import org.camunda.bpm.engine.impl.identity.PasswordPolicyDigitRuleImpl;
-import org.camunda.bpm.engine.impl.identity.PasswordPolicyLengthRuleImpl;
-import org.camunda.bpm.engine.rest.util.container.TestContainerRule;
+import io.orqueio.bpm.engine.IdentityService;
+import io.orqueio.bpm.engine.ProcessEngineConfiguration;
+import io.orqueio.bpm.engine.identity.PasswordPolicy;
+import io.orqueio.bpm.engine.identity.PasswordPolicyResult;
+import io.orqueio.bpm.engine.identity.PasswordPolicyRule;
+import io.orqueio.bpm.engine.identity.User;
+import io.orqueio.bpm.engine.impl.identity.PasswordPolicyDigitRuleImpl;
+import io.orqueio.bpm.engine.impl.identity.PasswordPolicyLengthRuleImpl;
+import io.orqueio.bpm.engine.rest.util.container.TestContainerRule;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;

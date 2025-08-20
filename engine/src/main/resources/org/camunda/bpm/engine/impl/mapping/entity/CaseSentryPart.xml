@@ -19,11 +19,11 @@
 -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
 
-<mapper namespace="org.camunda.bpm.engine.impl.cmmn.entity.runtime.CaseSentryPartEntity">
+<mapper namespace="io.orqueio.bpm.engine.impl.cmmn.entity.runtime.CaseSentryPartEntity">
 
   <!-- CASE SENTRY PART INSERT -->
 
-  <insert id="insertCaseSentryPart" parameterType="org.camunda.bpm.engine.impl.cmmn.entity.runtime.CaseSentryPartEntity">
+  <insert id="insertCaseSentryPart" parameterType="io.orqueio.bpm.engine.impl.cmmn.entity.runtime.CaseSentryPartEntity">
     insert into ${prefix}ACT_RU_CASE_SENTRY_PART
     (
       ID_,
@@ -58,7 +58,7 @@
 
   <!-- CASE SENTRY PART UPDATE -->
 
-  <update id="updateCaseSentryPart" parameterType="org.camunda.bpm.engine.impl.cmmn.entity.runtime.CaseSentryPartEntity">
+  <update id="updateCaseSentryPart" parameterType="io.orqueio.bpm.engine.impl.cmmn.entity.runtime.CaseSentryPartEntity">
     update ${prefix}ACT_RU_CASE_SENTRY_PART set
       REV_ = #{revisionNext, jdbcType=INTEGER},
       SATISFIED_ = #{satisfied, jdbcType=BOOLEAN}
@@ -68,13 +68,13 @@
 
   <!-- CASE SENTRY PART DELETE -->
 
-  <delete id="deleteCaseSentryPart" parameterType="org.camunda.bpm.engine.impl.cmmn.entity.runtime.CaseSentryPartEntity">
+  <delete id="deleteCaseSentryPart" parameterType="io.orqueio.bpm.engine.impl.cmmn.entity.runtime.CaseSentryPartEntity">
     delete from ${prefix}ACT_RU_CASE_SENTRY_PART where ID_ = #{id} and REV_ = #{revision}
   </delete>
 
   <!-- CASE SENTRY PART RESULTMAP -->
 
-  <resultMap id="caseSentryPartResultMap" type="org.camunda.bpm.engine.impl.cmmn.entity.runtime.CaseSentryPartEntity">
+  <resultMap id="caseSentryPartResultMap" type="io.orqueio.bpm.engine.impl.cmmn.entity.runtime.CaseSentryPartEntity">
     <id property="id" column="ID_" jdbcType="VARCHAR" />
     <result property="revision" column="REV_" jdbcType="INTEGER" />
     <result property="caseInstanceId" column="CASE_INST_ID_" jdbcType="VARCHAR" />
@@ -97,13 +97,13 @@
     where ID_ = #{id}
   </select>
 
-  <select id="selectCaseSentryPartsByCaseExecutionId" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject" resultMap="caseSentryPartResultMap">
+  <select id="selectCaseSentryPartsByCaseExecutionId" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject" resultMap="caseSentryPartResultMap">
     select * from ${prefix}ACT_RU_CASE_SENTRY_PART
     where CASE_EXEC_ID_ = #{parameter}
   </select>
 
-  <select id="selectCaseSentryPartsByQueryCriteria" parameterType="org.camunda.bpm.engine.impl.cmmn.entity.runtime.CaseSentryPartQueryImpl" resultMap="caseSentryPartResultMap">
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
+  <select id="selectCaseSentryPartsByQueryCriteria" parameterType="io.orqueio.bpm.engine.impl.cmmn.entity.runtime.CaseSentryPartQueryImpl" resultMap="caseSentryPartResultMap">
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
     ${limitBefore}
     select ${distinct} RES.* 
     ${limitBetween}
@@ -112,7 +112,7 @@
     ${limitAfter}
   </select>
 
-  <select id="selectCaseSentryPartsCountByQueryCriteria" parameterType="org.camunda.bpm.engine.impl.cmmn.entity.runtime.CaseSentryPartQueryImpl" resultType="long">
+  <select id="selectCaseSentryPartsCountByQueryCriteria" parameterType="io.orqueio.bpm.engine.impl.cmmn.entity.runtime.CaseSentryPartQueryImpl" resultType="long">
     ${countDistinctBeforeStart} RES.ID_ ${countDistinctBeforeEnd}
     <include refid="selectCaseSentryPartsByQueryCriteriaSql"/>
     ${countDistinctAfterEnd}

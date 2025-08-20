@@ -19,14 +19,14 @@
 
       <cmmn:milestone id="Milestone_1">
         <cmmn:extensionElements>
-          <camunda:caseExecutionListener event="parentTerminate" class="org.camunda.bpm.engine.test.cmmn.sentry.SentryTriggerListener" />
+          <camunda:caseExecutionListener event="parentTerminate" class="io.orqueio.bpm.engine.test.cmmn.sentry.SentryTriggerListener" />
         </cmmn:extensionElements>
       </cmmn:milestone>
 
       <cmmn:stage id="Stage_1">
 
         <cmmn:extensionElements>
-          <camunda:caseExecutionListener event="exit" class="org.camunda.bpm.engine.test.cmmn.sentry.SentryTriggerListener" />
+          <camunda:caseExecutionListener event="exit" class="io.orqueio.bpm.engine.test.cmmn.sentry.SentryTriggerListener" />
         </cmmn:extensionElements>
 
         <cmmn:planItem id="PI_Milestone_1" definitionRef="Milestone_1">

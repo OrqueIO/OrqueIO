@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.history;
+package io.orqueio.bpm.engine.test.api.history;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import org.camunda.bpm.engine.AuthorizationService;
-import org.camunda.bpm.engine.BadUserRequestException;
-import org.camunda.bpm.engine.authorization.HistoricTaskPermissions;
-import org.camunda.bpm.engine.authorization.Resources;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.test.util.ProvidedProcessEngineRule;
+import io.orqueio.bpm.engine.AuthorizationService;
+import io.orqueio.bpm.engine.BadUserRequestException;
+import io.orqueio.bpm.engine.authorization.HistoricTaskPermissions;
+import io.orqueio.bpm.engine.authorization.Resources;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.test.util.ProvidedProcessEngineRule;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.history;
+package io.orqueio.bpm.engine.rest.history;
 
 import static io.restassured.RestAssured.expect;
 import static io.restassured.RestAssured.given;
@@ -44,21 +44,21 @@ import java.util.Map;
 
 import javax.ws.rs.core.Response.Status;
 
-import org.camunda.bpm.engine.history.HistoricDecisionInstance;
-import org.camunda.bpm.engine.history.HistoricDecisionInstanceQuery;
-import org.camunda.bpm.engine.impl.calendar.DateTimeUtil;
-import org.camunda.bpm.engine.impl.digest._apacheCommonsCodec.Base64;
-import org.camunda.bpm.engine.rest.AbstractRestServiceTest;
-import org.camunda.bpm.engine.rest.dto.VariableValueDto;
-import org.camunda.bpm.engine.rest.dto.converter.StringArrayConverter;
-import org.camunda.bpm.engine.rest.dto.history.HistoricDecisionInputInstanceDto;
-import org.camunda.bpm.engine.rest.dto.history.HistoricDecisionOutputInstanceDto;
-import org.camunda.bpm.engine.rest.exception.InvalidRequestException;
-import org.camunda.bpm.engine.rest.helper.MockProvider;
-import org.camunda.bpm.engine.rest.util.container.TestContainerRule;
-import org.camunda.bpm.engine.variable.value.BytesValue;
-import org.camunda.bpm.engine.variable.value.ObjectValue;
-import org.camunda.bpm.engine.variable.value.StringValue;
+import io.orqueio.bpm.engine.history.HistoricDecisionInstance;
+import io.orqueio.bpm.engine.history.HistoricDecisionInstanceQuery;
+import io.orqueio.bpm.engine.impl.calendar.DateTimeUtil;
+import io.orqueio.bpm.engine.impl.digest._apacheCommonsCodec.Base64;
+import io.orqueio.bpm.engine.rest.AbstractRestServiceTest;
+import io.orqueio.bpm.engine.rest.dto.VariableValueDto;
+import io.orqueio.bpm.engine.rest.dto.converter.StringArrayConverter;
+import io.orqueio.bpm.engine.rest.dto.history.HistoricDecisionInputInstanceDto;
+import io.orqueio.bpm.engine.rest.dto.history.HistoricDecisionOutputInstanceDto;
+import io.orqueio.bpm.engine.rest.exception.InvalidRequestException;
+import io.orqueio.bpm.engine.rest.helper.MockProvider;
+import io.orqueio.bpm.engine.rest.util.container.TestContainerRule;
+import io.orqueio.bpm.engine.variable.value.BytesValue;
+import io.orqueio.bpm.engine.variable.value.ObjectValue;
+import io.orqueio.bpm.engine.variable.value.StringValue;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.ClassRule;

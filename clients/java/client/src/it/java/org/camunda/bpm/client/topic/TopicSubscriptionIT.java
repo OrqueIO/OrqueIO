@@ -14,18 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.topic;
+package io.orqueio.bpm.client.topic;
 
-import org.camunda.bpm.client.ExternalTaskClient;
-import org.camunda.bpm.client.dto.ProcessDefinitionDto;
-import org.camunda.bpm.client.dto.ProcessInstanceDto;
-import org.camunda.bpm.client.exception.ExternalTaskClientException;
-import org.camunda.bpm.client.rule.ClientRule;
-import org.camunda.bpm.client.rule.EngineRule;
-import org.camunda.bpm.client.task.ExternalTask;
-import org.camunda.bpm.client.util.RecordingExternalTaskHandler;
-import org.camunda.bpm.engine.variable.Variables;
-import org.camunda.bpm.engine.variable.value.TypedValue;
+import io.orqueio.bpm.client.ExternalTaskClient;
+import io.orqueio.bpm.client.dto.ProcessDefinitionDto;
+import io.orqueio.bpm.client.dto.ProcessInstanceDto;
+import io.orqueio.bpm.client.exception.ExternalTaskClientException;
+import io.orqueio.bpm.client.rule.ClientRule;
+import io.orqueio.bpm.client.rule.EngineRule;
+import io.orqueio.bpm.client.task.ExternalTask;
+import io.orqueio.bpm.client.util.RecordingExternalTaskHandler;
+import io.orqueio.bpm.engine.variable.Variables;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -38,7 +38,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.camunda.bpm.client.util.ProcessModels.*;
+import static io.orqueio.bpm.client.util.ProcessModels.*;
 
 /**
  * @author Tassilo Weidner

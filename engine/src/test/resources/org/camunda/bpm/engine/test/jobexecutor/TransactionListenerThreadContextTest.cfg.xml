@@ -4,7 +4,7 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans   http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-  <bean id="processEngineConfiguration" class="org.camunda.bpm.engine.impl.cfg.StandaloneInMemProcessEngineConfiguration">
+  <bean id="processEngineConfiguration" class="io.orqueio.bpm.engine.impl.cfg.StandaloneInMemProcessEngineConfiguration">
 
     <property name="processEngineName" value="TransactionListenerThreadContextTest-engine" />
   
@@ -33,7 +33,7 @@
     <property name="enforceHistoryTimeToLive" value="false" />
     
     <property name="transactionContextFactory">
-        <bean class="org.camunda.bpm.engine.test.jobexecutor.AsyncTransactionContextFactory"></bean>
+        <bean class="io.orqueio.bpm.engine.test.jobexecutor.AsyncTransactionContextFactory"></bean>
     </property>
 
   </bean>

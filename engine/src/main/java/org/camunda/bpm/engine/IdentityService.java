@@ -14,25 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine;
+package io.orqueio.bpm.engine;
 
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.engine.authorization.Permissions;
-import org.camunda.bpm.engine.authorization.Resources;
-import org.camunda.bpm.engine.identity.PasswordPolicyResult;
-import org.camunda.bpm.engine.identity.Group;
-import org.camunda.bpm.engine.identity.GroupQuery;
-import org.camunda.bpm.engine.identity.NativeUserQuery;
-import org.camunda.bpm.engine.identity.PasswordPolicy;
-import org.camunda.bpm.engine.identity.Picture;
-import org.camunda.bpm.engine.identity.Tenant;
-import org.camunda.bpm.engine.identity.TenantQuery;
-import org.camunda.bpm.engine.identity.User;
-import org.camunda.bpm.engine.identity.UserQuery;
-import org.camunda.bpm.engine.impl.identity.Account;
-import org.camunda.bpm.engine.impl.identity.Authentication;
+import io.orqueio.bpm.engine.authorization.Permissions;
+import io.orqueio.bpm.engine.authorization.Resources;
+import io.orqueio.bpm.engine.identity.PasswordPolicyResult;
+import io.orqueio.bpm.engine.identity.Group;
+import io.orqueio.bpm.engine.identity.GroupQuery;
+import io.orqueio.bpm.engine.identity.NativeUserQuery;
+import io.orqueio.bpm.engine.identity.PasswordPolicy;
+import io.orqueio.bpm.engine.identity.Picture;
+import io.orqueio.bpm.engine.identity.Tenant;
+import io.orqueio.bpm.engine.identity.TenantQuery;
+import io.orqueio.bpm.engine.identity.User;
+import io.orqueio.bpm.engine.identity.UserQuery;
+import io.orqueio.bpm.engine.impl.identity.Account;
+import io.orqueio.bpm.engine.impl.identity.Authentication;
 
 /**
  * Service to manage {@link User}s and {@link Group}s.

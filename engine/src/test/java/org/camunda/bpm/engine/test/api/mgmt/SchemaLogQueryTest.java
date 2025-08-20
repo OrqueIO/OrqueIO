@@ -14,27 +14,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.mgmt;
+package io.orqueio.bpm.engine.test.api.mgmt;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.camunda.bpm.engine.test.api.runtime.TestOrderingUtil.inverted;
-import static org.camunda.bpm.engine.test.api.runtime.TestOrderingUtil.schemaLogEntryByTimestamp;
-import static org.camunda.bpm.engine.test.api.runtime.TestOrderingUtil.verifySorting;
+import static io.orqueio.bpm.engine.test.api.runtime.TestOrderingUtil.inverted;
+import static io.orqueio.bpm.engine.test.api.runtime.TestOrderingUtil.schemaLogEntryByTimestamp;
+import static io.orqueio.bpm.engine.test.api.runtime.TestOrderingUtil.verifySorting;
 
 import java.util.Date;
 import java.util.List;
 
-import org.camunda.bpm.engine.ManagementService;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.engine.impl.db.entitymanager.DbEntityManager;
-import org.camunda.bpm.engine.impl.db.entitymanager.DbEntityManagerFactory;
-import org.camunda.bpm.engine.impl.interceptor.Command;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.persistence.entity.SchemaLogEntryEntity;
-import org.camunda.bpm.engine.management.SchemaLogEntry;
-import org.camunda.bpm.engine.test.ProcessEngineRule;
-import org.camunda.bpm.engine.test.util.ProvidedProcessEngineRule;
+import io.orqueio.bpm.engine.ManagementService;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.impl.db.entitymanager.DbEntityManager;
+import io.orqueio.bpm.engine.impl.db.entitymanager.DbEntityManagerFactory;
+import io.orqueio.bpm.engine.impl.interceptor.Command;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.impl.persistence.entity.SchemaLogEntryEntity;
+import io.orqueio.bpm.engine.management.SchemaLogEntry;
+import io.orqueio.bpm.engine.test.ProcessEngineRule;
+import io.orqueio.bpm.engine.test.util.ProvidedProcessEngineRule;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;

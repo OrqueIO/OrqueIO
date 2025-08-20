@@ -10,7 +10,7 @@
 
     <sequenceFlow id="flow1" sourceRef="theStart" targetRef="theTask" />
 
-    <serviceTask id="theTask" camunda:class="org.camunda.bpm.engine.test.api.variables.GetDeserializedValueDelegate" />
+    <serviceTask id="theTask" camunda:class="io.orqueio.bpm.engine.test.api.variables.GetDeserializedValueDelegate" />
 
     <sequenceFlow id="flow2" sourceRef="theTask" targetRef="theEnd" />
 

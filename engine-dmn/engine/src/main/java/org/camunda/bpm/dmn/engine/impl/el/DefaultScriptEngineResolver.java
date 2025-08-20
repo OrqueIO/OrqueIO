@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.engine.impl.el;
+package io.orqueio.bpm.dmn.engine.impl.el;
 
-import static org.camunda.commons.utils.EnsureUtil.ensureNotNull;
+import static io.orqueio.commons.utils.EnsureUtil.ensureNotNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,7 +24,7 @@ import java.util.Map;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 
-import org.camunda.bpm.dmn.engine.impl.spi.el.DmnScriptEngineResolver;
+import io.orqueio.bpm.dmn.engine.impl.spi.el.DmnScriptEngineResolver;
 
 public class DefaultScriptEngineResolver implements DmnScriptEngineResolver {
 

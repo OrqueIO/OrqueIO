@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.variable.impl;
+package io.orqueio.bpm.engine.variable.impl;
 
 import java.io.Serializable;
 import java.util.AbstractCollection;
@@ -25,10 +25,10 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import org.camunda.bpm.engine.variable.context.VariableContext;
-import org.camunda.bpm.engine.variable.VariableMap;
-import org.camunda.bpm.engine.variable.Variables;
-import org.camunda.bpm.engine.variable.value.TypedValue;
+import io.orqueio.bpm.engine.variable.context.VariableContext;
+import io.orqueio.bpm.engine.variable.VariableMap;
+import io.orqueio.bpm.engine.variable.Variables;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
 
 /**
  * @author Daniel Meyer

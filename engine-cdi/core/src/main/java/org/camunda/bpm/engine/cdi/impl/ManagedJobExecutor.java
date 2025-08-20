@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.cdi.impl;
+package io.orqueio.bpm.engine.cdi.impl;
 
 import java.util.List;
 import java.util.concurrent.RejectedExecutionException;
 
 import javax.enterprise.concurrent.ManagedExecutorService;
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.impl.ProcessEngineImpl;
-import org.camunda.bpm.engine.impl.jobexecutor.JobExecutor;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.impl.ProcessEngineImpl;
+import io.orqueio.bpm.engine.impl.jobexecutor.JobExecutor;
 
 /**
  * {@link JobExecutor} implementation that utilises an application server's

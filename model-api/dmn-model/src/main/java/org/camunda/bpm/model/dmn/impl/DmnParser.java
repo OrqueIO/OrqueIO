@@ -14,30 +14,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.dmn.impl;
+package io.orqueio.bpm.model.dmn.impl;
 
-import static org.camunda.bpm.model.dmn.impl.DmnModelConstants.DMN11_ALTERNATIVE_NS;
-import static org.camunda.bpm.model.dmn.impl.DmnModelConstants.DMN11_NS;
-import static org.camunda.bpm.model.dmn.impl.DmnModelConstants.DMN12_NS;
-import static org.camunda.bpm.model.dmn.impl.DmnModelConstants.DMN13_NS;
-import static org.camunda.bpm.model.dmn.impl.DmnModelConstants.DMN14_NS;
-import static org.camunda.bpm.model.dmn.impl.DmnModelConstants.DMN15_NS;
-import static org.camunda.bpm.model.dmn.impl.DmnModelConstants.DMN_11_ALTERNATIVE_SCHEMA_LOCATION;
-import static org.camunda.bpm.model.dmn.impl.DmnModelConstants.DMN_11_SCHEMA_LOCATION;
-import static org.camunda.bpm.model.dmn.impl.DmnModelConstants.DMN_12_SCHEMA_LOCATION;
-import static org.camunda.bpm.model.dmn.impl.DmnModelConstants.DMN_13_SCHEMA_LOCATION;
-import static org.camunda.bpm.model.dmn.impl.DmnModelConstants.DMN_14_SCHEMA_LOCATION;
-import static org.camunda.bpm.model.dmn.impl.DmnModelConstants.DMN_15_SCHEMA_LOCATION;
+import static io.orqueio.bpm.model.dmn.impl.DmnModelConstants.DMN11_ALTERNATIVE_NS;
+import static io.orqueio.bpm.model.dmn.impl.DmnModelConstants.DMN11_NS;
+import static io.orqueio.bpm.model.dmn.impl.DmnModelConstants.DMN12_NS;
+import static io.orqueio.bpm.model.dmn.impl.DmnModelConstants.DMN13_NS;
+import static io.orqueio.bpm.model.dmn.impl.DmnModelConstants.DMN14_NS;
+import static io.orqueio.bpm.model.dmn.impl.DmnModelConstants.DMN15_NS;
+import static io.orqueio.bpm.model.dmn.impl.DmnModelConstants.DMN_11_ALTERNATIVE_SCHEMA_LOCATION;
+import static io.orqueio.bpm.model.dmn.impl.DmnModelConstants.DMN_11_SCHEMA_LOCATION;
+import static io.orqueio.bpm.model.dmn.impl.DmnModelConstants.DMN_12_SCHEMA_LOCATION;
+import static io.orqueio.bpm.model.dmn.impl.DmnModelConstants.DMN_13_SCHEMA_LOCATION;
+import static io.orqueio.bpm.model.dmn.impl.DmnModelConstants.DMN_14_SCHEMA_LOCATION;
+import static io.orqueio.bpm.model.dmn.impl.DmnModelConstants.DMN_15_SCHEMA_LOCATION;
 
 import java.io.InputStream;
 
-import org.camunda.bpm.model.dmn.Dmn;
-import org.camunda.bpm.model.dmn.DmnModelException;
-import org.camunda.bpm.model.xml.ModelParseException;
-import org.camunda.bpm.model.xml.impl.ModelImpl;
-import org.camunda.bpm.model.xml.impl.parser.AbstractModelParser;
-import org.camunda.bpm.model.xml.impl.util.ReflectUtil;
-import org.camunda.bpm.model.xml.instance.DomDocument;
+import io.orqueio.bpm.model.dmn.Dmn;
+import io.orqueio.bpm.model.dmn.DmnModelException;
+import io.orqueio.bpm.model.xml.ModelParseException;
+import io.orqueio.bpm.model.xml.impl.ModelImpl;
+import io.orqueio.bpm.model.xml.impl.parser.AbstractModelParser;
+import io.orqueio.bpm.model.xml.impl.util.ReflectUtil;
+import io.orqueio.bpm.model.xml.instance.DomDocument;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.validation.SchemaFactory;

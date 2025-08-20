@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.dmn;
+package io.orqueio.bpm.engine.dmn;
 
 import java.util.Map;
 
-import org.camunda.bpm.dmn.engine.DmnDecisionTableResult;
-import org.camunda.bpm.engine.AuthorizationException;
-import org.camunda.bpm.engine.authorization.Permissions;
-import org.camunda.bpm.engine.authorization.Resources;
-import org.camunda.bpm.engine.exception.NotFoundException;
-import org.camunda.bpm.engine.exception.NotValidException;
+import io.orqueio.bpm.dmn.engine.DmnDecisionTableResult;
+import io.orqueio.bpm.engine.AuthorizationException;
+import io.orqueio.bpm.engine.authorization.Permissions;
+import io.orqueio.bpm.engine.authorization.Resources;
+import io.orqueio.bpm.engine.exception.NotFoundException;
+import io.orqueio.bpm.engine.exception.NotValidException;
 
 /**
  * Fluent builder to evaluate a decision.

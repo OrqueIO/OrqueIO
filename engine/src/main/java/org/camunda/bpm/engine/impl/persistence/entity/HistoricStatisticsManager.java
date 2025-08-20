@@ -14,20 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.persistence.entity;
+package io.orqueio.bpm.engine.impl.persistence.entity;
 
-import static org.camunda.bpm.engine.authorization.Permissions.READ_HISTORY;
-import static org.camunda.bpm.engine.authorization.Resources.PROCESS_DEFINITION;
+import static io.orqueio.bpm.engine.authorization.Permissions.READ_HISTORY;
+import static io.orqueio.bpm.engine.authorization.Resources.PROCESS_DEFINITION;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.camunda.bpm.engine.history.HistoricActivityStatistics;
-import org.camunda.bpm.engine.history.HistoricCaseActivityStatistics;
-import org.camunda.bpm.engine.impl.HistoricActivityStatisticsQueryImpl;
-import org.camunda.bpm.engine.impl.HistoricCaseActivityStatisticsQueryImpl;
-import org.camunda.bpm.engine.impl.Page;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.persistence.AbstractManager;
+import io.orqueio.bpm.engine.history.HistoricActivityStatistics;
+import io.orqueio.bpm.engine.history.HistoricCaseActivityStatistics;
+import io.orqueio.bpm.engine.impl.HistoricActivityStatisticsQueryImpl;
+import io.orqueio.bpm.engine.impl.HistoricCaseActivityStatisticsQueryImpl;
+import io.orqueio.bpm.engine.impl.Page;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.impl.persistence.AbstractManager;
 
 /**
  *

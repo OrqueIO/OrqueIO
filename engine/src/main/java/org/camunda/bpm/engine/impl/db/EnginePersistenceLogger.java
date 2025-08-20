@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.db;
+package io.orqueio.bpm.engine.impl.db;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -22,26 +22,26 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import org.apache.ibatis.executor.BatchExecutorException;
-import org.camunda.bpm.application.ProcessApplicationUnavailableException;
-import org.camunda.bpm.engine.AuthorizationException;
-import org.camunda.bpm.engine.BadUserRequestException;
-import org.camunda.bpm.engine.OptimisticLockingException;
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.SuspendedEntityInteractionException;
-import org.camunda.bpm.engine.WrongDbException;
-import org.camunda.bpm.engine.authorization.MissingAuthorization;
-import org.camunda.bpm.engine.exception.NotValidException;
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
-import org.camunda.bpm.engine.impl.db.entitymanager.cache.CachedDbEntity;
-import org.camunda.bpm.engine.impl.db.entitymanager.cache.DbEntityState;
-import org.camunda.bpm.engine.impl.db.entitymanager.operation.DbOperation;
-import org.camunda.bpm.engine.impl.history.HistoryLevel;
-import org.camunda.bpm.engine.impl.persistence.entity.ExecutionEntity;
-import org.camunda.bpm.engine.impl.persistence.entity.JobEntity;
-import org.camunda.bpm.engine.impl.util.ClassNameUtil;
-import org.camunda.bpm.engine.impl.util.ExceptionUtil;
-import org.camunda.bpm.engine.variable.value.TypedValue;
-import org.camunda.bpm.model.xml.instance.ModelElementInstance;
+import io.orqueio.bpm.application.ProcessApplicationUnavailableException;
+import io.orqueio.bpm.engine.AuthorizationException;
+import io.orqueio.bpm.engine.BadUserRequestException;
+import io.orqueio.bpm.engine.OptimisticLockingException;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.SuspendedEntityInteractionException;
+import io.orqueio.bpm.engine.WrongDbException;
+import io.orqueio.bpm.engine.authorization.MissingAuthorization;
+import io.orqueio.bpm.engine.exception.NotValidException;
+import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
+import io.orqueio.bpm.engine.impl.db.entitymanager.cache.CachedDbEntity;
+import io.orqueio.bpm.engine.impl.db.entitymanager.cache.DbEntityState;
+import io.orqueio.bpm.engine.impl.db.entitymanager.operation.DbOperation;
+import io.orqueio.bpm.engine.impl.history.HistoryLevel;
+import io.orqueio.bpm.engine.impl.persistence.entity.ExecutionEntity;
+import io.orqueio.bpm.engine.impl.persistence.entity.JobEntity;
+import io.orqueio.bpm.engine.impl.util.ClassNameUtil;
+import io.orqueio.bpm.engine.impl.util.ExceptionUtil;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
+import io.orqueio.bpm.model.xml.instance.ModelElementInstance;
 
 /**
  * @author Stefan Hentschel.

@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.jboss.test;
+package io.orqueio.bpm.container.impl.jboss.test;
 
 import java.io.IOException;
-import org.camunda.bpm.container.impl.jboss.extension.BpmPlatformExtension;
-import org.camunda.bpm.container.impl.jboss.extension.ModelConstants;
+import io.orqueio.bpm.container.impl.jboss.extension.BpmPlatformExtension;
+import io.orqueio.bpm.container.impl.jboss.extension.ModelConstants;
 import org.jboss.as.subsystem.test.AbstractSubsystemBaseTest;
 
 

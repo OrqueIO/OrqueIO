@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.standalone.identity;
+package io.orqueio.bpm.engine.test.standalone.identity;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
@@ -26,12 +26,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.engine.IdentityService;
-import org.camunda.bpm.engine.identity.PasswordPolicyResult;
-import org.camunda.bpm.engine.identity.User;
-import org.camunda.bpm.engine.impl.identity.DefaultPasswordPolicyImpl;
-import org.camunda.bpm.engine.impl.identity.PasswordPolicyUserDataRuleImpl;
-import org.camunda.bpm.engine.test.ProcessEngineRule;
+import io.orqueio.bpm.engine.IdentityService;
+import io.orqueio.bpm.engine.identity.PasswordPolicyResult;
+import io.orqueio.bpm.engine.identity.User;
+import io.orqueio.bpm.engine.impl.identity.DefaultPasswordPolicyImpl;
+import io.orqueio.bpm.engine.impl.identity.PasswordPolicyUserDataRuleImpl;
+import io.orqueio.bpm.engine.test.ProcessEngineRule;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;

@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.query;
+package io.orqueio.bpm.engine.query;
 
 import java.util.List;
 
-import org.camunda.bpm.engine.AuthorizationException;
-import org.camunda.bpm.engine.authorization.Permissions;
-import org.camunda.bpm.engine.authorization.Resources;
-import org.camunda.bpm.engine.exception.NotValidException;
-import org.camunda.bpm.engine.history.DurationReportResult;
+import io.orqueio.bpm.engine.AuthorizationException;
+import io.orqueio.bpm.engine.authorization.Permissions;
+import io.orqueio.bpm.engine.authorization.Resources;
+import io.orqueio.bpm.engine.exception.NotValidException;
+import io.orqueio.bpm.engine.history.DurationReportResult;
 
 /**
  * Describes basic methods for creating a report.

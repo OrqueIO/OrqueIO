@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.bpmn.instance.bpmndi;
+package io.orqueio.bpm.model.bpmn.instance.bpmndi;
 
-import org.camunda.bpm.model.bpmn.instance.BaseElement;
-import org.camunda.bpm.model.bpmn.instance.di.Plane;
+import io.orqueio.bpm.model.bpmn.instance.BaseElement;
+import io.orqueio.bpm.model.bpmn.instance.di.Plane;
 
 /**
  * The BPMNDI BPMNPlane element

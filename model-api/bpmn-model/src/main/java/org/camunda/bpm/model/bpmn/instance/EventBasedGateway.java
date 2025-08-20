@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.bpmn.instance;
+package io.orqueio.bpm.model.bpmn.instance;
 
-import org.camunda.bpm.model.bpmn.EventBasedGatewayType;
-import org.camunda.bpm.model.bpmn.builder.EventBasedGatewayBuilder;
+import io.orqueio.bpm.model.bpmn.EventBasedGatewayType;
+import io.orqueio.bpm.model.bpmn.builder.EventBasedGatewayBuilder;
 
 /**
  * The BPMN eventBasedGateway element

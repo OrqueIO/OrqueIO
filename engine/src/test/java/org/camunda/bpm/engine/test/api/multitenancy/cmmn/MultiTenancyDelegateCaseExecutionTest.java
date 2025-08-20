@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.multitenancy.cmmn;
+package io.orqueio.bpm.engine.test.api.multitenancy.cmmn;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.camunda.bpm.engine.delegate.DelegateCaseExecution;
-import org.camunda.bpm.engine.repository.CaseDefinition;
-import org.camunda.bpm.engine.runtime.CaseInstance;
-import org.camunda.bpm.engine.test.api.multitenancy.listener.AssertingCaseExecutionListener;
-import org.camunda.bpm.engine.test.api.multitenancy.listener.AssertingCaseExecutionListener.DelegateCaseExecutionAsserter;
-import org.camunda.bpm.engine.test.util.PluggableProcessEngineTest;
+import io.orqueio.bpm.engine.delegate.DelegateCaseExecution;
+import io.orqueio.bpm.engine.repository.CaseDefinition;
+import io.orqueio.bpm.engine.runtime.CaseInstance;
+import io.orqueio.bpm.engine.test.api.multitenancy.listener.AssertingCaseExecutionListener;
+import io.orqueio.bpm.engine.test.api.multitenancy.listener.AssertingCaseExecutionListener.DelegateCaseExecutionAsserter;
+import io.orqueio.bpm.engine.test.util.PluggableProcessEngineTest;
 import org.junit.After;
 import org.junit.Test;
 

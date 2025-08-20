@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.history.removaltime.cleanup;
+package io.orqueio.bpm.engine.test.api.history.removaltime.cleanup;
 
-import org.camunda.bpm.engine.impl.history.HistoryLevel;
-import org.camunda.bpm.engine.impl.history.event.HistoryEventType;
-import org.camunda.bpm.engine.impl.history.event.HistoryEventTypes;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.impl.history.HistoryLevel;
+import io.orqueio.bpm.engine.impl.history.event.HistoryEventType;
+import io.orqueio.bpm.engine.impl.history.event.HistoryEventTypes;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
 
 /**
  * @author Tassilo Weidner

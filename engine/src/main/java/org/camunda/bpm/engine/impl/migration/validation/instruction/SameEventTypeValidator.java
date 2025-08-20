@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.migration.validation.instruction;
+package io.orqueio.bpm.engine.impl.migration.validation.instruction;
 
-import org.camunda.bpm.engine.impl.bpmn.behavior.BoundaryEventActivityBehavior;
-import org.camunda.bpm.engine.impl.bpmn.behavior.EventSubProcessStartEventActivityBehavior;
-import org.camunda.bpm.engine.impl.bpmn.helper.BpmnProperties;
-import org.camunda.bpm.engine.impl.pvm.delegate.ActivityBehavior;
-import org.camunda.bpm.engine.impl.pvm.process.ActivityImpl;
+import io.orqueio.bpm.engine.impl.bpmn.behavior.BoundaryEventActivityBehavior;
+import io.orqueio.bpm.engine.impl.bpmn.behavior.EventSubProcessStartEventActivityBehavior;
+import io.orqueio.bpm.engine.impl.bpmn.helper.BpmnProperties;
+import io.orqueio.bpm.engine.impl.pvm.delegate.ActivityBehavior;
+import io.orqueio.bpm.engine.impl.pvm.process.ActivityImpl;
 
 /**
  * @author Thorben Lindhauer

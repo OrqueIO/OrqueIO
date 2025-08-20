@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.dto.batch;
+package io.orqueio.bpm.engine.rest.dto.batch;
 
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
@@ -26,13 +26,13 @@ import java.util.Map;
 
 import javax.ws.rs.core.MultivaluedMap;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.batch.BatchStatisticsQuery;
-import org.camunda.bpm.engine.rest.dto.AbstractQueryDto;
-import org.camunda.bpm.engine.rest.dto.CamundaQueryParam;
-import org.camunda.bpm.engine.rest.dto.converter.BooleanConverter;
-import org.camunda.bpm.engine.rest.dto.converter.DateConverter;
-import org.camunda.bpm.engine.rest.dto.converter.StringListConverter;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.batch.BatchStatisticsQuery;
+import io.orqueio.bpm.engine.rest.dto.AbstractQueryDto;
+import io.orqueio.bpm.engine.rest.dto.CamundaQueryParam;
+import io.orqueio.bpm.engine.rest.dto.converter.BooleanConverter;
+import io.orqueio.bpm.engine.rest.dto.converter.DateConverter;
+import io.orqueio.bpm.engine.rest.dto.converter.StringListConverter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 

@@ -14,21 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.bpmn.validation;
+package io.orqueio.bpm.model.bpmn.validation;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.model.bpmn.Bpmn;
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
-import org.camunda.bpm.model.xml.instance.ModelElementInstance;
-import org.camunda.bpm.model.xml.validation.ModelElementValidator;
-import org.camunda.bpm.model.xml.validation.ValidationResult;
-import org.camunda.bpm.model.xml.validation.ValidationResultType;
-import org.camunda.bpm.model.xml.validation.ValidationResults;
+import io.orqueio.bpm.model.bpmn.Bpmn;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.bpm.model.xml.instance.ModelElementInstance;
+import io.orqueio.bpm.model.xml.validation.ModelElementValidator;
+import io.orqueio.bpm.model.xml.validation.ValidationResult;
+import io.orqueio.bpm.model.xml.validation.ValidationResultType;
+import io.orqueio.bpm.model.xml.validation.ValidationResults;
 import org.junit.Test;
-import org.camunda.bpm.model.bpmn.instance.Process;
+import io.orqueio.bpm.model.bpmn.instance.Process;
 
 import static org.assertj.core.api.Assertions.*;
 

@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.sub.authorization;
+package io.orqueio.bpm.engine.rest.sub.authorization;
 
-import org.camunda.bpm.engine.rest.dto.ResourceOptionsDto;
-import org.camunda.bpm.engine.rest.dto.authorization.AuthorizationDto;
+import io.orqueio.bpm.engine.rest.dto.ResourceOptionsDto;
+import io.orqueio.bpm.engine.rest.dto.authorization.AuthorizationDto;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;

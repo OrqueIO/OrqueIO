@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.dto;
+package io.orqueio.bpm.engine.rest.dto;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.camunda.bpm.engine.impl.QueryOperator;
+import io.orqueio.bpm.engine.impl.QueryOperator;
 
 import java.util.Date;
 import java.util.HashMap;

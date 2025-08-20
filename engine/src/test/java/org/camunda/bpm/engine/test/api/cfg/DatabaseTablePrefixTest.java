@@ -14,19 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.cfg;
+package io.orqueio.bpm.engine.test.api.cfg;
 
 import static org.junit.Assert.assertEquals;
 
 import java.sql.Connection;
 
 import org.apache.ibatis.datasource.pooled.PooledDataSource;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.ProcessEngineConfiguration;
-import org.camunda.bpm.engine.impl.ProcessEngineImpl;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.cfg.StandaloneInMemProcessEngineConfiguration;
-import org.camunda.bpm.engine.impl.util.ReflectUtil;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.ProcessEngineConfiguration;
+import io.orqueio.bpm.engine.impl.ProcessEngineImpl;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.cfg.StandaloneInMemProcessEngineConfiguration;
+import io.orqueio.bpm.engine.impl.util.ReflectUtil;
 import org.junit.Test;
 
 /**

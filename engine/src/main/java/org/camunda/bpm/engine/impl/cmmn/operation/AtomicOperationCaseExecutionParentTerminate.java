@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.cmmn.operation;
+package io.orqueio.bpm.engine.impl.cmmn.operation;
 
-import static org.camunda.bpm.engine.delegate.CaseExecutionListener.PARENT_TERMINATE;
+import static io.orqueio.bpm.engine.delegate.CaseExecutionListener.PARENT_TERMINATE;
 
 /**
  * @author Roman Smirnov

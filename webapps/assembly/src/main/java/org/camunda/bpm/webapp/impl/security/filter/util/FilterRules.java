@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.webapp.impl.security.filter.util;
+package io.orqueio.bpm.webapp.impl.security.filter.util;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,17 +22,17 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.camunda.bpm.engine.impl.util.ReflectUtil;
-import org.camunda.bpm.webapp.impl.security.auth.Authentication;
-import org.camunda.bpm.webapp.impl.security.filter.Authorization;
-import org.camunda.bpm.webapp.impl.security.filter.PathFilterRule;
-import org.camunda.bpm.webapp.impl.security.filter.RequestAuthorizer;
-import org.camunda.bpm.webapp.impl.security.filter.RequestFilter;
-import org.camunda.bpm.webapp.impl.security.filter.RequestMatcher;
-import org.camunda.bpm.webapp.impl.security.filter.SecurityFilterConfig;
-import org.camunda.bpm.webapp.impl.security.filter.SecurityFilterConfig.PathFilterConfig;
-import org.camunda.bpm.webapp.impl.security.filter.SecurityFilterConfig.PathMatcherConfig;
-import org.camunda.bpm.webapp.impl.security.filter.SecurityFilterRule;
+import io.orqueio.bpm.engine.impl.util.ReflectUtil;
+import io.orqueio.bpm.webapp.impl.security.auth.Authentication;
+import io.orqueio.bpm.webapp.impl.security.filter.Authorization;
+import io.orqueio.bpm.webapp.impl.security.filter.PathFilterRule;
+import io.orqueio.bpm.webapp.impl.security.filter.RequestAuthorizer;
+import io.orqueio.bpm.webapp.impl.security.filter.RequestFilter;
+import io.orqueio.bpm.webapp.impl.security.filter.RequestMatcher;
+import io.orqueio.bpm.webapp.impl.security.filter.SecurityFilterConfig;
+import io.orqueio.bpm.webapp.impl.security.filter.SecurityFilterConfig.PathFilterConfig;
+import io.orqueio.bpm.webapp.impl.security.filter.SecurityFilterConfig.PathMatcherConfig;
+import io.orqueio.bpm.webapp.impl.security.filter.SecurityFilterRule;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 

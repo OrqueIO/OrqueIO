@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.migration.instance;
+package io.orqueio.bpm.engine.impl.migration.instance;
 
-import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.engine.impl.history.HistoryLevel;
-import org.camunda.bpm.engine.impl.history.event.HistoryEvent;
-import org.camunda.bpm.engine.impl.history.event.HistoryEventProcessor;
-import org.camunda.bpm.engine.impl.history.event.HistoryEventTypes;
-import org.camunda.bpm.engine.impl.history.producer.HistoryEventProducer;
-import org.camunda.bpm.engine.impl.persistence.entity.ExecutionEntity;
-import org.camunda.bpm.engine.impl.persistence.entity.IncidentEntity;
-import org.camunda.bpm.engine.impl.pvm.process.ScopeImpl;
+import io.orqueio.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.impl.history.HistoryLevel;
+import io.orqueio.bpm.engine.impl.history.event.HistoryEvent;
+import io.orqueio.bpm.engine.impl.history.event.HistoryEventProcessor;
+import io.orqueio.bpm.engine.impl.history.event.HistoryEventTypes;
+import io.orqueio.bpm.engine.impl.history.producer.HistoryEventProducer;
+import io.orqueio.bpm.engine.impl.persistence.entity.ExecutionEntity;
+import io.orqueio.bpm.engine.impl.persistence.entity.IncidentEntity;
+import io.orqueio.bpm.engine.impl.pvm.process.ScopeImpl;
 
 public class MigratingIncident implements MigratingInstance {
 

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.history;
+package io.orqueio.bpm.engine.rest.history;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.either;
@@ -32,20 +32,20 @@ import static org.mockito.Mockito.when;
 
 import javax.ws.rs.core.Response.Status;
 
-import org.camunda.bpm.engine.HistoryService;
-import org.camunda.bpm.engine.exception.NotFoundException;
-import org.camunda.bpm.engine.history.HistoricVariableInstance;
-import org.camunda.bpm.engine.history.HistoricVariableInstanceQuery;
-import org.camunda.bpm.engine.rest.AbstractRestServiceTest;
-import org.camunda.bpm.engine.rest.helper.MockHistoricVariableInstanceBuilder;
-import org.camunda.bpm.engine.rest.helper.MockObjectValue;
-import org.camunda.bpm.engine.rest.helper.MockProvider;
-import org.camunda.bpm.engine.rest.helper.VariableTypeHelper;
-import org.camunda.bpm.engine.rest.util.container.TestContainerRule;
-import org.camunda.bpm.engine.variable.Variables;
-import org.camunda.bpm.engine.variable.type.ValueType;
-import org.camunda.bpm.engine.variable.value.FileValue;
-import org.camunda.bpm.engine.variable.value.ObjectValue;
+import io.orqueio.bpm.engine.HistoryService;
+import io.orqueio.bpm.engine.exception.NotFoundException;
+import io.orqueio.bpm.engine.history.HistoricVariableInstance;
+import io.orqueio.bpm.engine.history.HistoricVariableInstanceQuery;
+import io.orqueio.bpm.engine.rest.AbstractRestServiceTest;
+import io.orqueio.bpm.engine.rest.helper.MockHistoricVariableInstanceBuilder;
+import io.orqueio.bpm.engine.rest.helper.MockObjectValue;
+import io.orqueio.bpm.engine.rest.helper.MockProvider;
+import io.orqueio.bpm.engine.rest.helper.VariableTypeHelper;
+import io.orqueio.bpm.engine.rest.util.container.TestContainerRule;
+import io.orqueio.bpm.engine.variable.Variables;
+import io.orqueio.bpm.engine.variable.type.ValueType;
+import io.orqueio.bpm.engine.variable.value.FileValue;
+import io.orqueio.bpm.engine.variable.value.ObjectValue;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Before;

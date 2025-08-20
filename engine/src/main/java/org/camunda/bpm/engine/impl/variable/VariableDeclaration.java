@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.variable;
+package io.orqueio.bpm.engine.impl.variable;
 
 import java.io.Serializable;
 
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.delegate.Expression;
-import org.camunda.bpm.engine.delegate.VariableScope;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.delegate.Expression;
+import io.orqueio.bpm.engine.delegate.VariableScope;
 
 
 /**

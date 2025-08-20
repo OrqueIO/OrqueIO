@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.functional.spin;
+package io.orqueio.bpm.integrationtest.functional.spin;
 
-import org.camunda.bpm.engine.history.HistoricDecisionInstance;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.variable.VariableMap;
-import org.camunda.bpm.engine.variable.Variables;
-import org.camunda.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
-import org.camunda.spin.Spin;
+import io.orqueio.bpm.engine.history.HistoricDecisionInstance;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.variable.VariableMap;
+import io.orqueio.bpm.engine.variable.Variables;
+import io.orqueio.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
+import io.orqueio.spin.Spin;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
@@ -103,7 +103,7 @@ public class FeelEngineTest extends AbstractFoxPlatformIntegrationTest {
 
   @Test
   public void testSpinIntegration() {
-    // Accessing SPIN object from FEEL requires the org.camunda.spin.plugin.impl.feel.integration.SpinValueMapper SPI
+    // Accessing SPIN object from FEEL requires the io.orqueio.spin.plugin.impl.feel.integration.SpinValueMapper SPI
     // given
     VariableMap variablesLarge = Variables.createVariables().putValue("amount", Spin.JSON("{\"value\": 25}"));
     VariableMap variablesSmall = Variables.createVariables().putValue("amount", Spin.JSON("{\"value\": 2}"));
@@ -125,7 +125,7 @@ public class FeelEngineTest extends AbstractFoxPlatformIntegrationTest {
 
   @Test
   public void testFeelEngineComplexContext() {
-    // Mapping complex FEEL context into Java requires the org.camunda.feel.impl.JavaValueMapper SPI to be registered
+    // Mapping complex FEEL context into Java requires the io.orqueio.feel.impl.JavaValueMapper SPI to be registered
     // when
     ProcessInstance pi = runtimeService.startProcessInstanceByKey("feelComplexContextProcess");
     String result = (String) runtimeService.getVariable(pi.getId(), "result");

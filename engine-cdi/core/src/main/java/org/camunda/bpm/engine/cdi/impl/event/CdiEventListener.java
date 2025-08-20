@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.cdi.impl.event;
+package io.orqueio.bpm.engine.cdi.impl.event;
 
 import java.lang.annotation.Annotation;
 import javax.enterprise.inject.spi.BeanManager;
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.cdi.BusinessProcessEvent;
-import org.camunda.bpm.engine.cdi.impl.util.BeanManagerLookup;
-import org.camunda.bpm.engine.delegate.ExecutionListener;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.cdi.BusinessProcessEvent;
+import io.orqueio.bpm.engine.cdi.impl.util.BeanManagerLookup;
+import io.orqueio.bpm.engine.delegate.ExecutionListener;
 
 /**
  * Generic {@link ExecutionListener} publishing events using the CDI event

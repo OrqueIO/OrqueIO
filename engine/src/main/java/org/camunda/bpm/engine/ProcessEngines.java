@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine;
+package io.orqueio.bpm.engine;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,10 +31,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import org.camunda.bpm.engine.impl.ProcessEngineInfoImpl;
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
-import org.camunda.bpm.engine.impl.util.IoUtil;
-import org.camunda.bpm.engine.impl.util.ReflectUtil;
+import io.orqueio.bpm.engine.impl.ProcessEngineInfoImpl;
+import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
+import io.orqueio.bpm.engine.impl.util.IoUtil;
+import io.orqueio.bpm.engine.impl.util.ReflectUtil;
 
 
 
@@ -45,7 +45,7 @@ import org.camunda.bpm.engine.impl.util.ReflectUtil;
  * The activiti-webapp-init webapp will
  * call the {@link #init()} method when the webapp is deployed and it will call the
  * {@link #destroy()} method when the webapp is destroyed, using a context-listener
- * (<code>org.camunda.bpm.engine.test.impl.servlet.listener.ProcessEnginesServletContextListener</code>).  That way,
+ * (<code>io.orqueio.bpm.engine.test.impl.servlet.listener.ProcessEnginesServletContextListener</code>).  That way,
  * all applications can just use the {@link #getProcessEngines()} to
  * obtain pre-initialized and cached process engines. <br>
  * <br>
@@ -133,7 +133,7 @@ public abstract class ProcessEngines {
 
   protected static void initProcessEngineFromSpringResource(URL resource) {
     try {
-      Class< ? > springConfigurationHelperClass = ReflectUtil.loadClass("org.camunda.bpm.engine.spring.SpringConfigurationHelper");
+      Class< ? > springConfigurationHelperClass = ReflectUtil.loadClass("io.orqueio.bpm.engine.spring.SpringConfigurationHelper");
       Method method = springConfigurationHelperClass.getMethod("buildProcessEngine", new Class<?>[]{URL.class});
       ProcessEngine processEngine = (ProcessEngine) method.invoke(null, new Object[]{resource});
 

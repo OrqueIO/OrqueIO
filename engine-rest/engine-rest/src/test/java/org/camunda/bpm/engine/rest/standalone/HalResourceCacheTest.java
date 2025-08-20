@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.standalone;
+package io.orqueio.bpm.engine.rest.standalone;
 
-import static org.camunda.bpm.engine.rest.hal.cache.HalRelationCacheConfiguration.CONFIG_CACHES;
-import static org.camunda.bpm.engine.rest.hal.cache.HalRelationCacheConfiguration.CONFIG_CACHE_IMPLEMENTATION;
+import static io.orqueio.bpm.engine.rest.hal.cache.HalRelationCacheConfiguration.CONFIG_CACHES;
+import static io.orqueio.bpm.engine.rest.hal.cache.HalRelationCacheConfiguration.CONFIG_CACHE_IMPLEMENTATION;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -36,23 +36,23 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.engine.identity.User;
-import org.camunda.bpm.engine.identity.UserQuery;
-import org.camunda.bpm.engine.impl.util.ClockUtil;
-import org.camunda.bpm.engine.rest.AbstractRestServiceTest;
-import org.camunda.bpm.engine.rest.IdentityRestService;
-import org.camunda.bpm.engine.rest.UserRestService;
-import org.camunda.bpm.engine.rest.cache.Cache;
-import org.camunda.bpm.engine.rest.hal.Hal;
-import org.camunda.bpm.engine.rest.hal.HalLinkResolver;
-import org.camunda.bpm.engine.rest.hal.HalResource;
-import org.camunda.bpm.engine.rest.hal.cache.DefaultHalResourceCache;
-import org.camunda.bpm.engine.rest.hal.cache.HalRelationCacheBootstrap;
-import org.camunda.bpm.engine.rest.hal.cache.HalRelationCacheConfiguration;
-import org.camunda.bpm.engine.rest.hal.cache.HalRelationCacheConfigurationException;
-import org.camunda.bpm.engine.rest.hal.identitylink.HalIdentityLink;
-import org.camunda.bpm.engine.rest.hal.user.HalUser;
-import org.camunda.bpm.engine.task.IdentityLink;
+import io.orqueio.bpm.engine.identity.User;
+import io.orqueio.bpm.engine.identity.UserQuery;
+import io.orqueio.bpm.engine.impl.util.ClockUtil;
+import io.orqueio.bpm.engine.rest.AbstractRestServiceTest;
+import io.orqueio.bpm.engine.rest.IdentityRestService;
+import io.orqueio.bpm.engine.rest.UserRestService;
+import io.orqueio.bpm.engine.rest.cache.Cache;
+import io.orqueio.bpm.engine.rest.hal.Hal;
+import io.orqueio.bpm.engine.rest.hal.HalLinkResolver;
+import io.orqueio.bpm.engine.rest.hal.HalResource;
+import io.orqueio.bpm.engine.rest.hal.cache.DefaultHalResourceCache;
+import io.orqueio.bpm.engine.rest.hal.cache.HalRelationCacheBootstrap;
+import io.orqueio.bpm.engine.rest.hal.cache.HalRelationCacheConfiguration;
+import io.orqueio.bpm.engine.rest.hal.cache.HalRelationCacheConfigurationException;
+import io.orqueio.bpm.engine.rest.hal.identitylink.HalIdentityLink;
+import io.orqueio.bpm.engine.rest.hal.user.HalUser;
+import io.orqueio.bpm.engine.task.IdentityLink;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -132,7 +132,7 @@ public class HalResourceCacheTest extends AbstractRestServiceTest {
   @Test
   public void testUnknownCacheImplementationClass() {
     try {
-      contextListener.configureCaches("{\"" + CONFIG_CACHE_IMPLEMENTATION +"\": \"org.camunda.bpm.UnknownCache\" }");
+      contextListener.configureCaches("{\"" + CONFIG_CACHE_IMPLEMENTATION +"\": \"io.orqueio.bpm.UnknownCache\" }");
       fail("Exception expected");
     }
     catch (HalRelationCacheConfigurationException e) {

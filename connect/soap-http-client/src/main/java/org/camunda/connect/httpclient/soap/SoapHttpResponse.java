@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.connect.httpclient.soap;
+package io.orqueio.connect.httpclient.soap;
 
-import org.camunda.connect.httpclient.HttpResponse;
+import io.orqueio.connect.httpclient.HttpResponse;
 
 public interface SoapHttpResponse extends HttpResponse {
 

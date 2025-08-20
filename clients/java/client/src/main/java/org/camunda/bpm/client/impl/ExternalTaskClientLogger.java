@@ -14,28 +14,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.impl;
+package io.orqueio.bpm.client.impl;
 
 import java.io.IOException;
 import java.util.Collection;
 
-import org.camunda.bpm.client.exception.ConnectionLostException;
-import org.camunda.bpm.client.exception.ExternalTaskClientException;
-import org.camunda.bpm.client.exception.BadRequestException;
-import org.camunda.bpm.client.exception.NotFoundException;
-import org.camunda.bpm.client.exception.EngineException;
-import org.camunda.bpm.client.exception.RestException;
-import org.camunda.bpm.client.exception.UnknownHttpErrorException;
-import org.camunda.bpm.client.exception.ValueMapperException;
-import org.camunda.bpm.client.spi.DataFormat;
-import org.camunda.bpm.client.spi.DataFormatConfigurator;
-import org.camunda.bpm.client.spi.DataFormatProvider;
-import org.camunda.bpm.client.topic.impl.TopicSubscriptionManagerLogger;
-import org.camunda.bpm.client.variable.impl.format.json.JacksonJsonLogger;
-import org.camunda.bpm.client.variable.impl.format.serializable.SerializableLogger;
-import org.camunda.bpm.client.variable.impl.format.xml.DomXmlLogger;
-import org.camunda.bpm.engine.variable.value.TypedValue;
-import org.camunda.commons.logging.BaseLogger;
+import io.orqueio.bpm.client.exception.ConnectionLostException;
+import io.orqueio.bpm.client.exception.ExternalTaskClientException;
+import io.orqueio.bpm.client.exception.BadRequestException;
+import io.orqueio.bpm.client.exception.NotFoundException;
+import io.orqueio.bpm.client.exception.EngineException;
+import io.orqueio.bpm.client.exception.RestException;
+import io.orqueio.bpm.client.exception.UnknownHttpErrorException;
+import io.orqueio.bpm.client.exception.ValueMapperException;
+import io.orqueio.bpm.client.spi.DataFormat;
+import io.orqueio.bpm.client.spi.DataFormatConfigurator;
+import io.orqueio.bpm.client.spi.DataFormatProvider;
+import io.orqueio.bpm.client.topic.impl.TopicSubscriptionManagerLogger;
+import io.orqueio.bpm.client.variable.impl.format.json.JacksonJsonLogger;
+import io.orqueio.bpm.client.variable.impl.format.serializable.SerializableLogger;
+import io.orqueio.bpm.client.variable.impl.format.xml.DomXmlLogger;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
+import io.orqueio.commons.logging.BaseLogger;
 
 /**
  * @author Tassilo Weidner
@@ -43,7 +43,7 @@ import org.camunda.commons.logging.BaseLogger;
 public class ExternalTaskClientLogger extends BaseLogger {
 
   protected static final String PROJECT_CODE = "TASK/CLIENT";
-  protected static final String PROJECT_LOGGER = "org.camunda.bpm.client";
+  protected static final String PROJECT_LOGGER = "io.orqueio.bpm.client";
 
   public static final ExternalTaskClientLogger CLIENT_LOGGER =
     createLogger(ExternalTaskClientLogger.class, PROJECT_CODE, PROJECT_LOGGER, "01");

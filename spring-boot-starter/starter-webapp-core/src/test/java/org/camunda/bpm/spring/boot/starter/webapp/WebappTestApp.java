@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter.webapp;
+package io.orqueio.bpm.spring.boot.starter.webapp;
 
-import org.camunda.bpm.spring.boot.starter.property.CamundaBpmProperties;
+import io.orqueio.bpm.spring.boot.starter.property.CamundaBpmProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

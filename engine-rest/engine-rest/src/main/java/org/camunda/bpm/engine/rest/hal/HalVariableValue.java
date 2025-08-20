@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.hal;
+package io.orqueio.bpm.engine.rest.hal;
 
-import org.camunda.bpm.engine.rest.*;
-import org.camunda.bpm.engine.rest.dto.VariableValueDto;
-import org.camunda.bpm.engine.rest.exception.RestException;
-import org.camunda.bpm.engine.rest.sub.VariableResource;
-import org.camunda.bpm.engine.runtime.VariableInstance;
+import io.orqueio.bpm.engine.rest.*;
+import io.orqueio.bpm.engine.rest.dto.VariableValueDto;
+import io.orqueio.bpm.engine.rest.exception.RestException;
+import io.orqueio.bpm.engine.rest.sub.VariableResource;
+import io.orqueio.bpm.engine.runtime.VariableInstance;
 
 import javax.ws.rs.core.UriBuilder;
 import java.util.Map;

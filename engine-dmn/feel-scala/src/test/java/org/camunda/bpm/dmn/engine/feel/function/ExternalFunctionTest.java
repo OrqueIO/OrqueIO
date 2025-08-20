@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.engine.feel.function;
+package io.orqueio.bpm.dmn.engine.feel.function;
 
-import org.camunda.bpm.dmn.engine.feel.helper.FeelRule;
-import org.camunda.bpm.dmn.feel.impl.FeelException;
+import io.orqueio.bpm.dmn.engine.feel.helper.FeelRule;
+import io.orqueio.bpm.dmn.feel.impl.FeelException;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;

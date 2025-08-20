@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.authorization.util;
+package io.orqueio.bpm.engine.test.api.authorization.util;
 
-import org.camunda.bpm.engine.AuthorizationException;
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
-import org.camunda.bpm.engine.impl.interceptor.Command;
-import org.camunda.bpm.engine.impl.interceptor.CommandInterceptor;
+import io.orqueio.bpm.engine.AuthorizationException;
+import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
+import io.orqueio.bpm.engine.impl.interceptor.Command;
+import io.orqueio.bpm.engine.impl.interceptor.CommandInterceptor;
 import org.slf4j.Logger;
 
 /**

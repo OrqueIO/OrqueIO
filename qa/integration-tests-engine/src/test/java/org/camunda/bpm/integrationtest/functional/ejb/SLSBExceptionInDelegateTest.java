@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.functional.ejb;
+package io.orqueio.bpm.integrationtest.functional.ejb;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-import org.camunda.bpm.engine.runtime.Incident;
-import org.camunda.bpm.engine.runtime.Job;
-import org.camunda.bpm.integrationtest.functional.ejb.beans.SLSBClientDelegate;
-import org.camunda.bpm.integrationtest.functional.ejb.beans.SLSBThrowExceptionDelegate;
-import org.camunda.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
+import io.orqueio.bpm.engine.runtime.Incident;
+import io.orqueio.bpm.engine.runtime.Job;
+import io.orqueio.bpm.integrationtest.functional.ejb.beans.SLSBClientDelegate;
+import io.orqueio.bpm.integrationtest.functional.ejb.beans.SLSBThrowExceptionDelegate;
+import io.orqueio.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.spec.WebArchive;

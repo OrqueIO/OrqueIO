@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.mgmt;
+package io.orqueio.bpm.engine.test.api.mgmt;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.camunda.bpm.engine.test.api.runtime.TestOrderingUtil.batchStatisticsById;
-import static org.camunda.bpm.engine.test.api.runtime.TestOrderingUtil.batchStatisticsByStartTime;
-import static org.camunda.bpm.engine.test.api.runtime.TestOrderingUtil.inverted;
-import static org.camunda.bpm.engine.test.api.runtime.TestOrderingUtil.verifySorting;
+import static io.orqueio.bpm.engine.test.api.runtime.TestOrderingUtil.batchStatisticsById;
+import static io.orqueio.bpm.engine.test.api.runtime.TestOrderingUtil.batchStatisticsByStartTime;
+import static io.orqueio.bpm.engine.test.api.runtime.TestOrderingUtil.inverted;
+import static io.orqueio.bpm.engine.test.api.runtime.TestOrderingUtil.verifySorting;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -29,19 +29,19 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.camunda.bpm.engine.ManagementService;
-import org.camunda.bpm.engine.batch.Batch;
-import org.camunda.bpm.engine.batch.BatchStatistics;
-import org.camunda.bpm.engine.batch.BatchStatisticsQuery;
-import org.camunda.bpm.engine.exception.NotValidException;
-import org.camunda.bpm.engine.exception.NullValueException;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.util.ClockUtil;
-import org.camunda.bpm.engine.runtime.Job;
-import org.camunda.bpm.engine.test.ProcessEngineRule;
-import org.camunda.bpm.engine.test.api.runtime.migration.MigrationTestRule;
-import org.camunda.bpm.engine.test.api.runtime.migration.batch.BatchMigrationHelper;
-import org.camunda.bpm.engine.test.util.ProvidedProcessEngineRule;
+import io.orqueio.bpm.engine.ManagementService;
+import io.orqueio.bpm.engine.batch.Batch;
+import io.orqueio.bpm.engine.batch.BatchStatistics;
+import io.orqueio.bpm.engine.batch.BatchStatisticsQuery;
+import io.orqueio.bpm.engine.exception.NotValidException;
+import io.orqueio.bpm.engine.exception.NullValueException;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.util.ClockUtil;
+import io.orqueio.bpm.engine.runtime.Job;
+import io.orqueio.bpm.engine.test.ProcessEngineRule;
+import io.orqueio.bpm.engine.test.api.runtime.migration.MigrationTestRule;
+import io.orqueio.bpm.engine.test.api.runtime.migration.batch.BatchMigrationHelper;
+import io.orqueio.bpm.engine.test.util.ProvidedProcessEngineRule;
 import org.hamcrest.CoreMatchers;
 import org.junit.After;
 import org.junit.Assert;

@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.task.impl.dto;
+package io.orqueio.bpm.client.task.impl.dto;
 
-import org.camunda.bpm.client.impl.RequestDto;
-import org.camunda.bpm.client.variable.impl.TypedValueField;
+import io.orqueio.bpm.client.impl.RequestDto;
+import io.orqueio.bpm.client.variable.impl.TypedValueField;
 
 import java.util.Map;
 

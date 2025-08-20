@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.variable.impl.value;
+package io.orqueio.bpm.client.variable.impl.value;
 
 import java.io.InputStream;
 
-import org.camunda.bpm.client.impl.EngineClient;
-import org.camunda.bpm.client.impl.EngineClientException;
-import org.camunda.bpm.client.impl.ExternalTaskClientLogger;
-import org.camunda.bpm.client.variable.value.DeferredFileValue;
-import org.camunda.bpm.engine.variable.impl.value.FileValueImpl;
-import org.camunda.bpm.engine.variable.type.PrimitiveValueType;
+import io.orqueio.bpm.client.impl.EngineClient;
+import io.orqueio.bpm.client.impl.EngineClientException;
+import io.orqueio.bpm.client.impl.ExternalTaskClientLogger;
+import io.orqueio.bpm.client.variable.value.DeferredFileValue;
+import io.orqueio.bpm.engine.variable.impl.value.FileValueImpl;
+import io.orqueio.bpm.engine.variable.type.PrimitiveValueType;
 
 /**
  * @author Tassilo Weidner

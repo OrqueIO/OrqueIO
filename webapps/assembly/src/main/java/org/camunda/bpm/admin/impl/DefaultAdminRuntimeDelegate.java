@@ -14,19 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.admin.impl;
+package io.orqueio.bpm.admin.impl;
 
-import org.camunda.bpm.admin.AdminRuntimeDelegate;
-import org.camunda.bpm.admin.plugin.spi.AdminPlugin;
-import org.camunda.bpm.webapp.db.CommandExecutor;
-import org.camunda.bpm.webapp.db.QueryService;
-import org.camunda.bpm.webapp.impl.db.CommandExecutorImpl;
-import org.camunda.bpm.webapp.impl.db.QueryServiceImpl;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.impl.ProcessEngineImpl;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.webapp.impl.AbstractAppRuntimeDelegate;
+import io.orqueio.bpm.admin.AdminRuntimeDelegate;
+import io.orqueio.bpm.admin.plugin.spi.AdminPlugin;
+import io.orqueio.bpm.webapp.db.CommandExecutor;
+import io.orqueio.bpm.webapp.db.QueryService;
+import io.orqueio.bpm.webapp.impl.db.CommandExecutorImpl;
+import io.orqueio.bpm.webapp.impl.db.QueryServiceImpl;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.impl.ProcessEngineImpl;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.webapp.impl.AbstractAppRuntimeDelegate;
 
 import java.util.HashMap;
 import java.util.List;

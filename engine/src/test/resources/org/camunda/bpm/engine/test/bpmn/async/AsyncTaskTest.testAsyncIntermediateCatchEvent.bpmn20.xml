@@ -12,7 +12,7 @@
     
     <intermediateCatchEvent id="intermediateCatchEvent" camunda:async="true">
     	<extensionElements>
-			  <camunda:executionListener event="start" class="org.camunda.bpm.engine.test.bpmn.async.AsyncListener" />
+			  <camunda:executionListener event="start" class="io.orqueio.bpm.engine.test.bpmn.async.AsyncListener" />
 		  </extensionElements>
 
       <messageEventDefinition id="testMessage" messageRef="testMessage1" />

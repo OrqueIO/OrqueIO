@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.plugin.impl;
+package io.orqueio.spin.plugin.impl;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -23,17 +23,17 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.engine.impl.util.IoUtil;
-import org.camunda.bpm.engine.impl.variable.serializer.AbstractObjectValueSerializer;
-import org.camunda.bpm.engine.impl.variable.serializer.TypedValueSerializer;
-import org.camunda.bpm.engine.variable.value.ObjectValue;
-import org.camunda.spin.DeserializationTypeValidator;
-import org.camunda.spin.spi.DataFormat;
-import org.camunda.spin.spi.DataFormatMapper;
-import org.camunda.spin.spi.DataFormatReader;
-import org.camunda.spin.spi.DataFormatWriter;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.impl.util.IoUtil;
+import io.orqueio.bpm.engine.impl.variable.serializer.AbstractObjectValueSerializer;
+import io.orqueio.bpm.engine.impl.variable.serializer.TypedValueSerializer;
+import io.orqueio.bpm.engine.variable.value.ObjectValue;
+import io.orqueio.spin.DeserializationTypeValidator;
+import io.orqueio.spin.spi.DataFormat;
+import io.orqueio.spin.spi.DataFormatMapper;
+import io.orqueio.spin.spi.DataFormatReader;
+import io.orqueio.spin.spi.DataFormatWriter;
 
 /**
  * Implementation of a {@link TypedValueSerializer} for {@link ObjectValue ObjectValues} using a

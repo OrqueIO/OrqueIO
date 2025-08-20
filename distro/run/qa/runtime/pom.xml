@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.camunda.bpm.run</groupId>
+    <groupId>io.orqueio.bpm.run</groupId>
     <artifactId>camunda-bpm-run-qa</artifactId>
     <version>7.24.0-SNAPSHOT</version>
     <relativePath>..</relativePath>
@@ -25,7 +25,7 @@
   <dependencies>
 
     <dependency>
-      <groupId>org.camunda.bpm.run</groupId>
+      <groupId>io.orqueio.bpm.run</groupId>
       <artifactId>camunda-bpm-run</artifactId>
       <version>${project.version}</version>
       <type>zip</type>
@@ -41,7 +41,7 @@
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm.run</groupId>
+      <groupId>io.orqueio.bpm.run</groupId>
       <artifactId>camunda-bpm-run-qa-integration-tests</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
@@ -88,13 +88,13 @@
 
     <!-- Webapps -->
     <dependency>
-      <groupId>org.camunda.bpm.qa</groupId>
+      <groupId>io.orqueio.bpm.qa</groupId>
       <artifactId>camunda-qa-integration-tests-webapps</artifactId>
       <version>${project.version}</version>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm.model</groupId>
+      <groupId>io.orqueio.bpm.model</groupId>
       <artifactId>camunda-bpmn-model</artifactId>
       <scope>test</scope>
     </dependency>
@@ -146,7 +146,7 @@
             <configuration>
               <redirectTestOutputToFile>true</redirectTestOutputToFile>
               <dependenciesToScan>
-                <dependenciesToScan>org.camunda.bpm.run:camunda-bpm-run-qa-integration-tests</dependenciesToScan>
+                <dependenciesToScan>io.orqueio.bpm.run:camunda-bpm-run-qa-integration-tests</dependenciesToScan>
               </dependenciesToScan>
               <systemPropertyVariables>
                 <camunda.run.home>${run-home}</camunda.run.home>
@@ -194,7 +194,7 @@
                 </goals>
                 <phase>generate-test-resources</phase>
                 <configuration>
-                  <artifact>org.camunda.bpm.run:camunda-bpm-run-example-plugin:${project.version}</artifact>
+                  <artifact>io.orqueio.bpm.run:camunda-bpm-run-example-plugin:${project.version}</artifact>
                   <overWriteSnapshots>true</overWriteSnapshots>
                   <stripVersion>true</stripVersion>
                   <outputDirectory>${example-plugin-home}</outputDirectory>

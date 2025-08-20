@@ -15,13 +15,13 @@
  * limitations under the License.
  */
 
-package org.camunda.bpm.engine.test.logging;
+package io.orqueio.bpm.engine.test.logging;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 
 import java.util.HashMap;
 import java.util.Map;
-import org.camunda.commons.logging.MdcAccess;
+import io.orqueio.commons.logging.MdcAccess;
 
 /**
  * Class that encapsulates the creation of MDC properties such as Logging Context Parameters or any other third party

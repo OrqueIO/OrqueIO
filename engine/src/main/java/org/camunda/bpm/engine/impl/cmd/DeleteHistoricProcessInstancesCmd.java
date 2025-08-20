@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.cmd;
+package io.orqueio.bpm.engine.impl.cmd;
 
-import org.camunda.bpm.engine.BadUserRequestException;
-import org.camunda.bpm.engine.history.HistoricProcessInstance;
-import org.camunda.bpm.engine.history.UserOperationLogEntry;
-import org.camunda.bpm.engine.impl.HistoricProcessInstanceQueryImpl;
-import org.camunda.bpm.engine.impl.cfg.CommandChecker;
-import org.camunda.bpm.engine.impl.interceptor.Command;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.persistence.entity.PropertyChange;
+import io.orqueio.bpm.engine.BadUserRequestException;
+import io.orqueio.bpm.engine.history.HistoricProcessInstance;
+import io.orqueio.bpm.engine.history.UserOperationLogEntry;
+import io.orqueio.bpm.engine.impl.HistoricProcessInstanceQueryImpl;
+import io.orqueio.bpm.engine.impl.cfg.CommandChecker;
+import io.orqueio.bpm.engine.impl.interceptor.Command;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.impl.persistence.entity.PropertyChange;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -31,9 +31,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureNotContainsNull;
-import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureNotEmpty;
-import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
+import static io.orqueio.bpm.engine.impl.util.EnsureUtil.ensureNotContainsNull;
+import static io.orqueio.bpm.engine.impl.util.EnsureUtil.ensureNotEmpty;
+import static io.orqueio.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
 
 
 /**

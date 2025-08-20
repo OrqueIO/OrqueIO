@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.plugin.variables;
+package io.orqueio.spin.plugin.variables;
 
 import java.util.Collections;
 
-import org.camunda.bpm.engine.impl.test.ResourceProcessEngineTestCase;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.engine.variable.Variables;
+import io.orqueio.bpm.engine.impl.test.ResourceProcessEngineTestCase;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.variable.Variables;
 
 /**
  * The test is copied from the engine to check how JSON serialization will behave with DMN result object.

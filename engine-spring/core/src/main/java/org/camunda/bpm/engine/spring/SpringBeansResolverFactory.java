@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.spring;
+package io.orqueio.bpm.engine.spring;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import org.camunda.bpm.engine.delegate.VariableScope;
-import org.camunda.bpm.engine.impl.scripting.engine.Resolver;
-import org.camunda.bpm.engine.impl.scripting.engine.ResolverFactory;
+import io.orqueio.bpm.engine.delegate.VariableScope;
+import io.orqueio.bpm.engine.impl.scripting.engine.Resolver;
+import io.orqueio.bpm.engine.impl.scripting.engine.ResolverFactory;
 import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.context.ApplicationContext;
 
@@ -34,7 +34,7 @@ import org.springframework.context.ApplicationContext;
  * </p>
  * 
  * <p>
- * {@see org.camunda.bpm.engine.spring.SpringProcessEngineConfiguration#initScripting()}
+ * {@see io.orqueio.bpm.engine.spring.SpringProcessEngineConfiguration#initScripting()}
  * <p>
  *
  */

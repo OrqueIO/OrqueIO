@@ -14,22 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.runtime.migration.batch;
+package io.orqueio.bpm.engine.test.api.runtime.migration.batch;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.engine.RuntimeService;
-import org.camunda.bpm.engine.batch.Batch;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.management.JobDefinition;
-import org.camunda.bpm.engine.migration.MigrationInstructionsBuilder;
-import org.camunda.bpm.engine.repository.ProcessDefinition;
-import org.camunda.bpm.engine.test.ProcessEngineRule;
-import org.camunda.bpm.engine.test.api.runtime.BatchHelper;
-import org.camunda.bpm.engine.test.api.runtime.migration.MigrationTestRule;
-import org.camunda.bpm.engine.test.api.runtime.migration.models.ProcessModels;
+import io.orqueio.bpm.engine.RuntimeService;
+import io.orqueio.bpm.engine.batch.Batch;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.management.JobDefinition;
+import io.orqueio.bpm.engine.migration.MigrationInstructionsBuilder;
+import io.orqueio.bpm.engine.repository.ProcessDefinition;
+import io.orqueio.bpm.engine.test.ProcessEngineRule;
+import io.orqueio.bpm.engine.test.api.runtime.BatchHelper;
+import io.orqueio.bpm.engine.test.api.runtime.migration.MigrationTestRule;
+import io.orqueio.bpm.engine.test.api.runtime.migration.models.ProcessModels;
 
 public class BatchMigrationHelper extends BatchHelper{
 

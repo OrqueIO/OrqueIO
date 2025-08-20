@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.metadata;
+package io.orqueio.bpm.container.impl.metadata;
 
-import static org.camunda.bpm.container.impl.metadata.DeploymentMetadataConstants.JOB_ACQUISITION;
-import static org.camunda.bpm.container.impl.metadata.DeploymentMetadataConstants.JOB_EXECUTOR;
-import static org.camunda.bpm.container.impl.metadata.DeploymentMetadataConstants.JOB_EXECUTOR_CLASS_NAME;
-import static org.camunda.bpm.container.impl.metadata.DeploymentMetadataConstants.NAME;
-import static org.camunda.bpm.container.impl.metadata.DeploymentMetadataConstants.PROCESS_ENGINE;
-import static org.camunda.bpm.container.impl.metadata.DeploymentMetadataConstants.PROPERTIES;
+import static io.orqueio.bpm.container.impl.metadata.DeploymentMetadataConstants.JOB_ACQUISITION;
+import static io.orqueio.bpm.container.impl.metadata.DeploymentMetadataConstants.JOB_EXECUTOR;
+import static io.orqueio.bpm.container.impl.metadata.DeploymentMetadataConstants.JOB_EXECUTOR_CLASS_NAME;
+import static io.orqueio.bpm.container.impl.metadata.DeploymentMetadataConstants.NAME;
+import static io.orqueio.bpm.container.impl.metadata.DeploymentMetadataConstants.PROCESS_ENGINE;
+import static io.orqueio.bpm.container.impl.metadata.DeploymentMetadataConstants.PROPERTIES;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -29,11 +29,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.container.impl.metadata.spi.BpmPlatformXml;
-import org.camunda.bpm.container.impl.metadata.spi.JobAcquisitionXml;
-import org.camunda.bpm.container.impl.metadata.spi.ProcessEngineXml;
-import org.camunda.bpm.engine.impl.util.xml.Element;
-import org.camunda.bpm.engine.impl.util.xml.Parser;
+import io.orqueio.bpm.container.impl.metadata.spi.BpmPlatformXml;
+import io.orqueio.bpm.container.impl.metadata.spi.JobAcquisitionXml;
+import io.orqueio.bpm.container.impl.metadata.spi.ProcessEngineXml;
+import io.orqueio.bpm.engine.impl.util.xml.Element;
+import io.orqueio.bpm.engine.impl.util.xml.Parser;
 
 /**
  * <p>Parse implementation for parsing the {@link BpmPlatformXml}</p>

@@ -37,7 +37,7 @@ Sorry, please try with better content the next time :-)]]></camunda:expression>
         </camunda:field>
       </extensionElements>
     </serviceTask>
-    <serviceTask id="Publish_on_Twitter_3" name="Publish on Twitter" camunda:class="org.camunda.bpm.demo.twitter.TweetContentDelegate"></serviceTask>
+    <serviceTask id="Publish_on_Twitter_3" name="Publish on Twitter" camunda:class="io.orqueio.bpm.demo.twitter.TweetContentDelegate"></serviceTask>
     <exclusiveGateway id="Exclusive_Databased_Gateway_3" name="Exclusive_Databased_Gateway"></exclusiveGateway>
     <endEvent id="EndNoneEvent_3" name="End"></endEvent>
     <sequenceFlow id="SequenceFlow_2" name="" sourceRef="new_tweet_3" targetRef="Review_Tweet_3"></sequenceFlow>

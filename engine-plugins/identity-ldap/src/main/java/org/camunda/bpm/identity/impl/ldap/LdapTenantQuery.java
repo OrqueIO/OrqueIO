@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.identity.impl.ldap;
+package io.orqueio.bpm.identity.impl.ldap;
 
 import java.util.Collections;
 import java.util.List;
 
-import org.camunda.bpm.engine.identity.Tenant;
-import org.camunda.bpm.engine.impl.Page;
-import org.camunda.bpm.engine.impl.TenantQueryImpl;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.interceptor.CommandExecutor;
+import io.orqueio.bpm.engine.identity.Tenant;
+import io.orqueio.bpm.engine.impl.Page;
+import io.orqueio.bpm.engine.impl.TenantQueryImpl;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.impl.interceptor.CommandExecutor;
 
 /**
  * Since multi-tenancy is not supported for the LDAP plugin, the query always

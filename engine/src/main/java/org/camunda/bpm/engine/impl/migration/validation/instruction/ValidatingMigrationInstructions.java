@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.migration.validation.instruction;
+package io.orqueio.bpm.engine.impl.migration.validation.instruction;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -24,9 +24,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.engine.impl.pvm.process.ScopeImpl;
-import org.camunda.bpm.engine.impl.util.CollectionUtil;
-import org.camunda.bpm.engine.migration.MigrationInstruction;
+import io.orqueio.bpm.engine.impl.pvm.process.ScopeImpl;
+import io.orqueio.bpm.engine.impl.util.CollectionUtil;
+import io.orqueio.bpm.engine.migration.MigrationInstruction;
 
 /**
  * @author Thorben Lindhauer

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.run.test.plugins;
+package io.orqueio.bpm.run.test.plugins;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -23,10 +23,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.impl.cfg.ProcessEnginePlugin;
-import org.camunda.bpm.run.property.CamundaBpmRunProcessEnginePluginProperty;
-import org.camunda.bpm.run.utils.CamundaBpmRunProcessEnginePluginHelper;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEnginePlugin;
+import io.orqueio.bpm.run.property.CamundaBpmRunProcessEnginePluginProperty;
+import io.orqueio.bpm.run.utils.CamundaBpmRunProcessEnginePluginHelper;
 import org.junit.Test;
 
 public class CamundaBpmRunProcessEnginePluginsHelperTest {
@@ -36,7 +36,7 @@ public class CamundaBpmRunProcessEnginePluginsHelperTest {
     // given
     // a process engine plugins map with a class not on the classpath
     CamundaBpmRunProcessEnginePluginProperty pluginConfig = new CamundaBpmRunProcessEnginePluginProperty();
-    pluginConfig.setPluginClass("org.camunda.bpm.run.test.plugins.TestThirdPlugin");
+    pluginConfig.setPluginClass("io.orqueio.bpm.run.test.plugins.TestThirdPlugin");
     pluginConfig.setPluginParameters(Collections.EMPTY_MAP);
     // a process engine plugins map with a plugin not configured properly
     List<CamundaBpmRunProcessEnginePluginProperty> plugins =
@@ -50,7 +50,7 @@ public class CamundaBpmRunProcessEnginePluginsHelperTest {
         // an exception is thrown with a user-friendly message asking to check the plugin class
         .isInstanceOf(ProcessEngineException.class)
         .hasMessageContaining("Unable to register the process engine plugin " +
-                                  "'org.camunda.bpm.run.test.plugins.TestThirdPlugin'.");
+                                  "'io.orqueio.bpm.run.test.plugins.TestThirdPlugin'.");
   }
 
   @Test
@@ -58,7 +58,7 @@ public class CamundaBpmRunProcessEnginePluginsHelperTest {
     // given
     // a process engine plugins map with a class not implementing the ProcessEnginePlugin interface
     CamundaBpmRunProcessEnginePluginProperty pluginConfig = new CamundaBpmRunProcessEnginePluginProperty();
-    pluginConfig.setPluginClass("org.camunda.bpm.run.test.plugins.TestFalsePlugin");
+    pluginConfig.setPluginClass("io.orqueio.bpm.run.test.plugins.TestFalsePlugin");
     pluginConfig.setPluginParameters(Collections.EMPTY_MAP);
     // a process engine plugins map with a plugin not configured properly
     List<CamundaBpmRunProcessEnginePluginProperty> plugins =
@@ -71,7 +71,7 @@ public class CamundaBpmRunProcessEnginePluginsHelperTest {
         // then
         // an exception is thrown with a user-friendly message asking to check the plugin class
         .isInstanceOf(ProcessEngineException.class)
-        .hasMessageContaining("'org.camunda.bpm.run.test.plugins.TestFalsePlugin'. " +
+        .hasMessageContaining("'io.orqueio.bpm.run.test.plugins.TestFalsePlugin'. " +
                                   "Please ensure that the correct plugin class is configured");
   }
 
@@ -79,7 +79,7 @@ public class CamundaBpmRunProcessEnginePluginsHelperTest {
   public void shouldReportMissingPluginConfigurationProperty() {
     // given
     CamundaBpmRunProcessEnginePluginProperty pluginConfig = new CamundaBpmRunProcessEnginePluginProperty();
-    pluginConfig.setPluginClass("org.camunda.bpm.run.test.plugins.TestFirstPlugin");
+    pluginConfig.setPluginClass("io.orqueio.bpm.run.test.plugins.TestFirstPlugin");
     pluginConfig.setPluginParameters(Collections.singletonMap("wrongKey", "wrongValue"));
     // a process engine plugins map with a plugin not configured properly
     List<CamundaBpmRunProcessEnginePluginProperty> plugins =
@@ -93,7 +93,7 @@ public class CamundaBpmRunProcessEnginePluginsHelperTest {
         // an exception is thrown with a user-friendly message asking to check the config options
         .isInstanceOf(ProcessEngineException.class)
         .hasMessageContaining("Please check the configuration options for plugin " +
-                                  "'org.camunda.bpm.run.test.plugins.TestFirstPlugin'.");
+                                  "'io.orqueio.bpm.run.test.plugins.TestFirstPlugin'.");
   }
 
 }

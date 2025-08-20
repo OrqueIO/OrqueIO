@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.metadata;
+package io.orqueio.bpm.container.impl.metadata;
 
 import java.lang.reflect.Method;
 import java.util.Map;
@@ -22,10 +22,10 @@ import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.camunda.bpm.container.impl.ContainerIntegrationLogger;
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
-import org.camunda.bpm.engine.impl.util.ReflectUtil;
+import io.orqueio.bpm.container.impl.ContainerIntegrationLogger;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
+import io.orqueio.bpm.engine.impl.util.ReflectUtil;
 
 /**
  *

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.application.impl.deployment;
+package io.orqueio.bpm.application.impl.deployment;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -22,23 +22,23 @@ import static org.junit.Assert.assertNull;
 import java.util.Arrays;
 import java.util.Collection;
 
-import org.camunda.bpm.application.ProcessApplicationReference;
-import org.camunda.bpm.application.impl.EmbeddedProcessApplication;
-import org.camunda.bpm.engine.RepositoryService;
-import org.camunda.bpm.engine.impl.application.ProcessApplicationManager;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.cmmn.entity.repository.CaseDefinitionEntity;
-import org.camunda.bpm.engine.impl.context.ProcessApplicationContextUtil;
-import org.camunda.bpm.engine.impl.dmn.entity.repository.DecisionDefinitionEntity;
-import org.camunda.bpm.engine.impl.dmn.entity.repository.DecisionRequirementsDefinitionEntity;
-import org.camunda.bpm.engine.impl.interceptor.Command;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.persistence.deploy.cache.DeploymentCache;
-import org.camunda.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity;
-import org.camunda.bpm.engine.repository.Deployment;
-import org.camunda.bpm.engine.test.ProcessEngineRule;
-import org.camunda.bpm.engine.test.util.ProcessEngineTestRule;
-import org.camunda.bpm.engine.test.util.ProvidedProcessEngineRule;
+import io.orqueio.bpm.application.ProcessApplicationReference;
+import io.orqueio.bpm.application.impl.EmbeddedProcessApplication;
+import io.orqueio.bpm.engine.RepositoryService;
+import io.orqueio.bpm.engine.impl.application.ProcessApplicationManager;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.cmmn.entity.repository.CaseDefinitionEntity;
+import io.orqueio.bpm.engine.impl.context.ProcessApplicationContextUtil;
+import io.orqueio.bpm.engine.impl.dmn.entity.repository.DecisionDefinitionEntity;
+import io.orqueio.bpm.engine.impl.dmn.entity.repository.DecisionRequirementsDefinitionEntity;
+import io.orqueio.bpm.engine.impl.interceptor.Command;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.impl.persistence.deploy.cache.DeploymentCache;
+import io.orqueio.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity;
+import io.orqueio.bpm.engine.repository.Deployment;
+import io.orqueio.bpm.engine.test.ProcessEngineRule;
+import io.orqueio.bpm.engine.test.util.ProcessEngineTestRule;
+import io.orqueio.bpm.engine.test.util.ProvidedProcessEngineRule;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;

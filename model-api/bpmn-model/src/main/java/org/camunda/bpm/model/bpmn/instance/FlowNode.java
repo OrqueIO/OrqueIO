@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.bpmn.instance;
+package io.orqueio.bpm.model.bpmn.instance;
 
-import org.camunda.bpm.model.bpmn.Query;
-import org.camunda.bpm.model.bpmn.builder.AbstractFlowNodeBuilder;
+import io.orqueio.bpm.model.bpmn.Query;
+import io.orqueio.bpm.model.bpmn.builder.AbstractFlowNodeBuilder;
 
 import java.util.Collection;
 

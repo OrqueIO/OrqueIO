@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.history;
+package io.orqueio.bpm.engine.rest.history;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.path.json.JsonPath.from;
-import static org.camunda.bpm.engine.rest.util.DateTimeUtils.DATE_FORMAT_WITH_TIMEZONE;
+import static io.orqueio.bpm.engine.rest.util.DateTimeUtils.DATE_FORMAT_WITH_TIMEZONE;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.is;
@@ -33,13 +33,13 @@ import java.util.List;
 
 import javax.ws.rs.core.Response.Status;
 
-import org.camunda.bpm.engine.history.HistoricActivityStatistics;
-import org.camunda.bpm.engine.history.HistoricActivityStatisticsQuery;
-import org.camunda.bpm.engine.impl.HistoricActivityStatisticsQueryImpl;
-import org.camunda.bpm.engine.rest.AbstractRestServiceTest;
-import org.camunda.bpm.engine.rest.exception.InvalidRequestException;
-import org.camunda.bpm.engine.rest.helper.MockProvider;
-import org.camunda.bpm.engine.rest.util.container.TestContainerRule;
+import io.orqueio.bpm.engine.history.HistoricActivityStatistics;
+import io.orqueio.bpm.engine.history.HistoricActivityStatisticsQuery;
+import io.orqueio.bpm.engine.impl.HistoricActivityStatisticsQueryImpl;
+import io.orqueio.bpm.engine.rest.AbstractRestServiceTest;
+import io.orqueio.bpm.engine.rest.exception.InvalidRequestException;
+import io.orqueio.bpm.engine.rest.helper.MockProvider;
+import io.orqueio.bpm.engine.rest.util.container.TestContainerRule;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.ClassRule;

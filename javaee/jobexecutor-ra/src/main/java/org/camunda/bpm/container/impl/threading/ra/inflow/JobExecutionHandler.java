@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.threading.ra.inflow;
+package io.orqueio.bpm.container.impl.threading.ra.inflow;
 
-import org.camunda.bpm.engine.impl.interceptor.CommandExecutor;
-import org.camunda.bpm.engine.impl.jobexecutor.JobFailureCollector;
+import io.orqueio.bpm.engine.impl.interceptor.CommandExecutor;
+import io.orqueio.bpm.engine.impl.jobexecutor.JobFailureCollector;
 
 /**
  * Interface to be implemented by a MessageDriven bean handling the execution of

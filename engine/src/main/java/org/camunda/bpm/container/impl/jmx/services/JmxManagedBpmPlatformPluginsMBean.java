@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.jmx.services;
+package io.orqueio.bpm.container.impl.jmx.services;
 
 /**
  * @author Thorben Lindhauer

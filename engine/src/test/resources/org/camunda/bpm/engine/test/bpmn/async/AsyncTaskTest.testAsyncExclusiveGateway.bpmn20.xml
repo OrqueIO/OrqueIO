@@ -12,7 +12,7 @@
 
     <exclusiveGateway id="exclusiveGateway" name="exclusiveGateway" default="flow1" camunda:async="true">
       <extensionElements>
-        <camunda:executionListener event="start" class="org.camunda.bpm.engine.test.bpmn.async.AsyncListener" />
+        <camunda:executionListener event="start" class="io.orqueio.bpm.engine.test.bpmn.async.AsyncListener" />
       </extensionElements>
     </exclusiveGateway>
 

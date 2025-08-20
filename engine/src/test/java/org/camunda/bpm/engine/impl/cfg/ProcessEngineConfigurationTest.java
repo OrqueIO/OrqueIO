@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.cfg;
+package io.orqueio.bpm.engine.impl.cfg;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.camunda.bpm.engine.impl.ProcessEngineLogger.CONFIG_LOGGER;
+import static io.orqueio.bpm.engine.impl.ProcessEngineLogger.CONFIG_LOGGER;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -25,8 +25,8 @@ import static org.mockito.Mockito.when;
 
 import java.sql.Connection;
 import org.apache.ibatis.datasource.pooled.PooledDataSource;
-import org.camunda.bpm.engine.ProcessEngineConfiguration;
-import org.camunda.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.ProcessEngineConfiguration;
+import io.orqueio.bpm.engine.ProcessEngineException;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;

@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.admin.impl.plugin.resources;
+package io.orqueio.bpm.admin.impl.plugin.resources;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.camunda.bpm.admin.impl.plugin.base.dto.MetricsAggregatedQueryDto;
-import org.camunda.bpm.admin.impl.plugin.base.dto.MetricsAggregatedResultDto;
-import org.camunda.bpm.admin.resource.AbstractAdminPluginResource;
-import org.camunda.bpm.engine.impl.metrics.util.MetricsUtil;
-import org.camunda.bpm.engine.management.Metrics;
+import io.orqueio.bpm.admin.impl.plugin.base.dto.MetricsAggregatedQueryDto;
+import io.orqueio.bpm.admin.impl.plugin.base.dto.MetricsAggregatedResultDto;
+import io.orqueio.bpm.admin.resource.AbstractAdminPluginResource;
+import io.orqueio.bpm.engine.impl.metrics.util.MetricsUtil;
+import io.orqueio.bpm.engine.management.Metrics;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.spring;
+package io.orqueio.bpm.engine.spring;
 
 import javax.sql.DataSource;
 
@@ -24,17 +24,17 @@ import java.util.Collection;
 import java.util.List;
 import java.util.zip.ZipInputStream;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.RepositoryService;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.cfg.StandaloneProcessEngineConfiguration;
-import org.camunda.bpm.engine.impl.interceptor.CommandContextInterceptor;
-import org.camunda.bpm.engine.impl.interceptor.CommandCounterInterceptor;
-import org.camunda.bpm.engine.impl.interceptor.CommandInterceptor;
-import org.camunda.bpm.engine.impl.interceptor.LogInterceptor;
-import org.camunda.bpm.engine.impl.interceptor.ProcessApplicationContextInterceptor;
-import org.camunda.bpm.engine.repository.DeploymentBuilder;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.RepositoryService;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.cfg.StandaloneProcessEngineConfiguration;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContextInterceptor;
+import io.orqueio.bpm.engine.impl.interceptor.CommandCounterInterceptor;
+import io.orqueio.bpm.engine.impl.interceptor.CommandInterceptor;
+import io.orqueio.bpm.engine.impl.interceptor.LogInterceptor;
+import io.orqueio.bpm.engine.impl.interceptor.ProcessApplicationContextInterceptor;
+import io.orqueio.bpm.engine.repository.DeploymentBuilder;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.ContextResource;
 import org.springframework.core.io.Resource;

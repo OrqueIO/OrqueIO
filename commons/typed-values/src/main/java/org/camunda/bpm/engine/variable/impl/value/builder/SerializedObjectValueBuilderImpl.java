@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.variable.impl.value.builder;
+package io.orqueio.bpm.engine.variable.impl.value.builder;
 
-import org.camunda.bpm.engine.variable.impl.value.ObjectValueImpl;
-import org.camunda.bpm.engine.variable.value.ObjectValue;
-import org.camunda.bpm.engine.variable.value.SerializationDataFormat;
-import org.camunda.bpm.engine.variable.value.builder.SerializedObjectValueBuilder;
-import org.camunda.bpm.engine.variable.value.builder.TypedValueBuilder;
+import io.orqueio.bpm.engine.variable.impl.value.ObjectValueImpl;
+import io.orqueio.bpm.engine.variable.value.ObjectValue;
+import io.orqueio.bpm.engine.variable.value.SerializationDataFormat;
+import io.orqueio.bpm.engine.variable.value.builder.SerializedObjectValueBuilder;
+import io.orqueio.bpm.engine.variable.value.builder.TypedValueBuilder;
 
 /**
  * @author Daniel Meyer

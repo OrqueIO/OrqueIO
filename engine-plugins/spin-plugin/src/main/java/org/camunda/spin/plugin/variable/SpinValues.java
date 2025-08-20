@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.plugin.variable;
+package io.orqueio.spin.plugin.variable;
 
-import org.camunda.spin.json.SpinJsonNode;
-import org.camunda.spin.plugin.variable.value.builder.JsonValueBuilder;
-import org.camunda.spin.plugin.variable.value.builder.XmlValueBuilder;
-import org.camunda.spin.plugin.variable.value.impl.builder.JsonValueBuilderImpl;
-import org.camunda.spin.plugin.variable.value.impl.builder.XmlValueBuilderImpl;
-import org.camunda.spin.xml.SpinXmlElement;
+import io.orqueio.spin.json.SpinJsonNode;
+import io.orqueio.spin.plugin.variable.value.builder.JsonValueBuilder;
+import io.orqueio.spin.plugin.variable.value.builder.XmlValueBuilder;
+import io.orqueio.spin.plugin.variable.value.impl.builder.JsonValueBuilderImpl;
+import io.orqueio.spin.plugin.variable.value.impl.builder.XmlValueBuilderImpl;
+import io.orqueio.spin.xml.SpinXmlElement;
 
 /**
  * @author Roman Smirnov

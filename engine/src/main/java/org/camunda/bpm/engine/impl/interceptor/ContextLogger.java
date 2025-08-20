@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.interceptor;
+package io.orqueio.bpm.engine.impl.interceptor;
 
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
-import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.engine.impl.core.instance.CoreExecution;
-import org.camunda.bpm.engine.impl.core.operation.CoreAtomicOperation;
+import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
+import io.orqueio.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.impl.core.instance.CoreExecution;
+import io.orqueio.bpm.engine.impl.core.operation.CoreAtomicOperation;
 
 /**
  * @author Daniel Meyer

@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.bpmn.builder;
+package io.orqueio.bpm.model.bpmn.builder;
 
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
-import org.camunda.bpm.model.bpmn.instance.BaseElement;
-import org.camunda.bpm.model.bpmn.instance.camunda.CamundaFormField;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.bpm.model.bpmn.instance.BaseElement;
+import io.orqueio.bpm.model.bpmn.instance.camunda.CamundaFormField;
 
 /**
  * @author Kristin Polenz

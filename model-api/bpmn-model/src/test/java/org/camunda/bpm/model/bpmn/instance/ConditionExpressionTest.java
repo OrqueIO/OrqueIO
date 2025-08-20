@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.bpmn.instance;
+package io.orqueio.bpm.model.bpmn.instance;
 
 import java.util.Arrays;
 import java.util.Collection;
 
-import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
-import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.XSI_NS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.XSI_NS;
 
 /**
  * @author Sebastian Menski

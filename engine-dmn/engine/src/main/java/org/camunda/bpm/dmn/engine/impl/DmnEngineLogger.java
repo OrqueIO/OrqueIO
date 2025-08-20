@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.engine.impl;
+package io.orqueio.bpm.dmn.engine.impl;
 
-import org.camunda.bpm.dmn.engine.DmnDecision;
-import org.camunda.bpm.dmn.engine.DmnDecisionLogic;
-import org.camunda.bpm.dmn.engine.DmnDecisionResult;
-import org.camunda.bpm.dmn.engine.DmnDecisionResultEntries;
-import org.camunda.bpm.dmn.engine.DmnDecisionRuleResult;
-import org.camunda.bpm.dmn.engine.DmnDecisionTableResult;
-import org.camunda.bpm.dmn.engine.DmnEngineException;
-import org.camunda.bpm.dmn.engine.impl.transform.DmnTransformException;
+import io.orqueio.bpm.dmn.engine.DmnDecision;
+import io.orqueio.bpm.dmn.engine.DmnDecisionLogic;
+import io.orqueio.bpm.dmn.engine.DmnDecisionResult;
+import io.orqueio.bpm.dmn.engine.DmnDecisionResultEntries;
+import io.orqueio.bpm.dmn.engine.DmnDecisionRuleResult;
+import io.orqueio.bpm.dmn.engine.DmnDecisionTableResult;
+import io.orqueio.bpm.dmn.engine.DmnEngineException;
+import io.orqueio.bpm.dmn.engine.impl.transform.DmnTransformException;
 
 public class DmnEngineLogger extends DmnLogger {
 

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.connect;
+package io.orqueio.connect;
 
 /**
  * Indicates an error during the response of a connector.

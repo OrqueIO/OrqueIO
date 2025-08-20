@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.quarkus.engine.extension.impl;
+package io.orqueio.bpm.quarkus.engine.extension.impl;
 
 import io.quarkus.arc.InjectableContext;
-import org.camunda.bpm.engine.cdi.impl.context.BusinessProcessContext;
-import org.camunda.bpm.engine.cdi.impl.util.BeanManagerLookup;
+import io.orqueio.bpm.engine.cdi.impl.context.BusinessProcessContext;
+import io.orqueio.bpm.engine.cdi.impl.util.BeanManagerLookup;
 
 import jakarta.enterprise.context.spi.Contextual;
 import jakarta.enterprise.inject.spi.BeanManager;

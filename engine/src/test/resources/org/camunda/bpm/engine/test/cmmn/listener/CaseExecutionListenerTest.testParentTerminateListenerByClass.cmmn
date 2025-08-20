@@ -21,7 +21,7 @@
 
       <milestone id="Milestone_1" name="A Milestone">
         <extensionElements>
-          <camunda:caseExecutionListener event="parentTerminate" class="org.camunda.bpm.engine.test.cmmn.listener.MySpecialCaseExecutionListener" />
+          <camunda:caseExecutionListener event="parentTerminate" class="io.orqueio.bpm.engine.test.cmmn.listener.MySpecialCaseExecutionListener" />
         </extensionElements>
       </milestone>
 

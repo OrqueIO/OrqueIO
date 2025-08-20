@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl;
+package io.orqueio.bpm.engine.impl;
 
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.engine.history.HistoricCaseInstance;
-import org.camunda.bpm.engine.history.NativeHistoricCaseInstanceQuery;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.interceptor.CommandExecutor;
+import io.orqueio.bpm.engine.history.HistoricCaseInstance;
+import io.orqueio.bpm.engine.history.NativeHistoricCaseInstanceQuery;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.impl.interceptor.CommandExecutor;
 
 
 public class NativeHistoricCaseInstanceQueryImpl extends AbstractNativeQuery<NativeHistoricCaseInstanceQuery, HistoricCaseInstance> implements NativeHistoricCaseInstanceQuery {

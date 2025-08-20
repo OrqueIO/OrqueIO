@@ -14,21 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.standalone.deploy;
+package io.orqueio.bpm.engine.test.standalone.deploy;
 
-import static org.camunda.bpm.engine.impl.bpmn.parser.BpmnParse.COMPENSATE_EVENT_DEFINITION;
+import static io.orqueio.bpm.engine.impl.bpmn.parser.BpmnParse.COMPENSATE_EVENT_DEFINITION;
 
 import java.util.List;
 
-import org.camunda.bpm.engine.impl.bpmn.behavior.CompensationEventActivityBehavior;
-import org.camunda.bpm.engine.impl.bpmn.behavior.NoneEndEventActivityBehavior;
-import org.camunda.bpm.engine.impl.bpmn.behavior.NoneStartEventActivityBehavior;
-import org.camunda.bpm.engine.impl.bpmn.parser.AbstractBpmnParseListener;
-import org.camunda.bpm.engine.impl.bpmn.parser.CompensateEventDefinition;
-import org.camunda.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity;
-import org.camunda.bpm.engine.impl.pvm.process.ActivityImpl;
-import org.camunda.bpm.engine.impl.pvm.process.ScopeImpl;
-import org.camunda.bpm.engine.impl.util.xml.Element;
+import io.orqueio.bpm.engine.impl.bpmn.behavior.CompensationEventActivityBehavior;
+import io.orqueio.bpm.engine.impl.bpmn.behavior.NoneEndEventActivityBehavior;
+import io.orqueio.bpm.engine.impl.bpmn.behavior.NoneStartEventActivityBehavior;
+import io.orqueio.bpm.engine.impl.bpmn.parser.AbstractBpmnParseListener;
+import io.orqueio.bpm.engine.impl.bpmn.parser.CompensateEventDefinition;
+import io.orqueio.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity;
+import io.orqueio.bpm.engine.impl.pvm.process.ActivityImpl;
+import io.orqueio.bpm.engine.impl.pvm.process.ScopeImpl;
+import io.orqueio.bpm.engine.impl.util.xml.Element;
 
 /**
  * @author Frederik Heremans

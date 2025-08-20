@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.bpmn.parser;
+package io.orqueio.bpm.engine.impl.bpmn.parser;
 
-import org.camunda.bpm.engine.impl.util.xml.Element;
+import io.orqueio.bpm.engine.impl.util.xml.Element;
 
 /**
  * A XML importer

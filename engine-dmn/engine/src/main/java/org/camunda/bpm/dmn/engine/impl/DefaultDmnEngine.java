@@ -14,24 +14,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.engine.impl;
+package io.orqueio.bpm.dmn.engine.impl;
 
-import static org.camunda.commons.utils.EnsureUtil.ensureNotNull;
+import static io.orqueio.commons.utils.EnsureUtil.ensureNotNull;
 
 import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.dmn.engine.DmnDecision;
-import org.camunda.bpm.dmn.engine.DmnDecisionRequirementsGraph;
-import org.camunda.bpm.dmn.engine.DmnDecisionResult;
-import org.camunda.bpm.dmn.engine.DmnDecisionTableResult;
-import org.camunda.bpm.dmn.engine.DmnEngine;
-import org.camunda.bpm.dmn.engine.DmnEngineConfiguration;
-import org.camunda.bpm.dmn.engine.impl.spi.transform.DmnTransformer;
-import org.camunda.bpm.engine.variable.Variables;
-import org.camunda.bpm.engine.variable.context.VariableContext;
-import org.camunda.bpm.model.dmn.DmnModelInstance;
+import io.orqueio.bpm.dmn.engine.DmnDecision;
+import io.orqueio.bpm.dmn.engine.DmnDecisionRequirementsGraph;
+import io.orqueio.bpm.dmn.engine.DmnDecisionResult;
+import io.orqueio.bpm.dmn.engine.DmnDecisionTableResult;
+import io.orqueio.bpm.dmn.engine.DmnEngine;
+import io.orqueio.bpm.dmn.engine.DmnEngineConfiguration;
+import io.orqueio.bpm.dmn.engine.impl.spi.transform.DmnTransformer;
+import io.orqueio.bpm.engine.variable.Variables;
+import io.orqueio.bpm.engine.variable.context.VariableContext;
+import io.orqueio.bpm.model.dmn.DmnModelInstance;
 
 public class DefaultDmnEngine implements DmnEngine {
 

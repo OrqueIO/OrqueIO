@@ -7,12 +7,12 @@
     <bpmn:sequenceFlow id="SequenceFlow_1azm3nc" sourceRef="StartEvent_1" targetRef="userTask" />
     <bpmn:userTask id="userTask">
       <bpmn:extensionElements>
-        <camunda:taskListener class="org.camunda.bpm.engine.test.api.runtime.migration.util.AccessModelInstanceTaskListener" event="timeout" id="timeout-friendly" >
+        <camunda:taskListener class="io.orqueio.bpm.engine.test.api.runtime.migration.util.AccessModelInstanceTaskListener" event="timeout" id="timeout-friendly" >
           <bpmn:timerEventDefinition>
             <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT1H</bpmn:timeDuration>
           </bpmn:timerEventDefinition>
         </camunda:taskListener>
-        <camunda:taskListener class="org.camunda.bpm.engine.test.api.runtime.migration.util.AccessModelInstanceTaskListener" event="timeout" id="timeout-hard" >
+        <camunda:taskListener class="io.orqueio.bpm.engine.test.api.runtime.migration.util.AccessModelInstanceTaskListener" event="timeout" id="timeout-hard" >
           <bpmn:timerEventDefinition>
             <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT2H</bpmn:timeDuration>
           </bpmn:timerEventDefinition>

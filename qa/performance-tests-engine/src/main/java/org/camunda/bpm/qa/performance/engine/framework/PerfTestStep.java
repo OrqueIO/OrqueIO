@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa.performance.engine.framework;
+package io.orqueio.bpm.qa.performance.engine.framework;
 
-import org.camunda.bpm.qa.performance.engine.steps.WaitStep;
+import io.orqueio.bpm.qa.performance.engine.steps.WaitStep;
 
 /**
  * A step in a performance test.

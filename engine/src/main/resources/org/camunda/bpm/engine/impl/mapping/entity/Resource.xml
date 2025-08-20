@@ -19,11 +19,11 @@
 -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
   
-<mapper namespace="org.camunda.bpm.engine.impl.persistence.entity.ResourceEntity">
+<mapper namespace="io.orqueio.bpm.engine.impl.persistence.entity.ResourceEntity">
   
   <!-- RESOURCE INSERT -->
 
-  <insert id="insertResource" parameterType="org.camunda.bpm.engine.impl.persistence.entity.ResourceEntity">
+  <insert id="insertResource" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.ResourceEntity">
     insert into ${prefix}ACT_GE_BYTEARRAY(
         ID_,
         NAME_,
@@ -50,7 +50,7 @@
 
   <!-- RESOURCE DELETE -->
 
-  <delete id="deleteResource" parameterType="org.camunda.bpm.engine.impl.persistence.entity.ResourceEntity">
+  <delete id="deleteResource" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.ResourceEntity">
     delete from ${prefix}ACT_GE_BYTEARRAY where ID_ = #{id}
   </delete>
 
@@ -67,7 +67,7 @@
   
   <!-- RESOURCE RESULTMAP -->
 
-  <resultMap id="resourceResultMap" type="org.camunda.bpm.engine.impl.persistence.entity.ResourceEntity">
+  <resultMap id="resourceResultMap" type="io.orqueio.bpm.engine.impl.persistence.entity.ResourceEntity">
     <id property="id" column="ID_" jdbcType="VARCHAR" />
     <result property="name" column="NAME_" jdbcType="VARCHAR"/>
     <result property="bytes" column="BYTES_" jdbcType="BLOB"/>
@@ -80,7 +80,7 @@
   
   <!-- RESOURCE SELECT -->
 
-  <select id="selectResourceNamesByDeploymentId" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject" resultType="string">
+  <select id="selectResourceNamesByDeploymentId" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject" resultType="string">
     select NAME_ from ${prefix}ACT_GE_BYTEARRAY where DEPLOYMENT_ID_ = #{parameter} order by NAME_ asc
   </select>
   
@@ -146,7 +146,7 @@
     </if>
   </select>
 
-  <select id="selectResourcesByDeploymentId" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject" resultMap="resourceResultMap">
+  <select id="selectResourcesByDeploymentId" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject" resultMap="resourceResultMap">
     select * from ${prefix}ACT_GE_BYTEARRAY where DEPLOYMENT_ID_ = #{parameter} order by NAME_ asc
   </select>
 
@@ -215,7 +215,7 @@
   </sql>
 
   <!-- postgresql specific -->
-  <resultMap id="resourceResultMap_postgres" type="org.camunda.bpm.engine.impl.persistence.entity.ResourceEntity">
+  <resultMap id="resourceResultMap_postgres" type="io.orqueio.bpm.engine.impl.persistence.entity.ResourceEntity">
     <id property="id" column="ID_" jdbcType="VARCHAR" />
     <result property="name" column="NAME_" jdbcType="VARCHAR"/>
     <result property="bytes" column="BYTES_" jdbcType="BINARY"/>
@@ -293,7 +293,7 @@
   </select>
 
   <!-- postgresql specific -->
-  <select id="selectResourcesByDeploymentId_postgres" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject" resultMap="resourceResultMap_postgres">
+  <select id="selectResourcesByDeploymentId_postgres" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject" resultMap="resourceResultMap_postgres">
     select * from ${prefix}ACT_GE_BYTEARRAY where DEPLOYMENT_ID_ = #{parameter} order by NAME_ asc
   </select>
   

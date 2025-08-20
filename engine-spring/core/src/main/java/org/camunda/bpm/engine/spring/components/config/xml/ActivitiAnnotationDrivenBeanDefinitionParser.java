@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.spring.components.config.xml;
+package io.orqueio.bpm.engine.spring.components.config.xml;
 
 
-import org.camunda.bpm.engine.spring.components.ActivitiContextUtils;
-import org.camunda.bpm.engine.spring.components.aop.ProcessStartAnnotationBeanPostProcessor;
-import org.camunda.bpm.engine.spring.components.scope.ProcessScope;
+import io.orqueio.bpm.engine.spring.components.ActivitiContextUtils;
+import io.orqueio.bpm.engine.spring.components.aop.ProcessStartAnnotationBeanPostProcessor;
+import io.orqueio.bpm.engine.spring.components.scope.ProcessScope;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinitionHolder;
 import org.springframework.beans.factory.config.RuntimeBeanReference;
@@ -32,10 +32,10 @@ import org.springframework.util.StringUtils;
 import org.w3c.dom.Element;
 
 /**
- * registers support for handling the annotations in the org.camunda.bpm.engine.annotations package.
+ * registers support for handling the annotations in the io.orqueio.bpm.engine.annotations package.
  * <p/>
  * The first major component is the state handlers. For this to work, a BeanFactoryPostProcessor is registered which in turn registers a
- * {@link org.camunda.bpm.engine.test.spring.components.registry.ActivitiStateHandlerRegistry} if none exists.
+ * {@link io.orqueio.bpm.engine.test.spring.components.registry.ActivitiStateHandlerRegistry} if none exists.
  *
  * @author Josh Long
  * @since 5.3

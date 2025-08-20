@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.cmmn.transformer;
+package io.orqueio.bpm.engine.test.cmmn.transformer;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -24,26 +24,26 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
-import org.camunda.bpm.engine.impl.cfg.StandaloneInMemProcessEngineConfiguration;
-import org.camunda.bpm.engine.impl.cmmn.entity.repository.CaseDefinitionEntity;
-import org.camunda.bpm.engine.impl.cmmn.handler.DefaultCmmnElementHandlerRegistry;
-import org.camunda.bpm.engine.impl.cmmn.model.CmmnActivity;
-import org.camunda.bpm.engine.impl.cmmn.model.CmmnCaseDefinition;
-import org.camunda.bpm.engine.impl.cmmn.transformer.CmmnTransform;
-import org.camunda.bpm.engine.impl.cmmn.transformer.CmmnTransformer;
-import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.engine.impl.persistence.entity.DeploymentEntity;
-import org.camunda.bpm.engine.impl.persistence.entity.ResourceEntity;
-import org.camunda.bpm.model.cmmn.Cmmn;
-import org.camunda.bpm.model.cmmn.CmmnModelInstance;
-import org.camunda.bpm.model.cmmn.instance.Case;
-import org.camunda.bpm.model.cmmn.instance.CasePlanModel;
-import org.camunda.bpm.model.cmmn.instance.CmmnModelElementInstance;
-import org.camunda.bpm.model.cmmn.instance.Definitions;
-import org.camunda.bpm.model.cmmn.instance.HumanTask;
-import org.camunda.bpm.model.cmmn.instance.PlanItem;
-import org.camunda.bpm.model.cmmn.instance.Stage;
-import org.camunda.bpm.model.xml.impl.util.IoUtil;
+import io.orqueio.bpm.engine.impl.cfg.StandaloneInMemProcessEngineConfiguration;
+import io.orqueio.bpm.engine.impl.cmmn.entity.repository.CaseDefinitionEntity;
+import io.orqueio.bpm.engine.impl.cmmn.handler.DefaultCmmnElementHandlerRegistry;
+import io.orqueio.bpm.engine.impl.cmmn.model.CmmnActivity;
+import io.orqueio.bpm.engine.impl.cmmn.model.CmmnCaseDefinition;
+import io.orqueio.bpm.engine.impl.cmmn.transformer.CmmnTransform;
+import io.orqueio.bpm.engine.impl.cmmn.transformer.CmmnTransformer;
+import io.orqueio.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.impl.persistence.entity.DeploymentEntity;
+import io.orqueio.bpm.engine.impl.persistence.entity.ResourceEntity;
+import io.orqueio.bpm.model.cmmn.Cmmn;
+import io.orqueio.bpm.model.cmmn.CmmnModelInstance;
+import io.orqueio.bpm.model.cmmn.instance.Case;
+import io.orqueio.bpm.model.cmmn.instance.CasePlanModel;
+import io.orqueio.bpm.model.cmmn.instance.CmmnModelElementInstance;
+import io.orqueio.bpm.model.cmmn.instance.Definitions;
+import io.orqueio.bpm.model.cmmn.instance.HumanTask;
+import io.orqueio.bpm.model.cmmn.instance.PlanItem;
+import io.orqueio.bpm.model.cmmn.instance.Stage;
+import io.orqueio.bpm.model.xml.impl.util.IoUtil;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -101,7 +101,7 @@ public class CmmnTransformerTest {
     Cmmn.writeModelToStream(outputStream, modelInstance);
     InputStream inputStream = IoUtil.convertOutputStreamToInputStream(outputStream);
 
-    byte[] model = org.camunda.bpm.engine.impl.util.IoUtil.readInputStream(inputStream, "model");
+    byte[] model = io.orqueio.bpm.engine.impl.util.IoUtil.readInputStream(inputStream, "model");
 
     ResourceEntity resource = new ResourceEntity();
     resource.setBytes(model);

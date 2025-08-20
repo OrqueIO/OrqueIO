@@ -10,7 +10,7 @@
     
     <startEvent id="theStart" name="Start Event">
       <extensionElements>
-        <camunda:executionListener class="org.camunda.bpm.engine.test.bpmn.executionlistener.RecorderExecutionListener" event="end">
+        <camunda:executionListener class="io.orqueio.bpm.engine.test.bpmn.executionlistener.RecorderExecutionListener" event="end">
           <camunda:field name="parameter" stringValue="Start Event Listener" />
         </camunda:executionListener>
       </extensionElements>
@@ -20,7 +20,7 @@
     
     <intermediateThrowEvent  id="noneEvent" name="None Event">
       <extensionElements>
-        <camunda:executionListener class="org.camunda.bpm.engine.test.bpmn.executionlistener.RecorderExecutionListener" event="end">
+        <camunda:executionListener class="io.orqueio.bpm.engine.test.bpmn.executionlistener.RecorderExecutionListener" event="end">
           <camunda:field name="parameter" stringValue="Intermediate Catch Event Listener" />
         </camunda:executionListener>
       </extensionElements>        
@@ -30,7 +30,7 @@
 
 	<intermediateThrowEvent id="signalEvent" name="Signal Event" >
         <extensionElements>
-          <camunda:executionListener class="org.camunda.bpm.engine.test.bpmn.executionlistener.RecorderExecutionListener" event="start">
+          <camunda:executionListener class="io.orqueio.bpm.engine.test.bpmn.executionlistener.RecorderExecutionListener" event="start">
             <camunda:field name="parameter" stringValue="Intermediate Throw Event Listener" />
           </camunda:executionListener>
         </extensionElements>        
@@ -41,7 +41,7 @@
 
     <endEvent id="theEnd" name="End Event">
       <extensionElements>
-        <camunda:executionListener class="org.camunda.bpm.engine.test.bpmn.executionlistener.RecorderExecutionListener" event="start">
+        <camunda:executionListener class="io.orqueio.bpm.engine.test.bpmn.executionlistener.RecorderExecutionListener" event="start">
           <camunda:field name="parameter" stringValue="End Event Listener" />
         </camunda:executionListener>
       </extensionElements>    

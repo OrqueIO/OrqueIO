@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.xml.impl.type.attribute;
+package io.orqueio.bpm.model.xml.impl.type.attribute;
 
-import org.camunda.bpm.model.xml.impl.type.reference.ReferenceImpl;
-import org.camunda.bpm.model.xml.instance.ModelElementInstance;
-import org.camunda.bpm.model.xml.type.ModelElementType;
-import org.camunda.bpm.model.xml.type.attribute.Attribute;
-import org.camunda.bpm.model.xml.type.reference.Reference;
+import io.orqueio.bpm.model.xml.impl.type.reference.ReferenceImpl;
+import io.orqueio.bpm.model.xml.instance.ModelElementInstance;
+import io.orqueio.bpm.model.xml.type.ModelElementType;
+import io.orqueio.bpm.model.xml.type.attribute.Attribute;
+import io.orqueio.bpm.model.xml.type.reference.Reference;
 
 import java.util.ArrayList;
 import java.util.Iterator;

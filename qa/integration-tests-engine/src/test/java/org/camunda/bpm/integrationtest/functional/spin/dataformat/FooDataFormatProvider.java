@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.functional.spin.dataformat;
+package io.orqueio.bpm.integrationtest.functional.spin.dataformat;
 
-import org.camunda.spin.spi.DataFormat;
-import org.camunda.spin.spi.DataFormatProvider;
+import io.orqueio.spin.spi.DataFormat;
+import io.orqueio.spin.spi.DataFormatProvider;
 
 /**
  * @author Thorben Lindhauer

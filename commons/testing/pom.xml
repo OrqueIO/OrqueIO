@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.camunda.commons</groupId>
+    <groupId>io.orqueio.commons</groupId>
     <artifactId>camunda-commons-root</artifactId>
     <version>7.24.0-SNAPSHOT</version>
   </parent>
@@ -34,7 +34,7 @@
 
     <!-- TEST -->
     <dependency>
-      <groupId>org.camunda.commons</groupId>
+      <groupId>io.orqueio.commons</groupId>
       <artifactId>camunda-commons-logging</artifactId>
       <scope>test</scope>
     </dependency>

@@ -14,20 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.cmmn.impl.instance.camunda;
+package io.orqueio.bpm.model.cmmn.impl.instance.camunda;
 
-import static org.camunda.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_RESOURCE;
-import static org.camunda.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_SCRIPT_FORMAT;
-import static org.camunda.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ELEMENT_SCRIPT;
-import static org.camunda.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_NS;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_RESOURCE;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_SCRIPT_FORMAT;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ELEMENT_SCRIPT;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_NS;
 
-import org.camunda.bpm.model.cmmn.impl.instance.CmmnModelElementInstanceImpl;
-import org.camunda.bpm.model.cmmn.instance.camunda.CamundaScript;
-import org.camunda.bpm.model.xml.ModelBuilder;
-import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
-import org.camunda.bpm.model.xml.type.attribute.Attribute;
+import io.orqueio.bpm.model.cmmn.impl.instance.CmmnModelElementInstanceImpl;
+import io.orqueio.bpm.model.cmmn.instance.camunda.CamundaScript;
+import io.orqueio.bpm.model.xml.ModelBuilder;
+import io.orqueio.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
+import io.orqueio.bpm.model.xml.type.ModelElementTypeBuilder;
+import io.orqueio.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
+import io.orqueio.bpm.model.xml.type.attribute.Attribute;
 
 /**
  * @author Roman Smirnov

@@ -11,7 +11,7 @@
     <bpmn:sequenceFlow id="Flow_0ayjmt5" sourceRef="theTask" targetRef="endEvent" />
     <bpmn:userTask id="theTask">
       <bpmn:extensionElements>
-        <camunda:taskListener class="org.camunda.bpm.engine.test.bpmn.tasklistener.builtin.TestTaskListener" event="create" />
+        <camunda:taskListener class="io.orqueio.bpm.engine.test.bpmn.tasklistener.builtin.TestTaskListener" event="create" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1ti3kzd</bpmn:incoming>
       <bpmn:outgoing>Flow_0ayjmt5</bpmn:outgoing>

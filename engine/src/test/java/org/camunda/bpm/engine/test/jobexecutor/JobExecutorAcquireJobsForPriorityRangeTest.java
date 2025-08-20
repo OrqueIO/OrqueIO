@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.jobexecutor;
+package io.orqueio.bpm.engine.test.jobexecutor;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 
-import org.camunda.bpm.engine.impl.persistence.entity.AcquirableJobEntity;
-import org.camunda.bpm.engine.runtime.Job;
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.commons.testing.ProcessEngineLoggingRule;
-import org.camunda.commons.testing.WatchLogger;
+import io.orqueio.bpm.engine.impl.persistence.entity.AcquirableJobEntity;
+import io.orqueio.bpm.engine.runtime.Job;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.commons.testing.ProcessEngineLoggingRule;
+import io.orqueio.commons.testing.WatchLogger;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -162,7 +162,7 @@ public class JobExecutorAcquireJobsForPriorityRangeTest extends AbstractJobExecu
   }
 
   @Test
-  @WatchLogger(loggerNames = "org.camunda.bpm.engine.impl.persistence.entity.JobEntity", level = "debug")
+  @WatchLogger(loggerNames = "io.orqueio.bpm.engine.impl.persistence.entity.JobEntity", level = "debug")
   public void shouldDisableRangeCheckInQueryWhenDefaultConfig() {
     // given default configuration
     configuration.setJobExecutorAcquireByPriority(false);
@@ -176,7 +176,7 @@ public class JobExecutorAcquireJobsForPriorityRangeTest extends AbstractJobExecu
   }
 
   @Test
-  @WatchLogger(loggerNames = "org.camunda.bpm.engine.impl.persistence.entity.JobEntity", level = "debug")
+  @WatchLogger(loggerNames = "io.orqueio.bpm.engine.impl.persistence.entity.JobEntity", level = "debug")
   public void shouldEnableRangeCheckInQueryWhenUsingCustomMinBoundaryConfig() {
     // given default configuration
     configuration.setJobExecutorPriorityRangeMin(6);
@@ -192,7 +192,7 @@ public class JobExecutorAcquireJobsForPriorityRangeTest extends AbstractJobExecu
   }
 
   @Test
-  @WatchLogger(loggerNames = "org.camunda.bpm.engine.impl.persistence.entity.JobEntity", level = "debug")
+  @WatchLogger(loggerNames = "io.orqueio.bpm.engine.impl.persistence.entity.JobEntity", level = "debug")
   public void shouldEnableRangeCheckInQueryWhenUsingCustomMaxBoundaryConfig() {
     // given default configuration
     configuration.setJobExecutorPriorityRangeMax(11);

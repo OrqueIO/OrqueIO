@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.bpmn.behavior;
+package io.orqueio.bpm.engine.test.bpmn.behavior;
 
 import ch.qos.logback.classic.Level;
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.engine.test.util.PluggableProcessEngineTest;
-import org.camunda.commons.testing.ProcessEngineLoggingRule;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.test.util.PluggableProcessEngineTest;
+import io.orqueio.commons.testing.ProcessEngineLoggingRule;
 import org.junit.After;
 import org.junit.Rule;
 import org.junit.Test;
@@ -37,7 +37,7 @@ public class BpmnBehaviorLoggerTest extends PluggableProcessEngineTest {
 
   @Rule
   public ProcessEngineLoggingRule processEngineLoggingRule = new ProcessEngineLoggingRule().watch(
-      "org.camunda.bpm.engine.bpmn.behavior", Level.INFO);
+      "io.orqueio.bpm.engine.bpmn.behavior", Level.INFO);
 
   @Test
   @Deployment(resources = {

@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.variable.impl.format.xml;
+package io.orqueio.bpm.client.variable.impl.format.xml;
 
-import static org.camunda.bpm.engine.variable.Variables.SerializationDataFormats.XML;
+import static io.orqueio.bpm.engine.variable.Variables.SerializationDataFormats.XML;
 
-import org.camunda.bpm.client.spi.DataFormat;
-import org.camunda.bpm.client.spi.DataFormatProvider;
+import io.orqueio.bpm.client.spi.DataFormat;
+import io.orqueio.bpm.client.spi.DataFormatProvider;
 
 public class DomXmlDataFormatProvider implements DataFormatProvider {
 

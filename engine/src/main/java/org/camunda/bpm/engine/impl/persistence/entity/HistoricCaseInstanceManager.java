@@ -14,25 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.persistence.entity;
+package io.orqueio.bpm.engine.impl.persistence.entity;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.engine.history.HistoricCaseInstance;
-import org.camunda.bpm.engine.history.CleanableHistoricCaseInstanceReportResult;
-import org.camunda.bpm.engine.impl.CleanableHistoricCaseInstanceReportImpl;
-import org.camunda.bpm.engine.impl.Direction;
-import org.camunda.bpm.engine.impl.HistoricCaseInstanceQueryImpl;
-import org.camunda.bpm.engine.impl.Page;
-import org.camunda.bpm.engine.impl.QueryOrderingProperty;
-import org.camunda.bpm.engine.impl.QueryPropertyImpl;
-import org.camunda.bpm.engine.impl.db.ListQueryParameterObject;
-import org.camunda.bpm.engine.impl.history.event.HistoricCaseInstanceEventEntity;
-import org.camunda.bpm.engine.impl.persistence.AbstractHistoricManager;
-import org.camunda.bpm.engine.impl.util.ClockUtil;
+import io.orqueio.bpm.engine.history.HistoricCaseInstance;
+import io.orqueio.bpm.engine.history.CleanableHistoricCaseInstanceReportResult;
+import io.orqueio.bpm.engine.impl.CleanableHistoricCaseInstanceReportImpl;
+import io.orqueio.bpm.engine.impl.Direction;
+import io.orqueio.bpm.engine.impl.HistoricCaseInstanceQueryImpl;
+import io.orqueio.bpm.engine.impl.Page;
+import io.orqueio.bpm.engine.impl.QueryOrderingProperty;
+import io.orqueio.bpm.engine.impl.QueryPropertyImpl;
+import io.orqueio.bpm.engine.impl.db.ListQueryParameterObject;
+import io.orqueio.bpm.engine.impl.history.event.HistoricCaseInstanceEventEntity;
+import io.orqueio.bpm.engine.impl.persistence.AbstractHistoricManager;
+import io.orqueio.bpm.engine.impl.util.ClockUtil;
 
 
 /**

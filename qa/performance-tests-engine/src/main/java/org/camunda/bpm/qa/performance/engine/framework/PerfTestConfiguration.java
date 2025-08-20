@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa.performance.engine.framework;
+package io.orqueio.bpm.qa.performance.engine.framework;
 
-import static org.camunda.bpm.qa.performance.engine.framework.activitylog.ActivityPerfTestWatcher.WATCH_ALL_ACTIVITIES;
+import static io.orqueio.bpm.qa.performance.engine.framework.activitylog.ActivityPerfTestWatcher.WATCH_ALL_ACTIVITIES;
 
 import java.util.ArrayList;
 import java.util.Collections;

@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.webapp.impl.util;
+package io.orqueio.bpm.webapp.impl.util;
 
-import org.camunda.bpm.engine.impl.util.ClockUtil;
-import org.camunda.bpm.webapp.impl.security.auth.AuthenticationFilter;
-import org.camunda.bpm.webapp.impl.security.auth.UserAuthenticationResource;
+import io.orqueio.bpm.engine.impl.util.ClockUtil;
+import io.orqueio.bpm.webapp.impl.security.auth.AuthenticationFilter;
+import io.orqueio.bpm.webapp.impl.security.auth.UserAuthenticationResource;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletContext;
@@ -35,13 +35,13 @@ import java.util.Date;
 public class ServletContextUtil {
 
   protected static final String APP_PATH_ATTR_NAME =
-    "org.camunda.bpm.spring.boot.starter.webapp.applicationPath";
+    "io.orqueio.bpm.spring.boot.starter.webapp.applicationPath";
 
   protected static final String SUCCESSFUL_ET_ATTR_NAME =
-    "org.camunda.bpm.webapp.telemetry.data.stored";
+    "io.orqueio.bpm.webapp.telemetry.data.stored";
 
   protected static final String AUTH_CACHE_TTL_ATTR_NAME =
-    "org.camunda.bpm.webapp.auth.cache.ttl";
+    "io.orqueio.bpm.webapp.auth.cache.ttl";
 
   /**
    * Consumed by Camunda Platform CE & EE Webapp:

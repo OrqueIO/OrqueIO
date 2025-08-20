@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.dmn.businessruletask;
+package io.orqueio.bpm.engine.test.dmn.businessruletask;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -24,12 +24,12 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Collections;
 
-import org.camunda.bpm.dmn.engine.DmnDecisionResult;
-import org.camunda.bpm.dmn.engine.DmnDecisionResultEntries;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.engine.test.util.PluggableProcessEngineTest;
-import org.camunda.bpm.engine.variable.Variables;
+import io.orqueio.bpm.dmn.engine.DmnDecisionResult;
+import io.orqueio.bpm.dmn.engine.DmnDecisionResultEntries;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.test.util.PluggableProcessEngineTest;
+import io.orqueio.bpm.engine.variable.Variables;
 import org.junit.After;
 import org.junit.Test;
 

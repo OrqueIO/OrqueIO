@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.identity.impl.ldap;
+package io.orqueio.bpm.identity.impl.ldap;
 
-import org.camunda.bpm.engine.identity.User;
-import org.camunda.bpm.engine.identity.UserQuery;
-import org.camunda.bpm.engine.impl.Page;
-import org.camunda.bpm.engine.impl.UserQueryImpl;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.interceptor.CommandExecutor;
+import io.orqueio.bpm.engine.identity.User;
+import io.orqueio.bpm.engine.identity.UserQuery;
+import io.orqueio.bpm.engine.impl.Page;
+import io.orqueio.bpm.engine.impl.UserQueryImpl;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.impl.interceptor.CommandExecutor;
 
 import java.util.List;
 

@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.bpmn.impl.instance;
+package io.orqueio.bpm.model.bpmn.impl.instance;
 
-import org.camunda.bpm.model.bpmn.BpmnModelException;
-import org.camunda.bpm.model.bpmn.builder.AbstractBaseElementBuilder;
-import org.camunda.bpm.model.bpmn.instance.BpmnModelElementInstance;
-import org.camunda.bpm.model.bpmn.instance.SubProcess;
-import org.camunda.bpm.model.xml.impl.instance.ModelElementInstanceImpl;
-import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
+import io.orqueio.bpm.model.bpmn.BpmnModelException;
+import io.orqueio.bpm.model.bpmn.builder.AbstractBaseElementBuilder;
+import io.orqueio.bpm.model.bpmn.instance.BpmnModelElementInstance;
+import io.orqueio.bpm.model.bpmn.instance.SubProcess;
+import io.orqueio.bpm.model.xml.impl.instance.ModelElementInstanceImpl;
+import io.orqueio.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 
 /**
  * Shared base class for all BPMN Model Elements. Provides implementation
@@ -41,7 +41,7 @@ public abstract class BpmnModelElementInstanceImpl extends ModelElementInstanceI
   }
 
   public boolean isScope() {
-    return this instanceof org.camunda.bpm.model.bpmn.instance.Process || this instanceof SubProcess;
+    return this instanceof io.orqueio.bpm.model.bpmn.instance.Process || this instanceof SubProcess;
   }
 
   public BpmnModelElementInstance getScope() {

@@ -14,20 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.plugin;
+package io.orqueio.bpm.engine.impl.plugin;
 
-import static org.camunda.bpm.engine.authorization.Authorization.ANY;
-import static org.camunda.bpm.engine.authorization.Authorization.AUTH_TYPE_GRANT;
-import static org.camunda.bpm.engine.authorization.Permissions.ALL;
+import static io.orqueio.bpm.engine.authorization.Authorization.ANY;
+import static io.orqueio.bpm.engine.authorization.Authorization.AUTH_TYPE_GRANT;
+import static io.orqueio.bpm.engine.authorization.Permissions.ALL;
 
-import org.camunda.bpm.engine.AuthorizationService;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.authorization.Resource;
-import org.camunda.bpm.engine.authorization.Resources;
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
-import org.camunda.bpm.engine.impl.cfg.AbstractProcessEnginePlugin;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity;
+import io.orqueio.bpm.engine.AuthorizationService;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.authorization.Resource;
+import io.orqueio.bpm.engine.authorization.Resources;
+import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
+import io.orqueio.bpm.engine.impl.cfg.AbstractProcessEnginePlugin;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity;
 
 /**
  * @author Daniel Meyer

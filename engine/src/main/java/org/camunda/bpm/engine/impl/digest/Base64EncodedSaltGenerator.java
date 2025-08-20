@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.digest;
+package io.orqueio.bpm.engine.impl.digest;
 
-import org.camunda.bpm.engine.impl.digest._apacheCommonsCodec.Base64;
+import io.orqueio.bpm.engine.impl.digest._apacheCommonsCodec.Base64;
 
 import java.security.SecureRandom;
 import java.util.Random;

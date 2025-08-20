@@ -14,21 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.webapp.impl;
+package io.orqueio.bpm.webapp.impl;
 
 import java.util.Date;
 import javax.ws.rs.core.Response.Status;
-import org.camunda.bpm.engine.rest.exception.InvalidRequestException;
-import org.camunda.bpm.engine.rest.exception.RestException;
-import org.camunda.bpm.engine.rest.spi.ProcessEngineProvider;
-import org.camunda.commons.logging.BaseLogger;
+import io.orqueio.bpm.engine.rest.exception.InvalidRequestException;
+import io.orqueio.bpm.engine.rest.exception.RestException;
+import io.orqueio.bpm.engine.rest.spi.ProcessEngineProvider;
+import io.orqueio.commons.logging.BaseLogger;
 
 public class WebappLogger extends BaseLogger {
 
   public static final String PROJECT_CODE = "WEBAPP";
 
   public static final WebappLogger INSTANCE = BaseLogger.createLogger(WebappLogger.class, PROJECT_CODE,
-      "org.camunda.bpm.webapp", "00");
+      "io.orqueio.bpm.webapp", "00");
 
   public InvalidRequestException invalidRequestEngineNotFoundForName(String engineName) {
     return new InvalidRequestException(Status.BAD_REQUEST,

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.engine.impl;
+package io.orqueio.bpm.dmn.engine.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -24,11 +24,11 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 
-import org.camunda.bpm.dmn.engine.DmnDecisionResult;
-import org.camunda.bpm.dmn.engine.DmnDecisionResultEntries;
-import org.camunda.bpm.dmn.engine.DmnDecisionRuleResult;
-import org.camunda.bpm.dmn.engine.DmnDecisionTableResult;
-import org.camunda.bpm.engine.variable.value.TypedValue;
+import io.orqueio.bpm.dmn.engine.DmnDecisionResult;
+import io.orqueio.bpm.dmn.engine.DmnDecisionResultEntries;
+import io.orqueio.bpm.dmn.engine.DmnDecisionRuleResult;
+import io.orqueio.bpm.dmn.engine.DmnDecisionTableResult;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
 
 public class DmnDecisionTableResultImpl implements DmnDecisionTableResult {
 

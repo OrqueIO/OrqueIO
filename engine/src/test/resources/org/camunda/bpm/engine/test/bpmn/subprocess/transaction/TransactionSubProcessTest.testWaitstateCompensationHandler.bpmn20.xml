@@ -54,7 +54,7 @@
 				<compensateEventDefinition />
 			</boundaryEvent>	
 											
-			<serviceTask id="undoChargeCard" isForCompensation="true" camunda:class="org.camunda.bpm.engine.test.bpmn.event.compensate.helper.UndoService">
+			<serviceTask id="undoChargeCard" isForCompensation="true" camunda:class="io.orqueio.bpm.engine.test.bpmn.event.compensate.helper.UndoService">
 				 <extensionElements>
 				      <camunda:field name="counterName" stringValue="undoChargeCard" />
 				 </extensionElements>        

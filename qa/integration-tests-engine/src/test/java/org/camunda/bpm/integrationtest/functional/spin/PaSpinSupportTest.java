@@ -14,24 +14,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.functional.spin;
+package io.orqueio.bpm.integrationtest.functional.spin;
 
-import static org.camunda.bpm.engine.variable.Variables.serializedObjectValue;
-import static org.camunda.spin.Spin.JSON;
-import static org.camunda.spin.Spin.XML;
+import static io.orqueio.bpm.engine.variable.Variables.serializedObjectValue;
+import static io.orqueio.spin.Spin.JSON;
+import static io.orqueio.spin.Spin.XML;
 import static org.junit.Assert.assertEquals;
 
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 
-import org.camunda.bpm.engine.impl.cfg.ProcessEnginePlugin;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.variable.Variables;
-import org.camunda.bpm.engine.variable.value.ObjectValue;
-import org.camunda.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
-import org.camunda.spin.impl.util.SpinIoUtil;
-import org.camunda.spin.json.SpinJsonNode;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEnginePlugin;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.variable.Variables;
+import io.orqueio.bpm.engine.variable.value.ObjectValue;
+import io.orqueio.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
+import io.orqueio.spin.impl.util.SpinIoUtil;
+import io.orqueio.spin.json.SpinJsonNode;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.spec.WebArchive;

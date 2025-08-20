@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.dto.authorization;
+package io.orqueio.bpm.engine.rest.dto.authorization;
 
-import org.camunda.bpm.engine.ProcessEngineConfiguration;
-import org.camunda.bpm.engine.authorization.Authorization;
-import org.camunda.bpm.engine.impl.util.PermissionConverter;
+import io.orqueio.bpm.engine.ProcessEngineConfiguration;
+import io.orqueio.bpm.engine.authorization.Authorization;
+import io.orqueio.bpm.engine.impl.util.PermissionConverter;
 
 /**
  * @author Daniel Meyer

@@ -14,33 +14,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.identity.impl.ldap;
+package io.orqueio.bpm.identity.impl.ldap;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.camunda.bpm.engine.authorization.Authorization.AUTH_TYPE_GRANT;
-import static org.camunda.bpm.engine.authorization.Permissions.READ;
-import static org.camunda.bpm.engine.authorization.Resources.USER;
-import static org.camunda.bpm.identity.ldap.util.LdapTestUtilities.checkPagingResults;
-import static org.camunda.bpm.identity.ldap.util.LdapTestUtilities.testUserPaging;
-import static org.camunda.bpm.identity.ldap.util.LdapTestUtilities.testUserPagingWithMemberOfGroup;
+import static io.orqueio.bpm.engine.authorization.Authorization.AUTH_TYPE_GRANT;
+import static io.orqueio.bpm.engine.authorization.Permissions.READ;
+import static io.orqueio.bpm.engine.authorization.Resources.USER;
+import static io.orqueio.bpm.identity.ldap.util.LdapTestUtilities.checkPagingResults;
+import static io.orqueio.bpm.identity.ldap.util.LdapTestUtilities.testUserPaging;
+import static io.orqueio.bpm.identity.ldap.util.LdapTestUtilities.testUserPagingWithMemberOfGroup;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.camunda.bpm.engine.AuthorizationService;
-import org.camunda.bpm.engine.BadUserRequestException;
-import org.camunda.bpm.engine.IdentityService;
-import org.camunda.bpm.engine.ProcessEngineConfiguration;
-import org.camunda.bpm.engine.authorization.Authorization;
-import org.camunda.bpm.engine.authorization.Permission;
-import org.camunda.bpm.engine.authorization.Resource;
-import org.camunda.bpm.engine.identity.User;
-import org.camunda.bpm.engine.identity.UserQuery;
-import org.camunda.bpm.engine.test.ProcessEngineRule;
-import org.camunda.bpm.identity.ldap.util.LdapTestEnvironment;
-import org.camunda.bpm.identity.ldap.util.LdapTestEnvironmentRule;
+import io.orqueio.bpm.engine.AuthorizationService;
+import io.orqueio.bpm.engine.BadUserRequestException;
+import io.orqueio.bpm.engine.IdentityService;
+import io.orqueio.bpm.engine.ProcessEngineConfiguration;
+import io.orqueio.bpm.engine.authorization.Authorization;
+import io.orqueio.bpm.engine.authorization.Permission;
+import io.orqueio.bpm.engine.authorization.Resource;
+import io.orqueio.bpm.engine.identity.User;
+import io.orqueio.bpm.engine.identity.UserQuery;
+import io.orqueio.bpm.engine.test.ProcessEngineRule;
+import io.orqueio.bpm.identity.ldap.util.LdapTestEnvironment;
+import io.orqueio.bpm.identity.ldap.util.LdapTestEnvironmentRule;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Rule;

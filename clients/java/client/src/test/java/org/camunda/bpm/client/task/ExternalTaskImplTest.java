@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.task;
+package io.orqueio.bpm.client.task;
 
 import static org.junit.Assert.assertEquals;
 
@@ -23,13 +23,13 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.camunda.bpm.client.task.impl.ExternalTaskImpl;
-import org.camunda.bpm.client.variable.impl.DefaultValueMappers;
-import org.camunda.bpm.client.variable.impl.TypedValueField;
-import org.camunda.bpm.client.variable.impl.ValueMappers;
-import org.camunda.bpm.client.variable.impl.VariableValue;
-import org.camunda.bpm.engine.variable.Variables;
-import org.camunda.bpm.engine.variable.type.ValueType;
+import io.orqueio.bpm.client.task.impl.ExternalTaskImpl;
+import io.orqueio.bpm.client.variable.impl.DefaultValueMappers;
+import io.orqueio.bpm.client.variable.impl.TypedValueField;
+import io.orqueio.bpm.client.variable.impl.ValueMappers;
+import io.orqueio.bpm.client.variable.impl.VariableValue;
+import io.orqueio.bpm.engine.variable.Variables;
+import io.orqueio.bpm.engine.variable.type.ValueType;
 import org.junit.Test;
 
 /**

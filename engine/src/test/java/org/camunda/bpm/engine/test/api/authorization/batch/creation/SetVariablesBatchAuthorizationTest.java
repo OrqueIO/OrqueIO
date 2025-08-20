@@ -14,24 +14,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.authorization.batch.creation;
+package io.orqueio.bpm.engine.test.api.authorization.batch.creation;
 
-import org.camunda.bpm.engine.authorization.BatchPermissions;
-import org.camunda.bpm.engine.authorization.Permissions;
-import org.camunda.bpm.engine.authorization.ProcessDefinitionPermissions;
-import org.camunda.bpm.engine.authorization.Resources;
-import org.camunda.bpm.engine.runtime.ProcessInstanceQuery;
-import org.camunda.bpm.engine.test.api.authorization.util.AuthorizationScenario;
-import org.camunda.bpm.engine.test.api.authorization.util.AuthorizationTestRule;
-import org.camunda.bpm.engine.test.api.runtime.migration.models.ProcessModels;
-import org.camunda.bpm.engine.variable.Variables;
+import io.orqueio.bpm.engine.authorization.BatchPermissions;
+import io.orqueio.bpm.engine.authorization.Permissions;
+import io.orqueio.bpm.engine.authorization.ProcessDefinitionPermissions;
+import io.orqueio.bpm.engine.authorization.Resources;
+import io.orqueio.bpm.engine.runtime.ProcessInstanceQuery;
+import io.orqueio.bpm.engine.test.api.authorization.util.AuthorizationScenario;
+import io.orqueio.bpm.engine.test.api.authorization.util.AuthorizationTestRule;
+import io.orqueio.bpm.engine.test.api.runtime.migration.models.ProcessModels;
+import io.orqueio.bpm.engine.variable.Variables;
 import org.junit.Test;
 import org.junit.runners.Parameterized;
 
 import java.util.Collection;
 
-import static org.camunda.bpm.engine.test.api.authorization.util.AuthorizationScenario.scenario;
-import static org.camunda.bpm.engine.test.api.authorization.util.AuthorizationSpec.grant;
+import static io.orqueio.bpm.engine.test.api.authorization.util.AuthorizationScenario.scenario;
+import static io.orqueio.bpm.engine.test.api.authorization.util.AuthorizationSpec.grant;
 
 public class SetVariablesBatchAuthorizationTest extends BatchCreationAuthorizationTest {
 

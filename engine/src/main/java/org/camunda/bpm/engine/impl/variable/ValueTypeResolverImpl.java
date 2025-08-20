@@ -14,20 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.variable;
+package io.orqueio.bpm.engine.impl.variable;
 
-import static org.camunda.bpm.engine.variable.type.ValueType.BOOLEAN;
-import static org.camunda.bpm.engine.variable.type.ValueType.BYTES;
-import static org.camunda.bpm.engine.variable.type.ValueType.DATE;
-import static org.camunda.bpm.engine.variable.type.ValueType.DOUBLE;
-import static org.camunda.bpm.engine.variable.type.ValueType.FILE;
-import static org.camunda.bpm.engine.variable.type.ValueType.INTEGER;
-import static org.camunda.bpm.engine.variable.type.ValueType.LONG;
-import static org.camunda.bpm.engine.variable.type.ValueType.NULL;
-import static org.camunda.bpm.engine.variable.type.ValueType.NUMBER;
-import static org.camunda.bpm.engine.variable.type.ValueType.OBJECT;
-import static org.camunda.bpm.engine.variable.type.ValueType.SHORT;
-import static org.camunda.bpm.engine.variable.type.ValueType.STRING;
+import static io.orqueio.bpm.engine.variable.type.ValueType.BOOLEAN;
+import static io.orqueio.bpm.engine.variable.type.ValueType.BYTES;
+import static io.orqueio.bpm.engine.variable.type.ValueType.DATE;
+import static io.orqueio.bpm.engine.variable.type.ValueType.DOUBLE;
+import static io.orqueio.bpm.engine.variable.type.ValueType.FILE;
+import static io.orqueio.bpm.engine.variable.type.ValueType.INTEGER;
+import static io.orqueio.bpm.engine.variable.type.ValueType.LONG;
+import static io.orqueio.bpm.engine.variable.type.ValueType.NULL;
+import static io.orqueio.bpm.engine.variable.type.ValueType.NUMBER;
+import static io.orqueio.bpm.engine.variable.type.ValueType.OBJECT;
+import static io.orqueio.bpm.engine.variable.type.ValueType.SHORT;
+import static io.orqueio.bpm.engine.variable.type.ValueType.STRING;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -37,8 +37,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.camunda.bpm.engine.variable.type.ValueType;
-import org.camunda.bpm.engine.variable.type.ValueTypeResolver;
+import io.orqueio.bpm.engine.variable.type.ValueType;
+import io.orqueio.bpm.engine.variable.type.ValueTypeResolver;
 
 /**
  * Resolves ValueType by name.

@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa.largedata.util;
+package io.orqueio.bpm.qa.largedata.util;
 
-import org.camunda.bpm.engine.batch.Batch;
-import org.camunda.bpm.engine.management.JobDefinition;
-import org.camunda.bpm.engine.test.ProcessEngineRule;
-import org.camunda.bpm.engine.test.api.runtime.BatchHelper;
+import io.orqueio.bpm.engine.batch.Batch;
+import io.orqueio.bpm.engine.management.JobDefinition;
+import io.orqueio.bpm.engine.test.ProcessEngineRule;
+import io.orqueio.bpm.engine.test.api.runtime.BatchHelper;
 
 public class BatchModificationJobHelper extends BatchHelper {
 

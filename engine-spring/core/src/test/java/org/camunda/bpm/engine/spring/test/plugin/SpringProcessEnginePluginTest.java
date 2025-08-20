@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.spring.test.plugin;
+package io.orqueio.bpm.engine.spring.test.plugin;
 
-import org.camunda.bpm.engine.spring.SpringProcessEnginePlugin;
+import io.orqueio.bpm.engine.spring.SpringProcessEnginePlugin;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.application.impl.el;
+package io.orqueio.bpm.application.impl.el;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.camunda.bpm.application.ProcessApplication;
-import org.camunda.bpm.application.impl.EmbeddedProcessApplication;
-import org.camunda.bpm.engine.impl.el.ReadOnlyMapELResolver;
-import org.camunda.bpm.impl.juel.jakarta.el.ELResolver;
+import io.orqueio.bpm.application.ProcessApplication;
+import io.orqueio.bpm.application.impl.EmbeddedProcessApplication;
+import io.orqueio.bpm.engine.impl.el.ReadOnlyMapELResolver;
+import io.orqueio.bpm.impl.juel.jakarta.el.ELResolver;
 
 /**
  * @author Thorben Lindhauer

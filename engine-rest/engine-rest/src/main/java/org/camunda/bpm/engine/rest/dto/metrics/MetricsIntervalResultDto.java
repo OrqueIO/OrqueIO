@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.dto.metrics;
+package io.orqueio.bpm.engine.rest.dto.metrics;
 
 import java.util.Date;
-import org.camunda.bpm.engine.management.MetricIntervalValue;
+import io.orqueio.bpm.engine.management.MetricIntervalValue;
 
 /**
  *

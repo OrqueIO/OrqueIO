@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.json;
+package io.orqueio.bpm.engine.impl.json;
 
 import com.google.gson.JsonObject;
-import org.camunda.bpm.engine.impl.migration.MigrationInstructionImpl;
-import org.camunda.bpm.engine.impl.util.JsonUtil;
-import org.camunda.bpm.engine.migration.MigrationInstruction;
+import io.orqueio.bpm.engine.impl.migration.MigrationInstructionImpl;
+import io.orqueio.bpm.engine.impl.util.JsonUtil;
+import io.orqueio.bpm.engine.migration.MigrationInstruction;
 
 public class MigrationInstructionJsonConverter extends JsonObjectConverter<MigrationInstruction> {
 

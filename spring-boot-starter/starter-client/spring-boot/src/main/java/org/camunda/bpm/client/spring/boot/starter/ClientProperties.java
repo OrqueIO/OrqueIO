@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.spring.boot.starter;
+package io.orqueio.bpm.client.spring.boot.starter;
 
-import org.camunda.bpm.client.spring.impl.client.ClientConfiguration;
-import org.camunda.bpm.client.spring.impl.subscription.SubscriptionConfiguration;
+import io.orqueio.bpm.client.spring.impl.client.ClientConfiguration;
+import io.orqueio.bpm.client.spring.impl.subscription.SubscriptionConfiguration;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 

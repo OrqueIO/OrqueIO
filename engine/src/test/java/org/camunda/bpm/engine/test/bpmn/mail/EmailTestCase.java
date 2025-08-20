@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.bpmn.mail;
+package io.orqueio.bpm.engine.test.bpmn.mail;
 
-import org.camunda.bpm.engine.impl.test.TestLogger;
-import org.camunda.bpm.engine.test.util.PluggableProcessEngineTest;
+import io.orqueio.bpm.engine.impl.test.TestLogger;
+import io.orqueio.bpm.engine.test.util.PluggableProcessEngineTest;
 import org.junit.After;
 import org.junit.Before;
 import org.slf4j.Logger;

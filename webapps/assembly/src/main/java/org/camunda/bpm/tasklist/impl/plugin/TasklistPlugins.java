@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.tasklist.impl.plugin;
+package io.orqueio.bpm.tasklist.impl.plugin;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.camunda.bpm.tasklist.impl.plugin.resources.TasklistPluginsRootResource;
-import org.camunda.bpm.tasklist.plugin.spi.impl.AbstractTasklistPlugin;
+import io.orqueio.bpm.tasklist.impl.plugin.resources.TasklistPluginsRootResource;
+import io.orqueio.bpm.tasklist.plugin.spi.impl.AbstractTasklistPlugin;
 
 /**
  *

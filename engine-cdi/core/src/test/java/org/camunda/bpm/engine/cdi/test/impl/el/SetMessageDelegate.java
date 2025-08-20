@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.cdi.test.impl.el;
+package io.orqueio.bpm.engine.cdi.test.impl.el;
 
-import org.camunda.bpm.engine.cdi.annotation.BusinessProcessScoped;
-import org.camunda.bpm.engine.cdi.test.impl.beans.MessageBean;
-import org.camunda.bpm.engine.cdi.test.impl.beans.ProcessScopedMessageBean;
-import org.camunda.bpm.engine.delegate.DelegateExecution;
-import org.camunda.bpm.engine.delegate.JavaDelegate;
+import io.orqueio.bpm.engine.cdi.annotation.BusinessProcessScoped;
+import io.orqueio.bpm.engine.cdi.test.impl.beans.MessageBean;
+import io.orqueio.bpm.engine.cdi.test.impl.beans.ProcessScopedMessageBean;
+import io.orqueio.bpm.engine.delegate.DelegateExecution;
+import io.orqueio.bpm.engine.delegate.JavaDelegate;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;

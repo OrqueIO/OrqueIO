@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.bpmn.builder;
+package io.orqueio.bpm.model.bpmn.builder;
 
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
-import org.camunda.bpm.model.bpmn.instance.ExtensionElements;
-import org.camunda.bpm.model.bpmn.instance.Task;
-import org.camunda.bpm.model.bpmn.instance.camunda.CamundaExecutionListener;
-import org.camunda.bpm.model.bpmn.instance.camunda.CamundaInputOutput;
-import org.camunda.bpm.model.bpmn.instance.camunda.CamundaInputParameter;
-import org.camunda.bpm.model.bpmn.instance.camunda.CamundaOutputParameter;
-import org.camunda.bpm.model.bpmn.instance.camunda.CamundaTaskListener;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.bpm.model.bpmn.instance.ExtensionElements;
+import io.orqueio.bpm.model.bpmn.instance.Task;
+import io.orqueio.bpm.model.bpmn.instance.camunda.CamundaExecutionListener;
+import io.orqueio.bpm.model.bpmn.instance.camunda.CamundaInputOutput;
+import io.orqueio.bpm.model.bpmn.instance.camunda.CamundaInputParameter;
+import io.orqueio.bpm.model.bpmn.instance.camunda.CamundaOutputParameter;
+import io.orqueio.bpm.model.bpmn.instance.camunda.CamundaTaskListener;
 
 /**
  * @author Sebastian Menski

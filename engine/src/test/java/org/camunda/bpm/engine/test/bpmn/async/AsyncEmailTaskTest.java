@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.bpmn.async;
+package io.orqueio.bpm.engine.test.bpmn.async;
 
 import static org.junit.Assert.assertEquals;
 
 import java.util.Arrays;
 import java.util.List;
 
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.engine.test.bpmn.mail.EmailServiceTaskTest;
-import org.camunda.bpm.engine.test.bpmn.mail.EmailTestCase;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.test.bpmn.mail.EmailServiceTaskTest;
+import io.orqueio.bpm.engine.test.bpmn.mail.EmailTestCase;
 import org.subethamail.wiser.WiserMessage;
 
 /**
@@ -33,7 +33,7 @@ import org.subethamail.wiser.WiserMessage;
  */
 public class AsyncEmailTaskTest extends EmailTestCase {
 
-  // copied from org.camunda.bpm.engine.test.bpmn.mail.EmailServiceTaskTest
+  // copied from io.orqueio.bpm.engine.test.bpmn.mail.EmailServiceTaskTest
   @Deployment
   public void testSimpleTextMail() throws Exception {
     String procId = runtimeService.startProcessInstanceByKey("simpleTextOnly").getId();
@@ -52,7 +52,7 @@ public class AsyncEmailTaskTest extends EmailTestCase {
     testRule.assertProcessEnded(procId);
   }
 
-  // copied from org.camunda.bpm.engine.test.bpmn.mail.EmailSendTaskTest
+  // copied from io.orqueio.bpm.engine.test.bpmn.mail.EmailSendTaskTest
   @Deployment
   public void testSimpleTextMailSendTask() throws Exception {
     runtimeService.startProcessInstanceByKey("simpleTextOnly");

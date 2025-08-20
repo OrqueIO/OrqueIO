@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.persistence.deploy.cache;
+package io.orqueio.bpm.engine.impl.persistence.deploy.cache;
 
-import org.camunda.bpm.engine.exception.dmn.DecisionDefinitionNotFoundException;
-import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.engine.impl.dmn.entity.repository.DecisionDefinitionEntity;
-import org.camunda.bpm.engine.impl.dmn.entity.repository.DecisionDefinitionManager;
-import org.camunda.bpm.engine.impl.persistence.AbstractResourceDefinitionManager;
+import io.orqueio.bpm.engine.exception.dmn.DecisionDefinitionNotFoundException;
+import io.orqueio.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.impl.dmn.entity.repository.DecisionDefinitionEntity;
+import io.orqueio.bpm.engine.impl.dmn.entity.repository.DecisionDefinitionManager;
+import io.orqueio.bpm.engine.impl.persistence.AbstractResourceDefinitionManager;
 
-import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
+import static io.orqueio.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
 
 /**
  * @author: Johannes Heinemann

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine;
+package io.orqueio.bpm.engine;
 
 /**
  * <p>Base exception resulting from a script engine interaction.</p>

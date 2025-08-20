@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.bpmn.mail;
+package io.orqueio.bpm.engine.test.bpmn.mail;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -34,8 +34,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.engine.impl.util.CollectionUtil;
-import org.camunda.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.impl.util.CollectionUtil;
+import io.orqueio.bpm.engine.test.Deployment;
 import org.junit.Test;
 import org.subethamail.wiser.WiserMessage;
 

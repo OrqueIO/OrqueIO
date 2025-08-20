@@ -9,7 +9,7 @@
     <casePlanModel id="CasePlanModel_1">
 
       <extensionElements>
-        <camunda:caseExecutionListener event="create" class="org.camunda.bpm.engine.test.cmmn.listener.FieldInjectionCaseExecutionListener">
+        <camunda:caseExecutionListener event="create" class="io.orqueio.bpm.engine.test.cmmn.listener.FieldInjectionCaseExecutionListener">
 
           <camunda:field name="greeter" stringValue="The Case" />
           <camunda:field name="helloWorld">

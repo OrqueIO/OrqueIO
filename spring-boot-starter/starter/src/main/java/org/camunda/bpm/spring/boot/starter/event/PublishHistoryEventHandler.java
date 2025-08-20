@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter.event;
+package io.orqueio.bpm.spring.boot.starter.event;
 
-import org.camunda.bpm.engine.impl.history.event.HistoryEvent;
-import org.camunda.bpm.engine.impl.history.handler.HistoryEventHandler;
+import io.orqueio.bpm.engine.impl.history.event.HistoryEvent;
+import io.orqueio.bpm.engine.impl.history.handler.HistoryEventHandler;
 import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.List;

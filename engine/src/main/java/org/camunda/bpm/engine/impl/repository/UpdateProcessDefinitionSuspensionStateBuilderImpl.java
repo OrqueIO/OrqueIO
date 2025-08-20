@@ -14,21 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.repository;
+package io.orqueio.bpm.engine.impl.repository;
 
-import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
-import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureOnlyOneNotNull;
+import static io.orqueio.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
+import static io.orqueio.bpm.engine.impl.util.EnsureUtil.ensureOnlyOneNotNull;
 
 import java.util.Date;
 
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
-import org.camunda.bpm.engine.impl.cmd.ActivateProcessDefinitionCmd;
-import org.camunda.bpm.engine.impl.cmd.CommandLogger;
-import org.camunda.bpm.engine.impl.cmd.SuspendProcessDefinitionCmd;
-import org.camunda.bpm.engine.impl.interceptor.CommandExecutor;
-import org.camunda.bpm.engine.repository.UpdateProcessDefinitionSuspensionStateBuilder;
-import org.camunda.bpm.engine.repository.UpdateProcessDefinitionSuspensionStateSelectBuilder;
-import org.camunda.bpm.engine.repository.UpdateProcessDefinitionSuspensionStateTenantBuilder;
+import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
+import io.orqueio.bpm.engine.impl.cmd.ActivateProcessDefinitionCmd;
+import io.orqueio.bpm.engine.impl.cmd.CommandLogger;
+import io.orqueio.bpm.engine.impl.cmd.SuspendProcessDefinitionCmd;
+import io.orqueio.bpm.engine.impl.interceptor.CommandExecutor;
+import io.orqueio.bpm.engine.repository.UpdateProcessDefinitionSuspensionStateBuilder;
+import io.orqueio.bpm.engine.repository.UpdateProcessDefinitionSuspensionStateSelectBuilder;
+import io.orqueio.bpm.engine.repository.UpdateProcessDefinitionSuspensionStateTenantBuilder;
 
 public class UpdateProcessDefinitionSuspensionStateBuilderImpl implements UpdateProcessDefinitionSuspensionStateBuilder,
     UpdateProcessDefinitionSuspensionStateSelectBuilder, UpdateProcessDefinitionSuspensionStateTenantBuilder {

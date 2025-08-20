@@ -14,28 +14,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.cmd;
+package io.orqueio.bpm.engine.impl.cmd;
 
 
-import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureAtLeastOneNotNull;
+import static io.orqueio.bpm.engine.impl.util.EnsureUtil.ensureAtLeastOneNotNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
-import org.camunda.bpm.engine.history.UserOperationLogEntry;
-import org.camunda.bpm.engine.impl.MessageCorrelationBuilderImpl;
-import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.engine.impl.history.SynchronousOperationLogProducer;
-import org.camunda.bpm.engine.impl.interceptor.Command;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.persistence.entity.PropertyChange;
-import org.camunda.bpm.engine.impl.runtime.CorrelationHandler;
-import org.camunda.bpm.engine.impl.runtime.CorrelationHandlerResult;
-import org.camunda.bpm.engine.impl.runtime.CorrelationSet;
-import org.camunda.bpm.engine.impl.runtime.MessageCorrelationResultImpl;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.history.UserOperationLogEntry;
+import io.orqueio.bpm.engine.impl.MessageCorrelationBuilderImpl;
+import io.orqueio.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.impl.history.SynchronousOperationLogProducer;
+import io.orqueio.bpm.engine.impl.interceptor.Command;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.impl.persistence.entity.PropertyChange;
+import io.orqueio.bpm.engine.impl.runtime.CorrelationHandler;
+import io.orqueio.bpm.engine.impl.runtime.CorrelationHandlerResult;
+import io.orqueio.bpm.engine.impl.runtime.CorrelationSet;
+import io.orqueio.bpm.engine.impl.runtime.MessageCorrelationResultImpl;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
 
 /**
  * @author Thorben Lindhauer

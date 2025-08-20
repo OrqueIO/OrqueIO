@@ -14,18 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.authorization;
+package io.orqueio.bpm.engine.test.api.authorization;
 
-import static org.camunda.bpm.engine.authorization.Authorization.ANY;
+import static io.orqueio.bpm.engine.authorization.Authorization.ANY;
 import static org.junit.Assert.assertTrue;
 
-import org.camunda.bpm.engine.AuthorizationService;
-import org.camunda.bpm.engine.authorization.OptimizePermissions;
-import org.camunda.bpm.engine.authorization.Resources;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.test.ProcessEngineRule;
-import org.camunda.bpm.engine.test.api.authorization.util.AuthorizationTestBaseRule;
-import org.camunda.bpm.engine.test.util.ProvidedProcessEngineRule;
+import io.orqueio.bpm.engine.AuthorizationService;
+import io.orqueio.bpm.engine.authorization.OptimizePermissions;
+import io.orqueio.bpm.engine.authorization.Resources;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.test.ProcessEngineRule;
+import io.orqueio.bpm.engine.test.api.authorization.util.AuthorizationTestBaseRule;
+import io.orqueio.bpm.engine.test.util.ProvidedProcessEngineRule;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;

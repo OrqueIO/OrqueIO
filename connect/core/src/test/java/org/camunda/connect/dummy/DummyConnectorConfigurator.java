@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.connect.dummy;
+package io.orqueio.connect.dummy;
 
-import org.camunda.connect.spi.ConnectorConfigurator;
+import io.orqueio.connect.spi.ConnectorConfigurator;
 
 public class DummyConnectorConfigurator implements ConnectorConfigurator<DummyConnector> {
 

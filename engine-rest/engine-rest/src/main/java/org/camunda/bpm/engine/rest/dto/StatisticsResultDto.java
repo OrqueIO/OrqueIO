@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.dto;
+package io.orqueio.bpm.engine.rest.dto;
 
-import org.camunda.bpm.engine.rest.dto.repository.ActivityStatisticsResultDto;
-import org.camunda.bpm.engine.rest.dto.repository.IncidentStatisticsResultDto;
-import org.camunda.bpm.engine.rest.dto.repository.ProcessDefinitionStatisticsResultDto;
+import io.orqueio.bpm.engine.rest.dto.repository.ActivityStatisticsResultDto;
+import io.orqueio.bpm.engine.rest.dto.repository.IncidentStatisticsResultDto;
+import io.orqueio.bpm.engine.rest.dto.repository.ProcessDefinitionStatisticsResultDto;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;

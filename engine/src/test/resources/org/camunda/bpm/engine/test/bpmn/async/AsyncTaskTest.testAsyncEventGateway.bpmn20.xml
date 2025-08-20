@@ -12,7 +12,7 @@
 
     <eventBasedGateway id="eventBasedGateway" name="eventBasedGateway" camunda:async="true">
       <extensionElements>
-        <camunda:executionListener event="start" class="org.camunda.bpm.engine.test.bpmn.async.AsyncListener" />
+        <camunda:executionListener event="start" class="io.orqueio.bpm.engine.test.bpmn.async.AsyncListener" />
       </extensionElements>
     </eventBasedGateway>
 

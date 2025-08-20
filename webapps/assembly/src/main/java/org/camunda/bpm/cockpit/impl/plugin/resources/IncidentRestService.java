@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.cockpit.impl.plugin.resources;
+package io.orqueio.bpm.cockpit.impl.plugin.resources;
 
-import static org.camunda.bpm.engine.authorization.Permissions.READ;
-import static org.camunda.bpm.engine.authorization.Permissions.READ_INSTANCE;
-import static org.camunda.bpm.engine.authorization.Resources.PROCESS_DEFINITION;
-import static org.camunda.bpm.engine.authorization.Resources.PROCESS_INSTANCE;
+import static io.orqueio.bpm.engine.authorization.Permissions.READ;
+import static io.orqueio.bpm.engine.authorization.Permissions.READ_INSTANCE;
+import static io.orqueio.bpm.engine.authorization.Resources.PROCESS_DEFINITION;
+import static io.orqueio.bpm.engine.authorization.Resources.PROCESS_INSTANCE;
 
 import java.util.List;
 
@@ -33,10 +33,10 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
-import org.camunda.bpm.cockpit.impl.plugin.base.dto.IncidentDto;
-import org.camunda.bpm.cockpit.impl.plugin.base.dto.query.IncidentQueryDto;
-import org.camunda.bpm.cockpit.plugin.resource.AbstractPluginResource;
-import org.camunda.bpm.engine.rest.dto.CountResultDto;
+import io.orqueio.bpm.cockpit.impl.plugin.base.dto.IncidentDto;
+import io.orqueio.bpm.cockpit.impl.plugin.base.dto.query.IncidentQueryDto;
+import io.orqueio.bpm.cockpit.plugin.resource.AbstractPluginResource;
+import io.orqueio.bpm.engine.rest.dto.CountResultDto;
 
 /**
  * @author roman.smirnov

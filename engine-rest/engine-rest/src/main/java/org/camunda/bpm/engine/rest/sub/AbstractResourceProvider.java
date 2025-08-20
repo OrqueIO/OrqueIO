@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.sub;
+package io.orqueio.bpm.engine.rest.sub;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.query.Query;
-import org.camunda.bpm.engine.rest.exception.InvalidRequestException;
-import org.camunda.bpm.engine.rest.sub.impl.VariableResponseProvider;
-import org.camunda.bpm.engine.variable.value.TypedValue;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.query.Query;
+import io.orqueio.bpm.engine.rest.exception.InvalidRequestException;
+import io.orqueio.bpm.engine.rest.sub.impl.VariableResponseProvider;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;

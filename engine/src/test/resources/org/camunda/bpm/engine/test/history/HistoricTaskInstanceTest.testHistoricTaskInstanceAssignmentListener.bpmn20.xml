@@ -12,7 +12,7 @@
 
     <userTask id="task" name="Clean up">
       <extensionElements>
-        <camunda:taskListener event="create" class="org.camunda.bpm.engine.test.history.SetAssigneeListener" />
+        <camunda:taskListener event="create" class="io.orqueio.bpm.engine.test.history.SetAssigneeListener" />
       </extensionElements>
     </userTask>
     

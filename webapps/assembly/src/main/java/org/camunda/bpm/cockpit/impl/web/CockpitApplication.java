@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.cockpit.impl.web;
+package io.orqueio.bpm.cockpit.impl.web;
 
 import java.util.HashSet;
 import java.util.List;
@@ -22,11 +22,11 @@ import java.util.Set;
 
 import javax.ws.rs.core.Application;
 
-import org.camunda.bpm.cockpit.Cockpit;
-import org.camunda.bpm.cockpit.plugin.spi.CockpitPlugin;
-import org.camunda.bpm.engine.rest.exception.ExceptionHandler;
-import org.camunda.bpm.engine.rest.exception.RestExceptionHandler;
-import org.camunda.bpm.engine.rest.mapper.JacksonConfigurator;
+import io.orqueio.bpm.cockpit.Cockpit;
+import io.orqueio.bpm.cockpit.plugin.spi.CockpitPlugin;
+import io.orqueio.bpm.engine.rest.exception.ExceptionHandler;
+import io.orqueio.bpm.engine.rest.exception.RestExceptionHandler;
+import io.orqueio.bpm.engine.rest.mapper.JacksonConfigurator;
 
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 

@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.hal.user;
+package io.orqueio.bpm.engine.rest.hal.user;
 
-import org.camunda.bpm.engine.identity.User;
-import org.camunda.bpm.engine.rest.UserRestService;
-import org.camunda.bpm.engine.rest.hal.HalResource;
+import io.orqueio.bpm.engine.identity.User;
+import io.orqueio.bpm.engine.rest.UserRestService;
+import io.orqueio.bpm.engine.rest.hal.HalResource;
 
 import javax.ws.rs.core.UriBuilder;
 import java.util.ArrayList;

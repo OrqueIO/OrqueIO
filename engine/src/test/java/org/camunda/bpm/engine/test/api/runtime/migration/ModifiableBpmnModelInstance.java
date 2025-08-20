@@ -14,43 +14,43 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.runtime.migration;
+package io.orqueio.bpm.engine.test.api.runtime.migration;
 
 import java.util.Collection;
 
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
-import org.camunda.bpm.model.bpmn.builder.AbstractActivityBuilder;
-import org.camunda.bpm.model.bpmn.builder.AbstractBaseElementBuilder;
-import org.camunda.bpm.model.bpmn.builder.AbstractFlowNodeBuilder;
-import org.camunda.bpm.model.bpmn.builder.CallActivityBuilder;
-import org.camunda.bpm.model.bpmn.builder.EndEventBuilder;
-import org.camunda.bpm.model.bpmn.builder.IntermediateCatchEventBuilder;
-import org.camunda.bpm.model.bpmn.builder.ServiceTaskBuilder;
-import org.camunda.bpm.model.bpmn.builder.StartEventBuilder;
-import org.camunda.bpm.model.bpmn.builder.SubProcessBuilder;
-import org.camunda.bpm.model.bpmn.builder.UserTaskBuilder;
-import org.camunda.bpm.model.bpmn.instance.Activity;
-import org.camunda.bpm.model.bpmn.instance.Association;
-import org.camunda.bpm.model.bpmn.instance.BaseElement;
-import org.camunda.bpm.model.bpmn.instance.BpmnModelElementInstance;
-import org.camunda.bpm.model.bpmn.instance.Definitions;
-import org.camunda.bpm.model.bpmn.instance.Documentation;
-import org.camunda.bpm.model.bpmn.instance.FlowElement;
-import org.camunda.bpm.model.bpmn.instance.FlowNode;
-import org.camunda.bpm.model.bpmn.instance.Message;
-import org.camunda.bpm.model.bpmn.instance.MultiInstanceLoopCharacteristics;
-import org.camunda.bpm.model.bpmn.instance.Process;
-import org.camunda.bpm.model.bpmn.instance.SequenceFlow;
-import org.camunda.bpm.model.bpmn.instance.Signal;
-import org.camunda.bpm.model.bpmn.instance.SubProcess;
-import org.camunda.bpm.model.bpmn.instance.bpmndi.BpmnEdge;
-import org.camunda.bpm.model.bpmn.instance.bpmndi.BpmnShape;
-import org.camunda.bpm.model.xml.Model;
-import org.camunda.bpm.model.xml.instance.DomDocument;
-import org.camunda.bpm.model.xml.instance.ModelElementInstance;
-import org.camunda.bpm.model.xml.type.ModelElementType;
-import org.camunda.bpm.model.xml.validation.ModelElementValidator;
-import org.camunda.bpm.model.xml.validation.ValidationResults;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.bpm.model.bpmn.builder.AbstractActivityBuilder;
+import io.orqueio.bpm.model.bpmn.builder.AbstractBaseElementBuilder;
+import io.orqueio.bpm.model.bpmn.builder.AbstractFlowNodeBuilder;
+import io.orqueio.bpm.model.bpmn.builder.CallActivityBuilder;
+import io.orqueio.bpm.model.bpmn.builder.EndEventBuilder;
+import io.orqueio.bpm.model.bpmn.builder.IntermediateCatchEventBuilder;
+import io.orqueio.bpm.model.bpmn.builder.ServiceTaskBuilder;
+import io.orqueio.bpm.model.bpmn.builder.StartEventBuilder;
+import io.orqueio.bpm.model.bpmn.builder.SubProcessBuilder;
+import io.orqueio.bpm.model.bpmn.builder.UserTaskBuilder;
+import io.orqueio.bpm.model.bpmn.instance.Activity;
+import io.orqueio.bpm.model.bpmn.instance.Association;
+import io.orqueio.bpm.model.bpmn.instance.BaseElement;
+import io.orqueio.bpm.model.bpmn.instance.BpmnModelElementInstance;
+import io.orqueio.bpm.model.bpmn.instance.Definitions;
+import io.orqueio.bpm.model.bpmn.instance.Documentation;
+import io.orqueio.bpm.model.bpmn.instance.FlowElement;
+import io.orqueio.bpm.model.bpmn.instance.FlowNode;
+import io.orqueio.bpm.model.bpmn.instance.Message;
+import io.orqueio.bpm.model.bpmn.instance.MultiInstanceLoopCharacteristics;
+import io.orqueio.bpm.model.bpmn.instance.Process;
+import io.orqueio.bpm.model.bpmn.instance.SequenceFlow;
+import io.orqueio.bpm.model.bpmn.instance.Signal;
+import io.orqueio.bpm.model.bpmn.instance.SubProcess;
+import io.orqueio.bpm.model.bpmn.instance.bpmndi.BpmnEdge;
+import io.orqueio.bpm.model.bpmn.instance.bpmndi.BpmnShape;
+import io.orqueio.bpm.model.xml.Model;
+import io.orqueio.bpm.model.xml.instance.DomDocument;
+import io.orqueio.bpm.model.xml.instance.ModelElementInstance;
+import io.orqueio.bpm.model.xml.type.ModelElementType;
+import io.orqueio.bpm.model.xml.validation.ModelElementValidator;
+import io.orqueio.bpm.model.xml.validation.ValidationResults;
 
 public class ModifiableBpmnModelInstance implements BpmnModelInstance {
 

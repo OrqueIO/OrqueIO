@@ -14,18 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.logging;
+package io.orqueio.bpm.engine.test.logging;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.impl.cfg.StandaloneInMemProcessEngineConfiguration;
-import org.camunda.bpm.model.bpmn.Bpmn;
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
-import org.camunda.commons.testing.ProcessEngineLoggingRule;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.impl.cfg.StandaloneInMemProcessEngineConfiguration;
+import io.orqueio.bpm.model.bpmn.Bpmn;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.commons.testing.ProcessEngineLoggingRule;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -36,7 +36,7 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 
 public class ProcessDataLoggingContextMultipleEnginesTest {
 
-  private static final String PVM_LOGGER = "org.camunda.bpm.engine.pvm";
+  private static final String PVM_LOGGER = "io.orqueio.bpm.engine.pvm";
   private static final String DELEGATE_LOGGER = LogEngineNameDelegate.class.getName();
 
   private static final String PROCESS = "process";

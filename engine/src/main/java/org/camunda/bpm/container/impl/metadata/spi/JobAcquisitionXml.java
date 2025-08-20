@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.metadata.spi;
+package io.orqueio.bpm.container.impl.metadata.spi;
 
 import java.util.Map;
 

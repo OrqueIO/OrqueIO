@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa.performance.engine.framework;
+package io.orqueio.bpm.qa.performance.engine.framework;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.qa.performance.engine.framework.activitylog.ActivityPerfTestResult;
+import io.orqueio.bpm.qa.performance.engine.framework.activitylog.ActivityPerfTestResult;
 
 /**
  * @author Daniel Meyer

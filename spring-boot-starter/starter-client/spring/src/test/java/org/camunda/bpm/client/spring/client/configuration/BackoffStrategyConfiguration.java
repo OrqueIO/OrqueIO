@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.spring.client.configuration;
+package io.orqueio.bpm.client.spring.client.configuration;
 
-import org.camunda.bpm.client.backoff.BackoffStrategy;
-import org.camunda.bpm.client.task.ExternalTask;
+import io.orqueio.bpm.client.backoff.BackoffStrategy;
+import io.orqueio.bpm.client.task.ExternalTask;
 import org.springframework.context.annotation.Bean;
 
 import java.util.List;

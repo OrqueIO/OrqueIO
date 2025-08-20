@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.spring.application;
+package io.orqueio.bpm.engine.spring.application;
 
 import javax.servlet.ServletContext;
 
-import org.camunda.bpm.application.ProcessApplication;
-import org.camunda.bpm.application.ProcessApplicationInfo;
+import io.orqueio.bpm.application.ProcessApplication;
+import io.orqueio.bpm.application.ProcessApplicationInfo;
 import org.springframework.web.context.ServletContextAware;
 
 /**

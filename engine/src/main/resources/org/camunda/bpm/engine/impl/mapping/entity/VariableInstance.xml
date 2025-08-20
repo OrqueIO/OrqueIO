@@ -19,11 +19,11 @@
 -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="org.camunda.bpm.engine.impl.persistence.entity.VariableInstanceEntity">
+<mapper namespace="io.orqueio.bpm.engine.impl.persistence.entity.VariableInstanceEntity">
 
   <!-- VARIABLE INSTANCE INSERT -->
 
-  <insert id="insertVariableInstance" parameterType="org.camunda.bpm.engine.impl.persistence.entity.VariableInstanceEntity">
+  <insert id="insertVariableInstance" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.VariableInstanceEntity">
     insert into ${prefix}ACT_RU_VARIABLE
     (
       ID_,
@@ -73,7 +73,7 @@
 
   <!-- VARIABLE INSTANCE UPDATE -->
 
-  <update id="updateVariableInstance" parameterType="org.camunda.bpm.engine.impl.persistence.entity.VariableInstanceEntity">
+  <update id="updateVariableInstance" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.VariableInstanceEntity">
     update ${prefix}ACT_RU_VARIABLE
     set
       REV_ = #{revisionNext, jdbcType=INTEGER},
@@ -92,13 +92,13 @@
 
   <!-- VARIABLE INSTANCE DELETE -->
 
-  <delete id="deleteVariableInstance" parameterType="org.camunda.bpm.engine.impl.persistence.entity.VariableInstanceEntity">
+  <delete id="deleteVariableInstance" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.VariableInstanceEntity">
     delete from ${prefix}ACT_RU_VARIABLE where ID_ = #{id, jdbcType=VARCHAR} and REV_ = #{revision}
   </delete>
 
   <!-- VARIABLE INSTANCE RESULTMAP -->
 
-	<resultMap id="variableInstanceResultMap" type="org.camunda.bpm.engine.impl.persistence.entity.VariableInstanceEntity">
+	<resultMap id="variableInstanceResultMap" type="io.orqueio.bpm.engine.impl.persistence.entity.VariableInstanceEntity">
       <id property="id" column="ID_" jdbcType="VARCHAR" />
       <result property="revision" column="REV_" jdbcType="INTEGER"/>
       <result property="serializerName" column="TYPE_" javaType="String" jdbcType="VARCHAR"/>
@@ -151,7 +151,7 @@
         RES.ID_ = #{id, jdbcType=VARCHAR}
   </select>
 
-  <select id="selectVariablesByExecutionId" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject" resultMap="variableInstanceResultMap">
+  <select id="selectVariablesByExecutionId" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject" resultMap="variableInstanceResultMap">
     SELECT
         RES.*,
         (<include refid="actInstIdColumn"/>) ACT_INST_ID_
@@ -181,7 +181,7 @@
     </if>
   </select>
 
-  <select id="selectVariablesByProcessInstanceId" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject" resultMap="variableInstanceResultMap">
+  <select id="selectVariablesByProcessInstanceId" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject" resultMap="variableInstanceResultMap">
     SELECT
         RES.*,
         (<include refid="actInstIdColumn"/>) ACT_INST_ID_
@@ -202,7 +202,7 @@
         RES.PROC_INST_ID_ = #{parameter, jdbcType=VARCHAR}
   </select>
 
-  <select id="selectVariablesByCaseExecutionId" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject" resultMap="variableInstanceResultMap">
+  <select id="selectVariablesByCaseExecutionId" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject" resultMap="variableInstanceResultMap">
     SELECT
         RES.*,
         (<include refid="actInstIdColumn"/>) ACT_INST_ID_
@@ -232,7 +232,7 @@
     </if>
   </select>
 
-  <select id="selectVariablesByTaskId" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject" resultMap="variableInstanceResultMap">
+  <select id="selectVariablesByTaskId" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject" resultMap="variableInstanceResultMap">
     SELECT
         RES.*,
         (<include refid="actInstIdColumn"/>) ACT_INST_ID_
@@ -260,8 +260,8 @@
     </if>
   </select>
 
-  <select id="selectVariableInstanceByQueryCriteria" parameterType="org.camunda.bpm.engine.impl.VariableInstanceQueryImpl" resultMap="variableInstanceResultMap">
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
+  <select id="selectVariableInstanceByQueryCriteria" parameterType="io.orqueio.bpm.engine.impl.VariableInstanceQueryImpl" resultMap="variableInstanceResultMap">
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
     ${limitBefore}
     select ${distinct} RES.*
     ${limitBetween}
@@ -270,7 +270,7 @@
     ${limitAfter}
   </select>
 
-  <select id="selectVariableInstanceCountByQueryCriteria" parameterType="org.camunda.bpm.engine.impl.VariableInstanceQueryImpl" resultType="long">
+  <select id="selectVariableInstanceCountByQueryCriteria" parameterType="io.orqueio.bpm.engine.impl.VariableInstanceQueryImpl" resultType="long">
     ${countDistinctBeforeStart} RES.ID_ ${countDistinctBeforeEnd}
     <include refid="selectVariableInstanceByQueryCriteriaSql"/>
     ${countDistinctAfterEnd}
@@ -326,7 +326,7 @@
             left join ${prefix}ACT_RE_PROCDEF PROCDEF
             on PROCDEF.ID_ = PROC_EXECUTION.PROC_DEF_ID_   
             <if test="!authCheck.revokeAuthorizationCheckEnabled">      
-              <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoinWithoutOnClause" /> 
+              <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoinWithoutOnClause" />
               AUTH ON (AUTH.RESOURCE_ID_ ${authJoinStart}
                 RES.PROC_INST_ID_ 
                 ${authJoinSeparator} PROC_EXECUTION.ID_
@@ -454,17 +454,17 @@
             <foreach collection="queryVariableValues" index="index" item="queryVariableValue">
               and
               <bind name="varPrefix" value="'RES.'"/>
-              <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.variableNameEqualsCaseInsensitive" />
+              <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.variableNameEqualsCaseInsensitive" />
               <bind name="varTypeField" value="'TYPE_'"/>
               <if test="queryVariableValue.valueConditions != null">
                 and
-                <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.variableValueConditions"/>
+                <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.variableValueConditions"/>
               </if>
             </foreach>
 
             <bind name="applyAuthorizationCheckForCaseInstances" value="true" />
-            <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.contextualAuthorizationCheck" />
-            <include refid="org.camunda.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
+            <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.contextualAuthorizationCheck" />
+            <include refid="io.orqueio.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
 
           </where>
     ) RES
@@ -472,7 +472,7 @@
 
   <!-- BYTE ARRAY INSERT -->
 
-  <insert id="insertByteArray" parameterType="org.camunda.bpm.engine.impl.persistence.entity.ByteArrayEntity">
+  <insert id="insertByteArray" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.ByteArrayEntity">
     insert into ${prefix}ACT_GE_BYTEARRAY(ID_, NAME_, BYTES_, DEPLOYMENT_ID_, TENANT_ID_, TYPE_, CREATE_TIME_, ROOT_PROC_INST_ID_, REMOVAL_TIME_, REV_)
     values (
       #{id, jdbcType=VARCHAR},
@@ -490,7 +490,7 @@
 
   <!-- BYTE ARRAY UPDATE -->
 
-  <update id="updateByteArray" parameterType="org.camunda.bpm.engine.impl.persistence.entity.ByteArrayEntity">
+  <update id="updateByteArray" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.ByteArrayEntity">
     update ${prefix}ACT_GE_BYTEARRAY 
     set
       REV_ = #{revisionNext, jdbcType=INTEGER},
@@ -1255,11 +1255,11 @@
     select BYTES_ from ${prefix}ACT_GE_BYTEARRAY where ID_ = #{id} and REV_ = #{revision}
   </select>
 
-  <delete id="deleteByteArraysForDeployment" parameterType="org.camunda.bpm.engine.impl.persistence.entity.ByteArrayEntity">
+  <delete id="deleteByteArraysForDeployment" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.ByteArrayEntity">
     delete from ${prefix}ACT_GE_BYTEARRAY where DEPLOYMENT_ID_ = #{id} and REV_ = #{revision}
   </delete>
 
-  <delete id="deleteByteArray" parameterType="org.camunda.bpm.engine.impl.persistence.entity.ByteArrayEntity">
+  <delete id="deleteByteArray" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.ByteArrayEntity">
     delete from ${prefix}ACT_GE_BYTEARRAY where ID_ = #{id} and REV_ = #{revision}
   </delete>
 
@@ -1269,20 +1269,20 @@
 
   <sql id="andWhereMinuteInDateBetweenSql">
     <if test="parameter.minuteFrom != null and parameter.minuteTo != null">
-      AND ${datepart1}<include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.periodUnitFunction"/>${datepart2}${date}${datepart3}
+      AND ${datepart1}<include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.periodUnitFunction"/>${datepart2}${date}${datepart3}
       between #{parameter.minuteFrom, jdbcType=INTEGER} and #{parameter.minuteTo, jdbcType=INTEGER}
     </if>
   </sql>
 
   <sql id="andWhereMinuteInDateBetweenSql_oracle">
     <if test="parameter.minuteFrom != null and parameter.minuteTo != null">
-      AND ${datepart1}${date}${datepart2}<include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.periodUnitFunction"/>${datepart3}
+      AND ${datepart1}${date}${datepart2}<include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.periodUnitFunction"/>${datepart3}
       between #{parameter.minuteFrom, jdbcType=INTEGER} and #{parameter.minuteTo, jdbcType=INTEGER}
     </if>
   </sql>
 
   <delete id="deleteByteArraysByRemovalTime"
-          parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject">
+          parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject">
     <bind name="date" value="'REMOVAL_TIME_'"/>
     <bind name="reportPeriodUnitName" value="'MINUTE'"/>
     delete ${limitBeforeWithoutOffset} from ${prefix}ACT_GE_BYTEARRAY
@@ -1292,7 +1292,7 @@
   </delete>
 
   <delete id="deleteByteArraysByRemovalTime_oracle"
-          parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject">
+          parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject">
     <bind name="date" value="'REMOVAL_TIME_'"/>
     <bind name="reportPeriodUnitName" value="'MINUTE'"/>
     delete ${limitBeforeWithoutOffset} from ${prefix}ACT_GE_BYTEARRAY
@@ -1302,7 +1302,7 @@
   </delete>
 
   <delete id="deleteByteArraysByRemovalTime_postgres_or_db2"
-          parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject">
+          parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject">
     <bind name="date" value="'REMOVAL_TIME_'"/>
     <bind name="reportPeriodUnitName" value="'MINUTE'"/>
     delete ${limitBeforeWithoutOffset} from ${prefix}ACT_GE_BYTEARRAY
@@ -1314,7 +1314,7 @@
   </delete>
 
   <delete id="deleteByteArraysByRemovalTime_mssql"
-          parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject">
+          parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject">
     <bind name="date" value="'REMOVAL_TIME_'"/>
     <bind name="reportPeriodUnitName" value="'MINUTE'"/>
     delete ${limitBeforeWithoutOffset} from ${prefix}ACT_GE_BYTEARRAY
@@ -1326,7 +1326,7 @@
 
   <!-- BYTE ARRAY RESULTMAP -->
 
-  <resultMap id="byteArrayResultMap" type="org.camunda.bpm.engine.impl.persistence.entity.ByteArrayEntity">
+  <resultMap id="byteArrayResultMap" type="io.orqueio.bpm.engine.impl.persistence.entity.ByteArrayEntity">
     <id property="id" column="ID_" jdbcType="VARCHAR" />
     <result property="revision" column="REV_" jdbcType="INTEGER"/>
     <result property="name" column="NAME_" jdbcType="VARCHAR"/>
@@ -1345,7 +1345,7 @@
     where
       <bind name="listOfIds" value="parameter"/>
       <bind name="fieldName" value="'ID_'"/>
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection"/>
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection"/>
   </select>
 
   <select id="selectByteArray" parameterType="string" resultMap="byteArrayResultMap">
@@ -1353,7 +1353,7 @@
   </select>
 
 <!-- Postgresql specific configuration -->
-  <resultMap id="byteArrayResultMap_postgres" type="org.camunda.bpm.engine.impl.persistence.entity.ByteArrayEntity">
+  <resultMap id="byteArrayResultMap_postgres" type="io.orqueio.bpm.engine.impl.persistence.entity.ByteArrayEntity">
     <id property="id" column="ID_" jdbcType="VARCHAR" />
     <result property="revision" column="REV_" jdbcType="INTEGER"/>
     <result property="name" column="NAME_" jdbcType="VARCHAR"/>
@@ -1370,14 +1370,14 @@
     where
       <bind name="listOfIds" value="parameter"/>
       <bind name="fieldName" value="'ID_'"/>
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection"/>
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection"/>
   </select>
 
   <select id="selectByteArray_postgres" parameterType="string" resultMap="byteArrayResultMap_postgres">
    select * from ${prefix}ACT_GE_BYTEARRAY where ID_ = #{id}
   </select>
 
-	<update id="updateByteArray_postgres" parameterType="org.camunda.bpm.engine.impl.persistence.entity.ByteArrayEntity">
+	<update id="updateByteArray_postgres" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.ByteArrayEntity">
     update ${prefix}ACT_GE_BYTEARRAY
     set
       REV_ = #{revisionNext, jdbcType=INTEGER},
@@ -1386,7 +1386,7 @@
       and REV_ = #{revision, jdbcType=INTEGER}
   </update>
 
-    <insert id="insertByteArray_postgres" parameterType="org.camunda.bpm.engine.impl.persistence.entity.ByteArrayEntity">
+    <insert id="insertByteArray_postgres" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.ByteArrayEntity">
     insert into ${prefix}ACT_GE_BYTEARRAY(ID_, NAME_, BYTES_, DEPLOYMENT_ID_, TENANT_ID_, TYPE_, CREATE_TIME_, ROOT_PROC_INST_ID_, REMOVAL_TIME_, REV_)
     values (
       #{id, jdbcType=VARCHAR},

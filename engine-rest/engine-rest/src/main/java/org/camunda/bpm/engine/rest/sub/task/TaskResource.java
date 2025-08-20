@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.sub.task;
+package io.orqueio.bpm.engine.rest.sub.task;
 
 import java.util.List;
 import java.util.Map;
@@ -34,16 +34,16 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 
-import org.camunda.bpm.engine.rest.dto.VariableValueDto;
-import org.camunda.bpm.engine.rest.dto.task.CompleteTaskDto;
-import org.camunda.bpm.engine.rest.dto.task.FormDto;
-import org.camunda.bpm.engine.rest.dto.task.IdentityLinkDto;
-import org.camunda.bpm.engine.rest.dto.task.TaskBpmnErrorDto;
-import org.camunda.bpm.engine.rest.dto.task.TaskEscalationDto;
-import org.camunda.bpm.engine.rest.dto.task.TaskDto;
-import org.camunda.bpm.engine.rest.dto.task.UserIdDto;
-import org.camunda.bpm.engine.rest.hal.Hal;
-import org.camunda.bpm.engine.rest.sub.VariableResource;
+import io.orqueio.bpm.engine.rest.dto.VariableValueDto;
+import io.orqueio.bpm.engine.rest.dto.task.CompleteTaskDto;
+import io.orqueio.bpm.engine.rest.dto.task.FormDto;
+import io.orqueio.bpm.engine.rest.dto.task.IdentityLinkDto;
+import io.orqueio.bpm.engine.rest.dto.task.TaskBpmnErrorDto;
+import io.orqueio.bpm.engine.rest.dto.task.TaskEscalationDto;
+import io.orqueio.bpm.engine.rest.dto.task.TaskDto;
+import io.orqueio.bpm.engine.rest.dto.task.UserIdDto;
+import io.orqueio.bpm.engine.rest.hal.Hal;
+import io.orqueio.bpm.engine.rest.sub.VariableResource;
 
 public interface TaskResource {
 

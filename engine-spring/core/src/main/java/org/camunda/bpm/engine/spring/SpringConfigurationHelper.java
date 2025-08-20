@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.spring;
+package io.orqueio.bpm.engine.spring;
 
 import java.net.URL;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.ProcessEngine;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.GenericXmlApplicationContext;
 import org.springframework.core.io.UrlResource;

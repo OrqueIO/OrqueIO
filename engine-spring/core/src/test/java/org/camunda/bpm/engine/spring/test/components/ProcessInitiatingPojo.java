@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.spring.test.components;
+package io.orqueio.bpm.engine.spring.test.components;
 
 
 import java.util.logging.Logger;
 
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.spring.annotations.BusinessKey;
-import org.camunda.bpm.engine.spring.annotations.ProcessVariable;
-import org.camunda.bpm.engine.spring.annotations.StartProcess;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.spring.annotations.BusinessKey;
+import io.orqueio.bpm.engine.spring.annotations.ProcessVariable;
+import io.orqueio.bpm.engine.spring.annotations.StartProcess;
 
 /**
  * simple class that demonstrates the annotations to implicitly handle annotation-driven process managment

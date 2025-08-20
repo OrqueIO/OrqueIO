@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.history;
+package io.orqueio.bpm.engine.rest.history;
 
 import static io.restassured.RestAssured.expect;
 import static io.restassured.RestAssured.given;
 import static io.restassured.path.json.JsonPath.from;
-import static org.camunda.bpm.engine.rest.helper.MockProvider.EXAMPLE_JOB_DEFINITION_ID;
-import static org.camunda.bpm.engine.rest.helper.MockProvider.NON_EXISTING_JOB_DEFINITION_ID;
+import static io.orqueio.bpm.engine.rest.helper.MockProvider.EXAMPLE_JOB_DEFINITION_ID;
+import static io.orqueio.bpm.engine.rest.helper.MockProvider.NON_EXISTING_JOB_DEFINITION_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
@@ -37,13 +37,13 @@ import java.util.List;
 
 import javax.ws.rs.core.Response.Status;
 
-import org.camunda.bpm.engine.history.HistoricIncident;
-import org.camunda.bpm.engine.history.HistoricIncidentQuery;
-import org.camunda.bpm.engine.impl.calendar.DateTimeUtil;
-import org.camunda.bpm.engine.rest.AbstractRestServiceTest;
-import org.camunda.bpm.engine.rest.exception.InvalidRequestException;
-import org.camunda.bpm.engine.rest.helper.MockProvider;
-import org.camunda.bpm.engine.rest.util.container.TestContainerRule;
+import io.orqueio.bpm.engine.history.HistoricIncident;
+import io.orqueio.bpm.engine.history.HistoricIncidentQuery;
+import io.orqueio.bpm.engine.impl.calendar.DateTimeUtil;
+import io.orqueio.bpm.engine.rest.AbstractRestServiceTest;
+import io.orqueio.bpm.engine.rest.exception.InvalidRequestException;
+import io.orqueio.bpm.engine.rest.helper.MockProvider;
+import io.orqueio.bpm.engine.rest.util.container.TestContainerRule;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.ClassRule;

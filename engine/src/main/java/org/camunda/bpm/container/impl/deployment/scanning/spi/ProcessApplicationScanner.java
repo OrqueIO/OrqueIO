@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.deployment.scanning.spi;
+package io.orqueio.bpm.container.impl.deployment.scanning.spi;
 
 import java.net.URL;
 import java.util.Map;
 
-import org.camunda.bpm.application.impl.metadata.spi.ProcessArchiveXml;
+import io.orqueio.bpm.application.impl.metadata.spi.ProcessArchiveXml;
 
 /**
  * @author Daniel Meyer

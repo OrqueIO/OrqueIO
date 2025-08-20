@@ -27,7 +27,7 @@
 			</boundaryEvent>	
 			
 			<serviceTask id="undoBookHotel" isForCompensation="true"
-				camunda:class="org.camunda.bpm.engine.test.bpmn.event.compensate.helper.UndoService">
+				camunda:class="io.orqueio.bpm.engine.test.bpmn.event.compensate.helper.UndoService">
 				<extensionElements>
 					<camunda:field name="counterName" stringValue="undoBookHotel" />
 				</extensionElements>

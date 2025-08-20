@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.jobexecutor;
+package io.orqueio.bpm.engine.test.jobexecutor;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.any;
@@ -24,14 +24,14 @@ import static org.mockito.Mockito.when;
 import java.util.Arrays;
 import java.util.List;
 
-import org.camunda.bpm.engine.impl.Page;
-import org.camunda.bpm.engine.impl.cmd.AcquireJobsCmd;
-import org.camunda.bpm.engine.impl.db.entitymanager.DbEntityManager;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.jobexecutor.AcquiredJobs;
-import org.camunda.bpm.engine.impl.jobexecutor.JobExecutor;
-import org.camunda.bpm.engine.impl.persistence.entity.AcquirableJobEntity;
-import org.camunda.bpm.engine.impl.persistence.entity.JobManager;
+import io.orqueio.bpm.engine.impl.Page;
+import io.orqueio.bpm.engine.impl.cmd.AcquireJobsCmd;
+import io.orqueio.bpm.engine.impl.db.entitymanager.DbEntityManager;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.impl.jobexecutor.AcquiredJobs;
+import io.orqueio.bpm.engine.impl.jobexecutor.JobExecutor;
+import io.orqueio.bpm.engine.impl.persistence.entity.AcquirableJobEntity;
+import io.orqueio.bpm.engine.impl.persistence.entity.JobManager;
 import org.junit.Before;
 import org.junit.Test;
 

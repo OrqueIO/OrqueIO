@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.standalone.entity;
+package io.orqueio.bpm.engine.test.standalone.entity;
 
 import static org.junit.Assert.assertEquals;
 
@@ -27,14 +27,14 @@ import java.io.ObjectOutputStream;
 import java.util.Collections;
 import java.util.Date;
 
-import org.camunda.bpm.engine.delegate.ExecutionListener;
-import org.camunda.bpm.engine.impl.persistence.entity.ExecutionEntity;
-import org.camunda.bpm.engine.impl.persistence.entity.TaskEntity;
-import org.camunda.bpm.engine.impl.pvm.process.ActivityImpl;
-import org.camunda.bpm.engine.impl.pvm.process.ProcessDefinitionImpl;
-import org.camunda.bpm.engine.impl.pvm.process.TransitionImpl;
-import org.camunda.bpm.engine.impl.task.TaskDefinition;
-import org.camunda.bpm.engine.task.DelegationState;
+import io.orqueio.bpm.engine.delegate.ExecutionListener;
+import io.orqueio.bpm.engine.impl.persistence.entity.ExecutionEntity;
+import io.orqueio.bpm.engine.impl.persistence.entity.TaskEntity;
+import io.orqueio.bpm.engine.impl.pvm.process.ActivityImpl;
+import io.orqueio.bpm.engine.impl.pvm.process.ProcessDefinitionImpl;
+import io.orqueio.bpm.engine.impl.pvm.process.TransitionImpl;
+import io.orqueio.bpm.engine.impl.task.TaskDefinition;
+import io.orqueio.bpm.engine.task.DelegationState;
 import org.junit.Test;
 
 public class EntitySerializationTest {

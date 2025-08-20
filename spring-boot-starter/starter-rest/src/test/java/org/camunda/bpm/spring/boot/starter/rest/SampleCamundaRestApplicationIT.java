@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter.rest;
+package io.orqueio.bpm.spring.boot.starter.rest;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -23,11 +23,11 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 
 import java.io.ByteArrayInputStream;
 
-import org.camunda.bpm.engine.RuntimeService;
-import org.camunda.bpm.engine.rest.dto.runtime.ProcessInstanceDto;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.runtime.VariableInstance;
-import org.camunda.bpm.spring.boot.starter.property.CamundaBpmProperties;
+import io.orqueio.bpm.engine.RuntimeService;
+import io.orqueio.bpm.engine.rest.dto.runtime.ProcessInstanceDto;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.runtime.VariableInstance;
+import io.orqueio.bpm.spring.boot.starter.property.CamundaBpmProperties;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

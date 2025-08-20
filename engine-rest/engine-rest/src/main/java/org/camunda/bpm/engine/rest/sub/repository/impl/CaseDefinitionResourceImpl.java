@@ -14,31 +14,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.sub.repository.impl;
+package io.orqueio.bpm.engine.rest.sub.repository.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.camunda.bpm.engine.CaseService;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.RepositoryService;
-import org.camunda.bpm.engine.exception.NotAllowedException;
-import org.camunda.bpm.engine.exception.NotFoundException;
-import org.camunda.bpm.engine.exception.NotValidException;
-import org.camunda.bpm.engine.impl.util.IoUtil;
-import org.camunda.bpm.engine.repository.CaseDefinition;
-import org.camunda.bpm.engine.rest.CaseInstanceRestService;
-import org.camunda.bpm.engine.rest.dto.HistoryTimeToLiveDto;
-import org.camunda.bpm.engine.rest.dto.VariableValueDto;
-import org.camunda.bpm.engine.rest.dto.repository.CaseDefinitionDiagramDto;
-import org.camunda.bpm.engine.rest.dto.repository.CaseDefinitionDto;
-import org.camunda.bpm.engine.rest.dto.runtime.CaseInstanceDto;
-import org.camunda.bpm.engine.rest.dto.runtime.CreateCaseInstanceDto;
-import org.camunda.bpm.engine.rest.exception.InvalidRequestException;
-import org.camunda.bpm.engine.rest.exception.RestException;
-import org.camunda.bpm.engine.rest.sub.repository.CaseDefinitionResource;
-import org.camunda.bpm.engine.rest.util.URLEncodingUtil;
-import org.camunda.bpm.engine.runtime.CaseInstance;
-import org.camunda.bpm.engine.variable.VariableMap;
+import io.orqueio.bpm.engine.CaseService;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.RepositoryService;
+import io.orqueio.bpm.engine.exception.NotAllowedException;
+import io.orqueio.bpm.engine.exception.NotFoundException;
+import io.orqueio.bpm.engine.exception.NotValidException;
+import io.orqueio.bpm.engine.impl.util.IoUtil;
+import io.orqueio.bpm.engine.repository.CaseDefinition;
+import io.orqueio.bpm.engine.rest.CaseInstanceRestService;
+import io.orqueio.bpm.engine.rest.dto.HistoryTimeToLiveDto;
+import io.orqueio.bpm.engine.rest.dto.VariableValueDto;
+import io.orqueio.bpm.engine.rest.dto.repository.CaseDefinitionDiagramDto;
+import io.orqueio.bpm.engine.rest.dto.repository.CaseDefinitionDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.CaseInstanceDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.CreateCaseInstanceDto;
+import io.orqueio.bpm.engine.rest.exception.InvalidRequestException;
+import io.orqueio.bpm.engine.rest.exception.RestException;
+import io.orqueio.bpm.engine.rest.sub.repository.CaseDefinitionResource;
+import io.orqueio.bpm.engine.rest.util.URLEncodingUtil;
+import io.orqueio.bpm.engine.runtime.CaseInstance;
+import io.orqueio.bpm.engine.variable.VariableMap;
 
 import javax.ws.rs.HttpMethod;
 import javax.ws.rs.core.Response;

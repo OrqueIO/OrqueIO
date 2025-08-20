@@ -35,7 +35,7 @@
         <bpmn2:script><![CDATA[]]></bpmn2:script>
       </bpmn2:scriptTask>
       <bpmn2:sequenceFlow id="SequenceFlow_0pohyk9" sourceRef="Task_0wouv2l" targetRef="EndEvent_1" />
-      <bpmn2:serviceTask id="Task_0wouv2l" name="assertion" camunda:class="org.camunda.bpm.engine.test.api.variables.scope.AssertVariableScopeDelegate">
+      <bpmn2:serviceTask id="Task_0wouv2l" name="assertion" camunda:class="io.orqueio.bpm.engine.test.api.variables.scope.AssertVariableScopeDelegate">
         <bpmn2:incoming>SequenceFlow_4</bpmn2:incoming>
         <bpmn2:outgoing>SequenceFlow_0pohyk9</bpmn2:outgoing>
       </bpmn2:serviceTask>

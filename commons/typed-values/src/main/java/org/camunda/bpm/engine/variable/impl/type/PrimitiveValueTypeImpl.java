@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.variable.impl.type;
+package io.orqueio.bpm.engine.variable.impl.type;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -22,23 +22,23 @@ import java.util.Map;
 
 import javax.lang.model.type.NullType;
 
-import org.camunda.bpm.engine.variable.Variables;
-import org.camunda.bpm.engine.variable.impl.value.PrimitiveTypeValueImpl.DoubleValueImpl;
-import org.camunda.bpm.engine.variable.impl.value.PrimitiveTypeValueImpl.IntegerValueImpl;
-import org.camunda.bpm.engine.variable.impl.value.PrimitiveTypeValueImpl.LongValueImpl;
-import org.camunda.bpm.engine.variable.impl.value.PrimitiveTypeValueImpl.ShortValueImpl;
-import org.camunda.bpm.engine.variable.type.PrimitiveValueType;
-import org.camunda.bpm.engine.variable.type.ValueType;
-import org.camunda.bpm.engine.variable.value.BooleanValue;
-import org.camunda.bpm.engine.variable.value.BytesValue;
-import org.camunda.bpm.engine.variable.value.DateValue;
-import org.camunda.bpm.engine.variable.value.DoubleValue;
-import org.camunda.bpm.engine.variable.value.IntegerValue;
-import org.camunda.bpm.engine.variable.value.LongValue;
-import org.camunda.bpm.engine.variable.value.NumberValue;
-import org.camunda.bpm.engine.variable.value.ShortValue;
-import org.camunda.bpm.engine.variable.value.StringValue;
-import org.camunda.bpm.engine.variable.value.TypedValue;
+import io.orqueio.bpm.engine.variable.Variables;
+import io.orqueio.bpm.engine.variable.impl.value.PrimitiveTypeValueImpl.DoubleValueImpl;
+import io.orqueio.bpm.engine.variable.impl.value.PrimitiveTypeValueImpl.IntegerValueImpl;
+import io.orqueio.bpm.engine.variable.impl.value.PrimitiveTypeValueImpl.LongValueImpl;
+import io.orqueio.bpm.engine.variable.impl.value.PrimitiveTypeValueImpl.ShortValueImpl;
+import io.orqueio.bpm.engine.variable.type.PrimitiveValueType;
+import io.orqueio.bpm.engine.variable.type.ValueType;
+import io.orqueio.bpm.engine.variable.value.BooleanValue;
+import io.orqueio.bpm.engine.variable.value.BytesValue;
+import io.orqueio.bpm.engine.variable.value.DateValue;
+import io.orqueio.bpm.engine.variable.value.DoubleValue;
+import io.orqueio.bpm.engine.variable.value.IntegerValue;
+import io.orqueio.bpm.engine.variable.value.LongValue;
+import io.orqueio.bpm.engine.variable.value.NumberValue;
+import io.orqueio.bpm.engine.variable.value.ShortValue;
+import io.orqueio.bpm.engine.variable.value.StringValue;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
 
 /**
  * Implementation of the primitive variable value types

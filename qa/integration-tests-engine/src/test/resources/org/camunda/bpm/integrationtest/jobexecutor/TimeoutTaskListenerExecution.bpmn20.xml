@@ -7,7 +7,7 @@
     <bpmn:sequenceFlow id="SequenceFlow_1azm3nc" sourceRef="StartEvent_1" targetRef="userTask" />
     <bpmn:userTask id="userTask">
       <bpmn:extensionElements>
-        <camunda:taskListener class="org.camunda.bpm.integrationtest.jobexecutor.beans.SampleTaskListenerBean" event="timeout" id="timeout-friendly" >
+        <camunda:taskListener class="io.orqueio.bpm.integrationtest.jobexecutor.beans.SampleTaskListenerBean" event="timeout" id="timeout-friendly" >
           <bpmn:timerEventDefinition>
             <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT1S</bpmn:timeDuration>
           </bpmn:timerEventDefinition>

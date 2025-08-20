@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa.upgrade.gson;
+package io.orqueio.bpm.qa.upgrade.gson;
 
-import org.camunda.bpm.engine.FilterService;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.filter.Filter;
-import org.camunda.bpm.qa.upgrade.DescribesScenario;
-import org.camunda.bpm.qa.upgrade.ScenarioSetup;
+import io.orqueio.bpm.engine.FilterService;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.filter.Filter;
+import io.orqueio.bpm.qa.upgrade.DescribesScenario;
+import io.orqueio.bpm.qa.upgrade.ScenarioSetup;
 
 import java.util.ArrayList;
 import java.util.Collections;

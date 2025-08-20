@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.persistence.entity;
+package io.orqueio.bpm.engine.impl.persistence.entity;
 
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -25,17 +25,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.camunda.bpm.engine.impl.Direction;
-import org.camunda.bpm.engine.impl.QueryOrderingProperty;
-import org.camunda.bpm.engine.impl.QueryPropertyImpl;
-import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.engine.impl.db.ListQueryParameterObject;
-import org.camunda.bpm.engine.impl.db.entitymanager.operation.DbOperation;
-import org.camunda.bpm.engine.impl.metrics.Meter;
-import org.camunda.bpm.engine.impl.metrics.MetricsQueryImpl;
-import org.camunda.bpm.engine.impl.persistence.AbstractManager;
-import org.camunda.bpm.engine.impl.util.ClockUtil;
-import org.camunda.bpm.engine.management.MetricIntervalValue;
+import io.orqueio.bpm.engine.impl.Direction;
+import io.orqueio.bpm.engine.impl.QueryOrderingProperty;
+import io.orqueio.bpm.engine.impl.QueryPropertyImpl;
+import io.orqueio.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.impl.db.ListQueryParameterObject;
+import io.orqueio.bpm.engine.impl.db.entitymanager.operation.DbOperation;
+import io.orqueio.bpm.engine.impl.metrics.Meter;
+import io.orqueio.bpm.engine.impl.metrics.MetricsQueryImpl;
+import io.orqueio.bpm.engine.impl.persistence.AbstractManager;
+import io.orqueio.bpm.engine.impl.util.ClockUtil;
+import io.orqueio.bpm.engine.management.MetricIntervalValue;
 
 /**
  * @author Daniel Meyer

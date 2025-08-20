@@ -10,7 +10,7 @@
     
     <sequenceFlow sourceRef="theStart" targetRef="service" />
     
-    <serviceTask id="service" camunda:class="org.camunda.bpm.engine.test.bpmn.async.FailingAsyncService" camunda:async="true" />
+    <serviceTask id="service" camunda:class="io.orqueio.bpm.engine.test.bpmn.async.FailingAsyncService" camunda:async="true" />
        
     <boundaryEvent attachedToRef="service" id="timer" cancelActivity="true">
     	<timerEventDefinition>

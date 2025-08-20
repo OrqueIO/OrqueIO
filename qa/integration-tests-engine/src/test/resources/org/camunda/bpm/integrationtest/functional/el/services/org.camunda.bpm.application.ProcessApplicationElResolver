@@ -1,1 +1,1 @@
-org.camunda.bpm.integrationtest.functional.el.NullELResolver
+io.orqueio.bpm.integrationtest.functional.el.NullELResolver

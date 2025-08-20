@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.run.utils;
+package io.orqueio.bpm.run.utils;
 
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.commons.logging.BaseLogger;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.commons.logging.BaseLogger;
 
 public class CamundaBpmRunLogger extends BaseLogger {
 
   public static final String PROJECT_CODE = "RUN";
   public static final String PROJECT_ID = "CR";
-  public static final String PACKAGE = "org.camunda.bpm.run";
+  public static final String PACKAGE = "io.orqueio.bpm.run";
 
   public static final CamundaBpmRunLogger LOG = createLogger(CamundaBpmRunLogger.class, PROJECT_CODE, PACKAGE, PROJECT_ID);
 

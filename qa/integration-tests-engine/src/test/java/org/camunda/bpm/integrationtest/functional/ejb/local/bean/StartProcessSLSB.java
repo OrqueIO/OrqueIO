@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.functional.ejb.local.bean;
+package io.orqueio.bpm.integrationtest.functional.ejb.local.bean;
 
 import javax.ejb.Local;
 import javax.ejb.Stateless;
 
-import org.camunda.bpm.BpmPlatform;
+import io.orqueio.bpm.BpmPlatform;
 
 /**
  * A SLSB with a local business interface

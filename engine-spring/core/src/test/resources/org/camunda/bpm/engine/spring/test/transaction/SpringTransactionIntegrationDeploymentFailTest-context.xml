@@ -15,7 +15,7 @@
     <property name="dataSource" ref="dataSource" />
   </bean>
 
-  <bean id="processEngineConfiguration" class="org.camunda.bpm.engine.spring.SpringProcessEngineConfiguration">
+  <bean id="processEngineConfiguration" class="io.orqueio.bpm.engine.spring.SpringProcessEngineConfiguration">
     <property name="authorizationEnabled" value="true"/>
     <property name="dataSource" ref="dataSource" />
     <property name="transactionManager" ref="transactionManager" />
@@ -29,12 +29,12 @@
     <property name="processEnginePlugins">
       <list>
         <bean id="failDeploymentsPlugin"
-              class="org.camunda.bpm.engine.spring.test.transaction.FailDeploymentsPlugin" />
+              class="io.orqueio.bpm.engine.spring.test.transaction.FailDeploymentsPlugin" />
       </list>
     </property>
   </bean>
 
-  <bean id="processEngine" class="org.camunda.bpm.engine.spring.ProcessEngineFactoryBean">
+  <bean id="processEngine" class="io.orqueio.bpm.engine.spring.ProcessEngineFactoryBean">
     <property name="processEngineConfiguration" ref="processEngineConfiguration" />
   </bean>
 

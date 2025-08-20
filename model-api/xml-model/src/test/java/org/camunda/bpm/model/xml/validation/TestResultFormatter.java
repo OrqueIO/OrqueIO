@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.xml.validation;
+package io.orqueio.bpm.model.xml.validation;
 
 import java.io.StringWriter;
 import java.util.Formatter;
 
-import org.camunda.bpm.model.xml.instance.ModelElementInstance;
-import org.camunda.bpm.model.xml.testmodel.instance.FlyingAnimal;
+import io.orqueio.bpm.model.xml.instance.ModelElementInstance;
+import io.orqueio.bpm.model.xml.testmodel.instance.FlyingAnimal;
 
 /**
  * @author Daniel Meyer

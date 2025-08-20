@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.scripting.env;
+package io.orqueio.bpm.engine.impl.scripting.env;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,17 +24,17 @@ import java.util.Map;
 import javax.script.Bindings;
 import javax.script.ScriptEngine;
 
-import org.camunda.bpm.application.AbstractProcessApplication;
-import org.camunda.bpm.application.ProcessApplicationInterface;
-import org.camunda.bpm.application.ProcessApplicationReference;
-import org.camunda.bpm.application.ProcessApplicationUnavailableException;
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.delegate.VariableScope;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.engine.impl.scripting.ExecutableScript;
-import org.camunda.bpm.engine.impl.scripting.ScriptFactory;
-import org.camunda.bpm.engine.impl.scripting.engine.ScriptingEngines;
+import io.orqueio.bpm.application.AbstractProcessApplication;
+import io.orqueio.bpm.application.ProcessApplicationInterface;
+import io.orqueio.bpm.application.ProcessApplicationReference;
+import io.orqueio.bpm.application.ProcessApplicationUnavailableException;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.delegate.VariableScope;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.impl.scripting.ExecutableScript;
+import io.orqueio.bpm.engine.impl.scripting.ScriptFactory;
+import io.orqueio.bpm.engine.impl.scripting.engine.ScriptingEngines;
 
 /**
  * <p>The scripting environment contains scripts that provide an environment to

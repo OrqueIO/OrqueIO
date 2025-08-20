@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.cdi.compat;
+package io.orqueio.bpm.engine.cdi.compat;
 
 import javax.enterprise.context.ConversationScoped;
 import javax.enterprise.inject.Typed;
 import javax.inject.Named;
 
-import org.camunda.bpm.engine.cdi.jsf.TaskForm;
+import io.orqueio.bpm.engine.cdi.jsf.TaskForm;
 
 @ConversationScoped
 @Named("fox.taskForm")

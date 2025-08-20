@@ -14,22 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.pvm.process;
+package io.orqueio.bpm.engine.impl.pvm.process;
 
-import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
+import static io.orqueio.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.engine.delegate.BaseDelegateExecution;
-import org.camunda.bpm.engine.impl.core.delegate.CoreActivityBehavior;
-import org.camunda.bpm.engine.impl.pvm.PvmProcessDefinition;
-import org.camunda.bpm.engine.impl.pvm.PvmProcessInstance;
-import org.camunda.bpm.engine.impl.pvm.PvmScope;
-import org.camunda.bpm.engine.impl.pvm.runtime.ExecutionImpl;
-import org.camunda.bpm.engine.impl.pvm.runtime.PvmExecutionImpl;
+import io.orqueio.bpm.engine.delegate.BaseDelegateExecution;
+import io.orqueio.bpm.engine.impl.core.delegate.CoreActivityBehavior;
+import io.orqueio.bpm.engine.impl.pvm.PvmProcessDefinition;
+import io.orqueio.bpm.engine.impl.pvm.PvmProcessInstance;
+import io.orqueio.bpm.engine.impl.pvm.PvmScope;
+import io.orqueio.bpm.engine.impl.pvm.runtime.ExecutionImpl;
+import io.orqueio.bpm.engine.impl.pvm.runtime.PvmExecutionImpl;
 
 
 /**

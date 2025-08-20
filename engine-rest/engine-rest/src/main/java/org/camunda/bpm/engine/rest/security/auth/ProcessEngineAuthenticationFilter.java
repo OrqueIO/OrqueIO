@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.security.auth;
+package io.orqueio.bpm.engine.rest.security.auth;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -33,13 +33,13 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response.Status;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.identity.Group;
-import org.camunda.bpm.engine.identity.Tenant;
-import org.camunda.bpm.engine.rest.dto.ExceptionDto;
-import org.camunda.bpm.engine.rest.exception.InvalidRequestException;
-import org.camunda.bpm.engine.rest.impl.NamedProcessEngineRestServiceImpl;
-import org.camunda.bpm.engine.rest.util.EngineUtil;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.identity.Group;
+import io.orqueio.bpm.engine.identity.Tenant;
+import io.orqueio.bpm.engine.rest.dto.ExceptionDto;
+import io.orqueio.bpm.engine.rest.exception.InvalidRequestException;
+import io.orqueio.bpm.engine.rest.impl.NamedProcessEngineRestServiceImpl;
+import io.orqueio.bpm.engine.rest.util.EngineUtil;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 

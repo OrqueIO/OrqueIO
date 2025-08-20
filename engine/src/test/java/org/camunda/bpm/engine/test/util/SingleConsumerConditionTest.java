@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.util;
+package io.orqueio.bpm.engine.test.util;
 
-import org.camunda.bpm.engine.impl.util.SingleConsumerCondition;
+import io.orqueio.bpm.engine.impl.util.SingleConsumerCondition;
 import org.junit.Assert;
 import org.junit.Test;
 

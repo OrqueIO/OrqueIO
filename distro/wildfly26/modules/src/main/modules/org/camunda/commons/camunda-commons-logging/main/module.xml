@@ -1,4 +1,4 @@
-<module xmlns="urn:jboss:module:1.0" name="org.camunda.commons.camunda-commons-logging">
+<module xmlns="urn:jboss:module:1.0" name="io.orqueio.commons.camunda-commons-logging">
   <resources>
     <resource-root path="camunda-commons-logging-@project.version@.jar" />
   </resources>

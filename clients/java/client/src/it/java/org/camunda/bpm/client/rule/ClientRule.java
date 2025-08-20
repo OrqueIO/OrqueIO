@@ -14,18 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.rule;
+package io.orqueio.bpm.client.rule;
 
-import static org.camunda.bpm.client.util.PropertyUtil.*;
-import static org.camunda.bpm.client.util.TestUtil.waitUntil;
+import static io.orqueio.bpm.client.util.PropertyUtil.*;
+import static io.orqueio.bpm.client.util.TestUtil.waitUntil;
 
 import java.util.Properties;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
-import org.camunda.bpm.client.ExternalTaskClient;
-import org.camunda.bpm.client.ExternalTaskClientBuilder;
-import org.camunda.bpm.client.util.PropertyUtil;
+import io.orqueio.bpm.client.ExternalTaskClient;
+import io.orqueio.bpm.client.ExternalTaskClientBuilder;
+import io.orqueio.bpm.client.util.PropertyUtil;
 import org.junit.rules.ExternalResource;
 
 public class ClientRule extends ExternalResource {

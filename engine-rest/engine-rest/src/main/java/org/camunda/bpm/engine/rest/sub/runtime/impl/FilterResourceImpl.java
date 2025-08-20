@@ -14,38 +14,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.sub.runtime.impl;
+package io.orqueio.bpm.engine.rest.sub.runtime.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.camunda.bpm.engine.EntityTypes;
-import org.camunda.bpm.engine.FilterService;
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.exception.NotValidException;
-import org.camunda.bpm.engine.exception.NullValueException;
-import org.camunda.bpm.engine.filter.Filter;
-import org.camunda.bpm.engine.impl.VariableInstanceQueryImpl;
-import org.camunda.bpm.engine.impl.persistence.entity.VariableInstanceEntity;
-import org.camunda.bpm.engine.query.Query;
-import org.camunda.bpm.engine.rest.FilterRestService;
-import org.camunda.bpm.engine.rest.dto.AbstractQueryDto;
-import org.camunda.bpm.engine.rest.dto.CountResultDto;
-import org.camunda.bpm.engine.rest.dto.ResourceOptionsDto;
-import org.camunda.bpm.engine.rest.dto.runtime.FilterDto;
-import org.camunda.bpm.engine.rest.dto.task.TaskDto;
-import org.camunda.bpm.engine.rest.dto.task.TaskQueryDto;
-import org.camunda.bpm.engine.rest.exception.InvalidRequestException;
-import org.camunda.bpm.engine.rest.hal.EmptyHalCollection;
-import org.camunda.bpm.engine.rest.hal.EmptyHalResource;
-import org.camunda.bpm.engine.rest.hal.Hal;
-import org.camunda.bpm.engine.rest.hal.HalCollectionResource;
-import org.camunda.bpm.engine.rest.hal.HalResource;
-import org.camunda.bpm.engine.rest.hal.HalVariableValue;
-import org.camunda.bpm.engine.rest.hal.task.HalTask;
-import org.camunda.bpm.engine.rest.hal.task.HalTaskList;
-import org.camunda.bpm.engine.rest.impl.AbstractAuthorizedRestResource;
-import org.camunda.bpm.engine.rest.sub.runtime.FilterResource;
-import org.camunda.bpm.engine.runtime.VariableInstance;
-import org.camunda.bpm.engine.task.Task;
+import io.orqueio.bpm.engine.EntityTypes;
+import io.orqueio.bpm.engine.FilterService;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.exception.NotValidException;
+import io.orqueio.bpm.engine.exception.NullValueException;
+import io.orqueio.bpm.engine.filter.Filter;
+import io.orqueio.bpm.engine.impl.VariableInstanceQueryImpl;
+import io.orqueio.bpm.engine.impl.persistence.entity.VariableInstanceEntity;
+import io.orqueio.bpm.engine.query.Query;
+import io.orqueio.bpm.engine.rest.FilterRestService;
+import io.orqueio.bpm.engine.rest.dto.AbstractQueryDto;
+import io.orqueio.bpm.engine.rest.dto.CountResultDto;
+import io.orqueio.bpm.engine.rest.dto.ResourceOptionsDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.FilterDto;
+import io.orqueio.bpm.engine.rest.dto.task.TaskDto;
+import io.orqueio.bpm.engine.rest.dto.task.TaskQueryDto;
+import io.orqueio.bpm.engine.rest.exception.InvalidRequestException;
+import io.orqueio.bpm.engine.rest.hal.EmptyHalCollection;
+import io.orqueio.bpm.engine.rest.hal.EmptyHalResource;
+import io.orqueio.bpm.engine.rest.hal.Hal;
+import io.orqueio.bpm.engine.rest.hal.HalCollectionResource;
+import io.orqueio.bpm.engine.rest.hal.HalResource;
+import io.orqueio.bpm.engine.rest.hal.HalVariableValue;
+import io.orqueio.bpm.engine.rest.hal.task.HalTask;
+import io.orqueio.bpm.engine.rest.hal.task.HalTaskList;
+import io.orqueio.bpm.engine.rest.impl.AbstractAuthorizedRestResource;
+import io.orqueio.bpm.engine.rest.sub.runtime.FilterResource;
+import io.orqueio.bpm.engine.runtime.VariableInstance;
+import io.orqueio.bpm.engine.task.Task;
 
 import javax.ws.rs.HttpMethod;
 import javax.ws.rs.core.MediaType;
@@ -67,10 +67,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import static org.camunda.bpm.engine.authorization.Permissions.DELETE;
-import static org.camunda.bpm.engine.authorization.Permissions.READ;
-import static org.camunda.bpm.engine.authorization.Permissions.UPDATE;
-import static org.camunda.bpm.engine.authorization.Resources.FILTER;
+import static io.orqueio.bpm.engine.authorization.Permissions.DELETE;
+import static io.orqueio.bpm.engine.authorization.Permissions.READ;
+import static io.orqueio.bpm.engine.authorization.Permissions.UPDATE;
+import static io.orqueio.bpm.engine.authorization.Resources.FILTER;
 
 /**
  * @author Sebastian Menski

@@ -14,29 +14,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.cmmn;
+package io.orqueio.bpm.engine.impl.cmmn;
 
 import java.util.Collection;
 import java.util.Map;
 
-import org.camunda.bpm.engine.CaseService;
-import org.camunda.bpm.engine.exception.NotFoundException;
-import org.camunda.bpm.engine.exception.NotValidException;
-import org.camunda.bpm.engine.exception.NullValueException;
-import org.camunda.bpm.engine.exception.cmmn.CaseExecutionNotFoundException;
-import org.camunda.bpm.engine.impl.ServiceImpl;
-import org.camunda.bpm.engine.impl.cmmn.cmd.GetCaseExecutionVariableCmd;
-import org.camunda.bpm.engine.impl.cmmn.cmd.GetCaseExecutionVariableTypedCmd;
-import org.camunda.bpm.engine.impl.cmmn.cmd.GetCaseExecutionVariablesCmd;
-import org.camunda.bpm.engine.impl.cmmn.entity.runtime.CaseExecutionQueryImpl;
-import org.camunda.bpm.engine.impl.cmmn.entity.runtime.CaseInstanceQueryImpl;
-import org.camunda.bpm.engine.runtime.CaseExecutionCommandBuilder;
-import org.camunda.bpm.engine.runtime.CaseExecutionQuery;
-import org.camunda.bpm.engine.runtime.CaseInstance;
-import org.camunda.bpm.engine.runtime.CaseInstanceBuilder;
-import org.camunda.bpm.engine.runtime.CaseInstanceQuery;
-import org.camunda.bpm.engine.variable.VariableMap;
-import org.camunda.bpm.engine.variable.value.TypedValue;
+import io.orqueio.bpm.engine.CaseService;
+import io.orqueio.bpm.engine.exception.NotFoundException;
+import io.orqueio.bpm.engine.exception.NotValidException;
+import io.orqueio.bpm.engine.exception.NullValueException;
+import io.orqueio.bpm.engine.exception.cmmn.CaseExecutionNotFoundException;
+import io.orqueio.bpm.engine.impl.ServiceImpl;
+import io.orqueio.bpm.engine.impl.cmmn.cmd.GetCaseExecutionVariableCmd;
+import io.orqueio.bpm.engine.impl.cmmn.cmd.GetCaseExecutionVariableTypedCmd;
+import io.orqueio.bpm.engine.impl.cmmn.cmd.GetCaseExecutionVariablesCmd;
+import io.orqueio.bpm.engine.impl.cmmn.entity.runtime.CaseExecutionQueryImpl;
+import io.orqueio.bpm.engine.impl.cmmn.entity.runtime.CaseInstanceQueryImpl;
+import io.orqueio.bpm.engine.runtime.CaseExecutionCommandBuilder;
+import io.orqueio.bpm.engine.runtime.CaseExecutionQuery;
+import io.orqueio.bpm.engine.runtime.CaseInstance;
+import io.orqueio.bpm.engine.runtime.CaseInstanceBuilder;
+import io.orqueio.bpm.engine.runtime.CaseInstanceQuery;
+import io.orqueio.bpm.engine.variable.VariableMap;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
 
 /**
  * @author Roman Smirnov

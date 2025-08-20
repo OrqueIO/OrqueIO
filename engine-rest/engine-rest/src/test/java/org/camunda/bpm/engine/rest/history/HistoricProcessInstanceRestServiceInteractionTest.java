@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.history;
+package io.orqueio.bpm.engine.rest.history;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.path.json.JsonPath.from;
@@ -46,24 +46,24 @@ import java.util.List;
 import java.util.Map;
 import java.util.HashSet;
 import javax.ws.rs.core.Response.Status;
-import org.camunda.bpm.engine.AuthorizationException;
-import org.camunda.bpm.engine.BadUserRequestException;
-import org.camunda.bpm.engine.HistoryService;
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.batch.Batch;
-import org.camunda.bpm.engine.exception.NotFoundException;
-import org.camunda.bpm.engine.history.HistoricProcessInstance;
-import org.camunda.bpm.engine.history.HistoricProcessInstanceQuery;
-import org.camunda.bpm.engine.history.SetRemovalTimeSelectModeForHistoricProcessInstancesBuilder;
-import org.camunda.bpm.engine.history.SetRemovalTimeToHistoricProcessInstancesBuilder;
-import org.camunda.bpm.engine.impl.HistoricProcessInstanceQueryImpl;
-import org.camunda.bpm.engine.rest.AbstractRestServiceTest;
-import org.camunda.bpm.engine.rest.dto.batch.BatchDto;
-import org.camunda.bpm.engine.rest.dto.history.HistoricProcessInstanceQueryDto;
-import org.camunda.bpm.engine.rest.exception.InvalidRequestException;
-import org.camunda.bpm.engine.rest.helper.MockProvider;
-import org.camunda.bpm.engine.rest.util.JsonPathUtil;
-import org.camunda.bpm.engine.rest.util.container.TestContainerRule;
+import io.orqueio.bpm.engine.AuthorizationException;
+import io.orqueio.bpm.engine.BadUserRequestException;
+import io.orqueio.bpm.engine.HistoryService;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.batch.Batch;
+import io.orqueio.bpm.engine.exception.NotFoundException;
+import io.orqueio.bpm.engine.history.HistoricProcessInstance;
+import io.orqueio.bpm.engine.history.HistoricProcessInstanceQuery;
+import io.orqueio.bpm.engine.history.SetRemovalTimeSelectModeForHistoricProcessInstancesBuilder;
+import io.orqueio.bpm.engine.history.SetRemovalTimeToHistoricProcessInstancesBuilder;
+import io.orqueio.bpm.engine.impl.HistoricProcessInstanceQueryImpl;
+import io.orqueio.bpm.engine.rest.AbstractRestServiceTest;
+import io.orqueio.bpm.engine.rest.dto.batch.BatchDto;
+import io.orqueio.bpm.engine.rest.dto.history.HistoricProcessInstanceQueryDto;
+import io.orqueio.bpm.engine.rest.exception.InvalidRequestException;
+import io.orqueio.bpm.engine.rest.helper.MockProvider;
+import io.orqueio.bpm.engine.rest.util.JsonPathUtil;
+import io.orqueio.bpm.engine.rest.util.container.TestContainerRule;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.ClassRule;

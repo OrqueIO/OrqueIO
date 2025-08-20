@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.bpmn.impl;
+package io.orqueio.bpm.model.bpmn.impl;
 
 /**
  * Constants used in the BPMN 2.0 Language (DI + Semantic)

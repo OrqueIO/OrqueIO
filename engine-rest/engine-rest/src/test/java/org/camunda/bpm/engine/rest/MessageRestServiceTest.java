@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest;
+package io.orqueio.bpm.engine.rest;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
@@ -29,20 +29,20 @@ import java.util.Map.Entry;
 
 import javax.ws.rs.core.Response.Status;
 
-import org.camunda.bpm.engine.AuthorizationException;
-import org.camunda.bpm.engine.MismatchingMessageCorrelationException;
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.RuntimeService;
-import org.camunda.bpm.engine.exception.NullValueException;
-import org.camunda.bpm.engine.rest.exception.InvalidRequestException;
-import org.camunda.bpm.engine.rest.exception.RestException;
-import org.camunda.bpm.engine.rest.helper.EqualsMap;
-import org.camunda.bpm.engine.rest.helper.ErrorMessageHelper;
-import org.camunda.bpm.engine.rest.helper.MockProvider;
-import org.camunda.bpm.engine.rest.helper.VariableTypeHelper;
-import org.camunda.bpm.engine.rest.util.VariablesBuilder;
-import org.camunda.bpm.engine.rest.util.container.TestContainerRule;
-import org.camunda.bpm.engine.runtime.MessageCorrelationBuilder;
+import io.orqueio.bpm.engine.AuthorizationException;
+import io.orqueio.bpm.engine.MismatchingMessageCorrelationException;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.RuntimeService;
+import io.orqueio.bpm.engine.exception.NullValueException;
+import io.orqueio.bpm.engine.rest.exception.InvalidRequestException;
+import io.orqueio.bpm.engine.rest.exception.RestException;
+import io.orqueio.bpm.engine.rest.helper.EqualsMap;
+import io.orqueio.bpm.engine.rest.helper.ErrorMessageHelper;
+import io.orqueio.bpm.engine.rest.helper.MockProvider;
+import io.orqueio.bpm.engine.rest.helper.VariableTypeHelper;
+import io.orqueio.bpm.engine.rest.util.VariablesBuilder;
+import io.orqueio.bpm.engine.rest.util.container.TestContainerRule;
+import io.orqueio.bpm.engine.runtime.MessageCorrelationBuilder;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -53,10 +53,10 @@ import io.restassured.response.Response;
 import java.util.ArrayList;
 import java.util.List;
 import junit.framework.Assert;
-import org.camunda.bpm.engine.runtime.MessageCorrelationResult;
-import org.camunda.bpm.engine.runtime.MessageCorrelationResultType;
-import org.camunda.bpm.engine.runtime.MessageCorrelationResultWithVariables;
-import org.camunda.bpm.engine.variable.type.ValueType;
+import io.orqueio.bpm.engine.runtime.MessageCorrelationResult;
+import io.orqueio.bpm.engine.runtime.MessageCorrelationResultType;
+import io.orqueio.bpm.engine.runtime.MessageCorrelationResultWithVariables;
+import io.orqueio.bpm.engine.variable.type.ValueType;
 
 import static org.mockito.Mockito.when;
 import static io.restassured.RestAssured.given;

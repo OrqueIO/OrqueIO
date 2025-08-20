@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.cockpit.plugin.base.pa;
+package io.orqueio.bpm.cockpit.plugin.base.pa;
 
-import org.camunda.bpm.engine.delegate.DelegateExecution;
-import org.camunda.bpm.engine.delegate.JavaDelegate;
-import org.camunda.bpm.engine.impl.incident.IncidentContext;
-import org.camunda.bpm.engine.impl.persistence.entity.IncidentEntity;
+import io.orqueio.bpm.engine.delegate.DelegateExecution;
+import io.orqueio.bpm.engine.delegate.JavaDelegate;
+import io.orqueio.bpm.engine.impl.incident.IncidentContext;
+import io.orqueio.bpm.engine.impl.persistence.entity.IncidentEntity;
 
 public class CreateIncidentsDelegate implements JavaDelegate {
 

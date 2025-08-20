@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.cmd;
+package io.orqueio.bpm.engine.impl.cmd;
 
 import java.util.Collection;
-import org.camunda.bpm.engine.BadUserRequestException;
-import org.camunda.bpm.engine.impl.UpdateProcessInstancesSuspensionStateBuilderImpl;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.interceptor.CommandExecutor;
-import org.camunda.bpm.engine.impl.runtime.UpdateProcessInstanceSuspensionStateBuilderImpl;
-import org.camunda.bpm.engine.impl.util.EnsureUtil;
+import io.orqueio.bpm.engine.BadUserRequestException;
+import io.orqueio.bpm.engine.impl.UpdateProcessInstancesSuspensionStateBuilderImpl;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.impl.interceptor.CommandExecutor;
+import io.orqueio.bpm.engine.impl.runtime.UpdateProcessInstanceSuspensionStateBuilderImpl;
+import io.orqueio.bpm.engine.impl.util.EnsureUtil;
 
 public class UpdateProcessInstancesSuspendStateCmd extends AbstractUpdateProcessInstancesSuspendStateCmd<Void> {
 

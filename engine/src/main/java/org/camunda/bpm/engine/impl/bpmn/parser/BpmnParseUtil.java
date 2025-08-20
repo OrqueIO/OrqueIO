@@ -14,29 +14,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.bpmn.parser;
+package io.orqueio.bpm.engine.impl.bpmn.parser;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import org.camunda.bpm.engine.BpmnParseException;
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.engine.impl.core.variable.mapping.InputParameter;
-import org.camunda.bpm.engine.impl.core.variable.mapping.IoMapping;
-import org.camunda.bpm.engine.impl.core.variable.mapping.OutputParameter;
-import org.camunda.bpm.engine.impl.core.variable.mapping.value.ListValueProvider;
-import org.camunda.bpm.engine.impl.core.variable.mapping.value.MapValueProvider;
-import org.camunda.bpm.engine.impl.core.variable.mapping.value.NullValueProvider;
-import org.camunda.bpm.engine.impl.core.variable.mapping.value.ParameterValueProvider;
-import org.camunda.bpm.engine.impl.el.ElValueProvider;
-import org.camunda.bpm.engine.impl.el.ExpressionManager;
-import org.camunda.bpm.engine.impl.scripting.ExecutableScript;
-import org.camunda.bpm.engine.impl.scripting.ScriptValueProvider;
-import org.camunda.bpm.engine.impl.util.ScriptUtil;
-import org.camunda.bpm.engine.impl.util.xml.Element;
+import io.orqueio.bpm.engine.BpmnParseException;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.impl.core.variable.mapping.InputParameter;
+import io.orqueio.bpm.engine.impl.core.variable.mapping.IoMapping;
+import io.orqueio.bpm.engine.impl.core.variable.mapping.OutputParameter;
+import io.orqueio.bpm.engine.impl.core.variable.mapping.value.ListValueProvider;
+import io.orqueio.bpm.engine.impl.core.variable.mapping.value.MapValueProvider;
+import io.orqueio.bpm.engine.impl.core.variable.mapping.value.NullValueProvider;
+import io.orqueio.bpm.engine.impl.core.variable.mapping.value.ParameterValueProvider;
+import io.orqueio.bpm.engine.impl.el.ElValueProvider;
+import io.orqueio.bpm.engine.impl.el.ExpressionManager;
+import io.orqueio.bpm.engine.impl.scripting.ExecutableScript;
+import io.orqueio.bpm.engine.impl.scripting.ScriptValueProvider;
+import io.orqueio.bpm.engine.impl.util.ScriptUtil;
+import io.orqueio.bpm.engine.impl.util.xml.Element;
 
 /**
  * Helper methods to reused for common parsing tasks.

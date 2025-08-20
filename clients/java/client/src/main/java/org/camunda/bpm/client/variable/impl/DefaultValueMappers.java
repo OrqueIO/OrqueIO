@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.variable.impl;
+package io.orqueio.bpm.client.variable.impl;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.camunda.bpm.client.impl.ExternalTaskClientLogger;
-import org.camunda.bpm.engine.variable.type.ValueType;
-import org.camunda.bpm.engine.variable.value.TypedValue;
+import io.orqueio.bpm.client.impl.ExternalTaskClientLogger;
+import io.orqueio.bpm.engine.variable.type.ValueType;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
 
 public class DefaultValueMappers<T extends TypedValue> implements Serializable, ValueMappers<T> {
 

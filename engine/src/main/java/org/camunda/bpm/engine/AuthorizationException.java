@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine;
+package io.orqueio.bpm.engine;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.camunda.bpm.engine.authorization.MissingAuthorization;
+import io.orqueio.bpm.engine.authorization.MissingAuthorization;
 
 /**
  * <p>Exception thrown by the process engine in case a user tries to

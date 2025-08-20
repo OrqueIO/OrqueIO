@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.authorization.util;
+package io.orqueio.bpm.engine.test.api.authorization.util;
 
 import java.util.Map;
 
-import org.camunda.bpm.engine.AuthorizationService;
-import org.camunda.bpm.engine.authorization.Authorization;
-import org.camunda.bpm.engine.authorization.Permission;
-import org.camunda.bpm.engine.authorization.Resource;
+import io.orqueio.bpm.engine.AuthorizationService;
+import io.orqueio.bpm.engine.authorization.Authorization;
+import io.orqueio.bpm.engine.authorization.Permission;
+import io.orqueio.bpm.engine.authorization.Resource;
 
 /**
  * @author Thorben Lindhauer

@@ -5,7 +5,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans   http://www.springframework.org/schema/beans/spring-beans.xsd">
 
   <!-- Spring bean to be invoked through the ApplicationContextElResolver -->
-  <bean id="retryConfig" class="org.camunda.bpm.integrationtest.functional.spring.beans.RetryConfig" />
-  <bean id="errorDelegate" class="org.camunda.bpm.integrationtest.functional.spring.beans.ErrorDelegate" />
+  <bean id="retryConfig" class="io.orqueio.bpm.integrationtest.functional.spring.beans.RetryConfig" />
+  <bean id="errorDelegate" class="io.orqueio.bpm.integrationtest.functional.spring.beans.ErrorDelegate" />
 
 </beans>

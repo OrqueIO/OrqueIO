@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.spring.components.registry;
+package io.orqueio.bpm.engine.spring.components.registry;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.impl.bpmn.behavior.ReceiveTaskActivityBehavior;
-import org.camunda.bpm.engine.impl.pvm.delegate.ActivityBehavior;
-import org.camunda.bpm.engine.impl.pvm.delegate.ActivityExecution;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.impl.bpmn.behavior.ReceiveTaskActivityBehavior;
+import io.orqueio.bpm.engine.impl.pvm.delegate.ActivityBehavior;
+import io.orqueio.bpm.engine.impl.pvm.delegate.ActivityExecution;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
@@ -33,7 +33,7 @@ import java.util.logging.Logger;
 
 
 /**
- * this class records and manages all known {@link org.camunda.bpm.engine.annotations.State} - responding
+ * this class records and manages all known {@link io.orqueio.bpm.engine.annotations.State} - responding
  * beans in the JVM. It <em>should</em> have metadata on all methods, and what
  * those methods expect from a given invocation (ie: which process, which process variables).
  *
@@ -67,14 +67,14 @@ public class ActivitiStateHandlerRegistry extends ReceiveTaskActivityBehavior im
 	}
 
 	protected String registrationKey(String stateName, String processName) {
-		return (org.camunda.commons.utils.StringUtil.defaultString(processName) +
-				":" + org.camunda.commons.utils.StringUtil.defaultString(stateName)).toLowerCase();
+		return (io.orqueio.commons.utils.StringUtil.defaultString(processName) +
+				":" + io.orqueio.commons.utils.StringUtil.defaultString(stateName)).toLowerCase();
 	}
 
 	/**
 	 * used at runtime to register state handlers as they are registered with the spring context
 	 *
-	 * @param registration the {@link org.camunda.bpm.engine.test.spring.components.registry.ActivitiStateHandlerRegistration}
+	 * @param registration the {@link io.orqueio.bpm.engine.test.spring.components.registry.ActivitiStateHandlerRegistration}
 	 */
 	public void registerActivitiStateHandler(
 			ActivitiStateHandlerRegistration registration) {
@@ -85,7 +85,7 @@ public class ActivitiStateHandlerRegistry extends ReceiveTaskActivityBehavior im
 
 	/**
 	 * this is responsible for looking up components in the registry and returning the appropriate handler based
-	 * on specificity of the {@link org.camunda.bpm.engine.test.spring.components.registry.ActivitiStateHandlerRegistration}
+	 * on specificity of the {@link io.orqueio.bpm.engine.test.spring.components.registry.ActivitiStateHandlerRegistration}
 	 *
 	 * @param processName the process name to look for (optional)
 	 * @param stateName	 the state name to look for (not optional)
@@ -117,7 +117,7 @@ public class ActivitiStateHandlerRegistry extends ReceiveTaskActivityBehavior im
 	 *
 	 * @param processName the name of the process
 	 * @param stateName	 the name of the state
-	 * @return an unambiguous {@link org.camunda.bpm.engine.test.spring.components.registry.ActivitiStateHandlerRegistry} or null
+	 * @return an unambiguous {@link io.orqueio.bpm.engine.test.spring.components.registry.ActivitiStateHandlerRegistry} or null
 	 */
 	public ActivitiStateHandlerRegistration findRegistrationForProcessAndState(String processName, String stateName) {
 

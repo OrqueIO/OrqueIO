@@ -14,30 +14,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.impl.history;
+package io.orqueio.bpm.engine.rest.impl.history;
 
-import org.camunda.bpm.engine.rest.history.HistoricActivityInstanceRestService;
-import org.camunda.bpm.engine.rest.history.HistoricProcessDefinitionRestService;
-import org.camunda.bpm.engine.rest.history.HistoricBatchRestService;
-import org.camunda.bpm.engine.rest.history.HistoricCaseActivityInstanceRestService;
-import org.camunda.bpm.engine.rest.history.HistoricCaseDefinitionRestService;
-import org.camunda.bpm.engine.rest.history.HistoricCaseInstanceRestService;
-import org.camunda.bpm.engine.rest.history.HistoricDecisionDefinitionRestService;
-import org.camunda.bpm.engine.rest.history.HistoricDecisionInstanceRestService;
-import org.camunda.bpm.engine.rest.history.HistoricDecisionStatisticsRestService;
-import org.camunda.bpm.engine.rest.history.HistoricDetailRestService;
-import org.camunda.bpm.engine.rest.history.HistoricExternalTaskLogRestService;
-import org.camunda.bpm.engine.rest.history.HistoricIdentityLinkLogRestService;
-import org.camunda.bpm.engine.rest.history.HistoricIncidentRestService;
-import org.camunda.bpm.engine.rest.history.HistoricJobLogRestService;
-import org.camunda.bpm.engine.rest.history.HistoricProcessInstanceRestService;
-import org.camunda.bpm.engine.rest.history.HistoricTaskInstanceRestService;
-import org.camunda.bpm.engine.rest.history.HistoricVariableInstanceRestService;
-import org.camunda.bpm.engine.rest.history.HistoryCleanupRestService;
-import org.camunda.bpm.engine.rest.history.HistoryRestService;
-import org.camunda.bpm.engine.rest.history.UserOperationLogRestService;
+import io.orqueio.bpm.engine.rest.history.HistoricActivityInstanceRestService;
+import io.orqueio.bpm.engine.rest.history.HistoricProcessDefinitionRestService;
+import io.orqueio.bpm.engine.rest.history.HistoricBatchRestService;
+import io.orqueio.bpm.engine.rest.history.HistoricCaseActivityInstanceRestService;
+import io.orqueio.bpm.engine.rest.history.HistoricCaseDefinitionRestService;
+import io.orqueio.bpm.engine.rest.history.HistoricCaseInstanceRestService;
+import io.orqueio.bpm.engine.rest.history.HistoricDecisionDefinitionRestService;
+import io.orqueio.bpm.engine.rest.history.HistoricDecisionInstanceRestService;
+import io.orqueio.bpm.engine.rest.history.HistoricDecisionStatisticsRestService;
+import io.orqueio.bpm.engine.rest.history.HistoricDetailRestService;
+import io.orqueio.bpm.engine.rest.history.HistoricExternalTaskLogRestService;
+import io.orqueio.bpm.engine.rest.history.HistoricIdentityLinkLogRestService;
+import io.orqueio.bpm.engine.rest.history.HistoricIncidentRestService;
+import io.orqueio.bpm.engine.rest.history.HistoricJobLogRestService;
+import io.orqueio.bpm.engine.rest.history.HistoricProcessInstanceRestService;
+import io.orqueio.bpm.engine.rest.history.HistoricTaskInstanceRestService;
+import io.orqueio.bpm.engine.rest.history.HistoricVariableInstanceRestService;
+import io.orqueio.bpm.engine.rest.history.HistoryCleanupRestService;
+import io.orqueio.bpm.engine.rest.history.HistoryRestService;
+import io.orqueio.bpm.engine.rest.history.UserOperationLogRestService;
 
-import org.camunda.bpm.engine.rest.impl.AbstractRestProcessEngineAware;
+import io.orqueio.bpm.engine.rest.impl.AbstractRestProcessEngineAware;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 

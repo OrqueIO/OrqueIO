@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.cmmn.behavior;
+package io.orqueio.bpm.engine.impl.cmmn.behavior;
 
-import static org.camunda.bpm.engine.impl.util.DecisionEvaluationUtil.evaluateDecision;
+import static io.orqueio.bpm.engine.impl.util.DecisionEvaluationUtil.evaluateDecision;
 
-import org.camunda.bpm.engine.impl.cmmn.entity.runtime.CaseExecutionEntity;
-import org.camunda.bpm.engine.impl.cmmn.execution.CmmnActivityExecution;
-import org.camunda.bpm.engine.impl.core.variable.scope.AbstractVariableScope;
-import org.camunda.bpm.engine.impl.dmn.result.DecisionResultMapper;
+import io.orqueio.bpm.engine.impl.cmmn.entity.runtime.CaseExecutionEntity;
+import io.orqueio.bpm.engine.impl.cmmn.execution.CmmnActivityExecution;
+import io.orqueio.bpm.engine.impl.core.variable.scope.AbstractVariableScope;
+import io.orqueio.bpm.engine.impl.dmn.result.DecisionResultMapper;
 
 /**
  * @author Roman Smirnov

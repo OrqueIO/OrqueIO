@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.cdi.impl;
+package io.orqueio.bpm.engine.cdi.impl;
 
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.AfterBeanDiscovery;
@@ -22,9 +22,9 @@ import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.BeforeBeanDiscovery;
 import javax.enterprise.inject.spi.Extension;
 
-import org.camunda.bpm.engine.cdi.annotation.BusinessProcessScoped;
-import org.camunda.bpm.engine.cdi.impl.context.BusinessProcessContext;
-import org.camunda.bpm.engine.cdi.impl.util.BeanManagerLookup;
+import io.orqueio.bpm.engine.cdi.annotation.BusinessProcessScoped;
+import io.orqueio.bpm.engine.cdi.impl.context.BusinessProcessContext;
+import io.orqueio.bpm.engine.cdi.impl.util.BeanManagerLookup;
 
 /**
  * 

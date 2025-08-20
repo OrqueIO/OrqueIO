@@ -4,7 +4,7 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans   http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-  <bean id="processEngineConfiguration" class="org.camunda.bpm.engine.impl.cfg.StandaloneInMemProcessEngineConfiguration">
+  <bean id="processEngineConfiguration" class="io.orqueio.bpm.engine.impl.cfg.StandaloneInMemProcessEngineConfiguration">
   
     <property name="processEngineName" value="DecisionInstanceHistoryTest-engine" />
   
@@ -29,10 +29,10 @@
     
     <property name="customHistoryLevels">
       <list>
-        <bean class="org.camunda.bpm.engine.test.standalone.history.RecordHistoryLevel">
+        <bean class="io.orqueio.bpm.engine.test.standalone.history.RecordHistoryLevel">
           <constructor-arg>
             <list>
-              <value type="org.camunda.bpm.engine.impl.history.event.HistoryEventTypes">DMN_DECISION_EVALUATE</value>
+              <value type="io.orqueio.bpm.engine.impl.history.event.HistoryEventTypes">DMN_DECISION_EVALUATE</value>
             </list>
           </constructor-arg>
         </bean>

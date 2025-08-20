@@ -14,22 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.application.impl.event;
+package io.orqueio.bpm.application.impl.event;
 
 import java.util.List;
 
-import org.camunda.bpm.engine.delegate.ExecutionListener;
-import org.camunda.bpm.engine.delegate.TaskListener;
-import org.camunda.bpm.engine.impl.bpmn.behavior.UserTaskActivityBehavior;
-import org.camunda.bpm.engine.impl.bpmn.parser.BpmnParseListener;
-import org.camunda.bpm.engine.impl.core.variable.mapping.IoMapping;
-import org.camunda.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity;
-import org.camunda.bpm.engine.impl.pvm.process.ActivityImpl;
-import org.camunda.bpm.engine.impl.pvm.process.ScopeImpl;
-import org.camunda.bpm.engine.impl.pvm.process.TransitionImpl;
-import org.camunda.bpm.engine.impl.task.TaskDefinition;
-import org.camunda.bpm.engine.impl.util.xml.Element;
-import org.camunda.bpm.engine.impl.variable.VariableDeclaration;
+import io.orqueio.bpm.engine.delegate.ExecutionListener;
+import io.orqueio.bpm.engine.delegate.TaskListener;
+import io.orqueio.bpm.engine.impl.bpmn.behavior.UserTaskActivityBehavior;
+import io.orqueio.bpm.engine.impl.bpmn.parser.BpmnParseListener;
+import io.orqueio.bpm.engine.impl.core.variable.mapping.IoMapping;
+import io.orqueio.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity;
+import io.orqueio.bpm.engine.impl.pvm.process.ActivityImpl;
+import io.orqueio.bpm.engine.impl.pvm.process.ScopeImpl;
+import io.orqueio.bpm.engine.impl.pvm.process.TransitionImpl;
+import io.orqueio.bpm.engine.impl.task.TaskDefinition;
+import io.orqueio.bpm.engine.impl.util.xml.Element;
+import io.orqueio.bpm.engine.impl.variable.VariableDeclaration;
 
 /**
  *

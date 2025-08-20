@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.metadata;
+package io.orqueio.bpm.container.impl.metadata;
 
 import java.util.List;
 
-import org.camunda.bpm.container.impl.metadata.spi.BpmPlatformXml;
-import org.camunda.bpm.container.impl.metadata.spi.JobExecutorXml;
-import org.camunda.bpm.container.impl.metadata.spi.ProcessEngineXml;
+import io.orqueio.bpm.container.impl.metadata.spi.BpmPlatformXml;
+import io.orqueio.bpm.container.impl.metadata.spi.JobExecutorXml;
+import io.orqueio.bpm.container.impl.metadata.spi.ProcessEngineXml;
 
 /**
  * <p>Implementation of the BpmPlatformXml SPI</p>

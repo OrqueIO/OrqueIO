@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.pvm.runtime;
+package io.orqueio.bpm.engine.impl.pvm.runtime;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -22,22 +22,22 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.ProcessEngineServices;
-import org.camunda.bpm.engine.delegate.BpmnModelExecutionContext;
-import org.camunda.bpm.engine.delegate.ProcessEngineServicesAware;
-import org.camunda.bpm.engine.impl.cmmn.execution.CaseExecutionImpl;
-import org.camunda.bpm.engine.impl.cmmn.execution.CmmnExecution;
-import org.camunda.bpm.engine.impl.cmmn.model.CmmnCaseDefinition;
-import org.camunda.bpm.engine.impl.core.variable.CoreVariableInstance;
-import org.camunda.bpm.engine.impl.core.variable.scope.SimpleVariableInstance.SimpleVariableInstanceFactory;
-import org.camunda.bpm.engine.impl.core.variable.scope.VariableInstanceFactory;
-import org.camunda.bpm.engine.impl.core.variable.scope.VariableInstanceLifecycleListener;
-import org.camunda.bpm.engine.impl.core.variable.scope.VariableStore;
-import org.camunda.bpm.engine.impl.pvm.PvmProcessInstance;
-import org.camunda.bpm.engine.impl.pvm.delegate.ActivityExecution;
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
-import org.camunda.bpm.model.bpmn.instance.FlowElement;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.ProcessEngineServices;
+import io.orqueio.bpm.engine.delegate.BpmnModelExecutionContext;
+import io.orqueio.bpm.engine.delegate.ProcessEngineServicesAware;
+import io.orqueio.bpm.engine.impl.cmmn.execution.CaseExecutionImpl;
+import io.orqueio.bpm.engine.impl.cmmn.execution.CmmnExecution;
+import io.orqueio.bpm.engine.impl.cmmn.model.CmmnCaseDefinition;
+import io.orqueio.bpm.engine.impl.core.variable.CoreVariableInstance;
+import io.orqueio.bpm.engine.impl.core.variable.scope.SimpleVariableInstance.SimpleVariableInstanceFactory;
+import io.orqueio.bpm.engine.impl.core.variable.scope.VariableInstanceFactory;
+import io.orqueio.bpm.engine.impl.core.variable.scope.VariableInstanceLifecycleListener;
+import io.orqueio.bpm.engine.impl.core.variable.scope.VariableStore;
+import io.orqueio.bpm.engine.impl.pvm.PvmProcessInstance;
+import io.orqueio.bpm.engine.impl.pvm.delegate.ActivityExecution;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.bpm.model.bpmn.instance.FlowElement;
 
 
 /**

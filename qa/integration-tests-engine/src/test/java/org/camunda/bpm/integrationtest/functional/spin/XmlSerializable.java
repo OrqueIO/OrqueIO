@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.functional.spin;
+package io.orqueio.bpm.integrationtest.functional.spin;
 
 /**
  * @author Daniel Meyer

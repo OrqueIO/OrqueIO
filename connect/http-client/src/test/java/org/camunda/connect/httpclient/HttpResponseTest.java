@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.connect.httpclient;
+package io.orqueio.connect.httpclient;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.assertj.core.api.Assertions;
-import org.camunda.connect.ConnectorRequestException;
-import org.camunda.connect.httpclient.impl.HttpConnectorImpl;
-import org.camunda.connect.impl.DebugRequestInterceptor;
+import io.orqueio.connect.ConnectorRequestException;
+import io.orqueio.connect.httpclient.impl.HttpConnectorImpl;
+import io.orqueio.connect.impl.DebugRequestInterceptor;
 import org.junit.Before;
 import org.junit.Test;
 

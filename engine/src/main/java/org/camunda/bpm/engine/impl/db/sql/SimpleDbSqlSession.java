@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.db.sql;
+package io.orqueio.bpm.engine.impl.db.sql;
 
-import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
+import static io.orqueio.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
 
 import java.sql.Connection;
 import java.util.Collections;
@@ -24,11 +24,11 @@ import java.util.List;
 
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.ibatis.session.ExecutorType;
-import org.camunda.bpm.engine.impl.db.DbEntity;
-import org.camunda.bpm.engine.impl.db.FlushResult;
-import org.camunda.bpm.engine.impl.db.entitymanager.operation.DbBulkOperation;
-import org.camunda.bpm.engine.impl.db.entitymanager.operation.DbEntityOperation;
-import org.camunda.bpm.engine.impl.db.entitymanager.operation.DbOperation;
+import io.orqueio.bpm.engine.impl.db.DbEntity;
+import io.orqueio.bpm.engine.impl.db.FlushResult;
+import io.orqueio.bpm.engine.impl.db.entitymanager.operation.DbBulkOperation;
+import io.orqueio.bpm.engine.impl.db.entitymanager.operation.DbEntityOperation;
+import io.orqueio.bpm.engine.impl.db.entitymanager.operation.DbOperation;
 
 /**
  * For mybatis {@link ExecutorType#SIMPLE}

@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.form;
+package io.orqueio.bpm.engine.impl.form;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.engine.form.FormField;
-import org.camunda.bpm.engine.form.FormFieldValidationConstraint;
-import org.camunda.bpm.engine.form.FormType;
-import org.camunda.bpm.engine.variable.value.TypedValue;
+import io.orqueio.bpm.engine.form.FormField;
+import io.orqueio.bpm.engine.form.FormFieldValidationConstraint;
+import io.orqueio.bpm.engine.form.FormType;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
 
 /**
  *

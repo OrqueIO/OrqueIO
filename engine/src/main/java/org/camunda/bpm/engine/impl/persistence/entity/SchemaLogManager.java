@@ -14,18 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.persistence.entity;
+package io.orqueio.bpm.engine.impl.persistence.entity;
 
 import java.util.Collections;
 import java.util.List;
 
-import org.camunda.bpm.engine.AuthorizationException;
-import org.camunda.bpm.engine.impl.Page;
-import org.camunda.bpm.engine.impl.SchemaLogQueryImpl;
-import org.camunda.bpm.engine.impl.cfg.CommandChecker;
-import org.camunda.bpm.engine.impl.persistence.AbstractManager;
-import org.camunda.bpm.engine.management.SchemaLogEntry;
-import org.camunda.bpm.engine.management.SchemaLogQuery;
+import io.orqueio.bpm.engine.AuthorizationException;
+import io.orqueio.bpm.engine.impl.Page;
+import io.orqueio.bpm.engine.impl.SchemaLogQueryImpl;
+import io.orqueio.bpm.engine.impl.cfg.CommandChecker;
+import io.orqueio.bpm.engine.impl.persistence.AbstractManager;
+import io.orqueio.bpm.engine.management.SchemaLogEntry;
+import io.orqueio.bpm.engine.management.SchemaLogQuery;
 
 /**
  * @author Miklas Boskamp

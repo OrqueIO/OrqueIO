@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.identity.impl.ldap;
+package io.orqueio.bpm.identity.impl.ldap;
 
-import org.camunda.bpm.engine.impl.identity.ReadOnlyIdentityProvider;
-import org.camunda.bpm.engine.impl.interceptor.Session;
-import org.camunda.bpm.engine.impl.interceptor.SessionFactory;
+import io.orqueio.bpm.engine.impl.identity.ReadOnlyIdentityProvider;
+import io.orqueio.bpm.engine.impl.interceptor.Session;
+import io.orqueio.bpm.engine.impl.interceptor.SessionFactory;
 
 /**
  * @author Daniel Meyer

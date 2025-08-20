@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.tasklist.plugin.spi.impl;
+package io.orqueio.bpm.tasklist.plugin.spi.impl;
 
-import org.camunda.bpm.tasklist.plugin.spi.TasklistPlugin;
-import org.camunda.bpm.webapp.plugin.spi.impl.AbstractAppPlugin;
+import io.orqueio.bpm.tasklist.plugin.spi.TasklistPlugin;
+import io.orqueio.bpm.webapp.plugin.spi.impl.AbstractAppPlugin;
 
 /**
  * Base class for implementing {@link TasklistPlugin TasklistPlugins}.

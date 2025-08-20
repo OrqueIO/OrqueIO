@@ -4,14 +4,14 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans   http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-  <bean id="processEngineConfiguration" class="org.camunda.bpm.engine.impl.cfg.StandaloneInMemProcessEngineConfiguration">
+  <bean id="processEngineConfiguration" class="io.orqueio.bpm.engine.impl.cfg.StandaloneInMemProcessEngineConfiguration">
     
     <property name="jdbcUrl" value="jdbc:h2:mem:camunda-DmnEngineConfigurationTest" />
 
     <!-- configure the DMN engine  -->
     <property name="dmnEngineConfiguration">
       <!-- based on default configuration -->
-      <bean class="org.camunda.bpm.dmn.engine.impl.DefaultDmnEngineConfiguration">
+      <bean class="io.orqueio.bpm.dmn.engine.impl.DefaultDmnEngineConfiguration">
         <!-- set the default expression language -->
         <property name="defaultInputExpressionExpressionLanguage" value="groovy" />
       </bean>

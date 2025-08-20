@@ -14,28 +14,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.persistence.entity;
+package io.orqueio.bpm.engine.impl.persistence.entity;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.camunda.bpm.engine.history.HistoricJobLog;
-import org.camunda.bpm.engine.impl.HistoricJobLogQueryImpl;
-import org.camunda.bpm.engine.impl.Page;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.engine.impl.db.ListQueryParameterObject;
-import org.camunda.bpm.engine.impl.db.entitymanager.operation.DbOperation;
-import org.camunda.bpm.engine.impl.history.HistoryLevel;
-import org.camunda.bpm.engine.impl.history.event.HistoryEvent;
-import org.camunda.bpm.engine.impl.history.event.HistoryEventProcessor;
-import org.camunda.bpm.engine.impl.history.event.HistoryEventType;
-import org.camunda.bpm.engine.impl.history.event.HistoryEventTypes;
-import org.camunda.bpm.engine.impl.history.producer.HistoryEventProducer;
-import org.camunda.bpm.engine.impl.persistence.AbstractHistoricManager;
-import org.camunda.bpm.engine.impl.util.EnsureUtil;
-import org.camunda.bpm.engine.runtime.Job;
+import io.orqueio.bpm.engine.history.HistoricJobLog;
+import io.orqueio.bpm.engine.impl.HistoricJobLogQueryImpl;
+import io.orqueio.bpm.engine.impl.Page;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.impl.db.ListQueryParameterObject;
+import io.orqueio.bpm.engine.impl.db.entitymanager.operation.DbOperation;
+import io.orqueio.bpm.engine.impl.history.HistoryLevel;
+import io.orqueio.bpm.engine.impl.history.event.HistoryEvent;
+import io.orqueio.bpm.engine.impl.history.event.HistoryEventProcessor;
+import io.orqueio.bpm.engine.impl.history.event.HistoryEventType;
+import io.orqueio.bpm.engine.impl.history.event.HistoryEventTypes;
+import io.orqueio.bpm.engine.impl.history.producer.HistoryEventProducer;
+import io.orqueio.bpm.engine.impl.persistence.AbstractHistoricManager;
+import io.orqueio.bpm.engine.impl.util.EnsureUtil;
+import io.orqueio.bpm.engine.runtime.Job;
 
 /**
  * @author Roman Smirnov

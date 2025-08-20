@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.core.model;
+package io.orqueio.bpm.engine.impl.core.model;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.camunda.bpm.engine.delegate.VariableScope;
-import org.camunda.bpm.engine.impl.core.variable.mapping.value.ParameterValueProvider;
-import org.camunda.bpm.engine.variable.VariableMap;
-import org.camunda.bpm.engine.variable.Variables;
+import io.orqueio.bpm.engine.delegate.VariableScope;
+import io.orqueio.bpm.engine.impl.core.variable.mapping.value.ParameterValueProvider;
+import io.orqueio.bpm.engine.variable.VariableMap;
+import io.orqueio.bpm.engine.variable.Variables;
 
 /**
  * @author Roman Smirnov

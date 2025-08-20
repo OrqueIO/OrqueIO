@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.connect.impl;
+package io.orqueio.connect.impl;
 
-import org.camunda.connect.spi.ConnectorInvocation;
-import org.camunda.connect.spi.ConnectorRequest;
-import org.camunda.connect.spi.ConnectorRequestInterceptor;
+import io.orqueio.connect.spi.ConnectorInvocation;
+import io.orqueio.connect.spi.ConnectorRequest;
+import io.orqueio.connect.spi.ConnectorRequestInterceptor;
 
 /**
  * <p>

@@ -14,18 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.variable.impl.type;
+package io.orqueio.bpm.engine.variable.impl.type;
 
 import java.io.File;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.camunda.bpm.engine.variable.Variables;
-import org.camunda.bpm.engine.variable.type.FileValueType;
-import org.camunda.bpm.engine.variable.value.FileValue;
-import org.camunda.bpm.engine.variable.value.TypedValue;
-import org.camunda.bpm.engine.variable.value.builder.FileValueBuilder;
+import io.orqueio.bpm.engine.variable.Variables;
+import io.orqueio.bpm.engine.variable.type.FileValueType;
+import io.orqueio.bpm.engine.variable.value.FileValue;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
+import io.orqueio.bpm.engine.variable.value.builder.FileValueBuilder;
 
 /**
  * Valuetype to save files from byte arrays, inputstreams or just files as

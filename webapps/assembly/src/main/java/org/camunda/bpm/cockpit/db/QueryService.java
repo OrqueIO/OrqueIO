@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.cockpit.db;
+package io.orqueio.bpm.cockpit.db;
 
 /**
  *
  * @author Nico Rehwaldt
  */
-public interface QueryService extends org.camunda.bpm.webapp.db.QueryService {
+public interface QueryService extends io.orqueio.bpm.webapp.db.QueryService {
 
 }

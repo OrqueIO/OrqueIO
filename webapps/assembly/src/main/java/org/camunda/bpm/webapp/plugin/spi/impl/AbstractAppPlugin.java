@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.webapp.plugin.spi.impl;
+package io.orqueio.bpm.webapp.plugin.spi.impl;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import org.camunda.bpm.webapp.plugin.resource.PluginResourceOverride;
-import org.camunda.bpm.webapp.plugin.spi.AppPlugin;
+import io.orqueio.bpm.webapp.plugin.resource.PluginResourceOverride;
+import io.orqueio.bpm.webapp.plugin.spi.AppPlugin;
 
 /**
  * Abstract implementation of the {@link AppPlugin} SPI. Should be used by

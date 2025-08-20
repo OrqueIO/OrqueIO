@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.engine.impl.transform;
+package io.orqueio.bpm.dmn.engine.impl.transform;
 
-import static org.camunda.bpm.dmn.engine.impl.transform.DmnExpressionTransformHelper.createTypeDefinition;
+import static io.orqueio.bpm.dmn.engine.impl.transform.DmnExpressionTransformHelper.createTypeDefinition;
 
-import org.camunda.bpm.dmn.engine.impl.DmnVariableImpl;
-import org.camunda.bpm.dmn.engine.impl.spi.transform.DmnElementTransformContext;
-import org.camunda.bpm.dmn.engine.impl.spi.transform.DmnElementTransformHandler;
-import org.camunda.bpm.dmn.engine.impl.spi.type.DmnTypeDefinition;
-import org.camunda.bpm.model.dmn.instance.Variable;
+import io.orqueio.bpm.dmn.engine.impl.DmnVariableImpl;
+import io.orqueio.bpm.dmn.engine.impl.spi.transform.DmnElementTransformContext;
+import io.orqueio.bpm.dmn.engine.impl.spi.transform.DmnElementTransformHandler;
+import io.orqueio.bpm.dmn.engine.impl.spi.type.DmnTypeDefinition;
+import io.orqueio.bpm.model.dmn.instance.Variable;
 
 public class DmnVariableTransformHandler implements DmnElementTransformHandler<Variable, DmnVariableImpl> {
 

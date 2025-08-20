@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.sub.identity.impl;
+package io.orqueio.bpm.engine.rest.sub.identity.impl;
 
-import static org.camunda.bpm.engine.authorization.Permissions.DELETE;
-import static org.camunda.bpm.engine.authorization.Permissions.UPDATE;
-import static org.camunda.bpm.engine.authorization.Resources.TENANT;
+import static io.orqueio.bpm.engine.authorization.Permissions.DELETE;
+import static io.orqueio.bpm.engine.authorization.Permissions.UPDATE;
+import static io.orqueio.bpm.engine.authorization.Resources.TENANT;
 
 import java.net.URI;
 
@@ -26,15 +26,15 @@ import javax.ws.rs.HttpMethod;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.identity.Tenant;
-import org.camunda.bpm.engine.rest.TenantRestService;
-import org.camunda.bpm.engine.rest.dto.ResourceOptionsDto;
-import org.camunda.bpm.engine.rest.dto.identity.TenantDto;
-import org.camunda.bpm.engine.rest.exception.InvalidRequestException;
-import org.camunda.bpm.engine.rest.sub.identity.TenantGroupMembersResource;
-import org.camunda.bpm.engine.rest.sub.identity.TenantResource;
-import org.camunda.bpm.engine.rest.sub.identity.TenantUserMembersResource;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.identity.Tenant;
+import io.orqueio.bpm.engine.rest.TenantRestService;
+import io.orqueio.bpm.engine.rest.dto.ResourceOptionsDto;
+import io.orqueio.bpm.engine.rest.dto.identity.TenantDto;
+import io.orqueio.bpm.engine.rest.exception.InvalidRequestException;
+import io.orqueio.bpm.engine.rest.sub.identity.TenantGroupMembersResource;
+import io.orqueio.bpm.engine.rest.sub.identity.TenantResource;
+import io.orqueio.bpm.engine.rest.sub.identity.TenantUserMembersResource;
 
 import com.fasterxml.jackson.databind.ObjectMapper;;
 

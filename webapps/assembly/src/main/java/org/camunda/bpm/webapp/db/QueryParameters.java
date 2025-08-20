@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.webapp.db;
+package io.orqueio.bpm.webapp.db;
 
-import org.camunda.bpm.engine.impl.db.ListQueryParameterObject;
+import io.orqueio.bpm.engine.impl.db.ListQueryParameterObject;
 
 /**
  * Typed query parameters for usage in webapp plugins

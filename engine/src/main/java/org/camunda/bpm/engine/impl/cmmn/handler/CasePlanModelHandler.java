@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.cmmn.handler;
+package io.orqueio.bpm.engine.impl.cmmn.handler;
 
 import java.util.Collection;
 import java.util.List;
 
-import org.camunda.bpm.engine.impl.cmmn.model.CmmnActivity;
-import org.camunda.bpm.engine.impl.cmmn.model.CmmnSentryDeclaration;
-import org.camunda.bpm.model.cmmn.instance.CasePlanModel;
-import org.camunda.bpm.model.cmmn.instance.CmmnElement;
-import org.camunda.bpm.model.cmmn.instance.PlanItemDefinition;
-import org.camunda.bpm.model.cmmn.instance.Sentry;
+import io.orqueio.bpm.engine.impl.cmmn.model.CmmnActivity;
+import io.orqueio.bpm.engine.impl.cmmn.model.CmmnSentryDeclaration;
+import io.orqueio.bpm.model.cmmn.instance.CasePlanModel;
+import io.orqueio.bpm.model.cmmn.instance.CmmnElement;
+import io.orqueio.bpm.model.cmmn.instance.PlanItemDefinition;
+import io.orqueio.bpm.model.cmmn.instance.Sentry;
 
 /**
  * @author Roman Smirnov

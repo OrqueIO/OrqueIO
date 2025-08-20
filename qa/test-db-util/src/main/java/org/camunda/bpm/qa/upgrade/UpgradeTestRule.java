@@ -14,22 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa.upgrade;
+package io.orqueio.bpm.qa.upgrade;
 
-import org.camunda.bpm.engine.history.HistoricIncidentQuery;
-import org.camunda.bpm.engine.history.HistoricProcessInstance;
-import org.camunda.bpm.engine.management.JobDefinitionQuery;
-import org.camunda.bpm.engine.runtime.CaseExecutionQuery;
-import org.camunda.bpm.engine.runtime.CaseInstance;
-import org.camunda.bpm.engine.runtime.CaseInstanceQuery;
-import org.camunda.bpm.engine.runtime.ExecutionQuery;
-import org.camunda.bpm.engine.runtime.IncidentQuery;
-import org.camunda.bpm.engine.runtime.JobQuery;
-import org.camunda.bpm.engine.runtime.MessageCorrelationBuilder;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.runtime.ProcessInstanceQuery;
-import org.camunda.bpm.engine.task.TaskQuery;
-import org.camunda.bpm.engine.test.ProcessEngineRule;
+import io.orqueio.bpm.engine.history.HistoricIncidentQuery;
+import io.orqueio.bpm.engine.history.HistoricProcessInstance;
+import io.orqueio.bpm.engine.management.JobDefinitionQuery;
+import io.orqueio.bpm.engine.runtime.CaseExecutionQuery;
+import io.orqueio.bpm.engine.runtime.CaseInstance;
+import io.orqueio.bpm.engine.runtime.CaseInstanceQuery;
+import io.orqueio.bpm.engine.runtime.ExecutionQuery;
+import io.orqueio.bpm.engine.runtime.IncidentQuery;
+import io.orqueio.bpm.engine.runtime.JobQuery;
+import io.orqueio.bpm.engine.runtime.MessageCorrelationBuilder;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.runtime.ProcessInstanceQuery;
+import io.orqueio.bpm.engine.task.TaskQuery;
+import io.orqueio.bpm.engine.test.ProcessEngineRule;
 import org.junit.Assert;
 import org.junit.runner.Description;
 

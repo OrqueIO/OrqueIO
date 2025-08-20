@@ -14,34 +14,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.cmmn;
+package io.orqueio.bpm.engine.impl.cmmn;
 
-import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
+import static io.orqueio.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
-import org.camunda.bpm.engine.exception.NotAllowedException;
-import org.camunda.bpm.engine.exception.NotFoundException;
-import org.camunda.bpm.engine.exception.NotValidException;
-import org.camunda.bpm.engine.exception.NullValueException;
-import org.camunda.bpm.engine.exception.cmmn.CaseDefinitionNotFoundException;
-import org.camunda.bpm.engine.exception.cmmn.CaseExecutionNotFoundException;
-import org.camunda.bpm.engine.exception.cmmn.CaseIllegalStateTransitionException;
-import org.camunda.bpm.engine.impl.cmmn.cmd.CaseExecutionVariableCmd;
-import org.camunda.bpm.engine.impl.cmmn.cmd.CloseCaseInstanceCmd;
-import org.camunda.bpm.engine.impl.cmmn.cmd.CompleteCaseExecutionCmd;
-import org.camunda.bpm.engine.impl.cmmn.cmd.DisableCaseExecutionCmd;
-import org.camunda.bpm.engine.impl.cmmn.cmd.ManualStartCaseExecutionCmd;
-import org.camunda.bpm.engine.impl.cmmn.cmd.ReenableCaseExecutionCmd;
-import org.camunda.bpm.engine.impl.cmmn.cmd.TerminateCaseExecutionCmd;
-import org.camunda.bpm.engine.impl.interceptor.Command;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.interceptor.CommandExecutor;
-import org.camunda.bpm.engine.runtime.CaseExecutionCommandBuilder;
-import org.camunda.bpm.engine.variable.VariableMap;
-import org.camunda.bpm.engine.variable.impl.VariableMapImpl;
+import io.orqueio.bpm.engine.exception.NotAllowedException;
+import io.orqueio.bpm.engine.exception.NotFoundException;
+import io.orqueio.bpm.engine.exception.NotValidException;
+import io.orqueio.bpm.engine.exception.NullValueException;
+import io.orqueio.bpm.engine.exception.cmmn.CaseDefinitionNotFoundException;
+import io.orqueio.bpm.engine.exception.cmmn.CaseExecutionNotFoundException;
+import io.orqueio.bpm.engine.exception.cmmn.CaseIllegalStateTransitionException;
+import io.orqueio.bpm.engine.impl.cmmn.cmd.CaseExecutionVariableCmd;
+import io.orqueio.bpm.engine.impl.cmmn.cmd.CloseCaseInstanceCmd;
+import io.orqueio.bpm.engine.impl.cmmn.cmd.CompleteCaseExecutionCmd;
+import io.orqueio.bpm.engine.impl.cmmn.cmd.DisableCaseExecutionCmd;
+import io.orqueio.bpm.engine.impl.cmmn.cmd.ManualStartCaseExecutionCmd;
+import io.orqueio.bpm.engine.impl.cmmn.cmd.ReenableCaseExecutionCmd;
+import io.orqueio.bpm.engine.impl.cmmn.cmd.TerminateCaseExecutionCmd;
+import io.orqueio.bpm.engine.impl.interceptor.Command;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.impl.interceptor.CommandExecutor;
+import io.orqueio.bpm.engine.runtime.CaseExecutionCommandBuilder;
+import io.orqueio.bpm.engine.variable.VariableMap;
+import io.orqueio.bpm.engine.variable.impl.VariableMapImpl;
 
 /**
  * @author Roman Smirnov

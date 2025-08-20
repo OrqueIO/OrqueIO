@@ -14,21 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.sub.repository;
+package io.orqueio.bpm.engine.rest.sub.repository;
 
-import org.camunda.bpm.engine.rest.dto.StatisticsResultDto;
-import org.camunda.bpm.engine.rest.dto.HistoryTimeToLiveDto;
-import org.camunda.bpm.engine.rest.dto.VariableValueDto;
-import org.camunda.bpm.engine.rest.dto.batch.BatchDto;
-import org.camunda.bpm.engine.rest.dto.repository.CalledProcessDefinitionDto;
-import org.camunda.bpm.engine.rest.dto.repository.ProcessDefinitionDiagramDto;
-import org.camunda.bpm.engine.rest.dto.repository.ProcessDefinitionDto;
-import org.camunda.bpm.engine.rest.dto.repository.ProcessDefinitionSuspensionStateDto;
-import org.camunda.bpm.engine.rest.dto.runtime.ProcessInstanceDto;
-import org.camunda.bpm.engine.rest.dto.runtime.RestartProcessInstanceDto;
-import org.camunda.bpm.engine.rest.dto.runtime.StartProcessInstanceDto;
-import org.camunda.bpm.engine.rest.dto.task.FormDto;
-import org.camunda.bpm.engine.rest.sub.VariableResource;
+import io.orqueio.bpm.engine.rest.dto.StatisticsResultDto;
+import io.orqueio.bpm.engine.rest.dto.HistoryTimeToLiveDto;
+import io.orqueio.bpm.engine.rest.dto.VariableValueDto;
+import io.orqueio.bpm.engine.rest.dto.batch.BatchDto;
+import io.orqueio.bpm.engine.rest.dto.repository.CalledProcessDefinitionDto;
+import io.orqueio.bpm.engine.rest.dto.repository.ProcessDefinitionDiagramDto;
+import io.orqueio.bpm.engine.rest.dto.repository.ProcessDefinitionDto;
+import io.orqueio.bpm.engine.rest.dto.repository.ProcessDefinitionSuspensionStateDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.ProcessInstanceDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.RestartProcessInstanceDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.StartProcessInstanceDto;
+import io.orqueio.bpm.engine.rest.dto.task.FormDto;
+import io.orqueio.bpm.engine.rest.sub.VariableResource;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;

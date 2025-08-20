@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.variable.impl.context;
+package io.orqueio.bpm.engine.variable.impl.context;
 
 import java.util.Collections;
 import java.util.Set;
 
-import org.camunda.bpm.engine.variable.context.VariableContext;
-import org.camunda.bpm.engine.variable.value.TypedValue;
+import io.orqueio.bpm.engine.variable.context.VariableContext;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
 
 /**
  * An empty variable context implementation which does

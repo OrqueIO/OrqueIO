@@ -14,19 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.xml.testmodel.instance;
+package io.orqueio.bpm.model.xml.testmodel.instance;
 
-import org.camunda.bpm.model.xml.ModelBuilder;
-import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.attribute.Attribute;
-import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
-import org.camunda.bpm.model.xml.type.reference.ElementReference;
-import org.camunda.bpm.model.xml.type.reference.ElementReferenceCollection;
+import io.orqueio.bpm.model.xml.ModelBuilder;
+import io.orqueio.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
+import io.orqueio.bpm.model.xml.type.ModelElementTypeBuilder;
+import io.orqueio.bpm.model.xml.type.attribute.Attribute;
+import io.orqueio.bpm.model.xml.type.child.SequenceBuilder;
+import io.orqueio.bpm.model.xml.type.reference.ElementReference;
+import io.orqueio.bpm.model.xml.type.reference.ElementReferenceCollection;
 
 import java.util.Collection;
 
-import static org.camunda.bpm.model.xml.testmodel.TestModelConstants.*;
+import static io.orqueio.bpm.model.xml.testmodel.TestModelConstants.*;
 
 /**
  * @author Daniel Meyer

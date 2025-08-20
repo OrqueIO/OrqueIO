@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.runtime;
+package io.orqueio.bpm.engine.test.api.runtime;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.camunda.bpm.engine.test.api.runtime.TestOrderingUtil.processInstanceByBusinessKey;
-import static org.camunda.bpm.engine.test.api.runtime.TestOrderingUtil.processInstanceByProcessDefinitionId;
-import static org.camunda.bpm.engine.test.api.runtime.TestOrderingUtil.processInstanceByProcessInstanceId;
-import static org.camunda.bpm.engine.test.api.runtime.TestOrderingUtil.verifySorting;
+import static io.orqueio.bpm.engine.test.api.runtime.TestOrderingUtil.processInstanceByBusinessKey;
+import static io.orqueio.bpm.engine.test.api.runtime.TestOrderingUtil.processInstanceByProcessDefinitionId;
+import static io.orqueio.bpm.engine.test.api.runtime.TestOrderingUtil.processInstanceByProcessInstanceId;
+import static io.orqueio.bpm.engine.test.api.runtime.TestOrderingUtil.verifySorting;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -40,30 +40,30 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.camunda.bpm.engine.CaseService;
-import org.camunda.bpm.engine.ManagementService;
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.RepositoryService;
-import org.camunda.bpm.engine.RuntimeService;
-import org.camunda.bpm.engine.exception.NullValueException;
-import org.camunda.bpm.engine.impl.ProcessInstanceQueryImpl;
-import org.camunda.bpm.engine.impl.util.ImmutablePair;
-import org.camunda.bpm.engine.repository.ProcessDefinition;
-import org.camunda.bpm.engine.runtime.Execution;
-import org.camunda.bpm.engine.runtime.Incident;
-import org.camunda.bpm.engine.runtime.Job;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.runtime.ProcessInstanceQuery;
-import org.camunda.bpm.engine.task.Task;
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.engine.test.ProcessEngineRule;
-import org.camunda.bpm.engine.test.api.runtime.migration.models.CompensationModels;
-import org.camunda.bpm.engine.test.api.runtime.migration.models.ProcessModels;
-import org.camunda.bpm.engine.test.util.ProcessEngineTestRule;
-import org.camunda.bpm.engine.test.util.ProvidedProcessEngineRule;
-import org.camunda.bpm.engine.variable.Variables;
-import org.camunda.bpm.model.bpmn.Bpmn;
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.bpm.engine.CaseService;
+import io.orqueio.bpm.engine.ManagementService;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.RepositoryService;
+import io.orqueio.bpm.engine.RuntimeService;
+import io.orqueio.bpm.engine.exception.NullValueException;
+import io.orqueio.bpm.engine.impl.ProcessInstanceQueryImpl;
+import io.orqueio.bpm.engine.impl.util.ImmutablePair;
+import io.orqueio.bpm.engine.repository.ProcessDefinition;
+import io.orqueio.bpm.engine.runtime.Execution;
+import io.orqueio.bpm.engine.runtime.Incident;
+import io.orqueio.bpm.engine.runtime.Job;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.runtime.ProcessInstanceQuery;
+import io.orqueio.bpm.engine.task.Task;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.test.ProcessEngineRule;
+import io.orqueio.bpm.engine.test.api.runtime.migration.models.CompensationModels;
+import io.orqueio.bpm.engine.test.api.runtime.migration.models.ProcessModels;
+import io.orqueio.bpm.engine.test.util.ProcessEngineTestRule;
+import io.orqueio.bpm.engine.test.util.ProvidedProcessEngineRule;
+import io.orqueio.bpm.engine.variable.Variables;
+import io.orqueio.bpm.model.bpmn.Bpmn;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -125,7 +125,7 @@ public class ProcessInstanceQueryTest {
    */
   @Before
   public void deployTestProcesses() throws Exception {
-    org.camunda.bpm.engine.repository.Deployment deployment = engineRule.getRepositoryService().createDeployment()
+    io.orqueio.bpm.engine.repository.Deployment deployment = engineRule.getRepositoryService().createDeployment()
       .addClasspathResource("org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml")
       .addClasspathResource("org/camunda/bpm/engine/test/api/runtime/otherOneTaskProcess.bpmn20.xml")
       .deploy();
@@ -176,7 +176,7 @@ public class ProcessInstanceQueryTest {
     processInstanceIds.stream()
       .map(id -> new ImmutablePair<>(deploymentIdOne, id))
       .forEach(expectedMappings::add);
-    org.camunda.bpm.engine.repository.Deployment deploymentTwo = repositoryService.createDeployment()
+    io.orqueio.bpm.engine.repository.Deployment deploymentTwo = repositoryService.createDeployment()
         .addClasspathResource("org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml")
         .deploy();
     engineRule.manageDeployment(deploymentTwo);
@@ -1959,7 +1959,7 @@ public class ProcessInstanceQueryTest {
         .getId();
 
     // make a second deployment and start an instance
-    org.camunda.bpm.engine.repository.Deployment secondDeployment = repositoryService.createDeployment()
+    io.orqueio.bpm.engine.repository.Deployment secondDeployment = repositoryService.createDeployment()
       .addClasspathResource("org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml")
       .deploy();
 

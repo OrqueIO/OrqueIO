@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.runtime;
+package io.orqueio.bpm.engine.test.api.runtime;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.util.Map;
 
-import org.camunda.bpm.engine.delegate.VariableScope;
-import org.camunda.bpm.engine.test.api.runtime.util.TestVariableScope;
-import org.camunda.bpm.engine.variable.VariableMap;
+import io.orqueio.bpm.engine.delegate.VariableScope;
+import io.orqueio.bpm.engine.test.api.runtime.util.TestVariableScope;
+import io.orqueio.bpm.engine.variable.VariableMap;
 import org.junit.Before;
 import org.junit.Test;
 

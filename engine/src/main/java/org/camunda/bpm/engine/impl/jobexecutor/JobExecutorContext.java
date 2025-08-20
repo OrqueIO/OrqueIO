@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.jobexecutor;
+package io.orqueio.bpm.engine.impl.jobexecutor;
 
 import java.util.LinkedList;
 import java.util.List;
-import org.camunda.bpm.engine.impl.db.entitymanager.cache.DbEntityCache;
-import org.camunda.bpm.engine.impl.persistence.entity.JobEntity;
+import io.orqueio.bpm.engine.impl.db.entitymanager.cache.DbEntityCache;
+import io.orqueio.bpm.engine.impl.persistence.entity.JobEntity;
 
 /**
  * @author Daniel Meyer

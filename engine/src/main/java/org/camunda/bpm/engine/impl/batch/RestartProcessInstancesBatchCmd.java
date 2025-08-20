@@ -14,29 +14,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.batch;
+package io.orqueio.bpm.engine.impl.batch;
 
-import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureNotContainsNull;
-import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureNotEmpty;
-import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
+import static io.orqueio.bpm.engine.impl.util.EnsureUtil.ensureNotContainsNull;
+import static io.orqueio.bpm.engine.impl.util.EnsureUtil.ensureNotEmpty;
+import static io.orqueio.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.camunda.bpm.engine.BadUserRequestException;
-import org.camunda.bpm.engine.authorization.BatchPermissions;
-import org.camunda.bpm.engine.batch.Batch;
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
-import org.camunda.bpm.engine.impl.RestartProcessInstanceBuilderImpl;
-import org.camunda.bpm.engine.impl.RestartProcessInstancesBatchConfiguration;
-import org.camunda.bpm.engine.impl.batch.builder.BatchBuilder;
-import org.camunda.bpm.engine.impl.cmd.AbstractProcessInstanceModificationCommand;
-import org.camunda.bpm.engine.impl.cmd.AbstractRestartProcessInstanceCmd;
-import org.camunda.bpm.engine.impl.cmd.CommandLogger;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.interceptor.CommandExecutor;
-import org.camunda.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity;
+import io.orqueio.bpm.engine.BadUserRequestException;
+import io.orqueio.bpm.engine.authorization.BatchPermissions;
+import io.orqueio.bpm.engine.batch.Batch;
+import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
+import io.orqueio.bpm.engine.impl.RestartProcessInstanceBuilderImpl;
+import io.orqueio.bpm.engine.impl.RestartProcessInstancesBatchConfiguration;
+import io.orqueio.bpm.engine.impl.batch.builder.BatchBuilder;
+import io.orqueio.bpm.engine.impl.cmd.AbstractProcessInstanceModificationCommand;
+import io.orqueio.bpm.engine.impl.cmd.AbstractRestartProcessInstanceCmd;
+import io.orqueio.bpm.engine.impl.cmd.CommandLogger;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.impl.interceptor.CommandExecutor;
+import io.orqueio.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity;
 
 /**
  *

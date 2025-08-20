@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.bpmn.parser;
+package io.orqueio.bpm.engine.impl.bpmn.parser;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.camunda.bpm.engine.impl.cfg.BpmnParseFactory;
-import org.camunda.bpm.engine.impl.el.ExpressionManager;
-import org.camunda.bpm.engine.impl.util.xml.Parser;
+import io.orqueio.bpm.engine.impl.cfg.BpmnParseFactory;
+import io.orqueio.bpm.engine.impl.el.ExpressionManager;
+import io.orqueio.bpm.engine.impl.util.xml.Parser;
 
 
 /**

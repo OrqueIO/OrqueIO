@@ -14,20 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa.upgrade.scenarios7110.gson;
+package io.orqueio.bpm.qa.upgrade.scenarios7110.gson;
 
-import org.camunda.bpm.engine.filter.Filter;
-import org.camunda.bpm.engine.impl.QueryEntityRelationCondition;
-import org.camunda.bpm.engine.impl.QueryOperator;
-import org.camunda.bpm.engine.impl.QueryOrderingProperty;
-import org.camunda.bpm.engine.impl.TaskQueryImpl;
-import org.camunda.bpm.engine.impl.TaskQueryVariableValue;
-import org.camunda.bpm.engine.impl.persistence.entity.SuspensionState;
-import org.camunda.bpm.engine.task.DelegationState;
-import org.camunda.bpm.engine.test.ProcessEngineRule;
-import org.camunda.bpm.engine.variable.type.ValueType;
-import org.camunda.bpm.qa.upgrade.Origin;
-import org.camunda.bpm.qa.upgrade.ScenarioUnderTest;
+import io.orqueio.bpm.engine.filter.Filter;
+import io.orqueio.bpm.engine.impl.QueryEntityRelationCondition;
+import io.orqueio.bpm.engine.impl.QueryOperator;
+import io.orqueio.bpm.engine.impl.QueryOrderingProperty;
+import io.orqueio.bpm.engine.impl.TaskQueryImpl;
+import io.orqueio.bpm.engine.impl.TaskQueryVariableValue;
+import io.orqueio.bpm.engine.impl.persistence.entity.SuspensionState;
+import io.orqueio.bpm.engine.task.DelegationState;
+import io.orqueio.bpm.engine.test.ProcessEngineRule;
+import io.orqueio.bpm.engine.variable.type.ValueType;
+import io.orqueio.bpm.qa.upgrade.Origin;
+import io.orqueio.bpm.qa.upgrade.ScenarioUnderTest;
 import org.junit.Rule;
 import org.junit.Test;
 

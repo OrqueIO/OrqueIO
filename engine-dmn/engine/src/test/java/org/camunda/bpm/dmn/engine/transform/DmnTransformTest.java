@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.engine.transform;
+package io.orqueio.bpm.dmn.engine.transform;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
@@ -24,24 +24,24 @@ import java.util.Collection;
 import java.util.List;
 
 import org.assertj.core.api.Assertions;
-import org.camunda.bpm.dmn.engine.DmnDecision;
-import org.camunda.bpm.dmn.engine.DmnDecisionRequirementsGraph;
-import org.camunda.bpm.dmn.engine.impl.DmnDecisionImpl;
-import org.camunda.bpm.dmn.engine.impl.DmnDecisionLiteralExpressionImpl;
-import org.camunda.bpm.dmn.engine.impl.DmnDecisionTableImpl;
-import org.camunda.bpm.dmn.engine.impl.DmnDecisionTableInputImpl;
-import org.camunda.bpm.dmn.engine.impl.DmnDecisionTableOutputImpl;
-import org.camunda.bpm.dmn.engine.impl.DmnDecisionTableRuleImpl;
-import org.camunda.bpm.dmn.engine.impl.DmnExpressionImpl;
-import org.camunda.bpm.dmn.engine.impl.DmnVariableImpl;
-import org.camunda.bpm.dmn.engine.impl.hitpolicy.FirstHitPolicyHandler;
-import org.camunda.bpm.dmn.engine.impl.hitpolicy.UniqueHitPolicyHandler;
-import org.camunda.bpm.dmn.engine.impl.transform.DmnTransformException;
-import org.camunda.bpm.dmn.engine.impl.type.DefaultTypeDefinition;
-import org.camunda.bpm.dmn.engine.test.DmnEngineTest;
-import org.camunda.bpm.model.dmn.Dmn;
-import org.camunda.bpm.model.dmn.DmnModelInstance;
-import org.camunda.commons.utils.IoUtil;
+import io.orqueio.bpm.dmn.engine.DmnDecision;
+import io.orqueio.bpm.dmn.engine.DmnDecisionRequirementsGraph;
+import io.orqueio.bpm.dmn.engine.impl.DmnDecisionImpl;
+import io.orqueio.bpm.dmn.engine.impl.DmnDecisionLiteralExpressionImpl;
+import io.orqueio.bpm.dmn.engine.impl.DmnDecisionTableImpl;
+import io.orqueio.bpm.dmn.engine.impl.DmnDecisionTableInputImpl;
+import io.orqueio.bpm.dmn.engine.impl.DmnDecisionTableOutputImpl;
+import io.orqueio.bpm.dmn.engine.impl.DmnDecisionTableRuleImpl;
+import io.orqueio.bpm.dmn.engine.impl.DmnExpressionImpl;
+import io.orqueio.bpm.dmn.engine.impl.DmnVariableImpl;
+import io.orqueio.bpm.dmn.engine.impl.hitpolicy.FirstHitPolicyHandler;
+import io.orqueio.bpm.dmn.engine.impl.hitpolicy.UniqueHitPolicyHandler;
+import io.orqueio.bpm.dmn.engine.impl.transform.DmnTransformException;
+import io.orqueio.bpm.dmn.engine.impl.type.DefaultTypeDefinition;
+import io.orqueio.bpm.dmn.engine.test.DmnEngineTest;
+import io.orqueio.bpm.model.dmn.Dmn;
+import io.orqueio.bpm.model.dmn.DmnModelInstance;
+import io.orqueio.commons.utils.IoUtil;
 import org.junit.Test;
 
 public class DmnTransformTest extends DmnEngineTest {

@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.cfg;
+package io.orqueio.bpm.engine.impl.cfg;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
-import org.camunda.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.ProcessEngineException;
 import org.springframework.beans.factory.BeanFactory;
 
 

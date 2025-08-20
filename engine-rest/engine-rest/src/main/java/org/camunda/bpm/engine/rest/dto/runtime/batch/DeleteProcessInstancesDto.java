@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.dto.runtime.batch;
+package io.orqueio.bpm.engine.rest.dto.runtime.batch;
 
-import org.camunda.bpm.engine.rest.dto.history.HistoricProcessInstanceQueryDto;
-import org.camunda.bpm.engine.rest.dto.runtime.ProcessInstanceQueryDto;
+import io.orqueio.bpm.engine.rest.dto.history.HistoricProcessInstanceQueryDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.ProcessInstanceQueryDto;
 
 import java.util.List;
 

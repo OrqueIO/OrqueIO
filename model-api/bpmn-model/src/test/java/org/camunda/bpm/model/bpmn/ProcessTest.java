@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.bpmn;
+package io.orqueio.bpm.model.bpmn;
 
-import org.camunda.bpm.model.bpmn.instance.Process;
-import org.camunda.bpm.model.bpmn.instance.RootElement;
-import org.camunda.bpm.model.bpmn.util.BpmnModelResource;
-import org.camunda.bpm.model.xml.instance.ModelElementInstance;
+import io.orqueio.bpm.model.bpmn.instance.Process;
+import io.orqueio.bpm.model.bpmn.instance.RootElement;
+import io.orqueio.bpm.model.bpmn.util.BpmnModelResource;
+import io.orqueio.bpm.model.xml.instance.ModelElementInstance;
 import org.junit.Test;
 
 import java.util.Collection;
@@ -41,7 +41,7 @@ public class ProcessTest extends BpmnModelTest {
 
     Collection<RootElement> rootElements = bpmnModelInstance.getDefinitions().getRootElements();
     assertThat(rootElements).hasSize(1);
-    org.camunda.bpm.model.bpmn.instance.Process process = (Process) rootElements.iterator().next();
+    io.orqueio.bpm.model.bpmn.instance.Process process = (Process) rootElements.iterator().next();
 
     assertThat(process.getId()).isEqualTo("exampleProcessId");
     assertThat(process.getName()).isNull();

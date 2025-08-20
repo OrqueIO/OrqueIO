@@ -14,18 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.db.sql;
+package io.orqueio.bpm.engine.impl.db.sql;
 
 import java.sql.Connection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import org.apache.ibatis.session.SqlSessionFactory;
-import org.camunda.bpm.engine.impl.cfg.IdGenerator;
-import org.camunda.bpm.engine.impl.db.DbEntity;
-import org.camunda.bpm.engine.impl.interceptor.Session;
-import org.camunda.bpm.engine.impl.interceptor.SessionFactory;
-import org.camunda.bpm.engine.impl.util.ClassNameUtil;
+import io.orqueio.bpm.engine.impl.cfg.IdGenerator;
+import io.orqueio.bpm.engine.impl.db.DbEntity;
+import io.orqueio.bpm.engine.impl.interceptor.Session;
+import io.orqueio.bpm.engine.impl.interceptor.SessionFactory;
+import io.orqueio.bpm.engine.impl.util.ClassNameUtil;
 
 
 /**

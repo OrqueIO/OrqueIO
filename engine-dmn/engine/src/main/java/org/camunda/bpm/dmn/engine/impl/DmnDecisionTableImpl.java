@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.engine.impl;
+package io.orqueio.bpm.dmn.engine.impl;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.camunda.bpm.dmn.engine.DmnDecisionLogic;
-import org.camunda.bpm.dmn.engine.impl.hitpolicy.DefaultHitPolicyHandlerRegistry;
-import org.camunda.bpm.dmn.engine.impl.spi.hitpolicy.DmnHitPolicyHandler;
-import org.camunda.bpm.model.dmn.BuiltinAggregator;
-import org.camunda.bpm.model.dmn.HitPolicy;
+import io.orqueio.bpm.dmn.engine.DmnDecisionLogic;
+import io.orqueio.bpm.dmn.engine.impl.hitpolicy.DefaultHitPolicyHandlerRegistry;
+import io.orqueio.bpm.dmn.engine.impl.spi.hitpolicy.DmnHitPolicyHandler;
+import io.orqueio.bpm.model.dmn.BuiltinAggregator;
+import io.orqueio.bpm.model.dmn.HitPolicy;
 
 public class DmnDecisionTableImpl implements DmnDecisionLogic {
 

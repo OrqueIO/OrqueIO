@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.mgmt.telemetry;
+package io.orqueio.bpm.engine.test.api.mgmt.telemetry;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.camunda.bpm.engine.impl.util.ParseUtil.parseProcessEngineVersion;
-import static org.camunda.bpm.engine.impl.util.ProcessEngineDetails.EDITION_COMMUNITY;
-import static org.camunda.bpm.engine.impl.util.ProcessEngineDetails.EDITION_ENTERPRISE;
+import static io.orqueio.bpm.engine.impl.util.ParseUtil.parseProcessEngineVersion;
+import static io.orqueio.bpm.engine.impl.util.ProcessEngineDetails.EDITION_COMMUNITY;
+import static io.orqueio.bpm.engine.impl.util.ProcessEngineDetails.EDITION_ENTERPRISE;
 
-import org.camunda.bpm.engine.impl.util.ProcessEngineDetails;
-import org.camunda.bpm.engine.test.util.TestconfigProperties;
+import io.orqueio.bpm.engine.impl.util.ProcessEngineDetails;
+import io.orqueio.bpm.engine.test.util.TestconfigProperties;
 import org.junit.Test;
 
 public class ProcessEngineDetailsTest {

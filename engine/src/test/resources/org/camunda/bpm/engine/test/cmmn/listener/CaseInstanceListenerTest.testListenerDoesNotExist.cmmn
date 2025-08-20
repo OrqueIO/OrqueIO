@@ -8,7 +8,7 @@
 
     <casePlanModel id="CasePlanModel_1">
       <extensionElements>
-        <camunda:caseExecutionListener event="create" class="org.camunda.bpm.engine.test.cmmn.listener.NotExistingCaseExecutionListener" />
+        <camunda:caseExecutionListener event="create" class="io.orqueio.bpm.engine.test.cmmn.listener.NotExistingCaseExecutionListener" />
       </extensionElements>
       <planItem id="PI_HumanTask_1" definitionRef="HumanTask_1" />
       <humanTask id="HumanTask_1" name="A HumanTask" />

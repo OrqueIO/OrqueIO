@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.webapp.impl.security.filter;
+package io.orqueio.bpm.webapp.impl.security.filter;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,15 +31,15 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.camunda.bpm.engine.impl.util.IoUtil;
-import org.camunda.bpm.webapp.impl.util.ServletContextUtil;
-import org.camunda.bpm.webapp.impl.security.auth.Authentications;
-import org.camunda.bpm.webapp.impl.security.filter.util.FilterRules;
+import io.orqueio.bpm.engine.impl.util.IoUtil;
+import io.orqueio.bpm.webapp.impl.util.ServletContextUtil;
+import io.orqueio.bpm.webapp.impl.security.auth.Authentications;
+import io.orqueio.bpm.webapp.impl.security.filter.util.FilterRules;
 
 
 /**
  * <p>Simple filter implementation which delegates to a list of {@link SecurityFilterRule FilterRules},
- * evaluating their {@link SecurityFilterRule#setAuthorized(org.camunda.bpm.webapp.impl.security.filter.AppRequest)} condition
+ * evaluating their {@link SecurityFilterRule#setAuthorized(io.orqueio.bpm.webapp.impl.security.filter.AppRequest)} condition
  * for the given request.</p>
  *
  * <p>This filter must be configured using a init-param in the web.xml file. The parameter must be named

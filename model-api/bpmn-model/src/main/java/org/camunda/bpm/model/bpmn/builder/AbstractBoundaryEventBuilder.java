@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.bpmn.builder;
+package io.orqueio.bpm.model.bpmn.builder;
 
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
-import org.camunda.bpm.model.bpmn.instance.*;
-import org.camunda.bpm.model.bpmn.instance.bpmndi.BpmnEdge;
-import org.camunda.bpm.model.bpmn.instance.bpmndi.BpmnShape;
-import org.camunda.bpm.model.bpmn.instance.dc.Bounds;
-import org.camunda.bpm.model.bpmn.instance.di.Waypoint;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.bpm.model.bpmn.instance.*;
+import io.orqueio.bpm.model.bpmn.instance.bpmndi.BpmnEdge;
+import io.orqueio.bpm.model.bpmn.instance.bpmndi.BpmnShape;
+import io.orqueio.bpm.model.bpmn.instance.dc.Bounds;
+import io.orqueio.bpm.model.bpmn.instance.di.Waypoint;
 
 /**
  * @author Sebastian Menski

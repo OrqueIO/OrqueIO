@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.bpmn;
+package io.orqueio.bpm.model.bpmn;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.camunda.bpm.model.bpmn.instance.Definitions;
-import org.camunda.bpm.model.bpmn.instance.Process;
-import org.camunda.bpm.model.bpmn.instance.StartEvent;
-import org.camunda.bpm.model.bpmn.instance.UserTask;
+import io.orqueio.bpm.model.bpmn.instance.Definitions;
+import io.orqueio.bpm.model.bpmn.instance.Process;
+import io.orqueio.bpm.model.bpmn.instance.StartEvent;
+import io.orqueio.bpm.model.bpmn.instance.UserTask;
 import org.junit.Test;
 
 public class GenerateIdTest {

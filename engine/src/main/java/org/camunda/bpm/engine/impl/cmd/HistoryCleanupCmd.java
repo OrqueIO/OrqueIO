@@ -14,30 +14,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.cmd;
+package io.orqueio.bpm.engine.impl.cmd;
 
 import java.util.Date;
 import java.util.List;
 import java.util.ListIterator;
-import org.camunda.bpm.engine.BadUserRequestException;
-import org.camunda.bpm.engine.history.UserOperationLogEntry;
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.engine.impl.interceptor.Command;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.jobexecutor.JobDeclaration;
-import org.camunda.bpm.engine.impl.jobexecutor.historycleanup.HistoryCleanupContext;
-import org.camunda.bpm.engine.impl.jobexecutor.historycleanup.HistoryCleanupHelper;
-import org.camunda.bpm.engine.impl.jobexecutor.historycleanup.HistoryCleanupJobDeclaration;
-import org.camunda.bpm.engine.impl.jobexecutor.historycleanup.HistoryCleanupJobHandler;
-import org.camunda.bpm.engine.impl.persistence.entity.AuthorizationManager;
-import org.camunda.bpm.engine.impl.persistence.entity.JobEntity;
-import org.camunda.bpm.engine.impl.persistence.entity.JobManager;
-import org.camunda.bpm.engine.impl.persistence.entity.PropertyChange;
-import org.camunda.bpm.engine.impl.persistence.entity.PropertyManager;
-import org.camunda.bpm.engine.impl.persistence.entity.SuspensionState;
-import org.camunda.bpm.engine.runtime.Job;
+import io.orqueio.bpm.engine.BadUserRequestException;
+import io.orqueio.bpm.engine.history.UserOperationLogEntry;
+import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.impl.interceptor.Command;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.impl.jobexecutor.JobDeclaration;
+import io.orqueio.bpm.engine.impl.jobexecutor.historycleanup.HistoryCleanupContext;
+import io.orqueio.bpm.engine.impl.jobexecutor.historycleanup.HistoryCleanupHelper;
+import io.orqueio.bpm.engine.impl.jobexecutor.historycleanup.HistoryCleanupJobDeclaration;
+import io.orqueio.bpm.engine.impl.jobexecutor.historycleanup.HistoryCleanupJobHandler;
+import io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationManager;
+import io.orqueio.bpm.engine.impl.persistence.entity.JobEntity;
+import io.orqueio.bpm.engine.impl.persistence.entity.JobManager;
+import io.orqueio.bpm.engine.impl.persistence.entity.PropertyChange;
+import io.orqueio.bpm.engine.impl.persistence.entity.PropertyManager;
+import io.orqueio.bpm.engine.impl.persistence.entity.SuspensionState;
+import io.orqueio.bpm.engine.runtime.Job;
 
 /**
  * @author Svetlana Dorokhova

@@ -9,7 +9,7 @@
           <camunda:inputParameter name="mappedVariable">mappedValue</camunda:inputParameter>
         </camunda:inputOutput>
       </extensionElements>
-      <messageEventDefinition camunda:class="org.camunda.bpm.engine.test.bpmn.iomapping.VariableLogDelegate" />
+      <messageEventDefinition camunda:class="io.orqueio.bpm.engine.test.bpmn.iomapping.VariableLogDelegate" />
     </endEvent>
   </process>
 </definitions>

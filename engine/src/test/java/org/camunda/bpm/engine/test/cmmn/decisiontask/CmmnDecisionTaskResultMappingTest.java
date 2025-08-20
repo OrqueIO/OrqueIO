@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.cmmn.decisiontask;
+package io.orqueio.bpm.engine.test.cmmn.decisiontask;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -23,11 +23,11 @@ import static org.junit.Assert.fail;
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.runtime.CaseInstance;
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.engine.test.cmmn.CmmnTest;
-import org.camunda.bpm.engine.variable.Variables;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.runtime.CaseInstance;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.test.cmmn.CmmnTest;
+import io.orqueio.bpm.engine.variable.Variables;
 import org.junit.Test;
 
 /**

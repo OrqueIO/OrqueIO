@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.feel.impl;
+package io.orqueio.bpm.dmn.feel.impl;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.camunda.bpm.dmn.feel.impl.juel.transform.FeelToJuelTransform;
-import org.camunda.bpm.dmn.feel.impl.juel.transform.FeelToJuelTransformImpl;
+import io.orqueio.bpm.dmn.feel.impl.juel.transform.FeelToJuelTransform;
+import io.orqueio.bpm.dmn.feel.impl.juel.transform.FeelToJuelTransformImpl;
 import org.junit.BeforeClass;
 import org.junit.Test;
 

@@ -24,7 +24,7 @@
         <property name="dataSource" ref="dataSource"/>
     </bean>
 
-    <bean id="processEngineConfiguration" class="org.camunda.bpm.engine.spring.SpringProcessEngineConfiguration">
+    <bean id="processEngineConfiguration" class="io.orqueio.bpm.engine.spring.SpringProcessEngineConfiguration">
         <property name="dataSource" ref="dataSource"/>
         <property name="transactionManager" ref="transactionManager"/>
         <property name="databaseSchemaUpdate" value="true"/>
@@ -36,7 +36,7 @@
         <property name="enforceHistoryTimeToLive" value="false" />
     </bean>
 
-    <bean id="processEngine" class="org.camunda.bpm.engine.spring.ProcessEngineFactoryBean">
+    <bean id="processEngine" class="io.orqueio.bpm.engine.spring.ProcessEngineFactoryBean">
         <property name="processEngineConfiguration" ref="processEngineConfiguration"/>
     </bean>
 
@@ -46,7 +46,7 @@
     <bean id="historyService" factory-bean="processEngine" factory-method="getHistoryService"/>
     <bean id="managementService" factory-bean="processEngine" factory-method="getManagementService"/>
     
-    <bean id="springJobExecutor" class="org.camunda.bpm.engine.spring.components.jobexecutor.SpringJobExecutor">
+    <bean id="springJobExecutor" class="io.orqueio.bpm.engine.spring.components.jobexecutor.SpringJobExecutor">
     	<property name="taskExecutor">
     		<bean class="org.springframework.core.task.SyncTaskExecutor" />
     	</property>

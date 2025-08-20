@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.hal.tenant;
+package io.orqueio.bpm.engine.rest.hal.tenant;
 
 import javax.ws.rs.core.UriBuilder;
 
-import org.camunda.bpm.engine.identity.Tenant;
-import org.camunda.bpm.engine.rest.TenantRestService;
-import org.camunda.bpm.engine.rest.hal.HalIdResource;
-import org.camunda.bpm.engine.rest.hal.HalRelation;
-import org.camunda.bpm.engine.rest.hal.HalResource;
+import io.orqueio.bpm.engine.identity.Tenant;
+import io.orqueio.bpm.engine.rest.TenantRestService;
+import io.orqueio.bpm.engine.rest.hal.HalIdResource;
+import io.orqueio.bpm.engine.rest.hal.HalRelation;
+import io.orqueio.bpm.engine.rest.hal.HalResource;
 
 public class HalTenant extends HalResource<HalTenant> implements HalIdResource {
 

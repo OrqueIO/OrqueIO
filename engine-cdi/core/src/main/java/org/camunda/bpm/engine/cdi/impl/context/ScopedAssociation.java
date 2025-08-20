@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.cdi.impl.context;
+package io.orqueio.bpm.engine.cdi.impl.context;
 
-import org.camunda.bpm.engine.RuntimeService;
-import org.camunda.bpm.engine.TaskService;
-import org.camunda.bpm.engine.cdi.ProcessEngineCdiException;
-import org.camunda.bpm.engine.runtime.Execution;
-import org.camunda.bpm.engine.task.Task;
-import org.camunda.bpm.engine.variable.VariableMap;
-import org.camunda.bpm.engine.variable.impl.VariableMapImpl;
-import org.camunda.bpm.engine.variable.value.TypedValue;
+import io.orqueio.bpm.engine.RuntimeService;
+import io.orqueio.bpm.engine.TaskService;
+import io.orqueio.bpm.engine.cdi.ProcessEngineCdiException;
+import io.orqueio.bpm.engine.runtime.Execution;
+import io.orqueio.bpm.engine.task.Task;
+import io.orqueio.bpm.engine.variable.VariableMap;
+import io.orqueio.bpm.engine.variable.impl.VariableMapImpl;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
 
 import javax.inject.Inject;
 

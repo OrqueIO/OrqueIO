@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.digest._apacheCommonsCodec;
+package io.orqueio.bpm.engine.impl.digest._apacheCommonsCodec;
 
 import java.math.BigInteger;
 

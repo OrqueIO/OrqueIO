@@ -14,23 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.authorization;
+package io.orqueio.bpm.engine.test.api.authorization;
 
-import static org.camunda.bpm.engine.authorization.Authorization.ANY;
-import static org.camunda.bpm.engine.authorization.Permissions.ALL;
-import static org.camunda.bpm.engine.authorization.Permissions.READ;
-import static org.camunda.bpm.engine.authorization.Permissions.READ_INSTANCE;
-import static org.camunda.bpm.engine.authorization.ProcessDefinitionPermissions.READ_INSTANCE_VARIABLE;
-import static org.camunda.bpm.engine.authorization.Resources.PROCESS_DEFINITION;
-import static org.camunda.bpm.engine.authorization.Resources.PROCESS_INSTANCE;
-import static org.camunda.bpm.engine.authorization.Resources.TASK;
-import static org.camunda.bpm.engine.authorization.TaskPermissions.READ_VARIABLE;
+import static io.orqueio.bpm.engine.authorization.Authorization.ANY;
+import static io.orqueio.bpm.engine.authorization.Permissions.ALL;
+import static io.orqueio.bpm.engine.authorization.Permissions.READ;
+import static io.orqueio.bpm.engine.authorization.Permissions.READ_INSTANCE;
+import static io.orqueio.bpm.engine.authorization.ProcessDefinitionPermissions.READ_INSTANCE_VARIABLE;
+import static io.orqueio.bpm.engine.authorization.Resources.PROCESS_DEFINITION;
+import static io.orqueio.bpm.engine.authorization.Resources.PROCESS_INSTANCE;
+import static io.orqueio.bpm.engine.authorization.Resources.TASK;
+import static io.orqueio.bpm.engine.authorization.TaskPermissions.READ_VARIABLE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.util.List;
-import org.camunda.bpm.engine.runtime.VariableInstance;
-import org.camunda.bpm.engine.runtime.VariableInstanceQuery;
+import io.orqueio.bpm.engine.runtime.VariableInstance;
+import io.orqueio.bpm.engine.runtime.VariableInstanceQuery;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

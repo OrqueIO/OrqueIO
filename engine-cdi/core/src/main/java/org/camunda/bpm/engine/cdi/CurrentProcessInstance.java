@@ -14,19 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.cdi;
+package io.orqueio.bpm.engine.cdi;
 
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.Typed;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.camunda.bpm.engine.cdi.annotation.ExecutionId;
-import org.camunda.bpm.engine.cdi.annotation.ProcessInstanceId;
-import org.camunda.bpm.engine.cdi.annotation.TaskId;
-import org.camunda.bpm.engine.runtime.Execution;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.task.Task;
+import io.orqueio.bpm.engine.cdi.annotation.ExecutionId;
+import io.orqueio.bpm.engine.cdi.annotation.ProcessInstanceId;
+import io.orqueio.bpm.engine.cdi.annotation.TaskId;
+import io.orqueio.bpm.engine.runtime.Execution;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.task.Task;
 
 /**
  * Allows to access executions and tasks of a managed process instance via

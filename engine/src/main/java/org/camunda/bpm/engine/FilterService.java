@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine;
+package io.orqueio.bpm.engine;
 
 import java.util.List;
 
-import org.camunda.bpm.engine.authorization.Permissions;
-import org.camunda.bpm.engine.authorization.Resources;
-import org.camunda.bpm.engine.filter.Filter;
-import org.camunda.bpm.engine.filter.FilterQuery;
-import org.camunda.bpm.engine.query.Query;
+import io.orqueio.bpm.engine.authorization.Permissions;
+import io.orqueio.bpm.engine.authorization.Resources;
+import io.orqueio.bpm.engine.filter.Filter;
+import io.orqueio.bpm.engine.filter.FilterQuery;
+import io.orqueio.bpm.engine.query.Query;
 
 
 /**

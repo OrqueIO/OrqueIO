@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.impl;
+package io.orqueio.bpm.engine.rest.impl;
 
-import static org.camunda.bpm.engine.authorization.Authorization.ANY;
-import static org.camunda.bpm.engine.authorization.Permissions.CREATE;
-import static org.camunda.bpm.engine.authorization.Resources.USER;
+import static io.orqueio.bpm.engine.authorization.Authorization.ANY;
+import static io.orqueio.bpm.engine.authorization.Permissions.CREATE;
+import static io.orqueio.bpm.engine.authorization.Resources.USER;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.net.URI;
@@ -27,20 +27,20 @@ import javax.ws.rs.HttpMethod;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
-import org.camunda.bpm.engine.IdentityService;
-import org.camunda.bpm.engine.identity.User;
-import org.camunda.bpm.engine.identity.UserQuery;
-import org.camunda.bpm.engine.rest.UserRestService;
-import org.camunda.bpm.engine.rest.dto.CountResultDto;
-import org.camunda.bpm.engine.rest.dto.ResourceOptionsDto;
-import org.camunda.bpm.engine.rest.dto.identity.UserDto;
-import org.camunda.bpm.engine.rest.dto.identity.UserProfileDto;
-import org.camunda.bpm.engine.rest.dto.identity.UserQueryDto;
-import org.camunda.bpm.engine.rest.exception.InvalidRequestException;
-import org.camunda.bpm.engine.rest.sub.identity.UserResource;
-import org.camunda.bpm.engine.rest.sub.identity.impl.UserResourceImpl;
-import org.camunda.bpm.engine.rest.util.PathUtil;
-import org.camunda.bpm.engine.rest.util.QueryUtil;
+import io.orqueio.bpm.engine.IdentityService;
+import io.orqueio.bpm.engine.identity.User;
+import io.orqueio.bpm.engine.identity.UserQuery;
+import io.orqueio.bpm.engine.rest.UserRestService;
+import io.orqueio.bpm.engine.rest.dto.CountResultDto;
+import io.orqueio.bpm.engine.rest.dto.ResourceOptionsDto;
+import io.orqueio.bpm.engine.rest.dto.identity.UserDto;
+import io.orqueio.bpm.engine.rest.dto.identity.UserProfileDto;
+import io.orqueio.bpm.engine.rest.dto.identity.UserQueryDto;
+import io.orqueio.bpm.engine.rest.exception.InvalidRequestException;
+import io.orqueio.bpm.engine.rest.sub.identity.UserResource;
+import io.orqueio.bpm.engine.rest.sub.identity.impl.UserResourceImpl;
+import io.orqueio.bpm.engine.rest.util.PathUtil;
+import io.orqueio.bpm.engine.rest.util.QueryUtil;
 
 /**
  * @author Daniel Meyer

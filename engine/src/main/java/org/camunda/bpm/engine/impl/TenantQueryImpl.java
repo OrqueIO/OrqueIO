@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl;
+package io.orqueio.bpm.engine.impl;
 
-import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
+import static io.orqueio.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
 
-import org.camunda.bpm.engine.identity.Tenant;
-import org.camunda.bpm.engine.identity.TenantQuery;
-import org.camunda.bpm.engine.impl.interceptor.CommandExecutor;
+import io.orqueio.bpm.engine.identity.Tenant;
+import io.orqueio.bpm.engine.identity.TenantQuery;
+import io.orqueio.bpm.engine.impl.interceptor.CommandExecutor;
 
 public abstract class TenantQueryImpl extends AbstractQuery<TenantQuery, Tenant> implements TenantQuery {
 

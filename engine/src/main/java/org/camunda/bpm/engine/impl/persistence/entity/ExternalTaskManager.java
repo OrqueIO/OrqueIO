@@ -14,31 +14,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.persistence.entity;
+package io.orqueio.bpm.engine.impl.persistence.entity;
 
-import static org.camunda.bpm.engine.impl.ExternalTaskQueryProperty.CREATE_TIME;
-import static org.camunda.bpm.engine.impl.db.sql.DbSqlSessionFactory.POSTGRES;
-import static org.camunda.bpm.engine.impl.util.DatabaseUtil.checkDatabaseType;
+import static io.orqueio.bpm.engine.impl.ExternalTaskQueryProperty.CREATE_TIME;
+import static io.orqueio.bpm.engine.impl.db.sql.DbSqlSessionFactory.POSTGRES;
+import static io.orqueio.bpm.engine.impl.util.DatabaseUtil.checkDatabaseType;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.camunda.bpm.engine.externaltask.ExternalTask;
-import org.camunda.bpm.engine.impl.ExternalTaskQueryImpl;
-import org.camunda.bpm.engine.impl.ProcessEngineImpl;
-import org.camunda.bpm.engine.impl.QueryOrderingProperty;
-import org.camunda.bpm.engine.impl.cfg.TransactionListener;
-import org.camunda.bpm.engine.impl.cfg.TransactionState;
-import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.engine.impl.db.ListQueryParameterObject;
-import org.camunda.bpm.engine.impl.db.entitymanager.DbEntityManager;
-import org.camunda.bpm.engine.impl.externaltask.TopicFetchInstruction;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.persistence.AbstractManager;
-import org.camunda.bpm.engine.impl.util.ClockUtil;
-import org.camunda.bpm.engine.impl.util.ImmutablePair;
+import io.orqueio.bpm.engine.externaltask.ExternalTask;
+import io.orqueio.bpm.engine.impl.ExternalTaskQueryImpl;
+import io.orqueio.bpm.engine.impl.ProcessEngineImpl;
+import io.orqueio.bpm.engine.impl.QueryOrderingProperty;
+import io.orqueio.bpm.engine.impl.cfg.TransactionListener;
+import io.orqueio.bpm.engine.impl.cfg.TransactionState;
+import io.orqueio.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.impl.db.ListQueryParameterObject;
+import io.orqueio.bpm.engine.impl.db.entitymanager.DbEntityManager;
+import io.orqueio.bpm.engine.impl.externaltask.TopicFetchInstruction;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.impl.persistence.AbstractManager;
+import io.orqueio.bpm.engine.impl.util.ClockUtil;
+import io.orqueio.bpm.engine.impl.util.ImmutablePair;
 
 /**
  * @author Thorben Lindhauer

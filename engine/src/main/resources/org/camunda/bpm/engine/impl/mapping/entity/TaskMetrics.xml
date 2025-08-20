@@ -19,11 +19,11 @@
 -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="org.camunda.bpm.engine.impl.persistence.entity.TaskMeterLogEntity">
+<mapper namespace="io.orqueio.bpm.engine.impl.persistence.entity.TaskMeterLogEntity">
 
   <!-- TASK METER INSERT -->
 
-  <insert id="insertTaskMeterLog" parameterType="org.camunda.bpm.engine.impl.persistence.entity.TaskMeterLogEntity">
+  <insert id="insertTaskMeterLog" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.TaskMeterLogEntity">
     insert into ${prefix}ACT_RU_TASK_METER_LOG (ID_, TIMESTAMP_, ASSIGNEE_HASH_)
     values (
     #{id, jdbcType=VARCHAR},
@@ -48,11 +48,11 @@
     where
       <bind name="listOfIds" value="list"/>
       <bind name="fieldName" value="'ID_'"/>
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection"/>
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection"/>
   </delete>
   
   <delete id="deleteTaskMetricsByRemovalTime"
-          parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject">
+          parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject">
     <bind name="date" value="'TIMESTAMP_'"/>
     <bind name="reportPeriodUnitName" value="'MINUTE'"/>
     delete ${limitBeforeWithoutOffset} from ${prefix}ACT_RU_TASK_METER_LOG
@@ -62,7 +62,7 @@
   </delete>
 
   <delete id="deleteTaskMetricsByRemovalTime_oracle"
-          parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject">
+          parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject">
     <bind name="date" value="'TIMESTAMP_'"/>
     <bind name="reportPeriodUnitName" value="'MINUTE'"/>
     delete ${limitBeforeWithoutOffset} from ${prefix}ACT_RU_TASK_METER_LOG
@@ -72,7 +72,7 @@
   </delete>
 
   <delete id="deleteTaskMetricsByRemovalTime_postgres_or_db2"
-          parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject">
+          parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject">
     <bind name="date" value="'TIMESTAMP_'"/>
     <bind name="reportPeriodUnitName" value="'MINUTE'"/>
     delete ${limitBeforeWithoutOffset} from ${prefix}ACT_RU_TASK_METER_LOG
@@ -100,14 +100,14 @@
   </select>
   
   <!-- Select ids for async history cleanup -->
-  <select id="selectTaskMetricIdsForCleanup" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject" resultType="string">
+  <select id="selectTaskMetricIdsForCleanup" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject" resultType="string">
     <include refid="selectTaskMetricIdsForCleanupSql"/>
     <include refid="andWhereMinuteInDateBetweenSql"/>
     ${orderBy}
     ${limitAfter}
   </select>
 
-  <select id="selectTaskMetricIdsForCleanup_oracle" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject" resultType="string">
+  <select id="selectTaskMetricIdsForCleanup_oracle" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject" resultType="string">
     <include refid="selectTaskMetricIdsForCleanupSql"/>
     <include refid="andWhereMinuteInDateBetweenSql_oracle"/>
     ${orderBy}
@@ -115,7 +115,7 @@
   </select>
 
   <sql id="selectTaskMetricIdsForCleanupSql">
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
     <bind name="date" value="'RES.TIMESTAMP_'"/>
     <bind name="days" value="parameter.timeToLive"/>
     <bind name="currentTimestamp" value="parameter.currentTimestamp"/>
@@ -129,14 +129,14 @@
 
   <sql id="andWhereMinuteInDateBetweenSql">
     <if test="parameter.minuteFrom != null and parameter.minuteTo != null">
-      AND ${datepart1}<include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.periodUnitFunction"/>${datepart2}${date}${datepart3}
+      AND ${datepart1}<include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.periodUnitFunction"/>${datepart2}${date}${datepart3}
       between #{parameter.minuteFrom, jdbcType=INTEGER} and #{parameter.minuteTo, jdbcType=INTEGER}
     </if>
   </sql>
 
   <sql id="andWhereMinuteInDateBetweenSql_oracle">
     <if test="parameter.minuteFrom != null and parameter.minuteTo != null">
-      AND ${datepart1}${date}${datepart2}<include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.periodUnitFunction"/>${datepart3}
+      AND ${datepart1}${date}${datepart2}<include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.periodUnitFunction"/>${datepart3}
       between #{parameter.minuteFrom, jdbcType=INTEGER} and #{parameter.minuteTo, jdbcType=INTEGER}
     </if>
   </sql>

@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.hal.caseDefinition;
+package io.orqueio.bpm.engine.rest.hal.caseDefinition;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.RepositoryService;
-import org.camunda.bpm.engine.repository.CaseDefinition;
-import org.camunda.bpm.engine.rest.hal.HalResource;
-import org.camunda.bpm.engine.rest.hal.cache.HalIdResourceCacheLinkResolver;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.RepositoryService;
+import io.orqueio.bpm.engine.repository.CaseDefinition;
+import io.orqueio.bpm.engine.rest.hal.HalResource;
+import io.orqueio.bpm.engine.rest.hal.cache.HalIdResourceCacheLinkResolver;
 
 import java.util.ArrayList;
 import java.util.List;

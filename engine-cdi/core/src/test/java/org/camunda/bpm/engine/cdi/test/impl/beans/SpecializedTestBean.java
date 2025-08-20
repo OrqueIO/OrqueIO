@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.cdi.test.impl.beans;
+package io.orqueio.bpm.engine.cdi.test.impl.beans;
 
 import javax.enterprise.inject.Specializes;
 
-import org.camunda.bpm.engine.cdi.test.impl.util.ProgrammaticBeanLookupTest.TestBean;
+import io.orqueio.bpm.engine.cdi.test.impl.util.ProgrammaticBeanLookupTest.TestBean;
 
 @Specializes
 public class SpecializedTestBean extends TestBean {

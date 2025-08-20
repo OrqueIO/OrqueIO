@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.bpmn.async;
+package io.orqueio.bpm.engine.test.bpmn.async;
 
-import static org.camunda.bpm.engine.test.util.ActivityInstanceAssert.assertThat;
-import static org.camunda.bpm.engine.test.util.ActivityInstanceAssert.describeActivityInstanceTree;
+import static io.orqueio.bpm.engine.test.util.ActivityInstanceAssert.assertThat;
+import static io.orqueio.bpm.engine.test.util.ActivityInstanceAssert.describeActivityInstanceTree;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -31,20 +31,20 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.camunda.bpm.engine.impl.bpmn.parser.BpmnParse;
-import org.camunda.bpm.engine.impl.history.HistoryLevel;
-import org.camunda.bpm.engine.impl.persistence.entity.MessageEntity;
-import org.camunda.bpm.engine.impl.util.ClockUtil;
-import org.camunda.bpm.engine.runtime.ActivityInstance;
-import org.camunda.bpm.engine.runtime.Execution;
-import org.camunda.bpm.engine.runtime.Job;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.task.Task;
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.engine.test.bpmn.executionlistener.RecorderExecutionListener;
-import org.camunda.bpm.engine.test.bpmn.executionlistener.RecorderExecutionListener.RecordedEvent;
-import org.camunda.bpm.engine.test.util.PluggableProcessEngineTest;
-import org.camunda.bpm.engine.variable.Variables;
+import io.orqueio.bpm.engine.impl.bpmn.parser.BpmnParse;
+import io.orqueio.bpm.engine.impl.history.HistoryLevel;
+import io.orqueio.bpm.engine.impl.persistence.entity.MessageEntity;
+import io.orqueio.bpm.engine.impl.util.ClockUtil;
+import io.orqueio.bpm.engine.runtime.ActivityInstance;
+import io.orqueio.bpm.engine.runtime.Execution;
+import io.orqueio.bpm.engine.runtime.Job;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.task.Task;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.test.bpmn.executionlistener.RecorderExecutionListener;
+import io.orqueio.bpm.engine.test.bpmn.executionlistener.RecorderExecutionListener.RecordedEvent;
+import io.orqueio.bpm.engine.test.util.PluggableProcessEngineTest;
+import io.orqueio.bpm.engine.variable.Variables;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -767,14 +767,14 @@ public class AsyncTaskTest extends PluggableProcessEngineTest {
 
     try {
       // given a deployment that contains a process called "process" with an async task "task"
-      org.camunda.bpm.engine.repository.Deployment deployment1 = repositoryService
+      io.orqueio.bpm.engine.repository.Deployment deployment1 = repositoryService
           .createDeployment()
           .addClasspathResource("org/camunda/bpm/engine/test/bpmn/async/AsyncTaskTest.testDeployAndRemoveAsyncActivity.v1.bpmn20.xml")
           .deploy();
       deployments.add(deployment1.getId());
 
       // when redeploying the process where that task is not contained anymore
-      org.camunda.bpm.engine.repository.Deployment deployment2 = repositoryService
+      io.orqueio.bpm.engine.repository.Deployment deployment2 = repositoryService
           .createDeployment()
           .addClasspathResource("org/camunda/bpm/engine/test/bpmn/async/AsyncTaskTest.testDeployAndRemoveAsyncActivity.v2.bpmn20.xml")
           .deploy();

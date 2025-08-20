@@ -10,7 +10,7 @@
     
     <sequenceFlow id="flow1" sourceRef="start" targetRef="buzzz" />
     
-    <serviceTask id="buzzz" camunda:class="org.camunda.bpm.engine.test.api.runtime.util.Buzzz" />
+    <serviceTask id="buzzz" camunda:class="io.orqueio.bpm.engine.test.api.runtime.util.Buzzz" />
     
   </process>
 

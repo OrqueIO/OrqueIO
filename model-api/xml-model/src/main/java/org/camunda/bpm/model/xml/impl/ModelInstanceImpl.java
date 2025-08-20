@@ -14,21 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.xml.impl;
+package io.orqueio.bpm.model.xml.impl;
 
-import org.camunda.bpm.model.xml.Model;
-import org.camunda.bpm.model.xml.ModelBuilder;
-import org.camunda.bpm.model.xml.ModelException;
-import org.camunda.bpm.model.xml.ModelInstance;
-import org.camunda.bpm.model.xml.impl.instance.ModelElementInstanceImpl;
-import org.camunda.bpm.model.xml.impl.util.ModelUtil;
-import org.camunda.bpm.model.xml.impl.validation.ModelInstanceValidator;
-import org.camunda.bpm.model.xml.instance.DomDocument;
-import org.camunda.bpm.model.xml.instance.DomElement;
-import org.camunda.bpm.model.xml.instance.ModelElementInstance;
-import org.camunda.bpm.model.xml.type.ModelElementType;
-import org.camunda.bpm.model.xml.validation.ModelElementValidator;
-import org.camunda.bpm.model.xml.validation.ValidationResults;
+import io.orqueio.bpm.model.xml.Model;
+import io.orqueio.bpm.model.xml.ModelBuilder;
+import io.orqueio.bpm.model.xml.ModelException;
+import io.orqueio.bpm.model.xml.ModelInstance;
+import io.orqueio.bpm.model.xml.impl.instance.ModelElementInstanceImpl;
+import io.orqueio.bpm.model.xml.impl.util.ModelUtil;
+import io.orqueio.bpm.model.xml.impl.validation.ModelInstanceValidator;
+import io.orqueio.bpm.model.xml.instance.DomDocument;
+import io.orqueio.bpm.model.xml.instance.DomElement;
+import io.orqueio.bpm.model.xml.instance.ModelElementInstance;
+import io.orqueio.bpm.model.xml.type.ModelElementType;
+import io.orqueio.bpm.model.xml.validation.ModelElementValidator;
+import io.orqueio.bpm.model.xml.validation.ValidationResults;
 
 import java.util.ArrayList;
 import java.util.Collection;

@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.functional.el;
+package io.orqueio.bpm.integrationtest.functional.el;
 
-import org.camunda.bpm.application.AbstractProcessApplication;
-import org.camunda.bpm.application.ProcessApplicationElResolver;
-import org.camunda.bpm.impl.juel.jakarta.el.ELResolver;
+import io.orqueio.bpm.application.AbstractProcessApplication;
+import io.orqueio.bpm.application.ProcessApplicationElResolver;
+import io.orqueio.bpm.impl.juel.jakarta.el.ELResolver;
 
 /**
  * @author Thorben Lindhauer

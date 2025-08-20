@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.application.impl.metadata;
+package io.orqueio.bpm.application.impl.metadata;
 
-import static org.camunda.bpm.container.impl.metadata.DeploymentMetadataConstants.NAME;
-import static org.camunda.bpm.container.impl.metadata.DeploymentMetadataConstants.PROCESS;
-import static org.camunda.bpm.container.impl.metadata.DeploymentMetadataConstants.PROCESS_ARCHIVE;
-import static org.camunda.bpm.container.impl.metadata.DeploymentMetadataConstants.PROCESS_ENGINE;
-import static org.camunda.bpm.container.impl.metadata.DeploymentMetadataConstants.PROPERTIES;
-import static org.camunda.bpm.container.impl.metadata.DeploymentMetadataConstants.RESOURCE;
-import static org.camunda.bpm.container.impl.metadata.DeploymentMetadataConstants.TENANT_ID;
+import static io.orqueio.bpm.container.impl.metadata.DeploymentMetadataConstants.NAME;
+import static io.orqueio.bpm.container.impl.metadata.DeploymentMetadataConstants.PROCESS;
+import static io.orqueio.bpm.container.impl.metadata.DeploymentMetadataConstants.PROCESS_ARCHIVE;
+import static io.orqueio.bpm.container.impl.metadata.DeploymentMetadataConstants.PROCESS_ENGINE;
+import static io.orqueio.bpm.container.impl.metadata.DeploymentMetadataConstants.PROPERTIES;
+import static io.orqueio.bpm.container.impl.metadata.DeploymentMetadataConstants.RESOURCE;
+import static io.orqueio.bpm.container.impl.metadata.DeploymentMetadataConstants.TENANT_ID;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -30,13 +30,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.application.impl.metadata.spi.ProcessArchiveXml;
-import org.camunda.bpm.application.impl.metadata.spi.ProcessesXml;
-import org.camunda.bpm.container.impl.metadata.DeploymentMetadataParse;
-import org.camunda.bpm.container.impl.metadata.spi.ProcessEngineXml;
-import org.camunda.bpm.engine.impl.util.xml.Element;
-import org.camunda.bpm.engine.impl.util.xml.Parse;
-import org.camunda.bpm.engine.impl.util.xml.Parser;
+import io.orqueio.bpm.application.impl.metadata.spi.ProcessArchiveXml;
+import io.orqueio.bpm.application.impl.metadata.spi.ProcessesXml;
+import io.orqueio.bpm.container.impl.metadata.DeploymentMetadataParse;
+import io.orqueio.bpm.container.impl.metadata.spi.ProcessEngineXml;
+import io.orqueio.bpm.engine.impl.util.xml.Element;
+import io.orqueio.bpm.engine.impl.util.xml.Parse;
+import io.orqueio.bpm.engine.impl.util.xml.Parser;
 
 /**
  * <p>{@link Parse} object for the <code>processes.xml</code> file.</p>

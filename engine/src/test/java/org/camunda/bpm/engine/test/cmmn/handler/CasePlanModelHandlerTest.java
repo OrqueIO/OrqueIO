@@ -14,29 +14,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.cmmn.handler;
+package io.orqueio.bpm.engine.test.cmmn.handler;
 
-import static org.camunda.bpm.engine.impl.cmmn.handler.ItemHandler.PROPERTY_ACTIVITY_DESCRIPTION;
-import static org.camunda.bpm.engine.impl.cmmn.handler.ItemHandler.PROPERTY_ACTIVITY_TYPE;
-import static org.camunda.bpm.engine.impl.cmmn.handler.ItemHandler.PROPERTY_AUTO_COMPLETE;
+import static io.orqueio.bpm.engine.impl.cmmn.handler.ItemHandler.PROPERTY_ACTIVITY_DESCRIPTION;
+import static io.orqueio.bpm.engine.impl.cmmn.handler.ItemHandler.PROPERTY_ACTIVITY_TYPE;
+import static io.orqueio.bpm.engine.impl.cmmn.handler.ItemHandler.PROPERTY_AUTO_COMPLETE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import org.camunda.bpm.engine.impl.cmmn.behavior.CmmnActivityBehavior;
-import org.camunda.bpm.engine.impl.cmmn.behavior.StageActivityBehavior;
-import org.camunda.bpm.engine.impl.cmmn.handler.CasePlanModelHandler;
-import org.camunda.bpm.engine.impl.cmmn.handler.SentryHandler;
-import org.camunda.bpm.engine.impl.cmmn.model.CmmnActivity;
-import org.camunda.bpm.engine.impl.cmmn.model.CmmnCaseDefinition;
-import org.camunda.bpm.engine.impl.cmmn.model.CmmnSentryDeclaration;
-import org.camunda.bpm.model.cmmn.instance.Body;
-import org.camunda.bpm.model.cmmn.instance.ConditionExpression;
-import org.camunda.bpm.model.cmmn.instance.ExitCriterion;
-import org.camunda.bpm.model.cmmn.instance.IfPart;
-import org.camunda.bpm.model.cmmn.instance.Sentry;
+import io.orqueio.bpm.engine.impl.cmmn.behavior.CmmnActivityBehavior;
+import io.orqueio.bpm.engine.impl.cmmn.behavior.StageActivityBehavior;
+import io.orqueio.bpm.engine.impl.cmmn.handler.CasePlanModelHandler;
+import io.orqueio.bpm.engine.impl.cmmn.handler.SentryHandler;
+import io.orqueio.bpm.engine.impl.cmmn.model.CmmnActivity;
+import io.orqueio.bpm.engine.impl.cmmn.model.CmmnCaseDefinition;
+import io.orqueio.bpm.engine.impl.cmmn.model.CmmnSentryDeclaration;
+import io.orqueio.bpm.model.cmmn.instance.Body;
+import io.orqueio.bpm.model.cmmn.instance.ConditionExpression;
+import io.orqueio.bpm.model.cmmn.instance.ExitCriterion;
+import io.orqueio.bpm.model.cmmn.instance.IfPart;
+import io.orqueio.bpm.model.cmmn.instance.Sentry;
 import org.junit.Test;
 
 /**

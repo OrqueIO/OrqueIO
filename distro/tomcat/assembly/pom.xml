@@ -11,7 +11,7 @@
   <packaging>pom</packaging>
 
   <parent>
-    <groupId>org.camunda.bpm.tomcat</groupId>
+    <groupId>io.orqueio.bpm.tomcat</groupId>
     <artifactId>camunda-tomcat</artifactId>
     <version>7.24.0-SNAPSHOT</version>
   </parent>
@@ -84,7 +84,7 @@
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
+      <groupId>io.orqueio.bpm</groupId>
       <artifactId>camunda-engine</artifactId>
       <exclusions>
         <exclusion>
@@ -99,66 +99,66 @@
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
+      <groupId>io.orqueio.bpm</groupId>
       <artifactId>camunda-engine-cdi-jakarta</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm.identity</groupId>
+      <groupId>io.orqueio.bpm.identity</groupId>
       <artifactId>camunda-identity-ldap</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.spin</groupId>
+      <groupId>io.orqueio.spin</groupId>
       <artifactId>orqueio-spin-core</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
+      <groupId>io.orqueio.bpm</groupId>
       <artifactId>camunda-engine-plugin-spin</artifactId>
       <version>${project.version}</version>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.spin</groupId>
+      <groupId>io.orqueio.spin</groupId>
       <artifactId>orqueio-spin-dataformat-all</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.connect</groupId>
+      <groupId>io.orqueio.connect</groupId>
       <artifactId>camunda-connect-core</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
+      <groupId>io.orqueio.bpm</groupId>
       <artifactId>camunda-engine-plugin-connect</artifactId>
       <version>${project.version}</version>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.connect</groupId>
+      <groupId>io.orqueio.connect</groupId>
       <artifactId>camunda-connect-connectors-all</artifactId>
       <exclusions>
         <exclusion>
-          <groupId>org.camunda.connect</groupId>
+          <groupId>io.orqueio.connect</groupId>
           <artifactId>camunda-connect-http-client</artifactId>
         </exclusion>
         <exclusion>
-          <groupId>org.camunda.connect</groupId>
+          <groupId>io.orqueio.connect</groupId>
           <artifactId>camunda-connect-soap-http-client</artifactId>
         </exclusion>
       </exclusions>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
+      <groupId>io.orqueio.bpm</groupId>
       <artifactId>license-book</artifactId>
       <version>${project.version}</version>
       <type>zip</type>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.template-engines</groupId>
+      <groupId>io.orqueio.template-engines</groupId>
       <artifactId>camunda-template-engines-freemarker</artifactId>
     </dependency>
 

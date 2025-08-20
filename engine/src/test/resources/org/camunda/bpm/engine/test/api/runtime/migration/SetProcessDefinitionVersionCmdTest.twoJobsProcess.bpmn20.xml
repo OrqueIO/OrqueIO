@@ -11,7 +11,7 @@
     <sequenceFlow id="flow1" sourceRef="theStart" targetRef="asyncServiceTask" />
     
     <serviceTask id="asyncServiceTask" camunda:asyncBefore="true" camunda:asyncAfter="true" 
-      camunda:class="org.camunda.bpm.engine.test.api.runtime.migration.ConfigurableFailureDelegate"/>
+      camunda:class="io.orqueio.bpm.engine.test.api.runtime.migration.ConfigurableFailureDelegate"/>
     
     <sequenceFlow id="flow3" sourceRef="asyncServiceTask" targetRef="theEnd" />
     

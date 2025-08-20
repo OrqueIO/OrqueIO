@@ -14,19 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.plugin.variables;
+package io.orqueio.spin.plugin.variables;
 
 import java.util.List;
 
-import org.camunda.bpm.engine.history.HistoricDecisionInputInstance;
-import org.camunda.bpm.engine.history.HistoricDecisionInstance;
-import org.camunda.bpm.engine.history.HistoricDecisionOutputInstance;
-import org.camunda.bpm.engine.impl.test.PluggableProcessEngineTestCase;
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.engine.variable.VariableMap;
-import org.camunda.bpm.engine.variable.Variables;
-import org.camunda.bpm.engine.variable.value.ObjectValue;
-import org.camunda.spin.DataFormats;
+import io.orqueio.bpm.engine.history.HistoricDecisionInputInstance;
+import io.orqueio.bpm.engine.history.HistoricDecisionInstance;
+import io.orqueio.bpm.engine.history.HistoricDecisionOutputInstance;
+import io.orqueio.bpm.engine.impl.test.PluggableProcessEngineTestCase;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.variable.VariableMap;
+import io.orqueio.bpm.engine.variable.Variables;
+import io.orqueio.bpm.engine.variable.value.ObjectValue;
+import io.orqueio.spin.DataFormats;
 
 public class HistoricDecisionInstanceSerializationTest extends PluggableProcessEngineTestCase {
 

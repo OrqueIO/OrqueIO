@@ -14,19 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.cdi.test.impl.beans;
+package io.orqueio.bpm.engine.cdi.test.impl.beans;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
-import org.camunda.bpm.engine.cdi.annotation.CompleteTask;
-import org.camunda.bpm.engine.cdi.annotation.ProcessVariable;
-import org.camunda.bpm.engine.cdi.annotation.ProcessVariableLocalTyped;
-import org.camunda.bpm.engine.cdi.annotation.ProcessVariableTyped;
-import org.camunda.bpm.engine.cdi.annotation.StartProcess;
-import org.camunda.bpm.engine.variable.Variables;
-import org.camunda.bpm.engine.variable.value.StringValue;
-import org.camunda.bpm.engine.variable.value.TypedValue;
+import io.orqueio.bpm.engine.cdi.annotation.CompleteTask;
+import io.orqueio.bpm.engine.cdi.annotation.ProcessVariable;
+import io.orqueio.bpm.engine.cdi.annotation.ProcessVariableLocalTyped;
+import io.orqueio.bpm.engine.cdi.annotation.ProcessVariableTyped;
+import io.orqueio.bpm.engine.cdi.annotation.StartProcess;
+import io.orqueio.bpm.engine.variable.Variables;
+import io.orqueio.bpm.engine.variable.value.StringValue;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
 
 /**
  *

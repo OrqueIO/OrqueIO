@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.xml.impl.type.attribute;
+package io.orqueio.bpm.model.xml.impl.type.attribute;
 
-import org.camunda.bpm.model.xml.impl.util.ModelUtil;
-import org.camunda.bpm.model.xml.type.ModelElementType;
+import io.orqueio.bpm.model.xml.impl.util.ModelUtil;
+import io.orqueio.bpm.model.xml.type.ModelElementType;
 
 /**
  * <p>class for providing Boolean value attributes. Takes care of type conversion and

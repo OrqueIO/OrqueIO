@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter.test.nonpa.service;
+package io.orqueio.bpm.spring.boot.starter.test.nonpa.service;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,11 +22,11 @@ import java.util.Map;
 import jakarta.transaction.Transactional;
 import jakarta.transaction.Transactional.TxType;
 
-import org.camunda.bpm.engine.RuntimeService;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.spring.boot.starter.test.nonpa.jpa.domain.TestEntity;
-import org.camunda.bpm.spring.boot.starter.test.nonpa.jpa.repository.TestEntityRepository;
-import org.camunda.bpm.spring.boot.starter.test.nonpa.service.TransactionalTestService;
+import io.orqueio.bpm.engine.RuntimeService;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.spring.boot.starter.test.nonpa.jpa.domain.TestEntity;
+import io.orqueio.bpm.spring.boot.starter.test.nonpa.jpa.repository.TestEntityRepository;
+import io.orqueio.bpm.spring.boot.starter.test.nonpa.service.TransactionalTestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

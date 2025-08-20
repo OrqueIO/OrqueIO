@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.bpmn.builder;
+package io.orqueio.bpm.model.bpmn.builder;
 
 import java.util.List;
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
-import org.camunda.bpm.model.bpmn.instance.Condition;
-import org.camunda.bpm.model.bpmn.instance.ConditionalEventDefinition;
-import org.camunda.bpm.model.bpmn.instance.Event;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.bpm.model.bpmn.instance.Condition;
+import io.orqueio.bpm.model.bpmn.instance.ConditionalEventDefinition;
+import io.orqueio.bpm.model.bpmn.instance.Event;
 
 /**
  * Represents the abstract conditional event definition builder.

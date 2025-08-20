@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.scripting;
+package io.orqueio.bpm.engine.impl.scripting;
 
 import javax.script.Bindings;
 import javax.script.ScriptEngine;
 
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.delegate.DelegateCaseExecution;
-import org.camunda.bpm.engine.delegate.DelegateExecution;
-import org.camunda.bpm.engine.delegate.VariableScope;
-import org.camunda.bpm.engine.impl.persistence.entity.TaskEntity;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.delegate.DelegateCaseExecution;
+import io.orqueio.bpm.engine.delegate.DelegateExecution;
+import io.orqueio.bpm.engine.delegate.VariableScope;
+import io.orqueio.bpm.engine.impl.persistence.entity.TaskEntity;
 
 /**
  * <p>Represents an executable script.</p>

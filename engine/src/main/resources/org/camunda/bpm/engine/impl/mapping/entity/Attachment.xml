@@ -19,11 +19,11 @@
 -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="org.camunda.bpm.engine.impl.persistence.entity.AttachmentEntity">
+<mapper namespace="io.orqueio.bpm.engine.impl.persistence.entity.AttachmentEntity">
 
   <!-- ATTACHMENT INSERT -->
 
-  <insert id="insertAttachment" parameterType="org.camunda.bpm.engine.impl.persistence.entity.AttachmentEntity">
+  <insert id="insertAttachment" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.AttachmentEntity">
     insert into ${prefix}ACT_HI_ATTACHMENT (ID_, NAME_, DESCRIPTION_, TYPE_, TASK_ID_, ROOT_PROC_INST_ID_, PROC_INST_ID_, URL_, CONTENT_ID_, TENANT_ID_, CREATE_TIME_, REMOVAL_TIME_, REV_)
     values (
       #{id ,jdbcType=VARCHAR},
@@ -44,7 +44,7 @@
 
   <!-- ATTACHMENT UPDATE -->
 
-  <update id="updateAttachment" parameterType="org.camunda.bpm.engine.impl.persistence.entity.AttachmentEntity">
+  <update id="updateAttachment" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.AttachmentEntity">
     update
     ${prefix}ACT_HI_ATTACHMENT 
     set
@@ -208,7 +208,7 @@
 
   <!-- ATTACHMENT DELETE -->
 
-  <delete id="deleteAttachment" parameterType="org.camunda.bpm.engine.impl.persistence.entity.AttachmentEntity">
+  <delete id="deleteAttachment" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.AttachmentEntity">
     delete from ${prefix}ACT_HI_ATTACHMENT 
     where ID_ = #{id} and REV_ = #{revision} 
   </delete>
@@ -254,20 +254,20 @@
 
   <sql id="andWhereMinuteInDateBetweenSql">
     <if test="parameter.minuteFrom != null and parameter.minuteTo != null">
-      AND ${datepart1}<include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.periodUnitFunction"/>${datepart2}${date}${datepart3}
+      AND ${datepart1}<include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.periodUnitFunction"/>${datepart2}${date}${datepart3}
       between #{parameter.minuteFrom, jdbcType=INTEGER} and #{parameter.minuteTo, jdbcType=INTEGER}
     </if>
   </sql>
 
   <sql id="andWhereMinuteInDateBetweenSql_oracle">
     <if test="parameter.minuteFrom != null and parameter.minuteTo != null">
-      AND ${datepart1}${date}${datepart2}<include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.periodUnitFunction"/>${datepart3}
+      AND ${datepart1}${date}${datepart2}<include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.periodUnitFunction"/>${datepart3}
       between #{parameter.minuteFrom, jdbcType=INTEGER} and #{parameter.minuteTo, jdbcType=INTEGER}
     </if>
   </sql>
 
   <delete id="deleteAttachmentsByRemovalTime"
-    parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject">
+    parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject">
     <bind name="date" value="'REMOVAL_TIME_'"/>
     <bind name="reportPeriodUnitName" value="'MINUTE'"/>
     delete ${limitBeforeWithoutOffset} from ${prefix}ACT_HI_ATTACHMENT
@@ -277,7 +277,7 @@
   </delete>
 
   <delete id="deleteAttachmentsByRemovalTime_oracle"
-          parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject">
+          parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject">
     <bind name="date" value="'REMOVAL_TIME_'"/>
     <bind name="reportPeriodUnitName" value="'MINUTE'"/>
     delete ${limitBeforeWithoutOffset} from ${prefix}ACT_HI_ATTACHMENT
@@ -287,7 +287,7 @@
   </delete>
 
   <delete id="deleteAttachmentsByRemovalTime_postgres_or_db2"
-          parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject">
+          parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject">
     <bind name="date" value="'REMOVAL_TIME_'"/>
     <bind name="reportPeriodUnitName" value="'MINUTE'"/>
     delete ${limitBeforeWithoutOffset} from ${prefix}ACT_HI_ATTACHMENT
@@ -300,7 +300,7 @@
 
   <!-- ATTACHMENT RESULTMAP -->
 
-  <resultMap id="attachmentResultMap" type="org.camunda.bpm.engine.impl.persistence.entity.AttachmentEntity">
+  <resultMap id="attachmentResultMap" type="io.orqueio.bpm.engine.impl.persistence.entity.AttachmentEntity">
     <id property="id" column="ID_" jdbcType="VARCHAR" />
     <result property="revision" column="REV_" jdbcType="INTEGER" />
     <result property="name" column="NAME_" jdbcType="VARCHAR" />
@@ -321,11 +321,11 @@
     select * from ${prefix}ACT_HI_ATTACHMENT where ID_ = #{id,jdbcType=VARCHAR}
   </select>
   
-  <select id="selectAttachmentsByTaskId" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject" resultMap="attachmentResultMap">
+  <select id="selectAttachmentsByTaskId" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject" resultMap="attachmentResultMap">
     select * from ${prefix}ACT_HI_ATTACHMENT where TASK_ID_ = #{parameter,jdbcType=VARCHAR}
   </select>
   
-  <select id="selectAttachmentsByProcessInstanceId" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject" resultMap="attachmentResultMap">
+  <select id="selectAttachmentsByProcessInstanceId" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject" resultMap="attachmentResultMap">
     select * from ${prefix}ACT_HI_ATTACHMENT where PROC_INST_ID_ = #{parameter,jdbcType=VARCHAR}
   </select>
 
@@ -340,7 +340,7 @@
       and
         <bind name="listOfIds" value="processInstanceIds"/>
         <bind name="fieldName" value="'PROC_INST_ID_'"/>
-        <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection"/>
+        <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection"/>
     </if>
   </sql>
 
@@ -352,7 +352,7 @@
       where
         <bind name="listOfIds" value="taskProcessInstanceIds"/>
         <bind name="fieldName" value="'PROC_INST_ID_'"/>
-        <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection"/>
+        <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection"/>
       )
     </if>
     <if test="caseInstanceIds != null &amp;&amp; caseInstanceIds.size > 0">
@@ -362,7 +362,7 @@
       where
         <bind name="listOfIds" value="caseInstanceIds"/>
         <bind name="fieldName" value="'CASE_INST_ID_'"/>
-        <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection"/>
+        <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection"/>
       )
     </if>
   </sql>
@@ -374,7 +374,7 @@
         and
           <bind name="listOfIds" value="taskProcessInstanceIds"/>
           <bind name="fieldName" value="'T.PROC_INST_ID_'"/>
-          <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection"/>
+          <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection"/>
     </if>
     <if test="caseInstanceIds != null &amp;&amp; caseInstanceIds.size > 0">
       inner join ${prefix}ACT_HI_TASKINST T
@@ -382,7 +382,7 @@
         and
           <bind name="listOfIds" value="caseInstanceIds"/>
           <bind name="fieldName" value="'T.CASE_INST_ID_'"/>
-          <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection"/>
+          <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection"/>
     </if>
   </sql>
 

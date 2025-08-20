@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.webapp.impl.security.filter.headersec.provider.impl;
+package io.orqueio.bpm.webapp.impl.security.filter.headersec.provider.impl;
 
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.webapp.impl.security.filter.headersec.provider.HeaderSecurityProvider;
-import org.camunda.bpm.webapp.impl.util.ServletFilterUtil;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.webapp.impl.security.filter.headersec.provider.HeaderSecurityProvider;
+import io.orqueio.bpm.webapp.impl.util.ServletFilterUtil;
 
 import java.util.Map;
 

@@ -14,32 +14,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.persistence.entity.util;
+package io.orqueio.bpm.engine.impl.persistence.entity.util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.camunda.bpm.application.AbstractProcessApplication;
-import org.camunda.bpm.application.ProcessApplicationInterface;
-import org.camunda.bpm.application.ProcessApplicationReference;
-import org.camunda.bpm.application.ProcessApplicationUnavailableException;
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
-import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.engine.impl.db.DbEntityLifecycleAware;
-import org.camunda.bpm.engine.impl.db.EnginePersistenceLogger;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.interceptor.CommandContextListener;
-import org.camunda.bpm.engine.impl.variable.serializer.TypedValueSerializer;
-import org.camunda.bpm.engine.impl.variable.serializer.ValueFields;
-import org.camunda.bpm.engine.impl.variable.serializer.ValueFieldsImpl;
-import org.camunda.bpm.engine.impl.variable.serializer.VariableSerializerFactory;
-import org.camunda.bpm.engine.impl.variable.serializer.VariableSerializers;
-import org.camunda.bpm.engine.variable.impl.value.UntypedValueImpl;
-import org.camunda.bpm.engine.variable.type.ValueType;
-import org.camunda.bpm.engine.variable.value.SerializableValue;
-import org.camunda.bpm.engine.variable.value.TypedValue;
+import io.orqueio.bpm.application.AbstractProcessApplication;
+import io.orqueio.bpm.application.ProcessApplicationInterface;
+import io.orqueio.bpm.application.ProcessApplicationReference;
+import io.orqueio.bpm.application.ProcessApplicationUnavailableException;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
+import io.orqueio.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.impl.db.DbEntityLifecycleAware;
+import io.orqueio.bpm.engine.impl.db.EnginePersistenceLogger;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContextListener;
+import io.orqueio.bpm.engine.impl.variable.serializer.TypedValueSerializer;
+import io.orqueio.bpm.engine.impl.variable.serializer.ValueFields;
+import io.orqueio.bpm.engine.impl.variable.serializer.ValueFieldsImpl;
+import io.orqueio.bpm.engine.impl.variable.serializer.VariableSerializerFactory;
+import io.orqueio.bpm.engine.impl.variable.serializer.VariableSerializers;
+import io.orqueio.bpm.engine.variable.impl.value.UntypedValueImpl;
+import io.orqueio.bpm.engine.variable.type.ValueType;
+import io.orqueio.bpm.engine.variable.value.SerializableValue;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
 
 /**
  * A field what provide a typed version of a value. It can

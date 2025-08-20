@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.impl;
+package io.orqueio.bpm.engine.rest.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import javax.ws.rs.core.Response.Status;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.rest.exception.InvalidRequestException;
-import org.camunda.bpm.engine.rest.util.EngineUtil;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.rest.exception.InvalidRequestException;
+import io.orqueio.bpm.engine.rest.util.EngineUtil;
 
 public abstract class AbstractRestProcessEngineAware {
 

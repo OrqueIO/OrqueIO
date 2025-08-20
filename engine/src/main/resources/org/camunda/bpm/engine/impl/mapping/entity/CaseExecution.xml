@@ -19,11 +19,11 @@
 -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="org.camunda.bpm.engine.impl.cmmn.entity.runtime.CaseExecutionEntity">
+<mapper namespace="io.orqueio.bpm.engine.impl.cmmn.entity.runtime.CaseExecutionEntity">
 
   <!-- CASE EXECUTION INSERT -->
 
-  <insert id="insertCaseExecution" parameterType="org.camunda.bpm.engine.impl.cmmn.entity.runtime.CaseExecutionEntity">
+  <insert id="insertCaseExecution" parameterType="io.orqueio.bpm.engine.impl.cmmn.entity.runtime.CaseExecutionEntity">
     insert into ${prefix}ACT_RU_CASE_EXECUTION
     (
       ID_,
@@ -60,7 +60,7 @@
 
   <!-- CASE EXECUTION UPDATE -->
 
-  <update id="updateCaseExecution" parameterType="org.camunda.bpm.engine.impl.cmmn.entity.runtime.CaseExecutionEntity">
+  <update id="updateCaseExecution" parameterType="io.orqueio.bpm.engine.impl.cmmn.entity.runtime.CaseExecutionEntity">
     update ${prefix}ACT_RU_CASE_EXECUTION set
       REV_ = #{revisionNext, jdbcType=INTEGER},
       CURRENT_STATE_ = #{state, jdbcType=INTEGER},
@@ -74,13 +74,13 @@
 
   <!-- CASE EXECUTION DELETE -->
 
-  <delete id="deleteCaseExecution" parameterType="org.camunda.bpm.engine.impl.cmmn.entity.runtime.CaseExecutionEntity">
+  <delete id="deleteCaseExecution" parameterType="io.orqueio.bpm.engine.impl.cmmn.entity.runtime.CaseExecutionEntity">
     delete from ${prefix}ACT_RU_CASE_EXECUTION where ID_ = #{id} and REV_ = #{revision}
   </delete>
 
   <!-- CASE EXECUTION RESULTMAP -->
 
-  <resultMap id="caseExecutionResultMap" type="org.camunda.bpm.engine.impl.cmmn.entity.runtime.CaseExecutionEntity">
+  <resultMap id="caseExecutionResultMap" type="io.orqueio.bpm.engine.impl.cmmn.entity.runtime.CaseExecutionEntity">
     <id property="id" column="ID_" jdbcType="VARCHAR" />
     <result property="revision" column="REV_" jdbcType="INTEGER" />
     <result property="caseInstanceId" column="CASE_INST_ID_" jdbcType="VARCHAR" />
@@ -102,17 +102,17 @@
     select * from ${prefix}ACT_RU_CASE_EXECUTION where ID_ = #{id}
   </select>
 
-  <select id="selectCaseExecutionsByParentCaseExecutionId" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject" resultMap="caseExecutionResultMap">
+  <select id="selectCaseExecutionsByParentCaseExecutionId" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject" resultMap="caseExecutionResultMap">
     select * from ${prefix}ACT_RU_CASE_EXECUTION
     where PARENT_ID_ = #{parameter}
   </select>
   
-  <select id="selectCaseExecutionsByCaseInstanceId" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject" resultMap="caseExecutionResultMap">
+  <select id="selectCaseExecutionsByCaseInstanceId" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject" resultMap="caseExecutionResultMap">
     select * from ${prefix}ACT_RU_CASE_EXECUTION
     where CASE_INST_ID_ = #{parameter}
   </select>
 
-  <select id="selectCaseInstanceIdsByCaseDefinitionId" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject" resultType="string">
+  <select id="selectCaseInstanceIdsByCaseDefinitionId" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject" resultType="string">
     select ID_
     from ${prefix}ACT_RU_CASE_EXECUTION
     where CASE_DEF_ID_ = #{parameter} and PARENT_ID_ is null
@@ -128,36 +128,36 @@
     where SUPER_EXEC_ = #{id}
   </select>
 
-  <select id="selectCaseExecutionsByQueryCriteria" parameterType="org.camunda.bpm.engine.impl.cmmn.entity.runtime.CaseExecutionQueryImpl" resultMap="caseExecutionResultMap">
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
+  <select id="selectCaseExecutionsByQueryCriteria" parameterType="io.orqueio.bpm.engine.impl.cmmn.entity.runtime.CaseExecutionQueryImpl" resultMap="caseExecutionResultMap">
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
     ${limitBefore}
     select ${distinct} RES.* 
     ${limitBetween}
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.orderBySelection"/>
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.orderBySelection"/>
     <include refid="selectCaseExecutionsByQueryCriteriaSql"/>
     ${orderBy}
     ${limitAfter}
   </select>
 
-  <select id="selectCaseExecutionCountByQueryCriteria" parameterType="org.camunda.bpm.engine.impl.cmmn.entity.runtime.CaseExecutionQueryImpl" resultType="long">
+  <select id="selectCaseExecutionCountByQueryCriteria" parameterType="io.orqueio.bpm.engine.impl.cmmn.entity.runtime.CaseExecutionQueryImpl" resultType="long">
     ${countDistinctBeforeStart} RES.ID_ ${countDistinctBeforeEnd}
     <include refid="selectCaseExecutionsByQueryCriteriaSql"/>
     ${countDistinctAfterEnd}
   </select>
 
   <!--  same as selectCaseExecutionByQueryCriteria, but with different parameterType -->
-  <select id="selectCaseInstanceByQueryCriteria" parameterType="org.camunda.bpm.engine.impl.cmmn.entity.runtime.CaseInstanceQueryImpl" resultMap="caseExecutionResultMap">
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
+  <select id="selectCaseInstanceByQueryCriteria" parameterType="io.orqueio.bpm.engine.impl.cmmn.entity.runtime.CaseInstanceQueryImpl" resultMap="caseExecutionResultMap">
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
     ${limitBefore}
     select ${distinct} RES.*
     ${limitBetween}
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.orderBySelection"/>
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.orderBySelection"/>
     <include refid="selectCaseExecutionsByQueryCriteriaSql"/>
     ${orderBy}
     ${limitAfter}
   </select>
 
-  <select id="selectCaseInstanceCountByQueryCriteria" parameterType="org.camunda.bpm.engine.impl.cmmn.entity.runtime.CaseInstanceQueryImpl" resultType="long">
+  <select id="selectCaseInstanceCountByQueryCriteria" parameterType="io.orqueio.bpm.engine.impl.cmmn.entity.runtime.CaseInstanceQueryImpl" resultType="long">
     ${countDistinctBeforeStart} RES.ID_ ${countDistinctBeforeEnd}
     <include refid="selectCaseExecutionsByQueryCriteriaSql"/>
     ${countDistinctAfterEnd}
@@ -225,7 +225,7 @@
         where
         <bind name="varPrefix" value="''"/>
 
-        <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.variableNameEqualsCaseInsensitive" />
+        <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.variableNameEqualsCaseInsensitive" />
 
         <choose>
           <when test="queryVariableValue.local">
@@ -241,7 +241,7 @@
         <bind name="varTypeField" value="'TYPE_'"/>
         <if test="queryVariableValue.valueConditions != null">
         and
-        <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.variableValueConditions"/>
+        <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.variableValueConditions"/>
         </if>
       )
       </foreach>
@@ -259,7 +259,7 @@
         </if>
       </if>
 
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
 
     </where>
   </sql>

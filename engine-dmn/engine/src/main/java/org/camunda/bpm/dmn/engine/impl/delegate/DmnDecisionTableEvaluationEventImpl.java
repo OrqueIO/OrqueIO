@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.engine.impl.delegate;
+package io.orqueio.bpm.dmn.engine.impl.delegate;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.camunda.bpm.dmn.engine.DmnDecision;
-import org.camunda.bpm.dmn.engine.delegate.DmnDecisionTableEvaluationEvent;
-import org.camunda.bpm.dmn.engine.delegate.DmnEvaluatedDecisionRule;
-import org.camunda.bpm.dmn.engine.delegate.DmnEvaluatedInput;
-import org.camunda.bpm.engine.variable.value.TypedValue;
+import io.orqueio.bpm.dmn.engine.DmnDecision;
+import io.orqueio.bpm.dmn.engine.delegate.DmnDecisionTableEvaluationEvent;
+import io.orqueio.bpm.dmn.engine.delegate.DmnEvaluatedDecisionRule;
+import io.orqueio.bpm.dmn.engine.delegate.DmnEvaluatedInput;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
 
 public class DmnDecisionTableEvaluationEventImpl implements DmnDecisionTableEvaluationEvent {
 

@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.sub.history;
+package io.orqueio.bpm.engine.rest.sub.history;
 
-import org.camunda.bpm.engine.rest.dto.history.HistoricActivityInstanceDto;
+import io.orqueio.bpm.engine.rest.dto.history.HistoricActivityInstanceDto;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Produces;

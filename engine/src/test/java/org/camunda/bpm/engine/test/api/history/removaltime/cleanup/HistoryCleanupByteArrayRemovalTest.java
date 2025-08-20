@@ -15,35 +15,35 @@
  * limitations under the License.
  */
 
-package org.camunda.bpm.engine.test.api.history.removaltime.cleanup;
+package io.orqueio.bpm.engine.test.api.history.removaltime.cleanup;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
-import static org.camunda.bpm.engine.ProcessEngineConfiguration.HISTORY_CLEANUP_STRATEGY_REMOVAL_TIME_BASED;
-import static org.camunda.bpm.engine.ProcessEngineConfiguration.HISTORY_FULL;
-import static org.camunda.bpm.engine.ProcessEngineConfiguration.HISTORY_REMOVAL_TIME_STRATEGY_END;
-import static org.camunda.bpm.engine.impl.jobexecutor.historycleanup.HistoryCleanupHandler.MAX_BATCH_SIZE;
+import static io.orqueio.bpm.engine.ProcessEngineConfiguration.HISTORY_CLEANUP_STRATEGY_REMOVAL_TIME_BASED;
+import static io.orqueio.bpm.engine.ProcessEngineConfiguration.HISTORY_FULL;
+import static io.orqueio.bpm.engine.ProcessEngineConfiguration.HISTORY_REMOVAL_TIME_STRATEGY_END;
+import static io.orqueio.bpm.engine.impl.jobexecutor.historycleanup.HistoryCleanupHandler.MAX_BATCH_SIZE;
 
 import java.util.Map;
-import org.camunda.bpm.engine.HistoryService;
-import org.camunda.bpm.engine.ManagementService;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.db.DbEntity;
-import org.camunda.bpm.engine.impl.db.entitymanager.operation.DbOperation;
-import org.camunda.bpm.engine.impl.history.DefaultHistoryRemovalTimeProvider;
-import org.camunda.bpm.engine.impl.history.event.HistoricJobLogEvent;
-import org.camunda.bpm.engine.impl.jobexecutor.historycleanup.HistoryCleanupJobHandler;
-import org.camunda.bpm.engine.impl.jobexecutor.historycleanup.HistoryCleanupRemovalTime;
-import org.camunda.bpm.engine.impl.persistence.entity.ByteArrayEntity;
-import org.camunda.bpm.engine.test.ProcessEngineRule;
-import org.camunda.bpm.engine.test.RequiredHistoryLevel;
-import org.camunda.bpm.engine.test.api.resources.GetByteArrayCommand;
-import org.camunda.bpm.engine.test.util.EntityRemoveRule;
-import org.camunda.bpm.engine.test.util.ProcessEngineBootstrapRule;
-import org.camunda.bpm.engine.test.util.ProcessEngineTestRule;
-import org.camunda.bpm.engine.test.util.ProvidedProcessEngineRule;
-import org.camunda.bpm.engine.test.util.RemoveAfter;
+import io.orqueio.bpm.engine.HistoryService;
+import io.orqueio.bpm.engine.ManagementService;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.db.DbEntity;
+import io.orqueio.bpm.engine.impl.db.entitymanager.operation.DbOperation;
+import io.orqueio.bpm.engine.impl.history.DefaultHistoryRemovalTimeProvider;
+import io.orqueio.bpm.engine.impl.history.event.HistoricJobLogEvent;
+import io.orqueio.bpm.engine.impl.jobexecutor.historycleanup.HistoryCleanupJobHandler;
+import io.orqueio.bpm.engine.impl.jobexecutor.historycleanup.HistoryCleanupRemovalTime;
+import io.orqueio.bpm.engine.impl.persistence.entity.ByteArrayEntity;
+import io.orqueio.bpm.engine.test.ProcessEngineRule;
+import io.orqueio.bpm.engine.test.RequiredHistoryLevel;
+import io.orqueio.bpm.engine.test.api.resources.GetByteArrayCommand;
+import io.orqueio.bpm.engine.test.util.EntityRemoveRule;
+import io.orqueio.bpm.engine.test.util.ProcessEngineBootstrapRule;
+import io.orqueio.bpm.engine.test.util.ProcessEngineTestRule;
+import io.orqueio.bpm.engine.test.util.ProvidedProcessEngineRule;
+import io.orqueio.bpm.engine.test.util.RemoveAfter;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;

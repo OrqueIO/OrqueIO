@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.ejb;
+package io.orqueio.bpm.container.impl.ejb;
 
 import java.util.List;
 
@@ -27,11 +27,11 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.resource.ResourceException;
 
-import org.camunda.bpm.container.ExecutorService;
-import org.camunda.bpm.container.impl.threading.ra.outbound.JcaExecutorServiceConnection;
-import org.camunda.bpm.container.impl.threading.ra.outbound.JcaExecutorServiceConnectionFactory;
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.impl.ProcessEngineImpl;
+import io.orqueio.bpm.container.ExecutorService;
+import io.orqueio.bpm.container.impl.threading.ra.outbound.JcaExecutorServiceConnection;
+import io.orqueio.bpm.container.impl.threading.ra.outbound.JcaExecutorServiceConnectionFactory;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.impl.ProcessEngineImpl;
 
 /**
  * Bean exposing the JCA implementation of the {@link ExecutorService} as Stateless Bean.

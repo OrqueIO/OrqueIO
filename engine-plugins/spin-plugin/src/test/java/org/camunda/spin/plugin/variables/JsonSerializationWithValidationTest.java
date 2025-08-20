@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.plugin.variables;
+package io.orqueio.spin.plugin.variables;
 
-import org.camunda.bpm.engine.runtime.DeserializationTypeValidator;
+import io.orqueio.bpm.engine.runtime.DeserializationTypeValidator;
 import org.junit.Before;
 import org.mockito.Mockito;
 

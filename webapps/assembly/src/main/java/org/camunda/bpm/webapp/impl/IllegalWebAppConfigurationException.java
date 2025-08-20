@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.webapp.impl;
+package io.orqueio.bpm.webapp.impl;
 
 /**
  * <p>Thrown if the webapp is configured incorrectly</p>

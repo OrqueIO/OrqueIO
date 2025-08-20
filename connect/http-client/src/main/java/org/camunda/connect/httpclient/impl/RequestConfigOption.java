@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.connect.httpclient.impl;
+package io.orqueio.connect.httpclient.impl;
 
 import java.util.Collection;
 import java.util.function.BiConsumer;

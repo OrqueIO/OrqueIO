@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.sql.test;
+package io.orqueio.bpm.sql.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -49,7 +49,7 @@ import liquibase.snapshot.SnapshotControl;
 import liquibase.snapshot.SnapshotGeneratorFactory;
 import liquibase.structure.DatabaseObject;
 import liquibase.structure.core.UniqueConstraint;
-import org.camunda.commons.utils.IoUtil;
+import io.orqueio.commons.utils.IoUtil;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

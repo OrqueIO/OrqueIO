@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.functional.spin.dataformat;
+package io.orqueio.bpm.integrationtest.functional.spin.dataformat;
 
-import org.camunda.bpm.integrationtest.functional.spin.XmlSerializable;
-import org.camunda.spin.impl.json.jackson.format.JacksonJsonDataFormat;
-import org.camunda.spin.spi.DataFormatConfigurator;
+import io.orqueio.bpm.integrationtest.functional.spin.XmlSerializable;
+import io.orqueio.spin.impl.json.jackson.format.JacksonJsonDataFormat;
+import io.orqueio.spin.spi.DataFormatConfigurator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 

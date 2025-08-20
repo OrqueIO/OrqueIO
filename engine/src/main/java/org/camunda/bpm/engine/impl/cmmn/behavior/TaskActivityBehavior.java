@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.cmmn.behavior;
+package io.orqueio.bpm.engine.impl.cmmn.behavior;
 
-import static org.camunda.bpm.engine.impl.cmmn.execution.CaseExecutionState.ACTIVE;
-import static org.camunda.bpm.engine.impl.cmmn.execution.CaseExecutionState.FAILED;
-import static org.camunda.bpm.engine.impl.cmmn.handler.ItemHandler.PROPERTY_IS_BLOCKING;
+import static io.orqueio.bpm.engine.impl.cmmn.execution.CaseExecutionState.ACTIVE;
+import static io.orqueio.bpm.engine.impl.cmmn.execution.CaseExecutionState.FAILED;
+import static io.orqueio.bpm.engine.impl.cmmn.handler.ItemHandler.PROPERTY_IS_BLOCKING;
 
-import org.camunda.bpm.engine.impl.cmmn.execution.CmmnActivityExecution;
-import org.camunda.bpm.engine.impl.cmmn.model.CmmnActivity;
+import io.orqueio.bpm.engine.impl.cmmn.execution.CmmnActivityExecution;
+import io.orqueio.bpm.engine.impl.cmmn.model.CmmnActivity;
 
 /**
  * @author Roman Smirnov

@@ -8,7 +8,7 @@
 
     <startEvent id="theStart">
       <extensionElements>
-        <camunda:executionListener event="start" class="org.camunda.bpm.engine.test.standalone.entity.ExecutionOrderListener" />
+        <camunda:executionListener event="start" class="io.orqueio.bpm.engine.test.standalone.entity.ExecutionOrderListener" />
       </extensionElements>
     </startEvent>
 
@@ -16,7 +16,7 @@
 
     <serviceTask id="theService1" camunda:expression="${true}">
       <extensionElements>
-        <camunda:executionListener event="start" class="org.camunda.bpm.engine.test.standalone.entity.ExecutionOrderListener" />
+        <camunda:executionListener event="start" class="io.orqueio.bpm.engine.test.standalone.entity.ExecutionOrderListener" />
       </extensionElements>
     </serviceTask>
 
@@ -24,7 +24,7 @@
 
     <exclusiveGateway id="join">
       <extensionElements>
-        <camunda:executionListener event="start" class="org.camunda.bpm.engine.test.standalone.entity.ExecutionOrderListener" />
+        <camunda:executionListener event="start" class="io.orqueio.bpm.engine.test.standalone.entity.ExecutionOrderListener" />
       </extensionElements>
     </exclusiveGateway>
 
@@ -32,7 +32,7 @@
 
     <scriptTask id="theScript" scriptFormat="groovy">
       <extensionElements>
-        <camunda:executionListener event="start" class="org.camunda.bpm.engine.test.standalone.entity.ExecutionOrderListener" />
+        <camunda:executionListener event="start" class="io.orqueio.bpm.engine.test.standalone.entity.ExecutionOrderListener" />
       </extensionElements>
       <script>
         <![CDATA[
@@ -51,7 +51,7 @@
 
     <exclusiveGateway id="fork">
       <extensionElements>
-        <camunda:executionListener event="start" class="org.camunda.bpm.engine.test.standalone.entity.ExecutionOrderListener" />
+        <camunda:executionListener event="start" class="io.orqueio.bpm.engine.test.standalone.entity.ExecutionOrderListener" />
       </extensionElements>
     </exclusiveGateway>
 
@@ -65,7 +65,7 @@
 
     <serviceTask id="theService2" camunda:expression="${true}">
       <extensionElements>
-        <camunda:executionListener event="start" class="org.camunda.bpm.engine.test.standalone.entity.ExecutionOrderListener" />
+        <camunda:executionListener event="start" class="io.orqueio.bpm.engine.test.standalone.entity.ExecutionOrderListener" />
       </extensionElements>
     </serviceTask>
 
@@ -73,7 +73,7 @@
 
     <endEvent id="theEnd">
       <extensionElements>
-        <camunda:executionListener event="start" class="org.camunda.bpm.engine.test.standalone.entity.ExecutionOrderListener" />
+        <camunda:executionListener event="start" class="io.orqueio.bpm.engine.test.standalone.entity.ExecutionOrderListener" />
       </extensionElements>
     </endEvent>
 

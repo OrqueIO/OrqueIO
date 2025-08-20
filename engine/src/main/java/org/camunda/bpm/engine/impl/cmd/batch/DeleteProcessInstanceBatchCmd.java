@@ -14,29 +14,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.cmd.batch;
+package io.orqueio.bpm.engine.impl.cmd.batch;
 
-import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureNotEmpty;
+import static io.orqueio.bpm.engine.impl.util.EnsureUtil.ensureNotEmpty;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import org.camunda.bpm.engine.BadUserRequestException;
-import org.camunda.bpm.engine.authorization.BatchPermissions;
-import org.camunda.bpm.engine.batch.Batch;
-import org.camunda.bpm.engine.history.HistoricProcessInstanceQuery;
-import org.camunda.bpm.engine.history.UserOperationLogEntry;
-import org.camunda.bpm.engine.impl.HistoricProcessInstanceQueryImpl;
-import org.camunda.bpm.engine.impl.ProcessInstanceQueryImpl;
-import org.camunda.bpm.engine.impl.batch.BatchConfiguration;
-import org.camunda.bpm.engine.impl.batch.BatchElementConfiguration;
-import org.camunda.bpm.engine.impl.batch.builder.BatchBuilder;
-import org.camunda.bpm.engine.impl.batch.deletion.DeleteProcessInstanceBatchConfiguration;
-import org.camunda.bpm.engine.impl.interceptor.Command;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.persistence.entity.PropertyChange;
-import org.camunda.bpm.engine.impl.util.CollectionUtil;
-import org.camunda.bpm.engine.runtime.ProcessInstanceQuery;
+import io.orqueio.bpm.engine.BadUserRequestException;
+import io.orqueio.bpm.engine.authorization.BatchPermissions;
+import io.orqueio.bpm.engine.batch.Batch;
+import io.orqueio.bpm.engine.history.HistoricProcessInstanceQuery;
+import io.orqueio.bpm.engine.history.UserOperationLogEntry;
+import io.orqueio.bpm.engine.impl.HistoricProcessInstanceQueryImpl;
+import io.orqueio.bpm.engine.impl.ProcessInstanceQueryImpl;
+import io.orqueio.bpm.engine.impl.batch.BatchConfiguration;
+import io.orqueio.bpm.engine.impl.batch.BatchElementConfiguration;
+import io.orqueio.bpm.engine.impl.batch.builder.BatchBuilder;
+import io.orqueio.bpm.engine.impl.batch.deletion.DeleteProcessInstanceBatchConfiguration;
+import io.orqueio.bpm.engine.impl.interceptor.Command;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.impl.persistence.entity.PropertyChange;
+import io.orqueio.bpm.engine.impl.util.CollectionUtil;
+import io.orqueio.bpm.engine.runtime.ProcessInstanceQuery;
 
 /**
  * @author Askar Akhmerov

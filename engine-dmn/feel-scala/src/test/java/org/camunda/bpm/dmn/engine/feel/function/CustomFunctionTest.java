@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.engine.feel.function;
+package io.orqueio.bpm.dmn.engine.feel.function;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.entry;
@@ -26,12 +26,12 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import org.camunda.bpm.dmn.engine.feel.function.helper.FunctionProvider;
-import org.camunda.bpm.dmn.engine.feel.function.helper.MyPojo;
-import org.camunda.bpm.dmn.engine.feel.helper.FeelRule;
-import org.camunda.bpm.dmn.feel.impl.FeelException;
-import org.camunda.bpm.dmn.feel.impl.scala.function.CustomFunction;
-import org.camunda.bpm.dmn.feel.impl.scala.function.builder.CustomFunctionBuilder;
+import io.orqueio.bpm.dmn.engine.feel.function.helper.FunctionProvider;
+import io.orqueio.bpm.dmn.engine.feel.function.helper.MyPojo;
+import io.orqueio.bpm.dmn.engine.feel.helper.FeelRule;
+import io.orqueio.bpm.dmn.feel.impl.FeelException;
+import io.orqueio.bpm.dmn.feel.impl.scala.function.CustomFunction;
+import io.orqueio.bpm.dmn.feel.impl.scala.function.builder.CustomFunctionBuilder;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.persistence.entity;
+package io.orqueio.bpm.engine.impl.persistence.entity;
 
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
@@ -26,47 +26,47 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.camunda.bpm.engine.filter.Filter;
-import org.camunda.bpm.engine.history.HistoricActivityInstance;
-import org.camunda.bpm.engine.history.HistoricCaseActivityInstance;
-import org.camunda.bpm.engine.history.HistoricCaseInstance;
-import org.camunda.bpm.engine.history.HistoricDecisionInstance;
-import org.camunda.bpm.engine.history.HistoricDetail;
-import org.camunda.bpm.engine.history.HistoricFormProperty;
-import org.camunda.bpm.engine.history.HistoricProcessInstance;
-import org.camunda.bpm.engine.history.HistoricTaskInstance;
-import org.camunda.bpm.engine.history.HistoricVariableInstance;
-import org.camunda.bpm.engine.history.HistoricVariableUpdate;
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
-import org.camunda.bpm.engine.impl.TablePageQueryImpl;
-import org.camunda.bpm.engine.impl.batch.BatchEntity;
-import org.camunda.bpm.engine.impl.batch.history.HistoricBatchEntity;
-import org.camunda.bpm.engine.impl.cmmn.entity.repository.CaseDefinitionEntity;
-import org.camunda.bpm.engine.impl.cmmn.entity.runtime.CaseExecutionEntity;
-import org.camunda.bpm.engine.impl.cmmn.entity.runtime.CaseSentryPartEntity;
-import org.camunda.bpm.engine.impl.db.DbEntity;
-import org.camunda.bpm.engine.impl.db.EnginePersistenceLogger;
-import org.camunda.bpm.engine.impl.db.sql.DbSqlSessionFactory;
-import org.camunda.bpm.engine.impl.dmn.entity.repository.DecisionDefinitionEntity;
-import org.camunda.bpm.engine.impl.dmn.entity.repository.DecisionRequirementsDefinitionEntity;
-import org.camunda.bpm.engine.impl.history.event.HistoricDecisionInputInstanceEntity;
-import org.camunda.bpm.engine.impl.history.event.HistoricDecisionInstanceEntity;
-import org.camunda.bpm.engine.impl.history.event.HistoricDecisionOutputInstanceEntity;
-import org.camunda.bpm.engine.impl.history.event.HistoricDetailEventEntity;
-import org.camunda.bpm.engine.impl.history.event.HistoricExternalTaskLogEntity;
-import org.camunda.bpm.engine.impl.history.event.HistoricIncidentEventEntity;
-import org.camunda.bpm.engine.impl.history.event.UserOperationLogEntryEventEntity;
-import org.camunda.bpm.engine.impl.persistence.AbstractManager;
-import org.camunda.bpm.engine.impl.util.DatabaseUtil;
-import org.camunda.bpm.engine.management.TableMetaData;
-import org.camunda.bpm.engine.management.TablePage;
-import org.camunda.bpm.engine.repository.Deployment;
-import org.camunda.bpm.engine.repository.ProcessDefinition;
-import org.camunda.bpm.engine.runtime.Execution;
-import org.camunda.bpm.engine.runtime.Incident;
-import org.camunda.bpm.engine.runtime.Job;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.task.Task;
+import io.orqueio.bpm.engine.filter.Filter;
+import io.orqueio.bpm.engine.history.HistoricActivityInstance;
+import io.orqueio.bpm.engine.history.HistoricCaseActivityInstance;
+import io.orqueio.bpm.engine.history.HistoricCaseInstance;
+import io.orqueio.bpm.engine.history.HistoricDecisionInstance;
+import io.orqueio.bpm.engine.history.HistoricDetail;
+import io.orqueio.bpm.engine.history.HistoricFormProperty;
+import io.orqueio.bpm.engine.history.HistoricProcessInstance;
+import io.orqueio.bpm.engine.history.HistoricTaskInstance;
+import io.orqueio.bpm.engine.history.HistoricVariableInstance;
+import io.orqueio.bpm.engine.history.HistoricVariableUpdate;
+import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
+import io.orqueio.bpm.engine.impl.TablePageQueryImpl;
+import io.orqueio.bpm.engine.impl.batch.BatchEntity;
+import io.orqueio.bpm.engine.impl.batch.history.HistoricBatchEntity;
+import io.orqueio.bpm.engine.impl.cmmn.entity.repository.CaseDefinitionEntity;
+import io.orqueio.bpm.engine.impl.cmmn.entity.runtime.CaseExecutionEntity;
+import io.orqueio.bpm.engine.impl.cmmn.entity.runtime.CaseSentryPartEntity;
+import io.orqueio.bpm.engine.impl.db.DbEntity;
+import io.orqueio.bpm.engine.impl.db.EnginePersistenceLogger;
+import io.orqueio.bpm.engine.impl.db.sql.DbSqlSessionFactory;
+import io.orqueio.bpm.engine.impl.dmn.entity.repository.DecisionDefinitionEntity;
+import io.orqueio.bpm.engine.impl.dmn.entity.repository.DecisionRequirementsDefinitionEntity;
+import io.orqueio.bpm.engine.impl.history.event.HistoricDecisionInputInstanceEntity;
+import io.orqueio.bpm.engine.impl.history.event.HistoricDecisionInstanceEntity;
+import io.orqueio.bpm.engine.impl.history.event.HistoricDecisionOutputInstanceEntity;
+import io.orqueio.bpm.engine.impl.history.event.HistoricDetailEventEntity;
+import io.orqueio.bpm.engine.impl.history.event.HistoricExternalTaskLogEntity;
+import io.orqueio.bpm.engine.impl.history.event.HistoricIncidentEventEntity;
+import io.orqueio.bpm.engine.impl.history.event.UserOperationLogEntryEventEntity;
+import io.orqueio.bpm.engine.impl.persistence.AbstractManager;
+import io.orqueio.bpm.engine.impl.util.DatabaseUtil;
+import io.orqueio.bpm.engine.management.TableMetaData;
+import io.orqueio.bpm.engine.management.TablePage;
+import io.orqueio.bpm.engine.repository.Deployment;
+import io.orqueio.bpm.engine.repository.ProcessDefinition;
+import io.orqueio.bpm.engine.runtime.Execution;
+import io.orqueio.bpm.engine.runtime.Incident;
+import io.orqueio.bpm.engine.runtime.Job;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.task.Task;
 
 
 /**

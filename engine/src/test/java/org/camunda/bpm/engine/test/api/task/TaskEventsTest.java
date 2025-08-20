@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.task;
+package io.orqueio.bpm.engine.test.api.task;
 
-import static org.camunda.bpm.engine.task.Event.ACTION_ADD_ATTACHMENT;
-import static org.camunda.bpm.engine.task.Event.ACTION_ADD_GROUP_LINK;
-import static org.camunda.bpm.engine.task.Event.ACTION_ADD_USER_LINK;
-import static org.camunda.bpm.engine.task.Event.ACTION_DELETE_ATTACHMENT;
-import static org.camunda.bpm.engine.task.Event.ACTION_DELETE_GROUP_LINK;
-import static org.camunda.bpm.engine.task.Event.ACTION_DELETE_USER_LINK;
-import static org.camunda.bpm.engine.task.IdentityLinkType.CANDIDATE;
+import static io.orqueio.bpm.engine.task.Event.ACTION_ADD_ATTACHMENT;
+import static io.orqueio.bpm.engine.task.Event.ACTION_ADD_GROUP_LINK;
+import static io.orqueio.bpm.engine.task.Event.ACTION_ADD_USER_LINK;
+import static io.orqueio.bpm.engine.task.Event.ACTION_DELETE_ATTACHMENT;
+import static io.orqueio.bpm.engine.task.Event.ACTION_DELETE_GROUP_LINK;
+import static io.orqueio.bpm.engine.task.Event.ACTION_DELETE_USER_LINK;
+import static io.orqueio.bpm.engine.task.IdentityLinkType.CANDIDATE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -30,14 +30,14 @@ import static org.junit.Assert.assertTrue;
 import java.util.Date;
 import java.util.List;
 
-import org.camunda.bpm.engine.impl.interceptor.Command;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.persistence.entity.CommentEntity;
-import org.camunda.bpm.engine.impl.util.ClockUtil;
-import org.camunda.bpm.engine.task.Attachment;
-import org.camunda.bpm.engine.task.Event;
-import org.camunda.bpm.engine.task.Task;
-import org.camunda.bpm.engine.test.history.useroperationlog.AbstractUserOperationLogTest;
+import io.orqueio.bpm.engine.impl.interceptor.Command;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.impl.persistence.entity.CommentEntity;
+import io.orqueio.bpm.engine.impl.util.ClockUtil;
+import io.orqueio.bpm.engine.task.Attachment;
+import io.orqueio.bpm.engine.task.Event;
+import io.orqueio.bpm.engine.task.Task;
+import io.orqueio.bpm.engine.test.history.useroperationlog.AbstractUserOperationLogTest;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

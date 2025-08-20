@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.persistence.entity;
+package io.orqueio.bpm.engine.impl.persistence.entity;
 
 import java.util.List;
 
-import org.camunda.bpm.engine.management.ActivityStatistics;
-import org.camunda.bpm.engine.management.IncidentStatistics;
+import io.orqueio.bpm.engine.management.ActivityStatistics;
+import io.orqueio.bpm.engine.management.IncidentStatistics;
 
 public class ActivityStatisticsImpl implements ActivityStatistics {
 

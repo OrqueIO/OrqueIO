@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.junit5.deployment;
+package io.orqueio.bpm.engine.test.junit5.deployment;
 
 import static org.junit.platform.engine.discovery.DiscoverySelectors.selectMethod;
 import static org.junit.platform.testkit.engine.EventConditions.event;
@@ -23,7 +23,7 @@ import static org.junit.platform.testkit.engine.EventConditions.test;
 import static org.junit.platform.testkit.engine.TestExecutionResultConditions.instanceOf;
 import static org.junit.platform.testkit.engine.TestExecutionResultConditions.message;
 
-import org.camunda.bpm.engine.test.junit5.ProcessEngineExtension;
+import io.orqueio.bpm.engine.test.junit5.ProcessEngineExtension;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

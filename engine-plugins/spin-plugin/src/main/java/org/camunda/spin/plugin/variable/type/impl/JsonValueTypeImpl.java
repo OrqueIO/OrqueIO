@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.plugin.variable.type.impl;
+package io.orqueio.spin.plugin.variable.type.impl;
 
-import org.camunda.spin.json.SpinJsonNode;
-import org.camunda.spin.plugin.variable.SpinValues;
-import org.camunda.spin.plugin.variable.type.JsonValueType;
-import org.camunda.spin.plugin.variable.value.SpinValue;
-import org.camunda.spin.plugin.variable.value.builder.JsonValueBuilder;
+import io.orqueio.spin.json.SpinJsonNode;
+import io.orqueio.spin.plugin.variable.SpinValues;
+import io.orqueio.spin.plugin.variable.type.JsonValueType;
+import io.orqueio.spin.plugin.variable.value.SpinValue;
+import io.orqueio.spin.plugin.variable.value.builder.JsonValueBuilder;
 
 /**
  * @author Roman Smirnov

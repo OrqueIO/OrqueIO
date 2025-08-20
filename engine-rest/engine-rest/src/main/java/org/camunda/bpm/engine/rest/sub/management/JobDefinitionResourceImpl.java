@@ -14,22 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.sub.management;
+package io.orqueio.bpm.engine.rest.sub.management;
 
 import javax.ws.rs.core.Response.Status;
-import org.camunda.bpm.engine.AuthorizationException;
-import org.camunda.bpm.engine.ManagementService;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.exception.NotFoundException;
-import org.camunda.bpm.engine.management.JobDefinition;
-import org.camunda.bpm.engine.management.SetJobRetriesBuilder;
-import org.camunda.bpm.engine.rest.dto.management.JobDefinitionDto;
-import org.camunda.bpm.engine.rest.dto.management.JobDefinitionSuspensionStateDto;
-import org.camunda.bpm.engine.rest.dto.runtime.JobDefinitionPriorityDto;
-import org.camunda.bpm.engine.rest.dto.runtime.RetriesDto;
-import org.camunda.bpm.engine.rest.exception.InvalidRequestException;
-import org.camunda.bpm.engine.rest.exception.RestException;
+import io.orqueio.bpm.engine.AuthorizationException;
+import io.orqueio.bpm.engine.ManagementService;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.exception.NotFoundException;
+import io.orqueio.bpm.engine.management.JobDefinition;
+import io.orqueio.bpm.engine.management.SetJobRetriesBuilder;
+import io.orqueio.bpm.engine.rest.dto.management.JobDefinitionDto;
+import io.orqueio.bpm.engine.rest.dto.management.JobDefinitionSuspensionStateDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.JobDefinitionPriorityDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.RetriesDto;
+import io.orqueio.bpm.engine.rest.exception.InvalidRequestException;
+import io.orqueio.bpm.engine.rest.exception.RestException;
 
 /**
  * @author roman.smirnov

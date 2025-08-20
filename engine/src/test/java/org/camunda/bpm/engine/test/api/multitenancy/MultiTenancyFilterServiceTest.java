@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.multitenancy;
+package io.orqueio.bpm.engine.test.api.multitenancy;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -23,11 +23,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.camunda.bpm.engine.filter.Filter;
-import org.camunda.bpm.engine.impl.TaskQueryImpl;
-import org.camunda.bpm.engine.task.Task;
-import org.camunda.bpm.engine.task.TaskQuery;
-import org.camunda.bpm.engine.test.util.PluggableProcessEngineTest;
+import io.orqueio.bpm.engine.filter.Filter;
+import io.orqueio.bpm.engine.impl.TaskQueryImpl;
+import io.orqueio.bpm.engine.task.Task;
+import io.orqueio.bpm.engine.task.TaskQuery;
+import io.orqueio.bpm.engine.test.util.PluggableProcessEngineTest;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

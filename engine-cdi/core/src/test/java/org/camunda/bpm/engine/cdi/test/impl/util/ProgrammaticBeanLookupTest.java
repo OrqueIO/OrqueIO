@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.cdi.test.impl.util;
+package io.orqueio.bpm.engine.cdi.test.impl.util;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -24,9 +24,9 @@ import static org.junit.Assert.*;
 import javax.enterprise.inject.Alternative;
 import javax.inject.Named;
 
-import org.camunda.bpm.engine.cdi.impl.ProcessEngineServicesProducer;
-import org.camunda.bpm.engine.cdi.impl.util.ProgrammaticBeanLookup;
-import org.camunda.bpm.engine.cdi.test.impl.beans.SpecializedTestBean;
+import io.orqueio.bpm.engine.cdi.impl.ProcessEngineServicesProducer;
+import io.orqueio.bpm.engine.cdi.impl.util.ProgrammaticBeanLookup;
+import io.orqueio.bpm.engine.cdi.test.impl.beans.SpecializedTestBean;
 import org.jboss.arquillian.container.test.api.Deployer;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;

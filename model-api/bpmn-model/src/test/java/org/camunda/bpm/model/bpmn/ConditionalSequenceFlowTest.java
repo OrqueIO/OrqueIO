@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.bpmn;
+package io.orqueio.bpm.model.bpmn;
 
-import org.camunda.bpm.model.bpmn.instance.ConditionExpression;
-import org.camunda.bpm.model.bpmn.instance.SequenceFlow;
+import io.orqueio.bpm.model.bpmn.instance.ConditionExpression;
+import io.orqueio.bpm.model.bpmn.instance.SequenceFlow;
 import org.junit.Before;
 import org.junit.Test;
 

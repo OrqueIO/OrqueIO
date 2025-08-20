@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.util.io;
+package io.orqueio.bpm.engine.impl.util.io;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
-import org.camunda.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.ProcessEngineException;
 
 
 /**

@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.jobexecutor.beans;
+package io.orqueio.bpm.integrationtest.jobexecutor.beans;
 
-import org.camunda.bpm.engine.delegate.DelegateTask;
-import org.camunda.bpm.engine.delegate.TaskListener;
+import io.orqueio.bpm.engine.delegate.DelegateTask;
+import io.orqueio.bpm.engine.delegate.TaskListener;
 
 public class SampleTaskListenerBean implements TaskListener {
 

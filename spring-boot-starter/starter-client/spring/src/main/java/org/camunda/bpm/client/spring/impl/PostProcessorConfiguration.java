@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.spring.impl;
+package io.orqueio.bpm.client.spring.impl;
 
-import org.camunda.bpm.client.spring.impl.client.ClientFactory;
-import org.camunda.bpm.client.spring.impl.client.ClientPostProcessor;
-import org.camunda.bpm.client.spring.impl.subscription.SpringTopicSubscriptionImpl;
-import org.camunda.bpm.client.spring.impl.subscription.SubscriptionPostProcessor;
+import io.orqueio.bpm.client.spring.impl.client.ClientFactory;
+import io.orqueio.bpm.client.spring.impl.client.ClientPostProcessor;
+import io.orqueio.bpm.client.spring.impl.subscription.SpringTopicSubscriptionImpl;
+import io.orqueio.bpm.client.spring.impl.subscription.SubscriptionPostProcessor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

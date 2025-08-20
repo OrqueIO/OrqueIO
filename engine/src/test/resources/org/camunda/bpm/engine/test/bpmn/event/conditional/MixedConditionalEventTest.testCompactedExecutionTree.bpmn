@@ -44,7 +44,7 @@
           </bpmn:conditionalEventDefinition>
         </bpmn:startEvent>
       </bpmn:subProcess>
-      <bpmn:serviceTask id="Task_1v2uhg7" camunda:class="org.camunda.bpm.engine.test.bpmn.event.conditional.SetVariableOnConcurrentExecutionDelegate">
+      <bpmn:serviceTask id="Task_1v2uhg7" camunda:class="io.orqueio.bpm.engine.test.bpmn.event.conditional.SetVariableOnConcurrentExecutionDelegate">
         <bpmn:incoming>SequenceFlow_0boqnce</bpmn:incoming>
         <bpmn:outgoing>SequenceFlow_1al6v9b</bpmn:outgoing>
       </bpmn:serviceTask>

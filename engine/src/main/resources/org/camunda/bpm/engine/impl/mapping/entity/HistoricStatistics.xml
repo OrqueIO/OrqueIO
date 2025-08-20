@@ -19,11 +19,11 @@
 -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
 
-<mapper namespace="org.camunda.bpm.engine.history.HistoricActivityStatistics">
+<mapper namespace="io.orqueio.bpm.engine.history.HistoricActivityStatistics">
 
   <!-- RESULTMAP -->
 
-  <resultMap id="historicActivityStatisticsResultMap" type="org.camunda.bpm.engine.impl.persistence.entity.HistoricActivityStatisticsImpl">
+  <resultMap id="historicActivityStatisticsResultMap" type="io.orqueio.bpm.engine.impl.persistence.entity.HistoricActivityStatisticsImpl">
     <id property="id" column="ID_" jdbcType="VARCHAR" />
     <result property="instances" column="INSTANCE_COUNT_" jdbcType="INTEGER" />
     <result property="finished" column="FINISHED_COUNT_" jdbcType="INTEGER" />
@@ -34,7 +34,7 @@
     <result property="deletedIncidents" column="DELETED_INCIDENT_COUNT_" jdbcType="INTEGER" />
   </resultMap>
 
-  <resultMap id="historicCaseActivityStatisticsResultMap" type="org.camunda.bpm.engine.impl.persistence.entity.HistoricCaseActivityStatisticsImpl">
+  <resultMap id="historicCaseActivityStatisticsResultMap" type="io.orqueio.bpm.engine.impl.persistence.entity.HistoricCaseActivityStatisticsImpl">
     <id property="id" column="ID_" jdbcType="VARCHAR" />
     <result property="available" column="AVAILABLE_" jdbcType="INTEGER" />
     <result property="enabled" column="ENABLED_" jdbcType="INTEGER" />
@@ -47,8 +47,8 @@
   <!-- HistoricActivity statistics -->
 
   <select id ="selectHistoricActivityStatistics" resultMap="historicActivityStatisticsResultMap" 
-    parameterType="org.camunda.bpm.engine.impl.HistoricActivityStatisticsQueryImpl">
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
+    parameterType="io.orqueio.bpm.engine.impl.HistoricActivityStatisticsQueryImpl">
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
     ${limitBefore}
     select RES.*
     ${limitBetween}
@@ -58,7 +58,7 @@
   </select>
 
   <select id ="selectHistoricActivityStatisticsCount" resultType="long" 
-    parameterType="org.camunda.bpm.engine.impl.HistoricActivityStatisticsQueryImpl">
+    parameterType="io.orqueio.bpm.engine.impl.HistoricActivityStatisticsQueryImpl">
     ${countDistinctBeforeStart} RES.ID_ ${countDistinctBeforeEnd}
     <include refid="selectHistoricActivityStatisticsByQueryCriteriaSql"/>
     ${countDistinctAfterEnd}
@@ -200,8 +200,8 @@
   <!-- HistoricCaseActivity statistics -->
 
   <select id ="selectHistoricCaseActivityStatistics" resultMap="historicCaseActivityStatisticsResultMap" 
-    parameterType="org.camunda.bpm.engine.impl.HistoricCaseActivityStatisticsQueryImpl">
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
+    parameterType="io.orqueio.bpm.engine.impl.HistoricCaseActivityStatisticsQueryImpl">
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
     ${limitBefore}
     select RES.*
     ${limitBetween}
@@ -211,7 +211,7 @@
   </select>
 
   <select id ="selectHistoricCaseActivityStatisticsCount" resultType="long" 
-    parameterType="org.camunda.bpm.engine.impl.HistoricCaseActivityStatisticsQueryImpl">
+    parameterType="io.orqueio.bpm.engine.impl.HistoricCaseActivityStatisticsQueryImpl">
     ${countDistinctBeforeStart} RES.ID_ ${countDistinctBeforeEnd}
     <include refid="selectHistoricCaseActivityStatisticsByQueryCriteriaSql"/>
     ${countDistinctAfterEnd}

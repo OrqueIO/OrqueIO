@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.quarkus.engine.extension.event;
+package io.orqueio.bpm.quarkus.engine.extension.event;
 
 /**
  * Event class that is fired after Camunda engine startup.

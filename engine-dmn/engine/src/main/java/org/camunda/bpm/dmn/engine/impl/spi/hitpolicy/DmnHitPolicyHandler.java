@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.engine.impl.spi.hitpolicy;
+package io.orqueio.bpm.dmn.engine.impl.spi.hitpolicy;
 
-import org.camunda.bpm.dmn.engine.DmnEngineException;
-import org.camunda.bpm.dmn.engine.delegate.DmnDecisionTableEvaluationEvent;
-import org.camunda.bpm.dmn.engine.impl.hitpolicy.HitPolicyEntry;
+import io.orqueio.bpm.dmn.engine.DmnEngineException;
+import io.orqueio.bpm.dmn.engine.delegate.DmnDecisionTableEvaluationEvent;
+import io.orqueio.bpm.dmn.engine.impl.hitpolicy.HitPolicyEntry;
 
 /**
  * Handler for a DMN decision table hit policy.

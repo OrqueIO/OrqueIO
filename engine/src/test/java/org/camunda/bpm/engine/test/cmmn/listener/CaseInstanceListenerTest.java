@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.cmmn.listener;
+package io.orqueio.bpm.engine.test.cmmn.listener;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import org.camunda.bpm.engine.delegate.CaseExecutionListener;
-import org.camunda.bpm.engine.runtime.VariableInstanceQuery;
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.engine.test.cmmn.CmmnTest;
+import io.orqueio.bpm.engine.delegate.CaseExecutionListener;
+import io.orqueio.bpm.engine.runtime.VariableInstanceQuery;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.test.cmmn.CmmnTest;
 import org.junit.Test;
 
 /**
@@ -1019,7 +1019,7 @@ public class CaseInstanceListenerTest extends CmmnTest {
     } catch (Exception e) {
       // then
       String message = e.getMessage();
-      testRule.assertTextPresent("ENGINE-05016 Class 'org.camunda.bpm.engine.test.cmmn.listener.NotCaseExecutionListener' doesn't implement '"+CaseExecutionListener.class.getName() + "'", message);
+      testRule.assertTextPresent("ENGINE-05016 Class 'io.orqueio.bpm.engine.test.cmmn.listener.NotCaseExecutionListener' doesn't implement '"+CaseExecutionListener.class.getName() + "'", message);
     }
 
   }

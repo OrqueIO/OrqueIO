@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.spring.components.aop;
+package io.orqueio.bpm.engine.spring.components.aop;
 
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
@@ -23,9 +23,9 @@ import java.util.Set;
 
 import org.aopalliance.aop.Advice;
 import org.aopalliance.intercept.MethodInterceptor;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.spring.annotations.StartProcess;
-import org.camunda.bpm.engine.spring.components.aop.util.MetaAnnotationMatchingPointcut;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.spring.annotations.StartProcess;
+import io.orqueio.bpm.engine.spring.components.aop.util.MetaAnnotationMatchingPointcut;
 import org.springframework.aop.Pointcut;
 import org.springframework.aop.PointcutAdvisor;
 import org.springframework.aop.support.ComposablePointcut;
@@ -36,7 +36,7 @@ import org.springframework.aop.support.ComposablePointcut;
  * Advised methods start a process after the method executes.
  *
  * Advised methods can declare a return
- * type of {@link org.camunda.bpm.engine.runtime.ProcessInstance} and then subsequently
+ * type of {@link io.orqueio.bpm.engine.runtime.ProcessInstance} and then subsequently
  * return null. The real return ProcessInstance value will be given by the aspect.
  * 
  *
@@ -62,7 +62,7 @@ public class ProcessStartingPointcutAdvisor implements PointcutAdvisor, Serializ
 	protected Pointcut pointcut;
 
 	/**
-	 * the injected reference to the {@link org.camunda.bpm.engine.ProcessEngine}
+	 * the injected reference to the {@link io.orqueio.bpm.engine.ProcessEngine}
 	 */
 	protected ProcessEngine processEngine;
 

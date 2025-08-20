@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.cmmn.operation;
+package io.orqueio.bpm.engine.impl.cmmn.operation;
 
-import static org.camunda.bpm.engine.impl.util.ActivityBehaviorUtil.getActivityBehavior;
+import static io.orqueio.bpm.engine.impl.util.ActivityBehaviorUtil.getActivityBehavior;
 
-import org.camunda.bpm.engine.impl.cmmn.behavior.CmmnActivityBehavior;
-import org.camunda.bpm.engine.impl.cmmn.execution.CmmnExecution;
-import org.camunda.bpm.engine.impl.cmmn.model.CmmnActivity;
-import org.camunda.bpm.engine.impl.core.operation.AbstractEventAtomicOperation;
+import io.orqueio.bpm.engine.impl.cmmn.behavior.CmmnActivityBehavior;
+import io.orqueio.bpm.engine.impl.cmmn.execution.CmmnExecution;
+import io.orqueio.bpm.engine.impl.cmmn.model.CmmnActivity;
+import io.orqueio.bpm.engine.impl.core.operation.AbstractEventAtomicOperation;
 
 /**
  * @author Roman Smirnov

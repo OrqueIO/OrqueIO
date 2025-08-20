@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.util;
+package io.orqueio.bpm.engine.impl.util;
 
 import java.lang.reflect.Type;
-import org.camunda.bpm.engine.impl.telemetry.dto.CommandImpl;
-import org.camunda.bpm.engine.impl.telemetry.dto.MetricImpl;
-import org.camunda.bpm.engine.telemetry.Command;
-import org.camunda.bpm.engine.telemetry.Metric;
+import io.orqueio.bpm.engine.impl.telemetry.dto.CommandImpl;
+import io.orqueio.bpm.engine.impl.telemetry.dto.MetricImpl;
+import io.orqueio.bpm.engine.telemetry.Command;
+import io.orqueio.bpm.engine.telemetry.Metric;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.hal.caseDefinition;
+package io.orqueio.bpm.engine.rest.hal.caseDefinition;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.repository.CaseDefinition;
-import org.camunda.bpm.engine.rest.CaseDefinitionRestService;
-import org.camunda.bpm.engine.rest.DeploymentRestService;
-import org.camunda.bpm.engine.rest.hal.HalIdResource;
-import org.camunda.bpm.engine.rest.hal.HalRelation;
-import org.camunda.bpm.engine.rest.hal.HalResource;
-import org.camunda.bpm.engine.rest.sub.repository.DeploymentResourcesResource;
-import org.camunda.bpm.engine.rest.util.ApplicationContextPathUtil;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.repository.CaseDefinition;
+import io.orqueio.bpm.engine.rest.CaseDefinitionRestService;
+import io.orqueio.bpm.engine.rest.DeploymentRestService;
+import io.orqueio.bpm.engine.rest.hal.HalIdResource;
+import io.orqueio.bpm.engine.rest.hal.HalRelation;
+import io.orqueio.bpm.engine.rest.hal.HalResource;
+import io.orqueio.bpm.engine.rest.sub.repository.DeploymentResourcesResource;
+import io.orqueio.bpm.engine.rest.util.ApplicationContextPathUtil;
 
 import javax.ws.rs.core.UriBuilder;
 

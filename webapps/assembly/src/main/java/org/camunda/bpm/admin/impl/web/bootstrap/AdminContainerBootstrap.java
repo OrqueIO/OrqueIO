@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.admin.impl.web.bootstrap;
+package io.orqueio.bpm.admin.impl.web.bootstrap;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-import org.camunda.bpm.admin.Admin;
-import org.camunda.bpm.admin.impl.DefaultAdminRuntimeDelegate;
-import org.camunda.bpm.container.RuntimeContainerDelegate;
-import org.camunda.bpm.engine.rest.util.WebApplicationUtil;
+import io.orqueio.bpm.admin.Admin;
+import io.orqueio.bpm.admin.impl.DefaultAdminRuntimeDelegate;
+import io.orqueio.bpm.container.RuntimeContainerDelegate;
+import io.orqueio.bpm.engine.rest.util.WebApplicationUtil;
 
 /**
  * @author Daniel Meyer

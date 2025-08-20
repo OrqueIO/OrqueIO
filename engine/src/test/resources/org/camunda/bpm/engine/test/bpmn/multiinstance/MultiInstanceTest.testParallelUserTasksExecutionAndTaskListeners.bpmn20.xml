@@ -12,8 +12,8 @@
     
     <userTask id="miTasks" name="My Task ${loopCounter}" camunda:assignee="kermit_${loopCounter}" >
       <extensionElements>
-        <camunda:taskListener event="complete" class="org.camunda.bpm.engine.test.bpmn.multiinstance.TaskCompletionListener" />
-        <camunda:executionListener event="start" class="org.camunda.bpm.engine.test.bpmn.multiinstance.ActivityStartListener" />
+        <camunda:taskListener event="complete" class="io.orqueio.bpm.engine.test.bpmn.multiinstance.TaskCompletionListener" />
+        <camunda:executionListener event="start" class="io.orqueio.bpm.engine.test.bpmn.multiinstance.ActivityStartListener" />
       </extensionElements>
       <multiInstanceLoopCharacteristics isSequential="false">
         <loopCardinality>3</loopCardinality>

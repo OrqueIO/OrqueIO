@@ -14,19 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.cmd;
+package io.orqueio.bpm.engine.impl.cmd;
 
-import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
-import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureWhitelistedResourceId;
+import static io.orqueio.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
+import static io.orqueio.bpm.engine.impl.util.EnsureUtil.ensureWhitelistedResourceId;
 
 import java.io.Serializable;
 
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.identity.User;
-import org.camunda.bpm.engine.impl.identity.IdentityOperationResult;
-import org.camunda.bpm.engine.impl.interceptor.Command;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.persistence.entity.UserEntity;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.identity.User;
+import io.orqueio.bpm.engine.impl.identity.IdentityOperationResult;
+import io.orqueio.bpm.engine.impl.interceptor.Command;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.impl.persistence.entity.UserEntity;
 
 /**
  * @author Joram Barrez

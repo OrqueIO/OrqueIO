@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.admin.impl.plugin.resources;
+package io.orqueio.bpm.admin.impl.plugin.resources;
 
-import org.camunda.bpm.admin.impl.plugin.AdminPlugins;
-import org.camunda.bpm.admin.resource.AbstractAdminPluginRootResource;
+import io.orqueio.bpm.admin.impl.plugin.AdminPlugins;
+import io.orqueio.bpm.admin.resource.AbstractAdminPluginRootResource;
 
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;

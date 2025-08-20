@@ -14,18 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.feel.impl.custom;
+package io.orqueio.bpm.dmn.feel.impl.custom;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.camunda.bpm.dmn.feel.impl.FeelEngine;
-import org.camunda.bpm.dmn.feel.impl.juel.FeelEngineFactoryImpl;
-import org.camunda.bpm.dmn.feel.impl.juel.transform.FeelToJuelFunctionTransformer;
-import org.camunda.bpm.engine.variable.VariableMap;
-import org.camunda.bpm.engine.variable.Variables;
+import io.orqueio.bpm.dmn.feel.impl.FeelEngine;
+import io.orqueio.bpm.dmn.feel.impl.juel.FeelEngineFactoryImpl;
+import io.orqueio.bpm.dmn.feel.impl.juel.transform.FeelToJuelFunctionTransformer;
+import io.orqueio.bpm.engine.variable.VariableMap;
+import io.orqueio.bpm.engine.variable.Variables;
 import org.junit.Before;
 import org.junit.Test;
 

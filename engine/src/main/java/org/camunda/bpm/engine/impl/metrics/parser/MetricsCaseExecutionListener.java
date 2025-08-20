@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.metrics.parser;
+package io.orqueio.bpm.engine.impl.metrics.parser;
 
-import org.camunda.bpm.engine.delegate.CaseExecutionListener;
-import org.camunda.bpm.engine.delegate.DelegateCaseExecution;
-import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.engine.management.Metrics;
+import io.orqueio.bpm.engine.delegate.CaseExecutionListener;
+import io.orqueio.bpm.engine.delegate.DelegateCaseExecution;
+import io.orqueio.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.management.Metrics;
 
 /**
  * @author Daniel Meyer

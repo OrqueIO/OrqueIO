@@ -14,21 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.sub.identity.impl;
+package io.orqueio.bpm.engine.rest.sub.identity.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.camunda.bpm.engine.authorization.Resources;
-import org.camunda.bpm.engine.rest.GroupRestService;
-import org.camunda.bpm.engine.rest.dto.ResourceOptionsDto;
-import org.camunda.bpm.engine.rest.sub.identity.GroupMembersResource;
-import org.camunda.bpm.engine.rest.util.PathUtil;
+import io.orqueio.bpm.engine.authorization.Resources;
+import io.orqueio.bpm.engine.rest.GroupRestService;
+import io.orqueio.bpm.engine.rest.dto.ResourceOptionsDto;
+import io.orqueio.bpm.engine.rest.sub.identity.GroupMembersResource;
+import io.orqueio.bpm.engine.rest.util.PathUtil;
 
 import javax.ws.rs.HttpMethod;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 
-import static org.camunda.bpm.engine.authorization.Permissions.CREATE;
-import static org.camunda.bpm.engine.authorization.Permissions.DELETE;
+import static io.orqueio.bpm.engine.authorization.Permissions.CREATE;
+import static io.orqueio.bpm.engine.authorization.Permissions.DELETE;
 
 /**
  * @author Daniel Meyer

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.webapp.impl.security.auth;
+package io.orqueio.bpm.webapp.impl.security.auth;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -30,13 +30,13 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.identity.Group;
-import org.camunda.bpm.engine.identity.Tenant;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.webapp.impl.WebappLogger;
-import org.camunda.bpm.webapp.impl.util.ProcessEngineUtil;
-import org.camunda.bpm.webapp.impl.util.ServletContextUtil;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.identity.Group;
+import io.orqueio.bpm.engine.identity.Tenant;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.webapp.impl.WebappLogger;
+import io.orqueio.bpm.webapp.impl.util.ProcessEngineUtil;
+import io.orqueio.bpm.webapp.impl.util.ServletContextUtil;
 
 /**
  * Jax-Rs resource allowing users to authenticate with username and password</p>

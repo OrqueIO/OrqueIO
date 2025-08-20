@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.webapp.impl.security.filter;
+package io.orqueio.bpm.webapp.impl.security.filter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.camunda.bpm.webapp.impl.security.auth.Authentication;
-import org.camunda.bpm.webapp.impl.security.filter.RequestMatcher.Match;
-import org.camunda.bpm.webapp.impl.security.filter.util.FilterRules;
+import io.orqueio.bpm.webapp.impl.security.auth.Authentication;
+import io.orqueio.bpm.webapp.impl.security.filter.RequestMatcher.Match;
+import io.orqueio.bpm.webapp.impl.security.filter.util.FilterRules;
 
 /**
  * <p>A {@link SecurityFilterRule} that delegates to a set of path matchers</p>

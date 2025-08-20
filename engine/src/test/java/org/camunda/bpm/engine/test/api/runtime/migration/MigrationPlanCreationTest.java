@@ -14,29 +14,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.runtime.migration;
+package io.orqueio.bpm.engine.test.api.runtime.migration;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.camunda.bpm.engine.test.api.runtime.migration.ModifiableBpmnModelInstance.modify;
-import static org.camunda.bpm.engine.test.util.MigrationPlanAssert.assertThat;
-import static org.camunda.bpm.engine.test.util.MigrationPlanAssert.migrate;
-import static org.camunda.bpm.engine.test.util.MigrationPlanAssert.variable;
-import static org.camunda.bpm.engine.test.util.MigrationPlanValidationReportAssert.assertThat;
+import static io.orqueio.bpm.engine.test.api.runtime.migration.ModifiableBpmnModelInstance.modify;
+import static io.orqueio.bpm.engine.test.util.MigrationPlanAssert.assertThat;
+import static io.orqueio.bpm.engine.test.util.MigrationPlanAssert.migrate;
+import static io.orqueio.bpm.engine.test.util.MigrationPlanAssert.variable;
+import static io.orqueio.bpm.engine.test.util.MigrationPlanValidationReportAssert.assertThat;
 import static org.junit.Assert.fail;
 
-import org.camunda.bpm.engine.BadUserRequestException;
-import org.camunda.bpm.engine.RuntimeService;
-import org.camunda.bpm.engine.migration.MigrationPlan;
-import org.camunda.bpm.engine.migration.MigrationPlanValidationException;
-import org.camunda.bpm.engine.repository.ProcessDefinition;
-import org.camunda.bpm.engine.test.ProcessEngineRule;
-import org.camunda.bpm.engine.test.api.runtime.migration.models.EventSubProcessModels;
-import org.camunda.bpm.engine.test.api.runtime.migration.models.ProcessModels;
-import org.camunda.bpm.engine.test.util.ProvidedProcessEngineRule;
-import org.camunda.bpm.engine.variable.Variables;
-import org.camunda.bpm.engine.variable.value.ObjectValue;
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
-import org.camunda.bpm.model.bpmn.builder.UserTaskBuilder;
+import io.orqueio.bpm.engine.BadUserRequestException;
+import io.orqueio.bpm.engine.RuntimeService;
+import io.orqueio.bpm.engine.migration.MigrationPlan;
+import io.orqueio.bpm.engine.migration.MigrationPlanValidationException;
+import io.orqueio.bpm.engine.repository.ProcessDefinition;
+import io.orqueio.bpm.engine.test.ProcessEngineRule;
+import io.orqueio.bpm.engine.test.api.runtime.migration.models.EventSubProcessModels;
+import io.orqueio.bpm.engine.test.api.runtime.migration.models.ProcessModels;
+import io.orqueio.bpm.engine.test.util.ProvidedProcessEngineRule;
+import io.orqueio.bpm.engine.variable.Variables;
+import io.orqueio.bpm.engine.variable.value.ObjectValue;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.bpm.model.bpmn.builder.UserTaskBuilder;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;

@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.dmn.transformer;
+package io.orqueio.bpm.engine.impl.dmn.transformer;
 
-import org.camunda.bpm.dmn.engine.impl.DmnDecisionRequirementsGraphImpl;
-import org.camunda.bpm.dmn.engine.impl.spi.transform.DmnElementTransformContext;
-import org.camunda.bpm.dmn.engine.impl.transform.DmnDecisionRequirementsGraphTransformHandler;
-import org.camunda.bpm.engine.impl.dmn.entity.repository.DecisionRequirementsDefinitionEntity;
-import org.camunda.bpm.model.dmn.instance.Definitions;
+import io.orqueio.bpm.dmn.engine.impl.DmnDecisionRequirementsGraphImpl;
+import io.orqueio.bpm.dmn.engine.impl.spi.transform.DmnElementTransformContext;
+import io.orqueio.bpm.dmn.engine.impl.transform.DmnDecisionRequirementsGraphTransformHandler;
+import io.orqueio.bpm.engine.impl.dmn.entity.repository.DecisionRequirementsDefinitionEntity;
+import io.orqueio.bpm.model.dmn.instance.Definitions;
 
 public class DecisionRequirementsDefinitionTransformHandler extends DmnDecisionRequirementsGraphTransformHandler {
 

@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.run;
+package io.orqueio.bpm.run;
 
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.cfg.ProcessEnginePlugin;
-import org.camunda.bpm.engine.impl.plugin.AdministratorAuthorizationPlugin;
-import org.camunda.bpm.identity.impl.ldap.plugin.LdapIdentityProviderPlugin;
-import org.camunda.bpm.run.property.CamundaBpmRunAdministratorAuthorizationProperties;
-import org.camunda.bpm.run.property.CamundaBpmRunLdapProperties;
-import org.camunda.bpm.run.property.CamundaBpmRunProperties;
-import org.camunda.bpm.spring.boot.starter.CamundaBpmAutoConfiguration;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEnginePlugin;
+import io.orqueio.bpm.engine.impl.plugin.AdministratorAuthorizationPlugin;
+import io.orqueio.bpm.identity.impl.ldap.plugin.LdapIdentityProviderPlugin;
+import io.orqueio.bpm.run.property.CamundaBpmRunAdministratorAuthorizationProperties;
+import io.orqueio.bpm.run.property.CamundaBpmRunLdapProperties;
+import io.orqueio.bpm.run.property.CamundaBpmRunProperties;
+import io.orqueio.bpm.spring.boot.starter.CamundaBpmAutoConfiguration;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.cmmn.milestone;
+package io.orqueio.bpm.engine.test.cmmn.milestone;
 
-import org.camunda.bpm.engine.delegate.CaseExecutionListener;
-import org.camunda.bpm.engine.delegate.DelegateCaseExecution;
+import io.orqueio.bpm.engine.delegate.CaseExecutionListener;
+import io.orqueio.bpm.engine.delegate.DelegateCaseExecution;
 
 /**
  * @author Roman Smirnov

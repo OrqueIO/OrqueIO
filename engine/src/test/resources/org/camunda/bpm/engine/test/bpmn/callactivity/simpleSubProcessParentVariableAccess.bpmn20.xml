@@ -10,7 +10,7 @@
 
     <sequenceFlow id="flow1" sourceRef="theStart" targetRef="task" />
 
-    <serviceTask id="task" camunda:class="org.camunda.bpm.engine.test.bpmn.callactivity.ServiceTaskParentProcessVariableAccess" />
+    <serviceTask id="task" camunda:class="io.orqueio.bpm.engine.test.bpmn.callactivity.ServiceTaskParentProcessVariableAccess" />
 
     <sequenceFlow id="flow2" sourceRef="task" targetRef="theEnd" />
 

@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.cmd.optimize;
+package io.orqueio.bpm.engine.impl.cmd.optimize;
 
-import org.camunda.bpm.engine.history.HistoricVariableUpdate;
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
-import org.camunda.bpm.engine.impl.cmd.CommandLogger;
-import org.camunda.bpm.engine.impl.interceptor.Command;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.persistence.entity.HistoricDetailVariableInstanceUpdateEntity;
-import org.camunda.bpm.engine.impl.util.CollectionUtil;
-import org.camunda.bpm.engine.impl.variable.serializer.AbstractTypedValueSerializer;
-import org.camunda.bpm.engine.variable.type.ValueType;
+import io.orqueio.bpm.engine.history.HistoricVariableUpdate;
+import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
+import io.orqueio.bpm.engine.impl.cmd.CommandLogger;
+import io.orqueio.bpm.engine.impl.interceptor.Command;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.impl.persistence.entity.HistoricDetailVariableInstanceUpdateEntity;
+import io.orqueio.bpm.engine.impl.util.CollectionUtil;
+import io.orqueio.bpm.engine.impl.variable.serializer.AbstractTypedValueSerializer;
+import io.orqueio.bpm.engine.variable.type.ValueType;
 
 import java.util.ArrayList;
 import java.util.Date;

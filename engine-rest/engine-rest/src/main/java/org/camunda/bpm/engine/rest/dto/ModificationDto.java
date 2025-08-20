@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.dto;
+package io.orqueio.bpm.engine.rest.dto;
 
 import java.util.List;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.history.HistoricProcessInstanceQuery;
-import org.camunda.bpm.engine.rest.dto.history.HistoricProcessInstanceQueryDto;
-import org.camunda.bpm.engine.rest.dto.runtime.ProcessInstanceQueryDto;
-import org.camunda.bpm.engine.rest.dto.runtime.modification.ProcessInstanceModificationInstructionDto;
-import org.camunda.bpm.engine.runtime.ModificationBuilder;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.history.HistoricProcessInstanceQuery;
+import io.orqueio.bpm.engine.rest.dto.history.HistoricProcessInstanceQueryDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.ProcessInstanceQueryDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.modification.ProcessInstanceModificationInstructionDto;
+import io.orqueio.bpm.engine.runtime.ModificationBuilder;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 

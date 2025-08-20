@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.history;
+package io.orqueio.bpm.engine.rest.history;
 
 import java.util.List;
 
@@ -29,13 +29,13 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
-import org.camunda.bpm.engine.history.HistoricDecisionInstanceQuery;
-import org.camunda.bpm.engine.rest.dto.CountResultDto;
-import org.camunda.bpm.engine.rest.dto.batch.BatchDto;
-import org.camunda.bpm.engine.rest.dto.history.HistoricDecisionInstanceDto;
-import org.camunda.bpm.engine.rest.dto.history.batch.removaltime.SetRemovalTimeToHistoricDecisionInstancesDto;
-import org.camunda.bpm.engine.rest.dto.history.batch.DeleteHistoricDecisionInstancesDto;
-import org.camunda.bpm.engine.rest.sub.history.HistoricDecisionInstanceResource;
+import io.orqueio.bpm.engine.history.HistoricDecisionInstanceQuery;
+import io.orqueio.bpm.engine.rest.dto.CountResultDto;
+import io.orqueio.bpm.engine.rest.dto.batch.BatchDto;
+import io.orqueio.bpm.engine.rest.dto.history.HistoricDecisionInstanceDto;
+import io.orqueio.bpm.engine.rest.dto.history.batch.removaltime.SetRemovalTimeToHistoricDecisionInstancesDto;
+import io.orqueio.bpm.engine.rest.dto.history.batch.DeleteHistoricDecisionInstancesDto;
+import io.orqueio.bpm.engine.rest.sub.history.HistoricDecisionInstanceResource;
 
 @Path(HistoricDecisionInstanceRestService.PATH)
 @Produces(MediaType.APPLICATION_JSON)

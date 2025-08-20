@@ -14,35 +14,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.variable;
+package io.orqueio.bpm.client.variable;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
-import static org.camunda.bpm.client.util.ProcessModels.EXTERNAL_TASK_TOPIC_BAR;
-import static org.camunda.bpm.client.util.ProcessModels.EXTERNAL_TASK_TOPIC_FOO;
-import static org.camunda.bpm.client.util.ProcessModels.TWO_EXTERNAL_TASK_PROCESS;
-import static org.camunda.bpm.engine.variable.Variables.SerializationDataFormats.XML;
-import static org.camunda.bpm.engine.variable.type.ValueType.OBJECT;
+import static io.orqueio.bpm.client.util.ProcessModels.EXTERNAL_TASK_TOPIC_BAR;
+import static io.orqueio.bpm.client.util.ProcessModels.EXTERNAL_TASK_TOPIC_FOO;
+import static io.orqueio.bpm.client.util.ProcessModels.TWO_EXTERNAL_TASK_PROCESS;
+import static io.orqueio.bpm.engine.variable.Variables.SerializationDataFormats.XML;
+import static io.orqueio.bpm.engine.variable.type.ValueType.OBJECT;
 
 import java.util.Arrays;
 import java.util.Map;
 
-import org.camunda.bpm.client.ExternalTaskClient;
-import org.camunda.bpm.client.dto.ProcessDefinitionDto;
-import org.camunda.bpm.client.dto.ProcessInstanceDto;
-import org.camunda.bpm.client.exception.ValueMapperException;
-import org.camunda.bpm.client.rule.ClientRule;
-import org.camunda.bpm.client.rule.EngineRule;
-import org.camunda.bpm.client.task.ExternalTask;
-import org.camunda.bpm.client.task.ExternalTaskService;
-import org.camunda.bpm.client.util.RecordingExternalTaskHandler;
-import org.camunda.bpm.client.util.RecordingInvocationHandler;
-import org.camunda.bpm.client.util.RecordingInvocationHandler.RecordedInvocation;
-import org.camunda.bpm.engine.variable.Variables;
-import org.camunda.bpm.engine.variable.value.ObjectValue;
-import org.camunda.spin.Spin;
-import org.camunda.spin.SpinList;
-import org.camunda.spin.xml.SpinXmlElement;
+import io.orqueio.bpm.client.ExternalTaskClient;
+import io.orqueio.bpm.client.dto.ProcessDefinitionDto;
+import io.orqueio.bpm.client.dto.ProcessInstanceDto;
+import io.orqueio.bpm.client.exception.ValueMapperException;
+import io.orqueio.bpm.client.rule.ClientRule;
+import io.orqueio.bpm.client.rule.EngineRule;
+import io.orqueio.bpm.client.task.ExternalTask;
+import io.orqueio.bpm.client.task.ExternalTaskService;
+import io.orqueio.bpm.client.util.RecordingExternalTaskHandler;
+import io.orqueio.bpm.client.util.RecordingInvocationHandler;
+import io.orqueio.bpm.client.util.RecordingInvocationHandler.RecordedInvocation;
+import io.orqueio.bpm.engine.variable.Variables;
+import io.orqueio.bpm.engine.variable.value.ObjectValue;
+import io.orqueio.spin.Spin;
+import io.orqueio.spin.SpinList;
+import io.orqueio.spin.xml.SpinXmlElement;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -700,7 +700,7 @@ public class XmlSerializationIT {
     ObjectValue serializedValue = task.getVariableTyped(VARIABLE_NAME_XML, false);
     assertThat(serializedValue.isDeserialized()).isFalse();
     assertThat(serializedValue.getType()).isEqualTo(OBJECT);
-    assertThat(serializedValue.getObjectTypeName()).isEqualTo("org.camunda.bpm.client.variable.XmlSerializables");
+    assertThat(serializedValue.getObjectTypeName()).isEqualTo("io.orqueio.bpm.client.variable.XmlSerializables");
 
     SpinXmlElement spinElement = Spin.XML(serializedValue.getValueSerialized());
     SpinList<SpinXmlElement> childElements = spinElement.childElements();
@@ -714,7 +714,7 @@ public class XmlSerializationIT {
     assertThat(deserializedValue.isDeserialized()).isTrue();
     assertThat(deserializedValue.getValue()).isEqualTo(VARIABLE_VALUE_XML_LIST_DESERIALIZED);
     assertThat(deserializedValue.getType()).isEqualTo(OBJECT);
-    assertThat(deserializedValue.getObjectTypeName()).isEqualTo("org.camunda.bpm.client.variable.XmlSerializables");
+    assertThat(deserializedValue.getObjectTypeName()).isEqualTo("io.orqueio.bpm.client.variable.XmlSerializables");
 
     XmlSerializables variableValue = task.getVariable(VARIABLE_NAME_XML);
     assertThat(variableValue).isEqualTo(VARIABLE_VALUE_XML_LIST_DESERIALIZED);

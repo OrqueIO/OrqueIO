@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.jboss.deployment.marker;
+package io.orqueio.bpm.container.impl.jboss.deployment.marker;
 
 import java.util.List;
 
-import org.camunda.bpm.application.AbstractProcessApplication;
-import org.camunda.bpm.application.impl.metadata.spi.ProcessesXml;
-import org.camunda.bpm.container.impl.jboss.util.ProcessesXmlWrapper;
+import io.orqueio.bpm.application.AbstractProcessApplication;
+import io.orqueio.bpm.application.impl.metadata.spi.ProcessesXml;
+import io.orqueio.bpm.container.impl.jboss.util.ProcessesXmlWrapper;
 import org.jboss.as.ee.component.ComponentDescription;
 import org.jboss.as.server.deployment.AttachmentKey;
 import org.jboss.as.server.deployment.AttachmentList;

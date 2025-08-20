@@ -14,25 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.impl;
+package io.orqueio.bpm.client.impl;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import org.camunda.bpm.client.UrlResolver;
-import org.camunda.bpm.client.task.ExternalTask;
-import org.camunda.bpm.client.task.OrderingConfig;
-import org.camunda.bpm.client.task.impl.ExternalTaskImpl;
-import org.camunda.bpm.client.task.impl.dto.BpmnErrorRequestDto;
-import org.camunda.bpm.client.task.impl.dto.CompleteRequestDto;
-import org.camunda.bpm.client.task.impl.dto.ExtendLockRequestDto;
-import org.camunda.bpm.client.task.impl.dto.FailureRequestDto;
-import org.camunda.bpm.client.task.impl.dto.LockRequestDto;
-import org.camunda.bpm.client.task.impl.dto.SetVariablesRequestDto;
-import org.camunda.bpm.client.topic.impl.dto.FetchAndLockRequestDto;
-import org.camunda.bpm.client.topic.impl.dto.TopicRequestDto;
-import org.camunda.bpm.client.variable.impl.TypedValueField;
-import org.camunda.bpm.client.variable.impl.TypedValues;
+import io.orqueio.bpm.client.UrlResolver;
+import io.orqueio.bpm.client.task.ExternalTask;
+import io.orqueio.bpm.client.task.OrderingConfig;
+import io.orqueio.bpm.client.task.impl.ExternalTaskImpl;
+import io.orqueio.bpm.client.task.impl.dto.BpmnErrorRequestDto;
+import io.orqueio.bpm.client.task.impl.dto.CompleteRequestDto;
+import io.orqueio.bpm.client.task.impl.dto.ExtendLockRequestDto;
+import io.orqueio.bpm.client.task.impl.dto.FailureRequestDto;
+import io.orqueio.bpm.client.task.impl.dto.LockRequestDto;
+import io.orqueio.bpm.client.task.impl.dto.SetVariablesRequestDto;
+import io.orqueio.bpm.client.topic.impl.dto.FetchAndLockRequestDto;
+import io.orqueio.bpm.client.topic.impl.dto.TopicRequestDto;
+import io.orqueio.bpm.client.variable.impl.TypedValueField;
+import io.orqueio.bpm.client.variable.impl.TypedValues;
 
 /**
  * @author Tassilo Weidner

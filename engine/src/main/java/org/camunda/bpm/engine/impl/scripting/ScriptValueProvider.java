@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.scripting;
+package io.orqueio.bpm.engine.impl.scripting;
 
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.delegate.VariableScope;
-import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.engine.impl.core.variable.mapping.IoParameter;
-import org.camunda.bpm.engine.impl.core.variable.mapping.value.ParameterValueProvider;
-import org.camunda.bpm.engine.impl.delegate.ScriptInvocation;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.delegate.VariableScope;
+import io.orqueio.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.impl.core.variable.mapping.IoParameter;
+import io.orqueio.bpm.engine.impl.core.variable.mapping.value.ParameterValueProvider;
+import io.orqueio.bpm.engine.impl.delegate.ScriptInvocation;
 
 /**
  * Makes it possible to use scripts in {@link IoParameter} mappings.

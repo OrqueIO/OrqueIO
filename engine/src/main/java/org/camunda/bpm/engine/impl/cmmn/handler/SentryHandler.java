@@ -14,35 +14,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.cmmn.handler;
+package io.orqueio.bpm.engine.impl.cmmn.handler;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.camunda.bpm.engine.delegate.Expression;
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
-import org.camunda.bpm.engine.impl.cmmn.model.CmmnActivity;
-import org.camunda.bpm.engine.impl.cmmn.model.CmmnIfPartDeclaration;
-import org.camunda.bpm.engine.impl.cmmn.model.CmmnOnPartDeclaration;
-import org.camunda.bpm.engine.impl.cmmn.model.CmmnSentryDeclaration;
-import org.camunda.bpm.engine.impl.cmmn.model.CmmnVariableOnPartDeclaration;
-import org.camunda.bpm.engine.impl.cmmn.transformer.CmmnTransformerLogger;
-import org.camunda.bpm.engine.impl.el.ExpressionManager;
-import org.camunda.bpm.model.cmmn.PlanItemTransition;
-import org.camunda.bpm.model.cmmn.Query;
-import org.camunda.bpm.model.cmmn.VariableTransition;
-import org.camunda.bpm.model.cmmn.instance.CaseFileItemOnPart;
-import org.camunda.bpm.model.cmmn.instance.CmmnElement;
-import org.camunda.bpm.model.cmmn.instance.ConditionExpression;
-import org.camunda.bpm.model.cmmn.instance.ExtensionElements;
-import org.camunda.bpm.model.cmmn.instance.IfPart;
-import org.camunda.bpm.model.cmmn.instance.OnPart;
-import org.camunda.bpm.model.cmmn.instance.PlanItem;
-import org.camunda.bpm.model.cmmn.instance.PlanItemOnPart;
-import org.camunda.bpm.model.cmmn.instance.Sentry;
-import org.camunda.bpm.model.cmmn.instance.camunda.CamundaVariableOnPart;
-import org.camunda.bpm.model.xml.instance.ModelElementInstance;
+import io.orqueio.bpm.engine.delegate.Expression;
+import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
+import io.orqueio.bpm.engine.impl.cmmn.model.CmmnActivity;
+import io.orqueio.bpm.engine.impl.cmmn.model.CmmnIfPartDeclaration;
+import io.orqueio.bpm.engine.impl.cmmn.model.CmmnOnPartDeclaration;
+import io.orqueio.bpm.engine.impl.cmmn.model.CmmnSentryDeclaration;
+import io.orqueio.bpm.engine.impl.cmmn.model.CmmnVariableOnPartDeclaration;
+import io.orqueio.bpm.engine.impl.cmmn.transformer.CmmnTransformerLogger;
+import io.orqueio.bpm.engine.impl.el.ExpressionManager;
+import io.orqueio.bpm.model.cmmn.PlanItemTransition;
+import io.orqueio.bpm.model.cmmn.Query;
+import io.orqueio.bpm.model.cmmn.VariableTransition;
+import io.orqueio.bpm.model.cmmn.instance.CaseFileItemOnPart;
+import io.orqueio.bpm.model.cmmn.instance.CmmnElement;
+import io.orqueio.bpm.model.cmmn.instance.ConditionExpression;
+import io.orqueio.bpm.model.cmmn.instance.ExtensionElements;
+import io.orqueio.bpm.model.cmmn.instance.IfPart;
+import io.orqueio.bpm.model.cmmn.instance.OnPart;
+import io.orqueio.bpm.model.cmmn.instance.PlanItem;
+import io.orqueio.bpm.model.cmmn.instance.PlanItemOnPart;
+import io.orqueio.bpm.model.cmmn.instance.Sentry;
+import io.orqueio.bpm.model.cmmn.instance.camunda.CamundaVariableOnPart;
+import io.orqueio.bpm.model.xml.instance.ModelElementInstance;
 
 /**
  * @author Roman Smirnov

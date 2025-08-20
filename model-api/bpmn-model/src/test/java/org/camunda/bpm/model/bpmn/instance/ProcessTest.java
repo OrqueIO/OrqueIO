@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.bpmn.instance;
+package io.orqueio.bpm.model.bpmn.instance;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
 
 import java.util.Arrays;
 import java.util.Collection;
-import org.camunda.bpm.model.bpmn.BpmnTestConstants;
+import io.orqueio.bpm.model.bpmn.BpmnTestConstants;
 
-import org.camunda.bpm.model.bpmn.ProcessType;
-import org.camunda.bpm.model.bpmn.impl.instance.Supports;
+import io.orqueio.bpm.model.bpmn.ProcessType;
+import io.orqueio.bpm.model.bpmn.impl.instance.Supports;
 import org.junit.Test;
 
 /**

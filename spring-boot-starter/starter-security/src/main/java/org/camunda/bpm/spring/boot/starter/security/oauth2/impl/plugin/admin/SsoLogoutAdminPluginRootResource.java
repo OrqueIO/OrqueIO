@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter.security.oauth2.impl.plugin.admin;
+package io.orqueio.bpm.spring.boot.starter.security.oauth2.impl.plugin.admin;
 
 import jakarta.ws.rs.Path;
-import org.camunda.bpm.admin.resource.AbstractAdminPluginRootResource;
-import org.camunda.bpm.spring.boot.starter.security.oauth2.impl.plugin.SsoLogoutPluginConstants;
+import io.orqueio.bpm.admin.resource.AbstractAdminPluginRootResource;
+import io.orqueio.bpm.spring.boot.starter.security.oauth2.impl.plugin.SsoLogoutPluginConstants;
 
 @Path("plugin/" + SsoLogoutPluginConstants.ID)
 public class SsoLogoutAdminPluginRootResource extends AbstractAdminPluginRootResource {

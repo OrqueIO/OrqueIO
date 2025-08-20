@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.backoff;
+package io.orqueio.bpm.client.backoff;
 
-import org.camunda.bpm.client.task.ExternalTask;
+import io.orqueio.bpm.client.task.ExternalTask;
 
 import java.util.List;
 

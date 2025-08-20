@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.dto;
+package io.orqueio.bpm.engine.rest.dto;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.camunda.bpm.engine.management.SchemaLogEntry;
+import io.orqueio.bpm.engine.management.SchemaLogEntry;
 
 /**
  * @author Miklas Boskamp

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.bpmn.util;
+package io.orqueio.bpm.model.bpmn.util;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

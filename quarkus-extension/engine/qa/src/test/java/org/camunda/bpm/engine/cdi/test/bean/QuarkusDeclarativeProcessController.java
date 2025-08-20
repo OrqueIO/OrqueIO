@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.cdi.test.bean;
+package io.orqueio.bpm.engine.cdi.test.bean;
 
 import io.quarkus.arc.Unremovable;
-import org.camunda.bpm.engine.cdi.test.impl.beans.DeclarativeProcessController;
+import io.orqueio.bpm.engine.cdi.test.impl.beans.DeclarativeProcessController;
 
 import jakarta.enterprise.context.Dependent;
 

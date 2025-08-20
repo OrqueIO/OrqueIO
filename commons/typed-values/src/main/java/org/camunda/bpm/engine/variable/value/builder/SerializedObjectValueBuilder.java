@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.variable.value.builder;
+package io.orqueio.bpm.engine.variable.value.builder;
 
-import org.camunda.bpm.engine.variable.value.SerializationDataFormat;
+import io.orqueio.bpm.engine.variable.value.SerializationDataFormat;
 
 /**
  * @author Daniel Meyer

@@ -14,24 +14,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.impl;
+package io.orqueio.bpm.engine.rest.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.repository.DecisionDefinition;
-import org.camunda.bpm.engine.repository.DecisionDefinitionQuery;
-import org.camunda.bpm.engine.rest.DecisionDefinitionRestService;
-import org.camunda.bpm.engine.rest.dto.CountResultDto;
-import org.camunda.bpm.engine.rest.dto.repository.DecisionDefinitionDto;
-import org.camunda.bpm.engine.rest.dto.repository.DecisionDefinitionQueryDto;
-import org.camunda.bpm.engine.rest.exception.RestException;
-import org.camunda.bpm.engine.rest.sub.repository.DecisionDefinitionResource;
-import org.camunda.bpm.engine.rest.sub.repository.impl.DecisionDefinitionResourceImpl;
-import org.camunda.bpm.engine.rest.util.QueryUtil;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.repository.DecisionDefinition;
+import io.orqueio.bpm.engine.repository.DecisionDefinitionQuery;
+import io.orqueio.bpm.engine.rest.DecisionDefinitionRestService;
+import io.orqueio.bpm.engine.rest.dto.CountResultDto;
+import io.orqueio.bpm.engine.rest.dto.repository.DecisionDefinitionDto;
+import io.orqueio.bpm.engine.rest.dto.repository.DecisionDefinitionQueryDto;
+import io.orqueio.bpm.engine.rest.exception.RestException;
+import io.orqueio.bpm.engine.rest.sub.repository.DecisionDefinitionResource;
+import io.orqueio.bpm.engine.rest.sub.repository.impl.DecisionDefinitionResourceImpl;
+import io.orqueio.bpm.engine.rest.util.QueryUtil;
 
 public class DecisionDefinitionRestServiceImpl extends AbstractRestProcessEngineAware implements DecisionDefinitionRestService {
 

@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.cockpit.plugin.base.authorization;
+package io.orqueio.bpm.cockpit.plugin.base.authorization;
 
-import org.camunda.bpm.cockpit.impl.plugin.base.dto.ProcessDefinitionStatisticsDto;
-import org.camunda.bpm.cockpit.impl.plugin.resources.ProcessDefinitionRestService;
-import org.camunda.bpm.engine.rest.dto.CountResultDto;
+import io.orqueio.bpm.cockpit.impl.plugin.base.dto.ProcessDefinitionStatisticsDto;
+import io.orqueio.bpm.cockpit.impl.plugin.resources.ProcessDefinitionRestService;
+import io.orqueio.bpm.engine.rest.dto.CountResultDto;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,9 +31,9 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
-import static org.camunda.bpm.engine.authorization.Authorization.ANY;
-import static org.camunda.bpm.engine.authorization.Permissions.READ;
-import static org.camunda.bpm.engine.authorization.Resources.PROCESS_DEFINITION;
+import static io.orqueio.bpm.engine.authorization.Authorization.ANY;
+import static io.orqueio.bpm.engine.authorization.Permissions.READ;
+import static io.orqueio.bpm.engine.authorization.Resources.PROCESS_DEFINITION;
 
 public class ProcessDefinitionRestServiceAuthorizationTest  extends AuthorizationTest {
 

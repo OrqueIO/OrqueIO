@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.cockpit;
+package io.orqueio.bpm.cockpit;
 
-import org.camunda.bpm.cockpit.db.CommandExecutor;
-import org.camunda.bpm.cockpit.db.QueryService;
-import org.camunda.bpm.cockpit.plugin.PluginRegistry;
-import org.camunda.bpm.cockpit.plugin.spi.CockpitPlugin;
-import org.camunda.bpm.webapp.AppRuntimeDelegate;
+import io.orqueio.bpm.cockpit.db.CommandExecutor;
+import io.orqueio.bpm.cockpit.db.QueryService;
+import io.orqueio.bpm.cockpit.plugin.PluginRegistry;
+import io.orqueio.bpm.cockpit.plugin.spi.CockpitPlugin;
+import io.orqueio.bpm.webapp.AppRuntimeDelegate;
 
 /**
  * <p>The {@link CockpitRuntimeDelegate} is a delegate to provide

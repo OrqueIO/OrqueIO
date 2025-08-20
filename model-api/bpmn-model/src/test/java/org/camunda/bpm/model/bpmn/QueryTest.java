@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.bpmn;
+package io.orqueio.bpm.model.bpmn;
 
-import org.camunda.bpm.model.bpmn.instance.FlowNode;
-import org.camunda.bpm.model.bpmn.instance.Gateway;
-import org.camunda.bpm.model.bpmn.instance.Task;
-import org.camunda.bpm.model.xml.type.ModelElementType;
+import io.orqueio.bpm.model.bpmn.instance.FlowNode;
+import io.orqueio.bpm.model.bpmn.instance.Gateway;
+import io.orqueio.bpm.model.bpmn.instance.Task;
+import io.orqueio.bpm.model.xml.type.ModelElementType;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;

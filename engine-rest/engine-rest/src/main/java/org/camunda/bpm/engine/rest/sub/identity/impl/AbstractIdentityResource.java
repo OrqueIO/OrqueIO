@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.sub.identity.impl;
+package io.orqueio.bpm.engine.rest.sub.identity.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.camunda.bpm.engine.IdentityService;
-import org.camunda.bpm.engine.authorization.Resource;
-import org.camunda.bpm.engine.rest.exception.InvalidRequestException;
-import org.camunda.bpm.engine.rest.impl.AbstractAuthorizedRestResource;
+import io.orqueio.bpm.engine.IdentityService;
+import io.orqueio.bpm.engine.authorization.Resource;
+import io.orqueio.bpm.engine.rest.exception.InvalidRequestException;
+import io.orqueio.bpm.engine.rest.impl.AbstractAuthorizedRestResource;
 
 import javax.ws.rs.core.Response.Status;
 

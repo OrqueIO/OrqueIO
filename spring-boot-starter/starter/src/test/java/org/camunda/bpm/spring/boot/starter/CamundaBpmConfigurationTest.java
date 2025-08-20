@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter;
+package io.orqueio.bpm.spring.boot.starter;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -22,9 +22,9 @@ import static org.mockito.Mockito.mock;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.camunda.bpm.engine.impl.cfg.CompositeProcessEnginePlugin;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.cfg.ProcessEnginePlugin;
+import io.orqueio.bpm.engine.impl.cfg.CompositeProcessEnginePlugin;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEnginePlugin;
 import org.junit.Test;
 
 public class CamundaBpmConfigurationTest {

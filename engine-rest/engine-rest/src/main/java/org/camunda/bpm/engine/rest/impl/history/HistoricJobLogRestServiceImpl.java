@@ -14,22 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.impl.history;
+package io.orqueio.bpm.engine.rest.impl.history;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.core.UriInfo;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.history.HistoricJobLog;
-import org.camunda.bpm.engine.history.HistoricJobLogQuery;
-import org.camunda.bpm.engine.rest.dto.CountResultDto;
-import org.camunda.bpm.engine.rest.dto.history.HistoricJobLogDto;
-import org.camunda.bpm.engine.rest.dto.history.HistoricJobLogQueryDto;
-import org.camunda.bpm.engine.rest.history.HistoricJobLogRestService;
-import org.camunda.bpm.engine.rest.sub.history.HistoricJobLogResource;
-import org.camunda.bpm.engine.rest.sub.history.impl.HistoricJobLogResourceImpl;
-import org.camunda.bpm.engine.rest.util.QueryUtil;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.history.HistoricJobLog;
+import io.orqueio.bpm.engine.history.HistoricJobLogQuery;
+import io.orqueio.bpm.engine.rest.dto.CountResultDto;
+import io.orqueio.bpm.engine.rest.dto.history.HistoricJobLogDto;
+import io.orqueio.bpm.engine.rest.dto.history.HistoricJobLogQueryDto;
+import io.orqueio.bpm.engine.rest.history.HistoricJobLogRestService;
+import io.orqueio.bpm.engine.rest.sub.history.HistoricJobLogResource;
+import io.orqueio.bpm.engine.rest.sub.history.impl.HistoricJobLogResourceImpl;
+import io.orqueio.bpm.engine.rest.util.QueryUtil;
 
 /**
  * @author Roman Smirnov

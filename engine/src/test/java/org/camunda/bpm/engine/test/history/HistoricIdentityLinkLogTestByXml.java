@@ -14,22 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.history;
+package io.orqueio.bpm.engine.test.history;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.util.List;
 
-import org.camunda.bpm.engine.ProcessEngineConfiguration;
-import org.camunda.bpm.engine.history.HistoricIdentityLinkLog;
-import org.camunda.bpm.engine.history.HistoricIdentityLinkLogQuery;
-import org.camunda.bpm.engine.repository.ProcessDefinition;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.task.IdentityLink;
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.engine.test.RequiredHistoryLevel;
-import org.camunda.bpm.engine.test.util.PluggableProcessEngineTest;
+import io.orqueio.bpm.engine.ProcessEngineConfiguration;
+import io.orqueio.bpm.engine.history.HistoricIdentityLinkLog;
+import io.orqueio.bpm.engine.history.HistoricIdentityLinkLogQuery;
+import io.orqueio.bpm.engine.repository.ProcessDefinition;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.task.IdentityLink;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.test.RequiredHistoryLevel;
+import io.orqueio.bpm.engine.test.util.PluggableProcessEngineTest;
 import org.junit.Test;
 
 @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_FULL)
@@ -157,7 +157,7 @@ public class HistoricIdentityLinkLogTestByXml extends PluggableProcessEngineTest
   @Test
   public void testPropagateTenantIdToCandidateStarterUser() {
     // when
-    org.camunda.bpm.engine.repository.Deployment deployment = repositoryService.createDeployment()
+    io.orqueio.bpm.engine.repository.Deployment deployment = repositoryService.createDeployment()
       .addClasspathResource(CANDIDATE_STARTER_USER)
       .tenantId(TENANT_ONE)
       .deploy();
@@ -176,7 +176,7 @@ public class HistoricIdentityLinkLogTestByXml extends PluggableProcessEngineTest
   @Test
   public void testPropagateTenantIdToCandidateStarterUsers() {
     // when
-    org.camunda.bpm.engine.repository.Deployment deployment = repositoryService.createDeployment()
+    io.orqueio.bpm.engine.repository.Deployment deployment = repositoryService.createDeployment()
         .addClasspathResource(CANDIDATE_STARTER_USERS)
         .tenantId(TENANT_ONE)
         .deploy();
@@ -196,7 +196,7 @@ public class HistoricIdentityLinkLogTestByXml extends PluggableProcessEngineTest
   @Test
   public void testPropagateTenantIdToCandidateStarterGroup() {
     // when
-    org.camunda.bpm.engine.repository.Deployment deployment = repositoryService.createDeployment()
+    io.orqueio.bpm.engine.repository.Deployment deployment = repositoryService.createDeployment()
         .addClasspathResource(CANDIDATE_STARTER_GROUP)
         .tenantId(TENANT_ONE)
         .deploy();
@@ -215,7 +215,7 @@ public class HistoricIdentityLinkLogTestByXml extends PluggableProcessEngineTest
   @Test
   public void testPropagateTenantIdToCandidateStarterGroups() {
     // when
-    org.camunda.bpm.engine.repository.Deployment deployment = repositoryService.createDeployment()
+    io.orqueio.bpm.engine.repository.Deployment deployment = repositoryService.createDeployment()
         .addClasspathResource(CANDIDATE_STARTER_GROUPS)
         .tenantId(TENANT_ONE)
         .deploy();

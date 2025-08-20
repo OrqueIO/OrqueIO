@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.engine.impl.hitpolicy;
+package io.orqueio.bpm.dmn.engine.impl.hitpolicy;
 
-import org.camunda.bpm.engine.variable.Variables;
-import org.camunda.bpm.engine.variable.value.TypedValue;
-import org.camunda.bpm.model.dmn.BuiltinAggregator;
-import org.camunda.bpm.model.dmn.HitPolicy;
+import io.orqueio.bpm.engine.variable.Variables;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
+import io.orqueio.bpm.model.dmn.BuiltinAggregator;
+import io.orqueio.bpm.model.dmn.HitPolicy;
 
 import java.util.List;
 

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.cdi.annotation;
+package io.orqueio.bpm.engine.cdi.annotation;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
@@ -23,7 +23,7 @@ import java.lang.annotation.RetentionPolicy;
 import javax.enterprise.util.Nonbinding;
 import javax.inject.Qualifier;
 
-import org.camunda.bpm.engine.variable.value.TypedValue;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
 
 /**
  * Annotation for qualifying injection points such that local process variables are

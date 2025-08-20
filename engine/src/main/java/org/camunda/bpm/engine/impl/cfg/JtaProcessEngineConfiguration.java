@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.cfg;
+package io.orqueio.bpm.engine.impl.cfg;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.transaction.TransactionManager;
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
-import org.camunda.bpm.engine.impl.cfg.jta.JtaTransactionContextFactory;
-import org.camunda.bpm.engine.impl.interceptor.CommandInterceptor;
-import org.camunda.bpm.engine.impl.interceptor.JtaTransactionInterceptor;
+import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
+import io.orqueio.bpm.engine.impl.cfg.jta.JtaTransactionContextFactory;
+import io.orqueio.bpm.engine.impl.interceptor.CommandInterceptor;
+import io.orqueio.bpm.engine.impl.interceptor.JtaTransactionInterceptor;
 
 
 /**

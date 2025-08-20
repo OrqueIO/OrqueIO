@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.bpmn.parser;
+package io.orqueio.bpm.engine.impl.bpmn.parser;
 
 import java.io.Serializable;
 import java.util.Set;
-import org.camunda.bpm.engine.delegate.DelegateExecution;
-import org.camunda.bpm.engine.impl.Condition;
-import org.camunda.bpm.engine.impl.core.variable.event.VariableEvent;
-import org.camunda.bpm.engine.impl.event.EventType;
-import org.camunda.bpm.engine.impl.pvm.process.ActivityImpl;
+import io.orqueio.bpm.engine.delegate.DelegateExecution;
+import io.orqueio.bpm.engine.impl.Condition;
+import io.orqueio.bpm.engine.impl.core.variable.event.VariableEvent;
+import io.orqueio.bpm.engine.impl.event.EventType;
+import io.orqueio.bpm.engine.impl.pvm.process.ActivityImpl;
 
 /**
  * Represents the conditional event definition corresponding to the

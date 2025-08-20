@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.persistence.entity;
+package io.orqueio.bpm.engine.impl.persistence.entity;
 
 import java.util.List;
 
-import org.camunda.bpm.engine.management.DeploymentStatistics;
-import org.camunda.bpm.engine.management.IncidentStatistics;
+import io.orqueio.bpm.engine.management.DeploymentStatistics;
+import io.orqueio.bpm.engine.management.IncidentStatistics;
 
 public class DeploymentStatisticsEntity extends DeploymentEntity implements DeploymentStatistics {
 

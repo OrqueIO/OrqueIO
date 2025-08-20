@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.connect.impl;
+package io.orqueio.connect.impl;
 
-import org.camunda.commons.logging.BaseLogger;
+import io.orqueio.commons.logging.BaseLogger;
 
 public abstract class ConnectLogger extends BaseLogger {
 
   public static final String PROJECT_CODE = "CNCT";
 
-  public static final ConnectCoreLogger CORE_LOGGER = createLogger(ConnectCoreLogger.class, PROJECT_CODE, "org.camunda.bpm.connect", "01");
+  public static final ConnectCoreLogger CORE_LOGGER = createLogger(ConnectCoreLogger.class, PROJECT_CODE, "io.orqueio.bpm.connect", "01");
 
 }

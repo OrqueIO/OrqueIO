@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.impl;
+package io.orqueio.bpm.client.impl;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -37,8 +37,8 @@ import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.apache.hc.core5.http.io.support.ClassicRequestBuilder;
 import org.apache.hc.core5.http.message.BasicHeader;
 import org.apache.hc.core5.http.message.StatusLine;
-import org.camunda.bpm.client.exception.RestException;
-import org.camunda.commons.utils.IoUtil;
+import io.orqueio.bpm.client.exception.RestException;
+import io.orqueio.commons.utils.IoUtil;
 
 /**
  * @author Tassilo Weidner

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.sub.runtime;
+package io.orqueio.bpm.engine.rest.sub.runtime;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -27,12 +27,12 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import org.camunda.bpm.engine.rest.dto.SuspensionStateDto;
-import org.camunda.bpm.engine.rest.dto.batch.BatchDto;
-import org.camunda.bpm.engine.rest.dto.runtime.ActivityInstanceDto;
-import org.camunda.bpm.engine.rest.dto.runtime.ProcessInstanceDto;
-import org.camunda.bpm.engine.rest.dto.runtime.modification.ProcessInstanceModificationDto;
-import org.camunda.bpm.engine.rest.sub.VariableResource;
+import io.orqueio.bpm.engine.rest.dto.SuspensionStateDto;
+import io.orqueio.bpm.engine.rest.dto.batch.BatchDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.ActivityInstanceDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.ProcessInstanceDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.modification.ProcessInstanceModificationDto;
+import io.orqueio.bpm.engine.rest.sub.VariableResource;
 
 public interface ProcessInstanceResource {
 

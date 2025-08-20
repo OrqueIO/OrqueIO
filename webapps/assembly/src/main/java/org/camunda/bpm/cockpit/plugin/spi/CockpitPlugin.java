@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.cockpit.plugin.spi;
+package io.orqueio.bpm.cockpit.plugin.spi;
 
 import java.util.List;
 
-import org.camunda.bpm.webapp.plugin.spi.AppPlugin;
+import io.orqueio.bpm.webapp.plugin.spi.AppPlugin;
 
 /**
  * The service provider interface (SPI) that must be provided by
@@ -27,11 +27,11 @@ import org.camunda.bpm.webapp.plugin.spi.AppPlugin;
  * A cockpit plugin may provide additional MyBatis mapping files, see {@link #getMappingFiles()}.
  *
  * Plugin developers should not use this interface directly but use
- * {@link org.camunda.bpm.cockpit.plugin.spi.impl.AbstractCockpitPlugin} as a base class.
+ * {@link io.orqueio.bpm.cockpit.plugin.spi.impl.AbstractCockpitPlugin} as a base class.
  *
  * @author nico.rehwaldt
  *
- * @see org.camunda.bpm.cockpit.plugin.spi.impl.AbstractCockpitPlugin
+ * @see io.orqueio.bpm.cockpit.plugin.spi.impl.AbstractCockpitPlugin
  */
 public interface CockpitPlugin extends AppPlugin {
 
@@ -45,8 +45,8 @@ public interface CockpitPlugin extends AppPlugin {
    *
    * <p>
    *
-   * Inside the plugin the queries may be executed via the {@link org.camunda.bpm.cockpit.db.QueryService} that may be obtained through
-   * {@link org.camunda.bpm.cockpit.Cockpit#getQueryService(java.lang.String) }.
+   * Inside the plugin the queries may be executed via the {@link io.orqueio.bpm.cockpit.db.QueryService} that may be obtained through
+   * {@link io.orqueio.bpm.cockpit.Cockpit#getQueryService(java.lang.String) }.
    *
    * @return the list of additional mapping files
    */

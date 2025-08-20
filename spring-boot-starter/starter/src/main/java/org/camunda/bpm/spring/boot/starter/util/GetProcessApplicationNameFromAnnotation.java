@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter.util;
+package io.orqueio.bpm.spring.boot.starter.util;
 
 import org.apache.commons.lang3.StringUtils;
-import org.camunda.bpm.spring.boot.starter.annotation.EnableProcessApplication;
+import io.orqueio.bpm.spring.boot.starter.annotation.EnableProcessApplication;
 import org.springframework.context.ApplicationContext;
 
 import java.util.Collections;

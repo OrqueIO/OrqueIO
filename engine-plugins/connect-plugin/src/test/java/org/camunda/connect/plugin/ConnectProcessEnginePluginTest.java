@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.connect.plugin;
+package io.orqueio.connect.plugin;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
@@ -23,21 +23,21 @@ import static org.junit.Assert.assertThat;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.camunda.bpm.engine.BpmnParseException;
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.delegate.BpmnError;
-import org.camunda.bpm.engine.history.HistoricVariableInstance;
-import org.camunda.bpm.engine.impl.test.PluggableProcessEngineTestCase;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.runtime.VariableInstance;
-import org.camunda.bpm.engine.task.Task;
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.connect.ConnectorException;
-import org.camunda.connect.Connectors;
-import org.camunda.connect.httpclient.HttpConnector;
-import org.camunda.connect.httpclient.soap.SoapHttpConnector;
-import org.camunda.connect.plugin.util.TestConnector;
-import org.camunda.connect.spi.Connector;
+import io.orqueio.bpm.engine.BpmnParseException;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.delegate.BpmnError;
+import io.orqueio.bpm.engine.history.HistoricVariableInstance;
+import io.orqueio.bpm.engine.impl.test.PluggableProcessEngineTestCase;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.runtime.VariableInstance;
+import io.orqueio.bpm.engine.task.Task;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.connect.ConnectorException;
+import io.orqueio.connect.Connectors;
+import io.orqueio.connect.httpclient.HttpConnector;
+import io.orqueio.connect.httpclient.soap.SoapHttpConnector;
+import io.orqueio.connect.plugin.util.TestConnector;
+import io.orqueio.connect.spi.Connector;
 
 public class ConnectProcessEnginePluginTest extends PluggableProcessEngineTestCase {
 

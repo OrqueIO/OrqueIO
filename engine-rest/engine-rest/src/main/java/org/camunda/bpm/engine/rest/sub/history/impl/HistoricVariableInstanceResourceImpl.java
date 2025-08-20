@@ -14,21 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.sub.history.impl;
+package io.orqueio.bpm.engine.rest.sub.history.impl;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.exception.NotFoundException;
-import org.camunda.bpm.engine.history.HistoricVariableInstance;
-import org.camunda.bpm.engine.history.HistoricVariableInstanceQuery;
-import org.camunda.bpm.engine.query.Query;
-import org.camunda.bpm.engine.rest.dto.history.HistoricVariableInstanceDto;
-import org.camunda.bpm.engine.rest.exception.InvalidRequestException;
-import org.camunda.bpm.engine.rest.sub.AbstractResourceProvider;
-import org.camunda.bpm.engine.rest.sub.history.HistoricVariableInstanceResource;
-import org.camunda.bpm.engine.variable.value.TypedValue;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.exception.NotFoundException;
+import io.orqueio.bpm.engine.history.HistoricVariableInstance;
+import io.orqueio.bpm.engine.history.HistoricVariableInstanceQuery;
+import io.orqueio.bpm.engine.query.Query;
+import io.orqueio.bpm.engine.rest.dto.history.HistoricVariableInstanceDto;
+import io.orqueio.bpm.engine.rest.exception.InvalidRequestException;
+import io.orqueio.bpm.engine.rest.sub.AbstractResourceProvider;
+import io.orqueio.bpm.engine.rest.sub.history.HistoricVariableInstanceResource;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
 
 /**
  * @author Daniel Meyer

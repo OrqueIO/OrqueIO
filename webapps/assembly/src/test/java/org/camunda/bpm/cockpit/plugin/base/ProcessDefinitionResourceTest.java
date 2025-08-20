@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.cockpit.plugin.base;
+package io.orqueio.bpm.cockpit.plugin.base;
 
 import static junit.framework.TestCase.fail;
-import static org.camunda.bpm.engine.rest.dto.ConditionQueryParameterDto.EQUALS_OPERATOR_NAME;
-import static org.camunda.bpm.engine.rest.dto.ConditionQueryParameterDto.LIKE_OPERATOR_NAME;
-import static org.camunda.bpm.engine.rest.dto.ConditionQueryParameterDto.NOT_EQUALS_OPERATOR_NAME;
+import static io.orqueio.bpm.engine.rest.dto.ConditionQueryParameterDto.EQUALS_OPERATOR_NAME;
+import static io.orqueio.bpm.engine.rest.dto.ConditionQueryParameterDto.LIKE_OPERATOR_NAME;
+import static io.orqueio.bpm.engine.rest.dto.ConditionQueryParameterDto.NOT_EQUALS_OPERATOR_NAME;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Arrays;
@@ -27,22 +27,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.cockpit.impl.plugin.base.dto.ProcessDefinitionDto;
-import org.camunda.bpm.cockpit.impl.plugin.base.dto.query.ProcessDefinitionQueryDto;
-import org.camunda.bpm.cockpit.impl.plugin.base.sub.resources.ProcessDefinitionResource;
-import org.camunda.bpm.cockpit.plugin.test.AbstractCockpitPluginTest;
-import org.camunda.bpm.engine.BadUserRequestException;
-import org.camunda.bpm.engine.IdentityService;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.RepositoryService;
-import org.camunda.bpm.engine.RuntimeService;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.db.sql.DbSqlSessionFactory;
-import org.camunda.bpm.engine.impl.test.RequiredDatabase;
-import org.camunda.bpm.engine.repository.ProcessDefinition;
-import org.camunda.bpm.engine.rest.dto.VariableQueryParameterDto;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.test.Deployment;
+import io.orqueio.bpm.cockpit.impl.plugin.base.dto.ProcessDefinitionDto;
+import io.orqueio.bpm.cockpit.impl.plugin.base.dto.query.ProcessDefinitionQueryDto;
+import io.orqueio.bpm.cockpit.impl.plugin.base.sub.resources.ProcessDefinitionResource;
+import io.orqueio.bpm.cockpit.plugin.test.AbstractCockpitPluginTest;
+import io.orqueio.bpm.engine.BadUserRequestException;
+import io.orqueio.bpm.engine.IdentityService;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.RepositoryService;
+import io.orqueio.bpm.engine.RuntimeService;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.db.sql.DbSqlSessionFactory;
+import io.orqueio.bpm.engine.impl.test.RequiredDatabase;
+import io.orqueio.bpm.engine.repository.ProcessDefinition;
+import io.orqueio.bpm.engine.rest.dto.VariableQueryParameterDto;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.test.Deployment;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;

@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.cmmn.handler;
+package io.orqueio.bpm.engine.test.cmmn.handler;
 
-import org.camunda.bpm.engine.impl.cmmn.handler.DecisionTaskItemHandler;
-import org.camunda.bpm.engine.impl.cmmn.model.CmmnActivity;
-import org.camunda.bpm.engine.test.cmmn.handler.specification.AbstractExecutionListenerSpec;
-import org.camunda.bpm.model.cmmn.instance.DecisionTask;
-import org.camunda.bpm.model.cmmn.instance.PlanItem;
+import io.orqueio.bpm.engine.impl.cmmn.handler.DecisionTaskItemHandler;
+import io.orqueio.bpm.engine.impl.cmmn.model.CmmnActivity;
+import io.orqueio.bpm.engine.test.cmmn.handler.specification.AbstractExecutionListenerSpec;
+import io.orqueio.bpm.model.cmmn.instance.DecisionTask;
+import io.orqueio.bpm.model.cmmn.instance.PlanItem;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

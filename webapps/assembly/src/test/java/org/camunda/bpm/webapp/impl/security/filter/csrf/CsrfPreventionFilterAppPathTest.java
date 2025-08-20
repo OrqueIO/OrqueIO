@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.webapp.impl.security.filter.csrf;
+package io.orqueio.bpm.webapp.impl.security.filter.csrf;
 
-import org.camunda.bpm.webapp.impl.util.ServletContextUtil;
+import io.orqueio.bpm.webapp.impl.util.ServletContextUtil;
 import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -28,8 +28,8 @@ import javax.ws.rs.core.Response;
 import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.camunda.bpm.webapp.impl.security.filter.util.CsrfConstants.CSRF_PATH_FIELD_NAME;
-import static org.camunda.bpm.webapp.impl.security.filter.util.CookieConstants.SET_COOKIE_HEADER_NAME;
+import static io.orqueio.bpm.webapp.impl.security.filter.util.CsrfConstants.CSRF_PATH_FIELD_NAME;
+import static io.orqueio.bpm.webapp.impl.security.filter.util.CookieConstants.SET_COOKIE_HEADER_NAME;
 
 public class CsrfPreventionFilterAppPathTest extends CsrfPreventionFilterTest {
 

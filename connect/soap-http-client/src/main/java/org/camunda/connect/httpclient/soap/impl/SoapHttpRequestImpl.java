@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.connect.httpclient.soap.impl;
+package io.orqueio.connect.httpclient.soap.impl;
 
 
 import org.apache.hc.client5.http.classic.methods.HttpPost;
-import org.camunda.connect.httpclient.impl.AbstractHttpRequest;
-import org.camunda.connect.httpclient.soap.SoapHttpConnector;
-import org.camunda.connect.httpclient.soap.SoapHttpRequest;
-import org.camunda.connect.httpclient.soap.SoapHttpResponse;
+import io.orqueio.connect.httpclient.impl.AbstractHttpRequest;
+import io.orqueio.connect.httpclient.soap.SoapHttpConnector;
+import io.orqueio.connect.httpclient.soap.SoapHttpRequest;
+import io.orqueio.connect.httpclient.soap.SoapHttpResponse;
 
 public class SoapHttpRequestImpl extends AbstractHttpRequest<SoapHttpRequest, SoapHttpResponse> implements SoapHttpRequest {
 

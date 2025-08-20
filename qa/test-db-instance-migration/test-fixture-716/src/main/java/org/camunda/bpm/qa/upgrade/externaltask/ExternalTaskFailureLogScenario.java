@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa.upgrade.externaltask;
+package io.orqueio.bpm.qa.upgrade.externaltask;
 
-import org.camunda.bpm.engine.ExternalTaskService;
-import org.camunda.bpm.engine.RuntimeService;
-import org.camunda.bpm.engine.externaltask.ExternalTask;
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.qa.upgrade.DescribesScenario;
-import org.camunda.bpm.qa.upgrade.ScenarioSetup;
+import io.orqueio.bpm.engine.ExternalTaskService;
+import io.orqueio.bpm.engine.RuntimeService;
+import io.orqueio.bpm.engine.externaltask.ExternalTask;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.qa.upgrade.DescribesScenario;
+import io.orqueio.bpm.qa.upgrade.ScenarioSetup;
 
 public class ExternalTaskFailureLogScenario {
 

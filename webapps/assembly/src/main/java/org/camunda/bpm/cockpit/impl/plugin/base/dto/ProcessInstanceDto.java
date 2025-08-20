@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.cockpit.impl.plugin.base.dto;
+package io.orqueio.bpm.cockpit.impl.plugin.base.dto;
 
 import java.util.Date;
 import java.util.List;
 
-import org.camunda.bpm.engine.impl.persistence.entity.SuspensionState;
+import io.orqueio.bpm.engine.impl.persistence.entity.SuspensionState;
 
 
 public class ProcessInstanceDto {

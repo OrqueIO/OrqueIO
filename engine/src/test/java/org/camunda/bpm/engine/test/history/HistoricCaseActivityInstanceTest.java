@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.history;
+package io.orqueio.bpm.engine.test.history;
 
-import static org.camunda.bpm.engine.impl.cmmn.execution.CaseExecutionState.ACTIVE;
-import static org.camunda.bpm.engine.impl.cmmn.execution.CaseExecutionState.AVAILABLE;
-import static org.camunda.bpm.engine.impl.cmmn.execution.CaseExecutionState.COMPLETED;
-import static org.camunda.bpm.engine.impl.cmmn.execution.CaseExecutionState.DISABLED;
-import static org.camunda.bpm.engine.impl.cmmn.execution.CaseExecutionState.ENABLED;
-import static org.camunda.bpm.engine.impl.cmmn.execution.CaseExecutionState.SUSPENDED;
-import static org.camunda.bpm.engine.impl.cmmn.execution.CaseExecutionState.TERMINATED;
+import static io.orqueio.bpm.engine.impl.cmmn.execution.CaseExecutionState.ACTIVE;
+import static io.orqueio.bpm.engine.impl.cmmn.execution.CaseExecutionState.AVAILABLE;
+import static io.orqueio.bpm.engine.impl.cmmn.execution.CaseExecutionState.COMPLETED;
+import static io.orqueio.bpm.engine.impl.cmmn.execution.CaseExecutionState.DISABLED;
+import static io.orqueio.bpm.engine.impl.cmmn.execution.CaseExecutionState.ENABLED;
+import static io.orqueio.bpm.engine.impl.cmmn.execution.CaseExecutionState.SUSPENDED;
+import static io.orqueio.bpm.engine.impl.cmmn.execution.CaseExecutionState.TERMINATED;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
@@ -42,30 +42,30 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import org.camunda.bpm.engine.ProcessEngineConfiguration;
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.exception.NotValidException;
-import org.camunda.bpm.engine.history.HistoricCaseActivityInstance;
-import org.camunda.bpm.engine.history.HistoricCaseActivityInstanceQuery;
-import org.camunda.bpm.engine.history.HistoricCaseInstance;
-import org.camunda.bpm.engine.history.HistoricProcessInstance;
-import org.camunda.bpm.engine.impl.AbstractQuery;
-import org.camunda.bpm.engine.impl.Direction;
-import org.camunda.bpm.engine.impl.QueryOrderingProperty;
-import org.camunda.bpm.engine.impl.cmmn.execution.CaseExecutionState;
-import org.camunda.bpm.engine.impl.history.event.HistoricCaseActivityInstanceEventEntity;
-import org.camunda.bpm.engine.impl.persistence.entity.HistoricCaseActivityInstanceEntity;
-import org.camunda.bpm.engine.impl.util.ClockUtil;
-import org.camunda.bpm.engine.query.Query;
-import org.camunda.bpm.engine.runtime.CaseExecution;
-import org.camunda.bpm.engine.runtime.CaseInstance;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.runtime.VariableInstanceQuery;
-import org.camunda.bpm.engine.task.Task;
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.engine.test.RequiredHistoryLevel;
-import org.camunda.bpm.engine.test.cmmn.CmmnTest;
-import org.camunda.bpm.engine.variable.Variables;
+import io.orqueio.bpm.engine.ProcessEngineConfiguration;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.exception.NotValidException;
+import io.orqueio.bpm.engine.history.HistoricCaseActivityInstance;
+import io.orqueio.bpm.engine.history.HistoricCaseActivityInstanceQuery;
+import io.orqueio.bpm.engine.history.HistoricCaseInstance;
+import io.orqueio.bpm.engine.history.HistoricProcessInstance;
+import io.orqueio.bpm.engine.impl.AbstractQuery;
+import io.orqueio.bpm.engine.impl.Direction;
+import io.orqueio.bpm.engine.impl.QueryOrderingProperty;
+import io.orqueio.bpm.engine.impl.cmmn.execution.CaseExecutionState;
+import io.orqueio.bpm.engine.impl.history.event.HistoricCaseActivityInstanceEventEntity;
+import io.orqueio.bpm.engine.impl.persistence.entity.HistoricCaseActivityInstanceEntity;
+import io.orqueio.bpm.engine.impl.util.ClockUtil;
+import io.orqueio.bpm.engine.query.Query;
+import io.orqueio.bpm.engine.runtime.CaseExecution;
+import io.orqueio.bpm.engine.runtime.CaseInstance;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.runtime.VariableInstanceQuery;
+import io.orqueio.bpm.engine.task.Task;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.test.RequiredHistoryLevel;
+import io.orqueio.bpm.engine.test.cmmn.CmmnTest;
+import io.orqueio.bpm.engine.variable.Variables;
 import org.hamcrest.Matcher;
 import org.junit.Test;
 

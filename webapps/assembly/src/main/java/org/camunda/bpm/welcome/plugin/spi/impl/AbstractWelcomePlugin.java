@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.welcome.plugin.spi.impl;
+package io.orqueio.bpm.welcome.plugin.spi.impl;
 
-import org.camunda.bpm.webapp.plugin.spi.impl.AbstractAppPlugin;
-import org.camunda.bpm.welcome.plugin.spi.WelcomePlugin;
+import io.orqueio.bpm.webapp.plugin.spi.impl.AbstractAppPlugin;
+import io.orqueio.bpm.welcome.plugin.spi.WelcomePlugin;
 
 /**
  * Base class for implementing {@link WelcomePlugin WelcomePlugins}.

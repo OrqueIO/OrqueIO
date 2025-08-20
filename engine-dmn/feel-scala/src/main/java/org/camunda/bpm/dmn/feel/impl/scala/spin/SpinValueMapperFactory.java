@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.feel.impl.scala.spin;
+package io.orqueio.bpm.dmn.feel.impl.scala.spin;
 
-import org.camunda.bpm.dmn.feel.impl.scala.ScalaFeelLogger;
-import org.camunda.feel.valuemapper.CustomValueMapper;
+import io.orqueio.bpm.dmn.feel.impl.scala.ScalaFeelLogger;
+import io.orqueio.feel.valuemapper.CustomValueMapper;
 
 public class SpinValueMapperFactory {
 
   protected static final ScalaFeelLogger LOGGER = ScalaFeelLogger.LOGGER;
 
   public static final String SPIN_VALUE_MAPPER_CLASS_NAME =
-    "org.camunda.spin.plugin.impl.feel.integration.SpinValueMapper";
+    "io.orqueio.spin.plugin.impl.feel.integration.SpinValueMapper";
 
   public CustomValueMapper createInstance() {
     Class<?> valueMapperClass = lookupClass();

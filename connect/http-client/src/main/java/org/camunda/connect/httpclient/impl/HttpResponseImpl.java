@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.connect.httpclient.impl;
+package io.orqueio.connect.httpclient.impl;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -23,9 +23,9 @@ import java.util.Map;
 
 import org.apache.hc.core5.http.ClassicHttpResponse;
 import org.apache.hc.core5.http.Header;
-import org.camunda.commons.utils.IoUtil;
-import org.camunda.connect.httpclient.HttpResponse;
-import org.camunda.connect.impl.AbstractCloseableConnectorResponse;
+import io.orqueio.commons.utils.IoUtil;
+import io.orqueio.connect.httpclient.HttpResponse;
+import io.orqueio.connect.impl.AbstractCloseableConnectorResponse;
 
 public class HttpResponseImpl extends AbstractCloseableConnectorResponse implements HttpResponse {
 

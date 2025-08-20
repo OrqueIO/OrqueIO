@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.repository;
+package io.orqueio.bpm.engine.test.api.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.camunda.bpm.engine.test.api.runtime.TestOrderingUtil.decisionDefinitionByDeployTime;
-import static org.camunda.bpm.engine.test.api.runtime.TestOrderingUtil.inverted;
-import static org.camunda.bpm.engine.test.api.runtime.TestOrderingUtil.verifySortingAndCount;
+import static io.orqueio.bpm.engine.test.api.runtime.TestOrderingUtil.decisionDefinitionByDeployTime;
+import static io.orqueio.bpm.engine.test.api.runtime.TestOrderingUtil.inverted;
+import static io.orqueio.bpm.engine.test.api.runtime.TestOrderingUtil.verifySortingAndCount;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -29,16 +29,16 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.time.DateUtils;
-import org.camunda.bpm.engine.RepositoryService;
-import org.camunda.bpm.engine.exception.NotValidException;
-import org.camunda.bpm.engine.impl.util.ClockUtil;
-import org.camunda.bpm.engine.repository.DecisionDefinition;
-import org.camunda.bpm.engine.repository.DecisionDefinitionQuery;
-import org.camunda.bpm.engine.repository.DecisionRequirementsDefinition;
-import org.camunda.bpm.engine.repository.Deployment;
-import org.camunda.bpm.engine.test.ProcessEngineRule;
-import org.camunda.bpm.engine.test.util.ProcessEngineTestRule;
-import org.camunda.bpm.engine.test.util.ProvidedProcessEngineRule;
+import io.orqueio.bpm.engine.RepositoryService;
+import io.orqueio.bpm.engine.exception.NotValidException;
+import io.orqueio.bpm.engine.impl.util.ClockUtil;
+import io.orqueio.bpm.engine.repository.DecisionDefinition;
+import io.orqueio.bpm.engine.repository.DecisionDefinitionQuery;
+import io.orqueio.bpm.engine.repository.DecisionRequirementsDefinition;
+import io.orqueio.bpm.engine.repository.Deployment;
+import io.orqueio.bpm.engine.test.ProcessEngineRule;
+import io.orqueio.bpm.engine.test.util.ProcessEngineTestRule;
+import io.orqueio.bpm.engine.test.util.ProvidedProcessEngineRule;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -651,7 +651,7 @@ public class DecisionDefinitionQueryTest {
     assertThat(query.list().size()).isEqualTo(expectedCount);
   }
 
-  @org.camunda.bpm.engine.test.Deployment(resources = {
+  @io.orqueio.bpm.engine.test.Deployment(resources = {
     "org/camunda/bpm/engine/test/api/repository/versionTag.dmn",
     "org/camunda/bpm/engine/test/api/repository/versionTagHigher.dmn" })
   @Test
@@ -720,7 +720,7 @@ public class DecisionDefinitionQueryTest {
     return ids;
   }
 
-  @org.camunda.bpm.engine.test.Deployment(resources = {
+  @io.orqueio.bpm.engine.test.Deployment(resources = {
     "org/camunda/bpm/engine/test/api/repository/versionTag.dmn",
     "org/camunda/bpm/engine/test/api/repository/versionTagHigher.dmn" })
   @Test
@@ -734,7 +734,7 @@ public class DecisionDefinitionQueryTest {
     assertThat(decisionDefinition.getVersionTag()).isEqualTo("1.0.0");
   }
 
-  @org.camunda.bpm.engine.test.Deployment(resources = {
+  @io.orqueio.bpm.engine.test.Deployment(resources = {
     "org/camunda/bpm/engine/test/api/repository/versionTag.dmn",
     "org/camunda/bpm/engine/test/api/repository/versionTagHigher.dmn" })
   @Test

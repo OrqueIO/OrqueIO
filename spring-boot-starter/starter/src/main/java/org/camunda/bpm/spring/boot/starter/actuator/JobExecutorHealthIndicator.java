@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter.actuator;
+package io.orqueio.bpm.spring.boot.starter.actuator;
 
 import static java.util.Objects.requireNonNull;
 
@@ -22,8 +22,8 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-import org.camunda.bpm.engine.impl.ProcessEngineImpl;
-import org.camunda.bpm.engine.impl.jobexecutor.JobExecutor;
+import io.orqueio.bpm.engine.impl.ProcessEngineImpl;
+import io.orqueio.bpm.engine.impl.jobexecutor.JobExecutor;
 import org.springframework.boot.actuate.health.AbstractHealthIndicator;
 import org.springframework.boot.actuate.health.Health.Builder;
 

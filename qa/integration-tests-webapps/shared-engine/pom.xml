@@ -9,7 +9,7 @@
   <name>Camunda Platform - QA Integration Tests - Webapps Shared Engine</name>
 
   <parent>
-    <groupId>org.camunda.bpm.qa</groupId>
+    <groupId>io.orqueio.bpm.qa</groupId>
     <artifactId>camunda-qa-integration-tests-webapps-root</artifactId>
     <version>7.24.0-SNAPSHOT</version>
     <relativePath>../</relativePath>
@@ -17,7 +17,7 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.camunda.bpm.qa</groupId>
+      <groupId>io.orqueio.bpm.qa</groupId>
       <artifactId>camunda-qa-integration-tests-webapps</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
@@ -34,20 +34,20 @@
       <dependencies>
         <dependency>
           <!-- make sure it comes after assembly in the build -->
-          <groupId>org.camunda.bpm.qa</groupId>
+          <groupId>io.orqueio.bpm.qa</groupId>
           <artifactId>camunda-qa-wildfly-runtime</artifactId>
           <version>${project.version}</version>
           <type>pom</type>
         </dependency>
         <dependency>
-          <groupId>org.camunda.bpm.webapp</groupId>
+          <groupId>io.orqueio.bpm.webapp</groupId>
           <artifactId>camunda-webapp-wildfly</artifactId>
           <version>${project.version}</version>
           <type>war</type>
           <scope>test</scope>
         </dependency>
         <dependency>
-          <groupId>org.camunda.bpm</groupId>
+          <groupId>io.orqueio.bpm</groupId>
           <artifactId>camunda-engine-rest-jakarta</artifactId>
           <version>${project.version}</version>
           <classifier>wildfly</classifier>
@@ -55,7 +55,7 @@
           <type>war</type>
         </dependency>
         <dependency>
-          <groupId>org.camunda.bpm.example</groupId>
+          <groupId>io.orqueio.bpm.example</groupId>
           <artifactId>camunda-example-invoice-jakarta</artifactId>
           <version>${project.version}</version>
           <scope>test</scope>
@@ -103,14 +103,14 @@
               </configuration>
               <deployables>
                 <deployable>
-                  <groupId>org.camunda.bpm.example</groupId>
+                  <groupId>io.orqueio.bpm.example</groupId>
                   <artifactId>camunda-example-invoice-jakarta</artifactId>
                   <type>war</type>
                   <pingURL>http://localhost:${jboss.http.port}/engine-rest/engine/default/user/demo/profile</pingURL>
                   <pingTimeout>${cargo.deploy.timeout}</pingTimeout>
                 </deployable>
                 <deployable>
-                  <groupId>org.camunda.bpm</groupId>
+                  <groupId>io.orqueio.bpm</groupId>
                   <artifactId>camunda-engine-rest-jakarta</artifactId>
                   <classifier>wildfly</classifier>
                   <type>war</type>
@@ -118,7 +118,7 @@
                   <pingTimeout>${cargo.deploy.timeout}</pingTimeout>
                 </deployable>
                 <deployable>
-                  <groupId>org.camunda.bpm.webapp</groupId>
+                  <groupId>io.orqueio.bpm.webapp</groupId>
                   <artifactId>camunda-webapp-wildfly</artifactId>
                   <type>war</type>
                   <pingURL>http://localhost:${jboss.http.port}/camunda</pingURL>
@@ -150,20 +150,20 @@
       <dependencies>
         <dependency>
           <!-- make sure it comes after assembly in the build -->
-          <groupId>org.camunda.bpm.qa</groupId>
+          <groupId>io.orqueio.bpm.qa</groupId>
           <artifactId>camunda-qa-wildfly26-runtime</artifactId>
           <version>${project.version}</version>
           <type>pom</type>
         </dependency>
         <dependency>
-          <groupId>org.camunda.bpm.webapp</groupId>
+          <groupId>io.orqueio.bpm.webapp</groupId>
           <artifactId>camunda-webapp-jboss</artifactId>
           <version>${project.version}</version>
           <type>war</type>
           <scope>test</scope>
         </dependency>
         <dependency>
-          <groupId>org.camunda.bpm</groupId>
+          <groupId>io.orqueio.bpm</groupId>
           <artifactId>camunda-engine-rest</artifactId>
           <version>${project.version}</version>
           <classifier>wildfly</classifier>
@@ -171,7 +171,7 @@
           <type>war</type>
         </dependency>
         <dependency>
-          <groupId>org.camunda.bpm</groupId>
+          <groupId>io.orqueio.bpm</groupId>
           <artifactId>camunda-engine</artifactId>
           <scope>test</scope>
           <exclusions>
@@ -223,14 +223,14 @@
               </configuration>
               <deployables>
                 <deployable>
-                  <groupId>org.camunda.bpm.example</groupId>
+                  <groupId>io.orqueio.bpm.example</groupId>
                   <artifactId>camunda-example-invoice</artifactId>
                   <type>war</type>
                   <pingURL>http://localhost:${jboss.http.port}/engine-rest/engine/default/user/demo/profile</pingURL>
                   <pingTimeout>${cargo.deploy.timeout}</pingTimeout>
                 </deployable>
                 <deployable>
-                  <groupId>org.camunda.bpm</groupId>
+                  <groupId>io.orqueio.bpm</groupId>
                   <artifactId>camunda-engine-rest</artifactId>
                   <classifier>wildfly</classifier>
                   <type>war</type>
@@ -238,7 +238,7 @@
                   <pingTimeout>${cargo.deploy.timeout}</pingTimeout>
                 </deployable>
                 <deployable>
-                  <groupId>org.camunda.bpm.webapp</groupId>
+                  <groupId>io.orqueio.bpm.webapp</groupId>
                   <artifactId>camunda-webapp-jboss</artifactId>
                   <type>war</type>
                   <pingURL>http://localhost:${jboss.http.port}/camunda</pingURL>
@@ -270,20 +270,20 @@
       <dependencies>
         <dependency>
           <!-- make sure it comes after assembly in the build -->
-          <groupId>org.camunda.bpm.qa</groupId>
+          <groupId>io.orqueio.bpm.qa</groupId>
           <artifactId>camunda-qa-tomcat9-runtime</artifactId>
           <version>${project.version}</version>
           <type>pom</type>
         </dependency>
         <dependency>
-          <groupId>org.camunda.bpm.webapp</groupId>
+          <groupId>io.orqueio.bpm.webapp</groupId>
           <artifactId>camunda-webapp-tomcat</artifactId>
           <version>${project.version}</version>
           <type>war</type>
           <scope>test</scope>
         </dependency>
         <dependency>
-          <groupId>org.camunda.bpm</groupId>
+          <groupId>io.orqueio.bpm</groupId>
           <artifactId>camunda-engine-rest</artifactId>
           <scope>test</scope>
           <type>war</type>
@@ -332,7 +332,7 @@
               </configuration>
               <deployables>
                 <deployable>
-                  <groupId>org.camunda.bpm</groupId>
+                  <groupId>io.orqueio.bpm</groupId>
                   <artifactId>camunda-engine-rest</artifactId>
                   <type>war</type>
                   <classifier>tomcat</classifier>
@@ -343,7 +343,7 @@
                   </properties>
                 </deployable>
                 <deployable>
-                  <groupId>org.camunda.bpm.webapp</groupId>
+                  <groupId>io.orqueio.bpm.webapp</groupId>
                   <artifactId>camunda-webapp-tomcat</artifactId>
                   <type>war</type>
                   <pingURL>http://localhost:${tomcat.connector.http.port}/camunda</pingURL>
@@ -353,7 +353,7 @@
                   </properties>
                 </deployable>
                 <deployable>
-                  <groupId>org.camunda.bpm.example</groupId>
+                  <groupId>io.orqueio.bpm.example</groupId>
                   <artifactId>camunda-example-invoice</artifactId>
                   <type>war</type>
                   <properties>
@@ -376,20 +376,20 @@
       <dependencies>
         <dependency>
           <!-- make sure it comes after assembly in the build -->
-          <groupId>org.camunda.bpm.qa</groupId>
+          <groupId>io.orqueio.bpm.qa</groupId>
           <artifactId>camunda-qa-tomcat-runtime</artifactId>
           <version>${project.version}</version>
           <type>pom</type>
         </dependency>
         <dependency>
-          <groupId>org.camunda.bpm.webapp</groupId>
+          <groupId>io.orqueio.bpm.webapp</groupId>
           <artifactId>camunda-webapp-tomcat-jakarta</artifactId>
           <version>${project.version}</version>
           <type>war</type>
           <scope>test</scope>
         </dependency>
         <dependency>
-          <groupId>org.camunda.bpm</groupId>
+          <groupId>io.orqueio.bpm</groupId>
           <artifactId>camunda-engine-rest-jakarta</artifactId>
           <version>${project.version}</version>
           <type>war</type>
@@ -397,7 +397,7 @@
           <classifier>tomcat</classifier>
         </dependency>
         <dependency>
-          <groupId>org.camunda.bpm.example</groupId>
+          <groupId>io.orqueio.bpm.example</groupId>
           <artifactId>camunda-example-invoice-jakarta</artifactId>
           <version>${project.version}</version>
           <type>war</type>
@@ -445,7 +445,7 @@
               </configuration>
               <deployables>
                 <deployable>
-                  <groupId>org.camunda.bpm</groupId>
+                  <groupId>io.orqueio.bpm</groupId>
                   <artifactId>camunda-engine-rest-jakarta</artifactId>
                   <type>war</type>
                   <classifier>tomcat</classifier>
@@ -456,7 +456,7 @@
                   </properties>
                 </deployable>
                 <deployable>
-                  <groupId>org.camunda.bpm.webapp</groupId>
+                  <groupId>io.orqueio.bpm.webapp</groupId>
                   <artifactId>camunda-webapp-tomcat-jakarta</artifactId>
                   <type>war</type>
                   <pingURL>http://localhost:${tomcat.connector.http.port}/camunda</pingURL>
@@ -466,7 +466,7 @@
                   </properties>
                 </deployable>
                 <deployable>
-                  <groupId>org.camunda.bpm.example</groupId>
+                  <groupId>io.orqueio.bpm.example</groupId>
                   <artifactId>camunda-example-invoice-jakarta</artifactId>
                   <type>war</type>
                   <properties>
@@ -507,7 +507,7 @@
             <configuration>
               <redirectTestOutputToFile>true</redirectTestOutputToFile>
               <dependenciesToScan>
-                <dependency>org.camunda.bpm.qa:camunda-qa-integration-tests-webapps</dependency>
+                <dependency>io.orqueio.bpm.qa:camunda-qa-integration-tests-webapps</dependency>
               </dependenciesToScan>
               <systemPropertyVariables>
                 <selenium.screenshot.directory>${project.build.directory}/selenium-screenshots</selenium.screenshot.directory>
@@ -536,7 +536,7 @@
                 <configuration>
                   <artifactItems>
                     <artifactItem>
-                      <groupId>org.camunda.bpm</groupId>
+                      <groupId>io.orqueio.bpm</groupId>
                       <artifactId>camunda-engine</artifactId>
                       <outputDirectory>${project.build.directory}/sql-scripts/engine</outputDirectory>
                       <overWrite>true</overWrite>
@@ -595,7 +595,7 @@
             <artifactId>maven-surefire-plugin</artifactId>
             <configuration>
               <dependenciesToScan>
-                <dependency>org.camunda.bpm.qa:camunda-qa-integration-tests-webapps</dependency>
+                <dependency>io.orqueio.bpm.qa:camunda-qa-integration-tests-webapps</dependency>
               </dependenciesToScan>
               <skipTests>false</skipTests>
               <includes>

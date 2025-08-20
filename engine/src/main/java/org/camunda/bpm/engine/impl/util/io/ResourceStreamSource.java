@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.util.io;
+package io.orqueio.bpm.engine.impl.util.io;
 
 import java.io.InputStream;
-import org.camunda.bpm.engine.impl.util.ReflectUtil;
+import io.orqueio.bpm.engine.impl.util.ReflectUtil;
 
-import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
+import static io.orqueio.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
 
 
 /**

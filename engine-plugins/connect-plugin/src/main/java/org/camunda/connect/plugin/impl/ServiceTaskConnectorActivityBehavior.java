@@ -14,19 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.connect.plugin.impl;
+package io.orqueio.connect.plugin.impl;
 
 import java.util.concurrent.Callable;
 
-import org.camunda.bpm.engine.impl.bpmn.behavior.TaskActivityBehavior;
-import org.camunda.bpm.engine.impl.core.variable.mapping.IoMapping;
-import org.camunda.bpm.engine.impl.core.variable.scope.AbstractVariableScope;
-import org.camunda.bpm.engine.impl.pvm.delegate.ActivityExecution;
-import org.camunda.connect.ConnectorException;
-import org.camunda.connect.Connectors;
-import org.camunda.connect.spi.Connector;
-import org.camunda.connect.spi.ConnectorRequest;
-import org.camunda.connect.spi.ConnectorResponse;
+import io.orqueio.bpm.engine.impl.bpmn.behavior.TaskActivityBehavior;
+import io.orqueio.bpm.engine.impl.core.variable.mapping.IoMapping;
+import io.orqueio.bpm.engine.impl.core.variable.scope.AbstractVariableScope;
+import io.orqueio.bpm.engine.impl.pvm.delegate.ActivityExecution;
+import io.orqueio.connect.ConnectorException;
+import io.orqueio.connect.Connectors;
+import io.orqueio.connect.spi.Connector;
+import io.orqueio.connect.spi.ConnectorRequest;
+import io.orqueio.connect.spi.ConnectorResponse;
 
 /**
  * @author Daniel Meyer

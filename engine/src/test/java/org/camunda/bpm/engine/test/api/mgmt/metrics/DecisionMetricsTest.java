@@ -14,21 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.mgmt.metrics;
+package io.orqueio.bpm.engine.test.api.mgmt.metrics;
 
 import static org.junit.Assert.assertEquals;
 
-import org.camunda.bpm.dmn.engine.impl.DefaultDmnEngineConfiguration;
-import org.camunda.bpm.dmn.engine.spi.DmnEngineMetricCollector;
-import org.camunda.bpm.engine.DecisionService;
-import org.camunda.bpm.engine.management.Metrics;
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.engine.test.util.ResetDmnConfigUtil;
-import org.camunda.bpm.engine.variable.VariableMap;
-import org.camunda.bpm.engine.variable.Variables;
-import org.camunda.bpm.model.bpmn.Bpmn;
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
-import org.camunda.bpm.model.bpmn.instance.BusinessRuleTask;
+import io.orqueio.bpm.dmn.engine.impl.DefaultDmnEngineConfiguration;
+import io.orqueio.bpm.dmn.engine.spi.DmnEngineMetricCollector;
+import io.orqueio.bpm.engine.DecisionService;
+import io.orqueio.bpm.engine.management.Metrics;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.test.util.ResetDmnConfigUtil;
+import io.orqueio.bpm.engine.variable.VariableMap;
+import io.orqueio.bpm.engine.variable.Variables;
+import io.orqueio.bpm.model.bpmn.Bpmn;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.bpm.model.bpmn.instance.BusinessRuleTask;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

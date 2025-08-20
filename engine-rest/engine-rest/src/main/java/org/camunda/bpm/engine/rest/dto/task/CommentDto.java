@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.dto.task;
+package io.orqueio.bpm.engine.rest.dto.task;
 
-import org.camunda.bpm.engine.rest.dto.LinkableDto;
-import org.camunda.bpm.engine.task.Comment;
+import io.orqueio.bpm.engine.rest.dto.LinkableDto;
+import io.orqueio.bpm.engine.task.Comment;
 
 import java.util.Date;
 

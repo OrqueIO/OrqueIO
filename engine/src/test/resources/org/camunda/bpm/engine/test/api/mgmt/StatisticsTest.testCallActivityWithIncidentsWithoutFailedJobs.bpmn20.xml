@@ -24,7 +24,7 @@
     
     <sequenceFlow id="flow3" sourceRef="start" targetRef="theServiceTask" />
 
-    <serviceTask id="theServiceTask" name="my task" camunda:class="org.camunda.bpm.engine.test.api.mgmt.AlwaysFailingDelegate" camunda:async="true"/>
+    <serviceTask id="theServiceTask" name="my task" camunda:class="io.orqueio.bpm.engine.test.api.mgmt.AlwaysFailingDelegate" camunda:async="true"/>
     
     <sequenceFlow id="flow4" sourceRef="theServiceTask" targetRef="theUserTask" />
     

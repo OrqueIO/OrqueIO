@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.hal.cache;
+package io.orqueio.bpm.engine.rest.hal.cache;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -23,16 +23,16 @@ import java.util.Map;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.impl.util.ReflectUtil;
-import org.camunda.bpm.engine.rest.cache.Cache;
-import org.camunda.bpm.engine.rest.hal.Hal;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.impl.util.ReflectUtil;
+import io.orqueio.bpm.engine.rest.cache.Cache;
+import io.orqueio.bpm.engine.rest.hal.Hal;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class HalRelationCacheBootstrap implements ServletContextListener {
 
-  public final static String CONTEXT_PARAM_NAME = "org.camunda.bpm.engine.rest.hal.cache.config";
+  public final static String CONTEXT_PARAM_NAME = "io.orqueio.bpm.engine.rest.hal.cache.config";
 
   protected ObjectMapper objectMapper = new ObjectMapper();
 

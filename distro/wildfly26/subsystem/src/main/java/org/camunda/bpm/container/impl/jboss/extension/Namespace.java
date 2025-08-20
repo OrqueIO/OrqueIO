@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.jboss.extension;
+package io.orqueio.bpm.container.impl.jboss.extension;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,7 +30,7 @@ public enum Namespace {
    */
   UNKNOWN((String) null),
   
-  CAMUNDA_BPM_PLATFORM_1_1("urn:org.camunda.bpm.jboss:1.1");
+  CAMUNDA_BPM_PLATFORM_1_1("urn:io.orqueio.bpm.jboss:1.1");
   
   /**
    * The current namespace version.

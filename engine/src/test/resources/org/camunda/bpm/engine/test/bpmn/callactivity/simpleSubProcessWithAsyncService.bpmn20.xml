@@ -10,7 +10,7 @@
 
     <sequenceFlow id="flow1" sourceRef="theStart" targetRef="task" />
 
-    <serviceTask camunda:asyncBefore="true" camunda:class="org.camunda.bpm.engine.test.bpmn.ruletask.DummyServiceTask"
+    <serviceTask camunda:asyncBefore="true" camunda:class="io.orqueio.bpm.engine.test.bpmn.ruletask.DummyServiceTask"
                   id="task" name="Task in subprocess" />
 
     <sequenceFlow id="flow2" sourceRef="task" targetRef="theEnd" />

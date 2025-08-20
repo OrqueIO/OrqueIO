@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.engine.impl.spi.transform;
+package io.orqueio.bpm.dmn.engine.impl.spi.transform;
 
 import java.io.File;
 import java.io.InputStream;
 import java.util.List;
 
-import org.camunda.bpm.dmn.engine.DmnDecision;
-import org.camunda.bpm.dmn.engine.DmnDecisionRequirementsGraph;
-import org.camunda.bpm.model.dmn.DmnModelInstance;
+import io.orqueio.bpm.dmn.engine.DmnDecision;
+import io.orqueio.bpm.dmn.engine.DmnDecisionRequirementsGraph;
+import io.orqueio.bpm.model.dmn.DmnModelInstance;
 
 /**
  * A transform of a DMN model instance

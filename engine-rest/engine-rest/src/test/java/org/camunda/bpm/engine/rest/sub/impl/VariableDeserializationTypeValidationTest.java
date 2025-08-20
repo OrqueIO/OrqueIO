@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.sub.impl;
+package io.orqueio.bpm.engine.rest.sub.impl;
 
 import static org.mockito.Mockito.times;
 
 import java.util.List;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.ProcessEngineConfiguration;
-import org.camunda.bpm.engine.runtime.DeserializationTypeValidator;
-import org.camunda.bpm.engine.variable.VariableMap;
-import org.camunda.bpm.engine.variable.value.TypedValue;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.ProcessEngineConfiguration;
+import io.orqueio.bpm.engine.runtime.DeserializationTypeValidator;
+import io.orqueio.bpm.engine.variable.VariableMap;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -92,7 +92,7 @@ public class VariableDeserializationTypeValidationTest {
     variablesResourceSpy.validateType(type);
 
     // then
-    Mockito.verify(validator).validate("org.camunda.bpm.engine.rest.sub.impl.VariableDeserializationTypeValidationTest$Complex");
+    Mockito.verify(validator).validate("io.orqueio.bpm.engine.rest.sub.impl.VariableDeserializationTypeValidationTest$Complex");
     Mockito.verifyNoMoreInteractions(validator);
   }
 
@@ -178,7 +178,7 @@ public class VariableDeserializationTypeValidationTest {
 
     // then
     thrown.expect(IllegalArgumentException.class);
-    thrown.expectMessage("[org.camunda.bpm.engine.rest.sub.impl.VariableDeserializationTypeValidationTest$Complex]");
+    thrown.expectMessage("[io.orqueio.bpm.engine.rest.sub.impl.VariableDeserializationTypeValidationTest$Complex]");
 
     // when
     variablesResourceSpy.validateType(type);

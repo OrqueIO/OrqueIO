@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.migration.validation.instruction;
+package io.orqueio.bpm.engine.impl.migration.validation.instruction;
 
-import org.camunda.bpm.engine.impl.bpmn.behavior.MultiInstanceActivityBehavior;
-import org.camunda.bpm.engine.impl.pvm.process.ActivityImpl;
-import org.camunda.bpm.engine.impl.pvm.process.ScopeImpl;
-import org.camunda.bpm.engine.impl.tree.FlowScopeWalker;
-import org.camunda.bpm.engine.impl.tree.ReferenceWalker.WalkCondition;
-import org.camunda.bpm.engine.impl.tree.TreeVisitor;
+import io.orqueio.bpm.engine.impl.bpmn.behavior.MultiInstanceActivityBehavior;
+import io.orqueio.bpm.engine.impl.pvm.process.ActivityImpl;
+import io.orqueio.bpm.engine.impl.pvm.process.ScopeImpl;
+import io.orqueio.bpm.engine.impl.tree.FlowScopeWalker;
+import io.orqueio.bpm.engine.impl.tree.ReferenceWalker.WalkCondition;
+import io.orqueio.bpm.engine.impl.tree.TreeVisitor;
 
 /**
  * Validates that the target process definition cannot add a migrating multi-instance body.

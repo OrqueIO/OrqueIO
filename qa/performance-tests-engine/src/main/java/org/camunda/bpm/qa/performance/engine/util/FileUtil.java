@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa.performance.engine.util;
+package io.orqueio.bpm.qa.performance.engine.util;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 
-import org.camunda.bpm.engine.impl.util.IoUtil;
-import org.camunda.bpm.qa.performance.engine.framework.PerfTestException;
+import io.orqueio.bpm.engine.impl.util.IoUtil;
+import io.orqueio.bpm.qa.performance.engine.framework.PerfTestException;
 
 /**
  * @author Daniel Meyer, Ingo Richtsmeier

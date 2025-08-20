@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.metrics.dmn;
+package io.orqueio.bpm.engine.impl.metrics.dmn;
 
-import org.camunda.bpm.dmn.engine.delegate.DmnDecisionEvaluationEvent;
-import org.camunda.bpm.dmn.engine.delegate.DmnDecisionEvaluationListener;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.engine.impl.metrics.MetricsRegistry;
-import org.camunda.bpm.engine.management.Metrics;
+import io.orqueio.bpm.dmn.engine.delegate.DmnDecisionEvaluationEvent;
+import io.orqueio.bpm.dmn.engine.delegate.DmnDecisionEvaluationListener;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.impl.metrics.MetricsRegistry;
+import io.orqueio.bpm.engine.management.Metrics;
 
 public class MetricsDecisionEvaluationListener implements DmnDecisionEvaluationListener {
 

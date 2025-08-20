@@ -14,21 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.metadata;
+package io.orqueio.bpm.container.impl.metadata;
 
-import static org.camunda.bpm.container.impl.metadata.DeploymentMetadataConstants.*;
+import static io.orqueio.bpm.container.impl.metadata.DeploymentMetadataConstants.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.camunda.bpm.container.impl.ContainerIntegrationLogger;
-import org.camunda.bpm.container.impl.metadata.spi.ProcessEnginePluginXml;
-import org.camunda.bpm.container.impl.metadata.spi.ProcessEngineXml;
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
-import org.camunda.bpm.engine.impl.util.xml.Element;
-import org.camunda.bpm.engine.impl.util.xml.Parse;
-import org.camunda.bpm.engine.impl.util.xml.Parser;
+import io.orqueio.bpm.container.impl.ContainerIntegrationLogger;
+import io.orqueio.bpm.container.impl.metadata.spi.ProcessEnginePluginXml;
+import io.orqueio.bpm.container.impl.metadata.spi.ProcessEngineXml;
+import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
+import io.orqueio.bpm.engine.impl.util.xml.Element;
+import io.orqueio.bpm.engine.impl.util.xml.Parse;
+import io.orqueio.bpm.engine.impl.util.xml.Parser;
 
 /**
  * <p>{@link Parse} implementation for Deployment Metadata.</p>

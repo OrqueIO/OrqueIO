@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.jboss.config;
+package io.orqueio.bpm.container.impl.jboss.config;
 
-import org.camunda.bpm.container.impl.metadata.spi.ProcessEnginePluginXml;
-import org.camunda.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.container.impl.metadata.spi.ProcessEnginePluginXml;
+import io.orqueio.bpm.engine.ProcessEngineException;
 
 import java.util.HashMap;
 import java.util.List;

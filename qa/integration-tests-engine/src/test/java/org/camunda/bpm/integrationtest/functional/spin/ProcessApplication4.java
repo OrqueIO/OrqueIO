@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.functional.spin;
+package io.orqueio.bpm.integrationtest.functional.spin;
 
-import org.camunda.bpm.application.ProcessApplication;
+import io.orqueio.bpm.application.ProcessApplication;
 
 @ProcessApplication("pa4")
 // Using fully-qualified class name instead of import statement to allow for automatic Jakarta transformation
-public class ProcessApplication4 extends org.camunda.bpm.application.impl.ServletProcessApplication {
+public class ProcessApplication4 extends io.orqueio.bpm.application.impl.ServletProcessApplication {
 
 }

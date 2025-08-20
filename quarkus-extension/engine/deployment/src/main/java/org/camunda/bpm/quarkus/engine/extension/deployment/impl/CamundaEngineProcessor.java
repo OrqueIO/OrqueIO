@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.quarkus.engine.extension.deployment.impl;
+package io.orqueio.bpm.quarkus.engine.extension.deployment.impl;
 
 import static io.quarkus.deployment.annotations.ExecutionTime.RUNTIME_INIT;
 
@@ -32,18 +32,18 @@ import io.quarkus.deployment.builditem.FeatureBuildItem;
 import io.quarkus.deployment.builditem.ShutdownContextBuildItem;
 import io.quarkus.runtime.RuntimeValue;
 import jakarta.enterprise.context.Dependent;
-import org.camunda.bpm.engine.cdi.BusinessProcess;
-import org.camunda.bpm.engine.cdi.ProcessVariables;
-import org.camunda.bpm.engine.cdi.annotation.BusinessProcessScoped;
-import org.camunda.bpm.engine.cdi.impl.ProcessVariableLocalMap;
-import org.camunda.bpm.engine.cdi.impl.ProcessVariableMap;
-import org.camunda.bpm.engine.cdi.impl.context.DefaultContextAssociationManager;
-import org.camunda.bpm.engine.cdi.impl.context.RequestScopedAssociation;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.quarkus.engine.extension.CamundaEngineConfig;
-import org.camunda.bpm.quarkus.engine.extension.QuarkusProcessEngineConfiguration;
-import org.camunda.bpm.quarkus.engine.extension.impl.CamundaEngineRecorder;
-import org.camunda.bpm.quarkus.engine.extension.impl.InjectableBusinessProcessContext;
+import io.orqueio.bpm.engine.cdi.BusinessProcess;
+import io.orqueio.bpm.engine.cdi.ProcessVariables;
+import io.orqueio.bpm.engine.cdi.annotation.BusinessProcessScoped;
+import io.orqueio.bpm.engine.cdi.impl.ProcessVariableLocalMap;
+import io.orqueio.bpm.engine.cdi.impl.ProcessVariableMap;
+import io.orqueio.bpm.engine.cdi.impl.context.DefaultContextAssociationManager;
+import io.orqueio.bpm.engine.cdi.impl.context.RequestScopedAssociation;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.quarkus.engine.extension.CamundaEngineConfig;
+import io.orqueio.bpm.quarkus.engine.extension.QuarkusProcessEngineConfiguration;
+import io.orqueio.bpm.quarkus.engine.extension.impl.CamundaEngineRecorder;
+import io.orqueio.bpm.quarkus.engine.extension.impl.InjectableBusinessProcessContext;
 import org.jboss.jandex.DotName;
 
 public class CamundaEngineProcessor {

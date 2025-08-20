@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.identity;
+package io.orqueio.bpm.engine.test.api.identity;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -37,27 +37,27 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.time.DateUtils;
-import org.camunda.bpm.engine.BadUserRequestException;
-import org.camunda.bpm.engine.IdentityService;
-import org.camunda.bpm.engine.OptimisticLockingException;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.ProcessEngineConfiguration;
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.ProcessEngines;
-import org.camunda.bpm.engine.authorization.Authorization;
-import org.camunda.bpm.engine.exception.NullValueException;
-import org.camunda.bpm.engine.identity.Group;
-import org.camunda.bpm.engine.identity.Picture;
-import org.camunda.bpm.engine.identity.Tenant;
-import org.camunda.bpm.engine.identity.User;
-import org.camunda.bpm.engine.impl.identity.Account;
-import org.camunda.bpm.engine.impl.identity.Authentication;
-import org.camunda.bpm.engine.impl.persistence.entity.UserEntity;
-import org.camunda.bpm.engine.impl.util.ClockUtil;
-import org.camunda.bpm.engine.test.ProcessEngineRule;
-import org.camunda.bpm.engine.test.util.ProvidedProcessEngineRule;
-import org.camunda.commons.testing.ProcessEngineLoggingRule;
-import org.camunda.commons.testing.WatchLogger;
+import io.orqueio.bpm.engine.BadUserRequestException;
+import io.orqueio.bpm.engine.IdentityService;
+import io.orqueio.bpm.engine.OptimisticLockingException;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.ProcessEngineConfiguration;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.ProcessEngines;
+import io.orqueio.bpm.engine.authorization.Authorization;
+import io.orqueio.bpm.engine.exception.NullValueException;
+import io.orqueio.bpm.engine.identity.Group;
+import io.orqueio.bpm.engine.identity.Picture;
+import io.orqueio.bpm.engine.identity.Tenant;
+import io.orqueio.bpm.engine.identity.User;
+import io.orqueio.bpm.engine.impl.identity.Account;
+import io.orqueio.bpm.engine.impl.identity.Authentication;
+import io.orqueio.bpm.engine.impl.persistence.entity.UserEntity;
+import io.orqueio.bpm.engine.impl.util.ClockUtil;
+import io.orqueio.bpm.engine.test.ProcessEngineRule;
+import io.orqueio.bpm.engine.test.util.ProvidedProcessEngineRule;
+import io.orqueio.commons.testing.ProcessEngineLoggingRule;
+import io.orqueio.commons.testing.WatchLogger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -71,7 +71,7 @@ public class IdentityServiceTest {
   private final String INVALID_ID_MESSAGE = "%s has an invalid id: '%s' is not a valid resource identifier.";
 
   private final static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-  private static final String INDENTITY_LOGGER = "org.camunda.bpm.engine.identity";
+  private static final String INDENTITY_LOGGER = "io.orqueio.bpm.engine.identity";
 
   @Rule
   public ProcessEngineRule engineRule = new ProvidedProcessEngineRule();

@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.bpmn.instance;
+package io.orqueio.bpm.model.bpmn.instance;
 
 import java.util.Collection;
 
-import org.camunda.bpm.model.bpmn.MultiInstanceFlowCondition;
-import org.camunda.bpm.model.bpmn.builder.MultiInstanceLoopCharacteristicsBuilder;
+import io.orqueio.bpm.model.bpmn.MultiInstanceFlowCondition;
+import io.orqueio.bpm.model.bpmn.builder.MultiInstanceLoopCharacteristicsBuilder;
 
 /**
  * The BPMN 2.0 multiInstanceLoopCharacteristics element type

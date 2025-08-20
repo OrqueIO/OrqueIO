@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.webapp.plugin.resource;
+package io.orqueio.bpm.webapp.plugin.resource;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,10 +34,10 @@ import javax.ws.rs.core.StreamingOutput;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
-import org.camunda.bpm.engine.rest.exception.RestException;
-import org.camunda.bpm.webapp.AppRuntimeDelegate;
-import org.camunda.bpm.webapp.plugin.spi.AppPlugin;
-import org.camunda.bpm.engine.impl.util.IoUtil;
+import io.orqueio.bpm.engine.rest.exception.RestException;
+import io.orqueio.bpm.webapp.AppRuntimeDelegate;
+import io.orqueio.bpm.webapp.plugin.spi.AppPlugin;
+import io.orqueio.bpm.engine.impl.util.IoUtil;
 
 /**
  * A resource class that provides a plugins restful API.

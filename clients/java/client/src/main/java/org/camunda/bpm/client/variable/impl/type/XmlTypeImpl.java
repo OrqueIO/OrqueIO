@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.variable.impl.type;
+package io.orqueio.bpm.client.variable.impl.type;
 
 import java.util.Map;
 
-import org.camunda.bpm.client.variable.ClientValues;
-import org.camunda.bpm.client.variable.value.XmlValue;
-import org.camunda.bpm.engine.variable.impl.type.PrimitiveValueTypeImpl;
+import io.orqueio.bpm.client.variable.ClientValues;
+import io.orqueio.bpm.client.variable.value.XmlValue;
+import io.orqueio.bpm.engine.variable.impl.type.PrimitiveValueTypeImpl;
 
 public class XmlTypeImpl extends PrimitiveValueTypeImpl {
 

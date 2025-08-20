@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.functional.classloading.ear;
+package io.orqueio.bpm.integrationtest.functional.classloading.ear;
 import javax.transaction.SystemException;
 
-import org.camunda.bpm.integrationtest.functional.classloading.beans.ExampleDelegate;
-import org.camunda.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
-import org.camunda.bpm.integrationtest.util.TestContainer;
+import io.orqueio.bpm.integrationtest.functional.classloading.beans.ExampleDelegate;
+import io.orqueio.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
+import io.orqueio.bpm.integrationtest.util.TestContainer;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -70,7 +70,7 @@ public class TestJavaDelegateResolution_ClientAsLibInWebModule extends AbstractF
   public void testResolveClass() {
     // assert that we cannot load the delegate here:
     try {
-      Class.forName("org.camunda.bpm.integrationtest.functional.classloading.ExampleDelegate");
+      Class.forName("io.orqueio.bpm.integrationtest.functional.classloading.ExampleDelegate");
       Assert.fail("CNFE expected");
     }catch (ClassNotFoundException e) {
       // expected

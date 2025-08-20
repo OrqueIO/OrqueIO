@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.authorization.batch;
+package io.orqueio.bpm.engine.test.api.authorization.batch;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.camunda.bpm.engine.test.api.authorization.util.AuthorizationScenario.scenario;
-import static org.camunda.bpm.engine.test.api.authorization.util.AuthorizationSpec.grant;
+import static io.orqueio.bpm.engine.test.api.authorization.util.AuthorizationScenario.scenario;
+import static io.orqueio.bpm.engine.test.api.authorization.util.AuthorizationSpec.grant;
 import static org.junit.Assert.assertEquals;
 
 import java.util.Arrays;
@@ -26,15 +26,15 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
-import org.camunda.bpm.engine.EntityTypes;
-import org.camunda.bpm.engine.authorization.BatchPermissions;
-import org.camunda.bpm.engine.authorization.Permissions;
-import org.camunda.bpm.engine.authorization.Resources;
-import org.camunda.bpm.engine.batch.Batch;
-import org.camunda.bpm.engine.batch.history.HistoricBatch;
-import org.camunda.bpm.engine.runtime.ProcessInstanceQuery;
-import org.camunda.bpm.engine.test.api.authorization.util.AuthorizationScenario;
-import org.camunda.bpm.engine.test.api.authorization.util.AuthorizationTestRule;
+import io.orqueio.bpm.engine.EntityTypes;
+import io.orqueio.bpm.engine.authorization.BatchPermissions;
+import io.orqueio.bpm.engine.authorization.Permissions;
+import io.orqueio.bpm.engine.authorization.Resources;
+import io.orqueio.bpm.engine.batch.Batch;
+import io.orqueio.bpm.engine.batch.history.HistoricBatch;
+import io.orqueio.bpm.engine.runtime.ProcessInstanceQuery;
+import io.orqueio.bpm.engine.test.api.authorization.util.AuthorizationScenario;
+import io.orqueio.bpm.engine.test.api.authorization.util.AuthorizationTestRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;

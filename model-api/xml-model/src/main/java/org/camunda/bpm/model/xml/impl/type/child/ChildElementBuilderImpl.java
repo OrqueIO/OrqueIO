@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.xml.impl.type.child;
+package io.orqueio.bpm.model.xml.impl.type.child;
 
-import org.camunda.bpm.model.xml.impl.type.reference.ElementReferenceBuilderImpl;
-import org.camunda.bpm.model.xml.impl.type.reference.QNameElementReferenceBuilderImpl;
-import org.camunda.bpm.model.xml.impl.type.reference.UriElementReferenceBuilderImpl;
-import org.camunda.bpm.model.xml.instance.ModelElementInstance;
-import org.camunda.bpm.model.xml.type.ModelElementType;
-import org.camunda.bpm.model.xml.type.child.ChildElement;
-import org.camunda.bpm.model.xml.type.child.ChildElementBuilder;
-import org.camunda.bpm.model.xml.type.reference.ElementReferenceBuilder;
+import io.orqueio.bpm.model.xml.impl.type.reference.ElementReferenceBuilderImpl;
+import io.orqueio.bpm.model.xml.impl.type.reference.QNameElementReferenceBuilderImpl;
+import io.orqueio.bpm.model.xml.impl.type.reference.UriElementReferenceBuilderImpl;
+import io.orqueio.bpm.model.xml.instance.ModelElementInstance;
+import io.orqueio.bpm.model.xml.type.ModelElementType;
+import io.orqueio.bpm.model.xml.type.child.ChildElement;
+import io.orqueio.bpm.model.xml.type.child.ChildElementBuilder;
+import io.orqueio.bpm.model.xml.type.reference.ElementReferenceBuilder;
 
 /**
  * @author Daniel Meyer

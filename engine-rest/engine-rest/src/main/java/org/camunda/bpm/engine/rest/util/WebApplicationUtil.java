@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.util;
+package io.orqueio.bpm.engine.rest.util;
 
-import static org.camunda.bpm.engine.rest.util.EngineUtil.getProcessEngineProvider;
+import static io.orqueio.bpm.engine.rest.util.EngineUtil.getProcessEngineProvider;
 
-import org.camunda.bpm.engine.impl.ManagementServiceImpl;
-import org.camunda.bpm.engine.impl.diagnostics.PlatformDiagnosticsRegistry;
-import org.camunda.bpm.engine.impl.telemetry.dto.LicenseKeyDataImpl;
-import org.camunda.bpm.engine.rest.spi.ProcessEngineProvider;
+import io.orqueio.bpm.engine.impl.ManagementServiceImpl;
+import io.orqueio.bpm.engine.impl.diagnostics.PlatformDiagnosticsRegistry;
+import io.orqueio.bpm.engine.impl.telemetry.dto.LicenseKeyDataImpl;
+import io.orqueio.bpm.engine.rest.spi.ProcessEngineProvider;
 
 public class WebApplicationUtil {
 

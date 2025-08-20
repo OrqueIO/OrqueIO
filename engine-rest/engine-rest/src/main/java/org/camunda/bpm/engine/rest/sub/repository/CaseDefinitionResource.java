@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.sub.repository;
+package io.orqueio.bpm.engine.rest.sub.repository;
 
-import org.camunda.bpm.engine.rest.dto.HistoryTimeToLiveDto;
-import org.camunda.bpm.engine.rest.dto.repository.CaseDefinitionDiagramDto;
-import org.camunda.bpm.engine.rest.dto.repository.CaseDefinitionDto;
-import org.camunda.bpm.engine.rest.dto.runtime.CaseInstanceDto;
-import org.camunda.bpm.engine.rest.dto.runtime.CreateCaseInstanceDto;
+import io.orqueio.bpm.engine.rest.dto.HistoryTimeToLiveDto;
+import io.orqueio.bpm.engine.rest.dto.repository.CaseDefinitionDiagramDto;
+import io.orqueio.bpm.engine.rest.dto.repository.CaseDefinitionDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.CaseInstanceDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.CreateCaseInstanceDto;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;

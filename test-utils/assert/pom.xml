@@ -10,7 +10,7 @@
   <name>Camunda Platform - Assert - Root</name>
 
   <parent>
-    <groupId>org.camunda.bpm</groupId>
+    <groupId>io.orqueio.bpm</groupId>
     <artifactId>camunda-database-settings</artifactId>
     <relativePath>../../database</relativePath>
     <version>7.24.0-SNAPSHOT</version>
@@ -39,7 +39,7 @@
         <type>pom</type>
       </dependency>
       <dependency>
-        <groupId>org.camunda.bpm</groupId>
+        <groupId>io.orqueio.bpm</groupId>
         <artifactId>camunda-core-internal-dependencies</artifactId>
         <version>${project.version}</version>
         <scope>import</scope>

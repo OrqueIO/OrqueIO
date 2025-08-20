@@ -14,44 +14,44 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine;
+package io.orqueio.bpm.engine;
 
 import java.io.InputStream;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-import org.camunda.bpm.application.ProcessApplicationReference;
-import org.camunda.bpm.engine.authorization.Permissions;
-import org.camunda.bpm.engine.authorization.ProcessDefinitionPermissions;
-import org.camunda.bpm.engine.authorization.ProcessInstancePermissions;
-import org.camunda.bpm.engine.authorization.Resources;
-import org.camunda.bpm.engine.delegate.ExecutionListener;
-import org.camunda.bpm.engine.exception.NotAllowedException;
-import org.camunda.bpm.engine.exception.NotFoundException;
-import org.camunda.bpm.engine.exception.NotValidException;
-import org.camunda.bpm.engine.repository.CaseDefinition;
-import org.camunda.bpm.engine.repository.CaseDefinitionQuery;
-import org.camunda.bpm.engine.repository.DecisionDefinition;
-import org.camunda.bpm.engine.repository.DecisionDefinitionQuery;
-import org.camunda.bpm.engine.repository.DecisionRequirementsDefinition;
-import org.camunda.bpm.engine.repository.DecisionRequirementsDefinitionQuery;
-import org.camunda.bpm.engine.repository.DeleteProcessDefinitionsSelectBuilder;
-import org.camunda.bpm.engine.repository.DeploymentBuilder;
-import org.camunda.bpm.engine.repository.DeploymentQuery;
-import org.camunda.bpm.engine.repository.DiagramLayout;
-import org.camunda.bpm.engine.repository.ProcessApplicationDeployment;
-import org.camunda.bpm.engine.repository.ProcessApplicationDeploymentBuilder;
-import org.camunda.bpm.engine.repository.ProcessDefinition;
-import org.camunda.bpm.engine.repository.ProcessDefinitionQuery;
-import org.camunda.bpm.engine.repository.Resource;
-import org.camunda.bpm.engine.repository.CalledProcessDefinition;
-import org.camunda.bpm.engine.repository.UpdateProcessDefinitionSuspensionStateBuilder;
-import org.camunda.bpm.engine.repository.UpdateProcessDefinitionSuspensionStateSelectBuilder;
-import org.camunda.bpm.engine.task.IdentityLink;
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
-import org.camunda.bpm.model.cmmn.CmmnModelInstance;
-import org.camunda.bpm.model.dmn.DmnModelInstance;
+import io.orqueio.bpm.application.ProcessApplicationReference;
+import io.orqueio.bpm.engine.authorization.Permissions;
+import io.orqueio.bpm.engine.authorization.ProcessDefinitionPermissions;
+import io.orqueio.bpm.engine.authorization.ProcessInstancePermissions;
+import io.orqueio.bpm.engine.authorization.Resources;
+import io.orqueio.bpm.engine.delegate.ExecutionListener;
+import io.orqueio.bpm.engine.exception.NotAllowedException;
+import io.orqueio.bpm.engine.exception.NotFoundException;
+import io.orqueio.bpm.engine.exception.NotValidException;
+import io.orqueio.bpm.engine.repository.CaseDefinition;
+import io.orqueio.bpm.engine.repository.CaseDefinitionQuery;
+import io.orqueio.bpm.engine.repository.DecisionDefinition;
+import io.orqueio.bpm.engine.repository.DecisionDefinitionQuery;
+import io.orqueio.bpm.engine.repository.DecisionRequirementsDefinition;
+import io.orqueio.bpm.engine.repository.DecisionRequirementsDefinitionQuery;
+import io.orqueio.bpm.engine.repository.DeleteProcessDefinitionsSelectBuilder;
+import io.orqueio.bpm.engine.repository.DeploymentBuilder;
+import io.orqueio.bpm.engine.repository.DeploymentQuery;
+import io.orqueio.bpm.engine.repository.DiagramLayout;
+import io.orqueio.bpm.engine.repository.ProcessApplicationDeployment;
+import io.orqueio.bpm.engine.repository.ProcessApplicationDeploymentBuilder;
+import io.orqueio.bpm.engine.repository.ProcessDefinition;
+import io.orqueio.bpm.engine.repository.ProcessDefinitionQuery;
+import io.orqueio.bpm.engine.repository.Resource;
+import io.orqueio.bpm.engine.repository.CalledProcessDefinition;
+import io.orqueio.bpm.engine.repository.UpdateProcessDefinitionSuspensionStateBuilder;
+import io.orqueio.bpm.engine.repository.UpdateProcessDefinitionSuspensionStateSelectBuilder;
+import io.orqueio.bpm.engine.task.IdentityLink;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.bpm.model.cmmn.CmmnModelInstance;
+import io.orqueio.bpm.model.dmn.DmnModelInstance;
 
 
 /** Service providing access to the repository of process definitions and deployments.

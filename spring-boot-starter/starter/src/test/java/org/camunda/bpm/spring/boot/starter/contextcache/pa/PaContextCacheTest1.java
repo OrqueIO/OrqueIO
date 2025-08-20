@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter.contextcache.pa;
+package io.orqueio.bpm.spring.boot.starter.contextcache.pa;
 
-import org.camunda.bpm.spring.boot.starter.contextcache.AbstractContextCacheTest;
-import org.camunda.bpm.spring.boot.starter.test.pa.TestProcessApplication;
+import io.orqueio.bpm.spring.boot.starter.contextcache.AbstractContextCacheTest;
+import io.orqueio.bpm.spring.boot.starter.test.pa.TestProcessApplication;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static org.camunda.bpm.engine.test.assertions.bpmn.AbstractAssertions.init;
+import static io.orqueio.bpm.engine.test.assertions.bpmn.AbstractAssertions.init;
 
 /**
  * Tests {@link PaContextCacheTest1}, {@link PaContextCacheTest2}, {@link PaContextCacheTest3}

@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.persistence.deploy.cache;
+package io.orqueio.bpm.engine.impl.persistence.deploy.cache;
 
-import org.camunda.bpm.engine.exception.cmmn.CaseDefinitionNotFoundException;
-import org.camunda.bpm.engine.impl.cmmn.entity.repository.CaseDefinitionEntity;
-import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.engine.impl.persistence.AbstractResourceDefinitionManager;
+import io.orqueio.bpm.engine.exception.cmmn.CaseDefinitionNotFoundException;
+import io.orqueio.bpm.engine.impl.cmmn.entity.repository.CaseDefinitionEntity;
+import io.orqueio.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.impl.persistence.AbstractResourceDefinitionManager;
 
-import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
+import static io.orqueio.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
 
 /**
  * @author: Johannes Heinemann

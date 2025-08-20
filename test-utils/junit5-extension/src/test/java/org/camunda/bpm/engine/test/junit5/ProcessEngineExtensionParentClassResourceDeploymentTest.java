@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.junit5;
+package io.orqueio.bpm.engine.test.junit5;
 
 import java.util.List;
 
 import org.assertj.core.api.Assertions;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.repository.ProcessDefinition;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.repository.ProcessDefinition;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 

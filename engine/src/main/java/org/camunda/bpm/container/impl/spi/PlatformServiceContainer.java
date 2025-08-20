@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.spi;
+package io.orqueio.bpm.container.impl.spi;
 
 import java.util.List;
 import java.util.Set;
 
 import javax.management.ObjectName;
 
-import org.camunda.bpm.container.impl.spi.DeploymentOperation.DeploymentOperationBuilder;
+import io.orqueio.bpm.container.impl.spi.DeploymentOperation.DeploymentOperationBuilder;
 
 /**
  * @author Daniel Meyer

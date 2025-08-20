@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.task.impl;
+package io.orqueio.bpm.client.task.impl;
 
 import java.util.Map;
 
-import org.camunda.bpm.client.impl.EngineClient;
-import org.camunda.bpm.client.impl.EngineClientException;
-import org.camunda.bpm.client.impl.ExternalTaskClientLogger;
-import org.camunda.bpm.client.task.ExternalTask;
-import org.camunda.bpm.client.task.ExternalTaskService;
+import io.orqueio.bpm.client.impl.EngineClient;
+import io.orqueio.bpm.client.impl.EngineClientException;
+import io.orqueio.bpm.client.impl.ExternalTaskClientLogger;
+import io.orqueio.bpm.client.task.ExternalTask;
+import io.orqueio.bpm.client.task.ExternalTaskService;
 
 /**
  * @author Tassilo Weidner

@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.topic;
+package io.orqueio.bpm.client.topic;
 
 import java.util.Map;
 
-import org.camunda.bpm.client.exception.ExternalTaskClientException;
-import org.camunda.bpm.client.task.ExternalTaskHandler;
+import io.orqueio.bpm.client.exception.ExternalTaskClientException;
+import io.orqueio.bpm.client.task.ExternalTaskHandler;
 
 /**
  * <p>A fluent builder to configure the topic subscription</p>

@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.delegate;
+package io.orqueio.bpm.engine.delegate;
 
-import org.camunda.bpm.engine.runtime.VariableInstance;
+import io.orqueio.bpm.engine.runtime.VariableInstance;
 
 /**
  * @author Thorben Lindhauer

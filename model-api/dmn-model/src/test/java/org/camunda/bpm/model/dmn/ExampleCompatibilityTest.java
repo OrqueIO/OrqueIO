@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.dmn;
+package io.orqueio.bpm.model.dmn;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -24,23 +24,23 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import org.camunda.bpm.model.dmn.instance.BusinessContextElement;
-import org.camunda.bpm.model.dmn.instance.Decision;
-import org.camunda.bpm.model.dmn.instance.DecisionTable;
-import org.camunda.bpm.model.dmn.instance.Definitions;
-import org.camunda.bpm.model.dmn.instance.DrgElement;
-import org.camunda.bpm.model.dmn.instance.ElementCollection;
-import org.camunda.bpm.model.dmn.instance.Import;
-import org.camunda.bpm.model.dmn.instance.Input;
-import org.camunda.bpm.model.dmn.instance.InputEntry;
-import org.camunda.bpm.model.dmn.instance.InputExpression;
-import org.camunda.bpm.model.dmn.instance.InputValues;
-import org.camunda.bpm.model.dmn.instance.ItemDefinition;
-import org.camunda.bpm.model.dmn.instance.Output;
-import org.camunda.bpm.model.dmn.instance.OutputEntry;
-import org.camunda.bpm.model.dmn.instance.OutputValues;
-import org.camunda.bpm.model.dmn.instance.Rule;
-import org.camunda.bpm.model.dmn.instance.Text;
+import io.orqueio.bpm.model.dmn.instance.BusinessContextElement;
+import io.orqueio.bpm.model.dmn.instance.Decision;
+import io.orqueio.bpm.model.dmn.instance.DecisionTable;
+import io.orqueio.bpm.model.dmn.instance.Definitions;
+import io.orqueio.bpm.model.dmn.instance.DrgElement;
+import io.orqueio.bpm.model.dmn.instance.ElementCollection;
+import io.orqueio.bpm.model.dmn.instance.Import;
+import io.orqueio.bpm.model.dmn.instance.Input;
+import io.orqueio.bpm.model.dmn.instance.InputEntry;
+import io.orqueio.bpm.model.dmn.instance.InputExpression;
+import io.orqueio.bpm.model.dmn.instance.InputValues;
+import io.orqueio.bpm.model.dmn.instance.ItemDefinition;
+import io.orqueio.bpm.model.dmn.instance.Output;
+import io.orqueio.bpm.model.dmn.instance.OutputEntry;
+import io.orqueio.bpm.model.dmn.instance.OutputValues;
+import io.orqueio.bpm.model.dmn.instance.Rule;
+import io.orqueio.bpm.model.dmn.instance.Text;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

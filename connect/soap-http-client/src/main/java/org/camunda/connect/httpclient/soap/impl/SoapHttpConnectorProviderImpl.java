@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.connect.httpclient.soap.impl;
+package io.orqueio.connect.httpclient.soap.impl;
 
-import org.camunda.connect.httpclient.soap.SoapHttpConnector;
-import org.camunda.connect.httpclient.soap.SoapHttpConnectorProvider;
+import io.orqueio.connect.httpclient.soap.SoapHttpConnector;
+import io.orqueio.connect.httpclient.soap.SoapHttpConnectorProvider;
 
 public class SoapHttpConnectorProviderImpl implements SoapHttpConnectorProvider {
 

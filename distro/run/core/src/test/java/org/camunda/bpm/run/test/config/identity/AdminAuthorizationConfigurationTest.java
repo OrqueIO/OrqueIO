@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.run.test.config.identity;
+package io.orqueio.bpm.run.test.config.identity;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.camunda.bpm.engine.impl.plugin.AdministratorAuthorizationPlugin;
-import org.camunda.bpm.run.CamundaBpmRun;
-import org.camunda.bpm.run.property.CamundaBpmRunAdministratorAuthorizationProperties;
-import org.camunda.bpm.run.property.CamundaBpmRunProperties;
+import io.orqueio.bpm.engine.impl.plugin.AdministratorAuthorizationPlugin;
+import io.orqueio.bpm.run.CamundaBpmRun;
+import io.orqueio.bpm.run.property.CamundaBpmRunAdministratorAuthorizationProperties;
+import io.orqueio.bpm.run.property.CamundaBpmRunProperties;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

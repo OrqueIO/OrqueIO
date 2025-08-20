@@ -25,7 +25,7 @@
       </boundaryEvent>
   
       <serviceTask id="compensateScope1Task" isForCompensation="true"
-        camunda:class="org.camunda.bpm.engine.test.bpmn.event.compensate.helper.UndoService">
+        camunda:class="io.orqueio.bpm.engine.test.bpmn.event.compensate.helper.UndoService">
         <extensionElements>
           <camunda:field name="counterName" stringValue="compensateScope1Task" />
         </extensionElements>
@@ -50,7 +50,7 @@
       </boundaryEvent>
   
       <serviceTask id="compensateScope2Task" isForCompensation="true"
-        camunda:class="org.camunda.bpm.engine.test.bpmn.event.compensate.helper.UndoService">
+        camunda:class="io.orqueio.bpm.engine.test.bpmn.event.compensate.helper.UndoService">
         <extensionElements>
           <camunda:field name="counterName" stringValue="compensateScope2Task" />
         </extensionElements>

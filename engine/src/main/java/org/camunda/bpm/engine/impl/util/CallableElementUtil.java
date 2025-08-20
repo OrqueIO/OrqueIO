@@ -14,21 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.util;
+package io.orqueio.bpm.engine.impl.util;
 
-import static org.camunda.bpm.engine.impl.ProcessEngineLogger.UTIL_LOGGER;
+import static io.orqueio.bpm.engine.impl.ProcessEngineLogger.UTIL_LOGGER;
 
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.delegate.VariableScope;
-import org.camunda.bpm.engine.impl.cmmn.model.CmmnCaseDefinition;
-import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.engine.impl.core.model.BaseCallableElement;
-import org.camunda.bpm.engine.impl.el.StartProcessVariableScope;
-import org.camunda.bpm.engine.impl.persistence.deploy.cache.DeploymentCache;
-import org.camunda.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity;
-import org.camunda.bpm.engine.impl.pvm.process.ProcessDefinitionImpl;
-import org.camunda.bpm.engine.repository.DecisionDefinition;
-import org.camunda.bpm.engine.repository.ProcessDefinition;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.delegate.VariableScope;
+import io.orqueio.bpm.engine.impl.cmmn.model.CmmnCaseDefinition;
+import io.orqueio.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.impl.core.model.BaseCallableElement;
+import io.orqueio.bpm.engine.impl.el.StartProcessVariableScope;
+import io.orqueio.bpm.engine.impl.persistence.deploy.cache.DeploymentCache;
+import io.orqueio.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity;
+import io.orqueio.bpm.engine.impl.pvm.process.ProcessDefinitionImpl;
+import io.orqueio.bpm.engine.repository.DecisionDefinition;
+import io.orqueio.bpm.engine.repository.ProcessDefinition;
 
 /**
  * @author Roman Smirnov

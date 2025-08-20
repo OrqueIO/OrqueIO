@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.application.impl.ejb;
+package io.orqueio.bpm.application.impl.ejb;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,8 +23,8 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.ejb.*;
 
-import org.camunda.bpm.application.ProcessApplication;
-import org.camunda.bpm.application.ProcessApplicationInterface;
+import io.orqueio.bpm.application.ProcessApplication;
+import io.orqueio.bpm.application.ProcessApplicationInterface;
 
 
 /**
@@ -40,7 +40,7 @@ import org.camunda.bpm.application.ProcessApplicationInterface;
 @ProcessApplication
 @Local(ProcessApplicationInterface.class)
 // Using fully-qualified class name instead of import statement to allow for automatic Jakarta transformation
-public class DefaultEjbProcessApplication extends org.camunda.bpm.application.impl.EjbProcessApplication {
+public class DefaultEjbProcessApplication extends io.orqueio.bpm.application.impl.EjbProcessApplication {
   
   protected Map<String, String> properties = new HashMap<String, String>();
   

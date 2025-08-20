@@ -14,29 +14,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.authorization.job;
+package io.orqueio.bpm.engine.test.api.authorization.job;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.camunda.bpm.engine.authorization.Permissions.UPDATE;
-import static org.camunda.bpm.engine.authorization.Permissions.UPDATE_INSTANCE;
-import static org.camunda.bpm.engine.authorization.Resources.PROCESS_DEFINITION;
-import static org.camunda.bpm.engine.authorization.Resources.PROCESS_INSTANCE;
-import static org.camunda.bpm.engine.test.api.authorization.util.AuthorizationScenario.scenario;
-import static org.camunda.bpm.engine.test.api.authorization.util.AuthorizationSpec.grant;
-import static org.camunda.bpm.engine.test.api.authorization.util.AuthorizationSpec.revoke;
+import static io.orqueio.bpm.engine.authorization.Permissions.UPDATE;
+import static io.orqueio.bpm.engine.authorization.Permissions.UPDATE_INSTANCE;
+import static io.orqueio.bpm.engine.authorization.Resources.PROCESS_DEFINITION;
+import static io.orqueio.bpm.engine.authorization.Resources.PROCESS_INSTANCE;
+import static io.orqueio.bpm.engine.test.api.authorization.util.AuthorizationScenario.scenario;
+import static io.orqueio.bpm.engine.test.api.authorization.util.AuthorizationSpec.grant;
+import static io.orqueio.bpm.engine.test.api.authorization.util.AuthorizationSpec.revoke;
 
 import java.util.Collection;
 
-import org.camunda.bpm.engine.ManagementService;
-import org.camunda.bpm.engine.authorization.ProcessDefinitionPermissions;
-import org.camunda.bpm.engine.authorization.ProcessInstancePermissions;
-import org.camunda.bpm.engine.management.JobDefinition;
-import org.camunda.bpm.engine.runtime.Job;
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.engine.test.ProcessEngineRule;
-import org.camunda.bpm.engine.test.api.authorization.util.AuthorizationScenario;
-import org.camunda.bpm.engine.test.api.authorization.util.AuthorizationTestRule;
-import org.camunda.bpm.engine.test.util.ProvidedProcessEngineRule;
+import io.orqueio.bpm.engine.ManagementService;
+import io.orqueio.bpm.engine.authorization.ProcessDefinitionPermissions;
+import io.orqueio.bpm.engine.authorization.ProcessInstancePermissions;
+import io.orqueio.bpm.engine.management.JobDefinition;
+import io.orqueio.bpm.engine.runtime.Job;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.test.ProcessEngineRule;
+import io.orqueio.bpm.engine.test.api.authorization.util.AuthorizationScenario;
+import io.orqueio.bpm.engine.test.api.authorization.util.AuthorizationTestRule;
+import io.orqueio.bpm.engine.test.util.ProvidedProcessEngineRule;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;

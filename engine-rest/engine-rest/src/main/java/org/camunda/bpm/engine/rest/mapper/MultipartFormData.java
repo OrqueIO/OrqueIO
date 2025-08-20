@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.mapper;
+package io.orqueio.bpm.engine.rest.mapper;
 
 import org.apache.commons.fileupload.FileItemStream;
-import org.camunda.bpm.engine.impl.util.IoUtil;
-import org.camunda.bpm.engine.rest.exception.RestException;
+import io.orqueio.bpm.engine.impl.util.IoUtil;
+import io.orqueio.bpm.engine.rest.exception.RestException;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response.Status;

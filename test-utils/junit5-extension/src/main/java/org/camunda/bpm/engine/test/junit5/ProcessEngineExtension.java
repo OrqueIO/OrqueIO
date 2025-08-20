@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.junit5;
+package io.orqueio.bpm.engine.test.junit5;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -24,28 +24,28 @@ import java.util.Date;
 import java.util.List;
 import java.util.function.Supplier;
 
-import org.camunda.bpm.engine.AuthorizationService;
-import org.camunda.bpm.engine.CaseService;
-import org.camunda.bpm.engine.DecisionService;
-import org.camunda.bpm.engine.ExternalTaskService;
-import org.camunda.bpm.engine.FilterService;
-import org.camunda.bpm.engine.FormService;
-import org.camunda.bpm.engine.HistoryService;
-import org.camunda.bpm.engine.IdentityService;
-import org.camunda.bpm.engine.ManagementService;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.ProcessEngineServices;
-import org.camunda.bpm.engine.RepositoryService;
-import org.camunda.bpm.engine.RuntimeService;
-import org.camunda.bpm.engine.TaskService;
-import org.camunda.bpm.engine.impl.ProcessEngineImpl;
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.diagnostics.PlatformDiagnosticsRegistry;
-import org.camunda.bpm.engine.impl.test.TestHelper;
-import org.camunda.bpm.engine.impl.util.ClockUtil;
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.engine.test.RequiredHistoryLevel;
+import io.orqueio.bpm.engine.AuthorizationService;
+import io.orqueio.bpm.engine.CaseService;
+import io.orqueio.bpm.engine.DecisionService;
+import io.orqueio.bpm.engine.ExternalTaskService;
+import io.orqueio.bpm.engine.FilterService;
+import io.orqueio.bpm.engine.FormService;
+import io.orqueio.bpm.engine.HistoryService;
+import io.orqueio.bpm.engine.IdentityService;
+import io.orqueio.bpm.engine.ManagementService;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.ProcessEngineServices;
+import io.orqueio.bpm.engine.RepositoryService;
+import io.orqueio.bpm.engine.RuntimeService;
+import io.orqueio.bpm.engine.TaskService;
+import io.orqueio.bpm.engine.impl.ProcessEngineImpl;
+import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.diagnostics.PlatformDiagnosticsRegistry;
+import io.orqueio.bpm.engine.impl.test.TestHelper;
+import io.orqueio.bpm.engine.impl.util.ClockUtil;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.test.RequiredHistoryLevel;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.extension.AfterAllCallback;
 import org.junit.jupiter.api.extension.AfterTestExecutionCallback;
@@ -262,7 +262,7 @@ public class ProcessEngineExtension implements TestWatcher,
     return this;
   }
 
-  public ProcessEngineExtension manageDeployment(org.camunda.bpm.engine.repository.Deployment deployment) {
+  public ProcessEngineExtension manageDeployment(io.orqueio.bpm.engine.repository.Deployment deployment) {
     this.additionalDeployments.add(deployment.getId());
     return this;
   }

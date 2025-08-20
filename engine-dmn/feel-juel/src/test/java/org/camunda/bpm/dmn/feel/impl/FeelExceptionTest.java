@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.feel.impl;
+package io.orqueio.bpm.dmn.feel.impl;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
@@ -22,9 +22,9 @@ import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
-import org.camunda.bpm.dmn.feel.impl.juel.FeelEngineFactoryImpl;
-import org.camunda.bpm.engine.variable.VariableMap;
-import org.camunda.bpm.engine.variable.Variables;
+import io.orqueio.bpm.dmn.feel.impl.juel.FeelEngineFactoryImpl;
+import io.orqueio.bpm.engine.variable.VariableMap;
+import io.orqueio.bpm.engine.variable.Variables;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;

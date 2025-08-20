@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl;
+package io.orqueio.bpm.engine.impl;
 
-import org.camunda.bpm.engine.query.QueryProperty;
+import io.orqueio.bpm.engine.query.QueryProperty;
 
 
 /**
- * Contains sortable properties which can be used in a {@link org.camunda.bpm.engine.history.UserOperationLogQuery}.
+ * Contains sortable properties which can be used in a {@link io.orqueio.bpm.engine.history.UserOperationLogQuery}.
  *
  * @author Danny Gräf
  */

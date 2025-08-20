@@ -14,24 +14,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.cmmn.handler.specification;
+package io.orqueio.bpm.engine.test.cmmn.handler.specification;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
-import org.camunda.bpm.engine.delegate.BaseDelegateExecution;
-import org.camunda.bpm.engine.delegate.DelegateListener;
-import org.camunda.bpm.engine.impl.bpmn.parser.FieldDeclaration;
-import org.camunda.bpm.engine.impl.cmmn.listener.ClassDelegateCaseExecutionListener;
-import org.camunda.bpm.model.cmmn.CmmnModelInstance;
-import org.camunda.bpm.model.cmmn.instance.camunda.CamundaCaseExecutionListener;
+import io.orqueio.bpm.engine.delegate.BaseDelegateExecution;
+import io.orqueio.bpm.engine.delegate.DelegateListener;
+import io.orqueio.bpm.engine.impl.bpmn.parser.FieldDeclaration;
+import io.orqueio.bpm.engine.impl.cmmn.listener.ClassDelegateCaseExecutionListener;
+import io.orqueio.bpm.model.cmmn.CmmnModelInstance;
+import io.orqueio.bpm.model.cmmn.instance.camunda.CamundaCaseExecutionListener;
 
 public class ClassExecutionListenerSpec extends AbstractExecutionListenerSpec {
 
   // could be configurable
-  protected static final String CLASS_NAME = "org.camunda.bpm.test.caseexecutionlistener.ABC";
+  protected static final String CLASS_NAME = "io.orqueio.bpm.test.caseexecutionlistener.ABC";
 
   public ClassExecutionListenerSpec(String eventName) {
     super(eventName);

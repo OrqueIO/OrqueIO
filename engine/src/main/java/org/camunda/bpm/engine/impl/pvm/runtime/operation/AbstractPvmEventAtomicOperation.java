@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.pvm.runtime.operation;
+package io.orqueio.bpm.engine.impl.pvm.runtime.operation;
 
-import org.camunda.bpm.engine.impl.bpmn.helper.BpmnExceptionHandler;
-import org.camunda.bpm.engine.impl.bpmn.helper.ErrorPropagationException;
-import org.camunda.bpm.engine.impl.core.model.CoreModelElement;
-import org.camunda.bpm.engine.impl.core.operation.AbstractEventAtomicOperation;
-import org.camunda.bpm.engine.impl.pvm.delegate.ActivityExecution;
-import org.camunda.bpm.engine.impl.pvm.runtime.PvmExecutionImpl;
+import io.orqueio.bpm.engine.impl.bpmn.helper.BpmnExceptionHandler;
+import io.orqueio.bpm.engine.impl.bpmn.helper.ErrorPropagationException;
+import io.orqueio.bpm.engine.impl.core.model.CoreModelElement;
+import io.orqueio.bpm.engine.impl.core.operation.AbstractEventAtomicOperation;
+import io.orqueio.bpm.engine.impl.pvm.delegate.ActivityExecution;
+import io.orqueio.bpm.engine.impl.pvm.runtime.PvmExecutionImpl;
 
 /**
  * @author Daniel Meyer

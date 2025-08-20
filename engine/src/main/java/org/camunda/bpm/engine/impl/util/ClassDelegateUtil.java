@@ -14,18 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.util;
+package io.orqueio.bpm.engine.impl.util;
 
-import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
+import static io.orqueio.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import org.camunda.bpm.engine.ArtifactFactory;
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
-import org.camunda.bpm.engine.impl.bpmn.parser.FieldDeclaration;
-import org.camunda.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.ArtifactFactory;
+import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
+import io.orqueio.bpm.engine.impl.bpmn.parser.FieldDeclaration;
+import io.orqueio.bpm.engine.impl.context.Context;
 
 /**
  * @author Roman Smirnov

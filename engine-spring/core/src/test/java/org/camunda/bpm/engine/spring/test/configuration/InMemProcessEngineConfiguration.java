@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.spring.test.configuration;
+package io.orqueio.bpm.engine.spring.test.configuration;
 
 import javax.sql.DataSource;
 
-import org.camunda.bpm.engine.spring.ProcessEngineFactoryBean;
-import org.camunda.bpm.engine.spring.SpringProcessEngineConfiguration;
+import io.orqueio.bpm.engine.spring.ProcessEngineFactoryBean;
+import io.orqueio.bpm.engine.spring.SpringProcessEngineConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -33,7 +33,7 @@ import org.springframework.transaction.PlatformTransactionManager;
  * @author Philipp Ossler
  */
 @Configuration
-@ComponentScan("org.camunda.bpm.engine.spring.test.configuration")
+@ComponentScan("io.orqueio.bpm.engine.spring.test.configuration")
 public class InMemProcessEngineConfiguration {
 
   @Bean

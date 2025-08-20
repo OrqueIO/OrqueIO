@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.cdi.test;
+package io.orqueio.bpm.engine.cdi.test;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -23,29 +23,29 @@ import java.util.logging.Logger;
 
 import javax.enterprise.inject.spi.BeanManager;
 
-import org.camunda.bpm.BpmPlatform;
-import org.camunda.bpm.container.RuntimeContainerDelegate;
-import org.camunda.bpm.engine.AuthorizationService;
-import org.camunda.bpm.engine.CaseService;
-import org.camunda.bpm.engine.DecisionService;
-import org.camunda.bpm.engine.ExternalTaskService;
-import org.camunda.bpm.engine.FilterService;
-import org.camunda.bpm.engine.FormService;
-import org.camunda.bpm.engine.HistoryService;
-import org.camunda.bpm.engine.IdentityService;
-import org.camunda.bpm.engine.ManagementService;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.RepositoryService;
-import org.camunda.bpm.engine.RuntimeService;
-import org.camunda.bpm.engine.TaskService;
-import org.camunda.bpm.engine.cdi.BusinessProcess;
-import org.camunda.bpm.engine.cdi.impl.util.ProgrammaticBeanLookup;
-import org.camunda.bpm.engine.impl.ProcessEngineImpl;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.jobexecutor.JobExecutor;
-import org.camunda.bpm.engine.impl.util.LogUtil;
-import org.camunda.bpm.engine.test.ProcessEngineRule;
+import io.orqueio.bpm.BpmPlatform;
+import io.orqueio.bpm.container.RuntimeContainerDelegate;
+import io.orqueio.bpm.engine.AuthorizationService;
+import io.orqueio.bpm.engine.CaseService;
+import io.orqueio.bpm.engine.DecisionService;
+import io.orqueio.bpm.engine.ExternalTaskService;
+import io.orqueio.bpm.engine.FilterService;
+import io.orqueio.bpm.engine.FormService;
+import io.orqueio.bpm.engine.HistoryService;
+import io.orqueio.bpm.engine.IdentityService;
+import io.orqueio.bpm.engine.ManagementService;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.RepositoryService;
+import io.orqueio.bpm.engine.RuntimeService;
+import io.orqueio.bpm.engine.TaskService;
+import io.orqueio.bpm.engine.cdi.BusinessProcess;
+import io.orqueio.bpm.engine.cdi.impl.util.ProgrammaticBeanLookup;
+import io.orqueio.bpm.engine.impl.ProcessEngineImpl;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.jobexecutor.JobExecutor;
+import io.orqueio.bpm.engine.impl.util.LogUtil;
+import io.orqueio.bpm.engine.test.ProcessEngineRule;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -74,7 +74,7 @@ public abstract class CdiProcessEngineTestCase {
   public static JavaArchive createDeployment() {
 
     return ShrinkWrap.create(JavaArchive.class)
-      .addPackages(true, "org.camunda.bpm.engine.cdi")
+      .addPackages(true, "io.orqueio.bpm.engine.cdi")
       .addAsManifestResource("META-INF/beans.xml", "beans.xml");
   }
 

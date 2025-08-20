@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.task;
+package io.orqueio.bpm.engine.test.api.task;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import org.camunda.bpm.engine.delegate.DelegateTask;
-import org.camunda.bpm.engine.delegate.TaskListener;
-import org.camunda.bpm.engine.task.IdentityLink;
+import io.orqueio.bpm.engine.delegate.DelegateTask;
+import io.orqueio.bpm.engine.delegate.TaskListener;
+import io.orqueio.bpm.engine.task.IdentityLink;
 
 
 public class DelegateTaskTestTaskListener implements TaskListener {

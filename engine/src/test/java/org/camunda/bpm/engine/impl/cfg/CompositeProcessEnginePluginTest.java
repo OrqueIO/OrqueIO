@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.cfg;
+package io.orqueio.bpm.engine.impl.cfg;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.inOrder;
@@ -23,7 +23,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 
-import org.camunda.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.ProcessEngine;
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.Mockito;

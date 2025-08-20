@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.bpmn.instance.di;
+package io.orqueio.bpm.model.bpmn.instance.di;
 
 /**
  * The DI LabeledEdge element

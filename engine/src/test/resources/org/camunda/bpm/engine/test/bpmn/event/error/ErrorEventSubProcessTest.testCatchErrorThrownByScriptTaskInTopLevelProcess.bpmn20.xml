@@ -11,7 +11,7 @@
 
     <scriptTask id="scriptTask" scriptFormat="groovy">
       <script>
-        throw new org.camunda.bpm.engine.delegate.BpmnError("123");
+        throw new io.orqueio.bpm.engine.delegate.BpmnError("123");
       </script>
     </scriptTask>
 

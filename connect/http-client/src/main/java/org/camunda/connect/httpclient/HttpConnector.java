@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.connect.httpclient;
+package io.orqueio.connect.httpclient;
 
-import org.camunda.connect.Connectors;
-import org.camunda.connect.spi.Connector;
+import io.orqueio.connect.Connectors;
+import io.orqueio.connect.spi.Connector;
 
 public interface HttpConnector extends Connector<HttpRequest> {
 

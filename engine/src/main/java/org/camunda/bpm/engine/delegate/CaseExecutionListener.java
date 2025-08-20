@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.delegate;
+package io.orqueio.bpm.engine.delegate;
 
-import org.camunda.bpm.engine.runtime.CaseExecution;
-import org.camunda.bpm.engine.runtime.CaseInstance;
-import org.camunda.bpm.model.cmmn.instance.Stage;
-import org.camunda.bpm.model.cmmn.instance.Task;
+import io.orqueio.bpm.engine.runtime.CaseExecution;
+import io.orqueio.bpm.engine.runtime.CaseInstance;
+import io.orqueio.bpm.model.cmmn.instance.Stage;
+import io.orqueio.bpm.model.cmmn.instance.Task;
 
 /**
  * Listener interface implemented by user code which wants to be notified

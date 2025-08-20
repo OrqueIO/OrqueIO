@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.engine.impl;
+package io.orqueio.bpm.dmn.engine.impl;
 
-import org.camunda.bpm.dmn.engine.impl.hitpolicy.DmnHitPolicyLogger;
-import org.camunda.bpm.dmn.engine.impl.transform.DmnTransformLogger;
-import org.camunda.commons.logging.BaseLogger;
+import io.orqueio.bpm.dmn.engine.impl.hitpolicy.DmnHitPolicyLogger;
+import io.orqueio.bpm.dmn.engine.impl.transform.DmnTransformLogger;
+import io.orqueio.commons.logging.BaseLogger;
 
 public class DmnLogger extends BaseLogger {
 
  public static final String PROJECT_CODE = "DMN";
- public static final String PROJECT_LOGGER= "org.camunda.bpm.dmn";
+ public static final String PROJECT_LOGGER= "io.orqueio.bpm.dmn";
 
  public static DmnEngineLogger ENGINE_LOGGER = createLogger(DmnEngineLogger.class, PROJECT_CODE, PROJECT_LOGGER, "01");
  public static DmnTransformLogger TRANSFORM_LOGGER = createLogger(DmnTransformLogger.class, PROJECT_CODE, PROJECT_LOGGER + ".transform", "02");

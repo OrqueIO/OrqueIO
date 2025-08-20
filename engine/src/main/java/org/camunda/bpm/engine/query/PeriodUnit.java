@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.query;
+package io.orqueio.bpm.engine.query;
 
 /**
  * <p>Specifies a unit for a span of time (i.e. period).</p>

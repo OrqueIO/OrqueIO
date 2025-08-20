@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.run.test.plugins;
+package io.orqueio.bpm.run.test.plugins;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 
-import org.camunda.bpm.engine.impl.cfg.CompositeProcessEnginePlugin;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.cfg.ProcessEnginePlugin;
-import org.camunda.bpm.run.CamundaBpmRun;
-import org.camunda.bpm.spring.boot.starter.spin.SpringBootSpinProcessEnginePlugin;
+import io.orqueio.bpm.engine.impl.cfg.CompositeProcessEnginePlugin;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEnginePlugin;
+import io.orqueio.bpm.run.CamundaBpmRun;
+import io.orqueio.bpm.spring.boot.starter.spin.SpringBootSpinProcessEnginePlugin;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

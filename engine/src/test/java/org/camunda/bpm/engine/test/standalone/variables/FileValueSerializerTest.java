@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.standalone.variables;
+package io.orqueio.bpm.engine.test.standalone.variables;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -27,13 +27,13 @@ import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.util.Scanner;
 
-import org.camunda.bpm.engine.impl.variable.serializer.FileValueSerializer;
-import org.camunda.bpm.engine.impl.variable.serializer.ValueFields;
-import org.camunda.bpm.engine.variable.Variables;
-import org.camunda.bpm.engine.variable.impl.type.FileValueTypeImpl;
-import org.camunda.bpm.engine.variable.impl.value.UntypedValueImpl;
-import org.camunda.bpm.engine.variable.value.FileValue;
-import org.camunda.bpm.engine.variable.value.TypedValue;
+import io.orqueio.bpm.engine.impl.variable.serializer.FileValueSerializer;
+import io.orqueio.bpm.engine.impl.variable.serializer.ValueFields;
+import io.orqueio.bpm.engine.variable.Variables;
+import io.orqueio.bpm.engine.variable.impl.type.FileValueTypeImpl;
+import io.orqueio.bpm.engine.variable.impl.value.UntypedValueImpl;
+import io.orqueio.bpm.engine.variable.value.FileValue;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
 import org.junit.Before;
 import org.junit.Test;
 

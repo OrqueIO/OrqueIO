@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.util;
+package io.orqueio.bpm.engine.rest.util;
 
-import org.camunda.bpm.engine.rest.mapper.JacksonConfigurator;
+import io.orqueio.bpm.engine.rest.mapper.JacksonConfigurator;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.path.json.mapper.factory.DefaultJackson2ObjectMapperFactory;

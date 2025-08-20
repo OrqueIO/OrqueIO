@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.application;
+package io.orqueio.bpm.application;
 
 import java.util.Set;
 
-import org.camunda.bpm.engine.ManagementService;
-import org.camunda.bpm.engine.repository.Deployment;
+import io.orqueio.bpm.engine.ManagementService;
+import io.orqueio.bpm.engine.repository.Deployment;
 
 
 /**

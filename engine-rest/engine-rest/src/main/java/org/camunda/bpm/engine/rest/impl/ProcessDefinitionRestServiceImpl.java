@@ -14,34 +14,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.impl;
+package io.orqueio.bpm.engine.rest.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
-import org.camunda.bpm.engine.ManagementService;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.RepositoryService;
-import org.camunda.bpm.engine.exception.NotFoundException;
-import org.camunda.bpm.engine.management.ProcessDefinitionStatistics;
-import org.camunda.bpm.engine.management.ProcessDefinitionStatisticsQuery;
-import org.camunda.bpm.engine.repository.DeleteProcessDefinitionsBuilder;
-import org.camunda.bpm.engine.repository.ProcessDefinition;
-import org.camunda.bpm.engine.repository.ProcessDefinitionQuery;
-import org.camunda.bpm.engine.rest.ProcessDefinitionRestService;
-import org.camunda.bpm.engine.rest.dto.CountResultDto;
-import org.camunda.bpm.engine.rest.dto.StatisticsResultDto;
-import org.camunda.bpm.engine.rest.dto.repository.ProcessDefinitionDto;
-import org.camunda.bpm.engine.rest.dto.repository.ProcessDefinitionQueryDto;
-import org.camunda.bpm.engine.rest.dto.repository.ProcessDefinitionStatisticsResultDto;
-import org.camunda.bpm.engine.rest.dto.repository.ProcessDefinitionSuspensionStateDto;
-import org.camunda.bpm.engine.rest.exception.InvalidRequestException;
-import org.camunda.bpm.engine.rest.exception.RestException;
-import org.camunda.bpm.engine.rest.sub.repository.ProcessDefinitionResource;
-import org.camunda.bpm.engine.rest.sub.repository.impl.ProcessDefinitionResourceImpl;
-import org.camunda.bpm.engine.rest.util.QueryUtil;
+import io.orqueio.bpm.engine.ManagementService;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.RepositoryService;
+import io.orqueio.bpm.engine.exception.NotFoundException;
+import io.orqueio.bpm.engine.management.ProcessDefinitionStatistics;
+import io.orqueio.bpm.engine.management.ProcessDefinitionStatisticsQuery;
+import io.orqueio.bpm.engine.repository.DeleteProcessDefinitionsBuilder;
+import io.orqueio.bpm.engine.repository.ProcessDefinition;
+import io.orqueio.bpm.engine.repository.ProcessDefinitionQuery;
+import io.orqueio.bpm.engine.rest.ProcessDefinitionRestService;
+import io.orqueio.bpm.engine.rest.dto.CountResultDto;
+import io.orqueio.bpm.engine.rest.dto.StatisticsResultDto;
+import io.orqueio.bpm.engine.rest.dto.repository.ProcessDefinitionDto;
+import io.orqueio.bpm.engine.rest.dto.repository.ProcessDefinitionQueryDto;
+import io.orqueio.bpm.engine.rest.dto.repository.ProcessDefinitionStatisticsResultDto;
+import io.orqueio.bpm.engine.rest.dto.repository.ProcessDefinitionSuspensionStateDto;
+import io.orqueio.bpm.engine.rest.exception.InvalidRequestException;
+import io.orqueio.bpm.engine.rest.exception.RestException;
+import io.orqueio.bpm.engine.rest.sub.repository.ProcessDefinitionResource;
+import io.orqueio.bpm.engine.rest.sub.repository.impl.ProcessDefinitionResourceImpl;
+import io.orqueio.bpm.engine.rest.util.QueryUtil;
 
 public class ProcessDefinitionRestServiceImpl extends AbstractRestProcessEngineAware implements ProcessDefinitionRestService {
 

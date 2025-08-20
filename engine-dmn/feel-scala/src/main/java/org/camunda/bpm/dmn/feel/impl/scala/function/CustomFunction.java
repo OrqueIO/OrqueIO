@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.feel.impl.scala.function;
+package io.orqueio.bpm.dmn.feel.impl.scala.function;
 
-import org.camunda.bpm.dmn.feel.impl.scala.function.builder.CustomFunctionBuilder;
-import org.camunda.bpm.dmn.feel.impl.scala.function.builder.CustomFunctionBuilderImpl;
+import io.orqueio.bpm.dmn.feel.impl.scala.function.builder.CustomFunctionBuilder;
+import io.orqueio.bpm.dmn.feel.impl.scala.function.builder.CustomFunctionBuilderImpl;
 
 import java.util.Collections;
 import java.util.List;

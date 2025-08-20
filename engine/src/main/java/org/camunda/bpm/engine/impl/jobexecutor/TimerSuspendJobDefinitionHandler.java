@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.jobexecutor;
+package io.orqueio.bpm.engine.impl.jobexecutor;
 
-import org.camunda.bpm.engine.impl.cmd.AbstractSetJobDefinitionStateCmd;
-import org.camunda.bpm.engine.impl.cmd.SuspendJobDefinitionCmd;
+import io.orqueio.bpm.engine.impl.cmd.AbstractSetJobDefinitionStateCmd;
+import io.orqueio.bpm.engine.impl.cmd.SuspendJobDefinitionCmd;
 
 /**
  * @author roman.smirnov

@@ -20,7 +20,7 @@
         <property name="dataSource" ref="dataSource"/>
     </bean>
 
-    <bean id="processEngineConfiguration" class="org.camunda.bpm.engine.spring.SpringProcessEngineConfiguration">
+    <bean id="processEngineConfiguration" class="io.orqueio.bpm.engine.spring.SpringProcessEngineConfiguration">
         <property name="dataSource" ref="dataSource"/>
         <property name="transactionManager" ref="transactionManager"/>
         <property name="databaseSchemaUpdate" value="true"/>
@@ -32,7 +32,7 @@
     </bean>
 
     <!-- using ManagedProcessEngineFactoryBean allows registering the ProcessEngine with the BpmPlatform -->
-    <bean id="processEngine" class="org.camunda.bpm.engine.spring.container.ManagedProcessEngineFactoryBean">
+    <bean id="processEngine" class="io.orqueio.bpm.engine.spring.container.ManagedProcessEngineFactoryBean">
         <property name="processEngineConfiguration" ref="processEngineConfiguration"/>
     </bean>
 
@@ -42,6 +42,6 @@
     <bean id="historyService" factory-bean="processEngine" factory-method="getHistoryService"/>
     <bean id="managementService" factory-bean="processEngine" factory-method="getManagementService"/>
     
-    <bean depends-on="processEngine" class="org.camunda.bpm.engine.spring.test.application.CustomSpringProcessApplication" />
+    <bean depends-on="processEngine" class="io.orqueio.bpm.engine.spring.test.application.CustomSpringProcessApplication" />
     
 </beans>

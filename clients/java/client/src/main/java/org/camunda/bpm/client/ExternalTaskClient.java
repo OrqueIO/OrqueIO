@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client;
+package io.orqueio.bpm.client;
 
-import org.camunda.bpm.client.impl.ExternalTaskClientBuilderImpl;
-import org.camunda.bpm.client.topic.TopicSubscriptionBuilder;
+import io.orqueio.bpm.client.impl.ExternalTaskClientBuilderImpl;
+import io.orqueio.bpm.client.topic.TopicSubscriptionBuilder;
 
 /**
  * <p>Camunda external task client</p>

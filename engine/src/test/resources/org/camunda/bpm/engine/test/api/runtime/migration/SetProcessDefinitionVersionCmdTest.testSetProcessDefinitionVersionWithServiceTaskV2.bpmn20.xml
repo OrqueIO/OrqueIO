@@ -11,7 +11,7 @@
     <sequenceFlow id="flow1" sourceRef="theStart" targetRef="migratingTask" />
     
     <serviceTask id="migratingTask" name="Migrating Task" camunda:async="true" 
-      camunda:class="org.camunda.bpm.engine.test.api.runtime.migration.MigrateProcessInstanceDelegate"/>
+      camunda:class="io.orqueio.bpm.engine.test.api.runtime.migration.MigrateProcessInstanceDelegate"/>
     
     <sequenceFlow id="flow3" sourceRef="migratingTask" targetRef="followUpTask" />
     

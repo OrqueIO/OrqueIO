@@ -10,7 +10,7 @@
 
   <context-param>
     <param-name>contextConfigLocation</param-name>
-    <param-value>org.camunda.bpm.integrationtest.deployment.spring.timer</param-value>
+    <param-value>io.orqueio.bpm.integrationtest.deployment.spring.timer</param-value>
   </context-param>
 
   <listener>

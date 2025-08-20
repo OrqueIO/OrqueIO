@@ -14,21 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.xml.impl.type.child;
+package io.orqueio.bpm.model.xml.impl.type.child;
 
-import org.camunda.bpm.model.xml.Model;
-import org.camunda.bpm.model.xml.ModelException;
-import org.camunda.bpm.model.xml.impl.ModelBuildOperation;
-import org.camunda.bpm.model.xml.impl.type.ModelElementTypeImpl;
-import org.camunda.bpm.model.xml.impl.type.reference.ElementReferenceCollectionBuilderImpl;
-import org.camunda.bpm.model.xml.impl.type.reference.IdsElementReferenceCollectionBuilderImpl;
-import org.camunda.bpm.model.xml.impl.type.reference.QNameElementReferenceCollectionBuilderImpl;
-import org.camunda.bpm.model.xml.impl.type.reference.UriElementReferenceCollectionBuilderImpl;
-import org.camunda.bpm.model.xml.instance.ModelElementInstance;
-import org.camunda.bpm.model.xml.type.ModelElementType;
-import org.camunda.bpm.model.xml.type.child.ChildElementCollection;
-import org.camunda.bpm.model.xml.type.child.ChildElementCollectionBuilder;
-import org.camunda.bpm.model.xml.type.reference.ElementReferenceCollectionBuilder;
+import io.orqueio.bpm.model.xml.Model;
+import io.orqueio.bpm.model.xml.ModelException;
+import io.orqueio.bpm.model.xml.impl.ModelBuildOperation;
+import io.orqueio.bpm.model.xml.impl.type.ModelElementTypeImpl;
+import io.orqueio.bpm.model.xml.impl.type.reference.ElementReferenceCollectionBuilderImpl;
+import io.orqueio.bpm.model.xml.impl.type.reference.IdsElementReferenceCollectionBuilderImpl;
+import io.orqueio.bpm.model.xml.impl.type.reference.QNameElementReferenceCollectionBuilderImpl;
+import io.orqueio.bpm.model.xml.impl.type.reference.UriElementReferenceCollectionBuilderImpl;
+import io.orqueio.bpm.model.xml.instance.ModelElementInstance;
+import io.orqueio.bpm.model.xml.type.ModelElementType;
+import io.orqueio.bpm.model.xml.type.child.ChildElementCollection;
+import io.orqueio.bpm.model.xml.type.child.ChildElementCollectionBuilder;
+import io.orqueio.bpm.model.xml.type.reference.ElementReferenceCollectionBuilder;
 
 import java.util.ArrayList;
 import java.util.List;

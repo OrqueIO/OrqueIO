@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.plugin.impl.feel.integration;
+package io.orqueio.spin.plugin.impl.feel.integration;
 
 import static camundajar.impl.scala.jdk.CollectionConverters.ListHasAsScala;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -25,20 +25,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.dmn.feel.impl.scala.ScalaFeelLogger;
-import org.camunda.bpm.dmn.feel.impl.scala.spin.SpinValueMapperFactory;
-import org.camunda.commons.testing.ProcessEngineLoggingRule;
-import org.camunda.commons.testing.WatchLogger;
-import org.camunda.feel.impl.DefaultValueMapper;
-import org.camunda.feel.syntaxtree.Val;
-import org.camunda.feel.syntaxtree.ValContext;
-import org.camunda.feel.syntaxtree.ValList;
-import org.camunda.feel.syntaxtree.ValString;
-import org.camunda.feel.valuemapper.CustomValueMapper;
-import org.camunda.feel.valuemapper.ValueMapper;
-import org.camunda.spin.Spin;
-import org.camunda.spin.json.SpinJsonNode;
-import org.camunda.spin.xml.SpinXmlElement;
+import io.orqueio.bpm.dmn.feel.impl.scala.ScalaFeelLogger;
+import io.orqueio.bpm.dmn.feel.impl.scala.spin.SpinValueMapperFactory;
+import io.orqueio.commons.testing.ProcessEngineLoggingRule;
+import io.orqueio.commons.testing.WatchLogger;
+import io.orqueio.feel.impl.DefaultValueMapper;
+import io.orqueio.feel.syntaxtree.Val;
+import io.orqueio.feel.syntaxtree.ValContext;
+import io.orqueio.feel.syntaxtree.ValList;
+import io.orqueio.feel.syntaxtree.ValString;
+import io.orqueio.feel.valuemapper.CustomValueMapper;
+import io.orqueio.feel.valuemapper.ValueMapper;
+import io.orqueio.spin.Spin;
+import io.orqueio.spin.json.SpinJsonNode;
+import io.orqueio.spin.xml.SpinXmlElement;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;

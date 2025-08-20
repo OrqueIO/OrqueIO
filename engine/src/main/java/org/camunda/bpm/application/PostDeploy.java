@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.application;
+package io.orqueio.bpm.application;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.camunda.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.ProcessEngine;
 
 /**
  * <p>Annotation that can be placed on a method of a {@link AbstractProcessApplication ProcessApplication} class.</p>

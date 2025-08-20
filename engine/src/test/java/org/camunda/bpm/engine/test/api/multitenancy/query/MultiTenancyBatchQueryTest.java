@@ -14,29 +14,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.multitenancy.query;
+package io.orqueio.bpm.engine.test.api.multitenancy.query;
 
 import static java.util.Collections.singletonList;
-import static org.camunda.bpm.engine.test.api.runtime.TestOrderingUtil.batchByTenantId;
-import static org.camunda.bpm.engine.test.api.runtime.TestOrderingUtil.batchStatisticsByTenantId;
-import static org.camunda.bpm.engine.test.api.runtime.TestOrderingUtil.inverted;
-import static org.camunda.bpm.engine.test.api.runtime.TestOrderingUtil.verifySorting;
+import static io.orqueio.bpm.engine.test.api.runtime.TestOrderingUtil.batchByTenantId;
+import static io.orqueio.bpm.engine.test.api.runtime.TestOrderingUtil.batchStatisticsByTenantId;
+import static io.orqueio.bpm.engine.test.api.runtime.TestOrderingUtil.inverted;
+import static io.orqueio.bpm.engine.test.api.runtime.TestOrderingUtil.verifySorting;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.camunda.bpm.engine.IdentityService;
-import org.camunda.bpm.engine.ManagementService;
-import org.camunda.bpm.engine.batch.Batch;
-import org.camunda.bpm.engine.batch.BatchStatistics;
-import org.camunda.bpm.engine.exception.NullValueException;
-import org.camunda.bpm.engine.repository.ProcessDefinition;
-import org.camunda.bpm.engine.test.api.runtime.migration.batch.BatchMigrationHelper;
-import org.camunda.bpm.engine.test.api.runtime.migration.models.ProcessModels;
-import org.camunda.bpm.engine.test.util.ProcessEngineTestRule;
-import org.camunda.bpm.engine.test.util.ProvidedProcessEngineRule;
+import io.orqueio.bpm.engine.IdentityService;
+import io.orqueio.bpm.engine.ManagementService;
+import io.orqueio.bpm.engine.batch.Batch;
+import io.orqueio.bpm.engine.batch.BatchStatistics;
+import io.orqueio.bpm.engine.exception.NullValueException;
+import io.orqueio.bpm.engine.repository.ProcessDefinition;
+import io.orqueio.bpm.engine.test.api.runtime.migration.batch.BatchMigrationHelper;
+import io.orqueio.bpm.engine.test.api.runtime.migration.models.ProcessModels;
+import io.orqueio.bpm.engine.test.util.ProcessEngineTestRule;
+import io.orqueio.bpm.engine.test.util.ProvidedProcessEngineRule;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;

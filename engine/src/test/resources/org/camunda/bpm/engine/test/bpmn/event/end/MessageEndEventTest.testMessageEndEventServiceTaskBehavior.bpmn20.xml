@@ -35,7 +35,7 @@
      </endEvent>
   
      <endEvent id="classEnd">
-       <messageEventDefinition camunda:class="org.camunda.bpm.engine.test.bpmn.event.end.DummyServiceTask" />
+       <messageEventDefinition camunda:class="io.orqueio.bpm.engine.test.bpmn.event.end.DummyServiceTask" />
      </endEvent>
     
   </process>

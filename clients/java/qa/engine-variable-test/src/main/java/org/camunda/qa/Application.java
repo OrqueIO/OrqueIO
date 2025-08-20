@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.qa;
+package io.orqueio.qa;
 
-import org.camunda.bpm.application.ProcessApplication;
-import org.camunda.bpm.application.impl.JakartaServletProcessApplication;
+import io.orqueio.bpm.application.ProcessApplication;
+import io.orqueio.bpm.application.impl.JakartaServletProcessApplication;
 
 /**
  * @author Tassilo Weidner

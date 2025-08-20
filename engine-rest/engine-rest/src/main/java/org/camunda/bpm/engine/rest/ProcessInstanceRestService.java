@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest;
+package io.orqueio.bpm.engine.rest;
 
 import java.util.List;
 
@@ -30,18 +30,18 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
-import org.camunda.bpm.engine.rest.dto.CountResultDto;
-import org.camunda.bpm.engine.rest.dto.batch.BatchDto;
-import org.camunda.bpm.engine.rest.dto.runtime.ProcessInstanceDto;
-import org.camunda.bpm.engine.rest.dto.runtime.ProcessInstanceQueryDto;
-import org.camunda.bpm.engine.rest.dto.runtime.ProcessInstanceSuspensionStateAsyncDto;
-import org.camunda.bpm.engine.rest.dto.runtime.ProcessInstanceSuspensionStateDto;
-import org.camunda.bpm.engine.rest.dto.runtime.SetJobRetriesByProcessDto;
-import org.camunda.bpm.engine.rest.dto.runtime.batch.SetVariablesAsyncDto;
-import org.camunda.bpm.engine.rest.dto.runtime.batch.CorrelationMessageAsyncDto;
-import org.camunda.bpm.engine.rest.dto.runtime.batch.DeleteProcessInstancesDto;
-import org.camunda.bpm.engine.rest.sub.runtime.ProcessInstanceResource;
-import org.camunda.bpm.engine.runtime.ProcessInstanceQuery;
+import io.orqueio.bpm.engine.rest.dto.CountResultDto;
+import io.orqueio.bpm.engine.rest.dto.batch.BatchDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.ProcessInstanceDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.ProcessInstanceQueryDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.ProcessInstanceSuspensionStateAsyncDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.ProcessInstanceSuspensionStateDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.SetJobRetriesByProcessDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.batch.SetVariablesAsyncDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.batch.CorrelationMessageAsyncDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.batch.DeleteProcessInstancesDto;
+import io.orqueio.bpm.engine.rest.sub.runtime.ProcessInstanceResource;
+import io.orqueio.bpm.engine.runtime.ProcessInstanceQuery;
 
 @Produces(MediaType.APPLICATION_JSON)
 public interface ProcessInstanceRestService {

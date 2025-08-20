@@ -19,11 +19,11 @@
 -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="org.camunda.bpm.engine.impl.persistence.entity.CommentEntity">
+<mapper namespace="io.orqueio.bpm.engine.impl.persistence.entity.CommentEntity">
 
   <!-- COMMENT INSERT -->
 
-  <insert id="insertComment" parameterType="org.camunda.bpm.engine.impl.persistence.entity.CommentEntity">
+  <insert id="insertComment" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.CommentEntity">
     insert into ${prefix}ACT_HI_COMMENT (ID_, TYPE_, TIME_, USER_ID_, TASK_ID_, ROOT_PROC_INST_ID_, PROC_INST_ID_,ACTION_, MESSAGE_, FULL_MSG_, TENANT_ID_, REMOVAL_TIME_, REV_)
     values (
       #{id ,jdbcType=VARCHAR},
@@ -42,7 +42,7 @@
     )
   </insert>
 
-  <insert id="insertComment_postgres" parameterType="org.camunda.bpm.engine.impl.persistence.entity.CommentEntity">
+  <insert id="insertComment_postgres" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.CommentEntity">
     insert into ${prefix}ACT_HI_COMMENT (ID_, TYPE_, TIME_, USER_ID_, TASK_ID_, ROOT_PROC_INST_ID_, PROC_INST_ID_, ACTION_, MESSAGE_, FULL_MSG_, TENANT_ID_, REMOVAL_TIME_, REV_)
     values (
       #{id ,jdbcType=VARCHAR},
@@ -62,7 +62,7 @@
   </insert>
 
   <!-- UPDATE -->
-  <update id="updateComment" parameterType="org.camunda.bpm.engine.impl.persistence.entity.CommentEntity">
+  <update id="updateComment" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.CommentEntity">
     update
       ${prefix}ACT_HI_COMMENT
     set MESSAGE_ = #{message ,jdbcType=VARCHAR},
@@ -227,7 +227,7 @@
 
   <!-- COMMENT DELETE -->
 
-  <delete id="deleteComment" parameterType="org.camunda.bpm.engine.impl.persistence.entity.CommentEntity">
+  <delete id="deleteComment" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.CommentEntity">
     delete
     from ${prefix}ACT_HI_COMMENT
     where ID_ = #{id} and REV_ = #{revision}
@@ -247,7 +247,7 @@
         where
           <bind name="listOfIds" value="taskProcessInstanceIds"/>
           <bind name="fieldName" value="'PROC_INST_ID_'"/>
-          <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection"/>
+          <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection"/>
       )
     </if>
     <if test="taskCaseInstanceIds != null &amp;&amp; taskCaseInstanceIds.size > 0">
@@ -257,13 +257,13 @@
         where
           <bind name="listOfIds" value="taskCaseInstanceIds"/>
           <bind name="fieldName" value="'CASE_INST_ID_'"/>
-          <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection"/>
+          <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection"/>
         )
     </if>
     <if test="processInstanceIds != null &amp;&amp; processInstanceIds.size > 0">
       <bind name="listOfIds" value="processInstanceIds"/>
       <bind name="fieldName" value="'PROC_INST_ID_'"/>
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection"/>
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection"/>
     </if>
   </delete>
 
@@ -275,38 +275,38 @@
         where
           <bind name="listOfIds" value="taskProcessInstanceIds"/>
           <bind name="fieldName" value="'T.PROC_INST_ID_'"/>
-          <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection"/>
+          <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection"/>
       </if>
       <if test="taskCaseInstanceIds != null &amp;&amp; taskCaseInstanceIds.size > 0">
         where
           <bind name="listOfIds" value="taskCaseInstanceIds"/>
           <bind name="fieldName" value="'T.CASE_INST_ID_'"/>
-          <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection"/>
+          <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection"/>
       </if>
       <if test="processInstanceIds != null &amp;&amp; processInstanceIds.size > 0">
         where
           <bind name="listOfIds" value="processInstanceIds"/>
           <bind name="fieldName" value="'CO.PROC_INST_ID_'"/>
-          <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection"/>
+          <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection"/>
       </if>
   </delete>
 
   <sql id="andWhereMinuteInDateBetweenSql">
     <if test="parameter.minuteFrom != null and parameter.minuteTo != null">
-      AND ${datepart1}<include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.periodUnitFunction"/>${datepart2}${date}${datepart3}
+      AND ${datepart1}<include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.periodUnitFunction"/>${datepart2}${date}${datepart3}
       between #{parameter.minuteFrom, jdbcType=INTEGER} and #{parameter.minuteTo, jdbcType=INTEGER}
     </if>
   </sql>
 
   <sql id="andWhereMinuteInDateBetweenSql_oracle">
     <if test="parameter.minuteFrom != null and parameter.minuteTo != null">
-      AND ${datepart1}${date}${datepart2}<include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.periodUnitFunction"/>${datepart3}
+      AND ${datepart1}${date}${datepart2}<include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.periodUnitFunction"/>${datepart3}
       between #{parameter.minuteFrom, jdbcType=INTEGER} and #{parameter.minuteTo, jdbcType=INTEGER}
     </if>
   </sql>
 
   <delete id="deleteCommentsByRemovalTime"
-    parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject">
+    parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject">
     <bind name="date" value="'REMOVAL_TIME_'"/>
     <bind name="reportPeriodUnitName" value="'MINUTE'"/>
     delete ${limitBeforeWithoutOffset} from ${prefix}ACT_HI_COMMENT
@@ -316,7 +316,7 @@
   </delete>
 
   <delete id="deleteCommentsByRemovalTime_oracle"
-          parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject">
+          parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject">
     <bind name="date" value="'REMOVAL_TIME_'"/>
     <bind name="reportPeriodUnitName" value="'MINUTE'"/>
     delete ${limitBeforeWithoutOffset} from ${prefix}ACT_HI_COMMENT
@@ -326,7 +326,7 @@
   </delete>
 
   <delete id="deleteCommentsByRemovalTime_postgres_or_db2"
-          parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject">
+          parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject">
     <bind name="date" value="'REMOVAL_TIME_'"/>
     <bind name="reportPeriodUnitName" value="'MINUTE'"/>
     delete ${limitBeforeWithoutOffset} from ${prefix}ACT_HI_COMMENT
@@ -339,7 +339,7 @@
 
   <!-- COMMENT RESULTMAP -->
 
-  <resultMap id="commentResultMap" type="org.camunda.bpm.engine.impl.persistence.entity.CommentEntity">
+  <resultMap id="commentResultMap" type="io.orqueio.bpm.engine.impl.persistence.entity.CommentEntity">
     <id property="id" column="ID_" jdbcType="VARCHAR" />
     <result property="type" column="TYPE_" jdbcType="VARCHAR" />
     <result property="userId" column="USER_ID_" jdbcType="VARCHAR" />
@@ -355,7 +355,7 @@
     <result property="revision" column="REV_" jdbcType="INTEGER" />
   </resultMap>
 
-  <resultMap id="commentResultMap_postgres" type="org.camunda.bpm.engine.impl.persistence.entity.CommentEntity">
+  <resultMap id="commentResultMap_postgres" type="io.orqueio.bpm.engine.impl.persistence.entity.CommentEntity">
     <id property="id" column="ID_" jdbcType="VARCHAR" />
     <result property="type" column="TYPE_" jdbcType="VARCHAR" />
     <result property="userId" column="USER_ID_" jdbcType="VARCHAR" />
@@ -378,7 +378,7 @@
     where ID_ = #{id}
   </select>
 
-  <select id="selectCommentsByTaskId" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject" resultMap="commentResultMap">
+  <select id="selectCommentsByTaskId" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject" resultMap="commentResultMap">
     select *
     from ${prefix}ACT_HI_COMMENT
     where TASK_ID_ = #{parameter,jdbcType=VARCHAR}
@@ -386,7 +386,7 @@
     order by TIME_ desc
   </select>
 
-  <select id="selectCommentsByTaskId_postgres" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject" resultMap="commentResultMap_postgres">
+  <select id="selectCommentsByTaskId_postgres" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject" resultMap="commentResultMap_postgres">
     select *
     from ${prefix}ACT_HI_COMMENT
     where TASK_ID_ = #{parameter,jdbcType=VARCHAR}
@@ -394,16 +394,16 @@
     order by TIME_ desc
   </select>
 
-  <select id="selectEventsByTaskId" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject" resultMap="commentResultMap">
+  <select id="selectEventsByTaskId" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject" resultMap="commentResultMap">
     <include refid="selectEventsByTaskIdSql"/>
   </select>
 
-  <select id="selectEventsByTaskId_postgres" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject" resultMap="commentResultMap_postgres">
+  <select id="selectEventsByTaskId_postgres" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject" resultMap="commentResultMap_postgres">
     <include refid="selectEventsByTaskIdSql"/>
   </select>
 
   <sql id="selectEventsByTaskIdSql">
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
     ${limitBefore}
     select distinct RES.* ${limitBetween}
     from (
@@ -453,14 +453,14 @@
     ${limitAfter}
   </sql>
 
-  <select id="selectCommentsByProcessInstanceId" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject" resultMap="commentResultMap">
+  <select id="selectCommentsByProcessInstanceId" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject" resultMap="commentResultMap">
     select *
     from ${prefix}ACT_HI_COMMENT
     where PROC_INST_ID_ = #{parameter,jdbcType=VARCHAR}
     order by TIME_ desc
   </select>
 
-  <select id="selectCommentsByProcessInstanceId_postgres" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject" resultMap="commentResultMap_postgres">
+  <select id="selectCommentsByProcessInstanceId_postgres" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject" resultMap="commentResultMap_postgres">
     select *
     from ${prefix}ACT_HI_COMMENT
     where PROC_INST_ID_ = #{parameter,jdbcType=BINARY}

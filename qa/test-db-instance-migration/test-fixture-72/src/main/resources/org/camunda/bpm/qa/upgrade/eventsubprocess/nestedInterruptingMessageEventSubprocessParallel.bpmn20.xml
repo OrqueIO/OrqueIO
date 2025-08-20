@@ -28,7 +28,7 @@
         <sequenceFlow sourceRef="fork" targetRef="innerEventSubProcessTask1" />
         <userTask id="innerEventSubProcessTask1" />
         <sequenceFlow sourceRef="innerEventSubProcessTask1" targetRef="throwErrorServiceTask" />
-        <serviceTask id="throwErrorServiceTask" camunda:class="org.camunda.bpm.qa.upgrade.util.ThrowBpmnErrorDelegate" />
+        <serviceTask id="throwErrorServiceTask" camunda:class="io.orqueio.bpm.qa.upgrade.util.ThrowBpmnErrorDelegate" />
         <sequenceFlow sourceRef="throwErrorServiceTask" targetRef="innerEventSubProcessEnd1" />
         <endEvent id="innerEventSubProcessEnd1" />
 

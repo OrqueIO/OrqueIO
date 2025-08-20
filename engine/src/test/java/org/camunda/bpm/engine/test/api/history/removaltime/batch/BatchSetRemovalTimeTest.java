@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.history.removaltime.batch;
+package io.orqueio.bpm.engine.test.api.history.removaltime.batch;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.camunda.bpm.engine.ProcessEngineConfiguration.HISTORY_FULL;
-import static org.camunda.bpm.engine.ProcessEngineConfiguration.HISTORY_REMOVAL_TIME_STRATEGY_END;
-import static org.camunda.bpm.engine.ProcessEngineConfiguration.HISTORY_REMOVAL_TIME_STRATEGY_NONE;
-import static org.camunda.bpm.engine.ProcessEngineConfiguration.HISTORY_REMOVAL_TIME_STRATEGY_START;
-import static org.camunda.bpm.engine.test.api.history.removaltime.batch.helper.BatchSetRemovalTimeRule.addDays;
+import static io.orqueio.bpm.engine.ProcessEngineConfiguration.HISTORY_FULL;
+import static io.orqueio.bpm.engine.ProcessEngineConfiguration.HISTORY_REMOVAL_TIME_STRATEGY_END;
+import static io.orqueio.bpm.engine.ProcessEngineConfiguration.HISTORY_REMOVAL_TIME_STRATEGY_NONE;
+import static io.orqueio.bpm.engine.ProcessEngineConfiguration.HISTORY_REMOVAL_TIME_STRATEGY_START;
+import static io.orqueio.bpm.engine.test.api.history.removaltime.batch.helper.BatchSetRemovalTimeRule.addDays;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,38 +30,38 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.camunda.bpm.engine.BadUserRequestException;
-import org.camunda.bpm.engine.DecisionService;
-import org.camunda.bpm.engine.HistoryService;
-import org.camunda.bpm.engine.ManagementService;
-import org.camunda.bpm.engine.RuntimeService;
-import org.camunda.bpm.engine.batch.Batch;
-import org.camunda.bpm.engine.batch.history.HistoricBatch;
-import org.camunda.bpm.engine.batch.history.HistoricBatchQuery;
-import org.camunda.bpm.engine.history.CleanableHistoricBatchReportResult;
-import org.camunda.bpm.engine.history.CleanableHistoricDecisionInstanceReportResult;
-import org.camunda.bpm.engine.history.CleanableHistoricProcessInstanceReportResult;
-import org.camunda.bpm.engine.history.HistoricDecisionInstance;
-import org.camunda.bpm.engine.history.HistoricDecisionInstanceQuery;
-import org.camunda.bpm.engine.history.HistoricProcessInstance;
-import org.camunda.bpm.engine.history.HistoricProcessInstanceQuery;
-import org.camunda.bpm.engine.history.SetRemovalTimeSelectModeForHistoricBatchesBuilder;
-import org.camunda.bpm.engine.history.SetRemovalTimeSelectModeForHistoricDecisionInstancesBuilder;
-import org.camunda.bpm.engine.history.SetRemovalTimeSelectModeForHistoricProcessInstancesBuilder;
-import org.camunda.bpm.engine.history.SetRemovalTimeToHistoricBatchesBuilder;
-import org.camunda.bpm.engine.history.SetRemovalTimeToHistoricDecisionInstancesBuilder;
-import org.camunda.bpm.engine.history.SetRemovalTimeToHistoricProcessInstancesBuilder;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.util.ClockUtil;
-import org.camunda.bpm.engine.runtime.Job;
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.engine.test.ProcessEngineRule;
-import org.camunda.bpm.engine.test.RequiredHistoryLevel;
-import org.camunda.bpm.engine.test.api.history.removaltime.batch.helper.BatchSetRemovalTimeRule;
-import org.camunda.bpm.engine.test.api.runtime.BatchHelper;
-import org.camunda.bpm.engine.test.util.ProcessEngineTestRule;
-import org.camunda.bpm.engine.test.util.ProvidedProcessEngineRule;
-import org.camunda.bpm.engine.variable.Variables;
+import io.orqueio.bpm.engine.BadUserRequestException;
+import io.orqueio.bpm.engine.DecisionService;
+import io.orqueio.bpm.engine.HistoryService;
+import io.orqueio.bpm.engine.ManagementService;
+import io.orqueio.bpm.engine.RuntimeService;
+import io.orqueio.bpm.engine.batch.Batch;
+import io.orqueio.bpm.engine.batch.history.HistoricBatch;
+import io.orqueio.bpm.engine.batch.history.HistoricBatchQuery;
+import io.orqueio.bpm.engine.history.CleanableHistoricBatchReportResult;
+import io.orqueio.bpm.engine.history.CleanableHistoricDecisionInstanceReportResult;
+import io.orqueio.bpm.engine.history.CleanableHistoricProcessInstanceReportResult;
+import io.orqueio.bpm.engine.history.HistoricDecisionInstance;
+import io.orqueio.bpm.engine.history.HistoricDecisionInstanceQuery;
+import io.orqueio.bpm.engine.history.HistoricProcessInstance;
+import io.orqueio.bpm.engine.history.HistoricProcessInstanceQuery;
+import io.orqueio.bpm.engine.history.SetRemovalTimeSelectModeForHistoricBatchesBuilder;
+import io.orqueio.bpm.engine.history.SetRemovalTimeSelectModeForHistoricDecisionInstancesBuilder;
+import io.orqueio.bpm.engine.history.SetRemovalTimeSelectModeForHistoricProcessInstancesBuilder;
+import io.orqueio.bpm.engine.history.SetRemovalTimeToHistoricBatchesBuilder;
+import io.orqueio.bpm.engine.history.SetRemovalTimeToHistoricDecisionInstancesBuilder;
+import io.orqueio.bpm.engine.history.SetRemovalTimeToHistoricProcessInstancesBuilder;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.util.ClockUtil;
+import io.orqueio.bpm.engine.runtime.Job;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.test.ProcessEngineRule;
+import io.orqueio.bpm.engine.test.RequiredHistoryLevel;
+import io.orqueio.bpm.engine.test.api.history.removaltime.batch.helper.BatchSetRemovalTimeRule;
+import io.orqueio.bpm.engine.test.api.runtime.BatchHelper;
+import io.orqueio.bpm.engine.test.util.ProcessEngineTestRule;
+import io.orqueio.bpm.engine.test.util.ProvidedProcessEngineRule;
+import io.orqueio.bpm.engine.variable.Variables;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -245,7 +245,7 @@ public class BatchSetRemovalTimeTest {
 
     List<String> deploymentIds = engineRule.getRepositoryService().createDeploymentQuery()
         .list().stream()
-        .map(org.camunda.bpm.engine.repository.Deployment::getId)
+        .map(io.orqueio.bpm.engine.repository.Deployment::getId)
         .collect(Collectors.toList());
 
     // when
@@ -290,7 +290,7 @@ public class BatchSetRemovalTimeTest {
 
     List<String> deploymentIds = engineRule.getRepositoryService().createDeploymentQuery()
         .list().stream()
-        .map(org.camunda.bpm.engine.repository.Deployment::getId)
+        .map(io.orqueio.bpm.engine.repository.Deployment::getId)
         .collect(Collectors.toList());
 
     // when

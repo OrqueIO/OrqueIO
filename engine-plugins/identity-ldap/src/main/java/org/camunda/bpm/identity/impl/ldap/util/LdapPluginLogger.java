@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.identity.impl.ldap.util;
+package io.orqueio.bpm.identity.impl.ldap.util;
 
 import javax.naming.directory.SearchResult;
 
-import org.camunda.bpm.engine.impl.db.DbEntity;
-import org.camunda.bpm.engine.impl.persistence.entity.UserEntity;
-import org.camunda.commons.logging.BaseLogger;
+import io.orqueio.bpm.engine.impl.db.DbEntity;
+import io.orqueio.bpm.engine.impl.persistence.entity.UserEntity;
+import io.orqueio.commons.logging.BaseLogger;
 
 /**
  * @author Thorben Lindhauer
@@ -31,7 +31,7 @@ public class LdapPluginLogger extends BaseLogger {
   public static final String PROJECT_CODE = "LDAP";
 
   public static final LdapPluginLogger INSTANCE = BaseLogger.createLogger(
-      LdapPluginLogger.class, PROJECT_CODE, "org.camunda.bpm.identity.impl.ldap", "00");
+      LdapPluginLogger.class, PROJECT_CODE, "io.orqueio.bpm.identity.impl.ldap", "00");
 
   public void pluginActivated(String pluginClassName, String engineName) {
     logInfo("001", "PLUGIN {} activated on process engine {}", pluginClassName, engineName);

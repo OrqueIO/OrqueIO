@@ -14,21 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.migration.instance.parser;
+package io.orqueio.bpm.engine.impl.migration.instance.parser;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.engine.impl.jobexecutor.AsyncContinuationJobHandler;
-import org.camunda.bpm.engine.impl.migration.instance.MigratingActivityInstance;
-import org.camunda.bpm.engine.impl.migration.instance.MigratingTransitionInstance;
-import org.camunda.bpm.engine.impl.persistence.entity.ExecutionEntity;
-import org.camunda.bpm.engine.impl.persistence.entity.JobEntity;
-import org.camunda.bpm.engine.impl.persistence.entity.VariableInstanceEntity;
-import org.camunda.bpm.engine.impl.pvm.process.ScopeImpl;
-import org.camunda.bpm.engine.migration.MigrationInstruction;
-import org.camunda.bpm.engine.runtime.TransitionInstance;
+import io.orqueio.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.impl.jobexecutor.AsyncContinuationJobHandler;
+import io.orqueio.bpm.engine.impl.migration.instance.MigratingActivityInstance;
+import io.orqueio.bpm.engine.impl.migration.instance.MigratingTransitionInstance;
+import io.orqueio.bpm.engine.impl.persistence.entity.ExecutionEntity;
+import io.orqueio.bpm.engine.impl.persistence.entity.JobEntity;
+import io.orqueio.bpm.engine.impl.persistence.entity.VariableInstanceEntity;
+import io.orqueio.bpm.engine.impl.pvm.process.ScopeImpl;
+import io.orqueio.bpm.engine.migration.MigrationInstruction;
+import io.orqueio.bpm.engine.runtime.TransitionInstance;
 
 /**
  * @author Thorben Lindhauer

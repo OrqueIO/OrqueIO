@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.history;
+package io.orqueio.bpm.engine.impl.history;
 
-import org.camunda.bpm.engine.impl.batch.history.HistoricBatchEntity;
-import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.engine.impl.history.event.HistoricDecisionInstanceEntity;
-import org.camunda.bpm.engine.impl.history.event.HistoricProcessInstanceEventEntity;
-import org.camunda.bpm.engine.repository.DecisionDefinition;
-import org.camunda.bpm.engine.repository.ProcessDefinition;
+import io.orqueio.bpm.engine.impl.batch.history.HistoricBatchEntity;
+import io.orqueio.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.impl.history.event.HistoricDecisionInstanceEntity;
+import io.orqueio.bpm.engine.impl.history.event.HistoricProcessInstanceEventEntity;
+import io.orqueio.bpm.engine.repository.DecisionDefinition;
+import io.orqueio.bpm.engine.repository.ProcessDefinition;
 
 import java.util.Calendar;
 import java.util.Date;

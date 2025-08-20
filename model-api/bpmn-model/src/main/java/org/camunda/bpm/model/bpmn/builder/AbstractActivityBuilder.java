@@ -14,21 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.bpmn.builder;
+package io.orqueio.bpm.model.bpmn.builder;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
-import org.camunda.bpm.model.bpmn.instance.Activity;
-import org.camunda.bpm.model.bpmn.instance.BoundaryEvent;
-import org.camunda.bpm.model.bpmn.instance.MultiInstanceLoopCharacteristics;
-import org.camunda.bpm.model.bpmn.instance.bpmndi.BpmnShape;
-import org.camunda.bpm.model.bpmn.instance.camunda.CamundaInputOutput;
-import org.camunda.bpm.model.bpmn.instance.camunda.CamundaInputParameter;
-import org.camunda.bpm.model.bpmn.instance.camunda.CamundaOutputParameter;
-import org.camunda.bpm.model.bpmn.instance.dc.Bounds;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.bpm.model.bpmn.instance.Activity;
+import io.orqueio.bpm.model.bpmn.instance.BoundaryEvent;
+import io.orqueio.bpm.model.bpmn.instance.MultiInstanceLoopCharacteristics;
+import io.orqueio.bpm.model.bpmn.instance.bpmndi.BpmnShape;
+import io.orqueio.bpm.model.bpmn.instance.camunda.CamundaInputOutput;
+import io.orqueio.bpm.model.bpmn.instance.camunda.CamundaInputParameter;
+import io.orqueio.bpm.model.bpmn.instance.camunda.CamundaOutputParameter;
+import io.orqueio.bpm.model.bpmn.instance.dc.Bounds;
 
 /**
  * @author Sebastian Menski

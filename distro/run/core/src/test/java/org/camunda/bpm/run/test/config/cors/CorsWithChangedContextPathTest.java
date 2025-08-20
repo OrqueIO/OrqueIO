@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.run.test.config.cors;
+package io.orqueio.bpm.run.test.config.cors;
 
-import org.camunda.bpm.run.property.CamundaBpmRunCorsProperty;
-import org.camunda.bpm.run.test.AbstractRestTest;
+import io.orqueio.bpm.run.property.CamundaBpmRunCorsProperty;
+import io.orqueio.bpm.run.test.AbstractRestTest;
 import org.junit.Test;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;

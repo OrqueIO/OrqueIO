@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.run.plugins;
+package io.orqueio.bpm.run.plugins;
 
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
-import org.camunda.bpm.cockpit.plugin.resource.AbstractCockpitPluginRootResource;
+import io.orqueio.bpm.cockpit.plugin.resource.AbstractCockpitPluginRootResource;
 
 @Path("plugin/" + TestCockpitPlugin.ID)
 public class TestCockpitResource extends AbstractCockpitPluginRootResource {

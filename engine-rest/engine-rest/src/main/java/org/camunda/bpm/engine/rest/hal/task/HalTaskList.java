@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.hal.task;
+package io.orqueio.bpm.engine.rest.hal.task;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.rest.TaskRestService;
-import org.camunda.bpm.engine.rest.hal.HalCollectionResource;
-import org.camunda.bpm.engine.rest.hal.HalResource;
-import org.camunda.bpm.engine.task.Task;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.rest.TaskRestService;
+import io.orqueio.bpm.engine.rest.hal.HalCollectionResource;
+import io.orqueio.bpm.engine.rest.hal.HalResource;
+import io.orqueio.bpm.engine.task.Task;
 
 import java.util.ArrayList;
 import java.util.List;

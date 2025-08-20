@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.pvm.runtime;
+package io.orqueio.bpm.engine.impl.pvm.runtime;
 
 /**
  * Represents a callback which should be called after work was done. This interface is similar to the

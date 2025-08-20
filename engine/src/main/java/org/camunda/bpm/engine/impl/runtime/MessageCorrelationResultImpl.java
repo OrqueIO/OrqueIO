@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.runtime;
+package io.orqueio.bpm.engine.impl.runtime;
 
-import org.camunda.bpm.engine.runtime.Execution;
-import org.camunda.bpm.engine.runtime.MessageCorrelationResultType;
-import org.camunda.bpm.engine.runtime.MessageCorrelationResultWithVariables;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.variable.VariableMap;
+import io.orqueio.bpm.engine.runtime.Execution;
+import io.orqueio.bpm.engine.runtime.MessageCorrelationResultType;
+import io.orqueio.bpm.engine.runtime.MessageCorrelationResultWithVariables;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.variable.VariableMap;
 
 /**
  *

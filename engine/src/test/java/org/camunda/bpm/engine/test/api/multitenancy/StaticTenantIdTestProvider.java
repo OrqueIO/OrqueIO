@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.multitenancy;
+package io.orqueio.bpm.engine.test.api.multitenancy;
 
-import org.camunda.bpm.engine.impl.cfg.multitenancy.TenantIdProvider;
-import org.camunda.bpm.engine.impl.cfg.multitenancy.TenantIdProviderCaseInstanceContext;
-import org.camunda.bpm.engine.impl.cfg.multitenancy.TenantIdProviderHistoricDecisionInstanceContext;
-import org.camunda.bpm.engine.impl.cfg.multitenancy.TenantIdProviderProcessInstanceContext;
+import io.orqueio.bpm.engine.impl.cfg.multitenancy.TenantIdProvider;
+import io.orqueio.bpm.engine.impl.cfg.multitenancy.TenantIdProviderCaseInstanceContext;
+import io.orqueio.bpm.engine.impl.cfg.multitenancy.TenantIdProviderHistoricDecisionInstanceContext;
+import io.orqueio.bpm.engine.impl.cfg.multitenancy.TenantIdProviderProcessInstanceContext;
 
 /**
  * Provide the given tenant id for all instances.

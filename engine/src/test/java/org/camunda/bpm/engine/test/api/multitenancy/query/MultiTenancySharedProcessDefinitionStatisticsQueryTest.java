@@ -14,26 +14,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.multitenancy.query;
+package io.orqueio.bpm.engine.test.api.multitenancy.query;
 
 import static org.junit.Assert.assertEquals;
 
 import java.util.Arrays;
 import java.util.List;
 
-import org.camunda.bpm.engine.IdentityService;
-import org.camunda.bpm.engine.ManagementService;
-import org.camunda.bpm.engine.ProcessEngineConfiguration;
-import org.camunda.bpm.engine.RuntimeService;
-import org.camunda.bpm.engine.management.IncidentStatistics;
-import org.camunda.bpm.engine.management.ProcessDefinitionStatistics;
-import org.camunda.bpm.engine.test.ProcessEngineRule;
-import org.camunda.bpm.engine.test.api.multitenancy.StaticTenantIdTestProvider;
-import org.camunda.bpm.engine.test.util.ProcessEngineBootstrapRule;
-import org.camunda.bpm.engine.test.util.ProcessEngineTestRule;
-import org.camunda.bpm.engine.test.util.ProvidedProcessEngineRule;
-import org.camunda.bpm.model.bpmn.Bpmn;
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.bpm.engine.IdentityService;
+import io.orqueio.bpm.engine.ManagementService;
+import io.orqueio.bpm.engine.ProcessEngineConfiguration;
+import io.orqueio.bpm.engine.RuntimeService;
+import io.orqueio.bpm.engine.management.IncidentStatistics;
+import io.orqueio.bpm.engine.management.ProcessDefinitionStatistics;
+import io.orqueio.bpm.engine.test.ProcessEngineRule;
+import io.orqueio.bpm.engine.test.api.multitenancy.StaticTenantIdTestProvider;
+import io.orqueio.bpm.engine.test.util.ProcessEngineBootstrapRule;
+import io.orqueio.bpm.engine.test.util.ProcessEngineTestRule;
+import io.orqueio.bpm.engine.test.util.ProvidedProcessEngineRule;
+import io.orqueio.bpm.model.bpmn.Bpmn;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Rule;
@@ -79,7 +79,7 @@ public class MultiTenancySharedProcessDefinitionStatisticsQueryTest {
   protected static final BpmnModelInstance failingProcess = Bpmn.createExecutableProcess(FAILED_JOBS_PROCESS_DEFINITION_KEY)
     .startEvent()
     .serviceTask()
-      .camundaClass("org.camunda.bpm.engine.test.api.multitenancy.FailingDelegate")
+      .camundaClass("io.orqueio.bpm.engine.test.api.multitenancy.FailingDelegate")
       .camundaAsyncBefore()
     .done();
 

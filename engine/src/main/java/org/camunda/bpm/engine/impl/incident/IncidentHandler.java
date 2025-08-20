@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.incident;
+package io.orqueio.bpm.engine.impl.incident;
 
-import org.camunda.bpm.engine.runtime.Incident;
+import io.orqueio.bpm.engine.runtime.Incident;
 
 /**
  * The {@link IncidentHandler} interface may be implemented by components
@@ -26,10 +26,10 @@ import org.camunda.bpm.engine.runtime.Incident;
  * <p>
  *
  * Custom implementations of this interface may be wired through
- * {@link org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl#setCustomIncidentHandlers(java.util.List)}.
+ * {@link io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl#setCustomIncidentHandlers(java.util.List)}.
  *
  * @see FailedJobIncidentHandler
- * @see org.camunda.bpm.engine.runtime.Incident
+ * @see io.orqueio.bpm.engine.runtime.Incident
  *
  * @author roman.smirnov
  */

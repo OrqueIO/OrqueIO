@@ -4,12 +4,12 @@
     <bpmn2:startEvent id="StartEvent_1">
       <bpmn2:outgoing>SequenceFlow_1</bpmn2:outgoing>
     </bpmn2:startEvent>
-    <bpmn2:serviceTask id="ServiceTask_1" camunda:class="org.camunda.bpm.engine.test.bpmn.servicetask.DummyServiceTask" name="Service Task 1">
+    <bpmn2:serviceTask id="ServiceTask_1" camunda:class="io.orqueio.bpm.engine.test.bpmn.servicetask.DummyServiceTask" name="Service Task 1">
       <bpmn2:incoming>SequenceFlow_1</bpmn2:incoming>
       <bpmn2:outgoing>SequenceFlow_2</bpmn2:outgoing>
     </bpmn2:serviceTask>
     <bpmn2:sequenceFlow id="SequenceFlow_1" name="" sourceRef="StartEvent_1" targetRef="ServiceTask_1"/>
-    <bpmn2:serviceTask id="ServiceTask_2" camunda:class="org.camunda.bpm.engine.test.bpmn.servicetask.ThrowExceptionServiceTask" name="Service Task 2">
+    <bpmn2:serviceTask id="ServiceTask_2" camunda:class="io.orqueio.bpm.engine.test.bpmn.servicetask.ThrowExceptionServiceTask" name="Service Task 2">
       <bpmn2:incoming>SequenceFlow_2</bpmn2:incoming>
       <bpmn2:outgoing>SequenceFlow_3</bpmn2:outgoing>
     </bpmn2:serviceTask>

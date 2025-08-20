@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.identity.ldap.util;
+package io.orqueio.bpm.identity.ldap.util;
 
 import java.util.HashSet;
 import java.util.List;
@@ -22,9 +22,9 @@ import java.util.Set;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertNotSame;
-import org.camunda.bpm.engine.IdentityService;
-import org.camunda.bpm.engine.identity.Group;
-import org.camunda.bpm.engine.identity.User;
+import io.orqueio.bpm.engine.IdentityService;
+import io.orqueio.bpm.engine.identity.Group;
+import io.orqueio.bpm.engine.identity.User;
 
 /**
  * Contains some test utilities to test the Ldap plugin.

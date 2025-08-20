@@ -14,24 +14,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.variable.impl.mapper;
+package io.orqueio.bpm.client.variable.impl.mapper;
 
-import static org.camunda.bpm.engine.variable.type.SerializableValueType.VALUE_INFO_OBJECT_TYPE_NAME;
-import static org.camunda.bpm.engine.variable.type.SerializableValueType.VALUE_INFO_SERIALIZATION_DATA_FORMAT;
-import static org.camunda.bpm.engine.variable.type.ValueType.OBJECT;
+import static io.orqueio.bpm.engine.variable.type.SerializableValueType.VALUE_INFO_OBJECT_TYPE_NAME;
+import static io.orqueio.bpm.engine.variable.type.SerializableValueType.VALUE_INFO_SERIALIZATION_DATA_FORMAT;
+import static io.orqueio.bpm.engine.variable.type.ValueType.OBJECT;
 
 import java.util.Map;
 
-import org.camunda.bpm.client.impl.ExternalTaskClientLogger;
-import org.camunda.bpm.client.spi.DataFormat;
-import org.camunda.bpm.client.variable.impl.AbstractTypedValueMapper;
-import org.camunda.bpm.client.variable.impl.TypedValueField;
-import org.camunda.bpm.engine.variable.Variables;
-import org.camunda.bpm.engine.variable.impl.value.ObjectValueImpl;
-import org.camunda.bpm.engine.variable.impl.value.UntypedValueImpl;
-import org.camunda.bpm.engine.variable.value.ObjectValue;
-import org.camunda.bpm.engine.variable.value.SerializableValue;
-import org.camunda.bpm.engine.variable.value.TypedValue;
+import io.orqueio.bpm.client.impl.ExternalTaskClientLogger;
+import io.orqueio.bpm.client.spi.DataFormat;
+import io.orqueio.bpm.client.variable.impl.AbstractTypedValueMapper;
+import io.orqueio.bpm.client.variable.impl.TypedValueField;
+import io.orqueio.bpm.engine.variable.Variables;
+import io.orqueio.bpm.engine.variable.impl.value.ObjectValueImpl;
+import io.orqueio.bpm.engine.variable.impl.value.UntypedValueImpl;
+import io.orqueio.bpm.engine.variable.value.ObjectValue;
+import io.orqueio.bpm.engine.variable.value.SerializableValue;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
 
 public class ObjectValueMapper extends AbstractTypedValueMapper<ObjectValue> {
 

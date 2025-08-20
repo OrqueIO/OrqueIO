@@ -14,21 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.json;
+package io.orqueio.bpm.engine.impl.json;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.engine.impl.QueryOperator;
-import org.camunda.bpm.engine.impl.QueryOrderingProperty;
-import org.camunda.bpm.engine.impl.TaskQueryImpl;
-import org.camunda.bpm.engine.impl.TaskQueryVariableValue;
-import org.camunda.bpm.engine.impl.persistence.entity.SuspensionState;
-import org.camunda.bpm.engine.impl.util.JsonUtil;
-import org.camunda.bpm.engine.task.DelegationState;
-import org.camunda.bpm.engine.task.TaskQuery;
+import io.orqueio.bpm.engine.impl.QueryOperator;
+import io.orqueio.bpm.engine.impl.QueryOrderingProperty;
+import io.orqueio.bpm.engine.impl.TaskQueryImpl;
+import io.orqueio.bpm.engine.impl.TaskQueryVariableValue;
+import io.orqueio.bpm.engine.impl.persistence.entity.SuspensionState;
+import io.orqueio.bpm.engine.impl.util.JsonUtil;
+import io.orqueio.bpm.engine.task.DelegationState;
+import io.orqueio.bpm.engine.task.TaskQuery;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;

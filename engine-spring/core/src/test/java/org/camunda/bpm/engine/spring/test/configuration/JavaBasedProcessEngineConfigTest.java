@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.spring.test.configuration;
+package io.orqueio.bpm.engine.spring.test.configuration;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-import org.camunda.bpm.engine.RuntimeService;
-import org.camunda.bpm.engine.spring.SpringProcessEngineServicesConfiguration;
-import org.camunda.bpm.engine.spring.test.SpringProcessEngineTestCase;
-import org.camunda.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.RuntimeService;
+import io.orqueio.bpm.engine.spring.SpringProcessEngineServicesConfiguration;
+import io.orqueio.bpm.engine.spring.test.SpringProcessEngineTestCase;
+import io.orqueio.bpm.engine.test.Deployment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 

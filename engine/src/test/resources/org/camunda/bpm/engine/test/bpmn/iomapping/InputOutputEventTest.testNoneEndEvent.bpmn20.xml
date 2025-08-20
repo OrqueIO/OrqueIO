@@ -7,7 +7,7 @@
     <sequenceFlow sourceRef="gateway" targetRef="endMapping" />
     <endEvent id="endMapping">
       <extensionElements>
-        <camunda:executionListener class="org.camunda.bpm.engine.test.bpmn.iomapping.VariableLogDelegate" event="start" />
+        <camunda:executionListener class="io.orqueio.bpm.engine.test.bpmn.iomapping.VariableLogDelegate" event="start" />
         <camunda:inputOutput>
           <camunda:inputParameter name="mappedVariable">mappedValue</camunda:inputParameter>
           <camunda:outputParameter name="outVariable">${mappedVariable}</camunda:outputParameter>

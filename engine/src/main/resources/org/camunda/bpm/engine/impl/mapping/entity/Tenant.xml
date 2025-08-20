@@ -19,11 +19,11 @@
 -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
   
-<mapper namespace="org.camunda.bpm.engine.impl.persistence.entity.TenantEntity">
+<mapper namespace="io.orqueio.bpm.engine.impl.persistence.entity.TenantEntity">
 
   <!-- INSERT -->
 
-  <insert id="insertTenant" parameterType="org.camunda.bpm.engine.impl.persistence.entity.TenantEntity">
+  <insert id="insertTenant" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.TenantEntity">
     insert into ${prefix}ACT_ID_TENANT (ID_, NAME_, REV_)
     values (
       #{id ,jdbcType=VARCHAR},
@@ -34,7 +34,7 @@
 
   <!-- UPDATE -->
   
-  <update id="updateTenant" parameterType="org.camunda.bpm.engine.impl.persistence.entity.TenantEntity">
+  <update id="updateTenant" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.TenantEntity">
     update ${prefix}ACT_ID_TENANT set
       REV_ = #{revisionNext ,jdbcType=INTEGER},
       NAME_ = #{name ,jdbcType=VARCHAR}
@@ -44,13 +44,13 @@
   
   <!-- DELETE -->
 
-  <delete id="deleteTenant" parameterType="org.camunda.bpm.engine.impl.persistence.entity.TenantEntity">
+  <delete id="deleteTenant" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.TenantEntity">
     delete from ${prefix}ACT_ID_TENANT where ID_ = #{id} and REV_ = #{revision} 
   </delete>
 
   <!-- RESULTMAP -->
 
-  <resultMap id="tenantResultMap" type="org.camunda.bpm.engine.impl.persistence.entity.TenantEntity">
+  <resultMap id="tenantResultMap" type="io.orqueio.bpm.engine.impl.persistence.entity.TenantEntity">
     <id property="id" column="ID_" jdbcType="VARCHAR" />
     <result property="revision" column="REV_" jdbcType="INTEGER" />
     <result property="name" column="NAME_" jdbcType="VARCHAR" />
@@ -62,8 +62,8 @@
     select * from ${prefix}ACT_ID_TENANT where ID_ = #{id}
   </select>
   
-  <select id="selectTenantByQueryCriteria" parameterType="org.camunda.bpm.engine.impl.TenantQueryImpl" resultMap="tenantResultMap">
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
+  <select id="selectTenantByQueryCriteria" parameterType="io.orqueio.bpm.engine.impl.TenantQueryImpl" resultMap="tenantResultMap">
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
     ${limitBefore}
     select ${distinct} RES.* 
     ${limitBetween}
@@ -72,7 +72,7 @@
     ${limitAfter}
   </select>
   
-   <select id="selectTenantCountByQueryCriteria" parameterType="org.camunda.bpm.engine.impl.TenantQueryImpl" resultType="long">
+   <select id="selectTenantCountByQueryCriteria" parameterType="io.orqueio.bpm.engine.impl.TenantQueryImpl" resultType="long">
     ${countDistinctBeforeStart} RES.ID_ ${countDistinctBeforeEnd}
     <include refid="selectTenantByQueryCriteriaSql" />
     ${countDistinctAfterEnd}
@@ -84,7 +84,7 @@
     <if test="userId != null || groupId != null">
       inner join ${prefix}ACT_ID_TENANT_MEMBER TM on RES.ID_ = TM.TENANT_ID_
     </if>
-   <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoin" /> 
+   <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoin" />
 
    <where>
       <if test="id != null">
@@ -118,7 +118,7 @@
         and TM.GROUP_ID_ = #{groupId}
       </if>
       
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.queryAuthorizationCheck" />
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.queryAuthorizationCheck" />
     </where>
   </sql> 
   
@@ -127,13 +127,13 @@
   <sql id="queryTenantCheck">
     <bind name="columnPrefix" value="'RES.'"/>
 
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheckWithPrefix" />
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheckWithPrefix" />
   </sql>
 
   <sql id="queryTenantCheckWithSelfPrefix">
     <bind name="columnPrefix" value="'SELF.'"/>
 
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheckWithPrefix" />
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheckWithPrefix" />
   </sql>
 
   <sql id="queryTenantCheckWithPrefix">

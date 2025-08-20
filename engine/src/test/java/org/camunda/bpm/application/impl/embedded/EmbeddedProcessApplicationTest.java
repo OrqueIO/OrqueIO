@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.application.impl.embedded;
+package io.orqueio.bpm.application.impl.embedded;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.*;
@@ -23,17 +23,17 @@ import java.util.List;
 import java.util.Set;
 
 import ch.qos.logback.classic.Level;
-import org.camunda.bpm.BpmPlatform;
-import org.camunda.bpm.container.RuntimeContainerDelegate;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.ProcessEngineConfiguration;
-import org.camunda.bpm.engine.impl.ProcessEngineImpl;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.repository.Deployment;
-import org.camunda.bpm.engine.repository.ProcessApplicationDeployment;
-import org.camunda.bpm.engine.repository.Resource;
-import org.camunda.bpm.engine.test.util.PluggableProcessEngineTest;
-import org.camunda.commons.testing.ProcessEngineLoggingRule;
+import io.orqueio.bpm.BpmPlatform;
+import io.orqueio.bpm.container.RuntimeContainerDelegate;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.ProcessEngineConfiguration;
+import io.orqueio.bpm.engine.impl.ProcessEngineImpl;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.repository.Deployment;
+import io.orqueio.bpm.engine.repository.ProcessApplicationDeployment;
+import io.orqueio.bpm.engine.repository.Resource;
+import io.orqueio.bpm.engine.test.util.PluggableProcessEngineTest;
+import io.orqueio.commons.testing.ProcessEngineLoggingRule;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -45,7 +45,7 @@ import org.junit.Test;
  */
 public class EmbeddedProcessApplicationTest extends PluggableProcessEngineTest {
 
-  protected static final String CONFIG_LOGGER = "org.camunda.bpm.application";
+  protected static final String CONFIG_LOGGER = "io.orqueio.bpm.application";
   @Rule
   public ProcessEngineLoggingRule loggingRule = new ProcessEngineLoggingRule()
                                                     .watch(CONFIG_LOGGER)

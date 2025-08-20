@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.jmx.deployment.util;
+package io.orqueio.bpm.container.impl.jmx.deployment.util;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -25,7 +25,7 @@ import java.net.URLClassLoader;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.camunda.bpm.container.impl.deployment.scanning.ClassPathProcessApplicationScanner;
+import io.orqueio.bpm.container.impl.deployment.scanning.ClassPathProcessApplicationScanner;
 import org.junit.Test;
 
 

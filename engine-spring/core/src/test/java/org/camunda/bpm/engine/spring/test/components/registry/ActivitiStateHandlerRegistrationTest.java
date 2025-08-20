@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.spring.test.components.registry;
+package io.orqueio.bpm.engine.spring.test.components.registry;
 
 import static org.junit.Assert.assertEquals;
 
@@ -22,7 +22,7 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.Map;
 
-import org.camunda.bpm.engine.spring.components.registry.ActivitiStateHandlerRegistration;
+import io.orqueio.bpm.engine.spring.components.registry.ActivitiStateHandlerRegistration;
 import org.junit.Test;
 
 /**
@@ -44,10 +44,10 @@ public class ActivitiStateHandlerRegistrationTest {
     ActivitiStateHandlerRegistration registration = new ActivitiStateHandlerRegistration(processVariablesExpected, 
         handlerMethod, handler, stateName, beanName,
         processVariablesIndex, processIdIndex, processName);
-    assertEquals("org.camunda.bpm.engine.spring.components.registry.ActivitiStateHandlerRegistration@" + Integer.toHexString(registration.hashCode()) + "["
+    assertEquals("io.orqueio.bpm.engine.spring.components.registry.ActivitiStateHandlerRegistration@" + Integer.toHexString(registration.hashCode()) + "["
         + "processVariablesExpected={34=testValue}, "
-        + "handlerMethod=public void org.camunda.bpm.engine.spring.test.components.registry.ActivitiStateHandlerRegistrationTest.shouldHaveDetailledStringRepresentation() throws java.lang.Exception, "
-        + "handler=org.camunda.bpm.engine.spring.test.components.registry.ActivitiStateHandlerRegistrationTest$1@" + Integer.toHexString(handler.hashCode()) + ", "
+        + "handlerMethod=public void io.orqueio.bpm.engine.spring.test.components.registry.ActivitiStateHandlerRegistrationTest.shouldHaveDetailledStringRepresentation() throws java.lang.Exception, "
+        + "handler=io.orqueio.bpm.engine.spring.test.components.registry.ActivitiStateHandlerRegistrationTest$1@" + Integer.toHexString(handler.hashCode()) + ", "
         + "stateName=running, "
         + "beanName=testBean, "
         + "processVariablesIndex=4, "
@@ -68,7 +68,7 @@ public class ActivitiStateHandlerRegistrationTest {
     ActivitiStateHandlerRegistration registration = new ActivitiStateHandlerRegistration(processVariablesExpected, 
         handlerMethod, handler, stateName, beanName,
         processVariablesIndex, processIdIndex, processName);
-    assertEquals("org.camunda.bpm.engine.spring.components.registry.ActivitiStateHandlerRegistration@" + Integer.toHexString(registration.hashCode()) + "["
+    assertEquals("io.orqueio.bpm.engine.spring.components.registry.ActivitiStateHandlerRegistration@" + Integer.toHexString(registration.hashCode()) + "["
         + "processVariablesExpected={34=testValue}, "
         + "handlerMethod=null, "
         + "handler=null, "

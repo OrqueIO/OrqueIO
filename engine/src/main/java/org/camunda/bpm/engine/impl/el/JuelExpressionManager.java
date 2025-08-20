@@ -14,28 +14,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.el;
+package io.orqueio.bpm.engine.impl.el;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
-import org.camunda.bpm.dmn.engine.impl.spi.el.ElProvider;
-import org.camunda.bpm.engine.delegate.VariableScope;
-import org.camunda.bpm.engine.impl.core.variable.scope.AbstractVariableScope;
-import org.camunda.bpm.engine.impl.dmn.el.ProcessEngineJuelElProvider;
-import org.camunda.bpm.impl.juel.jakarta.el.ArrayELResolver;
-import org.camunda.bpm.impl.juel.jakarta.el.CompositeELResolver;
-import org.camunda.bpm.impl.juel.jakarta.el.ELContext;
-import org.camunda.bpm.impl.juel.jakarta.el.ELResolver;
-import org.camunda.bpm.impl.juel.jakarta.el.ExpressionFactory;
-import org.camunda.bpm.impl.juel.jakarta.el.FunctionMapper;
-import org.camunda.bpm.impl.juel.jakarta.el.ListELResolver;
-import org.camunda.bpm.impl.juel.jakarta.el.MapELResolver;
-import org.camunda.bpm.impl.juel.jakarta.el.ValueExpression;
-import org.camunda.bpm.impl.juel.ExpressionFactoryImpl;
-import org.camunda.bpm.engine.impl.util.EnsureUtil;
-import org.camunda.bpm.engine.test.mock.MockElResolver;
-import org.camunda.bpm.engine.variable.context.VariableContext;
+import io.orqueio.bpm.dmn.engine.impl.spi.el.ElProvider;
+import io.orqueio.bpm.engine.delegate.VariableScope;
+import io.orqueio.bpm.engine.impl.core.variable.scope.AbstractVariableScope;
+import io.orqueio.bpm.engine.impl.dmn.el.ProcessEngineJuelElProvider;
+import io.orqueio.bpm.impl.juel.jakarta.el.ArrayELResolver;
+import io.orqueio.bpm.impl.juel.jakarta.el.CompositeELResolver;
+import io.orqueio.bpm.impl.juel.jakarta.el.ELContext;
+import io.orqueio.bpm.impl.juel.jakarta.el.ELResolver;
+import io.orqueio.bpm.impl.juel.jakarta.el.ExpressionFactory;
+import io.orqueio.bpm.impl.juel.jakarta.el.FunctionMapper;
+import io.orqueio.bpm.impl.juel.jakarta.el.ListELResolver;
+import io.orqueio.bpm.impl.juel.jakarta.el.MapELResolver;
+import io.orqueio.bpm.impl.juel.jakarta.el.ValueExpression;
+import io.orqueio.bpm.impl.juel.ExpressionFactoryImpl;
+import io.orqueio.bpm.engine.impl.util.EnsureUtil;
+import io.orqueio.bpm.engine.test.mock.MockElResolver;
+import io.orqueio.bpm.engine.variable.context.VariableContext;
 
 /**
  * JUEL-specific implementation of an {@link ExpressionManager}.

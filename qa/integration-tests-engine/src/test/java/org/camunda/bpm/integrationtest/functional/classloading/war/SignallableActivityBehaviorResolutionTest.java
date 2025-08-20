@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.functional.classloading.war;
+package io.orqueio.bpm.integrationtest.functional.classloading.war;
 
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.integrationtest.functional.classloading.beans.ExampleSignallableActivityBehavior;
-import org.camunda.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
-import org.camunda.bpm.integrationtest.util.TestContainer;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.integrationtest.functional.classloading.beans.ExampleSignallableActivityBehavior;
+import io.orqueio.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
+import io.orqueio.bpm.integrationtest.util.TestContainer;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -62,7 +62,7 @@ public class SignallableActivityBehaviorResolutionTest extends AbstractFoxPlatfo
   public void testResolveClass() {
     // assert that we cannot load the delegate here:
     try {
-      Class.forName("org.camunda.bpm.integrationtest.functional.classloading.beans.ExampleSignallableActivityBehavior");
+      Class.forName("io.orqueio.bpm.integrationtest.functional.classloading.beans.ExampleSignallableActivityBehavior");
       Assert.fail("CNFE expected");
     }catch (ClassNotFoundException e) {
       // expected

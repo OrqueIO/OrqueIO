@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.webapp.impl.security.auth;
+package io.orqueio.bpm.webapp.impl.security.auth;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.identity.User;
-import org.camunda.bpm.engine.impl.util.ClockUtil;
-import org.camunda.bpm.webapp.impl.IllegalWebAppConfigurationException;
-import org.camunda.bpm.webapp.impl.security.SecurityActions;
-import org.camunda.bpm.webapp.impl.util.ProcessEngineUtil;
-import org.camunda.bpm.webapp.impl.util.ServletContextUtil;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.identity.User;
+import io.orqueio.bpm.engine.impl.util.ClockUtil;
+import io.orqueio.bpm.webapp.impl.IllegalWebAppConfigurationException;
+import io.orqueio.bpm.webapp.impl.security.SecurityActions;
+import io.orqueio.bpm.webapp.impl.util.ProcessEngineUtil;
+import io.orqueio.bpm.webapp.impl.util.ServletContextUtil;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -42,7 +42,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.camunda.bpm.engine.rest.util.DateTimeUtils.addDays;
+import static io.orqueio.bpm.engine.rest.util.DateTimeUtils.addDays;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.any;

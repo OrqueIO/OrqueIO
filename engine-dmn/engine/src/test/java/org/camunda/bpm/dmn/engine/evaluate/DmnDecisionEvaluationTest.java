@@ -14,24 +14,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.engine.evaluate;
+package io.orqueio.bpm.dmn.engine.evaluate;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.camunda.bpm.dmn.engine.test.asserts.DmnEngineTestAssertions.assertThat;
-import static org.camunda.bpm.engine.variable.Variables.createVariables;
+import static io.orqueio.bpm.dmn.engine.test.asserts.DmnEngineTestAssertions.assertThat;
+import static io.orqueio.bpm.engine.variable.Variables.createVariables;
 
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.dmn.engine.DmnDecisionRequirementsGraph;
-import org.camunda.bpm.dmn.engine.DmnDecisionResult;
-import org.camunda.bpm.dmn.engine.DmnDecisionTableResult;
-import org.camunda.bpm.dmn.engine.DmnEngineConfiguration;
-import org.camunda.bpm.dmn.engine.DmnEngineException;
-import org.camunda.bpm.dmn.engine.impl.DefaultDmnEngineConfiguration;
-import org.camunda.bpm.dmn.engine.impl.DmnEvaluationException;
-import org.camunda.bpm.dmn.engine.test.DmnEngineTest;
-import org.camunda.commons.utils.IoUtil;
+import io.orqueio.bpm.dmn.engine.DmnDecisionRequirementsGraph;
+import io.orqueio.bpm.dmn.engine.DmnDecisionResult;
+import io.orqueio.bpm.dmn.engine.DmnDecisionTableResult;
+import io.orqueio.bpm.dmn.engine.DmnEngineConfiguration;
+import io.orqueio.bpm.dmn.engine.DmnEngineException;
+import io.orqueio.bpm.dmn.engine.impl.DefaultDmnEngineConfiguration;
+import io.orqueio.bpm.dmn.engine.impl.DmnEvaluationException;
+import io.orqueio.bpm.dmn.engine.test.DmnEngineTest;
+import io.orqueio.commons.utils.IoUtil;
 import org.junit.Test;
 
 public class DmnDecisionEvaluationTest extends DmnEngineTest {

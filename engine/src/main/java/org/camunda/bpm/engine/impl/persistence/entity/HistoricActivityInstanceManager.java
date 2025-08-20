@@ -14,19 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.persistence.entity;
+package io.orqueio.bpm.engine.impl.persistence.entity;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.camunda.bpm.engine.history.HistoricActivityInstance;
-import org.camunda.bpm.engine.impl.HistoricActivityInstanceQueryImpl;
-import org.camunda.bpm.engine.impl.Page;
-import org.camunda.bpm.engine.impl.db.ListQueryParameterObject;
-import org.camunda.bpm.engine.impl.db.entitymanager.operation.DbOperation;
-import org.camunda.bpm.engine.impl.history.event.HistoricActivityInstanceEventEntity;
-import org.camunda.bpm.engine.impl.persistence.AbstractHistoricManager;
+import io.orqueio.bpm.engine.history.HistoricActivityInstance;
+import io.orqueio.bpm.engine.impl.HistoricActivityInstanceQueryImpl;
+import io.orqueio.bpm.engine.impl.Page;
+import io.orqueio.bpm.engine.impl.db.ListQueryParameterObject;
+import io.orqueio.bpm.engine.impl.db.entitymanager.operation.DbOperation;
+import io.orqueio.bpm.engine.impl.history.event.HistoricActivityInstanceEventEntity;
+import io.orqueio.bpm.engine.impl.persistence.AbstractHistoricManager;
 
 
 /**

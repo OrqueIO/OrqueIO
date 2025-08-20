@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.webapp.plugin.spi;
+package io.orqueio.bpm.webapp.plugin.spi;
 
 import java.util.List;
 import java.util.Set;
 
-import org.camunda.bpm.webapp.plugin.resource.PluginResourceOverride;
-import org.camunda.bpm.webapp.plugin.spi.impl.AbstractAppPlugin;
+import io.orqueio.bpm.webapp.plugin.resource.PluginResourceOverride;
+import io.orqueio.bpm.webapp.plugin.spi.impl.AbstractAppPlugin;
 
 /**
  * The service provider interface (SPI) that must be provided by a webapplication plugin.
@@ -57,7 +57,7 @@ public interface AppPlugin {
    *
    * <p>
    *
-   * Typically, a plugin publishes its API via a subclass of {@link org.camunda.bpm.cockpit.plugin.resource.AbstractPluginRootResource}.
+   * Typically, a plugin publishes its API via a subclass of {@link io.orqueio.bpm.cockpit.plugin.resource.AbstractPluginRootResource}.
    *
    * @return the set of resource classes provided by this plugin
    */

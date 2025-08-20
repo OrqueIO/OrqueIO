@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.welcome.plugin.spi;
+package io.orqueio.bpm.welcome.plugin.spi;
 
-import org.camunda.bpm.webapp.plugin.spi.AppPlugin;
+import io.orqueio.bpm.webapp.plugin.spi.AppPlugin;
 
 /**
  * SPI interface for plugins to the welcome webapplication.

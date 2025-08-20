@@ -14,22 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.cmmn.impl;
+package io.orqueio.bpm.model.cmmn.impl;
 
-import static org.camunda.bpm.model.cmmn.impl.CmmnModelConstants.CMMN10_NS;
-import static org.camunda.bpm.model.cmmn.impl.CmmnModelConstants.CMMN11_NS;
-import static org.camunda.bpm.model.cmmn.impl.CmmnModelConstants.CMMN_10_SCHEMA_LOCATION;
-import static org.camunda.bpm.model.cmmn.impl.CmmnModelConstants.CMMN_11_SCHEMA_LOCATION;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CMMN10_NS;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CMMN11_NS;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CMMN_10_SCHEMA_LOCATION;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CMMN_11_SCHEMA_LOCATION;
 
 import java.io.InputStream;
 
-import org.camunda.bpm.model.cmmn.Cmmn;
-import org.camunda.bpm.model.cmmn.CmmnModelException;
-import org.camunda.bpm.model.xml.ModelParseException;
-import org.camunda.bpm.model.xml.impl.ModelImpl;
-import org.camunda.bpm.model.xml.impl.parser.AbstractModelParser;
-import org.camunda.bpm.model.xml.impl.util.ReflectUtil;
-import org.camunda.bpm.model.xml.instance.DomDocument;
+import io.orqueio.bpm.model.cmmn.Cmmn;
+import io.orqueio.bpm.model.cmmn.CmmnModelException;
+import io.orqueio.bpm.model.xml.ModelParseException;
+import io.orqueio.bpm.model.xml.impl.ModelImpl;
+import io.orqueio.bpm.model.xml.impl.parser.AbstractModelParser;
+import io.orqueio.bpm.model.xml.impl.util.ReflectUtil;
+import io.orqueio.bpm.model.xml.instance.DomDocument;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.validation.SchemaFactory;

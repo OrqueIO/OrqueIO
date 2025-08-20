@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.variable.serializer;
+package io.orqueio.bpm.engine.impl.variable.serializer;
 
-import org.camunda.bpm.engine.variable.impl.value.UntypedValueImpl;
-import org.camunda.bpm.engine.variable.type.ValueType;
-import org.camunda.bpm.engine.variable.value.SerializableValue;
-import org.camunda.bpm.engine.variable.value.TypedValue;
+import io.orqueio.bpm.engine.variable.impl.value.UntypedValueImpl;
+import io.orqueio.bpm.engine.variable.type.ValueType;
+import io.orqueio.bpm.engine.variable.value.SerializableValue;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
 
 /**
  * A {@link TypedValueSerializer} persists {@link TypedValue TypedValues} of a given

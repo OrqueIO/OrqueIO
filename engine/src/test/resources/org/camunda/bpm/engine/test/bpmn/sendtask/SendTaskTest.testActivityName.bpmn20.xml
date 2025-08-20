@@ -10,7 +10,7 @@
 
     <sequenceFlow id="flow1" sourceRef="start" targetRef="task" />
 
-    <sendTask id="task" name="Task" camunda:class="org.camunda.bpm.engine.test.bpmn.sendtask.DummyActivityBehavior" />
+    <sendTask id="task" name="Task" camunda:class="io.orqueio.bpm.engine.test.bpmn.sendtask.DummyActivityBehavior" />
 
     <sequenceFlow id="flow2" sourceRef="task" targetRef="end" />
 

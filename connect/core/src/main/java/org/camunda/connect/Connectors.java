@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.connect;
+package io.orqueio.connect;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -22,12 +22,12 @@ import java.util.Map;
 import java.util.ServiceLoader;
 import java.util.Set;
 
-import org.camunda.connect.impl.ConnectCoreLogger;
-import org.camunda.connect.impl.ConnectLogger;
-import org.camunda.connect.spi.Connector;
-import org.camunda.connect.spi.ConnectorConfigurator;
-import org.camunda.connect.spi.ConnectorProvider;
-import org.camunda.connect.spi.ConnectorRequest;
+import io.orqueio.connect.impl.ConnectCoreLogger;
+import io.orqueio.connect.impl.ConnectLogger;
+import io.orqueio.connect.spi.Connector;
+import io.orqueio.connect.spi.ConnectorConfigurator;
+import io.orqueio.connect.spi.ConnectorProvider;
+import io.orqueio.connect.spi.ConnectorRequest;
 
 /**
  * Provides access to all available connectors.

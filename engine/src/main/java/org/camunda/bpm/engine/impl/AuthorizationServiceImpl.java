@@ -14,19 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl;
+package io.orqueio.bpm.engine.impl;
 
 import java.util.List;
 
-import org.camunda.bpm.engine.AuthorizationService;
-import org.camunda.bpm.engine.authorization.Authorization;
-import org.camunda.bpm.engine.authorization.AuthorizationQuery;
-import org.camunda.bpm.engine.authorization.Permission;
-import org.camunda.bpm.engine.authorization.Resource;
-import org.camunda.bpm.engine.impl.cmd.AuthorizationCheckCmd;
-import org.camunda.bpm.engine.impl.cmd.CreateAuthorizationCommand;
-import org.camunda.bpm.engine.impl.cmd.DeleteAuthorizationCmd;
-import org.camunda.bpm.engine.impl.cmd.SaveAuthorizationCmd;
+import io.orqueio.bpm.engine.AuthorizationService;
+import io.orqueio.bpm.engine.authorization.Authorization;
+import io.orqueio.bpm.engine.authorization.AuthorizationQuery;
+import io.orqueio.bpm.engine.authorization.Permission;
+import io.orqueio.bpm.engine.authorization.Resource;
+import io.orqueio.bpm.engine.impl.cmd.AuthorizationCheckCmd;
+import io.orqueio.bpm.engine.impl.cmd.CreateAuthorizationCommand;
+import io.orqueio.bpm.engine.impl.cmd.DeleteAuthorizationCmd;
+import io.orqueio.bpm.engine.impl.cmd.SaveAuthorizationCmd;
 
 /**
  * @author Daniel Meyer

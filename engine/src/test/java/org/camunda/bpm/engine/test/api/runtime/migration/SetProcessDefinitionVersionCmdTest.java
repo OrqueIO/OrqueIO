@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.runtime.migration;
+package io.orqueio.bpm.engine.test.api.runtime.migration;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -23,25 +23,25 @@ import static org.junit.Assert.fail;
 import java.util.Date;
 import java.util.List;
 
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.history.HistoricProcessInstance;
-import org.camunda.bpm.engine.history.UserOperationLogEntry;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.cmd.SetProcessDefinitionVersionCmd;
-import org.camunda.bpm.engine.impl.history.HistoryLevel;
-import org.camunda.bpm.engine.impl.interceptor.CommandExecutor;
-import org.camunda.bpm.engine.impl.jobexecutor.MessageJobDeclaration;
-import org.camunda.bpm.engine.impl.persistence.entity.ExecutionEntity;
-import org.camunda.bpm.engine.management.JobDefinition;
-import org.camunda.bpm.engine.repository.ProcessDefinition;
-import org.camunda.bpm.engine.runtime.Execution;
-import org.camunda.bpm.engine.runtime.Incident;
-import org.camunda.bpm.engine.runtime.Job;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.task.Task;
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.engine.test.util.PluggableProcessEngineTest;
-import org.camunda.bpm.engine.variable.Variables;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.history.HistoricProcessInstance;
+import io.orqueio.bpm.engine.history.UserOperationLogEntry;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.cmd.SetProcessDefinitionVersionCmd;
+import io.orqueio.bpm.engine.impl.history.HistoryLevel;
+import io.orqueio.bpm.engine.impl.interceptor.CommandExecutor;
+import io.orqueio.bpm.engine.impl.jobexecutor.MessageJobDeclaration;
+import io.orqueio.bpm.engine.impl.persistence.entity.ExecutionEntity;
+import io.orqueio.bpm.engine.management.JobDefinition;
+import io.orqueio.bpm.engine.repository.ProcessDefinition;
+import io.orqueio.bpm.engine.runtime.Execution;
+import io.orqueio.bpm.engine.runtime.Incident;
+import io.orqueio.bpm.engine.runtime.Job;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.task.Task;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.test.util.PluggableProcessEngineTest;
+import io.orqueio.bpm.engine.variable.Variables;
 import org.junit.Test;
 
 
@@ -157,7 +157,7 @@ public class SetProcessDefinitionVersionCmdTest extends PluggableProcessEngineTe
     assertNotNull(execution);
 
     // deploy new version of the process definition
-    org.camunda.bpm.engine.repository.Deployment deployment = repositoryService
+    io.orqueio.bpm.engine.repository.Deployment deployment = repositoryService
       .createDeployment()
       .addClasspathResource(TEST_PROCESS_ACTIVITY_MISSING)
       .deploy();
@@ -191,7 +191,7 @@ public class SetProcessDefinitionVersionCmdTest extends PluggableProcessEngineTe
     assertNotNull(execution);
 
     // deploy new version of the process definition
-    org.camunda.bpm.engine.repository.Deployment deployment = repositoryService
+    io.orqueio.bpm.engine.repository.Deployment deployment = repositoryService
       .createDeployment()
       .addClasspathResource(TEST_PROCESS)
       .deploy();
@@ -239,7 +239,7 @@ public class SetProcessDefinitionVersionCmdTest extends PluggableProcessEngineTe
     assertEquals(2, taskService.createTaskQuery().count());
 
     // deploy new version of the process definition
-    org.camunda.bpm.engine.repository.Deployment deployment = repositoryService
+    io.orqueio.bpm.engine.repository.Deployment deployment = repositoryService
       .createDeployment()
       .addClasspathResource(TEST_PROCESS_WITH_PARALLEL_GATEWAY)
       .deploy();
@@ -280,7 +280,7 @@ public class SetProcessDefinitionVersionCmdTest extends PluggableProcessEngineTe
     assertNotNull(execution);
 
     // deploy new version of the process definition
-    org.camunda.bpm.engine.repository.Deployment deployment = repositoryService
+    io.orqueio.bpm.engine.repository.Deployment deployment = repositoryService
       .createDeployment()
       .addClasspathResource(TEST_PROCESS_CALL_ACTIVITY)
       .deploy();
@@ -311,7 +311,7 @@ public class SetProcessDefinitionVersionCmdTest extends PluggableProcessEngineTe
     assertEquals(1, taskService.createTaskQuery().processInstanceId(pi.getId()).count());
 
     // deploy new version of the process definition
-    org.camunda.bpm.engine.repository.Deployment deployment = repositoryService
+    io.orqueio.bpm.engine.repository.Deployment deployment = repositoryService
       .createDeployment()
       .addClasspathResource(TEST_PROCESS_USER_TASK_V2)
       .deploy();
@@ -389,7 +389,7 @@ public class SetProcessDefinitionVersionCmdTest extends PluggableProcessEngineTe
     assertEquals(2, taskService.createTaskQuery().count());
 
     // deploy new version of the process definition
-    org.camunda.bpm.engine.repository.Deployment deployment = repositoryService
+    io.orqueio.bpm.engine.repository.Deployment deployment = repositoryService
       .createDeployment()
       .addClasspathResource(TEST_PROCESS_WITH_MULTIPLE_PARENTS)
       .deploy();
@@ -427,7 +427,7 @@ public class SetProcessDefinitionVersionCmdTest extends PluggableProcessEngineTe
     assertNotNull(job);
 
     // and a second deployment of the process
-    org.camunda.bpm.engine.repository.Deployment deployment = repositoryService
+    io.orqueio.bpm.engine.repository.Deployment deployment = repositoryService
       .createDeployment()
       .addClasspathResource(TEST_PROCESS_ONE_JOB)
       .deploy();
@@ -472,7 +472,7 @@ public class SetProcessDefinitionVersionCmdTest extends PluggableProcessEngineTe
         .processInstanceId(asyncBeforeInstance.getId()).singleResult();
 
     // and a second deployment of the process
-    org.camunda.bpm.engine.repository.Deployment deployment = repositoryService
+    io.orqueio.bpm.engine.repository.Deployment deployment = repositoryService
       .createDeployment()
       .addClasspathResource(TEST_PROCESS_TWO_JOBS)
       .deploy();
@@ -531,7 +531,7 @@ public class SetProcessDefinitionVersionCmdTest extends PluggableProcessEngineTe
     assertNotNull(incident);
 
     // and a second deployment of the process
-    org.camunda.bpm.engine.repository.Deployment deployment = repositoryService
+    io.orqueio.bpm.engine.repository.Deployment deployment = repositoryService
       .createDeployment()
       .addClasspathResource(TEST_PROCESS_ONE_JOB)
       .deploy();
@@ -571,7 +571,7 @@ public class SetProcessDefinitionVersionCmdTest extends PluggableProcessEngineTe
 
     Date timestamp = incident.getIncidentTimestamp();
 
-    org.camunda.bpm.engine.repository.Deployment deployment = repositoryService
+    io.orqueio.bpm.engine.repository.Deployment deployment = repositoryService
       .createDeployment()
       .addClasspathResource(TEST_PROCESS_ONE_JOB)
       .deploy();
@@ -601,7 +601,7 @@ public class SetProcessDefinitionVersionCmdTest extends PluggableProcessEngineTe
         runtimeService.startProcessInstanceByKey("attachedTimer");
 
     // and a second deployment of the process
-    org.camunda.bpm.engine.repository.Deployment deployment = repositoryService
+    io.orqueio.bpm.engine.repository.Deployment deployment = repositoryService
       .createDeployment()
       .addClasspathResource(TEST_PROCESS_ATTACHED_TIMER)
       .deploy();
@@ -627,12 +627,12 @@ public class SetProcessDefinitionVersionCmdTest extends PluggableProcessEngineTe
     String resource = "org/camunda/bpm/engine/test/api/runtime/migration/SetProcessDefinitionVersionCmdTest.bpmn";
 
     // Deployments
-    org.camunda.bpm.engine.repository.Deployment firstDeployment = repositoryService
+    io.orqueio.bpm.engine.repository.Deployment firstDeployment = repositoryService
         .createDeployment()
         .addClasspathResource(resource)
         .deploy();
 
-    org.camunda.bpm.engine.repository.Deployment secondDeployment = repositoryService
+    io.orqueio.bpm.engine.repository.Deployment secondDeployment = repositoryService
         .createDeployment()
         .addClasspathResource(resource)
         .deploy();
@@ -682,12 +682,12 @@ public class SetProcessDefinitionVersionCmdTest extends PluggableProcessEngineTe
       String resource = "org/camunda/bpm/engine/test/api/runtime/migration/SetProcessDefinitionVersionCmdTest.bpmn";
 
       // Deployments
-      org.camunda.bpm.engine.repository.Deployment firstDeployment = repositoryService
+      io.orqueio.bpm.engine.repository.Deployment firstDeployment = repositoryService
           .createDeployment()
           .addClasspathResource(resource)
           .deploy();
 
-      org.camunda.bpm.engine.repository.Deployment secondDeployment = repositoryService
+      io.orqueio.bpm.engine.repository.Deployment secondDeployment = repositoryService
           .createDeployment()
           .addClasspathResource(resource)
           .deploy();

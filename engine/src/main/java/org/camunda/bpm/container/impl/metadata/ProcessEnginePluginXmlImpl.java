@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.metadata;
+package io.orqueio.bpm.container.impl.metadata;
 
 import java.util.Map;
 
-import org.camunda.bpm.container.impl.metadata.spi.ProcessEnginePluginXml;
+import io.orqueio.bpm.container.impl.metadata.spi.ProcessEnginePluginXml;
 
 /**
  * <p>Implementation of the {@link ProcessEnginePluginXml} descriptor</p>

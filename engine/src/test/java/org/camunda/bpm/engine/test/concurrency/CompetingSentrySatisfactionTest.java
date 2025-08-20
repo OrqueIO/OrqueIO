@@ -14,22 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.concurrency;
+package io.orqueio.bpm.engine.test.concurrency;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
-import org.camunda.bpm.engine.CaseService;
-import org.camunda.bpm.engine.OptimisticLockingException;
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.cmmn.cmd.CompleteCaseExecutionCmd;
-import org.camunda.bpm.engine.impl.cmmn.cmd.ManualStartCaseExecutionCmd;
-import org.camunda.bpm.engine.impl.cmmn.cmd.StateTransitionCaseExecutionCmd;
-import org.camunda.bpm.engine.runtime.CaseExecution;
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.engine.test.util.ProcessEngineTestRule;
-import org.camunda.bpm.engine.test.util.ProvidedProcessEngineRule;
+import io.orqueio.bpm.engine.CaseService;
+import io.orqueio.bpm.engine.OptimisticLockingException;
+import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.cmmn.cmd.CompleteCaseExecutionCmd;
+import io.orqueio.bpm.engine.impl.cmmn.cmd.ManualStartCaseExecutionCmd;
+import io.orqueio.bpm.engine.impl.cmmn.cmd.StateTransitionCaseExecutionCmd;
+import io.orqueio.bpm.engine.runtime.CaseExecution;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.test.util.ProcessEngineTestRule;
+import io.orqueio.bpm.engine.test.util.ProvidedProcessEngineRule;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;

@@ -16,12 +16,12 @@
       camunda:isStartableInTasklist="false"
       camunda:versionTag="v1.0.0">
     <extensionElements>
-      <camunda:executionListener event="start" class="org.camunda.test.Test"/>
+      <camunda:executionListener event="start" class="io.orqueio.test.Test"/>
     </extensionElements>
 
     <startEvent id="startEvent"
         camunda:initiator="test"
-        camunda:formHandlerClass="org.camunda.test.Test"
+        camunda:formHandlerClass="io.orqueio.test.Test"
         camunda:formKey="test"
         camunda:asyncBefore="true"
         camunda:asyncAfter="true"
@@ -55,12 +55,12 @@
         camunda:candidateUsers="user1, ${user2(a, b)}, user3"
         camunda:dueDate="2014-02-27"
         camunda:exclusive="false"
-        camunda:formHandlerClass="org.camunda.test.Test"
+        camunda:formHandlerClass="io.orqueio.test.Test"
         camunda:formKey="test"
         camunda:priority="12"
         camunda:jobPriority="${test}">
       <extensionElements>
-        <camunda:taskListener event="create" class="org.camunda.test.Test" expression="${test}" delegateExpression="${org.camunda.test.Test}">
+        <camunda:taskListener event="create" class="io.orqueio.test.Test" expression="${test}" delegateExpression="${io.orqueio.test.Test}">
           <camunda:field name="test">
             <camunda:string>test</camunda:string>
           </camunda:field>
@@ -87,14 +87,14 @@
 
     <serviceTask id="serviceTask"
         camunda:expression="${test}"
-        camunda:class="org.camunda.test.Test"
-        camunda:delegateExpression="${org.camunda.test.Test}"
+        camunda:class="io.orqueio.test.Test"
+        camunda:delegateExpression="${io.orqueio.test.Test}"
         camunda:resultVariable="test"
         camunda:type="mail"
         camunda:topic="test"
         camunda:taskPriority="${test}">
       <extensionElements>
-        <camunda:executionListener event="start" delegateExpression="${org.camunda.test.Test}"/>
+        <camunda:executionListener event="start" delegateExpression="${io.orqueio.test.Test}"/>
         <camunda:connector>
           <camunda:connectorId>soap-http-connector</camunda:connectorId>
           <camunda:inputOutput>
@@ -174,8 +174,8 @@
                   camunda:caseVersion="test"
                   camunda:caseTenantId="test"
                   camunda:exclusive="false"
-                  camunda:variableMappingClass="org.camunda.test.Test"
-                  camunda:variableMappingDelegateExpression="${org.camunda.test.Test}">
+                  camunda:variableMappingClass="io.orqueio.test.Test"
+                  camunda:variableMappingDelegateExpression="${io.orqueio.test.Test}">
       <extensionElements>
         <camunda:in source="test" sourceExpression="${test}" variables="test" businessKey="${test}" target="test" local="true"/>
         <camunda:out source="test" sourceExpression="${test}" variables="test" target="test" local="true"/>
@@ -202,9 +202,9 @@
         </camunda:properties>
       </extensionElements>
       <messageEventDefinition
-        camunda:class="org.camunda.test.Test"
+        camunda:class="io.orqueio.test.Test"
         camunda:expression="${test}"
-        camunda:delegateExpression="${org.camunda.test.Test}"
+        camunda:delegateExpression="${io.orqueio.test.Test}"
         camunda:resultVariable="test"
         camunda:topic="test"
         camunda:type="test" />

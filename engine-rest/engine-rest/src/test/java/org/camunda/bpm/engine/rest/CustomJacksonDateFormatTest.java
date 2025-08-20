@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest;
+package io.orqueio.bpm.engine.rest;
 
 import static io.restassured.RestAssured.given;
-import static org.camunda.bpm.engine.rest.mapper.JacksonConfigurator.DEFAULT_DATE_FORMAT;
+import static io.orqueio.bpm.engine.rest.mapper.JacksonConfigurator.DEFAULT_DATE_FORMAT;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.hamcrest.MockitoHamcrest.argThat;
 import static org.mockito.Mockito.eq;
@@ -30,12 +30,12 @@ import java.util.Date;
 import java.util.Map;
 import javax.ws.rs.core.Response.Status;
 
-import org.camunda.bpm.engine.impl.RuntimeServiceImpl;
-import org.camunda.bpm.engine.rest.helper.variable.EqualsPrimitiveValue;
-import org.camunda.bpm.engine.rest.mapper.JacksonConfigurator;
-import org.camunda.bpm.engine.rest.util.VariablesBuilder;
-import org.camunda.bpm.engine.rest.util.container.TestContainerRule;
-import org.camunda.bpm.engine.variable.Variables;
+import io.orqueio.bpm.engine.impl.RuntimeServiceImpl;
+import io.orqueio.bpm.engine.rest.helper.variable.EqualsPrimitiveValue;
+import io.orqueio.bpm.engine.rest.mapper.JacksonConfigurator;
+import io.orqueio.bpm.engine.rest.util.VariablesBuilder;
+import io.orqueio.bpm.engine.rest.util.container.TestContainerRule;
+import io.orqueio.bpm.engine.variable.Variables;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.ClassRule;

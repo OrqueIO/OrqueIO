@@ -14,40 +14,40 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa.upgrade;
+package io.orqueio.bpm.qa.upgrade;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.ProcessEngineConfiguration;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.qa.upgrade.gson.ProcessInstanceModificationScenario;
-import org.camunda.bpm.qa.upgrade.gson.TaskFilterPropertiesScenario;
-import org.camunda.bpm.qa.upgrade.gson.TaskFilterScenario;
-import org.camunda.bpm.qa.upgrade.gson.TaskFilterVariablesScenario;
-import org.camunda.bpm.qa.upgrade.gson.TimerChangeJobDefinitionScenario;
-import org.camunda.bpm.qa.upgrade.gson.TimerChangeProcessDefinitionScenario;
-import org.camunda.bpm.qa.upgrade.gson.batch.DeleteHistoricDecisionsBatchScenario;
-import org.camunda.bpm.qa.upgrade.gson.batch.DeleteHistoricProcessInstancesBatchScenario;
-import org.camunda.bpm.qa.upgrade.gson.batch.DeleteProcessInstancesBatchScenario;
-import org.camunda.bpm.qa.upgrade.gson.batch.MigrationBatchScenario;
-import org.camunda.bpm.qa.upgrade.gson.batch.ModificationBatchScenario;
-import org.camunda.bpm.qa.upgrade.gson.batch.RestartProcessInstanceBatchScenario;
-import org.camunda.bpm.qa.upgrade.gson.batch.SetExternalTaskRetriesBatchScenario;
-import org.camunda.bpm.qa.upgrade.gson.batch.SetJobRetriesBatchScenario;
-import org.camunda.bpm.qa.upgrade.gson.batch.UpdateProcessInstanceSuspendStateBatchScenario;
-import org.camunda.bpm.qa.upgrade.timestamp.DeploymentDeployTimeScenario;
-import org.camunda.bpm.qa.upgrade.timestamp.EventSubscriptionCreateTimeScenario;
-import org.camunda.bpm.qa.upgrade.timestamp.ExternalTaskLockExpTimeScenario;
-import org.camunda.bpm.qa.upgrade.timestamp.IncidentTimestampScenario;
-import org.camunda.bpm.qa.upgrade.timestamp.JobTimestampsScenario;
-import org.camunda.bpm.qa.upgrade.timestamp.MeterLogTimestampScenario;
-import org.camunda.bpm.qa.upgrade.timestamp.TaskCreateTimeScenario;
-import org.camunda.bpm.qa.upgrade.timestamp.UserLockExpTimeScenario;
-import org.camunda.bpm.qa.upgrade.useroperationlog.CreateStandaloneTaskDeleteScenario;
-import org.camunda.bpm.qa.upgrade.useroperationlog.CreateStandaloneTaskScenario;
-import org.camunda.bpm.qa.upgrade.useroperationlog.SetAssigneeProcessInstanceTaskScenario;
-import org.camunda.bpm.qa.upgrade.useroperationlog.SuspendProcessDefinitionDeleteScenario;
-import org.camunda.bpm.qa.upgrade.useroperationlog.annotation.AuthorizationCheckProcessDefinitionScenario;
-import org.camunda.bpm.qa.upgrade.useroperationlog.annotation.NoAuthorizationCheckScenario;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.ProcessEngineConfiguration;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.qa.upgrade.gson.ProcessInstanceModificationScenario;
+import io.orqueio.bpm.qa.upgrade.gson.TaskFilterPropertiesScenario;
+import io.orqueio.bpm.qa.upgrade.gson.TaskFilterScenario;
+import io.orqueio.bpm.qa.upgrade.gson.TaskFilterVariablesScenario;
+import io.orqueio.bpm.qa.upgrade.gson.TimerChangeJobDefinitionScenario;
+import io.orqueio.bpm.qa.upgrade.gson.TimerChangeProcessDefinitionScenario;
+import io.orqueio.bpm.qa.upgrade.gson.batch.DeleteHistoricDecisionsBatchScenario;
+import io.orqueio.bpm.qa.upgrade.gson.batch.DeleteHistoricProcessInstancesBatchScenario;
+import io.orqueio.bpm.qa.upgrade.gson.batch.DeleteProcessInstancesBatchScenario;
+import io.orqueio.bpm.qa.upgrade.gson.batch.MigrationBatchScenario;
+import io.orqueio.bpm.qa.upgrade.gson.batch.ModificationBatchScenario;
+import io.orqueio.bpm.qa.upgrade.gson.batch.RestartProcessInstanceBatchScenario;
+import io.orqueio.bpm.qa.upgrade.gson.batch.SetExternalTaskRetriesBatchScenario;
+import io.orqueio.bpm.qa.upgrade.gson.batch.SetJobRetriesBatchScenario;
+import io.orqueio.bpm.qa.upgrade.gson.batch.UpdateProcessInstanceSuspendStateBatchScenario;
+import io.orqueio.bpm.qa.upgrade.timestamp.DeploymentDeployTimeScenario;
+import io.orqueio.bpm.qa.upgrade.timestamp.EventSubscriptionCreateTimeScenario;
+import io.orqueio.bpm.qa.upgrade.timestamp.ExternalTaskLockExpTimeScenario;
+import io.orqueio.bpm.qa.upgrade.timestamp.IncidentTimestampScenario;
+import io.orqueio.bpm.qa.upgrade.timestamp.JobTimestampsScenario;
+import io.orqueio.bpm.qa.upgrade.timestamp.MeterLogTimestampScenario;
+import io.orqueio.bpm.qa.upgrade.timestamp.TaskCreateTimeScenario;
+import io.orqueio.bpm.qa.upgrade.timestamp.UserLockExpTimeScenario;
+import io.orqueio.bpm.qa.upgrade.useroperationlog.CreateStandaloneTaskDeleteScenario;
+import io.orqueio.bpm.qa.upgrade.useroperationlog.CreateStandaloneTaskScenario;
+import io.orqueio.bpm.qa.upgrade.useroperationlog.SetAssigneeProcessInstanceTaskScenario;
+import io.orqueio.bpm.qa.upgrade.useroperationlog.SuspendProcessDefinitionDeleteScenario;
+import io.orqueio.bpm.qa.upgrade.useroperationlog.annotation.AuthorizationCheckProcessDefinitionScenario;
+import io.orqueio.bpm.qa.upgrade.useroperationlog.annotation.NoAuthorizationCheckScenario;
 
 /**
  * @author Tassilo Weidner

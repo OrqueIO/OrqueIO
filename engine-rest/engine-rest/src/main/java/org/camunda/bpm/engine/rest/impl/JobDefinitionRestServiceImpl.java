@@ -14,24 +14,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.impl;
+package io.orqueio.bpm.engine.rest.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
-import org.camunda.bpm.engine.management.JobDefinition;
-import org.camunda.bpm.engine.management.JobDefinitionQuery;
-import org.camunda.bpm.engine.rest.JobDefinitionRestService;
-import org.camunda.bpm.engine.rest.dto.CountResultDto;
-import org.camunda.bpm.engine.rest.dto.management.JobDefinitionDto;
-import org.camunda.bpm.engine.rest.dto.management.JobDefinitionQueryDto;
-import org.camunda.bpm.engine.rest.dto.management.JobDefinitionSuspensionStateDto;
-import org.camunda.bpm.engine.rest.exception.InvalidRequestException;
-import org.camunda.bpm.engine.rest.sub.management.JobDefinitionResource;
-import org.camunda.bpm.engine.rest.sub.management.JobDefinitionResourceImpl;
-import org.camunda.bpm.engine.rest.util.QueryUtil;
+import io.orqueio.bpm.engine.management.JobDefinition;
+import io.orqueio.bpm.engine.management.JobDefinitionQuery;
+import io.orqueio.bpm.engine.rest.JobDefinitionRestService;
+import io.orqueio.bpm.engine.rest.dto.CountResultDto;
+import io.orqueio.bpm.engine.rest.dto.management.JobDefinitionDto;
+import io.orqueio.bpm.engine.rest.dto.management.JobDefinitionQueryDto;
+import io.orqueio.bpm.engine.rest.dto.management.JobDefinitionSuspensionStateDto;
+import io.orqueio.bpm.engine.rest.exception.InvalidRequestException;
+import io.orqueio.bpm.engine.rest.sub.management.JobDefinitionResource;
+import io.orqueio.bpm.engine.rest.sub.management.JobDefinitionResourceImpl;
+import io.orqueio.bpm.engine.rest.util.QueryUtil;
 
 /**
  * @author roman.smirnov

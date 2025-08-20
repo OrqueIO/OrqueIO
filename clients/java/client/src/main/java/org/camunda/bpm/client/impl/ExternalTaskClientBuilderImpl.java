@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.impl;
+package io.orqueio.bpm.client.impl;
 
-import static org.camunda.bpm.client.task.OrderingConfig.Direction.ASC;
-import static org.camunda.bpm.client.task.OrderingConfig.Direction.DESC;
-import static org.camunda.bpm.client.task.OrderingConfig.SortingField.CREATE_TIME;
+import static io.orqueio.bpm.client.task.OrderingConfig.Direction.ASC;
+import static io.orqueio.bpm.client.task.OrderingConfig.Direction.DESC;
+import static io.orqueio.bpm.client.task.OrderingConfig.SortingField.CREATE_TIME;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -35,35 +35,35 @@ import java.util.UUID;
 import java.util.function.Consumer;
 import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
-import org.camunda.bpm.client.ExternalTaskClient;
-import org.camunda.bpm.client.ExternalTaskClientBuilder;
-import org.camunda.bpm.client.UrlResolver;
-import org.camunda.bpm.client.backoff.BackoffStrategy;
-import org.camunda.bpm.client.backoff.ExponentialBackoffStrategy;
-import org.camunda.bpm.client.interceptor.ClientRequestInterceptor;
-import org.camunda.bpm.client.interceptor.impl.RequestInterceptorHandler;
-import org.camunda.bpm.client.spi.DataFormat;
-import org.camunda.bpm.client.spi.DataFormatConfigurator;
-import org.camunda.bpm.client.spi.DataFormatProvider;
-import org.camunda.bpm.client.task.OrderingConfig;
-import org.camunda.bpm.client.topic.impl.TopicSubscriptionManager;
-import org.camunda.bpm.client.variable.impl.DefaultValueMappers;
-import org.camunda.bpm.client.variable.impl.TypedValues;
-import org.camunda.bpm.client.variable.impl.ValueMappers;
-import org.camunda.bpm.client.variable.impl.mapper.BooleanValueMapper;
-import org.camunda.bpm.client.variable.impl.mapper.ByteArrayValueMapper;
-import org.camunda.bpm.client.variable.impl.mapper.DateValueMapper;
-import org.camunda.bpm.client.variable.impl.mapper.DoubleValueMapper;
-import org.camunda.bpm.client.variable.impl.mapper.FileValueMapper;
-import org.camunda.bpm.client.variable.impl.mapper.IntegerValueMapper;
-import org.camunda.bpm.client.variable.impl.mapper.JsonValueMapper;
-import org.camunda.bpm.client.variable.impl.mapper.LongValueMapper;
-import org.camunda.bpm.client.variable.impl.mapper.NullValueMapper;
-import org.camunda.bpm.client.variable.impl.mapper.ObjectValueMapper;
-import org.camunda.bpm.client.variable.impl.mapper.ShortValueMapper;
-import org.camunda.bpm.client.variable.impl.mapper.StringValueMapper;
-import org.camunda.bpm.client.variable.impl.mapper.XmlValueMapper;
-import org.camunda.bpm.engine.variable.Variables;
+import io.orqueio.bpm.client.ExternalTaskClient;
+import io.orqueio.bpm.client.ExternalTaskClientBuilder;
+import io.orqueio.bpm.client.UrlResolver;
+import io.orqueio.bpm.client.backoff.BackoffStrategy;
+import io.orqueio.bpm.client.backoff.ExponentialBackoffStrategy;
+import io.orqueio.bpm.client.interceptor.ClientRequestInterceptor;
+import io.orqueio.bpm.client.interceptor.impl.RequestInterceptorHandler;
+import io.orqueio.bpm.client.spi.DataFormat;
+import io.orqueio.bpm.client.spi.DataFormatConfigurator;
+import io.orqueio.bpm.client.spi.DataFormatProvider;
+import io.orqueio.bpm.client.task.OrderingConfig;
+import io.orqueio.bpm.client.topic.impl.TopicSubscriptionManager;
+import io.orqueio.bpm.client.variable.impl.DefaultValueMappers;
+import io.orqueio.bpm.client.variable.impl.TypedValues;
+import io.orqueio.bpm.client.variable.impl.ValueMappers;
+import io.orqueio.bpm.client.variable.impl.mapper.BooleanValueMapper;
+import io.orqueio.bpm.client.variable.impl.mapper.ByteArrayValueMapper;
+import io.orqueio.bpm.client.variable.impl.mapper.DateValueMapper;
+import io.orqueio.bpm.client.variable.impl.mapper.DoubleValueMapper;
+import io.orqueio.bpm.client.variable.impl.mapper.FileValueMapper;
+import io.orqueio.bpm.client.variable.impl.mapper.IntegerValueMapper;
+import io.orqueio.bpm.client.variable.impl.mapper.JsonValueMapper;
+import io.orqueio.bpm.client.variable.impl.mapper.LongValueMapper;
+import io.orqueio.bpm.client.variable.impl.mapper.NullValueMapper;
+import io.orqueio.bpm.client.variable.impl.mapper.ObjectValueMapper;
+import io.orqueio.bpm.client.variable.impl.mapper.ShortValueMapper;
+import io.orqueio.bpm.client.variable.impl.mapper.StringValueMapper;
+import io.orqueio.bpm.client.variable.impl.mapper.XmlValueMapper;
+import io.orqueio.bpm.engine.variable.Variables;
 
 /**
  * @author Tassilo Weidner

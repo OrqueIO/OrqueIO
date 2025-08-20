@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.ejb.deployment;
+package io.orqueio.bpm.container.impl.ejb.deployment;
 
-import org.camunda.bpm.container.ExecutorService;
-import org.camunda.bpm.container.impl.RuntimeContainerDelegateImpl;
-import org.camunda.bpm.container.impl.spi.DeploymentOperation;
-import org.camunda.bpm.container.impl.spi.DeploymentOperationStep;
-import org.camunda.bpm.container.impl.spi.PlatformServiceContainer;
-import org.camunda.bpm.container.impl.spi.ServiceTypes;
+import io.orqueio.bpm.container.ExecutorService;
+import io.orqueio.bpm.container.impl.RuntimeContainerDelegateImpl;
+import io.orqueio.bpm.container.impl.spi.DeploymentOperation;
+import io.orqueio.bpm.container.impl.spi.DeploymentOperationStep;
+import io.orqueio.bpm.container.impl.spi.PlatformServiceContainer;
+import io.orqueio.bpm.container.impl.spi.ServiceTypes;
 
 /**
  * <p>Deployment operation responsible for stopping a service which represents a Proxy to the

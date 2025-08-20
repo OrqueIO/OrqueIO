@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.db.sql;
+package io.orqueio.bpm.engine.impl.db.sql;
 
-import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
+import static io.orqueio.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
 
 import java.sql.BatchUpdateException;
 import java.sql.Connection;
@@ -29,15 +29,15 @@ import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.ibatis.executor.BatchExecutorException;
 import org.apache.ibatis.executor.BatchResult;
 import org.apache.ibatis.session.ExecutorType;
-import org.camunda.bpm.engine.impl.db.DbEntity;
-import org.camunda.bpm.engine.impl.db.FlushResult;
-import org.camunda.bpm.engine.impl.db.entitymanager.operation.DbBulkOperation;
-import org.camunda.bpm.engine.impl.db.entitymanager.operation.DbEntityOperation;
-import org.camunda.bpm.engine.impl.db.entitymanager.operation.DbOperation;
-import org.camunda.bpm.engine.impl.db.entitymanager.operation.DbOperationType;
-import org.camunda.bpm.engine.impl.util.CollectionUtil;
-import org.camunda.bpm.engine.impl.util.EnsureUtil;
-import org.camunda.bpm.engine.impl.util.ExceptionUtil;
+import io.orqueio.bpm.engine.impl.db.DbEntity;
+import io.orqueio.bpm.engine.impl.db.FlushResult;
+import io.orqueio.bpm.engine.impl.db.entitymanager.operation.DbBulkOperation;
+import io.orqueio.bpm.engine.impl.db.entitymanager.operation.DbEntityOperation;
+import io.orqueio.bpm.engine.impl.db.entitymanager.operation.DbOperation;
+import io.orqueio.bpm.engine.impl.db.entitymanager.operation.DbOperationType;
+import io.orqueio.bpm.engine.impl.util.CollectionUtil;
+import io.orqueio.bpm.engine.impl.util.EnsureUtil;
+import io.orqueio.bpm.engine.impl.util.ExceptionUtil;
 
 /**
  * For mybatis {@link ExecutorType#BATCH}

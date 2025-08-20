@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.junit5;
+package io.orqueio.bpm.engine.test.junit5;
 
-import org.camunda.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.test.Deployment;
 
 @Deployment
 public class ProcessEngineExtensionParentClassDeployment {

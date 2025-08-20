@@ -5,7 +5,7 @@
   targetNamespace="Examples">
   
   <error id="myError" errorCode="23"/>
-  <error id="myException" errorCode="org.camunda.bpm.engine.test.bpmn.event.error.MyBusinessException" />
+  <error id="myException" errorCode="io.orqueio.bpm.engine.test.bpmn.event.error.MyBusinessException" />
   
   <process id="catchErrorThrownByJavaDelegateOnCallActivity-parent" isExecutable="true">
   

@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.dto.identity;
+package io.orqueio.bpm.engine.rest.dto.identity;
 
-import org.camunda.bpm.engine.identity.PasswordPolicyRule;
+import io.orqueio.bpm.engine.identity.PasswordPolicyRule;
 
 /**
  * @author Tassilo Weidner

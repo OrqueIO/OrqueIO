@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.security.auth.impl;
+package io.orqueio.bpm.engine.rest.security.auth.impl;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.impl.digest._apacheCommonsCodec.Base64;
-import org.camunda.bpm.engine.rest.security.auth.AuthenticationProvider;
-import org.camunda.bpm.engine.rest.security.auth.AuthenticationResult;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.impl.digest._apacheCommonsCodec.Base64;
+import io.orqueio.bpm.engine.rest.security.auth.AuthenticationProvider;
+import io.orqueio.bpm.engine.rest.security.auth.AuthenticationResult;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

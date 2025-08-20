@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter.property;
+package io.orqueio.bpm.spring.boot.starter.property;
 
 import org.apache.commons.lang3.StringUtils;
-import org.camunda.bpm.engine.identity.User;
+import io.orqueio.bpm.engine.identity.User;
 
 import static java.util.Objects.requireNonNull;
-import static org.camunda.bpm.spring.boot.starter.property.CamundaBpmProperties.joinOn;
+import static io.orqueio.bpm.spring.boot.starter.property.CamundaBpmProperties.joinOn;
 
 
 public class AdminUserProperty implements User {

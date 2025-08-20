@@ -14,32 +14,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.dmn.impl.instance;
+package io.orqueio.bpm.model.dmn.impl.instance;
 
-import static org.camunda.bpm.model.dmn.impl.DmnModelConstants.LATEST_DMN_NS;
-import static org.camunda.bpm.model.dmn.impl.DmnModelConstants.DMN_ATTRIBUTE_EXPORTER;
-import static org.camunda.bpm.model.dmn.impl.DmnModelConstants.DMN_ATTRIBUTE_EXPORTER_VERSION;
-import static org.camunda.bpm.model.dmn.impl.DmnModelConstants.DMN_ATTRIBUTE_EXPRESSION_LANGUAGE;
-import static org.camunda.bpm.model.dmn.impl.DmnModelConstants.DMN_ATTRIBUTE_NAMESPACE;
-import static org.camunda.bpm.model.dmn.impl.DmnModelConstants.DMN_ATTRIBUTE_TYPE_LANGUAGE;
-import static org.camunda.bpm.model.dmn.impl.DmnModelConstants.DMN_ELEMENT_DEFINITIONS;
+import static io.orqueio.bpm.model.dmn.impl.DmnModelConstants.LATEST_DMN_NS;
+import static io.orqueio.bpm.model.dmn.impl.DmnModelConstants.DMN_ATTRIBUTE_EXPORTER;
+import static io.orqueio.bpm.model.dmn.impl.DmnModelConstants.DMN_ATTRIBUTE_EXPORTER_VERSION;
+import static io.orqueio.bpm.model.dmn.impl.DmnModelConstants.DMN_ATTRIBUTE_EXPRESSION_LANGUAGE;
+import static io.orqueio.bpm.model.dmn.impl.DmnModelConstants.DMN_ATTRIBUTE_NAMESPACE;
+import static io.orqueio.bpm.model.dmn.impl.DmnModelConstants.DMN_ATTRIBUTE_TYPE_LANGUAGE;
+import static io.orqueio.bpm.model.dmn.impl.DmnModelConstants.DMN_ELEMENT_DEFINITIONS;
 
 import java.util.Collection;
 
-import org.camunda.bpm.model.dmn.instance.Artifact;
-import org.camunda.bpm.model.dmn.instance.BusinessContextElement;
-import org.camunda.bpm.model.dmn.instance.Definitions;
-import org.camunda.bpm.model.dmn.instance.DrgElement;
-import org.camunda.bpm.model.dmn.instance.ElementCollection;
-import org.camunda.bpm.model.dmn.instance.Import;
-import org.camunda.bpm.model.dmn.instance.ItemDefinition;
-import org.camunda.bpm.model.dmn.instance.NamedElement;
-import org.camunda.bpm.model.xml.ModelBuilder;
-import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.attribute.Attribute;
-import org.camunda.bpm.model.xml.type.child.ChildElementCollection;
-import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
+import io.orqueio.bpm.model.dmn.instance.Artifact;
+import io.orqueio.bpm.model.dmn.instance.BusinessContextElement;
+import io.orqueio.bpm.model.dmn.instance.Definitions;
+import io.orqueio.bpm.model.dmn.instance.DrgElement;
+import io.orqueio.bpm.model.dmn.instance.ElementCollection;
+import io.orqueio.bpm.model.dmn.instance.Import;
+import io.orqueio.bpm.model.dmn.instance.ItemDefinition;
+import io.orqueio.bpm.model.dmn.instance.NamedElement;
+import io.orqueio.bpm.model.xml.ModelBuilder;
+import io.orqueio.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
+import io.orqueio.bpm.model.xml.type.ModelElementTypeBuilder;
+import io.orqueio.bpm.model.xml.type.attribute.Attribute;
+import io.orqueio.bpm.model.xml.type.child.ChildElementCollection;
+import io.orqueio.bpm.model.xml.type.child.SequenceBuilder;
 
 public class DefinitionsImpl extends NamedElementImpl implements Definitions {
 

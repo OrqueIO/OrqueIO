@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.engine.impl.transform;
+package io.orqueio.bpm.dmn.engine.impl.transform;
 
-import org.camunda.bpm.dmn.engine.impl.DmnDecisionImpl;
-import org.camunda.bpm.dmn.engine.impl.spi.transform.DmnElementTransformContext;
-import org.camunda.bpm.dmn.engine.impl.spi.transform.DmnElementTransformHandler;
-import org.camunda.bpm.model.dmn.instance.Decision;
+import io.orqueio.bpm.dmn.engine.impl.DmnDecisionImpl;
+import io.orqueio.bpm.dmn.engine.impl.spi.transform.DmnElementTransformContext;
+import io.orqueio.bpm.dmn.engine.impl.spi.transform.DmnElementTransformHandler;
+import io.orqueio.bpm.model.dmn.instance.Decision;
 
 public class DmnDecisionTransformHandler implements DmnElementTransformHandler<Decision, DmnDecisionImpl> {
 

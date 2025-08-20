@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.json;
+package io.orqueio.bpm.engine.impl.json;
 
 import com.google.gson.JsonObject;
-import org.camunda.bpm.engine.impl.cmd.AbstractProcessInstanceModificationCommand;
-import org.camunda.bpm.engine.impl.cmd.ActivityAfterInstantiationCmd;
-import org.camunda.bpm.engine.impl.cmd.ActivityBeforeInstantiationCmd;
-import org.camunda.bpm.engine.impl.cmd.ActivityCancellationCmd;
-import org.camunda.bpm.engine.impl.cmd.ActivityInstanceCancellationCmd;
-import org.camunda.bpm.engine.impl.cmd.TransitionInstanceCancellationCmd;
-import org.camunda.bpm.engine.impl.cmd.TransitionInstantiationCmd;
-import org.camunda.bpm.engine.impl.util.JsonUtil;
+import io.orqueio.bpm.engine.impl.cmd.AbstractProcessInstanceModificationCommand;
+import io.orqueio.bpm.engine.impl.cmd.ActivityAfterInstantiationCmd;
+import io.orqueio.bpm.engine.impl.cmd.ActivityBeforeInstantiationCmd;
+import io.orqueio.bpm.engine.impl.cmd.ActivityCancellationCmd;
+import io.orqueio.bpm.engine.impl.cmd.ActivityInstanceCancellationCmd;
+import io.orqueio.bpm.engine.impl.cmd.TransitionInstanceCancellationCmd;
+import io.orqueio.bpm.engine.impl.cmd.TransitionInstantiationCmd;
+import io.orqueio.bpm.engine.impl.util.JsonUtil;
 
 public class ModificationCmdJsonConverter extends JsonObjectConverter<AbstractProcessInstanceModificationCommand> {
 

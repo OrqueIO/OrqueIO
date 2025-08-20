@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest;
+package io.orqueio.bpm.engine.rest;
 
-import org.camunda.bpm.engine.rest.dto.CountResultDto;
-import org.camunda.bpm.engine.rest.dto.runtime.VariableInstanceDto;
-import org.camunda.bpm.engine.rest.dto.runtime.VariableInstanceQueryDto;
-import org.camunda.bpm.engine.rest.sub.VariableResource;
-import org.camunda.bpm.engine.rest.sub.runtime.VariableInstanceResource;
-import org.camunda.bpm.engine.runtime.VariableInstanceQuery;
+import io.orqueio.bpm.engine.rest.dto.CountResultDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.VariableInstanceDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.VariableInstanceQueryDto;
+import io.orqueio.bpm.engine.rest.sub.VariableResource;
+import io.orqueio.bpm.engine.rest.sub.runtime.VariableInstanceResource;
+import io.orqueio.bpm.engine.runtime.VariableInstanceQuery;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;

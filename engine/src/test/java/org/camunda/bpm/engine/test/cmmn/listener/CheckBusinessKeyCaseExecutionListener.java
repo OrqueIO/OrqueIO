@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.cmmn.listener;
+package io.orqueio.bpm.engine.test.cmmn.listener;
 
-import org.camunda.bpm.engine.delegate.CaseExecutionListener;
-import org.camunda.bpm.engine.delegate.DelegateCaseExecution;
+import io.orqueio.bpm.engine.delegate.CaseExecutionListener;
+import io.orqueio.bpm.engine.delegate.DelegateCaseExecution;
 
 public class CheckBusinessKeyCaseExecutionListener implements CaseExecutionListener {
 

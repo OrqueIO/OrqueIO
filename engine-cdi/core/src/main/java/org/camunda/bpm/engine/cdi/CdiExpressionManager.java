@@ -14,19 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.cdi;
+package io.orqueio.bpm.engine.cdi;
 
-import org.camunda.bpm.engine.cdi.impl.el.CdiResolver;
-import org.camunda.bpm.engine.impl.el.ExpressionManager;
-import org.camunda.bpm.engine.impl.el.JuelExpressionManager;
-import org.camunda.bpm.engine.impl.el.VariableContextElResolver;
-import org.camunda.bpm.engine.impl.el.VariableScopeElResolver;
-import org.camunda.bpm.impl.juel.jakarta.el.ArrayELResolver;
-import org.camunda.bpm.impl.juel.jakarta.el.BeanELResolver;
-import org.camunda.bpm.impl.juel.jakarta.el.CompositeELResolver;
-import org.camunda.bpm.impl.juel.jakarta.el.ELResolver;
-import org.camunda.bpm.impl.juel.jakarta.el.ListELResolver;
-import org.camunda.bpm.impl.juel.jakarta.el.MapELResolver;
+import io.orqueio.bpm.engine.cdi.impl.el.CdiResolver;
+import io.orqueio.bpm.engine.impl.el.ExpressionManager;
+import io.orqueio.bpm.engine.impl.el.JuelExpressionManager;
+import io.orqueio.bpm.engine.impl.el.VariableContextElResolver;
+import io.orqueio.bpm.engine.impl.el.VariableScopeElResolver;
+import io.orqueio.bpm.impl.juel.jakarta.el.ArrayELResolver;
+import io.orqueio.bpm.impl.juel.jakarta.el.BeanELResolver;
+import io.orqueio.bpm.impl.juel.jakarta.el.CompositeELResolver;
+import io.orqueio.bpm.impl.juel.jakarta.el.ELResolver;
+import io.orqueio.bpm.impl.juel.jakarta.el.ListELResolver;
+import io.orqueio.bpm.impl.juel.jakarta.el.MapELResolver;
 
 /**
  * {@link ExpressionManager} for resolving Cdi-managed beans.
@@ -37,7 +37,7 @@ import org.camunda.bpm.impl.juel.jakarta.el.MapELResolver;
  *
  * <pre>
  * &lt;property name="expressionManager"&gt;
- *      &lt;bean class="org.camunda.bpm.engine.test.cdi.CdiExpressionManager" /&gt;
+ *      &lt;bean class="io.orqueio.bpm.engine.test.cdi.CdiExpressionManager" /&gt;
  * &lt;/property&gt;
  * </pre>
  *

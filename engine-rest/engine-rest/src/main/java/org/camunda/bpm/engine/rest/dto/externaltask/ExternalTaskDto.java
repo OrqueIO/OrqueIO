@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.dto.externaltask;
+package io.orqueio.bpm.engine.rest.dto.externaltask;
 
 import java.util.Date;
 
-import org.camunda.bpm.engine.externaltask.ExternalTask;
+import io.orqueio.bpm.engine.externaltask.ExternalTask;
 
 /**
  * @author Thorben Lindhauer

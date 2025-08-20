@@ -15,7 +15,7 @@
         <camunda:formData>
             <camunda:formField id="stringField" label="String Field" type="string" defaultValue="someString">
               <camunda:validation>
-                 <camunda:constraint name="validator" config="org.camunda.bpm.engine.test.api.authorization.service.MyFormFieldValidator" />
+                 <camunda:constraint name="validator" config="io.orqueio.bpm.engine.test.api.authorization.service.MyFormFieldValidator" />
               </camunda:validation>
             </camunda:formField>
         </camunda:formData>

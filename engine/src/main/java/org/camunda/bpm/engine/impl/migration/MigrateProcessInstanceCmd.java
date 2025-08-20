@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.migration;
+package io.orqueio.bpm.engine.impl.migration;
 
 
-import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureNotContainsNull;
-import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureNotEmpty;
-import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
+import static io.orqueio.bpm.engine.impl.util.EnsureUtil.ensureNotContainsNull;
+import static io.orqueio.bpm.engine.impl.util.EnsureUtil.ensureNotEmpty;
+import static io.orqueio.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -29,35 +29,35 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Callable;
 
-import org.camunda.bpm.engine.BadUserRequestException;
-import org.camunda.bpm.engine.impl.ProcessEngineImpl;
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
-import org.camunda.bpm.engine.impl.cfg.CommandChecker;
-import org.camunda.bpm.engine.impl.cmd.SetExecutionVariablesCmd;
-import org.camunda.bpm.engine.impl.context.ProcessApplicationContextUtil;
-import org.camunda.bpm.engine.impl.interceptor.Command;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.migration.instance.DeleteUnmappedInstanceVisitor;
-import org.camunda.bpm.engine.impl.migration.instance.MigratingActivityInstance;
-import org.camunda.bpm.engine.impl.migration.instance.MigratingActivityInstanceVisitor;
-import org.camunda.bpm.engine.impl.migration.instance.MigratingCompensationEventSubscriptionInstance;
-import org.camunda.bpm.engine.impl.migration.instance.MigratingEventScopeInstance;
-import org.camunda.bpm.engine.impl.migration.instance.MigratingProcessElementInstanceTopDownWalker;
-import org.camunda.bpm.engine.impl.migration.instance.MigratingProcessInstance;
-import org.camunda.bpm.engine.impl.migration.instance.MigratingScopeInstance;
-import org.camunda.bpm.engine.impl.migration.instance.MigratingScopeInstanceBottomUpWalker;
-import org.camunda.bpm.engine.impl.migration.instance.MigratingTransitionInstance;
-import org.camunda.bpm.engine.impl.migration.instance.MigrationCompensationInstanceVisitor;
-import org.camunda.bpm.engine.impl.migration.instance.parser.MigratingInstanceParser;
-import org.camunda.bpm.engine.impl.migration.validation.instance.MigratingActivityInstanceValidationReportImpl;
-import org.camunda.bpm.engine.impl.migration.validation.instance.MigratingActivityInstanceValidator;
-import org.camunda.bpm.engine.impl.migration.validation.instance.MigratingCompensationInstanceValidator;
-import org.camunda.bpm.engine.impl.migration.validation.instance.MigratingProcessInstanceValidationReportImpl;
-import org.camunda.bpm.engine.impl.migration.validation.instance.MigratingTransitionInstanceValidationReportImpl;
-import org.camunda.bpm.engine.impl.migration.validation.instance.MigratingTransitionInstanceValidator;
-import org.camunda.bpm.engine.impl.persistence.entity.ExecutionEntity;
-import org.camunda.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity;
-import org.camunda.bpm.engine.migration.MigrationPlan;
+import io.orqueio.bpm.engine.BadUserRequestException;
+import io.orqueio.bpm.engine.impl.ProcessEngineImpl;
+import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
+import io.orqueio.bpm.engine.impl.cfg.CommandChecker;
+import io.orqueio.bpm.engine.impl.cmd.SetExecutionVariablesCmd;
+import io.orqueio.bpm.engine.impl.context.ProcessApplicationContextUtil;
+import io.orqueio.bpm.engine.impl.interceptor.Command;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.impl.migration.instance.DeleteUnmappedInstanceVisitor;
+import io.orqueio.bpm.engine.impl.migration.instance.MigratingActivityInstance;
+import io.orqueio.bpm.engine.impl.migration.instance.MigratingActivityInstanceVisitor;
+import io.orqueio.bpm.engine.impl.migration.instance.MigratingCompensationEventSubscriptionInstance;
+import io.orqueio.bpm.engine.impl.migration.instance.MigratingEventScopeInstance;
+import io.orqueio.bpm.engine.impl.migration.instance.MigratingProcessElementInstanceTopDownWalker;
+import io.orqueio.bpm.engine.impl.migration.instance.MigratingProcessInstance;
+import io.orqueio.bpm.engine.impl.migration.instance.MigratingScopeInstance;
+import io.orqueio.bpm.engine.impl.migration.instance.MigratingScopeInstanceBottomUpWalker;
+import io.orqueio.bpm.engine.impl.migration.instance.MigratingTransitionInstance;
+import io.orqueio.bpm.engine.impl.migration.instance.MigrationCompensationInstanceVisitor;
+import io.orqueio.bpm.engine.impl.migration.instance.parser.MigratingInstanceParser;
+import io.orqueio.bpm.engine.impl.migration.validation.instance.MigratingActivityInstanceValidationReportImpl;
+import io.orqueio.bpm.engine.impl.migration.validation.instance.MigratingActivityInstanceValidator;
+import io.orqueio.bpm.engine.impl.migration.validation.instance.MigratingCompensationInstanceValidator;
+import io.orqueio.bpm.engine.impl.migration.validation.instance.MigratingProcessInstanceValidationReportImpl;
+import io.orqueio.bpm.engine.impl.migration.validation.instance.MigratingTransitionInstanceValidationReportImpl;
+import io.orqueio.bpm.engine.impl.migration.validation.instance.MigratingTransitionInstanceValidator;
+import io.orqueio.bpm.engine.impl.persistence.entity.ExecutionEntity;
+import io.orqueio.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity;
+import io.orqueio.bpm.engine.migration.MigrationPlan;
 
 /**
  * How migration works:

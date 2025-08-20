@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.history;
+package io.orqueio.bpm.engine.rest.history;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.path.json.JsonPath.from;
@@ -28,12 +28,12 @@ import java.util.List;
 
 import javax.ws.rs.core.Response.Status;
 
-import org.camunda.bpm.engine.history.HistoricCaseActivityStatistics;
-import org.camunda.bpm.engine.history.HistoricCaseActivityStatisticsQuery;
-import org.camunda.bpm.engine.impl.HistoricCaseActivityStatisticsQueryImpl;
-import org.camunda.bpm.engine.rest.AbstractRestServiceTest;
-import org.camunda.bpm.engine.rest.helper.MockProvider;
-import org.camunda.bpm.engine.rest.util.container.TestContainerRule;
+import io.orqueio.bpm.engine.history.HistoricCaseActivityStatistics;
+import io.orqueio.bpm.engine.history.HistoricCaseActivityStatisticsQuery;
+import io.orqueio.bpm.engine.impl.HistoricCaseActivityStatisticsQueryImpl;
+import io.orqueio.bpm.engine.rest.AbstractRestServiceTest;
+import io.orqueio.bpm.engine.rest.helper.MockProvider;
+import io.orqueio.bpm.engine.rest.util.container.TestContainerRule;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.ClassRule;

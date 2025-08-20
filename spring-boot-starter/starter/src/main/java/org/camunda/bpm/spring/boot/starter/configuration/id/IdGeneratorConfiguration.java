@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter.configuration.id;
+package io.orqueio.bpm.spring.boot.starter.configuration.id;
 
-import org.camunda.bpm.engine.impl.cfg.IdGenerator;
-import org.camunda.bpm.engine.impl.persistence.StrongUuidGenerator;
-import org.camunda.bpm.spring.boot.starter.property.CamundaBpmProperties;
+import io.orqueio.bpm.engine.impl.cfg.IdGenerator;
+import io.orqueio.bpm.engine.impl.persistence.StrongUuidGenerator;
+import io.orqueio.bpm.spring.boot.starter.property.CamundaBpmProperties;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

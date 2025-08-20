@@ -1,4 +1,4 @@
-<module xmlns="urn:jboss:module:1.0" name="org.camunda.bpm.model.camunda-bpmn-model">
+<module xmlns="urn:jboss:module:1.0" name="io.orqueio.bpm.model.camunda-bpmn-model">
   <resources>
     <resource-root path="camunda-bpmn-model-@project.version@.jar" />
   </resources>
@@ -6,7 +6,7 @@
   <dependencies>
 
     <module name="javax.api" />
-    <module name="org.camunda.bpm.model.camunda-xml-model" />
+    <module name="io.orqueio.bpm.model.camunda-xml-model" />
 
   </dependencies>
 </module>

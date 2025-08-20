@@ -14,20 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.functional.spin;
+package io.orqueio.bpm.integrationtest.functional.spin;
 
 import java.util.concurrent.Callable;
-import org.camunda.bpm.engine.runtime.ActivityInstance;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.variable.Variables;
-import org.camunda.bpm.integrationtest.functional.spin.dataformat.CustomDataFormatConfigurator;
-import org.camunda.bpm.integrationtest.functional.spin.dataformat.XmlSerializableJsonDeserializer;
-import org.camunda.bpm.integrationtest.functional.spin.dataformat.XmlSerializableJsonSerializer;
-import org.camunda.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
-import org.camunda.bpm.integrationtest.util.DeploymentHelper;
-import org.camunda.bpm.integrationtest.util.TestContainer;
-import org.camunda.spin.DataFormats;
-import org.camunda.spin.spi.DataFormatConfigurator;
+import io.orqueio.bpm.engine.runtime.ActivityInstance;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.variable.Variables;
+import io.orqueio.bpm.integrationtest.functional.spin.dataformat.CustomDataFormatConfigurator;
+import io.orqueio.bpm.integrationtest.functional.spin.dataformat.XmlSerializableJsonDeserializer;
+import io.orqueio.bpm.integrationtest.functional.spin.dataformat.XmlSerializableJsonSerializer;
+import io.orqueio.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
+import io.orqueio.bpm.integrationtest.util.DeploymentHelper;
+import io.orqueio.bpm.integrationtest.util.TestContainer;
+import io.orqueio.spin.DataFormats;
+import io.orqueio.spin.spi.DataFormatConfigurator;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -35,7 +35,7 @@ import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import static org.camunda.bpm.application.ProcessApplicationContext.withProcessApplicationContext;
+import static io.orqueio.bpm.application.ProcessApplicationContext.withProcessApplicationContext;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(Arquillian.class)

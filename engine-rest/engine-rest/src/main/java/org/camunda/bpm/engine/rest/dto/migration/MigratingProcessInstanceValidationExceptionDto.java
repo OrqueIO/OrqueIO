@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.dto.migration;
+package io.orqueio.bpm.engine.rest.dto.migration;
 
-import org.camunda.bpm.engine.migration.MigratingProcessInstanceValidationException;
-import org.camunda.bpm.engine.rest.dto.ExceptionDto;
+import io.orqueio.bpm.engine.migration.MigratingProcessInstanceValidationException;
+import io.orqueio.bpm.engine.rest.dto.ExceptionDto;
 
 public class MigratingProcessInstanceValidationExceptionDto extends ExceptionDto {
 

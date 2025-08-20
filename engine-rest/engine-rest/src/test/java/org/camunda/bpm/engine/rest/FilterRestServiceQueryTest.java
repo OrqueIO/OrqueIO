@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest;
+package io.orqueio.bpm.engine.rest;
 
 import static javax.ws.rs.core.Response.Status;
 import static io.restassured.RestAssured.expect;
@@ -33,13 +33,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.engine.FilterService;
-import org.camunda.bpm.engine.filter.Filter;
-import org.camunda.bpm.engine.filter.FilterQuery;
-import org.camunda.bpm.engine.impl.AbstractQuery;
-import org.camunda.bpm.engine.rest.dto.runtime.FilterQueryDto;
-import org.camunda.bpm.engine.rest.helper.MockProvider;
-import org.camunda.bpm.engine.rest.util.container.TestContainerRule;
+import io.orqueio.bpm.engine.FilterService;
+import io.orqueio.bpm.engine.filter.Filter;
+import io.orqueio.bpm.engine.filter.FilterQuery;
+import io.orqueio.bpm.engine.impl.AbstractQuery;
+import io.orqueio.bpm.engine.rest.dto.runtime.FilterQueryDto;
+import io.orqueio.bpm.engine.rest.helper.MockProvider;
+import io.orqueio.bpm.engine.rest.util.container.TestContainerRule;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;

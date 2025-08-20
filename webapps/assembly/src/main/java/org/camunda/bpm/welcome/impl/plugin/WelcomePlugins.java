@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.welcome.impl.plugin;
+package io.orqueio.bpm.welcome.impl.plugin;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import org.camunda.bpm.welcome.impl.plugin.resources.WelcomePluginsRootResource;
-import org.camunda.bpm.welcome.plugin.spi.impl.AbstractWelcomePlugin;
+import io.orqueio.bpm.welcome.impl.plugin.resources.WelcomePluginsRootResource;
+import io.orqueio.bpm.welcome.plugin.spi.impl.AbstractWelcomePlugin;
 
 /**
  *

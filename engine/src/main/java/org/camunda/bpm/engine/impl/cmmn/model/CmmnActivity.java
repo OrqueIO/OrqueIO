@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.cmmn.model;
+package io.orqueio.bpm.engine.impl.cmmn.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.engine.delegate.VariableListener;
-import org.camunda.bpm.engine.impl.cmmn.behavior.CmmnActivityBehavior;
-import org.camunda.bpm.engine.impl.core.model.CoreActivity;
-import org.camunda.bpm.model.cmmn.instance.CmmnElement;
+import io.orqueio.bpm.engine.delegate.VariableListener;
+import io.orqueio.bpm.engine.impl.cmmn.behavior.CmmnActivityBehavior;
+import io.orqueio.bpm.engine.impl.core.model.CoreActivity;
+import io.orqueio.bpm.model.cmmn.instance.CmmnElement;
 
 /**
  * @author Roman Smirnov

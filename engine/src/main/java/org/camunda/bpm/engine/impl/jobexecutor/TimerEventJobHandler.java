@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.jobexecutor;
+package io.orqueio.bpm.engine.impl.jobexecutor;
 
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.impl.jobexecutor.TimerEventJobHandler.TimerJobConfiguration;
-import org.camunda.bpm.engine.impl.persistence.entity.JobEntity;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.impl.jobexecutor.TimerEventJobHandler.TimerJobConfiguration;
+import io.orqueio.bpm.engine.impl.persistence.entity.JobEntity;
 
 
 /**

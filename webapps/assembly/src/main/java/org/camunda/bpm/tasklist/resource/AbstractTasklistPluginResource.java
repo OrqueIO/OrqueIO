@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.tasklist.resource;
+package io.orqueio.bpm.tasklist.resource;
 
-import org.camunda.bpm.tasklist.Tasklist;
-import org.camunda.bpm.tasklist.plugin.spi.TasklistPlugin;
-import org.camunda.bpm.webapp.plugin.resource.AbstractAppPluginResource;
+import io.orqueio.bpm.tasklist.Tasklist;
+import io.orqueio.bpm.tasklist.plugin.spi.TasklistPlugin;
+import io.orqueio.bpm.webapp.plugin.resource.AbstractAppPluginResource;
 
 /**
  * Base class for implementing plugin REST resources for the admin application.

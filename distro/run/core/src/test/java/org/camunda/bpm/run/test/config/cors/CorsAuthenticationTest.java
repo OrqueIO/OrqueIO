@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.run.test.config.cors;
+package io.orqueio.bpm.run.test.config.cors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.identity.Group;
-import org.camunda.bpm.engine.impl.persistence.entity.GroupEntity;
-import org.camunda.bpm.run.test.AbstractRestTest;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.identity.Group;
+import io.orqueio.bpm.engine.impl.persistence.entity.GroupEntity;
+import io.orqueio.bpm.run.test.AbstractRestTest;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

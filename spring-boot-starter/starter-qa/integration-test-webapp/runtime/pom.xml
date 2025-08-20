@@ -8,7 +8,7 @@
   </description>
 
   <parent>
-    <groupId>org.camunda.bpm.springboot.project</groupId>
+    <groupId>io.orqueio.bpm.springboot.project</groupId>
     <artifactId>qa-webapp</artifactId>
     <version>7.24.0-SNAPSHOT</version>
   </parent>
@@ -37,27 +37,27 @@
 
         <!-- Web Applications -->
         <dependency>
-          <groupId>org.camunda.bpm.springboot</groupId>
+          <groupId>io.orqueio.bpm.springboot</groupId>
           <artifactId>camunda-bpm-spring-boot-starter-webapp</artifactId>
           <version>${project.version}</version>
         </dependency>
 
         <!-- REST API -->
         <dependency>
-          <groupId>org.camunda.bpm.springboot</groupId>
+          <groupId>io.orqueio.bpm.springboot</groupId>
           <artifactId>camunda-bpm-spring-boot-starter-rest</artifactId>
           <version>${project.version}</version>
         </dependency>
 
         <dependency>
-          <groupId>org.camunda.bpm.qa</groupId>
+          <groupId>io.orqueio.bpm.qa</groupId>
           <artifactId>camunda-qa-integration-tests-webapps</artifactId>
           <version>${project.version}</version>
           <scope>test</scope>
         </dependency>
 
         <dependency>
-          <groupId>org.camunda.bpm.springboot.project</groupId>
+          <groupId>io.orqueio.bpm.springboot.project</groupId>
           <artifactId>qa-webapp-invoice-example</artifactId>
           <version>${project.version}</version>
         </dependency>
@@ -125,7 +125,7 @@
             <artifactId>spring-boot-maven-plugin</artifactId>
             <version>${version.spring-boot}</version>
             <configuration>
-              <mainClass>org.camunda.bpm.qa.Application</mainClass>
+              <mainClass>io.orqueio.bpm.qa.Application</mainClass>
             </configuration>
             <executions>
               <execution>
@@ -148,7 +148,7 @@
             <version>3.0.0-M3</version>
             <configuration>
               <dependenciesToScan>
-                <dependency>org.camunda.bpm.qa:camunda-qa-integration-tests-webapps</dependency>
+                <dependency>io.orqueio.bpm.qa:camunda-qa-integration-tests-webapps</dependency>
               </dependenciesToScan>
               <skipTests>false</skipTests>
             </configuration>

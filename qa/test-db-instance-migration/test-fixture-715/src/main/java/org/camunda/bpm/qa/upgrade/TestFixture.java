@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa.upgrade;
+package io.orqueio.bpm.qa.upgrade;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.ProcessEngineConfiguration;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.qa.upgrade.batch.CreateSetProcessInstanceVariablesBatchScenario;
-import org.camunda.bpm.qa.upgrade.migration.CreateSetVariablesMigrationBatchScenario;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.ProcessEngineConfiguration;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.qa.upgrade.batch.CreateSetProcessInstanceVariablesBatchScenario;
+import io.orqueio.bpm.qa.upgrade.migration.CreateSetVariablesMigrationBatchScenario;
 
 public class TestFixture {
 

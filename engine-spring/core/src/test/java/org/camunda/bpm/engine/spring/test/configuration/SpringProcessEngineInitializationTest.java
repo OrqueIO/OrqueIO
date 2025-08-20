@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.spring.test.configuration;
+package io.orqueio.bpm.engine.spring.test.configuration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.net.URL;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.ProcessEngines;
-import org.camunda.bpm.engine.impl.util.ReflectUtil;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.ProcessEngines;
+import io.orqueio.bpm.engine.impl.util.ReflectUtil;
 import org.junit.After;
 import org.junit.Test;
 

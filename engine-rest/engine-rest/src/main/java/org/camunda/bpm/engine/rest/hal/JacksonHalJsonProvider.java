@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.hal;
+package io.orqueio.bpm.engine.rest.hal;
 
 
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;

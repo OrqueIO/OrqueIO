@@ -14,18 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.bpmn.impl;
+package io.orqueio.bpm.model.bpmn.impl;
 
-import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN20_NS;
-import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_20_SCHEMA_LOCATION;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.BPMN20_NS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_20_SCHEMA_LOCATION;
 
 import java.io.InputStream;
 
-import org.camunda.bpm.model.bpmn.Bpmn;
-import org.camunda.bpm.model.xml.impl.ModelImpl;
-import org.camunda.bpm.model.xml.impl.parser.AbstractModelParser;
-import org.camunda.bpm.model.xml.impl.util.ReflectUtil;
-import org.camunda.bpm.model.xml.instance.DomDocument;
+import io.orqueio.bpm.model.bpmn.Bpmn;
+import io.orqueio.bpm.model.xml.impl.ModelImpl;
+import io.orqueio.bpm.model.xml.impl.parser.AbstractModelParser;
+import io.orqueio.bpm.model.xml.impl.util.ReflectUtil;
+import io.orqueio.bpm.model.xml.instance.DomDocument;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.validation.SchemaFactory;

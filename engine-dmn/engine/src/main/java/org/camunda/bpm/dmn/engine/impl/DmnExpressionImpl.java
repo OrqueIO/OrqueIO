@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.engine.impl;
+package io.orqueio.bpm.dmn.engine.impl;
 
 import javax.script.CompiledScript;
 
-import org.camunda.bpm.dmn.engine.impl.spi.el.ElExpression;
-import org.camunda.bpm.dmn.engine.impl.spi.type.DmnTypeDefinition;
+import io.orqueio.bpm.dmn.engine.impl.spi.el.ElExpression;
+import io.orqueio.bpm.dmn.engine.impl.spi.type.DmnTypeDefinition;
 
 public class DmnExpressionImpl implements CachedCompiledScriptSupport, CachedExpressionSupport {
 

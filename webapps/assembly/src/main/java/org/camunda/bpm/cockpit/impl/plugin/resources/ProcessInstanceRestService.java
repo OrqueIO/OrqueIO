@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.cockpit.impl.plugin.resources;
+package io.orqueio.bpm.cockpit.impl.plugin.resources;
 
-import static org.camunda.bpm.engine.authorization.Permissions.READ;
-import static org.camunda.bpm.engine.authorization.Permissions.READ_INSTANCE;
-import static org.camunda.bpm.engine.authorization.Resources.PROCESS_DEFINITION;
-import static org.camunda.bpm.engine.authorization.Resources.PROCESS_INSTANCE;
+import static io.orqueio.bpm.engine.authorization.Permissions.READ;
+import static io.orqueio.bpm.engine.authorization.Permissions.READ_INSTANCE;
+import static io.orqueio.bpm.engine.authorization.Resources.PROCESS_DEFINITION;
+import static io.orqueio.bpm.engine.authorization.Resources.PROCESS_INSTANCE;
 
 import java.util.List;
 
@@ -35,16 +35,16 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.camunda.bpm.cockpit.impl.plugin.base.dto.ProcessInstanceDto;
-import org.camunda.bpm.cockpit.impl.plugin.base.dto.query.ProcessInstanceQueryDto;
-import org.camunda.bpm.cockpit.impl.plugin.base.sub.resources.ProcessInstanceResource;
-import org.camunda.bpm.cockpit.plugin.resource.AbstractPluginResource;
-import org.camunda.bpm.engine.impl.ProcessEngineImpl;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.history.HistoryLevel;
-import org.camunda.bpm.engine.impl.interceptor.Command;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.rest.dto.CountResultDto;
+import io.orqueio.bpm.cockpit.impl.plugin.base.dto.ProcessInstanceDto;
+import io.orqueio.bpm.cockpit.impl.plugin.base.dto.query.ProcessInstanceQueryDto;
+import io.orqueio.bpm.cockpit.impl.plugin.base.sub.resources.ProcessInstanceResource;
+import io.orqueio.bpm.cockpit.plugin.resource.AbstractPluginResource;
+import io.orqueio.bpm.engine.impl.ProcessEngineImpl;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.history.HistoryLevel;
+import io.orqueio.bpm.engine.impl.interceptor.Command;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.rest.dto.CountResultDto;
 
 public class ProcessInstanceRestService extends AbstractPluginResource {
 

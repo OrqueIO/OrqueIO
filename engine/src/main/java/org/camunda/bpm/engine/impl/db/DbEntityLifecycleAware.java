@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.db;
+package io.orqueio.bpm.engine.impl.db;
 
 /**
  * Interface which can be implemented by {@link DbEntity DbEntities} which

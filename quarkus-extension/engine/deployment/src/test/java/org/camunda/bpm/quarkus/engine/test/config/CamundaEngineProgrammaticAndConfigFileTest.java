@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.quarkus.engine.test.config;
+package io.orqueio.bpm.quarkus.engine.test.config;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -24,12 +24,12 @@ import jakarta.inject.Inject;
 import java.sql.SQLException;
 
 import io.quarkus.test.QuarkusUnitTest;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.jobexecutor.JobExecutor;
-import org.camunda.bpm.quarkus.engine.extension.CamundaEngineConfig;
-import org.camunda.bpm.quarkus.engine.extension.QuarkusProcessEngineConfiguration;
-import org.camunda.bpm.quarkus.engine.test.helper.ProcessEngineAwareExtension;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.jobexecutor.JobExecutor;
+import io.orqueio.bpm.quarkus.engine.extension.CamundaEngineConfig;
+import io.orqueio.bpm.quarkus.engine.extension.QuarkusProcessEngineConfiguration;
+import io.orqueio.bpm.quarkus.engine.test.helper.ProcessEngineAwareExtension;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.jupiter.api.Test;

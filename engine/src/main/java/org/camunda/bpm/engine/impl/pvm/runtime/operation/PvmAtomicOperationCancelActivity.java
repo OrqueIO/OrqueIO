@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.pvm.runtime.operation;
+package io.orqueio.bpm.engine.impl.pvm.runtime.operation;
 
-import org.camunda.bpm.engine.ActivityTypes;
-import org.camunda.bpm.engine.impl.bpmn.helper.BpmnProperties;
-import org.camunda.bpm.engine.impl.core.model.CoreModelElement;
-import org.camunda.bpm.engine.impl.pvm.PvmActivity;
-import org.camunda.bpm.engine.impl.pvm.process.ActivityStartBehavior;
-import org.camunda.bpm.engine.impl.pvm.runtime.LegacyBehavior;
-import org.camunda.bpm.engine.impl.pvm.runtime.PvmExecutionImpl;
+import io.orqueio.bpm.engine.ActivityTypes;
+import io.orqueio.bpm.engine.impl.bpmn.helper.BpmnProperties;
+import io.orqueio.bpm.engine.impl.core.model.CoreModelElement;
+import io.orqueio.bpm.engine.impl.pvm.PvmActivity;
+import io.orqueio.bpm.engine.impl.pvm.process.ActivityStartBehavior;
+import io.orqueio.bpm.engine.impl.pvm.runtime.LegacyBehavior;
+import io.orqueio.bpm.engine.impl.pvm.runtime.PvmExecutionImpl;
 
 /**
  * Implements {@link ActivityStartBehavior#CANCEL_EVENT_SCOPE}.

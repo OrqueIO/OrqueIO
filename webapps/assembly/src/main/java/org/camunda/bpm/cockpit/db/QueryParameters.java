@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.cockpit.db;
+package io.orqueio.bpm.cockpit.db;
 
 /**
  * Typed query parameters for usage in cockpit plugins
  *
  * @author Nico Rehwaldt
  */
-public class QueryParameters extends org.camunda.bpm.webapp.db.QueryParameters {
+public class QueryParameters extends io.orqueio.bpm.webapp.db.QueryParameters {
 
 }

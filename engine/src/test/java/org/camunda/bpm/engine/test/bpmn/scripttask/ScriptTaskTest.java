@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.bpmn.scripttask;
+package io.orqueio.bpm.engine.test.bpmn.scripttask;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -28,15 +28,15 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.ScriptCompilationException;
-import org.camunda.bpm.engine.ScriptEvaluationException;
-import org.camunda.bpm.engine.exception.NullValueException;
-import org.camunda.bpm.engine.impl.util.CollectionUtil;
-import org.camunda.bpm.engine.repository.ProcessDefinition;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.task.Task;
-import org.camunda.bpm.model.bpmn.Bpmn;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.ScriptCompilationException;
+import io.orqueio.bpm.engine.ScriptEvaluationException;
+import io.orqueio.bpm.engine.exception.NullValueException;
+import io.orqueio.bpm.engine.impl.util.CollectionUtil;
+import io.orqueio.bpm.engine.repository.ProcessDefinition;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.task.Task;
+import io.orqueio.bpm.model.bpmn.Bpmn;
 import org.junit.Test;
 
 /**
@@ -478,7 +478,7 @@ public class ScriptTaskTest extends AbstractScriptTaskTest {
     Date date = (Date) runtimeService.getVariable(pi.getId(), "date");
     assertEquals(0, date.getTime());
 
-    deployProcess(JAVASCRIPT, "execution.setVariable('myVar', new org.camunda.bpm.engine.test.bpmn.scripttask.MySerializable('test'));");
+    deployProcess(JAVASCRIPT, "execution.setVariable('myVar', new io.orqueio.bpm.engine.test.bpmn.scripttask.MySerializable('test'));");
 
     pi = runtimeService.startProcessInstanceByKey("testProcess");
 
@@ -495,8 +495,8 @@ public class ScriptTaskTest extends AbstractScriptTaskTest {
     Date date = (Date) runtimeService.getVariable(pi.getId(), "date");
     assertEquals(0, date.getTime());
 
-    deployProcess(PYTHON, "import org.camunda.bpm.engine.test.bpmn.scripttask.MySerializable\n" +
-      "execution.setVariable('myVar', org.camunda.bpm.engine.test.bpmn.scripttask.MySerializable('test'));");
+    deployProcess(PYTHON, "import io.orqueio.bpm.engine.test.bpmn.scripttask.MySerializable\n" +
+      "execution.setVariable('myVar', io.orqueio.bpm.engine.test.bpmn.scripttask.MySerializable('test'));");
 
     pi = runtimeService.startProcessInstanceByKey("testProcess");
 
@@ -513,7 +513,7 @@ public class ScriptTaskTest extends AbstractScriptTaskTest {
     Date date = (Date) runtimeService.getVariable(pi.getId(), "date");
     assertEquals(0, date.getTime());
 
-    deployProcess(RUBY, "$execution.setVariable('myVar', org.camunda.bpm.engine.test.bpmn.scripttask.MySerializable.new('test'));");
+    deployProcess(RUBY, "$execution.setVariable('myVar', io.orqueio.bpm.engine.test.bpmn.scripttask.MySerializable.new('test'));");
 
     pi = runtimeService.startProcessInstanceByKey("testProcess");
 
@@ -530,7 +530,7 @@ public class ScriptTaskTest extends AbstractScriptTaskTest {
     Date date = (Date) runtimeService.getVariable(pi.getId(), "date");
     assertEquals(0, date.getTime());
 
-    deployProcess(GROOVY, "execution.setVariable('myVar', new org.camunda.bpm.engine.test.bpmn.scripttask.MySerializable('test'));");
+    deployProcess(GROOVY, "execution.setVariable('myVar', new io.orqueio.bpm.engine.test.bpmn.scripttask.MySerializable('test'));");
 
     pi = runtimeService.startProcessInstanceByKey("testProcess");
 
@@ -609,7 +609,7 @@ public class ScriptTaskTest extends AbstractScriptTaskTest {
     assertFalse(processEngineConfiguration.isAutoStoreScriptVariables());
   }
 
-  @org.camunda.bpm.engine.test.Deployment
+  @io.orqueio.bpm.engine.test.Deployment
   @Test
   public void testPreviousTaskShouldNotHandleException(){
     try {
@@ -625,7 +625,7 @@ public class ScriptTaskTest extends AbstractScriptTaskTest {
     }
   }
 
-  @org.camunda.bpm.engine.test.Deployment
+  @io.orqueio.bpm.engine.test.Deployment
   @Test
   public void testSetScriptResultToProcessVariable() {
     Map<String, Object> variables = new HashMap<>();
@@ -638,7 +638,7 @@ public class ScriptTaskTest extends AbstractScriptTaskTest {
     assertEquals(pi.getId(), runtimeService.getVariable(pi.getId(), "newProcessVariableName"));
   }
 
-  @org.camunda.bpm.engine.test.Deployment
+  @io.orqueio.bpm.engine.test.Deployment
   @Test
   public void testGroovyScriptExecution() {
     try {
@@ -655,7 +655,7 @@ public class ScriptTaskTest extends AbstractScriptTaskTest {
     }
   }
 
-  @org.camunda.bpm.engine.test.Deployment
+  @io.orqueio.bpm.engine.test.Deployment
   @Test
   public void testGroovySetVariableThroughExecutionInScript() {
     ProcessInstance pi = runtimeService.startProcessInstanceByKey("setScriptVariableThroughExecution");
@@ -666,7 +666,7 @@ public class ScriptTaskTest extends AbstractScriptTaskTest {
     assertEquals("test123", runtimeService.getVariable(pi.getId(), "myVar"));
   }
 
-  @org.camunda.bpm.engine.test.Deployment
+  @io.orqueio.bpm.engine.test.Deployment
   @Test
   public void testScriptEvaluationException() {
     ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery().processDefinitionKey("Process_1").singleResult();

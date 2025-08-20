@@ -14,18 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.deployment.callbacks.apps;
+package io.orqueio.bpm.integrationtest.deployment.callbacks.apps;
 
 import java.util.List;
 
-import org.camunda.bpm.application.PostDeploy;
-import org.camunda.bpm.application.ProcessApplication;
-import org.camunda.bpm.application.ProcessApplicationInfo;
-import org.camunda.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.application.PostDeploy;
+import io.orqueio.bpm.application.ProcessApplication;
+import io.orqueio.bpm.application.ProcessApplicationInfo;
+import io.orqueio.bpm.engine.ProcessEngine;
 
 @ProcessApplication
 // Using fully-qualified class name instead of import statement to allow for automatic Jakarta transformation
-public class PostDeployInjectApp extends org.camunda.bpm.application.impl.ServletProcessApplication {
+public class PostDeployInjectApp extends io.orqueio.bpm.application.impl.ServletProcessApplication {
   
   public static ProcessEngine processEngine;
   public static ProcessApplicationInfo processApplicationInfo;

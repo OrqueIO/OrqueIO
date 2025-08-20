@@ -14,22 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.exception;
+package io.orqueio.bpm.engine.rest.exception;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import org.camunda.bpm.engine.AuthorizationException;
-import org.camunda.bpm.engine.BadUserRequestException;
-import org.camunda.bpm.engine.ParseException;
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.migration.MigratingProcessInstanceValidationException;
-import org.camunda.bpm.engine.migration.MigrationPlanValidationException;
-import org.camunda.bpm.engine.rest.dto.AuthorizationExceptionDto;
-import org.camunda.bpm.engine.rest.dto.ExceptionDto;
-import org.camunda.bpm.engine.rest.dto.ParseExceptionDto;
-import org.camunda.bpm.engine.rest.dto.migration.MigratingProcessInstanceValidationExceptionDto;
-import org.camunda.bpm.engine.rest.dto.migration.MigrationPlanValidationExceptionDto;
+import io.orqueio.bpm.engine.AuthorizationException;
+import io.orqueio.bpm.engine.BadUserRequestException;
+import io.orqueio.bpm.engine.ParseException;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.migration.MigratingProcessInstanceValidationException;
+import io.orqueio.bpm.engine.migration.MigrationPlanValidationException;
+import io.orqueio.bpm.engine.rest.dto.AuthorizationExceptionDto;
+import io.orqueio.bpm.engine.rest.dto.ExceptionDto;
+import io.orqueio.bpm.engine.rest.dto.ParseExceptionDto;
+import io.orqueio.bpm.engine.rest.dto.migration.MigratingProcessInstanceValidationExceptionDto;
+import io.orqueio.bpm.engine.rest.dto.migration.MigrationPlanValidationExceptionDto;
 
 /**
  * @author Svetlana Dorokhova.

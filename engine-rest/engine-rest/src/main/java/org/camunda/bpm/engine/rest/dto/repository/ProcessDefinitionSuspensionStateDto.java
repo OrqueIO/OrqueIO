@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.dto.repository;
+package io.orqueio.bpm.engine.rest.dto.repository;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.RepositoryService;
-import org.camunda.bpm.engine.impl.calendar.DateTimeUtil;
-import org.camunda.bpm.engine.rest.dto.SuspensionStateDto;
-import org.camunda.bpm.engine.rest.exception.InvalidRequestException;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.RepositoryService;
+import io.orqueio.bpm.engine.impl.calendar.DateTimeUtil;
+import io.orqueio.bpm.engine.rest.dto.SuspensionStateDto;
+import io.orqueio.bpm.engine.rest.exception.InvalidRequestException;
 
 import javax.ws.rs.core.Response.Status;
 import java.util.Date;

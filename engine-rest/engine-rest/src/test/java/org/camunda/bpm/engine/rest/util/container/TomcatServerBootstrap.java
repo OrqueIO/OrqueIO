@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.util.container;
+package io.orqueio.bpm.engine.rest.util.container;
 
 import java.io.File;
 import java.util.Properties;
@@ -23,8 +23,8 @@ import java.util.logging.Logger;
 import org.apache.catalina.LifecycleException;
 import org.apache.catalina.LifecycleState;
 import org.apache.catalina.startup.Tomcat;
-import org.camunda.bpm.engine.rest.spi.ProcessEngineProvider;
-import org.camunda.bpm.engine.rest.spi.impl.MockedProcessEngineProvider;
+import io.orqueio.bpm.engine.rest.spi.ProcessEngineProvider;
+import io.orqueio.bpm.engine.rest.spi.impl.MockedProcessEngineProvider;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.ClassLoaderAsset;
 import org.jboss.shrinkwrap.api.exporter.ZipExporter;
@@ -96,7 +96,7 @@ public abstract class TomcatServerBootstrap extends AbstractServerBootstrap {
 
         .addAsServiceProvider(ProcessEngineProvider.class, MockedProcessEngineProvider.class)
         .add(new ClassLoaderAsset("runtime/tomcat/context.xml"), "META-INF/context.xml")
-        .addPackages(true, "org.camunda.bpm.engine.rest");
+        .addPackages(true, "io.orqueio.bpm.engine.rest");
 
     addRuntimeSpecificLibraries(wa, resolver);
     wa.setWebXML(webXmlPath);

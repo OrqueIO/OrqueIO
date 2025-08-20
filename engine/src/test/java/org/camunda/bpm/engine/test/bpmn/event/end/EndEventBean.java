@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.bpmn.event.end;
+package io.orqueio.bpm.engine.test.bpmn.event.end;
 
 import java.io.Serializable;
 
-import org.camunda.bpm.engine.delegate.JavaDelegate;
+import io.orqueio.bpm.engine.delegate.JavaDelegate;
 
 /**
  * @author Kristin Polenz

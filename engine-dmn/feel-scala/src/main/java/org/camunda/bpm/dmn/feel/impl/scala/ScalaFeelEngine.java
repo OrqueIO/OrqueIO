@@ -14,22 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.feel.impl.scala;
+package io.orqueio.bpm.dmn.feel.impl.scala;
 
-import org.camunda.bpm.dmn.feel.impl.FeelEngine;
-import org.camunda.bpm.dmn.feel.impl.scala.function.CustomFunctionTransformer;
-import org.camunda.bpm.dmn.feel.impl.scala.function.FeelCustomFunctionProvider;
-import org.camunda.bpm.dmn.feel.impl.scala.spin.SpinValueMapperFactory;
-import org.camunda.bpm.engine.variable.context.VariableContext;
-import org.camunda.feel.FeelEngine$;
-import org.camunda.feel.FeelEngine.Builder;
-import org.camunda.feel.FeelEngine.Failure;
-import org.camunda.feel.context.CustomContext;
-import org.camunda.feel.context.VariableProvider;
-import org.camunda.feel.context.VariableProvider.StaticVariableProvider;
-import org.camunda.feel.impl.JavaValueMapper;
-import org.camunda.feel.valuemapper.CustomValueMapper;
-import org.camunda.feel.valuemapper.ValueMapper.CompositeValueMapper;
+import io.orqueio.bpm.dmn.feel.impl.FeelEngine;
+import io.orqueio.bpm.dmn.feel.impl.scala.function.CustomFunctionTransformer;
+import io.orqueio.bpm.dmn.feel.impl.scala.function.FeelCustomFunctionProvider;
+import io.orqueio.bpm.dmn.feel.impl.scala.spin.SpinValueMapperFactory;
+import io.orqueio.bpm.engine.variable.context.VariableContext;
+import io.orqueio.feel.FeelEngine$;
+import io.orqueio.feel.FeelEngine.Builder;
+import io.orqueio.feel.FeelEngine.Failure;
+import io.orqueio.feel.context.CustomContext;
+import io.orqueio.feel.context.VariableProvider;
+import io.orqueio.feel.context.VariableProvider.StaticVariableProvider;
+import io.orqueio.feel.impl.JavaValueMapper;
+import io.orqueio.feel.valuemapper.CustomValueMapper;
+import io.orqueio.feel.valuemapper.ValueMapper.CompositeValueMapper;
 import camundajar.impl.scala.collection.immutable.List;
 import camundajar.impl.scala.collection.immutable.Map;
 import camundajar.impl.scala.runtime.BoxesRunTime;
@@ -39,7 +39,7 @@ import camundajar.impl.scala.util.Right;
 
 import java.util.Arrays;
 
-import static org.camunda.feel.context.VariableProvider.CompositeVariableProvider;
+import static io.orqueio.feel.context.VariableProvider.CompositeVariableProvider;
 import static camundajar.impl.scala.jdk.CollectionConverters.ListHasAsScala;
 
 public class ScalaFeelEngine implements FeelEngine {
@@ -48,7 +48,7 @@ public class ScalaFeelEngine implements FeelEngine {
 
   protected static final ScalaFeelLogger LOGGER = ScalaFeelLogger.LOGGER;
 
-  protected org.camunda.feel.FeelEngine feelEngine;
+  protected io.orqueio.feel.FeelEngine feelEngine;
 
   public ScalaFeelEngine(java.util.List<FeelCustomFunctionProvider> functionProviders) {
     List<CustomValueMapper> valueMappers = getValueMappers();
@@ -145,7 +145,7 @@ public class ScalaFeelEngine implements FeelEngine {
     return ListHasAsScala(list).asScala().toList();
   }
 
-  protected org.camunda.feel.FeelEngine buildFeelEngine(CustomFunctionTransformer transformer,
+  protected io.orqueio.feel.FeelEngine buildFeelEngine(CustomFunctionTransformer transformer,
                                                         CompositeValueMapper valueMapper) {
     return new Builder()
       .functionProvider(transformer)

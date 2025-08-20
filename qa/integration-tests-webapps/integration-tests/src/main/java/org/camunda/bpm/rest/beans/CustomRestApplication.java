@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.rest.beans;
+package io.orqueio.bpm.rest.beans;
 
-import org.camunda.bpm.engine.rest.impl.CamundaRestResources;
+import io.orqueio.bpm.engine.rest.impl.CamundaRestResources;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;

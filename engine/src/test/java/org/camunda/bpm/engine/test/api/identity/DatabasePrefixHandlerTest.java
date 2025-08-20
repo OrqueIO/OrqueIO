@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.identity;
+package io.orqueio.bpm.engine.test.api.identity;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.camunda.bpm.engine.impl.digest.DatabasePrefixHandler;
+import io.orqueio.bpm.engine.impl.digest.DatabasePrefixHandler;
 import org.junit.Before;
 import org.junit.Test;
 

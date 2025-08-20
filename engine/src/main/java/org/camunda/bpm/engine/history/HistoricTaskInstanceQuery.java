@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.history;
+package io.orqueio.bpm.engine.history;
 
 import java.io.Serializable;
 import java.util.Date;
 
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.query.Query;
-import org.camunda.bpm.engine.task.Task;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.query.Query;
+import io.orqueio.bpm.engine.task.Task;
 
 
 /**

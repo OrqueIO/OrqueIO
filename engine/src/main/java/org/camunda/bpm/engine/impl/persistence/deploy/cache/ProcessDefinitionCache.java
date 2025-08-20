@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.persistence.deploy.cache;
+package io.orqueio.bpm.engine.impl.persistence.deploy.cache;
 
-import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.engine.impl.persistence.AbstractResourceDefinitionManager;
-import org.camunda.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity;
+import io.orqueio.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.impl.persistence.AbstractResourceDefinitionManager;
+import io.orqueio.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity;
 
-import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
+import static io.orqueio.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
 
-import org.camunda.bpm.engine.exception.NotFoundException;
+import io.orqueio.bpm.engine.exception.NotFoundException;
 
 /**
  * @author: Johannes Heinemann

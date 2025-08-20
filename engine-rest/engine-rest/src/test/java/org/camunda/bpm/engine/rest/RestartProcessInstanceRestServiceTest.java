@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest;
+package io.orqueio.bpm.engine.rest;
 
 import static io.restassured.RestAssured.given;
-import static org.camunda.bpm.engine.rest.helper.MockProvider.createMockBatch;
+import static io.orqueio.bpm.engine.rest.helper.MockProvider.createMockBatch;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Mockito.anyList;
 import static org.mockito.Mockito.anyString;
@@ -30,18 +30,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.ws.rs.core.Response.Status;
-import org.camunda.bpm.engine.BadUserRequestException;
-import org.camunda.bpm.engine.HistoryService;
-import org.camunda.bpm.engine.RuntimeService;
-import org.camunda.bpm.engine.batch.Batch;
-import org.camunda.bpm.engine.history.HistoricProcessInstanceQuery;
-import org.camunda.bpm.engine.impl.HistoricProcessInstanceQueryImpl;
-import org.camunda.bpm.engine.rest.dto.history.HistoricProcessInstanceQueryDto;
-import org.camunda.bpm.engine.rest.exception.InvalidRequestException;
-import org.camunda.bpm.engine.rest.helper.MockProvider;
-import org.camunda.bpm.engine.rest.util.ModificationInstructionBuilder;
-import org.camunda.bpm.engine.rest.util.container.TestContainerRule;
-import org.camunda.bpm.engine.runtime.RestartProcessInstanceBuilder;
+import io.orqueio.bpm.engine.BadUserRequestException;
+import io.orqueio.bpm.engine.HistoryService;
+import io.orqueio.bpm.engine.RuntimeService;
+import io.orqueio.bpm.engine.batch.Batch;
+import io.orqueio.bpm.engine.history.HistoricProcessInstanceQuery;
+import io.orqueio.bpm.engine.impl.HistoricProcessInstanceQueryImpl;
+import io.orqueio.bpm.engine.rest.dto.history.HistoricProcessInstanceQueryDto;
+import io.orqueio.bpm.engine.rest.exception.InvalidRequestException;
+import io.orqueio.bpm.engine.rest.helper.MockProvider;
+import io.orqueio.bpm.engine.rest.util.ModificationInstructionBuilder;
+import io.orqueio.bpm.engine.rest.util.container.TestContainerRule;
+import io.orqueio.bpm.engine.runtime.RestartProcessInstanceBuilder;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;

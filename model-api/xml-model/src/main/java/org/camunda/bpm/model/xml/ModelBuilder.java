@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.xml;
+package io.orqueio.bpm.model.xml;
 
-import org.camunda.bpm.model.xml.impl.ModelBuilderImpl;
-import org.camunda.bpm.model.xml.instance.ModelElementInstance;
-import org.camunda.bpm.model.xml.type.ModelElementType;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
+import io.orqueio.bpm.model.xml.impl.ModelBuilderImpl;
+import io.orqueio.bpm.model.xml.instance.ModelElementInstance;
+import io.orqueio.bpm.model.xml.type.ModelElementType;
+import io.orqueio.bpm.model.xml.type.ModelElementTypeBuilder;
 
 /**
  * This builder is used to define and create a new model.

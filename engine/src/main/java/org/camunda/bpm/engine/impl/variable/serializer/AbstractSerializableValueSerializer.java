@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.variable.serializer;
+package io.orqueio.bpm.engine.impl.variable.serializer;
 
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.impl.digest._apacheCommonsCodec.Base64;
-import org.camunda.bpm.engine.impl.util.StringUtil;
-import org.camunda.bpm.engine.variable.impl.value.UntypedValueImpl;
-import org.camunda.bpm.engine.variable.type.SerializableValueType;
-import org.camunda.bpm.engine.variable.value.SerializableValue;
-import org.camunda.bpm.engine.variable.value.TypedValue;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.impl.digest._apacheCommonsCodec.Base64;
+import io.orqueio.bpm.engine.impl.util.StringUtil;
+import io.orqueio.bpm.engine.variable.impl.value.UntypedValueImpl;
+import io.orqueio.bpm.engine.variable.type.SerializableValueType;
+import io.orqueio.bpm.engine.variable.value.SerializableValue;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
 
 /**
  * @author Roman Smirnov

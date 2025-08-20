@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client;
+package io.orqueio.bpm.client;
 
 import java.util.function.Consumer;
 import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
-import org.camunda.bpm.client.backoff.BackoffStrategy;
-import org.camunda.bpm.client.backoff.ExponentialBackoffStrategy;
-import org.camunda.bpm.client.exception.ExternalTaskClientException;
-import org.camunda.bpm.client.interceptor.ClientRequestInterceptor;
+import io.orqueio.bpm.client.backoff.BackoffStrategy;
+import io.orqueio.bpm.client.backoff.ExponentialBackoffStrategy;
+import io.orqueio.bpm.client.exception.ExternalTaskClientException;
+import io.orqueio.bpm.client.interceptor.ClientRequestInterceptor;
 
 /**
  * <p>A fluent builder to configure the Camunda client</p>
@@ -193,10 +193,10 @@ public interface ExternalTaskClientBuilder {
   ExternalTaskClientBuilder disableAutoFetching();
 
   /**
-   * Adds a custom strategy to the client for defining the org.camunda.bpm.client.backoff between two requests.
+   * Adds a custom strategy to the client for defining the io.orqueio.bpm.client.backoff between two requests.
    * This information is optional. By default {@link ExponentialBackoffStrategy} is applied.
    *
-   * @param backoffStrategy which realizes a custom org.camunda.bpm.client.backoff strategy
+   * @param backoffStrategy which realizes a custom io.orqueio.bpm.client.backoff strategy
    * @return the builder
    */
   ExternalTaskClientBuilder backoffStrategy(BackoffStrategy backoffStrategy);

@@ -14,23 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.cockpit.plugin.base.authorization;
+package io.orqueio.bpm.cockpit.plugin.base.authorization;
 
-import static org.camunda.bpm.engine.authorization.Authorization.ANY;
-import static org.camunda.bpm.engine.authorization.Permissions.READ;
-import static org.camunda.bpm.engine.authorization.Permissions.READ_INSTANCE;
-import static org.camunda.bpm.engine.authorization.Resources.PROCESS_DEFINITION;
-import static org.camunda.bpm.engine.authorization.Resources.PROCESS_INSTANCE;
+import static io.orqueio.bpm.engine.authorization.Authorization.ANY;
+import static io.orqueio.bpm.engine.authorization.Permissions.READ;
+import static io.orqueio.bpm.engine.authorization.Permissions.READ_INSTANCE;
+import static io.orqueio.bpm.engine.authorization.Resources.PROCESS_DEFINITION;
+import static io.orqueio.bpm.engine.authorization.Resources.PROCESS_INSTANCE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.cockpit.impl.plugin.base.dto.ProcessDefinitionDto;
-import org.camunda.bpm.cockpit.impl.plugin.base.dto.query.ProcessDefinitionQueryDto;
-import org.camunda.bpm.cockpit.impl.plugin.base.sub.resources.ProcessDefinitionResource;
-import org.camunda.bpm.engine.test.Deployment;
+import io.orqueio.bpm.cockpit.impl.plugin.base.dto.ProcessDefinitionDto;
+import io.orqueio.bpm.cockpit.impl.plugin.base.dto.query.ProcessDefinitionQueryDto;
+import io.orqueio.bpm.cockpit.impl.plugin.base.sub.resources.ProcessDefinitionResource;
+import io.orqueio.bpm.engine.test.Deployment;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

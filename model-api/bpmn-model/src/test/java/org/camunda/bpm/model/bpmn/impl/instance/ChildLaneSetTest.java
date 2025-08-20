@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.bpmn.impl.instance;
+package io.orqueio.bpm.model.bpmn.impl.instance;
 
-import org.camunda.bpm.model.bpmn.instance.BpmnModelElementInstanceTest;
-import org.camunda.bpm.model.bpmn.instance.LaneSet;
+import io.orqueio.bpm.model.bpmn.instance.BpmnModelElementInstanceTest;
+import io.orqueio.bpm.model.bpmn.instance.LaneSet;
 
 import java.util.Collection;
 

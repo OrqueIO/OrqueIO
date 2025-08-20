@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl;
+package io.orqueio.bpm.engine.impl;
 
 import java.util.Map;
 
-import org.camunda.bpm.dmn.engine.DmnDecisionTableResult;
-import org.camunda.bpm.engine.DecisionService;
-import org.camunda.bpm.engine.dmn.DecisionEvaluationBuilder;
-import org.camunda.bpm.engine.dmn.DecisionsEvaluationBuilder;
-import org.camunda.bpm.engine.impl.dmn.DecisionEvaluationBuilderImpl;
-import org.camunda.bpm.engine.impl.dmn.DecisionTableEvaluationBuilderImpl;
+import io.orqueio.bpm.dmn.engine.DmnDecisionTableResult;
+import io.orqueio.bpm.engine.DecisionService;
+import io.orqueio.bpm.engine.dmn.DecisionEvaluationBuilder;
+import io.orqueio.bpm.engine.dmn.DecisionsEvaluationBuilder;
+import io.orqueio.bpm.engine.impl.dmn.DecisionEvaluationBuilderImpl;
+import io.orqueio.bpm.engine.impl.dmn.DecisionTableEvaluationBuilderImpl;
 
 /**
  * @author Philipp Ossler

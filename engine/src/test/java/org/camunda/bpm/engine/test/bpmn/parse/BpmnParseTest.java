@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.bpmn.parse;
+package io.orqueio.bpm.engine.test.bpmn.parse;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -29,46 +29,46 @@ import static org.junit.Assert.fail;
 
 import java.util.List;
 
-import org.camunda.bpm.engine.ActivityTypes;
-import org.camunda.bpm.engine.ParseException;
-import org.camunda.bpm.engine.Problem;
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.RepositoryService;
-import org.camunda.bpm.engine.RuntimeService;
-import org.camunda.bpm.engine.impl.bpmn.behavior.BoundaryConditionalEventActivityBehavior;
-import org.camunda.bpm.engine.impl.bpmn.behavior.BoundaryEventActivityBehavior;
-import org.camunda.bpm.engine.impl.bpmn.behavior.CompensationEventActivityBehavior;
-import org.camunda.bpm.engine.impl.bpmn.behavior.EventSubProcessStartConditionalEventActivityBehavior;
-import org.camunda.bpm.engine.impl.bpmn.behavior.EventSubProcessStartEventActivityBehavior;
-import org.camunda.bpm.engine.impl.bpmn.behavior.IntermediateConditionalEventBehavior;
-import org.camunda.bpm.engine.impl.bpmn.behavior.NoneStartEventActivityBehavior;
-import org.camunda.bpm.engine.impl.bpmn.behavior.ThrowEscalationEventActivityBehavior;
-import org.camunda.bpm.engine.impl.bpmn.helper.BpmnProperties;
-import org.camunda.bpm.engine.impl.bpmn.parser.BpmnParse;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.engine.impl.interceptor.Command;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.interceptor.CommandExecutor;
-import org.camunda.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity;
-import org.camunda.bpm.engine.impl.pvm.PvmActivity;
-import org.camunda.bpm.engine.impl.pvm.PvmTransition;
-import org.camunda.bpm.engine.impl.pvm.process.ActivityImpl;
-import org.camunda.bpm.engine.impl.pvm.process.ScopeImpl;
-import org.camunda.bpm.engine.impl.pvm.process.TransitionImpl;
-import org.camunda.bpm.engine.impl.test.TestHelper;
-import org.camunda.bpm.engine.repository.DeploymentBuilder;
-import org.camunda.bpm.engine.repository.DeploymentWithDefinitions;
-import org.camunda.bpm.engine.repository.ProcessDefinition;
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.engine.test.ProcessEngineRule;
-import org.camunda.bpm.engine.test.util.ProcessEngineTestRule;
-import org.camunda.bpm.engine.test.util.ProvidedProcessEngineRule;
-import org.camunda.bpm.engine.test.util.SystemPropertiesRule;
-import org.camunda.bpm.model.bpmn.Bpmn;
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
-import org.camunda.commons.testing.ProcessEngineLoggingRule;
-import org.camunda.commons.testing.WatchLogger;
+import io.orqueio.bpm.engine.ActivityTypes;
+import io.orqueio.bpm.engine.ParseException;
+import io.orqueio.bpm.engine.Problem;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.RepositoryService;
+import io.orqueio.bpm.engine.RuntimeService;
+import io.orqueio.bpm.engine.impl.bpmn.behavior.BoundaryConditionalEventActivityBehavior;
+import io.orqueio.bpm.engine.impl.bpmn.behavior.BoundaryEventActivityBehavior;
+import io.orqueio.bpm.engine.impl.bpmn.behavior.CompensationEventActivityBehavior;
+import io.orqueio.bpm.engine.impl.bpmn.behavior.EventSubProcessStartConditionalEventActivityBehavior;
+import io.orqueio.bpm.engine.impl.bpmn.behavior.EventSubProcessStartEventActivityBehavior;
+import io.orqueio.bpm.engine.impl.bpmn.behavior.IntermediateConditionalEventBehavior;
+import io.orqueio.bpm.engine.impl.bpmn.behavior.NoneStartEventActivityBehavior;
+import io.orqueio.bpm.engine.impl.bpmn.behavior.ThrowEscalationEventActivityBehavior;
+import io.orqueio.bpm.engine.impl.bpmn.helper.BpmnProperties;
+import io.orqueio.bpm.engine.impl.bpmn.parser.BpmnParse;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.impl.interceptor.Command;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.impl.interceptor.CommandExecutor;
+import io.orqueio.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity;
+import io.orqueio.bpm.engine.impl.pvm.PvmActivity;
+import io.orqueio.bpm.engine.impl.pvm.PvmTransition;
+import io.orqueio.bpm.engine.impl.pvm.process.ActivityImpl;
+import io.orqueio.bpm.engine.impl.pvm.process.ScopeImpl;
+import io.orqueio.bpm.engine.impl.pvm.process.TransitionImpl;
+import io.orqueio.bpm.engine.impl.test.TestHelper;
+import io.orqueio.bpm.engine.repository.DeploymentBuilder;
+import io.orqueio.bpm.engine.repository.DeploymentWithDefinitions;
+import io.orqueio.bpm.engine.repository.ProcessDefinition;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.test.ProcessEngineRule;
+import io.orqueio.bpm.engine.test.util.ProcessEngineTestRule;
+import io.orqueio.bpm.engine.test.util.ProvidedProcessEngineRule;
+import io.orqueio.bpm.engine.test.util.SystemPropertiesRule;
+import io.orqueio.bpm.model.bpmn.Bpmn;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.commons.testing.ProcessEngineLoggingRule;
+import io.orqueio.commons.testing.WatchLogger;
 import org.junit.After;
 import org.junit.Assume;
 import org.junit.Before;
@@ -108,7 +108,7 @@ public class BpmnParseTest {
 
   @After
   public void tearDown() {
-    for (org.camunda.bpm.engine.repository.Deployment deployment : repositoryService.createDeploymentQuery().list()) {
+    for (io.orqueio.bpm.engine.repository.Deployment deployment : repositoryService.createDeploymentQuery().list()) {
       repositoryService.deleteDeployment(deployment.getId(), true);
     }
   }
@@ -1370,7 +1370,7 @@ public class BpmnParseTest {
   }
 
   @Test
-  @WatchLogger(loggerNames = {"org.camunda.bpm.engine.bpmn.parser"}, level = "INFO")
+  @WatchLogger(loggerNames = {"io.orqueio.bpm.engine.bpmn.parser"}, level = "INFO")
   public void testIntermediateCatchTimerEventWithTimeCycleNotRecommendedInfoMessage() {
     BpmnModelInstance process = Bpmn.createExecutableProcess("process")
         .startEvent()

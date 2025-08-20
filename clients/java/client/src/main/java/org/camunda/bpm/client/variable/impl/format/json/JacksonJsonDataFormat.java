@@ -14,18 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.variable.impl.format.json;
+package io.orqueio.bpm.client.variable.impl.format.json;
 
-import static org.camunda.commons.utils.EnsureUtil.ensureNotNull;
+import static io.orqueio.commons.utils.EnsureUtil.ensureNotNull;
 
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.camunda.bpm.client.impl.ExternalTaskClientLogger;
-import org.camunda.bpm.client.spi.DataFormat;
-import org.camunda.bpm.client.variable.impl.format.TypeDetector;
+import io.orqueio.bpm.client.impl.ExternalTaskClientLogger;
+import io.orqueio.bpm.client.spi.DataFormat;
+import io.orqueio.bpm.client.variable.impl.format.TypeDetector;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JavaType;

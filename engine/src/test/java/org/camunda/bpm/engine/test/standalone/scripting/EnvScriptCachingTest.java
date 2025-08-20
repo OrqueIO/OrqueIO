@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.standalone.scripting;
+package io.orqueio.bpm.engine.test.standalone.scripting;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -23,9 +23,9 @@ import static org.junit.Assert.assertNull;
 
 import java.util.List;
 import java.util.Map;
-import org.camunda.bpm.engine.impl.scripting.ExecutableScript;
-import org.camunda.bpm.engine.impl.scripting.env.ScriptEnvResolver;
-import org.camunda.bpm.engine.repository.ProcessApplicationDeployment;
+import io.orqueio.bpm.engine.impl.scripting.ExecutableScript;
+import io.orqueio.bpm.engine.impl.scripting.env.ScriptEnvResolver;
+import io.orqueio.bpm.engine.repository.ProcessApplicationDeployment;
 import org.junit.Test;
 
 /**

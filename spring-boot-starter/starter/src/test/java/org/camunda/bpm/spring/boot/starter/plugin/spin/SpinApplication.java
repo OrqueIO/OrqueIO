@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter.plugin.spin;
+package io.orqueio.bpm.spring.boot.starter.plugin.spin;
 
-import static org.camunda.spin.Spin.S;
+import static io.orqueio.spin.Spin.S;
 
-import org.camunda.bpm.engine.delegate.JavaDelegate;
-import org.camunda.spin.json.SpinJsonNode;
+import io.orqueio.bpm.engine.delegate.JavaDelegate;
+import io.orqueio.spin.json.SpinJsonNode;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 

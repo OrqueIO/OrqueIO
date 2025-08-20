@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.deployment.scanning;
+package io.orqueio.bpm.container.impl.deployment.scanning;
 
 import java.net.URL;
 import java.util.Map;
 
-import org.camunda.bpm.application.impl.metadata.spi.ProcessArchiveXml;
-import org.camunda.bpm.container.impl.deployment.scanning.spi.ProcessApplicationScanner;
-import org.camunda.bpm.engine.impl.bpmn.deployer.BpmnDeployer;
-import org.camunda.bpm.engine.impl.cmmn.deployer.CmmnDeployer;
-import org.camunda.bpm.engine.impl.dmn.deployer.DecisionDefinitionDeployer;
+import io.orqueio.bpm.application.impl.metadata.spi.ProcessArchiveXml;
+import io.orqueio.bpm.container.impl.deployment.scanning.spi.ProcessApplicationScanner;
+import io.orqueio.bpm.engine.impl.bpmn.deployer.BpmnDeployer;
+import io.orqueio.bpm.engine.impl.cmmn.deployer.CmmnDeployer;
+import io.orqueio.bpm.engine.impl.dmn.deployer.DecisionDefinitionDeployer;
 
 public class ProcessApplicationScanningUtil {
 

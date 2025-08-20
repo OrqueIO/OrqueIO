@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.admin.impl.plugin.base.dto;
+package io.orqueio.bpm.admin.impl.plugin.base.dto;
 
 public class MetricsAggregatedResultDto {
 

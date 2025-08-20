@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.standalone.authentication;
+package io.orqueio.bpm.engine.test.standalone.authentication;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -24,14 +24,14 @@ import java.util.Date;
 
 import ch.qos.logback.classic.Level;
 import org.apache.commons.lang3.time.DateUtils;
-import org.camunda.bpm.engine.IdentityService;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.ProcessEngineConfiguration;
-import org.camunda.bpm.engine.identity.User;
-import org.camunda.bpm.engine.impl.util.ClockUtil;
-import org.camunda.bpm.engine.test.util.ProcessEngineBootstrapRule;
-import org.camunda.bpm.engine.test.util.ProvidedProcessEngineRule;
-import org.camunda.commons.testing.ProcessEngineLoggingRule;
+import io.orqueio.bpm.engine.IdentityService;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.ProcessEngineConfiguration;
+import io.orqueio.bpm.engine.identity.User;
+import io.orqueio.bpm.engine.impl.util.ClockUtil;
+import io.orqueio.bpm.engine.test.util.ProcessEngineBootstrapRule;
+import io.orqueio.bpm.engine.test.util.ProvidedProcessEngineRule;
+import io.orqueio.commons.testing.ProcessEngineLoggingRule;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.ClassRule;
@@ -41,7 +41,7 @@ import org.junit.Test;
 public class LoginAttemptsTest {
 
   private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-  private static final String INDENTITY_LOGGER = "org.camunda.bpm.engine.identity";
+  private static final String INDENTITY_LOGGER = "io.orqueio.bpm.engine.identity";
 
   @ClassRule
   public static ProcessEngineBootstrapRule bootstrapRule = new ProcessEngineBootstrapRule(configuration -> {

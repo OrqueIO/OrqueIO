@@ -12,7 +12,7 @@
       <bpmn2:outgoing>SequenceFlow_4</bpmn2:outgoing>
     </bpmn2:receiveTask>
     <bpmn2:sequenceFlow id="SequenceFlow_3" name="" sourceRef="StartEvent_1" targetRef="waitState"/>
-    <bpmn2:serviceTask id="ServiceTask_1" camunda:class="org.camunda.bpm.integrationtest.functional.modification.beans.ExampleDelegate" name="Invoke Delegate">
+    <bpmn2:serviceTask id="ServiceTask_1" camunda:class="io.orqueio.bpm.integrationtest.functional.modification.beans.ExampleDelegate" name="Invoke Delegate">
       <bpmn2:incoming>SequenceFlow_4</bpmn2:incoming>
       <bpmn2:outgoing>SequenceFlow_5</bpmn2:outgoing>
     </bpmn2:serviceTask>

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.filter;
+package io.orqueio.bpm.engine.test.api.filter;
 
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.equalTo;
@@ -28,12 +28,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.camunda.bpm.engine.EntityTypes;
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.filter.Filter;
-import org.camunda.bpm.engine.filter.FilterQuery;
-import org.camunda.bpm.engine.impl.persistence.entity.FilterEntity;
-import org.camunda.bpm.engine.test.util.PluggableProcessEngineTest;
+import io.orqueio.bpm.engine.EntityTypes;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.filter.Filter;
+import io.orqueio.bpm.engine.filter.FilterQuery;
+import io.orqueio.bpm.engine.impl.persistence.entity.FilterEntity;
+import io.orqueio.bpm.engine.test.util.PluggableProcessEngineTest;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;

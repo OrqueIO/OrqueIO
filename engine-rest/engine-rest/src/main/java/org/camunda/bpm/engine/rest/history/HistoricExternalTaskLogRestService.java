@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.history;
+package io.orqueio.bpm.engine.rest.history;
 
-import org.camunda.bpm.engine.rest.dto.CountResultDto;
-import org.camunda.bpm.engine.rest.dto.history.HistoricExternalTaskLogDto;
-import org.camunda.bpm.engine.rest.dto.history.HistoricExternalTaskLogQueryDto;
-import org.camunda.bpm.engine.rest.sub.history.HistoricExternalTaskLogResource;
+import io.orqueio.bpm.engine.rest.dto.CountResultDto;
+import io.orqueio.bpm.engine.rest.dto.history.HistoricExternalTaskLogDto;
+import io.orqueio.bpm.engine.rest.dto.history.HistoricExternalTaskLogQueryDto;
+import io.orqueio.bpm.engine.rest.sub.history.HistoricExternalTaskLogResource;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;

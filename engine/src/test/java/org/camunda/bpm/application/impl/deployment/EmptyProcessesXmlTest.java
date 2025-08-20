@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.application.impl.deployment;
+package io.orqueio.bpm.application.impl.deployment;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
@@ -23,9 +23,9 @@ import static org.junit.Assert.assertNull;
 
 import java.util.Map;
 
-import org.camunda.bpm.application.impl.metadata.spi.ProcessArchiveXml;
-import org.camunda.bpm.application.impl.metadata.spi.ProcessesXml;
-import org.camunda.bpm.engine.repository.ResumePreviousBy;
+import io.orqueio.bpm.application.impl.metadata.spi.ProcessArchiveXml;
+import io.orqueio.bpm.application.impl.metadata.spi.ProcessesXml;
+import io.orqueio.bpm.engine.repository.ResumePreviousBy;
 import org.junit.Test;
 
 /**

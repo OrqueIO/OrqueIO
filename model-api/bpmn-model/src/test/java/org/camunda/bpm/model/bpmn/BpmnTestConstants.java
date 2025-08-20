@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.bpmn;
+package io.orqueio.bpm.model.bpmn;
 
 import java.util.Arrays;
 import java.util.List;
@@ -51,8 +51,8 @@ public final class BpmnTestConstants {
 
   public static final String TEST_STRING_XML = "test";
   public static final String TEST_STRING_API = "api";
-  public static final String TEST_CLASS_XML = "org.camunda.test.Test";
-  public static final String TEST_CLASS_API = "org.camunda.test.Api";
+  public static final String TEST_CLASS_XML = "io.orqueio.test.Test";
+  public static final String TEST_CLASS_API = "io.orqueio.test.Api";
   public static final String TEST_EXPRESSION_XML = "${" + TEST_STRING_XML + "}";
   public static final String TEST_EXPRESSION_API = "${" + TEST_STRING_API + "}";
   public static final String TEST_DELEGATE_EXPRESSION_XML = "${" + TEST_CLASS_XML + "}";

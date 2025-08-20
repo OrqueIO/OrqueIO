@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.engine.type;
+package io.orqueio.bpm.dmn.engine.type;
 
-import org.camunda.bpm.dmn.engine.DmnEngineConfiguration;
-import org.camunda.bpm.dmn.engine.DmnEngineException;
-import org.camunda.bpm.dmn.engine.impl.DefaultDmnEngineConfiguration;
-import org.camunda.bpm.dmn.engine.impl.spi.type.DmnDataTypeTransformer;
-import org.camunda.bpm.dmn.engine.impl.spi.type.DmnDataTypeTransformerRegistry;
-import org.camunda.bpm.dmn.engine.test.DmnEngineTest;
-import org.camunda.bpm.engine.variable.Variables;
-import org.camunda.bpm.engine.variable.value.TypedValue;
-import org.camunda.feel.syntaxtree.ZonedTime;
+import io.orqueio.bpm.dmn.engine.DmnEngineConfiguration;
+import io.orqueio.bpm.dmn.engine.DmnEngineException;
+import io.orqueio.bpm.dmn.engine.impl.DefaultDmnEngineConfiguration;
+import io.orqueio.bpm.dmn.engine.impl.spi.type.DmnDataTypeTransformer;
+import io.orqueio.bpm.dmn.engine.impl.spi.type.DmnDataTypeTransformerRegistry;
+import io.orqueio.bpm.dmn.engine.test.DmnEngineTest;
+import io.orqueio.bpm.engine.variable.Variables;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
+import io.orqueio.feel.syntaxtree.ZonedTime;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -306,7 +306,7 @@ public class DmnDataTypeTransformerTest extends DmnEngineTest {
 
     // then
     thrown.expect(DmnEngineException.class);
-    thrown.expectMessage("Unsupported type: 'org.camunda.feel.syntaxtree.ZonedTime' " +
+    thrown.expectMessage("Unsupported type: 'io.orqueio.feel.syntaxtree.ZonedTime' " +
                            "cannot be converted to 'java.util.Date'");
 
     // when

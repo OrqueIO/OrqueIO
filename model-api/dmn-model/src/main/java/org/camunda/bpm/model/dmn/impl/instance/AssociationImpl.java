@@ -14,25 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.dmn.impl.instance;
+package io.orqueio.bpm.model.dmn.impl.instance;
 
-import static org.camunda.bpm.model.dmn.impl.DmnModelConstants.LATEST_DMN_NS;
-import static org.camunda.bpm.model.dmn.impl.DmnModelConstants.DMN_ATTRIBUTE_ASSOCIATION_DIRECTION;
-import static org.camunda.bpm.model.dmn.impl.DmnModelConstants.DMN_ELEMENT_ASSOCIATION;
+import static io.orqueio.bpm.model.dmn.impl.DmnModelConstants.LATEST_DMN_NS;
+import static io.orqueio.bpm.model.dmn.impl.DmnModelConstants.DMN_ATTRIBUTE_ASSOCIATION_DIRECTION;
+import static io.orqueio.bpm.model.dmn.impl.DmnModelConstants.DMN_ELEMENT_ASSOCIATION;
 
-import org.camunda.bpm.model.dmn.AssociationDirection;
-import org.camunda.bpm.model.dmn.instance.Artifact;
-import org.camunda.bpm.model.dmn.instance.Association;
-import org.camunda.bpm.model.dmn.instance.DmnElement;
-import org.camunda.bpm.model.dmn.instance.SourceRef;
-import org.camunda.bpm.model.dmn.instance.TargetRef;
-import org.camunda.bpm.model.xml.ModelBuilder;
-import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
-import org.camunda.bpm.model.xml.type.attribute.Attribute;
-import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
-import org.camunda.bpm.model.xml.type.reference.ElementReference;
+import io.orqueio.bpm.model.dmn.AssociationDirection;
+import io.orqueio.bpm.model.dmn.instance.Artifact;
+import io.orqueio.bpm.model.dmn.instance.Association;
+import io.orqueio.bpm.model.dmn.instance.DmnElement;
+import io.orqueio.bpm.model.dmn.instance.SourceRef;
+import io.orqueio.bpm.model.dmn.instance.TargetRef;
+import io.orqueio.bpm.model.xml.ModelBuilder;
+import io.orqueio.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
+import io.orqueio.bpm.model.xml.type.ModelElementTypeBuilder;
+import io.orqueio.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
+import io.orqueio.bpm.model.xml.type.attribute.Attribute;
+import io.orqueio.bpm.model.xml.type.child.SequenceBuilder;
+import io.orqueio.bpm.model.xml.type.reference.ElementReference;
 
 public class AssociationImpl extends ArtifactImpl implements Association {
 

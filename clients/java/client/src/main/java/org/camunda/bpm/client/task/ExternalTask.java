@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.task;
+package io.orqueio.bpm.client.task;
 
-import org.camunda.bpm.client.exception.ValueMapperException;
-import org.camunda.bpm.client.topic.TopicSubscriptionBuilder;
-import org.camunda.bpm.engine.variable.VariableMap;
-import org.camunda.bpm.engine.variable.value.TypedValue;
+import io.orqueio.bpm.client.exception.ValueMapperException;
+import io.orqueio.bpm.client.topic.TopicSubscriptionBuilder;
+import io.orqueio.bpm.engine.variable.VariableMap;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
 
 import java.util.Date;
 import java.util.Map;

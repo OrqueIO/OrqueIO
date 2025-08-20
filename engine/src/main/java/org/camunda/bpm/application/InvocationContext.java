@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.application;
+package io.orqueio.bpm.application;
 
-import org.camunda.bpm.engine.delegate.BaseDelegateExecution;
+import io.orqueio.bpm.engine.delegate.BaseDelegateExecution;
 
 /**
  * The context of an invocation.

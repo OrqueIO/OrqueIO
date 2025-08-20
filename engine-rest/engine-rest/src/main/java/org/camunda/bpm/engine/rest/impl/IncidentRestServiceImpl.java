@@ -14,21 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.impl;
+package io.orqueio.bpm.engine.rest.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.core.UriInfo;
-import org.camunda.bpm.engine.rest.IncidentRestService;
-import org.camunda.bpm.engine.rest.dto.CountResultDto;
-import org.camunda.bpm.engine.rest.dto.runtime.IncidentDto;
-import org.camunda.bpm.engine.rest.dto.runtime.IncidentQueryDto;
-import org.camunda.bpm.engine.rest.sub.repository.impl.IncidentResourceImpl;
-import org.camunda.bpm.engine.rest.sub.runtime.IncidentResource;
-import org.camunda.bpm.engine.rest.util.QueryUtil;
-import org.camunda.bpm.engine.runtime.Incident;
-import org.camunda.bpm.engine.runtime.IncidentQuery;
+import io.orqueio.bpm.engine.rest.IncidentRestService;
+import io.orqueio.bpm.engine.rest.dto.CountResultDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.IncidentDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.IncidentQueryDto;
+import io.orqueio.bpm.engine.rest.sub.repository.impl.IncidentResourceImpl;
+import io.orqueio.bpm.engine.rest.sub.runtime.IncidentResource;
+import io.orqueio.bpm.engine.rest.util.QueryUtil;
+import io.orqueio.bpm.engine.runtime.Incident;
+import io.orqueio.bpm.engine.runtime.IncidentQuery;
 
 /**
  * @author Roman Smirnov

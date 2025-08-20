@@ -14,21 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.functional.spin;
+package io.orqueio.bpm.integrationtest.functional.spin;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.camunda.bpm.application.ProcessApplicationContext;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.variable.Variables;
-import org.camunda.bpm.engine.variable.Variables.SerializationDataFormats;
-import org.camunda.bpm.engine.variable.value.ObjectValue;
-import org.camunda.bpm.integrationtest.functional.spin.dataformat.JodaJsonDataFormatConfigurator;
-import org.camunda.bpm.integrationtest.functional.spin.dataformat.JodaJsonSerializable;
-import org.camunda.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
-import org.camunda.bpm.integrationtest.util.TestContainer;
-import org.camunda.spin.spi.DataFormatConfigurator;
+import io.orqueio.bpm.application.ProcessApplicationContext;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.variable.Variables;
+import io.orqueio.bpm.engine.variable.Variables.SerializationDataFormats;
+import io.orqueio.bpm.engine.variable.value.ObjectValue;
+import io.orqueio.bpm.integrationtest.functional.spin.dataformat.JodaJsonDataFormatConfigurator;
+import io.orqueio.bpm.integrationtest.functional.spin.dataformat.JodaJsonSerializable;
+import io.orqueio.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
+import io.orqueio.bpm.integrationtest.util.TestContainer;
+import io.orqueio.spin.spi.DataFormatConfigurator;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ShrinkWrap;

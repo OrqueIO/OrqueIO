@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.bpmn.deployment;
+package io.orqueio.bpm.engine.test.bpmn.deployment;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -22,27 +22,27 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import java.io.InputStream;
 import java.util.List;
 
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.impl.RepositoryServiceImpl;
-import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.engine.impl.interceptor.Command;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.interceptor.CommandExecutor;
-import org.camunda.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity;
-import org.camunda.bpm.engine.impl.pvm.ReadOnlyProcessDefinition;
-import org.camunda.bpm.engine.impl.util.IoUtil;
-import org.camunda.bpm.engine.impl.util.ReflectUtil;
-import org.camunda.bpm.engine.repository.DeploymentBuilder;
-import org.camunda.bpm.engine.repository.DeploymentHandlerFactory;
-import org.camunda.bpm.engine.repository.DeploymentWithDefinitions;
-import org.camunda.bpm.engine.repository.ProcessDefinition;
-import org.camunda.bpm.engine.repository.Resource;
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.engine.test.util.PluggableProcessEngineTest;
-import org.camunda.bpm.model.bpmn.Bpmn;
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
-import org.camunda.commons.testing.ProcessEngineLoggingRule;
-import org.camunda.commons.testing.WatchLogger;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.impl.RepositoryServiceImpl;
+import io.orqueio.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.impl.interceptor.Command;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.impl.interceptor.CommandExecutor;
+import io.orqueio.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity;
+import io.orqueio.bpm.engine.impl.pvm.ReadOnlyProcessDefinition;
+import io.orqueio.bpm.engine.impl.util.IoUtil;
+import io.orqueio.bpm.engine.impl.util.ReflectUtil;
+import io.orqueio.bpm.engine.repository.DeploymentBuilder;
+import io.orqueio.bpm.engine.repository.DeploymentHandlerFactory;
+import io.orqueio.bpm.engine.repository.DeploymentWithDefinitions;
+import io.orqueio.bpm.engine.repository.ProcessDefinition;
+import io.orqueio.bpm.engine.repository.Resource;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.test.util.PluggableProcessEngineTest;
+import io.orqueio.bpm.model.bpmn.Bpmn;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.commons.testing.ProcessEngineLoggingRule;
+import io.orqueio.commons.testing.WatchLogger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -55,7 +55,7 @@ import org.junit.Test;
  */
 public class BpmnDeploymentTest extends PluggableProcessEngineTest {
 
-  protected static final String CMD_LOGGER = "org.camunda.bpm.engine.cmd";
+  protected static final String CMD_LOGGER = "io.orqueio.bpm.engine.cmd";
   
   @Rule
   public ProcessEngineLoggingRule loggingRule = new ProcessEngineLoggingRule();
@@ -154,7 +154,7 @@ public class BpmnDeploymentTest extends PluggableProcessEngineTest {
         .enableDuplicateFiltering(false)
         .addClasspathResource(bpmnResourceName));
     // then
-    List<org.camunda.bpm.engine.repository.Deployment> deploymentList = repositoryService.createDeploymentQuery().list();
+    List<io.orqueio.bpm.engine.repository.Deployment> deploymentList = repositoryService.createDeploymentQuery().list();
     assertThat(deploymentList.size()).isEqualTo(2);
   }
 
@@ -270,7 +270,7 @@ public class BpmnDeploymentTest extends PluggableProcessEngineTest {
       .addModelInstance("process1.bpmn20.xml", model1)
       .addModelInstance("process2.bpmn20.xml", changedModel2)
       .name("twice"));
-    List<org.camunda.bpm.engine.repository.Deployment> deploymentList = repositoryService.createDeploymentQuery().list();
+    List<io.orqueio.bpm.engine.repository.Deployment> deploymentList = repositoryService.createDeploymentQuery().list();
     assertThat(deploymentList.size()).isEqualTo(2);
 
     // there should be new versions of both processes
@@ -298,7 +298,7 @@ public class BpmnDeploymentTest extends PluggableProcessEngineTest {
       .addModelInstance("process2.bpmn20.xml", changedModel2)
       .name("thrice"));
 
-    List<org.camunda.bpm.engine.repository.Deployment> deploymentList = repositoryService.createDeploymentQuery().list();
+    List<io.orqueio.bpm.engine.repository.Deployment> deploymentList = repositoryService.createDeploymentQuery().list();
     assertThat(deploymentList.size()).isEqualTo(2);
 
     // there should be only one version of process 1
@@ -387,7 +387,7 @@ public class BpmnDeploymentTest extends PluggableProcessEngineTest {
         .enableDuplicateFiltering(false)
         .addClasspathResource(bpmnResourceName)
         .name("twice"));
-    List<org.camunda.bpm.engine.repository.Deployment> deploymentList = repositoryService.createDeploymentQuery().list();
+    List<io.orqueio.bpm.engine.repository.Deployment> deploymentList = repositoryService.createDeploymentQuery().list();
     assertThat(deploymentList.size()).isEqualTo(2);
   }
 

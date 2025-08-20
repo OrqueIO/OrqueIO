@@ -19,7 +19,7 @@
 	    	
 	    	<sequenceFlow sourceRef="subStart" targetRef="service" />
 	    	    	
-	 		<serviceTask id="service" camunda:class="org.camunda.bpm.engine.test.cmd.FailingDelegate" />
+	 		<serviceTask id="service" camunda:class="io.orqueio.bpm.engine.test.cmd.FailingDelegate" />
 	 		
 	 		<sequenceFlow sourceRef="service" targetRef="subEnd" />
 	 		

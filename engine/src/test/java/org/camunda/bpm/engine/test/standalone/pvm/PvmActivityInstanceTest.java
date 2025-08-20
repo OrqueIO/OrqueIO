@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.standalone.pvm;
+package io.orqueio.bpm.engine.test.standalone.pvm;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -22,21 +22,21 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 
-import org.camunda.bpm.engine.delegate.ExecutionListener;
-import org.camunda.bpm.engine.impl.pvm.ProcessDefinitionBuilder;
-import org.camunda.bpm.engine.impl.pvm.PvmExecution;
-import org.camunda.bpm.engine.impl.pvm.PvmProcessDefinition;
-import org.camunda.bpm.engine.impl.pvm.PvmProcessInstance;
-import org.camunda.bpm.engine.impl.pvm.process.ActivityImpl;
-import org.camunda.bpm.engine.impl.pvm.process.ProcessDefinitionImpl;
-import org.camunda.bpm.engine.impl.pvm.runtime.ExecutionImpl;
-import org.camunda.bpm.engine.test.standalone.pvm.activities.Automatic;
-import org.camunda.bpm.engine.test.standalone.pvm.activities.EmbeddedSubProcess;
-import org.camunda.bpm.engine.test.standalone.pvm.activities.End;
-import org.camunda.bpm.engine.test.standalone.pvm.activities.ParallelGateway;
-import org.camunda.bpm.engine.test.standalone.pvm.activities.WaitState;
-import org.camunda.bpm.engine.test.standalone.pvm.activities.While;
-import org.camunda.bpm.engine.test.standalone.pvm.verification.TransitionInstanceVerifyer;
+import io.orqueio.bpm.engine.delegate.ExecutionListener;
+import io.orqueio.bpm.engine.impl.pvm.ProcessDefinitionBuilder;
+import io.orqueio.bpm.engine.impl.pvm.PvmExecution;
+import io.orqueio.bpm.engine.impl.pvm.PvmProcessDefinition;
+import io.orqueio.bpm.engine.impl.pvm.PvmProcessInstance;
+import io.orqueio.bpm.engine.impl.pvm.process.ActivityImpl;
+import io.orqueio.bpm.engine.impl.pvm.process.ProcessDefinitionImpl;
+import io.orqueio.bpm.engine.impl.pvm.runtime.ExecutionImpl;
+import io.orqueio.bpm.engine.test.standalone.pvm.activities.Automatic;
+import io.orqueio.bpm.engine.test.standalone.pvm.activities.EmbeddedSubProcess;
+import io.orqueio.bpm.engine.test.standalone.pvm.activities.End;
+import io.orqueio.bpm.engine.test.standalone.pvm.activities.ParallelGateway;
+import io.orqueio.bpm.engine.test.standalone.pvm.activities.WaitState;
+import io.orqueio.bpm.engine.test.standalone.pvm.activities.While;
+import io.orqueio.bpm.engine.test.standalone.pvm.verification.TransitionInstanceVerifyer;
 import org.junit.Test;
 
 /**

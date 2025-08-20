@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.runtime.migration.models;
+package io.orqueio.bpm.engine.test.api.runtime.migration.models;
 
-import static org.camunda.bpm.engine.test.api.runtime.migration.ModifiableBpmnModelInstance.modify;
+import static io.orqueio.bpm.engine.test.api.runtime.migration.ModifiableBpmnModelInstance.modify;
 
-import org.camunda.bpm.model.bpmn.AssociationDirection;
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
-import org.camunda.bpm.model.bpmn.instance.Association;
-import org.camunda.bpm.model.bpmn.instance.BaseElement;
-import org.camunda.bpm.model.bpmn.instance.BoundaryEvent;
-import org.camunda.bpm.model.bpmn.instance.UserTask;
+import io.orqueio.bpm.model.bpmn.AssociationDirection;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.bpm.model.bpmn.instance.Association;
+import io.orqueio.bpm.model.bpmn.instance.BaseElement;
+import io.orqueio.bpm.model.bpmn.instance.BoundaryEvent;
+import io.orqueio.bpm.model.bpmn.instance.UserTask;
 
 /**
  * @author Thorben Lindhauer

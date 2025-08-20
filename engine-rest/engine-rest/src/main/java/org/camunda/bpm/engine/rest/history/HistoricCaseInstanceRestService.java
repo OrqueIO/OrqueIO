@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.history;
+package io.orqueio.bpm.engine.rest.history;
 
-import org.camunda.bpm.engine.history.HistoricCaseInstanceQuery;
-import org.camunda.bpm.engine.rest.dto.CountResultDto;
-import org.camunda.bpm.engine.rest.dto.history.HistoricCaseInstanceDto;
-import org.camunda.bpm.engine.rest.dto.history.HistoricCaseInstanceQueryDto;
-import org.camunda.bpm.engine.rest.sub.history.HistoricCaseInstanceResource;
+import io.orqueio.bpm.engine.history.HistoricCaseInstanceQuery;
+import io.orqueio.bpm.engine.rest.dto.CountResultDto;
+import io.orqueio.bpm.engine.rest.dto.history.HistoricCaseInstanceDto;
+import io.orqueio.bpm.engine.rest.dto.history.HistoricCaseInstanceQueryDto;
+import io.orqueio.bpm.engine.rest.sub.history.HistoricCaseInstanceResource;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;

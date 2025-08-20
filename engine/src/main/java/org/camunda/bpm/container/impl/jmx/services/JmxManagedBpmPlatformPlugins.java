@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.jmx.services;
+package io.orqueio.bpm.container.impl.jmx.services;
 
 import java.util.List;
 
-import org.camunda.bpm.container.impl.plugin.BpmPlatformPlugin;
-import org.camunda.bpm.container.impl.plugin.BpmPlatformPlugins;
-import org.camunda.bpm.container.impl.spi.PlatformService;
-import org.camunda.bpm.container.impl.spi.PlatformServiceContainer;
+import io.orqueio.bpm.container.impl.plugin.BpmPlatformPlugin;
+import io.orqueio.bpm.container.impl.plugin.BpmPlatformPlugins;
+import io.orqueio.bpm.container.impl.spi.PlatformService;
+import io.orqueio.bpm.container.impl.spi.PlatformServiceContainer;
 
 /**
  * @author Thorben Lindhauer

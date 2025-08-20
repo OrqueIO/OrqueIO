@@ -12,7 +12,7 @@
       <bpmn2:startEvent id="StartEvent_1">
         <bpmn2:outgoing>SequenceFlow_1dacouk</bpmn2:outgoing>
       </bpmn2:startEvent>
-      <bpmn2:serviceTask id="ServiceTask_1" name="Throw Error E1" camunda:class="org.camunda.bpm.engine.test.bpmn.event.error.ThrowErrorInLoopDelegate">
+      <bpmn2:serviceTask id="ServiceTask_1" name="Throw Error E1" camunda:class="io.orqueio.bpm.engine.test.bpmn.event.error.ThrowErrorInLoopDelegate">
         <bpmn2:incoming>SequenceFlow_1dacouk</bpmn2:incoming>
         <bpmn2:outgoing>SequenceFlow_0zqri0n</bpmn2:outgoing>
       </bpmn2:serviceTask>

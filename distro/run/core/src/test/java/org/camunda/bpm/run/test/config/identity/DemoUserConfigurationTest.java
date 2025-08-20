@@ -14,19 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.run.test.config.identity;
+package io.orqueio.bpm.run.test.config.identity;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 
-import org.camunda.bpm.engine.IdentityService;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.identity.User;
-import org.camunda.bpm.engine.identity.UserQuery;
-import org.camunda.bpm.identity.impl.ldap.plugin.LdapIdentityProviderPlugin;
-import org.camunda.bpm.run.CamundaBpmRun;
-import org.camunda.bpm.run.property.CamundaBpmRunLdapProperties;
+import io.orqueio.bpm.engine.IdentityService;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.identity.User;
+import io.orqueio.bpm.engine.identity.UserQuery;
+import io.orqueio.bpm.identity.impl.ldap.plugin.LdapIdentityProviderPlugin;
+import io.orqueio.bpm.run.CamundaBpmRun;
+import io.orqueio.bpm.run.property.CamundaBpmRunLdapProperties;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -10,7 +10,7 @@
   <name>Camunda Platform - JUnit 5 Extension</name>
   
   <parent>
-    <groupId>org.camunda.bpm</groupId>
+    <groupId>io.orqueio.bpm</groupId>
     <artifactId>camunda-database-settings</artifactId>
     <relativePath>../../database</relativePath>
     <version>7.24.0-SNAPSHOT</version>
@@ -23,7 +23,7 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>org.camunda.bpm</groupId>
+        <groupId>io.orqueio.bpm</groupId>
         <artifactId>camunda-core-internal-dependencies</artifactId>
         <version>${project.version}</version>
         <scope>import</scope>
@@ -57,12 +57,12 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
+      <groupId>io.orqueio.bpm</groupId>
       <artifactId>camunda-engine</artifactId>
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.camunda.bpm.dmn</groupId>
+      <groupId>io.orqueio.bpm.dmn</groupId>
       <artifactId>camunda-dmn-junit5</artifactId>
       <version>${project.version}</version>
     </dependency>

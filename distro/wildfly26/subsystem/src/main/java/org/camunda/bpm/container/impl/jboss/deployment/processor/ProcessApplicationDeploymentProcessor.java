@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.jboss.deployment.processor;
+package io.orqueio.bpm.container.impl.jboss.deployment.processor;
 
 import static org.jboss.as.server.deployment.Attachments.MODULE;
 
@@ -28,23 +28,23 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import org.camunda.bpm.application.ProcessApplicationInterface;
-import org.camunda.bpm.application.impl.metadata.spi.ProcessArchiveXml;
-import org.camunda.bpm.application.impl.metadata.spi.ProcessesXml;
-import org.camunda.bpm.container.impl.deployment.scanning.VfsProcessApplicationScanner;
-import org.camunda.bpm.container.impl.jboss.deployment.marker.ProcessApplicationAttachments;
-import org.camunda.bpm.container.impl.jboss.service.MscManagedProcessApplication;
-import org.camunda.bpm.container.impl.jboss.service.ProcessApplicationDeploymentService;
-import org.camunda.bpm.container.impl.jboss.service.ProcessApplicationStartService;
-import org.camunda.bpm.container.impl.jboss.service.ProcessApplicationStopService;
-import org.camunda.bpm.container.impl.jboss.service.ServiceNames;
-import org.camunda.bpm.container.impl.jboss.util.JBossCompatibilityExtension;
-import org.camunda.bpm.container.impl.jboss.util.ProcessesXmlWrapper;
-import org.camunda.bpm.container.impl.metadata.PropertyHelper;
-import org.camunda.bpm.container.impl.plugin.BpmPlatformPlugins;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.impl.util.IoUtil;
-import org.camunda.bpm.engine.impl.util.StringUtil;
+import io.orqueio.bpm.application.ProcessApplicationInterface;
+import io.orqueio.bpm.application.impl.metadata.spi.ProcessArchiveXml;
+import io.orqueio.bpm.application.impl.metadata.spi.ProcessesXml;
+import io.orqueio.bpm.container.impl.deployment.scanning.VfsProcessApplicationScanner;
+import io.orqueio.bpm.container.impl.jboss.deployment.marker.ProcessApplicationAttachments;
+import io.orqueio.bpm.container.impl.jboss.service.MscManagedProcessApplication;
+import io.orqueio.bpm.container.impl.jboss.service.ProcessApplicationDeploymentService;
+import io.orqueio.bpm.container.impl.jboss.service.ProcessApplicationStartService;
+import io.orqueio.bpm.container.impl.jboss.service.ProcessApplicationStopService;
+import io.orqueio.bpm.container.impl.jboss.service.ServiceNames;
+import io.orqueio.bpm.container.impl.jboss.util.JBossCompatibilityExtension;
+import io.orqueio.bpm.container.impl.jboss.util.ProcessesXmlWrapper;
+import io.orqueio.bpm.container.impl.metadata.PropertyHelper;
+import io.orqueio.bpm.container.impl.plugin.BpmPlatformPlugins;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.impl.util.IoUtil;
+import io.orqueio.bpm.engine.impl.util.StringUtil;
 import org.jboss.as.ee.component.ComponentDescription;
 import org.jboss.as.ee.component.ComponentView;
 import org.jboss.as.ee.component.ViewDescription;

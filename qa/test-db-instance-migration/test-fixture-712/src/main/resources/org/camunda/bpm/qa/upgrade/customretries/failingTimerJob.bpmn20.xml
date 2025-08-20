@@ -15,7 +15,7 @@
       <bpmn:outgoing>SequenceFlow_2</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:sequenceFlow id="SequenceFlow_3" sourceRef="IntermediateThrowEvent_Timer" targetRef="service" />
-    <bpmn:serviceTask id="service" name="Failing Service" camunda:class="org.camunda.UnexistingClass">
+    <bpmn:serviceTask id="service" name="Failing Service" camunda:class="io.orqueio.UnexistingClass">
       <bpmn:incoming>SequenceFlow_3</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0zrwn6e</bpmn:outgoing>
     </bpmn:serviceTask>

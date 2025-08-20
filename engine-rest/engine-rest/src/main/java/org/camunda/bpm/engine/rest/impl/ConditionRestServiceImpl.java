@@ -14,22 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.impl;
+package io.orqueio.bpm.engine.rest.impl;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.core.Response.Status;
 
-import org.camunda.bpm.engine.RuntimeService;
-import org.camunda.bpm.engine.rest.ConditionRestService;
-import org.camunda.bpm.engine.rest.dto.VariableValueDto;
-import org.camunda.bpm.engine.rest.dto.condition.EvaluationConditionDto;
-import org.camunda.bpm.engine.rest.dto.runtime.ProcessInstanceDto;
-import org.camunda.bpm.engine.rest.exception.InvalidRequestException;
-import org.camunda.bpm.engine.runtime.ConditionEvaluationBuilder;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.variable.VariableMap;
+import io.orqueio.bpm.engine.RuntimeService;
+import io.orqueio.bpm.engine.rest.ConditionRestService;
+import io.orqueio.bpm.engine.rest.dto.VariableValueDto;
+import io.orqueio.bpm.engine.rest.dto.condition.EvaluationConditionDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.ProcessInstanceDto;
+import io.orqueio.bpm.engine.rest.exception.InvalidRequestException;
+import io.orqueio.bpm.engine.runtime.ConditionEvaluationBuilder;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.variable.VariableMap;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 

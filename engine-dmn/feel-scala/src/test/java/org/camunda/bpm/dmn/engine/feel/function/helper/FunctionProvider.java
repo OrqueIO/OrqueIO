@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.engine.feel.function.helper;
+package io.orqueio.bpm.dmn.engine.feel.function.helper;
 
-import org.camunda.bpm.dmn.feel.impl.scala.function.CustomFunction;
-import org.camunda.bpm.dmn.feel.impl.scala.function.FeelCustomFunctionProvider;
+import io.orqueio.bpm.dmn.feel.impl.scala.function.CustomFunction;
+import io.orqueio.bpm.dmn.feel.impl.scala.function.FeelCustomFunctionProvider;
 
 import java.util.Collection;
 import java.util.HashMap;

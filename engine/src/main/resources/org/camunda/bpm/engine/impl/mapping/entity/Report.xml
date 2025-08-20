@@ -19,9 +19,9 @@
 -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="org.camunda.bpm.engine.impl.persistence.entity.ReportResultEntity">
+<mapper namespace="io.orqueio.bpm.engine.impl.persistence.entity.ReportResultEntity">
 
-  <resultMap id="durationReportResultMap" type="org.camunda.bpm.engine.impl.persistence.entity.DurationReportResultEntity">
+  <resultMap id="durationReportResultMap" type="io.orqueio.bpm.engine.impl.persistence.entity.DurationReportResultEntity">
     <result property="minimum" column="MIN_" jdbcType="BIGINT" />
     <result property="maximum" column="MAX_" jdbcType="BIGINT" />
     <result property="average" column="AVG_" jdbcType="BIGINT" />
@@ -29,26 +29,26 @@
     <result property="periodUnit" column="PERIOD_UNIT_" jdbcType="VARCHAR" />
   </resultMap>
 
-  <select id="selectHistoricProcessInstanceDurationReport" parameterType="org.camunda.bpm.engine.impl.HistoricProcessInstanceReportImpl" resultMap="durationReportResultMap">
+  <select id="selectHistoricProcessInstanceDurationReport" parameterType="io.orqueio.bpm.engine.impl.HistoricProcessInstanceReportImpl" resultMap="durationReportResultMap">
     SELECT
       MIN(RES.DURATION_) AS MIN_, MAX(RES.DURATION_) AS MAX_, AVG(RES.DURATION_) AS AVG_, RES.PERIOD_, '${reportPeriodUnitName}' AS PERIOD_UNIT_
     FROM
       (
         SELECT
-          ${datepart1}<include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.periodUnitFunction"/>${datepart2}HPI.START_TIME_${datepart3} AS PERIOD_, HPI.DURATION_
+          ${datepart1}<include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.periodUnitFunction"/>${datepart2}HPI.START_TIME_${datepart3} AS PERIOD_, HPI.DURATION_
           <include refid="selectHistoricProcessInstancesByCriteria"/>
        ) RES
     GROUP BY
       PERIOD_ 
   </select>
 
-  <select id="selectHistoricProcessInstanceDurationReport_oracle" parameterType="org.camunda.bpm.engine.impl.HistoricProcessInstanceReportImpl" resultMap="durationReportResultMap">
+  <select id="selectHistoricProcessInstanceDurationReport_oracle" parameterType="io.orqueio.bpm.engine.impl.HistoricProcessInstanceReportImpl" resultMap="durationReportResultMap">
     SELECT
       MIN(RES.DURATION_) AS MIN_, MAX(RES.DURATION_) AS MAX_, AVG(RES.DURATION_) AS AVG_, RES.PERIOD_, '${reportPeriodUnitName}' AS PERIOD_UNIT_
     FROM
       (
         SELECT
-          ${datepart1}HPI.START_TIME_${datepart2}<include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.periodUnitFunction"/>${datepart3} AS PERIOD_, HPI.DURATION_
+          ${datepart1}HPI.START_TIME_${datepart2}<include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.periodUnitFunction"/>${datepart3} AS PERIOD_, HPI.DURATION_
           <include refid="selectHistoricProcessInstancesByCriteria"/>
        ) RES
     GROUP BY
@@ -80,7 +80,7 @@
       </if>
 
       <bind name="columnPrefix" value="'HPI.'"/>
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheckWithPrefix" />
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheckWithPrefix" />
 
     </where>
   </sql>

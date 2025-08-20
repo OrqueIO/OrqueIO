@@ -14,21 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine;
+package io.orqueio.bpm.engine;
 
 import java.util.List;
 import java.util.Map;
-import org.camunda.bpm.engine.authorization.BatchPermissions;
-import org.camunda.bpm.engine.authorization.Permissions;
-import org.camunda.bpm.engine.authorization.Resources;
-import org.camunda.bpm.engine.batch.Batch;
-import org.camunda.bpm.engine.exception.NotFoundException;
-import org.camunda.bpm.engine.externaltask.ExternalTask;
-import org.camunda.bpm.engine.externaltask.ExternalTaskQuery;
-import org.camunda.bpm.engine.externaltask.ExternalTaskQueryBuilder;
-import org.camunda.bpm.engine.externaltask.FetchAndLockBuilder;
-import org.camunda.bpm.engine.externaltask.UpdateExternalTaskRetriesBuilder;
-import org.camunda.bpm.engine.externaltask.UpdateExternalTaskRetriesSelectBuilder;
+import io.orqueio.bpm.engine.authorization.BatchPermissions;
+import io.orqueio.bpm.engine.authorization.Permissions;
+import io.orqueio.bpm.engine.authorization.Resources;
+import io.orqueio.bpm.engine.batch.Batch;
+import io.orqueio.bpm.engine.exception.NotFoundException;
+import io.orqueio.bpm.engine.externaltask.ExternalTask;
+import io.orqueio.bpm.engine.externaltask.ExternalTaskQuery;
+import io.orqueio.bpm.engine.externaltask.ExternalTaskQueryBuilder;
+import io.orqueio.bpm.engine.externaltask.FetchAndLockBuilder;
+import io.orqueio.bpm.engine.externaltask.UpdateExternalTaskRetriesBuilder;
+import io.orqueio.bpm.engine.externaltask.UpdateExternalTaskRetriesSelectBuilder;
 
 /**
  * Service that provides access to {@link ExternalTask} instances. External tasks

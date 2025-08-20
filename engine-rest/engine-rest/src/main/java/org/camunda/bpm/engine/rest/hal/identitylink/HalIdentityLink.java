@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.hal.identitylink;
+package io.orqueio.bpm.engine.rest.hal.identitylink;
 
 import javax.ws.rs.core.UriBuilder;
 
-import org.camunda.bpm.engine.rest.GroupRestService;
-import org.camunda.bpm.engine.rest.TaskRestService;
-import org.camunda.bpm.engine.rest.UserRestService;
-import org.camunda.bpm.engine.rest.hal.HalRelation;
-import org.camunda.bpm.engine.rest.hal.HalResource;
-import org.camunda.bpm.engine.task.IdentityLink;
+import io.orqueio.bpm.engine.rest.GroupRestService;
+import io.orqueio.bpm.engine.rest.TaskRestService;
+import io.orqueio.bpm.engine.rest.UserRestService;
+import io.orqueio.bpm.engine.rest.hal.HalRelation;
+import io.orqueio.bpm.engine.rest.hal.HalResource;
+import io.orqueio.bpm.engine.task.IdentityLink;
 
 public class HalIdentityLink extends HalResource<HalIdentityLink> {
 

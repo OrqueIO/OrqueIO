@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.sub.history;
+package io.orqueio.bpm.engine.rest.sub.history;
 
 import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
@@ -25,8 +25,8 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.camunda.bpm.engine.rest.dto.history.HistoricVariableInstanceDto;
-import org.camunda.bpm.engine.rest.sub.VariableResource;
+import io.orqueio.bpm.engine.rest.dto.history.HistoricVariableInstanceDto;
+import io.orqueio.bpm.engine.rest.sub.VariableResource;
 
 /**
  *

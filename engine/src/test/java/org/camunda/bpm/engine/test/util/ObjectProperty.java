@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.camunda.bpm.engine.test.util;
+package io.orqueio.bpm.engine.test.util;
 
 /**
  * Class modeling a property of an object having getters / setters. Allows for value retrieval using reflection.

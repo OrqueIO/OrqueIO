@@ -37,7 +37,7 @@
 		<sequenceFlow id="flow2a" sourceRef="catchSignal" targetRef="service" />
 
 		<serviceTask id="service"
-			camunda:class="org.camunda.bpm.engine.test.cmd.FailingDelegate"/>
+			camunda:class="io.orqueio.bpm.engine.test.cmd.FailingDelegate"/>
 
 		<sequenceFlow id="flow3a" sourceRef="service" targetRef="end" />
 

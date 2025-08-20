@@ -9,7 +9,7 @@
   <artifactId>camunda-engine-spring</artifactId>
 
   <parent>
-    <groupId>org.camunda.bpm</groupId>
+    <groupId>io.orqueio.bpm</groupId>
     <artifactId>camunda-database-settings</artifactId>
     <relativePath>../../database</relativePath>
     <version>7.24.0-SNAPSHOT</version>
@@ -19,7 +19,7 @@
     <dependencies>
 
       <dependency>
-        <groupId>org.camunda.bpm</groupId>
+        <groupId>io.orqueio.bpm</groupId>
         <artifactId>camunda-core-internal-dependencies</artifactId>
         <version>${project.version}</version>
         <scope>import</scope>
@@ -39,7 +39,7 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
+      <groupId>io.orqueio.bpm</groupId>
       <artifactId>camunda-engine</artifactId>
     </dependency>
     <dependency>
@@ -156,7 +156,7 @@
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
+      <groupId>io.orqueio.bpm</groupId>
       <artifactId>camunda-bpm-archunit</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
@@ -171,7 +171,7 @@
         <configuration>
           <redirectTestOutputToFile>true</redirectTestOutputToFile>
           <dependenciesToScan>
-            <dependency>org.camunda.bpm:camunda-bpm-archunit</dependency>
+            <dependency>io.orqueio.bpm:camunda-bpm-archunit</dependency>
           </dependenciesToScan>
         </configuration>
       </plugin>
@@ -191,7 +191,7 @@
               <forceCreation>true</forceCreation>
               <excludes>
                 <!-- this is re-defined in the consuming artifacts -->
-                <exclude>META-INF/services/org.camunda.bpm.engine.spring.test.SpringTestHelper</exclude>
+                <exclude>META-INF/services/io.orqueio.bpm.engine.spring.test.SpringTestHelper</exclude>
               </excludes>
             </configuration>
           </execution>

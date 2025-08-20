@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.scripting;
+package io.orqueio.bpm.engine.impl.scripting;
 
 import javax.script.Bindings;
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 
-import org.camunda.bpm.engine.ScriptEvaluationException;
-import org.camunda.bpm.engine.delegate.Expression;
-import org.camunda.bpm.engine.delegate.VariableScope;
+import io.orqueio.bpm.engine.ScriptEvaluationException;
+import io.orqueio.bpm.engine.delegate.Expression;
+import io.orqueio.bpm.engine.delegate.VariableScope;
 
 /**
  * A script which is dynamically determined during the execution.

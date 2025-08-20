@@ -15,28 +15,28 @@
  * limitations under the License.
  */
 
-package org.camunda.bpm.engine.test.api.repository;
+package io.orqueio.bpm.engine.test.api.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import ch.qos.logback.classic.Level;
-import org.camunda.bpm.dmn.engine.impl.transform.DmnTransformException;
-import org.camunda.bpm.engine.ManagementService;
-import org.camunda.bpm.engine.ParseException;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.RepositoryService;
-import org.camunda.bpm.engine.exception.NotValidException;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.util.ClockUtil;
-import org.camunda.bpm.engine.repository.Deployment;
-import org.camunda.bpm.engine.repository.DeploymentWithDefinitions;
-import org.camunda.bpm.engine.test.ProcessEngineRule;
-import org.camunda.bpm.engine.test.util.ProcessEngineTestRule;
-import org.camunda.bpm.engine.test.util.ProvidedProcessEngineRule;
-import org.camunda.bpm.model.bpmn.Bpmn;
-import org.camunda.commons.testing.ProcessEngineLoggingRule;
+import io.orqueio.bpm.dmn.engine.impl.transform.DmnTransformException;
+import io.orqueio.bpm.engine.ManagementService;
+import io.orqueio.bpm.engine.ParseException;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.RepositoryService;
+import io.orqueio.bpm.engine.exception.NotValidException;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.util.ClockUtil;
+import io.orqueio.bpm.engine.repository.Deployment;
+import io.orqueio.bpm.engine.repository.DeploymentWithDefinitions;
+import io.orqueio.bpm.engine.test.ProcessEngineRule;
+import io.orqueio.bpm.engine.test.util.ProcessEngineTestRule;
+import io.orqueio.bpm.engine.test.util.ProvidedProcessEngineRule;
+import io.orqueio.bpm.model.bpmn.Bpmn;
+import io.orqueio.commons.testing.ProcessEngineLoggingRule;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -45,7 +45,7 @@ import org.junit.rules.RuleChain;
 
 public class HistoryTimeToLiveDeploymentTest {
 
-  protected static final String CONFIG_LOGGER = "org.camunda.bpm.engine.cfg";
+  protected static final String CONFIG_LOGGER = "io.orqueio.bpm.engine.cfg";
 
   protected static final String EXPECTED_DEFAULT_CONFIG_MSG = "History Time To Live (TTL) cannot be null. ";
 

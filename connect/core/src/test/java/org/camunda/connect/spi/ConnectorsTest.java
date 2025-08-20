@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.connect.spi;
+package io.orqueio.connect.spi;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.camunda.connect.Connectors;
-import org.camunda.connect.dummy.DummyConnector;
+import io.orqueio.connect.Connectors;
+import io.orqueio.connect.dummy.DummyConnector;
 import org.junit.Test;
 
 public class ConnectorsTest {

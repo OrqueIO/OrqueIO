@@ -14,19 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.cmmn.listener;
+package io.orqueio.bpm.engine.impl.cmmn.listener;
 
-import static org.camunda.bpm.engine.impl.util.ClassDelegateUtil.applyFieldDeclaration;
+import static io.orqueio.bpm.engine.impl.util.ClassDelegateUtil.applyFieldDeclaration;
 
 import java.util.List;
 
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.delegate.CaseExecutionListener;
-import org.camunda.bpm.engine.delegate.DelegateCaseExecution;
-import org.camunda.bpm.engine.delegate.Expression;
-import org.camunda.bpm.engine.impl.bpmn.parser.FieldDeclaration;
-import org.camunda.bpm.engine.impl.cmmn.delegate.CaseExecutionListenerInvocation;
-import org.camunda.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.delegate.CaseExecutionListener;
+import io.orqueio.bpm.engine.delegate.DelegateCaseExecution;
+import io.orqueio.bpm.engine.delegate.Expression;
+import io.orqueio.bpm.engine.impl.bpmn.parser.FieldDeclaration;
+import io.orqueio.bpm.engine.impl.cmmn.delegate.CaseExecutionListenerInvocation;
+import io.orqueio.bpm.engine.impl.context.Context;
 
 
 /**

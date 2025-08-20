@@ -14,25 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.plugin.impl;
+package io.orqueio.spin.plugin.impl;
 
-import static org.camunda.spin.plugin.variable.type.SpinValueType.JSON;
-import static org.camunda.spin.plugin.variable.type.SpinValueType.XML;
+import static io.orqueio.spin.plugin.variable.type.SpinValueType.JSON;
+import static io.orqueio.spin.plugin.variable.type.SpinValueType.XML;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.el.ExpressionManager;
-import org.camunda.bpm.engine.impl.util.ClassLoaderUtil;
-import org.camunda.bpm.engine.impl.util.ReflectUtil;
-import org.camunda.bpm.engine.impl.variable.serializer.JavaObjectSerializer;
-import org.camunda.bpm.engine.impl.variable.serializer.TypedValueSerializer;
-import org.camunda.bpm.engine.impl.variable.serializer.VariableSerializers;
-import org.camunda.bpm.engine.variable.type.ValueTypeResolver;
-import org.camunda.spin.DataFormats;
-import org.camunda.spin.Spin;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.el.ExpressionManager;
+import io.orqueio.bpm.engine.impl.util.ClassLoaderUtil;
+import io.orqueio.bpm.engine.impl.util.ReflectUtil;
+import io.orqueio.bpm.engine.impl.variable.serializer.JavaObjectSerializer;
+import io.orqueio.bpm.engine.impl.variable.serializer.TypedValueSerializer;
+import io.orqueio.bpm.engine.impl.variable.serializer.VariableSerializers;
+import io.orqueio.bpm.engine.variable.type.ValueTypeResolver;
+import io.orqueio.spin.DataFormats;
+import io.orqueio.spin.Spin;
 
 /**
  * @author Thorben Lindhauer

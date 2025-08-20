@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.xml.impl.type.reference;
+package io.orqueio.bpm.model.xml.impl.type.reference;
 
-import org.camunda.bpm.model.xml.impl.type.attribute.AttributeImpl;
-import org.camunda.bpm.model.xml.instance.ModelElementInstance;
-import org.camunda.bpm.model.xml.type.ModelElementType;
-import org.camunda.bpm.model.xml.type.attribute.Attribute;
-import org.camunda.bpm.model.xml.type.reference.AttributeReference;
+import io.orqueio.bpm.model.xml.impl.type.attribute.AttributeImpl;
+import io.orqueio.bpm.model.xml.instance.ModelElementInstance;
+import io.orqueio.bpm.model.xml.type.ModelElementType;
+import io.orqueio.bpm.model.xml.type.attribute.Attribute;
+import io.orqueio.bpm.model.xml.type.reference.AttributeReference;
 
 /**
  * @author Sebastian Menski

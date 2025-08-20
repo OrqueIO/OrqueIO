@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.connect.httpclient.soap.impl;
+package io.orqueio.connect.httpclient.soap.impl;
 
-import org.camunda.connect.ConnectorRequestException;
+import io.orqueio.connect.ConnectorRequestException;
 
 public class SoapHttpConnectorLogger extends SoapHttpLogger {
 

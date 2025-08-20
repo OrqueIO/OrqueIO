@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.cockpit.plugin.base;
+package io.orqueio.bpm.cockpit.plugin.base;
 
 import static junit.framework.TestCase.fail;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -22,22 +22,22 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.sql.SQLException;
 import java.util.List;
 
-import org.camunda.bpm.cockpit.impl.plugin.base.dto.CalledProcessInstanceDto;
-import org.camunda.bpm.cockpit.impl.plugin.base.dto.IncidentStatisticsDto;
-import org.camunda.bpm.cockpit.impl.plugin.base.dto.ProcessInstanceDto;
-import org.camunda.bpm.cockpit.impl.plugin.base.dto.query.CalledProcessInstanceQueryDto;
-import org.camunda.bpm.cockpit.impl.plugin.base.sub.resources.ProcessInstanceResource;
-import org.camunda.bpm.cockpit.plugin.test.AbstractCockpitPluginTest;
-import org.camunda.bpm.engine.BadUserRequestException;
-import org.camunda.bpm.engine.IdentityService;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.RepositoryService;
-import org.camunda.bpm.engine.RuntimeService;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.repository.ProcessDefinition;
-import org.camunda.bpm.engine.runtime.ActivityInstance;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.test.Deployment;
+import io.orqueio.bpm.cockpit.impl.plugin.base.dto.CalledProcessInstanceDto;
+import io.orqueio.bpm.cockpit.impl.plugin.base.dto.IncidentStatisticsDto;
+import io.orqueio.bpm.cockpit.impl.plugin.base.dto.ProcessInstanceDto;
+import io.orqueio.bpm.cockpit.impl.plugin.base.dto.query.CalledProcessInstanceQueryDto;
+import io.orqueio.bpm.cockpit.impl.plugin.base.sub.resources.ProcessInstanceResource;
+import io.orqueio.bpm.cockpit.plugin.test.AbstractCockpitPluginTest;
+import io.orqueio.bpm.engine.BadUserRequestException;
+import io.orqueio.bpm.engine.IdentityService;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.RepositoryService;
+import io.orqueio.bpm.engine.RuntimeService;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.repository.ProcessDefinition;
+import io.orqueio.bpm.engine.runtime.ActivityInstance;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.test.Deployment;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;

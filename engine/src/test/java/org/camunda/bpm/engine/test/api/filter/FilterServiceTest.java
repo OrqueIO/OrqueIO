@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.filter;
+package io.orqueio.bpm.engine.test.api.filter;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -23,13 +23,13 @@ import static org.junit.Assert.fail;
 
 import java.util.HashMap;
 
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.filter.Filter;
-import org.camunda.bpm.engine.impl.TaskQueryImpl;
-import org.camunda.bpm.engine.impl.persistence.entity.FilterEntity;
-import org.camunda.bpm.engine.query.Query;
-import org.camunda.bpm.engine.task.TaskQuery;
-import org.camunda.bpm.engine.test.util.PluggableProcessEngineTest;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.filter.Filter;
+import io.orqueio.bpm.engine.impl.TaskQueryImpl;
+import io.orqueio.bpm.engine.impl.persistence.entity.FilterEntity;
+import io.orqueio.bpm.engine.query.Query;
+import io.orqueio.bpm.engine.task.TaskQuery;
+import io.orqueio.bpm.engine.test.util.PluggableProcessEngineTest;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

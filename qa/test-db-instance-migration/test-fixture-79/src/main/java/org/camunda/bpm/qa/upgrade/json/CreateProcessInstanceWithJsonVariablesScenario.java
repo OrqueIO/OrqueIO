@@ -14,23 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa.upgrade.json;
+package io.orqueio.bpm.qa.upgrade.json;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.runtime.Execution;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.engine.variable.value.builder.SerializedObjectValueBuilder;
-import org.camunda.bpm.qa.upgrade.DescribesScenario;
-import org.camunda.bpm.qa.upgrade.ScenarioSetup;
-import org.camunda.bpm.qa.upgrade.json.beans.ObjectList;
-import org.camunda.bpm.qa.upgrade.json.beans.Order;
-import org.camunda.bpm.qa.upgrade.json.beans.OrderDetails;
-import org.camunda.bpm.qa.upgrade.json.beans.RegularCustomer;
-import static org.camunda.bpm.engine.variable.Variables.serializedObjectValue;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.runtime.Execution;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.variable.value.builder.SerializedObjectValueBuilder;
+import io.orqueio.bpm.qa.upgrade.DescribesScenario;
+import io.orqueio.bpm.qa.upgrade.ScenarioSetup;
+import io.orqueio.bpm.qa.upgrade.json.beans.ObjectList;
+import io.orqueio.bpm.qa.upgrade.json.beans.Order;
+import io.orqueio.bpm.qa.upgrade.json.beans.OrderDetails;
+import io.orqueio.bpm.qa.upgrade.json.beans.RegularCustomer;
+import static io.orqueio.bpm.engine.variable.Variables.serializedObjectValue;
 import static org.junit.Assert.assertEquals;
 
 public class CreateProcessInstanceWithJsonVariablesScenario {

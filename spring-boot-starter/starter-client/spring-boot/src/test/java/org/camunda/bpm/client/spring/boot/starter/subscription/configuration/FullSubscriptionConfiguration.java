@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.spring.boot.starter.subscription.configuration;
+package io.orqueio.bpm.client.spring.boot.starter.subscription.configuration;
 
-import org.camunda.bpm.client.spring.annotation.ExternalTaskSubscription;
-import org.camunda.bpm.client.spring.annotation.ExternalTaskSubscription.ProcessVariable;
-import org.camunda.bpm.client.task.ExternalTaskHandler;
+import io.orqueio.bpm.client.spring.annotation.ExternalTaskSubscription;
+import io.orqueio.bpm.client.spring.annotation.ExternalTaskSubscription.ProcessVariable;
+import io.orqueio.bpm.client.task.ExternalTaskHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

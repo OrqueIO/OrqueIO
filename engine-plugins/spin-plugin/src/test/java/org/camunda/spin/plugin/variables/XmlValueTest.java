@@ -14,33 +14,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.plugin.variables;
+package io.orqueio.spin.plugin.variables;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.camunda.spin.DataFormats.xml;
-import static org.camunda.spin.plugin.variable.SpinValues.xmlValue;
-import static org.camunda.spin.plugin.variable.type.SpinValueType.XML;
+import static io.orqueio.spin.DataFormats.xml;
+import static io.orqueio.spin.plugin.variable.SpinValues.xmlValue;
+import static io.orqueio.spin.plugin.variable.type.SpinValueType.XML;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.impl.test.PluggableProcessEngineTestCase;
-import org.camunda.bpm.engine.runtime.VariableInstance;
-import org.camunda.bpm.engine.task.Task;
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.engine.variable.VariableMap;
-import org.camunda.bpm.engine.variable.Variables;
-import org.camunda.bpm.engine.variable.type.ValueType;
-import org.camunda.bpm.model.bpmn.Bpmn;
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
-import org.camunda.spin.DataFormats;
-import org.camunda.spin.SpinRuntimeException;
-import org.camunda.spin.plugin.variable.type.SpinValueType;
-import org.camunda.spin.plugin.variable.value.XmlValue;
-import org.camunda.spin.plugin.variable.value.builder.XmlValueBuilder;
-import org.camunda.spin.xml.SpinXmlElement;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.impl.test.PluggableProcessEngineTestCase;
+import io.orqueio.bpm.engine.runtime.VariableInstance;
+import io.orqueio.bpm.engine.task.Task;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.variable.VariableMap;
+import io.orqueio.bpm.engine.variable.Variables;
+import io.orqueio.bpm.engine.variable.type.ValueType;
+import io.orqueio.bpm.model.bpmn.Bpmn;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.spin.DataFormats;
+import io.orqueio.spin.SpinRuntimeException;
+import io.orqueio.spin.plugin.variable.type.SpinValueType;
+import io.orqueio.spin.plugin.variable.value.XmlValue;
+import io.orqueio.spin.plugin.variable.value.builder.XmlValueBuilder;
+import io.orqueio.spin.xml.SpinXmlElement;
 
 /**
  * @author Roman Smirnov

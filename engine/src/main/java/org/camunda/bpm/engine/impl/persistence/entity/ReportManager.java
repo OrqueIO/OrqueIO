@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.persistence.entity;
+package io.orqueio.bpm.engine.impl.persistence.entity;
 
 import java.util.List;
 
-import org.camunda.bpm.engine.history.DurationReportResult;
-import org.camunda.bpm.engine.impl.HistoricProcessInstanceReportImpl;
-import org.camunda.bpm.engine.impl.persistence.AbstractManager;
+import io.orqueio.bpm.engine.history.DurationReportResult;
+import io.orqueio.bpm.engine.impl.HistoricProcessInstanceReportImpl;
+import io.orqueio.bpm.engine.impl.persistence.AbstractManager;
 
 /**
  * @author Roman Smirnov

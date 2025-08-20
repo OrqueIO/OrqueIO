@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa.performance.engine.sqlstatementlog;
+package io.orqueio.bpm.qa.performance.engine.sqlstatementlog;
 
 import org.apache.ibatis.session.SqlSessionFactory;
-import org.camunda.bpm.engine.impl.cfg.AbstractProcessEnginePlugin;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.db.sql.DbSqlSessionFactory;
+import io.orqueio.bpm.engine.impl.cfg.AbstractProcessEnginePlugin;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.db.sql.DbSqlSessionFactory;
 
 /**
  * <p>ProcessEnginePlugin activating statement logging.</p>

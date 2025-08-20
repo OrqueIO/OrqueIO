@@ -14,7 +14,7 @@
       <sequenceFlow sourceRef="innerStart" targetRef="theTask" />
       <userTask id="theTask" name="my task">
         <extensionElements>
-          <camunda:executionListener event="end" class="org.camunda.bpm.engine.test.util.TestExecutionListener"/>
+          <camunda:executionListener event="end" class="io.orqueio.bpm.engine.test.util.TestExecutionListener"/>
         </extensionElements>
       </userTask>
     </subProcess>

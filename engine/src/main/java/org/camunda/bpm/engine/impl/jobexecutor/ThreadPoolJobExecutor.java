@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.jobexecutor;
+package io.orqueio.bpm.engine.impl.jobexecutor;
 
 import java.util.List;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.ThreadPoolExecutor;
 
-import org.camunda.bpm.engine.impl.ProcessEngineImpl;
+import io.orqueio.bpm.engine.impl.ProcessEngineImpl;
 
 /**
  * @author Daniel Meyer

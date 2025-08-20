@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.variables;
+package io.orqueio.bpm.engine.test.api.variables;
 
 import org.assertj.core.api.Assertions;
-import org.camunda.bpm.engine.RuntimeService;
-import org.camunda.bpm.engine.impl.VariableInstanceQueryImpl;
-import org.camunda.bpm.engine.runtime.VariableInstance;
-import org.camunda.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.RuntimeService;
+import io.orqueio.bpm.engine.impl.VariableInstanceQueryImpl;
+import io.orqueio.bpm.engine.runtime.VariableInstance;
+import io.orqueio.bpm.engine.test.Deployment;
 import org.junit.Before;
 
 @Deployment(resources = { "org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml" })

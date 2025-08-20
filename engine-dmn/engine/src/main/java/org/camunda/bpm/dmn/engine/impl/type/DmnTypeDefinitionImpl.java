@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.engine.impl.type;
+package io.orqueio.bpm.dmn.engine.impl.type;
 
-import static org.camunda.commons.utils.EnsureUtil.ensureNotNull;
+import static io.orqueio.commons.utils.EnsureUtil.ensureNotNull;
 
-import org.camunda.bpm.dmn.engine.impl.DmnEngineLogger;
-import org.camunda.bpm.dmn.engine.impl.DmnLogger;
-import org.camunda.bpm.dmn.engine.impl.spi.type.DmnDataTypeTransformer;
-import org.camunda.bpm.dmn.engine.impl.spi.type.DmnTypeDefinition;
-import org.camunda.bpm.engine.variable.Variables;
-import org.camunda.bpm.engine.variable.value.TypedValue;
+import io.orqueio.bpm.dmn.engine.impl.DmnEngineLogger;
+import io.orqueio.bpm.dmn.engine.impl.DmnLogger;
+import io.orqueio.bpm.dmn.engine.impl.spi.type.DmnDataTypeTransformer;
+import io.orqueio.bpm.dmn.engine.impl.spi.type.DmnTypeDefinition;
+import io.orqueio.bpm.engine.variable.Variables;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
 
 public class DmnTypeDefinitionImpl implements DmnTypeDefinition {
 

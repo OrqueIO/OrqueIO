@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.impl.history;
+package io.orqueio.bpm.engine.rest.impl.history;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -22,15 +22,15 @@ import java.util.List;
 
 import javax.ws.rs.core.Response.Status;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.jobexecutor.historycleanup.BatchWindow;
-import org.camunda.bpm.engine.impl.util.ClockUtil;
-import org.camunda.bpm.engine.rest.dto.history.HistoryCleanupConfigurationDto;
-import org.camunda.bpm.engine.rest.dto.runtime.JobDto;
-import org.camunda.bpm.engine.rest.exception.RestException;
-import org.camunda.bpm.engine.rest.history.HistoryCleanupRestService;
-import org.camunda.bpm.engine.runtime.Job;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.jobexecutor.historycleanup.BatchWindow;
+import io.orqueio.bpm.engine.impl.util.ClockUtil;
+import io.orqueio.bpm.engine.rest.dto.history.HistoryCleanupConfigurationDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.JobDto;
+import io.orqueio.bpm.engine.rest.exception.RestException;
+import io.orqueio.bpm.engine.rest.history.HistoryCleanupRestService;
+import io.orqueio.bpm.engine.runtime.Job;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 

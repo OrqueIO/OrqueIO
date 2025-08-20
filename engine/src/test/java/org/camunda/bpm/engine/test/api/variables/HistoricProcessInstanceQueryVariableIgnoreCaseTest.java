@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.variables;
+package io.orqueio.bpm.engine.test.api.variables;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.camunda.bpm.engine.ProcessEngineConfiguration;
-import org.camunda.bpm.engine.history.HistoricProcessInstance;
-import org.camunda.bpm.engine.impl.HistoricProcessInstanceQueryImpl;
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.engine.test.RequiredHistoryLevel;
+import io.orqueio.bpm.engine.ProcessEngineConfiguration;
+import io.orqueio.bpm.engine.history.HistoricProcessInstance;
+import io.orqueio.bpm.engine.impl.HistoricProcessInstanceQueryImpl;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.test.RequiredHistoryLevel;
 import org.junit.Before;
 
 @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_AUDIT)

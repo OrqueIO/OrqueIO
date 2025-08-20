@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.sub.task.impl;
+package io.orqueio.bpm.engine.rest.sub.task.impl;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -27,19 +27,19 @@ import javax.ws.rs.HttpMethod;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
-import org.camunda.bpm.engine.IdentityService;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.history.HistoricTaskInstance;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.identity.Authentication;
-import org.camunda.bpm.engine.rest.TaskRestService;
-import org.camunda.bpm.engine.rest.dto.task.AttachmentDto;
-import org.camunda.bpm.engine.rest.exception.InvalidRequestException;
-import org.camunda.bpm.engine.rest.mapper.MultipartFormData;
-import org.camunda.bpm.engine.rest.mapper.MultipartFormData.FormPart;
-import org.camunda.bpm.engine.rest.sub.task.TaskAttachmentResource;
-import org.camunda.bpm.engine.task.Attachment;
+import io.orqueio.bpm.engine.IdentityService;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.history.HistoricTaskInstance;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.identity.Authentication;
+import io.orqueio.bpm.engine.rest.TaskRestService;
+import io.orqueio.bpm.engine.rest.dto.task.AttachmentDto;
+import io.orqueio.bpm.engine.rest.exception.InvalidRequestException;
+import io.orqueio.bpm.engine.rest.mapper.MultipartFormData;
+import io.orqueio.bpm.engine.rest.mapper.MultipartFormData.FormPart;
+import io.orqueio.bpm.engine.rest.sub.task.TaskAttachmentResource;
+import io.orqueio.bpm.engine.task.Attachment;
 
 public class TaskAttachmentResourceImpl implements TaskAttachmentResource {
 

@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.cmd;
+package io.orqueio.bpm.engine.impl.cmd;
 
 import java.util.Date;
 
-import org.camunda.bpm.engine.BadUserRequestException;
-import org.camunda.bpm.engine.impl.persistence.entity.ExternalTaskEntity;
-import org.camunda.bpm.engine.impl.util.ClockUtil;
-import org.camunda.bpm.engine.impl.util.EnsureUtil;
+import io.orqueio.bpm.engine.BadUserRequestException;
+import io.orqueio.bpm.engine.impl.persistence.entity.ExternalTaskEntity;
+import io.orqueio.bpm.engine.impl.util.ClockUtil;
+import io.orqueio.bpm.engine.impl.util.EnsureUtil;
 
 public class LockExternalTaskCmd extends HandleExternalTaskCmd {
 

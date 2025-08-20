@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.dmn.util;
+package io.orqueio.bpm.model.dmn.util;
 
 import org.w3c.dom.CDATASection;
 import org.w3c.dom.Node;

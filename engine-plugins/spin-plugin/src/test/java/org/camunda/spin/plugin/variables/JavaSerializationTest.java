@@ -14,19 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.plugin.variables;
+package io.orqueio.spin.plugin.variables;
 
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.impl.test.PluggableProcessEngineTestCase;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.task.Task;
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.engine.variable.Variables;
-import org.camunda.bpm.engine.variable.type.ValueType;
-import org.camunda.bpm.engine.variable.value.ObjectValue;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.impl.test.PluggableProcessEngineTestCase;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.task.Task;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.variable.Variables;
+import io.orqueio.bpm.engine.variable.type.ValueType;
+import io.orqueio.bpm.engine.variable.value.ObjectValue;
 import org.json.JSONException;
-import static org.camunda.bpm.engine.variable.Variables.objectValue;
-import static org.camunda.bpm.engine.variable.Variables.serializedObjectValue;
+import static io.orqueio.bpm.engine.variable.Variables.objectValue;
+import static io.orqueio.bpm.engine.variable.Variables.serializedObjectValue;
 
 /**
  * Here we test how the engine behaves, when more than one object serializers are available.

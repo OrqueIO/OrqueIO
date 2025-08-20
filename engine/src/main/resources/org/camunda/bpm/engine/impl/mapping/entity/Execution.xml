@@ -19,11 +19,11 @@
 -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
   
-<mapper namespace="org.camunda.bpm.engine.impl.persistence.entity.ExecutionEntity">
+<mapper namespace="io.orqueio.bpm.engine.impl.persistence.entity.ExecutionEntity">
 
   <!-- EXECUTION INSERT -->
 
-  <insert id="insertExecution" parameterType="org.camunda.bpm.engine.impl.persistence.entity.ExecutionEntity">
+  <insert id="insertExecution" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.ExecutionEntity">
     insert into ${prefix}ACT_RU_EXECUTION
     (
       ID_,
@@ -76,7 +76,7 @@
 
   <!-- EXECUTION UPDATE -->
   
-  <update id="updateExecution" parameterType="org.camunda.bpm.engine.impl.persistence.entity.ExecutionEntity">
+  <update id="updateExecution" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.ExecutionEntity">
     update ${prefix}ACT_RU_EXECUTION set
       REV_ = #{revisionNext, jdbcType=INTEGER},
       PROC_DEF_ID_ = #{processDefinitionId, jdbcType=VARCHAR},
@@ -98,7 +98,7 @@
       and REV_ = #{revision, jdbcType=INTEGER}
   </update>
   
-  <update id="updateExecutionSuspensionStateByParameters" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject">
+  <update id="updateExecutionSuspensionStateByParameters" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject">
     update ${prefix}ACT_RU_EXECUTION set
       REV_ = 1 + REV_ ,
       SUSPENSION_STATE_ = #{parameter.suspensionState, jdbcType=INTEGER}
@@ -124,20 +124,20 @@
           </if>
         )
         <bind name="columnPrefix" value="''"/>
-        <include refid="org.camunda.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheckWithPrefix" />
+        <include refid="io.orqueio.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheckWithPrefix" />
       </if>
     </where>
   </update>
 
   <!-- EXECUTION DELETE -->
 
-  <delete id="deleteExecution" parameterType="org.camunda.bpm.engine.impl.persistence.entity.ExecutionEntity">
+  <delete id="deleteExecution" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.ExecutionEntity">
     delete from ${prefix}ACT_RU_EXECUTION where ID_ = #{id} and REV_ = #{revision}
   </delete>
 
   <!-- EXECUTION RESULTMAP -->
 
-  <resultMap id="executionResultMap" type="org.camunda.bpm.engine.impl.persistence.entity.ExecutionEntity">
+  <resultMap id="executionResultMap" type="io.orqueio.bpm.engine.impl.persistence.entity.ExecutionEntity">
     <id property="id" column="ID_" jdbcType="VARCHAR" />
     <result property="revision" column="REV_" jdbcType="INTEGER" />
     <result property="rootProcessInstanceId" column="ROOT_PROC_INST_ID_" jdbcType="VARCHAR"/>
@@ -161,7 +161,7 @@
     <result property="processDefinitionKey" column="PROC_DEF_KEY_" jdbcType="VARCHAR"/>  
   </resultMap>
   
-  <resultMap type="org.camunda.bpm.engine.impl.util.ImmutablePair" id="deploymentIdMapping">
+  <resultMap type="io.orqueio.bpm.engine.impl.util.ImmutablePair" id="deploymentIdMapping">
     <id property="left" column="DEPLOYMENT_ID_" jdbcType="VARCHAR" />
     <id property="right" column="ID_" jdbcType="VARCHAR" />
   </resultMap>
@@ -172,62 +172,62 @@
     select * from ${prefix}ACT_RU_EXECUTION where ID_ = #{id}
   </select>
   
-  <select id="selectExecutionsByParentExecutionId" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject" resultMap="executionResultMap">
+  <select id="selectExecutionsByParentExecutionId" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject" resultMap="executionResultMap">
     select * from ${prefix}ACT_RU_EXECUTION
     where PARENT_ID_ = #{parameter}
   </select>
   
-  <select id="selectExecutionsByProcessInstanceId" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject" resultMap="executionResultMap">
+  <select id="selectExecutionsByProcessInstanceId" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject" resultMap="executionResultMap">
     select * from ${prefix}ACT_RU_EXECUTION
     where PROC_INST_ID_ = #{parameter}
   </select>
 
-  <select id="selectProcessInstanceIdsByProcessDefinitionId" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject" resultType="string">
+  <select id="selectProcessInstanceIdsByProcessDefinitionId" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject" resultType="string">
     select ID_
     from ${prefix}ACT_RU_EXECUTION
     where PROC_DEF_ID_ = #{parameter} and PARENT_ID_ is null
   </select>
   
-  <select id="selectExecutionsByQueryCriteria" parameterType="org.camunda.bpm.engine.impl.ExecutionQueryImpl" resultMap="executionResultMap">
-  	<include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
+  <select id="selectExecutionsByQueryCriteria" parameterType="io.orqueio.bpm.engine.impl.ExecutionQueryImpl" resultMap="executionResultMap">
+  	<include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
     ${limitBefore}
     select ${distinct} RES.*
     ${limitBetween}
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.orderBySelection"/>
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.orderBySelection"/>
     <include refid="selectExecutionsByQueryCriteriaSql"/>
     ${orderBy}
     ${limitAfter}
   </select>
   
-  <select id="selectExecutionCountByQueryCriteria" parameterType="org.camunda.bpm.engine.impl.ExecutionQueryImpl" resultType="long">
+  <select id="selectExecutionCountByQueryCriteria" parameterType="io.orqueio.bpm.engine.impl.ExecutionQueryImpl" resultType="long">
     ${countDistinctBeforeStart} RES.ID_ ${countDistinctBeforeEnd}
     <include refid="selectExecutionsByQueryCriteriaSql"/>
     ${countDistinctAfterEnd}
   </select>
   
-  <select id="selectProcessInstanceByQueryCriteria" parameterType="org.camunda.bpm.engine.impl.ProcessInstanceQueryImpl" resultMap="executionResultMap">
-  	<include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
+  <select id="selectProcessInstanceByQueryCriteria" parameterType="io.orqueio.bpm.engine.impl.ProcessInstanceQueryImpl" resultMap="executionResultMap">
+  	<include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
     ${limitBefore}
     select ${distinct} RES.*
     ${limitBetween}
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.orderBySelection"/>
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.orderBySelection"/>
     <include refid="selectProcessInstanceByQueryCriteriaSql"/>
     ${orderBy}
     ${limitAfter}
   </select>
   
-  <select id="selectProcessInstanceCountByQueryCriteria" parameterType="org.camunda.bpm.engine.impl.ProcessInstanceQueryImpl" resultType="long">
+  <select id="selectProcessInstanceCountByQueryCriteria" parameterType="io.orqueio.bpm.engine.impl.ProcessInstanceQueryImpl" resultType="long">
     ${countDistinctBeforeStart} RES.ID_ ${countDistinctBeforeEnd}
     <include refid="selectProcessInstanceByQueryCriteriaSql"/>
     ${countDistinctAfterEnd}
   </select>
 
-  <select id="selectProcessInstanceIdsByQueryCriteria" parameterType="org.camunda.bpm.engine.impl.ProcessInstanceQueryImpl" resultType="string">
+  <select id="selectProcessInstanceIdsByQueryCriteria" parameterType="io.orqueio.bpm.engine.impl.ProcessInstanceQueryImpl" resultType="string">
     select distinct RES.ID_
     <include refid="selectProcessInstanceByQueryCriteriaSql"/>
   </select>
   
-  <select id="selectProcessInstanceDeploymentIdMappingsByQueryCriteria" parameterType="org.camunda.bpm.engine.impl.ProcessInstanceQueryImpl" resultMap="deploymentIdMapping">
+  <select id="selectProcessInstanceDeploymentIdMappingsByQueryCriteria" parameterType="io.orqueio.bpm.engine.impl.ProcessInstanceQueryImpl" resultMap="deploymentIdMapping">
     select distinct P.DEPLOYMENT_ID_, RES.ID_
     <include refid="selectProcessInstanceByQueryCriteriaSql"/>
     ORDER BY P.DEPLOYMENT_ID_ ASC
@@ -262,7 +262,7 @@
     inner join ${prefix}ACT_RE_PROCDEF P on RES.PROC_DEF_ID_ = P.ID_
 
     <if test="authCheck.shouldPerformAuthorizatioCheck &amp;&amp; !authCheck.revokeAuthorizationCheckEnabled &amp;&amp; authCheck.authUserId != null">
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoinWithoutOnClause" /> 
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoinWithoutOnClause" />
       AUTH ON (AUTH.RESOURCE_ID_ ${authJoinStart} RES.ID_ ${authJoinSeparator} P.KEY_ ${authJoinSeparator} '*' ${authJoinEnd})
     </if>
 
@@ -316,7 +316,7 @@
               ${queryType}
               <bind name="listOfIds" value="query.processInstanceIds" />
               <bind name="fieldName" value="'RES.PROC_INST_ID_'" />
-              <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection" />
+              <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection" />
             </if>
             <if test="query.businessKey != null">
               ${queryType} RES.BUSINESS_KEY_ = #{query.businessKey}
@@ -362,7 +362,7 @@
               WHERE
               <bind name="varPrefix" value="''"/>
 
-              <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.variableNameEqualsCaseInsensitive" />
+              <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.variableNameEqualsCaseInsensitive" />
 
               <choose>
                 <when test="queryVariableValue.local">
@@ -377,7 +377,7 @@
               <bind name="varTypeField" value="'TYPE_'"/>
               <if test="queryVariableValue.valueConditions != null">
                 and
-                <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.variableValueConditions"/>
+                <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.variableValueConditions"/>
               </if>
               )
             </foreach>
@@ -422,8 +422,8 @@
         )
       </foreach>
 
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.queryAuthorizationCheck" />
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.queryAuthorizationCheck" />
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
 
     </where>
   </sql>
@@ -440,7 +440,7 @@
     inner join ${prefix}ACT_RE_PROCDEF P on RES.PROC_DEF_ID_ = P.ID_
 
     <if test="authCheck.shouldPerformAuthorizatioCheck &amp;&amp; !authCheck.revokeAuthorizationCheckEnabled &amp;&amp; authCheck.authUserId != null">
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoinWithoutOnClause" />
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoinWithoutOnClause" />
       AUTH ON (AUTH.RESOURCE_ID_ ${authJoinStart} RES.PROC_INST_ID_ ${authJoinSeparator} P.KEY_ ${authJoinSeparator} '*' ${authJoinEnd})
     </if>
 
@@ -476,7 +476,7 @@
         WHERE
         <bind name="varPrefix" value="''"/>
 
-        <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.variableNameEqualsCaseInsensitive" />
+        <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.variableNameEqualsCaseInsensitive" />
 
         <choose>
           <when test="queryVariableValue.local">
@@ -491,7 +491,7 @@
         <bind name="varTypeField" value="'TYPE_'"/>
         <if test="queryVariableValue.valueConditions != null">
           and
-          <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.variableValueConditions"/>
+          <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.variableValueConditions"/>
         </if>
         )
       </foreach>
@@ -532,8 +532,8 @@
         </if>
       </if>
 
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.queryAuthorizationCheck" />
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.queryAuthorizationCheck" />
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
 
     </where>
   </sql>

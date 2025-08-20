@@ -14,23 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.cockpit.plugin.base.authorization;
+package io.orqueio.bpm.cockpit.plugin.base.authorization;
 
-import static org.camunda.bpm.engine.authorization.Authorization.ANY;
-import static org.camunda.bpm.engine.authorization.Permissions.READ;
-import static org.camunda.bpm.engine.authorization.Permissions.READ_INSTANCE;
-import static org.camunda.bpm.engine.authorization.Resources.PROCESS_DEFINITION;
-import static org.camunda.bpm.engine.authorization.Resources.PROCESS_INSTANCE;
+import static io.orqueio.bpm.engine.authorization.Authorization.ANY;
+import static io.orqueio.bpm.engine.authorization.Permissions.READ;
+import static io.orqueio.bpm.engine.authorization.Permissions.READ_INSTANCE;
+import static io.orqueio.bpm.engine.authorization.Resources.PROCESS_DEFINITION;
+import static io.orqueio.bpm.engine.authorization.Resources.PROCESS_INSTANCE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 
-import org.camunda.bpm.cockpit.impl.plugin.base.dto.CalledProcessInstanceDto;
-import org.camunda.bpm.cockpit.impl.plugin.base.dto.query.CalledProcessInstanceQueryDto;
-import org.camunda.bpm.cockpit.impl.plugin.base.sub.resources.ProcessInstanceResource;
-import org.camunda.bpm.engine.impl.db.AuthorizationCheck;
-import org.camunda.bpm.engine.impl.db.PermissionCheck;
-import org.camunda.bpm.engine.impl.identity.Authentication;
+import io.orqueio.bpm.cockpit.impl.plugin.base.dto.CalledProcessInstanceDto;
+import io.orqueio.bpm.cockpit.impl.plugin.base.dto.query.CalledProcessInstanceQueryDto;
+import io.orqueio.bpm.cockpit.impl.plugin.base.sub.resources.ProcessInstanceResource;
+import io.orqueio.bpm.engine.impl.db.AuthorizationCheck;
+import io.orqueio.bpm.engine.impl.db.PermissionCheck;
+import io.orqueio.bpm.engine.impl.identity.Authentication;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

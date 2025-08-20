@@ -14,52 +14,52 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine;
+package io.orqueio.bpm.engine;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.engine.authorization.BatchPermissions;
-import org.camunda.bpm.engine.authorization.Permissions;
-import org.camunda.bpm.engine.authorization.ProcessDefinitionPermissions;
-import org.camunda.bpm.engine.authorization.ProcessInstancePermissions;
-import org.camunda.bpm.engine.authorization.Resources;
-import org.camunda.bpm.engine.batch.Batch;
-import org.camunda.bpm.engine.delegate.ExecutionListener;
-import org.camunda.bpm.engine.exception.NullValueException;
-import org.camunda.bpm.engine.exception.NotFoundException;
-import org.camunda.bpm.engine.exception.NotValidException;
-import org.camunda.bpm.engine.history.HistoricProcessInstanceQuery;
-import org.camunda.bpm.engine.migration.MigrationPlan;
-import org.camunda.bpm.engine.migration.MigrationPlanBuilder;
-import org.camunda.bpm.engine.migration.MigrationPlanExecutionBuilder;
-import org.camunda.bpm.engine.repository.Deployment;
-import org.camunda.bpm.engine.repository.ProcessDefinition;
-import org.camunda.bpm.engine.runtime.ActivityInstance;
-import org.camunda.bpm.engine.runtime.ConditionEvaluationBuilder;
-import org.camunda.bpm.engine.runtime.EventSubscriptionQuery;
-import org.camunda.bpm.engine.runtime.Execution;
-import org.camunda.bpm.engine.runtime.ExecutionQuery;
-import org.camunda.bpm.engine.runtime.Incident;
-import org.camunda.bpm.engine.runtime.IncidentQuery;
-import org.camunda.bpm.engine.runtime.MessageCorrelationAsyncBuilder;
-import org.camunda.bpm.engine.runtime.MessageCorrelationBuilder;
-import org.camunda.bpm.engine.runtime.ModificationBuilder;
-import org.camunda.bpm.engine.runtime.NativeExecutionQuery;
-import org.camunda.bpm.engine.runtime.NativeProcessInstanceQuery;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.runtime.ProcessInstanceModificationBuilder;
-import org.camunda.bpm.engine.runtime.ProcessInstanceQuery;
-import org.camunda.bpm.engine.runtime.ProcessInstantiationBuilder;
-import org.camunda.bpm.engine.runtime.RestartProcessInstanceBuilder;
-import org.camunda.bpm.engine.runtime.SignalEventReceivedBuilder;
-import org.camunda.bpm.engine.runtime.UpdateProcessInstanceSuspensionStateBuilder;
-import org.camunda.bpm.engine.runtime.UpdateProcessInstanceSuspensionStateSelectBuilder;
-import org.camunda.bpm.engine.runtime.VariableInstanceQuery;
-import org.camunda.bpm.engine.variable.VariableMap;
-import org.camunda.bpm.engine.variable.value.SerializableValue;
-import org.camunda.bpm.engine.variable.value.TypedValue;
+import io.orqueio.bpm.engine.authorization.BatchPermissions;
+import io.orqueio.bpm.engine.authorization.Permissions;
+import io.orqueio.bpm.engine.authorization.ProcessDefinitionPermissions;
+import io.orqueio.bpm.engine.authorization.ProcessInstancePermissions;
+import io.orqueio.bpm.engine.authorization.Resources;
+import io.orqueio.bpm.engine.batch.Batch;
+import io.orqueio.bpm.engine.delegate.ExecutionListener;
+import io.orqueio.bpm.engine.exception.NullValueException;
+import io.orqueio.bpm.engine.exception.NotFoundException;
+import io.orqueio.bpm.engine.exception.NotValidException;
+import io.orqueio.bpm.engine.history.HistoricProcessInstanceQuery;
+import io.orqueio.bpm.engine.migration.MigrationPlan;
+import io.orqueio.bpm.engine.migration.MigrationPlanBuilder;
+import io.orqueio.bpm.engine.migration.MigrationPlanExecutionBuilder;
+import io.orqueio.bpm.engine.repository.Deployment;
+import io.orqueio.bpm.engine.repository.ProcessDefinition;
+import io.orqueio.bpm.engine.runtime.ActivityInstance;
+import io.orqueio.bpm.engine.runtime.ConditionEvaluationBuilder;
+import io.orqueio.bpm.engine.runtime.EventSubscriptionQuery;
+import io.orqueio.bpm.engine.runtime.Execution;
+import io.orqueio.bpm.engine.runtime.ExecutionQuery;
+import io.orqueio.bpm.engine.runtime.Incident;
+import io.orqueio.bpm.engine.runtime.IncidentQuery;
+import io.orqueio.bpm.engine.runtime.MessageCorrelationAsyncBuilder;
+import io.orqueio.bpm.engine.runtime.MessageCorrelationBuilder;
+import io.orqueio.bpm.engine.runtime.ModificationBuilder;
+import io.orqueio.bpm.engine.runtime.NativeExecutionQuery;
+import io.orqueio.bpm.engine.runtime.NativeProcessInstanceQuery;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.runtime.ProcessInstanceModificationBuilder;
+import io.orqueio.bpm.engine.runtime.ProcessInstanceQuery;
+import io.orqueio.bpm.engine.runtime.ProcessInstantiationBuilder;
+import io.orqueio.bpm.engine.runtime.RestartProcessInstanceBuilder;
+import io.orqueio.bpm.engine.runtime.SignalEventReceivedBuilder;
+import io.orqueio.bpm.engine.runtime.UpdateProcessInstanceSuspensionStateBuilder;
+import io.orqueio.bpm.engine.runtime.UpdateProcessInstanceSuspensionStateSelectBuilder;
+import io.orqueio.bpm.engine.runtime.VariableInstanceQuery;
+import io.orqueio.bpm.engine.variable.VariableMap;
+import io.orqueio.bpm.engine.variable.value.SerializableValue;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
 
 
 /** Service which provides access to {@link Deployment}s,

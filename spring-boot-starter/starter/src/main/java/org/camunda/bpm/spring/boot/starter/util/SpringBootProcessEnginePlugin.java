@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter.util;
+package io.orqueio.bpm.spring.boot.starter.util;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.impl.ProcessEngineImpl;
-import org.camunda.bpm.engine.impl.cfg.AbstractProcessEnginePlugin;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.spring.SpringProcessEngineConfiguration;
-import org.camunda.bpm.engine.spring.SpringProcessEnginePlugin;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.impl.ProcessEngineImpl;
+import io.orqueio.bpm.engine.impl.cfg.AbstractProcessEnginePlugin;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.spring.SpringProcessEngineConfiguration;
+import io.orqueio.bpm.engine.spring.SpringProcessEnginePlugin;
 
-import static org.camunda.bpm.spring.boot.starter.util.CamundaSpringBootUtil.processEngineImpl;
-import static org.camunda.bpm.spring.boot.starter.util.CamundaSpringBootUtil.springProcessEngineConfiguration;
+import static io.orqueio.bpm.spring.boot.starter.util.CamundaSpringBootUtil.processEngineImpl;
+import static io.orqueio.bpm.spring.boot.starter.util.CamundaSpringBootUtil.springProcessEngineConfiguration;
 
 /**
  * Convenience class that specializes {@link AbstractProcessEnginePlugin} to

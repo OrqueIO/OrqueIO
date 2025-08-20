@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.spring.annotations;
+package io.orqueio.bpm.engine.spring.annotations;
 
 
 import java.lang.annotation.*;
@@ -35,7 +35,7 @@ import java.lang.annotation.*;
  * registered in the context as "myBean." To subscribe to that, a POJO need only implement
  * (optionally) {@link ProcessEngineComponent} and, on a method, add
  * {@link State} to indicate that the method in particular is
- * tasked with responding to a state. If applied to a bean and there are no {@link org.camunda.bpm.engine.annotations.ProcessEngineComponent}
+ * tasked with responding to a state. If applied to a bean and there are no {@link io.orqueio.bpm.engine.annotations.ProcessEngineComponent}
  * annotations present, then one option might be to automatically enlist all public methods
  * as handlers for states whose IDs or names are inferred from the method name:
  * <p/>

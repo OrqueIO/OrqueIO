@@ -12,7 +12,7 @@
     <businessRuleTask id="ruleTask"
       camunda:decisionRef="testDecision" camunda:resultVariable="ruleResult">
       <extensionElements>
-        <camunda:executionListener class="org.camunda.bpm.engine.test.dmn.businessruletask.DecisionResultTestListener" event="end" />
+        <camunda:executionListener class="io.orqueio.bpm.engine.test.dmn.businessruletask.DecisionResultTestListener" event="end" />
       </extensionElements>
     </businessRuleTask>
 

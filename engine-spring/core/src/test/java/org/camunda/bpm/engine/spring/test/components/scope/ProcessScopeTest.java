@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.spring.test.components.scope;
+package io.orqueio.bpm.engine.spring.test.components.scope;
 
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -27,7 +27,7 @@ import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 import java.util.logging.StreamHandler;
 
-import org.camunda.bpm.engine.spring.components.scope.ProcessScope;
+import io.orqueio.bpm.engine.spring.components.scope.ProcessScope;
 import org.junit.Test;
 
 /**
@@ -54,12 +54,12 @@ public class ProcessScopeTest {
       // test for logged exception
       String message = new String(out.toByteArray(), StandardCharsets.UTF_8);
       assertTrue(!message.isEmpty());
-      assertTrue(message.contains("org.camunda.bpm.engine.spring.components.scope.ProcessScope get"));
+      assertTrue(message.contains("io.orqueio.bpm.engine.spring.components.scope.ProcessScope get"));
       assertTrue(message.contains("couldn't return value from process scope! java.lang.NullPointerException"));
-      assertTrue(message.contains("at org.camunda.bpm.engine.spring.components.scope.ProcessScope.getExecutionId(ProcessScope.java:")); 
-      assertTrue(message.contains("at org.camunda.bpm.engine.spring.components.scope.ProcessScope.getConversationId(ProcessScope.java:")); 
-      assertTrue(message.contains("at org.camunda.bpm.engine.spring.components.scope.ProcessScope.get(ProcessScope.java:")); 
-      assertTrue(message.contains("at org.camunda.bpm.engine.spring.test.components.scope.ProcessScopeTest.shouldLogExceptionStacktrace(ProcessScopeTest.java:")); 
+      assertTrue(message.contains("at io.orqueio.bpm.engine.spring.components.scope.ProcessScope.getExecutionId(ProcessScope.java:"));
+      assertTrue(message.contains("at io.orqueio.bpm.engine.spring.components.scope.ProcessScope.getConversationId(ProcessScope.java:"));
+      assertTrue(message.contains("at io.orqueio.bpm.engine.spring.components.scope.ProcessScope.get(ProcessScope.java:"));
+      assertTrue(message.contains("at io.orqueio.bpm.engine.spring.test.components.scope.ProcessScopeTest.shouldLogExceptionStacktrace(ProcessScopeTest.java:"));
     }
   }
 }

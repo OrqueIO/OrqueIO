@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter.annotation;
+package io.orqueio.bpm.spring.boot.starter.annotation;
 
-import org.camunda.bpm.engine.spring.SpringProcessEngineConfiguration;
-import org.camunda.bpm.spring.boot.starter.SpringBootProcessApplication;
+import io.orqueio.bpm.engine.spring.SpringProcessEngineConfiguration;
+import io.orqueio.bpm.spring.boot.starter.SpringBootProcessApplication;
 import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.Documented;

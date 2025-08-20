@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.exception;
+package io.orqueio.bpm.client.exception;
 
 /**
  * <p>Exception is thrown if the task has been canceled and therefore does not exist anymore</p>

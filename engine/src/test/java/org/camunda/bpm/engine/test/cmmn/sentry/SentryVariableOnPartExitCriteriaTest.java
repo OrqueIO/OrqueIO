@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.cmmn.sentry;
+package io.orqueio.bpm.engine.test.cmmn.sentry;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import org.camunda.bpm.engine.runtime.CaseExecution;
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.engine.test.cmmn.CmmnTest;
+import io.orqueio.bpm.engine.runtime.CaseExecution;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.test.cmmn.CmmnTest;
 import org.junit.Test;
 
 /**

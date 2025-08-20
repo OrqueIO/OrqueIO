@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.impl;
+package io.orqueio.bpm.engine.rest.impl;
 
 import java.util.Date;
 
-import org.camunda.bpm.engine.impl.identity.Authentication;
-import org.camunda.bpm.engine.impl.util.ClockUtil;
-import org.camunda.bpm.engine.rest.dto.externaltask.FetchExternalTasksExtendedDto;
+import io.orqueio.bpm.engine.impl.identity.Authentication;
+import io.orqueio.bpm.engine.impl.util.ClockUtil;
+import io.orqueio.bpm.engine.rest.dto.externaltask.FetchExternalTasksExtendedDto;
 
 import javax.ws.rs.container.AsyncResponse;
 

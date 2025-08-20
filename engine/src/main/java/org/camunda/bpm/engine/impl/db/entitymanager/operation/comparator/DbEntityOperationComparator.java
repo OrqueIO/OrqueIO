@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.db.entitymanager.operation.comparator;
+package io.orqueio.bpm.engine.impl.db.entitymanager.operation.comparator;
 
 import java.util.Comparator;
 
-import org.camunda.bpm.engine.impl.db.DbEntity;
-import org.camunda.bpm.engine.impl.db.entitymanager.operation.DbEntityOperation;
+import io.orqueio.bpm.engine.impl.db.DbEntity;
+import io.orqueio.bpm.engine.impl.db.entitymanager.operation.DbEntityOperation;
 
 /**
  * @author Daniel Meyer

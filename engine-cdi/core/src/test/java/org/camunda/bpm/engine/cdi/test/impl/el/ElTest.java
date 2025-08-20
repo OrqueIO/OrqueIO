@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.cdi.test.impl.el;
+package io.orqueio.bpm.engine.cdi.test.impl.el;
 
 import static org.junit.Assert.*;
 
 import java.util.Arrays;
 
-import org.camunda.bpm.engine.cdi.test.CdiProcessEngineTestCase;
-import org.camunda.bpm.engine.cdi.test.impl.beans.MessageBean;
-import org.camunda.bpm.engine.cdi.test.impl.el.beans.DependentScopedBean;
-import org.camunda.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.cdi.test.CdiProcessEngineTestCase;
+import io.orqueio.bpm.engine.cdi.test.impl.beans.MessageBean;
+import io.orqueio.bpm.engine.cdi.test.impl.el.beans.DependentScopedBean;
+import io.orqueio.bpm.engine.test.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.application;
+package io.orqueio.bpm.application;
 
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.ProcessApplicationService;
+import io.orqueio.bpm.ProcessApplicationService;
 
 /**
  * <p>Object holding information about a deployed Process Application</p>

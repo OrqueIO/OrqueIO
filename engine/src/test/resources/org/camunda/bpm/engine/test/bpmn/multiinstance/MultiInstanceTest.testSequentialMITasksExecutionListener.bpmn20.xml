@@ -14,10 +14,10 @@
       <extensionElements>
         <camunda:executionListener
           event="start"
-          class="org.camunda.bpm.engine.test.bpmn.multiinstance.RecordInvocationListener" />
+          class="io.orqueio.bpm.engine.test.bpmn.multiinstance.RecordInvocationListener" />
         <camunda:executionListener
           event="end"
-          class="org.camunda.bpm.engine.test.bpmn.multiinstance.RecordInvocationListener" />
+          class="io.orqueio.bpm.engine.test.bpmn.multiinstance.RecordInvocationListener" />
       </extensionElements>
       <multiInstanceLoopCharacteristics isSequential="true">
         <loopCardinality>${nrOfLoops}</loopCardinality>

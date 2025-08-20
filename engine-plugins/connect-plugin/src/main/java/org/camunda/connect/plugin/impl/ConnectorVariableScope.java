@@ -14,22 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.connect.plugin.impl;
+package io.orqueio.connect.plugin.impl;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.camunda.bpm.engine.impl.core.variable.CoreVariableInstance;
-import org.camunda.bpm.engine.impl.core.variable.scope.AbstractVariableScope;
-import org.camunda.bpm.engine.impl.core.variable.scope.SimpleVariableInstance;
-import org.camunda.bpm.engine.impl.core.variable.scope.SimpleVariableInstance.SimpleVariableInstanceFactory;
-import org.camunda.bpm.engine.impl.core.variable.scope.VariableInstanceFactory;
-import org.camunda.bpm.engine.impl.core.variable.scope.VariableInstanceLifecycleListener;
-import org.camunda.bpm.engine.impl.core.variable.scope.VariableStore;
-import org.camunda.connect.spi.ConnectorRequest;
-import org.camunda.connect.spi.ConnectorResponse;
+import io.orqueio.bpm.engine.impl.core.variable.CoreVariableInstance;
+import io.orqueio.bpm.engine.impl.core.variable.scope.AbstractVariableScope;
+import io.orqueio.bpm.engine.impl.core.variable.scope.SimpleVariableInstance;
+import io.orqueio.bpm.engine.impl.core.variable.scope.SimpleVariableInstance.SimpleVariableInstanceFactory;
+import io.orqueio.bpm.engine.impl.core.variable.scope.VariableInstanceFactory;
+import io.orqueio.bpm.engine.impl.core.variable.scope.VariableInstanceLifecycleListener;
+import io.orqueio.bpm.engine.impl.core.variable.scope.VariableStore;
+import io.orqueio.connect.spi.ConnectorRequest;
+import io.orqueio.connect.spi.ConnectorResponse;
 
 /**
  * Exposes a connector request as variableScope.

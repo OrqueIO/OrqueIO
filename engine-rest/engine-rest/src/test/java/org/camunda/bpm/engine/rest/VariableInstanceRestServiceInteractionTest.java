@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest;
+package io.orqueio.bpm.engine.rest;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.containsString;
@@ -31,18 +31,18 @@ import static org.mockito.Mockito.when;
 
 import javax.ws.rs.core.Response.Status;
 
-import org.camunda.bpm.engine.RuntimeService;
-import org.camunda.bpm.engine.rest.helper.MockObjectValue;
-import org.camunda.bpm.engine.rest.helper.MockProvider;
-import org.camunda.bpm.engine.rest.helper.MockVariableInstanceBuilder;
-import org.camunda.bpm.engine.rest.helper.VariableTypeHelper;
-import org.camunda.bpm.engine.rest.util.container.TestContainerRule;
-import org.camunda.bpm.engine.runtime.VariableInstance;
-import org.camunda.bpm.engine.runtime.VariableInstanceQuery;
-import org.camunda.bpm.engine.variable.Variables;
-import org.camunda.bpm.engine.variable.type.ValueType;
-import org.camunda.bpm.engine.variable.value.FileValue;
-import org.camunda.bpm.engine.variable.value.ObjectValue;
+import io.orqueio.bpm.engine.RuntimeService;
+import io.orqueio.bpm.engine.rest.helper.MockObjectValue;
+import io.orqueio.bpm.engine.rest.helper.MockProvider;
+import io.orqueio.bpm.engine.rest.helper.MockVariableInstanceBuilder;
+import io.orqueio.bpm.engine.rest.helper.VariableTypeHelper;
+import io.orqueio.bpm.engine.rest.util.container.TestContainerRule;
+import io.orqueio.bpm.engine.runtime.VariableInstance;
+import io.orqueio.bpm.engine.runtime.VariableInstanceQuery;
+import io.orqueio.bpm.engine.variable.Variables;
+import io.orqueio.bpm.engine.variable.type.ValueType;
+import io.orqueio.bpm.engine.variable.value.FileValue;
+import io.orqueio.bpm.engine.variable.value.ObjectValue;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Before;

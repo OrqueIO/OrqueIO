@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.cdi.impl.context;
+package io.orqueio.bpm.engine.cdi.impl.context;
 
 import java.lang.annotation.Annotation;
 import java.util.logging.Level;
@@ -26,9 +26,9 @@ import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 
-import org.camunda.bpm.engine.cdi.BusinessProcess;
-import org.camunda.bpm.engine.cdi.annotation.BusinessProcessScoped;
-import org.camunda.bpm.engine.cdi.impl.util.ProgrammaticBeanLookup;
+import io.orqueio.bpm.engine.cdi.BusinessProcess;
+import io.orqueio.bpm.engine.cdi.annotation.BusinessProcessScoped;
+import io.orqueio.bpm.engine.cdi.impl.util.ProgrammaticBeanLookup;
 
 /**
  * Implementation of the BusinessProcessContext-scope.

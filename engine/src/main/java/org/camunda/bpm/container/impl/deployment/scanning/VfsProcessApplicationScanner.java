@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.deployment.scanning;
+package io.orqueio.bpm.container.impl.deployment.scanning;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,10 +25,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.container.impl.ContainerIntegrationLogger;
-import org.camunda.bpm.container.impl.deployment.scanning.spi.ProcessApplicationScanner;
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
-import org.camunda.bpm.engine.impl.util.IoUtil;
+import io.orqueio.bpm.container.impl.ContainerIntegrationLogger;
+import io.orqueio.bpm.container.impl.deployment.scanning.spi.ProcessApplicationScanner;
+import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
+import io.orqueio.bpm.engine.impl.util.IoUtil;
 import org.jboss.vfs.VFS;
 import org.jboss.vfs.VirtualFile;
 import org.jboss.vfs.VirtualFileFilter;

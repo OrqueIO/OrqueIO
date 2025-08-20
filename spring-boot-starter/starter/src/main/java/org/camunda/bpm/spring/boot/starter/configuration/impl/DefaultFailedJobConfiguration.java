@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter.configuration.impl;
+package io.orqueio.bpm.spring.boot.starter.configuration.impl;
 
-import org.camunda.bpm.engine.impl.bpmn.parser.DefaultFailedJobParseListener;
-import org.camunda.bpm.engine.impl.jobexecutor.DefaultFailedJobCommandFactory;
-import org.camunda.bpm.engine.spring.SpringProcessEngineConfiguration;
-import org.camunda.bpm.spring.boot.starter.configuration.CamundaFailedJobConfiguration;
+import io.orqueio.bpm.engine.impl.bpmn.parser.DefaultFailedJobParseListener;
+import io.orqueio.bpm.engine.impl.jobexecutor.DefaultFailedJobCommandFactory;
+import io.orqueio.bpm.engine.spring.SpringProcessEngineConfiguration;
+import io.orqueio.bpm.spring.boot.starter.configuration.CamundaFailedJobConfiguration;
 
 import java.util.ArrayList;
 

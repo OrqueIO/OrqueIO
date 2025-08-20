@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.dto.telemetry;
+package io.orqueio.bpm.engine.rest.dto.telemetry;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -22,8 +22,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.camunda.bpm.engine.telemetry.Internals;
-import org.camunda.bpm.engine.telemetry.LicenseKeyData;
+import io.orqueio.bpm.engine.telemetry.Internals;
+import io.orqueio.bpm.engine.telemetry.LicenseKeyData;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

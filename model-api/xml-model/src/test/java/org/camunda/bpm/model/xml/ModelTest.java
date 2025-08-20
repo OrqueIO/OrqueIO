@@ -14,18 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.xml;
+package io.orqueio.bpm.model.xml;
 
-import org.camunda.bpm.model.xml.testmodel.TestModel;
-import org.camunda.bpm.model.xml.testmodel.instance.*;
-import org.camunda.bpm.model.xml.type.ModelElementType;
+import io.orqueio.bpm.model.xml.testmodel.TestModel;
+import io.orqueio.bpm.model.xml.testmodel.instance.*;
+import io.orqueio.bpm.model.xml.type.ModelElementType;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Collection;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.camunda.bpm.model.xml.testmodel.TestModelConstants.*;
+import static io.orqueio.bpm.model.xml.testmodel.TestModelConstants.*;
 
 /**
  * @author Sebastian Menski

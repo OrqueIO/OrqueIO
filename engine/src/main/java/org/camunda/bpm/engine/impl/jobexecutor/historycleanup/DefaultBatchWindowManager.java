@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.jobexecutor.historycleanup;
+package io.orqueio.bpm.engine.impl.jobexecutor.historycleanup;
 
 import java.util.Calendar;
 import java.util.Date;
-import org.camunda.bpm.engine.impl.cfg.BatchWindowConfiguration;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.cfg.BatchWindowConfiguration;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 
 /**
  * @author Svetlana Dorokhova.

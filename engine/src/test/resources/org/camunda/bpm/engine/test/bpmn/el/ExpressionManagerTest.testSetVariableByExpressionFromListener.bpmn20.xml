@@ -11,7 +11,7 @@
     <bpmn:sequenceFlow id="SequenceFlow_0tibtbc" sourceRef="Task_1ia94uu" targetRef="EndEvent_1grh1f5" />
     <bpmn:userTask id="Task_1ia94uu" name="A">
       <bpmn:extensionElements>
-        <camunda:executionListener class="org.camunda.bpm.engine.test.bpmn.el.ValueIncreasingListener" event="end">
+        <camunda:executionListener class="io.orqueio.bpm.engine.test.bpmn.el.ValueIncreasingListener" event="end">
           <camunda:field name="counter">
             <camunda:expression>${myCounter}</camunda:expression>
           </camunda:field>

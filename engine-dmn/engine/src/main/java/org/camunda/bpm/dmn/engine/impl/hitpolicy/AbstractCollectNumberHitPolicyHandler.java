@@ -14,22 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.engine.impl.hitpolicy;
+package io.orqueio.bpm.dmn.engine.impl.hitpolicy;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.dmn.engine.delegate.DmnDecisionTableEvaluationEvent;
-import org.camunda.bpm.dmn.engine.delegate.DmnEvaluatedDecisionRule;
-import org.camunda.bpm.dmn.engine.delegate.DmnEvaluatedOutput;
-import org.camunda.bpm.dmn.engine.impl.DmnLogger;
-import org.camunda.bpm.dmn.engine.impl.delegate.DmnDecisionTableEvaluationEventImpl;
-import org.camunda.bpm.dmn.engine.impl.spi.hitpolicy.DmnHitPolicyHandler;
-import org.camunda.bpm.engine.variable.Variables;
-import org.camunda.bpm.engine.variable.type.ValueType;
-import org.camunda.bpm.engine.variable.value.TypedValue;
-import org.camunda.bpm.model.dmn.BuiltinAggregator;
+import io.orqueio.bpm.dmn.engine.delegate.DmnDecisionTableEvaluationEvent;
+import io.orqueio.bpm.dmn.engine.delegate.DmnEvaluatedDecisionRule;
+import io.orqueio.bpm.dmn.engine.delegate.DmnEvaluatedOutput;
+import io.orqueio.bpm.dmn.engine.impl.DmnLogger;
+import io.orqueio.bpm.dmn.engine.impl.delegate.DmnDecisionTableEvaluationEventImpl;
+import io.orqueio.bpm.dmn.engine.impl.spi.hitpolicy.DmnHitPolicyHandler;
+import io.orqueio.bpm.engine.variable.Variables;
+import io.orqueio.bpm.engine.variable.type.ValueType;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
+import io.orqueio.bpm.model.dmn.BuiltinAggregator;
 
 public abstract class AbstractCollectNumberHitPolicyHandler implements DmnHitPolicyHandler {
 

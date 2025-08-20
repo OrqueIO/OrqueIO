@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.sub.runtime.impl;
+package io.orqueio.bpm.engine.rest.sub.runtime.impl;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.query.Query;
-import org.camunda.bpm.engine.rest.dto.runtime.VariableInstanceDto;
-import org.camunda.bpm.engine.rest.sub.AbstractResourceProvider;
-import org.camunda.bpm.engine.rest.sub.runtime.VariableInstanceResource;
-import org.camunda.bpm.engine.runtime.VariableInstance;
-import org.camunda.bpm.engine.runtime.VariableInstanceQuery;
-import org.camunda.bpm.engine.variable.value.TypedValue;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.query.Query;
+import io.orqueio.bpm.engine.rest.dto.runtime.VariableInstanceDto;
+import io.orqueio.bpm.engine.rest.sub.AbstractResourceProvider;
+import io.orqueio.bpm.engine.rest.sub.runtime.VariableInstanceResource;
+import io.orqueio.bpm.engine.runtime.VariableInstance;
+import io.orqueio.bpm.engine.runtime.VariableInstanceQuery;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
 
 /**
  * @author Daniel Meyer

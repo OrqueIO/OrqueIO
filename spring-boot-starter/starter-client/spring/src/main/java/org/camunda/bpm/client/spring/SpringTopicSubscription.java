@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.spring;
+package io.orqueio.bpm.client.spring;
 
-import org.camunda.bpm.client.exception.ExternalTaskClientException;
-import org.camunda.bpm.client.spring.event.SubscriptionInitializedEvent;
-import org.camunda.bpm.client.spring.exception.NotInitializedException;
-import org.camunda.bpm.client.spring.exception.NotOpenedException;
-import org.camunda.bpm.client.topic.TopicSubscription;
+import io.orqueio.bpm.client.exception.ExternalTaskClientException;
+import io.orqueio.bpm.client.spring.event.SubscriptionInitializedEvent;
+import io.orqueio.bpm.client.spring.exception.NotInitializedException;
+import io.orqueio.bpm.client.spring.exception.NotOpenedException;
+import io.orqueio.bpm.client.topic.TopicSubscription;
 
 /**
  * <p>

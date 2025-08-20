@@ -14,27 +14,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.feel.impl.juel;
+package io.orqueio.bpm.dmn.feel.impl.juel;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 
-import org.camunda.bpm.impl.juel.jakarta.el.ELException;
-import org.camunda.bpm.impl.juel.jakarta.el.ExpressionFactory;
+import io.orqueio.bpm.impl.juel.jakarta.el.ELException;
+import io.orqueio.bpm.impl.juel.jakarta.el.ExpressionFactory;
 
-import org.camunda.bpm.dmn.feel.impl.FeelEngine;
-import org.camunda.bpm.dmn.feel.impl.FeelEngineFactory;
-import org.camunda.bpm.dmn.feel.impl.juel.el.ElContextFactory;
-import org.camunda.bpm.dmn.feel.impl.juel.el.FeelElContextFactory;
-import org.camunda.bpm.dmn.feel.impl.juel.el.FeelTypeConverter;
-import org.camunda.bpm.dmn.feel.impl.juel.transform.FeelToJuelFunctionTransformer;
-import org.camunda.bpm.dmn.feel.impl.juel.transform.FeelToJuelTransform;
-import org.camunda.bpm.dmn.feel.impl.juel.transform.FeelToJuelTransformImpl;
-import org.camunda.commons.utils.cache.Cache;
-import org.camunda.commons.utils.cache.ConcurrentLruCache;
+import io.orqueio.bpm.dmn.feel.impl.FeelEngine;
+import io.orqueio.bpm.dmn.feel.impl.FeelEngineFactory;
+import io.orqueio.bpm.dmn.feel.impl.juel.el.ElContextFactory;
+import io.orqueio.bpm.dmn.feel.impl.juel.el.FeelElContextFactory;
+import io.orqueio.bpm.dmn.feel.impl.juel.el.FeelTypeConverter;
+import io.orqueio.bpm.dmn.feel.impl.juel.transform.FeelToJuelFunctionTransformer;
+import io.orqueio.bpm.dmn.feel.impl.juel.transform.FeelToJuelTransform;
+import io.orqueio.bpm.dmn.feel.impl.juel.transform.FeelToJuelTransformImpl;
+import io.orqueio.commons.utils.cache.Cache;
+import io.orqueio.commons.utils.cache.ConcurrentLruCache;
 
-import org.camunda.bpm.impl.juel.ExpressionFactoryImpl;
+import io.orqueio.bpm.impl.juel.ExpressionFactoryImpl;
 
 public class FeelEngineFactoryImpl implements FeelEngineFactory {
 

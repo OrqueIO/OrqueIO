@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.history;
+package io.orqueio.bpm.engine.rest.history;
 
-import org.camunda.bpm.engine.rest.dto.CountResultDto;
-import org.camunda.bpm.engine.rest.dto.history.UserOperationLogEntryDto;
-import org.camunda.bpm.engine.rest.dto.AnnotationDto;
+import io.orqueio.bpm.engine.rest.dto.CountResultDto;
+import io.orqueio.bpm.engine.rest.dto.history.UserOperationLogEntryDto;
+import io.orqueio.bpm.engine.rest.dto.AnnotationDto;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -34,7 +34,7 @@ import javax.ws.rs.core.UriInfo;
 import java.util.List;
 
 /**
- * Exposes the {@link org.camunda.bpm.engine.history.UserOperationLogQuery} as REST service.
+ * Exposes the {@link io.orqueio.bpm.engine.history.UserOperationLogQuery} as REST service.
  *
  * @author Danny Gräf
  */

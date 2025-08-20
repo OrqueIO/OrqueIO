@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.impl.juel;
+package io.orqueio.bpm.impl.juel;
 
 import java.text.MessageFormat;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 public final class LocalMessages {
-	private static final String BUNDLE_NAME = "org.camunda.bpm.impl.juel.misc.LocalStrings";
+	private static final String BUNDLE_NAME = "io.orqueio.bpm.impl.juel.misc.LocalStrings";
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle(BUNDLE_NAME);
 
 	public static String get(String key, Object... args) {

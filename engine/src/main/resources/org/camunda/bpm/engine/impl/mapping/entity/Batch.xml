@@ -19,11 +19,11 @@
 -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="org.camunda.bpm.engine.impl.batch.BatchEntity">
+<mapper namespace="io.orqueio.bpm.engine.impl.batch.BatchEntity">
 
   <!-- INSERT -->
 
-  <insert id="insertBatch" parameterType="org.camunda.bpm.engine.impl.batch.BatchEntity">
+  <insert id="insertBatch" parameterType="io.orqueio.bpm.engine.impl.batch.BatchEntity">
     insert into ${prefix}ACT_RU_BATCH
     (
       ID_,
@@ -64,7 +64,7 @@
 
   <!-- RESULTMAP -->
 
-  <resultMap id="batchResultMap" type="org.camunda.bpm.engine.impl.batch.BatchEntity">
+  <resultMap id="batchResultMap" type="io.orqueio.bpm.engine.impl.batch.BatchEntity">
     <id property="id" column="ID_" jdbcType="VARCHAR" />
     <result property="revision" column="REV_" jdbcType="INTEGER" />
     <result property="type" column="TYPE_" jdbcType="VARCHAR" />
@@ -84,7 +84,7 @@
   </resultMap>
 
   <!-- UPDATE -->
-  <update id="updateBatch" parameterType="org.camunda.bpm.engine.impl.batch.BatchEntity">
+  <update id="updateBatch" parameterType="io.orqueio.bpm.engine.impl.batch.BatchEntity">
     update ${prefix}ACT_RU_BATCH
     <set>
       JOBS_CREATED_ = #{jobsCreated, jdbcType=INTEGER},
@@ -98,7 +98,7 @@
       and REV_ = #{revision, jdbcType=INTEGER}
   </update>
 
-  <update id="updateBatchSuspensionStateByParameters" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject">
+  <update id="updateBatchSuspensionStateByParameters" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject">
     update ${prefix}ACT_RU_BATCH set
       REV_ = 1 + REV_ ,
       SUSPENSION_STATE_ = #{parameter.suspensionState, jdbcType=INTEGER}
@@ -111,7 +111,7 @@
 
   <!-- DELETE -->
 
-  <delete id="deleteBatch" parameterType="org.camunda.bpm.engine.impl.batch.BatchEntity">
+  <delete id="deleteBatch" parameterType="io.orqueio.bpm.engine.impl.batch.BatchEntity">
     delete from ${prefix}ACT_RU_BATCH where ID_ = #{id} and REV_ = #{revision}
   </delete>
 
@@ -120,8 +120,8 @@
     select * from ${prefix}ACT_RU_BATCH where ID_ = #{id}
   </select>
 
-  <select id="selectBatchesByQueryCriteria" parameterType="org.camunda.bpm.engine.impl.batch.BatchQueryImpl" resultMap="batchResultMap">
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
+  <select id="selectBatchesByQueryCriteria" parameterType="io.orqueio.bpm.engine.impl.batch.BatchQueryImpl" resultMap="batchResultMap">
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
     ${limitBefore}
     select ${distinct} RES.*
     ${limitBetween}
@@ -130,7 +130,7 @@
     ${limitAfter}
   </select>
 
-  <select id="selectBatchCountByQueryCriteria" parameterType="org.camunda.bpm.engine.impl.batch.BatchQueryImpl" resultType="long">
+  <select id="selectBatchCountByQueryCriteria" parameterType="io.orqueio.bpm.engine.impl.batch.BatchQueryImpl" resultType="long">
     ${countDistinctBeforeStart} RES.ID_ ${countDistinctBeforeEnd}
     <include refid="selectBatchesByQueryCriteriaSql"/>
     ${countDistinctAfterEnd}
@@ -139,7 +139,7 @@
   <sql id="selectBatchesByQueryCriteriaSql">
     from ${prefix}ACT_RU_BATCH RES
 
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoin" />
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoin" />
 
     <where>
       <if test="batchId != null">
@@ -164,8 +164,8 @@
         and RES.SUSPENSION_STATE_ = #{suspensionState.stateCode}
       </if>
 
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.queryAuthorizationCheck" />
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.queryAuthorizationCheck" />
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
     </where>
   </sql>
 

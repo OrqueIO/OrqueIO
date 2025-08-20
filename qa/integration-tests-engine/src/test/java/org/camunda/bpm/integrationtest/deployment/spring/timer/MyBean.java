@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.deployment.spring.timer;
+package io.orqueio.bpm.integrationtest.deployment.spring.timer;
 
 import org.springframework.stereotype.Component;
 

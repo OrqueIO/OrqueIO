@@ -19,9 +19,9 @@
 -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="org.camunda.bpm.engine.impl.persistence.entity.TaskReportResultEntity">
+<mapper namespace="io.orqueio.bpm.engine.impl.persistence.entity.TaskReportResultEntity">
 
-  <resultMap id="historicTaskReportResultMap" type="org.camunda.bpm.engine.impl.persistence.entity.TaskReportResultEntity">
+  <resultMap id="historicTaskReportResultMap" type="io.orqueio.bpm.engine.impl.persistence.entity.TaskReportResultEntity">
     <result property="count" column="COUNT_" jdbcType="BIGINT" />
     <result property="taskName" column="TASK_NAME_" jdbcType="VARCHAR" />
     <result property="processDefinitionKey" column="PROC_DEF_KEY_" jdbcType="VARCHAR" />
@@ -30,7 +30,7 @@
     <result property="tenantId" column="TENANT_ID_" jdbcType="VARCHAR" />
   </resultMap>
 
-  <select id="selectHistoricTaskInstanceCountByTaskNameReport" parameterType="org.camunda.bpm.engine.impl.HistoricTaskInstanceReportImpl" resultMap="historicTaskReportResultMap">
+  <select id="selectHistoricTaskInstanceCountByTaskNameReport" parameterType="io.orqueio.bpm.engine.impl.HistoricTaskInstanceReportImpl" resultMap="historicTaskReportResultMap">
     SELECT
       COUNTS.COUNT_ AS COUNT_,
       COUNTS.TASK_NAME_ AS TASK_NAME_,
@@ -89,7 +89,7 @@
     COUNTS.TASK_NAME_ ASC, COUNTS.COUNT_ DESC
   </select>
 
-  <select id="selectHistoricTaskInstanceCountByTaskNameReport_oracle" parameterType="org.camunda.bpm.engine.impl.HistoricTaskInstanceReportImpl" resultMap="historicTaskReportResultMap">
+  <select id="selectHistoricTaskInstanceCountByTaskNameReport_oracle" parameterType="io.orqueio.bpm.engine.impl.HistoricTaskInstanceReportImpl" resultMap="historicTaskReportResultMap">
     SELECT
       COUNTS.COUNT_ AS COUNT_,
       COUNTS.TASK_NAME_ AS TASK_NAME_,
@@ -148,7 +148,7 @@
       COUNTS.TASK_NAME_ ASC, COUNTS.COUNT_ DESC
   </select>
 
-  <select id="selectHistoricTaskInstanceCountByProcDefKeyReport" parameterType="org.camunda.bpm.engine.impl.HistoricTaskInstanceReportImpl" resultMap="historicTaskReportResultMap">
+  <select id="selectHistoricTaskInstanceCountByProcDefKeyReport" parameterType="io.orqueio.bpm.engine.impl.HistoricTaskInstanceReportImpl" resultMap="historicTaskReportResultMap">
     SELECT
       COUNTS.COUNT_ AS COUNT_,
       COUNTS.PROC_DEF_KEY_ AS PROC_DEF_KEY_,
@@ -211,32 +211,32 @@
       </if>
 
       <bind name="columnPrefix" value="'HTI.'"/>
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheckWithPrefix" />
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheckWithPrefix" />
     </where>
   </sql>
 
   <!-- DURATION REPORT -->
 
-  <select id="selectHistoricTaskInstanceDurationReport" parameterType="org.camunda.bpm.engine.impl.HistoricTaskInstanceReportImpl" resultMap="org.camunda.bpm.engine.impl.persistence.entity.ReportResultEntity.durationReportResultMap">
+  <select id="selectHistoricTaskInstanceDurationReport" parameterType="io.orqueio.bpm.engine.impl.HistoricTaskInstanceReportImpl" resultMap="io.orqueio.bpm.engine.impl.persistence.entity.ReportResultEntity.durationReportResultMap">
     SELECT
       MIN(RES.DURATION_) AS MIN_, MAX(RES.DURATION_) AS MAX_, AVG(RES.DURATION_) AS AVG_, RES.PERIOD_, '${reportPeriodUnitName}' AS PERIOD_UNIT_
     FROM
       (
         SELECT
-          ${datepart1}<include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.periodUnitFunction"/>${datepart2}HTI.END_TIME_${datepart3} AS PERIOD_, HTI.DURATION_
+          ${datepart1}<include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.periodUnitFunction"/>${datepart2}HTI.END_TIME_${datepart3} AS PERIOD_, HTI.DURATION_
           <include refid="selectHistoricTaskInstancesByCriteria"/>
       ) RES
     GROUP BY
       PERIOD_
   </select>
 
-  <select id="selectHistoricTaskInstanceDurationReport_oracle" parameterType="org.camunda.bpm.engine.impl.HistoricTaskInstanceReportImpl" resultMap="org.camunda.bpm.engine.impl.persistence.entity.ReportResultEntity.durationReportResultMap">
+  <select id="selectHistoricTaskInstanceDurationReport_oracle" parameterType="io.orqueio.bpm.engine.impl.HistoricTaskInstanceReportImpl" resultMap="io.orqueio.bpm.engine.impl.persistence.entity.ReportResultEntity.durationReportResultMap">
     SELECT
       MIN(RES.DURATION_) AS MIN_, MAX(RES.DURATION_) AS MAX_, AVG(RES.DURATION_) AS AVG_, RES.PERIOD_, '${reportPeriodUnitName}' AS PERIOD_UNIT_
     FROM
       (
         SELECT
-          ${datepart1}HTI.END_TIME_${datepart2}<include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.periodUnitFunction"/>${datepart3} AS PERIOD_, HTI.DURATION_
+          ${datepart1}HTI.END_TIME_${datepart2}<include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.periodUnitFunction"/>${datepart3} AS PERIOD_, HTI.DURATION_
           <include refid="selectHistoricTaskInstancesByCriteria"/>
       ) RES
     GROUP BY
@@ -257,7 +257,7 @@
       </if>
 
       <bind name="columnPrefix" value="'HTI.'"/>
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheckWithPrefix" />
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheckWithPrefix" />
     </where>
   </sql>
   

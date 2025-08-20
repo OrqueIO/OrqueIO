@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl;
+package io.orqueio.bpm.container.impl;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -29,8 +29,8 @@ import java.util.concurrent.TimeUnit;
 import javax.management.ObjectName;
 import javax.naming.NamingException;
 
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
 import org.jboss.vfs.VirtualFile;
 
 /**

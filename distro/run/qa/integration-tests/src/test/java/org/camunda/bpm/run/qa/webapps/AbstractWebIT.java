@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.run.qa.webapps;
+package io.orqueio.bpm.run.qa.webapps;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import kong.unirest.ObjectMapper;
 import kong.unirest.Unirest;
-import org.camunda.bpm.TestProperties;
+import io.orqueio.bpm.TestProperties;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;

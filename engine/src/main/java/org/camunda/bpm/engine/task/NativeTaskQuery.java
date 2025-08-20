@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.task;
+package io.orqueio.bpm.engine.task;
 
-import org.camunda.bpm.engine.query.NativeQuery;
+import io.orqueio.bpm.engine.query.NativeQuery;
 
 /**
  * Allows querying of {@link Task}s via native (SQL) queries

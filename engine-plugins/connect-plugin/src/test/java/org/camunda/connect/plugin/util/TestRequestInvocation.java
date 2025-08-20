@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.connect.plugin.util;
+package io.orqueio.connect.plugin.util;
 
 import java.util.List;
 
-import org.camunda.connect.impl.AbstractRequestInvocation;
-import org.camunda.connect.spi.ConnectorRequest;
-import org.camunda.connect.spi.ConnectorRequestInterceptor;
+import io.orqueio.connect.impl.AbstractRequestInvocation;
+import io.orqueio.connect.spi.ConnectorRequest;
+import io.orqueio.connect.spi.ConnectorRequestInterceptor;
 
 /**
  * @author Daniel Meyer

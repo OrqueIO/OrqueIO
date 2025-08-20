@@ -14,28 +14,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.persistence.entity;
+package io.orqueio.bpm.engine.impl.persistence.entity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.camunda.bpm.engine.history.HistoricVariableInstance;
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
-import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.engine.impl.db.DbEntity;
-import org.camunda.bpm.engine.impl.db.DbEntityLifecycleAware;
-import org.camunda.bpm.engine.impl.db.EnginePersistenceLogger;
-import org.camunda.bpm.engine.impl.db.HasDbRevision;
-import org.camunda.bpm.engine.impl.db.HistoricEntity;
-import org.camunda.bpm.engine.impl.history.event.HistoricVariableUpdateEventEntity;
-import org.camunda.bpm.engine.impl.persistence.entity.util.ByteArrayField;
-import org.camunda.bpm.engine.impl.persistence.entity.util.TypedValueField;
-import org.camunda.bpm.engine.impl.variable.serializer.TypedValueSerializer;
-import org.camunda.bpm.engine.impl.variable.serializer.ValueFields;
-import org.camunda.bpm.engine.repository.ResourceTypes;
-import org.camunda.bpm.engine.variable.value.TypedValue;
+import io.orqueio.bpm.engine.history.HistoricVariableInstance;
+import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
+import io.orqueio.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.impl.db.DbEntity;
+import io.orqueio.bpm.engine.impl.db.DbEntityLifecycleAware;
+import io.orqueio.bpm.engine.impl.db.EnginePersistenceLogger;
+import io.orqueio.bpm.engine.impl.db.HasDbRevision;
+import io.orqueio.bpm.engine.impl.db.HistoricEntity;
+import io.orqueio.bpm.engine.impl.history.event.HistoricVariableUpdateEventEntity;
+import io.orqueio.bpm.engine.impl.persistence.entity.util.ByteArrayField;
+import io.orqueio.bpm.engine.impl.persistence.entity.util.TypedValueField;
+import io.orqueio.bpm.engine.impl.variable.serializer.TypedValueSerializer;
+import io.orqueio.bpm.engine.impl.variable.serializer.ValueFields;
+import io.orqueio.bpm.engine.repository.ResourceTypes;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
 
 /**
  * @author Christian Lipphardt (camunda)

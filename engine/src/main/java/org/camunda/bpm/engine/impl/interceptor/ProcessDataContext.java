@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.interceptor;
+package io.orqueio.bpm.engine.impl.interceptor;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -24,11 +24,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
-import org.camunda.bpm.application.ProcessApplicationReference;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.engine.impl.persistence.entity.ExecutionEntity;
-import org.camunda.commons.logging.MdcAccess;
+import io.orqueio.bpm.application.ProcessApplicationReference;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.impl.persistence.entity.ExecutionEntity;
+import io.orqueio.commons.logging.MdcAccess;
 
 /**
  * Holds the contextual process data.<br>

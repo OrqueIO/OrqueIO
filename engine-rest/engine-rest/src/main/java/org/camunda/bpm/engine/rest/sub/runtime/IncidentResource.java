@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.sub.runtime;
+package io.orqueio.bpm.engine.rest.sub.runtime;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -25,8 +25,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.camunda.bpm.engine.rest.dto.AnnotationDto;
-import org.camunda.bpm.engine.rest.dto.runtime.IncidentDto;
+import io.orqueio.bpm.engine.rest.dto.AnnotationDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.IncidentDto;
 
 public interface IncidentResource {
 

@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.batch.builder;
+package io.orqueio.bpm.engine.impl.batch.builder;
 
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
 
 /**
  * This is a functional interface to pass a callback that performs

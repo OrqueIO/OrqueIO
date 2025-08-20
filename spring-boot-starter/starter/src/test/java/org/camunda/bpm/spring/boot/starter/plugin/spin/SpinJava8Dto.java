@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter.plugin.spin;
+package io.orqueio.bpm.spring.boot.starter.plugin.spin;
 
 import java.time.LocalDateTime;
 

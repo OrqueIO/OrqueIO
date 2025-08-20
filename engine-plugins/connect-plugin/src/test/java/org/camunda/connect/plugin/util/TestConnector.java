@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.connect.plugin.util;
+package io.orqueio.connect.plugin.util;
 
 import java.lang.Exception;import java.lang.Object;import java.lang.RuntimeException;import java.lang.String;import java.util.HashMap;
 import java.util.Map;
 
-import org.camunda.connect.impl.AbstractConnector;
+import io.orqueio.connect.impl.AbstractConnector;
 
 /**
  * @author Daniel Meyer

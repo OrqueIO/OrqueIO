@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.welcome.impl.web;
+package io.orqueio.bpm.welcome.impl.web;
 
 import java.util.HashSet;
 import java.util.List;
@@ -22,11 +22,11 @@ import java.util.Set;
 
 import javax.ws.rs.core.Application;
 
-import org.camunda.bpm.engine.rest.exception.ExceptionHandler;
-import org.camunda.bpm.engine.rest.exception.RestExceptionHandler;
-import org.camunda.bpm.engine.rest.mapper.JacksonConfigurator;
-import org.camunda.bpm.welcome.Welcome;
-import org.camunda.bpm.welcome.plugin.spi.WelcomePlugin;
+import io.orqueio.bpm.engine.rest.exception.ExceptionHandler;
+import io.orqueio.bpm.engine.rest.exception.RestExceptionHandler;
+import io.orqueio.bpm.engine.rest.mapper.JacksonConfigurator;
+import io.orqueio.bpm.welcome.Welcome;
+import io.orqueio.bpm.welcome.plugin.spi.WelcomePlugin;
 
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 

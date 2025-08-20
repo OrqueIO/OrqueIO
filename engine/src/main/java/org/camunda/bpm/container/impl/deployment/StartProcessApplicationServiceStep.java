@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.deployment;
+package io.orqueio.bpm.container.impl.deployment;
 
-import static org.camunda.bpm.container.impl.deployment.Attachments.PROCESSES_XML_RESOURCES;
-import static org.camunda.bpm.container.impl.deployment.Attachments.PROCESS_APPLICATION;
-import static org.camunda.bpm.container.impl.deployment.Attachments.PROCESS_ARCHIVE_DEPLOYMENT_MAP;
+import static io.orqueio.bpm.container.impl.deployment.Attachments.PROCESSES_XML_RESOURCES;
+import static io.orqueio.bpm.container.impl.deployment.Attachments.PROCESS_APPLICATION;
+import static io.orqueio.bpm.container.impl.deployment.Attachments.PROCESS_ARCHIVE_DEPLOYMENT_MAP;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -26,20 +26,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.camunda.bpm.application.AbstractProcessApplication;
-import org.camunda.bpm.application.ProcessApplicationDeploymentInfo;
-import org.camunda.bpm.application.impl.ProcessApplicationDeploymentInfoImpl;
-import org.camunda.bpm.application.impl.ProcessApplicationInfoImpl;
-import org.camunda.bpm.application.impl.metadata.spi.ProcessesXml;
-import org.camunda.bpm.container.impl.RuntimeContainerDelegateImpl;
-import org.camunda.bpm.container.impl.deployment.util.DeployedProcessArchive;
-import org.camunda.bpm.container.impl.jmx.services.JmxManagedBpmPlatformPlugins;
-import org.camunda.bpm.container.impl.jmx.services.JmxManagedProcessApplication;
-import org.camunda.bpm.container.impl.plugin.BpmPlatformPlugin;
-import org.camunda.bpm.container.impl.spi.DeploymentOperation;
-import org.camunda.bpm.container.impl.spi.DeploymentOperationStep;
-import org.camunda.bpm.container.impl.spi.PlatformServiceContainer;
-import org.camunda.bpm.container.impl.spi.ServiceTypes;
+import io.orqueio.bpm.application.AbstractProcessApplication;
+import io.orqueio.bpm.application.ProcessApplicationDeploymentInfo;
+import io.orqueio.bpm.application.impl.ProcessApplicationDeploymentInfoImpl;
+import io.orqueio.bpm.application.impl.ProcessApplicationInfoImpl;
+import io.orqueio.bpm.application.impl.metadata.spi.ProcessesXml;
+import io.orqueio.bpm.container.impl.RuntimeContainerDelegateImpl;
+import io.orqueio.bpm.container.impl.deployment.util.DeployedProcessArchive;
+import io.orqueio.bpm.container.impl.jmx.services.JmxManagedBpmPlatformPlugins;
+import io.orqueio.bpm.container.impl.jmx.services.JmxManagedProcessApplication;
+import io.orqueio.bpm.container.impl.plugin.BpmPlatformPlugin;
+import io.orqueio.bpm.container.impl.spi.DeploymentOperation;
+import io.orqueio.bpm.container.impl.spi.DeploymentOperationStep;
+import io.orqueio.bpm.container.impl.spi.PlatformServiceContainer;
+import io.orqueio.bpm.container.impl.spi.ServiceTypes;
 
 /**
  * <p>This deployment operation step starts an {@link MBeanService} for the process application.</p>

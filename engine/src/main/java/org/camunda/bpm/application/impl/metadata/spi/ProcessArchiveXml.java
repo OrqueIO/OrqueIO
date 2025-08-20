@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.application.impl.metadata.spi;
+package io.orqueio.bpm.application.impl.metadata.spi;
 
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.engine.repository.ResumePreviousBy;
+import io.orqueio.bpm.engine.repository.ResumePreviousBy;
 
 /**
  * <p>Java API representation of a ProcessArchive definition inside a processes.xml file</p>

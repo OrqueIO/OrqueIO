@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.standalone.pvm;
+package io.orqueio.bpm.engine.test.standalone.pvm;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.camunda.bpm.engine.impl.pvm.ProcessDefinitionBuilder;
-import org.camunda.bpm.engine.impl.pvm.PvmExecution;
-import org.camunda.bpm.engine.impl.pvm.PvmProcessDefinition;
-import org.camunda.bpm.engine.impl.pvm.PvmProcessInstance;
+import io.orqueio.bpm.engine.impl.pvm.ProcessDefinitionBuilder;
+import io.orqueio.bpm.engine.impl.pvm.PvmExecution;
+import io.orqueio.bpm.engine.impl.pvm.PvmProcessDefinition;
+import io.orqueio.bpm.engine.impl.pvm.PvmProcessInstance;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertFalse;
@@ -30,10 +30,10 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
-import org.camunda.bpm.engine.test.standalone.pvm.activities.Automatic;
-import org.camunda.bpm.engine.test.standalone.pvm.activities.End;
-import org.camunda.bpm.engine.test.standalone.pvm.activities.ParallelGateway;
-import org.camunda.bpm.engine.test.standalone.pvm.activities.WaitState;
+import io.orqueio.bpm.engine.test.standalone.pvm.activities.Automatic;
+import io.orqueio.bpm.engine.test.standalone.pvm.activities.End;
+import io.orqueio.bpm.engine.test.standalone.pvm.activities.ParallelGateway;
+import io.orqueio.bpm.engine.test.standalone.pvm.activities.WaitState;
 import org.junit.Test;
 
 

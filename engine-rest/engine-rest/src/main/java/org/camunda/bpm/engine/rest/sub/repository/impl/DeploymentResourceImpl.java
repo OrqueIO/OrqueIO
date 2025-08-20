@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.sub.repository.impl;
+package io.orqueio.bpm.engine.rest.sub.repository.impl;
 
 import java.net.URI;
 import java.util.List;
@@ -24,21 +24,21 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.RepositoryService;
-import org.camunda.bpm.engine.exception.NotFoundException;
-import org.camunda.bpm.engine.exception.NotValidException;
-import org.camunda.bpm.engine.repository.Deployment;
-import org.camunda.bpm.engine.repository.DeploymentBuilder;
-import org.camunda.bpm.engine.repository.DeploymentWithDefinitions;
-import org.camunda.bpm.engine.rest.DeploymentRestService;
-import org.camunda.bpm.engine.rest.dto.repository.DeploymentDto;
-import org.camunda.bpm.engine.rest.dto.repository.DeploymentWithDefinitionsDto;
-import org.camunda.bpm.engine.rest.dto.repository.RedeploymentDto;
-import org.camunda.bpm.engine.rest.exception.InvalidRequestException;
-import org.camunda.bpm.engine.rest.impl.AbstractRestProcessEngineAware;
-import org.camunda.bpm.engine.rest.sub.repository.DeploymentResource;
-import org.camunda.bpm.engine.rest.sub.repository.DeploymentResourcesResource;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.RepositoryService;
+import io.orqueio.bpm.engine.exception.NotFoundException;
+import io.orqueio.bpm.engine.exception.NotValidException;
+import io.orqueio.bpm.engine.repository.Deployment;
+import io.orqueio.bpm.engine.repository.DeploymentBuilder;
+import io.orqueio.bpm.engine.repository.DeploymentWithDefinitions;
+import io.orqueio.bpm.engine.rest.DeploymentRestService;
+import io.orqueio.bpm.engine.rest.dto.repository.DeploymentDto;
+import io.orqueio.bpm.engine.rest.dto.repository.DeploymentWithDefinitionsDto;
+import io.orqueio.bpm.engine.rest.dto.repository.RedeploymentDto;
+import io.orqueio.bpm.engine.rest.exception.InvalidRequestException;
+import io.orqueio.bpm.engine.rest.impl.AbstractRestProcessEngineAware;
+import io.orqueio.bpm.engine.rest.sub.repository.DeploymentResource;
+import io.orqueio.bpm.engine.rest.sub.repository.DeploymentResourcesResource;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 

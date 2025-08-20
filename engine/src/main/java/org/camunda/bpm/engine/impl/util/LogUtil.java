@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.util;
+package io.orqueio.bpm.engine.impl.util;
 
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -29,7 +29,7 @@ import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.LogRecord;
 
-import org.camunda.bpm.engine.impl.pvm.PvmException;
+import io.orqueio.bpm.engine.impl.pvm.PvmException;
 
 /**
  * @author Tom Baeyens

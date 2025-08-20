@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.dmn.impl.instance;
+package io.orqueio.bpm.model.dmn.impl.instance;
 
-import static org.camunda.bpm.model.dmn.impl.DmnModelConstants.LATEST_DMN_NS;
-import static org.camunda.bpm.model.dmn.impl.DmnModelConstants.DMN_ELEMENT_ARTIFACT;
+import static io.orqueio.bpm.model.dmn.impl.DmnModelConstants.LATEST_DMN_NS;
+import static io.orqueio.bpm.model.dmn.impl.DmnModelConstants.DMN_ELEMENT_ARTIFACT;
 
-import org.camunda.bpm.model.dmn.instance.Artifact;
-import org.camunda.bpm.model.dmn.instance.DmnElement;
-import org.camunda.bpm.model.xml.ModelBuilder;
-import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
+import io.orqueio.bpm.model.dmn.instance.Artifact;
+import io.orqueio.bpm.model.dmn.instance.DmnElement;
+import io.orqueio.bpm.model.xml.ModelBuilder;
+import io.orqueio.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
+import io.orqueio.bpm.model.xml.type.ModelElementTypeBuilder;
 
 public abstract class ArtifactImpl extends DmnElementImpl implements Artifact {
 

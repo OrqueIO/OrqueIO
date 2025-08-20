@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter.test.helper;
+package io.orqueio.bpm.spring.boot.starter.test.helper;
 
 
-import org.camunda.bpm.engine.impl.cfg.ProcessEnginePlugin;
-import org.camunda.bpm.engine.impl.cfg.StandaloneInMemProcessEngineConfiguration;
-import org.camunda.bpm.engine.test.ProcessEngineRule;
-import org.camunda.bpm.engine.test.mock.MockExpressionManager;
-import org.camunda.bpm.engine.impl.history.HistoryLevel;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEnginePlugin;
+import io.orqueio.bpm.engine.impl.cfg.StandaloneInMemProcessEngineConfiguration;
+import io.orqueio.bpm.engine.test.ProcessEngineRule;
+import io.orqueio.bpm.engine.test.mock.MockExpressionManager;
+import io.orqueio.bpm.engine.impl.history.HistoryLevel;
 
 import java.util.Arrays;
 import java.util.Collections;

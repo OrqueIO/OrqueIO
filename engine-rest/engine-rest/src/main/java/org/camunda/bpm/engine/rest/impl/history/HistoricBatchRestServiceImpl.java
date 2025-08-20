@@ -14,32 +14,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.impl.history;
+package io.orqueio.bpm.engine.rest.impl.history;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.ws.rs.core.UriInfo;
-import org.camunda.bpm.engine.HistoryService;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.batch.Batch;
-import org.camunda.bpm.engine.batch.history.HistoricBatch;
-import org.camunda.bpm.engine.batch.history.HistoricBatchQuery;
-import org.camunda.bpm.engine.history.CleanableHistoricBatchReport;
-import org.camunda.bpm.engine.history.CleanableHistoricBatchReportResult;
-import org.camunda.bpm.engine.history.SetRemovalTimeSelectModeForHistoricBatchesBuilder;
-import org.camunda.bpm.engine.rest.dto.CountResultDto;
-import org.camunda.bpm.engine.rest.dto.batch.BatchDto;
-import org.camunda.bpm.engine.rest.dto.history.batch.CleanableHistoricBatchReportDto;
-import org.camunda.bpm.engine.rest.dto.history.batch.CleanableHistoricBatchReportResultDto;
-import org.camunda.bpm.engine.rest.dto.history.batch.HistoricBatchDto;
-import org.camunda.bpm.engine.rest.dto.history.batch.HistoricBatchQueryDto;
-import org.camunda.bpm.engine.rest.dto.history.batch.removaltime.SetRemovalTimeToHistoricBatchesDto;
-import org.camunda.bpm.engine.rest.history.HistoricBatchRestService;
-import org.camunda.bpm.engine.rest.sub.history.HistoricBatchResource;
-import org.camunda.bpm.engine.rest.sub.history.impl.HistoricBatchResourceImpl;
-import org.camunda.bpm.engine.rest.util.QueryUtil;
+import io.orqueio.bpm.engine.HistoryService;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.batch.Batch;
+import io.orqueio.bpm.engine.batch.history.HistoricBatch;
+import io.orqueio.bpm.engine.batch.history.HistoricBatchQuery;
+import io.orqueio.bpm.engine.history.CleanableHistoricBatchReport;
+import io.orqueio.bpm.engine.history.CleanableHistoricBatchReportResult;
+import io.orqueio.bpm.engine.history.SetRemovalTimeSelectModeForHistoricBatchesBuilder;
+import io.orqueio.bpm.engine.rest.dto.CountResultDto;
+import io.orqueio.bpm.engine.rest.dto.batch.BatchDto;
+import io.orqueio.bpm.engine.rest.dto.history.batch.CleanableHistoricBatchReportDto;
+import io.orqueio.bpm.engine.rest.dto.history.batch.CleanableHistoricBatchReportResultDto;
+import io.orqueio.bpm.engine.rest.dto.history.batch.HistoricBatchDto;
+import io.orqueio.bpm.engine.rest.dto.history.batch.HistoricBatchQueryDto;
+import io.orqueio.bpm.engine.rest.dto.history.batch.removaltime.SetRemovalTimeToHistoricBatchesDto;
+import io.orqueio.bpm.engine.rest.history.HistoricBatchRestService;
+import io.orqueio.bpm.engine.rest.sub.history.HistoricBatchResource;
+import io.orqueio.bpm.engine.rest.sub.history.impl.HistoricBatchResourceImpl;
+import io.orqueio.bpm.engine.rest.util.QueryUtil;
 
 public class HistoricBatchRestServiceImpl implements HistoricBatchRestService {
 

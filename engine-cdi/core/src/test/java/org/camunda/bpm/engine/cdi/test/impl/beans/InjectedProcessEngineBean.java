@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.cdi.test.impl.beans;
+package io.orqueio.bpm.engine.cdi.test.impl.beans;
 
-import org.camunda.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.ProcessEngine;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;

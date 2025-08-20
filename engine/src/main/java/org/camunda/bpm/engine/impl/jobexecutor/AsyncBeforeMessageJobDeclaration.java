@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.jobexecutor;
+package io.orqueio.bpm.engine.impl.jobexecutor;
 
-import org.camunda.bpm.engine.impl.pvm.runtime.operation.PvmAtomicOperation;
+import io.orqueio.bpm.engine.impl.pvm.runtime.operation.PvmAtomicOperation;
 
 /**
  * @author Sebastian Menski

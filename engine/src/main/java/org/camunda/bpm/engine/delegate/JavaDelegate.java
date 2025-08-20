@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.delegate;
+package io.orqueio.bpm.engine.delegate;
 
 
 /**
@@ -27,7 +27,7 @@ package org.camunda.bpm.engine.delegate;
  * default BPMN 2.0 behavior of taking every outgoing sequence flow (which has a
  * condition that evaluates to true if there is a condition defined) If you are
  * in need of influencing the flow in your process, use the
- * class 'org.camunda.bpm.engine.impl.pvm.delegate.ActivityBehavior' instead.
+ * class 'io.orqueio.bpm.engine.impl.pvm.delegate.ActivityBehavior' instead.
  * 
  * @author Joram Barrez
  */

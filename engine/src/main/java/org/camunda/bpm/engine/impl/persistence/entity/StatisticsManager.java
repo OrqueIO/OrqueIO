@@ -14,29 +14,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.persistence.entity;
+package io.orqueio.bpm.engine.impl.persistence.entity;
 
-import org.camunda.bpm.engine.batch.BatchStatistics;
-import org.camunda.bpm.engine.impl.ActivityStatisticsQueryImpl;
-import org.camunda.bpm.engine.impl.HistoricDecisionInstanceStatisticsQueryImpl;
-import org.camunda.bpm.engine.impl.DeploymentStatisticsQueryImpl;
-import org.camunda.bpm.engine.impl.Page;
-import org.camunda.bpm.engine.impl.ProcessDefinitionStatisticsQueryImpl;
-import org.camunda.bpm.engine.impl.batch.BatchStatisticsQueryImpl;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.persistence.AbstractManager;
-import org.camunda.bpm.engine.management.ActivityStatistics;
-import org.camunda.bpm.engine.history.HistoricDecisionInstanceStatistics;
-import org.camunda.bpm.engine.management.DeploymentStatistics;
-import org.camunda.bpm.engine.management.ProcessDefinitionStatistics;
-import org.camunda.bpm.engine.repository.DecisionRequirementsDefinition;
+import io.orqueio.bpm.engine.batch.BatchStatistics;
+import io.orqueio.bpm.engine.impl.ActivityStatisticsQueryImpl;
+import io.orqueio.bpm.engine.impl.HistoricDecisionInstanceStatisticsQueryImpl;
+import io.orqueio.bpm.engine.impl.DeploymentStatisticsQueryImpl;
+import io.orqueio.bpm.engine.impl.Page;
+import io.orqueio.bpm.engine.impl.ProcessDefinitionStatisticsQueryImpl;
+import io.orqueio.bpm.engine.impl.batch.BatchStatisticsQueryImpl;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.impl.persistence.AbstractManager;
+import io.orqueio.bpm.engine.management.ActivityStatistics;
+import io.orqueio.bpm.engine.history.HistoricDecisionInstanceStatistics;
+import io.orqueio.bpm.engine.management.DeploymentStatistics;
+import io.orqueio.bpm.engine.management.ProcessDefinitionStatistics;
+import io.orqueio.bpm.engine.repository.DecisionRequirementsDefinition;
 
 import java.util.List;
 
-import static org.camunda.bpm.engine.authorization.Permissions.READ;
-import static org.camunda.bpm.engine.authorization.Resources.DECISION_REQUIREMENTS_DEFINITION;
-import static org.camunda.bpm.engine.authorization.Resources.PROCESS_DEFINITION;
-import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
+import static io.orqueio.bpm.engine.authorization.Permissions.READ;
+import static io.orqueio.bpm.engine.authorization.Resources.DECISION_REQUIREMENTS_DEFINITION;
+import static io.orqueio.bpm.engine.authorization.Resources.PROCESS_DEFINITION;
+import static io.orqueio.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
 
 public class StatisticsManager extends AbstractManager {
 

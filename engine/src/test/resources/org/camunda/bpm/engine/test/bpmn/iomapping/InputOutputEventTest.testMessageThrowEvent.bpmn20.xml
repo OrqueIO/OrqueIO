@@ -10,7 +10,7 @@
           <camunda:outputParameter name="outVariable">${mappedVariable}</camunda:outputParameter>
         </camunda:inputOutput>
       </extensionElements>
-      <messageEventDefinition camunda:class="org.camunda.bpm.engine.test.bpmn.iomapping.VariableLogDelegate" />
+      <messageEventDefinition camunda:class="io.orqueio.bpm.engine.test.bpmn.iomapping.VariableLogDelegate" />
     </intermediateThrowEvent>
     <sequenceFlow id="flow2" name="" sourceRef="messageThrow" targetRef="task"/>
     <userTask id="task"/>

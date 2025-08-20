@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.cdi.test;
+package io.orqueio.bpm.engine.cdi.test;
 
 import org.jboss.arquillian.container.test.api.DeploymentConfiguration;
 import org.jboss.arquillian.container.test.api.DeploymentConfiguration.DeploymentContentBuilder;

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.mock;
+package io.orqueio.bpm.engine.test.mock;
 
 import java.util.HashMap;
 import java.util.Map;

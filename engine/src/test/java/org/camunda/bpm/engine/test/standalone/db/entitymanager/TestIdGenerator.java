@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.standalone.db.entitymanager;
+package io.orqueio.bpm.engine.test.standalone.db.entitymanager;
 
 import java.util.concurrent.atomic.AtomicLong;
 
-import org.camunda.bpm.engine.impl.cfg.IdGenerator;
+import io.orqueio.bpm.engine.impl.cfg.IdGenerator;
 
 /**
  * @author Daniel Meyer

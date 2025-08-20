@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.xml.validation;
+package io.orqueio.bpm.model.xml.validation;
 
 import java.io.StringWriter;
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.model.xml.ModelInstance;
-import org.camunda.bpm.model.xml.instance.ModelElementInstance;
+import io.orqueio.bpm.model.xml.ModelInstance;
+import io.orqueio.bpm.model.xml.instance.ModelElementInstance;
 
 /**
  * Object in which the results of a model validation are collected.

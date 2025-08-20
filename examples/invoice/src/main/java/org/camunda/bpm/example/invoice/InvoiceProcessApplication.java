@@ -14,20 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.example.invoice;
+package io.orqueio.bpm.example.invoice;
 
-import org.camunda.bpm.BpmPlatform;
-import org.camunda.bpm.application.PostDeploy;
-import org.camunda.bpm.application.ProcessApplication;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.repository.DeploymentBuilder;
+import io.orqueio.bpm.BpmPlatform;
+import io.orqueio.bpm.application.PostDeploy;
+import io.orqueio.bpm.application.ProcessApplication;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.repository.DeploymentBuilder;
 
 /**
  * Process Application exposing this application's resources the process engine.
  */
 @ProcessApplication(name = "InvoiceProcessApplication")
 // Using fully-qualified class name instead of import statement to allow for automatic Jakarta transformation
-public class InvoiceProcessApplication extends org.camunda.bpm.application.impl.ServletProcessApplication {
+public class InvoiceProcessApplication extends io.orqueio.bpm.application.impl.ServletProcessApplication {
 
   /**
    * In a @PostDeploy Hook you can interact with the process engine and access

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.concurrency;
+package io.orqueio.bpm.engine.test.concurrency;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assumptions.assumeThat;
@@ -22,12 +22,12 @@ import static org.junit.Assert.assertNull;
 
 import java.sql.Connection;
 
-import org.camunda.bpm.engine.impl.BootstrapEngineCommand;
-import org.camunda.bpm.engine.impl.db.sql.DbSqlSessionFactory;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.test.RequiredDatabase;
-import org.camunda.bpm.engine.impl.test.TestHelper;
-import org.camunda.bpm.engine.test.util.DatabaseHelper;
+import io.orqueio.bpm.engine.impl.BootstrapEngineCommand;
+import io.orqueio.bpm.engine.impl.db.sql.DbSqlSessionFactory;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.impl.test.RequiredDatabase;
+import io.orqueio.bpm.engine.impl.test.TestHelper;
+import io.orqueio.bpm.engine.test.util.DatabaseHelper;
 import org.junit.Before;
 import org.junit.Test;
 

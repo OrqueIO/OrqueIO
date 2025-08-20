@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.variable.impl.format.json;
+package io.orqueio.bpm.client.variable.impl.format.json;
 
 import java.lang.reflect.TypeVariable;
 import java.util.List;
 
-import org.camunda.bpm.client.variable.impl.format.TypeDetector;
+import io.orqueio.bpm.client.variable.impl.format.TypeDetector;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.type.TypeFactory;

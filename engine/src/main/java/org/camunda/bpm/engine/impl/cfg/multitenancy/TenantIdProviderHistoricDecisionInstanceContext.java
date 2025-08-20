@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.cfg.multitenancy;
+package io.orqueio.bpm.engine.impl.cfg.multitenancy;
 
-import org.camunda.bpm.engine.delegate.DelegateCaseExecution;
-import org.camunda.bpm.engine.delegate.DelegateExecution;
-import org.camunda.bpm.engine.repository.DecisionDefinition;
+import io.orqueio.bpm.engine.delegate.DelegateCaseExecution;
+import io.orqueio.bpm.engine.delegate.DelegateExecution;
+import io.orqueio.bpm.engine.repository.DecisionDefinition;
 
 /**
  * Provides information about a historic decision instance to a {@link TenantIdProvider} implementation.

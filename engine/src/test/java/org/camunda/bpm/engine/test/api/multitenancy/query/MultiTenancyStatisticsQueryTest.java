@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.multitenancy.query;
+package io.orqueio.bpm.engine.test.api.multitenancy.query;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.hasItems;
@@ -24,15 +24,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.camunda.bpm.engine.management.ActivityStatisticsQuery;
-import org.camunda.bpm.engine.management.DeploymentStatistics;
-import org.camunda.bpm.engine.management.DeploymentStatisticsQuery;
-import org.camunda.bpm.engine.management.ProcessDefinitionStatistics;
-import org.camunda.bpm.engine.management.ProcessDefinitionStatisticsQuery;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.test.util.PluggableProcessEngineTest;
-import org.camunda.bpm.model.bpmn.Bpmn;
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.bpm.engine.management.ActivityStatisticsQuery;
+import io.orqueio.bpm.engine.management.DeploymentStatistics;
+import io.orqueio.bpm.engine.management.DeploymentStatisticsQuery;
+import io.orqueio.bpm.engine.management.ProcessDefinitionStatistics;
+import io.orqueio.bpm.engine.management.ProcessDefinitionStatisticsQuery;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.test.util.PluggableProcessEngineTest;
+import io.orqueio.bpm.model.bpmn.Bpmn;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
 import org.junit.Before;
 import org.junit.Test;
 

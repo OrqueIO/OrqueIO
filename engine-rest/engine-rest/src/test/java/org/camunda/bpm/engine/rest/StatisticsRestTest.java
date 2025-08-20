@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest;
+package io.orqueio.bpm.engine.rest;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
@@ -30,17 +30,17 @@ import java.util.List;
 
 import javax.ws.rs.core.Response.Status;
 
-import org.camunda.bpm.engine.AuthorizationException;
-import org.camunda.bpm.engine.impl.ActivityStatisticsQueryImpl;
-import org.camunda.bpm.engine.impl.ProcessDefinitionStatisticsQueryImpl;
-import org.camunda.bpm.engine.management.ActivityStatistics;
-import org.camunda.bpm.engine.management.ActivityStatisticsQuery;
-import org.camunda.bpm.engine.management.ProcessDefinitionStatistics;
-import org.camunda.bpm.engine.management.ProcessDefinitionStatisticsQuery;
-import org.camunda.bpm.engine.repository.ProcessDefinition;
-import org.camunda.bpm.engine.repository.ProcessDefinitionQuery;
-import org.camunda.bpm.engine.rest.helper.MockProvider;
-import org.camunda.bpm.engine.rest.util.container.TestContainerRule;
+import io.orqueio.bpm.engine.AuthorizationException;
+import io.orqueio.bpm.engine.impl.ActivityStatisticsQueryImpl;
+import io.orqueio.bpm.engine.impl.ProcessDefinitionStatisticsQueryImpl;
+import io.orqueio.bpm.engine.management.ActivityStatistics;
+import io.orqueio.bpm.engine.management.ActivityStatisticsQuery;
+import io.orqueio.bpm.engine.management.ProcessDefinitionStatistics;
+import io.orqueio.bpm.engine.management.ProcessDefinitionStatisticsQuery;
+import io.orqueio.bpm.engine.repository.ProcessDefinition;
+import io.orqueio.bpm.engine.repository.ProcessDefinitionQuery;
+import io.orqueio.bpm.engine.rest.helper.MockProvider;
+import io.orqueio.bpm.engine.rest.util.container.TestContainerRule;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;

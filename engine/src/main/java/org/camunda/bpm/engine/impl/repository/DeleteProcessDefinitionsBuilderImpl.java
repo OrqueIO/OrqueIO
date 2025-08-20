@@ -14,23 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.repository;
+package io.orqueio.bpm.engine.impl.repository;
 
-import org.camunda.bpm.engine.exception.NullValueException;
-import org.camunda.bpm.engine.impl.cmd.DeleteProcessDefinitionsByIdsCmd;
-import org.camunda.bpm.engine.impl.cmd.DeleteProcessDefinitionsByKeyCmd;
-import org.camunda.bpm.engine.impl.interceptor.Command;
-import org.camunda.bpm.engine.impl.interceptor.CommandExecutor;
-import org.camunda.bpm.engine.repository.DeleteProcessDefinitionsBuilder;
-import org.camunda.bpm.engine.repository.DeleteProcessDefinitionsSelectBuilder;
-import org.camunda.bpm.engine.repository.DeleteProcessDefinitionsTenantBuilder;
+import io.orqueio.bpm.engine.exception.NullValueException;
+import io.orqueio.bpm.engine.impl.cmd.DeleteProcessDefinitionsByIdsCmd;
+import io.orqueio.bpm.engine.impl.cmd.DeleteProcessDefinitionsByKeyCmd;
+import io.orqueio.bpm.engine.impl.interceptor.Command;
+import io.orqueio.bpm.engine.impl.interceptor.CommandExecutor;
+import io.orqueio.bpm.engine.repository.DeleteProcessDefinitionsBuilder;
+import io.orqueio.bpm.engine.repository.DeleteProcessDefinitionsSelectBuilder;
+import io.orqueio.bpm.engine.repository.DeleteProcessDefinitionsTenantBuilder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
-import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureOnlyOneNotNull;
+import static io.orqueio.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
+import static io.orqueio.bpm.engine.impl.util.EnsureUtil.ensureOnlyOneNotNull;
 
 /**
  * Fluent builder implementation to delete process definitions.

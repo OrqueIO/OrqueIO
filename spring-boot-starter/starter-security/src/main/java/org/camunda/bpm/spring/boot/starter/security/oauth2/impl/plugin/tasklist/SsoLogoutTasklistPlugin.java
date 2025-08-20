@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter.security.oauth2.impl.plugin.tasklist;
+package io.orqueio.bpm.spring.boot.starter.security.oauth2.impl.plugin.tasklist;
 
-import org.camunda.bpm.spring.boot.starter.security.oauth2.impl.plugin.SsoLogoutPluginConstants;
-import org.camunda.bpm.tasklist.plugin.spi.impl.AbstractTasklistPlugin;
+import io.orqueio.bpm.spring.boot.starter.security.oauth2.impl.plugin.SsoLogoutPluginConstants;
+import io.orqueio.bpm.tasklist.plugin.spi.impl.AbstractTasklistPlugin;
 
 import java.util.Set;
 

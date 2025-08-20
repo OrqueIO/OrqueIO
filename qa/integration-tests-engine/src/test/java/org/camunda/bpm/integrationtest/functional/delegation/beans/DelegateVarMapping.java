@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.functional.delegation.beans;
+package io.orqueio.bpm.integrationtest.functional.delegation.beans;
 
 import javax.inject.Named;
-import org.camunda.bpm.engine.delegate.DelegateExecution;
-import org.camunda.bpm.engine.delegate.DelegateVariableMapping;
-import org.camunda.bpm.engine.delegate.VariableScope;
-import org.camunda.bpm.engine.variable.VariableMap;
+import io.orqueio.bpm.engine.delegate.DelegateExecution;
+import io.orqueio.bpm.engine.delegate.DelegateVariableMapping;
+import io.orqueio.bpm.engine.delegate.VariableScope;
+import io.orqueio.bpm.engine.variable.VariableMap;
 /**
  *
  * @author Christopher Zell <christopher.zell@camunda.com>

@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.cdi.impl.el;
+package io.orqueio.bpm.engine.cdi.impl.el;
 
 import java.beans.FeatureDescriptor;
 import java.util.Iterator;
 import javax.enterprise.inject.spi.BeanManager;
-import org.camunda.bpm.engine.cdi.impl.util.BeanManagerLookup;
-import org.camunda.bpm.engine.cdi.impl.util.ProgrammaticBeanLookup;
-import org.camunda.bpm.impl.juel.jakarta.el.ELContext;
-import org.camunda.bpm.impl.juel.jakarta.el.ELResolver;
+import io.orqueio.bpm.engine.cdi.impl.util.BeanManagerLookup;
+import io.orqueio.bpm.engine.cdi.impl.util.ProgrammaticBeanLookup;
+import io.orqueio.bpm.impl.juel.jakarta.el.ELContext;
+import io.orqueio.bpm.impl.juel.jakarta.el.ELResolver;
 
 
 /**

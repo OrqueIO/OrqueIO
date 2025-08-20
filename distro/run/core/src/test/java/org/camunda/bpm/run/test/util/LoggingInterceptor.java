@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.run.test.util;
+package io.orqueio.bpm.run.test.util;
 
 import java.io.IOException;
 

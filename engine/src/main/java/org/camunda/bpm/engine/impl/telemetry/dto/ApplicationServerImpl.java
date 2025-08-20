@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.telemetry.dto;
+package io.orqueio.bpm.engine.impl.telemetry.dto;
 
-import static org.camunda.bpm.engine.impl.util.ParseUtil.parseServerVendor;
+import static io.orqueio.bpm.engine.impl.util.ParseUtil.parseServerVendor;
 
-import org.camunda.bpm.engine.telemetry.ApplicationServer;
+import io.orqueio.bpm.engine.telemetry.ApplicationServer;
 
 public class ApplicationServerImpl implements ApplicationServer {
 

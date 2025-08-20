@@ -13,7 +13,7 @@
                       targetRef="delegate"/>
 
         <serviceTask id="delegate"
-                     camunda:class="org.camunda.bpm.engine.test.bpmn.servicetask.util.BackwardsCompatibleExpressionDelegate">
+                     camunda:class="io.orqueio.bpm.engine.test.bpmn.servicetask.util.BackwardsCompatibleExpressionDelegate">
 		      <extensionElements>
 		        <camunda:field name="expression">
 		          <camunda:expression>...${var}...</camunda:expression>

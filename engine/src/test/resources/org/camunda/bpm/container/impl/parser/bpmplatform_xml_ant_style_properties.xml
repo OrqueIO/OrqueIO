@@ -12,7 +12,7 @@
 
     <plugins>
       <plugin>
-        <class>org.camunda.bpm.MyAwesomePlugin</class>
+        <class>io.orqueio.bpm.MyAwesomePlugin</class>
         <properties>
           <property name="prop1">${java.version}</property>
           <property name="prop2">prefix-${os.name}</property>

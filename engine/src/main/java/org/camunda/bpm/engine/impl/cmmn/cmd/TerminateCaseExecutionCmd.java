@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.cmmn.cmd;
+package io.orqueio.bpm.engine.impl.cmmn.cmd;
 
 import java.util.Collection;
 import java.util.Map;
 
-import org.camunda.bpm.engine.impl.cmmn.CaseExecutionCommandBuilderImpl;
-import org.camunda.bpm.engine.impl.cmmn.entity.runtime.CaseExecutionEntity;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.impl.cmmn.CaseExecutionCommandBuilderImpl;
+import io.orqueio.bpm.engine.impl.cmmn.entity.runtime.CaseExecutionEntity;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
 
 /**
  * 

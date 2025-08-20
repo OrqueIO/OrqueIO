@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.migration.instance;
+package io.orqueio.bpm.engine.impl.migration.instance;
 
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.camunda.bpm.engine.impl.tree.TreeVisitor;
+import io.orqueio.bpm.engine.impl.tree.TreeVisitor;
 
 /**
  * @author Thorben Lindhauer

@@ -19,9 +19,9 @@
 -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="org.camunda.bpm.engine.impl.history.event.HistoricDecisionInstanceEntity">
+<mapper namespace="io.orqueio.bpm.engine.impl.history.event.HistoricDecisionInstanceEntity">
 
-  <resultMap id="finishedReportResultMap" type="org.camunda.bpm.engine.impl.persistence.entity.CleanableHistoricDecisionInstanceReportResultEntity">
+  <resultMap id="finishedReportResultMap" type="io.orqueio.bpm.engine.impl.persistence.entity.CleanableHistoricDecisionInstanceReportResultEntity">
     <result property="cleanableDecisionInstanceCount" column="CLEANABLE_" jdbcType="BIGINT" />
     <result property="finishedDecisionInstanceCount" column="FINISHED_" jdbcType="BIGINT" />
     <result property="decisionDefinitionId" column="ID_" jdbcType="VARCHAR" />
@@ -34,7 +34,7 @@
 
  <!-- insert -->
 
- <insert id="insertHistoricDecisionInstance" parameterType="org.camunda.bpm.engine.impl.history.event.HistoricDecisionInstanceEntity">
+ <insert id="insertHistoricDecisionInstance" parameterType="io.orqueio.bpm.engine.impl.history.event.HistoricDecisionInstanceEntity">
     insert into ${prefix}ACT_HI_DECINST(
       ID_,
       DEC_DEF_ID_,
@@ -250,7 +250,7 @@
 
   <!-- delete -->
 
-  <delete id="deleteHistoricDecisionInstance" parameterType="org.camunda.bpm.engine.impl.history.event.HistoricDecisionInstanceEntity">
+  <delete id="deleteHistoricDecisionInstance" parameterType="io.orqueio.bpm.engine.impl.history.event.HistoricDecisionInstanceEntity">
     delete from ${prefix}ACT_HI_DECINST where ID_ = #{id}
   </delete>
 
@@ -260,11 +260,11 @@
     where
       <bind name="listOfIds" value="list"/>
       <bind name="fieldName" value="'ID_'"/>
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection"/>
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection"/>
   </delete>
 
   <delete id="deleteHistoricDecisionInstancesByRemovalTime"
-          parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject">
+          parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject">
     <bind name="date" value="'REMOVAL_TIME_'"/>
     <bind name="reportPeriodUnitName" value="'MINUTE'"/>
     delete ${limitBeforeWithoutOffset} from ${prefix}ACT_HI_DECINST
@@ -274,7 +274,7 @@
   </delete>
 
   <delete id="deleteHistoricDecisionInstancesByRemovalTime_oracle"
-          parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject">
+          parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject">
     <bind name="date" value="'REMOVAL_TIME_'"/>
     <bind name="reportPeriodUnitName" value="'MINUTE'"/>
     delete ${limitBeforeWithoutOffset} from ${prefix}ACT_HI_DECINST
@@ -284,7 +284,7 @@
   </delete>
 
   <delete id="deleteHistoricDecisionInstancesByRemovalTime_postgres_or_db2"
-          parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject">
+          parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject">
     <bind name="date" value="'REMOVAL_TIME_'"/>
     <bind name="reportPeriodUnitName" value="'MINUTE'"/>
     delete ${limitBeforeWithoutOffset} from ${prefix}ACT_HI_DECINST
@@ -297,7 +297,7 @@
 
   <!-- result map -->
 
- <resultMap id="historicDecisionInstanceResultMap" type="org.camunda.bpm.engine.impl.history.event.HistoricDecisionInstanceEntity">
+ <resultMap id="historicDecisionInstanceResultMap" type="io.orqueio.bpm.engine.impl.history.event.HistoricDecisionInstanceEntity">
     <id property="id" column="ID_" jdbcType="VARCHAR" />
     <result property="decisionDefinitionId" column="DEC_DEF_ID_" jdbcType="VARCHAR" />
     <result property="decisionDefinitionKey" column="DEC_DEF_KEY_" jdbcType="VARCHAR" />
@@ -321,26 +321,26 @@
     <result property="tenantId" column="TENANT_ID_" jdbcType="VARCHAR"/>
   </resultMap>
 
-  <resultMap type="org.camunda.bpm.engine.impl.util.ImmutablePair" id="deploymentIdMapping">
+  <resultMap type="io.orqueio.bpm.engine.impl.util.ImmutablePair" id="deploymentIdMapping">
     <id property="left" column="DEPLOYMENT_ID_" jdbcType="VARCHAR" />
     <id property="right" column="ID_" jdbcType="VARCHAR" />
   </resultMap>
 
   <!-- select -->
 
-  <select id="selectHistoricDecisionInstancesByDecisionDefinitionId" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject" resultMap="historicDecisionInstanceResultMap">
+  <select id="selectHistoricDecisionInstancesByDecisionDefinitionId" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject" resultMap="historicDecisionInstanceResultMap">
     select * from ${prefix}ACT_HI_DECINST RES
     where DEC_DEF_ID_ = #{parameter, jdbcType=VARCHAR}
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
   </select>
 
-  <select id="selectHistoricDecisionInstanceByDecisionInstanceId" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject" resultMap="historicDecisionInstanceResultMap">
+  <select id="selectHistoricDecisionInstanceByDecisionInstanceId" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject" resultMap="historicDecisionInstanceResultMap">
     select * from ${prefix}ACT_HI_DECINST RES
     where ID_ = #{parameter, jdbcType=VARCHAR}
   </select>
 
-  <select id="selectHistoricDecisionInstancesByQueryCriteria" parameterType="org.camunda.bpm.engine.impl.HistoricDecisionInstanceQueryImpl" resultMap="historicDecisionInstanceResultMap">
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
+  <select id="selectHistoricDecisionInstancesByQueryCriteria" parameterType="io.orqueio.bpm.engine.impl.HistoricDecisionInstanceQueryImpl" resultMap="historicDecisionInstanceResultMap">
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
     ${limitBefore}
     select ${distinct} RES.*
     ${limitBetween}
@@ -349,13 +349,13 @@
     ${limitAfter}
   </select>
 
-  <select id="selectHistoricDecisionInstanceCountByQueryCriteria" parameterType="org.camunda.bpm.engine.impl.HistoricDecisionInstanceQueryImpl" resultType="long">
+  <select id="selectHistoricDecisionInstanceCountByQueryCriteria" parameterType="io.orqueio.bpm.engine.impl.HistoricDecisionInstanceQueryImpl" resultType="long">
     ${countDistinctBeforeStart} RES.ID_ ${countDistinctBeforeEnd}
     <include refid="selectHistoricDecisionInstancesByQueryCriteriaSql"/>
     ${countDistinctAfterEnd}
   </select>
 
-  <select id="selectHistoricDecisionInstanceDeploymentIdMappingsByQueryCriteria" parameterType="org.camunda.bpm.engine.impl.HistoricDecisionInstanceQueryImpl" resultMap="deploymentIdMapping">
+  <select id="selectHistoricDecisionInstanceDeploymentIdMappingsByQueryCriteria" parameterType="io.orqueio.bpm.engine.impl.HistoricDecisionInstanceQueryImpl" resultMap="deploymentIdMapping">
     select distinct DD.DEPLOYMENT_ID_, RES.ID_
     <include refid="selectHistoricDecisionInstancesByQueryCriteriaSql"/>
     left join ${prefix}ACT_RE_DECISION_DEF DD on RES.DEC_DEF_ID_ = DD.ID_
@@ -400,7 +400,7 @@
     <if
         test="authCheck.shouldPerformAuthorizatioCheck &amp;&amp; !authCheck.revokeAuthorizationCheckEnabled &amp;&amp; authCheck.authUserId != null">
       <include
-          refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoinWithoutOnClause"/>
+          refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoinWithoutOnClause"/>
       AUTH ON (AUTH.RESOURCE_ID_ ${authJoinStart} RES.DEC_DEF_KEY_ ${authJoinSeparator} '*' ${authJoinEnd})
     </if>
 
@@ -411,7 +411,7 @@
       <if test="decisionInstanceIdIn != null and decisionInstanceIdIn.length > 0">
         <bind name="listOfIds" value="decisionInstanceIdIn" />
         <bind name="fieldName" value="'RES.ID_'" />
-        <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedArray" />
+        <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedArray" />
       </if>
       <if test="decisionDefinitionId != null">
         and RES.DEC_DEF_ID_ = #{decisionDefinitionId}
@@ -519,13 +519,13 @@
         and (
           (RES.DEC_DEF_KEY_ is not null
           <include
-              refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.queryAuthorizationCheck"/>
+              refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.queryAuthorizationCheck"/>
           ) or RES.DEC_DEF_KEY_ is null
         )
       </if>
 
       <include
-          refid="org.camunda.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
+          refid="io.orqueio.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
 
     </where>
     ) RES
@@ -544,14 +544,14 @@
         AND ${dayComparator}
   </sql>
 
-  <select id="selectHistoricDecisionInstanceIdsForCleanup" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject" resultType="string">
+  <select id="selectHistoricDecisionInstanceIdsForCleanup" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject" resultType="string">
     SELECT ${limitBeforeWithoutOffset} di.ID_, di.EVAL_TIME_
     <include refid="selectHistoricDecisionInstanceIdsForCleanupSql"/>
     <include refid="andWhereMinuteInDateBetweenSql"/>
     ${limitAfterWithoutOffset}
   </select>
 
-  <select id="selectHistoricDecisionInstanceIdsForCleanup_oracle" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject" resultType="string">
+  <select id="selectHistoricDecisionInstanceIdsForCleanup_oracle" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject" resultType="string">
     SELECT /*+ FIRST_ROWS(${maxResults}) NO_PARALLEL(di) NO_PARALLEL(dd) */ di.ID_, di.EVAL_TIME_
     <include refid="selectHistoricDecisionInstanceIdsForCleanupSql"/>
     <include refid="andWhereMinuteInDateBetweenSql_oracle"/>
@@ -560,27 +560,27 @@
 
   <sql id="andWhereMinuteInDateBetweenSql">
     <if test="parameter.minuteFrom != null and parameter.minuteTo != null">
-      AND ${datepart1}<include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.periodUnitFunction"/>${datepart2}${date}${datepart3}
+      AND ${datepart1}<include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.periodUnitFunction"/>${datepart2}${date}${datepart3}
       between #{parameter.minuteFrom, jdbcType=INTEGER} and #{parameter.minuteTo, jdbcType=INTEGER}
     </if>
   </sql>
 
   <sql id="andWhereMinuteInDateBetweenSql_oracle">
     <if test="parameter.minuteFrom != null and parameter.minuteTo != null">
-      AND ${datepart1}${date}${datepart2}<include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.periodUnitFunction"/>${datepart3}
+      AND ${datepart1}${date}${datepart2}<include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.periodUnitFunction"/>${datepart3}
       between #{parameter.minuteFrom, jdbcType=INTEGER} and #{parameter.minuteTo, jdbcType=INTEGER}
     </if>
   </sql>
 
   <!-- Select History Cleanup Report Entities -->
-  <select id="selectFinishedDecisionInstancesReportEntitiesCount" parameterType="org.camunda.bpm.engine.impl.CleanableHistoricDecisionInstanceReportImpl" resultType="long">
+  <select id="selectFinishedDecisionInstancesReportEntitiesCount" parameterType="io.orqueio.bpm.engine.impl.CleanableHistoricDecisionInstanceReportImpl" resultType="long">
     ${countDistinctBeforeStart} RES.ID_ ${countDistinctBeforeEnd}
     <include refid="selectFinishedDecisionInstancesReportEntitiesSql" />
     ${countDistinctAfterEnd}
   </select>
 
-  <select id="selectFinishedDecisionInstancesReportEntities" parameterType="org.camunda.bpm.engine.impl.CleanableHistoricProcessInstanceReportImpl" resultMap="finishedReportResultMap">
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
+  <select id="selectFinishedDecisionInstancesReportEntities" parameterType="io.orqueio.bpm.engine.impl.CleanableHistoricProcessInstanceReportImpl" resultMap="finishedReportResultMap">
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
     ${limitBefore}
     SELECT ${distinct} RES.*
     ${limitBetween}
@@ -614,7 +614,7 @@
           SELECT DISTINCT RES.*
           FROM ${prefix}ACT_RE_DECISION_DEF RES
           <if test="authCheck.shouldPerformAuthorizatioCheck &amp;&amp; !authCheck.revokeAuthorizationCheckEnabled &amp;&amp; authCheck.authUserId != null">
-            <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoinWithoutOnClause" />
+            <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoinWithoutOnClause" />
             AUTH ON (AUTH.RESOURCE_ID_ ${authJoinStart} RES.KEY_ ${authJoinSeparator} '*' ${authJoinEnd})
           </if>
           <where>
@@ -646,8 +646,8 @@
               </if>
             </if>
 
-            <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.queryAuthorizationCheck" />
-            <include refid="org.camunda.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
+            <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.queryAuthorizationCheck" />
+            <include refid="io.orqueio.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
 
           </where>
         ) RES

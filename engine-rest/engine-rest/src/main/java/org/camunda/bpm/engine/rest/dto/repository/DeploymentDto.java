@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.dto.repository;
+package io.orqueio.bpm.engine.rest.dto.repository;
 
 import java.util.*;
 
-import org.camunda.bpm.engine.repository.*;
-import org.camunda.bpm.engine.rest.dto.LinkableDto;
+import io.orqueio.bpm.engine.repository.*;
+import io.orqueio.bpm.engine.rest.dto.LinkableDto;
 
 public class DeploymentDto extends LinkableDto {
 

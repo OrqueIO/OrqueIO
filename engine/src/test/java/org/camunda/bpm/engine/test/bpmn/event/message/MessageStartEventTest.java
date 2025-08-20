@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.bpmn.event.message;
+package io.orqueio.bpm.engine.test.bpmn.event.message;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
@@ -25,15 +25,15 @@ import static org.junit.Assert.fail;
 
 import java.util.List;
 
-import org.camunda.bpm.engine.ParseException;
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.impl.persistence.entity.EventSubscriptionEntity;
-import org.camunda.bpm.engine.repository.ProcessDefinition;
-import org.camunda.bpm.engine.runtime.EventSubscription;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.task.Task;
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.engine.test.util.PluggableProcessEngineTest;
+import io.orqueio.bpm.engine.ParseException;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.impl.persistence.entity.EventSubscriptionEntity;
+import io.orqueio.bpm.engine.repository.ProcessDefinition;
+import io.orqueio.bpm.engine.runtime.EventSubscription;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.task.Task;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.test.util.PluggableProcessEngineTest;
 import org.junit.Test;
 
 
@@ -74,8 +74,8 @@ public class MessageStartEventTest extends PluggableProcessEngineTest {
       assertTrue(e.getMessage().contains("there already is a message event subscription for the message with name"));
     } finally {
       // clean db:
-      List<org.camunda.bpm.engine.repository.Deployment> deployments = repositoryService.createDeploymentQuery().list();
-      for (org.camunda.bpm.engine.repository.Deployment deployment : deployments) {
+      List<io.orqueio.bpm.engine.repository.Deployment> deployments = repositoryService.createDeploymentQuery().list();
+      for (io.orqueio.bpm.engine.repository.Deployment deployment : deployments) {
         repositoryService.deleteDeployment(deployment.getId(), true);
       }
       // Workaround for #CAM-4250: remove process definition of failed
@@ -281,8 +281,8 @@ public class MessageStartEventTest extends PluggableProcessEngineTest {
     } finally {
       // clean db:
       runtimeService.deleteProcessInstance(pi.getId(), "failure");
-      List<org.camunda.bpm.engine.repository.Deployment> deployments = repositoryService.createDeploymentQuery().list();
-      for (org.camunda.bpm.engine.repository.Deployment d : deployments) {
+      List<io.orqueio.bpm.engine.repository.Deployment> deployments = repositoryService.createDeploymentQuery().list();
+      for (io.orqueio.bpm.engine.repository.Deployment d : deployments) {
         repositoryService.deleteDeployment(d.getId(), true);
       }
       // Workaround for #CAM-4250: remove process definition of failed
@@ -310,8 +310,8 @@ public class MessageStartEventTest extends PluggableProcessEngineTest {
     } finally {
       // clean db:
       runtimeService.deleteProcessInstance(pi.getId(), "failure");
-      List<org.camunda.bpm.engine.repository.Deployment> deployments = repositoryService.createDeploymentQuery().list();
-      for (org.camunda.bpm.engine.repository.Deployment d : deployments) {
+      List<io.orqueio.bpm.engine.repository.Deployment> deployments = repositoryService.createDeploymentQuery().list();
+      for (io.orqueio.bpm.engine.repository.Deployment d : deployments) {
         repositoryService.deleteDeployment(d.getId(), true);
       }
       // Workaround for #CAM-4250: remove process definition of failed
@@ -339,8 +339,8 @@ public class MessageStartEventTest extends PluggableProcessEngineTest {
     } finally {
       // clean db:
       runtimeService.deleteProcessInstance(pi.getId(), "failure");
-      List<org.camunda.bpm.engine.repository.Deployment> deployments = repositoryService.createDeploymentQuery().list();
-      for (org.camunda.bpm.engine.repository.Deployment d : deployments) {
+      List<io.orqueio.bpm.engine.repository.Deployment> deployments = repositoryService.createDeploymentQuery().list();
+      for (io.orqueio.bpm.engine.repository.Deployment d : deployments) {
         repositoryService.deleteDeployment(d.getId(), true);
       }
       // Workaround for #CAM-4250: remove process definition of failed

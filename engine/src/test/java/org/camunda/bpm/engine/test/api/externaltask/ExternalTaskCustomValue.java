@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.externaltask;
+package io.orqueio.bpm.engine.test.api.externaltask;
 
 import java.io.Serializable;
 

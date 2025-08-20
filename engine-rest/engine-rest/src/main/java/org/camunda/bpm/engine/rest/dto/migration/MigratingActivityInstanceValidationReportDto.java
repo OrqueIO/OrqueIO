@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.dto.migration;
+package io.orqueio.bpm.engine.rest.dto.migration;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.camunda.bpm.engine.migration.MigratingActivityInstanceValidationReport;
+import io.orqueio.bpm.engine.migration.MigratingActivityInstanceValidationReport;
 
 public class MigratingActivityInstanceValidationReportDto {
 

@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa.largedata.util;
+package io.orqueio.bpm.qa.largedata.util;
 
-import org.camunda.bpm.model.dmn.Dmn;
-import org.camunda.bpm.model.dmn.DmnModelInstance;
-import org.camunda.bpm.model.dmn.instance.Decision;
-import org.camunda.bpm.model.dmn.instance.DecisionTable;
-import org.camunda.bpm.model.dmn.instance.Definitions;
-import org.camunda.bpm.model.dmn.instance.DmnElement;
-import org.camunda.bpm.model.dmn.instance.NamedElement;
-import org.camunda.bpm.model.dmn.instance.Output;
+import io.orqueio.bpm.model.dmn.Dmn;
+import io.orqueio.bpm.model.dmn.DmnModelInstance;
+import io.orqueio.bpm.model.dmn.instance.Decision;
+import io.orqueio.bpm.model.dmn.instance.DecisionTable;
+import io.orqueio.bpm.model.dmn.instance.Definitions;
+import io.orqueio.bpm.model.dmn.instance.DmnElement;
+import io.orqueio.bpm.model.dmn.instance.NamedElement;
+import io.orqueio.bpm.model.dmn.instance.Output;
 
 public class DmnHelper {
   public final static String TEST_NAMESPACE = "http://camunda.org/schema/1.0/dmn";

@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.spring.boot.starter.subscription;
+package io.orqueio.bpm.client.spring.boot.starter.subscription;
 
-import org.camunda.bpm.client.spring.boot.starter.subscription.configuration.FullSubscriptionConfiguration;
-import org.camunda.bpm.client.spring.boot.starter.ParsePropertiesHelper;
-import org.camunda.bpm.client.spring.impl.subscription.SubscriptionConfiguration;
+import io.orqueio.bpm.client.spring.boot.starter.subscription.configuration.FullSubscriptionConfiguration;
+import io.orqueio.bpm.client.spring.boot.starter.ParsePropertiesHelper;
+import io.orqueio.bpm.client.spring.impl.subscription.SubscriptionConfiguration;
 import org.junit.Test;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;

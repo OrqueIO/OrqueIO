@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.plugin.script;
+package io.orqueio.spin.plugin.script;
 
-import org.camunda.bpm.engine.impl.test.PluggableProcessEngineTestCase;
-import org.camunda.bpm.engine.repository.Deployment;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.task.Task;
-import org.camunda.bpm.engine.variable.VariableMap;
-import org.camunda.bpm.engine.variable.Variables;
-import org.camunda.bpm.model.bpmn.Bpmn;
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.bpm.engine.impl.test.PluggableProcessEngineTestCase;
+import io.orqueio.bpm.engine.repository.Deployment;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.task.Task;
+import io.orqueio.bpm.engine.variable.VariableMap;
+import io.orqueio.bpm.engine.variable.Variables;
+import io.orqueio.bpm.model.bpmn.Bpmn;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
 import java.util.Map;
 
 /**
@@ -47,8 +47,8 @@ public class SpinScriptTaskSupportWithAutoStoreScriptVariablesTest extends Plugg
   }
 
   public void testSpinInternalVariablesNotExportedGroovyScriptTask() {
-    String importXML = "XML = org.camunda.spin.Spin.&XML\n";
-    String importJSON = "JSON = org.camunda.spin.Spin.&JSON\n";
+    String importXML = "XML = io.orqueio.spin.Spin.&XML\n";
+    String importJSON = "JSON = io.orqueio.spin.Spin.&JSON\n";
 
     String script = importXML + importJSON + TEST_SCRIPT;
 
@@ -62,8 +62,8 @@ public class SpinScriptTaskSupportWithAutoStoreScriptVariablesTest extends Plugg
 
   // Check https://jira.camunda.com/browse/CAM-5869
   public void FAILING_testSpinInternalVariablesNotExportedByJavascriptScriptTask() {
-    String importXML = "var XML = org.camunda.spin.Spin.XML;\n";
-    String importJSON = "var JSON = org.camunda.spin.Spin.JSON;\n";
+    String importXML = "var XML = io.orqueio.spin.Spin.XML;\n";
+    String importJSON = "var JSON = io.orqueio.spin.Spin.JSON;\n";
 
     String script = importXML + importJSON + TEST_SCRIPT;
 
@@ -76,8 +76,8 @@ public class SpinScriptTaskSupportWithAutoStoreScriptVariablesTest extends Plugg
   }
 
   public void testSpinInternalVariablesNotExportedByPythonScriptTask() {
-    String importXML = "import org.camunda.spin.Spin.XML as XML;\n";
-    String importJSON = "import org.camunda.spin.Spin.JSON as JSON;\n";
+    String importXML = "import io.orqueio.spin.Spin.XML as XML;\n";
+    String importJSON = "import io.orqueio.spin.Spin.JSON as JSON;\n";
 
     String script = importXML + importJSON + TEST_SCRIPT;
 
@@ -90,8 +90,8 @@ public class SpinScriptTaskSupportWithAutoStoreScriptVariablesTest extends Plugg
   }
 
   public void testSpinInternalVariablesNotExportedByRubyScriptTask() {
-    String importXML = "def XML(*args)\n\torg.camunda.spin.Spin.XML(*args)\nend\n";
-    String importJSON = "def JSON(*args)\n\torg.camunda.spin.Spin.JSON(*args)\nend\n";
+    String importXML = "def XML(*args)\n\tio.orqueio.spin.Spin.XML(*args)\nend\n";
+    String importJSON = "def JSON(*args)\n\tio.orqueio.spin.Spin.JSON(*args)\nend\n";
 
     String script = importXML + importJSON + TEST_SCRIPT;
 

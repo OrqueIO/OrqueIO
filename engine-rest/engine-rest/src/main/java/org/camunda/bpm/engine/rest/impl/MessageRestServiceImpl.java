@@ -14,32 +14,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.impl;
+package io.orqueio.bpm.engine.rest.impl;
 
 import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.ws.rs.core.Response.Status;
 
-import org.camunda.bpm.engine.MismatchingMessageCorrelationException;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.RuntimeService;
-import org.camunda.bpm.engine.rest.MessageRestService;
-import org.camunda.bpm.engine.rest.dto.VariableValueDto;
-import org.camunda.bpm.engine.rest.dto.message.CorrelationMessageDto;
-import org.camunda.bpm.engine.rest.exception.InvalidRequestException;
-import org.camunda.bpm.engine.rest.exception.RestException;
-import org.camunda.bpm.engine.runtime.MessageCorrelationBuilder;
+import io.orqueio.bpm.engine.MismatchingMessageCorrelationException;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.RuntimeService;
+import io.orqueio.bpm.engine.rest.MessageRestService;
+import io.orqueio.bpm.engine.rest.dto.VariableValueDto;
+import io.orqueio.bpm.engine.rest.dto.message.CorrelationMessageDto;
+import io.orqueio.bpm.engine.rest.exception.InvalidRequestException;
+import io.orqueio.bpm.engine.rest.exception.RestException;
+import io.orqueio.bpm.engine.runtime.MessageCorrelationBuilder;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import org.camunda.bpm.engine.rest.dto.message.MessageCorrelationResultDto;
-import org.camunda.bpm.engine.rest.dto.message.MessageCorrelationResultWithVariableDto;
-import org.camunda.bpm.engine.runtime.MessageCorrelationResult;
-import org.camunda.bpm.engine.runtime.MessageCorrelationResultWithVariables;
+import io.orqueio.bpm.engine.rest.dto.message.MessageCorrelationResultDto;
+import io.orqueio.bpm.engine.rest.dto.message.MessageCorrelationResultWithVariableDto;
+import io.orqueio.bpm.engine.runtime.MessageCorrelationResult;
+import io.orqueio.bpm.engine.runtime.MessageCorrelationResultWithVariables;
 
 public class MessageRestServiceImpl extends AbstractRestProcessEngineAware implements MessageRestService {
 

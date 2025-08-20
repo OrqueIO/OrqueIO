@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.db;
+package io.orqueio.bpm.engine.impl.db;
 
-import org.camunda.bpm.engine.OptimisticLockingException;
+import io.orqueio.bpm.engine.OptimisticLockingException;
 
 /**
  * Marks an entity as an historic entity to ensure that {@link OptimisticLockingException}s

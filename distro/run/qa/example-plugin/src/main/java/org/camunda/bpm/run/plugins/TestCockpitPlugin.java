@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.run.plugins;
+package io.orqueio.bpm.run.plugins;
 
 import java.util.HashSet;
 import java.util.Set;
-import org.camunda.bpm.cockpit.plugin.spi.impl.AbstractCockpitPlugin;
+import io.orqueio.bpm.cockpit.plugin.spi.impl.AbstractCockpitPlugin;
 
 public class TestCockpitPlugin extends AbstractCockpitPlugin {
 

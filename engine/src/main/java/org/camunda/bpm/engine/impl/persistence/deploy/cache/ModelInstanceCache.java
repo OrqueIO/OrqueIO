@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.persistence.deploy.cache;
+package io.orqueio.bpm.engine.impl.persistence.deploy.cache;
 
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
-import org.camunda.bpm.engine.impl.cmd.GetDeploymentResourceCmd;
-import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.engine.impl.db.EnginePersistenceLogger;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.repository.ResourceDefinitionEntity;
-import org.camunda.bpm.engine.repository.ResourceDefinition;
-import org.camunda.bpm.model.xml.ModelInstance;
-import org.camunda.commons.utils.cache.Cache;
+import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
+import io.orqueio.bpm.engine.impl.cmd.GetDeploymentResourceCmd;
+import io.orqueio.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.impl.db.EnginePersistenceLogger;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.impl.repository.ResourceDefinitionEntity;
+import io.orqueio.bpm.engine.repository.ResourceDefinition;
+import io.orqueio.bpm.model.xml.ModelInstance;
+import io.orqueio.commons.utils.cache.Cache;
 
 import java.io.InputStream;
 import java.util.List;

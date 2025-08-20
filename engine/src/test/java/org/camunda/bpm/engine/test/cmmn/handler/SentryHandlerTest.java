@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.cmmn.handler;
+package io.orqueio.bpm.engine.test.cmmn.handler;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
@@ -25,29 +25,29 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
-import org.camunda.bpm.engine.delegate.Expression;
-import org.camunda.bpm.engine.impl.cmmn.handler.CasePlanModelHandler;
-import org.camunda.bpm.engine.impl.cmmn.handler.SentryHandler;
-import org.camunda.bpm.engine.impl.cmmn.handler.TaskItemHandler;
-import org.camunda.bpm.engine.impl.cmmn.model.CmmnActivity;
-import org.camunda.bpm.engine.impl.cmmn.model.CmmnIfPartDeclaration;
-import org.camunda.bpm.engine.impl.cmmn.model.CmmnOnPartDeclaration;
-import org.camunda.bpm.engine.impl.cmmn.model.CmmnSentryDeclaration;
-import org.camunda.bpm.engine.impl.cmmn.model.CmmnVariableOnPartDeclaration;
-import org.camunda.bpm.engine.impl.cmmn.transformer.CmmnTransformException;
-import org.camunda.bpm.model.cmmn.PlanItemTransition;
-import org.camunda.bpm.model.cmmn.VariableTransition;
-import org.camunda.bpm.model.cmmn.instance.Body;
-import org.camunda.bpm.model.cmmn.instance.ConditionExpression;
-import org.camunda.bpm.model.cmmn.instance.ExtensionElements;
-import org.camunda.bpm.model.cmmn.instance.IfPart;
-import org.camunda.bpm.model.cmmn.instance.PlanItem;
-import org.camunda.bpm.model.cmmn.instance.PlanItemOnPart;
-import org.camunda.bpm.model.cmmn.instance.PlanItemTransitionStandardEvent;
-import org.camunda.bpm.model.cmmn.instance.Sentry;
-import org.camunda.bpm.model.cmmn.instance.Task;
-import org.camunda.bpm.model.cmmn.instance.camunda.CamundaVariableOnPart;
-import org.camunda.bpm.model.cmmn.instance.camunda.CamundaVariableTransitionEvent;
+import io.orqueio.bpm.engine.delegate.Expression;
+import io.orqueio.bpm.engine.impl.cmmn.handler.CasePlanModelHandler;
+import io.orqueio.bpm.engine.impl.cmmn.handler.SentryHandler;
+import io.orqueio.bpm.engine.impl.cmmn.handler.TaskItemHandler;
+import io.orqueio.bpm.engine.impl.cmmn.model.CmmnActivity;
+import io.orqueio.bpm.engine.impl.cmmn.model.CmmnIfPartDeclaration;
+import io.orqueio.bpm.engine.impl.cmmn.model.CmmnOnPartDeclaration;
+import io.orqueio.bpm.engine.impl.cmmn.model.CmmnSentryDeclaration;
+import io.orqueio.bpm.engine.impl.cmmn.model.CmmnVariableOnPartDeclaration;
+import io.orqueio.bpm.engine.impl.cmmn.transformer.CmmnTransformException;
+import io.orqueio.bpm.model.cmmn.PlanItemTransition;
+import io.orqueio.bpm.model.cmmn.VariableTransition;
+import io.orqueio.bpm.model.cmmn.instance.Body;
+import io.orqueio.bpm.model.cmmn.instance.ConditionExpression;
+import io.orqueio.bpm.model.cmmn.instance.ExtensionElements;
+import io.orqueio.bpm.model.cmmn.instance.IfPart;
+import io.orqueio.bpm.model.cmmn.instance.PlanItem;
+import io.orqueio.bpm.model.cmmn.instance.PlanItemOnPart;
+import io.orqueio.bpm.model.cmmn.instance.PlanItemTransitionStandardEvent;
+import io.orqueio.bpm.model.cmmn.instance.Sentry;
+import io.orqueio.bpm.model.cmmn.instance.Task;
+import io.orqueio.bpm.model.cmmn.instance.camunda.CamundaVariableOnPart;
+import io.orqueio.bpm.model.cmmn.instance.camunda.CamundaVariableTransitionEvent;
 import org.junit.Before;
 import org.junit.Test;
 

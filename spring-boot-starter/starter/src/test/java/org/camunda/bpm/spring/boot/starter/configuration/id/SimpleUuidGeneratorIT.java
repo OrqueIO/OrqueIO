@@ -14,20 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter.configuration.id;
+package io.orqueio.bpm.spring.boot.starter.configuration.id;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.impl.cfg.IdGenerator;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.db.DbIdGenerator;
-import org.camunda.bpm.spring.boot.starter.test.nonpa.TestApplication;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.impl.cfg.IdGenerator;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.db.DbIdGenerator;
+import io.orqueio.bpm.spring.boot.starter.test.nonpa.TestApplication;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.camunda.bpm.spring.boot.starter.configuration.id.IdGeneratorConfiguration.SIMPLE;
+import static io.orqueio.bpm.spring.boot.starter.configuration.id.IdGeneratorConfiguration.SIMPLE;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = { TestApplication.class }, properties = "camunda.bpm.id-generator=" + SIMPLE)

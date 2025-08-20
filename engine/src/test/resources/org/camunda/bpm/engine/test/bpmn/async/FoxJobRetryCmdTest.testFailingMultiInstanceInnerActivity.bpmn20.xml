@@ -12,7 +12,7 @@
 
      <userTask id="task">
       <extensionElements>
-        <camunda:executionListener event="start" class="org.camunda.bpm.engine.test.cmd.FailingExecutionListener" />
+        <camunda:executionListener event="start" class="io.orqueio.bpm.engine.test.cmd.FailingExecutionListener" />
       </extensionElements>
       <multiInstanceLoopCharacteristics isSequential="true" camunda:asyncBefore="true">
         <extensionElements>

@@ -14,18 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.cmd;
+package io.orqueio.bpm.engine.impl.cmd;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.camunda.bpm.engine.batch.Batch;
-import org.camunda.bpm.engine.externaltask.ExternalTaskQuery;
-import org.camunda.bpm.engine.externaltask.UpdateExternalTaskRetriesBuilder;
-import org.camunda.bpm.engine.history.HistoricProcessInstanceQuery;
-import org.camunda.bpm.engine.impl.interceptor.CommandExecutor;
-import org.camunda.bpm.engine.runtime.ProcessInstanceQuery;
+import io.orqueio.bpm.engine.batch.Batch;
+import io.orqueio.bpm.engine.externaltask.ExternalTaskQuery;
+import io.orqueio.bpm.engine.externaltask.UpdateExternalTaskRetriesBuilder;
+import io.orqueio.bpm.engine.history.HistoricProcessInstanceQuery;
+import io.orqueio.bpm.engine.impl.interceptor.CommandExecutor;
+import io.orqueio.bpm.engine.runtime.ProcessInstanceQuery;
 
 /**
  * @author smirnov

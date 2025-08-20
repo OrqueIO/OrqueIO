@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.cmd;
+package io.orqueio.bpm.engine.impl.cmd;
 
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 
-import org.camunda.bpm.engine.impl.JobQueryImpl;
-import org.camunda.bpm.engine.impl.batch.BatchElementConfiguration;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.util.CollectionUtil;
-import org.camunda.bpm.engine.runtime.JobQuery;
+import io.orqueio.bpm.engine.impl.JobQueryImpl;
+import io.orqueio.bpm.engine.impl.batch.BatchElementConfiguration;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.impl.util.CollectionUtil;
+import io.orqueio.bpm.engine.runtime.JobQuery;
 
 /**
  * @author Askar Akhmerov

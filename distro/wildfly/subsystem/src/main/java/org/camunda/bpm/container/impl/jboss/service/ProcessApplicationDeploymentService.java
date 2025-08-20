@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.jboss.service;
+package io.orqueio.bpm.container.impl.jboss.service;
 
 import java.io.ByteArrayInputStream;
 import java.util.Collection;
@@ -27,18 +27,18 @@ import java.util.function.Supplier;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.camunda.bpm.application.ProcessApplicationInterface;
-import org.camunda.bpm.application.ProcessApplicationReference;
-import org.camunda.bpm.application.ProcessApplicationRegistration;
-import org.camunda.bpm.application.impl.metadata.spi.ProcessArchiveXml;
-import org.camunda.bpm.container.impl.jboss.util.Tccl;
-import org.camunda.bpm.container.impl.metadata.PropertyHelper;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.RepositoryService;
-import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.engine.repository.ProcessApplicationDeployment;
-import org.camunda.bpm.engine.repository.ProcessApplicationDeploymentBuilder;
-import org.camunda.bpm.engine.repository.ResumePreviousBy;
+import io.orqueio.bpm.application.ProcessApplicationInterface;
+import io.orqueio.bpm.application.ProcessApplicationReference;
+import io.orqueio.bpm.application.ProcessApplicationRegistration;
+import io.orqueio.bpm.application.impl.metadata.spi.ProcessArchiveXml;
+import io.orqueio.bpm.container.impl.jboss.util.Tccl;
+import io.orqueio.bpm.container.impl.metadata.PropertyHelper;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.RepositoryService;
+import io.orqueio.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.repository.ProcessApplicationDeployment;
+import io.orqueio.bpm.engine.repository.ProcessApplicationDeploymentBuilder;
+import io.orqueio.bpm.engine.repository.ResumePreviousBy;
 import org.jboss.as.ee.component.ComponentView;
 import org.jboss.as.naming.ManagedReference;
 import org.jboss.modules.Module;

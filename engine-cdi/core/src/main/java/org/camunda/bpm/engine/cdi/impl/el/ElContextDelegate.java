@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.cdi.impl.el;
+package io.orqueio.bpm.engine.cdi.impl.el;
 
 import java.util.Locale;
 import javax.el.ELContext;
@@ -28,11 +28,11 @@ import javax.el.VariableMapper;
  */
 public class ElContextDelegate extends ELContext {
 
-  protected final org.camunda.bpm.impl.juel.jakarta.el.ELContext delegateContext;
+  protected final io.orqueio.bpm.impl.juel.jakarta.el.ELContext delegateContext;
 
   protected final ELResolver elResolver;
 
-  public ElContextDelegate(org.camunda.bpm.impl.juel.jakarta.el.ELContext delegateContext, ELResolver elResolver) {
+  public ElContextDelegate(io.orqueio.bpm.impl.juel.jakarta.el.ELContext delegateContext, ELResolver elResolver) {
     this.delegateContext = delegateContext;
     this.elResolver = elResolver;
   }

@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.cmmn.handler;
+package io.orqueio.bpm.engine.test.cmmn.handler;
 
-import static org.camunda.bpm.engine.impl.cmmn.handler.ItemHandler.PROPERTY_ACTIVITY_DESCRIPTION;
-import static org.camunda.bpm.engine.impl.cmmn.handler.ItemHandler.PROPERTY_ACTIVITY_TYPE;
-import static org.camunda.bpm.engine.impl.cmmn.handler.ItemHandler.PROPERTY_IS_BLOCKING;
-import static org.camunda.bpm.engine.impl.cmmn.handler.ItemHandler.PROPERTY_MANUAL_ACTIVATION_RULE;
-import static org.camunda.bpm.engine.impl.cmmn.handler.ItemHandler.PROPERTY_REPETITION_RULE;
-import static org.camunda.bpm.engine.impl.cmmn.handler.ItemHandler.PROPERTY_REQUIRED_RULE;
+import static io.orqueio.bpm.engine.impl.cmmn.handler.ItemHandler.PROPERTY_ACTIVITY_DESCRIPTION;
+import static io.orqueio.bpm.engine.impl.cmmn.handler.ItemHandler.PROPERTY_ACTIVITY_TYPE;
+import static io.orqueio.bpm.engine.impl.cmmn.handler.ItemHandler.PROPERTY_IS_BLOCKING;
+import static io.orqueio.bpm.engine.impl.cmmn.handler.ItemHandler.PROPERTY_MANUAL_ACTIVATION_RULE;
+import static io.orqueio.bpm.engine.impl.cmmn.handler.ItemHandler.PROPERTY_REPETITION_RULE;
+import static io.orqueio.bpm.engine.impl.cmmn.handler.ItemHandler.PROPERTY_REQUIRED_RULE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
@@ -33,42 +33,42 @@ import static org.junit.Assert.fail;
 import java.util.List;
 import java.util.Set;
 
-import org.camunda.bpm.engine.delegate.CaseExecutionListener;
-import org.camunda.bpm.engine.delegate.Expression;
-import org.camunda.bpm.engine.delegate.TaskListener;
-import org.camunda.bpm.engine.impl.bpmn.helper.CmmnProperties;
-import org.camunda.bpm.engine.impl.cmmn.CaseControlRule;
-import org.camunda.bpm.engine.impl.cmmn.behavior.CmmnActivityBehavior;
-import org.camunda.bpm.engine.impl.cmmn.behavior.HumanTaskActivityBehavior;
-import org.camunda.bpm.engine.impl.cmmn.handler.CasePlanModelHandler;
-import org.camunda.bpm.engine.impl.cmmn.handler.HumanTaskItemHandler;
-import org.camunda.bpm.engine.impl.cmmn.handler.SentryHandler;
-import org.camunda.bpm.engine.impl.cmmn.model.CmmnActivity;
-import org.camunda.bpm.engine.impl.cmmn.model.CmmnCaseDefinition;
-import org.camunda.bpm.engine.impl.cmmn.model.CmmnSentryDeclaration;
-import org.camunda.bpm.engine.impl.el.ExpressionManager;
-import org.camunda.bpm.engine.impl.task.TaskDefinition;
-import org.camunda.bpm.engine.impl.task.listener.ClassDelegateTaskListener;
-import org.camunda.bpm.engine.impl.task.listener.DelegateExpressionTaskListener;
-import org.camunda.bpm.engine.impl.task.listener.ExpressionTaskListener;
-import org.camunda.bpm.model.cmmn.Cmmn;
-import org.camunda.bpm.model.cmmn.instance.Body;
-import org.camunda.bpm.model.cmmn.instance.CaseRole;
-import org.camunda.bpm.model.cmmn.instance.ConditionExpression;
-import org.camunda.bpm.model.cmmn.instance.DefaultControl;
-import org.camunda.bpm.model.cmmn.instance.EntryCriterion;
-import org.camunda.bpm.model.cmmn.instance.ExitCriterion;
-import org.camunda.bpm.model.cmmn.instance.ExtensionElements;
-import org.camunda.bpm.model.cmmn.instance.HumanTask;
-import org.camunda.bpm.model.cmmn.instance.IfPart;
-import org.camunda.bpm.model.cmmn.instance.ItemControl;
-import org.camunda.bpm.model.cmmn.instance.ManualActivationRule;
-import org.camunda.bpm.model.cmmn.instance.PlanItem;
-import org.camunda.bpm.model.cmmn.instance.PlanItemControl;
-import org.camunda.bpm.model.cmmn.instance.RepetitionRule;
-import org.camunda.bpm.model.cmmn.instance.RequiredRule;
-import org.camunda.bpm.model.cmmn.instance.Sentry;
-import org.camunda.bpm.model.cmmn.instance.camunda.CamundaTaskListener;
+import io.orqueio.bpm.engine.delegate.CaseExecutionListener;
+import io.orqueio.bpm.engine.delegate.Expression;
+import io.orqueio.bpm.engine.delegate.TaskListener;
+import io.orqueio.bpm.engine.impl.bpmn.helper.CmmnProperties;
+import io.orqueio.bpm.engine.impl.cmmn.CaseControlRule;
+import io.orqueio.bpm.engine.impl.cmmn.behavior.CmmnActivityBehavior;
+import io.orqueio.bpm.engine.impl.cmmn.behavior.HumanTaskActivityBehavior;
+import io.orqueio.bpm.engine.impl.cmmn.handler.CasePlanModelHandler;
+import io.orqueio.bpm.engine.impl.cmmn.handler.HumanTaskItemHandler;
+import io.orqueio.bpm.engine.impl.cmmn.handler.SentryHandler;
+import io.orqueio.bpm.engine.impl.cmmn.model.CmmnActivity;
+import io.orqueio.bpm.engine.impl.cmmn.model.CmmnCaseDefinition;
+import io.orqueio.bpm.engine.impl.cmmn.model.CmmnSentryDeclaration;
+import io.orqueio.bpm.engine.impl.el.ExpressionManager;
+import io.orqueio.bpm.engine.impl.task.TaskDefinition;
+import io.orqueio.bpm.engine.impl.task.listener.ClassDelegateTaskListener;
+import io.orqueio.bpm.engine.impl.task.listener.DelegateExpressionTaskListener;
+import io.orqueio.bpm.engine.impl.task.listener.ExpressionTaskListener;
+import io.orqueio.bpm.model.cmmn.Cmmn;
+import io.orqueio.bpm.model.cmmn.instance.Body;
+import io.orqueio.bpm.model.cmmn.instance.CaseRole;
+import io.orqueio.bpm.model.cmmn.instance.ConditionExpression;
+import io.orqueio.bpm.model.cmmn.instance.DefaultControl;
+import io.orqueio.bpm.model.cmmn.instance.EntryCriterion;
+import io.orqueio.bpm.model.cmmn.instance.ExitCriterion;
+import io.orqueio.bpm.model.cmmn.instance.ExtensionElements;
+import io.orqueio.bpm.model.cmmn.instance.HumanTask;
+import io.orqueio.bpm.model.cmmn.instance.IfPart;
+import io.orqueio.bpm.model.cmmn.instance.ItemControl;
+import io.orqueio.bpm.model.cmmn.instance.ManualActivationRule;
+import io.orqueio.bpm.model.cmmn.instance.PlanItem;
+import io.orqueio.bpm.model.cmmn.instance.PlanItemControl;
+import io.orqueio.bpm.model.cmmn.instance.RepetitionRule;
+import io.orqueio.bpm.model.cmmn.instance.RequiredRule;
+import io.orqueio.bpm.model.cmmn.instance.Sentry;
+import io.orqueio.bpm.model.cmmn.instance.camunda.CamundaTaskListener;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -529,7 +529,7 @@ public class HumanTaskPlanItemHandlerTest extends CmmnElementHandlerTest {
     ExtensionElements extensionElements = addExtensionElements(humanTask);
     CamundaTaskListener taskListener = createElement(extensionElements, null, CamundaTaskListener.class);
 
-    String className = "org.camunda.bpm.test.tasklistener.ABC";
+    String className = "io.orqueio.bpm.test.tasklistener.ABC";
     String event = TaskListener.EVENTNAME_CREATE;
     taskListener.setCamundaEvent(event);
     taskListener.setCamundaClass(className);
@@ -636,7 +636,7 @@ public class HumanTaskPlanItemHandlerTest extends CmmnElementHandlerTest {
     ExtensionElements extensionElements = addExtensionElements(humanTask);
     CamundaTaskListener taskListener = createElement(extensionElements, null, CamundaTaskListener.class);
 
-    String className = "org.camunda.bpm.test.tasklistener.ABC";
+    String className = "io.orqueio.bpm.test.tasklistener.ABC";
     String event = TaskListener.EVENTNAME_COMPLETE;
     taskListener.setCamundaEvent(event);
     taskListener.setCamundaClass(className);
@@ -743,7 +743,7 @@ public class HumanTaskPlanItemHandlerTest extends CmmnElementHandlerTest {
     ExtensionElements extensionElements = addExtensionElements(humanTask);
     CamundaTaskListener taskListener = createElement(extensionElements, null, CamundaTaskListener.class);
 
-    String className = "org.camunda.bpm.test.tasklistener.ABC";
+    String className = "io.orqueio.bpm.test.tasklistener.ABC";
     String event = TaskListener.EVENTNAME_ASSIGNMENT;
     taskListener.setCamundaEvent(event);
     taskListener.setCamundaClass(className);
@@ -850,7 +850,7 @@ public class HumanTaskPlanItemHandlerTest extends CmmnElementHandlerTest {
     ExtensionElements extensionElements = addExtensionElements(humanTask);
     CamundaTaskListener taskListener = createElement(extensionElements, null, CamundaTaskListener.class);
 
-    String className = "org.camunda.bpm.test.tasklistener.ABC";
+    String className = "io.orqueio.bpm.test.tasklistener.ABC";
     String event = TaskListener.EVENTNAME_UPDATE;
     taskListener.setCamundaEvent(event);
     taskListener.setCamundaClass(className);
@@ -957,7 +957,7 @@ public class HumanTaskPlanItemHandlerTest extends CmmnElementHandlerTest {
     ExtensionElements extensionElements = addExtensionElements(humanTask);
     CamundaTaskListener taskListener = createElement(extensionElements, null, CamundaTaskListener.class);
 
-    String className = "org.camunda.bpm.test.tasklistener.ABC";
+    String className = "io.orqueio.bpm.test.tasklistener.ABC";
     String event = TaskListener.EVENTNAME_DELETE;
     taskListener.setCamundaEvent(event);
     taskListener.setCamundaClass(className);

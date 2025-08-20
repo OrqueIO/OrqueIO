@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.connect.plugin.impl;
+package io.orqueio.connect.plugin.impl;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.camunda.bpm.engine.impl.bpmn.parser.BpmnParseListener;
-import org.camunda.bpm.engine.impl.cfg.AbstractProcessEnginePlugin;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.util.ClassLoaderUtil;
-import org.camunda.connect.Connectors;
+import io.orqueio.bpm.engine.impl.bpmn.parser.BpmnParseListener;
+import io.orqueio.bpm.engine.impl.cfg.AbstractProcessEnginePlugin;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.util.ClassLoaderUtil;
+import io.orqueio.connect.Connectors;
 
 public class ConnectProcessEnginePlugin extends AbstractProcessEnginePlugin {
 

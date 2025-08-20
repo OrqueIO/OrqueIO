@@ -14,25 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.sub.runtime.impl;
+package io.orqueio.bpm.engine.rest.sub.runtime.impl;
 
 import javax.ws.rs.core.Response.Status;
-import org.camunda.bpm.engine.AuthorizationException;
-import org.camunda.bpm.engine.ManagementService;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.exception.NotFoundException;
-import org.camunda.bpm.engine.exception.NullValueException;
-import org.camunda.bpm.engine.management.SetJobRetriesBuilder;
-import org.camunda.bpm.engine.rest.dto.runtime.JobDto;
-import org.camunda.bpm.engine.rest.dto.runtime.JobDuedateDto;
-import org.camunda.bpm.engine.rest.dto.runtime.JobSuspensionStateDto;
-import org.camunda.bpm.engine.rest.dto.runtime.PriorityDto;
-import org.camunda.bpm.engine.rest.dto.runtime.RetriesDto;
-import org.camunda.bpm.engine.rest.exception.InvalidRequestException;
-import org.camunda.bpm.engine.rest.exception.RestException;
-import org.camunda.bpm.engine.rest.sub.runtime.JobResource;
-import org.camunda.bpm.engine.runtime.Job;
+import io.orqueio.bpm.engine.AuthorizationException;
+import io.orqueio.bpm.engine.ManagementService;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.exception.NotFoundException;
+import io.orqueio.bpm.engine.exception.NullValueException;
+import io.orqueio.bpm.engine.management.SetJobRetriesBuilder;
+import io.orqueio.bpm.engine.rest.dto.runtime.JobDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.JobDuedateDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.JobSuspensionStateDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.PriorityDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.RetriesDto;
+import io.orqueio.bpm.engine.rest.exception.InvalidRequestException;
+import io.orqueio.bpm.engine.rest.exception.RestException;
+import io.orqueio.bpm.engine.rest.sub.runtime.JobResource;
+import io.orqueio.bpm.engine.runtime.Job;
 
 public class JobResourceImpl implements JobResource {
 

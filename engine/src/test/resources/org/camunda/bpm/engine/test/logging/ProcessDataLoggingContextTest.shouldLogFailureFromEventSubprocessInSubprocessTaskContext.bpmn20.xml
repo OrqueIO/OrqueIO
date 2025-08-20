@@ -23,7 +23,7 @@
         <bpmn:outgoing>SequenceFlow_1t7qsgf</bpmn:outgoing>
         <bpmn:messageEventDefinition messageRef="Message_1auh2zd" />
       </bpmn:startEvent>
-      <bpmn:serviceTask id="sub_failingTask" camunda:class="org.camunda.bpm.engine.test.logging.ProcessDataLoggingContextTest.FailingDelegate">
+      <bpmn:serviceTask id="sub_failingTask" camunda:class="io.orqueio.bpm.engine.test.logging.ProcessDataLoggingContextTest.FailingDelegate">
         <bpmn:incoming>SequenceFlow_1t7qsgf</bpmn:incoming>
         <bpmn:outgoing>SequenceFlow_1jfwjy5</bpmn:outgoing>
       </bpmn:serviceTask>

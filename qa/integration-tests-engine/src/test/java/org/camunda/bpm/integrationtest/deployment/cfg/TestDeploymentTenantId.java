@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.deployment.cfg;
+package io.orqueio.bpm.integrationtest.deployment.cfg;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
-import org.camunda.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
-import org.camunda.bpm.integrationtest.util.DeploymentHelper;
+import io.orqueio.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
+import io.orqueio.bpm.integrationtest.util.DeploymentHelper;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -47,7 +47,7 @@ public class TestDeploymentTenantId extends AbstractFoxPlatformIntegrationTest {
   public void testDeployProcessArchiveWithTenantId() {
     assertThat(processEngine, is(notNullValue()));
 
-    org.camunda.bpm.engine.repository.Deployment deployment = processEngine
+    io.orqueio.bpm.engine.repository.Deployment deployment = processEngine
         .getRepositoryService()
         .createDeploymentQuery()
         .singleResult();

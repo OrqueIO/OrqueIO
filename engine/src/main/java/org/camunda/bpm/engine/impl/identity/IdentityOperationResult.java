@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.identity;
+package io.orqueio.bpm.engine.impl.identity;
 
 import java.io.Serializable;
 
-import org.camunda.bpm.engine.IdentityService;
+import io.orqueio.bpm.engine.IdentityService;
 
 /**
  * <p>

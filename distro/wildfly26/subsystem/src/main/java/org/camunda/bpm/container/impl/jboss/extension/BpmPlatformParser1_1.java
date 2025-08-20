@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.jboss.extension;
+package io.orqueio.bpm.container.impl.jboss.extension;
 
-import org.camunda.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.ProcessEngineException;
 import org.jboss.as.connector.util.AbstractParser;
 import org.jboss.as.connector.util.ParserException;
 import org.jboss.as.controller.AttributeDefinition;
@@ -38,8 +38,8 @@ import java.util.List;
 
 import static javax.xml.stream.XMLStreamConstants.END_ELEMENT;
 import static javax.xml.stream.XMLStreamConstants.START_ELEMENT;
-import static org.camunda.bpm.container.impl.jboss.extension.Attribute.DEFAULT;
-import static org.camunda.bpm.container.impl.jboss.extension.Attribute.NAME;
+import static io.orqueio.bpm.container.impl.jboss.extension.Attribute.DEFAULT;
+import static io.orqueio.bpm.container.impl.jboss.extension.Attribute.NAME;
 import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.*;
 import static org.jboss.as.controller.parsing.ParseUtils.*;
 

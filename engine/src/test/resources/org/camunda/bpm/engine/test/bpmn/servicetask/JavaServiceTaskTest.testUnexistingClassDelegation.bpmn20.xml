@@ -12,7 +12,7 @@
     
     <serviceTask id="javaService" 
                  name="Java service invocation" 
-                 camunda:class="org.camunda.bpm.engine.test.BogusClass" />         
+                 camunda:class="io.orqueio.bpm.engine.test.BogusClass" />
     
     <sequenceFlow id="flow2" sourceRef="javaService" targetRef="theEnd" />
     

@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.commons.logging;
+package io.orqueio.commons.logging;
 
 import org.junit.Test;
 import org.mockito.Mockito;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.camunda.commons.logging.ExampleLogger.*;
+import static io.orqueio.commons.logging.ExampleLogger.*;
 
 /**
  * @author Daniel Meyer

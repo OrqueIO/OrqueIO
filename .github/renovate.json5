@@ -43,7 +43,7 @@
         "!/^org.apache.httpcomponents.client5/",
         "!/^com.fasterxml.uuid/",
         "!/^com.fasterxml.jackson/",
-        "!/^org.camunda.feel/",
+        "!/^io.orqueio.feel/",
         "!/^io.quarkus/",
         "!/^ch.qos.logback/",
         "!/^org.graalvm/",

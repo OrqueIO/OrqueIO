@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.jboss;
+package io.orqueio.bpm.integrationtest.jboss;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;

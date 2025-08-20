@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.jobexecutor;
+package io.orqueio.bpm.engine.test.jobexecutor;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -22,18 +22,18 @@ import java.util.List;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.spi.ILoggingEvent;
-import org.camunda.bpm.engine.ManagementService;
-import org.camunda.bpm.engine.RuntimeService;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.jobexecutor.JobExecutor;
-import org.camunda.bpm.engine.runtime.Job;
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.engine.test.ProcessEngineRule;
-import org.camunda.bpm.engine.test.util.ProcessEngineTestRule;
-import org.camunda.bpm.engine.test.util.ProvidedProcessEngineRule;
-import org.camunda.bpm.model.bpmn.Bpmn;
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
-import org.camunda.commons.testing.ProcessEngineLoggingRule;
+import io.orqueio.bpm.engine.ManagementService;
+import io.orqueio.bpm.engine.RuntimeService;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.jobexecutor.JobExecutor;
+import io.orqueio.bpm.engine.runtime.Job;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.test.ProcessEngineRule;
+import io.orqueio.bpm.engine.test.util.ProcessEngineTestRule;
+import io.orqueio.bpm.engine.test.util.ProvidedProcessEngineRule;
+import io.orqueio.bpm.model.bpmn.Bpmn;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.commons.testing.ProcessEngineLoggingRule;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -42,8 +42,8 @@ import org.junit.rules.RuleChain;
 
 public class JobExceptionLoggingTest {
 
-  private static final String JOBEXECUTOR_LOGGER = "org.camunda.bpm.engine.jobexecutor";
-  private static final String CONTEXT_LOGGER = "org.camunda.bpm.engine.context";
+  private static final String JOBEXECUTOR_LOGGER = "io.orqueio.bpm.engine.jobexecutor";
+  private static final String CONTEXT_LOGGER = "io.orqueio.bpm.engine.context";
 
   public ProcessEngineRule engineRule = new ProvidedProcessEngineRule();
   public ProcessEngineLoggingRule loggingRule = new ProcessEngineLoggingRule().watch(CONTEXT_LOGGER, JOBEXECUTOR_LOGGER).level(Level.DEBUG);
@@ -123,7 +123,7 @@ public class JobExceptionLoggingTest {
     BpmnModelInstance modelInstance = Bpmn.createExecutableProcess("failingDelegate")
         .startEvent()
         .serviceTask()
-          .camundaClass("org.camunda.bpm.engine.test.jobexecutor.FailingDelegate")
+          .camundaClass("io.orqueio.bpm.engine.test.jobexecutor.FailingDelegate")
           .camundaAsyncBefore()
         .done();
     testRule.deploy(modelInstance);
@@ -157,7 +157,7 @@ public class JobExceptionLoggingTest {
     BpmnModelInstance modelInstance = Bpmn.createExecutableProcess("failingDelegate")
         .startEvent()
         .serviceTask()
-          .camundaClass("org.camunda.bpm.engine.test.jobexecutor.FailingDelegate")
+          .camundaClass("io.orqueio.bpm.engine.test.jobexecutor.FailingDelegate")
         .done();
     testRule.deploy(modelInstance);
 

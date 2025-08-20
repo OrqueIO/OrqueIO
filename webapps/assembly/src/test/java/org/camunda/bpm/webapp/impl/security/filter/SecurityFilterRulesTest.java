@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.webapp.impl.security.filter;
+package io.orqueio.bpm.webapp.impl.security.filter;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -27,14 +27,14 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
-import org.camunda.bpm.cockpit.Cockpit;
-import org.camunda.bpm.cockpit.impl.DefaultCockpitRuntimeDelegate;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.impl.util.IoUtil;
-import org.camunda.bpm.webapp.impl.security.auth.Authentication;
-import org.camunda.bpm.webapp.impl.security.auth.Authentications;
-import org.camunda.bpm.webapp.impl.security.auth.UserAuthentication;
-import org.camunda.bpm.webapp.impl.security.filter.util.FilterRules;
+import io.orqueio.bpm.cockpit.Cockpit;
+import io.orqueio.bpm.cockpit.impl.DefaultCockpitRuntimeDelegate;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.impl.util.IoUtil;
+import io.orqueio.bpm.webapp.impl.security.auth.Authentication;
+import io.orqueio.bpm.webapp.impl.security.auth.Authentications;
+import io.orqueio.bpm.webapp.impl.security.auth.UserAuthentication;
+import io.orqueio.bpm.webapp.impl.security.filter.util.FilterRules;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

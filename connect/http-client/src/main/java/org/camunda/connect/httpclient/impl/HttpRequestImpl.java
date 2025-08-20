@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.connect.httpclient.impl;
+package io.orqueio.connect.httpclient.impl;
 
-import org.camunda.connect.httpclient.HttpRequest;
-import org.camunda.connect.httpclient.HttpResponse;
-import org.camunda.connect.spi.Connector;
+import io.orqueio.connect.httpclient.HttpRequest;
+import io.orqueio.connect.httpclient.HttpResponse;
+import io.orqueio.connect.spi.Connector;
 
 public class HttpRequestImpl extends AbstractHttpRequest<HttpRequest, HttpResponse> implements HttpRequest {
 

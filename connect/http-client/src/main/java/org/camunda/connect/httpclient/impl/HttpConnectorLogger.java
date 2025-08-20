@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.connect.httpclient.impl;
+package io.orqueio.connect.httpclient.impl;
 
-import org.camunda.connect.ConnectorRequestException;
-import org.camunda.connect.ConnectorResponseException;
-import org.camunda.connect.impl.ConnectLogger;
+import io.orqueio.connect.ConnectorRequestException;
+import io.orqueio.connect.ConnectorResponseException;
+import io.orqueio.connect.impl.ConnectLogger;
 
 public class HttpConnectorLogger extends ConnectLogger {
 

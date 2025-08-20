@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.variable.impl.format.serializable;
+package io.orqueio.bpm.client.variable.impl.format.serializable;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -27,9 +27,9 @@ import java.util.Base64;
 import java.util.Base64.Decoder;
 import java.util.Base64.Encoder;
 
-import org.camunda.bpm.client.impl.ExternalTaskClientLogger;
-import org.camunda.bpm.client.spi.DataFormat;
-import org.camunda.commons.utils.IoUtil;
+import io.orqueio.bpm.client.impl.ExternalTaskClientLogger;
+import io.orqueio.bpm.client.spi.DataFormat;
+import io.orqueio.commons.utils.IoUtil;
 
 public class SerializableDataFormat implements DataFormat {
 

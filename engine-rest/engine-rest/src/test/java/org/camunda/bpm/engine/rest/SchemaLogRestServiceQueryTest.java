@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest;
+package io.orqueio.bpm.engine.rest;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.is;
@@ -31,10 +31,10 @@ import java.util.Map;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response.Status;
 
-import org.camunda.bpm.engine.impl.persistence.entity.SchemaLogEntryEntity;
-import org.camunda.bpm.engine.management.SchemaLogEntry;
-import org.camunda.bpm.engine.management.SchemaLogQuery;
-import org.camunda.bpm.engine.rest.util.container.TestContainerRule;
+import io.orqueio.bpm.engine.impl.persistence.entity.SchemaLogEntryEntity;
+import io.orqueio.bpm.engine.management.SchemaLogEntry;
+import io.orqueio.bpm.engine.management.SchemaLogQuery;
+import io.orqueio.bpm.engine.rest.util.container.TestContainerRule;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;

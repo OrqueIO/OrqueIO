@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.externaltask;
+package io.orqueio.bpm.engine.impl.externaltask;
 
-import org.camunda.bpm.engine.impl.QueryOperator;
-import org.camunda.bpm.engine.impl.QueryVariableValue;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.engine.impl.variable.serializer.VariableSerializers;
+import io.orqueio.bpm.engine.impl.QueryOperator;
+import io.orqueio.bpm.engine.impl.QueryVariableValue;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.impl.variable.serializer.VariableSerializers;
 
 import java.io.Serializable;
 import java.util.ArrayList;

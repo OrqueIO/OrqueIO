@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.impl;
+package io.orqueio.bpm.engine.rest.impl;
 
-import static org.camunda.bpm.engine.rest.impl.FetchAndLockHandlerImpl.BLOCKING_QUEUE_CAPACITY_PARAM_NAME;
-import static org.camunda.bpm.engine.rest.impl.FetchAndLockHandlerImpl.DEFAULT_BLOCKING_QUEUE_CAPACITY;
+import static io.orqueio.bpm.engine.rest.impl.FetchAndLockHandlerImpl.BLOCKING_QUEUE_CAPACITY_PARAM_NAME;
+import static io.orqueio.bpm.engine.rest.impl.FetchAndLockHandlerImpl.DEFAULT_BLOCKING_QUEUE_CAPACITY;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.ArgumentMatchers.anyBoolean;
@@ -43,18 +43,18 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.ws.rs.container.AsyncResponse;
 import javax.ws.rs.core.Response.Status;
-import org.camunda.bpm.engine.ExternalTaskService;
-import org.camunda.bpm.engine.IdentityService;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.externaltask.ExternalTaskQueryTopicBuilder;
-import org.camunda.bpm.engine.externaltask.FetchAndLockBuilder;
-import org.camunda.bpm.engine.externaltask.LockedExternalTask;
-import org.camunda.bpm.engine.impl.util.ClockUtil;
-import org.camunda.bpm.engine.rest.dto.externaltask.FetchExternalTasksExtendedDto;
-import org.camunda.bpm.engine.rest.exception.InvalidRequestException;
-import org.camunda.bpm.engine.rest.exception.RestException;
-import org.camunda.bpm.engine.rest.helper.MockProvider;
+import io.orqueio.bpm.engine.ExternalTaskService;
+import io.orqueio.bpm.engine.IdentityService;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.externaltask.ExternalTaskQueryTopicBuilder;
+import io.orqueio.bpm.engine.externaltask.FetchAndLockBuilder;
+import io.orqueio.bpm.engine.externaltask.LockedExternalTask;
+import io.orqueio.bpm.engine.impl.util.ClockUtil;
+import io.orqueio.bpm.engine.rest.dto.externaltask.FetchExternalTasksExtendedDto;
+import io.orqueio.bpm.engine.rest.exception.InvalidRequestException;
+import io.orqueio.bpm.engine.rest.exception.RestException;
+import io.orqueio.bpm.engine.rest.helper.MockProvider;
 import org.hamcrest.collection.IsCollectionWithSize;
 import org.junit.After;
 import org.junit.Before;

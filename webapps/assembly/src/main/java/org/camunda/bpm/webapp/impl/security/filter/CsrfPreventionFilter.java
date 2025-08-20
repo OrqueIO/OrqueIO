@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.webapp.impl.security.filter;
+package io.orqueio.bpm.webapp.impl.security.filter;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -37,10 +37,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.core.Response;
 
-import org.camunda.bpm.engine.rest.exception.InvalidRequestException;
-import org.camunda.bpm.webapp.impl.security.filter.util.CookieConstants;
-import org.camunda.bpm.webapp.impl.security.filter.util.CsrfConstants;
-import org.camunda.bpm.webapp.impl.util.ServletContextUtil;
+import io.orqueio.bpm.engine.rest.exception.InvalidRequestException;
+import io.orqueio.bpm.webapp.impl.security.filter.util.CookieConstants;
+import io.orqueio.bpm.webapp.impl.security.filter.util.CsrfConstants;
+import io.orqueio.bpm.webapp.impl.util.ServletContextUtil;
 
 /**
  * Provides basic CSRF protection implementing a Same Origin Standard Header verification (step 1)

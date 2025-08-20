@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.variable.impl.value;
+package io.orqueio.bpm.engine.variable.impl.value;
 
-import org.camunda.bpm.engine.variable.type.SerializableValueType;
-import org.camunda.bpm.engine.variable.type.ValueType;
-import org.camunda.bpm.engine.variable.value.ObjectValue;
+import io.orqueio.bpm.engine.variable.type.SerializableValueType;
+import io.orqueio.bpm.engine.variable.type.ValueType;
+import io.orqueio.bpm.engine.variable.value.ObjectValue;
 
 /**
  * @author Daniel Meyer

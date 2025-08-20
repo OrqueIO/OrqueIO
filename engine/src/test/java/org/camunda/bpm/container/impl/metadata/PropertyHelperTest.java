@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.metadata;
+package io.orqueio.bpm.container.impl.metadata;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import org.camunda.bpm.engine.ProcessEngineConfiguration;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.cfg.StandaloneProcessEngineConfiguration;
-import org.camunda.bpm.engine.impl.jobexecutor.DefaultJobExecutor;
-import org.camunda.bpm.engine.impl.jobexecutor.JobExecutor;
+import io.orqueio.bpm.engine.ProcessEngineConfiguration;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.cfg.StandaloneProcessEngineConfiguration;
+import io.orqueio.bpm.engine.impl.jobexecutor.DefaultJobExecutor;
+import io.orqueio.bpm.engine.impl.jobexecutor.JobExecutor;
 import org.junit.Assert;
 import org.junit.Test;
 

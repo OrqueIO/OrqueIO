@@ -14,18 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.webapp.impl.security;
+package io.orqueio.bpm.webapp.impl.security;
 
 import javax.servlet.ServletException;
 import java.io.IOException;
 import java.util.List;
 
-import org.camunda.bpm.cockpit.Cockpit;
-import org.camunda.bpm.engine.IdentityService;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.webapp.impl.security.auth.Authentication;
-import org.camunda.bpm.webapp.impl.security.auth.Authentications;
-import org.camunda.bpm.webapp.impl.security.auth.UserAuthentication;
+import io.orqueio.bpm.cockpit.Cockpit;
+import io.orqueio.bpm.engine.IdentityService;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.webapp.impl.security.auth.Authentication;
+import io.orqueio.bpm.webapp.impl.security.auth.Authentications;
+import io.orqueio.bpm.webapp.impl.security.auth.UserAuthentication;
 
 /**
  * @author Daniel Meyer
@@ -79,7 +79,7 @@ public class SecurityActions {
   public static <T> T runWithoutAuthentication(SecurityAction<T> action, ProcessEngine processEngine) throws IOException, ServletException {
 
     final IdentityService identityService = processEngine.getIdentityService();
-    org.camunda.bpm.engine.impl.identity.Authentication currentAuth = identityService.getCurrentAuthentication();
+    io.orqueio.bpm.engine.impl.identity.Authentication currentAuth = identityService.getCurrentAuthentication();
 
     try {
       identityService.clearAuthentication();

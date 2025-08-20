@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.test;
+package io.orqueio.bpm.engine.impl.test;
 
 import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;
-import org.camunda.bpm.engine.delegate.Expression;
-import org.camunda.bpm.engine.impl.cmmn.behavior.CaseControlRuleImpl;
-import org.camunda.bpm.engine.impl.el.FixedValue;
+import io.orqueio.bpm.engine.delegate.Expression;
+import io.orqueio.bpm.engine.impl.cmmn.behavior.CaseControlRuleImpl;
+import io.orqueio.bpm.engine.impl.el.FixedValue;
 
 
 /**

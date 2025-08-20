@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.logging;
+package io.orqueio.bpm.engine.test.logging;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
@@ -26,26 +26,26 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-import org.camunda.bpm.container.RuntimeContainerDelegate;
-import org.camunda.bpm.engine.RuntimeService;
-import org.camunda.bpm.engine.TaskService;
-import org.camunda.bpm.engine.delegate.DelegateExecution;
-import org.camunda.bpm.engine.delegate.DelegateTask;
-import org.camunda.bpm.engine.delegate.ExecutionListener;
-import org.camunda.bpm.engine.delegate.JavaDelegate;
-import org.camunda.bpm.engine.delegate.TaskListener;
-import org.camunda.bpm.engine.impl.util.ClockUtil;
-import org.camunda.bpm.engine.repository.DeploymentBuilder;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.test.ProcessEngineRule;
-import org.camunda.bpm.engine.test.util.ProcessEngineBootstrapRule;
-import org.camunda.bpm.engine.test.util.ProcessEngineTestRule;
-import org.camunda.bpm.engine.test.util.ProvidedProcessEngineRule;
-import org.camunda.bpm.model.bpmn.Bpmn;
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
-import org.camunda.commons.logging.MdcAccess;
-import org.camunda.commons.testing.ProcessEngineLoggingRule;
-import org.camunda.commons.testing.WatchLogger;
+import io.orqueio.bpm.container.RuntimeContainerDelegate;
+import io.orqueio.bpm.engine.RuntimeService;
+import io.orqueio.bpm.engine.TaskService;
+import io.orqueio.bpm.engine.delegate.DelegateExecution;
+import io.orqueio.bpm.engine.delegate.DelegateTask;
+import io.orqueio.bpm.engine.delegate.ExecutionListener;
+import io.orqueio.bpm.engine.delegate.JavaDelegate;
+import io.orqueio.bpm.engine.delegate.TaskListener;
+import io.orqueio.bpm.engine.impl.util.ClockUtil;
+import io.orqueio.bpm.engine.repository.DeploymentBuilder;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.test.ProcessEngineRule;
+import io.orqueio.bpm.engine.test.util.ProcessEngineBootstrapRule;
+import io.orqueio.bpm.engine.test.util.ProcessEngineTestRule;
+import io.orqueio.bpm.engine.test.util.ProvidedProcessEngineRule;
+import io.orqueio.bpm.model.bpmn.Bpmn;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.commons.logging.MdcAccess;
+import io.orqueio.commons.testing.ProcessEngineLoggingRule;
+import io.orqueio.commons.testing.WatchLogger;
 import org.jboss.logging.MDC;
 import org.junit.After;
 import org.junit.Before;
@@ -65,10 +65,10 @@ public class ProcessDataLoggingContextTest {
   private static final String FAILING_PROCESS = "failing-process";
   private static final String TENANT_ID = "testTenant";
 
-  private static final String CMD_LOGGER = "org.camunda.bpm.engine.cmd";
-  private static final String CONTEXT_LOGGER = "org.camunda.bpm.engine.context";
-  private static final String JOBEXEC_LOGGER = "org.camunda.bpm.engine.jobexecutor";
-  private static final String PVM_LOGGER = "org.camunda.bpm.engine.pvm";
+  private static final String CMD_LOGGER = "io.orqueio.bpm.engine.cmd";
+  private static final String CONTEXT_LOGGER = "io.orqueio.bpm.engine.context";
+  private static final String JOBEXEC_LOGGER = "io.orqueio.bpm.engine.jobexecutor";
+  private static final String PVM_LOGGER = "io.orqueio.bpm.engine.pvm";
 
   private static final String LOG_IDENT_FAILURE = "ENGINE-16004";
 

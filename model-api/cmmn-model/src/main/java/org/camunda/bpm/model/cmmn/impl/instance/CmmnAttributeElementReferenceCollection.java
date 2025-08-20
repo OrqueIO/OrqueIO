@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.cmmn.impl.instance;
+package io.orqueio.bpm.model.cmmn.impl.instance;
 
-import org.camunda.bpm.model.cmmn.instance.CmmnElement;
-import org.camunda.bpm.model.xml.impl.type.attribute.AttributeImpl;
-import org.camunda.bpm.model.xml.type.reference.AttributeReferenceCollection;
+import io.orqueio.bpm.model.cmmn.instance.CmmnElement;
+import io.orqueio.bpm.model.xml.impl.type.attribute.AttributeImpl;
+import io.orqueio.bpm.model.xml.type.reference.AttributeReferenceCollection;
 
 /**
  * @author Roman Smirnov

@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.application.impl;
+package io.orqueio.bpm.application.impl;
 
 import jakarta.ejb.SessionContext;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import org.camunda.bpm.application.ProcessApplicationInterface;
-import org.camunda.bpm.application.ProcessApplicationReference;
-import org.camunda.bpm.engine.ManagementService;
-import org.camunda.bpm.engine.delegate.JavaDelegate;
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
+import io.orqueio.bpm.application.ProcessApplicationInterface;
+import io.orqueio.bpm.application.ProcessApplicationReference;
+import io.orqueio.bpm.engine.ManagementService;
+import io.orqueio.bpm.engine.delegate.JavaDelegate;
+import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
 
 /**
  * <p>Common base class for writing Jakarta Enterprise Bean process applications.</p>

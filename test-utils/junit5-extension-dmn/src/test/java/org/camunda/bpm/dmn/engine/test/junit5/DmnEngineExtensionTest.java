@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.engine.test.junit5;
+package io.orqueio.bpm.dmn.engine.test.junit5;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.camunda.bpm.engine.variable.Variables.createVariables;
+import static io.orqueio.bpm.engine.variable.Variables.createVariables;
 
-import org.camunda.bpm.dmn.engine.DmnDecisionResult;
-import org.camunda.bpm.dmn.engine.DmnEngine;
-import org.camunda.commons.utils.IoUtil;
+import io.orqueio.bpm.dmn.engine.DmnDecisionResult;
+import io.orqueio.bpm.dmn.engine.DmnEngine;
+import io.orqueio.commons.utils.IoUtil;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 

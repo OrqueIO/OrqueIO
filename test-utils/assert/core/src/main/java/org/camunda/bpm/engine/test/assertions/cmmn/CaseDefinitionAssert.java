@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.assertions.cmmn;
+package io.orqueio.bpm.engine.test.assertions.cmmn;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.repository.CaseDefinition;
-import org.camunda.bpm.engine.test.assertions.bpmn.AbstractProcessAssert;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.repository.CaseDefinition;
+import io.orqueio.bpm.engine.test.assertions.bpmn.AbstractProcessAssert;
 
 public class CaseDefinitionAssert extends AbstractProcessAssert<CaseDefinitionAssert, CaseDefinition> {
 

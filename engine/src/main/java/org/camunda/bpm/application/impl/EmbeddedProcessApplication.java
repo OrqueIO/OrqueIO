@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.application.impl;
+package io.orqueio.bpm.application.impl;
 
 import java.util.concurrent.Callable;
 
-import org.camunda.bpm.application.AbstractProcessApplication;
-import org.camunda.bpm.application.ProcessApplicationExecutionException;
-import org.camunda.bpm.application.ProcessApplicationReference;
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
+import io.orqueio.bpm.application.AbstractProcessApplication;
+import io.orqueio.bpm.application.ProcessApplicationExecutionException;
+import io.orqueio.bpm.application.ProcessApplicationReference;
+import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
 
 /**
  * <p>An embedded process application is a ProcessApplication that uses an embedded

@@ -14,29 +14,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.hal.task;
+package io.orqueio.bpm.engine.rest.hal.task;
 
 import java.util.Date;
 
 import javax.ws.rs.core.UriBuilder;
 
-import org.camunda.bpm.engine.BadUserRequestException;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.form.CamundaFormRef;
-import org.camunda.bpm.engine.rest.CaseDefinitionRestService;
-import org.camunda.bpm.engine.rest.CaseExecutionRestService;
-import org.camunda.bpm.engine.rest.CaseInstanceRestService;
-import org.camunda.bpm.engine.rest.ExecutionRestService;
-import org.camunda.bpm.engine.rest.IdentityRestService;
-import org.camunda.bpm.engine.rest.ProcessDefinitionRestService;
-import org.camunda.bpm.engine.rest.ProcessInstanceRestService;
-import org.camunda.bpm.engine.rest.TaskRestService;
-import org.camunda.bpm.engine.rest.UserRestService;
-import org.camunda.bpm.engine.rest.hal.HalRelation;
-import org.camunda.bpm.engine.rest.hal.HalResource;
-import org.camunda.bpm.engine.rest.hal.identitylink.HalIdentityLink;
-import org.camunda.bpm.engine.task.DelegationState;
-import org.camunda.bpm.engine.task.Task;
+import io.orqueio.bpm.engine.BadUserRequestException;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.form.CamundaFormRef;
+import io.orqueio.bpm.engine.rest.CaseDefinitionRestService;
+import io.orqueio.bpm.engine.rest.CaseExecutionRestService;
+import io.orqueio.bpm.engine.rest.CaseInstanceRestService;
+import io.orqueio.bpm.engine.rest.ExecutionRestService;
+import io.orqueio.bpm.engine.rest.IdentityRestService;
+import io.orqueio.bpm.engine.rest.ProcessDefinitionRestService;
+import io.orqueio.bpm.engine.rest.ProcessInstanceRestService;
+import io.orqueio.bpm.engine.rest.TaskRestService;
+import io.orqueio.bpm.engine.rest.UserRestService;
+import io.orqueio.bpm.engine.rest.hal.HalRelation;
+import io.orqueio.bpm.engine.rest.hal.HalResource;
+import io.orqueio.bpm.engine.rest.hal.identitylink.HalIdentityLink;
+import io.orqueio.bpm.engine.task.DelegationState;
+import io.orqueio.bpm.engine.task.Task;
 
 /**
  * @author Daniel Meyer

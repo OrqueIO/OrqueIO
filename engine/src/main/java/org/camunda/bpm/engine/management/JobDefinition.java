@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.management;
+package io.orqueio.bpm.engine.management;
 
-import org.camunda.bpm.engine.ManagementService;
-import org.camunda.bpm.engine.repository.ProcessDefinition;
+import io.orqueio.bpm.engine.ManagementService;
+import io.orqueio.bpm.engine.repository.ProcessDefinition;
 
 /**
  * <p>A Job Definition provides details about asynchronous background

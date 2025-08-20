@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.bpmn.servicetask;
+package io.orqueio.bpm.engine.test.bpmn.servicetask;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -24,15 +24,15 @@ import static org.junit.Assert.fail;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.camunda.bpm.engine.ClassLoadingException;
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.impl.util.CollectionUtil;
-import org.camunda.bpm.engine.runtime.Execution;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.task.Task;
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.engine.test.bpmn.servicetask.util.GenderBean;
-import org.camunda.bpm.engine.test.util.PluggableProcessEngineTest;
+import io.orqueio.bpm.engine.ClassLoadingException;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.impl.util.CollectionUtil;
+import io.orqueio.bpm.engine.runtime.Execution;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.task.Task;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.test.bpmn.servicetask.util.GenderBean;
+import io.orqueio.bpm.engine.test.util.PluggableProcessEngineTest;
 import org.junit.Test;
 
 /**
@@ -92,7 +92,7 @@ public class JavaServiceTaskTest extends PluggableProcessEngineTest {
       runtimeService.startProcessInstanceByKey("unexistingClassDelegation");
       fail();
     } catch (ProcessEngineException e) {
-      assertTrue(e.getMessage().contains("Exception while instantiating class 'org.camunda.bpm.engine.test.BogusClass'"));
+      assertTrue(e.getMessage().contains("Exception while instantiating class 'io.orqueio.bpm.engine.test.BogusClass'"));
       assertNotNull(e.getCause());
       assertTrue(e.getCause() instanceof ClassLoadingException);
     }

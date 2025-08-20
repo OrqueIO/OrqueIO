@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.jobexecutor;
+package io.orqueio.bpm.engine.test.jobexecutor;
 
-import org.camunda.bpm.engine.impl.interceptor.Command;
-import org.camunda.bpm.engine.impl.jobexecutor.AcquireJobsCommandFactory;
-import org.camunda.bpm.engine.impl.jobexecutor.AcquiredJobs;
-import org.camunda.bpm.engine.impl.jobexecutor.DefaultAcquireJobsCommandFactory;
-import org.camunda.bpm.engine.impl.jobexecutor.DefaultJobExecutor;
-import org.camunda.bpm.engine.impl.jobexecutor.JobExecutor;
+import io.orqueio.bpm.engine.impl.interceptor.Command;
+import io.orqueio.bpm.engine.impl.jobexecutor.AcquireJobsCommandFactory;
+import io.orqueio.bpm.engine.impl.jobexecutor.AcquiredJobs;
+import io.orqueio.bpm.engine.impl.jobexecutor.DefaultAcquireJobsCommandFactory;
+import io.orqueio.bpm.engine.impl.jobexecutor.DefaultJobExecutor;
+import io.orqueio.bpm.engine.impl.jobexecutor.JobExecutor;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

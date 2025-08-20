@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa.largedata.optimize;
+package io.orqueio.bpm.qa.largedata.optimize;
 
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
-import org.camunda.bpm.engine.impl.OptimizeService;
-import org.camunda.bpm.engine.impl.test.TestHelper;
-import org.camunda.bpm.engine.test.ProcessEngineRule;
-import org.camunda.bpm.qa.largedata.util.EngineDataGenerator;
+import io.orqueio.bpm.engine.impl.OptimizeService;
+import io.orqueio.bpm.engine.impl.test.TestHelper;
+import io.orqueio.bpm.engine.test.ProcessEngineRule;
+import io.orqueio.bpm.qa.largedata.util.EngineDataGenerator;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;

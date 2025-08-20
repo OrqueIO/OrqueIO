@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.topic.impl;
+package io.orqueio.bpm.client.topic.impl;
 
-import org.camunda.bpm.client.exception.ExternalTaskClientException;
-import org.camunda.bpm.client.impl.EngineClientException;
-import org.camunda.bpm.client.impl.ExternalTaskClientLogger;
-import org.camunda.bpm.client.topic.impl.dto.TopicRequestDto;
+import io.orqueio.bpm.client.exception.ExternalTaskClientException;
+import io.orqueio.bpm.client.impl.EngineClientException;
+import io.orqueio.bpm.client.impl.ExternalTaskClientLogger;
+import io.orqueio.bpm.client.topic.impl.dto.TopicRequestDto;
 
 import java.util.List;
 

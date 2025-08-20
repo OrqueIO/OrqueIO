@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.quarkus.engine.test;
+package io.orqueio.bpm.quarkus.engine.test;
 
 import io.quarkus.arc.Arc;
 import io.quarkus.arc.InjectableContext;
 import io.quarkus.arc.InjectableInstance;
 import io.quarkus.test.QuarkusUnitTest;
-import org.camunda.bpm.engine.cdi.annotation.BusinessProcessScoped;
-import org.camunda.bpm.quarkus.engine.test.helper.ProcessEngineAwareExtension;
+import io.orqueio.bpm.engine.cdi.annotation.BusinessProcessScoped;
+import io.orqueio.bpm.quarkus.engine.test.helper.ProcessEngineAwareExtension;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.jupiter.api.Test;

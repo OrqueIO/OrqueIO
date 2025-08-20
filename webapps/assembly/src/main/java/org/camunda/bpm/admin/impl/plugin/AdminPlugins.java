@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.admin.impl.plugin;
+package io.orqueio.bpm.admin.impl.plugin;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import org.camunda.bpm.admin.impl.plugin.resources.AdminPluginsRootResource;
-import org.camunda.bpm.admin.plugin.spi.impl.AbstractAdminPlugin;
+import io.orqueio.bpm.admin.impl.plugin.resources.AdminPluginsRootResource;
+import io.orqueio.bpm.admin.plugin.spi.impl.AbstractAdminPlugin;
 
 /**
  *

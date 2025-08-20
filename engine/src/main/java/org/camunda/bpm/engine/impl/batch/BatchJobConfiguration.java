@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.batch;
+package io.orqueio.bpm.engine.impl.batch;
 
-import org.camunda.bpm.engine.impl.jobexecutor.JobHandlerConfiguration;
+import io.orqueio.bpm.engine.impl.jobexecutor.JobHandlerConfiguration;
 
 /**
  * @author Thorben Lindhauer

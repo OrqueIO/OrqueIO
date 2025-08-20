@@ -14,30 +14,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.cmd;
+package io.orqueio.bpm.engine.impl.cmd;
 
 import java.util.Arrays;
 import java.util.List;
 
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
-import org.camunda.bpm.engine.impl.bpmn.parser.DefaultFailedJobParseListener;
-import org.camunda.bpm.engine.impl.bpmn.parser.FailedJobRetryConfiguration;
-import org.camunda.bpm.engine.impl.calendar.DurationHelper;
-import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.engine.impl.el.Expression;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.jobexecutor.AsyncContinuationJobHandler;
-import org.camunda.bpm.engine.impl.jobexecutor.JobExecutorLogger;
-import org.camunda.bpm.engine.impl.jobexecutor.TimerCatchIntermediateEventJobHandler;
-import org.camunda.bpm.engine.impl.jobexecutor.TimerExecuteNestedActivityJobHandler;
-import org.camunda.bpm.engine.impl.jobexecutor.TimerStartEventJobHandler;
-import org.camunda.bpm.engine.impl.jobexecutor.TimerStartEventSubprocessJobHandler;
-import org.camunda.bpm.engine.impl.persistence.deploy.cache.DeploymentCache;
-import org.camunda.bpm.engine.impl.persistence.entity.ExecutionEntity;
-import org.camunda.bpm.engine.impl.persistence.entity.JobEntity;
-import org.camunda.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity;
-import org.camunda.bpm.engine.impl.pvm.process.ActivityImpl;
-import org.camunda.bpm.engine.impl.util.ParseUtil;
+import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
+import io.orqueio.bpm.engine.impl.bpmn.parser.DefaultFailedJobParseListener;
+import io.orqueio.bpm.engine.impl.bpmn.parser.FailedJobRetryConfiguration;
+import io.orqueio.bpm.engine.impl.calendar.DurationHelper;
+import io.orqueio.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.impl.el.Expression;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.impl.jobexecutor.AsyncContinuationJobHandler;
+import io.orqueio.bpm.engine.impl.jobexecutor.JobExecutorLogger;
+import io.orqueio.bpm.engine.impl.jobexecutor.TimerCatchIntermediateEventJobHandler;
+import io.orqueio.bpm.engine.impl.jobexecutor.TimerExecuteNestedActivityJobHandler;
+import io.orqueio.bpm.engine.impl.jobexecutor.TimerStartEventJobHandler;
+import io.orqueio.bpm.engine.impl.jobexecutor.TimerStartEventSubprocessJobHandler;
+import io.orqueio.bpm.engine.impl.persistence.deploy.cache.DeploymentCache;
+import io.orqueio.bpm.engine.impl.persistence.entity.ExecutionEntity;
+import io.orqueio.bpm.engine.impl.persistence.entity.JobEntity;
+import io.orqueio.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity;
+import io.orqueio.bpm.engine.impl.pvm.process.ActivityImpl;
+import io.orqueio.bpm.engine.impl.util.ParseUtil;
 
 /**
  * @author Roman Smirnov

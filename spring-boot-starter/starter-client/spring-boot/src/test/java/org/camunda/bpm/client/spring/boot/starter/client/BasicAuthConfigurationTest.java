@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.spring.boot.starter.client;
+package io.orqueio.bpm.client.spring.boot.starter.client;
 
-import org.camunda.bpm.client.ExternalTaskClientBuilder;
-import org.camunda.bpm.client.interceptor.ClientRequestInterceptor;
-import org.camunda.bpm.client.spring.boot.starter.MockHelper;
-import org.camunda.bpm.client.spring.boot.starter.ParsePropertiesHelper;
-import org.camunda.bpm.client.spring.boot.starter.client.configuration.SimpleSubscriptionConfiguration;
-import org.camunda.bpm.client.spring.boot.starter.impl.ClientAutoConfiguration;
+import io.orqueio.bpm.client.ExternalTaskClientBuilder;
+import io.orqueio.bpm.client.interceptor.ClientRequestInterceptor;
+import io.orqueio.bpm.client.spring.boot.starter.MockHelper;
+import io.orqueio.bpm.client.spring.boot.starter.ParsePropertiesHelper;
+import io.orqueio.bpm.client.spring.boot.starter.client.configuration.SimpleSubscriptionConfiguration;
+import io.orqueio.bpm.client.spring.boot.starter.impl.ClientAutoConfiguration;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Rule;

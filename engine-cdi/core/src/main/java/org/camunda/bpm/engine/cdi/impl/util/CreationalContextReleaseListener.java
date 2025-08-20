@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.cdi.impl.util;
+package io.orqueio.bpm.engine.cdi.impl.util;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,8 +22,8 @@ import java.util.logging.Logger;
 import javax.enterprise.context.Dependent;
 import javax.enterprise.context.spi.CreationalContext;
 
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.interceptor.CommandContextListener;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContextListener;
 
 /**
  * {@link CommandContextCloseListener} which releases a CDI Creational Context when the command context is closed.

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.standalone.identity;
+package io.orqueio.bpm.engine.test.standalone.identity;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -23,21 +23,21 @@ import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.hamcrest.core.IsNull.notNullValue;
 
 import org.assertj.core.api.Assertions;
-import org.camunda.bpm.engine.IdentityService;
-import org.camunda.bpm.engine.exception.NullValueException;
-import org.camunda.bpm.engine.identity.PasswordPolicy;
-import org.camunda.bpm.engine.identity.PasswordPolicyResult;
-import org.camunda.bpm.engine.identity.PasswordPolicyRule;
-import org.camunda.bpm.engine.identity.User;
-import org.camunda.bpm.engine.impl.identity.DefaultPasswordPolicyImpl;
-import org.camunda.bpm.engine.impl.identity.PasswordPolicyDigitRuleImpl;
-import org.camunda.bpm.engine.impl.identity.PasswordPolicyLengthRuleImpl;
-import org.camunda.bpm.engine.impl.identity.PasswordPolicyLowerCaseRuleImpl;
-import org.camunda.bpm.engine.impl.identity.PasswordPolicySpecialCharacterRuleImpl;
-import org.camunda.bpm.engine.impl.identity.PasswordPolicyUpperCaseRuleImpl;
-import org.camunda.bpm.engine.impl.identity.PasswordPolicyUserDataRuleImpl;
-import org.camunda.bpm.engine.test.ProcessEngineRule;
-import org.camunda.bpm.engine.test.util.ProvidedProcessEngineRule;
+import io.orqueio.bpm.engine.IdentityService;
+import io.orqueio.bpm.engine.exception.NullValueException;
+import io.orqueio.bpm.engine.identity.PasswordPolicy;
+import io.orqueio.bpm.engine.identity.PasswordPolicyResult;
+import io.orqueio.bpm.engine.identity.PasswordPolicyRule;
+import io.orqueio.bpm.engine.identity.User;
+import io.orqueio.bpm.engine.impl.identity.DefaultPasswordPolicyImpl;
+import io.orqueio.bpm.engine.impl.identity.PasswordPolicyDigitRuleImpl;
+import io.orqueio.bpm.engine.impl.identity.PasswordPolicyLengthRuleImpl;
+import io.orqueio.bpm.engine.impl.identity.PasswordPolicyLowerCaseRuleImpl;
+import io.orqueio.bpm.engine.impl.identity.PasswordPolicySpecialCharacterRuleImpl;
+import io.orqueio.bpm.engine.impl.identity.PasswordPolicyUpperCaseRuleImpl;
+import io.orqueio.bpm.engine.impl.identity.PasswordPolicyUserDataRuleImpl;
+import io.orqueio.bpm.engine.test.ProcessEngineRule;
+import io.orqueio.bpm.engine.test.util.ProvidedProcessEngineRule;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;

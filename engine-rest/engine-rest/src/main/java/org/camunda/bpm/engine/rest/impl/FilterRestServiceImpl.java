@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.impl;
+package io.orqueio.bpm.engine.rest.impl;
 
-import static org.camunda.bpm.engine.authorization.Authorization.ANY;
-import static org.camunda.bpm.engine.authorization.Permissions.CREATE;
-import static org.camunda.bpm.engine.authorization.Resources.FILTER;
+import static io.orqueio.bpm.engine.authorization.Authorization.ANY;
+import static io.orqueio.bpm.engine.authorization.Permissions.CREATE;
+import static io.orqueio.bpm.engine.authorization.Resources.FILTER;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.net.URI;
@@ -29,21 +29,21 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
-import org.camunda.bpm.engine.EntityTypes;
-import org.camunda.bpm.engine.FilterService;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.exception.NotValidException;
-import org.camunda.bpm.engine.filter.Filter;
-import org.camunda.bpm.engine.filter.FilterQuery;
-import org.camunda.bpm.engine.rest.FilterRestService;
-import org.camunda.bpm.engine.rest.dto.CountResultDto;
-import org.camunda.bpm.engine.rest.dto.ResourceOptionsDto;
-import org.camunda.bpm.engine.rest.dto.runtime.FilterDto;
-import org.camunda.bpm.engine.rest.dto.runtime.FilterQueryDto;
-import org.camunda.bpm.engine.rest.exception.InvalidRequestException;
-import org.camunda.bpm.engine.rest.sub.runtime.FilterResource;
-import org.camunda.bpm.engine.rest.sub.runtime.impl.FilterResourceImpl;
-import org.camunda.bpm.engine.rest.util.QueryUtil;
+import io.orqueio.bpm.engine.EntityTypes;
+import io.orqueio.bpm.engine.FilterService;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.exception.NotValidException;
+import io.orqueio.bpm.engine.filter.Filter;
+import io.orqueio.bpm.engine.filter.FilterQuery;
+import io.orqueio.bpm.engine.rest.FilterRestService;
+import io.orqueio.bpm.engine.rest.dto.CountResultDto;
+import io.orqueio.bpm.engine.rest.dto.ResourceOptionsDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.FilterDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.FilterQueryDto;
+import io.orqueio.bpm.engine.rest.exception.InvalidRequestException;
+import io.orqueio.bpm.engine.rest.sub.runtime.FilterResource;
+import io.orqueio.bpm.engine.rest.sub.runtime.impl.FilterResourceImpl;
+import io.orqueio.bpm.engine.rest.util.QueryUtil;
 
 
 /**

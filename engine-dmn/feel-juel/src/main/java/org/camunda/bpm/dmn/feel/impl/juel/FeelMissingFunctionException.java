@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.feel.impl.juel;
+package io.orqueio.bpm.dmn.feel.impl.juel;
 
-import org.camunda.bpm.dmn.feel.impl.FeelException;
+import io.orqueio.bpm.dmn.feel.impl.FeelException;
 
 /**
  * Exception thrown if a method used in a FEEL expression is not available.

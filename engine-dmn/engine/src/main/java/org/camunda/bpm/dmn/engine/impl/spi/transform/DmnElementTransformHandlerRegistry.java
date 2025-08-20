@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.engine.impl.spi.transform;
+package io.orqueio.bpm.dmn.engine.impl.spi.transform;
 
-import org.camunda.bpm.model.dmn.instance.DmnModelElementInstance;
+import io.orqueio.bpm.model.dmn.instance.DmnModelElementInstance;
 
 /**
  * Registry of DMN model element transformers

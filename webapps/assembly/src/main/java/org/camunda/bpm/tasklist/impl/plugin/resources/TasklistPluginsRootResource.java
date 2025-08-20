@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.tasklist.impl.plugin.resources;
+package io.orqueio.bpm.tasklist.impl.plugin.resources;
 
 import javax.ws.rs.Path;
 
-import org.camunda.bpm.tasklist.impl.plugin.TasklistPlugins;
-import org.camunda.bpm.tasklist.resource.AbstractTasklistPluginRootResource;
+import io.orqueio.bpm.tasklist.impl.plugin.TasklistPlugins;
+import io.orqueio.bpm.tasklist.resource.AbstractTasklistPluginRootResource;
 
 /**
  * @author Roman Smirnov

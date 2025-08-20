@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.engine.el;
+package io.orqueio.bpm.dmn.engine.el;
 
-import org.camunda.bpm.dmn.engine.test.DecisionResource;
-import org.camunda.bpm.dmn.engine.test.DmnEngineTest;
+import io.orqueio.bpm.dmn.engine.test.DecisionResource;
+import io.orqueio.bpm.dmn.engine.test.DmnEngineTest;
 import org.junit.Test;
 
 public class FeelTest extends DmnEngineTest {

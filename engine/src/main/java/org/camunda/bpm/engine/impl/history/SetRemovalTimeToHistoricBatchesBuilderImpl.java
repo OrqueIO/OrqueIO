@@ -14,21 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.history;
+package io.orqueio.bpm.engine.impl.history;
 
-import org.camunda.bpm.engine.BadUserRequestException;
-import org.camunda.bpm.engine.batch.Batch;
-import org.camunda.bpm.engine.batch.history.HistoricBatchQuery;
-import org.camunda.bpm.engine.history.SetRemovalTimeSelectModeForHistoricBatchesBuilder;
-import org.camunda.bpm.engine.history.SetRemovalTimeToHistoricBatchesBuilder;
-import org.camunda.bpm.engine.impl.cmd.batch.removaltime.SetRemovalTimeToHistoricBatchesCmd;
-import org.camunda.bpm.engine.impl.interceptor.CommandExecutor;
+import io.orqueio.bpm.engine.BadUserRequestException;
+import io.orqueio.bpm.engine.batch.Batch;
+import io.orqueio.bpm.engine.batch.history.HistoricBatchQuery;
+import io.orqueio.bpm.engine.history.SetRemovalTimeSelectModeForHistoricBatchesBuilder;
+import io.orqueio.bpm.engine.history.SetRemovalTimeToHistoricBatchesBuilder;
+import io.orqueio.bpm.engine.impl.cmd.batch.removaltime.SetRemovalTimeToHistoricBatchesCmd;
+import io.orqueio.bpm.engine.impl.interceptor.CommandExecutor;
 
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureNull;
+import static io.orqueio.bpm.engine.impl.util.EnsureUtil.ensureNull;
 
 /**
  * @author Tassilo Weidner

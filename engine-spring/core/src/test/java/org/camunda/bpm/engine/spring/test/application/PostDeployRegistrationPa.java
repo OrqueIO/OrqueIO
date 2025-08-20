@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.spring.test.application;
+package io.orqueio.bpm.engine.spring.test.application;
 
 import java.util.concurrent.Callable;
 
-import org.camunda.bpm.application.PostDeploy;
-import org.camunda.bpm.application.PreUndeploy;
-import org.camunda.bpm.application.ProcessApplicationExecutionException;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.repository.ProcessDefinition;
-import org.camunda.bpm.engine.spring.application.SpringProcessApplication;
+import io.orqueio.bpm.application.PostDeploy;
+import io.orqueio.bpm.application.PreUndeploy;
+import io.orqueio.bpm.application.ProcessApplicationExecutionException;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.repository.ProcessDefinition;
+import io.orqueio.bpm.engine.spring.application.SpringProcessApplication;
 
 /**
  * @author Daniel Meyer

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.run.qa.util;
+package io.orqueio.bpm.run.qa.util;
 
 import java.io.BufferedReader;
 import java.io.File;

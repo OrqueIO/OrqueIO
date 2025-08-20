@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest;
+package io.orqueio.bpm.engine.rest;
 
-import org.camunda.bpm.engine.rest.dto.identity.BasicUserCredentialsDto;
-import org.camunda.bpm.engine.rest.dto.identity.PasswordPolicyRequestDto;
-import org.camunda.bpm.engine.rest.dto.task.GroupInfoDto;
-import org.camunda.bpm.engine.rest.security.auth.AuthenticationResult;
+import io.orqueio.bpm.engine.rest.dto.identity.BasicUserCredentialsDto;
+import io.orqueio.bpm.engine.rest.dto.identity.PasswordPolicyRequestDto;
+import io.orqueio.bpm.engine.rest.dto.task.GroupInfoDto;
+import io.orqueio.bpm.engine.rest.security.auth.AuthenticationResult;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;

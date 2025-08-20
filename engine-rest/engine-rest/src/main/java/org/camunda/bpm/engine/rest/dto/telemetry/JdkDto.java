@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.dto.telemetry;
+package io.orqueio.bpm.engine.rest.dto.telemetry;
 
-import org.camunda.bpm.engine.telemetry.Jdk;
+import io.orqueio.bpm.engine.telemetry.Jdk;
 
 public class JdkDto {
 

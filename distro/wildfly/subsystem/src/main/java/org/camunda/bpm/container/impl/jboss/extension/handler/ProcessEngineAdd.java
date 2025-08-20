@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.jboss.extension.handler;
+package io.orqueio.bpm.container.impl.jboss.extension.handler;
 
 import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.ADDRESS;
 
@@ -23,12 +23,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.container.impl.jboss.config.ManagedProcessEngineMetadata;
-import org.camunda.bpm.container.impl.jboss.extension.Element;
-import org.camunda.bpm.container.impl.jboss.extension.SubsystemAttributeDefinitons;
-import org.camunda.bpm.container.impl.jboss.service.MscManagedProcessEngineController;
-import org.camunda.bpm.container.impl.jboss.service.ServiceNames;
-import org.camunda.bpm.container.impl.metadata.spi.ProcessEnginePluginXml;
+import io.orqueio.bpm.container.impl.jboss.config.ManagedProcessEngineMetadata;
+import io.orqueio.bpm.container.impl.jboss.extension.Element;
+import io.orqueio.bpm.container.impl.jboss.extension.SubsystemAttributeDefinitons;
+import io.orqueio.bpm.container.impl.jboss.service.MscManagedProcessEngineController;
+import io.orqueio.bpm.container.impl.jboss.service.ServiceNames;
+import io.orqueio.bpm.container.impl.metadata.spi.ProcessEnginePluginXml;
 import org.jboss.as.controller.AbstractAddStepHandler;
 import org.jboss.as.controller.OperationContext;
 import org.jboss.as.controller.OperationFailedException;

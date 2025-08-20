@@ -19,11 +19,11 @@
 -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="org.camunda.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity">
+<mapper namespace="io.orqueio.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity">
 
   <!-- PROCESSDEFINITION INSERT -->
 
-  <insert id="insertProcessDefinition" parameterType="org.camunda.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity">
+  <insert id="insertProcessDefinition" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity">
     insert into ${prefix}ACT_RE_PROCDEF(ID_, CATEGORY_, NAME_, KEY_, VERSION_, DEPLOYMENT_ID_, RESOURCE_NAME_, DGRM_RESOURCE_NAME_, HAS_START_FORM_KEY_, SUSPENSION_STATE_, TENANT_ID_, VERSION_TAG_, HISTORY_TTL_, STARTABLE_, REV_)
     values (#{id, jdbcType=VARCHAR},
             #{category, jdbcType=VARCHAR},
@@ -45,7 +45,7 @@
 
   <!-- PROCESSDEFINITION UPDATE -->
 
-  <update id="updateProcessDefinition" parameterType="org.camunda.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity">
+  <update id="updateProcessDefinition" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity">
     update ${prefix}ACT_RE_PROCDEF set
       REV_ = #{revisionNext, jdbcType=INTEGER},
       SUSPENSION_STATE_ = #{suspensionState, jdbcType=INTEGER},
@@ -54,7 +54,7 @@
       and REV_ = #{revision, jdbcType=INTEGER}
   </update>
 
-  <update id="updateProcessDefinitionSuspensionStateByParameters" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject">
+  <update id="updateProcessDefinitionSuspensionStateByParameters" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject">
     update ${prefix}ACT_RE_PROCDEF set
       REV_ = 1 + REV_ ,
       SUSPENSION_STATE_ = #{parameter.suspensionState, jdbcType=INTEGER}
@@ -65,7 +65,7 @@
       <if test="parameter.processDefinitionKey != null">
         and KEY_ = #{parameter.processDefinitionKey, jdbcType=VARCHAR}
         <bind name="columnPrefix" value="''"/>
-        <include refid="org.camunda.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheckWithPrefix" />
+        <include refid="io.orqueio.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheckWithPrefix" />
       </if>
       <if test="parameter.isTenantIdSet">
         <if test="parameter.tenantId != null">
@@ -89,7 +89,7 @@
   </delete>
   <!-- PROCESSDEFINITION RESULTMAP -->
 
-  <resultMap id="processDefinitionResultMap" type="org.camunda.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity">
+  <resultMap id="processDefinitionResultMap" type="io.orqueio.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity">
     <id property="id" column="ID_" jdbcType="VARCHAR" />
     <result property="revision" column="REV_" />
     <result property="category" column="CATEGORY_" />
@@ -162,7 +162,7 @@
       <if test="parameter.processDefinitionIds != null">
         <bind name="listOfIds" value="parameter.processDefinitionIds"/>
         <bind name="fieldName" value="'ID_'"/>
-        <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection"/>
+        <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection"/>
       </if>
       <if test="parameter.isTenantIdSet">
         <if test="parameter.tenantId != null">
@@ -198,18 +198,18 @@
           AND VERSION_ &lt; #{version})
   </select>
 
-  <select id="selectProcessDefinitionsByQueryCriteria" parameterType="org.camunda.bpm.engine.impl.ProcessDefinitionQueryImpl" resultMap="processDefinitionResultMap">
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
+  <select id="selectProcessDefinitionsByQueryCriteria" parameterType="io.orqueio.bpm.engine.impl.ProcessDefinitionQueryImpl" resultMap="processDefinitionResultMap">
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
     ${limitBefore}
     select ${distinct} RES.*
     ${limitBetween}
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.orderBySelection"/>
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.orderBySelection"/>
     <include refid="selectProcessDefinitionsByQueryCriteriaSql"/>
     ${orderBy}
     ${limitAfter}
   </select>
 
-  <select id="selectProcessDefinitionCountByQueryCriteria" parameterType="org.camunda.bpm.engine.impl.ProcessDefinitionQueryImpl" resultType="long">
+  <select id="selectProcessDefinitionCountByQueryCriteria" parameterType="io.orqueio.bpm.engine.impl.ProcessDefinitionQueryImpl" resultType="long">
     ${countDistinctBeforeStart} RES.ID_ ${countDistinctBeforeEnd}
     <include refid="selectProcessDefinitionsByQueryCriteriaSql"/>
     ${countDistinctAfterEnd}
@@ -240,12 +240,12 @@
     </if>
 
     <if test="authCheck.shouldPerformAuthorizatioCheck &amp;&amp; !authCheck.revokeAuthorizationCheckEnabled &amp;&amp; authCheck.authUserId != null">
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoinWithoutOnClause" />
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoinWithoutOnClause" />
       AUTH ON (AUTH.RESOURCE_ID_ ${authJoinStart} RES.ID_ ${authJoinSeparator} RES.KEY_ ${authJoinSeparator} '*' ${authJoinEnd})
 
       <if test="startablePermissionCheck">
         <bind name="atomicChecks" value="processDefinitionCreatePermissionChecks" />
-        <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoinWithoutOnClauseWithBinding" />
+        <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoinWithoutOnClauseWithBinding" />
         AUTH1 ON (AUTH1.RESOURCE_ID_ ${authJoin1Start} RES.KEY_ ${authJoin1Separator} '*' ${authJoin1End})
       </if>
     </if>
@@ -376,8 +376,8 @@
         AND AUTH1.RESOURCE_ID_ IS NOT NULL
       </if>
 
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.queryAuthorizationCheck" />
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.queryAuthorizationCheck" />
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
 
     </where>
   </sql>
@@ -389,14 +389,14 @@
       and KEY_ = #{processDefinitionKey}
   </select>
 
-  <select id="selectLatestProcessDefinitionByKey" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject" resultMap="processDefinitionResultMap">
+  <select id="selectLatestProcessDefinitionByKey" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject" resultMap="processDefinitionResultMap">
     select *
     from ${prefix}ACT_RE_PROCDEF p1
         inner join
           (select KEY_, TENANT_ID_, max(VERSION_) as MAX_VERSION
           from ${prefix}ACT_RE_PROCDEF RES
           where KEY_ = #{parameter}
-            <include refid="org.camunda.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
+            <include refid="io.orqueio.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
           group by TENANT_ID_, KEY_) p2
         on p1.KEY_ = p2.KEY_
         where p1.VERSION_ = p2.MAX_VERSION and

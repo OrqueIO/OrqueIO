@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.authorization;
+package io.orqueio.bpm.engine.authorization;
 
 /**
  * <p>A permission represents an authorization to interact with a given 
@@ -46,7 +46,7 @@ package org.camunda.bpm.engine.authorization;
  * The XxxPermissions classes contains the values of the  built-in
  * permissions (i.e. {@link Permissions}, {@link ProcessDefinitionPermissions},
  * {@link ProcessInstancePermissions}, {@link TaskPermissions},
- * all can be found in {@link org.camunda.bpm.engine.authorization authorization} package).
+ * all can be found in {@link io.orqueio.bpm.engine.authorization authorization} package).
  * In order to define a custom permission, you must provide
  * an implementation of this interface such that the {@link #getValue()} 
  * method returns an integer which is a power of two and not yet used by any of the

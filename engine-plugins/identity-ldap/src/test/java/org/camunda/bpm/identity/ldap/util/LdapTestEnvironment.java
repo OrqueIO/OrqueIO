@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.identity.ldap.util;
+package io.orqueio.bpm.identity.ldap.util;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -50,7 +50,7 @@ import org.apache.directory.server.i18n.I18n;
 import org.apache.directory.server.ldap.LdapServer;
 import org.apache.directory.server.protocol.shared.transport.TcpTransport;
 import org.apache.directory.server.xdbm.Index;
-import org.camunda.bpm.engine.impl.util.IoUtil;
+import io.orqueio.bpm.engine.impl.util.IoUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

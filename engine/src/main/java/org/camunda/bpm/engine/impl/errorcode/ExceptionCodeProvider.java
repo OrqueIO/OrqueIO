@@ -14,18 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.errorcode;
+package io.orqueio.bpm.engine.impl.errorcode;
 
-import static org.camunda.bpm.engine.impl.errorcode.BuiltinExceptionCode.COLUMN_SIZE_TOO_SMALL;
-import static org.camunda.bpm.engine.impl.errorcode.BuiltinExceptionCode.DEADLOCK;
-import static org.camunda.bpm.engine.impl.errorcode.BuiltinExceptionCode.FOREIGN_KEY_CONSTRAINT_VIOLATION;
-import static org.camunda.bpm.engine.impl.errorcode.BuiltinExceptionCode.OPTIMISTIC_LOCKING;
+import static io.orqueio.bpm.engine.impl.errorcode.BuiltinExceptionCode.COLUMN_SIZE_TOO_SMALL;
+import static io.orqueio.bpm.engine.impl.errorcode.BuiltinExceptionCode.DEADLOCK;
+import static io.orqueio.bpm.engine.impl.errorcode.BuiltinExceptionCode.FOREIGN_KEY_CONSTRAINT_VIOLATION;
+import static io.orqueio.bpm.engine.impl.errorcode.BuiltinExceptionCode.OPTIMISTIC_LOCKING;
 
 import java.sql.SQLException;
-import org.camunda.bpm.engine.OptimisticLockingException;
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.util.ExceptionUtil;
+import io.orqueio.bpm.engine.OptimisticLockingException;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.util.ExceptionUtil;
 
 /**
  * <p>One of the provider methods are called when a {@link ProcessEngineException} occurs.

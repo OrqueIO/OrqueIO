@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.sub.runtime;
+package io.orqueio.bpm.engine.rest.sub.runtime;
 
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
@@ -24,8 +24,8 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.camunda.bpm.engine.rest.dto.runtime.VariableInstanceDto;
-import org.camunda.bpm.engine.rest.sub.VariableResource;
+import io.orqueio.bpm.engine.rest.dto.runtime.VariableInstanceDto;
+import io.orqueio.bpm.engine.rest.sub.VariableResource;
 
 /**
  *

@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.form.type;
+package io.orqueio.bpm.engine.impl.form.type;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.camunda.bpm.engine.impl.bpmn.parser.BpmnParse;
-import org.camunda.bpm.engine.impl.form.handler.DefaultFormHandler;
-import org.camunda.bpm.engine.impl.util.xml.Element;
+import io.orqueio.bpm.engine.impl.bpmn.parser.BpmnParse;
+import io.orqueio.bpm.engine.impl.form.handler.DefaultFormHandler;
+import io.orqueio.bpm.engine.impl.util.xml.Element;
 
 
 /**

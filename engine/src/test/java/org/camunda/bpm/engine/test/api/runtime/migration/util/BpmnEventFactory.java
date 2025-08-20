@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.runtime.migration.util;
+package io.orqueio.bpm.engine.test.api.runtime.migration.util;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
 
 /**
  * @author Thorben Lindhauer

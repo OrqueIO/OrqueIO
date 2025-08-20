@@ -14,22 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.history.useroperationlog;
+package io.orqueio.bpm.engine.test.history.useroperationlog;
 
-import static org.camunda.bpm.engine.history.UserOperationLogEntry.OPERATION_TYPE_CREATE;
-import static org.camunda.bpm.engine.history.UserOperationLogEntry.OPERATION_TYPE_DELETE;
-import static org.camunda.bpm.engine.history.UserOperationLogEntry.OPERATION_TYPE_UPDATE;
-import static org.camunda.bpm.engine.impl.persistence.entity.TaskEntity.ASSIGNEE;
-import static org.camunda.bpm.engine.impl.persistence.entity.TaskEntity.CASE_INSTANCE_ID;
-import static org.camunda.bpm.engine.impl.persistence.entity.TaskEntity.DELEGATION;
-import static org.camunda.bpm.engine.impl.persistence.entity.TaskEntity.DELETE;
-import static org.camunda.bpm.engine.impl.persistence.entity.TaskEntity.DESCRIPTION;
-import static org.camunda.bpm.engine.impl.persistence.entity.TaskEntity.DUE_DATE;
-import static org.camunda.bpm.engine.impl.persistence.entity.TaskEntity.FOLLOW_UP_DATE;
-import static org.camunda.bpm.engine.impl.persistence.entity.TaskEntity.NAME;
-import static org.camunda.bpm.engine.impl.persistence.entity.TaskEntity.OWNER;
-import static org.camunda.bpm.engine.impl.persistence.entity.TaskEntity.PARENT_TASK;
-import static org.camunda.bpm.engine.impl.persistence.entity.TaskEntity.PRIORITY;
+import static io.orqueio.bpm.engine.history.UserOperationLogEntry.OPERATION_TYPE_CREATE;
+import static io.orqueio.bpm.engine.history.UserOperationLogEntry.OPERATION_TYPE_DELETE;
+import static io.orqueio.bpm.engine.history.UserOperationLogEntry.OPERATION_TYPE_UPDATE;
+import static io.orqueio.bpm.engine.impl.persistence.entity.TaskEntity.ASSIGNEE;
+import static io.orqueio.bpm.engine.impl.persistence.entity.TaskEntity.CASE_INSTANCE_ID;
+import static io.orqueio.bpm.engine.impl.persistence.entity.TaskEntity.DELEGATION;
+import static io.orqueio.bpm.engine.impl.persistence.entity.TaskEntity.DELETE;
+import static io.orqueio.bpm.engine.impl.persistence.entity.TaskEntity.DESCRIPTION;
+import static io.orqueio.bpm.engine.impl.persistence.entity.TaskEntity.DUE_DATE;
+import static io.orqueio.bpm.engine.impl.persistence.entity.TaskEntity.FOLLOW_UP_DATE;
+import static io.orqueio.bpm.engine.impl.persistence.entity.TaskEntity.NAME;
+import static io.orqueio.bpm.engine.impl.persistence.entity.TaskEntity.OWNER;
+import static io.orqueio.bpm.engine.impl.persistence.entity.TaskEntity.PARENT_TASK;
+import static io.orqueio.bpm.engine.impl.persistence.entity.TaskEntity.PRIORITY;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -41,14 +41,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.engine.EntityTypes;
-import org.camunda.bpm.engine.history.UserOperationLogEntry;
-import org.camunda.bpm.engine.history.UserOperationLogQuery;
-import org.camunda.bpm.engine.impl.persistence.entity.PropertyChange;
-import org.camunda.bpm.engine.impl.persistence.entity.TaskEntity;
-import org.camunda.bpm.engine.impl.util.ClockUtil;
-import org.camunda.bpm.engine.task.DelegationState;
-import org.camunda.bpm.engine.task.Task;
+import io.orqueio.bpm.engine.EntityTypes;
+import io.orqueio.bpm.engine.history.UserOperationLogEntry;
+import io.orqueio.bpm.engine.history.UserOperationLogQuery;
+import io.orqueio.bpm.engine.impl.persistence.entity.PropertyChange;
+import io.orqueio.bpm.engine.impl.persistence.entity.TaskEntity;
+import io.orqueio.bpm.engine.impl.util.ClockUtil;
+import io.orqueio.bpm.engine.task.DelegationState;
+import io.orqueio.bpm.engine.task.Task;
 import org.junit.After;
 import org.junit.Test;
 /**

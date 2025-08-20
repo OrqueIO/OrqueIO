@@ -14,22 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.cmmn.handler;
+package io.orqueio.bpm.engine.impl.cmmn.handler;
 
-import org.camunda.bpm.engine.impl.cmmn.behavior.CallingTaskActivityBehavior;
-import org.camunda.bpm.engine.impl.cmmn.model.CmmnActivity;
-import org.camunda.bpm.engine.impl.core.model.BaseCallableElement;
-import org.camunda.bpm.engine.impl.core.model.BaseCallableElement.CallableElementBinding;
-import org.camunda.bpm.engine.impl.core.variable.mapping.value.ConstantValueProvider;
-import org.camunda.bpm.engine.impl.core.variable.mapping.value.NullValueProvider;
-import org.camunda.bpm.engine.impl.core.variable.mapping.value.ParameterValueProvider;
-import org.camunda.bpm.engine.impl.el.ElValueProvider;
-import org.camunda.bpm.engine.impl.el.Expression;
-import org.camunda.bpm.engine.impl.el.ExpressionManager;
-import org.camunda.bpm.engine.repository.Deployment;
-import org.camunda.bpm.model.cmmn.instance.CmmnElement;
+import io.orqueio.bpm.engine.impl.cmmn.behavior.CallingTaskActivityBehavior;
+import io.orqueio.bpm.engine.impl.cmmn.model.CmmnActivity;
+import io.orqueio.bpm.engine.impl.core.model.BaseCallableElement;
+import io.orqueio.bpm.engine.impl.core.model.BaseCallableElement.CallableElementBinding;
+import io.orqueio.bpm.engine.impl.core.variable.mapping.value.ConstantValueProvider;
+import io.orqueio.bpm.engine.impl.core.variable.mapping.value.NullValueProvider;
+import io.orqueio.bpm.engine.impl.core.variable.mapping.value.ParameterValueProvider;
+import io.orqueio.bpm.engine.impl.el.ElValueProvider;
+import io.orqueio.bpm.engine.impl.el.Expression;
+import io.orqueio.bpm.engine.impl.el.ExpressionManager;
+import io.orqueio.bpm.engine.repository.Deployment;
+import io.orqueio.bpm.model.cmmn.instance.CmmnElement;
 
-import static org.camunda.bpm.engine.impl.util.StringUtil.isCompositeExpression;
+import static io.orqueio.bpm.engine.impl.util.StringUtil.isCompositeExpression;
 
 /**
  * @author Roman Smirnov

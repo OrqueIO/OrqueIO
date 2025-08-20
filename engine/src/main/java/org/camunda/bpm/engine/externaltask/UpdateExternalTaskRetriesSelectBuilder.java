@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.externaltask;
+package io.orqueio.bpm.engine.externaltask;
 
 import java.util.List;
 
-import org.camunda.bpm.engine.history.HistoricProcessInstanceQuery;
-import org.camunda.bpm.engine.runtime.ProcessInstanceQuery;
+import io.orqueio.bpm.engine.history.HistoricProcessInstanceQuery;
+import io.orqueio.bpm.engine.runtime.ProcessInstanceQuery;
 
 public interface UpdateExternalTaskRetriesSelectBuilder {
 

@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.topic.impl.dto;
+package io.orqueio.bpm.client.topic.impl.dto;
 
-import org.camunda.bpm.client.topic.TopicSubscription;
+import io.orqueio.bpm.client.topic.TopicSubscription;
 
 import java.util.List;
 import java.util.Map;

@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter.property;
+package io.orqueio.bpm.spring.boot.starter.property;
 
-import org.camunda.bpm.engine.identity.User;
+import io.orqueio.bpm.engine.identity.User;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;

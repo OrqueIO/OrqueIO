@@ -11,7 +11,7 @@
     <sequenceFlow sourceRef="start" targetRef="task" />
 
     <businessRuleTask id="task"
-                      camunda:class="org.camunda.bpm.engine.test.history.DecisionServiceDelegate" />
+                      camunda:class="io.orqueio.bpm.engine.test.history.DecisionServiceDelegate" />
 
     <sequenceFlow sourceRef="task" targetRef="end" />
     

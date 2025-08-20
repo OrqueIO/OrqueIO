@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.persistence.entity;
+package io.orqueio.bpm.engine.impl.persistence.entity;
 
-import org.camunda.bpm.engine.variable.VariableMap;
+import io.orqueio.bpm.engine.variable.VariableMap;
 
 /**
  * Provides access to the snapshot of latest variables of an execution.

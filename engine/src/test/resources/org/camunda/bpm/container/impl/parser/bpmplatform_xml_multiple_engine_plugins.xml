@@ -12,10 +12,10 @@
 
     <plugins>
       <plugin>
-        <class>org.camunda.bpm.MyAwesomePlugin</class>
+        <class>io.orqueio.bpm.MyAwesomePlugin</class>
       </plugin>
       <plugin>
-        <class>org.camunda.bpm.MyEvenMoreAwesomePlugin</class>
+        <class>io.orqueio.bpm.MyEvenMoreAwesomePlugin</class>
       </plugin>
     </plugins>
 

@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.application.impl.embedded;
+package io.orqueio.bpm.application.impl.embedded;
 
-import org.camunda.bpm.application.ProcessApplication;
-import org.camunda.bpm.application.impl.EmbeddedProcessApplication;
+import io.orqueio.bpm.application.ProcessApplication;
+import io.orqueio.bpm.application.impl.EmbeddedProcessApplication;
 
 @ProcessApplication(
     name="test-app",

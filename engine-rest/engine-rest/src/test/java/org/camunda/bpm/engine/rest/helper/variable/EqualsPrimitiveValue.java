@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.helper.variable;
+package io.orqueio.bpm.engine.rest.helper.variable;
 
 import java.util.Arrays;
 import java.util.Date;
 
-import org.camunda.bpm.engine.variable.type.ValueType;
-import org.camunda.bpm.engine.variable.value.PrimitiveValue;
+import io.orqueio.bpm.engine.variable.type.ValueType;
+import io.orqueio.bpm.engine.variable.value.PrimitiveValue;
 import org.hamcrest.Description;
 
 

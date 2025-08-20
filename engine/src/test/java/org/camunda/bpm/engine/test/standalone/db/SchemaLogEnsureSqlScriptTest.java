@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.standalone.db;
+package io.orqueio.bpm.engine.test.standalone.db;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.camunda.bpm.engine.management.SchemaLogEntry;
-import org.camunda.bpm.engine.test.util.TestconfigProperties;
+import io.orqueio.bpm.engine.management.SchemaLogEntry;
+import io.orqueio.bpm.engine.test.util.TestconfigProperties;
 import org.junit.Before;
 import org.junit.Test;
 

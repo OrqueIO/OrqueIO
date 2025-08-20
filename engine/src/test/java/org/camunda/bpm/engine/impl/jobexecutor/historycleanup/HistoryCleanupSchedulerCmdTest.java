@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.jobexecutor.historycleanup;
+package io.orqueio.bpm.engine.impl.jobexecutor.historycleanup;
 
-import org.camunda.bpm.engine.impl.persistence.entity.JobEntity;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.metrics.reporter.DbMetricsReporter;
-import org.camunda.bpm.engine.impl.persistence.entity.JobManager;
+import io.orqueio.bpm.engine.impl.persistence.entity.JobEntity;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.metrics.reporter.DbMetricsReporter;
+import io.orqueio.bpm.engine.impl.persistence.entity.JobManager;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

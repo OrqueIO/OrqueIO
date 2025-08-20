@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.runtime;
+package io.orqueio.bpm.engine.impl.runtime;
 
 import java.util.Map;
 
-import org.camunda.bpm.engine.impl.MessageCorrelationBuilderImpl;
+import io.orqueio.bpm.engine.impl.MessageCorrelationBuilderImpl;
 
 public class CorrelationSet {
 

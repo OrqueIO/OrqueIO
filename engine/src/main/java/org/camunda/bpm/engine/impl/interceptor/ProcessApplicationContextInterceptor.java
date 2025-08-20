@@ -14,18 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.interceptor;
+package io.orqueio.bpm.engine.impl.interceptor;
 
 import java.util.concurrent.Callable;
 
-import org.camunda.bpm.application.ProcessApplicationReference;
-import org.camunda.bpm.application.impl.ProcessApplicationContextImpl;
-import org.camunda.bpm.application.impl.ProcessApplicationIdentifier;
-import org.camunda.bpm.container.RuntimeContainerDelegate;
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.cmd.CommandLogger;
-import org.camunda.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.application.ProcessApplicationReference;
+import io.orqueio.bpm.application.impl.ProcessApplicationContextImpl;
+import io.orqueio.bpm.application.impl.ProcessApplicationIdentifier;
+import io.orqueio.bpm.container.RuntimeContainerDelegate;
+import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.cmd.CommandLogger;
+import io.orqueio.bpm.engine.impl.context.Context;
 
 /**
  * @author Thorben Lindhauer

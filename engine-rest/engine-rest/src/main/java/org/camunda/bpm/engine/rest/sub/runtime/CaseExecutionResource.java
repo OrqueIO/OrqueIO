@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.sub.runtime;
+package io.orqueio.bpm.engine.rest.sub.runtime;
 
-import org.camunda.bpm.engine.rest.dto.runtime.CaseExecutionDto;
-import org.camunda.bpm.engine.rest.dto.runtime.CaseExecutionTriggerDto;
-import org.camunda.bpm.engine.rest.sub.VariableResource;
+import io.orqueio.bpm.engine.rest.dto.runtime.CaseExecutionDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.CaseExecutionTriggerDto;
+import io.orqueio.bpm.engine.rest.sub.VariableResource;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;

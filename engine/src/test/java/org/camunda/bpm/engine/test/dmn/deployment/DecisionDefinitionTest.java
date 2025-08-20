@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.camunda.bpm.engine.test.dmn.deployment;
+package io.orqueio.bpm.engine.test.dmn.deployment;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -25,29 +25,29 @@ import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import org.camunda.bpm.engine.DecisionService;
-import org.camunda.bpm.engine.HistoryService;
-import org.camunda.bpm.engine.ProcessEngineConfiguration;
-import org.camunda.bpm.engine.RepositoryService;
-import org.camunda.bpm.engine.history.HistoricDecisionInstance;
-import org.camunda.bpm.engine.impl.util.ClockUtil;
-import org.camunda.bpm.engine.repository.DeploymentBuilder;
-import org.camunda.bpm.engine.repository.DeploymentWithDefinitions;
-import org.camunda.bpm.engine.test.RequiredHistoryLevel;
-import org.camunda.bpm.engine.test.util.ProcessEngineBootstrapRule;
-import org.camunda.bpm.engine.test.util.ProcessEngineTestRule;
-import org.camunda.bpm.engine.test.util.ProvidedProcessEngineRule;
-import org.camunda.bpm.model.dmn.Dmn;
-import org.camunda.bpm.model.dmn.DmnModelInstance;
-import org.camunda.bpm.model.dmn.HitPolicy;
-import org.camunda.bpm.model.dmn.impl.DmnModelConstants;
-import org.camunda.bpm.model.dmn.instance.Decision;
-import org.camunda.bpm.model.dmn.instance.DecisionTable;
-import org.camunda.bpm.model.dmn.instance.Definitions;
-import org.camunda.bpm.model.dmn.instance.Input;
-import org.camunda.bpm.model.dmn.instance.InputExpression;
-import org.camunda.bpm.model.dmn.instance.Output;
-import org.camunda.bpm.model.dmn.instance.Text;
+import io.orqueio.bpm.engine.DecisionService;
+import io.orqueio.bpm.engine.HistoryService;
+import io.orqueio.bpm.engine.ProcessEngineConfiguration;
+import io.orqueio.bpm.engine.RepositoryService;
+import io.orqueio.bpm.engine.history.HistoricDecisionInstance;
+import io.orqueio.bpm.engine.impl.util.ClockUtil;
+import io.orqueio.bpm.engine.repository.DeploymentBuilder;
+import io.orqueio.bpm.engine.repository.DeploymentWithDefinitions;
+import io.orqueio.bpm.engine.test.RequiredHistoryLevel;
+import io.orqueio.bpm.engine.test.util.ProcessEngineBootstrapRule;
+import io.orqueio.bpm.engine.test.util.ProcessEngineTestRule;
+import io.orqueio.bpm.engine.test.util.ProvidedProcessEngineRule;
+import io.orqueio.bpm.model.dmn.Dmn;
+import io.orqueio.bpm.model.dmn.DmnModelInstance;
+import io.orqueio.bpm.model.dmn.HitPolicy;
+import io.orqueio.bpm.model.dmn.impl.DmnModelConstants;
+import io.orqueio.bpm.model.dmn.instance.Decision;
+import io.orqueio.bpm.model.dmn.instance.DecisionTable;
+import io.orqueio.bpm.model.dmn.instance.Definitions;
+import io.orqueio.bpm.model.dmn.instance.Input;
+import io.orqueio.bpm.model.dmn.instance.InputExpression;
+import io.orqueio.bpm.model.dmn.instance.Output;
+import io.orqueio.bpm.model.dmn.instance.Text;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.ClassRule;

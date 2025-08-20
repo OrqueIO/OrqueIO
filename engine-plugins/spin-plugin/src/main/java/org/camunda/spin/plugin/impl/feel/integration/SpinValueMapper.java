@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.plugin.impl.feel.integration;
+package io.orqueio.spin.plugin.impl.feel.integration;
 
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.mapping;
@@ -28,13 +28,13 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
-import org.camunda.feel.syntaxtree.Val;
-import org.camunda.feel.syntaxtree.ValString;
-import org.camunda.feel.valuemapper.JavaCustomValueMapper;
-import org.camunda.spin.json.SpinJsonNode;
-import org.camunda.spin.xml.SpinXmlAttribute;
-import org.camunda.spin.xml.SpinXmlElement;
-import org.camunda.spin.xml.SpinXmlNode;
+import io.orqueio.feel.syntaxtree.Val;
+import io.orqueio.feel.syntaxtree.ValString;
+import io.orqueio.feel.valuemapper.JavaCustomValueMapper;
+import io.orqueio.spin.json.SpinJsonNode;
+import io.orqueio.spin.xml.SpinXmlAttribute;
+import io.orqueio.spin.xml.SpinXmlElement;
+import io.orqueio.spin.xml.SpinXmlNode;
 
 
 public class SpinValueMapper extends JavaCustomValueMapper {

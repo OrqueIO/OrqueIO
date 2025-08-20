@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.db.entitymanager.cache;
+package io.orqueio.bpm.engine.impl.db.entitymanager.cache;
 
-import static org.camunda.bpm.engine.impl.db.entitymanager.cache.DbEntityState.DELETED_MERGED;
-import static org.camunda.bpm.engine.impl.db.entitymanager.cache.DbEntityState.DELETED_PERSISTENT;
-import static org.camunda.bpm.engine.impl.db.entitymanager.cache.DbEntityState.DELETED_TRANSIENT;
-import static org.camunda.bpm.engine.impl.db.entitymanager.cache.DbEntityState.MERGED;
-import static org.camunda.bpm.engine.impl.db.entitymanager.cache.DbEntityState.PERSISTENT;
-import static org.camunda.bpm.engine.impl.db.entitymanager.cache.DbEntityState.TRANSIENT;
+import static io.orqueio.bpm.engine.impl.db.entitymanager.cache.DbEntityState.DELETED_MERGED;
+import static io.orqueio.bpm.engine.impl.db.entitymanager.cache.DbEntityState.DELETED_PERSISTENT;
+import static io.orqueio.bpm.engine.impl.db.entitymanager.cache.DbEntityState.DELETED_TRANSIENT;
+import static io.orqueio.bpm.engine.impl.db.entitymanager.cache.DbEntityState.MERGED;
+import static io.orqueio.bpm.engine.impl.db.entitymanager.cache.DbEntityState.PERSISTENT;
+import static io.orqueio.bpm.engine.impl.db.entitymanager.cache.DbEntityState.TRANSIENT;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,10 +29,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
-import org.camunda.bpm.engine.impl.db.DbEntity;
-import org.camunda.bpm.engine.impl.db.EnginePersistenceLogger;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
+import io.orqueio.bpm.engine.impl.db.DbEntity;
+import io.orqueio.bpm.engine.impl.db.EnginePersistenceLogger;
 
 
 /**

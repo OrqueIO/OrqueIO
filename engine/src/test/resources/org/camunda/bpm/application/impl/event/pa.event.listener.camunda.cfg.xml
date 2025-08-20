@@ -4,7 +4,7 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans   http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-  <bean id="processEngineConfiguration" class="org.camunda.bpm.engine.impl.cfg.StandaloneInMemProcessEngineConfiguration">
+  <bean id="processEngineConfiguration" class="io.orqueio.bpm.engine.impl.cfg.StandaloneInMemProcessEngineConfiguration">
   
     <property name="processEngineName" value="ProcessApplicationEventListenerTest-engine" />
   
@@ -30,7 +30,7 @@
     
     <property name="processEnginePlugins">
       <list>
-        <bean class="org.camunda.bpm.application.impl.event.ProcessApplicationEventListenerPlugin" />
+        <bean class="io.orqueio.bpm.application.impl.event.ProcessApplicationEventListenerPlugin" />
       </list>
     </property>
 

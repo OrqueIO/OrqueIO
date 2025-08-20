@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.variable.impl.format;
+package io.orqueio.bpm.client.variable.impl.format;
 
 /**
  * Detects the canonical type string of a supplied object

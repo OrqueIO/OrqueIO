@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.connect.httpclient;
+package io.orqueio.connect.httpclient;
 
 import java.util.Map;
 
-import org.camunda.connect.spi.ConnectorRequest;
-import org.camunda.connect.spi.ConnectorResponse;
+import io.orqueio.connect.spi.ConnectorRequest;
+import io.orqueio.connect.spi.ConnectorResponse;
 
 public interface HttpBaseRequest<Q extends HttpBaseRequest<?, ?>, R extends ConnectorResponse> extends ConnectorRequest<R> {
 

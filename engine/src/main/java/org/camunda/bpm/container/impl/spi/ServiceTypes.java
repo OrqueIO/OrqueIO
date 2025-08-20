@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.spi;
+package io.orqueio.bpm.container.impl.spi;
 
-import org.camunda.bpm.container.impl.spi.PlatformServiceContainer.ServiceType;
+import io.orqueio.bpm.container.impl.spi.PlatformServiceContainer.ServiceType;
 
 /**
  * The service types managed by this container.
@@ -24,10 +24,10 @@ import org.camunda.bpm.container.impl.spi.PlatformServiceContainer.ServiceType;
  */
 public enum ServiceTypes implements ServiceType {
 
-  BPM_PLATFORM("org.camunda.bpm.platform"),
-  PROCESS_ENGINE("org.camunda.bpm.platform.process-engine"),
-  JOB_EXECUTOR("org.camunda.bpm.platform.job-executor"),
-  PROCESS_APPLICATION("org.camunda.bpm.platform.job-executor.process-application");
+  BPM_PLATFORM("io.orqueio.bpm.platform"),
+  PROCESS_ENGINE("io.orqueio.bpm.platform.process-engine"),
+  JOB_EXECUTOR("io.orqueio.bpm.platform.job-executor"),
+  PROCESS_APPLICATION("io.orqueio.bpm.platform.job-executor.process-application");
 
   protected String serviceRealm;
 

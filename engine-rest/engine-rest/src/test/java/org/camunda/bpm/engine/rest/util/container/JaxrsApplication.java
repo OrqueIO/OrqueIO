@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.util.container;
+package io.orqueio.bpm.engine.rest.util.container;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -22,7 +22,7 @@ import java.util.Set;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 
-import org.camunda.bpm.engine.rest.impl.CamundaRestResources;
+import io.orqueio.bpm.engine.rest.impl.CamundaRestResources;
 
 /**
  * @author Thorben Lindhauer

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.plugin.impl;
+package io.orqueio.spin.plugin.impl;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -23,15 +23,15 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
-import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.engine.impl.util.IoUtil;
-import org.camunda.bpm.engine.impl.variable.serializer.AbstractSerializableValueSerializer;
-import org.camunda.bpm.engine.impl.variable.serializer.ValueFields;
-import org.camunda.bpm.engine.variable.type.SerializableValueType;
-import org.camunda.spin.Spin;
-import org.camunda.spin.plugin.variable.value.SpinValue;
-import org.camunda.spin.plugin.variable.value.impl.SpinValueImpl;
-import org.camunda.spin.spi.DataFormat;
+import io.orqueio.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.impl.util.IoUtil;
+import io.orqueio.bpm.engine.impl.variable.serializer.AbstractSerializableValueSerializer;
+import io.orqueio.bpm.engine.impl.variable.serializer.ValueFields;
+import io.orqueio.bpm.engine.variable.type.SerializableValueType;
+import io.orqueio.spin.Spin;
+import io.orqueio.spin.plugin.variable.value.SpinValue;
+import io.orqueio.spin.plugin.variable.value.impl.SpinValueImpl;
+import io.orqueio.spin.spi.DataFormat;
 
 /**
  * @author Roman Smirnov

@@ -14,19 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.dto.runtime;
+package io.orqueio.bpm.engine.rest.dto.runtime;
 
 import java.util.List;
 
 import javax.ws.rs.core.Response.Status;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.batch.Batch;
-import org.camunda.bpm.engine.rest.dto.SuspensionStateDto;
-import org.camunda.bpm.engine.rest.dto.history.HistoricProcessInstanceQueryDto;
-import org.camunda.bpm.engine.rest.exception.InvalidRequestException;
-import org.camunda.bpm.engine.runtime.UpdateProcessInstanceSuspensionStateSelectBuilder;
-import org.camunda.bpm.engine.runtime.UpdateProcessInstancesSuspensionStateBuilder;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.batch.Batch;
+import io.orqueio.bpm.engine.rest.dto.SuspensionStateDto;
+import io.orqueio.bpm.engine.rest.dto.history.HistoricProcessInstanceQueryDto;
+import io.orqueio.bpm.engine.rest.exception.InvalidRequestException;
+import io.orqueio.bpm.engine.runtime.UpdateProcessInstanceSuspensionStateSelectBuilder;
+import io.orqueio.bpm.engine.runtime.UpdateProcessInstancesSuspensionStateBuilder;
 
 public class ProcessInstanceSuspensionStateAsyncDto extends SuspensionStateDto {
 

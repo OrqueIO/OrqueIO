@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.mock;
+package io.orqueio.bpm.engine.test.mock;
 
-import org.camunda.bpm.engine.delegate.VariableScope;
-import org.camunda.bpm.engine.impl.scripting.engine.Resolver;
-import org.camunda.bpm.engine.impl.scripting.engine.ResolverFactory;
+import io.orqueio.bpm.engine.delegate.VariableScope;
+import io.orqueio.bpm.engine.impl.scripting.engine.Resolver;
+import io.orqueio.bpm.engine.impl.scripting.engine.ResolverFactory;
 
 import java.util.Set;
 

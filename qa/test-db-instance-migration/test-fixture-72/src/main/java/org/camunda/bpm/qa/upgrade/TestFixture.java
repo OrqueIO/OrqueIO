@@ -14,46 +14,46 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa.upgrade;
+package io.orqueio.bpm.qa.upgrade;
 
 
-import org.camunda.bpm.engine.ManagementService;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.ProcessEngineConfiguration;
-import org.camunda.bpm.engine.RepositoryService;
-import org.camunda.bpm.engine.RuntimeService;
-import org.camunda.bpm.engine.TaskService;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.qa.upgrade.scenarios.boundary.NestedNonInterruptingBoundaryEventOnInnerSubprocessScenario;
-import org.camunda.bpm.qa.upgrade.scenarios.boundary.NestedNonInterruptingBoundaryEventOnOuterSubprocessScenario;
-import org.camunda.bpm.qa.upgrade.scenarios.boundary.NonInterruptingBoundaryEventScenario;
-import org.camunda.bpm.qa.upgrade.scenarios.compensation.InterruptingEventSubprocessCompensationScenario;
-import org.camunda.bpm.qa.upgrade.scenarios.compensation.SingleActivityCompensationScenario;
-import org.camunda.bpm.qa.upgrade.scenarios.compensation.SubprocessCompensationScenario;
-import org.camunda.bpm.qa.upgrade.scenarios.compensation.SubprocessParallelCreateCompensationScenario;
-import org.camunda.bpm.qa.upgrade.scenarios.compensation.SubprocessParallelThrowCompensationScenario;
-import org.camunda.bpm.qa.upgrade.scenarios.compensation.TransactionCancelCompensationScenario;
-import org.camunda.bpm.qa.upgrade.scenarios.eventsubprocess.InterruptingEventSubprocessScenario;
-import org.camunda.bpm.qa.upgrade.scenarios.eventsubprocess.NestedInterruptingErrorEventSubprocessScenario;
-import org.camunda.bpm.qa.upgrade.scenarios.eventsubprocess.NestedInterruptingEventSubprocessParallelScenario;
-import org.camunda.bpm.qa.upgrade.scenarios.eventsubprocess.NestedNonInterruptingEventSubprocessNestedSubprocessScenario;
-import org.camunda.bpm.qa.upgrade.scenarios.eventsubprocess.NestedNonInterruptingEventSubprocessScenario;
-import org.camunda.bpm.qa.upgrade.scenarios.eventsubprocess.NestedParallelNonInterruptingEventSubprocessScenario;
-import org.camunda.bpm.qa.upgrade.scenarios.eventsubprocess.NonInterruptingEventSubprocessScenario;
-import org.camunda.bpm.qa.upgrade.scenarios.eventsubprocess.ParallelNestedNonInterruptingEventSubprocessScenario;
-import org.camunda.bpm.qa.upgrade.scenarios.eventsubprocess.TwoLevelNestedNonInterruptingEventSubprocessScenario;
-import org.camunda.bpm.qa.upgrade.scenarios.gateway.EventBasedGatewayScenario;
-import org.camunda.bpm.qa.upgrade.scenarios.job.AsyncParallelMultiInstanceScenario;
-import org.camunda.bpm.qa.upgrade.scenarios.job.AsyncSequentialMultiInstanceScenario;
-import org.camunda.bpm.qa.upgrade.scenarios.multiinstance.MultiInstanceReceiveTaskScenario;
-import org.camunda.bpm.qa.upgrade.scenarios.multiinstance.NestedSequentialMultiInstanceSubprocessScenario;
-import org.camunda.bpm.qa.upgrade.scenarios.multiinstance.ParallelMultiInstanceSubprocessScenario;
-import org.camunda.bpm.qa.upgrade.scenarios.multiinstance.SequentialMultiInstanceSubprocessScenario;
-import org.camunda.bpm.qa.upgrade.scenarios.histperms.HistoricInstancePermissionsWithoutProcDefKeyScenario;
-import org.camunda.bpm.qa.upgrade.scenarios.task.OneScopeTaskScenario;
-import org.camunda.bpm.qa.upgrade.scenarios.task.OneTaskScenario;
-import org.camunda.bpm.qa.upgrade.scenarios.task.ParallelScopeTasksScenario;
-import org.camunda.bpm.qa.upgrade.scenarios.task.ParallelTasksScenario;
+import io.orqueio.bpm.engine.ManagementService;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.ProcessEngineConfiguration;
+import io.orqueio.bpm.engine.RepositoryService;
+import io.orqueio.bpm.engine.RuntimeService;
+import io.orqueio.bpm.engine.TaskService;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.qa.upgrade.scenarios.boundary.NestedNonInterruptingBoundaryEventOnInnerSubprocessScenario;
+import io.orqueio.bpm.qa.upgrade.scenarios.boundary.NestedNonInterruptingBoundaryEventOnOuterSubprocessScenario;
+import io.orqueio.bpm.qa.upgrade.scenarios.boundary.NonInterruptingBoundaryEventScenario;
+import io.orqueio.bpm.qa.upgrade.scenarios.compensation.InterruptingEventSubprocessCompensationScenario;
+import io.orqueio.bpm.qa.upgrade.scenarios.compensation.SingleActivityCompensationScenario;
+import io.orqueio.bpm.qa.upgrade.scenarios.compensation.SubprocessCompensationScenario;
+import io.orqueio.bpm.qa.upgrade.scenarios.compensation.SubprocessParallelCreateCompensationScenario;
+import io.orqueio.bpm.qa.upgrade.scenarios.compensation.SubprocessParallelThrowCompensationScenario;
+import io.orqueio.bpm.qa.upgrade.scenarios.compensation.TransactionCancelCompensationScenario;
+import io.orqueio.bpm.qa.upgrade.scenarios.eventsubprocess.InterruptingEventSubprocessScenario;
+import io.orqueio.bpm.qa.upgrade.scenarios.eventsubprocess.NestedInterruptingErrorEventSubprocessScenario;
+import io.orqueio.bpm.qa.upgrade.scenarios.eventsubprocess.NestedInterruptingEventSubprocessParallelScenario;
+import io.orqueio.bpm.qa.upgrade.scenarios.eventsubprocess.NestedNonInterruptingEventSubprocessNestedSubprocessScenario;
+import io.orqueio.bpm.qa.upgrade.scenarios.eventsubprocess.NestedNonInterruptingEventSubprocessScenario;
+import io.orqueio.bpm.qa.upgrade.scenarios.eventsubprocess.NestedParallelNonInterruptingEventSubprocessScenario;
+import io.orqueio.bpm.qa.upgrade.scenarios.eventsubprocess.NonInterruptingEventSubprocessScenario;
+import io.orqueio.bpm.qa.upgrade.scenarios.eventsubprocess.ParallelNestedNonInterruptingEventSubprocessScenario;
+import io.orqueio.bpm.qa.upgrade.scenarios.eventsubprocess.TwoLevelNestedNonInterruptingEventSubprocessScenario;
+import io.orqueio.bpm.qa.upgrade.scenarios.gateway.EventBasedGatewayScenario;
+import io.orqueio.bpm.qa.upgrade.scenarios.job.AsyncParallelMultiInstanceScenario;
+import io.orqueio.bpm.qa.upgrade.scenarios.job.AsyncSequentialMultiInstanceScenario;
+import io.orqueio.bpm.qa.upgrade.scenarios.multiinstance.MultiInstanceReceiveTaskScenario;
+import io.orqueio.bpm.qa.upgrade.scenarios.multiinstance.NestedSequentialMultiInstanceSubprocessScenario;
+import io.orqueio.bpm.qa.upgrade.scenarios.multiinstance.ParallelMultiInstanceSubprocessScenario;
+import io.orqueio.bpm.qa.upgrade.scenarios.multiinstance.SequentialMultiInstanceSubprocessScenario;
+import io.orqueio.bpm.qa.upgrade.scenarios.histperms.HistoricInstancePermissionsWithoutProcDefKeyScenario;
+import io.orqueio.bpm.qa.upgrade.scenarios.task.OneScopeTaskScenario;
+import io.orqueio.bpm.qa.upgrade.scenarios.task.OneTaskScenario;
+import io.orqueio.bpm.qa.upgrade.scenarios.task.ParallelScopeTasksScenario;
+import io.orqueio.bpm.qa.upgrade.scenarios.task.ParallelTasksScenario;
 
 /**
  * Sets up scenarios for migration from 7.3.0

@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.errorcode;
+package io.orqueio.bpm.engine.test.errorcode;
 
-import org.camunda.bpm.engine.impl.db.sql.DbSqlSessionFactory;
-import org.camunda.bpm.engine.impl.util.ExceptionUtil;
-import org.camunda.bpm.engine.test.ProcessEngineRule;
-import org.camunda.bpm.engine.test.util.ProcessEngineTestRule;
-import org.camunda.bpm.engine.test.util.ProvidedProcessEngineRule;
+import io.orqueio.bpm.engine.impl.db.sql.DbSqlSessionFactory;
+import io.orqueio.bpm.engine.impl.util.ExceptionUtil;
+import io.orqueio.bpm.engine.test.ProcessEngineRule;
+import io.orqueio.bpm.engine.test.util.ProcessEngineTestRule;
+import io.orqueio.bpm.engine.test.util.ProvidedProcessEngineRule;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -35,12 +35,12 @@ import java.util.concurrent.CountDownLatch;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
-import static org.camunda.bpm.engine.impl.util.ExceptionUtil.DEADLOCK_CODES.DB2;
-import static org.camunda.bpm.engine.impl.util.ExceptionUtil.DEADLOCK_CODES.H2;
-import static org.camunda.bpm.engine.impl.util.ExceptionUtil.DEADLOCK_CODES.MSSQL;
-import static org.camunda.bpm.engine.impl.util.ExceptionUtil.DEADLOCK_CODES.MYSQL;
-import static org.camunda.bpm.engine.impl.util.ExceptionUtil.DEADLOCK_CODES.ORACLE;
-import static org.camunda.bpm.engine.impl.util.ExceptionUtil.DEADLOCK_CODES.POSTGRES;
+import static io.orqueio.bpm.engine.impl.util.ExceptionUtil.DEADLOCK_CODES.DB2;
+import static io.orqueio.bpm.engine.impl.util.ExceptionUtil.DEADLOCK_CODES.H2;
+import static io.orqueio.bpm.engine.impl.util.ExceptionUtil.DEADLOCK_CODES.MSSQL;
+import static io.orqueio.bpm.engine.impl.util.ExceptionUtil.DEADLOCK_CODES.MYSQL;
+import static io.orqueio.bpm.engine.impl.util.ExceptionUtil.DEADLOCK_CODES.ORACLE;
+import static io.orqueio.bpm.engine.impl.util.ExceptionUtil.DEADLOCK_CODES.POSTGRES;
 
 /**
  * HEADS-UP: If a test fails, please make sure to adjust the error code / sql state for the respective

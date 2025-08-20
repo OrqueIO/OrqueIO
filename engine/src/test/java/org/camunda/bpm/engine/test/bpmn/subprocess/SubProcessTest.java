@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.bpmn.subprocess;
+package io.orqueio.bpm.engine.test.bpmn.subprocess;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -25,18 +25,18 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import org.camunda.bpm.engine.impl.persistence.entity.ActivityInstanceImpl;
-import org.camunda.bpm.engine.impl.util.ClockUtil;
-import org.camunda.bpm.engine.impl.util.CollectionUtil;
-import org.camunda.bpm.engine.runtime.ActivityInstance;
-import org.camunda.bpm.engine.runtime.Job;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.task.Task;
-import org.camunda.bpm.engine.task.TaskQuery;
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.engine.test.bpmn.subprocess.util.GetActInstanceDelegate;
-import org.camunda.bpm.engine.test.util.ActivityInstanceAssert;
-import org.camunda.bpm.engine.test.util.PluggableProcessEngineTest;
+import io.orqueio.bpm.engine.impl.persistence.entity.ActivityInstanceImpl;
+import io.orqueio.bpm.engine.impl.util.ClockUtil;
+import io.orqueio.bpm.engine.impl.util.CollectionUtil;
+import io.orqueio.bpm.engine.runtime.ActivityInstance;
+import io.orqueio.bpm.engine.runtime.Job;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.task.Task;
+import io.orqueio.bpm.engine.task.TaskQuery;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.test.bpmn.subprocess.util.GetActInstanceDelegate;
+import io.orqueio.bpm.engine.test.util.ActivityInstanceAssert;
+import io.orqueio.bpm.engine.test.util.PluggableProcessEngineTest;
 import org.junit.Test;
 
 
@@ -558,7 +558,7 @@ public class SubProcessTest extends PluggableProcessEngineTest {
   @Test
   public void testConcurrencyInSubProcess() {
 
-    org.camunda.bpm.engine.repository.Deployment deployment =
+    io.orqueio.bpm.engine.repository.Deployment deployment =
       repositoryService.createDeployment()
                   .addClasspathResource("org/camunda/bpm/engine/test/bpmn/subprocess/SubProcessTest.fixSystemFailureProcess.bpmn20.xml")
                   .deploy();

@@ -14,27 +14,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.repository;
+package io.orqueio.bpm.engine.repository;
 
 import java.io.InputStream;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.zip.ZipInputStream;
-import org.camunda.bpm.engine.AuthorizationException;
-import org.camunda.bpm.engine.ParseException;
-import org.camunda.bpm.engine.authorization.Permissions;
-import org.camunda.bpm.engine.authorization.Resources;
-import org.camunda.bpm.engine.exception.NotFoundException;
-import org.camunda.bpm.engine.exception.NotValidException;
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
-import org.camunda.bpm.model.cmmn.CmmnModelInstance;
-import org.camunda.bpm.model.dmn.DmnModelInstance;
+import io.orqueio.bpm.engine.AuthorizationException;
+import io.orqueio.bpm.engine.ParseException;
+import io.orqueio.bpm.engine.authorization.Permissions;
+import io.orqueio.bpm.engine.authorization.Resources;
+import io.orqueio.bpm.engine.exception.NotFoundException;
+import io.orqueio.bpm.engine.exception.NotValidException;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.bpm.model.cmmn.CmmnModelInstance;
+import io.orqueio.bpm.model.dmn.DmnModelInstance;
 
 /**
  * <p>Builder for creating new deployments.</p>
  *
- * <p>A builder instance can be obtained through {@link org.camunda.bpm.engine.RepositoryService#createDeployment()}.</p>
+ * <p>A builder instance can be obtained through {@link io.orqueio.bpm.engine.RepositoryService#createDeployment()}.</p>
  *
  * <p>Multiple resources can be added to one deployment before calling the {@link #deploy()}
  * operation.</p>

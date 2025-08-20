@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.welcome.resource;
+package io.orqueio.bpm.welcome.resource;
 
-import org.camunda.bpm.webapp.plugin.resource.AbstractAppPluginResource;
-import org.camunda.bpm.welcome.Welcome;
-import org.camunda.bpm.welcome.plugin.spi.WelcomePlugin;
+import io.orqueio.bpm.webapp.plugin.resource.AbstractAppPluginResource;
+import io.orqueio.bpm.welcome.Welcome;
+import io.orqueio.bpm.welcome.plugin.spi.WelcomePlugin;
 
 /**
  * Base class for implementing plugin REST resources for the welcome application.

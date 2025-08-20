@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.runtime.migration;
+package io.orqueio.bpm.engine.test.api.runtime.migration;
 
-import org.camunda.bpm.engine.RepositoryService;
-import org.camunda.bpm.engine.delegate.DelegateExecution;
-import org.camunda.bpm.engine.delegate.JavaDelegate;
-import org.camunda.bpm.engine.impl.cmd.SetProcessDefinitionVersionCmd;
-import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.engine.repository.ProcessDefinition;
+import io.orqueio.bpm.engine.RepositoryService;
+import io.orqueio.bpm.engine.delegate.DelegateExecution;
+import io.orqueio.bpm.engine.delegate.JavaDelegate;
+import io.orqueio.bpm.engine.impl.cmd.SetProcessDefinitionVersionCmd;
+import io.orqueio.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.repository.ProcessDefinition;
 
 public class MigrateProcessInstanceDelegate implements JavaDelegate {
 

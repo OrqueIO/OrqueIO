@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.impl;
+package io.orqueio.bpm.client.impl;
 
-import org.camunda.bpm.client.exception.RestException;
+import io.orqueio.bpm.client.exception.RestException;
 
 public class EngineRestExceptionDto {
 

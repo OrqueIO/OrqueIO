@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.engine.test.asserts;
+package io.orqueio.bpm.dmn.engine.test.asserts;
 
 import org.assertj.core.api.AbstractListAssert;
-import org.camunda.bpm.dmn.engine.DmnDecisionRuleResult;
-import org.camunda.bpm.dmn.engine.DmnDecisionTableResult;
+import io.orqueio.bpm.dmn.engine.DmnDecisionRuleResult;
+import io.orqueio.bpm.dmn.engine.DmnDecisionTableResult;
 
 public class DmnDecisionTableResultAssert extends AbstractListAssert<DmnDecisionTableResultAssert, DmnDecisionTableResult, DmnDecisionRuleResult, DmnDecisionRuleResultAssert> {
 

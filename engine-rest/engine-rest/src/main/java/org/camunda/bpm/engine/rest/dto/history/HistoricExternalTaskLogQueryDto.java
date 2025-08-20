@@ -14,18 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.dto.history;
+package io.orqueio.bpm.engine.rest.dto.history;
 
 import static java.lang.Boolean.TRUE;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.history.HistoricExternalTaskLogQuery;
-import org.camunda.bpm.engine.rest.dto.AbstractQueryDto;
-import org.camunda.bpm.engine.rest.dto.CamundaQueryParam;
-import org.camunda.bpm.engine.rest.dto.converter.BooleanConverter;
-import org.camunda.bpm.engine.rest.dto.converter.LongConverter;
-import org.camunda.bpm.engine.rest.dto.converter.StringArrayConverter;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.history.HistoricExternalTaskLogQuery;
+import io.orqueio.bpm.engine.rest.dto.AbstractQueryDto;
+import io.orqueio.bpm.engine.rest.dto.CamundaQueryParam;
+import io.orqueio.bpm.engine.rest.dto.converter.BooleanConverter;
+import io.orqueio.bpm.engine.rest.dto.converter.LongConverter;
+import io.orqueio.bpm.engine.rest.dto.converter.StringArrayConverter;
 
 import javax.ws.rs.core.MultivaluedMap;
 import java.util.ArrayList;

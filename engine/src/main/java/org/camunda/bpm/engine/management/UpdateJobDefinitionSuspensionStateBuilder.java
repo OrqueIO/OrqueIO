@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.management;
+package io.orqueio.bpm.engine.management;
 
 import java.util.Date;
 
-import org.camunda.bpm.engine.AuthorizationException;
-import org.camunda.bpm.engine.authorization.Permissions;
-import org.camunda.bpm.engine.authorization.Resources;
+import io.orqueio.bpm.engine.AuthorizationException;
+import io.orqueio.bpm.engine.authorization.Permissions;
+import io.orqueio.bpm.engine.authorization.Resources;
 
 /**
  * Fluent builder to update the suspension state of job definitions.

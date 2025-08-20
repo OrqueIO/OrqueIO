@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.migration.validation.instance;
+package io.orqueio.bpm.engine.impl.migration.validation.instance;
 
-import org.camunda.bpm.engine.impl.migration.instance.MigratingActivityInstance;
-import org.camunda.bpm.engine.impl.migration.instance.MigratingCompensationEventSubscriptionInstance;
-import org.camunda.bpm.engine.impl.migration.instance.MigratingEventScopeInstance;
-import org.camunda.bpm.engine.impl.migration.instance.MigratingProcessElementInstance;
-import org.camunda.bpm.engine.impl.migration.instance.MigratingProcessInstance;
-import org.camunda.bpm.engine.impl.migration.instance.MigratingTransitionInstance;
+import io.orqueio.bpm.engine.impl.migration.instance.MigratingActivityInstance;
+import io.orqueio.bpm.engine.impl.migration.instance.MigratingCompensationEventSubscriptionInstance;
+import io.orqueio.bpm.engine.impl.migration.instance.MigratingEventScopeInstance;
+import io.orqueio.bpm.engine.impl.migration.instance.MigratingProcessElementInstance;
+import io.orqueio.bpm.engine.impl.migration.instance.MigratingProcessInstance;
+import io.orqueio.bpm.engine.impl.migration.instance.MigratingTransitionInstance;
 
 public class NoUnmappedLeafInstanceValidator implements
   MigratingActivityInstanceValidator,

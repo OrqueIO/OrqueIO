@@ -15,21 +15,21 @@
  * limitations under the License.
  */
 
-package org.camunda.bpm.engine.impl;
+package io.orqueio.bpm.engine.impl;
 
-import static org.camunda.bpm.engine.impl.bpmn.parser.BpmnParse.CAMUNDA_BPMN_EXTENSIONS_NS;
+import static io.orqueio.bpm.engine.impl.bpmn.parser.BpmnParse.CAMUNDA_BPMN_EXTENSIONS_NS;
 
 import java.util.Objects;
-import org.camunda.bpm.engine.exception.NotAllowedException;
-import org.camunda.bpm.engine.exception.NotValidException;
-import org.camunda.bpm.engine.impl.cfg.ConfigurationLogger;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.util.ParseUtil;
-import org.camunda.bpm.engine.impl.util.xml.Element;
-import org.camunda.bpm.model.cmmn.instance.Case;
-import org.camunda.bpm.model.dmn.instance.Decision;
+import io.orqueio.bpm.engine.exception.NotAllowedException;
+import io.orqueio.bpm.engine.exception.NotValidException;
+import io.orqueio.bpm.engine.impl.cfg.ConfigurationLogger;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.impl.util.ParseUtil;
+import io.orqueio.bpm.engine.impl.util.xml.Element;
+import io.orqueio.bpm.model.cmmn.instance.Case;
+import io.orqueio.bpm.model.dmn.instance.Decision;
 
 /**
  * Class that encapsulates the business logic of parsing HistoryTimeToLive of different deployable resources (process, definition, case).

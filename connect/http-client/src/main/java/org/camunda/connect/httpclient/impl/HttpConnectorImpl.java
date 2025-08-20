@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.connect.httpclient.impl;
+package io.orqueio.connect.httpclient.impl;
 
 import org.apache.hc.core5.http.ClassicHttpResponse;
-import org.camunda.connect.httpclient.HttpConnector;
-import org.camunda.connect.httpclient.HttpRequest;
-import org.camunda.connect.httpclient.HttpResponse;
+import io.orqueio.connect.httpclient.HttpConnector;
+import io.orqueio.connect.httpclient.HttpRequest;
+import io.orqueio.connect.httpclient.HttpResponse;
 
 public class HttpConnectorImpl extends AbstractHttpConnector<HttpRequest, HttpResponse> implements HttpConnector {
 

@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.deployment.util;
+package io.orqueio.bpm.container.impl.deployment.util;
 
 import java.util.Set;
 
-import org.camunda.bpm.application.ProcessApplicationRegistration;
-import org.camunda.bpm.engine.repository.ProcessApplicationDeployment;
+import io.orqueio.bpm.application.ProcessApplicationRegistration;
+import io.orqueio.bpm.engine.repository.ProcessApplicationDeployment;
 
 /**
  * @author Daniel Meyer

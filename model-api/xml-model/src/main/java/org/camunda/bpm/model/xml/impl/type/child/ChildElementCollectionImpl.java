@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.xml.impl.type.child;
+package io.orqueio.bpm.model.xml.impl.type.child;
 
-import org.camunda.bpm.model.xml.Model;
-import org.camunda.bpm.model.xml.UnsupportedModelOperationException;
-import org.camunda.bpm.model.xml.impl.instance.ModelElementInstanceImpl;
-import org.camunda.bpm.model.xml.impl.type.ModelElementTypeImpl;
-import org.camunda.bpm.model.xml.impl.util.ModelUtil;
-import org.camunda.bpm.model.xml.instance.DomElement;
-import org.camunda.bpm.model.xml.instance.ModelElementInstance;
-import org.camunda.bpm.model.xml.type.ModelElementType;
-import org.camunda.bpm.model.xml.type.child.ChildElementCollection;
+import io.orqueio.bpm.model.xml.Model;
+import io.orqueio.bpm.model.xml.UnsupportedModelOperationException;
+import io.orqueio.bpm.model.xml.impl.instance.ModelElementInstanceImpl;
+import io.orqueio.bpm.model.xml.impl.type.ModelElementTypeImpl;
+import io.orqueio.bpm.model.xml.impl.util.ModelUtil;
+import io.orqueio.bpm.model.xml.instance.DomElement;
+import io.orqueio.bpm.model.xml.instance.ModelElementInstance;
+import io.orqueio.bpm.model.xml.type.ModelElementType;
+import io.orqueio.bpm.model.xml.type.child.ChildElementCollection;
 
 import java.util.Collection;
 import java.util.Iterator;

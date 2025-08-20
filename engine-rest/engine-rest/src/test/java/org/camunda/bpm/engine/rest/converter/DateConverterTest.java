@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.converter;
+package io.orqueio.bpm.engine.rest.converter;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.camunda.bpm.engine.impl.calendar.DateTimeUtil;
-import org.camunda.bpm.engine.rest.dto.converter.DateConverter;
-import org.camunda.bpm.engine.rest.exception.InvalidRequestException;
+import io.orqueio.bpm.engine.impl.calendar.DateTimeUtil;
+import io.orqueio.bpm.engine.rest.dto.converter.DateConverter;
+import io.orqueio.bpm.engine.rest.exception.InvalidRequestException;
 import org.junit.Before;
 import org.junit.Test;
 import static org.mockito.Mockito.anyString;

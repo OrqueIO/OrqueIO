@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.dmn;
+package io.orqueio.bpm.model.dmn;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.camunda.bpm.model.dmn.instance.Decision;
-import org.camunda.bpm.model.dmn.instance.DecisionTable;
-import org.camunda.bpm.model.dmn.instance.InputEntry;
-import org.camunda.bpm.model.dmn.instance.Rule;
+import io.orqueio.bpm.model.dmn.instance.Decision;
+import io.orqueio.bpm.model.dmn.instance.DecisionTable;
+import io.orqueio.bpm.model.dmn.instance.InputEntry;
+import io.orqueio.bpm.model.dmn.instance.Rule;
 import org.junit.Test;
 
 public class DmnWriterTest extends DmnModelTest {

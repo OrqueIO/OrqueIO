@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.dmn;
+package io.orqueio.bpm.model.dmn;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.camunda.bpm.model.dmn.impl.DmnModelConstants;
-import org.camunda.bpm.model.dmn.instance.Definitions;
+import io.orqueio.bpm.model.dmn.impl.DmnModelConstants;
+import io.orqueio.bpm.model.dmn.instance.Definitions;
 import org.junit.Test;
 
 /**

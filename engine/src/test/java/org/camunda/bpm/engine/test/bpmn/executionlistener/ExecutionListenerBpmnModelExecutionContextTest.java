@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.bpmn.executionlistener;
+package io.orqueio.bpm.engine.test.bpmn.executionlistener;
 
-import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -24,27 +24,27 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Collection;
 
-import org.camunda.bpm.engine.delegate.ExecutionListener;
-import org.camunda.bpm.engine.test.util.PluggableProcessEngineTest;
-import org.camunda.bpm.model.bpmn.Bpmn;
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
-import org.camunda.bpm.model.bpmn.instance.BaseElement;
-import org.camunda.bpm.model.bpmn.instance.CatchEvent;
-import org.camunda.bpm.model.bpmn.instance.EndEvent;
-import org.camunda.bpm.model.bpmn.instance.Event;
-import org.camunda.bpm.model.bpmn.instance.ExtensionElements;
-import org.camunda.bpm.model.bpmn.instance.FlowElement;
-import org.camunda.bpm.model.bpmn.instance.Gateway;
-import org.camunda.bpm.model.bpmn.instance.IntermediateCatchEvent;
-import org.camunda.bpm.model.bpmn.instance.Message;
-import org.camunda.bpm.model.bpmn.instance.MessageEventDefinition;
-import org.camunda.bpm.model.bpmn.instance.ParallelGateway;
-import org.camunda.bpm.model.bpmn.instance.SequenceFlow;
-import org.camunda.bpm.model.bpmn.instance.StartEvent;
-import org.camunda.bpm.model.bpmn.instance.Task;
-import org.camunda.bpm.model.bpmn.instance.UserTask;
-import org.camunda.bpm.model.xml.Model;
-import org.camunda.bpm.model.xml.instance.ModelElementInstance;
+import io.orqueio.bpm.engine.delegate.ExecutionListener;
+import io.orqueio.bpm.engine.test.util.PluggableProcessEngineTest;
+import io.orqueio.bpm.model.bpmn.Bpmn;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.bpm.model.bpmn.instance.BaseElement;
+import io.orqueio.bpm.model.bpmn.instance.CatchEvent;
+import io.orqueio.bpm.model.bpmn.instance.EndEvent;
+import io.orqueio.bpm.model.bpmn.instance.Event;
+import io.orqueio.bpm.model.bpmn.instance.ExtensionElements;
+import io.orqueio.bpm.model.bpmn.instance.FlowElement;
+import io.orqueio.bpm.model.bpmn.instance.Gateway;
+import io.orqueio.bpm.model.bpmn.instance.IntermediateCatchEvent;
+import io.orqueio.bpm.model.bpmn.instance.Message;
+import io.orqueio.bpm.model.bpmn.instance.MessageEventDefinition;
+import io.orqueio.bpm.model.bpmn.instance.ParallelGateway;
+import io.orqueio.bpm.model.bpmn.instance.SequenceFlow;
+import io.orqueio.bpm.model.bpmn.instance.StartEvent;
+import io.orqueio.bpm.model.bpmn.instance.Task;
+import io.orqueio.bpm.model.bpmn.instance.UserTask;
+import io.orqueio.bpm.model.xml.Model;
+import io.orqueio.bpm.model.xml.instance.ModelElementInstance;
 import org.junit.After;
 import org.junit.Test;
 

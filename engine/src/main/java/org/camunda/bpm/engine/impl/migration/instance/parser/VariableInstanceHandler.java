@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.migration.instance.parser;
+package io.orqueio.bpm.engine.impl.migration.instance.parser;
 
 import java.util.List;
 
-import org.camunda.bpm.engine.impl.migration.instance.MigratingProcessElementInstance;
-import org.camunda.bpm.engine.impl.migration.instance.MigratingVariableInstance;
-import org.camunda.bpm.engine.impl.persistence.entity.ExecutionEntity;
-import org.camunda.bpm.engine.impl.persistence.entity.VariableInstanceEntity;
+import io.orqueio.bpm.engine.impl.migration.instance.MigratingProcessElementInstance;
+import io.orqueio.bpm.engine.impl.migration.instance.MigratingVariableInstance;
+import io.orqueio.bpm.engine.impl.persistence.entity.ExecutionEntity;
+import io.orqueio.bpm.engine.impl.persistence.entity.VariableInstanceEntity;
 
 /**
  * @author Thorben Lindhauer

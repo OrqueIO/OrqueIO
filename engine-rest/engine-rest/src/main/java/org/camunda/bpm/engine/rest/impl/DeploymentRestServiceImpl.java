@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.impl;
+package io.orqueio.bpm.engine.rest.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.ByteArrayInputStream;
@@ -26,23 +26,23 @@ import java.util.Set;
 import javax.ws.rs.HttpMethod;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.impl.calendar.DateTimeUtil;
-import org.camunda.bpm.engine.repository.Deployment;
-import org.camunda.bpm.engine.repository.DeploymentBuilder;
-import org.camunda.bpm.engine.repository.DeploymentQuery;
-import org.camunda.bpm.engine.repository.DeploymentWithDefinitions;
-import org.camunda.bpm.engine.rest.DeploymentRestService;
-import org.camunda.bpm.engine.rest.dto.CountResultDto;
-import org.camunda.bpm.engine.rest.dto.repository.DeploymentDto;
-import org.camunda.bpm.engine.rest.dto.repository.DeploymentQueryDto;
-import org.camunda.bpm.engine.rest.dto.repository.DeploymentWithDefinitionsDto;
-import org.camunda.bpm.engine.rest.exception.InvalidRequestException;
-import org.camunda.bpm.engine.rest.mapper.MultipartFormData;
-import org.camunda.bpm.engine.rest.mapper.MultipartFormData.FormPart;
-import org.camunda.bpm.engine.rest.sub.repository.DeploymentResource;
-import org.camunda.bpm.engine.rest.sub.repository.impl.DeploymentResourceImpl;
-import org.camunda.bpm.engine.rest.util.QueryUtil;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.impl.calendar.DateTimeUtil;
+import io.orqueio.bpm.engine.repository.Deployment;
+import io.orqueio.bpm.engine.repository.DeploymentBuilder;
+import io.orqueio.bpm.engine.repository.DeploymentQuery;
+import io.orqueio.bpm.engine.repository.DeploymentWithDefinitions;
+import io.orqueio.bpm.engine.rest.DeploymentRestService;
+import io.orqueio.bpm.engine.rest.dto.CountResultDto;
+import io.orqueio.bpm.engine.rest.dto.repository.DeploymentDto;
+import io.orqueio.bpm.engine.rest.dto.repository.DeploymentQueryDto;
+import io.orqueio.bpm.engine.rest.dto.repository.DeploymentWithDefinitionsDto;
+import io.orqueio.bpm.engine.rest.exception.InvalidRequestException;
+import io.orqueio.bpm.engine.rest.mapper.MultipartFormData;
+import io.orqueio.bpm.engine.rest.mapper.MultipartFormData.FormPart;
+import io.orqueio.bpm.engine.rest.sub.repository.DeploymentResource;
+import io.orqueio.bpm.engine.rest.sub.repository.impl.DeploymentResourceImpl;
+import io.orqueio.bpm.engine.rest.util.QueryUtil;
 
 public class DeploymentRestServiceImpl extends AbstractRestProcessEngineAware implements DeploymentRestService {
 

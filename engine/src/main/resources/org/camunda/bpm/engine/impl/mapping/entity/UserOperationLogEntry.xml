@@ -19,11 +19,11 @@
 -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="org.camunda.bpm.engine.impl.history.event.UserOperationLogEntryEventEntity">
+<mapper namespace="io.orqueio.bpm.engine.impl.history.event.UserOperationLogEntryEventEntity">
 
   <!-- OPERATION LOG ENTRY INSERT -->
 
-  <insert id="insertUserOperationLogEntryEvent" parameterType="org.camunda.bpm.engine.impl.history.event.UserOperationLogEntryEventEntity">
+  <insert id="insertUserOperationLogEntryEvent" parameterType="io.orqueio.bpm.engine.impl.history.event.UserOperationLogEntryEventEntity">
       insert into ${prefix}ACT_HI_OP_LOG (
         ID_,
         DEPLOYMENT_ID_,
@@ -244,20 +244,20 @@
 
   <sql id="andWhereMinuteInDateBetweenSql">
     <if test="parameter.minuteFrom != null and parameter.minuteTo != null">
-      AND ${datepart1}<include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.periodUnitFunction"/>${datepart2}${date}${datepart3}
+      AND ${datepart1}<include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.periodUnitFunction"/>${datepart2}${date}${datepart3}
       between #{parameter.minuteFrom, jdbcType=INTEGER} and #{parameter.minuteTo, jdbcType=INTEGER}
     </if>
   </sql>
 
   <sql id="andWhereMinuteInDateBetweenSql_oracle">
     <if test="parameter.minuteFrom != null and parameter.minuteTo != null">
-      AND ${datepart1}${date}${datepart2}<include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.periodUnitFunction"/>${datepart3}
+      AND ${datepart1}${date}${datepart2}<include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.periodUnitFunction"/>${datepart3}
       between #{parameter.minuteFrom, jdbcType=INTEGER} and #{parameter.minuteTo, jdbcType=INTEGER}
     </if>
   </sql>
 
   <delete id="deleteUserOperationLogByRemovalTime"
-          parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject">
+          parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject">
     <bind name="date" value="'REMOVAL_TIME_'"/>
     <bind name="reportPeriodUnitName" value="'MINUTE'"/>
     delete ${limitBeforeWithoutOffset} from ${prefix}ACT_HI_OP_LOG
@@ -267,7 +267,7 @@
   </delete>
 
   <delete id="deleteUserOperationLogByRemovalTime_oracle"
-          parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject">
+          parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject">
     <bind name="date" value="'REMOVAL_TIME_'"/>
     <bind name="reportPeriodUnitName" value="'MINUTE'"/>
     delete ${limitBeforeWithoutOffset} from ${prefix}ACT_HI_OP_LOG
@@ -277,7 +277,7 @@
   </delete>
 
   <delete id="deleteUserOperationLogByRemovalTime_postgres_or_db2"
-          parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject">
+          parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject">
     <bind name="date" value="'REMOVAL_TIME_'"/>
     <bind name="reportPeriodUnitName" value="'MINUTE'"/>
     delete ${limitBeforeWithoutOffset} from ${prefix}ACT_HI_OP_LOG
@@ -290,7 +290,7 @@
 
   <!--OPERATION LOG ENTRY RESULT MAP -->
 
-  <resultMap id="UserOperationLogResultMap" type="org.camunda.bpm.engine.impl.history.event.UserOperationLogEntryEventEntity">
+  <resultMap id="UserOperationLogResultMap" type="io.orqueio.bpm.engine.impl.history.event.UserOperationLogEntryEventEntity">
     <id property="id" column="ID_" jdbcType="VARCHAR" />
     <result property="deploymentId" column="DEPLOYMENT_ID_" jdbcType="VARCHAR" />
     <result property="processDefinitionId" column="PROC_DEF_ID_" jdbcType="VARCHAR" />
@@ -330,8 +330,8 @@
     select * from ${prefix}ACT_HI_OP_LOG where OPERATION_ID_ = #{parameter, jdbcType=VARCHAR}
   </select>
 
-  <select id="selectUserOperationLogEntriesByQueryCriteria" parameterType="org.camunda.bpm.engine.impl.UserOperationLogQueryImpl" resultMap="UserOperationLogResultMap">
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
+  <select id="selectUserOperationLogEntriesByQueryCriteria" parameterType="io.orqueio.bpm.engine.impl.UserOperationLogQueryImpl" resultMap="UserOperationLogResultMap">
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
     ${limitBefore}
     select ${distinct} RES.*
     ${limitBetween}
@@ -340,7 +340,7 @@
     ${limitAfter}
   </select>
 
-  <select id="selectUserOperationLogEntryCountByQueryCriteria" parameterType="org.camunda.bpm.engine.impl.UserOperationLogQueryImpl" resultType="long">
+  <select id="selectUserOperationLogEntryCountByQueryCriteria" parameterType="io.orqueio.bpm.engine.impl.UserOperationLogQueryImpl" resultType="long">
     ${countDistinctBeforeStart} RES.ID_ ${countDistinctBeforeEnd}
     <include refid="selectUserOperationLogEntriesByQueryCriteriaSql"/>
     ${countDistinctAfterEnd}
@@ -350,7 +350,7 @@
     from ${prefix}ACT_HI_OP_LOG RES
 
     <if test="authCheck.shouldPerformAuthorizatioCheck &amp;&amp; !authCheck.revokeAuthorizationCheckEnabled &amp;&amp; authCheck.authUserId != null">
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoinWithoutOnClause"/>
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoinWithoutOnClause"/>
       AUTH ON (AUTH.RESOURCE_ID_ ${authJoinStart}
         RES.PROC_DEF_KEY_ ${authJoinSeparator} RES.CATEGORY_ ${authJoinSeparator} '*'
         <if test="authCheck.isHistoricInstancePermissionsEnabled">
@@ -453,12 +453,12 @@
       <if test="authCheck.shouldPerformAuthorizatioCheck &amp;&amp; authCheck.authUserId != null">
         <!-- may not exist in the context of a process definition -->
           and (
-            <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.queryAuthorizationCheckWithoutPrefix"/>
+            <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.queryAuthorizationCheckWithoutPrefix"/>
             or ( RES.CATEGORY_ IS NULL AND RES.PROC_DEF_KEY_ IS NULL )
           )
       </if>
 
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
 
     </where>
   </sql>

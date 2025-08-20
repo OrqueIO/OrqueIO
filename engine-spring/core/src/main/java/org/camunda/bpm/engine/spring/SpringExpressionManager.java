@@ -14,21 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.spring;
+package io.orqueio.bpm.engine.spring;
 
 import java.util.Map;
-import org.camunda.bpm.engine.impl.el.ExpressionManager;
-import org.camunda.bpm.engine.impl.el.JuelExpressionManager;
-import org.camunda.bpm.engine.impl.el.ReadOnlyMapELResolver;
-import org.camunda.bpm.engine.impl.el.VariableContextElResolver;
-import org.camunda.bpm.engine.impl.el.VariableScopeElResolver;
-import org.camunda.bpm.engine.test.mock.MockElResolver;
-import org.camunda.bpm.impl.juel.jakarta.el.ArrayELResolver;
-import org.camunda.bpm.impl.juel.jakarta.el.BeanELResolver;
-import org.camunda.bpm.impl.juel.jakarta.el.CompositeELResolver;
-import org.camunda.bpm.impl.juel.jakarta.el.ELResolver;
-import org.camunda.bpm.impl.juel.jakarta.el.ListELResolver;
-import org.camunda.bpm.impl.juel.jakarta.el.MapELResolver;
+import io.orqueio.bpm.engine.impl.el.ExpressionManager;
+import io.orqueio.bpm.engine.impl.el.JuelExpressionManager;
+import io.orqueio.bpm.engine.impl.el.ReadOnlyMapELResolver;
+import io.orqueio.bpm.engine.impl.el.VariableContextElResolver;
+import io.orqueio.bpm.engine.impl.el.VariableScopeElResolver;
+import io.orqueio.bpm.engine.test.mock.MockElResolver;
+import io.orqueio.bpm.impl.juel.jakarta.el.ArrayELResolver;
+import io.orqueio.bpm.impl.juel.jakarta.el.BeanELResolver;
+import io.orqueio.bpm.impl.juel.jakarta.el.CompositeELResolver;
+import io.orqueio.bpm.impl.juel.jakarta.el.ELResolver;
+import io.orqueio.bpm.impl.juel.jakarta.el.ListELResolver;
+import io.orqueio.bpm.impl.juel.jakarta.el.MapELResolver;
 import org.springframework.context.ApplicationContext;
 
 

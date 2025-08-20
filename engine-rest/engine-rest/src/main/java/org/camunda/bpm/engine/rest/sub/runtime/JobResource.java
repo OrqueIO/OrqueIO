@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.sub.runtime;
+package io.orqueio.bpm.engine.rest.sub.runtime;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -27,11 +27,11 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import org.camunda.bpm.engine.rest.dto.runtime.JobDto;
-import org.camunda.bpm.engine.rest.dto.runtime.JobDuedateDto;
-import org.camunda.bpm.engine.rest.dto.runtime.PriorityDto;
-import org.camunda.bpm.engine.rest.dto.runtime.RetriesDto;
-import org.camunda.bpm.engine.rest.dto.runtime.JobSuspensionStateDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.JobDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.JobDuedateDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.PriorityDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.RetriesDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.JobSuspensionStateDto;
 
 public interface JobResource {
 

@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.feel.impl;
+package io.orqueio.bpm.dmn.feel.impl;
 
-import org.camunda.bpm.engine.variable.context.VariableContext;
+import io.orqueio.bpm.engine.variable.context.VariableContext;
 
 /**
  * Engine to evaluate FEEL expressions.

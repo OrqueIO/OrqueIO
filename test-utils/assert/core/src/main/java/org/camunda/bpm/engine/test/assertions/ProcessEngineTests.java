@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.assertions;
+package io.orqueio.bpm.engine.test.assertions;
 
 
-import org.camunda.bpm.engine.test.assertions.bpmn.BpmnAwareTests;
-import org.camunda.bpm.engine.test.assertions.cmmn.CmmnAwareTests;
+import io.orqueio.bpm.engine.test.assertions.bpmn.BpmnAwareTests;
+import io.orqueio.bpm.engine.test.assertions.cmmn.CmmnAwareTests;
 
 /**
  * Convenience class to access all available Camunda Platform related
  * Assertions PLUS helper methods. Use it with a static import:
  *
- * import static org.camunda.bpm.engine.test.assertions.ProcessEngineTests.*;
+ * import static io.orqueio.bpm.engine.test.assertions.ProcessEngineTests.*;
  *
  * @see BpmnAwareTests if you only want to see BPMN related functionality
  *

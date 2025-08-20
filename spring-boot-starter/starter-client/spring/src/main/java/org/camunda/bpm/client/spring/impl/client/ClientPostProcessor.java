@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.spring.impl.client;
+package io.orqueio.bpm.client.spring.impl.client;
 
-import org.camunda.bpm.client.ExternalTaskClient;
-import org.camunda.bpm.client.spring.annotation.EnableExternalTaskClient;
-import org.camunda.bpm.client.spring.impl.client.util.ClientLoggerUtil;
-import org.camunda.bpm.client.spring.impl.util.AnnotationUtil;
+import io.orqueio.bpm.client.ExternalTaskClient;
+import io.orqueio.bpm.client.spring.annotation.EnableExternalTaskClient;
+import io.orqueio.bpm.client.spring.impl.client.util.ClientLoggerUtil;
+import io.orqueio.bpm.client.spring.impl.util.AnnotationUtil;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;

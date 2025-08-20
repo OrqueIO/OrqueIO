@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.connect.plugin.util;
+package io.orqueio.connect.plugin.util;
 
 import java.util.Map;
 
-import org.camunda.connect.impl.AbstractConnectorResponse;
+import io.orqueio.connect.impl.AbstractConnectorResponse;
 
 
 /**

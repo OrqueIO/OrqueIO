@@ -12,7 +12,7 @@
 
     <plugins>
       <plugin>
-        <class>org.camunda.bpm.MyAwesomePlugin</class>
+        <class>io.orqueio.bpm.MyAwesomePlugin</class>
         <properties>
           <property name="prop1">val1</property>
           <property name="prop2">val2</property>

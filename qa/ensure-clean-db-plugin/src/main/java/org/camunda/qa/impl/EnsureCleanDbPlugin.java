@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.qa.impl;
+package io.orqueio.qa.impl;
 
-import org.camunda.bpm.BpmPlatform;
-import org.camunda.bpm.application.ProcessApplicationInterface;
-import org.camunda.bpm.container.impl.plugin.BpmPlatformPlugin;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.impl.ManagementServiceImpl;
-import org.camunda.bpm.engine.impl.management.DatabasePurgeReport;
-import org.camunda.bpm.engine.impl.management.PurgeReport;
-import org.camunda.bpm.engine.impl.persistence.deploy.cache.CachePurgeReport;
+import io.orqueio.bpm.BpmPlatform;
+import io.orqueio.bpm.application.ProcessApplicationInterface;
+import io.orqueio.bpm.container.impl.plugin.BpmPlatformPlugin;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.impl.ManagementServiceImpl;
+import io.orqueio.bpm.engine.impl.management.DatabasePurgeReport;
+import io.orqueio.bpm.engine.impl.management.PurgeReport;
+import io.orqueio.bpm.engine.impl.persistence.deploy.cache.CachePurgeReport;
 
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;

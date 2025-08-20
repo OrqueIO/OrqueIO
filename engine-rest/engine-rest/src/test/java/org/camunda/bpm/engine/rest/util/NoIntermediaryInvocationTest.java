@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.util;
+package io.orqueio.bpm.engine.rest.util;
 
-import static org.camunda.bpm.engine.rest.helper.NoIntermediaryInvocation.immediatelyAfter;
+import static io.orqueio.bpm.engine.rest.helper.NoIntermediaryInvocation.immediatelyAfter;
 
 import org.junit.Assert;
 import org.junit.Before;

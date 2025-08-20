@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.feel.impl.juel.el;
+package io.orqueio.bpm.dmn.feel.impl.juel.el;
 
 import java.lang.reflect.Method;
 
-import org.camunda.bpm.impl.juel.jakarta.el.ELContext;
-import org.camunda.bpm.impl.juel.jakarta.el.ExpressionFactory;
+import io.orqueio.bpm.impl.juel.jakarta.el.ELContext;
+import io.orqueio.bpm.impl.juel.jakarta.el.ExpressionFactory;
 
-import org.camunda.bpm.engine.variable.context.VariableContext;
+import io.orqueio.bpm.engine.variable.context.VariableContext;
 
 public interface ElContextFactory {
 

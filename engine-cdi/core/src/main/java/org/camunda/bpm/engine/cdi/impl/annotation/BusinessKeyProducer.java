@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.cdi.impl.annotation;
+package io.orqueio.bpm.engine.cdi.impl.annotation;
 
 import javax.enterprise.inject.Produces;
 import javax.inject.Named;
 
-import org.camunda.bpm.engine.cdi.annotation.BusinessKey;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.cdi.annotation.BusinessKey;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
 
 /**
  * Producer for the current business key.

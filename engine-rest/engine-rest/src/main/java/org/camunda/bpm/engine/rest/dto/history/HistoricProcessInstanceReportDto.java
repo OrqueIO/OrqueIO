@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.dto.history;
+package io.orqueio.bpm.engine.rest.dto.history;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.history.HistoricProcessInstanceReport;
-import org.camunda.bpm.engine.rest.dto.AbstractReportDto;
-import org.camunda.bpm.engine.rest.dto.CamundaQueryParam;
-import org.camunda.bpm.engine.rest.dto.converter.DateConverter;
-import org.camunda.bpm.engine.rest.dto.converter.StringArrayConverter;
-import org.camunda.bpm.engine.rest.exception.InvalidRequestException;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.history.HistoricProcessInstanceReport;
+import io.orqueio.bpm.engine.rest.dto.AbstractReportDto;
+import io.orqueio.bpm.engine.rest.dto.CamundaQueryParam;
+import io.orqueio.bpm.engine.rest.dto.converter.DateConverter;
+import io.orqueio.bpm.engine.rest.dto.converter.StringArrayConverter;
+import io.orqueio.bpm.engine.rest.exception.InvalidRequestException;
 
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;

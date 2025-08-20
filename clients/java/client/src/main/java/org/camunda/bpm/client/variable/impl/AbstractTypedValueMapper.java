@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.variable.impl;
+package io.orqueio.bpm.client.variable.impl;
 
-import org.camunda.bpm.engine.variable.type.ValueType;
-import org.camunda.bpm.engine.variable.value.TypedValue;
+import io.orqueio.bpm.engine.variable.type.ValueType;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
 
 public abstract class AbstractTypedValueMapper<T extends TypedValue> implements ValueMapper<T> {
 

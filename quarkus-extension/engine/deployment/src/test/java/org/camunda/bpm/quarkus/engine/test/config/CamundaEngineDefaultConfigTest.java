@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.quarkus.engine.test.config;
+package io.orqueio.bpm.quarkus.engine.test.config;
 
 import io.quarkus.test.QuarkusUnitTest;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.impl.history.HistoryLevel;
-import org.camunda.bpm.engine.impl.persistence.StrongUuidGenerator;
-import org.camunda.bpm.quarkus.engine.extension.QuarkusProcessEngineConfiguration;
-import org.camunda.bpm.quarkus.engine.test.helper.ProcessEngineAwareExtension;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.impl.history.HistoryLevel;
+import io.orqueio.bpm.engine.impl.persistence.StrongUuidGenerator;
+import io.orqueio.bpm.quarkus.engine.extension.QuarkusProcessEngineConfiguration;
+import io.orqueio.bpm.quarkus.engine.test.helper.ProcessEngineAwareExtension;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.jupiter.api.Test;
@@ -32,7 +32,7 @@ import jakarta.enterprise.inject.Produces;
 import jakarta.inject.Inject;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.camunda.bpm.engine.ProcessEngineConfiguration.DB_SCHEMA_UPDATE_TRUE;
+import static io.orqueio.bpm.engine.ProcessEngineConfiguration.DB_SCHEMA_UPDATE_TRUE;
 
 public class CamundaEngineDefaultConfigTest {
 

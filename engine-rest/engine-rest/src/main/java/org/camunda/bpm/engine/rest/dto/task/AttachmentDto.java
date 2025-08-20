@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.dto.task;
+package io.orqueio.bpm.engine.rest.dto.task;
 
 import java.util.Date;
 
-import org.camunda.bpm.engine.rest.dto.LinkableDto;
-import org.camunda.bpm.engine.task.Attachment;
+import io.orqueio.bpm.engine.rest.dto.LinkableDto;
+import io.orqueio.bpm.engine.task.Attachment;
 
 public class AttachmentDto extends LinkableDto {
 

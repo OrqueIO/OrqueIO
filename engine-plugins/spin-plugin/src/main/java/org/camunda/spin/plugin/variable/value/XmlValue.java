@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.plugin.variable.value;
+package io.orqueio.spin.plugin.variable.value;
 
-import org.camunda.spin.spi.DataFormat;
-import org.camunda.spin.xml.SpinXmlElement;
+import io.orqueio.spin.spi.DataFormat;
+import io.orqueio.spin.xml.SpinXmlElement;
 
 
 /**

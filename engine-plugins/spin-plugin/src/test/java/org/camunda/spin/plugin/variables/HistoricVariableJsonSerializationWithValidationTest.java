@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.plugin.variables;
+package io.orqueio.spin.plugin.variables;
 
 import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import org.camunda.bpm.engine.runtime.DeserializationTypeValidator;
+import io.orqueio.bpm.engine.runtime.DeserializationTypeValidator;
 import org.junit.Before;
 
 public class HistoricVariableJsonSerializationWithValidationTest extends HistoricVariableJsonSerializationTest {

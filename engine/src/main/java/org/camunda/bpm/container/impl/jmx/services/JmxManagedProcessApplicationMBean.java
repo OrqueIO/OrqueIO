@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.jmx.services;
+package io.orqueio.bpm.container.impl.jmx.services;
 
 import java.util.List;
 
-import org.camunda.bpm.application.AbstractProcessApplication;
+import io.orqueio.bpm.application.AbstractProcessApplication;
 
 /**
  * MBean interface for {@link AbstractProcessApplication ProcessApplications}. This

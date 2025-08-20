@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.bpmn.parser;
+package io.orqueio.bpm.engine.impl.bpmn.parser;
 
 import java.util.List;
 
-import org.camunda.bpm.engine.impl.core.variable.mapping.IoMapping;
-import org.camunda.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity;
-import org.camunda.bpm.engine.impl.pvm.process.ActivityImpl;
-import org.camunda.bpm.engine.impl.pvm.process.ScopeImpl;
-import org.camunda.bpm.engine.impl.pvm.process.TransitionImpl;
-import org.camunda.bpm.engine.impl.util.xml.Element;
-import org.camunda.bpm.engine.impl.variable.VariableDeclaration;
+import io.orqueio.bpm.engine.impl.core.variable.mapping.IoMapping;
+import io.orqueio.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity;
+import io.orqueio.bpm.engine.impl.pvm.process.ActivityImpl;
+import io.orqueio.bpm.engine.impl.pvm.process.ScopeImpl;
+import io.orqueio.bpm.engine.impl.pvm.process.TransitionImpl;
+import io.orqueio.bpm.engine.impl.util.xml.Element;
+import io.orqueio.bpm.engine.impl.variable.VariableDeclaration;
 
 /**
  * Abstract base class for implementing a {@link BpmnParseListener} without being forced to implement

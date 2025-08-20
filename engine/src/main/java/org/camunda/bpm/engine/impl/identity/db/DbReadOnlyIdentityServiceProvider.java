@@ -14,35 +14,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.identity.db;
+package io.orqueio.bpm.engine.impl.identity.db;
 
-import static org.camunda.bpm.engine.impl.util.EncryptionUtil.saltPassword;
+import static io.orqueio.bpm.engine.impl.util.EncryptionUtil.saltPassword;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.engine.authorization.Permission;
-import org.camunda.bpm.engine.authorization.Permissions;
-import org.camunda.bpm.engine.authorization.Resource;
-import org.camunda.bpm.engine.authorization.Resources;
-import org.camunda.bpm.engine.identity.Group;
-import org.camunda.bpm.engine.identity.GroupQuery;
-import org.camunda.bpm.engine.identity.NativeUserQuery;
-import org.camunda.bpm.engine.identity.Tenant;
-import org.camunda.bpm.engine.identity.TenantQuery;
-import org.camunda.bpm.engine.identity.User;
-import org.camunda.bpm.engine.identity.UserQuery;
-import org.camunda.bpm.engine.impl.AbstractQuery;
-import org.camunda.bpm.engine.impl.NativeUserQueryImpl;
-import org.camunda.bpm.engine.impl.UserQueryImpl;
-import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.engine.impl.identity.ReadOnlyIdentityProvider;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.persistence.AbstractManager;
-import org.camunda.bpm.engine.impl.persistence.entity.GroupEntity;
-import org.camunda.bpm.engine.impl.persistence.entity.TenantEntity;
-import org.camunda.bpm.engine.impl.persistence.entity.UserEntity;
+import io.orqueio.bpm.engine.authorization.Permission;
+import io.orqueio.bpm.engine.authorization.Permissions;
+import io.orqueio.bpm.engine.authorization.Resource;
+import io.orqueio.bpm.engine.authorization.Resources;
+import io.orqueio.bpm.engine.identity.Group;
+import io.orqueio.bpm.engine.identity.GroupQuery;
+import io.orqueio.bpm.engine.identity.NativeUserQuery;
+import io.orqueio.bpm.engine.identity.Tenant;
+import io.orqueio.bpm.engine.identity.TenantQuery;
+import io.orqueio.bpm.engine.identity.User;
+import io.orqueio.bpm.engine.identity.UserQuery;
+import io.orqueio.bpm.engine.impl.AbstractQuery;
+import io.orqueio.bpm.engine.impl.NativeUserQueryImpl;
+import io.orqueio.bpm.engine.impl.UserQueryImpl;
+import io.orqueio.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.impl.identity.ReadOnlyIdentityProvider;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.impl.persistence.AbstractManager;
+import io.orqueio.bpm.engine.impl.persistence.entity.GroupEntity;
+import io.orqueio.bpm.engine.impl.persistence.entity.TenantEntity;
+import io.orqueio.bpm.engine.impl.persistence.entity.UserEntity;
 
 /**
  * <p>Read only implementation of DB-backed identity service</p>

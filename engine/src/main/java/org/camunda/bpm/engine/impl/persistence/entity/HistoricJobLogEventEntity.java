@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.persistence.entity;
+package io.orqueio.bpm.engine.impl.persistence.entity;
 
-import org.camunda.bpm.engine.history.HistoricJobLog;
-import org.camunda.bpm.engine.impl.history.event.HistoricJobLogEvent;
+import io.orqueio.bpm.engine.history.HistoricJobLog;
+import io.orqueio.bpm.engine.impl.history.event.HistoricJobLogEvent;
 
 /**
  * @author Roman Smirnov

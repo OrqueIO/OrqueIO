@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.dto.task;
+package io.orqueio.bpm.engine.rest.dto.task;
 
 import java.util.Date;
 
-import org.camunda.bpm.engine.BadUserRequestException;
-import org.camunda.bpm.engine.form.CamundaFormRef;
-import org.camunda.bpm.engine.rest.dto.converter.DelegationStateConverter;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.task.DelegationState;
-import org.camunda.bpm.engine.task.Task;
+import io.orqueio.bpm.engine.BadUserRequestException;
+import io.orqueio.bpm.engine.form.CamundaFormRef;
+import io.orqueio.bpm.engine.rest.dto.converter.DelegationStateConverter;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.task.DelegationState;
+import io.orqueio.bpm.engine.task.Task;
 
 public class TaskDto {
 

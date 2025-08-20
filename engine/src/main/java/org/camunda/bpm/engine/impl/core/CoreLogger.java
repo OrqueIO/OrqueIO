@@ -14,18 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.core;
+package io.orqueio.bpm.engine.impl.core;
 
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
-import org.camunda.bpm.engine.impl.core.instance.CoreExecution;
-import org.camunda.bpm.engine.impl.core.operation.CoreAtomicOperation;
-import org.camunda.bpm.engine.impl.core.variable.CoreVariableInstance;
-import org.camunda.bpm.engine.impl.core.variable.scope.AbstractVariableScope;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
+import io.orqueio.bpm.engine.impl.core.instance.CoreExecution;
+import io.orqueio.bpm.engine.impl.core.operation.CoreAtomicOperation;
+import io.orqueio.bpm.engine.impl.core.variable.CoreVariableInstance;
+import io.orqueio.bpm.engine.impl.core.variable.scope.AbstractVariableScope;
 
 import java.text.MessageFormat;
 
-import static org.camunda.bpm.engine.impl.core.variable.VariableUtil.ERROR_MSG;
+import static io.orqueio.bpm.engine.impl.core.variable.VariableUtil.ERROR_MSG;
 
 /**
  * @author Daniel Meyer

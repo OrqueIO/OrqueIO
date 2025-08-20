@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.bpmn.event.compensate;
+package io.orqueio.bpm.engine.test.bpmn.event.compensate;
 
-import static org.camunda.bpm.engine.test.util.ActivityInstanceAssert.assertThat;
-import static org.camunda.bpm.engine.test.util.ActivityInstanceAssert.describeActivityInstanceTree;
-import static org.camunda.bpm.engine.test.util.ExecutionAssert.assertThat;
-import static org.camunda.bpm.engine.test.util.ExecutionAssert.describeExecutionTree;
+import static io.orqueio.bpm.engine.test.util.ActivityInstanceAssert.assertThat;
+import static io.orqueio.bpm.engine.test.util.ActivityInstanceAssert.describeActivityInstanceTree;
+import static io.orqueio.bpm.engine.test.util.ExecutionAssert.assertThat;
+import static io.orqueio.bpm.engine.test.util.ExecutionAssert.describeExecutionTree;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -32,29 +32,29 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.engine.ProcessEngineConfiguration;
-import org.camunda.bpm.engine.history.HistoricActivityInstance;
-import org.camunda.bpm.engine.history.HistoricVariableInstanceQuery;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.event.EventType;
-import org.camunda.bpm.engine.impl.util.ClockUtil;
-import org.camunda.bpm.engine.runtime.ActivityInstance;
-import org.camunda.bpm.engine.runtime.EventSubscription;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.task.Task;
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.engine.test.RequiredHistoryLevel;
-import org.camunda.bpm.engine.test.api.runtime.migration.ModifiableBpmnModelInstance;
-import org.camunda.bpm.engine.test.bpmn.event.compensate.ReadLocalVariableListener.VariableEvent;
-import org.camunda.bpm.engine.test.bpmn.event.compensate.helper.BookFlightService;
-import org.camunda.bpm.engine.test.bpmn.event.compensate.helper.CancelFlightService;
-import org.camunda.bpm.engine.test.bpmn.event.compensate.helper.GetVariablesDelegate;
-import org.camunda.bpm.engine.test.bpmn.event.compensate.helper.SetVariablesDelegate;
-import org.camunda.bpm.engine.test.util.ExecutionTree;
-import org.camunda.bpm.engine.test.util.PluggableProcessEngineTest;
-import org.camunda.bpm.engine.variable.Variables;
-import org.camunda.bpm.model.bpmn.Bpmn;
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.bpm.engine.ProcessEngineConfiguration;
+import io.orqueio.bpm.engine.history.HistoricActivityInstance;
+import io.orqueio.bpm.engine.history.HistoricVariableInstanceQuery;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.event.EventType;
+import io.orqueio.bpm.engine.impl.util.ClockUtil;
+import io.orqueio.bpm.engine.runtime.ActivityInstance;
+import io.orqueio.bpm.engine.runtime.EventSubscription;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.task.Task;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.test.RequiredHistoryLevel;
+import io.orqueio.bpm.engine.test.api.runtime.migration.ModifiableBpmnModelInstance;
+import io.orqueio.bpm.engine.test.bpmn.event.compensate.ReadLocalVariableListener.VariableEvent;
+import io.orqueio.bpm.engine.test.bpmn.event.compensate.helper.BookFlightService;
+import io.orqueio.bpm.engine.test.bpmn.event.compensate.helper.CancelFlightService;
+import io.orqueio.bpm.engine.test.bpmn.event.compensate.helper.GetVariablesDelegate;
+import io.orqueio.bpm.engine.test.bpmn.event.compensate.helper.SetVariablesDelegate;
+import io.orqueio.bpm.engine.test.util.ExecutionTree;
+import io.orqueio.bpm.engine.test.util.PluggableProcessEngineTest;
+import io.orqueio.bpm.engine.variable.Variables;
+import io.orqueio.bpm.model.bpmn.Bpmn;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -71,13 +71,13 @@ public class CompensateEventTest extends PluggableProcessEngineTest {
     final String PROCESS_MODEL_WITH_REF_AFTER = "org/camunda/bpm/engine/test/bpmn/event/compensate/compensation_reference-after.bpmn";
 
     //when model with ref before is deployed
-    org.camunda.bpm.engine.repository.Deployment deployment1 = repositoryService.createDeployment()
+    io.orqueio.bpm.engine.repository.Deployment deployment1 = repositoryService.createDeployment()
             .addClasspathResource(PROCESS_MODEL_WITH_REF_BEFORE)
             .deploy();
     //then no problem will occure
 
     //when model with ref after is deployed
-    org.camunda.bpm.engine.repository.Deployment deployment2 = repositoryService.createDeployment()
+    io.orqueio.bpm.engine.repository.Deployment deployment2 = repositoryService.createDeployment()
             .addClasspathResource(PROCESS_MODEL_WITH_REF_AFTER)
             .deploy();
     //then also no problem should occure

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.standalone.history;
+package io.orqueio.bpm.engine.test.standalone.history;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.entry;
@@ -22,11 +22,11 @@ import static org.assertj.core.api.Assertions.entry;
 import java.util.Map;
 
 import ch.qos.logback.classic.Level;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.ProcessEngineConfiguration;
-import org.camunda.bpm.engine.batch.Batch;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.commons.testing.ProcessEngineLoggingRule;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.ProcessEngineConfiguration;
+import io.orqueio.bpm.engine.batch.Batch;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.commons.testing.ProcessEngineLoggingRule;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -37,7 +37,7 @@ public class HistoryCleanupBatchTest {
   protected static final String PROCESS_ENGINE_CONFIG =
       "org/camunda/bpm/engine/test/standalone/history/camunda.cfg.xml";
 
-  protected static final String CONFIG_LOGGER = "org.camunda.bpm.engine.cfg";
+  protected static final String CONFIG_LOGGER = "io.orqueio.bpm.engine.cfg";
 
   @Rule
   public ProcessEngineLoggingRule loggingRule = new ProcessEngineLoggingRule()

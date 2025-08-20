@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.engine.delegate;
+package io.orqueio.bpm.dmn.engine.delegate;
 
-import org.camunda.bpm.dmn.engine.DmnDecision;
+import io.orqueio.bpm.dmn.engine.DmnDecision;
 
 /**
  * Event which represents the evaluation of a decision.

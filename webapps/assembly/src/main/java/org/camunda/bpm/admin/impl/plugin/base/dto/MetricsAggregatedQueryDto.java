@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.admin.impl.plugin.base.dto;
+package io.orqueio.bpm.admin.impl.plugin.base.dto;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.camunda.bpm.engine.impl.util.ClockUtil;
-import org.camunda.bpm.webapp.rest.dto.AbstractRestQueryParametersDto;
-import org.camunda.bpm.engine.impl.metrics.util.MetricsUtil;
-import org.camunda.bpm.engine.management.Metrics;
-import org.camunda.bpm.engine.rest.dto.CamundaQueryParam;
-import org.camunda.bpm.engine.rest.dto.converter.DateConverter;
-import org.camunda.bpm.engine.rest.dto.converter.StringListConverter;
-import org.camunda.bpm.engine.rest.exception.InvalidRequestException;
+import io.orqueio.bpm.engine.impl.util.ClockUtil;
+import io.orqueio.bpm.webapp.rest.dto.AbstractRestQueryParametersDto;
+import io.orqueio.bpm.engine.impl.metrics.util.MetricsUtil;
+import io.orqueio.bpm.engine.management.Metrics;
+import io.orqueio.bpm.engine.rest.dto.CamundaQueryParam;
+import io.orqueio.bpm.engine.rest.dto.converter.DateConverter;
+import io.orqueio.bpm.engine.rest.dto.converter.StringListConverter;
+import io.orqueio.bpm.engine.rest.exception.InvalidRequestException;
 
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;

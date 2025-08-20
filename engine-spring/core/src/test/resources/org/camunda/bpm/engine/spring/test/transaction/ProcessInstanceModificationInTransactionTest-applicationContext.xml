@@ -17,10 +17,10 @@
   </bean>
 
   <!-- bind the process engine service as Spring Bean -->
-  <bean name="processEngineService" class="org.camunda.bpm.BpmPlatform" factory-method="getProcessEngineService"/>
+  <bean name="processEngineService" class="io.orqueio.bpm.BpmPlatform" factory-method="getProcessEngineService"/>
 
   <bean id="processEngineConfiguration"
-        class="org.camunda.bpm.engine.spring.SpringProcessEngineConfiguration">
+        class="io.orqueio.bpm.engine.spring.SpringProcessEngineConfiguration">
     <property name="dataSource" ref="dataSource"/>
     <property name="transactionManager" ref="transactionManager"/>
     <property name="databaseSchemaUpdate" value="true"/>
@@ -31,14 +31,14 @@
 
   </bean>
 
-  <bean id="processEngineRule" class="org.camunda.bpm.engine.test.ProcessEngineRule">
+  <bean id="processEngineRule" class="io.orqueio.bpm.engine.test.ProcessEngineRule">
     <property name="processEngine" ref="processEngine"/>
   </bean>
 
 
   <!-- bind the default process engine as Spring Bean -->
   <bean id="processEngine"
-        class="org.camunda.bpm.engine.spring.ProcessEngineFactoryBean">
+        class="io.orqueio.bpm.engine.spring.ProcessEngineFactoryBean">
     <property name="processEngineConfiguration" ref="processEngineConfiguration"/>
   </bean>
 
@@ -51,9 +51,9 @@
   <context:annotation-config/>
 
 
-  <bean id="userBean" class="org.camunda.bpm.engine.spring.test.transaction.modification.UserBean"></bean>
-  <bean id="deleteVariableListener" class="org.camunda.bpm.engine.spring.test.transaction.modification.DeleteVariableListener"></bean>
-  <bean id="calculateTimerDate" class="org.camunda.bpm.engine.spring.test.transaction.modification.CalculateTimerDate"></bean>
+  <bean id="userBean" class="io.orqueio.bpm.engine.spring.test.transaction.modification.UserBean"></bean>
+  <bean id="deleteVariableListener" class="io.orqueio.bpm.engine.spring.test.transaction.modification.DeleteVariableListener"></bean>
+  <bean id="calculateTimerDate" class="io.orqueio.bpm.engine.spring.test.transaction.modification.CalculateTimerDate"></bean>
 
   <tx:annotation-driven transaction-manager="transactionManager"/>
 

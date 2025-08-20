@@ -14,20 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.application;
+package io.orqueio.bpm.application;
 
 import java.util.Map;
 import java.util.concurrent.Callable;
 
-import org.camunda.bpm.ProcessApplicationService;
-import org.camunda.bpm.application.impl.EjbProcessApplication;
-import org.camunda.bpm.application.impl.EmbeddedProcessApplication;
-import org.camunda.bpm.application.impl.ServletProcessApplication;
-import org.camunda.bpm.engine.delegate.ExecutionListener;
-import org.camunda.bpm.engine.delegate.TaskListener;
-import org.camunda.bpm.impl.juel.jakarta.el.BeanELResolver;
-import org.camunda.bpm.impl.juel.jakarta.el.ELResolver;
-import org.camunda.bpm.engine.repository.DeploymentBuilder;
+import io.orqueio.bpm.ProcessApplicationService;
+import io.orqueio.bpm.application.impl.EjbProcessApplication;
+import io.orqueio.bpm.application.impl.EmbeddedProcessApplication;
+import io.orqueio.bpm.application.impl.ServletProcessApplication;
+import io.orqueio.bpm.engine.delegate.ExecutionListener;
+import io.orqueio.bpm.engine.delegate.TaskListener;
+import io.orqueio.bpm.impl.juel.jakarta.el.BeanELResolver;
+import io.orqueio.bpm.impl.juel.jakarta.el.ELResolver;
+import io.orqueio.bpm.engine.repository.DeploymentBuilder;
 
 /**
  * <p>A Process Application is an ordinary Java Application that uses the camunda process engine for
@@ -70,7 +70,7 @@ import org.camunda.bpm.engine.repository.DeploymentBuilder;
  *  <li> {@link EjbProcessApplication}: To be used in a Java EE application server.
  *  Use the JakartaEjbProcessApplication in a Jakarta EE 9+ application server.</li>
  *  <li> {@link EmbeddedProcessApplication}: To be used when embedding the process engine is an ordinary Java SE application.</li>
- *  <li> org.camunda.bpm.engine.spring.application.SpringProcessApplication: To be used for bootstrapping the process application from a Spring Application Context.</li>
+ *  <li> io.orqueio.bpm.engine.spring.application.SpringProcessApplication: To be used for bootstrapping the process application from a Spring Application Context.</li>
  * </ul>
  * </li>
  * <li>A processes.xml file to META-INF: The deployment descriptor file allows to provide a declarative

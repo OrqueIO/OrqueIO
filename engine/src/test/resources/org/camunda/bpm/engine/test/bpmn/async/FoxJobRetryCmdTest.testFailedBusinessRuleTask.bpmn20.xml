@@ -11,7 +11,7 @@
 		<sequenceFlow id="flow1" sourceRef="theStart" targetRef="failingBusinessRuleTask" />
 		
 		<businessRuleTask id="failingBusinessRuleTask" name="business rule task" 
-						  camunda:class="org.camunda.bpm.engine.test.cmd.FailingDelegate"
+						  camunda:class="io.orqueio.bpm.engine.test.cmd.FailingDelegate"
 						  camunda:async="true">
  		<extensionElements>
 	       		<fox:failedJobRetryTimeCycle>R5/PT5M</fox:failedJobRetryTimeCycle>

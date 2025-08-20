@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.persistence.entity;
+package io.orqueio.bpm.engine.impl.persistence.entity;
 
-import org.camunda.bpm.engine.authorization.Authorization;
-import org.camunda.bpm.engine.authorization.Permissions;
-import org.camunda.bpm.engine.authorization.Resources;
-import org.camunda.bpm.engine.history.DurationReportResult;
-import org.camunda.bpm.engine.history.HistoricTaskInstanceReportResult;
-import org.camunda.bpm.engine.impl.HistoricTaskInstanceReportImpl;
-import org.camunda.bpm.engine.impl.TaskReportImpl;
-import org.camunda.bpm.engine.impl.persistence.AbstractManager;
-import org.camunda.bpm.engine.task.TaskCountByCandidateGroupResult;
+import io.orqueio.bpm.engine.authorization.Authorization;
+import io.orqueio.bpm.engine.authorization.Permissions;
+import io.orqueio.bpm.engine.authorization.Resources;
+import io.orqueio.bpm.engine.history.DurationReportResult;
+import io.orqueio.bpm.engine.history.HistoricTaskInstanceReportResult;
+import io.orqueio.bpm.engine.impl.HistoricTaskInstanceReportImpl;
+import io.orqueio.bpm.engine.impl.TaskReportImpl;
+import io.orqueio.bpm.engine.impl.persistence.AbstractManager;
+import io.orqueio.bpm.engine.task.TaskCountByCandidateGroupResult;
 
 import java.util.List;
 

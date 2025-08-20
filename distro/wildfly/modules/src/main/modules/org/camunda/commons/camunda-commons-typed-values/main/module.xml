@@ -1,4 +1,4 @@
-<module xmlns="urn:jboss:module:1.0" name="org.camunda.commons.camunda-commons-typed-values">
+<module xmlns="urn:jboss:module:1.0" name="io.orqueio.commons.camunda-commons-typed-values">
   <resources>
     <resource-root path="camunda-commons-typed-values-@project.version@.jar" />
   </resources>
@@ -9,7 +9,7 @@
     <module name="java.desktop" />
     <module name="java.logging"/>
     
-    <module name="org.camunda.commons.camunda-commons-utils" />
+    <module name="io.orqueio.commons.camunda-commons-utils" />
     
   </dependencies>
 </module>

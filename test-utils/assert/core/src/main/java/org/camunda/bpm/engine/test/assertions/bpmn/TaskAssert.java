@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.assertions.bpmn;
+package io.orqueio.bpm.engine.test.assertions.bpmn;
 
 import java.util.Date;
 
 import org.assertj.core.api.Assertions;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.task.Task;
-import org.camunda.bpm.engine.task.TaskQuery;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.task.Task;
+import io.orqueio.bpm.engine.task.TaskQuery;
 
 /**
  * Assertions for a {@link Task}.

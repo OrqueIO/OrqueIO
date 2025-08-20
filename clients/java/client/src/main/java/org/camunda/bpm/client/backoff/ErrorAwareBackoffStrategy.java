@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.backoff;
+package io.orqueio.bpm.client.backoff;
 
-import org.camunda.bpm.client.exception.BadRequestException;
-import org.camunda.bpm.client.exception.ConnectionLostException;
-import org.camunda.bpm.client.exception.EngineException;
-import org.camunda.bpm.client.exception.ExternalTaskClientException;
-import org.camunda.bpm.client.exception.NotFoundException;
-import org.camunda.bpm.client.exception.UnknownHttpErrorException;
-import org.camunda.bpm.client.task.ExternalTask;
+import io.orqueio.bpm.client.exception.BadRequestException;
+import io.orqueio.bpm.client.exception.ConnectionLostException;
+import io.orqueio.bpm.client.exception.EngineException;
+import io.orqueio.bpm.client.exception.ExternalTaskClientException;
+import io.orqueio.bpm.client.exception.NotFoundException;
+import io.orqueio.bpm.client.exception.UnknownHttpErrorException;
+import io.orqueio.bpm.client.task.ExternalTask;
 
 import java.util.List;
 

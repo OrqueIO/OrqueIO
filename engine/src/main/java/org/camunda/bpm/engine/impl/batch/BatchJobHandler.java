@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.batch;
+package io.orqueio.bpm.engine.impl.batch;
 
-import org.camunda.bpm.engine.impl.jobexecutor.JobDeclaration;
-import org.camunda.bpm.engine.impl.jobexecutor.JobHandler;
-import org.camunda.bpm.engine.impl.persistence.entity.MessageEntity;
+import io.orqueio.bpm.engine.impl.jobexecutor.JobDeclaration;
+import io.orqueio.bpm.engine.impl.jobexecutor.JobHandler;
+import io.orqueio.bpm.engine.impl.persistence.entity.MessageEntity;
 
 /**
  * A batch job handler manages batch jobs based

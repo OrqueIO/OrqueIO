@@ -14,18 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.functional.spin;
+package io.orqueio.bpm.integrationtest.functional.spin;
 
-import org.camunda.bpm.application.ProcessApplicationContext;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.variable.Variables;
-import org.camunda.bpm.engine.variable.value.ObjectValue;
-import org.camunda.bpm.integrationtest.functional.spin.dataformat.Foo;
-import org.camunda.bpm.integrationtest.functional.spin.dataformat.FooDataFormat;
-import org.camunda.bpm.integrationtest.functional.spin.dataformat.FooDataFormatProvider;
-import org.camunda.bpm.integrationtest.functional.spin.dataformat.FooSpin;
-import org.camunda.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
-import org.camunda.spin.spi.DataFormatProvider;
+import io.orqueio.bpm.application.ProcessApplicationContext;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.variable.Variables;
+import io.orqueio.bpm.engine.variable.value.ObjectValue;
+import io.orqueio.bpm.integrationtest.functional.spin.dataformat.Foo;
+import io.orqueio.bpm.integrationtest.functional.spin.dataformat.FooDataFormat;
+import io.orqueio.bpm.integrationtest.functional.spin.dataformat.FooDataFormatProvider;
+import io.orqueio.bpm.integrationtest.functional.spin.dataformat.FooSpin;
+import io.orqueio.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
+import io.orqueio.spin.spi.DataFormatProvider;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -34,7 +34,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static org.camunda.bpm.engine.variable.Variables.serializedObjectValue;
+import static io.orqueio.bpm.engine.variable.Variables.serializedObjectValue;
 
 /**
  * @author Thorben Lindhauer

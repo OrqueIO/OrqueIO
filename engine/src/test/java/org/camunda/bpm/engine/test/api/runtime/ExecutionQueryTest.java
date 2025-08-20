@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.runtime;
+package io.orqueio.bpm.engine.test.api.runtime;
 
-import static org.camunda.bpm.engine.test.api.runtime.TestOrderingUtil.executionByProcessDefinitionId;
-import static org.camunda.bpm.engine.test.api.runtime.TestOrderingUtil.executionByProcessDefinitionKey;
-import static org.camunda.bpm.engine.test.api.runtime.TestOrderingUtil.executionByProcessInstanceId;
-import static org.camunda.bpm.engine.test.api.runtime.TestOrderingUtil.hierarchical;
-import static org.camunda.bpm.engine.test.api.runtime.TestOrderingUtil.inverted;
-import static org.camunda.bpm.engine.test.api.runtime.TestOrderingUtil.verifySorting;
+import static io.orqueio.bpm.engine.test.api.runtime.TestOrderingUtil.executionByProcessDefinitionId;
+import static io.orqueio.bpm.engine.test.api.runtime.TestOrderingUtil.executionByProcessDefinitionKey;
+import static io.orqueio.bpm.engine.test.api.runtime.TestOrderingUtil.executionByProcessInstanceId;
+import static io.orqueio.bpm.engine.test.api.runtime.TestOrderingUtil.hierarchical;
+import static io.orqueio.bpm.engine.test.api.runtime.TestOrderingUtil.inverted;
+import static io.orqueio.bpm.engine.test.api.runtime.TestOrderingUtil.verifySorting;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
@@ -39,17 +39,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.impl.persistence.entity.ExecutionEntity;
-import org.camunda.bpm.engine.repository.ProcessDefinitionQuery;
-import org.camunda.bpm.engine.runtime.EventSubscription;
-import org.camunda.bpm.engine.runtime.Execution;
-import org.camunda.bpm.engine.runtime.ExecutionQuery;
-import org.camunda.bpm.engine.runtime.Incident;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.engine.test.util.PluggableProcessEngineTest;
-import org.camunda.bpm.engine.variable.Variables;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.impl.persistence.entity.ExecutionEntity;
+import io.orqueio.bpm.engine.repository.ProcessDefinitionQuery;
+import io.orqueio.bpm.engine.runtime.EventSubscription;
+import io.orqueio.bpm.engine.runtime.Execution;
+import io.orqueio.bpm.engine.runtime.ExecutionQuery;
+import io.orqueio.bpm.engine.runtime.Incident;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.test.util.PluggableProcessEngineTest;
+import io.orqueio.bpm.engine.variable.Variables;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -87,7 +87,7 @@ public class ExecutionQueryTest extends PluggableProcessEngineTest {
 
   @After
   public void tearDown() throws Exception {
-    for (org.camunda.bpm.engine.repository.Deployment deployment : repositoryService.createDeploymentQuery().list()) {
+    for (io.orqueio.bpm.engine.repository.Deployment deployment : repositoryService.createDeploymentQuery().list()) {
       repositoryService.deleteDeployment(deployment.getId(), true);
     }
 

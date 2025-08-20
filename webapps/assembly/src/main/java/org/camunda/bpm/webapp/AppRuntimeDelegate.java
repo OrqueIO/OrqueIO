@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.webapp;
+package io.orqueio.bpm.webapp;
 
 import java.util.List;
 import java.util.Set;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.webapp.plugin.AppPluginRegistry;
-import org.camunda.bpm.webapp.plugin.resource.PluginResourceOverride;
-import org.camunda.bpm.webapp.plugin.spi.AppPlugin;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.webapp.plugin.AppPluginRegistry;
+import io.orqueio.bpm.webapp.plugin.resource.PluginResourceOverride;
+import io.orqueio.bpm.webapp.plugin.spi.AppPlugin;
 
 /**
  * The list of services provided by a camunda webapplication, providing

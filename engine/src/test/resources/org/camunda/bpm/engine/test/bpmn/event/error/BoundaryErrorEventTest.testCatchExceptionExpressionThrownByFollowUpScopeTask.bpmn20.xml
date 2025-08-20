@@ -5,7 +5,7 @@
   targetNamespace="Examples">
 
   <error id="myError" errorCode="MyError" />
-  <error id="myException" errorCode="org.camunda.bpm.engine.test.bpmn.event.error.MyBusinessException" />
+  <error id="myException" errorCode="io.orqueio.bpm.engine.test.bpmn.event.error.MyBusinessException" />
 
   <process id="testProcess" isExecutable="true">
   
@@ -21,7 +21,7 @@
 
     <sequenceFlow id="flow2" sourceRef="serviceTask" targetRef="serviceTask2" />
     
-    <serviceTask id="serviceTask2" camunda:class="org.camunda.bpm.engine.test.bpmn.event.error.ThrowErrorDelegate" />
+    <serviceTask id="serviceTask2" camunda:class="io.orqueio.bpm.engine.test.bpmn.event.error.ThrowErrorDelegate" />
     
     <sequenceFlow id="flow7" sourceRef="serviceTask2" targetRef="end" />
     <boundaryEvent id="BoundaryEvent_1" name="" attachedToRef="serviceTask2" cancelActivity="false">

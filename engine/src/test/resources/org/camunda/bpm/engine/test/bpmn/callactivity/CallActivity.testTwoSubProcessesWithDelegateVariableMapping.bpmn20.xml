@@ -13,8 +13,8 @@
     <parallelGateway id="fork"/>
     <sequenceFlow id="flow2" sourceRef="fork" targetRef="callSubProcess" />
     <sequenceFlow id="flow3" sourceRef="fork" targetRef="callSubProcess2" />
-    <callActivity id="callSubProcess" calledElement="simpleSubProcess" camunda:varMapping="org.camunda.bpm.engine.test.bpmn.callactivity.DelegatedVarMapping"/>
-    <callActivity id="callSubProcess2" calledElement="simpleSubProcess" camunda:varMapping="org.camunda.bpm.engine.test.bpmn.callactivity.DelegatedVarMapping" />
+    <callActivity id="callSubProcess" calledElement="simpleSubProcess" camunda:varMapping="io.orqueio.bpm.engine.test.bpmn.callactivity.DelegatedVarMapping"/>
+    <callActivity id="callSubProcess2" calledElement="simpleSubProcess" camunda:varMapping="io.orqueio.bpm.engine.test.bpmn.callactivity.DelegatedVarMapping" />
     <sequenceFlow id="flow4" sourceRef="callSubProcess" targetRef="join" />
     <sequenceFlow id="flow5" sourceRef="callSubProcess2" targetRef="join" />
     <parallelGateway id="join"/>

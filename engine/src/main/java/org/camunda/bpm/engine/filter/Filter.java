@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.filter;
+package io.orqueio.bpm.engine.filter;
 
 import java.util.Map;
-import org.camunda.bpm.engine.query.Query;
+import io.orqueio.bpm.engine.query.Query;
 
 /**
  * @author Sebastian Menski

@@ -8,7 +8,7 @@
   </description>
 
   <parent>
-    <groupId>org.camunda.bpm.quarkus</groupId>
+    <groupId>io.orqueio.bpm.quarkus</groupId>
     <artifactId>camunda-bpm-quarkus-engine-parent</artifactId>
     <version>7.24.0-SNAPSHOT</version>
   </parent>
@@ -21,12 +21,12 @@
 
     <!-- Camunda dependencies -->
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
+      <groupId>io.orqueio.bpm</groupId>
       <artifactId>camunda-engine</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
+      <groupId>io.orqueio.bpm</groupId>
       <artifactId>camunda-engine-cdi-jakarta</artifactId>
     </dependency>
 

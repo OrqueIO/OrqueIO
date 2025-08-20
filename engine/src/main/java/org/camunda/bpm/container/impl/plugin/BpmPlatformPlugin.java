@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.plugin;
+package io.orqueio.bpm.container.impl.plugin;
 
-import org.camunda.bpm.application.ProcessApplicationInterface;
+import io.orqueio.bpm.application.ProcessApplicationInterface;
 
 /**
  * @author Thorben Lindhauer

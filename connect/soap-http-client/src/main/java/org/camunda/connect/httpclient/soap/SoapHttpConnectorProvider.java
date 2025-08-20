@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.connect.httpclient.soap;
+package io.orqueio.connect.httpclient.soap;
 
-import org.camunda.connect.spi.ConnectorProvider;
+import io.orqueio.connect.spi.ConnectorProvider;
 
 public interface SoapHttpConnectorProvider extends ConnectorProvider {
 

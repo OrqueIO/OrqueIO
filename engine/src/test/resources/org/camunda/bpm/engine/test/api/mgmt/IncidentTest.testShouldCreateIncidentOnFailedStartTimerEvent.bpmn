@@ -7,7 +7,7 @@
         <bpmn2:timeCycle xsi:type="bpmn2:tFormalExpression">0 0/5 * * * ?</bpmn2:timeCycle>
       </bpmn2:timerEventDefinition>
     </bpmn2:startEvent>
-    <bpmn2:serviceTask id="theServiceTask" camunda:class="org.camunda.bpm.engine.test.api.mgmt.AlwaysFailingDelegate" name="Service Task">
+    <bpmn2:serviceTask id="theServiceTask" camunda:class="io.orqueio.bpm.engine.test.api.mgmt.AlwaysFailingDelegate" name="Service Task">
       <bpmn2:incoming>SequenceFlow_1</bpmn2:incoming>
       <bpmn2:outgoing>SequenceFlow_2</bpmn2:outgoing>
     </bpmn2:serviceTask>

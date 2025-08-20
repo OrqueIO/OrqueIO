@@ -14,21 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.interceptor;
+package io.orqueio.bpm.engine.impl.interceptor;
 
-import org.camunda.bpm.dmn.engine.DmnDecision;
-import org.camunda.bpm.engine.impl.delegate.DelegateInvocation;
+import io.orqueio.bpm.dmn.engine.DmnDecision;
+import io.orqueio.bpm.engine.impl.delegate.DelegateInvocation;
 
 /**
  * Interceptor responsible for handling calls to 'user code'. User code
  * represents external Java code (e.g. services and listeners) invoked by
  * activity. The following is a list of classes that represent user code:
  * <ul>
- * <li>{@link org.camunda.bpm.engine.delegate.JavaDelegate}</li>
- * <li>{@link org.camunda.bpm.engine.delegate.CaseExecutionListener}</li>
- * <li>{@link org.camunda.bpm.engine.delegate.ExecutionListener}</li>
- * <li>{@link org.camunda.bpm.engine.delegate.Expression}</li>
- * <li>{@link org.camunda.bpm.engine.delegate.TaskListener}</li>
+ * <li>{@link io.orqueio.bpm.engine.delegate.JavaDelegate}</li>
+ * <li>{@link io.orqueio.bpm.engine.delegate.CaseExecutionListener}</li>
+ * <li>{@link io.orqueio.bpm.engine.delegate.ExecutionListener}</li>
+ * <li>{@link io.orqueio.bpm.engine.delegate.Expression}</li>
+ * <li>{@link io.orqueio.bpm.engine.delegate.TaskListener}</li>
  * <li>{@link DmnDecision}</li>
  * </ul>
  *

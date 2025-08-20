@@ -19,11 +19,11 @@
 -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
   
-<mapper namespace="org.camunda.bpm.engine.impl.persistence.entity.UserEntity">
+<mapper namespace="io.orqueio.bpm.engine.impl.persistence.entity.UserEntity">
 
   <!-- USER INSERT -->
 
-  <insert id="insertUser" parameterType="org.camunda.bpm.engine.impl.persistence.entity.UserEntity">
+  <insert id="insertUser" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.UserEntity">
     insert into ${prefix}ACT_ID_USER (ID_, FIRST_, LAST_, EMAIL_, PWD_, SALT_, REV_)
     values (
       #{id ,jdbcType=VARCHAR},
@@ -38,7 +38,7 @@
 
   <!-- USER UPDATE -->
 
-  <update id="updateUser" parameterType="org.camunda.bpm.engine.impl.persistence.entity.UserEntity">
+  <update id="updateUser" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.UserEntity">
     update ${prefix}ACT_ID_USER set
       REV_ = #{revisionNext ,jdbcType=INTEGER},
       FIRST_ = #{firstName ,jdbcType=VARCHAR},
@@ -50,7 +50,7 @@
       and REV_ = #{revision}
   </update>
   
-  <update id="updateUserLock" parameterType="org.camunda.bpm.engine.impl.persistence.entity.UserEntity">
+  <update id="updateUserLock" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.UserEntity">
     update ${prefix}ACT_ID_USER set
       REV_ = #{revisionNext ,jdbcType=INTEGER},
       LOCK_EXP_TIME_ = #{lockExpirationTime ,jdbcType=TIMESTAMP},
@@ -61,13 +61,13 @@
   
   <!-- USER DELETE -->
 
-  <delete id="deleteUser" parameterType="org.camunda.bpm.engine.impl.persistence.entity.UserEntity">
+  <delete id="deleteUser" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.UserEntity">
     delete from ${prefix}ACT_ID_USER where ID_ = #{id} and REV_ = #{revision}
   </delete>
 
   <!-- USER RESULTMAP -->
 
-  <resultMap id="userResultMap" type="org.camunda.bpm.engine.impl.persistence.entity.UserEntity">
+  <resultMap id="userResultMap" type="io.orqueio.bpm.engine.impl.persistence.entity.UserEntity">
     <id property="id" column="ID_" jdbcType="VARCHAR" />
     <result property="revision" column="REV_" jdbcType="INTEGER" />
     <result property="firstName" column="FIRST_" jdbcType="VARCHAR" />
@@ -85,8 +85,8 @@
     select * from ${prefix}ACT_ID_USER where ID_ = #{id,jdbcType=VARCHAR}
   </select>
     
-  <select id="selectUserByQueryCriteria" parameterType="org.camunda.bpm.engine.impl.UserQueryImpl" resultMap="userResultMap">
-  	<include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
+  <select id="selectUserByQueryCriteria" parameterType="io.orqueio.bpm.engine.impl.UserQueryImpl" resultMap="userResultMap">
+  	<include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
     ${limitBefore}
     select ${distinct} RES.* 
     ${limitBetween}
@@ -95,7 +95,7 @@
     ${limitAfter}
   </select>
   
-   <select id="selectUserCountByQueryCriteria" parameterType="org.camunda.bpm.engine.impl.UserQueryImpl" resultType="long">
+   <select id="selectUserCountByQueryCriteria" parameterType="io.orqueio.bpm.engine.impl.UserQueryImpl" resultType="long">
     ${countDistinctBeforeStart} RES.ID_ ${countDistinctBeforeEnd}
     <include refid="selectUserByQueryCriteriaSql" />
     ${countDistinctAfterEnd}
@@ -112,7 +112,7 @@
       inner join ${prefix}ACT_ID_TENANT_MEMBER TM on RES.ID_ = TM.USER_ID_
     </if>
     
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoin" /> 
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoin" />
     
     <where>
       <if test="id != null">
@@ -153,7 +153,7 @@
         and TM.TENANT_ID_ = #{tenantId}
       </if>      
       
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.queryAuthorizationCheck" />
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.queryAuthorizationCheck" />
       
     </where>
   </sql>

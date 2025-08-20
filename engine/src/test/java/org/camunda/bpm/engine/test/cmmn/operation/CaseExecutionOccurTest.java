@@ -14,20 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.cmmn.operation;
+package io.orqueio.bpm.engine.test.cmmn.operation;
 
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import org.camunda.bpm.engine.impl.cmmn.behavior.MilestoneActivityBehavior;
-import org.camunda.bpm.engine.impl.cmmn.execution.CaseExecutionImpl;
-import org.camunda.bpm.engine.impl.cmmn.execution.CmmnActivityExecution;
-import org.camunda.bpm.engine.impl.cmmn.execution.CmmnCaseInstance;
-import org.camunda.bpm.engine.impl.cmmn.model.CaseDefinitionBuilder;
-import org.camunda.bpm.engine.impl.cmmn.model.CmmnActivity;
-import org.camunda.bpm.engine.impl.cmmn.model.CmmnCaseDefinition;
-import org.camunda.bpm.engine.impl.cmmn.model.CmmnOnPartDeclaration;
-import org.camunda.bpm.engine.impl.cmmn.model.CmmnSentryDeclaration;
+import io.orqueio.bpm.engine.impl.cmmn.behavior.MilestoneActivityBehavior;
+import io.orqueio.bpm.engine.impl.cmmn.execution.CaseExecutionImpl;
+import io.orqueio.bpm.engine.impl.cmmn.execution.CmmnActivityExecution;
+import io.orqueio.bpm.engine.impl.cmmn.execution.CmmnCaseInstance;
+import io.orqueio.bpm.engine.impl.cmmn.model.CaseDefinitionBuilder;
+import io.orqueio.bpm.engine.impl.cmmn.model.CmmnActivity;
+import io.orqueio.bpm.engine.impl.cmmn.model.CmmnCaseDefinition;
+import io.orqueio.bpm.engine.impl.cmmn.model.CmmnOnPartDeclaration;
+import io.orqueio.bpm.engine.impl.cmmn.model.CmmnSentryDeclaration;
 import org.junit.Test;
 
 /**

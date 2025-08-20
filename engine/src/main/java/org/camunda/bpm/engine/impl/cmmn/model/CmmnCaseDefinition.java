@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.cmmn.model;
+package io.orqueio.bpm.engine.impl.cmmn.model;
 
-import org.camunda.bpm.engine.impl.cmmn.execution.CaseExecutionImpl;
-import org.camunda.bpm.engine.impl.cmmn.execution.CmmnCaseInstance;
-import org.camunda.bpm.engine.impl.cmmn.execution.CmmnExecution;
+import io.orqueio.bpm.engine.impl.cmmn.execution.CaseExecutionImpl;
+import io.orqueio.bpm.engine.impl.cmmn.execution.CmmnCaseInstance;
+import io.orqueio.bpm.engine.impl.cmmn.execution.CmmnExecution;
 
 
 /**

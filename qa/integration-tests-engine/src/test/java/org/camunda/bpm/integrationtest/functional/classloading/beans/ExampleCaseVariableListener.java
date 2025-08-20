@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.functional.classloading.beans;
+package io.orqueio.bpm.integrationtest.functional.classloading.beans;
 
-import org.camunda.bpm.engine.delegate.CaseVariableListener;
-import org.camunda.bpm.engine.delegate.DelegateCaseVariableInstance;
+import io.orqueio.bpm.engine.delegate.CaseVariableListener;
+import io.orqueio.bpm.engine.delegate.DelegateCaseVariableInstance;
 
 /**
  * @author Thorben Lindhauer

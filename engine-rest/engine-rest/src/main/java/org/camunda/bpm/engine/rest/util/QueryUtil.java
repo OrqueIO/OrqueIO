@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.util;
+package io.orqueio.bpm.engine.rest.util;
 
 import java.util.List;
-import org.camunda.bpm.engine.query.Query;
+import io.orqueio.bpm.engine.query.Query;
 
 public class QueryUtil {
 

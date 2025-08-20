@@ -15,12 +15,12 @@
  * limitations under the License.
  */
 
-package org.camunda.bpm.client.task;
+package io.orqueio.bpm.client.task;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.camunda.bpm.client.impl.ExternalTaskClientLogger;
+import io.orqueio.bpm.client.impl.ExternalTaskClientLogger;
 
 /**
  * Class that encapsulates the client's configuration of createTime ordering.

@@ -14,33 +14,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.authorization.history;
+package io.orqueio.bpm.engine.test.api.authorization.history;
 
-import static org.camunda.bpm.engine.authorization.Resources.OPERATION_LOG_CATEGORY;
-import static org.camunda.bpm.engine.authorization.Resources.PROCESS_DEFINITION;
-import static org.camunda.bpm.engine.authorization.UserOperationLogCategoryPermissions.READ;
-import static org.camunda.bpm.engine.history.UserOperationLogEntry.CATEGORY_ADMIN;
-import static org.camunda.bpm.engine.history.UserOperationLogEntry.CATEGORY_OPERATOR;
+import static io.orqueio.bpm.engine.authorization.Resources.OPERATION_LOG_CATEGORY;
+import static io.orqueio.bpm.engine.authorization.Resources.PROCESS_DEFINITION;
+import static io.orqueio.bpm.engine.authorization.UserOperationLogCategoryPermissions.READ;
+import static io.orqueio.bpm.engine.history.UserOperationLogEntry.CATEGORY_ADMIN;
+import static io.orqueio.bpm.engine.history.UserOperationLogEntry.CATEGORY_OPERATOR;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-import org.camunda.bpm.engine.EntityTypes;
-import org.camunda.bpm.engine.ProcessEngineConfiguration;
-import org.camunda.bpm.engine.authorization.Authorization;
-import org.camunda.bpm.engine.authorization.Permission;
-import org.camunda.bpm.engine.authorization.Permissions;
-import org.camunda.bpm.engine.authorization.ProcessDefinitionPermissions;
-import org.camunda.bpm.engine.authorization.Resource;
-import org.camunda.bpm.engine.authorization.Resources;
-import org.camunda.bpm.engine.history.UserOperationLogEntry;
-import org.camunda.bpm.engine.history.UserOperationLogQuery;
-import org.camunda.bpm.engine.impl.cfg.auth.DefaultPermissionProvider;
-import org.camunda.bpm.engine.impl.cfg.auth.PermissionProvider;
-import org.camunda.bpm.engine.impl.util.StringUtil;
-import org.camunda.bpm.engine.test.RequiredHistoryLevel;
-import org.camunda.bpm.engine.test.api.authorization.AuthorizationTest;
-import org.camunda.bpm.engine.test.api.identity.TestPermissions;
-import org.camunda.bpm.engine.test.api.identity.TestResource;
+import io.orqueio.bpm.engine.EntityTypes;
+import io.orqueio.bpm.engine.ProcessEngineConfiguration;
+import io.orqueio.bpm.engine.authorization.Authorization;
+import io.orqueio.bpm.engine.authorization.Permission;
+import io.orqueio.bpm.engine.authorization.Permissions;
+import io.orqueio.bpm.engine.authorization.ProcessDefinitionPermissions;
+import io.orqueio.bpm.engine.authorization.Resource;
+import io.orqueio.bpm.engine.authorization.Resources;
+import io.orqueio.bpm.engine.history.UserOperationLogEntry;
+import io.orqueio.bpm.engine.history.UserOperationLogQuery;
+import io.orqueio.bpm.engine.impl.cfg.auth.DefaultPermissionProvider;
+import io.orqueio.bpm.engine.impl.cfg.auth.PermissionProvider;
+import io.orqueio.bpm.engine.impl.util.StringUtil;
+import io.orqueio.bpm.engine.test.RequiredHistoryLevel;
+import io.orqueio.bpm.engine.test.api.authorization.AuthorizationTest;
+import io.orqueio.bpm.engine.test.api.identity.TestPermissions;
+import io.orqueio.bpm.engine.test.api.identity.TestResource;
 import org.junit.Test;
 
 /**

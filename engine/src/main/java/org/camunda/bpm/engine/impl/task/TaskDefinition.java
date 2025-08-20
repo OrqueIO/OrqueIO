@@ -14,18 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.task;
+package io.orqueio.bpm.engine.impl.task;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import org.camunda.bpm.engine.delegate.Expression;
-import org.camunda.bpm.engine.delegate.TaskListener;
-import org.camunda.bpm.engine.impl.form.FormDefinition;
-import org.camunda.bpm.engine.impl.form.handler.TaskFormHandler;
-import org.camunda.bpm.engine.impl.util.CollectionUtil;
+import io.orqueio.bpm.engine.delegate.Expression;
+import io.orqueio.bpm.engine.delegate.TaskListener;
+import io.orqueio.bpm.engine.impl.form.FormDefinition;
+import io.orqueio.bpm.engine.impl.form.handler.TaskFormHandler;
+import io.orqueio.bpm.engine.impl.util.CollectionUtil;
 
 /**
  * Container for task definition information gathered at parsing time.

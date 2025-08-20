@@ -14,18 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.plugin.impl;
+package io.orqueio.spin.plugin.impl;
 
-import org.camunda.bpm.engine.impl.variable.serializer.ValueFields;
-import org.camunda.bpm.engine.variable.impl.value.UntypedValueImpl;
-import org.camunda.spin.DataFormats;
-import org.camunda.spin.plugin.variable.SpinValues;
-import org.camunda.spin.plugin.variable.type.SpinValueType;
-import org.camunda.spin.plugin.variable.type.XmlValueType;
-import org.camunda.spin.plugin.variable.value.SpinValue;
-import org.camunda.spin.plugin.variable.value.impl.XmlValueImpl;
-import org.camunda.spin.spi.DataFormat;
-import org.camunda.spin.xml.SpinXmlElement;
+import io.orqueio.bpm.engine.impl.variable.serializer.ValueFields;
+import io.orqueio.bpm.engine.variable.impl.value.UntypedValueImpl;
+import io.orqueio.spin.DataFormats;
+import io.orqueio.spin.plugin.variable.SpinValues;
+import io.orqueio.spin.plugin.variable.type.SpinValueType;
+import io.orqueio.spin.plugin.variable.type.XmlValueType;
+import io.orqueio.spin.plugin.variable.value.SpinValue;
+import io.orqueio.spin.plugin.variable.value.impl.XmlValueImpl;
+import io.orqueio.spin.spi.DataFormat;
+import io.orqueio.spin.xml.SpinXmlElement;
 
 /**
  * @author Roman Smirnov

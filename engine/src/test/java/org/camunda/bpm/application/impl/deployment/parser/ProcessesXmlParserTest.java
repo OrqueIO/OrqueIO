@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.application.impl.deployment.parser;
+package io.orqueio.bpm.application.impl.deployment.parser;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -25,11 +25,11 @@ import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.application.impl.metadata.ProcessesXmlParser;
-import org.camunda.bpm.application.impl.metadata.spi.ProcessArchiveXml;
-import org.camunda.bpm.application.impl.metadata.spi.ProcessesXml;
-import org.camunda.bpm.container.impl.metadata.spi.ProcessEngineXml;
-import org.camunda.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.application.impl.metadata.ProcessesXmlParser;
+import io.orqueio.bpm.application.impl.metadata.spi.ProcessArchiveXml;
+import io.orqueio.bpm.application.impl.metadata.spi.ProcessesXml;
+import io.orqueio.bpm.container.impl.metadata.spi.ProcessEngineXml;
+import io.orqueio.bpm.engine.ProcessEngineException;
 import org.junit.Before;
 import org.junit.Test;
 

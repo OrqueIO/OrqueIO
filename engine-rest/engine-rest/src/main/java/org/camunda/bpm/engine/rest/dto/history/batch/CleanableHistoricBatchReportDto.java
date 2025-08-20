@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.dto.history.batch;
+package io.orqueio.bpm.engine.rest.dto.history.batch;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,9 +22,9 @@ import java.util.Map;
 
 import javax.ws.rs.core.MultivaluedMap;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.history.CleanableHistoricBatchReport;
-import org.camunda.bpm.engine.rest.dto.AbstractQueryDto;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.history.CleanableHistoricBatchReport;
+import io.orqueio.bpm.engine.rest.dto.AbstractQueryDto;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 

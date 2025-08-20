@@ -14,21 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.bpmn.impl.instance.bpmndi;
+package io.orqueio.bpm.model.bpmn.impl.instance.bpmndi;
 
-import org.camunda.bpm.model.bpmn.impl.instance.di.PlaneImpl;
-import org.camunda.bpm.model.bpmn.instance.BaseElement;
-import org.camunda.bpm.model.bpmn.instance.bpmndi.BpmnPlane;
-import org.camunda.bpm.model.bpmn.instance.di.Plane;
-import org.camunda.bpm.model.xml.ModelBuilder;
-import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.reference.AttributeReference;
+import io.orqueio.bpm.model.bpmn.impl.instance.di.PlaneImpl;
+import io.orqueio.bpm.model.bpmn.instance.BaseElement;
+import io.orqueio.bpm.model.bpmn.instance.bpmndi.BpmnPlane;
+import io.orqueio.bpm.model.bpmn.instance.di.Plane;
+import io.orqueio.bpm.model.xml.ModelBuilder;
+import io.orqueio.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
+import io.orqueio.bpm.model.xml.type.ModelElementTypeBuilder;
+import io.orqueio.bpm.model.xml.type.reference.AttributeReference;
 
-import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMNDI_ATTRIBUTE_BPMN_ELEMENT;
-import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMNDI_ELEMENT_BPMN_PLANE;
-import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.BPMNDI_NS;
-import static org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.BPMNDI_ATTRIBUTE_BPMN_ELEMENT;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.BPMNDI_ELEMENT_BPMN_PLANE;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.BPMNDI_NS;
+import static io.orqueio.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
  * The BPMNDI BPMNPlane element

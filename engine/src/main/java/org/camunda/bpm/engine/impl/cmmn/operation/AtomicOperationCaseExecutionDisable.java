@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.cmmn.operation;
+package io.orqueio.bpm.engine.impl.cmmn.operation;
 
-import static org.camunda.bpm.engine.delegate.CaseExecutionListener.DISABLE;
-import static org.camunda.bpm.engine.impl.cmmn.execution.CaseExecutionState.DISABLED;
-import static org.camunda.bpm.engine.impl.util.ActivityBehaviorUtil.getActivityBehavior;
+import static io.orqueio.bpm.engine.delegate.CaseExecutionListener.DISABLE;
+import static io.orqueio.bpm.engine.impl.cmmn.execution.CaseExecutionState.DISABLED;
+import static io.orqueio.bpm.engine.impl.util.ActivityBehaviorUtil.getActivityBehavior;
 
-import org.camunda.bpm.engine.impl.cmmn.behavior.CmmnActivityBehavior;
-import org.camunda.bpm.engine.impl.cmmn.behavior.CmmnCompositeActivityBehavior;
-import org.camunda.bpm.engine.impl.cmmn.execution.CmmnExecution;
+import io.orqueio.bpm.engine.impl.cmmn.behavior.CmmnActivityBehavior;
+import io.orqueio.bpm.engine.impl.cmmn.behavior.CmmnCompositeActivityBehavior;
+import io.orqueio.bpm.engine.impl.cmmn.execution.CmmnExecution;
 
 /**
  * @author Roman Smirnov

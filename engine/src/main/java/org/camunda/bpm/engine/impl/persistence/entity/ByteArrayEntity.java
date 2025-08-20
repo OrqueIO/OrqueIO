@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.persistence.entity;
+package io.orqueio.bpm.engine.impl.persistence.entity;
 
 import java.io.Serializable;
 import java.util.Date;
 
-import org.camunda.bpm.engine.impl.db.HasDbRevision;
-import org.camunda.bpm.engine.repository.ResourceType;
-import org.camunda.bpm.engine.impl.db.DbEntity;
+import io.orqueio.bpm.engine.impl.db.HasDbRevision;
+import io.orqueio.bpm.engine.repository.ResourceType;
+import io.orqueio.bpm.engine.impl.db.DbEntity;
 
 /**
  * @author Tom Baeyens

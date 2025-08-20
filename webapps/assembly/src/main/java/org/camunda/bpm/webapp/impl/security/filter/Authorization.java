@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.webapp.impl.security.filter;
+package io.orqueio.bpm.webapp.impl.security.filter;
 
 import java.util.Collection;
 import javax.servlet.http.HttpServletResponse;
 
-import org.camunda.bpm.webapp.impl.security.auth.Authentication;
-import org.camunda.bpm.webapp.impl.security.auth.UserAuthentication;
+import io.orqueio.bpm.webapp.impl.security.auth.Authentication;
+import io.orqueio.bpm.webapp.impl.security.auth.UserAuthentication;
 
 /**
  *

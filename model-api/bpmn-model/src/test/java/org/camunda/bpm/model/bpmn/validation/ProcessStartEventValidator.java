@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.bpmn.validation;
+package io.orqueio.bpm.model.bpmn.validation;
 
 import java.util.Collection;
 
-import org.camunda.bpm.model.bpmn.instance.Process;
-import org.camunda.bpm.model.bpmn.instance.StartEvent;
-import org.camunda.bpm.model.xml.validation.ModelElementValidator;
-import org.camunda.bpm.model.xml.validation.ValidationResultCollector;
+import io.orqueio.bpm.model.bpmn.instance.Process;
+import io.orqueio.bpm.model.bpmn.instance.StartEvent;
+import io.orqueio.bpm.model.xml.validation.ModelElementValidator;
+import io.orqueio.bpm.model.xml.validation.ValidationResultCollector;
 
 /**
  * @author Daniel Meyer

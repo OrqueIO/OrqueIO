@@ -14,25 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.engine.impl.transform;
+package io.orqueio.bpm.dmn.engine.impl.transform;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.camunda.bpm.dmn.engine.impl.spi.transform.DmnElementTransformHandler;
-import org.camunda.bpm.dmn.engine.impl.spi.transform.DmnElementTransformHandlerRegistry;
-import org.camunda.bpm.model.dmn.instance.Decision;
-import org.camunda.bpm.model.dmn.instance.DecisionTable;
-import org.camunda.bpm.model.dmn.instance.Definitions;
-import org.camunda.bpm.model.dmn.instance.DmnModelElementInstance;
-import org.camunda.bpm.model.dmn.instance.Input;
-import org.camunda.bpm.model.dmn.instance.InputEntry;
-import org.camunda.bpm.model.dmn.instance.InputExpression;
-import org.camunda.bpm.model.dmn.instance.LiteralExpression;
-import org.camunda.bpm.model.dmn.instance.Output;
-import org.camunda.bpm.model.dmn.instance.OutputEntry;
-import org.camunda.bpm.model.dmn.instance.Rule;
-import org.camunda.bpm.model.dmn.instance.Variable;
+import io.orqueio.bpm.dmn.engine.impl.spi.transform.DmnElementTransformHandler;
+import io.orqueio.bpm.dmn.engine.impl.spi.transform.DmnElementTransformHandlerRegistry;
+import io.orqueio.bpm.model.dmn.instance.Decision;
+import io.orqueio.bpm.model.dmn.instance.DecisionTable;
+import io.orqueio.bpm.model.dmn.instance.Definitions;
+import io.orqueio.bpm.model.dmn.instance.DmnModelElementInstance;
+import io.orqueio.bpm.model.dmn.instance.Input;
+import io.orqueio.bpm.model.dmn.instance.InputEntry;
+import io.orqueio.bpm.model.dmn.instance.InputExpression;
+import io.orqueio.bpm.model.dmn.instance.LiteralExpression;
+import io.orqueio.bpm.model.dmn.instance.Output;
+import io.orqueio.bpm.model.dmn.instance.OutputEntry;
+import io.orqueio.bpm.model.dmn.instance.Rule;
+import io.orqueio.bpm.model.dmn.instance.Variable;
 
 public class DefaultElementTransformHandlerRegistry implements DmnElementTransformHandlerRegistry {
 

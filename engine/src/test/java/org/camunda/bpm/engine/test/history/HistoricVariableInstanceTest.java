@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.history;
+package io.orqueio.bpm.engine.test.history;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.tuple;
-import static org.camunda.bpm.engine.test.api.runtime.TestOrderingUtil.propertyComparator;
-import static org.camunda.bpm.engine.test.api.runtime.TestOrderingUtil.verifySorting;
+import static io.orqueio.bpm.engine.test.api.runtime.TestOrderingUtil.propertyComparator;
+import static io.orqueio.bpm.engine.test.api.runtime.TestOrderingUtil.verifySorting;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -39,43 +39,43 @@ import java.util.List;
 import java.util.Map;
 
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
-import org.camunda.bpm.engine.ProcessEngineConfiguration;
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.delegate.ExecutionListener;
-import org.camunda.bpm.engine.exception.NullValueException;
-import org.camunda.bpm.engine.history.HistoricActivityInstance;
-import org.camunda.bpm.engine.history.HistoricDetail;
-import org.camunda.bpm.engine.history.HistoricFormField;
-import org.camunda.bpm.engine.history.HistoricProcessInstance;
-import org.camunda.bpm.engine.history.HistoricTaskInstance;
-import org.camunda.bpm.engine.history.HistoricVariableInstance;
-import org.camunda.bpm.engine.history.HistoricVariableInstanceQuery;
-import org.camunda.bpm.engine.history.HistoricVariableUpdate;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.history.HistoryLevel;
-import org.camunda.bpm.engine.impl.history.event.HistoryEvent;
-import org.camunda.bpm.engine.impl.persistence.entity.HistoricVariableInstanceEntity;
-import org.camunda.bpm.engine.impl.util.ClockUtil;
-import org.camunda.bpm.engine.impl.util.CollectionUtil;
-import org.camunda.bpm.engine.runtime.CaseExecution;
-import org.camunda.bpm.engine.runtime.CaseInstance;
-import org.camunda.bpm.engine.runtime.Execution;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.runtime.VariableInstance;
-import org.camunda.bpm.engine.task.Task;
-import org.camunda.bpm.engine.task.TaskQuery;
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.engine.test.RequiredHistoryLevel;
-import org.camunda.bpm.engine.test.api.runtime.util.CustomSerializable;
-import org.camunda.bpm.engine.test.api.runtime.util.FailingSerializable;
-import org.camunda.bpm.engine.test.cmmn.decisiontask.TestPojo;
-import org.camunda.bpm.engine.test.util.PluggableProcessEngineTest;
-import org.camunda.bpm.engine.variable.Variables;
-import org.camunda.bpm.engine.variable.type.ValueType;
-import org.camunda.bpm.engine.variable.value.FileValue;
-import org.camunda.bpm.engine.variable.value.ObjectValue;
-import org.camunda.bpm.model.bpmn.Bpmn;
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.bpm.engine.ProcessEngineConfiguration;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.delegate.ExecutionListener;
+import io.orqueio.bpm.engine.exception.NullValueException;
+import io.orqueio.bpm.engine.history.HistoricActivityInstance;
+import io.orqueio.bpm.engine.history.HistoricDetail;
+import io.orqueio.bpm.engine.history.HistoricFormField;
+import io.orqueio.bpm.engine.history.HistoricProcessInstance;
+import io.orqueio.bpm.engine.history.HistoricTaskInstance;
+import io.orqueio.bpm.engine.history.HistoricVariableInstance;
+import io.orqueio.bpm.engine.history.HistoricVariableInstanceQuery;
+import io.orqueio.bpm.engine.history.HistoricVariableUpdate;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.history.HistoryLevel;
+import io.orqueio.bpm.engine.impl.history.event.HistoryEvent;
+import io.orqueio.bpm.engine.impl.persistence.entity.HistoricVariableInstanceEntity;
+import io.orqueio.bpm.engine.impl.util.ClockUtil;
+import io.orqueio.bpm.engine.impl.util.CollectionUtil;
+import io.orqueio.bpm.engine.runtime.CaseExecution;
+import io.orqueio.bpm.engine.runtime.CaseInstance;
+import io.orqueio.bpm.engine.runtime.Execution;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.runtime.VariableInstance;
+import io.orqueio.bpm.engine.task.Task;
+import io.orqueio.bpm.engine.task.TaskQuery;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.test.RequiredHistoryLevel;
+import io.orqueio.bpm.engine.test.api.runtime.util.CustomSerializable;
+import io.orqueio.bpm.engine.test.api.runtime.util.FailingSerializable;
+import io.orqueio.bpm.engine.test.cmmn.decisiontask.TestPojo;
+import io.orqueio.bpm.engine.test.util.PluggableProcessEngineTest;
+import io.orqueio.bpm.engine.variable.Variables;
+import io.orqueio.bpm.engine.variable.type.ValueType;
+import io.orqueio.bpm.engine.variable.value.FileValue;
+import io.orqueio.bpm.engine.variable.value.ObjectValue;
+import io.orqueio.bpm.model.bpmn.Bpmn;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -1950,10 +1950,10 @@ public class HistoricVariableInstanceTest extends PluggableProcessEngineTest {
     BpmnModelInstance subProcess = Bpmn.createExecutableProcess("subProcess")
         .startEvent()
         .camundaAsyncBefore()
-        .camundaExecutionListenerClass(ExecutionListener.EVENTNAME_END, "org.camunda.bpm.engine.test.history.SubProcessActivityStartListener")
+        .camundaExecutionListenerClass(ExecutionListener.EVENTNAME_END, "io.orqueio.bpm.engine.test.history.SubProcessActivityStartListener")
         .endEvent()
         .done();
-    org.camunda.bpm.engine.repository.Deployment deployment = repositoryService.createDeployment()
+    io.orqueio.bpm.engine.repository.Deployment deployment = repositoryService.createDeployment()
         .addModelInstance("process.bpmn", topProcess)
         .addModelInstance("subProcess.bpmn", subProcess)
         .deploy();
@@ -1977,7 +1977,7 @@ public class HistoricVariableInstanceTest extends PluggableProcessEngineTest {
       .endEvent()
       .done();
 
-    org.camunda.bpm.engine.repository.Deployment deployment = repositoryService.createDeployment()
+    io.orqueio.bpm.engine.repository.Deployment deployment = repositoryService.createDeployment()
       .addModelInstance("process.bpmn", subProcess)
       .deploy();
 
@@ -2000,7 +2000,7 @@ public class HistoricVariableInstanceTest extends PluggableProcessEngineTest {
       .endEvent()
       .done();
 
-    org.camunda.bpm.engine.repository.Deployment deployment = repositoryService.createDeployment()
+    io.orqueio.bpm.engine.repository.Deployment deployment = repositoryService.createDeployment()
       .addModelInstance("process.bpmn", subProcess)
       .deploy();
 

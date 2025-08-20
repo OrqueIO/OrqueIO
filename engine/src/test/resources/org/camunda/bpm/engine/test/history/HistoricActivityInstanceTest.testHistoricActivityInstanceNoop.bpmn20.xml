@@ -10,7 +10,7 @@
     <startEvent id="start" />
     <sequenceFlow id="flow1" sourceRef="start" targetRef="noop" />
     
-    <serviceTask id="noop" camunda:class="org.camunda.bpm.engine.test.history.Noop" />    
+    <serviceTask id="noop" camunda:class="io.orqueio.bpm.engine.test.history.Noop" />
     <sequenceFlow id="flow2" sourceRef="noop" targetRef="end" />
     
     <endEvent id="end" />

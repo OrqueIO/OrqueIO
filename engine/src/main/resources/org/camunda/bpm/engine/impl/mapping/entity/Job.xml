@@ -19,29 +19,29 @@
 -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="org.camunda.bpm.engine.impl.persistence.entity.JobEntity">
+<mapper namespace="io.orqueio.bpm.engine.impl.persistence.entity.JobEntity">
 
   <!-- JOB DELETE STATEMENTS-->
 
-  <delete id="deleteJob" parameterType="org.camunda.bpm.engine.impl.persistence.entity.JobEntity">
+  <delete id="deleteJob" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.JobEntity">
     delete from ${prefix}ACT_RU_JOB where ID_ = #{id} and REV_ = #{revision}
   </delete>
 
-  <delete id="deleteTimer" parameterType="org.camunda.bpm.engine.impl.persistence.entity.JobEntity">
+  <delete id="deleteTimer" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.JobEntity">
     delete from ${prefix}ACT_RU_JOB where ID_ = #{id} and REV_ = #{revision}
   </delete>
 
-  <delete id="deleteMessage" parameterType="org.camunda.bpm.engine.impl.persistence.entity.JobEntity">
+  <delete id="deleteMessage" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.JobEntity">
     delete from ${prefix}ACT_RU_JOB where ID_ = #{id} and REV_ = #{revision}
   </delete>
 
-  <delete id="deleteEverLivingJob" parameterType="org.camunda.bpm.engine.impl.persistence.entity.JobEntity">
+  <delete id="deleteEverLivingJob" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.JobEntity">
     delete from ${prefix}ACT_RU_JOB where ID_ = #{id} and REV_ = #{revision}
   </delete>
 
   <!-- JOB UPDATE STATEMENTS-->
 
-  <update id="updateJobSuspensionStateByParameters" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject">
+  <update id="updateJobSuspensionStateByParameters" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject">
     update ${prefix}ACT_RU_JOB set
       REV_ = 1 + REV_ ,
       SUSPENSION_STATE_ = #{parameter.suspensionState, jdbcType=INTEGER}
@@ -76,7 +76,7 @@
           )
         </if>
         <bind name="columnPrefix" value="''"/>
-        <include refid="org.camunda.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheckWithPrefix" />
+        <include refid="io.orqueio.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheckWithPrefix" />
       </if>
       <if test="parameter.handlerType != null">
         and HANDLER_TYPE_ =  #{parameter.handlerType, jdbcType=VARCHAR}
@@ -111,7 +111,7 @@
 
   <!-- JOB RESULTMAP (FOR TIMER AND MESSAGE) -->
 
-  <resultMap id="jobResultMap" type="org.camunda.bpm.engine.impl.persistence.entity.JobEntity">
+  <resultMap id="jobResultMap" type="io.orqueio.bpm.engine.impl.persistence.entity.JobEntity">
     <id property="id" column="ID_" jdbcType="VARCHAR" />
     <result property="revision" column="REV_" jdbcType="INTEGER" />
     <result property="lockOwner" column="LOCK_OWNER_" jdbcType="VARCHAR" />
@@ -145,16 +145,16 @@
     </discriminator>
   </resultMap>
 
-  <resultMap id="messageResultMap" type="org.camunda.bpm.engine.impl.persistence.entity.MessageEntity" extends="jobResultMap"/>
+  <resultMap id="messageResultMap" type="io.orqueio.bpm.engine.impl.persistence.entity.MessageEntity" extends="jobResultMap"/>
 
-  <resultMap id="everLivingJobResultMap" type="org.camunda.bpm.engine.impl.persistence.entity.EverLivingJobEntity" extends="jobResultMap"/>
+  <resultMap id="everLivingJobResultMap" type="io.orqueio.bpm.engine.impl.persistence.entity.EverLivingJobEntity" extends="jobResultMap"/>
 
-  <resultMap id="timerResultMap" type="org.camunda.bpm.engine.impl.persistence.entity.TimerEntity" extends="jobResultMap">
+  <resultMap id="timerResultMap" type="io.orqueio.bpm.engine.impl.persistence.entity.TimerEntity" extends="jobResultMap">
     <result property="repeat" column="REPEAT_" jdbcType="VARCHAR" />
     <result property="repeatOffset" column="REPEAT_OFFSET_" jdbcType="BIGINT" />
   </resultMap>
 
-  <resultMap id="acquirableJobResultMap" type="org.camunda.bpm.engine.impl.persistence.entity.AcquirableJobEntity">
+  <resultMap id="acquirableJobResultMap" type="io.orqueio.bpm.engine.impl.persistence.entity.AcquirableJobEntity">
     <id property="id" column="ID_" jdbcType="VARCHAR" />
     <result property="revision" column="REV_" jdbcType="INTEGER" />
     <result property="duedate" column="DUEDATE_" jdbcType="TIMESTAMP" />
@@ -163,7 +163,7 @@
     <result property="exclusive" column="EXCLUSIVE_" jdbcType="BOOLEAN" />
   </resultMap>
 
-  <resultMap type="org.camunda.bpm.engine.impl.util.ImmutablePair" id="deploymentIdMapping">
+  <resultMap type="io.orqueio.bpm.engine.impl.util.ImmutablePair" id="deploymentIdMapping">
     <id property="left" column="DEPLOYMENT_ID_" jdbcType="VARCHAR" />
     <id property="right" column="ID_" jdbcType="VARCHAR" />
   </resultMap>
@@ -175,9 +175,9 @@
     select * from ${prefix}ACT_RU_JOB where ID_ = #{id}
   </select>
 
-  <select id="selectNextJobsToExecute" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject" resultMap="acquirableJobResultMap">
+  <select id="selectNextJobsToExecute" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject" resultMap="acquirableJobResultMap">
     <bind name="orderingProperties" value="parameter.orderingProperties" />
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
     ${limitBefore}
     select RES.ID_,
       RES.REV_,
@@ -206,7 +206,7 @@
           or
           <bind name="listOfIds" value="parameter.deploymentIds"/>
           <bind name="fieldName" value="'RES.DEPLOYMENT_ID_'"/>
-          <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection"/>
+          <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection"/>
         </if>
         )
       </if>
@@ -260,7 +260,7 @@
     RES.EXCLUSIVE_ = ${falseConstant}
   </sql>
 
-  <select id="selectJobsByConfiguration" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject" resultMap="jobResultMap">
+  <select id="selectJobsByConfiguration" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject" resultMap="jobResultMap">
       select * from ${prefix}ACT_RU_JOB
       where HANDLER_TYPE_ = #{parameter.handlerType}
       <if test="parameter.tenantId != null">
@@ -275,31 +275,31 @@
       </if>)
   </select>
 
-    <select id="selectJobsByHandlerType" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject" resultMap="jobResultMap" flushCache="true">
+    <select id="selectJobsByHandlerType" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject" resultMap="jobResultMap" flushCache="true">
         select * from ${prefix}ACT_RU_JOB
         where HANDLER_TYPE_ = #{parameter}
     </select>
 
-  <select id="selectJobsByExecutionId" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject" resultMap="jobResultMap">
+  <select id="selectJobsByExecutionId" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject" resultMap="jobResultMap">
     select *
     from ${prefix}ACT_RU_JOB J
     where J.EXECUTION_ID_ = #{parameter}
   </select>
 
-  <select id="selectJobsByProcessInstanceId" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject" resultMap="jobResultMap">
+  <select id="selectJobsByProcessInstanceId" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject" resultMap="jobResultMap">
     select *
     from ${prefix}ACT_RU_JOB J
     where J.PROCESS_INSTANCE_ID_ = #{parameter}
   </select>
 
-  <select id="selectJobsByJobDefinitionId" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject" resultMap="jobResultMap">
+  <select id="selectJobsByJobDefinitionId" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject" resultMap="jobResultMap">
     select *
     from ${prefix}ACT_RU_JOB J
     where J.JOB_DEF_ID_ = #{parameter}
   </select>
 
-  <select id="selectJobByQueryCriteria" parameterType="org.camunda.bpm.engine.impl.JobQueryImpl" resultMap="jobResultMap">
-  	<include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
+  <select id="selectJobByQueryCriteria" parameterType="io.orqueio.bpm.engine.impl.JobQueryImpl" resultMap="jobResultMap">
+  	<include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
     ${limitBefore}
     select ${distinct} RES.*
     ${limitBetween}
@@ -308,13 +308,13 @@
     ${limitAfter}
   </select>
 
-  <select id="selectJobCountByQueryCriteria" parameterType="org.camunda.bpm.engine.impl.JobQueryImpl" resultType="long">
+  <select id="selectJobCountByQueryCriteria" parameterType="io.orqueio.bpm.engine.impl.JobQueryImpl" resultType="long">
     ${countDistinctBeforeStart} RES.ID_ ${countDistinctBeforeEnd}
     <include refid="selectJobByQueryCriteriaSql"/>
     ${countDistinctAfterEnd}
   </select>
 
-  <select id="selectJobDeploymentIdMappingsByQueryCriteria" parameterType="org.camunda.bpm.engine.impl.JobQueryImpl" resultMap="deploymentIdMapping">
+  <select id="selectJobDeploymentIdMappingsByQueryCriteria" parameterType="io.orqueio.bpm.engine.impl.JobQueryImpl" resultMap="deploymentIdMapping">
     select distinct RES.DEPLOYMENT_ID_, RES.ID_
     <include refid="selectJobByQueryCriteriaSql"/>
     ORDER BY RES.DEPLOYMENT_ID_ ASC
@@ -335,7 +335,7 @@
       <if test="ids != null and !ids.isEmpty()">
         <bind name="listOfIds" value="ids" />
         <bind name="fieldName" value="'RES.ID_'" />
-        <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection" />
+        <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection" />
       </if>
       <if test="jobDefinitionId != null">
         RES.JOB_DEF_ID_ = #{jobDefinitionId}
@@ -352,7 +352,7 @@
       <if test="processInstanceIds != null and !processInstanceIds.isEmpty()">
         <bind name="listOfIds" value="processInstanceIds" />
         <bind name="fieldName" value="'RES.PROCESS_INSTANCE_ID_'" />
-        <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection" />
+        <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection" />
       </if>
       <if test="executionId != null">
         and RES.EXECUTION_ID_ = #{executionId}
@@ -455,7 +455,7 @@
               <bind name="authGroupIds" value="authCheck.authGroupIds" />
               <bind name="revokeAuthorizationCheckEnabled" value="authCheck.revokeAuthorizationCheckEnabled" />
               <bind name="permissionChecks" value="authCheck.permissionChecks" />
-              <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.authorizationCheck" />)
+              <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.authorizationCheck" />)
 
             ELSE
               <!-- "standalone" job (e.g. job to activate/suspend a process definition etc.) -->
@@ -463,14 +463,14 @@
           END ) = 1
       </if>
 
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
 
     </where>
   </sql>
 
   <!-- TIMER INSERT -->
 
-  <insert id="insertTimer" parameterType="org.camunda.bpm.engine.impl.persistence.entity.TimerEntity">
+  <insert id="insertTimer" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.TimerEntity">
     insert into ${prefix}ACT_RU_JOB (
             ID_,
             TYPE_,
@@ -534,7 +534,7 @@
 
   <!-- TIMER UPDATE -->
 
-  <update id="updateTimer" parameterType="org.camunda.bpm.engine.impl.persistence.entity.TimerEntity">
+  <update id="updateTimer" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.TimerEntity">
     update ${prefix}ACT_RU_JOB
     <set>
        REV_ =  #{revisionNext, jdbcType=INTEGER},
@@ -565,7 +565,7 @@
 
   <!-- TIMER SELECT -->
 
-  <select id="selectUnlockedTimersByDuedate" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject" resultMap="jobResultMap">
+  <select id="selectUnlockedTimersByDuedate" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject" resultMap="jobResultMap">
     select *
     from ${prefix}ACT_RU_JOB
     where (TYPE_ = 'timer')
@@ -576,7 +576,7 @@
     order by DUEDATE_
   </select>
 
-  <select id="selectTimersByExecutionId" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject" resultMap="jobResultMap">
+  <select id="selectTimersByExecutionId" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject" resultMap="jobResultMap">
     select *
     from ${prefix}ACT_RU_JOB
     where (RETRIES_ &gt; 0)
@@ -586,7 +586,7 @@
 
   <!-- MESSAGE INSERT -->
 
-  <insert id="insertMessage" parameterType="org.camunda.bpm.engine.impl.persistence.entity.MessageEntity">
+  <insert id="insertMessage" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.MessageEntity">
     insert into ${prefix}ACT_RU_JOB (
             ID_,
             TYPE_,
@@ -645,7 +645,7 @@
   </insert>
   <!-- MESSAGE UPDATE -->
 
-  <update id="updateMessage" parameterType="org.camunda.bpm.engine.impl.persistence.entity.MessageEntity">
+  <update id="updateMessage" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.MessageEntity">
     update ${prefix}ACT_RU_JOB
     <set>
        REV_ =  #{revisionNext, jdbcType=INTEGER},
@@ -672,7 +672,7 @@
       and REV_ = #{revision, jdbcType=INTEGER}
   </update>
 
-    <insert id="insertEverLivingJob" parameterType="org.camunda.bpm.engine.impl.persistence.entity.EverLivingJobEntity">
+    <insert id="insertEverLivingJob" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.EverLivingJobEntity">
         insert into ${prefix}ACT_RU_JOB (
         ID_,
         TYPE_,
@@ -731,7 +731,7 @@
     </insert>
     <!-- MESSAGE UPDATE -->
 
-    <update id="updateEverLivingJob" parameterType="org.camunda.bpm.engine.impl.persistence.entity.EverLivingJobEntity">
+    <update id="updateEverLivingJob" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.EverLivingJobEntity">
         update ${prefix}ACT_RU_JOB
         <set>
             REV_ =  #{revisionNext, jdbcType=INTEGER},
@@ -759,7 +759,7 @@
     </update>
 
     <!-- ACQUIRABLE JOB UPDATE -->
-    <update id="updateAcquirableJob" parameterType="org.camunda.bpm.engine.impl.persistence.entity.AcquirableJobEntity">
+    <update id="updateAcquirableJob" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.AcquirableJobEntity">
       update ${prefix}ACT_RU_JOB
       <set>
           REV_ =  #{revisionNext, jdbcType=INTEGER},

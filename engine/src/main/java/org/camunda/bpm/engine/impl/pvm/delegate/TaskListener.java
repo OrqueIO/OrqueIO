@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.pvm.delegate;
+package io.orqueio.bpm.engine.impl.pvm.delegate;
 
-import org.camunda.bpm.engine.delegate.DelegateTask;
+import io.orqueio.bpm.engine.delegate.DelegateTask;
 
 
 
 /**
- * @deprecated use org.camunda.bpm.engine.delegate.TaskListener instead
+ * @deprecated use io.orqueio.bpm.engine.delegate.TaskListener instead
  * 
  * @author Tom Baeyens
  */

@@ -15,11 +15,11 @@
  * limitations under the License.
  */
 
-package org.camunda.bpm.engine.test.standalone.deploy;
+package io.orqueio.bpm.engine.test.standalone.deploy;
 
-import org.camunda.bpm.engine.delegate.DelegateExecution;
-import org.camunda.bpm.engine.delegate.DelegateTask;
-import org.camunda.bpm.engine.delegate.TaskListener;
+import io.orqueio.bpm.engine.delegate.DelegateExecution;
+import io.orqueio.bpm.engine.delegate.DelegateTask;
+import io.orqueio.bpm.engine.delegate.TaskListener;
 
 public class SingleVariableListener implements TaskListener {
 

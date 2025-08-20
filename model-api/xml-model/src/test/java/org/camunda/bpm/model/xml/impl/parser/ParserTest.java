@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.xml.impl.parser;
+package io.orqueio.bpm.model.xml.impl.parser;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.InputStream;
 
-import org.camunda.bpm.model.xml.ModelInstance;
-import org.camunda.bpm.model.xml.ModelParseException;
-import org.camunda.bpm.model.xml.testmodel.TestModelParser;
+import io.orqueio.bpm.model.xml.ModelInstance;
+import io.orqueio.bpm.model.xml.ModelParseException;
+import io.orqueio.bpm.model.xml.testmodel.TestModelParser;
 import org.junit.Assume;
 import org.junit.Rule;
 import org.junit.Test;

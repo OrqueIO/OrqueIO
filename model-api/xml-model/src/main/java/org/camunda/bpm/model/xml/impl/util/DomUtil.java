@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.xml.impl.util;
+package io.orqueio.bpm.model.xml.impl.util;
 
-import org.camunda.bpm.model.xml.ModelParseException;
-import org.camunda.bpm.model.xml.impl.ModelInstanceImpl;
-import org.camunda.bpm.model.xml.impl.instance.DomDocumentImpl;
-import org.camunda.bpm.model.xml.impl.instance.DomElementImpl;
-import org.camunda.bpm.model.xml.instance.DomDocument;
-import org.camunda.bpm.model.xml.instance.DomElement;
-import org.camunda.bpm.model.xml.instance.ModelElementInstance;
+import io.orqueio.bpm.model.xml.ModelParseException;
+import io.orqueio.bpm.model.xml.impl.ModelInstanceImpl;
+import io.orqueio.bpm.model.xml.impl.instance.DomDocumentImpl;
+import io.orqueio.bpm.model.xml.impl.instance.DomElementImpl;
+import io.orqueio.bpm.model.xml.instance.DomDocument;
+import io.orqueio.bpm.model.xml.instance.DomElement;
+import io.orqueio.bpm.model.xml.instance.ModelElementInstance;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;

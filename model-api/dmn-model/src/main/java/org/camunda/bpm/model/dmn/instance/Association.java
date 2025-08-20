@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.dmn.instance;
+package io.orqueio.bpm.model.dmn.instance;
 
-import org.camunda.bpm.model.dmn.AssociationDirection;
+import io.orqueio.bpm.model.dmn.AssociationDirection;
 
 public interface Association extends Artifact {
 

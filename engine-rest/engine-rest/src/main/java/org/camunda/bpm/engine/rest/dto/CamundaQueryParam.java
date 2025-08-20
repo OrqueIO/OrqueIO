@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.dto;
+package io.orqueio.bpm.engine.rest.dto;
 
-import org.camunda.bpm.engine.rest.dto.converter.JacksonAwareStringToTypeConverter;
-import org.camunda.bpm.engine.rest.dto.converter.StringConverter;
+import io.orqueio.bpm.engine.rest.dto.converter.JacksonAwareStringToTypeConverter;
+import io.orqueio.bpm.engine.rest.dto.converter.StringConverter;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

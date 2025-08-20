@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.rest;
+package io.orqueio.bpm.rest;
 
 import static org.junit.Assert.assertEquals;
 
@@ -33,7 +33,7 @@ import kong.unirest.HttpResponse;
 import kong.unirest.JsonNode;
 import kong.unirest.Unirest;
 
-import org.camunda.bpm.AbstractWebIntegrationTest;
+import io.orqueio.bpm.AbstractWebIntegrationTest;
 import org.junit.Before;
 import org.junit.Test;
 

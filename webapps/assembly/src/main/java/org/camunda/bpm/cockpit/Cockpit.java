@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.cockpit;
+package io.orqueio.bpm.cockpit;
 
-import org.camunda.bpm.cockpit.db.CommandExecutor;
-import org.camunda.bpm.cockpit.db.QueryService;
-import org.camunda.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.cockpit.db.CommandExecutor;
+import io.orqueio.bpm.cockpit.db.QueryService;
+import io.orqueio.bpm.engine.ProcessEngine;
 
 /**
  * <p>Provides access to the camunda cockpit core services.</p>

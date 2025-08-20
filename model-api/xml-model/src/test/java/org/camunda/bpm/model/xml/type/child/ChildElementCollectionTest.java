@@ -14,18 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.xml.type.child;
+package io.orqueio.bpm.model.xml.type.child;
 
-import org.camunda.bpm.model.xml.ModelInstance;
-import org.camunda.bpm.model.xml.UnsupportedModelOperationException;
-import org.camunda.bpm.model.xml.impl.parser.AbstractModelParser;
-import org.camunda.bpm.model.xml.impl.type.child.ChildElementCollectionImpl;
-import org.camunda.bpm.model.xml.impl.type.child.ChildElementImpl;
-import org.camunda.bpm.model.xml.testmodel.Gender;
-import org.camunda.bpm.model.xml.testmodel.TestModelParser;
-import org.camunda.bpm.model.xml.testmodel.TestModelTest;
-import org.camunda.bpm.model.xml.testmodel.instance.*;
-import org.camunda.bpm.model.xml.type.ModelElementType;
+import io.orqueio.bpm.model.xml.ModelInstance;
+import io.orqueio.bpm.model.xml.UnsupportedModelOperationException;
+import io.orqueio.bpm.model.xml.impl.parser.AbstractModelParser;
+import io.orqueio.bpm.model.xml.impl.type.child.ChildElementCollectionImpl;
+import io.orqueio.bpm.model.xml.impl.type.child.ChildElementImpl;
+import io.orqueio.bpm.model.xml.testmodel.Gender;
+import io.orqueio.bpm.model.xml.testmodel.TestModelParser;
+import io.orqueio.bpm.model.xml.testmodel.TestModelTest;
+import io.orqueio.bpm.model.xml.testmodel.instance.*;
+import io.orqueio.bpm.model.xml.type.ModelElementType;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -33,7 +33,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 
-import static org.camunda.bpm.model.xml.test.assertions.ModelAssertions.assertThat;
+import static io.orqueio.bpm.model.xml.test.assertions.ModelAssertions.assertThat;
 import static org.junit.Assert.fail;
 import static org.junit.runners.Parameterized.Parameters;
 

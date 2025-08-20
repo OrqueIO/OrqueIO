@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.engine.impl.hitpolicy;
+package io.orqueio.bpm.dmn.engine.impl.hitpolicy;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.camunda.bpm.dmn.engine.impl.spi.hitpolicy.DmnHitPolicyHandler;
-import org.camunda.bpm.dmn.engine.impl.spi.hitpolicy.DmnHitPolicyHandlerRegistry;
-import org.camunda.bpm.model.dmn.BuiltinAggregator;
-import org.camunda.bpm.model.dmn.HitPolicy;
+import io.orqueio.bpm.dmn.engine.impl.spi.hitpolicy.DmnHitPolicyHandler;
+import io.orqueio.bpm.dmn.engine.impl.spi.hitpolicy.DmnHitPolicyHandlerRegistry;
+import io.orqueio.bpm.model.dmn.BuiltinAggregator;
+import io.orqueio.bpm.model.dmn.HitPolicy;
 
 public class DefaultHitPolicyHandlerRegistry implements DmnHitPolicyHandlerRegistry {
 

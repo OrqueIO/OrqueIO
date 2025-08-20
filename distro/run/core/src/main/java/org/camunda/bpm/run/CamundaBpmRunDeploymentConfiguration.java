@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.run;
+package io.orqueio.bpm.run;
 
 import org.apache.commons.lang3.StringUtils;
-import org.camunda.bpm.spring.boot.starter.configuration.impl.DefaultDeploymentConfiguration;
+import io.orqueio.bpm.spring.boot.starter.configuration.impl.DefaultDeploymentConfiguration;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 

@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.bpmn.builder;
+package io.orqueio.bpm.model.bpmn.builder;
 
-import org.camunda.bpm.model.bpmn.BpmnModelException;
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
-import org.camunda.bpm.model.bpmn.instance.BpmnModelElementInstance;
-import org.camunda.bpm.model.bpmn.instance.EndEvent;
-import org.camunda.bpm.model.bpmn.instance.IntermediateThrowEvent;
-import org.camunda.bpm.model.bpmn.instance.SubProcess;
-import org.camunda.bpm.model.bpmn.instance.Transaction;
-import org.camunda.bpm.model.xml.instance.ModelElementInstance;
+import io.orqueio.bpm.model.bpmn.BpmnModelException;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.bpm.model.bpmn.instance.BpmnModelElementInstance;
+import io.orqueio.bpm.model.bpmn.instance.EndEvent;
+import io.orqueio.bpm.model.bpmn.instance.IntermediateThrowEvent;
+import io.orqueio.bpm.model.bpmn.instance.SubProcess;
+import io.orqueio.bpm.model.bpmn.instance.Transaction;
+import io.orqueio.bpm.model.xml.instance.ModelElementInstance;
 
 /**
  * @author Sebastian Menski

@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.identity.plugin;
+package io.orqueio.bpm.engine.test.api.identity.plugin;
 
-import org.camunda.bpm.engine.impl.interceptor.Session;
-import org.camunda.bpm.engine.impl.interceptor.SessionFactory;
+import io.orqueio.bpm.engine.impl.interceptor.Session;
+import io.orqueio.bpm.engine.impl.interceptor.SessionFactory;
 
 /**
  * @author Simon Jonischkeit

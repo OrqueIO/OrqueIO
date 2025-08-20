@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.jndi;
+package io.orqueio.bpm.container.impl.jndi;
 
 import java.util.Hashtable;
 
@@ -22,8 +22,8 @@ import javax.naming.Context;
 import javax.naming.Name;
 import javax.naming.spi.ObjectFactory;
 
-import org.camunda.bpm.BpmPlatform;
-import org.camunda.bpm.ProcessEngineService;
+import io.orqueio.bpm.BpmPlatform;
+import io.orqueio.bpm.ProcessEngineService;
 
 /**
  * <p>{@link ObjectFactory} that can be used for binding the {@link ProcessEngineService} into JNDI</p> 

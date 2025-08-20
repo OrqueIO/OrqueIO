@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.webapp.plugin.resource;
+package io.orqueio.bpm.webapp.plugin.resource;
 
 import java.io.InputStream;
 

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.task.impl;
+package io.orqueio.bpm.client.task.impl;
 
 import java.text.DateFormat;
 import java.util.Collections;
@@ -22,12 +22,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.camunda.bpm.client.task.ExternalTask;
-import org.camunda.bpm.client.variable.impl.TypedValueField;
-import org.camunda.bpm.client.variable.impl.VariableValue;
-import org.camunda.bpm.engine.variable.VariableMap;
-import org.camunda.bpm.engine.variable.Variables;
-import org.camunda.bpm.engine.variable.value.TypedValue;
+import io.orqueio.bpm.client.task.ExternalTask;
+import io.orqueio.bpm.client.variable.impl.TypedValueField;
+import io.orqueio.bpm.client.variable.impl.VariableValue;
+import io.orqueio.bpm.engine.variable.VariableMap;
+import io.orqueio.bpm.engine.variable.Variables;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

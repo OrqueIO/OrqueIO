@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.util;
+package io.orqueio.bpm.engine.impl.util;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.camunda.commons.testing.ProcessEngineLoggingRule;
-import org.camunda.commons.testing.WatchLogger;
+import io.orqueio.commons.testing.ProcessEngineLoggingRule;
+import io.orqueio.commons.testing.WatchLogger;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -29,7 +29,7 @@ public class PropertiesUtilTest {
   public ProcessEngineLoggingRule loggingRule = new ProcessEngineLoggingRule();
 
   @Test
-  @WatchLogger(loggerNames = {"org.camunda.bpm.engine.util"}, level = "DEBUG")
+  @WatchLogger(loggerNames = {"io.orqueio.bpm.engine.util"}, level = "DEBUG")
   public void shouldLogMissingFile() {
     // given
     String invalidFile = "/missingProps.properties";

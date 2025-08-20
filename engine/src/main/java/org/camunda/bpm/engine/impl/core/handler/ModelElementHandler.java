@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.core.handler;
+package io.orqueio.bpm.engine.impl.core.handler;
 
-import org.camunda.bpm.engine.impl.core.model.CoreActivity;
-import org.camunda.bpm.model.xml.instance.ModelElementInstance;
+import io.orqueio.bpm.engine.impl.core.model.CoreActivity;
+import io.orqueio.bpm.model.xml.instance.ModelElementInstance;
 
 /**
  * <p>A {@link ModelElementHandler} handles an instance of a {@link ModelElementInstance modelElement}

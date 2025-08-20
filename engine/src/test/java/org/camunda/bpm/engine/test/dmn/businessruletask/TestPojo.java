@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.dmn.businessruletask;
+package io.orqueio.bpm.engine.test.dmn.businessruletask;
 
 import java.io.Serializable;
 import java.util.Objects;

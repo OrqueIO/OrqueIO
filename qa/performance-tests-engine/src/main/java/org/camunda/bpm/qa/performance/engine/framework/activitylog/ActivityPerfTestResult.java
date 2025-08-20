@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa.performance.engine.framework.activitylog;
+package io.orqueio.bpm.qa.performance.engine.framework.activitylog;
 
 import java.util.Date;
 
-import org.camunda.bpm.engine.history.HistoricActivityInstance;
+import io.orqueio.bpm.engine.history.HistoricActivityInstance;
 
 public class ActivityPerfTestResult {
 

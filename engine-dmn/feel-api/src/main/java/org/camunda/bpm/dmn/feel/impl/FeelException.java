@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.feel.impl;
+package io.orqueio.bpm.dmn.feel.impl;
 
 /**
  * Exception which is thrown if a error occurs during the

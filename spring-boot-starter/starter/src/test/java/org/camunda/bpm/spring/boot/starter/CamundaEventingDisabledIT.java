@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter;
+package io.orqueio.bpm.spring.boot.starter;
 
-import org.camunda.bpm.engine.RuntimeService;
-import org.camunda.bpm.engine.TaskService;
-import org.camunda.bpm.engine.repository.ProcessDefinition;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.task.Task;
-import org.camunda.bpm.spring.boot.starter.test.nonpa.TestApplication;
-import org.camunda.bpm.spring.boot.starter.test.nonpa.TestEventCaptor;
+import io.orqueio.bpm.engine.RuntimeService;
+import io.orqueio.bpm.engine.TaskService;
+import io.orqueio.bpm.engine.repository.ProcessDefinition;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.task.Task;
+import io.orqueio.bpm.spring.boot.starter.test.nonpa.TestApplication;
+import io.orqueio.bpm.spring.boot.starter.test.nonpa.TestEventCaptor;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

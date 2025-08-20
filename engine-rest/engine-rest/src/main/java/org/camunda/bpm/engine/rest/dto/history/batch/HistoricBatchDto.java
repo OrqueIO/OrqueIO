@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.dto.history.batch;
+package io.orqueio.bpm.engine.rest.dto.history.batch;
 
 import java.util.Date;
 
-import org.camunda.bpm.engine.batch.history.HistoricBatch;
+import io.orqueio.bpm.engine.batch.history.HistoricBatch;
 
 public class HistoricBatchDto {
 

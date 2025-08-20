@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.jboss.util;
+package io.orqueio.bpm.container.impl.jboss.util;
 
-import org.camunda.bpm.container.impl.jboss.extension.BpmPlatformExtension;
+import io.orqueio.bpm.container.impl.jboss.extension.BpmPlatformExtension;
 import org.jboss.as.controller.SimpleMapAttributeDefinition;
 import org.jboss.as.controller.descriptions.StandardResourceDescriptionResolver;
 import org.jboss.dmr.ModelNode;
@@ -25,7 +25,7 @@ import org.junit.Test;
 import java.util.ResourceBundle;
 
 /**
- * This class must be in package 'org.camunda.bpm.container.impl.jboss.util' because of protected method test.
+ * This class must be in package 'io.orqueio.bpm.container.impl.jboss.util' because of protected method test.
  */
 public class ReflectionCompatibilityTest {
 

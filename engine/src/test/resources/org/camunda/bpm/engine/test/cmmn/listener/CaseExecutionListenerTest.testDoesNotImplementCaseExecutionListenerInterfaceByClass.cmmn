@@ -12,7 +12,7 @@
 
       <humanTask id="HumanTask_1" name="A HumanTask">
         <extensionElements>
-          <camunda:caseExecutionListener event="create" class="org.camunda.bpm.engine.test.cmmn.listener.NotCaseExecutionListener" />
+          <camunda:caseExecutionListener event="create" class="io.orqueio.bpm.engine.test.cmmn.listener.NotCaseExecutionListener" />
         </extensionElements>
       </humanTask>
 

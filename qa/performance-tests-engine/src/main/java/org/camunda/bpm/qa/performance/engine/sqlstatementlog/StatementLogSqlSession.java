@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa.performance.engine.sqlstatementlog;
+package io.orqueio.bpm.qa.performance.engine.sqlstatementlog;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -24,8 +24,8 @@ import java.util.Map;
 import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
-import org.camunda.bpm.qa.performance.engine.util.DelegatingSqlSession;
-import org.camunda.bpm.qa.performance.engine.util.JsonUtil;
+import io.orqueio.bpm.qa.performance.engine.util.DelegatingSqlSession;
+import io.orqueio.bpm.qa.performance.engine.util.JsonUtil;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.SerializationConfig;

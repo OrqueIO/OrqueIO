@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.history.event;
+package io.orqueio.bpm.engine.impl.history.event;
 
 import java.io.Serializable;
 import java.util.Date;
 
-import org.camunda.bpm.engine.impl.db.DbEntity;
-import org.camunda.bpm.engine.impl.db.HistoricEntity;
-import org.camunda.bpm.engine.impl.db.entitymanager.DbEntityManager;
-import org.camunda.bpm.engine.impl.history.handler.HistoryEventHandler;
+import io.orqueio.bpm.engine.impl.db.DbEntity;
+import io.orqueio.bpm.engine.impl.db.HistoricEntity;
+import io.orqueio.bpm.engine.impl.db.entitymanager.DbEntityManager;
+import io.orqueio.bpm.engine.impl.history.handler.HistoryEventHandler;
 
 /**
  * <p>The base class for all history events.</p>

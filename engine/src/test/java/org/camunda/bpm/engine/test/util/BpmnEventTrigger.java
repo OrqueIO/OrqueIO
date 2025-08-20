@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.util;
+package io.orqueio.bpm.engine.test.util;
 
 /**
  * @author Christopher Zell <christopher.zell@camunda.com>
  */
 
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
 
 public interface BpmnEventTrigger {
   void trigger(ProcessEngineTestRule rule);

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.spring;
+package io.orqueio.bpm.client.spring;
 
 import static org.junit.Assume.assumeTrue;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -23,10 +23,10 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.when;
 
-import org.camunda.bpm.client.ExternalTaskClient;
-import org.camunda.bpm.client.ExternalTaskClientBuilder;
-import org.camunda.bpm.client.topic.TopicSubscription;
-import org.camunda.bpm.client.topic.TopicSubscriptionBuilder;
+import io.orqueio.bpm.client.ExternalTaskClient;
+import io.orqueio.bpm.client.ExternalTaskClientBuilder;
+import io.orqueio.bpm.client.topic.TopicSubscription;
+import io.orqueio.bpm.client.topic.TopicSubscriptionBuilder;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Rule;

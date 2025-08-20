@@ -14,21 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.db.entitymanager.cache;
+package io.orqueio.bpm.engine.impl.db.entitymanager.cache;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.camunda.bpm.engine.impl.db.DbEntity;
-import org.camunda.bpm.engine.impl.history.event.HistoricDetailEventEntity;
-import org.camunda.bpm.engine.impl.history.event.HistoricFormPropertyEventEntity;
-import org.camunda.bpm.engine.impl.history.event.HistoricVariableUpdateEventEntity;
-import org.camunda.bpm.engine.impl.persistence.entity.AcquirableJobEntity;
-import org.camunda.bpm.engine.impl.persistence.entity.HistoricDetailVariableInstanceUpdateEntity;
-import org.camunda.bpm.engine.impl.persistence.entity.HistoricFormPropertyEntity;
-import org.camunda.bpm.engine.impl.persistence.entity.JobEntity;
-import org.camunda.bpm.engine.impl.persistence.entity.MessageEntity;
-import org.camunda.bpm.engine.impl.persistence.entity.TimerEntity;
+import io.orqueio.bpm.engine.impl.db.DbEntity;
+import io.orqueio.bpm.engine.impl.history.event.HistoricDetailEventEntity;
+import io.orqueio.bpm.engine.impl.history.event.HistoricFormPropertyEventEntity;
+import io.orqueio.bpm.engine.impl.history.event.HistoricVariableUpdateEventEntity;
+import io.orqueio.bpm.engine.impl.persistence.entity.AcquirableJobEntity;
+import io.orqueio.bpm.engine.impl.persistence.entity.HistoricDetailVariableInstanceUpdateEntity;
+import io.orqueio.bpm.engine.impl.persistence.entity.HistoricFormPropertyEntity;
+import io.orqueio.bpm.engine.impl.persistence.entity.JobEntity;
+import io.orqueio.bpm.engine.impl.persistence.entity.MessageEntity;
+import io.orqueio.bpm.engine.impl.persistence.entity.TimerEntity;
 
 /**
  * Provides the keys used by {@link DbEntityCache} for organizing the different {@link DbEntity} types.

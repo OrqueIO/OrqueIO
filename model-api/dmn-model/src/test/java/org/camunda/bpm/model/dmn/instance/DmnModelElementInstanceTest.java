@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.dmn.instance;
+package io.orqueio.bpm.model.dmn.instance;
 
-import org.camunda.bpm.model.dmn.impl.DmnModelConstants;
-import org.camunda.bpm.model.dmn.util.GetDmnModelElementTypeRule;
-import org.camunda.bpm.model.xml.test.AbstractModelElementInstanceTest;
+import io.orqueio.bpm.model.dmn.impl.DmnModelConstants;
+import io.orqueio.bpm.model.dmn.util.GetDmnModelElementTypeRule;
+import io.orqueio.bpm.model.xml.test.AbstractModelElementInstanceTest;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa.performance.engine.framework;
+package io.orqueio.bpm.qa.performance.engine.framework;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -22,9 +22,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
-import org.camunda.bpm.engine.impl.cfg.IdGenerator;
-import org.camunda.bpm.engine.impl.persistence.StrongUuidGenerator;
-import org.camunda.bpm.qa.performance.engine.framework.activitylog.ActivityPerfTestResult;
+import io.orqueio.bpm.engine.impl.cfg.IdGenerator;
+import io.orqueio.bpm.engine.impl.persistence.StrongUuidGenerator;
+import io.orqueio.bpm.qa.performance.engine.framework.activitylog.ActivityPerfTestResult;
 
 /**
  * A step in a performance test.

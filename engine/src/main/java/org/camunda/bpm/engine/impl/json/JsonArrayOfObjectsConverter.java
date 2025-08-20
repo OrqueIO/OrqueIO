@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.json;
+package io.orqueio.bpm.engine.impl.json;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonArray;
-import org.camunda.bpm.engine.impl.util.JsonUtil;
+import io.orqueio.bpm.engine.impl.util.JsonUtil;
 
 /**
  * @author Thorben Lindhauer

@@ -14,20 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.cmd;
+package io.orqueio.bpm.engine.impl.cmd;
 
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.impl.db.DbEntity;
-import org.camunda.bpm.engine.impl.db.entitymanager.DbEntityManager;
-import org.camunda.bpm.engine.impl.db.entitymanager.operation.DbBulkOperation;
-import org.camunda.bpm.engine.impl.db.entitymanager.operation.DbOperationType;
-import org.camunda.bpm.engine.impl.interceptor.Command;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.management.DatabasePurgeReport;
-import org.camunda.bpm.engine.impl.management.PurgeReport;
-import org.camunda.bpm.engine.impl.persistence.deploy.cache.CachePurgeReport;
-import org.camunda.bpm.engine.impl.persistence.deploy.cache.DeploymentCache;
-import org.camunda.bpm.engine.impl.persistence.entity.ByteArrayEntity;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.impl.db.DbEntity;
+import io.orqueio.bpm.engine.impl.db.entitymanager.DbEntityManager;
+import io.orqueio.bpm.engine.impl.db.entitymanager.operation.DbBulkOperation;
+import io.orqueio.bpm.engine.impl.db.entitymanager.operation.DbOperationType;
+import io.orqueio.bpm.engine.impl.interceptor.Command;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.impl.management.DatabasePurgeReport;
+import io.orqueio.bpm.engine.impl.management.PurgeReport;
+import io.orqueio.bpm.engine.impl.persistence.deploy.cache.CachePurgeReport;
+import io.orqueio.bpm.engine.impl.persistence.deploy.cache.DeploymentCache;
+import io.orqueio.bpm.engine.impl.persistence.entity.ByteArrayEntity;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.HashMap;

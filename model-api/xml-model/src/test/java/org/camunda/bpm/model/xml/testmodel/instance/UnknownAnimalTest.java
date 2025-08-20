@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.xml.testmodel.instance;
+package io.orqueio.bpm.model.xml.testmodel.instance;
 
-import org.camunda.bpm.model.xml.ModelException;
-import org.camunda.bpm.model.xml.ModelInstance;
-import org.camunda.bpm.model.xml.impl.ModelInstanceImpl;
-import org.camunda.bpm.model.xml.impl.parser.AbstractModelParser;
-import org.camunda.bpm.model.xml.instance.DomDocument;
-import org.camunda.bpm.model.xml.instance.ModelElementInstance;
-import org.camunda.bpm.model.xml.testmodel.TestModelParser;
-import org.camunda.bpm.model.xml.type.ModelElementType;
+import io.orqueio.bpm.model.xml.ModelException;
+import io.orqueio.bpm.model.xml.ModelInstance;
+import io.orqueio.bpm.model.xml.impl.ModelInstanceImpl;
+import io.orqueio.bpm.model.xml.impl.parser.AbstractModelParser;
+import io.orqueio.bpm.model.xml.instance.DomDocument;
+import io.orqueio.bpm.model.xml.instance.ModelElementInstance;
+import io.orqueio.bpm.model.xml.testmodel.TestModelParser;
+import io.orqueio.bpm.model.xml.type.ModelElementType;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,7 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.camunda.bpm.model.xml.testmodel.TestModelConstants.MODEL_NAMESPACE;
+import static io.orqueio.bpm.model.xml.testmodel.TestModelConstants.MODEL_NAMESPACE;
 import static org.junit.Assert.fail;
 
 /**

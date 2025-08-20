@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.batch.removaltime;
+package io.orqueio.bpm.engine.impl.batch.removaltime;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
-import org.camunda.bpm.engine.impl.batch.BatchConfiguration;
-import org.camunda.bpm.engine.impl.batch.DeploymentMappings;
+import io.orqueio.bpm.engine.impl.batch.BatchConfiguration;
+import io.orqueio.bpm.engine.impl.batch.DeploymentMappings;
 
 /**
  * @author Tassilo Weidner

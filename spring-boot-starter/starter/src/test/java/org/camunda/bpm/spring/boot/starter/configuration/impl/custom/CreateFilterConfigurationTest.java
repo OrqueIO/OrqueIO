@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter.configuration.impl.custom;
+package io.orqueio.bpm.spring.boot.starter.configuration.impl.custom;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -25,15 +25,15 @@ import static org.mockito.Mockito.when;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.spi.ILoggingEvent;
-import org.camunda.bpm.engine.FilterService;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.filter.Filter;
-import org.camunda.bpm.engine.filter.FilterQuery;
-import org.camunda.bpm.engine.test.ProcessEngineRule;
-import org.camunda.bpm.spring.boot.starter.property.CamundaBpmProperties;
-import org.camunda.bpm.spring.boot.starter.test.helper.StandaloneInMemoryTestConfiguration;
-import org.camunda.bpm.spring.boot.starter.util.SpringBootProcessEngineLogger;
-import org.camunda.commons.testing.ProcessEngineLoggingRule;
+import io.orqueio.bpm.engine.FilterService;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.filter.Filter;
+import io.orqueio.bpm.engine.filter.FilterQuery;
+import io.orqueio.bpm.engine.test.ProcessEngineRule;
+import io.orqueio.bpm.spring.boot.starter.property.CamundaBpmProperties;
+import io.orqueio.bpm.spring.boot.starter.test.helper.StandaloneInMemoryTestConfiguration;
+import io.orqueio.bpm.spring.boot.starter.util.SpringBootProcessEngineLogger;
+import io.orqueio.commons.testing.ProcessEngineLoggingRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;

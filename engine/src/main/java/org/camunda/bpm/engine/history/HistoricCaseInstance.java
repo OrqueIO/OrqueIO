@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.history;
+package io.orqueio.bpm.engine.history;
 
 import java.util.Date;
 
-import org.camunda.bpm.engine.IdentityService;
-import org.camunda.bpm.engine.runtime.CaseInstance;
+import io.orqueio.bpm.engine.IdentityService;
+import io.orqueio.bpm.engine.runtime.CaseInstance;
 
 /**
  * A single execution of a case definition that is stored permanently.

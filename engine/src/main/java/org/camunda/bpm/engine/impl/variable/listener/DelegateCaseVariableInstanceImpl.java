@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.variable.listener;
+package io.orqueio.bpm.engine.impl.variable.listener;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.ProcessEngineServices;
-import org.camunda.bpm.engine.delegate.DelegateCaseExecution;
-import org.camunda.bpm.engine.delegate.DelegateCaseVariableInstance;
-import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.engine.runtime.VariableInstance;
-import org.camunda.bpm.engine.variable.value.TypedValue;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.ProcessEngineServices;
+import io.orqueio.bpm.engine.delegate.DelegateCaseExecution;
+import io.orqueio.bpm.engine.delegate.DelegateCaseVariableInstance;
+import io.orqueio.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.runtime.VariableInstance;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
 /**
  * @author Thorben Lindhauer
  *

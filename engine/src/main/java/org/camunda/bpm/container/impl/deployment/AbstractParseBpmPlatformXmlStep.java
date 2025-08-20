@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.deployment;
+package io.orqueio.bpm.container.impl.deployment;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -25,16 +25,16 @@ import java.util.regex.Pattern;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
-import org.camunda.bpm.container.impl.ContainerIntegrationLogger;
-import org.camunda.bpm.container.impl.metadata.BpmPlatformXmlParser;
-import org.camunda.bpm.container.impl.metadata.spi.BpmPlatformXml;
-import org.camunda.bpm.container.impl.spi.DeploymentOperation;
-import org.camunda.bpm.container.impl.spi.DeploymentOperationStep;
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
-import org.camunda.bpm.engine.impl.util.ClassLoaderUtil;
+import io.orqueio.bpm.container.impl.ContainerIntegrationLogger;
+import io.orqueio.bpm.container.impl.metadata.BpmPlatformXmlParser;
+import io.orqueio.bpm.container.impl.metadata.spi.BpmPlatformXml;
+import io.orqueio.bpm.container.impl.spi.DeploymentOperation;
+import io.orqueio.bpm.container.impl.spi.DeploymentOperationStep;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
+import io.orqueio.bpm.engine.impl.util.ClassLoaderUtil;
 
-import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
+import static io.orqueio.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
 
 /**
  * <p>Deployment operation step responsible for parsing and attaching the bpm-platform.xml file.</p>

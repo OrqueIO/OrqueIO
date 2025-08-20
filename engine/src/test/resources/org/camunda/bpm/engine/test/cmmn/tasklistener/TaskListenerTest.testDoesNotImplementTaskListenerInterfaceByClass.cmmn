@@ -10,7 +10,7 @@
       <planItem id="PI_HumanTask_1" definitionRef="HumanTask_1" />
       <humanTask id="HumanTask_1" name="A HumanTask">
         <extensionElements>
-          <camunda:taskListener event="create" class="org.camunda.bpm.engine.test.cmmn.tasklistener.util.NotTaskListener" />
+          <camunda:taskListener event="create" class="io.orqueio.bpm.engine.test.cmmn.tasklistener.util.NotTaskListener" />
         </extensionElements>
       </humanTask>
     </casePlanModel>

@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.dto;
+package io.orqueio.bpm.engine.rest.dto;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.camunda.bpm.engine.authorization.MissingAuthorization;
+import io.orqueio.bpm.engine.authorization.MissingAuthorization;
 
 /**
  * * <p>Dto for {@link MissingAuthorization}</p>

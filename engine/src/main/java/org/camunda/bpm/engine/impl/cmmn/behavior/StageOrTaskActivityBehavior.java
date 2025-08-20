@@ -14,21 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.cmmn.behavior;
+package io.orqueio.bpm.engine.impl.cmmn.behavior;
 
-import static org.camunda.bpm.engine.impl.cmmn.execution.CaseExecutionState.ACTIVE;
-import static org.camunda.bpm.engine.impl.cmmn.execution.CaseExecutionState.AVAILABLE;
-import static org.camunda.bpm.engine.impl.cmmn.execution.CaseExecutionState.COMPLETED;
-import static org.camunda.bpm.engine.impl.cmmn.execution.CaseExecutionState.DISABLED;
-import static org.camunda.bpm.engine.impl.cmmn.execution.CaseExecutionState.ENABLED;
-import static org.camunda.bpm.engine.impl.cmmn.execution.CaseExecutionState.SUSPENDED;
-import static org.camunda.bpm.engine.impl.cmmn.execution.CaseExecutionState.TERMINATED;
-import static org.camunda.bpm.engine.impl.cmmn.handler.ItemHandler.PROPERTY_MANUAL_ACTIVATION_RULE;
+import static io.orqueio.bpm.engine.impl.cmmn.execution.CaseExecutionState.ACTIVE;
+import static io.orqueio.bpm.engine.impl.cmmn.execution.CaseExecutionState.AVAILABLE;
+import static io.orqueio.bpm.engine.impl.cmmn.execution.CaseExecutionState.COMPLETED;
+import static io.orqueio.bpm.engine.impl.cmmn.execution.CaseExecutionState.DISABLED;
+import static io.orqueio.bpm.engine.impl.cmmn.execution.CaseExecutionState.ENABLED;
+import static io.orqueio.bpm.engine.impl.cmmn.execution.CaseExecutionState.SUSPENDED;
+import static io.orqueio.bpm.engine.impl.cmmn.execution.CaseExecutionState.TERMINATED;
+import static io.orqueio.bpm.engine.impl.cmmn.handler.ItemHandler.PROPERTY_MANUAL_ACTIVATION_RULE;
 
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
-import org.camunda.bpm.engine.impl.cmmn.CaseControlRule;
-import org.camunda.bpm.engine.impl.cmmn.execution.CmmnActivityExecution;
-import org.camunda.bpm.engine.impl.cmmn.model.CmmnActivity;
+import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
+import io.orqueio.bpm.engine.impl.cmmn.CaseControlRule;
+import io.orqueio.bpm.engine.impl.cmmn.execution.CmmnActivityExecution;
+import io.orqueio.bpm.engine.impl.cmmn.model.CmmnActivity;
 
 /**
  * @author Roman Smirnov

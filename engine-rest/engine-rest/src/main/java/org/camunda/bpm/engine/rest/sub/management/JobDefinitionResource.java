@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.sub.management;
+package io.orqueio.bpm.engine.rest.sub.management;
 
-import org.camunda.bpm.engine.rest.dto.management.JobDefinitionDto;
-import org.camunda.bpm.engine.rest.dto.management.JobDefinitionSuspensionStateDto;
-import org.camunda.bpm.engine.rest.dto.runtime.JobDefinitionPriorityDto;
-import org.camunda.bpm.engine.rest.dto.runtime.RetriesDto;
+import io.orqueio.bpm.engine.rest.dto.management.JobDefinitionDto;
+import io.orqueio.bpm.engine.rest.dto.management.JobDefinitionSuspensionStateDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.JobDefinitionPriorityDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.RetriesDto;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;

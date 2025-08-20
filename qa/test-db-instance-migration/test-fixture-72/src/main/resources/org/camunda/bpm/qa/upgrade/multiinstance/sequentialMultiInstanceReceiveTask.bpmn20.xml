@@ -12,7 +12,7 @@
       <extensionElements>
         <camunda:executionListener
             event="end"
-            class="org.camunda.bpm.qa.upgrade.util.ThrowBpmnErrorDelegate" />
+            class="io.orqueio.bpm.qa.upgrade.util.ThrowBpmnErrorDelegate" />
       </extensionElements>
       <multiInstanceLoopCharacteristics isSequential="true">
         <loopCardinality>3</loopCardinality>

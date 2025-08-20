@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.dto;
+package io.orqueio.bpm.engine.rest.dto;
 
-import org.camunda.bpm.engine.impl.TaskQueryVariableValue;
-import org.camunda.bpm.engine.variable.Variables;
+import io.orqueio.bpm.engine.impl.TaskQueryVariableValue;
+import io.orqueio.bpm.engine.variable.Variables;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 

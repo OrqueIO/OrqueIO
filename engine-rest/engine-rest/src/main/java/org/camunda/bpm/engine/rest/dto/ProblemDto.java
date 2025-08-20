@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.dto;
+package io.orqueio.bpm.engine.rest.dto;
 
 import java.util.List;
 
-import org.camunda.bpm.engine.Problem;
+import io.orqueio.bpm.engine.Problem;
 
 /**
  * Dto for {@link Problem}

@@ -14,31 +14,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.runtime.migration;
+package io.orqueio.bpm.engine.test.api.runtime.migration;
 
-import static org.camunda.bpm.engine.test.api.runtime.migration.ModifiableBpmnModelInstance.modify;
-import static org.camunda.bpm.engine.test.api.runtime.migration.models.ConditionalModels.BOUNDARY_ID;
-import static org.camunda.bpm.engine.test.api.runtime.migration.models.ConditionalModels.CONDITION_ID;
-import static org.camunda.bpm.engine.test.api.runtime.migration.models.ConditionalModels.PROC_DEF_KEY;
-import static org.camunda.bpm.engine.test.api.runtime.migration.models.ConditionalModels.SUB_PROCESS_ID;
-import static org.camunda.bpm.engine.test.api.runtime.migration.models.ConditionalModels.USER_TASK_ID;
-import static org.camunda.bpm.engine.test.api.runtime.migration.models.ConditionalModels.VARIABLE_NAME;
-import static org.camunda.bpm.engine.test.api.runtime.migration.models.ConditionalModels.VAR_CONDITION;
-import static org.camunda.bpm.engine.test.api.runtime.migration.models.EventSubProcessModels.EVENT_SUB_PROCESS_START_ID;
-import static org.camunda.bpm.engine.test.bpmn.event.conditional.AbstractConditionalEventTestCase.TASK_AFTER_CONDITION_ID;
+import static io.orqueio.bpm.engine.test.api.runtime.migration.ModifiableBpmnModelInstance.modify;
+import static io.orqueio.bpm.engine.test.api.runtime.migration.models.ConditionalModels.BOUNDARY_ID;
+import static io.orqueio.bpm.engine.test.api.runtime.migration.models.ConditionalModels.CONDITION_ID;
+import static io.orqueio.bpm.engine.test.api.runtime.migration.models.ConditionalModels.PROC_DEF_KEY;
+import static io.orqueio.bpm.engine.test.api.runtime.migration.models.ConditionalModels.SUB_PROCESS_ID;
+import static io.orqueio.bpm.engine.test.api.runtime.migration.models.ConditionalModels.USER_TASK_ID;
+import static io.orqueio.bpm.engine.test.api.runtime.migration.models.ConditionalModels.VARIABLE_NAME;
+import static io.orqueio.bpm.engine.test.api.runtime.migration.models.ConditionalModels.VAR_CONDITION;
+import static io.orqueio.bpm.engine.test.api.runtime.migration.models.EventSubProcessModels.EVENT_SUB_PROCESS_START_ID;
+import static io.orqueio.bpm.engine.test.bpmn.event.conditional.AbstractConditionalEventTestCase.TASK_AFTER_CONDITION_ID;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-import org.camunda.bpm.engine.delegate.ExecutionListener;
-import org.camunda.bpm.engine.migration.MigrationPlan;
-import org.camunda.bpm.engine.repository.ProcessDefinition;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.test.ProcessEngineRule;
-import org.camunda.bpm.engine.test.api.runtime.migration.models.ProcessModels;
-import org.camunda.bpm.engine.test.bpmn.event.conditional.SetVariableDelegate;
-import org.camunda.bpm.engine.test.util.ProvidedProcessEngineRule;
-import org.camunda.bpm.model.bpmn.Bpmn;
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.bpm.engine.delegate.ExecutionListener;
+import io.orqueio.bpm.engine.migration.MigrationPlan;
+import io.orqueio.bpm.engine.repository.ProcessDefinition;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.test.ProcessEngineRule;
+import io.orqueio.bpm.engine.test.api.runtime.migration.models.ProcessModels;
+import io.orqueio.bpm.engine.test.bpmn.event.conditional.SetVariableDelegate;
+import io.orqueio.bpm.engine.test.util.ProvidedProcessEngineRule;
+import io.orqueio.bpm.model.bpmn.Bpmn;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;

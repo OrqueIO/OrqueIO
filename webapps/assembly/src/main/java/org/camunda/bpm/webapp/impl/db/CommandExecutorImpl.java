@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.webapp.impl.db;
+package io.orqueio.bpm.webapp.impl.db;
 
 import java.util.List;
 
-import org.camunda.bpm.webapp.db.CommandExecutor;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.interceptor.Command;
+import io.orqueio.bpm.webapp.db.CommandExecutor;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.interceptor.Command;
 
 public class CommandExecutorImpl implements CommandExecutor {
 

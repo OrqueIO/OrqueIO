@@ -14,22 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.xml.test;
+package io.orqueio.bpm.model.xml.test;
 
-import static org.camunda.bpm.model.xml.test.assertions.ModelAssertions.assertThat;
+import static io.orqueio.bpm.model.xml.test.assertions.ModelAssertions.assertThat;
 import static org.junit.Assert.fail;
 
 import java.util.Collection;
 
-import org.camunda.bpm.model.xml.Model;
-import org.camunda.bpm.model.xml.ModelInstance;
-import org.camunda.bpm.model.xml.impl.type.ModelElementTypeImpl;
-import org.camunda.bpm.model.xml.impl.util.ModelTypeException;
-import org.camunda.bpm.model.xml.instance.ModelElementInstance;
-import org.camunda.bpm.model.xml.test.assertions.AttributeAssert;
-import org.camunda.bpm.model.xml.test.assertions.ChildElementAssert;
-import org.camunda.bpm.model.xml.test.assertions.ModelElementTypeAssert;
-import org.camunda.bpm.model.xml.type.ModelElementType;
+import io.orqueio.bpm.model.xml.Model;
+import io.orqueio.bpm.model.xml.ModelInstance;
+import io.orqueio.bpm.model.xml.impl.type.ModelElementTypeImpl;
+import io.orqueio.bpm.model.xml.impl.util.ModelTypeException;
+import io.orqueio.bpm.model.xml.instance.ModelElementInstance;
+import io.orqueio.bpm.model.xml.test.assertions.AttributeAssert;
+import io.orqueio.bpm.model.xml.test.assertions.ChildElementAssert;
+import io.orqueio.bpm.model.xml.test.assertions.ModelElementTypeAssert;
+import io.orqueio.bpm.model.xml.type.ModelElementType;
 import org.junit.Test;
 import org.w3c.dom.DOMException;
 

@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest;
+package io.orqueio.bpm.engine.rest;
 
-import org.camunda.bpm.engine.rest.dto.CountResultDto;
-import org.camunda.bpm.engine.rest.dto.batch.BatchDto;
-import org.camunda.bpm.engine.rest.dto.runtime.JobDto;
-import org.camunda.bpm.engine.rest.dto.runtime.JobQueryDto;
-import org.camunda.bpm.engine.rest.dto.runtime.JobSuspensionStateDto;
-import org.camunda.bpm.engine.rest.dto.runtime.SetJobRetriesDto;
-import org.camunda.bpm.engine.rest.sub.runtime.JobResource;
+import io.orqueio.bpm.engine.rest.dto.CountResultDto;
+import io.orqueio.bpm.engine.rest.dto.batch.BatchDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.JobDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.JobQueryDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.JobSuspensionStateDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.SetJobRetriesDto;
+import io.orqueio.bpm.engine.rest.sub.runtime.JobResource;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;

@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.spring.impl.client.util;
+package io.orqueio.bpm.client.spring.impl.client.util;
 
-import org.camunda.bpm.client.ExternalTaskClient;
-import org.camunda.bpm.client.spring.exception.SpringExternalTaskClientException;
-import org.camunda.bpm.client.spring.impl.util.LoggerUtil;
+import io.orqueio.bpm.client.ExternalTaskClient;
+import io.orqueio.bpm.client.spring.exception.SpringExternalTaskClientException;
+import io.orqueio.bpm.client.spring.impl.util.LoggerUtil;
 
 public class ClientLoggerUtil extends LoggerUtil {
 

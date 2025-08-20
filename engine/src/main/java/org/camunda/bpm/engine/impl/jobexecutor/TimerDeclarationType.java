@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.jobexecutor;
+package io.orqueio.bpm.engine.impl.jobexecutor;
 
-import org.camunda.bpm.engine.impl.calendar.CycleBusinessCalendar;
-import org.camunda.bpm.engine.impl.calendar.DueDateBusinessCalendar;
-import org.camunda.bpm.engine.impl.calendar.DurationBusinessCalendar;
+import io.orqueio.bpm.engine.impl.calendar.CycleBusinessCalendar;
+import io.orqueio.bpm.engine.impl.calendar.DueDateBusinessCalendar;
+import io.orqueio.bpm.engine.impl.calendar.DurationBusinessCalendar;
 
 public enum TimerDeclarationType {
   DATE(DueDateBusinessCalendar.NAME),DURATION(DurationBusinessCalendar.NAME),CYCLE(CycleBusinessCalendar.NAME);

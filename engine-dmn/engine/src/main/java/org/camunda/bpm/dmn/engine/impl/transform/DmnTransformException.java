@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.engine.impl.transform;
+package io.orqueio.bpm.dmn.engine.impl.transform;
 
-import org.camunda.bpm.dmn.engine.DmnEngineException;
+import io.orqueio.bpm.dmn.engine.DmnEngineException;
 
 /**
  * Exception throw for errors during the transformation of a decision.

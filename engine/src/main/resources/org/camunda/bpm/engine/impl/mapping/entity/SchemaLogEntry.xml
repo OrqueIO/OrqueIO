@@ -19,11 +19,11 @@
 -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
   
-<mapper namespace="org.camunda.bpm.engine.impl.persistence.entity.SchemaLogEntryEntity">
+<mapper namespace="io.orqueio.bpm.engine.impl.persistence.entity.SchemaLogEntryEntity">
 
   <!-- SCHEMALOGENTRY INSERT -->
   
-  <insert id="insertSchemaLogEntry" parameterType="org.camunda.bpm.engine.impl.persistence.entity.SchemaLogEntryEntity">
+  <insert id="insertSchemaLogEntry" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.SchemaLogEntryEntity">
       insert into ${prefix}ACT_GE_SCHEMA_LOG (
         ID_,
         TIMESTAMP_,
@@ -37,31 +37,31 @@
 
   <!-- SCHEMALOGENTRY DELETE -->
   
-  <delete id="deleteSchemaLogEntry" parameterType="org.camunda.bpm.engine.impl.persistence.entity.SchemaLogEntryEntity">
+  <delete id="deleteSchemaLogEntry" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.SchemaLogEntryEntity">
       delete from ${prefix}ACT_GE_SCHEMA_LOG
       where ID_ = #{id}
   </delete>
 
   <!-- SCHEMALOGENTRY SELECT -->
   
-  <resultMap id="schemaLogEntryResultMap" type="org.camunda.bpm.engine.impl.persistence.entity.SchemaLogEntryEntity">
+  <resultMap id="schemaLogEntryResultMap" type="io.orqueio.bpm.engine.impl.persistence.entity.SchemaLogEntryEntity">
     <id property="id" column="ID_" jdbcType="VARCHAR" />
     <result property="timestamp" column="TIMESTAMP_" jdbcType="TIMESTAMP" />
     <result property="version" column="VERSION_" jdbcType="VARCHAR" />
   </resultMap>
 
-  <select id="selectSchemaLogEntryCountByQueryCriteria" parameterType="org.camunda.bpm.engine.impl.SchemaLogQueryImpl" resultType="long">
+  <select id="selectSchemaLogEntryCountByQueryCriteria" parameterType="io.orqueio.bpm.engine.impl.SchemaLogQueryImpl" resultType="long">
     ${countDistinctBeforeStart} RES.ID_ ${countDistinctBeforeEnd}
     <include refid="selectSchemaLogEntrySql"/>
     ${countDistinctAfterEnd}
   </select>
 
-  <select id="selectSchemaLogEntryByQueryCriteria" parameterType="org.camunda.bpm.engine.impl.SchemaLogQueryImpl" resultMap="schemaLogEntryResultMap">
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
+  <select id="selectSchemaLogEntryByQueryCriteria" parameterType="io.orqueio.bpm.engine.impl.SchemaLogQueryImpl" resultMap="schemaLogEntryResultMap">
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
     ${limitBefore}
     select ${distinct} RES.*
     ${limitBetween}
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.orderBySelection"/>
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.orderBySelection"/>
     <include refid="selectSchemaLogEntrySql"/>
     ${orderBy}
     ${limitAfter}

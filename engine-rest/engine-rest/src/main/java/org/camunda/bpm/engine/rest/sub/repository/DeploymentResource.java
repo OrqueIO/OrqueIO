@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.sub.repository;
+package io.orqueio.bpm.engine.rest.sub.repository;
 
-import org.camunda.bpm.engine.rest.dto.repository.DeploymentDto;
-import org.camunda.bpm.engine.rest.dto.repository.RedeploymentDto;
+import io.orqueio.bpm.engine.rest.dto.repository.DeploymentDto;
+import io.orqueio.bpm.engine.rest.dto.repository.RedeploymentDto;
 
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;

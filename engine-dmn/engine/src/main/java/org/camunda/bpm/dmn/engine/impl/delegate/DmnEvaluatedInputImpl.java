@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.engine.impl.delegate;
+package io.orqueio.bpm.dmn.engine.impl.delegate;
 
-import org.camunda.bpm.dmn.engine.delegate.DmnEvaluatedInput;
-import org.camunda.bpm.dmn.engine.impl.DmnDecisionTableInputImpl;
-import org.camunda.bpm.engine.variable.value.TypedValue;
+import io.orqueio.bpm.dmn.engine.delegate.DmnEvaluatedInput;
+import io.orqueio.bpm.dmn.engine.impl.DmnDecisionTableInputImpl;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
 
 public class DmnEvaluatedInputImpl implements DmnEvaluatedInput {
 

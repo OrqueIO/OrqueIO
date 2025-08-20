@@ -14,24 +14,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.impl;
+package io.orqueio.bpm.engine.rest.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.repository.CaseDefinition;
-import org.camunda.bpm.engine.repository.CaseDefinitionQuery;
-import org.camunda.bpm.engine.rest.CaseDefinitionRestService;
-import org.camunda.bpm.engine.rest.dto.CountResultDto;
-import org.camunda.bpm.engine.rest.dto.repository.CaseDefinitionDto;
-import org.camunda.bpm.engine.rest.dto.repository.CaseDefinitionQueryDto;
-import org.camunda.bpm.engine.rest.exception.RestException;
-import org.camunda.bpm.engine.rest.sub.repository.CaseDefinitionResource;
-import org.camunda.bpm.engine.rest.sub.repository.impl.CaseDefinitionResourceImpl;
-import org.camunda.bpm.engine.rest.util.QueryUtil;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.repository.CaseDefinition;
+import io.orqueio.bpm.engine.repository.CaseDefinitionQuery;
+import io.orqueio.bpm.engine.rest.CaseDefinitionRestService;
+import io.orqueio.bpm.engine.rest.dto.CountResultDto;
+import io.orqueio.bpm.engine.rest.dto.repository.CaseDefinitionDto;
+import io.orqueio.bpm.engine.rest.dto.repository.CaseDefinitionQueryDto;
+import io.orqueio.bpm.engine.rest.exception.RestException;
+import io.orqueio.bpm.engine.rest.sub.repository.CaseDefinitionResource;
+import io.orqueio.bpm.engine.rest.sub.repository.impl.CaseDefinitionResourceImpl;
+import io.orqueio.bpm.engine.rest.util.QueryUtil;
 
 /**
  *

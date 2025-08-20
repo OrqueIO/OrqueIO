@@ -14,20 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.jobexecutor.historycleanup;
+package io.orqueio.bpm.engine.impl.jobexecutor.historycleanup;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.camunda.bpm.engine.impl.batch.history.HistoricBatchEntity;
-import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.engine.impl.db.DbEntity;
-import org.camunda.bpm.engine.impl.db.entitymanager.operation.DbOperation;
-import org.camunda.bpm.engine.impl.history.event.HistoricDecisionInstanceEntity;
-import org.camunda.bpm.engine.impl.persistence.entity.HistoricProcessInstanceEntity;
-import org.camunda.bpm.engine.impl.persistence.entity.TaskMeterLogEntity;
-import org.camunda.bpm.engine.impl.util.ClockUtil;
-import org.camunda.bpm.engine.management.Metrics;
+import io.orqueio.bpm.engine.impl.batch.history.HistoricBatchEntity;
+import io.orqueio.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.impl.db.DbEntity;
+import io.orqueio.bpm.engine.impl.db.entitymanager.operation.DbOperation;
+import io.orqueio.bpm.engine.impl.history.event.HistoricDecisionInstanceEntity;
+import io.orqueio.bpm.engine.impl.persistence.entity.HistoricProcessInstanceEntity;
+import io.orqueio.bpm.engine.impl.persistence.entity.TaskMeterLogEntity;
+import io.orqueio.bpm.engine.impl.util.ClockUtil;
+import io.orqueio.bpm.engine.management.Metrics;
 
 /**
  * @author Tassilo Weidner

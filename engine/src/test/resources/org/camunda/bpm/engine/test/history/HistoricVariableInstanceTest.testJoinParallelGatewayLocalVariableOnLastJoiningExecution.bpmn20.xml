@@ -17,7 +17,7 @@
     <sequenceFlow sourceRef="serviceTask1" targetRef="gtw2" />
 
     <sequenceFlow sourceRef="gtw1" targetRef="serviceTask2" />
-    <serviceTask id="serviceTask2" camunda:class="org.camunda.bpm.engine.test.history.SetVariableLocalService" />
+    <serviceTask id="serviceTask2" camunda:class="io.orqueio.bpm.engine.test.history.SetVariableLocalService" />
     <sequenceFlow sourceRef="serviceTask2" targetRef="gtw2" />
 
     <parallelGateway id="gtw2" />

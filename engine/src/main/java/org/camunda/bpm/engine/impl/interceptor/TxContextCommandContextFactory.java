@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.interceptor;
+package io.orqueio.bpm.engine.impl.interceptor;
 
-import org.camunda.bpm.engine.impl.cfg.TransactionContextFactory;
+import io.orqueio.bpm.engine.impl.cfg.TransactionContextFactory;
 
 /**
  * <p>This {@link CommandContextFactory} allows to explicitly pass in a {@link TransactionContextFactory}.</p>

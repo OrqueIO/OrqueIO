@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter.security.oauth2.impl;
+package io.orqueio.bpm.spring.boot.starter.security.oauth2.impl;
 
 import jakarta.servlet.http.HttpServletRequest;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.rest.security.auth.AuthenticationResult;
-import org.camunda.bpm.engine.rest.security.auth.impl.ContainerBasedAuthenticationProvider;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.rest.security.auth.AuthenticationResult;
+import io.orqueio.bpm.engine.rest.security.auth.impl.ContainerBasedAuthenticationProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;

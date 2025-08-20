@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.authorization.service;
+package io.orqueio.bpm.engine.test.api.authorization.service;
 
-import org.camunda.bpm.engine.delegate.DelegateExecution;
+import io.orqueio.bpm.engine.delegate.DelegateExecution;
 
 /**
  * @author Roman Smirnov

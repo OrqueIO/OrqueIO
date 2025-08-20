@@ -14,25 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.cockpit.plugin.test;
+package io.orqueio.bpm.cockpit.plugin.test;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import org.apache.ibatis.logging.LogFactory;
-import org.camunda.bpm.cockpit.Cockpit;
-import org.camunda.bpm.cockpit.db.CommandExecutor;
-import org.camunda.bpm.cockpit.db.QueryService;
-import org.camunda.bpm.cockpit.impl.DefaultCockpitRuntimeDelegate;
-import org.camunda.bpm.engine.ManagementService;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.impl.util.LogUtil;
-import org.camunda.bpm.engine.repository.Deployment;
-import org.camunda.bpm.engine.repository.DeploymentBuilder;
-import org.camunda.bpm.engine.runtime.Job;
-import org.camunda.bpm.engine.test.ProcessEngineRule;
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.bpm.cockpit.Cockpit;
+import io.orqueio.bpm.cockpit.db.CommandExecutor;
+import io.orqueio.bpm.cockpit.db.QueryService;
+import io.orqueio.bpm.cockpit.impl.DefaultCockpitRuntimeDelegate;
+import io.orqueio.bpm.engine.ManagementService;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.impl.util.LogUtil;
+import io.orqueio.bpm.engine.repository.Deployment;
+import io.orqueio.bpm.engine.repository.DeploymentBuilder;
+import io.orqueio.bpm.engine.runtime.Job;
+import io.orqueio.bpm.engine.test.ProcessEngineRule;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

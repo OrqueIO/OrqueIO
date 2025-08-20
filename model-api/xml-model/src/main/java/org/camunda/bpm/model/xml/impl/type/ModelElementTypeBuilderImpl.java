@@ -14,20 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.xml.impl.type;
+package io.orqueio.bpm.model.xml.impl.type;
 
-import org.camunda.bpm.model.xml.Model;
-import org.camunda.bpm.model.xml.ModelException;
-import org.camunda.bpm.model.xml.impl.ModelBuildOperation;
-import org.camunda.bpm.model.xml.impl.ModelImpl;
-import org.camunda.bpm.model.xml.impl.type.attribute.*;
-import org.camunda.bpm.model.xml.impl.type.child.SequenceBuilderImpl;
-import org.camunda.bpm.model.xml.instance.ModelElementInstance;
-import org.camunda.bpm.model.xml.type.ModelElementType;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.attribute.AttributeBuilder;
-import org.camunda.bpm.model.xml.type.attribute.StringAttributeBuilder;
-import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
+import io.orqueio.bpm.model.xml.Model;
+import io.orqueio.bpm.model.xml.ModelException;
+import io.orqueio.bpm.model.xml.impl.ModelBuildOperation;
+import io.orqueio.bpm.model.xml.impl.ModelImpl;
+import io.orqueio.bpm.model.xml.impl.type.attribute.*;
+import io.orqueio.bpm.model.xml.impl.type.child.SequenceBuilderImpl;
+import io.orqueio.bpm.model.xml.instance.ModelElementInstance;
+import io.orqueio.bpm.model.xml.type.ModelElementType;
+import io.orqueio.bpm.model.xml.type.ModelElementTypeBuilder;
+import io.orqueio.bpm.model.xml.type.attribute.AttributeBuilder;
+import io.orqueio.bpm.model.xml.type.attribute.StringAttributeBuilder;
+import io.orqueio.bpm.model.xml.type.child.SequenceBuilder;
 
 import java.util.ArrayList;
 import java.util.List;

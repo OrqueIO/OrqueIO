@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.webapp.impl.security.filter.headersec;
+package io.orqueio.bpm.webapp.impl.security.filter.headersec;
 
-import org.camunda.bpm.webapp.impl.util.HeaderRule;
+import io.orqueio.bpm.webapp.impl.util.HeaderRule;
 import org.junit.Rule;
 import org.junit.Test;
 

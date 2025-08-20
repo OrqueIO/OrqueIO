@@ -18,7 +18,7 @@
 
     <sequenceFlow sourceRef="signalEvent" targetRef="serviceTask" />
 
-    <serviceTask id="serviceTask" camunda:class="org.camunda.bpm.engine.test.api.runtime.FailingDelegate" />
+    <serviceTask id="serviceTask" camunda:class="io.orqueio.bpm.engine.test.api.runtime.FailingDelegate" />
 
     <sequenceFlow sourceRef="serviceTask" targetRef="end" />
 

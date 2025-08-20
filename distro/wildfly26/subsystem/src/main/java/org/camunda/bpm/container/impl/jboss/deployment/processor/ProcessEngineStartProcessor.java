@@ -14,18 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.jboss.deployment.processor;
+package io.orqueio.bpm.container.impl.jboss.deployment.processor;
 
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.container.impl.jboss.config.ManagedProcessEngineMetadata;
-import org.camunda.bpm.container.impl.jboss.deployment.marker.ProcessApplicationAttachments;
-import org.camunda.bpm.container.impl.jboss.service.MscManagedProcessEngineController;
-import org.camunda.bpm.container.impl.jboss.service.ServiceNames;
-import org.camunda.bpm.container.impl.jboss.util.ProcessesXmlWrapper;
-import org.camunda.bpm.container.impl.metadata.spi.ProcessEngineXml;
-import org.camunda.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.container.impl.jboss.config.ManagedProcessEngineMetadata;
+import io.orqueio.bpm.container.impl.jboss.deployment.marker.ProcessApplicationAttachments;
+import io.orqueio.bpm.container.impl.jboss.service.MscManagedProcessEngineController;
+import io.orqueio.bpm.container.impl.jboss.service.ServiceNames;
+import io.orqueio.bpm.container.impl.jboss.util.ProcessesXmlWrapper;
+import io.orqueio.bpm.container.impl.metadata.spi.ProcessEngineXml;
+import io.orqueio.bpm.engine.ProcessEngine;
 import org.jboss.as.server.deployment.DeploymentPhaseContext;
 import org.jboss.as.server.deployment.DeploymentUnit;
 import org.jboss.as.server.deployment.DeploymentUnitProcessingException;

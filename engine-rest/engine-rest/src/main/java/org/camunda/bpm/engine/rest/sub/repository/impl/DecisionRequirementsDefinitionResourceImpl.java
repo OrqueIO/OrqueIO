@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.sub.repository.impl;
+package io.orqueio.bpm.engine.rest.sub.repository.impl;
 
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -22,19 +22,19 @@ import java.io.UnsupportedEncodingException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.RepositoryService;
-import org.camunda.bpm.engine.exception.NotFoundException;
-import org.camunda.bpm.engine.exception.NotValidException;
-import org.camunda.bpm.engine.impl.util.IoUtil;
-import org.camunda.bpm.engine.repository.DecisionRequirementsDefinition;
-import org.camunda.bpm.engine.rest.dto.repository.DecisionRequirementsDefinitionDto;
-import org.camunda.bpm.engine.rest.dto.repository.DecisionRequirementsDefinitionXmlDto;
-import org.camunda.bpm.engine.rest.exception.InvalidRequestException;
-import org.camunda.bpm.engine.rest.exception.RestException;
-import org.camunda.bpm.engine.rest.sub.repository.DecisionRequirementsDefinitionResource;
-import org.camunda.bpm.engine.rest.util.URLEncodingUtil;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.RepositoryService;
+import io.orqueio.bpm.engine.exception.NotFoundException;
+import io.orqueio.bpm.engine.exception.NotValidException;
+import io.orqueio.bpm.engine.impl.util.IoUtil;
+import io.orqueio.bpm.engine.repository.DecisionRequirementsDefinition;
+import io.orqueio.bpm.engine.rest.dto.repository.DecisionRequirementsDefinitionDto;
+import io.orqueio.bpm.engine.rest.dto.repository.DecisionRequirementsDefinitionXmlDto;
+import io.orqueio.bpm.engine.rest.exception.InvalidRequestException;
+import io.orqueio.bpm.engine.rest.exception.RestException;
+import io.orqueio.bpm.engine.rest.sub.repository.DecisionRequirementsDefinitionResource;
+import io.orqueio.bpm.engine.rest.util.URLEncodingUtil;
 
 /**
  * 

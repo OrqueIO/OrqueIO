@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.dto.history;
+package io.orqueio.bpm.engine.rest.dto.history;
 
 import java.util.Date;
 
-import org.camunda.bpm.engine.history.HistoricDecisionOutputInstance;
-import org.camunda.bpm.engine.rest.dto.VariableValueDto;
+import io.orqueio.bpm.engine.history.HistoricDecisionOutputInstance;
+import io.orqueio.bpm.engine.rest.dto.VariableValueDto;
 
 public class HistoricDecisionOutputInstanceDto extends VariableValueDto {
 

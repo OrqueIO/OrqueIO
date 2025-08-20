@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.jobexecutor;
+package io.orqueio.bpm.engine.test.jobexecutor;
 
-import static org.camunda.bpm.engine.test.util.ClockTestUtil.incrementClock;
+import static io.orqueio.bpm.engine.test.util.ClockTestUtil.incrementClock;
 import static org.junit.Assert.assertEquals;
 
 import java.util.List;
 
-import org.camunda.bpm.engine.impl.persistence.entity.AcquirableJobEntity;
-import org.camunda.bpm.engine.runtime.Job;
-import org.camunda.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.impl.persistence.entity.AcquirableJobEntity;
+import io.orqueio.bpm.engine.runtime.Job;
+import io.orqueio.bpm.engine.test.Deployment;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest;
+package io.orqueio.bpm.engine.rest;
 
 
 import static io.restassured.RestAssured.given;
@@ -41,27 +41,27 @@ import java.util.Map;
 
 import javax.ws.rs.core.Response.Status;
 
-import org.camunda.bpm.engine.AuthorizationException;
-import org.camunda.bpm.engine.BadUserRequestException;
-import org.camunda.bpm.engine.CaseService;
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.RepositoryService;
-import org.camunda.bpm.engine.impl.util.IoUtil;
-import org.camunda.bpm.engine.impl.util.ReflectUtil;
-import org.camunda.bpm.engine.repository.CaseDefinition;
-import org.camunda.bpm.engine.repository.CaseDefinitionQuery;
-import org.camunda.bpm.engine.rest.dto.HistoryTimeToLiveDto;
-import org.camunda.bpm.engine.rest.exception.RestException;
-import org.camunda.bpm.engine.rest.helper.EqualsVariableMap;
-import org.camunda.bpm.engine.rest.helper.MockProvider;
-import org.camunda.bpm.engine.rest.helper.variable.EqualsPrimitiveValue;
-import org.camunda.bpm.engine.rest.helper.variable.EqualsUntypedValue;
-import org.camunda.bpm.engine.rest.sub.repository.impl.ProcessDefinitionResourceImpl;
-import org.camunda.bpm.engine.rest.util.VariablesBuilder;
-import org.camunda.bpm.engine.rest.util.container.TestContainerRule;
-import org.camunda.bpm.engine.runtime.CaseInstance;
-import org.camunda.bpm.engine.runtime.CaseInstanceBuilder;
-import org.camunda.bpm.engine.variable.type.ValueType;
+import io.orqueio.bpm.engine.AuthorizationException;
+import io.orqueio.bpm.engine.BadUserRequestException;
+import io.orqueio.bpm.engine.CaseService;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.RepositoryService;
+import io.orqueio.bpm.engine.impl.util.IoUtil;
+import io.orqueio.bpm.engine.impl.util.ReflectUtil;
+import io.orqueio.bpm.engine.repository.CaseDefinition;
+import io.orqueio.bpm.engine.repository.CaseDefinitionQuery;
+import io.orqueio.bpm.engine.rest.dto.HistoryTimeToLiveDto;
+import io.orqueio.bpm.engine.rest.exception.RestException;
+import io.orqueio.bpm.engine.rest.helper.EqualsVariableMap;
+import io.orqueio.bpm.engine.rest.helper.MockProvider;
+import io.orqueio.bpm.engine.rest.helper.variable.EqualsPrimitiveValue;
+import io.orqueio.bpm.engine.rest.helper.variable.EqualsUntypedValue;
+import io.orqueio.bpm.engine.rest.sub.repository.impl.ProcessDefinitionResourceImpl;
+import io.orqueio.bpm.engine.rest.util.VariablesBuilder;
+import io.orqueio.bpm.engine.rest.util.container.TestContainerRule;
+import io.orqueio.bpm.engine.runtime.CaseInstance;
+import io.orqueio.bpm.engine.runtime.CaseInstanceBuilder;
+import io.orqueio.bpm.engine.variable.type.ValueType;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.ClassRule;

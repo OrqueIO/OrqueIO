@@ -14,19 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.variable.impl.value.builder;
+package io.orqueio.bpm.engine.variable.impl.value.builder;
 
 import java.io.File;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 
-import org.camunda.bpm.engine.variable.impl.value.FileValueImpl;
-import org.camunda.bpm.engine.variable.type.PrimitiveValueType;
-import org.camunda.bpm.engine.variable.value.FileValue;
-import org.camunda.bpm.engine.variable.value.builder.FileValueBuilder;
-import org.camunda.commons.utils.EnsureUtil;
-import org.camunda.commons.utils.IoUtil;
-import org.camunda.commons.utils.IoUtilException;
+import io.orqueio.bpm.engine.variable.impl.value.FileValueImpl;
+import io.orqueio.bpm.engine.variable.type.PrimitiveValueType;
+import io.orqueio.bpm.engine.variable.value.FileValue;
+import io.orqueio.bpm.engine.variable.value.builder.FileValueBuilder;
+import io.orqueio.commons.utils.EnsureUtil;
+import io.orqueio.commons.utils.IoUtil;
+import io.orqueio.commons.utils.IoUtilException;
 
 /**
  * @author Ronny Bräunlich

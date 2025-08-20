@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.deployment.scanning;
+package io.orqueio.bpm.container.impl.deployment.scanning;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -29,10 +29,10 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import org.camunda.bpm.container.impl.ContainerIntegrationLogger;
-import org.camunda.bpm.container.impl.deployment.scanning.spi.ProcessApplicationScanner;
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
-import org.camunda.bpm.engine.impl.util.IoUtil;
+import io.orqueio.bpm.container.impl.ContainerIntegrationLogger;
+import io.orqueio.bpm.container.impl.deployment.scanning.spi.ProcessApplicationScanner;
+import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
+import io.orqueio.bpm.engine.impl.util.IoUtil;
 
 /**
  * <p>Scans for bpmn20.xml files in the classpath of the given classloader.</p>

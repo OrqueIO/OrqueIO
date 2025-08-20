@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.dto.message;
+package io.orqueio.bpm.engine.rest.dto.message;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.camunda.bpm.engine.rest.dto.VariableValueDto;
-import org.camunda.bpm.engine.rest.dto.runtime.ExecutionDto;
-import org.camunda.bpm.engine.rest.dto.runtime.ProcessInstanceDto;
-import org.camunda.bpm.engine.runtime.MessageCorrelationResultWithVariables;
+import io.orqueio.bpm.engine.rest.dto.VariableValueDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.ExecutionDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.ProcessInstanceDto;
+import io.orqueio.bpm.engine.runtime.MessageCorrelationResultWithVariables;
 
 public class MessageCorrelationResultWithVariableDto extends MessageCorrelationResultDto {
 

@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter;
+package io.orqueio.bpm.spring.boot.starter;
 
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.interceptor.CommandExecutor;
-import org.camunda.bpm.engine.spring.ProcessEngineFactoryBean;
-import org.camunda.bpm.engine.spring.SpringProcessEngineServicesConfiguration;
-import org.camunda.bpm.spring.boot.starter.event.ProcessApplicationEventPublisher;
-import org.camunda.bpm.spring.boot.starter.property.CamundaBpmProperties;
-import org.camunda.bpm.spring.boot.starter.property.ManagementProperties;
-import org.camunda.bpm.spring.boot.starter.util.CamundaBpmVersion;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.interceptor.CommandExecutor;
+import io.orqueio.bpm.engine.spring.ProcessEngineFactoryBean;
+import io.orqueio.bpm.engine.spring.SpringProcessEngineServicesConfiguration;
+import io.orqueio.bpm.spring.boot.starter.event.ProcessApplicationEventPublisher;
+import io.orqueio.bpm.spring.boot.starter.property.CamundaBpmProperties;
+import io.orqueio.bpm.spring.boot.starter.property.ManagementProperties;
+import io.orqueio.bpm.spring.boot.starter.util.CamundaBpmVersion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

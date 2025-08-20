@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.interceptor.impl;
+package io.orqueio.bpm.client.interceptor.impl;
 
-import org.camunda.bpm.client.interceptor.ClientRequestContext;
+import io.orqueio.bpm.client.interceptor.ClientRequestContext;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

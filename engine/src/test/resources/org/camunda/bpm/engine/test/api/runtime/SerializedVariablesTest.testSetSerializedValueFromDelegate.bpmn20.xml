@@ -10,7 +10,7 @@
 
         <sequenceFlow sourceRef="theStart" targetRef="service1" />
 
-        <serviceTask id="service1" camunda:class="org.camunda.bpm.engine.test.api.runtime.util.SetSerializedVariablesDelegate"></serviceTask>
+        <serviceTask id="service1" camunda:class="io.orqueio.bpm.engine.test.api.runtime.util.SetSerializedVariablesDelegate"></serviceTask>
 
         <sequenceFlow sourceRef="service1" targetRef="theTask" />
 

@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.functional.cdi.beans;
+package io.orqueio.bpm.integrationtest.functional.cdi.beans;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.camunda.bpm.engine.CaseService;
-import org.camunda.bpm.engine.delegate.DelegateCaseExecution;
+import io.orqueio.bpm.engine.CaseService;
+import io.orqueio.bpm.engine.delegate.DelegateCaseExecution;
 
 /**
  * @author Thorben Lindhauer

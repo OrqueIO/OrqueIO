@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.util;
+package io.orqueio.bpm.engine.rest.util;
 
-import org.camunda.bpm.BpmPlatform;
-import org.camunda.bpm.ProcessApplicationService;
-import org.camunda.bpm.application.ProcessApplicationInfo;
-import org.camunda.bpm.engine.IdentityService;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.impl.identity.Authentication;
-import org.camunda.bpm.engine.repository.CaseDefinition;
-import org.camunda.bpm.engine.repository.ProcessDefinition;
+import io.orqueio.bpm.BpmPlatform;
+import io.orqueio.bpm.ProcessApplicationService;
+import io.orqueio.bpm.application.ProcessApplicationInfo;
+import io.orqueio.bpm.engine.IdentityService;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.impl.identity.Authentication;
+import io.orqueio.bpm.engine.repository.CaseDefinition;
+import io.orqueio.bpm.engine.repository.ProcessDefinition;
 
 public class ApplicationContextPathUtil {
 

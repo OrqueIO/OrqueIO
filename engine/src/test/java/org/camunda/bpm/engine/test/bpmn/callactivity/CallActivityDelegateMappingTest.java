@@ -14,21 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.bpmn.callactivity;
+package io.orqueio.bpm.engine.test.bpmn.callactivity;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.fail;
 
 import java.util.Map;
 
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.task.Task;
-import org.camunda.bpm.engine.task.TaskQuery;
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.engine.test.ProcessEngineRule;
-import org.camunda.bpm.engine.test.util.ProcessEngineTestRule;
-import org.camunda.bpm.engine.test.util.ProvidedProcessEngineRule;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.task.Task;
+import io.orqueio.bpm.engine.task.TaskQuery;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.test.ProcessEngineRule;
+import io.orqueio.bpm.engine.test.util.ProcessEngineTestRule;
+import io.orqueio.bpm.engine.test.util.ProvidedProcessEngineRule;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -118,8 +118,8 @@ public class CallActivityDelegateMappingTest {
       engineRule.getRuntimeService().startProcessInstanceByKey("callSimpleSubProcess");
       fail("Execption expected!");
     } catch (ProcessEngineException e) {
-      //Exception while instantiating class 'org.camunda.bpm.engine.test.bpmn.callactivity.NotFoundMapping'
-      assertEquals("ENGINE-09008 Exception while instantiating class 'org.camunda.bpm.engine.test.bpmn.callactivity.NotFoundMapping': ENGINE-09017 Cannot load class 'org.camunda.bpm.engine.test.bpmn.callactivity.NotFoundMapping': org.camunda.bpm.engine.test.bpmn.callactivity.NotFoundMapping",
+      //Exception while instantiating class 'io.orqueio.bpm.engine.test.bpmn.callactivity.NotFoundMapping'
+      assertEquals("ENGINE-09008 Exception while instantiating class 'io.orqueio.bpm.engine.test.bpmn.callactivity.NotFoundMapping': ENGINE-09017 Cannot load class 'io.orqueio.bpm.engine.test.bpmn.callactivity.NotFoundMapping': io.orqueio.bpm.engine.test.bpmn.callactivity.NotFoundMapping",
               e.getMessage());
     }
   }
@@ -153,7 +153,7 @@ public class CallActivityDelegateMappingTest {
       engineRule.getTaskService().complete(taskBeforeSubProcess.getId());
       fail("Exeption expected!");
     } catch (ProcessEngineException pex) { //then
-      Assert.assertTrue(pex.getMessage().equalsIgnoreCase("org.camunda.bpm.engine.ProcessEngineException: New process engine exception.")
+      Assert.assertTrue(pex.getMessage().equalsIgnoreCase("io.orqueio.bpm.engine.ProcessEngineException: New process engine exception.")
               || pex.getMessage().contains("1234"));
     }
 
@@ -222,7 +222,7 @@ public class CallActivityDelegateMappingTest {
       engineRule.getTaskService().complete(taskInSubProcess.getId());
       fail("Exeption expected!");
     } catch (ProcessEngineException pex) { //then
-      Assert.assertTrue(pex.getMessage().equalsIgnoreCase("org.camunda.bpm.engine.ProcessEngineException: New process engine exception.")
+      Assert.assertTrue(pex.getMessage().equalsIgnoreCase("io.orqueio.bpm.engine.ProcessEngineException: New process engine exception.")
               || pex.getMessage().contains("1234"));
     }
 

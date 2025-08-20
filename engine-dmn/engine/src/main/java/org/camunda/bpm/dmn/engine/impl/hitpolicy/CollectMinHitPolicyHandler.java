@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.engine.impl.hitpolicy;
+package io.orqueio.bpm.dmn.engine.impl.hitpolicy;
 
 import java.util.Collections;
 import java.util.List;
 
-import org.camunda.bpm.model.dmn.BuiltinAggregator;
-import org.camunda.bpm.model.dmn.HitPolicy;
+import io.orqueio.bpm.model.dmn.BuiltinAggregator;
+import io.orqueio.bpm.model.dmn.HitPolicy;
 
 public class CollectMinHitPolicyHandler extends AbstractCollectNumberHitPolicyHandler {
   protected static final HitPolicyEntry HIT_POLICY = new HitPolicyEntry(HitPolicy.COLLECT, BuiltinAggregator.MIN);

@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.ejb.deployment;
+package io.orqueio.bpm.container.impl.ejb.deployment;
 
 import java.net.URL;
 
-import org.camunda.bpm.container.impl.deployment.AbstractParseBpmPlatformXmlStep;
-import org.camunda.bpm.container.impl.spi.DeploymentOperation;
+import io.orqueio.bpm.container.impl.deployment.AbstractParseBpmPlatformXmlStep;
+import io.orqueio.bpm.container.impl.spi.DeploymentOperation;
 
 /**
  * <p>Deployment Step that reads the bpm-platform.xml from the classpath</p>

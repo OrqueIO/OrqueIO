@@ -14,24 +14,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.cmmn.tasklistener;
+package io.orqueio.bpm.engine.test.cmmn.tasklistener;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import org.camunda.bpm.engine.delegate.TaskListener;
-import org.camunda.bpm.engine.impl.cmmn.execution.CmmnExecution;
-import org.camunda.bpm.engine.impl.interceptor.Command;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.runtime.VariableInstanceQuery;
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.engine.test.cmmn.tasklistener.util.FieldInjectionTaskListener;
-import org.camunda.bpm.engine.test.cmmn.tasklistener.util.MySpecialTaskListener;
-import org.camunda.bpm.engine.test.cmmn.tasklistener.util.MyTaskListener;
-import org.camunda.bpm.engine.test.cmmn.tasklistener.util.NotTaskListener;
-import org.camunda.bpm.engine.test.cmmn.tasklistener.util.TaskDeleteListener;
-import org.camunda.bpm.engine.test.util.PluggableProcessEngineTest;
+import io.orqueio.bpm.engine.delegate.TaskListener;
+import io.orqueio.bpm.engine.impl.cmmn.execution.CmmnExecution;
+import io.orqueio.bpm.engine.impl.interceptor.Command;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.runtime.VariableInstanceQuery;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.test.cmmn.tasklistener.util.FieldInjectionTaskListener;
+import io.orqueio.bpm.engine.test.cmmn.tasklistener.util.MySpecialTaskListener;
+import io.orqueio.bpm.engine.test.cmmn.tasklistener.util.MyTaskListener;
+import io.orqueio.bpm.engine.test.cmmn.tasklistener.util.NotTaskListener;
+import io.orqueio.bpm.engine.test.cmmn.tasklistener.util.TaskDeleteListener;
+import io.orqueio.bpm.engine.test.util.PluggableProcessEngineTest;
 import org.junit.Test;
 
 /**
@@ -1354,7 +1354,7 @@ public class TaskListenerTest extends PluggableProcessEngineTest {
       // then
       Throwable cause = e.getCause();
       String message = cause.getMessage();
-      testRule.assertTextPresent("Exception while instantiating class 'org.camunda.bpm.engine.test.cmmn.tasklistener.util.NotExistingTaskListener'", message);
+      testRule.assertTextPresent("Exception while instantiating class 'io.orqueio.bpm.engine.test.cmmn.tasklistener.util.NotExistingTaskListener'", message);
     }
 
   }

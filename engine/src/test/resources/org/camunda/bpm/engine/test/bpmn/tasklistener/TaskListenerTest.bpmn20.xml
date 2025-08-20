@@ -16,12 +16,12 @@
 		    Schedule a meeting with management.
 		  </documentation>
 		  <extensionElements>
-		    <camunda:taskListener event="create" class="org.camunda.bpm.engine.test.bpmn.tasklistener.util.TaskCreateListener" />
-		    <camunda:taskListener event="complete" class="org.camunda.bpm.engine.test.bpmn.tasklistener.util.TaskCompleteListener">
+		    <camunda:taskListener event="create" class="io.orqueio.bpm.engine.test.bpmn.tasklistener.util.TaskCreateListener" />
+		    <camunda:taskListener event="complete" class="io.orqueio.bpm.engine.test.bpmn.tasklistener.util.TaskCompleteListener">
 		      <camunda:field name="greeter" stringValue="The Process" />
           <camunda:field name="shortName" expression="${'Activiti'.substring(0,3)}" />
 		    </camunda:taskListener>
-        <camunda:taskListener event="delete" class="org.camunda.bpm.engine.test.bpmn.tasklistener.util.TaskDeleteListener" />
+        <camunda:taskListener event="delete" class="io.orqueio.bpm.engine.test.bpmn.tasklistener.util.TaskDeleteListener" />
 		  </extensionElements>
 		</userTask>
 

@@ -10,7 +10,7 @@
   <name>Camunda Platform - QA Integration Tests - Engine - Jakarta</name>
 
   <parent>
-    <groupId>org.camunda.bpm.qa</groupId>
+    <groupId>io.orqueio.bpm.qa</groupId>
     <artifactId>camunda-qa</artifactId>
     <version>7.24.0-SNAPSHOT</version>
   </parent>
@@ -153,26 +153,26 @@
     <!-- CDI engine & Client -->
 
     <dependency>
-      <groupId>org.camunda.bpm.javaee</groupId>
+      <groupId>io.orqueio.bpm.javaee</groupId>
       <artifactId>camunda-ejb-client-jakarta</artifactId>
       <scope>provided</scope>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
+      <groupId>io.orqueio.bpm</groupId>
       <artifactId>camunda-engine-cdi-jakarta</artifactId>
       <scope>provided</scope>
       <exclusions>
         <exclusion>
           <artifactId>camunda-engine</artifactId>
-          <groupId>org.camunda.bpm</groupId>
+          <groupId>io.orqueio.bpm</groupId>
         </exclusion>
       </exclusions>
     </dependency>
 
     <!-- camunda -->
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
+      <groupId>io.orqueio.bpm</groupId>
       <artifactId>camunda-engine</artifactId>
       <scope>provided</scope>
       <exclusions>
@@ -184,7 +184,7 @@
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm.dmn</groupId>
+      <groupId>io.orqueio.bpm.dmn</groupId>
       <artifactId>camunda-engine-dmn</artifactId>
       <scope>provided</scope>
       <exclusions>
@@ -204,25 +204,25 @@
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
+      <groupId>io.orqueio.bpm</groupId>
       <artifactId>camunda-engine-spring-6</artifactId>
       <version>${project.version}</version>
       <scope>provided</scope>
       <exclusions>
         <exclusion>
           <artifactId>camunda-engine</artifactId>
-          <groupId>org.camunda.bpm</groupId>
+          <groupId>io.orqueio.bpm</groupId>
         </exclusion>
       </exclusions>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.spin</groupId>
+      <groupId>io.orqueio.spin</groupId>
       <artifactId>orqueio-spin-core</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.spin</groupId>
+      <groupId>io.orqueio.spin</groupId>
       <artifactId>orqueio-spin-dataformat-json-jackson</artifactId>
     </dependency>
 
@@ -236,7 +236,7 @@
       BOM must be installed before this module is built
     -->
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
+      <groupId>io.orqueio.bpm</groupId>
       <artifactId>camunda-bom</artifactId>
       <version>${project.version}</version>
       <type>pom</type>
@@ -244,7 +244,7 @@
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
+      <groupId>io.orqueio.bpm</groupId>
       <artifactId>camunda-core-internal-dependencies</artifactId>
       <version>${project.version}</version>
       <type>pom</type>
@@ -252,7 +252,7 @@
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.connect</groupId>
+      <groupId>io.orqueio.connect</groupId>
       <artifactId>camunda-connect-core</artifactId>
     </dependency>
 
@@ -583,7 +583,7 @@
       <dependencyManagement>
         <dependencies>
           <dependency>
-            <groupId>org.camunda.bpm</groupId>
+            <groupId>io.orqueio.bpm</groupId>
             <artifactId>camunda-core-internal-dependencies</artifactId>
             <version>${project.version}</version>
             <scope>import</scope>
@@ -595,7 +595,7 @@
       <dependencies>
         <dependency>
           <!-- make sure this comes after runtime in the reactor build -->
-          <groupId>org.camunda.bpm.qa</groupId>
+          <groupId>io.orqueio.bpm.qa</groupId>
           <artifactId>camunda-qa-tomcat-runtime</artifactId>
           <version>${project.version}</version>
           <scope>provided</scope>
@@ -719,7 +719,7 @@
       <dependencies>
         <dependency>
           <!-- make sure this comes after runtime in the reactor build -->
-          <groupId>org.camunda.bpm.qa</groupId>
+          <groupId>io.orqueio.bpm.qa</groupId>
           <artifactId>camunda-qa-wildfly-runtime</artifactId>
           <version>${project.version}</version>
           <scope>provided</scope>
@@ -809,7 +809,7 @@
       <dependencies>
         <dependency>
           <!-- make sure this comes after runtime in the reactor build -->
-          <groupId>org.camunda.bpm.qa</groupId>
+          <groupId>io.orqueio.bpm.qa</groupId>
           <artifactId>camunda-qa-wildfly-runtime</artifactId>
           <version>${project.version}</version>
           <scope>provided</scope>
@@ -1015,7 +1015,7 @@
       <id>clean-db</id>
       <dependencies>
         <dependency>
-          <groupId>org.camunda.bpm</groupId>
+          <groupId>io.orqueio.bpm</groupId>
           <artifactId>camunda-engine</artifactId>
           <scope>test</scope>
         </dependency>
@@ -1035,7 +1035,7 @@
                 <configuration>
                   <artifactItems>
                     <artifactItem>
-                      <groupId>org.camunda.bpm</groupId>
+                      <groupId>io.orqueio.bpm</groupId>
                       <artifactId>camunda-engine</artifactId>
                       <outputDirectory>${project.build.directory}/sql-scripts/engine</outputDirectory>
                       <overWrite>true</overWrite>

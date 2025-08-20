@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.bpmn.builder;
+package io.orqueio.bpm.model.bpmn.builder;
 
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
-import org.camunda.bpm.model.bpmn.instance.CompensateEventDefinition;
-import org.camunda.bpm.model.bpmn.instance.ErrorEventDefinition;
-import org.camunda.bpm.model.bpmn.instance.EscalationEventDefinition;
-import org.camunda.bpm.model.bpmn.instance.StartEvent;
-import org.camunda.bpm.model.bpmn.instance.camunda.CamundaFormData;
-import org.camunda.bpm.model.bpmn.instance.camunda.CamundaFormField;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.bpm.model.bpmn.instance.CompensateEventDefinition;
+import io.orqueio.bpm.model.bpmn.instance.ErrorEventDefinition;
+import io.orqueio.bpm.model.bpmn.instance.EscalationEventDefinition;
+import io.orqueio.bpm.model.bpmn.instance.StartEvent;
+import io.orqueio.bpm.model.bpmn.instance.camunda.CamundaFormData;
+import io.orqueio.bpm.model.bpmn.instance.camunda.CamundaFormField;
 
 /**
  * @author Sebastian Menski

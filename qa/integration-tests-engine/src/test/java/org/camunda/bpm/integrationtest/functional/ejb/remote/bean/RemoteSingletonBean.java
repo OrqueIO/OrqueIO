@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.functional.ejb.remote.bean;
+package io.orqueio.bpm.integrationtest.functional.ejb.remote.bean;
 
 import javax.ejb.Remote;
 import javax.ejb.Singleton;

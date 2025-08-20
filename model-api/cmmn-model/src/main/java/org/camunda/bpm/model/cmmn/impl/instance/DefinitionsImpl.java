@@ -14,37 +14,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.cmmn.impl.instance;
+package io.orqueio.bpm.model.cmmn.impl.instance;
 
-import static org.camunda.bpm.model.cmmn.impl.CmmnModelConstants.CMMN11_NS;
-import static org.camunda.bpm.model.cmmn.impl.CmmnModelConstants.CMMN_ATTRIBUTE_AUTHOR;
-import static org.camunda.bpm.model.cmmn.impl.CmmnModelConstants.CMMN_ATTRIBUTE_EXPORTER;
-import static org.camunda.bpm.model.cmmn.impl.CmmnModelConstants.CMMN_ATTRIBUTE_EXPORTER_VERSION;
-import static org.camunda.bpm.model.cmmn.impl.CmmnModelConstants.CMMN_ATTRIBUTE_EXPRESSION_LANGUAGE;
-import static org.camunda.bpm.model.cmmn.impl.CmmnModelConstants.CMMN_ATTRIBUTE_ID;
-import static org.camunda.bpm.model.cmmn.impl.CmmnModelConstants.CMMN_ATTRIBUTE_NAME;
-import static org.camunda.bpm.model.cmmn.impl.CmmnModelConstants.CMMN_ATTRIBUTE_TARGET_NAMESPACE;
-import static org.camunda.bpm.model.cmmn.impl.CmmnModelConstants.CMMN_ELEMENT_DEFINITIONS;
-import static org.camunda.bpm.model.cmmn.impl.CmmnModelConstants.XPATH_NS;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CMMN11_NS;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CMMN_ATTRIBUTE_AUTHOR;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CMMN_ATTRIBUTE_EXPORTER;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CMMN_ATTRIBUTE_EXPORTER_VERSION;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CMMN_ATTRIBUTE_EXPRESSION_LANGUAGE;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CMMN_ATTRIBUTE_ID;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CMMN_ATTRIBUTE_NAME;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CMMN_ATTRIBUTE_TARGET_NAMESPACE;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CMMN_ELEMENT_DEFINITIONS;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.XPATH_NS;
 
 import java.util.Collection;
 
-import org.camunda.bpm.model.cmmn.instance.Artifact;
-import org.camunda.bpm.model.cmmn.instance.Case;
-import org.camunda.bpm.model.cmmn.instance.CaseFileItemDefinition;
-import org.camunda.bpm.model.cmmn.instance.Decision;
-import org.camunda.bpm.model.cmmn.instance.Definitions;
-import org.camunda.bpm.model.cmmn.instance.ExtensionElements;
-import org.camunda.bpm.model.cmmn.instance.Import;
-import org.camunda.bpm.model.cmmn.instance.Process;
-import org.camunda.bpm.model.cmmn.instance.Relationship;
-import org.camunda.bpm.model.xml.ModelBuilder;
-import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.attribute.Attribute;
-import org.camunda.bpm.model.xml.type.child.ChildElement;
-import org.camunda.bpm.model.xml.type.child.ChildElementCollection;
-import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
+import io.orqueio.bpm.model.cmmn.instance.Artifact;
+import io.orqueio.bpm.model.cmmn.instance.Case;
+import io.orqueio.bpm.model.cmmn.instance.CaseFileItemDefinition;
+import io.orqueio.bpm.model.cmmn.instance.Decision;
+import io.orqueio.bpm.model.cmmn.instance.Definitions;
+import io.orqueio.bpm.model.cmmn.instance.ExtensionElements;
+import io.orqueio.bpm.model.cmmn.instance.Import;
+import io.orqueio.bpm.model.cmmn.instance.Process;
+import io.orqueio.bpm.model.cmmn.instance.Relationship;
+import io.orqueio.bpm.model.xml.ModelBuilder;
+import io.orqueio.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
+import io.orqueio.bpm.model.xml.type.ModelElementTypeBuilder;
+import io.orqueio.bpm.model.xml.type.attribute.Attribute;
+import io.orqueio.bpm.model.xml.type.child.ChildElement;
+import io.orqueio.bpm.model.xml.type.child.ChildElementCollection;
+import io.orqueio.bpm.model.xml.type.child.SequenceBuilder;
 
 /**
  * @author Roman Smirnov

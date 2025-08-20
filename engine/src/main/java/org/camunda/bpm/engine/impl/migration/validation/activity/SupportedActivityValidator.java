@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.migration.validation.activity;
+package io.orqueio.bpm.engine.impl.migration.validation.activity;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.camunda.bpm.engine.impl.bpmn.behavior.*;
-import org.camunda.bpm.engine.impl.pvm.delegate.ActivityBehavior;
-import org.camunda.bpm.engine.impl.pvm.process.ActivityImpl;
+import io.orqueio.bpm.engine.impl.bpmn.behavior.*;
+import io.orqueio.bpm.engine.impl.pvm.delegate.ActivityBehavior;
+import io.orqueio.bpm.engine.impl.pvm.process.ActivityImpl;
 
 /**
  * *Supported* refers to whether an activity instance of a certain activity type can be migrated.

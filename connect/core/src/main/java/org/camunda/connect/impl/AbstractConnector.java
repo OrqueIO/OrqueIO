@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.connect.impl;
+package io.orqueio.connect.impl;
 
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.camunda.connect.spi.Connector;
-import org.camunda.connect.spi.ConnectorRequest;
-import org.camunda.connect.spi.ConnectorRequestInterceptor;
-import org.camunda.connect.spi.ConnectorResponse;
+import io.orqueio.connect.spi.Connector;
+import io.orqueio.connect.spi.ConnectorRequest;
+import io.orqueio.connect.spi.ConnectorRequestInterceptor;
+import io.orqueio.connect.spi.ConnectorResponse;
 
 /**
  * Abstract implementation of the connector interface.

@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter.test.nonpa.jpa.repository;
+package io.orqueio.bpm.spring.boot.starter.test.nonpa.jpa.repository;
 
-import org.camunda.bpm.spring.boot.starter.test.nonpa.jpa.domain.TestEntity;
+import io.orqueio.bpm.spring.boot.starter.test.nonpa.jpa.domain.TestEntity;
 import org.springframework.data.repository.CrudRepository;
 
 public interface TestEntityRepository extends CrudRepository<TestEntity, Long> {

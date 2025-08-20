@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.migration.instance.parser;
+package io.orqueio.bpm.engine.impl.migration.instance.parser;
 
 import java.util.Arrays;
 import java.util.Collection;
 
-import org.camunda.bpm.engine.impl.tree.ReferenceWalker;
-import org.camunda.bpm.engine.runtime.ActivityInstance;
+import io.orqueio.bpm.engine.impl.tree.ReferenceWalker;
+import io.orqueio.bpm.engine.runtime.ActivityInstance;
 
 /**
  * @author Thorben Lindhauer

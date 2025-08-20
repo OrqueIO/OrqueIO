@@ -14,21 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.cmmn.impl.instance;
+package io.orqueio.bpm.model.cmmn.impl.instance;
 
-import static org.camunda.bpm.model.cmmn.impl.CmmnModelConstants.CMMN10_NS;
-import static org.camunda.bpm.model.cmmn.impl.CmmnModelConstants.CMMN_ELEMENT_TIMER_EVENT;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CMMN10_NS;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CMMN_ELEMENT_TIMER_EVENT;
 
-import org.camunda.bpm.model.cmmn.instance.Event;
-import org.camunda.bpm.model.cmmn.instance.StartTrigger;
-import org.camunda.bpm.model.cmmn.instance.TimerEvent;
-import org.camunda.bpm.model.cmmn.instance.TimerExpression;
-import org.camunda.bpm.model.xml.ModelBuilder;
-import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
-import org.camunda.bpm.model.xml.type.child.ChildElement;
-import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
+import io.orqueio.bpm.model.cmmn.instance.Event;
+import io.orqueio.bpm.model.cmmn.instance.StartTrigger;
+import io.orqueio.bpm.model.cmmn.instance.TimerEvent;
+import io.orqueio.bpm.model.cmmn.instance.TimerExpression;
+import io.orqueio.bpm.model.xml.ModelBuilder;
+import io.orqueio.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
+import io.orqueio.bpm.model.xml.type.ModelElementTypeBuilder;
+import io.orqueio.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
+import io.orqueio.bpm.model.xml.type.child.ChildElement;
+import io.orqueio.bpm.model.xml.type.child.SequenceBuilder;
 
 /**
  * @author Roman Smirnov

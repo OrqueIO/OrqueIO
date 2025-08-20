@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.authorization.externaltask;
+package io.orqueio.bpm.engine.test.api.authorization.externaltask;
 
-import org.camunda.bpm.engine.externaltask.ExternalTask;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.externaltask.ExternalTask;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.test.Deployment;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

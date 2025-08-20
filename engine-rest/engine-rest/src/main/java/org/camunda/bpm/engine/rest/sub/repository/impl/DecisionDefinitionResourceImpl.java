@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.sub.repository.impl;
+package io.orqueio.bpm.engine.rest.sub.repository.impl;
 
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -26,30 +26,30 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
-import org.camunda.bpm.dmn.engine.DmnDecisionResult;
-import org.camunda.bpm.dmn.engine.DmnDecisionResultEntries;
-import org.camunda.bpm.dmn.engine.DmnEngineException;
-import org.camunda.bpm.engine.AuthorizationException;
-import org.camunda.bpm.engine.DecisionService;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.RepositoryService;
-import org.camunda.bpm.engine.exception.NotFoundException;
-import org.camunda.bpm.engine.exception.NotValidException;
-import org.camunda.bpm.engine.impl.util.IoUtil;
-import org.camunda.bpm.engine.repository.DecisionDefinition;
-import org.camunda.bpm.engine.rest.dto.HistoryTimeToLiveDto;
-import org.camunda.bpm.engine.rest.dto.VariableValueDto;
-import org.camunda.bpm.engine.rest.dto.dmn.EvaluateDecisionDto;
-import org.camunda.bpm.engine.rest.dto.repository.DecisionDefinitionDiagramDto;
-import org.camunda.bpm.engine.rest.dto.repository.DecisionDefinitionDto;
-import org.camunda.bpm.engine.rest.exception.InvalidRequestException;
-import org.camunda.bpm.engine.rest.exception.RestException;
-import org.camunda.bpm.engine.rest.sub.repository.DecisionDefinitionResource;
-import org.camunda.bpm.engine.rest.util.URLEncodingUtil;
-import org.camunda.bpm.engine.variable.VariableMap;
-import org.camunda.bpm.engine.variable.Variables;
-import org.camunda.bpm.engine.variable.value.TypedValue;
+import io.orqueio.bpm.dmn.engine.DmnDecisionResult;
+import io.orqueio.bpm.dmn.engine.DmnDecisionResultEntries;
+import io.orqueio.bpm.dmn.engine.DmnEngineException;
+import io.orqueio.bpm.engine.AuthorizationException;
+import io.orqueio.bpm.engine.DecisionService;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.RepositoryService;
+import io.orqueio.bpm.engine.exception.NotFoundException;
+import io.orqueio.bpm.engine.exception.NotValidException;
+import io.orqueio.bpm.engine.impl.util.IoUtil;
+import io.orqueio.bpm.engine.repository.DecisionDefinition;
+import io.orqueio.bpm.engine.rest.dto.HistoryTimeToLiveDto;
+import io.orqueio.bpm.engine.rest.dto.VariableValueDto;
+import io.orqueio.bpm.engine.rest.dto.dmn.EvaluateDecisionDto;
+import io.orqueio.bpm.engine.rest.dto.repository.DecisionDefinitionDiagramDto;
+import io.orqueio.bpm.engine.rest.dto.repository.DecisionDefinitionDto;
+import io.orqueio.bpm.engine.rest.exception.InvalidRequestException;
+import io.orqueio.bpm.engine.rest.exception.RestException;
+import io.orqueio.bpm.engine.rest.sub.repository.DecisionDefinitionResource;
+import io.orqueio.bpm.engine.rest.util.URLEncodingUtil;
+import io.orqueio.bpm.engine.variable.VariableMap;
+import io.orqueio.bpm.engine.variable.Variables;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 

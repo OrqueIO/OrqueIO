@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.helper;
+package io.orqueio.bpm.engine.rest.helper;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.Date;
 
-import org.camunda.bpm.engine.form.CamundaFormRef;
-import org.camunda.bpm.engine.impl.form.CamundaFormRefImpl;
-import org.camunda.bpm.engine.task.DelegationState;
-import org.camunda.bpm.engine.task.Task;
+import io.orqueio.bpm.engine.form.CamundaFormRef;
+import io.orqueio.bpm.engine.impl.form.CamundaFormRefImpl;
+import io.orqueio.bpm.engine.task.DelegationState;
+import io.orqueio.bpm.engine.task.Task;
 
 public class MockTaskBuilder {
 

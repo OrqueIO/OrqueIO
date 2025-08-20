@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest;
+package io.orqueio.bpm.engine.rest;
 
-import org.camunda.bpm.engine.rest.dto.CountResultDto;
-import org.camunda.bpm.engine.rest.dto.ResourceOptionsDto;
-import org.camunda.bpm.engine.rest.dto.authorization.AuthorizationCheckResultDto;
-import org.camunda.bpm.engine.rest.dto.authorization.AuthorizationCreateDto;
-import org.camunda.bpm.engine.rest.dto.authorization.AuthorizationDto;
-import org.camunda.bpm.engine.rest.sub.authorization.AuthorizationResource;
+import io.orqueio.bpm.engine.rest.dto.CountResultDto;
+import io.orqueio.bpm.engine.rest.dto.ResourceOptionsDto;
+import io.orqueio.bpm.engine.rest.dto.authorization.AuthorizationCheckResultDto;
+import io.orqueio.bpm.engine.rest.dto.authorization.AuthorizationCreateDto;
+import io.orqueio.bpm.engine.rest.dto.authorization.AuthorizationDto;
+import io.orqueio.bpm.engine.rest.sub.authorization.AuthorizationResource;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;

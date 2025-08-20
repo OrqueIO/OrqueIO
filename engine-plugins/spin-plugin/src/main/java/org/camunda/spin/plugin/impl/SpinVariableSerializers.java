@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.plugin.impl;
+package io.orqueio.spin.plugin.impl;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.camunda.bpm.engine.impl.variable.serializer.TypedValueSerializer;
-import org.camunda.spin.DataFormats;
-import org.camunda.spin.json.SpinJsonNode;
-import org.camunda.spin.spi.DataFormat;
-import org.camunda.spin.xml.SpinXmlElement;
+import io.orqueio.bpm.engine.impl.variable.serializer.TypedValueSerializer;
+import io.orqueio.spin.DataFormats;
+import io.orqueio.spin.json.SpinJsonNode;
+import io.orqueio.spin.spi.DataFormat;
+import io.orqueio.spin.xml.SpinXmlElement;
 
 /**
  * @author Thorben Lindhauer

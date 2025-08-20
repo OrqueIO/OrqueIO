@@ -14,26 +14,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.impl;
+package io.orqueio.bpm.engine.rest.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.core.UriInfo;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.batch.Batch;
-import org.camunda.bpm.engine.batch.BatchQuery;
-import org.camunda.bpm.engine.batch.BatchStatistics;
-import org.camunda.bpm.engine.batch.BatchStatisticsQuery;
-import org.camunda.bpm.engine.rest.BatchRestService;
-import org.camunda.bpm.engine.rest.dto.CountResultDto;
-import org.camunda.bpm.engine.rest.dto.batch.BatchDto;
-import org.camunda.bpm.engine.rest.dto.batch.BatchQueryDto;
-import org.camunda.bpm.engine.rest.dto.batch.BatchStatisticsDto;
-import org.camunda.bpm.engine.rest.dto.batch.BatchStatisticsQueryDto;
-import org.camunda.bpm.engine.rest.sub.batch.BatchResource;
-import org.camunda.bpm.engine.rest.sub.batch.impl.BatchResourceImpl;
-import org.camunda.bpm.engine.rest.util.QueryUtil;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.batch.Batch;
+import io.orqueio.bpm.engine.batch.BatchQuery;
+import io.orqueio.bpm.engine.batch.BatchStatistics;
+import io.orqueio.bpm.engine.batch.BatchStatisticsQuery;
+import io.orqueio.bpm.engine.rest.BatchRestService;
+import io.orqueio.bpm.engine.rest.dto.CountResultDto;
+import io.orqueio.bpm.engine.rest.dto.batch.BatchDto;
+import io.orqueio.bpm.engine.rest.dto.batch.BatchQueryDto;
+import io.orqueio.bpm.engine.rest.dto.batch.BatchStatisticsDto;
+import io.orqueio.bpm.engine.rest.dto.batch.BatchStatisticsQueryDto;
+import io.orqueio.bpm.engine.rest.sub.batch.BatchResource;
+import io.orqueio.bpm.engine.rest.sub.batch.impl.BatchResourceImpl;
+import io.orqueio.bpm.engine.rest.util.QueryUtil;
 
 public class BatchRestServiceImpl extends AbstractRestProcessEngineAware implements BatchRestService {
 

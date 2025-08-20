@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.bpmn.builder;
+package io.orqueio.bpm.model.bpmn.builder;
 
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
-import org.camunda.bpm.model.bpmn.instance.CompensateEventDefinition;
-import org.camunda.bpm.model.bpmn.instance.EscalationEventDefinition;
-import org.camunda.bpm.model.bpmn.instance.MessageEventDefinition;
-import org.camunda.bpm.model.bpmn.instance.SignalEventDefinition;
-import org.camunda.bpm.model.bpmn.instance.ThrowEvent;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.bpm.model.bpmn.instance.CompensateEventDefinition;
+import io.orqueio.bpm.model.bpmn.instance.EscalationEventDefinition;
+import io.orqueio.bpm.model.bpmn.instance.MessageEventDefinition;
+import io.orqueio.bpm.model.bpmn.instance.SignalEventDefinition;
+import io.orqueio.bpm.model.bpmn.instance.ThrowEvent;
 
 /**
  * @author Sebastian Menski

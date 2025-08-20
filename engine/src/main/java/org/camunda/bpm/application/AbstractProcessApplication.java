@@ -14,23 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.application;
+package io.orqueio.bpm.application;
 
-import org.camunda.bpm.application.impl.DefaultElResolverLookup;
-import org.camunda.bpm.application.impl.ProcessApplicationLogger;
-import org.camunda.bpm.application.impl.ProcessApplicationScriptEnvironment;
-import org.camunda.bpm.container.RuntimeContainerDelegate;
-import org.camunda.bpm.engine.ProcessEngines;
-import org.camunda.bpm.engine.delegate.ExecutionListener;
-import org.camunda.bpm.engine.delegate.TaskListener;
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
-import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.impl.juel.jakarta.el.BeanELResolver;
-import org.camunda.bpm.impl.juel.jakarta.el.ELResolver;
-import org.camunda.bpm.engine.impl.scripting.ExecutableScript;
-import org.camunda.bpm.engine.impl.util.ClassLoaderUtil;
-import org.camunda.bpm.engine.impl.variable.serializer.VariableSerializers;
-import org.camunda.bpm.engine.repository.DeploymentBuilder;
+import io.orqueio.bpm.application.impl.DefaultElResolverLookup;
+import io.orqueio.bpm.application.impl.ProcessApplicationLogger;
+import io.orqueio.bpm.application.impl.ProcessApplicationScriptEnvironment;
+import io.orqueio.bpm.container.RuntimeContainerDelegate;
+import io.orqueio.bpm.engine.ProcessEngines;
+import io.orqueio.bpm.engine.delegate.ExecutionListener;
+import io.orqueio.bpm.engine.delegate.TaskListener;
+import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
+import io.orqueio.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.impl.juel.jakarta.el.BeanELResolver;
+import io.orqueio.bpm.impl.juel.jakarta.el.ELResolver;
+import io.orqueio.bpm.engine.impl.scripting.ExecutableScript;
+import io.orqueio.bpm.engine.impl.util.ClassLoaderUtil;
+import io.orqueio.bpm.engine.impl.variable.serializer.VariableSerializers;
+import io.orqueio.bpm.engine.repository.DeploymentBuilder;
 
 import javax.script.ScriptEngine;
 import java.util.Collections;
@@ -184,7 +184,7 @@ public abstract class AbstractProcessApplication implements ProcessApplicationIn
    * Java SE {@link ServiceLoader} facilities for resolving implementations of {@link ProcessApplicationElResolver}.</p>
    * <p>
    * <p>If you want to provide a custom implementation in your application, place a file named
-   * <code>META-INF/org.camunda.bpm.application.ProcessApplicationElResolver</code> inside your application
+   * <code>META-INF/io.orqueio.bpm.application.ProcessApplicationElResolver</code> inside your application
    * which contains the fully qualified classname of your implementation. Or simply override this method.</p>
    *
    * @return the process application ElResolver.

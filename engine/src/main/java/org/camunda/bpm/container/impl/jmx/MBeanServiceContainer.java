@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.jmx;
+package io.orqueio.bpm.container.impl.jmx;
 
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
@@ -28,15 +28,15 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.management.MBeanServer;
 import javax.management.ObjectName;
 
-import org.camunda.bpm.container.impl.ContainerIntegrationLogger;
-import org.camunda.bpm.container.impl.spi.DeploymentOperation;
-import org.camunda.bpm.container.impl.spi.DeploymentOperation.DeploymentOperationBuilder;
-import org.camunda.bpm.container.impl.spi.PlatformService;
-import org.camunda.bpm.container.impl.spi.PlatformServiceContainer;
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
+import io.orqueio.bpm.container.impl.ContainerIntegrationLogger;
+import io.orqueio.bpm.container.impl.spi.DeploymentOperation;
+import io.orqueio.bpm.container.impl.spi.DeploymentOperation.DeploymentOperationBuilder;
+import io.orqueio.bpm.container.impl.spi.PlatformService;
+import io.orqueio.bpm.container.impl.spi.PlatformServiceContainer;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
 
-import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
+import static io.orqueio.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
 
 /**
  * <p>A simple Service Container that delegates to the JVM's {@link MBeanServer}.</p>

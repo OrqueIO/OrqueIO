@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.threading.ra;
+package io.orqueio.bpm.container.impl.threading.ra;
 
 import java.io.Serializable;
 import java.util.logging.Level;
@@ -31,10 +31,10 @@ import javax.resource.spi.TransactionSupport;
 import javax.resource.spi.endpoint.MessageEndpointFactory;
 import javax.transaction.xa.XAResource;
 
-import org.camunda.bpm.container.impl.threading.ra.commonj.CommonJWorkManagerExecutorService;
-import org.camunda.bpm.container.impl.threading.ra.inflow.JobExecutionHandler;
-import org.camunda.bpm.container.impl.threading.ra.inflow.JobExecutionHandlerActivation;
-import org.camunda.bpm.container.impl.threading.ra.inflow.JobExecutionHandlerActivationSpec;
+import io.orqueio.bpm.container.impl.threading.ra.commonj.CommonJWorkManagerExecutorService;
+import io.orqueio.bpm.container.impl.threading.ra.inflow.JobExecutionHandler;
+import io.orqueio.bpm.container.impl.threading.ra.inflow.JobExecutionHandlerActivation;
+import io.orqueio.bpm.container.impl.threading.ra.inflow.JobExecutionHandlerActivationSpec;
 
 
 /**
@@ -48,7 +48,7 @@ import org.camunda.bpm.container.impl.threading.ra.inflow.JobExecutionHandlerAct
   )
 public class JcaExecutorServiceConnector implements ResourceAdapter, Serializable {
 
-  public static final String ORG_CAMUNDA_BPM_ENGINE_PROCESS_ENGINE = "org.camunda.bpm.engine.ProcessEngine";
+  public static final String ORG_CAMUNDA_BPM_ENGINE_PROCESS_ENGINE = "io.orqueio.bpm.engine.ProcessEngine";
 
   /**
    * This class must be free of engine classes to make it possible to install
@@ -60,7 +60,7 @@ public class JcaExecutorServiceConnector implements ResourceAdapter, Serializabl
    */
   public class ExecutorServiceWrapper {
     /**
-     * will hold a org.camunda.bpm.container.ExecutorService reference
+     * will hold a io.orqueio.bpm.container.ExecutorService reference
      */
     protected Object executorService;
 

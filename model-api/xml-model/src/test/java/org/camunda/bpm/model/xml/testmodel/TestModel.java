@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.xml.testmodel;
+package io.orqueio.bpm.model.xml.testmodel;
 
-import org.camunda.bpm.model.xml.Model;
-import org.camunda.bpm.model.xml.ModelBuilder;
-import org.camunda.bpm.model.xml.testmodel.instance.*;
+import io.orqueio.bpm.model.xml.Model;
+import io.orqueio.bpm.model.xml.ModelBuilder;
+import io.orqueio.bpm.model.xml.testmodel.instance.*;
 
 /**
  * @author Daniel Meyer

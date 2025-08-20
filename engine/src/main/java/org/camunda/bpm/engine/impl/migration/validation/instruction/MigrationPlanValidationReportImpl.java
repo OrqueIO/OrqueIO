@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.migration.validation.instruction;
+package io.orqueio.bpm.engine.impl.migration.validation.instruction;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.engine.migration.MigrationInstructionValidationReport;
-import org.camunda.bpm.engine.migration.MigrationPlan;
-import org.camunda.bpm.engine.migration.MigrationPlanValidationReport;
-import org.camunda.bpm.engine.migration.MigrationVariableValidationReport;
+import io.orqueio.bpm.engine.migration.MigrationInstructionValidationReport;
+import io.orqueio.bpm.engine.migration.MigrationPlan;
+import io.orqueio.bpm.engine.migration.MigrationPlanValidationReport;
+import io.orqueio.bpm.engine.migration.MigrationVariableValidationReport;
 
 public class MigrationPlanValidationReportImpl implements MigrationPlanValidationReport {
 

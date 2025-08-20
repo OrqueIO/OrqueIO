@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.history;
+package io.orqueio.bpm.engine.history;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-import org.camunda.bpm.engine.exception.NotValidException;
-import org.camunda.bpm.engine.query.Query;
+import io.orqueio.bpm.engine.exception.NotValidException;
+import io.orqueio.bpm.engine.query.Query;
 
 /**
  * Allows programmatic querying of {@link HistoricCaseInstance}s.

@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.el;
+package io.orqueio.bpm.engine.impl.el;
 
-import org.camunda.bpm.engine.ProcessEngineException;
-import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureInstanceOf;
-import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import static io.orqueio.bpm.engine.impl.util.EnsureUtil.ensureInstanceOf;
+import static io.orqueio.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
 
-import org.camunda.bpm.engine.delegate.DelegateExecution;
-import org.camunda.bpm.engine.delegate.VariableScope;
-import org.camunda.bpm.engine.impl.Condition;
-import org.camunda.bpm.impl.juel.jakarta.el.PropertyNotFoundException;
+import io.orqueio.bpm.engine.delegate.DelegateExecution;
+import io.orqueio.bpm.engine.delegate.VariableScope;
+import io.orqueio.bpm.engine.impl.Condition;
+import io.orqueio.bpm.impl.juel.jakarta.el.PropertyNotFoundException;
 
 
 /**

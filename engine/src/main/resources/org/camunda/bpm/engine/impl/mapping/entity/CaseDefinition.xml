@@ -19,11 +19,11 @@
 -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
 
-<mapper namespace="org.camunda.bpm.engine.impl.cmmn.entity.repository.CaseDefinitionEntity">
+<mapper namespace="io.orqueio.bpm.engine.impl.cmmn.entity.repository.CaseDefinitionEntity">
 
   <!-- CASEDEFINITION INSERT -->
 
-  <insert id="insertCaseDefinition" parameterType="org.camunda.bpm.engine.impl.cmmn.entity.repository.CaseDefinitionEntity">
+  <insert id="insertCaseDefinition" parameterType="io.orqueio.bpm.engine.impl.cmmn.entity.repository.CaseDefinitionEntity">
     insert into ${prefix}ACT_RE_CASE_DEF(
       ID_, 
       CATEGORY_, 
@@ -52,7 +52,7 @@
 
   <!-- CASEDEFINITION UPDATE -->
 
-  <update id="updateCaseDefinition" parameterType="org.camunda.bpm.engine.impl.cmmn.entity.repository.CaseDefinitionEntity">
+  <update id="updateCaseDefinition" parameterType="io.orqueio.bpm.engine.impl.cmmn.entity.repository.CaseDefinitionEntity">
     update ${prefix}ACT_RE_CASE_DEF set
       REV_ = #{revisionNext, jdbcType=INTEGER},
       HISTORY_TTL_ = #{historyTimeToLive, jdbcType=INTEGER}
@@ -68,7 +68,7 @@
 
   <!-- CASEDEFINITION RESULTMAP -->
 
-  <resultMap id="caseDefinitionResultMap" type="org.camunda.bpm.engine.impl.cmmn.entity.repository.CaseDefinitionEntity">
+  <resultMap id="caseDefinitionResultMap" type="io.orqueio.bpm.engine.impl.cmmn.entity.repository.CaseDefinitionEntity">
     <id property="id" column="ID_" jdbcType="VARCHAR" />
     <result property="revision" column="REV_" />
     <result property="category" column="CATEGORY_" />
@@ -99,14 +99,14 @@
       and KEY_ = #{caseDefinitionKey}
   </select>
 
-  <select id="selectLatestCaseDefinitionByKey" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject" resultMap="caseDefinitionResultMap">
+  <select id="selectLatestCaseDefinitionByKey" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject" resultMap="caseDefinitionResultMap">
     select *
     from ${prefix}ACT_RE_CASE_DEF c1
       inner join
           (select KEY_, TENANT_ID_, max(VERSION_) as MAX_VERSION
           from ${prefix}ACT_RE_CASE_DEF RES
           where KEY_ = #{parameter}
-            <include refid="org.camunda.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
+            <include refid="io.orqueio.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
           group by TENANT_ID_, KEY_) c2
         on c1.KEY_ = c2.KEY_
     where c1.VERSION_ = c2.MAX_VERSION and 
@@ -171,8 +171,8 @@
           AND VERSION_ &lt; #{version})
   </select>
 
-  <select id="selectCaseDefinitionsByQueryCriteria" parameterType="org.camunda.bpm.engine.impl.cmmn.entity.repository.CaseDefinitionQueryImpl" resultMap="caseDefinitionResultMap">
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
+  <select id="selectCaseDefinitionsByQueryCriteria" parameterType="io.orqueio.bpm.engine.impl.cmmn.entity.repository.CaseDefinitionQueryImpl" resultMap="caseDefinitionResultMap">
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
     ${limitBefore}
     select ${distinct} RES.*
     ${limitBetween}
@@ -181,15 +181,15 @@
     ${limitAfter}
   </select>
 
-  <select id="selectCaseDefinitionCountByQueryCriteria" parameterType="org.camunda.bpm.engine.impl.cmmn.entity.repository.CaseDefinitionQueryImpl" resultType="long">
+  <select id="selectCaseDefinitionCountByQueryCriteria" parameterType="io.orqueio.bpm.engine.impl.cmmn.entity.repository.CaseDefinitionQueryImpl" resultType="long">
     ${countDistinctBeforeStart} RES.ID_ ${countDistinctBeforeEnd}
     <include refid="selectCaseDefinitionsByQueryCriteriaSql"/>
     ${countDistinctAfterEnd}
   </select>
 
   <!-- mysql specific sql -->
-  <select id="selectCaseDefinitionsByQueryCriteria_mysql" parameterType="org.camunda.bpm.engine.impl.cmmn.entity.repository.CaseDefinitionQueryImpl" resultMap="caseDefinitionResultMap">
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
+  <select id="selectCaseDefinitionsByQueryCriteria_mysql" parameterType="io.orqueio.bpm.engine.impl.cmmn.entity.repository.CaseDefinitionQueryImpl" resultMap="caseDefinitionResultMap">
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
     ${limitBefore}
     select ${distinct} RES.* 
     ${limitBetween}
@@ -199,7 +199,7 @@
   </select>
 
   <!-- mysql specific sql -->
-  <select id="selectCaseDefinitionCountByQueryCriteria_mysql" parameterType="org.camunda.bpm.engine.impl.cmmn.entity.repository.CaseDefinitionQueryImpl" resultType="long">
+  <select id="selectCaseDefinitionCountByQueryCriteria_mysql" parameterType="io.orqueio.bpm.engine.impl.cmmn.entity.repository.CaseDefinitionQueryImpl" resultType="long">
     ${countDistinctBeforeStart} RES.ID_ ${countDistinctBeforeEnd}
     <include refid="selectCaseDefinitionsByQueryCriteriaSql"/>
     ${countDistinctAfterEnd}
@@ -282,7 +282,7 @@
         </if>
       </if>
 
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
 
     </where>
   </sql>

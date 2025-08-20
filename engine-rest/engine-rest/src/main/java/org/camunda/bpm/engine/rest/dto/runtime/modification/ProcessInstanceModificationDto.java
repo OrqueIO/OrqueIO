@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.dto.runtime.modification;
+package io.orqueio.bpm.engine.rest.dto.runtime.modification;
 
 import java.util.List;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.runtime.ProcessInstanceModificationBuilder;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.runtime.ProcessInstanceModificationBuilder;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 

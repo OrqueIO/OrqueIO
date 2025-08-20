@@ -12,7 +12,7 @@
     
     <serviceTask id="javaService" 
                  name="Java service invocation" 
-                 camunda:class="org.camunda.bpm.engine.test.bpmn.servicetask.util.ToUppercase" />
+                 camunda:class="io.orqueio.bpm.engine.test.bpmn.servicetask.util.ToUppercase" />
     
     <sequenceFlow id="flow2" sourceRef="javaService" targetRef="waitState" />
     

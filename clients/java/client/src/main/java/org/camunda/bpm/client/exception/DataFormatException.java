@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.exception;
+package io.orqueio.bpm.client.exception;
 
 public class DataFormatException extends ExternalTaskClientException {
 

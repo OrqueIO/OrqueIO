@@ -21,7 +21,7 @@
 			<sequenceFlow sourceRef="startInScope" targetRef="bookHotel" />
 
 			<serviceTask id="bookHotel" 
-				camunda:class="org.camunda.bpm.engine.test.bpmn.event.compensate.helper.SetVariablesDelegate">
+				camunda:class="io.orqueio.bpm.engine.test.bpmn.event.compensate.helper.SetVariablesDelegate">
               <extensionElements>
                 <camunda:field name="variable" stringValue="hotel" />
               </extensionElements>
@@ -40,7 +40,7 @@
               <sequenceFlow sourceRef="compensationStart" targetRef="undoBookHotel" />
               
               <serviceTask id="undoBookHotel" 
-                    camunda:class="org.camunda.bpm.engine.test.bpmn.event.compensate.helper.GetVariablesDelegate">
+                    camunda:class="io.orqueio.bpm.engine.test.bpmn.event.compensate.helper.GetVariablesDelegate">
                 <extensionElements>
                   <camunda:field name="variable" stringValue="hotel" />
                 </extensionElements>

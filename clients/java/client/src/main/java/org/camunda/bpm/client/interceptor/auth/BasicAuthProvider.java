@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.interceptor.auth;
+package io.orqueio.bpm.client.interceptor.auth;
 
-import org.camunda.bpm.client.impl.ExternalTaskClientLogger;
-import org.camunda.bpm.client.interceptor.ClientRequestContext;
-import org.camunda.bpm.client.interceptor.ClientRequestInterceptor;
+import io.orqueio.bpm.client.impl.ExternalTaskClientLogger;
+import io.orqueio.bpm.client.interceptor.ClientRequestContext;
+import io.orqueio.bpm.client.interceptor.ClientRequestInterceptor;
 
 import java.nio.charset.Charset;
 import java.util.Base64;

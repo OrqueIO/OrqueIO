@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.persistence.entity.util;
+package io.orqueio.bpm.engine.impl.persistence.entity.util;
 
-import org.camunda.bpm.engine.authorization.HistoricTaskPermissions;
-import org.camunda.bpm.engine.authorization.Permission;
-import org.camunda.bpm.engine.authorization.ProcessDefinitionPermissions;
+import io.orqueio.bpm.engine.authorization.HistoricTaskPermissions;
+import io.orqueio.bpm.engine.authorization.Permission;
+import io.orqueio.bpm.engine.authorization.ProcessDefinitionPermissions;
 
 public class AuthManagerUtil {
 

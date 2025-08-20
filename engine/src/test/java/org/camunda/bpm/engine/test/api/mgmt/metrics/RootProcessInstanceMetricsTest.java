@@ -14,20 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.mgmt.metrics;
+package io.orqueio.bpm.engine.test.api.mgmt.metrics;
 
 import static org.junit.Assert.assertEquals;
 
 import java.util.Collections;
 import java.util.Map;
 
-import org.camunda.bpm.engine.management.Metrics;
-import org.camunda.bpm.engine.management.MetricsQuery;
-import org.camunda.bpm.engine.variable.VariableMap;
-import org.camunda.bpm.engine.variable.Variables;
-import org.camunda.bpm.model.bpmn.Bpmn;
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
-import org.camunda.bpm.model.bpmn.instance.CallActivity;
+import io.orqueio.bpm.engine.management.Metrics;
+import io.orqueio.bpm.engine.management.MetricsQuery;
+import io.orqueio.bpm.engine.variable.VariableMap;
+import io.orqueio.bpm.engine.variable.Variables;
+import io.orqueio.bpm.model.bpmn.Bpmn;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.bpm.model.bpmn.instance.CallActivity;
 import org.junit.Test;
 
 public class RootProcessInstanceMetricsTest extends AbstractMetricsTest {

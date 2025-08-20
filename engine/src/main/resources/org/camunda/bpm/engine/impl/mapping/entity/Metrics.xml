@@ -19,11 +19,11 @@
 -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="org.camunda.bpm.engine.impl.persistence.entity.MeterLogEntity">
+<mapper namespace="io.orqueio.bpm.engine.impl.persistence.entity.MeterLogEntity">
 
   <!-- METER INSERT -->
 
-  <insert id="insertMeterLog" parameterType="org.camunda.bpm.engine.impl.persistence.entity.MeterLogEntity">
+  <insert id="insertMeterLog" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.MeterLogEntity">
     insert into ${prefix}ACT_RU_METER_LOG (ID_, NAME_, REPORTER_, VALUE_, TIMESTAMP_, MILLISECONDS_)
     values (
     #{id ,jdbcType=VARCHAR},
@@ -57,7 +57,7 @@
 
   <!-- Meter RESULTMAP -->
 
-  <resultMap id="meterResultMap" type="org.camunda.bpm.engine.impl.persistence.entity.MeterLogEntity">
+  <resultMap id="meterResultMap" type="io.orqueio.bpm.engine.impl.persistence.entity.MeterLogEntity">
     <id property="id" column="ID_" jdbcType="VARCHAR" />
     <result property="name" column="NAME_" jdbcType="VARCHAR" />
     <result property="reporter" column="REPORTER_" jdbcType="VARCHAR" />
@@ -69,7 +69,7 @@
 
   <!-- SELECT -->
 
-  <select id="selectMeterLogSum" parameterType="org.camunda.bpm.engine.impl.metrics.MetricsQueryImpl" resultType="long">
+  <select id="selectMeterLogSum" parameterType="io.orqueio.bpm.engine.impl.metrics.MetricsQueryImpl" resultType="long">
     select SUM(RES.VALUE_)
     <include refid="selectMeterLogsByQueryCriteriaSqlOldTimestampColumn"/>
   </select>
@@ -111,7 +111,7 @@
   </sql>
 
 
-  <resultMap id="meterResultIntervallMap" type="org.camunda.bpm.engine.impl.persistence.entity.MetricIntervalEntity">
+  <resultMap id="meterResultIntervallMap" type="io.orqueio.bpm.engine.impl.persistence.entity.MetricIntervalEntity">
     <constructor>
       <idArg column="INTERVAL_" jdbcType="BIGINT" javaType="java.lang.Long"/>
       <idArg column="NAME_" javaType="java.lang.String" jdbcType="VARCHAR" />
@@ -120,7 +120,7 @@
     <result property="value" column="VALUE_" jdbcType="BIGINT" />
   </resultMap>
 
-  <select id="selectMeterLogAggregatedByTimeInterval_db2_or_mssql"  parameterType="org.camunda.bpm.engine.impl.metrics.MetricsQueryImpl" resultMap="meterResultIntervallMap">
+  <select id="selectMeterLogAggregatedByTimeInterval_db2_or_mssql"  parameterType="io.orqueio.bpm.engine.impl.metrics.MetricsQueryImpl" resultMap="meterResultIntervallMap">
     SELECT NAME_, REPORTER_, VALUE_, INTERVAL_
     FROM (
     SELECT row_number() OVER ( ORDER BY INTERVAL_ DESC, NAME_ DESC, REPORTER_ DESC) AS rid, RES.*
@@ -154,7 +154,7 @@
     INTERVAL_
   </sql>
 
-  <select id="selectMeterLogAggregatedByTimeInterval"  parameterType="org.camunda.bpm.engine.impl.metrics.MetricsQueryImpl" resultMap="meterResultIntervallMap">
+  <select id="selectMeterLogAggregatedByTimeInterval"  parameterType="io.orqueio.bpm.engine.impl.metrics.MetricsQueryImpl" resultMap="meterResultIntervallMap">
     ${limitBefore}
     <include refid="selectMeterLogAggregatedByTimeIntervalQuery"/>
     ORDER BY INTERVAL_ DESC

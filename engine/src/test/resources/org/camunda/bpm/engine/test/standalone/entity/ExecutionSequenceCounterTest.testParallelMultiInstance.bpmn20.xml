@@ -7,7 +7,7 @@
 
     <startEvent id="theStart">
       <extensionElements>
-        <camunda:executionListener event="start" class="org.camunda.bpm.engine.test.standalone.entity.ExecutionOrderListener" />
+        <camunda:executionListener event="start" class="io.orqueio.bpm.engine.test.standalone.entity.ExecutionOrderListener" />
       </extensionElements>
     </startEvent>
 
@@ -15,7 +15,7 @@
 
     <serviceTask id="theService1" camunda:expression="${true}">
       <extensionElements>
-        <camunda:executionListener event="start" class="org.camunda.bpm.engine.test.standalone.entity.ExecutionOrderListener" />
+        <camunda:executionListener event="start" class="io.orqueio.bpm.engine.test.standalone.entity.ExecutionOrderListener" />
       </extensionElements>
     </serviceTask>
 
@@ -23,7 +23,7 @@
 
     <serviceTask id="theService2" camunda:expression="${true}">
       <extensionElements>
-        <camunda:executionListener event="start" class="org.camunda.bpm.engine.test.standalone.entity.ExecutionOrderListener" />
+        <camunda:executionListener event="start" class="io.orqueio.bpm.engine.test.standalone.entity.ExecutionOrderListener" />
       </extensionElements>
       <multiInstanceLoopCharacteristics isSequential="false">
         <loopCardinality>2</loopCardinality>
@@ -34,7 +34,7 @@
 
     <serviceTask id="theService3" camunda:expression="${true}">
       <extensionElements>
-        <camunda:executionListener event="start" class="org.camunda.bpm.engine.test.standalone.entity.ExecutionOrderListener" />
+        <camunda:executionListener event="start" class="io.orqueio.bpm.engine.test.standalone.entity.ExecutionOrderListener" />
       </extensionElements>
     </serviceTask>
 
@@ -42,7 +42,7 @@
 
     <endEvent id="theEnd">
       <extensionElements>
-        <camunda:executionListener event="start" class="org.camunda.bpm.engine.test.standalone.entity.ExecutionOrderListener" />
+        <camunda:executionListener event="start" class="io.orqueio.bpm.engine.test.standalone.entity.ExecutionOrderListener" />
       </extensionElements>
     </endEvent>
 

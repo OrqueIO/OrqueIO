@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */ 
-package org.camunda.bpm.impl.juel;
+package io.orqueio.bpm.impl.juel;
 
 import java.io.PrintWriter;
 import java.util.EnumSet;
@@ -23,7 +23,7 @@ import jakarta.el.ELException;
 import jakarta.el.ELResolver;
 import jakarta.el.FunctionMapper;
 import jakarta.el.VariableMapper;
-import org.camunda.bpm.impl.juel.Parser.ParseException;
+import io.orqueio.bpm.impl.juel.Parser.ParseException;
 
 /**
  * Tree builder.

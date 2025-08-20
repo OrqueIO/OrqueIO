@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.jboss.extension.handler;
+package io.orqueio.bpm.container.impl.jboss.extension.handler;
 
-import org.camunda.bpm.container.impl.jboss.deployment.processor.*;
-import org.camunda.bpm.container.impl.jboss.extension.ModelConstants;
-import org.camunda.bpm.container.impl.jboss.service.MscBpmPlatformPlugins;
-import org.camunda.bpm.container.impl.jboss.service.MscRuntimeContainerDelegate;
-import org.camunda.bpm.container.impl.jboss.service.ServiceNames;
-import org.camunda.bpm.container.impl.plugin.BpmPlatformPlugins;
+import io.orqueio.bpm.container.impl.jboss.deployment.processor.*;
+import io.orqueio.bpm.container.impl.jboss.extension.ModelConstants;
+import io.orqueio.bpm.container.impl.jboss.service.MscBpmPlatformPlugins;
+import io.orqueio.bpm.container.impl.jboss.service.MscRuntimeContainerDelegate;
+import io.orqueio.bpm.container.impl.jboss.service.ServiceNames;
+import io.orqueio.bpm.container.impl.plugin.BpmPlatformPlugins;
 import org.jboss.as.controller.AbstractBoottimeAddStepHandler;
 import org.jboss.as.controller.OperationContext;
 import org.jboss.as.controller.OperationFailedException;

@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.variable;
+package io.orqueio.bpm.client.variable;
 
-import org.camunda.bpm.client.variable.impl.TypedValueField;
-import org.camunda.bpm.client.variable.impl.mapper.DateValueMapper;
-import org.camunda.bpm.engine.variable.Variables;
-import org.camunda.bpm.engine.variable.impl.type.PrimitiveValueTypeImpl;
-import org.camunda.bpm.engine.variable.impl.value.UntypedValueImpl;
-import org.camunda.bpm.engine.variable.value.DateValue;
+import io.orqueio.bpm.client.variable.impl.TypedValueField;
+import io.orqueio.bpm.client.variable.impl.mapper.DateValueMapper;
+import io.orqueio.bpm.engine.variable.Variables;
+import io.orqueio.bpm.engine.variable.impl.type.PrimitiveValueTypeImpl;
+import io.orqueio.bpm.engine.variable.impl.value.UntypedValueImpl;
+import io.orqueio.bpm.engine.variable.value.DateValue;
 import org.junit.Before;
 import org.junit.Test;
 

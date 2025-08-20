@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.feel.impl.juel.transform;
+package io.orqueio.bpm.dmn.feel.impl.juel.transform;
 
-import static org.camunda.bpm.dmn.feel.impl.juel.el.FeelFunctionMapper.JUEL_DATE_AND_TIME_METHOD;
+import static io.orqueio.bpm.dmn.feel.impl.juel.el.FeelFunctionMapper.JUEL_DATE_AND_TIME_METHOD;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

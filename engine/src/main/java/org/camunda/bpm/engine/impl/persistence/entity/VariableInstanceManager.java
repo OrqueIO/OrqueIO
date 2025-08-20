@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.persistence.entity;
+package io.orqueio.bpm.engine.impl.persistence.entity;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -22,10 +22,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.engine.impl.Page;
-import org.camunda.bpm.engine.impl.VariableInstanceQueryImpl;
-import org.camunda.bpm.engine.impl.persistence.AbstractManager;
-import org.camunda.bpm.engine.runtime.VariableInstance;
+import io.orqueio.bpm.engine.impl.Page;
+import io.orqueio.bpm.engine.impl.VariableInstanceQueryImpl;
+import io.orqueio.bpm.engine.impl.persistence.AbstractManager;
+import io.orqueio.bpm.engine.runtime.VariableInstance;
 
 
 /**

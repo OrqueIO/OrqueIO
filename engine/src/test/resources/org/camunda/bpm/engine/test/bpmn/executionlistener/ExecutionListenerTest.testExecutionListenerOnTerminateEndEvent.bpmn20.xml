@@ -13,10 +13,10 @@
     <sequenceFlow id="flow2" sourceRef="theTask" targetRef="theEnd" />
     <endEvent id="theEnd">
       <extensionElements>
-        <camunda:executionListener class="org.camunda.bpm.engine.test.bpmn.executionlistener.RecorderExecutionListener" event="start">
+        <camunda:executionListener class="io.orqueio.bpm.engine.test.bpmn.executionlistener.RecorderExecutionListener" event="start">
           <camunda:field name="parameter" stringValue="Start Event Listener" />
         </camunda:executionListener>
-        <camunda:executionListener class="org.camunda.bpm.engine.test.bpmn.executionlistener.RecorderExecutionListener" event="end">
+        <camunda:executionListener class="io.orqueio.bpm.engine.test.bpmn.executionlistener.RecorderExecutionListener" event="end">
           <camunda:field name="parameter" stringValue="End Event Listener" />
         </camunda:executionListener>
       </extensionElements>

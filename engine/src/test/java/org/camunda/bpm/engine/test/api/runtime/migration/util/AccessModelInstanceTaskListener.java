@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.runtime.migration.util;
+package io.orqueio.bpm.engine.test.api.runtime.migration.util;
 
-import org.camunda.bpm.engine.delegate.DelegateTask;
-import org.camunda.bpm.engine.delegate.TaskListener;
-import org.camunda.bpm.model.bpmn.instance.UserTask;
+import io.orqueio.bpm.engine.delegate.DelegateTask;
+import io.orqueio.bpm.engine.delegate.TaskListener;
+import io.orqueio.bpm.model.bpmn.instance.UserTask;
 
 public class AccessModelInstanceTaskListener implements TaskListener {
 

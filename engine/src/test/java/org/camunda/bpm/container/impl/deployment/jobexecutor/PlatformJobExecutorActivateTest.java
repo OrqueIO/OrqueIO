@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.deployment.jobexecutor;
+package io.orqueio.bpm.container.impl.deployment.jobexecutor;
 
 import static org.junit.Assert.assertEquals;
 
@@ -22,21 +22,21 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
-import org.camunda.bpm.container.RuntimeContainerDelegate;
-import org.camunda.bpm.container.impl.RuntimeContainerDelegateImpl;
-import org.camunda.bpm.container.impl.deployment.Attachments;
-import org.camunda.bpm.container.impl.deployment.PlatformXmlStartProcessEnginesStep;
-import org.camunda.bpm.container.impl.deployment.StopProcessEnginesStep;
-import org.camunda.bpm.container.impl.metadata.BpmPlatformXmlImpl;
-import org.camunda.bpm.container.impl.metadata.JobAcquisitionXmlImpl;
-import org.camunda.bpm.container.impl.metadata.JobExecutorXmlImpl;
-import org.camunda.bpm.container.impl.metadata.ProcessEngineXmlImpl;
-import org.camunda.bpm.container.impl.metadata.spi.JobAcquisitionXml;
-import org.camunda.bpm.container.impl.metadata.spi.ProcessEnginePluginXml;
-import org.camunda.bpm.container.impl.metadata.spi.ProcessEngineXml;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.cfg.StandaloneInMemProcessEngineConfiguration;
+import io.orqueio.bpm.container.RuntimeContainerDelegate;
+import io.orqueio.bpm.container.impl.RuntimeContainerDelegateImpl;
+import io.orqueio.bpm.container.impl.deployment.Attachments;
+import io.orqueio.bpm.container.impl.deployment.PlatformXmlStartProcessEnginesStep;
+import io.orqueio.bpm.container.impl.deployment.StopProcessEnginesStep;
+import io.orqueio.bpm.container.impl.metadata.BpmPlatformXmlImpl;
+import io.orqueio.bpm.container.impl.metadata.JobAcquisitionXmlImpl;
+import io.orqueio.bpm.container.impl.metadata.JobExecutorXmlImpl;
+import io.orqueio.bpm.container.impl.metadata.ProcessEngineXmlImpl;
+import io.orqueio.bpm.container.impl.metadata.spi.JobAcquisitionXml;
+import io.orqueio.bpm.container.impl.metadata.spi.ProcessEnginePluginXml;
+import io.orqueio.bpm.container.impl.metadata.spi.ProcessEngineXml;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.cfg.StandaloneInMemProcessEngineConfiguration;
 import org.junit.Test;
 
 /**

@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.run.test;
+package io.orqueio.bpm.run.test;
 
 import java.util.Collections;
 
-import org.camunda.bpm.run.CamundaBpmRun;
-import org.camunda.bpm.run.test.util.LoggingInterceptor;
+import io.orqueio.bpm.run.CamundaBpmRun;
+import io.orqueio.bpm.run.test.util.LoggingInterceptor;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

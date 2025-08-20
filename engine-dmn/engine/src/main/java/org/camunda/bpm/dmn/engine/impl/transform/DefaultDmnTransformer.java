@@ -14,20 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.engine.impl.transform;
+package io.orqueio.bpm.dmn.engine.impl.transform;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.camunda.bpm.dmn.engine.impl.hitpolicy.DefaultHitPolicyHandlerRegistry;
-import org.camunda.bpm.dmn.engine.impl.spi.hitpolicy.DmnHitPolicyHandlerRegistry;
-import org.camunda.bpm.dmn.engine.impl.spi.transform.DmnElementTransformHandlerRegistry;
-import org.camunda.bpm.dmn.engine.impl.spi.transform.DmnTransform;
-import org.camunda.bpm.dmn.engine.impl.spi.transform.DmnTransformFactory;
-import org.camunda.bpm.dmn.engine.impl.spi.transform.DmnTransformListener;
-import org.camunda.bpm.dmn.engine.impl.spi.transform.DmnTransformer;
-import org.camunda.bpm.dmn.engine.impl.spi.type.DmnDataTypeTransformerRegistry;
-import org.camunda.bpm.dmn.engine.impl.type.DefaultDataTypeTransformerRegistry;
+import io.orqueio.bpm.dmn.engine.impl.hitpolicy.DefaultHitPolicyHandlerRegistry;
+import io.orqueio.bpm.dmn.engine.impl.spi.hitpolicy.DmnHitPolicyHandlerRegistry;
+import io.orqueio.bpm.dmn.engine.impl.spi.transform.DmnElementTransformHandlerRegistry;
+import io.orqueio.bpm.dmn.engine.impl.spi.transform.DmnTransform;
+import io.orqueio.bpm.dmn.engine.impl.spi.transform.DmnTransformFactory;
+import io.orqueio.bpm.dmn.engine.impl.spi.transform.DmnTransformListener;
+import io.orqueio.bpm.dmn.engine.impl.spi.transform.DmnTransformer;
+import io.orqueio.bpm.dmn.engine.impl.spi.type.DmnDataTypeTransformerRegistry;
+import io.orqueio.bpm.dmn.engine.impl.type.DefaultDataTypeTransformerRegistry;
 
 public class DefaultDmnTransformer implements DmnTransformer {
 

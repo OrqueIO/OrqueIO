@@ -19,11 +19,11 @@
 -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="org.camunda.bpm.engine.impl.batch.history.HistoricBatchEntity">
+<mapper namespace="io.orqueio.bpm.engine.impl.batch.history.HistoricBatchEntity">
 
   <!-- INSERT -->
 
-  <insert id="insertHistoricBatch" parameterType="org.camunda.bpm.engine.impl.batch.history.HistoricBatchEntity">
+  <insert id="insertHistoricBatch" parameterType="io.orqueio.bpm.engine.impl.batch.history.HistoricBatchEntity">
     insert into ${prefix}ACT_HI_BATCH
     (
       ID_,
@@ -60,7 +60,7 @@
 
   <!-- RESULTMAP -->
 
-  <resultMap id="historicBatchResultMap" type="org.camunda.bpm.engine.impl.batch.history.HistoricBatchEntity">
+  <resultMap id="historicBatchResultMap" type="io.orqueio.bpm.engine.impl.batch.history.HistoricBatchEntity">
     <id property="id" column="ID_" jdbcType="VARCHAR" />
     <result property="type" column="TYPE_" jdbcType="VARCHAR" />
     <result property="totalJobs" column="TOTAL_JOBS_" jdbcType="INTEGER" />
@@ -77,7 +77,7 @@
     <result property="executionStartTime" column="EXEC_START_TIME_" jdbcType="TIMESTAMP" />
   </resultMap>
 
-  <resultMap id="finishedReportResultMap" type="org.camunda.bpm.engine.impl.persistence.entity.CleanableHistoricBatchesReportResultEntity">
+  <resultMap id="finishedReportResultMap" type="io.orqueio.bpm.engine.impl.persistence.entity.CleanableHistoricBatchesReportResultEntity">
     <result property="cleanableBatchesCount" column="CLEANABLE_" jdbcType="BIGINT" />
     <result property="finishedBatchesCount" column="FINISHED_" jdbcType="BIGINT" />
     <result property="batchType" column="TYPE_" jdbcType="VARCHAR" />
@@ -86,7 +86,7 @@
 
   <!-- DELETE -->
 
-  <delete id="deleteHistoricBatch" parameterType="org.camunda.bpm.engine.impl.batch.history.HistoricBatchEntity">
+  <delete id="deleteHistoricBatch" parameterType="io.orqueio.bpm.engine.impl.batch.history.HistoricBatchEntity">
     delete from ${prefix}ACT_HI_BATCH where ID_ = #{id}
   </delete>
 
@@ -100,11 +100,11 @@
     where
       <bind name="listOfIds" value="list"/>
       <bind name="fieldName" value="'ID_'"/>
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection"/>
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection"/>
   </delete>
 
   <delete id="deleteHistoricBatchesByRemovalTime"
-          parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject">
+          parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject">
     <bind name="date" value="'REMOVAL_TIME_'"/>
     <bind name="reportPeriodUnitName" value="'MINUTE'"/>
     delete ${limitBeforeWithoutOffset} from ${prefix}ACT_HI_BATCH
@@ -114,7 +114,7 @@
   </delete>
 
   <delete id="deleteHistoricBatchesByRemovalTime_oracle"
-          parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject">
+          parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject">
     <bind name="date" value="'REMOVAL_TIME_'"/>
     <bind name="reportPeriodUnitName" value="'MINUTE'"/>
     delete ${limitBeforeWithoutOffset} from ${prefix}ACT_HI_BATCH
@@ -124,7 +124,7 @@
   </delete>
 
   <delete id="deleteHistoricBatchesByRemovalTime_postgres_or_db2"
-          parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject">
+          parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject">
     <bind name="date" value="'REMOVAL_TIME_'"/>
     <bind name="reportPeriodUnitName" value="'MINUTE'"/>
     delete ${limitBeforeWithoutOffset} from ${prefix}ACT_HI_BATCH
@@ -136,7 +136,7 @@
   </delete>
 
   <!-- UPDATE -->
-  <update id="updateHistoricBatch" parameterType="org.camunda.bpm.engine.impl.batch.history.HistoricBatchEntity">
+  <update id="updateHistoricBatch" parameterType="io.orqueio.bpm.engine.impl.batch.history.HistoricBatchEntity">
     update ${prefix}ACT_HI_BATCH
     <set>
       <if test="endTime != null">
@@ -152,7 +152,7 @@
     where ID_= #{id, jdbcType=VARCHAR}
   </update>
 
-  <update id="updateHistoricBatch_mssql" parameterType="org.camunda.bpm.engine.impl.batch.history.HistoricBatchEntity">
+  <update id="updateHistoricBatch_mssql" parameterType="io.orqueio.bpm.engine.impl.batch.history.HistoricBatchEntity">
     update RES
     <set>
       <if test="endTime != null">
@@ -169,7 +169,7 @@
     where RES.ID_= #{id, jdbcType=VARCHAR}
   </update>
 
-  <update id="updateHistoricBatchRemovalTimeById" parameterType="org.camunda.bpm.engine.impl.batch.history.HistoricBatchEntity">
+  <update id="updateHistoricBatchRemovalTimeById" parameterType="io.orqueio.bpm.engine.impl.batch.history.HistoricBatchEntity">
     update ${prefix}ACT_HI_BATCH
     <set>
         REMOVAL_TIME_ = #{removalTime, jdbcType=TIMESTAMP}
@@ -177,7 +177,7 @@
     where ID_ = #{id, jdbcType=VARCHAR}
   </update>
 
-  <update id="updateHistoricBatchRemovalTimeById_mssql" parameterType="org.camunda.bpm.engine.impl.batch.history.HistoricBatchEntity">
+  <update id="updateHistoricBatchRemovalTimeById_mssql" parameterType="io.orqueio.bpm.engine.impl.batch.history.HistoricBatchEntity">
     update RES
     <set>
       RES.REMOVAL_TIME_ = #{removalTime, jdbcType=TIMESTAMP}
@@ -191,8 +191,8 @@
     select * from ${prefix}ACT_HI_BATCH where ID_ = #{id}
   </select>
 
-  <select id="selectHistoricBatchesByQueryCriteria" parameterType="org.camunda.bpm.engine.impl.batch.history.HistoricBatchQueryImpl" resultMap="historicBatchResultMap">
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
+  <select id="selectHistoricBatchesByQueryCriteria" parameterType="io.orqueio.bpm.engine.impl.batch.history.HistoricBatchQueryImpl" resultMap="historicBatchResultMap">
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
     ${limitBefore}
     select ${distinct} RES.*
     ${limitBetween}
@@ -201,7 +201,7 @@
     ${limitAfter}
   </select>
 
-  <select id="selectHistoricBatchCountByQueryCriteria" parameterType="org.camunda.bpm.engine.impl.batch.history.HistoricBatchQueryImpl" resultType="long">
+  <select id="selectHistoricBatchCountByQueryCriteria" parameterType="io.orqueio.bpm.engine.impl.batch.history.HistoricBatchQueryImpl" resultType="long">
     ${countDistinctBeforeStart} RES.ID_ ${countDistinctBeforeEnd}
     <include refid="selectHistoricBatchesByQueryCriteriaSql"/>
     ${countDistinctAfterEnd}
@@ -210,7 +210,7 @@
   <sql id="selectHistoricBatchesByQueryCriteriaSql">
     from ${prefix}ACT_HI_BATCH RES
 
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoin" />
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoin" />
 
     <where>
       <if test="batchId != null">
@@ -238,8 +238,8 @@
         </if>
       </if>
 
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.queryAuthorizationCheck" />
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.queryAuthorizationCheck" />
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
     </where>
   </sql>
 
@@ -256,14 +256,14 @@
 
   <!-- Select ids for async history cleanup -->
 
-  <select id="selectHistoricBatchIdsForCleanup" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject" resultType="string">
+  <select id="selectHistoricBatchIdsForCleanup" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject" resultType="string">
     <include refid="selectHistoricBatchIdsForCleanupSql"/>
     <include refid="andWhereMinuteInDateBetweenSql"/>
     ${orderBy}
     ${limitAfter}
   </select>
 
-  <select id="selectHistoricBatchIdsForCleanup_oracle" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject" resultType="string">
+  <select id="selectHistoricBatchIdsForCleanup_oracle" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject" resultType="string">
     <include refid="selectHistoricBatchIdsForCleanupSql"/>
     <include refid="andWhereMinuteInDateBetweenSql_oracle"/>
     ${orderBy}
@@ -271,7 +271,7 @@
   </select>
 
   <sql id="selectHistoricBatchIdsForCleanupSql">
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
     <bind name="date" value="'RES.END_TIME_'"/>
     <bind name="currentTimestamp" value="parameter.currentTimestamp"/>
     <bind name="reportPeriodUnitName" value="'MINUTE'"/>
@@ -289,27 +289,27 @@
 
   <sql id="andWhereMinuteInDateBetweenSql">
     <if test="parameter.minuteFrom != null and parameter.minuteTo != null">
-      AND ${datepart1}<include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.periodUnitFunction"/>${datepart2}${date}${datepart3}
+      AND ${datepart1}<include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.periodUnitFunction"/>${datepart2}${date}${datepart3}
       between #{parameter.minuteFrom, jdbcType=INTEGER} and #{parameter.minuteTo, jdbcType=INTEGER}
     </if>
   </sql>
 
   <sql id="andWhereMinuteInDateBetweenSql_oracle">
     <if test="parameter.minuteFrom != null and parameter.minuteTo != null">
-      AND ${datepart1}${date}${datepart2}<include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.periodUnitFunction"/>${datepart3}
+      AND ${datepart1}${date}${datepart2}<include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.periodUnitFunction"/>${datepart3}
       between #{parameter.minuteFrom, jdbcType=INTEGER} and #{parameter.minuteTo, jdbcType=INTEGER}
     </if>
   </sql>
 
   <!-- Select History Cleanup Report Entities -->
-  <select id="selectFinishedBatchesReportEntitiesCount" parameterType="org.camunda.bpm.engine.impl.CleanableHistoricBatchReportImpl" resultType="long">
+  <select id="selectFinishedBatchesReportEntitiesCount" parameterType="io.orqueio.bpm.engine.impl.CleanableHistoricBatchReportImpl" resultType="long">
     ${countDistinctBeforeStart} RES.TYPE_ ${countDistinctBeforeEnd}
     <include refid="selectFinishedBatchesReportEntitiesSql" />
     ${countDistinctAfterEnd}
   </select>
 
-  <select id="selectFinishedBatchesReportEntities" parameterType="org.camunda.bpm.engine.impl.CleanableHistoricBatchReportImpl" resultMap="finishedReportResultMap">
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
+  <select id="selectFinishedBatchesReportEntities" parameterType="io.orqueio.bpm.engine.impl.CleanableHistoricBatchReportImpl" resultMap="finishedReportResultMap">
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
     ${limitBefore}
     SELECT ${distinct} RES.*
     ${limitBetween}
@@ -358,7 +358,7 @@
   </sql>
 
   <select id="selectOnlyFinishedBatchesReportEntities" resultMap="finishedReportResultMap">
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.bindOrderBy" />
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.bindOrderBy" />
     ${limitBefore}
     SELECT FINISHED_, TYPE_
     ${limitBetween}

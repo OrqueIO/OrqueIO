@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.dmn.result;
+package io.orqueio.bpm.engine.impl.dmn.result;
 
-import org.camunda.bpm.dmn.engine.DmnDecisionResult;
-import org.camunda.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.dmn.engine.DmnDecisionResult;
+import io.orqueio.bpm.engine.ProcessEngineException;
 
 /**
  * Mapping function for a decision result.

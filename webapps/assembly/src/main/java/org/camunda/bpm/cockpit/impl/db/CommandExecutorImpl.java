@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.cockpit.impl.db;
+package io.orqueio.bpm.cockpit.impl.db;
 
-import org.camunda.bpm.cockpit.db.CommandExecutor;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.cockpit.db.CommandExecutor;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 
 import java.util.List;
 
@@ -26,7 +26,7 @@ import java.util.List;
  * @author drobisch
  * @author nico.rehwaldt
  */
-public class CommandExecutorImpl extends org.camunda.bpm.webapp.impl.db.CommandExecutorImpl implements CommandExecutor {
+public class CommandExecutorImpl extends io.orqueio.bpm.webapp.impl.db.CommandExecutorImpl implements CommandExecutor {
 
   public CommandExecutorImpl(ProcessEngineConfigurationImpl processEngineConfiguration, List<String> mappingFiles) {
     super(processEngineConfiguration, mappingFiles);

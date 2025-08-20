@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.deployment.jobexecutor;
+package io.orqueio.bpm.container.impl.deployment.jobexecutor;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -26,19 +26,19 @@ import java.util.Map;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import org.camunda.bpm.container.impl.RuntimeContainerDelegateImpl;
-import org.camunda.bpm.container.impl.deployment.Attachments;
-import org.camunda.bpm.container.impl.jmx.MBeanServiceContainer;
-import org.camunda.bpm.container.impl.jmx.services.JmxManagedThreadPool;
-import org.camunda.bpm.container.impl.metadata.BpmPlatformXmlImpl;
-import org.camunda.bpm.container.impl.metadata.JobExecutorXmlImpl;
-import org.camunda.bpm.container.impl.metadata.spi.BpmPlatformXml;
-import org.camunda.bpm.container.impl.metadata.spi.JobExecutorXml;
-import org.camunda.bpm.container.impl.metadata.spi.ProcessEngineXml;
-import org.camunda.bpm.container.impl.spi.DeploymentOperation;
-import org.camunda.bpm.container.impl.spi.DeploymentOperationStep;
-import org.camunda.bpm.container.impl.spi.PlatformService;
-import org.camunda.bpm.container.impl.spi.ServiceTypes;
+import io.orqueio.bpm.container.impl.RuntimeContainerDelegateImpl;
+import io.orqueio.bpm.container.impl.deployment.Attachments;
+import io.orqueio.bpm.container.impl.jmx.MBeanServiceContainer;
+import io.orqueio.bpm.container.impl.jmx.services.JmxManagedThreadPool;
+import io.orqueio.bpm.container.impl.metadata.BpmPlatformXmlImpl;
+import io.orqueio.bpm.container.impl.metadata.JobExecutorXmlImpl;
+import io.orqueio.bpm.container.impl.metadata.spi.BpmPlatformXml;
+import io.orqueio.bpm.container.impl.metadata.spi.JobExecutorXml;
+import io.orqueio.bpm.container.impl.metadata.spi.ProcessEngineXml;
+import io.orqueio.bpm.container.impl.spi.DeploymentOperation;
+import io.orqueio.bpm.container.impl.spi.DeploymentOperationStep;
+import io.orqueio.bpm.container.impl.spi.PlatformService;
+import io.orqueio.bpm.container.impl.spi.ServiceTypes;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

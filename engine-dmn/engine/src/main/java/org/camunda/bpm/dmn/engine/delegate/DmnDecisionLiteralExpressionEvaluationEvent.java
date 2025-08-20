@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.engine.delegate;
+package io.orqueio.bpm.dmn.engine.delegate;
 
-import org.camunda.bpm.engine.variable.value.TypedValue;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
 
 /**
  * Event which represents the evaluation of a decision with a literal expression.

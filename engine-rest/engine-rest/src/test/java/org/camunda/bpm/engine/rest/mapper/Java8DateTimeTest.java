@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.mapper;
+package io.orqueio.bpm.engine.rest.mapper;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.is;
@@ -26,10 +26,10 @@ import java.time.LocalDate;
 
 import javax.ws.rs.core.Response.Status;
 
-import org.camunda.bpm.engine.impl.RuntimeServiceImpl;
-import org.camunda.bpm.engine.rest.AbstractRestServiceTest;
-import org.camunda.bpm.engine.rest.util.container.TestContainerRule;
-import org.camunda.bpm.engine.variable.Variables;
+import io.orqueio.bpm.engine.impl.RuntimeServiceImpl;
+import io.orqueio.bpm.engine.rest.AbstractRestServiceTest;
+import io.orqueio.bpm.engine.rest.util.container.TestContainerRule;
+import io.orqueio.bpm.engine.variable.Variables;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;

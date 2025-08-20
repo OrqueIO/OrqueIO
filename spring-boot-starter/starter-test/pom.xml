@@ -7,12 +7,12 @@
   </description>
 
   <parent>
-    <groupId>org.camunda.bpm.springboot.project</groupId>
+    <groupId>io.orqueio.bpm.springboot.project</groupId>
     <artifactId>camunda-bpm-spring-boot-starter-root</artifactId>
     <version>7.24.0-SNAPSHOT</version>
   </parent>
 
-  <groupId>org.camunda.bpm.springboot</groupId>
+  <groupId>io.orqueio.bpm.springboot</groupId>
   <artifactId>camunda-bpm-spring-boot-starter-test</artifactId>
   <name>Camunda Platform - Spring Boot Starter - Test</name>
 
@@ -38,13 +38,13 @@
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
+      <groupId>io.orqueio.bpm</groupId>
       <artifactId>camunda-engine</artifactId>
       <scope>provided</scope>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
+      <groupId>io.orqueio.bpm</groupId>
       <artifactId>camunda-bpm-assert</artifactId>
       <version>${project.version}</version>
       <scope>compile</scope>

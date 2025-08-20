@@ -14,19 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.repository;
+package io.orqueio.bpm.engine.impl.repository;
 
 import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
 import java.util.zip.ZipInputStream;
 
-import org.camunda.bpm.application.ProcessApplicationReference;
-import org.camunda.bpm.engine.impl.RepositoryServiceImpl;
-import org.camunda.bpm.engine.repository.ProcessApplicationDeployment;
-import org.camunda.bpm.engine.repository.ProcessApplicationDeploymentBuilder;
-import org.camunda.bpm.engine.repository.ResumePreviousBy;
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.bpm.application.ProcessApplicationReference;
+import io.orqueio.bpm.engine.impl.RepositoryServiceImpl;
+import io.orqueio.bpm.engine.repository.ProcessApplicationDeployment;
+import io.orqueio.bpm.engine.repository.ProcessApplicationDeploymentBuilder;
+import io.orqueio.bpm.engine.repository.ResumePreviousBy;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
 
 /**
  * @author Daniel Meyer

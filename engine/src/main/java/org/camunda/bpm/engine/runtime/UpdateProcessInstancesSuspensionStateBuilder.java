@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.runtime;
+package io.orqueio.bpm.engine.runtime;
 
-import org.camunda.bpm.engine.AuthorizationException;
-import org.camunda.bpm.engine.authorization.BatchPermissions;
-import org.camunda.bpm.engine.authorization.Permissions;
-import org.camunda.bpm.engine.authorization.Resources;
-import org.camunda.bpm.engine.batch.Batch;
+import io.orqueio.bpm.engine.AuthorizationException;
+import io.orqueio.bpm.engine.authorization.BatchPermissions;
+import io.orqueio.bpm.engine.authorization.Permissions;
+import io.orqueio.bpm.engine.authorization.Resources;
+import io.orqueio.bpm.engine.batch.Batch;
 
 public interface UpdateProcessInstancesSuspensionStateBuilder extends UpdateProcessInstanceSuspensionStateBuilder, UpdateProcessInstancesRequest {
 
@@ -35,7 +35,7 @@ public interface UpdateProcessInstancesSuspensionStateBuilder extends UpdateProc
    * hierarchy.
    * </p>
    *
-   * @throws org.camunda.bpm.engine.BadUserRequestException
+   * @throws io.orqueio.bpm.engine.BadUserRequestException
    *           If no process Instances are found
    *           If a process Instance is set to null
    * @throws AuthorizationException
@@ -78,7 +78,7 @@ public interface UpdateProcessInstancesSuspensionStateBuilder extends UpdateProc
    * hierarchy.
    * </p>
    *
-   * @throws org.camunda.bpm.engine.BadUserRequestException
+   * @throws io.orqueio.bpm.engine.BadUserRequestException
    *           If no process Instances are found
    *           If a process Instance is set to null
    * @throws AuthorizationException

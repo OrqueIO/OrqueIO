@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.rule;
+package io.orqueio.bpm.client.rule;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.camunda.bpm.client.util.PropertyUtil.DEFAULT_PROPERTIES_PATH;
-import static org.camunda.bpm.client.util.PropertyUtil.loadProperties;
+import static io.orqueio.bpm.client.util.PropertyUtil.DEFAULT_PROPERTIES_PATH;
+import static io.orqueio.bpm.client.util.PropertyUtil.loadProperties;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -48,21 +48,21 @@ import org.apache.hc.client5.http.impl.classic.AbstractHttpClientResponseHandler
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
 import org.apache.hc.core5.http.io.entity.EntityUtils;
-import org.camunda.bpm.client.dto.HistoricProcessInstanceDto;
-import org.camunda.bpm.client.dto.IncidentDto;
-import org.camunda.bpm.client.dto.ProcessDefinitionDto;
-import org.camunda.bpm.client.dto.ProcessInstanceDto;
-import org.camunda.bpm.client.dto.TaskDto;
-import org.camunda.bpm.client.dto.VariableInstanceDto;
-import org.camunda.bpm.client.task.ExternalTask;
-import org.camunda.bpm.client.task.impl.ExternalTaskImpl;
-import org.camunda.bpm.client.variable.impl.TypedValueField;
-import org.camunda.bpm.engine.variable.impl.value.FileValueImpl;
-import org.camunda.bpm.engine.variable.type.ValueType;
-import org.camunda.bpm.engine.variable.value.SerializableValue;
-import org.camunda.bpm.engine.variable.value.TypedValue;
-import org.camunda.bpm.model.bpmn.Bpmn;
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.bpm.client.dto.HistoricProcessInstanceDto;
+import io.orqueio.bpm.client.dto.IncidentDto;
+import io.orqueio.bpm.client.dto.ProcessDefinitionDto;
+import io.orqueio.bpm.client.dto.ProcessInstanceDto;
+import io.orqueio.bpm.client.dto.TaskDto;
+import io.orqueio.bpm.client.dto.VariableInstanceDto;
+import io.orqueio.bpm.client.task.ExternalTask;
+import io.orqueio.bpm.client.task.impl.ExternalTaskImpl;
+import io.orqueio.bpm.client.variable.impl.TypedValueField;
+import io.orqueio.bpm.engine.variable.impl.value.FileValueImpl;
+import io.orqueio.bpm.engine.variable.type.ValueType;
+import io.orqueio.bpm.engine.variable.value.SerializableValue;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
+import io.orqueio.bpm.model.bpmn.Bpmn;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
 import org.junit.rules.ExternalResource;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;

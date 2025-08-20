@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.admin.resource;
+package io.orqueio.bpm.admin.resource;
 
-import org.camunda.bpm.admin.Admin;
-import org.camunda.bpm.admin.plugin.spi.AdminPlugin;
-import org.camunda.bpm.webapp.db.QueryService;
-import org.camunda.bpm.webapp.plugin.resource.AbstractAppPluginResource;
+import io.orqueio.bpm.admin.Admin;
+import io.orqueio.bpm.admin.plugin.spi.AdminPlugin;
+import io.orqueio.bpm.webapp.db.QueryService;
+import io.orqueio.bpm.webapp.plugin.resource.AbstractAppPluginResource;
 
 /**
  * Base class for implementing plugin REST resources for the admin application.

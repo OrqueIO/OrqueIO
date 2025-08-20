@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine;
+package io.orqueio.bpm.engine;
 
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.errorcode.BuiltinExceptionCode;
-import org.camunda.bpm.engine.impl.errorcode.ExceptionCodeProvider;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.errorcode.BuiltinExceptionCode;
+import io.orqueio.bpm.engine.impl.errorcode.ExceptionCodeProvider;
 
 /**
  * Runtime exception that is the superclass of all exceptions in the process engine.

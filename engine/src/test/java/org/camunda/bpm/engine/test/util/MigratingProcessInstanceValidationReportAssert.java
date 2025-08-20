@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.util;
+package io.orqueio.bpm.engine.test.util;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -24,10 +24,10 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import org.camunda.bpm.engine.migration.MigratingActivityInstanceValidationReport;
-import org.camunda.bpm.engine.migration.MigratingProcessInstanceValidationReport;
-import org.camunda.bpm.engine.migration.MigratingTransitionInstanceValidationReport;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.migration.MigratingActivityInstanceValidationReport;
+import io.orqueio.bpm.engine.migration.MigratingProcessInstanceValidationReport;
+import io.orqueio.bpm.engine.migration.MigratingTransitionInstanceValidationReport;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.junit.Assert;

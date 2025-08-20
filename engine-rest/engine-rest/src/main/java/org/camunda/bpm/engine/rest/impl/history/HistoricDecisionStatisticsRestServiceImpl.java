@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.impl.history;
+package io.orqueio.bpm.engine.rest.impl.history;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.history.HistoricDecisionInstanceStatistics;
-import org.camunda.bpm.engine.history.HistoricDecisionInstanceStatisticsQuery;
-import org.camunda.bpm.engine.rest.dto.history.HistoricDecisionInstanceStatisticsDto;
-import org.camunda.bpm.engine.rest.history.HistoricDecisionStatisticsRestService;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.history.HistoricDecisionInstanceStatistics;
+import io.orqueio.bpm.engine.history.HistoricDecisionInstanceStatisticsQuery;
+import io.orqueio.bpm.engine.rest.dto.history.HistoricDecisionInstanceStatisticsDto;
+import io.orqueio.bpm.engine.rest.history.HistoricDecisionStatisticsRestService;
 
 import java.util.ArrayList;
 import java.util.List;

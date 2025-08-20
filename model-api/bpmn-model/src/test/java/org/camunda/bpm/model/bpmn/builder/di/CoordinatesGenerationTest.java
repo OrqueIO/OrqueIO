@@ -14,28 +14,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.bpmn.builder.di;
+package io.orqueio.bpm.model.bpmn.builder.di;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.camunda.bpm.model.bpmn.BpmnTestConstants.END_EVENT_ID;
-import static org.camunda.bpm.model.bpmn.BpmnTestConstants.SEND_TASK_ID;
-import static org.camunda.bpm.model.bpmn.BpmnTestConstants.SEQUENCE_FLOW_ID;
-import static org.camunda.bpm.model.bpmn.BpmnTestConstants.SERVICE_TASK_ID;
-import static org.camunda.bpm.model.bpmn.BpmnTestConstants.START_EVENT_ID;
-import static org.camunda.bpm.model.bpmn.BpmnTestConstants.SUB_PROCESS_ID;
-import static org.camunda.bpm.model.bpmn.BpmnTestConstants.TASK_ID;
-import static org.camunda.bpm.model.bpmn.BpmnTestConstants.USER_TASK_ID;
+import static io.orqueio.bpm.model.bpmn.BpmnTestConstants.END_EVENT_ID;
+import static io.orqueio.bpm.model.bpmn.BpmnTestConstants.SEND_TASK_ID;
+import static io.orqueio.bpm.model.bpmn.BpmnTestConstants.SEQUENCE_FLOW_ID;
+import static io.orqueio.bpm.model.bpmn.BpmnTestConstants.SERVICE_TASK_ID;
+import static io.orqueio.bpm.model.bpmn.BpmnTestConstants.START_EVENT_ID;
+import static io.orqueio.bpm.model.bpmn.BpmnTestConstants.SUB_PROCESS_ID;
+import static io.orqueio.bpm.model.bpmn.BpmnTestConstants.TASK_ID;
+import static io.orqueio.bpm.model.bpmn.BpmnTestConstants.USER_TASK_ID;
 
 import java.util.Collection;
 import java.util.Iterator;
 
-import org.camunda.bpm.model.bpmn.Bpmn;
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
-import org.camunda.bpm.model.bpmn.builder.ProcessBuilder;
-import org.camunda.bpm.model.bpmn.instance.bpmndi.BpmnEdge;
-import org.camunda.bpm.model.bpmn.instance.bpmndi.BpmnShape;
-import org.camunda.bpm.model.bpmn.instance.dc.Bounds;
-import org.camunda.bpm.model.bpmn.instance.di.Waypoint;
+import io.orqueio.bpm.model.bpmn.Bpmn;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.bpm.model.bpmn.builder.ProcessBuilder;
+import io.orqueio.bpm.model.bpmn.instance.bpmndi.BpmnEdge;
+import io.orqueio.bpm.model.bpmn.instance.bpmndi.BpmnShape;
+import io.orqueio.bpm.model.bpmn.instance.dc.Bounds;
+import io.orqueio.bpm.model.bpmn.instance.di.Waypoint;
 import org.junit.Test;
 
 public class CoordinatesGenerationTest {

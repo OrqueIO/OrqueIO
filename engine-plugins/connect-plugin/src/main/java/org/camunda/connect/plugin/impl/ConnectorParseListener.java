@@ -14,18 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.connect.plugin.impl;
+package io.orqueio.connect.plugin.impl;
 
-import static org.camunda.bpm.engine.impl.bpmn.parser.BpmnParseUtil.findCamundaExtensionElement;
-import static org.camunda.bpm.engine.impl.bpmn.parser.BpmnParseUtil.parseInputOutput;
+import static io.orqueio.bpm.engine.impl.bpmn.parser.BpmnParseUtil.findCamundaExtensionElement;
+import static io.orqueio.bpm.engine.impl.bpmn.parser.BpmnParseUtil.parseInputOutput;
 
-import org.camunda.bpm.engine.BpmnParseException;
-import org.camunda.bpm.engine.impl.bpmn.parser.AbstractBpmnParseListener;
-import org.camunda.bpm.engine.impl.bpmn.parser.BpmnParse;
-import org.camunda.bpm.engine.impl.core.variable.mapping.IoMapping;
-import org.camunda.bpm.engine.impl.pvm.process.ActivityImpl;
-import org.camunda.bpm.engine.impl.pvm.process.ScopeImpl;
-import org.camunda.bpm.engine.impl.util.xml.Element;
+import io.orqueio.bpm.engine.BpmnParseException;
+import io.orqueio.bpm.engine.impl.bpmn.parser.AbstractBpmnParseListener;
+import io.orqueio.bpm.engine.impl.bpmn.parser.BpmnParse;
+import io.orqueio.bpm.engine.impl.core.variable.mapping.IoMapping;
+import io.orqueio.bpm.engine.impl.pvm.process.ActivityImpl;
+import io.orqueio.bpm.engine.impl.pvm.process.ScopeImpl;
+import io.orqueio.bpm.engine.impl.util.xml.Element;
 
 public class ConnectorParseListener extends AbstractBpmnParseListener {
 

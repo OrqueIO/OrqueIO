@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 
-package org.camunda.bpm.qa.upgrade.httl;
+package io.orqueio.bpm.qa.upgrade.httl;
 
-import org.camunda.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.test.Deployment;
 
 public class EnforceHistoryTimeToLiveScenario {
 

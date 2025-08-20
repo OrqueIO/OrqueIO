@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl;
+package io.orqueio.bpm.engine.impl;
 
-import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
+import static io.orqueio.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
 
 import java.util.List;
 
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.interceptor.CommandExecutor;
-import org.camunda.bpm.engine.management.SchemaLogEntry;
-import org.camunda.bpm.engine.management.SchemaLogQuery;
-import org.camunda.bpm.engine.query.QueryProperty;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.impl.interceptor.CommandExecutor;
+import io.orqueio.bpm.engine.management.SchemaLogEntry;
+import io.orqueio.bpm.engine.management.SchemaLogQuery;
+import io.orqueio.bpm.engine.query.QueryProperty;
 
 /**
  * @author Miklas Boskamp

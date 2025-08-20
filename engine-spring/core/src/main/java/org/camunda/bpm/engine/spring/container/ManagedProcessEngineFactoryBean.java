@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.spring.container;
+package io.orqueio.bpm.engine.spring.container;
 
-import org.camunda.bpm.BpmPlatform;
-import org.camunda.bpm.container.RuntimeContainerDelegate;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.spring.ProcessEngineFactoryBean;
+import io.orqueio.bpm.BpmPlatform;
+import io.orqueio.bpm.container.RuntimeContainerDelegate;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.spring.ProcessEngineFactoryBean;
 
 /**
  * <p>Factory bean registering a spring-managed process engine with the {@link BpmPlatform}.</p>

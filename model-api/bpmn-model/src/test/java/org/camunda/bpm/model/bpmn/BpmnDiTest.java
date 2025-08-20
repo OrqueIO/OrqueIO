@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.bpmn;
+package io.orqueio.bpm.model.bpmn;
 
-import org.camunda.bpm.model.bpmn.instance.*;
-import org.camunda.bpm.model.bpmn.instance.Process;
-import org.camunda.bpm.model.bpmn.instance.bpmndi.*;
-import org.camunda.bpm.model.bpmn.instance.dc.Bounds;
-import org.camunda.bpm.model.bpmn.instance.dc.Font;
-import org.camunda.bpm.model.bpmn.instance.di.DiagramElement;
-import org.camunda.bpm.model.bpmn.instance.di.Waypoint;
+import io.orqueio.bpm.model.bpmn.instance.*;
+import io.orqueio.bpm.model.bpmn.instance.Process;
+import io.orqueio.bpm.model.bpmn.instance.bpmndi.*;
+import io.orqueio.bpm.model.bpmn.instance.dc.Bounds;
+import io.orqueio.bpm.model.bpmn.instance.dc.Font;
+import io.orqueio.bpm.model.bpmn.instance.di.DiagramElement;
+import io.orqueio.bpm.model.bpmn.instance.di.Waypoint;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,7 +30,7 @@ import org.junit.Test;
 import java.util.Collection;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.camunda.bpm.model.bpmn.BpmnTestConstants.*;
+import static io.orqueio.bpm.model.bpmn.BpmnTestConstants.*;
 
 /**
  * @author Sebastian Menski

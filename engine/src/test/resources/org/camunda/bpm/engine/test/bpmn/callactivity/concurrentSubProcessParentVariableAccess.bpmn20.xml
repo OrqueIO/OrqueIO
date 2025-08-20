@@ -15,7 +15,7 @@
     <sequenceFlow sourceRef="fork" targetRef="task" />
     <sequenceFlow sourceRef="fork" targetRef="task" />
 
-    <serviceTask id="task" camunda:class="org.camunda.bpm.engine.test.bpmn.callactivity.ServiceTaskParentProcessVariableAccess" />
+    <serviceTask id="task" camunda:class="io.orqueio.bpm.engine.test.bpmn.callactivity.ServiceTaskParentProcessVariableAccess" />
 
   </process>
 

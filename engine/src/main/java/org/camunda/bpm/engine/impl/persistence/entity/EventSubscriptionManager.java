@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.persistence.entity;
+package io.orqueio.bpm.engine.impl.persistence.entity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,16 +23,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.camunda.bpm.engine.impl.EventSubscriptionQueryImpl;
-import org.camunda.bpm.engine.impl.Page;
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
-import org.camunda.bpm.engine.impl.db.EnginePersistenceLogger;
-import org.camunda.bpm.engine.impl.db.ListQueryParameterObject;
-import org.camunda.bpm.engine.impl.event.EventType;
-import org.camunda.bpm.engine.impl.jobexecutor.ProcessEventJobHandler;
-import org.camunda.bpm.engine.impl.persistence.AbstractManager;
-import org.camunda.bpm.engine.runtime.EventSubscription;
-import org.camunda.commons.utils.EnsureUtil;
+import io.orqueio.bpm.engine.impl.EventSubscriptionQueryImpl;
+import io.orqueio.bpm.engine.impl.Page;
+import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
+import io.orqueio.bpm.engine.impl.db.EnginePersistenceLogger;
+import io.orqueio.bpm.engine.impl.db.ListQueryParameterObject;
+import io.orqueio.bpm.engine.impl.event.EventType;
+import io.orqueio.bpm.engine.impl.jobexecutor.ProcessEventJobHandler;
+import io.orqueio.bpm.engine.impl.persistence.AbstractManager;
+import io.orqueio.bpm.engine.runtime.EventSubscription;
+import io.orqueio.commons.utils.EnsureUtil;
 
 
 /**

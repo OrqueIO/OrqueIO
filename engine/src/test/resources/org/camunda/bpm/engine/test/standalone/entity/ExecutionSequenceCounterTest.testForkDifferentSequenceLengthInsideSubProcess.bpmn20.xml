@@ -32,7 +32,7 @@
       <sequenceFlow sourceRef="innerService3" targetRef="innerEnd1" />
       <endEvent id="innerEnd1">
         <extensionElements>
-          <camunda:executionListener event="start" class="org.camunda.bpm.engine.test.standalone.entity.ExecutionOrderListener" />
+          <camunda:executionListener event="start" class="io.orqueio.bpm.engine.test.standalone.entity.ExecutionOrderListener" />
         </extensionElements>
       </endEvent>
 
@@ -45,7 +45,7 @@
       <sequenceFlow sourceRef="innerService6" targetRef="innerEnd2" />
       <endEvent id="innerEnd2">
         <extensionElements>
-          <camunda:executionListener event="start" class="org.camunda.bpm.engine.test.standalone.entity.ExecutionOrderListener" />
+          <camunda:executionListener event="start" class="io.orqueio.bpm.engine.test.standalone.entity.ExecutionOrderListener" />
         </extensionElements>
       </endEvent>
 
@@ -55,7 +55,7 @@
 
     <serviceTask id="theService1" camunda:expression="${true}">
       <extensionElements>
-        <camunda:executionListener event="start" class="org.camunda.bpm.engine.test.standalone.entity.ExecutionOrderListener" />
+        <camunda:executionListener event="start" class="io.orqueio.bpm.engine.test.standalone.entity.ExecutionOrderListener" />
       </extensionElements>
     </serviceTask>
 

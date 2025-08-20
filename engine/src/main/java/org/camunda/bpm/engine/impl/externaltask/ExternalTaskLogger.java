@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.externaltask;
+package io.orqueio.bpm.engine.impl.externaltask;
 
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
-import org.camunda.bpm.engine.impl.bpmn.parser.CamundaErrorEventDefinition;
-import org.camunda.bpm.engine.impl.persistence.entity.ExecutionEntity;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
+import io.orqueio.bpm.engine.impl.bpmn.parser.CamundaErrorEventDefinition;
+import io.orqueio.bpm.engine.impl.persistence.entity.ExecutionEntity;
 
 /**
  * Represents the logger for the external task.

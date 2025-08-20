@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.authorization;
+package io.orqueio.bpm.engine.test.api.authorization;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Collections;
 
-import org.camunda.bpm.engine.authorization.Groups;
+import io.orqueio.bpm.engine.authorization.Groups;
 import org.junit.Test;
 
 /**

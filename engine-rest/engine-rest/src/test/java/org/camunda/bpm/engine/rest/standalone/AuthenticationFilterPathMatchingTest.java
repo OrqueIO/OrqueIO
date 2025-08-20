@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.standalone;
+package io.orqueio.bpm.engine.rest.standalone;
 
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.anyBoolean;
@@ -37,22 +37,22 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.ws.rs.core.Response.Status;
 
-import org.camunda.bpm.engine.AuthorizationService;
-import org.camunda.bpm.engine.IdentityService;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.RepositoryService;
-import org.camunda.bpm.engine.identity.Group;
-import org.camunda.bpm.engine.identity.GroupQuery;
-import org.camunda.bpm.engine.identity.Tenant;
-import org.camunda.bpm.engine.identity.TenantQuery;
-import org.camunda.bpm.engine.identity.User;
-import org.camunda.bpm.engine.impl.AuthorizationServiceImpl;
-import org.camunda.bpm.engine.impl.IdentityServiceImpl;
-import org.camunda.bpm.engine.impl.digest._apacheCommonsCodec.Base64;
-import org.camunda.bpm.engine.rest.AbstractRestServiceTest;
-import org.camunda.bpm.engine.rest.helper.MockProvider;
-import org.camunda.bpm.engine.rest.security.auth.ProcessEngineAuthenticationFilter;
-import org.camunda.bpm.engine.rest.security.auth.impl.HttpBasicAuthenticationProvider;
+import io.orqueio.bpm.engine.AuthorizationService;
+import io.orqueio.bpm.engine.IdentityService;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.RepositoryService;
+import io.orqueio.bpm.engine.identity.Group;
+import io.orqueio.bpm.engine.identity.GroupQuery;
+import io.orqueio.bpm.engine.identity.Tenant;
+import io.orqueio.bpm.engine.identity.TenantQuery;
+import io.orqueio.bpm.engine.identity.User;
+import io.orqueio.bpm.engine.impl.AuthorizationServiceImpl;
+import io.orqueio.bpm.engine.impl.IdentityServiceImpl;
+import io.orqueio.bpm.engine.impl.digest._apacheCommonsCodec.Base64;
+import io.orqueio.bpm.engine.rest.AbstractRestServiceTest;
+import io.orqueio.bpm.engine.rest.helper.MockProvider;
+import io.orqueio.bpm.engine.rest.security.auth.ProcessEngineAuthenticationFilter;
+import io.orqueio.bpm.engine.rest.security.auth.impl.HttpBasicAuthenticationProvider;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

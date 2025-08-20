@@ -14,19 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.webapp.impl.security.filter.headersec.provider.impl;
+package io.orqueio.bpm.webapp.impl.security.filter.headersec.provider.impl;
 
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.webapp.impl.security.filter.headersec.provider.HeaderSecurityProvider;
-import org.camunda.bpm.webapp.impl.util.ServletFilterUtil;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.webapp.impl.security.filter.headersec.provider.HeaderSecurityProvider;
+import io.orqueio.bpm.webapp.impl.util.ServletFilterUtil;
 
 import java.util.Arrays;
 import java.util.Map;
 
-import static org.camunda.bpm.webapp.impl.security.filter.headersec.provider.impl.StrictTransportSecurityProvider.Parameters.DISABLED;
-import static org.camunda.bpm.webapp.impl.security.filter.headersec.provider.impl.StrictTransportSecurityProvider.Parameters.INCLUDE_SUBDOMAINS_DISABLED;
-import static org.camunda.bpm.webapp.impl.security.filter.headersec.provider.impl.StrictTransportSecurityProvider.Parameters.MAX_AGE;
-import static org.camunda.bpm.webapp.impl.security.filter.headersec.provider.impl.StrictTransportSecurityProvider.Parameters.VALUE;
+import static io.orqueio.bpm.webapp.impl.security.filter.headersec.provider.impl.StrictTransportSecurityProvider.Parameters.DISABLED;
+import static io.orqueio.bpm.webapp.impl.security.filter.headersec.provider.impl.StrictTransportSecurityProvider.Parameters.INCLUDE_SUBDOMAINS_DISABLED;
+import static io.orqueio.bpm.webapp.impl.security.filter.headersec.provider.impl.StrictTransportSecurityProvider.Parameters.MAX_AGE;
+import static io.orqueio.bpm.webapp.impl.security.filter.headersec.provider.impl.StrictTransportSecurityProvider.Parameters.VALUE;
 
 public class StrictTransportSecurityProvider extends HeaderSecurityProvider {
 

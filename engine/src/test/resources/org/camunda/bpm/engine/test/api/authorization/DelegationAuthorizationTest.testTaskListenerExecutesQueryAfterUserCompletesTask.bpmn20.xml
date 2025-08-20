@@ -20,7 +20,7 @@
 
     <userTask id="task2">
       <extensionElements>
-        <camunda:taskListener event="create" class="org.camunda.bpm.engine.test.api.authorization.service.ExecuteQueryTaskListener" />
+        <camunda:taskListener event="create" class="io.orqueio.bpm.engine.test.api.authorization.service.ExecuteQueryTaskListener" />
       </extensionElements>
     </userTask>
 

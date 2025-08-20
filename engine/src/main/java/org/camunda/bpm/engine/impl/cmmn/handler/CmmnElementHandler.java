@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.cmmn.handler;
+package io.orqueio.bpm.engine.impl.cmmn.handler;
 
-import org.camunda.bpm.engine.impl.cmmn.model.CmmnActivity;
-import org.camunda.bpm.engine.impl.core.handler.ModelElementHandler;
-import org.camunda.bpm.model.cmmn.instance.CmmnElement;
+import io.orqueio.bpm.engine.impl.cmmn.model.CmmnActivity;
+import io.orqueio.bpm.engine.impl.core.handler.ModelElementHandler;
+import io.orqueio.bpm.model.cmmn.instance.CmmnElement;
 
 /**
  * <p>This handler handles an instance of a {@link CmmnElement} to create

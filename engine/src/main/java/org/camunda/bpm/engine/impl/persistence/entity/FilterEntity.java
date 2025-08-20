@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.persistence.entity;
+package io.orqueio.bpm.engine.impl.persistence.entity;
 
-import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureNotEmpty;
-import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
-import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureNull;
+import static io.orqueio.bpm.engine.impl.util.EnsureUtil.ensureNotEmpty;
+import static io.orqueio.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
+import static io.orqueio.bpm.engine.impl.util.EnsureUtil.ensureNull;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -26,22 +26,22 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.camunda.bpm.engine.EntityTypes;
-import org.camunda.bpm.engine.exception.NotValidException;
-import org.camunda.bpm.engine.filter.Filter;
-import org.camunda.bpm.engine.impl.AbstractQuery;
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
-import org.camunda.bpm.engine.impl.QueryValidators.StoredQueryValidator;
-import org.camunda.bpm.engine.impl.db.DbEntity;
-import org.camunda.bpm.engine.impl.db.DbEntityLifecycleAware;
-import org.camunda.bpm.engine.impl.db.EnginePersistenceLogger;
-import org.camunda.bpm.engine.impl.db.HasDbReferences;
-import org.camunda.bpm.engine.impl.db.HasDbRevision;
-import org.camunda.bpm.engine.impl.json.JsonObjectConverter;
-import org.camunda.bpm.engine.impl.json.JsonTaskQueryConverter;
-import org.camunda.bpm.engine.impl.util.JsonUtil;
+import io.orqueio.bpm.engine.EntityTypes;
+import io.orqueio.bpm.engine.exception.NotValidException;
+import io.orqueio.bpm.engine.filter.Filter;
+import io.orqueio.bpm.engine.impl.AbstractQuery;
+import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
+import io.orqueio.bpm.engine.impl.QueryValidators.StoredQueryValidator;
+import io.orqueio.bpm.engine.impl.db.DbEntity;
+import io.orqueio.bpm.engine.impl.db.DbEntityLifecycleAware;
+import io.orqueio.bpm.engine.impl.db.EnginePersistenceLogger;
+import io.orqueio.bpm.engine.impl.db.HasDbReferences;
+import io.orqueio.bpm.engine.impl.db.HasDbRevision;
+import io.orqueio.bpm.engine.impl.json.JsonObjectConverter;
+import io.orqueio.bpm.engine.impl.json.JsonTaskQueryConverter;
+import io.orqueio.bpm.engine.impl.util.JsonUtil;
 import com.google.gson.JsonObject;
-import org.camunda.bpm.engine.query.Query;
+import io.orqueio.bpm.engine.query.Query;
 
 /**
  * @author Sebastian Menski

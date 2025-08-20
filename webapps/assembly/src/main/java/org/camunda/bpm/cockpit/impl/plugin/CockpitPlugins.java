@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.cockpit.impl.plugin;
+package io.orqueio.bpm.cockpit.impl.plugin;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.camunda.bpm.cockpit.impl.plugin.resources.CockpitPluginsRootResource;
-import org.camunda.bpm.cockpit.impl.plugin.resources.BaseRootResource;
-import org.camunda.bpm.cockpit.plugin.spi.impl.AbstractCockpitPlugin;
+import io.orqueio.bpm.cockpit.impl.plugin.resources.CockpitPluginsRootResource;
+import io.orqueio.bpm.cockpit.impl.plugin.resources.BaseRootResource;
+import io.orqueio.bpm.cockpit.plugin.spi.impl.AbstractCockpitPlugin;
 
 /**
  *

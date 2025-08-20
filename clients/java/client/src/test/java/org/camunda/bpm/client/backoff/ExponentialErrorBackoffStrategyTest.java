@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.backoff;
+package io.orqueio.bpm.client.backoff;
 
 import org.assertj.core.util.Lists;
-import org.camunda.bpm.client.exception.ExternalTaskClientException;
-import org.camunda.bpm.client.task.ExternalTask;
-import org.camunda.bpm.client.task.impl.ExternalTaskImpl;
+import io.orqueio.bpm.client.exception.ExternalTaskClientException;
+import io.orqueio.bpm.client.task.ExternalTask;
+import io.orqueio.bpm.client.task.impl.ExternalTaskImpl;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -14,36 +14,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.engine.el;
+package io.orqueio.bpm.dmn.engine.el;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.dmn.engine.DmnDecisionResult;
-import org.camunda.bpm.dmn.engine.DmnEngine;
-import org.camunda.bpm.dmn.engine.DmnEngineConfiguration;
-import org.camunda.bpm.dmn.engine.impl.DefaultDmnEngineConfiguration;
-import org.camunda.bpm.dmn.engine.impl.DmnDecisionLiteralExpressionImpl;
-import org.camunda.bpm.dmn.engine.impl.DmnDecisionTableImpl;
-import org.camunda.bpm.dmn.engine.impl.DmnDecisionTableInputImpl;
-import org.camunda.bpm.dmn.engine.impl.DmnDecisionTableRuleImpl;
-import org.camunda.bpm.dmn.engine.impl.DmnExpressionImpl;
-import org.camunda.bpm.dmn.engine.impl.el.DefaultScriptEngineResolver;
-import org.camunda.bpm.dmn.engine.impl.el.JuelElProvider;
-import org.camunda.bpm.dmn.engine.impl.spi.el.DmnScriptEngineResolver;
-import org.camunda.bpm.dmn.engine.impl.spi.el.ElProvider;
-import org.camunda.bpm.dmn.engine.test.DecisionResource;
-import org.camunda.bpm.dmn.engine.test.DmnEngineTest;
-import org.camunda.bpm.dmn.feel.impl.FeelException;
-import org.camunda.bpm.engine.variable.VariableMap;
-import org.camunda.bpm.engine.variable.Variables;
+import io.orqueio.bpm.dmn.engine.DmnDecisionResult;
+import io.orqueio.bpm.dmn.engine.DmnEngine;
+import io.orqueio.bpm.dmn.engine.DmnEngineConfiguration;
+import io.orqueio.bpm.dmn.engine.impl.DefaultDmnEngineConfiguration;
+import io.orqueio.bpm.dmn.engine.impl.DmnDecisionLiteralExpressionImpl;
+import io.orqueio.bpm.dmn.engine.impl.DmnDecisionTableImpl;
+import io.orqueio.bpm.dmn.engine.impl.DmnDecisionTableInputImpl;
+import io.orqueio.bpm.dmn.engine.impl.DmnDecisionTableRuleImpl;
+import io.orqueio.bpm.dmn.engine.impl.DmnExpressionImpl;
+import io.orqueio.bpm.dmn.engine.impl.el.DefaultScriptEngineResolver;
+import io.orqueio.bpm.dmn.engine.impl.el.JuelElProvider;
+import io.orqueio.bpm.dmn.engine.impl.spi.el.DmnScriptEngineResolver;
+import io.orqueio.bpm.dmn.engine.impl.spi.el.ElProvider;
+import io.orqueio.bpm.dmn.engine.test.DecisionResource;
+import io.orqueio.bpm.dmn.engine.test.DmnEngineTest;
+import io.orqueio.bpm.dmn.feel.impl.FeelException;
+import io.orqueio.bpm.engine.variable.VariableMap;
+import io.orqueio.bpm.engine.variable.Variables;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
-import static org.camunda.bpm.dmn.engine.util.DmnExampleVerifier.assertExample;
+import static io.orqueio.bpm.dmn.engine.util.DmnExampleVerifier.assertExample;
 import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.never;

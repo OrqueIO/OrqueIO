@@ -12,7 +12,7 @@
 
       <caseTask id="CaseTask_1" name="A Case Task">
         <extensionElements>
-          <camunda:caseExecutionListener class="org.camunda.bpm.engine.test.api.multitenancy.listener.AssertingCaseExecutionListener"/>
+          <camunda:caseExecutionListener class="io.orqueio.bpm.engine.test.api.multitenancy.listener.AssertingCaseExecutionListener"/>
         </extensionElements>
       </caseTask>
     </casePlanModel>

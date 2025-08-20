@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.plugin.variable.type.impl;
+package io.orqueio.spin.plugin.variable.type.impl;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.camunda.bpm.engine.variable.impl.type.AbstractValueTypeImpl;
-import org.camunda.bpm.engine.variable.value.SerializableValue;
-import org.camunda.bpm.engine.variable.value.TypedValue;
-import org.camunda.spin.plugin.variable.type.SpinValueType;
-import org.camunda.spin.plugin.variable.value.SpinValue;
-import org.camunda.spin.plugin.variable.value.builder.SpinValueBuilder;
+import io.orqueio.bpm.engine.variable.impl.type.AbstractValueTypeImpl;
+import io.orqueio.bpm.engine.variable.value.SerializableValue;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
+import io.orqueio.spin.plugin.variable.type.SpinValueType;
+import io.orqueio.spin.plugin.variable.value.SpinValue;
+import io.orqueio.spin.plugin.variable.value.builder.SpinValueBuilder;
 
 /**
  * @author Roman Smirnov

@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.functional.spin;
+package io.orqueio.bpm.integrationtest.functional.spin;
 
-import org.camunda.bpm.BpmPlatform;
-import org.camunda.bpm.integrationtest.functional.spin.dataformat.Foo;
-import org.camunda.bpm.integrationtest.functional.spin.dataformat.FooDataFormat;
-import org.camunda.bpm.integrationtest.functional.spin.dataformat.FooDataFormatProvider;
-import org.camunda.bpm.integrationtest.functional.spin.dataformat.FooSpin;
-import org.camunda.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
-import org.camunda.spin.spi.DataFormatProvider;
+import io.orqueio.bpm.BpmPlatform;
+import io.orqueio.bpm.integrationtest.functional.spin.dataformat.Foo;
+import io.orqueio.bpm.integrationtest.functional.spin.dataformat.FooDataFormat;
+import io.orqueio.bpm.integrationtest.functional.spin.dataformat.FooDataFormatProvider;
+import io.orqueio.bpm.integrationtest.functional.spin.dataformat.FooSpin;
+import io.orqueio.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
+import io.orqueio.spin.spi.DataFormatProvider;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ShrinkWrap;

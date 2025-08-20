@@ -14,21 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.management;
+package io.orqueio.bpm.engine.impl.management;
 
-import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
-import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureOnlyOneNotNull;
+import static io.orqueio.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
+import static io.orqueio.bpm.engine.impl.util.EnsureUtil.ensureOnlyOneNotNull;
 
 import java.util.Date;
 
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
-import org.camunda.bpm.engine.impl.cmd.ActivateJobDefinitionCmd;
-import org.camunda.bpm.engine.impl.cmd.CommandLogger;
-import org.camunda.bpm.engine.impl.cmd.SuspendJobDefinitionCmd;
-import org.camunda.bpm.engine.impl.interceptor.CommandExecutor;
-import org.camunda.bpm.engine.management.UpdateJobDefinitionSuspensionStateBuilder;
-import org.camunda.bpm.engine.management.UpdateJobDefinitionSuspensionStateSelectBuilder;
-import org.camunda.bpm.engine.management.UpdateJobDefinitionSuspensionStateTenantBuilder;
+import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
+import io.orqueio.bpm.engine.impl.cmd.ActivateJobDefinitionCmd;
+import io.orqueio.bpm.engine.impl.cmd.CommandLogger;
+import io.orqueio.bpm.engine.impl.cmd.SuspendJobDefinitionCmd;
+import io.orqueio.bpm.engine.impl.interceptor.CommandExecutor;
+import io.orqueio.bpm.engine.management.UpdateJobDefinitionSuspensionStateBuilder;
+import io.orqueio.bpm.engine.management.UpdateJobDefinitionSuspensionStateSelectBuilder;
+import io.orqueio.bpm.engine.management.UpdateJobDefinitionSuspensionStateTenantBuilder;
 
 public class UpdateJobDefinitionSuspensionStateBuilderImpl
     implements UpdateJobDefinitionSuspensionStateBuilder, UpdateJobDefinitionSuspensionStateSelectBuilder, UpdateJobDefinitionSuspensionStateTenantBuilder {

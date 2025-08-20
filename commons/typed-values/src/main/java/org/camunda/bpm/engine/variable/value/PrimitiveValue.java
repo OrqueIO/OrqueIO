@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.variable.value;
+package io.orqueio.bpm.engine.variable.value;
 
-import org.camunda.bpm.engine.variable.type.PrimitiveValueType;
+import io.orqueio.bpm.engine.variable.type.PrimitiveValueType;
 
 /**
  *

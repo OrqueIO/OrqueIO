@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.variables;
+package io.orqueio.bpm.engine.test.api.variables;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 
-import org.camunda.bpm.engine.CaseService;
-import org.camunda.bpm.engine.RepositoryService;
-import org.camunda.bpm.engine.impl.cmmn.entity.runtime.CaseExecutionQueryImpl;
-import org.camunda.bpm.engine.repository.Deployment;
-import org.camunda.bpm.engine.runtime.CaseExecution;
+import io.orqueio.bpm.engine.CaseService;
+import io.orqueio.bpm.engine.RepositoryService;
+import io.orqueio.bpm.engine.impl.cmmn.entity.runtime.CaseExecutionQueryImpl;
+import io.orqueio.bpm.engine.repository.Deployment;
+import io.orqueio.bpm.engine.runtime.CaseExecution;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

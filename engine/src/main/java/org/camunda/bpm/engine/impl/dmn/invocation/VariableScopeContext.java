@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.dmn.invocation;
+package io.orqueio.bpm.engine.impl.dmn.invocation;
 
 import java.util.Set;
 
-import org.camunda.bpm.engine.delegate.VariableScope;
-import org.camunda.bpm.engine.variable.context.VariableContext;
-import org.camunda.bpm.engine.variable.value.TypedValue;
+import io.orqueio.bpm.engine.delegate.VariableScope;
+import io.orqueio.bpm.engine.variable.context.VariableContext;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
 
 /**
  * Implementation of the {@link VariableContext} interface backed

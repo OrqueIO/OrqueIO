@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.db.entitymanager.operation;
+package io.orqueio.bpm.engine.impl.db.entitymanager.operation;
 
-import static org.camunda.bpm.engine.impl.db.entitymanager.operation.DbOperationType.DELETE;
-import static org.camunda.bpm.engine.impl.db.entitymanager.operation.DbOperationType.INSERT;
+import static io.orqueio.bpm.engine.impl.db.entitymanager.operation.DbOperationType.DELETE;
+import static io.orqueio.bpm.engine.impl.db.entitymanager.operation.DbOperationType.INSERT;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -31,12 +31,12 @@ import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import org.camunda.bpm.engine.impl.db.DbEntity;
-import org.camunda.bpm.engine.impl.db.HasDbReferences;
-import org.camunda.bpm.engine.impl.db.entitymanager.operation.comparator.DbBulkOperationComparator;
-import org.camunda.bpm.engine.impl.db.entitymanager.operation.comparator.DbEntityOperationComparator;
-import org.camunda.bpm.engine.impl.db.entitymanager.operation.comparator.EntityTypeComparatorForInserts;
-import org.camunda.bpm.engine.impl.db.entitymanager.operation.comparator.EntityTypeComparatorForModifications;
+import io.orqueio.bpm.engine.impl.db.DbEntity;
+import io.orqueio.bpm.engine.impl.db.HasDbReferences;
+import io.orqueio.bpm.engine.impl.db.entitymanager.operation.comparator.DbBulkOperationComparator;
+import io.orqueio.bpm.engine.impl.db.entitymanager.operation.comparator.DbEntityOperationComparator;
+import io.orqueio.bpm.engine.impl.db.entitymanager.operation.comparator.EntityTypeComparatorForInserts;
+import io.orqueio.bpm.engine.impl.db.entitymanager.operation.comparator.EntityTypeComparatorForModifications;
 
 /**
  * Manages a set of {@link DbOperation database operations}.

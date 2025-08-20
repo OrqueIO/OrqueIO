@@ -14,25 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.variable;
+package io.orqueio.bpm.engine.test.api.variable;
 
-import static org.camunda.bpm.engine.variable.Variables.booleanValue;
-import static org.camunda.bpm.engine.variable.Variables.byteArrayValue;
-import static org.camunda.bpm.engine.variable.Variables.createVariables;
-import static org.camunda.bpm.engine.variable.Variables.dateValue;
-import static org.camunda.bpm.engine.variable.Variables.doubleValue;
-import static org.camunda.bpm.engine.variable.Variables.integerValue;
-import static org.camunda.bpm.engine.variable.Variables.shortValue;
-import static org.camunda.bpm.engine.variable.Variables.stringValue;
-import static org.camunda.bpm.engine.variable.Variables.untypedNullValue;
-import static org.camunda.bpm.engine.variable.type.ValueType.BOOLEAN;
-import static org.camunda.bpm.engine.variable.type.ValueType.BYTES;
-import static org.camunda.bpm.engine.variable.type.ValueType.DATE;
-import static org.camunda.bpm.engine.variable.type.ValueType.DOUBLE;
-import static org.camunda.bpm.engine.variable.type.ValueType.INTEGER;
-import static org.camunda.bpm.engine.variable.type.ValueType.NULL;
-import static org.camunda.bpm.engine.variable.type.ValueType.SHORT;
-import static org.camunda.bpm.engine.variable.type.ValueType.STRING;
+import static io.orqueio.bpm.engine.variable.Variables.booleanValue;
+import static io.orqueio.bpm.engine.variable.Variables.byteArrayValue;
+import static io.orqueio.bpm.engine.variable.Variables.createVariables;
+import static io.orqueio.bpm.engine.variable.Variables.dateValue;
+import static io.orqueio.bpm.engine.variable.Variables.doubleValue;
+import static io.orqueio.bpm.engine.variable.Variables.integerValue;
+import static io.orqueio.bpm.engine.variable.Variables.shortValue;
+import static io.orqueio.bpm.engine.variable.Variables.stringValue;
+import static io.orqueio.bpm.engine.variable.Variables.untypedNullValue;
+import static io.orqueio.bpm.engine.variable.type.ValueType.BOOLEAN;
+import static io.orqueio.bpm.engine.variable.type.ValueType.BYTES;
+import static io.orqueio.bpm.engine.variable.type.ValueType.DATE;
+import static io.orqueio.bpm.engine.variable.type.ValueType.DOUBLE;
+import static io.orqueio.bpm.engine.variable.type.ValueType.INTEGER;
+import static io.orqueio.bpm.engine.variable.type.ValueType.NULL;
+import static io.orqueio.bpm.engine.variable.type.ValueType.SHORT;
+import static io.orqueio.bpm.engine.variable.type.ValueType.STRING;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
@@ -40,10 +40,10 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 
-import org.camunda.bpm.engine.variable.VariableMap;
-import org.camunda.bpm.engine.variable.impl.value.NullValueImpl;
-import org.camunda.bpm.engine.variable.type.ValueType;
-import org.camunda.bpm.engine.variable.value.TypedValue;
+import io.orqueio.bpm.engine.variable.VariableMap;
+import io.orqueio.bpm.engine.variable.impl.value.NullValueImpl;
+import io.orqueio.bpm.engine.variable.type.ValueType;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;

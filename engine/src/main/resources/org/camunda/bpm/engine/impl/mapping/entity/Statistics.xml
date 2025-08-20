@@ -19,11 +19,11 @@
 -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="org.camunda.bpm.engine.impl.persistence.entity.ProcessDefinitionStatisticsEntity">
+<mapper namespace="io.orqueio.bpm.engine.impl.persistence.entity.ProcessDefinitionStatisticsEntity">
 
   <!-- RESULTMAP -->
 
-  <resultMap id="processDefinitionStatisticsResultMap" type="org.camunda.bpm.engine.impl.persistence.entity.ProcessDefinitionStatisticsEntity">
+  <resultMap id="processDefinitionStatisticsResultMap" type="io.orqueio.bpm.engine.impl.persistence.entity.ProcessDefinitionStatisticsEntity">
     <id property="id" column="ID_" jdbcType="VARCHAR" />
     <result property="instances" column="INSTANCE_COUNT_" jdbcType="INTEGER" />
     <result property="failedJobs" column="FAILED_JOBS_COUNT_" jdbcType="INTEGER" />
@@ -40,36 +40,36 @@
     <result property="tenantId" column="TENANT_ID_" jdbcType="VARCHAR" />
     <result property="versionTag" column="VERSION_TAG_" jdbcType="VARCHAR" />
     <result property="isStartableInTasklist" column="STARTABLE_" jdbcType="BOOLEAN" />
-    <collection property="incidentStatistics" javaType="ArrayList" ofType="org.camunda.bpm.engine.impl.persistence.entity.IncidentStatisticsEntity">
+    <collection property="incidentStatistics" javaType="ArrayList" ofType="io.orqueio.bpm.engine.impl.persistence.entity.IncidentStatisticsEntity">
       <result property="incidentType" column="INCIDENT_TYPE_" jdbcType="VARCHAR" />
       <result property="incidentCount" column="INCIDENT_COUNT_" jdbcType="INTEGER"/>
     </collection>
   </resultMap>
 
-  <resultMap id="deploymentStatisticsResultMap" type="org.camunda.bpm.engine.impl.persistence.entity.DeploymentStatisticsEntity">
+  <resultMap id="deploymentStatisticsResultMap" type="io.orqueio.bpm.engine.impl.persistence.entity.DeploymentStatisticsEntity">
     <id property="id" column="ID_" jdbcType="VARCHAR" />
     <result property="name" column="NAME_" jdbcType="VARCHAR" />
     <result property="deploymentTime" column="DEPLOY_TIME_" jdbcType="TIMESTAMP"/>
     <result property="tenantId" column="TENANT_ID_" jdbcType="VARCHAR" />
     <result property="instances" column="INSTANCE_COUNT_" jdbcType="INTEGER" />
     <result property="failedJobs" column="FAILED_JOBS_COUNT_" jdbcType="INTEGER" />
-    <collection property="incidentStatistics" javaType="ArrayList" ofType="org.camunda.bpm.engine.impl.persistence.entity.IncidentStatisticsEntity">
+    <collection property="incidentStatistics" javaType="ArrayList" ofType="io.orqueio.bpm.engine.impl.persistence.entity.IncidentStatisticsEntity">
       <result property="incidentType" column="INCIDENT_TYPE_" jdbcType="VARCHAR" />
       <result property="incidentCount" column="INCIDENT_COUNT_" jdbcType="INTEGER"/>
     </collection>
   </resultMap>
 
-  <resultMap id="activityStatisticsResultMap" type="org.camunda.bpm.engine.impl.persistence.entity.ActivityStatisticsImpl">
+  <resultMap id="activityStatisticsResultMap" type="io.orqueio.bpm.engine.impl.persistence.entity.ActivityStatisticsImpl">
     <id property="id" column="ID_" jdbcType="VARCHAR" />
     <result property="instances" column="INSTANCE_COUNT_" jdbcType="INTEGER" />
     <result property="failedJobs" column="FAILED_JOBS_COUNT_" jdbcType="INTEGER" />
-    <collection property="incidentStatistics" javaType="ArrayList" ofType="org.camunda.bpm.engine.impl.persistence.entity.IncidentStatisticsEntity">
+    <collection property="incidentStatistics" javaType="ArrayList" ofType="io.orqueio.bpm.engine.impl.persistence.entity.IncidentStatisticsEntity">
       <result property="incidentType" column="INCIDENT_TYPE_" jdbcType="VARCHAR" />
       <result property="incidentCount" column="INCIDENT_COUNT_" jdbcType="INTEGER"/>
     </collection>
   </resultMap>
 
-  <resultMap id="batchStatisticsResultMap" type="org.camunda.bpm.engine.impl.batch.BatchStatisticsEntity">
+  <resultMap id="batchStatisticsResultMap" type="io.orqueio.bpm.engine.impl.batch.BatchStatisticsEntity">
     <id property="id" column="ID_" jdbcType="VARCHAR" />
     <result property="revision" column="REV_" jdbcType="INTEGER" />
     <result property="type" column="TYPE_" jdbcType="VARCHAR" />
@@ -90,15 +90,15 @@
     <result property="executionStartTime" column="EXEC_START_TIME_" jdbcType="TIMESTAMP" />
   </resultMap>
 
-  <resultMap id="decisionDefinitionStatisticsResultMap" type="org.camunda.bpm.engine.impl.persistence.entity.DecisionInstanceStatisticsImpl">
+  <resultMap id="decisionDefinitionStatisticsResultMap" type="io.orqueio.bpm.engine.impl.persistence.entity.DecisionInstanceStatisticsImpl">
     <id property="decisionDefinitionKey" column="DEC_DEF_KEY_" jdbcType="VARCHAR" />
     <result property="evaluations" column="EVALUATION_COUNT_" jdbcType="INTEGER" />
   </resultMap>
 
   <!-- Process Definition Statistics -->
   <select id ="selectProcessDefinitionStatistics" resultMap="processDefinitionStatisticsResultMap"
-    parameterType="org.camunda.bpm.engine.impl.ProcessDefinitionStatisticsQueryImpl">
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
+    parameterType="io.orqueio.bpm.engine.impl.ProcessDefinitionStatisticsQueryImpl">
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
     ${limitBefore}
     select ${distinct} RES.*
     ${limitBetween}
@@ -108,7 +108,7 @@
   </select>
 
   <select id ="selectProcessDefinitionStatisticsCount" resultType="long"
-    parameterType="org.camunda.bpm.engine.impl.ProcessDefinitionStatisticsQueryImpl">
+    parameterType="io.orqueio.bpm.engine.impl.ProcessDefinitionStatisticsQueryImpl">
     ${countDistinctBeforeStart} RES.ID_ ${countDistinctBeforeEnd}
     <include refid="selectProcessDefinitionStatisticsByQueryCriteriaSql"/>
     ${countDistinctAfterEnd}
@@ -144,7 +144,7 @@
                 where
                     E.PARENT_ID_ IS NULL
                    <bind name="columnPrefix" value="'E.'"/>
-                   <include refid="org.camunda.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheckWithPrefix" />
+                   <include refid="io.orqueio.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheckWithPrefix" />
                 group by
                     E.PROC_DEF_ID_
               ) INSTANCE
@@ -164,7 +164,7 @@
                 where
                     J.RETRIES_ = 0
                     <bind name="columnPrefix" value="'J.'"/>
-                    <include refid="org.camunda.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheckWithPrefix" />
+                    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheckWithPrefix" />
                 group by
                     J.PROCESS_DEF_ID_
               ) JOB
@@ -193,7 +193,7 @@
                     and I.ID_ = I.ROOT_CAUSE_INCIDENT_ID_
                   </if>
                   <bind name="columnPrefix" value="'I.'"/>
-                  <include refid="org.camunda.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheckWithPrefix" />
+                  <include refid="io.orqueio.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheckWithPrefix" />
                 </where>
                 group by
                     I.PROC_DEF_ID_, I.INCIDENT_TYPE_
@@ -207,19 +207,19 @@
         ) RES
 
       <if test="authCheck.shouldPerformAuthorizatioCheck &amp;&amp; !authCheck.revokeAuthorizationCheckEnabled &amp;&amp; authCheck.authUserId != null">
-        <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoinWithoutOnClause" />
+        <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoinWithoutOnClause" />
         AUTH ON (AUTH.RESOURCE_ID_ ${authJoinStart} RES.ID_ ${authJoinSeparator} RES.KEY_ ${authJoinSeparator} '*' ${authJoinEnd})
       </if>
       <where>
-        <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.queryAuthorizationCheck" />
-        <include refid="org.camunda.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
+        <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.queryAuthorizationCheck" />
+        <include refid="io.orqueio.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
       </where>
   </sql>
 
   <!-- Deployment statistics -->
   <select id ="selectDeploymentStatistics" resultMap="deploymentStatisticsResultMap"
-    parameterType="org.camunda.bpm.engine.impl.DeploymentStatisticsQueryImpl">
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
+    parameterType="io.orqueio.bpm.engine.impl.DeploymentStatisticsQueryImpl">
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
     ${limitBefore}
     select ${distinct} RES.*
     ${limitBetween}
@@ -229,7 +229,7 @@
   </select>
 
   <select id ="selectDeploymentStatisticsCount" resultType="long"
-    parameterType="org.camunda.bpm.engine.impl.DeploymentStatisticsQueryImpl">
+    parameterType="io.orqueio.bpm.engine.impl.DeploymentStatisticsQueryImpl">
     ${countDistinctBeforeStart} RES.ID_ ${countDistinctBeforeEnd}
     <include refid="selectDeploymentStatisticsByQueryCriteriaSql"/>
     ${countDistinctAfterEnd}
@@ -274,7 +274,7 @@
                     and
                         (
                         <foreach item="permCheck" collection="processInstancePermissionChecks" separator=",">
-                          ${dbSpecificIfNullFunction}((<include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheck"/>)
+                          ${dbSpecificIfNullFunction}((<include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheck"/>)
                         </foreach>
                           , 0
                         <foreach item="permCheck" collection="processInstancePermissionChecks">
@@ -283,7 +283,7 @@
                         ) = 1
                     </if>
                     <bind name="columnPrefix" value="'EXECUTION.'"/>
-                    <include refid="org.camunda.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheckWithPrefix" />
+                    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheckWithPrefix" />
                   group by
                       PROCDEF.DEPLOYMENT_ID_
                 ) INSTANCE
@@ -308,7 +308,7 @@
                     and
                         (
                         <foreach item="permCheck" collection="jobPermissionChecks" separator=",">
-                          ${dbSpecificIfNullFunction}((<include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheck"/>)
+                          ${dbSpecificIfNullFunction}((<include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheck"/>)
                         </foreach>
                           , 0
                         <foreach item="permCheck" collection="jobPermissionChecks">
@@ -317,7 +317,7 @@
                         ) = 1
                     </if>
                     <bind name="columnPrefix" value="'JOB.'"/>
-                    <include refid="org.camunda.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheckWithPrefix" />
+                    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheckWithPrefix" />
                   group by
                       DEPLOYMENT_ID_
                 ) JOB
@@ -348,7 +348,7 @@
                     and
                         (
                         <foreach item="permCheck" collection="incidentPermissionChecks" separator=",">
-                          ${dbSpecificIfNullFunction}((<include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheck"/>)
+                          ${dbSpecificIfNullFunction}((<include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheck"/>)
                         </foreach>
                           , 0
                         <foreach item="permCheck" collection="incidentPermissionChecks">
@@ -357,7 +357,7 @@
                         ) = 1
                     </if>
                     <bind name="columnPrefix" value="'INC.'"/>
-                    <include refid="org.camunda.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheckWithPrefix" />
+                    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheckWithPrefix" />
                   group by
                       PROCDEF.DEPLOYMENT_ID_, INC.INCIDENT_TYPE_
                 ) INC
@@ -369,19 +369,19 @@
 
           ) RES
 
-          <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoin" />
+          <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoin" />
 
           <where>
-            <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.queryAuthorizationCheck" />
-            <include refid="org.camunda.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
+            <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.queryAuthorizationCheck" />
+            <include refid="io.orqueio.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
           </where>
   </sql>
 
   <!-- Activity statistics -->
 
   <select id ="selectActivityStatistics" resultMap="activityStatisticsResultMap"
-    parameterType="org.camunda.bpm.engine.impl.ActivityStatisticsQueryImpl">
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
+    parameterType="io.orqueio.bpm.engine.impl.ActivityStatisticsQueryImpl">
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
     ${limitBefore}
     select ${distinct} RES.*
     ${limitBetween}
@@ -399,7 +399,7 @@
   </select>
 
   <select id ="selectActivityStatisticsCount" resultType="long"
-    parameterType="org.camunda.bpm.engine.impl.ActivityStatisticsQueryImpl">
+    parameterType="io.orqueio.bpm.engine.impl.ActivityStatisticsQueryImpl">
     ${countDistinctBeforeStart} RES.ID_ ${countDistinctBeforeEnd}
 
     <if test="!failedJobsToInclude &amp;&amp; !incidentsToInclude">
@@ -436,7 +436,7 @@
 
           <if test="!revokeAuthorizationCheckEnabled">
             <bind name="atomicChecks" value="processInstancePermissionChecks" />
-            <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoinWithoutOnClauseWithBinding" />
+            <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoinWithoutOnClauseWithBinding" />
             AUTH ON (AUTH.RESOURCE_ID_ ${authJoinStart} E.PROC_INST_ID_ ${authJoinSeparator} P.KEY_ ${authJoinSeparator} '*' ${authJoinEnd})
           </if>
         </if>
@@ -452,7 +452,7 @@
           <include refid="acitivityStatisticsAuthorizationCheck" />
 
           <bind name="columnPrefix" value="'E.'"/>
-          <include refid="org.camunda.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheckWithPrefix" />
+          <include refid="io.orqueio.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheckWithPrefix" />
 
          group by
           E.ACT_ID_
@@ -496,7 +496,7 @@
 
                   <if test="!revokeAuthorizationCheckEnabled">
                       <bind name="atomicChecks" value="processInstancePermissionChecks" />
-                      <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoinWithoutOnClauseWithBinding" />
+                      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoinWithoutOnClauseWithBinding" />
                       AUTH ON (AUTH.RESOURCE_ID_ ${authJoinStart} E.PROC_INST_ID_ ${authJoinSeparator} P.KEY_ ${authJoinSeparator} '*' ${authJoinEnd})
                     </if>
                   </if>
@@ -512,7 +512,7 @@
                   <include refid="acitivityStatisticsAuthorizationCheck" />
 
                   <bind name="columnPrefix" value="'E.'"/>
-                  <include refid="org.camunda.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheckWithPrefix" />
+                  <include refid="io.orqueio.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheckWithPrefix" />
 
                   <if test="failedJobsToInclude">
                   UNION
@@ -527,7 +527,7 @@
 
                       <if test="authCheck.shouldPerformAuthorizatioCheck &amp;&amp; !revokeAuthorizationCheckEnabled &amp;&amp; authUserId != null">
                         <bind name="atomicChecks" value="jobPermissionChecks" />
-                        <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoinWithoutOnClauseWithBinding" />
+                        <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoinWithoutOnClauseWithBinding" />
                         AUTH ON (AUTH.RESOURCE_ID_ ${authJoinStart} JOB.PROCESS_INSTANCE_ID_ ${authJoinSeparator} JOB.PROCESS_DEF_KEY_ ${authJoinSeparator} '*' ${authJoinEnd})
                       </if>
 
@@ -554,7 +554,7 @@
                           I.PROC_DEF_ID_ = PROCDEF.ID_
                         <if test="!revokeAuthorizationCheckEnabled">
                           <bind name="atomicChecks" value="incidentPermissionChecks" />
-                          <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoinWithoutOnClauseWithBinding" />
+                          <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoinWithoutOnClauseWithBinding" />
                           AUTH ON (AUTH.RESOURCE_ID_ ${authJoinStart} I.PROC_INST_ID_ ${authJoinSeparator} PROCDEF.KEY_ ${authJoinSeparator} '*' ${authJoinEnd})
                         </if>
                       </if>
@@ -592,7 +592,7 @@
 
                     <if test="!revokeAuthorizationCheckEnabled">
                       <bind name="atomicChecks" value="processInstancePermissionChecks" />
-                      <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoinWithoutOnClauseWithBinding" />
+                      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoinWithoutOnClauseWithBinding" />
                       AUTH ON (AUTH.RESOURCE_ID_ ${authJoinStart} E.PROC_INST_ID_ ${authJoinSeparator} P.KEY_ ${authJoinSeparator} '*' ${authJoinEnd})
                     </if>
                   </if>
@@ -605,7 +605,7 @@
                     <include refid="acitivityStatisticsAuthorizationCheck" />
 
                     <bind name="columnPrefix" value="'E.'"/>
-                    <include refid="org.camunda.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheckWithPrefix" />
+                    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheckWithPrefix" />
 
                    group by
                     E.ACT_ID_
@@ -631,7 +631,7 @@
 
                 <if test="authCheck.shouldPerformAuthorizatioCheck &amp;&amp; !revokeAuthorizationCheckEnabled &amp;&amp; authUserId != null">
                   <bind name="atomicChecks" value="jobPermissionChecks" />
-                  <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoinWithoutOnClauseWithBinding" />
+                  <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoinWithoutOnClauseWithBinding" />
                   AUTH ON (AUTH.RESOURCE_ID_ ${authJoinStart} JOB.PROCESS_INSTANCE_ID_ ${authJoinSeparator} JOB.PROCESS_DEF_KEY_ ${authJoinSeparator} '*' ${authJoinEnd})
                 </if>
 
@@ -643,7 +643,7 @@
                     <include refid="acitivityStatisticsAuthorizationCheck" />
 
                     <bind name="columnPrefix" value="'JOB.'"/>
-                    <include refid="org.camunda.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheckWithPrefix" />
+                    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheckWithPrefix" />
 
                 group by
                     JOBDEF.ACT_ID_
@@ -671,7 +671,7 @@
                   I.PROC_DEF_ID_ = PROCDEF.ID_
                 <if test="!revokeAuthorizationCheckEnabled">
                   <bind name="atomicChecks" value="incidentPermissionChecks" />
-                  <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoinWithoutOnClauseWithBinding" />
+                  <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoinWithoutOnClauseWithBinding" />
                   AUTH ON (AUTH.RESOURCE_ID_ ${authJoinStart} I.PROC_INST_ID_ ${authJoinSeparator} PROCDEF.KEY_ ${authJoinSeparator} '*' ${authJoinEnd})
                 </if>
               </if>
@@ -685,7 +685,7 @@
                   <include refid="acitivityStatisticsAuthorizationCheck" />
 
                   <bind name="columnPrefix" value="'I.'"/>
-                  <include refid="org.camunda.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheckWithPrefix" />
+                  <include refid="io.orqueio.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheckWithPrefix" />
               group by
                   I.ACTIVITY_ID_, I.INCIDENT_TYPE_
             ) INC
@@ -702,7 +702,7 @@
           and
               (
               <foreach item="permCheck" index="index" collection="permissionChecks" separator=",">
-                ${dbSpecificIfNullFunction}((<include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheck"/>)
+                ${dbSpecificIfNullFunction}((<include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheck"/>)
               </foreach>
                 , 0
               <foreach item="permCheck" index="index" collection="permissionChecks">
@@ -718,8 +718,8 @@
   </sql>
 
   <!-- Batch Statistics -->
-  <select id ="selectBatchStatistics" resultMap="batchStatisticsResultMap" parameterType="org.camunda.bpm.engine.impl.batch.BatchStatisticsQueryImpl">
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
+  <select id ="selectBatchStatistics" resultMap="batchStatisticsResultMap" parameterType="io.orqueio.bpm.engine.impl.batch.BatchStatisticsQueryImpl">
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
     ${limitBefore}
     select ${distinct} RES.*
     ${limitBetween}
@@ -728,7 +728,7 @@
     ${limitAfter}
   </select>
 
-  <select id ="selectBatchStatisticsCount" resultType="long" parameterType="org.camunda.bpm.engine.impl.batch.BatchStatisticsQueryImpl">
+  <select id ="selectBatchStatisticsCount" resultType="long" parameterType="io.orqueio.bpm.engine.impl.batch.BatchStatisticsQueryImpl">
     ${countDistinctBeforeStart} RES.ID_ ${countDistinctBeforeEnd}
     <include refid="selectBatchStatisticsByQueryCriteriaSql"/>
     ${countDistinctAfterEnd}
@@ -760,7 +760,7 @@
       on
         RES.BATCH_JOB_DEF_ID_ = JOB.JOB_DEF_ID_
 
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoin" />
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoin" />
 
       <where>
         <if test="batchId != null">
@@ -800,8 +800,8 @@
          and (JOB.FAILED_JOBS_COUNT_ is null or JOB.FAILED_JOBS_COUNT_ = 0)
        </if>
 
-       <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.queryAuthorizationCheck" />
-       <include refid="org.camunda.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
+       <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.queryAuthorizationCheck" />
+       <include refid="io.orqueio.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
      </where>
 
     ) RES
@@ -810,8 +810,8 @@
 
   <!-- DRD Statistics -->
 
-  <select id ="selectDecisionDefinitionStatistics" resultMap="decisionDefinitionStatisticsResultMap" parameterType="org.camunda.bpm.engine.impl.HistoricDecisionInstanceStatisticsQueryImpl">
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
+  <select id ="selectDecisionDefinitionStatistics" resultMap="decisionDefinitionStatisticsResultMap" parameterType="io.orqueio.bpm.engine.impl.HistoricDecisionInstanceStatisticsQueryImpl">
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
     ${limitBefore}
     select ${distinct} RES.*
     ${limitBetween}
@@ -820,7 +820,7 @@
     ${limitAfter}
   </select>
 
-  <select id ="selectDecisionDefinitionStatisticsCount" resultType="long" parameterType="org.camunda.bpm.engine.impl.HistoricDecisionInstanceStatisticsQueryImpl">
+  <select id ="selectDecisionDefinitionStatisticsCount" resultType="long" parameterType="io.orqueio.bpm.engine.impl.HistoricDecisionInstanceStatisticsQueryImpl">
     ${countDistinctBeforeStart} RES.ID_ ${countDistinctBeforeEnd}
     <include refid="selectDecisionDefinitionStatisticsByQueryCriteriaSql"/>
     ${countDistinctAfterEnd}
@@ -839,7 +839,7 @@
         <if test="decisionInstanceId != null">
           and (RES.ID_ = #{decisionInstanceId} or RES.ROOT_DEC_INST_ID_ = #{decisionInstanceId, jdbcType=VARCHAR})
         </if>
-        <include refid="org.camunda.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
+        <include refid="io.orqueio.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
       group by
         RES.DEC_DEF_KEY_,
         RES.DEC_DEF_ID_

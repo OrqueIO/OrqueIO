@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.dto.runtime;
+package io.orqueio.bpm.engine.rest.dto.runtime;
 
 import java.util.Date;
 
-import org.camunda.bpm.engine.runtime.EventSubscription;
+import io.orqueio.bpm.engine.runtime.EventSubscription;
 
 public class EventSubscriptionDto {
 

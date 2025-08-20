@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.run;
+package io.orqueio.bpm.run;
 
 import jakarta.servlet.Filter;
 import org.apache.catalina.filters.CorsFilter;
-import org.camunda.bpm.engine.rest.security.auth.ProcessEngineAuthenticationFilter;
-import org.camunda.bpm.run.property.CamundaBpmRunAuthenticationProperties;
-import org.camunda.bpm.run.property.CamundaBpmRunCorsProperty;
-import org.camunda.bpm.run.property.CamundaBpmRunProperties;
-import org.camunda.bpm.spring.boot.starter.CamundaBpmAutoConfiguration;
-import org.camunda.bpm.spring.boot.starter.rest.CamundaBpmRestInitializer;
-import org.camunda.bpm.spring.boot.starter.rest.CamundaJerseyResourceConfig;
+import io.orqueio.bpm.engine.rest.security.auth.ProcessEngineAuthenticationFilter;
+import io.orqueio.bpm.run.property.CamundaBpmRunAuthenticationProperties;
+import io.orqueio.bpm.run.property.CamundaBpmRunCorsProperty;
+import io.orqueio.bpm.run.property.CamundaBpmRunProperties;
+import io.orqueio.bpm.spring.boot.starter.CamundaBpmAutoConfiguration;
+import io.orqueio.bpm.spring.boot.starter.rest.CamundaBpmRestInitializer;
+import io.orqueio.bpm.spring.boot.starter.rest.CamundaJerseyResourceConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -76,7 +76,7 @@ public class CamundaBpmRunRestConfiguration {
     // if nothing is set, use Http Basic authentication
     CamundaBpmRunAuthenticationProperties properties = camundaBpmRunProperties.getAuth();
     if (properties.getAuthentication() == null || CamundaBpmRunAuthenticationProperties.DEFAULT_AUTH.equals(properties.getAuthentication())) {
-      registration.addInitParameter("authentication-provider", "org.camunda.bpm.engine.rest.security.auth.impl.HttpBasicAuthenticationProvider");
+      registration.addInitParameter("authentication-provider", "io.orqueio.bpm.engine.rest.security.auth.impl.HttpBasicAuthenticationProvider");
     }
     return registration;
   }

@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.dto.history.batch;
+package io.orqueio.bpm.engine.rest.dto.history.batch;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.history.CleanableHistoricBatchReport;
-import org.camunda.bpm.engine.history.CleanableHistoricBatchReportResult;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.history.CleanableHistoricBatchReport;
+import io.orqueio.bpm.engine.history.CleanableHistoricBatchReportResult;
 
 public class CleanableHistoricBatchReportResultDto {
 

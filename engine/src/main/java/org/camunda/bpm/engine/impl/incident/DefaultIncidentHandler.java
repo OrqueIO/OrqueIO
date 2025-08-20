@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.incident;
+package io.orqueio.bpm.engine.impl.incident;
 
 import java.util.List;
 
-import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.engine.impl.persistence.entity.IncidentEntity;
-import org.camunda.bpm.engine.runtime.Incident;
+import io.orqueio.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.impl.persistence.entity.IncidentEntity;
+import io.orqueio.bpm.engine.runtime.Incident;
 
 /**
  * <p>
@@ -31,7 +31,7 @@ import org.camunda.bpm.engine.runtime.Incident;
  * By default, the process engine has two default handlers:
  * <ul>
  * <li>type <code>failedJob</code>: Indicates jobs without retries left. This incident handler is active by default and must be disabled
- * via {@link org.camunda.bpm.engine.ProcessEngineConfiguration#setCreateIncidentOnFailedJobEnabled(boolean)}.
+ * via {@link io.orqueio.bpm.engine.ProcessEngineConfiguration#setCreateIncidentOnFailedJobEnabled(boolean)}.
  * <li>type <code>failedExternalTask</code>: Indicates external tasks without retries left
  * </p>
  *

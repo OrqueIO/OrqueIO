@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.connect.httpclient;
+package io.orqueio.connect.httpclient;
 
 public interface HttpMethodRequest<Q extends HttpMethodRequest<?, ?>, R extends HttpResponse> extends HttpBaseRequest<Q, R> {
 

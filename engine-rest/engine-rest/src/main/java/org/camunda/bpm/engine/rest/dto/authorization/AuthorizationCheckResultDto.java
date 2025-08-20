@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.dto.authorization;
+package io.orqueio.bpm.engine.rest.dto.authorization;
 
-import org.camunda.bpm.engine.rest.util.ResourceUtil;
+import io.orqueio.bpm.engine.rest.util.ResourceUtil;
 
 /**
  * @author Daniel Meyer

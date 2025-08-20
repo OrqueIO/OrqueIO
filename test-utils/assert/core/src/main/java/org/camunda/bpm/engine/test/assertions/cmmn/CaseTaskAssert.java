@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.assertions.cmmn;
+package io.orqueio.bpm.engine.test.assertions.cmmn;
 
 import org.assertj.core.api.MapAssert;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.impl.cmmn.execution.CaseExecutionState;
-import org.camunda.bpm.engine.runtime.CaseExecution;
-import org.camunda.bpm.model.cmmn.instance.CaseTask;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.impl.cmmn.execution.CaseExecutionState;
+import io.orqueio.bpm.engine.runtime.CaseExecution;
+import io.orqueio.bpm.model.cmmn.instance.CaseTask;
 
 public class CaseTaskAssert extends AbstractCaseAssert<CaseTaskAssert, CaseExecution> {
 
@@ -93,7 +93,7 @@ public class CaseTaskAssert extends AbstractCaseAssert<CaseTaskAssert, CaseExecu
   }
 
   /**
-   * Verifies the expectation that the {@link org.camunda.bpm.model.cmmn.instance.CaseTask} holds no
+   * Verifies the expectation that the {@link io.orqueio.bpm.model.cmmn.instance.CaseTask} holds no
    * case variables at all.
    *
    * @return  this {@link CaseTaskAssert}
@@ -103,7 +103,7 @@ public class CaseTaskAssert extends AbstractCaseAssert<CaseTaskAssert, CaseExecu
   }
 
   /**
-   * Verifies the expectation that the {@link org.camunda.bpm.model.cmmn.instance.CaseTask} holds one or
+   * Verifies the expectation that the {@link io.orqueio.bpm.model.cmmn.instance.CaseTask} holds one or
    * more case variables with the specified names.
    *
    * @param   names the names of the case task variables expected to exist. In

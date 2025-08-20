@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.cockpit.impl.plugin.base.dto.query;
+package io.orqueio.bpm.cockpit.impl.plugin.base.dto.query;
 
 import javax.ws.rs.core.MultivaluedMap;
 
@@ -23,10 +23,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.cockpit.impl.plugin.base.dto.IncidentDto;
-import org.camunda.bpm.cockpit.rest.dto.AbstractRestQueryParametersDto;
-import org.camunda.bpm.engine.rest.dto.CamundaQueryParam;
-import org.camunda.bpm.engine.rest.dto.converter.StringArrayConverter;
+import io.orqueio.bpm.cockpit.impl.plugin.base.dto.IncidentDto;
+import io.orqueio.bpm.cockpit.rest.dto.AbstractRestQueryParametersDto;
+import io.orqueio.bpm.engine.rest.dto.CamundaQueryParam;
+import io.orqueio.bpm.engine.rest.dto.converter.StringArrayConverter;
 
 /**
  * @author roman.smirnov

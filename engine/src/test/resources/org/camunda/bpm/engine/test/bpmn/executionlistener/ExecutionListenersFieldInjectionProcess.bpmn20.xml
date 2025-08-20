@@ -5,7 +5,7 @@
   
   <process id="executionListenersProcess" isExecutable="true">
     <extensionElements>
-      <camunda:executionListener class="org.camunda.bpm.engine.test.bpmn.executionlistener.ExampleFieldInjectedExecutionListener" event="start">
+      <camunda:executionListener class="io.orqueio.bpm.engine.test.bpmn.executionlistener.ExampleFieldInjectedExecutionListener" event="start">
         <camunda:field name="fixedValue" stringValue="Yes, I am " />
         <camunda:field name="dynamicValue" expression="${myVar}" />
       </camunda:executionListener>

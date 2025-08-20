@@ -14,7 +14,7 @@
       <extensionElements>
         <camunda:taskListener event="create">
           <camunda:script scriptFormat="groovy">
-            import org.camunda.bpm.engine.delegate.BpmnError;
+            import io.orqueio.bpm.engine.delegate.BpmnError;
             throw new BpmnError("208", "ups")
           </camunda:script>
         </camunda:taskListener>

@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.spring.boot.starter.impl;
+package io.orqueio.bpm.client.spring.boot.starter.impl;
 
-import org.camunda.bpm.client.interceptor.auth.BasicAuthProvider;
-import org.camunda.bpm.client.spring.boot.starter.BasicAuthProperties;
-import org.camunda.bpm.client.spring.boot.starter.ClientProperties;
-import org.camunda.bpm.client.spring.impl.client.ClientConfiguration;
-import org.camunda.bpm.client.spring.impl.client.ClientFactory;
+import io.orqueio.bpm.client.interceptor.auth.BasicAuthProvider;
+import io.orqueio.bpm.client.spring.boot.starter.BasicAuthProperties;
+import io.orqueio.bpm.client.spring.boot.starter.ClientProperties;
+import io.orqueio.bpm.client.spring.impl.client.ClientConfiguration;
+import io.orqueio.bpm.client.spring.impl.client.ClientFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
 

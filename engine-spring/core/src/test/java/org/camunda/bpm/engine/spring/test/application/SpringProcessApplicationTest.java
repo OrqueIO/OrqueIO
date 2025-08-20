@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.spring.test.application;
+package io.orqueio.bpm.engine.spring.test.application;
 
-import org.camunda.bpm.BpmPlatform;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.repository.Deployment;
-import org.camunda.bpm.engine.spring.application.SpringProcessApplication;
+import io.orqueio.bpm.BpmPlatform;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.repository.Deployment;
+import io.orqueio.bpm.engine.spring.application.SpringProcessApplication;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.context.support.AbstractApplicationContext;

@@ -14,7 +14,7 @@
 
     <sequenceFlow sourceRef="task1" targetRef="serviceTask" />
 
-    <serviceTask id="serviceTask" camunda:class="org.camunda.bpm.engine.test.api.authorization.service.MyServiceTaskActivityBehaviorExecuteQuery" />
+    <serviceTask id="serviceTask" camunda:class="io.orqueio.bpm.engine.test.api.authorization.service.MyServiceTaskActivityBehaviorExecuteQuery" />
 
     <sequenceFlow sourceRef="serviceTask" targetRef="task2" />
 

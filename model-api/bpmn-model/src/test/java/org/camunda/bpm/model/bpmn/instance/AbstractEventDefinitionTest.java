@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.bpmn.instance;
+package io.orqueio.bpm.model.bpmn.instance;
 
-import org.camunda.bpm.model.bpmn.Bpmn;
-import org.camunda.bpm.model.bpmn.Query;
-import org.camunda.bpm.model.bpmn.impl.QueryImpl;
-import org.camunda.bpm.model.xml.impl.util.ReflectUtil;
+import io.orqueio.bpm.model.bpmn.Bpmn;
+import io.orqueio.bpm.model.bpmn.Query;
+import io.orqueio.bpm.model.bpmn.impl.QueryImpl;
+import io.orqueio.bpm.model.xml.impl.util.ReflectUtil;
 import org.junit.Before;
 
 import java.io.InputStream;

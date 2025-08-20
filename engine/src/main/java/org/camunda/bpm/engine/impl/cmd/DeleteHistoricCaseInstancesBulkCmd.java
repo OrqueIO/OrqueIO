@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.cmd;
+package io.orqueio.bpm.engine.impl.cmd;
 
-import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureEquals;
-import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureNotEmpty;
+import static io.orqueio.bpm.engine.impl.util.EnsureUtil.ensureEquals;
+import static io.orqueio.bpm.engine.impl.util.EnsureUtil.ensureNotEmpty;
 
 import java.io.Serializable;
 import java.util.Collections;
@@ -25,12 +25,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-import org.camunda.bpm.engine.BadUserRequestException;
-import org.camunda.bpm.engine.history.UserOperationLogEntry;
-import org.camunda.bpm.engine.impl.HistoricCaseInstanceQueryImpl;
-import org.camunda.bpm.engine.impl.interceptor.Command;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.persistence.entity.PropertyChange;
+import io.orqueio.bpm.engine.BadUserRequestException;
+import io.orqueio.bpm.engine.history.UserOperationLogEntry;
+import io.orqueio.bpm.engine.impl.HistoricCaseInstanceQueryImpl;
+import io.orqueio.bpm.engine.impl.interceptor.Command;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.impl.persistence.entity.PropertyChange;
 
 public class DeleteHistoricCaseInstancesBulkCmd implements Command<Void>, Serializable {
 

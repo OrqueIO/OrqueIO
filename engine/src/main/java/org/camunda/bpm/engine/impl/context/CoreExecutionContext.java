@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.context;
+package io.orqueio.bpm.engine.impl.context;
 
-import org.camunda.bpm.engine.impl.core.instance.CoreExecution;
-import org.camunda.bpm.engine.impl.persistence.entity.DeploymentEntity;
+import io.orqueio.bpm.engine.impl.core.instance.CoreExecution;
+import io.orqueio.bpm.engine.impl.persistence.entity.DeploymentEntity;
 
 /**
  * @author Roman Smirnov

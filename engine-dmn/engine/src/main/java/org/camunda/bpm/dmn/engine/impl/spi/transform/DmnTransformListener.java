@@ -14,18 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.engine.impl.spi.transform;
+package io.orqueio.bpm.dmn.engine.impl.spi.transform;
 
-import org.camunda.bpm.dmn.engine.DmnDecision;
-import org.camunda.bpm.dmn.engine.DmnDecisionRequirementsGraph;
-import org.camunda.bpm.dmn.engine.impl.DmnDecisionTableInputImpl;
-import org.camunda.bpm.dmn.engine.impl.DmnDecisionTableOutputImpl;
-import org.camunda.bpm.dmn.engine.impl.DmnDecisionTableRuleImpl;
-import org.camunda.bpm.model.dmn.instance.Decision;
-import org.camunda.bpm.model.dmn.instance.Definitions;
-import org.camunda.bpm.model.dmn.instance.Input;
-import org.camunda.bpm.model.dmn.instance.Output;
-import org.camunda.bpm.model.dmn.instance.Rule;
+import io.orqueio.bpm.dmn.engine.DmnDecision;
+import io.orqueio.bpm.dmn.engine.DmnDecisionRequirementsGraph;
+import io.orqueio.bpm.dmn.engine.impl.DmnDecisionTableInputImpl;
+import io.orqueio.bpm.dmn.engine.impl.DmnDecisionTableOutputImpl;
+import io.orqueio.bpm.dmn.engine.impl.DmnDecisionTableRuleImpl;
+import io.orqueio.bpm.model.dmn.instance.Decision;
+import io.orqueio.bpm.model.dmn.instance.Definitions;
+import io.orqueio.bpm.model.dmn.instance.Input;
+import io.orqueio.bpm.model.dmn.instance.Output;
+import io.orqueio.bpm.model.dmn.instance.Rule;
 
 /**
  * Listener for a DMN transformation
@@ -66,10 +66,10 @@ public interface DmnTransformListener {
 
   /**
    * Notified after a Decision Requirements Graph was transformed
-   * 
+   *
    * @param definitions
    * @param dmnDecisionGraph
    */
   void transformDecisionRequirementsGraph(Definitions definitions, DmnDecisionRequirementsGraph dmnDecisionRequirementsGraph);
-  
+
 }

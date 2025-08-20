@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.run.qa.webapps;
+package io.orqueio.bpm.run.qa.webapps;
 
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
-import org.camunda.bpm.run.qa.util.SpringBootManagedContainer;
+import io.orqueio.bpm.run.qa.util.SpringBootManagedContainer;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

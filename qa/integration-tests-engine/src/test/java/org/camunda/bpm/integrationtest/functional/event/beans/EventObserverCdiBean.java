@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.functional.event.beans;
+package io.orqueio.bpm.integrationtest.functional.event.beans;
 
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
-import org.camunda.bpm.engine.cdi.BusinessProcess;
-import org.camunda.bpm.engine.cdi.BusinessProcessEvent;
+import io.orqueio.bpm.engine.cdi.BusinessProcess;
+import io.orqueio.bpm.engine.cdi.BusinessProcessEvent;
 
 /**
  * @author Daniel Meyer

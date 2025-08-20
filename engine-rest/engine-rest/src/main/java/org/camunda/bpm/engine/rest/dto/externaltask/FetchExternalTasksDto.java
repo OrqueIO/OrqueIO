@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.dto.externaltask;
+package io.orqueio.bpm.engine.rest.dto.externaltask;
 
 import static java.lang.Boolean.TRUE;
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
@@ -24,13 +24,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
-import org.camunda.bpm.engine.ExternalTaskService;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.externaltask.ExternalTaskQueryTopicBuilder;
-import org.camunda.bpm.engine.externaltask.FetchAndLockBuilder;
-import org.camunda.bpm.engine.impl.util.CollectionUtil;
-import org.camunda.bpm.engine.rest.dto.SortingDto;
-import org.camunda.bpm.engine.rest.exception.InvalidRequestException;
+import io.orqueio.bpm.engine.ExternalTaskService;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.externaltask.ExternalTaskQueryTopicBuilder;
+import io.orqueio.bpm.engine.externaltask.FetchAndLockBuilder;
+import io.orqueio.bpm.engine.impl.util.CollectionUtil;
+import io.orqueio.bpm.engine.rest.dto.SortingDto;
+import io.orqueio.bpm.engine.rest.exception.InvalidRequestException;
 
 /**
  * @author Thorben Lindhauer

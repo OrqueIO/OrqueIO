@@ -14,7 +14,7 @@
         <extensionElements>
           <camunda:variableListener event="create">
             <camunda:script scriptFormat="groovy">
-              org.camunda.bpm.engine.test.cmmn.listener.SimpleBean.invokeStatic()
+              io.orqueio.bpm.engine.test.cmmn.listener.SimpleBean.invokeStatic()
             </camunda:script>
           </camunda:variableListener>
         </extensionElements>

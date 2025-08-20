@@ -14,29 +14,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl;
+package io.orqueio.bpm.engine.impl;
 
 import java.util.List;
 import java.util.Map;
-import org.camunda.bpm.engine.ExternalTaskService;
-import org.camunda.bpm.engine.batch.Batch;
-import org.camunda.bpm.engine.externaltask.ExternalTaskQuery;
-import org.camunda.bpm.engine.externaltask.ExternalTaskQueryBuilder;
-import org.camunda.bpm.engine.externaltask.FetchAndLockBuilder;
-import org.camunda.bpm.engine.impl.externaltask.FetchAndLockBuilderImpl;
-import org.camunda.bpm.engine.externaltask.UpdateExternalTaskRetriesSelectBuilder;
-import org.camunda.bpm.engine.impl.cmd.CompleteExternalTaskCmd;
-import org.camunda.bpm.engine.impl.cmd.ExtendLockOnExternalTaskCmd;
-import org.camunda.bpm.engine.impl.cmd.GetExternalTaskErrorDetailsCmd;
-import org.camunda.bpm.engine.impl.cmd.GetTopicNamesCmd;
-import org.camunda.bpm.engine.impl.cmd.HandleExternalTaskBpmnErrorCmd;
-import org.camunda.bpm.engine.impl.cmd.HandleExternalTaskFailureCmd;
-import org.camunda.bpm.engine.impl.cmd.LockExternalTaskCmd;
-import org.camunda.bpm.engine.impl.cmd.SetExternalTaskPriorityCmd;
-import org.camunda.bpm.engine.impl.cmd.SetExternalTaskRetriesCmd;
-import org.camunda.bpm.engine.impl.cmd.UnlockExternalTaskCmd;
-import org.camunda.bpm.engine.impl.cmd.UpdateExternalTaskRetriesBuilderImpl;
-import org.camunda.bpm.engine.impl.externaltask.ExternalTaskQueryTopicBuilderImpl;
+import io.orqueio.bpm.engine.ExternalTaskService;
+import io.orqueio.bpm.engine.batch.Batch;
+import io.orqueio.bpm.engine.externaltask.ExternalTaskQuery;
+import io.orqueio.bpm.engine.externaltask.ExternalTaskQueryBuilder;
+import io.orqueio.bpm.engine.externaltask.FetchAndLockBuilder;
+import io.orqueio.bpm.engine.impl.externaltask.FetchAndLockBuilderImpl;
+import io.orqueio.bpm.engine.externaltask.UpdateExternalTaskRetriesSelectBuilder;
+import io.orqueio.bpm.engine.impl.cmd.CompleteExternalTaskCmd;
+import io.orqueio.bpm.engine.impl.cmd.ExtendLockOnExternalTaskCmd;
+import io.orqueio.bpm.engine.impl.cmd.GetExternalTaskErrorDetailsCmd;
+import io.orqueio.bpm.engine.impl.cmd.GetTopicNamesCmd;
+import io.orqueio.bpm.engine.impl.cmd.HandleExternalTaskBpmnErrorCmd;
+import io.orqueio.bpm.engine.impl.cmd.HandleExternalTaskFailureCmd;
+import io.orqueio.bpm.engine.impl.cmd.LockExternalTaskCmd;
+import io.orqueio.bpm.engine.impl.cmd.SetExternalTaskPriorityCmd;
+import io.orqueio.bpm.engine.impl.cmd.SetExternalTaskRetriesCmd;
+import io.orqueio.bpm.engine.impl.cmd.UnlockExternalTaskCmd;
+import io.orqueio.bpm.engine.impl.cmd.UpdateExternalTaskRetriesBuilderImpl;
+import io.orqueio.bpm.engine.impl.externaltask.ExternalTaskQueryTopicBuilderImpl;
 
 /**
  * @author Thorben Lindhauer

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine;
+package io.orqueio.bpm.engine;
 
 import java.sql.Connection;
 import java.util.Date;
@@ -22,43 +22,43 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.camunda.bpm.application.ProcessApplicationReference;
-import org.camunda.bpm.application.ProcessApplicationRegistration;
-import org.camunda.bpm.engine.authorization.BatchPermissions;
-import org.camunda.bpm.engine.authorization.Groups;
-import org.camunda.bpm.engine.authorization.Permissions;
-import org.camunda.bpm.engine.authorization.ProcessDefinitionPermissions;
-import org.camunda.bpm.engine.authorization.ProcessInstancePermissions;
-import org.camunda.bpm.engine.authorization.Resources;
-import org.camunda.bpm.engine.batch.Batch;
-import org.camunda.bpm.engine.batch.BatchQuery;
-import org.camunda.bpm.engine.batch.BatchStatisticsQuery;
-import org.camunda.bpm.engine.history.HistoricProcessInstanceQuery;
-import org.camunda.bpm.engine.impl.jobexecutor.JobExecutor;
-import org.camunda.bpm.engine.management.ActivityStatisticsQuery;
-import org.camunda.bpm.engine.management.DeploymentStatisticsQuery;
-import org.camunda.bpm.engine.management.JobDefinition;
-import org.camunda.bpm.engine.management.JobDefinitionQuery;
-import org.camunda.bpm.engine.management.MetricsQuery;
-import org.camunda.bpm.engine.management.ProcessDefinitionStatisticsQuery;
-import org.camunda.bpm.engine.management.SchemaLogQuery;
-import org.camunda.bpm.engine.management.SetJobRetriesBuilder;
-import org.camunda.bpm.engine.management.SetJobRetriesByJobsAsyncBuilder;
-import org.camunda.bpm.engine.management.SetJobRetriesByProcessAsyncBuilder;
-import org.camunda.bpm.engine.management.TableMetaData;
-import org.camunda.bpm.engine.management.TablePage;
-import org.camunda.bpm.engine.management.TablePageQuery;
-import org.camunda.bpm.engine.management.UpdateJobDefinitionSuspensionStateBuilder;
-import org.camunda.bpm.engine.management.UpdateJobDefinitionSuspensionStateSelectBuilder;
-import org.camunda.bpm.engine.management.UpdateJobSuspensionStateBuilder;
-import org.camunda.bpm.engine.management.UpdateJobSuspensionStateSelectBuilder;
-import org.camunda.bpm.engine.runtime.Execution;
-import org.camunda.bpm.engine.runtime.Incident;
-import org.camunda.bpm.engine.runtime.Job;
-import org.camunda.bpm.engine.runtime.JobQuery;
-import org.camunda.bpm.engine.runtime.ProcessInstanceQuery;
-import org.camunda.bpm.engine.task.Task;
-import org.camunda.bpm.engine.telemetry.TelemetryData;
+import io.orqueio.bpm.application.ProcessApplicationReference;
+import io.orqueio.bpm.application.ProcessApplicationRegistration;
+import io.orqueio.bpm.engine.authorization.BatchPermissions;
+import io.orqueio.bpm.engine.authorization.Groups;
+import io.orqueio.bpm.engine.authorization.Permissions;
+import io.orqueio.bpm.engine.authorization.ProcessDefinitionPermissions;
+import io.orqueio.bpm.engine.authorization.ProcessInstancePermissions;
+import io.orqueio.bpm.engine.authorization.Resources;
+import io.orqueio.bpm.engine.batch.Batch;
+import io.orqueio.bpm.engine.batch.BatchQuery;
+import io.orqueio.bpm.engine.batch.BatchStatisticsQuery;
+import io.orqueio.bpm.engine.history.HistoricProcessInstanceQuery;
+import io.orqueio.bpm.engine.impl.jobexecutor.JobExecutor;
+import io.orqueio.bpm.engine.management.ActivityStatisticsQuery;
+import io.orqueio.bpm.engine.management.DeploymentStatisticsQuery;
+import io.orqueio.bpm.engine.management.JobDefinition;
+import io.orqueio.bpm.engine.management.JobDefinitionQuery;
+import io.orqueio.bpm.engine.management.MetricsQuery;
+import io.orqueio.bpm.engine.management.ProcessDefinitionStatisticsQuery;
+import io.orqueio.bpm.engine.management.SchemaLogQuery;
+import io.orqueio.bpm.engine.management.SetJobRetriesBuilder;
+import io.orqueio.bpm.engine.management.SetJobRetriesByJobsAsyncBuilder;
+import io.orqueio.bpm.engine.management.SetJobRetriesByProcessAsyncBuilder;
+import io.orqueio.bpm.engine.management.TableMetaData;
+import io.orqueio.bpm.engine.management.TablePage;
+import io.orqueio.bpm.engine.management.TablePageQuery;
+import io.orqueio.bpm.engine.management.UpdateJobDefinitionSuspensionStateBuilder;
+import io.orqueio.bpm.engine.management.UpdateJobDefinitionSuspensionStateSelectBuilder;
+import io.orqueio.bpm.engine.management.UpdateJobSuspensionStateBuilder;
+import io.orqueio.bpm.engine.management.UpdateJobSuspensionStateSelectBuilder;
+import io.orqueio.bpm.engine.runtime.Execution;
+import io.orqueio.bpm.engine.runtime.Incident;
+import io.orqueio.bpm.engine.runtime.Job;
+import io.orqueio.bpm.engine.runtime.JobQuery;
+import io.orqueio.bpm.engine.runtime.ProcessInstanceQuery;
+import io.orqueio.bpm.engine.task.Task;
+import io.orqueio.bpm.engine.telemetry.TelemetryData;
 
 
 
@@ -1347,7 +1347,7 @@ public interface ManagementService {
   void deleteTaskMetrics(Date timestamp);
 
   /**
-   * Creates a query to search for {@link org.camunda.bpm.engine.batch.Batch} instances.
+   * Creates a query to search for {@link io.orqueio.bpm.engine.batch.Batch} instances.
    *
    * @since 7.5
    */

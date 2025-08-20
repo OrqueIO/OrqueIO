@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.cmmn.listener;
+package io.orqueio.bpm.engine.test.cmmn.listener;
 
 import static org.junit.Assert.assertEquals;
 
-import org.camunda.bpm.engine.delegate.DelegateCaseVariableInstance;
-import org.camunda.bpm.engine.runtime.CaseExecution;
+import io.orqueio.bpm.engine.delegate.DelegateCaseVariableInstance;
+import io.orqueio.bpm.engine.runtime.CaseExecution;
 
 /**
  * @author Thorben Lindhauer

@@ -7,7 +7,7 @@
   <process id="receiveTask" isExecutable="true">
   
     <extensionElements>
-      <camunda:executionListener class="org.camunda.bpm.engine.test.standalone.history.VariableUpdateExecutionListener" event="start">
+      <camunda:executionListener class="io.orqueio.bpm.engine.test.standalone.history.VariableUpdateExecutionListener" event="start">
         <camunda:field name="varName" stringValue="zVar1" />
       </camunda:executionListener>
     </extensionElements>
@@ -16,18 +16,18 @@
     
     <sequenceFlow id="flow1" sourceRef="theStart" targetRef="serviceTask">
       <extensionElements>
-        <camunda:executionListener class="org.camunda.bpm.engine.test.standalone.history.VariableUpdateExecutionListener">
+        <camunda:executionListener class="io.orqueio.bpm.engine.test.standalone.history.VariableUpdateExecutionListener">
           <camunda:field name="varName" stringValue="zVar2" />
         </camunda:executionListener>
       </extensionElements>
     </sequenceFlow>
 
-    <serviceTask id="serviceTask" camunda:class="org.camunda.bpm.engine.test.standalone.history.VariableUpdateDelegate">
+    <serviceTask id="serviceTask" camunda:class="io.orqueio.bpm.engine.test.standalone.history.VariableUpdateDelegate">
       <extensionElements>
-        <camunda:executionListener class="org.camunda.bpm.engine.test.standalone.history.VariableUpdateExecutionListener" event="start">
+        <camunda:executionListener class="io.orqueio.bpm.engine.test.standalone.history.VariableUpdateExecutionListener" event="start">
           <camunda:field name="varName" stringValue="zVar3" />
         </camunda:executionListener>
-        <camunda:executionListener class="org.camunda.bpm.engine.test.standalone.history.VariableUpdateExecutionListener" event="end">
+        <camunda:executionListener class="io.orqueio.bpm.engine.test.standalone.history.VariableUpdateExecutionListener" event="end">
           <camunda:field name="varName" stringValue="zVar4" />
         </camunda:executionListener>
       </extensionElements>

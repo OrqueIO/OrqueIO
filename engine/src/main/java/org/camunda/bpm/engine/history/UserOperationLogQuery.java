@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.history;
+package io.orqueio.bpm.engine.history;
 
 import java.util.Date;
 
-import org.camunda.bpm.engine.EntityTypes;
-import org.camunda.bpm.engine.TaskService;
-import org.camunda.bpm.engine.query.Query;
+import io.orqueio.bpm.engine.EntityTypes;
+import io.orqueio.bpm.engine.TaskService;
+import io.orqueio.bpm.engine.query.Query;
 
 
 /**
@@ -100,7 +100,7 @@ public interface UserOperationLogQuery extends Query<UserOperationLogQuery, User
 
   /** Query entries of a composite operation.
    * This allows grouping multiple updates which are part of the same operation:
-   * for instance, a User may update multiple fields of a UserTask when calling {@link TaskService#saveTask(org.camunda.bpm.engine.task.Task)}
+   * for instance, a User may update multiple fields of a UserTask when calling {@link TaskService#saveTask(io.orqueio.bpm.engine.task.Task)}
    * which will be logged as separate {@link UserOperationLogEntry OperationLogEntries} with the same 'operationId'
    * */
   UserOperationLogQuery operationId(String operationId);

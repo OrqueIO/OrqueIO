@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter.event;
+package io.orqueio.bpm.spring.boot.starter.event;
 
-import org.camunda.bpm.engine.spring.SpringProcessEngineConfiguration;
-import org.camunda.bpm.spring.boot.starter.property.CamundaBpmProperties;
-import org.camunda.bpm.spring.boot.starter.property.EventingProperty;
-import org.camunda.bpm.spring.boot.starter.util.SpringBootProcessEnginePlugin;
+import io.orqueio.bpm.engine.spring.SpringProcessEngineConfiguration;
+import io.orqueio.bpm.spring.boot.starter.property.CamundaBpmProperties;
+import io.orqueio.bpm.spring.boot.starter.property.EventingProperty;
+import io.orqueio.bpm.spring.boot.starter.util.SpringBootProcessEnginePlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;

@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest;
+package io.orqueio.bpm.engine.rest;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-import org.camunda.bpm.engine.rest.mapper.JacksonConfigurator;
+import io.orqueio.bpm.engine.rest.mapper.JacksonConfigurator;
 
 public class CustomJacksonDateFormatListener implements ServletContextListener {
 
-  public final static String CONTEXT_PARAM_NAME = "org.camunda.bpm.engine.rest.jackson.dateFormat";
+  public final static String CONTEXT_PARAM_NAME = "io.orqueio.bpm.engine.rest.jackson.dateFormat";
 
   public void contextInitialized(ServletContextEvent sce) {
     String dateFormat = sce.getServletContext().getInitParameter(CONTEXT_PARAM_NAME);

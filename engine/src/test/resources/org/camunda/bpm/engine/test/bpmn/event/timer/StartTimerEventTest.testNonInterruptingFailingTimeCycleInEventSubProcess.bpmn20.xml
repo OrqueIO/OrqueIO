@@ -24,7 +24,7 @@
 
       <sequenceFlow id="sequenceFlow_2" sourceRef="subprocessStartEvent" targetRef="failingService" />
 
-      <serviceTask id="failingService" camunda:class="org.camunda.bpm.engine.test.api.runtime.FailingDelegate" />
+      <serviceTask id="failingService" camunda:class="io.orqueio.bpm.engine.test.api.runtime.FailingDelegate" />
 
       <sequenceFlow id="sequenceFlow_3" sourceRef="failingService" targetRef="subprocessEndEvent" />
 

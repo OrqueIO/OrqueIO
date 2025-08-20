@@ -14,18 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.migration;
+package io.orqueio.bpm.engine.impl.migration;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.camunda.bpm.engine.batch.Batch;
-import org.camunda.bpm.engine.impl.interceptor.CommandExecutor;
-import org.camunda.bpm.engine.impl.migration.batch.MigrateProcessInstanceBatchCmd;
-import org.camunda.bpm.engine.migration.MigrationPlan;
-import org.camunda.bpm.engine.migration.MigrationPlanExecutionBuilder;
-import org.camunda.bpm.engine.runtime.ProcessInstanceQuery;
+import io.orqueio.bpm.engine.batch.Batch;
+import io.orqueio.bpm.engine.impl.interceptor.CommandExecutor;
+import io.orqueio.bpm.engine.impl.migration.batch.MigrateProcessInstanceBatchCmd;
+import io.orqueio.bpm.engine.migration.MigrationPlan;
+import io.orqueio.bpm.engine.migration.MigrationPlanExecutionBuilder;
+import io.orqueio.bpm.engine.runtime.ProcessInstanceQuery;
 
 public class MigrationPlanExecutionBuilderImpl implements MigrationPlanExecutionBuilder {
 

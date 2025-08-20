@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.bpmn;
+package io.orqueio.bpm.model.bpmn;
 
-import org.camunda.bpm.model.bpmn.instance.*;
-import org.camunda.bpm.model.bpmn.instance.Process;
-import org.camunda.bpm.model.bpmn.util.BpmnModelResource;
-import org.camunda.bpm.model.xml.ModelParseException;
-import org.camunda.bpm.model.xml.ModelReferenceException;
-import org.camunda.bpm.model.xml.ModelValidationException;
-import org.camunda.bpm.model.xml.impl.util.IoUtil;
+import io.orqueio.bpm.model.bpmn.instance.*;
+import io.orqueio.bpm.model.bpmn.instance.Process;
+import io.orqueio.bpm.model.bpmn.util.BpmnModelResource;
+import io.orqueio.bpm.model.xml.ModelParseException;
+import io.orqueio.bpm.model.xml.ModelReferenceException;
+import io.orqueio.bpm.model.xml.ModelValidationException;
+import io.orqueio.bpm.model.xml.impl.util.IoUtil;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -32,8 +32,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.XML_SCHEMA_NS;
-import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.XPATH_NS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.XML_SCHEMA_NS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.XPATH_NS;
 
 /**
  * @author Daniel Meyer

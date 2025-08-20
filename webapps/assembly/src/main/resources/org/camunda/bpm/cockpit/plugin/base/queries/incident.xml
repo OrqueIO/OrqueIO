@@ -4,7 +4,7 @@
 
 <mapper namespace="cockpit.base">
 
-  <resultMap id="incidentResultMap" type="org.camunda.bpm.cockpit.impl.plugin.base.dto.IncidentDto">
+  <resultMap id="incidentResultMap" type="io.orqueio.bpm.cockpit.impl.plugin.base.dto.IncidentDto">
     <id property="id" column="ID_" jdbcType="VARCHAR" />
     <result property="incidentTimestamp" column="INCIDENT_TIMESTAMP_" jdbcType="TIMESTAMP" />
     <result property="incidentMessage" column="INCIDENT_MSG_" jdbcType="VARCHAR" />
@@ -30,14 +30,14 @@
     <result property="annotation" column="ANNOTATION_" jdbcType="VARCHAR" />
   </resultMap>
 
-  <select id="selectIncidentWithCauseAndRootCauseIncidentsCount" parameterType="org.camunda.bpm.cockpit.impl.plugin.base.dto.query.IncidentQueryDto"
+  <select id="selectIncidentWithCauseAndRootCauseIncidentsCount" parameterType="io.orqueio.bpm.cockpit.impl.plugin.base.dto.query.IncidentQueryDto"
            resultType="long">
     ${countDistinctBeforeStart} RES.ID_ ${countDistinctBeforeEnd}
     <include refid="selectIncidents" />
     ${countDistinctAfterEnd}
   </select>
 
-  <select id="selectIncidentWithCauseAndRootCauseIncidents" parameterType="org.camunda.bpm.cockpit.impl.plugin.base.dto.query.IncidentQueryDto"
+  <select id="selectIncidentWithCauseAndRootCauseIncidents" parameterType="io.orqueio.bpm.cockpit.impl.plugin.base.dto.query.IncidentQueryDto"
           resultMap="incidentResultMap">
     ${limitBefore}
     select ${distinct} RES.* ${limitBetween}
@@ -82,7 +82,7 @@
           </if>
 
           <if test="authCheck.shouldPerformAuthorizatioCheck &amp;&amp; !authCheck.revokeAuthorizationCheckEnabled &amp;&amp; authCheck.authUserId != null">
-            <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoinWithoutOnClause" />
+            <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoinWithoutOnClause" />
             AUTH ON (AUTH.RESOURCE_ID_ ${authJoinStart} RES.PROC_INST_ID_ ${authJoinSeparator} PROCDEF.KEY_ ${authJoinSeparator} '*' ${authJoinEnd})
           </if>
 
@@ -114,8 +114,8 @@
               </foreach>
             </if>
 
-            <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.queryAuthorizationCheck" />
-            <include refid="org.camunda.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
+            <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.queryAuthorizationCheck" />
+            <include refid="io.orqueio.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
 
           </where>
     ) RES

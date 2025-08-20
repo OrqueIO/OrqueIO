@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.spring.components.scope;
+package io.orqueio.bpm.engine.spring.components.scope;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
@@ -22,13 +22,13 @@ import java.util.logging.Logger;
 
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.RuntimeService;
-import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.engine.impl.persistence.entity.ExecutionEntity;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.spring.components.aop.util.Scopifier;
-import org.camunda.commons.utils.StringUtil;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.RuntimeService;
+import io.orqueio.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.impl.persistence.entity.ExecutionEntity;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.spring.components.aop.util.Scopifier;
+import io.orqueio.commons.utils.StringUtil;
 import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.aop.scope.ScopedObject;
 import org.springframework.beans.BeansException;
@@ -44,7 +44,7 @@ import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 
 /**
- * binds variables to a currently executing Activiti business process (a {@link org.camunda.bpm.engine.runtime.ProcessInstance}).
+ * binds variables to a currently executing Activiti business process (a {@link io.orqueio.bpm.engine.runtime.ProcessInstance}).
  * <p/>
  * Parts of this code are lifted wholesale from Dave Syer's work on the Spring 3.1 RefreshScope.
  *

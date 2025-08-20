@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.impl;
+package io.orqueio.bpm.engine.rest.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
@@ -27,27 +27,27 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.core.Variant;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.TaskService;
-import org.camunda.bpm.engine.exception.NotValidException;
-import org.camunda.bpm.engine.rest.TaskRestService;
-import org.camunda.bpm.engine.rest.dto.CountResultDto;
-import org.camunda.bpm.engine.rest.dto.task.TaskDto;
-import org.camunda.bpm.engine.rest.dto.task.TaskQueryDto;
-import org.camunda.bpm.engine.rest.dto.task.TaskWithAttachmentAndCommentDto;
-import org.camunda.bpm.engine.rest.dto.task.TaskWithVariablesDto;
-import org.camunda.bpm.engine.rest.dto.VariableValueDto;
-import org.camunda.bpm.engine.rest.exception.InvalidRequestException;
-import org.camunda.bpm.engine.rest.hal.Hal;
-import org.camunda.bpm.engine.rest.hal.task.HalTaskList;
-import org.camunda.bpm.engine.rest.sub.task.TaskReportResource;
-import org.camunda.bpm.engine.rest.sub.task.TaskResource;
-import org.camunda.bpm.engine.rest.sub.task.impl.TaskReportResourceImpl;
-import org.camunda.bpm.engine.rest.sub.task.impl.TaskResourceImpl;
-import org.camunda.bpm.engine.rest.util.QueryUtil;
-import org.camunda.bpm.engine.task.Task;
-import org.camunda.bpm.engine.task.TaskQuery;
-import org.camunda.bpm.engine.variable.VariableMap;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.TaskService;
+import io.orqueio.bpm.engine.exception.NotValidException;
+import io.orqueio.bpm.engine.rest.TaskRestService;
+import io.orqueio.bpm.engine.rest.dto.CountResultDto;
+import io.orqueio.bpm.engine.rest.dto.task.TaskDto;
+import io.orqueio.bpm.engine.rest.dto.task.TaskQueryDto;
+import io.orqueio.bpm.engine.rest.dto.task.TaskWithAttachmentAndCommentDto;
+import io.orqueio.bpm.engine.rest.dto.task.TaskWithVariablesDto;
+import io.orqueio.bpm.engine.rest.dto.VariableValueDto;
+import io.orqueio.bpm.engine.rest.exception.InvalidRequestException;
+import io.orqueio.bpm.engine.rest.hal.Hal;
+import io.orqueio.bpm.engine.rest.hal.task.HalTaskList;
+import io.orqueio.bpm.engine.rest.sub.task.TaskReportResource;
+import io.orqueio.bpm.engine.rest.sub.task.TaskResource;
+import io.orqueio.bpm.engine.rest.sub.task.impl.TaskReportResourceImpl;
+import io.orqueio.bpm.engine.rest.sub.task.impl.TaskResourceImpl;
+import io.orqueio.bpm.engine.rest.util.QueryUtil;
+import io.orqueio.bpm.engine.task.Task;
+import io.orqueio.bpm.engine.task.TaskQuery;
+import io.orqueio.bpm.engine.variable.VariableMap;
 
 public class TaskRestServiceImpl extends AbstractRestProcessEngineAware implements TaskRestService {
 

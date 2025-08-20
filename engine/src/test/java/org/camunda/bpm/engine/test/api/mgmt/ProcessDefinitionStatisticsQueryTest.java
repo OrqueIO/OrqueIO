@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.mgmt;
+package io.orqueio.bpm.engine.test.api.mgmt;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
@@ -26,13 +26,13 @@ import static org.junit.Assert.fail;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.management.IncidentStatistics;
-import org.camunda.bpm.engine.management.ProcessDefinitionStatistics;
-import org.camunda.bpm.engine.repository.ProcessDefinition;
-import org.camunda.bpm.engine.runtime.Incident;
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.engine.test.util.PluggableProcessEngineTest;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.management.IncidentStatistics;
+import io.orqueio.bpm.engine.management.ProcessDefinitionStatistics;
+import io.orqueio.bpm.engine.repository.ProcessDefinition;
+import io.orqueio.bpm.engine.runtime.Incident;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.test.util.PluggableProcessEngineTest;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -281,7 +281,7 @@ public class ProcessDefinitionStatisticsQueryTest extends PluggableProcessEngine
   @Test
   @Deployment(resources = "org/camunda/bpm/engine/test/api/mgmt/StatisticsTest.testStatisticsQueryWithFailedJobs.bpmn20.xml")
   public void testProcessDefinitionStatisticsQueryForMultipleVersions() {
-    org.camunda.bpm.engine.repository.Deployment deployment =
+    io.orqueio.bpm.engine.repository.Deployment deployment =
         repositoryService.createDeployment()
           .addClasspathResource("org/camunda/bpm/engine/test/api/mgmt/StatisticsTest.testStatisticsQueryWithFailedJobs.bpmn20.xml")
           .deploy();
@@ -325,7 +325,7 @@ public class ProcessDefinitionStatisticsQueryTest extends PluggableProcessEngine
   @Test
   @Deployment(resources = "org/camunda/bpm/engine/test/api/mgmt/StatisticsTest.testStatisticsQueryWithFailedJobs.bpmn20.xml")
   public void testProcessDefinitionStatisticsQueryForMultipleVersionsWithFailedJobsAndIncidents() {
-    org.camunda.bpm.engine.repository.Deployment deployment =
+    io.orqueio.bpm.engine.repository.Deployment deployment =
         repositoryService.createDeployment()
           .addClasspathResource("org/camunda/bpm/engine/test/api/mgmt/StatisticsTest.testStatisticsQueryWithFailedJobs.bpmn20.xml")
           .deploy();
@@ -386,7 +386,7 @@ public class ProcessDefinitionStatisticsQueryTest extends PluggableProcessEngine
   @Test
   @Deployment(resources = "org/camunda/bpm/engine/test/api/mgmt/StatisticsTest.testStatisticsQueryWithFailedJobs.bpmn20.xml")
   public void testProcessDefinitionStatisticsQueryForMultipleVersionsWithIncidentType() {
-    org.camunda.bpm.engine.repository.Deployment deployment =
+    io.orqueio.bpm.engine.repository.Deployment deployment =
         repositoryService.createDeployment()
           .addClasspathResource("org/camunda/bpm/engine/test/api/mgmt/StatisticsTest.testStatisticsQueryWithFailedJobs.bpmn20.xml")
           .deploy();
@@ -430,7 +430,7 @@ public class ProcessDefinitionStatisticsQueryTest extends PluggableProcessEngine
   @Test
   @Deployment(resources = "org/camunda/bpm/engine/test/api/mgmt/StatisticsTest.testStatisticsQueryWithFailedJobs.bpmn20.xml")
   public void testProcessDefinitionStatisticsQueryPagination() {
-    org.camunda.bpm.engine.repository.Deployment deployment =
+    io.orqueio.bpm.engine.repository.Deployment deployment =
         repositoryService.createDeployment()
           .addClasspathResource("org/camunda/bpm/engine/test/api/mgmt/StatisticsTest.testStatisticsQuery.bpmn20.xml")
           .deploy();

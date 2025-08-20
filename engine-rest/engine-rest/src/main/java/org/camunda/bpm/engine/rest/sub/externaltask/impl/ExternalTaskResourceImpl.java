@@ -14,28 +14,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.sub.externaltask.impl;
+package io.orqueio.bpm.engine.rest.sub.externaltask.impl;
 
 import javax.ws.rs.core.Response.Status;
 
-import org.camunda.bpm.engine.BadUserRequestException;
-import org.camunda.bpm.engine.ExternalTaskService;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.exception.NotFoundException;
-import org.camunda.bpm.engine.externaltask.ExternalTask;
-import org.camunda.bpm.engine.rest.dto.VariableValueDto;
-import org.camunda.bpm.engine.rest.dto.externaltask.CompleteExternalTaskDto;
-import org.camunda.bpm.engine.rest.dto.externaltask.ExtendLockOnExternalTaskDto;
-import org.camunda.bpm.engine.rest.dto.externaltask.ExternalTaskBpmnError;
-import org.camunda.bpm.engine.rest.dto.externaltask.ExternalTaskDto;
-import org.camunda.bpm.engine.rest.dto.externaltask.ExternalTaskFailureDto;
-import org.camunda.bpm.engine.rest.dto.externaltask.LockExternalTaskDto;
-import org.camunda.bpm.engine.rest.dto.runtime.PriorityDto;
-import org.camunda.bpm.engine.rest.dto.runtime.RetriesDto;
-import org.camunda.bpm.engine.rest.exception.InvalidRequestException;
-import org.camunda.bpm.engine.rest.exception.RestException;
-import org.camunda.bpm.engine.rest.sub.externaltask.ExternalTaskResource;
-import org.camunda.bpm.engine.variable.VariableMap;
+import io.orqueio.bpm.engine.BadUserRequestException;
+import io.orqueio.bpm.engine.ExternalTaskService;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.exception.NotFoundException;
+import io.orqueio.bpm.engine.externaltask.ExternalTask;
+import io.orqueio.bpm.engine.rest.dto.VariableValueDto;
+import io.orqueio.bpm.engine.rest.dto.externaltask.CompleteExternalTaskDto;
+import io.orqueio.bpm.engine.rest.dto.externaltask.ExtendLockOnExternalTaskDto;
+import io.orqueio.bpm.engine.rest.dto.externaltask.ExternalTaskBpmnError;
+import io.orqueio.bpm.engine.rest.dto.externaltask.ExternalTaskDto;
+import io.orqueio.bpm.engine.rest.dto.externaltask.ExternalTaskFailureDto;
+import io.orqueio.bpm.engine.rest.dto.externaltask.LockExternalTaskDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.PriorityDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.RetriesDto;
+import io.orqueio.bpm.engine.rest.exception.InvalidRequestException;
+import io.orqueio.bpm.engine.rest.exception.RestException;
+import io.orqueio.bpm.engine.rest.sub.externaltask.ExternalTaskResource;
+import io.orqueio.bpm.engine.variable.VariableMap;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 

@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.telemetry;
+package io.orqueio.bpm.engine.telemetry;
 
 import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 
-import org.camunda.bpm.engine.ManagementService;
+import io.orqueio.bpm.engine.ManagementService;
 
 /**
  * This class represents the structure of data describing Camunda internal

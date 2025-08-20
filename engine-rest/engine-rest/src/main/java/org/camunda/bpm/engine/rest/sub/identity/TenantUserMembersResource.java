@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.sub.identity;
+package io.orqueio.bpm.engine.rest.sub.identity;
 
 import javax.ws.rs.DELETE;
 import javax.ws.rs.OPTIONS;
@@ -26,7 +26,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
-import org.camunda.bpm.engine.rest.dto.ResourceOptionsDto;
+import io.orqueio.bpm.engine.rest.dto.ResourceOptionsDto;
 
 public interface TenantUserMembersResource {
 

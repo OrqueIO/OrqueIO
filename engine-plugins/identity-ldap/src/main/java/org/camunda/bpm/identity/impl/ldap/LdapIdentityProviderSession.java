@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.identity.impl.ldap;
+package io.orqueio.bpm.identity.impl.ldap;
 
-import static org.camunda.bpm.engine.authorization.Permissions.READ;
-import static org.camunda.bpm.engine.authorization.Resources.GROUP;
-import static org.camunda.bpm.engine.authorization.Resources.USER;
-import static org.camunda.bpm.engine.impl.context.Context.getCommandContext;
-import static org.camunda.bpm.engine.impl.context.Context.getProcessEngineConfiguration;
-import static org.camunda.bpm.identity.impl.ldap.LdapConfiguration.DB_QUERY_WILDCARD;
-import static org.camunda.bpm.identity.impl.ldap.LdapConfiguration.LDAP_QUERY_WILDCARD;
+import static io.orqueio.bpm.engine.authorization.Permissions.READ;
+import static io.orqueio.bpm.engine.authorization.Resources.GROUP;
+import static io.orqueio.bpm.engine.authorization.Resources.USER;
+import static io.orqueio.bpm.engine.impl.context.Context.getCommandContext;
+import static io.orqueio.bpm.engine.impl.context.Context.getProcessEngineConfiguration;
+import static io.orqueio.bpm.identity.impl.ldap.LdapConfiguration.DB_QUERY_WILDCARD;
+import static io.orqueio.bpm.identity.impl.ldap.LdapConfiguration.LDAP_QUERY_WILDCARD;
 
 import java.io.StringWriter;
 
@@ -39,28 +39,28 @@ import javax.naming.ldap.LdapContext;
 import javax.naming.ldap.SortKey;
 import javax.naming.ldap.PagedResultsResponseControl;
 
-import org.camunda.bpm.engine.BadUserRequestException;
-import org.camunda.bpm.engine.authorization.Resource;
-import org.camunda.bpm.engine.identity.Group;
-import org.camunda.bpm.engine.identity.GroupQuery;
-import org.camunda.bpm.engine.identity.NativeUserQuery;
-import org.camunda.bpm.engine.identity.Tenant;
-import org.camunda.bpm.engine.identity.TenantQuery;
-import org.camunda.bpm.engine.identity.User;
-import org.camunda.bpm.engine.identity.UserQuery;
-import org.camunda.bpm.engine.impl.AbstractQuery;
-import org.camunda.bpm.engine.impl.QueryOrderingProperty;
-import org.camunda.bpm.engine.impl.UserQueryImpl;
-import org.camunda.bpm.engine.impl.UserQueryProperty;
-import org.camunda.bpm.engine.impl.GroupQueryProperty;
-import org.camunda.bpm.engine.impl.db.DbEntity;
-import org.camunda.bpm.engine.impl.identity.IdentityProviderException;
-import org.camunda.bpm.engine.impl.identity.ReadOnlyIdentityProvider;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.persistence.entity.GroupEntity;
-import org.camunda.bpm.engine.impl.persistence.entity.UserEntity;
-import org.camunda.bpm.engine.impl.Direction;
-import org.camunda.bpm.identity.impl.ldap.util.LdapPluginLogger;
+import io.orqueio.bpm.engine.BadUserRequestException;
+import io.orqueio.bpm.engine.authorization.Resource;
+import io.orqueio.bpm.engine.identity.Group;
+import io.orqueio.bpm.engine.identity.GroupQuery;
+import io.orqueio.bpm.engine.identity.NativeUserQuery;
+import io.orqueio.bpm.engine.identity.Tenant;
+import io.orqueio.bpm.engine.identity.TenantQuery;
+import io.orqueio.bpm.engine.identity.User;
+import io.orqueio.bpm.engine.identity.UserQuery;
+import io.orqueio.bpm.engine.impl.AbstractQuery;
+import io.orqueio.bpm.engine.impl.QueryOrderingProperty;
+import io.orqueio.bpm.engine.impl.UserQueryImpl;
+import io.orqueio.bpm.engine.impl.UserQueryProperty;
+import io.orqueio.bpm.engine.impl.GroupQueryProperty;
+import io.orqueio.bpm.engine.impl.db.DbEntity;
+import io.orqueio.bpm.engine.impl.identity.IdentityProviderException;
+import io.orqueio.bpm.engine.impl.identity.ReadOnlyIdentityProvider;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.impl.persistence.entity.GroupEntity;
+import io.orqueio.bpm.engine.impl.persistence.entity.UserEntity;
+import io.orqueio.bpm.engine.impl.Direction;
+import io.orqueio.bpm.identity.impl.ldap.util.LdapPluginLogger;
 
 /**
  * <p>LDAP {@link ReadOnlyIdentityProvider}.</p>

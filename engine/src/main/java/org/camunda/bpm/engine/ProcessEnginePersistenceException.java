@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine;
+package io.orqueio.bpm.engine;
 
 /**
  * Exception thrown by the persistence layer of the process engine in the occurrence of a problematic interaction

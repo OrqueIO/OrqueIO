@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.jboss.test;
+package io.orqueio.bpm.container.impl.jboss.test;
 
-import org.camunda.bpm.application.ProcessApplicationInterface;
-import org.camunda.bpm.container.impl.plugin.BpmPlatformPlugin;
+import io.orqueio.bpm.application.ProcessApplicationInterface;
+import io.orqueio.bpm.container.impl.plugin.BpmPlatformPlugin;
 
 /**
  * @author Thorben Lindhauer

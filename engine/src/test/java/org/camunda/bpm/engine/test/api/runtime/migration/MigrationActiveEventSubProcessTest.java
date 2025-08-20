@@ -14,26 +14,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.runtime.migration;
+package io.orqueio.bpm.engine.test.api.runtime.migration;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 
-import org.camunda.bpm.engine.impl.util.ClockUtil;
-import org.camunda.bpm.engine.migration.MigrationPlan;
-import org.camunda.bpm.engine.repository.ProcessDefinition;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.test.ProcessEngineRule;
-import org.camunda.bpm.engine.test.api.runtime.migration.models.ProcessModels;
-import org.camunda.bpm.engine.test.api.runtime.migration.util.BpmnEventFactory;
-import org.camunda.bpm.engine.test.api.runtime.migration.util.ConditionalEventFactory;
-import org.camunda.bpm.engine.test.api.runtime.migration.util.MessageEventFactory;
-import org.camunda.bpm.engine.test.api.runtime.migration.util.MigratingBpmnEventTrigger;
-import org.camunda.bpm.engine.test.api.runtime.migration.util.SignalEventFactory;
-import org.camunda.bpm.engine.test.api.runtime.migration.util.TimerEventFactory;
-import org.camunda.bpm.engine.test.util.ProvidedProcessEngineRule;
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.bpm.engine.impl.util.ClockUtil;
+import io.orqueio.bpm.engine.migration.MigrationPlan;
+import io.orqueio.bpm.engine.repository.ProcessDefinition;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.test.ProcessEngineRule;
+import io.orqueio.bpm.engine.test.api.runtime.migration.models.ProcessModels;
+import io.orqueio.bpm.engine.test.api.runtime.migration.util.BpmnEventFactory;
+import io.orqueio.bpm.engine.test.api.runtime.migration.util.ConditionalEventFactory;
+import io.orqueio.bpm.engine.test.api.runtime.migration.util.MessageEventFactory;
+import io.orqueio.bpm.engine.test.api.runtime.migration.util.MigratingBpmnEventTrigger;
+import io.orqueio.bpm.engine.test.api.runtime.migration.util.SignalEventFactory;
+import io.orqueio.bpm.engine.test.api.runtime.migration.util.TimerEventFactory;
+import io.orqueio.bpm.engine.test.util.ProvidedProcessEngineRule;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;

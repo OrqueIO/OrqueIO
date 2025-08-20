@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.application;
+package io.orqueio.bpm.application;
 
 import java.util.concurrent.Callable;
 
-import org.camunda.bpm.application.impl.ProcessApplicationContextImpl;
-import org.camunda.bpm.application.impl.ProcessApplicationIdentifier;
+import io.orqueio.bpm.application.impl.ProcessApplicationContextImpl;
+import io.orqueio.bpm.application.impl.ProcessApplicationIdentifier;
 
 /**
  * <p>A utility to declare the process application in which subsequent engine API calls

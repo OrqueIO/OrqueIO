@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.connect.spi;
+package io.orqueio.connect.spi;
 
 /**
  * Represents a request invocation / request execution.

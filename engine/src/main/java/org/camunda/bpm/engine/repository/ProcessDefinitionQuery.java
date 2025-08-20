@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.repository;
+package io.orqueio.bpm.engine.repository;
 
 import java.util.Date;
 
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.impl.ProcessDefinitionQueryImpl;
-import org.camunda.bpm.engine.query.Query;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.impl.ProcessDefinitionQueryImpl;
+import io.orqueio.bpm.engine.query.Query;
 
 /**
  * Allows programmatic querying of {@link ProcessDefinition}s.

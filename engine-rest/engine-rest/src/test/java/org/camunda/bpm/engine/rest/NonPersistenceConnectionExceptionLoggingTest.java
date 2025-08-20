@@ -15,14 +15,14 @@
  * limitations under the License.
  */
 
-package org.camunda.bpm.engine.rest;
+package io.orqueio.bpm.engine.rest;
 
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.camunda.bpm.engine.impl.util.ExceptionUtil.PERSISTENCE_EXCEPTION_MESSAGE;
-import static org.camunda.bpm.engine.impl.util.ExceptionUtil.wrapPersistenceException;
-import static org.camunda.bpm.engine.rest.exception.ExceptionLogger.REST_API;
-import static org.camunda.bpm.engine.rest.helper.MockProvider.EXAMPLE_USER_FIRST_NAME;
+import static io.orqueio.bpm.engine.impl.util.ExceptionUtil.PERSISTENCE_EXCEPTION_MESSAGE;
+import static io.orqueio.bpm.engine.impl.util.ExceptionUtil.wrapPersistenceException;
+import static io.orqueio.bpm.engine.rest.exception.ExceptionLogger.REST_API;
+import static io.orqueio.bpm.engine.rest.helper.MockProvider.EXAMPLE_USER_FIRST_NAME;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -32,10 +32,10 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import java.sql.SQLNonTransientConnectionException;
 import java.util.List;
 import org.apache.ibatis.exceptions.PersistenceException;
-import org.camunda.bpm.engine.ProcessEnginePersistenceException;
-import org.camunda.bpm.engine.identity.UserQuery;
-import org.camunda.bpm.engine.rest.util.container.TestContainerRule;
-import org.camunda.commons.testing.ProcessEngineLoggingRule;
+import io.orqueio.bpm.engine.ProcessEnginePersistenceException;
+import io.orqueio.bpm.engine.identity.UserQuery;
+import io.orqueio.bpm.engine.rest.util.container.TestContainerRule;
+import io.orqueio.commons.testing.ProcessEngineLoggingRule;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;

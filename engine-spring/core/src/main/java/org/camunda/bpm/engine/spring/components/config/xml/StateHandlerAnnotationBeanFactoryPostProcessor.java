@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.spring.components.config.xml;
+package io.orqueio.bpm.engine.spring.components.config.xml;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.spring.components.ActivitiContextUtils;
-import org.camunda.bpm.engine.spring.components.registry.ActivitiStateHandlerRegistry;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.spring.components.ActivitiContextUtils;
+import io.orqueio.bpm.engine.spring.components.registry.ActivitiStateHandlerRegistry;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinitionHolder;

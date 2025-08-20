@@ -14,22 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.cockpit.impl.plugin.base.dto.query;
+package io.orqueio.bpm.cockpit.impl.plugin.base.dto.query;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.core.MultivaluedMap;
 
-import org.camunda.bpm.cockpit.impl.plugin.base.dto.ProcessDefinitionDto;
-import org.camunda.bpm.cockpit.rest.dto.AbstractRestQueryParametersDto;
-import org.camunda.bpm.engine.impl.QueryVariableValue;
-import org.camunda.bpm.engine.impl.variable.serializer.VariableSerializers;
-import org.camunda.bpm.engine.rest.dto.CamundaQueryParam;
-import org.camunda.bpm.engine.rest.dto.ConditionQueryParameterDto;
-import org.camunda.bpm.engine.rest.dto.VariableQueryParameterDto;
-import org.camunda.bpm.engine.rest.dto.converter.StringArrayConverter;
-import org.camunda.bpm.engine.rest.dto.converter.VariableListConverter;
+import io.orqueio.bpm.cockpit.impl.plugin.base.dto.ProcessDefinitionDto;
+import io.orqueio.bpm.cockpit.rest.dto.AbstractRestQueryParametersDto;
+import io.orqueio.bpm.engine.impl.QueryVariableValue;
+import io.orqueio.bpm.engine.impl.variable.serializer.VariableSerializers;
+import io.orqueio.bpm.engine.rest.dto.CamundaQueryParam;
+import io.orqueio.bpm.engine.rest.dto.ConditionQueryParameterDto;
+import io.orqueio.bpm.engine.rest.dto.VariableQueryParameterDto;
+import io.orqueio.bpm.engine.rest.dto.converter.StringArrayConverter;
+import io.orqueio.bpm.engine.rest.dto.converter.VariableListConverter;
 
 public class ProcessDefinitionQueryDto extends AbstractRestQueryParametersDto<ProcessDefinitionDto> {
 

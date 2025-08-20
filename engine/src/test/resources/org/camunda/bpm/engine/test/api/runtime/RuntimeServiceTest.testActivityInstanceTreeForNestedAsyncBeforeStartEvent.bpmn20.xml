@@ -2,7 +2,7 @@
 <definitions
   xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
   xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
-  targetNamespace="org.camunda.bpm.engine.test.enginge.test.api.runtime">
+  targetNamespace="io.orqueio.bpm.engine.test.enginge.test.api.runtime">
 
   <process id="oneTaskProcess" isExecutable="true">
     <startEvent id="theStart" />

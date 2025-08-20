@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.webapp.impl.security.filter.headersec;
+package io.orqueio.bpm.webapp.impl.security.filter.headersec;
 
-import org.camunda.bpm.webapp.impl.security.filter.headersec.provider.impl.ContentSecurityPolicyProvider;
-import org.camunda.bpm.webapp.impl.security.filter.headersec.provider.impl.ContentTypeOptionsProvider;
-import org.camunda.bpm.webapp.impl.security.filter.headersec.provider.HeaderSecurityProvider;
-import org.camunda.bpm.webapp.impl.security.filter.headersec.provider.impl.StrictTransportSecurityProvider;
-import org.camunda.bpm.webapp.impl.security.filter.headersec.provider.impl.XssProtectionProvider;
+import io.orqueio.bpm.webapp.impl.security.filter.headersec.provider.impl.ContentSecurityPolicyProvider;
+import io.orqueio.bpm.webapp.impl.security.filter.headersec.provider.impl.ContentTypeOptionsProvider;
+import io.orqueio.bpm.webapp.impl.security.filter.headersec.provider.HeaderSecurityProvider;
+import io.orqueio.bpm.webapp.impl.security.filter.headersec.provider.impl.StrictTransportSecurityProvider;
+import io.orqueio.bpm.webapp.impl.security.filter.headersec.provider.impl.XssProtectionProvider;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;

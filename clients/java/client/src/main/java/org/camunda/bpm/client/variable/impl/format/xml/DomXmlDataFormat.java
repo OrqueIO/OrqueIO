@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.variable.impl.format.xml;
+package io.orqueio.bpm.client.variable.impl.format.xml;
 
-import static org.camunda.commons.utils.EnsureUtil.ensureNotNull;
+import static io.orqueio.commons.utils.EnsureUtil.ensureNotNull;
 
 import java.beans.Introspector;
 import java.io.BufferedReader;
@@ -43,9 +43,9 @@ import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.camunda.bpm.client.impl.ExternalTaskClientLogger;
-import org.camunda.bpm.client.spi.DataFormat;
-import org.camunda.commons.utils.IoUtil;
+import io.orqueio.bpm.client.impl.ExternalTaskClientLogger;
+import io.orqueio.bpm.client.spi.DataFormat;
+import io.orqueio.commons.utils.IoUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;

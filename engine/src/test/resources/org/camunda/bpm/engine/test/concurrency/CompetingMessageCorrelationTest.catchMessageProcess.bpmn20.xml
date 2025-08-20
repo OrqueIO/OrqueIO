@@ -8,7 +8,7 @@
       <messageEventDefinition messageRef="messageId" />
     </intermediateCatchEvent>
     <sequenceFlow id="flow2" sourceRef="messageCatch" targetRef="afterMessageServiceTask"/>
-    <serviceTask id="afterMessageServiceTask" camunda:class="org.camunda.bpm.engine.test.concurrency.CompetingMessageCorrelationTest$InvocationLogListener"/>
+    <serviceTask id="afterMessageServiceTask" camunda:class="io.orqueio.bpm.engine.test.concurrency.CompetingMessageCorrelationTest$InvocationLogListener"/>
     <sequenceFlow id="flow3" sourceRef="afterMessageServiceTask" targetRef="afterMessageUserTask"/>
     <userTask id="afterMessageUserTask"/>
     <sequenceFlow id="flow4" sourceRef="afterMessageUserTask" targetRef="end"/>

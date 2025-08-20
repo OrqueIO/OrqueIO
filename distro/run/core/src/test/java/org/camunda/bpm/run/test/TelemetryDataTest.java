@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.run.test;
+package io.orqueio.bpm.run.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Set;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.diagnostics.CamundaIntegration;
-import org.camunda.bpm.engine.impl.telemetry.dto.TelemetryDataImpl;
-import org.camunda.bpm.run.CamundaBpmRun;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.diagnostics.CamundaIntegration;
+import io.orqueio.bpm.engine.impl.telemetry.dto.TelemetryDataImpl;
+import io.orqueio.bpm.run.CamundaBpmRun;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

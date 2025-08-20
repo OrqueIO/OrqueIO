@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.webapp.impl.security.filter.headersec;
+package io.orqueio.bpm.webapp.impl.security.filter.headersec;
 
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.webapp.impl.util.HeaderRule;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.webapp.impl.util.HeaderRule;
 import org.junit.Rule;
 import org.junit.Test;
 
-import static org.camunda.bpm.webapp.impl.security.filter.headersec.provider.impl.XssProtectionOption.BLOCK;
-import static org.camunda.bpm.webapp.impl.security.filter.headersec.provider.impl.XssProtectionOption.SANITIZE;
-import static org.camunda.bpm.webapp.impl.security.filter.headersec.provider.impl.XssProtectionProvider.HEADER_NAME;
+import static io.orqueio.bpm.webapp.impl.security.filter.headersec.provider.impl.XssProtectionOption.BLOCK;
+import static io.orqueio.bpm.webapp.impl.security.filter.headersec.provider.impl.XssProtectionOption.SANITIZE;
+import static io.orqueio.bpm.webapp.impl.security.filter.headersec.provider.impl.XssProtectionProvider.HEADER_NAME;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.junit.Assert.assertThat;

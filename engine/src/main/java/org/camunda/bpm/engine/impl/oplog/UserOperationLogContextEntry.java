@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.oplog;
+package io.orqueio.bpm.engine.impl.oplog;
 
 import java.util.List;
 
-import org.camunda.bpm.engine.impl.persistence.entity.PropertyChange;
+import io.orqueio.bpm.engine.impl.persistence.entity.PropertyChange;
 
 /**
  * One op log context entry represents an operation on a set of entities of the same type (see entityType field).

@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.cmmn.instance.camunda;
+package io.orqueio.bpm.model.cmmn.instance.camunda;
 
-import static org.camunda.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_NS;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_NS;
 
 import java.util.Arrays;
 import java.util.Collection;
 
-import org.camunda.bpm.model.cmmn.instance.CmmnModelElementInstanceTest;
+import io.orqueio.bpm.model.cmmn.instance.CmmnModelElementInstanceTest;
 
 
 /**

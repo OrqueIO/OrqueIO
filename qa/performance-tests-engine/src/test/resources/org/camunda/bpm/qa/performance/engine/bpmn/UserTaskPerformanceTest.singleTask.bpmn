@@ -7,7 +7,7 @@
     <bpmn2:sequenceFlow id="SequenceFlow_1" name="" sourceRef="StartEvent_1" targetRef="UserTask_1"/>
     <bpmn2:userTask id="UserTask_1" name="do &#xA;something">
       <bpmn2:extensionElements>
-        <camunda:taskListener class="org.camunda.bpm.qa.performance.engine.steps.TaskIdRecorder" event="create"/>
+        <camunda:taskListener class="io.orqueio.bpm.qa.performance.engine.steps.TaskIdRecorder" event="create"/>
       </bpmn2:extensionElements>
       <bpmn2:incoming>SequenceFlow_1</bpmn2:incoming>
       <bpmn2:outgoing>SequenceFlow_2</bpmn2:outgoing>

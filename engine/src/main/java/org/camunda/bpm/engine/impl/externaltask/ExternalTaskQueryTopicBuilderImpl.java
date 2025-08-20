@@ -14,18 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.externaltask;
+package io.orqueio.bpm.engine.impl.externaltask;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.camunda.bpm.engine.externaltask.ExternalTaskQueryTopicBuilder;
-import org.camunda.bpm.engine.externaltask.LockedExternalTask;
-import org.camunda.bpm.engine.impl.QueryOrderingProperty;
-import org.camunda.bpm.engine.impl.cmd.FetchExternalTasksCmd;
-import org.camunda.bpm.engine.impl.interceptor.CommandExecutor;
+import io.orqueio.bpm.engine.externaltask.ExternalTaskQueryTopicBuilder;
+import io.orqueio.bpm.engine.externaltask.LockedExternalTask;
+import io.orqueio.bpm.engine.impl.QueryOrderingProperty;
+import io.orqueio.bpm.engine.impl.cmd.FetchExternalTasksCmd;
+import io.orqueio.bpm.engine.impl.interceptor.CommandExecutor;
 
 /**
  * @author Thorben Lindhauer

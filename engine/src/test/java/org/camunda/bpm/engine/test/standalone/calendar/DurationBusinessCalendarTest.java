@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.standalone.calendar;
+package io.orqueio.bpm.engine.test.standalone.calendar;
 
 import static org.junit.Assert.assertEquals;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.camunda.bpm.engine.impl.calendar.DurationBusinessCalendar;
-import org.camunda.bpm.engine.impl.util.ClockUtil;
+import io.orqueio.bpm.engine.impl.calendar.DurationBusinessCalendar;
+import io.orqueio.bpm.engine.impl.util.ClockUtil;
 import org.junit.After;
 import org.junit.Test;
 

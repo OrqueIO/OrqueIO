@@ -14,18 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.migration.validation.instance;
+package io.orqueio.bpm.engine.impl.migration.validation.instance;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.engine.impl.migration.instance.MigratingActivityInstance;
-import org.camunda.bpm.engine.impl.migration.instance.MigratingInstance;
-import org.camunda.bpm.engine.impl.migration.instance.MigratingProcessInstance;
-import org.camunda.bpm.engine.impl.migration.instance.MigratingVariableInstance;
-import org.camunda.bpm.engine.impl.pvm.process.ScopeImpl;
-import org.camunda.bpm.engine.impl.util.CollectionUtil;
+import io.orqueio.bpm.engine.impl.migration.instance.MigratingActivityInstance;
+import io.orqueio.bpm.engine.impl.migration.instance.MigratingInstance;
+import io.orqueio.bpm.engine.impl.migration.instance.MigratingProcessInstance;
+import io.orqueio.bpm.engine.impl.migration.instance.MigratingVariableInstance;
+import io.orqueio.bpm.engine.impl.pvm.process.ScopeImpl;
+import io.orqueio.bpm.engine.impl.util.CollectionUtil;
 
 /**
  * Validates that when an activity instance has a variable with the same name twice (as a scope execution variable and a

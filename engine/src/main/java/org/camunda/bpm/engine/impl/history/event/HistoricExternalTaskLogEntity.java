@@ -14,21 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.history.event;
+package io.orqueio.bpm.engine.impl.history.event;
 
-import org.camunda.bpm.engine.history.ExternalTaskState;
-import org.camunda.bpm.engine.history.HistoricExternalTaskLog;
-import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.engine.impl.persistence.entity.ByteArrayEntity;
-import org.camunda.bpm.engine.impl.persistence.entity.ExternalTaskEntity;
-import org.camunda.bpm.engine.impl.util.EnsureUtil;
-import org.camunda.bpm.engine.impl.util.ExceptionUtil;
-import org.camunda.bpm.engine.repository.ResourceTypes;
+import io.orqueio.bpm.engine.history.ExternalTaskState;
+import io.orqueio.bpm.engine.history.HistoricExternalTaskLog;
+import io.orqueio.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.impl.persistence.entity.ByteArrayEntity;
+import io.orqueio.bpm.engine.impl.persistence.entity.ExternalTaskEntity;
+import io.orqueio.bpm.engine.impl.util.EnsureUtil;
+import io.orqueio.bpm.engine.impl.util.ExceptionUtil;
+import io.orqueio.bpm.engine.repository.ResourceTypes;
 
 import java.util.Date;
 
-import static org.camunda.bpm.engine.impl.util.ExceptionUtil.createExceptionByteArray;
-import static org.camunda.bpm.engine.impl.util.StringUtil.toByteArray;
+import static io.orqueio.bpm.engine.impl.util.ExceptionUtil.createExceptionByteArray;
+import static io.orqueio.bpm.engine.impl.util.StringUtil.toByteArray;
 
 public class HistoricExternalTaskLogEntity extends HistoryEvent implements HistoricExternalTaskLog {
 

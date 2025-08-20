@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.jboss.config;
+package io.orqueio.bpm.container.impl.jboss.config;
 
 import java.util.Set;
-import org.camunda.bpm.engine.impl.cfg.JakartaTransactionProcessEngineConfiguration;
-import org.camunda.bpm.engine.impl.persistence.StrongUuidGenerator;
-import org.camunda.bpm.engine.impl.diagnostics.CamundaIntegration;
+import io.orqueio.bpm.engine.impl.cfg.JakartaTransactionProcessEngineConfiguration;
+import io.orqueio.bpm.engine.impl.persistence.StrongUuidGenerator;
+import io.orqueio.bpm.engine.impl.diagnostics.CamundaIntegration;
 
 /**
  *

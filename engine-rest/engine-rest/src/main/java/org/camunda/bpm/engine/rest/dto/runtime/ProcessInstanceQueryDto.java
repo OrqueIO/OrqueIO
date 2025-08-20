@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.dto.runtime;
+package io.orqueio.bpm.engine.rest.dto.runtime;
 
 import static java.lang.Boolean.TRUE;
 
@@ -26,17 +26,17 @@ import java.util.Set;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response.Status;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.impl.ProcessInstanceQueryImpl;
-import org.camunda.bpm.engine.rest.dto.AbstractQueryDto;
-import org.camunda.bpm.engine.rest.dto.CamundaQueryParam;
-import org.camunda.bpm.engine.rest.dto.VariableQueryParameterDto;
-import org.camunda.bpm.engine.rest.dto.converter.BooleanConverter;
-import org.camunda.bpm.engine.rest.dto.converter.StringListConverter;
-import org.camunda.bpm.engine.rest.dto.converter.StringSetConverter;
-import org.camunda.bpm.engine.rest.dto.converter.VariableListConverter;
-import org.camunda.bpm.engine.rest.exception.InvalidRequestException;
-import org.camunda.bpm.engine.runtime.ProcessInstanceQuery;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.impl.ProcessInstanceQueryImpl;
+import io.orqueio.bpm.engine.rest.dto.AbstractQueryDto;
+import io.orqueio.bpm.engine.rest.dto.CamundaQueryParam;
+import io.orqueio.bpm.engine.rest.dto.VariableQueryParameterDto;
+import io.orqueio.bpm.engine.rest.dto.converter.BooleanConverter;
+import io.orqueio.bpm.engine.rest.dto.converter.StringListConverter;
+import io.orqueio.bpm.engine.rest.dto.converter.StringSetConverter;
+import io.orqueio.bpm.engine.rest.dto.converter.VariableListConverter;
+import io.orqueio.bpm.engine.rest.exception.InvalidRequestException;
+import io.orqueio.bpm.engine.runtime.ProcessInstanceQuery;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 

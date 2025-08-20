@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa.upgrade;
+package io.orqueio.bpm.qa.upgrade;
 
-import org.camunda.bpm.engine.delegate.BpmnError;
-import org.camunda.bpm.engine.delegate.DelegateExecution;
-import org.camunda.bpm.engine.delegate.JavaDelegate;
+import io.orqueio.bpm.engine.delegate.BpmnError;
+import io.orqueio.bpm.engine.delegate.DelegateExecution;
+import io.orqueio.bpm.engine.delegate.JavaDelegate;
 
 public class FailingDelegate implements JavaDelegate {
 
   public void execute(DelegateExecution execution) throws Exception {
-      throw new BpmnError("org.camunda.bpm.qa.upgrade.BuisnessError", "Expected exception");
+      throw new BpmnError("io.orqueio.bpm.qa.upgrade.BuisnessError", "Expected exception");
   }
 }

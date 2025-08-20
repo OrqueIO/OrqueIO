@@ -14,23 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.engine.impl.el;
+package io.orqueio.bpm.dmn.engine.impl.el;
 
-import org.camunda.bpm.impl.juel.jakarta.el.ArrayELResolver;
-import org.camunda.bpm.impl.juel.jakarta.el.BeanELResolver;
-import org.camunda.bpm.impl.juel.jakarta.el.CompositeELResolver;
-import org.camunda.bpm.impl.juel.jakarta.el.ELContext;
-import org.camunda.bpm.impl.juel.jakarta.el.ELResolver;
-import org.camunda.bpm.impl.juel.jakarta.el.ListELResolver;
-import org.camunda.bpm.impl.juel.jakarta.el.MapELResolver;
-import org.camunda.bpm.impl.juel.jakarta.el.ResourceBundleELResolver;
+import io.orqueio.bpm.impl.juel.jakarta.el.ArrayELResolver;
+import io.orqueio.bpm.impl.juel.jakarta.el.BeanELResolver;
+import io.orqueio.bpm.impl.juel.jakarta.el.CompositeELResolver;
+import io.orqueio.bpm.impl.juel.jakarta.el.ELContext;
+import io.orqueio.bpm.impl.juel.jakarta.el.ELResolver;
+import io.orqueio.bpm.impl.juel.jakarta.el.ListELResolver;
+import io.orqueio.bpm.impl.juel.jakarta.el.MapELResolver;
+import io.orqueio.bpm.impl.juel.jakarta.el.ResourceBundleELResolver;
 
-import org.camunda.bpm.dmn.engine.impl.spi.el.ElExpression;
-import org.camunda.bpm.dmn.engine.impl.spi.el.ElProvider;
+import io.orqueio.bpm.dmn.engine.impl.spi.el.ElExpression;
+import io.orqueio.bpm.dmn.engine.impl.spi.el.ElProvider;
 
-import org.camunda.bpm.impl.juel.ExpressionFactoryImpl;
-import org.camunda.bpm.impl.juel.TreeValueExpression;
-import org.camunda.bpm.impl.juel.SimpleContext;
+import io.orqueio.bpm.impl.juel.ExpressionFactoryImpl;
+import io.orqueio.bpm.impl.juel.TreeValueExpression;
+import io.orqueio.bpm.impl.juel.SimpleContext;
 
 /**
  * A simple implementation of {@link ElProvider} using Juel.

@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.core.variable.scope;
+package io.orqueio.bpm.engine.impl.core.variable.scope;
 
 
-import org.camunda.bpm.engine.impl.core.variable.CoreVariableInstance;
+import io.orqueio.bpm.engine.impl.core.variable.CoreVariableInstance;
 
 /**
  * @author Thorben Lindhauer

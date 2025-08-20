@@ -14,24 +14,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.impl.history;
+package io.orqueio.bpm.engine.rest.impl.history;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.core.UriInfo;
-import org.camunda.bpm.engine.HistoryService;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.history.CleanableHistoricCaseInstanceReport;
-import org.camunda.bpm.engine.history.CleanableHistoricCaseInstanceReportResult;
-import org.camunda.bpm.engine.history.HistoricCaseActivityStatistics;
-import org.camunda.bpm.engine.history.HistoricCaseActivityStatisticsQuery;
-import org.camunda.bpm.engine.rest.dto.CountResultDto;
-import org.camunda.bpm.engine.rest.dto.history.CleanableHistoricCaseInstanceReportDto;
-import org.camunda.bpm.engine.rest.dto.history.CleanableHistoricCaseInstanceReportResultDto;
-import org.camunda.bpm.engine.rest.dto.history.HistoricCaseActivityStatisticsDto;
-import org.camunda.bpm.engine.rest.history.HistoricCaseDefinitionRestService;
-import org.camunda.bpm.engine.rest.util.QueryUtil;
+import io.orqueio.bpm.engine.HistoryService;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.history.CleanableHistoricCaseInstanceReport;
+import io.orqueio.bpm.engine.history.CleanableHistoricCaseInstanceReportResult;
+import io.orqueio.bpm.engine.history.HistoricCaseActivityStatistics;
+import io.orqueio.bpm.engine.history.HistoricCaseActivityStatisticsQuery;
+import io.orqueio.bpm.engine.rest.dto.CountResultDto;
+import io.orqueio.bpm.engine.rest.dto.history.CleanableHistoricCaseInstanceReportDto;
+import io.orqueio.bpm.engine.rest.dto.history.CleanableHistoricCaseInstanceReportResultDto;
+import io.orqueio.bpm.engine.rest.dto.history.HistoricCaseActivityStatisticsDto;
+import io.orqueio.bpm.engine.rest.history.HistoricCaseDefinitionRestService;
+import io.orqueio.bpm.engine.rest.util.QueryUtil;
 
 /**
  * @author Roman Smirnov

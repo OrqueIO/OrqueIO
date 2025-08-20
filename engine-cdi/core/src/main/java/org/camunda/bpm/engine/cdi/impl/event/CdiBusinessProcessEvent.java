@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.cdi.impl.event;
+package io.orqueio.bpm.engine.cdi.impl.event;
 
-import org.camunda.bpm.engine.cdi.BusinessProcessEvent;
-import org.camunda.bpm.engine.cdi.BusinessProcessEventType;
-import org.camunda.bpm.engine.delegate.DelegateExecution;
-import org.camunda.bpm.engine.delegate.DelegateTask;
-import org.camunda.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity;
-import org.camunda.bpm.engine.repository.ProcessDefinition;
+import io.orqueio.bpm.engine.cdi.BusinessProcessEvent;
+import io.orqueio.bpm.engine.cdi.BusinessProcessEventType;
+import io.orqueio.bpm.engine.delegate.DelegateExecution;
+import io.orqueio.bpm.engine.delegate.DelegateTask;
+import io.orqueio.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity;
+import io.orqueio.bpm.engine.repository.ProcessDefinition;
 
 import java.util.Date;
 

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.task;
+package io.orqueio.bpm.engine.test.api.task;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -22,10 +22,10 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Date;
 
-import org.camunda.bpm.engine.BadUserRequestException;
-import org.camunda.bpm.engine.filter.Filter;
-import org.camunda.bpm.engine.task.TaskQuery;
-import org.camunda.bpm.engine.test.util.PluggableProcessEngineTest;
+import io.orqueio.bpm.engine.BadUserRequestException;
+import io.orqueio.bpm.engine.filter.Filter;
+import io.orqueio.bpm.engine.task.TaskQuery;
+import io.orqueio.bpm.engine.test.util.PluggableProcessEngineTest;
 import org.junit.Before;
 import org.junit.Test;
 

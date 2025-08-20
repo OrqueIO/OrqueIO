@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.dto.repository;
+package io.orqueio.bpm.engine.rest.dto.repository;
 
 import java.util.List;
 
-import org.camunda.bpm.engine.repository.CalledProcessDefinition;
+import io.orqueio.bpm.engine.repository.CalledProcessDefinition;
 
 public class CalledProcessDefinitionDto extends ProcessDefinitionDto {
 

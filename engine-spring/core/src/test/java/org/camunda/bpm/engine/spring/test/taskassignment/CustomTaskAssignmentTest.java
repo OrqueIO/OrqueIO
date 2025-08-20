@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.spring.test.taskassignment;
+package io.orqueio.bpm.engine.spring.test.taskassignment;
 
-import org.camunda.bpm.engine.impl.util.CollectionUtil;
-import org.camunda.bpm.engine.spring.test.SpringProcessEngineTestCase;
-import org.camunda.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.impl.util.CollectionUtil;
+import io.orqueio.bpm.engine.spring.test.SpringProcessEngineTestCase;
+import io.orqueio.bpm.engine.test.Deployment;
 import org.springframework.test.context.ContextConfiguration;
 
 

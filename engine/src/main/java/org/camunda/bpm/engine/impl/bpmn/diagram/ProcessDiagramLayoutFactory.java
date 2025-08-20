@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.bpmn.diagram;
+package io.orqueio.bpm.engine.impl.bpmn.diagram;
 
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.RepositoryService;
-import org.camunda.bpm.engine.impl.bpmn.parser.BpmnParser;
-import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.engine.repository.DiagramElement;
-import org.camunda.bpm.engine.repository.DiagramLayout;
-import org.camunda.bpm.engine.repository.DiagramNode;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.RepositoryService;
+import io.orqueio.bpm.engine.impl.bpmn.parser.BpmnParser;
+import io.orqueio.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.repository.DiagramElement;
+import io.orqueio.bpm.engine.repository.DiagramLayout;
+import io.orqueio.bpm.engine.repository.DiagramNode;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;

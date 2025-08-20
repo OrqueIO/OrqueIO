@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.task.delegate;
+package io.orqueio.bpm.engine.impl.task.delegate;
 
-import org.camunda.bpm.engine.delegate.BaseDelegateExecution;
-import org.camunda.bpm.engine.delegate.DelegateTask;
-import org.camunda.bpm.engine.delegate.TaskListener;
-import org.camunda.bpm.engine.impl.delegate.DelegateInvocation;
+import io.orqueio.bpm.engine.delegate.BaseDelegateExecution;
+import io.orqueio.bpm.engine.delegate.DelegateTask;
+import io.orqueio.bpm.engine.delegate.TaskListener;
+import io.orqueio.bpm.engine.impl.delegate.DelegateInvocation;
 
 /**
  * Class handling invocations of {@link TaskListener TaskListeners}

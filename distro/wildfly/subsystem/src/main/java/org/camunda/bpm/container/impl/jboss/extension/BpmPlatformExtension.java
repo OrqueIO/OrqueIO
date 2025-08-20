@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.jboss.extension;
+package io.orqueio.bpm.container.impl.jboss.extension;
 
-import org.camunda.bpm.container.impl.jboss.extension.resource.BpmPlatformRootDefinition;
+import io.orqueio.bpm.container.impl.jboss.extension.resource.BpmPlatformRootDefinition;
 import org.jboss.as.controller.Extension;
 import org.jboss.as.controller.ExtensionContext;
 import org.jboss.as.controller.ModelVersion;
@@ -25,7 +25,7 @@ import org.jboss.as.controller.SubsystemRegistration;
 import org.jboss.as.controller.descriptions.StandardResourceDescriptionResolver;
 import org.jboss.as.controller.parsing.ExtensionParsingContext;
 
-import static org.camunda.bpm.container.impl.jboss.extension.ModelConstants.SUBSYSTEM_NAME;
+import static io.orqueio.bpm.container.impl.jboss.extension.ModelConstants.SUBSYSTEM_NAME;
 import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.SUBSYSTEM;
 
 /**

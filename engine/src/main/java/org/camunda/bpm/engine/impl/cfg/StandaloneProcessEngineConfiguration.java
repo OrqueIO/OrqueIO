@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.cfg;
+package io.orqueio.bpm.engine.impl.cfg;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.camunda.bpm.engine.impl.interceptor.CommandContextInterceptor;
-import org.camunda.bpm.engine.impl.interceptor.CommandCounterInterceptor;
-import org.camunda.bpm.engine.impl.interceptor.CommandInterceptor;
-import org.camunda.bpm.engine.impl.interceptor.LogInterceptor;
-import org.camunda.bpm.engine.impl.interceptor.ProcessApplicationContextInterceptor;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContextInterceptor;
+import io.orqueio.bpm.engine.impl.interceptor.CommandCounterInterceptor;
+import io.orqueio.bpm.engine.impl.interceptor.CommandInterceptor;
+import io.orqueio.bpm.engine.impl.interceptor.LogInterceptor;
+import io.orqueio.bpm.engine.impl.interceptor.ProcessApplicationContextInterceptor;
 
 
 /**

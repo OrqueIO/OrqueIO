@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.cockpit.impl.db;
+package io.orqueio.bpm.cockpit.impl.db;
 
-import org.camunda.bpm.cockpit.db.CommandExecutor;
-import org.camunda.bpm.cockpit.db.QueryService;
+import io.orqueio.bpm.cockpit.db.CommandExecutor;
+import io.orqueio.bpm.cockpit.db.QueryService;
 
-public class QueryServiceImpl extends org.camunda.bpm.webapp.impl.db.QueryServiceImpl implements QueryService {
+public class QueryServiceImpl extends io.orqueio.bpm.webapp.impl.db.QueryServiceImpl implements QueryService {
 
   public QueryServiceImpl(CommandExecutor commandExecutor) {
     super(commandExecutor);

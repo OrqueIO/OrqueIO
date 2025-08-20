@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.dto.history.optimize;
+package io.orqueio.bpm.engine.rest.dto.history.optimize;
 
-import org.camunda.bpm.engine.impl.persistence.entity.optimize.OptimizeHistoricIdentityLinkLogEntity;
-import org.camunda.bpm.engine.rest.dto.history.HistoricIdentityLinkLogDto;
+import io.orqueio.bpm.engine.impl.persistence.entity.optimize.OptimizeHistoricIdentityLinkLogEntity;
+import io.orqueio.bpm.engine.rest.dto.history.HistoricIdentityLinkLogDto;
 
 public class OptimizeHistoricIdentityLinkLogDto extends HistoricIdentityLinkLogDto {
 

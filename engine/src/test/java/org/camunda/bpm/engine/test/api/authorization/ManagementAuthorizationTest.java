@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.authorization;
+package io.orqueio.bpm.engine.test.api.authorization;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -24,16 +24,16 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.engine.authorization.Groups;
-import org.camunda.bpm.engine.authorization.Resources;
-import org.camunda.bpm.engine.authorization.SystemPermissions;
-import org.camunda.bpm.engine.authorization.TaskPermissions;
-import org.camunda.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity;
-import org.camunda.bpm.engine.management.Metrics;
-import org.camunda.bpm.engine.management.SchemaLogEntry;
-import org.camunda.bpm.engine.management.TableMetaData;
-import org.camunda.bpm.engine.management.TablePage;
-import org.camunda.bpm.engine.telemetry.TelemetryData;
+import io.orqueio.bpm.engine.authorization.Groups;
+import io.orqueio.bpm.engine.authorization.Resources;
+import io.orqueio.bpm.engine.authorization.SystemPermissions;
+import io.orqueio.bpm.engine.authorization.TaskPermissions;
+import io.orqueio.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity;
+import io.orqueio.bpm.engine.management.Metrics;
+import io.orqueio.bpm.engine.management.SchemaLogEntry;
+import io.orqueio.bpm.engine.management.TableMetaData;
+import io.orqueio.bpm.engine.management.TablePage;
+import io.orqueio.bpm.engine.telemetry.TelemetryData;
 import org.junit.After;
 import org.junit.Test;
 

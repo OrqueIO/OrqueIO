@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.webapp.impl.engine;
+package io.orqueio.bpm.webapp.impl.engine;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -30,24 +30,24 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.camunda.bpm.admin.Admin;
-import org.camunda.bpm.admin.AdminRuntimeDelegate;
-import org.camunda.bpm.cockpit.Cockpit;
-import org.camunda.bpm.cockpit.CockpitRuntimeDelegate;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.authorization.Groups;
-import org.camunda.bpm.engine.rest.util.WebApplicationUtil;
-import org.camunda.bpm.tasklist.Tasklist;
-import org.camunda.bpm.tasklist.TasklistRuntimeDelegate;
-import org.camunda.bpm.webapp.impl.security.filter.headersec.provider.impl.ContentSecurityPolicyProvider;
-import org.camunda.bpm.webapp.impl.util.ServletContextUtil;
-import org.camunda.bpm.webapp.impl.IllegalWebAppConfigurationException;
-import org.camunda.bpm.webapp.impl.filter.AbstractTemplateFilter;
-import org.camunda.bpm.webapp.impl.security.SecurityActions;
-import org.camunda.bpm.webapp.impl.security.SecurityActions.SecurityAction;
-import org.camunda.bpm.webapp.plugin.spi.AppPlugin;
-import org.camunda.bpm.welcome.Welcome;
-import org.camunda.bpm.welcome.WelcomeRuntimeDelegate;
+import io.orqueio.bpm.admin.Admin;
+import io.orqueio.bpm.admin.AdminRuntimeDelegate;
+import io.orqueio.bpm.cockpit.Cockpit;
+import io.orqueio.bpm.cockpit.CockpitRuntimeDelegate;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.authorization.Groups;
+import io.orqueio.bpm.engine.rest.util.WebApplicationUtil;
+import io.orqueio.bpm.tasklist.Tasklist;
+import io.orqueio.bpm.tasklist.TasklistRuntimeDelegate;
+import io.orqueio.bpm.webapp.impl.security.filter.headersec.provider.impl.ContentSecurityPolicyProvider;
+import io.orqueio.bpm.webapp.impl.util.ServletContextUtil;
+import io.orqueio.bpm.webapp.impl.IllegalWebAppConfigurationException;
+import io.orqueio.bpm.webapp.impl.filter.AbstractTemplateFilter;
+import io.orqueio.bpm.webapp.impl.security.SecurityActions;
+import io.orqueio.bpm.webapp.impl.security.SecurityActions.SecurityAction;
+import io.orqueio.bpm.webapp.plugin.spi.AppPlugin;
+import io.orqueio.bpm.welcome.Welcome;
+import io.orqueio.bpm.welcome.WelcomeRuntimeDelegate;
 
 /**
  *

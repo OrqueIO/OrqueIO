@@ -19,7 +19,7 @@
 			<sequenceFlow sourceRef="startInScope" targetRef="bookFlight" />
 
 			<serviceTask id="bookFlight" 
-				camunda:class="org.camunda.bpm.engine.test.bpmn.event.compensate.helper.BookFlightService" />
+				camunda:class="io.orqueio.bpm.engine.test.bpmn.event.compensate.helper.BookFlightService" />
 
 			<boundaryEvent id="compensateBookFlightEvt" name="Boundary event"
 				attachedToRef="bookFlight">
@@ -27,7 +27,7 @@
 			</boundaryEvent>
 			
 			<serviceTask id="undoBookFlight" isForCompensation="true" 
-					camunda:class="org.camunda.bpm.engine.test.bpmn.event.compensate.helper.CancelFlightService" />
+					camunda:class="io.orqueio.bpm.engine.test.bpmn.event.compensate.helper.CancelFlightService" />
 			
 			<sequenceFlow sourceRef="bookFlight" targetRef="endInScope" />
 			

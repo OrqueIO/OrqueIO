@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.cockpit.plugin.base.tenantcheck;
+package io.orqueio.bpm.cockpit.plugin.base.tenantcheck;
 
-import org.camunda.bpm.cockpit.impl.plugin.base.dto.ProcessDefinitionStatisticsDto;
-import org.camunda.bpm.cockpit.impl.plugin.resources.ProcessDefinitionRestService;
-import org.camunda.bpm.cockpit.plugin.test.AbstractCockpitPluginTest;
-import org.camunda.bpm.engine.IdentityService;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.authorization.Groups;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.rest.dto.CountResultDto;
+import io.orqueio.bpm.cockpit.impl.plugin.base.dto.ProcessDefinitionStatisticsDto;
+import io.orqueio.bpm.cockpit.impl.plugin.resources.ProcessDefinitionRestService;
+import io.orqueio.bpm.cockpit.plugin.test.AbstractCockpitPluginTest;
+import io.orqueio.bpm.engine.IdentityService;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.authorization.Groups;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.rest.dto.CountResultDto;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

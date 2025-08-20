@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.bpmn.builder;
+package io.orqueio.bpm.model.bpmn.builder;
 
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
-import org.camunda.bpm.model.bpmn.instance.Event;
-import org.camunda.bpm.model.bpmn.instance.camunda.CamundaInputOutput;
-import org.camunda.bpm.model.bpmn.instance.camunda.CamundaInputParameter;
-import org.camunda.bpm.model.bpmn.instance.camunda.CamundaOutputParameter;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.bpm.model.bpmn.instance.Event;
+import io.orqueio.bpm.model.bpmn.instance.camunda.CamundaInputOutput;
+import io.orqueio.bpm.model.bpmn.instance.camunda.CamundaInputParameter;
+import io.orqueio.bpm.model.bpmn.instance.camunda.CamundaOutputParameter;
 
 /**
  * @author Sebastian Menski

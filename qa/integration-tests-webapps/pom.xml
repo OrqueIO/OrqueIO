@@ -11,7 +11,7 @@
   </description>
 
   <parent>
-    <groupId>org.camunda.bpm.qa</groupId>
+    <groupId>io.orqueio.bpm.qa</groupId>
     <artifactId>camunda-qa</artifactId>
     <version>7.24.0-SNAPSHOT</version>
   </parent>
@@ -152,19 +152,19 @@
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
+      <groupId>io.orqueio.bpm</groupId>
       <artifactId>camunda-engine</artifactId>
       <scope>test</scope>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.commons</groupId>
+      <groupId>io.orqueio.commons</groupId>
       <artifactId>camunda-commons-logging</artifactId>
       <scope>test</scope>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm.example</groupId>
+      <groupId>io.orqueio.bpm.example</groupId>
       <artifactId>camunda-example-invoice</artifactId>
       <version>${project.version}</version>
       <type>war</type>
@@ -172,7 +172,7 @@
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
+      <groupId>io.orqueio.bpm</groupId>
       <artifactId>camunda-engine-rest</artifactId>
       <type>jar</type>
       <classifier>classes</classifier>

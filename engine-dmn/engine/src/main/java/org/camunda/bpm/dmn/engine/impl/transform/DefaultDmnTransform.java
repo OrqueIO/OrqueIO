@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.engine.impl.transform;
+package io.orqueio.bpm.dmn.engine.impl.transform;
 
-import static org.camunda.commons.utils.EnsureUtil.ensureNotNull;
+import static io.orqueio.commons.utils.EnsureUtil.ensureNotNull;
 
 import java.io.File;
 import java.io.InputStream;
@@ -28,42 +28,42 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.camunda.bpm.dmn.engine.DmnDecision;
-import org.camunda.bpm.dmn.engine.DmnDecisionRequirementsGraph;
-import org.camunda.bpm.dmn.engine.impl.DmnDecisionImpl;
-import org.camunda.bpm.dmn.engine.impl.DmnDecisionLiteralExpressionImpl;
-import org.camunda.bpm.dmn.engine.impl.DmnDecisionRequirementsGraphImpl;
-import org.camunda.bpm.dmn.engine.impl.DmnDecisionTableImpl;
-import org.camunda.bpm.dmn.engine.impl.DmnDecisionTableInputImpl;
-import org.camunda.bpm.dmn.engine.impl.DmnDecisionTableOutputImpl;
-import org.camunda.bpm.dmn.engine.impl.DmnDecisionTableRuleImpl;
-import org.camunda.bpm.dmn.engine.impl.DmnExpressionImpl;
-import org.camunda.bpm.dmn.engine.impl.DmnLogger;
-import org.camunda.bpm.dmn.engine.impl.DmnVariableImpl;
-import org.camunda.bpm.dmn.engine.impl.spi.hitpolicy.DmnHitPolicyHandlerRegistry;
-import org.camunda.bpm.dmn.engine.impl.spi.transform.DmnElementTransformContext;
-import org.camunda.bpm.dmn.engine.impl.spi.transform.DmnElementTransformHandler;
-import org.camunda.bpm.dmn.engine.impl.spi.transform.DmnElementTransformHandlerRegistry;
-import org.camunda.bpm.dmn.engine.impl.spi.transform.DmnTransform;
-import org.camunda.bpm.dmn.engine.impl.spi.transform.DmnTransformListener;
-import org.camunda.bpm.dmn.engine.impl.spi.transform.DmnTransformer;
-import org.camunda.bpm.dmn.engine.impl.spi.type.DmnDataTypeTransformerRegistry;
-import org.camunda.bpm.model.dmn.Dmn;
-import org.camunda.bpm.model.dmn.DmnModelException;
-import org.camunda.bpm.model.dmn.DmnModelInstance;
-import org.camunda.bpm.model.dmn.instance.Decision;
-import org.camunda.bpm.model.dmn.instance.DecisionTable;
-import org.camunda.bpm.model.dmn.instance.Definitions;
-import org.camunda.bpm.model.dmn.instance.Expression;
-import org.camunda.bpm.model.dmn.instance.InformationRequirement;
-import org.camunda.bpm.model.dmn.instance.Input;
-import org.camunda.bpm.model.dmn.instance.InputEntry;
-import org.camunda.bpm.model.dmn.instance.InputExpression;
-import org.camunda.bpm.model.dmn.instance.LiteralExpression;
-import org.camunda.bpm.model.dmn.instance.Output;
-import org.camunda.bpm.model.dmn.instance.OutputEntry;
-import org.camunda.bpm.model.dmn.instance.Rule;
-import org.camunda.bpm.model.dmn.instance.Variable;
+import io.orqueio.bpm.dmn.engine.DmnDecision;
+import io.orqueio.bpm.dmn.engine.DmnDecisionRequirementsGraph;
+import io.orqueio.bpm.dmn.engine.impl.DmnDecisionImpl;
+import io.orqueio.bpm.dmn.engine.impl.DmnDecisionLiteralExpressionImpl;
+import io.orqueio.bpm.dmn.engine.impl.DmnDecisionRequirementsGraphImpl;
+import io.orqueio.bpm.dmn.engine.impl.DmnDecisionTableImpl;
+import io.orqueio.bpm.dmn.engine.impl.DmnDecisionTableInputImpl;
+import io.orqueio.bpm.dmn.engine.impl.DmnDecisionTableOutputImpl;
+import io.orqueio.bpm.dmn.engine.impl.DmnDecisionTableRuleImpl;
+import io.orqueio.bpm.dmn.engine.impl.DmnExpressionImpl;
+import io.orqueio.bpm.dmn.engine.impl.DmnLogger;
+import io.orqueio.bpm.dmn.engine.impl.DmnVariableImpl;
+import io.orqueio.bpm.dmn.engine.impl.spi.hitpolicy.DmnHitPolicyHandlerRegistry;
+import io.orqueio.bpm.dmn.engine.impl.spi.transform.DmnElementTransformContext;
+import io.orqueio.bpm.dmn.engine.impl.spi.transform.DmnElementTransformHandler;
+import io.orqueio.bpm.dmn.engine.impl.spi.transform.DmnElementTransformHandlerRegistry;
+import io.orqueio.bpm.dmn.engine.impl.spi.transform.DmnTransform;
+import io.orqueio.bpm.dmn.engine.impl.spi.transform.DmnTransformListener;
+import io.orqueio.bpm.dmn.engine.impl.spi.transform.DmnTransformer;
+import io.orqueio.bpm.dmn.engine.impl.spi.type.DmnDataTypeTransformerRegistry;
+import io.orqueio.bpm.model.dmn.Dmn;
+import io.orqueio.bpm.model.dmn.DmnModelException;
+import io.orqueio.bpm.model.dmn.DmnModelInstance;
+import io.orqueio.bpm.model.dmn.instance.Decision;
+import io.orqueio.bpm.model.dmn.instance.DecisionTable;
+import io.orqueio.bpm.model.dmn.instance.Definitions;
+import io.orqueio.bpm.model.dmn.instance.Expression;
+import io.orqueio.bpm.model.dmn.instance.InformationRequirement;
+import io.orqueio.bpm.model.dmn.instance.Input;
+import io.orqueio.bpm.model.dmn.instance.InputEntry;
+import io.orqueio.bpm.model.dmn.instance.InputExpression;
+import io.orqueio.bpm.model.dmn.instance.LiteralExpression;
+import io.orqueio.bpm.model.dmn.instance.Output;
+import io.orqueio.bpm.model.dmn.instance.OutputEntry;
+import io.orqueio.bpm.model.dmn.instance.Rule;
+import io.orqueio.bpm.model.dmn.instance.Variable;
 
 public class DefaultDmnTransform implements DmnTransform, DmnElementTransformContext {
 

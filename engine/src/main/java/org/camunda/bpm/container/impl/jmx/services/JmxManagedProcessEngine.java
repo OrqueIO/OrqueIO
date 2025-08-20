@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.jmx.services;
+package io.orqueio.bpm.container.impl.jmx.services;
 
 import java.util.Set;
 
-import org.camunda.bpm.container.impl.jmx.MBeanServiceContainer;
-import org.camunda.bpm.container.impl.spi.PlatformService;
-import org.camunda.bpm.container.impl.spi.PlatformServiceContainer;
-import org.camunda.bpm.engine.ManagementService;
-import org.camunda.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.container.impl.jmx.MBeanServiceContainer;
+import io.orqueio.bpm.container.impl.spi.PlatformService;
+import io.orqueio.bpm.container.impl.spi.PlatformServiceContainer;
+import io.orqueio.bpm.engine.ManagementService;
+import io.orqueio.bpm.engine.ProcessEngine;
 
 /**
  * <p>Represents a process engine managed by the {@link MBeanServiceContainer}</p>

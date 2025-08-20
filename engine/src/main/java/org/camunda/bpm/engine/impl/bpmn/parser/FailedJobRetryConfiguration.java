@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.bpmn.parser;
+package io.orqueio.bpm.engine.impl.bpmn.parser;
 
 import java.util.List;
 
-import org.camunda.bpm.engine.impl.el.Expression;
+import io.orqueio.bpm.engine.impl.el.Expression;
 
 public class FailedJobRetryConfiguration {
 

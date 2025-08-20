@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.run.test.config.https;
+package io.orqueio.bpm.run.test.config.https;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 
-import org.camunda.bpm.run.CamundaBpmRun;
-import org.camunda.bpm.run.test.AbstractRestTest;
-import org.camunda.bpm.run.test.util.TestUtils;
+import io.orqueio.bpm.run.CamundaBpmRun;
+import io.orqueio.bpm.run.test.AbstractRestTest;
+import io.orqueio.bpm.run.test.util.TestUtils;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;

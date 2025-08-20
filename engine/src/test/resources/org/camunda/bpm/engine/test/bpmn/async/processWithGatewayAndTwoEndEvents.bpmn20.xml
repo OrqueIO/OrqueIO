@@ -10,8 +10,8 @@
     <sequenceFlow id="flow1" sourceRef="theStart" targetRef="fork" />
 
     <parallelGateway id="fork" />
-    <serviceTask id="service1" camunda:class="org.camunda.bpm.engine.test.bpmn.async.AsyncService" camunda:async="true" />
-    <serviceTask id="service2" camunda:class="org.camunda.bpm.engine.test.bpmn.async.AsyncService" camunda:async="true" />
+    <serviceTask id="service1" camunda:class="io.orqueio.bpm.engine.test.bpmn.async.AsyncService" camunda:async="true" />
+    <serviceTask id="service2" camunda:class="io.orqueio.bpm.engine.test.bpmn.async.AsyncService" camunda:async="true" />
     <sequenceFlow id="flow2" sourceRef="fork" targetRef="service1" />
     <sequenceFlow id="flow3" sourceRef="fork" targetRef="service2" />
     <sequenceFlow id="flow4" sourceRef="service1" targetRef="end1" />

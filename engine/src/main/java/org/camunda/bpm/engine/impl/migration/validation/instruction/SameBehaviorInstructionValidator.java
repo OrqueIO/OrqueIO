@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.migration.validation.instruction;
+package io.orqueio.bpm.engine.impl.migration.validation.instruction;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,12 +22,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.camunda.bpm.engine.impl.bpmn.behavior.CallActivityBehavior;
-import org.camunda.bpm.engine.impl.bpmn.behavior.CaseCallActivityBehavior;
-import org.camunda.bpm.engine.impl.bpmn.behavior.EventSubProcessActivityBehavior;
-import org.camunda.bpm.engine.impl.bpmn.behavior.SubProcessActivityBehavior;
-import org.camunda.bpm.engine.impl.pvm.process.ActivityImpl;
-import org.camunda.bpm.engine.impl.util.CollectionUtil;
+import io.orqueio.bpm.engine.impl.bpmn.behavior.CallActivityBehavior;
+import io.orqueio.bpm.engine.impl.bpmn.behavior.CaseCallActivityBehavior;
+import io.orqueio.bpm.engine.impl.bpmn.behavior.EventSubProcessActivityBehavior;
+import io.orqueio.bpm.engine.impl.bpmn.behavior.SubProcessActivityBehavior;
+import io.orqueio.bpm.engine.impl.pvm.process.ActivityImpl;
+import io.orqueio.bpm.engine.impl.util.CollectionUtil;
 
 public class SameBehaviorInstructionValidator implements MigrationInstructionValidator {
 

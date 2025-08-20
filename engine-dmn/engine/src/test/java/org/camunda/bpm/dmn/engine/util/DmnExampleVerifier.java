@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.engine.util;
+package io.orqueio.bpm.dmn.engine.util;
 
 import java.io.InputStream;
-import static org.camunda.bpm.dmn.engine.test.asserts.DmnEngineTestAssertions.assertThat;
-import org.camunda.bpm.dmn.engine.DmnDecision;
-import org.camunda.bpm.dmn.engine.DmnDecisionTableResult;
-import org.camunda.bpm.dmn.engine.DmnEngine;
-import org.camunda.bpm.engine.variable.VariableMap;
-import org.camunda.bpm.engine.variable.Variables;
-import org.camunda.commons.utils.IoUtil;
+import static io.orqueio.bpm.dmn.engine.test.asserts.DmnEngineTestAssertions.assertThat;
+import io.orqueio.bpm.dmn.engine.DmnDecision;
+import io.orqueio.bpm.dmn.engine.DmnDecisionTableResult;
+import io.orqueio.bpm.dmn.engine.DmnEngine;
+import io.orqueio.bpm.engine.variable.VariableMap;
+import io.orqueio.bpm.engine.variable.Variables;
+import io.orqueio.commons.utils.IoUtil;
 
 public final class DmnExampleVerifier {
 

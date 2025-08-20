@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.bpmn.builder;
+package io.orqueio.bpm.model.bpmn.builder;
 
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
-import org.camunda.bpm.model.bpmn.instance.ErrorEventDefinition;
-import org.camunda.bpm.model.bpmn.instance.ExtensionElements;
-import org.camunda.bpm.model.bpmn.instance.ServiceTask;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.bpm.model.bpmn.instance.ErrorEventDefinition;
+import io.orqueio.bpm.model.bpmn.instance.ExtensionElements;
+import io.orqueio.bpm.model.bpmn.instance.ServiceTask;
 
 public class CamundaErrorEventDefinitionBuilder extends AbstractErrorEventDefinitionBuilder<CamundaErrorEventDefinitionBuilder> {
 

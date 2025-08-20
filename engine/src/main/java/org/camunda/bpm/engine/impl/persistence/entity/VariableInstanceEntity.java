@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.persistence.entity;
+package io.orqueio.bpm.engine.impl.persistence.entity;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -23,33 +23,33 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Callable;
 
-import org.camunda.bpm.application.InvocationContext;
-import org.camunda.bpm.application.ProcessApplicationReference;
-import org.camunda.bpm.engine.delegate.VariableScope;
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
-import org.camunda.bpm.engine.impl.cmmn.entity.runtime.CaseExecutionEntity;
-import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.engine.impl.context.ProcessApplicationContextUtil;
-import org.camunda.bpm.engine.impl.core.variable.CoreVariableInstance;
-import org.camunda.bpm.engine.impl.db.DbEntity;
-import org.camunda.bpm.engine.impl.db.DbEntityLifecycleAware;
-import org.camunda.bpm.engine.impl.db.EnginePersistenceLogger;
-import org.camunda.bpm.engine.impl.db.HasDbReferences;
-import org.camunda.bpm.engine.impl.db.HasDbRevision;
-import org.camunda.bpm.engine.impl.persistence.entity.util.ByteArrayField;
-import org.camunda.bpm.engine.impl.persistence.entity.util.TypedValueField;
-import org.camunda.bpm.engine.impl.persistence.entity.util.TypedValueUpdateListener;
-import org.camunda.bpm.engine.impl.pvm.runtime.LegacyBehavior;
-import org.camunda.bpm.engine.impl.variable.serializer.TypedValueSerializer;
-import org.camunda.bpm.engine.impl.variable.serializer.ValueFields;
-import org.camunda.bpm.engine.impl.variable.serializer.VariableSerializerFactory;
-import org.camunda.bpm.engine.repository.ResourceTypes;
-import org.camunda.bpm.engine.runtime.VariableInstance;
-import org.camunda.bpm.engine.variable.impl.value.UntypedValueImpl;
-import org.camunda.bpm.engine.variable.type.ValueType;
-import org.camunda.bpm.engine.variable.value.TypedValue;
+import io.orqueio.bpm.application.InvocationContext;
+import io.orqueio.bpm.application.ProcessApplicationReference;
+import io.orqueio.bpm.engine.delegate.VariableScope;
+import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
+import io.orqueio.bpm.engine.impl.cmmn.entity.runtime.CaseExecutionEntity;
+import io.orqueio.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.impl.context.ProcessApplicationContextUtil;
+import io.orqueio.bpm.engine.impl.core.variable.CoreVariableInstance;
+import io.orqueio.bpm.engine.impl.db.DbEntity;
+import io.orqueio.bpm.engine.impl.db.DbEntityLifecycleAware;
+import io.orqueio.bpm.engine.impl.db.EnginePersistenceLogger;
+import io.orqueio.bpm.engine.impl.db.HasDbReferences;
+import io.orqueio.bpm.engine.impl.db.HasDbRevision;
+import io.orqueio.bpm.engine.impl.persistence.entity.util.ByteArrayField;
+import io.orqueio.bpm.engine.impl.persistence.entity.util.TypedValueField;
+import io.orqueio.bpm.engine.impl.persistence.entity.util.TypedValueUpdateListener;
+import io.orqueio.bpm.engine.impl.pvm.runtime.LegacyBehavior;
+import io.orqueio.bpm.engine.impl.variable.serializer.TypedValueSerializer;
+import io.orqueio.bpm.engine.impl.variable.serializer.ValueFields;
+import io.orqueio.bpm.engine.impl.variable.serializer.VariableSerializerFactory;
+import io.orqueio.bpm.engine.repository.ResourceTypes;
+import io.orqueio.bpm.engine.runtime.VariableInstance;
+import io.orqueio.bpm.engine.variable.impl.value.UntypedValueImpl;
+import io.orqueio.bpm.engine.variable.type.ValueType;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
 
-import static org.camunda.bpm.engine.impl.persistence.entity.util.TypedValueField.getSerializers;
+import static io.orqueio.bpm.engine.impl.persistence.entity.util.TypedValueField.getSerializers;
 
 /**
  * @author Tom Baeyens
@@ -744,7 +744,7 @@ public class VariableInstanceEntity implements VariableInstance, CoreVariableIns
   /**
    * 
    * @return <code>true</code> <code>processDefinitionId</code> is introduced in 7.13,
-   * the check is used to created missing history at {@link LegacyBehavior#createMissingHistoricVariables(org.camunda.bpm.engine.impl.pvm.runtime.PvmExecutionImpl) LegacyBehavior#createMissingHistoricVariables}
+   * the check is used to created missing history at {@link LegacyBehavior#createMissingHistoricVariables(io.orqueio.bpm.engine.impl.pvm.runtime.PvmExecutionImpl) LegacyBehavior#createMissingHistoricVariables}
    */
   public boolean wasCreatedBefore713() {
     return this.getProcessDefinitionId() == null;

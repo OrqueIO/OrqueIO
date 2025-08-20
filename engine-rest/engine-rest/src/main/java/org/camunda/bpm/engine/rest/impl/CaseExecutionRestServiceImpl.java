@@ -14,22 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.impl;
+package io.orqueio.bpm.engine.rest.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.core.UriInfo;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.rest.CaseExecutionRestService;
-import org.camunda.bpm.engine.rest.dto.CountResultDto;
-import org.camunda.bpm.engine.rest.dto.runtime.CaseExecutionDto;
-import org.camunda.bpm.engine.rest.dto.runtime.CaseExecutionQueryDto;
-import org.camunda.bpm.engine.rest.sub.runtime.CaseExecutionResource;
-import org.camunda.bpm.engine.rest.sub.runtime.impl.CaseExecutionResourceImpl;
-import org.camunda.bpm.engine.rest.util.QueryUtil;
-import org.camunda.bpm.engine.runtime.CaseExecution;
-import org.camunda.bpm.engine.runtime.CaseExecutionQuery;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.rest.CaseExecutionRestService;
+import io.orqueio.bpm.engine.rest.dto.CountResultDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.CaseExecutionDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.CaseExecutionQueryDto;
+import io.orqueio.bpm.engine.rest.sub.runtime.CaseExecutionResource;
+import io.orqueio.bpm.engine.rest.sub.runtime.impl.CaseExecutionResourceImpl;
+import io.orqueio.bpm.engine.rest.util.QueryUtil;
+import io.orqueio.bpm.engine.runtime.CaseExecution;
+import io.orqueio.bpm.engine.runtime.CaseExecutionQuery;
 
 public class CaseExecutionRestServiceImpl extends AbstractRestProcessEngineAware implements CaseExecutionRestService {
 

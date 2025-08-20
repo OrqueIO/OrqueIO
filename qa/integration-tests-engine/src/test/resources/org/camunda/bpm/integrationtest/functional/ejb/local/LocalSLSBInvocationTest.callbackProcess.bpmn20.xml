@@ -12,7 +12,7 @@
     <sequenceFlow sourceRef="theStart" targetRef="servicetask1" />
 
     <serviceTask id="servicetask1"
-      camunda:class="org.camunda.bpm.integrationtest.functional.ejb.local.bean.CallbackBean" />
+      camunda:class="io.orqueio.bpm.integrationtest.functional.ejb.local.bean.CallbackBean" />
 
     <sequenceFlow sourceRef="servicetask1" targetRef="endevent1" />
 

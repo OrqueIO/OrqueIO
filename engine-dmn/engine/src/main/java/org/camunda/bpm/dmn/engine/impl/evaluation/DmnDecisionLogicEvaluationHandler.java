@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.engine.impl.evaluation;
+package io.orqueio.bpm.dmn.engine.impl.evaluation;
 
-import org.camunda.bpm.dmn.engine.DmnDecision;
-import org.camunda.bpm.dmn.engine.DmnDecisionResult;
-import org.camunda.bpm.dmn.engine.delegate.DmnDecisionLogicEvaluationEvent;
-import org.camunda.bpm.engine.variable.context.VariableContext;
+import io.orqueio.bpm.dmn.engine.DmnDecision;
+import io.orqueio.bpm.dmn.engine.DmnDecisionResult;
+import io.orqueio.bpm.dmn.engine.delegate.DmnDecisionLogicEvaluationEvent;
+import io.orqueio.bpm.engine.variable.context.VariableContext;
 
 /**
  * Evaluates decisions with a specific kind of decision logic and generates the

@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.db.sql;
+package io.orqueio.bpm.engine.impl.db.sql;
 
-import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.engine.impl.db.PersistenceSession;
-import org.camunda.bpm.engine.impl.interceptor.Session;
-import org.camunda.bpm.engine.impl.interceptor.SessionFactory;
+import io.orqueio.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.impl.db.PersistenceSession;
+import io.orqueio.bpm.engine.impl.interceptor.Session;
+import io.orqueio.bpm.engine.impl.interceptor.SessionFactory;
 
 /**
  * Provides the {@link DbSqlSession} as {@link PersistenceSession}.

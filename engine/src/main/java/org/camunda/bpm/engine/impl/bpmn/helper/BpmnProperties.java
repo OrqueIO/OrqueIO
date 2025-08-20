@@ -14,23 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.bpmn.helper;
+package io.orqueio.bpm.engine.impl.bpmn.helper;
 
-import static org.camunda.bpm.engine.impl.bpmn.parser.BpmnParse.PROPERTYNAME_HAS_CONDITIONAL_EVENTS;
+import static io.orqueio.bpm.engine.impl.bpmn.parser.BpmnParse.PROPERTYNAME_HAS_CONDITIONAL_EVENTS;
 
 import java.util.Map;
 
-import org.camunda.bpm.engine.impl.bpmn.parser.ConditionalEventDefinition;
-import org.camunda.bpm.engine.impl.bpmn.parser.ErrorEventDefinition;
-import org.camunda.bpm.engine.impl.bpmn.parser.CamundaErrorEventDefinition;
-import org.camunda.bpm.engine.impl.bpmn.parser.EscalationEventDefinition;
-import org.camunda.bpm.engine.impl.bpmn.parser.EventSubscriptionDeclaration;
-import org.camunda.bpm.engine.impl.core.model.Properties;
-import org.camunda.bpm.engine.impl.core.model.PropertyKey;
-import org.camunda.bpm.engine.impl.core.model.PropertyListKey;
-import org.camunda.bpm.engine.impl.core.model.PropertyMapKey;
-import org.camunda.bpm.engine.impl.jobexecutor.TimerDeclarationImpl;
-import org.camunda.bpm.engine.impl.pvm.process.ActivityImpl;
+import io.orqueio.bpm.engine.impl.bpmn.parser.ConditionalEventDefinition;
+import io.orqueio.bpm.engine.impl.bpmn.parser.ErrorEventDefinition;
+import io.orqueio.bpm.engine.impl.bpmn.parser.CamundaErrorEventDefinition;
+import io.orqueio.bpm.engine.impl.bpmn.parser.EscalationEventDefinition;
+import io.orqueio.bpm.engine.impl.bpmn.parser.EventSubscriptionDeclaration;
+import io.orqueio.bpm.engine.impl.core.model.Properties;
+import io.orqueio.bpm.engine.impl.core.model.PropertyKey;
+import io.orqueio.bpm.engine.impl.core.model.PropertyListKey;
+import io.orqueio.bpm.engine.impl.core.model.PropertyMapKey;
+import io.orqueio.bpm.engine.impl.jobexecutor.TimerDeclarationImpl;
+import io.orqueio.bpm.engine.impl.pvm.process.ActivityImpl;
 
 /**
  * Properties of bpmn elements.

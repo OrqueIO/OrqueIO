@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.threading.ra.inflow;
+package io.orqueio.bpm.container.impl.threading.ra.inflow;
 
 import java.lang.reflect.Method;
 import java.util.List;
@@ -25,12 +25,12 @@ import javax.resource.ResourceException;
 import javax.resource.spi.UnavailableException;
 import javax.resource.spi.endpoint.MessageEndpoint;
 
-import org.camunda.bpm.container.impl.threading.ra.JcaExecutorServiceConnector;
-import org.camunda.bpm.engine.impl.ProcessEngineImpl;
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
-import org.camunda.bpm.engine.impl.interceptor.CommandExecutor;
-import org.camunda.bpm.engine.impl.jobexecutor.ExecuteJobsRunnable;
-import org.camunda.bpm.engine.impl.jobexecutor.JobFailureCollector;
+import io.orqueio.bpm.container.impl.threading.ra.JcaExecutorServiceConnector;
+import io.orqueio.bpm.engine.impl.ProcessEngineImpl;
+import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
+import io.orqueio.bpm.engine.impl.interceptor.CommandExecutor;
+import io.orqueio.bpm.engine.impl.jobexecutor.ExecuteJobsRunnable;
+import io.orqueio.bpm.engine.impl.jobexecutor.JobFailureCollector;
 
 
 /**
@@ -109,7 +109,7 @@ public class JcaInflowExecuteJobsRunnable extends ExecuteJobsRunnable {
   /**
    * Context class loader switch is not necessary since
    * the loader used for job execution is successor of the engine's
-   * @see org.camunda.bpm.engine.impl.jobexecutor.ExecuteJobsRunnable#switchClassLoader()
+   * @see io.orqueio.bpm.engine.impl.jobexecutor.ExecuteJobsRunnable#switchClassLoader()
    *
    * @return the context class loader of the current thread.
    */

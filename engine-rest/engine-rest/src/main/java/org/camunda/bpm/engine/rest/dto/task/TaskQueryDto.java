@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.dto.task;
+package io.orqueio.bpm.engine.rest.dto.task;
 
 import static java.lang.Boolean.TRUE;
 
@@ -27,35 +27,35 @@ import java.util.Map;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response.Status;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.impl.QueryEntityRelationCondition;
-import org.camunda.bpm.engine.impl.QueryOrderingProperty;
-import org.camunda.bpm.engine.impl.TaskQueryImpl;
-import org.camunda.bpm.engine.impl.TaskQueryProperty;
-import org.camunda.bpm.engine.impl.TaskQueryVariableValue;
-import org.camunda.bpm.engine.impl.VariableInstanceQueryProperty;
-import org.camunda.bpm.engine.impl.VariableOrderProperty;
-import org.camunda.bpm.engine.impl.persistence.entity.SuspensionState;
-import org.camunda.bpm.engine.query.Query;
-import org.camunda.bpm.engine.query.QueryProperty;
-import org.camunda.bpm.engine.rest.dto.AbstractQueryDto;
-import org.camunda.bpm.engine.rest.dto.CamundaQueryParam;
-import org.camunda.bpm.engine.rest.dto.SortingDto;
-import org.camunda.bpm.engine.rest.dto.VariableQueryParameterDto;
-import org.camunda.bpm.engine.rest.dto.VariableValueDto;
-import org.camunda.bpm.engine.rest.dto.converter.BooleanConverter;
-import org.camunda.bpm.engine.rest.dto.converter.DateConverter;
-import org.camunda.bpm.engine.rest.dto.converter.DelegationStateConverter;
-import org.camunda.bpm.engine.rest.dto.converter.IntegerConverter;
-import org.camunda.bpm.engine.rest.dto.converter.StringArrayConverter;
-import org.camunda.bpm.engine.rest.dto.converter.StringListConverter;
-import org.camunda.bpm.engine.rest.dto.converter.VariableListConverter;
-import org.camunda.bpm.engine.rest.exception.InvalidRequestException;
-import org.camunda.bpm.engine.rest.exception.RestException;
-import org.camunda.bpm.engine.task.DelegationState;
-import org.camunda.bpm.engine.task.TaskQuery;
-import org.camunda.bpm.engine.variable.type.ValueType;
-import org.camunda.bpm.engine.variable.type.ValueTypeResolver;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.impl.QueryEntityRelationCondition;
+import io.orqueio.bpm.engine.impl.QueryOrderingProperty;
+import io.orqueio.bpm.engine.impl.TaskQueryImpl;
+import io.orqueio.bpm.engine.impl.TaskQueryProperty;
+import io.orqueio.bpm.engine.impl.TaskQueryVariableValue;
+import io.orqueio.bpm.engine.impl.VariableInstanceQueryProperty;
+import io.orqueio.bpm.engine.impl.VariableOrderProperty;
+import io.orqueio.bpm.engine.impl.persistence.entity.SuspensionState;
+import io.orqueio.bpm.engine.query.Query;
+import io.orqueio.bpm.engine.query.QueryProperty;
+import io.orqueio.bpm.engine.rest.dto.AbstractQueryDto;
+import io.orqueio.bpm.engine.rest.dto.CamundaQueryParam;
+import io.orqueio.bpm.engine.rest.dto.SortingDto;
+import io.orqueio.bpm.engine.rest.dto.VariableQueryParameterDto;
+import io.orqueio.bpm.engine.rest.dto.VariableValueDto;
+import io.orqueio.bpm.engine.rest.dto.converter.BooleanConverter;
+import io.orqueio.bpm.engine.rest.dto.converter.DateConverter;
+import io.orqueio.bpm.engine.rest.dto.converter.DelegationStateConverter;
+import io.orqueio.bpm.engine.rest.dto.converter.IntegerConverter;
+import io.orqueio.bpm.engine.rest.dto.converter.StringArrayConverter;
+import io.orqueio.bpm.engine.rest.dto.converter.StringListConverter;
+import io.orqueio.bpm.engine.rest.dto.converter.VariableListConverter;
+import io.orqueio.bpm.engine.rest.exception.InvalidRequestException;
+import io.orqueio.bpm.engine.rest.exception.RestException;
+import io.orqueio.bpm.engine.task.DelegationState;
+import io.orqueio.bpm.engine.task.TaskQuery;
+import io.orqueio.bpm.engine.variable.type.ValueType;
+import io.orqueio.bpm.engine.variable.type.ValueTypeResolver;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;

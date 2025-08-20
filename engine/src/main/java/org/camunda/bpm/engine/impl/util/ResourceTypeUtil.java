@@ -14,35 +14,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.util;
+package io.orqueio.bpm.engine.impl.util;
 
-import static org.camunda.bpm.engine.authorization.Resources.BATCH;
-import static org.camunda.bpm.engine.authorization.Resources.HISTORIC_PROCESS_INSTANCE;
-import static org.camunda.bpm.engine.authorization.Resources.HISTORIC_TASK;
-import static org.camunda.bpm.engine.authorization.Resources.OPERATION_LOG_CATEGORY;
-import static org.camunda.bpm.engine.authorization.Resources.OPTIMIZE;
-import static org.camunda.bpm.engine.authorization.Resources.PROCESS_DEFINITION;
-import static org.camunda.bpm.engine.authorization.Resources.PROCESS_INSTANCE;
-import static org.camunda.bpm.engine.authorization.Resources.TASK;
-import static org.camunda.bpm.engine.authorization.Resources.SYSTEM;
+import static io.orqueio.bpm.engine.authorization.Resources.BATCH;
+import static io.orqueio.bpm.engine.authorization.Resources.HISTORIC_PROCESS_INSTANCE;
+import static io.orqueio.bpm.engine.authorization.Resources.HISTORIC_TASK;
+import static io.orqueio.bpm.engine.authorization.Resources.OPERATION_LOG_CATEGORY;
+import static io.orqueio.bpm.engine.authorization.Resources.OPTIMIZE;
+import static io.orqueio.bpm.engine.authorization.Resources.PROCESS_DEFINITION;
+import static io.orqueio.bpm.engine.authorization.Resources.PROCESS_INSTANCE;
+import static io.orqueio.bpm.engine.authorization.Resources.TASK;
+import static io.orqueio.bpm.engine.authorization.Resources.SYSTEM;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.camunda.bpm.engine.BadUserRequestException;
-import org.camunda.bpm.engine.authorization.BatchPermissions;
-import org.camunda.bpm.engine.authorization.HistoricProcessInstancePermissions;
-import org.camunda.bpm.engine.authorization.HistoricTaskPermissions;
-import org.camunda.bpm.engine.authorization.OptimizePermissions;
-import org.camunda.bpm.engine.authorization.Permission;
-import org.camunda.bpm.engine.authorization.Permissions;
-import org.camunda.bpm.engine.authorization.ProcessDefinitionPermissions;
-import org.camunda.bpm.engine.authorization.ProcessInstancePermissions;
-import org.camunda.bpm.engine.authorization.Resource;
-import org.camunda.bpm.engine.authorization.Resources;
-import org.camunda.bpm.engine.authorization.SystemPermissions;
-import org.camunda.bpm.engine.authorization.TaskPermissions;
-import org.camunda.bpm.engine.authorization.UserOperationLogCategoryPermissions;
+import io.orqueio.bpm.engine.BadUserRequestException;
+import io.orqueio.bpm.engine.authorization.BatchPermissions;
+import io.orqueio.bpm.engine.authorization.HistoricProcessInstancePermissions;
+import io.orqueio.bpm.engine.authorization.HistoricTaskPermissions;
+import io.orqueio.bpm.engine.authorization.OptimizePermissions;
+import io.orqueio.bpm.engine.authorization.Permission;
+import io.orqueio.bpm.engine.authorization.Permissions;
+import io.orqueio.bpm.engine.authorization.ProcessDefinitionPermissions;
+import io.orqueio.bpm.engine.authorization.ProcessInstancePermissions;
+import io.orqueio.bpm.engine.authorization.Resource;
+import io.orqueio.bpm.engine.authorization.Resources;
+import io.orqueio.bpm.engine.authorization.SystemPermissions;
+import io.orqueio.bpm.engine.authorization.TaskPermissions;
+import io.orqueio.bpm.engine.authorization.UserOperationLogCategoryPermissions;
 
 public class ResourceTypeUtil {
 

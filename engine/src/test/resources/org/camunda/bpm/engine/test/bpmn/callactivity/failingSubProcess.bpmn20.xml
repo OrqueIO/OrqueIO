@@ -10,7 +10,7 @@
 
     <sequenceFlow id="flow1" sourceRef="theStart" targetRef="failingTask" />
 
-    <serviceTask id="failingTask" camunda:class="org.camunda.bpm.engine.test.bpmn.callactivity.ThrowingBpmnErrorDelegate" name="Failing task" />
+    <serviceTask id="failingTask" camunda:class="io.orqueio.bpm.engine.test.bpmn.callactivity.ThrowingBpmnErrorDelegate" name="Failing task" />
 
     <sequenceFlow id="flow2" sourceRef="failingTask" targetRef="theEnd" />
 

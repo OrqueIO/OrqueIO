@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.history;
+package io.orqueio.bpm.engine.history;
 
-import org.camunda.bpm.engine.query.NativeQuery;
+import io.orqueio.bpm.engine.query.NativeQuery;
 
 /**
- * Allows querying of {@link org.camunda.bpm.engine.history.HistoricVariableInstanceQuery}s via native (SQL) queries
+ * Allows querying of {@link io.orqueio.bpm.engine.history.HistoricVariableInstanceQuery}s via native (SQL) queries
  * @author Ramona Koch
  */
 public interface NativeHistoricVariableInstanceQuery extends NativeQuery<NativeHistoricVariableInstanceQuery, HistoricVariableInstance> {

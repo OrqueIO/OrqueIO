@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.management;
+package io.orqueio.bpm.engine.management;
 
 import java.util.List;
 
-import org.camunda.bpm.engine.repository.Deployment;
+import io.orqueio.bpm.engine.repository.Deployment;
 
 public interface DeploymentStatistics extends Deployment {
 

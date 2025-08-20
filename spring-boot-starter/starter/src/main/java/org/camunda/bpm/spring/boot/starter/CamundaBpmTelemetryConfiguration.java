@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter;
+package io.orqueio.bpm.spring.boot.starter;
 
 import jakarta.servlet.ServletContext;
 
-import org.camunda.bpm.spring.boot.starter.telemetry.CamundaApplicationServerConfigurator;
+import io.orqueio.bpm.spring.boot.starter.telemetry.CamundaApplicationServerConfigurator;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

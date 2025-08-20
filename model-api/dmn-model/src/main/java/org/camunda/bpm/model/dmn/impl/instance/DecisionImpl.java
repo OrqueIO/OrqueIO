@@ -14,42 +14,42 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.dmn.impl.instance;
+package io.orqueio.bpm.model.dmn.impl.instance;
 
-import static org.camunda.bpm.model.dmn.impl.DmnModelConstants.CAMUNDA_ATTRIBUTE_HISTORY_TIME_TO_LIVE;
-import static org.camunda.bpm.model.dmn.impl.DmnModelConstants.CAMUNDA_ATTRIBUTE_VERSION_TAG;
-import static org.camunda.bpm.model.dmn.impl.DmnModelConstants.CAMUNDA_NS;
-import static org.camunda.bpm.model.dmn.impl.DmnModelConstants.LATEST_DMN_NS;
-import static org.camunda.bpm.model.dmn.impl.DmnModelConstants.DMN_ELEMENT_DECISION;
+import static io.orqueio.bpm.model.dmn.impl.DmnModelConstants.CAMUNDA_ATTRIBUTE_HISTORY_TIME_TO_LIVE;
+import static io.orqueio.bpm.model.dmn.impl.DmnModelConstants.CAMUNDA_ATTRIBUTE_VERSION_TAG;
+import static io.orqueio.bpm.model.dmn.impl.DmnModelConstants.CAMUNDA_NS;
+import static io.orqueio.bpm.model.dmn.impl.DmnModelConstants.LATEST_DMN_NS;
+import static io.orqueio.bpm.model.dmn.impl.DmnModelConstants.DMN_ELEMENT_DECISION;
 
 import java.util.Collection;
 
-import org.camunda.bpm.model.dmn.instance.AllowedAnswers;
-import org.camunda.bpm.model.dmn.instance.AuthorityRequirement;
-import org.camunda.bpm.model.dmn.instance.Decision;
-import org.camunda.bpm.model.dmn.instance.DecisionMakerReference;
-import org.camunda.bpm.model.dmn.instance.DecisionOwnerReference;
-import org.camunda.bpm.model.dmn.instance.DrgElement;
-import org.camunda.bpm.model.dmn.instance.Expression;
-import org.camunda.bpm.model.dmn.instance.ImpactedPerformanceIndicatorReference;
-import org.camunda.bpm.model.dmn.instance.InformationRequirement;
-import org.camunda.bpm.model.dmn.instance.KnowledgeRequirement;
-import org.camunda.bpm.model.dmn.instance.OrganizationUnit;
-import org.camunda.bpm.model.dmn.instance.PerformanceIndicator;
-import org.camunda.bpm.model.dmn.instance.Question;
-import org.camunda.bpm.model.dmn.instance.SupportedObjectiveReference;
-import org.camunda.bpm.model.dmn.instance.UsingProcessReference;
-import org.camunda.bpm.model.dmn.instance.UsingTaskReference;
-import org.camunda.bpm.model.dmn.instance.Variable;
-import org.camunda.bpm.model.xml.ModelBuilder;
-import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
-import org.camunda.bpm.model.xml.type.attribute.Attribute;
-import org.camunda.bpm.model.xml.type.child.ChildElement;
-import org.camunda.bpm.model.xml.type.child.ChildElementCollection;
-import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
-import org.camunda.bpm.model.xml.type.reference.ElementReferenceCollection;
+import io.orqueio.bpm.model.dmn.instance.AllowedAnswers;
+import io.orqueio.bpm.model.dmn.instance.AuthorityRequirement;
+import io.orqueio.bpm.model.dmn.instance.Decision;
+import io.orqueio.bpm.model.dmn.instance.DecisionMakerReference;
+import io.orqueio.bpm.model.dmn.instance.DecisionOwnerReference;
+import io.orqueio.bpm.model.dmn.instance.DrgElement;
+import io.orqueio.bpm.model.dmn.instance.Expression;
+import io.orqueio.bpm.model.dmn.instance.ImpactedPerformanceIndicatorReference;
+import io.orqueio.bpm.model.dmn.instance.InformationRequirement;
+import io.orqueio.bpm.model.dmn.instance.KnowledgeRequirement;
+import io.orqueio.bpm.model.dmn.instance.OrganizationUnit;
+import io.orqueio.bpm.model.dmn.instance.PerformanceIndicator;
+import io.orqueio.bpm.model.dmn.instance.Question;
+import io.orqueio.bpm.model.dmn.instance.SupportedObjectiveReference;
+import io.orqueio.bpm.model.dmn.instance.UsingProcessReference;
+import io.orqueio.bpm.model.dmn.instance.UsingTaskReference;
+import io.orqueio.bpm.model.dmn.instance.Variable;
+import io.orqueio.bpm.model.xml.ModelBuilder;
+import io.orqueio.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
+import io.orqueio.bpm.model.xml.type.ModelElementTypeBuilder;
+import io.orqueio.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
+import io.orqueio.bpm.model.xml.type.attribute.Attribute;
+import io.orqueio.bpm.model.xml.type.child.ChildElement;
+import io.orqueio.bpm.model.xml.type.child.ChildElementCollection;
+import io.orqueio.bpm.model.xml.type.child.SequenceBuilder;
+import io.orqueio.bpm.model.xml.type.reference.ElementReferenceCollection;
 
 public class DecisionImpl extends DrgElementImpl implements Decision {
 

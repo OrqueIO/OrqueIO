@@ -15,7 +15,7 @@
       <startEvent id="subProcessStart" />
       <sequenceFlow id="flow3" sourceRef="subProcessStart" targetRef="innerServiceTask" />
       <serviceTask id="innerServiceTask" camunda:asyncBefore="true"
-                   camunda:class="org.camunda.bpm.engine.test.api.runtime.FailingDelegate" name="Service Task"/>
+                   camunda:class="io.orqueio.bpm.engine.test.api.runtime.FailingDelegate" name="Service Task"/>
       <sequenceFlow id="flow4" sourceRef="innerServiceTask" targetRef="subProcessEnd" />
       <endEvent id="subProcessEnd" />
     </subProcess>

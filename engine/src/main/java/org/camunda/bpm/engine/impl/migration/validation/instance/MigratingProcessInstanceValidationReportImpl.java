@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.migration.validation.instance;
+package io.orqueio.bpm.engine.impl.migration.validation.instance;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.camunda.bpm.engine.migration.MigratingActivityInstanceValidationReport;
-import org.camunda.bpm.engine.migration.MigratingProcessInstanceValidationReport;
-import org.camunda.bpm.engine.migration.MigratingTransitionInstanceValidationReport;
+import io.orqueio.bpm.engine.migration.MigratingActivityInstanceValidationReport;
+import io.orqueio.bpm.engine.migration.MigratingProcessInstanceValidationReport;
+import io.orqueio.bpm.engine.migration.MigratingTransitionInstanceValidationReport;
 
 public class MigratingProcessInstanceValidationReportImpl implements MigratingProcessInstanceValidationReport {
 

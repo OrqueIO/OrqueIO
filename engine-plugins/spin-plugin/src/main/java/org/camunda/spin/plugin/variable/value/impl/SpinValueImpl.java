@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.plugin.variable.value.impl;
+package io.orqueio.spin.plugin.variable.value.impl;
 
-import static org.camunda.spin.Spin.S;
+import static io.orqueio.spin.Spin.S;
 
-import org.camunda.bpm.engine.variable.impl.value.AbstractTypedValue;
-import org.camunda.bpm.engine.variable.type.ValueType;
-import org.camunda.spin.DataFormats;
-import org.camunda.spin.Spin;
-import org.camunda.spin.plugin.variable.type.SpinValueType;
-import org.camunda.spin.plugin.variable.value.SpinValue;
-import org.camunda.spin.spi.DataFormat;
+import io.orqueio.bpm.engine.variable.impl.value.AbstractTypedValue;
+import io.orqueio.bpm.engine.variable.type.ValueType;
+import io.orqueio.spin.DataFormats;
+import io.orqueio.spin.Spin;
+import io.orqueio.spin.plugin.variable.type.SpinValueType;
+import io.orqueio.spin.plugin.variable.value.SpinValue;
+import io.orqueio.spin.spi.DataFormat;
 
 /**
  * @author Roman Smirnov

@@ -14,26 +14,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.cockpit.impl;
+package io.orqueio.bpm.cockpit.impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.cockpit.CockpitRuntimeDelegate;
-import org.camunda.bpm.cockpit.db.CommandExecutor;
-import org.camunda.bpm.cockpit.db.QueryService;
-import org.camunda.bpm.cockpit.impl.db.CommandExecutorImpl;
-import org.camunda.bpm.cockpit.impl.db.QueryServiceImpl;
-import org.camunda.bpm.cockpit.impl.plugin.DefaultPluginRegistry;
-import org.camunda.bpm.cockpit.plugin.PluginRegistry;
-import org.camunda.bpm.cockpit.plugin.spi.CockpitPlugin;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.impl.ProcessEngineImpl;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.webapp.impl.AbstractAppRuntimeDelegate;
+import io.orqueio.bpm.cockpit.CockpitRuntimeDelegate;
+import io.orqueio.bpm.cockpit.db.CommandExecutor;
+import io.orqueio.bpm.cockpit.db.QueryService;
+import io.orqueio.bpm.cockpit.impl.db.CommandExecutorImpl;
+import io.orqueio.bpm.cockpit.impl.db.QueryServiceImpl;
+import io.orqueio.bpm.cockpit.impl.plugin.DefaultPluginRegistry;
+import io.orqueio.bpm.cockpit.plugin.PluginRegistry;
+import io.orqueio.bpm.cockpit.plugin.spi.CockpitPlugin;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.impl.ProcessEngineImpl;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.webapp.impl.AbstractAppRuntimeDelegate;
 
 /**
  * <p>This is the default {@link CockpitRuntimeDelegate} implementation that provides

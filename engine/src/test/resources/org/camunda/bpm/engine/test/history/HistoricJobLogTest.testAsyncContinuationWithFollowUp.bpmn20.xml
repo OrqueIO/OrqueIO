@@ -12,14 +12,14 @@
 
     <serviceTask id="serviceTask" 
       camunda:asyncBefore="true" 
-      camunda:class="org.camunda.bpm.engine.test.api.runtime.util.ChangeVariablesDelegate"
+      camunda:class="io.orqueio.bpm.engine.test.api.runtime.util.ChangeVariablesDelegate"
       camunda:jobPriority="15" />
       
     <serviceTask id="followUp1" 
-      camunda:class="org.camunda.bpm.engine.test.api.runtime.util.ChangeVariablesDelegate" />
+      camunda:class="io.orqueio.bpm.engine.test.api.runtime.util.ChangeVariablesDelegate" />
       
     <serviceTask id="followUp2" 
-      camunda:class="org.camunda.bpm.engine.test.api.runtime.FailingDelegate" />
+      camunda:class="io.orqueio.bpm.engine.test.api.runtime.FailingDelegate" />
 
     <sequenceFlow id="flow1" sourceRef="serviceTask" targetRef="followUp1" />
     <sequenceFlow id="flow2" sourceRef="followUp1" targetRef="followUp2" />

@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter.rest.spi;
+package io.orqueio.bpm.spring.boot.starter.rest.spi;
 
 import java.util.Set;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.ProcessEngines;
-import org.camunda.bpm.engine.rest.spi.ProcessEngineProvider;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.ProcessEngines;
+import io.orqueio.bpm.engine.rest.spi.ProcessEngineProvider;
 
 public class SpringBootProcessEngineProvider implements ProcessEngineProvider {
 

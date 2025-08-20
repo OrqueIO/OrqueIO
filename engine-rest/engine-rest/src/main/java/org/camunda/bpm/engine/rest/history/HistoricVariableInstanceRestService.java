@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.history;
+package io.orqueio.bpm.engine.rest.history;
 
-import org.camunda.bpm.engine.history.HistoricVariableInstanceQuery;
-import org.camunda.bpm.engine.rest.dto.CountResultDto;
-import org.camunda.bpm.engine.rest.dto.history.HistoricVariableInstanceDto;
-import org.camunda.bpm.engine.rest.dto.history.HistoricVariableInstanceQueryDto;
-import org.camunda.bpm.engine.rest.sub.VariableResource;
-import org.camunda.bpm.engine.rest.sub.history.HistoricVariableInstanceResource;
+import io.orqueio.bpm.engine.history.HistoricVariableInstanceQuery;
+import io.orqueio.bpm.engine.rest.dto.CountResultDto;
+import io.orqueio.bpm.engine.rest.dto.history.HistoricVariableInstanceDto;
+import io.orqueio.bpm.engine.rest.dto.history.HistoricVariableInstanceQueryDto;
+import io.orqueio.bpm.engine.rest.sub.VariableResource;
+import io.orqueio.bpm.engine.rest.sub.history.HistoricVariableInstanceResource;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;

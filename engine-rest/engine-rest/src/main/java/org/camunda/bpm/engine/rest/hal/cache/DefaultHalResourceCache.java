@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.hal.cache;
+package io.orqueio.bpm.engine.rest.hal.cache;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -24,8 +24,8 @@ import java.util.Map;
 import java.util.NavigableSet;
 import java.util.TreeSet;
 
-import org.camunda.bpm.engine.impl.util.ClockUtil;
-import org.camunda.bpm.engine.rest.cache.Cache;
+import io.orqueio.bpm.engine.impl.util.ClockUtil;
+import io.orqueio.bpm.engine.rest.cache.Cache;
 
 public class DefaultHalResourceCache implements Cache {
 

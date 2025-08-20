@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.deployment;
+package io.orqueio.bpm.container.impl.deployment;
 
-import static org.camunda.bpm.container.impl.deployment.Attachments.BPM_PLATFORM_XML;
+import static io.orqueio.bpm.container.impl.deployment.Attachments.BPM_PLATFORM_XML;
 
 import java.util.List;
 
-import org.camunda.bpm.application.impl.metadata.spi.ProcessesXml;
-import org.camunda.bpm.container.impl.metadata.spi.BpmPlatformXml;
-import org.camunda.bpm.container.impl.metadata.spi.ProcessEngineXml;
-import org.camunda.bpm.container.impl.spi.DeploymentOperation;
+import io.orqueio.bpm.application.impl.metadata.spi.ProcessesXml;
+import io.orqueio.bpm.container.impl.metadata.spi.BpmPlatformXml;
+import io.orqueio.bpm.container.impl.metadata.spi.ProcessEngineXml;
+import io.orqueio.bpm.container.impl.spi.DeploymentOperation;
 
 /**
  * <p> Retrieves the List of ProcessEngines from an attached {@link ProcessesXml}.</p>

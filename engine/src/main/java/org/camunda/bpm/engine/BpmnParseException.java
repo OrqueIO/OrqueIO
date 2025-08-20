@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine;
+package io.orqueio.bpm.engine;
 
 
-import org.camunda.bpm.engine.impl.util.xml.Element;
+import io.orqueio.bpm.engine.impl.util.xml.Element;
 
 /**
  * Exception during the parsing of an BPMN model.

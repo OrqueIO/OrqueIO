@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.engine;
+package io.orqueio.bpm.dmn.engine;
 
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.engine.variable.value.TypedValue;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
 
 /**
  * The result of one decision table. Which is the list of its decision rule results (see

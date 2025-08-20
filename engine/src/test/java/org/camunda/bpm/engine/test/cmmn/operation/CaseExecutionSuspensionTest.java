@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.cmmn.operation;
+package io.orqueio.bpm.engine.test.cmmn.operation;
 
-import org.camunda.bpm.engine.impl.cmmn.behavior.StageActivityBehavior;
-import org.camunda.bpm.engine.impl.cmmn.execution.CmmnActivityExecution;
-import org.camunda.bpm.engine.impl.cmmn.execution.CmmnCaseInstance;
-import org.camunda.bpm.engine.impl.cmmn.handler.ItemHandler;
-import org.camunda.bpm.engine.impl.cmmn.model.CaseDefinitionBuilder;
-import org.camunda.bpm.engine.impl.cmmn.model.CmmnCaseDefinition;
+import io.orqueio.bpm.engine.impl.cmmn.behavior.StageActivityBehavior;
+import io.orqueio.bpm.engine.impl.cmmn.execution.CmmnActivityExecution;
+import io.orqueio.bpm.engine.impl.cmmn.execution.CmmnCaseInstance;
+import io.orqueio.bpm.engine.impl.cmmn.handler.ItemHandler;
+import io.orqueio.bpm.engine.impl.cmmn.model.CaseDefinitionBuilder;
+import io.orqueio.bpm.engine.impl.cmmn.model.CmmnCaseDefinition;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertFalse;
@@ -30,7 +30,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
-import org.camunda.bpm.engine.impl.test.TestHelper;
+import io.orqueio.bpm.engine.impl.test.TestHelper;
 import org.junit.Test;
 
 /**

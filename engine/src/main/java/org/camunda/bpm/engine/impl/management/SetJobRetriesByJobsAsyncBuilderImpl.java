@@ -14,21 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.management;
+package io.orqueio.bpm.engine.impl.management;
 
-import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
+import static io.orqueio.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
 
 import java.util.Date;
 import java.util.List;
 
-import org.camunda.bpm.engine.batch.Batch;
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
-import org.camunda.bpm.engine.impl.cmd.CommandLogger;
-import org.camunda.bpm.engine.impl.cmd.SetJobsRetriesBatchCmd;
-import org.camunda.bpm.engine.impl.interceptor.CommandExecutor;
-import org.camunda.bpm.engine.management.SetJobRetriesAsyncBuilder;
-import org.camunda.bpm.engine.management.SetJobRetriesByJobsAsyncBuilder;
-import org.camunda.bpm.engine.runtime.JobQuery;
+import io.orqueio.bpm.engine.batch.Batch;
+import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
+import io.orqueio.bpm.engine.impl.cmd.CommandLogger;
+import io.orqueio.bpm.engine.impl.cmd.SetJobsRetriesBatchCmd;
+import io.orqueio.bpm.engine.impl.interceptor.CommandExecutor;
+import io.orqueio.bpm.engine.management.SetJobRetriesAsyncBuilder;
+import io.orqueio.bpm.engine.management.SetJobRetriesByJobsAsyncBuilder;
+import io.orqueio.bpm.engine.runtime.JobQuery;
 
 public class SetJobRetriesByJobsAsyncBuilderImpl implements SetJobRetriesByJobsAsyncBuilder {
 

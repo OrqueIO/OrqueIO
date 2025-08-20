@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.impl;
+package io.orqueio.bpm.engine.rest.impl;
 
-import org.camunda.bpm.engine.rest.MetricsRestService;
-import org.camunda.bpm.engine.rest.sub.metrics.MetricsResource;
-import org.camunda.bpm.engine.rest.sub.metrics.MetricsResourceImpl;
+import io.orqueio.bpm.engine.rest.MetricsRestService;
+import io.orqueio.bpm.engine.rest.sub.metrics.MetricsResource;
+import io.orqueio.bpm.engine.rest.sub.metrics.MetricsResourceImpl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
@@ -27,12 +27,12 @@ import java.util.List;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import org.camunda.bpm.engine.management.MetricsQuery;
-import org.camunda.bpm.engine.rest.dto.metrics.MetricsIntervalResultDto;
-import org.camunda.bpm.engine.management.MetricIntervalValue;
-import org.camunda.bpm.engine.rest.dto.converter.DateConverter;
-import org.camunda.bpm.engine.rest.dto.converter.IntegerConverter;
-import org.camunda.bpm.engine.rest.dto.converter.LongConverter;
+import io.orqueio.bpm.engine.management.MetricsQuery;
+import io.orqueio.bpm.engine.rest.dto.metrics.MetricsIntervalResultDto;
+import io.orqueio.bpm.engine.management.MetricIntervalValue;
+import io.orqueio.bpm.engine.rest.dto.converter.DateConverter;
+import io.orqueio.bpm.engine.rest.dto.converter.IntegerConverter;
+import io.orqueio.bpm.engine.rest.dto.converter.LongConverter;
 
 /**
  * @author Daniel Meyer

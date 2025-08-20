@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.bpmn.scripttask;
+package io.orqueio.bpm.engine.test.bpmn.scripttask;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -28,10 +28,10 @@ import java.util.Date;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 
-import org.camunda.bpm.engine.ScriptEvaluationException;
-import org.camunda.bpm.engine.impl.scripting.engine.DefaultScriptEngineResolver;
-import org.camunda.bpm.engine.impl.scripting.engine.ScriptEngineResolver;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.ScriptEvaluationException;
+import io.orqueio.bpm.engine.impl.scripting.engine.DefaultScriptEngineResolver;
+import io.orqueio.bpm.engine.impl.scripting.engine.ScriptEngineResolver;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -218,7 +218,7 @@ public class ScriptTaskGraalJsTest extends AbstractScriptTaskTest {
         // GIVEN
         // setting Java classes as variables
         "execution.setVariable('date', new java.util.Date(0));"
-      + "execution.setVariable('myVar', new org.camunda.bpm.engine.test.bpmn.scripttask.MySerializable('test'));");
+      + "execution.setVariable('myVar', new io.orqueio.bpm.engine.test.bpmn.scripttask.MySerializable('test'));");
 
     if (enableNashornCompat || configureHostAccess) {
       // WHEN

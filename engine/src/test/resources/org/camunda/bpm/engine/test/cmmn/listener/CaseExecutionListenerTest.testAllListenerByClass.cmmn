@@ -13,7 +13,7 @@
 
       <humanTask id="HumanTask_1" name="A HumanTask">
         <extensionElements>
-          <camunda:caseExecutionListener class="org.camunda.bpm.engine.test.cmmn.listener.MySpecialCaseExecutionListener" />
+          <camunda:caseExecutionListener class="io.orqueio.bpm.engine.test.cmmn.listener.MySpecialCaseExecutionListener" />
         </extensionElements>
         <defaultControl>
           <manualActivationRule>

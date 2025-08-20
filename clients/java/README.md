@@ -1,7 +1,7 @@
 # Camunda External Task Client (Java)
 
 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.camunda.bpm/camunda-external-task-client/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.camunda.bpm/camunda-external-task-client)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.orqueio.bpm/camunda-external-task-client/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.orqueio.bpm/camunda-external-task-client)
 
 > Are you looking for the Spring Boot External Task Client? This way please: [Spring Boot External Task Client](../../spring-boot-starter/starter-client)
 
@@ -31,7 +31,7 @@ The **Camunda External Task Client (Java)** allows to set up remote Service Task
 The following Maven coordinate needs to be added to the projects `pom.xml`:
 ```xml
 <dependency>
-  <groupId>org.camunda.bpm</groupId>
+  <groupId>io.orqueio.bpm</groupId>
   <artifactId>camunda-external-task-client</artifactId>
   <version>${version}</version>
 </dependency>

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.connect.httpclient.impl;
+package io.orqueio.connect.httpclient.impl;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,10 +27,10 @@ import org.apache.hc.client5.http.classic.methods.HttpPatch;
 import org.apache.hc.client5.http.classic.methods.HttpPost;
 import org.apache.hc.client5.http.classic.methods.HttpPut;
 import org.apache.hc.client5.http.classic.methods.HttpTrace;
-import org.camunda.connect.httpclient.HttpBaseRequest;
-import org.camunda.connect.httpclient.HttpResponse;
-import org.camunda.connect.impl.AbstractConnectorRequest;
-import org.camunda.connect.spi.Connector;
+import io.orqueio.connect.httpclient.HttpBaseRequest;
+import io.orqueio.connect.httpclient.HttpResponse;
+import io.orqueio.connect.impl.AbstractConnectorRequest;
+import io.orqueio.connect.spi.Connector;
 
 public class AbstractHttpRequest<Q extends HttpBaseRequest<?, ?>, R extends HttpResponse> extends AbstractConnectorRequest<R> {
 

@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter.property;
+package io.orqueio.bpm.spring.boot.starter.property;
 
 import org.apache.commons.lang3.RandomStringUtils;
-import org.camunda.bpm.engine.ProcessEngineConfiguration;
-import org.camunda.bpm.engine.ProcessEngines;
-import org.camunda.bpm.spring.boot.starter.configuration.id.IdGeneratorConfiguration;
+import io.orqueio.bpm.engine.ProcessEngineConfiguration;
+import io.orqueio.bpm.engine.ProcessEngines;
+import io.orqueio.bpm.spring.boot.starter.configuration.id.IdGeneratorConfiguration;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 

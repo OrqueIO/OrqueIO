@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.runtime;
+package io.orqueio.bpm.engine.runtime;
 
-import org.camunda.bpm.engine.variable.VariableMap;
+import io.orqueio.bpm.engine.variable.VariableMap;
 
 /**
  * <p> * The result of a {@link MessageCorrelationResult message correlation}

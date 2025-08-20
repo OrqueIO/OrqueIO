@@ -14,32 +14,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test;
+package io.orqueio.bpm.engine.test;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import org.camunda.bpm.engine.AuthorizationService;
-import org.camunda.bpm.engine.CaseService;
-import org.camunda.bpm.engine.DecisionService;
-import org.camunda.bpm.engine.ExternalTaskService;
-import org.camunda.bpm.engine.FilterService;
-import org.camunda.bpm.engine.FormService;
-import org.camunda.bpm.engine.HistoryService;
-import org.camunda.bpm.engine.IdentityService;
-import org.camunda.bpm.engine.ManagementService;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.ProcessEngineServices;
-import org.camunda.bpm.engine.RepositoryService;
-import org.camunda.bpm.engine.RuntimeService;
-import org.camunda.bpm.engine.TaskService;
-import org.camunda.bpm.engine.impl.ProcessEngineImpl;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.diagnostics.PlatformDiagnosticsRegistry;
-import org.camunda.bpm.engine.impl.test.RequiredDatabase;
-import org.camunda.bpm.engine.impl.test.TestHelper;
-import org.camunda.bpm.engine.impl.util.ClockUtil;
+import io.orqueio.bpm.engine.AuthorizationService;
+import io.orqueio.bpm.engine.CaseService;
+import io.orqueio.bpm.engine.DecisionService;
+import io.orqueio.bpm.engine.ExternalTaskService;
+import io.orqueio.bpm.engine.FilterService;
+import io.orqueio.bpm.engine.FormService;
+import io.orqueio.bpm.engine.HistoryService;
+import io.orqueio.bpm.engine.IdentityService;
+import io.orqueio.bpm.engine.ManagementService;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.ProcessEngineServices;
+import io.orqueio.bpm.engine.RepositoryService;
+import io.orqueio.bpm.engine.RuntimeService;
+import io.orqueio.bpm.engine.TaskService;
+import io.orqueio.bpm.engine.impl.ProcessEngineImpl;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.diagnostics.PlatformDiagnosticsRegistry;
+import io.orqueio.bpm.engine.impl.test.RequiredDatabase;
+import io.orqueio.bpm.engine.impl.test.TestHelper;
+import io.orqueio.bpm.engine.impl.util.ClockUtil;
 import org.junit.Assume;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
@@ -78,7 +78,7 @@ import org.junit.runners.model.Statement;
  * and {@link RepositoryService#deleteDeployment(String, boolean) cascade
  * deleted} after the tearDown. If you add a deployment programmatically in your
  * test, you have to make it known to the processEngineRule by calling
- * {@link ProcessEngineRule#manageDeployment(org.camunda.bpm.engine.repository.Deployment)}
+ * {@link ProcessEngineRule#manageDeployment(io.orqueio.bpm.engine.repository.Deployment)}
  * to have it cleaned up automatically.
  * </p>
  * <p>
@@ -405,7 +405,7 @@ public class ProcessEngineRule extends TestWatcher implements ProcessEngineServi
     this.decisionService = decisionService;
   }
 
-  public void manageDeployment(org.camunda.bpm.engine.repository.Deployment deployment) {
+  public void manageDeployment(io.orqueio.bpm.engine.repository.Deployment deployment) {
     this.additionalDeployments.add(deployment.getId());
   }
 

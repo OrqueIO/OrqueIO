@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest;
+package io.orqueio.bpm.engine.rest;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
@@ -28,15 +28,15 @@ import java.util.Map;
 
 import javax.ws.rs.core.Response.Status;
 
-import org.camunda.bpm.engine.ManagementService;
-import org.camunda.bpm.engine.rest.helper.MockProvider;
-import org.camunda.bpm.engine.rest.util.container.TestContainerRule;
-import org.camunda.bpm.engine.telemetry.ApplicationServer;
-import org.camunda.bpm.engine.telemetry.Database;
-import org.camunda.bpm.engine.telemetry.Internals;
-import org.camunda.bpm.engine.telemetry.Jdk;
-import org.camunda.bpm.engine.telemetry.Product;
-import org.camunda.bpm.engine.telemetry.TelemetryData;
+import io.orqueio.bpm.engine.ManagementService;
+import io.orqueio.bpm.engine.rest.helper.MockProvider;
+import io.orqueio.bpm.engine.rest.util.container.TestContainerRule;
+import io.orqueio.bpm.engine.telemetry.ApplicationServer;
+import io.orqueio.bpm.engine.telemetry.Database;
+import io.orqueio.bpm.engine.telemetry.Internals;
+import io.orqueio.bpm.engine.telemetry.Jdk;
+import io.orqueio.bpm.engine.telemetry.Product;
+import io.orqueio.bpm.engine.telemetry.TelemetryData;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;

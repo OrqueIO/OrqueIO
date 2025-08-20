@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.impl.history;
+package io.orqueio.bpm.engine.rest.impl.history;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
@@ -22,24 +22,24 @@ import java.util.Date;
 import java.util.List;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
-import org.camunda.bpm.engine.BadUserRequestException;
-import org.camunda.bpm.engine.HistoryService;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.batch.Batch;
-import org.camunda.bpm.engine.history.HistoricDecisionInstance;
-import org.camunda.bpm.engine.history.HistoricDecisionInstanceQuery;
-import org.camunda.bpm.engine.history.SetRemovalTimeSelectModeForHistoricDecisionInstancesBuilder;
-import org.camunda.bpm.engine.rest.dto.CountResultDto;
-import org.camunda.bpm.engine.rest.dto.batch.BatchDto;
-import org.camunda.bpm.engine.rest.dto.history.HistoricDecisionInstanceDto;
-import org.camunda.bpm.engine.rest.dto.history.HistoricDecisionInstanceQueryDto;
-import org.camunda.bpm.engine.rest.dto.history.batch.DeleteHistoricDecisionInstancesDto;
-import org.camunda.bpm.engine.rest.dto.history.batch.removaltime.SetRemovalTimeToHistoricDecisionInstancesDto;
-import org.camunda.bpm.engine.rest.exception.InvalidRequestException;
-import org.camunda.bpm.engine.rest.history.HistoricDecisionInstanceRestService;
-import org.camunda.bpm.engine.rest.sub.history.HistoricDecisionInstanceResource;
-import org.camunda.bpm.engine.rest.sub.history.impl.HistoricDecisionInstanceResourceImpl;
-import org.camunda.bpm.engine.rest.util.QueryUtil;
+import io.orqueio.bpm.engine.BadUserRequestException;
+import io.orqueio.bpm.engine.HistoryService;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.batch.Batch;
+import io.orqueio.bpm.engine.history.HistoricDecisionInstance;
+import io.orqueio.bpm.engine.history.HistoricDecisionInstanceQuery;
+import io.orqueio.bpm.engine.history.SetRemovalTimeSelectModeForHistoricDecisionInstancesBuilder;
+import io.orqueio.bpm.engine.rest.dto.CountResultDto;
+import io.orqueio.bpm.engine.rest.dto.batch.BatchDto;
+import io.orqueio.bpm.engine.rest.dto.history.HistoricDecisionInstanceDto;
+import io.orqueio.bpm.engine.rest.dto.history.HistoricDecisionInstanceQueryDto;
+import io.orqueio.bpm.engine.rest.dto.history.batch.DeleteHistoricDecisionInstancesDto;
+import io.orqueio.bpm.engine.rest.dto.history.batch.removaltime.SetRemovalTimeToHistoricDecisionInstancesDto;
+import io.orqueio.bpm.engine.rest.exception.InvalidRequestException;
+import io.orqueio.bpm.engine.rest.history.HistoricDecisionInstanceRestService;
+import io.orqueio.bpm.engine.rest.sub.history.HistoricDecisionInstanceResource;
+import io.orqueio.bpm.engine.rest.sub.history.impl.HistoricDecisionInstanceResourceImpl;
+import io.orqueio.bpm.engine.rest.util.QueryUtil;
 
 public class HistoricDecisionInstanceRestServiceImpl implements HistoricDecisionInstanceRestService {
 

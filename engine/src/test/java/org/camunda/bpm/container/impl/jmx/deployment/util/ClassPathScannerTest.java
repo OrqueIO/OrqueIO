@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.jmx.deployment.util;
+package io.orqueio.bpm.container.impl.jmx.deployment.util;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -28,7 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.container.impl.deployment.scanning.ClassPathProcessApplicationScanner;
+import io.orqueio.bpm.container.impl.deployment.scanning.ClassPathProcessApplicationScanner;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -70,7 +70,7 @@ public class ClassPathScannerTest {
   }
   
   /**
-   * Test method for {@link org.camunda.bpm.container.impl.deployment.scanning.ClassPathProcessApplicationScanner#scanClassPath(java.lang.ClassLoader)}.
+   * Test method for {@link io.orqueio.bpm.container.impl.deployment.scanning.ClassPathProcessApplicationScanner#scanClassPath(java.lang.ClassLoader)}.
    * @throws MalformedURLException 
    */
   @Test

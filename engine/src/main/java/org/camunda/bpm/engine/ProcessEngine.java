@@ -14,32 +14,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine;
+package io.orqueio.bpm.engine;
 
 /**
  * Provides access to all the services that expose the BPM and workflow operations.
  *
  * <ul>
  * <li>
- * <b>{@link org.camunda.bpm.engine.RuntimeService}: </b> Allows the creation of
- * {@link org.camunda.bpm.engine.repository.Deployment}s and the starting of and searching on
- * {@link org.camunda.bpm.engine.runtime.ProcessInstance}s.</li>
+ * <b>{@link io.orqueio.bpm.engine.RuntimeService}: </b> Allows the creation of
+ * {@link io.orqueio.bpm.engine.repository.Deployment}s and the starting of and searching on
+ * {@link io.orqueio.bpm.engine.runtime.ProcessInstance}s.</li>
  * <li>
- * <b>{@link org.camunda.bpm.engine.TaskService}: </b> Exposes operations to manage human
- * (standalone) {@link org.camunda.bpm.engine.task.Task}s, such as claiming, completing and
+ * <b>{@link io.orqueio.bpm.engine.TaskService}: </b> Exposes operations to manage human
+ * (standalone) {@link io.orqueio.bpm.engine.task.Task}s, such as claiming, completing and
  * assigning tasks</li>
  * <li>
- * <b>{@link org.camunda.bpm.engine.IdentityService}: </b> Used for managing
- * {@link org.camunda.bpm.engine.identity.User}s, {@link org.camunda.bpm.engine.identity.Group}s and
+ * <b>{@link io.orqueio.bpm.engine.IdentityService}: </b> Used for managing
+ * {@link io.orqueio.bpm.engine.identity.User}s, {@link io.orqueio.bpm.engine.identity.Group}s and
  * the relations between them<</li>
  * <li>
- * <b>{@link org.camunda.bpm.engine.ManagementService}: </b> Exposes engine admin and
+ * <b>{@link io.orqueio.bpm.engine.ManagementService}: </b> Exposes engine admin and
  * maintenance operations</li>
  *  <li>
- * <b>{@link org.camunda.bpm.engine.HistoryService}: </b> Service exposing information about
+ * <b>{@link io.orqueio.bpm.engine.HistoryService}: </b> Service exposing information about
  * ongoing and past process instances.</li>
  *
- * <li><b>{@link org.camunda.bpm.engine.AuthorizationService}:</b> Service allowing
+ * <li><b>{@link io.orqueio.bpm.engine.AuthorizationService}:</b> Service allowing
  * to manage access permissions for users and groups.</b>
  * </ul>
  *

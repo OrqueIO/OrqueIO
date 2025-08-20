@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.engine.impl.metrics;
+package io.orqueio.bpm.dmn.engine.impl.metrics;
 
 import java.util.concurrent.atomic.AtomicLong;
 
-import org.camunda.bpm.dmn.engine.delegate.DmnDecisionEvaluationEvent;
-import org.camunda.bpm.dmn.engine.delegate.DmnDecisionEvaluationListener;
-import org.camunda.bpm.dmn.engine.delegate.DmnDecisionTableEvaluationEvent;
-import org.camunda.bpm.dmn.engine.spi.DmnEngineMetricCollector;
+import io.orqueio.bpm.dmn.engine.delegate.DmnDecisionEvaluationEvent;
+import io.orqueio.bpm.dmn.engine.delegate.DmnDecisionEvaluationListener;
+import io.orqueio.bpm.dmn.engine.delegate.DmnDecisionTableEvaluationEvent;
+import io.orqueio.bpm.dmn.engine.spi.DmnEngineMetricCollector;
 
 public class DefaultEngineMetricCollector implements DmnEngineMetricCollector, DmnDecisionEvaluationListener {
 

@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest;
+package io.orqueio.bpm.engine.rest;
 
-import org.camunda.bpm.engine.rest.dto.CountResultDto;
-import org.camunda.bpm.engine.rest.dto.runtime.IncidentDto;
-import org.camunda.bpm.engine.rest.sub.runtime.IncidentResource;
-import org.camunda.bpm.engine.runtime.IncidentQuery;
+import io.orqueio.bpm.engine.rest.dto.CountResultDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.IncidentDto;
+import io.orqueio.bpm.engine.rest.sub.runtime.IncidentResource;
+import io.orqueio.bpm.engine.runtime.IncidentQuery;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

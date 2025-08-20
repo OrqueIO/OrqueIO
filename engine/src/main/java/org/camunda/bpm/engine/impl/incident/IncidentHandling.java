@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.incident;
+package io.orqueio.bpm.engine.impl.incident;
 
-import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.engine.runtime.Incident;
+import io.orqueio.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.runtime.Incident;
 
 public class IncidentHandling {
 

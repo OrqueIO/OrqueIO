@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.standalone.initialization;
+package io.orqueio.bpm.engine.test.standalone.initialization;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.camunda.bpm.engine.ProcessEngineConfiguration;
-import org.camunda.bpm.engine.impl.persistence.entity.JobEntity;
+import io.orqueio.bpm.engine.ProcessEngineConfiguration;
+import io.orqueio.bpm.engine.impl.persistence.entity.JobEntity;
 import org.junit.Test;
 
 /**

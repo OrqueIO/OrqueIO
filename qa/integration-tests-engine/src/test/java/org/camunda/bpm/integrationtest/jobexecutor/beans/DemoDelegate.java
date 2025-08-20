@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.jobexecutor.beans;
+package io.orqueio.bpm.integrationtest.jobexecutor.beans;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.logging.Logger;
 
-import org.camunda.bpm.engine.delegate.DelegateExecution;
-import org.camunda.bpm.engine.delegate.Expression;
-import org.camunda.bpm.engine.delegate.JavaDelegate;
+import io.orqueio.bpm.engine.delegate.DelegateExecution;
+import io.orqueio.bpm.engine.delegate.Expression;
+import io.orqueio.bpm.engine.delegate.JavaDelegate;
 
 public class DemoDelegate implements JavaDelegate {
 

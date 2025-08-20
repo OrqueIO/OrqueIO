@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.functional.classloading.variables;
+package io.orqueio.bpm.integrationtest.functional.classloading.variables;
 
-import org.camunda.bpm.engine.history.HistoricVariableInstance;
-import org.camunda.bpm.engine.impl.persistence.entity.HistoricVariableInstanceEntity;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.integrationtest.functional.classloading.variables.beans.GetDeserializableVariableDelegate;
-import org.camunda.bpm.integrationtest.functional.classloading.variables.beans.SerializableVariable;
-import org.camunda.bpm.integrationtest.functional.classloading.variables.beans.SetVariableDelegate;
-import org.camunda.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
-import org.camunda.bpm.integrationtest.util.TestContainer;
+import io.orqueio.bpm.engine.history.HistoricVariableInstance;
+import io.orqueio.bpm.engine.impl.persistence.entity.HistoricVariableInstanceEntity;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.integrationtest.functional.classloading.variables.beans.GetDeserializableVariableDelegate;
+import io.orqueio.bpm.integrationtest.functional.classloading.variables.beans.SerializableVariable;
+import io.orqueio.bpm.integrationtest.functional.classloading.variables.beans.SetVariableDelegate;
+import io.orqueio.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
+import io.orqueio.bpm.integrationtest.util.TestContainer;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;

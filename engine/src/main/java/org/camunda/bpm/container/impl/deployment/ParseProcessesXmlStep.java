@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.deployment;
+package io.orqueio.bpm.container.impl.deployment;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,18 +25,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.application.AbstractProcessApplication;
-import org.camunda.bpm.application.ProcessApplication;
-import org.camunda.bpm.application.impl.metadata.ProcessesXmlParser;
-import org.camunda.bpm.application.impl.metadata.spi.ProcessesXml;
-import org.camunda.bpm.container.impl.ContainerIntegrationLogger;
-import org.camunda.bpm.container.impl.spi.DeploymentOperation;
-import org.camunda.bpm.container.impl.spi.DeploymentOperationStep;
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
-import org.camunda.bpm.engine.impl.util.IoUtil;
+import io.orqueio.bpm.application.AbstractProcessApplication;
+import io.orqueio.bpm.application.ProcessApplication;
+import io.orqueio.bpm.application.impl.metadata.ProcessesXmlParser;
+import io.orqueio.bpm.application.impl.metadata.spi.ProcessesXml;
+import io.orqueio.bpm.container.impl.ContainerIntegrationLogger;
+import io.orqueio.bpm.container.impl.spi.DeploymentOperation;
+import io.orqueio.bpm.container.impl.spi.DeploymentOperationStep;
+import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
+import io.orqueio.bpm.engine.impl.util.IoUtil;
 
-import static org.camunda.bpm.container.impl.deployment.Attachments.PROCESSES_XML_RESOURCES;
-import static org.camunda.bpm.container.impl.deployment.Attachments.PROCESS_APPLICATION;
+import static io.orqueio.bpm.container.impl.deployment.Attachments.PROCESSES_XML_RESOURCES;
+import static io.orqueio.bpm.container.impl.deployment.Attachments.PROCESS_APPLICATION;
 
 
 /**

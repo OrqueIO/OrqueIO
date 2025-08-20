@@ -14,49 +14,49 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.history.producer;
+package io.orqueio.bpm.engine.impl.history.producer;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import org.camunda.bpm.dmn.engine.delegate.DmnDecisionEvaluationEvent;
-import org.camunda.bpm.dmn.engine.delegate.DmnDecisionLiteralExpressionEvaluationEvent;
-import org.camunda.bpm.dmn.engine.delegate.DmnDecisionLogicEvaluationEvent;
-import org.camunda.bpm.dmn.engine.delegate.DmnDecisionTableEvaluationEvent;
-import org.camunda.bpm.dmn.engine.delegate.DmnEvaluatedDecisionRule;
-import org.camunda.bpm.dmn.engine.delegate.DmnEvaluatedInput;
-import org.camunda.bpm.dmn.engine.delegate.DmnEvaluatedOutput;
-import org.camunda.bpm.engine.delegate.DelegateCaseExecution;
-import org.camunda.bpm.engine.delegate.DelegateExecution;
-import org.camunda.bpm.engine.history.HistoricDecisionInputInstance;
-import org.camunda.bpm.engine.history.HistoricDecisionOutputInstance;
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
-import org.camunda.bpm.engine.impl.cfg.multitenancy.TenantIdProvider;
-import org.camunda.bpm.engine.impl.cfg.multitenancy.TenantIdProviderHistoricDecisionInstanceContext;
-import org.camunda.bpm.engine.impl.cmmn.entity.repository.CaseDefinitionEntity;
-import org.camunda.bpm.engine.impl.cmmn.entity.runtime.CaseExecutionEntity;
-import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.engine.impl.db.EnginePersistenceLogger;
-import org.camunda.bpm.engine.impl.history.event.HistoricDecisionEvaluationEvent;
-import org.camunda.bpm.engine.impl.history.event.HistoricDecisionInputInstanceEntity;
-import org.camunda.bpm.engine.impl.history.event.HistoricDecisionInstanceEntity;
-import org.camunda.bpm.engine.impl.history.event.HistoricDecisionOutputInstanceEntity;
-import org.camunda.bpm.engine.impl.history.event.HistoricProcessInstanceEventEntity;
-import org.camunda.bpm.engine.impl.history.event.HistoryEvent;
-import org.camunda.bpm.engine.impl.history.event.HistoryEventTypes;
-import org.camunda.bpm.engine.impl.persistence.entity.ExecutionEntity;
-import org.camunda.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity;
-import org.camunda.bpm.engine.impl.util.ClockUtil;
-import org.camunda.bpm.engine.repository.DecisionDefinition;
-import org.camunda.bpm.engine.variable.Variables;
-import org.camunda.bpm.engine.variable.value.DoubleValue;
-import org.camunda.bpm.engine.variable.value.IntegerValue;
-import org.camunda.bpm.engine.variable.value.LongValue;
-import org.camunda.bpm.engine.variable.value.TypedValue;
+import io.orqueio.bpm.dmn.engine.delegate.DmnDecisionEvaluationEvent;
+import io.orqueio.bpm.dmn.engine.delegate.DmnDecisionLiteralExpressionEvaluationEvent;
+import io.orqueio.bpm.dmn.engine.delegate.DmnDecisionLogicEvaluationEvent;
+import io.orqueio.bpm.dmn.engine.delegate.DmnDecisionTableEvaluationEvent;
+import io.orqueio.bpm.dmn.engine.delegate.DmnEvaluatedDecisionRule;
+import io.orqueio.bpm.dmn.engine.delegate.DmnEvaluatedInput;
+import io.orqueio.bpm.dmn.engine.delegate.DmnEvaluatedOutput;
+import io.orqueio.bpm.engine.delegate.DelegateCaseExecution;
+import io.orqueio.bpm.engine.delegate.DelegateExecution;
+import io.orqueio.bpm.engine.history.HistoricDecisionInputInstance;
+import io.orqueio.bpm.engine.history.HistoricDecisionOutputInstance;
+import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
+import io.orqueio.bpm.engine.impl.cfg.multitenancy.TenantIdProvider;
+import io.orqueio.bpm.engine.impl.cfg.multitenancy.TenantIdProviderHistoricDecisionInstanceContext;
+import io.orqueio.bpm.engine.impl.cmmn.entity.repository.CaseDefinitionEntity;
+import io.orqueio.bpm.engine.impl.cmmn.entity.runtime.CaseExecutionEntity;
+import io.orqueio.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.impl.db.EnginePersistenceLogger;
+import io.orqueio.bpm.engine.impl.history.event.HistoricDecisionEvaluationEvent;
+import io.orqueio.bpm.engine.impl.history.event.HistoricDecisionInputInstanceEntity;
+import io.orqueio.bpm.engine.impl.history.event.HistoricDecisionInstanceEntity;
+import io.orqueio.bpm.engine.impl.history.event.HistoricDecisionOutputInstanceEntity;
+import io.orqueio.bpm.engine.impl.history.event.HistoricProcessInstanceEventEntity;
+import io.orqueio.bpm.engine.impl.history.event.HistoryEvent;
+import io.orqueio.bpm.engine.impl.history.event.HistoryEventTypes;
+import io.orqueio.bpm.engine.impl.persistence.entity.ExecutionEntity;
+import io.orqueio.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity;
+import io.orqueio.bpm.engine.impl.util.ClockUtil;
+import io.orqueio.bpm.engine.repository.DecisionDefinition;
+import io.orqueio.bpm.engine.variable.Variables;
+import io.orqueio.bpm.engine.variable.value.DoubleValue;
+import io.orqueio.bpm.engine.variable.value.IntegerValue;
+import io.orqueio.bpm.engine.variable.value.LongValue;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
 
-import static org.camunda.bpm.engine.ProcessEngineConfiguration.HISTORY_REMOVAL_TIME_STRATEGY_START;
+import static io.orqueio.bpm.engine.ProcessEngineConfiguration.HISTORY_REMOVAL_TIME_STRATEGY_START;
 
 /**
  * @author Philipp Ossler

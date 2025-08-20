@@ -17,7 +17,7 @@
         </camunda:inputOutput>
       </extensionElements>
       <script>
-        import org.camunda.bpm.engine.delegate.BpmnError;
+        import io.orqueio.bpm.engine.delegate.BpmnError;
 
         execution.setVariableLocal("localNotMapped", "a")
         execution.setVariableLocal("localMapped", "b")

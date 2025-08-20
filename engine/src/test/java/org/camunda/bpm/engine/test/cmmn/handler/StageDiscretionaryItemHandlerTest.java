@@ -14,34 +14,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.cmmn.handler;
+package io.orqueio.bpm.engine.test.cmmn.handler;
 
-import static org.camunda.bpm.engine.impl.cmmn.handler.ItemHandler.PROPERTY_ACTIVITY_DESCRIPTION;
-import static org.camunda.bpm.engine.impl.cmmn.handler.ItemHandler.PROPERTY_ACTIVITY_TYPE;
-import static org.camunda.bpm.engine.impl.cmmn.handler.ItemHandler.PROPERTY_AUTO_COMPLETE;
-import static org.camunda.bpm.engine.impl.cmmn.handler.ItemHandler.PROPERTY_MANUAL_ACTIVATION_RULE;
-import static org.camunda.bpm.engine.impl.cmmn.handler.ItemHandler.PROPERTY_REQUIRED_RULE;
+import static io.orqueio.bpm.engine.impl.cmmn.handler.ItemHandler.PROPERTY_ACTIVITY_DESCRIPTION;
+import static io.orqueio.bpm.engine.impl.cmmn.handler.ItemHandler.PROPERTY_ACTIVITY_TYPE;
+import static io.orqueio.bpm.engine.impl.cmmn.handler.ItemHandler.PROPERTY_AUTO_COMPLETE;
+import static io.orqueio.bpm.engine.impl.cmmn.handler.ItemHandler.PROPERTY_MANUAL_ACTIVATION_RULE;
+import static io.orqueio.bpm.engine.impl.cmmn.handler.ItemHandler.PROPERTY_REQUIRED_RULE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import org.camunda.bpm.engine.impl.cmmn.CaseControlRule;
-import org.camunda.bpm.engine.impl.cmmn.behavior.CmmnActivityBehavior;
-import org.camunda.bpm.engine.impl.cmmn.behavior.StageActivityBehavior;
-import org.camunda.bpm.engine.impl.cmmn.handler.StageItemHandler;
-import org.camunda.bpm.engine.impl.cmmn.model.CmmnActivity;
-import org.camunda.bpm.engine.impl.cmmn.model.CmmnCaseDefinition;
-import org.camunda.bpm.model.cmmn.Cmmn;
-import org.camunda.bpm.model.cmmn.instance.ConditionExpression;
-import org.camunda.bpm.model.cmmn.instance.DefaultControl;
-import org.camunda.bpm.model.cmmn.instance.DiscretionaryItem;
-import org.camunda.bpm.model.cmmn.instance.ItemControl;
-import org.camunda.bpm.model.cmmn.instance.ManualActivationRule;
-import org.camunda.bpm.model.cmmn.instance.PlanItemControl;
-import org.camunda.bpm.model.cmmn.instance.PlanningTable;
-import org.camunda.bpm.model.cmmn.instance.RequiredRule;
-import org.camunda.bpm.model.cmmn.instance.Stage;
+import io.orqueio.bpm.engine.impl.cmmn.CaseControlRule;
+import io.orqueio.bpm.engine.impl.cmmn.behavior.CmmnActivityBehavior;
+import io.orqueio.bpm.engine.impl.cmmn.behavior.StageActivityBehavior;
+import io.orqueio.bpm.engine.impl.cmmn.handler.StageItemHandler;
+import io.orqueio.bpm.engine.impl.cmmn.model.CmmnActivity;
+import io.orqueio.bpm.engine.impl.cmmn.model.CmmnCaseDefinition;
+import io.orqueio.bpm.model.cmmn.Cmmn;
+import io.orqueio.bpm.model.cmmn.instance.ConditionExpression;
+import io.orqueio.bpm.model.cmmn.instance.DefaultControl;
+import io.orqueio.bpm.model.cmmn.instance.DiscretionaryItem;
+import io.orqueio.bpm.model.cmmn.instance.ItemControl;
+import io.orqueio.bpm.model.cmmn.instance.ManualActivationRule;
+import io.orqueio.bpm.model.cmmn.instance.PlanItemControl;
+import io.orqueio.bpm.model.cmmn.instance.PlanningTable;
+import io.orqueio.bpm.model.cmmn.instance.RequiredRule;
+import io.orqueio.bpm.model.cmmn.instance.Stage;
 import org.junit.Before;
 import org.junit.Test;
 

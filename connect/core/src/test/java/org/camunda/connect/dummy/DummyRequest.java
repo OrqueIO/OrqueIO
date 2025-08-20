@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.connect.dummy;
+package io.orqueio.connect.dummy;
 
-import org.camunda.connect.impl.AbstractConnectorRequest;
-import org.camunda.connect.spi.Connector;
+import io.orqueio.connect.impl.AbstractConnectorRequest;
+import io.orqueio.connect.spi.Connector;
 
 public class DummyRequest extends AbstractConnectorRequest<DummyResponse> {
 

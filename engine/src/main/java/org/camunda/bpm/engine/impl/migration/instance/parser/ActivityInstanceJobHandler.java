@@ -14,27 +14,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.migration.instance.parser;
+package io.orqueio.bpm.engine.impl.migration.instance.parser;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.camunda.bpm.engine.impl.jobexecutor.JobHandlerConfiguration;
-import org.camunda.bpm.engine.impl.jobexecutor.TimerDeclarationImpl;
-import org.camunda.bpm.engine.impl.jobexecutor.TimerEventJobHandler.TimerJobConfiguration;
-import org.camunda.bpm.engine.impl.jobexecutor.TimerExecuteNestedActivityJobHandler;
-import org.camunda.bpm.engine.impl.jobexecutor.TimerTaskListenerJobHandler;
-import org.camunda.bpm.engine.impl.migration.instance.EmergingJobInstance;
-import org.camunda.bpm.engine.impl.migration.instance.MigratingActivityInstance;
-import org.camunda.bpm.engine.impl.migration.instance.MigratingJobInstance;
-import org.camunda.bpm.engine.impl.migration.instance.MigratingTimerJobInstance;
-import org.camunda.bpm.engine.impl.persistence.entity.JobDefinitionEntity;
-import org.camunda.bpm.engine.impl.persistence.entity.JobEntity;
-import org.camunda.bpm.engine.impl.persistence.entity.TimerEntity;
-import org.camunda.bpm.engine.impl.pvm.process.ActivityImpl;
-import org.camunda.bpm.engine.migration.MigrationInstruction;
+import io.orqueio.bpm.engine.impl.jobexecutor.JobHandlerConfiguration;
+import io.orqueio.bpm.engine.impl.jobexecutor.TimerDeclarationImpl;
+import io.orqueio.bpm.engine.impl.jobexecutor.TimerEventJobHandler.TimerJobConfiguration;
+import io.orqueio.bpm.engine.impl.jobexecutor.TimerExecuteNestedActivityJobHandler;
+import io.orqueio.bpm.engine.impl.jobexecutor.TimerTaskListenerJobHandler;
+import io.orqueio.bpm.engine.impl.migration.instance.EmergingJobInstance;
+import io.orqueio.bpm.engine.impl.migration.instance.MigratingActivityInstance;
+import io.orqueio.bpm.engine.impl.migration.instance.MigratingJobInstance;
+import io.orqueio.bpm.engine.impl.migration.instance.MigratingTimerJobInstance;
+import io.orqueio.bpm.engine.impl.persistence.entity.JobDefinitionEntity;
+import io.orqueio.bpm.engine.impl.persistence.entity.JobEntity;
+import io.orqueio.bpm.engine.impl.persistence.entity.TimerEntity;
+import io.orqueio.bpm.engine.impl.pvm.process.ActivityImpl;
+import io.orqueio.bpm.engine.migration.MigrationInstruction;
 
 /**
  * @author Thorben Lindhauer

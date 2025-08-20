@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.scripting;
+package io.orqueio.bpm.engine.impl.scripting;
 
 import javax.script.Bindings;
 import javax.script.Compilable;
@@ -22,13 +22,13 @@ import javax.script.CompiledScript;
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 
-import org.camunda.bpm.engine.ScriptCompilationException;
-import org.camunda.bpm.engine.ScriptEvaluationException;
-import org.camunda.bpm.engine.delegate.BpmnError;
-import org.camunda.bpm.engine.delegate.VariableScope;
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.ScriptCompilationException;
+import io.orqueio.bpm.engine.ScriptEvaluationException;
+import io.orqueio.bpm.engine.delegate.BpmnError;
+import io.orqueio.bpm.engine.delegate.VariableScope;
+import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.context.Context;
 
 /**
  * A script which is provided as source code.

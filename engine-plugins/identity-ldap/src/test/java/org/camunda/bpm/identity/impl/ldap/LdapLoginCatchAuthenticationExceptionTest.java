@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.identity.impl.ldap;
+package io.orqueio.bpm.identity.impl.ldap;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import org.camunda.bpm.engine.IdentityService;
-import org.camunda.bpm.engine.test.ProcessEngineRule;
-import org.camunda.bpm.identity.ldap.util.LdapTestEnvironmentRule;
+import io.orqueio.bpm.engine.IdentityService;
+import io.orqueio.bpm.engine.test.ProcessEngineRule;
+import io.orqueio.bpm.identity.ldap.util.LdapTestEnvironmentRule;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Rule;

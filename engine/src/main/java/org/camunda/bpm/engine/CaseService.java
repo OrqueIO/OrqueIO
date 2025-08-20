@@ -14,25 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine;
+package io.orqueio.bpm.engine;
 
 import java.util.Collection;
 import java.util.Map;
 
-import org.camunda.bpm.engine.exception.NotAllowedException;
-import org.camunda.bpm.engine.exception.NotFoundException;
-import org.camunda.bpm.engine.exception.NotValidException;
-import org.camunda.bpm.engine.runtime.CaseExecution;
-import org.camunda.bpm.engine.runtime.CaseExecutionCommandBuilder;
-import org.camunda.bpm.engine.runtime.CaseExecutionQuery;
-import org.camunda.bpm.engine.runtime.CaseInstance;
-import org.camunda.bpm.engine.runtime.CaseInstanceBuilder;
-import org.camunda.bpm.engine.runtime.CaseInstanceQuery;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.task.Task;
-import org.camunda.bpm.engine.variable.VariableMap;
-import org.camunda.bpm.engine.variable.value.SerializableValue;
-import org.camunda.bpm.engine.variable.value.TypedValue;
+import io.orqueio.bpm.engine.exception.NotAllowedException;
+import io.orqueio.bpm.engine.exception.NotFoundException;
+import io.orqueio.bpm.engine.exception.NotValidException;
+import io.orqueio.bpm.engine.runtime.CaseExecution;
+import io.orqueio.bpm.engine.runtime.CaseExecutionCommandBuilder;
+import io.orqueio.bpm.engine.runtime.CaseExecutionQuery;
+import io.orqueio.bpm.engine.runtime.CaseInstance;
+import io.orqueio.bpm.engine.runtime.CaseInstanceBuilder;
+import io.orqueio.bpm.engine.runtime.CaseInstanceQuery;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.task.Task;
+import io.orqueio.bpm.engine.variable.VariableMap;
+import io.orqueio.bpm.engine.variable.value.SerializableValue;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
 
 /**
  * Service which provides access to {@link CaseInstance case instances}
@@ -210,7 +210,7 @@ public interface CaseService {
    * {@link Stage} or {@link Task} related to the case execution does the following:
    *   <ul>
    *     <li>{@link Task}: the {@link Task task} is completed immediately</li>
-   *     <li>{@link HumanTask}: a new {@link org.camunda.bpm.engine.task.Task user task} is instantiated</li>
+   *     <li>{@link HumanTask}: a new {@link io.orqueio.bpm.engine.task.Task user task} is instantiated</li>
    *     <li>{@link ProcessTask}: a new {@link ProcessInstance process instance} is instantiated</li>
    *     <li>{@link CaseTask}: a new {@link CaseInstance case instance} is instantiated</li>
    *   </ul>
@@ -237,7 +237,7 @@ public interface CaseService {
    * {@link Stage} or {@link Task} related to the case execution does the following:
    *   <ul>
    *     <li>{@link Task}: the {@link Task task} is completed immediately</li>
-   *     <li>{@link HumanTask}: a new {@link org.camunda.bpm.engine.task.Task user task} is instantiated</li>
+   *     <li>{@link HumanTask}: a new {@link io.orqueio.bpm.engine.task.Task user task} is instantiated</li>
    *     <li>{@link ProcessTask}: a new {@link ProcessInstance process instance} is instantiated</li>
    *     <li>{@link CaseTask}: a new {@link CaseInstance case instance} is instantiated</li>
    *   </ul>

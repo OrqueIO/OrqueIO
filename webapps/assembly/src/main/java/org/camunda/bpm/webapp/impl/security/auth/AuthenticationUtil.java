@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.webapp.impl.security.auth;
+package io.orqueio.bpm.webapp.impl.security.auth;
 
-import static org.camunda.bpm.engine.authorization.Permissions.ACCESS;
-import static org.camunda.bpm.engine.authorization.Resources.APPLICATION;
-import static org.camunda.bpm.webapp.impl.security.filter.util.HttpSessionMutexListener.AUTH_TIME_SESSION_MUTEX;
+import static io.orqueio.bpm.engine.authorization.Permissions.ACCESS;
+import static io.orqueio.bpm.engine.authorization.Resources.APPLICATION;
+import static io.orqueio.bpm.webapp.impl.security.filter.util.HttpSessionMutexListener.AUTH_TIME_SESSION_MUTEX;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,14 +27,14 @@ import java.util.HashSet;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import org.camunda.bpm.engine.AuthorizationService;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.identity.Group;
-import org.camunda.bpm.engine.identity.Tenant;
-import org.camunda.bpm.engine.identity.User;
-import org.camunda.bpm.engine.impl.util.ClockUtil;
-import org.camunda.bpm.webapp.impl.WebappLogger;
-import org.camunda.bpm.webapp.impl.util.ProcessEngineUtil;
+import io.orqueio.bpm.engine.AuthorizationService;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.identity.Group;
+import io.orqueio.bpm.engine.identity.Tenant;
+import io.orqueio.bpm.engine.identity.User;
+import io.orqueio.bpm.engine.impl.util.ClockUtil;
+import io.orqueio.bpm.webapp.impl.WebappLogger;
+import io.orqueio.bpm.webapp.impl.util.ProcessEngineUtil;
 
 public class AuthenticationUtil {
 

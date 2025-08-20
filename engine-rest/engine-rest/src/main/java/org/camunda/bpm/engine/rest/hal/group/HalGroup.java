@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.hal.group;
+package io.orqueio.bpm.engine.rest.hal.group;
 
 import javax.ws.rs.core.UriBuilder;
 
-import org.camunda.bpm.engine.identity.Group;
-import org.camunda.bpm.engine.rest.GroupRestService;
-import org.camunda.bpm.engine.rest.hal.HalIdResource;
-import org.camunda.bpm.engine.rest.hal.HalRelation;
-import org.camunda.bpm.engine.rest.hal.HalResource;
+import io.orqueio.bpm.engine.identity.Group;
+import io.orqueio.bpm.engine.rest.GroupRestService;
+import io.orqueio.bpm.engine.rest.hal.HalIdResource;
+import io.orqueio.bpm.engine.rest.hal.HalRelation;
+import io.orqueio.bpm.engine.rest.hal.HalResource;
 
 public class HalGroup extends HalResource<HalGroup> implements HalIdResource {
 

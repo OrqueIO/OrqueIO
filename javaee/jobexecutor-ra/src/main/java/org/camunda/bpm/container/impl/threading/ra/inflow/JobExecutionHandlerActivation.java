@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.threading.ra.inflow;
+package io.orqueio.bpm.container.impl.threading.ra.inflow;
 
 
 import javax.resource.ResourceException;
 import javax.resource.spi.endpoint.MessageEndpointFactory;
 
-import org.camunda.bpm.container.impl.threading.ra.JcaExecutorServiceConnector;
+import io.orqueio.bpm.container.impl.threading.ra.JcaExecutorServiceConnector;
 
 /**
  * Represents the activation of a {@link JobExecutionHandler}

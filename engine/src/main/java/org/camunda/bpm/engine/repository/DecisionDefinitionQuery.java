@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.repository;
+package io.orqueio.bpm.engine.repository;
 
 import java.util.Date;
 
-import org.camunda.bpm.engine.query.Query;
+import io.orqueio.bpm.engine.query.Query;
 
 public interface DecisionDefinitionQuery extends Query<DecisionDefinitionQuery, DecisionDefinition> {
 

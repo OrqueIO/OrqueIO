@@ -14,69 +14,69 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine;
+package io.orqueio.bpm.engine;
 
-import org.camunda.bpm.engine.authorization.BatchPermissions;
-import org.camunda.bpm.engine.authorization.HistoricProcessInstancePermissions;
-import org.camunda.bpm.engine.authorization.HistoricTaskPermissions;
-import org.camunda.bpm.engine.authorization.Permissions;
-import org.camunda.bpm.engine.authorization.ProcessDefinitionPermissions;
-import org.camunda.bpm.engine.authorization.Resources;
-import org.camunda.bpm.engine.authorization.UserOperationLogCategoryPermissions;
-import org.camunda.bpm.engine.batch.Batch;
-import org.camunda.bpm.engine.batch.history.HistoricBatchQuery;
-import org.camunda.bpm.engine.exception.NotValidException;
-import org.camunda.bpm.engine.history.HistoricActivityInstance;
-import org.camunda.bpm.engine.history.HistoricActivityInstanceQuery;
-import org.camunda.bpm.engine.history.HistoricActivityStatisticsQuery;
-import org.camunda.bpm.engine.history.HistoricCaseActivityInstance;
-import org.camunda.bpm.engine.history.HistoricCaseActivityInstanceQuery;
-import org.camunda.bpm.engine.history.HistoricCaseActivityStatisticsQuery;
-import org.camunda.bpm.engine.history.HistoricCaseInstance;
-import org.camunda.bpm.engine.history.HistoricCaseInstanceQuery;
-import org.camunda.bpm.engine.history.HistoricDecisionInstance;
-import org.camunda.bpm.engine.history.HistoricDecisionInstanceQuery;
-import org.camunda.bpm.engine.history.HistoricDetail;
-import org.camunda.bpm.engine.history.HistoricDetailQuery;
-import org.camunda.bpm.engine.history.HistoricExternalTaskLogQuery;
-import org.camunda.bpm.engine.history.CleanableHistoricBatchReport;
-import org.camunda.bpm.engine.history.CleanableHistoricCaseInstanceReport;
-import org.camunda.bpm.engine.history.CleanableHistoricDecisionInstanceReport;
-import org.camunda.bpm.engine.history.CleanableHistoricProcessInstanceReport;
-import org.camunda.bpm.engine.history.HistoricExternalTaskLog;
-import org.camunda.bpm.engine.history.HistoricIdentityLinkLog;
-import org.camunda.bpm.engine.history.HistoricIdentityLinkLogQuery;
-import org.camunda.bpm.engine.history.HistoricIncident;
-import org.camunda.bpm.engine.history.HistoricIncidentQuery;
-import org.camunda.bpm.engine.history.HistoricJobLog;
-import org.camunda.bpm.engine.history.HistoricJobLogQuery;
-import org.camunda.bpm.engine.history.HistoricProcessInstance;
-import org.camunda.bpm.engine.history.HistoricProcessInstanceQuery;
-import org.camunda.bpm.engine.history.HistoricProcessInstanceReport;
-import org.camunda.bpm.engine.history.HistoricTaskInstance;
-import org.camunda.bpm.engine.history.HistoricTaskInstanceQuery;
-import org.camunda.bpm.engine.history.HistoricTaskInstanceReport;
-import org.camunda.bpm.engine.history.HistoricVariableInstance;
-import org.camunda.bpm.engine.history.HistoricVariableInstanceQuery;
-import org.camunda.bpm.engine.history.NativeHistoricActivityInstanceQuery;
-import org.camunda.bpm.engine.history.NativeHistoricCaseActivityInstanceQuery;
-import org.camunda.bpm.engine.history.NativeHistoricCaseInstanceQuery;
-import org.camunda.bpm.engine.history.NativeHistoricDecisionInstanceQuery;
-import org.camunda.bpm.engine.history.NativeHistoricProcessInstanceQuery;
-import org.camunda.bpm.engine.history.NativeHistoricTaskInstanceQuery;
-import org.camunda.bpm.engine.history.NativeHistoricVariableInstanceQuery;
-import org.camunda.bpm.engine.history.SetRemovalTimeSelectModeForHistoricBatchesBuilder;
-import org.camunda.bpm.engine.history.SetRemovalTimeSelectModeForHistoricDecisionInstancesBuilder;
-import org.camunda.bpm.engine.history.SetRemovalTimeSelectModeForHistoricProcessInstancesBuilder;
-import org.camunda.bpm.engine.history.SetRemovalTimeToHistoricBatchesBuilder;
-import org.camunda.bpm.engine.history.SetRemovalTimeToHistoricDecisionInstancesBuilder;
-import org.camunda.bpm.engine.history.UserOperationLogEntry;
-import org.camunda.bpm.engine.history.UserOperationLogQuery;
-import org.camunda.bpm.engine.history.HistoricDecisionInstanceStatisticsQuery;
-import org.camunda.bpm.engine.history.SetRemovalTimeToHistoricProcessInstancesBuilder;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.repository.ProcessDefinition;
-import org.camunda.bpm.engine.runtime.Job;
+import io.orqueio.bpm.engine.authorization.BatchPermissions;
+import io.orqueio.bpm.engine.authorization.HistoricProcessInstancePermissions;
+import io.orqueio.bpm.engine.authorization.HistoricTaskPermissions;
+import io.orqueio.bpm.engine.authorization.Permissions;
+import io.orqueio.bpm.engine.authorization.ProcessDefinitionPermissions;
+import io.orqueio.bpm.engine.authorization.Resources;
+import io.orqueio.bpm.engine.authorization.UserOperationLogCategoryPermissions;
+import io.orqueio.bpm.engine.batch.Batch;
+import io.orqueio.bpm.engine.batch.history.HistoricBatchQuery;
+import io.orqueio.bpm.engine.exception.NotValidException;
+import io.orqueio.bpm.engine.history.HistoricActivityInstance;
+import io.orqueio.bpm.engine.history.HistoricActivityInstanceQuery;
+import io.orqueio.bpm.engine.history.HistoricActivityStatisticsQuery;
+import io.orqueio.bpm.engine.history.HistoricCaseActivityInstance;
+import io.orqueio.bpm.engine.history.HistoricCaseActivityInstanceQuery;
+import io.orqueio.bpm.engine.history.HistoricCaseActivityStatisticsQuery;
+import io.orqueio.bpm.engine.history.HistoricCaseInstance;
+import io.orqueio.bpm.engine.history.HistoricCaseInstanceQuery;
+import io.orqueio.bpm.engine.history.HistoricDecisionInstance;
+import io.orqueio.bpm.engine.history.HistoricDecisionInstanceQuery;
+import io.orqueio.bpm.engine.history.HistoricDetail;
+import io.orqueio.bpm.engine.history.HistoricDetailQuery;
+import io.orqueio.bpm.engine.history.HistoricExternalTaskLogQuery;
+import io.orqueio.bpm.engine.history.CleanableHistoricBatchReport;
+import io.orqueio.bpm.engine.history.CleanableHistoricCaseInstanceReport;
+import io.orqueio.bpm.engine.history.CleanableHistoricDecisionInstanceReport;
+import io.orqueio.bpm.engine.history.CleanableHistoricProcessInstanceReport;
+import io.orqueio.bpm.engine.history.HistoricExternalTaskLog;
+import io.orqueio.bpm.engine.history.HistoricIdentityLinkLog;
+import io.orqueio.bpm.engine.history.HistoricIdentityLinkLogQuery;
+import io.orqueio.bpm.engine.history.HistoricIncident;
+import io.orqueio.bpm.engine.history.HistoricIncidentQuery;
+import io.orqueio.bpm.engine.history.HistoricJobLog;
+import io.orqueio.bpm.engine.history.HistoricJobLogQuery;
+import io.orqueio.bpm.engine.history.HistoricProcessInstance;
+import io.orqueio.bpm.engine.history.HistoricProcessInstanceQuery;
+import io.orqueio.bpm.engine.history.HistoricProcessInstanceReport;
+import io.orqueio.bpm.engine.history.HistoricTaskInstance;
+import io.orqueio.bpm.engine.history.HistoricTaskInstanceQuery;
+import io.orqueio.bpm.engine.history.HistoricTaskInstanceReport;
+import io.orqueio.bpm.engine.history.HistoricVariableInstance;
+import io.orqueio.bpm.engine.history.HistoricVariableInstanceQuery;
+import io.orqueio.bpm.engine.history.NativeHistoricActivityInstanceQuery;
+import io.orqueio.bpm.engine.history.NativeHistoricCaseActivityInstanceQuery;
+import io.orqueio.bpm.engine.history.NativeHistoricCaseInstanceQuery;
+import io.orqueio.bpm.engine.history.NativeHistoricDecisionInstanceQuery;
+import io.orqueio.bpm.engine.history.NativeHistoricProcessInstanceQuery;
+import io.orqueio.bpm.engine.history.NativeHistoricTaskInstanceQuery;
+import io.orqueio.bpm.engine.history.NativeHistoricVariableInstanceQuery;
+import io.orqueio.bpm.engine.history.SetRemovalTimeSelectModeForHistoricBatchesBuilder;
+import io.orqueio.bpm.engine.history.SetRemovalTimeSelectModeForHistoricDecisionInstancesBuilder;
+import io.orqueio.bpm.engine.history.SetRemovalTimeSelectModeForHistoricProcessInstancesBuilder;
+import io.orqueio.bpm.engine.history.SetRemovalTimeToHistoricBatchesBuilder;
+import io.orqueio.bpm.engine.history.SetRemovalTimeToHistoricDecisionInstancesBuilder;
+import io.orqueio.bpm.engine.history.UserOperationLogEntry;
+import io.orqueio.bpm.engine.history.UserOperationLogQuery;
+import io.orqueio.bpm.engine.history.HistoricDecisionInstanceStatisticsQuery;
+import io.orqueio.bpm.engine.history.SetRemovalTimeToHistoricProcessInstancesBuilder;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.repository.ProcessDefinition;
+import io.orqueio.bpm.engine.runtime.Job;
 
 import java.util.Date;
 import java.util.List;
@@ -649,7 +649,7 @@ public interface HistoryService {
   CleanableHistoricBatchReport createCleanableHistoricBatchReport();
 
   /**
-   * Creates a query to search for {@link org.camunda.bpm.engine.batch.history.HistoricBatch} instances.
+   * Creates a query to search for {@link io.orqueio.bpm.engine.batch.history.HistoricBatch} instances.
    *
    * @since 7.5
    */

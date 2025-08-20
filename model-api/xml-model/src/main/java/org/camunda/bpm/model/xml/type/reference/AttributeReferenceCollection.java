@@ -14,24 +14,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.xml.type.reference;
+package io.orqueio.bpm.model.xml.type.reference;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import org.camunda.bpm.model.xml.ModelException;
-import org.camunda.bpm.model.xml.UnsupportedModelOperationException;
-import org.camunda.bpm.model.xml.impl.ModelInstanceImpl;
-import org.camunda.bpm.model.xml.impl.instance.ModelElementInstanceImpl;
-import org.camunda.bpm.model.xml.impl.type.attribute.AttributeImpl;
-import org.camunda.bpm.model.xml.impl.type.reference.AttributeReferenceImpl;
-import org.camunda.bpm.model.xml.impl.util.ModelUtil;
-import org.camunda.bpm.model.xml.impl.util.StringUtil;
-import org.camunda.bpm.model.xml.instance.DomDocument;
-import org.camunda.bpm.model.xml.instance.DomElement;
-import org.camunda.bpm.model.xml.instance.ModelElementInstance;
+import io.orqueio.bpm.model.xml.ModelException;
+import io.orqueio.bpm.model.xml.UnsupportedModelOperationException;
+import io.orqueio.bpm.model.xml.impl.ModelInstanceImpl;
+import io.orqueio.bpm.model.xml.impl.instance.ModelElementInstanceImpl;
+import io.orqueio.bpm.model.xml.impl.type.attribute.AttributeImpl;
+import io.orqueio.bpm.model.xml.impl.type.reference.AttributeReferenceImpl;
+import io.orqueio.bpm.model.xml.impl.util.ModelUtil;
+import io.orqueio.bpm.model.xml.impl.util.StringUtil;
+import io.orqueio.bpm.model.xml.instance.DomDocument;
+import io.orqueio.bpm.model.xml.instance.DomElement;
+import io.orqueio.bpm.model.xml.instance.ModelElementInstance;
 
 /**
  * @author Roman Smirnov

@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.batch.history;
+package io.orqueio.bpm.engine.batch.history;
 
 import java.util.Date;
 
 /**
- * Historic representation of a {@link org.camunda.bpm.engine.batch.Batch}.
+ * Historic representation of a {@link io.orqueio.bpm.engine.batch.Batch}.
  */
 public interface HistoricBatch {
 

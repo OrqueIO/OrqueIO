@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.cockpit.plugin.resource;
+package io.orqueio.bpm.cockpit.plugin.resource;
 
-import org.camunda.bpm.cockpit.Cockpit;
-import org.camunda.bpm.cockpit.plugin.spi.CockpitPlugin;
-import org.camunda.bpm.webapp.plugin.resource.AbstractAppPluginRootResource;
+import io.orqueio.bpm.cockpit.Cockpit;
+import io.orqueio.bpm.cockpit.plugin.spi.CockpitPlugin;
+import io.orqueio.bpm.webapp.plugin.resource.AbstractAppPluginRootResource;
 
 /**
  * A resource class that provides a cockpit plugins restful API.

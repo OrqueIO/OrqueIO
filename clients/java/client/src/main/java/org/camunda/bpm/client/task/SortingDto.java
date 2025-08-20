@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 
-package org.camunda.bpm.client.task;
+package io.orqueio.bpm.client.task;
 
-import org.camunda.bpm.client.task.OrderingConfig.OrderingProperty;
+import io.orqueio.bpm.client.task.OrderingConfig.OrderingProperty;
 
 /**
  * DTO that encapsulates the sorting parameters used for making requests against the fetch and lock API.

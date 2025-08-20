@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.cockpit.impl.plugin.base.dto.query;
+package io.orqueio.bpm.cockpit.impl.plugin.base.dto.query;
 
-import org.camunda.bpm.cockpit.impl.plugin.base.dto.ProcessDefinitionStatisticsDto;
-import org.camunda.bpm.cockpit.rest.dto.AbstractRestQueryParametersDto;
-import org.camunda.bpm.engine.rest.dto.CamundaQueryParam;
+import io.orqueio.bpm.cockpit.impl.plugin.base.dto.ProcessDefinitionStatisticsDto;
+import io.orqueio.bpm.cockpit.rest.dto.AbstractRestQueryParametersDto;
+import io.orqueio.bpm.engine.rest.dto.CamundaQueryParam;
 
 import javax.ws.rs.core.MultivaluedMap;
 import java.util.HashMap;

@@ -15,13 +15,13 @@
  * limitations under the License.
  */
 
-package org.camunda.bpm.engine.test.util;
+package io.orqueio.bpm.engine.test.util;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.function.Supplier;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.task.Task;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.task.Task;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;

@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.dmn.impl;
+package io.orqueio.bpm.model.dmn.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.camunda.bpm.model.dmn.DmnModelException;
-import org.camunda.bpm.model.dmn.Query;
-import org.camunda.bpm.model.xml.instance.ModelElementInstance;
-import org.camunda.bpm.model.xml.type.ModelElementType;
+import io.orqueio.bpm.model.dmn.DmnModelException;
+import io.orqueio.bpm.model.dmn.Query;
+import io.orqueio.bpm.model.xml.instance.ModelElementInstance;
+import io.orqueio.bpm.model.xml.type.ModelElementType;
 
 public class QueryImpl<T extends ModelElementInstance> implements Query<T> {
 

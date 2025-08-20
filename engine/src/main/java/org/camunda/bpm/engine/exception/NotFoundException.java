@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.exception;
+package io.orqueio.bpm.engine.exception;
 
-import org.camunda.bpm.engine.BadUserRequestException;
+import io.orqueio.bpm.engine.BadUserRequestException;
 
 /**
  * <p>This exception is thrown, if an entity (case execution, case definition) is not found.</p>

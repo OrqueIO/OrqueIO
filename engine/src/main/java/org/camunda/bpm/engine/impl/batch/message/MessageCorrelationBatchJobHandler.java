@@ -14,27 +14,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.batch.message;
+package io.orqueio.bpm.engine.impl.batch.message;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.engine.batch.Batch;
-import org.camunda.bpm.engine.impl.MessageCorrelationBuilderImpl;
-import org.camunda.bpm.engine.impl.batch.AbstractBatchJobHandler;
-import org.camunda.bpm.engine.impl.batch.BatchJobContext;
-import org.camunda.bpm.engine.impl.batch.BatchJobDeclaration;
-import org.camunda.bpm.engine.impl.cmd.CorrelateAllMessageCmd;
-import org.camunda.bpm.engine.impl.core.variable.VariableUtil;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.jobexecutor.JobDeclaration;
-import org.camunda.bpm.engine.impl.json.MessageCorrelationBatchConfigurationJsonConverter;
-import org.camunda.bpm.engine.impl.persistence.entity.ExecutionEntity;
-import org.camunda.bpm.engine.impl.persistence.entity.JobEntity;
-import org.camunda.bpm.engine.impl.persistence.entity.MessageEntity;
-import org.camunda.bpm.engine.runtime.MessageCorrelationBuilder;
-import org.camunda.bpm.engine.variable.impl.VariableMapImpl;
+import io.orqueio.bpm.engine.batch.Batch;
+import io.orqueio.bpm.engine.impl.MessageCorrelationBuilderImpl;
+import io.orqueio.bpm.engine.impl.batch.AbstractBatchJobHandler;
+import io.orqueio.bpm.engine.impl.batch.BatchJobContext;
+import io.orqueio.bpm.engine.impl.batch.BatchJobDeclaration;
+import io.orqueio.bpm.engine.impl.cmd.CorrelateAllMessageCmd;
+import io.orqueio.bpm.engine.impl.core.variable.VariableUtil;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.impl.jobexecutor.JobDeclaration;
+import io.orqueio.bpm.engine.impl.json.MessageCorrelationBatchConfigurationJsonConverter;
+import io.orqueio.bpm.engine.impl.persistence.entity.ExecutionEntity;
+import io.orqueio.bpm.engine.impl.persistence.entity.JobEntity;
+import io.orqueio.bpm.engine.impl.persistence.entity.MessageEntity;
+import io.orqueio.bpm.engine.runtime.MessageCorrelationBuilder;
+import io.orqueio.bpm.engine.variable.impl.VariableMapImpl;
 
 /**
  * Job handler for message correlation jobs. The jobs correlate a message to a

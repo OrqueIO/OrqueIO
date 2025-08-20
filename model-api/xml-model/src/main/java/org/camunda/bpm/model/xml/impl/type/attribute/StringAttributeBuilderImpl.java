@@ -14,20 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.xml.impl.type.attribute;
+package io.orqueio.bpm.model.xml.impl.type.attribute;
 
-import org.camunda.bpm.model.xml.Model;
-import org.camunda.bpm.model.xml.ModelException;
-import org.camunda.bpm.model.xml.impl.ModelBuildOperation;
-import org.camunda.bpm.model.xml.impl.type.ModelElementTypeImpl;
-import org.camunda.bpm.model.xml.impl.type.reference.AttributeReferenceBuilderImpl;
-import org.camunda.bpm.model.xml.impl.type.reference.AttributeReferenceCollectionBuilderImpl;
-import org.camunda.bpm.model.xml.impl.type.reference.QNameAttributeReferenceBuilderImpl;
-import org.camunda.bpm.model.xml.instance.ModelElementInstance;
-import org.camunda.bpm.model.xml.type.attribute.StringAttributeBuilder;
-import org.camunda.bpm.model.xml.type.reference.AttributeReferenceBuilder;
-import org.camunda.bpm.model.xml.type.reference.AttributeReferenceCollection;
-import org.camunda.bpm.model.xml.type.reference.AttributeReferenceCollectionBuilder;
+import io.orqueio.bpm.model.xml.Model;
+import io.orqueio.bpm.model.xml.ModelException;
+import io.orqueio.bpm.model.xml.impl.ModelBuildOperation;
+import io.orqueio.bpm.model.xml.impl.type.ModelElementTypeImpl;
+import io.orqueio.bpm.model.xml.impl.type.reference.AttributeReferenceBuilderImpl;
+import io.orqueio.bpm.model.xml.impl.type.reference.AttributeReferenceCollectionBuilderImpl;
+import io.orqueio.bpm.model.xml.impl.type.reference.QNameAttributeReferenceBuilderImpl;
+import io.orqueio.bpm.model.xml.instance.ModelElementInstance;
+import io.orqueio.bpm.model.xml.type.attribute.StringAttributeBuilder;
+import io.orqueio.bpm.model.xml.type.reference.AttributeReferenceBuilder;
+import io.orqueio.bpm.model.xml.type.reference.AttributeReferenceCollection;
+import io.orqueio.bpm.model.xml.type.reference.AttributeReferenceCollectionBuilder;
 
 
 /**

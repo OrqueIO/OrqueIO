@@ -4,7 +4,7 @@
 
 <mapper namespace="admin.base">
 
-  <resultMap id="metricsResultMap" type="org.camunda.bpm.admin.impl.plugin.base.dto.MetricsAggregatedResultDto">
+  <resultMap id="metricsResultMap" type="io.orqueio.bpm.admin.impl.plugin.base.dto.MetricsAggregatedResultDto">
     <result property="metric" column="NAME_" jdbcType="VARCHAR" />
     <result property="sum" column="SUM_" jdbcType="INTEGER" />
     <result property="subscriptionYear" column="SUBSCRIPTION_YEAR_" jdbcType="INTEGER" />
@@ -63,7 +63,7 @@
   </sql>
 
   <select id="selectMetricsAggregated"
-          parameterType="org.camunda.bpm.admin.impl.plugin.base.dto.MetricsAggregatedQueryDto"
+          parameterType="io.orqueio.bpm.admin.impl.plugin.base.dto.MetricsAggregatedQueryDto"
           resultMap="metricsResultMap">
     <bind name="extractDateColumn" value="'TIMESTAMP_'"/>
     <bind name="groupByColumns" value="'RES.SUBSCRIPTION_YEAR_'"/>
@@ -106,7 +106,7 @@
   </select>
 
   <select id="selectMetricsAggregatedTU"
-          parameterType="org.camunda.bpm.admin.impl.plugin.base.dto.MetricsAggregatedQueryDto"
+          parameterType="io.orqueio.bpm.admin.impl.plugin.base.dto.MetricsAggregatedQueryDto"
           resultMap="metricsResultMap">
     <if test="groupBy.equals('year')">
       <include refid="selectMetricsAggregatedTU_annual"/>

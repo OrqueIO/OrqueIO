@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.cockpit.plugin.base;
+package io.orqueio.bpm.cockpit.plugin.base;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 
-import org.camunda.bpm.cockpit.db.QueryParameters;
-import org.camunda.bpm.cockpit.plugin.test.AbstractCockpitPluginTest;
-import org.camunda.bpm.engine.runtime.Execution;
+import io.orqueio.bpm.cockpit.db.QueryParameters;
+import io.orqueio.bpm.cockpit.plugin.test.AbstractCockpitPluginTest;
+import io.orqueio.bpm.engine.runtime.Execution;
 import org.junit.Test;
 
 /**

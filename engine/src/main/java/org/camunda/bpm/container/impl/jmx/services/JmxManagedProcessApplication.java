@@ -14,18 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.jmx.services;
+package io.orqueio.bpm.container.impl.jmx.services;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.application.ProcessApplicationReference;
-import org.camunda.bpm.application.impl.ProcessApplicationInfoImpl;
-import org.camunda.bpm.application.impl.metadata.spi.ProcessesXml;
-import org.camunda.bpm.container.impl.deployment.util.DeployedProcessArchive;
-import org.camunda.bpm.container.impl.spi.PlatformService;
-import org.camunda.bpm.container.impl.spi.PlatformServiceContainer;
+import io.orqueio.bpm.application.ProcessApplicationReference;
+import io.orqueio.bpm.application.impl.ProcessApplicationInfoImpl;
+import io.orqueio.bpm.application.impl.metadata.spi.ProcessesXml;
+import io.orqueio.bpm.container.impl.deployment.util.DeployedProcessArchive;
+import io.orqueio.bpm.container.impl.spi.PlatformService;
+import io.orqueio.bpm.container.impl.spi.PlatformServiceContainer;
 
 /**
  *

@@ -122,7 +122,7 @@ pipeline {
               cloud "kubernetes"
               label "${utils.envPrefix()}ci-infra-camunda-cloud-build_${env.JOB_BASE_NAME.take(15)}-${env.BUILD_ID}"
               defaultContainer 'alpine'
-              yaml org.camunda.helper.Podspec.getAgentPodspec(this, 'alpine-small', [
+              yaml io.orqueio.helper.Podspec.getAgentPodspec(this, 'alpine-small', [
                   useStableNodePool: false
               ])
             }

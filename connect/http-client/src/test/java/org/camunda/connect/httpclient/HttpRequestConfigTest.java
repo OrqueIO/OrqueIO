@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.connect.httpclient;
+package io.orqueio.connect.httpclient;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
@@ -32,10 +32,10 @@ import org.apache.hc.client5.http.classic.HttpClient;
 import org.apache.hc.client5.http.config.RequestConfig;
 import org.apache.hc.core5.http.HttpHost;
 import org.apache.hc.core5.util.Timeout;
-import org.camunda.connect.ConnectorRequestException;
-import org.camunda.connect.httpclient.impl.HttpConnectorImpl;
-import org.camunda.connect.httpclient.impl.RequestConfigOption;
-import org.camunda.connect.httpclient.impl.util.ParseUtil;
+import io.orqueio.connect.ConnectorRequestException;
+import io.orqueio.connect.httpclient.impl.HttpConnectorImpl;
+import io.orqueio.connect.httpclient.impl.RequestConfigOption;
+import io.orqueio.connect.httpclient.impl.util.ParseUtil;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;

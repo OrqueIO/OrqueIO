@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.cdi.annotation;
+package io.orqueio.bpm.engine.cdi.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -23,7 +23,7 @@ import java.lang.annotation.Target;
 
 import javax.inject.Qualifier;
 
-import org.camunda.bpm.engine.runtime.Execution;
+import io.orqueio.bpm.engine.runtime.Execution;
 
 /**
  * Qualifier annotation for injecting the current executionId.

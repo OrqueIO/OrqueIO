@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter.security.oauth2.impl;
+package io.orqueio.bpm.spring.boot.starter.security.oauth2.impl;
 
-import org.camunda.bpm.engine.impl.identity.WritableIdentityProvider;
-import org.camunda.bpm.engine.impl.interceptor.Session;
-import org.camunda.bpm.engine.impl.interceptor.SessionFactory;
+import io.orqueio.bpm.engine.impl.identity.WritableIdentityProvider;
+import io.orqueio.bpm.engine.impl.interceptor.Session;
+import io.orqueio.bpm.engine.impl.interceptor.SessionFactory;
 
 public class OAuth2IdentityProviderFactory implements SessionFactory {
   @Override

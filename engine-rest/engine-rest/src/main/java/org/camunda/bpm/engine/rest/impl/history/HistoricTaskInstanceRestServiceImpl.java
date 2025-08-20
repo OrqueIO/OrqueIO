@@ -14,28 +14,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.impl.history;
+package io.orqueio.bpm.engine.rest.impl.history;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.history.HistoricTaskInstance;
-import org.camunda.bpm.engine.history.HistoricTaskInstanceQuery;
-import org.camunda.bpm.engine.history.HistoricTaskInstanceReportResult;
-import org.camunda.bpm.engine.history.ReportResult;
-import org.camunda.bpm.engine.rest.dto.AbstractReportDto;
-import org.camunda.bpm.engine.rest.dto.CountResultDto;
-import org.camunda.bpm.engine.rest.dto.history.HistoricTaskInstanceDto;
-import org.camunda.bpm.engine.rest.dto.history.HistoricTaskInstanceQueryDto;
-import org.camunda.bpm.engine.rest.dto.history.HistoricTaskInstanceReportQueryDto;
-import org.camunda.bpm.engine.rest.dto.history.HistoricTaskInstanceReportResultDto;
-import org.camunda.bpm.engine.rest.dto.history.ReportResultDto;
-import org.camunda.bpm.engine.rest.exception.InvalidRequestException;
-import org.camunda.bpm.engine.rest.history.HistoricTaskInstanceRestService;
-import org.camunda.bpm.engine.rest.util.QueryUtil;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.history.HistoricTaskInstance;
+import io.orqueio.bpm.engine.history.HistoricTaskInstanceQuery;
+import io.orqueio.bpm.engine.history.HistoricTaskInstanceReportResult;
+import io.orqueio.bpm.engine.history.ReportResult;
+import io.orqueio.bpm.engine.rest.dto.AbstractReportDto;
+import io.orqueio.bpm.engine.rest.dto.CountResultDto;
+import io.orqueio.bpm.engine.rest.dto.history.HistoricTaskInstanceDto;
+import io.orqueio.bpm.engine.rest.dto.history.HistoricTaskInstanceQueryDto;
+import io.orqueio.bpm.engine.rest.dto.history.HistoricTaskInstanceReportQueryDto;
+import io.orqueio.bpm.engine.rest.dto.history.HistoricTaskInstanceReportResultDto;
+import io.orqueio.bpm.engine.rest.dto.history.ReportResultDto;
+import io.orqueio.bpm.engine.rest.exception.InvalidRequestException;
+import io.orqueio.bpm.engine.rest.history.HistoricTaskInstanceRestService;
+import io.orqueio.bpm.engine.rest.util.QueryUtil;
 
 /**
  * @author Roman Smirnov

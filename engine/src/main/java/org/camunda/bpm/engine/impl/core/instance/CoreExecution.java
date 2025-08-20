@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.core.instance;
+package io.orqueio.bpm.engine.impl.core.instance;
 
-import org.camunda.bpm.engine.delegate.BaseDelegateExecution;
-import org.camunda.bpm.engine.delegate.DelegateListener;
-import org.camunda.bpm.engine.impl.core.CoreLogger;
-import org.camunda.bpm.engine.impl.core.model.CoreModelElement;
-import org.camunda.bpm.engine.impl.core.operation.CoreAtomicOperation;
-import org.camunda.bpm.engine.impl.core.variable.scope.AbstractVariableScope;
+import io.orqueio.bpm.engine.delegate.BaseDelegateExecution;
+import io.orqueio.bpm.engine.delegate.DelegateListener;
+import io.orqueio.bpm.engine.impl.core.CoreLogger;
+import io.orqueio.bpm.engine.impl.core.model.CoreModelElement;
+import io.orqueio.bpm.engine.impl.core.operation.CoreAtomicOperation;
+import io.orqueio.bpm.engine.impl.core.variable.scope.AbstractVariableScope;
 
 /**
  * Defines the base API for the execution of an activity.

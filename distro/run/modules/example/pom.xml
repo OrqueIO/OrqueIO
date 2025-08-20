@@ -7,7 +7,7 @@
   </description>
 
   <parent>
-    <groupId>org.camunda.bpm.run</groupId>
+    <groupId>io.orqueio.bpm.run</groupId>
     <artifactId>camunda-bpm-run-modules</artifactId>
     <version>7.24.0-SNAPSHOT</version>
   </parent>
@@ -25,13 +25,13 @@
   <dependencies>
 
     <dependency>
-      <groupId>org.camunda.bpm.springboot</groupId>
+      <groupId>io.orqueio.bpm.springboot</groupId>
       <artifactId>camunda-bpm-spring-boot-starter-webapp</artifactId>
       <scope>provided</scope>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm.example</groupId>
+      <groupId>io.orqueio.bpm.example</groupId>
       <artifactId>camunda-example-invoice-jakarta</artifactId>
       <version>${project.version}</version>
       <classifier>classes</classifier>
@@ -57,7 +57,7 @@
             <configuration>
               <artifactItems>
                 <artifactItem>
-                  <groupId>org.camunda.bpm.example</groupId>
+                  <groupId>io.orqueio.bpm.example</groupId>
                   <artifactId>camunda-example-invoice-jakarta</artifactId>
                   <version>${project.version}</version>
                   <type>war</type>

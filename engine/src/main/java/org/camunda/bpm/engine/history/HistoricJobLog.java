@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.history;
+package io.orqueio.bpm.engine.history;
 
 import java.util.Date;
 
-import org.camunda.bpm.engine.HistoryService;
-import org.camunda.bpm.engine.runtime.Job;
+import io.orqueio.bpm.engine.HistoryService;
+import io.orqueio.bpm.engine.runtime.Job;
 
 /**
  * <p>The {@link HistoricJobLog} is used to have a log containing

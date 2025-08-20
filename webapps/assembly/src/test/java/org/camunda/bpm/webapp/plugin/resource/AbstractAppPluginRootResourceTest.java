@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.webapp.plugin.resource;
+package io.orqueio.bpm.webapp.plugin.resource;
 
-import org.camunda.bpm.engine.rest.exception.RestException;
-import org.camunda.bpm.webapp.AppRuntimeDelegate;
-import org.camunda.bpm.webapp.plugin.AppPluginRegistry;
-import org.camunda.bpm.webapp.plugin.spi.AppPlugin;
+import io.orqueio.bpm.engine.rest.exception.RestException;
+import io.orqueio.bpm.webapp.AppRuntimeDelegate;
+import io.orqueio.bpm.webapp.plugin.AppPluginRegistry;
+import io.orqueio.bpm.webapp.plugin.spi.AppPlugin;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,8 +40,8 @@ import java.util.Collection;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
-import static org.camunda.bpm.webapp.plugin.resource.AbstractAppPluginRootResource.MIME_TYPE_TEXT_CSS;
-import static org.camunda.bpm.webapp.plugin.resource.AbstractAppPluginRootResource.MIME_TYPE_TEXT_JAVASCRIPT;
+import static io.orqueio.bpm.webapp.plugin.resource.AbstractAppPluginRootResource.MIME_TYPE_TEXT_CSS;
+import static io.orqueio.bpm.webapp.plugin.resource.AbstractAppPluginRootResource.MIME_TYPE_TEXT_JAVASCRIPT;
 
 @RunWith(Parameterized.class)
 public class AbstractAppPluginRootResourceTest {

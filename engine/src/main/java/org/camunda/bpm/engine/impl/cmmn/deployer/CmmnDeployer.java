@@ -14,20 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.cmmn.deployer;
+package io.orqueio.bpm.engine.impl.cmmn.deployer;
 
 import java.util.List;
 
-import org.camunda.bpm.engine.impl.AbstractDefinitionDeployer;
-import org.camunda.bpm.engine.impl.cmmn.entity.repository.CaseDefinitionEntity;
-import org.camunda.bpm.engine.impl.cmmn.entity.repository.CaseDefinitionManager;
-import org.camunda.bpm.engine.impl.cmmn.transformer.CmmnTransformer;
-import org.camunda.bpm.engine.impl.core.model.Properties;
-import org.camunda.bpm.engine.impl.el.ExpressionManager;
-import org.camunda.bpm.engine.impl.persistence.deploy.Deployer;
-import org.camunda.bpm.engine.impl.persistence.deploy.cache.DeploymentCache;
-import org.camunda.bpm.engine.impl.persistence.entity.DeploymentEntity;
-import org.camunda.bpm.engine.impl.persistence.entity.ResourceEntity;
+import io.orqueio.bpm.engine.impl.AbstractDefinitionDeployer;
+import io.orqueio.bpm.engine.impl.cmmn.entity.repository.CaseDefinitionEntity;
+import io.orqueio.bpm.engine.impl.cmmn.entity.repository.CaseDefinitionManager;
+import io.orqueio.bpm.engine.impl.cmmn.transformer.CmmnTransformer;
+import io.orqueio.bpm.engine.impl.core.model.Properties;
+import io.orqueio.bpm.engine.impl.el.ExpressionManager;
+import io.orqueio.bpm.engine.impl.persistence.deploy.Deployer;
+import io.orqueio.bpm.engine.impl.persistence.deploy.cache.DeploymentCache;
+import io.orqueio.bpm.engine.impl.persistence.entity.DeploymentEntity;
+import io.orqueio.bpm.engine.impl.persistence.entity.ResourceEntity;
 
 /**
  * {@link Deployer} responsible to parse CMMN 1.0 XML files and create the

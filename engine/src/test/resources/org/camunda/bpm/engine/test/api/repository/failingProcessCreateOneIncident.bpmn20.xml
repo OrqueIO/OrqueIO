@@ -8,7 +8,7 @@
   
     <startEvent id="start" />
     <sequenceFlow id="flow1" sourceRef="start" targetRef="serviceTask" />
-    <serviceTask id="serviceTask" camunda:async="true" camunda:class="org.camunda.bpm.engine.test.api.repository.AlwaysFailingDelegate" name="Service Task"/>
+    <serviceTask id="serviceTask" camunda:async="true" camunda:class="io.orqueio.bpm.engine.test.api.repository.AlwaysFailingDelegate" name="Service Task"/>
     <sequenceFlow id="flow2" sourceRef="serviceTask" targetRef="end" />
     <endEvent id="end" />
     

@@ -12,7 +12,7 @@
     
     <serviceTask id="javaService" 
                  name="Java service invocation" 
-                 camunda:class="org.camunda.bpm.engine.test.bpmn.servicetask.util.ReverseStringsFieldInjected">
+                 camunda:class="io.orqueio.bpm.engine.test.bpmn.servicetask.util.ReverseStringsFieldInjected">
       <extensionElements>
         <camunda:field name="text1">
           <camunda:expression>${genderBean.getGenderString(gender)}</camunda:expression>

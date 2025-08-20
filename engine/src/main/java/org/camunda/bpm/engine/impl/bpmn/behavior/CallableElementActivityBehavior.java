@@ -14,30 +14,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.bpmn.behavior;
+package io.orqueio.bpm.engine.impl.bpmn.behavior;
 
 import java.util.concurrent.Callable;
-import org.camunda.bpm.application.InvocationContext;
-import org.camunda.bpm.application.ProcessApplicationReference;
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.delegate.DelegateVariableMapping;
-import org.camunda.bpm.engine.delegate.Expression;
-import org.camunda.bpm.engine.delegate.VariableScope;
+import io.orqueio.bpm.application.InvocationContext;
+import io.orqueio.bpm.application.ProcessApplicationReference;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.delegate.DelegateVariableMapping;
+import io.orqueio.bpm.engine.delegate.Expression;
+import io.orqueio.bpm.engine.delegate.VariableScope;
 
-import static org.camunda.bpm.engine.impl.bpmn.behavior.MultiInstanceActivityBehavior.NUMBER_OF_ACTIVE_INSTANCES;
-import static org.camunda.bpm.engine.impl.bpmn.behavior.MultiInstanceActivityBehavior.NUMBER_OF_COMPLETED_INSTANCES;
-import static org.camunda.bpm.engine.impl.bpmn.behavior.MultiInstanceActivityBehavior.NUMBER_OF_INSTANCES;
+import static io.orqueio.bpm.engine.impl.bpmn.behavior.MultiInstanceActivityBehavior.NUMBER_OF_ACTIVE_INSTANCES;
+import static io.orqueio.bpm.engine.impl.bpmn.behavior.MultiInstanceActivityBehavior.NUMBER_OF_COMPLETED_INSTANCES;
+import static io.orqueio.bpm.engine.impl.bpmn.behavior.MultiInstanceActivityBehavior.NUMBER_OF_INSTANCES;
 
-import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.engine.impl.context.ProcessApplicationContextUtil;
-import org.camunda.bpm.engine.impl.core.model.BaseCallableElement.CallableElementBinding;
-import org.camunda.bpm.engine.impl.core.model.CallableElement;
-import org.camunda.bpm.engine.impl.delegate.DelegateInvocation;
-import org.camunda.bpm.engine.impl.persistence.entity.ExecutionEntity;
-import org.camunda.bpm.engine.impl.pvm.delegate.ActivityExecution;
-import org.camunda.bpm.engine.impl.pvm.delegate.SubProcessActivityBehavior;
-import org.camunda.bpm.engine.impl.util.ClassDelegateUtil;
-import org.camunda.bpm.engine.variable.VariableMap;
+import io.orqueio.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.impl.context.ProcessApplicationContextUtil;
+import io.orqueio.bpm.engine.impl.core.model.BaseCallableElement.CallableElementBinding;
+import io.orqueio.bpm.engine.impl.core.model.CallableElement;
+import io.orqueio.bpm.engine.impl.delegate.DelegateInvocation;
+import io.orqueio.bpm.engine.impl.persistence.entity.ExecutionEntity;
+import io.orqueio.bpm.engine.impl.pvm.delegate.ActivityExecution;
+import io.orqueio.bpm.engine.impl.pvm.delegate.SubProcessActivityBehavior;
+import io.orqueio.bpm.engine.impl.util.ClassDelegateUtil;
+import io.orqueio.bpm.engine.variable.VariableMap;
 
 /**
  * @author Roman Smirnov

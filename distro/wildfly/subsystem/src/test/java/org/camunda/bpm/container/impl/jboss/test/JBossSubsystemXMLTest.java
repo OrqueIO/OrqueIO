@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.jboss.test;
+package io.orqueio.bpm.container.impl.jboss.test;
 
-import static org.camunda.bpm.container.impl.jboss.extension.SubsystemAttributeDefinitons.DEFAULT_CORE_THREADS;
-import static org.camunda.bpm.container.impl.jboss.extension.SubsystemAttributeDefinitons.DEFAULT_JOB_EXECUTOR_THREADPOOL_NAME;
-import static org.camunda.bpm.container.impl.jboss.extension.SubsystemAttributeDefinitons.DEFAULT_KEEPALIVE_TIME;
-import static org.camunda.bpm.container.impl.jboss.extension.SubsystemAttributeDefinitons.DEFAULT_MAX_THREADS;
+import static io.orqueio.bpm.container.impl.jboss.extension.SubsystemAttributeDefinitons.DEFAULT_CORE_THREADS;
+import static io.orqueio.bpm.container.impl.jboss.extension.SubsystemAttributeDefinitons.DEFAULT_JOB_EXECUTOR_THREADPOOL_NAME;
+import static io.orqueio.bpm.container.impl.jboss.extension.SubsystemAttributeDefinitons.DEFAULT_KEEPALIVE_TIME;
+import static io.orqueio.bpm.container.impl.jboss.extension.SubsystemAttributeDefinitons.DEFAULT_MAX_THREADS;
 import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.ADD;
 import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.OP;
 import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.OP_ADDR;
@@ -39,18 +39,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ThreadFactory;
 import javax.xml.stream.XMLStreamException;
-import org.camunda.bpm.container.impl.jboss.config.ManagedProcessEngineMetadata;
-import org.camunda.bpm.container.impl.jboss.extension.Attribute;
-import org.camunda.bpm.container.impl.jboss.extension.BpmPlatformExtension;
-import org.camunda.bpm.container.impl.jboss.extension.Element;
-import org.camunda.bpm.container.impl.jboss.extension.ModelConstants;
-import org.camunda.bpm.container.impl.jboss.extension.SubsystemAttributeDefinitons;
-import org.camunda.bpm.container.impl.jboss.service.MscManagedProcessEngineController;
-import org.camunda.bpm.container.impl.jboss.service.ServiceNames;
-import org.camunda.bpm.container.impl.metadata.spi.ProcessEnginePluginXml;
-import org.camunda.bpm.container.impl.plugin.BpmPlatformPlugin;
-import org.camunda.bpm.container.impl.plugin.BpmPlatformPlugins;
-import org.camunda.bpm.engine.impl.jobexecutor.JobExecutor;
+import io.orqueio.bpm.container.impl.jboss.config.ManagedProcessEngineMetadata;
+import io.orqueio.bpm.container.impl.jboss.extension.Attribute;
+import io.orqueio.bpm.container.impl.jboss.extension.BpmPlatformExtension;
+import io.orqueio.bpm.container.impl.jboss.extension.Element;
+import io.orqueio.bpm.container.impl.jboss.extension.ModelConstants;
+import io.orqueio.bpm.container.impl.jboss.extension.SubsystemAttributeDefinitons;
+import io.orqueio.bpm.container.impl.jboss.service.MscManagedProcessEngineController;
+import io.orqueio.bpm.container.impl.jboss.service.ServiceNames;
+import io.orqueio.bpm.container.impl.metadata.spi.ProcessEnginePluginXml;
+import io.orqueio.bpm.container.impl.plugin.BpmPlatformPlugin;
+import io.orqueio.bpm.container.impl.plugin.BpmPlatformPlugins;
+import io.orqueio.bpm.engine.impl.jobexecutor.JobExecutor;
 import org.jboss.as.controller.PathAddress;
 import org.jboss.as.controller.PathElement;
 import org.jboss.as.controller.descriptions.ModelDescriptionConstants;
@@ -100,7 +100,7 @@ public class JBossSubsystemXMLTest extends AbstractSubsystemTest {
   public static final ServiceName PROCESS_ENGINE_SERVICE_BINDING_SERVICE_NAME = ContextNames.GLOBAL_CONTEXT_SERVICE_NAME
     .append("camunda-bpm-platform")
     .append("process-engine")
-    .append("ProcessEngineService!org.camunda.bpm.ProcessEngineService");
+    .append("ProcessEngineService!io.orqueio.bpm.ProcessEngineService");
 
   public JBossSubsystemXMLTest() {
     super(ModelConstants.SUBSYSTEM_NAME, new BpmPlatformExtension(), getSubsystemRemoveOrderComparator());
@@ -109,25 +109,25 @@ public class JBossSubsystemXMLTest extends AbstractSubsystemTest {
   private static Map<String, String> EXPRESSION_PROPERTIES = new HashMap<>();
   
   static {
-    EXPRESSION_PROPERTIES.put("org.camunda.bpm.jboss.process-engine.test.isDefault", "true");
-    EXPRESSION_PROPERTIES.put("org.camunda.bpm.jboss.process-engine.test.datasource", "java:jboss/datasources/ExampleDS");
-    EXPRESSION_PROPERTIES.put("org.camunda.bpm.jboss.process-engine.test.history-level", "audit");
-    EXPRESSION_PROPERTIES.put("org.camunda.bpm.jboss.process-engine.test.configuration", "org.camunda.bpm.container.impl.jboss.config.ManagedJtaProcessEngineConfiguration");
-    EXPRESSION_PROPERTIES.put("org.camunda.bpm.jboss.process-engine.test.property.job-acquisition-name", "default");
-    EXPRESSION_PROPERTIES.put("org.camunda.bpm.jboss.process-engine.test.plugin.ldap.class", "org.camunda.bpm.identity.impl.ldap.plugin.LdapIdentityProviderPlugin");
-    EXPRESSION_PROPERTIES.put("org.camunda.bpm.jboss.process-engine.test.plugin.ldap.property.test", "abc");
-    EXPRESSION_PROPERTIES.put("org.camunda.bpm.jboss.process-engine.test.plugin.ldap.property.number", "123");
-    EXPRESSION_PROPERTIES.put("org.camunda.bpm.jboss.process-engine.test.plugin.ldap.property.bool", "true");
-    EXPRESSION_PROPERTIES.put("org.camunda.bpm.jboss.job-executor.thread-pool-name", "job-executor-tp");
-    EXPRESSION_PROPERTIES.put("org.camunda.bpm.jboss.job-executor.core-threads", "5");
-    EXPRESSION_PROPERTIES.put("org.camunda.bpm.jboss.job-executor.max-threads", "15");
-    EXPRESSION_PROPERTIES.put("org.camunda.bpm.jboss.job-executor.queue-length", "15");
-    EXPRESSION_PROPERTIES.put("org.camunda.bpm.jboss.job-executor.keepalive-time", "10");
-    EXPRESSION_PROPERTIES.put("org.camunda.bpm.jboss.job-executor.allow-core-timeout", "false");
-    EXPRESSION_PROPERTIES.put("org.camunda.bpm.jboss.job-executor.job-acquisition.default.acquisition-strategy", "SEQUENTIAL");
-    EXPRESSION_PROPERTIES.put("org.camunda.bpm.jboss.job-executor.job-acquisition.default.property.lockTimeInMillis", "300000");
-    EXPRESSION_PROPERTIES.put("org.camunda.bpm.jboss.job-executor.job-acquisition.default.property.waitTimeInMillis", "5000");
-    EXPRESSION_PROPERTIES.put("org.camunda.bpm.jboss.job-executor.job-acquisition.default.property.maxJobsPerAcquisition", "3");                                             
+    EXPRESSION_PROPERTIES.put("io.orqueio.bpm.jboss.process-engine.test.isDefault", "true");
+    EXPRESSION_PROPERTIES.put("io.orqueio.bpm.jboss.process-engine.test.datasource", "java:jboss/datasources/ExampleDS");
+    EXPRESSION_PROPERTIES.put("io.orqueio.bpm.jboss.process-engine.test.history-level", "audit");
+    EXPRESSION_PROPERTIES.put("io.orqueio.bpm.jboss.process-engine.test.configuration", "io.orqueio.bpm.container.impl.jboss.config.ManagedJtaProcessEngineConfiguration");
+    EXPRESSION_PROPERTIES.put("io.orqueio.bpm.jboss.process-engine.test.property.job-acquisition-name", "default");
+    EXPRESSION_PROPERTIES.put("io.orqueio.bpm.jboss.process-engine.test.plugin.ldap.class", "io.orqueio.bpm.identity.impl.ldap.plugin.LdapIdentityProviderPlugin");
+    EXPRESSION_PROPERTIES.put("io.orqueio.bpm.jboss.process-engine.test.plugin.ldap.property.test", "abc");
+    EXPRESSION_PROPERTIES.put("io.orqueio.bpm.jboss.process-engine.test.plugin.ldap.property.number", "123");
+    EXPRESSION_PROPERTIES.put("io.orqueio.bpm.jboss.process-engine.test.plugin.ldap.property.bool", "true");
+    EXPRESSION_PROPERTIES.put("io.orqueio.bpm.jboss.job-executor.thread-pool-name", "job-executor-tp");
+    EXPRESSION_PROPERTIES.put("io.orqueio.bpm.jboss.job-executor.core-threads", "5");
+    EXPRESSION_PROPERTIES.put("io.orqueio.bpm.jboss.job-executor.max-threads", "15");
+    EXPRESSION_PROPERTIES.put("io.orqueio.bpm.jboss.job-executor.queue-length", "15");
+    EXPRESSION_PROPERTIES.put("io.orqueio.bpm.jboss.job-executor.keepalive-time", "10");
+    EXPRESSION_PROPERTIES.put("io.orqueio.bpm.jboss.job-executor.allow-core-timeout", "false");
+    EXPRESSION_PROPERTIES.put("io.orqueio.bpm.jboss.job-executor.job-acquisition.default.acquisition-strategy", "SEQUENTIAL");
+    EXPRESSION_PROPERTIES.put("io.orqueio.bpm.jboss.job-executor.job-acquisition.default.property.lockTimeInMillis", "300000");
+    EXPRESSION_PROPERTIES.put("io.orqueio.bpm.jboss.job-executor.job-acquisition.default.property.waitTimeInMillis", "5000");
+    EXPRESSION_PROPERTIES.put("io.orqueio.bpm.jboss.job-executor.job-acquisition.default.property.maxJobsPerAcquisition", "3");
   }
 
   @Test
@@ -206,14 +206,14 @@ public class JBossSubsystemXMLTest extends AbstractSubsystemTest {
     List<ProcessEnginePluginXml> pluginConfigurations = metadata.getPluginConfigurations();
 
     ProcessEnginePluginXml processEnginePluginXml = pluginConfigurations.get(0);
-    assertEquals("org.camunda.bpm.identity.impl.ldap.plugin.LdapIdentityProviderPlugin", processEnginePluginXml.getPluginClass());
+    assertEquals("io.orqueio.bpm.identity.impl.ldap.plugin.LdapIdentityProviderPlugin", processEnginePluginXml.getPluginClass());
     Map<String, String> processEnginePluginXmlProperties = processEnginePluginXml.getProperties();
     assertEquals("abc", processEnginePluginXmlProperties.get("test"));
     assertEquals("123", processEnginePluginXmlProperties.get("number"));
     assertEquals("true", processEnginePluginXmlProperties.get("bool"));
 
     processEnginePluginXml = pluginConfigurations.get(1);
-    assertEquals("org.camunda.bpm.identity.impl.ldap.plugin.LdapIdentityProviderPlugin", processEnginePluginXml.getPluginClass());
+    assertEquals("io.orqueio.bpm.identity.impl.ldap.plugin.LdapIdentityProviderPlugin", processEnginePluginXml.getPluginClass());
     processEnginePluginXmlProperties = processEnginePluginXml.getProperties();
     assertEquals("cba", processEnginePluginXmlProperties.get("test"));
     assertEquals("321", processEnginePluginXmlProperties.get("number"));
@@ -469,7 +469,7 @@ public class JBossSubsystemXMLTest extends AbstractSubsystemTest {
     assertEquals(5000, defaultJobExecutor.getWaitTimeInMillis());
     assertEquals(3, defaultJobExecutor.getMaxJobsPerAcquisition());
 
-    // ServiceName: 'org.camunda.bpm.platform.job-executor.job-executor-tp'
+    // ServiceName: 'io.orqueio.bpm.platform.job-executor.job-executor-tp'
     ServiceController<?> EnhancedQueueExecutorController = container.getService(ServiceNames.forManagedThreadPool(DEFAULT_JOB_EXECUTOR_THREADPOOL_NAME));
     assertNotNull(EnhancedQueueExecutorController);
     Object EnhancedQueueExecutorObject = EnhancedQueueExecutorController.getValue();
@@ -624,7 +624,7 @@ public class JBossSubsystemXMLTest extends AbstractSubsystemTest {
       assertEquals(1, pluginConfigurations.size());
 
       ProcessEnginePluginXml processEnginePluginXml = pluginConfigurations.get(0);
-      assertEquals("org.camunda.bpm.identity.impl.ldap.plugin.LdapIdentityProviderPlugin", processEnginePluginXml.getPluginClass());
+      assertEquals("io.orqueio.bpm.identity.impl.ldap.plugin.LdapIdentityProviderPlugin", processEnginePluginXml.getPluginClass());
       Map<String, String> processEnginePluginXmlProperties = processEnginePluginXml.getProperties();
       assertEquals("abc", processEnginePluginXmlProperties.get("test"));
       assertEquals("123", processEnginePluginXmlProperties.get("number"));

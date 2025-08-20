@@ -7,7 +7,7 @@
       <bpmn:startEvent id="StartEvent_1">
         <bpmn:outgoing>SequenceFlow_06f67u0</bpmn:outgoing>
       </bpmn:startEvent>
-      <bpmn:serviceTask id="ServiceTask_1qujhvw" name="Throw error" camunda:class="org.camunda.bpm.engine.test.bpmn.event.error.ThrowErrorInLoopDelegate">
+      <bpmn:serviceTask id="ServiceTask_1qujhvw" name="Throw error" camunda:class="io.orqueio.bpm.engine.test.bpmn.event.error.ThrowErrorInLoopDelegate">
         <bpmn:incoming>SequenceFlow_06f67u0</bpmn:incoming>
         <bpmn:outgoing>SequenceFlow_1kcfvni</bpmn:outgoing>
       </bpmn:serviceTask>

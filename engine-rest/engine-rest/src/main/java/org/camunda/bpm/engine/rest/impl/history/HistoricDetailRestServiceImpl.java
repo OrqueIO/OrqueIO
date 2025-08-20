@@ -14,22 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.impl.history;
+package io.orqueio.bpm.engine.rest.impl.history;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.core.UriInfo;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.history.HistoricDetail;
-import org.camunda.bpm.engine.history.HistoricDetailQuery;
-import org.camunda.bpm.engine.rest.dto.CountResultDto;
-import org.camunda.bpm.engine.rest.dto.history.HistoricDetailDto;
-import org.camunda.bpm.engine.rest.dto.history.HistoricDetailQueryDto;
-import org.camunda.bpm.engine.rest.history.HistoricDetailRestService;
-import org.camunda.bpm.engine.rest.sub.history.HistoricDetailResource;
-import org.camunda.bpm.engine.rest.sub.history.impl.HistoricDetailResourceImpl;
-import org.camunda.bpm.engine.rest.util.QueryUtil;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.history.HistoricDetail;
+import io.orqueio.bpm.engine.history.HistoricDetailQuery;
+import io.orqueio.bpm.engine.rest.dto.CountResultDto;
+import io.orqueio.bpm.engine.rest.dto.history.HistoricDetailDto;
+import io.orqueio.bpm.engine.rest.dto.history.HistoricDetailQueryDto;
+import io.orqueio.bpm.engine.rest.history.HistoricDetailRestService;
+import io.orqueio.bpm.engine.rest.sub.history.HistoricDetailResource;
+import io.orqueio.bpm.engine.rest.sub.history.impl.HistoricDetailResourceImpl;
+import io.orqueio.bpm.engine.rest.util.QueryUtil;
 
 /**
  * @author Roman Smirnov

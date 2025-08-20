@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.batch;
+package io.orqueio.bpm.engine.impl.batch;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -26,7 +26,7 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import org.camunda.bpm.engine.impl.util.ImmutablePair;
+import io.orqueio.bpm.engine.impl.util.ImmutablePair;
 
 /**
  * Configuration information on the elements of a batch

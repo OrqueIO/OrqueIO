@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.externaltask;
+package io.orqueio.bpm.engine.externaltask;
 
 import java.util.Date;
 import java.util.Map;
 
-import org.camunda.bpm.engine.ExternalTaskService;
-import org.camunda.bpm.engine.variable.VariableMap;
+import io.orqueio.bpm.engine.ExternalTaskService;
+import io.orqueio.bpm.engine.variable.VariableMap;
 
 /**
  * Represents an external task that was fetched and locked.

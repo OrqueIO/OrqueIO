@@ -10,7 +10,7 @@
     <startEvent id="start" />
     <sequenceFlow id="flow1" sourceRef="start" targetRef="serviceTask" />
     
-    <serviceTask id="serviceTask" camunda:class="org.camunda.bpm.engine.spring.test.servicetask.DelegateClassNotABean"/>
+    <serviceTask id="serviceTask" camunda:class="io.orqueio.bpm.engine.spring.test.servicetask.DelegateClassNotABean"/>
 
     <sequenceFlow id="flow2" sourceRef="serviceTask" targetRef="userTask" />
     

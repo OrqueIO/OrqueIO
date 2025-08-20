@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.commons.utils.cache;
+package io.orqueio.commons.utils.cache;
 
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -22,7 +22,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ConcurrentMap;
 
 /**
- * A thread-safe LRU org.camunda.commons.utils.cache.Cache with a fixed capacity. If the cache reaches
+ * A thread-safe LRU io.orqueio.commons.utils.cache.Cache with a fixed capacity. If the cache reaches
  * the capacity, it discards the least recently used entry first.
  * <p>
  * *Note*: The consistency of the keys queue with the keys in the cache is not ensured! This means, the keys queue

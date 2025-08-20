@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.delegate;
+package io.orqueio.bpm.engine.impl.delegate;
 
 import java.util.List;
 
-import org.camunda.bpm.engine.impl.bpmn.parser.FieldDeclaration;
+import io.orqueio.bpm.engine.impl.bpmn.parser.FieldDeclaration;
 
 /**
  * @author Roman Smirnov

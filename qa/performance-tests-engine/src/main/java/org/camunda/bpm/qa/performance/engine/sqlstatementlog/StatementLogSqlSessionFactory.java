@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa.performance.engine.sqlstatementlog;
+package io.orqueio.bpm.qa.performance.engine.sqlstatementlog;
 
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
-import org.camunda.bpm.qa.performance.engine.util.DelegatingSqlSessionFactory;
+import io.orqueio.bpm.qa.performance.engine.util.DelegatingSqlSessionFactory;
 
 /**
  * {@link DelegatingSqlSessionFactory} wrapping the created sessions using a {@link StatementLogSqlSession.

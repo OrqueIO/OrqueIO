@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.cfg.multitenancy;
+package io.orqueio.bpm.engine.impl.cfg.multitenancy;
 
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 
 /**
  * SPI which can be implemented to assign tenant ids to process instances, case instances and historic decision instances.

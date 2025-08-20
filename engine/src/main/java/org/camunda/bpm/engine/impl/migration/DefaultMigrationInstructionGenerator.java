@@ -14,24 +14,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.migration;
+package io.orqueio.bpm.engine.impl.migration;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.camunda.bpm.engine.impl.bpmn.behavior.ConditionalEventBehavior;
-import org.camunda.bpm.engine.impl.migration.validation.activity.MigrationActivityValidator;
-import org.camunda.bpm.engine.impl.migration.validation.instruction.CannotAddMultiInstanceInnerActivityValidator;
-import org.camunda.bpm.engine.impl.migration.validation.instruction.CannotRemoveMultiInstanceInnerActivityValidator;
-import org.camunda.bpm.engine.impl.migration.validation.instruction.MigrationInstructionValidator;
-import org.camunda.bpm.engine.impl.migration.validation.instruction.UpdateEventTriggersValidator;
-import org.camunda.bpm.engine.impl.migration.validation.instruction.ValidatingMigrationInstruction;
-import org.camunda.bpm.engine.impl.migration.validation.instruction.ValidatingMigrationInstructionImpl;
-import org.camunda.bpm.engine.impl.migration.validation.instruction.ValidatingMigrationInstructions;
-import org.camunda.bpm.engine.impl.pvm.process.ActivityImpl;
-import org.camunda.bpm.engine.impl.pvm.process.ProcessDefinitionImpl;
-import org.camunda.bpm.engine.impl.pvm.process.ScopeImpl;
+import io.orqueio.bpm.engine.impl.bpmn.behavior.ConditionalEventBehavior;
+import io.orqueio.bpm.engine.impl.migration.validation.activity.MigrationActivityValidator;
+import io.orqueio.bpm.engine.impl.migration.validation.instruction.CannotAddMultiInstanceInnerActivityValidator;
+import io.orqueio.bpm.engine.impl.migration.validation.instruction.CannotRemoveMultiInstanceInnerActivityValidator;
+import io.orqueio.bpm.engine.impl.migration.validation.instruction.MigrationInstructionValidator;
+import io.orqueio.bpm.engine.impl.migration.validation.instruction.UpdateEventTriggersValidator;
+import io.orqueio.bpm.engine.impl.migration.validation.instruction.ValidatingMigrationInstruction;
+import io.orqueio.bpm.engine.impl.migration.validation.instruction.ValidatingMigrationInstructionImpl;
+import io.orqueio.bpm.engine.impl.migration.validation.instruction.ValidatingMigrationInstructions;
+import io.orqueio.bpm.engine.impl.pvm.process.ActivityImpl;
+import io.orqueio.bpm.engine.impl.pvm.process.ProcessDefinitionImpl;
+import io.orqueio.bpm.engine.impl.pvm.process.ScopeImpl;
 
 /**
  * @author Thorben Lindhauer

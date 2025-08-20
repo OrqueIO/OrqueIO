@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.connect.httpclient.impl.util;
+package io.orqueio.connect.httpclient.impl.util;
 
 import java.util.Map;
 
 import org.apache.hc.client5.http.config.RequestConfig.Builder;
-import org.camunda.connect.httpclient.impl.HttpLogger;
-import org.camunda.connect.httpclient.impl.HttpConnectorLogger;
-import org.camunda.connect.httpclient.impl.RequestConfigOption;
+import io.orqueio.connect.httpclient.impl.HttpLogger;
+import io.orqueio.connect.httpclient.impl.HttpConnectorLogger;
+import io.orqueio.connect.httpclient.impl.RequestConfigOption;
 
 public final class ParseUtil {
 

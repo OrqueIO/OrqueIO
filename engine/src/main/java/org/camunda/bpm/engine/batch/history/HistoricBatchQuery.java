@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.batch.history;
+package io.orqueio.bpm.engine.batch.history;
 
-import org.camunda.bpm.engine.query.Query;
+import io.orqueio.bpm.engine.query.Query;
 
 /**
  * Query for {@link HistoricBatch} instances.

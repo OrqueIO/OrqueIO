@@ -19,11 +19,11 @@
 -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="org.camunda.bpm.engine.impl.persistence.entity.FilterEntity">
+<mapper namespace="io.orqueio.bpm.engine.impl.persistence.entity.FilterEntity">
 
   <!-- FILTER INSERT -->
 
-  <insert id="insertFilter" parameterType="org.camunda.bpm.engine.impl.persistence.entity.FilterEntity">
+  <insert id="insertFilter" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.FilterEntity">
     insert into ${prefix}ACT_RU_FILTER (ID_, RESOURCE_TYPE_, NAME_, OWNER_, QUERY_, PROPERTIES_, REV_)
     values (
       #{id ,jdbcType=VARCHAR},
@@ -38,7 +38,7 @@
 
   <!-- FILTER UPDATE -->
 
-  <update id="updateFilter" parameterType="org.camunda.bpm.engine.impl.persistence.entity.FilterEntity">
+  <update id="updateFilter" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.FilterEntity">
     update ${prefix}ACT_RU_FILTER
     set
       REV_ = #{revisionNext, jdbcType=INTEGER},
@@ -52,14 +52,14 @@
 
   <!-- FILTER DELETE -->
 
-  <delete id="deleteFilter" parameterType="org.camunda.bpm.engine.impl.persistence.entity.FilterEntity">
+  <delete id="deleteFilter" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.FilterEntity">
     delete from ${prefix}ACT_RU_FILTER
     where ID_ = #{id} and REV_ = #{revision}
   </delete>
   
   <!-- FILTER RESULTMAP -->
 
-  <resultMap id="filterResultMap" type="org.camunda.bpm.engine.impl.persistence.entity.FilterEntity">
+  <resultMap id="filterResultMap" type="io.orqueio.bpm.engine.impl.persistence.entity.FilterEntity">
     <id property="id" column="ID_" jdbcType="VARCHAR" />
     <result property="revision" column="REV_" jdbcType="INTEGER" />
     <result property="resourceType" column="RESOURCE_TYPE_" jdbcType="VARCHAR" />
@@ -69,7 +69,7 @@
     <result property="propertiesInternal" column="PROPERTIES_" jdbcType="CLOB" />
   </resultMap>
 
-  <resultMap id="filterResultMap_postgres" type="org.camunda.bpm.engine.impl.persistence.entity.FilterEntity">
+  <resultMap id="filterResultMap_postgres" type="io.orqueio.bpm.engine.impl.persistence.entity.FilterEntity">
     <id property="id" column="ID_" jdbcType="VARCHAR" />
     <result property="revision" column="REV_" jdbcType="INTEGER" />
     <result property="resourceType" column="RESOURCE_TYPE_" jdbcType="VARCHAR" />
@@ -89,8 +89,8 @@
     select * from ${prefix}ACT_RU_FILTER where ID_ = #{id, jdbcType=VARCHAR}
   </select>
 
-  <select id="selectFilterByQueryCriteria" parameterType="org.camunda.bpm.engine.impl.filter.FilterQueryImpl" resultMap="filterResultMap">
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
+  <select id="selectFilterByQueryCriteria" parameterType="io.orqueio.bpm.engine.impl.filter.FilterQueryImpl" resultMap="filterResultMap">
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
     ${limitBefore}
     select ${distinct} RES.*
     ${limitBetween}
@@ -99,8 +99,8 @@
     ${limitAfter}
   </select>
 
-  <select id="selectFilterByQueryCriteria_postgres" parameterType="org.camunda.bpm.engine.impl.filter.FilterQueryImpl" resultMap="filterResultMap_postgres">
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
+  <select id="selectFilterByQueryCriteria_postgres" parameterType="io.orqueio.bpm.engine.impl.filter.FilterQueryImpl" resultMap="filterResultMap_postgres">
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
     ${limitBefore}
     select ${distinct} RES.*
     ${limitBetween}
@@ -109,11 +109,11 @@
     ${limitAfter}
   </select>
 
-  <select id="selectFilterByQueryCriteria_oracleDb2" parameterType="org.camunda.bpm.engine.impl.filter.FilterQueryImpl" resultMap="filterResultMap">
+  <select id="selectFilterByQueryCriteria_oracleDb2" parameterType="io.orqueio.bpm.engine.impl.filter.FilterQueryImpl" resultMap="filterResultMap">
     <!--
     SEE: https://app.camunda.com/jira/browse/CAM-6014
      -->
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
     SELECT RES.*, J.QUERY_, J.PROPERTIES_ FROM (
       ${limitBefore}
       select ${distinct} RES.ID_, RES.REV_, RES.RESOURCE_TYPE_, RES.NAME_, RES.OWNER_
@@ -126,12 +126,12 @@
     <if test="orderingProperties.size > 0">
       ORDER BY
       <foreach item="orderingProperty" index="index" collection="orderingProperties" separator=",">
-        ${@org.camunda.bpm.engine.impl.db.sql.MybatisJoinHelper@orderBy(orderingProperty, index)}
+        ${@io.orqueio.bpm.engine.impl.db.sql.MybatisJoinHelper@orderBy(orderingProperty, index)}
       </foreach>
     </if>
   </select>
 
-   <select id="selectFilterCountByQueryCriteria" parameterType="org.camunda.bpm.engine.impl.filter.FilterQueryImpl" resultType="long">
+   <select id="selectFilterCountByQueryCriteria" parameterType="io.orqueio.bpm.engine.impl.filter.FilterQueryImpl" resultType="long">
     ${countDistinctBeforeStart} RES.ID_ ${countDistinctBeforeEnd}
     <include refid="selectFilterByQueryCriteriaSql" />
     ${countDistinctAfterEnd}
@@ -141,7 +141,7 @@
 
     from ${prefix}ACT_RU_FILTER RES
     
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoin" /> 
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoin" />
     
     <where>
       <if test="filterId != null">
@@ -160,7 +160,7 @@
         and RES.OWNER_ = #{owner}
       </if>
 
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.queryAuthorizationCheck" />
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.queryAuthorizationCheck" />
 
     </where>
   </sql>

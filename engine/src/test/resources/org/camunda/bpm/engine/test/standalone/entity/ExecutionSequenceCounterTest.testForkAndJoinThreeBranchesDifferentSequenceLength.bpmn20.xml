@@ -35,7 +35,7 @@
 
     <parallelGateway id="join">
       <extensionElements>
-        <camunda:executionListener event="start" class="org.camunda.bpm.engine.test.standalone.entity.ExecutionOrderListener" />
+        <camunda:executionListener event="start" class="io.orqueio.bpm.engine.test.standalone.entity.ExecutionOrderListener" />
       </extensionElements>
     </parallelGateway>
 
@@ -43,7 +43,7 @@
 
     <serviceTask id="theService7" camunda:expression="${true}">
       <extensionElements>
-        <camunda:executionListener event="start" class="org.camunda.bpm.engine.test.standalone.entity.ExecutionOrderListener" />
+        <camunda:executionListener event="start" class="io.orqueio.bpm.engine.test.standalone.entity.ExecutionOrderListener" />
       </extensionElements>
     </serviceTask>
 

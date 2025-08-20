@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.engine.impl.spi.transform;
+package io.orqueio.bpm.dmn.engine.impl.spi.transform;
 
 /**
  * Factory to create a {@link DmnTransform} from a {@link DmnTransformer}

@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.cmmn.instance;
+package io.orqueio.bpm.model.cmmn.instance;
 
-import org.camunda.bpm.model.cmmn.impl.CmmnModelConstants;
-import org.camunda.bpm.model.cmmn.util.GetCmmnModelElementTypeRule;
-import org.camunda.bpm.model.xml.test.AbstractModelElementInstanceTest;
+import io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants;
+import io.orqueio.bpm.model.cmmn.util.GetCmmnModelElementTypeRule;
+import io.orqueio.bpm.model.xml.test.AbstractModelElementInstanceTest;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 

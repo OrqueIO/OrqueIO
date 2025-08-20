@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.spring.test.dmn;
+package io.orqueio.bpm.engine.spring.test.dmn;
 
-import org.camunda.bpm.dmn.engine.DmnDecisionResult;
-import org.camunda.bpm.engine.DecisionService;
-import org.camunda.bpm.engine.RepositoryService;
+import io.orqueio.bpm.dmn.engine.DmnDecisionResult;
+import io.orqueio.bpm.engine.DecisionService;
+import io.orqueio.bpm.engine.RepositoryService;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

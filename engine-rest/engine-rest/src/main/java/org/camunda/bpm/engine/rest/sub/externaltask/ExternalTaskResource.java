@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.sub.externaltask;
+package io.orqueio.bpm.engine.rest.sub.externaltask;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -24,14 +24,14 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import org.camunda.bpm.engine.rest.dto.externaltask.CompleteExternalTaskDto;
-import org.camunda.bpm.engine.rest.dto.externaltask.ExtendLockOnExternalTaskDto;
-import org.camunda.bpm.engine.rest.dto.externaltask.ExternalTaskBpmnError;
-import org.camunda.bpm.engine.rest.dto.externaltask.ExternalTaskDto;
-import org.camunda.bpm.engine.rest.dto.externaltask.ExternalTaskFailureDto;
-import org.camunda.bpm.engine.rest.dto.externaltask.LockExternalTaskDto;
-import org.camunda.bpm.engine.rest.dto.runtime.PriorityDto;
-import org.camunda.bpm.engine.rest.dto.runtime.RetriesDto;
+import io.orqueio.bpm.engine.rest.dto.externaltask.CompleteExternalTaskDto;
+import io.orqueio.bpm.engine.rest.dto.externaltask.ExtendLockOnExternalTaskDto;
+import io.orqueio.bpm.engine.rest.dto.externaltask.ExternalTaskBpmnError;
+import io.orqueio.bpm.engine.rest.dto.externaltask.ExternalTaskDto;
+import io.orqueio.bpm.engine.rest.dto.externaltask.ExternalTaskFailureDto;
+import io.orqueio.bpm.engine.rest.dto.externaltask.LockExternalTaskDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.PriorityDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.RetriesDto;
 
 /**
  * @author Thorben Lindhauer

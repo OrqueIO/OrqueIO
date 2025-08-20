@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.welcome.impl.plugin.resources;
+package io.orqueio.bpm.welcome.impl.plugin.resources;
 
 import javax.ws.rs.Path;
 
-import org.camunda.bpm.welcome.impl.plugin.WelcomePlugins;
-import org.camunda.bpm.welcome.resource.AbstractWelcomePluginRootResource;
+import io.orqueio.bpm.welcome.impl.plugin.WelcomePlugins;
+import io.orqueio.bpm.welcome.resource.AbstractWelcomePluginRootResource;
 
 /**
  * @author vale

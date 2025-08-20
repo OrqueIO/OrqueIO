@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa.performance.engine.loadgenerator;
+package io.orqueio.bpm.qa.performance.engine.loadgenerator;
 
-import static org.camunda.bpm.qa.performance.engine.loadgenerator.CompletionSignalingRunnable.wrap;
+import static io.orqueio.bpm.qa.performance.engine.loadgenerator.CompletionSignalingRunnable.wrap;
 
 import java.util.Timer;
 import java.util.TimerTask;

@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.authorization;
+package io.orqueio.bpm.engine.authorization;
 
-import org.camunda.bpm.engine.EntityTypes;
+import io.orqueio.bpm.engine.EntityTypes;
 
 /**
  * <p>The set of built-in {@link Resource} names.</p>

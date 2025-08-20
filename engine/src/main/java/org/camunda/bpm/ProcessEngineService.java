@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm;
+package io.orqueio.bpm;
 
 import java.util.List;
 import java.util.Set;
 
-import org.camunda.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.ProcessEngine;
 
 /**
  * <p>The {@link ProcessEngineService} provides access to the list of Managed Process Engines.</p>

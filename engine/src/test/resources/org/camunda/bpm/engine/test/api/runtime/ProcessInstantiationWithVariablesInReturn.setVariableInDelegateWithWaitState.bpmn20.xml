@@ -5,7 +5,7 @@
   <process id="variableProcess" isExecutable="true">
     <startEvent id="start" />
     <sequenceFlow id="flow1" sourceRef="start" targetRef="syncTask" />
-    <serviceTask id="syncTask" camunda:class="org.camunda.bpm.engine.test.api.runtime.AddVariablesService" />
+    <serviceTask id="syncTask" camunda:class="io.orqueio.bpm.engine.test.api.runtime.AddVariablesService" />
     <sequenceFlow id="flow2" sourceRef="syncTask" targetRef="user" />
     <userTask id="user"/>
     <sequenceFlow id="flow3" sourceRef="user" targetRef="end" />

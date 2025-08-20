@@ -9,7 +9,7 @@
     <startEvent id="theStart" name="Start"></startEvent>
     <sequenceFlow id="flow1" sourceRef="theStart" targetRef="waitTask"></sequenceFlow>
     <serviceTask id="waitTask" name="Service Task"
-                 camunda:class="org.camunda.bpm.engine.test.jobexecutor.DelayDelegate"
+                 camunda:class="io.orqueio.bpm.engine.test.jobexecutor.DelayDelegate"
                  camunda:async="true"></serviceTask>
     <sequenceFlow id="flow3" sourceRef="waitTask" targetRef="theEnd"></sequenceFlow>
     <endEvent id="theEnd" name="End"></endEvent>

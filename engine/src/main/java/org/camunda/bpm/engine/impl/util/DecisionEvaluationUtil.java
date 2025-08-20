@@ -14,26 +14,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.util;
+package io.orqueio.bpm.engine.impl.util;
 
-import org.camunda.bpm.dmn.engine.DmnDecisionResult;
-import org.camunda.bpm.dmn.engine.DmnDecisionTableResult;
-import org.camunda.bpm.dmn.engine.impl.DmnDecisionTableResultImpl;
-import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.engine.impl.core.model.BaseCallableElement;
-import org.camunda.bpm.engine.impl.core.variable.scope.AbstractVariableScope;
-import org.camunda.bpm.engine.impl.dmn.invocation.DecisionInvocation;
-import org.camunda.bpm.engine.impl.dmn.invocation.VariableScopeContext;
-import org.camunda.bpm.engine.impl.dmn.result.CollectEntriesDecisionResultMapper;
-import org.camunda.bpm.engine.impl.dmn.result.DecisionResultMapper;
-import org.camunda.bpm.engine.impl.dmn.result.ResultListDecisionTableResultMapper;
-import org.camunda.bpm.engine.impl.dmn.result.SingleEntryDecisionResultMapper;
-import org.camunda.bpm.engine.impl.dmn.result.SingleResultDecisionResultMapper;
-import org.camunda.bpm.engine.repository.DecisionDefinition;
-import org.camunda.bpm.engine.variable.VariableMap;
-import org.camunda.bpm.engine.variable.Variables;
-import org.camunda.bpm.engine.variable.context.VariableContext;
-import org.camunda.bpm.engine.variable.value.TypedValue;
+import io.orqueio.bpm.dmn.engine.DmnDecisionResult;
+import io.orqueio.bpm.dmn.engine.DmnDecisionTableResult;
+import io.orqueio.bpm.dmn.engine.impl.DmnDecisionTableResultImpl;
+import io.orqueio.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.impl.core.model.BaseCallableElement;
+import io.orqueio.bpm.engine.impl.core.variable.scope.AbstractVariableScope;
+import io.orqueio.bpm.engine.impl.dmn.invocation.DecisionInvocation;
+import io.orqueio.bpm.engine.impl.dmn.invocation.VariableScopeContext;
+import io.orqueio.bpm.engine.impl.dmn.result.CollectEntriesDecisionResultMapper;
+import io.orqueio.bpm.engine.impl.dmn.result.DecisionResultMapper;
+import io.orqueio.bpm.engine.impl.dmn.result.ResultListDecisionTableResultMapper;
+import io.orqueio.bpm.engine.impl.dmn.result.SingleEntryDecisionResultMapper;
+import io.orqueio.bpm.engine.impl.dmn.result.SingleResultDecisionResultMapper;
+import io.orqueio.bpm.engine.repository.DecisionDefinition;
+import io.orqueio.bpm.engine.variable.VariableMap;
+import io.orqueio.bpm.engine.variable.Variables;
+import io.orqueio.bpm.engine.variable.context.VariableContext;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
 
 /**
  * @author Roman Smirnov

@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.dto.message;
+package io.orqueio.bpm.engine.rest.dto.message;
 
-import org.camunda.bpm.engine.rest.dto.runtime.ExecutionDto;
-import org.camunda.bpm.engine.rest.dto.runtime.ProcessInstanceDto;
-import org.camunda.bpm.engine.runtime.MessageCorrelationResult;
-import org.camunda.bpm.engine.runtime.MessageCorrelationResultType;
+import io.orqueio.bpm.engine.rest.dto.runtime.ExecutionDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.ProcessInstanceDto;
+import io.orqueio.bpm.engine.runtime.MessageCorrelationResult;
+import io.orqueio.bpm.engine.runtime.MessageCorrelationResultType;
 
 /**
  *

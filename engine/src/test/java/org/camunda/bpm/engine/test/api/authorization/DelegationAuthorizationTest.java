@@ -14,38 +14,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.authorization;
+package io.orqueio.bpm.engine.test.api.authorization;
 
-import static org.camunda.bpm.engine.authorization.Authorization.ANY;
-import static org.camunda.bpm.engine.authorization.Permissions.CREATE;
-import static org.camunda.bpm.engine.authorization.Permissions.CREATE_INSTANCE;
-import static org.camunda.bpm.engine.authorization.Permissions.READ;
-import static org.camunda.bpm.engine.authorization.Permissions.UPDATE;
-import static org.camunda.bpm.engine.authorization.Resources.PROCESS_DEFINITION;
-import static org.camunda.bpm.engine.authorization.Resources.PROCESS_INSTANCE;
-import static org.camunda.bpm.engine.authorization.Resources.TASK;
+import static io.orqueio.bpm.engine.authorization.Authorization.ANY;
+import static io.orqueio.bpm.engine.authorization.Permissions.CREATE;
+import static io.orqueio.bpm.engine.authorization.Permissions.CREATE_INSTANCE;
+import static io.orqueio.bpm.engine.authorization.Permissions.READ;
+import static io.orqueio.bpm.engine.authorization.Permissions.UPDATE;
+import static io.orqueio.bpm.engine.authorization.Resources.PROCESS_DEFINITION;
+import static io.orqueio.bpm.engine.authorization.Resources.PROCESS_INSTANCE;
+import static io.orqueio.bpm.engine.authorization.Resources.TASK;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
-import org.camunda.bpm.engine.AuthorizationException;
-import org.camunda.bpm.engine.form.StartFormData;
-import org.camunda.bpm.engine.form.TaskFormData;
-import org.camunda.bpm.engine.runtime.VariableInstance;
-import org.camunda.bpm.engine.runtime.VariableInstanceQuery;
-import org.camunda.bpm.engine.task.Task;
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.engine.test.api.authorization.service.ExecuteCommandDelegate;
-import org.camunda.bpm.engine.test.api.authorization.service.ExecuteCommandListener;
-import org.camunda.bpm.engine.test.api.authorization.service.ExecuteCommandTaskListener;
-import org.camunda.bpm.engine.test.api.authorization.service.ExecuteQueryDelegate;
-import org.camunda.bpm.engine.test.api.authorization.service.ExecuteQueryListener;
-import org.camunda.bpm.engine.test.api.authorization.service.ExecuteQueryTaskListener;
-import org.camunda.bpm.engine.test.api.authorization.service.MyDelegationService;
-import org.camunda.bpm.engine.test.api.authorization.service.MyFormFieldValidator;
-import org.camunda.bpm.engine.test.api.authorization.service.MyServiceTaskActivityBehaviorExecuteCommand;
-import org.camunda.bpm.engine.test.api.authorization.service.MyServiceTaskActivityBehaviorExecuteQuery;
-import org.camunda.bpm.engine.test.api.authorization.service.MyTaskService;
+import io.orqueio.bpm.engine.AuthorizationException;
+import io.orqueio.bpm.engine.form.StartFormData;
+import io.orqueio.bpm.engine.form.TaskFormData;
+import io.orqueio.bpm.engine.runtime.VariableInstance;
+import io.orqueio.bpm.engine.runtime.VariableInstanceQuery;
+import io.orqueio.bpm.engine.task.Task;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.test.api.authorization.service.ExecuteCommandDelegate;
+import io.orqueio.bpm.engine.test.api.authorization.service.ExecuteCommandListener;
+import io.orqueio.bpm.engine.test.api.authorization.service.ExecuteCommandTaskListener;
+import io.orqueio.bpm.engine.test.api.authorization.service.ExecuteQueryDelegate;
+import io.orqueio.bpm.engine.test.api.authorization.service.ExecuteQueryListener;
+import io.orqueio.bpm.engine.test.api.authorization.service.ExecuteQueryTaskListener;
+import io.orqueio.bpm.engine.test.api.authorization.service.MyDelegationService;
+import io.orqueio.bpm.engine.test.api.authorization.service.MyFormFieldValidator;
+import io.orqueio.bpm.engine.test.api.authorization.service.MyServiceTaskActivityBehaviorExecuteCommand;
+import io.orqueio.bpm.engine.test.api.authorization.service.MyServiceTaskActivityBehaviorExecuteQuery;
+import io.orqueio.bpm.engine.test.api.authorization.service.MyTaskService;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -16,7 +16,7 @@
 
       <sequenceFlow id="innerFlow1" sourceRef="theInnterStart" targetRef="serviceTask" />
 
-      <serviceTask id="serviceTask" camunda:async="true" camunda:class="org.camunda.bpm.engine.test.api.runtime.FailingDelegate" />
+      <serviceTask id="serviceTask" camunda:async="true" camunda:class="io.orqueio.bpm.engine.test.api.runtime.FailingDelegate" />
 
       <sequenceFlow id="innerFlow2" sourceRef="serviceTask" targetRef="theInnerEnd" />
 

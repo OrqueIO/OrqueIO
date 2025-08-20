@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa.performance.engine.util;
+package io.orqueio.bpm.qa.performance.engine.util;
 
 import java.io.File;
 
-import org.camunda.bpm.qa.performance.engine.framework.PerfTestException;
+import io.orqueio.bpm.qa.performance.engine.framework.PerfTestException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.SerializationConfig;
 import org.codehaus.jackson.map.annotate.JsonSerialize;

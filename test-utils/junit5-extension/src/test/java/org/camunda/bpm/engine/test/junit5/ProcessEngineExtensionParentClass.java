@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.junit5;
+package io.orqueio.bpm.engine.test.junit5;
 
 public class ProcessEngineExtensionParentClass extends ProcessEngineExtensionSuperClass {
 

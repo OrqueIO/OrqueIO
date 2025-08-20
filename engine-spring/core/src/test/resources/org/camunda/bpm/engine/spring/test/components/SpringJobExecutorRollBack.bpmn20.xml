@@ -13,7 +13,7 @@
     <sequenceFlow id="flow2" name="" sourceRef="usertask1" targetRef="endevent1"></sequenceFlow>
     <sequenceFlow id="flow3" name="" sourceRef="boundarytimer1" targetRef="endevent1">
       <extensionElements>
-        <camunda:executionListener event="take" class="org.camunda.bpm.engine.spring.test.components.scope.components.jobexecutor.ForcedRollbackExecutionListener"></camunda:executionListener>
+        <camunda:executionListener event="take" class="io.orqueio.bpm.engine.spring.test.components.scope.components.jobexecutor.ForcedRollbackExecutionListener"></camunda:executionListener>
       </extensionElements>
     </sequenceFlow>
   </process>

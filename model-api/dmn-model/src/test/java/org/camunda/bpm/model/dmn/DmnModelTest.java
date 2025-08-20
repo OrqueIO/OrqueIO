@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.dmn;
+package io.orqueio.bpm.model.dmn;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
@@ -24,13 +24,13 @@ import java.io.File;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.camunda.bpm.model.dmn.instance.DmnElement;
-import org.camunda.bpm.model.dmn.instance.DmnModelElementInstance;
-import org.camunda.bpm.model.dmn.instance.NamedElement;
-import org.camunda.bpm.model.dmn.util.Java9CDataWhitespaceFilter;
-import org.camunda.bpm.model.dmn.util.ParseDmnModelRule;
-import org.camunda.bpm.model.xml.impl.util.ReflectUtil;
-import org.camunda.bpm.model.xml.instance.ModelElementInstance;
+import io.orqueio.bpm.model.dmn.instance.DmnElement;
+import io.orqueio.bpm.model.dmn.instance.DmnModelElementInstance;
+import io.orqueio.bpm.model.dmn.instance.NamedElement;
+import io.orqueio.bpm.model.dmn.util.Java9CDataWhitespaceFilter;
+import io.orqueio.bpm.model.dmn.util.ParseDmnModelRule;
+import io.orqueio.bpm.model.xml.impl.util.ReflectUtil;
+import io.orqueio.bpm.model.xml.instance.ModelElementInstance;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;

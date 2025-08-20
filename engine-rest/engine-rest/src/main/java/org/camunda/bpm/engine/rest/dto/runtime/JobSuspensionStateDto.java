@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.dto.runtime;
+package io.orqueio.bpm.engine.rest.dto.runtime;
 
 import javax.ws.rs.core.Response.Status;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.management.UpdateJobSuspensionStateBuilder;
-import org.camunda.bpm.engine.management.UpdateJobSuspensionStateSelectBuilder;
-import org.camunda.bpm.engine.management.UpdateJobSuspensionStateTenantBuilder;
-import org.camunda.bpm.engine.rest.dto.SuspensionStateDto;
-import org.camunda.bpm.engine.rest.exception.InvalidRequestException;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.management.UpdateJobSuspensionStateBuilder;
+import io.orqueio.bpm.engine.management.UpdateJobSuspensionStateSelectBuilder;
+import io.orqueio.bpm.engine.management.UpdateJobSuspensionStateTenantBuilder;
+import io.orqueio.bpm.engine.rest.dto.SuspensionStateDto;
+import io.orqueio.bpm.engine.rest.exception.InvalidRequestException;
 
 /**
  * @author roman.smirnov

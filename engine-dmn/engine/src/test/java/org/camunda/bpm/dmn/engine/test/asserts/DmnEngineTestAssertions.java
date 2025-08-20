@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.engine.test.asserts;
+package io.orqueio.bpm.dmn.engine.test.asserts;
 
 import org.assertj.core.api.Assertions;
-import org.camunda.bpm.dmn.engine.DmnDecisionTableResult;
+import io.orqueio.bpm.dmn.engine.DmnDecisionTableResult;
 
 public class DmnEngineTestAssertions extends Assertions {
 

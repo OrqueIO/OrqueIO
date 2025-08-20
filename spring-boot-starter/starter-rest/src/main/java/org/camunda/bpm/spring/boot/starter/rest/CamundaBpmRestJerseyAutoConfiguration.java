@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter.rest;
+package io.orqueio.bpm.spring.boot.starter.rest;
 
-import org.camunda.bpm.engine.rest.impl.FetchAndLockContextListener;
-import org.camunda.bpm.spring.boot.starter.CamundaBpmAutoConfiguration;
-import org.camunda.bpm.spring.boot.starter.property.CamundaBpmProperties;
+import io.orqueio.bpm.engine.rest.impl.FetchAndLockContextListener;
+import io.orqueio.bpm.spring.boot.starter.CamundaBpmAutoConfiguration;
+import io.orqueio.bpm.spring.boot.starter.property.CamundaBpmProperties;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;

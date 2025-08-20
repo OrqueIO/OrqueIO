@@ -14,19 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.application;
+package io.orqueio.bpm.application;
 
 import java.util.Comparator;
 import java.util.ServiceLoader;
 
-import org.camunda.bpm.impl.juel.jakarta.el.ELResolver;
+import io.orqueio.bpm.impl.juel.jakarta.el.ELResolver;
 
 /**
  * <p>SPI interface that allows providing a custom ElResolver implementation.</p>
  *
  * <p>Implementations of this interface are looked up through the Java SE {@link ServiceLoader} facilities.
  * If you want to provide a custom implementation in your application, place a file named
- * <code>META-INF/org.camunda.bpm.application.ProcessApplicationElResolver</code> inside your application
+ * <code>META-INF/io.orqueio.bpm.application.ProcessApplicationElResolver</code> inside your application
  * which contains the fully qualified classname of your implementation.</p>
  *
  * @author Daniel Meyer

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.util.xml;
+package io.orqueio.bpm.engine.impl.util.xml;
 
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -25,16 +25,16 @@ import java.util.List;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.camunda.bpm.engine.BpmnParseException;
-import org.camunda.bpm.engine.Problem;
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
-import org.camunda.bpm.engine.impl.util.EngineUtilLogger;
-import org.camunda.bpm.engine.impl.util.io.InputStreamSource;
-import org.camunda.bpm.engine.impl.util.io.ResourceStreamSource;
-import org.camunda.bpm.engine.impl.util.io.StreamSource;
-import org.camunda.bpm.engine.impl.util.io.StringStreamSource;
-import org.camunda.bpm.engine.impl.util.io.UrlStreamSource;
-import org.camunda.bpm.engine.impl.xml.ProblemImpl;
+import io.orqueio.bpm.engine.BpmnParseException;
+import io.orqueio.bpm.engine.Problem;
+import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
+import io.orqueio.bpm.engine.impl.util.EngineUtilLogger;
+import io.orqueio.bpm.engine.impl.util.io.InputStreamSource;
+import io.orqueio.bpm.engine.impl.util.io.ResourceStreamSource;
+import io.orqueio.bpm.engine.impl.util.io.StreamSource;
+import io.orqueio.bpm.engine.impl.util.io.StringStreamSource;
+import io.orqueio.bpm.engine.impl.util.io.UrlStreamSource;
+import io.orqueio.bpm.engine.impl.xml.ProblemImpl;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 

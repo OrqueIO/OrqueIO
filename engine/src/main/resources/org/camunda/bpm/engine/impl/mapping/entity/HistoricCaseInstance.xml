@@ -19,9 +19,9 @@
 -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="org.camunda.bpm.engine.impl.persistence.entity.HistoricCaseInstanceEntity">
+<mapper namespace="io.orqueio.bpm.engine.impl.persistence.entity.HistoricCaseInstanceEntity">
 
-  <resultMap id="finishedReportResultMap" type="org.camunda.bpm.engine.impl.persistence.entity.CleanableHistoricCaseInstanceReportResultEntity">
+  <resultMap id="finishedReportResultMap" type="io.orqueio.bpm.engine.impl.persistence.entity.CleanableHistoricCaseInstanceReportResultEntity">
     <result property="cleanableCaseInstanceCount" column="CLEANABLE_" jdbcType="BIGINT" />
     <result property="finishedCaseInstanceCount" column="FINISHED_" jdbcType="BIGINT" />
     <result property="caseDefinitionId" column="ID_" jdbcType="VARCHAR" />
@@ -34,7 +34,7 @@
 
   <!-- HISTORIC CASE INSTANCE INSERT -->
 
-  <insert id="insertHistoricCaseInstanceEvent" parameterType="org.camunda.bpm.engine.impl.history.event.HistoricCaseInstanceEventEntity">
+  <insert id="insertHistoricCaseInstanceEvent" parameterType="io.orqueio.bpm.engine.impl.history.event.HistoricCaseInstanceEventEntity">
       insert into ${prefix}ACT_HI_CASEINST (
         ID_,
         CASE_INST_ID_,
@@ -66,7 +66,7 @@
 
   <!-- HISTORIC CASE INSTANCE UPDATE -->
 
-  <update id="updateHistoricCaseInstanceEvent" parameterType="org.camunda.bpm.engine.impl.persistence.entity.HistoricCaseInstanceEntity">
+  <update id="updateHistoricCaseInstanceEvent" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.HistoricCaseInstanceEntity">
     update ${prefix}ACT_HI_CASEINST set
       CASE_DEF_ID_ = #{caseDefinitionId, jdbcType=VARCHAR},
       STATE_ = #{state, jdbcType=INTEGER}
@@ -94,12 +94,12 @@
     where
       <bind name="listOfIds" value="list"/>
       <bind name="fieldName" value="'CASE_INST_ID_'"/>
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection"/>
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection"/>
   </delete>
 
   <!-- HISTORIC CASE INSTANCE RESULT MAP -->
 
-  <resultMap id="historicCaseInstanceResultMap" type="org.camunda.bpm.engine.impl.persistence.entity.HistoricCaseInstanceEntity">
+  <resultMap id="historicCaseInstanceResultMap" type="io.orqueio.bpm.engine.impl.persistence.entity.HistoricCaseInstanceEntity">
     <id property="id" column="ID_" jdbcType="VARCHAR" />
     <result property="caseInstanceId" column="CASE_INST_ID_" jdbcType="VARCHAR" />
     <result property="businessKey" column="BUSINESS_KEY_" jdbcType="VARCHAR"/>
@@ -122,14 +122,14 @@
     select * from ${prefix}ACT_HI_CASEINST where CASE_INST_ID_ = #{caseInstanceId}
   </select>
 
-  <select id="selectHistoricCaseInstanceIdsByCaseDefinitionId" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject" resultType="string">
+  <select id="selectHistoricCaseInstanceIdsByCaseDefinitionId" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject" resultType="string">
     select ID_
     from ${prefix}ACT_HI_CASEINST
     where CASE_DEF_ID_ = #{parameter}
   </select>
 
-  <select id="selectHistoricCaseInstancesByQueryCriteria" parameterType="org.camunda.bpm.engine.impl.HistoricCaseInstanceQueryImpl" resultMap="historicCaseInstanceResultMap">
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
+  <select id="selectHistoricCaseInstancesByQueryCriteria" parameterType="io.orqueio.bpm.engine.impl.HistoricCaseInstanceQueryImpl" resultMap="historicCaseInstanceResultMap">
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
     ${limitBefore}
     select ${distinct} RES.*
     ${limitBetween}
@@ -138,7 +138,7 @@
     ${limitAfter}
   </select>
 
-  <select id="selectHistoricCaseInstanceCountByQueryCriteria" parameterType="org.camunda.bpm.engine.impl.HistoricCaseInstanceQueryImpl" resultType="long">
+  <select id="selectHistoricCaseInstanceCountByQueryCriteria" parameterType="io.orqueio.bpm.engine.impl.HistoricCaseInstanceQueryImpl" resultType="long">
     ${countDistinctBeforeStart} RES.ID_ ${countDistinctBeforeEnd}
     <include refid="selectHistoricCaseInstancesByQueryCriteriaSql"/>
     ${countDistinctAfterEnd}
@@ -255,19 +255,19 @@
             WHERE
             <bind name="varPrefix" value="''"/>
 
-            <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.variableNameEqualsCaseInsensitive" />
+            <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.variableNameEqualsCaseInsensitive" />
 
             AND CASE_INST_ID_ = RES.CASE_INST_ID_
 
           <bind name="varTypeField" value="'VAR_TYPE_'"/>
           <if test="queryVariableValue.valueConditions != null">
             and
-            <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.variableValueConditions"/>
+            <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.variableValueConditions"/>
           </if>
           )
         </foreach>
 
-        <include refid="org.camunda.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
+        <include refid="io.orqueio.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
 
       </where>
 
@@ -312,14 +312,14 @@
       AND ${dayComparator}
   </sql>
 
-  <select id="selectHistoricCaseInstanceIdsForCleanup" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject" resultType="string">
+  <select id="selectHistoricCaseInstanceIdsForCleanup" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject" resultType="string">
     SELECT ${limitBeforeWithoutOffset} ci.ID_, ci.CLOSE_TIME_
     <include refid="selectHistoricCaseInstanceIdsForCleanupSql"/>
     <include refid="andWhereMinuteInDateBetweenSql"/>
     ${limitAfterWithoutOffset}
   </select>
 
-  <select id="selectHistoricCaseInstanceIdsForCleanup_oracle" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject" resultType="string">
+  <select id="selectHistoricCaseInstanceIdsForCleanup_oracle" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject" resultType="string">
     SELECT /*+ FIRST_ROWS(${maxResults}) NO_PARALLEL(ci) NO_PARALLEL(cd) */ ci.ID_, ci.CLOSE_TIME_
     <include refid="selectHistoricCaseInstanceIdsForCleanupSql"/>
     <include refid="andWhereMinuteInDateBetweenSql_oracle"/>
@@ -328,27 +328,27 @@
 
   <sql id="andWhereMinuteInDateBetweenSql">
     <if test="parameter.minuteFrom != null and parameter.minuteTo != null">
-      AND ${datepart1}<include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.periodUnitFunction"/>${datepart2}ci.CLOSE_TIME_${datepart3}
+      AND ${datepart1}<include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.periodUnitFunction"/>${datepart2}ci.CLOSE_TIME_${datepart3}
       between #{parameter.minuteFrom, jdbcType=INTEGER} and #{parameter.minuteTo, jdbcType=INTEGER}
     </if>
   </sql>
 
   <sql id="andWhereMinuteInDateBetweenSql_oracle">
     <if test="parameter.minuteFrom != null and parameter.minuteTo != null">
-      AND ${datepart1}ci.CLOSE_TIME_${datepart2}<include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.periodUnitFunction"/>${datepart3}
+      AND ${datepart1}ci.CLOSE_TIME_${datepart2}<include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.periodUnitFunction"/>${datepart3}
       between #{parameter.minuteFrom, jdbcType=INTEGER} and #{parameter.minuteTo, jdbcType=INTEGER}
     </if>
   </sql>
 
   <!-- Select History Cleanup Report Entities -->
-  <select id="selectFinishedCaseInstancesReportEntitiesCount" parameterType="org.camunda.bpm.engine.impl.CleanableHistoricCaseInstanceReportImpl" resultType="long">
+  <select id="selectFinishedCaseInstancesReportEntitiesCount" parameterType="io.orqueio.bpm.engine.impl.CleanableHistoricCaseInstanceReportImpl" resultType="long">
     ${countDistinctBeforeStart} RES.ID_ ${countDistinctBeforeEnd}
     <include refid="selectFinishedCaseInstancesReportEntitiesSql" />
     ${countDistinctAfterEnd}
   </select>
 
-  <select id="selectFinishedCaseInstancesReportEntities" parameterType="org.camunda.bpm.engine.impl.CleanableHistoricCaseInstanceReportImpl" resultMap="finishedReportResultMap">
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
+  <select id="selectFinishedCaseInstancesReportEntities" parameterType="io.orqueio.bpm.engine.impl.CleanableHistoricCaseInstanceReportImpl" resultMap="finishedReportResultMap">
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
     ${limitBefore}
     SELECT ${distinct} RES.*
     ${limitBetween}
@@ -413,7 +413,7 @@
           and F.FINISHED_ > 0
         </if>
 
-        <include refid="org.camunda.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
+        <include refid="io.orqueio.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
 
       </where>
       GROUP BY RES.ID_,

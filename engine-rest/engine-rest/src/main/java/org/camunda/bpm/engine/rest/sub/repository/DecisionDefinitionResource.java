@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.sub.repository;
+package io.orqueio.bpm.engine.rest.sub.repository;
 
 import java.util.List;
 import java.util.Map;
@@ -30,11 +30,11 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import org.camunda.bpm.engine.rest.dto.HistoryTimeToLiveDto;
-import org.camunda.bpm.engine.rest.dto.VariableValueDto;
-import org.camunda.bpm.engine.rest.dto.dmn.EvaluateDecisionDto;
-import org.camunda.bpm.engine.rest.dto.repository.DecisionDefinitionDiagramDto;
-import org.camunda.bpm.engine.rest.dto.repository.DecisionDefinitionDto;
+import io.orqueio.bpm.engine.rest.dto.HistoryTimeToLiveDto;
+import io.orqueio.bpm.engine.rest.dto.VariableValueDto;
+import io.orqueio.bpm.engine.rest.dto.dmn.EvaluateDecisionDto;
+import io.orqueio.bpm.engine.rest.dto.repository.DecisionDefinitionDiagramDto;
+import io.orqueio.bpm.engine.rest.dto.repository.DecisionDefinitionDto;
 
 public interface DecisionDefinitionResource {
 

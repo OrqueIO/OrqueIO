@@ -12,13 +12,13 @@
 
     <activiti:annotation-driven process-engine="processEngine" />
 
-    <bean class="org.camunda.bpm.engine.spring.test.components.scope.StatefulObject" id="c1" scope="process"/>
+    <bean class="io.orqueio.bpm.engine.spring.test.components.scope.StatefulObject" id="c1" scope="process"/>
 
-    <bean class="org.camunda.bpm.engine.spring.test.components.scope.Delegate1" id="delegate1"/>
+    <bean class="io.orqueio.bpm.engine.spring.test.components.scope.Delegate1" id="delegate1"/>
 
-    <bean class="org.camunda.bpm.engine.spring.test.components.scope.Delegate2" id="delegate2"/>
+    <bean class="io.orqueio.bpm.engine.spring.test.components.scope.Delegate2" id="delegate2"/>
 
-    <bean class="org.camunda.bpm.engine.spring.test.components.ProcessInitiatingPojo" id="pojo" />
+    <bean class="io.orqueio.bpm.engine.spring.test.components.ProcessInitiatingPojo" id="pojo" />
 
 
     <bean id="dataSource" class="org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy">
@@ -36,7 +36,7 @@
         <property name="dataSource" ref="dataSource"/>
     </bean>
 
-    <bean id="processEngineConfiguration" class="org.camunda.bpm.engine.spring.SpringProcessEngineConfiguration">
+    <bean id="processEngineConfiguration" class="io.orqueio.bpm.engine.spring.SpringProcessEngineConfiguration">
         <property name="dataSource" ref="dataSource"/>
         <property name="transactionManager" ref="transactionManager"/>
         <property name="databaseSchemaUpdate" value="true"/>
@@ -47,7 +47,7 @@
         <property name="enforceHistoryTimeToLive" value="false" />
     </bean>
 
-    <bean id="processEngine" class="org.camunda.bpm.engine.spring.ProcessEngineFactoryBean">
+    <bean id="processEngine" class="io.orqueio.bpm.engine.spring.ProcessEngineFactoryBean">
         <property name="processEngineConfiguration" ref="processEngineConfiguration"/>
     </bean>
 

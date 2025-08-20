@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.spring.components.aop;
+package io.orqueio.bpm.engine.spring.components.aop;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.spring.annotations.ProcessVariable;
-import org.camunda.bpm.engine.spring.annotations.StartProcess;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.spring.annotations.ProcessVariable;
+import io.orqueio.bpm.engine.spring.annotations.StartProcess;
 import org.springframework.aop.framework.Advised;
 import org.springframework.aop.framework.AopInfrastructureBean;
 import org.springframework.aop.framework.ProxyConfig;
@@ -44,7 +44,7 @@ public class ProcessStartAnnotationBeanPostProcessor extends ProxyConfig impleme
 	private Log log = LogFactory.getLog(getClass()) ;
 
 	/**
-	 * the process engine as created by a {@link org.camunda.bpm.engine.spring.ProcessEngineFactoryBean}
+	 * the process engine as created by a {@link io.orqueio.bpm.engine.spring.ProcessEngineFactoryBean}
 	 */
 	private ProcessEngine processEngine;
 

@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.plugin.variables;
+package io.orqueio.spin.plugin.variables;
 
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.impl.test.PluggableProcessEngineTestCase;
-import org.camunda.bpm.engine.impl.variable.serializer.VariableSerializerFactory;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.engine.variable.Variables;
-import org.camunda.bpm.engine.variable.value.ObjectValue;
-import org.camunda.bpm.engine.variable.value.TypedValue;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.impl.test.PluggableProcessEngineTestCase;
+import io.orqueio.bpm.engine.impl.variable.serializer.VariableSerializerFactory;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.variable.Variables;
+import io.orqueio.bpm.engine.variable.value.ObjectValue;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
 import org.junit.Test;
 
 /**
@@ -42,7 +42,7 @@ public class FallbackSerializationTest extends PluggableProcessEngineTestCase {
     // when
     ObjectValue objectValue = Variables.serializedObjectValue("foo")
       .serializationDataFormat("application/foo")
-      .objectTypeName("org.camunda.Foo")
+      .objectTypeName("io.orqueio.Foo")
       .create();
 
     runtimeService.setVariable(instance.getId(), "var", objectValue);
@@ -59,7 +59,7 @@ public class FallbackSerializationTest extends PluggableProcessEngineTestCase {
     assertFalse(returnedValue.isDeserialized());
     assertEquals("application/foo", returnedValue.getSerializationDataFormat());
     assertEquals("foo", returnedValue.getValueSerialized());
-    assertEquals("org.camunda.Foo", returnedValue.getObjectTypeName());
+    assertEquals("io.orqueio.Foo", returnedValue.getObjectTypeName());
 
   }
 }

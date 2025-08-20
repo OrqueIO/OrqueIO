@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.delegate;
+package io.orqueio.bpm.engine.delegate;
 
 import java.util.Collection;
 import java.util.Date;
 import java.util.Set;
 
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.task.IdentityLink;
-import org.camunda.bpm.engine.task.IdentityLinkType;
-import org.camunda.bpm.model.bpmn.instance.UserTask;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.task.IdentityLink;
+import io.orqueio.bpm.engine.task.IdentityLinkType;
+import io.orqueio.bpm.model.bpmn.instance.UserTask;
 
 /**
  * @author Joram Barrez

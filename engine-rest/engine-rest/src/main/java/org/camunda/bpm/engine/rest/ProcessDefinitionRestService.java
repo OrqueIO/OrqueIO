@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest;
+package io.orqueio.bpm.engine.rest;
 
 import java.util.List;
 
@@ -30,12 +30,12 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
-import org.camunda.bpm.engine.repository.ProcessDefinitionQuery;
-import org.camunda.bpm.engine.rest.dto.CountResultDto;
-import org.camunda.bpm.engine.rest.dto.StatisticsResultDto;
-import org.camunda.bpm.engine.rest.dto.repository.ProcessDefinitionDto;
-import org.camunda.bpm.engine.rest.dto.repository.ProcessDefinitionSuspensionStateDto;
-import org.camunda.bpm.engine.rest.sub.repository.ProcessDefinitionResource;
+import io.orqueio.bpm.engine.repository.ProcessDefinitionQuery;
+import io.orqueio.bpm.engine.rest.dto.CountResultDto;
+import io.orqueio.bpm.engine.rest.dto.StatisticsResultDto;
+import io.orqueio.bpm.engine.rest.dto.repository.ProcessDefinitionDto;
+import io.orqueio.bpm.engine.rest.dto.repository.ProcessDefinitionSuspensionStateDto;
+import io.orqueio.bpm.engine.rest.sub.repository.ProcessDefinitionResource;
 
 @Produces(MediaType.APPLICATION_JSON)
 public interface ProcessDefinitionRestService {

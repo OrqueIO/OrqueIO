@@ -11,7 +11,7 @@
     
     <serviceTask id="javaService" 
                  name="Java service invocation" 
-                 camunda:class="org.camunda.bpm.engine.test.bpmn.servicetask.util.ThrowsExceptionBehavior">            
+                 camunda:class="io.orqueio.bpm.engine.test.bpmn.servicetask.util.ThrowsExceptionBehavior">
     </serviceTask>
     
     <sequenceFlow id="no-exception" sourceRef="javaService" targetRef="theEnd" />

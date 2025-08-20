@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.form;
+package io.orqueio.bpm.engine.test.api.form;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.camunda.bpm.engine.test.util.CamundaFormUtils.findAllCamundaFormDefinitionEntities;
+import static io.orqueio.bpm.engine.test.util.CamundaFormUtils.findAllCamundaFormDefinitionEntities;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -29,24 +29,24 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
-import org.camunda.bpm.engine.BadUserRequestException;
-import org.camunda.bpm.engine.FormService;
-import org.camunda.bpm.engine.RepositoryService;
-import org.camunda.bpm.engine.RuntimeService;
-import org.camunda.bpm.engine.TaskService;
-import org.camunda.bpm.engine.exception.NotFoundException;
-import org.camunda.bpm.engine.form.CamundaFormRef;
-import org.camunda.bpm.engine.form.TaskFormData;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.util.ReflectUtil;
-import org.camunda.bpm.engine.repository.CamundaFormDefinition;
-import org.camunda.bpm.engine.repository.Deployment;
-import org.camunda.bpm.engine.repository.DeploymentBuilder;
-import org.camunda.bpm.engine.repository.ProcessDefinition;
-import org.camunda.bpm.engine.task.Task;
-import org.camunda.bpm.engine.test.util.CamundaFormUtils;
-import org.camunda.bpm.engine.test.util.ProcessEngineTestRule;
-import org.camunda.bpm.engine.test.util.ProvidedProcessEngineRule;
+import io.orqueio.bpm.engine.BadUserRequestException;
+import io.orqueio.bpm.engine.FormService;
+import io.orqueio.bpm.engine.RepositoryService;
+import io.orqueio.bpm.engine.RuntimeService;
+import io.orqueio.bpm.engine.TaskService;
+import io.orqueio.bpm.engine.exception.NotFoundException;
+import io.orqueio.bpm.engine.form.CamundaFormRef;
+import io.orqueio.bpm.engine.form.TaskFormData;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.util.ReflectUtil;
+import io.orqueio.bpm.engine.repository.CamundaFormDefinition;
+import io.orqueio.bpm.engine.repository.Deployment;
+import io.orqueio.bpm.engine.repository.DeploymentBuilder;
+import io.orqueio.bpm.engine.repository.ProcessDefinition;
+import io.orqueio.bpm.engine.task.Task;
+import io.orqueio.bpm.engine.test.util.CamundaFormUtils;
+import io.orqueio.bpm.engine.test.util.ProcessEngineTestRule;
+import io.orqueio.bpm.engine.test.util.ProvidedProcessEngineRule;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -84,8 +84,8 @@ public class RetrieveCamundaFormRefTest {
 
   @After
   public void tearDown() throws Exception {
-    List<org.camunda.bpm.engine.repository.Deployment> deployments = repositoryService.createDeploymentQuery().list();
-    for (org.camunda.bpm.engine.repository.Deployment deployment : deployments) {
+    List<io.orqueio.bpm.engine.repository.Deployment> deployments = repositoryService.createDeploymentQuery().list();
+    for (io.orqueio.bpm.engine.repository.Deployment deployment : deployments) {
       repositoryService.deleteDeployment(deployment.getId(), true);
     }
   }
@@ -187,7 +187,7 @@ public class RetrieveCamundaFormRefTest {
   }
 
   @Test
-  @org.camunda.bpm.engine.test.Deployment(resources = {"org/camunda/bpm/engine/test/api/form/RetrieveCamundaFormRefTest.taskFormBindingLatest.bpmn"})
+  @io.orqueio.bpm.engine.test.Deployment(resources = {"org/camunda/bpm/engine/test/api/form/RetrieveCamundaFormRefTest.taskFormBindingLatest.bpmn"})
   public void shouldFailToRetrieveTaskFormBindingLatestUnexistingKey() throws IOException {
     // given BPMN model references missing form
     runtimeService.startProcessInstanceByKey("taskFormBindingLatest");
@@ -211,7 +211,7 @@ public class RetrieveCamundaFormRefTest {
   }
 
   @Test
-  @org.camunda.bpm.engine.test.Deployment(resources = {"org/camunda/bpm/engine/test/api/form/RetrieveCamundaFormRefTest.taskFormBindingDeployment.bpmn"})
+  @io.orqueio.bpm.engine.test.Deployment(resources = {"org/camunda/bpm/engine/test/api/form/RetrieveCamundaFormRefTest.taskFormBindingDeployment.bpmn"})
   public void shouldFailToRetrieveTaskFormBindingDeploymentUnexistingKey() throws IOException {
     // given BPMN model references missing form
     runtimeService.startProcessInstanceByKey("taskFormBindingDeployment");
@@ -235,7 +235,7 @@ public class RetrieveCamundaFormRefTest {
   }
 
   @Test
-  @org.camunda.bpm.engine.test.Deployment(resources = {
+  @io.orqueio.bpm.engine.test.Deployment(resources = {
       "org/camunda/bpm/engine/test/api/form/RetrieveCamundaFormRefTest.taskFormBindingVersion2.bpmn",
       "org/camunda/bpm/engine/test/api/form/task.form" })
   public void shouldFailToRetrieveTaskFormBindingVersionUnexistingVersion() throws IOException {
@@ -261,7 +261,7 @@ public class RetrieveCamundaFormRefTest {
   }
 
   @Test
-  @org.camunda.bpm.engine.test.Deployment(resources = {
+  @io.orqueio.bpm.engine.test.Deployment(resources = {
       "org/camunda/bpm/engine/test/api/form/RetrieveCamundaFormRefTest.shouldRetrieveTaskFormBindingLatestWithKeyExpression.bpmn",
       "org/camunda/bpm/engine/test/api/form/task.form" })
   public void shouldRetrieveTaskFormBindingLatestWithKeyExpression() throws IOException {
@@ -287,7 +287,7 @@ public class RetrieveCamundaFormRefTest {
   }
 
   @Test
-  @org.camunda.bpm.engine.test.Deployment(resources = {
+  @io.orqueio.bpm.engine.test.Deployment(resources = {
       "org/camunda/bpm/engine/test/api/form/RetrieveCamundaFormRefTest.shouldRetrieveTaskFormBindingVersionWithExpression.bpmn",
       "org/camunda/bpm/engine/test/api/form/task.form" })
   public void shouldRetrieveTaskFormBindingVersionWithExpression() throws IOException {
@@ -397,7 +397,7 @@ public class RetrieveCamundaFormRefTest {
   }
 
   @Test
-  @org.camunda.bpm.engine.test.Deployment(resources = {"org/camunda/bpm/engine/test/api/form/RetrieveCamundaFormRefTest.startFormBindingLatest.bpmn"})
+  @io.orqueio.bpm.engine.test.Deployment(resources = {"org/camunda/bpm/engine/test/api/form/RetrieveCamundaFormRefTest.startFormBindingLatest.bpmn"})
   public void shouldFailToRetrieveStartFormBindingLatestUnexistingKey() throws IOException {
     // given BPMN model references missing form
     runtimeService.startProcessInstanceByKey("startFormBindingLatest");
@@ -418,7 +418,7 @@ public class RetrieveCamundaFormRefTest {
   }
 
   @Test
-  @org.camunda.bpm.engine.test.Deployment(resources = {"org/camunda/bpm/engine/test/api/form/RetrieveCamundaFormRefTest.startFormBindingDeployment.bpmn"})
+  @io.orqueio.bpm.engine.test.Deployment(resources = {"org/camunda/bpm/engine/test/api/form/RetrieveCamundaFormRefTest.startFormBindingDeployment.bpmn"})
   public void shouldFailToRetrieveStartFormBindingDeploymentUnexistingKey() throws IOException {
     // given BPMN model references missing form
     runtimeService.startProcessInstanceByKey("startFormBindingDeployment");
@@ -439,7 +439,7 @@ public class RetrieveCamundaFormRefTest {
   }
 
   @Test
-  @org.camunda.bpm.engine.test.Deployment(resources = {
+  @io.orqueio.bpm.engine.test.Deployment(resources = {
       "org/camunda/bpm/engine/test/api/form/RetrieveCamundaFormRefTest.startFormBindingVersion2.bpmn",
       "org/camunda/bpm/engine/test/api/form/start.form" })
   public void shouldFailToRetrieveStartFormBindingVersionUnexistingVersion() throws IOException {

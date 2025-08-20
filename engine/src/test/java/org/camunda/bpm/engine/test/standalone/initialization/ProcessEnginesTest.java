@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.standalone.initialization;
+package io.orqueio.bpm.engine.test.standalone.initialization;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -22,9 +22,9 @@ import static org.junit.Assert.assertNull;
 
 import java.util.List;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.ProcessEngineInfo;
-import org.camunda.bpm.engine.ProcessEngines;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.ProcessEngineInfo;
+import io.orqueio.bpm.engine.ProcessEngines;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

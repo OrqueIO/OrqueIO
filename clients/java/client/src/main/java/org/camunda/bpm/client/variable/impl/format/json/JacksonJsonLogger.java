@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.variable.impl.format.json;
+package io.orqueio.bpm.client.variable.impl.format.json;
 
-import org.camunda.bpm.client.exception.DataFormatException;
-import org.camunda.bpm.client.impl.ExternalTaskClientLogger;
+import io.orqueio.bpm.client.exception.DataFormatException;
+import io.orqueio.bpm.client.impl.ExternalTaskClientLogger;
 
 public class JacksonJsonLogger extends ExternalTaskClientLogger {
 

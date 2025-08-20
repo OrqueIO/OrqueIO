@@ -14,20 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.migration;
+package io.orqueio.bpm.engine.impl.migration;
 
-import org.camunda.bpm.engine.BadUserRequestException;
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
-import org.camunda.bpm.engine.impl.migration.instance.MigratingActivityInstance;
-import org.camunda.bpm.engine.impl.migration.instance.MigratingInstance;
-import org.camunda.bpm.engine.impl.migration.instance.MigratingProcessElementInstance;
-import org.camunda.bpm.engine.impl.migration.instance.MigratingScopeInstance;
-import org.camunda.bpm.engine.impl.migration.validation.instance.MigratingProcessInstanceValidationReportImpl;
-import org.camunda.bpm.engine.impl.migration.validation.instruction.MigrationPlanValidationReportImpl;
-import org.camunda.bpm.engine.impl.persistence.entity.ExecutionEntity;
-import org.camunda.bpm.engine.migration.MigratingProcessInstanceValidationException;
-import org.camunda.bpm.engine.migration.MigrationPlanValidationException;
+import io.orqueio.bpm.engine.BadUserRequestException;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
+import io.orqueio.bpm.engine.impl.migration.instance.MigratingActivityInstance;
+import io.orqueio.bpm.engine.impl.migration.instance.MigratingInstance;
+import io.orqueio.bpm.engine.impl.migration.instance.MigratingProcessElementInstance;
+import io.orqueio.bpm.engine.impl.migration.instance.MigratingScopeInstance;
+import io.orqueio.bpm.engine.impl.migration.validation.instance.MigratingProcessInstanceValidationReportImpl;
+import io.orqueio.bpm.engine.impl.migration.validation.instruction.MigrationPlanValidationReportImpl;
+import io.orqueio.bpm.engine.impl.persistence.entity.ExecutionEntity;
+import io.orqueio.bpm.engine.migration.MigratingProcessInstanceValidationException;
+import io.orqueio.bpm.engine.migration.MigrationPlanValidationException;
 
 /**
  * @author Thorben Lindhauer

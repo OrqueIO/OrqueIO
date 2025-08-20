@@ -8,7 +8,7 @@
   </description>
 
   <parent>
-    <groupId>org.camunda.bpm.springboot.project</groupId>
+    <groupId>io.orqueio.bpm.springboot.project</groupId>
     <artifactId>qa-webapp</artifactId>
     <version>7.24.0-SNAPSHOT</version>
   </parent>
@@ -18,14 +18,14 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.camunda.bpm.springboot</groupId>
+      <groupId>io.orqueio.bpm.springboot</groupId>
       <artifactId>camunda-bpm-spring-boot-starter-webapp</artifactId>
       <version>${project.version}</version>
       <scope>provided</scope>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm.example</groupId>
+      <groupId>io.orqueio.bpm.example</groupId>
       <artifactId>camunda-example-invoice-jakarta</artifactId>
       <version>${project.version}</version>
       <classifier>classes</classifier>

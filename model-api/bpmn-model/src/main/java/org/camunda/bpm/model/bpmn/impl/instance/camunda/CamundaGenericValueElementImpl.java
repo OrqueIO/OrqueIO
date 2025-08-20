@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.bpmn.impl.instance.camunda;
+package io.orqueio.bpm.model.bpmn.impl.instance.camunda;
 
 import java.util.List;
 
-import org.camunda.bpm.model.bpmn.impl.instance.BpmnModelElementInstanceImpl;
-import org.camunda.bpm.model.bpmn.instance.BpmnModelElementInstance;
-import org.camunda.bpm.model.bpmn.instance.camunda.CamundaGenericValueElement;
-import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
-import org.camunda.bpm.model.xml.impl.util.ModelUtil;
-import org.camunda.bpm.model.xml.instance.DomElement;
+import io.orqueio.bpm.model.bpmn.impl.instance.BpmnModelElementInstanceImpl;
+import io.orqueio.bpm.model.bpmn.instance.BpmnModelElementInstance;
+import io.orqueio.bpm.model.bpmn.instance.camunda.CamundaGenericValueElement;
+import io.orqueio.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
+import io.orqueio.bpm.model.xml.impl.util.ModelUtil;
+import io.orqueio.bpm.model.xml.instance.DomElement;
 
 /**
  * A helper interface for camunda extension elements which

@@ -14,21 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.variable;
+package io.orqueio.bpm.client.variable;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.camunda.bpm.client.util.ProcessModels.EXTERNAL_TASK_TOPIC_FOO;
+import static io.orqueio.bpm.client.util.ProcessModels.EXTERNAL_TASK_TOPIC_FOO;
 
-import org.camunda.bpm.client.ExternalTaskClient;
-import org.camunda.bpm.client.dto.ProcessDefinitionDto;
-import org.camunda.bpm.client.dto.ProcessInstanceDto;
-import org.camunda.bpm.client.rule.ClientRule;
-import org.camunda.bpm.client.rule.EngineRule;
-import org.camunda.bpm.client.task.ExternalTask;
-import org.camunda.bpm.client.util.RecordingExternalTaskHandler;
-import org.camunda.bpm.engine.variable.value.StringValue;
-import org.camunda.bpm.model.bpmn.Bpmn;
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.bpm.client.ExternalTaskClient;
+import io.orqueio.bpm.client.dto.ProcessDefinitionDto;
+import io.orqueio.bpm.client.dto.ProcessInstanceDto;
+import io.orqueio.bpm.client.rule.ClientRule;
+import io.orqueio.bpm.client.rule.EngineRule;
+import io.orqueio.bpm.client.task.ExternalTask;
+import io.orqueio.bpm.client.util.RecordingExternalTaskHandler;
+import io.orqueio.bpm.engine.variable.value.StringValue;
+import io.orqueio.bpm.model.bpmn.Bpmn;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;

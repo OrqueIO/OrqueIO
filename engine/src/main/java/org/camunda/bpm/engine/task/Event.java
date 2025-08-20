@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.task;
+package io.orqueio.bpm.engine.task;
 
 import java.util.Date;
 import java.util.List;
 
-import org.camunda.bpm.engine.TaskService;
-import org.camunda.bpm.engine.history.UserOperationLogEntry;
-import org.camunda.bpm.engine.history.UserOperationLogQuery;
+import io.orqueio.bpm.engine.TaskService;
+import io.orqueio.bpm.engine.history.UserOperationLogEntry;
+import io.orqueio.bpm.engine.history.UserOperationLogQuery;
 
 
 /** Exposes twitter-like feeds for tasks and process instances.

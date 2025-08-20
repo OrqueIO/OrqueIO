@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.sub.history;
+package io.orqueio.bpm.engine.rest.sub.history;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import org.camunda.bpm.engine.rest.dto.history.HistoricJobLogDto;
+import io.orqueio.bpm.engine.rest.dto.history.HistoricJobLogDto;
 
 /**
  * @author Roman Smirnov

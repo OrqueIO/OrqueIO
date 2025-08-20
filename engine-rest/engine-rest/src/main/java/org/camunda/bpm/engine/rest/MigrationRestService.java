@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest;
+package io.orqueio.bpm.engine.rest;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -22,11 +22,11 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import org.camunda.bpm.engine.rest.dto.batch.BatchDto;
-import org.camunda.bpm.engine.rest.dto.migration.MigrationExecutionDto;
-import org.camunda.bpm.engine.rest.dto.migration.MigrationPlanDto;
-import org.camunda.bpm.engine.rest.dto.migration.MigrationPlanGenerationDto;
-import org.camunda.bpm.engine.rest.dto.migration.MigrationPlanReportDto;
+import io.orqueio.bpm.engine.rest.dto.batch.BatchDto;
+import io.orqueio.bpm.engine.rest.dto.migration.MigrationExecutionDto;
+import io.orqueio.bpm.engine.rest.dto.migration.MigrationPlanDto;
+import io.orqueio.bpm.engine.rest.dto.migration.MigrationPlanGenerationDto;
+import io.orqueio.bpm.engine.rest.dto.migration.MigrationPlanReportDto;
 
 public interface MigrationRestService {
 

@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.connect.httpclient.impl;
+package io.orqueio.connect.httpclient.impl;
 
-import org.camunda.connect.httpclient.HttpConnector;
-import org.camunda.connect.httpclient.HttpConnectorProvider;
+import io.orqueio.connect.httpclient.HttpConnector;
+import io.orqueio.connect.httpclient.HttpConnectorProvider;
 
 public class HttpConnectorProviderImpl implements HttpConnectorProvider {
 

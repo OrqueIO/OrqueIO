@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.variable.value;
+package io.orqueio.bpm.client.variable.value;
 
-import org.camunda.bpm.engine.variable.value.PrimitiveValue;
+import io.orqueio.bpm.engine.variable.value.PrimitiveValue;
 
 public interface XmlValue extends PrimitiveValue<String> {
 

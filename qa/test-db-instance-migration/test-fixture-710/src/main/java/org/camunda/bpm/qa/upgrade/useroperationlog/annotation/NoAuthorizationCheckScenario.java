@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa.upgrade.useroperationlog.annotation;
+package io.orqueio.bpm.qa.upgrade.useroperationlog.annotation;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.task.Task;
-import org.camunda.bpm.qa.upgrade.DescribesScenario;
-import org.camunda.bpm.qa.upgrade.ScenarioSetup;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.task.Task;
+import io.orqueio.bpm.qa.upgrade.DescribesScenario;
+import io.orqueio.bpm.qa.upgrade.ScenarioSetup;
 
 public class NoAuthorizationCheckScenario {
 

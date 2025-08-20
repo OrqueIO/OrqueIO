@@ -2,7 +2,7 @@
 
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.camunda.bpm.model</groupId>
+  <groupId>io.orqueio.bpm.model</groupId>
   <artifactId>camunda-model-apis</artifactId>
 
   <name>camunda Model APIs</name>
@@ -13,7 +13,7 @@
   </description>
 
   <parent>
-    <groupId>org.camunda.bpm</groupId>
+    <groupId>io.orqueio.bpm</groupId>
     <artifactId>camunda-database-settings</artifactId>
     <relativePath>../database</relativePath>
     <version>7.24.0-SNAPSHOT</version>
@@ -22,7 +22,7 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>org.camunda.bpm</groupId>
+        <groupId>io.orqueio.bpm</groupId>
         <artifactId>camunda-core-internal-dependencies</artifactId>
         <version>${project.version}</version>
         <scope>import</scope>

@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.diagnostics;
+package io.orqueio.bpm.engine.impl.diagnostics;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import org.camunda.bpm.engine.impl.telemetry.dto.ApplicationServerImpl;
-import org.camunda.bpm.engine.impl.telemetry.dto.LicenseKeyDataImpl;
+import io.orqueio.bpm.engine.impl.telemetry.dto.ApplicationServerImpl;
+import io.orqueio.bpm.engine.impl.telemetry.dto.LicenseKeyDataImpl;
 
 public class DiagnosticsRegistry {
 

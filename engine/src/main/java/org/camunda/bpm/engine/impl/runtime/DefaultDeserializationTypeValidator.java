@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.runtime;
+package io.orqueio.bpm.engine.impl.runtime;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -22,7 +22,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.camunda.bpm.engine.runtime.WhitelistingDeserializationTypeValidator;
+import io.orqueio.bpm.engine.runtime.WhitelistingDeserializationTypeValidator;
 
 /**
  * Validate a type against a list of allowed packages and classes. Allows a basic

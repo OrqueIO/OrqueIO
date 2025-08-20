@@ -14,18 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.connect.plugin;
+package io.orqueio.connect.plugin;
 
 import org.apache.hc.core5.http.ClassicHttpResponse;
 import org.apache.hc.core5.http.ContentType;
 import org.apache.hc.core5.http.HttpEntity;
 import org.apache.hc.core5.http.io.entity.StringEntity;
 import org.apache.hc.core5.http.message.BasicHttpResponse;
-import org.camunda.connect.httpclient.HttpConnector;
-import org.camunda.connect.httpclient.impl.HttpResponseImpl;
-import org.camunda.connect.spi.ConnectorConfigurator;
-import org.camunda.connect.spi.ConnectorInvocation;
-import org.camunda.connect.spi.ConnectorRequestInterceptor;
+import io.orqueio.connect.httpclient.HttpConnector;
+import io.orqueio.connect.httpclient.impl.HttpResponseImpl;
+import io.orqueio.connect.spi.ConnectorConfigurator;
+import io.orqueio.connect.spi.ConnectorInvocation;
+import io.orqueio.connect.spi.ConnectorRequestInterceptor;
 
 /**
  * @author Daniel Meyer

@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.engine.impl.type;
+package io.orqueio.bpm.dmn.engine.impl.type;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.camunda.bpm.dmn.engine.impl.DmnEngineLogger;
-import org.camunda.bpm.dmn.engine.impl.DmnLogger;
-import org.camunda.bpm.dmn.engine.impl.spi.type.DmnDataTypeTransformer;
-import org.camunda.bpm.dmn.engine.impl.spi.type.DmnDataTypeTransformerRegistry;
+import io.orqueio.bpm.dmn.engine.impl.DmnEngineLogger;
+import io.orqueio.bpm.dmn.engine.impl.DmnLogger;
+import io.orqueio.bpm.dmn.engine.impl.spi.type.DmnDataTypeTransformer;
+import io.orqueio.bpm.dmn.engine.impl.spi.type.DmnDataTypeTransformerRegistry;
 
 /**
  * {@link DmnDataTypeTransformerRegistry} for the built-in {@link DmnDataTypeTransformer}s.

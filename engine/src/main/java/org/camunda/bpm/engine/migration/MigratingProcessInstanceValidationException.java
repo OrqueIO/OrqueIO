@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.migration;
+package io.orqueio.bpm.engine.migration;
 
-import org.camunda.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.ProcessEngineException;
 
 /**
  * Thrown if at least one migration instruction cannot be applied to the activity instance it matches. Contains

@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.plugin.impl;
+package io.orqueio.spin.plugin.impl;
 
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.commons.logging.BaseLogger;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.commons.logging.BaseLogger;
 
 /**
  * @author Thorben Lindhauer
@@ -27,7 +27,7 @@ public class SpinPluginLogger extends BaseLogger {
 
   public static final String PROJECT_CODE = "SPIN-PLUGIN";
 
-  public static final SpinPluginLogger LOGGER = BaseLogger.createLogger(SpinPluginLogger.class, PROJECT_CODE, "org.camunda.spin.plugin", "01");
+  public static final SpinPluginLogger LOGGER = BaseLogger.createLogger(SpinPluginLogger.class, PROJECT_CODE, "io.orqueio.spin.plugin", "01");
 
   public void logNoDataFormatsInitiailized(String dataFormatDescription, String reason) {
     logInfo(

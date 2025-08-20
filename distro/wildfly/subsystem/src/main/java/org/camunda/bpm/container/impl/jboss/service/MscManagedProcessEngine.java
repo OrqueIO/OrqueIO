@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.jboss.service;
+package io.orqueio.bpm.container.impl.jboss.service;
 
 import java.util.function.Supplier;
 import java.util.logging.Logger;
 
-import org.camunda.bpm.BpmPlatform;
-import org.camunda.bpm.container.impl.jboss.util.BindingUtil;
-import org.camunda.bpm.container.impl.jboss.util.ProcessEngineManagedReferenceFactory;
-import org.camunda.bpm.container.impl.jmx.services.JmxManagedProcessEngine;
-import org.camunda.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.BpmPlatform;
+import io.orqueio.bpm.container.impl.jboss.util.BindingUtil;
+import io.orqueio.bpm.container.impl.jboss.util.ProcessEngineManagedReferenceFactory;
+import io.orqueio.bpm.container.impl.jmx.services.JmxManagedProcessEngine;
+import io.orqueio.bpm.engine.ProcessEngine;
 import org.jboss.as.naming.ManagedReferenceFactory;
 import org.jboss.as.naming.deployment.ContextNames;
 import org.jboss.msc.service.Service;

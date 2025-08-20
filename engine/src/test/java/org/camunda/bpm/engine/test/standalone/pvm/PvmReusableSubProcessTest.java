@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.standalone.pvm;
+package io.orqueio.bpm.engine.test.standalone.pvm;
 
 import static org.junit.Assert.assertTrue;
 
-import org.camunda.bpm.engine.impl.pvm.ProcessDefinitionBuilder;
-import org.camunda.bpm.engine.impl.pvm.PvmProcessDefinition;
-import org.camunda.bpm.engine.impl.pvm.PvmProcessInstance;
-import org.camunda.bpm.engine.test.standalone.pvm.activities.Automatic;
-import org.camunda.bpm.engine.test.standalone.pvm.activities.End;
-import org.camunda.bpm.engine.test.standalone.pvm.activities.ReusableSubProcess;
+import io.orqueio.bpm.engine.impl.pvm.ProcessDefinitionBuilder;
+import io.orqueio.bpm.engine.impl.pvm.PvmProcessDefinition;
+import io.orqueio.bpm.engine.impl.pvm.PvmProcessInstance;
+import io.orqueio.bpm.engine.test.standalone.pvm.activities.Automatic;
+import io.orqueio.bpm.engine.test.standalone.pvm.activities.End;
+import io.orqueio.bpm.engine.test.standalone.pvm.activities.ReusableSubProcess;
 import org.junit.Test;
 
 

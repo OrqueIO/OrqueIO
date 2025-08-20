@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.experimental;
+package io.orqueio.bpm.engine.experimental;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
-import org.camunda.bpm.engine.cdi.annotation.ProcessVariable;
+import io.orqueio.bpm.engine.cdi.annotation.ProcessVariable;
 
 @Dependent
 public class InjectProcessVariable {

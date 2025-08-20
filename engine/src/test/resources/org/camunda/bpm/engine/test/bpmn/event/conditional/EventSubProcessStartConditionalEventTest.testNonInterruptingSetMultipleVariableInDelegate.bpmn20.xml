@@ -10,7 +10,7 @@
       <bpmn:incoming>SequenceFlow_03t5ok6</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="SequenceFlow_03t5ok6" sourceRef="Task_1" targetRef="EndEvent_0lxn4mv" />
-    <bpmn:serviceTask id="Task_1bpsy6l" name="Set var = 1" camunda:class="org.camunda.bpm.engine.test.bpmn.event.conditional.SetVariableDelegate">
+    <bpmn:serviceTask id="Task_1bpsy6l" name="Set var = 1" camunda:class="io.orqueio.bpm.engine.test.bpmn.event.conditional.SetVariableDelegate">
       <bpmn:incoming>SequenceFlow_0ymvnxm</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1ste9vp</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -35,7 +35,7 @@
         <bpmn:incoming>SequenceFlow_0fpxh8r</bpmn:incoming>
         <bpmn:outgoing>SequenceFlow_1o99nbn</bpmn:outgoing>
       </bpmn:userTask>
-      <bpmn:serviceTask id="Task_17xhxvc" name="Set var = 2 (3x)" camunda:class="org.camunda.bpm.engine.test.bpmn.event.conditional.SetMultipleSameVariableDelegate">
+      <bpmn:serviceTask id="Task_17xhxvc" name="Set var = 2 (3x)" camunda:class="io.orqueio.bpm.engine.test.bpmn.event.conditional.SetMultipleSameVariableDelegate">
         <bpmn:incoming>SequenceFlow_0bca2es</bpmn:incoming>
         <bpmn:outgoing>SequenceFlow_0fpxh8r</bpmn:outgoing>
       </bpmn:serviceTask>

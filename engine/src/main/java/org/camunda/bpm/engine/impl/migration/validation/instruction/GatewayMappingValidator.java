@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.migration.validation.instruction;
+package io.orqueio.bpm.engine.impl.migration.validation.instruction;
 
 import java.util.List;
 
-import org.camunda.bpm.engine.impl.bpmn.behavior.InclusiveGatewayActivityBehavior;
-import org.camunda.bpm.engine.impl.bpmn.behavior.ParallelGatewayActivityBehavior;
-import org.camunda.bpm.engine.impl.pvm.delegate.ActivityBehavior;
-import org.camunda.bpm.engine.impl.pvm.process.ActivityImpl;
-import org.camunda.bpm.engine.impl.pvm.process.ScopeImpl;
+import io.orqueio.bpm.engine.impl.bpmn.behavior.InclusiveGatewayActivityBehavior;
+import io.orqueio.bpm.engine.impl.bpmn.behavior.ParallelGatewayActivityBehavior;
+import io.orqueio.bpm.engine.impl.pvm.delegate.ActivityBehavior;
+import io.orqueio.bpm.engine.impl.pvm.process.ActivityImpl;
+import io.orqueio.bpm.engine.impl.pvm.process.ScopeImpl;
 
 /**
  * <p>For synchronizing gateways (inclusive; parallel), the situation in which

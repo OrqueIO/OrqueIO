@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.camunda.bpm.qa</groupId>
+    <groupId>io.orqueio.bpm.qa</groupId>
     <artifactId>camunda-qa</artifactId>
     <version>7.24.0-SNAPSHOT</version>
   </parent>
@@ -81,7 +81,7 @@
       <dependencyManagement>
         <dependencies>
           <dependency>
-            <groupId>org.camunda.bpm</groupId>
+            <groupId>io.orqueio.bpm</groupId>
             <artifactId>camunda-bom</artifactId>
             <!-- Cannot use variables due to bug in Maven Release Plugin -->
             <version>7.23.0</version>
@@ -178,14 +178,14 @@
         </dependency>
 
         <dependency>
-          <groupId>org.camunda.bpm.distro</groupId>
+          <groupId>io.orqueio.bpm.distro</groupId>
           <artifactId>camunda-sql-scripts</artifactId>
           <version>${project.version}</version>
           <type>test-jar</type>
         </dependency>
 
         <dependency>
-          <groupId>org.camunda.bpm</groupId>
+          <groupId>io.orqueio.bpm</groupId>
           <artifactId>camunda-engine</artifactId>
           <scope>test</scope>
         </dependency>
@@ -210,7 +210,7 @@
         </dependency>
 
         <dependency>
-          <groupId>org.camunda.commons</groupId>
+          <groupId>io.orqueio.commons</groupId>
           <artifactId>camunda-commons-testing</artifactId>
           <scope>test</scope>
         </dependency>
@@ -279,7 +279,7 @@
                 <configuration>
                   <artifactItems>
                     <artifactItem>
-                      <groupId>org.camunda.bpm</groupId>
+                      <groupId>io.orqueio.bpm</groupId>
                       <artifactId>camunda-engine</artifactId>
                       <version>${camunda.old.engine.version}</version>
                       <type>test-jar</type>
@@ -299,7 +299,7 @@
                 <configuration>
                   <artifactItems>
                     <artifactItem>
-                      <groupId>org.camunda.bpm.distro</groupId>
+                      <groupId>io.orqueio.bpm.distro</groupId>
                       <artifactId>camunda-sql-scripts</artifactId>
                       <version>${project.version}</version>
                       <type>test-jar</type>

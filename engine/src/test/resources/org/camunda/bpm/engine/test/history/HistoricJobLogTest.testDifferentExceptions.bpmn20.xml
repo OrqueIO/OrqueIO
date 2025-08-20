@@ -10,11 +10,11 @@
 
     <sequenceFlow sourceRef="theStart" targetRef="serviceTask1" />
 
-    <serviceTask id="serviceTask1" camunda:asyncBefore="true" camunda:class="org.camunda.bpm.engine.test.history.FirstFailingDelegate" />
+    <serviceTask id="serviceTask1" camunda:asyncBefore="true" camunda:class="io.orqueio.bpm.engine.test.history.FirstFailingDelegate" />
 
     <sequenceFlow sourceRef="serviceTask1" targetRef="serviceTask2" />
 
-    <serviceTask id="serviceTask2" camunda:class="org.camunda.bpm.engine.test.history.SecondFailingDelegate" />
+    <serviceTask id="serviceTask2" camunda:class="io.orqueio.bpm.engine.test.history.SecondFailingDelegate" />
 
     <sequenceFlow sourceRef="serviceTask2" targetRef="theEnd" />
 

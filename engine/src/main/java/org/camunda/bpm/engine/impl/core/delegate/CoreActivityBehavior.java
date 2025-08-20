@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.core.delegate;
+package io.orqueio.bpm.engine.impl.core.delegate;
 
-import org.camunda.bpm.engine.delegate.BaseDelegateExecution;
+import io.orqueio.bpm.engine.delegate.BaseDelegateExecution;
 
 /**
  * @author Daniel Meyer

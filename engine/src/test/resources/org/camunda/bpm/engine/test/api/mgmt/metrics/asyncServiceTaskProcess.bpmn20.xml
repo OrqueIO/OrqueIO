@@ -7,7 +7,7 @@
   <process id="asyncServiceTaskProcess" isExecutable="true">
     <startEvent id="theStart" />
     <sequenceFlow id="flow1" sourceRef="theStart" targetRef="theTask" />
-    <serviceTask id="theTask" camunda:asyncBefore="true" camunda:class="org.camunda.bpm.engine.test.api.mgmt.metrics.FailingDelegate"/>
+    <serviceTask id="theTask" camunda:asyncBefore="true" camunda:class="io.orqueio.bpm.engine.test.api.mgmt.metrics.FailingDelegate"/>
     <sequenceFlow id="flow2" sourceRef="theTask" targetRef="theEnd" />
     <endEvent id="theEnd" />
     

@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.run.qa.webapps;
+package io.orqueio.bpm.run.qa.webapps;
 
-import org.camunda.bpm.run.qa.util.SpringBootManagedContainer;
+import io.orqueio.bpm.run.qa.util.SpringBootManagedContainer;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;

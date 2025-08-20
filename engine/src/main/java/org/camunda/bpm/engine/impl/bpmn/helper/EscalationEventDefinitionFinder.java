@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.bpmn.helper;
+package io.orqueio.bpm.engine.impl.bpmn.helper;
 
 import java.util.List;
 
-import org.camunda.bpm.engine.impl.bpmn.parser.EscalationEventDefinition;
-import org.camunda.bpm.engine.impl.pvm.PvmActivity;
-import org.camunda.bpm.engine.impl.pvm.PvmScope;
-import org.camunda.bpm.engine.impl.tree.TreeVisitor;
+import io.orqueio.bpm.engine.impl.bpmn.parser.EscalationEventDefinition;
+import io.orqueio.bpm.engine.impl.pvm.PvmActivity;
+import io.orqueio.bpm.engine.impl.pvm.PvmScope;
+import io.orqueio.bpm.engine.impl.tree.TreeVisitor;
 
 public class EscalationEventDefinitionFinder implements TreeVisitor<PvmScope> {
 

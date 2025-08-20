@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter.contextcache.nonpa;
+package io.orqueio.bpm.spring.boot.starter.contextcache.nonpa;
 
-import org.camunda.bpm.engine.ProcessEngines;
-import org.camunda.bpm.spring.boot.starter.contextcache.AbstractContextCacheTest;
-import org.camunda.bpm.spring.boot.starter.test.nonpa.TestApplication;
+import io.orqueio.bpm.engine.ProcessEngines;
+import io.orqueio.bpm.spring.boot.starter.contextcache.AbstractContextCacheTest;
+import io.orqueio.bpm.spring.boot.starter.test.nonpa.TestApplication;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,7 +27,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.camunda.bpm.engine.test.assertions.bpmn.AbstractAssertions.init;
+import static io.orqueio.bpm.engine.test.assertions.bpmn.AbstractAssertions.init;
 
 /**
  * Tests {@link NonPaContextCacheTest1}, {@link NonPaContextCacheTest2}, {@link NonPaContextCacheTest3},

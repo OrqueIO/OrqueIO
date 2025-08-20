@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.dto.identity;
+package io.orqueio.bpm.engine.rest.dto.identity;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.camunda.bpm.engine.identity.PasswordPolicy;
-import org.camunda.bpm.engine.identity.PasswordPolicyRule;
+import io.orqueio.bpm.engine.identity.PasswordPolicy;
+import io.orqueio.bpm.engine.identity.PasswordPolicyRule;
 
 /**
  * @author Miklas Boskamp

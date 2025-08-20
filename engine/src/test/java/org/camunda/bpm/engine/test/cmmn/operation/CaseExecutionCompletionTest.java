@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.cmmn.operation;
+package io.orqueio.bpm.engine.test.cmmn.operation;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
@@ -27,15 +27,15 @@ import static org.junit.Assert.fail;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.camunda.bpm.engine.exception.cmmn.CaseIllegalStateTransitionException;
-import org.camunda.bpm.engine.impl.cmmn.behavior.StageActivityBehavior;
-import org.camunda.bpm.engine.impl.cmmn.execution.CaseExecutionImpl;
-import org.camunda.bpm.engine.impl.cmmn.execution.CmmnActivityExecution;
-import org.camunda.bpm.engine.impl.cmmn.execution.CmmnCaseInstance;
-import org.camunda.bpm.engine.impl.cmmn.handler.ItemHandler;
-import org.camunda.bpm.engine.impl.cmmn.model.CaseDefinitionBuilder;
-import org.camunda.bpm.engine.impl.cmmn.model.CmmnCaseDefinition;
-import org.camunda.bpm.engine.impl.test.TestHelper;
+import io.orqueio.bpm.engine.exception.cmmn.CaseIllegalStateTransitionException;
+import io.orqueio.bpm.engine.impl.cmmn.behavior.StageActivityBehavior;
+import io.orqueio.bpm.engine.impl.cmmn.execution.CaseExecutionImpl;
+import io.orqueio.bpm.engine.impl.cmmn.execution.CmmnActivityExecution;
+import io.orqueio.bpm.engine.impl.cmmn.execution.CmmnCaseInstance;
+import io.orqueio.bpm.engine.impl.cmmn.handler.ItemHandler;
+import io.orqueio.bpm.engine.impl.cmmn.model.CaseDefinitionBuilder;
+import io.orqueio.bpm.engine.impl.cmmn.model.CmmnCaseDefinition;
+import io.orqueio.bpm.engine.impl.test.TestHelper;
 import org.junit.Test;
 
 /**

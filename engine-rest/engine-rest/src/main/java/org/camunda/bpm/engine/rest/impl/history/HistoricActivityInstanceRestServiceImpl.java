@@ -14,22 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.impl.history;
+package io.orqueio.bpm.engine.rest.impl.history;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.core.UriInfo;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.history.HistoricActivityInstance;
-import org.camunda.bpm.engine.history.HistoricActivityInstanceQuery;
-import org.camunda.bpm.engine.rest.dto.CountResultDto;
-import org.camunda.bpm.engine.rest.dto.history.HistoricActivityInstanceDto;
-import org.camunda.bpm.engine.rest.dto.history.HistoricActivityInstanceQueryDto;
-import org.camunda.bpm.engine.rest.history.HistoricActivityInstanceRestService;
-import org.camunda.bpm.engine.rest.sub.history.HistoricActivityInstanceResource;
-import org.camunda.bpm.engine.rest.sub.history.impl.HistoricActivityInstanceResourceImpl;
-import org.camunda.bpm.engine.rest.util.QueryUtil;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.history.HistoricActivityInstance;
+import io.orqueio.bpm.engine.history.HistoricActivityInstanceQuery;
+import io.orqueio.bpm.engine.rest.dto.CountResultDto;
+import io.orqueio.bpm.engine.rest.dto.history.HistoricActivityInstanceDto;
+import io.orqueio.bpm.engine.rest.dto.history.HistoricActivityInstanceQueryDto;
+import io.orqueio.bpm.engine.rest.history.HistoricActivityInstanceRestService;
+import io.orqueio.bpm.engine.rest.sub.history.HistoricActivityInstanceResource;
+import io.orqueio.bpm.engine.rest.sub.history.impl.HistoricActivityInstanceResourceImpl;
+import io.orqueio.bpm.engine.rest.util.QueryUtil;
 
 public class HistoricActivityInstanceRestServiceImpl implements HistoricActivityInstanceRestService {
 

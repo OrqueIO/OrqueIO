@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.xml.testmodel.instance;
+package io.orqueio.bpm.model.xml.testmodel.instance;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -26,14 +26,14 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.camunda.bpm.model.xml.ModelInstance;
-import org.camunda.bpm.model.xml.impl.ModelImpl;
-import org.camunda.bpm.model.xml.impl.parser.AbstractModelParser;
-import org.camunda.bpm.model.xml.instance.DomElement;
-import org.camunda.bpm.model.xml.instance.ModelElementInstance;
-import org.camunda.bpm.model.xml.testmodel.Gender;
-import org.camunda.bpm.model.xml.testmodel.TestModelConstants;
-import org.camunda.bpm.model.xml.testmodel.TestModelTest;
+import io.orqueio.bpm.model.xml.ModelInstance;
+import io.orqueio.bpm.model.xml.impl.ModelImpl;
+import io.orqueio.bpm.model.xml.impl.parser.AbstractModelParser;
+import io.orqueio.bpm.model.xml.instance.DomElement;
+import io.orqueio.bpm.model.xml.instance.ModelElementInstance;
+import io.orqueio.bpm.model.xml.testmodel.Gender;
+import io.orqueio.bpm.model.xml.testmodel.TestModelConstants;
+import io.orqueio.bpm.model.xml.testmodel.TestModelTest;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

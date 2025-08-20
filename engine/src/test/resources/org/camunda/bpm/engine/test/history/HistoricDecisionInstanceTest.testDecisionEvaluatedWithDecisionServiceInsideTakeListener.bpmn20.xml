@@ -16,7 +16,7 @@
       
       <sequenceFlow id="flow"  sourceRef="start" targetRef="task">
         <extensionElements>
-          <camunda:executionListener class="org.camunda.bpm.engine.test.history.DecisionServiceDelegate" event="take" />
+          <camunda:executionListener class="io.orqueio.bpm.engine.test.history.DecisionServiceDelegate" event="take" />
         </extensionElements>
       </sequenceFlow>
       

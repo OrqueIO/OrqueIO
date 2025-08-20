@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.run.test.plugins;
+package io.orqueio.bpm.run.test.plugins;
 
 /**
  * This is a dummy class. It is used to test if our logic detects
- * that it doesn't extend the {@link org.camunda.bpm.engine.impl.cfg.ProcessEnginePlugin} interface.
+ * that it doesn't extend the {@link io.orqueio.bpm.engine.impl.cfg.ProcessEnginePlugin} interface.
  */
 public class TestFalsePlugin {
 }

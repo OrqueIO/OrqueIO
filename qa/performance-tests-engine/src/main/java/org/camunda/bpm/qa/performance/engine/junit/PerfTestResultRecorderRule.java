@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa.performance.engine.junit;
+package io.orqueio.bpm.qa.performance.engine.junit;
 
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.camunda.bpm.qa.performance.engine.framework.PerfTestException;
-import org.camunda.bpm.qa.performance.engine.framework.PerfTestResults;
-import org.camunda.bpm.qa.performance.engine.util.JsonUtil;
+import io.orqueio.bpm.qa.performance.engine.framework.PerfTestException;
+import io.orqueio.bpm.qa.performance.engine.framework.PerfTestResults;
+import io.orqueio.bpm.qa.performance.engine.util.JsonUtil;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 

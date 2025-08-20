@@ -14,27 +14,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.dmn.impl.instance;
+package io.orqueio.bpm.model.dmn.impl.instance;
 
-import static org.camunda.bpm.model.dmn.impl.DmnModelConstants.LATEST_DMN_NS;
-import static org.camunda.bpm.model.dmn.impl.DmnModelConstants.DMN_ELEMENT_DECISION_SERVICE;
+import static io.orqueio.bpm.model.dmn.impl.DmnModelConstants.LATEST_DMN_NS;
+import static io.orqueio.bpm.model.dmn.impl.DmnModelConstants.DMN_ELEMENT_DECISION_SERVICE;
 
 import java.util.Collection;
 
-import org.camunda.bpm.model.dmn.instance.Decision;
-import org.camunda.bpm.model.dmn.instance.DecisionService;
-import org.camunda.bpm.model.dmn.instance.EncapsulatedDecisionReference;
-import org.camunda.bpm.model.dmn.instance.InputData;
-import org.camunda.bpm.model.dmn.instance.InputDataReference;
-import org.camunda.bpm.model.dmn.instance.InputDecisionReference;
-import org.camunda.bpm.model.dmn.instance.NamedElement;
-import org.camunda.bpm.model.dmn.instance.OutputDecisionReference;
-import org.camunda.bpm.model.xml.ModelBuilder;
-import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder;
-import org.camunda.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
-import org.camunda.bpm.model.xml.type.child.SequenceBuilder;
-import org.camunda.bpm.model.xml.type.reference.ElementReferenceCollection;
+import io.orqueio.bpm.model.dmn.instance.Decision;
+import io.orqueio.bpm.model.dmn.instance.DecisionService;
+import io.orqueio.bpm.model.dmn.instance.EncapsulatedDecisionReference;
+import io.orqueio.bpm.model.dmn.instance.InputData;
+import io.orqueio.bpm.model.dmn.instance.InputDataReference;
+import io.orqueio.bpm.model.dmn.instance.InputDecisionReference;
+import io.orqueio.bpm.model.dmn.instance.NamedElement;
+import io.orqueio.bpm.model.dmn.instance.OutputDecisionReference;
+import io.orqueio.bpm.model.xml.ModelBuilder;
+import io.orqueio.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
+import io.orqueio.bpm.model.xml.type.ModelElementTypeBuilder;
+import io.orqueio.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
+import io.orqueio.bpm.model.xml.type.child.SequenceBuilder;
+import io.orqueio.bpm.model.xml.type.reference.ElementReferenceCollection;
 
 public class DecisionServiceImpl extends NamedElementImpl implements DecisionService {
 

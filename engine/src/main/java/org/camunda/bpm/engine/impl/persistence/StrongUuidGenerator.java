@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.persistence;
+package io.orqueio.bpm.engine.impl.persistence;
 
-import org.camunda.bpm.engine.impl.cfg.IdGenerator;
+import io.orqueio.bpm.engine.impl.cfg.IdGenerator;
 
 import com.fasterxml.uuid.EthernetAddress;
 import com.fasterxml.uuid.Generators;

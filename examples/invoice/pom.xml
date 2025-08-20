@@ -10,7 +10,7 @@
   <name>Camunda Platform - Example - Invoice</name>
 
   <parent>
-    <groupId>org.camunda.bpm.example</groupId>
+    <groupId>io.orqueio.bpm.example</groupId>
     <artifactId>camunda-example-root</artifactId>
     <relativePath>../</relativePath>
     <version>7.24.0-SNAPSHOT</version>

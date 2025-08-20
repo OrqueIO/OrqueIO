@@ -14,27 +14,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl;
+package io.orqueio.bpm.engine.impl;
 
-import static org.camunda.bpm.engine.impl.cmmn.execution.CaseExecutionState.ACTIVE;
-import static org.camunda.bpm.engine.impl.cmmn.execution.CaseExecutionState.AVAILABLE;
-import static org.camunda.bpm.engine.impl.cmmn.execution.CaseExecutionState.COMPLETED;
-import static org.camunda.bpm.engine.impl.cmmn.execution.CaseExecutionState.DISABLED;
-import static org.camunda.bpm.engine.impl.cmmn.execution.CaseExecutionState.ENABLED;
-import static org.camunda.bpm.engine.impl.cmmn.execution.CaseExecutionState.SUSPENDED;
-import static org.camunda.bpm.engine.impl.cmmn.execution.CaseExecutionState.TERMINATED;
-import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
-import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureNull;
+import static io.orqueio.bpm.engine.impl.cmmn.execution.CaseExecutionState.ACTIVE;
+import static io.orqueio.bpm.engine.impl.cmmn.execution.CaseExecutionState.AVAILABLE;
+import static io.orqueio.bpm.engine.impl.cmmn.execution.CaseExecutionState.COMPLETED;
+import static io.orqueio.bpm.engine.impl.cmmn.execution.CaseExecutionState.DISABLED;
+import static io.orqueio.bpm.engine.impl.cmmn.execution.CaseExecutionState.ENABLED;
+import static io.orqueio.bpm.engine.impl.cmmn.execution.CaseExecutionState.SUSPENDED;
+import static io.orqueio.bpm.engine.impl.cmmn.execution.CaseExecutionState.TERMINATED;
+import static io.orqueio.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
+import static io.orqueio.bpm.engine.impl.util.EnsureUtil.ensureNull;
 
 import java.util.Date;
 import java.util.List;
 
-import org.camunda.bpm.engine.exception.NotValidException;
-import org.camunda.bpm.engine.history.HistoricCaseActivityInstance;
-import org.camunda.bpm.engine.history.HistoricCaseActivityInstanceQuery;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.interceptor.CommandExecutor;
-import org.camunda.bpm.engine.impl.util.CompareUtil;
+import io.orqueio.bpm.engine.exception.NotValidException;
+import io.orqueio.bpm.engine.history.HistoricCaseActivityInstance;
+import io.orqueio.bpm.engine.history.HistoricCaseActivityInstanceQuery;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.impl.interceptor.CommandExecutor;
+import io.orqueio.bpm.engine.impl.util.CompareUtil;
 
 /**
  * @author Sebastian Menski

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.hal.cache;
+package io.orqueio.bpm.engine.rest.hal.cache;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -22,7 +22,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.camunda.bpm.engine.rest.cache.Cache;
+import io.orqueio.bpm.engine.rest.cache.Cache;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;

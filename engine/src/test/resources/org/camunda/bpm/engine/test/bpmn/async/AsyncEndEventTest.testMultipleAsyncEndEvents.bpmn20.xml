@@ -20,7 +20,7 @@
     <sequenceFlow sourceRef="parallelGateway" targetRef="messageEndEvent"/>
 
     <endEvent id="messageEndEvent" name="messageEndEvent" camunda:async="true" >
-      <messageEventDefinition id="messageEventDefinition" camunda:class="org.camunda.bpm.engine.test.bpmn.async.AsyncEndEventDelegate"/>
+      <messageEventDefinition id="messageEventDefinition" camunda:class="io.orqueio.bpm.engine.test.bpmn.async.AsyncEndEventDelegate"/>
     </endEvent>
   </process>
 </definitions>

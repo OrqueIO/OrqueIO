@@ -14,23 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.migration.instance.parser;
+package io.orqueio.bpm.engine.impl.migration.instance.parser;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.camunda.bpm.engine.impl.bpmn.helper.BpmnProperties;
-import org.camunda.bpm.engine.impl.bpmn.helper.CompensationUtil;
-import org.camunda.bpm.engine.impl.core.model.Properties;
-import org.camunda.bpm.engine.impl.migration.instance.MigratingCompensationEventSubscriptionInstance;
-import org.camunda.bpm.engine.impl.migration.instance.MigratingEventScopeInstance;
-import org.camunda.bpm.engine.impl.migration.instance.MigratingProcessElementInstance;
-import org.camunda.bpm.engine.impl.migration.instance.MigratingScopeInstance;
-import org.camunda.bpm.engine.impl.persistence.entity.EventSubscriptionEntity;
-import org.camunda.bpm.engine.impl.persistence.entity.ExecutionEntity;
-import org.camunda.bpm.engine.impl.persistence.entity.VariableInstanceEntity;
-import org.camunda.bpm.engine.impl.pvm.process.ActivityImpl;
-import org.camunda.bpm.engine.migration.MigrationInstruction;
+import io.orqueio.bpm.engine.impl.bpmn.helper.BpmnProperties;
+import io.orqueio.bpm.engine.impl.bpmn.helper.CompensationUtil;
+import io.orqueio.bpm.engine.impl.core.model.Properties;
+import io.orqueio.bpm.engine.impl.migration.instance.MigratingCompensationEventSubscriptionInstance;
+import io.orqueio.bpm.engine.impl.migration.instance.MigratingEventScopeInstance;
+import io.orqueio.bpm.engine.impl.migration.instance.MigratingProcessElementInstance;
+import io.orqueio.bpm.engine.impl.migration.instance.MigratingScopeInstance;
+import io.orqueio.bpm.engine.impl.persistence.entity.EventSubscriptionEntity;
+import io.orqueio.bpm.engine.impl.persistence.entity.ExecutionEntity;
+import io.orqueio.bpm.engine.impl.persistence.entity.VariableInstanceEntity;
+import io.orqueio.bpm.engine.impl.pvm.process.ActivityImpl;
+import io.orqueio.bpm.engine.migration.MigrationInstruction;
 
 /**
  * @author Thorben Lindhauer

@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.bpmn;
+package io.orqueio.bpm.model.bpmn;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Collection;
 
-import org.camunda.bpm.model.bpmn.instance.HumanPerformer;
-import org.camunda.bpm.model.bpmn.instance.Performer;
-import org.camunda.bpm.model.bpmn.instance.PotentialOwner;
-import org.camunda.bpm.model.bpmn.instance.ResourceRole;
-import org.camunda.bpm.model.bpmn.instance.UserTask;
+import io.orqueio.bpm.model.bpmn.instance.HumanPerformer;
+import io.orqueio.bpm.model.bpmn.instance.Performer;
+import io.orqueio.bpm.model.bpmn.instance.PotentialOwner;
+import io.orqueio.bpm.model.bpmn.instance.ResourceRole;
+import io.orqueio.bpm.model.bpmn.instance.UserTask;
 import org.junit.BeforeClass;
 import org.junit.Test;
 

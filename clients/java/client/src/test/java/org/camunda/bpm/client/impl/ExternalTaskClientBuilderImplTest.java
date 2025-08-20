@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.impl;
+package io.orqueio.bpm.client.impl;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.spy;
@@ -23,9 +23,9 @@ import static org.mockito.Mockito.verify;
 import org.apache.hc.client5.http.config.RequestConfig;
 import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
 import org.apache.hc.core5.util.Timeout;
-import org.camunda.bpm.client.ExternalTaskClient;
-import org.camunda.bpm.client.UrlResolver;
-import org.camunda.bpm.engine.impl.util.ReflectUtil;
+import io.orqueio.bpm.client.ExternalTaskClient;
+import io.orqueio.bpm.client.UrlResolver;
+import io.orqueio.bpm.engine.impl.util.ReflectUtil;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 

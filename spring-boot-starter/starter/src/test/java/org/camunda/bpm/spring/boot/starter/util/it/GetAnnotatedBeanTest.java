@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter.util.it;
+package io.orqueio.bpm.spring.boot.starter.util.it;
 
 
-import org.camunda.bpm.spring.boot.starter.annotation.EnableProcessApplication;
-import org.camunda.bpm.spring.boot.starter.util.GetProcessApplicationNameFromAnnotation;
+import io.orqueio.bpm.spring.boot.starter.annotation.EnableProcessApplication;
+import io.orqueio.bpm.spring.boot.starter.util.GetProcessApplicationNameFromAnnotation;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

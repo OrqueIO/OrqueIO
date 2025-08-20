@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.runtime;
+package io.orqueio.bpm.engine.impl.runtime;
 
-import org.camunda.bpm.engine.impl.ConditionEvaluationBuilderImpl;
-import org.camunda.bpm.engine.variable.VariableMap;
+import io.orqueio.bpm.engine.impl.ConditionEvaluationBuilderImpl;
+import io.orqueio.bpm.engine.variable.VariableMap;
 
 public class ConditionSet {
 

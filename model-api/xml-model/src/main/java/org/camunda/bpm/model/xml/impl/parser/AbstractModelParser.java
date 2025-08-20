@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.xml.impl.parser;
+package io.orqueio.bpm.model.xml.impl.parser;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,12 +28,12 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
-import org.camunda.bpm.model.xml.ModelInstance;
-import org.camunda.bpm.model.xml.ModelValidationException;
-import org.camunda.bpm.model.xml.impl.util.DomUtil;
-import org.camunda.bpm.model.xml.impl.util.ReflectUtil;
-import org.camunda.bpm.model.xml.instance.DomDocument;
-import org.camunda.bpm.model.xml.instance.DomElement;
+import io.orqueio.bpm.model.xml.ModelInstance;
+import io.orqueio.bpm.model.xml.ModelValidationException;
+import io.orqueio.bpm.model.xml.impl.util.DomUtil;
+import io.orqueio.bpm.model.xml.impl.util.ReflectUtil;
+import io.orqueio.bpm.model.xml.instance.DomDocument;
+import io.orqueio.bpm.model.xml.instance.DomElement;
 import org.xml.sax.SAXException;
 
 /**

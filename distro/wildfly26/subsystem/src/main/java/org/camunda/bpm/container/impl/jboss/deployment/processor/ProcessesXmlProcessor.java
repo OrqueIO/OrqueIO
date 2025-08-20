@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.jboss.deployment.processor;
+package io.orqueio.bpm.container.impl.jboss.deployment.processor;
 
 import static org.jboss.as.server.deployment.Attachments.MODULE;
 
@@ -25,13 +25,13 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
-import org.camunda.bpm.application.ProcessApplication;
-import org.camunda.bpm.application.impl.metadata.ProcessesXmlParser;
-import org.camunda.bpm.application.impl.metadata.spi.ProcessesXml;
-import org.camunda.bpm.container.impl.jboss.deployment.marker.ProcessApplicationAttachments;
-import org.camunda.bpm.container.impl.jboss.util.ProcessesXmlWrapper;
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.impl.util.IoUtil;
+import io.orqueio.bpm.application.ProcessApplication;
+import io.orqueio.bpm.application.impl.metadata.ProcessesXmlParser;
+import io.orqueio.bpm.application.impl.metadata.spi.ProcessesXml;
+import io.orqueio.bpm.container.impl.jboss.deployment.marker.ProcessApplicationAttachments;
+import io.orqueio.bpm.container.impl.jboss.util.ProcessesXmlWrapper;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.impl.util.IoUtil;
 import org.jboss.as.ee.component.ComponentDescription;
 import org.jboss.as.server.deployment.DeploymentPhaseContext;
 import org.jboss.as.server.deployment.DeploymentUnit;

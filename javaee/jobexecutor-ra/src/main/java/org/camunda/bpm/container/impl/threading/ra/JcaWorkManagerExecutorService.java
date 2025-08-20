@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.threading.ra;
+package io.orqueio.bpm.container.impl.threading.ra;
 
 import java.util.List;
 import java.util.logging.Level;
@@ -27,9 +27,9 @@ import javax.resource.spi.work.WorkException;
 import javax.resource.spi.work.WorkManager;
 import javax.resource.spi.work.WorkRejectedException;
 
-import org.camunda.bpm.container.ExecutorService;
-import org.camunda.bpm.container.impl.threading.ra.inflow.JcaInflowExecuteJobsRunnable;
-import org.camunda.bpm.engine.impl.ProcessEngineImpl;
+import io.orqueio.bpm.container.ExecutorService;
+import io.orqueio.bpm.container.impl.threading.ra.inflow.JcaInflowExecuteJobsRunnable;
+import io.orqueio.bpm.engine.impl.ProcessEngineImpl;
 
 
 

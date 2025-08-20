@@ -11,7 +11,7 @@
   <name>Camunda Platform - QA Wildfly 26 Test Runtime</name>
 
   <parent>
-    <groupId>org.camunda.bpm.qa</groupId>
+    <groupId>io.orqueio.bpm.qa</groupId>
     <artifactId>camunda-qa</artifactId>
     <version>7.24.0-SNAPSHOT</version>
   </parent>
@@ -39,7 +39,7 @@
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm.qa</groupId>
+      <groupId>io.orqueio.bpm.qa</groupId>
       <artifactId>camunda-qa-ensure-clean-db</artifactId>
       <version>${project.version}</version>
       <scope>runtime</scope>
@@ -136,7 +136,7 @@
       <dependencies>
         <dependency>
           <!-- make sure it comes after WildFly 26 modules in the build -->
-          <groupId>org.camunda.bpm.wildfly</groupId>
+          <groupId>io.orqueio.bpm.wildfly</groupId>
           <artifactId>camunda-wildfly26-modules</artifactId>
           <version>${project.version}</version>
           <type>pom</type>
@@ -200,7 +200,7 @@
                       <excludes>**/h2database/**</excludes>
                     </artifactItem>
                     <artifactItem>
-                      <groupId>org.camunda.bpm.wildfly</groupId>
+                      <groupId>io.orqueio.bpm.wildfly</groupId>
                       <artifactId>camunda-wildfly26-modules</artifactId>
                       <version>${project.version}</version>
                       <type>tar.gz</type>
@@ -279,7 +279,7 @@
                       <mapper>
                         <chainedmapper>
                           <regexpmapper from="^(.*)/([^/]+)/([^/]*)$$" to="\1/main/\3" handledirsep="yes" />
-                          <regexpmapper from="^(org.camunda.bpm.qa.*)/((camunda-[A-Za-z-]*)[0-9\.]*).*.jar$$" to="\1/\3${project.version}.jar" handledirsep="yes" />
+                          <regexpmapper from="^(io.orqueio.bpm.qa.*)/((camunda-[A-Za-z-]*)[0-9\.]*).*.jar$$" to="\1/\3${project.version}.jar" handledirsep="yes" />
                         </chainedmapper>
                       </mapper>
                     </copy>
@@ -305,7 +305,7 @@
       <dependencies>
         <dependency>
           <!-- make sure it comes after WildFly 26 modules in the build -->
-          <groupId>org.camunda.bpm.wildfly</groupId>
+          <groupId>io.orqueio.bpm.wildfly</groupId>
           <artifactId>camunda-wildfly26-modules</artifactId>
           <version>${project.version}</version>
           <type>pom</type>
@@ -339,7 +339,7 @@
                       <excludes>**/h2database/**</excludes>
                     </artifactItem>
                     <artifactItem>
-                      <groupId>org.camunda.bpm.wildfly</groupId>
+                      <groupId>io.orqueio.bpm.wildfly</groupId>
                       <artifactId>camunda-wildfly26-modules</artifactId>
                       <version>${project.version}</version>
                       <type>tar.gz</type>
@@ -418,7 +418,7 @@
                       <mapper>
                         <chainedmapper>
                           <regexpmapper from="^(.*)/([^/]+)/([^/]*)$$" to="\1/main/\3" handledirsep="yes" />
-                          <regexpmapper from="^(org.camunda.bpm.qa.*)/((camunda-[A-Za-z-]*)[0-9\.]*).*.jar$$" to="\1/\3${project.version}.jar" handledirsep="yes" />
+                          <regexpmapper from="^(io.orqueio.bpm.qa.*)/((camunda-[A-Za-z-]*)[0-9\.]*).*.jar$$" to="\1/\3${project.version}.jar" handledirsep="yes" />
                         </chainedmapper>
                       </mapper>
                     </copy>

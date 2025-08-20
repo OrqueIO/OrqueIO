@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.cmmn.sentry;
+package io.orqueio.bpm.engine.test.cmmn.sentry;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -22,12 +22,12 @@ import static org.junit.Assert.assertNull;
 
 import java.util.List;
 
-import org.camunda.bpm.engine.impl.cmmn.entity.runtime.CaseSentryPartEntity;
-import org.camunda.bpm.engine.impl.cmmn.entity.runtime.CaseSentryPartQueryImpl;
-import org.camunda.bpm.engine.impl.cmmn.model.CmmnSentryDeclaration;
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.engine.test.cmmn.CmmnTest;
-import org.camunda.bpm.model.cmmn.VariableTransition;
+import io.orqueio.bpm.engine.impl.cmmn.entity.runtime.CaseSentryPartEntity;
+import io.orqueio.bpm.engine.impl.cmmn.entity.runtime.CaseSentryPartQueryImpl;
+import io.orqueio.bpm.engine.impl.cmmn.model.CmmnSentryDeclaration;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.test.cmmn.CmmnTest;
+import io.orqueio.bpm.model.cmmn.VariableTransition;
 import org.junit.Test;
 
 /**

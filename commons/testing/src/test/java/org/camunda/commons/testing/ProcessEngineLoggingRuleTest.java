@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.commons.testing;
+package io.orqueio.commons.testing;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 
 import java.util.List;
 
-import org.camunda.commons.testing.util.ExampleProcessEngineLogger;
+import io.orqueio.commons.testing.util.ExampleProcessEngineLogger;
 import org.junit.Rule;
 import org.junit.Test;
 import ch.qos.logback.classic.Level;
@@ -30,10 +30,10 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 @SuppressWarnings("unused")
 public class ProcessEngineLoggingRuleTest {
 
-  private static final String PERSISTENCE_LOGGER = "org.camunda.bpm.engine.persistence"; // 03
-  private static final String CONTAINER_INTEGRATION_LOGGER = "org.camunda.bpm.container"; //08
-  private static final String PROCESS_APPLICATION_LOGGER = "org.camunda.bpm.application"; //07
-  private static final String JOB_EXECUTOR_LOGGER = "org.camunda.bpm.engine.jobexecutor"; //14
+  private static final String PERSISTENCE_LOGGER = "io.orqueio.bpm.engine.persistence"; // 03
+  private static final String CONTAINER_INTEGRATION_LOGGER = "io.orqueio.bpm.container"; //08
+  private static final String PROCESS_APPLICATION_LOGGER = "io.orqueio.bpm.application"; //07
+  private static final String JOB_EXECUTOR_LOGGER = "io.orqueio.bpm.engine.jobexecutor"; //14
 
   @Rule
   public ProcessEngineLoggingRule loggingRule = new ProcessEngineLoggingRule()

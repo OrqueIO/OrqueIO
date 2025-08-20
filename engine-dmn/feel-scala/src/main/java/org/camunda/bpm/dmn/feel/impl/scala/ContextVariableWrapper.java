@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.feel.impl.scala;
+package io.orqueio.bpm.dmn.feel.impl.scala;
 
-import org.camunda.bpm.engine.variable.context.VariableContext;
-import org.camunda.bpm.engine.variable.value.TypedValue;
-import org.camunda.feel.context.VariableProvider;
+import io.orqueio.bpm.engine.variable.context.VariableContext;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
+import io.orqueio.feel.context.VariableProvider;
 import camundajar.impl.scala.Option;
 import camundajar.impl.scala.Some;
 import camundajar.impl.scala.collection.Iterable;

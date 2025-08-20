@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.engine.impl.type;
+package io.orqueio.bpm.dmn.engine.impl.type;
 
-import org.camunda.bpm.dmn.engine.impl.spi.type.DmnDataTypeTransformer;
-import org.camunda.bpm.engine.variable.Variables;
-import org.camunda.bpm.engine.variable.value.LongValue;
-import org.camunda.bpm.engine.variable.value.TypedValue;
+import io.orqueio.bpm.dmn.engine.impl.spi.type.DmnDataTypeTransformer;
+import io.orqueio.bpm.engine.variable.Variables;
+import io.orqueio.bpm.engine.variable.value.LongValue;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
 
 /**
  * Transform values of type {@link Number} and {@link String} into {@link LongValue}.

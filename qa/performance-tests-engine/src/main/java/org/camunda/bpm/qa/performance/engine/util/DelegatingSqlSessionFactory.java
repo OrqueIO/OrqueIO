@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa.performance.engine.util;
+package io.orqueio.bpm.qa.performance.engine.util;
 
 import java.sql.Connection;
 

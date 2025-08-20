@@ -29,7 +29,7 @@
 
       <milestone id="Milestone_1">
         <extensionElements>
-          <camunda:caseExecutionListener event="occur" class="org.camunda.bpm.engine.test.cmmn.milestone.MilestoneListener" />
+          <camunda:caseExecutionListener event="occur" class="io.orqueio.bpm.engine.test.cmmn.milestone.MilestoneListener" />
         </extensionElements>
       </milestone>
 

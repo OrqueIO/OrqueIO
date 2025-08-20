@@ -14,24 +14,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.cmmn.handler.specification;
+package io.orqueio.bpm.engine.test.cmmn.handler.specification;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import org.camunda.bpm.engine.delegate.BaseDelegateExecution;
-import org.camunda.bpm.engine.delegate.DelegateListener;
-import org.camunda.bpm.engine.impl.cmmn.listener.ScriptCaseExecutionListener;
-import org.camunda.bpm.engine.impl.scripting.ExecutableScript;
-import org.camunda.bpm.model.cmmn.CmmnModelInstance;
-import org.camunda.bpm.model.cmmn.instance.camunda.CamundaCaseExecutionListener;
-import org.camunda.bpm.model.cmmn.instance.camunda.CamundaScript;
+import io.orqueio.bpm.engine.delegate.BaseDelegateExecution;
+import io.orqueio.bpm.engine.delegate.DelegateListener;
+import io.orqueio.bpm.engine.impl.cmmn.listener.ScriptCaseExecutionListener;
+import io.orqueio.bpm.engine.impl.scripting.ExecutableScript;
+import io.orqueio.bpm.model.cmmn.CmmnModelInstance;
+import io.orqueio.bpm.model.cmmn.instance.camunda.CamundaCaseExecutionListener;
+import io.orqueio.bpm.model.cmmn.instance.camunda.CamundaScript;
 
 public class ScriptExecutionListenerSpec extends AbstractExecutionListenerSpec {
 
   //could be configurable
-  protected static final String SCRIPT_FORMAT = "org.camunda.bpm.test.caseexecutionlistener.ABC";
+  protected static final String SCRIPT_FORMAT = "io.orqueio.bpm.test.caseexecutionlistener.ABC";
 
   public ScriptExecutionListenerSpec(String eventName) {
     super(eventName);

@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.mgmt.telemetry;
+package io.orqueio.bpm.engine.test.api.mgmt.telemetry;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.camunda.bpm.engine.impl.db.sql.DbSqlSessionFactory;
-import org.camunda.bpm.engine.impl.telemetry.dto.ApplicationServerImpl;
-import org.camunda.bpm.engine.impl.test.RequiredDatabase;
+import io.orqueio.bpm.engine.impl.db.sql.DbSqlSessionFactory;
+import io.orqueio.bpm.engine.impl.telemetry.dto.ApplicationServerImpl;
+import io.orqueio.bpm.engine.impl.test.RequiredDatabase;
 import org.junit.Test;
 
 @RequiredDatabase(includes = DbSqlSessionFactory.H2) // it's h2-specific test

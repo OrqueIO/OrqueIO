@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest;
+package io.orqueio.bpm.engine.rest;
 
 import java.util.List;
 
@@ -23,8 +23,8 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import org.camunda.bpm.engine.rest.dto.condition.EvaluationConditionDto;
-import org.camunda.bpm.engine.rest.dto.runtime.ProcessInstanceDto;
+import io.orqueio.bpm.engine.rest.dto.condition.EvaluationConditionDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.ProcessInstanceDto;
 
 @Produces(MediaType.APPLICATION_JSON)
 public interface ConditionRestService {

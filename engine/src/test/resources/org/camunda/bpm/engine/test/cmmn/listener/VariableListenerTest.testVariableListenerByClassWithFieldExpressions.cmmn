@@ -12,7 +12,7 @@
 
       <humanTask id="HumanTask_1" name="A HumanTask">
         <extensionElements>
-          <camunda:variableListener class="org.camunda.bpm.engine.test.cmmn.listener.LogInjectedValuesListener">
+          <camunda:variableListener class="io.orqueio.bpm.engine.test.cmmn.listener.LogInjectedValuesListener">
             <camunda:field name="stringValueExpression" stringValue="injectedValue" />
             <camunda:field name="juelExpression">
               <camunda:expression>${'camunda'.substring(0,3)}</camunda:expression>

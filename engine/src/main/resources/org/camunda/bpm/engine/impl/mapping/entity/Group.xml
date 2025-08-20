@@ -19,11 +19,11 @@
 -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
   
-<mapper namespace="org.camunda.bpm.engine.impl.persistence.entity.GroupEntity">
+<mapper namespace="io.orqueio.bpm.engine.impl.persistence.entity.GroupEntity">
 
   <!-- GROUP INSERT -->
 
-  <insert id="insertGroup" parameterType="org.camunda.bpm.engine.impl.persistence.entity.GroupEntity">
+  <insert id="insertGroup" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.GroupEntity">
     insert into ${prefix}ACT_ID_GROUP (ID_, NAME_, TYPE_, REV_)
     values (
       #{id ,jdbcType=VARCHAR},
@@ -35,7 +35,7 @@
 
   <!-- GROUP UPDATE -->
   
-  <update id="updateGroup" parameterType="org.camunda.bpm.engine.impl.persistence.entity.GroupEntity">
+  <update id="updateGroup" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.GroupEntity">
     update ${prefix}ACT_ID_GROUP set
       REV_ = #{revisionNext ,jdbcType=INTEGER},
       NAME_ = #{name ,jdbcType=VARCHAR},
@@ -46,13 +46,13 @@
   
   <!-- GROUP DELETE -->
 
-  <delete id="deleteGroup" parameterType="org.camunda.bpm.engine.impl.persistence.entity.GroupEntity">
+  <delete id="deleteGroup" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.GroupEntity">
     delete from ${prefix}ACT_ID_GROUP where ID_ = #{id} and REV_ = #{revision} 
   </delete>
 
   <!-- GROUP RESULTMAP -->
 
-  <resultMap id="groupResultMap" type="org.camunda.bpm.engine.impl.persistence.entity.GroupEntity">
+  <resultMap id="groupResultMap" type="io.orqueio.bpm.engine.impl.persistence.entity.GroupEntity">
     <id property="id" column="ID_" jdbcType="VARCHAR" />
     <result property="revision" column="REV_" jdbcType="INTEGER" />
     <result property="name" column="NAME_" jdbcType="VARCHAR" />
@@ -65,14 +65,14 @@
     select * from ${prefix}ACT_ID_GROUP where ID_ = #{id}
   </select>
     
-  <select id="selectGroupsByUserId" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject" resultMap="groupResultMap">
+  <select id="selectGroupsByUserId" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject" resultMap="groupResultMap">
     select g.*
     from ${prefix}ACT_ID_GROUP g, ${prefix}ACT_ID_MEMBERSHIP membership
     where g.ID_ = membership.GROUP_ID_
       and membership.USER_ID_ = #{parameter}
   </select>
 
-  <select id="selectGroupsByUserIdAndGroupType" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject" resultMap="groupResultMap">
+  <select id="selectGroupsByUserIdAndGroupType" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject" resultMap="groupResultMap">
     select g.*
     from ${prefix}ACT_ID_GROUP g, ${prefix}ACT_ID_MEMBERSHIP membership
     where g.ID_ = membership.GROUP_ID_
@@ -82,8 +82,8 @@
       </if>
   </select>
   
-  <select id="selectGroupByQueryCriteria" parameterType="org.camunda.bpm.engine.impl.GroupQueryImpl" resultMap="groupResultMap">
-  	<include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
+  <select id="selectGroupByQueryCriteria" parameterType="io.orqueio.bpm.engine.impl.GroupQueryImpl" resultMap="groupResultMap">
+  	<include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
     ${limitBefore}
     select ${distinct} RES.* 
     ${limitBetween}
@@ -92,7 +92,7 @@
     ${limitAfter}
   </select>
   
-   <select id="selectGroupCountByQueryCriteria" parameterType="org.camunda.bpm.engine.impl.GroupQueryImpl" resultType="long">
+   <select id="selectGroupCountByQueryCriteria" parameterType="io.orqueio.bpm.engine.impl.GroupQueryImpl" resultType="long">
     ${countDistinctBeforeStart} RES.ID_ ${countDistinctBeforeEnd}
     <include refid="selectGroupByQueryCriteriaSql" />
     ${countDistinctAfterEnd}
@@ -109,7 +109,7 @@
       inner join ${prefix}ACT_ID_TENANT_MEMBER TM on RES.ID_ = TM.GROUP_ID_
     </if>
 
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoin" /> 
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoin" />
 
     <where>
       <if test="id != null">
@@ -141,7 +141,7 @@
         and TM.TENANT_ID_ = #{tenantId}
       </if>
       
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.queryAuthorizationCheck" />
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.queryAuthorizationCheck" />
     </where>
   </sql> 
   

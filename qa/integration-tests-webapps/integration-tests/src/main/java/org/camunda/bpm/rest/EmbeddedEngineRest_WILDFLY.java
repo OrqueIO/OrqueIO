@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.rest;
+package io.orqueio.bpm.rest;
 
-import org.camunda.bpm.rest.beans.CustomProcessEngineProvider;
-import org.camunda.bpm.rest.beans.CustomRestApplication;
+import io.orqueio.bpm.rest.beans.CustomProcessEngineProvider;
+import io.orqueio.bpm.rest.beans.CustomRestApplication;
 import org.jboss.arquillian.container.test.api.Deployer;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
@@ -48,7 +48,7 @@ public class EmbeddedEngineRest_WILDFLY {
     WebArchive archive = ShrinkWrap.create(WebArchive.class, "embedded-engine-rest.war")
         .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
         .addAsWebInfResource("jboss-deployment-structure.xml")
-        .addAsManifestResource("org.camunda.bpm.engine.rest.spi.ProcessEngineProvider", "META-INF/services/org.camunda.bpm.engine.rest.spi.ProcessEngineProvider")
+        .addAsManifestResource("io.orqueio.bpm.engine.rest.spi.ProcessEngineProvider", "META-INF/services/io.orqueio.bpm.engine.rest.spi.ProcessEngineProvider")
         .addAsLibraries(engineRestClasses)
         .addClasses(CustomRestApplication.class, CustomProcessEngineProvider.class);
 
@@ -67,7 +67,7 @@ public class EmbeddedEngineRest_WILDFLY {
   }
 
   private static JavaArchive[] getEngineRestClasses() {
-    String coordinates = "org.camunda.bpm:camunda-engine-rest:jar:classes:" + System.getProperty("projectversion");
+    String coordinates = "io.orqueio.bpm:camunda-engine-rest:jar:classes:" + System.getProperty("projectversion");
 
     JavaArchive[] resolvedArchives = Maven.configureResolver()
           .workOffline()

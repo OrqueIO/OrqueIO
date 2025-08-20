@@ -14,24 +14,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.jboss.extension.handler;
+package io.orqueio.bpm.container.impl.jboss.extension.handler;
 
-import static org.camunda.bpm.container.impl.jboss.extension.SubsystemAttributeDefinitons.ALLOW_CORE_TIMEOUT;
-import static org.camunda.bpm.container.impl.jboss.extension.SubsystemAttributeDefinitons.CORE_THREADS;
-import static org.camunda.bpm.container.impl.jboss.extension.SubsystemAttributeDefinitons.JOB_EXECUTOR_ATTRIBUTES;
-import static org.camunda.bpm.container.impl.jboss.extension.SubsystemAttributeDefinitons.KEEPALIVE_TIME;
-import static org.camunda.bpm.container.impl.jboss.extension.SubsystemAttributeDefinitons.MAX_THREADS;
-import static org.camunda.bpm.container.impl.jboss.extension.SubsystemAttributeDefinitons.QUEUE_LENGTH;
-import static org.camunda.bpm.container.impl.jboss.extension.SubsystemAttributeDefinitons.THREAD_POOL_NAME;
+import static io.orqueio.bpm.container.impl.jboss.extension.SubsystemAttributeDefinitons.ALLOW_CORE_TIMEOUT;
+import static io.orqueio.bpm.container.impl.jboss.extension.SubsystemAttributeDefinitons.CORE_THREADS;
+import static io.orqueio.bpm.container.impl.jboss.extension.SubsystemAttributeDefinitons.JOB_EXECUTOR_ATTRIBUTES;
+import static io.orqueio.bpm.container.impl.jboss.extension.SubsystemAttributeDefinitons.KEEPALIVE_TIME;
+import static io.orqueio.bpm.container.impl.jboss.extension.SubsystemAttributeDefinitons.MAX_THREADS;
+import static io.orqueio.bpm.container.impl.jboss.extension.SubsystemAttributeDefinitons.QUEUE_LENGTH;
+import static io.orqueio.bpm.container.impl.jboss.extension.SubsystemAttributeDefinitons.THREAD_POOL_NAME;
 
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import org.camunda.bpm.container.ExecutorService;
-import org.camunda.bpm.container.impl.jboss.service.MscExecutorService;
-import org.camunda.bpm.container.impl.jboss.service.ServiceNames;
+import io.orqueio.bpm.container.ExecutorService;
+import io.orqueio.bpm.container.impl.jboss.service.MscExecutorService;
+import io.orqueio.bpm.container.impl.jboss.service.ServiceNames;
 import org.jboss.as.controller.AbstractAddStepHandler;
 import org.jboss.as.controller.OperationContext;
 import org.jboss.as.controller.OperationFailedException;

@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.jmx.kernel.util;
+package io.orqueio.bpm.container.impl.jmx.kernel.util;
 
-import org.camunda.bpm.container.impl.spi.PlatformServiceContainer.ServiceType;
+import io.orqueio.bpm.container.impl.spi.PlatformServiceContainer.ServiceType;
 
 public enum TestServiceType implements ServiceType {
 

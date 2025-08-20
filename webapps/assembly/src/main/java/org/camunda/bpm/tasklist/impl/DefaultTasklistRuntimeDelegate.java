@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.tasklist.impl;
+package io.orqueio.bpm.tasklist.impl;
 
-import org.camunda.bpm.tasklist.TasklistRuntimeDelegate;
-import org.camunda.bpm.tasklist.plugin.spi.TasklistPlugin;
-import org.camunda.bpm.webapp.impl.AbstractAppRuntimeDelegate;
+import io.orqueio.bpm.tasklist.TasklistRuntimeDelegate;
+import io.orqueio.bpm.tasklist.plugin.spi.TasklistPlugin;
+import io.orqueio.bpm.webapp.impl.AbstractAppRuntimeDelegate;
 
 /**
  * @author Roman Smirnov

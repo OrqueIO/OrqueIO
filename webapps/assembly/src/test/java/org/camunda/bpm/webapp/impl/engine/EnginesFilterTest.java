@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.webapp.impl.engine;
+package io.orqueio.bpm.webapp.impl.engine;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
@@ -24,11 +24,11 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.camunda.bpm.cockpit.Cockpit;
-import org.camunda.bpm.cockpit.impl.DefaultCockpitRuntimeDelegate;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.rest.spi.ProcessEngineProvider;
-import org.camunda.bpm.webapp.impl.IllegalWebAppConfigurationException;
+import io.orqueio.bpm.cockpit.Cockpit;
+import io.orqueio.bpm.cockpit.impl.DefaultCockpitRuntimeDelegate;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.rest.spi.ProcessEngineProvider;
+import io.orqueio.bpm.webapp.impl.IllegalWebAppConfigurationException;
 import org.junit.After;
 import org.junit.Test;
 

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.interceptor;
+package io.orqueio.bpm.client.interceptor;
 
 /**
  * <p>Client request interceptor makes it possible to apply changes to each request before it is sent to the http server</p>

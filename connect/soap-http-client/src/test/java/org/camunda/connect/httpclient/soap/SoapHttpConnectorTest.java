@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.connect.httpclient.soap;
+package io.orqueio.connect.httpclient.soap;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.apache.hc.client5.http.classic.methods.HttpPost;
-import org.camunda.connect.Connectors;
-import org.camunda.connect.httpclient.soap.impl.SoapHttpConnectorImpl;
-import org.camunda.connect.impl.DebugRequestInterceptor;
-import org.camunda.connect.spi.Connector;
+import io.orqueio.connect.Connectors;
+import io.orqueio.connect.httpclient.soap.impl.SoapHttpConnectorImpl;
+import io.orqueio.connect.impl.DebugRequestInterceptor;
+import io.orqueio.connect.spi.Connector;
 import org.junit.Before;
 import org.junit.Test;
 

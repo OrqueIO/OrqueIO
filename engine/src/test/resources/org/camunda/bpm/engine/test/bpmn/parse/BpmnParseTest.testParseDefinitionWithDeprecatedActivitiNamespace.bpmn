@@ -4,7 +4,7 @@
     <bpmn2:startEvent id="StartEvent_1">
       <bpmn2:outgoing>SequenceFlow_1</bpmn2:outgoing>
     </bpmn2:startEvent>
-    <bpmn2:serviceTask id="UserTask_1" camunda_1:class="org.camunda.bpm.engine.test.bpmn.servicetask.DummyServiceTask" name="Task">
+    <bpmn2:serviceTask id="UserTask_1" camunda_1:class="io.orqueio.bpm.engine.test.bpmn.servicetask.DummyServiceTask" name="Task">
       <bpmn2:extensionElements>
         <camunda_1:properties>
           <camunda_1:property/>
@@ -14,7 +14,7 @@
       <bpmn2:outgoing>SequenceFlow_3</bpmn2:outgoing>
     </bpmn2:serviceTask>
     <bpmn2:sequenceFlow id="SequenceFlow_1" name="" sourceRef="StartEvent_1" targetRef="UserTask_1"/>
-    <bpmn2:serviceTask id="ServiceTask_1" camunda_1:class="org.camunda.bpm.engine.test.bpmn.servicetask.DummyServiceTask" camunda_1:async="true" camunda_1:asyncAfter="true" name="ConnectorTask">
+    <bpmn2:serviceTask id="ServiceTask_1" camunda_1:class="io.orqueio.bpm.engine.test.bpmn.servicetask.DummyServiceTask" camunda_1:async="true" camunda_1:asyncAfter="true" name="ConnectorTask">
       <bpmn2:extensionElements>
         <camunda_1:connector>
           <camunda_1:connectorId>connector</camunda_1:connectorId>

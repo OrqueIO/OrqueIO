@@ -4,7 +4,7 @@
   xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
   targetNamespace="Examples">
   
-  <error id="myException" errorCode="org.camunda.bpm.engine.test.bpmn.event.error.MyBusinessException"/>
+  <error id="myException" errorCode="io.orqueio.bpm.engine.test.bpmn.event.error.MyBusinessException"/>
   
   <process id="testCatchExceptionThrownByScriptTask" isExecutable="true">
   
@@ -13,7 +13,7 @@
     
     <scriptTask id="scriptTask" scriptFormat="groovy">
       <script>
-        throw new org.camunda.bpm.engine.test.bpmn.event.error.MyBusinessException("This is a business exception, which can be caught by a BPMN Error Event.");
+        throw new io.orqueio.bpm.engine.test.bpmn.event.error.MyBusinessException("This is a business exception, which can be caught by a BPMN Error Event.");
       </script>
     </scriptTask>
     

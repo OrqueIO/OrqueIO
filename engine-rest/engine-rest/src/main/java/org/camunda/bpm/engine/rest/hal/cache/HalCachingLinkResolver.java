@@ -14,18 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.hal.cache;
+package io.orqueio.bpm.engine.rest.hal.cache;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.rest.cache.Cache;
-import org.camunda.bpm.engine.rest.hal.Hal;
-import org.camunda.bpm.engine.rest.hal.HalLinkResolver;
-import org.camunda.bpm.engine.rest.hal.HalResource;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.rest.cache.Cache;
+import io.orqueio.bpm.engine.rest.hal.Hal;
+import io.orqueio.bpm.engine.rest.hal.HalLinkResolver;
+import io.orqueio.bpm.engine.rest.hal.HalResource;
 
 public abstract class HalCachingLinkResolver implements HalLinkResolver {
 

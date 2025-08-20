@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.application.impl.metadata.spi;
+package io.orqueio.bpm.application.impl.metadata.spi;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-import org.camunda.bpm.application.impl.metadata.ProcessArchiveXmlImpl;
-import org.camunda.bpm.container.impl.metadata.spi.ProcessEngineXml;
-import org.camunda.bpm.engine.repository.ResumePreviousBy;
+import io.orqueio.bpm.application.impl.metadata.ProcessArchiveXmlImpl;
+import io.orqueio.bpm.container.impl.metadata.spi.ProcessEngineXml;
+import io.orqueio.bpm.engine.repository.ResumePreviousBy;
 
 /**
  * <p>Java API representation of the {@link ProcessesXml} Metadata.</p>

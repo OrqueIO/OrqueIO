@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.run.qa.webapps;
+package io.orqueio.bpm.run.qa.webapps;
 
-import org.camunda.bpm.util.SeleniumScreenshotRule;
+import io.orqueio.bpm.util.SeleniumScreenshotRule;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

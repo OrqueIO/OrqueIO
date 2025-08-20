@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.variable;
+package io.orqueio.bpm.client.variable;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -23,7 +23,7 @@ import java.io.Serializable;
 import java.util.Base64;
 import java.util.Base64.Encoder;
 
-import org.camunda.commons.utils.IoUtil;
+import io.orqueio.commons.utils.IoUtil;
 
 public class JavaSerializable implements Serializable {
 

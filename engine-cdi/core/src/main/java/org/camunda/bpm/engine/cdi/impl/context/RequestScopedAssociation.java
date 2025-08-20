@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.cdi.impl.context;
+package io.orqueio.bpm.engine.cdi.impl.context;
 
 import javax.enterprise.context.RequestScoped;
 import java.io.Serializable;

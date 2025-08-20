@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.jboss.extension.handler;
+package io.orqueio.bpm.container.impl.jboss.extension.handler;
 
-import org.camunda.bpm.container.impl.jboss.config.ManagedProcessEngineMetadata;
-import org.camunda.bpm.container.impl.jboss.extension.SubsystemAttributeDefinitons;
-import org.camunda.bpm.container.impl.jboss.extension.Element;
-import org.camunda.bpm.container.impl.jboss.service.MscManagedProcessEngineController;
-import org.camunda.bpm.container.impl.jboss.service.ServiceNames;
-import org.camunda.bpm.container.impl.metadata.spi.ProcessEnginePluginXml;
-import org.camunda.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.container.impl.jboss.config.ManagedProcessEngineMetadata;
+import io.orqueio.bpm.container.impl.jboss.extension.SubsystemAttributeDefinitons;
+import io.orqueio.bpm.container.impl.jboss.extension.Element;
+import io.orqueio.bpm.container.impl.jboss.service.MscManagedProcessEngineController;
+import io.orqueio.bpm.container.impl.jboss.service.ServiceNames;
+import io.orqueio.bpm.container.impl.metadata.spi.ProcessEnginePluginXml;
+import io.orqueio.bpm.engine.ProcessEngine;
 import org.jboss.as.controller.*;
 import org.jboss.dmr.ModelNode;
 import org.jboss.dmr.Property;

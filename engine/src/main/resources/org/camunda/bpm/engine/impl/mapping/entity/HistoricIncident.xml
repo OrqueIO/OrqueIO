@@ -19,11 +19,11 @@
 -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="org.camunda.bpm.engine.impl.persistence.entity.HistoricIncidentEntity">
+<mapper namespace="io.orqueio.bpm.engine.impl.persistence.entity.HistoricIncidentEntity">
 
   <!-- HISTORIC INCIDENT INSERT -->
 
-  <insert id="insertHistoricIncidentEvent" parameterType="org.camunda.bpm.engine.impl.history.event.HistoricIncidentEventEntity">
+  <insert id="insertHistoricIncidentEvent" parameterType="io.orqueio.bpm.engine.impl.history.event.HistoricIncidentEventEntity">
       insert into ${prefix}ACT_HI_INCIDENT (
         ID_,
         PROC_DEF_KEY_,
@@ -73,7 +73,7 @@
 
   <!-- HISTORIC INCIDENT UPDATE -->
 
-  <update id="updateHistoricIncidentEvent" parameterType="org.camunda.bpm.engine.impl.history.event.HistoricIncidentEventEntity">
+  <update id="updateHistoricIncidentEvent" parameterType="io.orqueio.bpm.engine.impl.history.event.HistoricIncidentEventEntity">
     update
       ${prefix}ACT_HI_INCIDENT
     set
@@ -93,7 +93,7 @@
       ID_ = #{id, jdbcType=VARCHAR}
   </update>
   
-  <update id="updateHistoricIncident" parameterType="org.camunda.bpm.engine.impl.persistence.entity.HistoricIncidentEntity">
+  <update id="updateHistoricIncident" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.HistoricIncidentEntity">
     update
       ${prefix}ACT_HI_INCIDENT
     set
@@ -285,7 +285,7 @@
 
   <!-- HISTORIC INCIDENT DELETE -->
 
-  <delete id="deleteHistoricIncident" parameterType="org.camunda.bpm.engine.impl.persistence.entity.HistoricIncidentEntity">
+  <delete id="deleteHistoricIncident" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.HistoricIncidentEntity">
     delete from ${prefix}ACT_HI_INCIDENT where ID_ = #{id}
   </delete>
 
@@ -294,7 +294,7 @@
     where
       <bind name="listOfIds" value="list"/>
       <bind name="fieldName" value="'PROC_INST_ID_'"/>
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection"/>
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection"/>
   </delete>
 
   <delete id="deleteHistoricIncidentsByProcessDefinitionId">
@@ -318,20 +318,20 @@
 
   <sql id="andWhereMinuteInDateBetweenSql">
     <if test="parameter.minuteFrom != null and parameter.minuteTo != null">
-      AND ${datepart1}<include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.periodUnitFunction"/>${datepart2}${date}${datepart3}
+      AND ${datepart1}<include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.periodUnitFunction"/>${datepart2}${date}${datepart3}
       between #{parameter.minuteFrom, jdbcType=INTEGER} and #{parameter.minuteTo, jdbcType=INTEGER}
     </if>
   </sql>
 
   <sql id="andWhereMinuteInDateBetweenSql_oracle">
     <if test="parameter.minuteFrom != null and parameter.minuteTo != null">
-      AND ${datepart1}${date}${datepart2}<include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.periodUnitFunction"/>${datepart3}
+      AND ${datepart1}${date}${datepart2}<include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.periodUnitFunction"/>${datepart3}
       between #{parameter.minuteFrom, jdbcType=INTEGER} and #{parameter.minuteTo, jdbcType=INTEGER}
     </if>
   </sql>
 
   <delete id="deleteHistoricIncidentsByRemovalTime"
-          parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject">
+          parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject">
     <bind name="date" value="'REMOVAL_TIME_'"/>
     <bind name="reportPeriodUnitName" value="'MINUTE'"/>
     delete ${limitBeforeWithoutOffset} from ${prefix}ACT_HI_INCIDENT
@@ -341,7 +341,7 @@
   </delete>
 
   <delete id="deleteHistoricIncidentsByRemovalTime_oracle"
-          parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject">
+          parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject">
     <bind name="date" value="'REMOVAL_TIME_'"/>
     <bind name="reportPeriodUnitName" value="'MINUTE'"/>
     delete ${limitBeforeWithoutOffset} from ${prefix}ACT_HI_INCIDENT
@@ -351,7 +351,7 @@
   </delete>
 
   <delete id="deleteHistoricIncidentsByRemovalTime_postgres_or_db2"
-          parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject">
+          parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject">
     <bind name="date" value="'REMOVAL_TIME_'"/>
     <bind name="reportPeriodUnitName" value="'MINUTE'"/>
     delete ${limitBeforeWithoutOffset} from ${prefix}ACT_HI_INCIDENT
@@ -364,7 +364,7 @@
 
   <!-- HISTORIC INCIDENT RESULTMAP -->
 
-  <resultMap id="historicIncidentResultMap" type="org.camunda.bpm.engine.impl.persistence.entity.HistoricIncidentEntity">
+  <resultMap id="historicIncidentResultMap" type="io.orqueio.bpm.engine.impl.persistence.entity.HistoricIncidentEntity">
     <id property="id" column="ID_" jdbcType="VARCHAR" />
     <result property="processDefinitionKey" column="PROC_DEF_KEY_" jdbcType="VARCHAR" />
     <result property="processDefinitionId" column="PROC_DEF_ID_" jdbcType="VARCHAR" />
@@ -394,8 +394,8 @@
     select RES.* from ${prefix}ACT_HI_INCIDENT RES where RES.ID_ = #{id}
   </select>
 
-  <select id="selectHistoricIncidentByQueryCriteria" parameterType="org.camunda.bpm.engine.impl.HistoricIncidentQueryImpl" resultMap="historicIncidentResultMap">
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
+  <select id="selectHistoricIncidentByQueryCriteria" parameterType="io.orqueio.bpm.engine.impl.HistoricIncidentQueryImpl" resultMap="historicIncidentResultMap">
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
     ${limitBefore}
     select ${distinct} RES.*
     ${limitBetween}
@@ -404,7 +404,7 @@
     ${limitAfter}
   </select>
 
-  <select id="selectHistoricIncidentCountByQueryCriteria" parameterType="org.camunda.bpm.engine.impl.HistoricIncidentQueryImpl" resultType="long">
+  <select id="selectHistoricIncidentCountByQueryCriteria" parameterType="io.orqueio.bpm.engine.impl.HistoricIncidentQueryImpl" resultType="long">
     ${countDistinctBeforeStart} RES.ID_ ${countDistinctBeforeEnd}
     <include refid="selectHistoricIncidentByQueryCriteriaSql"/>
     ${countDistinctAfterEnd}
@@ -419,7 +419,7 @@
         If you change something here, you should probably also change it the EE Webapp
         See camunda-bpm-platform-ee/webapps/camunda-webapp/plugins/src/main/resources/org/camunda/bpm/cockpit/impl/plugin/history/historicIncident.xml
       -->
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoinWithoutOnClause"/>
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoinWithoutOnClause"/>
       AUTH ON (AUTH.RESOURCE_ID_ ${authJoinStart}
         RES.PROC_DEF_KEY_ ${authJoinSeparator} '*'
         <if test="authCheck.isHistoricInstancePermissionsEnabled">
@@ -526,12 +526,12 @@
         <!-- incident exists in context of a process definition -->
         and (
           (RES.PROC_DEF_ID_ is not null
-          <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.queryAuthorizationCheck"/>
+          <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.queryAuthorizationCheck"/>
           ) or RES.PROC_DEF_ID_ is null
         )
       </if>
 
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
 
     </where>
   </sql>
@@ -551,7 +551,7 @@
     where
       <bind name="listOfIds" value="list"/>
       <bind name="fieldName" value="'HB.ID_'"/>
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection"/>
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection"/>
       and HI.JOB_DEF_ID_ is not null
   </sql>
 

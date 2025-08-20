@@ -14,18 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.runtime;
+package io.orqueio.bpm.engine.test.api.runtime;
 
-import org.camunda.bpm.engine.impl.persistence.entity.VariableInstanceEntity;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.engine.test.bpmn.scripttask.MySerializable;
-import org.camunda.bpm.engine.test.util.PluggableProcessEngineTest;
-import org.camunda.bpm.engine.variable.VariableMap;
-import org.camunda.bpm.engine.variable.Variables;
-import org.camunda.bpm.engine.variable.value.ObjectValue;
-import org.camunda.bpm.model.bpmn.Bpmn;
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.bpm.engine.impl.persistence.entity.VariableInstanceEntity;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.test.bpmn.scripttask.MySerializable;
+import io.orqueio.bpm.engine.test.util.PluggableProcessEngineTest;
+import io.orqueio.bpm.engine.variable.VariableMap;
+import io.orqueio.bpm.engine.variable.Variables;
+import io.orqueio.bpm.engine.variable.value.ObjectValue;
+import io.orqueio.bpm.model.bpmn.Bpmn;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
 import org.junit.After;
 import org.junit.Test;
 
@@ -172,7 +172,7 @@ public class VariableInstanceTest extends PluggableProcessEngineTest {
                 .scriptText("println 'var ' + myVar")
                 .scriptTask()
                 .scriptFormat("groovy")
-                .scriptText("execution.setVariable('myVar', new org.camunda.bpm.engine.test.bpmn.scripttask.MySerializable('updated value'))")
+                .scriptText("execution.setVariable('myVar', new io.orqueio.bpm.engine.test.bpmn.scripttask.MySerializable('updated value'))")
                 .userTask()
                 .endEvent()
                 .done());
@@ -202,7 +202,7 @@ public class VariableInstanceTest extends PluggableProcessEngineTest {
         // then
         assertThat(variable.getTextValue2())
                 .withFailMessage("The type of the variable didn't change and should be MySerializable")
-                .isEqualTo("org.camunda.bpm.engine.test.bpmn.scripttask.MySerializable");
+                .isEqualTo("io.orqueio.bpm.engine.test.bpmn.scripttask.MySerializable");
 
         assertThat(((MySerializable)variable.getValue()).getName())
                 .withFailMessage("The variable changed value")
@@ -274,7 +274,7 @@ public class VariableInstanceTest extends PluggableProcessEngineTest {
                 .scriptText("println 'var ' + myVar")
                 .scriptTask()
                 .scriptFormat("groovy")                                                     // The new value is not null
-                .scriptText("execution.setVariable('myVar', new org.camunda.bpm.engine.test.bpmn.scripttask.MySerializable('non null value'))")
+                .scriptText("execution.setVariable('myVar', new io.orqueio.bpm.engine.test.bpmn.scripttask.MySerializable('non null value'))")
                 .userTask()
                 .endEvent()
                 .done());
@@ -304,7 +304,7 @@ public class VariableInstanceTest extends PluggableProcessEngineTest {
         // then
         assertThat(variable.getTextValue2())
                 .withFailMessage("The type name of the variable should be set on the text value 2 field")
-                .isEqualTo("org.camunda.bpm.engine.test.bpmn.scripttask.MySerializable");
+                .isEqualTo("io.orqueio.bpm.engine.test.bpmn.scripttask.MySerializable");
 
         assertThat(((MySerializable)variable.getValue()).getName())
                 .withFailMessage("The variable changed value")
@@ -346,7 +346,7 @@ public class VariableInstanceTest extends PluggableProcessEngineTest {
     }
 
     protected void deployProcess(BpmnModelInstance process) {
-        org.camunda.bpm.engine.repository.Deployment deployment = repositoryService.createDeployment()
+        io.orqueio.bpm.engine.repository.Deployment deployment = repositoryService.createDeployment()
                 .addModelInstance("testProcess.bpmn", process)
                 .deploy();
         deploymentIds.add(deployment.getId());

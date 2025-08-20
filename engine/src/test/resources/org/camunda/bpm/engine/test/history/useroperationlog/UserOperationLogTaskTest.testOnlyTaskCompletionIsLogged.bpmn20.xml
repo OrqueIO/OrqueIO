@@ -12,13 +12,13 @@
 
     <userTask id="task1">
       <extensionElements>
-        <camunda:taskListener class="org.camunda.bpm.engine.test.history.useroperationlog.ExecuteRuntimeServiceOperationTaskListener" event="complete" />
+        <camunda:taskListener class="io.orqueio.bpm.engine.test.history.useroperationlog.ExecuteRuntimeServiceOperationTaskListener" event="complete" />
       </extensionElements>
     </userTask>
 
     <sequenceFlow sourceRef="task1" targetRef="serviceTask" />
 
-    <serviceTask id="serviceTask" camunda:class="org.camunda.bpm.engine.test.history.useroperationlog.ExecuteRuntimeServiceOperationDelegate" />
+    <serviceTask id="serviceTask" camunda:class="io.orqueio.bpm.engine.test.history.useroperationlog.ExecuteRuntimeServiceOperationDelegate" />
 
     <sequenceFlow sourceRef="serviceTask" targetRef="task2" />
 

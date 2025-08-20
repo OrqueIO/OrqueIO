@@ -14,27 +14,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.persistence.entity;
+package io.orqueio.bpm.engine.impl.persistence.entity;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
-import org.camunda.bpm.engine.impl.calendar.BusinessCalendar;
-import org.camunda.bpm.engine.impl.calendar.CycleBusinessCalendar;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.cfg.TransactionState;
-import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.interceptor.CommandExecutor;
-import org.camunda.bpm.engine.impl.jobexecutor.RepeatingFailedJobListener;
-import org.camunda.bpm.engine.impl.jobexecutor.TimerDeclarationImpl;
-import org.camunda.bpm.engine.impl.jobexecutor.TimerDeclarationType;
-import org.camunda.bpm.engine.impl.jobexecutor.TimerEventJobHandler;
-import org.camunda.bpm.engine.impl.jobexecutor.TimerEventJobHandler.TimerJobConfiguration;
-import org.camunda.bpm.engine.impl.util.ClockUtil;
+import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
+import io.orqueio.bpm.engine.impl.calendar.BusinessCalendar;
+import io.orqueio.bpm.engine.impl.calendar.CycleBusinessCalendar;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.cfg.TransactionState;
+import io.orqueio.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.impl.interceptor.CommandExecutor;
+import io.orqueio.bpm.engine.impl.jobexecutor.RepeatingFailedJobListener;
+import io.orqueio.bpm.engine.impl.jobexecutor.TimerDeclarationImpl;
+import io.orqueio.bpm.engine.impl.jobexecutor.TimerDeclarationType;
+import io.orqueio.bpm.engine.impl.jobexecutor.TimerEventJobHandler;
+import io.orqueio.bpm.engine.impl.jobexecutor.TimerEventJobHandler.TimerJobConfiguration;
+import io.orqueio.bpm.engine.impl.util.ClockUtil;
 
 
 /**

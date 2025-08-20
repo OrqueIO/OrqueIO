@@ -10,7 +10,7 @@
       <planItem id="PI_HumanTask_1" definitionRef="HumanTask_1" />
       <humanTask id="HumanTask_1" name="A HumanTask">
         <extensionElements>
-          <camunda:taskListener event="delete" class="org.camunda.bpm.engine.test.cmmn.tasklistener.util.TaskDeleteListener" />
+          <camunda:taskListener event="delete" class="io.orqueio.bpm.engine.test.cmmn.tasklistener.util.TaskDeleteListener" />
         </extensionElements>
       </humanTask>
     </casePlanModel>

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.feel.impl.juel.el;
+package io.orqueio.bpm.dmn.feel.impl.juel.el;
 
 import java.lang.reflect.Method;
 import java.text.ParseException;
@@ -22,10 +22,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import org.camunda.bpm.impl.juel.jakarta.el.FunctionMapper;
+import io.orqueio.bpm.impl.juel.jakarta.el.FunctionMapper;
 
-import org.camunda.bpm.dmn.feel.impl.juel.FeelEngineLogger;
-import org.camunda.bpm.dmn.feel.impl.juel.FeelLogger;
+import io.orqueio.bpm.dmn.feel.impl.juel.FeelEngineLogger;
+import io.orqueio.bpm.dmn.feel.impl.juel.FeelLogger;
 
 public class FeelFunctionMapper extends FunctionMapper {
 

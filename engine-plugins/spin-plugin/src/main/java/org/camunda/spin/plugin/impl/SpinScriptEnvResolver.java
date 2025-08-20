@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.plugin.impl;
+package io.orqueio.spin.plugin.impl;
 
-import org.camunda.bpm.engine.impl.scripting.env.ScriptEnvResolver;
-import org.camunda.spin.scripting.SpinScriptEnv;
+import io.orqueio.bpm.engine.impl.scripting.env.ScriptEnvResolver;
+import io.orqueio.spin.scripting.SpinScriptEnv;
 
 /**
  * Resolves Spin Environment Scripts.

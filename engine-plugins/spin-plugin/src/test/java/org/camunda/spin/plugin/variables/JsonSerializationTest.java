@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.plugin.variables;
+package io.orqueio.spin.plugin.variables;
 
-import static org.camunda.bpm.engine.variable.Variables.objectValue;
-import static org.camunda.bpm.engine.variable.Variables.serializedObjectValue;
-import static org.camunda.spin.plugin.variables.TypedValueAssert.assertObjectValueDeserializedNull;
-import static org.camunda.spin.plugin.variables.TypedValueAssert.assertObjectValueSerializedNull;
-import static org.camunda.spin.plugin.variables.TypedValueAssert.assertUntypedNullValue;
+import static io.orqueio.bpm.engine.variable.Variables.objectValue;
+import static io.orqueio.bpm.engine.variable.Variables.serializedObjectValue;
+import static io.orqueio.spin.plugin.variables.TypedValueAssert.assertObjectValueDeserializedNull;
+import static io.orqueio.spin.plugin.variables.TypedValueAssert.assertObjectValueSerializedNull;
+import static io.orqueio.spin.plugin.variables.TypedValueAssert.assertUntypedNullValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -32,25 +32,25 @@ import static org.junit.Assert.fail;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.RuntimeService;
-import org.camunda.bpm.engine.impl.interceptor.Command;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.runtime.VariableInstance;
-import org.camunda.bpm.engine.task.Task;
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.engine.test.ProcessEngineRule;
-import org.camunda.bpm.engine.test.util.ProcessEngineTestRule;
-import org.camunda.bpm.engine.variable.VariableMap;
-import org.camunda.bpm.engine.variable.Variables;
-import org.camunda.bpm.engine.variable.type.ValueType;
-import org.camunda.bpm.engine.variable.value.ObjectValue;
-import org.camunda.bpm.engine.variable.value.TypedValue;
-import org.camunda.bpm.engine.variable.value.builder.SerializedObjectValueBuilder;
-import org.camunda.bpm.model.bpmn.Bpmn;
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
-import org.camunda.spin.DataFormats;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.RuntimeService;
+import io.orqueio.bpm.engine.impl.interceptor.Command;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.runtime.VariableInstance;
+import io.orqueio.bpm.engine.task.Task;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.test.ProcessEngineRule;
+import io.orqueio.bpm.engine.test.util.ProcessEngineTestRule;
+import io.orqueio.bpm.engine.variable.VariableMap;
+import io.orqueio.bpm.engine.variable.Variables;
+import io.orqueio.bpm.engine.variable.type.ValueType;
+import io.orqueio.bpm.engine.variable.value.ObjectValue;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
+import io.orqueio.bpm.engine.variable.value.builder.SerializedObjectValueBuilder;
+import io.orqueio.bpm.model.bpmn.Bpmn;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.spin.DataFormats;
 import org.json.JSONException;
 import org.junit.Before;
 import org.junit.Rule;

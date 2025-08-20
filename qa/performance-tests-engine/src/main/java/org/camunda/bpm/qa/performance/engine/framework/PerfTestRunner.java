@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa.performance.engine.framework;
+package io.orqueio.bpm.qa.performance.engine.framework;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -26,8 +26,8 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import org.camunda.bpm.engine.impl.util.ReflectUtil;
-import org.camunda.bpm.qa.performance.engine.framework.activitylog.ActivityPerfTestWatcher;
+import io.orqueio.bpm.engine.impl.util.ReflectUtil;
+import io.orqueio.bpm.qa.performance.engine.framework.activitylog.ActivityPerfTestWatcher;
 
 /**
  * @author Daniel Meyer, Ingo Richtsmeier

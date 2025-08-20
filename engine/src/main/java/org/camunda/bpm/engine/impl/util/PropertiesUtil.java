@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.util;
+package io.orqueio.bpm.engine.impl.util;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
+import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
 
 public class PropertiesUtil {
 

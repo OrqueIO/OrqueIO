@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.feel.impl.juel;
+package io.orqueio.bpm.dmn.feel.impl.juel;
 
-import org.camunda.commons.logging.BaseLogger;
+import io.orqueio.commons.logging.BaseLogger;
 
 public class FeelLogger extends BaseLogger {
 
   public static final String PROJECT_CODE = "FEEL";
-  public static final String PROJECT_LOGGER= "org.camunda.bpm.dmn.feel";
+  public static final String PROJECT_LOGGER= "io.orqueio.bpm.dmn.feel";
 
   public static FeelEngineLogger ENGINE_LOGGER = createLogger(FeelEngineLogger.class, PROJECT_CODE, PROJECT_LOGGER, "01");
 

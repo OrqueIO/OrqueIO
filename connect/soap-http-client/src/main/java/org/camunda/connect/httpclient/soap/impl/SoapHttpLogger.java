@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.connect.httpclient.soap.impl;
+package io.orqueio.connect.httpclient.soap.impl;
 
-import org.camunda.commons.logging.BaseLogger;
+import io.orqueio.commons.logging.BaseLogger;
 
 public abstract class SoapHttpLogger extends BaseLogger {
 
   public static final String PROJECT_CODE = "SOAPC";
 
-  public static final SoapHttpConnectorLogger SOAP_HTTP_CONNECTOR_LOGGER = createLogger(SoapHttpConnectorLogger.class, PROJECT_CODE, "org.camunda.bpm.connect.soap.httpclient.connector", "01");
+  public static final SoapHttpConnectorLogger SOAP_HTTP_CONNECTOR_LOGGER = createLogger(SoapHttpConnectorLogger.class, PROJECT_CODE, "io.orqueio.bpm.connect.soap.httpclient.connector", "01");
 
 }

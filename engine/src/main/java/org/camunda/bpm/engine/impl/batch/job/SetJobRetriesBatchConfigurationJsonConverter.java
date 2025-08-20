@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.batch.job;
+package io.orqueio.bpm.engine.impl.batch.job;
 
 import java.util.Date;
 import java.util.List;
 
-import org.camunda.bpm.engine.impl.batch.AbstractBatchConfigurationObjectConverter;
-import org.camunda.bpm.engine.impl.batch.DeploymentMappingJsonConverter;
-import org.camunda.bpm.engine.impl.batch.DeploymentMappings;
-import org.camunda.bpm.engine.impl.batch.SetJobRetriesBatchConfiguration;
-import org.camunda.bpm.engine.impl.util.JsonUtil;
+import io.orqueio.bpm.engine.impl.batch.AbstractBatchConfigurationObjectConverter;
+import io.orqueio.bpm.engine.impl.batch.DeploymentMappingJsonConverter;
+import io.orqueio.bpm.engine.impl.batch.DeploymentMappings;
+import io.orqueio.bpm.engine.impl.batch.SetJobRetriesBatchConfiguration;
+import io.orqueio.bpm.engine.impl.util.JsonUtil;
 
 import com.google.gson.JsonObject;
 

@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.util.container;
+package io.orqueio.bpm.engine.rest.util.container;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
-import org.camunda.bpm.engine.rest.AbstractRestServiceTest;
+import io.orqueio.bpm.engine.rest.AbstractRestServiceTest;
 
 public abstract class AbstractServerBootstrap {
 

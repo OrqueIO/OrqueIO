@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.engine.el;
+package io.orqueio.bpm.dmn.engine.el;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -24,7 +24,7 @@ import static org.mockito.Mockito.when;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 
-import org.camunda.bpm.dmn.engine.impl.el.DefaultScriptEngineResolver;
+import io.orqueio.bpm.dmn.engine.impl.el.DefaultScriptEngineResolver;
 import org.junit.Test;
 import static org.assertj.core.api.Assertions.*;
 

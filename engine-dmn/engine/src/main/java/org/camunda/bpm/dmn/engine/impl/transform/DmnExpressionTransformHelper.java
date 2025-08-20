@@ -14,18 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.engine.impl.transform;
+package io.orqueio.bpm.dmn.engine.impl.transform;
 
-import org.camunda.bpm.dmn.engine.impl.DefaultDmnEngineConfiguration;
-import org.camunda.bpm.dmn.engine.impl.spi.transform.DmnElementTransformContext;
-import org.camunda.bpm.dmn.engine.impl.spi.type.DmnDataTypeTransformer;
-import org.camunda.bpm.dmn.engine.impl.spi.type.DmnTypeDefinition;
-import org.camunda.bpm.dmn.engine.impl.type.DefaultTypeDefinition;
-import org.camunda.bpm.dmn.engine.impl.type.DmnTypeDefinitionImpl;
-import org.camunda.bpm.model.dmn.instance.InformationItem;
-import org.camunda.bpm.model.dmn.instance.LiteralExpression;
-import org.camunda.bpm.model.dmn.instance.Text;
-import org.camunda.bpm.model.dmn.instance.UnaryTests;
+import io.orqueio.bpm.dmn.engine.impl.DefaultDmnEngineConfiguration;
+import io.orqueio.bpm.dmn.engine.impl.spi.transform.DmnElementTransformContext;
+import io.orqueio.bpm.dmn.engine.impl.spi.type.DmnDataTypeTransformer;
+import io.orqueio.bpm.dmn.engine.impl.spi.type.DmnTypeDefinition;
+import io.orqueio.bpm.dmn.engine.impl.type.DefaultTypeDefinition;
+import io.orqueio.bpm.dmn.engine.impl.type.DmnTypeDefinitionImpl;
+import io.orqueio.bpm.model.dmn.instance.InformationItem;
+import io.orqueio.bpm.model.dmn.instance.LiteralExpression;
+import io.orqueio.bpm.model.dmn.instance.Text;
+import io.orqueio.bpm.model.dmn.instance.UnaryTests;
 
 public class DmnExpressionTransformHelper {
 

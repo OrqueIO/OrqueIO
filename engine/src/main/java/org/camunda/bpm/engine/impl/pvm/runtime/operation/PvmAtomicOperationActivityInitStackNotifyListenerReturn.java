@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.pvm.runtime.operation;
+package io.orqueio.bpm.engine.impl.pvm.runtime.operation;
 
-import org.camunda.bpm.engine.delegate.ExecutionListener;
-import org.camunda.bpm.engine.impl.pvm.process.ActivityImpl;
-import org.camunda.bpm.engine.impl.pvm.process.ScopeImpl;
-import org.camunda.bpm.engine.impl.pvm.runtime.ScopeInstantiationContext;
-import org.camunda.bpm.engine.impl.pvm.runtime.InstantiationStack;
-import org.camunda.bpm.engine.impl.pvm.runtime.PvmExecutionImpl;
+import io.orqueio.bpm.engine.delegate.ExecutionListener;
+import io.orqueio.bpm.engine.impl.pvm.process.ActivityImpl;
+import io.orqueio.bpm.engine.impl.pvm.process.ScopeImpl;
+import io.orqueio.bpm.engine.impl.pvm.runtime.ScopeInstantiationContext;
+import io.orqueio.bpm.engine.impl.pvm.runtime.InstantiationStack;
+import io.orqueio.bpm.engine.impl.pvm.runtime.PvmExecutionImpl;
 
 /**
  * @author Thorben Lindhauer

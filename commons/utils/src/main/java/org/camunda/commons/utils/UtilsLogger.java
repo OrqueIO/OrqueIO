@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.commons.utils;
+package io.orqueio.commons.utils;
 
-import org.camunda.commons.logging.BaseLogger;
+import io.orqueio.commons.logging.BaseLogger;
 
 /**
  * @author Sebastian Menski
@@ -25,6 +25,6 @@ public class UtilsLogger extends BaseLogger {
 
   public final static String PROJECT_CODE = "UTILS";
 
-  public final static IoUtilLogger IO_UTIL_LOGGER = BaseLogger.createLogger(IoUtilLogger.class, PROJECT_CODE, "org.camunda.commons.utils.io", "01");
-  public final static EnsureUtilLogger ENSURE_UTIL_LOGGER = BaseLogger.createLogger(EnsureUtilLogger.class, PROJECT_CODE, "org.camunda.commons.utils.ensure", "02");
+  public final static IoUtilLogger IO_UTIL_LOGGER = BaseLogger.createLogger(IoUtilLogger.class, PROJECT_CODE, "io.orqueio.commons.utils.io", "01");
+  public final static EnsureUtilLogger ENSURE_UTIL_LOGGER = BaseLogger.createLogger(EnsureUtilLogger.class, PROJECT_CODE, "io.orqueio.commons.utils.ensure", "02");
 }

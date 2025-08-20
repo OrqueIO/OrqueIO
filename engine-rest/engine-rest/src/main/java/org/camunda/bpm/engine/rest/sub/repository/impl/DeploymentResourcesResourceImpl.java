@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.sub.repository.impl;
+package io.orqueio.bpm.engine.rest.sub.repository.impl;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -26,13 +26,13 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.RepositoryService;
-import org.camunda.bpm.engine.repository.Resource;
-import org.camunda.bpm.engine.rest.dto.repository.DeploymentResourceDto;
-import org.camunda.bpm.engine.rest.exception.InvalidRequestException;
-import org.camunda.bpm.engine.rest.sub.repository.DeploymentResourcesResource;
-import org.camunda.bpm.engine.rest.util.URLEncodingUtil;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.RepositoryService;
+import io.orqueio.bpm.engine.repository.Resource;
+import io.orqueio.bpm.engine.rest.dto.repository.DeploymentResourceDto;
+import io.orqueio.bpm.engine.rest.exception.InvalidRequestException;
+import io.orqueio.bpm.engine.rest.sub.repository.DeploymentResourcesResource;
+import io.orqueio.bpm.engine.rest.util.URLEncodingUtil;
 
 /**
  * @author Sebastian Menski

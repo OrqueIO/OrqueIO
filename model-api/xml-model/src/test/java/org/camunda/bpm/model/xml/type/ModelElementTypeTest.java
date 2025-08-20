@@ -14,18 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.xml.type;
+package io.orqueio.bpm.model.xml.type;
 
-import org.camunda.bpm.model.xml.Model;
-import org.camunda.bpm.model.xml.ModelInstance;
-import org.camunda.bpm.model.xml.impl.util.ModelTypeException;
-import org.camunda.bpm.model.xml.testmodel.TestModelParser;
-import org.camunda.bpm.model.xml.testmodel.instance.*;
+import io.orqueio.bpm.model.xml.Model;
+import io.orqueio.bpm.model.xml.ModelInstance;
+import io.orqueio.bpm.model.xml.impl.util.ModelTypeException;
+import io.orqueio.bpm.model.xml.testmodel.TestModelParser;
+import io.orqueio.bpm.model.xml.testmodel.instance.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.camunda.bpm.model.xml.test.assertions.ModelAssertions.assertThat;
-import static org.camunda.bpm.model.xml.testmodel.TestModelConstants.MODEL_NAMESPACE;
+import static io.orqueio.bpm.model.xml.test.assertions.ModelAssertions.assertThat;
+import static io.orqueio.bpm.model.xml.testmodel.TestModelConstants.MODEL_NAMESPACE;
 import static org.junit.Assert.fail;
 
 /**

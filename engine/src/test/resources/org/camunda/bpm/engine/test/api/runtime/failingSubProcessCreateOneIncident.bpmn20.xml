@@ -12,7 +12,7 @@
     <subProcess id="subProcess">
      <startEvent id="subProcessStart" />
      <sequenceFlow id="flow2" sourceRef="subProcessStart" targetRef="serviceTask" />
-     <serviceTask id="serviceTask" camunda:async="true" camunda:class="org.camunda.bpm.engine.test.api.runtime.FailingDelegate" name="Service Task"/>
+     <serviceTask id="serviceTask" camunda:async="true" camunda:class="io.orqueio.bpm.engine.test.api.runtime.FailingDelegate" name="Service Task"/>
      <sequenceFlow id="flow3" sourceRef="serviceTask" targetRef="subProcessEnd" />
      <endEvent id="subProcessEnd" />
     </subProcess>

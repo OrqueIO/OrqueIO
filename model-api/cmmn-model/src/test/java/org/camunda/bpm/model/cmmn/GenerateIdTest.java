@@ -14,18 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.cmmn;
+package io.orqueio.bpm.model.cmmn;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Collection;
 
-import org.camunda.bpm.model.cmmn.impl.instance.CaseFileItemTransitionStandardEventImpl;
-import org.camunda.bpm.model.cmmn.instance.Case;
-import org.camunda.bpm.model.cmmn.instance.CasePlanModel;
-import org.camunda.bpm.model.cmmn.instance.DefaultControl;
-import org.camunda.bpm.model.cmmn.instance.Definitions;
-import org.camunda.bpm.model.cmmn.instance.HumanTask;
+import io.orqueio.bpm.model.cmmn.impl.instance.CaseFileItemTransitionStandardEventImpl;
+import io.orqueio.bpm.model.cmmn.instance.Case;
+import io.orqueio.bpm.model.cmmn.instance.CasePlanModel;
+import io.orqueio.bpm.model.cmmn.instance.DefaultControl;
+import io.orqueio.bpm.model.cmmn.instance.Definitions;
+import io.orqueio.bpm.model.cmmn.instance.HumanTask;
 import org.junit.Test;
 
 public class GenerateIdTest {

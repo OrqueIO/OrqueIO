@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.identity;
+package io.orqueio.bpm.engine.test.api.identity;
 
-import static org.camunda.bpm.engine.authorization.Authorization.ANY;
-import static org.camunda.bpm.engine.authorization.Authorization.AUTH_TYPE_GLOBAL;
-import static org.camunda.bpm.engine.authorization.Authorization.AUTH_TYPE_GRANT;
-import static org.camunda.bpm.engine.authorization.Authorization.AUTH_TYPE_REVOKE;
-import static org.camunda.bpm.engine.test.api.identity.TestPermissions.ALL;
-import static org.camunda.bpm.engine.test.api.identity.TestPermissions.CREATE;
-import static org.camunda.bpm.engine.test.api.identity.TestPermissions.DELETE;
-import static org.camunda.bpm.engine.test.api.identity.TestPermissions.READ;
-import static org.camunda.bpm.engine.test.api.identity.TestPermissions.UPDATE;
+import static io.orqueio.bpm.engine.authorization.Authorization.ANY;
+import static io.orqueio.bpm.engine.authorization.Authorization.AUTH_TYPE_GLOBAL;
+import static io.orqueio.bpm.engine.authorization.Authorization.AUTH_TYPE_GRANT;
+import static io.orqueio.bpm.engine.authorization.Authorization.AUTH_TYPE_REVOKE;
+import static io.orqueio.bpm.engine.test.api.identity.TestPermissions.ALL;
+import static io.orqueio.bpm.engine.test.api.identity.TestPermissions.CREATE;
+import static io.orqueio.bpm.engine.test.api.identity.TestPermissions.DELETE;
+import static io.orqueio.bpm.engine.test.api.identity.TestPermissions.READ;
+import static io.orqueio.bpm.engine.test.api.identity.TestPermissions.UPDATE;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -33,11 +33,11 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.camunda.bpm.engine.authorization.Authorization;
-import org.camunda.bpm.engine.authorization.Resource;
-import org.camunda.bpm.engine.exception.NullValueException;
-import org.camunda.bpm.engine.identity.User;
-import org.camunda.bpm.engine.test.util.PluggableProcessEngineTest;
+import io.orqueio.bpm.engine.authorization.Authorization;
+import io.orqueio.bpm.engine.authorization.Resource;
+import io.orqueio.bpm.engine.exception.NullValueException;
+import io.orqueio.bpm.engine.identity.User;
+import io.orqueio.bpm.engine.test.util.PluggableProcessEngineTest;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

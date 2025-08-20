@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa.upgrade;
+package io.orqueio.bpm.qa.upgrade;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.ProcessEngineConfiguration;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.qa.upgrade.batch.deploymentaware.DeploymentAwareBatchesScenario;
-import org.camunda.bpm.qa.upgrade.customretries.FailingIntermediateBoundaryTimerJobScenario;
-import org.camunda.bpm.qa.upgrade.restart.StartProcessIntanceWithInitialVariablesScenario;
-import org.camunda.bpm.qa.upgrade.restart.SetVariablesScenario;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.ProcessEngineConfiguration;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.qa.upgrade.batch.deploymentaware.DeploymentAwareBatchesScenario;
+import io.orqueio.bpm.qa.upgrade.customretries.FailingIntermediateBoundaryTimerJobScenario;
+import io.orqueio.bpm.qa.upgrade.restart.StartProcessIntanceWithInitialVariablesScenario;
+import io.orqueio.bpm.qa.upgrade.restart.SetVariablesScenario;
 
 /**
  * @author Nikola Koevski

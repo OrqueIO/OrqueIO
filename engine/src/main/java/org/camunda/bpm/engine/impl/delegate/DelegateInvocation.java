@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.delegate;
+package io.orqueio.bpm.engine.impl.delegate;
 
-import org.camunda.bpm.engine.delegate.BaseDelegateExecution;
-import org.camunda.bpm.engine.impl.interceptor.DelegateInterceptor;
-import org.camunda.bpm.engine.impl.repository.ResourceDefinitionEntity;
+import io.orqueio.bpm.engine.delegate.BaseDelegateExecution;
+import io.orqueio.bpm.engine.impl.interceptor.DelegateInterceptor;
+import io.orqueio.bpm.engine.impl.repository.ResourceDefinitionEntity;
 
 /**
  * Provides context about the invocation of usercode and handles the actual

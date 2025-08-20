@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.functional.transactions;
+package io.orqueio.bpm.integrationtest.functional.transactions;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -23,13 +23,13 @@ import java.util.HashMap;
 
 import javax.inject.Inject;
 
-import org.camunda.bpm.engine.RuntimeService;
-import org.camunda.bpm.engine.runtime.Job;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.integrationtest.functional.transactions.beans.FailingTransactionListenerDelegate;
-import org.camunda.bpm.integrationtest.functional.transactions.beans.GetVersionInfoDelegate;
-import org.camunda.bpm.integrationtest.functional.transactions.beans.UpdateRouterConfiguration;
-import org.camunda.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
+import io.orqueio.bpm.engine.RuntimeService;
+import io.orqueio.bpm.engine.runtime.Job;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.integrationtest.functional.transactions.beans.FailingTransactionListenerDelegate;
+import io.orqueio.bpm.integrationtest.functional.transactions.beans.GetVersionInfoDelegate;
+import io.orqueio.bpm.integrationtest.functional.transactions.beans.UpdateRouterConfiguration;
+import io.orqueio.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.spec.WebArchive;

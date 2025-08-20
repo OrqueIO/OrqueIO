@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.ejb.deployment;
+package io.orqueio.bpm.container.impl.ejb.deployment;
 
-import org.camunda.bpm.container.ExecutorService;
-import org.camunda.bpm.container.impl.spi.PlatformService;
-import org.camunda.bpm.container.impl.spi.PlatformServiceContainer;
+import io.orqueio.bpm.container.ExecutorService;
+import io.orqueio.bpm.container.impl.spi.PlatformService;
+import io.orqueio.bpm.container.impl.spi.PlatformServiceContainer;
 
 /**
  * <p>MBean Service delegating to the Jca ExecutorService</p>

@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.run.test.config.deploy;
+package io.orqueio.bpm.run.test.config.deploy;
 
-import org.camunda.bpm.run.CamundaBpmRunProcessEngineConfiguration;
-import org.camunda.bpm.run.test.AbstractRestTest;
+import io.orqueio.bpm.run.CamundaBpmRunProcessEngineConfiguration;
+import io.orqueio.bpm.run.test.AbstractRestTest;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 

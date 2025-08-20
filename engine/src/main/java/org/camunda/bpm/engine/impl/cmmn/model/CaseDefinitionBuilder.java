@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.cmmn.model;
+package io.orqueio.bpm.engine.impl.cmmn.model;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
-import org.camunda.bpm.engine.delegate.CaseExecutionListener;
-import org.camunda.bpm.engine.impl.cmmn.behavior.CmmnActivityBehavior;
-import org.camunda.bpm.engine.impl.cmmn.behavior.StageActivityBehavior;
-import org.camunda.bpm.engine.impl.core.model.CoreModelElement;
+import io.orqueio.bpm.engine.delegate.CaseExecutionListener;
+import io.orqueio.bpm.engine.impl.cmmn.behavior.CmmnActivityBehavior;
+import io.orqueio.bpm.engine.impl.cmmn.behavior.StageActivityBehavior;
+import io.orqueio.bpm.engine.impl.core.model.CoreModelElement;
 
 /**
  * @author Roman Smirnov

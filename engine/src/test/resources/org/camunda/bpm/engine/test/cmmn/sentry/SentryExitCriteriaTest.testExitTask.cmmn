@@ -19,7 +19,7 @@
 
       <cmmn:humanTask id="HumanTask_2">
         <cmmn:extensionElements>
-          <camunda:caseExecutionListener event="exit" class="org.camunda.bpm.engine.test.cmmn.sentry.SentryTriggerListener" />
+          <camunda:caseExecutionListener event="exit" class="io.orqueio.bpm.engine.test.cmmn.sentry.SentryTriggerListener" />
         </cmmn:extensionElements>
       </cmmn:humanTask>
 

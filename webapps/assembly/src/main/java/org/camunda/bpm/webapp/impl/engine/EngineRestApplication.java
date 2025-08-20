@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.webapp.impl.engine;
+package io.orqueio.bpm.webapp.impl.engine;
 
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.ws.rs.core.Application;
 
-import org.camunda.bpm.engine.rest.impl.CamundaRestResources;
-import org.camunda.bpm.engine.rest.impl.NamedProcessEngineRestServiceImpl;
+import io.orqueio.bpm.engine.rest.impl.CamundaRestResources;
+import io.orqueio.bpm.engine.rest.impl.NamedProcessEngineRestServiceImpl;
 
 /**
  * The engine rest api exposed by the application.

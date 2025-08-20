@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.authorization;
+package io.orqueio.bpm.engine.test.api.authorization;
 
-import org.camunda.bpm.engine.authorization.Permissions;
-import org.camunda.bpm.engine.impl.cfg.auth.DefaultAuthorizationProvider;
-import org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity;
-import org.camunda.bpm.engine.task.Task;
+import io.orqueio.bpm.engine.authorization.Permissions;
+import io.orqueio.bpm.engine.impl.cfg.auth.DefaultAuthorizationProvider;
+import io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity;
+import io.orqueio.bpm.engine.task.Task;
 
 /**
  * @author Johannes Heinemann

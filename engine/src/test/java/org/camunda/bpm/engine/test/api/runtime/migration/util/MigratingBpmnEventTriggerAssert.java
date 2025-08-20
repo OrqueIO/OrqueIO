@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.runtime.migration.util;
+package io.orqueio.bpm.engine.test.api.runtime.migration.util;
 
-import org.camunda.bpm.engine.test.api.runtime.migration.MigrationTestRule;
+import io.orqueio.bpm.engine.test.api.runtime.migration.MigrationTestRule;
 
 /**
  * @author Thorben Lindhauer

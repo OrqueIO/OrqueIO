@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.core.model;
+package io.orqueio.bpm.engine.impl.core.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -23,9 +23,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.engine.delegate.BaseDelegateExecution;
-import org.camunda.bpm.engine.delegate.DelegateListener;
-import org.camunda.bpm.engine.delegate.VariableListener;
+import io.orqueio.bpm.engine.delegate.BaseDelegateExecution;
+import io.orqueio.bpm.engine.delegate.DelegateListener;
+import io.orqueio.bpm.engine.delegate.VariableListener;
 
 /**
  * @author Daniel Meyer

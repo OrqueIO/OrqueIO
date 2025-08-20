@@ -14,22 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.cockpit.plugin.resource;
+package io.orqueio.bpm.cockpit.plugin.resource;
 
 import java.util.List;
-import org.camunda.bpm.cockpit.Cockpit;
-import org.camunda.bpm.cockpit.db.CommandExecutor;
-import org.camunda.bpm.cockpit.db.QueryParameters;
-import org.camunda.bpm.cockpit.db.QueryService;
-import org.camunda.bpm.cockpit.plugin.spi.CockpitPlugin;
-import org.camunda.bpm.engine.authorization.Permission;
-import org.camunda.bpm.engine.authorization.Resource;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.db.AuthorizationCheck;
-import org.camunda.bpm.engine.impl.db.PermissionCheck;
-import org.camunda.bpm.engine.impl.db.TenantCheck;
-import org.camunda.bpm.engine.impl.identity.Authentication;
-import org.camunda.bpm.webapp.plugin.resource.AbstractAppPluginResource;
+import io.orqueio.bpm.cockpit.Cockpit;
+import io.orqueio.bpm.cockpit.db.CommandExecutor;
+import io.orqueio.bpm.cockpit.db.QueryParameters;
+import io.orqueio.bpm.cockpit.db.QueryService;
+import io.orqueio.bpm.cockpit.plugin.spi.CockpitPlugin;
+import io.orqueio.bpm.engine.authorization.Permission;
+import io.orqueio.bpm.engine.authorization.Resource;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.db.AuthorizationCheck;
+import io.orqueio.bpm.engine.impl.db.PermissionCheck;
+import io.orqueio.bpm.engine.impl.db.TenantCheck;
+import io.orqueio.bpm.engine.impl.identity.Authentication;
+import io.orqueio.bpm.webapp.plugin.resource.AbstractAppPluginResource;
 
 /**
  * Base class for implementing a plugin REST resource.

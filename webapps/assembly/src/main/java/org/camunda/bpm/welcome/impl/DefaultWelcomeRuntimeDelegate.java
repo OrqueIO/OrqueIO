@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.welcome.impl;
+package io.orqueio.bpm.welcome.impl;
 
-import org.camunda.bpm.webapp.impl.AbstractAppRuntimeDelegate;
-import org.camunda.bpm.welcome.WelcomeRuntimeDelegate;
-import org.camunda.bpm.welcome.plugin.spi.WelcomePlugin;
+import io.orqueio.bpm.webapp.impl.AbstractAppRuntimeDelegate;
+import io.orqueio.bpm.welcome.WelcomeRuntimeDelegate;
+import io.orqueio.bpm.welcome.plugin.spi.WelcomePlugin;
 
 /**
  * @author Daniel Meyer

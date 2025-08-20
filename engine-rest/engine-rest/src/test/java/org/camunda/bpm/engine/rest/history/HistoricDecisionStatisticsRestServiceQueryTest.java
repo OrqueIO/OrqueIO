@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.history;
+package io.orqueio.bpm.engine.rest.history;
 
-import org.camunda.bpm.engine.history.HistoricDecisionInstanceStatistics;
-import org.camunda.bpm.engine.history.HistoricDecisionInstanceStatisticsQuery;
-import org.camunda.bpm.engine.impl.HistoricDecisionInstanceStatisticsQueryImpl;
-import org.camunda.bpm.engine.rest.AbstractRestServiceTest;
-import org.camunda.bpm.engine.rest.helper.MockProvider;
-import org.camunda.bpm.engine.rest.util.container.TestContainerRule;
+import io.orqueio.bpm.engine.history.HistoricDecisionInstanceStatistics;
+import io.orqueio.bpm.engine.history.HistoricDecisionInstanceStatisticsQuery;
+import io.orqueio.bpm.engine.impl.HistoricDecisionInstanceStatisticsQueryImpl;
+import io.orqueio.bpm.engine.rest.AbstractRestServiceTest;
+import io.orqueio.bpm.engine.rest.helper.MockProvider;
+import io.orqueio.bpm.engine.rest.util.container.TestContainerRule;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.ClassRule;

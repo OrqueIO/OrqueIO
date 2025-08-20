@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.connect.plugin.util;
+package io.orqueio.connect.plugin.util;
 
-import org.camunda.connect.impl.AbstractConnector;
-import org.camunda.connect.impl.AbstractConnectorRequest;
+import io.orqueio.connect.impl.AbstractConnector;
+import io.orqueio.connect.impl.AbstractConnectorRequest;
 
 /**
  * @author Daniel Meyer

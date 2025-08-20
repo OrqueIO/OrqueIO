@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.impl;
+package io.orqueio.bpm.engine.rest.impl;
 
-import org.camunda.bpm.engine.ManagementService;
-import org.camunda.bpm.engine.rest.TelemetryRestService;
-import org.camunda.bpm.engine.rest.dto.TelemetryConfigurationDto;
-import org.camunda.bpm.engine.rest.dto.telemetry.TelemetryDataDto;
-import org.camunda.bpm.engine.telemetry.TelemetryData;
+import io.orqueio.bpm.engine.ManagementService;
+import io.orqueio.bpm.engine.rest.TelemetryRestService;
+import io.orqueio.bpm.engine.rest.dto.TelemetryConfigurationDto;
+import io.orqueio.bpm.engine.rest.dto.telemetry.TelemetryDataDto;
+import io.orqueio.bpm.engine.telemetry.TelemetryData;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 

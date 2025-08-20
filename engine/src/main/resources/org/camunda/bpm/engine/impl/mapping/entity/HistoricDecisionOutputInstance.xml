@@ -19,11 +19,11 @@
 -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="org.camunda.bpm.engine.impl.history.event.HistoricDecisionOutputInstanceEntity">
+<mapper namespace="io.orqueio.bpm.engine.impl.history.event.HistoricDecisionOutputInstanceEntity">
 
  <!-- insert -->
  
-  <insert id="insertHistoricDecisionOutputInstance" parameterType="org.camunda.bpm.engine.impl.history.event.HistoricDecisionOutputInstanceEntity">
+  <insert id="insertHistoricDecisionOutputInstance" parameterType="io.orqueio.bpm.engine.impl.history.event.HistoricDecisionOutputInstanceEntity">
      insert into ${prefix}ACT_HI_DEC_OUT(
           ID_, 
           DEC_INST_ID_, 
@@ -252,16 +252,16 @@
 
   <!-- delete -->
   
-  <delete id="deleteHistoricDecisionOutputInstance" parameterType="org.camunda.bpm.engine.impl.history.event.HistoricDecisionOutputInstanceEntity">
+  <delete id="deleteHistoricDecisionOutputInstance" parameterType="io.orqueio.bpm.engine.impl.history.event.HistoricDecisionOutputInstanceEntity">
     delete from ${prefix}ACT_HI_DEC_OUT where ID_ = #{id}
   </delete>
 
-  <delete id="deleteHistoricDecisionOutputInstanceByDecisionInstanceIds" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject">
+  <delete id="deleteHistoricDecisionOutputInstanceByDecisionInstanceIds" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject">
     delete from ${prefix}ACT_HI_DEC_OUT
     where
       <bind name="listOfIds" value="list"/>
       <bind name="fieldName" value="'DEC_INST_ID_'"/>
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection"/>
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection"/>
   </delete>
 
   <delete id="deleteHistoricDecisionOutputInstanceByteArraysByDecisionInstanceIds">
@@ -272,7 +272,7 @@
       where
         <bind name="listOfIds" value="list"/>
         <bind name="fieldName" value="'DEC_INST_ID_'"/>
-        <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection"/>
+        <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection"/>
         and BYTEARRAY_ID_ is not NULL
     )
   </delete>
@@ -290,20 +290,20 @@
 
   <sql id="andWhereMinuteInDateBetweenSql">
     <if test="parameter.minuteFrom != null and parameter.minuteTo != null">
-      AND ${datepart1}<include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.periodUnitFunction"/>${datepart2}${date}${datepart3}
+      AND ${datepart1}<include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.periodUnitFunction"/>${datepart2}${date}${datepart3}
       between #{parameter.minuteFrom, jdbcType=INTEGER} and #{parameter.minuteTo, jdbcType=INTEGER}
     </if>
   </sql>
 
   <sql id="andWhereMinuteInDateBetweenSql_oracle">
     <if test="parameter.minuteFrom != null and parameter.minuteTo != null">
-      AND ${datepart1}${date}${datepart2}<include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.periodUnitFunction"/>${datepart3}
+      AND ${datepart1}${date}${datepart2}<include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.periodUnitFunction"/>${datepart3}
       between #{parameter.minuteFrom, jdbcType=INTEGER} and #{parameter.minuteTo, jdbcType=INTEGER}
     </if>
   </sql>
 
   <delete id="deleteHistoricDecisionOutputInstancesByRemovalTime"
-          parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject">
+          parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject">
     <bind name="date" value="'REMOVAL_TIME_'"/>
     <bind name="reportPeriodUnitName" value="'MINUTE'"/>
     delete ${limitBeforeWithoutOffset} from ${prefix}ACT_HI_DEC_OUT
@@ -313,7 +313,7 @@
   </delete>
 
   <delete id="deleteHistoricDecisionOutputInstancesByRemovalTime_oracle"
-          parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject">
+          parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject">
     <bind name="date" value="'REMOVAL_TIME_'"/>
     <bind name="reportPeriodUnitName" value="'MINUTE'"/>
     delete ${limitBeforeWithoutOffset} from ${prefix}ACT_HI_DEC_OUT
@@ -323,7 +323,7 @@
   </delete>
 
   <delete id="deleteHistoricDecisionOutputInstancesByRemovalTime_postgres_or_db2"
-          parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject">
+          parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject">
     <bind name="date" value="'REMOVAL_TIME_'"/>
     <bind name="reportPeriodUnitName" value="'MINUTE'"/>
     delete ${limitBeforeWithoutOffset} from ${prefix}ACT_HI_DEC_OUT
@@ -336,7 +336,7 @@
 
   <!-- result map -->
 
-  <resultMap id="historicDecisionOutputInstanceResultMap" type="org.camunda.bpm.engine.impl.history.event.HistoricDecisionOutputInstanceEntity">
+  <resultMap id="historicDecisionOutputInstanceResultMap" type="io.orqueio.bpm.engine.impl.history.event.HistoricDecisionOutputInstanceEntity">
     <id property="id" column="ID_" jdbcType="VARCHAR" />
     <result property="decisionInstanceId" column="DEC_INST_ID_" jdbcType="VARCHAR"/>
     <result property="clauseId" column="CLAUSE_ID_" jdbcType="VARCHAR"/>
@@ -358,22 +358,22 @@
   
   <!-- select -->
 
-  <select id="selectHistoricDecisionOutputInstancesByDecisionInstanceId" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject" resultMap="historicDecisionOutputInstanceResultMap">
+  <select id="selectHistoricDecisionOutputInstancesByDecisionInstanceId" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject" resultMap="historicDecisionOutputInstanceResultMap">
     select * from ${prefix}ACT_HI_DEC_OUT
     where DEC_INST_ID_ = #{parameter, jdbcType=VARCHAR}
   </select>
 
-  <select id="selectHistoricDecisionOutputInstance" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject" resultMap="historicDecisionOutputInstanceResultMap">
+  <select id="selectHistoricDecisionOutputInstance" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject" resultMap="historicDecisionOutputInstanceResultMap">
     select * from ${prefix}ACT_HI_DEC_OUT
     where ID_ = #{parameter, jdbcType=VARCHAR}
   </select>
 
-  <select id="selectHistoricDecisionOutputInstancesByDecisionInstanceIds" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject" resultMap="historicDecisionOutputInstanceResultMap">
+  <select id="selectHistoricDecisionOutputInstancesByDecisionInstanceIds" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject" resultMap="historicDecisionOutputInstanceResultMap">
     select * from ${prefix}ACT_HI_DEC_OUT
     where
       <bind name="listOfIds" value="parameter"/>
       <bind name="fieldName" value="'DEC_INST_ID_'"/>
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection"/>
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection"/>
     order by RULE_ORDER_, CLAUSE_ID_
   </select>
 

@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.jboss.extension;
+package io.orqueio.bpm.container.impl.jboss.extension;
 
-import org.camunda.bpm.container.impl.jboss.config.ManagedJtaProcessEngineConfiguration;
-import org.camunda.bpm.container.impl.jboss.util.CustomMarshaller;
-import org.camunda.bpm.container.impl.jboss.util.FixedObjectTypeAttributeDefinition;
+import io.orqueio.bpm.container.impl.jboss.config.ManagedJtaProcessEngineConfiguration;
+import io.orqueio.bpm.container.impl.jboss.util.CustomMarshaller;
+import io.orqueio.bpm.container.impl.jboss.util.FixedObjectTypeAttributeDefinition;
 import org.jboss.as.controller.*;
 import org.jboss.as.controller.registry.AttributeAccess;
 import org.jboss.dmr.ModelNode;

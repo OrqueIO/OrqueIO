@@ -14,22 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.variable.impl.value;
+package io.orqueio.bpm.engine.variable.impl.value;
 
 import java.util.Date;
 
-import org.camunda.bpm.engine.variable.type.PrimitiveValueType;
-import org.camunda.bpm.engine.variable.type.ValueType;
-import org.camunda.bpm.engine.variable.value.BooleanValue;
-import org.camunda.bpm.engine.variable.value.BytesValue;
-import org.camunda.bpm.engine.variable.value.DateValue;
-import org.camunda.bpm.engine.variable.value.DoubleValue;
-import org.camunda.bpm.engine.variable.value.IntegerValue;
-import org.camunda.bpm.engine.variable.value.LongValue;
-import org.camunda.bpm.engine.variable.value.NumberValue;
-import org.camunda.bpm.engine.variable.value.PrimitiveValue;
-import org.camunda.bpm.engine.variable.value.ShortValue;
-import org.camunda.bpm.engine.variable.value.StringValue;
+import io.orqueio.bpm.engine.variable.type.PrimitiveValueType;
+import io.orqueio.bpm.engine.variable.type.ValueType;
+import io.orqueio.bpm.engine.variable.value.BooleanValue;
+import io.orqueio.bpm.engine.variable.value.BytesValue;
+import io.orqueio.bpm.engine.variable.value.DateValue;
+import io.orqueio.bpm.engine.variable.value.DoubleValue;
+import io.orqueio.bpm.engine.variable.value.IntegerValue;
+import io.orqueio.bpm.engine.variable.value.LongValue;
+import io.orqueio.bpm.engine.variable.value.NumberValue;
+import io.orqueio.bpm.engine.variable.value.PrimitiveValue;
+import io.orqueio.bpm.engine.variable.value.ShortValue;
+import io.orqueio.bpm.engine.variable.value.StringValue;
 
 /**
  * @author Daniel Meyer

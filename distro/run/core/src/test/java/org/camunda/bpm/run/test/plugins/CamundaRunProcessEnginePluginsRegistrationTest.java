@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.run.test.plugins;
+package io.orqueio.bpm.run.test.plugins;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.entry;
@@ -23,12 +23,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.camunda.bpm.engine.impl.cfg.CompositeProcessEnginePlugin;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.cfg.ProcessEnginePlugin;
-import org.camunda.bpm.run.CamundaBpmRun;
-import org.camunda.bpm.run.property.CamundaBpmRunProcessEnginePluginProperty;
-import org.camunda.bpm.run.property.CamundaBpmRunProperties;
+import io.orqueio.bpm.engine.impl.cfg.CompositeProcessEnginePlugin;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEnginePlugin;
+import io.orqueio.bpm.run.CamundaBpmRun;
+import io.orqueio.bpm.run.property.CamundaBpmRunProcessEnginePluginProperty;
+import io.orqueio.bpm.run.property.CamundaBpmRunProperties;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -60,9 +60,9 @@ public class CamundaRunProcessEnginePluginsRegistrationTest {
   @Test
   public void shouldPickUpAllPluginConfigurations() {
     // given a CamundaBpmRunProperties instance
-    String pluginOne = "org.camunda.bpm.run.test.plugins.TestFirstPlugin";
-    String pluginTwo = "org.camunda.bpm.run.test.plugins.TestSecondPlugin";
-    String pluginThree = "org.camunda.bpm.run.test.plugins.TestDefaultValuesPlugin";
+    String pluginOne = "io.orqueio.bpm.run.test.plugins.TestFirstPlugin";
+    String pluginTwo = "io.orqueio.bpm.run.test.plugins.TestSecondPlugin";
+    String pluginThree = "io.orqueio.bpm.run.test.plugins.TestDefaultValuesPlugin";
     List<CamundaBpmRunProcessEnginePluginProperty> pluginConfigs = properties
         .getProcessEnginePlugins();
 

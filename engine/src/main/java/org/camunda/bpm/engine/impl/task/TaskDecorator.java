@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.task;
+package io.orqueio.bpm.engine.impl.task;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -22,14 +22,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.delegate.Expression;
-import org.camunda.bpm.engine.delegate.VariableScope;
-import org.camunda.bpm.engine.impl.calendar.BusinessCalendar;
-import org.camunda.bpm.engine.impl.calendar.DueDateBusinessCalendar;
-import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.engine.impl.el.ExpressionManager;
-import org.camunda.bpm.engine.impl.persistence.entity.TaskEntity;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.delegate.Expression;
+import io.orqueio.bpm.engine.delegate.VariableScope;
+import io.orqueio.bpm.engine.impl.calendar.BusinessCalendar;
+import io.orqueio.bpm.engine.impl.calendar.DueDateBusinessCalendar;
+import io.orqueio.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.impl.el.ExpressionManager;
+import io.orqueio.bpm.engine.impl.persistence.entity.TaskEntity;
 
 /**
  * @author Roman Smirnov

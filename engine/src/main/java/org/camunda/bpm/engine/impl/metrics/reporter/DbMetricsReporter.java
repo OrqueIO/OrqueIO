@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.metrics.reporter;
+package io.orqueio.bpm.engine.impl.metrics.reporter;
 
 
 import java.util.Timer;
 
-import org.camunda.bpm.engine.impl.interceptor.Command;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.interceptor.CommandExecutor;
-import org.camunda.bpm.engine.impl.metrics.MetricsRegistry;
-import org.camunda.bpm.engine.impl.persistence.entity.MeterLogEntity;
-import org.camunda.bpm.engine.impl.util.ClockUtil;
+import io.orqueio.bpm.engine.impl.interceptor.Command;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.impl.interceptor.CommandExecutor;
+import io.orqueio.bpm.engine.impl.metrics.MetricsRegistry;
+import io.orqueio.bpm.engine.impl.persistence.entity.MeterLogEntity;
+import io.orqueio.bpm.engine.impl.util.ClockUtil;
 
 /**
  * @author Daniel Meyer

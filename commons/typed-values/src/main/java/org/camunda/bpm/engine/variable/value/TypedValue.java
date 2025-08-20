@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.variable.value;
+package io.orqueio.bpm.engine.variable.value;
 
 import java.io.Serializable;
 
-import org.camunda.bpm.engine.variable.type.ValueType;
+import io.orqueio.bpm.engine.variable.type.ValueType;
 
 /**
  * <p>A {@link TypedValue} is a value with additional type information (the {@link ValueType}).

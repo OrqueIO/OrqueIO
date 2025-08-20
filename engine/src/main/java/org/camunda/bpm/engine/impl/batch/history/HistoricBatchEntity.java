@@ -14,18 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.batch.history;
+package io.orqueio.bpm.engine.impl.batch.history;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.camunda.bpm.engine.batch.history.HistoricBatch;
-import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.engine.impl.db.DbEntity;
-import org.camunda.bpm.engine.impl.history.event.HistoryEvent;
-import org.camunda.bpm.engine.impl.persistence.entity.HistoricIncidentManager;
-import org.camunda.bpm.engine.impl.persistence.entity.HistoricJobLogManager;
+import io.orqueio.bpm.engine.batch.history.HistoricBatch;
+import io.orqueio.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.impl.db.DbEntity;
+import io.orqueio.bpm.engine.impl.history.event.HistoryEvent;
+import io.orqueio.bpm.engine.impl.persistence.entity.HistoricIncidentManager;
+import io.orqueio.bpm.engine.impl.persistence.entity.HistoricJobLogManager;
 
 public class HistoricBatchEntity extends HistoryEvent implements HistoricBatch, DbEntity {
 

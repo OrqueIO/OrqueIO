@@ -14,18 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.plugin.impl;
+package io.orqueio.spin.plugin.impl;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.Collections;
 
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.test.PluggableProcessEngineTestCase;
-import org.camunda.bpm.engine.impl.variable.serializer.DefaultVariableSerializers;
-import org.camunda.spin.DataFormats;
-import org.camunda.spin.plugin.variable.type.JsonValueType;
-import org.camunda.spin.plugin.variable.type.XmlValueType;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.test.PluggableProcessEngineTestCase;
+import io.orqueio.bpm.engine.impl.variable.serializer.DefaultVariableSerializers;
+import io.orqueio.spin.DataFormats;
+import io.orqueio.spin.plugin.variable.type.JsonValueType;
+import io.orqueio.spin.plugin.variable.type.XmlValueType;
 import org.mockito.Mockito;
 
 /**

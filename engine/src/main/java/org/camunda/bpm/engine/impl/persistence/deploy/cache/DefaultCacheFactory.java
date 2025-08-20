@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.persistence.deploy.cache;
+package io.orqueio.bpm.engine.impl.persistence.deploy.cache;
 
 
-import org.camunda.commons.utils.cache.Cache;
-import org.camunda.commons.utils.cache.ConcurrentLruCache;
+import io.orqueio.commons.utils.cache.Cache;
+import io.orqueio.commons.utils.cache.ConcurrentLruCache;
 
 /**
  * <p>Provides the default cache implementation for the deployment caches see {@link DeploymentCache}.</p>

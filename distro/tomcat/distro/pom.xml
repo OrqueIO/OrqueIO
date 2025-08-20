@@ -9,7 +9,7 @@
   </description>
 
   <parent>
-    <groupId>org.camunda.bpm.tomcat</groupId>
+    <groupId>io.orqueio.bpm.tomcat</groupId>
     <artifactId>camunda-tomcat</artifactId>
     <version>7.24.0-SNAPSHOT</version>
   </parent>
@@ -19,7 +19,7 @@
   <dependencies>
 
     <dependency>
-      <groupId>org.camunda.bpm.distro</groupId>
+      <groupId>io.orqueio.bpm.distro</groupId>
       <artifactId>camunda-sql-scripts</artifactId>
       <version>${project.version}</version>
       <type>jar</type>
@@ -28,21 +28,21 @@
     <!-- Tomcat 10 dependencies -->
 
     <dependency>
-      <groupId>org.camunda.bpm.tomcat</groupId>
+      <groupId>io.orqueio.bpm.tomcat</groupId>
       <artifactId>camunda-tomcat-assembly</artifactId>
       <version>${project.version}</version>
       <type>tar.gz</type>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm.webapp</groupId>
+      <groupId>io.orqueio.bpm.webapp</groupId>
       <artifactId>camunda-webapp-tomcat-jakarta</artifactId>
       <version>${project.version}</version>
       <type>war</type>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
+      <groupId>io.orqueio.bpm</groupId>
       <artifactId>camunda-engine-rest-jakarta</artifactId>
       <version>${project.version}</version>
       <classifier>tomcat</classifier>
@@ -50,7 +50,7 @@
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm.example</groupId>
+      <groupId>io.orqueio.bpm.example</groupId>
       <artifactId>camunda-example-invoice-jakarta</artifactId>
       <version>${project.version}</version>
       <type>war</type>

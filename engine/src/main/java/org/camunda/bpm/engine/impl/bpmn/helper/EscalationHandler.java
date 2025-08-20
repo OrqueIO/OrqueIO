@@ -14,19 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.bpmn.helper;
+package io.orqueio.bpm.engine.impl.bpmn.helper;
 
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
-import org.camunda.bpm.engine.impl.bpmn.behavior.BpmnBehaviorLogger;
-import org.camunda.bpm.engine.impl.bpmn.parser.EscalationEventDefinition;
-import org.camunda.bpm.engine.impl.pvm.PvmActivity;
-import org.camunda.bpm.engine.impl.pvm.PvmScope;
-import org.camunda.bpm.engine.impl.pvm.delegate.ActivityExecution;
-import org.camunda.bpm.engine.impl.tree.ActivityExecutionHierarchyWalker;
-import org.camunda.bpm.engine.impl.tree.ActivityExecutionMappingCollector;
-import org.camunda.bpm.engine.impl.tree.ActivityExecutionTuple;
-import org.camunda.bpm.engine.impl.tree.OutputVariablesPropagator;
-import org.camunda.bpm.engine.impl.tree.ReferenceWalker;
+import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
+import io.orqueio.bpm.engine.impl.bpmn.behavior.BpmnBehaviorLogger;
+import io.orqueio.bpm.engine.impl.bpmn.parser.EscalationEventDefinition;
+import io.orqueio.bpm.engine.impl.pvm.PvmActivity;
+import io.orqueio.bpm.engine.impl.pvm.PvmScope;
+import io.orqueio.bpm.engine.impl.pvm.delegate.ActivityExecution;
+import io.orqueio.bpm.engine.impl.tree.ActivityExecutionHierarchyWalker;
+import io.orqueio.bpm.engine.impl.tree.ActivityExecutionMappingCollector;
+import io.orqueio.bpm.engine.impl.tree.ActivityExecutionTuple;
+import io.orqueio.bpm.engine.impl.tree.OutputVariablesPropagator;
+import io.orqueio.bpm.engine.impl.tree.ReferenceWalker;
 
 /**
  * Helper class handling the propagation of escalation.

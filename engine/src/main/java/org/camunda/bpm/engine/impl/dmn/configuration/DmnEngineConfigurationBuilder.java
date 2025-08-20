@@ -14,25 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.dmn.configuration;
+package io.orqueio.bpm.engine.impl.dmn.configuration;
 
-import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
+import static io.orqueio.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
 
 import java.util.List;
 
-import org.camunda.bpm.dmn.engine.delegate.DmnDecisionEvaluationListener;
-import org.camunda.bpm.dmn.engine.impl.DefaultDmnEngineConfiguration;
-import org.camunda.bpm.dmn.engine.impl.spi.el.DmnScriptEngineResolver;
-import org.camunda.bpm.dmn.engine.impl.spi.el.ElProvider;
-import org.camunda.bpm.dmn.engine.impl.spi.transform.DmnTransformer;
-import org.camunda.bpm.dmn.feel.impl.scala.function.FeelCustomFunctionProvider;
-import org.camunda.bpm.engine.impl.dmn.transformer.DecisionDefinitionHandler;
-import org.camunda.bpm.engine.impl.dmn.transformer.DecisionRequirementsDefinitionTransformHandler;
-import org.camunda.bpm.engine.impl.history.parser.HistoryDecisionEvaluationListener;
-import org.camunda.bpm.engine.impl.history.producer.DmnHistoryEventProducer;
-import org.camunda.bpm.engine.impl.metrics.dmn.MetricsDecisionEvaluationListener;
-import org.camunda.bpm.model.dmn.instance.Decision;
-import org.camunda.bpm.model.dmn.instance.Definitions;
+import io.orqueio.bpm.dmn.engine.delegate.DmnDecisionEvaluationListener;
+import io.orqueio.bpm.dmn.engine.impl.DefaultDmnEngineConfiguration;
+import io.orqueio.bpm.dmn.engine.impl.spi.el.DmnScriptEngineResolver;
+import io.orqueio.bpm.dmn.engine.impl.spi.el.ElProvider;
+import io.orqueio.bpm.dmn.engine.impl.spi.transform.DmnTransformer;
+import io.orqueio.bpm.dmn.feel.impl.scala.function.FeelCustomFunctionProvider;
+import io.orqueio.bpm.engine.impl.dmn.transformer.DecisionDefinitionHandler;
+import io.orqueio.bpm.engine.impl.dmn.transformer.DecisionRequirementsDefinitionTransformHandler;
+import io.orqueio.bpm.engine.impl.history.parser.HistoryDecisionEvaluationListener;
+import io.orqueio.bpm.engine.impl.history.producer.DmnHistoryEventProducer;
+import io.orqueio.bpm.engine.impl.metrics.dmn.MetricsDecisionEvaluationListener;
+import io.orqueio.bpm.model.dmn.instance.Decision;
+import io.orqueio.bpm.model.dmn.instance.Definitions;
 
 /**
  * Modify the given DMN engine configuration so that the DMN engine can be used

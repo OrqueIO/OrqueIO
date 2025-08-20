@@ -14,26 +14,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.sub.runtime.impl;
+package io.orqueio.bpm.engine.rest.sub.runtime.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.camunda.bpm.engine.CaseService;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.exception.NotAllowedException;
-import org.camunda.bpm.engine.exception.NotFoundException;
-import org.camunda.bpm.engine.exception.NotValidException;
-import org.camunda.bpm.engine.rest.dto.runtime.CaseExecutionDto;
-import org.camunda.bpm.engine.rest.dto.runtime.CaseExecutionTriggerDto;
-import org.camunda.bpm.engine.rest.dto.runtime.TriggerVariableValueDto;
-import org.camunda.bpm.engine.rest.dto.runtime.VariableNameDto;
-import org.camunda.bpm.engine.rest.exception.InvalidRequestException;
-import org.camunda.bpm.engine.rest.exception.RestException;
-import org.camunda.bpm.engine.rest.sub.VariableResource;
-import org.camunda.bpm.engine.rest.sub.runtime.CaseExecutionResource;
-import org.camunda.bpm.engine.runtime.CaseExecution;
-import org.camunda.bpm.engine.runtime.CaseExecutionCommandBuilder;
-import org.camunda.bpm.engine.variable.value.TypedValue;
+import io.orqueio.bpm.engine.CaseService;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.exception.NotAllowedException;
+import io.orqueio.bpm.engine.exception.NotFoundException;
+import io.orqueio.bpm.engine.exception.NotValidException;
+import io.orqueio.bpm.engine.rest.dto.runtime.CaseExecutionDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.CaseExecutionTriggerDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.TriggerVariableValueDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.VariableNameDto;
+import io.orqueio.bpm.engine.rest.exception.InvalidRequestException;
+import io.orqueio.bpm.engine.rest.exception.RestException;
+import io.orqueio.bpm.engine.rest.sub.VariableResource;
+import io.orqueio.bpm.engine.rest.sub.runtime.CaseExecutionResource;
+import io.orqueio.bpm.engine.runtime.CaseExecution;
+import io.orqueio.bpm.engine.runtime.CaseExecutionCommandBuilder;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
 
 import javax.ws.rs.core.Response.Status;
 import java.util.List;

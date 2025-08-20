@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.connect.httpclient.impl;
+package io.orqueio.connect.httpclient.impl;
 
-import org.camunda.commons.logging.BaseLogger;
+import io.orqueio.commons.logging.BaseLogger;
 
 public abstract class HttpLogger extends BaseLogger {
 
   public static final String PROJECT_CODE = "HTCL";
 
-  public static final HttpConnectorLogger HTTP_LOGGER = createLogger(HttpConnectorLogger.class, PROJECT_CODE, "org.camunda.bpm.connect.httpclient.connector", "02");
+  public static final HttpConnectorLogger HTTP_LOGGER = createLogger(HttpConnectorLogger.class, PROJECT_CODE, "io.orqueio.bpm.connect.httpclient.connector", "02");
 }

@@ -14,19 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.cmmn.handler.specification;
+package io.orqueio.bpm.engine.test.cmmn.handler.specification;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import org.camunda.bpm.engine.delegate.Expression;
-import org.camunda.bpm.engine.impl.bpmn.parser.FieldDeclaration;
-import org.camunda.bpm.model.cmmn.CmmnModelInstance;
-import org.camunda.bpm.model.cmmn.instance.camunda.CamundaCaseExecutionListener;
-import org.camunda.bpm.model.cmmn.instance.camunda.CamundaExpression;
-import org.camunda.bpm.model.cmmn.instance.camunda.CamundaField;
-import org.camunda.bpm.model.cmmn.instance.camunda.CamundaString;
+import io.orqueio.bpm.engine.delegate.Expression;
+import io.orqueio.bpm.engine.impl.bpmn.parser.FieldDeclaration;
+import io.orqueio.bpm.model.cmmn.CmmnModelInstance;
+import io.orqueio.bpm.model.cmmn.instance.camunda.CamundaCaseExecutionListener;
+import io.orqueio.bpm.model.cmmn.instance.camunda.CamundaExpression;
+import io.orqueio.bpm.model.cmmn.instance.camunda.CamundaField;
+import io.orqueio.bpm.model.cmmn.instance.camunda.CamundaString;
 
 public class FieldSpec {
 

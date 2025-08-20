@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.cdi.annotation;
+package io.orqueio.bpm.engine.cdi.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -24,7 +24,7 @@ import java.lang.annotation.Target;
 import javax.enterprise.util.Nonbinding;
 import javax.interceptor.InterceptorBinding;
 
-import org.camunda.bpm.engine.cdi.BusinessProcess;
+import io.orqueio.bpm.engine.cdi.BusinessProcess;
 
 /**
  * Annotation signaling that a task is to be completed after the annotated

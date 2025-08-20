@@ -14,24 +14,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.hal;
+package io.orqueio.bpm.engine.rest.hal;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.ws.rs.core.MediaType;
 
-import org.camunda.bpm.engine.rest.CaseDefinitionRestService;
-import org.camunda.bpm.engine.rest.GroupRestService;
-import org.camunda.bpm.engine.rest.IdentityRestService;
-import org.camunda.bpm.engine.rest.ProcessDefinitionRestService;
-import org.camunda.bpm.engine.rest.UserRestService;
-import org.camunda.bpm.engine.rest.cache.Cache;
-import org.camunda.bpm.engine.rest.hal.caseDefinition.HalCaseDefinitionResolver;
-import org.camunda.bpm.engine.rest.hal.group.HalGroupResolver;
-import org.camunda.bpm.engine.rest.hal.identitylink.HalIdentityLinkResolver;
-import org.camunda.bpm.engine.rest.hal.processDefinition.HalProcessDefinitionResolver;
-import org.camunda.bpm.engine.rest.hal.user.HalUserResolver;
+import io.orqueio.bpm.engine.rest.CaseDefinitionRestService;
+import io.orqueio.bpm.engine.rest.GroupRestService;
+import io.orqueio.bpm.engine.rest.IdentityRestService;
+import io.orqueio.bpm.engine.rest.ProcessDefinitionRestService;
+import io.orqueio.bpm.engine.rest.UserRestService;
+import io.orqueio.bpm.engine.rest.cache.Cache;
+import io.orqueio.bpm.engine.rest.hal.caseDefinition.HalCaseDefinitionResolver;
+import io.orqueio.bpm.engine.rest.hal.group.HalGroupResolver;
+import io.orqueio.bpm.engine.rest.hal.identitylink.HalIdentityLinkResolver;
+import io.orqueio.bpm.engine.rest.hal.processDefinition.HalProcessDefinitionResolver;
+import io.orqueio.bpm.engine.rest.hal.user.HalUserResolver;
 
 /**
  * @author Daniel Meyer

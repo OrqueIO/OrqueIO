@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.dto.runtime;
+package io.orqueio.bpm.engine.rest.dto.runtime;
 
-import org.camunda.bpm.engine.runtime.ActivityInstance;
+import io.orqueio.bpm.engine.runtime.ActivityInstance;
 
 /**
  * <p>An activity instance is the instance of an activity</p>

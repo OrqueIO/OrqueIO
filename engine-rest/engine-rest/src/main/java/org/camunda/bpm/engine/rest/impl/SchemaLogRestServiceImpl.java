@@ -14,18 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.impl;
+package io.orqueio.bpm.engine.rest.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.UriInfo;
-import org.camunda.bpm.engine.management.SchemaLogEntry;
-import org.camunda.bpm.engine.management.SchemaLogQuery;
-import org.camunda.bpm.engine.rest.SchemaLogRestService;
-import org.camunda.bpm.engine.rest.dto.SchemaLogEntryDto;
-import org.camunda.bpm.engine.rest.dto.SchemaLogQueryDto;
-import org.camunda.bpm.engine.rest.util.QueryUtil;
+import io.orqueio.bpm.engine.management.SchemaLogEntry;
+import io.orqueio.bpm.engine.management.SchemaLogQuery;
+import io.orqueio.bpm.engine.rest.SchemaLogRestService;
+import io.orqueio.bpm.engine.rest.dto.SchemaLogEntryDto;
+import io.orqueio.bpm.engine.rest.dto.SchemaLogQueryDto;
+import io.orqueio.bpm.engine.rest.util.QueryUtil;
 
 /**
  * @author Miklas Boskamp

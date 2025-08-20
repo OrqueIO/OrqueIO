@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.jboss.extension.resource;
+package io.orqueio.bpm.container.impl.jboss.extension.resource;
 
 import java.util.Arrays;
 import java.util.Collection;
 
-import org.camunda.bpm.container.impl.jboss.extension.BpmPlatformExtension;
-import org.camunda.bpm.container.impl.jboss.extension.ModelConstants;
-import org.camunda.bpm.container.impl.jboss.extension.SubsystemAttributeDefinitons;
-import org.camunda.bpm.container.impl.jboss.extension.handler.JobAcquisitionAdd;
-import org.camunda.bpm.container.impl.jboss.extension.handler.JobAcquisitionRemove;
+import io.orqueio.bpm.container.impl.jboss.extension.BpmPlatformExtension;
+import io.orqueio.bpm.container.impl.jboss.extension.ModelConstants;
+import io.orqueio.bpm.container.impl.jboss.extension.SubsystemAttributeDefinitons;
+import io.orqueio.bpm.container.impl.jboss.extension.handler.JobAcquisitionAdd;
+import io.orqueio.bpm.container.impl.jboss.extension.handler.JobAcquisitionRemove;
 import org.jboss.as.controller.AttributeDefinition;
 import org.jboss.as.controller.PersistentResourceDefinition;
 import org.jboss.as.controller.registry.ManagementResourceRegistration;

@@ -14,28 +14,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.dmn.deployer;
+package io.orqueio.bpm.engine.impl.dmn.deployer;
 
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.camunda.bpm.dmn.engine.impl.DmnDecisionImpl;
-import org.camunda.bpm.dmn.engine.impl.spi.transform.DmnElementTransformHandler;
-import org.camunda.bpm.dmn.engine.impl.spi.transform.DmnTransformer;
-import org.camunda.bpm.engine.impl.AbstractDefinitionDeployer;
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
-import org.camunda.bpm.engine.impl.core.model.Properties;
-import org.camunda.bpm.engine.impl.dmn.DecisionLogger;
-import org.camunda.bpm.engine.impl.dmn.entity.repository.DecisionRequirementsDefinitionEntity;
-import org.camunda.bpm.engine.impl.dmn.entity.repository.DecisionRequirementsDefinitionManager;
-import org.camunda.bpm.engine.impl.dmn.transformer.DecisionDefinitionHandler;
-import org.camunda.bpm.engine.impl.persistence.deploy.Deployer;
-import org.camunda.bpm.engine.impl.persistence.deploy.cache.DeploymentCache;
-import org.camunda.bpm.engine.impl.persistence.entity.DeploymentEntity;
-import org.camunda.bpm.engine.impl.persistence.entity.ResourceEntity;
-import org.camunda.bpm.model.dmn.instance.Decision;
+import io.orqueio.bpm.dmn.engine.impl.DmnDecisionImpl;
+import io.orqueio.bpm.dmn.engine.impl.spi.transform.DmnElementTransformHandler;
+import io.orqueio.bpm.dmn.engine.impl.spi.transform.DmnTransformer;
+import io.orqueio.bpm.engine.impl.AbstractDefinitionDeployer;
+import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
+import io.orqueio.bpm.engine.impl.core.model.Properties;
+import io.orqueio.bpm.engine.impl.dmn.DecisionLogger;
+import io.orqueio.bpm.engine.impl.dmn.entity.repository.DecisionRequirementsDefinitionEntity;
+import io.orqueio.bpm.engine.impl.dmn.entity.repository.DecisionRequirementsDefinitionManager;
+import io.orqueio.bpm.engine.impl.dmn.transformer.DecisionDefinitionHandler;
+import io.orqueio.bpm.engine.impl.persistence.deploy.Deployer;
+import io.orqueio.bpm.engine.impl.persistence.deploy.cache.DeploymentCache;
+import io.orqueio.bpm.engine.impl.persistence.entity.DeploymentEntity;
+import io.orqueio.bpm.engine.impl.persistence.entity.ResourceEntity;
+import io.orqueio.bpm.model.dmn.instance.Decision;
 
 /**
  * {@link Deployer} responsible to parse DMN 1.1 XML files and create the proper

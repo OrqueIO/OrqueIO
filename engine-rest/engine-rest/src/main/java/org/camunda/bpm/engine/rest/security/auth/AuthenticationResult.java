@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.security.auth;
+package io.orqueio.bpm.engine.rest.security.auth;
 
 import java.util.List;
 
-import org.camunda.bpm.engine.IdentityService;
+import io.orqueio.bpm.engine.IdentityService;
 
 /**
  * Serves as DTO to hold the result of an authentication request performed

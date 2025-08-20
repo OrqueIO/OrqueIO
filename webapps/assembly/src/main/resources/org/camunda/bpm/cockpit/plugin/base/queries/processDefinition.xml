@@ -4,7 +4,7 @@
 
 <mapper namespace="cockpit.base">
 
-  <resultMap id="processDefinitionMap" type="org.camunda.bpm.cockpit.impl.plugin.base.dto.ProcessDefinitionDto">
+  <resultMap id="processDefinitionMap" type="io.orqueio.bpm.cockpit.impl.plugin.base.dto.ProcessDefinitionDto">
     <id property="id" column="ID_" jdbcType="VARCHAR" />
     <result property="name" column="NAME_" jdbcType="VARCHAR" />
     <result property="key" column="KEY_" jdbcType="VARCHAR" />
@@ -13,7 +13,7 @@
 
   </resultMap>
 
-  <resultMap id="calledProcessDefinitionMap" type="org.camunda.bpm.cockpit.impl.plugin.base.dto.ProcessDefinitionDto">
+  <resultMap id="calledProcessDefinitionMap" type="io.orqueio.bpm.cockpit.impl.plugin.base.dto.ProcessDefinitionDto">
     <id property="id" column="ID_" jdbcType="VARCHAR" />
     <result property="key" column="KEY_" jdbcType="VARCHAR" />
     <result property="name" column="NAME_" jdbcType="VARCHAR" />
@@ -24,7 +24,7 @@
     </collection>
   </resultMap>
 
-  <resultMap id="processDefinitionStatisticsMap" type="org.camunda.bpm.cockpit.impl.plugin.base.dto.ProcessDefinitionStatisticsDto">
+  <resultMap id="processDefinitionStatisticsMap" type="io.orqueio.bpm.cockpit.impl.plugin.base.dto.ProcessDefinitionStatisticsDto">
     <id property="id" column="ID_" jdbcType="VARCHAR" />
     <result property="key" column="KEY_" jdbcType="VARCHAR" />
     <result property="name" column="NAME_" jdbcType="VARCHAR" />
@@ -36,7 +36,7 @@
   </resultMap>
 
   <select id="selectPDStatistics" resultMap="processDefinitionStatisticsMap"
-          parameterType="org.camunda.bpm.cockpit.impl.plugin.base.dto.query.ProcessDefinitionStatisticsQueryDto">
+          parameterType="io.orqueio.bpm.cockpit.impl.plugin.base.dto.query.ProcessDefinitionStatisticsQueryDto">
     ${limitBefore}
     select ${distinct} RES.*
     ${limitBetween}
@@ -46,7 +46,7 @@
   </select>
 
   <select id="selectPDStatisticsCount" resultType="long"
-          parameterType="org.camunda.bpm.cockpit.impl.plugin.base.dto.query.ProcessDefinitionStatisticsQueryDto">
+          parameterType="io.orqueio.bpm.cockpit.impl.plugin.base.dto.query.ProcessDefinitionStatisticsQueryDto">
     ${countDistinctBeforeStart} RES.ID_ ${countDistinctBeforeEnd}
     <include refid="selectPDStatisticsByQueryCriteriaSql"/>
     ${countDistinctAfterEnd}
@@ -88,7 +88,7 @@
                     where
                         E.PARENT_ID_ IS NULL
                       <bind name="columnPrefix" value="'E.'"/>
-                      <include refid="org.camunda.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheckWithPrefix" />
+                      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheckWithPrefix" />
                     group by
                         E.PROC_DEF_ID_
                   ) INSTANCE
@@ -107,7 +107,7 @@
 
                     <where>
                       <bind name="columnPrefix" value="'I.'"/>
-                      <include refid="org.camunda.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheckWithPrefix" />
+                      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheckWithPrefix" />
                     </where>
                     group by
                         I.PROC_DEF_ID_
@@ -123,7 +123,7 @@
     ) RES
 
     <if test="authCheck.shouldPerformAuthorizatioCheck &amp;&amp; !authCheck.revokeAuthorizationCheckEnabled &amp;&amp; authCheck.authUserId != null">
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoinWithoutOnClause" />
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoinWithoutOnClause" />
       AUTH ON (AUTH.RESOURCE_ID_ ${authJoinStart} RES.ID_ ${authJoinSeparator} RES.KEY_ ${authJoinSeparator} '*' ${authJoinEnd})
     </if>
 
@@ -146,8 +146,8 @@
         and UPPER(RES.NAME_) like UPPER(#{nameLike}) ESCAPE ${escapeChar}
       </if>
 
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.queryAuthorizationCheck" />
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.queryAuthorizationCheck" />
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
     </where>
   </sql>
 
@@ -159,7 +159,7 @@
     from ${prefix}ACT_RE_PROCDEF procdef
   </select>
 
-  <select id="selectCalledProcessDefinitions" parameterType="org.camunda.bpm.cockpit.impl.plugin.base.dto.query.ProcessDefinitionQueryDto"
+  <select id="selectCalledProcessDefinitions" parameterType="io.orqueio.bpm.cockpit.impl.plugin.base.dto.query.ProcessDefinitionQueryDto"
           resultMap="calledProcessDefinitionMap">
     select distinct RES.ID_, RES.KEY_, RES.NAME_, RES.VERSION_, EXEC2.ACT_ID_
     <include refid="selectCalledProcesses"/>
@@ -186,7 +186,7 @@
     </if>
 
     <if test="authCheck.shouldPerformAuthorizatioCheck &amp;&amp; !authCheck.revokeAuthorizationCheckEnabled &amp;&amp; authCheck.authUserId != null">
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoinWithoutOnClause" />
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoinWithoutOnClause" />
       AUTH ON (AUTH.RESOURCE_ID_ ${authJoinStart} EXEC2.PROC_INST_ID_ ${authJoinSeparator} PROCDEF.KEY_ ${authJoinSeparator} '*' ${authJoinEnd})
     </if>
 
@@ -302,8 +302,8 @@
       )
       </foreach>
 
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.queryAuthorizationCheck" />
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.queryAuthorizationCheck" />
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
 
     </where>
   </sql>

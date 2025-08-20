@@ -14,24 +14,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl;
+package io.orqueio.bpm.engine.impl;
 
 import java.util.UUID;
 
-import org.camunda.bpm.engine.ProcessEngineBootstrapCommand;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.engine.impl.db.DbEntity;
-import org.camunda.bpm.engine.impl.db.EnginePersistenceLogger;
-import org.camunda.bpm.engine.impl.db.entitymanager.OptimisticLockingListener;
-import org.camunda.bpm.engine.impl.db.entitymanager.OptimisticLockingResult;
-import org.camunda.bpm.engine.impl.db.entitymanager.operation.DbOperation;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.persistence.entity.EverLivingJobEntity;
-import org.camunda.bpm.engine.impl.persistence.entity.PropertyEntity;
-import org.camunda.bpm.engine.impl.persistence.entity.PropertyManager;
-import org.camunda.bpm.engine.impl.telemetry.dto.TelemetryDataImpl;
-import org.camunda.bpm.engine.impl.telemetry.dto.LicenseKeyDataImpl;
+import io.orqueio.bpm.engine.ProcessEngineBootstrapCommand;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.impl.db.DbEntity;
+import io.orqueio.bpm.engine.impl.db.EnginePersistenceLogger;
+import io.orqueio.bpm.engine.impl.db.entitymanager.OptimisticLockingListener;
+import io.orqueio.bpm.engine.impl.db.entitymanager.OptimisticLockingResult;
+import io.orqueio.bpm.engine.impl.db.entitymanager.operation.DbOperation;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.impl.persistence.entity.EverLivingJobEntity;
+import io.orqueio.bpm.engine.impl.persistence.entity.PropertyEntity;
+import io.orqueio.bpm.engine.impl.persistence.entity.PropertyManager;
+import io.orqueio.bpm.engine.impl.telemetry.dto.TelemetryDataImpl;
+import io.orqueio.bpm.engine.impl.telemetry.dto.LicenseKeyDataImpl;
 
 /**
  * @author Nikola Koevski

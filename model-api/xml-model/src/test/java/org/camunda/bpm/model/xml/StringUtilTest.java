@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.xml;
+package io.orqueio.bpm.model.xml;
 
 import org.junit.Test;
 
@@ -22,8 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.camunda.bpm.model.xml.impl.util.StringUtil.joinCommaSeparatedList;
-import static org.camunda.bpm.model.xml.impl.util.StringUtil.splitCommaSeparatedList;
+import static io.orqueio.bpm.model.xml.impl.util.StringUtil.joinCommaSeparatedList;
+import static io.orqueio.bpm.model.xml.impl.util.StringUtil.splitCommaSeparatedList;
 
 /**
  * @author Sebastian Menski

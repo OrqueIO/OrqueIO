@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.sub.repository;
+package io.orqueio.bpm.engine.rest.sub.repository;
 
 import java.util.List;
 
@@ -25,7 +25,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.camunda.bpm.engine.rest.dto.repository.DeploymentResourceDto;
+import io.orqueio.bpm.engine.rest.dto.repository.DeploymentResourceDto;
 
 /**
  * @author Sebastian Menski

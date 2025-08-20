@@ -12,7 +12,7 @@
                     decisionRef="testDecision"
                     camunda:resultVariable="result">
         <extensionElements>
-          <camunda:caseExecutionListener class="org.camunda.bpm.engine.test.cmmn.decisiontask.DecisionResultTestListener" event="complete" />
+          <camunda:caseExecutionListener class="io.orqueio.bpm.engine.test.cmmn.decisiontask.DecisionResultTestListener" event="complete" />
         </extensionElements>
         <defaultControl>
           <manualActivationRule>

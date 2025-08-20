@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.cdi;
+package io.orqueio.bpm.engine.cdi;
 
-import org.camunda.bpm.engine.impl.cfg.JtaProcessEngineConfiguration;
+import io.orqueio.bpm.engine.impl.cfg.JtaProcessEngineConfiguration;
 
 /**
  * @author Daniel Meyer

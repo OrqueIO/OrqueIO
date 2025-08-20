@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.engine.impl.spi.transform;
+package io.orqueio.bpm.dmn.engine.impl.spi.transform;
 
-import org.camunda.bpm.dmn.engine.DmnDecision;
-import org.camunda.bpm.dmn.engine.impl.spi.hitpolicy.DmnHitPolicyHandlerRegistry;
-import org.camunda.bpm.dmn.engine.impl.spi.type.DmnDataTypeTransformerRegistry;
-import org.camunda.bpm.model.dmn.DmnModelInstance;
+import io.orqueio.bpm.dmn.engine.DmnDecision;
+import io.orqueio.bpm.dmn.engine.impl.spi.hitpolicy.DmnHitPolicyHandlerRegistry;
+import io.orqueio.bpm.dmn.engine.impl.spi.type.DmnDataTypeTransformerRegistry;
+import io.orqueio.bpm.model.dmn.DmnModelInstance;
 
 /**
  * Context available during the DMN transformation

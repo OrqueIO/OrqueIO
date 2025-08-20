@@ -14,31 +14,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.variables.scope;
+package io.orqueio.bpm.engine.test.api.variables.scope;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.camunda.bpm.engine.test.api.runtime.migration.ModifiableBpmnModelInstance.modify;
+import static io.orqueio.bpm.engine.test.api.runtime.migration.ModifiableBpmnModelInstance.modify;
 
 import java.util.Arrays;
 
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.ScriptEvaluationException;
-import org.camunda.bpm.engine.delegate.DelegateExecution;
-import org.camunda.bpm.engine.delegate.DelegateTask;
-import org.camunda.bpm.engine.impl.persistence.entity.ProcessInstanceWithVariablesImpl;
-import org.camunda.bpm.engine.repository.ProcessDefinition;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.engine.test.ProcessEngineRule;
-import org.camunda.bpm.engine.test.util.ProcessEngineTestRule;
-import org.camunda.bpm.engine.test.util.ProvidedProcessEngineRule;
-import org.camunda.bpm.engine.variable.VariableMap;
-import org.camunda.bpm.engine.variable.Variables;
-import org.camunda.bpm.model.bpmn.Bpmn;
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
-import org.camunda.bpm.model.bpmn.instance.SequenceFlow;
-import org.camunda.bpm.model.bpmn.instance.camunda.CamundaExecutionListener;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.ScriptEvaluationException;
+import io.orqueio.bpm.engine.delegate.DelegateExecution;
+import io.orqueio.bpm.engine.delegate.DelegateTask;
+import io.orqueio.bpm.engine.impl.persistence.entity.ProcessInstanceWithVariablesImpl;
+import io.orqueio.bpm.engine.repository.ProcessDefinition;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.test.ProcessEngineRule;
+import io.orqueio.bpm.engine.test.util.ProcessEngineTestRule;
+import io.orqueio.bpm.engine.test.util.ProvidedProcessEngineRule;
+import io.orqueio.bpm.engine.variable.VariableMap;
+import io.orqueio.bpm.engine.variable.Variables;
+import io.orqueio.bpm.model.bpmn.Bpmn;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.bpm.model.bpmn.instance.SequenceFlow;
+import io.orqueio.bpm.model.bpmn.instance.camunda.CamundaExecutionListener;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -86,7 +86,7 @@ public class TargetVariableScopeTest {
     assertThatThrownBy(() -> engineRule.getRuntimeService().startProcessInstanceByKey("Process_MultiInstanceCallAcitivity",variables))
       .isInstanceOf(ScriptEvaluationException.class)
       .hasMessageContaining("Unable to evaluate script while executing activity 'CallActivity_1' in the process definition with id '"
-          + processDefinition.getId() + "': org.camunda.bpm.engine.ProcessEngineException: ENGINE-20011 "
+          + processDefinition.getId() + "': io.orqueio.bpm.engine.ProcessEngineException: ENGINE-20011 "
               + "Scope with specified activity Id NOT_EXISTING and execution");
   }
 
@@ -100,9 +100,9 @@ public class TargetVariableScopeTest {
             .startEvent()
               .callActivity()
                 .calledElement("Process_StuffDoer")
-                .camundaVariableMappingClass("org.camunda.bpm.engine.test.api.variables.scope.SetVariableMappingDelegate")
+                .camundaVariableMappingClass("io.orqueio.bpm.engine.test.api.variables.scope.SetVariableMappingDelegate")
               .serviceTask()
-                .camundaClass("org.camunda.bpm.engine.test.api.variables.scope.AssertVariableScopeDelegate")
+                .camundaClass("io.orqueio.bpm.engine.test.api.variables.scope.AssertVariableScopeDelegate")
             .endEvent()
           .subProcessDone()
         .endEvent()
@@ -131,9 +131,9 @@ public class TargetVariableScopeTest {
               .startEvent()
               .callActivity()
                 .calledElement("Process_StuffDoer")
-                .camundaVariableMappingClass("org.camunda.bpm.engine.test.api.variables.scope.SetVariableToChildMappingDelegate")
+                .camundaVariableMappingClass("io.orqueio.bpm.engine.test.api.variables.scope.SetVariableToChildMappingDelegate")
               .serviceTask()
-                .camundaClass("org.camunda.bpm.engine.test.api.variables.scope.AssertVariableScopeDelegate")
+                .camundaClass("io.orqueio.bpm.engine.test.api.variables.scope.AssertVariableScopeDelegate")
               .endEvent()
             .subProcessDone()
           .moveToLastGateway()
@@ -161,11 +161,11 @@ public class TargetVariableScopeTest {
     //fails due to inappropriate variable scope target
     assertThatThrownBy(() -> engineRule.getRuntimeService().startProcessInstanceById(processDefinition.getId(),variables))
       .isInstanceOf(ProcessEngineException.class)
-      .hasMessageContaining("org.camunda.bpm.engine.ProcessEngineException: ENGINE-20011 Scope with specified activity Id SubProcess_2 and execution");
+      .hasMessageContaining("io.orqueio.bpm.engine.ProcessEngineException: ENGINE-20011 Scope with specified activity Id SubProcess_2 and execution");
 
   }
 
-  public static class JavaDelegate implements org.camunda.bpm.engine.delegate.JavaDelegate {
+  public static class JavaDelegate implements io.orqueio.bpm.engine.delegate.JavaDelegate {
 
     @Override
     public void execute(DelegateExecution execution) {
@@ -175,7 +175,7 @@ public class TargetVariableScopeTest {
 
   }
 
-  public static class ExecutionListener implements org.camunda.bpm.engine.delegate.ExecutionListener {
+  public static class ExecutionListener implements io.orqueio.bpm.engine.delegate.ExecutionListener {
 
     @Override
     public void notify(DelegateExecution execution) {
@@ -185,7 +185,7 @@ public class TargetVariableScopeTest {
 
   }
 
-  public static class TaskListener implements org.camunda.bpm.engine.delegate.TaskListener {
+  public static class TaskListener implements io.orqueio.bpm.engine.delegate.TaskListener {
 
     @Override
     public void notify(DelegateTask delegateTask) {

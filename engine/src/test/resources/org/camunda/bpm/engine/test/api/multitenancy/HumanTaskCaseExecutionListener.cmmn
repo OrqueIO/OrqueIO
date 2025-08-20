@@ -13,7 +13,7 @@
 
       <humanTask id="HumanTask_1" name="A HumanTask">
         <extensionElements>
-          <camunda:caseExecutionListener class="org.camunda.bpm.engine.test.api.multitenancy.listener.AssertingCaseExecutionListener"/>
+          <camunda:caseExecutionListener class="io.orqueio.bpm.engine.test.api.multitenancy.listener.AssertingCaseExecutionListener"/>
         </extensionElements>
       </humanTask>
       <humanTask id="HumanTask_2" name="Another HumanTask" />

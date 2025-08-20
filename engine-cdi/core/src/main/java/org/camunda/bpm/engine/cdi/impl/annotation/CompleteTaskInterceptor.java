@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.cdi.impl.annotation;
+package io.orqueio.bpm.engine.cdi.impl.annotation;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
@@ -24,9 +24,9 @@ import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
 
-import org.camunda.bpm.engine.cdi.BusinessProcess;
-import org.camunda.bpm.engine.cdi.ProcessEngineCdiException;
-import org.camunda.bpm.engine.cdi.annotation.CompleteTask;
+import io.orqueio.bpm.engine.cdi.BusinessProcess;
+import io.orqueio.bpm.engine.cdi.ProcessEngineCdiException;
+import io.orqueio.bpm.engine.cdi.annotation.CompleteTask;
 
 /**
  * {@link Interceptor} for handling the {@link CompleteTask}-Annotation

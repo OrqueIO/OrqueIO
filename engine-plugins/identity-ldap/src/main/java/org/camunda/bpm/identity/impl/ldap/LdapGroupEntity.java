@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.identity.impl.ldap;
+package io.orqueio.bpm.identity.impl.ldap;
 
-import org.camunda.bpm.engine.impl.persistence.entity.GroupEntity;
+import io.orqueio.bpm.engine.impl.persistence.entity.GroupEntity;
 
 /**
  * @author Daniel Meyer

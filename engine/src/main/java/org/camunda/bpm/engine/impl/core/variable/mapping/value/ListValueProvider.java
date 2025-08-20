@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.core.variable.mapping.value;
+package io.orqueio.bpm.engine.impl.core.variable.mapping.value;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.camunda.bpm.engine.delegate.VariableScope;
+import io.orqueio.bpm.engine.delegate.VariableScope;
 
 /**
  * @author Daniel Meyer

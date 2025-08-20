@@ -26,7 +26,7 @@
 
       </extensionElements>
 
-      <messageEventDefinition camunda:class="org.camunda.bpm.engine.test.bpmn.event.message.DummyServiceTask" />
+      <messageEventDefinition camunda:class="io.orqueio.bpm.engine.test.bpmn.event.message.DummyServiceTask" />
 
     </intermediateThrowEvent>
 

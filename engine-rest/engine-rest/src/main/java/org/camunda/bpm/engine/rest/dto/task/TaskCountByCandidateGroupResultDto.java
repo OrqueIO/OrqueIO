@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.dto.task;
+package io.orqueio.bpm.engine.rest.dto.task;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.exception.NotValidException;
-import org.camunda.bpm.engine.rest.exception.InvalidRequestException;
-import org.camunda.bpm.engine.task.TaskCountByCandidateGroupResult;
-import org.camunda.bpm.engine.task.TaskReport;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.exception.NotValidException;
+import io.orqueio.bpm.engine.rest.exception.InvalidRequestException;
+import io.orqueio.bpm.engine.task.TaskCountByCandidateGroupResult;
+import io.orqueio.bpm.engine.task.TaskReport;
 
 import javax.ws.rs.core.Response;
 import java.util.List;

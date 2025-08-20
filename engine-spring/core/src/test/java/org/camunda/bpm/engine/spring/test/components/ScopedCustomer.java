@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.spring.test.components;
+package io.orqueio.bpm.engine.spring.test.components;
 
-import org.camunda.bpm.engine.spring.components.scope.ProcessScope;
+import io.orqueio.bpm.engine.spring.components.scope.ProcessScope;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;

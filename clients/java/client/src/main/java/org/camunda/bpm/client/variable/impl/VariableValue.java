@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.variable.impl;
+package io.orqueio.bpm.client.variable.impl;
 
-import org.camunda.bpm.client.variable.impl.value.DeferredFileValueImpl;
-import org.camunda.bpm.engine.variable.value.SerializableValue;
-import org.camunda.bpm.engine.variable.value.TypedValue;
+import io.orqueio.bpm.client.variable.impl.value.DeferredFileValueImpl;
+import io.orqueio.bpm.engine.variable.value.SerializableValue;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
 
 public class VariableValue<T extends TypedValue> {
 

@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.qa;
+package io.orqueio.bpm.qa;
 
 import org.apache.catalina.webresources.TomcatURLStreamHandlerFactory;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.example.invoice.InvoiceProcessApplication;
-import org.camunda.bpm.spring.boot.starter.annotation.EnableProcessApplication;
-import org.camunda.bpm.spring.boot.starter.event.PostDeployEvent;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.example.invoice.InvoiceProcessApplication;
+import io.orqueio.bpm.spring.boot.starter.annotation.EnableProcessApplication;
+import io.orqueio.bpm.spring.boot.starter.event.PostDeployEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

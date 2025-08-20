@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.cdi;
+package io.orqueio.bpm.engine.cdi;
 
 import java.util.Map;
 import java.util.logging.Level;
@@ -25,14 +25,14 @@ import javax.enterprise.inject.spi.InjectionPoint;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.camunda.bpm.engine.cdi.annotation.ProcessVariable;
-import org.camunda.bpm.engine.cdi.annotation.ProcessVariableLocal;
-import org.camunda.bpm.engine.cdi.annotation.ProcessVariableLocalTyped;
-import org.camunda.bpm.engine.cdi.annotation.ProcessVariableTyped;
-import org.camunda.bpm.engine.cdi.impl.ProcessVariableLocalMap;
-import org.camunda.bpm.engine.cdi.impl.ProcessVariableMap;
-import org.camunda.bpm.engine.variable.VariableMap;
-import org.camunda.bpm.engine.variable.value.TypedValue;
+import io.orqueio.bpm.engine.cdi.annotation.ProcessVariable;
+import io.orqueio.bpm.engine.cdi.annotation.ProcessVariableLocal;
+import io.orqueio.bpm.engine.cdi.annotation.ProcessVariableLocalTyped;
+import io.orqueio.bpm.engine.cdi.annotation.ProcessVariableTyped;
+import io.orqueio.bpm.engine.cdi.impl.ProcessVariableLocalMap;
+import io.orqueio.bpm.engine.cdi.impl.ProcessVariableMap;
+import io.orqueio.bpm.engine.variable.VariableMap;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
 
 /**
  * Allows to access the process variables of a managed process instance.

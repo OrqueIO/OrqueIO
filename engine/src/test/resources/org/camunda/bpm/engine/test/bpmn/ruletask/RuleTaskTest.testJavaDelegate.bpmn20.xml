@@ -10,7 +10,7 @@
     
     <sequenceFlow id="flow1" sourceRef="start" targetRef="theTask" />
 
-    <businessRuleTask id="theTask" name="business rule tasl" camunda:class="org.camunda.bpm.engine.test.bpmn.ruletask.DummyServiceTask" />
+    <businessRuleTask id="theTask" name="business rule tasl" camunda:class="io.orqueio.bpm.engine.test.bpmn.ruletask.DummyServiceTask" />
     
     <sequenceFlow id="flow2" sourceRef="theTask" targetRef="theEnd" />
     

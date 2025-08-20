@@ -14,25 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.jobexecutor;
+package io.orqueio.bpm.engine.test.jobexecutor;
 
 import java.util.List;
 
-import org.camunda.bpm.engine.impl.ProcessEngineImpl;
-import org.camunda.bpm.engine.impl.cmd.AcquireJobsCmd;
-import org.camunda.bpm.engine.impl.db.DbEntity;
-import org.camunda.bpm.engine.impl.db.entitymanager.OptimisticLockingListener;
-import org.camunda.bpm.engine.impl.db.entitymanager.OptimisticLockingResult;
-import org.camunda.bpm.engine.impl.db.entitymanager.operation.DbOperation;
-import org.camunda.bpm.engine.impl.interceptor.Command;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.jobexecutor.AcquireJobsCommandFactory;
-import org.camunda.bpm.engine.impl.jobexecutor.AcquiredJobs;
-import org.camunda.bpm.engine.impl.jobexecutor.JobExecutor;
-import org.camunda.bpm.engine.impl.persistence.entity.JobEntity;
-import org.camunda.bpm.engine.test.concurrency.ConcurrencyTestHelper.ControllableCommand;
-import org.camunda.bpm.engine.test.concurrency.ConcurrencyTestHelper.ThreadControl;
-import org.camunda.bpm.engine.test.concurrency.ControllableThread;
+import io.orqueio.bpm.engine.impl.ProcessEngineImpl;
+import io.orqueio.bpm.engine.impl.cmd.AcquireJobsCmd;
+import io.orqueio.bpm.engine.impl.db.DbEntity;
+import io.orqueio.bpm.engine.impl.db.entitymanager.OptimisticLockingListener;
+import io.orqueio.bpm.engine.impl.db.entitymanager.OptimisticLockingResult;
+import io.orqueio.bpm.engine.impl.db.entitymanager.operation.DbOperation;
+import io.orqueio.bpm.engine.impl.interceptor.Command;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.impl.jobexecutor.AcquireJobsCommandFactory;
+import io.orqueio.bpm.engine.impl.jobexecutor.AcquiredJobs;
+import io.orqueio.bpm.engine.impl.jobexecutor.JobExecutor;
+import io.orqueio.bpm.engine.impl.persistence.entity.JobEntity;
+import io.orqueio.bpm.engine.test.concurrency.ConcurrencyTestHelper.ControllableCommand;
+import io.orqueio.bpm.engine.test.concurrency.ConcurrencyTestHelper.ThreadControl;
+import io.orqueio.bpm.engine.test.concurrency.ControllableThread;
 
 /**
  * Job executor that uses a {@link ControllableThread} for job acquisition. That means,

@@ -8,7 +8,7 @@
 
     <casePlanModel id="CasePlanModel_1">
       <extensionElements>
-        <camunda:variableListener class="org.camunda.bpm.engine.test.cmmn.listener.NoVariableListener" />
+        <camunda:variableListener class="io.orqueio.bpm.engine.test.cmmn.listener.NoVariableListener" />
       </extensionElements>
 
       <planItem id="PI_HumanTask_1" definitionRef="HumanTask_1" />

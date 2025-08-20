@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.admin.plugin.base;
+package io.orqueio.bpm.admin.plugin.base;
 
 import org.apache.ibatis.logging.LogFactory;
-import org.camunda.bpm.admin.Admin;
-import org.camunda.bpm.admin.impl.DefaultAdminRuntimeDelegate;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.impl.util.LogUtil;
-import org.camunda.bpm.engine.test.ProcessEngineRule;
+import io.orqueio.bpm.admin.Admin;
+import io.orqueio.bpm.admin.impl.DefaultAdminRuntimeDelegate;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.impl.util.LogUtil;
+import io.orqueio.bpm.engine.test.ProcessEngineRule;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

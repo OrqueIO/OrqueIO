@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.variable.serializer;
+package io.orqueio.bpm.engine.impl.variable.serializer;
 
 import java.util.List;
 
-import org.camunda.bpm.engine.variable.value.TypedValue;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
 
 /**
  * Interface describing a container for all available {@link TypedValueSerializer}s of variables.

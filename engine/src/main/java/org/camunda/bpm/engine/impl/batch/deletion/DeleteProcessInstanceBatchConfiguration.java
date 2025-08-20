@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.batch.deletion;
+package io.orqueio.bpm.engine.impl.batch.deletion;
 
 import java.util.List;
 
-import org.camunda.bpm.engine.impl.batch.BatchConfiguration;
-import org.camunda.bpm.engine.impl.batch.DeploymentMappings;
+import io.orqueio.bpm.engine.impl.batch.BatchConfiguration;
+import io.orqueio.bpm.engine.impl.batch.DeploymentMappings;
 
 /**
  * Configuration object that is passed to the Job that will actually perform execution of
@@ -28,7 +28,7 @@ import org.camunda.bpm.engine.impl.batch.DeploymentMappings;
  * This object will be serialized and persisted as run will be performed asynchronously.
  *
  * @author Askar Akhmerov
- * @see org.camunda.bpm.engine.impl.batch.deletion.DeleteProcessInstanceBatchConfigurationJsonConverter
+ * @see io.orqueio.bpm.engine.impl.batch.deletion.DeleteProcessInstanceBatchConfigurationJsonConverter
  */
 public class DeleteProcessInstanceBatchConfiguration extends BatchConfiguration {
 

@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.pvm.delegate;
+package io.orqueio.bpm.engine.impl.pvm.delegate;
 
-import org.camunda.bpm.engine.impl.migration.instance.MigratingActivityInstance;
-import org.camunda.bpm.engine.impl.migration.instance.parser.MigratingInstanceParseContext;
+import io.orqueio.bpm.engine.impl.migration.instance.MigratingActivityInstance;
+import io.orqueio.bpm.engine.impl.migration.instance.parser.MigratingInstanceParseContext;
 
 /**
  * @author Thorben Lindhauer

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.interceptor.impl;
+package io.orqueio.bpm.client.interceptor.impl;
 
 import org.apache.hc.core5.http.EntityDetails;
 import org.apache.hc.core5.http.HttpException;
@@ -22,9 +22,9 @@ import org.apache.hc.core5.http.HttpRequest;
 import org.apache.hc.core5.http.HttpRequestInterceptor;
 import org.apache.hc.core5.http.message.BasicHeader;
 import org.apache.hc.core5.http.protocol.HttpContext;
-import org.camunda.bpm.client.impl.EngineClientLogger;
-import org.camunda.bpm.client.impl.ExternalTaskClientLogger;
-import org.camunda.bpm.client.interceptor.ClientRequestInterceptor;
+import io.orqueio.bpm.client.impl.EngineClientLogger;
+import io.orqueio.bpm.client.impl.ExternalTaskClientLogger;
+import io.orqueio.bpm.client.interceptor.ClientRequestInterceptor;
 
 import java.io.IOException;
 import java.util.List;

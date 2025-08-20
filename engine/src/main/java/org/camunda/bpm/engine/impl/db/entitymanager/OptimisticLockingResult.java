@@ -14,19 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.db.entitymanager;
+package io.orqueio.bpm.engine.impl.db.entitymanager;
 
 public enum OptimisticLockingResult {
 
   /**
    * Marks that that an {@link OptimisticLockingListener} resulted
-   * in successfully handling, or ignoring, an {@link org.camunda.bpm.engine.OptimisticLockingException}.
+   * in successfully handling, or ignoring, an {@link io.orqueio.bpm.engine.OptimisticLockingException}.
    */
   IGNORE,
 
   /**
    * Marks that that an {@link OptimisticLockingListener} resulted
-   * in a failure when handling an {@link org.camunda.bpm.engine.OptimisticLockingException}
+   * in a failure when handling an {@link io.orqueio.bpm.engine.OptimisticLockingException}
    * and the exception should be re-thrown to the caller.
    */
   THROW;

@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.jobexecutor;
+package io.orqueio.bpm.engine.impl.jobexecutor;
 
-import org.camunda.bpm.engine.impl.cmd.DefaultJobRetryCmd;
-import org.camunda.bpm.engine.impl.interceptor.Command;
+import io.orqueio.bpm.engine.impl.cmd.DefaultJobRetryCmd;
+import io.orqueio.bpm.engine.impl.interceptor.Command;
 
 
 public class DefaultFailedJobCommandFactory implements FailedJobCommandFactory {

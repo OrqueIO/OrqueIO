@@ -14,24 +14,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.variable.type;
+package io.orqueio.bpm.engine.variable.type;
 
 import java.io.Serializable;
 import java.util.Map;
 
-import org.camunda.bpm.engine.variable.impl.type.FileValueTypeImpl;
-import org.camunda.bpm.engine.variable.impl.type.ObjectTypeImpl;
-import org.camunda.bpm.engine.variable.impl.type.PrimitiveValueTypeImpl.BooleanTypeImpl;
-import org.camunda.bpm.engine.variable.impl.type.PrimitiveValueTypeImpl.BytesTypeImpl;
-import org.camunda.bpm.engine.variable.impl.type.PrimitiveValueTypeImpl.DateTypeImpl;
-import org.camunda.bpm.engine.variable.impl.type.PrimitiveValueTypeImpl.DoubleTypeImpl;
-import org.camunda.bpm.engine.variable.impl.type.PrimitiveValueTypeImpl.IntegerTypeImpl;
-import org.camunda.bpm.engine.variable.impl.type.PrimitiveValueTypeImpl.LongTypeImpl;
-import org.camunda.bpm.engine.variable.impl.type.PrimitiveValueTypeImpl.NullTypeImpl;
-import org.camunda.bpm.engine.variable.impl.type.PrimitiveValueTypeImpl.NumberTypeImpl;
-import org.camunda.bpm.engine.variable.impl.type.PrimitiveValueTypeImpl.ShortTypeImpl;
-import org.camunda.bpm.engine.variable.impl.type.PrimitiveValueTypeImpl.StringTypeImpl;
-import org.camunda.bpm.engine.variable.value.TypedValue;
+import io.orqueio.bpm.engine.variable.impl.type.FileValueTypeImpl;
+import io.orqueio.bpm.engine.variable.impl.type.ObjectTypeImpl;
+import io.orqueio.bpm.engine.variable.impl.type.PrimitiveValueTypeImpl.BooleanTypeImpl;
+import io.orqueio.bpm.engine.variable.impl.type.PrimitiveValueTypeImpl.BytesTypeImpl;
+import io.orqueio.bpm.engine.variable.impl.type.PrimitiveValueTypeImpl.DateTypeImpl;
+import io.orqueio.bpm.engine.variable.impl.type.PrimitiveValueTypeImpl.DoubleTypeImpl;
+import io.orqueio.bpm.engine.variable.impl.type.PrimitiveValueTypeImpl.IntegerTypeImpl;
+import io.orqueio.bpm.engine.variable.impl.type.PrimitiveValueTypeImpl.LongTypeImpl;
+import io.orqueio.bpm.engine.variable.impl.type.PrimitiveValueTypeImpl.NullTypeImpl;
+import io.orqueio.bpm.engine.variable.impl.type.PrimitiveValueTypeImpl.NumberTypeImpl;
+import io.orqueio.bpm.engine.variable.impl.type.PrimitiveValueTypeImpl.ShortTypeImpl;
+import io.orqueio.bpm.engine.variable.impl.type.PrimitiveValueTypeImpl.StringTypeImpl;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
 
 /**
  *

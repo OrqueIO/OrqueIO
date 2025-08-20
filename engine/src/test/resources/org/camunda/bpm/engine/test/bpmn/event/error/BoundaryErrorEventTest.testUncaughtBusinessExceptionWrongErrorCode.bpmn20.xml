@@ -11,7 +11,7 @@
     <startEvent id="theStart" />
     <sequenceFlow id="flow1" sourceRef="theStart" targetRef="serviceTask" />
     
-    <serviceTask id="serviceTask" camunda:class="org.camunda.bpm.engine.test.bpmn.event.error.ThrowSpecializedExceptionDelegate" />
+    <serviceTask id="serviceTask" camunda:class="io.orqueio.bpm.engine.test.bpmn.event.error.ThrowSpecializedExceptionDelegate" />
     
     <boundaryEvent id="catchException" attachedToRef="serviceTask">
       <errorEventDefinition errorRef="myException"/>

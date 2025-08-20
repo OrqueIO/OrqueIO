@@ -9,7 +9,7 @@
   </description>
 
   <parent>
-    <groupId>org.camunda.bpm</groupId>
+    <groupId>io.orqueio.bpm</groupId>
     <artifactId>camunda-engine-rest-root</artifactId>
     <relativePath>../</relativePath>
     <version>7.24.0-SNAPSHOT</version>
@@ -76,7 +76,7 @@
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
+      <groupId>io.orqueio.bpm</groupId>
       <artifactId>camunda-engine</artifactId>
       <scope>provided</scope>
       <exclusions>
@@ -88,7 +88,7 @@
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.commons</groupId>
+      <groupId>io.orqueio.commons</groupId>
       <artifactId>camunda-commons-logging</artifactId>
       <scope>provided</scope>
     </dependency>
@@ -111,7 +111,7 @@
       BOMs must be installed before this module is built
     -->
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
+      <groupId>io.orqueio.bpm</groupId>
       <artifactId>camunda-bom</artifactId>
       <version>${project.version}</version>
       <type>pom</type>
@@ -119,7 +119,7 @@
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
+      <groupId>io.orqueio.bpm</groupId>
       <artifactId>camunda-core-internal-dependencies</artifactId>
       <version>${project.version}</version>
       <type>pom</type>
@@ -219,7 +219,7 @@
    </dependency>
 
     <dependency>
-      <groupId>org.camunda.commons</groupId>
+      <groupId>io.orqueio.commons</groupId>
       <artifactId>camunda-commons-testing</artifactId>
       <scope>test</scope>
     </dependency>

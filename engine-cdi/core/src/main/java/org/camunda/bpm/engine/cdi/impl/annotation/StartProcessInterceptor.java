@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.cdi.impl.annotation;
+package io.orqueio.bpm.engine.cdi.impl.annotation;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
@@ -26,13 +26,13 @@ import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
 
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.cdi.BusinessProcess;
-import org.camunda.bpm.engine.cdi.annotation.ProcessVariable;
-import org.camunda.bpm.engine.cdi.annotation.ProcessVariableTyped;
-import org.camunda.bpm.engine.cdi.annotation.StartProcess;
-import org.camunda.bpm.engine.variable.VariableMap;
-import org.camunda.bpm.engine.variable.impl.VariableMapImpl;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.cdi.BusinessProcess;
+import io.orqueio.bpm.engine.cdi.annotation.ProcessVariable;
+import io.orqueio.bpm.engine.cdi.annotation.ProcessVariableTyped;
+import io.orqueio.bpm.engine.cdi.annotation.StartProcess;
+import io.orqueio.bpm.engine.variable.VariableMap;
+import io.orqueio.bpm.engine.variable.impl.VariableMapImpl;
 
 /**
  * implementation of the {@link StartProcess} annotation

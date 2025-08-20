@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.api.identity.plugin;
+package io.orqueio.bpm.engine.test.api.identity.plugin;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.cfg.ProcessEnginePlugin;
-import org.camunda.bpm.engine.impl.digest.ShaHashDigest;
-import org.camunda.bpm.engine.test.api.identity.util.MyConstantSaltGenerator;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEnginePlugin;
+import io.orqueio.bpm.engine.impl.digest.ShaHashDigest;
+import io.orqueio.bpm.engine.test.api.identity.util.MyConstantSaltGenerator;
 
 /**
  * @author Simon Jonischkeit

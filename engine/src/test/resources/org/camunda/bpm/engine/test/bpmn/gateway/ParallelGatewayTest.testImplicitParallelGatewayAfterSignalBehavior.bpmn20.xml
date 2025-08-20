@@ -5,7 +5,7 @@
       <bpmn:outgoing>SequenceFlow_1pbpft9</bpmn:outgoing>
     </bpmn:startEvent>
     <bpmn:sequenceFlow id="SequenceFlow_1pbpft9" sourceRef="StartEvent_1" targetRef="service" />
-    <bpmn:serviceTask id="service" camunda:class="org.camunda.bpm.engine.test.bpmn.gateway.SignalableBehavior">
+    <bpmn:serviceTask id="service" camunda:class="io.orqueio.bpm.engine.test.bpmn.gateway.SignalableBehavior">
       <bpmn:incoming>SequenceFlow_1pbpft9</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0s6o4jy</bpmn:outgoing>
       <bpmn:outgoing>SequenceFlow_11t3cfk</bpmn:outgoing>
@@ -21,17 +21,17 @@
     </bpmn:boundaryEvent>
     <bpmn:sequenceFlow id="SequenceFlow_0s6o4jy" sourceRef="service" targetRef="task1">
       <bpmn:extensionElements>
-        <camunda:executionListener class="org.camunda.bpm.engine.test.bpmn.gateway.SequenceFlowListener" event="take" />
+        <camunda:executionListener class="io.orqueio.bpm.engine.test.bpmn.gateway.SequenceFlowListener" event="take" />
       </bpmn:extensionElements>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_11t3cfk" sourceRef="service" targetRef="task2">
       <bpmn:extensionElements>
-        <camunda:executionListener class="org.camunda.bpm.engine.test.bpmn.gateway.SequenceFlowListener" event="take" />
+        <camunda:executionListener class="io.orqueio.bpm.engine.test.bpmn.gateway.SequenceFlowListener" event="take" />
       </bpmn:extensionElements>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_1sg58we" sourceRef="service" targetRef="task3">
       <bpmn:extensionElements>
-        <camunda:executionListener class="org.camunda.bpm.engine.test.bpmn.gateway.SequenceFlowListener" event="take" />
+        <camunda:executionListener class="io.orqueio.bpm.engine.test.bpmn.gateway.SequenceFlowListener" event="take" />
       </bpmn:extensionElements>
     </bpmn:sequenceFlow>
     <bpmn:endEvent id="EndEvent_0swie5x">

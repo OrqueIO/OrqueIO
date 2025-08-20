@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.cdi.impl;
+package io.orqueio.bpm.engine.cdi.impl;
 
-import org.camunda.bpm.application.AbstractProcessApplication;
-import org.camunda.bpm.application.ProcessApplicationElResolver;
-import org.camunda.bpm.engine.cdi.impl.el.CdiResolver;
-import org.camunda.bpm.impl.juel.jakarta.el.ELResolver;
+import io.orqueio.bpm.application.AbstractProcessApplication;
+import io.orqueio.bpm.application.ProcessApplicationElResolver;
+import io.orqueio.bpm.engine.cdi.impl.el.CdiResolver;
+import io.orqueio.bpm.impl.juel.jakarta.el.ELResolver;
 
 /**
  * <p>Exposes the CdiResolver in a multiple-applications, shared process engine context.</p>

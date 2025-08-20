@@ -14,18 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.concurrency;
+package io.orqueio.bpm.engine.test.concurrency;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.util.Map;
 
-import org.camunda.bpm.engine.impl.cmd.CompleteTaskCmd;
-import org.camunda.bpm.engine.impl.cmd.SetTaskVariablesCmd;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.engine.variable.Variables;
+import io.orqueio.bpm.engine.impl.cmd.CompleteTaskCmd;
+import io.orqueio.bpm.engine.impl.cmd.SetTaskVariablesCmd;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.variable.Variables;
 import org.junit.Test;
 
 /**

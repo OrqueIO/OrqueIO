@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.impl.web.bootstrap;
+package io.orqueio.bpm.engine.rest.impl.web.bootstrap;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-import org.camunda.bpm.engine.rest.util.WebApplicationUtil;
+import io.orqueio.bpm.engine.rest.util.WebApplicationUtil;
 
 public class RestContainerBootstrap implements ServletContextListener {
 

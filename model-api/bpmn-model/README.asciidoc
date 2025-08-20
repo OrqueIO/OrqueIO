@@ -117,5 +117,5 @@ Java JRE 1.8+ is required. We test camunda BPMN model API on Oracle and IBM JVMs
 === Does this API support all BPMN 2.0 Elements?
 
 No, but support is already quite extensive. See
-link:src/main/java/org/camunda/bpm/model/bpmn/instance[org.camunda.bpm.model.bpmn.instance]
+link:src/main/java/org/camunda/bpm/model/bpmn/instance[io.orqueio.bpm.model.bpmn.instance]
 for a list of currently supported elements.

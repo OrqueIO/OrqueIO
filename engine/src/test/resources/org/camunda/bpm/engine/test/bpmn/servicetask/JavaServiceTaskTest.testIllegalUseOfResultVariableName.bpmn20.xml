@@ -12,7 +12,7 @@
     <sequenceFlow id="flow1" sourceRef="theStart" targetRef="javaService" />
     
     <serviceTask id="javaService" 
-                 camunda:class="org.camunda.bpm.engine.test.bpmn.servicetask.util.ToUppercase" 
+                 camunda:class="io.orqueio.bpm.engine.test.bpmn.servicetask.util.ToUppercase"
                  camunda:resultVariable="var"
             />
     

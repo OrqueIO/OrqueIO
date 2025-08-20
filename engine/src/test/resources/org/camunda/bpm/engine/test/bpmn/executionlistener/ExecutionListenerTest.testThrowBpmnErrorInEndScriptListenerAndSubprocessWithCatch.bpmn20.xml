@@ -18,7 +18,7 @@
         <bpmn:extensionElements>
           <camunda:executionListener event="start">
             <camunda:script scriptFormat="groovy">
-              import org.camunda.bpm.engine.delegate.BpmnError;
+              import io.orqueio.bpm.engine.delegate.BpmnError;
               throw new BpmnError("208", "business error");
             </camunda:script>
           </camunda:executionListener>

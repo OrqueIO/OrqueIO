@@ -14,24 +14,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.impl;
+package io.orqueio.bpm.engine.rest.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.repository.DecisionRequirementsDefinition;
-import org.camunda.bpm.engine.repository.DecisionRequirementsDefinitionQuery;
-import org.camunda.bpm.engine.rest.DecisionRequirementsDefinitionRestService;
-import org.camunda.bpm.engine.rest.dto.CountResultDto;
-import org.camunda.bpm.engine.rest.dto.repository.DecisionRequirementsDefinitionDto;
-import org.camunda.bpm.engine.rest.dto.repository.DecisionRequirementsDefinitionQueryDto;
-import org.camunda.bpm.engine.rest.exception.RestException;
-import org.camunda.bpm.engine.rest.sub.repository.DecisionRequirementsDefinitionResource;
-import org.camunda.bpm.engine.rest.sub.repository.impl.DecisionRequirementsDefinitionResourceImpl;
-import org.camunda.bpm.engine.rest.util.QueryUtil;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.repository.DecisionRequirementsDefinition;
+import io.orqueio.bpm.engine.repository.DecisionRequirementsDefinitionQuery;
+import io.orqueio.bpm.engine.rest.DecisionRequirementsDefinitionRestService;
+import io.orqueio.bpm.engine.rest.dto.CountResultDto;
+import io.orqueio.bpm.engine.rest.dto.repository.DecisionRequirementsDefinitionDto;
+import io.orqueio.bpm.engine.rest.dto.repository.DecisionRequirementsDefinitionQueryDto;
+import io.orqueio.bpm.engine.rest.exception.RestException;
+import io.orqueio.bpm.engine.rest.sub.repository.DecisionRequirementsDefinitionResource;
+import io.orqueio.bpm.engine.rest.sub.repository.impl.DecisionRequirementsDefinitionResourceImpl;
+import io.orqueio.bpm.engine.rest.util.QueryUtil;
 
 public class DecisionRequirementsDefinitionRestServiceImpl extends AbstractRestProcessEngineAware implements DecisionRequirementsDefinitionRestService {
 

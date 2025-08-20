@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.migration.instance.parser;
+package io.orqueio.bpm.engine.impl.migration.instance.parser;
 
 import java.util.List;
 
-import org.camunda.bpm.engine.impl.jobexecutor.AsyncContinuationJobHandler;
-import org.camunda.bpm.engine.impl.migration.instance.MigratingAsyncJobInstance;
-import org.camunda.bpm.engine.impl.migration.instance.MigratingTransitionInstance;
-import org.camunda.bpm.engine.impl.persistence.entity.JobDefinitionEntity;
-import org.camunda.bpm.engine.impl.persistence.entity.JobEntity;
-import org.camunda.bpm.engine.impl.pvm.process.ScopeImpl;
+import io.orqueio.bpm.engine.impl.jobexecutor.AsyncContinuationJobHandler;
+import io.orqueio.bpm.engine.impl.migration.instance.MigratingAsyncJobInstance;
+import io.orqueio.bpm.engine.impl.migration.instance.MigratingTransitionInstance;
+import io.orqueio.bpm.engine.impl.persistence.entity.JobDefinitionEntity;
+import io.orqueio.bpm.engine.impl.persistence.entity.JobEntity;
+import io.orqueio.bpm.engine.impl.pvm.process.ScopeImpl;
 
 /**
  * @author Thorben Lindhauer

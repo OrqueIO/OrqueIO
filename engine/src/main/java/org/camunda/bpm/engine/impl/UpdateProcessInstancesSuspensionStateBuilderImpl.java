@@ -14,18 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl;
+package io.orqueio.bpm.engine.impl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import org.camunda.bpm.engine.batch.Batch;
-import org.camunda.bpm.engine.history.HistoricProcessInstanceQuery;
-import org.camunda.bpm.engine.impl.cmd.UpdateProcessInstancesSuspendStateBatchCmd;
-import org.camunda.bpm.engine.impl.cmd.UpdateProcessInstancesSuspendStateCmd;
-import org.camunda.bpm.engine.impl.interceptor.CommandExecutor;
-import org.camunda.bpm.engine.runtime.ProcessInstanceQuery;
-import org.camunda.bpm.engine.runtime.UpdateProcessInstancesSuspensionStateBuilder;
+import io.orqueio.bpm.engine.batch.Batch;
+import io.orqueio.bpm.engine.history.HistoricProcessInstanceQuery;
+import io.orqueio.bpm.engine.impl.cmd.UpdateProcessInstancesSuspendStateBatchCmd;
+import io.orqueio.bpm.engine.impl.cmd.UpdateProcessInstancesSuspendStateCmd;
+import io.orqueio.bpm.engine.impl.interceptor.CommandExecutor;
+import io.orqueio.bpm.engine.runtime.ProcessInstanceQuery;
+import io.orqueio.bpm.engine.runtime.UpdateProcessInstancesSuspensionStateBuilder;
 
 public class UpdateProcessInstancesSuspensionStateBuilderImpl implements UpdateProcessInstancesSuspensionStateBuilder {
 

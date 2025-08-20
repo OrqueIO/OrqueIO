@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.authorization;
+package io.orqueio.bpm.engine.authorization;
 
 /**
  * The set of built-in {@link Permission Permissions} for {@link Resources#OPERATION_LOG_CATEGORY User operation log based on categories} in Camunda Platform.

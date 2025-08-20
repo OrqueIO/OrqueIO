@@ -21,7 +21,7 @@
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>SequenceFlow_1bygmz9</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:serviceTask id="Task_13fi9oe" name="Set Variable" camunda:class="org.camunda.bpm.engine.test.bpmn.event.conditional.SetVariableDelegate">
+    <bpmn:serviceTask id="Task_13fi9oe" name="Set Variable" camunda:class="io.orqueio.bpm.engine.test.bpmn.event.conditional.SetVariableDelegate">
       <bpmn:incoming>SequenceFlow_05hw3ji</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0tfp1hc</bpmn:outgoing>
     </bpmn:serviceTask>

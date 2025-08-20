@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.quarkus.engine.extension;
+package io.orqueio.bpm.quarkus.engine.extension;
 
-import org.camunda.bpm.engine.cdi.CdiJtaProcessEngineConfiguration;
-import org.camunda.bpm.engine.impl.history.HistoryLevel;
-import org.camunda.bpm.engine.impl.interceptor.CommandContextInterceptor;
-import org.camunda.bpm.engine.impl.interceptor.CommandCounterInterceptor;
-import org.camunda.bpm.engine.impl.interceptor.CommandInterceptor;
-import org.camunda.bpm.engine.impl.interceptor.JakartaTransactionInterceptor;
-import org.camunda.bpm.engine.impl.interceptor.LogInterceptor;
-import org.camunda.bpm.engine.impl.persistence.StrongUuidGenerator;
+import io.orqueio.bpm.engine.cdi.CdiJtaProcessEngineConfiguration;
+import io.orqueio.bpm.engine.impl.history.HistoryLevel;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContextInterceptor;
+import io.orqueio.bpm.engine.impl.interceptor.CommandCounterInterceptor;
+import io.orqueio.bpm.engine.impl.interceptor.CommandInterceptor;
+import io.orqueio.bpm.engine.impl.interceptor.JakartaTransactionInterceptor;
+import io.orqueio.bpm.engine.impl.interceptor.LogInterceptor;
+import io.orqueio.bpm.engine.impl.persistence.StrongUuidGenerator;
 
 import jakarta.transaction.TransactionManager;
 import java.util.ArrayList;

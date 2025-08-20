@@ -10,7 +10,7 @@
 
     <sequenceFlow sourceRef="theStart" targetRef="task" />
 
-    <userTask id="task" camunda:formHandlerClass="org.camunda.bpm.engine.test.api.authorization.service.MyTaskFormHandler" />
+    <userTask id="task" camunda:formHandlerClass="io.orqueio.bpm.engine.test.api.authorization.service.MyTaskFormHandler" />
 
     <sequenceFlow sourceRef="task" targetRef="theEnd" />
 

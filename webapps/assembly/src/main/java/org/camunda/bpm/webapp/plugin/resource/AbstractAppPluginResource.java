@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.webapp.plugin.resource;
+package io.orqueio.bpm.webapp.plugin.resource;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.webapp.AppRuntimeDelegate;
-import org.camunda.bpm.webapp.plugin.spi.AppPlugin;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.webapp.AppRuntimeDelegate;
+import io.orqueio.bpm.webapp.plugin.spi.AppPlugin;
 
 /**
  * A abstract plugin resource class that may be used to implement

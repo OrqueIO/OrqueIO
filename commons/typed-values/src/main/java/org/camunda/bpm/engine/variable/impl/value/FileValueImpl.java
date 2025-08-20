@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.variable.impl.value;
+package io.orqueio.bpm.engine.variable.impl.value;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 
-import org.camunda.bpm.engine.variable.type.FileValueType;
-import org.camunda.bpm.engine.variable.type.ValueType;
-import org.camunda.bpm.engine.variable.value.FileValue;
+import io.orqueio.bpm.engine.variable.type.FileValueType;
+import io.orqueio.bpm.engine.variable.type.ValueType;
+import io.orqueio.bpm.engine.variable.value.FileValue;
 
 /**
  * @author Ronny Bräunlich

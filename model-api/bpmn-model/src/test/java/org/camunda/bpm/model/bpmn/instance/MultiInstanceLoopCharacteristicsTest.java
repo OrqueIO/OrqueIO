@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.bpmn.instance;
+package io.orqueio.bpm.model.bpmn.instance;
 
-import static org.camunda.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
 
 import java.util.Arrays;
 import java.util.Collection;
 
-import org.camunda.bpm.model.bpmn.MultiInstanceFlowCondition;
-import org.camunda.bpm.model.bpmn.impl.instance.LoopDataInputRef;
-import org.camunda.bpm.model.bpmn.impl.instance.LoopDataOutputRef;
+import io.orqueio.bpm.model.bpmn.MultiInstanceFlowCondition;
+import io.orqueio.bpm.model.bpmn.impl.instance.LoopDataInputRef;
+import io.orqueio.bpm.model.bpmn.impl.instance.LoopDataOutputRef;
 
 /**
  * @author Filip Hrisafov

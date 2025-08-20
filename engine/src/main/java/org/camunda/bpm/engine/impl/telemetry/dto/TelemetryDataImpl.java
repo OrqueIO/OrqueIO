@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.telemetry.dto;
+package io.orqueio.bpm.engine.impl.telemetry.dto;
 
-import org.camunda.bpm.engine.impl.util.JsonUtil;
-import org.camunda.bpm.engine.telemetry.TelemetryData;
+import io.orqueio.bpm.engine.impl.util.JsonUtil;
+import io.orqueio.bpm.engine.telemetry.TelemetryData;
 
 public class TelemetryDataImpl implements TelemetryData {
 

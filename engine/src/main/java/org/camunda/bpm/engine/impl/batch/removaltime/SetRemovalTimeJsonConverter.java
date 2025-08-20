@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.batch.removaltime;
+package io.orqueio.bpm.engine.impl.batch.removaltime;
 
 import com.google.gson.JsonObject;
 import java.util.ArrayList;
@@ -22,10 +22,10 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import org.camunda.bpm.engine.impl.batch.AbstractBatchConfigurationObjectConverter;
-import org.camunda.bpm.engine.impl.batch.DeploymentMappingJsonConverter;
-import org.camunda.bpm.engine.impl.batch.DeploymentMappings;
-import org.camunda.bpm.engine.impl.util.JsonUtil;
+import io.orqueio.bpm.engine.impl.batch.AbstractBatchConfigurationObjectConverter;
+import io.orqueio.bpm.engine.impl.batch.DeploymentMappingJsonConverter;
+import io.orqueio.bpm.engine.impl.batch.DeploymentMappings;
+import io.orqueio.bpm.engine.impl.util.JsonUtil;
 
 /**
  * @author Tassilo Weidner

@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.deployment.callbacks;
+package io.orqueio.bpm.integrationtest.deployment.callbacks;
 
 import org.junit.Assert;
 
-import org.camunda.bpm.integrationtest.deployment.callbacks.apps.PostDeployFailureApp;
+import io.orqueio.bpm.integrationtest.deployment.callbacks.apps.PostDeployFailureApp;
 import org.jboss.arquillian.container.test.api.Deployer;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.connect.spi;
+package io.orqueio.connect.spi;
 
 /**
  * Can be used to configure connectors of a certain type.

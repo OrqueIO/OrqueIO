@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.admin.plugin.spi;
+package io.orqueio.bpm.admin.plugin.spi;
 
-import org.camunda.bpm.webapp.plugin.spi.AppPlugin;
+import io.orqueio.bpm.webapp.plugin.spi.AppPlugin;
 
 /**
  * SPI inteface for plugins to the admin webapplication.

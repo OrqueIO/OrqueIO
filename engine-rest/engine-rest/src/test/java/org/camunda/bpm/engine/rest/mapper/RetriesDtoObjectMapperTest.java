@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.mapper;
+package io.orqueio.bpm.engine.rest.mapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -22,12 +22,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.Date;
-import org.camunda.bpm.engine.rest.dto.history.HistoricProcessInstanceQueryDto;
-import org.camunda.bpm.engine.rest.dto.runtime.JobQueryDto;
-import org.camunda.bpm.engine.rest.dto.runtime.ProcessInstanceQueryDto;
-import org.camunda.bpm.engine.rest.dto.runtime.RetriesDto;
-import org.camunda.bpm.engine.rest.dto.runtime.SetJobRetriesByProcessDto;
-import org.camunda.bpm.engine.rest.dto.runtime.SetJobRetriesDto;
+import io.orqueio.bpm.engine.rest.dto.history.HistoricProcessInstanceQueryDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.JobQueryDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.ProcessInstanceQueryDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.RetriesDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.SetJobRetriesByProcessDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.SetJobRetriesDto;
 import org.junit.Test;
 
 public class RetriesDtoObjectMapperTest {

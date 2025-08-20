@@ -14,8 +14,8 @@
 
     <receiveTask id="task" messageRef="messageId">
       <extensionElements>
-        <camunda:executionListener class="org.camunda.bpm.engine.test.concurrency.CompetingMessageCorrelationTest$InvocationLogListener" event="end"/>
-        <camunda:executionListener class="org.camunda.bpm.engine.test.concurrency.CompetingMessageCorrelationTest$WaitingListener" event="end"/>
+        <camunda:executionListener class="io.orqueio.bpm.engine.test.concurrency.CompetingMessageCorrelationTest$InvocationLogListener" event="end"/>
+        <camunda:executionListener class="io.orqueio.bpm.engine.test.concurrency.CompetingMessageCorrelationTest$WaitingListener" event="end"/>
       </extensionElements>
       <multiInstanceLoopCharacteristics>
         <loopCardinality xsi:type="tFormalExpression">2</loopCardinality>

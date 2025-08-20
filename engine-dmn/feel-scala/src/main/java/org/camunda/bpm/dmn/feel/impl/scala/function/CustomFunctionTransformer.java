@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.dmn.feel.impl.scala.function;
+package io.orqueio.bpm.dmn.feel.impl.scala.function;
 
-import org.camunda.bpm.dmn.feel.impl.scala.ScalaFeelLogger;
-import org.camunda.feel.context.JavaFunction;
-import org.camunda.feel.context.JavaFunctionProvider;
-import org.camunda.feel.syntaxtree.Val;
-import org.camunda.feel.valuemapper.ValueMapper;
+import io.orqueio.bpm.dmn.feel.impl.scala.ScalaFeelLogger;
+import io.orqueio.feel.context.JavaFunction;
+import io.orqueio.feel.context.JavaFunctionProvider;
+import io.orqueio.feel.syntaxtree.Val;
+import io.orqueio.feel.valuemapper.ValueMapper;
 
 import java.util.Collection;
 import java.util.HashMap;

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.parser;
+package io.orqueio.bpm.container.impl.parser;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
@@ -24,12 +24,12 @@ import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.container.impl.metadata.BpmPlatformXmlParser;
-import org.camunda.bpm.container.impl.metadata.spi.BpmPlatformXml;
-import org.camunda.bpm.container.impl.metadata.spi.JobAcquisitionXml;
-import org.camunda.bpm.container.impl.metadata.spi.JobExecutorXml;
-import org.camunda.bpm.container.impl.metadata.spi.ProcessEnginePluginXml;
-import org.camunda.bpm.container.impl.metadata.spi.ProcessEngineXml;
+import io.orqueio.bpm.container.impl.metadata.BpmPlatformXmlParser;
+import io.orqueio.bpm.container.impl.metadata.spi.BpmPlatformXml;
+import io.orqueio.bpm.container.impl.metadata.spi.JobAcquisitionXml;
+import io.orqueio.bpm.container.impl.metadata.spi.JobExecutorXml;
+import io.orqueio.bpm.container.impl.metadata.spi.ProcessEnginePluginXml;
+import io.orqueio.bpm.container.impl.metadata.spi.ProcessEngineXml;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -69,7 +69,7 @@ public class BpmPlatformXmlParserTest {
 
     JobAcquisitionXml jobAcquisitionXml = jobExecutorXml.getJobAcquisitions().get(0);
     assertEquals("default", jobAcquisitionXml.getName());
-    assertEquals("org.camunda.bpm.engine.impl.jobexecutor.DefaultJobExecutor", jobAcquisitionXml.getJobExecutorClassName());
+    assertEquals("io.orqueio.bpm.engine.impl.jobexecutor.DefaultJobExecutor", jobAcquisitionXml.getJobExecutorClassName());
 
     assertEquals(2, jobAcquisitionXml.getProperties().size());
 
@@ -93,7 +93,7 @@ public class BpmPlatformXmlParserTest {
 
     JobAcquisitionXml jobAcquisitionXml = jobExecutorXml.getJobAcquisitions().get(0);
     assertEquals("default", jobAcquisitionXml.getName());
-    assertEquals("org.camunda.bpm.engine.impl.jobexecutor.DefaultJobExecutor", jobAcquisitionXml.getJobExecutorClassName());
+    assertEquals("io.orqueio.bpm.engine.impl.jobexecutor.DefaultJobExecutor", jobAcquisitionXml.getJobExecutorClassName());
 
     assertEquals(2, jobAcquisitionXml.getProperties().size());
 
@@ -132,7 +132,7 @@ public class BpmPlatformXmlParserTest {
     ProcessEnginePluginXml plugin1 = plugins.get(0);
     assertNotNull(plugin1);
 
-    assertEquals("org.camunda.bpm.MyAwesomePlugin", plugin1.getPluginClass());
+    assertEquals("io.orqueio.bpm.MyAwesomePlugin", plugin1.getPluginClass());
 
     Map<String, String> properties = plugin1.getProperties();
     assertNotNull(properties);

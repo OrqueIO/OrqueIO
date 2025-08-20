@@ -15,7 +15,7 @@
 		    Schedule a meeting with management.
 		  </documentation>
 		  <extensionElements>
-		    <camunda:taskListener event="create" class="org.camunda.bpm.engine.test.bpmn.tasklistener.util.AssigneeAssignment" />
+		    <camunda:taskListener event="create" class="io.orqueio.bpm.engine.test.bpmn.tasklistener.util.AssigneeAssignment" />
 		  </extensionElements>
 		</userTask>
 		

@@ -14,20 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.webapp.impl.db;
+package io.orqueio.bpm.webapp.impl.db;
 
 import java.util.List;
 
-import org.camunda.bpm.webapp.db.CommandExecutor;
-import org.camunda.bpm.webapp.db.QueryParameters;
-import org.camunda.bpm.webapp.db.QueryService;
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.db.AuthorizationCheck;
-import org.camunda.bpm.engine.impl.db.ListQueryParameterObject;
-import org.camunda.bpm.engine.impl.interceptor.Command;
-import org.camunda.bpm.engine.impl.interceptor.CommandContext;
-import org.camunda.bpm.engine.impl.util.QueryMaxResultsLimitUtil;
+import io.orqueio.bpm.webapp.db.CommandExecutor;
+import io.orqueio.bpm.webapp.db.QueryParameters;
+import io.orqueio.bpm.webapp.db.QueryService;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.db.AuthorizationCheck;
+import io.orqueio.bpm.engine.impl.db.ListQueryParameterObject;
+import io.orqueio.bpm.engine.impl.interceptor.Command;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
+import io.orqueio.bpm.engine.impl.util.QueryMaxResultsLimitUtil;
 
 public class QueryServiceImpl implements QueryService {
 

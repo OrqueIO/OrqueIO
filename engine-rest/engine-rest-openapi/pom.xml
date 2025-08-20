@@ -9,7 +9,7 @@
   </description>
 
   <parent>
-    <groupId>org.camunda.bpm</groupId>
+    <groupId>io.orqueio.bpm</groupId>
     <artifactId>camunda-engine-rest-root</artifactId>
     <relativePath>../</relativePath>
     <version>7.24.0-SNAPSHOT</version>
@@ -35,7 +35,7 @@
   <dependencies>
 
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
+      <groupId>io.orqueio.bpm</groupId>
       <artifactId>camunda-engine-rest-openapi-generator</artifactId>
       <scope>test</scope>
       <version>${project.version}</version>
@@ -135,7 +135,7 @@
             </goals>
             <configuration>
               <classpathScope>test</classpathScope>
-              <mainClass>org.camunda.bpm.engine.rest.openapi.generator.impl.TemplateParser</mainClass>
+              <mainClass>io.orqueio.bpm.engine.rest.openapi.generator.impl.TemplateParser</mainClass>
               <arguments>
                 <argument>${project.basedir}/src/main/templates</argument>
                 <argument>main.ftl</argument>
@@ -152,7 +152,7 @@
             </goals>
             <configuration>
               <classpathScope>test</classpathScope>
-              <mainClass>org.camunda.bpm.engine.rest.openapi.generator.impl.SchemaValidator</mainClass>
+              <mainClass>io.orqueio.bpm.engine.rest.openapi.generator.impl.SchemaValidator</mainClass>
               <arguments>
                 <!-- The following json schema is a copy from https://github.com/OAI/OpenAPI-Specification/blob/master/schemas/v3.0/schema.json -->
                 <!-- Date: 11-Feb-2020 -->

@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.webapp.impl.security.filter.csrf;
+package io.orqueio.bpm.webapp.impl.security.filter.csrf;
 
-import org.camunda.bpm.webapp.impl.security.filter.CsrfPreventionFilter;
+import io.orqueio.bpm.webapp.impl.security.filter.CsrfPreventionFilter;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -39,8 +39,8 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.camunda.bpm.webapp.impl.security.filter.util.CsrfConstants.CSRF_PATH_FIELD_NAME;
-import static org.camunda.bpm.webapp.impl.security.filter.util.CookieConstants.SET_COOKIE_HEADER_NAME;
+import static io.orqueio.bpm.webapp.impl.security.filter.util.CsrfConstants.CSRF_PATH_FIELD_NAME;
+import static io.orqueio.bpm.webapp.impl.security.filter.util.CookieConstants.SET_COOKIE_HEADER_NAME;
 
 /**
  * @author Nikola Koevski

@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.json;
+package io.orqueio.bpm.engine.impl.json;
 
 import java.util.List;
 
-import org.camunda.bpm.engine.impl.QueryEntityRelationCondition;
-import org.camunda.bpm.engine.impl.QueryPropertyImpl;
-import org.camunda.bpm.engine.impl.util.JsonUtil;
+import io.orqueio.bpm.engine.impl.QueryEntityRelationCondition;
+import io.orqueio.bpm.engine.impl.QueryPropertyImpl;
+import io.orqueio.bpm.engine.impl.util.JsonUtil;
 import com.google.gson.JsonObject;
-import org.camunda.bpm.engine.query.QueryProperty;
+import io.orqueio.bpm.engine.query.QueryProperty;
 
 /**
  * @author Thorben Lindhauer

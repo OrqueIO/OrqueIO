@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.commons.logging;
+package io.orqueio.commons.logging;
 
 /**
  * @author Daniel Meyer
@@ -24,7 +24,7 @@ public class ExampleLogger extends BaseLogger {
 
   public static final String COMPONENT_ID = "01";
 
-  public static final String NAME = "org.camunda.commons.logging";
+  public static final String NAME = "io.orqueio.commons.logging";
 
   public static final String PROJECT_CODE = "TEST";
 

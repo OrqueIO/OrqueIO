@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm;
+package io.orqueio.bpm;
 
-import org.camunda.bpm.container.RuntimeContainerDelegate;
-import org.camunda.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.container.RuntimeContainerDelegate;
+import io.orqueio.bpm.engine.ProcessEngine;
 
 
 /**
@@ -32,8 +32,8 @@ public final class BpmPlatform {
   public final static String APP_JNDI_NAME = "camunda-bpm-platform";
   public final static String MODULE_JNDI_NAME = "process-engine";
 
-  public final static String PROCESS_ENGINE_SERVICE_NAME = "ProcessEngineService!org.camunda.bpm.ProcessEngineService";
-  public final static String PROCESS_APPLICATION_SERVICE_NAME = "ProcessApplicationService!org.camunda.bpm.ProcessApplicationService";
+  public final static String PROCESS_ENGINE_SERVICE_NAME = "ProcessEngineService!io.orqueio.bpm.ProcessEngineService";
+  public final static String PROCESS_APPLICATION_SERVICE_NAME = "ProcessApplicationService!io.orqueio.bpm.ProcessApplicationService";
 
   public final static String PROCESS_ENGINE_SERVICE_JNDI_NAME = JNDI_NAME_PREFIX + "/" + APP_JNDI_NAME + "/" + MODULE_JNDI_NAME + "/" + PROCESS_ENGINE_SERVICE_NAME;
   public final static String PROCESS_APPLICATION_SERVICE_JNDI_NAME = JNDI_NAME_PREFIX + "/" + APP_JNDI_NAME + "/" + MODULE_JNDI_NAME + "/" + PROCESS_APPLICATION_SERVICE_NAME;

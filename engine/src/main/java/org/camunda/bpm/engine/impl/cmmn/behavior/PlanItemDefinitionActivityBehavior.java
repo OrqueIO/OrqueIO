@@ -14,29 +14,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.cmmn.behavior;
+package io.orqueio.bpm.engine.impl.cmmn.behavior;
 
-import static org.camunda.bpm.engine.delegate.CaseExecutionListener.ENABLE;
-import static org.camunda.bpm.engine.delegate.CaseExecutionListener.OCCUR;
-import static org.camunda.bpm.engine.delegate.CaseExecutionListener.START;
-import static org.camunda.bpm.engine.impl.cmmn.execution.CaseExecutionState.AVAILABLE;
-import static org.camunda.bpm.engine.impl.cmmn.execution.CaseExecutionState.NEW;
-import static org.camunda.bpm.engine.impl.cmmn.handler.ItemHandler.PROPERTY_REPETITION_RULE;
-import static org.camunda.bpm.engine.impl.cmmn.handler.ItemHandler.PROPERTY_REQUIRED_RULE;
-import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
+import static io.orqueio.bpm.engine.delegate.CaseExecutionListener.ENABLE;
+import static io.orqueio.bpm.engine.delegate.CaseExecutionListener.OCCUR;
+import static io.orqueio.bpm.engine.delegate.CaseExecutionListener.START;
+import static io.orqueio.bpm.engine.impl.cmmn.execution.CaseExecutionState.AVAILABLE;
+import static io.orqueio.bpm.engine.impl.cmmn.execution.CaseExecutionState.NEW;
+import static io.orqueio.bpm.engine.impl.cmmn.handler.ItemHandler.PROPERTY_REPETITION_RULE;
+import static io.orqueio.bpm.engine.impl.cmmn.handler.ItemHandler.PROPERTY_REQUIRED_RULE;
+import static io.orqueio.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
 
 import java.util.Arrays;
 import java.util.List;
 
-import org.camunda.bpm.engine.impl.ProcessEngineLogger;
-import org.camunda.bpm.engine.impl.bpmn.helper.CmmnProperties;
-import org.camunda.bpm.engine.impl.cmmn.CaseControlRule;
-import org.camunda.bpm.engine.impl.cmmn.execution.CaseExecutionState;
-import org.camunda.bpm.engine.impl.cmmn.execution.CmmnActivityExecution;
-import org.camunda.bpm.engine.impl.cmmn.execution.CmmnExecution;
-import org.camunda.bpm.engine.impl.cmmn.model.CmmnActivity;
-import org.camunda.bpm.engine.impl.cmmn.model.CmmnSentryDeclaration;
-import org.camunda.bpm.engine.impl.pvm.PvmException;
+import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
+import io.orqueio.bpm.engine.impl.bpmn.helper.CmmnProperties;
+import io.orqueio.bpm.engine.impl.cmmn.CaseControlRule;
+import io.orqueio.bpm.engine.impl.cmmn.execution.CaseExecutionState;
+import io.orqueio.bpm.engine.impl.cmmn.execution.CmmnActivityExecution;
+import io.orqueio.bpm.engine.impl.cmmn.execution.CmmnExecution;
+import io.orqueio.bpm.engine.impl.cmmn.model.CmmnActivity;
+import io.orqueio.bpm.engine.impl.cmmn.model.CmmnSentryDeclaration;
+import io.orqueio.bpm.engine.impl.pvm.PvmException;
 
 
 /**

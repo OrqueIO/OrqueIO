@@ -4,7 +4,7 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans   http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-  <bean id="processEngineConfiguration" class="org.camunda.bpm.engine.impl.cfg.StandaloneInMemProcessEngineConfiguration">
+  <bean id="processEngineConfiguration" class="io.orqueio.bpm.engine.impl.cfg.StandaloneInMemProcessEngineConfiguration">
   
     <property name="processEngineName" value="CmmnTransformListenerTest-engine" />
   
@@ -26,13 +26,13 @@
 
     <property name="customPreCmmnTransformListeners">
       <list>
-        <bean class="org.camunda.bpm.engine.test.standalone.deploy.TestCmmnTransformListener" />
+        <bean class="io.orqueio.bpm.engine.test.standalone.deploy.TestCmmnTransformListener" />
       </list>
     </property>
 
     <property name="customPostCmmnTransformListeners">
       <list>
-        <bean class="org.camunda.bpm.engine.test.standalone.deploy.TestCmmnTransformListener" />
+        <bean class="io.orqueio.bpm.engine.test.standalone.deploy.TestCmmnTransformListener" />
       </list>
     </property>
 

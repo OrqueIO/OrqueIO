@@ -19,17 +19,17 @@
 -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
   
-<mapper namespace="org.camunda.bpm.engine.impl.persistence.entity.IncidentEntity">
+<mapper namespace="io.orqueio.bpm.engine.impl.persistence.entity.IncidentEntity">
 
   <!-- INCIDENT DELETE -->
 
-  <delete id="deleteIncident" parameterType="org.camunda.bpm.engine.impl.persistence.entity.IncidentEntity">
+  <delete id="deleteIncident" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.IncidentEntity">
     delete from ${prefix}ACT_RU_INCIDENT where ID_ = #{id} and REV_ = #{revision}
   </delete>
 
   <!-- INCIDENT INSERT -->
 
-  <insert id="insertIncident" parameterType="org.camunda.bpm.engine.impl.persistence.entity.IncidentEntity">
+  <insert id="insertIncident" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.IncidentEntity">
     insert into ${prefix}ACT_RU_INCIDENT (
       ID_, 
       INCIDENT_TIMESTAMP_, 
@@ -69,7 +69,7 @@
 
   <!-- INCIDENT RESULTMAP -->
 
-  <resultMap id="incidentResultMap" type="org.camunda.bpm.engine.impl.persistence.entity.IncidentEntity">
+  <resultMap id="incidentResultMap" type="io.orqueio.bpm.engine.impl.persistence.entity.IncidentEntity">
     <id property="id" column="ID_" jdbcType="VARCHAR" />
     <result property="incidentTimestamp" column="INCIDENT_TIMESTAMP_" jdbcType="TIMESTAMP" />
     <result property="incidentType" column="INCIDENT_TYPE_" jdbcType="VARCHAR" />
@@ -114,8 +114,8 @@
     </if>
   </select>
 
-  <select id="selectIncidentByQueryCriteria" parameterType="org.camunda.bpm.engine.impl.IncidentQueryImpl" resultMap="incidentResultMap">
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
+  <select id="selectIncidentByQueryCriteria" parameterType="io.orqueio.bpm.engine.impl.IncidentQueryImpl" resultMap="incidentResultMap">
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
     ${limitBefore}
     select ${distinct} RES.*
     ${limitBetween}
@@ -124,7 +124,7 @@
     ${limitAfter}
   </select>
 
-  <select id="selectIncidentCountByQueryCriteria" parameterType="org.camunda.bpm.engine.impl.IncidentQueryImpl" resultType="long">
+  <select id="selectIncidentCountByQueryCriteria" parameterType="io.orqueio.bpm.engine.impl.IncidentQueryImpl" resultType="long">
     ${countDistinctBeforeStart} RES.ID_ ${countDistinctBeforeEnd}
     <include refid="selectIncidentByQueryCriteriaSql"/>
     ${countDistinctAfterEnd}
@@ -218,19 +218,19 @@
               <bind name="authGroupIds" value="authCheck.authGroupIds" />
               <bind name="permissionChecks" value="authCheck.permissionChecks" />
               <bind name="revokeAuthorizationCheckEnabled" value="authCheck.revokeAuthorizationCheckEnabled" />
-              <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.authorizationCheck" />)
+              <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.authorizationCheck" />)
 
             ELSE
               1
           END ) = 1
       </if>
 
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
 
     </where>
   </sql>
 
-  <update id="updateIncident" parameterType="org.camunda.bpm.engine.impl.persistence.entity.IncidentEntity">
+  <update id="updateIncident" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.IncidentEntity">
     update ${prefix}ACT_RU_INCIDENT
     <set>
       REV_ = #{revisionNext, jdbcType=INTEGER},

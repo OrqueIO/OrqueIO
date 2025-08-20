@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.persistence.entity;
+package io.orqueio.bpm.engine.impl.persistence.entity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -24,12 +24,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import org.camunda.bpm.engine.impl.db.DbEntity;
-import org.camunda.bpm.engine.impl.db.HasDbRevision;
-import org.camunda.bpm.engine.impl.db.HistoricEntity;
-import org.camunda.bpm.engine.impl.util.StringUtil;
-import org.camunda.bpm.engine.task.Comment;
-import org.camunda.bpm.engine.task.Event;
+import io.orqueio.bpm.engine.impl.db.DbEntity;
+import io.orqueio.bpm.engine.impl.db.HasDbRevision;
+import io.orqueio.bpm.engine.impl.db.HistoricEntity;
+import io.orqueio.bpm.engine.impl.util.StringUtil;
+import io.orqueio.bpm.engine.task.Comment;
+import io.orqueio.bpm.engine.task.Event;
 
 
 /**

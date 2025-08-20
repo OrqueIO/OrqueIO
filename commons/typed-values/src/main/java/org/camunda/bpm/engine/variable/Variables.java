@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.variable;
+package io.orqueio.bpm.engine.variable;
 
 import java.io.File;
 import java.io.Serializable;
@@ -23,50 +23,50 @@ import java.util.Map;
 
 import javax.activation.MimetypesFileTypeMap;
 
-import org.camunda.bpm.engine.variable.context.VariableContext;
-import org.camunda.bpm.engine.variable.impl.VariableMapImpl;
-import org.camunda.bpm.engine.variable.impl.context.EmptyVariableContext;
-import org.camunda.bpm.engine.variable.impl.value.AbstractTypedValue;
-import org.camunda.bpm.engine.variable.impl.value.FileValueImpl;
-import org.camunda.bpm.engine.variable.impl.value.NullValueImpl;
-import org.camunda.bpm.engine.variable.impl.value.UntypedValueImpl;
-import org.camunda.bpm.engine.variable.impl.value.PrimitiveTypeValueImpl.BooleanValueImpl;
-import org.camunda.bpm.engine.variable.impl.value.PrimitiveTypeValueImpl.BytesValueImpl;
-import org.camunda.bpm.engine.variable.impl.value.PrimitiveTypeValueImpl.DateValueImpl;
-import org.camunda.bpm.engine.variable.impl.value.PrimitiveTypeValueImpl.DoubleValueImpl;
-import org.camunda.bpm.engine.variable.impl.value.PrimitiveTypeValueImpl.IntegerValueImpl;
-import org.camunda.bpm.engine.variable.impl.value.PrimitiveTypeValueImpl.LongValueImpl;
-import org.camunda.bpm.engine.variable.impl.value.PrimitiveTypeValueImpl.NumberValueImpl;
-import org.camunda.bpm.engine.variable.impl.value.PrimitiveTypeValueImpl.ShortValueImpl;
-import org.camunda.bpm.engine.variable.impl.value.PrimitiveTypeValueImpl.StringValueImpl;
-import org.camunda.bpm.engine.variable.impl.value.builder.FileValueBuilderImpl;
-import org.camunda.bpm.engine.variable.impl.value.builder.ObjectVariableBuilderImpl;
-import org.camunda.bpm.engine.variable.impl.value.builder.SerializedObjectValueBuilderImpl;
-import org.camunda.bpm.engine.variable.type.ValueType;
-import org.camunda.bpm.engine.variable.value.BooleanValue;
-import org.camunda.bpm.engine.variable.value.BytesValue;
-import org.camunda.bpm.engine.variable.value.DateValue;
-import org.camunda.bpm.engine.variable.value.DoubleValue;
-import org.camunda.bpm.engine.variable.value.FileValue;
-import org.camunda.bpm.engine.variable.value.IntegerValue;
-import org.camunda.bpm.engine.variable.value.LongValue;
-import org.camunda.bpm.engine.variable.value.NumberValue;
-import org.camunda.bpm.engine.variable.value.ObjectValue;
-import org.camunda.bpm.engine.variable.value.SerializationDataFormat;
-import org.camunda.bpm.engine.variable.value.ShortValue;
-import org.camunda.bpm.engine.variable.value.StringValue;
-import org.camunda.bpm.engine.variable.value.TypedValue;
-import org.camunda.bpm.engine.variable.value.builder.FileValueBuilder;
-import org.camunda.bpm.engine.variable.value.builder.ObjectValueBuilder;
-import org.camunda.bpm.engine.variable.value.builder.SerializedObjectValueBuilder;
-import org.camunda.bpm.engine.variable.value.builder.TypedValueBuilder;
+import io.orqueio.bpm.engine.variable.context.VariableContext;
+import io.orqueio.bpm.engine.variable.impl.VariableMapImpl;
+import io.orqueio.bpm.engine.variable.impl.context.EmptyVariableContext;
+import io.orqueio.bpm.engine.variable.impl.value.AbstractTypedValue;
+import io.orqueio.bpm.engine.variable.impl.value.FileValueImpl;
+import io.orqueio.bpm.engine.variable.impl.value.NullValueImpl;
+import io.orqueio.bpm.engine.variable.impl.value.UntypedValueImpl;
+import io.orqueio.bpm.engine.variable.impl.value.PrimitiveTypeValueImpl.BooleanValueImpl;
+import io.orqueio.bpm.engine.variable.impl.value.PrimitiveTypeValueImpl.BytesValueImpl;
+import io.orqueio.bpm.engine.variable.impl.value.PrimitiveTypeValueImpl.DateValueImpl;
+import io.orqueio.bpm.engine.variable.impl.value.PrimitiveTypeValueImpl.DoubleValueImpl;
+import io.orqueio.bpm.engine.variable.impl.value.PrimitiveTypeValueImpl.IntegerValueImpl;
+import io.orqueio.bpm.engine.variable.impl.value.PrimitiveTypeValueImpl.LongValueImpl;
+import io.orqueio.bpm.engine.variable.impl.value.PrimitiveTypeValueImpl.NumberValueImpl;
+import io.orqueio.bpm.engine.variable.impl.value.PrimitiveTypeValueImpl.ShortValueImpl;
+import io.orqueio.bpm.engine.variable.impl.value.PrimitiveTypeValueImpl.StringValueImpl;
+import io.orqueio.bpm.engine.variable.impl.value.builder.FileValueBuilderImpl;
+import io.orqueio.bpm.engine.variable.impl.value.builder.ObjectVariableBuilderImpl;
+import io.orqueio.bpm.engine.variable.impl.value.builder.SerializedObjectValueBuilderImpl;
+import io.orqueio.bpm.engine.variable.type.ValueType;
+import io.orqueio.bpm.engine.variable.value.BooleanValue;
+import io.orqueio.bpm.engine.variable.value.BytesValue;
+import io.orqueio.bpm.engine.variable.value.DateValue;
+import io.orqueio.bpm.engine.variable.value.DoubleValue;
+import io.orqueio.bpm.engine.variable.value.FileValue;
+import io.orqueio.bpm.engine.variable.value.IntegerValue;
+import io.orqueio.bpm.engine.variable.value.LongValue;
+import io.orqueio.bpm.engine.variable.value.NumberValue;
+import io.orqueio.bpm.engine.variable.value.ObjectValue;
+import io.orqueio.bpm.engine.variable.value.SerializationDataFormat;
+import io.orqueio.bpm.engine.variable.value.ShortValue;
+import io.orqueio.bpm.engine.variable.value.StringValue;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
+import io.orqueio.bpm.engine.variable.value.builder.FileValueBuilder;
+import io.orqueio.bpm.engine.variable.value.builder.ObjectValueBuilder;
+import io.orqueio.bpm.engine.variable.value.builder.SerializedObjectValueBuilder;
+import io.orqueio.bpm.engine.variable.value.builder.TypedValueBuilder;
 
 /**
  * <p>This class is the entry point to the process engine's typed variables API.
  * Users can import the methods provided by this class using a static import:</p>
  *
  * <code>
- * import static org.camunda.bpm.engine.variable.Variables.*;
+ * import static io.orqueio.bpm.engine.variable.Variables.*;
  * </code>
  *
  * @author Daniel Meyer

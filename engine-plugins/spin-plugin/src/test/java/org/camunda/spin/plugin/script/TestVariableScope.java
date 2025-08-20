@@ -14,18 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.plugin.script;
+package io.orqueio.spin.plugin.script;
 
 import java.util.Collections;
 import java.util.List;
 
-import org.camunda.bpm.engine.impl.core.variable.CoreVariableInstance;
-import org.camunda.bpm.engine.impl.core.variable.scope.AbstractVariableScope;
-import org.camunda.bpm.engine.impl.core.variable.scope.SimpleVariableInstance;
-import org.camunda.bpm.engine.impl.core.variable.scope.VariableInstanceFactory;
-import org.camunda.bpm.engine.impl.core.variable.scope.VariableInstanceLifecycleListener;
-import org.camunda.bpm.engine.impl.core.variable.scope.VariableStore;
-import org.camunda.bpm.engine.impl.core.variable.scope.SimpleVariableInstance.SimpleVariableInstanceFactory;
+import io.orqueio.bpm.engine.impl.core.variable.CoreVariableInstance;
+import io.orqueio.bpm.engine.impl.core.variable.scope.AbstractVariableScope;
+import io.orqueio.bpm.engine.impl.core.variable.scope.SimpleVariableInstance;
+import io.orqueio.bpm.engine.impl.core.variable.scope.VariableInstanceFactory;
+import io.orqueio.bpm.engine.impl.core.variable.scope.VariableInstanceLifecycleListener;
+import io.orqueio.bpm.engine.impl.core.variable.scope.VariableStore;
+import io.orqueio.bpm.engine.impl.core.variable.scope.SimpleVariableInstance.SimpleVariableInstanceFactory;
 
 /**
  * Simple standalone variable scope which can be used in testcases.

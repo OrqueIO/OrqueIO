@@ -14,26 +14,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.variable.impl.mapper;
+package io.orqueio.bpm.client.variable.impl.mapper;
 
-import static org.camunda.bpm.engine.variable.type.FileValueType.VALUE_INFO_FILE_ENCODING;
-import static org.camunda.bpm.engine.variable.type.FileValueType.VALUE_INFO_FILE_MIME_TYPE;
-import static org.camunda.bpm.engine.variable.type.FileValueType.VALUE_INFO_FILE_NAME;
-import static org.camunda.bpm.engine.variable.type.ValueType.FILE;
+import static io.orqueio.bpm.engine.variable.type.FileValueType.VALUE_INFO_FILE_ENCODING;
+import static io.orqueio.bpm.engine.variable.type.FileValueType.VALUE_INFO_FILE_MIME_TYPE;
+import static io.orqueio.bpm.engine.variable.type.FileValueType.VALUE_INFO_FILE_NAME;
+import static io.orqueio.bpm.engine.variable.type.ValueType.FILE;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.hc.client5.http.utils.Base64;
-import org.camunda.bpm.client.impl.EngineClient;
-import org.camunda.bpm.client.variable.impl.AbstractTypedValueMapper;
-import org.camunda.bpm.client.variable.impl.TypedValueField;
-import org.camunda.bpm.client.variable.impl.value.DeferredFileValueImpl;
-import org.camunda.bpm.client.variable.value.DeferredFileValue;
-import org.camunda.bpm.engine.variable.impl.value.FileValueImpl;
-import org.camunda.bpm.engine.variable.impl.value.UntypedValueImpl;
-import org.camunda.bpm.engine.variable.value.FileValue;
-import org.camunda.bpm.engine.variable.value.TypedValue;
+import io.orqueio.bpm.client.impl.EngineClient;
+import io.orqueio.bpm.client.variable.impl.AbstractTypedValueMapper;
+import io.orqueio.bpm.client.variable.impl.TypedValueField;
+import io.orqueio.bpm.client.variable.impl.value.DeferredFileValueImpl;
+import io.orqueio.bpm.client.variable.value.DeferredFileValue;
+import io.orqueio.bpm.engine.variable.impl.value.FileValueImpl;
+import io.orqueio.bpm.engine.variable.impl.value.UntypedValueImpl;
+import io.orqueio.bpm.engine.variable.value.FileValue;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
 
 /**
  * @author Tassilo Weidner

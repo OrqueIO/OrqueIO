@@ -10,7 +10,7 @@
     <sequenceFlow id="flow1" sourceRef="theStart" targetRef="fork" />
 
     <parallelGateway id="fork" />
-    <serviceTask id="service1" camunda:class="org.camunda.bpm.engine.test.bpmn.async.AsyncService" camunda:async="true" />
+    <serviceTask id="service1" camunda:class="io.orqueio.bpm.engine.test.bpmn.async.AsyncService" camunda:async="true" />
     <intermediateCatchEvent id="timer1">
        <timerEventDefinition>
           <timeDuration>PT0S</timeDuration>

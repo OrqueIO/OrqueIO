@@ -15,23 +15,23 @@
  * limitations under the License.
  */
 
-package org.camunda.bpm.engine.impl.externaltask;
+package io.orqueio.bpm.engine.impl.externaltask;
 
-import static org.camunda.bpm.engine.impl.Direction.ASCENDING;
-import static org.camunda.bpm.engine.impl.Direction.DESCENDING;
-import static org.camunda.bpm.engine.impl.ExternalTaskQueryProperty.CREATE_TIME;
-import static org.camunda.bpm.engine.impl.util.CollectionUtil.getLastElement;
-import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
-import static org.camunda.bpm.engine.impl.util.EnsureUtil.ensureNull;
+import static io.orqueio.bpm.engine.impl.Direction.ASCENDING;
+import static io.orqueio.bpm.engine.impl.Direction.DESCENDING;
+import static io.orqueio.bpm.engine.impl.ExternalTaskQueryProperty.CREATE_TIME;
+import static io.orqueio.bpm.engine.impl.util.CollectionUtil.getLastElement;
+import static io.orqueio.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
+import static io.orqueio.bpm.engine.impl.util.EnsureUtil.ensureNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.camunda.bpm.engine.exception.NotValidException;
-import org.camunda.bpm.engine.externaltask.ExternalTaskQueryTopicBuilder;
-import org.camunda.bpm.engine.externaltask.FetchAndLockBuilder;
-import org.camunda.bpm.engine.impl.Direction;
-import org.camunda.bpm.engine.impl.QueryOrderingProperty;
-import org.camunda.bpm.engine.impl.interceptor.CommandExecutor;
+import io.orqueio.bpm.engine.exception.NotValidException;
+import io.orqueio.bpm.engine.externaltask.ExternalTaskQueryTopicBuilder;
+import io.orqueio.bpm.engine.externaltask.FetchAndLockBuilder;
+import io.orqueio.bpm.engine.impl.Direction;
+import io.orqueio.bpm.engine.impl.QueryOrderingProperty;
+import io.orqueio.bpm.engine.impl.interceptor.CommandExecutor;
 
 /**
  * Implementation of {@link FetchAndLockBuilder}.

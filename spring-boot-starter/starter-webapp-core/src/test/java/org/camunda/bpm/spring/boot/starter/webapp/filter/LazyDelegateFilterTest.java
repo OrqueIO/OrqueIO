@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.spring.boot.starter.webapp.filter;
+package io.orqueio.bpm.spring.boot.starter.webapp.filter;
 
 import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.doReturn;
@@ -31,7 +31,7 @@ import jakarta.servlet.FilterConfig;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 
-import org.camunda.bpm.spring.boot.starter.webapp.filter.LazyDelegateFilter.InitHook;
+import io.orqueio.bpm.spring.boot.starter.webapp.filter.LazyDelegateFilter.InitHook;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InOrder;

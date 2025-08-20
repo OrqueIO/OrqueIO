@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.deployment.ear.beans;
+package io.orqueio.bpm.integrationtest.deployment.ear.beans;
 
-import org.camunda.bpm.application.ProcessApplication;
-import org.camunda.bpm.application.ProcessApplicationInterface;
+import io.orqueio.bpm.application.ProcessApplication;
+import io.orqueio.bpm.application.ProcessApplicationInterface;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.ejb.ConcurrencyManagement;
@@ -38,7 +38,7 @@ import javax.ejb.TransactionAttributeType;
 @ProcessApplication(deploymentDescriptors = {"deployment-descriptor-with-custom-filename.xml"})
 @Local(ProcessApplicationInterface.class)
 // Using fully-qualified class name instead of import statement to allow for automatic Jakarta transformation
-public class AnnotatedEjbPa extends org.camunda.bpm.application.impl.EjbProcessApplication {
+public class AnnotatedEjbPa extends io.orqueio.bpm.application.impl.EjbProcessApplication {
 
   @PostConstruct
   public void start() {

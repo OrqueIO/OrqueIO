@@ -14,23 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.variable.pa;
+package io.orqueio.bpm.client.variable.pa;
 
-import org.camunda.bpm.client.ExternalTaskClient;
-import org.camunda.bpm.client.dto.HistoricProcessInstanceDto;
-import org.camunda.bpm.client.dto.ProcessInstanceDto;
-import org.camunda.bpm.client.exception.BadRequestException;
-import org.camunda.bpm.client.exception.EngineException;
-import org.camunda.bpm.client.exception.NotFoundException;
-import org.camunda.bpm.client.exception.UnknownHttpErrorException;
-import org.camunda.bpm.client.rule.ClientRule;
-import org.camunda.bpm.client.rule.EngineRule;
-import org.camunda.bpm.client.task.ExternalTask;
-import org.camunda.bpm.client.task.ExternalTaskService;
-import org.camunda.bpm.client.task.impl.ExternalTaskImpl;
-import org.camunda.bpm.client.util.RecordingExternalTaskHandler;
-import org.camunda.bpm.client.util.RecordingInvocationHandler;
-import org.camunda.bpm.client.util.RecordingInvocationHandler.RecordedInvocation;
+import io.orqueio.bpm.client.ExternalTaskClient;
+import io.orqueio.bpm.client.dto.HistoricProcessInstanceDto;
+import io.orqueio.bpm.client.dto.ProcessInstanceDto;
+import io.orqueio.bpm.client.exception.BadRequestException;
+import io.orqueio.bpm.client.exception.EngineException;
+import io.orqueio.bpm.client.exception.NotFoundException;
+import io.orqueio.bpm.client.exception.UnknownHttpErrorException;
+import io.orqueio.bpm.client.rule.ClientRule;
+import io.orqueio.bpm.client.rule.EngineRule;
+import io.orqueio.bpm.client.task.ExternalTask;
+import io.orqueio.bpm.client.task.ExternalTaskService;
+import io.orqueio.bpm.client.task.impl.ExternalTaskImpl;
+import io.orqueio.bpm.client.util.RecordingExternalTaskHandler;
+import io.orqueio.bpm.client.util.RecordingInvocationHandler;
+import io.orqueio.bpm.client.util.RecordingInvocationHandler.RecordedInvocation;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -43,10 +43,10 @@ import java.util.Properties;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
-import static org.camunda.bpm.client.util.PropertyUtil.CAMUNDA_ENGINE_NAME;
-import static org.camunda.bpm.client.util.PropertyUtil.CAMUNDA_ENGINE_REST;
-import static org.camunda.bpm.client.util.PropertyUtil.DEFAULT_PROPERTIES_PATH;
-import static org.camunda.bpm.client.util.PropertyUtil.loadProperties;
+import static io.orqueio.bpm.client.util.PropertyUtil.CAMUNDA_ENGINE_NAME;
+import static io.orqueio.bpm.client.util.PropertyUtil.CAMUNDA_ENGINE_REST;
+import static io.orqueio.bpm.client.util.PropertyUtil.DEFAULT_PROPERTIES_PATH;
+import static io.orqueio.bpm.client.util.PropertyUtil.loadProperties;
 
 public class PaExceptionIT {
 

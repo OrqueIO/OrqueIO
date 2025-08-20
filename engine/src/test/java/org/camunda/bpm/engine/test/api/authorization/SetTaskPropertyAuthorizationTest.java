@@ -15,28 +15,28 @@
  * limitations under the License.
  */
 
-package org.camunda.bpm.engine.test.api.authorization;
+package io.orqueio.bpm.engine.test.api.authorization;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Fail.fail;
-import static org.camunda.bpm.engine.authorization.Authorization.ANY;
-import static org.camunda.bpm.engine.authorization.Permissions.TASK_ASSIGN;
-import static org.camunda.bpm.engine.authorization.Permissions.UPDATE;
-import static org.camunda.bpm.engine.authorization.Permissions.UPDATE_TASK;
-import static org.camunda.bpm.engine.authorization.Resources.PROCESS_DEFINITION;
-import static org.camunda.bpm.engine.authorization.Resources.TASK;
+import static io.orqueio.bpm.engine.authorization.Authorization.ANY;
+import static io.orqueio.bpm.engine.authorization.Permissions.TASK_ASSIGN;
+import static io.orqueio.bpm.engine.authorization.Permissions.UPDATE;
+import static io.orqueio.bpm.engine.authorization.Permissions.UPDATE_TASK;
+import static io.orqueio.bpm.engine.authorization.Resources.PROCESS_DEFINITION;
+import static io.orqueio.bpm.engine.authorization.Resources.TASK;
 
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import org.camunda.bpm.engine.AuthorizationException;
-import org.camunda.bpm.engine.TaskService;
-import org.camunda.bpm.engine.task.Task;
-import org.camunda.bpm.engine.test.util.ClockTestUtil;
-import org.camunda.bpm.engine.test.util.EntityRemoveRule;
-import org.camunda.bpm.engine.test.util.ObjectProperty;
-import org.camunda.bpm.engine.test.util.RemoveAfter;
-import org.camunda.bpm.engine.test.util.TriConsumer;
+import io.orqueio.bpm.engine.AuthorizationException;
+import io.orqueio.bpm.engine.TaskService;
+import io.orqueio.bpm.engine.task.Task;
+import io.orqueio.bpm.engine.test.util.ClockTestUtil;
+import io.orqueio.bpm.engine.test.util.EntityRemoveRule;
+import io.orqueio.bpm.engine.test.util.ObjectProperty;
+import io.orqueio.bpm.engine.test.util.RemoveAfter;
+import io.orqueio.bpm.engine.test.util.TriConsumer;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;

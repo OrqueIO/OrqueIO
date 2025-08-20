@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.persistence.entity;
+package io.orqueio.bpm.engine.impl.persistence.entity;
 
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.camunda.bpm.engine.identity.Tenant;
-import org.camunda.bpm.engine.impl.db.DbEntity;
-import org.camunda.bpm.engine.impl.db.HasDbRevision;
+import io.orqueio.bpm.engine.identity.Tenant;
+import io.orqueio.bpm.engine.impl.db.DbEntity;
+import io.orqueio.bpm.engine.impl.db.HasDbRevision;
 
 public class TenantEntity implements Tenant, Serializable, DbEntity, HasDbRevision {
 

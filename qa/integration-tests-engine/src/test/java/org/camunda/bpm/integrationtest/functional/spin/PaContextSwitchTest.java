@@ -14,19 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.functional.spin;
+package io.orqueio.bpm.integrationtest.functional.spin;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.camunda.bpm.application.ProcessApplicationContext;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.variable.value.SerializableValue;
-import org.camunda.bpm.integrationtest.functional.spin.dataformat.JsonDataFormatConfigurator;
-import org.camunda.bpm.integrationtest.functional.spin.dataformat.JsonSerializable;
-import org.camunda.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
-import org.camunda.bpm.integrationtest.util.DeploymentHelper;
-import org.camunda.bpm.integrationtest.util.TestContainer;
-import org.camunda.spin.spi.DataFormatConfigurator;
+import io.orqueio.bpm.application.ProcessApplicationContext;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.variable.value.SerializableValue;
+import io.orqueio.bpm.integrationtest.functional.spin.dataformat.JsonDataFormatConfigurator;
+import io.orqueio.bpm.integrationtest.functional.spin.dataformat.JsonSerializable;
+import io.orqueio.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
+import io.orqueio.bpm.integrationtest.util.DeploymentHelper;
+import io.orqueio.bpm.integrationtest.util.TestContainer;
+import io.orqueio.spin.spi.DataFormatConfigurator;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -38,7 +38,7 @@ import org.junit.runner.RunWith;
 
 import java.util.concurrent.Callable;
 
-import static org.camunda.bpm.application.ProcessApplicationContext.withProcessApplicationContext;
+import static io.orqueio.bpm.application.ProcessApplicationContext.withProcessApplicationContext;
 
 /**
  * @author Thorben Lindhauer

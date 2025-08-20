@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.springboot.project.qa.spin;
+package io.orqueio.bpm.springboot.project.qa.spin;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.camunda.bpm.engine.HistoryService;
-import org.camunda.bpm.engine.RuntimeService;
+import io.orqueio.bpm.engine.HistoryService;
+import io.orqueio.bpm.engine.RuntimeService;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;

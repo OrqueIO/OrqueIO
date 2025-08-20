@@ -14,19 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.client.task;
+package io.orqueio.bpm.client.task;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.camunda.bpm.client.rule.ClientRule.LOCK_DURATION;
-import static org.camunda.bpm.client.util.ProcessModels.BPMN_ERROR_EXTERNAL_TASK_PROCESS;
-import static org.camunda.bpm.client.util.ProcessModels.EXTERNAL_TASK_ID;
-import static org.camunda.bpm.client.util.ProcessModels.EXTERNAL_TASK_PRIORITY;
-import static org.camunda.bpm.client.util.ProcessModels.EXTERNAL_TASK_TOPIC_FOO;
-import static org.camunda.bpm.client.util.ProcessModels.PROCESS_KEY;
-import static org.camunda.bpm.client.util.ProcessModels.PROCESS_KEY_2;
-import static org.camunda.bpm.client.util.ProcessModels.USER_TASK_AFTER_BPMN_ERROR;
-import static org.camunda.bpm.client.util.ProcessModels.USER_TASK_ID;
-import static org.camunda.bpm.client.util.ProcessModels.createProcessWithExclusiveGateway;
+import static io.orqueio.bpm.client.rule.ClientRule.LOCK_DURATION;
+import static io.orqueio.bpm.client.util.ProcessModels.BPMN_ERROR_EXTERNAL_TASK_PROCESS;
+import static io.orqueio.bpm.client.util.ProcessModels.EXTERNAL_TASK_ID;
+import static io.orqueio.bpm.client.util.ProcessModels.EXTERNAL_TASK_PRIORITY;
+import static io.orqueio.bpm.client.util.ProcessModels.EXTERNAL_TASK_TOPIC_FOO;
+import static io.orqueio.bpm.client.util.ProcessModels.PROCESS_KEY;
+import static io.orqueio.bpm.client.util.ProcessModels.PROCESS_KEY_2;
+import static io.orqueio.bpm.client.util.ProcessModels.USER_TASK_AFTER_BPMN_ERROR;
+import static io.orqueio.bpm.client.util.ProcessModels.USER_TASK_ID;
+import static io.orqueio.bpm.client.util.ProcessModels.createProcessWithExclusiveGateway;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -34,20 +34,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import org.camunda.bpm.client.ExternalTaskClient;
-import org.camunda.bpm.client.dto.IncidentDto;
-import org.camunda.bpm.client.dto.ProcessDefinitionDto;
-import org.camunda.bpm.client.dto.ProcessInstanceDto;
-import org.camunda.bpm.client.dto.TaskDto;
-import org.camunda.bpm.client.dto.VariableInstanceDto;
-import org.camunda.bpm.client.rule.ClientRule;
-import org.camunda.bpm.client.rule.EngineRule;
-import org.camunda.bpm.client.util.ProcessModels;
-import org.camunda.bpm.client.util.RecordingExternalTaskHandler;
-import org.camunda.bpm.engine.variable.Variables;
-import org.camunda.bpm.model.bpmn.BpmnModelInstance;
-import org.camunda.bpm.model.bpmn.instance.BoundaryEvent;
-import org.camunda.bpm.model.bpmn.instance.ErrorEventDefinition;
+import io.orqueio.bpm.client.ExternalTaskClient;
+import io.orqueio.bpm.client.dto.IncidentDto;
+import io.orqueio.bpm.client.dto.ProcessDefinitionDto;
+import io.orqueio.bpm.client.dto.ProcessInstanceDto;
+import io.orqueio.bpm.client.dto.TaskDto;
+import io.orqueio.bpm.client.dto.VariableInstanceDto;
+import io.orqueio.bpm.client.rule.ClientRule;
+import io.orqueio.bpm.client.rule.EngineRule;
+import io.orqueio.bpm.client.util.ProcessModels;
+import io.orqueio.bpm.client.util.RecordingExternalTaskHandler;
+import io.orqueio.bpm.engine.variable.Variables;
+import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
+import io.orqueio.bpm.model.bpmn.instance.BoundaryEvent;
+import io.orqueio.bpm.model.bpmn.instance.ErrorEventDefinition;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;

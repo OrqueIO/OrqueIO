@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.impl;
+package io.orqueio.bpm.engine.rest.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
@@ -22,41 +22,41 @@ import java.util.List;
 import java.util.Map;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
-import org.camunda.bpm.engine.AuthorizationException;
-import org.camunda.bpm.engine.BadUserRequestException;
-import org.camunda.bpm.engine.ManagementService;
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.ProcessEngineException;
-import org.camunda.bpm.engine.RuntimeService;
-import org.camunda.bpm.engine.batch.Batch;
-import org.camunda.bpm.engine.exception.NullValueException;
-import org.camunda.bpm.engine.history.HistoricProcessInstanceQuery;
-import org.camunda.bpm.engine.impl.util.EnsureUtil;
-import org.camunda.bpm.engine.management.SetJobRetriesByProcessAsyncBuilder;
-import org.camunda.bpm.engine.query.Query;
-import org.camunda.bpm.engine.rest.ProcessInstanceRestService;
-import org.camunda.bpm.engine.rest.dto.AbstractQueryDto;
-import org.camunda.bpm.engine.rest.dto.CountResultDto;
-import org.camunda.bpm.engine.rest.dto.VariableValueDto;
-import org.camunda.bpm.engine.rest.dto.batch.BatchDto;
-import org.camunda.bpm.engine.rest.dto.history.HistoricProcessInstanceQueryDto;
-import org.camunda.bpm.engine.rest.dto.runtime.ProcessInstanceDto;
-import org.camunda.bpm.engine.rest.dto.runtime.ProcessInstanceQueryDto;
-import org.camunda.bpm.engine.rest.dto.runtime.ProcessInstanceSuspensionStateAsyncDto;
-import org.camunda.bpm.engine.rest.dto.runtime.ProcessInstanceSuspensionStateDto;
-import org.camunda.bpm.engine.rest.dto.runtime.SetJobRetriesByProcessDto;
-import org.camunda.bpm.engine.rest.dto.runtime.batch.CorrelationMessageAsyncDto;
-import org.camunda.bpm.engine.rest.dto.runtime.batch.DeleteProcessInstancesDto;
-import org.camunda.bpm.engine.rest.dto.runtime.batch.SetVariablesAsyncDto;
-import org.camunda.bpm.engine.rest.exception.InvalidRequestException;
-import org.camunda.bpm.engine.rest.exception.RestException;
-import org.camunda.bpm.engine.rest.sub.runtime.ProcessInstanceResource;
-import org.camunda.bpm.engine.rest.sub.runtime.impl.ProcessInstanceResourceImpl;
-import org.camunda.bpm.engine.rest.util.QueryUtil;
-import org.camunda.bpm.engine.runtime.MessageCorrelationAsyncBuilder;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.runtime.ProcessInstanceQuery;
-import org.camunda.bpm.engine.variable.VariableMap;
+import io.orqueio.bpm.engine.AuthorizationException;
+import io.orqueio.bpm.engine.BadUserRequestException;
+import io.orqueio.bpm.engine.ManagementService;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.RuntimeService;
+import io.orqueio.bpm.engine.batch.Batch;
+import io.orqueio.bpm.engine.exception.NullValueException;
+import io.orqueio.bpm.engine.history.HistoricProcessInstanceQuery;
+import io.orqueio.bpm.engine.impl.util.EnsureUtil;
+import io.orqueio.bpm.engine.management.SetJobRetriesByProcessAsyncBuilder;
+import io.orqueio.bpm.engine.query.Query;
+import io.orqueio.bpm.engine.rest.ProcessInstanceRestService;
+import io.orqueio.bpm.engine.rest.dto.AbstractQueryDto;
+import io.orqueio.bpm.engine.rest.dto.CountResultDto;
+import io.orqueio.bpm.engine.rest.dto.VariableValueDto;
+import io.orqueio.bpm.engine.rest.dto.batch.BatchDto;
+import io.orqueio.bpm.engine.rest.dto.history.HistoricProcessInstanceQueryDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.ProcessInstanceDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.ProcessInstanceQueryDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.ProcessInstanceSuspensionStateAsyncDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.ProcessInstanceSuspensionStateDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.SetJobRetriesByProcessDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.batch.CorrelationMessageAsyncDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.batch.DeleteProcessInstancesDto;
+import io.orqueio.bpm.engine.rest.dto.runtime.batch.SetVariablesAsyncDto;
+import io.orqueio.bpm.engine.rest.exception.InvalidRequestException;
+import io.orqueio.bpm.engine.rest.exception.RestException;
+import io.orqueio.bpm.engine.rest.sub.runtime.ProcessInstanceResource;
+import io.orqueio.bpm.engine.rest.sub.runtime.impl.ProcessInstanceResourceImpl;
+import io.orqueio.bpm.engine.rest.util.QueryUtil;
+import io.orqueio.bpm.engine.runtime.MessageCorrelationAsyncBuilder;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.runtime.ProcessInstanceQuery;
+import io.orqueio.bpm.engine.variable.VariableMap;
 
 public class ProcessInstanceRestServiceImpl extends AbstractRestProcessEngineAware implements
     ProcessInstanceRestService {

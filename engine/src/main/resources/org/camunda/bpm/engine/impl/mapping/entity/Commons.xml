@@ -19,7 +19,7 @@
 -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="org.camunda.bpm.engine.impl.persistence.entity.Commons">
+<mapper namespace="io.orqueio.bpm.engine.impl.persistence.entity.Commons">
 
   <!-- SQL snippets that are reused in different mappers -->
   
@@ -37,7 +37,7 @@
         <if test="valueCondition.textValue != null &amp;&amp; valueCondition.longValue == null &amp;&amp; valueCondition.doubleValue == null">
           <choose>
             <when test="valueCondition.findNulledEmptyStrings">
-              and ${varPrefix}TEXT_ is null and ${varPrefix}TEXT2_ = '${@org.camunda.bpm.engine.impl.variable.serializer.StringValueSerializer@EMPTY_STRING}'
+              and ${varPrefix}TEXT_ is null and ${varPrefix}TEXT2_ = '${@io.orqueio.bpm.engine.impl.variable.serializer.StringValueSerializer@EMPTY_STRING}'
             </when>
             <otherwise>
               and ${varPrefix}TEXT_ is not null and
@@ -47,7 +47,7 @@
               </choose>
               <choose>
                 <when test="queryVariableValue.operatorName.contains('LIKE')">LIKE</when>
-                <otherwise><include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.executionVariableOperator" /></otherwise>
+                <otherwise><include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.executionVariableOperator" /></otherwise>
               </choose>
               <choose>
                 <when test="queryVariableValue.variableValueIgnoreCase">UPPER(#{valueCondition.textValue})</when>
@@ -62,7 +62,7 @@
           and ${varPrefix}TEXT2_ is not null and ${varPrefix}TEXT2_
           <choose>
             <when test="queryVariableValue.operatorName.contains('LIKE')">LIKE</when>
-            <otherwise><include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.executionVariableOperator" /></otherwise>
+            <otherwise><include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.executionVariableOperator" /></otherwise>
           </choose>
           #{valueCondition.textValue2}
           <if test="queryVariableValue.operatorName.contains('LIKE')">ESCAPE ${escapeChar}</if>
@@ -70,13 +70,13 @@
     
         <if test="valueCondition.longValue != null">
           and ${varPrefix}LONG_ is not null and ${varPrefix}LONG_
-          <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.executionVariableOperator" />
+          <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.executionVariableOperator" />
           #{valueCondition.longValue}
         </if>
     
         <if test="valueCondition.doubleValue != null">
           and ${varPrefix}DOUBLE_ is not null and ${varPrefix}DOUBLE_
-          <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.executionVariableOperator" />
+          <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.executionVariableOperator" />
           #{valueCondition.doubleValue}
         </if>
   
@@ -121,7 +121,7 @@
     <choose>
       <when test="orderingProperties.size > 0">
         <foreach collection="orderingProperties" item="orderingProperty" index="index">
-          <bind name="newOrderBy" value="@org.camunda.bpm.engine.impl.db.sql.MybatisJoinHelper@orderBy(orderingProperty, index)" />
+          <bind name="newOrderBy" value="@io.orqueio.bpm.engine.impl.db.sql.MybatisJoinHelper@orderBy(orderingProperty, index)" />
 
           <if test="index == 0">
             <bind name="internalOrderBy" value="newOrderBy"/>
@@ -145,9 +145,9 @@
   <sql id="orderBySelection">
     <foreach collection="orderingProperties" item="orderingProperty" index="index">
       <if test="!orderingProperty.containedProperty">
-        <bind name="tableAlias" value="@org.camunda.bpm.engine.impl.db.sql.MybatisJoinHelper@tableAlias(orderingProperty.relation, index)"/>
+        <bind name="tableAlias" value="@io.orqueio.bpm.engine.impl.db.sql.MybatisJoinHelper@tableAlias(orderingProperty.relation, index)"/>
         ,
-        ${@org.camunda.bpm.engine.impl.db.sql.MybatisJoinHelper@orderBySelection(orderingProperty, index)}
+        ${@io.orqueio.bpm.engine.impl.db.sql.MybatisJoinHelper@orderBySelection(orderingProperty, index)}
         as
         ${tableAlias}_${orderingProperty.queryProperty.name}
       </if>
@@ -195,12 +195,12 @@
 
   <sql id="applyInForPaginatedCollection">
     <bind name="sizeOfIds" value="listOfIds.size" />
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedSql" />
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedSql" />
   </sql>
 
   <sql id="applyInForPaginatedArray">
     <bind name="sizeOfIds" value="listOfIds.length" />
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedSql" />
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedSql" />
   </sql>
 
   <sql id="periodUnitFunction">

@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.container.impl.metadata;
+package io.orqueio.bpm.container.impl.metadata;
 
-import org.camunda.bpm.application.impl.metadata.ProcessesXmlParse;
-import org.camunda.bpm.engine.impl.util.ReflectUtil;
-import org.camunda.bpm.engine.impl.util.xml.Parser;
+import io.orqueio.bpm.application.impl.metadata.ProcessesXmlParse;
+import io.orqueio.bpm.engine.impl.util.ReflectUtil;
+import io.orqueio.bpm.engine.impl.util.xml.Parser;
 
 
 /**

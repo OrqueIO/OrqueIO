@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.model.xml.impl.type.reference;
+package io.orqueio.bpm.model.xml.impl.type.reference;
 
-import org.camunda.bpm.model.xml.ModelException;
-import org.camunda.bpm.model.xml.ModelReferenceException;
-import org.camunda.bpm.model.xml.impl.ModelInstanceImpl;
-import org.camunda.bpm.model.xml.impl.instance.ModelElementInstanceImpl;
-import org.camunda.bpm.model.xml.instance.ModelElementInstance;
-import org.camunda.bpm.model.xml.type.child.ChildElement;
-import org.camunda.bpm.model.xml.type.reference.ElementReference;
+import io.orqueio.bpm.model.xml.ModelException;
+import io.orqueio.bpm.model.xml.ModelReferenceException;
+import io.orqueio.bpm.model.xml.impl.ModelInstanceImpl;
+import io.orqueio.bpm.model.xml.impl.instance.ModelElementInstanceImpl;
+import io.orqueio.bpm.model.xml.instance.ModelElementInstance;
+import io.orqueio.bpm.model.xml.type.child.ChildElement;
+import io.orqueio.bpm.model.xml.type.reference.ElementReference;
 
 /**
  * @author Sebastian Menski

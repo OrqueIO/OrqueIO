@@ -14,19 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.integrationtest.jobexecutor;
+package io.orqueio.bpm.integrationtest.jobexecutor;
 
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Map;
-import org.camunda.bpm.engine.impl.jobexecutor.DefaultJobPriorityProvider;
-import org.camunda.bpm.engine.runtime.Job;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.variable.Variables;
-import org.camunda.bpm.engine.variable.Variables.SerializationDataFormats;
-import org.camunda.bpm.integrationtest.jobexecutor.beans.PriorityBean;
-import org.camunda.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
+import io.orqueio.bpm.engine.impl.jobexecutor.DefaultJobPriorityProvider;
+import io.orqueio.bpm.engine.runtime.Job;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.variable.Variables;
+import io.orqueio.bpm.engine.variable.Variables.SerializationDataFormats;
+import io.orqueio.bpm.integrationtest.jobexecutor.beans.PriorityBean;
+import io.orqueio.bpm.integrationtest.util.AbstractFoxPlatformIntegrationTest;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -47,7 +47,7 @@ public class JobPrioritizationFailureTest extends AbstractFoxPlatformIntegration
 
   protected ProcessInstance processInstance;
 
-  public static final String VARIABLE_CLASS_NAME = "org.camunda.bpm.integrationtest.jobexecutor.beans.PriorityBean";
+  public static final String VARIABLE_CLASS_NAME = "io.orqueio.bpm.integrationtest.jobexecutor.beans.PriorityBean";
   public static final String PRIORITY_BEAN_INSTANCE_FILE = "priorityBean.instance";
 
   @Before
@@ -58,7 +58,7 @@ public class JobPrioritizationFailureTest extends AbstractFoxPlatformIntegration
   }
 
   protected void unregisterProcessApplication() {
-    org.camunda.bpm.engine.repository.Deployment deployment =
+    io.orqueio.bpm.engine.repository.Deployment deployment =
         processEngine.getRepositoryService().createDeploymentQuery().singleResult();
 
     managementService.unregisterProcessApplication(deployment.getId(), false);

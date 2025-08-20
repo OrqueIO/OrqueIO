@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.connect.httpclient.impl;
+package io.orqueio.connect.httpclient.impl;
 
 import java.util.List;
 
 import org.apache.hc.client5.http.classic.HttpClient;
 import org.apache.hc.core5.http.message.BasicClassicHttpRequest;
-import org.camunda.connect.impl.AbstractRequestInvocation;
-import org.camunda.connect.spi.ConnectorRequest;
-import org.camunda.connect.spi.ConnectorRequestInterceptor;
+import io.orqueio.connect.impl.AbstractRequestInvocation;
+import io.orqueio.connect.spi.ConnectorRequest;
+import io.orqueio.connect.spi.ConnectorRequestInterceptor;
 
 public class HttpRequestInvocation extends AbstractRequestInvocation<BasicClassicHttpRequest> {
 

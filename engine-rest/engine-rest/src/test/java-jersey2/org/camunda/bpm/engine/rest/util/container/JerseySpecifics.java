@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.rest.util.container;
+package io.orqueio.bpm.engine.rest.util.container;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.ws.rs.core.Application;
 
-import org.camunda.bpm.engine.rest.CustomJacksonDateFormatTest;
-import org.camunda.bpm.engine.rest.ExceptionHandlerTest;
-import org.camunda.bpm.engine.rest.application.TestCustomResourceApplication;
+import io.orqueio.bpm.engine.rest.CustomJacksonDateFormatTest;
+import io.orqueio.bpm.engine.rest.ExceptionHandlerTest;
+import io.orqueio.bpm.engine.rest.application.TestCustomResourceApplication;
 import org.junit.rules.ExternalResource;
 import org.junit.rules.RuleChain;
 import org.junit.rules.TemporaryFolder;

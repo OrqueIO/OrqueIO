@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.bpmn.job;
+package io.orqueio.bpm.engine.test.bpmn.job;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
@@ -23,11 +23,11 @@ import static org.junit.Assert.fail;
 
 import java.util.List;
 
-import org.camunda.bpm.engine.ParseException;
-import org.camunda.bpm.engine.runtime.Execution;
-import org.camunda.bpm.engine.runtime.Job;
-import org.camunda.bpm.engine.test.Deployment;
-import org.camunda.bpm.engine.test.util.PluggableProcessEngineTest;
+import io.orqueio.bpm.engine.ParseException;
+import io.orqueio.bpm.engine.runtime.Execution;
+import io.orqueio.bpm.engine.runtime.Job;
+import io.orqueio.bpm.engine.test.Deployment;
+import io.orqueio.bpm.engine.test.util.PluggableProcessEngineTest;
 import org.junit.Test;
 
 /**
@@ -218,7 +218,7 @@ public class JobPrioritizationBpmnConstantValueTest extends PluggableProcessEngi
 
     // deploying a process definition where the activity
     // has a priority but defines no jobs succeeds
-    org.camunda.bpm.engine.repository.Deployment deployment = repositoryService
+    io.orqueio.bpm.engine.repository.Deployment deployment = repositoryService
       .createDeployment()
       .addClasspathResource("org/camunda/bpm/engine/test/bpmn/job/JobPrioritizationBpmnTest.testParsePriorityOnNonAsyncActivity.bpmn20.xml")
       .deploy();
@@ -230,7 +230,7 @@ public class JobPrioritizationBpmnConstantValueTest extends PluggableProcessEngi
   @Test
   public void testTimerStartEventPriorityOnProcessDefinition() {
     // given a timer start job
-    org.camunda.bpm.engine.repository.Deployment deployment = repositoryService
+    io.orqueio.bpm.engine.repository.Deployment deployment = repositoryService
         .createDeployment()
         .addClasspathResource("org/camunda/bpm/engine/test/bpmn/job/JobPrioritizationBpmnConstantValueTest.testTimerStartEventPriorityOnProcessDefinition.bpmn20.xml")
         .deploy();
@@ -247,7 +247,7 @@ public class JobPrioritizationBpmnConstantValueTest extends PluggableProcessEngi
   @Test
   public void testTimerStartEventPriorityOnActivity() {
     // given a timer start job
-    org.camunda.bpm.engine.repository.Deployment deployment = repositoryService
+    io.orqueio.bpm.engine.repository.Deployment deployment = repositoryService
         .createDeployment()
         .addClasspathResource("org/camunda/bpm/engine/test/bpmn/job/JobPrioritizationBpmnConstantValueTest.testTimerStartEventPriorityOnActivity.bpmn20.xml")
         .deploy();

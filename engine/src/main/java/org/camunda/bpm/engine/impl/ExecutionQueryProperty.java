@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl;
+package io.orqueio.bpm.engine.impl;
 
-import org.camunda.bpm.engine.query.QueryProperty;
-import org.camunda.bpm.engine.runtime.ExecutionQuery;
+import io.orqueio.bpm.engine.query.QueryProperty;
+import io.orqueio.bpm.engine.runtime.ExecutionQuery;
 
 /**
  * Contains the possible properties that can be used in a {@link ExecutionQuery}.

@@ -12,7 +12,7 @@
 
       <humanTask id="HumanTask_1" name="A HumanTask">
         <extensionElements>
-          <camunda:variableListener class="org.camunda.bpm.engine.test.cmmn.listener.LogVariableListener" />
+          <camunda:variableListener class="io.orqueio.bpm.engine.test.cmmn.listener.LogVariableListener" />
         </extensionElements>
       </humanTask>
 

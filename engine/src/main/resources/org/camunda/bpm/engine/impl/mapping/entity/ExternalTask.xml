@@ -19,9 +19,9 @@
 -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="org.camunda.bpm.engine.impl.persistence.entity.ExternalTaskEntity">
+<mapper namespace="io.orqueio.bpm.engine.impl.persistence.entity.ExternalTaskEntity">
 
-  <resultMap id="externalTaskResultMap" type="org.camunda.bpm.engine.impl.persistence.entity.ExternalTaskEntity">
+  <resultMap id="externalTaskResultMap" type="io.orqueio.bpm.engine.impl.persistence.entity.ExternalTaskEntity">
     <id property="id" column="ID_" jdbcType="VARCHAR"/>
     <result property="revision" column="REV_" jdbcType="INTEGER"/>
     <result property="topicName" column="TOPIC_NAME_" jdbcType="VARCHAR"/>
@@ -47,12 +47,12 @@
     <!-- note: if you add mappings here, make sure to select the columns in 'columnSelection' -->
   </resultMap>
   
-  <resultMap type="org.camunda.bpm.engine.impl.util.ImmutablePair" id="deploymentIdMapping">
+  <resultMap type="io.orqueio.bpm.engine.impl.util.ImmutablePair" id="deploymentIdMapping">
     <id property="left" column="DEPLOYMENT_ID_" jdbcType="VARCHAR" />
     <id property="right" column="ID_" jdbcType="VARCHAR" />
   </resultMap>
 
-  <insert id="insertExternalTask" parameterType="org.camunda.bpm.engine.impl.persistence.entity.ExternalTaskEntity">
+  <insert id="insertExternalTask" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.ExternalTaskEntity">
     insert into ${prefix}ACT_RU_EXT_TASK (
       ID_,
       WORKER_ID_,
@@ -96,7 +96,7 @@
     )
   </insert>
   
-  <update id="updateExternalTask" parameterType="org.camunda.bpm.engine.impl.persistence.entity.ExternalTaskEntity">
+  <update id="updateExternalTask" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.ExternalTaskEntity">
     update ${prefix}ACT_RU_EXT_TASK
     <set>
       REV_ = #{revisionNext, jdbcType=INTEGER},
@@ -120,7 +120,7 @@
       and REV_ = #{revision, jdbcType=INTEGER}
   </update>
   
-  <update id="updateExternalTaskSuspensionStateByParameters" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject">
+  <update id="updateExternalTaskSuspensionStateByParameters" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject">
     update ${prefix}ACT_RU_EXT_TASK
     <set>
       SUSPENSION_STATE_ = #{parameter.suspensionState, jdbcType=INTEGER}
@@ -150,12 +150,12 @@
           )
         </if>
         <bind name="columnPrefix" value="''"/>
-        <include refid="org.camunda.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheckWithPrefix" />
+        <include refid="io.orqueio.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheckWithPrefix" />
       </if>
     </where>
   </update>
   
-  <delete id="deleteExternalTask" parameterType="org.camunda.bpm.engine.impl.persistence.entity.ExternalTaskEntity">
+  <delete id="deleteExternalTask" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.ExternalTaskEntity">
     delete from ${prefix}ACT_RU_EXT_TASK where ID_ = #{id} and REV_ = #{revision}
   </delete>
   
@@ -163,17 +163,17 @@
    select * from ${prefix}ACT_RU_EXT_TASK where ID_ = #{id, jdbcType=VARCHAR}
   </select>
   
-  <select id="selectExternalTasksByExecutionId" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject" resultMap="externalTaskResultMap">
+  <select id="selectExternalTasksByExecutionId" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject" resultMap="externalTaskResultMap">
     select * from ${prefix}ACT_RU_EXT_TASK where EXECUTION_ID_ = #{parameter, jdbcType=VARCHAR}
   </select>
   
-  <select id="selectExternalTasksByProcessInstanceId" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject" resultMap="externalTaskResultMap">
+  <select id="selectExternalTasksByProcessInstanceId" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject" resultMap="externalTaskResultMap">
     select * from ${prefix}ACT_RU_EXT_TASK where PROC_INST_ID_ = #{parameter, jdbcType=VARCHAR}
   </select>
   
-  <select id="selectExternalTasksForTopics" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject" resultMap="externalTaskResultMap">
+  <select id="selectExternalTasksForTopics" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject" resultMap="externalTaskResultMap">
     <bind name="orderingProperties" value="parameter.orderingProperties" />
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
 
     <bind name="performAuthorizationCheck" value="authCheck.shouldPerformAuthorizatioCheck &amp;&amp; !authCheck.revokeAuthorizationCheckEnabled &amp;&amp; authCheck.authUserId != null" />
 
@@ -195,7 +195,7 @@
     inner join ${prefix}ACT_RE_PROCDEF PD on RES.PROC_DEF_ID_ = PD.ID_
 
     <if test="performAuthorizationCheck">
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoinWithoutOnClause" /> 
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoinWithoutOnClause" />
       AUTH ON (
        (AUTH.RESOURCE_TYPE_ = 8 
         AND (AUTH.RESOURCE_ID_ ${authJoinStart} RES.PROC_INST_ID_ ${authJoinSeparator} '*' ${authJoinEnd})   
@@ -205,7 +205,7 @@
         AND (AUTH.RESOURCE_ID_ ${authJoinStart} RES.PROC_DEF_KEY_ ${authJoinSeparator} '*' ${authJoinEnd}) 
         AND ${bitand1}AUTH.PERMS_${bitand2}512${bitand3} = 512) 
       )
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoinWithoutOnClause" />
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoinWithoutOnClause" />
       AUTH1 ON (
          (AUTH1.RESOURCE_TYPE_ = 8 
           AND (AUTH1.RESOURCE_ID_ ${authJoin1Start} RES.PROC_INST_ID_ ${authJoin1Separator} '*' ${authJoin1End})
@@ -270,7 +270,7 @@
                 ${varPrefix}NAME_ = #{variable.name}
                 and
                 <bind name="queryVariableValue" value="variable" />
-                <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.variableValueConditions" />
+                <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.variableValueConditions" />
               </foreach>
               )
           </if>
@@ -281,8 +281,8 @@
 
       </if>
     </where>
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.queryAuthorizationCheck" />
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.queryAuthorizationCheck" />
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
     ) RES
     <if test="parameter.applyOrdering">
       ${orderBy}
@@ -290,13 +290,13 @@
     ${limitAfter}
   </select>
 
-  <select id="selectTopicNamesByQuery" parameterType="org.camunda.bpm.engine.impl.ExternalTaskQueryImpl" resultType="string">
+  <select id="selectTopicNamesByQuery" parameterType="io.orqueio.bpm.engine.impl.ExternalTaskQueryImpl" resultType="string">
     select distinct RES.TOPIC_NAME_
     <include refid="selectExternalTaskByQueryCriteriaSql"/>
   </select>
 
-  <select id="selectExternalTaskByQueryCriteria" parameterType="org.camunda.bpm.engine.impl.ExternalTaskQueryImpl" resultMap="externalTaskResultMap">
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
+  <select id="selectExternalTaskByQueryCriteria" parameterType="io.orqueio.bpm.engine.impl.ExternalTaskQueryImpl" resultMap="externalTaskResultMap">
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
     ${limitBefore}
     select ${distinct}
     <include refid="columnSelection"/>
@@ -306,8 +306,8 @@
     ${limitAfter}
   </select>
 
-  <select id="selectExternalTaskIdsByQueryCriteria" parameterType="org.camunda.bpm.engine.impl.ExternalTaskQueryImpl" resultType="string">
-    <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
+  <select id="selectExternalTaskIdsByQueryCriteria" parameterType="io.orqueio.bpm.engine.impl.ExternalTaskQueryImpl" resultType="string">
+    <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.bindOrderBy"/>
     ${limitBefore}
     select ${distinct} RES.ID_
     ${limitBetween}
@@ -316,13 +316,13 @@
     ${limitAfter}
   </select>
 
-  <select id="selectExternalTaskCountByQueryCriteria" parameterType="org.camunda.bpm.engine.impl.ExternalTaskQueryImpl" resultType="long">
+  <select id="selectExternalTaskCountByQueryCriteria" parameterType="io.orqueio.bpm.engine.impl.ExternalTaskQueryImpl" resultType="long">
     ${countDistinctBeforeStart} RES.ID_ ${countDistinctBeforeEnd}
     <include refid="selectExternalTaskByQueryCriteriaSql"/>
     ${countDistinctAfterEnd}
   </select>
   
-  <select id="selectExternalTaskDeploymentIdMappingsByQueryCriteria" parameterType="org.camunda.bpm.engine.impl.ExternalTaskQueryImpl" resultMap="deploymentIdMapping">
+  <select id="selectExternalTaskDeploymentIdMappingsByQueryCriteria" parameterType="io.orqueio.bpm.engine.impl.ExternalTaskQueryImpl" resultMap="deploymentIdMapping">
     select distinct PD.DEPLOYMENT_ID_, RES.ID_
     <include refid="selectExternalTaskByQueryCriteriaSql"/>
     inner join ${prefix}ACT_RE_PROCDEF PD on RES.PROC_DEF_ID_ = PD.ID_
@@ -338,7 +338,7 @@
     left join ${prefix}ACT_RE_PROCDEF PD on RES.PROC_DEF_ID_ = PD.ID_
 
     <if test="authCheck.shouldPerformAuthorizatioCheck &amp;&amp; !authCheck.revokeAuthorizationCheckEnabled &amp;&amp; authCheck.authUserId != null">
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoinWithoutOnClause" /> 
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoinWithoutOnClause" />
       AUTH ON (
        (AUTH.RESOURCE_TYPE_ = 8 
         AND AUTH.RESOURCE_ID_ ${authJoinStart} RES.PROC_INST_ID_ ${authJoinSeparator} '*' ${authJoinEnd} 
@@ -357,7 +357,7 @@
         and
         <bind name="listOfIds" value="externalTaskIds"/>
         <bind name="fieldName" value="'RES.ID_'"/>
-        <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection"/>
+        <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedCollection"/>
       </if>
       <if test="workerId != null">
         and RES.WORKER_ID_ = #{workerId}
@@ -389,7 +389,7 @@
         and
         <bind name="listOfIds" value="processInstanceIdIn"/>
         <bind name="fieldName" value="'RES.PROC_INST_ID_'"/>
-        <include refid="org.camunda.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedArray"/>
+        <include refid="io.orqueio.bpm.engine.impl.persistence.entity.Commons.applyInForPaginatedArray"/>
       </if>
       <if test="processDefinitionId != null">
         and RES.PROC_DEF_ID_ = #{processDefinitionId}
@@ -433,8 +433,8 @@
           #{tenantId}
         </foreach>
       </if>
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.AuthorizationEntity.queryAuthorizationCheck" />
-      <include refid="org.camunda.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.queryAuthorizationCheck" />
+      <include refid="io.orqueio.bpm.engine.impl.persistence.entity.TenantEntity.queryTenantCheck" />
     </where>
     ) RES
   </sql>

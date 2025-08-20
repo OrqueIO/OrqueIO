@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.impl.util;
+package io.orqueio.bpm.engine.impl.util;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doReturn;
@@ -22,7 +22,7 @@ import static org.mockito.Mockito.mock;
 
 import java.sql.SQLException;
 import org.apache.ibatis.exceptions.PersistenceException;
-import org.camunda.bpm.engine.ProcessEngineException;
+import io.orqueio.bpm.engine.ProcessEngineException;
 import org.junit.Test;
 
 public class ExceptionUtilTest {

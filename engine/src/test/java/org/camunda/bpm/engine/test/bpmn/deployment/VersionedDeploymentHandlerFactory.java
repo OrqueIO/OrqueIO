@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.test.bpmn.deployment;
+package io.orqueio.bpm.engine.test.bpmn.deployment;
 
-import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.repository.DeploymentHandler;
-import org.camunda.bpm.engine.repository.DeploymentHandlerFactory;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.repository.DeploymentHandler;
+import io.orqueio.bpm.engine.repository.DeploymentHandlerFactory;
 
 public class VersionedDeploymentHandlerFactory implements DeploymentHandlerFactory {
 
