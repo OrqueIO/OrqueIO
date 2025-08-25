@@ -2,17 +2,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <description>
-    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://camunda.com/contact/
-  </description>
 
-  <artifactId>camunda-qa-integration-tests-engine-jakarta</artifactId>
-  <name>Camunda Platform - QA Integration Tests - Engine - Jakarta</name>
+
+  <artifactId>orqueio-qa-integration-tests-engine-jakarta</artifactId>
+  <name>Orque IO Platform - QA Integration Tests - Engine - Jakarta</name>
 
   <parent>
     <groupId>io.orqueio.bpm.qa</groupId>
-    <artifactId>camunda-qa</artifactId>
-    <version>7.24.0-SNAPSHOT</version>
+    <artifactId>orqueio-qa</artifactId>
+    <version>0.24.0-SNAPSHOT</version>
   </parent>
 
   <properties>
@@ -170,7 +168,7 @@
       </exclusions>
     </dependency>
 
-    <!-- camunda -->
+    <!-- orqueio -->
     <dependency>
       <groupId>io.orqueio.bpm</groupId>
       <artifactId>orqueio-engine</artifactId>
@@ -237,7 +235,7 @@
     -->
     <dependency>
       <groupId>io.orqueio.bpm</groupId>
-      <artifactId>camunda-bom</artifactId>
+      <artifactId>orqueio-bom</artifactId>
       <version>${project.version}</version>
       <type>pom</type>
       <scope>test</scope>
@@ -257,7 +255,7 @@
     </dependency>
 
     <!-- explicit Spring dependencies for applications
-      that pack camunda-engine-spring -->
+      that pack orqueio-engine-spring -->
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-context</artifactId>
@@ -304,9 +302,9 @@
             <configuration>
               <forceCreation>true</forceCreation>
               <excludes>
-                <exclude>org/camunda/bpm/integrationtest/util/TestConstants*</exclude>
-                <exclude>org/camunda/bpm/integrationtest/util/TestContainer*</exclude>
-                <exclude>org/camunda/bpm/integrationtest/util/TestProcessApplication*</exclude>
+                <exclude>io/orqueio/bpm/integrationtest/util/TestConstants*</exclude>
+                <exclude>io/orqueio/bpm/integrationtest/util/TestContainer*</exclude>
+                <exclude>io/orqueio/bpm/integrationtest/util/TestProcessApplication*</exclude>
               </excludes>
             </configuration>
           </execution>
@@ -584,7 +582,7 @@
         <dependencies>
           <dependency>
             <groupId>io.orqueio.bpm</groupId>
-            <artifactId>camunda-core-internal-dependencies</artifactId>
+            <artifactId>orqueio-core-internal-dependencies</artifactId>
             <version>${project.version}</version>
             <scope>import</scope>
             <type>pom</type>
@@ -596,7 +594,7 @@
         <dependency>
           <!-- make sure this comes after runtime in the reactor build -->
           <groupId>io.orqueio.bpm.qa</groupId>
-          <artifactId>camunda-qa-tomcat-runtime</artifactId>
+          <artifactId>orqueio-qa-tomcat-runtime</artifactId>
           <version>${project.version}</version>
           <scope>provided</scope>
           <type>pom</type>
@@ -720,7 +718,7 @@
         <dependency>
           <!-- make sure this comes after runtime in the reactor build -->
           <groupId>io.orqueio.bpm.qa</groupId>
-          <artifactId>camunda-qa-wildfly-runtime</artifactId>
+          <artifactId>orqueio-qa-wildfly-runtime</artifactId>
           <version>${project.version}</version>
           <scope>provided</scope>
           <type>pom</type>
@@ -810,7 +808,7 @@
         <dependency>
           <!-- make sure this comes after runtime in the reactor build -->
           <groupId>io.orqueio.bpm.qa</groupId>
-          <artifactId>camunda-qa-wildfly-runtime</artifactId>
+          <artifactId>orqueio-qa-wildfly-runtime</artifactId>
           <version>${project.version}</version>
           <scope>provided</scope>
           <type>pom</type>
@@ -1016,7 +1014,7 @@
       <dependencies>
         <dependency>
           <groupId>io.orqueio.bpm</groupId>
-          <artifactId>camunda-engine</artifactId>
+          <artifactId>orqueio-engine</artifactId>
           <scope>test</scope>
         </dependency>
       </dependencies>
@@ -1036,7 +1034,7 @@
                   <artifactItems>
                     <artifactItem>
                       <groupId>io.orqueio.bpm</groupId>
-                      <artifactId>camunda-engine</artifactId>
+                      <artifactId>orqueio-engine</artifactId>
                       <outputDirectory>${project.build.directory}/sql-scripts/engine</outputDirectory>
                       <overWrite>true</overWrite>
                     </artifactItem>
@@ -1058,13 +1056,13 @@
                 <configuration>
                   <srcFiles>
                     <!-- try dropping the DB if it exists. -->
-                    <srcFile>${project.build.directory}/sql-scripts/engine/org/camunda/bpm/engine/db/drop/activiti.${database.type}.drop.decision.engine.sql</srcFile>
-                    <srcFile>${project.build.directory}/sql-scripts/engine/org/camunda/bpm/engine/db/drop/activiti.${database.type}.drop.case.engine.sql</srcFile>
-                    <srcFile>${project.build.directory}/sql-scripts/engine/org/camunda/bpm/engine/db/drop/activiti.${database.type}.drop.engine.sql</srcFile>
-                    <srcFile>${project.build.directory}/sql-scripts/engine/org/camunda/bpm/engine/db/drop/activiti.${database.type}.drop.identity.sql</srcFile>
-                    <srcFile>${project.build.directory}/sql-scripts/engine/org/camunda/bpm/engine/db/drop/activiti.${database.type}.drop.decision.history.sql</srcFile>
-                    <srcFile>${project.build.directory}/sql-scripts/engine/org/camunda/bpm/engine/db/drop/activiti.${database.type}.drop.case.history.sql</srcFile>
-                    <srcFile>${project.build.directory}/sql-scripts/engine/org/camunda/bpm/engine/db/drop/activiti.${database.type}.drop.history.sql</srcFile>
+                    <srcFile>${project.build.directory}/sql-scripts/engine/io/orqueio/bpm/engine/db/drop/activiti.${database.type}.drop.decision.engine.sql</srcFile>
+                    <srcFile>${project.build.directory}/sql-scripts/engine/io/orqueio/bpm/engine/db/drop/activiti.${database.type}.drop.case.engine.sql</srcFile>
+                    <srcFile>${project.build.directory}/sql-scripts/engine/io/orqueio/bpm/engine/db/drop/activiti.${database.type}.drop.engine.sql</srcFile>
+                    <srcFile>${project.build.directory}/sql-scripts/engine/io/orqueio/bpm/engine/db/drop/activiti.${database.type}.drop.identity.sql</srcFile>
+                    <srcFile>${project.build.directory}/sql-scripts/engine/io/orqueio/bpm/engine/db/drop/activiti.${database.type}.drop.decision.history.sql</srcFile>
+                    <srcFile>${project.build.directory}/sql-scripts/engine/io/orqueio/bpm/engine/db/drop/activiti.${database.type}.drop.case.history.sql</srcFile>
+                    <srcFile>${project.build.directory}/sql-scripts/engine/io/orqueio/bpm/engine/db/drop/activiti.${database.type}.drop.history.sql</srcFile>
                   </srcFiles>
                   <autocommit>true</autocommit>
                   <onError>continue</onError>

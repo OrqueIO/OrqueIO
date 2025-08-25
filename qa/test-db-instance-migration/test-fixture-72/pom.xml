@@ -3,17 +3,15 @@
 
   <parent>
     <groupId>io.orqueio.bpm.qa.upgrade</groupId>
-    <artifactId>camunda-qa-db-instance-migration</artifactId>
-    <version>7.24.0-SNAPSHOT</version>
+    <artifactId>orqueio-qa-db-instance-migration</artifactId>
+    <version>0.24.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>camunda-qa-upgrade-test-fixture-72</artifactId>
+  <artifactId>orqueio-qa-upgrade-test-fixture-72</artifactId>
   <packaging>jar</packaging>
 
-  <description>
-    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://camunda.com/contact/
-  </description>
-  <name>Camunda Platform - QA - upgrade - instance migration - test fixture - 7.2.0</name>
+
+  <name>Orque IO Platform - QA - upgrade - instance migration - test fixture - 7.2.0</name>
 
   <properties>
   <!-- Due to https://issues.apache.org/jira/browse/MRELEASE-799 the release test fails when
@@ -27,8 +25,8 @@
     <dependencies>
       <dependency>
         <groupId>io.orqueio.bpm</groupId>
-        <artifactId>camunda-bom</artifactId>
-        <version>7.2.0</version>
+        <artifactId>orqueio-bom</artifactId>
+        <version>0.24.0-SNAPSHOT</version>
         <scope>import</scope>
         <type>pom</type>
       </dependency>
@@ -45,7 +43,7 @@
 
     <dependency>
       <groupId>io.orqueio.bpm.qa.upgrade</groupId>
-      <artifactId>camunda-qa-upgrade-scenario-util</artifactId>
+      <artifactId>orqueio-qa-upgrade-scenario-util</artifactId>
       <version>${project.version}</version>
     </dependency>
   </dependencies>

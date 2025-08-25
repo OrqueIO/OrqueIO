@@ -1,24 +1,22 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <description>
-    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://camunda.com/contact/
-  </description>
 
-  <artifactId>camunda-qa-integration-tests-webapps-shared-engine</artifactId>
-  <name>Camunda Platform - QA Integration Tests - Webapps Shared Engine</name>
+
+  <artifactId>orqueio-qa-integration-tests-webapps-shared-engine</artifactId>
+  <name>Orque IO Platform - QA Integration Tests - Webapps Shared Engine</name>
 
   <parent>
     <groupId>io.orqueio.bpm.qa</groupId>
-    <artifactId>camunda-qa-integration-tests-webapps-root</artifactId>
-    <version>7.24.0-SNAPSHOT</version>
+    <artifactId>orqueio-qa-integration-tests-webapps-root</artifactId>
+    <version>0.24.0-SNAPSHOT</version>
     <relativePath>../</relativePath>
   </parent>
 
   <dependencies>
     <dependency>
       <groupId>io.orqueio.bpm.qa</groupId>
-      <artifactId>camunda-qa-integration-tests-webapps</artifactId>
+      <artifactId>orqueio-qa-integration-tests-webapps</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
     </dependency>
@@ -35,20 +33,20 @@
         <dependency>
           <!-- make sure it comes after assembly in the build -->
           <groupId>io.orqueio.bpm.qa</groupId>
-          <artifactId>camunda-qa-wildfly-runtime</artifactId>
+          <artifactId>orqueio-qa-wildfly-runtime</artifactId>
           <version>${project.version}</version>
           <type>pom</type>
         </dependency>
         <dependency>
           <groupId>io.orqueio.bpm.webapp</groupId>
-          <artifactId>camunda-webapp-wildfly</artifactId>
+          <artifactId>orqueio-webapp-wildfly</artifactId>
           <version>${project.version}</version>
           <type>war</type>
           <scope>test</scope>
         </dependency>
         <dependency>
           <groupId>io.orqueio.bpm</groupId>
-          <artifactId>camunda-engine-rest-jakarta</artifactId>
+          <artifactId>orqueio-engine-rest-jakarta</artifactId>
           <version>${project.version}</version>
           <classifier>wildfly</classifier>
           <scope>test</scope>
@@ -56,7 +54,7 @@
         </dependency>
         <dependency>
           <groupId>io.orqueio.bpm.example</groupId>
-          <artifactId>camunda-example-invoice-jakarta</artifactId>
+          <artifactId>orqueio-example-invoice-jakarta</artifactId>
           <version>${project.version}</version>
           <scope>test</scope>
           <type>war</type>
@@ -104,14 +102,14 @@
               <deployables>
                 <deployable>
                   <groupId>io.orqueio.bpm.example</groupId>
-                  <artifactId>camunda-example-invoice-jakarta</artifactId>
+                  <artifactId>orqueio-example-invoice-jakarta</artifactId>
                   <type>war</type>
                   <pingURL>http://localhost:${jboss.http.port}/engine-rest/engine/default/user/demo/profile</pingURL>
                   <pingTimeout>${cargo.deploy.timeout}</pingTimeout>
                 </deployable>
                 <deployable>
                   <groupId>io.orqueio.bpm</groupId>
-                  <artifactId>camunda-engine-rest-jakarta</artifactId>
+                  <artifactId>orqueio-engine-rest-jakarta</artifactId>
                   <classifier>wildfly</classifier>
                   <type>war</type>
                   <pingURL>http://localhost:${jboss.http.port}/engine-rest/engine/default/process-definition</pingURL>
@@ -119,9 +117,9 @@
                 </deployable>
                 <deployable>
                   <groupId>io.orqueio.bpm.webapp</groupId>
-                  <artifactId>camunda-webapp-wildfly</artifactId>
+                  <artifactId>orqueio-webapp-wildfly</artifactId>
                   <type>war</type>
-                  <pingURL>http://localhost:${jboss.http.port}/camunda</pingURL>
+                  <pingURL>http://localhost:${jboss.http.port}/orqueio</pingURL>
                   <pingTimeout>${cargo.deploy.timeout}</pingTimeout>
                 </deployable>
               </deployables>
@@ -151,20 +149,20 @@
         <dependency>
           <!-- make sure it comes after assembly in the build -->
           <groupId>io.orqueio.bpm.qa</groupId>
-          <artifactId>camunda-qa-wildfly26-runtime</artifactId>
+          <artifactId>orqueio-qa-wildfly26-runtime</artifactId>
           <version>${project.version}</version>
           <type>pom</type>
         </dependency>
         <dependency>
           <groupId>io.orqueio.bpm.webapp</groupId>
-          <artifactId>camunda-webapp-jboss</artifactId>
+          <artifactId>orqueio-webapp-jboss</artifactId>
           <version>${project.version}</version>
           <type>war</type>
           <scope>test</scope>
         </dependency>
         <dependency>
           <groupId>io.orqueio.bpm</groupId>
-          <artifactId>camunda-engine-rest</artifactId>
+          <artifactId>orqueio-engine-rest</artifactId>
           <version>${project.version}</version>
           <classifier>wildfly</classifier>
           <scope>test</scope>
@@ -172,7 +170,7 @@
         </dependency>
         <dependency>
           <groupId>io.orqueio.bpm</groupId>
-          <artifactId>camunda-engine</artifactId>
+          <artifactId>orqueio-engine</artifactId>
           <scope>test</scope>
           <exclusions>
             <exclusion>
@@ -224,14 +222,14 @@
               <deployables>
                 <deployable>
                   <groupId>io.orqueio.bpm.example</groupId>
-                  <artifactId>camunda-example-invoice</artifactId>
+                  <artifactId>orqueio-example-invoice</artifactId>
                   <type>war</type>
                   <pingURL>http://localhost:${jboss.http.port}/engine-rest/engine/default/user/demo/profile</pingURL>
                   <pingTimeout>${cargo.deploy.timeout}</pingTimeout>
                 </deployable>
                 <deployable>
                   <groupId>io.orqueio.bpm</groupId>
-                  <artifactId>camunda-engine-rest</artifactId>
+                  <artifactId>orqueio-engine-rest</artifactId>
                   <classifier>wildfly</classifier>
                   <type>war</type>
                   <pingURL>http://localhost:${jboss.http.port}/engine-rest/engine/default/process-definition</pingURL>
@@ -239,9 +237,9 @@
                 </deployable>
                 <deployable>
                   <groupId>io.orqueio.bpm.webapp</groupId>
-                  <artifactId>camunda-webapp-jboss</artifactId>
+                  <artifactId>orqueio-webapp-jboss</artifactId>
                   <type>war</type>
-                  <pingURL>http://localhost:${jboss.http.port}/camunda</pingURL>
+                  <pingURL>http://localhost:${jboss.http.port}/orqueio</pingURL>
                   <pingTimeout>${cargo.deploy.timeout}</pingTimeout>
                 </deployable>
               </deployables>
@@ -271,20 +269,20 @@
         <dependency>
           <!-- make sure it comes after assembly in the build -->
           <groupId>io.orqueio.bpm.qa</groupId>
-          <artifactId>camunda-qa-tomcat9-runtime</artifactId>
+          <artifactId>orqueio-qa-tomcat9-runtime</artifactId>
           <version>${project.version}</version>
           <type>pom</type>
         </dependency>
         <dependency>
           <groupId>io.orqueio.bpm.webapp</groupId>
-          <artifactId>camunda-webapp-tomcat</artifactId>
+          <artifactId>orqueio-webapp-tomcat</artifactId>
           <version>${project.version}</version>
           <type>war</type>
           <scope>test</scope>
         </dependency>
         <dependency>
           <groupId>io.orqueio.bpm</groupId>
-          <artifactId>camunda-engine-rest</artifactId>
+          <artifactId>orqueio-engine-rest</artifactId>
           <scope>test</scope>
           <type>war</type>
           <classifier>tomcat</classifier>
@@ -333,7 +331,7 @@
               <deployables>
                 <deployable>
                   <groupId>io.orqueio.bpm</groupId>
-                  <artifactId>camunda-engine-rest</artifactId>
+                  <artifactId>orqueio-engine-rest</artifactId>
                   <type>war</type>
                   <classifier>tomcat</classifier>
                   <pingURL>http://localhost:${tomcat.connector.http.port}/engine-rest/engine/default/process-definition</pingURL>
@@ -344,17 +342,17 @@
                 </deployable>
                 <deployable>
                   <groupId>io.orqueio.bpm.webapp</groupId>
-                  <artifactId>camunda-webapp-tomcat</artifactId>
+                  <artifactId>orqueio-webapp-tomcat</artifactId>
                   <type>war</type>
-                  <pingURL>http://localhost:${tomcat.connector.http.port}/camunda</pingURL>
+                  <pingURL>http://localhost:${tomcat.connector.http.port}/orqueio</pingURL>
                   <pingTimeout>${cargo.deploy.timeout}</pingTimeout>
                   <properties>
-                    <context>camunda</context>
+                    <context>orqueio</context>
                   </properties>
                 </deployable>
                 <deployable>
                   <groupId>io.orqueio.bpm.example</groupId>
-                  <artifactId>camunda-example-invoice</artifactId>
+                  <artifactId>orqueio-example-invoice</artifactId>
                   <type>war</type>
                   <properties>
                     <context>invoice</context>
@@ -377,20 +375,20 @@
         <dependency>
           <!-- make sure it comes after assembly in the build -->
           <groupId>io.orqueio.bpm.qa</groupId>
-          <artifactId>camunda-qa-tomcat-runtime</artifactId>
+          <artifactId>orqueio-qa-tomcat-runtime</artifactId>
           <version>${project.version}</version>
           <type>pom</type>
         </dependency>
         <dependency>
           <groupId>io.orqueio.bpm.webapp</groupId>
-          <artifactId>camunda-webapp-tomcat-jakarta</artifactId>
+          <artifactId>orqueio-webapp-tomcat-jakarta</artifactId>
           <version>${project.version}</version>
           <type>war</type>
           <scope>test</scope>
         </dependency>
         <dependency>
           <groupId>io.orqueio.bpm</groupId>
-          <artifactId>camunda-engine-rest-jakarta</artifactId>
+          <artifactId>orqueio-engine-rest-jakarta</artifactId>
           <version>${project.version}</version>
           <type>war</type>
           <scope>test</scope>
@@ -398,7 +396,7 @@
         </dependency>
         <dependency>
           <groupId>io.orqueio.bpm.example</groupId>
-          <artifactId>camunda-example-invoice-jakarta</artifactId>
+          <artifactId>orqueio-example-invoice-jakarta</artifactId>
           <version>${project.version}</version>
           <type>war</type>
           <scope>test</scope>
@@ -446,7 +444,7 @@
               <deployables>
                 <deployable>
                   <groupId>io.orqueio.bpm</groupId>
-                  <artifactId>camunda-engine-rest-jakarta</artifactId>
+                  <artifactId>orqueio-engine-rest-jakarta</artifactId>
                   <type>war</type>
                   <classifier>tomcat</classifier>
                   <pingURL>http://localhost:${tomcat.connector.http.port}/engine-rest/engine/default/process-definition</pingURL>
@@ -457,17 +455,17 @@
                 </deployable>
                 <deployable>
                   <groupId>io.orqueio.bpm.webapp</groupId>
-                  <artifactId>camunda-webapp-tomcat-jakarta</artifactId>
+                  <artifactId>orqueio-webapp-tomcat-jakarta</artifactId>
                   <type>war</type>
-                  <pingURL>http://localhost:${tomcat.connector.http.port}/camunda</pingURL>
+                  <pingURL>http://localhost:${tomcat.connector.http.port}/orqueio</pingURL>
                   <pingTimeout>${cargo.deploy.timeout}</pingTimeout>
                   <properties>
-                    <context>camunda</context>
+                    <context>orqueio</context>
                   </properties>
                 </deployable>
                 <deployable>
                   <groupId>io.orqueio.bpm.example</groupId>
-                  <artifactId>camunda-example-invoice-jakarta</artifactId>
+                  <artifactId>orqueio-example-invoice-jakarta</artifactId>
                   <type>war</type>
                   <properties>
                     <context>invoice</context>
@@ -507,7 +505,7 @@
             <configuration>
               <redirectTestOutputToFile>true</redirectTestOutputToFile>
               <dependenciesToScan>
-                <dependency>io.orqueio.bpm.qa:camunda-qa-integration-tests-webapps</dependency>
+                <dependency>io.orqueio.bpm.qa:orqueio-qa-integration-tests-webapps</dependency>
               </dependenciesToScan>
               <systemPropertyVariables>
                 <selenium.screenshot.directory>${project.build.directory}/selenium-screenshots</selenium.screenshot.directory>
@@ -537,7 +535,7 @@
                   <artifactItems>
                     <artifactItem>
                       <groupId>io.orqueio.bpm</groupId>
-                      <artifactId>camunda-engine</artifactId>
+                      <artifactId>orqueio-engine</artifactId>
                       <outputDirectory>${project.build.directory}/sql-scripts/engine</outputDirectory>
                       <overWrite>true</overWrite>
                     </artifactItem>
@@ -559,13 +557,13 @@
                 <configuration>
                   <srcFiles>
                     <!-- try dropping the DB if it exists. -->
-                    <srcFile>${project.build.directory}/sql-scripts/engine/org/camunda/bpm/engine/db/drop/activiti.${database.type}.drop.decision.engine.sql</srcFile>
-                    <srcFile>${project.build.directory}/sql-scripts/engine/org/camunda/bpm/engine/db/drop/activiti.${database.type}.drop.case.engine.sql</srcFile>
-                    <srcFile>${project.build.directory}/sql-scripts/engine/org/camunda/bpm/engine/db/drop/activiti.${database.type}.drop.engine.sql</srcFile>
-                    <srcFile>${project.build.directory}/sql-scripts/engine/org/camunda/bpm/engine/db/drop/activiti.${database.type}.drop.identity.sql</srcFile>
-                    <srcFile>${project.build.directory}/sql-scripts/engine/org/camunda/bpm/engine/db/drop/activiti.${database.type}.drop.decision.history.sql</srcFile>
-                    <srcFile>${project.build.directory}/sql-scripts/engine/org/camunda/bpm/engine/db/drop/activiti.${database.type}.drop.case.history.sql</srcFile>
-                    <srcFile>${project.build.directory}/sql-scripts/engine/org/camunda/bpm/engine/db/drop/activiti.${database.type}.drop.history.sql</srcFile>
+                    <srcFile>${project.build.directory}/sql-scripts/engine/io/orqueio/bpm/engine/db/drop/activiti.${database.type}.drop.decision.engine.sql</srcFile>
+                    <srcFile>${project.build.directory}/sql-scripts/engine/io/orqueio/bpm/engine/db/drop/activiti.${database.type}.drop.case.engine.sql</srcFile>
+                    <srcFile>${project.build.directory}/sql-scripts/engine/io/orqueio/bpm/engine/db/drop/activiti.${database.type}.drop.engine.sql</srcFile>
+                    <srcFile>${project.build.directory}/sql-scripts/engine/io/orqueio/bpm/engine/db/drop/activiti.${database.type}.drop.identity.sql</srcFile>
+                    <srcFile>${project.build.directory}/sql-scripts/engine/io/orqueio/bpm/engine/db/drop/activiti.${database.type}.drop.decision.history.sql</srcFile>
+                    <srcFile>${project.build.directory}/sql-scripts/engine/io/orqueio/bpm/engine/db/drop/activiti.${database.type}.drop.case.history.sql</srcFile>
+                    <srcFile>${project.build.directory}/sql-scripts/engine/io/orqueio/bpm/engine/db/drop/activiti.${database.type}.drop.history.sql</srcFile>
                   </srcFiles>
                   <autocommit>true</autocommit>
                   <onError>continue</onError>
@@ -595,7 +593,7 @@
             <artifactId>maven-surefire-plugin</artifactId>
             <configuration>
               <dependenciesToScan>
-                <dependency>io.orqueio.bpm.qa:camunda-qa-integration-tests-webapps</dependency>
+                <dependency>io.orqueio.bpm.qa:orqueio-qa-integration-tests-webapps</dependency>
               </dependenciesToScan>
               <skipTests>false</skipTests>
               <includes>

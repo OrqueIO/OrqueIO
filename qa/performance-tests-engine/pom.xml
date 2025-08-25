@@ -10,7 +10,7 @@
 
   <parent>
     <groupId>io.orqueio.bpm.qa</groupId>
-    <artifactId>camunda-qa</artifactId>
+    <artifactId>orqueio-qa</artifactId>
     <version>7.24.0-SNAPSHOT</version>
   </parent>
 
