@@ -2,10 +2,10 @@
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.orqueio.bpm.quarkus/camunda-bpm-quarkus-engine/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.orqueio.bpm.quarkus/camunda-bpm-quarkus-engine) [![camunda manual latest](https://img.shields.io/badge/manual-latest-brown.svg)](https://docs.camunda.org/manual/develop/user-guide/quarkus-integration/)
 
-This sub-project provides Camunda Platform Quarkus Extensions that allow you to add behavior to your Quarkus 
+This sub-project provides Orque IO Platform Quarkus Extensions that allow you to add behavior to your Quarkus 
 application by adding dependencies to the classpath.
 
-You can find the documentation on the Camunda Platform Quarkus Extensions 
+You can find the documentation on the Orque IO Platform Quarkus Extensions 
 [here](https://docs.camunda.org/manual/develop/user-guide/quarkus-integration/).
 
 We also provide some useful examples at our 
@@ -15,8 +15,8 @@ We also provide some useful examples at our
 <dependency>
   <dependency>
     <groupId>io.orqueio.bpm.quarkus</groupId>
-    <artifactId>camunda-bpm-quarkus-engine</artifactId>
-    <version>${version.camunda}</version><!-- place Camunda version here -->
+    <artifactId>orqueio-bpm-quarkus-engine</artifactId>
+    <version>${version.orqueio}</version><!-- place Orque IO version here -->
   </dependency>
 </dependency>
 ```
