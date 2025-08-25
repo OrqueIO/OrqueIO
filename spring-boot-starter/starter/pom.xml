@@ -29,7 +29,7 @@
   <dependencies>
     <dependency>
       <groupId>io.orqueio.bpm</groupId>
-      <artifactId>camunda-engine-spring-6</artifactId>
+      <artifactId>orqueio-engine-spring-6</artifactId>
     </dependency>
 
     <!-- Spring dependencies required by camunda-engine-spring -->

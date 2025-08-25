@@ -205,7 +205,7 @@
 
     <dependency>
       <groupId>io.orqueio.bpm</groupId>
-      <artifactId>camunda-engine-spring-6</artifactId>
+      <artifactId>orqueio-engine-spring-6</artifactId>
       <version>${project.version}</version>
       <scope>provided</scope>
       <exclusions>
