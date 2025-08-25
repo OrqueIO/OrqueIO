@@ -1,4 +1,4 @@
-# Camunda Platform DMN JUnit 5
+# Orque IO Platform DMN JUnit 5
 
 JUnit 5 extension that allows you to inject a DMN engine into your test.
 
@@ -10,8 +10,8 @@ Add the dependency to your pom.xml
 ```xml
     <dependency>
       <groupId>io.orqueio.bpm.dmn</groupId>
-      <artifactId>camunda-dmn-junit5</artifactId>
-      <version>7.20.0</version>
+      <artifactId>orqueio-dmn-junit5</artifactId>
+      <version>0.24.0-SNAPSHOT</version>
       <scope>test</scope>
     </dependency>
 ```
