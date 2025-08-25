@@ -2,23 +2,21 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <description>
-    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://camunda.com/contact/
-  </description>
+
 
   <parent>
     <groupId>io.orqueio.bpm.dmn</groupId>
-    <artifactId>camunda-engine-dmn-root</artifactId>
-    <version>7.24.0-SNAPSHOT</version>
+    <artifactId>orqueio-engine-dmn-root</artifactId>
+    <version>0.24.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>camunda-engine-dmn</artifactId>
-  <name>camunda DMN - engine</name>
+  <artifactId>orqueio-engine-dmn</artifactId>
+  <name>orqueio DMN - engine</name>
   <properties>
-    <camunda.artifact>io.orqueio.bpm.dmn.engine</camunda.artifact>
-    <camunda.osgi.import.additional>
+    <orqueio.artifact>io.orqueio.bpm.dmn.engine</orqueio.artifact>
+    <orqueio.osgi.import.additional>
       org.junit.*;resolution:=optional
-    </camunda.osgi.import.additional>
+    </orqueio.osgi.import.additional>
   </properties>
   <dependencies>
     <dependency>
@@ -33,22 +31,22 @@
 
     <dependency>
       <groupId>io.orqueio.bpm.model</groupId>
-      <artifactId>camunda-dmn-model</artifactId>
+      <artifactId>orqueio-dmn-model</artifactId>
     </dependency>
 
     <dependency>
       <groupId>io.orqueio.bpm.dmn</groupId>
-      <artifactId>camunda-engine-feel-api</artifactId>
+      <artifactId>orqueio-engine-feel-api</artifactId>
     </dependency>
 
     <dependency>
       <groupId>io.orqueio.bpm.dmn</groupId>
-      <artifactId>camunda-engine-feel-juel</artifactId>
+      <artifactId>orqueio-engine-feel-juel</artifactId>
     </dependency>
 
     <dependency>
       <groupId>io.orqueio.bpm.dmn</groupId>
-      <artifactId>camunda-engine-feel-scala</artifactId>
+      <artifactId>orqueio-engine-feel-scala</artifactId>
     </dependency>
 
     <dependency>
@@ -59,7 +57,7 @@
 
     <dependency>
       <groupId>io.orqueio.bpm.juel</groupId>
-      <artifactId>camunda-juel</artifactId>
+      <artifactId>orqueio-juel</artifactId>
     </dependency>
 
     <dependency>
@@ -112,7 +110,7 @@
 
     <dependency>
       <groupId>io.orqueio.bpm</groupId>
-      <artifactId>camunda-bpm-archunit</artifactId>
+      <artifactId>orqueio-bpm-archunit</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
     </dependency>
@@ -125,7 +123,7 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
           <dependenciesToScan>
-            <dependency>io.orqueio.bpm:camunda-bpm-archunit</dependency>
+            <dependency>io.orqueio.bpm:orqueio-bpm-archunit</dependency>
           </dependenciesToScan>
         </configuration>
       </plugin>
@@ -161,7 +159,7 @@
               <comparisonVersion>${camunda.version.old}</comparisonVersion>
               <logResults>true</logResults>
               <excludes>
-                <exclude>org/camunda/bpm/dmn/engine/impl/**</exclude>
+                <exclude>io/orqueio/bpm/dmn/engine/impl/**</exclude>
               </excludes>
             </configuration>
             <executions>

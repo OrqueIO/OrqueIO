@@ -59,7 +59,7 @@
     </dependency>
     <dependency>
       <groupId>io.orqueio.bpm.dmn</groupId>
-      <artifactId>camunda-engine-dmn</artifactId>
+      <artifactId>orqueio-engine-dmn</artifactId>
       <scope>provided</scope>
     </dependency>
     <dependency>

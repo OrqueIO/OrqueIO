@@ -24,7 +24,7 @@
 
     <dependency>
       <groupId>io.orqueio.bpm.dmn</groupId>
-      <artifactId>camunda-engine-feel-scala</artifactId>
+      <artifactId>orqueio-engine-feel-scala</artifactId>
       <scope>provided</scope>
     </dependency>
 

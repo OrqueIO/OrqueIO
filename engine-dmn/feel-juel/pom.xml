@@ -2,26 +2,23 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <description>
-    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://camunda.com/contact/
-  </description>
 
   <parent>
     <groupId>io.orqueio.bpm.dmn</groupId>
-    <artifactId>camunda-engine-dmn-root</artifactId>
-    <version>7.24.0-SNAPSHOT</version>
+    <artifactId>orqueio-engine-dmn-root</artifactId>
+    <version>0.24.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>camunda-engine-feel-juel</artifactId>
-  <name>camunda DMN - engine FEEL - JUEL</name>
+  <artifactId>orqueio-engine-feel-juel</artifactId>
+  <name>orqueio DMN - engine FEEL - JUEL</name>
 
   <properties>
-    <camunda.artifact>io.orqueio.bpm.dmn.feel.impl.juel</camunda.artifact>
+    <orqueio.artifact>io.orqueio.bpm.dmn.feel.impl.juel</orqueio.artifact>
   </properties>
   <dependencies>
     <dependency>
       <groupId>io.orqueio.bpm.dmn</groupId>
-      <artifactId>camunda-engine-feel-api</artifactId>
+      <artifactId>orqueio-engine-feel-api</artifactId>
     </dependency>
 
     <dependency>
@@ -36,7 +33,7 @@
 
     <dependency>
       <groupId>io.orqueio.bpm.juel</groupId>
-      <artifactId>camunda-juel</artifactId>
+      <artifactId>orqueio-juel</artifactId>
     </dependency>
 
     <dependency>
@@ -93,9 +90,9 @@
               <comparisonVersion>${camunda.version.old}</comparisonVersion>
               <logResults>true</logResults>
               <excludes>
-                <exclude>org/camunda/bpm/dmn/feel/impl/**</exclude>
+                <exclude>io/orqueio/bpm/dmn/feel/impl/**</exclude>
                 <!-- exclude shaded dependencies -->
-                <exclude>camundafeel/**</exclude>
+                <exclude>orqueiofeel/**</exclude>
               </excludes>
             </configuration>
             <executions>
