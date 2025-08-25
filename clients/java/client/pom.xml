@@ -1,24 +1,22 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
-  <name>Camunda Platform - Java External Task Client - CLIENT</name>
+  <name>Orque IO Platform - Java External Task Client - CLIENT</name>
 
   <artifactId>orqueio-external-task-client</artifactId>
 
   <packaging>jar</packaging>
 
-  <description>
-    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://camunda.com/contact/
-  </description>
+
 
   <parent>
     <groupId>io.orqueio.bpm</groupId>
     <artifactId>orqueio-external-task-client-root</artifactId>
-    <version>7.24.0-SNAPSHOT</version>
+    <version>0.24.0-SNAPSHOT</version>
   </parent>
 
   <properties>
-    <engine.runtime>${project.build.directory}/camunda-tomcat</engine.runtime>
+    <engine.runtime>${project.build.directory}/orqueio-tomcat</engine.runtime>
     <tomcat.runtime>${engine.runtime}/server/apache-tomcat-${version.tomcat}</tomcat.runtime>
     <http.port>${tomcat.connector.http.port}</http.port>
 
@@ -36,7 +34,7 @@
     <dependencies>
       <dependency>
         <groupId>io.orqueio.bpm</groupId>
-        <artifactId>camunda-core-internal-dependencies</artifactId>
+        <artifactId>orqueio-core-internal-dependencies</artifactId>
         <version>${project.version}</version>
         <scope>import</scope>
         <type>pom</type>
@@ -211,7 +209,7 @@
               <artifactItems>
                 <artifactItem>
                   <groupId>io.orqueio.bpm.tomcat</groupId>
-                  <artifactId>camunda-tomcat-assembly</artifactId>
+                  <artifactId>orqueio-tomcat-assembly</artifactId>
                   <version>${project.version}</version>
                   <type>tar.gz</type>
                   <outputDirectory>${engine.runtime}</outputDirectory>
@@ -288,7 +286,7 @@
           <deployables>
             <deployable>
               <groupId>io.orqueio.bpm</groupId>
-              <artifactId>camunda-engine-rest-jakarta</artifactId>
+              <artifactId>orqueio-engine-rest-jakarta</artifactId>
               <type>war</type>
               <classifier>tomcat</classifier>
               <pingURL>

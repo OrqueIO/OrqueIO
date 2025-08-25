@@ -1,11 +1,11 @@
-# Camunda External Task Client (Java)
+# Orque IO External Task Client (Java)
 
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.orqueio.bpm/camunda-external-task-client/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.orqueio.bpm/camunda-external-task-client)
 
 > Are you looking for the Spring Boot External Task Client? This way please: [Spring Boot External Task Client](../../spring-boot-starter/starter-client)
 
-The **Camunda External Task Client (Java)** allows to set up remote Service Tasks for your workflow.
+The **Orque IO External Task Client (Java)** allows to set up remote Service Tasks for your workflow.
 
 * [Quick Start](https://docs.camunda.org/get-started/quick-start/)
 * [Documentation](https://docs.camunda.org/manual/develop/user-guide/ext-client/)
@@ -32,14 +32,14 @@ The following Maven coordinate needs to be added to the projects `pom.xml`:
 ```xml
 <dependency>
   <groupId>io.orqueio.bpm</groupId>
-  <artifactId>camunda-external-task-client</artifactId>
+  <artifactId>orqueio-external-task-client</artifactId>
   <version>${version}</version>
 </dependency>
 ```
 
 ## Contributing
 
-Have a look at our [contribution guide](https://github.com/camunda/camunda-bpm-platform/blob/master/CONTRIBUTING.md) for how to contribute to this repository.
+Have a look at our [contribution guide](https://github.com/orqueio/orqueio/blob/master/CONTRIBUTING.md) for how to contribute to this repository.
 
 
 ## License
