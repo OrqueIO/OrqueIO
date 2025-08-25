@@ -25,7 +25,7 @@ import io.orqueio.bpm.dmn.engine.impl.spi.type.DmnDataTypeTransformer;
 import io.orqueio.bpm.engine.variable.Variables;
 import io.orqueio.bpm.engine.variable.value.DateValue;
 import io.orqueio.bpm.engine.variable.value.TypedValue;
-import io.orqueio.feel.syntaxtree.ZonedTime;
+import org.camunda.feel.syntaxtree.ZonedTime;
 
 import java.time.Duration;
 import java.time.Instant;

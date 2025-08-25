@@ -17,9 +17,10 @@
   <dependencies>
 
     <dependency>
-      <groupId>io.orqueio.feel</groupId>
+      <groupId>org.camunda.feel</groupId>
       <artifactId>feel-engine</artifactId>
       <classifier>scala-shaded</classifier>
+      <version>1.19.3</version>
     </dependency>
 
     <dependency>

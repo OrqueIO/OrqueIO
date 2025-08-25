@@ -24,7 +24,7 @@ import io.orqueio.bpm.dmn.engine.impl.spi.type.DmnDataTypeTransformerRegistry;
 import io.orqueio.bpm.dmn.engine.test.DmnEngineTest;
 import io.orqueio.bpm.engine.variable.Variables;
 import io.orqueio.bpm.engine.variable.value.TypedValue;
-import io.orqueio.feel.syntaxtree.ZonedTime;
+import org.camunda.feel.syntaxtree.ZonedTime;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;

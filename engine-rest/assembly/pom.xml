@@ -87,9 +87,9 @@
                   <Dependencies>io.orqueio.bpm.orqueio-engine,io.orqueio.bpm.dmn.orqueio-engine-dmn,io.orqueio.commons.orqueio-commons-logging,io.orqueio.spin.orqueio-spin-core,io.orqueio.bpm.juel.orqueio-juel services,org.graalvm.js.js-scriptengine services</Dependencies>
                 </manifestEntries>
               </archive>
-              <descriptors>
-                <descriptor>assembly-war-wildfly.xml</descriptor>
-              </descriptors>
+              <descriptorRefs>
+                <descriptorRef>jar-with-dependencies</descriptorRef>
+              </descriptorRefs>
               <finalName>orqueio-engine-rest-${project.version}</finalName>
               <attach>true</attach>
               <classifier>wildfly</classifier>
@@ -105,9 +105,9 @@
               <goal>single</goal>
             </goals>
             <configuration>
-              <descriptors>
-                <descriptor>assembly-war-tomcat.xml</descriptor>
-              </descriptors>
+              <descriptorRefs>
+                <descriptorRef>jar-with-dependencies</descriptorRef>
+              </descriptorRefs>
               <finalName>orqueio-engine-rest-${project.version}</finalName>
               <attach>true</attach>
               <classifier>tomcat</classifier>
@@ -123,9 +123,9 @@
               <goal>single</goal>
             </goals>
             <configuration>
-              <descriptors>
-                <descriptor>assembly-war-wls.xml</descriptor>
-              </descriptors>
+              <descriptorRefs>
+                <descriptorRef>jar-with-dependencies</descriptorRef>
+              </descriptorRefs>
               <finalName>orqueio-engine-rest-${project.version}</finalName>
               <attach>true</attach>
               <classifier>wls</classifier>
@@ -141,9 +141,9 @@
               <goal>single</goal>
             </goals>
             <configuration>
-              <descriptors>
-                <descriptor>assembly-classes.xml</descriptor>
-              </descriptors>
+              <descriptorRefs>
+                <descriptorRef>jar-with-dependencies</descriptorRef>
+              </descriptorRefs>
               <finalName>orqueio-engine-rest-${project.version}</finalName>
               <attach>true</attach>
               <outputDirectory>target/</outputDirectory>
@@ -158,9 +158,9 @@
               <goal>single</goal>
             </goals>
             <configuration>
-              <descriptors>
-                <descriptor>assembly-sources.xml</descriptor>
-              </descriptors>
+              <descriptorRefs>
+                <descriptorRef>jar-with-dependencies</descriptorRef>
+              </descriptorRefs>
               <finalName>orqueio-engine-rest-${project.version}</finalName>
               <attach>true</attach>
               <outputDirectory>target/</outputDirectory>
@@ -175,9 +175,9 @@
               <goal>single</goal>
             </goals>
             <configuration>
-              <descriptors>
-                <descriptor>assembly-tests.xml</descriptor>
-              </descriptors>
+              <descriptorRefs>
+                <descriptorRef>jar-with-dependencies</descriptorRef>
+              </descriptorRefs>
               <finalName>orqueio-engine-rest-${project.version}</finalName>
               <attach>true</attach>
               <outputDirectory>target/</outputDirectory>

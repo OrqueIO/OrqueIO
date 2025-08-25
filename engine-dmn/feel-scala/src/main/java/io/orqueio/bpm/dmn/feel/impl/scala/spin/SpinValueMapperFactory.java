@@ -17,7 +17,7 @@
 package io.orqueio.bpm.dmn.feel.impl.scala.spin;
 
 import io.orqueio.bpm.dmn.feel.impl.scala.ScalaFeelLogger;
-import io.orqueio.feel.valuemapper.CustomValueMapper;
+import org.camunda.feel.valuemapper.CustomValueMapper;
 
 public class SpinValueMapperFactory {
 

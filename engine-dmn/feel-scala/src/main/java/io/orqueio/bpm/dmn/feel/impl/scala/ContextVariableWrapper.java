@@ -18,7 +18,7 @@ package io.orqueio.bpm.dmn.feel.impl.scala;
 
 import io.orqueio.bpm.engine.variable.context.VariableContext;
 import io.orqueio.bpm.engine.variable.value.TypedValue;
-import io.orqueio.feel.context.VariableProvider;
+import org.camunda.feel.context.VariableProvider;
 import camundajar.impl.scala.Option;
 import camundajar.impl.scala.Some;
 import camundajar.impl.scala.collection.Iterable;
