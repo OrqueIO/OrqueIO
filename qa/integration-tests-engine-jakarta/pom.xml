@@ -154,7 +154,7 @@
 
     <dependency>
       <groupId>io.orqueio.bpm.javaee</groupId>
-      <artifactId>camunda-ejb-client-jakarta</artifactId>
+      <artifactId>orqueio-ejb-client-jakarta</artifactId>
       <scope>provided</scope>
     </dependency>
 
