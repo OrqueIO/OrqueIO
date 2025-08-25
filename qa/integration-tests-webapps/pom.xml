@@ -165,7 +165,7 @@
 
     <dependency>
       <groupId>io.orqueio.bpm.example</groupId>
-      <artifactId>camunda-example-invoice</artifactId>
+      <artifactId>orqueio-example-invoice</artifactId>
       <version>${project.version}</version>
       <type>war</type>
       <scope>test</scope>
