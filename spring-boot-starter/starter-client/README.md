@@ -1,6 +1,6 @@
-# Camunda External Task Client as Spring Boot Starter
+# Orque IO External Task Client as Spring Boot Starter
 
-This project provides a Spring Boot Starter that allows you to implement an External Task Worker for Camunda. It uses the Camunda REST API to fetch, lock, and complete External Service Tasks. It is based on the [Java External Task Client](../../clients/java).
+This project provides a Spring Boot Starter that allows you to implement an External Task Worker for Orque IO. It uses the Orque IO REST API to fetch, lock, and complete External Service Tasks. It is based on the [Java External Task Client](../../clients/java).
 
 * [Documentation](https://docs.camunda.org/manual/develop/user-guide/ext-client/spring-boot-starter/)
 * [Examples](https://github.com/camunda/camunda-bpm-examples/tree/master/spring-boot-starter/external-task-client)
@@ -12,17 +12,17 @@ You need this dependency to get started:
 ```xml
 <dependency>
   <groupId>io.orqueio.bpm.springboot</groupId>
-  <artifactId>camunda-bpm-spring-boot-starter-external-task-client</artifactId>
+  <artifactId>orqueio-bpm-spring-boot-starter-external-task-client</artifactId>
   <version>...</version>
 </dependency>
 ```
 
 ## Configuration
 
-You can configure the Camunda Platform Runtime REST API endpoint and other properties in the `application.yml` file:
+You can configure the Orque IO Platform Runtime REST API endpoint and other properties in the `application.yml` file:
 
 ```yaml
-camunda.bpm.client:
+orqueio.bpm.client:
   base-url: http://localhost:8080/engine-rest
   subscriptions:
     creditScoreChecker:
@@ -54,7 +54,7 @@ You can also use the basic Spring integration without the Spring Boot Starter:
 ```xml
 <dependency>
   <groupId>io.orqueio.bpm</groupId>
-  <artifactId>camunda-external-task-client-spring</artifactId>
+  <artifactId>orqueio-external-task-client-spring</artifactId>
   <version>...</version>
 </dependency>
 ```
@@ -72,4 +72,4 @@ public class SimpleConfiguration {
 
 ## Credits
 
-The Camunda External Task Client Spring Boot Starter project used to be a community extension initially created by [Oliver Steinhauer](https://github.com/osteinhauer).
+The Orque IO External Task Client Spring Boot Starter project used to be a community extension initially created by [Oliver Steinhauer](https://github.com/osteinhauer).
