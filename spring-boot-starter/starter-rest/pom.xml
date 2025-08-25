@@ -25,7 +25,7 @@
 
     <dependency>
       <groupId>io.orqueio.bpm</groupId>
-      <artifactId>camunda-engine-rest-core-jakarta</artifactId>
+      <artifactId>orqueio-engine-rest-core-jakarta</artifactId>
       <version>${project.version}</version>
     </dependency>
 

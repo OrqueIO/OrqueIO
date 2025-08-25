@@ -137,7 +137,7 @@
 
     <dependency>
       <groupId>io.orqueio.bpm</groupId>
-      <artifactId>camunda-engine-rest-jakarta</artifactId>
+      <artifactId>orqueio-engine-rest-jakarta</artifactId>
       <scope>test</scope>
       <type>war</type>
       <classifier>tomcat</classifier>

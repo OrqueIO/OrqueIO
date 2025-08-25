@@ -1,18 +1,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>camunda-engine-rest-openapi</artifactId>
-  <name>Camunda Platform - engine - REST - OpenAPI</name>
+  <artifactId>orqueio-engine-rest-openapi</artifactId>
+  <name>Orque IO Platform - engine - REST - OpenAPI</name>
   <packaging>jar</packaging>
 
-  <description>
-    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://camunda.com/contact/
-  </description>
+
 
   <parent>
     <groupId>io.orqueio.bpm</groupId>
-    <artifactId>camunda-engine-rest-root</artifactId>
-    <relativePath>../</relativePath>
-    <version>7.24.0-SNAPSHOT</version>
+    <artifactId>orqueio-engine-rest-root</artifactId>
+    <relativePath>../pom.xml</relativePath>
+    <version>0.24.0-SNAPSHOT</version>
   </parent>
 
   <properties>
@@ -36,7 +34,7 @@
 
     <dependency>
       <groupId>io.orqueio.bpm</groupId>
-      <artifactId>camunda-engine-rest-openapi-generator</artifactId>
+      <artifactId>orqueio-engine-rest-openapi-generator</artifactId>
       <scope>test</scope>
       <version>${project.version}</version>
     </dependency>
@@ -190,7 +188,7 @@
             <phase>generate-test-sources</phase>
             <configuration>
               <sources>
-                <source>${project.build.directory}/camunda-openapi-client/src/main/java</source>
+                <source>${project.build.directory}/orqueio-openapi-client/src/main/java</source>
               </sources>
             </configuration>
           </execution>
@@ -210,7 +208,7 @@
             </goals>
             <configuration>
               <inputSpec>${generated-directory}/${generated-file}</inputSpec>
-              <output>${project.build.directory}/camunda-openapi-client</output>
+              <output>${project.build.directory}/orqueio-openapi-client</output>
               <generatorName>java</generatorName>
               <configOptions>
                 <dateLibrary>legacy</dateLibrary>

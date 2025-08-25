@@ -173,7 +173,7 @@
 
     <dependency>
       <groupId>io.orqueio.bpm</groupId>
-      <artifactId>camunda-engine-rest</artifactId>
+      <artifactId>orqueio-engine-rest</artifactId>
       <type>jar</type>
       <classifier>classes</classifier>
       <scope>test</scope>

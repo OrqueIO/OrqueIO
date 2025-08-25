@@ -1,19 +1,17 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <parent>
-    <artifactId>camunda-engine-rest-root</artifactId>
+    <artifactId>orqueio-engine-rest-root</artifactId>
     <groupId>io.orqueio.bpm</groupId>
-    <version>7.24.0-SNAPSHOT</version>
+    <version>0.24.0-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>docs</artifactId>
-  <name>Camunda Platform - engine - REST - Docs</name>
+  <name>Orque IO Platform - engine - REST - Docs</name>
   <packaging>pom</packaging>
 
-  <description>
-    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://camunda.com/contact/
-  </description>
+
 
   <properties>
     <skip-third-party-bom>true</skip-third-party-bom>
@@ -22,7 +20,7 @@
   <dependencies>
     <dependency>
       <groupId>io.orqueio.bpm</groupId>
-      <artifactId>camunda-engine-rest-openapi</artifactId>
+      <artifactId>orqueio-engine-rest-openapi</artifactId>
       <version>${project.version}</version>
     </dependency>
   </dependencies>
@@ -43,7 +41,7 @@
               <artifactItems>
                 <artifactItem>
                   <groupId>io.orqueio.bpm</groupId>
-                  <artifactId>camunda-engine-rest-openapi</artifactId>
+                  <artifactId>orqueio-engine-rest-openapi</artifactId>
                   <version>${project.version}</version>
                   <type>jar</type>
                 </artifactItem>

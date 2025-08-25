@@ -74,7 +74,7 @@
     <!-- rest api -->
     <dependency>
       <groupId>io.orqueio.bpm</groupId>
-      <artifactId>camunda-engine-rest-core</artifactId>
+      <artifactId>orqueio-engine-rest-core</artifactId>
     </dependency>
 
     <dependency>
@@ -93,7 +93,7 @@
 
     <dependency>
       <groupId>io.orqueio.bpm</groupId>
-      <artifactId>camunda-engine-rest-core</artifactId>
+      <artifactId>orqueio-engine-rest-core</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
       <classifier>tests</classifier>
