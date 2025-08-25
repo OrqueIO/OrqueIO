@@ -164,7 +164,7 @@
       <scope>provided</scope>
       <exclusions>
         <exclusion>
-          <artifactId>camunda-engine</artifactId>
+          <artifactId>orqueio-engine</artifactId>
           <groupId>io.orqueio.bpm</groupId>
         </exclusion>
       </exclusions>
@@ -173,7 +173,7 @@
     <!-- camunda -->
     <dependency>
       <groupId>io.orqueio.bpm</groupId>
-      <artifactId>camunda-engine</artifactId>
+      <artifactId>orqueio-engine</artifactId>
       <scope>provided</scope>
       <exclusions>
         <exclusion>
@@ -210,7 +210,7 @@
       <scope>provided</scope>
       <exclusions>
         <exclusion>
-          <artifactId>camunda-engine</artifactId>
+          <artifactId>orqueio-engine</artifactId>
           <groupId>io.orqueio.bpm</groupId>
         </exclusion>
       </exclusions>

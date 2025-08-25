@@ -2,18 +2,16 @@
 
   <modelVersion>4.0.0</modelVersion>
 
-  <description>
-    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://camunda.com/contact/
-  </description>
 
-  <name>Camunda Platform - engine</name>
-  <artifactId>camunda-engine</artifactId>
+
+  <name>Orque IO Platform - engine</name>
+  <artifactId>orqueio-engine</artifactId>
 
   <parent>
     <groupId>io.orqueio.bpm</groupId>
     <artifactId>orqueio-database-settings</artifactId>
     <relativePath>../database</relativePath>
-    <version>7.24.0-SNAPSHOT</version>
+    <version>0.24.0-SNAPSHOT</version>
   </parent>
 
   <dependencyManagement>
@@ -21,7 +19,7 @@
 
       <dependency>
         <groupId>io.orqueio.bpm</groupId>
-        <artifactId>camunda-core-internal-dependencies</artifactId>
+        <artifactId>orqueio-core-internal-dependencies</artifactId>
         <version>${project.version}</version>
         <scope>import</scope>
         <type>pom</type>
@@ -48,26 +46,26 @@
 
   <dependencies>
 
-    <!-- camunda dependencies -->
+    <!-- orqueio dependencies -->
 
     <dependency>
       <groupId>io.orqueio.bpm.model</groupId>
-      <artifactId>camunda-bpmn-model</artifactId>
+      <artifactId>orqueio-bpmn-model</artifactId>
     </dependency>
 
     <dependency>
       <groupId>io.orqueio.bpm.model</groupId>
-      <artifactId>camunda-cmmn-model</artifactId>
+      <artifactId>orqueio-cmmn-model</artifactId>
     </dependency>
 
     <dependency>
       <groupId>io.orqueio.bpm.juel</groupId>
-      <artifactId>camunda-juel</artifactId>
+      <artifactId>orqueio-juel</artifactId>
     </dependency>
 
     <dependency>
       <groupId>io.orqueio.bpm.dmn</groupId>
-      <artifactId>camunda-engine-dmn</artifactId>
+      <artifactId>orqueio-engine-dmn</artifactId>
       <exclusions>
         <!-- these exclusions are needed when building with Maven >= 3.3
           see CAM-11822 for details -->
@@ -259,7 +257,7 @@
 
     <dependency>
       <groupId>io.orqueio.bpm</groupId>
-      <artifactId>camunda-test-utils-testcontainers</artifactId>
+      <artifactId>orqueio-test-utils-testcontainers</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
     </dependency>
@@ -339,7 +337,7 @@
 
     <dependency>
       <groupId>io.orqueio.bpm</groupId>
-      <artifactId>camunda-bpm-archunit</artifactId>
+      <artifactId>orqueio-bpm-archunit</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
     </dependency>
@@ -366,17 +364,17 @@
     for the license book -->
     <skip-third-party-bom>false</skip-third-party-bom>
 
-    <camunda.artifact>
+    <orqueio.artifact>
       io.orqueio.bpm
-    </camunda.artifact>
-    <camunda.osgi.export.pkg>
-      !${camunda.artifact}.engine.variable.*,
-      ${camunda.artifact},
-      ${camunda.artifact}.application.*,
-      ${camunda.artifact}.container.*,
-      ${camunda.artifact}.engine.*
-    </camunda.osgi.export.pkg>
-    <camunda.osgi.import.additional>
+    </orqueio.artifact>
+    <orqueio.osgi.export.pkg>
+      !${orqueio.artifact}.engine.variable.*,
+      ${orqueio.artifact},
+      ${orqueio.artifact}.application.*,
+      ${orqueio.artifact}.container.*,
+      ${orqueio.artifact}.engine.*
+    </orqueio.osgi.export.pkg>
+    <orqueio.osgi.import.additional>
       !com.google.gson.*,
       junit*;resolution:=optional,
       org.junit*;resolution:=optional,
@@ -394,7 +392,7 @@
       org.springframework*;resolution:=optional,
       com.fasterxml*;resolution:=optional,
       org.jboss.vfs*;resolution:=optional
-    </camunda.osgi.import.additional>
+    </orqueio.osgi.import.additional>
   </properties>
 
   <build>
@@ -407,7 +405,7 @@
         <directory>src/main/resources</directory>
         <filtering>true</filtering>
         <includes>
-          <include>org/camunda/bpm/engine/product-info.properties</include>
+          <include>io/orqueio/bpm/engine/product-info.properties</include>
         </includes>
       </resource>
     </resources>
@@ -419,9 +417,9 @@
         <directory>src/test/resources</directory>
         <filtering>true</filtering>
         <includes>
-          <include>**/camunda.cfg.xml</include>
-          <include>**/*camunda.cfg.xml</include>
-          <include>**/camunda.cfg.*.xml</include>
+          <include>**/orqueio.cfg.xml</include>
+          <include>**/*orqueio.cfg.xml</include>
+          <include>**/orqueio.cfg.*.xml</include>
           <include>testconfig.properties</include>
           <include>database.properties</include>
           <include>**/testcontainers.properties</include>
@@ -444,7 +442,7 @@
             <exclude>%regex[.*(${test.excludes}).*Test.*.class]</exclude>
           </excludes>
           <dependenciesToScan>
-            <dependency>io.orqueio.bpm:camunda-bpm-archunit</dependency>
+            <dependency>io.orqueio.bpm:orqueio-bpm-archunit</dependency>
           </dependenciesToScan>
         </configuration>
       </plugin>
@@ -505,11 +503,11 @@
           <relocations>
             <relocation>
               <pattern>com.google.gson</pattern>
-              <shadedPattern>camundajar.impl.com.google.gson</shadedPattern>
+              <shadedPattern>orqueiojar.impl.com.google.gson</shadedPattern>
             </relocation>
             <relocation>
               <pattern>com.cronutils</pattern>
-              <shadedPattern>camundajar.impl.com.cronutils</shadedPattern>
+              <shadedPattern>orqueiojar.impl.com.cronutils</shadedPattern>
             </relocation>
           </relocations>
           <transformers>
@@ -532,9 +530,9 @@
               <target>
 
                 <!-- copy all upgrade scripts after 7.15 -->
-                <mkdir dir="target/classes/org/camunda/bpm/engine/db/liquibase/upgrade" />
-                <copy todir="target/classes/org/camunda/bpm/engine/db/liquibase/upgrade">
-                  <fileset dir="target/classes/org/camunda/bpm/engine/db/upgrade" excludes="*_6.*_*,*_7.0_*,*_7.1_*,*_7.2_*,*_7.3_*,*_7.4_*,*_7.5_*,*_7.6_*,*_7.7_*, *_7.8_*,*_7.9_*,*_7.10_*,*_7.11_*,*_7.12_*,*_7.13_*,*_7.14_*,*_7.15_*" />
+                <mkdir dir="target/classes/io/orqueio/bpm/engine/db/liquibase/upgrade" />
+                <copy todir="target/classes/io/orqueio/bpm/engine/db/liquibase/upgrade">
+                  <fileset dir="target/classes/io/orqueio/bpm/engine/db/upgrade" excludes="*_6.*_*,*_7.0_*,*_7.1_*,*_7.2_*,*_7.3_*,*_7.4_*,*_7.5_*,*_7.6_*,*_7.7_*, *_7.8_*,*_7.9_*,*_7.10_*,*_7.11_*,*_7.12_*,*_7.13_*,*_7.14_*,*_7.15_*" />
                 </copy>
 
               </target>
@@ -681,7 +679,7 @@
               <redirectTestOutputToFile>true</redirectTestOutputToFile>
               <reuseForks>true</reuseForks>
               <systemPropertyVariables>
-                <jdbcUrl>jdbc:h2:mem:camunda_${surefire.forkNumber};DB_CLOSE_DELAY=1000</jdbcUrl>
+                <jdbcUrl>jdbc:h2:mem:orqueio_${surefire.forkNumber};DB_CLOSE_DELAY=1000</jdbcUrl>
               </systemPropertyVariables>
             </configuration>
           </plugin>
@@ -724,12 +722,12 @@
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>clirr-maven-plugin</artifactId>
             <configuration>
-              <comparisonVersion>${camunda.version.old}</comparisonVersion>
+              <comparisonVersion>${orqueio.version.old}</comparisonVersion>
               <logResults>true</logResults>
               <excludes>
-                <exclude>org/camunda/bpm/*/impl/**</exclude>
-                <exclude>org/camunda/bpm/engine/test/ProcessEngineRule</exclude>
-                <exclude>camundajar/**/*</exclude>
+                <exclude>io/orqueio/bpm/*/impl/**</exclude>
+                <exclude>io/orqueio/bpm/engine/test/ProcessEngineRule</exclude>
+                <exclude>orqueiojar/**/*</exclude>
               </excludes>
             </configuration>
             <executions>
@@ -768,27 +766,27 @@
       <dependencies>
         <dependency>
           <groupId>io.orqueio.bpm</groupId>
-          <artifactId>camunda-engine-plugin-spin</artifactId>
+          <artifactId>orqueio-engine-plugin-spin</artifactId>
         </dependency>
         <dependency>
           <groupId>io.orqueio.spin</groupId>
-          <artifactId>camunda-spin-dataformat-all</artifactId>
+          <artifactId>orqueio-spin-dataformat-all</artifactId>
         </dependency>
         <dependency>
           <groupId>io.orqueio.bpm</groupId>
-          <artifactId>camunda-engine-plugin-connect</artifactId>
+          <artifactId>orqueio-engine-plugin-connect</artifactId>
         </dependency>
         <dependency>
           <groupId>io.orqueio.connect</groupId>
-          <artifactId>camunda-connect-connectors-all</artifactId>
+          <artifactId>orqueio-connect-connectors-all</artifactId>
           <exclusions>
             <exclusion>
               <groupId>io.orqueio.connect</groupId>
-              <artifactId>camunda-connect-http-client</artifactId>
+              <artifactId>orqueio-connect-http-client</artifactId>
             </exclusion>
             <exclusion>
               <groupId>io.orqueio.connect</groupId>
-              <artifactId>camunda-connect-soap-http-client</artifactId>
+              <artifactId>orqueio-connect-soap-http-client</artifactId>
             </exclusion>
           </exclusions>
         </dependency>
@@ -799,15 +797,15 @@
             <artifactId>maven-antrun-plugin</artifactId>
             <executions>
               <execution>
-                <id>copy-camunda-cfg</id>
+                <id>copy-orqueio-cfg</id>
                 <phase>process-test-classes</phase>
                 <goals>
                   <goal>run</goal>
                 </goals>
                 <configuration>
                   <target>
-                    <echo message="Copying camunda.cfg.plugins.xml to camunda.cfg.xml" />
-                    <copy file="target/test-classes/camunda.cfg.plugins.xml" tofile="target/test-classes/camunda.cfg.xml" overwrite="true" />
+                    <echo message="Copying orqueio.cfg.plugins.xml to orqueio.cfg.xml" />
+                    <copy file="target/test-classes/orqueio.cfg.plugins.xml" tofile="target/test-classes/orqueio.cfg.xml" overwrite="true" />
                   </target>
                 </configuration>
               </execution>
@@ -840,7 +838,7 @@
                 </goals>
                 <configuration>
                   <target>
-                    <copy file="target/test-classes/camunda.cfg.prefix.xml" tofile="target/test-classes/camunda.cfg.xml" overwrite="true" />
+                    <copy file="target/test-classes/orqueio.cfg.prefix.xml" tofile="target/test-classes/orqueio.cfg.xml" overwrite="true" />
                   </target>
                 </configuration>
               </execution>

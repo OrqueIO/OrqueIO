@@ -40,7 +40,7 @@
       you declare them to be ${camunda.version.current} here -->
     <dependency>
       <groupId>io.orqueio.bpm</groupId>
-      <artifactId>camunda-engine</artifactId>
+      <artifactId>orqueio-engine</artifactId>
     </dependency>
 
     <dependency>

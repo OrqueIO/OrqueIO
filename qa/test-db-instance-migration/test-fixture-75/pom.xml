@@ -35,7 +35,7 @@
   <dependencies>
     <dependency>
       <groupId>io.orqueio.bpm</groupId>
-      <artifactId>camunda-engine</artifactId>
+      <artifactId>orqueio-engine</artifactId>
     </dependency>
     <dependency>
       <groupId>io.orqueio.bpm.qa.upgrade</groupId>
