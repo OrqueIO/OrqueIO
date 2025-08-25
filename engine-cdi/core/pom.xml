@@ -2,19 +2,17 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <name>Camunda Platform - engine - Cdi</name>
-  <artifactId>camunda-engine-cdi</artifactId>
+  <name>Orque IO Platform - engine - Cdi</name>
+  <artifactId>orqueio-engine-cdi</artifactId>
   <packaging>jar</packaging>
 
-  <description>
-    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://camunda.com/contact/
-  </description>
+
 
   <parent>
     <groupId>io.orqueio.bpm</groupId>
     <artifactId>orqueio-database-settings</artifactId>
     <relativePath>../../database</relativePath>
-    <version>7.24.0-SNAPSHOT</version>
+    <version>0.24.0-SNAPSHOT</version>
   </parent>
 
   <properties>
@@ -29,7 +27,7 @@
     <dependencies>
       <dependency>
         <groupId>io.orqueio.bpm</groupId>
-        <artifactId>camunda-core-internal-dependencies</artifactId>
+        <artifactId>orqueio-core-internal-dependencies</artifactId>
         <version>${project.version}</version>
         <scope>import</scope>
         <type>pom</type>
@@ -123,7 +121,7 @@
     </dependency>
     <dependency>
       <groupId>io.orqueio.bpm</groupId>
-      <artifactId>camunda-bpm-archunit</artifactId>
+      <artifactId>orqueio-bpm-archunit</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
     </dependency>
@@ -156,7 +154,7 @@
           <trimStackTrace>false</trimStackTrace>
           <redirectTestOutputToFile>true</redirectTestOutputToFile>
           <dependenciesToScan>
-            <dependency>io.orqueio.bpm:camunda-bpm-archunit</dependency>
+            <dependency>io.orqueio.bpm:orqueio-bpm-archunit</dependency>
           </dependenciesToScan>
         </configuration>
       </plugin>

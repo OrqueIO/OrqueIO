@@ -84,7 +84,7 @@
 
     <dependency>
       <groupId>io.orqueio.bpm</groupId>
-      <artifactId>camunda-engine-cdi-jakarta</artifactId>
+      <artifactId>orqueio-engine-cdi-jakarta</artifactId>
       <version>${project.version}</version>
       <type>test-jar</type>
       <classifier>tests-quarkus</classifier>
