@@ -3,26 +3,24 @@
 
   <parent>
     <groupId>io.orqueio.bpm.model</groupId>
-    <artifactId>camunda-model-apis</artifactId>
-    <relativePath>../</relativePath>
-    <version>7.24.0-SNAPSHOT</version>
+    <artifactId>orqueio-model-apis</artifactId>
+    <relativePath>../pom.xml</relativePath>
+    <version>0.24.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>camunda-xml-model</artifactId>
+  <artifactId>orqueio-xml-model</artifactId>
   <packaging>jar</packaging>
 
-  <description>
-    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://camunda.com/contact/
-  </description>
 
-  <name>Camunda Platform - Xml Model API</name>
+
+  <name>Orque IO Platform - Xml Model API</name>
   <inceptionYear>2014</inceptionYear>
   <properties>
-    <camunda.artifact>io.orqueio.bpm.model.xml</camunda.artifact>
-    <camunda.osgi.import.additional>
+    <orqueio.artifact>io.orqueio.bpm.model.xml</orqueio.artifact>
+    <orqueio.osgi.import.additional>
       org.assertj.*;resolution:=optional,
       org.junit.*;resolution:=optional
-    </camunda.osgi.import.additional>
+    </orqueio.osgi.import.additional>
   </properties>
   <dependencies>
 
@@ -80,7 +78,7 @@
               <comparisonVersion>${camunda.version.old}</comparisonVersion>
               <logResults>true</logResults>
               <excludes>
-                <exclude>org/camunda/bpm/model/xml/impl/**</exclude>
+                <exclude>org/orqueio/bpm/model/xml/impl/**</exclude>
               </excludes>
             </configuration>
             <executions>

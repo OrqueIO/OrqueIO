@@ -97,7 +97,7 @@
 
     <dependency>
       <groupId>io.orqueio.bpm.model</groupId>
-      <artifactId>camunda-bpmn-model</artifactId>
+      <artifactId>orqueio-bpmn-model</artifactId>
       <scope>test</scope>
     </dependency>
 

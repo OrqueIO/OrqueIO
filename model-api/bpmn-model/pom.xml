@@ -3,32 +3,30 @@
 
   <parent>
     <groupId>io.orqueio.bpm.model</groupId>
-    <artifactId>camunda-model-apis</artifactId>
-    <relativePath>../</relativePath>
-    <version>7.24.0-SNAPSHOT</version>
+    <artifactId>orqueio-model-apis</artifactId>
+    <relativePath>../pom.xml</relativePath>
+    <version>0.24.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>camunda-bpmn-model</artifactId>
+  <artifactId>orqueio-bpmn-model</artifactId>
   <packaging>jar</packaging>
 
-  <description>
-    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://camunda.com/contact/
-  </description>
 
-  <name>Camunda Platform - BPMN Model API</name>
+
+  <name>Orque IO Platform - BPMN Model API</name>
   <inceptionYear>2014</inceptionYear>
   <properties>
-    <camunda.artifact>io.orqueio.bpm.model.bpmn</camunda.artifact>
-    <camunda.osgi.export>
+    <orqueio.artifact>io.orqueio.bpm.model.bpmn</orqueio.artifact>
+    <orqueio.osgi.export>
       !io.orqueio.bpm.model.bpmn.schema,
-      ${camunda.osgi.export.pkg};${camunda.osgi.version};-noimport:=true
-    </camunda.osgi.export>
+      ${orqueio.osgi.export.pkg};${orqueio.osgi.version};-noimport:=true
+    </orqueio.osgi.export>
   </properties>
   <dependencies>
 
     <dependency>
       <groupId>io.orqueio.bpm.model</groupId>
-      <artifactId>camunda-xml-model</artifactId>
+      <artifactId>orqueio-xml-model</artifactId>
     </dependency>
 
     <dependency>
@@ -45,7 +43,7 @@
 
     <dependency>
       <groupId>io.orqueio.bpm</groupId>
-      <artifactId>camunda-bpm-archunit</artifactId>
+      <artifactId>orqueio-bpm-archunit</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
     </dependency>
@@ -77,7 +75,7 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
           <dependenciesToScan>
-            <dependency>io.orqueio.bpm:camunda-bpm-archunit</dependency>
+            <dependency>io.orqueio.bpm:orqueio-bpm-archunit</dependency>
           </dependenciesToScan>
         </configuration>
       </plugin>
@@ -97,10 +95,10 @@
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>clirr-maven-plugin</artifactId>
             <configuration>
-              <comparisonVersion>${camunda.version.old}</comparisonVersion>
+              <comparisonVersion>${orqueio.version.old}</comparisonVersion>
               <logResults>true</logResults>
               <excludes>
-                <exclude>org/camunda/bpm/model/bpmn/impl/**</exclude>
+                <exclude>io/orqueio/bpm/model/bpmn/impl/**</exclude>
               </excludes>
             </configuration>
             <executions>
