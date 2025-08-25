@@ -3,20 +3,18 @@
 
   <parent>
     <groupId>io.orqueio.bpm</groupId>
-    <artifactId>camunda-parent</artifactId>
+    <artifactId>orqueio-parent</artifactId>
     <relativePath>../parent</relativePath>
-    <version>7.24.0-SNAPSHOT</version>
+    <version>0.24.0-SNAPSHOT</version>
   </parent>
 
   <groupId>io.orqueio.connect</groupId>
-  <artifactId>camunda-connect-root</artifactId>
-  <name>Camunda Platform - connect - root</name>
+  <artifactId>orqueio-connect-root</artifactId>
+  <name>Orque IO Platform - connect - root</name>
   <inceptionYear>2014</inceptionYear>
   <packaging>pom</packaging>
 
-  <description>
-    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://camunda.com/contact/
-  </description>
+
 
   <properties>
     <commons-codec.version>1.15</commons-codec.version>
@@ -132,9 +130,9 @@
   </profiles>
 
   <scm>
-    <url>https://github.com/camunda/camunda-bpm-platform</url>
-    <connection>scm:git:git@github.com:camunda/camunda-bpm-platform.git</connection>
-    <developerConnection>scm:git:git@github.com:camunda/camunda-bpm-platform.git</developerConnection>
+    <url>https://github.com/orqueio/orqueio</url>
+    <connection>scm:git:git@github.com:orqueio/orqueio.git</connection>
+    <developerConnection>scm:git:git@github.com:orqueio/orqueio-bpm.git</developerConnection>
     <tag>HEAD</tag>
   </scm>
 

@@ -1,29 +1,27 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <description>
-    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://camunda.com/contact/
-  </description>
+
 
   <parent>
     <groupId>io.orqueio.connect</groupId>
-    <artifactId>camunda-connect-root</artifactId>
-    <version>7.24.0-SNAPSHOT</version>
+    <artifactId>orqueio-connect-root</artifactId>
+    <version>0.24.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>camunda-connect-core</artifactId>
-  <name>Camunda Platform - connect - core</name>
+  <artifactId>orqueio-connect-core</artifactId>
+  <name>Orque IO Platform - connect - core</name>
 
   <dependencies>
 
     <dependency>
       <groupId>io.orqueio.commons</groupId>
-      <artifactId>camunda-commons-logging</artifactId>
+      <artifactId>orqueio-commons-logging</artifactId>
     </dependency>
 
     <dependency>
       <groupId>io.orqueio.commons</groupId>
-      <artifactId>camunda-commons-utils</artifactId>
+      <artifactId>orqueio-commons-utils</artifactId>
     </dependency>
 
     <dependency>
@@ -81,7 +79,7 @@
               <comparisonVersion>${connect.version.old}</comparisonVersion>
               <logResults>true</logResults>
               <excludes>
-                <exclude>org/camunda/connect/impl/**</exclude>
+                <exclude>io/orqueio/connect/impl/**</exclude>
               </excludes>
             </configuration>
             <executions>

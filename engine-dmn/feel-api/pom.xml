@@ -20,7 +20,7 @@
   <dependencies>
     <dependency>
       <groupId>io.orqueio.commons</groupId>
-      <artifactId>camunda-commons-typed-values</artifactId>
+      <artifactId>orqueio-commons-typed-values</artifactId>
     </dependency>
   </dependencies>
 

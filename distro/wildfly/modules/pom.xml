@@ -73,12 +73,12 @@
 
     <dependency>
       <groupId>io.orqueio.connect</groupId>
-      <artifactId>camunda-connect-http-client</artifactId>
+      <artifactId>orqueio-connect-http-client</artifactId>
     </dependency>
 
     <dependency>
       <groupId>io.orqueio.connect</groupId>
-      <artifactId>camunda-connect-soap-http-client</artifactId>
+      <artifactId>orqueio-connect-soap-http-client</artifactId>
     </dependency>
 
     <!-- script engine dependencies -->

@@ -253,7 +253,7 @@
 
     <dependency>
       <groupId>io.orqueio.connect</groupId>
-      <artifactId>camunda-connect-core</artifactId>
+      <artifactId>orqueio-connect-core</artifactId>
     </dependency>
 
     <!-- explicit Spring dependencies for applications

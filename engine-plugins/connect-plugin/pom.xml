@@ -19,18 +19,18 @@
 
     <dependency>
       <groupId>io.orqueio.connect</groupId>
-      <artifactId>camunda-connect-core</artifactId>
+      <artifactId>orqueio-connect-core</artifactId>
     </dependency>
 
     <dependency>
       <groupId>io.orqueio.connect</groupId>
-      <artifactId>camunda-connect-http-client</artifactId>
+      <artifactId>orqueio-connect-http-client</artifactId>
       <scope>test</scope>
     </dependency>
 
     <dependency>
       <groupId>io.orqueio.connect</groupId>
-      <artifactId>camunda-connect-soap-http-client</artifactId>
+      <artifactId>orqueio-connect-soap-http-client</artifactId>
       <scope>test</scope>
     </dependency>
 

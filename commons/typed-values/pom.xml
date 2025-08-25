@@ -2,26 +2,23 @@
 
   <modelVersion>4.0.0</modelVersion>
 
-  <description>
-    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://camunda.com/contact/
-  </description>
 
   <groupId>io.orqueio.commons</groupId>
-  <artifactId>camunda-commons-typed-values</artifactId>
-  <name>camunda Commons - Typed Values</name>
+  <artifactId>orqueio-commons-typed-values</artifactId>
+  <name>Orque IO Commons - Typed Values</name>
 
   <parent>
     <groupId>io.orqueio.bpm</groupId>
-    <artifactId>camunda-database-settings</artifactId>
+    <artifactId>orqueio-database-settings</artifactId>
     <relativePath>../../database</relativePath>
-    <version>7.24.0-SNAPSHOT</version>
+    <version>0.24.0-SNAPSHOT</version>
   </parent>
 
   <dependencyManagement>
     <dependencies>
       <dependency>
         <groupId>io.orqueio.bpm</groupId>
-        <artifactId>camunda-core-internal-dependencies</artifactId>
+        <artifactId>orqueio-core-internal-dependencies</artifactId>
         <version>${project.version}</version>
         <scope>import</scope>
         <type>pom</type>
@@ -29,16 +26,16 @@
     </dependencies>
   </dependencyManagement>
   <properties>
-    <camunda.artifact>io.orqueio.bpm.engine.variable</camunda.artifact>
-    <camunda.osgi.import.additional>
+    <orqueio.artifact>io.orqueio.bpm.engine.variable</orqueio.artifact>
+    <orqueio.osgi.import.additional>
       !javax.activation
-    </camunda.osgi.import.additional>
+    </orqueio.osgi.import.additional>
   </properties>
   <dependencies>
 
     <dependency>
       <groupId>io.orqueio.commons</groupId>
-      <artifactId>camunda-commons-utils</artifactId>
+      <artifactId>orqueio-commons-utils</artifactId>
     </dependency>
 
     <dependency>
@@ -62,7 +59,7 @@
 
     <dependency>
       <groupId>io.orqueio.bpm</groupId>
-      <artifactId>camunda-bpm-archunit</artifactId>
+      <artifactId>orqueio-bpm-archunit</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
     </dependency>
@@ -75,10 +72,11 @@
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>clirr-maven-plugin</artifactId>
         <configuration>
-          <comparisonVersion>${camunda.version.old}</comparisonVersion>
+          <!--suppress UnresolvedMavenProperty -->
+          <comparisonVersion>${orqueio.version.old}</comparisonVersion>
           <logResults>true</logResults>
           <excludes>
-            <exclude>org/camunda/bpm/engine/impl/**</exclude>
+            <exclude>io/orqueio/bpm/engine/impl/**</exclude>
           </excludes>
         </configuration>
         <executions>
@@ -95,11 +93,11 @@
               <ignored>
                 <difference>
                   <differenceType>8001</differenceType>
-                  <className>camundajar/com/sun/activation/**/*</className>
+                  <className>orqueiojar/com/sun/activation/**/*</className>
                 </difference>
                 <difference>
                   <differenceType>8001</differenceType>
-                  <className>camundajar/javax/activation/**/*</className>
+                  <className>orqueiojar/javax/activation/**/*</className>
                 </difference>
               </ignored>
             </configuration>
@@ -137,11 +135,11 @@
               <relocations>
                 <relocation>
                   <pattern>com.sun.activation</pattern>
-                  <shadedPattern>camundajar.com.sun.activation</shadedPattern>
+                  <shadedPattern>orqueiojar.com.sun.activation</shadedPattern>
                 </relocation>
                 <relocation>
                   <pattern>javax.activation</pattern>
-                  <shadedPattern>camundajar.javax.activation</shadedPattern>
+                  <shadedPattern>orqueiojar.javax.activation</shadedPattern>
                 </relocation>
               </relocations>
             </configuration>
@@ -171,7 +169,7 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
           <dependenciesToScan>
-            <dependency>io.orqueio.bpm:camunda-bpm-archunit</dependency>
+            <dependency>io.orqueio.bpm:orqueio-bpm-archunit</dependency>
           </dependenciesToScan>
         </configuration>
       </plugin>

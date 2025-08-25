@@ -5,45 +5,43 @@
   it would introduce a cyclic dependency to this bom -->
   <parent>
     <groupId>io.orqueio.bpm</groupId>
-    <artifactId>camunda-root</artifactId>
-    <version>7.24.0-SNAPSHOT</version>
+    <artifactId>orqueio-root</artifactId>
+    <version>0.24.0-SNAPSHOT</version>
     <relativePath>../../pom.xml</relativePath>
   </parent>
 
   <groupId>io.orqueio.connect</groupId>
-  <artifactId>camunda-connect-bom</artifactId>
-  <version>7.24.0-SNAPSHOT</version>
-  <name>Camunda Platform - connect - bom</name>
+  <artifactId>orqueio-connect-bom</artifactId>
+  <version>0.24.0-SNAPSHOT</version>
+  <name>Orque IO Platform - connect - bom</name>
   <packaging>pom</packaging>
 
-  <description>
-    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://camunda.com/contact/
-  </description>
+
 
   <dependencyManagement>
     <dependencies>
 
       <dependency>
         <groupId>io.orqueio.connect</groupId>
-        <artifactId>camunda-connect-core</artifactId>
+        <artifactId>orqueio-connect-core</artifactId>
         <version>${project.version}</version>
       </dependency>
 
       <dependency>
         <groupId>io.orqueio.connect</groupId>
-        <artifactId>camunda-connect-http-client</artifactId>
+        <artifactId>orqueio-connect-http-client</artifactId>
         <version>${project.version}</version>
       </dependency>
 
       <dependency>
         <groupId>io.orqueio.connect</groupId>
-        <artifactId>camunda-connect-soap-http-client</artifactId>
+        <artifactId>orqueio-connect-soap-http-client</artifactId>
         <version>${project.version}</version>
       </dependency>
 
       <dependency>
         <groupId>io.orqueio.connect</groupId>
-        <artifactId>camunda-connect-connectors-all</artifactId>
+        <artifactId>orqueio-connect-connectors-all</artifactId>
         <version>${project.version}</version>
       </dependency>
 
@@ -51,9 +49,9 @@
   </dependencyManagement>
 
   <scm>
-    <url>https://github.com/camunda/camunda-bpm-platform</url>
-    <connection>scm:git:git@github.com:camunda/camunda-bpm-platform.git</connection>
-    <developerConnection>scm:git:git@github.com:camunda/camunda-bpm-platform.git</developerConnection>
+    <url>https://github.com/orqueio/orqueio</url>
+    <connection>scm:git:git@github.com:orqueio/orqueio.git</connection>
+    <developerConnection>scm:git:git@github.com:orqueio/orqueio.git</developerConnection>
     <tag>HEAD</tag>
   </scm>
 

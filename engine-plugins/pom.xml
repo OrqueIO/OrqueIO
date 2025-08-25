@@ -67,7 +67,7 @@
 
     <dependency>
       <groupId>io.orqueio.commons</groupId>
-      <artifactId>camunda-commons-testing</artifactId>
+      <artifactId>orqueio-commons-testing</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>

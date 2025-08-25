@@ -126,7 +126,7 @@
 
     <dependency>
       <groupId>io.orqueio.connect</groupId>
-      <artifactId>camunda-connect-core</artifactId>
+      <artifactId>orqueio-connect-core</artifactId>
     </dependency>
 
     <dependency>
@@ -137,15 +137,15 @@
 
     <dependency>
       <groupId>io.orqueio.connect</groupId>
-      <artifactId>camunda-connect-connectors-all</artifactId>
+      <artifactId>orqueio-connect-connectors-all</artifactId>
       <exclusions>
         <exclusion>
           <groupId>io.orqueio.connect</groupId>
-          <artifactId>camunda-connect-http-client</artifactId>
+          <artifactId>orqueio-connect-http-client</artifactId>
         </exclusion>
         <exclusion>
           <groupId>io.orqueio.connect</groupId>
-          <artifactId>camunda-connect-soap-http-client</artifactId>
+          <artifactId>orqueio-connect-soap-http-client</artifactId>
         </exclusion>
       </exclusions>
     </dependency>

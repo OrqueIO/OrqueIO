@@ -24,7 +24,7 @@
   <dependencies>
     <dependency>
       <groupId>io.orqueio.commons</groupId>
-      <artifactId>camunda-commons-logging</artifactId>
+      <artifactId>orqueio-commons-logging</artifactId>
     </dependency>
 
     <!-- LDAP Libraries to start test server -->
