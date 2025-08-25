@@ -4,18 +4,16 @@
 
   <parent>
     <groupId>io.orqueio.bpm.run</groupId>
-    <artifactId>camunda-bpm-run-qa</artifactId>
-    <version>7.24.0-SNAPSHOT</version>
-    <relativePath>..</relativePath>
+    <artifactId>orqueio-bpm-run-qa</artifactId>
+    <version>0.24.0-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
   </parent>
 
-  <artifactId>camunda-bpm-run-qa-integration-tests</artifactId>
-  <name>Camunda Platform - Run - QA - Integration Tests</name>
+  <artifactId>orqueio-bpm-run-qa-integration-tests</artifactId>
+  <name>Orque IO Platform - Run - QA - Integration Tests</name>
   <packaging>jar</packaging>
 
-  <description>
-    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://camunda.com/contact/
-  </description>
+
 
   <dependencies>
 
@@ -60,13 +58,13 @@
     <!-- Webapps -->
     <dependency>
       <groupId>io.orqueio.bpm.qa</groupId>
-      <artifactId>camunda-qa-integration-tests-webapps</artifactId>
+      <artifactId>orqueio-qa-integration-tests-webapps</artifactId>
       <version>${project.version}</version>
     </dependency>
 
     <dependency>
       <groupId>io.orqueio.bpm.model</groupId>
-      <artifactId>camunda-bpmn-model</artifactId>
+      <artifactId>orqueio-bpmn-model</artifactId>
       <scope>test</scope>
     </dependency>
 

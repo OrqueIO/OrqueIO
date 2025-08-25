@@ -2,25 +2,24 @@
   <modelVersion>4.0.0</modelVersion>
 
   <description>
-    Assembles the Camunda Platform and makes it ready for qa. 
+    Assembles the Orque IO Platform and makes it ready for qa.
     The assembly is installed to maven later in the reactor, if the integration tests pass successfully.
-    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://camunda.com/contact/
   </description>
 
-  <artifactId>camunda-tomcat-assembly</artifactId>
+  <artifactId>orqueio-tomcat-assembly</artifactId>
   <packaging>pom</packaging>
 
   <parent>
     <groupId>io.orqueio.bpm.tomcat</groupId>
-    <artifactId>camunda-tomcat</artifactId>
-    <version>7.24.0-SNAPSHOT</version>
+    <artifactId>orqueio-tomcat</artifactId>
+    <version>0.24.0-SNAPSHOT</version>
   </parent>
   
   <properties>
     <skip-third-party-bom>false</skip-third-party-bom>
   </properties>
 
-  <name>Camunda Platform - tomcat Assembly</name>
+  <name>Orque IO Platform - tomcat Assembly</name>
 
   <dependencies>
     <dependency>
@@ -85,7 +84,7 @@
 
     <dependency>
       <groupId>io.orqueio.bpm</groupId>
-      <artifactId>camunda-engine</artifactId>
+      <artifactId>orqueio-engine</artifactId>
       <exclusions>
         <exclusion>
           <groupId>org.springframework</groupId>
@@ -100,12 +99,12 @@
 
     <dependency>
       <groupId>io.orqueio.bpm</groupId>
-      <artifactId>camunda-engine-cdi-jakarta</artifactId>
+      <artifactId>orqueio-engine-cdi-jakarta</artifactId>
     </dependency>
 
     <dependency>
       <groupId>io.orqueio.bpm.identity</groupId>
-      <artifactId>camunda-identity-ldap</artifactId>
+      <artifactId>orqueio-identity-ldap</artifactId>
     </dependency>
 
     <dependency>
@@ -115,7 +114,7 @@
 
     <dependency>
       <groupId>io.orqueio.bpm</groupId>
-      <artifactId>camunda-engine-plugin-spin</artifactId>
+      <artifactId>orqueio-engine-plugin-spin</artifactId>
       <version>${project.version}</version>
     </dependency>
 
@@ -131,7 +130,7 @@
 
     <dependency>
       <groupId>io.orqueio.bpm</groupId>
-      <artifactId>camunda-engine-plugin-connect</artifactId>
+      <artifactId>orqueio-engine-plugin-connect</artifactId>
       <version>${project.version}</version>
     </dependency>
 
@@ -159,7 +158,7 @@
 
     <dependency>
       <groupId>io.orqueio.template-engines</groupId>
-      <artifactId>camunda-template-engines-freemarker</artifactId>
+      <artifactId>orqueio-template-engines-freemarker</artifactId>
     </dependency>
 
     <dependency>

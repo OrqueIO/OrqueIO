@@ -2,18 +2,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <description>
-    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://camunda.com/contact/
-  </description>
+
 
   <parent>
     <groupId>io.orqueio.bpm.run</groupId>
-    <artifactId>camunda-bpm-run-modules</artifactId>
-    <version>7.24.0-SNAPSHOT</version>
+    <artifactId>orqueio-bpm-run-modules</artifactId>
+    <version>0.24.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>camunda-bpm-run-modules-example-invoice</artifactId>
-  <name>Camunda Platform - Run - Module Example Invoice</name>
+  <artifactId>orqueio-bpm-run-modules-example-invoice</artifactId>
+  <name>Orque IO Platform - Run - Module Example Invoice</name>
   
   <properties>
     <!-- generate a bom of compile time dependencies for the license book.
@@ -26,13 +24,13 @@
 
     <dependency>
       <groupId>io.orqueio.bpm.springboot</groupId>
-      <artifactId>camunda-bpm-spring-boot-starter-webapp</artifactId>
+      <artifactId>orqueio-bpm-spring-boot-starter-webapp</artifactId>
       <scope>provided</scope>
     </dependency>
 
     <dependency>
       <groupId>io.orqueio.bpm.example</groupId>
-      <artifactId>camunda-example-invoice-jakarta</artifactId>
+      <artifactId>orqueio-example-invoice-jakarta</artifactId>
       <version>${project.version}</version>
       <classifier>classes</classifier>
       <scope>provided</scope>
@@ -58,7 +56,7 @@
               <artifactItems>
                 <artifactItem>
                   <groupId>io.orqueio.bpm.example</groupId>
-                  <artifactId>camunda-example-invoice-jakarta</artifactId>
+                  <artifactId>orqueio-example-invoice-jakarta</artifactId>
                   <version>${project.version}</version>
                   <type>war</type>
                   <outputDirectory>${project.build.directory}/classes</outputDirectory>
@@ -72,11 +70,11 @@
                     </org.codehaus.plexus.components.io.filemappers.RegExpFileMapper>
                     <org.codehaus.plexus.components.io.filemappers.RegExpFileMapper>
                       <pattern>^\Qindex.html\E</pattern>
-                      <replacement>./camunda-invoice/index.html</replacement>
+                      <replacement>./orqueio-invoice/index.html</replacement>
                     </org.codehaus.plexus.components.io.filemappers.RegExpFileMapper>
                     <org.codehaus.plexus.components.io.filemappers.RegExpFileMapper>
                       <pattern>^\Qassets/\E</pattern>
-                      <replacement>./camunda-invoice/assets/</replacement>
+                      <replacement>./orqueio-invoice/assets/</replacement>
                     </org.codehaus.plexus.components.io.filemappers.RegExpFileMapper>
                   </fileMappers>
                 </artifactItem>

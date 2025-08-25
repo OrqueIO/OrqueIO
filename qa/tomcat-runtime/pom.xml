@@ -23,7 +23,7 @@
         Leave scope test, otherwise libs from pom will be copied into Tomcat's lib folder
       -->
       <groupId>io.orqueio.bpm.tomcat</groupId>
-      <artifactId>camunda-tomcat-assembly</artifactId>
+      <artifactId>orqueio-tomcat-assembly</artifactId>
       <version>${project.version}</version>
       <type>pom</type>
       <scope>test</scope>

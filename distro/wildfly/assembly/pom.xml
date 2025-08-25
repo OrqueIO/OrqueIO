@@ -3,19 +3,18 @@
 
   <parent>
     <groupId>io.orqueio.bpm.wildfly</groupId>
-    <artifactId>camunda-wildfly</artifactId>
-    <version>7.24.0-SNAPSHOT</version>
+    <artifactId>orqueio-wildfly</artifactId>
+    <version>0.24.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>camunda-wildfly-assembly</artifactId>
+  <artifactId>orqueio-wildfly-assembly</artifactId>
   <packaging>pom</packaging>
 
-  <name>Camunda Platform - Wildfly Assembly</name>
+  <name>Orque IO Platform - Wildfly Assembly</name>
 
   <description>
-    Assembles the Camunda Platform and makes it ready for qa.
+    Assembles the Orque IO Platform and makes it ready for qa.
     The assembly is installed to maven later in the reactor, if the integration tests pass successfully.
-    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://camunda.com/contact/
   </description>
   
   <properties>
@@ -35,32 +34,32 @@
 
     <dependency>
       <groupId>io.orqueio.bpm.javaee</groupId>
-      <artifactId>camunda-ejb-client-jakarta</artifactId>
+      <artifactId>orqueio-ejb-client-jakarta</artifactId>
     </dependency>
     
     <dependency>
       <groupId>io.orqueio.bpm</groupId>
-      <artifactId>camunda-engine</artifactId>
+      <artifactId>orqueio-engine</artifactId>
     </dependency>
 
     <dependency>
       <groupId>io.orqueio.bpm.identity</groupId>
-      <artifactId>camunda-identity-ldap</artifactId>
+      <artifactId>orqueio-identity-ldap</artifactId>
     </dependency>
 
     <dependency>
       <groupId>io.orqueio.bpm</groupId>
-      <artifactId>camunda-engine-cdi-jakarta</artifactId>
+      <artifactId>orqueio-engine-cdi-jakarta</artifactId>
     </dependency>
     
     <dependency>
       <groupId>io.orqueio.bpm</groupId>
-      <artifactId>camunda-engine-spring-6</artifactId>
+      <artifactId>orqueio-engine-spring-6</artifactId>
     </dependency>
     
     <dependency>
       <groupId>io.orqueio.bpm</groupId>
-      <artifactId>camunda-engine-rest-jakarta</artifactId>
+      <artifactId>orqueio-engine-rest-jakarta</artifactId>
       <classifier>classes</classifier>
       <version>${project.version}</version>
     </dependency>
@@ -116,10 +115,10 @@
     </dependency>
 
     <dependency>
-      <!-- this dependency is to make sure that we are executed after camunda-modules 
+      <!-- this dependency is to make sure that we are executed after orqueio-modules
         in the reactor -->
       <groupId>io.orqueio.bpm.wildfly</groupId>
-      <artifactId>camunda-wildfly-modules</artifactId>
+      <artifactId>orqueio-wildfly-modules</artifactId>
       <version>${project.version}</version>
       <scope>provided</scope>
     </dependency>

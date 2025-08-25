@@ -30,7 +30,7 @@
 
     <dependency>
       <groupId>io.orqueio.bpm.webapp</groupId>
-      <artifactId>camunda-webapp-webjar</artifactId>
+      <artifactId>orqueio-webapp-webjar</artifactId>
       <scope>test</scope>
     </dependency>
 

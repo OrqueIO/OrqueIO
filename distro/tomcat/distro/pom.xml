@@ -1,26 +1,24 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>camunda-bpm-tomcat</artifactId>
+  <artifactId>orqueio-bpm-tomcat</artifactId>
   <packaging>pom</packaging>
 
-  <description>
-    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://camunda.com/contact/
-  </description>
+
 
   <parent>
     <groupId>io.orqueio.bpm.tomcat</groupId>
-    <artifactId>camunda-tomcat</artifactId>
-    <version>7.24.0-SNAPSHOT</version>
+    <artifactId>orqueio-tomcat</artifactId>
+    <version>0.24.0-SNAPSHOT</version>
   </parent>
 
-  <name>Camunda Platform - tomcat Distro</name>
+  <name>Orque IO Platform - tomcat Distro</name>
 
   <dependencies>
 
     <dependency>
       <groupId>io.orqueio.bpm.distro</groupId>
-      <artifactId>camunda-sql-scripts</artifactId>
+      <artifactId>orqueio-sql-scripts</artifactId>
       <version>${project.version}</version>
       <type>jar</type>
     </dependency>
@@ -29,21 +27,21 @@
 
     <dependency>
       <groupId>io.orqueio.bpm.tomcat</groupId>
-      <artifactId>camunda-tomcat-assembly</artifactId>
+      <artifactId>orqueio-tomcat-assembly</artifactId>
       <version>${project.version}</version>
       <type>tar.gz</type>
     </dependency>
 
     <dependency>
       <groupId>io.orqueio.bpm.webapp</groupId>
-      <artifactId>camunda-webapp-tomcat-jakarta</artifactId>
+      <artifactId>orqueio-webapp-tomcat-jakarta</artifactId>
       <version>${project.version}</version>
       <type>war</type>
     </dependency>
 
     <dependency>
       <groupId>io.orqueio.bpm</groupId>
-      <artifactId>camunda-engine-rest-jakarta</artifactId>
+      <artifactId>orqueio-engine-rest-jakarta</artifactId>
       <version>${project.version}</version>
       <classifier>tomcat</classifier>
       <type>war</type>
@@ -51,7 +49,7 @@
 
     <dependency>
       <groupId>io.orqueio.bpm.example</groupId>
-      <artifactId>camunda-example-invoice-jakarta</artifactId>
+      <artifactId>orqueio-example-invoice-jakarta</artifactId>
       <version>${project.version}</version>
       <type>war</type>
     </dependency>
@@ -74,7 +72,7 @@
               <descriptors>
                 <descriptor>assembly.xml</descriptor>
               </descriptors>
-              <finalName>camunda-bpm-tomcat-${project.version}</finalName>
+              <finalName>orqueio-bpm-tomcat-${project.version}</finalName>
               <attach>true</attach>
               <appendAssemblyId>false</appendAssemblyId>
               <outputDirectory>target/</outputDirectory>

@@ -4,31 +4,29 @@
 
   <parent>
     <groupId>io.orqueio.bpm.run</groupId>
-    <artifactId>camunda-bpm-run-root</artifactId>
-    <version>7.24.0-SNAPSHOT</version>
+    <artifactId>orqueio-bpm-run-root</artifactId>
+    <version>0.24.0-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>
 
-  <artifactId>camunda-bpm-run</artifactId>
-  <name>Camunda Platform - Run - Distribution</name>
+  <artifactId>orqueio-bpm-run</artifactId>
+  <name>Orque IO Platform - Run - Distribution</name>
   <packaging>pom</packaging>
 
-  <description>
-    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://camunda.com/contact/
-  </description>
+
 
   <dependencies>
 
     <dependency>
       <groupId>io.orqueio.bpm.run</groupId>
-      <artifactId>camunda-bpm-run-assembly</artifactId>
+      <artifactId>orqueio-bpm-run-assembly</artifactId>
       <version>${project.version}</version>
       <type>tar.gz</type>
     </dependency>
 
     <dependency>
       <groupId>io.orqueio.bpm.distro</groupId>
-      <artifactId>camunda-sql-scripts</artifactId>
+      <artifactId>orqueio-sql-scripts</artifactId>
       <version>${project.version}</version>
       <type>jar</type>
     </dependency>
@@ -36,7 +34,7 @@
     <!-- make sure this runs after webapps -->
     <dependency>
       <groupId>io.orqueio.bpm.run</groupId>
-      <artifactId>camunda-bpm-run-modules-webapps</artifactId>
+      <artifactId>orqueio-bpm-run-modules-webapps</artifactId>
       <version>${project.version}</version>
       <type>pom</type>
       <exclusions>

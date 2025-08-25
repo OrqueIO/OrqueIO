@@ -123,7 +123,7 @@
 
     <dependency>
       <groupId>io.orqueio.bpm.tomcat</groupId>
-      <artifactId>camunda-tomcat-assembly</artifactId>
+      <artifactId>orqueio-tomcat-assembly</artifactId>
       <version>${project.version}</version>
       <type>tar.gz</type>
       <scope>test</scope>
