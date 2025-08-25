@@ -14,7 +14,7 @@
 
   <parent>
     <groupId>io.orqueio.bpm</groupId>
-    <artifactId>camunda-database-settings</artifactId>
+    <artifactId>orqueio-database-settings</artifactId>
     <relativePath>../database</relativePath>
     <version>7.24.0-SNAPSHOT</version>
   </parent>
