@@ -52,7 +52,7 @@
 
     <dependency>
       <groupId>io.orqueio.bpm</groupId>
-      <artifactId>camunda-engine-plugin-spin</artifactId>
+      <artifactId>orqueio-engine-plugin-spin</artifactId>
       <optional>true</optional>
     </dependency>
 
@@ -64,7 +64,7 @@
 
     <dependency>
       <groupId>io.orqueio.bpm</groupId>
-      <artifactId>camunda-engine-plugin-connect</artifactId>
+      <artifactId>orqueio-engine-plugin-connect</artifactId>
       <optional>true</optional>
     </dependency>
 
