@@ -16,7 +16,7 @@
       <unpack>true</unpack>
       <scope>provided</scope>
       <includes>
-        <include>io.orqueio.bpm:camunda-engine-rest-core-jakarta:jar:tests:*</include>
+        <include>io.orqueio.bpm:orqueio-engine-rest-core-jakarta:jar:tests:*</include>
       </includes>
     </dependencySet>
   </dependencySets>

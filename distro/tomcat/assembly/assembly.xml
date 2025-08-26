@@ -36,8 +36,8 @@
 
         <include>com.h2database:h2:jar</include>
 
-        <include>io.orqueio.bpm:camunda-engine:jar</include>
-        <include>io.orqueio.bpm.identity:camunda-identity-ldap:jar</include>
+        <include>io.orqueio.bpm:orqueio-engine:jar</include>
+        <include>io.orqueio.bpm.identity:orqueio-identity-ldap:jar</include>
 
         <include>org.mybatis:mybatis:jar:*</include>
         <include>com.fasterxml.uuid:java-uuid-generator:jar:*</include>
@@ -58,9 +58,9 @@
         <include>org.slf4j:slf4j-api:jar:*</include>
         <include>org.slf4j:slf4j-jdk14:jar:*</include>
 
-        <include>io.orqueio.bpm:camunda-engine-plugin-*:jar</include>
-        <include>io.orqueio.spin:camunda-spin-core*:jar</include>
-        <include>io.orqueio.spin:camunda-spin-dataformat-all*:jar</include>
+        <include>io.orqueio.bpm:orqueio-engine-plugin-*:jar</include>
+        <include>io.orqueio.spin:orqueio-spin-core*:jar</include>
+        <include>io.orqueio.spin:orqueio-spin-dataformat-all*:jar</include>
         <include>io.orqueio.connect:*:jar</include>
         <include>io.orqueio.commons:*:jar</include>
 
@@ -81,8 +81,8 @@
 
         <include>com.h2database:h2:jar</include>
 
-        <include>io.orqueio.bpm:camunda-engine:jar</include>
-        <include>io.orqueio.bpm.identity:camunda-identity-ldap:jar</include>
+        <include>io.orqueio.bpm:orqueio-engine:jar</include>
+        <include>io.orqueio.bpm.identity:orqueio-identity-ldap:jar</include>
 
         <include>org.mybatis:mybatis:jar:*</include>
         <include>com.fasterxml.uuid:java-uuid-generator:jar:*</include>
@@ -102,9 +102,9 @@
         <include>org.slf4j:slf4j-api:jar:*</include>
         <include>org.slf4j:slf4j-jdk14:jar:*</include>
 
-        <include>io.orqueio.bpm:camunda-engine-plugin-*:jar</include>
-        <include>io.orqueio.spin:camunda-spin-core*:jar</include>
-        <include>io.orqueio.spin:camunda-spin-dataformat-all*:jar</include>
+        <include>io.orqueio.bpm:orqueio-engine-plugin-*:jar</include>
+        <include>io.orqueio.spin:orqueio-spin-core*:jar</include>
+        <include>io.orqueio.spin:orqueio-spin-dataformat-all*:jar</include>
         <include>io.orqueio.connect:*:jar</include>
         <include>io.orqueio.commons:*:jar</include>
 
@@ -141,23 +141,23 @@
       <outputDirectory></outputDirectory>
     </file>
     <file>
-      <source>src/start-camunda.bat</source>
+      <source>src/start-orqueio.bat</source>
       <filtered>true</filtered>
       <outputDirectory></outputDirectory>
     </file>
     <file>
-      <source>src/start-camunda.sh</source>
+      <source>src/start-orqueio.sh</source>
       <filtered>true</filtered>
       <outputDirectory></outputDirectory>
       <fileMode>0755</fileMode>
     </file>
     <file>
-      <source>src/shutdown-camunda.bat</source>
+      <source>src/shutdown-orqueio.bat</source>
       <filtered>true</filtered>
       <outputDirectory></outputDirectory>
     </file>
     <file>
-      <source>src/shutdown-camunda.sh</source>
+      <source>src/shutdown-orqueio.sh</source>
       <filtered>true</filtered>
       <outputDirectory></outputDirectory>
       <fileMode>0755</fileMode>
