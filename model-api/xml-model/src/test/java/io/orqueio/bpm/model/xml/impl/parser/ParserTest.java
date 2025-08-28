@@ -38,7 +38,7 @@ public class ParserTest {
   @Test
   public void shouldThrowExceptionForTooManyAttributes() {
     TestModelParser modelParser = new TestModelParser();
-    String testXml = "org/camunda/bpm/model/xml/impl/parser/FeatureSecureProcessing.xml";
+    String testXml = "io/orqueio/bpm/model/xml/impl/parser/FeatureSecureProcessing.xml";
     InputStream testXmlAsStream = this.getClass().getClassLoader().getResourceAsStream(testXml);
     try {
       modelParser.parseModelFromStream(testXmlAsStream);
@@ -60,7 +60,7 @@ public class ParserTest {
 
     try {
       TestModelParser modelParser = new TestModelParser();
-      String testXml = "org/camunda/bpm/model/xml/impl/parser/ExternalSchemaAccess.xml";
+      String testXml = "io/orqueio/bpm/model/xml/impl/parser/ExternalSchemaAccess.xml";
       InputStream testXmlAsStream = this.getClass().getClassLoader().getResourceAsStream(testXml);
 
       // then
@@ -83,7 +83,7 @@ public class ParserTest {
 
     try {
       TestModelParser modelParser = new TestModelParser();
-      String testXml = "org/camunda/bpm/model/xml/impl/parser/ExternalSchemaAccess.xml";
+      String testXml = "io/orqueio/bpm/model/xml/impl/parser/ExternalSchemaAccess.xml";
       InputStream testXmlAsStream = this.getClass().getClassLoader().getResourceAsStream(testXml);
 
       // when
@@ -99,7 +99,7 @@ public class ParserTest {
   @Test
   public void shouldThrowExceptionForDoctype() {
     TestModelParser modelParser = new TestModelParser();
-    String testXml = "org/camunda/bpm/model/xml/impl/parser/XxeProcessing.xml";
+    String testXml = "io/orqueio/bpm/model/xml/impl/parser/XxeProcessing.xml";
     InputStream testXmlAsStream = this.getClass().getClassLoader().getResourceAsStream(testXml);
     try {
       modelParser.parseModelFromStream(testXmlAsStream);

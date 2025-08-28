@@ -25,7 +25,7 @@ import io.orqueio.bpm.application.impl.EmbeddedProcessApplication;
  */
 @ProcessApplication(
     name="test-app",
-    deploymentDescriptors={"org/camunda/bpm/application/impl/embedded/deployment-reusing-existing-engine.xml"}
+    deploymentDescriptors={"io/orqueio/bpm/application/impl/embedded/deployment-reusing-existing-engine.xml"}
 )
 public class TestApplicationReusingExistingEngine extends EmbeddedProcessApplication {
 

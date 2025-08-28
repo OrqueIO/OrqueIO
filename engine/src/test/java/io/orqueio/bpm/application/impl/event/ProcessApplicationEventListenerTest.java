@@ -53,7 +53,7 @@ public class ProcessApplicationEventListenerTest {
 
   @ClassRule
   public static ProcessEngineBootstrapRule bootstrapRule = new ProcessEngineBootstrapRule(
-      "org/camunda/bpm/application/impl/event/pa.event.listener.camunda.cfg.xml");
+      "io/orqueio/bpm/application/impl/event/pa.event.listener.camunda.cfg.xml");
   @Rule
   public ProvidedProcessEngineRule engineRule = new ProvidedProcessEngineRule(bootstrapRule);
 
@@ -81,7 +81,7 @@ public class ProcessApplicationEventListenerTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/application/impl/event/ProcessApplicationEventListenerTest.testExecutionListener.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/application/impl/event/ProcessApplicationEventListenerTest.testExecutionListener.bpmn20.xml" })
   public void testExecutionListenerNull() {
 
     // this test verifies that the process application can return a 'null'
@@ -97,7 +97,7 @@ public class ProcessApplicationEventListenerTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/application/impl/event/ProcessApplicationEventListenerTest.testExecutionListener.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/application/impl/event/ProcessApplicationEventListenerTest.testExecutionListener.bpmn20.xml" })
   public void testShouldInvokeExecutionListenerOnStartAndEndOfProcessInstance() {
     final AtomicInteger processDefinitionEventCount = new AtomicInteger();
 
@@ -122,7 +122,7 @@ public class ProcessApplicationEventListenerTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/application/impl/event/ProcessApplicationEventListenerTest.testExecutionListener.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/application/impl/event/ProcessApplicationEventListenerTest.testExecutionListener.bpmn20.xml" })
   public void testShouldNotIncrementExecutionListenerCountOnStartAndEndOfProcessInstance() {
     final AtomicInteger eventCount = new AtomicInteger();
 

@@ -39,7 +39,7 @@ public class VfsProcessApplicationScannerTest {
 
     // given: scanning the relative test resource root
     URLClassLoader classLoader = new URLClassLoader(new URL[]{new URL("file:")});
-    String processRootPath = "classpath:org/camunda/bpm/container/impl/jmx/deployment/process/";
+    String processRootPath = "classpath:io/orqueio/bpm/container/impl/jmx/deployment/process/";
     Map<String, byte[]> scanResult = ProcessApplicationScanningUtil.findResources(classLoader, processRootPath, null);
 
     // expect: finds only the BPMN process file and not treats the 'bpmn' folder
@@ -54,7 +54,7 @@ public class VfsProcessApplicationScannerTest {
 
     // given: scanning the relative test resource root
     URLClassLoader classLoader = new URLClassLoader(new URL[]{new URL("file:")});
-    String processRootPath = "classpath:org/camunda/bpm/container/impl/jmx/deployment/case/";
+    String processRootPath = "classpath:io/orqueio/bpm/container/impl/jmx/deployment/case/";
     Map<String, byte[]> scanResult = ProcessApplicationScanningUtil.findResources(classLoader, processRootPath, null);
 
     // expect: finds only the CMMN process file and not treats the 'cmmn' folder
@@ -67,7 +67,7 @@ public class VfsProcessApplicationScannerTest {
   @Test
   public void testScanProcessArchivePathWithAdditionalResourceSuffixes() throws MalformedURLException {
     URLClassLoader classLoader = new URLClassLoader(new URL[]{new URL("file:")});
-    String processRootPath = "classpath:org/camunda/bpm/container/impl/jmx/deployment/script/";
+    String processRootPath = "classpath:io/orqueio/bpm/container/impl/jmx/deployment/script/";
     String[] additionalResourceSuffixes = new String[] { "py", "groovy", "rb" };
     Map<String, byte[]> scanResult = ProcessApplicationScanningUtil.findResources(classLoader, processRootPath, null, additionalResourceSuffixes);
 

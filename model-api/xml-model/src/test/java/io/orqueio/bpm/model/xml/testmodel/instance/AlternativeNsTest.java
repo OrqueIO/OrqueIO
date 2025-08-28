@@ -46,8 +46,8 @@ import org.w3c.dom.Node;
  */
 public class AlternativeNsTest extends TestModelTest {
 
-  private static final String MECHANICAL_NS = "http://camunda.org/mechanical";
-  private static final String YET_ANOTHER_NS = "http://camunda.org/yans";
+  private static final String MECHANICAL_NS = "http://orqueio.io/mechanical";
+  private static final String YET_ANOTHER_NS = "http://orqueio.io/yans";
 
   public AlternativeNsTest(String testName, ModelInstance testModelInstance, AbstractModelParser modelParser) {
     super(testName, testModelInstance, modelParser);

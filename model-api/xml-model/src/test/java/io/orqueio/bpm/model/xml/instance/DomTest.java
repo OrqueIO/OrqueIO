@@ -39,10 +39,10 @@ import static org.junit.runners.Parameterized.Parameters;
  */
 public class DomTest extends TestModelTest {
 
-  private static final String TEST_NS = "http://camunda.org/test";
-  private static final String UNKNOWN_NS = "http://camunda.org/unknown";
+  private static final String TEST_NS = "http://orqueio.io/test";
+  private static final String UNKNOWN_NS = "http://orqueio.io/unknown";
   private static final String CAMUNDA_NS = "http://activiti.org/bpmn";
-  private static final String FOX_NS = "http://www.camunda.com/fox";
+  private static final String FOX_NS = "http://www.orqueio.io/fox";
   private static final String BPMN_NS = "http://www.omg.org/spec/BPMN/20100524/MODEL";
 
   private DomDocument document;
@@ -139,8 +139,8 @@ public class DomTest extends TestModelTest {
     document.registerNamespace(FOX_NS);
 
     DomElement rootElement = document.getRootElement();
-    assertThat(rootElement.hasAttribute(XMLNS_ATTRIBUTE_NS_URI, "camunda")).isTrue();
-    assertThat(rootElement.getAttribute(XMLNS_ATTRIBUTE_NS_URI, "camunda")).isEqualTo(CAMUNDA_NS);
+    assertThat(rootElement.hasAttribute(XMLNS_ATTRIBUTE_NS_URI, "orqueio")).isTrue();
+    assertThat(rootElement.getAttribute(XMLNS_ATTRIBUTE_NS_URI, "orqueio")).isEqualTo(CAMUNDA_NS);
     assertThat(rootElement.hasAttribute(XMLNS_ATTRIBUTE_NS_URI, "fox")).isTrue();
     assertThat(rootElement.getAttribute(XMLNS_ATTRIBUTE_NS_URI, "fox")).isEqualTo(FOX_NS);
   }
@@ -151,8 +151,8 @@ public class DomTest extends TestModelTest {
     document.registerNamespace(CAMUNDA_NS);
 
     DomElement rootElement = document.getRootElement();
-    assertThat(rootElement.hasAttribute(XMLNS_ATTRIBUTE_NS_URI, "camunda")).isTrue();
-    assertThat(rootElement.getAttribute(XMLNS_ATTRIBUTE_NS_URI, "camunda")).isEqualTo(TEST_NS);
+    assertThat(rootElement.hasAttribute(XMLNS_ATTRIBUTE_NS_URI, "orqueio")).isTrue();
+    assertThat(rootElement.getAttribute(XMLNS_ATTRIBUTE_NS_URI, "orqueio")).isEqualTo(TEST_NS);
     assertThat(rootElement.hasAttribute(XMLNS_ATTRIBUTE_NS_URI, "ns0")).isTrue();
     assertThat(rootElement.getAttribute(XMLNS_ATTRIBUTE_NS_URI, "ns0")).isEqualTo(CAMUNDA_NS);
   }

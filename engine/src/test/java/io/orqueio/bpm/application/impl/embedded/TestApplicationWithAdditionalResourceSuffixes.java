@@ -25,7 +25,7 @@ import io.orqueio.bpm.application.impl.EmbeddedProcessApplication;
  */
 @ProcessApplication(
     name="test-app",
-    deploymentDescriptors={"org/camunda/bpm/application/impl/embedded/deployment-with-additional-resource-suffixes.xml"}
+    deploymentDescriptors={"io/orqueio/bpm/application/impl/embedded/deployment-with-additional-resource-suffixes.xml"}
 )
 public class TestApplicationWithAdditionalResourceSuffixes extends EmbeddedProcessApplication {
 

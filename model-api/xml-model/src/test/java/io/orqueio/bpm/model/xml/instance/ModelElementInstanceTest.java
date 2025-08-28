@@ -168,7 +168,7 @@ public class ModelElementInstanceTest extends TestModelTest {
     assertThat(daisy.getTextContent()).isEqualTo("some text content with outer line breaks");
     assertThat(hedwig.getTextContent()).isEqualTo("some text content with inner\n        line breaks");
 
-    String testContent = "\n test content \n \n \t camunda.org \t    \n   ";
+    String testContent = "\n test content \n \n \t orqueio.io \t    \n   ";
     tweety.setTextContent(testContent);
     assertThat(tweety.getTextContent()).isEqualTo(testContent.trim());
   }
@@ -180,7 +180,7 @@ public class ModelElementInstanceTest extends TestModelTest {
     assertThat(daisy.getRawTextContent()).isEqualTo("\n        some text content with outer line breaks\n    ");
     assertThat(hedwig.getRawTextContent()).isEqualTo("\n        some text content with inner\n        line breaks\n    ");
 
-    String testContent = "\n test content \n \n \t camunda.org \t    \n   ";
+    String testContent = "\n test content \n \n \t orqueio.io \t    \n   ";
     tweety.setTextContent(testContent);
     assertThat(tweety.getRawTextContent()).isEqualTo(testContent);
   }

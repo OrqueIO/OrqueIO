@@ -30,7 +30,7 @@ import io.orqueio.bpm.impl.juel.jakarta.el.ELResolver;
  */
 @ProcessApplication(
     value="called-app",
-    deploymentDescriptors={"org/camunda/bpm/application/impl/el/called-process-app.xml"}
+    deploymentDescriptors={"io/orqueio/bpm/application/impl/el/called-process-app.xml"}
 )
 public class CalledProcessApplication extends EmbeddedProcessApplication {
 

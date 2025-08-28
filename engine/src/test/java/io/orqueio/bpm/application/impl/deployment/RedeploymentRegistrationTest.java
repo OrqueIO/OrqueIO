@@ -54,17 +54,17 @@ public class RedeploymentRegistrationTest {
 
   protected static final String DEPLOYMENT_NAME = "my-deployment";
 
-  protected static final String BPMN_RESOURCE_1 = "org/camunda/bpm/engine/test/api/repository/processOne.bpmn20.xml";
-  protected static final String BPMN_RESOURCE_2 = "org/camunda/bpm/engine/test/api/repository/processTwo.bpmn20.xml";
+  protected static final String BPMN_RESOURCE_1 = "io/orqueio/bpm/engine/test/api/repository/processOne.bpmn20.xml";
+  protected static final String BPMN_RESOURCE_2 = "io/orqueio/bpm/engine/test/api/repository/processTwo.bpmn20.xml";
 
-  protected static final String CMMN_RESOURCE_1 = "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn";
-  protected static final String CMMN_RESOURCE_2 = "org/camunda/bpm/engine/test/api/cmmn/twoTaskCase.cmmn";
+  protected static final String CMMN_RESOURCE_1 = "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn";
+  protected static final String CMMN_RESOURCE_2 = "io/orqueio/bpm/engine/test/api/cmmn/twoTaskCase.cmmn";
 
-  protected static final String DMN_RESOURCE_1 = "org/camunda/bpm/engine/test/dmn/deployment/DecisionDefinitionDeployerTest.testDmnDeployment.dmn11.xml";
-  protected static final String DMN_RESOURCE_2 = "org/camunda/bpm/engine/test/dmn/deployment/dmnScore.dmn11.xml";
+  protected static final String DMN_RESOURCE_1 = "io/orqueio/bpm/engine/test/dmn/deployment/DecisionDefinitionDeployerTest.testDmnDeployment.dmn11.xml";
+  protected static final String DMN_RESOURCE_2 = "io/orqueio/bpm/engine/test/dmn/deployment/dmnScore.dmn11.xml";
 
-  protected static final String DRD_RESOURCE_1 = "org/camunda/bpm/engine/test/dmn/deployment/drdScore.dmn11.xml";
-  protected static final String DRD_RESOURCE_2 = "org/camunda/bpm/engine/test/dmn/deployment/drdDish.dmn11.xml";
+  protected static final String DRD_RESOURCE_1 = "io/orqueio/bpm/engine/test/dmn/deployment/drdScore.dmn11.xml";
+  protected static final String DRD_RESOURCE_2 = "io/orqueio/bpm/engine/test/dmn/deployment/drdDish.dmn11.xml";
 
   protected EmbeddedProcessApplication processApplication;
 
