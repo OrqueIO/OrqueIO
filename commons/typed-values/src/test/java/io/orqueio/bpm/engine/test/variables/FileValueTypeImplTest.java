@@ -90,7 +90,7 @@ public class FileValueTypeImplTest {
 
   @Test
   public void createValueFromFile() throws URISyntaxException {
-    File file = new File(this.getClass().getClassLoader().getResource("org/camunda/bpm/engine/test/variables/simpleFile.txt").toURI());
+    File file = new File(this.getClass().getClassLoader().getResource("io/orqueio/bpm/engine/test/variables/simpleFile.txt").toURI());
     TypedValue value = type.createValue(file, Collections.<String, Object> singletonMap(FileValueTypeImpl.VALUE_INFO_FILE_NAME, "simpleFile.txt"));
     assertThat(value, is(instanceOf(FileValue.class)));
     assertThat(value.getType(), is(instanceOf(FileValueTypeImpl.class)));
@@ -99,7 +99,7 @@ public class FileValueTypeImplTest {
 
   @Test
   public void createValueFromStream() {
-    InputStream file = this.getClass().getClassLoader().getResourceAsStream("org/camunda/bpm/engine/test/variables/simpleFile.txt");
+    InputStream file = this.getClass().getClassLoader().getResourceAsStream("io/orqueio/bpm/engine/test/variables/simpleFile.txt");
     TypedValue value = type.createValue(file, Collections.<String, Object> singletonMap(FileValueTypeImpl.VALUE_INFO_FILE_NAME, "simpleFile.txt"));
     assertThat(value, is(instanceOf(FileValue.class)));
     assertThat(value.getType(), is(instanceOf(FileValueTypeImpl.class)));
@@ -108,7 +108,7 @@ public class FileValueTypeImplTest {
 
   @Test
   public void createValueFromBytes() throws IOException, URISyntaxException {
-    File file = new File(this.getClass().getClassLoader().getResource("org/camunda/bpm/engine/test/variables/simpleFile.txt").toURI());
+    File file = new File(this.getClass().getClassLoader().getResource("io/orqueio/bpm/engine/test/variables/simpleFile.txt").toURI());
     TypedValue value = type.createValue(file, Collections.<String, Object> singletonMap(FileValueTypeImpl.VALUE_INFO_FILE_NAME, "simpleFile.txt"));
     assertThat(value, is(instanceOf(FileValue.class)));
     assertThat(value.getType(), is(instanceOf(FileValueTypeImpl.class)));
@@ -123,7 +123,7 @@ public class FileValueTypeImplTest {
   @Test
   public void createValueWithProperties() {
     // given
-    InputStream file = this.getClass().getClassLoader().getResourceAsStream("org/camunda/bpm/engine/test/variables/simpleFile.txt");
+    InputStream file = this.getClass().getClassLoader().getResourceAsStream("io/orqueio/bpm/engine/test/variables/simpleFile.txt");
     Map<String, Object> properties = new HashMap<String, Object>();
     properties.put("filename", "someFileName");
     properties.put("mimeType", "someMimeType");
@@ -142,7 +142,7 @@ public class FileValueTypeImplTest {
   @Test
   public void createValueWithNullProperties() {
     // given
-    InputStream file = this.getClass().getClassLoader().getResourceAsStream("org/camunda/bpm/engine/test/variables/simpleFile.txt");
+    InputStream file = this.getClass().getClassLoader().getResourceAsStream("io/orqueio/bpm/engine/test/variables/simpleFile.txt");
     Map<String, Object> properties = new HashMap<String, Object>();
     properties.put("filename", "someFileName");
     properties.put("mimeType", null);
@@ -158,7 +158,7 @@ public class FileValueTypeImplTest {
     }
 
     // given
-    file = this.getClass().getClassLoader().getResourceAsStream("org/camunda/bpm/engine/test/variables/simpleFile.txt");
+    file = this.getClass().getClassLoader().getResourceAsStream("io/orqueio/bpm/engine/test/variables/simpleFile.txt");
 
     properties.put("mimeType", "someMimetype");
     properties.put("encoding", null);
@@ -175,19 +175,19 @@ public class FileValueTypeImplTest {
 
   @Test(expected = IllegalArgumentException.class)
   public void cannotCreateFileWithoutName() {
-    InputStream file = this.getClass().getClassLoader().getResourceAsStream("org/camunda/bpm/engine/test/variables/simpleFile.txt");
+    InputStream file = this.getClass().getClassLoader().getResourceAsStream("io/orqueio/bpm/engine/test/variables/simpleFile.txt");
     type.createValue(file, Collections.<String, Object> emptyMap());
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void cannotCreateFileWithoutValueInfo() {
-    InputStream file = this.getClass().getClassLoader().getResourceAsStream("org/camunda/bpm/engine/test/variables/simpleFile.txt");
+    InputStream file = this.getClass().getClassLoader().getResourceAsStream("io/orqueio/bpm/engine/test/variables/simpleFile.txt");
     type.createValue(file, null);
   }
 
   @Test
   public void cannotCreateFileWithInvalidTransientFlag() {
-    InputStream file = this.getClass().getClassLoader().getResourceAsStream("org/camunda/bpm/engine/test/variables/simpleFile.txt");
+    InputStream file = this.getClass().getClassLoader().getResourceAsStream("io/orqueio/bpm/engine/test/variables/simpleFile.txt");
     Map<String, Object> info = new HashMap<String, Object>();
     info.put("filename", "bar");
     info.put("transient", "foo");
@@ -201,7 +201,7 @@ public class FileValueTypeImplTest {
 
   @Test
   public void valueInfoContainsFileTypeNameTransientFlagAndCharsetEncoding() {
-    InputStream file = this.getClass().getClassLoader().getResourceAsStream("org/camunda/bpm/engine/test/variables/simpleFile.txt");
+    InputStream file = this.getClass().getClassLoader().getResourceAsStream("io/orqueio/bpm/engine/test/variables/simpleFile.txt");
     String fileName = "simpleFile.txt";
     String fileType = "text/plain";
     Charset encoding = Charset.forName("UTF-8");
@@ -216,7 +216,7 @@ public class FileValueTypeImplTest {
 
   @Test
   public void valueInfoContainsFileTypeNameAndStringEncoding() {
-    InputStream file = this.getClass().getClassLoader().getResourceAsStream("org/camunda/bpm/engine/test/variables/simpleFile.txt");
+    InputStream file = this.getClass().getClassLoader().getResourceAsStream("io/orqueio/bpm/engine/test/variables/simpleFile.txt");
     String fileName = "simpleFile.txt";
     String fileType = "text/plain";
     String encoding = "UTF-8";
@@ -230,11 +230,11 @@ public class FileValueTypeImplTest {
 
   @Test
   public void fileByteArrayIsEqualToFileValueContent() throws IOException {
-    InputStream file = this.getClass().getClassLoader().getResourceAsStream("org/camunda/bpm/engine/test/variables/simpleFile.txt");
+    InputStream file = this.getClass().getClassLoader().getResourceAsStream("io/orqueio/bpm/engine/test/variables/simpleFile.txt");
     String fileName = "simpleFile.txt";
 
     FileValue fileValue = Variables.fileValue(fileName).file(file).create();
-    file = this.getClass().getClassLoader().getResourceAsStream("org/camunda/bpm/engine/test/variables/simpleFile.txt");
+    file = this.getClass().getClassLoader().getResourceAsStream("io/orqueio/bpm/engine/test/variables/simpleFile.txt");
     assertThat(IoUtil.inputStreamAsByteArray(fileValue.getValue()), equalTo(IoUtil.inputStreamAsByteArray(file)));
   }
 

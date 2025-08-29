@@ -31,7 +31,7 @@ import static org.assertj.core.api.Assertions.fail;
  */
 public class IoUtilTest {
 
-  public final static String TEST_FILE_NAME = "org/camunda/commons/utils/testFile.txt";
+  public final static String TEST_FILE_NAME = "io/orqueio/commons/utils/testFile.txt";
 
   @Test
   public void shouldTransformBetweenInputStreamAndString() {
