@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -20,12 +20,12 @@ import java.util.Map;
 
 /**
  * This class represents the data structure used for collecting information
- * about the license key issued for enterprise versions of Camunda Platform.
+ * about the license key issued for enterprise versions of Orqueio Platform.
  *
- * This information is sent to Camunda when telemetry is enabled.
+ * This information is sent to Orqueio when telemetry is enabled.
  *
  * @see <a href=
- *      "https://docs.camunda.org/manual/latest/introduction/telemetry/#collected-data">Camunda
+ *      "https://docs.orqueio.io/manual/latest/introduction/telemetry/#collected-data">Orqueio
  *      Documentation: Collected Telemetry Data</a>
  */
 public interface LicenseKeyData {
@@ -36,7 +36,7 @@ public interface LicenseKeyData {
   public String getCustomer();
 
   /**
-   * Camunda uses different license types e.g., when one license includes usage
+   * Orqueio uses different license types e.g., when one license includes usage
    * of Cawemo enterprise.
    */
   public String getType();
@@ -53,7 +53,7 @@ public interface LicenseKeyData {
 
   /**
    * A collection of features that are enabled through this license. Features
-   * could be Camunda BPM, Optimize or Cawemo.
+   * could be Orqueio BPM, Optimize or Cawemo.
    */
   public Map<String, String> getFeatures();
 

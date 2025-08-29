@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -66,7 +66,7 @@ import org.junit.rules.RuleChain;
 @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_FULL)
 public class TenantIdProviderTest {
 
-  protected static final String CONFIGURATION_RESOURCE = "org/camunda/bpm/engine/test/api/multitenancy/TenantIdProviderTest.camunda.cfg.xml";
+  protected static final String CONFIGURATION_RESOURCE = "io/orqueio/bpm/engine/test/api/multitenancy/TenantIdProviderTest.orqueio.cfg.xml";
 
   protected static final String PROCESS_DEFINITION_KEY = "testProcess";
   protected static final String DECISION_DEFINITION_KEY = "decision";
@@ -75,16 +75,16 @@ public class TenantIdProviderTest {
   protected static final BpmnModelInstance TASK_PROCESS = Bpmn.createExecutableProcess(PROCESS_DEFINITION_KEY).startEvent().userTask().done();
   protected static final BpmnModelInstance FAILING_PROCESS = Bpmn.createExecutableProcess(PROCESS_DEFINITION_KEY).startEvent()
       .serviceTask()
-        .camundaClass("io.orqueio.bpm.engine.test.api.multitenancy.FailingDelegate")
-        .camundaAsyncBefore()
+        .orqueioClass("io.orqueio.bpm.engine.test.api.multitenancy.FailingDelegate")
+        .orqueioAsyncBefore()
       .done();
 
-  protected static final String DMN_FILE = "org/camunda/bpm/engine/test/api/multitenancy/simpleDecisionTable.dmn";
+  protected static final String DMN_FILE = "io/orqueio/bpm/engine/test/api/multitenancy/simpleDecisionTable.dmn";
 
-  protected static final String CMMN_FILE = "org/camunda/bpm/engine/test/api/multitenancy/CaseWithCaseTask.cmmn";
-  protected static final String CMMN_FILE_WITH_MANUAL_ACTIVATION = "org/camunda/bpm/engine/test/api/multitenancy/CaseWithCaseTaskWithManualActivation.cmmn";
-  protected static final String CMMN_VARIABLE_FILE = "org/camunda/bpm/engine/test/api/multitenancy/CaseWithCaseTaskVariables.cmmn";
-  protected static final String CMMN_SUBPROCESS_FILE = "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn";
+  protected static final String CMMN_FILE = "io/orqueio/bpm/engine/test/api/multitenancy/CaseWithCaseTask.cmmn";
+  protected static final String CMMN_FILE_WITH_MANUAL_ACTIVATION = "io/orqueio/bpm/engine/test/api/multitenancy/CaseWithCaseTaskWithManualActivation.cmmn";
+  protected static final String CMMN_VARIABLE_FILE = "io/orqueio/bpm/engine/test/api/multitenancy/CaseWithCaseTaskVariables.cmmn";
+  protected static final String CMMN_SUBPROCESS_FILE = "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn";
 
   protected static final String TENANT_ID = "tenant1";
   protected static final String TENANT_TWO = "tenant2";
@@ -147,7 +147,7 @@ public class TenantIdProviderTest {
 
     // given a deployment without a tenant id
     testRule.deploy(Bpmn.createExecutableProcess(PROCESS_DEFINITION_KEY).startEvent().done(),
-                                            "org/camunda/bpm/engine/test/api/form/util/request.html");
+                                            "io/orqueio/bpm/engine/test/api/form/util/request.html");
 
     // when a process instance is started with a start form
     String processDefinitionId = engineRule.getRepositoryService()
@@ -173,7 +173,7 @@ public class TenantIdProviderTest {
 
     // given a deployment with a tenant id
     testRule.deployForTenant(TENANT_ID, Bpmn.createExecutableProcess(PROCESS_DEFINITION_KEY).startEvent().done(),
-                                            "org/camunda/bpm/engine/test/api/form/util/request.html");
+                                            "io/orqueio/bpm/engine/test/api/form/util/request.html");
 
     // when a process instance is started with a start form
     String processDefinitionId = engineRule.getRepositoryService()
@@ -199,7 +199,7 @@ public class TenantIdProviderTest {
     testRule.deploy(Bpmn.createExecutableProcess(PROCESS_DEFINITION_KEY)
                                                 .startEvent().userTask("task")
                                                 .endEvent().done(),
-                                            "org/camunda/bpm/engine/test/api/form/util/request.html");
+                                            "io/orqueio/bpm/engine/test/api/form/util/request.html");
 
     // when a process instance is created and the instance is set to a starting point
     String processInstanceId = engineRule.getRuntimeService()
@@ -219,7 +219,7 @@ public class TenantIdProviderTest {
     testRule.deployForTenant(TENANT_ID, Bpmn.createExecutableProcess(PROCESS_DEFINITION_KEY)
                                                                    .startEvent().userTask("task")
                                                                    .endEvent().done(),
-                                            "org/camunda/bpm/engine/test/api/form/util/request.html");
+                                            "io/orqueio/bpm/engine/test/api/form/util/request.html");
 
     // when a process instance is created and the instance is set to a starting point
     String processInstanceId = engineRule.getRuntimeService()
@@ -342,7 +342,7 @@ public class TenantIdProviderTest {
     TestTenantIdProvider.delegate = tenantIdProvider;
 
     testRule.deploy(Bpmn.createExecutableProcess(PROCESS_DEFINITION_KEY).startEvent().done(),
-        Bpmn.createExecutableProcess("superProcess").startEvent().callActivity().calledElement(PROCESS_DEFINITION_KEY).camundaIn("varName", "varName").done());
+        Bpmn.createExecutableProcess("superProcess").startEvent().callActivity().calledElement(PROCESS_DEFINITION_KEY).orqueioIn("varName", "varName").done());
 
     // if a process instance is started
     engineRule.getRuntimeService().startProcessInstanceByKey("superProcess", Variables.createVariables().putValue("varName", true));
@@ -459,7 +459,7 @@ public class TenantIdProviderTest {
 
     testRule.deploy(
         Bpmn.createExecutableProcess(PROCESS_DEFINITION_KEY).startEvent().userTask().done(),
-        "org/camunda/bpm/engine/test/api/multitenancy/CaseWithProcessTask.cmmn");
+        "io/orqueio/bpm/engine/test/api/multitenancy/CaseWithProcessTask.cmmn");
 
     // if the case is started
     engineRule.getCaseService().createCaseInstanceByKey("testCase");
@@ -478,7 +478,7 @@ public class TenantIdProviderTest {
 
     testRule.deployForTenant(TENANT_ID,
         Bpmn.createExecutableProcess(PROCESS_DEFINITION_KEY).startEvent().userTask().done(),
-        "org/camunda/bpm/engine/test/api/multitenancy/CaseWithProcessTask.cmmn");
+        "io/orqueio/bpm/engine/test/api/multitenancy/CaseWithProcessTask.cmmn");
 
     // if the case is started
     engineRule.getCaseService().createCaseInstanceByKey("testCase");
@@ -496,7 +496,7 @@ public class TenantIdProviderTest {
 
     testRule.deploy(
         Bpmn.createExecutableProcess(PROCESS_DEFINITION_KEY).startEvent().userTask().done(),
-        "org/camunda/bpm/engine/test/api/multitenancy/CaseWithProcessTask.cmmn");
+        "io/orqueio/bpm/engine/test/api/multitenancy/CaseWithProcessTask.cmmn");
 
     // if the case is started
     engineRule.getCaseService().createCaseInstanceByKey("testCase", Variables.createVariables().putValue("varName", true));
@@ -518,7 +518,7 @@ public class TenantIdProviderTest {
 
     testRule.deploy(
         Bpmn.createExecutableProcess(PROCESS_DEFINITION_KEY).startEvent().userTask().done(),
-        "org/camunda/bpm/engine/test/api/multitenancy/CaseWithProcessTask.cmmn");
+        "io/orqueio/bpm/engine/test/api/multitenancy/CaseWithProcessTask.cmmn");
 
     // if the case is started
     engineRule.getCaseService().createCaseInstanceByKey("testCase");
@@ -537,7 +537,7 @@ public class TenantIdProviderTest {
 
     testRule.deploy(
         Bpmn.createExecutableProcess(PROCESS_DEFINITION_KEY).startEvent().userTask().done(),
-        "org/camunda/bpm/engine/test/api/multitenancy/CaseWithProcessTask.cmmn");
+        "io/orqueio/bpm/engine/test/api/multitenancy/CaseWithProcessTask.cmmn");
 
     // if the case is started
     engineRule.getCaseService().createCaseInstanceByKey("testCase");
@@ -643,7 +643,7 @@ public class TenantIdProviderTest {
     BpmnModelInstance process = Bpmn.createExecutableProcess(PROCESS_DEFINITION_KEY)
       .startEvent()
       .businessRuleTask()
-        .camundaDecisionRef(DECISION_DEFINITION_KEY)
+        .orqueioDecisionRef(DECISION_DEFINITION_KEY)
       .endEvent()
       .done();
 
@@ -668,7 +668,7 @@ public class TenantIdProviderTest {
         Bpmn.createExecutableProcess(PROCESS_DEFINITION_KEY)
           .startEvent()
           .businessRuleTask()
-            .camundaDecisionRef(DECISION_DEFINITION_KEY)
+            .orqueioDecisionRef(DECISION_DEFINITION_KEY)
           .endEvent()
         .done(),
         DMN_FILE);
@@ -689,8 +689,8 @@ public class TenantIdProviderTest {
     BpmnModelInstance process = Bpmn.createExecutableProcess(PROCESS_DEFINITION_KEY)
         .startEvent()
         .businessRuleTask()
-          .camundaDecisionRef(DECISION_DEFINITION_KEY)
-        .camundaAsyncAfter()
+          .orqueioDecisionRef(DECISION_DEFINITION_KEY)
+        .orqueioAsyncAfter()
         .endEvent()
         .done();
 
@@ -717,8 +717,8 @@ public class TenantIdProviderTest {
     BpmnModelInstance process = Bpmn.createExecutableProcess(PROCESS_DEFINITION_KEY)
         .startEvent()
         .businessRuleTask()
-          .camundaDecisionRef(DECISION_DEFINITION_KEY)
-        .camundaAsyncAfter()
+          .orqueioDecisionRef(DECISION_DEFINITION_KEY)
+        .orqueioAsyncAfter()
         .endEvent()
         .done();
 
@@ -742,8 +742,8 @@ public class TenantIdProviderTest {
     BpmnModelInstance process = Bpmn.createExecutableProcess(PROCESS_DEFINITION_KEY)
         .startEvent()
         .businessRuleTask()
-          .camundaDecisionRef(DECISION_DEFINITION_KEY)
-        .camundaAsyncAfter()
+          .orqueioDecisionRef(DECISION_DEFINITION_KEY)
+        .orqueioAsyncAfter()
         .endEvent()
         .done();
 
@@ -1038,7 +1038,7 @@ public class TenantIdProviderTest {
     TestTenantIdProvider.delegate = tenantIdProvider;
 
     BpmnModelInstance process = Bpmn.createExecutableProcess(PROCESS_DEFINITION_KEY)
-        .startEvent().camundaFormKey("embedded:app:forms/FORM_NAME.htmls")
+        .startEvent().orqueioFormKey("embedded:app:forms/FORM_NAME.htmls")
         .userTask("UserTask")
         .endEvent()
         .done();

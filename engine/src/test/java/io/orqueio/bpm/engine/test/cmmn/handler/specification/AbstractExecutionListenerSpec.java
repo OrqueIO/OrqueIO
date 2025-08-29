@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -29,7 +29,7 @@ import io.orqueio.bpm.engine.impl.cmmn.model.CmmnActivity;
 import io.orqueio.bpm.model.cmmn.CmmnModelInstance;
 import io.orqueio.bpm.model.cmmn.instance.CmmnModelElementInstance;
 import io.orqueio.bpm.model.cmmn.instance.ExtensionElements;
-import io.orqueio.bpm.model.cmmn.instance.camunda.CamundaCaseExecutionListener;
+import io.orqueio.bpm.model.cmmn.instance.orqueio.OrqueioCaseExecutionListener;
 
 public abstract class AbstractExecutionListenerSpec {
 
@@ -50,10 +50,10 @@ public abstract class AbstractExecutionListenerSpec {
 
   public void addListenerToElement(CmmnModelInstance modelInstance, CmmnModelElementInstance modelElement) {
     ExtensionElements extensionElements = SpecUtil.createElement(modelInstance, modelElement, null, ExtensionElements.class);
-    CamundaCaseExecutionListener caseExecutionListener = SpecUtil.createElement(modelInstance, extensionElements, null, CamundaCaseExecutionListener.class);
+    OrqueioCaseExecutionListener caseExecutionListener = SpecUtil.createElement(modelInstance, extensionElements, null, OrqueioCaseExecutionListener.class);
 
     if (!ANY_EVENT.equals(eventNameToRegisterOn)) {
-      caseExecutionListener.setCamundaEvent(eventNameToRegisterOn);
+      caseExecutionListener.setOrqueioEvent(eventNameToRegisterOn);
     }
 
     configureCaseExecutionListener(modelInstance, caseExecutionListener);
@@ -63,7 +63,7 @@ public abstract class AbstractExecutionListenerSpec {
     }
   }
 
-  protected abstract void configureCaseExecutionListener(CmmnModelInstance modelInstance, CamundaCaseExecutionListener listener);
+  protected abstract void configureCaseExecutionListener(CmmnModelInstance modelInstance, OrqueioCaseExecutionListener listener);
 
   public void verify(CmmnActivity activity) {
 

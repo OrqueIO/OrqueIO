@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -61,8 +61,8 @@ public class HistoricIncidentQueryTest {
   public static BpmnModelInstance FAILING_SERVICE_TASK_MODEL  = Bpmn.createExecutableProcess(PROCESS_DEFINITION_KEY)
     .startEvent("start")
     .serviceTask("task")
-      .camundaAsyncBefore()
-      .camundaClass(FailingDelegate.class.getName())
+      .orqueioAsyncBefore()
+      .orqueioClass(FailingDelegate.class.getName())
     .endEvent("end")
     .done();
 
@@ -84,7 +84,7 @@ public class HistoricIncidentQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
   public void testHistoricIncidentQueryCreateEndAfterBefore() {
 
     // given
@@ -120,7 +120,7 @@ public class HistoricIncidentQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
   public void testQueryByIncidentId() {
     startProcessInstance(PROCESS_DEFINITION_KEY);
 
@@ -134,7 +134,7 @@ public class HistoricIncidentQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
   public void testQueryByInvalidIncidentId() {
     startProcessInstance(PROCESS_DEFINITION_KEY);
 
@@ -150,7 +150,7 @@ public class HistoricIncidentQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
   public void testQueryByIncidentType() {
     startProcessInstance(PROCESS_DEFINITION_KEY);
 
@@ -175,7 +175,7 @@ public class HistoricIncidentQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
   public void testQueryByIncidentMessage() {
     startProcessInstance(PROCESS_DEFINITION_KEY);
 
@@ -200,7 +200,7 @@ public class HistoricIncidentQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
   public void testQueryByIncidentMessageLike() {
 
     startProcessInstance(PROCESS_DEFINITION_KEY);
@@ -213,7 +213,7 @@ public class HistoricIncidentQueryTest {
 
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
   public void testQueryByProcessDefinitionId() {
     startProcessInstance(PROCESS_DEFINITION_KEY);
 
@@ -240,7 +240,7 @@ public class HistoricIncidentQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
   public void testQueryByProcessDefinitionKey() {
     // given
     // 1 failed instance of "oneFailingServiceTaskProcess"
@@ -293,7 +293,7 @@ public class HistoricIncidentQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
   public void testQueryByProcessInstanceId() {
     startProcessInstance(PROCESS_DEFINITION_KEY);
 
@@ -320,7 +320,7 @@ public class HistoricIncidentQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
   public void testQueryByExecutionId() {
     startProcessInstance(PROCESS_DEFINITION_KEY);
 
@@ -347,7 +347,7 @@ public class HistoricIncidentQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
   public void testQueryByActivityId() {
     startProcessInstance(PROCESS_DEFINITION_KEY);
 
@@ -359,7 +359,7 @@ public class HistoricIncidentQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
   public void testQueryByInvalidActivityId() {
     startProcessInstance(PROCESS_DEFINITION_KEY);
 
@@ -375,7 +375,7 @@ public class HistoricIncidentQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
   public void testQueryByFailedActivityId() {
     startProcessInstance(PROCESS_DEFINITION_KEY);
 
@@ -387,7 +387,7 @@ public class HistoricIncidentQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
   public void testQueryByFailedInvalidActivityId() {
     startProcessInstance(PROCESS_DEFINITION_KEY);
 
@@ -403,8 +403,8 @@ public class HistoricIncidentQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/history/HistoricIncidentQueryTest.testQueryByCauseIncidentId.bpmn20.xml",
-      "org/camunda/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/history/HistoricIncidentQueryTest.testQueryByCauseIncidentId.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
   public void testQueryByCauseIncidentId() {
     startProcessInstance("process");
 
@@ -438,8 +438,8 @@ public class HistoricIncidentQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/history/HistoricIncidentQueryTest.testQueryByCauseIncidentId.bpmn20.xml",
-  "org/camunda/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/history/HistoricIncidentQueryTest.testQueryByCauseIncidentId.bpmn20.xml",
+  "io/orqueio/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
   public void testQueryByRootCauseIncidentId() {
     startProcessInstance("process");
 
@@ -473,7 +473,7 @@ public class HistoricIncidentQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
   public void testQueryByConfiguration() {
     startProcessInstance(PROCESS_DEFINITION_KEY);
 
@@ -500,7 +500,7 @@ public class HistoricIncidentQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
   public void testQueryByHistoryConfiguration() {
     startProcessInstance(PROCESS_DEFINITION_KEY);
 
@@ -519,7 +519,7 @@ public class HistoricIncidentQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
   public void testQueryByNotExistingHistoryConfiguration() {
     startProcessInstance(PROCESS_DEFINITION_KEY);
 
@@ -544,7 +544,7 @@ public class HistoricIncidentQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
   public void testQueryByOpen() {
     startProcessInstance(PROCESS_DEFINITION_KEY);
 
@@ -566,7 +566,7 @@ public class HistoricIncidentQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
   public void testQueryByResolved() {
     startProcessInstance(PROCESS_DEFINITION_KEY);
 
@@ -591,7 +591,7 @@ public class HistoricIncidentQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
   public void testQueryByDeleted() {
     startProcessInstance(PROCESS_DEFINITION_KEY);
 
@@ -689,7 +689,7 @@ public class HistoricIncidentQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
   public void testQueryPaging() {
     startProcessInstances(PROCESS_DEFINITION_KEY, 4);
 
@@ -702,7 +702,7 @@ public class HistoricIncidentQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
   public void testQuerySorting() {
     startProcessInstances(PROCESS_DEFINITION_KEY, 4);
 
@@ -736,7 +736,7 @@ public class HistoricIncidentQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
   public void testQuerySortingByIncidentMessage()
   {
     // given

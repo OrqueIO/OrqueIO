@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -1190,12 +1190,12 @@ public interface TaskService {
   /**
    * <p>The all events related to the given task.</p>
    *
-   * <p>As of Camunda Platform 7.4 task events are only written in context of a logged in
+   * <p>As of Orqueio Platform 7.4 task events are only written in context of a logged in
    * user. This behavior can be toggled in the process engine configuration using the
    * property <code>legacyUserOperationLog</code> (default false). To restore the engine's
    * previous behavior, set the flag to <code>true</code>.</p>
    *
-   * @deprecated This method has been deprecated as of Camunda Platform 7.1. It has been replaced with
+   * @deprecated This method has been deprecated as of Orqueio Platform 7.1. It has been replaced with
    * the operation log. See {@link UserOperationLogEntry} and {@link UserOperationLogQuery}.
    *
    * @see HistoryService#createUserOperationLogQuery()

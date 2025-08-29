@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -61,9 +61,9 @@ public class PasswordHashingTest {
   protected RuntimeService runtimeService;
   protected ProcessEngineConfigurationImpl processEngineConfiguration;
 
-  protected PasswordEncryptor camundaDefaultEncryptor;
-  protected List<PasswordEncryptor> camundaDefaultPasswordChecker;
-  protected SaltGenerator camundaDefaultSaltGenerator;
+  protected PasswordEncryptor orqueioDefaultEncryptor;
+  protected List<PasswordEncryptor> orqueioDefaultPasswordChecker;
+  protected SaltGenerator orqueioDefaultSaltGenerator;
 
 
   @Before
@@ -71,9 +71,9 @@ public class PasswordHashingTest {
     runtimeService = engineRule.getRuntimeService();
     identityService = engineRule.getIdentityService();
     processEngineConfiguration = engineRule.getProcessEngineConfiguration();
-    camundaDefaultEncryptor = processEngineConfiguration.getPasswordEncryptor();
-    camundaDefaultPasswordChecker = processEngineConfiguration.getCustomPasswordChecker();
-    camundaDefaultSaltGenerator = processEngineConfiguration.getSaltGenerator();
+    orqueioDefaultEncryptor = processEngineConfiguration.getPasswordEncryptor();
+    orqueioDefaultPasswordChecker = processEngineConfiguration.getCustomPasswordChecker();
+    orqueioDefaultSaltGenerator = processEngineConfiguration.getSaltGenerator();
   }
 
   @After
@@ -90,8 +90,8 @@ public class PasswordHashingTest {
   }
 
   protected void resetEngineConfiguration() {
-    setEncryptors(camundaDefaultEncryptor, camundaDefaultPasswordChecker);
-    processEngineConfiguration.setSaltGenerator(camundaDefaultSaltGenerator);
+    setEncryptors(orqueioDefaultEncryptor, orqueioDefaultPasswordChecker);
+    processEngineConfiguration.setSaltGenerator(orqueioDefaultSaltGenerator);
   }
 
   @Test

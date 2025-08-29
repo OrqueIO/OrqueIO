@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -36,7 +36,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 
-public class StartEventCamundaFormDefinitionParseTest {
+public class StartEventOrqueioFormDefinitionParseTest {
 
   public ProcessEngineRule engineRule = new ProvidedProcessEngineRule();
   public ProcessEngineTestRule testRule = new ProcessEngineTestRule(engineRule);
@@ -73,53 +73,53 @@ private ProcessDefinitionEntity getProcessDefinition() {
 
   @Test
   @Deployment
-  public void shouldParseCamundaFormDefinitionVersionBinding() {
-    // given a deployed process with a StartEvent containing a Camunda Form definition with version binding
+  public void shouldParseOrqueioFormDefinitionVersionBinding() {
+    // given a deployed process with a StartEvent containing a Orqueio Form definition with version binding
     // then
     FormDefinition startFormDefinition = getStartFormDefinition();
 
-    assertThat(startFormDefinition.getCamundaFormDefinitionKey().getExpressionText()).isEqualTo("formId");
-    assertThat(startFormDefinition.getCamundaFormDefinitionBinding()).isEqualTo("version");
-    assertThat(startFormDefinition.getCamundaFormDefinitionVersion().getExpressionText()).isEqualTo("1");
+    assertThat(startFormDefinition.getOrqueioFormDefinitionKey().getExpressionText()).isEqualTo("formId");
+    assertThat(startFormDefinition.getOrqueioFormDefinitionBinding()).isEqualTo("version");
+    assertThat(startFormDefinition.getOrqueioFormDefinitionVersion().getExpressionText()).isEqualTo("1");
   }
 
   @Test
   @Deployment
-  public void shouldParseCamundaFormDefinitionLatestBinding() {
-    // given a deployed process with a StartEvent containing a Camunda Form definition with latest binding
+  public void shouldParseOrqueioFormDefinitionLatestBinding() {
+    // given a deployed process with a StartEvent containing a Orqueio Form definition with latest binding
     // then
     FormDefinition startFormDefinition = getStartFormDefinition();
 
-    assertThat(startFormDefinition.getCamundaFormDefinitionKey().getExpressionText()).isEqualTo("formId");
-    assertThat(startFormDefinition.getCamundaFormDefinitionBinding()).isEqualTo("latest");
+    assertThat(startFormDefinition.getOrqueioFormDefinitionKey().getExpressionText()).isEqualTo("formId");
+    assertThat(startFormDefinition.getOrqueioFormDefinitionBinding()).isEqualTo("latest");
   }
 
   @Test
   @Deployment
-  public void shouldParseCamundaFormDefinitionMultipleStartEvents() {
-    // given a deployed process with a StartEvent containing a Camunda Form definition with latest binding and another StartEvent inside a subprocess
+  public void shouldParseOrqueioFormDefinitionMultipleStartEvents() {
+    // given a deployed process with a StartEvent containing a Orqueio Form definition with latest binding and another StartEvent inside a subprocess
     // then
     FormDefinition startFormDefinition = getStartFormDefinition();
 
-    assertThat(startFormDefinition.getCamundaFormDefinitionKey().getExpressionText()).isEqualTo("formId");
-    assertThat(startFormDefinition.getCamundaFormDefinitionBinding()).isEqualTo("latest");
+    assertThat(startFormDefinition.getOrqueioFormDefinitionKey().getExpressionText()).isEqualTo("formId");
+    assertThat(startFormDefinition.getOrqueioFormDefinitionBinding()).isEqualTo("latest");
   }
 
   @Test
   @Deployment
-  public void shouldParseCamundaFormDefinitionDeploymentBinding() {
-    // given a deployed process with a StartEvent containing a Camunda Form definition with deployment binding
+  public void shouldParseOrqueioFormDefinitionDeploymentBinding() {
+    // given a deployed process with a StartEvent containing a Orqueio Form definition with deployment binding
     // then
     FormDefinition startFormDefinition = getStartFormDefinition();
 
-    assertThat(startFormDefinition.getCamundaFormDefinitionKey().getExpressionText()).isEqualTo("formId");
-    assertThat(startFormDefinition.getCamundaFormDefinitionBinding()).isEqualTo("deployment");
+    assertThat(startFormDefinition.getOrqueioFormDefinitionKey().getExpressionText()).isEqualTo("formId");
+    assertThat(startFormDefinition.getOrqueioFormDefinitionBinding()).isEqualTo("deployment");
   }
 
   @Test
-  public void shouldNotParseCamundaFormDefinitionUnsupportedBinding() {
-    // given a deployed process with a UserTask containing a Camunda Form definition with unsupported binding
-    String resource = TestHelper.getBpmnProcessDefinitionResource(getClass(), "shouldNotParseCamundaFormDefinitionUnsupportedBinding");
+  public void shouldNotParseOrqueioFormDefinitionUnsupportedBinding() {
+    // given a deployed process with a UserTask containing a Orqueio Form definition with unsupported binding
+    String resource = TestHelper.getBpmnProcessDefinitionResource(getClass(), "shouldNotParseOrqueioFormDefinitionUnsupportedBinding");
 
     // when/then expect parse exception
     assertThatThrownBy(() -> repositoryService.createDeployment().name(resource).addClasspathResource(resource).deploy())
@@ -127,9 +127,9 @@ private ProcessDefinitionEntity getProcessDefinition() {
       .hasMessageContaining("Invalid element definition: value for formRefBinding attribute has to be one of [deployment, latest, version] but was unsupported");
   }
 
-  public void shouldNotParseCamundaFormDefinitionAndFormKey() {
-    // given a deployed process with a UserTask containing a Camunda Form definition and formKey
-    String resource = TestHelper.getBpmnProcessDefinitionResource(getClass(), "shouldNotParseCamundaFormDefinitionAndFormKey");
+  public void shouldNotParseOrqueioFormDefinitionAndFormKey() {
+    // given a deployed process with a UserTask containing a Orqueio Form definition and formKey
+    String resource = TestHelper.getBpmnProcessDefinitionResource(getClass(), "shouldNotParseOrqueioFormDefinitionAndFormKey");
 
     // when/then expect parse exception
     assertThatThrownBy(() -> repositoryService.createDeployment().name(resource).addClasspathResource(resource).deploy())

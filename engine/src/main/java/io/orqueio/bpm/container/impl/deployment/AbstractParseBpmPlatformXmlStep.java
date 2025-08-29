@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -61,7 +61,7 @@ public abstract class AbstractParseBpmPlatformXmlStep extends DeploymentOperatio
   public void performOperationStep(DeploymentOperation operationContext) {
 
     URL bpmPlatformXmlSource = getBpmPlatformXmlStream(operationContext);
-    ensureNotNull("Unable to find bpm-platform.xml. This file is necessary for deploying the Camunda Platform", "bpmPlatformXmlSource", bpmPlatformXmlSource);
+    ensureNotNull("Unable to find bpm-platform.xml. This file is necessary for deploying the Orqueio Platform", "bpmPlatformXmlSource", bpmPlatformXmlSource);
 
     // parse the bpm platform xml
     BpmPlatformXml bpmPlatformXml = new BpmPlatformXmlParser().createParse()
@@ -86,7 +86,7 @@ public abstract class AbstractParseBpmPlatformXmlStep extends DeploymentOperatio
       }
     }
     catch (MalformedURLException e) {
-      throw new ProcessEngineException("'" + url + "' is not a valid Camunda Platform configuration resource location.", e);
+      throw new ProcessEngineException("'" + url + "' is not a valid Orqueio Platform configuration resource location.", e);
     }
 
     return fileLocation;

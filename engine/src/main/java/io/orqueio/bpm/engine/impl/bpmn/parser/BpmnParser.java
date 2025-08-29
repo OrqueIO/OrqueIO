@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -44,16 +44,16 @@ public class BpmnParser extends Parser {
   /**
    * The location of the BPMN 2.0 XML schema.
    */
-  public static final String BPMN_20_SCHEMA_LOCATION = "org/camunda/bpm/engine/impl/bpmn/parser/BPMN20.xsd";
+  public static final String BPMN_20_SCHEMA_LOCATION = "io/orqueio/bpm/engine/impl/bpmn/parser/BPMN20.xsd";
 
   /**
-   * The namespace of the camunda custom BPMN extensions.
+   * The namespace of the orqueio custom BPMN extensions.
    */
-  public static final String CAMUNDA_BPMN_EXTENSIONS_NS = "http://camunda.org/schema/1.0/bpmn";
+  public static final String ORQUEIO_BPMN_EXTENSIONS_NS = "http://orqueio.io/schema/1.0/bpmn";
 
   /**
    * The namespace of the Activiti custom BPMN extensions.
-   * @deprecated use {@link #CAMUNDA_BPMN_EXTENSIONS_NS}
+   * @deprecated use {@link #ORQUEIO_BPMN_EXTENSIONS_NS}
    */
   @Deprecated
   public static final String ACTIVITI_BPMN_EXTENSIONS_NS = "http://activiti.org/bpmn";

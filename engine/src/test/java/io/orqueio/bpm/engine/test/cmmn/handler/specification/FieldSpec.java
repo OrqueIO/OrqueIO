@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -23,10 +23,10 @@ import static org.junit.Assert.assertTrue;
 import io.orqueio.bpm.engine.delegate.Expression;
 import io.orqueio.bpm.engine.impl.bpmn.parser.FieldDeclaration;
 import io.orqueio.bpm.model.cmmn.CmmnModelInstance;
-import io.orqueio.bpm.model.cmmn.instance.camunda.CamundaCaseExecutionListener;
-import io.orqueio.bpm.model.cmmn.instance.camunda.CamundaExpression;
-import io.orqueio.bpm.model.cmmn.instance.camunda.CamundaField;
-import io.orqueio.bpm.model.cmmn.instance.camunda.CamundaString;
+import io.orqueio.bpm.model.cmmn.instance.orqueio.OrqueioCaseExecutionListener;
+import io.orqueio.bpm.model.cmmn.instance.orqueio.OrqueioExpression;
+import io.orqueio.bpm.model.cmmn.instance.orqueio.OrqueioField;
+import io.orqueio.bpm.model.cmmn.instance.orqueio.OrqueioString;
 
 public class FieldSpec {
 
@@ -56,22 +56,22 @@ public class FieldSpec {
     assertEquals(getExpectedExpression(), expressionValue.getExpressionText());
   }
 
-  public void addFieldToListenerElement(CmmnModelInstance modelInstance, CamundaCaseExecutionListener listenerElement) {
-    CamundaField field = SpecUtil.createElement(modelInstance, listenerElement, null, CamundaField.class);
-    field.setCamundaName(fieldName);
+  public void addFieldToListenerElement(CmmnModelInstance modelInstance, OrqueioCaseExecutionListener listenerElement) {
+    OrqueioField field = SpecUtil.createElement(modelInstance, listenerElement, null, OrqueioField.class);
+    field.setOrqueioName(fieldName);
 
     if (expression != null) {
-      field.setCamundaExpression(expression);
+      field.setOrqueioExpression(expression);
 
     } else if (childExpression != null) {
-      CamundaExpression fieldExpressionChild = SpecUtil.createElement(modelInstance, field, null, CamundaExpression.class);
+      OrqueioExpression fieldExpressionChild = SpecUtil.createElement(modelInstance, field, null, OrqueioExpression.class);
       fieldExpressionChild.setTextContent(childExpression);
 
     } else if (stringValue != null) {
-      field.setCamundaStringValue(stringValue);
+      field.setOrqueioStringValue(stringValue);
 
     } else if (childStringValue != null) {
-      CamundaString fieldExpressionChild = SpecUtil.createElement(modelInstance, field, null, CamundaString.class);
+      OrqueioString fieldExpressionChild = SpecUtil.createElement(modelInstance, field, null, OrqueioString.class);
       fieldExpressionChild.setTextContent(childStringValue);
     }
   }

@@ -1,8 +1,8 @@
 --
--- Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+-- Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
 -- under one or more contributor license agreements. See the NOTICE file
 -- distributed with this work for additional information regarding copyright
--- ownership. Camunda licenses this file to you under the Apache License,
+-- ownership. TOADDLATERCCS this file to you under the Apache License,
 -- Version 2.0; you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
 --
@@ -122,9 +122,9 @@ create index ACT_IDX_HI_DEC_IN_CLAUSE on ACT_HI_DEC_IN(DEC_INST_ID_, CLAUSE_ID_)
 create index ACT_IDX_HI_DEC_OUT_INST on ACT_HI_DEC_OUT(DEC_INST_ID_);
 create index ACT_IDX_HI_DEC_OUT_RULE on ACT_HI_DEC_OUT(RULE_ORDER_, CLAUSE_ID_);
 
--- add grant authorization for group camunda-admin:
+-- add grant authorization for group orqueio-admin:
 INSERT INTO ACT_RU_AUTHORIZATION (ID_, TYPE_, GROUP_ID_, RESOURCE_TYPE_, RESOURCE_ID_, PERMS_, REV_)
-  VALUES ('camunda-admin-grant-decision-definition', 1, 'camunda-admin', 10, '*', 2147483647, 1);
+  VALUES ('orqueio-admin-grant-decision-definition', 1, 'orqueio-admin', 10, '*', 2147483647, 1);
 
 -- external tasks --
 
@@ -166,7 +166,7 @@ ALTER TABLE ACT_HI_OP_LOG
 ALTER TABLE ACT_RU_JOB
   MODIFY ( SUSPENSION_STATE_ DEFAULT 1 );
 
-  -- relevant for jobs created in Camunda 7.0
+  -- relevant for jobs created in Orqueio 7.0
 UPDATE ACT_RU_JOB
   SET SUSPENSION_STATE_ = 1
   WHERE SUSPENSION_STATE_ IS NULL;

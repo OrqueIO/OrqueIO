@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -48,7 +48,7 @@ import org.junit.runners.Parameterized.Parameter;
 public abstract class ProcessTaskAuthorizationTest {
 
 
-  private static final String ONE_TASK_PROCESS = "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml";
+  private static final String ONE_TASK_PROCESS = "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml";
   protected static final String userId = "userId";
   public static final String VARIABLE_NAME = "aVariableName";
   public static final String VARIABLE_VALUE = "aVariableValue";

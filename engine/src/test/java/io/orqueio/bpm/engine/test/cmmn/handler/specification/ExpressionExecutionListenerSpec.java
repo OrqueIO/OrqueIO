@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -23,7 +23,7 @@ import io.orqueio.bpm.engine.delegate.BaseDelegateExecution;
 import io.orqueio.bpm.engine.delegate.DelegateListener;
 import io.orqueio.bpm.engine.impl.cmmn.listener.ExpressionCaseExecutionListener;
 import io.orqueio.bpm.model.cmmn.CmmnModelInstance;
-import io.orqueio.bpm.model.cmmn.instance.camunda.CamundaCaseExecutionListener;
+import io.orqueio.bpm.model.cmmn.instance.orqueio.OrqueioCaseExecutionListener;
 
 public class ExpressionExecutionListenerSpec extends AbstractExecutionListenerSpec {
 
@@ -33,8 +33,8 @@ public class ExpressionExecutionListenerSpec extends AbstractExecutionListenerSp
     super(eventName);
   }
 
-  protected void configureCaseExecutionListener(CmmnModelInstance modelInstance, CamundaCaseExecutionListener listener) {
-    listener.setCamundaExpression(EXPRESSION);
+  protected void configureCaseExecutionListener(CmmnModelInstance modelInstance, OrqueioCaseExecutionListener listener) {
+    listener.setOrqueioExpression(EXPRESSION);
 
   }
 

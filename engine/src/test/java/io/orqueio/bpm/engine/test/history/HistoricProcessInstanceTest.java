@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -131,7 +131,7 @@ public class HistoricProcessInstanceTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/history/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/history/oneTaskProcess.bpmn20.xml" })
   public void testHistoricDataCreatedForProcessExecution() {
 
     Calendar calendar = new GregorianCalendar();
@@ -195,7 +195,7 @@ public class HistoricProcessInstanceTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/history/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/history/oneTaskProcess.bpmn20.xml" })
   public void testLongRunningHistoricDataCreatedForProcessExecution() {
     final long ONE_YEAR = 1000 * 60 * 60 * 24 * 365;
 
@@ -241,7 +241,7 @@ public class HistoricProcessInstanceTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/history/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/history/oneTaskProcess.bpmn20.xml" })
   public void testDeleteProcessInstanceHistoryCreated() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("oneTaskProcess");
     assertNotNull(processInstance);
@@ -313,7 +313,7 @@ public class HistoricProcessInstanceTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/history/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/history/oneTaskProcess.bpmn20.xml" })
   public void testHistoricProcessInstanceStartDate() {
     ClockUtil.setCurrentTime(new Date());
     runtimeService.startProcessInstanceByKey("oneTaskProcess");
@@ -334,7 +334,7 @@ public class HistoricProcessInstanceTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/history/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/history/oneTaskProcess.bpmn20.xml" })
   public void testHistoricProcessInstanceFinishDateUnfinished() {
     runtimeService.startProcessInstanceByKey("oneTaskProcess");
 
@@ -353,7 +353,7 @@ public class HistoricProcessInstanceTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/history/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/history/oneTaskProcess.bpmn20.xml" })
   public void testHistoricProcessInstanceFinishDateFinished() {
     ProcessInstance pi = runtimeService.startProcessInstanceByKey("oneTaskProcess");
 
@@ -375,7 +375,7 @@ public class HistoricProcessInstanceTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/history/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/history/oneTaskProcess.bpmn20.xml" })
   public void testHistoricProcessInstanceDelete() {
     ProcessInstance pi = runtimeService.startProcessInstanceByKey("oneTaskProcess");
 
@@ -470,7 +470,7 @@ public class HistoricProcessInstanceTest {
 
   @Test
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/api/mgmt/IncidentTest.testShouldDeleteIncidentAfterJobWasSuccessfully.bpmn" })
+      "io/orqueio/bpm/engine/test/api/mgmt/IncidentTest.testShouldDeleteIncidentAfterJobWasSuccessfully.bpmn" })
   @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_FULL)
   public void testHistoricProcessInstanceQueryIncidentStatusOpen() {
     //given a processes instance, which will fail
@@ -487,7 +487,7 @@ public class HistoricProcessInstanceTest {
 
   @Test
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/api/mgmt/IncidentTest.testShouldDeleteIncidentAfterJobWasSuccessfully.bpmn" })
+      "io/orqueio/bpm/engine/test/api/mgmt/IncidentTest.testShouldDeleteIncidentAfterJobWasSuccessfully.bpmn" })
   @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_FULL)
   public void testHistoricProcessInstanceQueryIncidentStatusResolved() {
     //given a incident processes instance
@@ -508,7 +508,7 @@ public class HistoricProcessInstanceTest {
 
   @Test
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/api/mgmt/IncidentTest.testShouldDeleteIncidentAfterJobWasSuccessfully.bpmn" })
+      "io/orqueio/bpm/engine/test/api/mgmt/IncidentTest.testShouldDeleteIncidentAfterJobWasSuccessfully.bpmn" })
   @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_FULL)
   public void testHistoricProcessInstanceQueryIncidentStatusOpenWithTwoProcesses() {
     //given two processes, which will fail, are started
@@ -552,7 +552,7 @@ public class HistoricProcessInstanceTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/history/testInstancesWithJobsRetrying.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/history/testInstancesWithJobsRetrying.bpmn20.xml" })
   public void testHistoricProcessInstanceQueryWithJobsRetrying() {
     // given query for instances with jobs that have an exception and retries left
     HistoricProcessInstanceQuery queryWithJobsRetrying = historyService.createHistoricProcessInstanceQuery()
@@ -591,7 +591,7 @@ public class HistoricProcessInstanceTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/history/oneAsyncTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/history/oneAsyncTaskProcess.bpmn20.xml" })
   public void testHistoricProcessInstanceQuery() {
     Calendar startTime = Calendar.getInstance();
 
@@ -712,11 +712,11 @@ public class HistoricProcessInstanceTest {
   @Test
   public void testHistoricProcessInstanceSorting() {
 
-    deployment("org/camunda/bpm/engine/test/history/oneTaskProcess.bpmn20.xml");
-    deployment("org/camunda/bpm/engine/test/history/HistoricActivityInstanceTest.testSorting.bpmn20.xml");
+    deployment("io/orqueio/bpm/engine/test/history/oneTaskProcess.bpmn20.xml");
+    deployment("io/orqueio/bpm/engine/test/history/HistoricActivityInstanceTest.testSorting.bpmn20.xml");
 
     //deploy second version of the same process definition
-    deployment("org/camunda/bpm/engine/test/history/oneTaskProcess.bpmn20.xml");
+    deployment("io/orqueio/bpm/engine/test/history/oneTaskProcess.bpmn20.xml");
 
     List<ProcessDefinition> processDefinitions = repositoryService.createProcessDefinitionQuery()
         .processDefinitionKey("oneTaskProcess")
@@ -797,8 +797,8 @@ public class HistoricProcessInstanceTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/runtime/superProcess.bpmn20.xml",
-      "org/camunda/bpm/engine/test/api/runtime/subProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/runtime/superProcess.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/api/runtime/subProcess.bpmn20.xml" })
   public void testHistoricProcessInstanceSubProcess() {
     ProcessInstance superPi = runtimeService.startProcessInstanceByKey("subProcessQueryTest");
     ProcessInstance subPi = runtimeService.createProcessInstanceQuery()
@@ -837,7 +837,7 @@ public class HistoricProcessInstanceTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/history/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/history/oneTaskProcess.bpmn20.xml" })
   // ACT-1098
   public void testDeleteReason() {
     if (!ProcessEngineConfiguration.HISTORY_NONE.equals(engineRule.getProcessEngineConfiguration().getHistory())) {
@@ -883,8 +883,8 @@ public class HistoricProcessInstanceTest {
 
   @Test
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/history/HistoricProcessInstanceTest.testQueryByCaseInstanceId.cmmn",
-      "org/camunda/bpm/engine/test/history/HistoricProcessInstanceTest.testQueryByCaseInstanceId.bpmn20.xml" })
+      "io/orqueio/bpm/engine/test/history/HistoricProcessInstanceTest.testQueryByCaseInstanceId.cmmn",
+      "io/orqueio/bpm/engine/test/history/HistoricProcessInstanceTest.testQueryByCaseInstanceId.bpmn20.xml" })
   public void testQueryByCaseInstanceId() {
     // given
     String caseInstanceId = caseService.withCaseDefinitionByKey("case").create().getId();
@@ -922,9 +922,9 @@ public class HistoricProcessInstanceTest {
 
   @Test
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/history/HistoricProcessInstanceTest.testQueryByCaseInstanceId.cmmn",
-      "org/camunda/bpm/engine/test/history/HistoricProcessInstanceTest.testQueryByCaseInstanceIdHierarchy-super.bpmn20.xml",
-      "org/camunda/bpm/engine/test/history/HistoricProcessInstanceTest.testQueryByCaseInstanceIdHierarchy-sub.bpmn20.xml" })
+      "io/orqueio/bpm/engine/test/history/HistoricProcessInstanceTest.testQueryByCaseInstanceId.cmmn",
+      "io/orqueio/bpm/engine/test/history/HistoricProcessInstanceTest.testQueryByCaseInstanceIdHierarchy-super.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/history/HistoricProcessInstanceTest.testQueryByCaseInstanceIdHierarchy-sub.bpmn20.xml" })
   public void testQueryByCaseInstanceIdHierarchy() {
     // given
     String caseInstanceId = caseService.withCaseDefinitionByKey("case").create().getId();
@@ -972,8 +972,8 @@ public class HistoricProcessInstanceTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/history/HistoricProcessInstanceTest.testBusinessKey.cmmn",
-      "org/camunda/bpm/engine/test/history/HistoricProcessInstanceTest.testBusinessKey.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/history/HistoricProcessInstanceTest.testBusinessKey.cmmn",
+      "io/orqueio/bpm/engine/test/history/HistoricProcessInstanceTest.testBusinessKey.bpmn20.xml" })
   public void testBusinessKey() {
     // given
     String businessKey = "aBusinessKey";
@@ -997,8 +997,8 @@ public class HistoricProcessInstanceTest {
 
   @Test
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/history/HistoricProcessInstanceTest.testStartActivityId-super.bpmn20.xml",
-      "org/camunda/bpm/engine/test/history/HistoricProcessInstanceTest.testStartActivityId-sub.bpmn20.xml" })
+      "io/orqueio/bpm/engine/test/history/HistoricProcessInstanceTest.testStartActivityId-super.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/history/HistoricProcessInstanceTest.testStartActivityId-sub.bpmn20.xml" })
   public void testStartActivityId() {
     // given
 
@@ -1016,8 +1016,8 @@ public class HistoricProcessInstanceTest {
 
   @Test
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/history/HistoricProcessInstanceTest.testStartActivityId-super.bpmn20.xml",
-      "org/camunda/bpm/engine/test/history/HistoricProcessInstanceTest.testAsyncStartActivityId-sub.bpmn20.xml" })
+      "io/orqueio/bpm/engine/test/history/HistoricProcessInstanceTest.testStartActivityId-super.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/history/HistoricProcessInstanceTest.testAsyncStartActivityId-sub.bpmn20.xml" })
   public void testAsyncStartActivityId() {
     // given
     runtimeService.startProcessInstanceByKey("super");
@@ -1035,7 +1035,7 @@ public class HistoricProcessInstanceTest {
   }
 
   @Test
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
   public void testStartByKeyWithCaseInstanceId() {
     String caseInstanceId = "aCaseInstanceId";
 
@@ -1064,7 +1064,7 @@ public class HistoricProcessInstanceTest {
   }
 
   @Test
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
   public void testStartByIdWithCaseInstanceId() {
     String processDefinitionId = repositoryService.createProcessDefinitionQuery()
         .processDefinitionKey("oneTaskProcess")
@@ -1128,8 +1128,8 @@ public class HistoricProcessInstanceTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/cmmn/oneProcessTaskCase.cmmn",
-      "org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/cmmn/oneProcessTaskCase.cmmn",
+      "io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml" })
   public void testQueryBySuperCaseInstanceId() {
     String superCaseInstanceId = caseService.createCaseInstanceByKey("oneProcessTaskCase").getId();
 
@@ -1161,8 +1161,8 @@ public class HistoricProcessInstanceTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/runtime/superProcessWithCaseCallActivity.bpmn20.xml",
-      "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/runtime/superProcessWithCaseCallActivity.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn" })
   public void testQueryBySubCaseInstanceId() {
     String superProcessInstanceId = runtimeService.startProcessInstanceByKey("subProcessQueryTest").getId();
 
@@ -1200,8 +1200,8 @@ public class HistoricProcessInstanceTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/cmmn/oneProcessTaskCase.cmmn",
-      "org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/cmmn/oneProcessTaskCase.cmmn",
+      "io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml" })
   public void testSuperCaseInstanceIdProperty() {
     String superCaseInstanceId = caseService.createCaseInstanceByKey("oneProcessTaskCase").getId();
 
@@ -1222,7 +1222,7 @@ public class HistoricProcessInstanceTest {
   }
 
   @Test
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
   public void testProcessDefinitionKeyProperty() {
     // given
     String key = "oneTaskProcess";
@@ -1256,7 +1256,7 @@ public class HistoricProcessInstanceTest {
   }
 
   @Test
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
   public void testRetrieveProcessDefinitionName() {
 
     // given
@@ -1272,7 +1272,7 @@ public class HistoricProcessInstanceTest {
   }
 
   @Test
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
   public void testRetrieveProcessDefinitionVersion() {
 
     // given
@@ -1448,7 +1448,7 @@ public class HistoricProcessInstanceTest {
     // given
     BpmnModelInstance asyncModel = Bpmn.createExecutableProcess("async")
         .startEvent()
-        .camundaAsyncBefore()
+        .orqueioAsyncBefore()
         .endEvent()
         .done();
     deployment(asyncModel);
@@ -1488,7 +1488,7 @@ public class HistoricProcessInstanceTest {
     // given
     BpmnModelInstance asyncModel = Bpmn.createExecutableProcess("async")
         .startEvent()
-        .camundaAsyncBefore()
+        .orqueioAsyncBefore()
         .endEvent()
         .done();
     deployment(asyncModel);
@@ -1528,7 +1528,7 @@ public class HistoricProcessInstanceTest {
     // given
     BpmnModelInstance asyncModel = Bpmn.createExecutableProcess("async")
         .startEvent()
-        .camundaAsyncBefore()
+        .orqueioAsyncBefore()
         .endEvent()
         .done();
     deployment(asyncModel);
@@ -1576,7 +1576,7 @@ public class HistoricProcessInstanceTest {
     // given
     BpmnModelInstance asyncModel = Bpmn.createExecutableProcess("async")
         .startEvent()
-        .camundaAsyncBefore()
+        .orqueioAsyncBefore()
         .endEvent()
         .done();
     deployment(asyncModel);
@@ -1761,18 +1761,18 @@ public class HistoricProcessInstanceTest {
     // given
     ProcessDefinition testProcess = testHelper.deployAndGetDefinition(ProcessModels.newModel()
         .startEvent("start")
-        .camundaAsyncBefore()
+        .orqueioAsyncBefore()
         .subProcess("subProcess")
-        .camundaAsyncBefore()
+        .orqueioAsyncBefore()
         .embeddedSubProcess()
         .startEvent()
         .serviceTask("task")
-        .camundaAsyncBefore()
-        .camundaExpression("${true}")
+        .orqueioAsyncBefore()
+        .orqueioExpression("${true}")
         .endEvent()
         .subProcessDone()
         .endEvent("end")
-        .camundaAsyncBefore()
+        .orqueioAsyncBefore()
         .done());
 
     // when
@@ -1806,18 +1806,18 @@ public class HistoricProcessInstanceTest {
     // given
     ProcessDefinition testProcess = testHelper.deployAndGetDefinition(ProcessModels.newModel()
         .startEvent("start")
-        .camundaAsyncAfter()
+        .orqueioAsyncAfter()
         .subProcess("subProcess")
-        .camundaAsyncAfter()
+        .orqueioAsyncAfter()
         .embeddedSubProcess()
         .startEvent()
         .serviceTask("task")
-        .camundaAsyncAfter()
-        .camundaExpression("${true}")
+        .orqueioAsyncAfter()
+        .orqueioExpression("${true}")
         .endEvent()
         .subProcessDone()
         .endEvent("end")
-        .camundaAsyncAfter()
+        .orqueioAsyncAfter()
         .done());
 
     // when
@@ -1963,7 +1963,7 @@ public class HistoricProcessInstanceTest {
   @Test
   @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_FULL)
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/history/HistoricProcessInstanceTest.testHistoricProcessInstanceQueryActivityIdInWithIncident.bpmn" })
+      "io/orqueio/bpm/engine/test/history/HistoricProcessInstanceTest.testHistoricProcessInstanceQueryActivityIdInWithIncident.bpmn" })
   public void shouldQueryQueryWithActivityIdsWithFailingActivity() {
     // given
     String piOne = runtimeService.startProcessInstanceByKey("failingProcess").getId();
@@ -1989,7 +1989,7 @@ public class HistoricProcessInstanceTest {
 
   @Test
   @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_FULL)
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/runtime/failingSubProcessCreateOneIncident.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/runtime/failingSubProcessCreateOneIncident.bpmn20.xml" })
   public void shouldNotRetrieveInstanceWhenQueryByActivityIdInWithFailingSubprocess() {
     // given
     runtimeService.startProcessInstanceByKey("failingSubProcess");
@@ -2007,7 +2007,7 @@ public class HistoricProcessInstanceTest {
 
   @Test
   @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_FULL)
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/runtime/failingSubProcessCreateOneIncident.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/runtime/failingSubProcessCreateOneIncident.bpmn20.xml" })
   public void shouldQueryByActivityIdInWithFailingSubServiceTask() {
     // given
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("failingSubProcess");
@@ -2027,7 +2027,7 @@ public class HistoricProcessInstanceTest {
   @Test
   @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_FULL)
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/api/runtime/ProcessInstanceModificationTest.subprocess.bpmn20.xml" })
+      "io/orqueio/bpm/engine/test/api/runtime/ProcessInstanceModificationTest.subprocess.bpmn20.xml" })
   public void shouldNotReturnInstanceWhenQueryByActivityIdInWithSubprocess() {
     // given
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("subprocess");
@@ -2048,7 +2048,7 @@ public class HistoricProcessInstanceTest {
   @Test
   @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_FULL)
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/api/runtime/ProcessInstanceModificationTest.subprocess.bpmn20.xml" })
+      "io/orqueio/bpm/engine/test/api/runtime/ProcessInstanceModificationTest.subprocess.bpmn20.xml" })
   public void shouldQueryByActivityIdInWithActivityIdOfSubServiceTask() {
     // given
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("subprocess");
@@ -2070,7 +2070,7 @@ public class HistoricProcessInstanceTest {
   @Test
   @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_FULL)
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/api/runtime/ProcessInstanceModificationTest.failingSubprocessWithAsyncBeforeTask.bpmn20.xml" })
+      "io/orqueio/bpm/engine/test/api/runtime/ProcessInstanceModificationTest.failingSubprocessWithAsyncBeforeTask.bpmn20.xml" })
   public void shouldQueryByActivityIdInWithMultipleScopeAndIncident() {
     // given
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("failingSubProcess");
@@ -2107,7 +2107,7 @@ public class HistoricProcessInstanceTest {
   @Test
   @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_FULL)
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/api/runtime/ProcessInstanceModificationTest.subprocessWithAsyncBeforeTask.bpmn20.xml" })
+      "io/orqueio/bpm/engine/test/api/runtime/ProcessInstanceModificationTest.subprocessWithAsyncBeforeTask.bpmn20.xml" })
   public void shouldQueryByActivityIdInWithMultipleScope() {
     // given
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("failingSubProcess");
@@ -2146,12 +2146,12 @@ public class HistoricProcessInstanceTest {
     testHelper.deploy(Bpmn.createExecutableProcess("process")
         .startEvent()
         .serviceTask("theTask")
-        .camundaAsyncBefore()
-        .camundaClass(ChangeVariablesDelegate.class)
+        .orqueioAsyncBefore()
+        .orqueioClass(ChangeVariablesDelegate.class)
         .serviceTask("theTask2")
-        .camundaClass(ChangeVariablesDelegate.class)
+        .orqueioClass(ChangeVariablesDelegate.class)
         .serviceTask("theTask3")
-        .camundaClass(FailingDelegate.class)
+        .orqueioClass(FailingDelegate.class)
         .endEvent()
         .done());
 
@@ -2239,7 +2239,7 @@ public class HistoricProcessInstanceTest {
   @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_FULL)
   public void testQueryWithRootIncidents() {
     // given
-    deployment("org/camunda/bpm/engine/test/history/HistoricProcessInstanceTest.testQueryWithRootIncidents.bpmn20.xml");
+    deployment("io/orqueio/bpm/engine/test/history/HistoricProcessInstanceTest.testQueryWithRootIncidents.bpmn20.xml");
     deployment(CallActivityModels.oneBpmnCallActivityProcess("Process_1"));
 
     runtimeService.startProcessInstanceByKey("Process");
@@ -2328,7 +2328,7 @@ public class HistoricProcessInstanceTest {
 
   @Test
   @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_FULL)
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/runtime/failingProcessCreateOneIncident.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/runtime/failingProcessCreateOneIncident.bpmn20.xml" })
   public void shouldQueryProcessInstancesWithIncidentIdIn() {
     // GIVEN
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("failingProcess");
@@ -2358,7 +2358,7 @@ public class HistoricProcessInstanceTest {
   @Test
   @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_FULL)
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/api/runtime/failingProcessAfterUserTaskCreateOneIncident.bpmn20.xml" })
+      "io/orqueio/bpm/engine/test/api/runtime/failingProcessAfterUserTaskCreateOneIncident.bpmn20.xml" })
   public void shouldOnlyQueryProcessInstancesWithIncidentIdIn() {
     // GIVEN
     ProcessInstance processWithIncident1 = runtimeService.startProcessInstanceByKey("failingProcess");
@@ -2404,7 +2404,7 @@ public class HistoricProcessInstanceTest {
 
   @Test
   @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_FULL)
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/runtime/failingSubProcessCreateOneIncident.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/runtime/failingSubProcessCreateOneIncident.bpmn20.xml" })
   public void shouldQueryByIncidentIdInSubProcess() {
     // given
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("failingSubProcess");
@@ -2427,7 +2427,7 @@ public class HistoricProcessInstanceTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/history/oneAsyncTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/history/oneAsyncTaskProcess.bpmn20.xml" })
   public void testShouldStoreHistoricProcessInstanceVariableOnAsyncBefore() {
     // given definition with asyncBefore startEvent
 
@@ -2443,7 +2443,7 @@ public class HistoricProcessInstanceTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/history/oneAsyncTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/history/oneAsyncTaskProcess.bpmn20.xml" })
   public void testShouldStoreInitialHistoricProcessInstanceVariableOnAsyncBefore() {
     // given definition with asyncBefore startEvent
 
@@ -2467,7 +2467,7 @@ public class HistoricProcessInstanceTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/history/oneAsyncTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/history/oneAsyncTaskProcess.bpmn20.xml" })
   public void testShouldSetVariableBeforeAsyncBefore() {
     // given definition with asyncBefore startEvent
 
@@ -2487,7 +2487,7 @@ public class HistoricProcessInstanceTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/history/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/history/oneTaskProcess.bpmn20.xml" })
   public void shouldQueryByVariableValue_1() {
     // GIVEN
     String processInstanceIdOne = runtimeService.startProcessInstanceByKey("oneTaskProcess",
@@ -2507,7 +2507,7 @@ public class HistoricProcessInstanceTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/history/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/history/oneTaskProcess.bpmn20.xml" })
   public void shouldQueryByVariableValue_2() {
     // GIVEN
     String processInstanceIdOne = runtimeService.startProcessInstanceByKey("oneTaskProcess",
@@ -2527,7 +2527,7 @@ public class HistoricProcessInstanceTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/history/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/history/oneTaskProcess.bpmn20.xml" })
   public void shouldQueryByVariableValue_3() {
     // GIVEN
     String processInstanceIdOne = runtimeService.startProcessInstanceByKey("oneTaskProcess",
@@ -2546,7 +2546,7 @@ public class HistoricProcessInstanceTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/history/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/history/oneTaskProcess.bpmn20.xml" })
   public void shouldQueryByVariableValue_4() {
     // GIVEN
     String processInstanceIdOne = runtimeService.startProcessInstanceByKey("oneTaskProcess",
@@ -2564,7 +2564,7 @@ public class HistoricProcessInstanceTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/history/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/history/oneTaskProcess.bpmn20.xml" })
   public void shouldQueryByVariableValue_5() {
     // GIVEN
     String processInstanceIdOne = runtimeService.startProcessInstanceByKey("oneTaskProcess",
@@ -2583,7 +2583,7 @@ public class HistoricProcessInstanceTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/history/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/history/oneTaskProcess.bpmn20.xml" })
   public void shouldQueryByVariableValue_6() {
     // GIVEN
     runtimeService.startProcessInstanceByKey("oneTaskProcess", Variables.putValue("foo", "bar"));
@@ -2600,7 +2600,7 @@ public class HistoricProcessInstanceTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/history/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/history/oneTaskProcess.bpmn20.xml" })
   public void shouldQueryByVariableValue_7() {
     // GIVEN
     runtimeService.startProcessInstanceByKey("oneTaskProcess", Variables.putValue("foo", "foo"));
@@ -2617,7 +2617,7 @@ public class HistoricProcessInstanceTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/history/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/history/oneTaskProcess.bpmn20.xml" })
   public void shouldQueryByVariableValue_8() {
     // GIVEN
     runtimeService.startProcessInstanceByKey("oneTaskProcess", Variables.putValue("foo", "foo"));
@@ -2634,7 +2634,7 @@ public class HistoricProcessInstanceTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/history/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/history/oneTaskProcess.bpmn20.xml" })
   public void shouldQueryByVariableValue_9() {
     // GIVEN
     String processInstanceIdOne = runtimeService.startProcessInstanceByKey("oneTaskProcess", "a-business-key")
@@ -2653,7 +2653,7 @@ public class HistoricProcessInstanceTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/history/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/history/oneTaskProcess.bpmn20.xml" })
   public void shouldQueryByVariableValue_10() {
     // GIVEN
     String processInstanceIdOne = runtimeService.startProcessInstanceByKey("oneTaskProcess", "a-business-key")
@@ -2670,7 +2670,7 @@ public class HistoricProcessInstanceTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/history/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/history/oneTaskProcess.bpmn20.xml" })
   public void shouldQueryByVariableValue_11() {
     // GIVEN
     String processInstanceIdOne = runtimeService.startProcessInstanceByKey("oneTaskProcess", "a-business-key")
@@ -2689,7 +2689,7 @@ public class HistoricProcessInstanceTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/history/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/history/oneTaskProcess.bpmn20.xml" })
   public void shouldQueryByVariableValue_12() {
     // GIVEN
     String processInstanceIdOne = runtimeService.startProcessInstanceByKey("oneTaskProcess", "a-business-key")
@@ -2708,7 +2708,7 @@ public class HistoricProcessInstanceTest {
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/history/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/history/oneTaskProcess.bpmn20.xml"})
 public void shouldExcludeByProcessInstanceIdNotIn() {
     // GIVEN
     String processInstanceIdOne = runtimeService.startProcessInstanceByKey("oneTaskProcess").getProcessInstanceId();
@@ -2734,7 +2734,7 @@ public void shouldExcludeByProcessInstanceIdNotIn() {
   }
 
   @Test
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
   public void testWithNonExistentProcessInstanceIdNotIn() {
     // GIVEN
     String processInstanceIdOne = runtimeService.startProcessInstanceByKey("oneTaskProcess").getProcessInstanceId();
@@ -2757,7 +2757,7 @@ public void shouldExcludeByProcessInstanceIdNotIn() {
   }
 
   @Test
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
   public void testQueryByOneInvalidProcessInstanceIdNotIn() {
     try {
       // when
@@ -2770,7 +2770,7 @@ public void shouldExcludeByProcessInstanceIdNotIn() {
   }
 
   @Test
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
   public void testExcludingProcessInstanceAndProcessInstanceIdNotIn() {
     // GIVEN
     String processInstanceIdOne = runtimeService.startProcessInstanceByKey("oneTaskProcess").getProcessInstanceId();
@@ -2786,7 +2786,7 @@ public void shouldExcludeByProcessInstanceIdNotIn() {
   }
 
   @Test
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
   public void testExcludingProcessInstanceIdsAndProcessInstanceIdNotIn() {
     // GIVEN
     String processInstanceIdOne = runtimeService.startProcessInstanceByKey("oneTaskProcess").getProcessInstanceId();

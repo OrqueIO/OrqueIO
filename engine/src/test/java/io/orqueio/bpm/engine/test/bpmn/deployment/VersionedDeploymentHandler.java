@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -51,8 +51,8 @@ public class VersionedDeploymentHandler implements DeploymentHandler {
 
     if (isBpmnResource(newResource)) {
 
-      Integer existingVersion = parseCamundaVersionTag(existingResource);
-      Integer newVersion = parseCamundaVersionTag(newResource);
+      Integer existingVersion = parseOrqueioVersionTag(existingResource);
+      Integer newVersion = parseOrqueioVersionTag(newResource);
       if (this.candidateVersionTag == null) {
         this.candidateProcessDefinitionKey = parseProcessDefinitionKey(newResource);
         this.candidateVersionTag = String.valueOf(newVersion);
@@ -114,7 +114,7 @@ public class VersionedDeploymentHandler implements DeploymentHandler {
 
       for (ProcessDefinition processDefinition : deploymentPDs) {
         // only deploy Deployments of the same name that contain a Process Definition with the
-        // correct Camunda Version Tag. If all the resources are new, the candidateVersionTag
+        // correct Orqueio Version Tag. If all the resources are new, the candidateVersionTag
         // property will be null since there's nothing to compare it to.
         if (candidateVersionTag != null && candidateVersionTag.equals(processDefinition.getVersionTag())) {
           deploymentIds.add(deployment.getId());
@@ -126,15 +126,15 @@ public class VersionedDeploymentHandler implements DeploymentHandler {
     return deploymentIds;
   }
 
-  protected Integer parseCamundaVersionTag(Resource resource) {
+  protected Integer parseOrqueioVersionTag(Resource resource) {
     BpmnModelInstance model = Bpmn
         .readModelFromStream(new ByteArrayInputStream(resource.getBytes()));
 
     Process process = model.getDefinitions().getChildElementsByType(Process.class)
         .iterator().next();
 
-    return process.getCamundaVersionTag() != null ?
-        Integer.parseInt(process.getCamundaVersionTag()) :
+    return process.getOrqueioVersionTag() != null ?
+        Integer.parseInt(process.getOrqueioVersionTag()) :
         0;
   }
 

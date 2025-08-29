@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -55,13 +55,13 @@ import org.junit.rules.RuleChain;
 
 public class ConditionalStartEventTest {
 
-  private static final String SINGLE_CONDITIONAL_START_EVENT_XML = "org/camunda/bpm/engine/test/bpmn/event/conditional/ConditionalStartEventTest.testSingleConditionalStartEvent.bpmn20.xml";
-  private static final String SINGLE_CONDITIONAL_XML = "org/camunda/bpm/engine/test/bpmn/event/conditional/ConditionalStartEventTest.testSingleConditionalStartEvent1.bpmn20.xml";
-  private static final String TRUE_CONDITION_START_XML = "org/camunda/bpm/engine/test/bpmn/event/conditional/ConditionalStartEventTest.testStartInstanceWithTrueConditionalStartEvent.bpmn20.xml";
-  private static final String TWO_EQUAL_CONDITIONAL_START_EVENT_XML = "org/camunda/bpm/engine/test/bpmn/event/conditional/ConditionalStartEventTest.testTwoEqualConditionalStartEvent.bpmn20.xml";
-  private static final String MULTIPLE_CONDITION_XML = "org/camunda/bpm/engine/test/bpmn/event/conditional/ConditionalStartEventTest.testMultipleCondition.bpmn20.xml";
-  private static final String START_INSTANCE_WITH_VARIABLE_NAME_XML = "org/camunda/bpm/engine/test/bpmn/event/conditional/ConditionalStartEventTest.testStartInstanceWithVariableName.bpmn20.xml";
-  private static final String ONE_TASK_PROCESS = "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml";
+  private static final String SINGLE_CONDITIONAL_START_EVENT_XML = "io/orqueio/bpm/engine/test/bpmn/event/conditional/ConditionalStartEventTest.testSingleConditionalStartEvent.bpmn20.xml";
+  private static final String SINGLE_CONDITIONAL_XML = "io/orqueio/bpm/engine/test/bpmn/event/conditional/ConditionalStartEventTest.testSingleConditionalStartEvent1.bpmn20.xml";
+  private static final String TRUE_CONDITION_START_XML = "io/orqueio/bpm/engine/test/bpmn/event/conditional/ConditionalStartEventTest.testStartInstanceWithTrueConditionalStartEvent.bpmn20.xml";
+  private static final String TWO_EQUAL_CONDITIONAL_START_EVENT_XML = "io/orqueio/bpm/engine/test/bpmn/event/conditional/ConditionalStartEventTest.testTwoEqualConditionalStartEvent.bpmn20.xml";
+  private static final String MULTIPLE_CONDITION_XML = "io/orqueio/bpm/engine/test/bpmn/event/conditional/ConditionalStartEventTest.testMultipleCondition.bpmn20.xml";
+  private static final String START_INSTANCE_WITH_VARIABLE_NAME_XML = "io/orqueio/bpm/engine/test/bpmn/event/conditional/ConditionalStartEventTest.testStartInstanceWithVariableName.bpmn20.xml";
+  private static final String ONE_TASK_PROCESS = "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml";
 
   private static final String MULTIPLE_CONDITIONS = "multipleConditions";
   private static final String TRUE_CONDITION_PROCESS = "trueConditionProcess";

@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -122,7 +122,7 @@ public class DbHistoryEventHandler implements HistoryEventHandler {
 
       } else {
         // #CAM-1344 / #SUPPORT-688
-        // this is a FIX for process instances which were started in camunda fox 6.1 and migrated to Camunda Platform 7.0.
+        // this is a FIX for process instances which were started in orqueio fox 6.1 and migrated to Orqueio Platform 7.0.
         // in fox 6.1 the HistoricVariable instances were flushed to the DB when the process instance completed.
         // Since fox 6.2 we populate the HistoricVariable table as we go.
         HistoricVariableInstanceEntity persistentObject = new HistoricVariableInstanceEntity(historyEvent);

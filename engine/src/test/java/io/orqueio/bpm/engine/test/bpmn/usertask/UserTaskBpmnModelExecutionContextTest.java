@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -16,7 +16,7 @@
  */
 package io.orqueio.bpm.engine.test.bpmn.usertask;
 
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_NS;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -184,9 +184,9 @@ public class UserTaskBpmnModelExecutionContextTest {
     UserTask userTask = ModelExecutionContextTaskListener.userTask;
     assertNotNull(userTask);
 
-    ModelElementInstance taskListener = userTask.getExtensionElements().getUniqueChildElementByNameNs(CAMUNDA_NS, "taskListener");
-    assertEquals(eventName, taskListener.getAttributeValueNs(CAMUNDA_NS, "event"));
-    assertEquals(ModelExecutionContextTaskListener.class.getName(), taskListener.getAttributeValueNs(CAMUNDA_NS, "class"));
+    ModelElementInstance taskListener = userTask.getExtensionElements().getUniqueChildElementByNameNs(ORQUEIO_NS, "taskListener");
+    assertEquals(eventName, taskListener.getAttributeValueNs(ORQUEIO_NS, "event"));
+    assertEquals(ModelExecutionContextTaskListener.class.getName(), taskListener.getAttributeValueNs(ORQUEIO_NS, "class"));
 
     BpmnModelInstance modelInstance = ModelExecutionContextTaskListener.modelInstance;
     Collection<ModelElementInstance> tasks = modelInstance.getModelElementsByType(modelInstance.getModel().getType(Task.class));
@@ -197,7 +197,7 @@ public class UserTaskBpmnModelExecutionContextTest {
     BpmnModelInstance modelInstance = Bpmn.createExecutableProcess(PROCESS_ID)
       .startEvent()
       .userTask(USER_TASK_ID)
-        .camundaTaskListenerClass(eventName, ModelExecutionContextTaskListener.class)
+        .orqueioTaskListenerClass(eventName, ModelExecutionContextTaskListener.class)
       .endEvent()
       .done();
 

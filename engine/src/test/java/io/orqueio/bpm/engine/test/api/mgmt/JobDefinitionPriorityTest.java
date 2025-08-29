@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -40,7 +40,7 @@ public class JobDefinitionPriorityTest extends PluggableProcessEngineTest {
 
   protected static final long EXPECTED_DEFAULT_PRIORITY = 0;
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/mgmt/asyncTaskProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/mgmt/asyncTaskProcess.bpmn20.xml")
   @Test
   public void testSetJobDefinitionPriority() {
     // given a process instance with a job with default priority and a corresponding job definition
@@ -73,7 +73,7 @@ public class JobDefinitionPriorityTest extends PluggableProcessEngineTest {
     assertEquals(42, newJob.getPriority());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/mgmt/asyncTaskProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/mgmt/asyncTaskProcess.bpmn20.xml")
   @Test
   public void testSetJobDefinitionPriorityWithCascade() {
     // given a process instance with a job with default priority and a corresponding job definition
@@ -106,7 +106,7 @@ public class JobDefinitionPriorityTest extends PluggableProcessEngineTest {
     assertEquals(52, newJob.getPriority());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/mgmt/jobPrioProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/mgmt/jobPrioProcess.bpmn20.xml")
   @Test
   public void testSetJobDefinitionPriorityOverridesBpmnPriority() {
     // given a process instance with a job with default priority and a corresponding job definition
@@ -140,7 +140,7 @@ public class JobDefinitionPriorityTest extends PluggableProcessEngineTest {
     assertEquals(62, newJob.getPriority());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/mgmt/jobPrioProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/mgmt/jobPrioProcess.bpmn20.xml")
   @Test
   public void testSetJobDefinitionPriorityWithCascadeOverridesBpmnPriority() {
     // given a process instance with a job with default priority and a corresponding job definition
@@ -174,7 +174,7 @@ public class JobDefinitionPriorityTest extends PluggableProcessEngineTest {
     assertEquals(72, newJob.getPriority());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/mgmt/jobPrioProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/mgmt/jobPrioProcess.bpmn20.xml")
   @Test
   public void testRedeployOverridesSetJobDefinitionPriority() {
     // given a process instance with a job with default priority and a corresponding job definition
@@ -199,7 +199,7 @@ public class JobDefinitionPriorityTest extends PluggableProcessEngineTest {
     assertEquals(72, updatedExistingJob.getPriority());
 
     // if the process definition is redeployed
-    String secondDeploymentId = repositoryService.createDeployment().addClasspathResource("org/camunda/bpm/engine/test/api/mgmt/jobPrioProcess.bpmn20.xml").deploy().getId();
+    String secondDeploymentId = repositoryService.createDeployment().addClasspathResource("io/orqueio/bpm/engine/test/api/mgmt/jobPrioProcess.bpmn20.xml").deploy().getId();
 
     // then a new job will have the priority from the BPMN xml
     ProcessInstance secondInstance = runtimeService.createProcessInstanceByKey("jobPrioProcess")
@@ -212,7 +212,7 @@ public class JobDefinitionPriorityTest extends PluggableProcessEngineTest {
     repositoryService.deleteDeployment(secondDeploymentId, true);
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/mgmt/asyncTaskProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/mgmt/asyncTaskProcess.bpmn20.xml")
   @Test
   public void testResetJobDefinitionPriority() {
 
@@ -239,7 +239,7 @@ public class JobDefinitionPriorityTest extends PluggableProcessEngineTest {
     assertEquals(EXPECTED_DEFAULT_PRIORITY, job.getPriority());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/mgmt/asyncTaskProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/mgmt/asyncTaskProcess.bpmn20.xml")
   @Test
   public void testResetJobDefinitionPriorityWhenPriorityIsNull() {
 
@@ -256,7 +256,7 @@ public class JobDefinitionPriorityTest extends PluggableProcessEngineTest {
     assertNull(updatedDefinition.getOverridingJobPriority());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/mgmt/jobPrioProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/mgmt/jobPrioProcess.bpmn20.xml")
   @Test
   public void testGetJobDefinitionDefaultPriority() {
     // with a process with job definitions deployed
@@ -334,7 +334,7 @@ public class JobDefinitionPriorityTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/mgmt/asyncTaskProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/mgmt/asyncTaskProcess.bpmn20.xml")
   @Test
   public void testSetJobDefinitionPriorityToExtremeValues() {
     JobDefinition jobDefinition = managementService.createJobDefinitionQuery().singleResult();

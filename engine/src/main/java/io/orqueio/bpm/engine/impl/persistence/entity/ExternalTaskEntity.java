@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -32,7 +32,7 @@ import io.orqueio.bpm.engine.externaltask.ExternalTask;
 import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
 import io.orqueio.bpm.engine.impl.bpmn.helper.BpmnExceptionHandler;
 import io.orqueio.bpm.engine.impl.bpmn.helper.BpmnProperties;
-import io.orqueio.bpm.engine.impl.bpmn.parser.CamundaErrorEventDefinition;
+import io.orqueio.bpm.engine.impl.bpmn.parser.OrqueioErrorEventDefinition;
 import io.orqueio.bpm.engine.impl.context.Context;
 import io.orqueio.bpm.engine.impl.db.DbEntity;
 import io.orqueio.bpm.engine.impl.db.EnginePersistenceLogger;
@@ -517,11 +517,11 @@ public class ExternalTaskEntity implements ExternalTask, DbEntity,
   }
 
   protected boolean evaluateThrowBpmnError(ExecutionEntity execution, boolean continueOnException) {
-    List<CamundaErrorEventDefinition> camundaErrorEventDefinitions = (List<CamundaErrorEventDefinition>) execution.getActivity().getProperty(BpmnProperties.CAMUNDA_ERROR_EVENT_DEFINITION.getName());
-    if (camundaErrorEventDefinitions != null && !camundaErrorEventDefinitions.isEmpty()) {
-      for (CamundaErrorEventDefinition camundaErrorEventDefinition : camundaErrorEventDefinitions) {
-        if (errorEventDefinitionMatches(camundaErrorEventDefinition, continueOnException)) {
-          bpmnError(camundaErrorEventDefinition.getErrorCode(), errorMessage, null);
+    List<OrqueioErrorEventDefinition> orqueioErrorEventDefinitions = (List<OrqueioErrorEventDefinition>) execution.getActivity().getProperty(BpmnProperties.ORQUEIO_ERROR_EVENT_DEFINITION.getName());
+    if (orqueioErrorEventDefinitions != null && !orqueioErrorEventDefinitions.isEmpty()) {
+      for (OrqueioErrorEventDefinition orqueioErrorEventDefinition : orqueioErrorEventDefinitions) {
+        if (errorEventDefinitionMatches(orqueioErrorEventDefinition, continueOnException)) {
+          bpmnError(orqueioErrorEventDefinition.getErrorCode(), errorMessage, null);
           return true;
         }
       }
@@ -529,12 +529,12 @@ public class ExternalTaskEntity implements ExternalTask, DbEntity,
     return false;
   }
 
-  protected boolean errorEventDefinitionMatches(CamundaErrorEventDefinition camundaErrorEventDefinition, boolean continueOnException) {
+  protected boolean errorEventDefinitionMatches(OrqueioErrorEventDefinition orqueioErrorEventDefinition, boolean continueOnException) {
     try {
-      return camundaErrorEventDefinition.getExpression() != null && Boolean.TRUE.equals(camundaErrorEventDefinition.getExpression().getValue(getExecution()));
+      return orqueioErrorEventDefinition.getExpression() != null && Boolean.TRUE.equals(orqueioErrorEventDefinition.getExpression().getValue(getExecution()));
     } catch (Exception exception) {
       if (continueOnException) {
-        ProcessEngineLogger.EXTERNAL_TASK_LOGGER.errorEventDefinitionEvaluationException(id, camundaErrorEventDefinition, exception);
+        ProcessEngineLogger.EXTERNAL_TASK_LOGGER.errorEventDefinitionEvaluationException(id, orqueioErrorEventDefinition, exception);
         return false;
       }
       throw exception;

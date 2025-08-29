@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -94,7 +94,7 @@ public class DatabaseTablePrefixTest {
     try {
       engine1.getRepositoryService()
         .createDeployment()
-        .addClasspathResource("org/camunda/bpm/engine/test/api/cfg/oneJobProcess.bpmn20.xml")
+        .addClasspathResource("io/orqueio/bpm/engine/test/api/cfg/oneJobProcess.bpmn20.xml")
         .deploy();
 
       assertEquals(1, engine1.getRepositoryService().createDeploymentQuery().count());

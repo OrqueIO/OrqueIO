@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -182,14 +182,14 @@ public class DecisionDefinitionTest {
     Definitions definitions = modelInstance.newInstance(Definitions.class);
     definitions.setId(DmnModelConstants.DMN_ELEMENT_DEFINITIONS);
     definitions.setName(DmnModelConstants.DMN_ELEMENT_DEFINITIONS);
-    definitions.setNamespace(DmnModelConstants.CAMUNDA_NS);
+    definitions.setNamespace(DmnModelConstants.ORQUEIO_NS);
     modelInstance.setDefinitions(definitions);
 
     Decision decision = modelInstance.newInstance(Decision.class);
     decision.setId("Decision-1");
     decision.setName("foo");
 
-    decision.setCamundaHistoryTimeToLiveString(historyTTL);
+    decision.setOrqueioHistoryTimeToLiveString(historyTTL);
 
     modelInstance.getDefinitions().addChildElement(decision);
 

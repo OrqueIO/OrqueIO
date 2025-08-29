@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -62,7 +62,7 @@ import io.orqueio.bpm.engine.runtime.ProcessInstance;
 import io.orqueio.bpm.engine.task.Task;
 
 /**
- * <p>Provides the default authorizations for Camunda Platform.</p>
+ * <p>Provides the default authorizations for Orqueio Platform.</p>
  *
  * @author Daniel Meyer
  *
@@ -267,7 +267,7 @@ public class DefaultAuthorizationProvider implements ResourceAuthorizationProvid
    *         ->  create a new history authorization (with READ on HISTORIC_TASK)
    *     (2b) fetched authorization != null
    *         ->  Add READ, (UPDATE/TASK_WORK) permission, and READ_VARIABLE if enabled
-   *             UPDATE or TASK_WORK permission is configurable in camunda.cfg.xml and by default,
+   *             UPDATE or TASK_WORK permission is configurable in orqueio.cfg.xml and by default,
    *             UPDATE permission is provided
    *         ->  Add READ on HISTORIC_TASK
    */

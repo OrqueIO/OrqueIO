@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -91,7 +91,7 @@ public interface ManagementService {
    * @return a new {@link ProcessApplicationRegistration}
    *
    * @throws AuthorizationException
-   *          If the user is not a member of the group {@link Groups#CAMUNDA_ADMIN}.
+   *          If the user is not a member of the group {@link Groups#ORQUEIO_ADMIN}.
    */
   ProcessApplicationRegistration registerProcessApplication(String deploymentId, ProcessApplicationReference reference);
 
@@ -106,7 +106,7 @@ public interface ManagementService {
    *          indicates whether the process definitions should be removed from the deployment cache
    *
    * @throws AuthorizationException
-   *          If the user is not a member of the group {@link Groups#CAMUNDA_ADMIN}.
+   *          If the user is not a member of the group {@link Groups#ORQUEIO_ADMIN}.
    */
   void unregisterProcessApplication(String deploymentId, boolean removeProcessDefinitionsFromCache);
 
@@ -121,7 +121,7 @@ public interface ManagementService {
    *          indicates whether the process definitions should be removed from the deployment cache
    *
    * @throws AuthorizationException
-   *          If the user is not a member of the group {@link Groups#CAMUNDA_ADMIN}.
+   *          If the user is not a member of the group {@link Groups#ORQUEIO_ADMIN}.
    */
   void unregisterProcessApplication(Set<String> deploymentIds, boolean removeProcessDefinitionsFromCache);
 
@@ -131,7 +131,7 @@ public interface ManagementService {
    *         currently registered.
    *
    * @throws AuthorizationException
-   *          If the user is not a member of the group {@link Groups#CAMUNDA_ADMIN}.
+   *          If the user is not a member of the group {@link Groups#ORQUEIO_ADMIN}.
    */
   String getProcessApplicationForDeployment(String deploymentId);
 
@@ -139,7 +139,7 @@ public interface ManagementService {
    * Get the mapping containing {table name, row count} entries of the database schema.
    *
    * @throws AuthorizationException
-   *          If the user is not a member of the group {@link Groups#CAMUNDA_ADMIN}.
+   *          If the user is not a member of the group {@link Groups#ORQUEIO_ADMIN}.
    */
   Map<String, Long> getTableCount();
 
@@ -148,7 +148,7 @@ public interface ManagementService {
    * {@link Execution} or the like.
    *
    * @throws AuthorizationException
-   *          If the user is not a member of the group {@link Groups#CAMUNDA_ADMIN}.
+   *          If the user is not a member of the group {@link Groups#ORQUEIO_ADMIN}.
    */
   String getTableName(Class<?> entityClass);
 
@@ -157,7 +157,7 @@ public interface ManagementService {
    * Returns null when no table exists with the given name.
    *
    * @throws AuthorizationException
-   *          If the user is not a member of the group {@link Groups#CAMUNDA_ADMIN}.
+   *          If the user is not a member of the group {@link Groups#ORQUEIO_ADMIN}.
    */
   TableMetaData getTableMetaData(String tableName);
 
@@ -166,7 +166,7 @@ public interface ManagementService {
    * containing specific sections of table row data.
    *
    * @throws AuthorizationException
-   *          If the user is not a member of the group {@link Groups#CAMUNDA_ADMIN}.
+   *          If the user is not a member of the group {@link Groups#ORQUEIO_ADMIN}.
    */
   TablePageQuery createTablePageQuery();
 
@@ -1168,7 +1168,7 @@ public interface ManagementService {
    * @return a map of all properties.
    *
    * @throws AuthorizationException
-   *          If the user is not a member of the group {@link Groups#CAMUNDA_ADMIN}.
+   *          If the user is not a member of the group {@link Groups#ORQUEIO_ADMIN}.
    */
   Map<String, String> getProperties();
 
@@ -1180,7 +1180,7 @@ public interface ManagementService {
    * @param value the new value for the property.
    *
    * @throws AuthorizationException
-   *          If the user is not a member of the group {@link Groups#CAMUNDA_ADMIN}.
+   *          If the user is not a member of the group {@link Groups#ORQUEIO_ADMIN}.
    */
   void setProperty(String name, String value);
 
@@ -1190,7 +1190,7 @@ public interface ManagementService {
    * @param name the name of the property to delete
    *
    * @throws AuthorizationException
-   *          If the user is not a member of the group {@link Groups#CAMUNDA_ADMIN}.
+   *          If the user is not a member of the group {@link Groups#ORQUEIO_ADMIN}.
    */
   void deleteProperty(String name);
 
@@ -1200,7 +1200,7 @@ public interface ManagementService {
    * @param licenseKey the license key string.
    *
    * @throws AuthorizationException
-   *          If the user is not a member of the group {@link Groups#CAMUNDA_ADMIN}.
+   *          If the user is not a member of the group {@link Groups#ORQUEIO_ADMIN}.
    */
   void setLicenseKey(String licenseKey);
 
@@ -1208,7 +1208,7 @@ public interface ManagementService {
    * Get the stored license key string or <code>null</code> if no license is set.
    *
    * @throws AuthorizationException
-   *          If the user is not a member of the group {@link Groups#CAMUNDA_ADMIN}.
+   *          If the user is not a member of the group {@link Groups#ORQUEIO_ADMIN}.
    */
   String getLicenseKey();
 
@@ -1216,7 +1216,7 @@ public interface ManagementService {
    * Deletes the stored license key. If no license key is set, the request is ignored.
    *
    * @throws AuthorizationException
-   *          If the user is not a member of the group {@link Groups#CAMUNDA_ADMIN}.
+   *          If the user is not a member of the group {@link Groups#ORQUEIO_ADMIN}.
    */
   void deleteLicenseKey();
 
@@ -1225,7 +1225,7 @@ public interface ManagementService {
    *  Note: will always return an empty string
    *
    * @throws AuthorizationException
-   *          If the user is not a member of the group {@link Groups#CAMUNDA_ADMIN}.
+   *          If the user is not a member of the group {@link Groups#ORQUEIO_ADMIN}.
    */
   String databaseSchemaUpgrade(Connection connection, String catalog, String schema);
 
@@ -1252,7 +1252,7 @@ public interface ManagementService {
    * This set is only relevant, if the engine configuration property <code>jobExecutorDeploymentAware</code> is set.
    *
    * @throws AuthorizationException
-   *          If the user is not a member of the group {@link Groups#CAMUNDA_ADMIN}.
+   *          If the user is not a member of the group {@link Groups#ORQUEIO_ADMIN}.
    */
   Set<String> getRegisteredDeployments();
 
@@ -1262,7 +1262,7 @@ public interface ManagementService {
    * If set to false, the job executor will execute any job.
    *
    * @throws AuthorizationException
-   *          If the user is not a member of the group {@link Groups#CAMUNDA_ADMIN}.
+   *          If the user is not a member of the group {@link Groups#ORQUEIO_ADMIN}.
    */
   void registerDeploymentForJobExecutor(String deploymentId);
 
@@ -1272,7 +1272,7 @@ public interface ManagementService {
    * jobs for the given deployment will no longer get acquired.
    *
    * @throws AuthorizationException
-   *          If the user is not a member of the group {@link Groups#CAMUNDA_ADMIN}.
+   *          If the user is not a member of the group {@link Groups#ORQUEIO_ADMIN}.
    */
   void unregisterDeploymentForJobExecutor(String deploymentId);
 
@@ -1282,7 +1282,7 @@ public interface ManagementService {
    * @return the history level
    *
    * @throws AuthorizationException
-   *          If the user is not a member of the group {@link Groups#CAMUNDA_ADMIN}.
+   *          If the user is not a member of the group {@link Groups#ORQUEIO_ADMIN}.
    */
   int getHistoryLevel();
 
@@ -1297,7 +1297,7 @@ public interface ManagementService {
    * If the timestamp is null, all metrics will be deleted
    *
    * @throws AuthorizationException
-   *          If the user is not a member of the group {@link Groups#CAMUNDA_ADMIN}.
+   *          If the user is not a member of the group {@link Groups#ORQUEIO_ADMIN}.
    *
    * @param timestamp or null
    * @since 7.3
@@ -1310,7 +1310,7 @@ public interface ManagementService {
    * are matched in that regard.
    *
    * @throws AuthorizationException
-   *          If the user is not a member of the group {@link Groups#CAMUNDA_ADMIN}.
+   *          If the user is not a member of the group {@link Groups#ORQUEIO_ADMIN}.
    *
    * @param timestamp or null
    * @param reporter or null
@@ -1340,7 +1340,7 @@ public interface ManagementService {
    * If the timestamp is null, all metrics will be deleted
    *
    * @throws AuthorizationException
-   *          If the user is not a member of the group {@link Groups#CAMUNDA_ADMIN}.
+   *          If the user is not a member of the group {@link Groups#ORQUEIO_ADMIN}.
    *
    * @param timestamp or <code>null</code>
    */
@@ -1437,12 +1437,12 @@ public interface ManagementService {
   /**
    * This method returns the current state of the collected telemetry data. For a
    * detailed explanation on what is included, read the
-   * <a href="https://docs.camunda.org/manual/latest/introduction/telemetry/#collected-data">Telemetry</a>
-   * page in the Camunda docs.
+   * <a href="https://docs.orqueio.io/manual/latest/introduction/telemetry/#collected-data">Telemetry</a>
+   * page in the Orqueio docs.
    *
    * The engine collects information about multiple aspects of the installation.
    *
-   * @see <a href="https://docs.camunda.org/manual/latest/introduction/telemetry/#collected-data">Camunda Documentation: Telemetry</a>
+   * @see <a href="https://docs.orqueio.io/manual/latest/introduction/telemetry/#collected-data">Orqueio Documentation: Telemetry</a>
    */
   TelemetryData getTelemetryData();
 

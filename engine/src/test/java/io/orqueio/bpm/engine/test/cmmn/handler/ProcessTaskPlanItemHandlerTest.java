@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -64,8 +64,8 @@ import io.orqueio.bpm.model.cmmn.instance.ProcessTask;
 import io.orqueio.bpm.model.cmmn.instance.RepetitionRule;
 import io.orqueio.bpm.model.cmmn.instance.RequiredRule;
 import io.orqueio.bpm.model.cmmn.instance.Sentry;
-import io.orqueio.bpm.model.cmmn.instance.camunda.CamundaIn;
-import io.orqueio.bpm.model.cmmn.instance.camunda.CamundaOut;
+import io.orqueio.bpm.model.cmmn.instance.orqueio.OrqueioIn;
+import io.orqueio.bpm.model.cmmn.instance.orqueio.OrqueioOut;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -283,7 +283,7 @@ public class ProcessTaskPlanItemHandlerTest extends CmmnElementHandlerTest {
   public void testBinding() {
     // given:
     CallableElementBinding processBinding = CallableElementBinding.LATEST;
-    processTask.setCamundaProcessBinding(processBinding.getValue());
+    processTask.setOrqueioProcessBinding(processBinding.getValue());
 
     // when
     CmmnActivity activity = handler.handleElement(planItem, context);
@@ -301,7 +301,7 @@ public class ProcessTaskPlanItemHandlerTest extends CmmnElementHandlerTest {
   public void testVersionConstant() {
     // given:
     String processVersion = "2";
-    processTask.setCamundaProcessVersion(processVersion);
+    processTask.setOrqueioProcessVersion(processVersion);
 
     // when
     CmmnActivity activity = handler.handleElement(planItem, context);
@@ -321,7 +321,7 @@ public class ProcessTaskPlanItemHandlerTest extends CmmnElementHandlerTest {
   public void testVersionExpression() {
     // given:
     String processVersion = "${aVersion}";
-    processTask.setCamundaProcessVersion(processVersion);
+    processTask.setOrqueioProcessVersion(processVersion);
 
     // when
     CmmnActivity activity = handler.handleElement(planItem, context);
@@ -343,8 +343,8 @@ public class ProcessTaskPlanItemHandlerTest extends CmmnElementHandlerTest {
     // given:
     String businessKey = "myBusinessKey";
     ExtensionElements extensionElements = addExtensionElements(processTask);
-    CamundaIn businessKeyElement = createElement(extensionElements, null, CamundaIn.class);
-    businessKeyElement.setCamundaBusinessKey(businessKey);
+    OrqueioIn businessKeyElement = createElement(extensionElements, null, OrqueioIn.class);
+    businessKeyElement.setOrqueioBusinessKey(businessKey);
 
     // when
     CmmnActivity activity = handler.handleElement(planItem, context);
@@ -365,8 +365,8 @@ public class ProcessTaskPlanItemHandlerTest extends CmmnElementHandlerTest {
     // given:
     String businessKey = "${myBusinessKey}";
     ExtensionElements extensionElements = addExtensionElements(processTask);
-    CamundaIn businessKeyElement = createElement(extensionElements, null, CamundaIn.class);
-    businessKeyElement.setCamundaBusinessKey(businessKey);
+    OrqueioIn businessKeyElement = createElement(extensionElements, null, OrqueioIn.class);
+    businessKeyElement.setOrqueioBusinessKey(businessKey);
 
     // when
     CmmnActivity activity = handler.handleElement(planItem, context);
@@ -387,12 +387,12 @@ public class ProcessTaskPlanItemHandlerTest extends CmmnElementHandlerTest {
   public void testInputs() {
     // given:
     ExtensionElements extensionElements = addExtensionElements(processTask);
-    CamundaIn variablesElement = createElement(extensionElements, null, CamundaIn.class);
-    variablesElement.setCamundaVariables("all");
-    CamundaIn sourceElement = createElement(extensionElements, null, CamundaIn.class);
-    sourceElement.setCamundaSource("a");
-    CamundaIn sourceExpressionElement = createElement(extensionElements, null, CamundaIn.class);
-    sourceExpressionElement.setCamundaSourceExpression("${b}");
+    OrqueioIn variablesElement = createElement(extensionElements, null, OrqueioIn.class);
+    variablesElement.setOrqueioVariables("all");
+    OrqueioIn sourceElement = createElement(extensionElements, null, OrqueioIn.class);
+    sourceElement.setOrqueioSource("a");
+    OrqueioIn sourceExpressionElement = createElement(extensionElements, null, OrqueioIn.class);
+    sourceExpressionElement.setOrqueioSourceExpression("${b}");
 
     // when
     CmmnActivity activity = handler.handleElement(planItem, context);
@@ -412,8 +412,8 @@ public class ProcessTaskPlanItemHandlerTest extends CmmnElementHandlerTest {
   public void testInputVariables() {
     // given:
     ExtensionElements extensionElements = addExtensionElements(processTask);
-    CamundaIn variablesElement = createElement(extensionElements, null, CamundaIn.class);
-    variablesElement.setCamundaVariables("all");
+    OrqueioIn variablesElement = createElement(extensionElements, null, OrqueioIn.class);
+    variablesElement.setOrqueioVariables("all");
 
     // when
     CmmnActivity activity = handler.handleElement(planItem, context);
@@ -433,8 +433,8 @@ public class ProcessTaskPlanItemHandlerTest extends CmmnElementHandlerTest {
     // given:
     String source = "a";
     ExtensionElements extensionElements = addExtensionElements(processTask);
-    CamundaIn sourceElement = createElement(extensionElements, null, CamundaIn.class);
-    sourceElement.setCamundaSource(source);
+    OrqueioIn sourceElement = createElement(extensionElements, null, OrqueioIn.class);
+    sourceElement.setOrqueioSource(source);
 
     // when
     CmmnActivity activity = handler.handleElement(planItem, context);
@@ -459,8 +459,8 @@ public class ProcessTaskPlanItemHandlerTest extends CmmnElementHandlerTest {
     // given:
     String source = "${a}";
     ExtensionElements extensionElements = addExtensionElements(processTask);
-    CamundaIn sourceElement = createElement(extensionElements, null, CamundaIn.class);
-    sourceElement.setCamundaSourceExpression(source);
+    OrqueioIn sourceElement = createElement(extensionElements, null, OrqueioIn.class);
+    sourceElement.setOrqueioSourceExpression(source);
 
     // when
     CmmnActivity activity = handler.handleElement(planItem, context);
@@ -486,8 +486,8 @@ public class ProcessTaskPlanItemHandlerTest extends CmmnElementHandlerTest {
     // given:
     String target = "b";
     ExtensionElements extensionElements = addExtensionElements(processTask);
-    CamundaIn sourceElement = createElement(extensionElements, null, CamundaIn.class);
-    sourceElement.setCamundaTarget(target);
+    OrqueioIn sourceElement = createElement(extensionElements, null, OrqueioIn.class);
+    sourceElement.setOrqueioTarget(target);
 
     // when
     CmmnActivity activity = handler.handleElement(planItem, context);
@@ -507,12 +507,12 @@ public class ProcessTaskPlanItemHandlerTest extends CmmnElementHandlerTest {
   public void testOutputs() {
     // given:
     ExtensionElements extensionElements = addExtensionElements(processTask);
-    CamundaOut variablesElement = createElement(extensionElements, null, CamundaOut.class);
-    variablesElement.setCamundaVariables("all");
-    CamundaOut sourceElement = createElement(extensionElements, null, CamundaOut.class);
-    sourceElement.setCamundaSource("a");
-    CamundaOut sourceExpressionElement = createElement(extensionElements, null, CamundaOut.class);
-    sourceExpressionElement.setCamundaSourceExpression("${b}");
+    OrqueioOut variablesElement = createElement(extensionElements, null, OrqueioOut.class);
+    variablesElement.setOrqueioVariables("all");
+    OrqueioOut sourceElement = createElement(extensionElements, null, OrqueioOut.class);
+    sourceElement.setOrqueioSource("a");
+    OrqueioOut sourceExpressionElement = createElement(extensionElements, null, OrqueioOut.class);
+    sourceExpressionElement.setOrqueioSourceExpression("${b}");
 
     // when
     CmmnActivity activity = handler.handleElement(planItem, context);
@@ -532,8 +532,8 @@ public class ProcessTaskPlanItemHandlerTest extends CmmnElementHandlerTest {
   public void testOutputVariables() {
     // given:
     ExtensionElements extensionElements = addExtensionElements(processTask);
-    CamundaOut variablesElement = createElement(extensionElements, null, CamundaOut.class);
-    variablesElement.setCamundaVariables("all");
+    OrqueioOut variablesElement = createElement(extensionElements, null, OrqueioOut.class);
+    variablesElement.setOrqueioVariables("all");
 
     // when
     CmmnActivity activity = handler.handleElement(planItem, context);
@@ -553,8 +553,8 @@ public class ProcessTaskPlanItemHandlerTest extends CmmnElementHandlerTest {
     // given:
     String source = "a";
     ExtensionElements extensionElements = addExtensionElements(processTask);
-    CamundaOut sourceElement = createElement(extensionElements, null, CamundaOut.class);
-    sourceElement.setCamundaSource(source);
+    OrqueioOut sourceElement = createElement(extensionElements, null, OrqueioOut.class);
+    sourceElement.setOrqueioSource(source);
 
     // when
     CmmnActivity activity = handler.handleElement(planItem, context);
@@ -579,8 +579,8 @@ public class ProcessTaskPlanItemHandlerTest extends CmmnElementHandlerTest {
     // given:
     String source = "${a}";
     ExtensionElements extensionElements = addExtensionElements(processTask);
-    CamundaOut sourceElement = createElement(extensionElements, null, CamundaOut.class);
-    sourceElement.setCamundaSourceExpression(source);
+    OrqueioOut sourceElement = createElement(extensionElements, null, OrqueioOut.class);
+    sourceElement.setOrqueioSourceExpression(source);
 
     // when
     CmmnActivity activity = handler.handleElement(planItem, context);
@@ -606,8 +606,8 @@ public class ProcessTaskPlanItemHandlerTest extends CmmnElementHandlerTest {
     // given:
     String target = "b";
     ExtensionElements extensionElements = addExtensionElements(processTask);
-    CamundaOut sourceElement = createElement(extensionElements, null, CamundaOut.class);
-    sourceElement.setCamundaTarget(target);
+    OrqueioOut sourceElement = createElement(extensionElements, null, OrqueioOut.class);
+    sourceElement.setOrqueioTarget(target);
 
     // when
     CmmnActivity activity = handler.handleElement(planItem, context);
@@ -985,7 +985,7 @@ public class ProcessTaskPlanItemHandlerTest extends CmmnElementHandlerTest {
     ConditionExpression expression = createElement(repetitionRule, "Expression_1", ConditionExpression.class);
     expression.setText("${true}");
 
-    repetitionRule.setCamundaRepeatOnStandardEvent(CaseExecutionListener.DISABLE);
+    repetitionRule.setOrqueioRepeatOnStandardEvent(CaseExecutionListener.DISABLE);
 
     Cmmn.validateModel(modelInstance);
 
@@ -1007,7 +1007,7 @@ public class ProcessTaskPlanItemHandlerTest extends CmmnElementHandlerTest {
     ConditionExpression expression = createElement(repetitionRule, "Expression_1", ConditionExpression.class);
     expression.setText("${true}");
 
-    repetitionRule.setCamundaRepeatOnStandardEvent(CaseExecutionListener.DISABLE);
+    repetitionRule.setOrqueioRepeatOnStandardEvent(CaseExecutionListener.DISABLE);
 
     Cmmn.validateModel(modelInstance);
 

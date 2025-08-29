@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -68,7 +68,7 @@ import io.orqueio.bpm.model.cmmn.instance.PlanItemControl;
 import io.orqueio.bpm.model.cmmn.instance.RepetitionRule;
 import io.orqueio.bpm.model.cmmn.instance.RequiredRule;
 import io.orqueio.bpm.model.cmmn.instance.Sentry;
-import io.orqueio.bpm.model.cmmn.instance.camunda.CamundaTaskListener;
+import io.orqueio.bpm.model.cmmn.instance.orqueio.OrqueioTaskListener;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -317,7 +317,7 @@ public class HumanTaskPlanItemHandlerTest extends CmmnElementHandlerTest {
   public void testTaskDefinitionDueDateExpression() {
     // given
     String aDueDate = "aDueDate";
-    humanTask.setCamundaDueDate(aDueDate);
+    humanTask.setOrqueioDueDate(aDueDate);
 
     // when
     CmmnActivity activity = handler.handleElement(planItem, context);
@@ -335,7 +335,7 @@ public class HumanTaskPlanItemHandlerTest extends CmmnElementHandlerTest {
   public void testTaskDefinitionFollowUpDateExpression() {
     // given
     String aFollowUpDate = "aFollowDate";
-    humanTask.setCamundaFollowUpDate(aFollowUpDate);
+    humanTask.setOrqueioFollowUpDate(aFollowUpDate);
 
     // when
     CmmnActivity activity = handler.handleElement(planItem, context);
@@ -353,7 +353,7 @@ public class HumanTaskPlanItemHandlerTest extends CmmnElementHandlerTest {
   public void testTaskDefinitionPriorityExpression() {
     // given
     String aPriority = "aPriority";
-    humanTask.setCamundaPriority(aPriority);
+    humanTask.setOrqueioPriority(aPriority);
 
     // when
     CmmnActivity activity = handler.handleElement(planItem, context);
@@ -391,7 +391,7 @@ public class HumanTaskPlanItemHandlerTest extends CmmnElementHandlerTest {
   public void testTaskDefinitionAssigneeExpression() {
     // given
     String aPriority = "aPriority";
-    humanTask.setCamundaPriority(aPriority);
+    humanTask.setOrqueioPriority(aPriority);
 
     // when
     CmmnActivity activity = handler.handleElement(planItem, context);
@@ -409,7 +409,7 @@ public class HumanTaskPlanItemHandlerTest extends CmmnElementHandlerTest {
   public void testTaskDefinitionCandidateUsers() {
     // given
     String aCandidateUsers = "mary,john,peter";
-    humanTask.setCamundaCandidateUsers(aCandidateUsers);
+    humanTask.setOrqueioCandidateUsers(aCandidateUsers);
 
     // when
     CmmnActivity activity = handler.handleElement(planItem, context);
@@ -439,7 +439,7 @@ public class HumanTaskPlanItemHandlerTest extends CmmnElementHandlerTest {
   public void testTaskDefinitionCandidateGroups() {
     // given
     String aCandidateGroups = "accounting,management,backoffice";
-    humanTask.setCamundaCandidateGroups(aCandidateGroups);
+    humanTask.setOrqueioCandidateGroups(aCandidateGroups);
 
     // when
     CmmnActivity activity = handler.handleElement(planItem, context);
@@ -469,7 +469,7 @@ public class HumanTaskPlanItemHandlerTest extends CmmnElementHandlerTest {
   public void testTaskDefinitionFormKey() {
     // given
     String aFormKey = "aFormKey";
-    humanTask.setCamundaFormKey(aFormKey);
+    humanTask.setOrqueioFormKey(aFormKey);
 
     // when
     CmmnActivity activity = handler.handleElement(planItem, context);
@@ -527,12 +527,12 @@ public class HumanTaskPlanItemHandlerTest extends CmmnElementHandlerTest {
   public void testCreateTaskListenerByClass() {
     // given:
     ExtensionElements extensionElements = addExtensionElements(humanTask);
-    CamundaTaskListener taskListener = createElement(extensionElements, null, CamundaTaskListener.class);
+    OrqueioTaskListener taskListener = createElement(extensionElements, null, OrqueioTaskListener.class);
 
     String className = "io.orqueio.bpm.test.tasklistener.ABC";
     String event = TaskListener.EVENTNAME_CREATE;
-    taskListener.setCamundaEvent(event);
-    taskListener.setCamundaClass(className);
+    taskListener.setOrqueioEvent(event);
+    taskListener.setOrqueioClass(className);
 
     // when
     CmmnActivity activity = handler.handleElement(planItem, context);
@@ -563,12 +563,12 @@ public class HumanTaskPlanItemHandlerTest extends CmmnElementHandlerTest {
   public void testCreateTaskListenerByDelegateExpression() {
     // given:
     ExtensionElements extensionElements = addExtensionElements(humanTask);
-    CamundaTaskListener taskListener = createElement(extensionElements, null, CamundaTaskListener.class);
+    OrqueioTaskListener taskListener = createElement(extensionElements, null, OrqueioTaskListener.class);
 
     String delegateExpression = "${myDelegateExpression}";
     String event = TaskListener.EVENTNAME_CREATE;
-    taskListener.setCamundaEvent(event);
-    taskListener.setCamundaDelegateExpression(delegateExpression);
+    taskListener.setOrqueioEvent(event);
+    taskListener.setOrqueioDelegateExpression(delegateExpression);
 
     // when
     CmmnActivity activity = handler.handleElement(planItem, context);
@@ -599,12 +599,12 @@ public class HumanTaskPlanItemHandlerTest extends CmmnElementHandlerTest {
   public void testCreateTaskListenerByExpression() {
     // given:
     ExtensionElements extensionElements = addExtensionElements(humanTask);
-    CamundaTaskListener taskListener = createElement(extensionElements, null, CamundaTaskListener.class);
+    OrqueioTaskListener taskListener = createElement(extensionElements, null, OrqueioTaskListener.class);
 
     String expression = "${myExpression}";
     String event = TaskListener.EVENTNAME_CREATE;
-    taskListener.setCamundaEvent(event);
-    taskListener.setCamundaExpression(expression);
+    taskListener.setOrqueioEvent(event);
+    taskListener.setOrqueioExpression(expression);
 
     // when
     CmmnActivity activity = handler.handleElement(planItem, context);
@@ -634,12 +634,12 @@ public class HumanTaskPlanItemHandlerTest extends CmmnElementHandlerTest {
   public void testCompleteTaskListenerByClass() {
     // given:
     ExtensionElements extensionElements = addExtensionElements(humanTask);
-    CamundaTaskListener taskListener = createElement(extensionElements, null, CamundaTaskListener.class);
+    OrqueioTaskListener taskListener = createElement(extensionElements, null, OrqueioTaskListener.class);
 
     String className = "io.orqueio.bpm.test.tasklistener.ABC";
     String event = TaskListener.EVENTNAME_COMPLETE;
-    taskListener.setCamundaEvent(event);
-    taskListener.setCamundaClass(className);
+    taskListener.setOrqueioEvent(event);
+    taskListener.setOrqueioClass(className);
 
     // when
     CmmnActivity activity = handler.handleElement(planItem, context);
@@ -670,12 +670,12 @@ public class HumanTaskPlanItemHandlerTest extends CmmnElementHandlerTest {
   public void testCompleteTaskListenerByDelegateExpression() {
     // given:
     ExtensionElements extensionElements = addExtensionElements(humanTask);
-    CamundaTaskListener taskListener = createElement(extensionElements, null, CamundaTaskListener.class);
+    OrqueioTaskListener taskListener = createElement(extensionElements, null, OrqueioTaskListener.class);
 
     String delegateExpression = "${myDelegateExpression}";
     String event = TaskListener.EVENTNAME_COMPLETE;
-    taskListener.setCamundaEvent(event);
-    taskListener.setCamundaDelegateExpression(delegateExpression);
+    taskListener.setOrqueioEvent(event);
+    taskListener.setOrqueioDelegateExpression(delegateExpression);
 
     // when
     CmmnActivity activity = handler.handleElement(planItem, context);
@@ -706,12 +706,12 @@ public class HumanTaskPlanItemHandlerTest extends CmmnElementHandlerTest {
   public void testCompleteTaskListenerByExpression() {
     // given:
     ExtensionElements extensionElements = addExtensionElements(humanTask);
-    CamundaTaskListener taskListener = createElement(extensionElements, null, CamundaTaskListener.class);
+    OrqueioTaskListener taskListener = createElement(extensionElements, null, OrqueioTaskListener.class);
 
     String expression = "${myExpression}";
     String event = TaskListener.EVENTNAME_COMPLETE;
-    taskListener.setCamundaEvent(event);
-    taskListener.setCamundaExpression(expression);
+    taskListener.setOrqueioEvent(event);
+    taskListener.setOrqueioExpression(expression);
 
     // when
     CmmnActivity activity = handler.handleElement(planItem, context);
@@ -741,12 +741,12 @@ public class HumanTaskPlanItemHandlerTest extends CmmnElementHandlerTest {
   public void testAssignmentTaskListenerByClass() {
     // given:
     ExtensionElements extensionElements = addExtensionElements(humanTask);
-    CamundaTaskListener taskListener = createElement(extensionElements, null, CamundaTaskListener.class);
+    OrqueioTaskListener taskListener = createElement(extensionElements, null, OrqueioTaskListener.class);
 
     String className = "io.orqueio.bpm.test.tasklistener.ABC";
     String event = TaskListener.EVENTNAME_ASSIGNMENT;
-    taskListener.setCamundaEvent(event);
-    taskListener.setCamundaClass(className);
+    taskListener.setOrqueioEvent(event);
+    taskListener.setOrqueioClass(className);
 
     // when
     CmmnActivity activity = handler.handleElement(planItem, context);
@@ -777,12 +777,12 @@ public class HumanTaskPlanItemHandlerTest extends CmmnElementHandlerTest {
   public void testAssignmentTaskListenerByDelegateExpression() {
     // given:
     ExtensionElements extensionElements = addExtensionElements(humanTask);
-    CamundaTaskListener taskListener = createElement(extensionElements, null, CamundaTaskListener.class);
+    OrqueioTaskListener taskListener = createElement(extensionElements, null, OrqueioTaskListener.class);
 
     String delegateExpression = "${myDelegateExpression}";
     String event = TaskListener.EVENTNAME_ASSIGNMENT;
-    taskListener.setCamundaEvent(event);
-    taskListener.setCamundaDelegateExpression(delegateExpression);
+    taskListener.setOrqueioEvent(event);
+    taskListener.setOrqueioDelegateExpression(delegateExpression);
 
     // when
     CmmnActivity activity = handler.handleElement(planItem, context);
@@ -813,12 +813,12 @@ public class HumanTaskPlanItemHandlerTest extends CmmnElementHandlerTest {
   public void testAssignmentTaskListenerByExpression() {
     // given:
     ExtensionElements extensionElements = addExtensionElements(humanTask);
-    CamundaTaskListener taskListener = createElement(extensionElements, null, CamundaTaskListener.class);
+    OrqueioTaskListener taskListener = createElement(extensionElements, null, OrqueioTaskListener.class);
 
     String expression = "${myExpression}";
     String event = TaskListener.EVENTNAME_ASSIGNMENT;
-    taskListener.setCamundaEvent(event);
-    taskListener.setCamundaExpression(expression);
+    taskListener.setOrqueioEvent(event);
+    taskListener.setOrqueioExpression(expression);
 
     // when
     CmmnActivity activity = handler.handleElement(planItem, context);
@@ -848,12 +848,12 @@ public class HumanTaskPlanItemHandlerTest extends CmmnElementHandlerTest {
   public void testUpdateTaskListenerByClass() {
     // given:
     ExtensionElements extensionElements = addExtensionElements(humanTask);
-    CamundaTaskListener taskListener = createElement(extensionElements, null, CamundaTaskListener.class);
+    OrqueioTaskListener taskListener = createElement(extensionElements, null, OrqueioTaskListener.class);
 
     String className = "io.orqueio.bpm.test.tasklistener.ABC";
     String event = TaskListener.EVENTNAME_UPDATE;
-    taskListener.setCamundaEvent(event);
-    taskListener.setCamundaClass(className);
+    taskListener.setOrqueioEvent(event);
+    taskListener.setOrqueioClass(className);
 
     // when
     CmmnActivity activity = handler.handleElement(planItem, context);
@@ -884,12 +884,12 @@ public class HumanTaskPlanItemHandlerTest extends CmmnElementHandlerTest {
   public void testUpdateTaskListenerByDelegateExpression() {
     // given:
     ExtensionElements extensionElements = addExtensionElements(humanTask);
-    CamundaTaskListener taskListener = createElement(extensionElements, null, CamundaTaskListener.class);
+    OrqueioTaskListener taskListener = createElement(extensionElements, null, OrqueioTaskListener.class);
 
     String delegateExpression = "${myDelegateExpression}";
     String event = TaskListener.EVENTNAME_UPDATE;
-    taskListener.setCamundaEvent(event);
-    taskListener.setCamundaDelegateExpression(delegateExpression);
+    taskListener.setOrqueioEvent(event);
+    taskListener.setOrqueioDelegateExpression(delegateExpression);
 
     // when
     CmmnActivity activity = handler.handleElement(planItem, context);
@@ -920,12 +920,12 @@ public class HumanTaskPlanItemHandlerTest extends CmmnElementHandlerTest {
   public void testUpdateTaskListenerByExpression() {
     // given:
     ExtensionElements extensionElements = addExtensionElements(humanTask);
-    CamundaTaskListener taskListener = createElement(extensionElements, null, CamundaTaskListener.class);
+    OrqueioTaskListener taskListener = createElement(extensionElements, null, OrqueioTaskListener.class);
 
     String expression = "${myExpression}";
     String event = TaskListener.EVENTNAME_UPDATE;
-    taskListener.setCamundaEvent(event);
-    taskListener.setCamundaExpression(expression);
+    taskListener.setOrqueioEvent(event);
+    taskListener.setOrqueioExpression(expression);
 
     // when
     CmmnActivity activity = handler.handleElement(planItem, context);
@@ -955,12 +955,12 @@ public class HumanTaskPlanItemHandlerTest extends CmmnElementHandlerTest {
   public void testDeleteTaskListenerByClass() {
     // given:
     ExtensionElements extensionElements = addExtensionElements(humanTask);
-    CamundaTaskListener taskListener = createElement(extensionElements, null, CamundaTaskListener.class);
+    OrqueioTaskListener taskListener = createElement(extensionElements, null, OrqueioTaskListener.class);
 
     String className = "io.orqueio.bpm.test.tasklistener.ABC";
     String event = TaskListener.EVENTNAME_DELETE;
-    taskListener.setCamundaEvent(event);
-    taskListener.setCamundaClass(className);
+    taskListener.setOrqueioEvent(event);
+    taskListener.setOrqueioClass(className);
 
     // when
     CmmnActivity activity = handler.handleElement(planItem, context);
@@ -991,12 +991,12 @@ public class HumanTaskPlanItemHandlerTest extends CmmnElementHandlerTest {
   public void testDeleteTaskListenerByDelegateExpression() {
     // given:
     ExtensionElements extensionElements = addExtensionElements(humanTask);
-    CamundaTaskListener taskListener = createElement(extensionElements, null, CamundaTaskListener.class);
+    OrqueioTaskListener taskListener = createElement(extensionElements, null, OrqueioTaskListener.class);
 
     String delegateExpression = "${myDelegateExpression}";
     String event = TaskListener.EVENTNAME_DELETE;
-    taskListener.setCamundaEvent(event);
-    taskListener.setCamundaDelegateExpression(delegateExpression);
+    taskListener.setOrqueioEvent(event);
+    taskListener.setOrqueioDelegateExpression(delegateExpression);
 
     // when
     CmmnActivity activity = handler.handleElement(planItem, context);
@@ -1027,12 +1027,12 @@ public class HumanTaskPlanItemHandlerTest extends CmmnElementHandlerTest {
   public void testDeleteTaskListenerByExpression() {
     // given:
     ExtensionElements extensionElements = addExtensionElements(humanTask);
-    CamundaTaskListener taskListener = createElement(extensionElements, null, CamundaTaskListener.class);
+    OrqueioTaskListener taskListener = createElement(extensionElements, null, OrqueioTaskListener.class);
 
     String expression = "${myExpression}";
     String event = TaskListener.EVENTNAME_DELETE;
-    taskListener.setCamundaEvent(event);
-    taskListener.setCamundaExpression(expression);
+    taskListener.setOrqueioEvent(event);
+    taskListener.setOrqueioExpression(expression);
 
     // when
     CmmnActivity activity = handler.handleElement(planItem, context);
@@ -1428,7 +1428,7 @@ public class HumanTaskPlanItemHandlerTest extends CmmnElementHandlerTest {
     ConditionExpression expression = createElement(repetitionRule, "Expression_1", ConditionExpression.class);
     expression.setText("${true}");
 
-    repetitionRule.setCamundaRepeatOnStandardEvent(CaseExecutionListener.DISABLE);
+    repetitionRule.setOrqueioRepeatOnStandardEvent(CaseExecutionListener.DISABLE);
 
     Cmmn.validateModel(modelInstance);
 
@@ -1450,7 +1450,7 @@ public class HumanTaskPlanItemHandlerTest extends CmmnElementHandlerTest {
     ConditionExpression expression = createElement(repetitionRule, "Expression_1", ConditionExpression.class);
     expression.setText("${true}");
 
-    repetitionRule.setCamundaRepeatOnStandardEvent(CaseExecutionListener.DISABLE);
+    repetitionRule.setOrqueioRepeatOnStandardEvent(CaseExecutionListener.DISABLE);
 
     Cmmn.validateModel(modelInstance);
 

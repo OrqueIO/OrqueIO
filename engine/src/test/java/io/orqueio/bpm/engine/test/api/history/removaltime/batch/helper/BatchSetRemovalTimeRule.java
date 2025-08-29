@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -174,7 +174,7 @@ public class BatchSetRemovalTimeRule extends BatchRule {
     protected static final String ROOT_PROCESS_KEY = "rootProcess";
 
     ProcessBuilder builder = Bpmn.createExecutableProcess(PROCESS_KEY)
-        .camundaHistoryTimeToLiveString(null);
+        .orqueioHistoryTimeToLiveString(null);
 
     StartEventBuilder startEventBuilder = builder.startEvent();
     ProcessBuilder rootProcessBuilder = null;
@@ -187,7 +187,7 @@ public class BatchSetRemovalTimeRule extends BatchRule {
     }
 
     public TestProcessBuilder async() {
-      startEventBuilder.camundaAsyncBefore();
+      startEventBuilder.orqueioAsyncBefore();
 
       return this;
     }
@@ -195,14 +195,14 @@ public class BatchSetRemovalTimeRule extends BatchRule {
     public TestProcessBuilder ruleTask(String ref) {
       startEventBuilder
         .businessRuleTask()
-        .camundaDecisionRef(ref);
+        .orqueioDecisionRef(ref);
 
       return this;
     }
 
     public TestProcessBuilder call() {
       rootProcessBuilder = Bpmn.createExecutableProcess(ROOT_PROCESS_KEY)
-          .camundaHistoryTimeToLiveString(null);
+          .orqueioHistoryTimeToLiveString(null);
 
       callActivityBuilder = rootProcessBuilder
         .startEvent()
@@ -214,7 +214,7 @@ public class BatchSetRemovalTimeRule extends BatchRule {
 
     public TestProcessBuilder passVars(String... vars) {
       for (String variable : vars) {
-        callActivityBuilder.camundaIn(variable, variable);
+        callActivityBuilder.orqueioIn(variable, variable);
       }
 
       callActivityBuilder.endEvent();
@@ -226,7 +226,7 @@ public class BatchSetRemovalTimeRule extends BatchRule {
       startEventBuilder
         .userTask("userTask")
         .name("userTask")
-        .camundaAssignee("anAssignee");
+        .orqueioAssignee("anAssignee");
 
       return this;
     }
@@ -243,7 +243,7 @@ public class BatchSetRemovalTimeRule extends BatchRule {
     public TestProcessBuilder externalTask() {
       startEventBuilder
         .serviceTask()
-        .camundaExternalTask("aTopicName");
+        .orqueioExternalTask("aTopicName");
 
       return this;
     }
@@ -251,7 +251,7 @@ public class BatchSetRemovalTimeRule extends BatchRule {
     public TestProcessBuilder serviceTask() {
       startEventBuilder
         .serviceTask()
-        .camundaExpression("${true}");
+        .orqueioExpression("${true}");
 
       return this;
     }
@@ -259,7 +259,7 @@ public class BatchSetRemovalTimeRule extends BatchRule {
     public TestProcessBuilder failingCustomListener() {
       startEventBuilder
         .userTask()
-        .camundaExecutionListenerClass("end", FailingExecutionListener.class);
+        .orqueioExecutionListenerClass("end", FailingExecutionListener.class);
 
       return this;
     }
@@ -267,9 +267,9 @@ public class BatchSetRemovalTimeRule extends BatchRule {
     public TestProcessBuilder deploy() {
       if (ttl != null) {
         if (rootProcessBuilder != null) {
-          rootProcessBuilder.camundaHistoryTimeToLive(ttl);
+          rootProcessBuilder.orqueioHistoryTimeToLive(ttl);
         } else {
-          builder.camundaHistoryTimeToLive(ttl);
+          builder.orqueioHistoryTimeToLive(ttl);
         }
       }
 

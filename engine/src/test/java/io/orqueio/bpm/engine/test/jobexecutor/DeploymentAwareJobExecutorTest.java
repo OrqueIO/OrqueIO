@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -72,7 +72,7 @@ public class DeploymentAwareJobExecutorTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/jobexecutor/simpleAsyncProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/jobexecutor/simpleAsyncProcess.bpmn20.xml")
   @Test
   public void testProcessingOfJobsWithMatchingDeployment() {
     String deploymentId = repositoryService.createDeploymentQuery().singleResult().getId();
@@ -86,7 +86,7 @@ public class DeploymentAwareJobExecutorTest extends PluggableProcessEngineTest {
 
     String otherDeploymentId =
         deployAndInstantiateWithNewEngineConfiguration(
-            "org/camunda/bpm/engine/test/jobexecutor/simpleAsyncProcessVersion2.bpmn20.xml");
+            "io/orqueio/bpm/engine/test/jobexecutor/simpleAsyncProcessVersion2.bpmn20.xml");
 
     // assert that two jobs have been created, one for each deployment
     List<Job> jobs = managementService.createJobQuery().list();
@@ -106,14 +106,14 @@ public class DeploymentAwareJobExecutorTest extends PluggableProcessEngineTest {
     repositoryService.deleteDeployment(otherDeploymentId, true);
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/jobexecutor/simpleAsyncProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/jobexecutor/simpleAsyncProcess.bpmn20.xml")
   @Test
   public void testExplicitDeploymentRegistration() {
     runtimeService.startProcessInstanceByKey("simpleAsyncProcess");
 
     String otherDeploymentId =
         deployAndInstantiateWithNewEngineConfiguration(
-            "org/camunda/bpm/engine/test/jobexecutor/simpleAsyncProcessVersion2.bpmn20.xml");
+            "io/orqueio/bpm/engine/test/jobexecutor/simpleAsyncProcessVersion2.bpmn20.xml");
 
     processEngine.getManagementService().registerDeploymentForJobExecutor(otherDeploymentId);
 
@@ -141,7 +141,7 @@ public class DeploymentAwareJobExecutorTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/jobexecutor/simpleAsyncProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/jobexecutor/simpleAsyncProcess.bpmn20.xml")
   @Test
   public void testDeploymentUnregistrationOnUndeployment() {
     String deploymentId = repositoryService.createDeploymentQuery().singleResult().getId();
@@ -152,7 +152,7 @@ public class DeploymentAwareJobExecutorTest extends PluggableProcessEngineTest {
     Assert.assertEquals(0, managementService.getRegisteredDeployments().size());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/jobexecutor/simpleAsyncProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/jobexecutor/simpleAsyncProcess.bpmn20.xml")
   @Test
   public void testNoUnregistrationOnFailingUndeployment() {
     String deploymentId = repositoryService.createDeploymentQuery().singleResult().getId();
@@ -167,7 +167,7 @@ public class DeploymentAwareJobExecutorTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/jobexecutor/simpleAsyncProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/jobexecutor/simpleAsyncProcess.bpmn20.xml")
   @Test
   public void testExplicitDeploymentUnregistration() {
     String deploymentId = repositoryService.createDeploymentQuery().singleResult().getId();
@@ -206,7 +206,7 @@ public class DeploymentAwareJobExecutorTest extends PluggableProcessEngineTest {
     // 1. create another process engine
     try {
       otherProcessEngine = ProcessEngineConfiguration
-        .createProcessEngineConfigurationFromResource("camunda.cfg.xml")
+        .createProcessEngineConfigurationFromResource("orqueio.cfg.xml")
         .buildProcessEngine();
     } catch (RuntimeException ex) {
       if (ex.getCause() != null && ex.getCause() instanceof FileNotFoundException) {
@@ -232,7 +232,7 @@ public class DeploymentAwareJobExecutorTest extends PluggableProcessEngineTest {
     return deploymentId;
   }
 
-  @Deployment(resources="org/camunda/bpm/engine/test/jobexecutor/processWithTimerCatch.bpmn20.xml")
+  @Deployment(resources="io/orqueio/bpm/engine/test/jobexecutor/processWithTimerCatch.bpmn20.xml")
   @Test
   public void testIntermediateTimerEvent() {
 
@@ -258,7 +258,7 @@ public class DeploymentAwareJobExecutorTest extends PluggableProcessEngineTest {
     assertEquals(0, acquirableJobs.size());
   }
 
-  @Deployment(resources="org/camunda/bpm/engine/test/jobexecutor/processWithTimerStart.bpmn20.xml")
+  @Deployment(resources="io/orqueio/bpm/engine/test/jobexecutor/processWithTimerStart.bpmn20.xml")
   @Test
   public void testTimerStartEvent() {
 

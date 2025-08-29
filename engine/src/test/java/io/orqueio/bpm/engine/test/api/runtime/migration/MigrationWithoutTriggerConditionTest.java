@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -60,7 +60,7 @@ public class MigrationWithoutTriggerConditionTest {
     ProcessDefinition sourceProcessDefinition = testHelper.deployAndGetDefinition(Bpmn.createExecutableProcess()
       .startEvent()
       .subProcess()
-      .camundaExecutionListenerClass(ExecutionListener.EVENTNAME_END, SetVariableDelegate.class.getName())
+      .orqueioExecutionListenerClass(ExecutionListener.EVENTNAME_END, SetVariableDelegate.class.getName())
       .embeddedSubProcess()
         .startEvent()
         .intermediateCatchEvent(CONDITION_ID)
@@ -120,7 +120,7 @@ public class MigrationWithoutTriggerConditionTest {
     ProcessDefinition targetProcessDefinition = testHelper.deployAndGetDefinition(Bpmn.createExecutableProcess()
       .startEvent()
       .subProcess()
-      .camundaExecutionListenerClass(ExecutionListener.EVENTNAME_START, SetVariableDelegate.class.getName())
+      .orqueioExecutionListenerClass(ExecutionListener.EVENTNAME_START, SetVariableDelegate.class.getName())
       .embeddedSubProcess()
         .startEvent()
         .intermediateCatchEvent(CONDITION_ID)
@@ -170,7 +170,7 @@ public class MigrationWithoutTriggerConditionTest {
       Bpmn.createExecutableProcess()
         .startEvent()
         .subProcess(SUB_PROCESS_ID)
-        .camundaExecutionListenerClass(ExecutionListener.EVENTNAME_START, SetVariableDelegate.class.getName())
+        .orqueioExecutionListenerClass(ExecutionListener.EVENTNAME_START, SetVariableDelegate.class.getName())
         .embeddedSubProcess()
           .startEvent()
           .userTask(USER_TASK_ID)
@@ -219,7 +219,7 @@ public class MigrationWithoutTriggerConditionTest {
       Bpmn.createExecutableProcess(PROC_DEF_KEY)
         .startEvent()
         .subProcess(SUB_PROCESS_ID)
-        .camundaExecutionListenerClass(ExecutionListener.EVENTNAME_END, SetVariableDelegate.class.getName())
+        .orqueioExecutionListenerClass(ExecutionListener.EVENTNAME_END, SetVariableDelegate.class.getName())
         .embeddedSubProcess()
           .startEvent()
           .userTask(USER_TASK_ID)
@@ -285,7 +285,7 @@ public class MigrationWithoutTriggerConditionTest {
       Bpmn.createExecutableProcess(PROC_DEF_KEY)
         .startEvent()
         .subProcess(SUB_PROCESS_ID)
-        .camundaExecutionListenerClass(ExecutionListener.EVENTNAME_START, SetVariableDelegate.class.getName())
+        .orqueioExecutionListenerClass(ExecutionListener.EVENTNAME_START, SetVariableDelegate.class.getName())
         .embeddedSubProcess()
           .startEvent()
           .userTask(USER_TASK_ID)
@@ -342,7 +342,7 @@ public class MigrationWithoutTriggerConditionTest {
       Bpmn.createExecutableProcess(PROC_DEF_KEY)
         .startEvent()
         .subProcess(SUB_PROCESS_ID)
-        .camundaExecutionListenerClass(ExecutionListener.EVENTNAME_END, SetVariableDelegate.class.getName())
+        .orqueioExecutionListenerClass(ExecutionListener.EVENTNAME_END, SetVariableDelegate.class.getName())
         .embeddedSubProcess()
           .startEvent()
           .userTask(USER_TASK_ID)

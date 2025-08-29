@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -20,11 +20,11 @@ import java.io.InputStream;
 import io.orqueio.bpm.engine.BadUserRequestException;
 import io.orqueio.bpm.engine.exception.DeploymentResourceNotFoundException;
 import io.orqueio.bpm.engine.exception.NotFoundException;
-import io.orqueio.bpm.engine.form.CamundaFormRef;
+import io.orqueio.bpm.engine.form.OrqueioFormRef;
 import io.orqueio.bpm.engine.form.FormData;
 import io.orqueio.bpm.engine.impl.interceptor.Command;
 import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
-import io.orqueio.bpm.engine.repository.CamundaFormDefinition;
+import io.orqueio.bpm.engine.repository.OrqueioFormDefinition;
 
 /**
  *
@@ -34,9 +34,9 @@ import io.orqueio.bpm.engine.repository.CamundaFormDefinition;
 public abstract class AbstractGetDeployedFormCmd implements Command<InputStream> {
 
   protected static String EMBEDDED_KEY = "embedded:";
-  protected static String CAMUNDA_FORMS_KEY = "camunda-forms:";
+  protected static String ORQUEIO_FORMS_KEY = "orqueio-forms:";
   protected static int EMBEDDED_KEY_LENGTH = EMBEDDED_KEY.length();
-  protected static int CAMUNDA_FORMS_KEY_LENGTH = CAMUNDA_FORMS_KEY.length();
+  protected static int ORQUEIO_FORMS_KEY_LENGTH = ORQUEIO_FORMS_KEY.length();
 
   protected static String DEPLOYMENT_KEY = "deployment:";
   protected static int DEPLOYMENT_KEY_LENGTH = DEPLOYMENT_KEY.length();
@@ -49,14 +49,14 @@ public abstract class AbstractGetDeployedFormCmd implements Command<InputStream>
 
     final FormData formData = getFormData();
     String formKey = formData.getFormKey();
-    CamundaFormRef camundaFormRef = formData.getCamundaFormRef();
+    OrqueioFormRef orqueioFormRef = formData.getOrqueioFormRef();
 
     if (formKey != null) {
       return getResourceForFormKey(formData, formKey);
-    } else if(camundaFormRef != null && camundaFormRef.getKey() != null) {
-      return getResourceForCamundaFormRef(camundaFormRef, formData.getDeploymentId());
+    } else if(orqueioFormRef != null && orqueioFormRef.getKey() != null) {
+      return getResourceForOrqueioFormRef(orqueioFormRef, formData.getDeploymentId());
     } else {
-      throw new BadUserRequestException("One of the attributes 'formKey' and 'camunda:formRef' must be supplied but none were set.");
+      throw new BadUserRequestException("One of the attributes 'formKey' and 'orqueio:formRef' must be supplied but none were set.");
     }
   }
 
@@ -65,8 +65,8 @@ public abstract class AbstractGetDeployedFormCmd implements Command<InputStream>
 
     if (resourceName.startsWith(EMBEDDED_KEY)) {
       resourceName = resourceName.substring(EMBEDDED_KEY_LENGTH, resourceName.length());
-    } else if (resourceName.startsWith(CAMUNDA_FORMS_KEY)) {
-      resourceName = resourceName.substring(CAMUNDA_FORMS_KEY_LENGTH, resourceName.length());
+    } else if (resourceName.startsWith(ORQUEIO_FORMS_KEY)) {
+      resourceName = resourceName.substring(ORQUEIO_FORMS_KEY_LENGTH, resourceName.length());
     }
 
     if (!resourceName.startsWith(DEPLOYMENT_KEY)) {
@@ -78,13 +78,13 @@ public abstract class AbstractGetDeployedFormCmd implements Command<InputStream>
     return getDeploymentResource(formData.getDeploymentId(), resourceName);
   }
 
-  protected InputStream getResourceForCamundaFormRef(CamundaFormRef camundaFormRef,
+  protected InputStream getResourceForOrqueioFormRef(OrqueioFormRef orqueioFormRef,
       String deploymentId) {
-    CamundaFormDefinition definition = commandContext.runWithoutAuthorization(
-        new GetCamundaFormDefinitionCmd(camundaFormRef, deploymentId));
+    OrqueioFormDefinition definition = commandContext.runWithoutAuthorization(
+        new GetOrqueioFormDefinitionCmd(orqueioFormRef, deploymentId));
 
     if (definition == null) {
-      throw new NotFoundException("No Camunda Form Definition was found for Camunda Form Ref: " + camundaFormRef);
+      throw new NotFoundException("No Orqueio Form Definition was found for Orqueio Form Ref: " + orqueioFormRef);
     }
 
     return getDeploymentResource(definition.getDeploymentId(), definition.getResourceName());

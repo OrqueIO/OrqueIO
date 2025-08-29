@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -46,8 +46,8 @@ import io.orqueio.bpm.model.cmmn.instance.PlanItemOnPart;
 import io.orqueio.bpm.model.cmmn.instance.PlanItemTransitionStandardEvent;
 import io.orqueio.bpm.model.cmmn.instance.Sentry;
 import io.orqueio.bpm.model.cmmn.instance.Task;
-import io.orqueio.bpm.model.cmmn.instance.camunda.CamundaVariableOnPart;
-import io.orqueio.bpm.model.cmmn.instance.camunda.CamundaVariableTransitionEvent;
+import io.orqueio.bpm.model.cmmn.instance.orqueio.OrqueioVariableOnPart;
+import io.orqueio.bpm.model.cmmn.instance.orqueio.OrqueioVariableTransitionEvent;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -59,7 +59,7 @@ public class SentryHandlerTest extends CmmnElementHandlerTest {
 
   protected Sentry sentry;
   protected PlanItemOnPart onPart;
-  protected CamundaVariableOnPart variableOnPart;
+  protected OrqueioVariableOnPart variableOnPart;
   protected Task task;
   protected PlanItem planItem;
   protected ExtensionElements extensionElements;
@@ -251,8 +251,8 @@ public class SentryHandlerTest extends CmmnElementHandlerTest {
   public void sentryTransformWithVariableOnPart() {
     // given
     ExtensionElements extensionElements = createElement(sentry, "extensionElements", ExtensionElements.class);
-    CamundaVariableOnPart variableOnPart = createElement(extensionElements, null, CamundaVariableOnPart.class);
-    createElement(variableOnPart, null, CamundaVariableTransitionEvent.class);
+    OrqueioVariableOnPart variableOnPart = createElement(extensionElements, null, OrqueioVariableOnPart.class);
+    createElement(variableOnPart, null, OrqueioVariableTransitionEvent.class);
     variableOnPart.setVariableEvent(VariableTransition.create);
     variableOnPart.setVariableName("aVariable");
 
@@ -275,13 +275,13 @@ public class SentryHandlerTest extends CmmnElementHandlerTest {
   public void sentryTransformWithMultipleVariableOnPart() {
     // given
     ExtensionElements extensionElements = createElement(sentry, "extensionElements", ExtensionElements.class);
-    CamundaVariableOnPart variableOnPart = createElement(extensionElements, null, CamundaVariableOnPart.class);
-    createElement(variableOnPart, null, CamundaVariableTransitionEvent.class);
+    OrqueioVariableOnPart variableOnPart = createElement(extensionElements, null, OrqueioVariableOnPart.class);
+    createElement(variableOnPart, null, OrqueioVariableTransitionEvent.class);
     variableOnPart.setVariableEvent(VariableTransition.create);
     variableOnPart.setVariableName("aVariable");
 
-    CamundaVariableOnPart additionalVariableOnPart = createElement(extensionElements, null, CamundaVariableOnPart.class);
-    createElement(additionalVariableOnPart, null, CamundaVariableTransitionEvent.class);
+    OrqueioVariableOnPart additionalVariableOnPart = createElement(extensionElements, null, OrqueioVariableOnPart.class);
+    createElement(additionalVariableOnPart, null, OrqueioVariableTransitionEvent.class);
     additionalVariableOnPart.setVariableEvent(VariableTransition.update);
     additionalVariableOnPart.setVariableName("bVariable");
 
@@ -300,13 +300,13 @@ public class SentryHandlerTest extends CmmnElementHandlerTest {
   public void sentryTransformWithSameVariableOnPartTwice() {
     // given
     ExtensionElements extensionElements = createElement(sentry, "extensionElements", ExtensionElements.class);
-    CamundaVariableOnPart variableOnPart = createElement(extensionElements, null, CamundaVariableOnPart.class);
-    createElement(variableOnPart, null, CamundaVariableTransitionEvent.class);
+    OrqueioVariableOnPart variableOnPart = createElement(extensionElements, null, OrqueioVariableOnPart.class);
+    createElement(variableOnPart, null, OrqueioVariableTransitionEvent.class);
     variableOnPart.setVariableEvent(VariableTransition.create);
     variableOnPart.setVariableName("aVariable");
 
-    CamundaVariableOnPart additionalVariableOnPart = createElement(extensionElements, null, CamundaVariableOnPart.class);
-    createElement(additionalVariableOnPart, null, CamundaVariableTransitionEvent.class);
+    OrqueioVariableOnPart additionalVariableOnPart = createElement(extensionElements, null, OrqueioVariableOnPart.class);
+    createElement(additionalVariableOnPart, null, OrqueioVariableTransitionEvent.class);
     additionalVariableOnPart.setVariableEvent(VariableTransition.create);
     additionalVariableOnPart.setVariableName("aVariable");
 
@@ -325,7 +325,7 @@ public class SentryHandlerTest extends CmmnElementHandlerTest {
   public void sentryTransformShouldFailWithMissingVariableEvent() {
     // given
     ExtensionElements extensionElements = createElement(sentry, "extensionElements", ExtensionElements.class);
-    CamundaVariableOnPart variableOnPart = createElement(extensionElements, null, CamundaVariableOnPart.class);
+    OrqueioVariableOnPart variableOnPart = createElement(extensionElements, null, OrqueioVariableOnPart.class);
     variableOnPart.setVariableName("aVariable");
 
     // when/then
@@ -338,8 +338,8 @@ public class SentryHandlerTest extends CmmnElementHandlerTest {
   public void sentryTransformShouldFailWithInvalidVariableEvent() {
     // given
     ExtensionElements extensionElements = createElement(sentry, "extensionElements", ExtensionElements.class);
-    CamundaVariableOnPart variableOnPart = createElement(extensionElements, null, CamundaVariableOnPart.class);
-    CamundaVariableTransitionEvent transitionEvent = createElement(variableOnPart, null, CamundaVariableTransitionEvent.class);
+    OrqueioVariableOnPart variableOnPart = createElement(extensionElements, null, OrqueioVariableOnPart.class);
+    OrqueioVariableTransitionEvent transitionEvent = createElement(variableOnPart, null, OrqueioVariableTransitionEvent.class);
     transitionEvent.setTextContent("invalid");
     variableOnPart.setVariableName("aVariable");
 
@@ -353,10 +353,10 @@ public class SentryHandlerTest extends CmmnElementHandlerTest {
   public void sentryTransformWithMultipleVariableEvent() {
     // given
     ExtensionElements extensionElements = createElement(sentry, "extensionElements", ExtensionElements.class);
-    CamundaVariableOnPart variableOnPart = createElement(extensionElements, null, CamundaVariableOnPart.class);
-    CamundaVariableTransitionEvent transitionEvent = createElement(variableOnPart, null, CamundaVariableTransitionEvent.class);
+    OrqueioVariableOnPart variableOnPart = createElement(extensionElements, null, OrqueioVariableOnPart.class);
+    OrqueioVariableTransitionEvent transitionEvent = createElement(variableOnPart, null, OrqueioVariableTransitionEvent.class);
     transitionEvent.setTextContent("create");
-    CamundaVariableTransitionEvent additionalTransitionEvent = createElement(variableOnPart, null, CamundaVariableTransitionEvent.class);
+    OrqueioVariableTransitionEvent additionalTransitionEvent = createElement(variableOnPart, null, OrqueioVariableTransitionEvent.class);
     additionalTransitionEvent.setTextContent("delete");
     variableOnPart.setVariableName("aVariable");
 
@@ -379,8 +379,8 @@ public class SentryHandlerTest extends CmmnElementHandlerTest {
   public void sentryTransformShouldFailWithMissingVariableName() {
     // given
     ExtensionElements extensionElements = createElement(sentry, "extensionElements", ExtensionElements.class);
-    CamundaVariableOnPart variableOnPart = createElement(extensionElements, null, CamundaVariableOnPart.class);
-    createElement(variableOnPart, null, CamundaVariableTransitionEvent.class);
+    OrqueioVariableOnPart variableOnPart = createElement(extensionElements, null, OrqueioVariableOnPart.class);
+    createElement(variableOnPart, null, OrqueioVariableTransitionEvent.class);
     variableOnPart.setVariableEvent(VariableTransition.create);
 
     // when/then

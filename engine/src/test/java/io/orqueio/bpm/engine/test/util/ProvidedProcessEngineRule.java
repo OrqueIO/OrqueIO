@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -26,7 +26,7 @@ public class ProvidedProcessEngineRule extends ProcessEngineRule {
 
 
   /**
-   * The one process engine created from camunda.cfg.xml.
+   * The one process engine created from orqueio.cfg.xml.
    * To save the effort of building unnecessary process engines, it should 
    * be used in any test that does not require extra engine configuration.
    * It should not be reconfigured on the fly (=> violates test isolation).
@@ -68,7 +68,7 @@ public class ProvidedProcessEngineRule extends ProcessEngineRule {
   protected static ProcessEngine getOrInitializeCachedProcessEngine() {
     if (cachedProcessEngine == null) {
       cachedProcessEngine = ProcessEngineConfiguration
-          .createProcessEngineConfigurationFromResource("camunda.cfg.xml")
+          .createProcessEngineConfigurationFromResource("orqueio.cfg.xml")
           .buildProcessEngine();
     }
     return cachedProcessEngine;

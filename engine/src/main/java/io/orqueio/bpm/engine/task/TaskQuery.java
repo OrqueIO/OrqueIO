@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -59,14 +59,14 @@ public interface TaskQuery extends Query<TaskQuery, Task> {
 
   /**
    * Only select tasks with a name matching the parameter.
-   * The syntax is that of SQL: for example usage: nameLike(%camunda%).
+   * The syntax is that of SQL: for example usage: nameLike(%orqueio%).
    * The query will match the names of tasks in a case-insensitive way.
    */
   TaskQuery taskNameLike(String nameLike);
 
   /**
    * Only select tasks with a name not matching the parameter.
-   * The syntax is that of SQL: for example usage: nameNotLike(%camunda%)
+   * The syntax is that of SQL: for example usage: nameNotLike(%orqueio%)
    * The query will match the names of tasks in a case-insensitive way.
    */
   TaskQuery taskNameNotLike(String nameNotLike);
@@ -79,7 +79,7 @@ public interface TaskQuery extends Query<TaskQuery, Task> {
 
   /**
    * Only select tasks with a description matching the parameter .
-   * The syntax is that of SQL: for example usage: descriptionLike(%camunda%)
+   * The syntax is that of SQL: for example usage: descriptionLike(%orqueio%)
    * The query will match the descriptions of tasks in a case-insensitive way.
    */
   TaskQuery taskDescriptionLike(String descriptionLike);
@@ -118,7 +118,7 @@ public interface TaskQuery extends Query<TaskQuery, Task> {
 
   /**
    * Only select tasks which are matching the given user.
-   * The syntax is that of SQL: for example usage: nameLike(%camunda%)
+   * The syntax is that of SQL: for example usage: nameLike(%orqueio%)
    */
   TaskQuery taskAssigneeLike(String assignee);
 
@@ -316,7 +316,7 @@ public interface TaskQuery extends Query<TaskQuery, Task> {
 
   /**
    * Only select tasks whose candidate users belong to groups matching the given parameter.
-   * The syntax is that of SQL: for example usage: nameLike(%camunda%)
+   * The syntax is that of SQL: for example usage: nameLike(%orqueio%)
    *
    * <p>
    * Per default it only selects tasks which are not already assigned
@@ -409,13 +409,13 @@ public interface TaskQuery extends Query<TaskQuery, Task> {
 
   /**
    * Only select tasks matching the given process instance business key.
-   * The syntax is that of SQL: for example usage: nameLike(%camunda%)
+   * The syntax is that of SQL: for example usage: nameLike(%orqueio%)
    */
   TaskQuery processInstanceBusinessKeyLike(String processInstanceBusinessKey);
 
   /**
    * Only select tasks matching the given process instance business key described by the given expression.
-   * The syntax is that of SQL: for example usage: processInstanceBusinessKeyLikeExpression("${ '%camunda%' }")
+   * The syntax is that of SQL: for example usage: processInstanceBusinessKeyLikeExpression("${ '%orqueio%' }")
    */
   TaskQuery processInstanceBusinessKeyLikeExpression(String processInstanceBusinessKeyExpression);
 
@@ -483,7 +483,7 @@ public interface TaskQuery extends Query<TaskQuery, Task> {
 
   /**
    * Only select tasks with a taskDefinitionKey that match the given parameter.
-   * The syntax is that of SQL: for example usage: taskDefinitionKeyLike("%camunda%").
+   * The syntax is that of SQL: for example usage: taskDefinitionKeyLike("%orqueio%").
    * The task definition key is the id of the userTask:
    * &lt;userTask id="xxx" .../&gt;
    **/
@@ -916,7 +916,7 @@ public interface TaskQuery extends Query<TaskQuery, Task> {
 
   /**
    * If called, the form keys and form references of the fetched tasks are initialized and
-   * {@link Task#getFormKey()} and {@link Task#getCamundaFormRef()} will return a value (in
+   * {@link Task#getFormKey()} and {@link Task#getOrqueioFormRef()} will return a value (in
    * case the task has is linked to a form).
    *
    * @return the query itself

@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -59,12 +59,12 @@ public class MessageCorrelationByLocalVariablesTest {
           .subProcess("SubProcess_1").embeddedSubProcess()
           .startEvent()
             .receiveTask("MessageReceiver_1").message(TEST_MESSAGE_NAME)
-              .camundaInputParameter("localVar", "${loopVar}")
-              .camundaInputParameter("constVar", "someValue")   //to test array of parameters
+              .orqueioInputParameter("localVar", "${loopVar}")
+              .orqueioInputParameter("constVar", "someValue")   //to test array of parameters
             .userTask("UserTask_1")
           .endEvent()
           .subProcessDone()
-          .multiInstance().camundaCollection("${vars}").camundaElementVariable("loopVar").multiInstanceDone()
+          .multiInstance().orqueioCollection("${vars}").orqueioElementVariable("loopVar").multiInstanceDone()
         .endEvent().done();
 
     testHelper.deploy(model);
@@ -100,11 +100,11 @@ public class MessageCorrelationByLocalVariablesTest {
           .subProcess("SubProcess_1").embeddedSubProcess()
           .startEvent()
             .intermediateCatchEvent("MessageReceiver_1").message(TEST_MESSAGE_NAME)
-              .camundaInputParameter("localVar", "${loopVar}")
+              .orqueioInputParameter("localVar", "${loopVar}")
             .userTask("UserTask_1")
           .endEvent()
           .subProcessDone()
-          .multiInstance().camundaCollection("${vars}").camundaElementVariable("loopVar").multiInstanceDone()
+          .multiInstance().orqueioCollection("${vars}").orqueioElementVariable("loopVar").multiInstanceDone()
         .endEvent().done();
 
     testHelper.deploy(model);
@@ -137,13 +137,13 @@ public class MessageCorrelationByLocalVariablesTest {
           .subProcess("SubProcess_1").embeddedSubProcess()
           .startEvent()
             .userTask("UserTask_1")
-              .camundaInputParameter("localVar", "${loopVar}")
-              .camundaInputParameter("constVar", "someValue")   //to test array of parameters
+              .orqueioInputParameter("localVar", "${loopVar}")
+              .orqueioInputParameter("constVar", "someValue")   //to test array of parameters
               .boundaryEvent("MessageReceiver_1").message(TEST_MESSAGE_NAME)
             .userTask("UserTask_2")
           .endEvent()
           .subProcessDone()
-          .multiInstance().camundaCollection("${vars}").camundaElementVariable("loopVar").multiInstanceDone()
+          .multiInstance().orqueioCollection("${vars}").orqueioElementVariable("loopVar").multiInstanceDone()
         .endEvent().done();
 
     testHelper.deploy(model);
@@ -184,12 +184,12 @@ public class MessageCorrelationByLocalVariablesTest {
             .userTask("UserTask_1")
           .endEvent()
           .subProcessDone()
-          .multiInstance().camundaCollection("${vars}").camundaElementVariable("loopVar").multiInstanceDone()
+          .multiInstance().orqueioCollection("${vars}").orqueioElementVariable("loopVar").multiInstanceDone()
         .endEvent().done();
 
     model = modify(model).activityBuilder("MessageReceiver_1")
-        .camundaInputParameter("localVar", "${loopVar}")
-        .camundaInputParameter("constVar", "someValue")   //to test array of parameters
+        .orqueioInputParameter("localVar", "${loopVar}")
+        .orqueioInputParameter("constVar", "someValue")   //to test array of parameters
         .done();
 
     testHelper.deploy(model);
@@ -237,12 +237,12 @@ public class MessageCorrelationByLocalVariablesTest {
           .subProcess("SubProcess_1").embeddedSubProcess()
           .startEvent()
             .receiveTask("MessageReceiver_1").message(TEST_MESSAGE_NAME)
-              .camundaInputParameter("localVar", "${loopVar}")
-              .camundaInputParameter("constVar", "someValue")   //to test array of parameters
+              .orqueioInputParameter("localVar", "${loopVar}")
+              .orqueioInputParameter("constVar", "someValue")   //to test array of parameters
             .userTask("UserTask_1")
           .endEvent()
           .subProcessDone()
-          .multiInstance().camundaCollection("${vars}").camundaElementVariable("loopVar").multiInstanceDone()
+          .multiInstance().orqueioCollection("${vars}").orqueioElementVariable("loopVar").multiInstanceDone()
         .endEvent().done();
 
     testHelper.deploy(model);
@@ -274,12 +274,12 @@ public class MessageCorrelationByLocalVariablesTest {
           .subProcess("SubProcess_1").embeddedSubProcess()
           .startEvent()
             .receiveTask("MessageReceiver_1").message(TEST_MESSAGE_NAME)
-              .camundaInputParameter("localVar", "${loopVar}")
-              .camundaInputParameter("constVar", "someValue")   //to test array of parameters
+              .orqueioInputParameter("localVar", "${loopVar}")
+              .orqueioInputParameter("constVar", "someValue")   //to test array of parameters
             .userTask("UserTask_1")
           .endEvent()
           .subProcessDone()
-          .multiInstance().camundaCollection("${vars}").camundaElementVariable("loopVar").multiInstanceDone()
+          .multiInstance().orqueioCollection("${vars}").orqueioElementVariable("loopVar").multiInstanceDone()
         .endEvent().done();
 
     testHelper.deploy(model);

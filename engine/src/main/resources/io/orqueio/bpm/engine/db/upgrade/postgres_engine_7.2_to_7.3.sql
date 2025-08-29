@@ -1,8 +1,8 @@
 --
--- Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+-- Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
 -- under one or more contributor license agreements. See the NOTICE file
 -- distributed with this work for additional information regarding copyright
--- ownership. Camunda licenses this file to you under the Apache License,
+-- ownership. TOADDLATERCCS this file to you under the Apache License,
 -- Version 2.0; you may not use this file except in compliance with the License.
 -- You may obtain a copy of the License at
 --
@@ -131,14 +131,14 @@ ALTER TABLE ACT_HI_OP_LOG
 
 -- AUTHORIZATION --
 
--- add grant authorizations for group camunda-admin:
+-- add grant authorizations for group orqueio-admin:
 INSERT INTO
   ACT_RU_AUTHORIZATION (ID_, TYPE_, GROUP_ID_, RESOURCE_TYPE_, RESOURCE_ID_, PERMS_, REV_)
 VALUES
-  ('camunda-admin-grant-process-definition', 1, 'camunda-admin', 6, '*', 2147483647, 1),
-  ('camunda-admin-grant-task', 1, 'camunda-admin', 7, '*', 2147483647, 1),
-  ('camunda-admin-grant-process-instance', 1, 'camunda-admin', 8, '*', 2147483647, 1),
-  ('camunda-admin-grant-deployment', 1, 'camunda-admin', 9, '*', 2147483647, 1);
+  ('orqueio-admin-grant-process-definition', 1, 'orqueio-admin', 6, '*', 2147483647, 1),
+  ('orqueio-admin-grant-task', 1, 'orqueio-admin', 7, '*', 2147483647, 1),
+  ('orqueio-admin-grant-process-instance', 1, 'orqueio-admin', 8, '*', 2147483647, 1),
+  ('orqueio-admin-grant-deployment', 1, 'orqueio-admin', 9, '*', 2147483647, 1);
 
 -- add global grant authorizations for new authorization resources:
 -- DEPLOYMENT

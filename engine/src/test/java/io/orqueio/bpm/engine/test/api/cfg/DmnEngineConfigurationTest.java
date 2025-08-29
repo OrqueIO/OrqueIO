@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -42,7 +42,7 @@ import org.junit.Test;
  */
 public class DmnEngineConfigurationTest {
 
-  protected final static String CONFIGURATION_XML = "org/camunda/bpm/engine/test/api/cfg/custom-dmn-camunda.cfg.xml";
+  protected final static String CONFIGURATION_XML = "io/orqueio/bpm/engine/test/api/cfg/custom-dmn-orqueio.cfg.xml";
 
   protected ProcessEngine engine;
 
@@ -199,7 +199,7 @@ public class DmnEngineConfigurationTest {
 
   protected ProcessEngineConfigurationImpl createProcessEngineConfiguration() {
     return (ProcessEngineConfigurationImpl) ProcessEngineConfiguration.createStandaloneInMemProcessEngineConfiguration()
-        .setJdbcUrl("jdbc:h2:mem:camunda" + getClass().getSimpleName());
+        .setJdbcUrl("jdbc:h2:mem:orqueio" + getClass().getSimpleName());
   }
 
   protected DefaultDmnEngineConfiguration getConfigurationOfDmnEngine() {

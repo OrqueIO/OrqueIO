@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -89,7 +89,7 @@ public class MultiTenancyFormServiceCmdsTenantCheckTest {
   public void testGetStartFormWithAuthenticatedTenant() {
 
     testRule.deployForTenant(TENANT_ONE,
-      "org/camunda/bpm/engine/test/api/authorization/formKeyProcess.bpmn20.xml");
+      "io/orqueio/bpm/engine/test/api/authorization/formKeyProcess.bpmn20.xml");
 
     ProcessInstance instance = runtimeService.startProcessInstanceByKey(PROCESS_DEFINITION_KEY);
 
@@ -106,7 +106,7 @@ public class MultiTenancyFormServiceCmdsTenantCheckTest {
   public void testGetStartFormWithNoAuthenticatedTenant() {
 
     testRule.deployForTenant(TENANT_ONE,
-    "org/camunda/bpm/engine/test/api/authorization/formKeyProcess.bpmn20.xml");
+    "io/orqueio/bpm/engine/test/api/authorization/formKeyProcess.bpmn20.xml");
 
     ProcessInstance instance = runtimeService.startProcessInstanceByKey(PROCESS_DEFINITION_KEY);
 
@@ -124,7 +124,7 @@ public class MultiTenancyFormServiceCmdsTenantCheckTest {
   public void testGetStartFormWithDisabledTenantCheck() {
 
     testRule.deployForTenant(TENANT_ONE,
-    "org/camunda/bpm/engine/test/api/authorization/formKeyProcess.bpmn20.xml");
+    "io/orqueio/bpm/engine/test/api/authorization/formKeyProcess.bpmn20.xml");
 
     ProcessInstance instance = runtimeService.startProcessInstanceByKey(PROCESS_DEFINITION_KEY);
 
@@ -144,8 +144,8 @@ public class MultiTenancyFormServiceCmdsTenantCheckTest {
   public void testGetRenderedStartFormWithAuthenticatedTenant() {
 
     testRule.deployForTenant(TENANT_ONE,
-      "org/camunda/bpm/engine/test/api/form/util/VacationRequest_deprecated_forms.bpmn20.xml",
-      "org/camunda/bpm/engine/test/api/form/util/request.html");
+      "io/orqueio/bpm/engine/test/api/form/util/VacationRequest_deprecated_forms.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/api/form/util/request.html");
 
     String processDefinitionId = repositoryService.createProcessDefinitionQuery()
       .singleResult().getId();
@@ -159,8 +159,8 @@ public class MultiTenancyFormServiceCmdsTenantCheckTest {
   public void testGetRenderedStartFormWithNoAuthenticatedTenant() {
 
     testRule.deployForTenant(TENANT_ONE,
-      "org/camunda/bpm/engine/test/api/form/util/VacationRequest_deprecated_forms.bpmn20.xml",
-      "org/camunda/bpm/engine/test/api/form/util/request.html");
+      "io/orqueio/bpm/engine/test/api/form/util/VacationRequest_deprecated_forms.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/api/form/util/request.html");
 
     String processDefinitionId = repositoryService.createProcessDefinitionQuery()
       .singleResult().getId();
@@ -178,8 +178,8 @@ public class MultiTenancyFormServiceCmdsTenantCheckTest {
   public void testGetRenderedStartFormWithDisabledTenantCheck() {
 
     testRule.deployForTenant(TENANT_ONE,
-      "org/camunda/bpm/engine/test/api/form/util/VacationRequest_deprecated_forms.bpmn20.xml",
-      "org/camunda/bpm/engine/test/api/form/util/request.html");
+      "io/orqueio/bpm/engine/test/api/form/util/VacationRequest_deprecated_forms.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/api/form/util/request.html");
 
     String processDefinitionId = repositoryService.createProcessDefinitionQuery()
       .singleResult().getId();
@@ -195,8 +195,8 @@ public class MultiTenancyFormServiceCmdsTenantCheckTest {
   public void testSubmitStartFormWithAuthenticatedTenant() {
 
     testRule.deployForTenant(TENANT_ONE,
-      "org/camunda/bpm/engine/test/api/form/util/VacationRequest_deprecated_forms.bpmn20.xml",
-      "org/camunda/bpm/engine/test/api/form/util/request.html");
+      "io/orqueio/bpm/engine/test/api/form/util/VacationRequest_deprecated_forms.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/api/form/util/request.html");
 
     String processDefinitionId = repositoryService.createProcessDefinitionQuery()
       .singleResult().getId();
@@ -213,8 +213,8 @@ public class MultiTenancyFormServiceCmdsTenantCheckTest {
   public void testSubmitStartFormWithNoAuthenticatedTenant() {
 
     testRule.deployForTenant(TENANT_ONE,
-      "org/camunda/bpm/engine/test/api/form/util/VacationRequest_deprecated_forms.bpmn20.xml",
-      "org/camunda/bpm/engine/test/api/form/util/request.html");
+      "io/orqueio/bpm/engine/test/api/form/util/VacationRequest_deprecated_forms.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/api/form/util/request.html");
 
     String processDefinitionId = repositoryService.createProcessDefinitionQuery()
       .singleResult().getId();
@@ -236,8 +236,8 @@ public class MultiTenancyFormServiceCmdsTenantCheckTest {
   public void testSubmitStartFormWithDisabledTenantcheck() {
 
     testRule.deployForTenant(TENANT_ONE,
-      "org/camunda/bpm/engine/test/api/form/util/VacationRequest_deprecated_forms.bpmn20.xml",
-      "org/camunda/bpm/engine/test/api/form/util/request.html");
+      "io/orqueio/bpm/engine/test/api/form/util/VacationRequest_deprecated_forms.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/api/form/util/request.html");
 
     String processDefinitionId = repositoryService.createProcessDefinitionQuery()
       .singleResult().getId();
@@ -257,7 +257,7 @@ public class MultiTenancyFormServiceCmdsTenantCheckTest {
   @Test
   public void testGetStartFormKeyWithAuthenticatedTenant() {
 
-    testRule.deployForTenant(TENANT_ONE, "org/camunda/bpm/engine/test/api/authorization/formKeyProcess.bpmn20.xml");
+    testRule.deployForTenant(TENANT_ONE, "io/orqueio/bpm/engine/test/api/authorization/formKeyProcess.bpmn20.xml");
 
     String processDefinitionId = runtimeService.startProcessInstanceByKey(PROCESS_DEFINITION_KEY).getProcessDefinitionId();
 
@@ -269,7 +269,7 @@ public class MultiTenancyFormServiceCmdsTenantCheckTest {
   @Test
   public void testGetStartFormKeyWithNoAuthenticatedTenant() {
 
-    testRule.deployForTenant(TENANT_ONE, "org/camunda/bpm/engine/test/api/authorization/formKeyProcess.bpmn20.xml");
+    testRule.deployForTenant(TENANT_ONE, "io/orqueio/bpm/engine/test/api/authorization/formKeyProcess.bpmn20.xml");
 
     String processDefinitionId = runtimeService.startProcessInstanceByKey(PROCESS_DEFINITION_KEY).getProcessDefinitionId();
 
@@ -285,7 +285,7 @@ public class MultiTenancyFormServiceCmdsTenantCheckTest {
   @Test
   public void testGetStartFormKeyWithDisabledTenantCheck() {
 
-    testRule.deployForTenant(TENANT_ONE, "org/camunda/bpm/engine/test/api/authorization/formKeyProcess.bpmn20.xml");
+    testRule.deployForTenant(TENANT_ONE, "io/orqueio/bpm/engine/test/api/authorization/formKeyProcess.bpmn20.xml");
 
     String processDefinitionId = runtimeService.startProcessInstanceByKey(PROCESS_DEFINITION_KEY).getProcessDefinitionId();
 
@@ -301,7 +301,7 @@ public class MultiTenancyFormServiceCmdsTenantCheckTest {
   @Test
   public void testGetTaskFormWithAuthenticatedTenant() {
 
-    testRule.deployForTenant(TENANT_ONE, "org/camunda/bpm/engine/test/api/authorization/formKeyProcess.bpmn20.xml");
+    testRule.deployForTenant(TENANT_ONE, "io/orqueio/bpm/engine/test/api/authorization/formKeyProcess.bpmn20.xml");
 
     runtimeService.startProcessInstanceByKey(PROCESS_DEFINITION_KEY);
 
@@ -319,7 +319,7 @@ public class MultiTenancyFormServiceCmdsTenantCheckTest {
   @Test
   public void testGetTaskFormWithNoAuthenticatedTenant() {
 
-    testRule.deployForTenant(TENANT_ONE, "org/camunda/bpm/engine/test/api/authorization/formKeyProcess.bpmn20.xml");
+    testRule.deployForTenant(TENANT_ONE, "io/orqueio/bpm/engine/test/api/authorization/formKeyProcess.bpmn20.xml");
 
     runtimeService.startProcessInstanceByKey(PROCESS_DEFINITION_KEY);
 
@@ -337,7 +337,7 @@ public class MultiTenancyFormServiceCmdsTenantCheckTest {
   @Test
   public void testGetTaskFormWithDisabledTenantCheck() {
 
-    testRule.deployForTenant(TENANT_ONE, "org/camunda/bpm/engine/test/api/authorization/formKeyProcess.bpmn20.xml");
+    testRule.deployForTenant(TENANT_ONE, "io/orqueio/bpm/engine/test/api/authorization/formKeyProcess.bpmn20.xml");
 
     runtimeService.startProcessInstanceByKey(PROCESS_DEFINITION_KEY);
 
@@ -359,7 +359,7 @@ public class MultiTenancyFormServiceCmdsTenantCheckTest {
   public void testSubmitTaskFormWithAuthenticatedTenant() {
 
     testRule.deployForTenant(TENANT_ONE,
-    "org/camunda/bpm/engine/test/api/authorization/formKeyProcess.bpmn20.xml");
+    "io/orqueio/bpm/engine/test/api/authorization/formKeyProcess.bpmn20.xml");
 
     String processDefinitionId = repositoryService.createProcessDefinitionQuery()
       .singleResult().getId();
@@ -382,7 +382,7 @@ public class MultiTenancyFormServiceCmdsTenantCheckTest {
   public void testSubmitTaskFormWithNoAuthenticatedTenant() {
 
     testRule.deployForTenant(TENANT_ONE,
-      "org/camunda/bpm/engine/test/api/authorization/formKeyProcess.bpmn20.xml");
+      "io/orqueio/bpm/engine/test/api/authorization/formKeyProcess.bpmn20.xml");
 
     String processDefinitionId = repositoryService.createProcessDefinitionQuery()
       .singleResult().getId();
@@ -404,7 +404,7 @@ public class MultiTenancyFormServiceCmdsTenantCheckTest {
   public void testSubmitTaskFormWithDisabledTenantCheck() {
 
     testRule.deployForTenant(TENANT_ONE,
-      "org/camunda/bpm/engine/test/api/authorization/formKeyProcess.bpmn20.xml");
+      "io/orqueio/bpm/engine/test/api/authorization/formKeyProcess.bpmn20.xml");
 
     String processDefinitionId = repositoryService.createProcessDefinitionQuery()
       .singleResult().getId();
@@ -428,8 +428,8 @@ public class MultiTenancyFormServiceCmdsTenantCheckTest {
 
     // deploy tenants
     testRule.deployForTenant(TENANT_ONE,
-      "org/camunda/bpm/engine/test/api/form/FormsProcess.bpmn20.xml",
-      "org/camunda/bpm/engine/test/api/form/task.html").getId();
+      "io/orqueio/bpm/engine/test/api/form/FormsProcess.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/api/form/task.html").getId();
 
     String procDefId = repositoryService.createProcessDefinitionQuery().singleResult().getId();
 
@@ -450,8 +450,8 @@ public class MultiTenancyFormServiceCmdsTenantCheckTest {
 
     // deploy tenants
     testRule.deployForTenant(TENANT_ONE,
-      "org/camunda/bpm/engine/test/api/form/FormsProcess.bpmn20.xml",
-      "org/camunda/bpm/engine/test/api/form/task.html").getId();
+      "io/orqueio/bpm/engine/test/api/form/FormsProcess.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/api/form/task.html").getId();
 
     String procDefId = repositoryService.createProcessDefinitionQuery().singleResult().getId();
 
@@ -475,8 +475,8 @@ public class MultiTenancyFormServiceCmdsTenantCheckTest {
 
     // deploy tenants
     testRule.deployForTenant(TENANT_ONE,
-      "org/camunda/bpm/engine/test/api/form/FormsProcess.bpmn20.xml",
-      "org/camunda/bpm/engine/test/api/form/task.html").getId();
+      "io/orqueio/bpm/engine/test/api/form/FormsProcess.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/api/form/task.html").getId();
 
     String procDefId = repositoryService.createProcessDefinitionQuery().singleResult().getId();
 
@@ -498,7 +498,7 @@ public class MultiTenancyFormServiceCmdsTenantCheckTest {
   public void testGetTaskFormKeyWithAuthenticatedTenant() {
 
     testRule.deployForTenant(TENANT_ONE,
-      "org/camunda/bpm/engine/test/api/authorization/formKeyProcess.bpmn20.xml");
+      "io/orqueio/bpm/engine/test/api/authorization/formKeyProcess.bpmn20.xml");
 
     runtimeService.startProcessInstanceByKey(PROCESS_DEFINITION_KEY);
 
@@ -513,7 +513,7 @@ public class MultiTenancyFormServiceCmdsTenantCheckTest {
   public void testGetTaskFormKeyWithNoAuthenticatedTenant() {
 
     testRule.deployForTenant(TENANT_ONE,
-      "org/camunda/bpm/engine/test/api/authorization/formKeyProcess.bpmn20.xml");
+      "io/orqueio/bpm/engine/test/api/authorization/formKeyProcess.bpmn20.xml");
 
     runtimeService.startProcessInstanceByKey(PROCESS_DEFINITION_KEY);
 
@@ -533,7 +533,7 @@ public class MultiTenancyFormServiceCmdsTenantCheckTest {
   public void testGetTaskFormKeyWithDisabledTenantCheck() {
 
     testRule.deployForTenant(TENANT_ONE,
-      "org/camunda/bpm/engine/test/api/authorization/formKeyProcess.bpmn20.xml");
+      "io/orqueio/bpm/engine/test/api/authorization/formKeyProcess.bpmn20.xml");
 
     runtimeService.startProcessInstanceByKey(PROCESS_DEFINITION_KEY);
 

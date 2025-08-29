@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -20,7 +20,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.orqueio.bpm.engine.form.CamundaFormRef;
+import io.orqueio.bpm.engine.form.OrqueioFormRef;
 import io.orqueio.bpm.engine.form.FormData;
 import io.orqueio.bpm.engine.form.FormField;
 import io.orqueio.bpm.engine.form.FormProperty;
@@ -34,7 +34,7 @@ public abstract class FormDataImpl implements FormData, Serializable {
   private static final long serialVersionUID = 1L;
 
   protected String formKey;
-  protected CamundaFormRef camundaFormRef;
+  protected OrqueioFormRef orqueioFormRef;
   protected String deploymentId;
   protected List<FormProperty> formProperties = new ArrayList<>();
 
@@ -50,12 +50,12 @@ public abstract class FormDataImpl implements FormData, Serializable {
     this.formKey = formKey;
   }
 
-  public CamundaFormRef getCamundaFormRef() {
-    return camundaFormRef;
+  public OrqueioFormRef getOrqueioFormRef() {
+    return orqueioFormRef;
   }
 
-  public void setCamundaFormRef(CamundaFormRef camundaFormRef) {
-    this.camundaFormRef = camundaFormRef;
+  public void setOrqueioFormRef(OrqueioFormRef orqueioFormRef) {
+    this.orqueioFormRef = orqueioFormRef;
   }
 
   public String getDeploymentId() {

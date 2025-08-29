@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -39,9 +39,9 @@ import io.orqueio.bpm.engine.repository.Deployment;
 import io.orqueio.bpm.model.cmmn.instance.CmmnElement;
 import io.orqueio.bpm.model.cmmn.instance.HumanTask;
 import io.orqueio.bpm.model.cmmn.instance.Role;
-import io.orqueio.bpm.model.cmmn.instance.camunda.CamundaField;
-import io.orqueio.bpm.model.cmmn.instance.camunda.CamundaScript;
-import io.orqueio.bpm.model.cmmn.instance.camunda.CamundaTaskListener;
+import io.orqueio.bpm.model.cmmn.instance.orqueio.OrqueioField;
+import io.orqueio.bpm.model.cmmn.instance.orqueio.OrqueioScript;
+import io.orqueio.bpm.model.cmmn.instance.orqueio.OrqueioTaskListener;
 
 /**
  * @author Roman Smirnov
@@ -145,7 +145,7 @@ public class HumanTaskItemHandler extends TaskItemHandler {
   protected void initializeTaskDefinitionFormKey(CmmnElement element, TaskDefinition taskDefinition, CmmnHandlerContext context) {
     HumanTask definition = getDefinition(element);
 
-    String formKey = definition.getCamundaFormKey();
+    String formKey = definition.getOrqueioFormKey();
     if (formKey != null) {
       ExpressionManager expressionManager = context.getExpressionManager();
       Expression formKeyExpression = expressionManager.createExpression(formKey);
@@ -161,7 +161,7 @@ public class HumanTaskItemHandler extends TaskItemHandler {
     if (performer != null) {
       assignee = performer.getName();
     } else {
-      assignee = definition.getCamundaAssignee();
+      assignee = definition.getOrqueioAssignee();
     }
 
     if (assignee != null) {
@@ -175,7 +175,7 @@ public class HumanTaskItemHandler extends TaskItemHandler {
     HumanTask definition = getDefinition(element);
     ExpressionManager expressionManager = context.getExpressionManager();
 
-    List<String> candidateUsers = definition.getCamundaCandidateUsersList();
+    List<String> candidateUsers = definition.getOrqueioCandidateUsersList();
     for (String candidateUser : candidateUsers) {
       Expression candidateUserExpression = expressionManager.createExpression(candidateUser);
       taskDefinition.addCandidateUserIdExpression(candidateUserExpression);
@@ -186,7 +186,7 @@ public class HumanTaskItemHandler extends TaskItemHandler {
     HumanTask definition = getDefinition(element);
     ExpressionManager expressionManager = context.getExpressionManager();
 
-    List<String> candidateGroups = definition.getCamundaCandidateGroupsList();
+    List<String> candidateGroups = definition.getOrqueioCandidateGroupsList();
     for (String candidateGroup : candidateGroups) {
       Expression candidateGroupExpression = expressionManager.createExpression(candidateGroup);
       taskDefinition.addCandidateGroupIdExpression(candidateGroupExpression);
@@ -196,7 +196,7 @@ public class HumanTaskItemHandler extends TaskItemHandler {
   protected void initializeTaskDefinitionDueDate(CmmnElement element, TaskDefinition taskDefinition, CmmnHandlerContext context) {
     HumanTask definition = getDefinition(element);
 
-    String dueDate = definition.getCamundaDueDate();
+    String dueDate = definition.getOrqueioDueDate();
     if (dueDate != null) {
       ExpressionManager expressionManager = context.getExpressionManager();
       Expression dueDateExpression = expressionManager.createExpression(dueDate);
@@ -207,7 +207,7 @@ public class HumanTaskItemHandler extends TaskItemHandler {
   protected void initializeTaskDefinitionFollowUpDate(CmmnElement element, TaskDefinition taskDefinition, CmmnHandlerContext context) {
     HumanTask definition = getDefinition(element);
 
-    String followUpDate = definition.getCamundaFollowUpDate();
+    String followUpDate = definition.getOrqueioFollowUpDate();
     if (followUpDate != null) {
       ExpressionManager expressionManager = context.getExpressionManager();
       Expression followUpDateExpression = expressionManager.createExpression(followUpDate);
@@ -218,7 +218,7 @@ public class HumanTaskItemHandler extends TaskItemHandler {
   protected void initializeTaskDefinitionPriority(CmmnElement element, TaskDefinition taskDefinition, CmmnHandlerContext context) {
     HumanTask definition = getDefinition(element);
 
-    String priority = definition.getCamundaPriority();
+    String priority = definition.getOrqueioPriority();
     if (priority != null) {
       ExpressionManager expressionManager = context.getExpressionManager();
       Expression priorityExpression = expressionManager.createExpression(priority);
@@ -246,12 +246,12 @@ public class HumanTaskItemHandler extends TaskItemHandler {
   protected void initializeTaskListeners(CmmnElement element, CmmnActivity activity, CmmnHandlerContext context, TaskDefinition taskDefinition) {
     HumanTask humanTask = getDefinition(element);
 
-    List<CamundaTaskListener> listeners = queryExtensionElementsByClass(humanTask, CamundaTaskListener.class);
+    List<OrqueioTaskListener> listeners = queryExtensionElementsByClass(humanTask, OrqueioTaskListener.class);
 
-    for (CamundaTaskListener listener : listeners) {
+    for (OrqueioTaskListener listener : listeners) {
       TaskListener taskListener = initializeTaskListener(element, activity, context, listener);
 
-      String eventName = listener.getCamundaEvent();
+      String eventName = listener.getOrqueioEvent();
       if (eventName != null) {
         taskDefinition.addTaskListener(eventName, taskListener);
 
@@ -265,18 +265,18 @@ public class HumanTaskItemHandler extends TaskItemHandler {
     }
   }
 
-  protected TaskListener initializeTaskListener(CmmnElement element, CmmnActivity activity, CmmnHandlerContext context, CamundaTaskListener listener) {
-    Collection<CamundaField> fields = listener.getCamundaFields();
+  protected TaskListener initializeTaskListener(CmmnElement element, CmmnActivity activity, CmmnHandlerContext context, OrqueioTaskListener listener) {
+    Collection<OrqueioField> fields = listener.getOrqueioFields();
     List<FieldDeclaration> fieldDeclarations = initializeFieldDeclarations(element, activity, context, fields);
 
     ExpressionManager expressionManager = context.getExpressionManager();
 
     TaskListener taskListener = null;
 
-    String className = listener.getCamundaClass();
-    String expression = listener.getCamundaExpression();
-    String delegateExpression = listener.getCamundaDelegateExpression();
-    CamundaScript scriptElement = listener.getCamundaScript();
+    String className = listener.getOrqueioClass();
+    String expression = listener.getOrqueioExpression();
+    String delegateExpression = listener.getOrqueioDelegateExpression();
+    OrqueioScript scriptElement = listener.getOrqueioScript();
 
     if (className != null) {
       taskListener = new ClassDelegateTaskListener(className, fieldDeclarations);

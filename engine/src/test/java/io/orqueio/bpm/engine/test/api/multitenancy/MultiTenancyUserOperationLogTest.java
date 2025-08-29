@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -93,7 +93,7 @@ public class MultiTenancyUserOperationLogTest {
   protected static final BpmnModelInstance MODEL = Bpmn.createExecutableProcess(PROCESS_NAME)
       .startEvent().userTask(TASK_ID).done();
   protected static final BpmnModelInstance MODEL_JOB = Bpmn.createExecutableProcess(PROCESS_NAME)
-      .startEvent().userTask(TASK_ID).camundaAsyncBefore().done();
+      .startEvent().userTask(TASK_ID).orqueioAsyncBefore().done();
 
   protected ProcessEngineRule engineRule = new ProvidedProcessEngineRule();
   protected ProcessEngineTestRule testRule = new ProcessEngineTestRule(engineRule);
@@ -406,7 +406,7 @@ public class MultiTenancyUserOperationLogTest {
   public void shouldLogDeployOperationWithTenant() {
     // given
     identityService.setAuthentication(USER_ID, null, Arrays.asList(TENANT_ONE));
-    String deploymentId = testRule.deployForTenant(TENANT_ONE, "org/camunda/bpm/engine/test/api/externaltask/externalTaskPriorityExpression.bpmn20.xml").getId();
+    String deploymentId = testRule.deployForTenant(TENANT_ONE, "io/orqueio/bpm/engine/test/api/externaltask/externalTaskPriorityExpression.bpmn20.xml").getId();
 
     // when
     repositoryService.deleteDeployment(deploymentId);
@@ -446,7 +446,7 @@ public class MultiTenancyUserOperationLogTest {
   @Test
   public void shouldLogExternalTaskOperationWithTenant() {
     // given
-    testRule.deployForTenant(TENANT_ONE, "org/camunda/bpm/engine/test/api/externaltask/externalTaskPriorityExpression.bpmn20.xml");
+    testRule.deployForTenant(TENANT_ONE, "io/orqueio/bpm/engine/test/api/externaltask/externalTaskPriorityExpression.bpmn20.xml");
     identityService.setAuthentication(USER_ID, null, Arrays.asList(TENANT_ONE));
     runtimeService.startProcessInstanceByKey("twoExternalTaskWithPriorityProcess", Collections.<String, Object>singletonMap("priority", 14));
     ExternalTaskService externalTaskService = engineRule.getExternalTaskService();
@@ -466,7 +466,7 @@ public class MultiTenancyUserOperationLogTest {
   @Test
   public void shouldLogDecisionDefinitionOperationWithTenant() {
     // given
-    testRule.deployForTenant(TENANT_ONE, "org/camunda/bpm/engine/test/api/dmn/Example.dmn");
+    testRule.deployForTenant(TENANT_ONE, "io/orqueio/bpm/engine/test/api/dmn/Example.dmn");
     identityService.setAuthentication(USER_ID, null, Arrays.asList(TENANT_ONE));
     DecisionDefinition decisionDefinition = repositoryService.createDecisionDefinitionQuery().singleResult();
 
@@ -487,7 +487,7 @@ public class MultiTenancyUserOperationLogTest {
   @Test
   public void shouldLogDecisionInstanceOperationWithTenant() {
     // given
-    testRule.deployForTenant(TENANT_ONE, "org/camunda/bpm/engine/test/api/dmn/Example.dmn");
+    testRule.deployForTenant(TENANT_ONE, "io/orqueio/bpm/engine/test/api/dmn/Example.dmn");
     identityService.setAuthentication(USER_ID, null, Arrays.asList(TENANT_ONE));
     engineRule.getDecisionService().evaluateDecisionByKey("decision")
     .variables(
@@ -513,7 +513,7 @@ public class MultiTenancyUserOperationLogTest {
   @Test
   public void shouldLogDecisionInstancesOperationWithoutTenant() {
     // given
-    testRule.deployForTenant(TENANT_ONE, "org/camunda/bpm/engine/test/api/dmn/Example.dmn");
+    testRule.deployForTenant(TENANT_ONE, "io/orqueio/bpm/engine/test/api/dmn/Example.dmn");
     identityService.setAuthentication(USER_ID, null, Arrays.asList(TENANT_ONE));
     engineRule.getDecisionService().evaluateDecisionByKey("decision")
       .variables(
@@ -543,7 +543,7 @@ public class MultiTenancyUserOperationLogTest {
   @Test
   public void shouldLogCaseDefinitionOperationWithTenant() {
     // given
-    testRule.deployForTenant(TENANT_ONE, "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn");
+    testRule.deployForTenant(TENANT_ONE, "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn");
     identityService.setAuthentication(USER_ID, null, Arrays.asList(TENANT_ONE));
     CaseDefinition caseDefinition = repositoryService.createCaseDefinitionQuery().singleResult();
 
@@ -564,7 +564,7 @@ public class MultiTenancyUserOperationLogTest {
   @Test
   public void shouldLogCaseInstanceOperationWithTenant() {
     // given
-    testRule.deployForTenant(TENANT_ONE, "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn");
+    testRule.deployForTenant(TENANT_ONE, "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn");
     identityService.setAuthentication(USER_ID, null, Arrays.asList(TENANT_ONE));
     CaseDefinition caseDefinition = repositoryService.createCaseDefinitionQuery().singleResult();
     CaseService caseService = engineRule.getCaseService();

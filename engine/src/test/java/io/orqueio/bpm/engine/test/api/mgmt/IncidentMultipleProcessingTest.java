@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -84,7 +84,7 @@ public class IncidentMultipleProcessingTest {
     assertThat(incidentHandler).isInstanceOf(CompositeIncidentHandler.class);
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/mgmt/IncidentTest.testShouldCreateOneIncident.bpmn" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/mgmt/IncidentTest.testShouldCreateOneIncident.bpmn" })
   @Test
   public void shouldCreateOneIncident() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("failingProcess");
@@ -100,7 +100,7 @@ public class IncidentMultipleProcessingTest {
     assertThat(JOB_HANDLER.getDeleteEvents()).isEmpty();
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/mgmt/IncidentTest.testShouldCreateOneIncident.bpmn" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/mgmt/IncidentTest.testShouldCreateOneIncident.bpmn" })
   @Test
   public void shouldResolveIncidentAfterJobRetriesRefresh() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("failingProcess");
@@ -124,7 +124,7 @@ public class IncidentMultipleProcessingTest {
     assertThat(JOB_HANDLER.getDeleteEvents()).isEmpty();
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/mgmt/IncidentTest.testShouldCreateOneIncident.bpmn" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/mgmt/IncidentTest.testShouldCreateOneIncident.bpmn" })
   @Test
   public void shouldDeleteIncidentAfterJobHasBeenDeleted() {
     // start failing process

@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -30,9 +30,9 @@ import io.orqueio.bpm.engine.impl.util.xml.Parser;
 public class BpmPlatformXmlParser extends Parser {
 
   /**
-   * The Camunda Platform namespace
+   * The Orqueio Platform namespace
    */
-  public static final String BPM_PLATFORM_NS = "http://www.camunda.org/schema/1.0/BpmPlatform";
+  public static final String BPM_PLATFORM_NS = "http://www.orqueio.io/schema/1.0/BpmPlatform";
 
   /**
    * The location of the XSD file in the classpath.

@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -57,8 +57,8 @@ public class CaseCallActivityTest extends CmmnTest {
   protected final String HUMAN_TASK_ID = "PI_HumanTask_1";
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/bpmn/callactivity/CaseCallActivityTest.testCallCaseAsConstant.bpmn20.xml",
-      "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
+      "io/orqueio/bpm/engine/test/bpmn/callactivity/CaseCallActivityTest.testCallCaseAsConstant.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
     })
   @Test
   public void testCallCaseAsConstant() {
@@ -85,8 +85,8 @@ public class CaseCallActivityTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/bpmn/callactivity/CaseCallActivityTest.testCallCaseAsExpressionStartsWithDollar.bpmn20.xml",
-      "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
+      "io/orqueio/bpm/engine/test/bpmn/callactivity/CaseCallActivityTest.testCallCaseAsExpressionStartsWithDollar.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
     })
   @Test
   public void testCallCaseAsExpressionStartsWithDollar() {
@@ -113,8 +113,8 @@ public class CaseCallActivityTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/bpmn/callactivity/CaseCallActivityTest.testCallCaseAsExpressionStartsWithHash.bpmn20.xml",
-      "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
+      "io/orqueio/bpm/engine/test/bpmn/callactivity/CaseCallActivityTest.testCallCaseAsExpressionStartsWithHash.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
     })
   @Test
   public void testCallCaseAsExpressionStartsWithHash() {
@@ -141,8 +141,8 @@ public class CaseCallActivityTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/callactivity/CaseCallActivityTest.testCallCaseWithCompositeExpression.bpmn20.xml",
-    "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/CaseCallActivityTest.testCallCaseWithCompositeExpression.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
   })
   @Test
   public void testCallCaseWithCompositeExpression() {
@@ -169,13 +169,13 @@ public class CaseCallActivityTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/bpmn/callactivity/CaseCallActivityTest.testCallLatestCase.bpmn20.xml",
-      "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
+      "io/orqueio/bpm/engine/test/bpmn/callactivity/CaseCallActivityTest.testCallLatestCase.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
     })
   @Test
   public void testCallLatestCase() {
     // given
-    String cmmnResourceName = "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn";
+    String cmmnResourceName = "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn";
 
     String deploymentId = repositoryService.createDeployment()
         .addClasspathResource(cmmnResourceName)
@@ -214,8 +214,8 @@ public class CaseCallActivityTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/bpmn/callactivity/CaseCallActivityTest.testCallCaseByDeployment.bpmn20.xml",
-      "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
+      "io/orqueio/bpm/engine/test/bpmn/callactivity/CaseCallActivityTest.testCallCaseByDeployment.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
     })
   @Test
   public void testCallCaseByDeployment() {
@@ -226,7 +226,7 @@ public class CaseCallActivityTest extends CmmnTest {
       .singleResult()
       .getId();
 
-    String cmmnResourceName = "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn";
+    String cmmnResourceName = "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn";
     String deploymentId = repositoryService.createDeployment()
             .addClasspathResource(cmmnResourceName)
             .deploy()
@@ -264,14 +264,14 @@ public class CaseCallActivityTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/bpmn/callactivity/CaseCallActivityTest.testCallCaseByVersion.bpmn20.xml",
-      "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
+      "io/orqueio/bpm/engine/test/bpmn/callactivity/CaseCallActivityTest.testCallCaseByVersion.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
     })
   @Test
   public void testCallCaseByVersion() {
     // given
 
-    String cmmnResourceName = "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn";
+    String cmmnResourceName = "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn";
     String secondDeploymentId = repositoryService.createDeployment()
             .addClasspathResource(cmmnResourceName)
             .deploy()
@@ -315,14 +315,14 @@ public class CaseCallActivityTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/bpmn/callactivity/CaseCallActivityTest.testCallCaseByVersionAsExpression.bpmn20.xml",
-      "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
+      "io/orqueio/bpm/engine/test/bpmn/callactivity/CaseCallActivityTest.testCallCaseByVersionAsExpression.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
     })
   @Test
   public void testCallCaseByVersionAsExpression() {
     // given
 
-    String cmmnResourceName = "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn";
+    String cmmnResourceName = "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn";
 
     String secondDeploymentId = repositoryService.createDeployment()
             .addClasspathResource(cmmnResourceName)
@@ -365,7 +365,7 @@ public class CaseCallActivityTest extends CmmnTest {
     repositoryService.deleteDeployment(thirdDeploymentId, true);
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/bpmn/callactivity/CaseCallActivityTest.testCallCaseAsConstant.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/bpmn/callactivity/CaseCallActivityTest.testCallCaseAsConstant.bpmn20.xml" })
   @Test
   public void testCaseNotFound() {
     // given
@@ -379,8 +379,8 @@ public class CaseCallActivityTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/bpmn/callactivity/CaseCallActivityTest.testInputBusinessKey.bpmn20.xml",
-      "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
+      "io/orqueio/bpm/engine/test/bpmn/callactivity/CaseCallActivityTest.testInputBusinessKey.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
     })
   @Test
   public void testInputBusinessKey() {
@@ -408,8 +408,8 @@ public class CaseCallActivityTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/bpmn/callactivity/CaseCallActivityTest.testInputDifferentBusinessKey.bpmn20.xml",
-      "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
+      "io/orqueio/bpm/engine/test/bpmn/callactivity/CaseCallActivityTest.testInputDifferentBusinessKey.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
     })
   @Test
   public void testInputDifferentBusinessKey() {
@@ -440,8 +440,8 @@ public class CaseCallActivityTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/bpmn/callactivity/CaseCallActivityTest.testInputSource.bpmn20.xml",
-      "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
+      "io/orqueio/bpm/engine/test/bpmn/callactivity/CaseCallActivityTest.testInputSource.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
     })
   @Test
   public void testInputSource() {
@@ -491,8 +491,8 @@ public class CaseCallActivityTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/bpmn/callactivity/CaseCallActivityTest.testInputSourceDifferentTarget.bpmn20.xml",
-      "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
+      "io/orqueio/bpm/engine/test/bpmn/callactivity/CaseCallActivityTest.testInputSourceDifferentTarget.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
     })
   @Test
   public void testInputSourceDifferentTarget() {
@@ -541,8 +541,8 @@ public class CaseCallActivityTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/bpmn/callactivity/CaseCallActivityTest.testInputSource.bpmn20.xml",
-      "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
+      "io/orqueio/bpm/engine/test/bpmn/callactivity/CaseCallActivityTest.testInputSource.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
     })
   @Test
   public void testInputSourceNullValue() {
@@ -586,8 +586,8 @@ public class CaseCallActivityTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/bpmn/callactivity/CaseCallActivityTest.testInputSourceExpression.bpmn20.xml",
-      "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
+      "io/orqueio/bpm/engine/test/bpmn/callactivity/CaseCallActivityTest.testInputSourceExpression.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
     })
   @Test
   public void testInputSourceExpression() {
@@ -635,8 +635,8 @@ public class CaseCallActivityTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/callactivity/CaseCallActivityTest.testInputSourceAsCompositeExpression.bpmn20.xml",
-    "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/CaseCallActivityTest.testInputSourceAsCompositeExpression.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
   })
   @Test
   public void testInputSourceAsCompositeExpression() {
@@ -684,8 +684,8 @@ public class CaseCallActivityTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/bpmn/callactivity/CaseCallActivityTest.testInputAll.bpmn20.xml",
-      "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
+      "io/orqueio/bpm/engine/test/bpmn/callactivity/CaseCallActivityTest.testInputAll.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
     })
   @Test
   public void testInputAll() {
@@ -732,8 +732,8 @@ public class CaseCallActivityTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/bpmn/callactivity/CaseCallActivityTest.testCompleteCase.bpmn20.xml",
-      "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
+      "io/orqueio/bpm/engine/test/bpmn/callactivity/CaseCallActivityTest.testCompleteCase.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
     })
   @Test
   public void testCompleteCase() {
@@ -764,8 +764,8 @@ public class CaseCallActivityTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/bpmn/callactivity/CaseCallActivityTest.testOutputSource.bpmn20.xml",
-      "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
+      "io/orqueio/bpm/engine/test/bpmn/callactivity/CaseCallActivityTest.testOutputSource.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
     })
   @Test
   public void testOutputSource() {
@@ -818,8 +818,8 @@ public class CaseCallActivityTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/bpmn/callactivity/CaseCallActivityTest.testOutputSourceDifferentTarget.bpmn20.xml",
-      "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
+      "io/orqueio/bpm/engine/test/bpmn/callactivity/CaseCallActivityTest.testOutputSourceDifferentTarget.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
     })
   @Test
   public void testOutputSourceDifferentTarget() {
@@ -871,8 +871,8 @@ public class CaseCallActivityTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/bpmn/callactivity/CaseCallActivityTest.testOutputSource.bpmn20.xml",
-      "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
+      "io/orqueio/bpm/engine/test/bpmn/callactivity/CaseCallActivityTest.testOutputSource.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
     })
   @Test
   public void testOutputSourceNullValue() {
@@ -918,8 +918,8 @@ public class CaseCallActivityTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/bpmn/callactivity/CaseCallActivityTest.testOutputSourceExpression.bpmn20.xml",
-      "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
+      "io/orqueio/bpm/engine/test/bpmn/callactivity/CaseCallActivityTest.testOutputSourceExpression.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
     })
   @Test
   public void testOutputSourceExpression() {
@@ -971,8 +971,8 @@ public class CaseCallActivityTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/callactivity/CaseCallActivityTest.testOutputSourceAsCompositeExpression.bpmn20.xml",
-    "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/CaseCallActivityTest.testOutputSourceAsCompositeExpression.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
   })
   @Test
   public void testOutputSourceAsCompositeExpression() {
@@ -1024,8 +1024,8 @@ public class CaseCallActivityTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/bpmn/callactivity/CaseCallActivityTest.testOutputAll.bpmn20.xml",
-      "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
+      "io/orqueio/bpm/engine/test/bpmn/callactivity/CaseCallActivityTest.testOutputAll.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
     })
   @Test
   public void testOutputAll() {
@@ -1077,8 +1077,8 @@ public class CaseCallActivityTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/bpmn/callactivity/CaseCallActivityTest.testOutputAll.bpmn20.xml",
-      "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
+      "io/orqueio/bpm/engine/test/bpmn/callactivity/CaseCallActivityTest.testOutputAll.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
     })
   @Test
   public void testOutputVariablesShouldNotExistAnymore() {
@@ -1127,8 +1127,8 @@ public class CaseCallActivityTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/bpmn/callactivity/CaseCallActivityTest.testVariablesRoundtrip.bpmn20.xml",
-      "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
+      "io/orqueio/bpm/engine/test/bpmn/callactivity/CaseCallActivityTest.testVariablesRoundtrip.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
     })
   @Test
   public void testVariablesRoundtrip() {
@@ -1185,8 +1185,8 @@ public class CaseCallActivityTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/bpmn/callactivity/CaseCallActivityTest.testOutputAll.bpmn20.xml",
-      "org/camunda/bpm/engine/test/api/cmmn/oneTaskCaseWithManualActivation.cmmn"
+      "io/orqueio/bpm/engine/test/bpmn/callactivity/CaseCallActivityTest.testOutputAll.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCaseWithManualActivation.cmmn"
     })
   @Test
   public void testCallCaseOutputAllVariablesTypedToProcess(){
@@ -1210,8 +1210,8 @@ public class CaseCallActivityTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/bpmn/callactivity/CaseCallActivityTest.testCallCaseAsConstant.bpmn20.xml",
-      "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
+      "io/orqueio/bpm/engine/test/bpmn/callactivity/CaseCallActivityTest.testCallCaseAsConstant.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
     })
   @Test
   public void testDeleteProcessInstance() {
@@ -1236,8 +1236,8 @@ public class CaseCallActivityTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/bpmn/callactivity/CaseCallActivityTest.testCallCaseAsConstant.bpmn20.xml",
-      "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
+      "io/orqueio/bpm/engine/test/bpmn/callactivity/CaseCallActivityTest.testCallCaseAsConstant.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
     })
   @Test
   public void testSuspendProcessInstance() {
@@ -1277,8 +1277,8 @@ public class CaseCallActivityTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/bpmn/callactivity/CaseCallActivityTest.testCallCaseAsConstant.bpmn20.xml",
-      "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
+      "io/orqueio/bpm/engine/test/bpmn/callactivity/CaseCallActivityTest.testCallCaseAsConstant.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
     })
   @Test
   public void testTerminateSubCaseInstance() {
@@ -1306,8 +1306,8 @@ public class CaseCallActivityTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/bpmn/callactivity/CaseCallActivityTest.testCallCaseAsConstant.bpmn20.xml",
-      "org/camunda/bpm/engine/test/api/cmmn/oneTaskCaseWithManualActivation.cmmn"
+      "io/orqueio/bpm/engine/test/bpmn/callactivity/CaseCallActivityTest.testCallCaseAsConstant.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCaseWithManualActivation.cmmn"
     })
   @Test
   public void testSuspendSubCaseInstance() {
@@ -1335,8 +1335,8 @@ public class CaseCallActivityTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/bpmn/callactivity/CaseCallActivityTest.testCompletionOfCaseWithTwoTasks.bpmn20.xml",
-      "org/camunda/bpm/engine/test/api/cmmn/twoTaskCase.cmmn"
+      "io/orqueio/bpm/engine/test/bpmn/callactivity/CaseCallActivityTest.testCompletionOfCaseWithTwoTasks.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/api/cmmn/twoTaskCase.cmmn"
     })
   @Test
   public void testCompletionOfTwoHumanTasks() {
@@ -1366,8 +1366,8 @@ public class CaseCallActivityTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/bpmn/callactivity/CaseCallActivity.testSubProcessLocalInputAllVariables.bpmn20.xml",
-      "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn" })
+      "io/orqueio/bpm/engine/test/bpmn/callactivity/CaseCallActivity.testSubProcessLocalInputAllVariables.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn" })
   @Test
   public void testSubProcessLocalInputAllVariables() {
     ProcessInstance processInstance = startProcessInstanceByKey("subProcessLocalInputAllVariables");
@@ -1404,8 +1404,8 @@ public class CaseCallActivityTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/bpmn/callactivity/CaseCallActivity.testSubProcessLocalInputSingleVariable.bpmn20.xml",
-  "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn" })
+      "io/orqueio/bpm/engine/test/bpmn/callactivity/CaseCallActivity.testSubProcessLocalInputSingleVariable.bpmn20.xml",
+  "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn" })
   @Test
   public void testSubProcessLocalInputSingleVariable() {
     ProcessInstance processInstance = startProcessInstanceByKey("subProcessLocalInputSingleVariable");
@@ -1443,8 +1443,8 @@ public class CaseCallActivityTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/bpmn/callactivity/CaseCallActivity.testSubProcessLocalInputSingleVariableExpression.bpmn20.xml",
-  "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn" })
+      "io/orqueio/bpm/engine/test/bpmn/callactivity/CaseCallActivity.testSubProcessLocalInputSingleVariableExpression.bpmn20.xml",
+  "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn" })
   @Test
   public void testSubProcessLocalInputSingleVariableExpression() {
     ProcessInstance processInstance = startProcessInstanceByKey("subProcessLocalInputSingleVariableExpression");
@@ -1481,8 +1481,8 @@ public class CaseCallActivityTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/bpmn/callactivity/CaseCallActivity.testSubProcessLocalOutputAllVariables.bpmn20.xml",
-  "org/camunda/bpm/engine/test/api/cmmn/oneTaskCaseWithManualActivation.cmmn" })
+      "io/orqueio/bpm/engine/test/bpmn/callactivity/CaseCallActivity.testSubProcessLocalOutputAllVariables.bpmn20.xml",
+  "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCaseWithManualActivation.cmmn" })
   @Test
   public void testSubProcessLocalOutputAllVariables() {
     ProcessInstance processInstance = startProcessInstanceByKey("subProcessLocalOutputAllVariables");
@@ -1519,8 +1519,8 @@ public class CaseCallActivityTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/bpmn/callactivity/CaseCallActivity.testSubProcessLocalOutputSingleVariable.bpmn20.xml",
-  "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn" })
+      "io/orqueio/bpm/engine/test/bpmn/callactivity/CaseCallActivity.testSubProcessLocalOutputSingleVariable.bpmn20.xml",
+  "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn" })
   @Test
   public void testSubProcessLocalOutputSingleVariable() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("subProcessLocalOutputSingleVariable");

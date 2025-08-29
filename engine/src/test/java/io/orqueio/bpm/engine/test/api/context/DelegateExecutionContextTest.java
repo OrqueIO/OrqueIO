@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -49,23 +49,23 @@ import org.junit.rules.RuleChain;
 public class DelegateExecutionContextTest {
 
   protected static final BpmnModelInstance SERVICE_TASK_DELEGATE_PROCESS = Bpmn.createExecutableProcess()
-      .camundaHistoryTimeToLive(180)
+      .orqueioHistoryTimeToLive(180)
       .startEvent()
       .serviceTask("serviceTask1")
-        .camundaClass(DelegateClass.class.getName())
+        .orqueioClass(DelegateClass.class.getName())
       .endEvent()
       .done();
 
 
   protected static final BpmnModelInstance EXEUCTION_LISTENER_PROCESS = Bpmn.createExecutableProcess()
-      .camundaHistoryTimeToLive(180)
+      .orqueioHistoryTimeToLive(180)
       .startEvent()
-        .camundaExecutionListenerClass(ExecutionListener.EVENTNAME_START, ExecutionListenerImpl.class.getName())
+        .orqueioExecutionListenerClass(ExecutionListener.EVENTNAME_START, ExecutionListenerImpl.class.getName())
       .endEvent()
       .done();
 
   protected static final BpmnModelInstance SIGNAL_EVENT_PROCESS = Bpmn.createExecutableProcess()
-      .camundaHistoryTimeToLive(180)
+      .orqueioHistoryTimeToLive(180)
       .startEvent()
         .intermediateCatchEvent("catchSignal")
           .signal("${delegateExecutionContextBean.getCurrentActivityId()}")
@@ -75,7 +75,7 @@ public class DelegateExecutionContextTest {
   protected static final BpmnModelInstance getSingleUserTaskProcessWithSignalStartEventSubprocess() {
     ProcessBuilder processBuilder = Bpmn.createExecutableProcess();
     BpmnModelInstance model = processBuilder
-        .camundaHistoryTimeToLive(180)
+        .orqueioHistoryTimeToLive(180)
         .startEvent("start")
         .userTask("A")
       .endEvent()

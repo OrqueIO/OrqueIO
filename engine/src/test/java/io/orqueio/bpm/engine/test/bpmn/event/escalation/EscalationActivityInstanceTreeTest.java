@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -30,7 +30,7 @@ import org.junit.Test;
  */
 public class EscalationActivityInstanceTreeTest extends PluggableProcessEngineTest {
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.testThrowEscalationEventFromEmbeddedSubprocess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.testThrowEscalationEventFromEmbeddedSubprocess.bpmn20.xml")
   @Test
   public void testNonInterruptingEscalationBoundaryEvent(){
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("escalationProcess");
@@ -45,7 +45,7 @@ public class EscalationActivityInstanceTreeTest extends PluggableProcessEngineTe
         .done());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.testInterruptingEscalationBoundaryEvent.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.testInterruptingEscalationBoundaryEvent.bpmn20.xml")
   @Test
   public void testInterruptingEscalationBoundaryEvent(){
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("escalationProcess");
@@ -58,7 +58,7 @@ public class EscalationActivityInstanceTreeTest extends PluggableProcessEngineTe
         .done());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/bpmn/event/escalation/EscalationEventSubprocessTest.testCatchEscalationEventInsideSubprocess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/bpmn/event/escalation/EscalationEventSubprocessTest.testCatchEscalationEventInsideSubprocess.bpmn20.xml")
   @Test
   public void testNonInterruptingEscalationEventSubprocessInsideSubprocess() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("escalationProcess");
@@ -74,7 +74,7 @@ public class EscalationActivityInstanceTreeTest extends PluggableProcessEngineTe
         .done());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/bpmn/event/escalation/EscalationEventSubprocessTest.testCatchEscalationEventFromEmbeddedSubprocess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/bpmn/event/escalation/EscalationEventSubprocessTest.testCatchEscalationEventFromEmbeddedSubprocess.bpmn20.xml")
   @Test
   public void testNonInterruptingEscalationEventSubprocessOutsideSubprocess() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("escalationProcess");
@@ -91,7 +91,7 @@ public class EscalationActivityInstanceTreeTest extends PluggableProcessEngineTe
         .done());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/bpmn/event/escalation/EscalationEventSubprocessTest.testInterruptionEscalationEventSubprocess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/bpmn/event/escalation/EscalationEventSubprocessTest.testInterruptionEscalationEventSubprocess.bpmn20.xml")
   @Test
   public void testInterruptingEscalationEventSubprocessInsideSubprocess() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("escalationProcess");

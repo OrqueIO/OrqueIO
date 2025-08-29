@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -84,7 +84,7 @@ public class MessageCorrelationUserOperationLogTest {
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/runtime/message/MessageCorrelationUserOperationLogTest.intermediateMessageEvent.bpmn" })
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/runtime/message/MessageCorrelationUserOperationLogTest.intermediateMessageEvent.bpmn" })
   public void shouldCreateSingleUserOperationLogForMessageCorrelationWithReturnVariables() {
     // given
     // limit for message correlation operation log to 1
@@ -110,7 +110,7 @@ public class MessageCorrelationUserOperationLogTest {
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/runtime/message/MessageCorrelationUserOperationLogTest.intermediateMessageEvent.bpmn" })
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/runtime/message/MessageCorrelationUserOperationLogTest.intermediateMessageEvent.bpmn" })
   public void shouldCreateSingleUserOperationLogForMessageCorrelationWithVariables() {
     // given
     // limit for message correlation operation log to 1
@@ -137,7 +137,7 @@ public class MessageCorrelationUserOperationLogTest {
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/runtime/message/MessageCorrelationUserOperationLogTest.intermediateMessageEvent.bpmn" })
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/runtime/message/MessageCorrelationUserOperationLogTest.intermediateMessageEvent.bpmn" })
   public void shouldCreateSummarizingUserOperationLogForMessageCorrelations() {
     // given
     // limit for message correlation operation log to 1 -> only one summary op log
@@ -164,7 +164,7 @@ public class MessageCorrelationUserOperationLogTest {
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/runtime/message/MessageCorrelationUserOperationLogTest.intermediateMessageEvent.bpmn" })
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/runtime/message/MessageCorrelationUserOperationLogTest.intermediateMessageEvent.bpmn" })
   public void shouldCreateDetailedUserOperationLogForMessageCorrelationsWhenOnlyOneCorrelation() {
     // given
     // limit for message correlation operation log to 1
@@ -190,7 +190,7 @@ public class MessageCorrelationUserOperationLogTest {
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/runtime/message/MessageCorrelationUserOperationLogTest.intermediateMessageEvent.bpmn" })
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/runtime/message/MessageCorrelationUserOperationLogTest.intermediateMessageEvent.bpmn" })
   public void shouldCreateUserOperationLogForMessageCorrelations() {
     // given
     // limit for message correlation operation log to 3
@@ -233,7 +233,7 @@ public class MessageCorrelationUserOperationLogTest {
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/runtime/message/MessageCorrelationUserOperationLogTest.intermediateMessageEvent.bpmn" })
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/runtime/message/MessageCorrelationUserOperationLogTest.intermediateMessageEvent.bpmn" })
   public void shouldThrowExceptionForMessageCorrelationsExceedingLimit() {
     // given
     // limit for message correlation operation log to 3
@@ -258,7 +258,7 @@ public class MessageCorrelationUserOperationLogTest {
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/runtime/message/MessageCorrelationUserOperationLogTest.intermediateMessageEvent.bpmn" })
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/runtime/message/MessageCorrelationUserOperationLogTest.intermediateMessageEvent.bpmn" })
   public void shouldCreateUserOperationLogForMessageCorrelationsWhenUnlimited() {
     // given
     // operation log for message correlation is not limited (-1)
@@ -309,7 +309,7 @@ public class MessageCorrelationUserOperationLogTest {
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/runtime/message/MessageCorrelationUserOperationLogTest.intermediateMessageEvent.bpmn" })
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/runtime/message/MessageCorrelationUserOperationLogTest.intermediateMessageEvent.bpmn" })
   public void shouldNotCreateUserOperationLogIfNoCorrelationResult() {
     // given
     // limit for message correlation operation log to 1
@@ -327,7 +327,7 @@ public class MessageCorrelationUserOperationLogTest {
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/runtime/message/MessageCorrelationUserOperationLogTest.messageStartEvent.bpmn" })
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/runtime/message/MessageCorrelationUserOperationLogTest.messageStartEvent.bpmn" })
   public void shouldCreateSingleUserOperationLogForMessageCorrelationStart() {
     // given
     // limit for message correlation operation log to 1
@@ -355,7 +355,7 @@ public class MessageCorrelationUserOperationLogTest {
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/runtime/message/MessageCorrelationUserOperationLogTest.messageStartEvent.bpmn" })
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/runtime/message/MessageCorrelationUserOperationLogTest.messageStartEvent.bpmn" })
   public void shouldCreateSingleUserOperationLogForMessageCorrelationStartWithinLimit() {
     // given
     // limit for message correlation operation log to 3
@@ -383,7 +383,7 @@ public class MessageCorrelationUserOperationLogTest {
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/runtime/message/MessageCorrelationUserOperationLogTest.messageStartEvent.bpmn" })
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/runtime/message/MessageCorrelationUserOperationLogTest.messageStartEvent.bpmn" })
   public void shouldCreateSingleUserOperationLogForMessageCorrelationStartUnlimited() {
     // given
     // limit for message correlation operation log to -1
@@ -411,7 +411,7 @@ public class MessageCorrelationUserOperationLogTest {
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/runtime/message/MessageCorrelationUserOperationLogTest.messageStartEvent.bpmn" })
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/runtime/message/MessageCorrelationUserOperationLogTest.messageStartEvent.bpmn" })
   public void shouldCreateSingleUserOperationLogForMessageCorrelationStartWithVariables() {
     // given
     // limit for message correlation operation log to 1

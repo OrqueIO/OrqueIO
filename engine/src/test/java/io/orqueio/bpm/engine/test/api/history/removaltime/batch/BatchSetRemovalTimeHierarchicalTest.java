@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -111,7 +111,7 @@ public class BatchSetRemovalTimeHierarchicalTest {
 
   @Test
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/dmn/deployment/drdDish.dmn11.xml"
+    "io/orqueio/bpm/engine/test/dmn/deployment/drdDish.dmn11.xml"
   })
   public void shouldSetRemovalTime_DecisionInstance() {
     // given
@@ -157,7 +157,7 @@ public class BatchSetRemovalTimeHierarchicalTest {
 
   @Test
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/dmn/deployment/drdDish.dmn11.xml"
+    "io/orqueio/bpm/engine/test/dmn/deployment/drdDish.dmn11.xml"
   })
   public void shouldSetRemovalTimeToStandaloneDecision_RootDecisionInstance() {
     // given
@@ -198,7 +198,7 @@ public class BatchSetRemovalTimeHierarchicalTest {
 
   @Test
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/dmn/deployment/drdDish.dmn11.xml"
+    "io/orqueio/bpm/engine/test/dmn/deployment/drdDish.dmn11.xml"
   })
   public void shouldSetRemovalTimeToStandaloneDecision_ChildDecisionInstance() {
     // given
@@ -239,7 +239,7 @@ public class BatchSetRemovalTimeHierarchicalTest {
 
   @Test
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/dmn/deployment/drdDish.dmn11.xml"
+    "io/orqueio/bpm/engine/test/dmn/deployment/drdDish.dmn11.xml"
   })
   public void shouldSetRemovalTime_DecisionInputInstance() {
     // given
@@ -293,7 +293,7 @@ public class BatchSetRemovalTimeHierarchicalTest {
 
   @Test
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/dmn/deployment/drdDish.dmn11.xml"
+    "io/orqueio/bpm/engine/test/dmn/deployment/drdDish.dmn11.xml"
   })
   public void shouldSetRemovalTimeForStandaloneDecision_RootDecisionInputInstance() {
     // given
@@ -340,7 +340,7 @@ public class BatchSetRemovalTimeHierarchicalTest {
 
   @Test
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/dmn/deployment/drdDish.dmn11.xml"
+    "io/orqueio/bpm/engine/test/dmn/deployment/drdDish.dmn11.xml"
   })
   public void shouldSetRemovalTimeForStandaloneDecision_ChildDecisionInputInstance() {
     // given
@@ -387,7 +387,7 @@ public class BatchSetRemovalTimeHierarchicalTest {
 
   @Test
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/dmn/deployment/drdDish.dmn11.xml"
+    "io/orqueio/bpm/engine/test/dmn/deployment/drdDish.dmn11.xml"
   })
   public void shouldSetRemovalTime_DecisionOutputInstance() {
     // given
@@ -439,7 +439,7 @@ public class BatchSetRemovalTimeHierarchicalTest {
 
   @Test
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/dmn/deployment/drdDish.dmn11.xml"
+    "io/orqueio/bpm/engine/test/dmn/deployment/drdDish.dmn11.xml"
   })
   public void shouldSetRemovalTimeForStandaloneDecision_RootDecisionOutputInstance() {
     // given
@@ -486,7 +486,7 @@ public class BatchSetRemovalTimeHierarchicalTest {
 
   @Test
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/dmn/deployment/drdDish.dmn11.xml"
+    "io/orqueio/bpm/engine/test/dmn/deployment/drdDish.dmn11.xml"
   })
   public void shouldSetRemovalTimeForStandaloneDecision_ChildDecisionOutputInstance() {
     // given
@@ -1366,7 +1366,7 @@ public class BatchSetRemovalTimeHierarchicalTest {
 
   @Test
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/api/history/testDmnWithPojo.dmn11.xml"
+    "io/orqueio/bpm/engine/test/api/history/testDmnWithPojo.dmn11.xml"
   })
   public void shouldSetRemovalTime_ByteArray_DecisionInputInstance() {
     // given
@@ -1415,7 +1415,7 @@ public class BatchSetRemovalTimeHierarchicalTest {
 
   @Test
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/api/history/removaltime/drd.dmn11.xml"
+    "io/orqueio/bpm/engine/test/api/history/removaltime/drd.dmn11.xml"
   })
   public void shouldSetRemovalTimeForStandaloneDecision_ByteArray_RootDecisionInputInstance() {
     // given
@@ -1459,7 +1459,7 @@ public class BatchSetRemovalTimeHierarchicalTest {
 
   @Test
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/api/history/removaltime/drd.dmn11.xml"
+    "io/orqueio/bpm/engine/test/api/history/removaltime/drd.dmn11.xml"
   })
   public void shouldSetRemovalTimeForStandaloneDecision_ByteArray_ChildDecisionInputInstance() {
     // given
@@ -1503,7 +1503,7 @@ public class BatchSetRemovalTimeHierarchicalTest {
 
   @Test
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/api/history/testDmnWithPojo.dmn11.xml"
+    "io/orqueio/bpm/engine/test/api/history/testDmnWithPojo.dmn11.xml"
   })
   public void shouldSetRemovalTime_ByteArray_DecisionOutputInstance() {
     // given
@@ -1552,7 +1552,7 @@ public class BatchSetRemovalTimeHierarchicalTest {
 
   @Test
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/api/history/removaltime/drd.dmn11.xml"
+    "io/orqueio/bpm/engine/test/api/history/removaltime/drd.dmn11.xml"
   })
   public void shouldSetRemovalTimeForStandaloneDecision_ByteArray_RootDecisionOutputInstance() {
     // given
@@ -1596,7 +1596,7 @@ public class BatchSetRemovalTimeHierarchicalTest {
 
   @Test
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/api/history/removaltime/drd.dmn11.xml"
+    "io/orqueio/bpm/engine/test/api/history/removaltime/drd.dmn11.xml"
   })
   public void shouldSetRemovalTimeForStandaloneDecision_ByteArray_ChildDecisionOutputInstance() {
     // given

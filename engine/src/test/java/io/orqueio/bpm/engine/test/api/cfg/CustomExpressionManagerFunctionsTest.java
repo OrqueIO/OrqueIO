@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -55,9 +55,9 @@ public class CustomExpressionManagerFunctionsTest {
     // given
     processEngineConfiguration.getExpressionManager().addFunction("foobar", ReflectUtil.getMethod(TestFunctions.class, "foobar"));
     testRule.deploy(Bpmn.createExecutableProcess("process")
-        .camundaHistoryTimeToLive(180)
+        .orqueioHistoryTimeToLive(180)
        .startEvent()
-       .serviceTask().camundaExpression("${execution.setVariable(\"baz\", foobar())}")
+       .serviceTask().orqueioExpression("${execution.setVariable(\"baz\", foobar())}")
        .userTask()
        .endEvent()
        .done());
@@ -72,9 +72,9 @@ public class CustomExpressionManagerFunctionsTest {
     // given
     processEngineConfiguration.getExpressionManager().addFunction("foo:bar", ReflectUtil.getMethod(TestFunctions.class, "foobar"));
     testRule.deploy(Bpmn.createExecutableProcess("process")
-        .camundaHistoryTimeToLive(180)
+        .orqueioHistoryTimeToLive(180)
         .startEvent()
-        .serviceTask().camundaExpression("${execution.setVariable(\"baz\", foo:bar())}")
+        .serviceTask().orqueioExpression("${execution.setVariable(\"baz\", foo:bar())}")
         .userTask()
         .endEvent()
         .done());

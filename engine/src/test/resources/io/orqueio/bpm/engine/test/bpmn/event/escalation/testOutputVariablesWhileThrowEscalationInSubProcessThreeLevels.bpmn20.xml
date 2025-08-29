@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1bdvjcr" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="2.0.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:orqueio="http://orqueio.io/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1bdvjcr" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Orqueio Modeler" exporterVersion="2.0.0">
   <bpmn:process id="EscalationChildProcess" name="Escalation Child" isExecutable="true">
     <bpmn:startEvent id="StartEvent_Start" name="start">
       <bpmn:outgoing>SequenceFlow_04ui0jd</bpmn:outgoing>
@@ -68,7 +68,7 @@
       </bpmn:parallelGateway>
       <bpmn:endEvent id="EndEvent_End" name="end">
         <bpmn:extensionElements>
-          <camunda:executionListener expression="${execution.setVariable(&#34;cancelReason&#34;, &#34;reason1&#34;)}" event="start" />
+          <orqueio:executionListener expression="${execution.setVariable(&#34;cancelReason&#34;, &#34;reason1&#34;)}" event="start" />
         </bpmn:extensionElements>
         <bpmn:incoming>SequenceFlow_0qp76yc</bpmn:incoming>
         <bpmn:escalationEventDefinition escalationRef="Escalation_13b9fvn" />

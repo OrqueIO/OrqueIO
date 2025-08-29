@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -28,8 +28,8 @@ import io.orqueio.bpm.model.bpmn.Bpmn;
 import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
 import io.orqueio.bpm.model.bpmn.builder.CallActivityBuilder;
 import io.orqueio.bpm.model.bpmn.instance.CallActivity;
-import io.orqueio.bpm.model.bpmn.instance.camunda.CamundaIn;
-import io.orqueio.bpm.model.bpmn.instance.camunda.CamundaOut;
+import io.orqueio.bpm.model.bpmn.instance.orqueio.OrqueioIn;
+import io.orqueio.bpm.model.bpmn.instance.orqueio.OrqueioOut;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -72,15 +72,15 @@ public class MultiInstanceVariablesTest {
   }
 
   protected void addAllOut(BpmnModelInstance modelInstance, CallActivityBuilder callActivityBuilder) {
-    CamundaOut camundaOut = modelInstance.newInstance(CamundaOut.class);
-    camundaOut.setCamundaVariables(ALL);
-    callActivityBuilder.addExtensionElement(camundaOut);
+    OrqueioOut orqueioOut = modelInstance.newInstance(OrqueioOut.class);
+    orqueioOut.setOrqueioVariables(ALL);
+    callActivityBuilder.addExtensionElement(orqueioOut);
   }
 
   protected void addAllIn(BpmnModelInstance modelInstance, CallActivityBuilder callActivityBuilder) {
-    CamundaIn camundaIn = modelInstance.newInstance(CamundaIn.class);
-    camundaIn.setCamundaVariables(ALL);
-    callActivityBuilder.addExtensionElement(camundaIn);
+    OrqueioIn orqueioIn = modelInstance.newInstance(OrqueioIn.class);
+    orqueioIn.setOrqueioVariables(ALL);
+    callActivityBuilder.addExtensionElement(orqueioIn);
   }
 
   protected void deployAndStartProcess(BpmnModelInstance modelInstance, BpmnModelInstance testProcess) {

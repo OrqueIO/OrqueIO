@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -40,7 +40,7 @@ import org.junit.Test;
  */
 public class ImplicitVariableUpdateTest extends PluggableProcessEngineTest {
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/variables/ImplicitVariableUpdateTest.sequence.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/variables/ImplicitVariableUpdateTest.sequence.bpmn20.xml")
   @Test
   public void testUpdate() {
     ProcessInstance instance = runtimeService.startProcessInstanceByKey("serviceTaskProcess",
@@ -54,7 +54,7 @@ public class ImplicitVariableUpdateTest extends PluggableProcessEngineTest {
     assertEquals(UpdateValueDelegate.NEW_ELEMENT, list.get(0));
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/variables/ImplicitVariableUpdateTest.parallel.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/variables/ImplicitVariableUpdateTest.parallel.bpmn20.xml")
   @Test
   public void testUpdateParallelFlow() {
     // should also work when execution tree is expanded between the implicit update
@@ -71,7 +71,7 @@ public class ImplicitVariableUpdateTest extends PluggableProcessEngineTest {
     assertEquals(UpdateValueDelegate.NEW_ELEMENT, list.get(0));
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/variables/ImplicitVariableUpdateTest.sequence.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/variables/ImplicitVariableUpdateTest.sequence.bpmn20.xml")
   @Test
   public void testUpdatePreviousValue() {
     ProcessInstance instance = runtimeService.startProcessInstanceByKey("serviceTaskProcess",
@@ -84,7 +84,7 @@ public class ImplicitVariableUpdateTest extends PluggableProcessEngineTest {
     assertTrue(list.isEmpty());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/variables/ImplicitVariableUpdateTest.sequence.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/variables/ImplicitVariableUpdateTest.sequence.bpmn20.xml")
   @Test
   public void testRemoveAndUpdateValue() {
     ProcessInstance instance = runtimeService.startProcessInstanceByKey("serviceTaskProcess",
@@ -101,7 +101,7 @@ public class ImplicitVariableUpdateTest extends PluggableProcessEngineTest {
    * the variable is also implicitly updated when only the serialized
    * value changes (without explicit instructions to change the object)
    */
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/variables/ImplicitVariableUpdateTest.sequence.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/variables/ImplicitVariableUpdateTest.sequence.bpmn20.xml")
   @Test
   public void testSerialization() {
     ProcessInstance instance = runtimeService.startProcessInstanceByKey("serviceTaskProcess",

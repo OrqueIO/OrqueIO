@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -70,7 +70,7 @@ public class CompetingMessageCorrelationTest extends ConcurrencyTestCase {
     assertEquals(0, processEngine.getHistoryService().createHistoricJobLogQuery().list().size());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/concurrency/CompetingMessageCorrelationTest.catchMessageProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/concurrency/CompetingMessageCorrelationTest.catchMessageProcess.bpmn20.xml")
   @Test
   @RequiredDatabase(excludes = DbSqlSessionFactory.H2)
   public void testConcurrentExclusiveCorrelation() throws InterruptedException {
@@ -123,7 +123,7 @@ public class CompetingMessageCorrelationTest extends ConcurrencyTestCase {
     assertEquals(1, InvocationLogListener.getInvocations());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/concurrency/CompetingMessageCorrelationTest.catchMessageProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/concurrency/CompetingMessageCorrelationTest.catchMessageProcess.bpmn20.xml")
   @Test
   public void testConcurrentCorrelationFailsWithOptimisticLockingException() {
     InvocationLogListener.reset();
@@ -164,7 +164,7 @@ public class CompetingMessageCorrelationTest extends ConcurrencyTestCase {
     assertTrue(thread2.getException() instanceof OptimisticLockingException);
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/concurrency/CompetingMessageCorrelationTest.catchMessageProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/concurrency/CompetingMessageCorrelationTest.catchMessageProcess.bpmn20.xml")
   @Test
   public void testConcurrentExclusiveCorrelationToDifferentExecutions() throws InterruptedException {
     InvocationLogListener.reset();
@@ -215,7 +215,7 @@ public class CompetingMessageCorrelationTest extends ConcurrencyTestCase {
   /**
    * Fails at least on mssql; mssql appears to lock more than the actual event subscription row
    */
-  @Deployment(resources = "org/camunda/bpm/engine/test/concurrency/CompetingMessageCorrelationTest.catchMessageProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/concurrency/CompetingMessageCorrelationTest.catchMessageProcess.bpmn20.xml")
   @Ignore
   @Test
   public void testConcurrentExclusiveCorrelationToDifferentExecutionsCase2() throws InterruptedException {
@@ -262,7 +262,7 @@ public class CompetingMessageCorrelationTest extends ConcurrencyTestCase {
     assertEquals(2, taskService.createTaskQuery().taskDefinitionKey("afterMessageUserTask").count());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/concurrency/CompetingMessageCorrelationTest.catchMessageProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/concurrency/CompetingMessageCorrelationTest.catchMessageProcess.bpmn20.xml")
   @Test
   public void testConcurrentMixedCorrelation() {
     InvocationLogListener.reset();
@@ -314,7 +314,7 @@ public class CompetingMessageCorrelationTest extends ConcurrencyTestCase {
    * </p>
    * @throws InterruptedException
    */
-  @Deployment(resources = "org/camunda/bpm/engine/test/concurrency/CompetingMessageCorrelationTest.catchMessageProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/concurrency/CompetingMessageCorrelationTest.catchMessageProcess.bpmn20.xml")
   @Ignore("CAM-3636")
   @Test
   public void testConcurrentMixedCorrelationCase2() throws InterruptedException {
@@ -365,7 +365,7 @@ public class CompetingMessageCorrelationTest extends ConcurrencyTestCase {
     assertTrue(thread1.getException() instanceof OptimisticLockingException);
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/concurrency/CompetingMessageCorrelationTest.eventSubprocess.bpmn")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/concurrency/CompetingMessageCorrelationTest.eventSubprocess.bpmn")
   @Test
   public void testEventSubprocess() {
     InvocationLogListener.reset();
@@ -430,7 +430,7 @@ public class CompetingMessageCorrelationTest extends ConcurrencyTestCase {
     assertTrue(exception instanceof OptimisticLockingException);
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/concurrency/CompetingMessageCorrelationTest.testConcurrentMessageCorrelationAndTreeCompaction.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/concurrency/CompetingMessageCorrelationTest.testConcurrentMessageCorrelationAndTreeCompaction.bpmn20.xml")
   @Test
   public void testConcurrentTreeCompactionAndMessageCorrelation() {
     runtimeService.startProcessInstanceByKey("process");

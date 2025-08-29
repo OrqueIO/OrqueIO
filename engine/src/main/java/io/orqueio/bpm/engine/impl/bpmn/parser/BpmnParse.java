@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -16,9 +16,9 @@
  */
 package io.orqueio.bpm.engine.impl.bpmn.parser;
 
-import static io.orqueio.bpm.engine.impl.bpmn.parser.BpmnParseUtil.findCamundaExtensionElement;
-import static io.orqueio.bpm.engine.impl.bpmn.parser.BpmnParseUtil.parseCamundaExtensionProperties;
-import static io.orqueio.bpm.engine.impl.bpmn.parser.BpmnParseUtil.parseCamundaScript;
+import static io.orqueio.bpm.engine.impl.bpmn.parser.BpmnParseUtil.findOrqueioExtensionElement;
+import static io.orqueio.bpm.engine.impl.bpmn.parser.BpmnParseUtil.parseOrqueioExtensionProperties;
+import static io.orqueio.bpm.engine.impl.bpmn.parser.BpmnParseUtil.parseOrqueioScript;
 import static io.orqueio.bpm.engine.impl.bpmn.parser.BpmnParseUtil.parseInputOutput;
 import static io.orqueio.bpm.engine.impl.util.ClassDelegateUtil.instantiateDelegate;
 
@@ -255,7 +255,7 @@ public class BpmnParse extends Parse {
 
   public static final String PROPERTYNAME_IS_MULTI_INSTANCE = "isMultiInstance";
 
-  public static final Namespace CAMUNDA_BPMN_EXTENSIONS_NS = new Namespace(BpmnParser.CAMUNDA_BPMN_EXTENSIONS_NS, BpmnParser.ACTIVITI_BPMN_EXTENSIONS_NS);
+  public static final Namespace ORQUEIO_BPMN_EXTENSIONS_NS = new Namespace(BpmnParser.ORQUEIO_BPMN_EXTENSIONS_NS, BpmnParser.ACTIVITI_BPMN_EXTENSIONS_NS);
   public static final Namespace XSI_NS = new Namespace(BpmnParser.XSI_NS);
   public static final Namespace BPMN_DI_NS = new Namespace(BpmnParser.BPMN_DI_NS);
   public static final Namespace OMG_DI_NS = new Namespace(BpmnParser.OMG_DI_NS);
@@ -512,7 +512,7 @@ public class BpmnParse extends Parse {
         error.setErrorCode(errorCode);
       }
 
-      String errorMessage = errorElement.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, "errorMessage");
+      String errorMessage = errorElement.attributeNS(ORQUEIO_BPMN_EXTENSIONS_NS, "errorMessage");
       if(errorMessage != null) {
         error.setErrorMessageExpression(createParameterValueProvider(errorMessage, expressionManager));
       }
@@ -630,7 +630,7 @@ public class BpmnParse extends Parse {
     processDefinition.setTenantId(deployment.getTenantId());
     processDefinition.setProperty(PROPERTYNAME_JOB_PRIORITY, parsePriority(processElement, PROPERTYNAME_JOB_PRIORITY));
     processDefinition.setProperty(PROPERTYNAME_TASK_PRIORITY, parsePriority(processElement, PROPERTYNAME_TASK_PRIORITY));
-    processDefinition.setVersionTag(processElement.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, "versionTag"));
+    processDefinition.setVersionTag(processElement.attributeNS(ORQUEIO_BPMN_EXTENSIONS_NS, "versionTag"));
 
     boolean skipEnforceTtl = !deployment.isNew();
     validateAndSetHTTL(processElement, processDefinition, skipEnforceTtl);
@@ -796,7 +796,7 @@ public class BpmnParse extends Parse {
     // parse activiti:potentialStarters
     Element extentionsElement = scopeElement.element("extensionElements");
     if (extentionsElement != null) {
-      List<Element> potentialStarterElements = extentionsElement.elementsNS(CAMUNDA_BPMN_EXTENSIONS_NS, POTENTIAL_STARTER);
+      List<Element> potentialStarterElements = extentionsElement.elementsNS(ORQUEIO_BPMN_EXTENSIONS_NS, POTENTIAL_STARTER);
 
       for (Element potentialStarterElement : potentialStarterElements) {
         parsePotentialStarterResourceAssignment(potentialStarterElement, processDefinition);
@@ -804,7 +804,7 @@ public class BpmnParse extends Parse {
     }
 
     // parse activiti:candidateStarterUsers
-    String candidateUsersString = scopeElement.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, CANDIDATE_STARTER_USERS_EXTENSION);
+    String candidateUsersString = scopeElement.attributeNS(ORQUEIO_BPMN_EXTENSIONS_NS, CANDIDATE_STARTER_USERS_EXTENSION);
     if (candidateUsersString != null) {
       List<String> candidateUsers = parseCommaSeparatedList(candidateUsersString);
       for (String candidateUser : candidateUsers) {
@@ -813,7 +813,7 @@ public class BpmnParse extends Parse {
     }
 
     // Candidate activiti:candidateStarterGroups
-    String candidateGroupsString = scopeElement.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, CANDIDATE_STARTER_GROUPS_EXTENSION);
+    String candidateGroupsString = scopeElement.attributeNS(ORQUEIO_BPMN_EXTENSIONS_NS, CANDIDATE_STARTER_GROUPS_EXTENSION);
     if (candidateGroupsString != null) {
       List<String> candidateGroups = parseCommaSeparatedList(candidateGroupsString);
       for (String candidateGroup : candidateGroups) {
@@ -1006,7 +1006,7 @@ public class BpmnParse extends Parse {
   protected void parseProcessDefinitionStartEvent(ActivityImpl startEventActivity, Element startEventElement, Element parentElement, ScopeImpl scope) {
     ProcessDefinitionEntity processDefinition = (ProcessDefinitionEntity) scope;
 
-    String initiatorVariableName = startEventElement.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, "initiator");
+    String initiatorVariableName = startEventElement.attributeNS(ORQUEIO_BPMN_EXTENSIONS_NS, "initiator");
     if (initiatorVariableName != null) {
       processDefinition.setProperty(PROPERTYNAME_INITIATOR_VARIABLE_NAME, initiatorVariableName);
     }
@@ -1054,7 +1054,7 @@ public class BpmnParse extends Parse {
         if (startEventElement.attribute("id").equals(processDefinition.getInitial().getId())) {
 
           StartFormHandler startFormHandler;
-          String startFormHandlerClassName = startEventElement.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, "formHandlerClass");
+          String startFormHandlerClassName = startEventElement.attributeNS(ORQUEIO_BPMN_EXTENSIONS_NS, "formHandlerClass");
           if (startFormHandlerClassName != null) {
             startFormHandler = (StartFormHandler) ReflectUtil.instantiate(startFormHandlerClassName);
           } else {
@@ -1225,7 +1225,7 @@ public class BpmnParse extends Parse {
   }
 
   /**
-   * Sets the value for "camunda:errorCodeVariable" on the passed definition if
+   * Sets the value for "orqueio:errorCodeVariable" on the passed definition if
    * it's present.
    *
    * @param errorEventDefinition
@@ -1234,14 +1234,14 @@ public class BpmnParse extends Parse {
    *          the errorEventDefintion that can get the errorCodeVariable value
    */
   protected void setErrorCodeVariableOnErrorEventDefinition(Element errorEventDefinition, ErrorEventDefinition definition) {
-    String errorCodeVar = errorEventDefinition.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, "errorCodeVariable");
+    String errorCodeVar = errorEventDefinition.attributeNS(ORQUEIO_BPMN_EXTENSIONS_NS, "errorCodeVariable");
     if (errorCodeVar != null) {
       definition.setErrorCodeVariable(errorCodeVar);
     }
   }
 
   /**
-   * Sets the value for "camunda:errorMessageVariable" on the passed definition if
+   * Sets the value for "orqueio:errorMessageVariable" on the passed definition if
    * it's present.
    *
    * @param errorEventDefinition
@@ -1250,7 +1250,7 @@ public class BpmnParse extends Parse {
    *          the errorEventDefintion that can get the errorMessageVariable value
    */
   protected void setErrorMessageVariableOnErrorEventDefinition(Element errorEventDefinition, ErrorEventDefinition definition) {
-    String errorMessageVariable = errorEventDefinition.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, "errorMessageVariable");
+    String errorMessageVariable = errorEventDefinition.attributeNS(ORQUEIO_BPMN_EXTENSIONS_NS, "errorMessageVariable");
     if (errorMessageVariable != null) {
       definition.setErrorMessageVariable(errorMessageVariable);
     }
@@ -1838,7 +1838,7 @@ public class BpmnParse extends Parse {
       }
 
       // activiti:collection
-      String collection = miLoopCharacteristics.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, "collection");
+      String collection = miLoopCharacteristics.attributeNS(ORQUEIO_BPMN_EXTENSIONS_NS, "collection");
       if (collection != null) {
         if (collection.contains("{")) {
           behavior.setCollectionExpression(expressionManager.createExpression(collection));
@@ -1861,7 +1861,7 @@ public class BpmnParse extends Parse {
       }
 
       // activiti:elementVariable
-      String elementVariable = miLoopCharacteristics.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, "elementVariable");
+      String elementVariable = miLoopCharacteristics.attributeNS(ORQUEIO_BPMN_EXTENSIONS_NS, "elementVariable");
       if (elementVariable != null) {
         behavior.setCollectionElementVariable(elementVariable);
       }
@@ -2207,7 +2207,7 @@ public class BpmnParse extends Parse {
     if (scriptElement != null) {
       scriptSource = scriptElement.getText();
     }
-    String scriptResource = scriptTaskElement.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, PROPERTYNAME_RESOURCE);
+    String scriptResource = scriptTaskElement.attributeNS(ORQUEIO_BPMN_EXTENSIONS_NS, PROPERTYNAME_RESOURCE);
 
     try {
       ExecutableScript script = ScriptUtil.getScript(language, scriptSource, scriptResource, expressionManager);
@@ -2220,10 +2220,10 @@ public class BpmnParse extends Parse {
 
   protected String parseResultVariable(Element element) {
     // determine if result variable exists
-    String resultVariableName = element.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, "resultVariable");
+    String resultVariableName = element.attributeNS(ORQUEIO_BPMN_EXTENSIONS_NS, "resultVariable");
     if (resultVariableName == null) {
       // for backwards compatible reasons
-      resultVariableName = element.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, "resultVariableName");
+      resultVariableName = element.attributeNS(ORQUEIO_BPMN_EXTENSIONS_NS, "resultVariableName");
     }
     return resultVariableName;
   }
@@ -2254,9 +2254,9 @@ public class BpmnParse extends Parse {
 
   /**
    * @param elementName
-   * @param serviceTaskElement the element that contains the camunda service task definition
-   *   (e.g. camunda:class attributes)
-   * @param camundaPropertiesElement the element that contains the camunda:properties extension elements
+   * @param serviceTaskElement the element that contains the orqueio service task definition
+   *   (e.g. orqueio:class attributes)
+   * @param orqueioPropertiesElement the element that contains the orqueio:properties extension elements
    *   that apply to this service task. Usually, but not always, this is the same as serviceTaskElement
    * @param scope
    * @return
@@ -2265,13 +2265,13 @@ public class BpmnParse extends Parse {
       ActivityImpl activity,
       String elementName,
       Element serviceTaskElement,
-      Element camundaPropertiesElement,
+      Element orqueioPropertiesElement,
       ScopeImpl scope) {
 
-    String type = serviceTaskElement.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, TYPE);
-    String className = serviceTaskElement.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, PROPERTYNAME_CLASS);
-    String expression = serviceTaskElement.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, PROPERTYNAME_EXPRESSION);
-    String delegateExpression = serviceTaskElement.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, PROPERTYNAME_DELEGATE_EXPRESSION);
+    String type = serviceTaskElement.attributeNS(ORQUEIO_BPMN_EXTENSIONS_NS, TYPE);
+    String className = serviceTaskElement.attributeNS(ORQUEIO_BPMN_EXTENSIONS_NS, PROPERTYNAME_CLASS);
+    String expression = serviceTaskElement.attributeNS(ORQUEIO_BPMN_EXTENSIONS_NS, PROPERTYNAME_EXPRESSION);
+    String delegateExpression = serviceTaskElement.attributeNS(ORQUEIO_BPMN_EXTENSIONS_NS, PROPERTYNAME_DELEGATE_EXPRESSION);
     String resultVariableName = parseResultVariable(serviceTaskElement);
 
     if (type != null) {
@@ -2280,7 +2280,7 @@ public class BpmnParse extends Parse {
       } else if (type.equalsIgnoreCase("shell")) {
         parseShellServiceTask(activity, serviceTaskElement, parseFieldDeclarations(serviceTaskElement));
       } else if (type.equalsIgnoreCase("external")) {
-        parseExternalServiceTask(activity, serviceTaskElement, camundaPropertiesElement);
+        parseExternalServiceTask(activity, serviceTaskElement, orqueioPropertiesElement);
       } else {
         addError("Invalid usage of type attribute on " + elementName + ": '" + type + "'", serviceTaskElement);
       }
@@ -2319,7 +2319,7 @@ public class BpmnParse extends Parse {
    * Parses a businessRuleTask declaration.
    */
   public ActivityImpl parseBusinessRuleTask(Element businessRuleTaskElement, ScopeImpl scope) {
-    String decisionRef = businessRuleTaskElement.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, "decisionRef");
+    String decisionRef = businessRuleTaskElement.attributeNS(ORQUEIO_BPMN_EXTENSIONS_NS, "decisionRef");
     if (decisionRef != null) {
       return parseDmnBusinessRuleTask(businessRuleTaskElement, scope);
     }
@@ -2361,7 +2361,7 @@ public class BpmnParse extends Parse {
 
     parseAsynchronousContinuationForActivity(businessRuleTaskElement, activity);
 
-    String decisionRef = businessRuleTaskElement.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, "decisionRef");
+    String decisionRef = businessRuleTaskElement.attributeNS(ORQUEIO_BPMN_EXTENSIONS_NS, "decisionRef");
 
     BaseCallableElement callableElement = new BaseCallableElement();
     callableElement.setDeploymentId(deployment.getId());
@@ -2391,7 +2391,7 @@ public class BpmnParse extends Parse {
 
   protected DecisionResultMapper parseDecisionResultMapper(Element businessRuleTaskElement) {
     // default mapper is 'resultList'
-    String decisionResultMapper = businessRuleTaskElement.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, "mapDecisionResult");
+    String decisionResultMapper = businessRuleTaskElement.attributeNS(ORQUEIO_BPMN_EXTENSIONS_NS, "mapDecisionResult");
     DecisionResultMapper mapper = DecisionEvaluationUtil.getDecisionResultMapperForName(decisionResultMapper);
 
     if (mapper == null) {
@@ -2444,7 +2444,7 @@ public class BpmnParse extends Parse {
   }
 
   protected ParameterValueProvider parsePriority(Element element, String priorityAttribute) {
-    String priorityAttributeValue = element.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, priorityAttribute);
+    String priorityAttributeValue = element.attributeNS(ORQUEIO_BPMN_EXTENSIONS_NS, priorityAttribute);
 
     if (priorityAttributeValue == null) {
       return null;
@@ -2466,10 +2466,10 @@ public class BpmnParse extends Parse {
   }
 
   protected ParameterValueProvider parseTopic(Element element, String topicAttribute) {
-    String topicAttributeValue = element.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, topicAttribute);
+    String topicAttributeValue = element.attributeNS(ORQUEIO_BPMN_EXTENSIONS_NS, topicAttribute);
 
     if (topicAttributeValue == null) {
-      addError("External tasks must specify a 'topic' attribute in the camunda namespace", element);
+      addError("External tasks must specify a 'topic' attribute in the orqueio namespace", element);
       return null;
 
     } else {
@@ -2552,15 +2552,15 @@ public class BpmnParse extends Parse {
 
   protected void parseExternalServiceTask(ActivityImpl activity,
       Element serviceTaskElement,
-      Element camundaPropertiesElement) {
+      Element orqueioPropertiesElement) {
     activity.setScope(true);
 
     ParameterValueProvider topicNameProvider = parseTopic(serviceTaskElement, PROPERTYNAME_EXTERNAL_TASK_TOPIC);
     ParameterValueProvider priorityProvider = parsePriority(serviceTaskElement, PROPERTYNAME_TASK_PRIORITY);
-    Map<String, String> properties = parseCamundaExtensionProperties(camundaPropertiesElement);
+    Map<String, String> properties = parseOrqueioExtensionProperties(orqueioPropertiesElement);
     activity.getProperties().set(BpmnProperties.EXTENSION_PROPERTIES, properties);
-    List<CamundaErrorEventDefinition> camundaErrorEventDefinitions = parseCamundaErrorEventDefinitions(activity, serviceTaskElement);
-    activity.getProperties().set(BpmnProperties.CAMUNDA_ERROR_EVENT_DEFINITION, camundaErrorEventDefinitions);
+    List<OrqueioErrorEventDefinition> orqueioErrorEventDefinitions = parseOrqueioErrorEventDefinitions(activity, serviceTaskElement);
+    activity.getProperties().set(BpmnProperties.ORQUEIO_ERROR_EVENT_DEFINITION, orqueioErrorEventDefinitions);
     activity.setActivityBehavior(new ExternalTaskActivityBehavior(topicNameProvider, priorityProvider));
   }
 
@@ -2618,7 +2618,7 @@ public class BpmnParse extends Parse {
                                               // subelement
       elementWithFieldInjections = element;
     }
-    List<Element> fieldDeclarationElements = elementWithFieldInjections.elementsNS(CAMUNDA_BPMN_EXTENSIONS_NS, "field");
+    List<Element> fieldDeclarationElements = elementWithFieldInjections.elementsNS(ORQUEIO_BPMN_EXTENSIONS_NS, "field");
     if (fieldDeclarationElements != null && !fieldDeclarationElements.isEmpty()) {
 
       for (Element fieldDeclarationElement : fieldDeclarationElements) {
@@ -2684,7 +2684,7 @@ public class BpmnParse extends Parse {
     String value = null;
 
     String attributeValue = element.attribute(attributeName);
-    Element childElement = element.elementNS(CAMUNDA_BPMN_EXTENSIONS_NS, elementName);
+    Element childElement = element.elementNS(ORQUEIO_BPMN_EXTENSIONS_NS, elementName);
     String stringElementText = null;
 
     if (attributeValue != null && childElement != null) {
@@ -2809,7 +2809,7 @@ public class BpmnParse extends Parse {
 
   public TaskDefinition parseTaskDefinition(Element taskElement, String taskDefinitionKey, ActivityImpl activity, ProcessDefinitionEntity processDefinition) {
     TaskFormHandler taskFormHandler;
-    String taskFormHandlerClassName = taskElement.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, "formHandlerClass");
+    String taskFormHandlerClassName = taskElement.attributeNS(ORQUEIO_BPMN_EXTENSIONS_NS, "formHandlerClass");
     if (taskFormHandlerClassName != null) {
       taskFormHandler = (TaskFormHandler) ReflectUtil.instantiate(taskFormHandlerClassName);
     } else {
@@ -2847,8 +2847,8 @@ public class BpmnParse extends Parse {
   protected FormDefinition parseFormDefinition(Element flowNodeElement) {
     FormDefinition formDefinition = new FormDefinition();
 
-    String formKeyAttribute = flowNodeElement.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, "formKey");
-    String formRefAttribute = flowNodeElement.attributeNS(BpmnParse.CAMUNDA_BPMN_EXTENSIONS_NS, "formRef");
+    String formKeyAttribute = flowNodeElement.attributeNS(ORQUEIO_BPMN_EXTENSIONS_NS, "formKey");
+    String formRefAttribute = flowNodeElement.attributeNS(BpmnParse.ORQUEIO_BPMN_EXTENSIONS_NS, "formRef");
 
     if(formKeyAttribute != null && formRefAttribute != null) {
       addError("Invalid element definition: only one of the attributes formKey and formRef is allowed.", flowNodeElement);
@@ -2859,9 +2859,9 @@ public class BpmnParse extends Parse {
     }
 
     if(formRefAttribute != null) {
-      formDefinition.setCamundaFormDefinitionKey(expressionManager.createExpression(formRefAttribute));
+      formDefinition.setOrqueioFormDefinitionKey(expressionManager.createExpression(formRefAttribute));
 
-      String formRefBindingAttribute = flowNodeElement.attributeNS(BpmnParse.CAMUNDA_BPMN_EXTENSIONS_NS, "formRefBinding");
+      String formRefBindingAttribute = flowNodeElement.attributeNS(BpmnParse.ORQUEIO_BPMN_EXTENSIONS_NS, "formRefBinding");
 
       if (formRefBindingAttribute == null || !DefaultTaskFormHandler.ALLOWED_FORM_REF_BINDINGS.contains(formRefBindingAttribute)) {
         addError("Invalid element definition: value for formRefBinding attribute has to be one of "
@@ -2870,16 +2870,16 @@ public class BpmnParse extends Parse {
 
 
       if(formRefBindingAttribute != null) {
-        formDefinition.setCamundaFormDefinitionBinding(formRefBindingAttribute);
+        formDefinition.setOrqueioFormDefinitionBinding(formRefBindingAttribute);
       }
 
       if(DefaultTaskFormHandler.FORM_REF_BINDING_VERSION.equals(formRefBindingAttribute)) {
-        String formRefVersionAttribute = flowNodeElement.attributeNS(BpmnParse.CAMUNDA_BPMN_EXTENSIONS_NS, "formRefVersion");
+        String formRefVersionAttribute = flowNodeElement.attributeNS(BpmnParse.ORQUEIO_BPMN_EXTENSIONS_NS, "formRefVersion");
 
-        Expression camundaFormDefinitionVersion = expressionManager.createExpression(formRefVersionAttribute);
+        Expression orqueioFormDefinitionVersion = expressionManager.createExpression(formRefVersionAttribute);
 
         if(formRefVersionAttribute != null) {
-          formDefinition.setCamundaFormDefinitionVersion(camundaFormDefinitionVersion);
+          formDefinition.setOrqueioFormDefinitionVersion(orqueioFormDefinitionVersion);
         }
       }
     }
@@ -2946,7 +2946,7 @@ public class BpmnParse extends Parse {
   protected void parseUserTaskCustomExtensions(Element taskElement, ActivityImpl activity, TaskDefinition taskDefinition) {
 
     // assignee
-    String assignee = taskElement.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, ASSIGNEE_EXTENSION);
+    String assignee = taskElement.attributeNS(ORQUEIO_BPMN_EXTENSIONS_NS, ASSIGNEE_EXTENSION);
     if (assignee != null) {
       if (taskDefinition.getAssigneeExpression() == null) {
         taskDefinition.setAssigneeExpression(expressionManager.createExpression(assignee));
@@ -2956,7 +2956,7 @@ public class BpmnParse extends Parse {
     }
 
     // Candidate users
-    String candidateUsersString = taskElement.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, CANDIDATE_USERS_EXTENSION);
+    String candidateUsersString = taskElement.attributeNS(ORQUEIO_BPMN_EXTENSIONS_NS, CANDIDATE_USERS_EXTENSION);
     if (candidateUsersString != null) {
       List<String> candidateUsers = parseCommaSeparatedList(candidateUsersString);
       for (String candidateUser : candidateUsers) {
@@ -2965,7 +2965,7 @@ public class BpmnParse extends Parse {
     }
 
     // Candidate groups
-    String candidateGroupsString = taskElement.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, CANDIDATE_GROUPS_EXTENSION);
+    String candidateGroupsString = taskElement.attributeNS(ORQUEIO_BPMN_EXTENSIONS_NS, CANDIDATE_GROUPS_EXTENSION);
     if (candidateGroupsString != null) {
       List<String> candidateGroups = parseCommaSeparatedList(candidateGroupsString);
       for (String candidateGroup : candidateGroups) {
@@ -2977,19 +2977,19 @@ public class BpmnParse extends Parse {
     parseTaskListeners(taskElement, activity, taskDefinition);
 
     // Due date
-    String dueDateExpression = taskElement.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, DUE_DATE_EXTENSION);
+    String dueDateExpression = taskElement.attributeNS(ORQUEIO_BPMN_EXTENSIONS_NS, DUE_DATE_EXTENSION);
     if (dueDateExpression != null) {
       taskDefinition.setDueDateExpression(expressionManager.createExpression(dueDateExpression));
     }
 
     // follow up date
-    String followUpDateExpression = taskElement.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, FOLLOW_UP_DATE_EXTENSION);
+    String followUpDateExpression = taskElement.attributeNS(ORQUEIO_BPMN_EXTENSIONS_NS, FOLLOW_UP_DATE_EXTENSION);
     if (followUpDateExpression != null) {
       taskDefinition.setFollowUpDateExpression(expressionManager.createExpression(followUpDateExpression));
     }
 
     // Priority
-    final String priorityExpression = taskElement.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, PRIORITY_EXTENSION);
+    final String priorityExpression = taskElement.attributeNS(ORQUEIO_BPMN_EXTENSIONS_NS, PRIORITY_EXTENSION);
     if (priorityExpression != null) {
       taskDefinition.setPriorityExpression(expressionManager.createExpression(priorityExpression));
     }
@@ -3041,7 +3041,7 @@ public class BpmnParse extends Parse {
   protected void parseTaskListeners(Element userTaskElement, ActivityImpl activity, TaskDefinition taskDefinition) {
     Element extentionsElement = userTaskElement.element("extensionElements");
     if (extentionsElement != null) {
-      List<Element> taskListenerElements = extentionsElement.elementsNS(CAMUNDA_BPMN_EXTENSIONS_NS, "taskListener");
+      List<Element> taskListenerElements = extentionsElement.elementsNS(ORQUEIO_BPMN_EXTENSIONS_NS, "taskListener");
       for (Element taskListenerElement : taskListenerElements) {
         String eventName = taskListenerElement.attribute("event");
         if (eventName != null) {
@@ -3069,7 +3069,7 @@ public class BpmnParse extends Parse {
     String className = taskListenerElement.attribute(PROPERTYNAME_CLASS);
     String expression = taskListenerElement.attribute(PROPERTYNAME_EXPRESSION);
     String delegateExpression = taskListenerElement.attribute(PROPERTYNAME_DELEGATE_EXPRESSION);
-    Element scriptElement = taskListenerElement.elementNS(CAMUNDA_BPMN_EXTENSIONS_NS, "script");
+    Element scriptElement = taskListenerElement.elementNS(ORQUEIO_BPMN_EXTENSIONS_NS, "script");
 
     if (className != null) {
       taskListener = new ClassDelegateTaskListener(className, parseFieldDeclarations(taskListenerElement));
@@ -3079,7 +3079,7 @@ public class BpmnParse extends Parse {
       taskListener = new DelegateExpressionTaskListener(expressionManager.createExpression(delegateExpression), parseFieldDeclarations(taskListenerElement));
     } else if (scriptElement != null) {
       try {
-        ExecutableScript executableScript = parseCamundaScript(scriptElement);
+        ExecutableScript executableScript = parseOrqueioScript(scriptElement);
         if (executableScript != null) {
           taskListener = new ScriptTaskListener(executableScript);
         }
@@ -3362,8 +3362,8 @@ public class BpmnParse extends Parse {
 
   }
 
-  public List<CamundaErrorEventDefinition> parseCamundaErrorEventDefinitions(ActivityImpl activity, Element scopeElement) {
-    List<CamundaErrorEventDefinition> errorEventDefinitions = new ArrayList<>();
+  public List<OrqueioErrorEventDefinition> parseOrqueioErrorEventDefinitions(ActivityImpl activity, Element scopeElement) {
+    List<OrqueioErrorEventDefinition> errorEventDefinitions = new ArrayList<>();
     Element extensionElements = scopeElement.element("extensionElements");
     if (extensionElements != null) {
       List<Element> errorEventDefinitionElements = extensionElements.elements("errorEventDefinition");
@@ -3371,9 +3371,9 @@ public class BpmnParse extends Parse {
         String errorRef = errorEventDefinitionElement.attribute("errorRef");
         Error error = null;
         if (errorRef != null) {
-          String camundaExpression = errorEventDefinitionElement.attribute("expression");
+          String orqueioExpression = errorEventDefinitionElement.attribute("expression");
           error = errors.get(errorRef);
-          CamundaErrorEventDefinition definition = new CamundaErrorEventDefinition(activity.getId(), expressionManager.createExpression(camundaExpression));
+          OrqueioErrorEventDefinition definition = new OrqueioErrorEventDefinition(activity.getId(), expressionManager.createExpression(orqueioExpression));
           definition.setErrorCode(error == null ? errorRef : error.getErrorCode());
           setErrorCodeVariableOnErrorEventDefinition(errorEventDefinitionElement, definition);
           setErrorMessageVariableOnErrorEventDefinition(errorEventDefinitionElement, definition);
@@ -3553,7 +3553,7 @@ public class BpmnParse extends Parse {
         signalEventDefinition = new EventSubscriptionDeclaration(signalDefinition.getExpression(), EventType.SIGNAL);
       }
 
-      boolean throwingAsync = TRUE.equals(signalEventDefinitionElement.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, "async", "false"));
+      boolean throwingAsync = TRUE.equals(signalEventDefinitionElement.attributeNS(ORQUEIO_BPMN_EXTENSIONS_NS, "async", "false"));
       signalEventDefinition.setAsync(throwingAsync);
 
       return signalEventDefinition;
@@ -3599,7 +3599,7 @@ public class BpmnParse extends Parse {
     // Parse the timer declaration
     TimerDeclarationImpl timerDeclaration = new TimerDeclarationImpl(expression, type, jobHandlerType);
     timerDeclaration.setRawJobHandlerConfiguration(timerActivity.getId());
-    timerDeclaration.setExclusive(TRUE.equals(timerEventDefinition.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, "exclusive", String.valueOf(JobEntity.DEFAULT_EXCLUSIVE))));
+    timerDeclaration.setExclusive(TRUE.equals(timerEventDefinition.attributeNS(ORQUEIO_BPMN_EXTENSIONS_NS, "exclusive", String.valueOf(JobEntity.DEFAULT_EXCLUSIVE))));
     if (timerActivity.getId() == null) {
       addError("Attribute \"id\" is required!", timerEventDefinition);
     }
@@ -3691,7 +3691,7 @@ public class BpmnParse extends Parse {
       }
     }
 
-    String escalationCodeVariable = escalationEventDefinitionElement.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, "escalationCodeVariable");
+    String escalationCodeVariable = escalationEventDefinitionElement.attributeNS(ORQUEIO_BPMN_EXTENSIONS_NS, "escalationCodeVariable");
     if(escalationCodeVariable != null) {
       escalationEventDefinition.setEscalationCodeVariable(escalationCodeVariable);
     }
@@ -3844,10 +3844,10 @@ public class BpmnParse extends Parse {
 
       conditionalActivity.getProcessDefinition().getProperties().set(BpmnProperties.HAS_CONDITIONAL_EVENTS, true);
 
-      final String variableName = element.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, "variableName");
+      final String variableName = element.attributeNS(ORQUEIO_BPMN_EXTENSIONS_NS, "variableName");
       conditionalEventDefinition.setVariableName(variableName);
 
-      final String variableEvents = element.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, "variableEvents");
+      final String variableEvents = element.attributeNS(ORQUEIO_BPMN_EXTENSIONS_NS, "variableEvents");
       final List<String> variableEventsList = parseCommaSeparatedList(variableEvents);
       conditionalEventDefinition.setVariableEvents(new HashSet<>(variableEventsList));
 
@@ -3932,9 +3932,9 @@ public class BpmnParse extends Parse {
 
     // parse definition key (and behavior)
     String calledElement = callActivityElement.attribute("calledElement");
-    String caseRef = callActivityElement.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, "caseRef");
-    String className = callActivityElement.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, PROPERTYNAME_VARIABLE_MAPPING_CLASS);
-    String delegateExpression = callActivityElement.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, PROPERTYNAME_VARIABLE_MAPPING_DELEGATE_EXPRESSION);
+    String caseRef = callActivityElement.attributeNS(ORQUEIO_BPMN_EXTENSIONS_NS, "caseRef");
+    String className = callActivityElement.attributeNS(ORQUEIO_BPMN_EXTENSIONS_NS, PROPERTYNAME_VARIABLE_MAPPING_CLASS);
+    String delegateExpression = callActivityElement.attributeNS(ORQUEIO_BPMN_EXTENSIONS_NS, PROPERTYNAME_VARIABLE_MAPPING_DELEGATE_EXPRESSION);
 
     if (calledElement == null && caseRef == null) {
       addError("Missing attribute 'calledElement' or 'caseRef'", callActivityElement);
@@ -4014,7 +4014,7 @@ public class BpmnParse extends Parse {
   }
 
   protected void parseBinding(Element callActivityElement, ActivityImpl activity, BaseCallableElement callableElement, String bindingAttributeName) {
-    String binding = callActivityElement.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, bindingAttributeName);
+    String binding = callActivityElement.attributeNS(ORQUEIO_BPMN_EXTENSIONS_NS, bindingAttributeName);
 
     if (CallableElementBinding.DEPLOYMENT.getValue().equals(binding)) {
       callableElement.setBinding(CallableElementBinding.DEPLOYMENT);
@@ -4030,7 +4030,7 @@ public class BpmnParse extends Parse {
   protected void parseTenantId(Element callingActivityElement, ActivityImpl activity, BaseCallableElement callableElement, String attrName) {
     ParameterValueProvider tenantIdValueProvider = null;
 
-    String tenantId = callingActivityElement.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, attrName);
+    String tenantId = callingActivityElement.attributeNS(ORQUEIO_BPMN_EXTENSIONS_NS, attrName);
     if (tenantId != null && tenantId.length() > 0) {
       tenantIdValueProvider = createParameterValueProvider(tenantId, expressionManager);
     }
@@ -4042,7 +4042,7 @@ public class BpmnParse extends Parse {
     String version = null;
 
     CallableElementBinding binding = callableElement.getBinding();
-    version = callingActivityElement.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, versionAttributeName);
+    version = callingActivityElement.attributeNS(ORQUEIO_BPMN_EXTENSIONS_NS, versionAttributeName);
 
     if (binding != null && binding.equals(CallableElementBinding.VERSION) && version == null) {
       addError("Missing attribute '" + versionAttributeName + "' when '" + bindingAttributeName + "' has value '" + CallableElementBinding.VERSION.getValue()
@@ -4057,7 +4057,7 @@ public class BpmnParse extends Parse {
     String versionTag = null;
 
     CallableElementBinding binding = callableElement.getBinding();
-    versionTag = callingActivityElement.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, versionTagAttributeName);
+    versionTag = callingActivityElement.attributeNS(ORQUEIO_BPMN_EXTENSIONS_NS, versionTagAttributeName);
 
     if (binding != null && binding.equals(CallableElementBinding.VERSION_TAG) && versionTag == null) {
       addError("Missing attribute '" + versionTagAttributeName + "' when '" + bindingAttributeName + "' has value '" + CallableElementBinding.VERSION_TAG.getValue()
@@ -4073,7 +4073,7 @@ public class BpmnParse extends Parse {
 
     if (extensionsElement != null) {
       // input data elements
-      for (Element inElement : extensionsElement.elementsNS(CAMUNDA_BPMN_EXTENSIONS_NS, "in")) {
+      for (Element inElement : extensionsElement.elementsNS(ORQUEIO_BPMN_EXTENSIONS_NS, "in")) {
 
         String businessKey = inElement.attribute("businessKey");
 
@@ -4100,7 +4100,7 @@ public class BpmnParse extends Parse {
 
     if (extensionsElement != null) {
       // output data elements
-      for (Element outElement : extensionsElement.elementsNS(CAMUNDA_BPMN_EXTENSIONS_NS, "out")) {
+      for (Element outElement : extensionsElement.elementsNS(ORQUEIO_BPMN_EXTENSIONS_NS, "out")) {
 
         CallableElementParameter parameter = parseCallableElementProvider(outElement, callActivityElement.attribute("id"));
 
@@ -4238,7 +4238,7 @@ public class BpmnParse extends Parse {
   public void parsePropertyCustomExtensions(ActivityImpl activity, Element propertyElement, String propertyName, String propertyType) {
 
     if (propertyType == null) {
-      String type = propertyElement.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, TYPE);
+      String type = propertyElement.attributeNS(ORQUEIO_BPMN_EXTENSIONS_NS, TYPE);
       propertyType = type != null ? type : "string"; // default is string
     }
 
@@ -4246,34 +4246,34 @@ public class BpmnParse extends Parse {
     addVariableDeclaration(activity, variableDeclaration);
     activity.setScope(true);
 
-    String src = propertyElement.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, "src");
+    String src = propertyElement.attributeNS(ORQUEIO_BPMN_EXTENSIONS_NS, "src");
     if (src != null) {
       variableDeclaration.setSourceVariableName(src);
     }
 
-    String srcExpr = propertyElement.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, "srcExpr");
+    String srcExpr = propertyElement.attributeNS(ORQUEIO_BPMN_EXTENSIONS_NS, "srcExpr");
     if (srcExpr != null) {
       Expression sourceExpression = expressionManager.createExpression(srcExpr);
       variableDeclaration.setSourceExpression(sourceExpression);
     }
 
-    String dst = propertyElement.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, "dst");
+    String dst = propertyElement.attributeNS(ORQUEIO_BPMN_EXTENSIONS_NS, "dst");
     if (dst != null) {
       variableDeclaration.setDestinationVariableName(dst);
     }
 
-    String destExpr = propertyElement.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, "dstExpr");
+    String destExpr = propertyElement.attributeNS(ORQUEIO_BPMN_EXTENSIONS_NS, "dstExpr");
     if (destExpr != null) {
       Expression destinationExpression = expressionManager.createExpression(destExpr);
       variableDeclaration.setDestinationExpression(destinationExpression);
     }
 
-    String link = propertyElement.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, "link");
+    String link = propertyElement.attributeNS(ORQUEIO_BPMN_EXTENSIONS_NS, "link");
     if (link != null) {
       variableDeclaration.setLink(link);
     }
 
-    String linkExpr = propertyElement.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, "linkExpr");
+    String linkExpr = propertyElement.attributeNS(ORQUEIO_BPMN_EXTENSIONS_NS, "linkExpr");
     if (linkExpr != null) {
       Expression linkExpression = expressionManager.createExpression(linkExpr);
       variableDeclaration.setLinkExpression(linkExpression);
@@ -4400,7 +4400,7 @@ public class BpmnParse extends Parse {
     String expression = conditionExprElement.getText().trim();
     String type = conditionExprElement.attributeNS(XSI_NS, TYPE);
     String language = conditionExprElement.attribute(PROPERTYNAME_LANGUAGE);
-    String resource = conditionExprElement.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, PROPERTYNAME_RESOURCE);
+    String resource = conditionExprElement.attributeNS(ORQUEIO_BPMN_EXTENSIONS_NS, PROPERTYNAME_RESOURCE);
     if (type != null) {
       String value = type.contains(":") ? resolveName(type) : BpmnParser.BPMN20_NS + ":" + type;
       if (!value.equals(ATTRIBUTEVALUE_T_FORMAL_EXPRESSION)) {
@@ -4433,7 +4433,7 @@ public class BpmnParse extends Parse {
     Element extentionsElement = scopeElement.element("extensionElements");
     String scopeElementId = scopeElement.attribute("id");
     if (extentionsElement != null) {
-      List<Element> listenerElements = extentionsElement.elementsNS(CAMUNDA_BPMN_EXTENSIONS_NS, "executionListener");
+      List<Element> listenerElements = extentionsElement.elementsNS(ORQUEIO_BPMN_EXTENSIONS_NS, "executionListener");
       for (Element listenerElement : listenerElements) {
         String eventName = listenerElement.attribute("event");
         if (isValidEventNameForScope(eventName, listenerElement, scopeElementId)) {
@@ -4466,7 +4466,7 @@ public class BpmnParse extends Parse {
   public void parseExecutionListenersOnTransition(Element activitiElement, TransitionImpl activity) {
     Element extensionElements = activitiElement.element("extensionElements");
     if (extensionElements != null) {
-      List<Element> listenerElements = extensionElements.elementsNS(CAMUNDA_BPMN_EXTENSIONS_NS, "executionListener");
+      List<Element> listenerElements = extensionElements.elementsNS(ORQUEIO_BPMN_EXTENSIONS_NS, "executionListener");
       for (Element listenerElement : listenerElements) {
         ExecutionListener listener = parseExecutionListener(listenerElement, activity.getId());
         if (listener != null) {
@@ -4491,7 +4491,7 @@ public class BpmnParse extends Parse {
     String className = executionListenerElement.attribute(PROPERTYNAME_CLASS);
     String expression = executionListenerElement.attribute(PROPERTYNAME_EXPRESSION);
     String delegateExpression = executionListenerElement.attribute(PROPERTYNAME_DELEGATE_EXPRESSION);
-    Element scriptElement = executionListenerElement.elementNS(CAMUNDA_BPMN_EXTENSIONS_NS, "script");
+    Element scriptElement = executionListenerElement.elementNS(ORQUEIO_BPMN_EXTENSIONS_NS, "script");
 
     if (className != null) {
       if (className.isEmpty()) {
@@ -4509,7 +4509,7 @@ public class BpmnParse extends Parse {
       }
     } else if (scriptElement != null) {
       try {
-        ExecutableScript executableScript = parseCamundaScript(scriptElement);
+        ExecutableScript executableScript = parseOrqueioScript(scriptElement);
         if (executableScript != null) {
           executionListener = new ScriptExecutionListener(executableScript);
         }
@@ -4744,29 +4744,29 @@ public class BpmnParse extends Parse {
   }
 
   protected boolean isStartable(Element element) {
-    return TRUE.equalsIgnoreCase(element.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, "isStartableInTasklist", TRUE));
+    return TRUE.equalsIgnoreCase(element.attributeNS(ORQUEIO_BPMN_EXTENSIONS_NS, "isStartableInTasklist", TRUE));
   }
 
   protected boolean isExclusive(Element element) {
-    return TRUE.equals(element.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, "exclusive", String.valueOf(JobEntity.DEFAULT_EXCLUSIVE)));
+    return TRUE.equals(element.attributeNS(ORQUEIO_BPMN_EXTENSIONS_NS, "exclusive", String.valueOf(JobEntity.DEFAULT_EXCLUSIVE)));
   }
 
   protected boolean isAsyncBefore(Element element) {
-    return TRUE.equals(element.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, "async"))
-        || TRUE.equals(element.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, "asyncBefore"));
+    return TRUE.equals(element.attributeNS(ORQUEIO_BPMN_EXTENSIONS_NS, "async"))
+        || TRUE.equals(element.attributeNS(ORQUEIO_BPMN_EXTENSIONS_NS, "asyncBefore"));
   }
 
   protected boolean isAsyncAfter(Element element) {
-    return TRUE.equals(element.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, "asyncAfter"));
+    return TRUE.equals(element.attributeNS(ORQUEIO_BPMN_EXTENSIONS_NS, "asyncAfter"));
   }
 
   protected boolean isServiceTaskLike(Element element) {
 
     return element != null && (
-          element.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, PROPERTYNAME_CLASS) != null
-        || element.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, PROPERTYNAME_EXPRESSION) != null
-        || element.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, PROPERTYNAME_DELEGATE_EXPRESSION) != null
-        || element.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, TYPE) != null
+          element.attributeNS(ORQUEIO_BPMN_EXTENSIONS_NS, PROPERTYNAME_CLASS) != null
+        || element.attributeNS(ORQUEIO_BPMN_EXTENSIONS_NS, PROPERTYNAME_EXPRESSION) != null
+        || element.attributeNS(ORQUEIO_BPMN_EXTENSIONS_NS, PROPERTYNAME_DELEGATE_EXPRESSION) != null
+        || element.attributeNS(ORQUEIO_BPMN_EXTENSIONS_NS, TYPE) != null
         || hasConnector(element));
   }
 
@@ -4830,12 +4830,12 @@ public class BpmnParse extends Parse {
         || tagName.equals("transaction")
         || tagName.equals("subProcess")
         || tagName.equals("callActivity"))) {
-      addError("camunda:inputOutput mapping unsupported for element type '" + tagName + "'.", activityElement);
+      addError("orqueio:inputOutput mapping unsupported for element type '" + tagName + "'.", activityElement);
       return false;
     }
 
     if (tagName.equals("subProcess") && TRUE.equals(activityElement.attribute("triggeredByEvent"))) {
-      addError("camunda:inputOutput mapping unsupported for element type '" + tagName + "' with attribute 'triggeredByEvent = true'.", activityElement);
+      addError("orqueio:inputOutput mapping unsupported for element type '" + tagName + "' with attribute 'triggeredByEvent = true'.", activityElement);
       return false;
     }
 
@@ -4850,10 +4850,10 @@ public class BpmnParse extends Parse {
     String tagName = activityElement.getTagName();
 
     if (tagName.equals("endEvent")) {
-      addError("camunda:outputParameter not allowed for element type '" + tagName + "'.", activityElement);
+      addError("orqueio:outputParameter not allowed for element type '" + tagName + "'.", activityElement);
       return true;
     } else if (getMultiInstanceScope(activity) != null) {
-      addError("camunda:outputParameter not allowed for multi-instance constructs", activityElement);
+      addError("orqueio:outputParameter not allowed for multi-instance constructs", activityElement);
       return false;
     } else {
       return true;
@@ -4861,9 +4861,9 @@ public class BpmnParse extends Parse {
   }
 
   protected void ensureNoIoMappingDefined(Element element) {
-    Element inputOutput = findCamundaExtensionElement(element, "inputOutput");
+    Element inputOutput = findOrqueioExtensionElement(element, "inputOutput");
     if (inputOutput != null) {
-      addError("camunda:inputOutput mapping unsupported for element type '" + element.getTagName() + "'.", element);
+      addError("orqueio:inputOutput mapping unsupported for element type '" + element.getTagName() + "'.", element);
     }
   }
 

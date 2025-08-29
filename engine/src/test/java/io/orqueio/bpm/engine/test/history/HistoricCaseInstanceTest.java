@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -55,7 +55,7 @@ import org.junit.Test;
 @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_AUDIT)
 public class HistoricCaseInstanceTest extends CmmnTest {
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/emptyStageCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/emptyStageCase.cmmn"})
   @Test
   public void testCaseInstanceProperties() {
     CaseInstance caseInstance = createCaseInstance();
@@ -68,7 +68,7 @@ public class HistoricCaseInstanceTest extends CmmnTest {
     assertEquals(caseInstance.getCaseDefinitionId(), historicInstance.getCaseDefinitionId());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/emptyStageWithManualActivationCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/emptyStageWithManualActivationCase.cmmn"})
   @Test
   public void testCaseInstanceStates() {
     String caseInstanceId = createCaseInstance().getId();
@@ -116,7 +116,7 @@ public class HistoricCaseInstanceTest extends CmmnTest {
     assertCount(0, historicQuery().notClosed());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/emptyStageWithManualActivationCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/emptyStageWithManualActivationCase.cmmn"})
   @Test
   public void testHistoricCaseInstanceDates() {
     // create test dates
@@ -171,7 +171,7 @@ public class HistoricCaseInstanceTest extends CmmnTest {
     assertCount(1, historicQuery().closedBefore(afterClose).closedAfter(created));
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/emptyStageCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/emptyStageCase.cmmn"})
   @Test
   public void testCreateUser() {
     String userId = "test";
@@ -187,8 +187,8 @@ public class HistoricCaseInstanceTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/api/cmmn/oneCaseTaskCase.cmmn",
-    "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
+    "io/orqueio/bpm/engine/test/api/cmmn/oneCaseTaskCase.cmmn",
+    "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
   })
   @Test
   public void testSuperCaseInstance() {
@@ -211,9 +211,9 @@ public class HistoricCaseInstanceTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn",
-    "org/camunda/bpm/engine/test/api/cmmn/twoTaskCase.cmmn",
-    "org/camunda/bpm/engine/test/api/repository/three_.cmmn"
+    "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn",
+    "io/orqueio/bpm/engine/test/api/cmmn/twoTaskCase.cmmn",
+    "io/orqueio/bpm/engine/test/api/repository/three_.cmmn"
   })
   @Test
   public void testHistoricCaseInstanceQuery() {
@@ -268,7 +268,7 @@ public class HistoricCaseInstanceTest extends CmmnTest {
     assertCount(1, historicQuery().caseInstanceBusinessKeyLike("%z\\_"));
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testQueryByVariable() {
     String caseInstanceId = createCaseInstance().getId();
@@ -297,7 +297,7 @@ public class HistoricCaseInstanceTest extends CmmnTest {
     assertCount(0, historicQuery().variableValueGreaterThan("number", 10));
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn")
   @Test
   public void testCaseVariableValueEqualsNumber() throws Exception {
     // long
@@ -356,7 +356,7 @@ public class HistoricCaseInstanceTest extends CmmnTest {
   }
 
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testQueryPaging() {
     createCaseInstance();
@@ -370,8 +370,8 @@ public class HistoricCaseInstanceTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn",
-    "org/camunda/bpm/engine/test/api/cmmn/twoTaskCase.cmmn"
+    "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn",
+    "io/orqueio/bpm/engine/test/api/cmmn/twoTaskCase.cmmn"
   })
   @SuppressWarnings("unchecked")
   @Test
@@ -491,7 +491,7 @@ public class HistoricCaseInstanceTest extends CmmnTest {
     }
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testNativeQuery() {
     String id = createCaseInstance().getId();
@@ -520,7 +520,7 @@ public class HistoricCaseInstanceTest extends CmmnTest {
     assertEquals(1, historyService.createNativeHistoricCaseInstanceQuery().sql("SELECT count(*) FROM " + tableName + " H WHERE H.ID_ = #{caseInstanceId}").parameter("caseInstanceId", id).count());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testNativeQueryPaging() {
     createCaseInstance();
@@ -533,7 +533,7 @@ public class HistoricCaseInstanceTest extends CmmnTest {
     assertEquals(2, historyService.createNativeHistoricCaseInstanceQuery().sql("SELECT * FROM " + tableName).listPage(2, 2).size());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/emptyStageWithManualActivationCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/emptyStageWithManualActivationCase.cmmn"})
   @Test
   public void testDeleteHistoricCaseInstance() {
     CaseInstance caseInstance = createCaseInstance();
@@ -575,8 +575,8 @@ public class HistoricCaseInstanceTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/api/runtime/superProcessWithCaseCallActivity.bpmn20.xml",
-      "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
+      "io/orqueio/bpm/engine/test/api/runtime/superProcessWithCaseCallActivity.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
       })
   @Test
   public void testQueryBySuperProcessInstanceId() {
@@ -612,8 +612,8 @@ public class HistoricCaseInstanceTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/api/cmmn/oneProcessTaskCase.cmmn",
-      "org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+      "io/orqueio/bpm/engine/test/api/cmmn/oneProcessTaskCase.cmmn",
+      "io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   @Test
   public void testQueryBySubProcessInstanceId() {
     String superCaseInstanceId = caseService.createCaseInstanceByKey("oneProcessTaskCase").getId();
@@ -654,8 +654,8 @@ public class HistoricCaseInstanceTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/api/cmmn/oneCaseTaskCase.cmmn",
-      "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
+      "io/orqueio/bpm/engine/test/api/cmmn/oneCaseTaskCase.cmmn",
+      "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
       })
   @Test
   public void testQueryBySuperCaseInstanceId() {
@@ -690,8 +690,8 @@ public class HistoricCaseInstanceTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/api/cmmn/oneCaseTaskCase.cmmn",
-      "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
+      "io/orqueio/bpm/engine/test/api/cmmn/oneCaseTaskCase.cmmn",
+      "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
       })
   @Test
   public void testQueryBySubCaseInstanceId() {
@@ -732,7 +732,7 @@ public class HistoricCaseInstanceTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
+    "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
   })
   @Test
   public void testQueryByCaseActivityId() {
@@ -750,8 +750,8 @@ public class HistoricCaseInstanceTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/api/cmmn/oneCaseTaskCase.cmmn",
-    "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
+    "io/orqueio/bpm/engine/test/api/cmmn/oneCaseTaskCase.cmmn",
+    "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
   })
   @Test
   public void testQueryByCaseActivityIds() {
@@ -769,7 +769,7 @@ public class HistoricCaseInstanceTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/api/cmmn/twoTaskCase.cmmn"
+    "io/orqueio/bpm/engine/test/api/cmmn/twoTaskCase.cmmn"
   })
   @Test
   public void testDistinctQueryByCaseActivityIds() {
@@ -806,7 +806,7 @@ public class HistoricCaseInstanceTest extends CmmnTest {
     }
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn")
   @Test
   public void testRetrieveCaseDefinitionKey() {
 
@@ -823,7 +823,7 @@ public class HistoricCaseInstanceTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn")
   @Test
   public void testRetrieveCaseDefinitionName() {
 

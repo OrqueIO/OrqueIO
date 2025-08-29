@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -146,19 +146,19 @@ public class ContainerIntegrationLogger extends ProcessEngineLogger {
   public void foundConfigJndi(String jndi, String string) {
     logInfo(
         "018",
-        "Found Camunda Platform configuration in JNDI [{}] at {}", jndi, string);
+        "Found Orqueio Platform configuration in JNDI [{}] at {}", jndi, string);
   }
 
   public void debugExceptionWhileGettingConfigFromJndi(String jndi, NamingException e) {
     logDebug(
         "019",
-        "Failed to look up Camunda Platform configuration in JNDI [{}]: {}", jndi, e);
+        "Failed to look up Orqueio Platform configuration in JNDI [{}]: {}", jndi, e);
   }
 
   public void foundConfigAtLocation(String logStatement, String string) {
     logInfo(
         "020",
-        "Found Camunda Platform configuration through {}  at {} " , logStatement, string);
+        "Found Orqueio Platform configuration through {}  at {} " , logStatement, string);
   }
 
   public void notCreatingPaDeployment(String name) {
@@ -278,7 +278,7 @@ public class ContainerIntegrationLogger extends ProcessEngineLogger {
   public ProcessEngineException unknownExceptionWhileParsingDeploymentDescriptor(Exception e) {
     return new ProcessEngineException(exceptionMessage(
         "038",
-        "Unknown exception while parsing deployment camunda descriptor: {}", e.getMessage()), e);
+        "Unknown exception while parsing deployment orqueio descriptor: {}", e.getMessage()), e);
   }
 
   public ProcessEngineException cannotSetValueForProperty(String key, String canonicalName, Exception e) {
@@ -333,26 +333,26 @@ public class ContainerIntegrationLogger extends ProcessEngineLogger {
   public void foundTomcatDeploymentDescriptor(String bpmPlatformFileLocation, String fileLocation) {
     logInfo(
         "046",
-        "Found Camunda Platform configuration in CATALINA_BASE/CATALINA_HOME conf directory [{}] at '{}'", bpmPlatformFileLocation, fileLocation);
+        "Found Orqueio Platform configuration in CATALINA_BASE/CATALINA_HOME conf directory [{}] at '{}'", bpmPlatformFileLocation, fileLocation);
 
   }
 
   public ProcessEngineException invalidDeploymentDescriptorLocation(String bpmPlatformFileLocation, MalformedURLException e) {
     throw new ProcessEngineException(exceptionMessage(
         "047",
-        "'{} is not a valid Camunda Platform configuration resource location.", bpmPlatformFileLocation), e);
+        "'{} is not a valid Orqueio Platform configuration resource location.", bpmPlatformFileLocation), e);
   }
 
-  public void camundaBpmPlatformSuccessfullyStarted(String serverInfo) {
+  public void orqueioBpmPlatformSuccessfullyStarted(String serverInfo) {
     logInfo(
         "048",
-        "Camunda Platform sucessfully started at '{}'.", serverInfo);
+        "Orqueio Platform sucessfully started at '{}'.", serverInfo);
   }
 
-  public void camundaBpmPlatformStopped(String serverInfo) {
+  public void orqueioBpmPlatformStopped(String serverInfo) {
     logInfo(
         "049",
-        "Camunda Platform stopped at '{}'", serverInfo);
+        "Orqueio Platform stopped at '{}'", serverInfo);
   }
 
   public void paDeployed(String name) {

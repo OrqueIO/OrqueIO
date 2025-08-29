@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -43,22 +43,22 @@ public class ExternalScriptTaskTest extends PluggableProcessEngineTest {
 
     String greeting = (String) runtimeService.getVariable(processInstance.getId(), "greeting");
     assertNotNull(greeting);
-    assertEquals("Greetings Camunda Platform speaking", greeting);
+    assertEquals("Greetings Orqueio Platform speaking", greeting);
   }
 
   @Deployment
   @Test
   public void testDefaultExternalScriptAsVariable() {
     Map<String, Object> variables = new HashMap<String, Object>();
-    variables.put("scriptPath", "org/camunda/bpm/engine/test/bpmn/scripttask/greeting.py");
+    variables.put("scriptPath", "io/orqueio/bpm/engine/test/bpmn/scripttask/greeting.py");
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("process", variables);
 
     String greeting = (String) runtimeService.getVariable(processInstance.getId(), "greeting");
     assertNotNull(greeting);
-    assertEquals("Greetings Camunda Platform speaking", greeting);
+    assertEquals("Greetings Orqueio Platform speaking", greeting);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/scripttask/ExternalScriptTaskTest.testDefaultExternalScriptAsVariable.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/bpmn/scripttask/ExternalScriptTaskTest.testDefaultExternalScriptAsVariable.bpmn20.xml"})
   @Test
   public void testDefaultExternalScriptAsNonExistingVariable() {
     try {
@@ -79,7 +79,7 @@ public class ExternalScriptTaskTest extends PluggableProcessEngineTest {
 
     String greeting = (String) runtimeService.getVariable(processInstance.getId(), "greeting");
     assertNotNull(greeting);
-    assertEquals("Greetings Camunda Platform speaking", greeting);
+    assertEquals("Greetings Orqueio Platform speaking", greeting);
   }
 
   @Deployment
@@ -89,19 +89,19 @@ public class ExternalScriptTaskTest extends PluggableProcessEngineTest {
 
     String greeting = (String) runtimeService.getVariable(processInstance.getId(), "greeting");
     assertNotNull(greeting);
-    assertEquals("Greetings Camunda Platform speaking", greeting);
+    assertEquals("Greetings Orqueio Platform speaking", greeting);
   }
 
   @Deployment
   @Test
   public void testScriptInClasspathAsVariable() {
     Map<String, Object> variables = new HashMap<String, Object>();
-    variables.put("scriptPath", "classpath://org/camunda/bpm/engine/test/bpmn/scripttask/greeting.py");
+    variables.put("scriptPath", "classpath://io/orqueio/bpm/engine/test/bpmn/scripttask/greeting.py");
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("process", variables);
 
     String greeting = (String) runtimeService.getVariable(processInstance.getId(), "greeting");
     assertNotNull(greeting);
-    assertEquals("Greetings Camunda Platform speaking", greeting);
+    assertEquals("Greetings Orqueio Platform speaking", greeting);
   }
 
   @Deployment
@@ -113,7 +113,7 @@ public class ExternalScriptTaskTest extends PluggableProcessEngineTest {
 
     String greeting = (String) runtimeService.getVariable(processInstance.getId(), "greeting");
     assertNotNull(greeting);
-    assertEquals("Greetings Camunda Platform speaking", greeting);
+    assertEquals("Greetings Orqueio Platform speaking", greeting);
   }
 
   @Deployment
@@ -124,13 +124,13 @@ public class ExternalScriptTaskTest extends PluggableProcessEngineTest {
       fail("Resource does not exist in classpath");
     }
     catch (NotFoundException e) {
-      testRule.assertTextPresentIgnoreCase("unable to find resource at path classpath://org/camunda/bpm/engine/test/bpmn/scripttask/notexisting.py", e.getMessage());
+      testRule.assertTextPresentIgnoreCase("unable to find resource at path classpath://io/orqueio/bpm/engine/test/bpmn/scripttask/notexisting.py", e.getMessage());
     }
   }
 
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/scripttask/ExternalScriptTaskTest.testScriptInDeployment.bpmn20.xml",
-    "org/camunda/bpm/engine/test/bpmn/scripttask/greeting.py"
+    "io/orqueio/bpm/engine/test/bpmn/scripttask/ExternalScriptTaskTest.testScriptInDeployment.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/bpmn/scripttask/greeting.py"
   })
   @Test
   public void testScriptInDeployment() {
@@ -138,12 +138,12 @@ public class ExternalScriptTaskTest extends PluggableProcessEngineTest {
 
     String greeting = (String) runtimeService.getVariable(processInstance.getId(), "greeting");
     assertNotNull(greeting);
-    assertEquals("Greetings Camunda Platform speaking", greeting);
+    assertEquals("Greetings Orqueio Platform speaking", greeting);
   }
 
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/scripttask/ExternalScriptTaskTest.testScriptInDeployment.bpmn20.xml",
-    "org/camunda/bpm/engine/test/bpmn/scripttask/greeting.py"
+    "io/orqueio/bpm/engine/test/bpmn/scripttask/ExternalScriptTaskTest.testScriptInDeployment.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/bpmn/scripttask/greeting.py"
   })
   @Test
   public void testScriptInDeploymentAfterCacheWasCleaned() {
@@ -153,27 +153,27 @@ public class ExternalScriptTaskTest extends PluggableProcessEngineTest {
 
     String greeting = (String) runtimeService.getVariable(processInstance.getId(), "greeting");
     assertNotNull(greeting);
-    assertEquals("Greetings Camunda Platform speaking", greeting);
+    assertEquals("Greetings Orqueio Platform speaking", greeting);
   }
 
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/scripttask/ExternalScriptTaskTest.testScriptInDeploymentAsVariable.bpmn20.xml",
-    "org/camunda/bpm/engine/test/bpmn/scripttask/greeting.py"
+    "io/orqueio/bpm/engine/test/bpmn/scripttask/ExternalScriptTaskTest.testScriptInDeploymentAsVariable.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/bpmn/scripttask/greeting.py"
   })
   @Test
   public void testScriptInDeploymentAsVariable() {
     Map<String, Object> variables = new HashMap<String, Object>();
-    variables.put("scriptPath", "deployment://org/camunda/bpm/engine/test/bpmn/scripttask/greeting.py");
+    variables.put("scriptPath", "deployment://io/orqueio/bpm/engine/test/bpmn/scripttask/greeting.py");
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("process", variables);
 
     String greeting = (String) runtimeService.getVariable(processInstance.getId(), "greeting");
     assertNotNull(greeting);
-    assertEquals("Greetings Camunda Platform speaking", greeting);
+    assertEquals("Greetings Orqueio Platform speaking", greeting);
   }
 
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/scripttask/ExternalScriptTaskTest.testScriptInDeploymentAsBean.bpmn20.xml",
-    "org/camunda/bpm/engine/test/bpmn/scripttask/greeting.py"
+    "io/orqueio/bpm/engine/test/bpmn/scripttask/ExternalScriptTaskTest.testScriptInDeploymentAsBean.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/bpmn/scripttask/greeting.py"
   })
   @Test
   public void testScriptInDeploymentAsBean() {
@@ -183,7 +183,7 @@ public class ExternalScriptTaskTest extends PluggableProcessEngineTest {
 
     String greeting = (String) runtimeService.getVariable(processInstance.getId(), "greeting");
     assertNotNull(greeting);
-    assertEquals("Greetings Camunda Platform speaking", greeting);
+    assertEquals("Greetings Orqueio Platform speaking", greeting);
   }
 
   @Deployment
@@ -194,7 +194,7 @@ public class ExternalScriptTaskTest extends PluggableProcessEngineTest {
       fail("Resource does not exist in classpath");
     }
     catch (NotFoundException e) {
-      testRule.assertTextPresentIgnoreCase("unable to find resource at path deployment://org/camunda/bpm/engine/test/bpmn/scripttask/notexisting.py", e.getMessage());
+      testRule.assertTextPresentIgnoreCase("unable to find resource at path deployment://io/orqueio/bpm/engine/test/bpmn/scripttask/notexisting.py", e.getMessage());
     }
   }
 

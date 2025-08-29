@@ -1,3 +1,3 @@
-greeting = 'Greetings Camunda Platform speaking'
+greeting = 'Greetings Orqueio Platform speaking'
 execution.setVariable("greeting", greeting)
 print greeting

@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -48,9 +48,9 @@ public class TaskMetricsTest {
 
   protected static final String PROCESS_KEY = "process";
   protected static final BpmnModelInstance USER_TASK_PROCESS = Bpmn.createExecutableProcess(PROCESS_KEY)
-      .camundaHistoryTimeToLive(180)
+      .orqueioHistoryTimeToLive(180)
       .startEvent()
-      .userTask("task").camundaAssignee("kermit")
+      .userTask("task").orqueioAssignee("kermit")
       .endEvent()
       .done();
 
@@ -192,9 +192,9 @@ public class TaskMetricsTest {
   public void shouldCreateTaskMetricWithAssignmentByTaskListener() {
     // given
     testRule.deploy(Bpmn.createExecutableProcess(PROCESS_KEY)
-        .camundaHistoryTimeToLive(180)
+        .orqueioHistoryTimeToLive(180)
         .startEvent()
-        .userTask("task").camundaTaskListenerClass("create", AssignmentTaskListener.class)
+        .userTask("task").orqueioTaskListenerClass("create", AssignmentTaskListener.class)
         .endEvent()
         .done());
     // when
@@ -204,7 +204,7 @@ public class TaskMetricsTest {
   }
 
   @Test
-  public void shouldCreateTaskMetricWithAssignmentByCamundaAssigneeExtension() {
+  public void shouldCreateTaskMetricWithAssignmentByOrqueioAssigneeExtension() {
     // given
     testRule.deploy(USER_TASK_PROCESS);
     // when
@@ -227,11 +227,11 @@ public class TaskMetricsTest {
   public void shouldCreateTaskMetricsWithMultipleAssignments() {
     // given
     testRule.deploy(Bpmn.createExecutableProcess(PROCESS_KEY)
-        .camundaHistoryTimeToLive(180)
+        .orqueioHistoryTimeToLive(180)
         .startEvent()
         .userTask("task")
-          .camundaAssignee("kermit")
-          .camundaTaskListenerClass("create", AssignmentTaskListener.class)
+          .orqueioAssignee("kermit")
+          .orqueioTaskListenerClass("create", AssignmentTaskListener.class)
         .endEvent()
         .done());
     // when
@@ -256,7 +256,7 @@ public class TaskMetricsTest {
   public void shouldCreateTaskMetricOnClaim() {
     // given
     testRule.deploy(Bpmn.createExecutableProcess(PROCESS_KEY)
-        .camundaHistoryTimeToLive(180)
+        .orqueioHistoryTimeToLive(180)
         .startEvent()
         .userTask("task")
         .endEvent()
@@ -275,7 +275,7 @@ public class TaskMetricsTest {
     long taskWorkers = 3500L;
     long lowerErrorBoundary = Math.floorDiv((int)(taskWorkers * 90), 100);// 10% off is acceptable
     testRule.deploy(Bpmn.createExecutableProcess(PROCESS_KEY)
-        .camundaHistoryTimeToLive(180)
+        .orqueioHistoryTimeToLive(180)
         .startEvent()
         .userTask("task")
         .endEvent()

@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -50,23 +50,23 @@ import org.junit.Test;
  */
 public class SetProcessDefinitionVersionCmdTest extends PluggableProcessEngineTest {
 
-  private static final String TEST_PROCESS_WITH_PARALLEL_GATEWAY = "org/camunda/bpm/engine/test/bpmn/gateway/ParallelGatewayTest.testForkJoin.bpmn20.xml";
-  private static final String TEST_PROCESS = "org/camunda/bpm/engine/test/api/runtime/migration/SetProcessDefinitionVersionCmdTest.testSetProcessDefinitionVersion.bpmn20.xml";
-  private static final String TEST_PROCESS_ACTIVITY_MISSING = "org/camunda/bpm/engine/test/api/runtime/migration/SetProcessDefinitionVersionCmdTest.testSetProcessDefinitionVersionActivityMissing.bpmn20.xml";
+  private static final String TEST_PROCESS_WITH_PARALLEL_GATEWAY = "io/orqueio/bpm/engine/test/bpmn/gateway/ParallelGatewayTest.testForkJoin.bpmn20.xml";
+  private static final String TEST_PROCESS = "io/orqueio/bpm/engine/test/api/runtime/migration/SetProcessDefinitionVersionCmdTest.testSetProcessDefinitionVersion.bpmn20.xml";
+  private static final String TEST_PROCESS_ACTIVITY_MISSING = "io/orqueio/bpm/engine/test/api/runtime/migration/SetProcessDefinitionVersionCmdTest.testSetProcessDefinitionVersionActivityMissing.bpmn20.xml";
 
-  private static final String TEST_PROCESS_CALL_ACTIVITY = "org/camunda/bpm/engine/test/api/runtime/migration/SetProcessDefinitionVersionCmdTest.withCallActivity.bpmn20.xml";
-  private static final String TEST_PROCESS_USER_TASK_V1 = "org/camunda/bpm/engine/test/api/runtime/migration/SetProcessDefinitionVersionCmdTest.testSetProcessDefinitionVersionWithTask.bpmn20.xml";
-  private static final String TEST_PROCESS_USER_TASK_V2 = "org/camunda/bpm/engine/test/api/runtime/migration/SetProcessDefinitionVersionCmdTest.testSetProcessDefinitionVersionWithTaskV2.bpmn20.xml";
+  private static final String TEST_PROCESS_CALL_ACTIVITY = "io/orqueio/bpm/engine/test/api/runtime/migration/SetProcessDefinitionVersionCmdTest.withCallActivity.bpmn20.xml";
+  private static final String TEST_PROCESS_USER_TASK_V1 = "io/orqueio/bpm/engine/test/api/runtime/migration/SetProcessDefinitionVersionCmdTest.testSetProcessDefinitionVersionWithTask.bpmn20.xml";
+  private static final String TEST_PROCESS_USER_TASK_V2 = "io/orqueio/bpm/engine/test/api/runtime/migration/SetProcessDefinitionVersionCmdTest.testSetProcessDefinitionVersionWithTaskV2.bpmn20.xml";
 
-  private static final String TEST_PROCESS_SERVICE_TASK_V1 = "org/camunda/bpm/engine/test/api/runtime/migration/SetProcessDefinitionVersionCmdTest.testSetProcessDefinitionVersionWithServiceTask.bpmn20.xml";
-  private static final String TEST_PROCESS_SERVICE_TASK_V2 = "org/camunda/bpm/engine/test/api/runtime/migration/SetProcessDefinitionVersionCmdTest.testSetProcessDefinitionVersionWithServiceTaskV2.bpmn20.xml";
+  private static final String TEST_PROCESS_SERVICE_TASK_V1 = "io/orqueio/bpm/engine/test/api/runtime/migration/SetProcessDefinitionVersionCmdTest.testSetProcessDefinitionVersionWithServiceTask.bpmn20.xml";
+  private static final String TEST_PROCESS_SERVICE_TASK_V2 = "io/orqueio/bpm/engine/test/api/runtime/migration/SetProcessDefinitionVersionCmdTest.testSetProcessDefinitionVersionWithServiceTaskV2.bpmn20.xml";
 
-  private static final String TEST_PROCESS_WITH_MULTIPLE_PARENTS = "org/camunda/bpm/engine/test/api/runtime/migration/SetProcessDefinitionVersionCmdTest.testSetProcessDefinitionVersionWithMultipleParents.bpmn";
+  private static final String TEST_PROCESS_WITH_MULTIPLE_PARENTS = "io/orqueio/bpm/engine/test/api/runtime/migration/SetProcessDefinitionVersionCmdTest.testSetProcessDefinitionVersionWithMultipleParents.bpmn";
 
-  private static final String TEST_PROCESS_ONE_JOB = "org/camunda/bpm/engine/test/api/runtime/migration/SetProcessDefinitionVersionCmdTest.oneJobProcess.bpmn20.xml";
-  private static final String TEST_PROCESS_TWO_JOBS = "org/camunda/bpm/engine/test/api/runtime/migration/SetProcessDefinitionVersionCmdTest.twoJobsProcess.bpmn20.xml";
+  private static final String TEST_PROCESS_ONE_JOB = "io/orqueio/bpm/engine/test/api/runtime/migration/SetProcessDefinitionVersionCmdTest.oneJobProcess.bpmn20.xml";
+  private static final String TEST_PROCESS_TWO_JOBS = "io/orqueio/bpm/engine/test/api/runtime/migration/SetProcessDefinitionVersionCmdTest.twoJobsProcess.bpmn20.xml";
 
-  private static final String TEST_PROCESS_ATTACHED_TIMER = "org/camunda/bpm/engine/test/api/runtime/migration/SetProcessDefinitionVersionCmdTest.testAttachedTimer.bpmn20.xml";
+  private static final String TEST_PROCESS_ATTACHED_TIMER = "io/orqueio/bpm/engine/test/api/runtime/migration/SetProcessDefinitionVersionCmdTest.testAttachedTimer.bpmn20.xml";
 
   @Test
   public void testSetProcessDefinitionVersionEmptyArguments() {
@@ -624,7 +624,7 @@ public class SetProcessDefinitionVersionCmdTest extends PluggableProcessEngineTe
   @Test
   public void testHistoryOfSetProcessDefinitionVersionCmd() {
     // given
-    String resource = "org/camunda/bpm/engine/test/api/runtime/migration/SetProcessDefinitionVersionCmdTest.bpmn";
+    String resource = "io/orqueio/bpm/engine/test/api/runtime/migration/SetProcessDefinitionVersionCmdTest.bpmn";
 
     // Deployments
     io.orqueio.bpm.engine.repository.Deployment firstDeployment = repositoryService
@@ -679,7 +679,7 @@ public class SetProcessDefinitionVersionCmdTest extends PluggableProcessEngineTe
     // given
     try {
       identityService.setAuthenticatedUserId("demo");
-      String resource = "org/camunda/bpm/engine/test/api/runtime/migration/SetProcessDefinitionVersionCmdTest.bpmn";
+      String resource = "io/orqueio/bpm/engine/test/api/runtime/migration/SetProcessDefinitionVersionCmdTest.bpmn";
 
       // Deployments
       io.orqueio.bpm.engine.repository.Deployment firstDeployment = repositoryService

@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -95,7 +95,7 @@ public class LinkEventTest extends PluggableProcessEngineTest {
   @Test
   public void testInvalidEventLinkMultipleTargets() {
     try {
-      repositoryService.createDeployment().addClasspathResource("org/camunda/bpm/engine/test/bpmn/event/link/LinkEventTest.testInvalidEventLinkMultipleTargets.bpmn20.xml").deploy();
+      repositoryService.createDeployment().addClasspathResource("io/orqueio/bpm/engine/test/bpmn/event/link/LinkEventTest.testInvalidEventLinkMultipleTargets.bpmn20.xml").deploy();
       fail("process should not deploy because it contains multiple event link targets which is invalid in the BPMN 2.0 spec");
     }
     catch (ParseException e) {
@@ -107,7 +107,7 @@ public class LinkEventTest extends PluggableProcessEngineTest {
   @Test
   public void testCatchLinkEventAfterEventBasedGatewayNotAllowed() {
     try {
-      repositoryService.createDeployment().addClasspathResource("org/camunda/bpm/engine/test/bpmn/event/link/LinkEventTest.testCatchLinkEventAfterEventBasedGatewayNotAllowed.bpmn20.xml").deploy();
+      repositoryService.createDeployment().addClasspathResource("io/orqueio/bpm/engine/test/bpmn/event/link/LinkEventTest.testCatchLinkEventAfterEventBasedGatewayNotAllowed.bpmn20.xml").deploy();
       fail("process should not deploy because it contains multiple event link targets which is invalid in the BPMN 2.0 spec");
     }
     catch (ParseException e) {

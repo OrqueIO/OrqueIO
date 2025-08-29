@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -226,7 +226,7 @@ public abstract class ProcessEngineConfiguration {
   protected String mailServerPassword; // means no authentication for mail server
   protected int mailServerPort = 25;
   protected boolean useTLS = false;
-  protected String mailServerDefaultFrom = "camunda@localhost";
+  protected String mailServerDefaultFrom = "orqueio@localhost";
 
   protected String databaseType;
   protected String databaseVendor;
@@ -312,9 +312,9 @@ public abstract class ProcessEngineConfiguration {
    * and Tenant IDs. The pattern can be defined by using the standard
    * Java Regular Expression syntax should be used.
    *
-   * <p>By default only alphanumeric values (or 'camunda-admin') will be accepted.</p>
+   * <p>By default only alphanumeric values (or 'orqueio-admin') will be accepted.</p>
    */
-  protected String generalResourceWhitelistPattern =  "[a-zA-Z0-9]+|camunda-admin";
+  protected String generalResourceWhitelistPattern =  "[a-zA-Z0-9]+|orqueio-admin";
 
   /**
    * A parameter used for defining acceptable values for the User IDs.
@@ -322,7 +322,7 @@ public abstract class ProcessEngineConfiguration {
    * Expression syntax should be used.
    *
    * <p>If not defined, the general pattern is used. Only alphanumeric
-   * values (or 'camunda-admin') will be accepted.</p>
+   * values (or 'orqueio-admin') will be accepted.</p>
    */
   protected String userResourceWhitelistPattern;
 
@@ -332,7 +332,7 @@ public abstract class ProcessEngineConfiguration {
    * Expression syntax should be used.
    *
    * <p>If not defined, the general pattern is used. Only alphanumeric
-   * values (or 'camunda-admin') will be accepted.</p>
+   * values (or 'orqueio-admin') will be accepted.</p>
    */
   protected String groupResourceWhitelistPattern;
 
@@ -342,7 +342,7 @@ public abstract class ProcessEngineConfiguration {
    * Expression syntax should be used.
    *
    * <p>If not defined, the general pattern is used. Only alphanumeric
-   * values (or 'camunda-admin') will be accepted.</p>
+   * values (or 'orqueio-admin') will be accepted.</p>
    */
   protected String tenantResourceWhitelistPattern;
 
@@ -426,7 +426,7 @@ public abstract class ProcessEngineConfiguration {
   public static ProcessEngineConfiguration createProcessEngineConfigurationFromResourceDefault() {
     ProcessEngineConfiguration processEngineConfiguration = null;
     try {
-      processEngineConfiguration = createProcessEngineConfigurationFromResource("camunda.cfg.xml", "processEngineConfiguration");
+      processEngineConfiguration = createProcessEngineConfigurationFromResource("orqueio.cfg.xml", "processEngineConfiguration");
     } catch (RuntimeException ex) {
       processEngineConfiguration = createProcessEngineConfigurationFromResource("activiti.cfg.xml", "processEngineConfiguration");
     }

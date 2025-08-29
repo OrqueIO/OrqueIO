@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -17,7 +17,7 @@
 package io.orqueio.bpm.engine;
 
 /**
- * Class contains constants that identifies the activity types, which are used by Camunda.
+ * Class contains constants that identifies the activity types, which are used by Orqueio.
  * Events, gateways and activities are summed together as activities.
  * They typically correspond to the XML tags used in the BPMN 2.0 process definition file.
  *

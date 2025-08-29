@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!--
 
-    Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+    Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
     under one or more contributor license agreements. See the NOTICE file
     distributed with this work for additional information regarding copyright
-    ownership. Camunda licenses this file to you under the Apache License,
+    ownership. TOADDLATERCCS this file to you under the Apache License,
     Version 2.0; you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
@@ -417,7 +417,7 @@
       <!--
         HEADS-UP!!!
         If you change something here, you should probably also change it the EE Webapp
-        See camunda-bpm-platform-ee/webapps/camunda-webapp/plugins/src/main/resources/org/camunda/bpm/cockpit/impl/plugin/history/historicIncident.xml
+        See orqueio-bpm-platform-ee/webapps/orqueio-webapp/plugins/src/main/resources/io/orqueio/bpm/cockpit/impl/plugin/history/historicIncident.xml
       -->
       <include refid="io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity.authCheckJoinWithoutOnClause"/>
       AUTH ON (AUTH.RESOURCE_ID_ ${authJoinStart}
@@ -521,7 +521,7 @@
         <!--
           HEADS-UP!!!
           If you change something here, you should probably also change it the EE Webapp
-          See camunda-bpm-platform-ee/webapps/camunda-webapp/plugins/src/main/resources/org/camunda/bpm/cockpit/impl/plugin/history/historicIncident.xml
+          See orqueio-bpm-platform-ee/webapps/orqueio-webapp/plugins/src/main/resources/io/orqueio/bpm/cockpit/impl/plugin/history/historicIncident.xml
         -->
         <!-- incident exists in context of a process definition -->
         and (

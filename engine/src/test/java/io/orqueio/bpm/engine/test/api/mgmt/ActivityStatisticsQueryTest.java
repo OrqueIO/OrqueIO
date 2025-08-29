@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -41,7 +41,7 @@ import org.junit.Test;
 public class ActivityStatisticsQueryTest extends PluggableProcessEngineTest {
 
   @Test
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/mgmt/StatisticsTest.testStatisticsQueryWithFailedJobs.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/mgmt/StatisticsTest.testStatisticsQueryWithFailedJobs.bpmn20.xml")
   public void testActivityStatisticsQueryWithoutFailedJobs() {
 
     Map<String, Object> parameters = new HashMap<String, Object>();
@@ -66,7 +66,7 @@ public class ActivityStatisticsQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/mgmt/StatisticsTest.testStatisticsQueryWithFailedJobs.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/mgmt/StatisticsTest.testStatisticsQueryWithFailedJobs.bpmn20.xml")
   public void testActivityStatisticsQueryWithIncidents() {
 
     Map<String, Object> parameters = new HashMap<String, Object>();
@@ -96,7 +96,7 @@ public class ActivityStatisticsQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/mgmt/StatisticsTest.testStatisticsQueryWithFailedJobs.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/mgmt/StatisticsTest.testStatisticsQueryWithFailedJobs.bpmn20.xml")
   public void testActivityStatisticsQueryWithIncidentType() {
 
     Map<String, Object> parameters = new HashMap<String, Object>();
@@ -126,7 +126,7 @@ public class ActivityStatisticsQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/mgmt/StatisticsTest.testStatisticsQueryWithFailedJobs.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/mgmt/StatisticsTest.testStatisticsQueryWithFailedJobs.bpmn20.xml")
   public void testActivityStatisticsQueryWithInvalidIncidentType() {
 
     Map<String, Object> parameters = new HashMap<String, Object>();
@@ -151,7 +151,7 @@ public class ActivityStatisticsQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/mgmt/StatisticsTest.testCallActivityWithIncidentsWithoutFailedJobs.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/mgmt/StatisticsTest.testCallActivityWithIncidentsWithoutFailedJobs.bpmn20.xml")
   public void testActivityStatisticsQueryWithIncidentsWithoutFailedJobs() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("callExampleSubProcess");
 
@@ -181,7 +181,7 @@ public class ActivityStatisticsQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/mgmt/StatisticsTest.testStatisticsQuery.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/mgmt/StatisticsTest.testStatisticsQuery.bpmn20.xml")
   public void testActivityStatisticsQuery() {
     runtimeService.startProcessInstanceByKey("ExampleProcess");
     ProcessDefinition definition = repositoryService.createProcessDefinitionQuery()
@@ -204,7 +204,7 @@ public class ActivityStatisticsQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/mgmt/StatisticsTest.testStatisticsQuery.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/mgmt/StatisticsTest.testStatisticsQuery.bpmn20.xml")
   public void testActivityStatisticsQueryCount() {
     runtimeService.startProcessInstanceByKey("ExampleProcess");
     ProcessDefinition definition = repositoryService.createProcessDefinitionQuery()
@@ -221,7 +221,7 @@ public class ActivityStatisticsQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/mgmt/StatisticsTest.testStatisticsQuery.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/mgmt/StatisticsTest.testStatisticsQuery.bpmn20.xml")
   public void testManyInstancesActivityStatisticsQuery() {
     runtimeService.startProcessInstanceByKey("ExampleProcess");
     runtimeService.startProcessInstanceByKey("ExampleProcess");
@@ -247,7 +247,7 @@ public class ActivityStatisticsQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/mgmt/StatisticsTest.testMultiInstanceStatisticsQuery.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/mgmt/StatisticsTest.testMultiInstanceStatisticsQuery.bpmn20.xml")
   public void testParallelMultiInstanceActivityStatisticsQueryIncludingFailedJobIncidents() {
     runtimeService.startProcessInstanceByKey("MIExampleProcess");
     ProcessDefinition definition = repositoryService.createProcessDefinitionQuery()
@@ -270,7 +270,7 @@ public class ActivityStatisticsQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/mgmt/StatisticsTest.testMultiInstanceStatisticsQuery.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/mgmt/StatisticsTest.testMultiInstanceStatisticsQuery.bpmn20.xml")
   public void testParallelMultiInstanceActivityStatisticsQuery() {
     runtimeService.startProcessInstanceByKey("MIExampleProcess");
     ProcessDefinition definition = repositoryService.createProcessDefinitionQuery()
@@ -291,7 +291,7 @@ public class ActivityStatisticsQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/mgmt/StatisticsTest.testSubprocessStatisticsQuery.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/mgmt/StatisticsTest.testSubprocessStatisticsQuery.bpmn20.xml")
   public void testSubprocessActivityStatisticsQuery() {
     runtimeService.startProcessInstanceByKey("ExampleProcess");
 
@@ -314,8 +314,8 @@ public class ActivityStatisticsQueryTest extends PluggableProcessEngineTest {
 
   @Test
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/api/mgmt/StatisticsTest.testCallActivityStatisticsQuery.bpmn20.xml",
-      "org/camunda/bpm/engine/test/api/mgmt/StatisticsTest.testStatisticsQueryWithFailedJobs.bpmn20.xml"})
+      "io/orqueio/bpm/engine/test/api/mgmt/StatisticsTest.testCallActivityStatisticsQuery.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/api/mgmt/StatisticsTest.testStatisticsQueryWithFailedJobs.bpmn20.xml"})
   public void testCallActivityActivityStatisticsQuery() {
     runtimeService.startProcessInstanceByKey("callExampleSubProcess");
 
@@ -361,7 +361,7 @@ public class ActivityStatisticsQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/mgmt/StatisticsTest.testActivityStatisticsQueryWithIntermediateTimer.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/mgmt/StatisticsTest.testActivityStatisticsQueryWithIntermediateTimer.bpmn20.xml")
   public void testActivityStatisticsQueryWithIntermediateTimer() {
     runtimeService.startProcessInstanceByKey("ExampleProcess");
     ProcessDefinition definition = repositoryService.createProcessDefinitionQuery()
@@ -394,7 +394,7 @@ public class ActivityStatisticsQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/mgmt/StatisticsTest.testParallelGatewayStatisticsQuery.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/mgmt/StatisticsTest.testParallelGatewayStatisticsQuery.bpmn20.xml")
   public void testActivityStatisticsQueryPagination() {
 
     ProcessDefinition definition =
@@ -416,7 +416,7 @@ public class ActivityStatisticsQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/mgmt/StatisticsTest.testParallelGatewayStatisticsQuery.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/mgmt/StatisticsTest.testParallelGatewayStatisticsQuery.bpmn20.xml")
   public void testParallelGatewayActivityStatisticsQuery() {
 
     ProcessDefinition definition =
@@ -439,7 +439,7 @@ public class ActivityStatisticsQueryTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/mgmt/StatisticsTest.testNonInterruptingBoundaryEventStatisticsQuery.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/mgmt/StatisticsTest.testNonInterruptingBoundaryEventStatisticsQuery.bpmn20.xml")
   @Test
   public void testNonInterruptingBoundaryEventActivityStatisticsQuery() {
     // given
@@ -467,7 +467,7 @@ public class ActivityStatisticsQueryTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/mgmt/StatisticsTest.testAsyncInterruptingEventSubProcessStatisticsQuery.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/mgmt/StatisticsTest.testAsyncInterruptingEventSubProcessStatisticsQuery.bpmn20.xml")
   @Test
   public void testAsyncInterruptingEventSubProcessActivityStatisticsQuery() {
     // given
@@ -495,7 +495,7 @@ public class ActivityStatisticsQueryTest extends PluggableProcessEngineTest {
     return null;
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/mgmt/StatisticsTest.testFailedTimerStartEvent.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/mgmt/StatisticsTest.testFailedTimerStartEvent.bpmn20.xml")
   @Test
   public void testQueryByIncidentsWithFailedTimerStartEvent() {
 
@@ -532,7 +532,7 @@ public class ActivityStatisticsQueryTest extends PluggableProcessEngineTest {
     assertEquals(Incident.FAILED_JOB_HANDLER_TYPE, incidentStatistic.getIncidentType());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/mgmt/StatisticsTest.testFailedTimerStartEvent.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/mgmt/StatisticsTest.testFailedTimerStartEvent.bpmn20.xml")
   @Test
   public void testQueryByIncidentTypeWithFailedTimerStartEvent() {
 
@@ -567,7 +567,7 @@ public class ActivityStatisticsQueryTest extends PluggableProcessEngineTest {
     assertEquals(Incident.FAILED_JOB_HANDLER_TYPE, incidentStatistic.getIncidentType());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/mgmt/StatisticsTest.testFailedTimerStartEvent.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/mgmt/StatisticsTest.testFailedTimerStartEvent.bpmn20.xml")
   @Test
   public void testQueryByFailedJobsWithFailedTimerStartEvent() {
 
@@ -595,7 +595,7 @@ public class ActivityStatisticsQueryTest extends PluggableProcessEngineTest {
     assertEquals(1, result.getFailedJobs());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/mgmt/StatisticsTest.testFailedTimerStartEvent.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/mgmt/StatisticsTest.testFailedTimerStartEvent.bpmn20.xml")
   @Test
   public void testQueryByFailedJobsAndIncidentsWithFailedTimerStartEvent() {
 
@@ -635,7 +635,7 @@ public class ActivityStatisticsQueryTest extends PluggableProcessEngineTest {
 
   @Ignore("CAM-126")
   @Test
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/mgmt/StatisticsTest.testStatisticsQuery.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/mgmt/StatisticsTest.testStatisticsQuery.bpmn20.xml")
   public void testActivityStatisticsQueryWithNoInstances() {
 
     ProcessDefinition definition =

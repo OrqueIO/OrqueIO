@@ -113,17 +113,17 @@ import io.orqueio.bpm.model.cmmn.impl.instance.TimerExpressionImpl;
 import io.orqueio.bpm.model.cmmn.impl.instance.TransformationExpressionImpl;
 import io.orqueio.bpm.model.cmmn.impl.instance.UserEventImpl;
 import io.orqueio.bpm.model.cmmn.impl.instance.UserEventListenerImpl;
-import io.orqueio.bpm.model.cmmn.impl.instance.camunda.CamundaCaseExecutionListenerImpl;
-import io.orqueio.bpm.model.cmmn.impl.instance.camunda.CamundaExpressionImpl;
-import io.orqueio.bpm.model.cmmn.impl.instance.camunda.CamundaFieldImpl;
-import io.orqueio.bpm.model.cmmn.impl.instance.camunda.CamundaInImpl;
-import io.orqueio.bpm.model.cmmn.impl.instance.camunda.CamundaOutImpl;
-import io.orqueio.bpm.model.cmmn.impl.instance.camunda.CamundaScriptImpl;
-import io.orqueio.bpm.model.cmmn.impl.instance.camunda.CamundaStringImpl;
-import io.orqueio.bpm.model.cmmn.impl.instance.camunda.CamundaTaskListenerImpl;
-import io.orqueio.bpm.model.cmmn.impl.instance.camunda.CamundaVariableListenerImpl;
-import io.orqueio.bpm.model.cmmn.impl.instance.camunda.CamundaVariableOnPartImpl;
-import io.orqueio.bpm.model.cmmn.impl.instance.camunda.CamundaVariableTransitionEventImpl;
+import io.orqueio.bpm.model.cmmn.impl.instance.orqueio.OrqueioCaseExecutionListenerImpl;
+import io.orqueio.bpm.model.cmmn.impl.instance.orqueio.OrqueioExpressionImpl;
+import io.orqueio.bpm.model.cmmn.impl.instance.orqueio.OrqueioFieldImpl;
+import io.orqueio.bpm.model.cmmn.impl.instance.orqueio.OrqueioInImpl;
+import io.orqueio.bpm.model.cmmn.impl.instance.orqueio.OrqueioOutImpl;
+import io.orqueio.bpm.model.cmmn.impl.instance.orqueio.OrqueioScriptImpl;
+import io.orqueio.bpm.model.cmmn.impl.instance.orqueio.OrqueioStringImpl;
+import io.orqueio.bpm.model.cmmn.impl.instance.orqueio.OrqueioTaskListenerImpl;
+import io.orqueio.bpm.model.cmmn.impl.instance.orqueio.OrqueioVariableListenerImpl;
+import io.orqueio.bpm.model.cmmn.impl.instance.orqueio.OrqueioVariableOnPartImpl;
+import io.orqueio.bpm.model.cmmn.impl.instance.orqueio.OrqueioVariableTransitionEventImpl;
 import io.orqueio.bpm.model.xml.Model;
 import io.orqueio.bpm.model.xml.ModelBuilder;
 import io.orqueio.bpm.model.xml.ModelException;
@@ -385,17 +385,17 @@ public class Cmmn {
     UserEventListenerImpl.registerType(modelBuilder);
 
     /** camunda extensions */
-    CamundaCaseExecutionListenerImpl.registerType(modelBuilder);
-    CamundaExpressionImpl.registerType(modelBuilder);
-    CamundaFieldImpl.registerType(modelBuilder);
-    CamundaInImpl.registerType(modelBuilder);
-    CamundaOutImpl.registerType(modelBuilder);
-    CamundaScriptImpl.registerType(modelBuilder);
-    CamundaStringImpl.registerType(modelBuilder);
-    CamundaTaskListenerImpl.registerType(modelBuilder);
-    CamundaVariableListenerImpl.registerType(modelBuilder);
-    CamundaVariableOnPartImpl.registerType(modelBuilder);
-    CamundaVariableTransitionEventImpl.registerType(modelBuilder);
+    OrqueioCaseExecutionListenerImpl.registerType(modelBuilder);
+    OrqueioExpressionImpl.registerType(modelBuilder);
+    OrqueioFieldImpl.registerType(modelBuilder);
+    OrqueioInImpl.registerType(modelBuilder);
+    OrqueioOutImpl.registerType(modelBuilder);
+    OrqueioScriptImpl.registerType(modelBuilder);
+    OrqueioStringImpl.registerType(modelBuilder);
+    OrqueioTaskListenerImpl.registerType(modelBuilder);
+    OrqueioVariableListenerImpl.registerType(modelBuilder);
+    OrqueioVariableOnPartImpl.registerType(modelBuilder);
+    OrqueioVariableTransitionEventImpl.registerType(modelBuilder);
   }
 
   /**

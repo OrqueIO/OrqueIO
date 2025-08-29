@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -66,7 +66,7 @@ import org.junit.Test;
  */
 public class MultiInstanceTest extends PluggableProcessEngineTest {
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.sequentialUserTasks.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.sequentialUserTasks.bpmn20.xml"})
   @Test
   public void testSequentialUserTasks() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("miSequentialUserTasks",
@@ -106,7 +106,7 @@ public class MultiInstanceTest extends PluggableProcessEngineTest {
     testRule.assertProcessEnded(procId);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.sequentialUserTasks.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.sequentialUserTasks.bpmn20.xml"})
   @Test
   public void testSequentialUserTasksHistory() {
     runtimeService.startProcessInstanceByKey("miSequentialUserTasks",
@@ -141,7 +141,7 @@ public class MultiInstanceTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.sequentialUserTasks.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.sequentialUserTasks.bpmn20.xml"})
   @Test
   public void testSequentialUserTasksWithTimer() {
     String procId = runtimeService.startProcessInstanceByKey("miSequentialUserTasks",
@@ -160,7 +160,7 @@ public class MultiInstanceTest extends PluggableProcessEngineTest {
     testRule.assertProcessEnded(procId);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.sequentialUserTasks.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.sequentialUserTasks.bpmn20.xml"})
   @Test
   public void testSequentialUserTasksCompletionCondition() {
     String procId = runtimeService.startProcessInstanceByKey("miSequentialUserTasks",
@@ -291,7 +291,7 @@ public class MultiInstanceTest extends PluggableProcessEngineTest {
     testRule.assertProcessEnded(procId);
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testParallelReceiveTasks.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testParallelReceiveTasks.bpmn20.xml")
   @Test
   public void testParallelReceiveTasksAssertEventSubscriptionRemoval() {
     runtimeService.startProcessInstanceByKey("miParallelReceiveTasks");
@@ -308,7 +308,7 @@ public class MultiInstanceTest extends PluggableProcessEngineTest {
     assertEquals(2, runtimeService.createEventSubscriptionQuery().count());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testParallelUserTasks.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testParallelUserTasks.bpmn20.xml"})
   @Test
   public void testParallelUserTasksHistory() {
     ProcessInstance pi = runtimeService.startProcessInstanceByKey("miParallelUserTasks");
@@ -400,7 +400,7 @@ public class MultiInstanceTest extends PluggableProcessEngineTest {
     testRule.assertProcessEnded(procId);
   }
 
-  @Deployment(resources="org/camunda/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testParallelUserTasksBasedOnCollection.bpmn20.xml")
+  @Deployment(resources="io/orqueio/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testParallelUserTasksBasedOnCollection.bpmn20.xml")
   @Test
   public void testEmptyCollectionInMI() {
     List<String> assigneeList = new ArrayList<String>();
@@ -448,8 +448,8 @@ public class MultiInstanceTest extends PluggableProcessEngineTest {
         .userTask("miTasks")
             .multiInstance()
             .sequential()
-            .camundaCollection("${myBean.resolveCollection(execution)}")
-            .camundaElementVariable("elementVar")
+            .orqueioCollection("${myBean.resolveCollection(execution)}")
+            .orqueioElementVariable("elementVar")
             .multiInstanceDone()
         .endEvent()
         .done();
@@ -525,7 +525,7 @@ public class MultiInstanceTest extends PluggableProcessEngineTest {
     assertEquals(10, sum);
   }
 
-  @Deployment(resources="org/camunda/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testSequentialScriptTasks.bpmn20.xml")
+  @Deployment(resources="io/orqueio/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testSequentialScriptTasks.bpmn20.xml")
   @Test
   public void testSequentialScriptTasksNoStackOverflow() {
     Map<String, Object> vars = new HashMap<String, Object>();
@@ -537,7 +537,7 @@ public class MultiInstanceTest extends PluggableProcessEngineTest {
     assertEquals(19900, sum);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testSequentialScriptTasks.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testSequentialScriptTasks.bpmn20.xml"})
   @Test
   public void testSequentialScriptTasksHistory() {
     Map<String, Object> vars = new HashMap<String, Object>();
@@ -579,7 +579,7 @@ public class MultiInstanceTest extends PluggableProcessEngineTest {
     assertEquals(45, sum);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testParallelScriptTasks.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testParallelScriptTasks.bpmn20.xml"})
   @Test
   public void testParallelScriptTasksHistory() {
     Map<String, Object> vars = new HashMap<String, Object>();
@@ -605,7 +605,7 @@ public class MultiInstanceTest extends PluggableProcessEngineTest {
     assertEquals(2, sum);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testParallelScriptTasksCompletionCondition.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testParallelScriptTasksCompletionCondition.bpmn20.xml"})
   @Test
   public void testParallelScriptTasksCompletionConditionHistory() {
     runtimeService.startProcessInstanceByKey("miParallelScriptTaskCompletionCondition");
@@ -667,7 +667,7 @@ public class MultiInstanceTest extends PluggableProcessEngineTest {
     testRule.assertProcessEnded(procId);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testSequentialSubProcess.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testSequentialSubProcess.bpmn20.xml"})
   @Test
   public void testSequentialSubProcessHistory() {
     runtimeService.startProcessInstanceByKey("miSequentialSubprocess");
@@ -795,7 +795,7 @@ public class MultiInstanceTest extends PluggableProcessEngineTest {
     testRule.assertProcessEnded(procId);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testParallelSubProcess.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testParallelSubProcess.bpmn20.xml"})
   @Test
   public void testParallelSubProcessHistory() {
     ProcessInstance pi = runtimeService.startProcessInstanceByKey("miParallelSubprocess");
@@ -883,7 +883,7 @@ public class MultiInstanceTest extends PluggableProcessEngineTest {
     testRule.assertProcessEnded(procId);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testParallelSubProcessAllAutomatic.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testParallelSubProcessAllAutomatic.bpmn20.xml"})
   @Test
   public void testParallelSubProcessAllAutomaticCompletionCondition() {
     String procId = runtimeService.startProcessInstanceByKey("miParallelSubprocessAllAutomatics",
@@ -930,8 +930,8 @@ public class MultiInstanceTest extends PluggableProcessEngineTest {
     testRule.assertProcessEnded(procId);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testSequentialCallActivity.bpmn20.xml",
-          "org/camunda/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.externalSubProcess.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testSequentialCallActivity.bpmn20.xml",
+          "io/orqueio/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.externalSubProcess.bpmn20.xml"})
   @Test
   public void testSequentialCallActivity() {
     String procId = runtimeService.startProcessInstanceByKey("miSequentialCallActivity").getId();
@@ -948,7 +948,7 @@ public class MultiInstanceTest extends PluggableProcessEngineTest {
     testRule.assertProcessEnded(procId);
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testSequentialCallActivityWithList.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testSequentialCallActivityWithList.bpmn20.xml")
   @Test
   public void testSequentialCallActivityWithList() {
     ArrayList<String> list = new ArrayList<String>();
@@ -983,8 +983,8 @@ public class MultiInstanceTest extends PluggableProcessEngineTest {
     testRule.assertProcessEnded(procId);
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testSequentialCallActivityWithTimer.bpmn20.xml",
-      "org/camunda/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.externalSubProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testSequentialCallActivityWithTimer.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.externalSubProcess.bpmn20.xml" })
   @Test
   public void testSequentialCallActivityWithTimer() {
     String procId = runtimeService.startProcessInstanceByKey("miSequentialCallActivityWithTimer").getId();
@@ -1008,8 +1008,8 @@ public class MultiInstanceTest extends PluggableProcessEngineTest {
     testRule.assertProcessEnded(procId);
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testParallelCallActivity.bpmn20.xml",
-      "org/camunda/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.externalSubProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testParallelCallActivity.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.externalSubProcess.bpmn20.xml" })
   @Test
   public void testParallelCallActivity() {
     String procId = runtimeService.startProcessInstanceByKey("miParallelCallActivity").getId();
@@ -1022,8 +1022,8 @@ public class MultiInstanceTest extends PluggableProcessEngineTest {
     testRule.assertProcessEnded(procId);
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testParallelCallActivity.bpmn20.xml",
-  "org/camunda/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.externalSubProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testParallelCallActivity.bpmn20.xml",
+  "io/orqueio/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.externalSubProcess.bpmn20.xml" })
   @Test
   public void testParallelCallActivityHistory() {
     runtimeService.startProcessInstanceByKey("miParallelCallActivity");
@@ -1065,8 +1065,8 @@ public class MultiInstanceTest extends PluggableProcessEngineTest {
   }
 
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testParallelCallActivityWithTimer.bpmn20.xml",
-      "org/camunda/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.externalSubProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testParallelCallActivityWithTimer.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.externalSubProcess.bpmn20.xml" })
   @Test
   public void testParallelCallActivityWithTimer() {
     String procId = runtimeService.startProcessInstanceByKey("miParallelCallActivity").getId();
@@ -1087,8 +1087,8 @@ public class MultiInstanceTest extends PluggableProcessEngineTest {
     testRule.assertProcessEnded(procId);
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testNestedSequentialCallActivity.bpmn20.xml",
-      "org/camunda/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.externalSubProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testNestedSequentialCallActivity.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.externalSubProcess.bpmn20.xml" })
   @Test
   public void testNestedSequentialCallActivity() {
     String procId = runtimeService.startProcessInstanceByKey("miNestedSequentialCallActivity").getId();
@@ -1105,8 +1105,8 @@ public class MultiInstanceTest extends PluggableProcessEngineTest {
     testRule.assertProcessEnded(procId);
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testNestedSequentialCallActivityWithTimer.bpmn20.xml",
-      "org/camunda/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.externalSubProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testNestedSequentialCallActivityWithTimer.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.externalSubProcess.bpmn20.xml" })
   @Test
   public void testNestedSequentialCallActivityWithTimer() {
     String procId = runtimeService.startProcessInstanceByKey("miNestedSequentialCallActivityWithTimer").getId();
@@ -1135,8 +1135,8 @@ public class MultiInstanceTest extends PluggableProcessEngineTest {
     testRule.assertProcessEnded(procId);
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testNestedParallelCallActivity.bpmn20.xml",
-  "org/camunda/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.externalSubProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testNestedParallelCallActivity.bpmn20.xml",
+  "io/orqueio/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.externalSubProcess.bpmn20.xml" })
   @Test
   public void testNestedParallelCallActivity() {
     String procId = runtimeService.startProcessInstanceByKey("miNestedParallelCallActivity").getId();
@@ -1150,8 +1150,8 @@ public class MultiInstanceTest extends PluggableProcessEngineTest {
     testRule.assertProcessEnded(procId);
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testNestedParallelCallActivityWithTimer.bpmn20.xml",
-  "org/camunda/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.externalSubProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testNestedParallelCallActivityWithTimer.bpmn20.xml",
+  "io/orqueio/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.externalSubProcess.bpmn20.xml" })
   @Test
   public void testNestedParallelCallActivityWithTimer() {
     String procId = runtimeService.startProcessInstanceByKey("miNestedParallelCallActivityWithTimer").getId();
@@ -1173,8 +1173,8 @@ public class MultiInstanceTest extends PluggableProcessEngineTest {
     testRule.assertProcessEnded(procId);
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testNestedParallelCallActivityCompletionCondition.bpmn20.xml",
-  "org/camunda/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.externalSubProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testNestedParallelCallActivityCompletionCondition.bpmn20.xml",
+  "io/orqueio/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.externalSubProcess.bpmn20.xml" })
   @Test
   public void testNestedParallelCallActivityCompletionCondition() {
     String procId = runtimeService.startProcessInstanceByKey("miNestedParallelCallActivityCompletionCondition").getId();
@@ -1245,8 +1245,8 @@ public class MultiInstanceTest extends PluggableProcessEngineTest {
     assertEquals(0, tasks.size());
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.callActivityWithBoundaryErrorEvent.bpmn20.xml",
-  "org/camunda/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.throwingErrorEventSubProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.callActivityWithBoundaryErrorEvent.bpmn20.xml",
+  "io/orqueio/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.throwingErrorEventSubProcess.bpmn20.xml" })
   @Test
   public void testMultiInstanceCallActivityWithErrorBoundaryEvent() {
     Map<String, Object> variableMap = new HashMap<String, Object>();
@@ -1272,8 +1272,8 @@ public class MultiInstanceTest extends PluggableProcessEngineTest {
     testRule.assertProcessEnded(processInstance.getId());
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.callActivityWithBoundaryErrorEventSequential.bpmn20.xml",
-  "org/camunda/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.throwingErrorEventSubProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.callActivityWithBoundaryErrorEventSequential.bpmn20.xml",
+  "io/orqueio/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.throwingErrorEventSubProcess.bpmn20.xml" })
   @Test
   public void testSequentialMultiInstanceCallActivityWithErrorBoundaryEvent() {
     Map<String, Object> variableMap = new HashMap<String, Object>();
@@ -1297,7 +1297,7 @@ public class MultiInstanceTest extends PluggableProcessEngineTest {
     testRule.assertProcessEnded(processInstance.getId());
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testNestedMultiInstanceTasks.bpmn20.xml"})
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testNestedMultiInstanceTasks.bpmn20.xml"})
   @Test
   public void testNestedMultiInstanceTasks() {
     List<String> processes = Arrays.asList("process A", "process B");
@@ -1320,7 +1320,7 @@ public class MultiInstanceTest extends PluggableProcessEngineTest {
     testRule.assertProcessEnded(processInstance.getId());
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testNestedMultiInstanceTasks.bpmn20.xml"})
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testNestedMultiInstanceTasks.bpmn20.xml"})
   @Test
   public void testNestedMultiInstanceTasksActivityInstance() {
     List<String> processes = Arrays.asList("process A", "process B");
@@ -1354,7 +1354,7 @@ public class MultiInstanceTest extends PluggableProcessEngineTest {
   }
 
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testParallelUserTasks.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testParallelUserTasks.bpmn20.xml"})
   @Test
   public void testActiveExecutionsInParallelTasks() {
     runtimeService.startProcessInstanceByKey("miParallelUserTasks").getId();
@@ -1378,7 +1378,7 @@ public class MultiInstanceTest extends PluggableProcessEngineTest {
   }
 
   @Deployment( resources = {
-    "org/camunda/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testCatchErrorThrownBySequentialAbstractBpmnActivityBehavior.bpmn20.xml"
+    "io/orqueio/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testCatchErrorThrownBySequentialAbstractBpmnActivityBehavior.bpmn20.xml"
   })
   @Test
   public void testCatchExceptionThrownByExecuteOfSequentialAbstractBpmnActivityBehavior() {
@@ -1395,7 +1395,7 @@ public class MultiInstanceTest extends PluggableProcessEngineTest {
   }
 
   @Deployment( resources = {
-    "org/camunda/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testCatchErrorThrownBySequentialAbstractBpmnActivityBehavior.bpmn20.xml"
+    "io/orqueio/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testCatchErrorThrownBySequentialAbstractBpmnActivityBehavior.bpmn20.xml"
   })
   @Test
   public void testCatchErrorThrownByExecuteOfSequentialAbstractBpmnActivityBehavior() {
@@ -1412,7 +1412,7 @@ public class MultiInstanceTest extends PluggableProcessEngineTest {
   }
 
   @Deployment( resources = {
-    "org/camunda/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testCatchErrorThrownBySequentialAbstractBpmnActivityBehavior.bpmn20.xml"
+    "io/orqueio/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testCatchErrorThrownBySequentialAbstractBpmnActivityBehavior.bpmn20.xml"
   })
   @Test
   public void testCatchExceptionThrownBySignalOfSequentialAbstractBpmnActivityBehavior() {
@@ -1444,7 +1444,7 @@ public class MultiInstanceTest extends PluggableProcessEngineTest {
   }
 
   @Deployment( resources = {
-    "org/camunda/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testCatchErrorThrownBySequentialAbstractBpmnActivityBehavior.bpmn20.xml"
+    "io/orqueio/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testCatchErrorThrownBySequentialAbstractBpmnActivityBehavior.bpmn20.xml"
   })
   @Test
   public void testCatchErrorThrownBySignalOfSequentialAbstractBpmnActivityBehavior() {
@@ -1476,7 +1476,7 @@ public class MultiInstanceTest extends PluggableProcessEngineTest {
   }
 
   @Deployment( resources = {
-    "org/camunda/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testCatchErrorThrownByParallelAbstractBpmnActivityBehavior.bpmn20.xml"
+    "io/orqueio/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testCatchErrorThrownByParallelAbstractBpmnActivityBehavior.bpmn20.xml"
   })
   @Test
   public void testCatchExceptionThrownByExecuteOfParallelAbstractBpmnActivityBehavior() {
@@ -1493,7 +1493,7 @@ public class MultiInstanceTest extends PluggableProcessEngineTest {
   }
 
   @Deployment( resources = {
-    "org/camunda/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testCatchErrorThrownByParallelAbstractBpmnActivityBehavior.bpmn20.xml"
+    "io/orqueio/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testCatchErrorThrownByParallelAbstractBpmnActivityBehavior.bpmn20.xml"
   })
   @Test
   public void testCatchErrorThrownByExecuteOfParallelAbstractBpmnActivityBehavior() {
@@ -1510,7 +1510,7 @@ public class MultiInstanceTest extends PluggableProcessEngineTest {
   }
 
   @Deployment( resources = {
-    "org/camunda/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testCatchErrorThrownByParallelAbstractBpmnActivityBehavior.bpmn20.xml"
+    "io/orqueio/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testCatchErrorThrownByParallelAbstractBpmnActivityBehavior.bpmn20.xml"
   })
   @Test
   public void testCatchExceptionThrownBySignalOfParallelAbstractBpmnActivityBehavior() {
@@ -1536,7 +1536,7 @@ public class MultiInstanceTest extends PluggableProcessEngineTest {
   }
 
   @Deployment( resources = {
-    "org/camunda/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testCatchErrorThrownByParallelAbstractBpmnActivityBehavior.bpmn20.xml"
+    "io/orqueio/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testCatchErrorThrownByParallelAbstractBpmnActivityBehavior.bpmn20.xml"
   })
   @Test
   public void testCatchErrorThrownBySignalOfParallelAbstractBpmnActivityBehavior() {
@@ -1562,7 +1562,7 @@ public class MultiInstanceTest extends PluggableProcessEngineTest {
   }
 
   @Deployment( resources = {
-    "org/camunda/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testCatchErrorThrownBySequentialDelegateExpression.bpmn20.xml"
+    "io/orqueio/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testCatchErrorThrownBySequentialDelegateExpression.bpmn20.xml"
   })
   @Test
   public void testCatchExceptionThrownByExecuteOfSequentialDelegateExpression() {
@@ -1581,7 +1581,7 @@ public class MultiInstanceTest extends PluggableProcessEngineTest {
   }
 
   @Deployment( resources = {
-    "org/camunda/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testCatchErrorThrownBySequentialDelegateExpression.bpmn20.xml"
+    "io/orqueio/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testCatchErrorThrownBySequentialDelegateExpression.bpmn20.xml"
   })
   @Test
   public void testCatchErrorThrownByExecuteOfSequentialDelegateExpression() {
@@ -1600,7 +1600,7 @@ public class MultiInstanceTest extends PluggableProcessEngineTest {
   }
 
   @Deployment( resources = {
-    "org/camunda/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testCatchErrorThrownBySequentialDelegateExpression.bpmn20.xml"
+    "io/orqueio/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testCatchErrorThrownBySequentialDelegateExpression.bpmn20.xml"
   })
   @Test
   public void testCatchExceptionThrownBySignalOfSequentialDelegateExpression() {
@@ -1633,7 +1633,7 @@ public class MultiInstanceTest extends PluggableProcessEngineTest {
   }
 
   @Deployment( resources = {
-    "org/camunda/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testCatchErrorThrownBySequentialDelegateExpression.bpmn20.xml"
+    "io/orqueio/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testCatchErrorThrownBySequentialDelegateExpression.bpmn20.xml"
   })
   @Test
   public void testCatchErrorThrownBySignalOfSequentialDelegateExpression() {
@@ -1666,7 +1666,7 @@ public class MultiInstanceTest extends PluggableProcessEngineTest {
   }
 
   @Deployment( resources = {
-    "org/camunda/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testCatchErrorThrownByParallelDelegateExpression.bpmn20.xml"
+    "io/orqueio/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testCatchErrorThrownByParallelDelegateExpression.bpmn20.xml"
   })
   @Test
   public void testCatchExceptionThrownByExecuteOfParallelDelegateExpression() {
@@ -1685,7 +1685,7 @@ public class MultiInstanceTest extends PluggableProcessEngineTest {
   }
 
   @Deployment( resources = {
-    "org/camunda/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testCatchErrorThrownByParallelDelegateExpression.bpmn20.xml"
+    "io/orqueio/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testCatchErrorThrownByParallelDelegateExpression.bpmn20.xml"
   })
   @Test
   public void testCatchErrorThrownByExecuteOfParallelDelegateExpression() {
@@ -1704,7 +1704,7 @@ public class MultiInstanceTest extends PluggableProcessEngineTest {
   }
 
   @Deployment( resources = {
-    "org/camunda/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testCatchErrorThrownByParallelDelegateExpression.bpmn20.xml"
+    "io/orqueio/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testCatchErrorThrownByParallelDelegateExpression.bpmn20.xml"
   })
   @Test
   public void testCatchExceptionThrownBySignalOfParallelDelegateExpression() {
@@ -1731,7 +1731,7 @@ public class MultiInstanceTest extends PluggableProcessEngineTest {
   }
 
   @Deployment( resources = {
-    "org/camunda/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testCatchErrorThrownByParallelDelegateExpression.bpmn20.xml"
+    "io/orqueio/bpm/engine/test/bpmn/multiinstance/MultiInstanceTest.testCatchErrorThrownByParallelDelegateExpression.bpmn20.xml"
   })
   @Test
   public void testCatchErrorThrownBySignalOfParallelDelegateExpression() {

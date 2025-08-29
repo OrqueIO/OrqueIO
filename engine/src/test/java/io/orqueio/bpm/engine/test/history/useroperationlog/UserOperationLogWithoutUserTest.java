@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -34,7 +34,7 @@ import org.junit.Test;
  */
 public class UserOperationLogWithoutUserTest extends PluggableProcessEngineTest {
 
-  protected static final String PROCESS_PATH = "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml";
+  protected static final String PROCESS_PATH = "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml";
   protected static final String PROCESS_KEY = "oneTaskProcess";
 
   @Deployment(resources = PROCESS_PATH)
@@ -188,7 +188,7 @@ public class UserOperationLogWithoutUserTest extends PluggableProcessEngineTest 
     verifyNoUserOperationLogged();
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml")
   @Test
   public void testActivateJobDefinition() {
     // given
@@ -202,7 +202,7 @@ public class UserOperationLogWithoutUserTest extends PluggableProcessEngineTest 
     verifyNoUserOperationLogged();
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml")
   @Test
   public void testSuspendJobDefinition() {
     // given
@@ -216,7 +216,7 @@ public class UserOperationLogWithoutUserTest extends PluggableProcessEngineTest 
     verifyNoUserOperationLogged();
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml")
   @Test
   public void testActivateJob() {
     // given
@@ -230,7 +230,7 @@ public class UserOperationLogWithoutUserTest extends PluggableProcessEngineTest 
     verifyNoUserOperationLogged();
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml")
   @Test
   public void testSuspendJob() {
     // given
@@ -244,7 +244,7 @@ public class UserOperationLogWithoutUserTest extends PluggableProcessEngineTest 
     verifyNoUserOperationLogged();
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml")
   @Test
   public void testSetJobRetries() {
     // given
@@ -358,7 +358,7 @@ public class UserOperationLogWithoutUserTest extends PluggableProcessEngineTest 
     verifyNoUserOperationLogged();
   }
   
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_FULL)
   @Test
   public void testQueryDeleteVariableHistoryOperationOnCase() {

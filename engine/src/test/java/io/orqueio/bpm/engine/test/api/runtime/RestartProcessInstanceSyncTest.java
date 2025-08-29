@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -223,7 +223,7 @@ public class RestartProcessInstanceSyncTest {
     BpmnModelInstance instance = Bpmn.createExecutableProcess("Process")
         .startEvent()
         .userTask("userTask1")
-        .camundaExecutionListenerClass(ExecutionListener.EVENTNAME_END, SetVariableExecutionListenerImpl.class.getName())
+        .orqueioExecutionListenerClass(ExecutionListener.EVENTNAME_END, SetVariableExecutionListenerImpl.class.getName())
         .userTask("userTask2")
         .endEvent()
         .done();
@@ -260,7 +260,7 @@ public class RestartProcessInstanceSyncTest {
     BpmnModelInstance instance = Bpmn.createExecutableProcess("Process")
         .startEvent("startEvent")
         .userTask("userTask1")
-        .camundaExecutionListenerClass(ExecutionListener.EVENTNAME_END, SetVariableExecutionListenerImpl.class.getName())
+        .orqueioExecutionListenerClass(ExecutionListener.EVENTNAME_END, SetVariableExecutionListenerImpl.class.getName())
         .userTask("userTask2")
         .endEvent()
         .done();
@@ -457,8 +457,8 @@ public class RestartProcessInstanceSyncTest {
     // given
     BpmnModelInstance model = Bpmn.createExecutableProcess("process")
         .startEvent()
-        .camundaAsyncBefore()
-        .camundaExecutionListenerClass("end", AsyncListener.class)
+        .orqueioAsyncBefore()
+        .orqueioExecutionListenerClass("end", AsyncListener.class)
         .userTask("task")
         .endEvent()
         .done();
@@ -494,7 +494,7 @@ public class RestartProcessInstanceSyncTest {
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/async/AsyncStartEventTest.testAsyncStartEventListeners.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/bpmn/async/AsyncStartEventTest.testAsyncStartEventListeners.bpmn20.xml"})
   public void shouldSetInitialVersionOfVariablesAsyncBeforeStartEventExecutionListener() {
     // given
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("asyncStartEvent",
@@ -528,8 +528,8 @@ public class RestartProcessInstanceSyncTest {
 
   @Test
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/bpmn/async/AsyncStartEventTest.testCallActivity-super.bpmn20.xml",
-      "org/camunda/bpm/engine/test/bpmn/async/AsyncStartEventTest.testCallActivity-sub.bpmn20.xml"
+      "io/orqueio/bpm/engine/test/bpmn/async/AsyncStartEventTest.testCallActivity-super.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/bpmn/async/AsyncStartEventTest.testCallActivity-sub.bpmn20.xml"
   })
   public void shouldSetInitialVersionOfVariablesAsyncBeforeCallActivity() {
     // given
@@ -730,7 +730,7 @@ public class RestartProcessInstanceSyncTest {
   public void shouldSkipCustomListeners() {
     // given
     ProcessDefinition processDefinition = testRule.deployAndGetDefinition(modify(ProcessModels.TWO_TASKS_PROCESS).activityBuilder("userTask1")
-        .camundaExecutionListenerClass(ExecutionListener.EVENTNAME_START, IncrementCounterListener.class.getName()).done());
+        .orqueioExecutionListenerClass(ExecutionListener.EVENTNAME_START, IncrementCounterListener.class.getName()).done());
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("Process");
 
     runtimeService.deleteProcessInstance(processInstance.getId(), "test");
@@ -751,7 +751,7 @@ public class RestartProcessInstanceSyncTest {
   public void shouldSkipIoMappings() {
     // given
     ProcessDefinition processDefinition = testRule.deployAndGetDefinition(
-        modify(ProcessModels.TWO_TASKS_PROCESS).activityBuilder("userTask1").camundaInputParameter("foo", "bar").done());
+        modify(ProcessModels.TWO_TASKS_PROCESS).activityBuilder("userTask1").orqueioInputParameter("foo", "bar").done());
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("Process");
 
     runtimeService.deleteProcessInstance(processInstance.getId(), "test");

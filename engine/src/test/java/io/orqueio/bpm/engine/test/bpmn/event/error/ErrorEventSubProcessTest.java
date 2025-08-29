@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -104,8 +104,8 @@ public class ErrorEventSubProcessTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/bpmn/event/error/ErrorEventSubProcessTest.testThrowErrorInScriptTaskInsideCallActivitiCatchInTopLevelProcess.bpmn20.xml",
-      "org/camunda/bpm/engine/test/bpmn/event/error/BoundaryErrorEventTest.testCatchErrorThrownByJavaDelegateOnCallActivity-child.bpmn20.xml" })
+      "io/orqueio/bpm/engine/test/bpmn/event/error/ErrorEventSubProcessTest.testThrowErrorInScriptTaskInsideCallActivitiCatchInTopLevelProcess.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/bpmn/event/error/BoundaryErrorEventTest.testCatchErrorThrownByJavaDelegateOnCallActivity-child.bpmn20.xml" })
   @Test
   public void testThrowErrorInScriptTaskInsideCallActivitiCatchInTopLevelProcess() {
     String procId = runtimeService.startProcessInstanceByKey("testThrowErrorInScriptTaskInsideCallActivitiCatchInTopLevelProcess").getId();
@@ -113,7 +113,7 @@ public class ErrorEventSubProcessTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/event/error/ErrorEventSubProcessTest.testCatchErrorThrownByAbstractBpmnActivityBehavior.bpmn20.xml"
+    "io/orqueio/bpm/engine/test/bpmn/event/error/ErrorEventSubProcessTest.testCatchErrorThrownByAbstractBpmnActivityBehavior.bpmn20.xml"
   })
   @Test
   public void testCatchExceptionThrownByExecuteOfAbstractBpmnActivityBehavior() {
@@ -130,7 +130,7 @@ public class ErrorEventSubProcessTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/event/error/ErrorEventSubProcessTest.testCatchErrorThrownByAbstractBpmnActivityBehavior.bpmn20.xml"
+    "io/orqueio/bpm/engine/test/bpmn/event/error/ErrorEventSubProcessTest.testCatchErrorThrownByAbstractBpmnActivityBehavior.bpmn20.xml"
   })
   @Test
   public void testCatchErrorThrownByExecuteOfAbstractBpmnActivityBehavior() {
@@ -147,7 +147,7 @@ public class ErrorEventSubProcessTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/event/error/ErrorEventSubProcessTest.testCatchErrorThrownByAbstractBpmnActivityBehavior.bpmn20.xml"
+    "io/orqueio/bpm/engine/test/bpmn/event/error/ErrorEventSubProcessTest.testCatchErrorThrownByAbstractBpmnActivityBehavior.bpmn20.xml"
   })
   @Test
   public void testCatchExceptionThrownBySignalOfAbstractBpmnActivityBehavior() {
@@ -173,7 +173,7 @@ public class ErrorEventSubProcessTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/event/error/ErrorEventSubProcessTest.testCatchErrorThrownByAbstractBpmnActivityBehavior.bpmn20.xml"
+    "io/orqueio/bpm/engine/test/bpmn/event/error/ErrorEventSubProcessTest.testCatchErrorThrownByAbstractBpmnActivityBehavior.bpmn20.xml"
   })
   @Test
   public void testCatchErrorThrownBySignalOfAbstractBpmnActivityBehavior() {
@@ -199,7 +199,7 @@ public class ErrorEventSubProcessTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/event/error/ErrorEventSubProcessTest.testCatchErrorThrownByDelegateExpression.bpmn20.xml"
+    "io/orqueio/bpm/engine/test/bpmn/event/error/ErrorEventSubProcessTest.testCatchErrorThrownByDelegateExpression.bpmn20.xml"
   })
   @Test
   public void testCatchExceptionThrownByExecuteOfDelegateExpression() {
@@ -218,7 +218,7 @@ public class ErrorEventSubProcessTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/event/error/ErrorEventSubProcessTest.testCatchErrorThrownByDelegateExpression.bpmn20.xml"
+    "io/orqueio/bpm/engine/test/bpmn/event/error/ErrorEventSubProcessTest.testCatchErrorThrownByDelegateExpression.bpmn20.xml"
   })
   @Test
   public void testCatchErrorThrownByExecuteOfDelegateExpression() {
@@ -237,7 +237,7 @@ public class ErrorEventSubProcessTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/event/error/ErrorEventSubProcessTest.testCatchErrorThrownByDelegateExpression.bpmn20.xml"
+    "io/orqueio/bpm/engine/test/bpmn/event/error/ErrorEventSubProcessTest.testCatchErrorThrownByDelegateExpression.bpmn20.xml"
   })
   @Test
   public void testCatchExceptionThrownBySignalOfDelegateExpression() {
@@ -264,7 +264,7 @@ public class ErrorEventSubProcessTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/event/error/ErrorEventSubProcessTest.testCatchErrorThrownByDelegateExpression.bpmn20.xml"
+    "io/orqueio/bpm/engine/test/bpmn/event/error/ErrorEventSubProcessTest.testCatchErrorThrownByDelegateExpression.bpmn20.xml"
   })
   @Test
   public void testCatchErrorThrownBySignalOfDelegateExpression() {
@@ -306,7 +306,7 @@ public class ErrorEventSubProcessTest extends PluggableProcessEngineTest {
   @Test
   public void testCatchErrorEventSubprocessSetErrorVariables(){
     runtimeService.startProcessInstanceByKey("Process_1");
-    //the name used in "camunda:errorCodeVariable" in the BPMN
+    //the name used in "orqueio:errorCodeVariable" in the BPMN
     String variableName = "errorCode";
     VariableInstance errorVariable = runtimeService.createVariableInstanceQuery().variableName(variableName).singleResult();
 
@@ -318,13 +318,13 @@ public class ErrorEventSubProcessTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources={
-      "org/camunda/bpm/engine/test/bpmn/event/error/ThrowErrorProcess.bpmn",
-      "org/camunda/bpm/engine/test/bpmn/event/error/ErrorEventSubProcessTest.testCatchErrorFromCallActivitySetsErrorVariables.bpmn"
+      "io/orqueio/bpm/engine/test/bpmn/event/error/ThrowErrorProcess.bpmn",
+      "io/orqueio/bpm/engine/test/bpmn/event/error/ErrorEventSubProcessTest.testCatchErrorFromCallActivitySetsErrorVariables.bpmn"
   })
   @Test
   public void testCatchErrorFromCallActivitySetsErrorVariable(){
     runtimeService.startProcessInstanceByKey("Process_1");
-    //the name used in "camunda:errorCodeVariable" in the BPMN
+    //the name used in "orqueio:errorCodeVariable" in the BPMN
     String variableName = "errorCode";
     VariableInstance errorVariable = runtimeService.createVariableInstanceQuery().variableName(variableName).singleResult();
 
@@ -335,15 +335,15 @@ public class ErrorEventSubProcessTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources={
-      "org/camunda/bpm/engine/test/bpmn/event/error/ErrorEventSubProcessTest.testCatchBpmnErrorFromJavaDelegateInsideCallActivitySetsErrorVariable.bpmn",
-      "org/camunda/bpm/engine/test/bpmn/callactivity/subProcessWithThrownError.bpmn"
+      "io/orqueio/bpm/engine/test/bpmn/event/error/ErrorEventSubProcessTest.testCatchBpmnErrorFromJavaDelegateInsideCallActivitySetsErrorVariable.bpmn",
+      "io/orqueio/bpm/engine/test/bpmn/callactivity/subProcessWithThrownError.bpmn"
     })
   @Test
   public void testCatchBpmnErrorFromJavaDelegateInsideCallActivitySetsErrorVariable(){
     runtimeService.startProcessInstanceByKey("Process_1");
     Task task = taskService.createTaskQuery().singleResult();
     taskService.complete(task.getId());
-    //the name used in "camunda:errorCodeVariable" in the BPMN
+    //the name used in "orqueio:errorCodeVariable" in the BPMN
     String variableName = "errorCode";
     //the code we gave the thrown error
     Object errorCode = "errorCode";
@@ -355,7 +355,7 @@ public class ErrorEventSubProcessTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources={
-      "org/camunda/bpm/engine/test/bpmn/event/error/ErrorEventSubProcessTest.testThrowErrorInLoop.bpmn20.xml"
+      "io/orqueio/bpm/engine/test/bpmn/event/error/ErrorEventSubProcessTest.testThrowErrorInLoop.bpmn20.xml"
     })
   @Test
   public void testShouldNotThrowErrorInLoop(){
@@ -369,8 +369,8 @@ public class ErrorEventSubProcessTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources={
-      "org/camunda/bpm/engine/test/bpmn/event/error/ErrorEventSubProcessTest.testThrowErrorInLoopWithCallActivity.bpmn20.xml",
-      "org/camunda/bpm/engine/test/bpmn/event/error/ThrowErrorToCallActivity.bpmn20.xml"
+      "io/orqueio/bpm/engine/test/bpmn/event/error/ErrorEventSubProcessTest.testThrowErrorInLoopWithCallActivity.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/bpmn/event/error/ThrowErrorToCallActivity.bpmn20.xml"
     })
   @Test
   public void testShouldNotThrowErrorInLoopWithCallActivity(){
@@ -384,7 +384,7 @@ public class ErrorEventSubProcessTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources={
-      "org/camunda/bpm/engine/test/bpmn/event/error/ErrorEventSubProcessTest.testThrowErrorInLoopWithMultipleSubProcess.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/bpmn/event/error/ErrorEventSubProcessTest.testThrowErrorInLoopWithMultipleSubProcess.bpmn20.xml",
     })
   @Test
   public void testShouldNotThrowErrorInLoopForMultipleSubProcess(){
@@ -398,8 +398,8 @@ public class ErrorEventSubProcessTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources={
-      "org/camunda/bpm/engine/test/bpmn/event/error/ErrorEventSubProcessTest.testThrowErrorInLoopFromCallActivityToEventSubProcess.bpmn20.xml",
-      "org/camunda/bpm/engine/test/bpmn/event/error/ThrowErrorToCallActivity.bpmn20.xml"
+      "io/orqueio/bpm/engine/test/bpmn/event/error/ErrorEventSubProcessTest.testThrowErrorInLoopFromCallActivityToEventSubProcess.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/bpmn/event/error/ThrowErrorToCallActivity.bpmn20.xml"
     })
   public void FAILING_testShouldNotThrowErrorInLoopFromCallActivityToEventSubProcess(){
     runtimeService.startProcessInstanceByKey("Process_1");

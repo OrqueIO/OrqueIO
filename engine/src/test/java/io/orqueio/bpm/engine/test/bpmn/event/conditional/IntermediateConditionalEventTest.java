@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -199,7 +199,7 @@ public class IntermediateConditionalEventTest extends AbstractConditionalEventTe
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/event/conditional/IntermediateConditionalEventTest.testParallelVariableValue.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/bpmn/event/conditional/IntermediateConditionalEventTest.testParallelVariableValue.bpmn20.xml"})
   public void testParallelVariableSetValueOnParent() {
     //given process with intermediate conditional event and variable with wrong value
     Map<String, Object> variables = Variables.createVariables();
@@ -260,7 +260,7 @@ public class IntermediateConditionalEventTest extends AbstractConditionalEventTe
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/event/conditional/IntermediateConditionalEventTest.testSubProcessVariableValue.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/bpmn/event/conditional/IntermediateConditionalEventTest.testSubProcessVariableValue.bpmn20.xml"})
   public void testSubProcessVariableSetValueOnParent() {
     //given process with intermediate conditional event and variable with wrong value
     Map<String, Object> variables = Variables.createVariables();
@@ -319,7 +319,7 @@ public class IntermediateConditionalEventTest extends AbstractConditionalEventTe
           .intermediateCatchEvent(CONDITIONAL_EVENT)
             .conditionalEventDefinition()
               .condition(CONDITION_EXPR)
-              .camundaVariableName(VARIABLE_NAME)
+              .orqueioVariableName(VARIABLE_NAME)
             .conditionalEventDefinitionDone()
           .userTask()
             .name(TASK_AFTER_CONDITION)
@@ -371,7 +371,7 @@ public class IntermediateConditionalEventTest extends AbstractConditionalEventTe
           .intermediateCatchEvent(CONDITIONAL_EVENT)
             .conditionalEventDefinition()
               .condition(CONDITION_EXPR)
-              .camundaVariableEvents(CONDITIONAL_VAR_EVENT_UPDATE)
+              .orqueioVariableEvents(CONDITIONAL_VAR_EVENT_UPDATE)
             .conditionalEventDefinitionDone()
           .userTask()
             .name(TASK_AFTER_CONDITION)
@@ -427,8 +427,8 @@ public class IntermediateConditionalEventTest extends AbstractConditionalEventTe
           .intermediateCatchEvent(CONDITIONAL_EVENT)
             .conditionalEventDefinition()
               .condition(CONDITION_EXPR)
-              .camundaVariableName(VARIABLE_NAME)
-              .camundaVariableEvents(CONDITIONAL_VAR_EVENT_UPDATE)
+              .orqueioVariableName(VARIABLE_NAME)
+              .orqueioVariableEvents(CONDITIONAL_VAR_EVENT_UPDATE)
             .conditionalEventDefinitionDone()
           .userTask()
             .name(TASK_AFTER_CONDITION)
@@ -702,7 +702,7 @@ public class IntermediateConditionalEventTest extends AbstractConditionalEventTe
         .moveToNode(PARALLEL_GATEWAY_ID)
         .userTask(TASK_BEFORE_SERVICE_TASK_ID)
         .serviceTask()
-        .camundaClass(SetVariableDelegate.class.getName())
+        .orqueioClass(SetVariableDelegate.class.getName())
         .endEvent()
         .done();
 

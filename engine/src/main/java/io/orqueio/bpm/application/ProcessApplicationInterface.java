@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -30,7 +30,7 @@ import io.orqueio.bpm.impl.juel.jakarta.el.ELResolver;
 import io.orqueio.bpm.engine.repository.DeploymentBuilder;
 
 /**
- * <p>A Process Application is an ordinary Java Application that uses the camunda process engine for
+ * <p>A Process Application is an ordinary Java Application that uses the orqueio process engine for
  * BPM and Worklow functionality. Most such applications will start their own process engine (or use
  * a process engine provided by the runtime container), deploy some BPMN 2.0 process definitions and
  * interact with process instances derived from these process definitions. Since most process applications

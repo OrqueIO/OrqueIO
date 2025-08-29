@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -221,17 +221,17 @@ public class HistoryCleanupRemovalTimeTest {
 
   protected final String PROCESS_KEY = "process";
   protected final BpmnModelInstance PROCESS = Bpmn.createExecutableProcess(PROCESS_KEY)
-    .camundaHistoryTimeToLive(5)
+    .orqueioHistoryTimeToLive(5)
     .startEvent()
       .userTask("userTask").name("userTask")
     .endEvent().done();
 
 
   protected final BpmnModelInstance CALLED_PROCESS_INCIDENT = Bpmn.createExecutableProcess(PROCESS_KEY)
-    .camundaHistoryTimeToLive(null)
+    .orqueioHistoryTimeToLive(null)
     .startEvent()
       .scriptTask()
-        .camundaAsyncBefore()
+        .orqueioAsyncBefore()
         .scriptFormat("groovy")
         .scriptText("if(execution.getIncidents().size() == 0) throw new RuntimeException(\"I'm supposed to fail!\")")
       .userTask("userTask")
@@ -240,14 +240,14 @@ public class HistoryCleanupRemovalTimeTest {
   protected final String CALLING_PROCESS_KEY = "callingProcess";
 
   protected final BpmnModelInstance CALLING_PROCESS = Bpmn.createExecutableProcess(CALLING_PROCESS_KEY)
-    .camundaHistoryTimeToLive(5)
+    .orqueioHistoryTimeToLive(5)
     .startEvent()
       .callActivity()
         .calledElement(PROCESS_KEY)
     .endEvent().done();
 
   protected final BpmnModelInstance CALLING_PROCESS_WO_TTL = Bpmn.createExecutableProcess(CALLING_PROCESS_KEY)
-      .camundaHistoryTimeToLive(null)
+      .orqueioHistoryTimeToLive(null)
       .startEvent()
         .callActivity()
           .calledElement(PROCESS_KEY)
@@ -256,18 +256,18 @@ public class HistoryCleanupRemovalTimeTest {
   protected final String CALLING_PROCESS_CALLS_DMN_KEY = "callingProcessCallsDmn";
 
   protected final BpmnModelInstance CALLING_PROCESS_CALLS_DMN = Bpmn.createExecutableProcess(CALLING_PROCESS_CALLS_DMN_KEY)
-    .camundaHistoryTimeToLive(5)
+    .orqueioHistoryTimeToLive(5)
     .startEvent()
       .businessRuleTask()
-        .camundaAsyncAfter()
-        .camundaDecisionRef("dish-decision")
+        .orqueioAsyncAfter()
+        .orqueioDecisionRef("dish-decision")
     .endEvent().done();
 
   protected final Date END_DATE = new GregorianCalendar(2013, Calendar.MARCH, 18, 13, 0, 0).getTime();
 
   @Test
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/dmn/deployment/drdDish.dmn11.xml"
+    "io/orqueio/bpm/engine/test/dmn/deployment/drdDish.dmn11.xml"
   })
   public void shouldCleanupDecisionInstance() {
     // given
@@ -302,7 +302,7 @@ public class HistoryCleanupRemovalTimeTest {
 
   @Test
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/dmn/deployment/drdDish.dmn11.xml"
+    "io/orqueio/bpm/engine/test/dmn/deployment/drdDish.dmn11.xml"
   })
   public void shouldCleanupStandaloneDecisionInstance() {
     // given
@@ -343,7 +343,7 @@ public class HistoryCleanupRemovalTimeTest {
 
   @Test
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/dmn/deployment/drdDish.dmn11.xml"
+    "io/orqueio/bpm/engine/test/dmn/deployment/drdDish.dmn11.xml"
   })
   public void shouldReportMetricsForDecisionInstanceCleanup() {
     // given
@@ -375,7 +375,7 @@ public class HistoryCleanupRemovalTimeTest {
 
   @Test
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/dmn/deployment/drdDish.dmn11.xml"
+    "io/orqueio/bpm/engine/test/dmn/deployment/drdDish.dmn11.xml"
   })
   public void shouldCleanupDecisionInputInstance() {
     // given
@@ -414,7 +414,7 @@ public class HistoryCleanupRemovalTimeTest {
 
   @Test
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/dmn/deployment/drdDish.dmn11.xml"
+    "io/orqueio/bpm/engine/test/dmn/deployment/drdDish.dmn11.xml"
   })
   public void shouldCleanupDecisionOutputInstance() {
     // given
@@ -811,11 +811,11 @@ public class HistoryCleanupRemovalTimeTest {
     // given
     testRule.deploy(Bpmn.createExecutableProcess("calledProcess")
       .startEvent()
-        .serviceTask().camundaExternalTask("anExternalTaskTopic")
+        .serviceTask().orqueioExternalTask("anExternalTaskTopic")
       .endEvent().done());
 
     testRule.deploy(Bpmn.createExecutableProcess("callingProcess")
-      .camundaHistoryTimeToLive(5)
+      .orqueioHistoryTimeToLive(5)
       .startEvent()
         .callActivity()
           .calledElement("calledProcess")
@@ -854,7 +854,7 @@ public class HistoryCleanupRemovalTimeTest {
     testRule.deploy(CALLING_PROCESS);
 
     testRule.deploy(Bpmn.createExecutableProcess(PROCESS_KEY)
-      .startEvent().camundaAsyncBefore()
+      .startEvent().orqueioAsyncBefore()
         .userTask("userTask").name("userTask")
       .endEvent().done());
 
@@ -935,7 +935,7 @@ public class HistoryCleanupRemovalTimeTest {
     testRule.deploy(CALLING_PROCESS);
 
     testRule.deploy(Bpmn.createExecutableProcess(PROCESS_KEY)
-      .startEvent().camundaAsyncBefore()
+      .startEvent().orqueioAsyncBefore()
         .userTask("userTask").name("userTask")
       .endEvent().done());
 
@@ -1292,7 +1292,7 @@ public class HistoryCleanupRemovalTimeTest {
 
   @Test
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/dmn/deployment/drdDish.dmn11.xml"
+    "io/orqueio/bpm/engine/test/dmn/deployment/drdDish.dmn11.xml"
   })
   public void shouldDistributeWorkForDecisions() {
     // given
@@ -1591,11 +1591,11 @@ public class HistoryCleanupRemovalTimeTest {
     // given
     testRule.deploy(Bpmn.createExecutableProcess("calledProcess")
       .startEvent()
-        .serviceTask().camundaExternalTask("anExternalTaskTopic")
+        .serviceTask().orqueioExternalTask("anExternalTaskTopic")
       .endEvent().done());
 
     testRule.deploy(Bpmn.createExecutableProcess("callingProcess")
-      .camundaHistoryTimeToLive(5)
+      .orqueioHistoryTimeToLive(5)
       .startEvent()
         .callActivity()
           .calledElement("calledProcess")
@@ -1638,7 +1638,7 @@ public class HistoryCleanupRemovalTimeTest {
     testRule.deploy(CALLING_PROCESS);
 
     testRule.deploy(Bpmn.createExecutableProcess(PROCESS_KEY)
-      .startEvent().camundaAsyncBefore()
+      .startEvent().orqueioAsyncBefore()
         .userTask("userTask").name("userTask")
       .endEvent().done());
 
@@ -1681,7 +1681,7 @@ public class HistoryCleanupRemovalTimeTest {
     testRule.deploy(CALLING_PROCESS);
 
     testRule.deploy(Bpmn.createExecutableProcess(PROCESS_KEY)
-      .startEvent().camundaAsyncBefore()
+      .startEvent().orqueioAsyncBefore()
         .userTask("userTask").name("userTask")
       .endEvent().done());
 
@@ -2044,7 +2044,7 @@ public class HistoryCleanupRemovalTimeTest {
 
   @Test
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/dmn/deployment/drdDish.dmn11.xml"
+    "io/orqueio/bpm/engine/test/dmn/deployment/drdDish.dmn11.xml"
   })
   public void shouldSeeCleanableDecisionInstancesInReport() {
     // given
@@ -2078,7 +2078,7 @@ public class HistoryCleanupRemovalTimeTest {
 
   @Test
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/dmn/deployment/drdDish.dmn11.xml"
+    "io/orqueio/bpm/engine/test/dmn/deployment/drdDish.dmn11.xml"
   })
   public void shouldNotSeeCleanableDecisionInstancesInReport() {
     // given

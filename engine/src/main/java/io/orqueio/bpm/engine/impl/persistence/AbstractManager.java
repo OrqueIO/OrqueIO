@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -30,7 +30,7 @@ import io.orqueio.bpm.engine.impl.db.entitymanager.DbEntityManager;
 import io.orqueio.bpm.engine.impl.db.sql.DbSqlSession;
 import io.orqueio.bpm.engine.impl.dmn.entity.repository.DecisionDefinitionManager;
 import io.orqueio.bpm.engine.impl.dmn.entity.repository.DecisionRequirementsDefinitionManager;
-import io.orqueio.bpm.engine.impl.form.entity.CamundaFormDefinitionManager;
+import io.orqueio.bpm.engine.impl.form.entity.OrqueioFormDefinitionManager;
 import io.orqueio.bpm.engine.impl.history.event.HistoricDecisionInstanceManager;
 import io.orqueio.bpm.engine.impl.identity.Authentication;
 import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
@@ -123,8 +123,8 @@ public abstract class AbstractManager implements Session {
     return getSession(DecisionRequirementsDefinitionManager.class);
   }
 
-  protected CamundaFormDefinitionManager getCamundaFormDefinitionManager() {
-    return getSession(CamundaFormDefinitionManager.class);
+  protected OrqueioFormDefinitionManager getOrqueioFormDefinitionManager() {
+    return getSession(OrqueioFormDefinitionManager.class);
   }
 
   protected HistoricDecisionInstanceManager getHistoricDecisionInstanceManager() {

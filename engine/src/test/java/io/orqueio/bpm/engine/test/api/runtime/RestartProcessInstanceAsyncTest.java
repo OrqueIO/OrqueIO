@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -362,7 +362,7 @@ public class RestartProcessInstanceAsyncTest {
     BpmnModelInstance instance = Bpmn.createExecutableProcess("Process")
         .startEvent()
         .userTask("userTask1")
-        .camundaExecutionListenerClass(ExecutionListener.EVENTNAME_END, SetVariableExecutionListenerImpl.class.getName())
+        .orqueioExecutionListenerClass(ExecutionListener.EVENTNAME_END, SetVariableExecutionListenerImpl.class.getName())
         .userTask("userTask2")
         .endEvent()
         .done();
@@ -410,7 +410,7 @@ public class RestartProcessInstanceAsyncTest {
     BpmnModelInstance instance = Bpmn.createExecutableProcess("Process")
         .startEvent()
         .userTask("userTask1")
-        .camundaExecutionListenerClass(ExecutionListener.EVENTNAME_END, SetVariableExecutionListenerImpl.class.getName())
+        .orqueioExecutionListenerClass(ExecutionListener.EVENTNAME_END, SetVariableExecutionListenerImpl.class.getName())
         .userTask("userTask2")
         .endEvent()
         .done();
@@ -991,7 +991,7 @@ public class RestartProcessInstanceAsyncTest {
   public void shouldSkipCustomListeners() {
     // given
     ProcessDefinition processDefinition = testRule.deployAndGetDefinition(modify(ProcessModels.TWO_TASKS_PROCESS).activityBuilder("userTask1")
-        .camundaExecutionListenerClass(ExecutionListener.EVENTNAME_START, IncrementCounterListener.class.getName()).done());
+        .orqueioExecutionListenerClass(ExecutionListener.EVENTNAME_START, IncrementCounterListener.class.getName()).done());
     ProcessInstance processInstance1 = runtimeService.startProcessInstanceByKey("Process");
     ProcessInstance processInstance2 = runtimeService.startProcessInstanceByKey("Process");
 
@@ -1015,7 +1015,7 @@ public class RestartProcessInstanceAsyncTest {
   public void shouldSkipIoMappings() {
     // given
     ProcessDefinition processDefinition = testRule.deployAndGetDefinition(
-        modify(ProcessModels.TWO_TASKS_PROCESS).activityBuilder("userTask1").camundaInputParameter("foo", "bar").done());
+        modify(ProcessModels.TWO_TASKS_PROCESS).activityBuilder("userTask1").orqueioInputParameter("foo", "bar").done());
     ProcessInstance processInstance1 = runtimeService.startProcessInstanceByKey("Process");
     ProcessInstance processInstance2 = runtimeService.startProcessInstanceByKey("Process");
 

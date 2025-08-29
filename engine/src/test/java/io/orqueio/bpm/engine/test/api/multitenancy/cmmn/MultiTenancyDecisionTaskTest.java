@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -31,16 +31,16 @@ public class MultiTenancyDecisionTaskTest extends PluggableProcessEngineTest {
   protected static final String TENANT_ONE = "tenant1";
   protected static final String TENANT_TWO = "tenant2";
 
-  protected static final String CMMN_LATEST = "org/camunda/bpm/engine/test/api/multitenancy/CaseWithDecisionTask.cmmn";
-  protected static final String CMMN_DEPLOYMENT = "org/camunda/bpm/engine/test/api/multitenancy/CaseWithDecisionTaskDeploymentBinding.cmmn";
-  protected static final String CMMN_VERSION = "org/camunda/bpm/engine/test/api/multitenancy/CaseWithDecisionTaskVersionBinding.cmmn";
-  protected static final String CMMN_VERSION_2 = "org/camunda/bpm/engine/test/api/multitenancy/CaseWithDecisionTaskVersionBinding_v2.cmmn";
-  protected static final String CMMN_CONST = "org/camunda/bpm/engine/test/api/multitenancy/CaseWithDecisionTaskTenantIdConst.cmmn";
-  protected static final String CMMN_WITHOUT_TENANT = "org/camunda/bpm/engine/test/api/multitenancy/CaseWithDecisionTaskWithoutTenantId.cmmn";
-  protected static final String CMMN_EXPR = "org/camunda/bpm/engine/test/api/multitenancy/CaseWithDecisionTaskTenantIdExpr.cmmn";
+  protected static final String CMMN_LATEST = "io/orqueio/bpm/engine/test/api/multitenancy/CaseWithDecisionTask.cmmn";
+  protected static final String CMMN_DEPLOYMENT = "io/orqueio/bpm/engine/test/api/multitenancy/CaseWithDecisionTaskDeploymentBinding.cmmn";
+  protected static final String CMMN_VERSION = "io/orqueio/bpm/engine/test/api/multitenancy/CaseWithDecisionTaskVersionBinding.cmmn";
+  protected static final String CMMN_VERSION_2 = "io/orqueio/bpm/engine/test/api/multitenancy/CaseWithDecisionTaskVersionBinding_v2.cmmn";
+  protected static final String CMMN_CONST = "io/orqueio/bpm/engine/test/api/multitenancy/CaseWithDecisionTaskTenantIdConst.cmmn";
+  protected static final String CMMN_WITHOUT_TENANT = "io/orqueio/bpm/engine/test/api/multitenancy/CaseWithDecisionTaskWithoutTenantId.cmmn";
+  protected static final String CMMN_EXPR = "io/orqueio/bpm/engine/test/api/multitenancy/CaseWithDecisionTaskTenantIdExpr.cmmn";
 
-  protected static final String DMN_FILE = "org/camunda/bpm/engine/test/api/multitenancy/simpleDecisionTable.dmn";
-  protected static final String DMN_FILE_VERSION_TWO = "org/camunda/bpm/engine/test/api/multitenancy/simpleDecisionTable_v2.dmn";
+  protected static final String DMN_FILE = "io/orqueio/bpm/engine/test/api/multitenancy/simpleDecisionTable.dmn";
+  protected static final String DMN_FILE_VERSION_TWO = "io/orqueio/bpm/engine/test/api/multitenancy/simpleDecisionTable_v2.dmn";
 
   protected static final String CASE_DEFINITION_KEY = "caseDecisionTask";
   protected static final String DECISION_TASK_ID = "PI_DecisionTask_1";

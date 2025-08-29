@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -35,7 +35,7 @@ import org.junit.Test;
 @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_AUDIT)
 public class HistoricActivityInstanceSequenceCounterTest extends PluggableProcessEngineTest {
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/standalone/entity/ExecutionSequenceCounterTest.testSequence.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/standalone/entity/ExecutionSequenceCounterTest.testSequence.bpmn20.xml"})
   @Test
   public void testSequence() {
     // given
@@ -51,7 +51,7 @@ public class HistoricActivityInstanceSequenceCounterTest extends PluggableProces
     verifyOrder(query, "theStart", "theService1", "theService2", "theEnd");
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/standalone/entity/ExecutionSequenceCounterTest.testForkSameSequenceLengthWithoutWaitStates.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/standalone/entity/ExecutionSequenceCounterTest.testForkSameSequenceLengthWithoutWaitStates.bpmn20.xml"})
   @Test
   public void testFork() {
     // given
@@ -79,7 +79,7 @@ public class HistoricActivityInstanceSequenceCounterTest extends PluggableProces
     verifyOrder(query, "theStart", "theService", "fork", "theService1", "theEnd1", "theService2", "theEnd2");
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/standalone/entity/ExecutionSequenceCounterTest.testForkAndJoinDifferentSequenceLength.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/standalone/entity/ExecutionSequenceCounterTest.testForkAndJoinDifferentSequenceLength.bpmn20.xml"})
   @Test
   public void testForkAndJoin() {
     // given
@@ -122,7 +122,7 @@ public class HistoricActivityInstanceSequenceCounterTest extends PluggableProces
     verifyOrder(query, "theStart", "theService", "fork", "theService1", "theService2", "join", "theService3", "join", "theService4", "theEnd");
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/standalone/entity/ExecutionSequenceCounterTest.testSequenceInsideSubProcess.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/standalone/entity/ExecutionSequenceCounterTest.testSequenceInsideSubProcess.bpmn20.xml"})
   @Test
   public void testSequenceInsideSubProcess() {
     // given
@@ -154,7 +154,7 @@ public class HistoricActivityInstanceSequenceCounterTest extends PluggableProces
     verifyOrder(query, "theStart", "theService1", "subProcess", "innerStart", "innerService", "innerEnd", "theService2", "theEnd");
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/standalone/entity/ExecutionSequenceCounterTest.testSequentialMultiInstance.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/standalone/entity/ExecutionSequenceCounterTest.testSequentialMultiInstance.bpmn20.xml"})
   @Test
   public void testSequentialMultiInstance() {
     // given
@@ -187,7 +187,7 @@ public class HistoricActivityInstanceSequenceCounterTest extends PluggableProces
     verifyOrder(query, "theStart", "theService1", "theService2#multiInstanceBody", "theService2", "theService2", "theService3", "theEnd");
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/standalone/entity/ExecutionSequenceCounterTest.testParallelMultiInstance.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/standalone/entity/ExecutionSequenceCounterTest.testParallelMultiInstance.bpmn20.xml"})
   @Test
   public void testParallelMultiInstance() {
     // given
@@ -219,7 +219,7 @@ public class HistoricActivityInstanceSequenceCounterTest extends PluggableProces
     verifyOrder(query, "theStart", "theService1", "theService2#multiInstanceBody", "theService2", "theService2", "theService3", "theEnd");
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/standalone/entity/ExecutionSequenceCounterTest.testLoop.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/standalone/entity/ExecutionSequenceCounterTest.testLoop.bpmn20.xml"})
   @Test
   public void testLoop() {
     // given
@@ -236,7 +236,7 @@ public class HistoricActivityInstanceSequenceCounterTest extends PluggableProces
     verifyOrder(query, "theStart", "theService1", "join", "theScript", "fork", "join", "theScript", "fork", "theService2", "theEnd");
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/standalone/entity/ExecutionSequenceCounterTest.testInterruptingBoundaryEvent.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/standalone/entity/ExecutionSequenceCounterTest.testInterruptingBoundaryEvent.bpmn20.xml"})
   @Test
   public void testInterruptingBoundaryEvent() {
     // given
@@ -265,7 +265,7 @@ public class HistoricActivityInstanceSequenceCounterTest extends PluggableProces
     verifyOrder(query, "theTask");
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/standalone/entity/ExecutionSequenceCounterTest.testNonInterruptingBoundaryEvent.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/standalone/entity/ExecutionSequenceCounterTest.testNonInterruptingBoundaryEvent.bpmn20.xml"})
   @Test
   public void testNonInterruptingBoundaryEvent() {
     // given

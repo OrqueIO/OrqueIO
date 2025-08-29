@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -39,13 +39,13 @@ public class ExternalTaskParseTest extends PluggableProcessEngineTest {
   public void testParseExternalTaskWithoutTopic() {
     DeploymentBuilder deploymentBuilder = repositoryService
       .createDeployment()
-      .addClasspathResource("org/camunda/bpm/engine/test/bpmn/external/ExternalTaskParseTest.testParseExternalTaskWithoutTopic.bpmn20.xml");
+      .addClasspathResource("io/orqueio/bpm/engine/test/bpmn/external/ExternalTaskParseTest.testParseExternalTaskWithoutTopic.bpmn20.xml");
 
     try {
       deploymentBuilder.deploy();
       fail("exception expected");
     } catch (ParseException e) {
-      testRule.assertTextPresent("External tasks must specify a 'topic' attribute in the camunda namespace", e.getMessage());
+      testRule.assertTextPresent("External tasks must specify a 'topic' attribute in the orqueio namespace", e.getMessage());
       assertThat(e.getResorceReports().get(0).getErrors().size()).isEqualTo(1);
       assertThat(e.getResorceReports().get(0).getErrors().get(0).getMainElementId()).isEqualTo("externalTask");
     }

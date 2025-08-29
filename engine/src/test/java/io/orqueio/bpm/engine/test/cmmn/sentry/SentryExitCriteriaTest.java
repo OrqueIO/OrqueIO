@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -33,7 +33,7 @@ import org.junit.Test;
  */
 public class SentryExitCriteriaTest extends CmmnTest {
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/sentry/SentryExitCriteriaTest.testExitTask.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/sentry/SentryExitCriteriaTest.testExitTask.cmmn"})
   @Test
   public void testExitTask() {
     // given
@@ -62,7 +62,7 @@ public class SentryExitCriteriaTest extends CmmnTest {
     assertTrue((Boolean) exitVariable);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/sentry/SentryExitCriteriaTest.testExitStage.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/sentry/SentryExitCriteriaTest.testExitStage.cmmn"})
   @Test
   public void testExitStage() {
     // given
@@ -117,7 +117,7 @@ public class SentryExitCriteriaTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/sentry/SentryExitCriteriaTest.testAndJoin.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/sentry/SentryExitCriteriaTest.testAndJoin.cmmn"})
   @Test
   public void testAndJoin() {
     // given
@@ -156,7 +156,7 @@ public class SentryExitCriteriaTest extends CmmnTest {
     assertTrue((Boolean) exitVariable);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/sentry/SentryExitCriteriaTest.testAndFork.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/sentry/SentryExitCriteriaTest.testAndFork.cmmn"})
   @Test
   public void testAndFork() {
     // given
@@ -185,7 +185,7 @@ public class SentryExitCriteriaTest extends CmmnTest {
     assertNull(thirdHumanTask);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/sentry/SentryExitCriteriaTest.testOrJoin.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/sentry/SentryExitCriteriaTest.testOrJoin.cmmn"})
   @Test
   public void testOrJoin() {
     // given
@@ -222,7 +222,7 @@ public class SentryExitCriteriaTest extends CmmnTest {
     assertNull(thirdHumanTask);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/sentry/SentryExitCriteriaTest.testOrFork.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/sentry/SentryExitCriteriaTest.testOrFork.cmmn"})
   @Test
   public void testOrFork() {
     // given
@@ -256,7 +256,7 @@ public class SentryExitCriteriaTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/sentry/SentryExitCriteriaTest.testCycle.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/sentry/SentryExitCriteriaTest.testCycle.cmmn"})
   @Test
   public void testCycle() {
     // given
@@ -288,7 +288,7 @@ public class SentryExitCriteriaTest extends CmmnTest {
     assertNull(thirdHumanTask);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/sentry/SentryExitCriteriaTest.testExitTaskWithIfPart.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/sentry/SentryExitCriteriaTest.testExitTaskWithIfPart.cmmn"})
   @Test
   public void testExitTaskWithIfPartSatisfied() {
     // given
@@ -317,7 +317,7 @@ public class SentryExitCriteriaTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/sentry/SentryExitCriteriaTest.testExitTaskWithIfPart.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/sentry/SentryExitCriteriaTest.testExitTaskWithIfPart.cmmn"})
   @Test
   public void testExitTaskWithIfPartNotSatisfied() {
     // given
@@ -346,7 +346,7 @@ public class SentryExitCriteriaTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/sentry/SentryExitCriteriaTest.testExitCriteriaOnCasePlanModel.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/sentry/SentryExitCriteriaTest.testExitCriteriaOnCasePlanModel.cmmn"})
   @Test
   public void testExitCriteriaOnCasePlanModel() {
     // given
@@ -365,7 +365,7 @@ public class SentryExitCriteriaTest extends CmmnTest {
     assertTrue(caseInstance.isTerminated());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/sentry/SentryExitCriteriaTest.testExitOnParentSuspendInsideStage.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/sentry/SentryExitCriteriaTest.testExitOnParentSuspendInsideStage.cmmn"})
   public void FAILING_testExitOnParentSuspendInsideStage() {
     // given
     createCaseInstance();
@@ -400,7 +400,7 @@ public class SentryExitCriteriaTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/sentry/SentryExitCriteriaTest.testExitOnParentResumeInsideStage.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/sentry/SentryExitCriteriaTest.testExitOnParentResumeInsideStage.cmmn"})
   public void FAILING_testExitOnParentResumeInsideStage() {
     // given
     createCaseInstance();
@@ -447,7 +447,7 @@ public class SentryExitCriteriaTest extends CmmnTest {
     assertNull(secondHumanTask);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/sentry/SentryExitCriteriaTest.testExitActiveTask.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/sentry/SentryExitCriteriaTest.testExitActiveTask.cmmn"})
   @Test
   public void testExitActiveTask() {
     // given

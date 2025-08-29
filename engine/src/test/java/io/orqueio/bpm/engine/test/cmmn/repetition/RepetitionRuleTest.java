@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -39,7 +39,7 @@ public class RepetitionRuleTest extends CmmnTest {
 
   private static final String CASE_ID = "case";
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/cmmn/repetition/RepetitionRuleTest.testVariableBasedRule.cmmn")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/cmmn/repetition/RepetitionRuleTest.testVariableBasedRule.cmmn")
   @Test
   public void testVariableBasedRepetitionRuleEvaluatesToTrue() {
     // given
@@ -61,7 +61,7 @@ public class RepetitionRuleTest extends CmmnTest {
     assertEquals(1, query.active().count());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/cmmn/repetition/RepetitionRuleTest.testVariableBasedRule.cmmn")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/cmmn/repetition/RepetitionRuleTest.testVariableBasedRule.cmmn")
   @Test
   public void testVariableBasedRepetitionRuleEvaluatesToFalse() {
     // given
@@ -81,7 +81,7 @@ public class RepetitionRuleTest extends CmmnTest {
     assertEquals(1, query.active().count());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/cmmn/repetition/RepetitionRuleTest.testDefaultVariableBasedRule.cmmn")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/cmmn/repetition/RepetitionRuleTest.testDefaultVariableBasedRule.cmmn")
   @Test
   public void testDefaultVariableBasedRepetitionRuleEvaluatesToTrue() {
     // given
@@ -103,7 +103,7 @@ public class RepetitionRuleTest extends CmmnTest {
     assertEquals(1, query.active().count());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/cmmn/repetition/RepetitionRuleTest.testDefaultVariableBasedRule.cmmn")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/cmmn/repetition/RepetitionRuleTest.testDefaultVariableBasedRule.cmmn")
   @Test
   public void testDefaultVariableBasedRepetitionRuleEvaluatesToFalse() {
     // given
@@ -314,7 +314,7 @@ public class RepetitionRuleTest extends CmmnTest {
     assertFalse(milestoneId.equals(query.singleResult().getId()));
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/cmmn/repetition/RepetitionRuleTest.testRepeatTaskWithoutEntryCriteria.cmmn")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/cmmn/repetition/RepetitionRuleTest.testRepeatTaskWithoutEntryCriteria.cmmn")
   @Test
   public void testRepeatTaskWithoutEntryCriteriaWhenCompleting() {
     // given
@@ -350,7 +350,7 @@ public class RepetitionRuleTest extends CmmnTest {
     assertEquals(caseInstanceId, query.singleResult().getId());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/cmmn/repetition/RepetitionRuleTest.testRepeatStageWithoutEntryCriteria.cmmn")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/cmmn/repetition/RepetitionRuleTest.testRepeatStageWithoutEntryCriteria.cmmn")
   @Test
   public void testRepeatStageWithoutEntryCriteriaWhenCompleting() {
     // given
@@ -388,7 +388,7 @@ public class RepetitionRuleTest extends CmmnTest {
     assertEquals(caseInstanceId, query.singleResult().getId());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/cmmn/repetition/RepetitionRuleTest.testRepeatTaskWithoutEntryCriteria.cmmn")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/cmmn/repetition/RepetitionRuleTest.testRepeatTaskWithoutEntryCriteria.cmmn")
   @Test
   public void testRepeatTaskWithoutEntryCriteriaWhenTerminating() {
     // given
@@ -420,7 +420,7 @@ public class RepetitionRuleTest extends CmmnTest {
     assertEquals(caseInstanceId, query.singleResult().getId());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/cmmn/repetition/RepetitionRuleTest.testRepeatStageWithoutEntryCriteria.cmmn")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/cmmn/repetition/RepetitionRuleTest.testRepeatStageWithoutEntryCriteria.cmmn")
   @Test
   public void testRepeatStageWithoutEntryCriteriaWhenTerminating() {
     // given
@@ -903,7 +903,7 @@ public class RepetitionRuleTest extends CmmnTest {
     assertTrue(caseInstance.isActive());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/cmmn/repetition/RepetitionRuleTest.testRepeatTask.cmmn")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/cmmn/repetition/RepetitionRuleTest.testRepeatTask.cmmn")
   @Test
   public void testShouldNotRepeatTaskAfterCompletion() {
     // given

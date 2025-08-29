@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -92,7 +92,7 @@ public class DefaultFormHandler implements FormHandler {
   }
 
   protected void parseFormData(BpmnParse bpmnParse, ExpressionManager expressionManager, Element extensionElement) {
-    Element formData = extensionElement.elementNS(BpmnParse.CAMUNDA_BPMN_EXTENSIONS_NS, "formData");
+    Element formData = extensionElement.elementNS(BpmnParse.ORQUEIO_BPMN_EXTENSIONS_NS, "formData");
     if(formData != null) {
       this.businessKeyFieldId = formData.attribute(BUSINESS_KEY_ATTRIBUTE);
       parseFormFields(formData, bpmnParse, expressionManager);
@@ -101,7 +101,7 @@ public class DefaultFormHandler implements FormHandler {
 
   protected void parseFormFields(Element formData, BpmnParse bpmnParse, ExpressionManager expressionManager) {
     // parse fields:
-    List<Element> formFields = formData.elementsNS(BpmnParse.CAMUNDA_BPMN_EXTENSIONS_NS, FORM_FIELD_ELEMENT);
+    List<Element> formFields = formData.elementsNS(BpmnParse.ORQUEIO_BPMN_EXTENSIONS_NS, FORM_FIELD_ELEMENT);
     for (Element formField : formFields) {
       parseFormField(formField, bpmnParse, expressionManager);
     }
@@ -154,10 +154,10 @@ public class DefaultFormHandler implements FormHandler {
 
   protected void parseProperties(Element formField, FormFieldHandler formFieldHandler, BpmnParse bpmnParse, ExpressionManager expressionManager) {
 
-    Element propertiesElement = formField.elementNS(BpmnParse.CAMUNDA_BPMN_EXTENSIONS_NS, "properties");
+    Element propertiesElement = formField.elementNS(BpmnParse.ORQUEIO_BPMN_EXTENSIONS_NS, "properties");
 
     if(propertiesElement != null) {
-      List<Element> propertyElements = propertiesElement.elementsNS(BpmnParse.CAMUNDA_BPMN_EXTENSIONS_NS, "property");
+      List<Element> propertyElements = propertiesElement.elementsNS(BpmnParse.ORQUEIO_BPMN_EXTENSIONS_NS, "property");
 
       // use linked hash map to preserve item ordering as provided in XML
       Map<String, String> propertyMap = new LinkedHashMap<>();
@@ -174,10 +174,10 @@ public class DefaultFormHandler implements FormHandler {
 
   protected void parseValidation(Element formField, FormFieldHandler formFieldHandler, BpmnParse bpmnParse, ExpressionManager expressionManager) {
 
-    Element validationElement = formField.elementNS(BpmnParse.CAMUNDA_BPMN_EXTENSIONS_NS, "validation");
+    Element validationElement = formField.elementNS(BpmnParse.ORQUEIO_BPMN_EXTENSIONS_NS, "validation");
 
     if(validationElement != null) {
-      List<Element> constraintElements = validationElement.elementsNS(BpmnParse.CAMUNDA_BPMN_EXTENSIONS_NS, "constraint");
+      List<Element> constraintElements = validationElement.elementsNS(BpmnParse.ORQUEIO_BPMN_EXTENSIONS_NS, "constraint");
 
       for (Element property : constraintElements) {
          FormFieldValidator validator = Context.getProcessEngineConfiguration()
@@ -209,7 +209,7 @@ public class DefaultFormHandler implements FormHandler {
   protected void parseFormProperties(BpmnParse bpmnParse, ExpressionManager expressionManager, Element extensionElement) {
     FormTypes formTypes = getFormTypes();
 
-    List<Element> formPropertyElements = extensionElement.elementsNS(BpmnParse.CAMUNDA_BPMN_EXTENSIONS_NS, FORM_PROPERTY_ELEMENT);
+    List<Element> formPropertyElements = extensionElement.elementsNS(BpmnParse.ORQUEIO_BPMN_EXTENSIONS_NS, FORM_PROPERTY_ELEMENT);
     for (Element formPropertyElement : formPropertyElements) {
       FormPropertyHandler formPropertyHandler = new FormPropertyHandler();
 

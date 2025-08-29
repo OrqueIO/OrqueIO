@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -74,7 +74,7 @@ public interface HistoricDetailQuery extends Query<HistoricDetailQuery, Historic
   HistoricDetailQuery variableTypeIn(String... variableTypes);
 
   /** Only select historic process variables that have a name matching the criteria.
-   * The syntax is that of SQL: for example usage: variableNameLike(%camunda%).
+   * The syntax is that of SQL: for example usage: variableNameLike(%orqueio%).
    * The query will match the names of variables in a case-insensitive way.
    */
   HistoricDetailQuery variableNameLike(String variableNameLike);

@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -43,11 +43,11 @@ public class RetryCmdDeployment {
     BpmnModelInstance modelInstance = Bpmn.createExecutableProcess(PROCESS_ID)
         .startEvent()
           .intermediateThrowEvent(FAILING_EVENT)
-            .camundaAsyncBefore(true)
-            .camundaFailedJobRetryTimeCycle(SCHEDULE)
+            .orqueioAsyncBefore(true)
+            .orqueioFailedJobRetryTimeCycle(SCHEDULE)
             .signal(MESSAGE)
           .serviceTask()
-            .camundaClass(FailingDelegate.class.getName())
+            .orqueioClass(FailingDelegate.class.getName())
         .endEvent()
         .done();
     return modelInstance;
@@ -57,11 +57,11 @@ public class RetryCmdDeployment {
     return Bpmn.createExecutableProcess(PROCESS_ID)
         .startEvent()
           .intermediateThrowEvent(FAILING_EVENT)
-            .camundaAsyncBefore(true)
-              .camundaFailedJobRetryTimeCycle(SCHEDULE)
+            .orqueioAsyncBefore(true)
+              .orqueioFailedJobRetryTimeCycle(SCHEDULE)
               .message(MESSAGE)
             .serviceTask()
-              .camundaClass(FailingDelegate.class.getName())
+              .orqueioClass(FailingDelegate.class.getName())
         .done();
   }
 
@@ -69,11 +69,11 @@ public class RetryCmdDeployment {
     return Bpmn.createExecutableProcess(PROCESS_ID)
         .startEvent()
           .intermediateThrowEvent(FAILING_EVENT)
-            .camundaAsyncBefore(true)
-            .camundaFailedJobRetryTimeCycle(SCHEDULE)
+            .orqueioAsyncBefore(true)
+            .orqueioFailedJobRetryTimeCycle(SCHEDULE)
             .escalation(MESSAGE)
           .serviceTask()
-            .camundaClass(FailingDelegate.class.getName())
+            .orqueioClass(FailingDelegate.class.getName())
         .endEvent()
         .done();
   }
@@ -88,12 +88,12 @@ public class RetryCmdDeployment {
               .endEvent()
           .subProcessDone()
           .intermediateThrowEvent(FAILING_EVENT)
-            .camundaAsyncBefore(true)
-            .camundaFailedJobRetryTimeCycle(SCHEDULE)
+            .orqueioAsyncBefore(true)
+            .orqueioFailedJobRetryTimeCycle(SCHEDULE)
             .compensateEventDefinition()
             .compensateEventDefinitionDone()
           .serviceTask()
-          .camundaClass(FailingDelegate.class.getName())
+          .orqueioClass(FailingDelegate.class.getName())
         .endEvent()
         .done();
   }

@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -28,7 +28,7 @@ public class DiagnosticsRegistry {
   protected Map<String, CommandCounter> commands = new HashMap<>();
   protected ApplicationServerImpl applicationServer;
   protected LicenseKeyDataImpl licenseKey;
-  protected String camundaIntegration;
+  protected String orqueioIntegration;
   protected Set<String> webapps = new HashSet<>();
 
   public synchronized ApplicationServerImpl getApplicationServer() {
@@ -46,12 +46,12 @@ public class DiagnosticsRegistry {
     return commands;
   }
 
-  public String getCamundaIntegration() {
-    return camundaIntegration;
+  public String getOrqueioIntegration() {
+    return orqueioIntegration;
   }
 
-  public void setCamundaIntegration(String camundaIntegration) {
-    this.camundaIntegration = camundaIntegration;
+  public void setOrqueioIntegration(String orqueioIntegration) {
+    this.orqueioIntegration = orqueioIntegration;
   }
 
   public LicenseKeyDataImpl getLicenseKey() {

@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -72,9 +72,9 @@ public class MultiEngineCommandContextTest {
     BpmnModelInstance process1 = Bpmn.createExecutableProcess("process1")
         .startEvent()
         .serviceTask()
-          .camundaInputParameter("engineName", "engine2")
-          .camundaInputParameter("processKey", "process2")
-          .camundaClass(StartProcessInstanceOnEngineDelegate.class.getName())
+          .orqueioInputParameter("engineName", "engine2")
+          .orqueioInputParameter("processKey", "process2")
+          .orqueioClass(StartProcessInstanceOnEngineDelegate.class.getName())
         .endEvent()
         .done();
 
@@ -97,18 +97,18 @@ public class MultiEngineCommandContextTest {
     BpmnModelInstance process1 = Bpmn.createExecutableProcess("process1")
         .startEvent()
         .serviceTask()
-          .camundaInputParameter("engineName", "engine2")
-          .camundaInputParameter("processKey", "process2")
-          .camundaClass(StartProcessInstanceOnEngineDelegate.class.getName())
+          .orqueioInputParameter("engineName", "engine2")
+          .orqueioInputParameter("processKey", "process2")
+          .orqueioClass(StartProcessInstanceOnEngineDelegate.class.getName())
         .endEvent()
         .done();
 
     BpmnModelInstance process2 = Bpmn.createExecutableProcess("process2")
         .startEvent()
         .serviceTask()
-          .camundaInputParameter("engineName", "engine1")
-          .camundaInputParameter("processKey", "process3")
-          .camundaClass(StartProcessInstanceOnEngineDelegate.class.getName())
+          .orqueioInputParameter("engineName", "engine1")
+          .orqueioInputParameter("processKey", "process3")
+          .orqueioClass(StartProcessInstanceOnEngineDelegate.class.getName())
         .done();
 
     BpmnModelInstance process3 = Bpmn.createExecutableProcess("process3")

@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -494,26 +494,26 @@ public class AuthorizationManager extends AbstractManager {
 
   // predefined authorization checks
 
-  /* MEMBER OF CAMUNDA_ADMIN */
+  /* MEMBER OF ORQUEIO_ADMIN */
 
   /**
    * Checks if the current authentication contains the group
-   * {@link Groups#CAMUNDA_ADMIN}. The check is ignored if the authorization is
+   * {@link Groups#ORQUEIO_ADMIN}. The check is ignored if the authorization is
    * disabled or no authentication exists.
    *
    * @throws AuthorizationException
    */
-  public void checkCamundaAdmin() {
+  public void checkOrqueioAdmin() {
     final Authentication currentAuthentication = getCurrentAuthentication();
 
     if (isAuthorizationEnabled() && getCommandContext().isAuthorizationCheckEnabled()
-        && currentAuthentication != null && !isCamundaAdmin(currentAuthentication)) {
+        && currentAuthentication != null && !isOrqueioAdmin(currentAuthentication)) {
 
-      throw LOG.requiredCamundaAdmin();
+      throw LOG.requiredOrqueioAdmin();
     }
   }
 
-  public void checkCamundaAdminOrPermission(Consumer<CommandChecker> permissionCheck) {
+  public void checkOrqueioAdminOrPermission(Consumer<CommandChecker> permissionCheck) {
     if (isAuthorizationEnabled() && getCommandContext().isAuthorizationCheckEnabled()) {
 
       AuthorizationException authorizationException = null;
@@ -528,7 +528,7 @@ public class AuthorizationManager extends AbstractManager {
       }
 
       try {
-        checkCamundaAdmin();
+        checkOrqueioAdmin();
       } catch (AuthorizationException e) {
         adminException = e;
       }
@@ -536,7 +536,7 @@ public class AuthorizationManager extends AbstractManager {
       if (authorizationException != null && adminException != null) {
         // throw combined exception
         List<MissingAuthorization> info = authorizationException.getMissingAuthorizations();
-        throw LOG.requiredCamundaAdminOrPermissionException(info);
+        throw LOG.requiredOrqueioAdminOrPermissionException(info);
       }
     }
   }
@@ -545,9 +545,9 @@ public class AuthorizationManager extends AbstractManager {
    * @param authentication
    *          authentication to check, cannot be <code>null</code>
    * @return <code>true</code> if the given authentication contains the group
-   *         {@link Groups#CAMUNDA_ADMIN} or the user
+   *         {@link Groups#ORQUEIO_ADMIN} or the user
    */
-  public boolean isCamundaAdmin(Authentication authentication) {
+  public boolean isOrqueioAdmin(Authentication authentication) {
     List<String> groupIds = authentication.getGroupIds();
     if (groupIds != null) {
       CommandContext commandContext = Context.getCommandContext();

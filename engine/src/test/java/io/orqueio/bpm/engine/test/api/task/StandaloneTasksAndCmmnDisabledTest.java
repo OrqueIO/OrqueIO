@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -82,8 +82,8 @@ public class StandaloneTasksAndCmmnDisabledTest {
   @Test
   public void testTaskQueryAuthorization() {
     // given
-    engineTestRule.deploy("org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml");
-    engineTestRule.deploy("org/camunda/bpm/engine/test/api/twoTasksProcess.bpmn20.xml");
+    engineTestRule.deploy("io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml");
+    engineTestRule.deploy("io/orqueio/bpm/engine/test/api/twoTasksProcess.bpmn20.xml");
 
     // a process instance task with read authorization on the process
     ProcessInstance instance1 = runtimeService.startProcessInstanceByKey("oneTaskProcess");
@@ -128,8 +128,8 @@ public class StandaloneTasksAndCmmnDisabledTest {
   @Test
   public void testTaskQueryAuthorizationWithProcessDefinitionFilter() {
     // given
-    engineTestRule.deploy("org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml");
-    engineTestRule.deploy("org/camunda/bpm/engine/test/api/twoTasksProcess.bpmn20.xml");
+    engineTestRule.deploy("io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml");
+    engineTestRule.deploy("io/orqueio/bpm/engine/test/api/twoTasksProcess.bpmn20.xml");
 
     ProcessInstance instance1 = runtimeService.startProcessInstanceByKey("oneTaskProcess");
     Task instance1Task = taskService.createTaskQuery().processInstanceId(instance1.getId()).singleResult();
@@ -157,8 +157,8 @@ public class StandaloneTasksAndCmmnDisabledTest {
   @Test
   public void testTaskQueryAuthorizationWithProcessDefinitionFilterInOrQuery() {
     // given
-    engineTestRule.deploy("org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml");
-    engineTestRule.deploy("org/camunda/bpm/engine/test/api/twoTasksProcess.bpmn20.xml");
+    engineTestRule.deploy("io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml");
+    engineTestRule.deploy("io/orqueio/bpm/engine/test/api/twoTasksProcess.bpmn20.xml");
 
     ProcessInstance instance1 = runtimeService.startProcessInstanceByKey("oneTaskProcess");
     Task instance1Task = taskService.createTaskQuery().processInstanceId(instance1.getId()).singleResult();

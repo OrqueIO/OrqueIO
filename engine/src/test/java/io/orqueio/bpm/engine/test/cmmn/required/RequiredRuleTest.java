@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -38,7 +38,7 @@ import org.junit.Test;
  */
 public class RequiredRuleTest extends PluggableProcessEngineTest {
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/cmmn/required/RequiredRuleTest.testVariableBasedRule.cmmn")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/cmmn/required/RequiredRuleTest.testVariableBasedRule.cmmn")
   @Test
   public void testRequiredRuleEvaluatesToTrue() {
     CaseInstance caseInstance =
@@ -59,7 +59,7 @@ public class RequiredRuleTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/cmmn/required/RequiredRuleTest.testVariableBasedRule.cmmn")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/cmmn/required/RequiredRuleTest.testVariableBasedRule.cmmn")
   @Test
   public void testRequiredRuleEvaluatesToFalse() {
     CaseInstance caseInstance =
@@ -77,7 +77,7 @@ public class RequiredRuleTest extends PluggableProcessEngineTest {
     caseService.completeCaseExecution(caseInstance.getId());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/cmmn/required/RequiredRuleTest.testDefaultVariableBasedRule.cmmn")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/cmmn/required/RequiredRuleTest.testDefaultVariableBasedRule.cmmn")
   @Test
   public void testDefaultRequiredRuleEvaluatesToTrue() {
     CaseInstance caseInstance =
@@ -99,7 +99,7 @@ public class RequiredRuleTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/cmmn/required/RequiredRuleTest.testDefaultVariableBasedRule.cmmn")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/cmmn/required/RequiredRuleTest.testDefaultVariableBasedRule.cmmn")
   @Test
   public void testDefaultRequiredRuleEvaluatesToFalse() {
     CaseInstance caseInstance =

@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -60,9 +60,9 @@ public class InclusiveGatewayTest extends PluggableProcessEngineTest {
   private static final String BEAN_TASK3_NAME = "Gold Member service";
 
   protected static final String ASYNC_CONCURRENT_PARALLEL_GATEWAY =
-      "org/camunda/bpm/engine/test/bpmn/gateway/InclusiveGatewayTest.AsyncConcurrentExecutions.ParallelGateway.bpmn";
+      "io/orqueio/bpm/engine/test/bpmn/gateway/InclusiveGatewayTest.AsyncConcurrentExecutions.ParallelGateway.bpmn";
   protected static final String ASYNC_CONCURRENT_PARALLEL_INCLUSIVE_GATEWAY =
-      "org/camunda/bpm/engine/test/bpmn/gateway/InclusiveGatewayTest.AsyncConcurrentExecutions.ParallelInclusiveGateway.bpmn";
+      "io/orqueio/bpm/engine/test/bpmn/gateway/InclusiveGatewayTest.AsyncConcurrentExecutions.ParallelInclusiveGateway.bpmn";
 
   @Deployment
   @Test
@@ -196,7 +196,7 @@ public class InclusiveGatewayTest extends PluggableProcessEngineTest {
     runtimeService.startProcessInstanceByKey("inclusiveWhiteSpaceInExpression", CollectionUtil.singletonMap("input", 1));
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/bpmn/gateway/InclusiveGatewayTest.testDivergingInclusiveGateway.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/bpmn/gateway/InclusiveGatewayTest.testDivergingInclusiveGateway.bpmn20.xml" })
   @Test
   public void testUnknownVariableInExpression() {
     // Instead of 'input' we're starting a process instance with the name
@@ -344,7 +344,7 @@ public class InclusiveGatewayTest extends PluggableProcessEngineTest {
     assertEquals("Default input", task.getName());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/bpmn/gateway/InclusiveGatewayTest.testDefaultSequenceFlow.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/bpmn/gateway/InclusiveGatewayTest.testDefaultSequenceFlow.bpmn20.xml")
   @Test
   public void testDefaultSequenceFlowExecutionIsActive() {
     // given a triggered inclusive gateway default flow
@@ -486,8 +486,8 @@ public class InclusiveGatewayTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/bpmn/gateway/InclusiveGatewayTest.testJoinAfterCall.bpmn20.xml",
-                    "org/camunda/bpm/engine/test/bpmn/gateway/InclusiveGatewayTest.testJoinAfterCallSubProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/bpmn/gateway/InclusiveGatewayTest.testJoinAfterCall.bpmn20.xml",
+                    "io/orqueio/bpm/engine/test/bpmn/gateway/InclusiveGatewayTest.testJoinAfterCallSubProcess.bpmn20.xml"})
   @Test
   public void testJoinAfterCall() {
     // Test case to test act-1026

@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -251,8 +251,8 @@ public class MigrationTransitionInstancesTest {
     // given
     BpmnModelInstance model = Bpmn.createExecutableProcess("Process")
         .startEvent()
-        .serviceTask("serviceTask").camundaExpression("${true}")
-        .userTask("userTask").camundaAsyncBefore()
+        .serviceTask("serviceTask").orqueioExpression("${true}")
+        .userTask("userTask").orqueioAsyncBefore()
         .endEvent()
         .done();
     ProcessDefinition sourceProcessDefinition = testHelper.deployAndGetDefinition(model);
@@ -284,8 +284,8 @@ public class MigrationTransitionInstancesTest {
     // given
     BpmnModelInstance model = Bpmn.createExecutableProcess("Process")
         .startEvent()
-        .serviceTask("serviceTask").camundaExpression("${true}")
-        .userTask("userTask").camundaAsyncBefore()
+        .serviceTask("serviceTask").orqueioExpression("${true}")
+        .userTask("userTask").orqueioAsyncBefore()
         .endEvent()
         .done();
     ProcessDefinition sourceProcessDefinition = testHelper.deployAndGetDefinition(modify(model).removeFlowNode("serviceTask"));
@@ -933,7 +933,7 @@ public class MigrationTransitionInstancesTest {
     // given
     BpmnModelInstance model = modify(ProcessModels.SUBPROCESS_PROCESS)
       .activityBuilder("subProcess")
-      .camundaAsyncBefore(true)
+      .orqueioAsyncBefore(true)
       .done();
 
     ProcessDefinition sourceProcessDefinition = testHelper.deployAndGetDefinition(model);
@@ -1013,7 +1013,7 @@ public class MigrationTransitionInstancesTest {
     // given
     BpmnModelInstance model = modify(EventSubProcessModels.COMPENSATE_EVENT_SUBPROCESS_PROCESS)
         .flowNodeBuilder("eventSubProcessStart")
-        .camundaAsyncAfter()
+        .orqueioAsyncAfter()
         .done();
 
     ProcessDefinition sourceProcessDefinition = testHelper.deployAndGetDefinition(model);
@@ -1045,7 +1045,7 @@ public class MigrationTransitionInstancesTest {
   public void testMigrateAsyncAfterBoundaryEventWithChangedEventScope() {
     BpmnModelInstance sourceProcess = modify(ProcessModels.PARALLEL_GATEWAY_PROCESS)
       .activityBuilder("userTask1")
-        .boundaryEvent("boundary").message("Message").camundaAsyncAfter()
+        .boundaryEvent("boundary").message("Message").orqueioAsyncAfter()
         .userTask("afterBoundaryTask")
         .endEvent()
       .done();
@@ -1076,8 +1076,8 @@ public class MigrationTransitionInstancesTest {
     BpmnModelInstance model = ProcessModels.newModel()
       .startEvent()
       .serviceTask("serviceTask")
-      .camundaAsyncBefore()
-      .camundaClass(AlwaysFailingDelegate.class.getName())
+      .orqueioAsyncBefore()
+      .orqueioClass(AlwaysFailingDelegate.class.getName())
       .endEvent()
       .done();
 

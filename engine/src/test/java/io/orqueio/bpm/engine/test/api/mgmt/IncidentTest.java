@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -62,7 +62,7 @@ import org.junit.Test;
 
 public class IncidentTest extends PluggableProcessEngineTest {
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/IncidentTest.testShouldCreateOneIncident.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/IncidentTest.testShouldCreateOneIncident.bpmn"})
   @Test
   public void shouldCreateOneIncident() {
 
@@ -94,7 +94,7 @@ public class IncidentTest extends PluggableProcessEngineTest {
     assertEquals(job.getJobDefinitionId(), incident.getJobDefinitionId());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/IncidentTest.testShouldCreateOneIncident.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/IncidentTest.testShouldCreateOneIncident.bpmn"})
   @Test
   public void shouldCreateOneIncidentAfterSetRetries() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("failingProcess");
@@ -122,7 +122,7 @@ public class IncidentTest extends PluggableProcessEngineTest {
     assertTrue(incidents.size() == 1);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/IncidentTest.testShouldCreateOneIncident.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/IncidentTest.testShouldCreateOneIncident.bpmn"})
   @Test
   public void shouldCreateOneIncidentAfterExecuteJob() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("failingProcess");
@@ -153,7 +153,7 @@ public class IncidentTest extends PluggableProcessEngineTest {
     assertTrue(incidents.size() == 1);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/IncidentTest.testShouldCreateOneIncidentForNestedExecution.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/IncidentTest.testShouldCreateOneIncidentForNestedExecution.bpmn"})
   @Test
   public void shouldCreateOneIncidentForNestedExecution() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("failingProcessWithNestedExecutions");
@@ -189,12 +189,12 @@ public class IncidentTest extends PluggableProcessEngineTest {
     // given
     String key = "process";
     BpmnModelInstance model = Bpmn.createExecutableProcess(key)
-        .camundaHistoryTimeToLive(180)
+        .orqueioHistoryTimeToLive(180)
         .startEvent()
         .serviceTask("theServiceTask")
-        .camundaClass(AlwaysFailingDelegate.class)
-        .camundaAsyncBefore()
-        .camundaFailedJobRetryTimeCycle("R0/PT30S")
+        .orqueioClass(AlwaysFailingDelegate.class)
+        .orqueioAsyncBefore()
+        .orqueioFailedJobRetryTimeCycle("R0/PT30S")
         .endEvent()
         .done();
 
@@ -227,8 +227,8 @@ public class IncidentTest extends PluggableProcessEngineTest {
     assertThat(stacktrace).isNotNull();
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/IncidentTest.testShouldCreateRecursiveIncidents.bpmn",
-      "org/camunda/bpm/engine/test/api/mgmt/IncidentTest.testShouldCreateOneIncident.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/IncidentTest.testShouldCreateRecursiveIncidents.bpmn",
+      "io/orqueio/bpm/engine/test/api/mgmt/IncidentTest.testShouldCreateOneIncident.bpmn"})
   @Test
   public void shouldCreateRecursiveIncidents() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("callFailingProcess");
@@ -286,9 +286,9 @@ public class IncidentTest extends PluggableProcessEngineTest {
     assertNull(recursiveCreatedIncident.getJobDefinitionId());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/IncidentTest.testShouldCreateRecursiveIncidentsForNestedCallActivity.bpmn",
-  		"org/camunda/bpm/engine/test/api/mgmt/IncidentTest.testShouldCreateRecursiveIncidents.bpmn",
-  "org/camunda/bpm/engine/test/api/mgmt/IncidentTest.testShouldCreateOneIncident.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/IncidentTest.testShouldCreateRecursiveIncidentsForNestedCallActivity.bpmn",
+  		"io/orqueio/bpm/engine/test/api/mgmt/IncidentTest.testShouldCreateRecursiveIncidents.bpmn",
+  "io/orqueio/bpm/engine/test/api/mgmt/IncidentTest.testShouldCreateOneIncident.bpmn"})
   @Test
   public void shouldCreateRecursiveIncidentsForNestedCallActivity() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("callingFailingCallActivity");
@@ -366,7 +366,7 @@ public class IncidentTest extends PluggableProcessEngineTest {
     assertNull(topLevelIncident.getJobDefinitionId());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/IncidentTest.testShouldCreateOneIncident.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/IncidentTest.testShouldCreateOneIncident.bpmn"})
   @Test
   public void shouldDeleteIncidentAfterJobHasBeenDeleted() {
     // start failing process
@@ -390,7 +390,7 @@ public class IncidentTest extends PluggableProcessEngineTest {
     assertNull(incident);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/IncidentTest.testShouldDeleteIncidentAfterJobWasSuccessfully.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/IncidentTest.testShouldDeleteIncidentAfterJobWasSuccessfully.bpmn"})
   @Test
   public void shouldDeleteIncidentAfterJobWasSuccessfully() {
     // Start process instance
@@ -430,7 +430,7 @@ public class IncidentTest extends PluggableProcessEngineTest {
     assertNull(incident);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/IncidentTest.testShouldCreateIncidentOnFailedStartTimerEvent.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/IncidentTest.testShouldCreateIncidentOnFailedStartTimerEvent.bpmn"})
   @Test
   public void shouldCreateIncidentOnFailedStartTimerEvent() {
     // After process start, there should be timer created
@@ -465,7 +465,7 @@ public class IncidentTest extends PluggableProcessEngineTest {
     managementService.deleteJob(job.getId());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/IncidentTest.testShouldCreateOneIncident.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/IncidentTest.testShouldCreateOneIncident.bpmn"})
   @Test
   public void shouldNotCreateNewIncident() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("failingProcess");
@@ -515,7 +515,7 @@ public class IncidentTest extends PluggableProcessEngineTest {
     assertEquals(processInstanceId, incident.getExecutionId());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/IncidentTest.testShouldCreateOneIncident.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/IncidentTest.testShouldCreateOneIncident.bpmn"})
   @Test
   public void shouldNotSetNegativeRetries() {
     runtimeService.startProcessInstanceByKey("failingProcess");
@@ -596,11 +596,11 @@ public class IncidentTest extends PluggableProcessEngineTest {
   public void shouldShowFailedActivityIdPropertyForFailingAsyncTask() {
     // given
     testRule.deploy(Bpmn.createExecutableProcess("process")
-        .camundaHistoryTimeToLive(180)
+        .orqueioHistoryTimeToLive(180)
         .startEvent()
         .serviceTask("theTask")
-        .camundaAsyncBefore()
-        .camundaClass(FailingDelegate.class)
+        .orqueioAsyncBefore()
+        .orqueioClass(FailingDelegate.class)
         .endEvent()
         .done());
 
@@ -624,15 +624,15 @@ public class IncidentTest extends PluggableProcessEngineTest {
   public void shouldShowFailedActivityIdPropertyForAsyncTaskWithFailingFollowUp() {
     // given
     testRule.deploy(Bpmn.createExecutableProcess("process")
-        .camundaHistoryTimeToLive(180)
+        .orqueioHistoryTimeToLive(180)
         .startEvent()
         .serviceTask("theTask")
-        .camundaAsyncBefore()
-        .camundaClass(ChangeVariablesDelegate.class)
+        .orqueioAsyncBefore()
+        .orqueioClass(ChangeVariablesDelegate.class)
         .serviceTask("theTask2")
-        .camundaClass(ChangeVariablesDelegate.class)
+        .orqueioClass(ChangeVariablesDelegate.class)
         .serviceTask("theTask3")
-        .camundaClass(FailingDelegate.class)
+        .orqueioClass(FailingDelegate.class)
         .endEvent()
         .done());
 
@@ -655,7 +655,7 @@ public class IncidentTest extends PluggableProcessEngineTest {
   @Test
   public void shouldSetBoundaryEventIncidentActivityId() {
     testRule.deploy(Bpmn.createExecutableProcess("process")
-        .camundaHistoryTimeToLive(180)
+        .orqueioHistoryTimeToLive(180)
         .startEvent()
         .userTask("userTask")
         .endEvent()
@@ -792,12 +792,12 @@ public class IncidentTest extends PluggableProcessEngineTest {
   protected Incident createIncident() {
     String key = "process";
     BpmnModelInstance model = Bpmn.createExecutableProcess(key)
-        .camundaHistoryTimeToLive(180)
+        .orqueioHistoryTimeToLive(180)
         .startEvent()
         .serviceTask("theServiceTask")
-        .camundaClass(AlwaysFailingDelegate.class)
-        .camundaAsyncBefore()
-        .camundaFailedJobRetryTimeCycle("R0/PT30S")
+        .orqueioClass(AlwaysFailingDelegate.class)
+        .orqueioAsyncBefore()
+        .orqueioFailedJobRetryTimeCycle("R0/PT30S")
         .endEvent()
         .done();
 

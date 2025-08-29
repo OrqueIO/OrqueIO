@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -62,21 +62,21 @@ public class HistoryCleanupOnEngineBootstrapTest {
     // given
     // create history cleanup job
     ProcessEngineConfiguration
-      .createProcessEngineConfigurationFromResource("org/camunda/bpm/engine/test/history/batchwindow.camunda.cfg.xml")
+      .createProcessEngineConfigurationFromResource("io/orqueio/bpm/engine/test/history/batchwindow.orqueio.cfg.xml")
       .buildProcessEngine()
       .close();
 
     // when
     // suspend history cleanup job
     ProcessEngineConfiguration
-      .createProcessEngineConfigurationFromResource("org/camunda/bpm/engine/test/history/no-batchwindow.camunda.cfg.xml")
+      .createProcessEngineConfigurationFromResource("io/orqueio/bpm/engine/test/history/no-batchwindow.orqueio.cfg.xml")
       .buildProcessEngine()
       .close();
 
     // then
     // reconfigure history cleanup job
     ProcessEngineConfiguration processEngineConfiguration = ProcessEngineConfiguration
-      .createProcessEngineConfigurationFromResource("org/camunda/bpm/engine/test/history/batchwindow.camunda.cfg.xml");
+      .createProcessEngineConfigurationFromResource("io/orqueio/bpm/engine/test/history/batchwindow.orqueio.cfg.xml");
     processEngineConfiguration.setProcessEngineName(ENGINE_NAME);
     ProcessEngine processEngine = processEngineConfiguration.buildProcessEngine();
 
@@ -90,7 +90,7 @@ public class HistoryCleanupOnEngineBootstrapTest {
     // given
     // create history cleanup job
     ProcessEngine engine = ProcessEngineConfiguration
-      .createProcessEngineConfigurationFromResource("org/camunda/bpm/engine/test/history/history-cleanup-parallelism-default.camunda.cfg.xml")
+      .createProcessEngineConfigurationFromResource("io/orqueio/bpm/engine/test/history/history-cleanup-parallelism-default.orqueio.cfg.xml")
       .buildProcessEngine();
 
     // assume
@@ -101,7 +101,7 @@ public class HistoryCleanupOnEngineBootstrapTest {
 
     // when
     engine = ProcessEngineConfiguration
-    .createProcessEngineConfigurationFromResource("org/camunda/bpm/engine/test/history/history-cleanup-parallelism-less.camunda.cfg.xml")
+    .createProcessEngineConfigurationFromResource("io/orqueio/bpm/engine/test/history/history-cleanup-parallelism-less.orqueio.cfg.xml")
       .buildProcessEngine();
 
     // then
@@ -121,7 +121,7 @@ public class HistoryCleanupOnEngineBootstrapTest {
     // given
     // create history cleanup job
     ProcessEngine engine = ProcessEngineConfiguration
-      .createProcessEngineConfigurationFromResource("org/camunda/bpm/engine/test/history/history-cleanup-parallelism-default.camunda.cfg.xml")
+      .createProcessEngineConfigurationFromResource("io/orqueio/bpm/engine/test/history/history-cleanup-parallelism-default.orqueio.cfg.xml")
       .buildProcessEngine();
 
     // assume
@@ -132,7 +132,7 @@ public class HistoryCleanupOnEngineBootstrapTest {
 
     // when
     engine = ProcessEngineConfiguration
-    .createProcessEngineConfigurationFromResource("org/camunda/bpm/engine/test/history/history-cleanup-parallelism-more.camunda.cfg.xml")
+    .createProcessEngineConfigurationFromResource("io/orqueio/bpm/engine/test/history/history-cleanup-parallelism-more.orqueio.cfg.xml")
       .buildProcessEngine();
 
     // then
@@ -181,7 +181,7 @@ public class HistoryCleanupOnEngineBootstrapTest {
   public void testBatchWindowXmlConfigParsingException() throws ParseException {
     // when/then
     assertThatThrownBy(() -> ProcessEngineConfiguration
-      .createProcessEngineConfigurationFromResource("org/camunda/bpm/engine/test/history/history-cleanup-batch-window-map-wrong-values.camunda.cfg.xml")
+      .createProcessEngineConfigurationFromResource("io/orqueio/bpm/engine/test/history/history-cleanup-batch-window-map-wrong-values.orqueio.cfg.xml")
       .buildProcessEngine())
     .isInstanceOf(Exception.class)
     .hasMessageContaining("Error creating bean with name 'processEngineConfiguration'");
@@ -196,7 +196,7 @@ public class HistoryCleanupOnEngineBootstrapTest {
     //when
     //we configure batch window only for Wednesday and start the server
     ProcessEngine engine = ProcessEngineConfiguration
-      .createProcessEngineConfigurationFromResource("org/camunda/bpm/engine/test/history/history-cleanup-batch-window-map.camunda.cfg.xml")
+      .createProcessEngineConfigurationFromResource("io/orqueio/bpm/engine/test/history/history-cleanup-batch-window-map.orqueio.cfg.xml")
       .buildProcessEngine();
 
     //then
@@ -212,7 +212,7 @@ public class HistoryCleanupOnEngineBootstrapTest {
     //when
     //we reconfigure batch window with default values
     engine = ProcessEngineConfiguration
-      .createProcessEngineConfigurationFromResource("org/camunda/bpm/engine/test/history/history-cleanup-batch-window-default.camunda.cfg.xml")
+      .createProcessEngineConfigurationFromResource("io/orqueio/bpm/engine/test/history/history-cleanup-batch-window-default.orqueio.cfg.xml")
       .buildProcessEngine();
 
     //then
@@ -232,7 +232,7 @@ public class HistoryCleanupOnEngineBootstrapTest {
     final ProcessEngineConfigurationImpl standaloneInMemProcessEngineConfiguration = (ProcessEngineConfigurationImpl)ProcessEngineConfiguration.createStandaloneInMemProcessEngineConfiguration();
     standaloneInMemProcessEngineConfiguration.setHistoryCleanupBatchWindowStartTime("23:00");
     standaloneInMemProcessEngineConfiguration.setHistoryCleanupBatchWindowEndTime("01:00");
-    standaloneInMemProcessEngineConfiguration.setJdbcUrl("jdbc:h2:mem:camunda" + getClass().getSimpleName() + "testHistoryCleanupJobScheduled");
+    standaloneInMemProcessEngineConfiguration.setJdbcUrl("jdbc:h2:mem:orqueio" + getClass().getSimpleName() + "testHistoryCleanupJobScheduled");
 
     ProcessEngine engine = standaloneInMemProcessEngineConfiguration
       .buildProcessEngine();
@@ -258,7 +258,7 @@ public class HistoryCleanupOnEngineBootstrapTest {
     standaloneInMemProcessEngineConfiguration.setHistoryCleanupBatchWindowStartTime("23:00");
     standaloneInMemProcessEngineConfiguration.setHistoryCleanupBatchWindowEndTime("01:00");
     standaloneInMemProcessEngineConfiguration
-        .setJdbcUrl("jdbc:h2:mem:camunda" + getClass().getSimpleName() + "testHistoryCleanupJobScheduled");
+        .setJdbcUrl("jdbc:h2:mem:orqueio" + getClass().getSimpleName() + "testHistoryCleanupJobScheduled");
 
     ProcessEngine engine = standaloneInMemProcessEngineConfiguration.buildProcessEngine();
     try {
@@ -281,7 +281,7 @@ public class HistoryCleanupOnEngineBootstrapTest {
     final ProcessEngineConfigurationImpl configuration = (ProcessEngineConfigurationImpl)ProcessEngineConfiguration.createStandaloneInMemProcessEngineConfiguration();
     //we have batch window only once per week - Monday afternoon
     configuration.getHistoryCleanupBatchWindows().put(Calendar.MONDAY, new BatchWindowConfiguration("18:00", "20:00"));
-    configuration.setJdbcUrl("jdbc:h2:mem:camunda" + getClass().getSimpleName() + "testBatchWindowOneDayOfWeek");
+    configuration.setJdbcUrl("jdbc:h2:mem:orqueio" + getClass().getSimpleName() + "testBatchWindowOneDayOfWeek");
 
     //when
     //we're on Monday evening
@@ -319,7 +319,7 @@ public class HistoryCleanupOnEngineBootstrapTest {
     final ProcessEngineConfigurationImpl configuration = (ProcessEngineConfigurationImpl)ProcessEngineConfiguration.createStandaloneInMemProcessEngineConfiguration();
     //we have batch window for 24 hours
     configuration.getHistoryCleanupBatchWindows().put(Calendar.MONDAY, new BatchWindowConfiguration("06:00", "06:00"));
-    configuration.setJdbcUrl("jdbc:h2:mem:camunda" + getClass().getSimpleName() + "testBatchWindow24Hours");
+    configuration.setJdbcUrl("jdbc:h2:mem:orqueio" + getClass().getSimpleName() + "testBatchWindow24Hours");
 
     //when
     //we're on Monday early morning

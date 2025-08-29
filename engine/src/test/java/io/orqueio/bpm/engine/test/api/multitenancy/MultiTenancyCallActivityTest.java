@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -34,7 +34,7 @@ public class MultiTenancyCallActivityTest extends PluggableProcessEngineTest {
   protected static final String TENANT_ONE = "tenant1";
   protected static final String TENANT_TWO = "tenant2";
 
-  protected static final String CMMN = "org/camunda/bpm/engine/test/cmmn/deployment/CmmnDeploymentTest.testSimpleDeployment.cmmn";
+  protected static final String CMMN = "io/orqueio/bpm/engine/test/cmmn/deployment/CmmnDeploymentTest.testSimpleDeployment.cmmn";
 
   protected static final BpmnModelInstance SUB_PROCESS = Bpmn.createExecutableProcess("subProcess")
       .startEvent()
@@ -49,7 +49,7 @@ public class MultiTenancyCallActivityTest extends PluggableProcessEngineTest {
       .startEvent()
       .callActivity()
         .calledElement("subProcess")
-        .camundaCalledElementBinding("deployment")
+        .orqueioCalledElementBinding("deployment")
       .endEvent()
       .done();
 
@@ -71,7 +71,7 @@ public class MultiTenancyCallActivityTest extends PluggableProcessEngineTest {
       .startEvent()
       .callActivity()
         .calledElement("subProcess")
-        .camundaCalledElementBinding("latest")
+        .orqueioCalledElementBinding("latest")
       .endEvent()
       .done();
 
@@ -93,7 +93,7 @@ public class MultiTenancyCallActivityTest extends PluggableProcessEngineTest {
       .startEvent()
       .callActivity()
         .calledElement("subProcess")
-        .camundaCalledElementBinding("latest")
+        .orqueioCalledElementBinding("latest")
       .endEvent()
       .done();
 
@@ -120,8 +120,8 @@ public class MultiTenancyCallActivityTest extends PluggableProcessEngineTest {
       .startEvent()
       .callActivity()
         .calledElement("subProcess")
-        .camundaCalledElementBinding("version")
-        .camundaCalledElementVersion("1")
+        .orqueioCalledElementBinding("version")
+        .orqueioCalledElementVersion("1")
       .endEvent()
       .done();
 
@@ -142,9 +142,9 @@ public class MultiTenancyCallActivityTest extends PluggableProcessEngineTest {
     BpmnModelInstance callingProcess = createCallingProcess("callingProcess", "ver_tag_1");
 
     testRule.deployForTenant(TENANT_ONE, callingProcess);
-    testRule.deployForTenant(TENANT_ONE, "org/camunda/bpm/engine/test/bpmn/callactivity/subProcessWithVersionTag.bpmn20.xml");
+    testRule.deployForTenant(TENANT_ONE, "io/orqueio/bpm/engine/test/bpmn/callactivity/subProcessWithVersionTag.bpmn20.xml");
     testRule.deployForTenant(TENANT_TWO, callingProcess);
-    testRule.deployForTenant(TENANT_TWO, "org/camunda/bpm/engine/test/bpmn/callactivity/subProcessWithVersionTag2.bpmn20.xml");
+    testRule.deployForTenant(TENANT_TWO, "io/orqueio/bpm/engine/test/bpmn/callactivity/subProcessWithVersionTag2.bpmn20.xml");
 
     // when
     runtimeService.createProcessInstanceByKey("callingProcess").processDefinitionTenantId(TENANT_ONE).execute();
@@ -163,7 +163,7 @@ public class MultiTenancyCallActivityTest extends PluggableProcessEngineTest {
       .startEvent()
       .callActivity()
         .calledElement("subProcess")
-        .camundaCalledElementBinding("deployment")
+        .orqueioCalledElementBinding("deployment")
       .endEvent()
       .done();
 
@@ -188,7 +188,7 @@ public class MultiTenancyCallActivityTest extends PluggableProcessEngineTest {
       .startEvent()
       .callActivity()
         .calledElement("subProcess")
-        .camundaCalledElementBinding("latest")
+        .orqueioCalledElementBinding("latest")
       .endEvent()
       .done();
 
@@ -213,8 +213,8 @@ public class MultiTenancyCallActivityTest extends PluggableProcessEngineTest {
       .startEvent()
       .callActivity()
         .calledElement("subProcess")
-        .camundaCalledElementBinding("version")
-        .camundaCalledElementVersion("2")
+        .orqueioCalledElementBinding("version")
+        .orqueioCalledElementVersion("2")
       .endEvent()
       .done();
 
@@ -239,7 +239,7 @@ public class MultiTenancyCallActivityTest extends PluggableProcessEngineTest {
     // given
     BpmnModelInstance callingProcess = createCallingProcess("callingProcess", "ver_tag_2");
     testRule.deployForTenant(TENANT_ONE, callingProcess);
-    testRule.deployForTenant(TENANT_TWO, "org/camunda/bpm/engine/test/bpmn/callactivity/subProcessWithVersionTag2.bpmn20.xml");
+    testRule.deployForTenant(TENANT_TWO, "io/orqueio/bpm/engine/test/bpmn/callactivity/subProcessWithVersionTag2.bpmn20.xml");
 
     try {
       // when
@@ -259,8 +259,8 @@ public class MultiTenancyCallActivityTest extends PluggableProcessEngineTest {
     BpmnModelInstance callingProcess = Bpmn.createExecutableProcess("callingProcess")
       .startEvent()
       .callActivity()
-        .camundaCaseRef("Case_1")
-        .camundaCaseBinding("deployment")
+        .orqueioCaseRef("Case_1")
+        .orqueioCaseBinding("deployment")
       .endEvent()
       .done();
 
@@ -281,8 +281,8 @@ public class MultiTenancyCallActivityTest extends PluggableProcessEngineTest {
     BpmnModelInstance callingProcess = Bpmn.createExecutableProcess("callingProcess")
       .startEvent()
       .callActivity()
-        .camundaCaseRef("Case_1")
-        .camundaCaseBinding("latest")
+        .orqueioCaseRef("Case_1")
+        .orqueioCaseBinding("latest")
       .endEvent()
       .done();
 
@@ -303,8 +303,8 @@ public class MultiTenancyCallActivityTest extends PluggableProcessEngineTest {
     BpmnModelInstance callingProcess = Bpmn.createExecutableProcess("callingProcess")
         .startEvent()
         .callActivity()
-          .camundaCaseRef("Case_1")
-          .camundaCaseBinding("latest")
+          .orqueioCaseRef("Case_1")
+          .orqueioCaseBinding("latest")
         .endEvent()
         .done();
 
@@ -330,9 +330,9 @@ public class MultiTenancyCallActivityTest extends PluggableProcessEngineTest {
     BpmnModelInstance callingProcess = Bpmn.createExecutableProcess("callingProcess")
       .startEvent()
       .callActivity()
-        .camundaCaseRef("Case_1")
-        .camundaCaseBinding("version")
-        .camundaCaseVersion("1")
+        .orqueioCaseRef("Case_1")
+        .orqueioCaseBinding("version")
+        .orqueioCaseVersion("1")
       .endEvent()
       .done();
 
@@ -353,8 +353,8 @@ public class MultiTenancyCallActivityTest extends PluggableProcessEngineTest {
     BpmnModelInstance callingProcess = Bpmn.createExecutableProcess("callingProcess")
         .startEvent()
         .callActivity()
-          .camundaCaseRef("Case_1")
-          .camundaCaseBinding("deployment")
+          .orqueioCaseRef("Case_1")
+          .orqueioCaseBinding("deployment")
         .endEvent()
         .done();
 
@@ -378,8 +378,8 @@ public class MultiTenancyCallActivityTest extends PluggableProcessEngineTest {
     BpmnModelInstance callingProcess = Bpmn.createExecutableProcess("callingProcess")
         .startEvent()
         .callActivity()
-          .camundaCaseRef("Case_1")
-          .camundaCaseBinding("latest")
+          .orqueioCaseRef("Case_1")
+          .orqueioCaseBinding("latest")
         .endEvent()
         .done();
 
@@ -403,9 +403,9 @@ public class MultiTenancyCallActivityTest extends PluggableProcessEngineTest {
     BpmnModelInstance callingProcess = Bpmn.createExecutableProcess("callingProcess")
         .startEvent()
         .callActivity()
-          .camundaCaseRef("Case_1")
-          .camundaCaseBinding("version")
-          .camundaCaseVersion("2")
+          .orqueioCaseRef("Case_1")
+          .orqueioCaseBinding("version")
+          .orqueioCaseVersion("2")
         .endEvent()
         .done();
 
@@ -432,7 +432,7 @@ public class MultiTenancyCallActivityTest extends PluggableProcessEngineTest {
         .startEvent()
         .callActivity()
           .calledElement("subProcess")
-          .camundaCalledElementTenantId(TENANT_ONE)
+          .orqueioCalledElementTenantId(TENANT_ONE)
         .endEvent()
         .done();
 
@@ -452,7 +452,7 @@ public class MultiTenancyCallActivityTest extends PluggableProcessEngineTest {
         .startEvent()
         .callActivity()
           .calledElement("subProcess")
-          .camundaCalledElementTenantId("${'"+TENANT_ONE+"'}")
+          .orqueioCalledElementTenantId("${'"+TENANT_ONE+"'}")
         .endEvent()
         .done();
 
@@ -471,8 +471,8 @@ public class MultiTenancyCallActivityTest extends PluggableProcessEngineTest {
     BpmnModelInstance callingProcess = Bpmn.createExecutableProcess("callingProcess")
       .startEvent()
       .callActivity()
-        .camundaCaseRef("Case_1")
-        .camundaCaseTenantId(TENANT_ONE)
+        .orqueioCaseRef("Case_1")
+        .orqueioCaseTenantId(TENANT_ONE)
       .endEvent()
       .done();
 
@@ -492,8 +492,8 @@ public class MultiTenancyCallActivityTest extends PluggableProcessEngineTest {
     BpmnModelInstance callingProcess = Bpmn.createExecutableProcess("callingProcess")
       .startEvent()
       .callActivity()
-        .camundaCaseRef("Case_1")
-        .camundaCaseTenantId("${'"+TENANT_ONE+"'}")
+        .orqueioCaseRef("Case_1")
+        .orqueioCaseTenantId("${'"+TENANT_ONE+"'}")
       .endEvent()
       .done();
 
@@ -512,8 +512,8 @@ public class MultiTenancyCallActivityTest extends PluggableProcessEngineTest {
     BpmnModelInstance callingProcess = Bpmn.createExecutableProcess("callingProcess")
       .startEvent()
       .callActivity()
-      .camundaCaseRef("Case_1")
-      .camundaCaseTenantId("tenant${'1'}")
+      .orqueioCaseRef("Case_1")
+      .orqueioCaseTenantId("tenant${'1'}")
       .endEvent()
       .done();
 
@@ -533,8 +533,8 @@ public class MultiTenancyCallActivityTest extends PluggableProcessEngineTest {
         .startEvent()
         .callActivity()
           .calledElement("subProcess")
-          .camundaCalledElementBinding("versionTag")
-          .camundaCalledElementVersionTag(versionTagValue)
+          .orqueioCalledElementBinding("versionTag")
+          .orqueioCalledElementVersionTag(versionTagValue)
         .endEvent()
         .done();
   }

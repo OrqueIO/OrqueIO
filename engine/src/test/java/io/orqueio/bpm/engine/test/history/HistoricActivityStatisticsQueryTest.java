@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -49,7 +49,7 @@ public class HistoricActivityStatisticsQueryTest extends PluggableProcessEngineT
 
   private SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/history/HistoricActivityStatisticsQueryTest.testSingleTask.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/history/HistoricActivityStatisticsQueryTest.testSingleTask.bpmn20.xml")
   @Test
   public void testNoRunningProcessInstances() {
     String processDefinitionId = getProcessDefinitionId();
@@ -82,7 +82,7 @@ public class HistoricActivityStatisticsQueryTest extends PluggableProcessEngineT
     completeProcessInstances();
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/history/HistoricActivityStatisticsQueryTest.testSingleTask.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/history/HistoricActivityStatisticsQueryTest.testSingleTask.bpmn20.xml")
   @Test
   public void testFinishedProcessInstances() {
     String processDefinitionId = getProcessDefinitionId();
@@ -142,8 +142,8 @@ public class HistoricActivityStatisticsQueryTest extends PluggableProcessEngineT
     completeProcessInstances();
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/history/HistoricActivityStatisticsQueryTest.testWithCallActivity.bpmn20.xml",
-      "org/camunda/bpm/engine/test/history/HistoricActivityStatisticsQueryTest.calledProcess.bpmn20.xml" })
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/history/HistoricActivityStatisticsQueryTest.testWithCallActivity.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/history/HistoricActivityStatisticsQueryTest.calledProcess.bpmn20.xml" })
   @Test
   public void testMultipleProcessDefinitions() {
     String processId = getProcessDefinitionId();
@@ -194,7 +194,7 @@ public class HistoricActivityStatisticsQueryTest extends PluggableProcessEngineT
     completeProcessInstances();
   }
 
-  @Deployment(resources="org/camunda/bpm/engine/test/history/HistoricActivityStatisticsQueryTest.testSingleTask.bpmn20.xml")
+  @Deployment(resources="io/orqueio/bpm/engine/test/history/HistoricActivityStatisticsQueryTest.testSingleTask.bpmn20.xml")
   @Test
   public void testQueryByFinished() {
     String processDefinitionId = getProcessDefinitionId();
@@ -226,7 +226,7 @@ public class HistoricActivityStatisticsQueryTest extends PluggableProcessEngineT
     assertEquals(0, task.getFinished());
   }
 
-  @Deployment(resources="org/camunda/bpm/engine/test/history/HistoricActivityStatisticsQueryTest.testSingleTask.bpmn20.xml")
+  @Deployment(resources="io/orqueio/bpm/engine/test/history/HistoricActivityStatisticsQueryTest.testSingleTask.bpmn20.xml")
   @Test
   public void testQueryByFinishedAfterFinishingSomeInstances() {
     String processDefinitionId = getProcessDefinitionId();
@@ -275,7 +275,7 @@ public class HistoricActivityStatisticsQueryTest extends PluggableProcessEngineT
     completeProcessInstances();
   }
 
-  @Deployment(resources="org/camunda/bpm/engine/test/history/HistoricActivityStatisticsQueryTest.testMultipleRunningTasks.bpmn20.xml")
+  @Deployment(resources="io/orqueio/bpm/engine/test/history/HistoricActivityStatisticsQueryTest.testMultipleRunningTasks.bpmn20.xml")
   @Test
   public void testQueryByFinishedMultipleRunningTasks() {
     String processDefinitionId = getProcessDefinitionId();
@@ -364,7 +364,7 @@ public class HistoricActivityStatisticsQueryTest extends PluggableProcessEngineT
     completeProcessInstances();
   }
 
-  @Deployment(resources="org/camunda/bpm/engine/test/history/HistoricActivityStatisticsQueryTest.testSingleTask.bpmn20.xml")
+  @Deployment(resources="io/orqueio/bpm/engine/test/history/HistoricActivityStatisticsQueryTest.testSingleTask.bpmn20.xml")
   @Test
   public void testQueryByCompleteScope() {
     String processDefinitionId = getProcessDefinitionId();
@@ -389,7 +389,7 @@ public class HistoricActivityStatisticsQueryTest extends PluggableProcessEngineT
     assertEquals(5, end.getCompleteScope());
   }
 
-  @Deployment(resources="org/camunda/bpm/engine/test/history/HistoricActivityStatisticsQueryTest.testSingleTask.bpmn20.xml")
+  @Deployment(resources="io/orqueio/bpm/engine/test/history/HistoricActivityStatisticsQueryTest.testSingleTask.bpmn20.xml")
   @Test
   public void testQueryByCompleteScopeAfterFinishingSomeInstances() {
     String processDefinitionId = getProcessDefinitionId();
@@ -431,7 +431,7 @@ public class HistoricActivityStatisticsQueryTest extends PluggableProcessEngineT
     completeProcessInstances();
   }
 
-  @Deployment(resources="org/camunda/bpm/engine/test/history/HistoricActivityStatisticsQueryTest.testMultipleRunningTasks.bpmn20.xml")
+  @Deployment(resources="io/orqueio/bpm/engine/test/history/HistoricActivityStatisticsQueryTest.testMultipleRunningTasks.bpmn20.xml")
   @Test
   public void testQueryByCompleteScopeMultipleRunningTasks() {
     String processDefinitionId = getProcessDefinitionId();
@@ -485,7 +485,7 @@ public class HistoricActivityStatisticsQueryTest extends PluggableProcessEngineT
     completeProcessInstances();
   }
 
-  @Deployment(resources="org/camunda/bpm/engine/test/history/HistoricActivityStatisticsQueryTest.testSingleTask.bpmn20.xml")
+  @Deployment(resources="io/orqueio/bpm/engine/test/history/HistoricActivityStatisticsQueryTest.testSingleTask.bpmn20.xml")
   @Test
   public void testQueryByCanceled() {
     String processDefinitionId = getProcessDefinitionId();
@@ -511,7 +511,7 @@ public class HistoricActivityStatisticsQueryTest extends PluggableProcessEngineT
     assertEquals(5, task.getCanceled());
   }
 
-  @Deployment(resources="org/camunda/bpm/engine/test/history/HistoricActivityStatisticsQueryTest.testSingleTask.bpmn20.xml")
+  @Deployment(resources="io/orqueio/bpm/engine/test/history/HistoricActivityStatisticsQueryTest.testSingleTask.bpmn20.xml")
   @Test
   public void testQueryByCanceledAfterCancelingSomeInstances() {
     String processDefinitionId = getProcessDefinitionId();
@@ -545,7 +545,7 @@ public class HistoricActivityStatisticsQueryTest extends PluggableProcessEngineT
     completeProcessInstances();
   }
 
-  @Deployment(resources="org/camunda/bpm/engine/test/history/HistoricActivityStatisticsQueryTest.testSingleTask.bpmn20.xml")
+  @Deployment(resources="io/orqueio/bpm/engine/test/history/HistoricActivityStatisticsQueryTest.testSingleTask.bpmn20.xml")
   @Test
   public void testQueryByCanceledAndFinished() {
     String processDefinitionId = getProcessDefinitionId();
@@ -604,7 +604,7 @@ public class HistoricActivityStatisticsQueryTest extends PluggableProcessEngineT
     assertEquals(4, task.getFinished());
   }
 
-  @Deployment(resources="org/camunda/bpm/engine/test/history/HistoricActivityStatisticsQueryTest.testSingleTask.bpmn20.xml")
+  @Deployment(resources="io/orqueio/bpm/engine/test/history/HistoricActivityStatisticsQueryTest.testSingleTask.bpmn20.xml")
   @Test
   public void testQueryByCanceledAndFinishedByPeriods() throws ParseException {
     try {
@@ -747,7 +747,7 @@ public class HistoricActivityStatisticsQueryTest extends PluggableProcessEngineT
     assertEquals(finished, activity.getFinished());
   }
 
-  @Deployment(resources="org/camunda/bpm/engine/test/history/HistoricActivityStatisticsQueryTest.testSingleTask.bpmn20.xml")
+  @Deployment(resources="io/orqueio/bpm/engine/test/history/HistoricActivityStatisticsQueryTest.testSingleTask.bpmn20.xml")
   @Test
   public void testQueryByCanceledAndCompleteScope() {
     String processDefinitionId = getProcessDefinitionId();
@@ -798,7 +798,7 @@ public class HistoricActivityStatisticsQueryTest extends PluggableProcessEngineT
     assertEquals(0, task.getCompleteScope());
   }
 
-  @Deployment(resources="org/camunda/bpm/engine/test/history/HistoricActivityStatisticsQueryTest.testSingleTask.bpmn20.xml")
+  @Deployment(resources="io/orqueio/bpm/engine/test/history/HistoricActivityStatisticsQueryTest.testSingleTask.bpmn20.xml")
   @Test
   public void testQueryByFinishedAndCompleteScope() {
     String processDefinitionId = getProcessDefinitionId();
@@ -857,7 +857,7 @@ public class HistoricActivityStatisticsQueryTest extends PluggableProcessEngineT
     assertEquals(0, task.getCompleteScope());
   }
 
-  @Deployment(resources="org/camunda/bpm/engine/test/history/HistoricActivityStatisticsQueryTest.testSingleTask.bpmn20.xml")
+  @Deployment(resources="io/orqueio/bpm/engine/test/history/HistoricActivityStatisticsQueryTest.testSingleTask.bpmn20.xml")
   @Test
   public void testQueryByFinishedAndCompleteScopeAndCanceled() {
     String processDefinitionId = getProcessDefinitionId();
@@ -920,7 +920,7 @@ public class HistoricActivityStatisticsQueryTest extends PluggableProcessEngineT
     assertEquals(0, task.getCompleteScope());
   }
 
-  @Deployment(resources="org/camunda/bpm/engine/test/history/HistoricActivityStatisticsQueryTest.testSingleTask.bpmn20.xml")
+  @Deployment(resources="io/orqueio/bpm/engine/test/history/HistoricActivityStatisticsQueryTest.testSingleTask.bpmn20.xml")
   @Test
   public void testQueryByProcessInstanceIds() {
     // given
@@ -1000,7 +1000,7 @@ public class HistoricActivityStatisticsQueryTest extends PluggableProcessEngineT
     }
   }
 
-  @Deployment(resources="org/camunda/bpm/engine/test/history/HistoricActivityStatisticsQueryTest.testSingleTask.bpmn20.xml")
+  @Deployment(resources="io/orqueio/bpm/engine/test/history/HistoricActivityStatisticsQueryTest.testSingleTask.bpmn20.xml")
   @Test
   public void testSorting() {
     String processDefinitionId = getProcessDefinitionId();
@@ -1017,8 +1017,8 @@ public class HistoricActivityStatisticsQueryTest extends PluggableProcessEngineT
     assertEquals(1, query.orderByActivityId().desc().count());
   }
 
-  @Deployment(resources= {"org/camunda/bpm/engine/test/history/HistoricActivityStatisticsQueryTest.testSingleTask.bpmn20.xml",
-      "org/camunda/bpm/engine/test/history/HistoricActivityStatisticsQueryTest.testAnotherSingleTask.bpmn20.xml"})
+  @Deployment(resources= {"io/orqueio/bpm/engine/test/history/HistoricActivityStatisticsQueryTest.testSingleTask.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/history/HistoricActivityStatisticsQueryTest.testAnotherSingleTask.bpmn20.xml"})
   @Test
   public void testDifferentProcessesWithSameActivityId() {
     String processDefinitionId = getProcessDefinitionId();
@@ -1055,7 +1055,7 @@ public class HistoricActivityStatisticsQueryTest extends PluggableProcessEngineT
   }
 
   @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_FULL)
-  @Deployment(resources="org/camunda/bpm/engine/test/history/HistoricActivityStatisticsQueryTest.testSingleTask.bpmn20.xml")
+  @Deployment(resources="io/orqueio/bpm/engine/test/history/HistoricActivityStatisticsQueryTest.testSingleTask.bpmn20.xml")
   @Test
   public void testQueryIncludeIncidents() {
     // given
@@ -1098,7 +1098,7 @@ public class HistoricActivityStatisticsQueryTest extends PluggableProcessEngineT
   }
 
   @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_FULL)
-  @Deployment(resources="org/camunda/bpm/engine/test/history/HistoricActivityStatisticsQueryTest.testSingleTask.bpmn20.xml")
+  @Deployment(resources="io/orqueio/bpm/engine/test/history/HistoricActivityStatisticsQueryTest.testSingleTask.bpmn20.xml")
   @Test
   public void testQueryIncludeIncidentsDeletedOnlyAndProcessInstanceIds() {
     // given
@@ -1138,7 +1138,7 @@ public class HistoricActivityStatisticsQueryTest extends PluggableProcessEngineT
     assertActivityStatistics(statistics.get(1), "task", 0, 1, 1, 0, 0, 3);
   }
 
-  @Deployment(resources="org/camunda/bpm/engine/test/history/HistoricActivityStatisticsQueryTest.testSingleTask.bpmn20.xml")
+  @Deployment(resources="io/orqueio/bpm/engine/test/history/HistoricActivityStatisticsQueryTest.testSingleTask.bpmn20.xml")
   @Test
   public void testQueryIncludeIncidentsWhenNoIncidents() {
     // given
@@ -1171,7 +1171,7 @@ public class HistoricActivityStatisticsQueryTest extends PluggableProcessEngineT
   }
 
   @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_FULL)
-  @Deployment(resources="org/camunda/bpm/engine/test/history/HistoricActivityStatisticsQueryTest.testMultipleRunningTasks.bpmn20.xml")
+  @Deployment(resources="io/orqueio/bpm/engine/test/history/HistoricActivityStatisticsQueryTest.testMultipleRunningTasks.bpmn20.xml")
   @Test
   public void testQueryIncludeIncidentsMultipleRunningTasksDeletedOnly() {
     // given
@@ -1212,7 +1212,7 @@ public class HistoricActivityStatisticsQueryTest extends PluggableProcessEngineT
   }
 
   @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_FULL)
-  @Deployment(resources="org/camunda/bpm/engine/test/history/HistoricActivityStatisticsQueryTest.testMultipleRunningTasks.bpmn20.xml")
+  @Deployment(resources="io/orqueio/bpm/engine/test/history/HistoricActivityStatisticsQueryTest.testMultipleRunningTasks.bpmn20.xml")
   @Test
   public void testQueryIncludeIncidentsMultipleRunningTasksOpenOnly() {
     // given
@@ -1252,7 +1252,7 @@ public class HistoricActivityStatisticsQueryTest extends PluggableProcessEngineT
   }
 
   @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_FULL)
-  @Deployment(resources="org/camunda/bpm/engine/test/history/HistoricActivityStatisticsQueryTest.testSingleTask.bpmn20.xml")
+  @Deployment(resources="io/orqueio/bpm/engine/test/history/HistoricActivityStatisticsQueryTest.testSingleTask.bpmn20.xml")
   @Test
   public void testQueryCancelledIncludeIncidentsDeletedOnly() throws ParseException {
     try {
@@ -1300,7 +1300,7 @@ public class HistoricActivityStatisticsQueryTest extends PluggableProcessEngineT
   }
 
   @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_FULL)
-  @Deployment(resources="org/camunda/bpm/engine/test/history/HistoricActivityStatisticsQueryTest.testSingleTask.bpmn20.xml")
+  @Deployment(resources="io/orqueio/bpm/engine/test/history/HistoricActivityStatisticsQueryTest.testSingleTask.bpmn20.xml")
   @Test
   public void testQueryCompletedIncludeIncidentsDeletedOnly() throws ParseException {
     try {
@@ -1347,7 +1347,7 @@ public class HistoricActivityStatisticsQueryTest extends PluggableProcessEngineT
   }
 
   @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_FULL)
-  @Deployment(resources="org/camunda/bpm/engine/test/api/repository/failingProcessCreateOneIncident.bpmn20.xml")
+  @Deployment(resources="io/orqueio/bpm/engine/test/api/repository/failingProcessCreateOneIncident.bpmn20.xml")
   @Test
   public void testQueryIncludeIncidentsWhenNoHistoricActivityInstanceDeletedOnly() {
     // given
@@ -1382,7 +1382,7 @@ public class HistoricActivityStatisticsQueryTest extends PluggableProcessEngineT
   }
 
   @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_FULL)
-  @Deployment(resources="org/camunda/bpm/engine/test/api/repository/failingProcessCreateOneIncident.bpmn20.xml")
+  @Deployment(resources="io/orqueio/bpm/engine/test/api/repository/failingProcessCreateOneIncident.bpmn20.xml")
   @Test
   public void testQueryIncludeIncidentsWhenNoHistoricActivityInstanceWithoutFilters() {
     // given

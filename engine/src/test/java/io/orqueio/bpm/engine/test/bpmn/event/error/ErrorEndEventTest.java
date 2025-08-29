@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -54,8 +54,8 @@ public class ErrorEndEventTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/bpmn/event/error/testPropagateOutputVariablesWhileThrowError.bpmn20.xml",
-                            "org/camunda/bpm/engine/test/bpmn/event/error/ErrorEventTest.errorParent.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/bpmn/event/error/testPropagateOutputVariablesWhileThrowError.bpmn20.xml",
+                            "io/orqueio/bpm/engine/test/bpmn/event/error/ErrorEventTest.errorParent.bpmn20.xml" })
   public void testPropagateOutputVariablesWhileThrowError() {
     // given
     Map<String,Object> variables = new HashMap<String, Object>();
@@ -76,7 +76,7 @@ public class ErrorEndEventTest {
   @Test
   @Deployment
   public void testErrorMessage() {
-    // given a process definition including an error with camunda:errorMessage property
+    // given a process definition including an error with orqueio:errorMessage property
     ProcessInstance instance = runtimeService.startProcessInstanceByKey("testErrorMessage");
 
     // when
@@ -91,7 +91,7 @@ public class ErrorEndEventTest {
   @Test
   @Deployment
   public void testErrorMessageExpression() {
-    // given a process definition including an error with camunda:errorMessage property with an expression value
+    // given a process definition including an error with orqueio:errorMessage property with an expression value
     String errorMessage = "This is the error message indicating what went wrong.";
     Map<String, Object> initialVariables = new HashMap<>();
     initialVariables.put("errorMessageExpression", errorMessage);

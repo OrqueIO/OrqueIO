@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -38,7 +38,7 @@ public class DeleteProcessDefinitionTest extends ConcurrencyTestCase {
   @Test
   public void testDeploymentOfProcessDefinitionWithOrphanMessageEvent() {
     // given
-    String resource = "org/camunda/bpm/engine/test/api/repository/processWithNewInvoiceMessage.bpmn20.xml";
+    String resource = "io/orqueio/bpm/engine/test/api/repository/processWithNewInvoiceMessage.bpmn20.xml";
     List<ProcessDefinition> processDefinitions = deployProcessDefinitionTwice(resource);
     assertThat(processDefinitions.size()).isEqualTo(2);
     deleteProcessDefinitionsSimultaneously(processDefinitions.get(0).getId(), processDefinitions.get(1).getId());
@@ -57,7 +57,7 @@ public class DeleteProcessDefinitionTest extends ConcurrencyTestCase {
   @Test
   public void testDeploymentOfProcessDefinitionWithOrphanJob() {
     // given
-    String resource = "org/camunda/bpm/engine/test/bpmn/event/timer/StartTimerEventTest.testTimeCycle.bpmn20.xml";
+    String resource = "io/orqueio/bpm/engine/test/bpmn/event/timer/StartTimerEventTest.testTimeCycle.bpmn20.xml";
     List<ProcessDefinition> processDefinitions = deployProcessDefinitionTwice(resource);
     assertThat(processDefinitions.size()).isEqualTo(2);
     deleteProcessDefinitionsSimultaneously(processDefinitions.get(0).getId(), processDefinitions.get(1).getId());
@@ -76,7 +76,7 @@ public class DeleteProcessDefinitionTest extends ConcurrencyTestCase {
   @Test
   public void testDeploymentOfProcessDefinitionWithOrphanSignalEvent() {
     // given
-    String resource = "org/camunda/bpm/engine/test/api/repository/processWithStartSignalEvent.bpmn20.xml";
+    String resource = "io/orqueio/bpm/engine/test/api/repository/processWithStartSignalEvent.bpmn20.xml";
     List<ProcessDefinition> processDefinitions = deployProcessDefinitionTwice(resource);
     assertThat(processDefinitions.size()).isEqualTo(2);
     deleteProcessDefinitionsSimultaneously(processDefinitions.get(0).getId(), processDefinitions.get(1).getId());
@@ -95,7 +95,7 @@ public class DeleteProcessDefinitionTest extends ConcurrencyTestCase {
   @Test
   public void testDeploymentOfProcessDefinitionWithOrphanEventAndPreviousVersion() {
     // given
-    String resource = "org/camunda/bpm/engine/test/api/repository/processWithNewInvoiceMessage.bpmn20.xml";
+    String resource = "io/orqueio/bpm/engine/test/api/repository/processWithNewInvoiceMessage.bpmn20.xml";
     repositoryService.createDeployment().addClasspathResource(resource).deploy();
     repositoryService.createDeployment().addClasspathResource(resource).deploy();
     repositoryService.createDeployment().addClasspathResource(resource).deploy();
@@ -118,7 +118,7 @@ public class DeleteProcessDefinitionTest extends ConcurrencyTestCase {
   @Test
   public void testDeploymentOfProcessDefinitionWithOrphanConditionalEvent() {
     // given
-    String resource = "org/camunda/bpm/engine/test/api/repository/processWithConditionalStartEvent.bpmn20.xml";
+    String resource = "io/orqueio/bpm/engine/test/api/repository/processWithConditionalStartEvent.bpmn20.xml";
     List<ProcessDefinition> definitions = deployProcessDefinitionTwice(resource);
     deleteProcessDefinitionsSimultaneously(definitions.get(0).getId(), definitions.get(1).getId());
     // at this point we have one orphan subscription in the database

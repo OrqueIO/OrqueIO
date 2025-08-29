@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -44,7 +44,7 @@ import org.junit.Test;
  */
 public class SentryEntryCriteriaTest extends CmmnTest {
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/sentry/SentryEntryCriteriaTest.testSequenceEnableTask.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/sentry/SentryEntryCriteriaTest.testSequenceEnableTask.cmmn"})
   @Test
   public void testSequenceEnableTask() {
     // given
@@ -76,7 +76,7 @@ public class SentryEntryCriteriaTest extends CmmnTest {
     assertTrue((Boolean) enableVariable);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/sentry/SentryEntryCriteriaTest.testSequenceAutoStartTask.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/sentry/SentryEntryCriteriaTest.testSequenceAutoStartTask.cmmn"})
   @Test
   public void testSequenceAutoStartTask() {
     // given
@@ -110,7 +110,7 @@ public class SentryEntryCriteriaTest extends CmmnTest {
     assertTrue((Boolean) startVariable);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/sentry/SentryEntryCriteriaTest.testSequenceEnableStage.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/sentry/SentryEntryCriteriaTest.testSequenceEnableStage.cmmn"})
   @Test
   public void testSequenceEnableStage() {
     // given
@@ -143,7 +143,7 @@ public class SentryEntryCriteriaTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/sentry/SentryEntryCriteriaTest.testSequenceAutoStartStage.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/sentry/SentryEntryCriteriaTest.testSequenceAutoStartStage.cmmn"})
   @Test
   public void testSequenceAutoStartStage() {
     // given
@@ -188,7 +188,7 @@ public class SentryEntryCriteriaTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/sentry/SentryEntryCriteriaTest.testSequenceOccurMilestone.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/sentry/SentryEntryCriteriaTest.testSequenceOccurMilestone.cmmn"})
   @Test
   public void testSequenceOccurMilestone() {
     // given
@@ -221,7 +221,7 @@ public class SentryEntryCriteriaTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/sentry/SentryEntryCriteriaTest.testSequence.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/sentry/SentryEntryCriteriaTest.testSequence.cmmn"})
   @Test
   public void testSequence() {
     // given
@@ -286,7 +286,7 @@ public class SentryEntryCriteriaTest extends CmmnTest {
     assertTrue((Boolean) enableVariable);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/sentry/SentryEntryCriteriaTest.testSequenceWithIfPart.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/sentry/SentryEntryCriteriaTest.testSequenceWithIfPart.cmmn"})
   @Test
   public void testSequenceWithIfPartNotSatisfied() {
     // given
@@ -315,7 +315,7 @@ public class SentryEntryCriteriaTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/sentry/SentryEntryCriteriaTest.testSequenceWithIfPart.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/sentry/SentryEntryCriteriaTest.testSequenceWithIfPart.cmmn"})
   @Test
   public void testSequenceWithIfPartSatisfied() {
     // given
@@ -344,7 +344,7 @@ public class SentryEntryCriteriaTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/sentry/SentryEntryCriteriaTest.testAndFork.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/sentry/SentryEntryCriteriaTest.testAndFork.cmmn"})
   @Test
   public void testAndFork() {
     // given
@@ -381,7 +381,7 @@ public class SentryEntryCriteriaTest extends CmmnTest {
     assertFalse(part.isSatisfied());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/sentry/SentryEntryCriteriaTest.testAndJoin.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/sentry/SentryEntryCriteriaTest.testAndJoin.cmmn"})
   @Test
   public void testAndJoin() {
     // given
@@ -420,7 +420,7 @@ public class SentryEntryCriteriaTest extends CmmnTest {
     assertTrue((Boolean) startVariable);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/sentry/SentryEntryCriteriaTest.testSequenceCombinedWithAndJoin.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/sentry/SentryEntryCriteriaTest.testSequenceCombinedWithAndJoin.cmmn"})
   @Test
   public void testSequenceCombinedWithAndJoin() {
     // given
@@ -457,7 +457,7 @@ public class SentryEntryCriteriaTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/sentry/SentryEntryCriteriaTest.testOrFork.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/sentry/SentryEntryCriteriaTest.testOrFork.cmmn"})
   @Test
   public void testOrFork() {
     // given
@@ -490,7 +490,7 @@ public class SentryEntryCriteriaTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/sentry/SentryEntryCriteriaTest.testOrJoin.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/sentry/SentryEntryCriteriaTest.testOrJoin.cmmn"})
   @Test
   public void testOrJoin() {
     // given
@@ -527,7 +527,7 @@ public class SentryEntryCriteriaTest extends CmmnTest {
     assertTrue(thirdHumanTask.isActive()); // is still active
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/sentry/SentryEntryCriteriaTest.testCycle.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/sentry/SentryEntryCriteriaTest.testCycle.cmmn"})
   @Test
   public void testCycle() {
     // given
@@ -567,7 +567,7 @@ public class SentryEntryCriteriaTest extends CmmnTest {
     }
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/sentry/SentryEntryCriteriaTest.testEnableByInstanceCreation.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/sentry/SentryEntryCriteriaTest.testEnableByInstanceCreation.cmmn"})
   @Test
   public void testEnableByInstanceCreation() {
     // given + when
@@ -581,7 +581,7 @@ public class SentryEntryCriteriaTest extends CmmnTest {
     assertTrue(secondHumanTask.isActive());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/sentry/SentryEntryCriteriaTest.testEnableOnParentSuspendInsideStage.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/sentry/SentryEntryCriteriaTest.testEnableOnParentSuspendInsideStage.cmmn"})
   public void FAILING_testEnableOnParentSuspendInsideStage() {
     // given
     createCaseInstance();
@@ -629,7 +629,7 @@ public class SentryEntryCriteriaTest extends CmmnTest {
     assertTrue(secondHumanTask.isEnabled());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/sentry/SentryEntryCriteriaTest.testEnableOnParentResumeInsideStage.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/sentry/SentryEntryCriteriaTest.testEnableOnParentResumeInsideStage.cmmn"})
   public void FAILING_testEnableOnParentResumeInsideStage() {
     // given
     createCaseInstance();
@@ -683,7 +683,7 @@ public class SentryEntryCriteriaTest extends CmmnTest {
    * test is not a very useful use case in that just a milestone
    * will be suspended.
    */
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/sentry/SentryEntryCriteriaTest.testResume.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/sentry/SentryEntryCriteriaTest.testResume.cmmn"})
   public void FAILING_testResume() {
     // given
     createCaseInstance();
@@ -720,7 +720,7 @@ public class SentryEntryCriteriaTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/sentry/SentryEntryCriteriaTest.testFireAlsoNotAffectedSentries.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/sentry/SentryEntryCriteriaTest.testFireAlsoNotAffectedSentries.cmmn"})
   @Test
   public void testFireAlsoNotAffectedSentries() {
     // given
@@ -897,8 +897,8 @@ public class SentryEntryCriteriaTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/cmmn/sentry/SentryEntryCriteriaTest.testShouldNotTriggerCompletionTwice.cmmn",
-      "org/camunda/bpm/engine/test/cmmn/sentry/SentryEntryCriteriaTest.noop.bpmn20.xml"
+      "io/orqueio/bpm/engine/test/cmmn/sentry/SentryEntryCriteriaTest.testShouldNotTriggerCompletionTwice.cmmn",
+      "io/orqueio/bpm/engine/test/cmmn/sentry/SentryEntryCriteriaTest.noop.bpmn20.xml"
   })
   @Test
   public void testShouldNotTriggerCompletionTwice() {

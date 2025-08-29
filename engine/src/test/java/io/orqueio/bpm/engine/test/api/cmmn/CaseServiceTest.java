@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -157,7 +157,7 @@ public class CaseServiceTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testExecuteSetVariable() {
     // given:
@@ -222,7 +222,7 @@ public class CaseServiceTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testExecuteSetVariableTyped() {
     // given:
@@ -287,7 +287,7 @@ public class CaseServiceTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testExecuteSetVariables() {
     // given:
@@ -355,7 +355,7 @@ public class CaseServiceTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testExecuteSetVariablesTyped() {
     // given:
@@ -423,7 +423,7 @@ public class CaseServiceTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testExecuteSetVariableAndVariables() {
     // given:
@@ -496,7 +496,7 @@ public class CaseServiceTest extends PluggableProcessEngineTest {
   }
 
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testExecuteSetVariableAndVariablesTyped() {
     // given:
@@ -568,7 +568,7 @@ public class CaseServiceTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testExecuteSetVariableLocal() {
     // given:
@@ -651,7 +651,7 @@ public class CaseServiceTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testExecuteSetVariablesLocal() {
     // given:
@@ -736,7 +736,7 @@ public class CaseServiceTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testExecuteSetVariablesLocalTyped() {
     // given:
@@ -796,7 +796,7 @@ public class CaseServiceTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testExecuteSetVariableLocalAndVariablesLocal() {
     // given:
@@ -888,7 +888,7 @@ public class CaseServiceTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testExecuteSetVariableAndVariablesLocal() {
     // given:
@@ -977,7 +977,7 @@ public class CaseServiceTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testExecuteRemoveVariable() {
     // given:
@@ -1027,7 +1027,7 @@ public class CaseServiceTest extends PluggableProcessEngineTest {
     assertTrue(result.isEmpty());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testExecuteRemoveVariables() {
     // given:
@@ -1081,7 +1081,7 @@ public class CaseServiceTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testExecuteRemoveVariableAndVariables() {
     // given:
@@ -1136,7 +1136,7 @@ public class CaseServiceTest extends PluggableProcessEngineTest {
     assertTrue(result.isEmpty());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testExecuteRemoveVariableLocal() {
     // given:
@@ -1190,7 +1190,7 @@ public class CaseServiceTest extends PluggableProcessEngineTest {
     assertTrue(result.isEmpty());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testExecuteRemoveVariablesLocal() {
     // given:
@@ -1248,7 +1248,7 @@ public class CaseServiceTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testExecuteRemoveVariableLocalAndVariablesLocal() {
     // given:
@@ -1307,7 +1307,7 @@ public class CaseServiceTest extends PluggableProcessEngineTest {
     assertTrue(result.isEmpty());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testExecuteRemoveVariableAndVariablesLocal() {
     // given:
@@ -1366,7 +1366,7 @@ public class CaseServiceTest extends PluggableProcessEngineTest {
     assertTrue(result.isEmpty());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testExecuteRemoveAndSetSameVariable() {
     // given:
@@ -1402,7 +1402,7 @@ public class CaseServiceTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testExecuteRemoveAndSetSameLocal() {
     // given:
@@ -1438,7 +1438,7 @@ public class CaseServiceTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testGetVariables() {
     // given:
@@ -1476,7 +1476,7 @@ public class CaseServiceTest extends PluggableProcessEngineTest {
      assertEquals(variables, caseService.getVariablesTyped(caseExecutionId, true));
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testGetVariablesTyped() {
     // given:
@@ -1532,7 +1532,7 @@ public class CaseServiceTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testGetVariablesWithVariableNames() {
     // given:
@@ -1576,7 +1576,7 @@ public class CaseServiceTest extends PluggableProcessEngineTest {
   }
 
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testGetVariablesWithVariableNamesTyped() {
     // given:
@@ -1637,7 +1637,7 @@ public class CaseServiceTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testGetVariablesLocal() {
     // given:
@@ -1679,7 +1679,7 @@ public class CaseServiceTest extends PluggableProcessEngineTest {
      assertEquals(variables, caseService.getVariablesLocal(caseExecutionId));
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testGetVariablesLocalTyped() {
     // given:
@@ -1739,7 +1739,7 @@ public class CaseServiceTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testGetVariablesLocalWithVariableNames() {
     // given:
@@ -1785,7 +1785,7 @@ public class CaseServiceTest extends PluggableProcessEngineTest {
      assertEquals(variables, caseService.getVariablesLocal(caseExecutionId, names));
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testGetVariablesLocalWithVariableNamesTyped() {
     // given:
@@ -1848,7 +1848,7 @@ public class CaseServiceTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testGetVariable() {
     // given:
@@ -1898,7 +1898,7 @@ public class CaseServiceTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testGetVariableLocal() {
     // given:
@@ -1951,7 +1951,7 @@ public class CaseServiceTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testGetVariableTyped() {
     // given:
@@ -2007,7 +2007,7 @@ public class CaseServiceTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testSetVariable() {
     // given:
@@ -2051,7 +2051,7 @@ public class CaseServiceTest extends PluggableProcessEngineTest {
     assertEquals("abc", variable.getValue());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testSetVariables() {
     // given:
@@ -2114,7 +2114,7 @@ public class CaseServiceTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testSetVariableLocal() {
     // given:
@@ -2158,7 +2158,7 @@ public class CaseServiceTest extends PluggableProcessEngineTest {
     assertEquals("abc", variable.getValue());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testSetVariablesLocal() {
     // given:
@@ -2221,7 +2221,7 @@ public class CaseServiceTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testGetVariableTypedLocal() {
     // given:
@@ -2280,7 +2280,7 @@ public class CaseServiceTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testRemoveVariable() {
     // given:
@@ -2305,7 +2305,7 @@ public class CaseServiceTest extends PluggableProcessEngineTest {
     assertEquals(0, runtimeService.createVariableInstanceQuery().count());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testRemoveVariables() {
     // given:
@@ -2337,7 +2337,7 @@ public class CaseServiceTest extends PluggableProcessEngineTest {
     assertEquals("aThirdVariable", variable.getName());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testRemoveVariableLocal() {
     // given:
@@ -2369,7 +2369,7 @@ public class CaseServiceTest extends PluggableProcessEngineTest {
     assertEquals(0, runtimeService.createVariableInstanceQuery().count());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testRemoveVariablesLocal() {
     // given:
@@ -2409,7 +2409,7 @@ public class CaseServiceTest extends PluggableProcessEngineTest {
     assertEquals("aThirdVariable", variable.getName());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/cmmn/loan-application.cmmn")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/cmmn/loan-application.cmmn")
   @Test
   public void testCreateCaseInstanceById() {
     // given
@@ -2445,7 +2445,7 @@ public class CaseServiceTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/cmmn/loan-application.cmmn")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/cmmn/loan-application.cmmn")
   @Test
   public void testCreateCaseInstanceByKey() {
     // given
@@ -2481,7 +2481,7 @@ public class CaseServiceTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/cmmn/loan-application.cmmn")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/cmmn/loan-application.cmmn")
   @Test
   public void testCaseExecutionQuery() {
     // given
@@ -2541,7 +2541,7 @@ public class CaseServiceTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/cmmn/loan-application.cmmn")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/cmmn/loan-application.cmmn")
   @Test
   public void testCaseInstanceQuery() {
     // given
@@ -2577,7 +2577,7 @@ public class CaseServiceTest extends PluggableProcessEngineTest {
     assertEquals(1, caseInstances.size());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testGetVariablesByEmptyList() {
     // given
@@ -2591,7 +2591,7 @@ public class CaseServiceTest extends PluggableProcessEngineTest {
     assertTrue(variables.isEmpty());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testGetVariablesTypedByEmptyList() {
     // given
@@ -2605,7 +2605,7 @@ public class CaseServiceTest extends PluggableProcessEngineTest {
     assertTrue(variables.isEmpty());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testGetVariablesLocalByEmptyList() {
     // given
@@ -2619,7 +2619,7 @@ public class CaseServiceTest extends PluggableProcessEngineTest {
     assertTrue(variables.isEmpty());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testGetVariablesLocalTypedByEmptyList() {
     // given

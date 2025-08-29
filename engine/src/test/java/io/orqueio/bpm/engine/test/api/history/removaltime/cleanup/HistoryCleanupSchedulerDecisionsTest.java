@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -70,10 +70,10 @@ public class HistoryCleanupSchedulerDecisionsTest extends AbstractHistoryCleanup
 
   protected final String CALLING_PROCESS_CALLS_DMN_KEY = "callingProcessCallsDmn";
   protected final BpmnModelInstance CALLING_PROCESS_CALLS_DMN = Bpmn.createExecutableProcess(CALLING_PROCESS_CALLS_DMN_KEY)
-    .camundaHistoryTimeToLive(5)
+    .orqueioHistoryTimeToLive(5)
     .startEvent()
       .businessRuleTask()
-        .camundaDecisionRef("dish-decision")
+        .orqueioDecisionRef("dish-decision")
         .multiInstance()
           .sequential()
           .cardinality("5")
@@ -84,7 +84,7 @@ public class HistoryCleanupSchedulerDecisionsTest extends AbstractHistoryCleanup
 
   @Test
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/dmn/deployment/drdDish.dmn11.xml"
+    "io/orqueio/bpm/engine/test/dmn/deployment/drdDish.dmn11.xml"
   })
   public void shouldScheduleToNowByDecisionInputs() {
     // given
@@ -114,7 +114,7 @@ public class HistoryCleanupSchedulerDecisionsTest extends AbstractHistoryCleanup
 
   @Test
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/dmn/deployment/drdDish.dmn11.xml"
+    "io/orqueio/bpm/engine/test/dmn/deployment/drdDish.dmn11.xml"
   })
   public void shouldScheduleToLaterByDecisionInputs() {
     // given
@@ -144,7 +144,7 @@ public class HistoryCleanupSchedulerDecisionsTest extends AbstractHistoryCleanup
 
   @Test
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/api/history/removaltime/cleanup/decisonWithThreeOutputs.dmn11.xml"
+    "io/orqueio/bpm/engine/test/api/history/removaltime/cleanup/decisonWithThreeOutputs.dmn11.xml"
   })
   public void shouldScheduleToNowByDecisionOutputs() {
     // given
@@ -174,7 +174,7 @@ public class HistoryCleanupSchedulerDecisionsTest extends AbstractHistoryCleanup
 
   @Test
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/api/history/removaltime/cleanup/decisonWithThreeOutputs.dmn11.xml"
+    "io/orqueio/bpm/engine/test/api/history/removaltime/cleanup/decisonWithThreeOutputs.dmn11.xml"
   })
   public void shouldScheduleToLaterByDecisionOutputs() {
     // given

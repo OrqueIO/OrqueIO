@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -90,8 +90,8 @@ public class TerminateEndEventTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources={
-    "org/camunda/bpm/engine/test/bpmn/event/end/TerminateEndEventTest.testTerminateWithCallActivity.bpmn",
-    "org/camunda/bpm/engine/test/bpmn/event/end/TerminateEndEventTest.subProcessNoTerminate.bpmn"
+    "io/orqueio/bpm/engine/test/bpmn/event/end/TerminateEndEventTest.testTerminateWithCallActivity.bpmn",
+    "io/orqueio/bpm/engine/test/bpmn/event/end/TerminateEndEventTest.subProcessNoTerminate.bpmn"
   })
   @Test
   public void testTerminateWithCallActivity() throws Exception {
@@ -168,7 +168,7 @@ public class TerminateEndEventTest extends PluggableProcessEngineTest {
   /**
    * CAM-4067
    */
-  @Deployment(resources = "org/camunda/bpm/engine/test/bpmn/event/end/TerminateEndEventTest.testTerminateInSubProcess.bpmn")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/bpmn/event/end/TerminateEndEventTest.testTerminateInSubProcess.bpmn")
   @Test
   public void testTerminateInSubProcessShouldNotEndProcessInstanceInHistory() throws Exception {
     // when process instance is started and terminate end event in subprocess executed
@@ -204,7 +204,7 @@ public class TerminateEndEventTest extends PluggableProcessEngineTest {
   /**
    * CAM-4067
    */
-  @Deployment(resources = "org/camunda/bpm/engine/test/bpmn/event/end/TerminateEndEventTest.testTerminateInSubProcessConcurrent.bpmn")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/bpmn/event/end/TerminateEndEventTest.testTerminateInSubProcessConcurrent.bpmn")
   @Test
   public void testTerminateInSubProcessConcurrentShouldNotEndProcessInstanceInHistory() throws Exception {
     // when process instance is started and terminate end event in subprocess executed
@@ -289,8 +289,8 @@ public class TerminateEndEventTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources={
-    "org/camunda/bpm/engine/test/bpmn/event/end/TerminateEndEventTest.testTerminateInCallActivity.bpmn",
-    "org/camunda/bpm/engine/test/bpmn/event/end/TerminateEndEventTest.subProcessTerminate.bpmn"
+    "io/orqueio/bpm/engine/test/bpmn/event/end/TerminateEndEventTest.testTerminateInCallActivity.bpmn",
+    "io/orqueio/bpm/engine/test/bpmn/event/end/TerminateEndEventTest.subProcessTerminate.bpmn"
   })
   @Test
   public void testTerminateInCallActivity() throws Exception {
@@ -307,8 +307,8 @@ public class TerminateEndEventTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources={
-    "org/camunda/bpm/engine/test/bpmn/event/end/TerminateEndEventTest.testTerminateInCallActivityMulitInstance.bpmn",
-    "org/camunda/bpm/engine/test/bpmn/event/end/TerminateEndEventTest.subProcessTerminate.bpmn"
+    "io/orqueio/bpm/engine/test/bpmn/event/end/TerminateEndEventTest.testTerminateInCallActivityMulitInstance.bpmn",
+    "io/orqueio/bpm/engine/test/bpmn/event/end/TerminateEndEventTest.subProcessTerminate.bpmn"
   })
   @Test
   public void testTerminateInCallActivityMulitInstance() throws Exception {
@@ -325,8 +325,8 @@ public class TerminateEndEventTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources={
-    "org/camunda/bpm/engine/test/bpmn/event/end/TerminateEndEventTest.testTerminateInCallActivityConcurrent.bpmn",
-    "org/camunda/bpm/engine/test/bpmn/event/end/TerminateEndEventTest.subProcessConcurrentTerminate.bpmn"
+    "io/orqueio/bpm/engine/test/bpmn/event/end/TerminateEndEventTest.testTerminateInCallActivityConcurrent.bpmn",
+    "io/orqueio/bpm/engine/test/bpmn/event/end/TerminateEndEventTest.subProcessConcurrentTerminate.bpmn"
   })
   @Test
   public void testTerminateInCallActivityConcurrent() throws Exception {
@@ -343,8 +343,8 @@ public class TerminateEndEventTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources={
-    "org/camunda/bpm/engine/test/bpmn/event/end/TerminateEndEventTest.testTerminateInCallActivityConcurrentMulitInstance.bpmn",
-    "org/camunda/bpm/engine/test/bpmn/event/end/TerminateEndEventTest.subProcessConcurrentTerminate.bpmn"
+    "io/orqueio/bpm/engine/test/bpmn/event/end/TerminateEndEventTest.testTerminateInCallActivityConcurrentMulitInstance.bpmn",
+    "io/orqueio/bpm/engine/test/bpmn/event/end/TerminateEndEventTest.subProcessConcurrentTerminate.bpmn"
   })
   @Test
   public void testTerminateInCallActivityConcurrentMulitInstance() throws Exception {

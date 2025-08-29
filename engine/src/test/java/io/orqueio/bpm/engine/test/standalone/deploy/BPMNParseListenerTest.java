@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -25,7 +25,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import io.orqueio.bpm.engine.FormService;
 import io.orqueio.bpm.engine.RepositoryService;
 import io.orqueio.bpm.engine.RuntimeService;
-import io.orqueio.bpm.engine.form.CamundaFormRef;
+import io.orqueio.bpm.engine.form.OrqueioFormRef;
 import io.orqueio.bpm.engine.form.TaskFormData;
 import io.orqueio.bpm.engine.impl.bpmn.behavior.UserTaskActivityBehavior;
 import io.orqueio.bpm.engine.impl.bpmn.parser.AbstractBpmnParseListener;
@@ -66,7 +66,7 @@ public class BPMNParseListenerTest {
 
   @ClassRule
   public static ProcessEngineBootstrapRule bootstrapRule = new ProcessEngineBootstrapRule(
-      "org/camunda/bpm/engine/test/standalone/deploy/bpmn.parse.listener.camunda.cfg.xml");
+      "io/orqueio/bpm/engine/test/standalone/deploy/bpmn.parse.listener.orqueio.cfg.xml");
 
   protected ProcessEngineRule engineRule = new ProvidedProcessEngineRule(bootstrapRule);
   protected ProcessEngineTestRule engineTestRule = new ProcessEngineTestRule(engineRule);
@@ -94,7 +94,7 @@ public class BPMNParseListenerTest {
     DelegatingBpmnParseListener.DELEGATE = new TestBPMNParseListener();
 
     // when
-    engineTestRule.deploy("org/camunda/bpm/engine/test/standalone/deploy/"
+    engineTestRule.deploy("io/orqueio/bpm/engine/test/standalone/deploy/"
         + "BPMNParseListenerTest.testAlterProcessDefinitionKeyWhenDeploying.bpmn20.xml");
 
     // then
@@ -110,7 +110,7 @@ public class BPMNParseListenerTest {
     DelegatingBpmnParseListener.DELEGATE = new TestBPMNParseListener();
 
     // when
-    engineTestRule.deploy("org/camunda/bpm/engine/test/standalone/deploy/"
+    engineTestRule.deploy("io/orqueio/bpm/engine/test/standalone/deploy/"
         + "BPMNParseListenerTest.testAlterActivityBehaviors.bpmn20.xml");
 
     // then
@@ -135,7 +135,7 @@ public class BPMNParseListenerTest {
 
     BpmnModelInstance model = Bpmn.createExecutableProcess("process")
       .startEvent()
-        .userTask("task").camundaFormKey(originalFormKey)
+        .userTask("task").orqueioFormKey(originalFormKey)
       .endEvent()
       .done();
 
@@ -181,8 +181,8 @@ public class BPMNParseListenerTest {
     BpmnModelInstance model = Bpmn.createExecutableProcess("process")
         .startEvent()
           .userTask("task")
-            .camundaFormRef(originalFormRef)
-            .camundaFormRefBinding(originalFormRefBinding)
+            .orqueioFormRef(originalFormRef)
+            .orqueioFormRefBinding(originalFormRefBinding)
           .endEvent()
         .done();
 
@@ -196,12 +196,12 @@ public class BPMNParseListenerTest {
         ExpressionManager expressionManager = new JuelExpressionManager();
 
         Expression formRefExpression = expressionManager.createExpression(modifiedFormRef);
-        formDefinition.setCamundaFormDefinitionKey(formRefExpression);
+        formDefinition.setOrqueioFormDefinitionKey(formRefExpression);
 
-        formDefinition.setCamundaFormDefinitionBinding(modifiedFormRefBinding);
+        formDefinition.setOrqueioFormDefinitionBinding(modifiedFormRefBinding);
 
         Expression formVersionExpression = expressionManager.createExpression(modifiedFormRefVersion.toString());
-        formDefinition.setCamundaFormDefinitionVersion(formVersionExpression);
+        formDefinition.setOrqueioFormDefinitionVersion(formVersionExpression);
       }
     };
 
@@ -214,7 +214,7 @@ public class BPMNParseListenerTest {
 
     FormService formService = engineRule.getFormService();
     TaskFormData formData = formService.getTaskFormData(task.getId());
-    CamundaFormRef formRef = formData.getCamundaFormRef();
+    OrqueioFormRef formRef = formData.getOrqueioFormRef();
     assertThat(formRef.getKey()).isEqualTo(modifiedFormRef);
     assertThat(formRef.getBinding()).isEqualTo(modifiedFormRefBinding);
     assertThat(formRef.getVersion()).isEqualTo(modifiedFormRefVersion);
@@ -271,7 +271,7 @@ public class BPMNParseListenerTest {
     };
 
     // when
-    engineTestRule.deploy("org/camunda/bpm/engine/test/standalone/deploy/"
+    engineTestRule.deploy("io/orqueio/bpm/engine/test/standalone/deploy/"
         + "BPMNParseListenerTest.shouldInvokeParseIoMapping.bpmn20.xml");
 
     // then

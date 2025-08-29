@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -60,9 +60,9 @@ public class ManagementAuthorizationTest extends AuthorizationTest {
   // get table count //////////////////////////////////////////////
 
   @Test
-  public void shouldGetTableCountAsCamundaAdmin() {
+  public void shouldGetTableCountAsOrqueioAdmin() {
     // given
-    identityService.setAuthentication(userId, Collections.singletonList(Groups.CAMUNDA_ADMIN));
+    identityService.setAuthentication(userId, Collections.singletonList(Groups.ORQUEIO_ADMIN));
 
     // when
     Map<String, Long> tableCount = managementService.getTableCount();
@@ -86,7 +86,7 @@ public class ManagementAuthorizationTest extends AuthorizationTest {
   @Test
   public void shouldGetTableCountWithAdminAndPermission() {
     // given
-    identityService.setAuthentication(userId, Collections.singletonList(Groups.CAMUNDA_ADMIN));
+    identityService.setAuthentication(userId, Collections.singletonList(Groups.ORQUEIO_ADMIN));
     createGrantAuthorization(Resources.SYSTEM, "*", userId, SystemPermissions.READ);
 
     // when
@@ -111,9 +111,9 @@ public class ManagementAuthorizationTest extends AuthorizationTest {
   // get table name //////////////////////////////////////////////
 
   @Test
-  public void shouldGetTableNameAsCamundaAdmin() {
+  public void shouldGetTableNameAsOrqueioAdmin() {
     // given
-    identityService.setAuthentication(userId, Collections.singletonList(Groups.CAMUNDA_ADMIN));
+    identityService.setAuthentication(userId, Collections.singletonList(Groups.ORQUEIO_ADMIN));
     String tablePrefix = processEngineConfiguration.getDatabaseTablePrefix();
 
     // when
@@ -139,7 +139,7 @@ public class ManagementAuthorizationTest extends AuthorizationTest {
   @Test
   public void shouldGetTableNameAdminAndWithPermission() {
     // given
-    identityService.setAuthentication(userId, Collections.singletonList(Groups.CAMUNDA_ADMIN));
+    identityService.setAuthentication(userId, Collections.singletonList(Groups.ORQUEIO_ADMIN));
     createGrantAuthorization(Resources.SYSTEM, "*", userId, SystemPermissions.READ);
     String tablePrefix = processEngineConfiguration.getDatabaseTablePrefix();
 
@@ -165,9 +165,9 @@ public class ManagementAuthorizationTest extends AuthorizationTest {
   // get table meta data //////////////////////////////////////////////
 
   @Test
-  public void shouldGetTableMetaDataAsCamundaAdmin() {
+  public void shouldGetTableMetaDataAsOrqueioAdmin() {
     // given
-    identityService.setAuthentication(userId, Collections.singletonList(Groups.CAMUNDA_ADMIN));
+    identityService.setAuthentication(userId, Collections.singletonList(Groups.ORQUEIO_ADMIN));
 
     // when
     TableMetaData tableMetaData = managementService.getTableMetaData("ACT_RE_PROCDEF");
@@ -191,7 +191,7 @@ public class ManagementAuthorizationTest extends AuthorizationTest {
   @Test
   public void shouldGetTableMetaDataWithAdminAndPermission() {
     // given
-    identityService.setAuthentication(userId, Collections.singletonList(Groups.CAMUNDA_ADMIN));
+    identityService.setAuthentication(userId, Collections.singletonList(Groups.ORQUEIO_ADMIN));
     createGrantAuthorization(Resources.SYSTEM, "*", userId, SystemPermissions.READ);
 
     // when
@@ -229,9 +229,9 @@ public class ManagementAuthorizationTest extends AuthorizationTest {
   }
 
   @Test
-  public void shouldPerformTablePageQueryAsCamundaAdmin() {
+  public void shouldPerformTablePageQueryAsOrqueioAdmin() {
     // given
-    identityService.setAuthentication(userId, Collections.singletonList(Groups.CAMUNDA_ADMIN));
+    identityService.setAuthentication(userId, Collections.singletonList(Groups.ORQUEIO_ADMIN));
     String tablePrefix = processEngineConfiguration.getDatabaseTablePrefix();
 
     // when
@@ -244,9 +244,9 @@ public class ManagementAuthorizationTest extends AuthorizationTest {
   // get history level /////////////////////////////////
 
   @Test
-  public void shouldGetHistoryLevelAsCamundaAdmin() {
+  public void shouldGetHistoryLevelAsOrqueioAdmin() {
     //given
-    identityService.setAuthentication(userId, Collections.singletonList(Groups.CAMUNDA_ADMIN));
+    identityService.setAuthentication(userId, Collections.singletonList(Groups.ORQUEIO_ADMIN));
 
     // when
     int historyLevel = managementService.getHistoryLevel();
@@ -270,7 +270,7 @@ public class ManagementAuthorizationTest extends AuthorizationTest {
   @Test
   public void shouldGetHistoryLevelAdminAndWithPermission() {
     //given
-    identityService.setAuthentication(userId, Collections.singletonList(Groups.CAMUNDA_ADMIN));
+    identityService.setAuthentication(userId, Collections.singletonList(Groups.ORQUEIO_ADMIN));
     createGrantAuthorization(Resources.SYSTEM, "*", userId, SystemPermissions.READ);
 
     // when
@@ -309,9 +309,9 @@ public class ManagementAuthorizationTest extends AuthorizationTest {
 
 
   @Test
-  public void shouldGetPropertiesAsCamundaAdmin() {
+  public void shouldGetPropertiesAsOrqueioAdmin() {
     // given
-    identityService.setAuthentication(userId, Collections.singletonList(Groups.CAMUNDA_ADMIN));
+    identityService.setAuthentication(userId, Collections.singletonList(Groups.ORQUEIO_ADMIN));
 
     // when
       Map<String, String> properties = managementService.getProperties();
@@ -335,7 +335,7 @@ public class ManagementAuthorizationTest extends AuthorizationTest {
   @Test
   public void shouldGetPropertiesWithAdminAndPermission() {
     // given
-    identityService.setAuthentication(userId, Collections.singletonList(Groups.CAMUNDA_ADMIN));
+    identityService.setAuthentication(userId, Collections.singletonList(Groups.ORQUEIO_ADMIN));
     createGrantAuthorization(Resources.SYSTEM, "*", userId, SystemPermissions.READ);
 
     // when
@@ -373,9 +373,9 @@ public class ManagementAuthorizationTest extends AuthorizationTest {
   // set properties ///////////////////////////
 
   @Test
-  public void shouldSetPropertyAsCamundaAdmin() {
+  public void shouldSetPropertyAsOrqueioAdmin() {
     // given
-    identityService.setAuthentication(userId, Collections.singletonList(Groups.CAMUNDA_ADMIN));
+    identityService.setAuthentication(userId, Collections.singletonList(Groups.ORQUEIO_ADMIN));
 
     // when
       managementService.setProperty(DUMMY_PROPERTY, DUMMY_VALUE);
@@ -401,7 +401,7 @@ public class ManagementAuthorizationTest extends AuthorizationTest {
   @Test
   public void shouldSetPropertyWithAdminAndPermission() {
     // given
-    identityService.setAuthentication(userId, Collections.singletonList(Groups.CAMUNDA_ADMIN));
+    identityService.setAuthentication(userId, Collections.singletonList(Groups.ORQUEIO_ADMIN));
     createGrantAuthorization(Resources.SYSTEM, "*", userId, SystemPermissions.SET);
 
     // when
@@ -427,9 +427,9 @@ public class ManagementAuthorizationTest extends AuthorizationTest {
   // delete properties ///////////////////////////
 
   @Test
-  public void shouldDeletePropertyAsCamundaAdmin() {
+  public void shouldDeletePropertyAsOrqueioAdmin() {
     // given
-    identityService.setAuthentication(userId, Collections.singletonList(Groups.CAMUNDA_ADMIN));
+    identityService.setAuthentication(userId, Collections.singletonList(Groups.ORQUEIO_ADMIN));
     managementService.setProperty(DUMMY_VALUE, DUMMY_PROPERTY);
 
     // when
@@ -460,7 +460,7 @@ public class ManagementAuthorizationTest extends AuthorizationTest {
   @Test
   public void shouldDeletePropertyWithAdminAndPermission() {
     // given
-    identityService.setAuthentication(userId, Collections.singletonList(Groups.CAMUNDA_ADMIN));
+    identityService.setAuthentication(userId, Collections.singletonList(Groups.ORQUEIO_ADMIN));
     createGrantAuthorization(Resources.SYSTEM, "*", userId, SystemPermissions.DELETE);
     managementService.setProperty(DUMMY_VALUE, DUMMY_PROPERTY);
 
@@ -499,9 +499,9 @@ public class ManagementAuthorizationTest extends AuthorizationTest {
   // get telemetry data /////////////////////////////////////
 
   @Test
-  public void shouldGetTelemetryDataAsCamundaAdmin() {
+  public void shouldGetTelemetryDataAsOrqueioAdmin() {
     // given
-    identityService.setAuthentication(userId, Collections.singletonList(Groups.CAMUNDA_ADMIN));
+    identityService.setAuthentication(userId, Collections.singletonList(Groups.ORQUEIO_ADMIN));
 
     // when
     TelemetryData telemetryData = managementService.getTelemetryData();
@@ -525,7 +525,7 @@ public class ManagementAuthorizationTest extends AuthorizationTest {
   @Test
   public void shouldGetTelemetryDataWithAdminAndPermission() {
     // given
-    identityService.setAuthentication(userId, Collections.singletonList(Groups.CAMUNDA_ADMIN));
+    identityService.setAuthentication(userId, Collections.singletonList(Groups.ORQUEIO_ADMIN));
     createGrantAuthorization(Resources.SYSTEM, "*", userId, SystemPermissions.READ);
 
     // when
@@ -551,9 +551,9 @@ public class ManagementAuthorizationTest extends AuthorizationTest {
   // get license key /////////////////////////////////////
 
   @Test
-  public void shouldGetLicenseKeyAsCamundaAdmin() {
+  public void shouldGetLicenseKeyAsOrqueioAdmin() {
     // given
-    identityService.setAuthentication(userId, Collections.singletonList(Groups.CAMUNDA_ADMIN));
+    identityService.setAuthentication(userId, Collections.singletonList(Groups.ORQUEIO_ADMIN));
     managementService.setLicenseKey("testLicenseKey");
 
     // when
@@ -582,7 +582,7 @@ public class ManagementAuthorizationTest extends AuthorizationTest {
   @Test
   public void shouldGetLicenseKeyWithAdminAndPermission() {
     // given
-    identityService.setAuthentication(userId, Collections.singletonList(Groups.CAMUNDA_ADMIN));
+    identityService.setAuthentication(userId, Collections.singletonList(Groups.ORQUEIO_ADMIN));
     createGrantAuthorization(Resources.SYSTEM, "*", userId, SystemPermissions.READ);
     managementService.setLicenseKey("testLicenseKey");
 
@@ -608,9 +608,9 @@ public class ManagementAuthorizationTest extends AuthorizationTest {
   // set license key /////////////////////////////////////
 
   @Test
-  public void shouldSetLicenseKeyAsCamundaAdmin() {
+  public void shouldSetLicenseKeyAsOrqueioAdmin() {
     // given
-    identityService.setAuthentication(userId, Collections.singletonList(Groups.CAMUNDA_ADMIN));
+    identityService.setAuthentication(userId, Collections.singletonList(Groups.ORQUEIO_ADMIN));
 
     // when
     managementService.setLicenseKey("testLicenseKey");
@@ -636,7 +636,7 @@ public class ManagementAuthorizationTest extends AuthorizationTest {
   @Test
   public void shouldSetLicenseKeyWithAdminAndPermission() {
     // given
-    identityService.setAuthentication(userId, Collections.singletonList(Groups.CAMUNDA_ADMIN));
+    identityService.setAuthentication(userId, Collections.singletonList(Groups.ORQUEIO_ADMIN));
     createGrantAuthorization(Resources.SYSTEM, "*", userId, SystemPermissions.SET);
 
     // when
@@ -661,9 +661,9 @@ public class ManagementAuthorizationTest extends AuthorizationTest {
   // delete license key //////////////////////////////////
 
   @Test
-  public void shouldDeleteLicenseKeyAsCamundaAdmin() {
+  public void shouldDeleteLicenseKeyAsOrqueioAdmin() {
     // given
-    identityService.setAuthentication(userId, Collections.singletonList(Groups.CAMUNDA_ADMIN));
+    identityService.setAuthentication(userId, Collections.singletonList(Groups.ORQUEIO_ADMIN));
     managementService.setLicenseKey("testLicenseKey");
 
     // when
@@ -694,7 +694,7 @@ public class ManagementAuthorizationTest extends AuthorizationTest {
   @Test
   public void shouldDeleteLicenseKeyWithAdminAndPermission() {
     // given
-    identityService.setAuthentication(userId, Collections.singletonList(Groups.CAMUNDA_ADMIN));
+    identityService.setAuthentication(userId, Collections.singletonList(Groups.ORQUEIO_ADMIN));
     createGrantAuthorization(Resources.SYSTEM, "*", userId, SystemPermissions.DELETE);
     managementService.setLicenseKey("testLicenseKey");
 
@@ -720,9 +720,9 @@ public class ManagementAuthorizationTest extends AuthorizationTest {
   // delete metrics //////////////////////////////////////
 
   @Test
-  public void shouldDeleteMetricsAsCamundaAdmin() {
+  public void shouldDeleteMetricsAsOrqueioAdmin() {
     // given
-    identityService.setAuthentication(userId, Collections.singletonList(Groups.CAMUNDA_ADMIN));
+    identityService.setAuthentication(userId, Collections.singletonList(Groups.ORQUEIO_ADMIN));
 
     processEngineConfiguration.getDbMetricsReporter().reportValueAtOnce(DUMMY_METRIC, 15);
 
@@ -750,7 +750,7 @@ public class ManagementAuthorizationTest extends AuthorizationTest {
   @Test
   public void shouldDeleteMetricsWithAdminAndPermission() {
     // given
-    identityService.setAuthentication(userId, Collections.singletonList(Groups.CAMUNDA_ADMIN));
+    identityService.setAuthentication(userId, Collections.singletonList(Groups.ORQUEIO_ADMIN));
     createGrantAuthorization(Resources.SYSTEM, "*", userId, SystemPermissions.DELETE);
 
     processEngineConfiguration.getDbMetricsReporter().reportValueAtOnce(DUMMY_METRIC, 15);
@@ -777,9 +777,9 @@ public class ManagementAuthorizationTest extends AuthorizationTest {
   // delete task metrics /////////////////////////////////
 
   @Test
-  public void shouldDeleteTaskMetricsAsCamundaAdmin() {
+  public void shouldDeleteTaskMetricsAsOrqueioAdmin() {
     // given
-    identityService.setAuthentication(userId, Collections.singletonList(Groups.CAMUNDA_ADMIN));
+    identityService.setAuthentication(userId, Collections.singletonList(Groups.ORQUEIO_ADMIN));
 
     // when
     managementService.deleteTaskMetrics(null);
@@ -805,7 +805,7 @@ public class ManagementAuthorizationTest extends AuthorizationTest {
   @Test
   public void shouldDeleteTaskMetricsWithAdminAndPermission() {
     // given
-    identityService.setAuthentication(userId, Collections.singletonList(Groups.CAMUNDA_ADMIN));
+    identityService.setAuthentication(userId, Collections.singletonList(Groups.ORQUEIO_ADMIN));
     createGrantAuthorization(Resources.SYSTEM, "*", userId, SystemPermissions.DELETE);
 
     // when
@@ -831,9 +831,9 @@ public class ManagementAuthorizationTest extends AuthorizationTest {
   // query schema log list //////////////////////////////////////////
 
   @Test
-  public void shouldExecuteSchemaLogListAsCamundaAdmin() {
+  public void shouldExecuteSchemaLogListAsOrqueioAdmin() {
     // given
-    identityService.setAuthentication(userId, Collections.singletonList(Groups.CAMUNDA_ADMIN));
+    identityService.setAuthentication(userId, Collections.singletonList(Groups.ORQUEIO_ADMIN));
 
     // when
     List<SchemaLogEntry> schemaLog = managementService.createSchemaLogQuery().list();
@@ -857,7 +857,7 @@ public class ManagementAuthorizationTest extends AuthorizationTest {
   @Test
   public void shouldExecuteSchemaLogListWithAdminAndPermission() {
     // given
-    identityService.setAuthentication(userId, Collections.singletonList(Groups.CAMUNDA_ADMIN));
+    identityService.setAuthentication(userId, Collections.singletonList(Groups.ORQUEIO_ADMIN));
     createGrantAuthorization(Resources.SYSTEM, "*", userId, SystemPermissions.READ);
 
     // when
@@ -881,9 +881,9 @@ public class ManagementAuthorizationTest extends AuthorizationTest {
   // query schema log count //////////////////////////////////////////
 
   @Test
-  public void shouldExecuteSchemaLogCountAsCamundaAdmin() {
+  public void shouldExecuteSchemaLogCountAsOrqueioAdmin() {
     // given
-    identityService.setAuthentication(userId, Collections.singletonList(Groups.CAMUNDA_ADMIN));
+    identityService.setAuthentication(userId, Collections.singletonList(Groups.ORQUEIO_ADMIN));
 
     // when
     long schemaLog = managementService.createSchemaLogQuery().count();
@@ -907,7 +907,7 @@ public class ManagementAuthorizationTest extends AuthorizationTest {
   @Test
   public void shouldExecuteSchemaLogCountWithAdminAndPermission() {
     // given
-    identityService.setAuthentication(userId, Collections.singletonList(Groups.CAMUNDA_ADMIN));
+    identityService.setAuthentication(userId, Collections.singletonList(Groups.ORQUEIO_ADMIN));
     createGrantAuthorization(Resources.SYSTEM, "*", userId, SystemPermissions.READ);
 
     // when

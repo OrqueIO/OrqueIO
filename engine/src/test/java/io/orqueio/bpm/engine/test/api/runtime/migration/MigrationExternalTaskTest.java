@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -160,8 +160,8 @@ public class MigrationExternalTaskTest {
     ProcessDefinition sourceProcessDefinition = testHelper.deployAndGetDefinition(ExternalTaskModels.ONE_EXTERNAL_TASK_PROCESS);
     ProcessDefinition targetProcessDefinition = testHelper.deployAndGetDefinition(modify(ExternalTaskModels.ONE_EXTERNAL_TASK_PROCESS)
         .serviceTaskBuilder("externalTask")
-        .camundaTopic("new" + ExternalTaskModels.TOPIC)
-        .camundaTaskPriority(Integer.toString(ExternalTaskModels.PRIORITY * 2))
+        .orqueioTopic("new" + ExternalTaskModels.TOPIC)
+        .orqueioTaskPriority(Integer.toString(ExternalTaskModels.PRIORITY * 2))
         .done());
 
     MigrationPlan migrationPlan = rule.getRuntimeService()
@@ -188,9 +188,9 @@ public class MigrationExternalTaskTest {
     ProcessDefinition targetProcessDefinition = testHelper.deployAndGetDefinition(ProcessModels.newModel()
         .startEvent()
         .businessRuleTask("externalBusinessRuleTask")
-          .camundaType(ExternalTaskModels.EXTERNAL_TASK_TYPE)
-          .camundaTopic(ExternalTaskModels.TOPIC)
-          .camundaTaskPriority(ExternalTaskModels.PRIORITY.toString())
+          .orqueioType(ExternalTaskModels.EXTERNAL_TASK_TYPE)
+          .orqueioTopic(ExternalTaskModels.TOPIC)
+          .orqueioTaskPriority(ExternalTaskModels.PRIORITY.toString())
         .endEvent()
         .done());
 
@@ -407,12 +407,12 @@ public class MigrationExternalTaskTest {
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/externaltask/ExternalTaskWithoutIdTest.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/externaltask/ExternalTaskWithoutIdTest.bpmn"})
   public void testProcessDefinitionWithoutIdField() {
      // given
 
-    ProcessDefinition sourceProcessDefinition = testHelper.deploy("org/camunda/bpm/engine/test/api/externaltask/ExternalTaskWithoutIdTest.bpmn").getDeployedProcessDefinitions().get(0);
-    ProcessDefinition targetProcessDefinition = testHelper.deploy("org/camunda/bpm/engine/test/api/externaltask/ExternalTaskWithoutIdTest.bpmn").getDeployedProcessDefinitions().get(0);
+    ProcessDefinition sourceProcessDefinition = testHelper.deploy("io/orqueio/bpm/engine/test/api/externaltask/ExternalTaskWithoutIdTest.bpmn").getDeployedProcessDefinitions().get(0);
+    ProcessDefinition targetProcessDefinition = testHelper.deploy("io/orqueio/bpm/engine/test/api/externaltask/ExternalTaskWithoutIdTest.bpmn").getDeployedProcessDefinitions().get(0);
 
     //external task is not mapped to new external task
     MigrationPlan migrationPlan = rule.getRuntimeService()
@@ -427,12 +427,12 @@ public class MigrationExternalTaskTest {
 
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/externaltask/ExternalTaskWithoutIdTest.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/externaltask/ExternalTaskWithoutIdTest.bpmn"})
   public void testProcessDefinitionWithIdField() {
      // given
 
-    ProcessDefinition sourceProcessDefinition = testHelper.deploy("org/camunda/bpm/engine/test/api/externaltask/ExternalTaskWithIdTest.bpmn").getDeployedProcessDefinitions().get(0);
-    ProcessDefinition targetProcessDefinition = testHelper.deploy("org/camunda/bpm/engine/test/api/externaltask/ExternalTaskWithIdTest.bpmn").getDeployedProcessDefinitions().get(0);
+    ProcessDefinition sourceProcessDefinition = testHelper.deploy("io/orqueio/bpm/engine/test/api/externaltask/ExternalTaskWithIdTest.bpmn").getDeployedProcessDefinitions().get(0);
+    ProcessDefinition targetProcessDefinition = testHelper.deploy("io/orqueio/bpm/engine/test/api/externaltask/ExternalTaskWithIdTest.bpmn").getDeployedProcessDefinitions().get(0);
 
     //external task is not mapped to new external task
     MigrationPlan migrationPlan = rule.getRuntimeService()

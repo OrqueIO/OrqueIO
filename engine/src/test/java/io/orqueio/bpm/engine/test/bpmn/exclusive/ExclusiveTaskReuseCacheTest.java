@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -37,31 +37,31 @@ public class ExclusiveTaskReuseCacheTest extends ExclusiveTaskTest {
     processEngineConfiguration.setDbEntityCacheReuseEnabled(false);
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/bpmn/exclusive/ExclusiveTaskTest.testNonExclusiveService.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/bpmn/exclusive/ExclusiveTaskTest.testNonExclusiveService.bpmn20.xml"})
   @Test
   public void testNonExclusiveService() {
     super.testNonExclusiveService();
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/bpmn/exclusive/ExclusiveTaskTest.testExclusiveService.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/bpmn/exclusive/ExclusiveTaskTest.testExclusiveService.bpmn20.xml"})
   @Test
   public void testExclusiveService() {
     super.testExclusiveService();
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/bpmn/exclusive/ExclusiveTaskTest.testExclusiveServiceConcurrent.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/bpmn/exclusive/ExclusiveTaskTest.testExclusiveServiceConcurrent.bpmn20.xml"})
   @Test
   public void testExclusiveServiceConcurrent() {
     super.testExclusiveServiceConcurrent();
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/bpmn/exclusive/ExclusiveTaskTest.testExclusiveSequence2.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/bpmn/exclusive/ExclusiveTaskTest.testExclusiveSequence2.bpmn20.xml"})
   @Test
   public void testExclusiveSequence2() {
     super.testExclusiveSequence2();
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/bpmn/exclusive/ExclusiveTaskTest.testExclusiveSequence3.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/bpmn/exclusive/ExclusiveTaskTest.testExclusiveSequence3.bpmn20.xml"})
   @Test
   public void testExclusiveSequence3() {
     super.testExclusiveSequence3();

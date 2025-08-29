@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -38,7 +38,7 @@ import org.junit.Test;
 @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_AUDIT)
 public class CompensateEventHistoryTest extends PluggableProcessEngineTest {
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/bpmn/event/compensate/CompensateEventHistoryTest.testBoundaryCompensationHandlerHistory.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/bpmn/event/compensate/CompensateEventHistoryTest.testBoundaryCompensationHandlerHistory.bpmn20.xml")
   @Test
   public void testBoundaryCompensationHandlerHistoryActivityInstance() {
     // given a process instance
@@ -68,7 +68,7 @@ public class CompensateEventHistoryTest extends PluggableProcessEngineTest {
     assertEquals(processInstance.getId(), historicCompensationHandlerInstance.getParentActivityInstanceId());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/bpmn/event/compensate/CompensateEventHistoryTest.testBoundaryCompensationHandlerHistory.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/bpmn/event/compensate/CompensateEventHistoryTest.testBoundaryCompensationHandlerHistory.bpmn20.xml")
   @Ignore("Fix CAM-4351")
   @Test
   public void testBoundaryCompensationHandlerHistoryVariableInstance() {
@@ -98,7 +98,7 @@ public class CompensateEventHistoryTest extends PluggableProcessEngineTest {
     assertEquals(compensationHandlerActivityInstanceId, historicVariableInstance.getActivityInstanceId());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/bpmn/event/compensate/CompensateEventHistoryTest.testDefaultCompensationHandlerHistory.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/bpmn/event/compensate/CompensateEventHistoryTest.testDefaultCompensationHandlerHistory.bpmn20.xml")
   @Test
   public void testDefaultCompensationHandlerHistoryActivityInstance() {
     // given a process instance
@@ -132,7 +132,7 @@ public class CompensateEventHistoryTest extends PluggableProcessEngineTest {
     assertEquals(subProcessActivityInstanceId, historicCompensationHandlerInstance.getParentActivityInstanceId());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/bpmn/event/compensate/CompensateEventHistoryTest.testDefaultCompensationHandlerHistory.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/bpmn/event/compensate/CompensateEventHistoryTest.testDefaultCompensationHandlerHistory.bpmn20.xml")
   @Ignore("Fix CAM-4351")
   @Test
   public void testDefaultCompensationHandlerHistoryVariableInstance() {

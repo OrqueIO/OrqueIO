@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -41,7 +41,7 @@ import io.orqueio.bpm.model.cmmn.instance.OnPart;
 import io.orqueio.bpm.model.cmmn.instance.PlanItem;
 import io.orqueio.bpm.model.cmmn.instance.PlanItemOnPart;
 import io.orqueio.bpm.model.cmmn.instance.Sentry;
-import io.orqueio.bpm.model.cmmn.instance.camunda.CamundaVariableOnPart;
+import io.orqueio.bpm.model.cmmn.instance.orqueio.OrqueioVariableOnPart;
 import io.orqueio.bpm.model.xml.instance.ModelElementInstance;
 
 /**
@@ -57,7 +57,7 @@ public class SentryHandler extends CmmnElementHandler<Sentry, CmmnSentryDeclarat
     String id = element.getId();
     Collection<OnPart> onParts = element.getOnParts();
     IfPart ifPart = element.getIfPart();
-    List<CamundaVariableOnPart> variableOnParts = queryExtensionElementsByClass(element, CamundaVariableOnPart.class);
+    List<OrqueioVariableOnPart> variableOnParts = queryExtensionElementsByClass(element, OrqueioVariableOnPart.class);
 
     if ((ifPart == null || ifPart.getConditions().isEmpty()) && variableOnParts.isEmpty()) {
 
@@ -184,13 +184,13 @@ public class SentryHandler extends CmmnElementHandler<Sentry, CmmnSentryDeclarat
   }
 
   protected void initializeVariableOnParts(CmmnElement element, CmmnSentryDeclaration sentryDeclaration, 
-    CmmnHandlerContext context, List<CamundaVariableOnPart> variableOnParts) {
-    for(CamundaVariableOnPart variableOnPart: variableOnParts) {
+    CmmnHandlerContext context, List<OrqueioVariableOnPart> variableOnParts) {
+    for(OrqueioVariableOnPart variableOnPart: variableOnParts) {
       initializeVariableOnPart(variableOnPart, sentryDeclaration, context);
     }
   }
 
-  protected void initializeVariableOnPart(CamundaVariableOnPart variableOnPart, CmmnSentryDeclaration sentryDeclaration, CmmnHandlerContext context) {
+  protected void initializeVariableOnPart(OrqueioVariableOnPart variableOnPart, CmmnSentryDeclaration sentryDeclaration, CmmnHandlerContext context) {
     VariableTransition variableTransition;
 
     try {

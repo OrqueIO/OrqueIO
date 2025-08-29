@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -31,14 +31,14 @@ public class MultiTenancyBusinessRuleTaskTest extends PluggableProcessEngineTest
   protected static final String TENANT_ONE = "tenant1";
   protected static final String TENANT_TWO = "tenant2";
 
-  protected static final String DMN_FILE = "org/camunda/bpm/engine/test/api/multitenancy/simpleDecisionTable.dmn";
-  protected static final String DMN_FILE_VERSION_TWO = "org/camunda/bpm/engine/test/api/multitenancy/simpleDecisionTable_v2.dmn";
+  protected static final String DMN_FILE = "io/orqueio/bpm/engine/test/api/multitenancy/simpleDecisionTable.dmn";
+  protected static final String DMN_FILE_VERSION_TWO = "io/orqueio/bpm/engine/test/api/multitenancy/simpleDecisionTable_v2.dmn";
 
   protected static final String RESULT_OF_VERSION_ONE = "A";
   protected static final String RESULT_OF_VERSION_TWO = "C";
 
-  public static final String DMN_FILE_VERSION_TAG = "org/camunda/bpm/engine/test/dmn/businessruletask/DmnBusinessRuleTaskTest.testDecisionVersionTagOkay.dmn11.xml";
-  public static final String DMN_FILE_VERSION_TAG_TWO = "org/camunda/bpm/engine/test/dmn/businessruletask/DmnBusinessRuleTaskTest.testDecisionVersionTagOkay_v2.dmn11.xml";
+  public static final String DMN_FILE_VERSION_TAG = "io/orqueio/bpm/engine/test/dmn/businessruletask/DmnBusinessRuleTaskTest.testDecisionVersionTagOkay.dmn11.xml";
+  public static final String DMN_FILE_VERSION_TAG_TWO = "io/orqueio/bpm/engine/test/dmn/businessruletask/DmnBusinessRuleTaskTest.testDecisionVersionTagOkay_v2.dmn11.xml";
 
   protected static final String RESULT_OF_VERSION_TAG_ONE = "A";
   protected static final String RESULT_OF_VERSION_TAG_TWO = "C";
@@ -49,11 +49,11 @@ public class MultiTenancyBusinessRuleTaskTest extends PluggableProcessEngineTest
     BpmnModelInstance process = Bpmn.createExecutableProcess("process")
         .startEvent()
         .businessRuleTask()
-          .camundaDecisionRef("decision")
-          .camundaDecisionRefBinding("deployment")
-          .camundaMapDecisionResult("singleEntry")
-          .camundaResultVariable("decisionVar")
-        .camundaAsyncAfter()
+          .orqueioDecisionRef("decision")
+          .orqueioDecisionRefBinding("deployment")
+          .orqueioMapDecisionResult("singleEntry")
+          .orqueioResultVariable("decisionVar")
+        .orqueioAsyncAfter()
         .endEvent()
         .done();
 
@@ -78,11 +78,11 @@ public class MultiTenancyBusinessRuleTaskTest extends PluggableProcessEngineTest
     BpmnModelInstance process = Bpmn.createExecutableProcess("process")
         .startEvent()
         .businessRuleTask()
-          .camundaDecisionRef("decision")
-          .camundaDecisionRefBinding("latest")
-          .camundaMapDecisionResult("singleEntry")
-          .camundaResultVariable("decisionVar")
-        .camundaAsyncAfter()
+          .orqueioDecisionRef("decision")
+          .orqueioDecisionRefBinding("latest")
+          .orqueioMapDecisionResult("singleEntry")
+          .orqueioResultVariable("decisionVar")
+        .orqueioAsyncAfter()
         .endEvent()
         .done();
 
@@ -107,11 +107,11 @@ public class MultiTenancyBusinessRuleTaskTest extends PluggableProcessEngineTest
     BpmnModelInstance process = Bpmn.createExecutableProcess("process")
         .startEvent()
         .businessRuleTask()
-          .camundaDecisionRef("decision")
-          .camundaDecisionRefBinding("latest")
-          .camundaMapDecisionResult("singleEntry")
-          .camundaResultVariable("decisionVar")
-        .camundaAsyncAfter()
+          .orqueioDecisionRef("decision")
+          .orqueioDecisionRefBinding("latest")
+          .orqueioMapDecisionResult("singleEntry")
+          .orqueioResultVariable("decisionVar")
+        .orqueioAsyncAfter()
         .endEvent()
         .done();
 
@@ -138,12 +138,12 @@ public class MultiTenancyBusinessRuleTaskTest extends PluggableProcessEngineTest
     BpmnModelInstance process = Bpmn.createExecutableProcess("process")
         .startEvent()
         .businessRuleTask()
-          .camundaDecisionRef("decision")
-          .camundaDecisionRefBinding("version")
-          .camundaDecisionRefVersion("1")
-          .camundaMapDecisionResult("singleEntry")
-          .camundaResultVariable("decisionVar")
-        .camundaAsyncAfter()
+          .orqueioDecisionRef("decision")
+          .orqueioDecisionRefBinding("version")
+          .orqueioDecisionRefVersion("1")
+          .orqueioMapDecisionResult("singleEntry")
+          .orqueioResultVariable("decisionVar")
+        .orqueioAsyncAfter()
         .endEvent()
         .done();
 
@@ -172,14 +172,14 @@ public class MultiTenancyBusinessRuleTaskTest extends PluggableProcessEngineTest
     testRule.deploy(Bpmn.createExecutableProcess("process")
         .startEvent()
         .businessRuleTask()
-          .camundaDecisionRef("decision")
-          .camundaDecisionRefTenantId(TENANT_ONE)
-          .camundaDecisionRefBinding("versionTag")
-          .camundaDecisionRefVersionTag("0.0.2")
-          .camundaMapDecisionResult("singleEntry")
-          .camundaResultVariable("decisionVar")
+          .orqueioDecisionRef("decision")
+          .orqueioDecisionRefTenantId(TENANT_ONE)
+          .orqueioDecisionRefBinding("versionTag")
+          .orqueioDecisionRefVersionTag("0.0.2")
+          .orqueioMapDecisionResult("singleEntry")
+          .orqueioResultVariable("decisionVar")
         .endEvent()
-          .camundaAsyncBefore()
+          .orqueioAsyncBefore()
         .done());
 
     // when
@@ -197,13 +197,13 @@ public class MultiTenancyBusinessRuleTaskTest extends PluggableProcessEngineTest
     BpmnModelInstance process = Bpmn.createExecutableProcess("process")
         .startEvent()
         .businessRuleTask()
-          .camundaDecisionRef("decision")
-          .camundaDecisionRefBinding("versionTag")
-          .camundaDecisionRefVersionTag("0.0.2")
-          .camundaMapDecisionResult("singleEntry")
-          .camundaResultVariable("decisionVar")
+          .orqueioDecisionRef("decision")
+          .orqueioDecisionRefBinding("versionTag")
+          .orqueioDecisionRefVersionTag("0.0.2")
+          .orqueioMapDecisionResult("singleEntry")
+          .orqueioResultVariable("decisionVar")
         .endEvent()
-          .camundaAsyncBefore()
+          .orqueioAsyncBefore()
         .done();
 
     testRule.deployForTenant(TENANT_ONE, process, DMN_FILE_VERSION_TAG);
@@ -227,9 +227,9 @@ public class MultiTenancyBusinessRuleTaskTest extends PluggableProcessEngineTest
     BpmnModelInstance process = Bpmn.createExecutableProcess("process")
         .startEvent()
         .businessRuleTask()
-          .camundaDecisionRef("decision")
-          .camundaDecisionRefBinding("deployment")
-        .camundaAsyncAfter()
+          .orqueioDecisionRef("decision")
+          .orqueioDecisionRefBinding("deployment")
+        .orqueioAsyncAfter()
         .endEvent()
         .done();
 
@@ -253,9 +253,9 @@ public class MultiTenancyBusinessRuleTaskTest extends PluggableProcessEngineTest
     BpmnModelInstance process = Bpmn.createExecutableProcess("process")
         .startEvent()
         .businessRuleTask()
-          .camundaDecisionRef("decision")
-          .camundaDecisionRefBinding("latest")
-        .camundaAsyncAfter()
+          .orqueioDecisionRef("decision")
+          .orqueioDecisionRefBinding("latest")
+        .orqueioAsyncAfter()
         .endEvent()
         .done();
 
@@ -279,10 +279,10 @@ public class MultiTenancyBusinessRuleTaskTest extends PluggableProcessEngineTest
     BpmnModelInstance process = Bpmn.createExecutableProcess("process")
         .startEvent()
         .businessRuleTask()
-          .camundaDecisionRef("decision")
-          .camundaDecisionRefBinding("version")
-          .camundaDecisionRefVersion("2")
-        .camundaAsyncAfter()
+          .orqueioDecisionRef("decision")
+          .orqueioDecisionRefBinding("version")
+          .orqueioDecisionRefVersion("2")
+        .orqueioAsyncAfter()
         .endEvent()
         .done();
 
@@ -308,12 +308,12 @@ public class MultiTenancyBusinessRuleTaskTest extends PluggableProcessEngineTest
     BpmnModelInstance process = Bpmn.createExecutableProcess("process")
         .startEvent()
         .businessRuleTask()
-        .camundaDecisionRef("decision")
-        .camundaDecisionRefBinding("versionTag")
-        .camundaDecisionRefVersionTag("0.0.2")
-        .camundaMapDecisionResult("singleEntry")
-        .camundaResultVariable("result")
-        .camundaAsyncAfter()
+        .orqueioDecisionRef("decision")
+        .orqueioDecisionRefBinding("versionTag")
+        .orqueioDecisionRefVersionTag("0.0.2")
+        .orqueioMapDecisionResult("singleEntry")
+        .orqueioResultVariable("result")
+        .orqueioAsyncAfter()
         .endEvent()
         .done();
 
@@ -340,12 +340,12 @@ public class MultiTenancyBusinessRuleTaskTest extends PluggableProcessEngineTest
     BpmnModelInstance process = Bpmn.createExecutableProcess("process")
         .startEvent()
         .businessRuleTask()
-          .camundaDecisionRef("decision")
-          .camundaDecisionRefBinding("latest")
-          .camundaDecisionRefTenantId(TENANT_ONE)
-          .camundaMapDecisionResult("singleEntry")
-          .camundaResultVariable("decisionVar")
-        .camundaAsyncAfter()
+          .orqueioDecisionRef("decision")
+          .orqueioDecisionRefBinding("latest")
+          .orqueioDecisionRefTenantId(TENANT_ONE)
+          .orqueioMapDecisionResult("singleEntry")
+          .orqueioResultVariable("decisionVar")
+        .orqueioAsyncAfter()
         .endEvent()
         .done();
 
@@ -365,12 +365,12 @@ public class MultiTenancyBusinessRuleTaskTest extends PluggableProcessEngineTest
     BpmnModelInstance process = Bpmn.createExecutableProcess("process")
         .startEvent()
         .businessRuleTask()
-          .camundaDecisionRef("decision")
-          .camundaDecisionRefBinding("latest")
-          .camundaDecisionRefTenantId("${null}")
-          .camundaMapDecisionResult("singleEntry")
-          .camundaResultVariable("decisionVar")
-        .camundaAsyncAfter()
+          .orqueioDecisionRef("decision")
+          .orqueioDecisionRefBinding("latest")
+          .orqueioDecisionRefTenantId("${null}")
+          .orqueioMapDecisionResult("singleEntry")
+          .orqueioResultVariable("decisionVar")
+        .orqueioAsyncAfter()
         .endEvent()
         .done();
 
@@ -390,12 +390,12 @@ public class MultiTenancyBusinessRuleTaskTest extends PluggableProcessEngineTest
     BpmnModelInstance process = Bpmn.createExecutableProcess("process")
         .startEvent()
         .businessRuleTask()
-          .camundaDecisionRef("decision")
-          .camundaDecisionRefBinding("latest")
-          .camundaDecisionRefTenantId("${'"+TENANT_ONE+"'}")
-          .camundaMapDecisionResult("singleEntry")
-          .camundaResultVariable("decisionVar")
-        .camundaAsyncAfter()
+          .orqueioDecisionRef("decision")
+          .orqueioDecisionRefBinding("latest")
+          .orqueioDecisionRefTenantId("${'"+TENANT_ONE+"'}")
+          .orqueioMapDecisionResult("singleEntry")
+          .orqueioResultVariable("decisionVar")
+        .orqueioAsyncAfter()
         .endEvent()
         .done();
 
@@ -415,12 +415,12 @@ public class MultiTenancyBusinessRuleTaskTest extends PluggableProcessEngineTest
     BpmnModelInstance process = Bpmn.createExecutableProcess("process")
       .startEvent()
       .businessRuleTask()
-      .camundaDecisionRef("decision")
-      .camundaDecisionRefBinding("latest")
-      .camundaDecisionRefTenantId("tenant${'1'}")
-      .camundaMapDecisionResult("singleEntry")
-      .camundaResultVariable("decisionVar")
-      .camundaAsyncAfter()
+      .orqueioDecisionRef("decision")
+      .orqueioDecisionRefBinding("latest")
+      .orqueioDecisionRefTenantId("tenant${'1'}")
+      .orqueioMapDecisionResult("singleEntry")
+      .orqueioResultVariable("decisionVar")
+      .orqueioAsyncAfter()
       .endEvent()
       .done();
     testRule.deployForTenant(TENANT_ONE, DMN_FILE);

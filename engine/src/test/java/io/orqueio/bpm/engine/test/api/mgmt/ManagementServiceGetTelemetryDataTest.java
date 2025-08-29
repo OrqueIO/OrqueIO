@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -98,7 +98,7 @@ public class ManagementServiceGetTelemetryDataTest {
   @Test
   public void shouldReturnLicenseKey() {
     // given
-    managementService.setLicenseKeyForDiagnostics(new LicenseKeyDataImpl("customer a", "UNIFIED", "2029-09-01", false, Collections.singletonMap("camundaBPM", "true"), "raw license"));
+    managementService.setLicenseKeyForDiagnostics(new LicenseKeyDataImpl("customer a", "UNIFIED", "2029-09-01", false, Collections.singletonMap("orqueioBPM", "true"), "raw license"));
 
     // when
     TelemetryData telemetryData = managementService.getTelemetryData();
@@ -107,7 +107,7 @@ public class ManagementServiceGetTelemetryDataTest {
     assertThat(telemetryData.getProduct().getInternals().getLicenseKey().getCustomer()).isEqualTo("customer a");
     assertThat(telemetryData.getProduct().getInternals().getLicenseKey().getType()).isEqualTo("UNIFIED");
     assertThat(telemetryData.getProduct().getInternals().getLicenseKey().getValidUntil()).isEqualTo("2029-09-01");
-    assertThat(telemetryData.getProduct().getInternals().getLicenseKey().getFeatures()).isEqualTo(Collections.singletonMap("camundaBPM", "true"));
+    assertThat(telemetryData.getProduct().getInternals().getLicenseKey().getFeatures()).isEqualTo(Collections.singletonMap("orqueioBPM", "true"));
     assertThat(telemetryData.getProduct().getInternals().getLicenseKey().getRaw()).isEqualTo("raw license");
     assertThat(telemetryData.getProduct().getInternals().getLicenseKey().isUnlimited()).isFalse();
   }
@@ -132,7 +132,7 @@ public class ManagementServiceGetTelemetryDataTest {
     TelemetryData telemetryData = managementService.getTelemetryData();
 
     // then
-    assertThat(telemetryData.getProduct().getName()).isEqualTo("Camunda BPM Runtime");
+    assertThat(telemetryData.getProduct().getName()).isEqualTo("Orqueio BPM Runtime");
     assertThat(telemetryData.getProduct().getEdition()).isEqualTo("community");
     assertThat(telemetryData.getProduct().getVersion()).isEqualTo(ParseUtil.parseProcessEngineVersion(true).getVersion());
   }
@@ -237,7 +237,7 @@ public class ManagementServiceGetTelemetryDataTest {
   }
 
   @Test
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
   public void shouldNotResetMetricsCount() {
     // given default telemetry data and empty telemetry registry
     // create metrics data
@@ -253,7 +253,7 @@ public class ManagementServiceGetTelemetryDataTest {
   }
 
   @Test
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
   public void shouldCollectMetrics_TelemetryDisabled() {
     // given default configuration
 
@@ -268,7 +268,7 @@ public class ManagementServiceGetTelemetryDataTest {
   }
 
   @Test
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
   @SuppressWarnings("deprecation")
   public void shouldCollectCommands_TelemetryDisabled() {
     // given default configuration

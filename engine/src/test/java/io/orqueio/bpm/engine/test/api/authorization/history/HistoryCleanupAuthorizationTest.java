@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -76,15 +76,15 @@ public class HistoryCleanupAuthorizationTest extends AuthorizationTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/dmn/businessruletask/DmnBusinessRuleTaskTest.testDecisionRef.bpmn20.xml",
-      "org/camunda/bpm/engine/test/api/history/testDmnWithPojo.dmn11.xml", "org/camunda/bpm/engine/test/api/authorization/oneTaskCase.cmmn" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/dmn/businessruletask/DmnBusinessRuleTaskTest.testDecisionRef.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/api/history/testDmnWithPojo.dmn11.xml", "io/orqueio/bpm/engine/test/api/authorization/oneTaskCase.cmmn" })
   public void testHistoryCleanupWithAuthorization() {
     // given
     prepareInstances(5, 5, 5);
 
     ClockUtil.setCurrentTime(new Date());
     // when
-    identityService.setAuthentication("user", Collections.singletonList(Groups.CAMUNDA_ADMIN), null);
+    identityService.setAuthentication("user", Collections.singletonList(Groups.ORQUEIO_ADMIN), null);
 
     String jobId = historyService.cleanUpHistoryAsync(true).getId();
 
@@ -95,8 +95,8 @@ public class HistoryCleanupAuthorizationTest extends AuthorizationTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/dmn/businessruletask/DmnBusinessRuleTaskTest.testDecisionRef.bpmn20.xml",
-      "org/camunda/bpm/engine/test/api/history/testDmnWithPojo.dmn11.xml", "org/camunda/bpm/engine/test/api/authorization/oneTaskCase.cmmn" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/dmn/businessruletask/DmnBusinessRuleTaskTest.testDecisionRef.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/api/history/testDmnWithPojo.dmn11.xml", "io/orqueio/bpm/engine/test/api/authorization/oneTaskCase.cmmn" })
   public void testHistoryCleanupWithoutAuthorization() {
     // given
     prepareInstances(5, 5, 5);

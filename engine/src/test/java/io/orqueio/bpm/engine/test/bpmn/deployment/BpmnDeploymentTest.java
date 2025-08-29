@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -82,7 +82,7 @@ public class BpmnDeploymentTest extends PluggableProcessEngineTest {
 
     // verify bpmn file name
     assertThat(deploymentResources.size()).isEqualTo(1);
-    String bpmnResourceName = "org/camunda/bpm/engine/test/bpmn/deployment/BpmnDeploymentTest.testGetBpmnXmlFileThroughService.bpmn20.xml";
+    String bpmnResourceName = "io/orqueio/bpm/engine/test/bpmn/deployment/BpmnDeploymentTest.testGetBpmnXmlFileThroughService.bpmn20.xml";
     assertThat(deploymentResources.get(0)).isEqualTo(bpmnResourceName);
 
     ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery().singleResult();
@@ -99,7 +99,7 @@ public class BpmnDeploymentTest extends PluggableProcessEngineTest {
     assertThat(contentFromDeployment.length() > 0).isTrue();
     assertThat(contentFromDeployment.contains("process id=\"emptyProcess\"")).isTrue();
 
-    InputStream fileInputStream = ReflectUtil.getResourceAsStream("org/camunda/bpm/engine/test/bpmn/deployment/BpmnDeploymentTest.testGetBpmnXmlFileThroughService.bpmn20.xml");
+    InputStream fileInputStream = ReflectUtil.getResourceAsStream("io/orqueio/bpm/engine/test/bpmn/deployment/BpmnDeploymentTest.testGetBpmnXmlFileThroughService.bpmn20.xml");
     String contentFromFile = readInputStreamToString(fileInputStream);
     assertThat(contentFromDeployment).isEqualTo(contentFromFile);
   }
@@ -112,7 +112,7 @@ public class BpmnDeploymentTest extends PluggableProcessEngineTest {
   public void FAILING_testViolateProcessDefinitionIdMaximumLength() {
     // given
     DeploymentBuilder deployment = repositoryService.createDeployment()
-        .addClasspathResource("org/camunda/bpm/engine/test/bpmn/deployment/processWithLongId.bpmn20.xml");
+        .addClasspathResource("io/orqueio/bpm/engine/test/bpmn/deployment/processWithLongId.bpmn20.xml");
     // when
     assertThatThrownBy(() -> testRule.deploy(deployment))
       .hasMessageContaining("id can be maximum 64 characters");
@@ -122,7 +122,7 @@ public class BpmnDeploymentTest extends PluggableProcessEngineTest {
 
   @Test
   public void testDeploySameFileTwice() {
-    String bpmnResourceName = "org/camunda/bpm/engine/test/bpmn/deployment/BpmnDeploymentTest.testGetBpmnXmlFileThroughService.bpmn20.xml";
+    String bpmnResourceName = "io/orqueio/bpm/engine/test/bpmn/deployment/BpmnDeploymentTest.testGetBpmnXmlFileThroughService.bpmn20.xml";
     testRule.deploy(repositoryService.createDeployment()
         .enableDuplicateFiltering(false)
         .addClasspathResource(bpmnResourceName)
@@ -145,7 +145,7 @@ public class BpmnDeploymentTest extends PluggableProcessEngineTest {
   @Test
   public void shouldNotFilterDuplicateWithSameFileDeployedTwiceWithoutDeploymentName() {
     // given
-    String bpmnResourceName = "org/camunda/bpm/engine/test/bpmn/deployment/BpmnDeploymentTest.testGetBpmnXmlFileThroughService.bpmn20.xml";
+    String bpmnResourceName = "io/orqueio/bpm/engine/test/bpmn/deployment/BpmnDeploymentTest.testGetBpmnXmlFileThroughService.bpmn20.xml";
     testRule.deploy(repositoryService.createDeployment()
         .enableDuplicateFiltering(false)
         .addClasspathResource(bpmnResourceName));
@@ -199,9 +199,9 @@ public class BpmnDeploymentTest extends PluggableProcessEngineTest {
   public void testDuplicateFilteringDefaultBehavior() {
     // given
     BpmnModelInstance oldModel = Bpmn.createExecutableProcess("versionedProcess")
-      .camundaVersionTag("3").done();
+      .orqueioVersionTag("3").done();
     BpmnModelInstance newModel = Bpmn.createExecutableProcess("versionedProcess")
-      .camundaVersionTag("1").done();
+      .orqueioVersionTag("1").done();
 
     testRule.deploy(repositoryService.createDeployment()
       .enableDuplicateFiltering(true)
@@ -224,9 +224,9 @@ public class BpmnDeploymentTest extends PluggableProcessEngineTest {
     // given
     processEngineConfiguration.setDeploymentHandlerFactory(customDeploymentHandlerFactory);
     BpmnModelInstance oldModel = Bpmn.createExecutableProcess("versionedProcess")
-      .camundaVersionTag("1").startEvent().done();
+      .orqueioVersionTag("1").startEvent().done();
     BpmnModelInstance newModel = Bpmn.createExecutableProcess("versionedProcess")
-      .camundaVersionTag("2").startEvent().done();
+      .orqueioVersionTag("2").startEvent().done();
 
     DeploymentWithDefinitions deployment1 = testRule.deploy(repositoryService.createDeployment()
         .enableDuplicateFiltering(true)
@@ -355,8 +355,8 @@ public class BpmnDeploymentTest extends PluggableProcessEngineTest {
   @Test
   public void testDeployTwoProcessesWithDuplicateIdAtTheSameTime() {
     // given
-    String bpmnResourceName = "org/camunda/bpm/engine/test/bpmn/deployment/BpmnDeploymentTest.testGetBpmnXmlFileThroughService.bpmn20.xml";
-    String bpmnResourceName2 = "org/camunda/bpm/engine/test/bpmn/deployment/BpmnDeploymentTest.testGetBpmnXmlFileThroughService2.bpmn20.xml";
+    String bpmnResourceName = "io/orqueio/bpm/engine/test/bpmn/deployment/BpmnDeploymentTest.testGetBpmnXmlFileThroughService.bpmn20.xml";
+    String bpmnResourceName2 = "io/orqueio/bpm/engine/test/bpmn/deployment/BpmnDeploymentTest.testGetBpmnXmlFileThroughService2.bpmn20.xml";
     // when
     assertThatThrownBy(() -> testRule.deploy(repositoryService.createDeployment()
         .enableDuplicateFiltering(false)
@@ -369,7 +369,7 @@ public class BpmnDeploymentTest extends PluggableProcessEngineTest {
 
   @Test
   public void testDeployDifferentFiles() {
-    String bpmnResourceName = "org/camunda/bpm/engine/test/bpmn/deployment/BpmnDeploymentTest.testGetBpmnXmlFileThroughService.bpmn20.xml";
+    String bpmnResourceName = "io/orqueio/bpm/engine/test/bpmn/deployment/BpmnDeploymentTest.testGetBpmnXmlFileThroughService.bpmn20.xml";
     testRule.deploy(repositoryService.createDeployment()
         .enableDuplicateFiltering(false)
         .addClasspathResource(bpmnResourceName)
@@ -382,7 +382,7 @@ public class BpmnDeploymentTest extends PluggableProcessEngineTest {
     assertThat(deploymentResources.size()).isEqualTo(1);
     assertThat(deploymentResources.get(0)).isEqualTo(bpmnResourceName);
 
-    bpmnResourceName = "org/camunda/bpm/engine/test/bpmn/deployment/BpmnDeploymentTest.testProcessDiagramResource.bpmn20.xml";
+    bpmnResourceName = "io/orqueio/bpm/engine/test/bpmn/deployment/BpmnDeploymentTest.testProcessDiagramResource.bpmn20.xml";
     testRule.deploy(repositoryService.createDeployment()
         .enableDuplicateFiltering(false)
         .addClasspathResource(bpmnResourceName)
@@ -394,7 +394,7 @@ public class BpmnDeploymentTest extends PluggableProcessEngineTest {
   @Test
   public void testDiagramCreationDisabled() {
     testRule.deploy(repositoryService.createDeployment()
-        .addClasspathResource("org/camunda/bpm/engine/test/bpmn/parse/BpmnParseTest.testParseDiagramInterchangeElements.bpmn20.xml"));
+        .addClasspathResource("io/orqueio/bpm/engine/test/bpmn/parse/BpmnParseTest.testParseDiagramInterchangeElements.bpmn20.xml"));
 
     // Graphical information is not yet exposed publicly, so we need to do some plumbing
     CommandExecutor commandExecutor = processEngineConfiguration.getCommandExecutorTxRequired();
@@ -416,31 +416,31 @@ public class BpmnDeploymentTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources={
-    "org/camunda/bpm/engine/test/bpmn/deployment/BpmnDeploymentTest.testProcessDiagramResource.bpmn20.xml",
-    "org/camunda/bpm/engine/test/bpmn/deployment/BpmnDeploymentTest.testProcessDiagramResource.jpg"
+    "io/orqueio/bpm/engine/test/bpmn/deployment/BpmnDeploymentTest.testProcessDiagramResource.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/bpmn/deployment/BpmnDeploymentTest.testProcessDiagramResource.jpg"
   })
   @Test
   public void testProcessDiagramResource() {
     ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery().singleResult();
 
-    assertThat(processDefinition.getResourceName()).isEqualTo("org/camunda/bpm/engine/test/bpmn/deployment/BpmnDeploymentTest.testProcessDiagramResource.bpmn20.xml");
+    assertThat(processDefinition.getResourceName()).isEqualTo("io/orqueio/bpm/engine/test/bpmn/deployment/BpmnDeploymentTest.testProcessDiagramResource.bpmn20.xml");
     assertThat(processDefinition.hasStartFormKey()).isTrue();
 
     String diagramResourceName = processDefinition.getDiagramResourceName();
-    assertThat(diagramResourceName).isEqualTo("org/camunda/bpm/engine/test/bpmn/deployment/BpmnDeploymentTest.testProcessDiagramResource.jpg");
+    assertThat(diagramResourceName).isEqualTo("io/orqueio/bpm/engine/test/bpmn/deployment/BpmnDeploymentTest.testProcessDiagramResource.jpg");
 
     InputStream diagramStream = repositoryService
         .getResourceAsStream(processDefinition.getDeploymentId(),
-                             "org/camunda/bpm/engine/test/bpmn/deployment/BpmnDeploymentTest.testProcessDiagramResource.jpg");
+                             "io/orqueio/bpm/engine/test/bpmn/deployment/BpmnDeploymentTest.testProcessDiagramResource.jpg");
     byte[] diagramBytes = IoUtil.readInputStream(diagramStream, "diagram stream");
     assertThat(diagramBytes.length).isEqualTo(33343);
   }
 
   @Deployment(resources={
-          "org/camunda/bpm/engine/test/bpmn/deployment/BpmnDeploymentTest.testMultipleDiagramResourcesProvided.bpmn20.xml",
-          "org/camunda/bpm/engine/test/bpmn/deployment/BpmnDeploymentTest.testMultipleDiagramResourcesProvided.a.jpg",
-          "org/camunda/bpm/engine/test/bpmn/deployment/BpmnDeploymentTest.testMultipleDiagramResourcesProvided.b.jpg",
-          "org/camunda/bpm/engine/test/bpmn/deployment/BpmnDeploymentTest.testMultipleDiagramResourcesProvided.c.jpg"
+          "io/orqueio/bpm/engine/test/bpmn/deployment/BpmnDeploymentTest.testMultipleDiagramResourcesProvided.bpmn20.xml",
+          "io/orqueio/bpm/engine/test/bpmn/deployment/BpmnDeploymentTest.testMultipleDiagramResourcesProvided.a.jpg",
+          "io/orqueio/bpm/engine/test/bpmn/deployment/BpmnDeploymentTest.testMultipleDiagramResourcesProvided.b.jpg",
+          "io/orqueio/bpm/engine/test/bpmn/deployment/BpmnDeploymentTest.testMultipleDiagramResourcesProvided.c.jpg"
         })
   @Test
   public void testMultipleDiagramResourcesProvided() {
@@ -448,9 +448,9 @@ public class BpmnDeploymentTest extends PluggableProcessEngineTest {
     ProcessDefinition processB = repositoryService.createProcessDefinitionQuery().processDefinitionKey("b").singleResult();
     ProcessDefinition processC = repositoryService.createProcessDefinitionQuery().processDefinitionKey("c").singleResult();
 
-    assertThat(processA.getDiagramResourceName()).isEqualTo("org/camunda/bpm/engine/test/bpmn/deployment/BpmnDeploymentTest.testMultipleDiagramResourcesProvided.a.jpg");
-    assertThat(processB.getDiagramResourceName()).isEqualTo("org/camunda/bpm/engine/test/bpmn/deployment/BpmnDeploymentTest.testMultipleDiagramResourcesProvided.b.jpg");
-    assertThat(processC.getDiagramResourceName()).isEqualTo("org/camunda/bpm/engine/test/bpmn/deployment/BpmnDeploymentTest.testMultipleDiagramResourcesProvided.c.jpg");
+    assertThat(processA.getDiagramResourceName()).isEqualTo("io/orqueio/bpm/engine/test/bpmn/deployment/BpmnDeploymentTest.testMultipleDiagramResourcesProvided.a.jpg");
+    assertThat(processB.getDiagramResourceName()).isEqualTo("io/orqueio/bpm/engine/test/bpmn/deployment/BpmnDeploymentTest.testMultipleDiagramResourcesProvided.b.jpg");
+    assertThat(processC.getDiagramResourceName()).isEqualTo("io/orqueio/bpm/engine/test/bpmn/deployment/BpmnDeploymentTest.testMultipleDiagramResourcesProvided.c.jpg");
   }
 
   @Deployment
@@ -467,7 +467,7 @@ public class BpmnDeploymentTest extends PluggableProcessEngineTest {
     // ACT-1391: Deploying a process with invalid expressions inside should cause the deployment to fail, since
     // the process is not deployed and useless
     DeploymentBuilder deployment = repositoryService.createDeployment()
-      .addClasspathResource("org/camunda/bpm/engine/test/bpmn/deployment/BpmnDeploymentTest.testInvalidExpression.bpmn20.xml");
+      .addClasspathResource("io/orqueio/bpm/engine/test/bpmn/deployment/BpmnDeploymentTest.testInvalidExpression.bpmn20.xml");
     // when
     assertThatThrownBy(() -> testRule.deploy(deployment))
       .isInstanceOf(ProcessEngineException.class)
@@ -477,7 +477,7 @@ public class BpmnDeploymentTest extends PluggableProcessEngineTest {
     assertThat(repositoryService.createDeploymentQuery().count()).isEqualTo(0);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/deployment/BpmnDeploymentTest.testGetBpmnXmlFileThroughService.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/bpmn/deployment/BpmnDeploymentTest.testGetBpmnXmlFileThroughService.bpmn20.xml"})
   @Test
   public void testDeploymentIdOfResource() {
     String deploymentId = repositoryService.createDeploymentQuery().singleResult().getId();

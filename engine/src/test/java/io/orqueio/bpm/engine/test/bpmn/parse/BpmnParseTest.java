@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -419,20 +419,20 @@ public class BpmnParseTest {
   @Test
   public void testParseWithBpmnNamespacePrefix() {
     repositoryService.createDeployment()
-        .addClasspathResource("org/camunda/bpm/engine/test/bpmn/parse/BpmnParseTest.testParseWithBpmnNamespacePrefix.bpmn20.xml").deploy();
+        .addClasspathResource("io/orqueio/bpm/engine/test/bpmn/parse/BpmnParseTest.testParseWithBpmnNamespacePrefix.bpmn20.xml").deploy();
     assertEquals(1, repositoryService.createProcessDefinitionQuery().count());
   }
 
   @Test
   public void testParseWithMultipleDocumentation() {
     repositoryService.createDeployment()
-        .addClasspathResource("org/camunda/bpm/engine/test/bpmn/parse/BpmnParseTest.testParseWithMultipleDocumentation.bpmn20.xml").deploy();
+        .addClasspathResource("io/orqueio/bpm/engine/test/bpmn/parse/BpmnParseTest.testParseWithMultipleDocumentation.bpmn20.xml").deploy();
     assertEquals(1, repositoryService.createProcessDefinitionQuery().count());
   }
 
   @Test
   public void testParseCollaborationPlane() {
-    repositoryService.createDeployment().addClasspathResource("org/camunda/bpm/engine/test/bpmn/parse/BpmnParseTest.testParseCollaborationPlane.bpmn").deploy();
+    repositoryService.createDeployment().addClasspathResource("io/orqueio/bpm/engine/test/bpmn/parse/BpmnParseTest.testParseCollaborationPlane.bpmn").deploy();
     assertEquals(1, repositoryService.createProcessDefinitionQuery().count());
   }
 
@@ -562,7 +562,7 @@ public class BpmnParseTest {
 
   @Test
   @Deployment
-  public void testParseDefinitionWithCamundaNamespace(){
+  public void testParseDefinitionWithOrqueioNamespace(){
 
   }
 
@@ -631,12 +631,12 @@ public class BpmnParseTest {
   @Test
   public void testParseSwitchedSourceAndTargetRefsForAssociations() {
     repositoryService.createDeployment()
-        .addClasspathResource("org/camunda/bpm/engine/test/bpmn/parse/BpmnParseTest.testParseSwitchedSourceAndTargetRefsForAssociations.bpmn20.xml").deploy();
+        .addClasspathResource("io/orqueio/bpm/engine/test/bpmn/parse/BpmnParseTest.testParseSwitchedSourceAndTargetRefsForAssociations.bpmn20.xml").deploy();
 
     assertEquals(1, repositoryService.createProcessDefinitionQuery().count());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/bpmn/event/compensate/CompensateEventTest.compensationMiActivity.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/bpmn/event/compensate/CompensateEventTest.compensationMiActivity.bpmn20.xml")
   @Test
   public void testParseCompensationHandlerOfMiActivity() {
     ActivityImpl miActivity = findActivityInDeployedProcessDefinition("undoBookHotel");
@@ -646,7 +646,7 @@ public class BpmnParseTest {
     assertEquals("bookHotel" + BpmnParse.MULTI_INSTANCE_BODY_ID_SUFFIX, ((ActivityImpl) flowScope).getActivityId());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/bpmn/event/compensate/CompensateEventTest.compensationMiSubprocess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/bpmn/event/compensate/CompensateEventTest.compensationMiSubprocess.bpmn20.xml")
   @Test
   public void testParseCompensationHandlerOfMiSubprocess() {
     ActivityImpl miActivity = findActivityInDeployedProcessDefinition("undoBookHotel");
@@ -798,11 +798,11 @@ public class BpmnParseTest {
   }
 
   @Test
-  public void testNoCamundaInSourceThrowsError() {
+  public void testNoOrqueioInSourceThrowsError() {
     try {
-      String resource = TestHelper.getBpmnProcessDefinitionResource(getClass(), "testNoCamundaInSourceThrowsError");
+      String resource = TestHelper.getBpmnProcessDefinitionResource(getClass(), "testNoOrqueioInSourceThrowsError");
       repositoryService.createDeployment().name(resource).addClasspathResource(resource).deploy();
-      fail("Process camunda:in extension element should contain source!");
+      fail("Process orqueio:in extension element should contain source!");
     } catch (ParseException e) {
       testRule.assertTextPresent("Missing parameter 'source' or 'sourceExpression' when passing variables", e.getMessage());
       testRule.assertTextPresent("Missing attribute 'target' when attribute 'source' or 'sourceExpression' is set", e.getMessage());
@@ -814,11 +814,11 @@ public class BpmnParseTest {
   }
 
   @Test
-  public void testNoCamundaInSourceShouldWithoutValidation() {
+  public void testNoOrqueioInSourceShouldWithoutValidation() {
     try {
       processEngineConfiguration.setDisableStrictCallActivityValidation(true);
 
-      String resource = TestHelper.getBpmnProcessDefinitionResource(getClass(), "testNoCamundaInSourceThrowsError");
+      String resource = TestHelper.getBpmnProcessDefinitionResource(getClass(), "testNoOrqueioInSourceThrowsError");
       repositoryService.createDeployment().name(resource).addClasspathResource(resource).deploy();
     } finally {
       processEngineConfiguration.setDisableStrictCallActivityValidation(false);
@@ -826,11 +826,11 @@ public class BpmnParseTest {
   }
 
   @Test
-  public void testEmptyCamundaInSourceThrowsError() {
+  public void testEmptyOrqueioInSourceThrowsError() {
     try {
-      String resource = TestHelper.getBpmnProcessDefinitionResource(getClass(), "testEmptyCamundaInSourceThrowsError");
+      String resource = TestHelper.getBpmnProcessDefinitionResource(getClass(), "testEmptyOrqueioInSourceThrowsError");
       repositoryService.createDeployment().name(resource).addClasspathResource(resource).deploy();
-      fail("Process camunda:in extension element should contain source!");
+      fail("Process orqueio:in extension element should contain source!");
     } catch (ParseException e) {
       testRule.assertTextPresent("Empty attribute 'source' when passing variables", e.getMessage());
       testRule.assertTextPresent("Missing attribute 'target' when attribute 'source' or 'sourceExpression' is set", e.getMessage());
@@ -842,11 +842,11 @@ public class BpmnParseTest {
   }
 
   @Test
-  public void testEmptyCamundaInSourceWithoutValidation() {
+  public void testEmptyOrqueioInSourceWithoutValidation() {
     try {
       processEngineConfiguration.setDisableStrictCallActivityValidation(true);
 
-      String resource = TestHelper.getBpmnProcessDefinitionResource(getClass(), "testEmptyCamundaInSourceThrowsError");
+      String resource = TestHelper.getBpmnProcessDefinitionResource(getClass(), "testEmptyOrqueioInSourceThrowsError");
       repositoryService.createDeployment().name(resource).addClasspathResource(resource).deploy();
     } finally {
       processEngineConfiguration.setDisableStrictCallActivityValidation(false);
@@ -854,11 +854,11 @@ public class BpmnParseTest {
   }
 
   @Test
-  public void testNoCamundaInTargetThrowsError() {
+  public void testNoOrqueioInTargetThrowsError() {
     try {
-      String resource = TestHelper.getBpmnProcessDefinitionResource(getClass(), "testNoCamundaInTargetThrowsError");
+      String resource = TestHelper.getBpmnProcessDefinitionResource(getClass(), "testNoOrqueioInTargetThrowsError");
       repositoryService.createDeployment().name(resource).addClasspathResource(resource).deploy();
-      fail("Process camunda:in extension element should contain target!");
+      fail("Process orqueio:in extension element should contain target!");
     } catch (ParseException e) {
       testRule.assertTextPresent("Missing attribute 'target' when attribute 'source' or 'sourceExpression' is set", e.getMessage());
       assertErrors(e.getResorceReports().get(0).getErrors(), "callActivity");
@@ -866,13 +866,13 @@ public class BpmnParseTest {
   }
 
   @Test
-  public void testNoCamundaInTargetWithoutValidation() {
+  public void testNoOrqueioInTargetWithoutValidation() {
     try {
       processEngineConfiguration.setDisableStrictCallActivityValidation(true);
 
-      String resource = TestHelper.getBpmnProcessDefinitionResource(getClass(), "testNoCamundaInTargetThrowsError");
+      String resource = TestHelper.getBpmnProcessDefinitionResource(getClass(), "testNoOrqueioInTargetThrowsError");
       repositoryService.createDeployment().name(resource).addClasspathResource(resource).deploy();
-      fail("Process camunda:in extension element should contain target!");
+      fail("Process orqueio:in extension element should contain target!");
     } catch (ParseException e) {
       testRule.assertTextPresent("Missing attribute 'target' when attribute 'source' or 'sourceExpression' is set", e.getMessage());
       assertErrors(e.getResorceReports().get(0).getErrors(), "callActivity");
@@ -882,11 +882,11 @@ public class BpmnParseTest {
   }
 
   @Test
-  public void testEmptyCamundaInTargetThrowsError() {
+  public void testEmptyOrqueioInTargetThrowsError() {
     try {
-      String resource = TestHelper.getBpmnProcessDefinitionResource(getClass(), "testEmptyCamundaInTargetThrowsError");
+      String resource = TestHelper.getBpmnProcessDefinitionResource(getClass(), "testEmptyOrqueioInTargetThrowsError");
       repositoryService.createDeployment().name(resource).addClasspathResource(resource).deploy();
-      fail("Process camunda:in extension element should contain target!");
+      fail("Process orqueio:in extension element should contain target!");
     } catch (ParseException e) {
       testRule.assertTextPresent("Empty attribute 'target' when attribute 'source' or 'sourceExpression' is set", e.getMessage());
       assertErrors(e.getResorceReports().get(0).getErrors(), "callActivity");
@@ -894,11 +894,11 @@ public class BpmnParseTest {
   }
 
   @Test
-  public void testEmptyCamundaInTargetWithoutValidation() {
+  public void testEmptyOrqueioInTargetWithoutValidation() {
     try {
       processEngineConfiguration.setDisableStrictCallActivityValidation(true);
 
-      String resource = TestHelper.getBpmnProcessDefinitionResource(getClass(), "testEmptyCamundaInTargetThrowsError");
+      String resource = TestHelper.getBpmnProcessDefinitionResource(getClass(), "testEmptyOrqueioInTargetThrowsError");
       repositoryService.createDeployment().name(resource).addClasspathResource(resource).deploy();
     } finally {
       processEngineConfiguration.setDisableStrictCallActivityValidation(false);
@@ -906,11 +906,11 @@ public class BpmnParseTest {
   }
 
   @Test
-  public void testNoCamundaOutSourceThrowsError() {
+  public void testNoOrqueioOutSourceThrowsError() {
     try {
-      String resource = TestHelper.getBpmnProcessDefinitionResource(getClass(), "testNoCamundaOutSourceThrowsError");
+      String resource = TestHelper.getBpmnProcessDefinitionResource(getClass(), "testNoOrqueioOutSourceThrowsError");
       repositoryService.createDeployment().name(resource).addClasspathResource(resource).deploy();
-      fail("Process camunda:out extension element should contain source!");
+      fail("Process orqueio:out extension element should contain source!");
     } catch (ParseException e) {
       testRule.assertTextPresent("Missing parameter 'source' or 'sourceExpression' when passing variables", e.getMessage());
       testRule.assertTextPresent("Missing attribute 'target' when attribute 'source' or 'sourceExpression' is set", e.getMessage());
@@ -922,11 +922,11 @@ public class BpmnParseTest {
   }
 
   @Test
-  public void testNoCamundaOutSourceWithoutValidation() {
+  public void testNoOrqueioOutSourceWithoutValidation() {
     try {
       processEngineConfiguration.setDisableStrictCallActivityValidation(true);
 
-      String resource = TestHelper.getBpmnProcessDefinitionResource(getClass(), "testNoCamundaOutSourceThrowsError");
+      String resource = TestHelper.getBpmnProcessDefinitionResource(getClass(), "testNoOrqueioOutSourceThrowsError");
       repositoryService.createDeployment().name(resource).addClasspathResource(resource).deploy();
     } finally {
       processEngineConfiguration.setDisableStrictCallActivityValidation(false);
@@ -934,11 +934,11 @@ public class BpmnParseTest {
   }
 
   @Test
-  public void testEmptyCamundaOutSourceThrowsError() {
+  public void testEmptyOrqueioOutSourceThrowsError() {
     try {
-      String resource = TestHelper.getBpmnProcessDefinitionResource(getClass(), "testEmptyCamundaOutSourceThrowsError");
+      String resource = TestHelper.getBpmnProcessDefinitionResource(getClass(), "testEmptyOrqueioOutSourceThrowsError");
       repositoryService.createDeployment().name(resource).addClasspathResource(resource).deploy();
-      fail("Process camunda:out extension element should contain source!");
+      fail("Process orqueio:out extension element should contain source!");
     } catch (ParseException e) {
       testRule.assertTextPresent("Empty attribute 'source' when passing variables", e.getMessage());
       testRule.assertTextPresent("Missing attribute 'target' when attribute 'source' or 'sourceExpression' is set", e.getMessage());
@@ -950,11 +950,11 @@ public class BpmnParseTest {
   }
 
   @Test
-  public void testEmptyCamundaOutSourceWithoutValidation() {
+  public void testEmptyOrqueioOutSourceWithoutValidation() {
     try {
       processEngineConfiguration.setDisableStrictCallActivityValidation(true);
 
-      String resource = TestHelper.getBpmnProcessDefinitionResource(getClass(), "testEmptyCamundaOutSourceThrowsError");
+      String resource = TestHelper.getBpmnProcessDefinitionResource(getClass(), "testEmptyOrqueioOutSourceThrowsError");
       repositoryService.createDeployment().name(resource).addClasspathResource(resource).deploy();
     } finally {
       processEngineConfiguration.setDisableStrictCallActivityValidation(false);
@@ -962,11 +962,11 @@ public class BpmnParseTest {
   }
 
   @Test
-  public void testNoCamundaOutTargetThrowsError() {
+  public void testNoOrqueioOutTargetThrowsError() {
     try {
-      String resource = TestHelper.getBpmnProcessDefinitionResource(getClass(), "testNoCamundaOutTargetThrowsError");
+      String resource = TestHelper.getBpmnProcessDefinitionResource(getClass(), "testNoOrqueioOutTargetThrowsError");
       repositoryService.createDeployment().name(resource).addClasspathResource(resource).deploy();
-      fail("Process camunda:out extension element should contain target!");
+      fail("Process orqueio:out extension element should contain target!");
     } catch (ParseException e) {
       testRule.assertTextPresent("Missing attribute 'target' when attribute 'source' or 'sourceExpression' is set", e.getMessage());
       assertErrors(e.getResorceReports().get(0).getErrors(), "callActivity");
@@ -974,13 +974,13 @@ public class BpmnParseTest {
   }
 
   @Test
-  public void testNoCamundaOutTargetWithoutValidation() {
+  public void testNoOrqueioOutTargetWithoutValidation() {
     try {
       processEngineConfiguration.setDisableStrictCallActivityValidation(true);
 
-      String resource = TestHelper.getBpmnProcessDefinitionResource(getClass(), "testNoCamundaOutTargetThrowsError");
+      String resource = TestHelper.getBpmnProcessDefinitionResource(getClass(), "testNoOrqueioOutTargetThrowsError");
       repositoryService.createDeployment().name(resource).addClasspathResource(resource).deploy();
-      fail("Process camunda:out extension element should contain target!");
+      fail("Process orqueio:out extension element should contain target!");
     } catch (ParseException e) {
       testRule.assertTextPresent("Missing attribute 'target' when attribute 'source' or 'sourceExpression' is set", e.getMessage());
       assertErrors(e.getResorceReports().get(0).getErrors(), "callActivity");
@@ -990,11 +990,11 @@ public class BpmnParseTest {
   }
 
   @Test
-  public void testEmptyCamundaOutTargetThrowsError() {
+  public void testEmptyOrqueioOutTargetThrowsError() {
     try {
-      String resource = TestHelper.getBpmnProcessDefinitionResource(getClass(), "testEmptyCamundaOutTargetThrowsError");
+      String resource = TestHelper.getBpmnProcessDefinitionResource(getClass(), "testEmptyOrqueioOutTargetThrowsError");
       repositoryService.createDeployment().name(resource).addClasspathResource(resource).deploy();
-      fail("Process camunda:out extension element should contain target!");
+      fail("Process orqueio:out extension element should contain target!");
     } catch (ParseException e) {
       testRule.assertTextPresent("Empty attribute 'target' when attribute 'source' or 'sourceExpression' is set", e.getMessage());
       assertErrors(e.getResorceReports().get(0).getErrors(), "callActivity");
@@ -1002,11 +1002,11 @@ public class BpmnParseTest {
   }
 
   @Test
-  public void testEmptyCamundaOutTargetWithoutValidation() {
+  public void testEmptyOrqueioOutTargetWithoutValidation() {
     try {
       processEngineConfiguration.setDisableStrictCallActivityValidation(true);
 
-      String resource = TestHelper.getBpmnProcessDefinitionResource(getClass(), "testEmptyCamundaOutTargetThrowsError");
+      String resource = TestHelper.getBpmnProcessDefinitionResource(getClass(), "testEmptyOrqueioOutTargetThrowsError");
       repositoryService.createDeployment().name(resource).addClasspathResource(resource).deploy();
     } finally {
       processEngineConfiguration.setDisableStrictCallActivityValidation(false);
@@ -1309,7 +1309,7 @@ public class BpmnParseTest {
       String timerWithoutDetails = "<?xml version='1.0' encoding='UTF-8'?>" +
           "<definitions xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'" +
           "  xmlns='http://www.omg.org/spec/BPMN/20100524/MODEL'" +
-          "  xmlns:camunda='http://camunda.org/schema/1.0/bpmn'" +
+          "  xmlns:orqueio='http://orqueio.io/schema/1.0/bpmn'" +
           "  targetNamespace='Examples'>" +
           "  <process id='process' isExecutable='true'>" +
           "    <startEvent id='start'>" +
@@ -1333,7 +1333,7 @@ public class BpmnParseTest {
       String incorrectSequenceFlow = "<?xml version='1.0' encoding='UTF-8'?>" +
           "<definitions xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'" +
           "  xmlns='http://www.omg.org/spec/BPMN/20100524/MODEL'" +
-          "  xmlns:camunda='http://camunda.org/schema/1.0/bpmn'" +
+          "  xmlns:orqueio='http://orqueio.io/schema/1.0/bpmn'" +
           "  targetNamespace='Examples'>" +
           "  <process id='process' isExecutable='true'>" +
           "    <startEvent id='start'/>" +
@@ -1390,7 +1390,7 @@ public class BpmnParseTest {
     // given process definition with empty property (key and value = null) is deployed
     // when
     repositoryService.createDeployment()
-    .addClasspathResource("org/camunda/bpm/engine/test/bpmn/parse/BpmnParseTest.testParseEmptyExtensionProperty.bpmn").deploy();
+    .addClasspathResource("io/orqueio/bpm/engine/test/bpmn/parse/BpmnParseTest.testParseEmptyExtensionProperty.bpmn").deploy();
 
     // then
     assertThat(repositoryService.createProcessDefinitionQuery().count()).isEqualTo(1L);

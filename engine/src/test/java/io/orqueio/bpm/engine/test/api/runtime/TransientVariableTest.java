@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -93,7 +93,7 @@ public class TransientVariableTest {
     BpmnModelInstance instance = Bpmn.createExecutableProcess("Process")
       .startEvent()
       .serviceTask()
-        .camundaClass(ReadTransientVariablesOfAllTypesDelegate.class.getName())
+        .orqueioClass(ReadTransientVariablesOfAllTypesDelegate.class.getName())
       .userTask("user")
       .endEvent()
       .done();
@@ -115,7 +115,7 @@ public class TransientVariableTest {
             .putValueTyped("j", Variables.untypedValue(null, true))
             .putValueTyped("k", Variables.untypedValue(Variables.booleanValue(true), true))
             .putValueTyped("l", Variables.fileValue(new File(this.getClass().getClassLoader()
-                .getResource("org/camunda/bpm/engine/test/standalone/variables/simpleFile.txt").toURI()), true)));
+                .getResource("io/orqueio/bpm/engine/test/standalone/variables/simpleFile.txt").toURI()), true)));
 
     // then
     List<HistoricVariableInstance> historicVariableInstances = historyService.createHistoricVariableInstanceQuery().list();
@@ -130,7 +130,7 @@ public class TransientVariableTest {
     BpmnModelInstance instance = Bpmn.createExecutableProcess("Process")
       .startEvent()
       .serviceTask()
-        .camundaClass(ReadTransientVariablesOfAllTypesDelegate.class.getName())
+        .orqueioClass(ReadTransientVariablesOfAllTypesDelegate.class.getName())
       .userTask("user")
       .endEvent()
       .done();
@@ -151,7 +151,7 @@ public class TransientVariableTest {
         .putValue("j", Variables.untypedValue(null, true))
         .putValue("k", Variables.untypedValue(Variables.booleanValue(true), true))
         .putValue("l", Variables.fileValue(new File(this.getClass().getClassLoader()
-            .getResource("org/camunda/bpm/engine/test/standalone/variables/simpleFile.txt").toURI()), true)));
+            .getResource("io/orqueio/bpm/engine/test/standalone/variables/simpleFile.txt").toURI()), true)));
 
     // then
     List<HistoricVariableInstance> historicVariableInstances = historyService.createHistoricVariableInstanceQuery().list();
@@ -165,7 +165,7 @@ public class TransientVariableTest {
     // given
     BpmnModelInstance simpleInstanceWithListener = Bpmn.createExecutableProcess("Process")
         .startEvent()
-          .camundaExecutionListenerClass(ExecutionListener.EVENTNAME_END, ReadTransientVariableExecutionListener.class)
+          .orqueioExecutionListenerClass(ExecutionListener.EVENTNAME_END, ReadTransientVariableExecutionListener.class)
         .userTask()
         .endEvent()
         .done();
@@ -188,7 +188,7 @@ public class TransientVariableTest {
     // given
     BpmnModelInstance simpleInstanceWithListener = Bpmn.createExecutableProcess("Process")
         .startEvent()
-          .camundaExecutionListenerClass(ExecutionListener.EVENTNAME_END, ReadTransientVariableExecutionListener.class)
+          .orqueioExecutionListenerClass(ExecutionListener.EVENTNAME_END, ReadTransientVariableExecutionListener.class)
         .userTask()
         .endEvent()
         .done();
@@ -214,7 +214,7 @@ public class TransientVariableTest {
     BpmnModelInstance instance = Bpmn.createExecutableProcess(CONDITIONAL_PROCESS_KEY)
         .startEvent()
         .serviceTask()
-        .camundaClass(SetVariableTransientDelegate.class.getName())
+        .orqueioClass(SetVariableTransientDelegate.class.getName())
         .intermediateCatchEvent(CONDITION_ID)
         .conditionalEventDefinition()
         .condition(VAR_CONDITION)
@@ -245,7 +245,7 @@ public class TransientVariableTest {
           .intermediateCatchEvent()
           .conditionalEventDefinition()
           .condition(VAR_CONDITION)
-          .camundaVariableEvents(Arrays.asList("create", "update"))
+          .orqueioVariableEvents(Arrays.asList("create", "update"))
           .conditionalEventDefinitionDone()
           .userTask()
           .name("taskAfter")
@@ -253,7 +253,7 @@ public class TransientVariableTest {
           .moveToNode("parallel")
           .userTask("taskBefore")
           .serviceTask()
-          .camundaClass(SetVariableTransientDelegate.class.getName())
+          .orqueioClass(SetVariableTransientDelegate.class.getName())
           .endEvent()
           .done();
 
@@ -299,7 +299,7 @@ public class TransientVariableTest {
   @Test
   public void setVariableTransientForCase() {
     // given
-    testRule.deploy("org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn");
+    testRule.deploy("io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn");
 
     // when
     engineRule.getCaseService().withCaseDefinitionByKey("oneTaskCase")
@@ -339,7 +339,7 @@ public class TransientVariableTest {
   @Test
   public void testFormFieldsWithCustomTransientFlags() {
     // given
-    testRule.deploy("org/camunda/bpm/engine/test/api/form/TransientVariableTest.taskFormFieldsWithTransientFlags.bpmn20.xml");
+    testRule.deploy("io/orqueio/bpm/engine/test/api/form/TransientVariableTest.taskFormFieldsWithTransientFlags.bpmn20.xml");
     runtimeService.startProcessInstanceByKey("testProcess");
     Task task = taskService.createTaskQuery().singleResult();
 
@@ -358,7 +358,7 @@ public class TransientVariableTest {
   @Test
   public void testStartProcessInstanceWithFormsUsingTransientVariables() {
     // given
-    testRule.deploy("org/camunda/bpm/engine/test/api/form/TransientVariableTest.startFormFieldsWithTransientFlags.bpmn20.xml");
+    testRule.deploy("io/orqueio/bpm/engine/test/api/form/TransientVariableTest.startFormFieldsWithTransientFlags.bpmn20.xml");
     ProcessDefinition processDefinition = engineRule.getRepositoryService().createProcessDefinitionQuery().singleResult();
 
     // when
@@ -382,7 +382,7 @@ public class TransientVariableTest {
       .signal("signal")
     .scriptTask("scriptTask")
       .scriptFormat("javascript")
-      .camundaResultVariable("abc")
+      .orqueioResultVariable("abc")
       .scriptText("execution.setVariable('abc', foo);")
     .endEvent()
     .done();
@@ -408,7 +408,7 @@ public class TransientVariableTest {
         .message("message")
       .scriptTask("scriptTask")
         .scriptFormat("javascript")
-        .camundaResultVariable("abc")
+        .orqueioResultVariable("abc")
         .scriptText("execution.setVariable('abc', foo);")
       .endEvent()
       .done();
@@ -438,7 +438,7 @@ public class TransientVariableTest {
         .message("message")
       .scriptTask("scriptTask")
         .scriptFormat("javascript")
-        .camundaResultVariable("abc")
+        .orqueioResultVariable("abc")
         .scriptText("execution.setVariable('abc', blob);")
       .endEvent()
       .done();
@@ -469,13 +469,13 @@ public class TransientVariableTest {
       .parallelGateway()
       .scriptTask()
         .scriptFormat("javascript")
-        .camundaResultVariable("abc")
+        .orqueioResultVariable("abc")
         .scriptText("execution.setVariableLocal('abc', foo);")
       .endEvent()
       .moveToLastGateway()
       .scriptTask()
         .scriptFormat("javascript")
-        .camundaResultVariable("abc")
+        .orqueioResultVariable("abc")
         .scriptText("execution.setVariableLocal('abc', foo);")
       .endEvent()
       .done();
@@ -497,7 +497,7 @@ public class TransientVariableTest {
   @Test
   public void testExclusiveGateway() {
     // given
-    testRule.deploy("org/camunda/bpm/engine/test/bpmn/gateway/ExclusiveGatewayTest.testDivergingExclusiveGateway.bpmn20.xml");
+    testRule.deploy("io/orqueio/bpm/engine/test/bpmn/gateway/ExclusiveGatewayTest.testDivergingExclusiveGateway.bpmn20.xml");
 
     // when
     runtimeService.startProcessInstanceByKey("exclusiveGwDiverging",
@@ -516,7 +516,7 @@ public class TransientVariableTest {
     BpmnModelInstance instance = Bpmn.createExecutableProcess("Process")
       .startEvent()
       .serviceTask()
-        .camundaClass(ChangeVariableTransientDelegate.class.getName())
+        .orqueioClass(ChangeVariableTransientDelegate.class.getName())
       .userTask("user")
       .endEvent()
       .done();
@@ -545,7 +545,7 @@ public class TransientVariableTest {
     BpmnModelInstance instance = Bpmn.createExecutableProcess("Process")
       .startEvent()
       .serviceTask()
-        .camundaClass(SwitchTransientVariableDelegate.class.getName())
+        .orqueioClass(SwitchTransientVariableDelegate.class.getName())
       .userTask("user")
       .endEvent()
       .done();
@@ -570,7 +570,7 @@ public class TransientVariableTest {
     BpmnModelInstance instance = Bpmn.createExecutableProcess("Process")
       .startEvent()
       .serviceTask()
-        .camundaClass(SwitchTransientVariableDelegate.class.getName())
+        .orqueioClass(SwitchTransientVariableDelegate.class.getName())
       .userTask("user")
       .endEvent()
       .done();
@@ -595,7 +595,7 @@ public class TransientVariableTest {
     BpmnModelInstance instance = Bpmn.createExecutableProcess("Process")
       .startEvent()
       .serviceTask()
-        .camundaClass(SetTransientLocalVariableDelegate.class)
+        .orqueioClass(SetTransientLocalVariableDelegate.class)
       .endEvent()
       .done();
 
@@ -619,7 +619,7 @@ public class TransientVariableTest {
     BpmnModelInstance modelInstance = Bpmn.createExecutableProcess("aProcess")
       .startEvent()
       .serviceTask()
-        .camundaClass(ReadTypedTransientVariableDelegate.class)
+        .orqueioClass(ReadTypedTransientVariableDelegate.class)
       .userTask()
       .endEvent()
       .done();
@@ -640,7 +640,7 @@ public class TransientVariableTest {
     // given
     BpmnModelInstance model = Bpmn.createExecutableProcess("process")
         .startEvent()
-        .serviceTask().camundaClass(SetTransientLocalVariableDelegate.class)
+        .serviceTask().orqueioClass(SetTransientLocalVariableDelegate.class)
         .userTask()
         .endEvent()
         .done();
@@ -664,7 +664,7 @@ public class TransientVariableTest {
     // given
     BpmnModelInstance model = Bpmn.createExecutableProcess("process")
         .startEvent()
-        .serviceTask().camundaClass(RemoveAndSetVariableDelegate.class)
+        .serviceTask().orqueioClass(RemoveAndSetVariableDelegate.class)
         .userTask()
         .endEvent()
         .done();
@@ -685,7 +685,7 @@ public class TransientVariableTest {
     // given
     BpmnModelInstance model = Bpmn.createExecutableProcess("process")
         .startEvent()
-        .serviceTask().camundaClass(RemoveAndSetVariableDelegate.class)
+        .serviceTask().orqueioClass(RemoveAndSetVariableDelegate.class)
         .userTask()
         .endEvent()
         .done();
@@ -706,7 +706,7 @@ public class TransientVariableTest {
     // given
     BpmnModelInstance model = Bpmn.createExecutableProcess("process")
         .startEvent()
-        .serviceTask().camundaClass(RemoveAndSetVariableDelegate.class)
+        .serviceTask().orqueioClass(RemoveAndSetVariableDelegate.class)
         .userTask()
         .endEvent()
         .done();
@@ -725,7 +725,7 @@ public class TransientVariableTest {
     // given
     BpmnModelInstance model = Bpmn.createExecutableProcess("process")
         .startEvent()
-        .serviceTask().camundaClass(RemoveAndSetVariableDelegate.class)
+        .serviceTask().orqueioClass(RemoveAndSetVariableDelegate.class)
         .userTask()
         .endEvent()
         .done();

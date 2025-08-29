@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -40,7 +40,7 @@ import org.junit.Test;
  */
 public class ExternalTaskQueryByPriorityTest extends PluggableProcessEngineTest {
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/externaltask/externalTaskPriorityExpression.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/externaltask/externalTaskPriorityExpression.bpmn20.xml")
   @Test
   public void testOrderByPriority() {
     // given five jobs with priorities from 1 to 5
@@ -57,7 +57,7 @@ public class ExternalTaskQueryByPriorityTest extends PluggableProcessEngineTest 
     verifySortingAndCount(externalTaskService.createExternalTaskQuery().orderByPriority().desc(), 10, inverted(externalTaskByPriority()));
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/externaltask/externalTaskPriorityExpression.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/externaltask/externalTaskPriorityExpression.bpmn20.xml")
   @Test
   public void testFilterByExternalTaskPriorityLowerThanOrEquals() {
     // given five jobs with priorities from 1 to 5
@@ -79,7 +79,7 @@ public class ExternalTaskQueryByPriorityTest extends PluggableProcessEngineTest 
     }
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/externaltask/externalTaskPriorityExpression.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/externaltask/externalTaskPriorityExpression.bpmn20.xml")
   @Test
   public void testFilterByExternalTaskPriorityLowerThanOrEqualsAndHigherThanOrEqual() {
     // given five jobs with priorities from 1 to 5
@@ -99,7 +99,7 @@ public class ExternalTaskQueryByPriorityTest extends PluggableProcessEngineTest 
     assertEquals(2, externalTaskService.createExternalTaskQuery().priorityHigherThanOrEquals(2).priorityLowerThanOrEquals(3).count());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/externaltask/externalTaskPriorityExpression.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/externaltask/externalTaskPriorityExpression.bpmn20.xml")
   @Test
   public void testFilterByExternalTaskPriorityHigherThanOrEquals() {
     // given five jobs with priorities from 1 to 5
@@ -126,7 +126,7 @@ public class ExternalTaskQueryByPriorityTest extends PluggableProcessEngineTest 
     }
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/externaltask/externalTaskPriorityExpression.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/externaltask/externalTaskPriorityExpression.bpmn20.xml")
   @Test
   public void testFilterByExternalTaskPriorityLowerAndHigher() {
     // given five jobs with priorities from 1 to 5

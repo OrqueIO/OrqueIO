@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -33,14 +33,14 @@ public class MultiTenancyProcessTaskTest extends PluggableProcessEngineTest {
   protected static final String TENANT_ONE = "tenant1";
   protected static final String TENANT_TWO = "tenant2";
 
-  protected static final String CMMN_LATEST = "org/camunda/bpm/engine/test/api/multitenancy/CaseWithProcessTask.cmmn";
-  protected static final String CMMN_LATEST_WITH_MANUAL_ACTIVATION = "org/camunda/bpm/engine/test/api/multitenancy/CaseWithProcessTaskWithManualActivation.cmmn";
-  protected static final String CMMN_DEPLOYMENT = "org/camunda/bpm/engine/test/api/multitenancy/CaseWithProcessTaskDeploymentBinding.cmmn";
-  protected static final String CMMN_VERSION = "org/camunda/bpm/engine/test/api/multitenancy/CaseWithProcessTaskVersionBinding.cmmn";
-  protected static final String CMMN_VERSION_2 = "org/camunda/bpm/engine/test/api/multitenancy/CaseWithProcessTaskVersionBinding_v2.cmmn";
+  protected static final String CMMN_LATEST = "io/orqueio/bpm/engine/test/api/multitenancy/CaseWithProcessTask.cmmn";
+  protected static final String CMMN_LATEST_WITH_MANUAL_ACTIVATION = "io/orqueio/bpm/engine/test/api/multitenancy/CaseWithProcessTaskWithManualActivation.cmmn";
+  protected static final String CMMN_DEPLOYMENT = "io/orqueio/bpm/engine/test/api/multitenancy/CaseWithProcessTaskDeploymentBinding.cmmn";
+  protected static final String CMMN_VERSION = "io/orqueio/bpm/engine/test/api/multitenancy/CaseWithProcessTaskVersionBinding.cmmn";
+  protected static final String CMMN_VERSION_2 = "io/orqueio/bpm/engine/test/api/multitenancy/CaseWithProcessTaskVersionBinding_v2.cmmn";
 
-  protected static final String CMMN_TENANT_CONST = "org/camunda/bpm/engine/test/api/multitenancy/CaseWithProcessTaskTenantIdConst.cmmn";
-  protected static final String CMMN_TENANT_EXPR = "org/camunda/bpm/engine/test/api/multitenancy/CaseWithProcessTaskTenantIdExpr.cmmn";
+  protected static final String CMMN_TENANT_CONST = "io/orqueio/bpm/engine/test/api/multitenancy/CaseWithProcessTaskTenantIdConst.cmmn";
+  protected static final String CMMN_TENANT_EXPR = "io/orqueio/bpm/engine/test/api/multitenancy/CaseWithProcessTaskTenantIdExpr.cmmn";
 
   protected static final String PROCESS_TASK_ID = "PI_ProcessTask_1";
 

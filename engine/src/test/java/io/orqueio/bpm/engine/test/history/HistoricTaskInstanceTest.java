@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -474,7 +474,7 @@ public class HistoricTaskInstanceTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/history/HistoricTaskInstanceTest.testHistoricTaskInstance.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/history/HistoricTaskInstanceTest.testHistoricTaskInstance.bpmn20.xml"})
   @Test
   public void testHistoricTaskInstanceQueryByFollowUpDate() throws Exception {
     Calendar otherDate = Calendar.getInstance();
@@ -515,7 +515,7 @@ public class HistoricTaskInstanceTest extends PluggableProcessEngineTest {
     assertEquals(1, historyService.createHistoricTaskInstanceQuery().taskFollowUpDate(followUpDate).count());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/history/HistoricTaskInstanceTest.testHistoricTaskInstance.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/history/HistoricTaskInstanceTest.testHistoricTaskInstance.bpmn20.xml"})
   @Test
   public void testHistoricTaskInstanceQueryByActivityInstanceId() throws Exception {
     runtimeService.startProcessInstanceByKey("HistoricTaskInstanceTest");
@@ -532,7 +532,7 @@ public class HistoricTaskInstanceTest extends PluggableProcessEngineTest {
     assertEquals(1, query.list().size());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/history/HistoricTaskInstanceTest.testHistoricTaskInstance.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/history/HistoricTaskInstanceTest.testHistoricTaskInstance.bpmn20.xml"})
   @Test
   public void testHistoricTaskInstanceQueryByActivityInstanceIds() throws Exception {
     ProcessInstance pi1 = runtimeService.startProcessInstanceByKey("HistoricTaskInstanceTest");
@@ -557,7 +557,7 @@ public class HistoricTaskInstanceTest extends PluggableProcessEngineTest {
     assertEquals(2, query.list().size());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/history/HistoricTaskInstanceTest.testHistoricTaskInstance.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/history/HistoricTaskInstanceTest.testHistoricTaskInstance.bpmn20.xml"})
   @Test
   public void testHistoricTaskInstanceQueryByInvalidActivityInstanceId() {
     HistoricTaskInstanceQuery query = historyService.createHistoricTaskInstanceQuery();
@@ -583,7 +583,7 @@ public class HistoricTaskInstanceTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testQueryByCaseDefinitionId() {
     // given
@@ -638,7 +638,7 @@ public class HistoricTaskInstanceTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testQueryByCaseDefinitionKey() {
     // given
@@ -696,7 +696,7 @@ public class HistoricTaskInstanceTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testQueryByCaseDefinitionName() {
     // given
@@ -753,7 +753,7 @@ public class HistoricTaskInstanceTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testQueryByCaseInstanceId() {
     // given
@@ -797,8 +797,8 @@ public class HistoricTaskInstanceTest extends PluggableProcessEngineTest {
 
   @Deployment(resources=
     {
-      "org/camunda/bpm/engine/test/history/HistoricTaskInstanceTest.testQueryByCaseInstanceIdHierarchy.cmmn",
-      "org/camunda/bpm/engine/test/history/HistoricTaskInstanceTest.testQueryByCaseInstanceIdHierarchy.bpmn20.xml"
+      "io/orqueio/bpm/engine/test/history/HistoricTaskInstanceTest.testQueryByCaseInstanceIdHierarchy.cmmn",
+      "io/orqueio/bpm/engine/test/history/HistoricTaskInstanceTest.testQueryByCaseInstanceIdHierarchy.bpmn20.xml"
     })
   @Test
   public void testQueryByCaseInstanceIdHierarchy() {
@@ -861,7 +861,7 @@ public class HistoricTaskInstanceTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testQueryByCaseExecutionId() {
     // given
@@ -947,7 +947,7 @@ public class HistoricTaskInstanceTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
   @Test
   public void testProcessDefinitionKeyProperty() {
     // given
@@ -968,7 +968,7 @@ public class HistoricTaskInstanceTest extends PluggableProcessEngineTest {
     assertNull(task.getCaseDefinitionKey());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn")
   @Test
   public void testCaseDefinitionKeyProperty() {
     // given
@@ -989,7 +989,7 @@ public class HistoricTaskInstanceTest extends PluggableProcessEngineTest {
     assertNull(task.getProcessDefinitionKey());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
   @Test
   public void testQueryByTaskDefinitionKey() {
     // given
@@ -1010,8 +1010,8 @@ public class HistoricTaskInstanceTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml",
-      "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
   })
   @Test
   public void testQueryByTaskDefinitionKeys() {
@@ -1053,7 +1053,7 @@ public class HistoricTaskInstanceTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
   @Test
   public void testQueryByProcessInstanceBusinessKey() {
     // given
@@ -1066,7 +1066,7 @@ public class HistoricTaskInstanceTest extends PluggableProcessEngineTest {
     assertEquals(0, query.processInstanceBusinessKey("unexistingBusinessKey").count());
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
   @Test
   public void testQueryByProcessInstanceBusinessKeyIn() {
     // given
@@ -1110,7 +1110,7 @@ public class HistoricTaskInstanceTest extends PluggableProcessEngineTest {
     } catch (ProcessEngineException e) {}
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
   @Test
   public void testQueryByProcessInstanceBusinessKeyLike() {
     // given
@@ -1126,7 +1126,7 @@ public class HistoricTaskInstanceTest extends PluggableProcessEngineTest {
     assertEquals(0, query.processInstanceBusinessKeyLike("BUZINESS-KEY%").count());
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
   @Test
   public void testQueryByProcessInstanceBusinessKeyAndArray() {
     // given
@@ -1146,9 +1146,9 @@ public class HistoricTaskInstanceTest extends PluggableProcessEngineTest {
     assertEquals(1, query.processInstanceBusinessKeyIn(businessKey2, businessKey3).processInstanceBusinessKey(businessKey2).count());
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/history/multiprocess/rootProcess.bpmn",
-      "org/camunda/bpm/engine/test/api/history/multiprocess/secondLevelProcess.bpmn",
-      "org/camunda/bpm/engine/test/api/history/multiprocess/thirdLevelProcess.bpmn" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/history/multiprocess/rootProcess.bpmn",
+      "io/orqueio/bpm/engine/test/api/history/multiprocess/secondLevelProcess.bpmn",
+      "io/orqueio/bpm/engine/test/api/history/multiprocess/thirdLevelProcess.bpmn" })
   @Test
   public void testQueryByRootProcessInstanceId() {
     // given

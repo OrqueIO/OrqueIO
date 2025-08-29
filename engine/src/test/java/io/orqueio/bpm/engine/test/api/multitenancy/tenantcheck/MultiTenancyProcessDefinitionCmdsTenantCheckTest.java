@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -53,8 +53,8 @@ public class MultiTenancyProcessDefinitionCmdsTenantCheckTest {
 
   protected static final String TENANT_ONE = "tenant1";
 
-  protected static final String BPMN_PROCESS_MODEL = "org/camunda/bpm/engine/test/api/multitenancy/testProcess.bpmn";
-  protected static final String BPMN_PROCESS_DIAGRAM = "org/camunda/bpm/engine/test/api/multitenancy/testProcess.png";
+  protected static final String BPMN_PROCESS_MODEL = "io/orqueio/bpm/engine/test/api/multitenancy/testProcess.bpmn";
+  protected static final String BPMN_PROCESS_DIAGRAM = "io/orqueio/bpm/engine/test/api/multitenancy/testProcess.png";
 
   protected ProcessEngineRule engineRule = new ProvidedProcessEngineRule();
 
@@ -246,7 +246,7 @@ public class MultiTenancyProcessDefinitionCmdsTenantCheckTest {
   @Test
   public void testDeleteProcessDefinitionWithAuthenticatedTenant() {
     //given deployment with two process definitions
-    Deployment deployment = testRule.deployForTenant(TENANT_ONE, "org/camunda/bpm/engine/test/repository/twoProcesses.bpmn20.xml");
+    Deployment deployment = testRule.deployForTenant(TENANT_ONE, "io/orqueio/bpm/engine/test/repository/twoProcesses.bpmn20.xml");
     ProcessDefinitionQuery processDefinitionQuery = repositoryService.createProcessDefinitionQuery().deploymentId(deployment.getId());
     List<ProcessDefinition> processDefinitions = processDefinitionQuery.list();
     //and user with tenant authentication
@@ -289,7 +289,7 @@ public class MultiTenancyProcessDefinitionCmdsTenantCheckTest {
   @Test
   public void testDeleteProcessDefinitionDisabledTenantCheck() {
     //given deployment with two process definitions
-    Deployment deployment = testRule.deployForTenant(TENANT_ONE, "org/camunda/bpm/engine/test/repository/twoProcesses.bpmn20.xml");
+    Deployment deployment = testRule.deployForTenant(TENANT_ONE, "io/orqueio/bpm/engine/test/repository/twoProcesses.bpmn20.xml");
     //tenant check disabled
     processEngineConfiguration.setTenantCheckEnabled(false);
     ProcessDefinitionQuery processDefinitionQuery = repositoryService.createProcessDefinitionQuery().deploymentId(deployment.getId());

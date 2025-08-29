@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -49,7 +49,7 @@ public interface HistoricTaskInstanceQuery  extends Query<HistoricTaskInstanceQu
   HistoricTaskInstanceQuery processInstanceBusinessKeyIn(String... processInstanceBusinessKeys);
 
   /** Only select historic tasks matching the given process instance business key.
-   *  The syntax is that of SQL: for example usage: nameLike(%camunda%)*/
+   *  The syntax is that of SQL: for example usage: nameLike(%orqueio%)*/
   HistoricTaskInstanceQuery processInstanceBusinessKeyLike(String processInstanceBusinessKey);
 
   /** Only select historic task instances for the given execution. */

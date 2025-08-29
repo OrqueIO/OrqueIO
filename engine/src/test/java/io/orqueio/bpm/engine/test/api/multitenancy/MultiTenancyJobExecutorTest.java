@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -54,7 +54,7 @@ public class MultiTenancyJobExecutorTest {
         .startEvent()
           .timerWithDuration("PT1M")
         .serviceTask()
-          .camundaClass(AssertingJavaDelegate.class.getName())
+          .orqueioClass(AssertingJavaDelegate.class.getName())
         .userTask()
         .endEvent()
       .done());
@@ -74,7 +74,7 @@ public class MultiTenancyJobExecutorTest {
         .intermediateCatchEvent()
           .timerWithDuration("PT1M")
         .serviceTask()
-          .camundaClass(AssertingJavaDelegate.class.getName())
+          .orqueioClass(AssertingJavaDelegate.class.getName())
         .endEvent()
       .done());
 
@@ -92,8 +92,8 @@ public class MultiTenancyJobExecutorTest {
     testRule.deployForTenant(TENANT_ID, Bpmn.createExecutableProcess("process")
         .startEvent()
         .serviceTask()
-          .camundaAsyncBefore()
-          .camundaClass(AssertingJavaDelegate.class.getName())
+          .orqueioAsyncBefore()
+          .orqueioClass(AssertingJavaDelegate.class.getName())
         .endEvent()
       .done());
 
@@ -110,8 +110,8 @@ public class MultiTenancyJobExecutorTest {
     testRule.deploy(Bpmn.createExecutableProcess("process")
         .startEvent()
         .serviceTask()
-          .camundaAsyncBefore()
-          .camundaClass(AssertingJavaDelegate.class.getName())
+          .orqueioAsyncBefore()
+          .orqueioClass(AssertingJavaDelegate.class.getName())
         .endEvent()
       .done());
 
@@ -128,8 +128,8 @@ public class MultiTenancyJobExecutorTest {
     testRule.deployForTenant(TENANT_ID, Bpmn.createExecutableProcess("process")
         .startEvent()
         .serviceTask()
-          .camundaAsyncBefore()
-          .camundaClass(AssertingJavaDelegate.class.getName())
+          .orqueioAsyncBefore()
+          .orqueioClass(AssertingJavaDelegate.class.getName())
         .endEvent()
       .done());
 

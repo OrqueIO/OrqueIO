@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -33,7 +33,7 @@ import io.orqueio.bpm.engine.task.TaskQuery;
 import io.orqueio.bpm.model.bpmn.Bpmn;
 import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
 import io.orqueio.bpm.model.bpmn.instance.SequenceFlow;
-import io.orqueio.bpm.model.bpmn.instance.camunda.CamundaExecutionListener;
+import io.orqueio.bpm.model.bpmn.instance.orqueio.OrqueioExecutionListener;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -176,7 +176,7 @@ public class ConditionalEventTriggeredByExecutionListenerTest extends AbstractCo
         .name(TASK_BEFORE_CONDITION)
       .userTask(TASK_WITH_CONDITION_ID)
         .name(TASK_WITH_CONDITION)
-        .camundaExecutionListenerExpression(ExecutionListener.EVENTNAME_START, EXPR_SET_VARIABLE)
+        .orqueioExecutionListenerExpression(ExecutionListener.EVENTNAME_START, EXPR_SET_VARIABLE)
       .endEvent(END_EVENT_ID)
       .done();
     modelInstance = specifier.specifyConditionalProcess(modelInstance, true);
@@ -206,7 +206,7 @@ public class ConditionalEventTriggeredByExecutionListenerTest extends AbstractCo
       .userTask(TASK_BEFORE_CONDITION_ID)
         .name(TASK_BEFORE_CONDITION)
       .userTask(TASK_WITH_CONDITION_ID)
-        .camundaExecutionListenerExpression(ExecutionListener.EVENTNAME_START, EXPR_SET_VARIABLE)
+        .orqueioExecutionListenerExpression(ExecutionListener.EVENTNAME_START, EXPR_SET_VARIABLE)
         .name(TASK_WITH_CONDITION)
       .endEvent(END_EVENT_ID)
       .done();
@@ -239,9 +239,9 @@ public class ConditionalEventTriggeredByExecutionListenerTest extends AbstractCo
         .name(TASK_WITH_CONDITION)
       .endEvent(END_EVENT_ID)
       .done();
-    CamundaExecutionListener listener = modelInstance.newInstance(CamundaExecutionListener.class);
-    listener.setCamundaEvent(ExecutionListener.EVENTNAME_TAKE);
-    listener.setCamundaExpression(EXPR_SET_VARIABLE);
+    OrqueioExecutionListener listener = modelInstance.newInstance(OrqueioExecutionListener.class);
+    listener.setOrqueioEvent(ExecutionListener.EVENTNAME_TAKE);
+    listener.setOrqueioExpression(EXPR_SET_VARIABLE);
     modelInstance.<SequenceFlow>getModelElementById(FLOW_ID).builder().addExtensionElement(listener);
     modelInstance = specifier.specifyConditionalProcess(modelInstance, true);
     engine.manageDeployment(repositoryService.createDeployment().addModelInstance(CONDITIONAL_MODEL, modelInstance).deploy());
@@ -274,9 +274,9 @@ public class ConditionalEventTriggeredByExecutionListenerTest extends AbstractCo
         .name(TASK_WITH_CONDITION)
       .endEvent(END_EVENT_ID)
       .done();
-    CamundaExecutionListener listener = modelInstance.newInstance(CamundaExecutionListener.class);
-    listener.setCamundaEvent(ExecutionListener.EVENTNAME_TAKE);
-    listener.setCamundaExpression(EXPR_SET_VARIABLE);
+    OrqueioExecutionListener listener = modelInstance.newInstance(OrqueioExecutionListener.class);
+    listener.setOrqueioEvent(ExecutionListener.EVENTNAME_TAKE);
+    listener.setOrqueioExpression(EXPR_SET_VARIABLE);
     modelInstance.<SequenceFlow>getModelElementById(FLOW_ID).builder().addExtensionElement(listener);
     modelInstance = specifier.specifyConditionalProcess(modelInstance, false);
     engine.manageDeployment(repositoryService.createDeployment().addModelInstance(CONDITIONAL_MODEL, modelInstance).deploy());
@@ -309,12 +309,12 @@ public class ConditionalEventTriggeredByExecutionListenerTest extends AbstractCo
       .sequenceFlowId(FLOW_ID)
       .userTask(TASK_WITH_CONDITION_ID)
         .name(TASK_WITH_CONDITION)
-        .camundaAsyncBefore()
+        .orqueioAsyncBefore()
       .endEvent(END_EVENT_ID)
       .done();
-    CamundaExecutionListener listener = modelInstance.newInstance(CamundaExecutionListener.class);
-    listener.setCamundaEvent(ExecutionListener.EVENTNAME_TAKE);
-    listener.setCamundaExpression(EXPR_SET_VARIABLE);
+    OrqueioExecutionListener listener = modelInstance.newInstance(OrqueioExecutionListener.class);
+    listener.setOrqueioEvent(ExecutionListener.EVENTNAME_TAKE);
+    listener.setOrqueioExpression(EXPR_SET_VARIABLE);
     modelInstance.<SequenceFlow>getModelElementById(FLOW_ID).builder().addExtensionElement(listener);
     modelInstance = specifier.specifyConditionalProcess(modelInstance, true);
     engine.manageDeployment(repositoryService.createDeployment().addModelInstance(CONDITIONAL_MODEL, modelInstance).deploy());
@@ -345,12 +345,12 @@ public class ConditionalEventTriggeredByExecutionListenerTest extends AbstractCo
       .sequenceFlowId(FLOW_ID)
       .userTask(TASK_WITH_CONDITION_ID)
         .name(TASK_WITH_CONDITION)
-        .camundaAsyncBefore()
+        .orqueioAsyncBefore()
       .endEvent(END_EVENT_ID)
       .done();
-    CamundaExecutionListener listener = modelInstance.newInstance(CamundaExecutionListener.class);
-    listener.setCamundaEvent(ExecutionListener.EVENTNAME_TAKE);
-    listener.setCamundaExpression(EXPR_SET_VARIABLE);
+    OrqueioExecutionListener listener = modelInstance.newInstance(OrqueioExecutionListener.class);
+    listener.setOrqueioEvent(ExecutionListener.EVENTNAME_TAKE);
+    listener.setOrqueioExpression(EXPR_SET_VARIABLE);
     modelInstance.<SequenceFlow>getModelElementById(FLOW_ID).builder().addExtensionElement(listener);
     modelInstance = specifier.specifyConditionalProcess(modelInstance, false);
     engine.manageDeployment(repositoryService.createDeployment().addModelInstance(CONDITIONAL_MODEL, modelInstance).deploy());
@@ -391,7 +391,7 @@ public class ConditionalEventTriggeredByExecutionListenerTest extends AbstractCo
       .startEvent(START_EVENT_ID)
       .userTask(TASK_BEFORE_CONDITION_ID)
         .name(TASK_BEFORE_CONDITION)
-        .camundaExecutionListenerExpression(ExecutionListener.EVENTNAME_END, EXPR_SET_VARIABLE)
+        .orqueioExecutionListenerExpression(ExecutionListener.EVENTNAME_END, EXPR_SET_VARIABLE)
       .userTask(TASK_WITH_CONDITION_ID)
         .name(TASK_WITH_CONDITION)
       .endEvent(END_EVENT_ID)
@@ -420,7 +420,7 @@ public class ConditionalEventTriggeredByExecutionListenerTest extends AbstractCo
       .startEvent(START_EVENT_ID)
       .userTask(TASK_BEFORE_CONDITION_ID)
         .name(TASK_BEFORE_CONDITION)
-        .camundaExecutionListenerExpression(ExecutionListener.EVENTNAME_END, EXPR_SET_VARIABLE)
+        .orqueioExecutionListenerExpression(ExecutionListener.EVENTNAME_END, EXPR_SET_VARIABLE)
       .userTask(TASK_WITH_CONDITION_ID)
         .name(TASK_WITH_CONDITION)
       .endEvent(END_EVENT_ID)
@@ -458,9 +458,9 @@ public class ConditionalEventTriggeredByExecutionListenerTest extends AbstractCo
       .subProcessDone()
       .endEvent(END_EVENT_ID)
       .done();
-    CamundaExecutionListener listener = modelInstance.newInstance(CamundaExecutionListener.class);
-    listener.setCamundaEvent(ExecutionListener.EVENTNAME_TAKE);
-    listener.setCamundaExpression(EXPR_SET_VARIABLE_ON_PARENT);
+    OrqueioExecutionListener listener = modelInstance.newInstance(OrqueioExecutionListener.class);
+    listener.setOrqueioEvent(ExecutionListener.EVENTNAME_TAKE);
+    listener.setOrqueioExpression(EXPR_SET_VARIABLE_ON_PARENT);
     modelInstance.<SequenceFlow>getModelElementById(FLOW_ID).builder().addExtensionElement(listener);
     modelInstance = specifier.specifyConditionalProcess(modelInstance, true);
     engine.manageDeployment(repositoryService.createDeployment().addModelInstance(CONDITIONAL_MODEL, modelInstance).deploy());
@@ -498,9 +498,9 @@ public class ConditionalEventTriggeredByExecutionListenerTest extends AbstractCo
       .subProcessDone()
       .endEvent(END_EVENT_ID)
       .done();
-    CamundaExecutionListener listener = modelInstance.newInstance(CamundaExecutionListener.class);
-    listener.setCamundaEvent(ExecutionListener.EVENTNAME_TAKE);
-    listener.setCamundaExpression(EXPR_SET_VARIABLE_ON_PARENT);
+    OrqueioExecutionListener listener = modelInstance.newInstance(OrqueioExecutionListener.class);
+    listener.setOrqueioEvent(ExecutionListener.EVENTNAME_TAKE);
+    listener.setOrqueioExpression(EXPR_SET_VARIABLE_ON_PARENT);
     modelInstance.<SequenceFlow>getModelElementById(FLOW_ID).builder().addExtensionElement(listener);
     modelInstance = specifier.specifyConditionalProcess(modelInstance, false);
     engine.manageDeployment(repositoryService.createDeployment().addModelInstance(CONDITIONAL_MODEL, modelInstance).deploy());
@@ -533,7 +533,7 @@ public class ConditionalEventTriggeredByExecutionListenerTest extends AbstractCo
           .name(TASK_BEFORE_CONDITION)
         .userTask(TASK_WITH_CONDITION_ID)
           .name(TASK_WITH_CONDITION)
-          .camundaExecutionListenerExpression(ExecutionListener.EVENTNAME_START, EXPR_SET_VARIABLE_ON_PARENT)
+          .orqueioExecutionListenerExpression(ExecutionListener.EVENTNAME_START, EXPR_SET_VARIABLE_ON_PARENT)
         .endEvent()
       .subProcessDone()
       .endEvent(END_EVENT_ID)
@@ -569,7 +569,7 @@ public class ConditionalEventTriggeredByExecutionListenerTest extends AbstractCo
           .name(TASK_BEFORE_CONDITION)
         .userTask(TASK_WITH_CONDITION_ID)
           .name(TASK_WITH_CONDITION)
-          .camundaExecutionListenerExpression(ExecutionListener.EVENTNAME_START, EXPR_SET_VARIABLE_ON_PARENT)
+          .orqueioExecutionListenerExpression(ExecutionListener.EVENTNAME_START, EXPR_SET_VARIABLE_ON_PARENT)
         .endEvent()
       .subProcessDone()
       .endEvent(END_EVENT_ID)
@@ -603,7 +603,7 @@ public class ConditionalEventTriggeredByExecutionListenerTest extends AbstractCo
         .startEvent()
         .userTask(TASK_BEFORE_CONDITION_ID)
           .name(TASK_BEFORE_CONDITION)
-          .camundaExecutionListenerExpression(ExecutionListener.EVENTNAME_END, EXPR_SET_VARIABLE_ON_PARENT)
+          .orqueioExecutionListenerExpression(ExecutionListener.EVENTNAME_END, EXPR_SET_VARIABLE_ON_PARENT)
         .userTask(TASK_WITH_CONDITION_ID)
           .name(TASK_WITH_CONDITION)
         .endEvent()
@@ -639,7 +639,7 @@ public class ConditionalEventTriggeredByExecutionListenerTest extends AbstractCo
         .startEvent()
         .userTask(TASK_BEFORE_CONDITION_ID)
           .name(TASK_BEFORE_CONDITION)
-          .camundaExecutionListenerExpression(ExecutionListener.EVENTNAME_END, EXPR_SET_VARIABLE_ON_PARENT)
+          .orqueioExecutionListenerExpression(ExecutionListener.EVENTNAME_END, EXPR_SET_VARIABLE_ON_PARENT)
         .userTask(TASK_WITH_CONDITION_ID)
           .name(TASK_WITH_CONDITION)
         .endEvent()

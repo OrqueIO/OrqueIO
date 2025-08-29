@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<cmmn:definitions xmlns:dc="http://www.omg.org/spec/CMMN/20151109/DC"  xmlns:camunda="http://camunda.org/schema/1.0/cmmn" xmlns:di="http://www.omg.org/spec/CMMN/20151109/DI" xmlns:cmmndi="http://www.omg.org/spec/CMMN/20151109/CMMNDI" xmlns:cmmn="http://www.omg.org/spec/CMMN/20151109/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Test" targetNamespace="http://bpmn.io/schema/cmmn" exporter="Camunda Modeler" exporterVersion="1.2.0">
+<cmmn:definitions xmlns:dc="http://www.omg.org/spec/CMMN/20151109/DC"  xmlns:orqueio="http://orqueio.io/schema/1.0/cmmn" xmlns:di="http://www.omg.org/spec/CMMN/20151109/DI" xmlns:cmmndi="http://www.omg.org/spec/CMMN/20151109/CMMNDI" xmlns:cmmn="http://www.omg.org/spec/CMMN/20151109/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Test" targetNamespace="http://bpmn.io/schema/cmmn" exporter="Orqueio Modeler" exporterVersion="1.2.0">
   <cmmn:case id="Case_1">
     <cmmn:casePlanModel id="CasePlanModel_1" name="A CasePlanModel">
       <cmmn:planItem id="HumanTask_1" name="HumanTask1" definitionRef="HumanTask_1c0ossk" />
@@ -8,9 +8,9 @@
       </cmmn:planItem>
       <cmmn:sentry id="Sentry_0h6sch8" >
          <cmmn:extensionElements>
-          <camunda:variableOnPart variableName = "variable_1">
-            <camunda:variableEvent>create</camunda:variableEvent>
-          </camunda:variableOnPart>
+          <orqueio:variableOnPart variableName = "variable_1">
+            <orqueio:variableEvent>create</orqueio:variableEvent>
+          </orqueio:variableOnPart>
         </cmmn:extensionElements>
       </cmmn:sentry>  
       <cmmn:humanTask id="HumanTask_1c0ossk" name="HumanTask_1" >

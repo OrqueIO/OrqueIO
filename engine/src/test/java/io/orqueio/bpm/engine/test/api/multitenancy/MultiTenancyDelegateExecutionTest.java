@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -40,7 +40,7 @@ public class MultiTenancyDelegateExecutionTest extends PluggableProcessEngineTes
     testRule.deployForTenant("tenant1", Bpmn.createExecutableProcess(PROCESS_DEFINITION_KEY)
       .startEvent()
       .serviceTask()
-        .camundaClass(AssertingJavaDelegate.class.getName())
+        .orqueioClass(AssertingJavaDelegate.class.getName())
       .endEvent()
     .done());
 
@@ -56,12 +56,12 @@ public class MultiTenancyDelegateExecutionTest extends PluggableProcessEngineTes
       .startEvent()
       .parallelGateway("fork")
         .serviceTask()
-          .camundaClass(AssertingJavaDelegate.class.getName())
+          .orqueioClass(AssertingJavaDelegate.class.getName())
         .parallelGateway("join")
         .endEvent()
         .moveToNode("fork")
           .serviceTask()
-          .camundaClass(AssertingJavaDelegate.class.getName())
+          .orqueioClass(AssertingJavaDelegate.class.getName())
           .connectTo("join")
           .done());
 
@@ -78,7 +78,7 @@ public class MultiTenancyDelegateExecutionTest extends PluggableProcessEngineTes
           .embeddedSubProcess()
             .startEvent()
             .serviceTask()
-              .camundaClass(AssertingJavaDelegate.class.getName())
+              .orqueioClass(AssertingJavaDelegate.class.getName())
             .endEvent()
         .subProcessDone()
         .endEvent()

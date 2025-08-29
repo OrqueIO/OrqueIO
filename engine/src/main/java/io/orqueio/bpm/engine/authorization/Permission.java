@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -21,7 +21,7 @@ package io.orqueio.bpm.engine.authorization;
  * resource in a specific way. See {@link Permissions} for a set of built-in 
  * permissions and {@link Authorization} for general overview on authorizations.</p>
  *  
- * <p>In Camunda Platform, multiple permissions are grouped into an {@link Authorization}.
+ * <p>In Orqueio Platform, multiple permissions are grouped into an {@link Authorization}.
  * For efficient storage and checking of authorizations, the permissons that make
  * up an authorization are coded into a single integer.
  * The implication of this design is that a permission must have a unique integer value 

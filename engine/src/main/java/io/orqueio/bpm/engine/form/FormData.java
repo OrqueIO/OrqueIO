@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -29,25 +29,25 @@ import java.util.List;
  */
 public interface FormData {
 
-  /** User-defined reference to a form. In the Camunda Tasklist application,
+  /** User-defined reference to a form. In the Orqueio Tasklist application,
    * it is assumed that the form key specifies a resource in the deployment
    * which is the template for the form.  But users are free to
    * use this property differently.
    *
-   * A form can be referenced either through a form key or through a {@link CamundaFormRef}.
+   * A form can be referenced either through a form key or through a {@link OrqueioFormRef}.
    *
    */
   String getFormKey();
 
   /**
-   * User-defined reference to a form. A {@link CamundaFormRef} can specify any
-   * Camunda Form deployed to the engine with any deployment. It is also possible
+   * User-defined reference to a form. A {@link OrqueioFormRef} can specify any
+   * Orqueio Form deployed to the engine with any deployment. It is also possible
    * to specify a specific version of a deployed form.
    *
-   * A form can be referenced either through a form key or through a {@link CamundaFormRef}.
+   * A form can be referenced either through a form key or through a {@link OrqueioFormRef}.
    *
    */
-  CamundaFormRef getCamundaFormRef();
+  OrqueioFormRef getOrqueioFormRef();
 
   /** The deployment id of the process definition to which this form is related
    *  */

@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -40,7 +40,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 
-public class UserTaskCamundaFormDefinitionParseTest {
+public class UserTaskOrqueioFormDefinitionParseTest {
 
   public ProcessEngineRule engineRule = new ProvidedProcessEngineRule();
   public ProcessEngineTestRule testRule = new ProcessEngineTestRule(engineRule);
@@ -75,82 +75,82 @@ public class UserTaskCamundaFormDefinitionParseTest {
 
   @Test
   @Deployment
-  public void shouldParseCamundaFormDefinitionVersionBinding() {
-    // given a deployed process with a UserTask containing a Camunda Form definition with version binding
+  public void shouldParseOrqueioFormDefinitionVersionBinding() {
+    // given a deployed process with a UserTask containing a Orqueio Form definition with version binding
     // then
     TaskDefinition taskDefinition = findUserTaskDefinition("UserTask");
     FormDefinition formDefinition = taskDefinition.getFormDefinition();
 
-    assertThat(taskDefinition.getCamundaFormDefinitionKey().getExpressionText()).isEqualTo("formId");
-    assertThat(formDefinition.getCamundaFormDefinitionKey().getExpressionText()).isEqualTo("formId");
+    assertThat(taskDefinition.getOrqueioFormDefinitionKey().getExpressionText()).isEqualTo("formId");
+    assertThat(formDefinition.getOrqueioFormDefinitionKey().getExpressionText()).isEqualTo("formId");
 
-    assertThat(taskDefinition.getCamundaFormDefinitionBinding()).isEqualTo("version");
-    assertThat(formDefinition.getCamundaFormDefinitionBinding()).isEqualTo("version");
+    assertThat(taskDefinition.getOrqueioFormDefinitionBinding()).isEqualTo("version");
+    assertThat(formDefinition.getOrqueioFormDefinitionBinding()).isEqualTo("version");
 
-    assertThat(taskDefinition.getCamundaFormDefinitionVersion().getExpressionText()).isEqualTo("1");
-    assertThat(formDefinition.getCamundaFormDefinitionVersion().getExpressionText()).isEqualTo("1");
+    assertThat(taskDefinition.getOrqueioFormDefinitionVersion().getExpressionText()).isEqualTo("1");
+    assertThat(formDefinition.getOrqueioFormDefinitionVersion().getExpressionText()).isEqualTo("1");
   }
 
   @Test
   @Deployment
-  public void shouldParseCamundaFormDefinitionLatestBinding() {
-    // given a deployed process with a UserTask containing a Camunda Form definition with latest binding
+  public void shouldParseOrqueioFormDefinitionLatestBinding() {
+    // given a deployed process with a UserTask containing a Orqueio Form definition with latest binding
     // then
     TaskDefinition taskDefinition = findUserTaskDefinition("UserTask");
     FormDefinition formDefinition = taskDefinition.getFormDefinition();
 
-    assertThat(taskDefinition.getCamundaFormDefinitionKey().getExpressionText()).isEqualTo("formId");
-    assertThat(formDefinition.getCamundaFormDefinitionKey().getExpressionText()).isEqualTo("formId");
+    assertThat(taskDefinition.getOrqueioFormDefinitionKey().getExpressionText()).isEqualTo("formId");
+    assertThat(formDefinition.getOrqueioFormDefinitionKey().getExpressionText()).isEqualTo("formId");
 
-    assertThat(taskDefinition.getCamundaFormDefinitionBinding()).isEqualTo("latest");
-    assertThat(formDefinition.getCamundaFormDefinitionBinding()).isEqualTo("latest");
+    assertThat(taskDefinition.getOrqueioFormDefinitionBinding()).isEqualTo("latest");
+    assertThat(formDefinition.getOrqueioFormDefinitionBinding()).isEqualTo("latest");
   }
 
   @Test
   @Deployment
-  public void shouldParseCamundaFormDefinitionDeploymentBinding() {
-    // given a deployed process with a UserTask containing a Camunda Form definition with deployment binding
+  public void shouldParseOrqueioFormDefinitionDeploymentBinding() {
+    // given a deployed process with a UserTask containing a Orqueio Form definition with deployment binding
     // then
     TaskDefinition taskDefinition = findUserTaskDefinition("UserTask");
     FormDefinition formDefinition = taskDefinition.getFormDefinition();
 
-    assertThat(taskDefinition.getCamundaFormDefinitionKey().getExpressionText()).isEqualTo("formId");
-    assertThat(formDefinition.getCamundaFormDefinitionKey().getExpressionText()).isEqualTo("formId");
+    assertThat(taskDefinition.getOrqueioFormDefinitionKey().getExpressionText()).isEqualTo("formId");
+    assertThat(formDefinition.getOrqueioFormDefinitionKey().getExpressionText()).isEqualTo("formId");
 
-    assertThat(taskDefinition.getCamundaFormDefinitionBinding()).isEqualTo("deployment");
-    assertThat(formDefinition.getCamundaFormDefinitionBinding()).isEqualTo("deployment");
+    assertThat(taskDefinition.getOrqueioFormDefinitionBinding()).isEqualTo("deployment");
+    assertThat(formDefinition.getOrqueioFormDefinitionBinding()).isEqualTo("deployment");
   }
 
   @Test
   @Deployment
-  public void shouldParseTwoUserTasksWithCamundaFormDefinition() {
-    // given a deployed process with two UserTask containing a Camunda Form definition with deployment binding
+  public void shouldParseTwoUserTasksWithOrqueioFormDefinition() {
+    // given a deployed process with two UserTask containing a Orqueio Form definition with deployment binding
     // then
     TaskDefinition taskDefinition1 = findUserTaskDefinition("UserTask_1");
     FormDefinition formDefinition1 = taskDefinition1.getFormDefinition();
 
-    assertThat(taskDefinition1.getCamundaFormDefinitionKey().getExpressionText()).isEqualTo("formId_1");
-    assertThat(formDefinition1.getCamundaFormDefinitionKey().getExpressionText()).isEqualTo("formId_1");
+    assertThat(taskDefinition1.getOrqueioFormDefinitionKey().getExpressionText()).isEqualTo("formId_1");
+    assertThat(formDefinition1.getOrqueioFormDefinitionKey().getExpressionText()).isEqualTo("formId_1");
 
-    assertThat(taskDefinition1.getCamundaFormDefinitionBinding()).isEqualTo("deployment");
-    assertThat(formDefinition1.getCamundaFormDefinitionBinding()).isEqualTo("deployment");
+    assertThat(taskDefinition1.getOrqueioFormDefinitionBinding()).isEqualTo("deployment");
+    assertThat(formDefinition1.getOrqueioFormDefinitionBinding()).isEqualTo("deployment");
 
     TaskDefinition taskDefinition2 = findUserTaskDefinition("UserTask_2");
     FormDefinition formDefinition2 = taskDefinition2.getFormDefinition();
-    assertThat(taskDefinition2.getCamundaFormDefinitionKey().getExpressionText()).isEqualTo("formId_2");
-    assertThat(formDefinition2.getCamundaFormDefinitionKey().getExpressionText()).isEqualTo("formId_2");
+    assertThat(taskDefinition2.getOrqueioFormDefinitionKey().getExpressionText()).isEqualTo("formId_2");
+    assertThat(formDefinition2.getOrqueioFormDefinitionKey().getExpressionText()).isEqualTo("formId_2");
 
-    assertThat(taskDefinition2.getCamundaFormDefinitionBinding()).isEqualTo("version");
-    assertThat(formDefinition2.getCamundaFormDefinitionBinding()).isEqualTo("version");
+    assertThat(taskDefinition2.getOrqueioFormDefinitionBinding()).isEqualTo("version");
+    assertThat(formDefinition2.getOrqueioFormDefinitionBinding()).isEqualTo("version");
 
-    assertThat(taskDefinition2.getCamundaFormDefinitionVersion().getExpressionText()).isEqualTo("2");
-    assertThat(formDefinition2.getCamundaFormDefinitionVersion().getExpressionText()).isEqualTo("2");
+    assertThat(taskDefinition2.getOrqueioFormDefinitionVersion().getExpressionText()).isEqualTo("2");
+    assertThat(formDefinition2.getOrqueioFormDefinitionVersion().getExpressionText()).isEqualTo("2");
   }
 
   @Test
-  public void shouldNotParseCamundaFormDefinitionUnsupportedBinding() {
-    // given a deployed process with a UserTask containing a Camunda Form definition with unsupported binding
-    String resource = TestHelper.getBpmnProcessDefinitionResource(getClass(), "shouldNotParseCamundaFormDefinitionUnsupportedBinding");
+  public void shouldNotParseOrqueioFormDefinitionUnsupportedBinding() {
+    // given a deployed process with a UserTask containing a Orqueio Form definition with unsupported binding
+    String resource = TestHelper.getBpmnProcessDefinitionResource(getClass(), "shouldNotParseOrqueioFormDefinitionUnsupportedBinding");
 
     // when/then expect parse exception
     assertThatThrownBy(() -> repositoryService.createDeployment().name(resource).addClasspathResource(resource).deploy())
@@ -159,9 +159,9 @@ public class UserTaskCamundaFormDefinitionParseTest {
   }
 
   @Test
-  public void shouldNotParseCamundaFormDefinitionAndFormKey() {
-    // given a deployed process with a UserTask containing a Camunda Form definition and formKey
-    String resource = TestHelper.getBpmnProcessDefinitionResource(getClass(), "shouldNotParseCamundaFormDefinitionAndFormKey");
+  public void shouldNotParseOrqueioFormDefinitionAndFormKey() {
+    // given a deployed process with a UserTask containing a Orqueio Form definition and formKey
+    String resource = TestHelper.getBpmnProcessDefinitionResource(getClass(), "shouldNotParseOrqueioFormDefinitionAndFormKey");
 
     // when/then expect parse exception
     assertThatThrownBy(() -> repositoryService.createDeployment().name(resource).addClasspathResource(resource).deploy())

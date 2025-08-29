@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -38,7 +38,7 @@ import org.junit.Test;
  */
 public class Cmmn10CompatibilityTest extends CmmnTest {
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/cmmn/cmm10/Cmmn10CompatibilityTest.testRequiredRule.cmmn")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/cmmn/cmm10/Cmmn10CompatibilityTest.testRequiredRule.cmmn")
   @Test
   public void testRequiredRule() {
     CaseInstance caseInstance =
@@ -57,7 +57,7 @@ public class Cmmn10CompatibilityTest extends CmmnTest {
     }
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/cmmn/cmm10/Cmmn10CompatibilityTest.testManualActivationRule.cmmn")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/cmmn/cmm10/Cmmn10CompatibilityTest.testManualActivationRule.cmmn")
   @Test
   public void testManualActivationRule() {
     createCaseInstanceByKey("case", Variables.createVariables().putValue("manual", false));
@@ -68,7 +68,7 @@ public class Cmmn10CompatibilityTest extends CmmnTest {
     assertTrue(taskExecution.isActive());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/cmmn/cmm10/Cmmn10CompatibilityTest.testManualActivationRuleWithoutCondition.cmmn")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/cmmn/cmm10/Cmmn10CompatibilityTest.testManualActivationRuleWithoutCondition.cmmn")
   @Test
   public void testManualActivationRuleWithoutCondition() {
     createCaseInstanceByKey("case", Variables.createVariables().putValue("manual", false));
@@ -79,7 +79,7 @@ public class Cmmn10CompatibilityTest extends CmmnTest {
     assertTrue(taskExecution.isEnabled());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/cmmn/cmm10/Cmmn10CompatibilityTest.testRepetitionRule.cmmn")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/cmmn/cmm10/Cmmn10CompatibilityTest.testRepetitionRule.cmmn")
   @Test
   public void testRepetitionRule() {
     // given
@@ -98,7 +98,7 @@ public class Cmmn10CompatibilityTest extends CmmnTest {
     assertEquals(1, query.available().count());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/cmmn/cmm10/Cmmn10CompatibilityTest.testRepetitionRuleWithoutEntryCriteria.cmmn")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/cmmn/cmm10/Cmmn10CompatibilityTest.testRepetitionRuleWithoutEntryCriteria.cmmn")
   @Test
   public void testRepetitionRuleWithoutEntryCriteria() {
     // given
@@ -117,7 +117,7 @@ public class Cmmn10CompatibilityTest extends CmmnTest {
     assertEquals(1, query.active().count());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/cmmn/cmm10/Cmmn10CompatibilityTest.testRepetitionRuleCustomStandardEvent.cmmn")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/cmmn/cmm10/Cmmn10CompatibilityTest.testRepetitionRuleCustomStandardEvent.cmmn")
   @Test
   public void testRepetitionRuleWithoutEntryCriteriaAndCustomStandardEvent() {
     // given
@@ -137,7 +137,7 @@ public class Cmmn10CompatibilityTest extends CmmnTest {
     assertEquals(1, query.disabled().count());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/cmmn/cmm10/Cmmn10CompatibilityTest.testPlanItemEntryCriterion.cmmn")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/cmmn/cmm10/Cmmn10CompatibilityTest.testPlanItemEntryCriterion.cmmn")
   @Test
   public void testPlanItemEntryCriterion() {
     // given
@@ -151,7 +151,7 @@ public class Cmmn10CompatibilityTest extends CmmnTest {
     assertTrue(queryCaseExecutionByActivityId("PI_HumanTask_2").isActive());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/cmmn/cmm10/Cmmn10CompatibilityTest.testPlanItemExitCriterion.cmmn")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/cmmn/cmm10/Cmmn10CompatibilityTest.testPlanItemExitCriterion.cmmn")
   @Test
   public void testPlanItemExitCriterion() {
     // given
@@ -166,7 +166,7 @@ public class Cmmn10CompatibilityTest extends CmmnTest {
     assertNull(queryCaseExecutionByActivityId("PI_HumanTask_2"));
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/cmmn/cmm10/Cmmn10CompatibilityTest.testCasePlanModelExitCriterion.cmmn")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/cmmn/cmm10/Cmmn10CompatibilityTest.testCasePlanModelExitCriterion.cmmn")
   @Test
   public void testCasePlanModelExitCriterion() {
     // given
@@ -181,7 +181,7 @@ public class Cmmn10CompatibilityTest extends CmmnTest {
     assertTrue(queryCaseExecutionById(caseInstanceId).isTerminated());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/cmmn/cmm10/Cmmn10CompatibilityTest.testSentryIfPartCondition.cmmn")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/cmmn/cmm10/Cmmn10CompatibilityTest.testSentryIfPartCondition.cmmn")
   @Test
   public void testSentryIfPartCondition() {
     // given
@@ -202,7 +202,7 @@ public class Cmmn10CompatibilityTest extends CmmnTest {
     assertTrue(queryCaseExecutionById(humanTask2).isEnabled());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/cmmn/cmm10/Cmmn10CompatibilityTest.testDescription.cmmn")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/cmmn/cmm10/Cmmn10CompatibilityTest.testDescription.cmmn")
   @Test
   public void testDescription() {
     // given

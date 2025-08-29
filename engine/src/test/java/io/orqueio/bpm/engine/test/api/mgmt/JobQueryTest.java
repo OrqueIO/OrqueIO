@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -138,7 +138,7 @@ public class JobQueryTest {
     processEngineConfiguration.setEnsureJobDueDateNotNull(ensureJobDueDateSet);
 
     deploymentId = repositoryService.createDeployment()
-        .addClasspathResource("org/camunda/bpm/engine/test/api/mgmt/timerOnTask.bpmn20.xml")
+        .addClasspathResource("io/orqueio/bpm/engine/test/api/mgmt/timerOnTask.bpmn20.xml")
         .deploy()
         .getId();
 
@@ -292,7 +292,7 @@ public class JobQueryTest {
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/JobQueryTest.testTimeCycleQueryByProcessDefinitionId.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/JobQueryTest.testTimeCycleQueryByProcessDefinitionId.bpmn20.xml"})
   public void testTimeCycleQueryByProcessDefinitionId() {
     String processDefinitionId = repositoryService
         .createProcessDefinitionQuery()
@@ -331,7 +331,7 @@ public class JobQueryTest {
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/JobQueryTest.testTimeCycleQueryByProcessDefinitionId.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/JobQueryTest.testTimeCycleQueryByProcessDefinitionId.bpmn20.xml"})
   public void testTimeCycleQueryByProcessDefinitionKey() {
     JobQuery query = managementService.createJobQuery().processDefinitionKey("process");
 
@@ -556,7 +556,7 @@ public class JobQueryTest {
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/ManagementServiceTest.testGetJobExceptionStacktrace.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/ManagementServiceTest.testGetJobExceptionStacktrace.bpmn20.xml"})
   public void testQueryByException() {
     JobQuery query = managementService.createJobQuery().withException();
     verifyQueryResults(query, 0);
@@ -568,7 +568,7 @@ public class JobQueryTest {
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/ManagementServiceTest.testGetJobExceptionStacktrace.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/ManagementServiceTest.testGetJobExceptionStacktrace.bpmn20.xml"})
   public void testQueryByExceptionMessage() {
     JobQuery query = managementService.createJobQuery().exceptionMessage(EXCEPTION_MESSAGE);
     verifyQueryResults(query, 0);
@@ -582,7 +582,7 @@ public class JobQueryTest {
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/ManagementServiceTest.testGetJobExceptionStacktrace.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/ManagementServiceTest.testGetJobExceptionStacktrace.bpmn20.xml"})
   public void testQueryByExceptionMessageEmpty() {
     JobQuery query = managementService.createJobQuery().exceptionMessage("");
     verifyQueryResults(query, 0);
@@ -604,7 +604,7 @@ public class JobQueryTest {
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/ManagementServiceTest.testGetJobExceptionStacktrace.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/ManagementServiceTest.testGetJobExceptionStacktrace.bpmn20.xml"})
   public void testQueryByFailedActivityId(){
     JobQuery query = managementService.createJobQuery().failedActivityId("theScriptTask");
     verifyQueryResults(query, 0);

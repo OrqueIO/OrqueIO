@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -123,7 +123,7 @@ public class PurgeDatabaseTest {
     // given process with variable and async process instance
     BpmnModelInstance test = Bpmn.createExecutableProcess(PROCESS_DEF_KEY)
       .startEvent()
-      .camundaAsyncBefore()
+      .orqueioAsyncBefore()
       .userTask()
       .userTask()
       .endEvent()
@@ -154,17 +154,17 @@ public class PurgeDatabaseTest {
 
     BpmnModelInstance modelInstance = Bpmn.createExecutableProcess(PROCESS_DEF_KEY)
       .startEvent()
-        .camundaAsyncBefore()
+        .orqueioAsyncBefore()
       .parallelGateway("parallel")
         .serviceTask("external")
-          .camundaType("external")
-          .camundaTopic("external")
+          .orqueioType("external")
+          .orqueioTopic("external")
         .boundaryEvent()
           .message("message")
         .moveToNode("parallel")
         .serviceTask()
-          .camundaAsyncBefore()
-          .camundaExpression("${1/0}")
+          .orqueioAsyncBefore()
+          .orqueioExpression("${1/0}")
         .moveToLastGateway()
         .userTask()
       .done();
@@ -289,7 +289,7 @@ public class PurgeDatabaseTest {
 
     engineRule.getRepositoryService()
       .createDeployment()
-      .addClasspathResource("org/camunda/bpm/engine/test/standalone/db/entitymanager/PurgeDatabaseTest.testPurgeCmmnProcess.cmmn")
+      .addClasspathResource("io/orqueio/bpm/engine/test/standalone/db/entitymanager/PurgeDatabaseTest.testPurgeCmmnProcess.cmmn")
       .deploy();
     VariableMap variables = Variables.createVariables();
     variables.put("key", "value");
@@ -332,7 +332,7 @@ public class PurgeDatabaseTest {
     // given dmn process which is not managed by process engine rule
     engineRule.getRepositoryService()
       .createDeployment()
-      .addClasspathResource("org/camunda/bpm/engine/test/standalone/db/entitymanager/PurgeDatabaseTest.testPurgeDmnProcess.dmn")
+      .addClasspathResource("io/orqueio/bpm/engine/test/standalone/db/entitymanager/PurgeDatabaseTest.testPurgeDmnProcess.dmn")
       .deploy();
     VariableMap variables = Variables.createVariables()
       .putValue("key", "value")

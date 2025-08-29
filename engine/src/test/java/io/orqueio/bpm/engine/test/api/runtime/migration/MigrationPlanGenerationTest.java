@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -200,13 +200,13 @@ public class MigrationPlanGenerationTest {
   @Test
   public void testMapEqualUnsupportedAsyncBeforeActivities() {
     BpmnModelInstance testModel = modify(ProcessModels.UNSUPPORTED_ACTIVITIES)
-      .flowNodeBuilder("startEvent").camundaAsyncBefore()
-      .moveToNode("decisionTask").camundaAsyncBefore()
-      .moveToNode("throwEvent").camundaAsyncAfter()
-      .moveToNode("serviceTask").camundaAsyncBefore()
-      .moveToNode("sendTask").camundaAsyncBefore()
-      .moveToNode("scriptTask").camundaAsyncBefore()
-      .moveToNode("endEvent").camundaAsyncBefore()
+      .flowNodeBuilder("startEvent").orqueioAsyncBefore()
+      .moveToNode("decisionTask").orqueioAsyncBefore()
+      .moveToNode("throwEvent").orqueioAsyncAfter()
+      .moveToNode("serviceTask").orqueioAsyncBefore()
+      .moveToNode("sendTask").orqueioAsyncBefore()
+      .moveToNode("scriptTask").orqueioAsyncBefore()
+      .moveToNode("endEvent").orqueioAsyncBefore()
       .done();
 
     assertGeneratedMigrationPlan(testModel, testModel)
@@ -224,13 +224,13 @@ public class MigrationPlanGenerationTest {
   @Test
   public void testMapEqualUnsupportedAsyncAfterActivities() {
     BpmnModelInstance testModel = modify(ProcessModels.UNSUPPORTED_ACTIVITIES)
-      .flowNodeBuilder("startEvent").camundaAsyncAfter()
-      .moveToNode("decisionTask").camundaAsyncAfter()
-      .moveToNode("throwEvent").camundaAsyncAfter()
-      .moveToNode("serviceTask").camundaAsyncAfter()
-      .moveToNode("sendTask").camundaAsyncAfter()
-      .moveToNode("scriptTask").camundaAsyncAfter()
-      .moveToNode("endEvent").camundaAsyncAfter()
+      .flowNodeBuilder("startEvent").orqueioAsyncAfter()
+      .moveToNode("decisionTask").orqueioAsyncAfter()
+      .moveToNode("throwEvent").orqueioAsyncAfter()
+      .moveToNode("serviceTask").orqueioAsyncAfter()
+      .moveToNode("sendTask").orqueioAsyncAfter()
+      .moveToNode("scriptTask").orqueioAsyncAfter()
+      .moveToNode("endEvent").orqueioAsyncAfter()
       .done();
 
     assertGeneratedMigrationPlan(testModel, testModel)
@@ -796,8 +796,8 @@ public class MigrationPlanGenerationTest {
     BpmnModelInstance targetModel = ProcessModels.newModel()
       .startEvent()
       .sendTask("externalTask")
-        .camundaType("external")
-        .camundaTopic("foo")
+        .orqueioType("external")
+        .orqueioTopic("foo")
       .endEvent()
       .done();
 

@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -55,8 +55,8 @@ import org.junit.Test;
  */
 public class DeploymentAuthorizationTest extends AuthorizationTest {
 
-  protected static final String FIRST_RESOURCE = "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml";
-  protected static final String SECOND_RESOURCE = "org/camunda/bpm/engine/test/api/authorization/messageBoundaryEventProcess.bpmn20.xml";
+  protected static final String FIRST_RESOURCE = "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml";
+  protected static final String SECOND_RESOURCE = "io/orqueio/bpm/engine/test/api/authorization/messageBoundaryEventProcess.bpmn20.xml";
 
   // query ////////////////////////////////////////////////////////////
 
@@ -529,9 +529,9 @@ public class DeploymentAuthorizationTest extends AuthorizationTest {
   // register process application ///////////////////////////////////
 
   @Test
-  public void shouldRegisterProcessApplicationAsCamundaAdmin() {
+  public void shouldRegisterProcessApplicationAsOrqueioAdmin() {
     // given
-    identityService.setAuthentication(userId, Collections.singletonList(Groups.CAMUNDA_ADMIN));
+    identityService.setAuthentication(userId, Collections.singletonList(Groups.ORQUEIO_ADMIN));
 
     EmbeddedProcessApplication processApplication = new EmbeddedProcessApplication();
     ProcessApplicationReference reference = processApplication.getReference();
@@ -564,7 +564,7 @@ public class DeploymentAuthorizationTest extends AuthorizationTest {
   @Test
   public void shouldRegisterProcessApplicationWithAdminAndPermission() {
     // given
-    identityService.setAuthentication(userId, Collections.singletonList(Groups.CAMUNDA_ADMIN));
+    identityService.setAuthentication(userId, Collections.singletonList(Groups.ORQUEIO_ADMIN));
     createGrantAuthorization(Resources.SYSTEM, "*", userId, SystemPermissions.SET);
     EmbeddedProcessApplication processApplication = new EmbeddedProcessApplication();
     ProcessApplicationReference reference = processApplication.getReference();
@@ -592,9 +592,9 @@ public class DeploymentAuthorizationTest extends AuthorizationTest {
 
   // unregister process application ///////////////////////////////////
   @Test
-  public void shouldUnregisterProcessApplicationAsCamundaAdmin() {
+  public void shouldUnregisterProcessApplicationAsOrqueioAdmin() {
     // given
-    identityService.setAuthentication(userId, Collections.singletonList(Groups.CAMUNDA_ADMIN));
+    identityService.setAuthentication(userId, Collections.singletonList(Groups.ORQUEIO_ADMIN));
 
     EmbeddedProcessApplication processApplication = new EmbeddedProcessApplication();
     String deploymentId = createDeployment(null, FIRST_RESOURCE).getId();
@@ -628,7 +628,7 @@ public class DeploymentAuthorizationTest extends AuthorizationTest {
   @Test
   public void shouldUnregisterProcessApplicationWithAdminAndPermission() {
     // given
-    identityService.setAuthentication(userId, Collections.singletonList(Groups.CAMUNDA_ADMIN));
+    identityService.setAuthentication(userId, Collections.singletonList(Groups.ORQUEIO_ADMIN));
     createGrantAuthorization(Resources.SYSTEM, "*", userId, SystemPermissions.SET);
 
     EmbeddedProcessApplication processApplication = new EmbeddedProcessApplication();
@@ -658,9 +658,9 @@ public class DeploymentAuthorizationTest extends AuthorizationTest {
   // get process application for deployment ///////////////////////////////////
 
   @Test
-  public void shouldGetProcessApplicationForDeploymentAsCamundaAdmin() {
+  public void shouldGetProcessApplicationForDeploymentAsOrqueioAdmin() {
     // given
-    identityService.setAuthentication(userId, Collections.singletonList(Groups.CAMUNDA_ADMIN));
+    identityService.setAuthentication(userId, Collections.singletonList(Groups.ORQUEIO_ADMIN));
 
     EmbeddedProcessApplication processApplication = new EmbeddedProcessApplication();
     String deploymentId = createDeployment(null, FIRST_RESOURCE).getId();
@@ -694,7 +694,7 @@ public class DeploymentAuthorizationTest extends AuthorizationTest {
   @Test
   public void shouldGetProcessApplicationForDeploymentWithAdminAndPermission() {
     // given
-    identityService.setAuthentication(userId, Collections.singletonList(Groups.CAMUNDA_ADMIN));
+    identityService.setAuthentication(userId, Collections.singletonList(Groups.ORQUEIO_ADMIN));
     createGrantAuthorization(Resources.SYSTEM, "*", userId, SystemPermissions.READ);
 
     EmbeddedProcessApplication processApplication = new EmbeddedProcessApplication();
@@ -724,9 +724,9 @@ public class DeploymentAuthorizationTest extends AuthorizationTest {
   // get registered deployments ///////////////////////////////////
 
   @Test
-  public void shouldGetRegisteredDeploymentsAsCamundaAdmin() {
+  public void shouldGetRegisteredDeploymentsAsOrqueioAdmin() {
     // given
-    identityService.setAuthentication(userId, Collections.singletonList(Groups.CAMUNDA_ADMIN));
+    identityService.setAuthentication(userId, Collections.singletonList(Groups.ORQUEIO_ADMIN));
 
     String deploymentId = createDeployment(null, FIRST_RESOURCE).getId();
 
@@ -754,7 +754,7 @@ public class DeploymentAuthorizationTest extends AuthorizationTest {
   @Test
   public void shouldGetRegisteredDeploymentsWithAdminAndPermission() {
     // given
-    identityService.setAuthentication(userId, Collections.singletonList(Groups.CAMUNDA_ADMIN));
+    identityService.setAuthentication(userId, Collections.singletonList(Groups.ORQUEIO_ADMIN));
     createGrantAuthorization(Resources.SYSTEM, "*", userId, SystemPermissions.READ);
 
     String deploymentId = createDeployment(null, FIRST_RESOURCE).getId();
@@ -781,9 +781,9 @@ public class DeploymentAuthorizationTest extends AuthorizationTest {
   // register deployment for job executor ///////////////////////////////////
 
   @Test
-  public void shouldRegisterDeploymentAsCamundaAdmin() {
+  public void shouldRegisterDeploymentAsOrqueioAdmin() {
     // given
-    identityService.setAuthentication(userId, Collections.singletonList(Groups.CAMUNDA_ADMIN));
+    identityService.setAuthentication(userId, Collections.singletonList(Groups.ORQUEIO_ADMIN));
 
     String deploymentId = createDeployment(null, FIRST_RESOURCE).getId();
 
@@ -811,7 +811,7 @@ public class DeploymentAuthorizationTest extends AuthorizationTest {
   @Test
   public void shouldRegisterDeploymentWithAdminAndPermission() {
     // given
-    identityService.setAuthentication(userId, Collections.singletonList(Groups.CAMUNDA_ADMIN));
+    identityService.setAuthentication(userId, Collections.singletonList(Groups.ORQUEIO_ADMIN));
     createGrantAuthorization(Resources.SYSTEM, "*", userId, SystemPermissions.SET);
 
     String deploymentId = createDeployment(null, FIRST_RESOURCE).getId();
@@ -841,9 +841,9 @@ public class DeploymentAuthorizationTest extends AuthorizationTest {
   // unregister deployment for job executor ///////////////////////////////////
 
   @Test
-  public void shouldUnregisterDeploymentAsCamundaAdmin() {
+  public void shouldUnregisterDeploymentAsOrqueioAdmin() {
     // given
-    identityService.setAuthentication(userId, Collections.singletonList(Groups.CAMUNDA_ADMIN));
+    identityService.setAuthentication(userId, Collections.singletonList(Groups.ORQUEIO_ADMIN));
 
     String deploymentId = createDeployment(null, FIRST_RESOURCE).getId();
 
@@ -871,7 +871,7 @@ public class DeploymentAuthorizationTest extends AuthorizationTest {
   @Test
   public void shouldUnregisterDeploymentWithAdminAndPermission() {
     // given
-    identityService.setAuthentication(userId, Collections.singletonList(Groups.CAMUNDA_ADMIN));
+    identityService.setAuthentication(userId, Collections.singletonList(Groups.ORQUEIO_ADMIN));
     createGrantAuthorization(Resources.SYSTEM, "*", userId, SystemPermissions.SET);
 
     String deploymentId = createDeployment(null, FIRST_RESOURCE).getId();

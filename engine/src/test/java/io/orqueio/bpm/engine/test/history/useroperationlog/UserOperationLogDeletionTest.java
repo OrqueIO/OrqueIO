@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -48,10 +48,10 @@ import org.junit.Test;
  */
 public class UserOperationLogDeletionTest extends AbstractUserOperationLogTest {
 
-  public static final String DECISION_SINGLE_OUTPUT_DMN = "org/camunda/bpm/engine/test/history/HistoricDecisionInstanceTest.decisionSingleOutput.dmn11.xml";
+  public static final String DECISION_SINGLE_OUTPUT_DMN = "io/orqueio/bpm/engine/test/history/HistoricDecisionInstanceTest.decisionSingleOutput.dmn11.xml";
   public static final String DECISION_DEFINITION_KEY = "testDecision";
 
-  protected static final String PROCESS_PATH = "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml";
+  protected static final String PROCESS_PATH = "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml";
   protected static final String PROCESS_KEY = "oneTaskProcess";
 
   @Before
@@ -129,7 +129,7 @@ public class UserOperationLogDeletionTest extends AbstractUserOperationLogTest {
     assertEquals(5, query.count());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testDeleteCaseTaskKeepUserOperationLog() {
     // given
@@ -191,7 +191,7 @@ public class UserOperationLogDeletionTest extends AbstractUserOperationLogTest {
     assertEquals(CATEGORY_OPERATOR, entry.getCategory());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testDeleteCaseInstanceKeepUserOperationLog() {
     // given

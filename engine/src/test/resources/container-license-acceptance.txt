@@ -1,2 +1,2 @@
-registry.camunda.cloud/team-cambpm/camunda-ci-sqlserver:2017
-registry.camunda.cloud/team-cambpm/camunda-ci-sqlserver:2019
+registry.orqueio.cloud/team-cambpm/orqueio-ci-sqlserver:2017
+registry.orqueio.cloud/team-cambpm/orqueio-ci-sqlserver:2019

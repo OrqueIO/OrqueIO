@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -105,11 +105,11 @@ public class DelegateTaskTest {
   public void testGetFollowUpDate() {
     // given
     BpmnModelInstance modelInstance = Bpmn.createExecutableProcess("process")
-        .camundaHistoryTimeToLive(180)
+        .orqueioHistoryTimeToLive(180)
         .startEvent()
       .userTask()
-        .camundaFollowUpDate(FOLLOW_UP_DATE_STRING)
-        .camundaTaskListenerClass("create", GetFollowUpDateListener.class)
+        .orqueioFollowUpDate(FOLLOW_UP_DATE_STRING)
+        .orqueioTaskListenerClass("create", GetFollowUpDateListener.class)
       .endEvent()
       .done();
 
@@ -130,10 +130,10 @@ public class DelegateTaskTest {
   public void testSetFollowUpDate() {
     // given
     BpmnModelInstance modelInstance = Bpmn.createExecutableProcess("process")
-        .camundaHistoryTimeToLive(180)
+        .orqueioHistoryTimeToLive(180)
         .startEvent()
       .userTask()
-        .camundaTaskListenerClass("create", SetFollowUpDateListener.class)
+        .orqueioTaskListenerClass("create", SetFollowUpDateListener.class)
       .endEvent()
       .done();
 
@@ -154,10 +154,10 @@ public class DelegateTaskTest {
   public void testLastUpdated() {
     // given
     BpmnModelInstance modelInstance = Bpmn.createExecutableProcess("process")
-        .camundaHistoryTimeToLive(180)
+        .orqueioHistoryTimeToLive(180)
         .startEvent()
         .userTask()
-          .camundaTaskListenerClass(TaskListener.EVENTNAME_UPDATE, LastUpdateListener.class)
+          .orqueioTaskListenerClass(TaskListener.EVENTNAME_UPDATE, LastUpdateListener.class)
         .endEvent()
         .done();
 

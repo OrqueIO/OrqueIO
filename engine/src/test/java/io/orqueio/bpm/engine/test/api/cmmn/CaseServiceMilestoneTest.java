@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -38,7 +38,7 @@ public class CaseServiceMilestoneTest extends PluggableProcessEngineTest {
   protected final String MILESTONE_KEY = "PI_Milestone_1";
 
   @Deployment(resources={
-      "org/camunda/bpm/engine/test/api/cmmn/oneMilestoneCase.cmmn"
+      "io/orqueio/bpm/engine/test/api/cmmn/oneMilestoneCase.cmmn"
       })
   @Test
   public void testManualStart() {
@@ -57,7 +57,7 @@ public class CaseServiceMilestoneTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources={
-      "org/camunda/bpm/engine/test/api/cmmn/oneMilestoneCase.cmmn"
+      "io/orqueio/bpm/engine/test/api/cmmn/oneMilestoneCase.cmmn"
       })
   @Test
   public void testDisable() {
@@ -76,7 +76,7 @@ public class CaseServiceMilestoneTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources={
-      "org/camunda/bpm/engine/test/api/cmmn/oneMilestoneCase.cmmn"
+      "io/orqueio/bpm/engine/test/api/cmmn/oneMilestoneCase.cmmn"
       })
   @Test
   public void testReenable() {
@@ -95,7 +95,7 @@ public class CaseServiceMilestoneTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources={
-      "org/camunda/bpm/engine/test/api/cmmn/oneMilestoneCase.cmmn"
+      "io/orqueio/bpm/engine/test/api/cmmn/oneMilestoneCase.cmmn"
       })
   @Test
   public void testComplete() {
@@ -114,7 +114,7 @@ public class CaseServiceMilestoneTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources={
-      "org/camunda/bpm/engine/test/api/cmmn/oneMilestoneCase.cmmn"
+      "io/orqueio/bpm/engine/test/api/cmmn/oneMilestoneCase.cmmn"
       })
   @Test
   public void testTerminate() {
@@ -132,7 +132,7 @@ public class CaseServiceMilestoneTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources={
-      "org/camunda/bpm/engine/test/api/cmmn/oneMilestoneCase.cmmn"
+      "io/orqueio/bpm/engine/test/api/cmmn/oneMilestoneCase.cmmn"
       })
   @Test
   public void testTerminateNonFluent() {

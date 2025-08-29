@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -21,7 +21,7 @@ import io.orqueio.bpm.engine.ProcessEngine;
 
 
 /**
- * <p>Provides access to the Camunda Platform services.</p>
+ * <p>Provides access to the Orqueio Platform services.</p>
  *
  * @author Daniel Meyer
  *
@@ -29,7 +29,7 @@ import io.orqueio.bpm.engine.ProcessEngine;
 public final class BpmPlatform {
 
   public final static String JNDI_NAME_PREFIX = "java:global";
-  public final static String APP_JNDI_NAME = "camunda-bpm-platform";
+  public final static String APP_JNDI_NAME = "orqueio-bpm-platform";
   public final static String MODULE_JNDI_NAME = "process-engine";
 
   public final static String PROCESS_ENGINE_SERVICE_NAME = "ProcessEngineService!io.orqueio.bpm.ProcessEngineService";

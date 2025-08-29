@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -95,7 +95,7 @@ public class HistoryTimeToLiveDeploymentTest {
     assertThatThrownBy(() -> {
       // when
       testRule.deploy(repositoryService.createDeployment()
-          .addClasspathResource("org/camunda/bpm/engine/test/api/repository/version1.bpmn20.xml"));})
+          .addClasspathResource("io/orqueio/bpm/engine/test/api/repository/version1.bpmn20.xml"));})
 
         // then
         .isInstanceOf(ParseException.class)
@@ -111,7 +111,7 @@ public class HistoryTimeToLiveDeploymentTest {
     // when
     testRule.deploy(repositoryService
         .createDeployment()
-        .addClasspathResource("org/camunda/bpm/engine/test/api/repository/version3.bpmn20.xml"));
+        .addClasspathResource("io/orqueio/bpm/engine/test/api/repository/version3.bpmn20.xml"));
 
     Deployment deployment = repositoryService.createDeploymentQuery().singleResult();
 
@@ -124,7 +124,7 @@ public class HistoryTimeToLiveDeploymentTest {
     // when
     testRule.deploy(repositoryService
         .createDeployment()
-        .addClasspathResource("org/camunda/bpm/engine/test/api/cmmn/oneTaskCaseWithHistoryTimeToLive.cmmn"));
+        .addClasspathResource("io/orqueio/bpm/engine/test/api/cmmn/oneTaskCaseWithHistoryTimeToLive.cmmn"));
 
     Deployment deployment = repositoryService.createDeploymentQuery().singleResult();
 
@@ -137,7 +137,7 @@ public class HistoryTimeToLiveDeploymentTest {
     assertThatThrownBy(() -> {
       // when
       testRule.deploy(repositoryService.createDeployment()
-          .addClasspathResource("org/camunda/bpm/engine/test/api/cmmn/oneTaskCase2.cmmn"));})
+          .addClasspathResource("io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase2.cmmn"));})
 
         // then
         .isInstanceOf(ProcessEngineException.class)
@@ -150,7 +150,7 @@ public class HistoryTimeToLiveDeploymentTest {
     // when
     testRule.deploy(repositoryService
         .createDeployment()
-        .addClasspathResource("org/camunda/bpm/engine/test/api/dmn/Example.dmn"));
+        .addClasspathResource("io/orqueio/bpm/engine/test/api/dmn/Example.dmn"));
 
     Deployment deployment = repositoryService.createDeploymentQuery().singleResult();
 
@@ -164,7 +164,7 @@ public class HistoryTimeToLiveDeploymentTest {
       // when
       testRule.deploy(repositoryService
           .createDeployment()
-          .addClasspathResource("org/camunda/bpm/engine/test/api/dmn/Another_Example.dmn"));})
+          .addClasspathResource("io/orqueio/bpm/engine/test/api/dmn/Another_Example.dmn"));})
 
         // then
         .isInstanceOf(ProcessEngineException.class)
@@ -179,7 +179,7 @@ public class HistoryTimeToLiveDeploymentTest {
 
     // when
     testRule.deploy(repositoryService.createDeployment()
-        .addClasspathResource("org/camunda/bpm/engine/test/api/repository/version1.bpmn20.xml"));
+        .addClasspathResource("io/orqueio/bpm/engine/test/api/repository/version1.bpmn20.xml"));
 
     Deployment deployment = repositoryService.createDeploymentQuery().singleResult();
 
@@ -194,7 +194,7 @@ public class HistoryTimeToLiveDeploymentTest {
 
     // when
     testRule.deploy(repositoryService.createDeployment()
-        .addClasspathResource("org/camunda/bpm/engine/test/api/repository/version1.bpmn20.xml"));
+        .addClasspathResource("io/orqueio/bpm/engine/test/api/repository/version1.bpmn20.xml"));
 
     // then
     assertThat(loggingRule.getFilteredLog(EXPECTED_DEFAULT_CONFIG_MSG)).hasSize(0);
@@ -207,7 +207,7 @@ public class HistoryTimeToLiveDeploymentTest {
 
     // when
     DeploymentWithDefinitions definitions = testRule.deploy(repositoryService.createDeployment()
-        .addClasspathResource("org/camunda/bpm/engine/test/api/repository/version1.bpmn20.xml"));
+        .addClasspathResource("io/orqueio/bpm/engine/test/api/repository/version1.bpmn20.xml"));
 
     // then
     processEngineConfiguration.setEnforceHistoryTimeToLive(true);
@@ -222,7 +222,7 @@ public class HistoryTimeToLiveDeploymentTest {
 
     // when
     DeploymentWithDefinitions definitions = testRule.deploy(repositoryService.createDeployment()
-        .addClasspathResource("org/camunda/bpm/engine/test/api/dmn/Another_Example.dmn"));
+        .addClasspathResource("io/orqueio/bpm/engine/test/api/dmn/Another_Example.dmn"));
 
     // then
     processEngineConfiguration.setEnforceHistoryTimeToLive(true);
@@ -237,7 +237,7 @@ public class HistoryTimeToLiveDeploymentTest {
 
     // when
     DeploymentWithDefinitions definitions = testRule.deploy(repositoryService.createDeployment()
-        .addClasspathResource("org/camunda/bpm/engine/test/api/cmmn/oneTaskCase2.cmmn"));
+        .addClasspathResource("io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase2.cmmn"));
 
     // then
     processEngineConfiguration.setEnforceHistoryTimeToLive(true);
@@ -266,7 +266,7 @@ public class HistoryTimeToLiveDeploymentTest {
 
     // when
     testRule.deploy(repositoryService.createDeployment()
-        .addClasspathResource("org/camunda/bpm/engine/test/api/repository/case_with_365_httl.cmmn"));
+        .addClasspathResource("io/orqueio/bpm/engine/test/api/repository/case_with_365_httl.cmmn"));
 
     // then
     assertThat(loggingRule.getFilteredLog("definitionKey: testCase; " + EXPECTED_LONGER_TTL_MSG)).hasSize(1);
@@ -280,7 +280,7 @@ public class HistoryTimeToLiveDeploymentTest {
 
     // when
     testRule.deploy(repositoryService.createDeployment()
-        .addClasspathResource("org/camunda/bpm/engine/test/api/repository/decision_with_365_httl.dmn"));
+        .addClasspathResource("io/orqueio/bpm/engine/test/api/repository/decision_with_365_httl.dmn"));
 
     // then
     assertThat(loggingRule.getFilteredLog("definitionKey: testDecision; " + EXPECTED_LONGER_TTL_MSG)).hasSize(1);
@@ -289,7 +289,7 @@ public class HistoryTimeToLiveDeploymentTest {
   protected void deployProcessDefinitions() {
     testRule.deploy(
       Bpmn.createExecutableProcess("process")
-        .camundaHistoryTimeToLive(365)
+        .orqueioHistoryTimeToLive(365)
         .startEvent()
         .userTask()
         .endEvent()

@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -546,7 +546,7 @@ public class DecisionTaskPlanItemHandlerTest extends CmmnElementHandlerTest {
     ConditionExpression expression = createElement(repetitionRule, "Expression_1", ConditionExpression.class);
     expression.setText("${true}");
 
-    repetitionRule.setCamundaRepeatOnStandardEvent(CaseExecutionListener.DISABLE);
+    repetitionRule.setOrqueioRepeatOnStandardEvent(CaseExecutionListener.DISABLE);
 
     Cmmn.validateModel(modelInstance);
 
@@ -568,7 +568,7 @@ public class DecisionTaskPlanItemHandlerTest extends CmmnElementHandlerTest {
     ConditionExpression expression = createElement(repetitionRule, "Expression_1", ConditionExpression.class);
     expression.setText("${true}");
 
-    repetitionRule.setCamundaRepeatOnStandardEvent(CaseExecutionListener.DISABLE);
+    repetitionRule.setOrqueioRepeatOnStandardEvent(CaseExecutionListener.DISABLE);
 
     Cmmn.validateModel(modelInstance);
 
@@ -709,7 +709,7 @@ public class DecisionTaskPlanItemHandlerTest extends CmmnElementHandlerTest {
   public void testBinding() {
     // given:
     CallableElementBinding caseBinding = CallableElementBinding.LATEST;
-    decisionTask.setCamundaDecisionBinding(caseBinding.getValue());
+    decisionTask.setOrqueioDecisionBinding(caseBinding.getValue());
 
     // when
     CmmnActivity activity = handler.handleElement(planItem, context);
@@ -727,7 +727,7 @@ public class DecisionTaskPlanItemHandlerTest extends CmmnElementHandlerTest {
   public void testVersionConstant() {
     // given:
     String caseVersion = "2";
-    decisionTask.setCamundaDecisionVersion(caseVersion);
+    decisionTask.setOrqueioDecisionVersion(caseVersion);
 
     // when
     CmmnActivity activity = handler.handleElement(planItem, context);
@@ -747,7 +747,7 @@ public class DecisionTaskPlanItemHandlerTest extends CmmnElementHandlerTest {
   public void testVersionExpression() {
     // given:
     String caseVersion = "${aVersion}";
-    decisionTask.setCamundaDecisionVersion(caseVersion);
+    decisionTask.setOrqueioDecisionVersion(caseVersion);
 
     // when
     CmmnActivity activity = handler.handleElement(planItem, context);
@@ -767,7 +767,7 @@ public class DecisionTaskPlanItemHandlerTest extends CmmnElementHandlerTest {
   @Test
   public void testResultVariable() {
     // given:
-    decisionTask.setCamundaResultVariable("aResultVariable");
+    decisionTask.setOrqueioResultVariable("aResultVariable");
 
     // when
     CmmnActivity activity = handler.handleElement(planItem, context);
@@ -793,7 +793,7 @@ public class DecisionTaskPlanItemHandlerTest extends CmmnElementHandlerTest {
   @Test
   public void testMapDecisionResult() {
     // given:
-    decisionTask.setCamundaMapDecisionResult("singleResult");
+    decisionTask.setOrqueioMapDecisionResult("singleResult");
 
     // when
     CmmnActivity activity = handler.handleElement(planItem, context);

@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -65,7 +65,7 @@ public class SetBusinessKeyTest {
       Bpmn.createExecutableProcess(PROCESS_KEY)
       .startEvent("startEvent")
       .serviceTask()
-        .camundaClass(SetBusinessKeyDelegate.class)
+        .orqueioClass(SetBusinessKeyDelegate.class)
       .userTask("userTask2")
       .endEvent("endEvent")
       .done();
@@ -74,8 +74,8 @@ public class SetBusinessKeyTest {
       Bpmn.createExecutableProcess(PROCESS_KEY)
       .startEvent("startEvent")
       .serviceTask()
-        .camundaAsyncBefore()
-        .camundaClass(SetBusinessKeyDelegate.class)
+        .orqueioAsyncBefore()
+        .orqueioClass(SetBusinessKeyDelegate.class)
       .userTask("userTask2")
       .endEvent("endEvent")
       .done();
@@ -333,7 +333,7 @@ public class SetBusinessKeyTest {
     return Bpmn.createExecutableProcess(PROCESS_KEY)
     .startEvent("startEvent")
     .userTask("userTask1").name("User task")
-      .camundaExecutionListenerExpression(listener,
+      .orqueioExecutionListenerExpression(listener,
             "${execution.setProcessBusinessKey(execution.getVariable(\"" + BUSINESS_KEY_VARIABLE + "\"))}")
     .userTask("userTask2")
     .endEvent("endEvent")
@@ -344,7 +344,7 @@ public class SetBusinessKeyTest {
     return Bpmn.createExecutableProcess(PROCESS_KEY)
     .startEvent("startEvent")
     .userTask("userTask1").name("User task")
-      .camundaTaskListenerClass(listener, SetBusinessKeyListener.class)
+      .orqueioTaskListenerClass(listener, SetBusinessKeyListener.class)
     .userTask("userTask2")
     .endEvent("endEvent")
     .done();

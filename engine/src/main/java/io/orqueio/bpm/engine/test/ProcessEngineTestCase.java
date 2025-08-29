@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -43,7 +43,7 @@ import junit.framework.TestCase;
  * <p>Usage: <code>public class YourTest extends ProcessEngineTestCase</code></p>
  *
  * <p>The ProcessEngine and the services available to subclasses through protected member fields.
- * The processEngine will be initialized by default with the camunda.cfg.xml resource
+ * The processEngine will be initialized by default with the orqueio.cfg.xml resource
  * on the classpath.  To specify a different configuration file, override the
  * {@link #getConfigurationResource()} method.
  * Process engines will be cached statically.  The first time the setUp is called for a given
@@ -64,11 +64,11 @@ import junit.framework.TestCase;
  * </p>
  *
  * @author Tom Baeyens
- * @author Falko Menge (camunda)
+ * @author Falko Menge (orqueio)
  */
 public class ProcessEngineTestCase extends TestCase {
 
-  protected String configurationResource = "camunda.cfg.xml";
+  protected String configurationResource = "orqueio.cfg.xml";
   protected String configurationResourceCompat = "activiti.cfg.xml";
   protected String deploymentId = null;
 
@@ -87,7 +87,7 @@ public class ProcessEngineTestCase extends TestCase {
 
   protected boolean skipTest = false;
 
-  /** uses 'camunda.cfg.xml' as it's configuration resource */
+  /** uses 'orqueio.cfg.xml' as it's configuration resource */
   public ProcessEngineTestCase() {
   }
 

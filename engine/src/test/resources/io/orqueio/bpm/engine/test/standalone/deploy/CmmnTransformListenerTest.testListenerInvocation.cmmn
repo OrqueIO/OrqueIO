@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <definitions name="Test Case"
                 xmlns="http://www.omg.org/spec/CMMN/20151109/MODEL"
-                xmlns:camunda="http://camunda.org/schema/1.0/cmmn"
+                xmlns:orqueio="http://orqueio.io/schema/1.0/cmmn"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                 targetNamespace="Examples">
 
@@ -47,9 +47,9 @@
 
       <processTask name="Obtain Schufa-Information" id="obtainSchufaInfoProcessTask" processRef="obtainSchufa" />
 
-      <humanTask name="Decide About Loan Application" id="decideHumanTask" camunda:assignee="jonny1" />
-      <humanTask name="Capture Application Data" id="captureAppDataHumanTask" camunda:assignee="jonny1" />
-      <caseTask name="Obtain Credit-worthiness" id="obtainCreditWorthinessCaseTask" camunda:assignee="jonny1" />
+      <humanTask name="Decide About Loan Application" id="decideHumanTask" orqueio:assignee="jonny1" />
+      <humanTask name="Capture Application Data" id="captureAppDataHumanTask" orqueio:assignee="jonny1" />
+      <caseTask name="Obtain Credit-worthiness" id="obtainCreditWorthinessCaseTask" orqueio:assignee="jonny1" />
       <task name="Request Missing Documents" id="requestMissingDocumentsTask"/>
       <humanTask name="Review Documents" id="reviewDocumentsHumanTask"/>
       <decisionTask name="Decide something" id="decisionTask"/>

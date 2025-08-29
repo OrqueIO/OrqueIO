@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="_ACAG8N4BEeSE-s4wevEmQQ" targetNamespace="http://camunda.org/schema/1.0/bpmn" exporter="Camunda Modeler" exporterVersion="2.0.0-nightly" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd">
+<bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:orqueio="http://orqueio.io/schema/1.0/bpmn" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="_ACAG8N4BEeSE-s4wevEmQQ" targetNamespace="http://orqueio.io/schema/1.0/bpmn" exporter="Orqueio Modeler" exporterVersion="2.0.0-nightly" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd">
   <bpmn2:process id="oneExternalTaskProcess" isExecutable="true">
     <bpmn2:startEvent id="StartEvent_1" name="startEvent">
       <bpmn2:outgoing>SequenceFlow_1</bpmn2:outgoing>
@@ -12,7 +12,7 @@
     <bpmn2:subProcess id="SubProcess_03t1zwx" triggeredByEvent="true">
       <bpmn2:startEvent id="StartEvent_1j54dlr" name="eventSubProcessStart">
         <bpmn2:outgoing>SequenceFlow_0lgnypj</bpmn2:outgoing>
-        <bpmn2:errorEventDefinition errorRef="Error_1djix19" camunda:errorMessageVariable="errorMessageVariable" />
+        <bpmn2:errorEventDefinition errorRef="Error_1djix19" orqueio:errorMessageVariable="errorMessageVariable" />
       </bpmn2:startEvent>
       <bpmn2:userTask id="afterBpmnError" name="User Task">
         <bpmn2:incoming>SequenceFlow_0lgnypj</bpmn2:incoming>
@@ -24,7 +24,7 @@
       <bpmn2:sequenceFlow id="SequenceFlow_0lgnypj" sourceRef="StartEvent_1j54dlr" targetRef="afterBpmnError" />
       <bpmn2:sequenceFlow id="SequenceFlow_1vfeoid" sourceRef="afterBpmnError" targetRef="EndEvent_2" />
     </bpmn2:subProcess>
-    <bpmn2:serviceTask id="externalTask_1" name="externalTask" camunda:type="external" camunda:topic="externalTaskTopic">
+    <bpmn2:serviceTask id="externalTask_1" name="externalTask" orqueio:type="external" orqueio:topic="externalTaskTopic">
       <bpmn2:incoming>SequenceFlow_1</bpmn2:incoming>
       <bpmn2:outgoing>SequenceFlow_2</bpmn2:outgoing>
     </bpmn2:serviceTask>

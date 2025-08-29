@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <definitions id="definitions"
-             targetNamespace="http://camunda.org/schema/1.0/bpmn20" 
+             targetNamespace="http://orqueio.io/schema/1.0/bpmn20"
              xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
-             xmlns:camunda="http://camunda.org/schema/1.0/bpmn">
+             xmlns:orqueio="http://orqueio.io/schema/1.0/bpmn">
   
   <process id="FormPropertyDetails" isExecutable="true">
   
     <startEvent id="start">
       <extensionElements>
-        <camunda:formProperty id="speaker" 
+        <orqueio:formProperty id="speaker" 
           name="Speaker"
           variable="SpeakerName" 
           type="string" />
 
-        <camunda:formProperty id="start" 
+        <orqueio:formProperty id="start" 
           type="date" 
           datePattern="dd-MMM-yyyy" />
 
-        <camunda:formProperty id="direction" type="enum">
-          <camunda:value id="left" name="Go Left" />
-          <camunda:value id="right" name="Go Right" />
-          <camunda:value id="up" name="Go Up" />
-          <camunda:value id="down" name="Go Down" />
-        </camunda:formProperty>
+        <orqueio:formProperty id="direction" type="enum">
+          <orqueio:value id="left" name="Go Left" />
+          <orqueio:value id="right" name="Go Right" />
+          <orqueio:value id="up" name="Go Up" />
+          <orqueio:value id="down" name="Go Down" />
+        </orqueio:formProperty>
         
       </extensionElements>
     </startEvent>

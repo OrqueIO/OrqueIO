@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -18,7 +18,7 @@ package io.orqueio.bpm.engine.impl.form.handler;
 
 import io.orqueio.bpm.engine.delegate.Expression;
 import io.orqueio.bpm.engine.form.TaskFormData;
-import io.orqueio.bpm.engine.impl.form.CamundaFormRefImpl;
+import io.orqueio.bpm.engine.impl.form.OrqueioFormRefImpl;
 import io.orqueio.bpm.engine.impl.form.FormDefinition;
 import io.orqueio.bpm.engine.impl.form.TaskFormDataImpl;
 import io.orqueio.bpm.engine.impl.persistence.entity.TaskEntity;
@@ -37,26 +37,26 @@ public class DefaultTaskFormHandler extends DefaultFormHandler implements TaskFo
 
     FormDefinition formDefinition = taskDefinition.getFormDefinition();
     Expression formKey = formDefinition.getFormKey();
-    Expression camundaFormDefinitionKey = formDefinition.getCamundaFormDefinitionKey();
-    String camundaFormDefinitionBinding = formDefinition.getCamundaFormDefinitionBinding();
-    Expression camundaFormDefinitionVersion = formDefinition.getCamundaFormDefinitionVersion();
+    Expression orqueioFormDefinitionKey = formDefinition.getOrqueioFormDefinitionKey();
+    String orqueioFormDefinitionBinding = formDefinition.getOrqueioFormDefinitionBinding();
+    Expression orqueioFormDefinitionVersion = formDefinition.getOrqueioFormDefinitionVersion();
 
     if (formKey != null) {
       Object formValue = formKey.getValue(task);
       if (formValue != null) {
         taskFormData.setFormKey(formValue.toString());
       }
-    } else if (camundaFormDefinitionKey != null && camundaFormDefinitionBinding != null) {
-      Object formRefKeyValue = camundaFormDefinitionKey.getValue(task);
+    } else if (orqueioFormDefinitionKey != null && orqueioFormDefinitionBinding != null) {
+      Object formRefKeyValue = orqueioFormDefinitionKey.getValue(task);
       if(formRefKeyValue != null) {
-        CamundaFormRefImpl ref = new CamundaFormRefImpl(formRefKeyValue.toString(), camundaFormDefinitionBinding);
-        if(camundaFormDefinitionBinding.equals(FORM_REF_BINDING_VERSION) && camundaFormDefinitionVersion != null) {
-          Object formRefVersionValue = camundaFormDefinitionVersion.getValue(task);
+        OrqueioFormRefImpl ref = new OrqueioFormRefImpl(formRefKeyValue.toString(), orqueioFormDefinitionBinding);
+        if(orqueioFormDefinitionBinding.equals(FORM_REF_BINDING_VERSION) && orqueioFormDefinitionVersion != null) {
+          Object formRefVersionValue = orqueioFormDefinitionVersion.getValue(task);
           if(formRefVersionValue != null) {
             ref.setVersion(Integer.parseInt((String)formRefVersionValue));
           }
         }
-        taskFormData.setCamundaFormRef(ref);
+        taskFormData.setOrqueioFormRef(ref);
       }
     }
 

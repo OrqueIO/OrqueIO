@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -72,7 +72,7 @@ public class JobAcquisitionBackoffIdleTest {
    * CAM-5073
    */
   @Test
-  @Deployment(resources = "org/camunda/bpm/engine/test/jobexecutor/simpleAsyncProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/jobexecutor/simpleAsyncProcess.bpmn20.xml")
   public void testIdlingAfterConcurrentJobAddedNotification() {
     // start job acquisition - waiting before acquiring jobs
     jobExecutor.start();
@@ -99,7 +99,7 @@ public class JobAcquisitionBackoffIdleTest {
   }
 
   @Test
-  @Deployment(resources = "org/camunda/bpm/engine/test/jobexecutor/JobAcquisitionBackoffIdleTest.testShortTimerOnUserTaskWithExpression.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/jobexecutor/JobAcquisitionBackoffIdleTest.testShortTimerOnUserTaskWithExpression.bpmn20.xml")
   public void testIdlingWithHintOnSuspend() {
     testIdlingWithHint(() -> {
       //continue sync before acquire
@@ -122,7 +122,7 @@ public class JobAcquisitionBackoffIdleTest {
   }
 
   @Test
-  @Deployment(resources = "org/camunda/bpm/engine/test/jobexecutor/JobAcquisitionBackoffIdleTest.testShortTimerOnUserTaskWithExpression.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/jobexecutor/JobAcquisitionBackoffIdleTest.testShortTimerOnUserTaskWithExpression.bpmn20.xml")
   public void testIdlingWithHintOnAcquisition() {
     testIdlingWithHint(() -> {
       //continue sync before acquire
@@ -142,7 +142,7 @@ public class JobAcquisitionBackoffIdleTest {
   }
 
   @Test
-  @Deployment(resources = "org/camunda/bpm/engine/test/jobexecutor/JobAcquisitionBackoffIdleTest.testShortTimerOnUserTaskWithExpression.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/jobexecutor/JobAcquisitionBackoffIdleTest.testShortTimerOnUserTaskWithExpression.bpmn20.xml")
   public void testIdlingWithHintBeforeAcquisition() {
     testIdlingWithHint(() -> {
       //process is started with timer boundary event which should start after 3 seconds

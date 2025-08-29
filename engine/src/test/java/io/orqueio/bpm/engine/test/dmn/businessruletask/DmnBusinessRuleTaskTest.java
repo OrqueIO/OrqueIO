@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -38,34 +38,34 @@ import org.junit.rules.RuleChain;
 
 public class DmnBusinessRuleTaskTest {
 
-  public static final String DECISION_PROCESS = "org/camunda/bpm/engine/test/dmn/businessruletask/DmnBusinessRuleTaskTest.testDecisionRef.bpmn20.xml";
-  public static final String DECISION_PROCESS_EXPRESSION = "org/camunda/bpm/engine/test/dmn/businessruletask/DmnBusinessRuleTaskTest.testDecisionRefExpression.bpmn20.xml";
-  public static final String DECISION_PROCESS_COMPOSITEEXPRESSION = "org/camunda/bpm/engine/test/dmn/businessruletask/DmnBusinessRuleTaskTest.testDecisionRefCompositeExpression.bpmn20.xml";
-  public static final String DECISION_PROCESS_LATEST = "org/camunda/bpm/engine/test/dmn/businessruletask/DmnBusinessRuleTaskTest.testDecisionRefLatestBinding.bpmn20.xml";
-  public static final String DECISION_PROCESS_DEPLOYMENT = "org/camunda/bpm/engine/test/dmn/businessruletask/DmnBusinessRuleTaskTest.testDecisionRefDeploymentBinding.bpmn20.xml";
-  public static final String DECISION_PROCESS_VERSION = "org/camunda/bpm/engine/test/dmn/businessruletask/DmnBusinessRuleTaskTest.testDecisionRefVersionBinding.bpmn20.xml";
-  public static final String DECISION_OKAY_DMN = "org/camunda/bpm/engine/test/dmn/businessruletask/DmnBusinessRuleTaskTest.testDecisionOkay.dmn11.xml";
-  public static final String DECISION_NOT_OKAY_DMN = "org/camunda/bpm/engine/test/dmn/businessruletask/DmnBusinessRuleTaskTest.testDecisionNotOkay.dmn11.xml";
-  public static final String DECISION_VERSION_TAG_OKAY_DMN = "org/camunda/bpm/engine/test/dmn/businessruletask/DmnBusinessRuleTaskTest.testDecisionVersionTagOkay.dmn11.xml";
-  public static final String DECISION_POJO_DMN = "org/camunda/bpm/engine/test/dmn/businessruletask/DmnBusinessRuleTaskTest.testPojo.dmn11.xml";
+  public static final String DECISION_PROCESS = "io/orqueio/bpm/engine/test/dmn/businessruletask/DmnBusinessRuleTaskTest.testDecisionRef.bpmn20.xml";
+  public static final String DECISION_PROCESS_EXPRESSION = "io/orqueio/bpm/engine/test/dmn/businessruletask/DmnBusinessRuleTaskTest.testDecisionRefExpression.bpmn20.xml";
+  public static final String DECISION_PROCESS_COMPOSITEEXPRESSION = "io/orqueio/bpm/engine/test/dmn/businessruletask/DmnBusinessRuleTaskTest.testDecisionRefCompositeExpression.bpmn20.xml";
+  public static final String DECISION_PROCESS_LATEST = "io/orqueio/bpm/engine/test/dmn/businessruletask/DmnBusinessRuleTaskTest.testDecisionRefLatestBinding.bpmn20.xml";
+  public static final String DECISION_PROCESS_DEPLOYMENT = "io/orqueio/bpm/engine/test/dmn/businessruletask/DmnBusinessRuleTaskTest.testDecisionRefDeploymentBinding.bpmn20.xml";
+  public static final String DECISION_PROCESS_VERSION = "io/orqueio/bpm/engine/test/dmn/businessruletask/DmnBusinessRuleTaskTest.testDecisionRefVersionBinding.bpmn20.xml";
+  public static final String DECISION_OKAY_DMN = "io/orqueio/bpm/engine/test/dmn/businessruletask/DmnBusinessRuleTaskTest.testDecisionOkay.dmn11.xml";
+  public static final String DECISION_NOT_OKAY_DMN = "io/orqueio/bpm/engine/test/dmn/businessruletask/DmnBusinessRuleTaskTest.testDecisionNotOkay.dmn11.xml";
+  public static final String DECISION_VERSION_TAG_OKAY_DMN = "io/orqueio/bpm/engine/test/dmn/businessruletask/DmnBusinessRuleTaskTest.testDecisionVersionTagOkay.dmn11.xml";
+  public static final String DECISION_POJO_DMN = "io/orqueio/bpm/engine/test/dmn/businessruletask/DmnBusinessRuleTaskTest.testPojo.dmn11.xml";
 
-  public static final String DECISION_LITERAL_EXPRESSION_DMN = "org/camunda/bpm/engine/test/dmn/deployment/DecisionWithLiteralExpression.dmn";
-  public static final String DRD_DISH_RESOURCE = "org/camunda/bpm/engine/test/dmn/deployment/drdDish.dmn11.xml";
+  public static final String DECISION_LITERAL_EXPRESSION_DMN = "io/orqueio/bpm/engine/test/dmn/deployment/DecisionWithLiteralExpression.dmn";
+  public static final String DRD_DISH_RESOURCE = "io/orqueio/bpm/engine/test/dmn/deployment/drdDish.dmn11.xml";
 
-  public static final String DECISION_OKAY_DMN12 = "org/camunda/bpm/engine/test/dmn/businessruletask/dmn12/DmnBusinessRuleTaskTest.testDecisionOkay.dmn";
+  public static final String DECISION_OKAY_DMN12 = "io/orqueio/bpm/engine/test/dmn/businessruletask/dmn12/DmnBusinessRuleTaskTest.testDecisionOkay.dmn";
 
-  public static final String DECISION_OKAY_DMN13 = "org/camunda/bpm/engine/test/dmn/businessruletask/dmn13/DmnBusinessRuleTaskTest.testDecisionOkay.dmn";
+  public static final String DECISION_OKAY_DMN13 = "io/orqueio/bpm/engine/test/dmn/businessruletask/dmn13/DmnBusinessRuleTaskTest.testDecisionOkay.dmn";
 
   public static final BpmnModelInstance BPMN_VERSION_TAG_BINDING = Bpmn.createExecutableProcess("process")
               .startEvent()
               .businessRuleTask()
-                    .camundaDecisionRef("decision")
-                    .camundaDecisionRefBinding("versionTag")
-                    .camundaDecisionRefVersionTag("0.0.2")
-                    .camundaMapDecisionResult("singleEntry")
-                    .camundaResultVariable("result")
+                    .orqueioDecisionRef("decision")
+                    .orqueioDecisionRefBinding("versionTag")
+                    .orqueioDecisionRefVersionTag("0.0.2")
+                    .orqueioMapDecisionResult("singleEntry")
+                    .orqueioResultVariable("result")
               .endEvent()
-                    .camundaAsyncBefore()
+                    .orqueioAsyncBefore()
               .done();
 
   protected ProcessEngineRule engineRule = new ProvidedProcessEngineRule();
@@ -176,13 +176,13 @@ public class DmnBusinessRuleTaskTest {
     testRule.deploy(Bpmn.createExecutableProcess("process")
         .startEvent()
         .businessRuleTask()
-          .camundaDecisionRef("decision")
-          .camundaDecisionRefBinding("versionTag")
-          .camundaDecisionRefVersionTag("${versionTagExpr}")
-          .camundaMapDecisionResult("singleEntry")
-          .camundaResultVariable("result")
+          .orqueioDecisionRef("decision")
+          .orqueioDecisionRefBinding("versionTag")
+          .orqueioDecisionRefVersionTag("${versionTagExpr}")
+          .orqueioMapDecisionResult("singleEntry")
+          .orqueioResultVariable("result")
         .endEvent()
-          .camundaAsyncBefore()
+          .orqueioAsyncBefore()
         .done());
 
     // when
@@ -201,12 +201,12 @@ public class DmnBusinessRuleTaskTest {
     BpmnModelInstance modelInstance = Bpmn.createExecutableProcess("process")
         .startEvent()
         .businessRuleTask()
-        .camundaDecisionRef("testDecision")
-        .camundaDecisionRefBinding("versionTag")
-        .camundaMapDecisionResult("singleEntry")
-        .camundaResultVariable("result")
+        .orqueioDecisionRef("testDecision")
+        .orqueioDecisionRefBinding("versionTag")
+        .orqueioMapDecisionResult("singleEntry")
+        .orqueioResultVariable("result")
         .endEvent()
-        .camundaAsyncBefore()
+        .orqueioAsyncBefore()
         .done();
 
     // when/then
@@ -255,11 +255,11 @@ public class DmnBusinessRuleTaskTest {
     testRule.deploy(Bpmn.createExecutableProcess("process")
         .startEvent()
         .businessRuleTask()
-          .camundaDecisionRef("decisionLiteralExpression")
-          .camundaResultVariable("result")
-          .camundaMapDecisionResult("singleEntry")
+          .orqueioDecisionRef("decisionLiteralExpression")
+          .orqueioResultVariable("result")
+          .orqueioMapDecisionResult("singleEntry")
         .endEvent()
-          .camundaAsyncBefore()
+          .orqueioAsyncBefore()
         .done());
 
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("process", Variables.createVariables()
@@ -275,11 +275,11 @@ public class DmnBusinessRuleTaskTest {
     testRule.deploy(Bpmn.createExecutableProcess("process")
         .startEvent()
         .businessRuleTask()
-          .camundaDecisionRef("dish-decision")
-          .camundaResultVariable("result")
-          .camundaMapDecisionResult("singleEntry")
+          .orqueioDecisionRef("dish-decision")
+          .orqueioResultVariable("result")
+          .orqueioMapDecisionResult("singleEntry")
         .endEvent()
-          .camundaAsyncBefore()
+          .orqueioAsyncBefore()
         .done());
 
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("process", Variables.createVariables()

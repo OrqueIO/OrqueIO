@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -49,16 +49,16 @@ public class DeploymentQueryTest extends PluggableProcessEngineTest {
   public void setUp() throws Exception {
     deploymentOneId = repositoryService
       .createDeployment()
-      .name("org/camunda/bpm/engine/test/repository/one.bpmn20.xml")
-      .addClasspathResource("org/camunda/bpm/engine/test/repository/one.bpmn20.xml")
+      .name("io/orqueio/bpm/engine/test/repository/one.bpmn20.xml")
+      .addClasspathResource("io/orqueio/bpm/engine/test/repository/one.bpmn20.xml")
       .source(ProcessApplicationDeployment.PROCESS_APPLICATION_DEPLOYMENT_SOURCE)
       .deploy()
       .getId();
 
     deploymentTwoId = repositoryService
       .createDeployment()
-      .name("org/camunda/bpm/engine/test/repository/two_.bpmn20.xml")
-      .addClasspathResource("org/camunda/bpm/engine/test/repository/two.bpmn20.xml")
+      .name("io/orqueio/bpm/engine/test/repository/two_.bpmn20.xml")
+      .addClasspathResource("io/orqueio/bpm/engine/test/repository/two.bpmn20.xml")
       .deploy()
       .getId();
 
@@ -107,7 +107,7 @@ public class DeploymentQueryTest extends PluggableProcessEngineTest {
 
   @Test
   public void testQueryByName() {
-    DeploymentQuery query = repositoryService.createDeploymentQuery().deploymentName("org/camunda/bpm/engine/test/repository/two_.bpmn20.xml");
+    DeploymentQuery query = repositoryService.createDeploymentQuery().deploymentName("io/orqueio/bpm/engine/test/repository/two_.bpmn20.xml");
     assertNotNull(query.singleResult());
     assertEquals(1, query.list().size());
     assertEquals(1, query.count());
@@ -128,14 +128,14 @@ public class DeploymentQueryTest extends PluggableProcessEngineTest {
 
   @Test
   public void testQueryByNameLike() {
-    DeploymentQuery query = repositoryService.createDeploymentQuery().deploymentNameLike("%camunda%");
+    DeploymentQuery query = repositoryService.createDeploymentQuery().deploymentNameLike("%orqueio%");
     assertEquals(2, query.list().size());
     assertEquals(2, query.count());
 
     query = repositoryService.createDeploymentQuery().deploymentNameLike("%two\\_%");
     assertEquals(1, query.list().size());
     assertEquals(1, query.count());
-    assertEquals("org/camunda/bpm/engine/test/repository/two_.bpmn20.xml", query.singleResult().getName());
+    assertEquals("io/orqueio/bpm/engine/test/repository/two_.bpmn20.xml", query.singleResult().getName());
   }
 
   @Test
@@ -260,13 +260,13 @@ public class DeploymentQueryTest extends PluggableProcessEngineTest {
       .list();
 
     Deployment deploymentOne = deployments.get(0);
-    assertEquals("org/camunda/bpm/engine/test/repository/one.bpmn20.xml", deploymentOne.getName());
+    assertEquals("io/orqueio/bpm/engine/test/repository/one.bpmn20.xml", deploymentOne.getName());
     assertEquals(deploymentOneId, deploymentOne.getId());
     assertEquals(ProcessApplicationDeployment.PROCESS_APPLICATION_DEPLOYMENT_SOURCE, deploymentOne.getSource());
     assertNull(deploymentOne.getTenantId());
 
     Deployment deploymentTwo = deployments.get(1);
-    assertEquals("org/camunda/bpm/engine/test/repository/two_.bpmn20.xml", deploymentTwo.getName());
+    assertEquals("io/orqueio/bpm/engine/test/repository/two_.bpmn20.xml", deploymentTwo.getName());
     assertEquals(deploymentTwoId, deploymentTwo.getId());
     assertNull(deploymentTwo.getSource());
     assertNull(deploymentTwo.getTenantId());

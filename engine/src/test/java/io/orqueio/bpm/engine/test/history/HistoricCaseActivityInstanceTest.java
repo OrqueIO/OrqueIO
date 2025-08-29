@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -75,7 +75,7 @@ import org.junit.Test;
 @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_AUDIT)
 public class HistoricCaseActivityInstanceTest extends CmmnTest {
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/emptyStageWithManualActivationCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/emptyStageWithManualActivationCase.cmmn"})
   @Test
   public void testHistoricCaseActivityInstanceProperties() {
     String activityId = "PI_Stage_1";
@@ -350,7 +350,7 @@ public class HistoricCaseActivityInstanceTest extends CmmnTest {
     assertCount(0, historicQuery().endedBefore(created).endedAfter(afterEnd));
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/cmmn/oneTaskCaseWithManualActivation.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCaseWithManualActivation.cmmn"})
   @Test
   public void testHistoricCaseActivityTaskId() {
     String taskId = "PI_HumanTask_1";
@@ -384,8 +384,8 @@ public class HistoricCaseActivityInstanceTest extends CmmnTest {
   }
 
   @Deployment(resources={
-    "org/camunda/bpm/engine/test/api/cmmn/oneProcessTaskCaseWithManualActivation.cmmn",
-    "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
+    "io/orqueio/bpm/engine/test/api/cmmn/oneProcessTaskCaseWithManualActivation.cmmn",
+    "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
   })
   @Test
   public void testHistoricCaseActivityCalledProcessInstanceId() {
@@ -422,8 +422,8 @@ public class HistoricCaseActivityInstanceTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/api/cmmn/oneCaseTaskCaseWithManualActivation.cmmn",
-    "org/camunda/bpm/engine/test/api/cmmn/oneTaskCaseWithManualActivation.cmmn"
+    "io/orqueio/bpm/engine/test/api/cmmn/oneCaseTaskCaseWithManualActivation.cmmn",
+    "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCaseWithManualActivation.cmmn"
   })
   @Test
   public void testHistoricCaseActivityCalledCaseInstanceId() {
@@ -463,7 +463,7 @@ public class HistoricCaseActivityInstanceTest extends CmmnTest {
     assertEquals(calledCaseInstance.getId(), historicInstance.getCalledCaseInstanceId());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/cmmn/oneTaskAndOneStageWithManualActivationCase.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/cmmn/oneTaskAndOneStageWithManualActivationCase.cmmn"})
   @Test
   public void testHistoricCaseActivityQuery() {
     String stageId = "PI_Stage_1";
@@ -495,7 +495,7 @@ public class HistoricCaseActivityInstanceTest extends CmmnTest {
     assertCount(1, historicQuery().caseActivityType("humanTask"));
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testQueryPaging() {
     createCaseInstance();
@@ -509,8 +509,8 @@ public class HistoricCaseActivityInstanceTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn",
-    "org/camunda/bpm/engine/test/api/cmmn/twoTaskCase.cmmn"
+    "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn",
+    "io/orqueio/bpm/engine/test/api/cmmn/twoTaskCase.cmmn"
   })
   @Test
   public void testQuerySorting() {
@@ -612,7 +612,7 @@ public class HistoricCaseActivityInstanceTest extends CmmnTest {
     }
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testNativeQuery() {
     createCaseInstance();
@@ -643,7 +643,7 @@ public class HistoricCaseActivityInstanceTest extends CmmnTest {
     assertEquals(1, historyService.createNativeHistoricCaseActivityInstanceQuery().sql("SELECT count(*) FROM " + tableName + " H WHERE H.ID_ = #{caseActivityInstanceId}").parameter("caseActivityInstanceId", instanceId).count());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testNativeQueryPaging() {
     createCaseInstance();
@@ -656,7 +656,7 @@ public class HistoricCaseActivityInstanceTest extends CmmnTest {
     assertEquals(2, historyService.createNativeHistoricCaseActivityInstanceQuery().sql("SELECT * FROM " + tableName).listPage(2, 2).size());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/cmmn/oneTaskCaseWithManualActivation.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCaseWithManualActivation.cmmn"})
   @Test
   public void testDeleteHistoricCaseActivityInstance() {
     CaseInstance caseInstance = createCaseInstance();
@@ -681,7 +681,7 @@ public class HistoricCaseActivityInstanceTest extends CmmnTest {
     assertNotNull(caseInstance);
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/cmmn/required/RequiredRuleTest.testVariableBasedRule.cmmn")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/cmmn/required/RequiredRuleTest.testVariableBasedRule.cmmn")
   @Test
   public void testRequiredRuleEvaluatesToTrue() {
     caseService.createCaseInstanceByKey("case", Collections.<String, Object>singletonMap("required", true));
@@ -695,7 +695,7 @@ public class HistoricCaseActivityInstanceTest extends CmmnTest {
     assertTrue(task.isRequired());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/cmmn/required/RequiredRuleTest.testVariableBasedRule.cmmn")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/cmmn/required/RequiredRuleTest.testVariableBasedRule.cmmn")
   @Test
   public void testRequiredRuleEvaluatesToFalse() {
     caseService.createCaseInstanceByKey("case", Collections.<String, Object>singletonMap("required", false));
@@ -709,7 +709,7 @@ public class HistoricCaseActivityInstanceTest extends CmmnTest {
     assertFalse(task.isRequired());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/cmmn/required/RequiredRuleTest.testVariableBasedRule.cmmn")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/cmmn/required/RequiredRuleTest.testVariableBasedRule.cmmn")
   @Test
   public void testQueryByRequired() {
     caseService.createCaseInstanceByKey("case", Collections.<String, Object>singletonMap("required", true));
@@ -726,7 +726,7 @@ public class HistoricCaseActivityInstanceTest extends CmmnTest {
     assertTrue(activityInstance.isRequired());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/stage/AutoCompleteTest.testCasePlanModel.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/stage/AutoCompleteTest.testCasePlanModel.cmmn"})
   @Test
   public void testAutoCompleteEnabled() {
     String caseInstanceId = createCaseInstanceByKey("case").getId();
@@ -754,7 +754,7 @@ public class HistoricCaseActivityInstanceTest extends CmmnTest {
     assertNotNull(humanTask2.getDurationInMillis());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/repetition/RepetitionRuleTest.testRepeatTask.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/repetition/RepetitionRuleTest.testRepeatTask.cmmn"})
   @Test
   public void testRepeatTask() {
     // given
@@ -769,7 +769,7 @@ public class HistoricCaseActivityInstanceTest extends CmmnTest {
     assertEquals(2, query.count());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/repetition/RepetitionRuleTest.testRepeatStage.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/repetition/RepetitionRuleTest.testRepeatStage.cmmn"})
   @Test
   public void testRepeatStage() {
     // given
@@ -785,7 +785,7 @@ public class HistoricCaseActivityInstanceTest extends CmmnTest {
     assertEquals(2, query.count());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/repetition/RepetitionRuleTest.testRepeatMilestone.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/repetition/RepetitionRuleTest.testRepeatMilestone.cmmn"})
   @Test
   public void testRepeatMilestone() {
     // given
@@ -800,7 +800,7 @@ public class HistoricCaseActivityInstanceTest extends CmmnTest {
     assertEquals(2, query.count());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/repetition/RepetitionRuleTest.testAutoCompleteStage.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/repetition/RepetitionRuleTest.testAutoCompleteStage.cmmn"})
   @Test
   public void testAutoCompleteStage() {
     // given
@@ -821,7 +821,7 @@ public class HistoricCaseActivityInstanceTest extends CmmnTest {
     assertEquals(2, query.count());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/repetition/RepetitionRuleTest.testAutoCompleteStageWithoutEntryCriteria.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/repetition/RepetitionRuleTest.testAutoCompleteStageWithoutEntryCriteria.cmmn"})
   @Test
   public void testAutoCompleteStageWithRepeatableTaskWithoutEntryCriteria() {
     // given
@@ -855,7 +855,7 @@ public class HistoricCaseActivityInstanceTest extends CmmnTest {
     assertEquals("decisionTask", decisionTask.getCaseActivityType());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testQueryByCaseInstanceId() {
     // given
@@ -870,7 +870,7 @@ public class HistoricCaseActivityInstanceTest extends CmmnTest {
     assertCount(1, query);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testQueryByCaseInstanceIds() {
     // given
@@ -920,8 +920,8 @@ public class HistoricCaseActivityInstanceTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn",
-      "org/camunda/bpm/engine/test/api/cmmn/twoTaskCase.cmmn"
+      "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn",
+      "io/orqueio/bpm/engine/test/api/cmmn/twoTaskCase.cmmn"
   })
   @Test
   public void testQueryByCaseActivityIds() {
@@ -1098,7 +1098,7 @@ public class HistoricCaseActivityInstanceTest extends CmmnTest {
     assertThat(instances, contains(matchers.toArray(new Matcher[matchers.size()])));
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/history/HistoricCaseActivityInstanceTest.oneStageAndOneTaskCaseWithManualActivation.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/history/HistoricCaseActivityInstanceTest.oneStageAndOneTaskCaseWithManualActivation.cmmn"})
   @Test
   public void testHistoricActivityInstanceWithinStageIsMarkedTerminatedOnComplete() {
 
@@ -1125,7 +1125,7 @@ public class HistoricCaseActivityInstanceTest extends CmmnTest {
     assertTrue(completedTask.isCompleted());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/history/HistoricCaseActivityInstanceTest.oneStageAndOneTaskCaseWithManualActivation.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/history/HistoricCaseActivityInstanceTest.oneStageAndOneTaskCaseWithManualActivation.cmmn"})
   @Test
   public void testHistoricActivityInstancesAreMarkedTerminatedOnComplete() {
 
@@ -1151,7 +1151,7 @@ public class HistoricCaseActivityInstanceTest extends CmmnTest {
     assertTrue(taskInstance.isTerminated());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/history/HistoricCaseActivityInstanceTest.oneStageAndOneTaskCaseWithManualActivation.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/history/HistoricCaseActivityInstanceTest.oneStageAndOneTaskCaseWithManualActivation.cmmn"})
   @Test
   public void testDisabledHistoricActivityInstancesStayDisabledOnComplete() {
 
@@ -1200,7 +1200,7 @@ public class HistoricCaseActivityInstanceTest extends CmmnTest {
     assertTrue(milestoneInstance.isTerminated());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/history/HistoricCaseActivityInstanceTest.oneStageWithSentryAsEntryPointCase.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/history/HistoricCaseActivityInstanceTest.oneStageWithSentryAsEntryPointCase.cmmn"})
   @Test
   public void testHistoricTaskWithSentryIsMarkedTerminatedOnComplete() {
 
@@ -1222,7 +1222,7 @@ public class HistoricCaseActivityInstanceTest extends CmmnTest {
     assertTrue(taskInstance2.isTerminated());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/history/HistoricCaseActivityInstanceTest.oneStageWithSentryAsEntryPointCase.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/history/HistoricCaseActivityInstanceTest.oneStageWithSentryAsEntryPointCase.cmmn"})
   @Test
   public void testHistoricTaskWithSentryDoesNotReachStateActiveOnComplete() {
 
@@ -1242,8 +1242,8 @@ public class HistoricCaseActivityInstanceTest extends CmmnTest {
   }
 
   @Deployment(resources={
-    "org/camunda/bpm/engine/test/api/cmmn/oneProcessTaskCaseWithManualActivation.cmmn",
-    "org/camunda/bpm/engine/test/history/HistoricCaseActivityInstanceTest.oneTaskProcess.bpmn20.xml"
+    "io/orqueio/bpm/engine/test/api/cmmn/oneProcessTaskCaseWithManualActivation.cmmn",
+    "io/orqueio/bpm/engine/test/history/HistoricCaseActivityInstanceTest.oneTaskProcess.bpmn20.xml"
   })
   @Test
   public void testHistoricCalledProcessInstanceId() {

@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -53,8 +53,8 @@ public class ProcessTaskTest extends CmmnTest {
   protected final String ONE_PROCESS_TASK_CASE = "oneProcessTaskCase";
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/api/cmmn/oneProcessTaskCase.cmmn",
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
+      "io/orqueio/bpm/engine/test/api/cmmn/oneProcessTaskCase.cmmn",
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
     })
   @Test
   public void testCallProcessAsConstant() {
@@ -91,8 +91,8 @@ public class ProcessTaskTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testCallProcessAsExpressionStartsWithDollar.cmmn",
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
+      "io/orqueio/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testCallProcessAsExpressionStartsWithDollar.cmmn",
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
     })
   @Test
   public void testCallProcessAsExpressionStartsWithDollar() {
@@ -129,8 +129,8 @@ public class ProcessTaskTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testCallProcessAsExpressionStartsWithHash.cmmn",
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
+      "io/orqueio/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testCallProcessAsExpressionStartsWithHash.cmmn",
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
     })
   @Test
   public void testCallProcessAsExpressionStartsWithHash() {
@@ -167,13 +167,13 @@ public class ProcessTaskTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testCallLatestProcess.cmmn",
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
+      "io/orqueio/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testCallLatestProcess.cmmn",
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
     })
   @Test
   public void testCallLatestProcess() {
     // given
-    String bpmnResourceName = "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml";
+    String bpmnResourceName = "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml";
 
     String deploymentId = repositoryService.createDeployment()
         .addClasspathResource(bpmnResourceName)
@@ -223,8 +223,8 @@ public class ProcessTaskTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testCallProcessByDeployment.cmmn",
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
+      "io/orqueio/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testCallProcessByDeployment.cmmn",
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
     })
   @Test
   public void testCallProcessByDeployment() {
@@ -235,7 +235,7 @@ public class ProcessTaskTest extends CmmnTest {
       .singleResult()
       .getId();
 
-    String bpmnResourceName = "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml";
+    String bpmnResourceName = "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml";
     String deploymentId = repositoryService.createDeployment()
             .addClasspathResource(bpmnResourceName)
             .deploy()
@@ -285,14 +285,14 @@ public class ProcessTaskTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testCallProcessByVersion.cmmn",
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
+      "io/orqueio/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testCallProcessByVersion.cmmn",
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
     })
   @Test
   public void testCallProcessByVersion() {
     // given
 
-    String bpmnResourceName = "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml";
+    String bpmnResourceName = "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml";
     String secondDeploymentId = repositoryService.createDeployment()
             .addClasspathResource(bpmnResourceName)
             .deploy()
@@ -348,14 +348,14 @@ public class ProcessTaskTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testCallProcessByVersionAsExpressionStartsWithDollar.cmmn",
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
+      "io/orqueio/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testCallProcessByVersionAsExpressionStartsWithDollar.cmmn",
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
     })
   @Test
   public void testCallProcessByVersionAsExpressionStartsWithDollar() {
     // given
 
-    String bpmnResourceName = "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml";
+    String bpmnResourceName = "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml";
 
     String secondDeploymentId = repositoryService.createDeployment()
             .addClasspathResource(bpmnResourceName)
@@ -413,14 +413,14 @@ public class ProcessTaskTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testCallProcessByVersionAsExpressionStartsWithHash.cmmn",
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
+      "io/orqueio/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testCallProcessByVersionAsExpressionStartsWithHash.cmmn",
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
     })
   @Test
   public void testCallProcessByVersionAsExpressionStartsWithHash() {
     // given
 
-    String bpmnResourceName = "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml";
+    String bpmnResourceName = "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml";
 
     String secondDeploymentId = repositoryService.createDeployment()
             .addClasspathResource(bpmnResourceName)
@@ -478,8 +478,8 @@ public class ProcessTaskTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testInputBusinessKey.cmmn",
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
+      "io/orqueio/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testInputBusinessKey.cmmn",
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
     })
   @Test
   public void testInputBusinessKey() {
@@ -519,8 +519,8 @@ public class ProcessTaskTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testInputDifferentBusinessKey.cmmn",
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
+      "io/orqueio/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testInputDifferentBusinessKey.cmmn",
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
     })
   @Test
   public void testInputDifferentBusinessKey() {
@@ -567,8 +567,8 @@ public class ProcessTaskTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testInputSource.cmmn",
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
+      "io/orqueio/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testInputSource.cmmn",
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
     })
   @Test
   public void testInputSource() {
@@ -619,8 +619,8 @@ public class ProcessTaskTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testInputSourceDifferentTarget.cmmn",
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
+      "io/orqueio/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testInputSourceDifferentTarget.cmmn",
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
     })
   @Test
   public void testInputSourceDifferentTarget() {
@@ -674,8 +674,8 @@ public class ProcessTaskTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testInputSource.cmmn",
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
+      "io/orqueio/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testInputSource.cmmn",
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
     })
   @Test
   public void testInputSourceNullValue() {
@@ -718,8 +718,8 @@ public class ProcessTaskTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testInputSourceExpression.cmmn",
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
+      "io/orqueio/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testInputSourceExpression.cmmn",
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
     })
   @Test
   public void testInputSourceExpression() {
@@ -767,8 +767,8 @@ public class ProcessTaskTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testInputAll.cmmn",
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
+      "io/orqueio/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testInputAll.cmmn",
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
     })
   @Test
   public void testInputAll() {
@@ -815,8 +815,8 @@ public class ProcessTaskTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testInputAllLocal.cmmn",
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
+      "io/orqueio/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testInputAllLocal.cmmn",
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
     })
   @Test
   public void testInputAllLocal() {
@@ -845,8 +845,8 @@ public class ProcessTaskTest extends CmmnTest {
 
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testInputOverlapping.cmmn",
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
+      "io/orqueio/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testInputOverlapping.cmmn",
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
     })
   @Test
   public void testInputOverlapping() {
@@ -900,7 +900,7 @@ public class ProcessTaskTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/api/cmmn/oneProcessTaskCaseWithManualActivation.cmmn"
+      "io/orqueio/bpm/engine/test/api/cmmn/oneProcessTaskCaseWithManualActivation.cmmn"
     })
   @Test
   public void testProcessNotFound() {
@@ -924,8 +924,8 @@ public class ProcessTaskTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/api/cmmn/oneProcessTaskCase.cmmn",
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
+      "io/orqueio/bpm/engine/test/api/cmmn/oneProcessTaskCase.cmmn",
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
     })
   @Test
   public void testCompleteSimpleProcess() {
@@ -956,8 +956,8 @@ public class ProcessTaskTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testOutputSource.cmmn",
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
+      "io/orqueio/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testOutputSource.cmmn",
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
     })
   @Test
   public void testOutputSource() {
@@ -1008,8 +1008,8 @@ public class ProcessTaskTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testOutputSourceDifferentTarget.cmmn",
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
+      "io/orqueio/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testOutputSourceDifferentTarget.cmmn",
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
     })
   @Test
   public void testOutputSourceDifferentTarget() {
@@ -1059,8 +1059,8 @@ public class ProcessTaskTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testOutputSource.cmmn",
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
+      "io/orqueio/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testOutputSource.cmmn",
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
     })
   @Test
   public void testOutputSourceNullValue() {
@@ -1103,8 +1103,8 @@ public class ProcessTaskTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testOutputSourceExpression.cmmn",
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
+      "io/orqueio/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testOutputSourceExpression.cmmn",
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
     })
   @Test
   public void testOutputSourceExpression() {
@@ -1154,8 +1154,8 @@ public class ProcessTaskTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testOutputAll.cmmn",
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
+      "io/orqueio/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testOutputAll.cmmn",
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
     })
   @Test
   public void testOutputAll() {
@@ -1206,8 +1206,8 @@ public class ProcessTaskTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testOutputOverlapping.cmmn",
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
+      "io/orqueio/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testOutputOverlapping.cmmn",
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
     })
   @Test
   public void testOutputOverlapping() {
@@ -1258,8 +1258,8 @@ public class ProcessTaskTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testOutputAllWithManualActivation.cmmn",
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
+      "io/orqueio/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testOutputAllWithManualActivation.cmmn",
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
     })
   @Test
   public void testOutputVariablesShouldNotExistAnymore() {
@@ -1305,8 +1305,8 @@ public class ProcessTaskTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testVariablesRoundtrip.cmmn",
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
+      "io/orqueio/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testVariablesRoundtrip.cmmn",
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
     })
   @Test
   public void testVariablesRoundtrip() {
@@ -1363,8 +1363,8 @@ public class ProcessTaskTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testInputOutputAll.cmmn",
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
+      "io/orqueio/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testInputOutputAll.cmmn",
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
     })
   @Test
   public void testInputOutputAllTypedVariables() {
@@ -1409,8 +1409,8 @@ public class ProcessTaskTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testVariablesRoundtrip.cmmn",
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
+      "io/orqueio/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testVariablesRoundtrip.cmmn",
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
     })
   @Test
   public void testInputOutputLimitedTypedVariables() {
@@ -1452,8 +1452,8 @@ public class ProcessTaskTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/api/cmmn/oneProcessTaskCase.cmmn",
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
+      "io/orqueio/bpm/engine/test/api/cmmn/oneProcessTaskCase.cmmn",
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
     })
   @Test
   public void testCompleteProcessTask() {
@@ -1484,8 +1484,8 @@ public class ProcessTaskTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/api/cmmn/oneProcessTaskCase.cmmn",
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
+      "io/orqueio/bpm/engine/test/api/cmmn/oneProcessTaskCase.cmmn",
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
     })
   @Test
   public void testCompleteProcessTaskAfterTerminateSubProcessInstance() {
@@ -1517,8 +1517,8 @@ public class ProcessTaskTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/api/cmmn/oneProcessTaskCase.cmmn",
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
+      "io/orqueio/bpm/engine/test/api/cmmn/oneProcessTaskCase.cmmn",
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
     })
   @Test
   public void testTerminateProcessTask() {
@@ -1549,8 +1549,8 @@ public class ProcessTaskTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/api/cmmn/oneProcessTaskCase.cmmn",
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
+      "io/orqueio/bpm/engine/test/api/cmmn/oneProcessTaskCase.cmmn",
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
     })
   @Test
   public void testTerminateSubProcessInstance() {
@@ -1583,8 +1583,8 @@ public class ProcessTaskTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/api/cmmn/oneProcessTaskCase.cmmn",
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
+      "io/orqueio/bpm/engine/test/api/cmmn/oneProcessTaskCase.cmmn",
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
     })
   @Test
   public void testSuspendProcessTask() {
@@ -1617,8 +1617,8 @@ public class ProcessTaskTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/api/cmmn/oneProcessTaskCase.cmmn",
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
+      "io/orqueio/bpm/engine/test/api/cmmn/oneProcessTaskCase.cmmn",
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
     })
   @Test
   public void testSuspendSubProcessInstance() {
@@ -1655,8 +1655,8 @@ public class ProcessTaskTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/api/cmmn/oneProcessTaskCase.cmmn",
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
+      "io/orqueio/bpm/engine/test/api/cmmn/oneProcessTaskCase.cmmn",
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
     })
   @Test
   public void testResumeProcessTask() {
@@ -1694,8 +1694,8 @@ public class ProcessTaskTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testNonBlockingProcessTask.cmmn",
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
+      "io/orqueio/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testNonBlockingProcessTask.cmmn",
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
     })
   @Test
   public void testNonBlockingProcessTask() {
@@ -1730,8 +1730,8 @@ public class ProcessTaskTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testProcessInstanceCompletesInOneGo.cmmn",
-      "org/camunda/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testProcessInstanceCompletesInOneGo.bpmn20.xml"
+      "io/orqueio/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testProcessInstanceCompletesInOneGo.cmmn",
+      "io/orqueio/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testProcessInstanceCompletesInOneGo.bpmn20.xml"
     })
   @Test
   public void testProcessInstanceCompletesInOneGo() {
@@ -1758,8 +1758,8 @@ public class ProcessTaskTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testNonBlockingProcessTaskAndProcessInstanceCompletesInOneGo.cmmn",
-      "org/camunda/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testProcessInstanceCompletesInOneGo.bpmn20.xml"
+      "io/orqueio/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testNonBlockingProcessTaskAndProcessInstanceCompletesInOneGo.cmmn",
+      "io/orqueio/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testProcessInstanceCompletesInOneGo.bpmn20.xml"
     })
   @Test
   public void testNonBlockingProcessTaskAndProcessInstanceCompletesInOneGo() {
@@ -1786,8 +1786,8 @@ public class ProcessTaskTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testStartProcessInstanceAsync.cmmn",
-      "org/camunda/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testStartProcessInstanceAsync.bpmn20.xml"
+      "io/orqueio/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testStartProcessInstanceAsync.cmmn",
+      "io/orqueio/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testStartProcessInstanceAsync.bpmn20.xml"
     })
   @Test
   public void testStartProcessInstanceAsync() {
@@ -1809,7 +1809,7 @@ public class ProcessTaskTest extends CmmnTest {
     testRule.assertCaseEnded(caseInstanceId);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/cmmn/oneProcessTaskCaseWithManualActivation.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/cmmn/oneProcessTaskCaseWithManualActivation.cmmn"})
   @Test
   public void testActivityType() {
     // given
@@ -1822,8 +1822,8 @@ public class ProcessTaskTest extends CmmnTest {
     assertEquals("processTask", processTask.getActivityType());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testOutputAll.cmmn",
-      "org/camunda/bpm/engine/test/cmmn/processtask/subProcessWithError.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testOutputAll.cmmn",
+      "io/orqueio/bpm/engine/test/cmmn/processtask/subProcessWithError.bpmn"})
   @Test
   public void testOutputWhenErrorOccurs() {
     String caseInstanceId = createCaseInstanceByKey(ONE_PROCESS_TASK_CASE).getId();
@@ -1839,8 +1839,8 @@ public class ProcessTaskTest extends CmmnTest {
     assertThat(variable).isEqualTo(variableValue);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testOutputAll.cmmn",
-  "org/camunda/bpm/engine/test/cmmn/processtask/subProcessWithThrownError.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/processtask/ProcessTaskTest.testOutputAll.cmmn",
+  "io/orqueio/bpm/engine/test/cmmn/processtask/subProcessWithThrownError.bpmn"})
   @Test
   public void testOutputWhenThrownBpmnErrorOccurs() {
     String caseInstanceId = createCaseInstanceByKey(ONE_PROCESS_TASK_CASE).getId();

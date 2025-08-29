@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions id="definitions"
 	xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
-	xmlns:camunda="http://camunda.org/schema/1.0/bpmn" 
+	xmlns:orqueio="http://orqueio.io/schema/1.0/bpmn"
 	targetNamespace="Examples">
 	
 	<signal id="alertSignal" name="alert" />
@@ -14,17 +14,17 @@
 
 		<intermediateThrowEvent id="signalEvent" name="Alert" >
 			<extensionElements>
-				<camunda:inputOutput>
-					<camunda:inputParameter name="localVar1">localVal1</camunda:inputParameter>
-					<camunda:inputParameter name="localVar2">localVal2</camunda:inputParameter>
-				</camunda:inputOutput>
+				<orqueio:inputOutput>
+					<orqueio:inputParameter name="localVar1">localVal1</orqueio:inputParameter>
+					<orqueio:inputParameter name="localVar2">localVal2</orqueio:inputParameter>
+				</orqueio:inputOutput>
 			</extensionElements>
 			<signalEventDefinition signalRef="alertSignal">
 				<extensionElements>
-					<camunda:in businessKey="${execution.processBusinessKey}" />
-					<camunda:in variables="all" local="true" />
-					<camunda:in source="payloadVar1" target="payloadVar1Target" />
-					<camunda:in sourceExpression="${payloadVar2.concat('Source')}" target="payloadVar2Target" />
+					<orqueio:in businessKey="${execution.processBusinessKey}" />
+					<orqueio:in variables="all" local="true" />
+					<orqueio:in source="payloadVar1" target="payloadVar1Target" />
+					<orqueio:in sourceExpression="${payloadVar2.concat('Source')}" target="payloadVar2Target" />
 				</extensionElements>
 			</signalEventDefinition>
 		</intermediateThrowEvent>

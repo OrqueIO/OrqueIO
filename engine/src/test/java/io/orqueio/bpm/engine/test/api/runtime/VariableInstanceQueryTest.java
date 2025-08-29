@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -62,7 +62,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   protected static String PROC_DEF_KEY = "oneTaskProcess";
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQuery() {
     // given
     Map<String, Object> variables1 = new HashMap<>();
@@ -125,7 +125,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryByVariableName() {
     // given
     Map<String, Object> variables = new HashMap<>();
@@ -140,7 +140,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryByVariableNames() {
     // given
     String variableValue = "a";
@@ -172,7 +172,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryByVariableNameLike() {
     // given
     Map<String, Object> variables = new HashMap<>();
@@ -196,7 +196,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryByVariableName_EmptyString() {
     // given
     String varName = "testVar";
@@ -212,7 +212,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryByVariableNameLikeWithoutAnyResult() {
     // given
     Map<String, Object> variables = new HashMap<>();
@@ -230,7 +230,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryByNameAndVariableValueEquals_String() {
     // given
     Map<String, Object> variables = new HashMap<>();
@@ -245,7 +245,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryByNameAndVariableValueEquals_EmptyString() {
     // given
     Map<String, Object> variables = new HashMap<>();
@@ -260,7 +260,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryByNameAndVariableValueNotEquals_String() {
     // given
     Map<String, Object> variables1 = new HashMap<>();
@@ -279,7 +279,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryByNameAndVariableValueNotEquals_EmptyString() {
     // given
     Map<String, Object> variables1 = new HashMap<>();
@@ -298,7 +298,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryByNameAndVariableValueGreaterThan_String() {
     // given
     Map<String, Object> variables1 = new HashMap<>();
@@ -321,7 +321,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryByNameAndVariableValueGreaterThanOrEqual_String() {
     // given
     Map<String, Object> variables1 = new HashMap<>();
@@ -344,7 +344,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryByNameAndVariableValueLessThan_String() {
     // given
     Map<String, Object> variables1 = new HashMap<>();
@@ -367,7 +367,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryByNameAndVariableValueLessThanOrEqual_String() {
     // given
     Map<String, Object> variables1 = new HashMap<>();
@@ -390,7 +390,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryByNameAndVariableValueLike_String() {
     // given
     Map<String, Object> variables1 = new HashMap<>();
@@ -431,7 +431,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml" })
   public void testQueryByNameAndVariableValueLikeWithEscape_String() {
     // given
     Map<String, Object> variables1 = new HashMap<>();
@@ -468,7 +468,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryByNameAndVariableValueEquals_Integer() {
     // given
     Map<String, Object> variables = new HashMap<>();
@@ -492,7 +492,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryByNameAndVariableValueNotEquals_Integer() {
     // given
     Map<String, Object> variables1 = new HashMap<>();
@@ -520,7 +520,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryByNameAndVariableGreaterThan_Integer() {
     // given
     Map<String, Object> variables1 = new HashMap<>();
@@ -559,7 +559,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryByNameAndVariableGreaterThanAndEqual_Integer() {
     // given
     Map<String, Object> variables1 = new HashMap<>();
@@ -600,7 +600,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryByNameAndVariableLessThan_Integer() {
     // given
     Map<String, Object> variables1 = new HashMap<>();
@@ -639,7 +639,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryByNameAndVariableLessThanAndEqual_Integer() {
     // given
     Map<String, Object> variables1 = new HashMap<>();
@@ -680,7 +680,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryByNameAndVariableValueEquals_Long() {
     // given
     Map<String, Object> variables = new HashMap<>();
@@ -704,7 +704,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryByNameAndVariableValueNotEquals_Long() {
     // given
     Map<String, Object> variables1 = new HashMap<>();
@@ -732,7 +732,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryByNameAndVariableGreaterThan_Long() {
     // given
     Map<String, Object> variables1 = new HashMap<>();
@@ -771,7 +771,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryByNameAndVariableGreaterThanAndEqual_Long() {
     // given
     Map<String, Object> variables1 = new HashMap<>();
@@ -812,7 +812,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryByNameAndVariableLessThan_Long() {
     // given
     Map<String, Object> variables1 = new HashMap<>();
@@ -851,7 +851,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryByNameAndVariableLessThanAndEqual_Long() {
     // given
     Map<String, Object> variables1 = new HashMap<>();
@@ -892,7 +892,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryByNameAndVariableValueEquals_Double() {
     // given
     Map<String, Object> variables = new HashMap<>();
@@ -916,7 +916,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryByNameAndVariableValueNotEquals_Double() {
     // given
     Map<String, Object> variables1 = new HashMap<>();
@@ -944,7 +944,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryByNameAndVariableGreaterThan_Double() {
     // given
     Map<String, Object> variables1 = new HashMap<>();
@@ -983,7 +983,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryByNameAndVariableGreaterThanAndEqual_Double() {
     // given
     Map<String, Object> variables1 = new HashMap<>();
@@ -1024,7 +1024,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryByNameAndVariableLessThan_Double() {
     // given
     Map<String, Object> variables1 = new HashMap<>();
@@ -1063,7 +1063,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryByNameAndVariableLessThanAndEqual_Double() {
     // given
     Map<String, Object> variables1 = new HashMap<>();
@@ -1104,7 +1104,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryByNameAndVariableValueEquals_Short() {
     // given
     Map<String, Object> variables = new HashMap<>();
@@ -1128,7 +1128,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryByVariableValueNotEquals_Short() {
     // given
     Map<String, Object> variables1 = new HashMap<>();
@@ -1156,7 +1156,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryByNameAndVariableGreaterThan_Short() {
     // given
     Map<String, Object> variables1 = new HashMap<>();
@@ -1195,7 +1195,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryByNameAndVariableGreaterThanAndEqual_Short() {
     // given
     Map<String, Object> variables1 = new HashMap<>();
@@ -1236,7 +1236,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryByNameAndVariableLessThan_Short() {
     // given
     Map<String, Object> variables1 = new HashMap<>();
@@ -1275,7 +1275,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryByNameAndVariableLessThanAndEqual_Short() {
     // given
     Map<String, Object> variables1 = new HashMap<>();
@@ -1316,7 +1316,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryByNameAndVariableValueEquals_Bytes() {
     // given
     byte[] bytes = "somebytes".getBytes();
@@ -1337,7 +1337,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryByNameAndVariableValueEquals_Date() {
     // given
      Date now = new Date();
@@ -1363,7 +1363,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryByNameAndVariableValueEqualsWihtoutAnyResult() {
     // given
     Map<String, Object> variables = new HashMap<>();
@@ -1381,7 +1381,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryByNameAndVariableValueEquals_NullValue() {
     // given
     Map<String, Object> variables = new HashMap<>();
@@ -1405,7 +1405,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryByVariableValueNotEquals_NullValue() {
     // given
     Map<String, Object> variables1 = new HashMap<>();
@@ -1446,7 +1446,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryByProcessInstanceId() {
     // given
     Map<String, Object> variables = new HashMap<>();
@@ -1479,7 +1479,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryByProcessInstanceIds() {
     // given
     Map<String, Object> variables = new HashMap<>();
@@ -1513,7 +1513,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryByProcessInstanceIdWithoutAnyResult() {
     // given
     Map<String, Object> variables = new HashMap<>();
@@ -1532,7 +1532,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryByExecutionId() {
     // given
     Map<String, Object> variables = new HashMap<>();
@@ -1565,7 +1565,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryByExecutionIds() {
     // given
     Map<String, Object> variables1 = new HashMap<>();
@@ -1602,7 +1602,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryByExecutionIdWithoutAnyResult() {
     // given
     Map<String, Object> variables = new HashMap<>();
@@ -1621,7 +1621,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryByTaskId() {
     // given
     Map<String, Object> variables = new HashMap<>();
@@ -1649,7 +1649,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryByTaskIds() {
     // given
     Map<String, Object> variables = new HashMap<>();
@@ -1690,7 +1690,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryByTaskIdWithoutAnyResult() {
     // given
     Map<String, Object> variables = new HashMap<>();
@@ -1712,7 +1712,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/runtime/VariableInstanceQueryTest.taskInEmbeddedSubProcess.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/runtime/VariableInstanceQueryTest.taskInEmbeddedSubProcess.bpmn20.xml"})
   public void testQueryByVariableScopeId() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("testProcess");
 
@@ -1775,7 +1775,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryByActivityInstanceId() {
     // given
     Map<String, Object> variables = new HashMap<>();
@@ -1808,7 +1808,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryByActivityInstanceIds() {
     // given
     Map<String, Object> variables1 = new HashMap<>();
@@ -1881,7 +1881,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryOrderByName_Asc() {
     // given
     Map<String, Object> variables = new HashMap<>();
@@ -1905,7 +1905,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryOrderByName_Desc() {
     // given
     Map<String, Object> variables = new HashMap<>();
@@ -1931,7 +1931,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryOrderByType_Asc() {
     // given
     Map<String, Object> variables = new HashMap<>();
@@ -1957,7 +1957,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryOrderByType_Desc() {
     // given
     Map<String, Object> variables = new HashMap<>();
@@ -1983,7 +1983,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryOrderByActivityInstanceId_Asc() {
     // given
     Map<String, Object> variables1 = new HashMap<>();
@@ -2025,7 +2025,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryOrderByActivityInstanceId_Desc() {
     // given
     Map<String, Object> variables1 = new HashMap<>();
@@ -2067,7 +2067,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testGetValueOfSerializableVar() {
     // given
     List<String> serializable = new ArrayList<>();
@@ -2327,7 +2327,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources= "org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml")
+  @Deployment(resources= "io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml")
   public void testDisableBinaryFetchingForFileValues() {
     // given
     String fileName = "text.txt";
@@ -2450,7 +2450,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   public void testQueryByCaseExecutionId() {
     CaseInstance instance = caseService
       .withCaseDefinitionByKey("oneTaskCase")
@@ -2478,7 +2478,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   public void testQueryByCaseExecutionIds() {
     CaseInstance instance1 = caseService
       .withCaseDefinitionByKey("oneTaskCase")
@@ -2516,7 +2516,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   public void testQueryByCaseInstanceId() {
     CaseInstance instance = caseService
       .withCaseDefinitionByKey("oneTaskCase")
@@ -2544,7 +2544,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   public void testQueryByCaseInstanceIds() {
     CaseInstance instance1 = caseService
       .withCaseDefinitionByKey("oneTaskCase")
@@ -2582,7 +2582,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   public void testQueryByCaseActivityInstanceId() {
     CaseInstance instance = caseService
       .withCaseDefinitionByKey("oneTaskCase")
@@ -2610,7 +2610,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   public void testQueryByCaseActivityInstanceIds() {
     CaseInstance instance1 = caseService
       .withCaseDefinitionByKey("oneTaskCase")
@@ -2708,7 +2708,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testVariablesProcessDefinitionId() {
     // given
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(PROC_DEF_KEY,
@@ -2723,7 +2723,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void shouldGetBatchId() {
     // given
     String processInstanceId =
@@ -2746,7 +2746,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void shouldQueryForBatchId() {
     // given
     VariableMap variables = Variables.putValue("foo", "bar");
@@ -2783,7 +2783,7 @@ public class VariableInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void shouldQueryForBatchIds() {
     // given
     VariableMap variables = Variables.putValue("foo", "bar");

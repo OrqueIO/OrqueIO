@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -18,8 +18,8 @@ package io.orqueio.bpm.engine.test.form.deployment;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static io.orqueio.bpm.engine.test.util.CamundaFormUtils.findAllCamundaFormDefinitionEntities;
-import static io.orqueio.bpm.engine.test.util.CamundaFormUtils.writeTempFormFile;
+import static io.orqueio.bpm.engine.test.util.OrqueioFormUtils.findAllOrqueioFormDefinitionEntities;
+import static io.orqueio.bpm.engine.test.util.OrqueioFormUtils.writeTempFormFile;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -30,7 +30,7 @@ import java.util.List;
 import io.orqueio.bpm.engine.ProcessEngineException;
 import io.orqueio.bpm.engine.RepositoryService;
 import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import io.orqueio.bpm.engine.repository.CamundaFormDefinition;
+import io.orqueio.bpm.engine.repository.OrqueioFormDefinition;
 import io.orqueio.bpm.engine.repository.Deployment;
 import io.orqueio.bpm.engine.repository.DeploymentBuilder;
 import io.orqueio.bpm.engine.test.ProcessEngineRule;
@@ -43,12 +43,12 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.rules.TemporaryFolder;
 
-public class CamundaFormDefinitionDeploymentTest {
+public class OrqueioFormDefinitionDeploymentTest {
 
-  protected static final String SIMPLE_FORM = "org/camunda/bpm/engine/test/form/deployment/CamundaFormDefinitionDeploymentTest.simple_form.form";
-  protected static final String SIMPLE_FORM_DUPLICATE = "org/camunda/bpm/engine/test/form/deployment/CamundaFormDefinitionDeploymentTest.simple_form_duplicate.form";
-  protected static final String COMPLEX_FORM = "org/camunda/bpm/engine/test/form/deployment/CamundaFormDefinitionDeploymentTest.complex_form.form";
-  protected static final String SIMPLE_BPMN = "org/camunda/bpm/engine/test/form/deployment/CamundaFormDefinitionDeploymentTest.simpleBPMN.bpmn";
+  protected static final String SIMPLE_FORM = "io/orqueio/bpm/engine/test/form/deployment/OrqueioFormDefinitionDeploymentTest.simple_form.form";
+  protected static final String SIMPLE_FORM_DUPLICATE = "io/orqueio/bpm/engine/test/form/deployment/OrqueioFormDefinitionDeploymentTest.simple_form_duplicate.form";
+  protected static final String COMPLEX_FORM = "io/orqueio/bpm/engine/test/form/deployment/OrqueioFormDefinitionDeploymentTest.complex_form.form";
+  protected static final String SIMPLE_BPMN = "io/orqueio/bpm/engine/test/form/deployment/OrqueioFormDefinitionDeploymentTest.simpleBPMN.bpmn";
 
   protected ProcessEngineRule engineRule = new ProvidedProcessEngineRule();
   protected ProcessEngineTestRule testRule = new ProcessEngineTestRule(engineRule);
@@ -84,7 +84,7 @@ public class CamundaFormDefinitionDeploymentTest {
     List<Deployment> deployments = repositoryService.createDeploymentQuery().list();
     assertThat(deployments).hasSize(2);
 
-    List<CamundaFormDefinition> definitions = findAllCamundaFormDefinitionEntities(processEngineConfiguration);
+    List<OrqueioFormDefinition> definitions = findAllOrqueioFormDefinitionEntities(processEngineConfiguration);
     assertThat(definitions).hasSize(2);
     assertThat(definitions).extracting("version").containsExactlyInAnyOrder(1, 2);
     assertThat(definitions).extracting("deploymentId").containsExactlyInAnyOrder(deployments.stream().map(Deployment::getId).toArray());
@@ -101,9 +101,9 @@ public class CamundaFormDefinitionDeploymentTest {
     List<Deployment> deployments = repositoryService.createDeploymentQuery().list();
     assertThat(deployments).hasSize(1);
 
-    List<CamundaFormDefinition> definitions = findAllCamundaFormDefinitionEntities(processEngineConfiguration);
+    List<OrqueioFormDefinition> definitions = findAllOrqueioFormDefinitionEntities(processEngineConfiguration);
     assertThat(definitions).hasSize(1);
-    CamundaFormDefinition definition = definitions.get(0);
+    OrqueioFormDefinition definition = definitions.get(0);
     assertThat(definition.getVersion()).isEqualTo(1);
     assertThat(definition.getDeploymentId()).isEqualTo(deployments.get(0).getId());
     assertThat(definition.getResourceName()).isEqualTo(SIMPLE_FORM);
@@ -120,9 +120,9 @@ public class CamundaFormDefinitionDeploymentTest {
     List<Deployment> deployments = repositoryService.createDeploymentQuery().list();
     assertThat(deployments).hasSize(2);
 
-    List<CamundaFormDefinition> definitions = findAllCamundaFormDefinitionEntities(processEngineConfiguration);
+    List<OrqueioFormDefinition> definitions = findAllOrqueioFormDefinitionEntities(processEngineConfiguration);
     assertThat(definitions).hasSize(1);
-    CamundaFormDefinition definition = definitions.get(0);
+    OrqueioFormDefinition definition = definitions.get(0);
     assertThat(definition.getVersion()).isEqualTo(1);
     assertThat(definition.getDeploymentId()).isEqualTo(firstDeployment.getId());
     assertThat(definition.getResourceName()).isEqualTo(SIMPLE_FORM);
@@ -138,7 +138,7 @@ public class CamundaFormDefinitionDeploymentTest {
     List<Deployment> deployments = repositoryService.createDeploymentQuery().list();
     assertThat(deployments).hasSize(2);
 
-    List<CamundaFormDefinition> definitions = findAllCamundaFormDefinitionEntities(processEngineConfiguration);
+    List<OrqueioFormDefinition> definitions = findAllOrqueioFormDefinitionEntities(processEngineConfiguration);
     assertThat(definitions).hasSize(2);
     assertThat(definitions).extracting("version").containsExactly(1, 1);
     assertThat(definitions).extracting("deploymentId").containsExactlyInAnyOrder(deployments.stream().map(Deployment::getId).toArray());
@@ -155,7 +155,7 @@ public class CamundaFormDefinitionDeploymentTest {
     assertThat(deployments).hasSize(1);
     String deploymentId = deployments.get(0).getId();
 
-    List<CamundaFormDefinition> definitions = findAllCamundaFormDefinitionEntities(processEngineConfiguration);
+    List<OrqueioFormDefinition> definitions = findAllOrqueioFormDefinitionEntities(processEngineConfiguration);
     assertThat(definitions).hasSize(2);
     assertThat(definitions).extracting("version").containsExactly(1, 1);
     assertThat(definitions).extracting("deploymentId").containsExactly(deploymentId, deploymentId);
@@ -175,7 +175,7 @@ public class CamundaFormDefinitionDeploymentTest {
   public void shouldDeleteFormDefinitionWhenDeletingDeployment() {
     // given
     Deployment deployment = createDeploymentBuilder(true).addClasspathResource(SIMPLE_FORM).addClasspathResource(COMPLEX_FORM).deploy();
-    List<CamundaFormDefinition> formDefinitions = findAllCamundaFormDefinitionEntities(processEngineConfiguration);
+    List<OrqueioFormDefinition> formDefinitions = findAllOrqueioFormDefinitionEntities(processEngineConfiguration);
     List<Deployment> deployments = repositoryService.createDeploymentQuery().list();
 
     // when
@@ -187,7 +187,7 @@ public class CamundaFormDefinitionDeploymentTest {
     assertThat(deployments).hasSize(1);
 
     // after deletion of deployment
-    assertThat(findAllCamundaFormDefinitionEntities(processEngineConfiguration)).hasSize(0);
+    assertThat(findAllOrqueioFormDefinitionEntities(processEngineConfiguration)).hasSize(0);
     assertThat(repositoryService.createDeploymentQuery().list()).hasSize(0);
   }
 
@@ -207,7 +207,7 @@ public class CamundaFormDefinitionDeploymentTest {
     List<Deployment> deployments = repositoryService.createDeploymentQuery().list();
     assertThat(deployments).hasSize(2);
     assertThat(deployments).extracting("tenantId").containsExactly(null, null);
-    List<CamundaFormDefinition> formDefinitions = findAllCamundaFormDefinitionEntities(processEngineConfiguration);
+    List<OrqueioFormDefinition> formDefinitions = findAllOrqueioFormDefinitionEntities(processEngineConfiguration);
     assertThat(formDefinitions).extracting("version").containsExactlyInAnyOrder(1, 2);
     assertThat(formDefinitions).extracting("resourceName").containsExactly(fileName, fileName);
     assertThat(formDefinitions).extracting("deploymentId").containsExactlyInAnyOrder(deployments.stream().map(Deployment::getId).toArray());
@@ -230,7 +230,7 @@ public class CamundaFormDefinitionDeploymentTest {
     List<Deployment> deployments = repositoryService.createDeploymentQuery().list();
     assertThat(deployments).hasSize(2);
     assertThat(deployments).extracting("tenantId").containsExactly("tenant1", "tenant1");
-    List<CamundaFormDefinition> formDefinitions = findAllCamundaFormDefinitionEntities(processEngineConfiguration);
+    List<OrqueioFormDefinition> formDefinitions = findAllOrqueioFormDefinitionEntities(processEngineConfiguration);
     assertThat(formDefinitions).extracting("version").containsExactlyInAnyOrder(1, 2);
     assertThat(formDefinitions).extracting("resourceName").containsExactly(fileName, fileName);
     assertThat(formDefinitions).extracting("deploymentId").containsExactlyInAnyOrder(deployments.stream().map(Deployment::getId).toArray());

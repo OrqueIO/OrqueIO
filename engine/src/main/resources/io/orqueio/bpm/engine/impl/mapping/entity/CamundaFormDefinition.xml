@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!--
 
-    Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+    Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
     under one or more contributor license agreements. See the NOTICE file
     distributed with this work for additional information regarding copyright
-    ownership. Camunda licenses this file to you under the Apache License,
+    ownership. TOADDLATERCCS this file to you under the Apache License,
     Version 2.0; you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
@@ -19,11 +19,11 @@
 -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="io.orqueio.bpm.engine.impl.persistence.entity.CamundaFormDefinitionEntity">
+<mapper namespace="io.orqueio.bpm.engine.impl.persistence.entity.OrqueioFormDefinitionEntity">
 
-  <!-- CAMUNDA FORM DEFINITION INSERT -->
+  <!-- ORQUEIO FORM DEFINITION INSERT -->
 
-  <insert id="insertCamundaFormDefinition" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.CamundaFormDefinitionEntity">
+  <insert id="insertOrqueioFormDefinition" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.OrqueioFormDefinitionEntity">
     insert into ${prefix}ACT_RE_CAMFORMDEF(
       ID_,
       KEY_,
@@ -42,24 +42,24 @@
            )
   </insert>
 
-  <!-- CAMUNDA FORM DEFINITION UPDATE -->
+  <!-- ORQUEIO FORM DEFINITION UPDATE -->
 
-  <update id="updateCamundaFormDefinition" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.CamundaFormDefinitionEntity">
+  <update id="updateOrqueioFormDefinition" parameterType="io.orqueio.bpm.engine.impl.persistence.entity.OrqueioFormDefinitionEntity">
     update ${prefix}ACT_RE_CAMFORMDEF set
       REV_ = #{revisionNext, jdbcType=INTEGER}
     where ID_ = #{id, jdbcType=VARCHAR}
       and REV_ = #{revision, jdbcType=INTEGER}
   </update>
 
-  <!-- CAMUNDA FORM DEFINITION DELETE -->
+  <!-- ORQUEIO FORM DEFINITION DELETE -->
 
-  <delete id="deleteCamundaFormDefinitionsByDeploymentId" parameterType="string">
+  <delete id="deleteOrqueioFormDefinitionsByDeploymentId" parameterType="string">
     delete from ${prefix}ACT_RE_CAMFORMDEF where DEPLOYMENT_ID_ = #{deploymentId}
   </delete>
 
-  <!-- CAMUNDA FORM DEFINITION RESULTMAP -->
+  <!-- ORQUEIO FORM DEFINITION RESULTMAP -->
 
-  <resultMap id="camundaFormDefinitionResultMap" type="io.orqueio.bpm.engine.impl.persistence.entity.CamundaFormDefinitionEntity">
+  <resultMap id="orqueioFormDefinitionResultMap" type="io.orqueio.bpm.engine.impl.persistence.entity.OrqueioFormDefinitionEntity">
     <id property="id" column="ID_" jdbcType="VARCHAR" />
     <result property="revision" column="REV_" />
     <result property="key" column="KEY_" jdbcType="VARCHAR" />
@@ -69,28 +69,28 @@
     <result property="tenantId" column="TENANT_ID_" jdbcType="VARCHAR"/>
   </resultMap>
 
-  <!-- CAMUNDA FORM DEFINITION SELECT -->
+  <!-- ORQUEIO FORM DEFINITION SELECT -->
 
-  <select id="selectAllCamundaFormDefinitions" resultMap="camundaFormDefinitionResultMap">
+  <select id="selectAllOrqueioFormDefinitions" resultMap="orqueioFormDefinitionResultMap">
     select * from ${prefix}ACT_RE_CAMFORMDEF
   </select>
 
-  <select id="selectCamundaFormDefinition" parameterType="string" resultMap="camundaFormDefinitionResultMap">
-    select * from ${prefix}ACT_RE_CAMFORMDEF where ID_ = #{camundaFormDefinitionId}
+  <select id="selectOrqueioFormDefinition" parameterType="string" resultMap="orqueioFormDefinitionResultMap">
+    select * from ${prefix}ACT_RE_CAMFORMDEF where ID_ = #{orqueioFormDefinitionId}
   </select>
 
-  <select id="selectCamundaFormDefinitionByDeploymentId" parameterType="string" resultMap="camundaFormDefinitionResultMap">
+  <select id="selectOrqueioFormDefinitionByDeploymentId" parameterType="string" resultMap="orqueioFormDefinitionResultMap">
     select * from ${prefix}ACT_RE_CAMFORMDEF where DEPLOYMENT_ID_ = #{parameter}
   </select>
 
-  <select id="selectCamundaFormDefinitionByDeploymentAndKey" parameterType="map" resultMap="camundaFormDefinitionResultMap">
+  <select id="selectOrqueioFormDefinitionByDeploymentAndKey" parameterType="map" resultMap="orqueioFormDefinitionResultMap">
     select *
     from ${prefix}ACT_RE_CAMFORMDEF
     where DEPLOYMENT_ID_ = #{deploymentId}
-      and KEY_ = #{camundaFormDefinitionKey}
+      and KEY_ = #{orqueioFormDefinitionKey}
   </select>
 
-  <select id="selectLatestCamundaFormDefinitionByKey" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject" resultMap="camundaFormDefinitionResultMap">
+  <select id="selectLatestOrqueioFormDefinitionByKey" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject" resultMap="orqueioFormDefinitionResultMap">
     select *
     from ${prefix}ACT_RE_CAMFORMDEF d1
       inner join
@@ -104,49 +104,49 @@
           (d1.TENANT_ID_ = d2.TENANT_ID_ or (d1.TENANT_ID_ is null and d2.TENANT_ID_ is null))
   </select>
 
-  <select id="selectLatestCamundaFormDefinitionByKeyWithoutTenantId" parameterType="map" resultMap="camundaFormDefinitionResultMap">
+  <select id="selectLatestOrqueioFormDefinitionByKeyWithoutTenantId" parameterType="map" resultMap="orqueioFormDefinitionResultMap">
     select *
     from ${prefix}ACT_RE_CAMFORMDEF 
-    where KEY_ = #{camundaFormDefinitionKey}
+    where KEY_ = #{orqueioFormDefinitionKey}
           and TENANT_ID_ is null
           and VERSION_ = (
               select max(VERSION_) 
               from ${prefix}ACT_RE_CAMFORMDEF 
-              where KEY_ = #{camundaFormDefinitionKey} and TENANT_ID_ is null)
+              where KEY_ = #{orqueioFormDefinitionKey} and TENANT_ID_ is null)
   </select>
 
-  <select id="selectLatestCamundaDefinitionByKeyAndTenantId" parameterType="map" resultMap="camundaFormDefinitionResultMap">
+  <select id="selectLatestOrqueioDefinitionByKeyAndTenantId" parameterType="map" resultMap="orqueioFormDefinitionResultMap">
     select *
     from ${prefix}ACT_RE_CAMFORMDEF RES
-    where KEY_ = #{camundaFormDefinitionKey}
+    where KEY_ = #{orqueioFormDefinitionKey}
           and TENANT_ID_ = #{tenantId}
           and VERSION_ = (
               select max(VERSION_) 
               from ${prefix}ACT_RE_CAMFORMDEF 
-              where KEY_ = #{camundaFormDefinitionKey} and TENANT_ID_ = #{tenantId})
+              where KEY_ = #{orqueioFormDefinitionKey} and TENANT_ID_ = #{tenantId})
   </select>
 
-  <select id="selectCamundaFormDefinitionByKeyVersionWithoutTenantId" parameterType="map" resultMap="camundaFormDefinitionResultMap">
+  <select id="selectOrqueioFormDefinitionByKeyVersionWithoutTenantId" parameterType="map" resultMap="orqueioFormDefinitionResultMap">
     select *
     from ${prefix}ACT_RE_CAMFORMDEF
-    where KEY_ = #{camundaFormDefinitionKey}
-          and VERSION_ = #{camundaFormDefinitionVersion}
+    where KEY_ = #{orqueioFormDefinitionKey}
+          and VERSION_ = #{orqueioFormDefinitionVersion}
           and TENANT_ID_ is null
   </select>
 
-  <select id="selectCamundaFormDefinitionByKeyVersionAndTenantId" parameterType="map" resultMap="camundaFormDefinitionResultMap">
+  <select id="selectOrqueioFormDefinitionByKeyVersionAndTenantId" parameterType="map" resultMap="orqueioFormDefinitionResultMap">
     select *
     from ${prefix}ACT_RE_CAMFORMDEF
-    where KEY_ = #{camundaFormDefinitionKey}
-          and VERSION_ = #{camundaFormDefinitionVersion}
+    where KEY_ = #{orqueioFormDefinitionKey}
+          and VERSION_ = #{orqueioFormDefinitionVersion}
           and TENANT_ID_ = #{tenantId}
   </select>
 
-  <select id="selectCamundaFormDefinitionByKeyVersionTag" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject" resultMap="camundaFormDefinitionResultMap">
+  <select id="selectOrqueioFormDefinitionByKeyVersionTag" parameterType="io.orqueio.bpm.engine.impl.db.ListQueryParameterObject" resultMap="orqueioFormDefinitionResultMap">
     select *
     from ${prefix}ACT_RE_CAMFORMDEF
-    where KEY_ = #{parameter.camundaFormDefinitionKey}
-          and VERSION_TAG_ = #{parameter.camundaFormDefinitionVersionTag}
+    where KEY_ = #{parameter.orqueioFormDefinitionKey}
+          and VERSION_TAG_ = #{parameter.orqueioFormDefinitionVersionTag}
           <if test="parameter.tenantId == null">
                 and TENANT_ID_ is null
           </if>
@@ -155,7 +155,7 @@
           </if>
   </select>
 
-  <select id="selectPreviousCamundaFormDefinitionId" parameterType="map" resultType="string">
+  <select id="selectPreviousOrqueioFormDefinitionId" parameterType="map" resultType="string">
     select distinct RES.*
       from ${prefix}ACT_RE_CAMFORMDEF RES
      where RES.KEY_ = #{key}

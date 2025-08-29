@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -84,7 +84,7 @@ public class ExternalTaskUserOperationLogTest {
   }
 
   @Test
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
   public void testSetRetriesLogCreationForOneExternalTaskId() {
     // given
     runtimeService.startProcessInstanceByKey(PROCESS_DEFINITION_KEY);
@@ -114,7 +114,7 @@ public class ExternalTaskUserOperationLogTest {
   }
 
   @Test
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
   public void testSetRetriesLogCreationSync() {
     // given
     runtimeService.startProcessInstanceByKey(PROCESS_DEFINITION_KEY);
@@ -176,7 +176,7 @@ public class ExternalTaskUserOperationLogTest {
   }
 
   @Test
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
   public void testSetRetriesLogCreationAsync() {
     // given
     runtimeService.startProcessInstanceByKey(PROCESS_DEFINITION_KEY);
@@ -231,7 +231,7 @@ public class ExternalTaskUserOperationLogTest {
   }
   
   @Test
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/externaltask/externalTaskPriorityExpression.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/externaltask/externalTaskPriorityExpression.bpmn20.xml")
   public void testSetPriorityLogCreation() {
     // given
     runtimeService.startProcessInstanceByKey(PROCESS_DEFINITION_KEY_2, Collections.<String, Object>singletonMap("priority", 14));
@@ -261,7 +261,7 @@ public class ExternalTaskUserOperationLogTest {
   }
   
   @Test
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
   public void testUnlockLogCreation() {
     // given
     runtimeService.startProcessInstanceByKey(PROCESS_DEFINITION_KEY);

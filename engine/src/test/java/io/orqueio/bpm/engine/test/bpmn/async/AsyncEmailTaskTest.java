@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -47,8 +47,8 @@ public class AsyncEmailTaskTest extends EmailTestCase {
     assertEquals(1, messages.size());
 
     WiserMessage message = messages.get(0);
-    EmailServiceTaskTest.assertEmailSend(message, false, "Hello Kermit!", "This a text only e-mail.", "camunda@localhost",
-            Arrays.asList("kermit@camunda.org"), null);
+    EmailServiceTaskTest.assertEmailSend(message, false, "Hello Kermit!", "This a text only e-mail.", "orqueio@localhost",
+            Arrays.asList("kermit@orqueio.io"), null);
     testRule.assertProcessEnded(procId);
   }
 
@@ -66,8 +66,8 @@ public class AsyncEmailTaskTest extends EmailTestCase {
     assertEquals(1, messages.size());
 
     WiserMessage message = messages.get(0);
-    EmailServiceTaskTest.assertEmailSend(message, false, "Hello Kermit!", "This a text only e-mail.", "camunda@localhost",
-            Arrays.asList("kermit@camunda.org"), null);
+    EmailServiceTaskTest.assertEmailSend(message, false, "Hello Kermit!", "This a text only e-mail.", "orqueio@localhost",
+            Arrays.asList("kermit@orqueio.io"), null);
   }
 
 }

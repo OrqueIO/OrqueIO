@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
-             xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
+             xmlns:orqueio="http://orqueio.io/schema/1.0/bpmn"
              targetNamespace="Examples">
 
   <message id="messageId" name="newMessage" />
@@ -9,15 +9,15 @@
 
     <startEvent id="theStart">
       <extensionElements>
-        <camunda:executionListener event="start" class="io.orqueio.bpm.engine.test.standalone.entity.ExecutionOrderListener" />
+        <orqueio:executionListener event="start" class="io.orqueio.bpm.engine.test.standalone.entity.ExecutionOrderListener" />
       </extensionElements>
     </startEvent>
 
     <sequenceFlow sourceRef="theStart" targetRef="theService1" />
 
-    <serviceTask id="theService1" camunda:expression="${true}">
+    <serviceTask id="theService1" orqueio:expression="${true}">
       <extensionElements>
-        <camunda:executionListener event="start" class="io.orqueio.bpm.engine.test.standalone.entity.ExecutionOrderListener" />
+        <orqueio:executionListener event="start" class="io.orqueio.bpm.engine.test.standalone.entity.ExecutionOrderListener" />
       </extensionElements>
     </serviceTask>
 
@@ -25,7 +25,7 @@
 
     <userTask id="theTask">
       <extensionElements>
-        <camunda:executionListener event="start" class="io.orqueio.bpm.engine.test.standalone.entity.ExecutionOrderListener" />
+        <orqueio:executionListener event="start" class="io.orqueio.bpm.engine.test.standalone.entity.ExecutionOrderListener" />
       </extensionElements>
     </userTask>
 
@@ -33,22 +33,22 @@
 
     <endEvent id="theEnd1">
       <extensionElements>
-        <camunda:executionListener event="start" class="io.orqueio.bpm.engine.test.standalone.entity.ExecutionOrderListener" />
+        <orqueio:executionListener event="start" class="io.orqueio.bpm.engine.test.standalone.entity.ExecutionOrderListener" />
       </extensionElements>
     </endEvent>
 
     <boundaryEvent id="messageBoundary" attachedToRef="theTask" cancelActivity="false">
       <extensionElements>
-        <camunda:executionListener event="start" class="io.orqueio.bpm.engine.test.standalone.entity.ExecutionOrderListener" />
+        <orqueio:executionListener event="start" class="io.orqueio.bpm.engine.test.standalone.entity.ExecutionOrderListener" />
       </extensionElements>
       <messageEventDefinition messageRef="messageId" />
     </boundaryEvent>
 
     <sequenceFlow sourceRef="messageBoundary" targetRef="theServiceAfterMessage" />
 
-    <serviceTask id="theServiceAfterMessage" camunda:expression="${true}">
+    <serviceTask id="theServiceAfterMessage" orqueio:expression="${true}">
       <extensionElements>
-        <camunda:executionListener event="start" class="io.orqueio.bpm.engine.test.standalone.entity.ExecutionOrderListener" />
+        <orqueio:executionListener event="start" class="io.orqueio.bpm.engine.test.standalone.entity.ExecutionOrderListener" />
       </extensionElements>
     </serviceTask>
 
@@ -56,7 +56,7 @@
 
     <endEvent id="theEnd2">
       <extensionElements>
-        <camunda:executionListener event="start" class="io.orqueio.bpm.engine.test.standalone.entity.ExecutionOrderListener" />
+        <orqueio:executionListener event="start" class="io.orqueio.bpm.engine.test.standalone.entity.ExecutionOrderListener" />
       </extensionElements>
     </endEvent>
 

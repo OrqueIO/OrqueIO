@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -33,7 +33,7 @@ import org.junit.Test;
  */
 public class CaseExecutionListenerTest extends CmmnTest {
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testCreateListenerByClass.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testCreateListenerByClass.cmmn"})
   @Test
   public void testCreateListenerByClass() {
     // given
@@ -65,7 +65,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testCreateListenerByDelegateExpression.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testCreateListenerByDelegateExpression.cmmn"})
   @Test
   public void testCreateListenerByDelegateExpression() {
     // given
@@ -98,7 +98,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testCreateListenerByExpression.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testCreateListenerByExpression.cmmn"})
   @Test
   public void testCreateListenerByExpression() {
     // given
@@ -131,7 +131,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testCreateListenerByScript.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testCreateListenerByScript.cmmn"})
   @Test
   public void testCreateListenerByScript() {
     // given
@@ -163,7 +163,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testEnableListenerByClass.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testEnableListenerByClass.cmmn"})
   @Test
   public void testEnableListenerByClass() {
     // given
@@ -195,7 +195,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testEnableListenerByDelegateExpression.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testEnableListenerByDelegateExpression.cmmn"})
   @Test
   public void testEnableListenerByDelegateExpression() {
     // given
@@ -228,7 +228,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testEnableListenerByExpression.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testEnableListenerByExpression.cmmn"})
   @Test
   public void testEnableListenerByExpression() {
     // given
@@ -261,7 +261,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testEnableListenerByScript.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testEnableListenerByScript.cmmn"})
   @Test
   public void testEnableListenerByScript() {
     // given
@@ -293,7 +293,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testDisableListenerByClass.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testDisableListenerByClass.cmmn"})
   @Test
   public void testDisableListenerByClass() {
     // given
@@ -328,7 +328,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testDisableListenerByDelegateExpression.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testDisableListenerByDelegateExpression.cmmn"})
   @Test
   public void testDisableListenerByDelegateExpression() {
     // given
@@ -364,7 +364,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testDisableListenerByExpression.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testDisableListenerByExpression.cmmn"})
   @Test
   public void testDisableListenerByExpression() {
     // given
@@ -400,7 +400,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testDisableListenerByScript.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testDisableListenerByScript.cmmn"})
   @Test
   public void testDisableListenerByScript() {
     // given
@@ -435,7 +435,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testReEnableListenerByClass.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testReEnableListenerByClass.cmmn"})
   @Test
   public void testReEnableListenerByClass() {
     // given
@@ -474,7 +474,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testReEnableListenerByDelegateExpression.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testReEnableListenerByDelegateExpression.cmmn"})
   @Test
   public void testReEnableListenerByDelegateExpression() {
     // given
@@ -514,7 +514,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testReEnableListenerByExpression.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testReEnableListenerByExpression.cmmn"})
   @Test
   public void testReEnableListenerByExpression() {
     // given
@@ -554,7 +554,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testReEnableListenerByScript.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testReEnableListenerByScript.cmmn"})
   @Test
   public void testReEnableListenerByScript() {
     // given
@@ -593,7 +593,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testStartListenerByClass.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testStartListenerByClass.cmmn"})
   @Test
   public void testStartListenerByClass() {
     // given
@@ -625,7 +625,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testStartListenerByDelegateExpression.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testStartListenerByDelegateExpression.cmmn"})
   @Test
   public void testStartListenerByDelegateExpression() {
     // given
@@ -658,7 +658,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testStartListenerByExpression.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testStartListenerByExpression.cmmn"})
   @Test
   public void testStartListenerByExpression() {
     // given
@@ -691,7 +691,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testStartListenerByScript.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testStartListenerByScript.cmmn"})
   @Test
   public void testStartListenerByScript() {
     // given
@@ -723,7 +723,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testManualStartListenerByClass.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testManualStartListenerByClass.cmmn"})
   @Test
   public void testManualStartListenerByClass() {
     // given
@@ -758,7 +758,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testManualStartListenerByDelegateExpression.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testManualStartListenerByDelegateExpression.cmmn"})
   @Test
   public void testManualStartListenerByDelegateExpression() {
     // given
@@ -794,7 +794,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testManualStartListenerByExpression.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testManualStartListenerByExpression.cmmn"})
   @Test
   public void testManualStartListenerByExpression() {
     // given
@@ -830,7 +830,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testManualStartListenerByScript.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testManualStartListenerByScript.cmmn"})
   @Test
   public void testManualStartListenerByScript() {
     // given
@@ -865,7 +865,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testCompleteListenerByClass.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testCompleteListenerByClass.cmmn"})
   @Test
   public void testCompleteListenerByClass() {
     // given
@@ -900,7 +900,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testCompleteListenerByDelegateExpression.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testCompleteListenerByDelegateExpression.cmmn"})
   @Test
   public void testCompleteListenerByDelegateExpression() {
     // given
@@ -936,7 +936,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testCompleteListenerByExpression.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testCompleteListenerByExpression.cmmn"})
   @Test
   public void testCompleteListenerByExpression() {
     // given
@@ -972,7 +972,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testCompleteListenerByScript.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testCompleteListenerByScript.cmmn"})
   @Test
   public void testCompleteListenerByScript() {
     // given
@@ -1007,7 +1007,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testTerminateListenerByClass.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testTerminateListenerByClass.cmmn"})
   @Test
   public void testTerminateListenerByClass() {
     // given
@@ -1040,7 +1040,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testTerminateListenerByDelegateExpression.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testTerminateListenerByDelegateExpression.cmmn"})
   @Test
   public void testTerminateListenerByDelegateExpression() {
     // given
@@ -1074,7 +1074,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testTerminateListenerByExpression.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testTerminateListenerByExpression.cmmn"})
   @Test
   public void testTerminateListenerByExpression() {
     // given
@@ -1108,7 +1108,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testTerminateListenerByScript.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testTerminateListenerByScript.cmmn"})
   @Test
   public void testTerminateListenerByScript() {
     // given
@@ -1141,7 +1141,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testExitListenerByClass.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testExitListenerByClass.cmmn"})
   @Test
   public void testExitListenerByClass() {
     // given
@@ -1174,7 +1174,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testExitListenerByDelegateExpression.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testExitListenerByDelegateExpression.cmmn"})
   @Test
   public void testExitListenerByDelegateExpression() {
     // given
@@ -1208,7 +1208,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testExitListenerByExpression.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testExitListenerByExpression.cmmn"})
   @Test
   public void testExitListenerByExpression() {
     // given
@@ -1242,7 +1242,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testExitListenerByScript.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testExitListenerByScript.cmmn"})
   @Test
   public void testExitListenerByScript() {
     // given
@@ -1275,7 +1275,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testParentTerminateListenerByClass.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testParentTerminateListenerByClass.cmmn"})
   @Test
   public void testParentTerminateListenerByClass() {
     // given
@@ -1308,7 +1308,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testParentTerminateListenerByDelegateExpression.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testParentTerminateListenerByDelegateExpression.cmmn"})
   @Test
   public void testParentTerminateListenerByDelegateExpression() {
     // given
@@ -1342,7 +1342,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testParentTerminateListenerByExpression.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testParentTerminateListenerByExpression.cmmn"})
   @Test
   public void testParentTerminateListenerByExpression() {
     // given
@@ -1376,7 +1376,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testParentTerminateListenerByScript.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testParentTerminateListenerByScript.cmmn"})
   @Test
   public void testParentTerminateListenerByScript() {
     // given
@@ -1409,7 +1409,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testSuspendListenerByClass.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testSuspendListenerByClass.cmmn"})
   @Test
   public void testSuspendListenerByClass() {
     // given
@@ -1442,7 +1442,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testSuspendListenerByDelegateExpression.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testSuspendListenerByDelegateExpression.cmmn"})
   @Test
   public void testSuspendListenerByDelegateExpression() {
     // given
@@ -1476,7 +1476,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testSuspendListenerByExpression.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testSuspendListenerByExpression.cmmn"})
   @Test
   public void testSuspendListenerByExpression() {
     // given
@@ -1510,7 +1510,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testSuspendListenerByScript.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testSuspendListenerByScript.cmmn"})
   @Test
   public void testSuspendListenerByScript() {
     // given
@@ -1543,7 +1543,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testParentSuspendListenerByClass.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testParentSuspendListenerByClass.cmmn"})
   @Test
   public void testParentSuspendListenerByClass() {
     // given
@@ -1576,7 +1576,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testParentSuspendListenerByDelegateExpression.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testParentSuspendListenerByDelegateExpression.cmmn"})
   @Test
   public void testParentSuspendListenerByDelegateExpression() {
     // given
@@ -1610,7 +1610,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testParentSuspendListenerByExpression.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testParentSuspendListenerByExpression.cmmn"})
   @Test
   public void testParentSuspendListenerByExpression() {
     // given
@@ -1644,7 +1644,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testParentSuspendListenerByScript.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testParentSuspendListenerByScript.cmmn"})
   @Test
   public void testParentSuspendListenerByScript() {
     // given
@@ -1677,7 +1677,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testResumeListenerByClass.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testResumeListenerByClass.cmmn"})
   @Test
   public void testResumeListenerByClass() {
     // given
@@ -1712,7 +1712,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testResumeListenerByDelegateExpression.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testResumeListenerByDelegateExpression.cmmn"})
   @Test
   public void testResumeListenerByDelegateExpression() {
     // given
@@ -1748,7 +1748,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testResumeListenerByExpression.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testResumeListenerByExpression.cmmn"})
   @Test
   public void testResumeListenerByExpression() {
     // given
@@ -1784,7 +1784,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testResumeListenerByScript.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testResumeListenerByScript.cmmn"})
   @Test
   public void testResumeListenerByScript() {
     // given
@@ -1819,7 +1819,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testParentResumeListenerByClass.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testParentResumeListenerByClass.cmmn"})
   @Test
   public void testParentResumeListenerByClass() {
     // given
@@ -1854,7 +1854,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testParentResumeListenerByDelegateExpression.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testParentResumeListenerByDelegateExpression.cmmn"})
   @Test
   public void testParentResumeListenerByDelegateExpression() {
     // given
@@ -1890,7 +1890,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testParentResumeListenerByExpression.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testParentResumeListenerByExpression.cmmn"})
   @Test
   public void testParentResumeListenerByExpression() {
     // given
@@ -1926,7 +1926,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testParentResumeListenerByScript.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testParentResumeListenerByScript.cmmn"})
   @Test
   public void testParentResumeListenerByScript() {
     // given
@@ -1961,7 +1961,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testOccurListenerByClass.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testOccurListenerByClass.cmmn"})
   @Test
   public void testOccurListenerByClass() {
     // given
@@ -1994,7 +1994,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testOccurListenerByDelegateExpression.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testOccurListenerByDelegateExpression.cmmn"})
   @Test
   public void testOccurListenerByDelegateExpression() {
     // given
@@ -2028,7 +2028,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testOccurListenerByExpression.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testOccurListenerByExpression.cmmn"})
   @Test
   public void testOccurListenerByExpression() {
     // given
@@ -2062,7 +2062,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testOccurListenerByScript.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testOccurListenerByScript.cmmn"})
   @Test
   public void testOccurListenerByScript() {
     // given
@@ -2095,7 +2095,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testAllListenerByClass.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testAllListenerByClass.cmmn"})
   @Test
   public void testAllListenerByClass() {
     // given
@@ -2175,7 +2175,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testAllListenerByDelegateExpression.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testAllListenerByDelegateExpression.cmmn"})
   @Test
   public void testAllListenerByDelegateExpression() {
     // given
@@ -2256,7 +2256,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testAllListenerByExpression.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testAllListenerByExpression.cmmn"})
   @Test
   public void testAllListenerByExpression() {
     // given
@@ -2337,7 +2337,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testAllListenerByScript.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testAllListenerByScript.cmmn"})
   @Test
   public void testAllListenerByScript() {
     // given
@@ -2417,7 +2417,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testFieldInjectionByClass.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testFieldInjectionByClass.cmmn"})
   @Test
   public void testFieldInjectionByClass() {
     // given
@@ -2442,7 +2442,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testFieldInjectionByDelegateExpression.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testFieldInjectionByDelegateExpression.cmmn"})
   @Test
   public void testFieldInjectionByDelegateExpression() {
     // given
@@ -2469,8 +2469,8 @@ public class CaseExecutionListenerTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testListenerByScriptResource.cmmn",
-      "org/camunda/bpm/engine/test/cmmn/listener/caseExecutionListener.groovy"
+      "io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testListenerByScriptResource.cmmn",
+      "io/orqueio/bpm/engine/test/cmmn/listener/caseExecutionListener.groovy"
       })
   @Test
   public void testListenerByScriptResource() {
@@ -2521,7 +2521,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
     assertEquals(3, query.variableName("eventCounter").singleResult().getValue());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testDoesNotImplementCaseExecutionListenerInterfaceByClass.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testDoesNotImplementCaseExecutionListenerInterfaceByClass.cmmn"})
   @Test
   public void testDoesNotImplementCaseExecutionListenerInterfaceByClass() {
     // given
@@ -2540,7 +2540,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testDoesNotImplementCaseExecutionListenerInterfaceByDelegateExpression.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testDoesNotImplementCaseExecutionListenerInterfaceByDelegateExpression.cmmn"})
   @Test
   public void testDoesNotImplementCaseExecutionListenerInterfaceByDelegateExpression() {
     // given
@@ -2559,7 +2559,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testListenerDoesNotExist.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testListenerDoesNotExist.cmmn"})
   @Test
   public void testListenerDoesNotExist() {
     // given
@@ -2578,7 +2578,7 @@ public class CaseExecutionListenerTest extends CmmnTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testBusinessKeyAsCaseBusinessKey.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/listener/CaseExecutionListenerTest.testBusinessKeyAsCaseBusinessKey.cmmn"})
   @Test
   public void testBusinessKeyAsCaseBusinessKey() {
     // given

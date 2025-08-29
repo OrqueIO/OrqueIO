@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -50,31 +50,31 @@ public class JobExecutorFollowUpTest {
   protected static final BpmnModelInstance TWO_TASKS_PROCESS = Bpmn.createExecutableProcess("process")
     .startEvent()
     .serviceTask("serviceTask1")
-      .camundaAsyncBefore()
-      .camundaClass(SyncDelegate.class.getName())
+      .orqueioAsyncBefore()
+      .orqueioClass(SyncDelegate.class.getName())
     .serviceTask("serviceTask2")
-      .camundaAsyncBefore()
-      .camundaClass(SyncDelegate.class.getName())
+      .orqueioAsyncBefore()
+      .orqueioClass(SyncDelegate.class.getName())
     .endEvent()
     .done();
 
   protected static final BpmnModelInstance TWO_TASKS_DIFFERENT_PRIORITIES_PROCESS = Bpmn.createExecutableProcess("prioritizedTasksProcess")
       .startEvent()
       .serviceTask("prio20serviceTask")
-        .camundaAsyncBefore()
-        .camundaClass(SyncDelegate.class.getName())
-        .camundaJobPriority("20")
+        .orqueioAsyncBefore()
+        .orqueioClass(SyncDelegate.class.getName())
+        .orqueioJobPriority("20")
       .serviceTask("prio10serviceTask")
-        .camundaAsyncBefore()
-        .camundaClass(SyncDelegate.class.getName())
-        .camundaJobPriority("10")
+        .orqueioAsyncBefore()
+        .orqueioClass(SyncDelegate.class.getName())
+        .orqueioJobPriority("10")
       .endEvent()
       .done();
 
   protected static final BpmnModelInstance CALL_ACTIVITY_PROCESS = Bpmn.createExecutableProcess("callActivityProcess")
       .startEvent()
       .callActivity("callActivity")
-        .camundaAsyncBefore()
+        .orqueioAsyncBefore()
         .calledElement("oneTaskProcess")
       .endEvent()
       .done();
@@ -82,7 +82,7 @@ public class JobExecutorFollowUpTest {
   protected static final BpmnModelInstance ONE_TASK_PROCESS = Bpmn.createExecutableProcess("oneTaskProcess")
       .startEvent()
       .userTask("serviceTask")
-        .camundaAsyncBefore()
+        .orqueioAsyncBefore()
       .endEvent()
       .done();
 

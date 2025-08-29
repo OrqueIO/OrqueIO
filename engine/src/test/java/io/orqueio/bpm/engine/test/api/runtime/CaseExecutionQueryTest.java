@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -62,8 +62,8 @@ public class CaseExecutionQueryTest extends PluggableProcessEngineTest {
   public void setUp() throws Exception {
 
     repositoryService.createDeployment()
-      .addClasspathResource("org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn")
-      .addClasspathResource("org/camunda/bpm/engine/test/api/cmmn/twoTaskCase.cmmn")
+      .addClasspathResource("io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn")
+      .addClasspathResource("io/orqueio/bpm/engine/test/api/cmmn/twoTaskCase.cmmn")
       .deploy();
 
     for (int i = 0; i < 4; i++) {
@@ -347,7 +347,7 @@ public class CaseExecutionQueryTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/cmmn/oneMilestoneCase.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/cmmn/oneMilestoneCase.cmmn"})
   @Test
   public void testQueryByAvailable() {
     caseService
@@ -2679,7 +2679,7 @@ public class CaseExecutionQueryTest extends PluggableProcessEngineTest {
     assertNotNull(task.getId());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/cmmn/required/RequiredRuleTest.testVariableBasedRule.cmmn")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/cmmn/required/RequiredRuleTest.testVariableBasedRule.cmmn")
   @Test
   public void testQueryByRequired() {
     caseService.createCaseInstanceByKey("case", Collections.<String, Object>singletonMap("required", true));

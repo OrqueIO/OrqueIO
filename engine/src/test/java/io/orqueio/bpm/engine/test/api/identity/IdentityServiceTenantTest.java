@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -168,7 +168,7 @@ public class IdentityServiceTenantTest {
   @Test
   public void testCustomCreateTenantWhitelistPattern() {
     processEngine = ProcessEngineConfiguration
-      .createProcessEngineConfigurationFromResource("org/camunda/bpm/engine/test/api/identity/generic.resource.id.whitelist.camunda.cfg.xml")
+      .createProcessEngineConfigurationFromResource("io/orqueio/bpm/engine/test/api/identity/generic.resource.id.whitelist.orqueio.cfg.xml")
       .buildProcessEngine();
     processEngine.getProcessEngineConfiguration().setTenantResourceWhitelistPattern("[a-zA-Z]+");
 
@@ -186,7 +186,7 @@ public class IdentityServiceTenantTest {
   @Test
   public void testCustomTenantWhitelistPattern() {
     processEngine = ProcessEngineConfiguration
-      .createProcessEngineConfigurationFromResource("org/camunda/bpm/engine/test/api/identity/generic.resource.id.whitelist.camunda.cfg.xml")
+      .createProcessEngineConfigurationFromResource("io/orqueio/bpm/engine/test/api/identity/generic.resource.id.whitelist.orqueio.cfg.xml")
       .buildProcessEngine();
     processEngine.getProcessEngineConfiguration().setTenantResourceWhitelistPattern("[a-zA-Z]+");
 
@@ -243,7 +243,7 @@ public class IdentityServiceTenantTest {
   @Test
   public void createTenantWithGenericResourceId() {
     processEngine = ProcessEngineConfiguration
-      .createProcessEngineConfigurationFromResource("org/camunda/bpm/engine/test/api/identity/generic.resource.id.whitelist.camunda.cfg.xml")
+      .createProcessEngineConfigurationFromResource("io/orqueio/bpm/engine/test/api/identity/generic.resource.id.whitelist.orqueio.cfg.xml")
       .buildProcessEngine();
 
     Tenant tenant = processEngine.getIdentityService().newTenant("*");

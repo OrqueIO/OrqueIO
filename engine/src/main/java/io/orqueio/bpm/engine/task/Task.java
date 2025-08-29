@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -21,7 +21,7 @@ import java.util.Date;
 import io.orqueio.bpm.engine.BadUserRequestException;
 import io.orqueio.bpm.engine.TaskService;
 import io.orqueio.bpm.engine.delegate.TaskListener;
-import io.orqueio.bpm.engine.form.CamundaFormRef;
+import io.orqueio.bpm.engine.form.OrqueioFormRef;
 
 
 
@@ -160,7 +160,7 @@ public interface Task {
   String getFormKey();
 
   /**
-   * Provides the form binding reference to the Camunda Form for the task.
+   * Provides the form binding reference to the Orqueio Form for the task.
    *
    * <p><strong>NOTE:</strong> If the task instance is obtained through a query, this property is only populated in case the
    * {@link TaskQuery#initializeFormKeys()} method is called. If this method is called without a prior call to
@@ -169,7 +169,7 @@ public interface Task {
    * @return the reference key, binding type and version (if type is {@code version})
    * @throws BadUserRequestException in case the form key is not initialized.
    */
-  CamundaFormRef getCamundaFormRef();
+  OrqueioFormRef getOrqueioFormRef();
 
   /**
    * Returns the task's tenant id or null in case this task does not belong to a tenant.

@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -126,8 +126,8 @@ public class ProcessInstanceQueryTest {
   @Before
   public void deployTestProcesses() throws Exception {
     io.orqueio.bpm.engine.repository.Deployment deployment = engineRule.getRepositoryService().createDeployment()
-      .addClasspathResource("org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml")
-      .addClasspathResource("org/camunda/bpm/engine/test/api/runtime/otherOneTaskProcess.bpmn20.xml")
+      .addClasspathResource("io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml")
+      .addClasspathResource("io/orqueio/bpm/engine/test/api/runtime/otherOneTaskProcess.bpmn20.xml")
       .deploy();
 
     engineRule.manageDeployment(deployment);
@@ -177,7 +177,7 @@ public class ProcessInstanceQueryTest {
       .map(id -> new ImmutablePair<>(deploymentIdOne, id))
       .forEach(expectedMappings::add);
     io.orqueio.bpm.engine.repository.Deployment deploymentTwo = repositoryService.createDeployment()
-        .addClasspathResource("org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml")
+        .addClasspathResource("io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml")
         .deploy();
     engineRule.manageDeployment(deploymentTwo);
     ImmutablePair<String, String> newMapping = new ImmutablePair<>(deploymentTwo.getId(),
@@ -422,8 +422,8 @@ public class ProcessInstanceQueryTest {
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/runtime/superProcess.bpmn20.xml",
-                           "org/camunda/bpm/engine/test/api/runtime/subProcess.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/runtime/superProcess.bpmn20.xml",
+                           "io/orqueio/bpm/engine/test/api/runtime/subProcess.bpmn20.xml"})
   public void testQueryBySuperProcessInstanceId() {
     ProcessInstance superProcessInstance = runtimeService.startProcessInstanceByKey("subProcessQueryTest");
 
@@ -440,8 +440,8 @@ public class ProcessInstanceQueryTest {
     assertEquals(0, runtimeService.createProcessInstanceQuery().superProcessInstanceId("invalid").list().size());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/runtime/superProcess.bpmn20.xml",
-                           "org/camunda/bpm/engine/test/api/runtime/subProcess.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/runtime/superProcess.bpmn20.xml",
+                           "io/orqueio/bpm/engine/test/api/runtime/subProcess.bpmn20.xml"})
   @Test
   public void testQueryBySubProcessInstanceId() {
     ProcessInstance superProcessInstance = runtimeService.startProcessInstanceByKey("subProcessQueryTest");
@@ -459,9 +459,9 @@ public class ProcessInstanceQueryTest {
 
   // Nested subprocess make the query complexer, hence this test
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/runtime/superProcessWithNestedSubProcess.bpmn20.xml",
-                           "org/camunda/bpm/engine/test/api/runtime/nestedSubProcess.bpmn20.xml",
-                           "org/camunda/bpm/engine/test/api/runtime/subProcess.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/runtime/superProcessWithNestedSubProcess.bpmn20.xml",
+                           "io/orqueio/bpm/engine/test/api/runtime/nestedSubProcess.bpmn20.xml",
+                           "io/orqueio/bpm/engine/test/api/runtime/subProcess.bpmn20.xml"})
   public void testQueryBySuperProcessInstanceIdNested() {
     ProcessInstance superProcessInstance = runtimeService.startProcessInstanceByKey("nestedSubProcessQueryTest");
 
@@ -474,9 +474,9 @@ public class ProcessInstanceQueryTest {
 
   //Nested subprocess make the query complexer, hence this test
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/runtime/superProcessWithNestedSubProcess.bpmn20.xml",
-          "org/camunda/bpm/engine/test/api/runtime/nestedSubProcess.bpmn20.xml",
-          "org/camunda/bpm/engine/test/api/runtime/subProcess.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/runtime/superProcessWithNestedSubProcess.bpmn20.xml",
+          "io/orqueio/bpm/engine/test/api/runtime/nestedSubProcess.bpmn20.xml",
+          "io/orqueio/bpm/engine/test/api/runtime/subProcess.bpmn20.xml"})
   public void testQueryBySubProcessInstanceIdNested() {
     ProcessInstance superProcessInstance = runtimeService.startProcessInstanceByKey("nestedSubProcessQueryTest");
 
@@ -528,7 +528,7 @@ public class ProcessInstanceQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   public void testQueryStringVariable() {
     Map<String, Object> vars = new HashMap<>();
     vars.put("stringVar", "abcdef");
@@ -616,7 +616,7 @@ public class ProcessInstanceQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   public void testQueryLongVariable() {
     Map<String, Object> vars = new HashMap<>();
     vars.put("longVar", 12345L);
@@ -695,7 +695,7 @@ public class ProcessInstanceQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   public void testQueryDoubleVariable() {
     Map<String, Object> vars = new HashMap<>();
     vars.put("doubleVar", 12345.6789);
@@ -774,7 +774,7 @@ public class ProcessInstanceQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   public void testQueryIntegerVariable() {
     Map<String, Object> vars = new HashMap<>();
     vars.put("integerVar", 12345);
@@ -853,7 +853,7 @@ public class ProcessInstanceQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   public void testQueryShortVariable() {
     Map<String, Object> vars = new HashMap<>();
     short shortVar = 1234;
@@ -935,7 +935,7 @@ public class ProcessInstanceQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   public void testQueryDateVariable() throws Exception {
     Map<String, Object> vars = new HashMap<>();
     Date date1 = Calendar.getInstance().getTime();
@@ -1029,7 +1029,7 @@ public class ProcessInstanceQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   public void testBooleanVariable() throws Exception {
 
     // TEST EQUALS
@@ -1100,7 +1100,7 @@ public class ProcessInstanceQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   public void testQueryVariablesUpdatedToNullValue() {
     // Start process instance with different types of variables
     Map<String, Object> variables = new HashMap<>();
@@ -1148,7 +1148,7 @@ public class ProcessInstanceQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   public void testQueryNullVariable() throws Exception {
     Map<String, Object> vars = new HashMap<>();
     vars.put("nullVar", null);
@@ -1228,7 +1228,7 @@ public class ProcessInstanceQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   public void testQueryInvalidTypes() throws Exception {
     Map<String, Object> vars = new HashMap<>();
     vars.put("bytesVar", "test".getBytes());
@@ -1304,7 +1304,7 @@ public class ProcessInstanceQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   public void testQueryAllVariableTypes() throws Exception {
     Map<String, Object> vars = new HashMap<>();
     vars.put("nullVar", null);
@@ -1335,7 +1335,7 @@ public class ProcessInstanceQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   public void testClashingValues() throws Exception {
       Map<String, Object> vars = new HashMap<>();
       vars.put("var", 1234L);
@@ -1446,8 +1446,8 @@ public class ProcessInstanceQueryTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/runtime/failingProcessCreateOneIncident.bpmn20.xml",
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/runtime/failingProcessCreateOneIncident.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
   public void testQueryWithIncident() {
     ProcessInstance instanceWithIncident = runtimeService.startProcessInstanceByKey("failingProcess");
     runtimeService.startProcessInstanceByKey("oneTaskProcess");
@@ -1462,7 +1462,7 @@ public class ProcessInstanceQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/failingProcessCreateOneIncident.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/failingProcessCreateOneIncident.bpmn20.xml"})
   public void testQueryByIncidentId() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("failingProcess");
 
@@ -1493,7 +1493,7 @@ public class ProcessInstanceQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/failingProcessCreateOneIncident.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/failingProcessCreateOneIncident.bpmn20.xml"})
   public void testQueryByIncidentType() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("failingProcess");
 
@@ -1524,7 +1524,7 @@ public class ProcessInstanceQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/failingProcessCreateOneIncident.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/failingProcessCreateOneIncident.bpmn20.xml"})
   public void testQueryByIncidentMessage() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("failingProcess");
 
@@ -1555,7 +1555,7 @@ public class ProcessInstanceQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/failingProcessCreateOneIncident.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/failingProcessCreateOneIncident.bpmn20.xml"})
   public void testQueryByIncidentMessageLike() {
     runtimeService.startProcessInstanceByKey("failingProcess");
 
@@ -1584,7 +1584,7 @@ public class ProcessInstanceQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/failingSubProcessCreateOneIncident.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/failingSubProcessCreateOneIncident.bpmn20.xml"})
   public void testQueryByIncidentIdInSubProcess() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("failingSubProcess");
 
@@ -1604,7 +1604,7 @@ public class ProcessInstanceQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/failingSubProcessCreateOneIncident.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/failingSubProcessCreateOneIncident.bpmn20.xml"})
   public void testQueryByIncidentTypeInSubProcess() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("failingSubProcess");
 
@@ -1624,7 +1624,7 @@ public class ProcessInstanceQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/failingSubProcessCreateOneIncident.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/failingSubProcessCreateOneIncident.bpmn20.xml"})
   public void testQueryByIncidentMessageInSubProcess() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("failingSubProcess");
 
@@ -1644,7 +1644,7 @@ public class ProcessInstanceQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/failingSubProcessCreateOneIncident.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/failingSubProcessCreateOneIncident.bpmn20.xml"})
   public void testQueryByIncidentMessageLikeInSubProcess() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("failingSubProcess");
 
@@ -1663,8 +1663,8 @@ public class ProcessInstanceQueryTest {
 
   @Test
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/api/cmmn/oneProcessTaskCase.cmmn",
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
+      "io/orqueio/bpm/engine/test/api/cmmn/oneProcessTaskCase.cmmn",
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
     })
   public void testQueryByCaseInstanceId() {
     String caseInstanceId = caseService
@@ -1702,9 +1702,9 @@ public class ProcessInstanceQueryTest {
 
   @Test
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/api/runtime/superCase.cmmn",
-      "org/camunda/bpm/engine/test/api/runtime/superProcessWithCallActivityInsideSubProcess.bpmn20.xml",
-      "org/camunda/bpm/engine/test/api/runtime/subProcess.bpmn20.xml"
+      "io/orqueio/bpm/engine/test/api/runtime/superCase.cmmn",
+      "io/orqueio/bpm/engine/test/api/runtime/superProcessWithCallActivityInsideSubProcess.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/api/runtime/subProcess.bpmn20.xml"
     })
   public void testQueryByCaseInstanceIdHierarchy() {
     String caseInstanceId = caseService
@@ -1730,7 +1730,7 @@ public class ProcessInstanceQueryTest {
   }
 
   @Test
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
   public void testProcessVariableValueEqualsNumber() throws Exception {
     // long
     runtimeService.startProcessInstanceByKey("oneTaskProcess",
@@ -1772,7 +1772,7 @@ public class ProcessInstanceQueryTest {
   }
 
   @Test
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
   public void testProcessVariableValueNumberComparison() throws Exception {
     // long
     runtimeService.startProcessInstanceByKey("oneTaskProcess",
@@ -1813,7 +1813,7 @@ public class ProcessInstanceQueryTest {
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/cmmn/oneProcessTaskCase.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/cmmn/oneProcessTaskCase.cmmn"})
   public void testQueryBySuperCaseInstanceId() {
     String superCaseInstanceId = caseService.createCaseInstanceByKey("oneProcessTaskCase").getId();
 
@@ -1845,8 +1845,8 @@ public class ProcessInstanceQueryTest {
 
   @Test
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/api/runtime/superProcessWithCaseCallActivity.bpmn20.xml",
-      "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn" })
+      "io/orqueio/bpm/engine/test/api/runtime/superProcessWithCaseCallActivity.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn" })
   public void testQueryBySubCaseInstanceId() {
     String superProcessInstanceId = runtimeService.startProcessInstanceByKey("subProcessQueryTest").getId();
 
@@ -1870,8 +1870,8 @@ public class ProcessInstanceQueryTest {
 
   @Test
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/api/runtime/superProcessWithCaseCallActivityInsideSubProcess.bpmn20.xml",
-      "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn" })
+      "io/orqueio/bpm/engine/test/api/runtime/superProcessWithCaseCallActivityInsideSubProcess.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn" })
   public void testQueryBySubCaseInstanceIdNested() {
     String superProcessInstanceId = runtimeService.startProcessInstanceByKey("subProcessQueryTest").getId();
 
@@ -1909,7 +1909,7 @@ public class ProcessInstanceQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   public void testQueryNullValue() {
     // typed null
     ProcessInstance processInstance1 = runtimeService.startProcessInstanceByKey("oneTaskProcess",
@@ -1960,7 +1960,7 @@ public class ProcessInstanceQueryTest {
 
     // make a second deployment and start an instance
     io.orqueio.bpm.engine.repository.Deployment secondDeployment = repositoryService.createDeployment()
-      .addClasspathResource("org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml")
+      .addClasspathResource("io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml")
       .deploy();
 
     ProcessInstance secondProcessInstance = runtimeService.startProcessInstanceByKey("oneTaskProcess");
@@ -2081,14 +2081,14 @@ public class ProcessInstanceQueryTest {
   public void testQueryByAsyncBeforeActivityId() {
     // given
     ProcessDefinition testProcess = testHelper.deployAndGetDefinition(ProcessModels.newModel()
-      .startEvent("start").camundaAsyncBefore()
-      .subProcess("subProcess").camundaAsyncBefore()
+      .startEvent("start").orqueioAsyncBefore()
+      .subProcess("subProcess").orqueioAsyncBefore()
       .embeddedSubProcess()
         .startEvent()
-        .serviceTask("task").camundaAsyncBefore().camundaExpression("${true}")
+        .serviceTask("task").orqueioAsyncBefore().orqueioExpression("${true}")
         .endEvent()
       .subProcessDone()
-      .endEvent("end").camundaAsyncBefore()
+      .endEvent("end").orqueioAsyncBefore()
       .done()
     );
 
@@ -2122,14 +2122,14 @@ public class ProcessInstanceQueryTest {
   public void testQueryByAsyncAfterActivityId() {
     // given
     ProcessDefinition testProcess = testHelper.deployAndGetDefinition(ProcessModels.newModel()
-      .startEvent("start").camundaAsyncAfter()
-      .subProcess("subProcess").camundaAsyncAfter()
+      .startEvent("start").orqueioAsyncAfter()
+      .subProcess("subProcess").orqueioAsyncAfter()
       .embeddedSubProcess()
         .startEvent()
-        .serviceTask("task").camundaAsyncAfter().camundaExpression("${true}")
+        .serviceTask("task").orqueioAsyncAfter().orqueioExpression("${true}")
         .endEvent()
       .subProcessDone()
-      .endEvent("end").camundaAsyncAfter()
+      .endEvent("end").orqueioAsyncAfter()
       .done()
     );
 

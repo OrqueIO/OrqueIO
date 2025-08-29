@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -17,7 +17,7 @@
 
 package io.orqueio.bpm.engine.impl;
 
-import static io.orqueio.bpm.engine.impl.bpmn.parser.BpmnParse.CAMUNDA_BPMN_EXTENSIONS_NS;
+import static io.orqueio.bpm.engine.impl.bpmn.parser.BpmnParse.ORQUEIO_BPMN_EXTENSIONS_NS;
 
 import java.util.Objects;
 import io.orqueio.bpm.engine.exception.NotAllowedException;
@@ -73,19 +73,19 @@ public class HistoryTimeToLiveParser {
   }
 
   public Integer parse(Element processElement, String definitionKey, boolean skipEnforceTtl) {
-    String historyTimeToLiveString = processElement.attributeNS(CAMUNDA_BPMN_EXTENSIONS_NS, "historyTimeToLive");
+    String historyTimeToLiveString = processElement.attributeNS(ORQUEIO_BPMN_EXTENSIONS_NS, "historyTimeToLive");
 
     return parseAndValidate(historyTimeToLiveString, definitionKey, skipEnforceTtl);
   }
 
   public Integer parse(Case caseElement, String definitionKey, boolean skipEnforceTtl) {
-    String historyTimeToLiveString = caseElement.getCamundaHistoryTimeToLiveString();
+    String historyTimeToLiveString = caseElement.getOrqueioHistoryTimeToLiveString();
 
     return parseAndValidate(historyTimeToLiveString, definitionKey, skipEnforceTtl);
   }
 
   public Integer parse(Decision decision, String definitionKey, boolean skipEnforceTtl) {
-    String historyTimeToLiveString = decision.getCamundaHistoryTimeToLiveString();
+    String historyTimeToLiveString = decision.getOrqueioHistoryTimeToLiveString();
 
     return parseAndValidate(historyTimeToLiveString, definitionKey, skipEnforceTtl);
   }

@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -99,7 +99,7 @@ public class HistoricDetailQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   public void testQueryByUserOperationId() {
     startProcessInstance(PROCESS_KEY);
 
@@ -121,7 +121,7 @@ public class HistoricDetailQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   public void shouldQueryByUserOperationIdAndVariableUpdates() {
     startProcessInstance(PROCESS_KEY);
 
@@ -144,7 +144,7 @@ public class HistoricDetailQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   public void testQueryByInvalidUserOperationId() {
     startProcessInstance(PROCESS_KEY);
 
@@ -167,7 +167,7 @@ public class HistoricDetailQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   public void testQueryByExecutionId() {
     startProcessInstance(PROCESS_KEY);
 
@@ -187,7 +187,7 @@ public class HistoricDetailQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   public void testQueryByInvalidExecutionId() {
     startProcessInstance(PROCESS_KEY);
 
@@ -205,7 +205,7 @@ public class HistoricDetailQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   public void testQueryByExecutionIdAndProcessInstanceId() {
     // given
     startProcessInstance(PROCESS_KEY);
@@ -229,7 +229,7 @@ public class HistoricDetailQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryByVariableTypeIn() {
     // given
     Map<String, Object> variables1 = new HashMap<>();
@@ -256,7 +256,7 @@ public class HistoricDetailQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryByVariableTypeInWithCapitalLetter() {
     // given
     Map<String, Object> variables1 = new HashMap<>();
@@ -283,7 +283,7 @@ public class HistoricDetailQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryByVariableTypeInWithSeveralTypes() {
     // given
     Map<String, Object> variables1 = new HashMap<>();
@@ -317,7 +317,7 @@ public class HistoricDetailQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryByInvalidVariableTypeIn() {
     // given
     Map<String, Object> variables1 = new HashMap<>();
@@ -352,7 +352,7 @@ public class HistoricDetailQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   public void shouldQueryByVariableNameLike() {
     // given
     Map<String, Object> variables = new HashMap<>();
@@ -371,7 +371,7 @@ public class HistoricDetailQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   public void shouldQueryByVariableNameLikeTwoWildcards() {
     // given
     Map<String, Object> variables = new HashMap<>();
@@ -390,7 +390,7 @@ public class HistoricDetailQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   public void shouldQueryByVariableNameLikePrefixWildcard() {
     // given
     Map<String, Object> variables = new HashMap<>();
@@ -409,7 +409,7 @@ public class HistoricDetailQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   public void shouldQueryByVariableNameLikeInfixWildcard() {
     // given
     Map<String, Object> variables = new HashMap<>();
@@ -428,7 +428,7 @@ public class HistoricDetailQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   public void shouldQueryByVariableNameLikeIgnoreCase() {
     // given
     Map<String, Object> variables = new HashMap<>();
@@ -447,7 +447,7 @@ public class HistoricDetailQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   public void shouldQueryByVariableNameLikeEqualsNoWildcard() {
     // given
     Map<String, Object> variables = new HashMap<>();
@@ -466,7 +466,7 @@ public class HistoricDetailQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   public void shouldQueryByVariableNameLikeEqualsWildcards() {
     // given
     Map<String, Object> variables = new HashMap<>();
@@ -485,7 +485,7 @@ public class HistoricDetailQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   public void shouldQueryByVariableNameLikeTwoMatches() {
     // given
     Map<String, Object> variables = new HashMap<>();
@@ -505,7 +505,7 @@ public class HistoricDetailQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   public void shouldQueryByVariableNameLikeTwoProcessInstances() {
     // given
     Map<String, Object> variables = new HashMap<>();
@@ -530,7 +530,7 @@ public class HistoricDetailQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   public void shouldQueryByVariableNameLikeNull() {
     // given
     Map<String, Object> variables = new HashMap<>();
@@ -550,7 +550,7 @@ public class HistoricDetailQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   public void testQueryBySingleProcessInstanceId() {
     // given
     Map<String, Object> variables = new HashMap<>();
@@ -569,7 +569,7 @@ public class HistoricDetailQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   public void testQueryBySeveralProcessInstanceIds() {
     // given
     Map<String, Object> variables = new HashMap<>();
@@ -594,7 +594,7 @@ public class HistoricDetailQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   public void testQueryByNonExistingProcessInstanceId() {
     // given
     Map<String, Object> variables = new HashMap<>();
@@ -611,7 +611,7 @@ public class HistoricDetailQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryByInvalidProcessInstanceIds() {
     // given
     Map<String, Object> variables1 = new HashMap<>();
@@ -640,7 +640,7 @@ public class HistoricDetailQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   public void testQueryByOccurredBefore() {
     // given
     Calendar startTime = Calendar.getInstance();
@@ -666,7 +666,7 @@ public class HistoricDetailQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   public void testQueryByOccurredAfter() {
     // given
     Calendar startTime = Calendar.getInstance();
@@ -691,7 +691,7 @@ public class HistoricDetailQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   public void testQueryByOccurredAfterAndOccurredBefore() {
     // given
     Calendar startTime = Calendar.getInstance();
@@ -718,7 +718,7 @@ public class HistoricDetailQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryByInvalidOccurredBeforeDate() {
     // given
     Map<String, Object> variables1 = new HashMap<>();
@@ -739,7 +739,7 @@ public class HistoricDetailQueryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void testQueryByInvalidOccurredAfterDate() {
     // given
     Map<String, Object> variables1 = new HashMap<>();
@@ -760,7 +760,7 @@ public class HistoricDetailQueryTest {
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   public void testQueryByCaseInstanceIdAndCaseExecutionId() {
     // given
     String caseInstanceId = caseService.createCaseInstanceByKey("oneTaskCase").getId();
@@ -883,7 +883,7 @@ public class HistoricDetailQueryTest {
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/async/AsyncStartEventTest.testAsyncStartEventListeners.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/bpmn/async/AsyncStartEventTest.testAsyncStartEventListeners.bpmn20.xml"})
   public void testInitialFlagAsyncBeforeStartEventGlobalExecutionListener() {
     // given
     String initalValue = "initial";
@@ -921,8 +921,8 @@ public class HistoricDetailQueryTest {
     // given
     BpmnModelInstance model = Bpmn.createExecutableProcess("process")
         .startEvent()
-        .camundaAsyncBefore()
-        .camundaExecutionListenerClass("start", AsyncListener.class)
+        .orqueioAsyncBefore()
+        .orqueioExecutionListenerClass("start", AsyncListener.class)
         .userTask()
         .endEvent()
         .done();
@@ -962,8 +962,8 @@ public class HistoricDetailQueryTest {
     // given
     BpmnModelInstance model = Bpmn.createExecutableProcess("process")
         .startEvent()
-        .camundaAsyncBefore()
-        .camundaExecutionListenerClass("end", AsyncListener.class)
+        .orqueioAsyncBefore()
+        .orqueioExecutionListenerClass("end", AsyncListener.class)
         .userTask()
         .endEvent()
         .done();

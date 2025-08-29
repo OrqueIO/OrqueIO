@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -47,12 +47,12 @@ import org.junit.rules.RuleChain;
 
 public class DecisionDefinitionQueryTest {
 
-  protected static final String DMN_ONE_RESOURCE = "org/camunda/bpm/engine/test/repository/one.dmn";
-  protected static final String DMN_TWO_RESOURCE = "org/camunda/bpm/engine/test/repository/two.dmn";
-  protected static final String DMN_THREE_RESOURCE = "org/camunda/bpm/engine/test/api/repository/three_.dmn";
+  protected static final String DMN_ONE_RESOURCE = "io/orqueio/bpm/engine/test/repository/one.dmn";
+  protected static final String DMN_TWO_RESOURCE = "io/orqueio/bpm/engine/test/repository/two.dmn";
+  protected static final String DMN_THREE_RESOURCE = "io/orqueio/bpm/engine/test/api/repository/three_.dmn";
 
-  protected static final String DRD_SCORE_RESOURCE = "org/camunda/bpm/engine/test/dmn/deployment/drdScore.dmn11.xml";
-  protected static final String DRD_DISH_RESOURCE = "org/camunda/bpm/engine/test/dmn/deployment/drdDish.dmn11.xml";
+  protected static final String DRD_SCORE_RESOURCE = "io/orqueio/bpm/engine/test/dmn/deployment/drdScore.dmn11.xml";
+  protected static final String DRD_DISH_RESOURCE = "io/orqueio/bpm/engine/test/dmn/deployment/drdDish.dmn11.xml";
 
   protected ProcessEngineRule engineRule = new ProvidedProcessEngineRule();
   protected ProcessEngineTestRule testRule = new ProcessEngineTestRule(engineRule);
@@ -97,7 +97,7 @@ public class DecisionDefinitionQueryTest {
     assertThat(decisionDefinition.getId()).startsWith("one:1");
     assertThat(decisionDefinition.getCategory()).isEqualTo("Examples");
     assertThat(decisionDefinition.getVersion()).isEqualTo(1);
-    assertThat(decisionDefinition.getResourceName()).isEqualTo("org/camunda/bpm/engine/test/repository/one.dmn");
+    assertThat(decisionDefinition.getResourceName()).isEqualTo("io/orqueio/bpm/engine/test/repository/one.dmn");
     assertThat(decisionDefinition.getDeploymentId()).isEqualTo(firstDeploymentId);
 
     decisionDefinition = decisionDefinitions.get(1);
@@ -106,7 +106,7 @@ public class DecisionDefinitionQueryTest {
     assertThat(decisionDefinition.getId()).startsWith("one:2");
     assertThat(decisionDefinition.getCategory()).isEqualTo("Examples");
     assertThat(decisionDefinition.getVersion()).isEqualTo(2);
-    assertThat(decisionDefinition.getResourceName()).isEqualTo("org/camunda/bpm/engine/test/repository/one.dmn");
+    assertThat(decisionDefinition.getResourceName()).isEqualTo("io/orqueio/bpm/engine/test/repository/one.dmn");
     assertThat(decisionDefinition.getDeploymentId()).isEqualTo(secondDeploymentId);
 
     decisionDefinition = decisionDefinitions.get(2);
@@ -115,7 +115,7 @@ public class DecisionDefinitionQueryTest {
     assertThat(decisionDefinition.getId()).startsWith("two:1");
     assertThat(decisionDefinition.getCategory()).isEqualTo("Examples2");
     assertThat(decisionDefinition.getVersion()).isEqualTo(1);
-    assertThat(decisionDefinition.getResourceName()).isEqualTo("org/camunda/bpm/engine/test/repository/two.dmn");
+    assertThat(decisionDefinition.getResourceName()).isEqualTo("io/orqueio/bpm/engine/test/repository/two.dmn");
     assertThat(decisionDefinition.getDeploymentId()).isEqualTo(firstDeploymentId);
   }
 
@@ -652,8 +652,8 @@ public class DecisionDefinitionQueryTest {
   }
 
   @io.orqueio.bpm.engine.test.Deployment(resources = {
-    "org/camunda/bpm/engine/test/api/repository/versionTag.dmn",
-    "org/camunda/bpm/engine/test/api/repository/versionTagHigher.dmn" })
+    "io/orqueio/bpm/engine/test/api/repository/versionTag.dmn",
+    "io/orqueio/bpm/engine/test/api/repository/versionTagHigher.dmn" })
   @Test
   public void testQueryOrderByVersionTag() {
     List<DecisionDefinition> decisionDefinitionList = repositoryService
@@ -721,8 +721,8 @@ public class DecisionDefinitionQueryTest {
   }
 
   @io.orqueio.bpm.engine.test.Deployment(resources = {
-    "org/camunda/bpm/engine/test/api/repository/versionTag.dmn",
-    "org/camunda/bpm/engine/test/api/repository/versionTagHigher.dmn" })
+    "io/orqueio/bpm/engine/test/api/repository/versionTag.dmn",
+    "io/orqueio/bpm/engine/test/api/repository/versionTagHigher.dmn" })
   @Test
   public void testQueryByVersionTag() {
     DecisionDefinition decisionDefinition = repositoryService
@@ -735,8 +735,8 @@ public class DecisionDefinitionQueryTest {
   }
 
   @io.orqueio.bpm.engine.test.Deployment(resources = {
-    "org/camunda/bpm/engine/test/api/repository/versionTag.dmn",
-    "org/camunda/bpm/engine/test/api/repository/versionTagHigher.dmn" })
+    "io/orqueio/bpm/engine/test/api/repository/versionTag.dmn",
+    "io/orqueio/bpm/engine/test/api/repository/versionTagHigher.dmn" })
   @Test
   public void testQueryByVersionTagLike() {
     List<DecisionDefinition> decisionDefinitionList = repositoryService

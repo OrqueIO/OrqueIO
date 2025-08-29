@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -76,8 +76,8 @@ public class UpdateProcessInstancesSuspendStateAsyncTest {
 
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml",
-    "org/camunda/bpm/engine/test/api/externaltask/twoExternalTaskProcess.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/api/externaltask/twoExternalTaskProcess.bpmn20.xml"})
   public void testBatchSuspensionById() {
     // given
     ProcessInstance processInstance1 = runtimeService.startProcessInstanceByKey("oneExternalTaskProcess");
@@ -100,8 +100,8 @@ public class UpdateProcessInstancesSuspendStateAsyncTest {
   @Test
   public void testBatchSuspensionByIdsInDifferentDeployments() {
     // given
-    String deploymentId1 = testRule.deployAndGetDefinition("org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml").getDeploymentId();
-    String deploymentId2 = testRule.deployAndGetDefinition("org/camunda/bpm/engine/test/api/externaltask/twoExternalTaskProcess.bpmn20.xml").getDeploymentId();
+    String deploymentId1 = testRule.deployAndGetDefinition("io/orqueio/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml").getDeploymentId();
+    String deploymentId2 = testRule.deployAndGetDefinition("io/orqueio/bpm/engine/test/api/externaltask/twoExternalTaskProcess.bpmn20.xml").getDeploymentId();
     ProcessInstance processInstance1 = runtimeService.startProcessInstanceByKey("oneExternalTaskProcess");
     ProcessInstance processInstance2 = runtimeService.startProcessInstanceByKey("twoExternalTaskProcess");
 
@@ -134,8 +134,8 @@ public class UpdateProcessInstancesSuspendStateAsyncTest {
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml",
-      "org/camunda/bpm/engine/test/api/externaltask/twoExternalTaskProcess.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/api/externaltask/twoExternalTaskProcess.bpmn20.xml"})
   public void shouldSetInvocationsPerBatchTypeOnSuspension() {
     // given
     engineRule.getProcessEngineConfiguration()
@@ -159,8 +159,8 @@ public class UpdateProcessInstancesSuspendStateAsyncTest {
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml",
-      "org/camunda/bpm/engine/test/api/externaltask/twoExternalTaskProcess.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/api/externaltask/twoExternalTaskProcess.bpmn20.xml"})
   public void shouldSetInvocationsPerBatchTypeOnActivation() {
     // given
     engineRule.getProcessEngineConfiguration()
@@ -184,8 +184,8 @@ public class UpdateProcessInstancesSuspendStateAsyncTest {
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml",
-    "org/camunda/bpm/engine/test/api/externaltask/twoExternalTaskProcess.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/api/externaltask/twoExternalTaskProcess.bpmn20.xml"})
   public void testBatchActivationById() {
     // given
     ProcessInstance processInstance1 = runtimeService.startProcessInstanceByKey("oneExternalTaskProcess");
@@ -208,8 +208,8 @@ public class UpdateProcessInstancesSuspendStateAsyncTest {
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml",
-    "org/camunda/bpm/engine/test/api/externaltask/twoExternalTaskProcess.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/api/externaltask/twoExternalTaskProcess.bpmn20.xml"})
   public void testBatchSuspensionByProcessInstanceQuery() {
     // given
     ProcessInstance processInstance1 = runtimeService.startProcessInstanceByKey("oneExternalTaskProcess");
@@ -230,8 +230,8 @@ public class UpdateProcessInstancesSuspendStateAsyncTest {
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml",
-    "org/camunda/bpm/engine/test/api/externaltask/twoExternalTaskProcess.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/api/externaltask/twoExternalTaskProcess.bpmn20.xml"})
   public void testBatchActivationByProcessInstanceQuery() {
     // given
     ProcessInstance processInstance1 = runtimeService.startProcessInstanceByKey("oneExternalTaskProcess");
@@ -254,8 +254,8 @@ public class UpdateProcessInstancesSuspendStateAsyncTest {
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml",
-    "org/camunda/bpm/engine/test/api/externaltask/twoExternalTaskProcess.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/api/externaltask/twoExternalTaskProcess.bpmn20.xml"})
   @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_ACTIVITY)
   public void testBatchSuspensionByHistoricProcessInstanceQuery() {
     // given
@@ -278,8 +278,8 @@ public class UpdateProcessInstancesSuspendStateAsyncTest {
 
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml",
-    "org/camunda/bpm/engine/test/api/externaltask/twoExternalTaskProcess.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/api/externaltask/twoExternalTaskProcess.bpmn20.xml"})
   @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_ACTIVITY)
   public void testBatchActivationByHistoricProcessInstanceQuery() {
     // given
@@ -326,8 +326,8 @@ public class UpdateProcessInstancesSuspendStateAsyncTest {
 
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml",
-    "org/camunda/bpm/engine/test/api/externaltask/twoExternalTaskProcess.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/api/externaltask/twoExternalTaskProcess.bpmn20.xml"})
   public void testNullProcessInstanceListActivateAsync() {
     // given
     ProcessInstance processInstance1 = runtimeService.startProcessInstanceByKey("oneExternalTaskProcess");
@@ -340,8 +340,8 @@ public class UpdateProcessInstancesSuspendStateAsyncTest {
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml",
-    "org/camunda/bpm/engine/test/api/externaltask/twoExternalTaskProcess.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/api/externaltask/twoExternalTaskProcess.bpmn20.xml"})
   public void testNullProcessInstanceListSuspendAsync() {
     // given
     ProcessInstance processInstance1 = runtimeService.startProcessInstanceByKey("oneExternalTaskProcess");
@@ -359,7 +359,7 @@ public class UpdateProcessInstancesSuspendStateAsyncTest {
   public void shouldSetExecutionStartTimeInBatchAndHistory() {
     // given
     ClockUtil.setCurrentTime(TEST_DATE);
-    testRule.deployAndGetDefinition("org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
+    testRule.deployAndGetDefinition("io/orqueio/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
         .getDeploymentId();
     ProcessInstance processInstance1 = runtimeService.startProcessInstanceByKey("oneExternalTaskProcess");
     Batch batch = runtimeService.updateProcessInstanceSuspensionState()

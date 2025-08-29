@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -57,7 +57,7 @@ public class ReceiveTaskTest extends PluggableProcessEngineTest {
         .processInstanceId(processInstanceId).activityId(activityId).singleResult().getId();
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/bpmn/receivetask/ReceiveTaskTest.simpleReceiveTask.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/bpmn/receivetask/ReceiveTaskTest.simpleReceiveTask.bpmn20.xml")
   @Test
   public void testReceiveTaskWithoutMessageReference() {
 
@@ -74,7 +74,7 @@ public class ReceiveTaskTest extends PluggableProcessEngineTest {
     testRule.assertProcessEnded(processInstance.getId());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/bpmn/receivetask/ReceiveTaskTest.singleReceiveTask.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/bpmn/receivetask/ReceiveTaskTest.singleReceiveTask.bpmn20.xml")
   @Test
   public void testSupportsLegacySignalingOnSingleReceiveTask() {
 
@@ -94,7 +94,7 @@ public class ReceiveTaskTest extends PluggableProcessEngineTest {
     testRule.assertProcessEnded(processInstance.getId());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/bpmn/receivetask/ReceiveTaskTest.singleReceiveTask.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/bpmn/receivetask/ReceiveTaskTest.singleReceiveTask.bpmn20.xml")
   @Test
   public void testSupportsMessageEventReceivedOnSingleReceiveTask() {
 
@@ -116,7 +116,7 @@ public class ReceiveTaskTest extends PluggableProcessEngineTest {
     testRule.assertProcessEnded(processInstance.getId());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/bpmn/receivetask/ReceiveTaskTest.singleReceiveTask.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/bpmn/receivetask/ReceiveTaskTest.singleReceiveTask.bpmn20.xml")
   @Test
   public void testSupportsCorrelateMessageOnSingleReceiveTask() {
 
@@ -138,7 +138,7 @@ public class ReceiveTaskTest extends PluggableProcessEngineTest {
     testRule.assertProcessEnded(processInstance.getId());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/bpmn/receivetask/ReceiveTaskTest.singleReceiveTask.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/bpmn/receivetask/ReceiveTaskTest.singleReceiveTask.bpmn20.xml")
   @Test
   public void testSupportsCorrelateMessageByBusinessKeyOnSingleReceiveTask() {
 
@@ -174,7 +174,7 @@ public class ReceiveTaskTest extends PluggableProcessEngineTest {
     testRule.assertProcessEnded(processInstance42.getId());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/bpmn/receivetask/ReceiveTaskTest.multiSequentialReceiveTask.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/bpmn/receivetask/ReceiveTaskTest.multiSequentialReceiveTask.bpmn20.xml")
   @Test
   public void testSupportsLegacySignalingOnSequentialMultiReceiveTask() {
 
@@ -210,7 +210,7 @@ public class ReceiveTaskTest extends PluggableProcessEngineTest {
     testRule.assertProcessEnded(processInstance.getId());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/bpmn/receivetask/ReceiveTaskTest.multiSequentialReceiveTask.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/bpmn/receivetask/ReceiveTaskTest.multiSequentialReceiveTask.bpmn20.xml")
   @Test
   public void testSupportsMessageEventReceivedOnSequentialMultiReceiveTask() {
 
@@ -246,7 +246,7 @@ public class ReceiveTaskTest extends PluggableProcessEngineTest {
     testRule.assertProcessEnded(processInstance.getId());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/bpmn/receivetask/ReceiveTaskTest.multiSequentialReceiveTask.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/bpmn/receivetask/ReceiveTaskTest.multiSequentialReceiveTask.bpmn20.xml")
   @Test
   public void testSupportsCorrelateMessageOnSequentialMultiReceiveTask() {
 
@@ -282,7 +282,7 @@ public class ReceiveTaskTest extends PluggableProcessEngineTest {
     testRule.assertProcessEnded(processInstance.getId());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/bpmn/receivetask/ReceiveTaskTest.multiParallelReceiveTask.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/bpmn/receivetask/ReceiveTaskTest.multiParallelReceiveTask.bpmn20.xml")
   @Test
   public void testSupportsLegacySignalingOnParallelMultiReceiveTask() {
 
@@ -310,7 +310,7 @@ public class ReceiveTaskTest extends PluggableProcessEngineTest {
     testRule.assertProcessEnded(processInstance.getId());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/bpmn/receivetask/ReceiveTaskTest.multiParallelReceiveTask.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/bpmn/receivetask/ReceiveTaskTest.multiParallelReceiveTask.bpmn20.xml")
   @Test
   public void testSupportsMessageEventReceivedOnParallelMultiReceiveTask() {
 
@@ -332,7 +332,7 @@ public class ReceiveTaskTest extends PluggableProcessEngineTest {
     testRule.assertProcessEnded(processInstance.getId());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/bpmn/receivetask/ReceiveTaskTest.multiParallelReceiveTask.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/bpmn/receivetask/ReceiveTaskTest.multiParallelReceiveTask.bpmn20.xml")
   @Test
   public void testNotSupportsCorrelateMessageOnParallelMultiReceiveTask() {
 
@@ -352,7 +352,7 @@ public class ReceiveTaskTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/bpmn/receivetask/ReceiveTaskTest.multiParallelReceiveTaskCompensate.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/bpmn/receivetask/ReceiveTaskTest.multiParallelReceiveTaskCompensate.bpmn20.xml")
   @Test
   public void testSupportsMessageEventReceivedOnParallelMultiReceiveTaskWithCompensation() {
 
@@ -385,7 +385,7 @@ public class ReceiveTaskTest extends PluggableProcessEngineTest {
     testRule.assertProcessEnded(processInstance.getId());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/bpmn/receivetask/ReceiveTaskTest.multiParallelReceiveTaskBoundary.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/bpmn/receivetask/ReceiveTaskTest.multiParallelReceiveTaskBoundary.bpmn20.xml")
   @Test
   public void testSupportsMessageEventReceivedOnParallelMultiInstanceWithBoundary() {
 
@@ -410,7 +410,7 @@ public class ReceiveTaskTest extends PluggableProcessEngineTest {
     testRule.assertProcessEnded(processInstance.getId());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/bpmn/receivetask/ReceiveTaskTest.multiParallelReceiveTaskBoundary.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/bpmn/receivetask/ReceiveTaskTest.multiParallelReceiveTaskBoundary.bpmn20.xml")
   @Test
   public void testSupportsMessageEventReceivedOnParallelMultiInstanceWithBoundaryEventReceived() {
 
@@ -435,7 +435,7 @@ public class ReceiveTaskTest extends PluggableProcessEngineTest {
     testRule.assertProcessEnded(processInstance.getId());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/bpmn/receivetask/ReceiveTaskTest.subProcessReceiveTask.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/bpmn/receivetask/ReceiveTaskTest.subProcessReceiveTask.bpmn20.xml")
   @Test
   public void testSupportsMessageEventReceivedOnSubProcessReceiveTask() {
 
@@ -457,7 +457,7 @@ public class ReceiveTaskTest extends PluggableProcessEngineTest {
     testRule.assertProcessEnded(processInstance.getId());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/bpmn/receivetask/ReceiveTaskTest.multiSubProcessReceiveTask.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/bpmn/receivetask/ReceiveTaskTest.multiSubProcessReceiveTask.bpmn20.xml")
   @Test
   public void testSupportsMessageEventReceivedOnMultiSubProcessReceiveTask() {
 
@@ -479,7 +479,7 @@ public class ReceiveTaskTest extends PluggableProcessEngineTest {
     testRule.assertProcessEnded(processInstance.getId());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/bpmn/receivetask/ReceiveTaskTest.parallelGatewayReceiveTask.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/bpmn/receivetask/ReceiveTaskTest.parallelGatewayReceiveTask.bpmn20.xml")
   @Test
   public void testSupportsMessageEventReceivedOnReceiveTaskBehindParallelGateway() {
 
@@ -501,7 +501,7 @@ public class ReceiveTaskTest extends PluggableProcessEngineTest {
     testRule.assertProcessEnded(processInstance.getId());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/bpmn/receivetask/ReceiveTaskTest.parallelGatewayReceiveTask.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/bpmn/receivetask/ReceiveTaskTest.parallelGatewayReceiveTask.bpmn20.xml")
   @Test
   public void testSupportsCorrelateMessageOnReceiveTaskBehindParallelGateway() {
 

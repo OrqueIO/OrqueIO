@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -105,7 +105,7 @@ public class UpdateJobAuthorizationTest {
 
   @Test
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/api/authorization/timerBoundaryEventProcess.bpmn20.xml" })
+      "io/orqueio/bpm/engine/test/api/authorization/timerBoundaryEventProcess.bpmn20.xml" })
   public void shouldExecuteJob() {
     // given
     String processInstanceId = runtimeService
@@ -134,7 +134,7 @@ public class UpdateJobAuthorizationTest {
 
   @Test
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/api/authorization/timerBoundaryEventProcess.bpmn20.xml" })
+      "io/orqueio/bpm/engine/test/api/authorization/timerBoundaryEventProcess.bpmn20.xml" })
   public void shouldSuspendJobById() {
     // given
     String processInstanceId = runtimeService
@@ -161,7 +161,7 @@ public class UpdateJobAuthorizationTest {
 
   @Test
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/api/authorization/timerBoundaryEventProcess.bpmn20.xml" })
+      "io/orqueio/bpm/engine/test/api/authorization/timerBoundaryEventProcess.bpmn20.xml" })
   public void shouldActivateJobById() {
     // given
     String processInstanceId = runtimeService
@@ -188,7 +188,7 @@ public class UpdateJobAuthorizationTest {
 
   @Test
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/api/authorization/timerBoundaryEventProcess.bpmn20.xml" })
+      "io/orqueio/bpm/engine/test/api/authorization/timerBoundaryEventProcess.bpmn20.xml" })
   public void shouldSuspendJobByProcessInstanceId() {
     // given
     String processInstanceId = runtimeService
@@ -215,7 +215,7 @@ public class UpdateJobAuthorizationTest {
 
   @Test
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/api/authorization/timerBoundaryEventProcess.bpmn20.xml" })
+      "io/orqueio/bpm/engine/test/api/authorization/timerBoundaryEventProcess.bpmn20.xml" })
   public void shouldActivateJobByProcessInstanceId() {
     // given
     String processInstanceId = runtimeService
@@ -242,7 +242,7 @@ public class UpdateJobAuthorizationTest {
 
   @Test
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/api/authorization/timerBoundaryEventProcess.bpmn20.xml" })
+      "io/orqueio/bpm/engine/test/api/authorization/timerBoundaryEventProcess.bpmn20.xml" })
   public void shouldSuspendJobByJobDefinitionId() {
     // given
     String processInstanceId = runtimeService
@@ -270,7 +270,7 @@ public class UpdateJobAuthorizationTest {
 
   @Test
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/api/authorization/timerBoundaryEventProcess.bpmn20.xml" })
+      "io/orqueio/bpm/engine/test/api/authorization/timerBoundaryEventProcess.bpmn20.xml" })
   public void shouldActivateJobByJobDefinitionId() {
     // given
     String processInstanceId = runtimeService
@@ -298,7 +298,7 @@ public class UpdateJobAuthorizationTest {
 
   @Test
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/api/authorization/timerBoundaryEventProcess.bpmn20.xml" })
+      "io/orqueio/bpm/engine/test/api/authorization/timerBoundaryEventProcess.bpmn20.xml" })
   public void shouldSuspendJobByProcessDefinitionId() {
     // given
     ProcessInstance processInstance = runtimeService
@@ -324,7 +324,7 @@ public class UpdateJobAuthorizationTest {
 
   @Test
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/api/authorization/timerBoundaryEventProcess.bpmn20.xml" })
+      "io/orqueio/bpm/engine/test/api/authorization/timerBoundaryEventProcess.bpmn20.xml" })
   public void shouldActivateJobByProcessDefinitionId() {
     // given
     ProcessInstance processInstance = runtimeService
@@ -349,7 +349,7 @@ public class UpdateJobAuthorizationTest {
 
   @Test
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/api/authorization/timerBoundaryEventProcess.bpmn20.xml" })
+      "io/orqueio/bpm/engine/test/api/authorization/timerBoundaryEventProcess.bpmn20.xml" })
   public void shouldSuspendJobByProcessDefinitionKey() {
     // given
     String processInstanceId = runtimeService
@@ -375,7 +375,7 @@ public class UpdateJobAuthorizationTest {
 
   @Test
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/api/authorization/timerBoundaryEventProcess.bpmn20.xml" })
+      "io/orqueio/bpm/engine/test/api/authorization/timerBoundaryEventProcess.bpmn20.xml" })
   public void shouldActivateJobByProcessDefinitionKey() {
     // given
     String processInstanceId = runtimeService
@@ -401,7 +401,7 @@ public class UpdateJobAuthorizationTest {
 
   @Test
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/api/authorization/timerBoundaryEventProcess.bpmn20.xml" })
+      "io/orqueio/bpm/engine/test/api/authorization/timerBoundaryEventProcess.bpmn20.xml" })
   public void shouldSetJobDueDate() {
     // given
     String processInstanceId = runtimeService
@@ -428,7 +428,7 @@ public class UpdateJobAuthorizationTest {
 
   @Test
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/api/authorization/timerBoundaryEventProcess.bpmn20.xml" })
+      "io/orqueio/bpm/engine/test/api/authorization/timerBoundaryEventProcess.bpmn20.xml" })
   public void shouldDeleteJob() {
     // given
     String processInstanceId = runtimeService

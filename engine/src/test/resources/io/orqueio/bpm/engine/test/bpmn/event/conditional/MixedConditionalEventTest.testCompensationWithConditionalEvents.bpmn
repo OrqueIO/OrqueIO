@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="1.3.2">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:orqueio="http://orqueio.io/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Orqueio Modeler" exporterVersion="1.3.2">
   <bpmn:process id="conditionalEventProcess" isExecutable="true">
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>SequenceFlow_1w5ew0y</bpmn:outgoing>
@@ -28,7 +28,7 @@
         <bpmn:incoming>SequenceFlow_0ucwcc4</bpmn:incoming>
         <bpmn:outgoing>SequenceFlow_05ckpnq</bpmn:outgoing>
       </bpmn:parallelGateway>
-      <bpmn:serviceTask id="Task_1qkzpv7" camunda:expression="${true}">
+      <bpmn:serviceTask id="Task_1qkzpv7" orqueio:expression="${true}">
         <bpmn:incoming>SequenceFlow_09zhvdi</bpmn:incoming>
         <bpmn:outgoing>SequenceFlow_1j7hg7y</bpmn:outgoing>
       </bpmn:serviceTask>
@@ -37,7 +37,7 @@
           <bpmn:outgoing>SequenceFlow_0bxke4m</bpmn:outgoing>
         </bpmn:startEvent>
         <bpmn:sequenceFlow id="SequenceFlow_0bxke4m" sourceRef="StartEvent_1u8w0ab" targetRef="Task_0t6juzj" />
-        <bpmn:serviceTask id="Task_0t6juzj" camunda:class="io.orqueio.bpm.engine.test.bpmn.event.conditional.SetVariableDelegate">
+        <bpmn:serviceTask id="Task_0t6juzj" orqueio:class="io.orqueio.bpm.engine.test.bpmn.event.conditional.SetVariableDelegate">
           <bpmn:incoming>SequenceFlow_0bxke4m</bpmn:incoming>
           <bpmn:outgoing>SequenceFlow_0iwh211</bpmn:outgoing>
         </bpmn:serviceTask>
@@ -87,7 +87,7 @@
         <bpmn:endEvent id="EndEvent_0ano8uu">
           <bpmn:incoming>SequenceFlow_1f8iy7a</bpmn:incoming>
         </bpmn:endEvent>
-        <bpmn:serviceTask id="Task_1w6h2t3" camunda:class="io.orqueio.bpm.engine.test.bpmn.event.conditional.SetVariableDelegate">
+        <bpmn:serviceTask id="Task_1w6h2t3" orqueio:class="io.orqueio.bpm.engine.test.bpmn.event.conditional.SetVariableDelegate">
           <bpmn:incoming>SequenceFlow_0ms497p</bpmn:incoming>
           <bpmn:outgoing>SequenceFlow_1f8iy7a</bpmn:outgoing>
         </bpmn:serviceTask>
@@ -104,7 +104,7 @@
         </bpmn:startEvent>
         <bpmn:sequenceFlow id="SequenceFlow_0ms497p" sourceRef="StartEvent_1utlsih" targetRef="Task_1w6h2t3" />
       </bpmn:subProcess>
-      <bpmn:serviceTask id="Task_1alr7zc" camunda:expression="${true}">
+      <bpmn:serviceTask id="Task_1alr7zc" orqueio:expression="${true}">
         <bpmn:incoming>SequenceFlow_0tgdve3</bpmn:incoming>
         <bpmn:outgoing>SequenceFlow_0ucwcc4</bpmn:outgoing>
         <bpmn:multiInstanceLoopCharacteristics>

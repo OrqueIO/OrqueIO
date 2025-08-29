@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -77,7 +77,7 @@ public class TaskListenerTest extends AbstractTaskListenerTest {
   // CREATE Task Listener tests
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/tasklistener/TaskListenerTest.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/bpmn/tasklistener/TaskListenerTest.bpmn20.xml"})
   public void testTaskCreateListener() {
     runtimeService.startProcessInstanceByKey("taskListenerProcess");
     Task task = taskService.createTaskQuery().singleResult();
@@ -92,7 +92,7 @@ public class TaskListenerTest extends AbstractTaskListenerTest {
         Bpmn.createExecutableProcess("startToEnd")
             .startEvent()
             .userTask()
-            .camundaTaskListenerClass(TaskListener.EVENTNAME_CREATE, CompletingTaskListener.class.getName())
+            .orqueioTaskListenerClass(TaskListener.EVENTNAME_CREATE, CompletingTaskListener.class.getName())
             .name("userTask")
             .endEvent().done();
 
@@ -112,10 +112,10 @@ public class TaskListenerTest extends AbstractTaskListenerTest {
         Bpmn.createExecutableProcess("startToEnd")
             .startEvent()
             .userTask()
-            .camundaTaskListenerClass(TaskListener.EVENTNAME_CREATE, CompletingTaskListener.class.getName())
+            .orqueioTaskListenerClass(TaskListener.EVENTNAME_CREATE, CompletingTaskListener.class.getName())
             .name("userTask")
-            .camundaCandidateUsers(Arrays.asList(new String[]{"users1", "user2"}))
-            .camundaCandidateGroups(Arrays.asList(new String[]{"group1", "group2"}))
+            .orqueioCandidateUsers(Arrays.asList(new String[]{"users1", "user2"}))
+            .orqueioCandidateGroups(Arrays.asList(new String[]{"group1", "group2"}))
             .endEvent().done();
 
     testRule.deploy(modelInstance);
@@ -138,7 +138,7 @@ public class TaskListenerTest extends AbstractTaskListenerTest {
     final BpmnModelInstance instance = Bpmn.createExecutableProcess("mainProc")
                                            .startEvent()
                                            .userTask("mainTask")
-                                           .camundaTaskListenerClass(TaskListener.EVENTNAME_CREATE, CompletingTaskListener.class.getName())
+                                           .orqueioTaskListenerClass(TaskListener.EVENTNAME_CREATE, CompletingTaskListener.class.getName())
                                            .callActivity().calledElement("subProc")
                                            .endEvent()
                                            .done();
@@ -154,7 +154,7 @@ public class TaskListenerTest extends AbstractTaskListenerTest {
   // COMPLETE Task Listener tests
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/tasklistener/TaskListenerTest.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/bpmn/tasklistener/TaskListenerTest.bpmn20.xml"})
   public void testTaskCompleteListener() {
     TaskDeleteListener.clear();
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("taskListenerProcess");
@@ -177,7 +177,7 @@ public class TaskListenerTest extends AbstractTaskListenerTest {
   // DELETE Task Listener tests
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/tasklistener/TaskListenerTest.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/bpmn/tasklistener/TaskListenerTest.bpmn20.xml"})
   public void testTaskDeleteListenerByProcessDeletion() {
     TaskDeleteListener.clear();
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("taskListenerProcess");
@@ -196,7 +196,7 @@ public class TaskListenerTest extends AbstractTaskListenerTest {
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/tasklistener/TaskListenerTest.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/bpmn/tasklistener/TaskListenerTest.bpmn20.xml"})
   public void testTaskDeleteListenerByBoundaryEvent() {
     TaskDeleteListener.clear();
     runtimeService.startProcessInstanceByKey("taskListenerProcess");
@@ -229,8 +229,8 @@ public class TaskListenerTest extends AbstractTaskListenerTest {
     BpmnModelInstance calledProcess = Bpmn.createExecutableProcess("called")
                                           .startEvent()
                                           .userTask()
-                                          .camundaTaskListenerClass(TaskListener.EVENTNAME_CREATE, RecorderTaskListener.class.getName())
-                                          .camundaTaskListenerClass(TaskListener.EVENTNAME_DELETE, RecorderTaskListener.class.getName())
+                                          .orqueioTaskListenerClass(TaskListener.EVENTNAME_CREATE, RecorderTaskListener.class.getName())
+                                          .orqueioTaskListenerClass(TaskListener.EVENTNAME_DELETE, RecorderTaskListener.class.getName())
                                           .endEvent()
                                           .done();
 
@@ -257,7 +257,7 @@ public class TaskListenerTest extends AbstractTaskListenerTest {
     BpmnModelInstance callActivityProcess = Bpmn.createExecutableProcess("calling")
                                                 .startEvent()
                                                 .callActivity()
-                                                .camundaIn("foo", "foo")
+                                                .orqueioIn("foo", "foo")
                                                 .calledElement("called")
                                                 .endEvent()
                                                 .done();
@@ -265,7 +265,7 @@ public class TaskListenerTest extends AbstractTaskListenerTest {
     BpmnModelInstance calledProcess = Bpmn.createExecutableProcess("called")
                                           .startEvent()
                                           .userTask()
-                                          .camundaTaskListenerClass(TaskListener.EVENTNAME_DELETE, VariablesCollectingListener.class.getName())
+                                          .orqueioTaskListenerClass(TaskListener.EVENTNAME_DELETE, VariablesCollectingListener.class.getName())
                                           .endEvent()
                                           .done();
 
@@ -286,7 +286,7 @@ public class TaskListenerTest extends AbstractTaskListenerTest {
   // Expression & Scripts Task Listener tests
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/tasklistener/TaskListenerTest.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/bpmn/tasklistener/TaskListenerTest.bpmn20.xml"})
   public void testTaskListenerWithExpression() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("taskListenerProcess");
     assertEquals(null, runtimeService.getVariable(processInstance.getId(), "greeting2"));
@@ -328,8 +328,8 @@ public class TaskListenerTest extends AbstractTaskListenerTest {
 
   @Test
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/tasklistener/TaskListenerTest.testScriptResourceListener.bpmn20.xml",
-    "org/camunda/bpm/engine/test/bpmn/tasklistener/taskListener.groovy"
+    "io/orqueio/bpm/engine/test/bpmn/tasklistener/TaskListenerTest.testScriptResourceListener.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/bpmn/tasklistener/taskListener.groovy"
   })
   public void testScriptResourceListener() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("process");
@@ -725,11 +725,11 @@ public class TaskListenerTest extends AbstractTaskListenerTest {
     BpmnModelInstance modelInstance = Bpmn.createExecutableProcess("process")
       .startEvent()
       .userTask("task")
-        .camundaTaskListenerClass(TaskListener.EVENTNAME_UPDATE, RecorderTaskListener.class)
+        .orqueioTaskListenerClass(TaskListener.EVENTNAME_UPDATE, RecorderTaskListener.class)
       .boundaryEvent()
         .condition("${triggerBoundaryEvent}")
       .userTask("afterBoundaryEvent")
-        .camundaTaskListenerClass(TaskListener.EVENTNAME_CREATE, RecorderTaskListener.class)
+        .orqueioTaskListenerClass(TaskListener.EVENTNAME_CREATE, RecorderTaskListener.class)
       .endEvent()
       .moveToActivity("task")
       .endEvent()
@@ -831,7 +831,7 @@ public class TaskListenerTest extends AbstractTaskListenerTest {
   }
 
   @Test
-  @Deployment(resources = "org/camunda/bpm/engine/test/bpmn/tasklistener/TaskListenerTest.testTimeoutTaskListenerDuration.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/bpmn/tasklistener/TaskListenerTest.testTimeoutTaskListenerDuration.bpmn20.xml")
   public void testTimeoutTaskListenerNotCalledWhenTaskCompleted() {
     // given
     JobQuery jobQuery = managementService.createJobQuery();
@@ -895,7 +895,7 @@ public class TaskListenerTest extends AbstractTaskListenerTest {
   }
 
   @Test
-  @Deployment(resources = "org/camunda/bpm/engine/test/bpmn/tasklistener/TaskListenerTest.testRecalculateTimeoutTaskListenerDuedateCreationDateBased.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/bpmn/tasklistener/TaskListenerTest.testRecalculateTimeoutTaskListenerDuedateCreationDateBased.bpmn20.xml")
   public void testRecalculateTimeoutTaskListenerDuedateCurrentDateBased() {
     // given
     ProcessInstance pi = runtimeService.startProcessInstanceByKey("process", Variables.putValue("duration", "PT1H"));

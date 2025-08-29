@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -26,7 +26,7 @@ import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
 /**
  * <p>An embedded process application is a ProcessApplication that uses an embedded
  * process engine. An embedded process engine is loaded by the same classloader as
- * the process application which usually means that the <code>camunda-engine.jar</code>
+ * the process application which usually means that the <code>orqueio-engine.jar</code>
  * is deployed as a web application library (in case of WAR deployments) or as an
  * application library (in case of EAR deployments).</p>
  *

@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -109,9 +109,9 @@ public class RetryIntervalsConfigurationTest extends AbstractAsyncOperationsTest
     BpmnModelInstance bpmnModelInstance = Bpmn.createExecutableProcess(PROCESS_ID)
     .startEvent()
     .serviceTask()
-      .camundaClass(FAILING_CLASS)
-      .camundaAsyncBefore()
-      .camundaExecutionListenerClass(RecorderExecutionListener.EVENTNAME_START, RecorderExecutionListener.class.getName())
+      .orqueioClass(FAILING_CLASS)
+      .orqueioAsyncBefore()
+      .orqueioExecutionListenerClass(RecorderExecutionListener.EVENTNAME_START, RecorderExecutionListener.class.getName())
     .endEvent()
     .done();
     testRule.deploy(bpmnModelInstance);
@@ -308,12 +308,12 @@ public class RetryIntervalsConfigurationTest extends AbstractAsyncOperationsTest
     BpmnModelInstance bpmnModelInstance = Bpmn.createExecutableProcess(PROCESS_ID)
         .startEvent()
         .serviceTask("Task1")
-          .camundaClass(ServiceTaskDelegate.class.getName())
-          .camundaAsyncBefore()
+          .orqueioClass(ServiceTaskDelegate.class.getName())
+          .orqueioAsyncBefore()
         .serviceTask("Task2")
-          .camundaClass(FAILING_CLASS)
-          .camundaAsyncBefore()
-          .camundaFailedJobRetryTimeCycle("PT3M, PT10M,PT8M")
+          .orqueioClass(FAILING_CLASS)
+          .orqueioAsyncBefore()
+          .orqueioFailedJobRetryTimeCycle("PT3M, PT10M,PT8M")
         .endEvent()
         .done();
     testRule.deploy(bpmnModelInstance);
@@ -355,9 +355,9 @@ public class RetryIntervalsConfigurationTest extends AbstractAsyncOperationsTest
     BpmnModelInstance bpmnModelInstance = Bpmn.createExecutableProcess("process")
         .startEvent()
         .serviceTask()
-          .camundaClass("foo")
-          .camundaAsyncBefore()
-          .camundaFailedJobRetryTimeCycle("${var}")
+          .orqueioClass("foo")
+          .orqueioAsyncBefore()
+          .orqueioFailedJobRetryTimeCycle("${var}")
         .endEvent()
         .done();
 
@@ -434,8 +434,8 @@ public class RetryIntervalsConfigurationTest extends AbstractAsyncOperationsTest
     BpmnModelInstance modelInstance = Bpmn.createExecutableProcess(PROCESS_ID)
         .startEvent()
         .serviceTask()
-          .camundaClass(FAILING_CLASS)
-          .camundaAsyncBefore()
+          .orqueioClass(FAILING_CLASS)
+          .orqueioAsyncBefore()
         .endEvent()
         .done();
     return modelInstance;
@@ -445,9 +445,9 @@ public class RetryIntervalsConfigurationTest extends AbstractAsyncOperationsTest
     BpmnModelInstance modelInstance = Bpmn.createExecutableProcess(PROCESS_ID)
         .startEvent()
         .serviceTask()
-          .camundaClass(FAILING_CLASS)
-          .camundaAsyncBefore()
-          .camundaFailedJobRetryTimeCycle(retryTimeCycle)
+          .orqueioClass(FAILING_CLASS)
+          .orqueioAsyncBefore()
+          .orqueioFailedJobRetryTimeCycle(retryTimeCycle)
         .endEvent()
         .done();
     return modelInstance;

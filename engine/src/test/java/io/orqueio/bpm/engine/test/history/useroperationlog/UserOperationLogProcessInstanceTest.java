@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -54,7 +54,7 @@ public class UserOperationLogProcessInstanceTest {
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void shouldProduceUserOperationLogStartProcessInstanceByKey() {
     // when
     ProcessInstance instance = runtimeService.startProcessInstanceByKey("oneTaskProcess");
@@ -66,7 +66,7 @@ public class UserOperationLogProcessInstanceTest {
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void shouldProduceUserOperationLogStartProcessInstanceById() {
     // given
     ProcessDefinition processDefinition = rule.getRepositoryService().createProcessDefinitionQuery().singleResult();
@@ -82,7 +82,7 @@ public class UserOperationLogProcessInstanceTest {
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   public void shouldProduceUserOperationLogStartProcessInstanceAtActivity() {
     // given
     ProcessDefinition processDefinition = rule.getRepositoryService().createProcessDefinitionQuery().singleResult();
@@ -98,7 +98,7 @@ public class UserOperationLogProcessInstanceTest {
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/runtime/oneTaskProcessWithStartForm.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcessWithStartForm.bpmn20.xml"})
   public void shouldProduceUserOperationLogStartProcessInstanceBySubmitStartForm() {
     // given
     ProcessDefinition processDefinition = rule.getRepositoryService().createProcessDefinitionQuery().singleResult();

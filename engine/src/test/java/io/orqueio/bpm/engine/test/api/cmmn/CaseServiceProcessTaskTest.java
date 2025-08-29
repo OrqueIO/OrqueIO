@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -47,8 +47,8 @@ public class CaseServiceProcessTaskTest extends PluggableProcessEngineTest {
   protected final String PROCESS_TASK_KEY = "PI_ProcessTask_1";
 
   @Deployment(resources={
-      "org/camunda/bpm/engine/test/api/cmmn/oneProcessTaskCase.cmmn",
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
+      "io/orqueio/bpm/engine/test/api/cmmn/oneProcessTaskCase.cmmn",
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
   })
   @Test
   public void testStart() {
@@ -86,8 +86,8 @@ public class CaseServiceProcessTaskTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources={
-      "org/camunda/bpm/engine/test/api/cmmn/oneProcessTaskCaseWithManualActivation.cmmn",
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
+      "io/orqueio/bpm/engine/test/api/cmmn/oneProcessTaskCaseWithManualActivation.cmmn",
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
       })
   @Test
   public void testManualStart() {
@@ -114,8 +114,8 @@ public class CaseServiceProcessTaskTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources={
-      "org/camunda/bpm/engine/test/api/cmmn/oneProcessTaskCaseWithManualActivation.cmmn",
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
+      "io/orqueio/bpm/engine/test/api/cmmn/oneProcessTaskCaseWithManualActivation.cmmn",
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
       })
   @Test
   public void testManualStartWithVariables() {
@@ -161,8 +161,8 @@ public class CaseServiceProcessTaskTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources={
-      "org/camunda/bpm/engine/test/api/cmmn/oneProcessTaskCaseWithManualActivation.cmmn",
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
+      "io/orqueio/bpm/engine/test/api/cmmn/oneProcessTaskCaseWithManualActivation.cmmn",
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
       })
   @Test
   public void testManualStartWithLocalVariable() {
@@ -218,7 +218,7 @@ public class CaseServiceProcessTaskTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources={
-      "org/camunda/bpm/engine/test/api/cmmn/oneProcessTaskCaseWithManualActivation.cmmn"
+      "io/orqueio/bpm/engine/test/api/cmmn/oneProcessTaskCaseWithManualActivation.cmmn"
       })
   @Test
   public void testReenableAnEnabledProcessTask() {
@@ -240,8 +240,8 @@ public class CaseServiceProcessTaskTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources={
-      "org/camunda/bpm/engine/test/api/cmmn/oneProcessTaskWithManualActivationAndOneHumanTaskCase.cmmn",
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
+      "io/orqueio/bpm/engine/test/api/cmmn/oneProcessTaskWithManualActivationAndOneHumanTaskCase.cmmn",
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
       })
   @Test
   public void testReenableADisabledProcessTask() {
@@ -267,8 +267,8 @@ public class CaseServiceProcessTaskTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources={
-      "org/camunda/bpm/engine/test/api/cmmn/oneProcessTaskCase.cmmn",
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
+      "io/orqueio/bpm/engine/test/api/cmmn/oneProcessTaskCase.cmmn",
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
       })
   @Test
   public void testReenableAnActiveProcessTask() {
@@ -286,7 +286,7 @@ public class CaseServiceProcessTaskTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneProcessTaskWithManualActivationAndOneHumanTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneProcessTaskWithManualActivationAndOneHumanTaskCase.cmmn"})
   @Test
   public void testDisableAnEnabledProcessTask() {
     // given
@@ -306,7 +306,7 @@ public class CaseServiceProcessTaskTest extends PluggableProcessEngineTest {
     assertTrue(processTask.isDisabled());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneProcessTaskWithManualActivationAndOneHumanTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneProcessTaskWithManualActivationAndOneHumanTaskCase.cmmn"})
   @Test
   public void testDisableADisabledProcessTask() {
     // given
@@ -328,8 +328,8 @@ public class CaseServiceProcessTaskTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources={
-      "org/camunda/bpm/engine/test/api/cmmn/oneProcessTaskCase.cmmn",
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
+      "io/orqueio/bpm/engine/test/api/cmmn/oneProcessTaskCase.cmmn",
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
       })
   @Test
   public void testDisableAnActiveProcessTask() {
@@ -347,7 +347,7 @@ public class CaseServiceProcessTaskTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneProcessTaskWithManualActivationAndOneHumanTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneProcessTaskWithManualActivationAndOneHumanTaskCase.cmmn"})
   @Test
   public void testManualStartOfADisabledProcessTask() {
     // given
@@ -369,8 +369,8 @@ public class CaseServiceProcessTaskTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources={
-      "org/camunda/bpm/engine/test/api/cmmn/oneProcessTaskCase.cmmn",
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
+      "io/orqueio/bpm/engine/test/api/cmmn/oneProcessTaskCase.cmmn",
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
       })
   @Test
   public void testManualStartOfAnActiveProcessTask() {
@@ -389,8 +389,8 @@ public class CaseServiceProcessTaskTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources={
-      "org/camunda/bpm/engine/test/api/cmmn/oneProcessTaskCase.cmmn",
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
+      "io/orqueio/bpm/engine/test/api/cmmn/oneProcessTaskCase.cmmn",
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
       })
   @Test
   public void testComplete() {
@@ -409,8 +409,8 @@ public class CaseServiceProcessTaskTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources={
-      "org/camunda/bpm/engine/test/api/cmmn/oneProcessTaskCase.cmmn",
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
+      "io/orqueio/bpm/engine/test/api/cmmn/oneProcessTaskCase.cmmn",
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
       })
   @Test
   public void testCompleteProcessInstanceShouldCompleteProcessTask() {
@@ -436,7 +436,7 @@ public class CaseServiceProcessTaskTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneProcessTaskCaseWithManualActivation.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneProcessTaskCaseWithManualActivation.cmmn"})
   @Test
   public void testDisableShouldCompleteCaseInstance() {
     // given
@@ -463,7 +463,7 @@ public class CaseServiceProcessTaskTest extends PluggableProcessEngineTest {
     assertTrue(caseInstance.isCompleted());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneProcessTaskCaseWithManualActivation.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneProcessTaskCaseWithManualActivation.cmmn"})
   @Test
   public void testCompleteAnEnabledProcessTask() {
     // given
@@ -479,7 +479,7 @@ public class CaseServiceProcessTaskTest extends PluggableProcessEngineTest {
     } catch (NotAllowedException e) {}
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneProcessTaskWithManualActivationAndOneHumanTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneProcessTaskWithManualActivationAndOneHumanTaskCase.cmmn"})
   @Test
   public void testCompleteADisabledProcessTask() {
     // given
@@ -499,7 +499,7 @@ public class CaseServiceProcessTaskTest extends PluggableProcessEngineTest {
     } catch (NotAllowedException e) {}
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneProcessTaskCaseWithManualActivation.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneProcessTaskCaseWithManualActivation.cmmn"})
   @Test
   public void testClose() {
     // given
@@ -519,8 +519,8 @@ public class CaseServiceProcessTaskTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources={
-      "org/camunda/bpm/engine/test/api/cmmn/oneProcessTaskCase.cmmn",
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
+      "io/orqueio/bpm/engine/test/api/cmmn/oneProcessTaskCase.cmmn",
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
       })
   @Test
   public void testTerminate() {
@@ -539,8 +539,8 @@ public class CaseServiceProcessTaskTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources={
-      "org/camunda/bpm/engine/test/api/cmmn/oneProcessTaskCase.cmmn",
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
+      "io/orqueio/bpm/engine/test/api/cmmn/oneProcessTaskCase.cmmn",
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
       })
   @Test
   public void testTerminateNonFluent() {
@@ -559,8 +559,8 @@ public class CaseServiceProcessTaskTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources={
-      "org/camunda/bpm/engine/test/api/cmmn/oneProcessTaskCaseWithManualActivation.cmmn",
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
+      "io/orqueio/bpm/engine/test/api/cmmn/oneProcessTaskCaseWithManualActivation.cmmn",
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
       })
   @Test
   public void testTerminateNonActiveProcessTask() {

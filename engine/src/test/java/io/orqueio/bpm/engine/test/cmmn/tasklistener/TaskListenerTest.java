@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -40,7 +40,7 @@ import org.junit.Test;
  */
 public class TaskListenerTest extends PluggableProcessEngineTest {
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testCreateListenerByClass.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testCreateListenerByClass.cmmn"})
   @Test
   public void testCreateListenerByClass() {
     // given
@@ -68,7 +68,7 @@ public class TaskListenerTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testCreateListenerByExpression.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testCreateListenerByExpression.cmmn"})
   @Test
   public void testCreateListenerByExpression() {
     // given
@@ -91,7 +91,7 @@ public class TaskListenerTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testCreateListenerByDelegateExpression.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testCreateListenerByDelegateExpression.cmmn"})
   @Test
   public void testCreateListenerByDelegateExpression() {
     // given
@@ -122,7 +122,7 @@ public class TaskListenerTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testCreateListenerByScript.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testCreateListenerByScript.cmmn"})
   @Test
   public void testCreateListenerByScript() {
     // given
@@ -143,7 +143,7 @@ public class TaskListenerTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testCompleteListenerByClass.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testCompleteListenerByClass.cmmn"})
   @Test
   public void testCompleteListenerByClass() {
     // given
@@ -176,7 +176,7 @@ public class TaskListenerTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testCompleteListenerByExpression.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testCompleteListenerByExpression.cmmn"})
   @Test
   public void testCompleteListenerByExpression() {
     // given
@@ -210,7 +210,7 @@ public class TaskListenerTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testCompleteListenerByDelegateExpression.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testCompleteListenerByDelegateExpression.cmmn"})
   @Test
   public void testCompleteListenerByDelegateExpression() {
     // given
@@ -244,7 +244,7 @@ public class TaskListenerTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testCompleteListenerByScript.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testCompleteListenerByScript.cmmn"})
   @Test
   public void testCompleteListenerByScript() {
     // given
@@ -276,7 +276,7 @@ public class TaskListenerTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testDeleteListenerByClass.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testDeleteListenerByClass.cmmn"})
   @Test
   public void testDeleteListenerByClass() {
     // given
@@ -307,7 +307,7 @@ public class TaskListenerTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testDeleteListenerByExpression.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testDeleteListenerByExpression.cmmn"})
   @Test
   public void testDeleteListenerByExpression() {
     // given
@@ -339,7 +339,7 @@ public class TaskListenerTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testDeleteListenerByDelegateExpression.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testDeleteListenerByDelegateExpression.cmmn"})
   @Test
   public void testDeleteListenerByDelegateExpression() {
     // given
@@ -371,7 +371,7 @@ public class TaskListenerTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testDeleteListenerByScript.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testDeleteListenerByScript.cmmn"})
   @Test
   public void testDeleteListenerByScript() {
     // given
@@ -401,7 +401,7 @@ public class TaskListenerTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testDeleteListenerByCaseInstanceDeletion.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testDeleteListenerByCaseInstanceDeletion.cmmn"})
   @Test
   public void testDeleteListenerByCaseInstanceDeletion() {
     TaskDeleteListener.clear();
@@ -438,7 +438,7 @@ public class TaskListenerTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testAssignmentListenerByClass.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testAssignmentListenerByClass.cmmn"})
   @Test
   public void testAssignmentListenerByClass() {
     // given
@@ -475,7 +475,7 @@ public class TaskListenerTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testAssignmentListenerByExpression.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testAssignmentListenerByExpression.cmmn"})
   @Test
   public void testAssignmentListenerByExpression() {
     // given
@@ -513,7 +513,7 @@ public class TaskListenerTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testAssignmentListenerByDelegateExpression.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testAssignmentListenerByDelegateExpression.cmmn"})
   @Test
   public void testAssignmentListenerByDelegateExpression() {
     // given
@@ -551,7 +551,7 @@ public class TaskListenerTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testAssignmentListenerByScript.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testAssignmentListenerByScript.cmmn"})
   @Test
   public void testAssignmentListenerByScript() {
     // given
@@ -587,7 +587,7 @@ public class TaskListenerTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testAssignmentListenerByInitialInstantiation.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testAssignmentListenerByInitialInstantiation.cmmn"})
   @Test
   public void testAssignmentListenerByInitialInstantiation() {
     // given
@@ -615,7 +615,7 @@ public class TaskListenerTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testUpdateListenerByClass.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testUpdateListenerByClass.cmmn"})
   @Test
   public void testUpdateListenerByClass() {
     // given
@@ -652,7 +652,7 @@ public class TaskListenerTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testUpdateListenerByExpression.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testUpdateListenerByExpression.cmmn"})
   @Test
   public void testUpdateListenerByExpression() {
     // given
@@ -690,7 +690,7 @@ public class TaskListenerTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testUpdateListenerByDelegateExpression.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testUpdateListenerByDelegateExpression.cmmn"})
   @Test
   public void testUpdateListenerByDelegateExpression() {
     // given
@@ -727,7 +727,7 @@ public class TaskListenerTest extends PluggableProcessEngineTest {
     assertEquals(1, query.variableName("eventCounter").singleResult().getValue());
 
   }
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testUpdateListenerByScript.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testUpdateListenerByScript.cmmn"})
   @Test
   public void testUpdateListenerByScript() {
     // given
@@ -763,7 +763,7 @@ public class TaskListenerTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testUpdateListenerByInitialInstantiation.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testUpdateListenerByInitialInstantiation.cmmn"})
   @Test
   public void testUpdateListenerNotInvokedByInitialInstantiation() {
     // given
@@ -786,7 +786,7 @@ public class TaskListenerTest extends PluggableProcessEngineTest {
     assertEquals(0, query.count());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testAllListenerByClass.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testAllListenerByClass.cmmn"})
   @Test
   public void testAllListenerByClassExcludingDeletion() {
     // given
@@ -837,7 +837,7 @@ public class TaskListenerTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testAllListenerByClass.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testAllListenerByClass.cmmn"})
   @Test
   public void testAllListenerByClassExcludingCompletion() {
     // given
@@ -887,7 +887,7 @@ public class TaskListenerTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testAllListenerByExpression.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testAllListenerByExpression.cmmn"})
   @Test
   public void testAllListenerByExpressionExcludingDeletion() {
     // given
@@ -940,7 +940,7 @@ public class TaskListenerTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testAllListenerByExpression.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testAllListenerByExpression.cmmn"})
   @Test
   public void testAllListenerByExpressionExcludingCompletion() {
     // given
@@ -991,7 +991,7 @@ public class TaskListenerTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testAllListenerByDelegateExpression.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testAllListenerByDelegateExpression.cmmn"})
   @Test
   public void testAllListenerByDelegateExpressionExcludingDeletion() {
     // given
@@ -1044,7 +1044,7 @@ public class TaskListenerTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testAllListenerByDelegateExpression.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testAllListenerByDelegateExpression.cmmn"})
   @Test
   public void testAllListenerByDelegateExpressionExcludingCompletion() {
     // given
@@ -1094,7 +1094,7 @@ public class TaskListenerTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testAllListenerByScript.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testAllListenerByScript.cmmn"})
   @Test
   public void testAllListenerByScriptExcludingDeletion() {
     // given
@@ -1145,7 +1145,7 @@ public class TaskListenerTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testAllListenerByScript.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testAllListenerByScript.cmmn"})
   @Test
   public void testAllListenerByScriptExcludingCompletion() {
     // given
@@ -1194,7 +1194,7 @@ public class TaskListenerTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testFieldInjectionByClass.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testFieldInjectionByClass.cmmn"})
   @Test
   public void testFieldInjectionByClass() {
     // given
@@ -1223,7 +1223,7 @@ public class TaskListenerTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testFieldInjectionByDelegateExpression.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testFieldInjectionByDelegateExpression.cmmn"})
   @Test
   public void testFieldInjectionByDelegateExpression() {
     // given
@@ -1254,8 +1254,8 @@ public class TaskListenerTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testListenerByScriptResource.cmmn",
-      "org/camunda/bpm/engine/test/cmmn/tasklistener/taskListener.groovy"
+      "io/orqueio/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testListenerByScriptResource.cmmn",
+      "io/orqueio/bpm/engine/test/cmmn/tasklistener/taskListener.groovy"
       })
   @Test
   public void testListenerByScriptResource() {
@@ -1303,7 +1303,7 @@ public class TaskListenerTest extends PluggableProcessEngineTest {
     assertEquals(3, query.variableName("eventCounter").singleResult().getValue());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testDoesNotImplementTaskListenerInterfaceByClass.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testDoesNotImplementTaskListenerInterfaceByClass.cmmn"})
   @Test
   public void testDoesNotImplementTaskListenerInterfaceByClass() {
     try {
@@ -1321,7 +1321,7 @@ public class TaskListenerTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testDoesNotImplementTaskListenerInterfaceByDelegateExpression.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testDoesNotImplementTaskListenerInterfaceByDelegateExpression.cmmn"})
   @Test
   public void testDoesNotImplementTaskListenerInterfaceByDelegateExpression() {
     try {
@@ -1340,7 +1340,7 @@ public class TaskListenerTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testTaskListenerDoesNotExist.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/cmmn/tasklistener/TaskListenerTest.testTaskListenerDoesNotExist.cmmn"})
   @Test
   public void testTaskListenerDoesNotExist() {
 

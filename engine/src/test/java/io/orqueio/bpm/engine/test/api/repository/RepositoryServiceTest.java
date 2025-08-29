@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -102,7 +102,7 @@ import org.mockito.Mockito;
 public class RepositoryServiceTest extends PluggableProcessEngineTest {
 
   private static final String NAMESPACE = "xmlns='http://www.omg.org/spec/BPMN/20100524/MODEL'";
-  private static final String TARGET_NAMESPACE = "targetNamespace='" + BpmnParse.CAMUNDA_BPMN_EXTENSIONS_NS + "'";
+  private static final String TARGET_NAMESPACE = "targetNamespace='" + BpmnParse.ORQUEIO_BPMN_EXTENSIONS_NS + "'";
 
   private boolean enforceHistoryTimeToLiveBefore;
 
@@ -142,7 +142,7 @@ public class RepositoryServiceTest extends PluggableProcessEngineTest {
     //and model instance with umlauts
     String umlautsString = "äöüÄÖÜß";
     String resourceName = "deployment.bpmn";
-    BpmnModelInstance instance = Bpmn.createExecutableProcess("umlautsProcess").camundaHistoryTimeToLive(180).startEvent(umlautsString).done();
+    BpmnModelInstance instance = Bpmn.createExecutableProcess("umlautsProcess").orqueioHistoryTimeToLive(180).startEvent(umlautsString).done();
     String instanceAsString = Bpmn.convertToString(instance);
 
     //when instance is deployed via addString method
@@ -169,7 +169,7 @@ public class RepositoryServiceTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources = {
-  "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+  "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   @Test
   public void testStartProcessInstanceById() {
     List<ProcessDefinition> processDefinitions = repositoryService.createProcessDefinitionQuery().list();
@@ -181,7 +181,7 @@ public class RepositoryServiceTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources={
-    "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+    "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   @Test
   public void testFindProcessDefinitionById() {
     List<ProcessDefinition> definitions = repositoryService.createProcessDefinitionQuery().list();
@@ -197,7 +197,7 @@ public class RepositoryServiceTest extends PluggableProcessEngineTest {
     assertEquals("This is a process for testing purposes", processDefinition.getDescription());
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
   @Test
   public void testDeleteDeploymentWithRunningInstances() {
     List<ProcessDefinition> processDefinitions = repositoryService.createProcessDefinitionQuery().list();
@@ -221,7 +221,7 @@ public class RepositoryServiceTest extends PluggableProcessEngineTest {
     DeploymentBuilder deploymentBuilder =
         repositoryService
           .createDeployment()
-          .addClasspathResource("org/camunda/bpm/engine/test/api/repository/RepositoryServiceTest.testDeleteProcessInstanceSkipCustomListeners.bpmn20.xml");
+          .addClasspathResource("io/orqueio/bpm/engine/test/api/repository/RepositoryServiceTest.testDeleteProcessInstanceSkipCustomListeners.bpmn20.xml");
 
     String deploymentId = deploymentBuilder.deploy().getId();
 
@@ -246,7 +246,7 @@ public class RepositoryServiceTest extends PluggableProcessEngineTest {
     DeploymentBuilder deploymentBuilder =
         repositoryService
           .createDeployment()
-          .addClasspathResource("org/camunda/bpm/engine/test/api/repository/RepositoryServiceTest.testDeleteProcessInstanceSkipCustomTaskListeners.bpmn20.xml");
+          .addClasspathResource("io/orqueio/bpm/engine/test/api/repository/RepositoryServiceTest.testDeleteProcessInstanceSkipCustomTaskListeners.bpmn20.xml");
 
     String deploymentId = deploymentBuilder.deploy().getId();
 
@@ -270,7 +270,7 @@ public class RepositoryServiceTest extends PluggableProcessEngineTest {
   @Test
   public void testDeleteDeploymentSkipIoMappings() {
     DeploymentBuilder deploymentBuilder = repositoryService.createDeployment()
-        .addClasspathResource("org/camunda/bpm/engine/test/api/repository/RepositoryServiceTest.testDeleteDeploymentSkipIoMappings.bpmn20.xml");
+        .addClasspathResource("io/orqueio/bpm/engine/test/api/repository/RepositoryServiceTest.testDeleteDeploymentSkipIoMappings.bpmn20.xml");
 
     String deploymentId = deploymentBuilder.deploy().getId();
     runtimeService.startProcessInstanceByKey("ioMappingProcess");
@@ -286,7 +286,7 @@ public class RepositoryServiceTest extends PluggableProcessEngineTest {
   @Test
   public void testDeleteDeploymentWithoutSkipIoMappings() {
     DeploymentBuilder deploymentBuilder = repositoryService.createDeployment()
-        .addClasspathResource("org/camunda/bpm/engine/test/api/repository/RepositoryServiceTest.testDeleteDeploymentSkipIoMappings.bpmn20.xml");
+        .addClasspathResource("io/orqueio/bpm/engine/test/api/repository/RepositoryServiceTest.testDeleteDeploymentSkipIoMappings.bpmn20.xml");
 
     String deploymentId = deploymentBuilder.deploy().getId();
     runtimeService.startProcessInstanceByKey("ioMappingProcess");
@@ -324,7 +324,7 @@ public class RepositoryServiceTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
   @Test
   public void testDeleteDeploymentCascadeWithRunningInstances() {
     List<ProcessDefinition> processDefinitions = repositoryService.createProcessDefinitionQuery().list();
@@ -338,8 +338,8 @@ public class RepositoryServiceTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml",
-      "org/camunda/bpm/engine/test/repository/one.cmmn"})
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/repository/one.cmmn"})
   @Test
   public void testDeleteDeploymentClearsCache() {
     String deploymentId = repositoryService.createDeploymentQuery().singleResult().getId();
@@ -398,8 +398,8 @@ public class RepositoryServiceTest extends PluggableProcessEngineTest {
 
     // Deploy process, but activate after three days
     io.orqueio.bpm.engine.repository.Deployment deployment = repositoryService.createDeployment()
-            .addClasspathResource("org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
-            .addClasspathResource("org/camunda/bpm/engine/test/api/twoTasksProcess.bpmn20.xml")
+            .addClasspathResource("io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
+            .addClasspathResource("io/orqueio/bpm/engine/test/api/twoTasksProcess.bpmn20.xml")
             .activateProcessDefinitionsOn(inThreeDays)
             .deploy();
 
@@ -442,7 +442,7 @@ public class RepositoryServiceTest extends PluggableProcessEngineTest {
 
     // Deploy process, but activate after three days
     io.orqueio.bpm.engine.repository.Deployment deployment = repositoryService.createDeployment()
-            .addClasspathResource("org/camunda/bpm/engine/test/api/oneAsyncTask.bpmn")
+            .addClasspathResource("io/orqueio/bpm/engine/test/api/oneAsyncTask.bpmn")
             .activateProcessDefinitionsOn(inThreeDays)
             .deploy();
 
@@ -485,26 +485,26 @@ public class RepositoryServiceTest extends PluggableProcessEngineTest {
     repositoryService.deleteDeployment(deployment.getId(), true);
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
   @Test
   public void testGetResourceAsStreamUnexistingResourceInExistingDeployment() {
     // Get hold of the deployment id
     io.orqueio.bpm.engine.repository.Deployment deployment = repositoryService.createDeploymentQuery().singleResult();
 
     try {
-      repositoryService.getResourceAsStream(deployment.getId(), "org/camunda/bpm/engine/test/api/unexistingProcess.bpmn.xml");
+      repositoryService.getResourceAsStream(deployment.getId(), "io/orqueio/bpm/engine/test/api/unexistingProcess.bpmn.xml");
       fail("ProcessEngineException expected");
     } catch (ProcessEngineException ae) {
       testRule.assertTextPresent("no resource found with name", ae.getMessage());
     }
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
   @Test
   public void testGetResourceAsStreamUnexistingDeployment() {
 
     try {
-      repositoryService.getResourceAsStream("unexistingdeployment", "org/camunda/bpm/engine/test/api/unexistingProcess.bpmn.xml");
+      repositoryService.getResourceAsStream("unexistingdeployment", "io/orqueio/bpm/engine/test/api/unexistingProcess.bpmn.xml");
       fail("ProcessEngineException expected");
     } catch (ProcessEngineException ae) {
       testRule.assertTextPresent("no resource found with name", ae.getMessage());
@@ -529,7 +529,7 @@ public class RepositoryServiceTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/repository/one.cmmn" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/repository/one.cmmn" })
   @Test
   public void testGetCaseDefinition() {
     CaseDefinitionQuery query = repositoryService.createCaseDefinitionQuery();
@@ -559,7 +559,7 @@ public class RepositoryServiceTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/repository/one.cmmn" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/repository/one.cmmn" })
   @Test
   public void testGetCaseModel() throws Exception {
     CaseDefinitionQuery query = repositoryService.createCaseDefinitionQuery();
@@ -595,7 +595,7 @@ public class RepositoryServiceTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/repository/one.dmn" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/repository/one.dmn" })
   @Test
   public void testGetDecisionDefinition() {
     DecisionDefinitionQuery query = repositoryService.createDecisionDefinitionQuery();
@@ -626,7 +626,7 @@ public class RepositoryServiceTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/repository/drg.dmn" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/repository/drg.dmn" })
   @Test
   public void testGetDecisionRequirementsDefinition() {
     DecisionRequirementsDefinitionQuery query = repositoryService.createDecisionRequirementsDefinitionQuery();
@@ -657,7 +657,7 @@ public class RepositoryServiceTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/repository/one.dmn" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/repository/one.dmn" })
   @Test
   public void testGetDecisionModel() throws Exception {
     DecisionDefinitionQuery query = repositoryService.createDecisionDefinitionQuery();
@@ -693,7 +693,7 @@ public class RepositoryServiceTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/repository/drg.dmn" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/repository/drg.dmn" })
   @Test
   public void testGetDecisionRequirementsModel() throws Exception {
     DecisionRequirementsDefinitionQuery query = repositoryService.createDecisionRequirementsDefinitionQuery();
@@ -728,8 +728,8 @@ public class RepositoryServiceTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/repository/drg.dmn",
-                           "org/camunda/bpm/engine/test/repository/drg.png" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/repository/drg.dmn",
+                           "io/orqueio/bpm/engine/test/repository/drg.png" })
   @Test
   public void testGetDecisionRequirementsDiagram() throws Exception {
 
@@ -784,7 +784,7 @@ public class RepositoryServiceTest extends PluggableProcessEngineTest {
 
     // Deploy first version of process: start->originalTask->end on first process engine
     String deploymentId = repositoryService1.createDeployment()
-      .addClasspathResource("org/camunda/bpm/engine/test/api/repository/RepositoryServiceTest.testDeployRevisedProcessAfterDeleteOnOtherProcessEngine.v1.bpmn20.xml")
+      .addClasspathResource("io/orqueio/bpm/engine/test/api/repository/RepositoryServiceTest.testDeployRevisedProcessAfterDeleteOnOtherProcessEngine.v1.bpmn20.xml")
       .deploy()
       .getId();
 
@@ -806,7 +806,7 @@ public class RepositoryServiceTest extends PluggableProcessEngineTest {
     // Since there is a deployment delete in between, the new generated process definition id is the same
     // as in the original deployment, making the second process engine using the old cached process definition.
     deploymentId = repositoryService1.createDeployment()
-      .addClasspathResource("org/camunda/bpm/engine/test/api/repository/RepositoryServiceTest.testDeployRevisedProcessAfterDeleteOnOtherProcessEngine.v2.bpmn20.xml")
+      .addClasspathResource("io/orqueio/bpm/engine/test/api/repository/RepositoryServiceTest.testDeployRevisedProcessAfterDeleteOnOtherProcessEngine.v2.bpmn20.xml")
       .deploy()
       .getId();
 
@@ -827,8 +827,8 @@ public class RepositoryServiceTest extends PluggableProcessEngineTest {
     io.orqueio.bpm.engine.repository.Deployment deployment = repositoryService
       .createDeployment()
       .name("strings")
-      .addString("org/camunda/bpm/engine/test/test/HelloWorld.string", "hello world")
-      .addString("org/camunda/bpm/engine/test/test/TheAnswer.string", "42")
+      .addString("io/orqueio/bpm/engine/test/test/HelloWorld.string", "hello world")
+      .addString("io/orqueio/bpm/engine/test/test/TheAnswer.string", "42")
       .deploy();
 
     List<io.orqueio.bpm.engine.repository.Deployment> deployments
@@ -842,14 +842,14 @@ public class RepositoryServiceTest extends PluggableProcessEngineTest {
     String deploymentId = deployment.getId();
     List<String> resourceNames = repositoryService.getDeploymentResourceNames(deploymentId);
     Set<String> expectedResourceNames = new HashSet<>();
-    expectedResourceNames.add("org/camunda/bpm/engine/test/test/HelloWorld.string");
-    expectedResourceNames.add("org/camunda/bpm/engine/test/test/TheAnswer.string");
+    expectedResourceNames.add("io/orqueio/bpm/engine/test/test/HelloWorld.string");
+    expectedResourceNames.add("io/orqueio/bpm/engine/test/test/TheAnswer.string");
     assertEquals(expectedResourceNames, new HashSet<>(resourceNames));
 
-    InputStream resourceStream = repositoryService.getResourceAsStream(deploymentId, "org/camunda/bpm/engine/test/test/HelloWorld.string");
+    InputStream resourceStream = repositoryService.getResourceAsStream(deploymentId, "io/orqueio/bpm/engine/test/test/HelloWorld.string");
     assertTrue(Arrays.equals("hello world".getBytes(), IoUtil.readInputStream(resourceStream, "test")));
 
-    resourceStream = repositoryService.getResourceAsStream(deploymentId, "org/camunda/bpm/engine/test/test/TheAnswer.string");
+    resourceStream = repositoryService.getResourceAsStream(deploymentId, "io/orqueio/bpm/engine/test/test/TheAnswer.string");
     assertTrue(Arrays.equals("42".getBytes(), IoUtil.readInputStream(resourceStream, "test")));
 
     repositoryService.deleteDeployment(deploymentId);
@@ -859,8 +859,8 @@ public class RepositoryServiceTest extends PluggableProcessEngineTest {
   public void testProcessDefinitionPersistence() {
     String deploymentId = repositoryService
       .createDeployment()
-      .addClasspathResource("org/camunda/bpm/engine/test/api/repository/processOne.bpmn20.xml")
-      .addClasspathResource("org/camunda/bpm/engine/test/api/repository/processTwo.bpmn20.xml")
+      .addClasspathResource("io/orqueio/bpm/engine/test/api/repository/processOne.bpmn20.xml")
+      .addClasspathResource("io/orqueio/bpm/engine/test/api/repository/processTwo.bpmn20.xml")
       .deploy()
       .getId();
 
@@ -874,7 +874,7 @@ public class RepositoryServiceTest extends PluggableProcessEngineTest {
   }
 
   @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_FULL)
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/dmn/Example.dmn"})
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/dmn/Example.dmn"})
   @Test
   public void testDecisionDefinitionUpdateTimeToLiveWithUserOperationLog() {
     //given
@@ -911,7 +911,7 @@ public class RepositoryServiceTest extends PluggableProcessEngineTest {
     assertEquals(UserOperationLogEntry.CATEGORY_OPERATOR, definitionKeyEntry.getCategory());
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/dmn/Example.dmn"})
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/dmn/Example.dmn"})
   @Test
   public void testDecisionDefinitionUpdateTimeToLiveNull() {
     //given
@@ -926,7 +926,7 @@ public class RepositoryServiceTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/dmn/Example.dmn"})
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/dmn/Example.dmn"})
   @Test
   public void testDecisionDefinitionUpdateTimeToLiveNegative() {
     //given
@@ -942,7 +942,7 @@ public class RepositoryServiceTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   @Test
   public void testProcessDefinitionUpdateTimeToLive() {
     //given
@@ -957,7 +957,7 @@ public class RepositoryServiceTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   @Test
   public void testProcessDefinitionUpdateTimeToLiveNull() {
     //given
@@ -972,7 +972,7 @@ public class RepositoryServiceTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   @Test
   public void testProcessDefinitionUpdateTimeToLiveNegative() {
     //given
@@ -989,7 +989,7 @@ public class RepositoryServiceTest extends PluggableProcessEngineTest {
   }
 
   @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_FULL)
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   @Test
   public void testProcessDefinitionUpdateHistoryTimeToLiveWithUserOperationLog() {
     //given
@@ -1036,7 +1036,7 @@ public class RepositoryServiceTest extends PluggableProcessEngineTest {
   }
 
   @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_FULL)
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testCaseDefinitionUpdateHistoryTimeToLiveWithUserOperationLog() {
     // given
@@ -1073,7 +1073,7 @@ public class RepositoryServiceTest extends PluggableProcessEngineTest {
     assertEquals(UserOperationLogEntry.CATEGORY_OPERATOR, definitionKeyEntry.getCategory());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testUpdateHistoryTimeToLiveNull() {
     // given
@@ -1090,7 +1090,7 @@ public class RepositoryServiceTest extends PluggableProcessEngineTest {
     assertEquals(null, caseDefinition.getHistoryTimeToLive());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void shouldFailToUpdateHistoryTimeToLiveOnCaseDefinitionHTTLUpdate() {
     assertThatThrownBy(() -> {
@@ -1106,7 +1106,7 @@ public class RepositoryServiceTest extends PluggableProcessEngineTest {
         .hasMessage("Null historyTimeToLive values are not allowed");
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   @Test
   public void shouldFailToUpdateHistoryTimeToLiveOnProcessDefinitionHTTLUpdate() {
     assertThatThrownBy(() -> {
@@ -1121,7 +1121,7 @@ public class RepositoryServiceTest extends PluggableProcessEngineTest {
         .hasMessage("Null historyTimeToLive values are not allowed");
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/dmn/Example.dmn"})
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/dmn/Example.dmn"})
   @Test
   public void shouldFailToUpdateHistoryTimeToLiveOnDecisionDefinitionHTTLUpdate() {
     assertThatThrownBy(() -> {
@@ -1136,7 +1136,7 @@ public class RepositoryServiceTest extends PluggableProcessEngineTest {
         .hasMessage("Null historyTimeToLive values are not allowed");
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testUpdateHistoryTimeToLiveNegative() {
     // given
@@ -1153,7 +1153,7 @@ public class RepositoryServiceTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testUpdateHistoryTimeToLiveInCache() {
     // given
@@ -1196,7 +1196,7 @@ public class RepositoryServiceTest extends PluggableProcessEngineTest {
   public void testProcessDefinitionIntrospection() {
     String deploymentId = repositoryService
       .createDeployment()
-      .addClasspathResource("org/camunda/bpm/engine/test/api/repository/processOne.bpmn20.xml")
+      .addClasspathResource("io/orqueio/bpm/engine/test/api/repository/processOne.bpmn20.xml")
       .deploy()
       .getId();
 
@@ -1235,8 +1235,8 @@ public class RepositoryServiceTest extends PluggableProcessEngineTest {
   public void testProcessDefinitionQuery() {
     String deployment1Id = repositoryService
       .createDeployment()
-      .addClasspathResource("org/camunda/bpm/engine/test/api/repository/processOne.bpmn20.xml")
-      .addClasspathResource("org/camunda/bpm/engine/test/api/repository/processTwo.bpmn20.xml")
+      .addClasspathResource("io/orqueio/bpm/engine/test/api/repository/processOne.bpmn20.xml")
+      .addClasspathResource("io/orqueio/bpm/engine/test/api/repository/processTwo.bpmn20.xml")
       .deploy()
       .getId();
 
@@ -1249,8 +1249,8 @@ public class RepositoryServiceTest extends PluggableProcessEngineTest {
 
     String deployment2Id = repositoryService
             .createDeployment()
-            .addClasspathResource("org/camunda/bpm/engine/test/api/repository/processOne.bpmn20.xml")
-            .addClasspathResource("org/camunda/bpm/engine/test/api/repository/processTwo.bpmn20.xml")
+            .addClasspathResource("io/orqueio/bpm/engine/test/api/repository/processOne.bpmn20.xml")
+            .addClasspathResource("io/orqueio/bpm/engine/test/api/repository/processTwo.bpmn20.xml")
             .deploy()
             .getId();
 
@@ -1344,15 +1344,15 @@ public class RepositoryServiceTest extends PluggableProcessEngineTest {
 
   @Test
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/api/repository/call-activities-with-references.bpmn",
-    "org/camunda/bpm/engine/test/api/repository/failingProcessCreateOneIncident.bpmn20.xml",
-    "org/camunda/bpm/engine/test/api/repository/first-process.bpmn20.xml",
-    "org/camunda/bpm/engine/test/api/repository/three_.cmmn"
+    "io/orqueio/bpm/engine/test/api/repository/call-activities-with-references.bpmn",
+    "io/orqueio/bpm/engine/test/api/repository/failingProcessCreateOneIncident.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/api/repository/first-process.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/api/repository/three_.cmmn"
   })
   public void shouldReturnStaticCalledProcessDefinitions() {
     //given
-    testRule.deploy("org/camunda/bpm/engine/test/api/repository/second-process.bpmn20.xml");
-    testRule.deployForTenant("someTenant", "org/camunda/bpm/engine/test/api/repository/processOne.bpmn20.xml");
+    testRule.deploy("io/orqueio/bpm/engine/test/api/repository/second-process.bpmn20.xml");
+    testRule.deployForTenant("someTenant", "io/orqueio/bpm/engine/test/api/repository/processOne.bpmn20.xml");
 
     ProcessDefinition processDefinition = repositoryService
       .createProcessDefinitionQuery()
@@ -1386,7 +1386,7 @@ public class RepositoryServiceTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/repository/dynamic-call-activities.bpmn" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/repository/dynamic-call-activities.bpmn" })
   public void shouldNotTryToResolveDynamicCalledElementBinding() {
     //given
     ProcessDefinition processDefinition = repositoryService
@@ -1422,7 +1422,7 @@ public class RepositoryServiceTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/repository/first-process.bpmn20.xml" )
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/repository/first-process.bpmn20.xml" )
   public void shouldReturnEmptyListIfNoCallActivityExists(){
     //given
     ProcessDefinition processDefinition = repositoryService
@@ -1438,8 +1438,8 @@ public class RepositoryServiceTest extends PluggableProcessEngineTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/repository/nested-call-activities.bpmn",
-      "org/camunda/bpm/engine/test/api/repository/failingProcessCreateOneIncident.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/repository/nested-call-activities.bpmn",
+      "io/orqueio/bpm/engine/test/api/repository/failingProcessCreateOneIncident.bpmn20.xml" })
   public void shouldReturnCalledProcessDefinitionsForNestedCallActivities() {
     //given
     ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery()
@@ -1467,14 +1467,14 @@ public class RepositoryServiceTest extends PluggableProcessEngineTest {
   @Test
   public void shouldReturnCorrectProcessesForCallActivityWithTenantId(){
     //given
-    final String processOne = "org/camunda/bpm/engine/test/api/repository/processOne.bpmn20.xml";
-    final String processTwo = "org/camunda/bpm/engine/test/api/repository/processTwo.bpmn20.xml";
+    final String processOne = "io/orqueio/bpm/engine/test/api/repository/processOne.bpmn20.xml";
+    final String processTwo = "io/orqueio/bpm/engine/test/api/repository/processTwo.bpmn20.xml";
 
     final String aTenant = "aTenant";
     final String anotherTenant = "anotherTenant";
 
     String id = testRule.deployForTenantAndGetDefinition(aTenant,
-      "org/camunda/bpm/engine/test/api/repository/call_activities_with_tenants.bpmn").getId();
+      "io/orqueio/bpm/engine/test/api/repository/call_activities_with_tenants.bpmn").getId();
     testRule.deployForTenant(anotherTenant, processTwo);
     String sameTenantProcessOne = testRule.deployForTenantAndGetDefinition(aTenant, processOne).getId();
     String otherTenantProcessOne = testRule.deployForTenantAndGetDefinition(anotherTenant, processOne).getId();

@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -50,7 +50,7 @@ import org.junit.Test;
 public class TransactionSubProcessTest extends PluggableProcessEngineTest {
 
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/bpmn/subprocess/transaction/TransactionSubProcessTest.testSimpleCase.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/bpmn/subprocess/transaction/TransactionSubProcessTest.testSimpleCase.bpmn20.xml"})
   @Test
   public void testSimpleCaseTxSuccessful() {
 
@@ -105,7 +105,7 @@ public class TransactionSubProcessTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/bpmn/subprocess/transaction/TransactionSubProcessTest.testSimpleCase.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/bpmn/subprocess/transaction/TransactionSubProcessTest.testSimpleCase.bpmn20.xml"})
   @Test
   public void testActivityInstanceTreeAfterSuccessfulCompletion() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("transactionProcess");
@@ -126,7 +126,7 @@ public class TransactionSubProcessTest extends PluggableProcessEngineTest {
         .done());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/bpmn/subprocess/transaction/TransactionSubProcessTest.testWaitstateCompensationHandler.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/bpmn/subprocess/transaction/TransactionSubProcessTest.testWaitstateCompensationHandler.bpmn20.xml"})
   @Test
   public void testWaitstateCompensationHandler() {
 
@@ -190,7 +190,7 @@ public class TransactionSubProcessTest extends PluggableProcessEngineTest {
     assertEquals(0, runtimeService.createExecutionQuery().count());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/bpmn/subprocess/transaction/TransactionSubProcessTest.testSimpleCase.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/bpmn/subprocess/transaction/TransactionSubProcessTest.testSimpleCase.bpmn20.xml"})
   @Test
   public void testSimpleCaseTxCancelled() {
 
@@ -448,7 +448,7 @@ public class TransactionSubProcessTest extends PluggableProcessEngineTest {
     testRule.assertProcessEnded(processInstance.getId());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/bpmn/subprocess/transaction/TransactionSubProcessTest.testMultiInstanceTx.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/bpmn/subprocess/transaction/TransactionSubProcessTest.testMultiInstanceTx.bpmn20.xml"})
   @Test
   public void testMultiInstanceTxSuccessful() {
 
@@ -532,7 +532,7 @@ public class TransactionSubProcessTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/bpmn/subprocess/transaction/TransactionSubProcessTest.testCompensateTransactionWithEventSubprocess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/bpmn/subprocess/transaction/TransactionSubProcessTest.testCompensateTransactionWithEventSubprocess.bpmn20.xml")
   @Test
   public void testCompensateTransactionWithEventSubprocessActivityInstanceTree() {
     // given
@@ -555,7 +555,7 @@ public class TransactionSubProcessTest extends PluggableProcessEngineTest {
        .done());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/bpmn/subprocess/transaction/TransactionSubProcessTest.testCompensateSubprocess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/bpmn/subprocess/transaction/TransactionSubProcessTest.testCompensateSubprocess.bpmn20.xml")
   @Test
   public void testCompensateSubprocessNotTriggered() {
     // given
@@ -579,7 +579,7 @@ public class TransactionSubProcessTest extends PluggableProcessEngineTest {
     testRule.assertProcessEnded(instance.getId());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/bpmn/subprocess/transaction/TransactionSubProcessTest.testCompensateSubprocess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/bpmn/subprocess/transaction/TransactionSubProcessTest.testCompensateSubprocess.bpmn20.xml")
   @Test
   public void testCompensateSubprocessAfterTxCompletion() {
     // given
@@ -633,7 +633,7 @@ public class TransactionSubProcessTest extends PluggableProcessEngineTest {
   public void testMultipleCancelBoundaryFails() {
     try {
       repositoryService.createDeployment()
-        .addClasspathResource("org/camunda/bpm/engine/test/bpmn/subprocess/transaction/TransactionSubProcessTest.testMultipleCancelBoundaryFails.bpmn20.xml")
+        .addClasspathResource("io/orqueio/bpm/engine/test/bpmn/subprocess/transaction/TransactionSubProcessTest.testMultipleCancelBoundaryFails.bpmn20.xml")
         .deploy();
       fail("exception expected");
     } catch (ParseException e) {
@@ -646,7 +646,7 @@ public class TransactionSubProcessTest extends PluggableProcessEngineTest {
   public void testCancelBoundaryNoTransactionFails() {
     try {
       repositoryService.createDeployment()
-        .addClasspathResource("org/camunda/bpm/engine/test/bpmn/subprocess/transaction/TransactionSubProcessTest.testCancelBoundaryNoTransactionFails.bpmn20.xml")
+        .addClasspathResource("io/orqueio/bpm/engine/test/bpmn/subprocess/transaction/TransactionSubProcessTest.testCancelBoundaryNoTransactionFails.bpmn20.xml")
         .deploy();
       fail("exception expected");
     } catch (ParseException e) {
@@ -659,7 +659,7 @@ public class TransactionSubProcessTest extends PluggableProcessEngineTest {
   public void testCancelEndNoTransactionFails() {
     try {
       repositoryService.createDeployment()
-        .addClasspathResource("org/camunda/bpm/engine/test/bpmn/subprocess/transaction/TransactionSubProcessTest.testCancelEndNoTransactionFails.bpmn20.xml")
+        .addClasspathResource("io/orqueio/bpm/engine/test/bpmn/subprocess/transaction/TransactionSubProcessTest.testCancelEndNoTransactionFails.bpmn20.xml")
         .deploy();
       fail("exception expected");
     } catch (ParseException e) {

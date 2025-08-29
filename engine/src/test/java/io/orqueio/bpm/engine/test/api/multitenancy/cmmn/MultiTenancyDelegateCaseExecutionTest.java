@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -32,9 +32,9 @@ import org.junit.Test;
  */
 public class MultiTenancyDelegateCaseExecutionTest extends PluggableProcessEngineTest {
 
-  protected static final String HUMAN_TASK_CMMN_FILE = "org/camunda/bpm/engine/test/api/multitenancy/HumanTaskCaseExecutionListener.cmmn";
-  protected static final String CASE_TASK_CMMN_FILE = "org/camunda/bpm/engine/test/api/multitenancy/CaseTaskCaseExecutionListener.cmmn";
-  protected static final String CMMN_FILE = "org/camunda/bpm/engine/test/api/cmmn/oneCaseTaskCaseWithManualActivation.cmmn";
+  protected static final String HUMAN_TASK_CMMN_FILE = "io/orqueio/bpm/engine/test/api/multitenancy/HumanTaskCaseExecutionListener.cmmn";
+  protected static final String CASE_TASK_CMMN_FILE = "io/orqueio/bpm/engine/test/api/multitenancy/CaseTaskCaseExecutionListener.cmmn";
+  protected static final String CMMN_FILE = "io/orqueio/bpm/engine/test/api/cmmn/oneCaseTaskCaseWithManualActivation.cmmn";
 
   protected static final String TENANT_ID = "tenant1";
 

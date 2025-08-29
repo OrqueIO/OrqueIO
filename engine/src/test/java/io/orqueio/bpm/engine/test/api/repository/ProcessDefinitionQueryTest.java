@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -52,15 +52,15 @@ public class ProcessDefinitionQueryTest extends AbstractDefinitionQueryTest {
   private String deploymentThreeId;
 
   protected String getResourceOnePath() {
-    return "org/camunda/bpm/engine/test/repository/one.bpmn20.xml";
+    return "io/orqueio/bpm/engine/test/repository/one.bpmn20.xml";
   }
 
   protected String getResourceTwoPath() {
-    return "org/camunda/bpm/engine/test/repository/two.bpmn20.xml";
+    return "io/orqueio/bpm/engine/test/repository/two.bpmn20.xml";
   }
 
   protected String getResourceThreePath() {
-    return "org/camunda/bpm/engine/test/repository/three_.bpmn20.xml";
+    return "io/orqueio/bpm/engine/test/repository/three_.bpmn20.xml";
   }
 
   @Before
@@ -479,8 +479,8 @@ public class ProcessDefinitionQueryTest extends AbstractDefinitionQueryTest {
   @Test
   public void testQueryByMessageSubscription() {
     Deployment deployment = repositoryService.createDeployment()
-      .addClasspathResource("org/camunda/bpm/engine/test/api/repository/processWithNewBookingMessage.bpmn20.xml")
-      .addClasspathResource("org/camunda/bpm/engine/test/api/repository/processWithNewInvoiceMessage.bpmn20.xml")
+      .addClasspathResource("io/orqueio/bpm/engine/test/api/repository/processWithNewBookingMessage.bpmn20.xml")
+      .addClasspathResource("io/orqueio/bpm/engine/test/api/repository/processWithNewInvoiceMessage.bpmn20.xml")
     .deploy();
 
     assertThat(repositoryService.createProcessDefinitionQuery()
@@ -499,7 +499,7 @@ public class ProcessDefinitionQueryTest extends AbstractDefinitionQueryTest {
   }
 
   @Test
-  @io.orqueio.bpm.engine.test.Deployment(resources={"org/camunda/bpm/engine/test/api/repository/failingProcessCreateOneIncident.bpmn20.xml"})
+  @io.orqueio.bpm.engine.test.Deployment(resources={"io/orqueio/bpm/engine/test/api/repository/failingProcessCreateOneIncident.bpmn20.xml"})
   public void testQueryByIncidentId() {
     assertThat(repositoryService.createProcessDefinitionQuery()
         .processDefinitionKey("failingProcess")
@@ -533,7 +533,7 @@ public class ProcessDefinitionQueryTest extends AbstractDefinitionQueryTest {
   }
 
   @Test
-  @io.orqueio.bpm.engine.test.Deployment(resources={"org/camunda/bpm/engine/test/api/repository/failingProcessCreateOneIncident.bpmn20.xml"})
+  @io.orqueio.bpm.engine.test.Deployment(resources={"io/orqueio/bpm/engine/test/api/repository/failingProcessCreateOneIncident.bpmn20.xml"})
   public void testQueryByIncidentType() {
     assertThat(repositoryService.createProcessDefinitionQuery()
         .processDefinitionKey("failingProcess")
@@ -567,7 +567,7 @@ public class ProcessDefinitionQueryTest extends AbstractDefinitionQueryTest {
   }
 
   @Test
-  @io.orqueio.bpm.engine.test.Deployment(resources={"org/camunda/bpm/engine/test/api/repository/failingProcessCreateOneIncident.bpmn20.xml"})
+  @io.orqueio.bpm.engine.test.Deployment(resources={"io/orqueio/bpm/engine/test/api/repository/failingProcessCreateOneIncident.bpmn20.xml"})
   public void testQueryByIncidentMessage() {
     assertThat(repositoryService.createProcessDefinitionQuery()
         .processDefinitionKey("failingProcess")
@@ -601,7 +601,7 @@ public class ProcessDefinitionQueryTest extends AbstractDefinitionQueryTest {
   }
 
   @Test
-  @io.orqueio.bpm.engine.test.Deployment(resources={"org/camunda/bpm/engine/test/api/repository/failingProcessCreateOneIncident.bpmn20.xml"})
+  @io.orqueio.bpm.engine.test.Deployment(resources={"io/orqueio/bpm/engine/test/api/repository/failingProcessCreateOneIncident.bpmn20.xml"})
   public void testQueryByIncidentMessageLike() {
     assertThat(repositoryService.createProcessDefinitionQuery()
         .processDefinitionKey("failingProcess")
@@ -670,13 +670,13 @@ public class ProcessDefinitionQueryTest extends AbstractDefinitionQueryTest {
   public void testQueryByLatestAndName() {
     String firstDeployment = repositoryService
         .createDeployment()
-        .addClasspathResource("org/camunda/bpm/engine/test/api/repository/first-process.bpmn20.xml")
+        .addClasspathResource("io/orqueio/bpm/engine/test/api/repository/first-process.bpmn20.xml")
         .deploy()
         .getId();
 
     String secondDeployment = repositoryService
         .createDeployment()
-        .addClasspathResource("org/camunda/bpm/engine/test/api/repository/first-process.bpmn20.xml")
+        .addClasspathResource("io/orqueio/bpm/engine/test/api/repository/first-process.bpmn20.xml")
         .deploy()
         .getId();
 
@@ -702,13 +702,13 @@ public class ProcessDefinitionQueryTest extends AbstractDefinitionQueryTest {
   public void testQueryByLatestAndName_NotFound() {
     String firstDeployment = repositoryService
         .createDeployment()
-        .addClasspathResource("org/camunda/bpm/engine/test/api/repository/first-process.bpmn20.xml")
+        .addClasspathResource("io/orqueio/bpm/engine/test/api/repository/first-process.bpmn20.xml")
         .deploy()
         .getId();
 
     String secondDeployment = repositoryService
         .createDeployment()
-        .addClasspathResource("org/camunda/bpm/engine/test/api/repository/second-process.bpmn20.xml")
+        .addClasspathResource("io/orqueio/bpm/engine/test/api/repository/second-process.bpmn20.xml")
         .deploy()
         .getId();
 
@@ -729,13 +729,13 @@ public class ProcessDefinitionQueryTest extends AbstractDefinitionQueryTest {
   public void testQueryByLatestAndNameLike() {
     String firstDeployment = repositoryService
         .createDeployment()
-        .addClasspathResource("org/camunda/bpm/engine/test/api/repository/first-process.bpmn20.xml")
+        .addClasspathResource("io/orqueio/bpm/engine/test/api/repository/first-process.bpmn20.xml")
         .deploy()
         .getId();
 
     String secondDeployment = repositoryService
         .createDeployment()
-        .addClasspathResource("org/camunda/bpm/engine/test/api/repository/second-process.bpmn20.xml")
+        .addClasspathResource("io/orqueio/bpm/engine/test/api/repository/second-process.bpmn20.xml")
         .deploy()
         .getId();
 
@@ -780,13 +780,13 @@ public class ProcessDefinitionQueryTest extends AbstractDefinitionQueryTest {
   public void testQueryByLatestAndNameLike_NotFound() {
     String firstDeployment = repositoryService
         .createDeployment()
-        .addClasspathResource("org/camunda/bpm/engine/test/api/repository/first-process.bpmn20.xml")
+        .addClasspathResource("io/orqueio/bpm/engine/test/api/repository/first-process.bpmn20.xml")
         .deploy()
         .getId();
 
     String secondDeployment = repositoryService
         .createDeployment()
-        .addClasspathResource("org/camunda/bpm/engine/test/api/repository/second-process.bpmn20.xml")
+        .addClasspathResource("io/orqueio/bpm/engine/test/api/repository/second-process.bpmn20.xml")
         .deploy()
         .getId();
 
@@ -803,7 +803,7 @@ public class ProcessDefinitionQueryTest extends AbstractDefinitionQueryTest {
   }
 
   @Test
-  @io.orqueio.bpm.engine.test.Deployment(resources={"org/camunda/bpm/engine/test/api/repository/failingProcessCreateOneIncident.bpmn20.xml"})
+  @io.orqueio.bpm.engine.test.Deployment(resources={"io/orqueio/bpm/engine/test/api/repository/failingProcessCreateOneIncident.bpmn20.xml"})
   public void testQueryByVersionTag() {
     assertThat(repositoryService.createProcessDefinitionQuery()
       .versionTag("ver_tag_2")
@@ -811,7 +811,7 @@ public class ProcessDefinitionQueryTest extends AbstractDefinitionQueryTest {
   }
 
   @Test
-  @io.orqueio.bpm.engine.test.Deployment(resources={"org/camunda/bpm/engine/test/api/repository/failingProcessCreateOneIncident.bpmn20.xml"})
+  @io.orqueio.bpm.engine.test.Deployment(resources={"io/orqueio/bpm/engine/test/api/repository/failingProcessCreateOneIncident.bpmn20.xml"})
   public void testQueryByVersionTagLike() {
     assertThat(repositoryService.createProcessDefinitionQuery()
       .versionTagLike("ver\\_tag\\_%")
@@ -819,7 +819,7 @@ public class ProcessDefinitionQueryTest extends AbstractDefinitionQueryTest {
   }
 
   @Test
-  @io.orqueio.bpm.engine.test.Deployment(resources={"org/camunda/bpm/engine/test/api/repository/failingProcessCreateOneIncident.bpmn20.xml"})
+  @io.orqueio.bpm.engine.test.Deployment(resources={"io/orqueio/bpm/engine/test/api/repository/failingProcessCreateOneIncident.bpmn20.xml"})
   public void testQueryByNoVersionTag() {
     // 4 definitions without and 1 definition with version tag are deployed
     assertThat(repositoryService.createProcessDefinitionQuery()
@@ -850,8 +850,8 @@ public class ProcessDefinitionQueryTest extends AbstractDefinitionQueryTest {
 
   @Test
   @io.orqueio.bpm.engine.test.Deployment(resources={
-    "org/camunda/bpm/engine/test/api/repository/failingProcessCreateOneIncident.bpmn20.xml",
-    "org/camunda/bpm/engine/test/api/repository/VersionTagTest.testParsingVersionTag.bpmn20.xml"
+    "io/orqueio/bpm/engine/test/api/repository/failingProcessCreateOneIncident.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/api/repository/VersionTagTest.testParsingVersionTag.bpmn20.xml"
   })
   public void testQueryOrderByVersionTag() {
     List<ProcessDefinition> processDefinitionList = repositoryService.createProcessDefinitionQuery()
@@ -957,7 +957,7 @@ public class ProcessDefinitionQueryTest extends AbstractDefinitionQueryTest {
         .done();
 
     result[1] = Bpmn.createExecutableProcess("called")
-        .camundaStartableInTasklist(isStartableSubprocess)
+        .orqueioStartableInTasklist(isStartableSubprocess)
         .startEvent()
         .userTask()
         .endEvent()

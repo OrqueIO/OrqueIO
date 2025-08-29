@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -59,8 +59,8 @@ public class EscalationEventTest extends PluggableProcessEngineTest {
     assertEquals(1, taskService.createTaskQuery().taskName("task in subprocess").count());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.throwEscalationEvent.bpmn20.xml",
-      "org/camunda/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.nonInterruptingEscalationBoundaryEventOnCallActivity.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.throwEscalationEvent.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.nonInterruptingEscalationBoundaryEventOnCallActivity.bpmn20.xml"})
   @Test
   public void testThrowEscalationEventFromCallActivity() {
     runtimeService.startProcessInstanceByKey("catchEscalationProcess");
@@ -73,7 +73,7 @@ public class EscalationEventTest extends PluggableProcessEngineTest {
     assertEquals(1, taskService.createTaskQuery().taskName("task after thrown escalation").count());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.throwEscalationEvent.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.throwEscalationEvent.bpmn20.xml")
   @Test
   public void testThrowEscalationEventNotCaught() {
     runtimeService.startProcessInstanceByKey("throwEscalationProcess");
@@ -188,8 +188,8 @@ public class EscalationEventTest extends PluggableProcessEngineTest {
     assertEquals(1, taskService.createTaskQuery().taskName("task after catched escalation").count());
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.throwEscalationEvent.bpmn20.xml",
-      "org/camunda/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.interruptingEscalationBoundaryEventOnCallActivity.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.throwEscalationEvent.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.interruptingEscalationBoundaryEventOnCallActivity.bpmn20.xml" })
   @Test
   public void testInterruptingEscalationBoundaryEventOnCallActivity(){
     runtimeService.startProcessInstanceByKey("catchEscalationProcess");
@@ -225,8 +225,8 @@ public class EscalationEventTest extends PluggableProcessEngineTest {
     assertEquals(1, taskService.createTaskQuery().taskName("task after catched escalation").count());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.throwEscalationEvent.bpmn20.xml",
-  "org/camunda/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.testPropagateOutputVariablesWhileCatchEscalationOnCallActivity.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.throwEscalationEvent.bpmn20.xml",
+  "io/orqueio/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.testPropagateOutputVariablesWhileCatchEscalationOnCallActivity.bpmn20.xml"})
   @Test
   public void testPropagateOutputVariablesWhileCatchEscalationOnCallActivity() {
     Map<String,Object> variables = new HashMap<String, Object>();
@@ -240,8 +240,8 @@ public class EscalationEventTest extends PluggableProcessEngineTest {
     assertEquals(42, runtimeService.getVariable(processInstanceId, "output"));
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.throwEscalationEvent.bpmn20.xml",
-  "org/camunda/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.testPropagateOutputVariablesWhileCatchEscalationOnCallActivity.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.throwEscalationEvent.bpmn20.xml",
+  "io/orqueio/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.testPropagateOutputVariablesWhileCatchEscalationOnCallActivity.bpmn20.xml"})
   @Test
   public void testPropagateOutputVariablesTwoTimes() {
     Map<String,Object> variables = new HashMap<String, Object>();
@@ -264,8 +264,8 @@ public class EscalationEventTest extends PluggableProcessEngineTest {
     assertEquals(999, runtimeService.getVariable(processInstanceId, "output"));
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.throwEscalationEvent.bpmn20.xml",
-  "org/camunda/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.testPropagateOutputVariablesWhileCatchInterruptingEscalationOnCallActivity.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.throwEscalationEvent.bpmn20.xml",
+  "io/orqueio/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.testPropagateOutputVariablesWhileCatchInterruptingEscalationOnCallActivity.bpmn20.xml"})
   @Test
   public void testPropagateOutputVariablesWhileCatchInterruptingEscalationOnCallActivity() {
     Map<String,Object> variables = new HashMap<String, Object>();
@@ -279,8 +279,8 @@ public class EscalationEventTest extends PluggableProcessEngineTest {
     assertEquals(42, runtimeService.getVariable(processInstanceId, "output"));
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.throwEscalationEvent.bpmn20.xml",
-  "org/camunda/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.testPropagateOutputVariablesWithoutCatchEscalation.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.throwEscalationEvent.bpmn20.xml",
+  "io/orqueio/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.testPropagateOutputVariablesWithoutCatchEscalation.bpmn20.xml"})
   @Test
   public void testPropagateOutputVariablesWithoutCatchEscalation() {
     Map<String,Object> variables = new HashMap<String, Object>();
@@ -321,8 +321,8 @@ public class EscalationEventTest extends PluggableProcessEngineTest {
     assertEquals("escalationCode", runtimeService.getVariable(task.getExecutionId(), "escalationCodeVar"));
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.throwEscalationEvent.bpmn20.xml",
-    "org/camunda/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.testInterruptingRetrieveEscalationCodeInSuperProcess.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.throwEscalationEvent.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.testInterruptingRetrieveEscalationCodeInSuperProcess.bpmn20.xml"})
   @Test
   public void testInterruptingRetrieveEscalationCodeInSuperProcess() {
     runtimeService.startProcessInstanceByKey("catchEscalationProcess");
@@ -335,8 +335,8 @@ public class EscalationEventTest extends PluggableProcessEngineTest {
     assertEquals("escalationCode", runtimeService.getVariable(task.getExecutionId(), "escalationCodeVar"));
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.throwEscalationEvent.bpmn20.xml",
-    "org/camunda/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.testInterruptingRetrieveEscalationCodeInSuperProcessWithoutEscalationCode.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.throwEscalationEvent.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.testInterruptingRetrieveEscalationCodeInSuperProcessWithoutEscalationCode.bpmn20.xml"})
   @Test
   public void testInterruptingRetrieveEscalationCodeInSuperProcessWithoutEscalationCode() {
     runtimeService.startProcessInstanceByKey("catchEscalationProcess");
@@ -348,8 +348,8 @@ public class EscalationEventTest extends PluggableProcessEngineTest {
     // and set the escalationCode of the escalation event to the declared variable
     assertEquals("escalationCode", runtimeService.getVariable(task.getExecutionId(), "escalationCodeVar"));
   }
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.throwEscalationEvent.bpmn20.xml",
-    "org/camunda/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.testNonInterruptingRetrieveEscalationCodeInSuperProcess.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.throwEscalationEvent.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.testNonInterruptingRetrieveEscalationCodeInSuperProcess.bpmn20.xml"})
   @Test
   public void testNonInterruptingRetrieveEscalationCodeInSuperProcess() {
     runtimeService.startProcessInstanceByKey("catchEscalationProcess");
@@ -362,8 +362,8 @@ public class EscalationEventTest extends PluggableProcessEngineTest {
     assertEquals("escalationCode", runtimeService.getVariable(task.getExecutionId(), "escalationCodeVar"));
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.throwEscalationEvent.bpmn20.xml",
-    "org/camunda/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.testNonInterruptingRetrieveEscalationCodeInSuperProcessWithoutEscalationCode.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.throwEscalationEvent.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.testNonInterruptingRetrieveEscalationCodeInSuperProcessWithoutEscalationCode.bpmn20.xml"})
   @Test
   public void testNonInterruptingRetrieveEscalationCodeInSuperProcessWithoutEscalationCode() {
     runtimeService.startProcessInstanceByKey("catchEscalationProcess");
@@ -376,8 +376,8 @@ public class EscalationEventTest extends PluggableProcessEngineTest {
     assertEquals("escalationCode", runtimeService.getVariable(task.getExecutionId(), "escalationCodeVar"));
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/event/escalation/testOutputVariablesWhileThrowEscalation.bpmn20.xml",
-  "org/camunda/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.escalationParent.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/bpmn/event/escalation/testOutputVariablesWhileThrowEscalation.bpmn20.xml",
+  "io/orqueio/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.escalationParent.bpmn20.xml"})
   @Test
   public void testPropagateOutputVariablesWhileThrowEscalation() {
     // given
@@ -393,8 +393,8 @@ public class EscalationEventTest extends PluggableProcessEngineTest {
     checkOutput(processInstanceId);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/event/escalation/testOutputVariablesWhileThrowEscalationTwoLevels.bpmn20.xml",
-  "org/camunda/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.escalationParent.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/bpmn/event/escalation/testOutputVariablesWhileThrowEscalationTwoLevels.bpmn20.xml",
+  "io/orqueio/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.escalationParent.bpmn20.xml"})
   @Test
   public void testPropagateOutputVariablesWhileThrowEscalationTwoLevels() {
     // given
@@ -410,8 +410,8 @@ public class EscalationEventTest extends PluggableProcessEngineTest {
     checkOutput(processInstanceId);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/event/escalation/testOutputVariablesWhileThrowEscalationThreeLevels.bpmn20.xml",
-  "org/camunda/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.escalationParent.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/bpmn/event/escalation/testOutputVariablesWhileThrowEscalationThreeLevels.bpmn20.xml",
+  "io/orqueio/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.escalationParent.bpmn20.xml"})
   @Test
   public void testPropagateOutputVariablesWhileThrowEscalationThreeLevels() {
     // given
@@ -427,8 +427,8 @@ public class EscalationEventTest extends PluggableProcessEngineTest {
     checkOutput(processInstanceId);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/event/escalation/testOutputVariablesWhileThrowEscalationInSubProcess.bpmn20.xml",
-  "org/camunda/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.escalationParent.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/bpmn/event/escalation/testOutputVariablesWhileThrowEscalationInSubProcess.bpmn20.xml",
+  "io/orqueio/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.escalationParent.bpmn20.xml"})
   @Test
   public void testPropagateOutputVariablesWhileThrowEscalationInSubProcess() {
     // given
@@ -444,8 +444,8 @@ public class EscalationEventTest extends PluggableProcessEngineTest {
     checkOutput(processInstanceId);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/event/escalation/testOutputVariablesWhileThrowEscalationInSubProcessThreeLevels.bpmn20.xml",
-  "org/camunda/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.escalationParent.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/bpmn/event/escalation/testOutputVariablesWhileThrowEscalationInSubProcessThreeLevels.bpmn20.xml",
+  "io/orqueio/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.escalationParent.bpmn20.xml"})
   @Test
   public void testPropagateOutputVariablesWhileThrowEscalationInSubProcessThreeLevels() {
     // given
@@ -461,8 +461,8 @@ public class EscalationEventTest extends PluggableProcessEngineTest {
     checkOutput(processInstanceId);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/event/escalation/testOutputVariablesWhileThrowEscalation2.bpmn20.xml",
-  "org/camunda/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.escalationParent.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/bpmn/event/escalation/testOutputVariablesWhileThrowEscalation2.bpmn20.xml",
+  "io/orqueio/bpm/engine/test/bpmn/event/escalation/EscalationEventTest.escalationParent.bpmn20.xml"})
   @Test
   public void testPropagateOutputVariablesWhileThrowEscalation2() {
     // given

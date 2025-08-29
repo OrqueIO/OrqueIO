@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -40,7 +40,7 @@ public class DefaultFailedJobParseListener extends AbstractBpmnParseListener {
   protected static final String FAILED_JOB_RETRY_TIME_CYCLE = "failedJobRetryTimeCycle";
 
   /**
-   * deprecated since 7.4, use camunda ns.
+   * deprecated since 7.4, use orqueio ns.
    */
   @Deprecated
   public static final Namespace FOX_ENGINE_NS = new Namespace("http://www.camunda.com/fox");
@@ -186,7 +186,7 @@ public class DefaultFailedJobParseListener extends AbstractBpmnParseListener {
       Element failedJobRetryTimeCycleElement = extensionElements.elementNS(FOX_ENGINE_NS, FAILED_JOB_RETRY_TIME_CYCLE);
       if (failedJobRetryTimeCycleElement == null) {
         // try to get it from the activiti namespace
-        failedJobRetryTimeCycleElement = extensionElements.elementNS(BpmnParse.CAMUNDA_BPMN_EXTENSIONS_NS, FAILED_JOB_RETRY_TIME_CYCLE);
+        failedJobRetryTimeCycleElement = extensionElements.elementNS(BpmnParse.ORQUEIO_BPMN_EXTENSIONS_NS, FAILED_JOB_RETRY_TIME_CYCLE);
       }
 
       if (failedJobRetryTimeCycleElement != null) {

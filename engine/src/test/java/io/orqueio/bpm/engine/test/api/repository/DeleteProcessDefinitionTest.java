@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -96,7 +96,7 @@ public class DeleteProcessDefinitionTest {
   protected static final BpmnModelInstance IO_MAPPING_PROCESS = Bpmn.createExecutableProcess(IO_MAPPING_PROCESS_KEY)
     .startEvent()
     .userTask()
-      .camundaOutputParameter("inputParameter", "${notExistentVariable}")
+      .orqueioOutputParameter("inputParameter", "${notExistentVariable}")
     .endEvent()
     .done();
 
@@ -122,7 +122,7 @@ public class DeleteProcessDefinitionTest {
   public void testDeleteProcessDefinition() {
     // given deployment with two process definitions in one xml model file
     deployment = repositoryService.createDeployment()
-            .addClasspathResource("org/camunda/bpm/engine/test/repository/twoProcesses.bpmn20.xml")
+            .addClasspathResource("io/orqueio/bpm/engine/test/repository/twoProcesses.bpmn20.xml")
             .deploy();
     List<ProcessDefinition> processDefinitions = repositoryService.createProcessDefinitionQuery().list();
 
@@ -205,7 +205,7 @@ public class DeleteProcessDefinitionTest {
   public void testDeleteProcessDefinitionAndRefillDeploymentCache() {
     // given a deployment with two process definitions in one xml model file
     deployment = repositoryService.createDeployment()
-            .addClasspathResource("org/camunda/bpm/engine/test/repository/twoProcesses.bpmn20.xml")
+            .addClasspathResource("io/orqueio/bpm/engine/test/repository/twoProcesses.bpmn20.xml")
             .deploy();
     ProcessDefinition processDefinitionOne =
         repositoryService.createProcessDefinitionQuery().processDefinitionKey("one").singleResult();
@@ -235,7 +235,7 @@ public class DeleteProcessDefinitionTest {
   public void testDeleteProcessDefinitionAndRedeploy() {
     // given a deployment with two process definitions in one xml model file
     deployment = repositoryService.createDeployment()
-            .addClasspathResource("org/camunda/bpm/engine/test/repository/twoProcesses.bpmn20.xml")
+            .addClasspathResource("io/orqueio/bpm/engine/test/repository/twoProcesses.bpmn20.xml")
             .deploy();
 
     ProcessDefinition processDefinitionOne =
@@ -573,7 +573,7 @@ public class DeleteProcessDefinitionTest {
       Bpmn.createExecutableProcess("processOne")
         .startEvent()
         .userTask()
-          .camundaExecutionListenerClass(ExecutionListener.EVENTNAME_END, IncrementCounterListener.class.getName())
+          .orqueioExecutionListenerClass(ExecutionListener.EVENTNAME_END, IncrementCounterListener.class.getName())
         .endEvent()
         .done(),
       Bpmn.createExecutableProcess("processTwo")

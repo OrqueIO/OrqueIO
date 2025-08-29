@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -38,7 +38,7 @@ import io.orqueio.bpm.engine.variable.Variables;
 import io.orqueio.bpm.model.bpmn.Bpmn;
 import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
 import io.orqueio.bpm.model.bpmn.instance.SequenceFlow;
-import io.orqueio.bpm.model.bpmn.instance.camunda.CamundaExecutionListener;
+import io.orqueio.bpm.model.bpmn.instance.orqueio.OrqueioExecutionListener;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -53,7 +53,7 @@ public class TargetVariableScopeTest {
   public ProcessEngineTestRule testHelper = new ProcessEngineTestRule(engineRule);
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/variables/scope/TargetVariableScopeTest.testExecutionWithDelegateProcess.bpmn","org/camunda/bpm/engine/test/api/variables/scope/doer.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/variables/scope/TargetVariableScopeTest.testExecutionWithDelegateProcess.bpmn","io/orqueio/bpm/engine/test/api/variables/scope/doer.bpmn"})
   public void testExecutionWithDelegateProcess() {
     // Given we create a new process instance
     VariableMap variables = Variables.createVariables().putValue("orderIds", Arrays.asList(new int[]{1, 2, 3}));
@@ -65,7 +65,7 @@ public class TargetVariableScopeTest {
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/variables/scope/TargetVariableScopeTest.testExecutionWithScriptTargetScope.bpmn","org/camunda/bpm/engine/test/api/variables/scope/doer.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/variables/scope/TargetVariableScopeTest.testExecutionWithScriptTargetScope.bpmn","io/orqueio/bpm/engine/test/api/variables/scope/doer.bpmn"})
   public void testExecutionWithScriptTargetScope () {
     VariableMap variables = Variables.createVariables().putValue("orderIds", Arrays.asList(new int[]{1, 2, 3}));
     ProcessInstance processInstance = engineRule.getRuntimeService().startProcessInstanceByKey("Process_MultiInstanceCallAcitivity",variables);
@@ -76,7 +76,7 @@ public class TargetVariableScopeTest {
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/variables/scope/TargetVariableScopeTest.testExecutionWithoutProperTargetScope.bpmn","org/camunda/bpm/engine/test/api/variables/scope/doer.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/variables/scope/TargetVariableScopeTest.testExecutionWithoutProperTargetScope.bpmn","io/orqueio/bpm/engine/test/api/variables/scope/doer.bpmn"})
   public void testExecutionWithoutProperTargetScope () {
     VariableMap variables = Variables.createVariables().putValue("orderIds", Arrays.asList(new int[]{1, 2, 3}));
     ProcessDefinition processDefinition = engineRule.getRepositoryService().createProcessDefinitionQuery().processDefinitionKey("Process_MultiInstanceCallAcitivity").singleResult();
@@ -91,7 +91,7 @@ public class TargetVariableScopeTest {
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/variables/scope/doer.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/variables/scope/doer.bpmn"})
   public void testWithDelegateVariableMapping () {
     BpmnModelInstance instance = Bpmn.createExecutableProcess("process1")
         .startEvent()
@@ -100,9 +100,9 @@ public class TargetVariableScopeTest {
             .startEvent()
               .callActivity()
                 .calledElement("Process_StuffDoer")
-                .camundaVariableMappingClass("io.orqueio.bpm.engine.test.api.variables.scope.SetVariableMappingDelegate")
+                .orqueioVariableMappingClass("io.orqueio.bpm.engine.test.api.variables.scope.SetVariableMappingDelegate")
               .serviceTask()
-                .camundaClass("io.orqueio.bpm.engine.test.api.variables.scope.AssertVariableScopeDelegate")
+                .orqueioClass("io.orqueio.bpm.engine.test.api.variables.scope.AssertVariableScopeDelegate")
             .endEvent()
           .subProcessDone()
         .endEvent()
@@ -111,8 +111,8 @@ public class TargetVariableScopeTest {
         .activityBuilder("SubProcess_1")
         .multiInstance()
         .parallel()
-        .camundaCollection("orderIds")
-        .camundaElementVariable("orderId")
+        .orqueioCollection("orderIds")
+        .orqueioElementVariable("orderId")
         .done();
 
     ProcessDefinition processDefinition = testHelper.deployAndGetDefinition(instance);
@@ -121,7 +121,7 @@ public class TargetVariableScopeTest {
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/variables/scope/doer.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/variables/scope/doer.bpmn"})
   public void testWithDelegateVariableMappingAndChildScope () {
     BpmnModelInstance instance = Bpmn.createExecutableProcess("process1")
         .startEvent()
@@ -131,9 +131,9 @@ public class TargetVariableScopeTest {
               .startEvent()
               .callActivity()
                 .calledElement("Process_StuffDoer")
-                .camundaVariableMappingClass("io.orqueio.bpm.engine.test.api.variables.scope.SetVariableToChildMappingDelegate")
+                .orqueioVariableMappingClass("io.orqueio.bpm.engine.test.api.variables.scope.SetVariableToChildMappingDelegate")
               .serviceTask()
-                .camundaClass("io.orqueio.bpm.engine.test.api.variables.scope.AssertVariableScopeDelegate")
+                .orqueioClass("io.orqueio.bpm.engine.test.api.variables.scope.AssertVariableScopeDelegate")
               .endEvent()
             .subProcessDone()
           .moveToLastGateway()
@@ -149,8 +149,8 @@ public class TargetVariableScopeTest {
         .activityBuilder("SubProcess_1")
         .multiInstance()
         .parallel()
-        .camundaCollection("orderIds")
-        .camundaElementVariable("orderId")
+        .orqueioCollection("orderIds")
+        .orqueioElementVariable("orderId")
         .done();
 
     ProcessDefinition processDefinition = testHelper.deployAndGetDefinition(instance);
@@ -201,7 +201,7 @@ public class TargetVariableScopeTest {
       .startEvent()
       .serviceTask()
         .id("activityId")
-        .camundaClass(JavaDelegate.class)
+        .orqueioClass(JavaDelegate.class)
       .endEvent()
       .done());
 
@@ -212,7 +212,7 @@ public class TargetVariableScopeTest {
   public void testSetLocalScopeWithExecutionListenerStart() {
     testHelper.deploy(Bpmn.createExecutableProcess("process")
       .startEvent().id("activityId")
-        .camundaExecutionListenerClass(ExecutionListener.EVENTNAME_START, ExecutionListener.class)
+        .orqueioExecutionListenerClass(ExecutionListener.EVENTNAME_START, ExecutionListener.class)
       .endEvent()
       .done());
 
@@ -224,7 +224,7 @@ public class TargetVariableScopeTest {
     testHelper.deploy(Bpmn.createExecutableProcess("process")
       .startEvent()
       .endEvent().id("activityId")
-        .camundaExecutionListenerClass(ExecutionListener.EVENTNAME_END, ExecutionListener.class)
+        .orqueioExecutionListenerClass(ExecutionListener.EVENTNAME_END, ExecutionListener.class)
       .done());
 
     engineRule.getRuntimeService().startProcessInstanceByKey("process");
@@ -238,9 +238,9 @@ public class TargetVariableScopeTest {
       .endEvent()
       .done();
 
-    CamundaExecutionListener listener = modelInstance.newInstance(CamundaExecutionListener.class);
-    listener.setCamundaEvent(ExecutionListener.EVENTNAME_TAKE);
-    listener.setCamundaClass(ExecutionListener.class.getName());
+    OrqueioExecutionListener listener = modelInstance.newInstance(OrqueioExecutionListener.class);
+    listener.setOrqueioEvent(ExecutionListener.EVENTNAME_TAKE);
+    listener.setOrqueioClass(ExecutionListener.class.getName());
     modelInstance.<SequenceFlow>getModelElementById("sequenceFlow").builder().addExtensionElement(listener);
 
     testHelper.deploy(modelInstance);
@@ -252,7 +252,7 @@ public class TargetVariableScopeTest {
     testHelper.deploy(Bpmn.createExecutableProcess("process")
       .startEvent()
       .userTask().id("activityId")
-        .camundaTaskListenerClass(TaskListener.EVENTNAME_CREATE, TaskListener.class)
+        .orqueioTaskListenerClass(TaskListener.EVENTNAME_CREATE, TaskListener.class)
       .endEvent()
       .done());
 
@@ -266,7 +266,7 @@ public class TargetVariableScopeTest {
       .subProcess().embeddedSubProcess()
         .startEvent()
           .serviceTask().id("activityId")
-            .camundaClass(JavaDelegate.class)
+            .orqueioClass(JavaDelegate.class)
         .endEvent()
       .subProcessDone()
       .endEvent()
@@ -281,7 +281,7 @@ public class TargetVariableScopeTest {
       .startEvent()
       .subProcess().embeddedSubProcess()
         .startEvent().id("activityId")
-          .camundaExecutionListenerClass(ExecutionListener.EVENTNAME_START, ExecutionListener.class)
+          .orqueioExecutionListenerClass(ExecutionListener.EVENTNAME_START, ExecutionListener.class)
         .endEvent()
       .subProcessDone()
       .endEvent()
@@ -297,7 +297,7 @@ public class TargetVariableScopeTest {
       .subProcess().embeddedSubProcess()
         .startEvent()
         .endEvent().id("activityId")
-          .camundaExecutionListenerClass(ExecutionListener.EVENTNAME_END, ExecutionListener.class)
+          .orqueioExecutionListenerClass(ExecutionListener.EVENTNAME_END, ExecutionListener.class)
       .subProcessDone()
       .endEvent()
       .done());
@@ -312,7 +312,7 @@ public class TargetVariableScopeTest {
       .subProcess().embeddedSubProcess()
         .startEvent()
         .userTask().id("activityId")
-        .camundaTaskListenerClass(TaskListener.EVENTNAME_CREATE, TaskListener.class)
+        .orqueioTaskListenerClass(TaskListener.EVENTNAME_CREATE, TaskListener.class)
         .endEvent()
       .subProcessDone()
       .endEvent()

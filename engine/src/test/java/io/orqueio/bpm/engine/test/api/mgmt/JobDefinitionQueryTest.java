@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -38,14 +38,14 @@ import org.junit.Test;
  */
 public class JobDefinitionQueryTest extends PluggableProcessEngineTest {
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/JobDefinitionQueryTest.testBase.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/JobDefinitionQueryTest.testBase.bpmn"})
   @Test
   public void testQueryByNoCriteria() {
     JobDefinitionQuery query = managementService.createJobDefinitionQuery();
     verifyQueryResults(query, 4);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/JobDefinitionQueryTest.testBase.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/JobDefinitionQueryTest.testBase.bpmn"})
   @Test
   public void testQueryByJobDefinitionId() {
     JobDefinition jobDefinition = managementService.createJobDefinitionQuery().jobType(TimerStartEventJobHandler.TYPE).singleResult();
@@ -57,7 +57,7 @@ public class JobDefinitionQueryTest extends PluggableProcessEngineTest {
     assertEquals(jobDefinition.getId(), query.singleResult().getId());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/JobDefinitionQueryTest.testBase.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/JobDefinitionQueryTest.testBase.bpmn"})
   @Test
   public void testQueryByInvalidJobDefinitionId() {
     JobDefinitionQuery query = managementService.createJobDefinitionQuery().jobDefinitionId("invalid");
@@ -69,7 +69,7 @@ public class JobDefinitionQueryTest extends PluggableProcessEngineTest {
     } catch (ProcessEngineException e) {}
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/JobDefinitionQueryTest.testBase.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/JobDefinitionQueryTest.testBase.bpmn"})
   @Test
   public void testQueryByActivityId() {
     JobDefinitionQuery query = managementService.createJobDefinitionQuery().activityIdIn("ServiceTask_1");
@@ -85,7 +85,7 @@ public class JobDefinitionQueryTest extends PluggableProcessEngineTest {
     verifyQueryResults(query, 4);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/JobDefinitionQueryTest.testBase.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/JobDefinitionQueryTest.testBase.bpmn"})
   @Test
   public void testQueryByInvalidActivityId() {
     JobDefinitionQuery query = managementService.createJobDefinitionQuery().activityIdIn("invalid");
@@ -102,7 +102,7 @@ public class JobDefinitionQueryTest extends PluggableProcessEngineTest {
     } catch (ProcessEngineException e) {}
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/JobDefinitionQueryTest.testBase.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/JobDefinitionQueryTest.testBase.bpmn"})
   @Test
   public void testQueryByProcessDefinitionId() {
     ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery().singleResult();
@@ -111,7 +111,7 @@ public class JobDefinitionQueryTest extends PluggableProcessEngineTest {
     verifyQueryResults(query, 4);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/JobDefinitionQueryTest.testBase.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/JobDefinitionQueryTest.testBase.bpmn"})
   @Test
   public void testQueryByInvalidDefinitionId() {
     JobDefinitionQuery query = managementService.createJobDefinitionQuery().processDefinitionId("invalid");
@@ -123,7 +123,7 @@ public class JobDefinitionQueryTest extends PluggableProcessEngineTest {
     } catch (ProcessEngineException e) {}
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/JobDefinitionQueryTest.testBase.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/JobDefinitionQueryTest.testBase.bpmn"})
   @Test
   public void testQueryByProcessDefinitionKey() {
     ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery().singleResult();
@@ -132,7 +132,7 @@ public class JobDefinitionQueryTest extends PluggableProcessEngineTest {
     verifyQueryResults(query, 4);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/JobDefinitionQueryTest.testBase.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/JobDefinitionQueryTest.testBase.bpmn"})
   @Test
   public void testQueryByInvalidDefinitionKey() {
     JobDefinitionQuery query = managementService.createJobDefinitionQuery().processDefinitionKey("invalid");
@@ -144,7 +144,7 @@ public class JobDefinitionQueryTest extends PluggableProcessEngineTest {
     } catch (ProcessEngineException e) {}
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/JobDefinitionQueryTest.testBase.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/JobDefinitionQueryTest.testBase.bpmn"})
   @Test
   public void testQueryByJobType() {
     JobDefinitionQuery query = managementService.createJobDefinitionQuery().jobType(AsyncContinuationJobHandler.TYPE);
@@ -160,7 +160,7 @@ public class JobDefinitionQueryTest extends PluggableProcessEngineTest {
     verifyQueryResults(query, 1);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/JobDefinitionQueryTest.testBase.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/JobDefinitionQueryTest.testBase.bpmn"})
   @Test
   public void testQueryByInvalidJobType() {
     JobDefinitionQuery query = managementService.createJobDefinitionQuery().jobType("invalid");
@@ -172,7 +172,7 @@ public class JobDefinitionQueryTest extends PluggableProcessEngineTest {
     } catch (ProcessEngineException e) {}
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/JobDefinitionQueryTest.testBase.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/JobDefinitionQueryTest.testBase.bpmn"})
   @Test
   public void testQueryByInvalidJobConfiguration() {
     JobDefinitionQuery query = managementService.createJobDefinitionQuery().jobConfiguration("invalid");
@@ -184,7 +184,7 @@ public class JobDefinitionQueryTest extends PluggableProcessEngineTest {
     } catch (ProcessEngineException e) {}
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/JobDefinitionQueryTest.testBase.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/JobDefinitionQueryTest.testBase.bpmn"})
   @Test
   public void testQueryByActive() {
     JobDefinitionQuery query = managementService.createJobDefinitionQuery().active();
@@ -219,7 +219,7 @@ public class JobDefinitionQueryTest extends PluggableProcessEngineTest {
     verifyQueryResults(query, 0);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/JobDefinitionQueryTest.testBase.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/JobDefinitionQueryTest.testBase.bpmn"})
   @Test
   public void testQueryBySuspended() {
     JobDefinitionQuery query = managementService.createJobDefinitionQuery().suspended();
@@ -256,7 +256,7 @@ public class JobDefinitionQueryTest extends PluggableProcessEngineTest {
 
   // Pagination //////////////////////////////////////////////////////////
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/JobDefinitionQueryTest.testBase.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/JobDefinitionQueryTest.testBase.bpmn"})
   @Test
   public void testQueryPaging() {
     assertEquals(4, managementService.createJobDefinitionQuery().listPage(0, 4).size());
@@ -267,7 +267,7 @@ public class JobDefinitionQueryTest extends PluggableProcessEngineTest {
 
   // Sorting /////////////////////////////////////////////////////////////
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/JobDefinitionQueryTest.testBase.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/JobDefinitionQueryTest.testBase.bpmn"})
   @Test
   public void testQuerySorting() {
     // asc
@@ -305,7 +305,7 @@ public class JobDefinitionQueryTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/JobDefinitionQueryTest.testBase.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/JobDefinitionQueryTest.testBase.bpmn"})
   @Test
   public void testQueryWithOverridingJobPriority() {
     // given

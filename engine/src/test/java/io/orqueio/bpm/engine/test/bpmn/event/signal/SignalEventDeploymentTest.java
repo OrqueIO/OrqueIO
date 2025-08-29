@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -34,8 +34,8 @@ import org.junit.Test;
  */
 public class SignalEventDeploymentTest extends PluggableProcessEngineTest {
 
-  private static final String SIGNAL_START_EVENT_PROCESS = "org/camunda/bpm/engine/test/bpmn/event/signal/SignalEventTest.signalStartEvent.bpmn20.xml";
-  private static final String SIGNAL_START_EVENT_PROCESS_NEW_VERSION = "org/camunda/bpm/engine/test/bpmn/event/signal/SignalEventTest.signalStartEvent_v2.bpmn20.xml";
+  private static final String SIGNAL_START_EVENT_PROCESS = "io/orqueio/bpm/engine/test/bpmn/event/signal/SignalEventTest.signalStartEvent.bpmn20.xml";
+  private static final String SIGNAL_START_EVENT_PROCESS_NEW_VERSION = "io/orqueio/bpm/engine/test/bpmn/event/signal/SignalEventTest.signalStartEvent_v2.bpmn20.xml";
 
   @Test
   public void testCreateEventSubscriptionOnDeployment() {
@@ -84,8 +84,8 @@ public class SignalEventDeploymentTest extends PluggableProcessEngineTest {
     // given a deployment
     io.orqueio.bpm.engine.repository.Deployment deployment =
         repositoryService.createDeployment()
-          .addClasspathResource("org/camunda/bpm/engine/test/bpmn/event/signal/SignalEventTest.signalStartEvent.bpmn20.xml")
-          .addClasspathResource("org/camunda/bpm/engine/test/bpmn/event/signal/SignalEventTests.throwAlertSignalAsync.bpmn20.xml")
+          .addClasspathResource("io/orqueio/bpm/engine/test/bpmn/event/signal/SignalEventTest.signalStartEvent.bpmn20.xml")
+          .addClasspathResource("io/orqueio/bpm/engine/test/bpmn/event/signal/SignalEventTests.throwAlertSignalAsync.bpmn20.xml")
           .deploy();
 
     // and an active job for asynchronously triggering a signal start event

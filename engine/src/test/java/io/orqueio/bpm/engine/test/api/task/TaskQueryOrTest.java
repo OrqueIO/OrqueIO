@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -604,7 +604,7 @@ public class TaskQueryOrTest {
   public void shouldReturnTasksWithProcessVariableValueNotLikeOrEquals() {
     // given
     BpmnModelInstance aProcessDefinition = Bpmn.createExecutableProcess("process")
-        .camundaHistoryTimeToLive(180)
+        .orqueioHistoryTimeToLive(180)
         .startEvent()
         .userTask()
         .endEvent()
@@ -633,10 +633,10 @@ public class TaskQueryOrTest {
   public void shouldInitializeFormKeys() {
     // given
     BpmnModelInstance aProcessDefinition = Bpmn.createExecutableProcess("aProcessDefinition")
-        .camundaHistoryTimeToLive(180)
+        .orqueioHistoryTimeToLive(180)
         .startEvent()
         .userTask()
-        .camundaFormKey("aFormKey")
+        .orqueioFormKey("aFormKey")
         .endEvent()
         .done();
 
@@ -649,10 +649,10 @@ public class TaskQueryOrTest {
       .startProcessInstanceByKey("aProcessDefinition");
 
     BpmnModelInstance anotherProcessDefinition = Bpmn.createExecutableProcess("anotherProcessDefinition")
-        .camundaHistoryTimeToLive(180)
+        .orqueioHistoryTimeToLive(180)
         .startEvent()
         .userTask()
-          .camundaFormKey("anotherFormKey")
+          .orqueioFormKey("anotherFormKey")
       .endEvent()
       .done();
 
@@ -683,7 +683,7 @@ public class TaskQueryOrTest {
   public void shouldReturnTasksWithProcessDefinitionNameOrProcessDefinitionKey() {
     // given
     BpmnModelInstance aProcessDefinition = Bpmn.createExecutableProcess("aProcessDefinition")
-        .camundaHistoryTimeToLive(180)
+        .orqueioHistoryTimeToLive(180)
         .name("process1")
       .startEvent()
         .userTask()
@@ -698,7 +698,7 @@ public class TaskQueryOrTest {
     runtimeService.startProcessInstanceByKey("aProcessDefinition");
 
     BpmnModelInstance anotherProcessDefinition = Bpmn.createExecutableProcess("anotherProcessDefinition")
-        .camundaHistoryTimeToLive(180)
+        .orqueioHistoryTimeToLive(180)
         .startEvent()
         .userTask()
       .endEvent()
@@ -727,7 +727,7 @@ public class TaskQueryOrTest {
   public void shouldReturnTasksWithProcessInstanceBusinessKeyOrProcessInstanceBusinessKeyLike() {
     // given
     BpmnModelInstance aProcessDefinition = Bpmn.createExecutableProcess("aProcessDefinition")
-        .camundaHistoryTimeToLive(180)
+        .orqueioHistoryTimeToLive(180)
         .startEvent()
         .userTask()
       .endEvent()
@@ -742,7 +742,7 @@ public class TaskQueryOrTest {
       .startProcessInstanceByKey("aProcessDefinition", "aBusinessKey");
 
     BpmnModelInstance anotherProcessDefinition = Bpmn.createExecutableProcess("anotherProcessDefinition")
-        .camundaHistoryTimeToLive(180)
+        .orqueioHistoryTimeToLive(180)
         .startEvent()
         .userTask()
       .endEvent()
@@ -772,7 +772,7 @@ public class TaskQueryOrTest {
   public void shouldReturnTasksWithProcessInstanceBusinessKeyOrProcessInstanceBusinessKeyLikeAndAssignee() {
     // given
     BpmnModelInstance aProcessDefinition = Bpmn.createExecutableProcess("aProcessDefinition")
-        .camundaHistoryTimeToLive(180)
+        .orqueioHistoryTimeToLive(180)
         .startEvent()
         .userTask()
       .endEvent()
@@ -790,7 +790,7 @@ public class TaskQueryOrTest {
     .startProcessInstanceByKey("aProcessDefinition", "aBusinessKey");
 
     BpmnModelInstance anotherProcessDefinition = Bpmn.createExecutableProcess("anotherProcessDefinition")
-        .camundaHistoryTimeToLive(180)
+        .orqueioHistoryTimeToLive(180)
         .startEvent()
         .userTask()
       .endEvent()
@@ -829,7 +829,7 @@ public class TaskQueryOrTest {
   public void shouldReturnTasksWithProcessInstanceBusinessKeyOrProcessInstanceBusinessKeyLikeOrStandaloneAssignee() {
     // given
     BpmnModelInstance aProcessDefinition = Bpmn.createExecutableProcess("aProcessDefinition")
-        .camundaHistoryTimeToLive(180)
+        .orqueioHistoryTimeToLive(180)
         .startEvent()
         .userTask()
       .endEvent()
@@ -878,8 +878,8 @@ public class TaskQueryOrTest {
 
   @Test
   @Deployment(resources={
-    "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn",
-    "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase2.cmmn"})
+    "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn",
+    "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase2.cmmn"})
   public void shouldReturnTasksWithCaseDefinitionKeyCaseDefinitionName() {
     // given
     String caseDefinitionId1 = repositoryService
@@ -916,8 +916,8 @@ public class TaskQueryOrTest {
 
   @Test
   @Deployment(resources={
-    "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn",
-    "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase2.cmmn"})
+    "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn",
+    "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase2.cmmn"})
   public void shouldReturnTasksWithCaseInstanceBusinessKeyOrCaseInstanceBusinessKeyLike() {
     // given
     String caseDefinitionId1 = repositoryService
@@ -956,8 +956,8 @@ public class TaskQueryOrTest {
 
   @Test
   @Deployment(resources={
-    "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn",
-    "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase2.cmmn"})
+    "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn",
+    "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase2.cmmn"})
   public void shouldReturnTasksWithCaseInstanceBusinessKeyOrCaseInstanceBusinessKeyLikeOrStandaloneAssignee() {
     // given
     String caseDefinitionId1 = repositoryService
@@ -1002,7 +1002,7 @@ public class TaskQueryOrTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   public void shouldReturnTasksWithCaseInstanceBusinessKeyOrProcessInstanceBusinessKey() {
     String businessKey = "aBusinessKey";
 

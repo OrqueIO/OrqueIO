@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -122,8 +122,8 @@ public class TaskListenerEventLifecycleTest extends AbstractTaskListenerTest{
     BpmnModelInstance model = Bpmn.createExecutableProcess("process")
         .startEvent()
           .userTask("task")
-            .camundaTaskListenerClass(TaskListener.EVENTNAME_CREATE, RecorderTaskListener.class)
-            .camundaTaskListenerClassTimeoutWithDate(TaskListener.EVENTNAME_TIMEOUT,
+            .orqueioTaskListenerClass(TaskListener.EVENTNAME_CREATE, RecorderTaskListener.class)
+            .orqueioTaskListenerClassTimeoutWithDate(TaskListener.EVENTNAME_TIMEOUT,
                                                      RecorderTaskListener.class,
                                                      sdf.format(now.getTime()))
         .endEvent()
@@ -154,9 +154,9 @@ public class TaskListenerEventLifecycleTest extends AbstractTaskListenerTest{
     BpmnModelInstance model = Bpmn.createExecutableProcess("process")
                                   .startEvent()
                                   .userTask("task")
-                                  .camundaTaskListenerClass(TaskListener.EVENTNAME_CREATE, RecorderTaskListener.class)
-                                  .camundaTaskListenerClass(TaskListener.EVENTNAME_COMPLETE, RecorderTaskListener.class)
-                                  .camundaTaskListenerClassTimeoutWithDate(TaskListener.EVENTNAME_TIMEOUT,
+                                  .orqueioTaskListenerClass(TaskListener.EVENTNAME_CREATE, RecorderTaskListener.class)
+                                  .orqueioTaskListenerClass(TaskListener.EVENTNAME_COMPLETE, RecorderTaskListener.class)
+                                  .orqueioTaskListenerClassTimeoutWithDate(TaskListener.EVENTNAME_TIMEOUT,
                                                                            RecorderTaskListener.class,
                                                                            sdf.format(now.getTime()))
                                   .endEvent()

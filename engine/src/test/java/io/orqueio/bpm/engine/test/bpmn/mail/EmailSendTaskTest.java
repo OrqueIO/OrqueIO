@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -54,8 +54,8 @@ public class EmailSendTaskTest extends EmailTestCase {
     assertEquals(1, messages.size());
 
     WiserMessage message = messages.get(0);
-    assertEmailSend(message, false, "Hello Kermit!", "This a text only e-mail.", "camunda@localhost",
-            Arrays.asList("kermit@camunda.org"), null);
+    assertEmailSend(message, false, "Hello Kermit!", "This a text only e-mail.", "orqueio@localhost",
+            Arrays.asList("kermit@orqueio.io"), null);
   }
 
   @Deployment
@@ -74,9 +74,9 @@ public class EmailSendTaskTest extends EmailTestCase {
     }
     Collections.sort(recipients);
 
-    assertEquals("fozzie@camunda.org", recipients.get(0));
-    assertEquals("kermit@camunda.org", recipients.get(1));
-    assertEquals("mispiggy@camunda.org", recipients.get(2));
+    assertEquals("fozzie@orqueio.io", recipients.get(0));
+    assertEquals("kermit@orqueio.io", recipients.get(1));
+    assertEquals("mispiggy@orqueio.io", recipients.get(2));
   }
 
   @Deployment
@@ -110,8 +110,8 @@ public class EmailSendTaskTest extends EmailTestCase {
     runtimeService.startProcessInstanceByKey("ccAndBcc");
 
     List<WiserMessage> messages = wiser.getMessages();
-    assertEmailSend(messages.get(0), false, "Hello world", "This is the content", "camunda@localhost",
-            Arrays.asList("kermit@camunda.org"), Arrays.asList("fozzie@camunda.org"));
+    assertEmailSend(messages.get(0), false, "Hello world", "This is the content", "orqueio@localhost",
+            Arrays.asList("kermit@orqueio.io"), Arrays.asList("fozzie@orqueio.io"));
 
     // Bcc is not stored in the header (obviously)
     // so the only way to verify the bcc, is that there are three messages send.
@@ -125,7 +125,7 @@ public class EmailSendTaskTest extends EmailTestCase {
 
     List<WiserMessage> messages = wiser.getMessages();
     assertEquals(1, messages.size());
-    assertEmailSend(messages.get(0), true, "Test", "Mr. <b>Kermit</b>", "camunda@localhost", Arrays.asList("kermit@camunda.org"), null);
+    assertEmailSend(messages.get(0), true, "Test", "Mr. <b>Kermit</b>", "orqueio@localhost", Arrays.asList("kermit@orqueio.io"), null);
   }
 
   @Deployment

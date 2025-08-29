@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -36,9 +36,9 @@ import org.junit.Test;
 public class DecisionMetricsTest extends AbstractMetricsTest {
 
   public static final String DECISION_DEFINITION_KEY = "decision";
-  public static final String DRD_DISH_DECISION_TABLE = "org/camunda/bpm/engine/test/dmn/deployment/drdDish.dmn11.xml";
-  public static final String DMN_DECISION_LITERAL_EXPRESSION = "org/camunda/bpm/engine/test/api/dmn/DecisionWithLiteralExpression.dmn";
-  public static final String DMN_FILE = "org/camunda/bpm/engine/test/api/mgmt/metrics/ExecutedDecisionElementsTest.dmn11.xml";
+  public static final String DRD_DISH_DECISION_TABLE = "io/orqueio/bpm/engine/test/dmn/deployment/drdDish.dmn11.xml";
+  public static final String DMN_DECISION_LITERAL_EXPRESSION = "io/orqueio/bpm/engine/test/api/dmn/DecisionWithLiteralExpression.dmn";
+  public static final String DMN_FILE = "io/orqueio/bpm/engine/test/api/mgmt/metrics/ExecutedDecisionElementsTest.dmn11.xml";
   public static VariableMap VARIABLES = Variables.createVariables().putValue("status", "").putValue("sum", 100);
 
   protected DecisionService decisionService;
@@ -75,14 +75,14 @@ public class DecisionMetricsTest extends AbstractMetricsTest {
   @Test
   public void testBusinessRuleTask() {
     BpmnModelInstance modelInstance = Bpmn.createExecutableProcess("testProcess")
-        .camundaHistoryTimeToLive(180)
+        .orqueioHistoryTimeToLive(180)
         .startEvent()
         .businessRuleTask("task")
         .endEvent()
         .done();
 
     BusinessRuleTask task = modelInstance.getModelElementById("task");
-    task.setCamundaDecisionRef("decision");
+    task.setOrqueioDecisionRef("decision");
 
     testRule.deploy(repositoryService.createDeployment()
         .addModelInstance("process.bpmn", modelInstance)

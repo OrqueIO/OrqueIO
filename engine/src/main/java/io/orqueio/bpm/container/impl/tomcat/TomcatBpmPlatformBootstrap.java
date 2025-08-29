@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -38,7 +38,7 @@ import io.orqueio.bpm.engine.ProcessEngine;
 import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
 
 /**
- * <p>Apache Tomcat server listener responsible for deploying the Camunda Platform.</p>
+ * <p>Apache Tomcat server listener responsible for deploying the Orqueio Platform.</p>
  *
  * @author Daniel Meyer
  *
@@ -82,7 +82,7 @@ public class TomcatBpmPlatformBootstrap implements LifecycleListener {
       .addStep(new PlatformXmlStartProcessEnginesStep())
       .execute();
 
-    LOG.camundaBpmPlatformSuccessfullyStarted(server.getServerInfo());
+    LOG.orqueioBpmPlatformSuccessfullyStarted(server.getServerInfo());
 
   }
 
@@ -100,7 +100,7 @@ public class TomcatBpmPlatformBootstrap implements LifecycleListener {
       .addStep(new UnregisterBpmPlatformPluginsStep())
       .execute();
 
-    LOG.camundaBpmPlatformStopped(server.getServerInfo());
+    LOG.orqueioBpmPlatformStopped(server.getServerInfo());
   }
 
 }

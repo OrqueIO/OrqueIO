@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -194,7 +194,7 @@ public class HistoricProcessInstanceStateTest {
     BpmnModelInstance instance = Bpmn.createExecutableProcess(PROCESS_ID)
         .startEvent()
         //add wait state
-        .camundaAsyncAfter()
+        .orqueioAsyncAfter()
         .scriptTask()
         .scriptText("throw new RuntimeException()")
         .scriptFormat("groovy")
@@ -235,7 +235,7 @@ public class HistoricProcessInstanceStateTest {
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/history/HistoricProcessInstanceStateTest.testWithCallActivity.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/history/HistoricProcessInstanceStateTest.testWithCallActivity.bpmn"})
   public void testWithCallActivity() {
     processEngineRule.getRuntimeService().startProcessInstanceByKey("Main_Process");
     assertThat(processEngineRule.getRuntimeService().createProcessInstanceQuery().active().list().size()).isEqualTo(0);
@@ -255,7 +255,7 @@ public class HistoricProcessInstanceStateTest {
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/history/CAM-9934.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/history/CAM-9934.bpmn"})
   public void shouldSetCorrectInstanceStateOnInterruption() {
     // given
     processEngineRule.getRuntimeService().startProcessInstanceByKey("Process_1");
@@ -274,7 +274,7 @@ public class HistoricProcessInstanceStateTest {
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/history/CAM-9934.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/history/CAM-9934.bpmn"})
   public void shouldSetRemovalTimeOnHistoricActivityInstances() {
     // given
     processEngineRule.getProcessEngineConfiguration()

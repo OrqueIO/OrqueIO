@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -26,8 +26,8 @@ import io.orqueio.bpm.engine.impl.core.variable.mapping.value.ParameterValueProv
 import io.orqueio.bpm.engine.impl.el.ExpressionManager;
 import io.orqueio.bpm.model.cmmn.instance.CmmnElement;
 import io.orqueio.bpm.model.cmmn.instance.PlanItemDefinition;
-import io.orqueio.bpm.model.cmmn.instance.camunda.CamundaIn;
-import io.orqueio.bpm.model.cmmn.instance.camunda.CamundaOut;
+import io.orqueio.bpm.model.cmmn.instance.orqueio.OrqueioIn;
+import io.orqueio.bpm.model.cmmn.instance.orqueio.OrqueioOut;
 
 /**
  * @author Roman Smirnov
@@ -55,12 +55,12 @@ public abstract class ProcessOrCaseTaskItemHandler extends CallingTaskItemHandle
   protected void initializeInputParameter(CmmnElement element, CmmnActivity activity, CmmnHandlerContext context, CallableElement callableElement) {
     ExpressionManager expressionManager = context.getExpressionManager();
 
-    List<CamundaIn> inputs = getInputs(element);
+    List<OrqueioIn> inputs = getInputs(element);
 
-    for (CamundaIn input : inputs) {
+    for (OrqueioIn input : inputs) {
 
       // businessKey
-      String businessKey = input.getCamundaBusinessKey();
+      String businessKey = input.getOrqueioBusinessKey();
       if (businessKey != null && !businessKey.isEmpty()) {
         ParameterValueProvider businessKeyValueProvider = createParameterValueProvider(businessKey, expressionManager);
         callableElement.setBusinessKeyValueProvider(businessKeyValueProvider);
@@ -70,28 +70,28 @@ public abstract class ProcessOrCaseTaskItemHandler extends CallingTaskItemHandle
         CallableElementParameter parameter = new CallableElementParameter();
         callableElement.addInput(parameter);
 
-        if (input.getCamundaLocal()) {
+        if (input.getOrqueioLocal()) {
           parameter.setReadLocal(true);
         }
 
         // all variables
-        String variables = input.getCamundaVariables();
+        String variables = input.getOrqueioVariables();
         if ("all".equals(variables)) {
           parameter.setAllVariables(true);
           continue;
         }
 
         // source/sourceExpression
-        String source = input.getCamundaSource();
+        String source = input.getOrqueioSource();
         if (source == null || source.isEmpty()) {
-          source = input.getCamundaSourceExpression();
+          source = input.getOrqueioSourceExpression();
         }
 
         ParameterValueProvider sourceValueProvider = createParameterValueProvider(source, expressionManager);
         parameter.setSourceValueProvider(sourceValueProvider);
 
         // target
-        String target = input.getCamundaTarget();
+        String target = input.getOrqueioTarget();
         parameter.setTarget(target);
       }
     }
@@ -100,44 +100,44 @@ public abstract class ProcessOrCaseTaskItemHandler extends CallingTaskItemHandle
   protected void initializeOutputParameter(CmmnElement element, CmmnActivity activity, CmmnHandlerContext context, CallableElement callableElement) {
     ExpressionManager expressionManager = context.getExpressionManager();
 
-    List<CamundaOut> outputs = getOutputs(element);
+    List<OrqueioOut> outputs = getOutputs(element);
 
-    for (CamundaOut output : outputs) {
+    for (OrqueioOut output : outputs) {
 
       // create new parameter
       CallableElementParameter parameter = new CallableElementParameter();
       callableElement.addOutput(parameter);
 
       // all variables
-      String variables = output.getCamundaVariables();
+      String variables = output.getOrqueioVariables();
       if ("all".equals(variables)) {
         parameter.setAllVariables(true);
         continue;
       }
 
       // source/sourceExpression
-      String source = output.getCamundaSource();
+      String source = output.getOrqueioSource();
       if (source == null || source.isEmpty()) {
-        source = output.getCamundaSourceExpression();
+        source = output.getOrqueioSourceExpression();
       }
 
       ParameterValueProvider sourceValueProvider = createParameterValueProvider(source, expressionManager);
       parameter.setSourceValueProvider(sourceValueProvider);
 
       // target
-      String target = output.getCamundaTarget();
+      String target = output.getOrqueioTarget();
       parameter.setTarget(target);
 
     }
   }
 
-  protected List<CamundaIn> getInputs(CmmnElement element) {
+  protected List<OrqueioIn> getInputs(CmmnElement element) {
     PlanItemDefinition definition = getDefinition(element);
-    return queryExtensionElementsByClass(definition, CamundaIn.class);
+    return queryExtensionElementsByClass(definition, OrqueioIn.class);
   }
 
-  protected List<CamundaOut> getOutputs(CmmnElement element) {
+  protected List<OrqueioOut> getOutputs(CmmnElement element) {
     PlanItemDefinition definition = getDefinition(element);
-    return queryExtensionElementsByClass(definition, CamundaOut.class);
+    return queryExtensionElementsByClass(definition, OrqueioOut.class);
   }
 }

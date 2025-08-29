@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -27,7 +27,7 @@ import io.orqueio.bpm.engine.impl.cmd.DeleteProcessDefinitionsByIdsCmd;
 import io.orqueio.bpm.engine.impl.context.Context;
 import io.orqueio.bpm.engine.impl.dmn.entity.repository.DecisionDefinitionManager;
 import io.orqueio.bpm.engine.impl.dmn.entity.repository.DecisionRequirementsDefinitionManager;
-import io.orqueio.bpm.engine.impl.form.entity.CamundaFormDefinitionManager;
+import io.orqueio.bpm.engine.impl.form.entity.OrqueioFormDefinitionManager;
 import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
 import io.orqueio.bpm.engine.impl.persistence.AbstractManager;
 import io.orqueio.bpm.engine.impl.persistence.deploy.cache.DeploymentCache;
@@ -121,7 +121,7 @@ public class DeploymentManager extends AbstractManager {
     deleteDecisionDeployment(deploymentId, cascade);
     deleteDecisionRequirementDeployment(deploymentId);
 
-    deleteCamundaFormDefinitionDeployment(deploymentId);
+    deleteOrqueioFormDefinitionDeployment(deploymentId);
 
     getResourceManager().deleteResourcesByDeploymentId(deploymentId);
 
@@ -213,19 +213,19 @@ public class DeploymentManager extends AbstractManager {
     }
   }
 
-  protected void deleteCamundaFormDefinitionDeployment(String deploymentId) {
-    CamundaFormDefinitionManager manager = getCamundaFormDefinitionManager();
+  protected void deleteOrqueioFormDefinitionDeployment(String deploymentId) {
+    OrqueioFormDefinitionManager manager = getOrqueioFormDefinitionManager();
 
-    List<CamundaFormDefinitionEntity> camundaFormDefinitions = manager.findDefinitionsByDeploymentId(deploymentId);
+    List<OrqueioFormDefinitionEntity> orqueioFormDefinitions = manager.findDefinitionsByDeploymentId(deploymentId);
 
     // delete definitions from db
-    manager.deleteCamundaFormDefinitionsByDeploymentId(deploymentId);
+    manager.deleteOrqueioFormDefinitionsByDeploymentId(deploymentId);
 
     // delete definitions from deployment cache
     ProcessEngineConfigurationImpl processEngineConfiguration = Context.getProcessEngineConfiguration();
     DeploymentCache deploymentCache = processEngineConfiguration.getDeploymentCache();
-    for (CamundaFormDefinitionEntity camundaFormDefinition : camundaFormDefinitions) {
-      deploymentCache.removeCamundaFormDefinition(camundaFormDefinition.getId());
+    for (OrqueioFormDefinitionEntity orqueioFormDefinition : orqueioFormDefinitions) {
+      deploymentCache.removeOrqueioFormDefinition(orqueioFormDefinition.getId());
     }
   }
 

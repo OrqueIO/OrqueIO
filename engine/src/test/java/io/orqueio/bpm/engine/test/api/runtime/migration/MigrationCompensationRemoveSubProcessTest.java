@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -348,7 +348,7 @@ public class MigrationCompensationRemoveSubProcessTest {
     // given
     ProcessDefinition sourceProcessDefinition = testHelper.deployAndGetDefinition(modify(CompensationModels.COMPENSATION_ONE_TASK_SUBPROCESS_MODEL)
         .activityBuilder("subProcess")
-        .camundaExecutionListenerClass(
+        .orqueioExecutionListenerClass(
             ExecutionListener.EVENTNAME_END,
             RecorderExecutionListener.class.getName())
         .done());
@@ -375,7 +375,7 @@ public class MigrationCompensationRemoveSubProcessTest {
     // given
     ProcessDefinition sourceProcessDefinition = testHelper.deployAndGetDefinition(modify(CompensationModels.COMPENSATION_ONE_TASK_SUBPROCESS_MODEL)
       .activityBuilder("subProcess")
-        .camundaOutputParameter("foo", "${bar}")
+        .orqueioOutputParameter("foo", "${bar}")
       .done());
     ProcessDefinition targetProcessDefinition = testHelper.deployAndGetDefinition(CompensationModels.ONE_COMPENSATION_TASK_MODEL);
 

@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -99,7 +99,7 @@ public class HistoricJobLogQueryTest {
     processEngineConfiguration.setHostname(defaultHostname);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
   @Test
   public void testQuery() {
     runtimeService.startProcessInstanceByKey("process");
@@ -108,7 +108,7 @@ public class HistoricJobLogQueryTest {
     verifyQueryResults(query, 1);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
   @Test
   public void testQueryByLogId() {
     runtimeService.startProcessInstanceByKey("process");
@@ -132,7 +132,7 @@ public class HistoricJobLogQueryTest {
     }
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
   @Test
   public void testQueryByJobId() {
     runtimeService.startProcessInstanceByKey("process");
@@ -156,7 +156,7 @@ public class HistoricJobLogQueryTest {
     }
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
   @Test
   public void testQueryByJobExceptionMessage() {
     runtimeService.startProcessInstanceByKey("process");
@@ -186,7 +186,7 @@ public class HistoricJobLogQueryTest {
     }
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
   @Test
   public void testQueryByFailedActivityId() {
     runtimeService.startProcessInstanceByKey("process");
@@ -234,7 +234,7 @@ public class HistoricJobLogQueryTest {
     }
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
   @Test
   public void testQueryByJobDefinitionId() {
     runtimeService.startProcessInstanceByKey("process");
@@ -258,7 +258,7 @@ public class HistoricJobLogQueryTest {
     }
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
   @Test
   public void testQueryByJobDefinitionType() {
     runtimeService.startProcessInstanceByKey("process");
@@ -281,7 +281,7 @@ public class HistoricJobLogQueryTest {
     }
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
   @Test
   public void testQueryByJobDefinitionConfiguration() {
     runtimeService.startProcessInstanceByKey("process");
@@ -304,7 +304,7 @@ public class HistoricJobLogQueryTest {
     }
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
   @Test
   public void testQueryByActivityId() {
     runtimeService.startProcessInstanceByKey("process");
@@ -345,7 +345,7 @@ public class HistoricJobLogQueryTest {
     }
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
   @Test
   public void testQueryByExecutionId() {
     runtimeService.startProcessInstanceByKey("process");
@@ -387,7 +387,7 @@ public class HistoricJobLogQueryTest {
     }
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
   @Test
   public void testQueryByProcessInstanceId() {
     runtimeService.startProcessInstanceByKey("process");
@@ -411,7 +411,7 @@ public class HistoricJobLogQueryTest {
     }
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
   @Test
   public void testQueryByProcessDefinitionId() {
     runtimeService.startProcessInstanceByKey("process");
@@ -435,7 +435,7 @@ public class HistoricJobLogQueryTest {
     }
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
   @Test
   public void testQueryByProcessDefinitionKey() {
     runtimeService.startProcessInstanceByKey("process");
@@ -459,7 +459,7 @@ public class HistoricJobLogQueryTest {
     }
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
   @Test
   public void testQueryByDeploymentId() {
     runtimeService.startProcessInstanceByKey("process");
@@ -470,7 +470,7 @@ public class HistoricJobLogQueryTest {
     verifyQueryResults(query, 1);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
   @Test
   public void shouldQueryCreateLogByHostname() {
     // given
@@ -497,7 +497,7 @@ public class HistoricJobLogQueryTest {
         .isNotEqualToIgnoringCase(query2.singleResult().getHostname());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
   @Test
   public void shouldQuerySuccessLogByHostname() {
     // given
@@ -524,7 +524,7 @@ public class HistoricJobLogQueryTest {
         .isNotEqualToIgnoringCase(query2.singleResult().getHostname());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
   @Test
   public void shouldQueryFailureLogByHostname() {
     // given
@@ -559,7 +559,7 @@ public class HistoricJobLogQueryTest {
         .isNotEqualToIgnoringCase(query2.singleResult().getHostname());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
   @Test
   public void shouldQueryDeletionLogByHostname() {
     // given
@@ -660,7 +660,7 @@ public class HistoricJobLogQueryTest {
     assertThat(jobLogs.size()).isEqualTo(0);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
   @Test
   public void testQueryByCreationLog() {
     runtimeService.startProcessInstanceByKey("process");
@@ -670,7 +670,7 @@ public class HistoricJobLogQueryTest {
     verifyQueryResults(query, 1);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
   @Test
   public void testQueryByFailureLog() {
     runtimeService.startProcessInstanceByKey("process");
@@ -687,7 +687,7 @@ public class HistoricJobLogQueryTest {
     verifyQueryResults(query, 1);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
   @Test
   public void testQueryBySuccessLog() {
     runtimeService.startProcessInstanceByKey("process", Variables.createVariables().putValue("fail", false));
@@ -699,7 +699,7 @@ public class HistoricJobLogQueryTest {
     verifyQueryResults(query, 1);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
   @Test
   public void testQueryByDeletionLog() {
     String processInstanceId = runtimeService.startProcessInstanceByKey("process").getId();
@@ -710,7 +710,7 @@ public class HistoricJobLogQueryTest {
     verifyQueryResults(query, 1);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
   @Test
   public void testQuerySorting() {
     for (int i = 0; i < 10; i++) {
@@ -889,7 +889,7 @@ public class HistoricJobLogQueryTest {
   verifyQueryWithOrdering(query, 10, inverted(historicJobLogByJobPriority()));
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
   @Test
   public void testQuerySortingPartiallyByOccurrence() {
     String processInstanceId = runtimeService.startProcessInstanceByKey("process").getId();

@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -31,7 +31,7 @@ import com.google.gson.annotations.SerializedName;
 public class InternalsImpl implements Internals {
 
   public static final String SERIALIZED_APPLICATION_SERVER = "application-server";
-  public static final String SERIALIZED_CAMUNDA_INTEGRATION = "camunda-integration";
+  public static final String SERIALIZED_ORQUEIO_INTEGRATION = "orqueio-integration";
   public static final String SERIALIZED_LICENSE_KEY = "license-key";
   public static final String SERIALIZED_DATA_COLLECTION_START_DATE = "data-collection-start-date";
 
@@ -40,8 +40,8 @@ public class InternalsImpl implements Internals {
   protected ApplicationServerImpl applicationServer;
   @SerializedName(value = SERIALIZED_LICENSE_KEY)
   protected LicenseKeyDataImpl licenseKey;
-  @SerializedName(value = SERIALIZED_CAMUNDA_INTEGRATION)
-  protected Set<String> camundaIntegration;
+  @SerializedName(value = SERIALIZED_ORQUEIO_INTEGRATION)
+  protected Set<String> orqueioIntegration;
   @SerializedName(value = SERIALIZED_DATA_COLLECTION_START_DATE)
   protected Date dataCollectionStartDate;
   protected Map<String, Command> commands;
@@ -60,12 +60,12 @@ public class InternalsImpl implements Internals {
     this.licenseKey = licenseKey;
     this.commands = new HashMap<>();
     this.jdk = jdk;
-    this.camundaIntegration = new HashSet<>();
+    this.orqueioIntegration = new HashSet<>();
   }
 
   public InternalsImpl(InternalsImpl internals) {
     this(internals.database, internals.applicationServer, internals.licenseKey, internals.jdk);
-    this.camundaIntegration = internals.camundaIntegration == null ? null : new HashSet<>(internals.getCamundaIntegration());
+    this.orqueioIntegration = internals.orqueioIntegration == null ? null : new HashSet<>(internals.getOrqueioIntegration());
     this.commands = new HashMap<>(internals.getCommands());
     this.metrics = internals.metrics == null ? null : new HashMap<>(internals.getMetrics());
     this.webapps = internals.webapps;
@@ -148,12 +148,12 @@ public class InternalsImpl implements Internals {
   }
 
   @Override
-  public Set<String> getCamundaIntegration() {
-    return camundaIntegration;
+  public Set<String> getOrqueioIntegration() {
+    return orqueioIntegration;
   }
 
-  public void setCamundaIntegration(Set<String> camundaIntegration) {
-    this.camundaIntegration = camundaIntegration;
+  public void setOrqueioIntegration(Set<String> orqueioIntegration) {
+    this.orqueioIntegration = orqueioIntegration;
   }
 
   @Override

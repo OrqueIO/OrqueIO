@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_13kwld3" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="2.0.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:orqueio="http://orqueio.io/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_13kwld3" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Orqueio Modeler" exporterVersion="2.0.0">
   <bpmn:process id="EscalationParentProcess" name="Escalation Parent" isExecutable="true">
     <bpmn:startEvent id="StartEvent_Start" name="start">
       <bpmn:outgoing>SequenceFlow_0lino7x</bpmn:outgoing>
@@ -11,10 +11,10 @@
     <bpmn:sequenceFlow id="SequenceFlow_0az44i0" sourceRef="Task_00akond" targetRef="EndEvent_End" />
     <bpmn:callActivity id="Task_00akond" name="EscalationChildProcess" calledElement="EscalationChildProcess">
       <bpmn:extensionElements>
-        <camunda:in businessKey="#{execution.processBusinessKey}" />
-        <camunda:out source="cancelReason" target="cancelReason" />
-        <camunda:out source="input" target="output" />
-        <camunda:in source="input" target="input" />
+        <orqueio:in businessKey="#{execution.processBusinessKey}" />
+        <orqueio:out source="cancelReason" target="cancelReason" />
+        <orqueio:out source="input" target="output" />
+        <orqueio:in source="input" target="input" />
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_0lino7x</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0az44i0</bpmn:outgoing>

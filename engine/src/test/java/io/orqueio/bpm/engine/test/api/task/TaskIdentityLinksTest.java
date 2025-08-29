@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -51,7 +51,7 @@ public class TaskIdentityLinksTest extends PluggableProcessEngineTest {
   @Rule
   public ProcessEngineLoggingRule loggingRule = new ProcessEngineLoggingRule().level(Level.ERROR);
 
-  @Deployment(resources="org/camunda/bpm/engine/test/api/task/IdentityLinksProcess.bpmn20.xml")
+  @Deployment(resources="io/orqueio/bpm/engine/test/api/task/IdentityLinksProcess.bpmn20.xml")
   @Test
   public void testCandidateUserLink() {
     runtimeService.startProcessInstanceByKey("IdentityLinksProcess");
@@ -81,7 +81,7 @@ public class TaskIdentityLinksTest extends PluggableProcessEngineTest {
     assertEquals(0, taskService.getIdentityLinksForTask(taskId).size());
   }
 
-  @Deployment(resources="org/camunda/bpm/engine/test/api/task/IdentityLinksProcess.bpmn20.xml")
+  @Deployment(resources="io/orqueio/bpm/engine/test/api/task/IdentityLinksProcess.bpmn20.xml")
   @Test
   public void testCandidateGroupLink() {
     try {
@@ -189,7 +189,7 @@ public class TaskIdentityLinksTest extends PluggableProcessEngineTest {
     throw new AssertionError("no task event found with action "+action);
   }
 
-  @Deployment(resources="org/camunda/bpm/engine/test/api/task/IdentityLinksProcess.bpmn20.xml")
+  @Deployment(resources="io/orqueio/bpm/engine/test/api/task/IdentityLinksProcess.bpmn20.xml")
   @Test
   public void testCustomTypeUserLink() {
     runtimeService.startProcessInstanceByKey("IdentityLinksProcess");
@@ -216,7 +216,7 @@ public class TaskIdentityLinksTest extends PluggableProcessEngineTest {
     assertEquals(0, taskService.getIdentityLinksForTask(taskId).size());
   }
 
-  @Deployment(resources="org/camunda/bpm/engine/test/api/task/IdentityLinksProcess.bpmn20.xml")
+  @Deployment(resources="io/orqueio/bpm/engine/test/api/task/IdentityLinksProcess.bpmn20.xml")
   @Test
   public void testCustomLinkGroupLink() {
     runtimeService.startProcessInstanceByKey("IdentityLinksProcess");
@@ -279,10 +279,10 @@ public class TaskIdentityLinksTest extends PluggableProcessEngineTest {
   public void testAssigneeGetIdentityLinksInCompleteListener() {
     // given
     BpmnModelInstance model = Bpmn.createExecutableProcess("process")
-        .camundaHistoryTimeToLive(180)
+        .orqueioHistoryTimeToLive(180)
         .startEvent()
         .userTask("task1")
-        .camundaTaskListenerClass(TaskListener.EVENTNAME_COMPLETE, GetIdentityLinksTaskListener.class.getName())
+        .orqueioTaskListenerClass(TaskListener.EVENTNAME_COMPLETE, GetIdentityLinksTaskListener.class.getName())
         .userTask("task2")
         .endEvent()
         .done();
@@ -310,10 +310,10 @@ public class TaskIdentityLinksTest extends PluggableProcessEngineTest {
   public void testOwnerGetIdentityLinksInCompleteListener() {
     // given
     BpmnModelInstance model = Bpmn.createExecutableProcess("process")
-        .camundaHistoryTimeToLive(180)
+        .orqueioHistoryTimeToLive(180)
         .startEvent()
         .userTask("task1")
-        .camundaTaskListenerClass(TaskListener.EVENTNAME_COMPLETE, GetIdentityLinksTaskListener.class.getName())
+        .orqueioTaskListenerClass(TaskListener.EVENTNAME_COMPLETE, GetIdentityLinksTaskListener.class.getName())
         .userTask("task2")
         .endEvent()
         .done();

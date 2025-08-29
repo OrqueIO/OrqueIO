@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -24,11 +24,11 @@ import java.util.List;
 import io.orqueio.bpm.engine.ProcessEngineException;
 import io.orqueio.bpm.engine.RepositoryService;
 import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import io.orqueio.bpm.engine.repository.CamundaFormDefinition;
+import io.orqueio.bpm.engine.repository.OrqueioFormDefinition;
 import io.orqueio.bpm.engine.repository.Deployment;
 import io.orqueio.bpm.engine.repository.Resource;
 import io.orqueio.bpm.engine.test.ProcessEngineRule;
-import io.orqueio.bpm.engine.test.form.deployment.FindCamundaFormDefinitionsCmd;
+import io.orqueio.bpm.engine.test.form.deployment.FindOrqueioFormDefinitionsCmd;
 import io.orqueio.bpm.engine.test.util.ProcessEngineTestRule;
 import io.orqueio.bpm.engine.test.util.ProvidedProcessEngineRule;
 import org.junit.After;
@@ -37,9 +37,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 
-public class CamundaFormDefinitionStrictParseTest {
+public class OrqueioFormDefinitionStrictParseTest {
 
-  private static final String FORM = "org/camunda/bpm/engine/test/bpmn/CamundaFormDefinitionStrictParseTest.anyForm.form";
+  private static final String FORM = "io/orqueio/bpm/engine/test/bpmn/OrqueioFormDefinitionStrictParseTest.anyForm.form";
 
   public ProcessEngineRule engineRule = new ProvidedProcessEngineRule();
   public ProcessEngineTestRule testRule = new ProcessEngineTestRule(engineRule);
@@ -59,13 +59,13 @@ public class CamundaFormDefinitionStrictParseTest {
 
   @After
   public void reset() {
-    processEngineConfiguration.setDisableStrictCamundaFormParsing(false);
+    processEngineConfiguration.setDisableStrictOrqueioFormParsing(false);
   }
 
   @Test
   public void shouldParseAnyFormFile_strictParsingDisabled() {
     // given
-    processEngineConfiguration.setDisableStrictCamundaFormParsing(true);
+    processEngineConfiguration.setDisableStrictOrqueioFormParsing(true);
 
     // when
     testRule.deploy(FORM);
@@ -80,8 +80,8 @@ public class CamundaFormDefinitionStrictParseTest {
     assertThat(resources.get(0).getName()).isEqualTo(FORM);
 
     // no form definition was created
-    List<CamundaFormDefinition> formDefinitions = engineRule.getProcessEngineConfiguration().getCommandExecutorTxRequired()
-        .execute(new FindCamundaFormDefinitionsCmd());
+    List<OrqueioFormDefinition> formDefinitions = engineRule.getProcessEngineConfiguration().getCommandExecutorTxRequired()
+        .execute(new FindOrqueioFormDefinitionsCmd());
     assertThat(formDefinitions).hasSize(0);
 
   }
@@ -89,13 +89,13 @@ public class CamundaFormDefinitionStrictParseTest {
   @Test
   public void shouldNotParseAnyFormFile_strictParsingEnabled() {
     // given
-    processEngineConfiguration.setDisableStrictCamundaFormParsing(false);
+    processEngineConfiguration.setDisableStrictOrqueioFormParsing(false);
 
     // then deployment fails with an exception
     assertThatThrownBy(() -> {
       testRule.deploy(FORM);
     }).isInstanceOf(ProcessEngineException.class)
-    .hasMessageContaining("ENGINE-09033 Could not parse Camunda Form resource org/camunda/bpm/engine/test/bpmn/CamundaFormDefinitionStrictParseTest.anyForm.form.");
+    .hasMessageContaining("ENGINE-09033 Could not parse Orqueio Form resource io/orqueio/bpm/engine/test/bpmn/OrqueioFormDefinitionStrictParseTest.anyForm.form.");
     assertThat(repositoryService.createDeploymentQuery().list()).hasSize(0);
   }
 }

@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -46,22 +46,22 @@ public class JobExecutorShutdownTest {
   protected static final BpmnModelInstance TWO_ASYNC_TASKS = Bpmn.createExecutableProcess("process")
       .startEvent()
       .serviceTask("task1")
-      .camundaClass(SyncDelegate.class.getName())
-      .camundaAsyncBefore()
-      .camundaExclusive(true)
+      .orqueioClass(SyncDelegate.class.getName())
+      .orqueioAsyncBefore()
+      .orqueioExclusive(true)
       .serviceTask("task2")
-      .camundaClass(SyncDelegate.class.getName())
-      .camundaAsyncBefore()
-      .camundaExclusive(true)
+      .orqueioClass(SyncDelegate.class.getName())
+      .orqueioAsyncBefore()
+      .orqueioExclusive(true)
       .endEvent()
       .done();
 
   protected static final BpmnModelInstance SINGLE_ASYNC_TASK = Bpmn.createExecutableProcess("process")
       .startEvent()
       .serviceTask("task1")
-      .camundaClass(SyncDelegate.class.getName())
-      .camundaAsyncBefore()
-      .camundaExclusive(true)
+      .orqueioClass(SyncDelegate.class.getName())
+      .orqueioAsyncBefore()
+      .orqueioExclusive(true)
       .endEvent()
       .done();
 

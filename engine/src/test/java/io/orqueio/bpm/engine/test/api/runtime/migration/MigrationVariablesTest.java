@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -626,7 +626,7 @@ public class MigrationVariablesTest {
     ProcessDefinition targetProcessDefinition = testHelper.deployAndGetDefinition(
         modify(ProcessModels.PARALLEL_TASK_AND_SUBPROCESS_PROCESS)
         .activityBuilder("subProcess")
-        .camundaInputParameter("foo", "subProcessValue")
+        .orqueioInputParameter("foo", "subProcessValue")
         .done());
 
     MigrationPlan migrationPlan = rule.getRuntimeService().createMigrationPlan(sourceProcessDefinition.getId(), targetProcessDefinition.getId())
@@ -666,7 +666,7 @@ public class MigrationVariablesTest {
     ProcessDefinition sourceProcessDefinition = testHelper.deployAndGetDefinition(ProcessModels.PARALLEL_GATEWAY_PROCESS);
     ProcessDefinition targetProcessDefinition = testHelper.deployAndGetDefinition(
         modify(ProcessModels.PARALLEL_GATEWAY_SUBPROCESS_PROCESS)
-          .activityBuilder("subProcess").camundaInputParameter("foo", "inputOutputValue").done()
+          .activityBuilder("subProcess").orqueioInputParameter("foo", "inputOutputValue").done()
       );
 
     MigrationPlan migrationPlan = rule.getRuntimeService().createMigrationPlan(sourceProcessDefinition.getId(), targetProcessDefinition.getId())

@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -79,7 +79,7 @@ public class ExternalTaskQueryTest extends PluggableProcessEngineTest {
     ClockUtil.reset();
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
   @Test
   public void testSingleResult() {
     // given
@@ -103,21 +103,21 @@ public class ExternalTaskQueryTest extends PluggableProcessEngineTest {
     assertFalse(externalTask.isSuspended());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
   @Test
   public void testList() {
     startInstancesByKey("oneExternalTaskProcess", 5);
     assertEquals(5, externalTaskService.createExternalTaskQuery().list().size());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
   @Test
   public void testCount() {
     startInstancesByKey("oneExternalTaskProcess", 5);
     assertEquals(5, externalTaskService.createExternalTaskQuery().count());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
   @Test
   public void testQueryByLockState() {
     // given
@@ -140,13 +140,13 @@ public class ExternalTaskQueryTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
   @Test
   public void testQueryByProcessDefinitionId() {
     // given
     io.orqueio.bpm.engine.repository.Deployment secondDeployment = repositoryService
       .createDeployment()
-      .addClasspathResource("org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
+      .addClasspathResource("io/orqueio/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
       .deploy();
 
     List<ProcessDefinition> processDefinitions = repositoryService.createProcessDefinitionQuery().list();
@@ -179,7 +179,7 @@ public class ExternalTaskQueryTest extends PluggableProcessEngineTest {
     repositoryService.deleteDeployment(secondDeployment.getId(), true);
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/externaltask/parallelExternalTaskProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/externaltask/parallelExternalTaskProcess.bpmn20.xml")
   @Test
   public void testQueryByActivityId() {
     // given
@@ -198,7 +198,7 @@ public class ExternalTaskQueryTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/externaltask/parallelExternalTaskProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/externaltask/parallelExternalTaskProcess.bpmn20.xml")
   @Test
   public void testQueryByActivityIdIn() {
     // given
@@ -229,7 +229,7 @@ public class ExternalTaskQueryTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/externaltask/parallelExternalTaskProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/externaltask/parallelExternalTaskProcess.bpmn20.xml")
   @Test
   public void testQueryByTopicName() {
     // given
@@ -248,7 +248,7 @@ public class ExternalTaskQueryTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
   @Test
   public void testQueryByProcessInstanceId() {
     // given
@@ -265,7 +265,7 @@ public class ExternalTaskQueryTest extends PluggableProcessEngineTest {
     assertEquals(processInstances.get(0).getId(), task.getProcessInstanceId());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
   @Test
   public void testQueryByLargeListOfProcessInstanceIdIn() {
     // given
@@ -288,7 +288,7 @@ public class ExternalTaskQueryTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
   @Test
   public void testQueryByProcessInstanceIdIn() {
     // given
@@ -330,7 +330,7 @@ public class ExternalTaskQueryTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
   @Test
   public void testQueryByExecutionId() {
     // given
@@ -354,7 +354,7 @@ public class ExternalTaskQueryTest extends PluggableProcessEngineTest {
     assertEquals(executionId, externalTask.getExecutionId());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
   @Test
   public void testQueryByWorkerId() {
     // given
@@ -375,7 +375,7 @@ public class ExternalTaskQueryTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
   @Test
   public void testQueryByLockExpirationTime() {
     // given
@@ -475,8 +475,8 @@ public class ExternalTaskQueryTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml",
-    "org/camunda/bpm/engine/test/api/externaltask/twoExternalTaskProcess.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/api/externaltask/twoExternalTaskProcess.bpmn20.xml"})
   @Test
   public void testQuerySorting() {
 
@@ -529,7 +529,7 @@ public class ExternalTaskQueryTest extends PluggableProcessEngineTest {
     verifySorting(tasks, inverted(externalTaskByLockExpirationTime()));
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
   @Test
   public void testQueryBySuspensionState() {
     // given
@@ -553,7 +553,7 @@ public class ExternalTaskQueryTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
   @Test
   public void testQueryByRetries() {
     // given
@@ -581,7 +581,7 @@ public class ExternalTaskQueryTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
   @Test
   public void testQueryById() {
     // given
@@ -599,7 +599,7 @@ public class ExternalTaskQueryTest extends PluggableProcessEngineTest {
     assertEquals(firstTask.getId(), resultTask.getId());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
   @Test
   public void testQueryByIds() {
     // given
@@ -613,7 +613,7 @@ public class ExternalTaskQueryTest extends PluggableProcessEngineTest {
     assertThat(query.count()).isEqualTo(2L);
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
   @Test
   public void testQueryByIdsWithNull() {
     // given
@@ -627,7 +627,7 @@ public class ExternalTaskQueryTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
   @Test
   public void testQueryByIdsWithEmptyList() {
     // given
@@ -641,7 +641,7 @@ public class ExternalTaskQueryTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
   @Test
   public void testQueryByBusinessKey() {
     // given
@@ -656,7 +656,7 @@ public class ExternalTaskQueryTest extends PluggableProcessEngineTest {
     assertEquals(businessKey, externalTask.getBusinessKey());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
   @Test
   public void testQueryListByBusinessKey() {
     for (int i = 0; i < 5; i++) {
@@ -673,10 +673,10 @@ public class ExternalTaskQueryTest extends PluggableProcessEngineTest {
   @Test
   public void shouldCheckPresenceOfVersionTag() {
     BpmnModelInstance process = Bpmn.createExecutableProcess("process")
-        .camundaVersionTag("1.2.3.4")
+        .orqueioVersionTag("1.2.3.4")
         .startEvent()
         .serviceTask()
-          .camundaExternalTask("my-topic")
+          .orqueioExternalTask("my-topic")
         .endEvent()
         .done();
 

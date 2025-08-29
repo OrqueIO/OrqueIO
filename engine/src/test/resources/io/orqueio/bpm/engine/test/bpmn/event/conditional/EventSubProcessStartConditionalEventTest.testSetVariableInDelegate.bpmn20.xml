@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="1.3.2">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:orqueio="http://orqueio.io/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Orqueio Modeler" exporterVersion="1.3.2">
   <bpmn:process id="conditionalEventProcess" isExecutable="true">
     <bpmn:subProcess id="Task_04vxsn9" triggeredByEvent="true">
       <bpmn:sequenceFlow id="SequenceFlow_1h0k8e4" sourceRef="StartEvent_0aq2oue" targetRef="Task_06rcodd" />
@@ -21,11 +21,11 @@
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>SequenceFlow_1bygmz9</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:serviceTask id="Task_13fi9oe" name="Set Variable" camunda:class="io.orqueio.bpm.engine.test.bpmn.event.conditional.SetVariableDelegate">
+    <bpmn:serviceTask id="Task_13fi9oe" name="Set Variable" orqueio:class="io.orqueio.bpm.engine.test.bpmn.event.conditional.SetVariableDelegate">
       <bpmn:incoming>SequenceFlow_05hw3ji</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0tfp1hc</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:endEvent id="EndEvent_1aq4rsa" camunda:asyncBefore="true">
+    <bpmn:endEvent id="EndEvent_1aq4rsa" orqueio:asyncBefore="true">
       <bpmn:incoming>SequenceFlow_0tfp1hc</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:userTask id="Task_0c66qc5" name="Before Condition">

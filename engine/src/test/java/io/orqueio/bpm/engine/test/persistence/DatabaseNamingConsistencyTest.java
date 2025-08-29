@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -36,9 +36,9 @@ public class DatabaseNamingConsistencyTest {
 
   public static String COLUMN_NAME_REGEX = "([a-zA-Z_]*(?=[a-z]+)[a-zA-Z_]+_)[,\\s]";
   public static String[] SCANNED_FOLDERS = {
-      "org/camunda/bpm/engine/impl/mapping/entity/",
-      "org/camunda/bpm/engine/db/create", "org/camunda/bpm/engine/db/drop",
-      "org/camunda/bpm/engine/db/liquibase/baseline" };
+      "io/orqueio/bpm/engine/impl/mapping/entity/",
+      "io/orqueio/bpm/engine/db/create", "io/orqueio/bpm/engine/db/drop",
+      "io/orqueio/bpm/engine/db/liquibase/baseline" };
 
   @Test
   public void shouldNotFindLowercaseDbColumnNamesInMappings() {

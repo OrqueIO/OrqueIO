@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -93,9 +93,9 @@ import org.junit.Test;
  */
 public class UserOperationLogQueryTest extends AbstractUserOperationLogTest {
 
-  protected static final String ONE_TASK_PROCESS = "org/camunda/bpm/engine/test/history/oneTaskProcess.bpmn20.xml";
-  protected static final String ONE_TASK_CASE = "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn";
-  protected static final String ONE_EXTERNAL_TASK_PROCESS = "org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml";
+  protected static final String ONE_TASK_PROCESS = "io/orqueio/bpm/engine/test/history/oneTaskProcess.bpmn20.xml";
+  protected static final String ONE_TASK_CASE = "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn";
+  protected static final String ONE_EXTERNAL_TASK_PROCESS = "io/orqueio/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml";
 
   private ProcessInstance process;
   private Task userTask;
@@ -773,7 +773,7 @@ public class UserOperationLogQueryTest extends AbstractUserOperationLogTest {
     assertEquals(UserOperationLogEntry.CATEGORY_OPERATOR, activeDefinitionEntry.getCategory());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
   @Test
   public void testQueryJobOperations() {
     // given
@@ -855,7 +855,7 @@ public class UserOperationLogQueryTest extends AbstractUserOperationLogTest {
     assertEquals(UserOperationLogEntry.CATEGORY_OPERATOR, suspendedJobEntry.getCategory());
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/bpmn/async/FoxJobRetryCmdTest.testFailedServiceTask.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/bpmn/async/FoxJobRetryCmdTest.testFailedServiceTask.bpmn20.xml" })
   @Test
   public void testQueryJobRetryOperationsById() {
     // given
@@ -948,7 +948,7 @@ public class UserOperationLogQueryTest extends AbstractUserOperationLogTest {
     });
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testWithOneAsyncServiceTask.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testWithOneAsyncServiceTask.bpmn"})
   @Test
   public void testQueryProcessDefinitionOperationWithDelayedProcessDefinition() {
     // given
@@ -1431,7 +1431,7 @@ public class UserOperationLogQueryTest extends AbstractUserOperationLogTest {
     verifySingleVariableOperationPropertyChange("name", "testVariable", UserOperationLogEntry.OPERATION_TYPE_DELETE_HISTORY);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testQueryDeleteVariableHistoryOperationOnCase() {
     // given
@@ -1449,7 +1449,7 @@ public class UserOperationLogQueryTest extends AbstractUserOperationLogTest {
     verifySingleVariableOperationPropertyChange("name", "myVariable", UserOperationLogEntry.OPERATION_TYPE_DELETE_HISTORY);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testQueryDeleteVariableHistoryOperationOnTaskOfCase() {
     // given

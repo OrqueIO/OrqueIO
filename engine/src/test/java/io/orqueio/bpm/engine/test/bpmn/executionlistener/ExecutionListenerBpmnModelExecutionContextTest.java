@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -16,7 +16,7 @@
  */
 package io.orqueio.bpm.engine.test.bpmn.executionlistener;
 
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_NS;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -219,9 +219,9 @@ public class ExecutionListenerBpmnModelExecutionContextTest extends PluggablePro
 
   private void addExecutionListener(BaseElement element, String eventName) {
     ExtensionElements extensionElements = element.getModelInstance().newInstance(ExtensionElements.class);
-    ModelElementInstance executionListener = extensionElements.addExtensionElement(CAMUNDA_NS, "executionListener");
-    executionListener.setAttributeValueNs(CAMUNDA_NS, "class", ModelExecutionContextExecutionListener.class.getName());
-    executionListener.setAttributeValueNs(CAMUNDA_NS, "event", eventName);
+    ModelElementInstance executionListener = extensionElements.addExtensionElement(ORQUEIO_NS, "executionListener");
+    executionListener.setAttributeValueNs(ORQUEIO_NS, "class", ModelExecutionContextExecutionListener.class.getName());
+    executionListener.setAttributeValueNs(ORQUEIO_NS, "event", eventName);
     element.setExtensionElements(extensionElements);
   }
 

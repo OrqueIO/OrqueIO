@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -72,14 +72,14 @@ public class HistoricRootProcessInstanceTest extends AbstractRemovalTimeTest {
   protected final String CALLED_PROCESS_KEY = "calledProcess";
 
   protected final BpmnModelInstance CALLED_PROCESS = Bpmn.createExecutableProcess(CALLED_PROCESS_KEY)
-      .camundaHistoryTimeToLive(180)
+      .orqueioHistoryTimeToLive(180)
       .startEvent()
       .userTask("userTask")
       .name("userTask")
-      .camundaAssignee("foo")
+      .orqueioAssignee("foo")
       .serviceTask()
-      .camundaAsyncBefore()
-      .camundaClass(FailingDelegate.class.getName())
+      .orqueioAsyncBefore()
+      .orqueioClass(FailingDelegate.class.getName())
       .endEvent()
       .done();
 
@@ -92,14 +92,14 @@ public class HistoricRootProcessInstanceTest extends AbstractRemovalTimeTest {
 
   @Test
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/dmn/deployment/drdDish.dmn11.xml"
+    "io/orqueio/bpm/engine/test/dmn/deployment/drdDish.dmn11.xml"
   })
   public void shouldResolveHistoricDecisionInstance() {
     // given
     testRule.deploy(Bpmn.createExecutableProcess(CALLING_PROCESS_KEY)
     .startEvent()
       .businessRuleTask()
-        .camundaDecisionRef("dish-decision")
+        .orqueioDecisionRef("dish-decision")
     .endEvent().done());
 
     // when
@@ -121,14 +121,14 @@ public class HistoricRootProcessInstanceTest extends AbstractRemovalTimeTest {
 
   @Test
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/dmn/deployment/drdDish.dmn11.xml"
+    "io/orqueio/bpm/engine/test/dmn/deployment/drdDish.dmn11.xml"
   })
   public void shouldResolveHistoricDecisionInputInstance() {
     // given
     testRule.deploy(Bpmn.createExecutableProcess(CALLING_PROCESS_KEY)
     .startEvent()
       .businessRuleTask()
-        .camundaDecisionRef("dish-decision")
+        .orqueioDecisionRef("dish-decision")
     .endEvent().done());
 
     // when
@@ -154,7 +154,7 @@ public class HistoricRootProcessInstanceTest extends AbstractRemovalTimeTest {
 
   @Test
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/dmn/deployment/drdDish.dmn11.xml"
+    "io/orqueio/bpm/engine/test/dmn/deployment/drdDish.dmn11.xml"
   })
   public void shouldNotResolveHistoricDecisionInputInstance() {
     // given
@@ -181,14 +181,14 @@ public class HistoricRootProcessInstanceTest extends AbstractRemovalTimeTest {
 
   @Test
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/dmn/deployment/drdDish.dmn11.xml"
+    "io/orqueio/bpm/engine/test/dmn/deployment/drdDish.dmn11.xml"
   })
   public void shouldResolveHistoricDecisionOutputInstance() {
     // given
     testRule.deploy(Bpmn.createExecutableProcess(CALLING_PROCESS_KEY)
     .startEvent()
       .businessRuleTask()
-        .camundaDecisionRef("dish-decision")
+        .orqueioDecisionRef("dish-decision")
     .endEvent().done());
 
     // when
@@ -213,7 +213,7 @@ public class HistoricRootProcessInstanceTest extends AbstractRemovalTimeTest {
 
   @Test
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/dmn/deployment/drdDish.dmn11.xml"
+    "io/orqueio/bpm/engine/test/dmn/deployment/drdDish.dmn11.xml"
   })
   public void shouldNotResolveHistoricDecisionOutputInstance() {
     // given
@@ -457,7 +457,7 @@ public class HistoricRootProcessInstanceTest extends AbstractRemovalTimeTest {
     // given
     testRule.deploy(Bpmn.createExecutableProcess("calledProcess")
       .startEvent()
-        .serviceTask().camundaExternalTask("anExternalTaskTopic")
+        .serviceTask().orqueioExternalTask("anExternalTaskTopic")
       .endEvent().done());
 
     testRule.deploy(Bpmn.createExecutableProcess("callingProcess")
@@ -561,7 +561,7 @@ public class HistoricRootProcessInstanceTest extends AbstractRemovalTimeTest {
     // given
     testRule.deploy(Bpmn.createExecutableProcess("calledProcess")
       .startEvent()
-        .serviceTask().camundaExternalTask("anExternalTaskTopic")
+        .serviceTask().orqueioExternalTask("anExternalTaskTopic")
       .endEvent().done());
 
     testRule.deploy(Bpmn.createExecutableProcess("callingProcess")
@@ -1073,7 +1073,7 @@ public class HistoricRootProcessInstanceTest extends AbstractRemovalTimeTest {
     // given
     testRule.deploy(Bpmn.createExecutableProcess("calledProcess")
       .startEvent()
-        .serviceTask().camundaExternalTask("aTopicName")
+        .serviceTask().orqueioExternalTask("aTopicName")
       .endEvent().done());
 
     testRule.deploy(Bpmn.createExecutableProcess("callingProcess")
@@ -1106,13 +1106,13 @@ public class HistoricRootProcessInstanceTest extends AbstractRemovalTimeTest {
 
   @Test
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/api/history/testDmnWithPojo.dmn11.xml"
+    "io/orqueio/bpm/engine/test/api/history/testDmnWithPojo.dmn11.xml"
   })
   public void shouldResolveByteArray_DecisionInput() {
     // given
     testRule.deploy(Bpmn.createExecutableProcess(CALLING_PROCESS_KEY)
       .startEvent()
-        .businessRuleTask().camundaDecisionRef("testDecision")
+        .businessRuleTask().orqueioDecisionRef("testDecision")
       .endEvent().done());
 
     // when
@@ -1138,13 +1138,13 @@ public class HistoricRootProcessInstanceTest extends AbstractRemovalTimeTest {
 
   @Test
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/api/history/testDmnWithPojo.dmn11.xml"
+    "io/orqueio/bpm/engine/test/api/history/testDmnWithPojo.dmn11.xml"
   })
   public void shouldResolveByteArray_DecisionOutput() {
     // given
     testRule.deploy(Bpmn.createExecutableProcess(CALLING_PROCESS_KEY)
       .startEvent()
-        .businessRuleTask().camundaDecisionRef("testDecision")
+        .businessRuleTask().orqueioDecisionRef("testDecision")
       .endEvent().done());
 
     // when
@@ -1174,7 +1174,7 @@ public class HistoricRootProcessInstanceTest extends AbstractRemovalTimeTest {
     // given
     testRule.deploy(Bpmn.createExecutableProcess(CALLING_PROCESS_KEY)
       .startEvent()
-        .businessRuleTask().camundaDecisionRef("testDecision")
+        .businessRuleTask().orqueioDecisionRef("testDecision")
       .endEvent().done());
 
     // when

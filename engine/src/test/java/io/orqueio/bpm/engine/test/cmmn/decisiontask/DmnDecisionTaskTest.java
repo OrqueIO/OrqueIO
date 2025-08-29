@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -34,17 +34,17 @@ import org.junit.Test;
  */
 public class DmnDecisionTaskTest extends CmmnTest {
 
-  public static final String CMMN_CALL_DECISION_CONSTANT = "org/camunda/bpm/engine/test/cmmn/decisiontask/DmnDecisionTaskTest.testCallDecisionAsConstant.cmmn";
-  public static final String CMMN_CALL_DECISION_CONSTANT_WITH_MANUAL_ACTIVATION = "org/camunda/bpm/engine/test/cmmn/decisiontask/DmnDecisionTaskTest.testCallDecisionAsConstantWithManualActiovation.cmmn";
-  public static final String CMMN_CALL_DECISION_EXPRESSION = "org/camunda/bpm/engine/test/cmmn/decisiontask/DmnDecisionTaskTest.testCallDecisionAsExpressionStartsWithDollar.cmmn";
-  public static final String CMMN_CALL_DECISION_EXPRESSION_WITH_MANUAL_ACTIVATION = "org/camunda/bpm/engine/test/cmmn/decisiontask/DmnDecisionTaskTest.testCallDecisionAsExpressionStartsWithDollarWithManualActiovation.cmmn";
+  public static final String CMMN_CALL_DECISION_CONSTANT = "io/orqueio/bpm/engine/test/cmmn/decisiontask/DmnDecisionTaskTest.testCallDecisionAsConstant.cmmn";
+  public static final String CMMN_CALL_DECISION_CONSTANT_WITH_MANUAL_ACTIVATION = "io/orqueio/bpm/engine/test/cmmn/decisiontask/DmnDecisionTaskTest.testCallDecisionAsConstantWithManualActiovation.cmmn";
+  public static final String CMMN_CALL_DECISION_EXPRESSION = "io/orqueio/bpm/engine/test/cmmn/decisiontask/DmnDecisionTaskTest.testCallDecisionAsExpressionStartsWithDollar.cmmn";
+  public static final String CMMN_CALL_DECISION_EXPRESSION_WITH_MANUAL_ACTIVATION = "io/orqueio/bpm/engine/test/cmmn/decisiontask/DmnDecisionTaskTest.testCallDecisionAsExpressionStartsWithDollarWithManualActiovation.cmmn";
 
-  public static final String DECISION_OKAY_DMN = "org/camunda/bpm/engine/test/cmmn/decisiontask/DmnDecisionTaskTest.testDecisionOkay.dmn11.xml";
-  public static final String DECISION_NOT_OKAY_DMN = "org/camunda/bpm/engine/test/cmmn/decisiontask/DmnDecisionTaskTest.testDecisionNotOkay.dmn11.xml";
-  public static final String DECISION_POJO_DMN = "org/camunda/bpm/engine/test/cmmn/decisiontask/DmnDecisionTaskTest.testPojo.dmn11.xml";
+  public static final String DECISION_OKAY_DMN = "io/orqueio/bpm/engine/test/cmmn/decisiontask/DmnDecisionTaskTest.testDecisionOkay.dmn11.xml";
+  public static final String DECISION_NOT_OKAY_DMN = "io/orqueio/bpm/engine/test/cmmn/decisiontask/DmnDecisionTaskTest.testDecisionNotOkay.dmn11.xml";
+  public static final String DECISION_POJO_DMN = "io/orqueio/bpm/engine/test/cmmn/decisiontask/DmnDecisionTaskTest.testPojo.dmn11.xml";
 
-  public static final String DECISION_LITERAL_EXPRESSION_DMN = "org/camunda/bpm/engine/test/dmn/deployment/DecisionWithLiteralExpression.dmn";
-  public static final String DRD_DISH_RESOURCE = "org/camunda/bpm/engine/test/dmn/deployment/drdDish.dmn11.xml";
+  public static final String DECISION_LITERAL_EXPRESSION_DMN = "io/orqueio/bpm/engine/test/dmn/deployment/DecisionWithLiteralExpression.dmn";
+  public static final String DRD_DISH_RESOURCE = "io/orqueio/bpm/engine/test/dmn/deployment/drdDish.dmn11.xml";
 
   protected final String CASE_KEY = "case";
   protected final String DECISION_TASK = "PI_DecisionTask_1";
@@ -76,7 +76,7 @@ public class DmnDecisionTaskTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/cmmn/decisiontask/DmnDecisionTaskTest.testCallDecisionAsExpressionStartsWithHash.cmmn",
+      "io/orqueio/bpm/engine/test/cmmn/decisiontask/DmnDecisionTaskTest.testCallDecisionAsExpressionStartsWithHash.cmmn",
       DECISION_OKAY_DMN
     })
   @Test
@@ -90,7 +90,7 @@ public class DmnDecisionTaskTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/cmmn/decisiontask/DmnDecisionTaskTest.testCallLatestDecision.cmmn",
+      "io/orqueio/bpm/engine/test/cmmn/decisiontask/DmnDecisionTaskTest.testCallLatestDecision.cmmn",
       DECISION_OKAY_DMN
     })
   @Test
@@ -111,7 +111,7 @@ public class DmnDecisionTaskTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/cmmn/decisiontask/DmnDecisionTaskTest.testCallDecisionByDeployment.cmmn",
+      "io/orqueio/bpm/engine/test/cmmn/decisiontask/DmnDecisionTaskTest.testCallDecisionByDeployment.cmmn",
       DECISION_OKAY_DMN
     })
   @Test
@@ -132,7 +132,7 @@ public class DmnDecisionTaskTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/cmmn/decisiontask/DmnDecisionTaskTest.testCallDecisionByVersion.cmmn",
+      "io/orqueio/bpm/engine/test/cmmn/decisiontask/DmnDecisionTaskTest.testCallDecisionByVersion.cmmn",
       DECISION_OKAY_DMN
     })
   @Test
@@ -153,7 +153,7 @@ public class DmnDecisionTaskTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/cmmn/decisiontask/DmnDecisionTaskTest.testCallDecisionByVersionAsExpressionStartsWithDollar.cmmn",
+      "io/orqueio/bpm/engine/test/cmmn/decisiontask/DmnDecisionTaskTest.testCallDecisionByVersionAsExpressionStartsWithDollar.cmmn",
       DECISION_OKAY_DMN
     })
   @Test
@@ -174,7 +174,7 @@ public class DmnDecisionTaskTest extends CmmnTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/cmmn/decisiontask/DmnDecisionTaskTest.testCallDecisionByVersionAsExpressionStartsWithHash.cmmn",
+      "io/orqueio/bpm/engine/test/cmmn/decisiontask/DmnDecisionTaskTest.testCallDecisionByVersionAsExpressionStartsWithHash.cmmn",
       DECISION_OKAY_DMN
     })
   @Test

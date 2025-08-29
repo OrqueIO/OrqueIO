@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions 
   xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
-  xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
+  xmlns:orqueio="http://orqueio.io/schema/1.0/bpmn"
   targetNamespace="Examples">
 
   <error id="Error_1" errorCode="error" name="error"/>
@@ -11,7 +11,7 @@
 
     <sequenceFlow sourceRef="theStart" targetRef="serviceTask" />
 
-    <serviceTask id="serviceTask" camunda:class="io.orqueio.bpm.application.impl.event.AsyncThrowErrorService" />
+    <serviceTask id="serviceTask" orqueio:class="io.orqueio.bpm.application.impl.event.AsyncThrowErrorService" />
     <sequenceFlow sourceRef="serviceTask" targetRef="theEnd" />
 
     <boundaryEvent id="errorBoundary" attachedToRef="serviceTask">

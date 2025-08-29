@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -41,7 +41,7 @@ import org.junit.Test;
  */
 public class JobQueryByPriorityTest extends PluggableProcessEngineTest {
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/mgmt/jobPrioExpressionProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/mgmt/jobPrioExpressionProcess.bpmn20.xml")
   @Test
   public void testOrderByPriority() {
     // given five jobs with priorities from 1 to 5
@@ -57,7 +57,7 @@ public class JobQueryByPriorityTest extends PluggableProcessEngineTest {
     verifySortingAndCount(managementService.createJobQuery().orderByJobPriority().desc(), 5, inverted(jobByPriority()));
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/mgmt/jobPrioExpressionProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/mgmt/jobPrioExpressionProcess.bpmn20.xml")
   @Test
   public void testFilterByJobPriorityLowerThanOrEquals() {
     // given five jobs with priorities from 1 to 5
@@ -84,7 +84,7 @@ public class JobQueryByPriorityTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/mgmt/jobPrioExpressionProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/mgmt/jobPrioExpressionProcess.bpmn20.xml")
   @Test
   public void testFilterByJobPriorityLowerThanOrEqualsAndHigherThanOrEqual() {
     // given five jobs with priorities from 1 to 5
@@ -100,7 +100,7 @@ public class JobQueryByPriorityTest extends PluggableProcessEngineTest {
     assertEquals(0, managementService.createJobQuery().priorityLowerThanOrEquals(2).priorityHigherThanOrEquals(3).count());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/mgmt/jobPrioExpressionProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/mgmt/jobPrioExpressionProcess.bpmn20.xml")
   @Test
   public void testFilterByJobPriorityHigherThanOrEquals() {
     // given five jobs with priorities from 1 to 5
@@ -127,7 +127,7 @@ public class JobQueryByPriorityTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/mgmt/jobPrioExpressionProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/mgmt/jobPrioExpressionProcess.bpmn20.xml")
   @Test
   public void testFilterByJobPriorityLowerAndHigher() {
     // given five jobs with priorities from 1 to 5

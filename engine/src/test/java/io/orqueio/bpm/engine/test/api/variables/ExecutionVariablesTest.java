@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -66,7 +66,7 @@ public class ExecutionVariablesTest extends PluggableProcessEngineTest {
     assertEquals(processInstance.getId(), variable.getExecutionId());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/variables/ExecutionVariablesTest.testTreeCompactionWithLocalVariableOnConcurrentExecution.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/variables/ExecutionVariablesTest.testTreeCompactionWithLocalVariableOnConcurrentExecution.bpmn20.xml")
   @Test
   public void testStableVariableInstanceIdsOnCompaction() {
     runtimeService.startProcessInstanceByKey("process");
@@ -98,7 +98,7 @@ public class ExecutionVariablesTest extends PluggableProcessEngineTest {
     assertEquals(variableBeforeCompaction.getId(), variableAfterCompaction.getId());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/variables/ExecutionVariablesTest.testTreeCompactionForkParallelGateway.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/variables/ExecutionVariablesTest.testTreeCompactionForkParallelGateway.bpmn20.xml")
   @Test
   public void testStableVariableInstanceIdsOnCompactionAndExpansion() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("process");
@@ -187,7 +187,7 @@ public class ExecutionVariablesTest extends PluggableProcessEngineTest {
     assertEquals(subProcessScopeExecutionId, variable.getExecutionId());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/variables/ExecutionVariablesTest.testTreeCompactionForkParallelGateway.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/variables/ExecutionVariablesTest.testTreeCompactionForkParallelGateway.bpmn20.xml")
   @Test
   public void testTreeCompactionWithVariablesOnScopeAndConcurrentExecution() {
     // given
@@ -256,7 +256,7 @@ public class ExecutionVariablesTest extends PluggableProcessEngineTest {
     assertEquals(0, runtimeService.createVariableInstanceQuery().count());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/variables/ExecutionVariablesTest.testTreeCompactionForkParallelGateway.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/variables/ExecutionVariablesTest.testTreeCompactionForkParallelGateway.bpmn20.xml")
   @Test
   public void testTreeCompactionAndExpansionWithConcurrentLocalVariables() {
 
@@ -283,7 +283,7 @@ public class ExecutionVariablesTest extends PluggableProcessEngineTest {
     assertEquals(task1.getExecutionId(), variable.getExecutionId());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/variables/ExecutionVariablesTest.testTreeCompactionForkParallelGateway.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/variables/ExecutionVariablesTest.testTreeCompactionForkParallelGateway.bpmn20.xml")
   @Test
   public void testTreeCompactionAndExpansionWithScopeExecutionVariables() {
 

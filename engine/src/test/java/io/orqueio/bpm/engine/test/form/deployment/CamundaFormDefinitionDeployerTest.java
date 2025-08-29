@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -24,9 +24,9 @@ import java.util.List;
 import org.assertj.core.util.Arrays;
 import io.orqueio.bpm.engine.RepositoryService;
 import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import io.orqueio.bpm.engine.repository.CamundaFormDefinition;
+import io.orqueio.bpm.engine.repository.OrqueioFormDefinition;
 import io.orqueio.bpm.engine.test.ProcessEngineRule;
-import io.orqueio.bpm.engine.test.util.CamundaFormUtils;
+import io.orqueio.bpm.engine.test.util.OrqueioFormUtils;
 import io.orqueio.bpm.engine.test.util.ProcessEngineTestRule;
 import io.orqueio.bpm.engine.test.util.ProvidedProcessEngineRule;
 import org.junit.Before;
@@ -39,12 +39,12 @@ import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
 
 @RunWith(Parameterized.class)
-public class CamundaFormDefinitionDeployerTest {
+public class OrqueioFormDefinitionDeployerTest {
 
-  protected static final String BPMN_USER_TASK_FORM_REF_DEPLOYMENT = "org/camunda/bpm/engine/test/form/deployment/CamundaFormDefinitionDeployerTest.shouldDeployProcessWithCamundaFormDefinitionBindingDeployment.bpmn";
-  protected static final String BPMN_USER_TASK_FORM_REF_LATEST = "org/camunda/bpm/engine/test/form/deployment/CamundaFormDefinitionDeployerTest.shouldDeployProcessWithCamundaFormDefinitionBindingLatest.bpmn";
-  protected static final String BPMN_USER_TASK_FORM_REF_VERSION = "org/camunda/bpm/engine/test/form/deployment/CamundaFormDefinitionDeployerTest.shouldDeployProcessWithCamundaFormDefinitionBindingVersion.bpmn";
-  protected static final String SIMPLE_FORM = "org/camunda/bpm/engine/test/form/deployment/CamundaFormDefinitionDeployerTest.simple_form.form";
+  protected static final String BPMN_USER_TASK_FORM_REF_DEPLOYMENT = "io/orqueio/bpm/engine/test/form/deployment/OrqueioFormDefinitionDeployerTest.shouldDeployProcessWithOrqueioFormDefinitionBindingDeployment.bpmn";
+  protected static final String BPMN_USER_TASK_FORM_REF_LATEST = "io/orqueio/bpm/engine/test/form/deployment/OrqueioFormDefinitionDeployerTest.shouldDeployProcessWithOrqueioFormDefinitionBindingLatest.bpmn";
+  protected static final String BPMN_USER_TASK_FORM_REF_VERSION = "io/orqueio/bpm/engine/test/form/deployment/OrqueioFormDefinitionDeployerTest.shouldDeployProcessWithOrqueioFormDefinitionBindingVersion.bpmn";
+  protected static final String SIMPLE_FORM = "io/orqueio/bpm/engine/test/form/deployment/OrqueioFormDefinitionDeployerTest.simple_form.form";
 
   protected ProcessEngineRule engineRule = new ProvidedProcessEngineRule();
   protected ProcessEngineTestRule testRule = new ProcessEngineTestRule(engineRule);
@@ -73,15 +73,15 @@ public class CamundaFormDefinitionDeployerTest {
   }
 
   @Test
-  public void shouldDeployProcessWithCamundaFormDefinition() {
+  public void shouldDeployProcessWithOrqueioFormDefinition() {
     String deploymentId = testRule.deploy(bpmnResource, SIMPLE_FORM).getId();
 
     // there should only be one deployment
     long deploymentCount = repositoryService.createDeploymentQuery().count();
     assertThat(deploymentCount).isEqualTo(1);
 
-    // there should only be one CamundaFormDefinition
-    List<CamundaFormDefinition> definitions = CamundaFormUtils.findAllCamundaFormDefinitionEntities(processEngineConfiguration);
+    // there should only be one OrqueioFormDefinition
+    List<OrqueioFormDefinition> definitions = OrqueioFormUtils.findAllOrqueioFormDefinitionEntities(processEngineConfiguration);
     assertThat(definitions).hasSize(1);
     assertThat(definitions.get(0).getDeploymentId()).isEqualTo(deploymentId);
   }

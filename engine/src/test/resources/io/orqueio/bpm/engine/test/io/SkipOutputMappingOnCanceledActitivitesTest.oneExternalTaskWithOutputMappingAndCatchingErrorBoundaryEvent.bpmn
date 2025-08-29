@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_0823et8" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.0.0-alpha.3">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:orqueio="http://orqueio.io/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_0823et8" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Orqueio Modeler" exporterVersion="4.0.0-alpha.3">
   <bpmn:process id="externalTaskProcess" isExecutable="true">
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>Flow_03j7lb4</bpmn:outgoing>
     </bpmn:startEvent>
     <bpmn:sequenceFlow id="Flow_03j7lb4" sourceRef="StartEvent_1" targetRef="externalTask" />
-    <bpmn:serviceTask id="externalTask" name="externalTask" camunda:type="external" camunda:topic="externalTaskTopic">
+    <bpmn:serviceTask id="externalTask" name="externalTask" orqueio:type="external" orqueio:topic="externalTaskTopic">
       <bpmn:extensionElements>
-        <camunda:inputOutput>
-          <camunda:outputParameter name="foo">${bar}</camunda:outputParameter>
-        </camunda:inputOutput>
+        <orqueio:inputOutput>
+          <orqueio:outputParameter name="foo">${bar}</orqueio:outputParameter>
+        </orqueio:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_03j7lb4</bpmn:incoming>
       <bpmn:outgoing>Flow_17qoz5a</bpmn:outgoing>

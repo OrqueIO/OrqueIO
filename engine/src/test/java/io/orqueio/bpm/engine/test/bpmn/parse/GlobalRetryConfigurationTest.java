@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -125,8 +125,8 @@ public class GlobalRetryConfigurationTest {
       Bpmn.createExecutableProcess("testProcess2")
         .startEvent()
         .serviceTask()
-          .camundaClass(FAILING_CLASS)
-          .camundaAsyncBefore()
+          .orqueioClass(FAILING_CLASS)
+          .orqueioAsyncBefore()
         .endEvent()
       .done());
 
@@ -161,10 +161,10 @@ public class GlobalRetryConfigurationTest {
   public void testRetryOnAsyncStartEvent() throws Exception {
     BpmnModelInstance bpmnModelInstance = Bpmn.createExecutableProcess("process")
         .startEvent()
-          .camundaAsyncBefore()
-          .camundaFailedJobRetryTimeCycle("R5/PT5M")
+          .orqueioAsyncBefore()
+          .orqueioFailedJobRetryTimeCycle("R5/PT5M")
         .serviceTask()
-          .camundaClass("bar")
+          .orqueioClass("bar")
         .endEvent()
         .done();
 
@@ -199,10 +199,10 @@ public class GlobalRetryConfigurationTest {
     BpmnModelInstance modelInstance = Bpmn.createExecutableProcess(PROCESS_ID)
         .startEvent()
           .intermediateThrowEvent(FAILING_EVENT)
-            .camundaAsyncBefore(true)
+            .orqueioAsyncBefore(true)
             .signal("start")
           .serviceTask()
-            .camundaClass(FAILING_CLASS)
+            .orqueioClass(FAILING_CLASS)
         .endEvent()
         .done();
     return modelInstance;
@@ -212,8 +212,8 @@ public class GlobalRetryConfigurationTest {
     BpmnModelInstance modelInstance = Bpmn.createExecutableProcess(PROCESS_ID)
         .startEvent()
         .serviceTask()
-          .camundaClass(FAILING_CLASS)
-          .camundaAsyncBefore()
+          .orqueioClass(FAILING_CLASS)
+          .orqueioAsyncBefore()
         .endEvent()
         .done();
     return modelInstance;
@@ -223,9 +223,9 @@ public class GlobalRetryConfigurationTest {
     BpmnModelInstance modelInstance = Bpmn.createExecutableProcess(PROCESS_ID)
         .startEvent()
         .serviceTask()
-          .camundaClass(FAILING_CLASS)
-          .camundaAsyncBefore()
-          .camundaFailedJobRetryTimeCycle("R10/PT5M")
+          .orqueioClass(FAILING_CLASS)
+          .orqueioAsyncBefore()
+          .orqueioFailedJobRetryTimeCycle("R10/PT5M")
         .endEvent()
         .done();
     return modelInstance;
@@ -235,8 +235,8 @@ public class GlobalRetryConfigurationTest {
     BpmnModelInstance modelInstance = Bpmn.createExecutableProcess(PROCESS_ID)
         .startEvent()
         .businessRuleTask()
-          .camundaClass(FAILING_CLASS)
-          .camundaAsyncBefore()
+          .orqueioClass(FAILING_CLASS)
+          .orqueioAsyncBefore()
         .endEvent()
         .done();
     return modelInstance;
@@ -248,7 +248,7 @@ public class GlobalRetryConfigurationTest {
       .scriptTask()
         .scriptFormat("groovy")
         .scriptText("x = 5 / 0")
-        .camundaAsyncBefore()
+        .orqueioAsyncBefore()
       .userTask()
       .endEvent()
     .done();
@@ -262,8 +262,8 @@ public class GlobalRetryConfigurationTest {
         .embeddedSubProcess()
           .startEvent()
           .serviceTask()
-            .camundaClass(FAILING_CLASS)
-            .camundaAsyncBefore()
+            .orqueioClass(FAILING_CLASS)
+            .orqueioAsyncBefore()
           .endEvent()
       .subProcessDone()
       .endEvent()

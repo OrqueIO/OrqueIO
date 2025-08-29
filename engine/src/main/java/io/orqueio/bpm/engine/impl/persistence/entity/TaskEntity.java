@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -41,7 +41,7 @@ import io.orqueio.bpm.engine.delegate.Expression;
 import io.orqueio.bpm.engine.delegate.TaskListener;
 import io.orqueio.bpm.engine.exception.NotFoundException;
 import io.orqueio.bpm.engine.exception.NullValueException;
-import io.orqueio.bpm.engine.form.CamundaFormRef;
+import io.orqueio.bpm.engine.form.OrqueioFormRef;
 import io.orqueio.bpm.engine.history.UserOperationLogEntry;
 import io.orqueio.bpm.engine.impl.ProcessEngineLogger;
 import io.orqueio.bpm.engine.impl.bpmn.helper.BpmnExceptionHandler;
@@ -65,7 +65,7 @@ import io.orqueio.bpm.engine.impl.db.EnginePersistenceLogger;
 import io.orqueio.bpm.engine.impl.db.HasDbReferences;
 import io.orqueio.bpm.engine.impl.db.HasDbRevision;
 import io.orqueio.bpm.engine.impl.db.entitymanager.DbEntityManager;
-import io.orqueio.bpm.engine.impl.form.CamundaFormRefImpl;
+import io.orqueio.bpm.engine.impl.form.OrqueioFormRefImpl;
 import io.orqueio.bpm.engine.impl.history.event.HistoryEventTypes;
 import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
 import io.orqueio.bpm.engine.impl.interceptor.CommandContextListener;
@@ -161,7 +161,7 @@ public class TaskEntity extends AbstractVariableScope implements Task, DelegateT
   protected String eventName;
   protected boolean isFormKeyInitialized = false;
   protected String formKey;
-  protected CamundaFormRef camundaFormRef;
+  protected OrqueioFormRef orqueioFormRef;
   protected boolean attachmentExists;
   protected boolean commentExists;
 
@@ -1446,18 +1446,18 @@ public class TaskEntity extends AbstractVariableScope implements Task, DelegateT
           this.formKey = (String) formKey.getValue(this);
         } else {
           // initialize form reference
-          Expression formRef = taskDefinition.getCamundaFormDefinitionKey();
-          String formRefBinding = taskDefinition.getCamundaFormDefinitionBinding();
-          Expression formRefVersion = taskDefinition.getCamundaFormDefinitionVersion();
+          Expression formRef = taskDefinition.getOrqueioFormDefinitionKey();
+          String formRefBinding = taskDefinition.getOrqueioFormDefinitionBinding();
+          Expression formRefVersion = taskDefinition.getOrqueioFormDefinitionVersion();
           if (formRef != null && formRefBinding != null) {
             String formRefValue = (String) formRef.getValue(this);
             if (formRefValue != null) {
-              CamundaFormRefImpl camFormRef = new CamundaFormRefImpl(formRefValue, formRefBinding);
+              OrqueioFormRefImpl camFormRef = new OrqueioFormRefImpl(formRefValue, formRefBinding);
               if (formRefBinding.equals(FORM_REF_BINDING_VERSION) && formRefVersion != null) {
                 String formRefVersionValue = (String) formRefVersion.getValue(this);
                 camFormRef.setVersion(Integer.parseInt(formRefVersionValue));
               }
-              this.camundaFormRef = camFormRef;
+              this.orqueioFormRef = camFormRef;
             }
           }
         }
@@ -1478,11 +1478,11 @@ public class TaskEntity extends AbstractVariableScope implements Task, DelegateT
   }
 
   @Override
-  public CamundaFormRef getCamundaFormRef() {
+  public OrqueioFormRef getOrqueioFormRef() {
     if(!isFormKeyInitialized) {
       throw LOG.uninitializedFormKeyException();
     }
-    return camundaFormRef;
+    return orqueioFormRef;
   }
 
   public void setProcessDefinitionId(String processDefinitionId) {

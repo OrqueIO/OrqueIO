@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -101,17 +101,17 @@ public class RemovalTimeStrategyEndTest extends AbstractRemovalTimeTest {
   protected final String CALLED_PROCESS_KEY = "calledProcess";
 
   protected final BpmnModelInstance CALLED_PROCESS = Bpmn.createExecutableProcess(CALLED_PROCESS_KEY)
-      .camundaHistoryTimeToLive(180)
+      .orqueioHistoryTimeToLive(180)
       .startEvent()
       .userTask("userTask")
       .name("userTask")
-      .camundaCandidateUsers("foo")
+      .orqueioCandidateUsers("foo")
       .endEvent()
       .done();
 
   protected final String CALLING_PROCESS_KEY = "callingProcess";
   protected final BpmnModelInstance CALLING_PROCESS = Bpmn.createExecutableProcess(CALLING_PROCESS_KEY)
-    .camundaHistoryTimeToLive(5)
+    .orqueioHistoryTimeToLive(5)
     .startEvent()
       .callActivity()
         .calledElement(CALLED_PROCESS_KEY)
@@ -122,16 +122,16 @@ public class RemovalTimeStrategyEndTest extends AbstractRemovalTimeTest {
 
   @Test
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/dmn/deployment/drdDish.dmn11.xml"
+    "io/orqueio/bpm/engine/test/dmn/deployment/drdDish.dmn11.xml"
   })
   public void shouldResolveHistoricDecisionInstance() {
     // given
     testRule.deploy(Bpmn.createExecutableProcess("process")
-      .camundaHistoryTimeToLive(5)
+      .orqueioHistoryTimeToLive(5)
       .startEvent()
         .businessRuleTask()
-          .camundaAsyncAfter()
-          .camundaDecisionRef("dish-decision")
+          .orqueioAsyncAfter()
+          .orqueioDecisionRef("dish-decision")
       .endEvent().done());
 
     ClockUtil.setCurrentTime(START_DATE);
@@ -167,16 +167,16 @@ public class RemovalTimeStrategyEndTest extends AbstractRemovalTimeTest {
 
   @Test
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/dmn/deployment/drdDish.dmn11.xml"
+    "io/orqueio/bpm/engine/test/dmn/deployment/drdDish.dmn11.xml"
   })
   public void shouldResolveHistoricDecisionInputInstance() {
     // given
     testRule.deploy(Bpmn.createExecutableProcess("process")
-      .camundaHistoryTimeToLive(5)
+      .orqueioHistoryTimeToLive(5)
       .startEvent()
         .businessRuleTask()
-          .camundaAsyncAfter()
-          .camundaDecisionRef("dish-decision")
+          .orqueioAsyncAfter()
+          .orqueioDecisionRef("dish-decision")
       .endEvent().done());
 
     ClockUtil.setCurrentTime(START_DATE);
@@ -220,16 +220,16 @@ public class RemovalTimeStrategyEndTest extends AbstractRemovalTimeTest {
 
   @Test
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/dmn/deployment/drdDish.dmn11.xml"
+    "io/orqueio/bpm/engine/test/dmn/deployment/drdDish.dmn11.xml"
   })
   public void shouldResolveHistoricDecisionOutputInstance() {
     // given
     testRule.deploy(Bpmn.createExecutableProcess("process")
-      .camundaHistoryTimeToLive(5)
+      .orqueioHistoryTimeToLive(5)
       .startEvent()
         .businessRuleTask()
-          .camundaAsyncAfter()
-          .camundaDecisionRef("dish-decision")
+          .orqueioAsyncAfter()
+          .orqueioDecisionRef("dish-decision")
       .endEvent().done());
 
     ClockUtil.setCurrentTime(START_DATE);
@@ -350,9 +350,9 @@ public class RemovalTimeStrategyEndTest extends AbstractRemovalTimeTest {
     int degreeOfParallelism = 30;
 
     testRule.deploy(Bpmn.createExecutableProcess("process")
-        .camundaHistoryTimeToLive(5)
+        .orqueioHistoryTimeToLive(5)
         .startEvent()
-        .serviceTask().camundaExpression("${true}")
+        .serviceTask().orqueioExpression("${true}")
         .endEvent()
         .done());
 
@@ -912,7 +912,7 @@ public class RemovalTimeStrategyEndTest extends AbstractRemovalTimeTest {
     testRule.deploy(Bpmn.createExecutableProcess(CALLED_PROCESS_KEY)
     .startEvent()
       .scriptTask()
-        .camundaAsyncBefore()
+        .orqueioAsyncBefore()
         .scriptFormat("groovy")
         .scriptText("if(execution.getIncidents().size() == 0) throw new RuntimeException()")
       .userTask()
@@ -963,7 +963,7 @@ public class RemovalTimeStrategyEndTest extends AbstractRemovalTimeTest {
     testRule.deploy(Bpmn.createExecutableProcess(CALLED_PROCESS_KEY)
     .startEvent()
       .scriptTask()
-        .camundaAsyncBefore()
+        .orqueioAsyncBefore()
         .scriptFormat("groovy")
         .scriptText("if(execution.getIncidents().size() == 0) throw new RuntimeException()")
       .userTask()
@@ -1029,11 +1029,11 @@ public class RemovalTimeStrategyEndTest extends AbstractRemovalTimeTest {
     // given
     testRule.deploy(Bpmn.createExecutableProcess("calledProcess")
       .startEvent()
-        .serviceTask().camundaExternalTask("anExternalTaskTopic")
+        .serviceTask().orqueioExternalTask("anExternalTaskTopic")
       .endEvent().done());
 
     testRule.deploy(Bpmn.createExecutableProcess("callingProcess")
-      .camundaHistoryTimeToLive(5)
+      .orqueioHistoryTimeToLive(5)
       .startEvent()
         .callActivity()
           .calledElement("calledProcess")
@@ -1075,11 +1075,11 @@ public class RemovalTimeStrategyEndTest extends AbstractRemovalTimeTest {
     // given
     testRule.deploy(Bpmn.createExecutableProcess("calledProcess")
       .startEvent()
-        .serviceTask().camundaExternalTask("anExternalTaskTopic")
+        .serviceTask().orqueioExternalTask("anExternalTaskTopic")
       .endEvent().done());
 
     testRule.deploy(Bpmn.createExecutableProcess("callingProcess")
-      .camundaHistoryTimeToLive(5)
+      .orqueioHistoryTimeToLive(5)
       .startEvent()
         .callActivity()
           .calledElement("calledProcess")
@@ -1110,7 +1110,7 @@ public class RemovalTimeStrategyEndTest extends AbstractRemovalTimeTest {
     testRule.deploy(CALLING_PROCESS);
 
     testRule.deploy(Bpmn.createExecutableProcess(CALLED_PROCESS_KEY)
-      .startEvent().camundaAsyncBefore()
+      .startEvent().orqueioAsyncBefore()
         .userTask("userTask").name("userTask")
       .endEvent().done());
 
@@ -1157,7 +1157,7 @@ public class RemovalTimeStrategyEndTest extends AbstractRemovalTimeTest {
     testRule.deploy(CALLING_PROCESS);
 
     testRule.deploy(Bpmn.createExecutableProcess(CALLED_PROCESS_KEY)
-      .startEvent().camundaAsyncBefore()
+      .startEvent().orqueioAsyncBefore()
         .userTask("userTask").name("userTask")
       .endEvent().done());
 
@@ -1191,7 +1191,7 @@ public class RemovalTimeStrategyEndTest extends AbstractRemovalTimeTest {
     testRule.deploy(CALLING_PROCESS);
 
     testRule.deploy(Bpmn.createExecutableProcess(CALLED_PROCESS_KEY)
-      .startEvent().camundaAsyncBefore()
+      .startEvent().orqueioAsyncBefore()
         .userTask("userTask").name("userTask")
       .endEvent().done());
 
@@ -1234,11 +1234,11 @@ public class RemovalTimeStrategyEndTest extends AbstractRemovalTimeTest {
     // given
     testRule.deploy(Bpmn.createExecutableProcess("calledProcess")
       .startEvent()
-        .serviceTask().camundaExternalTask("anExternalTaskTopic")
+        .serviceTask().orqueioExternalTask("anExternalTaskTopic")
       .endEvent().done());
 
     testRule.deploy(Bpmn.createExecutableProcess("callingProcess")
-      .camundaHistoryTimeToLive(5)
+      .orqueioHistoryTimeToLive(5)
       .startEvent()
         .callActivity()
           .calledElement("calledProcess")
@@ -1898,7 +1898,7 @@ public class RemovalTimeStrategyEndTest extends AbstractRemovalTimeTest {
     testRule.deploy(Bpmn.createExecutableProcess(CALLED_PROCESS_KEY)
       .startEvent()
         .scriptTask()
-          .camundaAsyncBefore()
+          .orqueioAsyncBefore()
           .scriptFormat("groovy")
           .scriptText("if(execution.getIncidents().size() == 0) throw new RuntimeException(\"I'm supposed to fail!\")")
       .endEvent().done());
@@ -1946,11 +1946,11 @@ public class RemovalTimeStrategyEndTest extends AbstractRemovalTimeTest {
     // given
     testRule.deploy(Bpmn.createExecutableProcess("calledProcess")
       .startEvent()
-        .serviceTask().camundaExternalTask("aTopicName")
+        .serviceTask().orqueioExternalTask("aTopicName")
       .endEvent().done());
 
     testRule.deploy(Bpmn.createExecutableProcess("callingProcess")
-      .camundaHistoryTimeToLive(5)
+      .orqueioHistoryTimeToLive(5)
       .startEvent()
         .callActivity()
           .calledElement("calledProcess")
@@ -1992,14 +1992,14 @@ public class RemovalTimeStrategyEndTest extends AbstractRemovalTimeTest {
 
   @Test
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/api/history/testDmnWithPojo.dmn11.xml"
+    "io/orqueio/bpm/engine/test/api/history/testDmnWithPojo.dmn11.xml"
   })
   public void shouldResolveByteArray_DecisionInput() {
     // given
     testRule.deploy(Bpmn.createExecutableProcess(CALLING_PROCESS_KEY)
-      .camundaHistoryTimeToLive(5)
+      .orqueioHistoryTimeToLive(5)
       .startEvent()
-        .businessRuleTask().camundaDecisionRef("testDecision")
+        .businessRuleTask().orqueioDecisionRef("testDecision")
         .userTask()
       .endEvent().done());
 
@@ -2038,16 +2038,16 @@ public class RemovalTimeStrategyEndTest extends AbstractRemovalTimeTest {
 
   @Test
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/api/history/testDmnWithPojo.dmn11.xml"
+    "io/orqueio/bpm/engine/test/api/history/testDmnWithPojo.dmn11.xml"
   })
   public void shouldResolveByteArray_DecisionOutput() {
     // given
     ClockUtil.setCurrentTime(START_DATE);
 
     testRule.deploy(Bpmn.createExecutableProcess(CALLING_PROCESS_KEY)
-      .camundaHistoryTimeToLive(5)
+      .orqueioHistoryTimeToLive(5)
       .startEvent()
-        .businessRuleTask().camundaDecisionRef("testDecision")
+        .businessRuleTask().orqueioDecisionRef("testDecision")
         .userTask()
       .endEvent().done());
 
@@ -2084,16 +2084,16 @@ public class RemovalTimeStrategyEndTest extends AbstractRemovalTimeTest {
 
   @Test
   @Deployment( resources = {
-    "org/camunda/bpm/engine/test/api/history/removaltime/HistoricRootProcessInstanceTest.shouldResolveByteArray_DecisionOutputLiteralExpression.dmn"
+    "io/orqueio/bpm/engine/test/api/history/removaltime/HistoricRootProcessInstanceTest.shouldResolveByteArray_DecisionOutputLiteralExpression.dmn"
   })
   public void shouldResolveByteArray_DecisionOutputLiteralExpression() {
     // given
     ClockUtil.setCurrentTime(START_DATE);
 
     testRule.deploy(Bpmn.createExecutableProcess(CALLING_PROCESS_KEY)
-      .camundaHistoryTimeToLive(5)
+      .orqueioHistoryTimeToLive(5)
       .startEvent()
-        .businessRuleTask().camundaDecisionRef("testDecision")
+        .businessRuleTask().orqueioDecisionRef("testDecision")
         .userTask()
       .endEvent().done());
 
@@ -2207,7 +2207,7 @@ public class RemovalTimeStrategyEndTest extends AbstractRemovalTimeTest {
     testRule.deploy(Bpmn.createExecutableProcess("process")
       .startEvent()
       .userTask()
-        .camundaExecutionListenerClass("end", FailingExecutionListener.class)
+        .orqueioExecutionListenerClass("end", FailingExecutionListener.class)
       .endEvent()
       .done());
 

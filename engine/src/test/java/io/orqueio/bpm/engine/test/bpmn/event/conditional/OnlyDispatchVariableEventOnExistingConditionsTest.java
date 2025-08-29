@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -82,7 +82,7 @@ public class OnlyDispatchVariableEventOnExistingConditionsTest {
     BpmnModelInstance modelInstance = Bpmn.createExecutableProcess(CONDITIONAL_EVENT_PROCESS_KEY)
       .startEvent()
       .serviceTask()
-      .camundaClass(CheckDelayedVariablesDelegate.class.getName())
+      .orqueioClass(CheckDelayedVariablesDelegate.class.getName())
       .intermediateCatchEvent()
       .conditionalEventDefinition()
         .condition("${var==1}")
@@ -106,7 +106,7 @@ public class OnlyDispatchVariableEventOnExistingConditionsTest {
     BpmnModelInstance modelInstance = Bpmn.createExecutableProcess(CONDITIONAL_EVENT_PROCESS_KEY)
       .startEvent()
       .serviceTask()
-      .camundaClass(CheckDelayedVariablesDelegate.class.getName())
+      .orqueioClass(CheckDelayedVariablesDelegate.class.getName())
       .userTask(TASK_WITH_CONDITION_ID)
       .endEvent()
       .done();
@@ -135,7 +135,7 @@ public class OnlyDispatchVariableEventOnExistingConditionsTest {
     BpmnModelInstance modelInstance = Bpmn.createExecutableProcess(CONDITIONAL_EVENT_PROCESS_KEY)
       .startEvent()
       .serviceTask()
-      .camundaClass(CheckDelayedVariablesDelegate.class.getName())
+      .orqueioClass(CheckDelayedVariablesDelegate.class.getName())
       .userTask()
       .endEvent()
       .done();
@@ -166,7 +166,7 @@ public class OnlyDispatchVariableEventOnExistingConditionsTest {
     BpmnModelInstance modelInstance = Bpmn.createExecutableProcess(CONDITIONAL_EVENT_PROCESS_KEY)
       .startEvent()
       .serviceTask()
-      .camundaClass(CheckNoDelayedVariablesDelegate.class.getName())
+      .orqueioClass(CheckNoDelayedVariablesDelegate.class.getName())
       .userTask()
       .endEvent()
       .done();

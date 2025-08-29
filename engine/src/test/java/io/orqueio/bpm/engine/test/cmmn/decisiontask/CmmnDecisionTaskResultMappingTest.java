@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -36,13 +36,13 @@ import org.junit.Test;
  */
 public class CmmnDecisionTaskResultMappingTest extends CmmnTest {
 
-  protected static final String TEST_DECISION = "org/camunda/bpm/engine/test/dmn/result/DmnDecisionResultTest.dmn11.xml";
-  protected static final String SINGLE_ENTRY_MAPPING_CMMN = "org/camunda/bpm/engine/test/cmmn/decisiontask/DmnDecisionTableResultMappingTest.testSingleEntryMapping.cmmn";
-  protected static final String SINGLE_RESULT_MAPPING_CMMN = "org/camunda/bpm/engine/test/cmmn/decisiontask/DmnDecisionTableResultMappingTest.testSingleResultMapping.cmmn";
-  protected static final String COLLECT_ENTRIES_MAPPING_CMMN = "org/camunda/bpm/engine/test/cmmn/decisiontask/DmnDecisionTableResultMappingTest.testCollectEntriesMapping.cmmn";
-  protected static final String RESULT_LIST_MAPPING_CMMN = "org/camunda/bpm/engine/test/cmmn/decisiontask/DmnDecisionTableResultMappingTest.testResultListMapping.cmmn";
-  protected static final String DEFAULT_MAPPING_CMMN = "org/camunda/bpm/engine/test/cmmn/decisiontask/DmnDecisionTableResultMappingTest.testDefaultResultMapping.cmmn";
-  protected static final String OVERRIDE_DECISION_RESULT_CMMN = "org/camunda/bpm/engine/test/cmmn/decisiontask/DmnDecisionTableResultMappingTest.testFailedToOverrideDecisionResultVariable.cmmn";
+  protected static final String TEST_DECISION = "io/orqueio/bpm/engine/test/dmn/result/DmnDecisionResultTest.dmn11.xml";
+  protected static final String SINGLE_ENTRY_MAPPING_CMMN = "io/orqueio/bpm/engine/test/cmmn/decisiontask/DmnDecisionTableResultMappingTest.testSingleEntryMapping.cmmn";
+  protected static final String SINGLE_RESULT_MAPPING_CMMN = "io/orqueio/bpm/engine/test/cmmn/decisiontask/DmnDecisionTableResultMappingTest.testSingleResultMapping.cmmn";
+  protected static final String COLLECT_ENTRIES_MAPPING_CMMN = "io/orqueio/bpm/engine/test/cmmn/decisiontask/DmnDecisionTableResultMappingTest.testCollectEntriesMapping.cmmn";
+  protected static final String RESULT_LIST_MAPPING_CMMN = "io/orqueio/bpm/engine/test/cmmn/decisiontask/DmnDecisionTableResultMappingTest.testResultListMapping.cmmn";
+  protected static final String DEFAULT_MAPPING_CMMN = "io/orqueio/bpm/engine/test/cmmn/decisiontask/DmnDecisionTableResultMappingTest.testDefaultResultMapping.cmmn";
+  protected static final String OVERRIDE_DECISION_RESULT_CMMN = "io/orqueio/bpm/engine/test/cmmn/decisiontask/DmnDecisionTableResultMappingTest.testFailedToOverrideDecisionResultVariable.cmmn";
 
   @Deployment(resources = { SINGLE_ENTRY_MAPPING_CMMN, TEST_DECISION })
   @Test

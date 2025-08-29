@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -23,13 +23,13 @@ import java.util.Set;
 import io.orqueio.bpm.engine.ManagementService;
 
 /**
- * This class represents the structure of data describing Camunda internal
- * metrics and the technical environment in which Camunda is set-up.
+ * This class represents the structure of data describing Orqueio internal
+ * metrics and the technical environment in which Orqueio is set-up.
  *
- * This information is sent to Camunda when telemetry is enabled.
+ * This information is sent to Orqueio when telemetry is enabled.
  *
  * @see <a href=
- *      "https://docs.camunda.org/manual/latest/introduction/telemetry/#collected-data">Camunda
+ *      "https://docs.orqueio.io/manual/latest/introduction/telemetry/#collected-data">Orqueio
  *      Documentation: Collected Telemetry Data</a>
  */
 public interface Internals {
@@ -40,20 +40,20 @@ public interface Internals {
   public Database getDatabase();
 
   /**
-   * Information about the application server Camunda is running on.
+   * Information about the application server Orqueio is running on.
    */
   public ApplicationServer getApplicationServer();
 
   /**
-   * Information about the Camunda license key issued for enterprise editions of
-   * Camunda Platform. May be null when no license is used.
+   * Information about the Orqueio license key issued for enterprise editions of
+   * Orqueio Platform. May be null when no license is used.
    */
   public LicenseKeyData getLicenseKey();
 
   /**
    * The date when the engine started to collect dynamic data, such as command executions
    * and metrics. If telemetry sending is enabled, dynamic data resets on sending the data
-   * to Camunda.
+   * to Orqueio.
    *
    * This method returns a date that represents the date and time when the dynamic data collected
    * for telemetry is reset. Dynamic data and the date returned by this method are reset in three
@@ -62,11 +62,11 @@ public interface Internals {
    * <ul>
    *   <li>At engine startup, the date is set to the current time, even if telemetry is disabled.
    *       It is then only used by the telemetry Query API that returns the currently collected
-   *       data but sending telemetry to Camunda is disabled.</li>
-   *   <li>When sending telemetry to Camunda is enabled after engine start via API (e.g.,
+   *       data but sending telemetry to Orqueio is disabled.</li>
+   *   <li>When sending telemetry to Orqueio is enabled after engine start via API (e.g.,
    *       {@link ManagementService#toggleTelemetry(boolean)}. This call causes the engine to wipe
    *       all dynamic data and therefore the collection date is reset to the current time.</li>
-   *   <li>When sending telemetry to Camunda is enabled, after sending the data, all existing dynamic
+   *   <li>When sending telemetry to Orqueio is enabled, after sending the data, all existing dynamic
    *       data is wiped and therefore the collection date is reset to the current time.</li>
    * </ul>
    *
@@ -76,9 +76,9 @@ public interface Internals {
   public Date getDataCollectionStartDate();
 
   /**
-   * Information about the number of command executions performed by the Camunda
+   * Information about the number of command executions performed by the Orqueio
    * engine. If telemetry sending is enabled, the number of executions per
-   * command resets on sending the data to Camunda. Retrieving the data through
+   * command resets on sending the data to Orqueio. Retrieving the data through
    * {@link ManagementService#getTelemetryData()} will not reset the count.
    */
   public Map<String, Command> getCommands();
@@ -92,20 +92,20 @@ public interface Internals {
    *   <li>The number of executed decision instances.</li>
    *   <li>The number of executed decision elements.</li>
    * </ul>
-   * The metrics reset on sending the data to Camunda. Retrieving the data
+   * The metrics reset on sending the data to Orqueio. Retrieving the data
    * through {@link ManagementService#getTelemetryData()} will not reset the
    * count.
    */
   public Map<String, Metric> getMetrics();
 
   /**
-   * Used Camunda integrations (e.g, Spring boot starter, Camunda Platform Run,
-   * WildFly/JBoss subsystem or Camunda EJB service).
+   * Used Orqueio integrations (e.g, Spring boot starter, Orqueio Platform Run,
+   * WildFly/JBoss subsystem or Orqueio EJB service).
    */
-  public Set<String> getCamundaIntegration();
+  public Set<String> getOrqueioIntegration();
 
   /**
-   * Webapps enabled in the Camunda installation (e.g., cockpit, admin,
+   * Webapps enabled in the Orqueio installation (e.g., cockpit, admin,
    * tasklist).
    */
   public Set<String> getWebapps();

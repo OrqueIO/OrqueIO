@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -44,17 +44,17 @@ import io.orqueio.bpm.engine.impl.util.xml.Element;
 public final class BpmnParseUtil {
 
   /**
-   * Returns the camunda extension element in the camunda namespace
+   * Returns the orqueio extension element in the orqueio namespace
    * and the given name.
    *
     * @param element the parent element of the extension element
    * @param extensionElementName the name of the extension element to find
    * @return the extension element or null if not found
    */
-  public static Element findCamundaExtensionElement(Element element, String extensionElementName) {
+  public static Element findOrqueioExtensionElement(Element element, String extensionElementName) {
     Element extensionElements = element.element("extensionElements");
     if(extensionElements != null) {
-      return extensionElements.elementNS(BpmnParse.CAMUNDA_BPMN_EXTENSIONS_NS, extensionElementName);
+      return extensionElements.elementNS(BpmnParse.ORQUEIO_BPMN_EXTENSIONS_NS, extensionElementName);
     } else {
       return null;
     }
@@ -68,11 +68,11 @@ public final class BpmnParseUtil {
    * @throws BpmnParseException if a input/output parameter element is malformed
    */
   public static IoMapping parseInputOutput(Element element) {
-    Element inputOutputElement = element.elementNS(BpmnParse.CAMUNDA_BPMN_EXTENSIONS_NS, "inputOutput");
+    Element inputOutputElement = element.elementNS(BpmnParse.ORQUEIO_BPMN_EXTENSIONS_NS, "inputOutput");
     if(inputOutputElement != null) {
       IoMapping ioMapping = new IoMapping();
-      parseCamundaInputParameters(inputOutputElement, ioMapping);
-      parseCamundaOutputParameters(inputOutputElement, ioMapping);
+      parseOrqueioInputParameters(inputOutputElement, ioMapping);
+      parseOrqueioOutputParameters(inputOutputElement, ioMapping);
       return ioMapping;
     }
     return null;
@@ -86,8 +86,8 @@ public final class BpmnParseUtil {
    * @param ioMapping the input output mapping to add input parameters to
    * @throws BpmnParseException if a input parameter element is malformed
    */
-  public static void parseCamundaInputParameters(Element inputOutputElement, IoMapping ioMapping) {
-    List<Element> inputParameters = inputOutputElement.elementsNS(BpmnParse.CAMUNDA_BPMN_EXTENSIONS_NS, "inputParameter");
+  public static void parseOrqueioInputParameters(Element inputOutputElement, IoMapping ioMapping) {
+    List<Element> inputParameters = inputOutputElement.elementsNS(BpmnParse.ORQUEIO_BPMN_EXTENSIONS_NS, "inputParameter");
     for (Element inputParameterElement : inputParameters) {
       parseInputParameterElement(inputParameterElement, ioMapping);
     }
@@ -101,8 +101,8 @@ public final class BpmnParseUtil {
    * @param ioMapping the input output mapping to add input parameters to
    * @throws BpmnParseException if a output parameter element is malformed
    */
-  public static void parseCamundaOutputParameters(Element inputOutputElement, IoMapping ioMapping) {
-    List<Element> outputParameters = inputOutputElement.elementsNS(BpmnParse.CAMUNDA_BPMN_EXTENSIONS_NS, "outputParameter");
+  public static void parseOrqueioOutputParameters(Element inputOutputElement, IoMapping ioMapping) {
+    List<Element> outputParameters = inputOutputElement.elementsNS(BpmnParse.ORQUEIO_BPMN_EXTENSIONS_NS, "outputParameter");
     for (Element outputParameterElement : outputParameters) {
       parseOutputParameterElement(outputParameterElement, ioMapping);
     }
@@ -194,7 +194,7 @@ public final class BpmnParseUtil {
 
     // SCRIPT
     if("script".equals(parameterElement.getTagName())) {
-      ExecutableScript executableScript = parseCamundaScript(parameterElement);
+      ExecutableScript executableScript = parseOrqueioScript(parameterElement);
       if (executableScript != null) {
         return new ScriptValueProvider(executableScript);
       }
@@ -215,13 +215,13 @@ public final class BpmnParseUtil {
   }
 
   /**
-   * Parses a camunda script element.
+   * Parses a orqueio script element.
    *
    * @param scriptElement the script element ot parse
    * @return the generated executable script
    * @throws BpmnParseException if the a attribute is missing or the script cannot be processed
    */
-  public static ExecutableScript parseCamundaScript(Element scriptElement) {
+  public static ExecutableScript parseOrqueioScript(Element scriptElement) {
     String scriptLanguage = scriptElement.attribute("scriptFormat");
     if (scriptLanguage == null || scriptLanguage.isEmpty()) {
       throw new BpmnParseException("Missing attribute 'scriptFormat' for 'script' element", scriptElement);
@@ -239,10 +239,10 @@ public final class BpmnParseUtil {
   }
 
 
-  public static Map<String, String> parseCamundaExtensionProperties(Element element){
-    Element propertiesElement = findCamundaExtensionElement(element, "properties");
+  public static Map<String, String> parseOrqueioExtensionProperties(Element element){
+    Element propertiesElement = findOrqueioExtensionElement(element, "properties");
     if(propertiesElement != null) {
-      List<Element> properties = propertiesElement.elementsNS(BpmnParse.CAMUNDA_BPMN_EXTENSIONS_NS, "property");
+      List<Element> properties = propertiesElement.elementsNS(BpmnParse.ORQUEIO_BPMN_EXTENSIONS_NS, "property");
       Map<String, String> propertiesMap = new HashMap<>();
       for (Element property : properties) {
         propertiesMap.put(property.attribute("name"), property.attribute("value"));

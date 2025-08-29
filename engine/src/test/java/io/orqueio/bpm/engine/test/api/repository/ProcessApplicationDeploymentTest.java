@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -133,7 +133,7 @@ public class ProcessApplicationDeploymentTest {
     // given
     ProcessApplicationDeployment deployment = testRule.deploy(repositoryService
         .createDeployment(processApplication.getReference())
-        .addClasspathResource("org/camunda/bpm/engine/test/api/repository/version1.bpmn20.xml"));
+        .addClasspathResource("io/orqueio/bpm/engine/test/api/repository/version1.bpmn20.xml"));
 
     // process is deployed:
     assertThatOneProcessIsDeployed();
@@ -153,7 +153,7 @@ public class ProcessApplicationDeploymentTest {
     testRule.deploy(repositoryService
         .createDeployment(processApplication.getReference())
         .name("deployment")
-        .addClasspathResource("org/camunda/bpm/engine/test/api/repository/version1.bpmn20.xml"));
+        .addClasspathResource("io/orqueio/bpm/engine/test/api/repository/version1.bpmn20.xml"));
 
     assertThatOneProcessIsDeployed();
 
@@ -163,7 +163,7 @@ public class ProcessApplicationDeploymentTest {
         .createDeployment(processApplication.getReference())
         .name("deployment")
         .enableDuplicateFiltering(false)
-        .addClasspathResource("org/camunda/bpm/engine/test/api/repository/version1.bpmn20.xml"));
+        .addClasspathResource("io/orqueio/bpm/engine/test/api/repository/version1.bpmn20.xml"));
 
     // no changes
     assertThatOneProcessIsDeployed();
@@ -326,9 +326,9 @@ public class ProcessApplicationDeploymentTest {
   public void testDuplicateFilteringDefaultBehavior() {
     // given
     BpmnModelInstance oldModel = Bpmn.createExecutableProcess("versionedProcess")
-      .camundaVersionTag("3").done();
+      .orqueioVersionTag("3").done();
     BpmnModelInstance newModel = Bpmn.createExecutableProcess("versionedProcess")
-      .camundaVersionTag("1").done();
+      .orqueioVersionTag("1").done();
 
     testRule.deploy(repositoryService.createDeployment(processApplication.getReference())
       .enableDuplicateFiltering(true)
@@ -351,9 +351,9 @@ public class ProcessApplicationDeploymentTest {
     // given
     processEngineConfiguration.setDeploymentHandlerFactory( customDeploymentHandlerFactory);
     BpmnModelInstance oldModel = Bpmn.createExecutableProcess("versionedProcess")
-      .camundaVersionTag("1").startEvent().done();
+      .orqueioVersionTag("1").startEvent().done();
     BpmnModelInstance newModel = Bpmn.createExecutableProcess("versionedProcess")
-      .camundaVersionTag("3").startEvent().done();
+      .orqueioVersionTag("3").startEvent().done();
 
     Deployment deployment1 = testRule.deploy(
         repositoryService
@@ -410,7 +410,7 @@ public class ProcessApplicationDeploymentTest {
     testRule.deploy(repositoryService
         .createDeployment(processApplication.getReference())
         .name("deployment")
-        .addClasspathResource("org/camunda/bpm/engine/test/api/repository/version1.bpmn20.xml"));
+        .addClasspathResource("io/orqueio/bpm/engine/test/api/repository/version1.bpmn20.xml"));
 
     assertThatOneProcessIsDeployed();
 
@@ -420,7 +420,7 @@ public class ProcessApplicationDeploymentTest {
         .name("deployment")
         .enableDuplicateFiltering(false)
         .resumePreviousVersions()
-        .addClasspathResource("org/camunda/bpm/engine/test/api/repository/version2.bpmn20.xml"));
+        .addClasspathResource("io/orqueio/bpm/engine/test/api/repository/version2.bpmn20.xml"));
 
     List<ProcessDefinition> processDefinitions = repositoryService.createProcessDefinitionQuery()
         .orderByProcessDefinitionVersion()
@@ -443,7 +443,7 @@ public class ProcessApplicationDeploymentTest {
     testRule.deploy(repositoryService
         .createDeployment(processApplication.getReference())
         .name("deployment")
-        .addClasspathResource("org/camunda/bpm/engine/test/api/repository/version1.bpmn20.xml"));
+        .addClasspathResource("io/orqueio/bpm/engine/test/api/repository/version1.bpmn20.xml"));
 
     assertThatOneProcessIsDeployed();
 
@@ -452,7 +452,7 @@ public class ProcessApplicationDeploymentTest {
         .createDeployment(processApplication.getReference())
         .name("deployment")
         .resumePreviousVersions()
-        .addClasspathResource("org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"));
+        .addClasspathResource("io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"));
 
     List<ProcessDefinition> processDefinitions = repositoryService.createProcessDefinitionQuery()
         .orderByProcessDefinitionVersion()
@@ -500,11 +500,11 @@ public class ProcessApplicationDeploymentTest {
     // given
     processEngineConfiguration.setDeploymentHandlerFactory(customDeploymentHandlerFactory);
     BpmnModelInstance oldModel = Bpmn.createExecutableProcess("process")
-        .camundaVersionTag("1")
+        .orqueioVersionTag("1")
         .startEvent()
         .done();
     BpmnModelInstance newModel = Bpmn.createExecutableProcess("process")
-        .camundaVersionTag("3")
+        .orqueioVersionTag("3")
         .startEvent()
         .done();
 
@@ -547,7 +547,7 @@ public class ProcessApplicationDeploymentTest {
     testRule.deploy(repositoryService
         .createDeployment(processApplication.getReference())
         .name("deployment")
-        .addClasspathResource("org/camunda/bpm/engine/test/api/repository/version1.bpmn20.xml"));
+        .addClasspathResource("io/orqueio/bpm/engine/test/api/repository/version1.bpmn20.xml"));
 
     assertThatOneProcessIsDeployed();
 
@@ -556,7 +556,7 @@ public class ProcessApplicationDeploymentTest {
         .createDeployment(processApplication.getReference())
         .name("deployment")
         .enableDuplicateFiltering(false)
-        .addClasspathResource("org/camunda/bpm/engine/test/api/repository/version2.bpmn20.xml"));
+        .addClasspathResource("io/orqueio/bpm/engine/test/api/repository/version2.bpmn20.xml"));
 
     List<ProcessDefinition> processDefinitions = repositoryService.createProcessDefinitionQuery()
         .orderByProcessDefinitionVersion()
@@ -579,7 +579,7 @@ public class ProcessApplicationDeploymentTest {
     testRule.deploy(repositoryService
         .createDeployment(processApplication.getReference())
         .name("deployment")
-        .addClasspathResource("org/camunda/bpm/engine/test/api/repository/version1.bpmn20.xml"));
+        .addClasspathResource("io/orqueio/bpm/engine/test/api/repository/version1.bpmn20.xml"));
 
     assertThatOneProcessIsDeployed();
 
@@ -590,7 +590,7 @@ public class ProcessApplicationDeploymentTest {
         .enableDuplicateFiltering(false)
         .resumePreviousVersions()
         .resumePreviousVersionsBy(ResumePreviousBy.RESUME_BY_DEPLOYMENT_NAME)
-        .addClasspathResource("org/camunda/bpm/engine/test/api/repository/version2.bpmn20.xml"));
+        .addClasspathResource("io/orqueio/bpm/engine/test/api/repository/version2.bpmn20.xml"));
 
     List<ProcessDefinition> processDefinitions = repositoryService.createProcessDefinitionQuery()
         .orderByProcessDefinitionVersion()
@@ -611,9 +611,9 @@ public class ProcessApplicationDeploymentTest {
   public void testProcessApplicationDeploymentResumePreviousVersionsByDeploymentNameCustomBehavior() {
     // given
     BpmnModelInstance oldProcess =
-        Bpmn.createExecutableProcess("process").camundaVersionTag("1").startEvent().done();
+        Bpmn.createExecutableProcess("process").orqueioVersionTag("1").startEvent().done();
     BpmnModelInstance newProcess =
-        Bpmn.createExecutableProcess("process").camundaVersionTag("2").startEvent().done();
+        Bpmn.createExecutableProcess("process").orqueioVersionTag("2").startEvent().done();
 
     // set custom deployment handler
     processEngineConfiguration.setDeploymentHandlerFactory(customDeploymentHandlerFactory);
@@ -748,7 +748,7 @@ public class ProcessApplicationDeploymentTest {
     testRule.deploy(repositoryService
         .createDeployment(processApplication.getReference())
         .name("deployment")
-        .addClasspathResource("org/camunda/bpm/engine/test/api/repository/version1.bpmn20.xml"));
+        .addClasspathResource("io/orqueio/bpm/engine/test/api/repository/version1.bpmn20.xml"));
 
     deploymentCache.discardProcessDefinitionCache();
 
@@ -758,7 +758,7 @@ public class ProcessApplicationDeploymentTest {
         .name("deployment")
         .enableDuplicateFiltering(false)
         .resumePreviousVersions()
-        .addClasspathResource("org/camunda/bpm/engine/test/api/repository/version2.bpmn20.xml"));
+        .addClasspathResource("io/orqueio/bpm/engine/test/api/repository/version2.bpmn20.xml"));
 
     // then the cache is still empty
     assertTrue(deploymentCache.getBpmnModelInstanceCache().isEmpty());

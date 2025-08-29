@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -35,22 +35,22 @@ public class ProcessEngineInitializationTest {
   public void testNoTables() {
     try {
       ProcessEngineConfiguration
-      .createProcessEngineConfigurationFromResource("org/camunda/bpm/engine/test/standalone/initialization/notables.camunda.cfg.xml")
+      .createProcessEngineConfigurationFromResource("io/orqueio/bpm/engine/test/standalone/initialization/notables.orqueio.cfg.xml")
         .buildProcessEngine();
       fail("expected exception");
     } catch (Exception e) {
       // OK
-      assertThat(e.getMessage()).contains("ENGINE-03057 There are no Camunda tables in the database. " +
+      assertThat(e.getMessage()).contains("ENGINE-03057 There are no Orqueio tables in the database. " +
         "Hint: Set <property name=\"databaseSchemaUpdate\" to value=\"true\" or value=\"create-drop\" " +
         "(use create-drop for testing only!) in bean processEngineConfiguration " +
-        "in camunda.cfg.xml for automatic schema creation");
+        "in orqueio.cfg.xml for automatic schema creation");
     }
   }
 
   @Test
   public void testDefaultRetries() {
     ProcessEngineConfiguration configuration = ProcessEngineConfiguration
-      .createProcessEngineConfigurationFromResource("org/camunda/bpm/engine/test/standalone/initialization/defaultretries.camunda.cfg.xml");
+      .createProcessEngineConfigurationFromResource("io/orqueio/bpm/engine/test/standalone/initialization/defaultretries.orqueio.cfg.xml");
 
     assertEquals(JobEntity.DEFAULT_RETRIES, configuration.getDefaultNumberOfRetries());
   }
@@ -58,7 +58,7 @@ public class ProcessEngineInitializationTest {
   @Test
   public void testCustomDefaultRetries() {
     ProcessEngineConfiguration configuration = ProcessEngineConfiguration
-      .createProcessEngineConfigurationFromResource("org/camunda/bpm/engine/test/standalone/initialization/customdefaultretries.camunda.cfg.xml");
+      .createProcessEngineConfigurationFromResource("io/orqueio/bpm/engine/test/standalone/initialization/customdefaultretries.orqueio.cfg.xml");
 
     assertEquals(5, configuration.getDefaultNumberOfRetries());
   }

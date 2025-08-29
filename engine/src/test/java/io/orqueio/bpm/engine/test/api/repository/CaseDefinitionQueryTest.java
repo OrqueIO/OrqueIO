@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -39,15 +39,15 @@ public class CaseDefinitionQueryTest extends AbstractDefinitionQueryTest {
   private String deploymentThreeId;
 
   protected String getResourceOnePath() {
-    return "org/camunda/bpm/engine/test/repository/one.cmmn";
+    return "io/orqueio/bpm/engine/test/repository/one.cmmn";
   }
 
   protected String getResourceTwoPath() {
-    return "org/camunda/bpm/engine/test/repository/two.cmmn";
+    return "io/orqueio/bpm/engine/test/repository/two.cmmn";
   }
 
   protected String getResourceThreePath() {
-    return "org/camunda/bpm/engine/test/api/repository/three_.cmmn";
+    return "io/orqueio/bpm/engine/test/api/repository/three_.cmmn";
   }
 
   @Before
@@ -76,7 +76,7 @@ public class CaseDefinitionQueryTest extends AbstractDefinitionQueryTest {
     assertThat(caseDefinition.getId()).startsWith("one:1");
     assertThat(caseDefinition.getCategory()).isEqualTo("Examples");
     assertThat(caseDefinition.getVersion()).isEqualTo(1);
-    assertThat(caseDefinition.getResourceName()).isEqualTo("org/camunda/bpm/engine/test/repository/one.cmmn");
+    assertThat(caseDefinition.getResourceName()).isEqualTo("io/orqueio/bpm/engine/test/repository/one.cmmn");
     assertThat(caseDefinition.getDeploymentId()).isEqualTo(deploymentOneId);
 
     caseDefinition = caseDefinitions.get(1);
@@ -85,7 +85,7 @@ public class CaseDefinitionQueryTest extends AbstractDefinitionQueryTest {
     assertThat(caseDefinition.getId()).startsWith("one:2");
     assertThat(caseDefinition.getCategory()).isEqualTo("Examples");
     assertThat(caseDefinition.getVersion()).isEqualTo(2);
-    assertThat(caseDefinition.getResourceName()).isEqualTo("org/camunda/bpm/engine/test/repository/one.cmmn");
+    assertThat(caseDefinition.getResourceName()).isEqualTo("io/orqueio/bpm/engine/test/repository/one.cmmn");
     assertThat(caseDefinition.getDeploymentId()).isEqualTo(deploymentTwoId);
 
     caseDefinition = caseDefinitions.get(2);
@@ -94,7 +94,7 @@ public class CaseDefinitionQueryTest extends AbstractDefinitionQueryTest {
     assertThat(caseDefinition.getId()).startsWith("two:1");
     assertThat(caseDefinition.getCategory()).isEqualTo("Examples2");
     assertThat(caseDefinition.getVersion()).isEqualTo(1);
-    assertThat(caseDefinition.getResourceName()).isEqualTo("org/camunda/bpm/engine/test/repository/two.cmmn");
+    assertThat(caseDefinition.getResourceName()).isEqualTo("io/orqueio/bpm/engine/test/repository/two.cmmn");
     assertThat(caseDefinition.getDeploymentId()).isEqualTo(deploymentOneId);
   }
 

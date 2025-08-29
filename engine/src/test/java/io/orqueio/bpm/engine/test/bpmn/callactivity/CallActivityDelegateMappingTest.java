@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -48,8 +48,8 @@ public class CallActivityDelegateMappingTest {
 
   @Test
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/callactivity/CallActivityDelegateMappingTest.testCallSimpleSubProcessDelegateVarMapping.bpmn20.xml",
-    "org/camunda/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/CallActivityDelegateMappingTest.testCallSimpleSubProcessDelegateVarMapping.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"
   })
   public void testCallSubProcessWithDelegatedVariableMapping() {
     //given
@@ -77,8 +77,8 @@ public class CallActivityDelegateMappingTest {
 
   @Test
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/callactivity/CallActivityDelegateMappingTest.testCallSimpleSubProcessDelegateVarMappingExpression.bpmn20.xml",
-    "org/camunda/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/CallActivityDelegateMappingTest.testCallSimpleSubProcessDelegateVarMappingExpression.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"
   })
   public void testCallSubProcessWithDelegatedVariableMappingeExpression() {
     //given
@@ -110,8 +110,8 @@ public class CallActivityDelegateMappingTest {
 
   @Test
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/callactivity/CallActivityDelegateMappingTest.testCallSimpleSubProcessDelegateVarMappingNotFound.bpmn20.xml",
-    "org/camunda/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/CallActivityDelegateMappingTest.testCallSimpleSubProcessDelegateVarMappingNotFound.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"
   })
   public void testCallSubProcessWithDelegatedVariableMappingNotFound() {
     try {
@@ -126,8 +126,8 @@ public class CallActivityDelegateMappingTest {
 
   @Test
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/callactivity/CallActivityDelegateMappingTest.testCallSimpleSubProcessDelegateVarMappingExpressionNotFound.bpmn20.xml",
-    "org/camunda/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/CallActivityDelegateMappingTest.testCallSimpleSubProcessDelegateVarMappingExpressionNotFound.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"
   })
   public void testCallSubProcessWithDelegatedVariableMappingeExpressionNotFound() {
     try {
@@ -165,8 +165,8 @@ public class CallActivityDelegateMappingTest {
 
   @Test
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/callactivity/CallActivityDelegateMappingTest.testCallSimpleSubProcessDelegateVarMappingThrowException.bpmn20.xml",
-    "org/camunda/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/CallActivityDelegateMappingTest.testCallSimpleSubProcessDelegateVarMappingThrowException.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"
   })
   public void testCallSubProcessWithDelegatedVariableMappingThrowException() {
     delegateVariableMappingThrowException();
@@ -174,8 +174,8 @@ public class CallActivityDelegateMappingTest {
 
   @Test
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/callactivity/CallActivityDelegateMappingTest.testCallSimpleSubProcessDelegateVarMappingExpressionThrowException.bpmn20.xml",
-    "org/camunda/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/CallActivityDelegateMappingTest.testCallSimpleSubProcessDelegateVarMappingExpressionThrowException.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"
   })
   public void testCallSubProcessWithDelegatedVariableMappingeExpressionThrowException() {
     //given
@@ -187,8 +187,8 @@ public class CallActivityDelegateMappingTest {
 
   @Test
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/callactivity/CallActivityDelegateMappingTest.testCallSimpleSubProcessDelegateVarMappingThrowBpmnError.bpmn20.xml",
-    "org/camunda/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/CallActivityDelegateMappingTest.testCallSimpleSubProcessDelegateVarMappingThrowBpmnError.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"
   })
   public void testCallSubProcessWithDelegatedVariableMappingThrowBpmnError() {
     delegateVariableMappingThrowException();
@@ -196,8 +196,8 @@ public class CallActivityDelegateMappingTest {
 
   @Test
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/callactivity/CallActivityDelegateMappingTest.testCallSimpleSubProcessDelegateVarMappingExpressionThrowException.bpmn20.xml",
-    "org/camunda/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/CallActivityDelegateMappingTest.testCallSimpleSubProcessDelegateVarMappingExpressionThrowException.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"
   })
   public void testCallSubProcessWithDelegatedVariableMappingeExpressionThrowBpmnError() {
     //given
@@ -234,8 +234,8 @@ public class CallActivityDelegateMappingTest {
 
   @Test
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/callactivity/CallActivityDelegateMappingTest.testCallSimpleSubProcessDelegateVarMappingThrowExceptionOutput.bpmn20.xml",
-    "org/camunda/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/CallActivityDelegateMappingTest.testCallSimpleSubProcessDelegateVarMappingThrowExceptionOutput.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"
   })
   public void testCallSubProcessWithDelegatedVariableMappingThrowExceptionOutput() {
     delegateVariableMappingThrowExceptionOutput();
@@ -243,8 +243,8 @@ public class CallActivityDelegateMappingTest {
 
   @Test
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/callactivity/CallActivityDelegateMappingTest.testCallSimpleSubProcessDelegateVarMappingExpressionThrowException.bpmn20.xml",
-    "org/camunda/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/CallActivityDelegateMappingTest.testCallSimpleSubProcessDelegateVarMappingExpressionThrowException.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"
   })
   public void testCallSubProcessWithDelegatedVariableMappingeExpressionThrowExceptionOutput() {
     //given
@@ -256,8 +256,8 @@ public class CallActivityDelegateMappingTest {
 
   @Test
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/callactivity/CallActivityDelegateMappingTest.testCallSimpleSubProcessDelegateVarMappingThrowBpmnErrorOutput.bpmn20.xml",
-    "org/camunda/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/CallActivityDelegateMappingTest.testCallSimpleSubProcessDelegateVarMappingThrowBpmnErrorOutput.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"
   })
   public void testCallSubProcessWithDelegatedVariableMappingThrowBpmnErrorOutput() {
     delegateVariableMappingThrowExceptionOutput();
@@ -265,8 +265,8 @@ public class CallActivityDelegateMappingTest {
 
   @Test
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/callactivity/CallActivityDelegateMappingTest.testCallSimpleSubProcessDelegateVarMappingExpressionThrowException.bpmn20.xml",
-    "org/camunda/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/CallActivityDelegateMappingTest.testCallSimpleSubProcessDelegateVarMappingExpressionThrowException.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"
   })
   public void testCallSubProcessWithDelegatedVariableMappingeExpressionThrowBpmnErrorOutput() {
     //given
@@ -278,8 +278,8 @@ public class CallActivityDelegateMappingTest {
 
   @Test
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/callactivity/CallActivityDelegateMappingTest.testCallFailingSubProcessWithDelegatedVariableMapping.bpmn20.xml",
-    "org/camunda/bpm/engine/test/bpmn/callactivity/failingSubProcess.bpmn20.xml"
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/CallActivityDelegateMappingTest.testCallFailingSubProcessWithDelegatedVariableMapping.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/failingSubProcess.bpmn20.xml"
   })
   public void testCallFailingSubProcessWithDelegatedVariableMapping() {
     //given starting process instance with call activity
@@ -293,8 +293,8 @@ public class CallActivityDelegateMappingTest {
 
   @Test
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/callactivity/CallActivityDelegateMappingTest.testCallSubProcessWithDelegatedVariableMappingAndAsyncServiceTask.bpmn20.xml",
-    "org/camunda/bpm/engine/test/bpmn/callactivity/simpleSubProcessWithAsyncService.bpmn20.xml"
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/CallActivityDelegateMappingTest.testCallSubProcessWithDelegatedVariableMappingAndAsyncServiceTask.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/simpleSubProcessWithAsyncService.bpmn20.xml"
   })
   public void testCallSubProcessWithDelegatedVariableMappingAndAsyncServiceTask() {
     //given starting process instance with call activity which has asyn service task

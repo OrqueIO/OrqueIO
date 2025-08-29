@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -67,8 +67,8 @@ public class CompensateEventTest extends PluggableProcessEngineTest {
   @Test
   public void testCompensateOrder() {
     //given two process models, only differ in order of the activities
-    final String PROCESS_MODEL_WITH_REF_BEFORE = "org/camunda/bpm/engine/test/bpmn/event/compensate/compensation_reference-before.bpmn";
-    final String PROCESS_MODEL_WITH_REF_AFTER = "org/camunda/bpm/engine/test/bpmn/event/compensate/compensation_reference-after.bpmn";
+    final String PROCESS_MODEL_WITH_REF_BEFORE = "io/orqueio/bpm/engine/test/bpmn/event/compensate/compensation_reference-before.bpmn";
+    final String PROCESS_MODEL_WITH_REF_AFTER = "io/orqueio/bpm/engine/test/bpmn/event/compensate/compensation_reference-after.bpmn";
 
     //when model with ref before is deployed
     io.orqueio.bpm.engine.repository.Deployment deployment1 = repositoryService.createDeployment()
@@ -158,7 +158,7 @@ public class CompensateEventTest extends PluggableProcessEngineTest {
     testRule.assertProcessEnded(processInstance.getId());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/bpmn/event/compensate/CompensateEventTest.testCompensateParallelSubprocessCompHandlerWaitstate.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/bpmn/event/compensate/CompensateEventTest.testCompensateParallelSubprocessCompHandlerWaitstate.bpmn20.xml")
   @Test
   public void testDeleteParallelSubprocessCompHandlerWaitstate() {
     // given
@@ -356,8 +356,8 @@ public class CompensateEventTest extends PluggableProcessEngineTest {
     testRule.assertProcessEnded(processInstanceId);
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/bpmn/event/compensate/CompensateEventTest.testCallActivityCompensationHandler.bpmn20.xml",
-      "org/camunda/bpm/engine/test/bpmn/event/compensate/CompensationHandler.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/bpmn/event/compensate/CompensateEventTest.testCallActivityCompensationHandler.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/bpmn/event/compensate/CompensationHandler.bpmn20.xml" })
   @Test
   public void testCallActivityCompensationHandler() {
 
@@ -446,7 +446,7 @@ public class CompensateEventTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/bpmn/event/compensate/CompensateEventTest.testCompensationTriggeredByEventSubProcessActivityRef.bpmn20.xml" })
+      "io/orqueio/bpm/engine/test/bpmn/event/compensate/CompensateEventTest.testCompensationTriggeredByEventSubProcessActivityRef.bpmn20.xml" })
   @Test
   public void testCompensateActivityRefTriggeredByEventSubprocess() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("compensateProcess");
@@ -465,7 +465,7 @@ public class CompensateEventTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/bpmn/event/compensate/CompensateEventTest.testCompensationTriggeredByEventSubProcessInSubProcessActivityRef.bpmn20.xml" })
+      "io/orqueio/bpm/engine/test/bpmn/event/compensate/CompensateEventTest.testCompensationTriggeredByEventSubProcessInSubProcessActivityRef.bpmn20.xml" })
   @Test
   public void testCompensateActivityRefTriggeredByEventSubprocessInSubProcess() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("compensateProcess");
@@ -483,7 +483,7 @@ public class CompensateEventTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/bpmn/event/compensate/CompensateEventTest.testCompensationInEventSubProcessActivityRef.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/bpmn/event/compensate/CompensateEventTest.testCompensationInEventSubProcessActivityRef.bpmn20.xml" })
   @Test
   public void testCompensateActivityRefInEventSubprocess() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("compensateProcess");
@@ -507,7 +507,7 @@ public class CompensateEventTest extends PluggableProcessEngineTest {
    *
    * @see <a href="https://app.camunda.com/jira/browse/CAM-4304">https://app.camunda.com/jira/browse/CAM-4304</a>
    */
-  @Deployment(resources = { "org/camunda/bpm/engine/test/bpmn/event/compensate/CompensateEventTest.testCompensationInEventSubProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/bpmn/event/compensate/CompensateEventTest.testCompensationInEventSubProcess.bpmn20.xml" })
   @Test
   public void testCompensateInEventSubprocess() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("compensateProcess");
@@ -653,7 +653,7 @@ public class CompensateEventTest extends PluggableProcessEngineTest {
     testRule.assertProcessEnded(processInstance.getId());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/bpmn/event/compensate/CompensateEventTest.activityWithCompensationEndEvent.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/bpmn/event/compensate/CompensateEventTest.activityWithCompensationEndEvent.bpmn20.xml")
   @Test
   public void testActivityInstanceTreeForCompensationEndEvent(){
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("compensateProcess");
@@ -666,7 +666,7 @@ public class CompensateEventTest extends PluggableProcessEngineTest {
       .done());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/bpmn/event/compensate/CompensateEventTest.compensationMiActivity.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/bpmn/event/compensate/CompensateEventTest.compensationMiActivity.bpmn20.xml")
   @Test
   public void testActivityInstanceTreeForMiActivity(){
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("compensateProcess");
@@ -684,7 +684,7 @@ public class CompensateEventTest extends PluggableProcessEngineTest {
       .done());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/bpmn/event/compensate/CompensateEventTest.testCompensateParallelSubprocessCompHandlerWaitstate.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/bpmn/event/compensate/CompensateEventTest.testCompensateParallelSubprocessCompHandlerWaitstate.bpmn20.xml")
   @Test
   public void testActivityInstanceTreeForParallelMiActivityInSubprocess() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("compensateProcess");
@@ -704,7 +704,7 @@ public class CompensateEventTest extends PluggableProcessEngineTest {
         .done());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/bpmn/event/compensate/CompensateEventTest.compensationMiSubprocess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/bpmn/event/compensate/CompensateEventTest.compensationMiSubprocess.bpmn20.xml")
   @Test
   public void testActivityInstanceTreeForMiSubprocess(){
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("compensateProcess");
@@ -758,7 +758,7 @@ public class CompensateEventTest extends PluggableProcessEngineTest {
       .done());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/bpmn/event/compensate/CompensateEventTest.activityWithCompensationEndEvent.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/bpmn/event/compensate/CompensateEventTest.activityWithCompensationEndEvent.bpmn20.xml")
   @Test
   public void testCancelProcessInstanceWithActiveCompensation() {
     // given
@@ -771,7 +771,7 @@ public class CompensateEventTest extends PluggableProcessEngineTest {
     testRule.assertProcessEnded(processInstance.getId());
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/bpmn/event/compensate/CompensateEventTest.testCompensationEventSubProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/bpmn/event/compensate/CompensateEventTest.testCompensationEventSubProcess.bpmn20.xml" })
   @Test
   public void testCompensationEventSubProcessWithScope() {
     String processInstanceId = runtimeService.startProcessInstanceByKey("bookingProcess").getId();
@@ -812,7 +812,7 @@ public class CompensateEventTest extends PluggableProcessEngineTest {
     testRule.assertProcessEnded(processInstanceId);
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/bpmn/event/compensate/CompensateEventTest.testCompensationEventSubProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/bpmn/event/compensate/CompensateEventTest.testCompensationEventSubProcess.bpmn20.xml" })
   @Test
   public void testActivityInstanceTreeForCompensationEventSubProcess() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("bookingProcess");
@@ -968,7 +968,7 @@ public class CompensateEventTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/bpmn/event/compensate/CompensateEventTest.testSubprocessCompensationHandler.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/bpmn/event/compensate/CompensateEventTest.testSubprocessCompensationHandler.bpmn20.xml")
   @Test
   public void testSubprocessCompensationHandlerActivityInstanceTree() {
 
@@ -989,7 +989,7 @@ public class CompensateEventTest extends PluggableProcessEngineTest {
        .done());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/bpmn/event/compensate/CompensateEventTest.testSubprocessCompensationHandler.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/bpmn/event/compensate/CompensateEventTest.testSubprocessCompensationHandler.bpmn20.xml")
   @Test
   public void testSubprocessCompensationHandlerDeleteProcessInstance() {
 
@@ -1026,7 +1026,7 @@ public class CompensateEventTest extends PluggableProcessEngineTest {
   /**
    * CAM-4387
    */
-  @Deployment(resources = "org/camunda/bpm/engine/test/bpmn/event/compensate/CompensateEventTest.testSubprocessCompensationHandlerWithEventSubprocess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/bpmn/event/compensate/CompensateEventTest.testSubprocessCompensationHandlerWithEventSubprocess.bpmn20.xml")
   @Ignore("CAM-4387")
   @Test
   public void testSubprocessCompensationHandlerWithEventSubprocessActivityInstanceTree() {

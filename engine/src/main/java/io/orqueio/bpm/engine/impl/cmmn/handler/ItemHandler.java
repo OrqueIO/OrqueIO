@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -63,12 +63,12 @@ import io.orqueio.bpm.model.cmmn.instance.PlanItemDefinition;
 import io.orqueio.bpm.model.cmmn.instance.RepetitionRule;
 import io.orqueio.bpm.model.cmmn.instance.RequiredRule;
 import io.orqueio.bpm.model.cmmn.instance.Sentry;
-import io.orqueio.bpm.model.cmmn.instance.camunda.CamundaCaseExecutionListener;
-import io.orqueio.bpm.model.cmmn.instance.camunda.CamundaExpression;
-import io.orqueio.bpm.model.cmmn.instance.camunda.CamundaField;
-import io.orqueio.bpm.model.cmmn.instance.camunda.CamundaScript;
-import io.orqueio.bpm.model.cmmn.instance.camunda.CamundaString;
-import io.orqueio.bpm.model.cmmn.instance.camunda.CamundaVariableListener;
+import io.orqueio.bpm.model.cmmn.instance.orqueio.OrqueioCaseExecutionListener;
+import io.orqueio.bpm.model.cmmn.instance.orqueio.OrqueioExpression;
+import io.orqueio.bpm.model.cmmn.instance.orqueio.OrqueioField;
+import io.orqueio.bpm.model.cmmn.instance.orqueio.OrqueioScript;
+import io.orqueio.bpm.model.cmmn.instance.orqueio.OrqueioString;
+import io.orqueio.bpm.model.cmmn.instance.orqueio.OrqueioVariableListener;
 import io.orqueio.bpm.model.xml.instance.ModelElementInstance;
 import io.orqueio.bpm.model.xml.type.ModelElementType;
 
@@ -335,7 +335,7 @@ public abstract class ItemHandler extends CmmnElementHandler<CmmnElement, CmmnAc
       activity.setProperty(PROPERTY_REPETITION_RULE, caseRule);
 
       List<String> events = Arrays.asList(TERMINATE, COMPLETE);
-      String repeatOnStandardEvent = repetitionRule.getCamundaRepeatOnStandardEvent();
+      String repeatOnStandardEvent = repetitionRule.getOrqueioRepeatOnStandardEvent();
       if (repeatOnStandardEvent != null && !repeatOnStandardEvent.isEmpty()) {
         events = Arrays.asList(repeatOnStandardEvent);
       }
@@ -360,12 +360,12 @@ public abstract class ItemHandler extends CmmnElementHandler<CmmnElement, CmmnAc
   protected void initializeCaseExecutionListeners(CmmnElement element, CmmnActivity activity, CmmnHandlerContext context) {
     PlanItemDefinition definition = getDefinition(element);
 
-    List<CamundaCaseExecutionListener> listeners = queryExtensionElementsByClass(definition, CamundaCaseExecutionListener.class);
+    List<OrqueioCaseExecutionListener> listeners = queryExtensionElementsByClass(definition, OrqueioCaseExecutionListener.class);
 
-    for (CamundaCaseExecutionListener listener : listeners) {
+    for (OrqueioCaseExecutionListener listener : listeners) {
       CaseExecutionListener caseExecutionListener = initializeCaseExecutionListener(element, activity, context, listener);
 
-      String eventName = listener.getCamundaEvent();
+      String eventName = listener.getOrqueioEvent();
       if(eventName != null) {
         activity.addListener(eventName, caseExecutionListener);
 
@@ -377,18 +377,18 @@ public abstract class ItemHandler extends CmmnElementHandler<CmmnElement, CmmnAc
     }
   }
 
-  protected CaseExecutionListener initializeCaseExecutionListener(CmmnElement element, CmmnActivity activity, CmmnHandlerContext context, CamundaCaseExecutionListener listener) {
-    Collection<CamundaField> fields = listener.getCamundaFields();
+  protected CaseExecutionListener initializeCaseExecutionListener(CmmnElement element, CmmnActivity activity, CmmnHandlerContext context, OrqueioCaseExecutionListener listener) {
+    Collection<OrqueioField> fields = listener.getOrqueioFields();
     List<FieldDeclaration> fieldDeclarations = initializeFieldDeclarations(element, activity, context, fields);
 
     ExpressionManager expressionManager = context.getExpressionManager();
 
     CaseExecutionListener caseExecutionListener = null;
 
-    String className = listener.getCamundaClass();
-    String expression = listener.getCamundaExpression();
-    String delegateExpression = listener.getCamundaDelegateExpression();
-    CamundaScript scriptElement = listener.getCamundaScript();
+    String className = listener.getOrqueioClass();
+    String expression = listener.getOrqueioExpression();
+    String delegateExpression = listener.getOrqueioDelegateExpression();
+    OrqueioScript scriptElement = listener.getOrqueioScript();
 
     if (className != null) {
       caseExecutionListener = new ClassDelegateCaseExecutionListener(className, fieldDeclarations);
@@ -414,12 +414,12 @@ public abstract class ItemHandler extends CmmnElementHandler<CmmnElement, CmmnAc
   protected void initializeVariableListeners(CmmnElement element, CmmnActivity activity, CmmnHandlerContext context) {
     PlanItemDefinition definition = getDefinition(element);
 
-    List<CamundaVariableListener> listeners = queryExtensionElementsByClass(definition, CamundaVariableListener.class);
+    List<OrqueioVariableListener> listeners = queryExtensionElementsByClass(definition, OrqueioVariableListener.class);
 
-    for (CamundaVariableListener listener : listeners) {
+    for (OrqueioVariableListener listener : listeners) {
       CaseVariableListener variableListener = initializeVariableListener(element, activity, context, listener);
 
-      String eventName = listener.getCamundaEvent();
+      String eventName = listener.getOrqueioEvent();
       if(eventName != null) {
         activity.addVariableListener(eventName, variableListener);
 
@@ -431,16 +431,16 @@ public abstract class ItemHandler extends CmmnElementHandler<CmmnElement, CmmnAc
     }
   }
 
-  protected CaseVariableListener initializeVariableListener(CmmnElement element, CmmnActivity activity, CmmnHandlerContext context, CamundaVariableListener listener) {
-    Collection<CamundaField> fields = listener.getCamundaFields();
+  protected CaseVariableListener initializeVariableListener(CmmnElement element, CmmnActivity activity, CmmnHandlerContext context, OrqueioVariableListener listener) {
+    Collection<OrqueioField> fields = listener.getOrqueioFields();
     List<FieldDeclaration> fieldDeclarations = initializeFieldDeclarations(element, activity, context, fields);
 
     ExpressionManager expressionManager = context.getExpressionManager();
 
-    String className = listener.getCamundaClass();
-    String expression = listener.getCamundaExpression();
-    String delegateExpression = listener.getCamundaDelegateExpression();
-    CamundaScript scriptElement = listener.getCamundaScript();
+    String className = listener.getOrqueioClass();
+    String expression = listener.getOrqueioExpression();
+    String delegateExpression = listener.getOrqueioDelegateExpression();
+    OrqueioScript scriptElement = listener.getOrqueioScript();
 
     CaseVariableListener variableListener = null;
     if (className != null) {
@@ -464,9 +464,9 @@ public abstract class ItemHandler extends CmmnElementHandler<CmmnElement, CmmnAc
     return variableListener;
   }
 
-  protected ExecutableScript initializeScript(CmmnElement element, CmmnActivity activity, CmmnHandlerContext context, CamundaScript script) {
-    String language = script.getCamundaScriptFormat();
-    String resource = script.getCamundaResource();
+  protected ExecutableScript initializeScript(CmmnElement element, CmmnActivity activity, CmmnHandlerContext context, OrqueioScript script) {
+    String language = script.getOrqueioScriptFormat();
+    String resource = script.getOrqueioResource();
     String source = script.getTextContent();
 
     if (language == null) {
@@ -482,10 +482,10 @@ public abstract class ItemHandler extends CmmnElementHandler<CmmnElement, CmmnAc
     }
   }
 
-  protected List<FieldDeclaration> initializeFieldDeclarations(CmmnElement element, CmmnActivity activity, CmmnHandlerContext context, Collection<CamundaField> fields) {
+  protected List<FieldDeclaration> initializeFieldDeclarations(CmmnElement element, CmmnActivity activity, CmmnHandlerContext context, Collection<OrqueioField> fields) {
     List<FieldDeclaration> fieldDeclarations = new ArrayList<FieldDeclaration>();
 
-    for (CamundaField field : fields) {
+    for (OrqueioField field : fields) {
       FieldDeclaration fieldDeclaration = initializeFieldDeclaration(element, activity, context, field);
       fieldDeclarations.add(fieldDeclaration);
     }
@@ -493,8 +493,8 @@ public abstract class ItemHandler extends CmmnElementHandler<CmmnElement, CmmnAc
     return fieldDeclarations;
   }
 
-  protected FieldDeclaration initializeFieldDeclaration(CmmnElement element, CmmnActivity activity, CmmnHandlerContext context, CamundaField field) {
-    String name = field.getCamundaName();
+  protected FieldDeclaration initializeFieldDeclaration(CmmnElement element, CmmnActivity activity, CmmnHandlerContext context, OrqueioField field) {
+    String name = field.getOrqueioName();
     String type = Expression.class.getName();
 
     Object value = getFixedValue(field);
@@ -507,8 +507,8 @@ public abstract class ItemHandler extends CmmnElementHandler<CmmnElement, CmmnAc
     return new FieldDeclaration(name, type, value);
   }
 
-  protected FixedValue getFixedValue(CamundaField field) {
-    CamundaString strg = field.getCamundaString();
+  protected FixedValue getFixedValue(OrqueioField field) {
+    OrqueioString strg = field.getOrqueioString();
 
     String value = null;
     if (strg != null) {
@@ -516,7 +516,7 @@ public abstract class ItemHandler extends CmmnElementHandler<CmmnElement, CmmnAc
     }
 
     if (value == null) {
-      value = field.getCamundaStringValue();
+      value = field.getOrqueioStringValue();
     }
 
     if (value != null) {
@@ -526,8 +526,8 @@ public abstract class ItemHandler extends CmmnElementHandler<CmmnElement, CmmnAc
     return null;
   }
 
-  protected Expression getExpressionValue(CamundaField field, ExpressionManager expressionManager) {
-    CamundaExpression expression = field.getCamundaExpressionChild();
+  protected Expression getExpressionValue(OrqueioField field, ExpressionManager expressionManager) {
+    OrqueioExpression expression = field.getOrqueioExpressionChild();
 
     String value = null;
     if (expression != null) {
@@ -536,7 +536,7 @@ public abstract class ItemHandler extends CmmnElementHandler<CmmnElement, CmmnAc
     }
 
     if (value == null) {
-      value = field.getCamundaExpression();
+      value = field.getOrqueioExpression();
     }
 
     if (value != null) {

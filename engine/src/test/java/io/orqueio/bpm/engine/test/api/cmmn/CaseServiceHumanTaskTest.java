@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -45,7 +45,7 @@ import org.junit.Test;
  */
 public class CaseServiceHumanTaskTest extends PluggableProcessEngineTest {
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCaseWithManualActivation.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCaseWithManualActivation.cmmn"})
   @Test
   public void testManualStart() {
     // given:
@@ -92,7 +92,7 @@ public class CaseServiceHumanTaskTest extends PluggableProcessEngineTest {
     assertNotNull(task);
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCaseWithManualActivation.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCaseWithManualActivation.cmmn"})
   @Test
   public void testManualStartWithVariable() {
     // given:
@@ -169,7 +169,7 @@ public class CaseServiceHumanTaskTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCaseWithManualActivation.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCaseWithManualActivation.cmmn"})
   @Test
   public void testManualStartWithVariables() {
     // given:
@@ -250,7 +250,7 @@ public class CaseServiceHumanTaskTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testStart() {
     // given:
@@ -294,7 +294,7 @@ public class CaseServiceHumanTaskTest extends PluggableProcessEngineTest {
     assertNotNull(task);
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testStartWithVariable() {
     // given:
@@ -368,7 +368,7 @@ public class CaseServiceHumanTaskTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testStartWithVariables() {
     // given:
@@ -443,7 +443,7 @@ public class CaseServiceHumanTaskTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCaseWithManualActivation.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCaseWithManualActivation.cmmn"})
   @Test
   public void testManualStartWithLocalVariable() {
     // given:
@@ -520,7 +520,7 @@ public class CaseServiceHumanTaskTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCaseWithManualActivation.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCaseWithManualActivation.cmmn"})
   @Test
   public void testManualStartWithLocalVariables() {
     // given:
@@ -601,7 +601,7 @@ public class CaseServiceHumanTaskTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testReenableAnEnabledHumanTask() {
     // given:
@@ -633,7 +633,7 @@ public class CaseServiceHumanTaskTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/twoTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/twoTaskCase.cmmn"})
   @Test
   public void testReenableAnDisabledHumanTask() {
     // given:
@@ -674,7 +674,7 @@ public class CaseServiceHumanTaskTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testReenableAnActiveHumanTask() {
     // given:
@@ -705,7 +705,7 @@ public class CaseServiceHumanTaskTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/twoTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/twoTaskCase.cmmn"})
   @Test
   public void testDisableAnEnabledHumanTask() {
     // given:
@@ -741,7 +741,7 @@ public class CaseServiceHumanTaskTest extends PluggableProcessEngineTest {
     assertFalse(caseExecution.isEnabled());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/twoTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/twoTaskCase.cmmn"})
   @Test
   public void testDisableADisabledHumanTask() {
     // given:
@@ -778,7 +778,7 @@ public class CaseServiceHumanTaskTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testDisableAnActiveHumanTask() {
     // given:
@@ -809,7 +809,7 @@ public class CaseServiceHumanTaskTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/twoTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/twoTaskCase.cmmn"})
   @Test
   public void testManualStartOfADisabledHumanTask() {
     // given:
@@ -844,7 +844,7 @@ public class CaseServiceHumanTaskTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testManualStartOfAnActiveHumanTask() {
     // given:
@@ -875,7 +875,7 @@ public class CaseServiceHumanTaskTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/twoTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/twoTaskCase.cmmn"})
   @Test
   public void testComplete() {
     // given:
@@ -941,7 +941,7 @@ public class CaseServiceHumanTaskTest extends PluggableProcessEngineTest {
     assertTrue(caseInstance.isActive());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testCompleteShouldCompleteCaseInstance() {
     // given:
@@ -1003,7 +1003,7 @@ public class CaseServiceHumanTaskTest extends PluggableProcessEngineTest {
     assertTrue(caseInstance.isCompleted());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCaseWithManualActivation.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCaseWithManualActivation.cmmn"})
   @Test
   public void testCompleteShouldCompleteCaseInstanceViaTaskService() {
     // given:
@@ -1067,7 +1067,7 @@ public class CaseServiceHumanTaskTest extends PluggableProcessEngineTest {
     assertTrue(caseInstance.isCompleted());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCaseWithManualActivation.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCaseWithManualActivation.cmmn"})
   @Test
   public void testDisableShouldCompleteCaseInstance() {
     // given:
@@ -1116,7 +1116,7 @@ public class CaseServiceHumanTaskTest extends PluggableProcessEngineTest {
     assertTrue(caseInstance.isCompleted());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCaseWithManualActivation.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCaseWithManualActivation.cmmn"})
   @Test
   public void testCompleteAnEnabledHumanTask() {
     // given:
@@ -1146,7 +1146,7 @@ public class CaseServiceHumanTaskTest extends PluggableProcessEngineTest {
     } catch (NotAllowedException e) {}
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/twoTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/twoTaskCase.cmmn"})
   @Test
   public void testCompleteADisabledHumanTask() {
     // given:
@@ -1180,7 +1180,7 @@ public class CaseServiceHumanTaskTest extends PluggableProcessEngineTest {
     } catch (NotAllowedException e) {}
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/twoTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/twoTaskCase.cmmn"})
   @Test
   public void testCompleteWithSetVariable() {
     // given:
@@ -1274,7 +1274,7 @@ public class CaseServiceHumanTaskTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/twoTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/twoTaskCase.cmmn"})
   @Test
   public void testCompleteWithSetVariableLocal() {
     // given:
@@ -1349,7 +1349,7 @@ public class CaseServiceHumanTaskTest extends PluggableProcessEngineTest {
     assertTrue(result.isEmpty());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/twoTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/twoTaskCase.cmmn"})
   @Test
   public void testCompleteWithRemoveVariable() {
     // given:
@@ -1424,7 +1424,7 @@ public class CaseServiceHumanTaskTest extends PluggableProcessEngineTest {
     assertTrue(result.isEmpty());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/twoTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/twoTaskCase.cmmn"})
   @Test
   public void testCompleteWithRemoveVariableLocal() {
     // given:
@@ -1499,7 +1499,7 @@ public class CaseServiceHumanTaskTest extends PluggableProcessEngineTest {
     assertTrue(result.isEmpty());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testClose() {
     // given:
@@ -1531,7 +1531,7 @@ public class CaseServiceHumanTaskTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testTerminate() {
     // given:
@@ -1558,7 +1558,7 @@ public class CaseServiceHumanTaskTest extends PluggableProcessEngineTest {
     
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testTerminateNonFluent() {
     // given:
@@ -1583,7 +1583,7 @@ public class CaseServiceHumanTaskTest extends PluggableProcessEngineTest {
     
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCaseWithManualActivation.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCaseWithManualActivation.cmmn"})
   @Test
   public void testTerminateNonActiveHumanTask() {
     // given:
@@ -1609,7 +1609,7 @@ public class CaseServiceHumanTaskTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testManualStartNonFluent() {
     // given:
@@ -1651,7 +1651,7 @@ public class CaseServiceHumanTaskTest extends PluggableProcessEngineTest {
   }
 
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/twoTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/twoTaskCase.cmmn"})
   @Test
   public void testManualStartWithVariablesNonFluent() {
     // given:
@@ -1709,7 +1709,7 @@ public class CaseServiceHumanTaskTest extends PluggableProcessEngineTest {
   }
 
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/twoTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/twoTaskCase.cmmn"})
   @Test
   public void testDisableNonFluent() {
     // given:
@@ -1743,7 +1743,7 @@ public class CaseServiceHumanTaskTest extends PluggableProcessEngineTest {
     assertFalse(caseExecution.isEnabled());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/twoTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/twoTaskCase.cmmn"})
   @Test
   public void testDisableNonFluentWithVariables() {
     // given:
@@ -1788,7 +1788,7 @@ public class CaseServiceHumanTaskTest extends PluggableProcessEngineTest {
     assertEquals("aValue", variable.getValue());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/twoTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/twoTaskCase.cmmn"})
   @Test
   public void testReenableNonFluent() {
     // given:
@@ -1827,7 +1827,7 @@ public class CaseServiceHumanTaskTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/twoTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/twoTaskCase.cmmn"})
   @Test
   public void testReenableNonFluentWithVariables() {
     // given:
@@ -1877,7 +1877,7 @@ public class CaseServiceHumanTaskTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/twoTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/twoTaskCase.cmmn"})
   @Test
   public void testCompleteNonFluent() {
     // given:
@@ -1941,7 +1941,7 @@ public class CaseServiceHumanTaskTest extends PluggableProcessEngineTest {
     assertTrue(caseInstance.isActive());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/twoTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/twoTaskCase.cmmn"})
   @Test
   public void testCompleteWithVariablesNonFluent() {
     // given:

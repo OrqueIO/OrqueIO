@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -25,14 +25,14 @@ import java.util.Map;
 import static io.orqueio.bpm.engine.impl.util.EnsureUtil.ensureNotNull;
 
 /**
- * Different Camunda versions use different hashing algorithms. In addition, it is possible
+ * Different Orqueio versions use different hashing algorithms. In addition, it is possible
  * to add a custom hashing algorithm. The {@link PasswordManager} ensures that the right
  * algorithm is used for the encryption.
  *
  * Default algorithms:
  * Version:           |    Algorithm
- * <= Camunda 7.6     | SHA1
- * >= Camunda 7.7     | SHA512
+ * <= Orqueio 7.6     | SHA1
+ * >= Orqueio 7.7     | SHA512
  */
 public class PasswordManager {
 
@@ -45,9 +45,9 @@ public class PasswordManager {
 
   public PasswordManager(PasswordEncryptor defaultPasswordEncryptor, List<PasswordEncryptor> customPasswordChecker) {
     // add default password encryptors for password checking
-    // for Camunda 7.6 and earlier
+    // for Orqueio 7.6 and earlier
     addPasswordCheckerAndThrowErrorIfAlreadyAvailable(new ShaHashDigest());
-    // from Camunda 7.7
+    // from Orqueio 7.7
     addPasswordCheckerAndThrowErrorIfAlreadyAvailable(new Sha512HashDigest());
 
     // add custom encryptors

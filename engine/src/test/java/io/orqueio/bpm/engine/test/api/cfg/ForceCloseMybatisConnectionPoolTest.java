@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -37,7 +37,7 @@ public class ForceCloseMybatisConnectionPoolTest {
     // given
     // that the process engine is configured with forceCloseMybatisConnectionPool = true
     ProcessEngineConfigurationImpl configurationImpl = new StandaloneInMemProcessEngineConfiguration()
-     .setJdbcUrl("jdbc:h2:mem:camunda-forceclose")
+     .setJdbcUrl("jdbc:h2:mem:orqueio-forceclose")
      .setProcessEngineName("engine-forceclose")
      .setForceCloseMybatisConnectionPool(true);
 
@@ -63,7 +63,7 @@ public class ForceCloseMybatisConnectionPoolTest {
     // given
     // that the process engine is configured with forceCloseMybatisConnectionPool = false
     ProcessEngineConfigurationImpl configurationImpl = new StandaloneInMemProcessEngineConfiguration()
-     .setJdbcUrl("jdbc:h2:mem:camunda-forceclose")
+     .setJdbcUrl("jdbc:h2:mem:orqueio-forceclose")
      .setProcessEngineName("engine-forceclose")
      .setForceCloseMybatisConnectionPool(false);
 

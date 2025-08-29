@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -150,7 +150,7 @@ public class BulkHistoryDeleteTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
   public void testCleanupHistoryTaskIdentityLink() {
     //given
     final List<String> ids = prepareHistoricProcesses();
@@ -168,7 +168,7 @@ public class BulkHistoryDeleteTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
   public void testCleanupHistoryActivityInstances() {
     //given
     final List<String> ids = prepareHistoricProcesses();
@@ -184,7 +184,7 @@ public class BulkHistoryDeleteTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
   public void testCleanupTaskAttachmentWithContent() {
     //given
     final List<String> ids = prepareHistoricProcesses();
@@ -214,7 +214,7 @@ public class BulkHistoryDeleteTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
   public void testCleanupProcessInstanceAttachmentWithContent() {
     //given
     final List<String> ids = prepareHistoricProcesses();
@@ -254,7 +254,7 @@ public class BulkHistoryDeleteTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
   public void testCleanupTaskComment() {
     //given
     final List<String> ids = prepareHistoricProcesses();
@@ -275,7 +275,7 @@ public class BulkHistoryDeleteTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
   public void testCleanupProcessInstanceComment() {
     //given
     final List<String> ids = prepareHistoricProcesses();
@@ -295,7 +295,7 @@ public class BulkHistoryDeleteTest {
 
   @Test
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
   public void testCleanupHistoricVariableInstancesAndHistoricDetails() {
     //given
     final List<String> ids = prepareHistoricProcesses();
@@ -316,7 +316,7 @@ public class BulkHistoryDeleteTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
   public void testCleanupHistoryTaskForm() {
     //given
     final List<String> ids = prepareHistoricProcesses();
@@ -339,7 +339,7 @@ public class BulkHistoryDeleteTest {
   }
 
   @Test
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
   public void testCleanupHistoricExternalTaskLog() {
     //given
     final List<String> ids = prepareHistoricProcesses("oneExternalTaskProcess");
@@ -373,7 +373,7 @@ public class BulkHistoryDeleteTest {
 
   @Test
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/api/mgmt/IncidentTest.testShouldCreateOneIncident.bpmn" })
+      "io/orqueio/bpm/engine/test/api/mgmt/IncidentTest.testShouldCreateOneIncident.bpmn" })
   public void testCleanupHistoricIncidents() {
     //given
     List<String> ids = prepareHistoricProcesses("failingProcess");
@@ -393,7 +393,7 @@ public class BulkHistoryDeleteTest {
 
   @Test
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/api/mgmt/IncidentTest.testShouldCreateOneIncident.bpmn" })
+      "io/orqueio/bpm/engine/test/api/mgmt/IncidentTest.testShouldCreateOneIncident.bpmn" })
   public void testCleanupHistoricJobLogs() {
     //given
     List<String> ids = prepareHistoricProcesses("failingProcess", null, 1);
@@ -427,8 +427,8 @@ public class BulkHistoryDeleteTest {
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/dmn/businessruletask/DmnBusinessRuleTaskTest.testDecisionRef.bpmn20.xml",
-      "org/camunda/bpm/engine/test/api/history/testDmnWithPojo.dmn11.xml" })
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/dmn/businessruletask/DmnBusinessRuleTaskTest.testDecisionRef.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/api/history/testDmnWithPojo.dmn11.xml" })
   public void testCleanupHistoryDecisionData() {
     //given
     List<String> ids = prepareHistoricProcesses("testProcess", Variables.createVariables().putValue("pojo", new TestPojo("okay", 13.37)));
@@ -468,8 +468,8 @@ public class BulkHistoryDeleteTest {
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/dmn/businessruletask/DmnBusinessRuleTaskTest.testDecisionRef.bpmn20.xml",
-  "org/camunda/bpm/engine/test/api/history/testDmnWithPojo.dmn11.xml" })
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/dmn/businessruletask/DmnBusinessRuleTaskTest.testDecisionRef.bpmn20.xml",
+  "io/orqueio/bpm/engine/test/api/history/testDmnWithPojo.dmn11.xml" })
   public void testCleanupFakeHistoryDecisionData() {
     //given
     List<String> ids = Arrays.asList("aFake");
@@ -503,7 +503,7 @@ public class BulkHistoryDeleteTest {
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/history/testDmnWithPojo.dmn11.xml" })
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/history/testDmnWithPojo.dmn11.xml" })
   public void testCleanupHistoryStandaloneDecisionData() {
     //given
     for (int i = 0; i < 5; i++) {
@@ -543,7 +543,7 @@ public class BulkHistoryDeleteTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
   public void testCleanupHistoryEmptyProcessIdsException() {
     //given
     final List<String> ids = prepareHistoricProcesses();
@@ -564,7 +564,7 @@ public class BulkHistoryDeleteTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
   public void testCleanupHistoryProcessesNotFinishedException() {
     //given
     final List<String> ids = prepareHistoricProcesses();
@@ -645,7 +645,7 @@ public class BulkHistoryDeleteTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn" })
   public void testCleanupHistoryCaseInstance() {
     // given
     // create case instances
@@ -665,7 +665,7 @@ public class BulkHistoryDeleteTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn" })
   public void testCleanupHistoryCaseActivityInstance() {
     // given
     // create case instance
@@ -685,7 +685,7 @@ public class BulkHistoryDeleteTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn" })
   public void testCleanupHistoryCaseInstanceTask() {
     // given
     // create case instance
@@ -705,7 +705,7 @@ public class BulkHistoryDeleteTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn" })
   public void testCleanupHistoryCaseInstanceTaskComment() {
     // given
     // create case instance
@@ -728,7 +728,7 @@ public class BulkHistoryDeleteTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn" })
   public void testCleanupHistoryCaseInstanceTaskDetails() {
     // given
     // create case instance
@@ -755,7 +755,7 @@ public class BulkHistoryDeleteTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn" })
   public void testCleanupHistoryCaseInstanceTaskIdentityLink() {
     // given
     // create case instance
@@ -778,7 +778,7 @@ public class BulkHistoryDeleteTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn" })
   public void testCleanupHistoryCaseInstanceTaskAttachmentByteArray() {
     // given
     // create case instance
@@ -804,14 +804,14 @@ public class BulkHistoryDeleteTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn" })
   public void testCleanupHistoryCaseInstanceTaskAttachmentUrl() {
     // given
     // create case instance
     String caseInstanceId = caseService.createCaseInstanceByKey("oneTaskCase").getId();
 
     Task task = taskService.createTaskQuery().singleResult();
-    taskService.createAttachment("foo", task.getId(), null, "something", null, "http://camunda.org");
+    taskService.createAttachment("foo", task.getId(), null, "something", null, "http://orqueio.io");
 
     // assume
     List<Attachment> attachments = taskService.getTaskAttachments(task.getId());
@@ -827,7 +827,7 @@ public class BulkHistoryDeleteTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn" })
   public void testCleanupHistoryCaseInstanceVariables() {
     // given
     // create case instances
@@ -852,7 +852,7 @@ public class BulkHistoryDeleteTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn" })
   public void testCleanupHistoryCaseInstanceComplexVariable() {
     // given
     // create case instances
@@ -879,7 +879,7 @@ public class BulkHistoryDeleteTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn" })
   public void testCleanupHistoryCaseInstanceDetails() {
     // given
     // create case instances
@@ -906,7 +906,7 @@ public class BulkHistoryDeleteTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn" })
   public void testCleanupHistoryCaseInstanceOperationLog() {
     // given
     // create case instances

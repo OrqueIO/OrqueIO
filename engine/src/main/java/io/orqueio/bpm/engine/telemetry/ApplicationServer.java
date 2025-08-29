@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -20,10 +20,10 @@ package io.orqueio.bpm.engine.telemetry;
  * This class represents the data structure used for collecting information
  * about the application server.
  *
- * This information is sent to Camunda when telemetry is enabled.
+ * This information is sent to Orqueio when telemetry is enabled.
  *
  * @see <a href=
- *      "https://docs.camunda.org/manual/latest/introduction/telemetry/#collected-data">Camunda
+ *      "https://docs.orqueio.io/manual/latest/introduction/telemetry/#collected-data">Orqueio
  *      Documentation: Collected Telemetry Data</a>
  */
 public interface ApplicationServer {

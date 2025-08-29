@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -63,8 +63,8 @@ public class MigrationIncidentTest {
   public static final BpmnModelInstance FAIL_CALLED_PROC  = Bpmn.createExecutableProcess(FAIL_CALLED_PROC_KEY)
     .startEvent("start")
     .serviceTask("task")
-      .camundaAsyncBefore()
-      .camundaClass(FailingDelegate.class.getName())
+      .orqueioAsyncBefore()
+      .orqueioClass(FailingDelegate.class.getName())
     .endEvent("end")
     .done();
 
@@ -82,8 +82,8 @@ public class MigrationIncidentTest {
   public static final BpmnModelInstance NEW_CALLED_PROC = Bpmn.createExecutableProcess(NEW_CALLED_PROC_KEY)
     .startEvent("start")
     .serviceTask("taskV2")
-      .camundaAsyncBefore()
-      .camundaClass(NewDelegate.class.getName())
+      .orqueioAsyncBefore()
+      .orqueioClass(NewDelegate.class.getName())
     .endEvent("end")
     .done();
 
@@ -103,9 +103,9 @@ public class MigrationIncidentTest {
   public RuleChain chain = RuleChain.outerRule(engineRule).around(testHelper);
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/runtime/migration/calledProcess.bpmn",
-                           "org/camunda/bpm/engine/test/api/runtime/migration/callingProcess.bpmn",
-                           "org/camunda/bpm/engine/test/api/runtime/migration/callingProcess_v2.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/runtime/migration/calledProcess.bpmn",
+                           "io/orqueio/bpm/engine/test/api/runtime/migration/callingProcess.bpmn",
+                           "io/orqueio/bpm/engine/test/api/runtime/migration/callingProcess_v2.bpmn"})
   public void testCallActivityExternalTaskIncidentMigration() throws Exception {
     // Given we create a new process instance
     ProcessDefinition callingProcess = engineRule.getRepositoryService()
@@ -149,8 +149,8 @@ public class MigrationIncidentTest {
 
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/runtime/migration/calledProcess.bpmn",
-                           "org/camunda/bpm/engine/test/api/runtime/migration/calledProcess_v2.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/runtime/migration/calledProcess.bpmn",
+                           "io/orqueio/bpm/engine/test/api/runtime/migration/calledProcess_v2.bpmn"})
   public void testExternalTaskIncidentMigration() throws Exception {
 
     // Given we create a new process instance
@@ -347,8 +347,8 @@ public class MigrationIncidentTest {
 
   @Test
   @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_FULL)
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/runtime/migration/calledProcess.bpmn",
-                           "org/camunda/bpm/engine/test/api/runtime/migration/calledProcess_v2.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/runtime/migration/calledProcess.bpmn",
+                           "io/orqueio/bpm/engine/test/api/runtime/migration/calledProcess_v2.bpmn"})
   public void historicIncidentRemainsOpenAfterMigration() {
 
     // Given we create a new process instance

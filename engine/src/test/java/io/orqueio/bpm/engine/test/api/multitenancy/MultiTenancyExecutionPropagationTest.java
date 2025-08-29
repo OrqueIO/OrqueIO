@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -46,8 +46,8 @@ import org.junit.Test;
 
 public class MultiTenancyExecutionPropagationTest extends PluggableProcessEngineTest {
 
-  protected static final String CMMN_FILE = "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn";
-  protected static final String SET_VARIABLE_CMMN_FILE = "org/camunda/bpm/engine/test/api/multitenancy/HumanTaskSetVariableExecutionListener.cmmn";
+  protected static final String CMMN_FILE = "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn";
+  protected static final String SET_VARIABLE_CMMN_FILE = "io/orqueio/bpm/engine/test/api/multitenancy/HumanTaskSetVariableExecutionListener.cmmn";
 
   protected static final String PROCESS_DEFINITION_KEY = "testProcess";
   protected static final String TENANT_ID = "tenant1";
@@ -172,8 +172,8 @@ public class MultiTenancyExecutionPropagationTest extends PluggableProcessEngine
     testRule.deployForTenant(TENANT_ID, Bpmn.createExecutableProcess(PROCESS_DEFINITION_KEY)
         .startEvent()
         .serviceTask()
-          .camundaClass(SetVariableTask.class.getName())
-          .camundaAsyncAfter()
+          .orqueioClass(SetVariableTask.class.getName())
+          .orqueioAsyncAfter()
         .endEvent()
       .done());
 
@@ -191,7 +191,7 @@ public class MultiTenancyExecutionPropagationTest extends PluggableProcessEngine
     testRule.deployForTenant(TENANT_ID, Bpmn.createExecutableProcess(PROCESS_DEFINITION_KEY)
         .startEvent()
         .userTask()
-          .camundaAsyncAfter()
+          .orqueioAsyncAfter()
         .endEvent()
       .done());
 
@@ -278,7 +278,7 @@ public class MultiTenancyExecutionPropagationTest extends PluggableProcessEngine
   @Test
   public void testPropagateTenantIdToCompensationEventSubscription() {
 
-    testRule.deployForTenant(TENANT_ID, "org/camunda/bpm/engine/test/api/multitenancy/compensationBoundaryEvent.bpmn");
+    testRule.deployForTenant(TENANT_ID, "io/orqueio/bpm/engine/test/api/multitenancy/compensationBoundaryEvent.bpmn");
 
     startProcessInstance(PROCESS_DEFINITION_KEY);
 
@@ -330,7 +330,7 @@ public class MultiTenancyExecutionPropagationTest extends PluggableProcessEngine
     testRule.deployForTenant(TENANT_ID, Bpmn.createExecutableProcess(PROCESS_DEFINITION_KEY)
         .startEvent()
         .userTask()
-          .camundaAsyncBefore()
+          .orqueioAsyncBefore()
         .endEvent()
       .done());
 
@@ -349,8 +349,8 @@ public class MultiTenancyExecutionPropagationTest extends PluggableProcessEngine
     testRule.deployForTenant(TENANT_ID, Bpmn.createExecutableProcess(PROCESS_DEFINITION_KEY)
         .startEvent()
         .serviceTask()
-          .camundaExpression("${failing}")
-          .camundaAsyncBefore()
+          .orqueioExpression("${failing}")
+          .orqueioAsyncBefore()
         .endEvent()
         .done());
 
@@ -371,7 +371,7 @@ public class MultiTenancyExecutionPropagationTest extends PluggableProcessEngine
         .startEvent()
           .timerWithDuration("PT1M")
          .serviceTask()
-           .camundaExpression("${failing}")
+           .orqueioExpression("${failing}")
          .endEvent()
          .done());
 
@@ -389,8 +389,8 @@ public class MultiTenancyExecutionPropagationTest extends PluggableProcessEngine
     testRule.deployForTenant(TENANT_ID, Bpmn.createExecutableProcess(PROCESS_DEFINITION_KEY)
         .startEvent()
         .serviceTask()
-          .camundaType("external")
-          .camundaTopic("test")
+          .orqueioType("external")
+          .orqueioTopic("test")
         .endEvent()
       .done());
 
@@ -412,8 +412,8 @@ public class MultiTenancyExecutionPropagationTest extends PluggableProcessEngine
     testRule.deployForTenant(TENANT_ID, Bpmn.createExecutableProcess(PROCESS_DEFINITION_KEY)
         .startEvent()
         .serviceTask()
-          .camundaType("external")
-          .camundaTopic("test")
+          .orqueioType("external")
+          .orqueioTopic("test")
         .endEvent()
       .done());
 

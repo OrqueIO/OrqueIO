@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -22,7 +22,7 @@ import java.util.Map;
 
 import io.orqueio.bpm.engine.impl.bpmn.parser.ConditionalEventDefinition;
 import io.orqueio.bpm.engine.impl.bpmn.parser.ErrorEventDefinition;
-import io.orqueio.bpm.engine.impl.bpmn.parser.CamundaErrorEventDefinition;
+import io.orqueio.bpm.engine.impl.bpmn.parser.OrqueioErrorEventDefinition;
 import io.orqueio.bpm.engine.impl.bpmn.parser.EscalationEventDefinition;
 import io.orqueio.bpm.engine.impl.bpmn.parser.EventSubscriptionDeclaration;
 import io.orqueio.bpm.engine.impl.core.model.Properties;
@@ -78,5 +78,5 @@ public class BpmnProperties {
 
   public static final PropertyKey<Map<String, String>> EXTENSION_PROPERTIES = new PropertyKey<>("extensionProperties");
 
-  public static final PropertyListKey<CamundaErrorEventDefinition> CAMUNDA_ERROR_EVENT_DEFINITION = new PropertyListKey<>("camundaErrorEventDefinition");
+  public static final PropertyListKey<OrqueioErrorEventDefinition> ORQUEIO_ERROR_EVENT_DEFINITION = new PropertyListKey<>("orqueioErrorEventDefinition");
 }

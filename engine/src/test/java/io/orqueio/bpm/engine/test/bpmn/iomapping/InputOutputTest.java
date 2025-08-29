@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -49,7 +49,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 /**
- * Testcase for camunda input / output in BPMN
+ * Testcase for orqueio input / output in BPMN
  *
  * @author Daniel Meyer
  *
@@ -151,7 +151,7 @@ public class InputOutputTest extends PluggableProcessEngineTest {
   @Test
   public void testInputExternalScriptValueAsVariable() {
     Map<String, Object> variables = new HashMap<String, Object>();
-    variables.put("scriptPath", "org/camunda/bpm/engine/test/bpmn/iomapping/oneplusone.groovy");
+    variables.put("scriptPath", "io/orqueio/bpm/engine/test/bpmn/iomapping/oneplusone.groovy");
     runtimeService.startProcessInstanceByKey("testProcess", variables);
     Execution execution = runtimeService.createExecutionQuery().activityId("wait").singleResult();
 
@@ -191,7 +191,7 @@ public class InputOutputTest extends PluggableProcessEngineTest {
   @Test
   public void testInputExternalClasspathScriptValueAsVariable() {
     Map<String, Object> variables = new HashMap<String, Object>();
-    variables.put("scriptPath", "classpath://org/camunda/bpm/engine/test/bpmn/iomapping/oneplusone.groovy");
+    variables.put("scriptPath", "classpath://io/orqueio/bpm/engine/test/bpmn/iomapping/oneplusone.groovy");
     runtimeService.startProcessInstanceByKey("testProcess", variables);
     Execution execution = runtimeService.createExecutionQuery().activityId("wait").singleResult();
 
@@ -216,8 +216,8 @@ public class InputOutputTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/iomapping/InputOutputTest.testInputExternalDeploymentScriptValue.bpmn",
-    "org/camunda/bpm/engine/test/bpmn/iomapping/oneplusone.groovy"
+    "io/orqueio/bpm/engine/test/bpmn/iomapping/InputOutputTest.testInputExternalDeploymentScriptValue.bpmn",
+    "io/orqueio/bpm/engine/test/bpmn/iomapping/oneplusone.groovy"
   })
   @Test
   public void testInputExternalDeploymentScriptValue() {
@@ -231,13 +231,13 @@ public class InputOutputTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/iomapping/InputOutputTest.testInputExternalDeploymentScriptValueAsVariable.bpmn",
-    "org/camunda/bpm/engine/test/bpmn/iomapping/oneplusone.groovy"
+    "io/orqueio/bpm/engine/test/bpmn/iomapping/InputOutputTest.testInputExternalDeploymentScriptValueAsVariable.bpmn",
+    "io/orqueio/bpm/engine/test/bpmn/iomapping/oneplusone.groovy"
   })
   @Test
   public void testInputExternalDeploymentScriptValueAsVariable() {
     Map<String, Object> variables = new HashMap<String, Object>();
-    variables.put("scriptPath", "deployment://org/camunda/bpm/engine/test/bpmn/iomapping/oneplusone.groovy");
+    variables.put("scriptPath", "deployment://io/orqueio/bpm/engine/test/bpmn/iomapping/oneplusone.groovy");
     runtimeService.startProcessInstanceByKey("testProcess", variables);
     Execution execution = runtimeService.createExecutionQuery().activityId("wait").singleResult();
 
@@ -248,8 +248,8 @@ public class InputOutputTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/iomapping/InputOutputTest.testInputExternalDeploymentScriptValueAsBean.bpmn",
-    "org/camunda/bpm/engine/test/bpmn/iomapping/oneplusone.groovy"
+    "io/orqueio/bpm/engine/test/bpmn/iomapping/InputOutputTest.testInputExternalDeploymentScriptValueAsBean.bpmn",
+    "io/orqueio/bpm/engine/test/bpmn/iomapping/oneplusone.groovy"
   })
   @Test
   public void testInputExternalDeploymentScriptValueAsBean() {
@@ -424,7 +424,7 @@ public class InputOutputTest extends PluggableProcessEngineTest {
     assertEquals("tomato", value.get("b"));
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/bpmn/iomapping/InputOutputTest.testInputMapElKey.bpmn")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/bpmn/iomapping/InputOutputTest.testInputMapElKey.bpmn")
   @Test
   public void testInputMapElUndefinedKey() {
     try {
@@ -502,12 +502,12 @@ public class InputOutputTest extends PluggableProcessEngineTest {
     BpmnModelInstance processDefinition = Bpmn.createExecutableProcess("process")
       .startEvent()
       .serviceTask()
-        .camundaOutputParameter("variable", "A")
-        .camundaExpression("${'this value does not matter'}")
+        .orqueioOutputParameter("variable", "A")
+        .orqueioExpression("${'this value does not matter'}")
       .parallelGateway("fork")
       .endEvent()
       .moveToNode("fork")
-        .serviceTask().camundaExpression("${variable}")
+        .serviceTask().orqueioExpression("${variable}")
         .receiveTask()
       .endEvent()
     .done();
@@ -552,7 +552,7 @@ public class InputOutputTest extends PluggableProcessEngineTest {
   @Test
   public void testOutputExternalScriptValueAsVariable() {
     Map<String, Object> variables = new HashMap<String, Object>();
-    variables.put("scriptPath", "org/camunda/bpm/engine/test/bpmn/iomapping/oneplusone.groovy");
+    variables.put("scriptPath", "io/orqueio/bpm/engine/test/bpmn/iomapping/oneplusone.groovy");
     ProcessInstance pi = runtimeService.startProcessInstanceByKey("testProcess", variables);
 
     VariableInstance variable = runtimeService.createVariableInstanceQuery().variableName("var1").singleResult();
@@ -589,7 +589,7 @@ public class InputOutputTest extends PluggableProcessEngineTest {
   @Test
   public void testOutputExternalClasspathScriptValueAsVariable() {
     Map<String, Object> variables = new HashMap<String, Object>();
-    variables.put("scriptPath", "classpath://org/camunda/bpm/engine/test/bpmn/iomapping/oneplusone.groovy");
+    variables.put("scriptPath", "classpath://io/orqueio/bpm/engine/test/bpmn/iomapping/oneplusone.groovy");
     ProcessInstance pi = runtimeService.startProcessInstanceByKey("testProcess", variables);
 
     VariableInstance variable = runtimeService.createVariableInstanceQuery().variableName("var1").singleResult();
@@ -612,8 +612,8 @@ public class InputOutputTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/iomapping/InputOutputTest.testOutputExternalDeploymentScriptValue.bpmn",
-    "org/camunda/bpm/engine/test/bpmn/iomapping/oneplusone.groovy"
+    "io/orqueio/bpm/engine/test/bpmn/iomapping/InputOutputTest.testOutputExternalDeploymentScriptValue.bpmn",
+    "io/orqueio/bpm/engine/test/bpmn/iomapping/oneplusone.groovy"
   })
   @Test
   public void testOutputExternalDeploymentScriptValue() {
@@ -626,13 +626,13 @@ public class InputOutputTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/iomapping/InputOutputTest.testOutputExternalDeploymentScriptValueAsVariable.bpmn",
-    "org/camunda/bpm/engine/test/bpmn/iomapping/oneplusone.groovy"
+    "io/orqueio/bpm/engine/test/bpmn/iomapping/InputOutputTest.testOutputExternalDeploymentScriptValueAsVariable.bpmn",
+    "io/orqueio/bpm/engine/test/bpmn/iomapping/oneplusone.groovy"
   })
   @Test
   public void testOutputExternalDeploymentScriptValueAsVariable() {
     Map<String, Object> variables = new HashMap<String, Object>();
-    variables.put("scriptPath", "deployment://org/camunda/bpm/engine/test/bpmn/iomapping/oneplusone.groovy");
+    variables.put("scriptPath", "deployment://io/orqueio/bpm/engine/test/bpmn/iomapping/oneplusone.groovy");
     ProcessInstance pi = runtimeService.startProcessInstanceByKey("testProcess", variables);
 
     VariableInstance variable = runtimeService.createVariableInstanceQuery().variableName("var1").singleResult();
@@ -642,8 +642,8 @@ public class InputOutputTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/iomapping/InputOutputTest.testOutputExternalDeploymentScriptValueAsBean.bpmn",
-    "org/camunda/bpm/engine/test/bpmn/iomapping/oneplusone.groovy"
+    "io/orqueio/bpm/engine/test/bpmn/iomapping/InputOutputTest.testOutputExternalDeploymentScriptValueAsBean.bpmn",
+    "io/orqueio/bpm/engine/test/bpmn/iomapping/oneplusone.groovy"
   })
   @Test
   public void testOutputExternalDeploymentScriptValueAsBean() {
@@ -816,7 +816,7 @@ public class InputOutputTest extends PluggableProcessEngineTest {
     assertEquals("tomato", value.get("b"));
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/bpmn/iomapping/InputOutputTest.testOutputMapElKey.bpmn")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/bpmn/iomapping/InputOutputTest.testOutputMapElKey.bpmn")
   @Test
   public void testOutputMapElUndefinedKey() {
     try {
@@ -834,12 +834,12 @@ public class InputOutputTest extends PluggableProcessEngineTest {
     try {
       repositoryService
         .createDeployment()
-        .addClasspathResource("org/camunda/bpm/engine/test/bpmn/iomapping/InputOutputTest.testInterruptingEventSubprocessIoSupport.bpmn")
+        .addClasspathResource("io/orqueio/bpm/engine/test/bpmn/iomapping/InputOutputTest.testInterruptingEventSubprocessIoSupport.bpmn")
         .deploy();
       fail("exception expected");
     } catch (ParseException e) {
       // happy path
-      testRule.assertTextPresent("camunda:inputOutput mapping unsupported for element type 'subProcess' with attribute 'triggeredByEvent = true'", e.getMessage());
+      testRule.assertTextPresent("orqueio:inputOutput mapping unsupported for element type 'subProcess' with attribute 'triggeredByEvent = true'", e.getMessage());
       assertThat(e.getResorceReports().get(0).getErrors().get(0).getMainElementId()).isEqualTo("SubProcess_1");
     }
   }
@@ -1018,17 +1018,17 @@ public class InputOutputTest extends PluggableProcessEngineTest {
   public void testMIOutputMappingDisallowed() {
     try {
       repositoryService.createDeployment()
-      .addClasspathResource("org/camunda/bpm/engine/test/bpmn/iomapping/InputOutputTest.testMIOutputMappingDisallowed.bpmn20.xml")
+      .addClasspathResource("io/orqueio/bpm/engine/test/bpmn/iomapping/InputOutputTest.testMIOutputMappingDisallowed.bpmn20.xml")
       .deploy();
       fail("Exception expected");
     } catch (ParseException e) {
-      testRule.assertTextPresent("camunda:outputParameter not allowed for multi-instance constructs", e.getMessage());
+      testRule.assertTextPresent("orqueio:outputParameter not allowed for multi-instance constructs", e.getMessage());
       assertThat(e.getResorceReports().get(0).getErrors().get(0).getMainElementId()).isEqualTo("miTask");
     }
 
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/bpmn/iomapping/InputOutputTest.testThrowErrorInScriptInputOutputMapping.bpmn")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/bpmn/iomapping/InputOutputTest.testThrowErrorInScriptInputOutputMapping.bpmn")
   @Ignore
   @Test
   public void testBpmnErrorInScriptInputMapping() {
@@ -1041,7 +1041,7 @@ public class InputOutputTest extends PluggableProcessEngineTest {
     assertThat(task.getName()).isEqualTo("User Task");
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/bpmn/iomapping/InputOutputTest.testThrowErrorInScriptInputOutputMapping.bpmn")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/bpmn/iomapping/InputOutputTest.testThrowErrorInScriptInputOutputMapping.bpmn")
   @Test
   public void testExceptionInScriptInputMapping() {
     String exceptionMessage = "myException";
@@ -1055,7 +1055,7 @@ public class InputOutputTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/bpmn/iomapping/InputOutputTest.testThrowErrorInScriptInputOutputMapping.bpmn")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/bpmn/iomapping/InputOutputTest.testThrowErrorInScriptInputOutputMapping.bpmn")
   @Ignore
   @Test
   public void testBpmnErrorInScriptOutputMapping() {
@@ -1068,7 +1068,7 @@ public class InputOutputTest extends PluggableProcessEngineTest {
     assertThat(task.getName()).isEqualTo("User Task");
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/bpmn/iomapping/InputOutputTest.testThrowErrorInScriptInputOutputMapping.bpmn")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/bpmn/iomapping/InputOutputTest.testThrowErrorInScriptInputOutputMapping.bpmn")
   @Test
   public void testExceptionInScriptOutputMapping() {
     String exceptionMessage = "myException";
@@ -1246,7 +1246,7 @@ public class InputOutputTest extends PluggableProcessEngineTest {
     BpmnModelInstance instance = Bpmn.createExecutableProcess("Process")
       .startEvent()
       .receiveTask()
-        .camundaInputParameter("var", "Hello World${'!'}")
+        .orqueioInputParameter("var", "Hello World${'!'}")
       .endEvent("end")
       .done();
 
@@ -1270,9 +1270,9 @@ public class InputOutputTest extends PluggableProcessEngineTest {
     BpmnModelInstance instance = Bpmn.createExecutableProcess("Process")
       .startEvent()
       .serviceTask()
-        .camundaExpression("${true}")
-        .camundaInputParameter("var1", "World!")
-        .camundaOutputParameter("var2", "Hello ${var1}")
+        .orqueioExpression("${true}")
+        .orqueioInputParameter("var1", "World!")
+        .orqueioOutputParameter("var2", "Hello ${var1}")
       .userTask()
       .endEvent("end")
       .done();

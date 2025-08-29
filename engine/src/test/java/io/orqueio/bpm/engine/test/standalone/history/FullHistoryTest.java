@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -84,7 +84,7 @@ import org.junit.rules.RuleChain;
  * @author Tom Baeyens
  * @author Frederik Heremans
  * @author Joram Barrez
- * @author Christian Lipphardt (camunda)
+ * @author Christian Lipphardt (orqueio)
  */
 @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_FULL)
 public class FullHistoryTest {
@@ -265,7 +265,7 @@ public class FullHistoryTest {
   }
 
   @Test
-  @Deployment(resources="org/camunda/bpm/engine/test/standalone/history/FullHistoryTest.testVariableUpdates.bpmn20.xml")
+  @Deployment(resources="io/orqueio/bpm/engine/test/standalone/history/FullHistoryTest.testVariableUpdates.bpmn20.xml")
   public void testHistoricVariableInstanceQuery() {
     Map<String, Object> variables = new HashMap<String, Object>();
     variables.put("process", "one");
@@ -532,7 +532,7 @@ public class FullHistoryTest {
 
   @Test
   @Deployment(
-    resources={"org/camunda/bpm/engine/test/history/oneTaskProcess.bpmn20.xml"})
+    resources={"io/orqueio/bpm/engine/test/history/oneTaskProcess.bpmn20.xml"})
   public void testHistoricVariableQuery() throws Exception {
     Map<String, Object> variables = new HashMap<String, Object>();
     variables.put("stringVar", "activiti rocks!");
@@ -568,7 +568,7 @@ public class FullHistoryTest {
 
   @Test
   @Deployment(
-    resources={"org/camunda/bpm/engine/test/history/oneTaskProcess.bpmn20.xml"})
+    resources={"io/orqueio/bpm/engine/test/history/oneTaskProcess.bpmn20.xml"})
   public void testHistoricVariableQueryExcludeTaskRelatedDetails() throws Exception {
     Map<String, Object> variables = new HashMap<String, Object>();
     variables.put("stringVar", "activiti rocks!");
@@ -595,7 +595,7 @@ public class FullHistoryTest {
 
   @Test
   @Deployment(
-    resources={"org/camunda/bpm/engine/test/history/oneTaskProcess.bpmn20.xml"})
+    resources={"io/orqueio/bpm/engine/test/history/oneTaskProcess.bpmn20.xml"})
   public void testHistoricFormPropertiesQuery() throws Exception {
     Map<String, String> formProperties = new HashMap<String, String>();
     formProperties.put("stringVar", "activiti rocks!");
@@ -624,7 +624,7 @@ public class FullHistoryTest {
 
   @Test
   @Deployment(
-    resources={"org/camunda/bpm/engine/test/history/oneTaskProcess.bpmn20.xml"})
+    resources={"io/orqueio/bpm/engine/test/history/oneTaskProcess.bpmn20.xml"})
   public void testHistoricVariableQuerySorting() throws Exception {
     Map<String, Object> variables = new HashMap<String, Object>();
     variables.put("stringVar", "activiti rocks!");
@@ -659,7 +659,7 @@ public class FullHistoryTest {
 
   @Test
   @Deployment(
-    resources={"org/camunda/bpm/engine/test/history/oneTaskProcess.bpmn20.xml"})
+    resources={"io/orqueio/bpm/engine/test/history/oneTaskProcess.bpmn20.xml"})
   public void testHistoricFormPropertySorting() throws Exception {
 
     Map<String, String> formProperties = new HashMap<String, String>();
@@ -1033,7 +1033,7 @@ public class FullHistoryTest {
   }
 
   @Test
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
   public void testHistoricTaskInstanceQueryTaskVariableValueEqualsOverwriteType() throws Exception {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("oneTaskProcess");
     Task task = taskService.createTaskQuery().processInstanceId(processInstance.getId()).singleResult();
@@ -1077,7 +1077,7 @@ public class FullHistoryTest {
   }
 
   @Test
-  @Deployment(resources = "org/camunda/bpm/engine/test/standalone/history/FullHistoryTest.testHistoricTaskInstanceQueryVariableInParallelBranch.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/standalone/history/FullHistoryTest.testHistoricTaskInstanceQueryVariableInParallelBranch.bpmn20.xml")
   public void testHistoricTaskInstanceQueryVariableOfSameTypeInParallelBranch() throws Exception {
     runtimeService.startProcessInstanceByKey("parallelGateway");
 
@@ -1183,7 +1183,7 @@ public class FullHistoryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/standalone/history/FullHistoryTest.testHistoricProcessInstanceVariableValueEquals.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/standalone/history/FullHistoryTest.testHistoricProcessInstanceVariableValueEquals.bpmn20.xml"})
   public void testHistoricProcessInstanceVariableValueNotEquals() throws Exception {
     // Set some variables on the process instance
     Map<String, Object> variables = new HashMap<String, Object>();
@@ -1216,7 +1216,7 @@ public class FullHistoryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/standalone/history/FullHistoryTest.testHistoricProcessInstanceVariableValueEquals.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/standalone/history/FullHistoryTest.testHistoricProcessInstanceVariableValueEquals.bpmn20.xml"})
   public void testHistoricProcessInstanceVariableValueLessThanAndGreaterThan() throws Exception {
     // Set some variables on the process instance
     Map<String, Object> variables = new HashMap<String, Object>();
@@ -1231,7 +1231,7 @@ public class FullHistoryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/standalone/history/FullHistoryTest.testVariableUpdatesAreLinkedToActivity.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/standalone/history/FullHistoryTest.testVariableUpdatesAreLinkedToActivity.bpmn20.xml"})
   public void testVariableUpdatesLinkedToActivity() throws Exception {
     ProcessInstance pi = runtimeService.startProcessInstanceByKey("ProcessWithSubProcess");
 
@@ -1283,7 +1283,7 @@ public class FullHistoryTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/history/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/history/oneTaskProcess.bpmn20.xml"})
   public void testHistoricDetailQueryByVariableInstanceId() throws Exception {
     Map<String, Object> params = new HashMap<String, Object>();
     params.put("testVar", "testValue");
@@ -1425,7 +1425,7 @@ public class FullHistoryTest {
   }
 
   @Test
-  @Deployment(resources= "org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml")
+  @Deployment(resources= "io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml")
   public void testDisableBinaryFetchingForFileValues() {
     // given
     String fileName = "text.txt";
@@ -1558,7 +1558,7 @@ public class FullHistoryTest {
   }
 
   @Test
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
   public void testHistoricVariableUpdateProcessDefinitionProperty() {
     // given
     String key = "oneTaskProcess";
@@ -1618,7 +1618,7 @@ public class FullHistoryTest {
   }
 
   @Test
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn")
   public void testHistoricVariableUpdateCaseDefinitionProperty() {
     // given
     String key = "oneTaskCase";
@@ -1716,7 +1716,7 @@ public class FullHistoryTest {
   }
 
   @Test
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
   public void testHistoricFormFieldProcessDefinitionProperty() {
     // given
     String key = "oneTaskProcess";
@@ -1744,7 +1744,7 @@ public class FullHistoryTest {
   }
 
   @Test
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
   public void testDeleteProcessInstanceSkipCustomListener() {
     // given
     String processInstanceId = runtimeService.startProcessInstanceByKey("oneTaskProcess").getId();

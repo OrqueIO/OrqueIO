@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -103,9 +103,9 @@ public class JobEntityTest {
   public void shouldCheckCreateTimeOnMessage() {
     // given
     testRule.deploy(Bpmn.createExecutableProcess("process")
-        .camundaHistoryTimeToLive(180)
+        .orqueioHistoryTimeToLive(180)
         .startEvent()
-        .camundaAsyncBefore()
+        .orqueioAsyncBefore()
         .endEvent()
         .done());
 
@@ -126,7 +126,7 @@ public class JobEntityTest {
   public void shouldCheckCreateTimeOnTimer() {
     // given
     testRule.deploy(Bpmn.createExecutableProcess("process")
-        .camundaHistoryTimeToLive(180)
+        .orqueioHistoryTimeToLive(180)
         .startEvent()
         .timerWithDuration("PT5S")
         .endEvent()
@@ -165,11 +165,11 @@ public class JobEntityTest {
   public void shouldShowFailedActivityIdPropertyForFailingAsyncTask() {
     // given
     testRule.deploy(Bpmn.createExecutableProcess("process")
-        .camundaHistoryTimeToLive(180)
+        .orqueioHistoryTimeToLive(180)
         .startEvent()
         .serviceTask("theTask")
-        .camundaAsyncBefore()
-        .camundaClass(FailingDelegate.class)
+        .orqueioAsyncBefore()
+        .orqueioClass(FailingDelegate.class)
         .endEvent()
         .done());
 
@@ -195,11 +195,11 @@ public class JobEntityTest {
     engineRule.getProcessEngineConfiguration().setLoggingContextActivityId(null);
 
     testRule.deploy(Bpmn.createExecutableProcess("process")
-        .camundaHistoryTimeToLive(180)
+        .orqueioHistoryTimeToLive(180)
         .startEvent()
         .serviceTask("theTask")
-        .camundaAsyncBefore()
-        .camundaClass(FailingDelegate.class)
+        .orqueioAsyncBefore()
+        .orqueioClass(FailingDelegate.class)
         .endEvent()
         .done());
 
@@ -223,15 +223,15 @@ public class JobEntityTest {
   public void shouldShowFailedActivityIdPropertyForAsyncTaskWithFailingFollowUp() {
     // given
     testRule.deploy(Bpmn.createExecutableProcess("process")
-        .camundaHistoryTimeToLive(180)
+        .orqueioHistoryTimeToLive(180)
         .startEvent()
         .serviceTask("theTask")
-        .camundaAsyncBefore()
-        .camundaClass(ChangeVariablesDelegate.class)
+        .orqueioAsyncBefore()
+        .orqueioClass(ChangeVariablesDelegate.class)
         .serviceTask("theTask2")
-        .camundaClass(ChangeVariablesDelegate.class)
+        .orqueioClass(ChangeVariablesDelegate.class)
         .serviceTask("theTask3")
-        .camundaClass(FailingDelegate.class)
+        .orqueioClass(FailingDelegate.class)
         .endEvent()
         .done());
 

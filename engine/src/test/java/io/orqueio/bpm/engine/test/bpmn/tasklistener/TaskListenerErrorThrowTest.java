@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -219,8 +219,8 @@ public class TaskListenerErrorThrowTest extends AbstractTaskListenerTest {
     BpmnModelInstance model = Bpmn.createExecutableProcess("process")
                                   .startEvent()
                                     .userTask("mainTask")
-                                      .camundaTaskListenerExpression(TaskListener.EVENTNAME_ASSIGNMENT, "${myListener.notify(task)}")
-                                      .camundaTaskListenerClass(TaskListener.EVENTNAME_DELETE, RecorderTaskListener.class.getName())
+                                      .orqueioTaskListenerExpression(TaskListener.EVENTNAME_ASSIGNMENT, "${myListener.notify(task)}")
+                                      .orqueioTaskListenerClass(TaskListener.EVENTNAME_DELETE, RecorderTaskListener.class.getName())
                                       .boundaryEvent("throw")
                                         .error(ERROR_CODE)
                                     .userTask("afterCatch")
@@ -271,8 +271,8 @@ public class TaskListenerErrorThrowTest extends AbstractTaskListenerTest {
     BpmnModelInstance model = Bpmn.createExecutableProcess("process")
                                   .startEvent()
                                     .userTask("mainTask")
-                                      .camundaTaskListenerClass(TaskListener.EVENTNAME_COMPLETE, ThrowBPMNErrorListener.class.getName())
-                                      .camundaTaskListenerClass(TaskListener.EVENTNAME_DELETE, RecorderTaskListener.class.getName())
+                                      .orqueioTaskListenerClass(TaskListener.EVENTNAME_COMPLETE, ThrowBPMNErrorListener.class.getName())
+                                      .orqueioTaskListenerClass(TaskListener.EVENTNAME_DELETE, RecorderTaskListener.class.getName())
                                     .userTask("afterThrow")
                                   .endEvent()
                                   .done();
@@ -317,8 +317,8 @@ public class TaskListenerErrorThrowTest extends AbstractTaskListenerTest {
     return Bpmn.createExecutableProcess("process")
                .startEvent()
                  .userTask("mainTask")
-                   .camundaTaskListenerClass(eventName, ThrowBPMNErrorListener.class.getName())
-                   .camundaTaskListenerClass(TaskListener.EVENTNAME_DELETE, RecorderTaskListener.class.getName())
+                   .orqueioTaskListenerClass(eventName, ThrowBPMNErrorListener.class.getName())
+                   .orqueioTaskListenerClass(TaskListener.EVENTNAME_DELETE, RecorderTaskListener.class.getName())
                    .boundaryEvent("throw")
                      .error(ERROR_CODE)
                  .userTask("afterCatch")
@@ -335,8 +335,8 @@ public class TaskListenerErrorThrowTest extends AbstractTaskListenerTest {
                  .embeddedSubProcess()
                    .startEvent("inSub")
                      .userTask("mainTask")
-                       .camundaTaskListenerClass(eventName, ThrowBPMNErrorListener.class.getName())
-                       .camundaTaskListenerClass(TaskListener.EVENTNAME_DELETE, RecorderTaskListener.class.getName())
+                       .orqueioTaskListenerClass(eventName, ThrowBPMNErrorListener.class.getName())
+                       .orqueioTaskListenerClass(TaskListener.EVENTNAME_DELETE, RecorderTaskListener.class.getName())
                      .userTask("afterThrow")
                    .endEvent()
                  .moveToActivity("sub")
@@ -352,8 +352,8 @@ public class TaskListenerErrorThrowTest extends AbstractTaskListenerTest {
     BpmnModelInstance model = processBuilder
         .startEvent()
           .userTask("mainTask")
-            .camundaTaskListenerClass(eventName, ThrowBPMNErrorListener.class.getName())
-            .camundaTaskListenerClass(TaskListener.EVENTNAME_DELETE, RecorderTaskListener.class.getName())
+            .orqueioTaskListenerClass(eventName, ThrowBPMNErrorListener.class.getName())
+            .orqueioTaskListenerClass(TaskListener.EVENTNAME_DELETE, RecorderTaskListener.class.getName())
           .userTask("afterThrow")
           .endEvent()
         .done();

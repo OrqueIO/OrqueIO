@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -64,7 +64,7 @@ public class HistoricIdentityLinkLogQueryTest extends PluggableProcessEngineTest
   private static final String IDENTITY_LINK_ADD="add";
   private static final String IDENTITY_LINK_DELETE="delete";
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml" })
   @Test
   public void testQueryAddTaskCandidateforAddIdentityLink() {
 
@@ -91,7 +91,7 @@ public class HistoricIdentityLinkLogQueryTest extends PluggableProcessEngineTest
     assertEquals(historicIdentityLink.getProcessDefinitionKey(), PROCESS_DEFINITION_KEY);
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml" })
   @Test
   public void testGroupQueryTaskCandidateForAddAndDeleteIdentityLink() {
 
@@ -118,7 +118,7 @@ public class HistoricIdentityLinkLogQueryTest extends PluggableProcessEngineTest
     assertEquals(historicIdentityLink.getProcessDefinitionKey(), PROCESS_DEFINITION_KEY);
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml" })
   @Test
   public void testValidIndividualQueryTaskCandidateForAddAndDeleteIdentityLink() {
 
@@ -161,7 +161,7 @@ public class HistoricIdentityLinkLogQueryTest extends PluggableProcessEngineTest
 
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml" })
   @Test
   public void testValidGroupQueryTaskCandidateForAddAndDeleteIdentityLink() {
 
@@ -189,7 +189,7 @@ public class HistoricIdentityLinkLogQueryTest extends PluggableProcessEngineTest
     assertEquals(query.operationType(IDENTITY_LINK_ADD).count(), 1);
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml" })
   @Test
   public void testInvalidIndividualQueryTaskCandidateForAddAndDeleteIdentityLink() {
 
@@ -226,7 +226,7 @@ public class HistoricIdentityLinkLogQueryTest extends PluggableProcessEngineTest
 
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml" })
   @Test
   public void testInvalidGroupQueryTaskCandidateForAddAndDeleteIdentityLink() {
 
@@ -265,7 +265,7 @@ public class HistoricIdentityLinkLogQueryTest extends PluggableProcessEngineTest
    *
    * Test case: Query the number of added records at different time interval.
    */
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml" })
   @Test
   public void testShouldAddTaskOwnerForAddandDeleteIdentityLinkByTimeStamp() {
 
@@ -315,7 +315,7 @@ public class HistoricIdentityLinkLogQueryTest extends PluggableProcessEngineTest
   }
 
   @SuppressWarnings("deprecation")
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml" })
   @Test
   public void testQueryAddAndRemoveIdentityLinksForProcessDefinition() throws Exception {
 
@@ -363,7 +363,7 @@ public class HistoricIdentityLinkLogQueryTest extends PluggableProcessEngineTest
     assertEquals(query.operationType(IDENTITY_LINK_DELETE).count(), 2);
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/runtime/OneTaskProcessWithMultipleCandidateUser.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/runtime/OneTaskProcessWithMultipleCandidateUser.bpmn20.xml" })
   @Test
   public void testHistoricIdentityLinkQueryPaging() {
     startProcessInstance(PROCESS_DEFINITION_KEY_MULTIPLE_CANDIDATE_USER);
@@ -376,7 +376,7 @@ public class HistoricIdentityLinkLogQueryTest extends PluggableProcessEngineTest
     assertEquals(3, query.listPage(1, 4).size());
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/runtime/OneTaskProcessWithMultipleCandidateUser.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/runtime/OneTaskProcessWithMultipleCandidateUser.bpmn20.xml" })
   @Test
   public void testHistoricIdentityLinkQuerySorting() {
 

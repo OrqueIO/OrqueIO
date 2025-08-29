@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -62,11 +62,11 @@ public class FormAuthorizationTest extends AuthorizationTest {
   @Before
   public void setUp() throws Exception {
     deploymentId = testRule.deploy(
-        "org/camunda/bpm/engine/test/api/form/DeployedFormsProcess.bpmn20.xml",
-        "org/camunda/bpm/engine/test/api/form/start.html",
-        "org/camunda/bpm/engine/test/api/form/task.html",
-        "org/camunda/bpm/engine/test/api/authorization/renderedFormProcess.bpmn20.xml",
-        "org/camunda/bpm/engine/test/api/authorization/oneTaskCase.cmmn").getId();
+        "io/orqueio/bpm/engine/test/api/form/DeployedFormsProcess.bpmn20.xml",
+        "io/orqueio/bpm/engine/test/api/form/start.html",
+        "io/orqueio/bpm/engine/test/api/form/task.html",
+        "io/orqueio/bpm/engine/test/api/authorization/renderedFormProcess.bpmn20.xml",
+        "io/orqueio/bpm/engine/test/api/authorization/oneTaskCase.cmmn").getId();
     ensureSpecificVariablePermission = processEngineConfiguration.isEnforceSpecificVariablePermission();
     super.setUp();
   }
@@ -109,7 +109,7 @@ public class FormAuthorizationTest extends AuthorizationTest {
 
     // then
     assertNotNull(startFormData);
-    assertEquals("deployment:org/camunda/bpm/engine/test/api/form/start.html", startFormData.getFormKey());
+    assertEquals("deployment:io/orqueio/bpm/engine/test/api/form/start.html", startFormData.getFormKey());
   }
 
   // get rendered start form /////////////////////////////////////
@@ -1039,7 +1039,7 @@ public class FormAuthorizationTest extends AuthorizationTest {
     String formKey = formService.getStartFormKey(processDefinitionId);
 
     // then
-    assertEquals("deployment:org/camunda/bpm/engine/test/api/form/start.html", formKey);
+    assertEquals("deployment:io/orqueio/bpm/engine/test/api/form/start.html", formKey);
   }
 
   // get task form key ////////////////////////////////////////
@@ -1073,7 +1073,7 @@ public class FormAuthorizationTest extends AuthorizationTest {
     String formKey = formService.getTaskFormKey(processDefinitionId, "task");
 
     // then
-    assertEquals("deployment:org/camunda/bpm/engine/test/api/form/task.html", formKey);
+    assertEquals("deployment:io/orqueio/bpm/engine/test/api/form/task.html", formKey);
   }
 
   // get deployed start form////////////////////////////////////////

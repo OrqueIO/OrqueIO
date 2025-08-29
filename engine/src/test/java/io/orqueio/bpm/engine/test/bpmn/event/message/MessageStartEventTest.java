@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -46,7 +46,7 @@ public class MessageStartEventTest extends PluggableProcessEngineTest {
   public void testDeploymentCreatesSubscriptions() {
     String deploymentId = repositoryService
         .createDeployment()
-        .addClasspathResource("org/camunda/bpm/engine/test/bpmn/event/message/MessageStartEventTest.testSingleMessageStartEvent.bpmn20.xml")
+        .addClasspathResource("io/orqueio/bpm/engine/test/bpmn/event/message/MessageStartEventTest.testSingleMessageStartEvent.bpmn20.xml")
         .deploy()
         .getId();
 
@@ -61,13 +61,13 @@ public class MessageStartEventTest extends PluggableProcessEngineTest {
   public void testSameMessageNameFails() {
     repositoryService
         .createDeployment()
-        .addClasspathResource("org/camunda/bpm/engine/test/bpmn/event/message/MessageStartEventTest.testSingleMessageStartEvent.bpmn20.xml")
+        .addClasspathResource("io/orqueio/bpm/engine/test/bpmn/event/message/MessageStartEventTest.testSingleMessageStartEvent.bpmn20.xml")
         .deploy()
         .getId();
     try {
       repositoryService
           .createDeployment()
-          .addClasspathResource("org/camunda/bpm/engine/test/bpmn/event/message/otherProcessWithNewInvoiceMessage.bpmn20.xml")
+          .addClasspathResource("io/orqueio/bpm/engine/test/bpmn/event/message/otherProcessWithNewInvoiceMessage.bpmn20.xml")
           .deploy();
       fail("exception expected");
     } catch (ProcessEngineException e) {
@@ -90,7 +90,7 @@ public class MessageStartEventTest extends PluggableProcessEngineTest {
     try {
       repositoryService
           .createDeployment()
-          .addClasspathResource("org/camunda/bpm/engine/test/bpmn/event/message/MessageStartEventTest.testEmptyMessageNameFails.bpmn20.xml")
+          .addClasspathResource("io/orqueio/bpm/engine/test/bpmn/event/message/MessageStartEventTest.testEmptyMessageNameFails.bpmn20.xml")
           .deploy();
       fail("exception expected");
     } catch (ParseException e) {
@@ -104,7 +104,7 @@ public class MessageStartEventTest extends PluggableProcessEngineTest {
     try {
       repositoryService
           .createDeployment()
-          .addClasspathResource("org/camunda/bpm/engine/test/bpmn/event/message/testSameMessageNameInSameProcessFails.bpmn20.xml")
+          .addClasspathResource("io/orqueio/bpm/engine/test/bpmn/event/message/testSameMessageNameInSameProcessFails.bpmn20.xml")
           .deploy();
       fail("exception expected");
     } catch (ProcessEngineException e) {
@@ -116,7 +116,7 @@ public class MessageStartEventTest extends PluggableProcessEngineTest {
   public void testUpdateProcessVersionCancelsSubscriptions() {
     String deploymentId = repositoryService
         .createDeployment()
-        .addClasspathResource("org/camunda/bpm/engine/test/bpmn/event/message/MessageStartEventTest.testSingleMessageStartEvent.bpmn20.xml")
+        .addClasspathResource("io/orqueio/bpm/engine/test/bpmn/event/message/MessageStartEventTest.testSingleMessageStartEvent.bpmn20.xml")
         .deploy()
         .getId();
 
@@ -128,7 +128,7 @@ public class MessageStartEventTest extends PluggableProcessEngineTest {
 
     String newDeploymentId = repositoryService
         .createDeployment()
-        .addClasspathResource("org/camunda/bpm/engine/test/bpmn/event/message/MessageStartEventTest.testSingleMessageStartEvent.bpmn20.xml")
+        .addClasspathResource("io/orqueio/bpm/engine/test/bpmn/event/message/MessageStartEventTest.testSingleMessageStartEvent.bpmn20.xml")
         .deploy()
         .getId();
 
@@ -275,7 +275,7 @@ public class MessageStartEventTest extends PluggableProcessEngineTest {
       String deploymentId = repositoryService
           .createDeployment()
           .addClasspathResource(
-              "org/camunda/bpm/engine/test/bpmn/event/message/MessageStartEventTest.testDeployStartAndIntermediateEventWithSameMessageInSameProcess.bpmn")
+              "io/orqueio/bpm/engine/test/bpmn/event/message/MessageStartEventTest.testDeployStartAndIntermediateEventWithSameMessageInSameProcess.bpmn")
           .name("deployment2").deploy().getId();
       assertThat(repositoryService.createDeploymentQuery().deploymentId(deploymentId).singleResult()).isNotNull();
     } finally {
@@ -292,7 +292,7 @@ public class MessageStartEventTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/event/message/MessageStartEventTest.testDeployStartAndIntermediateEventWithSameMessageDifferentProcesses.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/bpmn/event/message/MessageStartEventTest.testDeployStartAndIntermediateEventWithSameMessageDifferentProcesses.bpmn"})
   @Test
   public void testDeployStartAndIntermediateEventWithSameMessageDifferentProcessesFirstStartEvent() {
     ProcessInstance pi = null;
@@ -304,7 +304,7 @@ public class MessageStartEventTest extends PluggableProcessEngineTest {
       String deploymentId = repositoryService
           .createDeployment()
           .addClasspathResource(
-              "org/camunda/bpm/engine/test/bpmn/event/message/MessageStartEventTest.testDeployStartAndIntermediateEventWithSameMessageDifferentProcesses2.bpmn")
+              "io/orqueio/bpm/engine/test/bpmn/event/message/MessageStartEventTest.testDeployStartAndIntermediateEventWithSameMessageDifferentProcesses2.bpmn")
           .name("deployment2").deploy().getId();
       assertThat(repositoryService.createDeploymentQuery().deploymentId(deploymentId).singleResult()).isNotNull();
     } finally {
@@ -321,7 +321,7 @@ public class MessageStartEventTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/event/message/MessageStartEventTest.testDeployStartAndIntermediateEventWithSameMessageDifferentProcesses2.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/bpmn/event/message/MessageStartEventTest.testDeployStartAndIntermediateEventWithSameMessageDifferentProcesses2.bpmn"})
   @Test
   public void testDeployStartAndIntermediateEventWithSameMessageDifferentProcessesFirstIntermediateEvent() {
     ProcessInstance pi = null;
@@ -333,7 +333,7 @@ public class MessageStartEventTest extends PluggableProcessEngineTest {
       String deploymentId = repositoryService
           .createDeployment()
           .addClasspathResource(
-              "org/camunda/bpm/engine/test/bpmn/event/message/MessageStartEventTest.testDeployStartAndIntermediateEventWithSameMessageDifferentProcesses.bpmn")
+              "io/orqueio/bpm/engine/test/bpmn/event/message/MessageStartEventTest.testDeployStartAndIntermediateEventWithSameMessageDifferentProcesses.bpmn")
           .name("deployment2").deploy().getId();
       assertThat(repositoryService.createDeploymentQuery().deploymentId(deploymentId).singleResult()).isNotNull();
     } finally {
@@ -355,7 +355,7 @@ public class MessageStartEventTest extends PluggableProcessEngineTest {
 
     // given a process definition with a start message event that has a message name which contains an expression
     String processDefinition =
-        "org/camunda/bpm/engine/test/bpmn/event/message/" +
+        "io/orqueio/bpm/engine/test/bpmn/event/message/" +
             "MessageStartEventTest.testUsingExpressionWithDollarTagInMessageStartEventNameThrowsException.bpmn20.xml";
     try {
       // when deploying the process
@@ -376,7 +376,7 @@ public class MessageStartEventTest extends PluggableProcessEngineTest {
 
     // given a process definition with a start message event that has a message name which contains an expression
     String processDefinition =
-        "org/camunda/bpm/engine/test/bpmn/event/message/" +
+        "io/orqueio/bpm/engine/test/bpmn/event/message/" +
             "MessageStartEventTest.testUsingExpressionWithHashTagInMessageStartEventNameThrowsException.bpmn20.xml";
     try {
       // when deploying the process
@@ -393,7 +393,7 @@ public class MessageStartEventTest extends PluggableProcessEngineTest {
   }
 
   //test fix CAM-10819
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/event/message/MessageStartEventTest.testMessageStartEventUsingCorrelationEngine.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/bpmn/event/message/MessageStartEventTest.testMessageStartEventUsingCorrelationEngine.bpmn"})
   @Test
   public void testMessageStartEventUsingCorrelationEngineAndLocalVariable() {
 

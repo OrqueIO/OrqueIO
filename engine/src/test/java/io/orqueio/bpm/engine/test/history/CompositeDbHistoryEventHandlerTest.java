@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -35,7 +35,7 @@ import org.junit.Test;
 public class CompositeDbHistoryEventHandlerTest extends AbstractCompositeHistoryEventHandlerTest {
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/history/HistoryLevelTest.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/history/HistoryLevelTest.bpmn20.xml"})
   public void shouldUseCompositeDbHistoryEventHandlerNonArgumentConstructor() {
     processEngineConfiguration.setHistoryEventHandler(new CompositeDbHistoryEventHandler());
 
@@ -57,7 +57,7 @@ public class CompositeDbHistoryEventHandlerTest extends AbstractCompositeHistory
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/history/HistoryLevelTest.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/history/HistoryLevelTest.bpmn20.xml"})
   public void shouldUseCompositeDbHistoryEventHandlerNonArgumentConstructorAddNotNullEvent() {
     CompositeDbHistoryEventHandler compositeDbHistoryEventHandler = new CompositeDbHistoryEventHandler();
     compositeDbHistoryEventHandler.add(new CustomDbHistoryEventHandler());
@@ -70,7 +70,7 @@ public class CompositeDbHistoryEventHandlerTest extends AbstractCompositeHistory
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/history/HistoryLevelTest.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/history/HistoryLevelTest.bpmn20.xml" })
   public void shouldUseCompositeDbHistoryEventHandlerNonArgumentConstructorAddTwoNotNullEvents() {
     CompositeDbHistoryEventHandler compositeDbHistoryEventHandler = new CompositeDbHistoryEventHandler();
     compositeDbHistoryEventHandler.add(new CustomDbHistoryEventHandler());
@@ -105,7 +105,7 @@ public class CompositeDbHistoryEventHandlerTest extends AbstractCompositeHistory
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/history/HistoryLevelTest.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/history/HistoryLevelTest.bpmn20.xml" })
   public void shouldUseCompositeDbHistoryEventHandlerArgumentConstructorWithNotNullVarargsOneEvent() {
     CompositeDbHistoryEventHandler compositeDbHistoryEventHandler = new CompositeDbHistoryEventHandler(new CustomDbHistoryEventHandler());
     processEngineConfiguration.setHistoryEventHandler(compositeDbHistoryEventHandler);
@@ -117,7 +117,7 @@ public class CompositeDbHistoryEventHandlerTest extends AbstractCompositeHistory
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/history/HistoryLevelTest.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/history/HistoryLevelTest.bpmn20.xml" })
   public void shouldUseCompositeDbHistoryEventHandlerArgumentConstructorWithNotNullVarargsTwoEvents() {
     CompositeDbHistoryEventHandler compositeDbHistoryEventHandler = new CompositeDbHistoryEventHandler(new CustomDbHistoryEventHandler(), new CustomDbHistoryEventHandler());
     processEngineConfiguration.setHistoryEventHandler(compositeDbHistoryEventHandler);
@@ -129,7 +129,7 @@ public class CompositeDbHistoryEventHandlerTest extends AbstractCompositeHistory
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/history/HistoryLevelTest.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/history/HistoryLevelTest.bpmn20.xml"})
   public void shouldUseCompositeDbHistoryEventHandlerArgumentConstructorWithEmptyList() {
     CompositeDbHistoryEventHandler compositeDbHistoryEventHandler = new CompositeDbHistoryEventHandler(new ArrayList<HistoryEventHandler>());
     processEngineConfiguration.setHistoryEventHandler(compositeDbHistoryEventHandler);
@@ -156,7 +156,7 @@ public class CompositeDbHistoryEventHandlerTest extends AbstractCompositeHistory
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/history/HistoryLevelTest.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/history/HistoryLevelTest.bpmn20.xml"})
   public void shouldUseCompositeDbHistoryEventHandlerArgumentConstructorWithNotEmptyListNotNullTwoEvents() {
     // prepare the list with two events
     List<HistoryEventHandler> historyEventHandlers = new ArrayList<HistoryEventHandler>();

@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -101,8 +101,8 @@ public class SignalEventTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/bpmn/event/signal/SignalEventTests.catchAlertSignal.bpmn20.xml",
-      "org/camunda/bpm/engine/test/bpmn/event/signal/SignalEventTests.throwAlertSignal.bpmn20.xml"})
+      "io/orqueio/bpm/engine/test/bpmn/event/signal/SignalEventTests.catchAlertSignal.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/bpmn/event/signal/SignalEventTests.throwAlertSignal.bpmn20.xml"})
   @Test
   public void testSignalCatchIntermediate() {
 
@@ -119,8 +119,8 @@ public class SignalEventTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/bpmn/event/signal/SignalEventTests.catchAlertSignalBoundary.bpmn20.xml",
-      "org/camunda/bpm/engine/test/bpmn/event/signal/SignalEventTests.throwAlertSignal.bpmn20.xml"})
+      "io/orqueio/bpm/engine/test/bpmn/event/signal/SignalEventTests.catchAlertSignalBoundary.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/bpmn/event/signal/SignalEventTests.throwAlertSignal.bpmn20.xml"})
   @Test
   public void testSignalCatchBoundary() {
     runtimeService.startProcessInstanceByKey("catchSignal");
@@ -135,8 +135,8 @@ public class SignalEventTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/bpmn/event/signal/SignalEventTests.catchAlertSignalBoundaryWithReceiveTask.bpmn20.xml",
-      "org/camunda/bpm/engine/test/bpmn/event/signal/SignalEventTests.throwAlertSignal.bpmn20.xml"})
+      "io/orqueio/bpm/engine/test/bpmn/event/signal/SignalEventTests.catchAlertSignalBoundaryWithReceiveTask.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/bpmn/event/signal/SignalEventTests.throwAlertSignal.bpmn20.xml"})
   @Test
   public void testSignalCatchBoundaryWithVariables() {
     HashMap<String, Object> variables1 = new HashMap<>();
@@ -151,8 +151,8 @@ public class SignalEventTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/bpmn/event/signal/SignalEventTests.catchAlertSignal.bpmn20.xml",
-      "org/camunda/bpm/engine/test/bpmn/event/signal/SignalEventTests.throwAlertSignalAsynch.bpmn20.xml"})
+      "io/orqueio/bpm/engine/test/bpmn/event/signal/SignalEventTests.catchAlertSignal.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/bpmn/event/signal/SignalEventTests.throwAlertSignalAsynch.bpmn20.xml"})
   @Test
   public void testSignalCatchIntermediateAsynch() {
 
@@ -183,9 +183,9 @@ public class SignalEventTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/bpmn/event/signal/SignalEventTests.catchMultipleSignals.bpmn20.xml",
-      "org/camunda/bpm/engine/test/bpmn/event/signal/SignalEventTests.throwAlertSignal.bpmn20.xml",
-      "org/camunda/bpm/engine/test/bpmn/event/signal/SignalEventTests.throwAbortSignal.bpmn20.xml"})
+      "io/orqueio/bpm/engine/test/bpmn/event/signal/SignalEventTests.catchMultipleSignals.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/bpmn/event/signal/SignalEventTests.throwAlertSignal.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/bpmn/event/signal/SignalEventTests.throwAbortSignal.bpmn20.xml"})
   @Test
   public void testSignalCatchDifferentSignals() {
 
@@ -352,7 +352,7 @@ public class SignalEventTest {
     assertEquals(1, executionQuery.count());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/event/signal/SignalEventTest.signalStartEvent.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/bpmn/event/signal/SignalEventTest.signalStartEvent.bpmn20.xml"})
   @Test
   public void testSignalStartEvent() {
     // event subscription for signal start event
@@ -363,7 +363,7 @@ public class SignalEventTest {
     assertEquals(1, taskService.createTaskQuery().count());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/event/signal/SignalEventTest.signalStartEvent.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/bpmn/event/signal/SignalEventTest.signalStartEvent.bpmn20.xml"})
   @Test
   public void testSuspendedProcessWithSignalStartEvent() {
     // event subscription for signal start event
@@ -377,8 +377,8 @@ public class SignalEventTest {
     assertEquals(0, taskService.createTaskQuery().count());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/event/signal/SignalEventTest.signalStartEvent.bpmn20.xml",
-      "org/camunda/bpm/engine/test/bpmn/event/signal/SignalEventTest.testOtherSignalStartEvent.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/bpmn/event/signal/SignalEventTest.signalStartEvent.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/bpmn/event/signal/SignalEventTest.testOtherSignalStartEvent.bpmn20.xml"})
   @Test
   public void testMultipleProcessesWithSameSignalStartEvent() {
     // event subscriptions for signal start event
@@ -390,8 +390,8 @@ public class SignalEventTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/bpmn/event/signal/SignalEventTest.signalStartEvent.bpmn20.xml",
-      "org/camunda/bpm/engine/test/bpmn/event/signal/SignalEventTests.throwAlertSignal.bpmn20.xml"})
+      "io/orqueio/bpm/engine/test/bpmn/event/signal/SignalEventTest.signalStartEvent.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/bpmn/event/signal/SignalEventTests.throwAlertSignal.bpmn20.xml"})
   @Test
   public void testStartProcessInstanceBySignalFromIntermediateThrowingSignalEvent() {
     // start a process instance to throw a signal
@@ -401,8 +401,8 @@ public class SignalEventTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/bpmn/event/signal/SignalEventTest.signalStartEvent.bpmn20.xml",
-      "org/camunda/bpm/engine/test/bpmn/event/signal/SignalEventTests.throwAlertSignal.bpmn20.xml"})
+      "io/orqueio/bpm/engine/test/bpmn/event/signal/SignalEventTest.signalStartEvent.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/bpmn/event/signal/SignalEventTests.throwAlertSignal.bpmn20.xml"})
   @Test
   public void testIntermediateThrowingSignalEventWithSuspendedSignalStartEvent() {
     // event subscription for signal start event
@@ -428,7 +428,7 @@ public class SignalEventTest {
     assertEquals(1, taskService.createTaskQuery().count());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/event/signal/SignalEventTests.catchAlertTwiceAndTerminate.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/bpmn/event/signal/SignalEventTests.catchAlertTwiceAndTerminate.bpmn20.xml"})
   @Test
   public void testThrowSignalMultipleCancellingReceivers() {
     RecorderExecutionListener.clear();
@@ -449,8 +449,8 @@ public class SignalEventTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/bpmn/event/signal/SignalEventTests.catchAlertTwiceAndTerminate.bpmn20.xml",
-      "org/camunda/bpm/engine/test/bpmn/event/signal/SignalEventTests.throwAlertSignal.bpmn20.xml"})
+      "io/orqueio/bpm/engine/test/bpmn/event/signal/SignalEventTests.catchAlertTwiceAndTerminate.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/bpmn/event/signal/SignalEventTests.throwAlertSignal.bpmn20.xml"})
   @Test
   public void testIntermediateThrowSignalMultipleCancellingReceivers() {
     RecorderExecutionListener.clear();
@@ -471,8 +471,8 @@ public class SignalEventTest {
   }
 
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/event/signal/SignalEventTest.signalStartEvent.bpmn20.xml",
-    "org/camunda/bpm/engine/test/bpmn/event/signal/SignalEventTests.throwAlertSignalAsync.bpmn20.xml"})
+    "io/orqueio/bpm/engine/test/bpmn/event/signal/SignalEventTest.signalStartEvent.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/bpmn/event/signal/SignalEventTests.throwAlertSignalAsync.bpmn20.xml"})
   @Test
   public void testAsyncSignalStartEventJobProperties() {
     processEngineConfiguration.setEnsureJobDueDateNotNull(false);
@@ -504,8 +504,8 @@ public class SignalEventTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/bpmn/event/signal/SignalEventTest.signalStartEvent.bpmn20.xml",
-      "org/camunda/bpm/engine/test/bpmn/event/signal/SignalEventTests.throwAlertSignalAsync.bpmn20.xml"})
+      "io/orqueio/bpm/engine/test/bpmn/event/signal/SignalEventTest.signalStartEvent.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/bpmn/event/signal/SignalEventTests.throwAlertSignalAsync.bpmn20.xml"})
   @Test
   public void testAsyncSignalStartEventJobPropertiesDueDateSet() {
     Date testTime = new Date(1457326800000L);
@@ -539,8 +539,8 @@ public class SignalEventTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/bpmn/event/signal/SignalEventTest.signalStartEvent.bpmn20.xml",
-      "org/camunda/bpm/engine/test/bpmn/event/signal/SignalEventTests.throwAlertSignalAsync.bpmn20.xml"})
+      "io/orqueio/bpm/engine/test/bpmn/event/signal/SignalEventTest.signalStartEvent.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/bpmn/event/signal/SignalEventTests.throwAlertSignalAsync.bpmn20.xml"})
   @Test
   public void testAsyncSignalStartEvent() {
     ProcessDefinition catchingProcessDefinition = repositoryService
@@ -586,7 +586,7 @@ public class SignalEventTest {
     assertEquals(1, taskService.createTaskQuery().taskDefinitionKey("eventSubProcessTask").count());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/bpmn/event/signal/SignalEventTest.signalStartEvent.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/bpmn/event/signal/SignalEventTest.signalStartEvent.bpmn20.xml")
   @Test
   public void testSetSerializedVariableValues() throws IOException, ClassNotFoundException {
 
@@ -631,8 +631,8 @@ public class SignalEventTest {
    * CAM-6807
    */
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/bpmn/event/signal/SignalEventTests.catchAlertSignalBoundary.bpmn20.xml",
-      "org/camunda/bpm/engine/test/bpmn/event/signal/SignalEventTests.throwAlertSignalAsync.bpmn20.xml"})
+      "io/orqueio/bpm/engine/test/bpmn/event/signal/SignalEventTests.catchAlertSignalBoundary.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/bpmn/event/signal/SignalEventTests.throwAlertSignalAsync.bpmn20.xml"})
   @Test
   @Ignore("CAM-6807")
   public void testAsyncSignalBoundary() {

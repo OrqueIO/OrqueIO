@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -75,7 +75,7 @@ public class RuntimeServiceAsyncOperationsTest extends AbstractAsyncOperationsTe
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   @Test
   public void testDeleteProcessInstancesAsyncWithList() throws Exception {
     // given
@@ -94,7 +94,7 @@ public class RuntimeServiceAsyncOperationsTest extends AbstractAsyncOperationsTe
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   @Test
   public void testDeleteProcessInstancesAsyncWithLargeList() throws Exception {
     // given
@@ -121,7 +121,7 @@ public class RuntimeServiceAsyncOperationsTest extends AbstractAsyncOperationsTe
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   @Test
   public void testDeleteProcessInstancesAsyncWithListOnly() throws Exception {
     // given
@@ -140,7 +140,7 @@ public class RuntimeServiceAsyncOperationsTest extends AbstractAsyncOperationsTe
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   @Test
   public void testDeleteProcessInstancesAsyncWithFake() throws Exception {
     // given
@@ -165,7 +165,7 @@ public class RuntimeServiceAsyncOperationsTest extends AbstractAsyncOperationsTe
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   @Test
   public void testDeleteProcessInstancesAsyncWithNullList() throws Exception {
 
@@ -177,7 +177,7 @@ public class RuntimeServiceAsyncOperationsTest extends AbstractAsyncOperationsTe
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   @Test
   public void testDeleteProcessInstancesAsyncWithEmptyList() throws Exception {
 
@@ -189,7 +189,7 @@ public class RuntimeServiceAsyncOperationsTest extends AbstractAsyncOperationsTe
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   @Test
   public void testDeleteProcessInstancesAsyncWithQuery() throws Exception {
     // given
@@ -210,7 +210,7 @@ public class RuntimeServiceAsyncOperationsTest extends AbstractAsyncOperationsTe
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   @Test
   public void testDeleteProcessInstancesAsyncWithQueryOnly() throws Exception {
     // given
@@ -231,7 +231,7 @@ public class RuntimeServiceAsyncOperationsTest extends AbstractAsyncOperationsTe
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   @Test
   public void testDeleteProcessInstancesAsyncWithQueryWithoutDeleteReason() throws Exception {
     // given
@@ -253,7 +253,7 @@ public class RuntimeServiceAsyncOperationsTest extends AbstractAsyncOperationsTe
 
   @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_ACTIVITY)
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   @Test
   public void testDeleteProcessInstancesAsyncWithHistoryQuery() {
     // given
@@ -277,7 +277,7 @@ public class RuntimeServiceAsyncOperationsTest extends AbstractAsyncOperationsTe
 
   @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_ACTIVITY)
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   @Test
   public void testDeleteProcessInstancesAsyncWithRuntimeAndHistoryQuery() {
     // given
@@ -303,7 +303,7 @@ public class RuntimeServiceAsyncOperationsTest extends AbstractAsyncOperationsTe
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   @Test
   public void testDeleteProcessInstancesAsyncWithNullQueryParameter() throws Exception {
 
@@ -314,7 +314,7 @@ public class RuntimeServiceAsyncOperationsTest extends AbstractAsyncOperationsTe
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   @Test
   public void testDeleteProcessInstancesAsyncWithInvalidQueryParameter() throws Exception {
     // given
@@ -342,7 +342,7 @@ public class RuntimeServiceAsyncOperationsTest extends AbstractAsyncOperationsTe
     BpmnModelInstance instance = ProcessModels.newModel(ONE_TASK_PROCESS)
         .startEvent()
         .userTask()
-          .camundaExecutionListenerClass(ExecutionListener.EVENTNAME_END, IncrementCounterListener.class.getName())
+          .orqueioExecutionListenerClass(ExecutionListener.EVENTNAME_END, IncrementCounterListener.class.getName())
         .endEvent()
         .done();
 
@@ -391,7 +391,7 @@ public class RuntimeServiceAsyncOperationsTest extends AbstractAsyncOperationsTe
     assertNotNull(subInstance);
   }
 
-  @Deployment(resources="org/camunda/bpm/engine/test/api/oneTaskProcessWithIoMappings.bpmn20.xml")
+  @Deployment(resources="io/orqueio/bpm/engine/test/api/oneTaskProcessWithIoMappings.bpmn20.xml")
   @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_FULL)
   @Test
   public void shouldApplySkipIoMappingOnDeleteProcessInstancesAsync() {
@@ -415,7 +415,7 @@ public class RuntimeServiceAsyncOperationsTest extends AbstractAsyncOperationsTe
     assertThat(historyService.createHistoricVariableInstanceQuery().variableName("inputMappingExecuted").count()).isEqualTo(2);
   }
 
-  @Deployment(resources="org/camunda/bpm/engine/test/api/oneTaskProcessWithIoMappings.bpmn20.xml")
+  @Deployment(resources="io/orqueio/bpm/engine/test/api/oneTaskProcessWithIoMappings.bpmn20.xml")
   @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_FULL)
   @Test
   public void shouldNotApplySkipIoMappingOnDeleteProcessInstancesAsyncFalse() {
@@ -482,7 +482,7 @@ public class RuntimeServiceAsyncOperationsTest extends AbstractAsyncOperationsTe
     BpmnModelInstance instance = ProcessModels.newModel(ONE_TASK_PROCESS)
         .startEvent()
         .userTask()
-          .camundaExecutionListenerClass(ExecutionListener.EVENTNAME_END, IncrementCounterListener.class.getName())
+          .orqueioExecutionListenerClass(ExecutionListener.EVENTNAME_END, IncrementCounterListener.class.getName())
         .endEvent()
         .done();
 
@@ -551,7 +551,7 @@ public class RuntimeServiceAsyncOperationsTest extends AbstractAsyncOperationsTe
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   @Test
   public void shouldSetInvocationsPerBatchType() {
     // given

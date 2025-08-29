@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -21,10 +21,10 @@ import io.orqueio.bpm.engine.delegate.Expression;
 public class FormDefinition {
 
   protected Expression formKey;
-  // camunda form definition
-  protected Expression camundaFormDefinitionKey;
-  protected String camundaFormDefinitionBinding;
-  protected Expression camundaFormDefinitionVersion;
+  // orqueio form definition
+  protected Expression orqueioFormDefinitionKey;
+  protected String orqueioFormDefinitionBinding;
+  protected Expression orqueioFormDefinitionVersion;
 
   public Expression getFormKey() {
     return formKey;
@@ -32,22 +32,22 @@ public class FormDefinition {
   public void setFormKey(Expression formKey) {
     this.formKey = formKey;
   }
-  public Expression getCamundaFormDefinitionKey() {
-    return camundaFormDefinitionKey;
+  public Expression getOrqueioFormDefinitionKey() {
+    return orqueioFormDefinitionKey;
   }
-  public void setCamundaFormDefinitionKey(Expression camundaFormDefinitionKey) {
-    this.camundaFormDefinitionKey = camundaFormDefinitionKey;
+  public void setOrqueioFormDefinitionKey(Expression orqueioFormDefinitionKey) {
+    this.orqueioFormDefinitionKey = orqueioFormDefinitionKey;
   }
-  public String getCamundaFormDefinitionBinding() {
-    return camundaFormDefinitionBinding;
+  public String getOrqueioFormDefinitionBinding() {
+    return orqueioFormDefinitionBinding;
   }
-  public void setCamundaFormDefinitionBinding(String camundaFormDefinitionBinding) {
-    this.camundaFormDefinitionBinding = camundaFormDefinitionBinding;
+  public void setOrqueioFormDefinitionBinding(String orqueioFormDefinitionBinding) {
+    this.orqueioFormDefinitionBinding = orqueioFormDefinitionBinding;
   }
-  public Expression getCamundaFormDefinitionVersion() {
-    return camundaFormDefinitionVersion;
+  public Expression getOrqueioFormDefinitionVersion() {
+    return orqueioFormDefinitionVersion;
   }
-  public void setCamundaFormDefinitionVersion(Expression camundaFormDefinitionVersion) {
-    this.camundaFormDefinitionVersion = camundaFormDefinitionVersion;
+  public void setOrqueioFormDefinitionVersion(Expression orqueioFormDefinitionVersion) {
+    this.orqueioFormDefinitionVersion = orqueioFormDefinitionVersion;
   }
 }

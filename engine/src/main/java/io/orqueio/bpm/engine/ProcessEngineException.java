@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -59,7 +59,7 @@ public class ProcessEngineException extends RuntimeException {
    * the exception code from a custom {@link ExceptionCodeProvider}.
    *
    * <p>Your business logic can react to the exception code exposed
-   * via {@link #getCode} when calling Camunda Java API and is
+   * via {@link #getCode} when calling Orqueio Java API and is
    * even exposed to the REST API when an error occurs.
    */
   public void setCode(int code) {

@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -51,7 +51,7 @@ public class CmmnDeployerTest extends PluggableProcessEngineTest {
     String deploymentId = processEngine
         .getRepositoryService()
         .createDeployment()
-        .addClasspathResource("org/camunda/bpm/engine/test/cmmn/deployment/CmmnDeploymentTest.testSimpleDeployment.cmmn")
+        .addClasspathResource("io/orqueio/bpm/engine/test/cmmn/deployment/CmmnDeploymentTest.testSimpleDeployment.cmmn")
         .deploy()
         .getId();
 
@@ -74,8 +74,8 @@ public class CmmnDeployerTest extends PluggableProcessEngineTest {
   @Test
   public void testDeployTwoCasesWithDuplicateIdAtTheSameTime() {
     try {
-      String cmmnResourceName1 = "org/camunda/bpm/engine/test/cmmn/deployment/CmmnDeploymentTest.testSimpleDeployment.cmmn";
-      String cmmnResourceName2 = "org/camunda/bpm/engine/test/cmmn/deployment/CmmnDeploymentTest.testSimpleDeployment2.cmmn";
+      String cmmnResourceName1 = "io/orqueio/bpm/engine/test/cmmn/deployment/CmmnDeploymentTest.testSimpleDeployment.cmmn";
+      String cmmnResourceName2 = "io/orqueio/bpm/engine/test/cmmn/deployment/CmmnDeploymentTest.testSimpleDeployment2.cmmn";
       repositoryService.createDeployment()
               .addClasspathResource(cmmnResourceName1)
               .addClasspathResource(cmmnResourceName2)
@@ -88,49 +88,49 @@ public class CmmnDeployerTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/cmmn/deployment/CmmnDeploymentTest.testCaseDiagramResource.cmmn",
-      "org/camunda/bpm/engine/test/cmmn/deployment/CmmnDeploymentTest.testCaseDiagramResource.png" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/cmmn/deployment/CmmnDeploymentTest.testCaseDiagramResource.cmmn",
+      "io/orqueio/bpm/engine/test/cmmn/deployment/CmmnDeploymentTest.testCaseDiagramResource.png" })
   @Test
   public void testCaseDiagramResource() {
     String deploymentId = repositoryService.createDeploymentQuery().singleResult().getId();
     final CaseDefinition caseDefinition = repositoryService.createCaseDefinitionQuery().singleResult();
 
-    assertEquals("org/camunda/bpm/engine/test/cmmn/deployment/CmmnDeploymentTest.testCaseDiagramResource.cmmn", caseDefinition.getResourceName());
+    assertEquals("io/orqueio/bpm/engine/test/cmmn/deployment/CmmnDeploymentTest.testCaseDiagramResource.cmmn", caseDefinition.getResourceName());
     assertEquals("Case_1", caseDefinition.getKey());
 
     final String diagramResourceName = caseDefinition.getDiagramResourceName();
-    assertEquals("org/camunda/bpm/engine/test/cmmn/deployment/CmmnDeploymentTest.testCaseDiagramResource.png", diagramResourceName);
+    assertEquals("io/orqueio/bpm/engine/test/cmmn/deployment/CmmnDeploymentTest.testCaseDiagramResource.png", diagramResourceName);
 
     final InputStream diagramStream = repositoryService.getResourceAsStream(deploymentId,
-        "org/camunda/bpm/engine/test/cmmn/deployment/CmmnDeploymentTest.testCaseDiagramResource.png");
+        "io/orqueio/bpm/engine/test/cmmn/deployment/CmmnDeploymentTest.testCaseDiagramResource.png");
     final byte[] diagramBytes = IoUtil.readInputStream(diagramStream, "diagram stream");
     assertEquals(2540, diagramBytes.length);
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/cmmn/deployment/CmmnDeploymentTest.testMultipleDiagramResourcesProvided.cmmn",
-      "org/camunda/bpm/engine/test/cmmn/deployment/CmmnDeploymentTest.testMultipleDiagramResourcesProvided.a.png",
-      "org/camunda/bpm/engine/test/cmmn/deployment/CmmnDeploymentTest.testMultipleDiagramResourcesProvided.b.png",
-      "org/camunda/bpm/engine/test/cmmn/deployment/CmmnDeploymentTest.testMultipleDiagramResourcesProvided.c.png" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/cmmn/deployment/CmmnDeploymentTest.testMultipleDiagramResourcesProvided.cmmn",
+      "io/orqueio/bpm/engine/test/cmmn/deployment/CmmnDeploymentTest.testMultipleDiagramResourcesProvided.a.png",
+      "io/orqueio/bpm/engine/test/cmmn/deployment/CmmnDeploymentTest.testMultipleDiagramResourcesProvided.b.png",
+      "io/orqueio/bpm/engine/test/cmmn/deployment/CmmnDeploymentTest.testMultipleDiagramResourcesProvided.c.png" })
   @Test
   public void testMultipleDiagramResourcesProvided() {
     final CaseDefinition caseA = repositoryService.createCaseDefinitionQuery().caseDefinitionKey("a").singleResult();
     final CaseDefinition caseB = repositoryService.createCaseDefinitionQuery().caseDefinitionKey("b").singleResult();
     final CaseDefinition caseC = repositoryService.createCaseDefinitionQuery().caseDefinitionKey("c").singleResult();
 
-    assertEquals("org/camunda/bpm/engine/test/cmmn/deployment/CmmnDeploymentTest.testMultipleDiagramResourcesProvided.a.png", caseA.getDiagramResourceName());
-    assertEquals("org/camunda/bpm/engine/test/cmmn/deployment/CmmnDeploymentTest.testMultipleDiagramResourcesProvided.b.png", caseB.getDiagramResourceName());
-    assertEquals("org/camunda/bpm/engine/test/cmmn/deployment/CmmnDeploymentTest.testMultipleDiagramResourcesProvided.c.png", caseC.getDiagramResourceName());
+    assertEquals("io/orqueio/bpm/engine/test/cmmn/deployment/CmmnDeploymentTest.testMultipleDiagramResourcesProvided.a.png", caseA.getDiagramResourceName());
+    assertEquals("io/orqueio/bpm/engine/test/cmmn/deployment/CmmnDeploymentTest.testMultipleDiagramResourcesProvided.b.png", caseB.getDiagramResourceName());
+    assertEquals("io/orqueio/bpm/engine/test/cmmn/deployment/CmmnDeploymentTest.testMultipleDiagramResourcesProvided.c.png", caseC.getDiagramResourceName());
   }
 
   @Test
   public void testDeployCmmn10XmlFile() {
-    verifyCmmnResourceDeployed("org/camunda/bpm/engine/test/cmmn/deployment/CmmnDeploymentTest.testDeployCmmn10XmlFile.cmmn10.xml");
+    verifyCmmnResourceDeployed("io/orqueio/bpm/engine/test/cmmn/deployment/CmmnDeploymentTest.testDeployCmmn10XmlFile.cmmn10.xml");
 
   }
 
   @Test
   public void testDeployCmmn11XmlFile() {
-    verifyCmmnResourceDeployed("org/camunda/bpm/engine/test/cmmn/deployment/CmmnDeploymentTest.testDeployCmmn11XmlFile.cmmn11.xml");
+    verifyCmmnResourceDeployed("io/orqueio/bpm/engine/test/cmmn/deployment/CmmnDeploymentTest.testDeployCmmn11XmlFile.cmmn11.xml");
   }
 
   protected void verifyCmmnResourceDeployed(String resourcePath) {
@@ -173,7 +173,7 @@ public class CmmnDeployerTest extends PluggableProcessEngineTest {
   protected static CmmnModelInstance createCmmnModelInstance() {
     final CmmnModelInstance modelInstance = Cmmn.createEmptyModel();
     io.orqueio.bpm.model.cmmn.instance.Definitions definitions = modelInstance.newInstance(io.orqueio.bpm.model.cmmn.instance.Definitions.class);
-    definitions.setTargetNamespace("http://camunda.org/examples");
+    definitions.setTargetNamespace("http://orqueio.io/examples");
     modelInstance.setDefinitions(definitions);
 
     Case caseElement = modelInstance.newInstance(Case.class);
@@ -215,7 +215,7 @@ public class CmmnDeployerTest extends PluggableProcessEngineTest {
     // given empty case model
     final CmmnModelInstance modelInstance = Cmmn.createEmptyModel();
     io.orqueio.bpm.model.cmmn.instance.Definitions definitions = modelInstance.newInstance(io.orqueio.bpm.model.cmmn.instance.Definitions.class);
-    definitions.setTargetNamespace("http://camunda.org/examples");
+    definitions.setTargetNamespace("http://orqueio.io/examples");
     modelInstance.setDefinitions(definitions);
 
     // when case model is deployed
@@ -229,7 +229,7 @@ public class CmmnDeployerTest extends PluggableProcessEngineTest {
     assertNull(repositoryService.createCaseDefinitionQuery().caseDefinitionResourceName("foo.cmmn").singleResult());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/cmmn/deployment/CmmnDeploymentTest.testDeployCaseDefinitionWithIntegerHistoryTimeToLive.cmmn")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/cmmn/deployment/CmmnDeploymentTest.testDeployCaseDefinitionWithIntegerHistoryTimeToLive.cmmn")
   @Test
   public void testDeployCaseDefinitionWithIntegerHistoryTimeToLive() {
     CaseDefinition caseDefinition = repositoryService.createCaseDefinitionQuery().singleResult();
@@ -238,7 +238,7 @@ public class CmmnDeployerTest extends PluggableProcessEngineTest {
     assertEquals((int) historyTimeToLive, 5);
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/cmmn/deployment/CmmnDeploymentTest.testDeployCaseDefinitionWithStringHistoryTimeToLive.cmmn")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/cmmn/deployment/CmmnDeploymentTest.testDeployCaseDefinitionWithStringHistoryTimeToLive.cmmn")
   @Test
   public void testDeployCaseDefinitionWithStringHistoryTimeToLive() {
     CaseDefinition caseDefinition = repositoryService.createCaseDefinitionQuery().singleResult();
@@ -250,7 +250,7 @@ public class CmmnDeployerTest extends PluggableProcessEngineTest {
   @Test
   public void testDeployCaseDefinitionWithMalformedHistoryTimeToLive() {
     try {
-     testRule.deploy("org/camunda/bpm/engine/test/cmmn/deployment/CmmnDeploymentTest.testDeployCaseDefinitionWithMalformedHistoryTimeToLive.cmmn");
+     testRule.deploy("io/orqueio/bpm/engine/test/cmmn/deployment/CmmnDeploymentTest.testDeployCaseDefinitionWithMalformedHistoryTimeToLive.cmmn");
       fail("Exception expected");
     } catch (ProcessEngineException e) {
       assertTrue(e.getCause().getMessage().contains("Cannot parse historyTimeToLive"));

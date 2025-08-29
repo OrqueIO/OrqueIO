@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -752,7 +752,7 @@ public class ManagementServiceImpl extends ServiceImpl implements ManagementServ
 
     @Override
     public String execute(CommandContext commandContext) {
-      commandContext.getAuthorizationManager().checkCamundaAdmin();
+      commandContext.getAuthorizationManager().checkOrqueioAdmin();
       DbSqlSessionFactory dbSqlSessionFactory = (DbSqlSessionFactory) commandContext.getSessionFactories().get(DbSqlSession.class);
       DbSqlSession dbSqlSession = dbSqlSessionFactory.openSession(connection, catalog, schema);
       commandContext.getSessions().put(DbSqlSession.class, dbSqlSession);
@@ -767,7 +767,7 @@ public class ManagementServiceImpl extends ServiceImpl implements ManagementServ
 
     @Override
     public Set<String> execute(CommandContext commandContext) {
-      commandContext.getAuthorizationManager().checkCamundaAdminOrPermission(CommandChecker::checkReadRegisteredDeployments);
+      commandContext.getAuthorizationManager().checkOrqueioAdminOrPermission(CommandChecker::checkReadRegisteredDeployments);
       Set<String> registeredDeployments = Context.getProcessEngineConfiguration().getRegisteredDeployments();
       return new HashSet<>(registeredDeployments);
     }

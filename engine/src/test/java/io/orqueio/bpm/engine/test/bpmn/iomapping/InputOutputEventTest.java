@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -127,11 +127,11 @@ public class InputOutputEventTest extends PluggableProcessEngineTest {
     try {
       repositoryService
         .createDeployment()
-        .addClasspathResource("org/camunda/bpm/engine/test/bpmn/iomapping/InputOutputEventTest.testMessageStartEvent.bpmn20.xml")
+        .addClasspathResource("io/orqueio/bpm/engine/test/bpmn/iomapping/InputOutputEventTest.testMessageStartEvent.bpmn20.xml")
         .deploy();
       fail("expected exception");
     } catch (ParseException e) {
-      testRule.assertTextPresent("camunda:inputOutput mapping unsupported for element type 'startEvent'", e.getMessage());
+      testRule.assertTextPresent("orqueio:inputOutput mapping unsupported for element type 'startEvent'", e.getMessage());
       assertThat(e.getResorceReports().get(0).getErrors().get(0).getMainElementId()).isEqualTo("start");
     }
   }
@@ -141,11 +141,11 @@ public class InputOutputEventTest extends PluggableProcessEngineTest {
     try {
       repositoryService
         .createDeployment()
-        .addClasspathResource("org/camunda/bpm/engine/test/bpmn/iomapping/InputOutputEventTest.testNoneEndEvent.bpmn20.xml")
+        .addClasspathResource("io/orqueio/bpm/engine/test/bpmn/iomapping/InputOutputEventTest.testNoneEndEvent.bpmn20.xml")
         .deploy();
       fail("expected exception");
     } catch (ParseException e) {
-      testRule.assertTextPresent("camunda:outputParameter not allowed for element type 'endEvent'", e.getMessage());
+      testRule.assertTextPresent("orqueio:outputParameter not allowed for element type 'endEvent'", e.getMessage());
       assertThat(e.getResorceReports().get(0).getErrors().get(0).getMainElementId()).isEqualTo("endMapping");
     }
   }
@@ -257,11 +257,11 @@ public class InputOutputEventTest extends PluggableProcessEngineTest {
     try {
       repositoryService
         .createDeployment()
-        .addClasspathResource("org/camunda/bpm/engine/test/bpmn/iomapping/InputOutputEventTest.testMessageBoundaryEvent.bpmn20.xml")
+        .addClasspathResource("io/orqueio/bpm/engine/test/bpmn/iomapping/InputOutputEventTest.testMessageBoundaryEvent.bpmn20.xml")
         .deploy();
       fail("expected exception");
     } catch (ParseException e) {
-      testRule.assertTextPresent("camunda:inputOutput mapping unsupported for element type 'boundaryEvent'", e.getMessage());
+      testRule.assertTextPresent("orqueio:inputOutput mapping unsupported for element type 'boundaryEvent'", e.getMessage());
       assertThat(e.getResorceReports().get(0).getErrors().get(0).getMainElementId()).isEqualTo("messageBoundary");
     }
   }

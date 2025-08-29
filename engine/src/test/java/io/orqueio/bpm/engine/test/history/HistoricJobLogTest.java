@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -111,7 +111,7 @@ public class HistoricJobLogTest {
     ClockUtil.reset();
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
   @Test
   public void testCreateHistoricJobLogProperties() {
     runtimeService.startProcessInstanceByKey("process");
@@ -151,7 +151,7 @@ public class HistoricJobLogTest {
     assertThat(historicJob.isDeletionLog()).isFalse();
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
   @Test
   public void testFailedHistoricJobLogProperties() {
     runtimeService.startProcessInstanceByKey("process");
@@ -200,7 +200,7 @@ public class HistoricJobLogTest {
     assertThat(historicJob.isDeletionLog()).isFalse();
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
   @Test
   public void testSuccessfulHistoricJobLogProperties() {
     runtimeService.startProcessInstanceByKey("process", Variables.createVariables().putValue("fail", false));
@@ -242,7 +242,7 @@ public class HistoricJobLogTest {
     assertThat(historicJob.isDeletionLog()).isFalse();
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
   @Test
   public void testDeletedHistoricJobLogProperties() {
     String processInstanceId = runtimeService.startProcessInstanceByKey("process").getId();
@@ -284,7 +284,7 @@ public class HistoricJobLogTest {
     assertThat(historicJob.isDeletionLog()).isTrue();
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
   @Test
   public void testAsyncBeforeJobHandlerType() {
     processEngineConfiguration.setEnsureJobDueDateNotNull(false);
@@ -310,7 +310,7 @@ public class HistoricJobLogTest {
     assertThat(historicJob.getJobDefinitionConfiguration()).isEqualTo(MessageJobDeclaration.ASYNC_BEFORE);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
   @Test
   public void testAsyncBeforeJobHandlerTypeDueDateSet() {
     processEngineConfiguration.setEnsureJobDueDateNotNull(true);
@@ -337,7 +337,7 @@ public class HistoricJobLogTest {
     assertThat(historicJob.getJobDefinitionConfiguration()).isEqualTo(MessageJobDeclaration.ASYNC_BEFORE);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
   @Test
   public void testAsyncAfterJobHandlerType() {
     processEngineConfiguration.setEnsureJobDueDateNotNull(false);
@@ -371,7 +371,7 @@ public class HistoricJobLogTest {
     assertThat(historicJob.getJobDefinitionConfiguration()).isEqualTo(MessageJobDeclaration.ASYNC_AFTER);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
   @Test
   public void testAsyncAfterJobHandlerTypeDueDateSet() {
     processEngineConfiguration.setEnsureJobDueDateNotNull(true);
@@ -406,7 +406,7 @@ public class HistoricJobLogTest {
     assertThat(historicJob.getJobDefinitionConfiguration()).isEqualTo(MessageJobDeclaration.ASYNC_AFTER);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuationWithLongId.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuationWithLongId.bpmn20.xml"})
   @Test
   public void testSuccessfulHistoricJobLogEntryStoredForLongActivityId() {
     runtimeService.startProcessInstanceByKey("process", Variables.createVariables().putValue("fail", false));
@@ -427,7 +427,7 @@ public class HistoricJobLogTest {
         "BlowAnyActivityIdColumnWhereSizeIs64OrLessSoWeAlignItTo255LikeEverywhereElse");
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/history/HistoricJobLogTest.testStartTimerEvent.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/history/HistoricJobLogTest.testStartTimerEvent.bpmn20.xml"})
   @Test
   public void testStartTimerEventJobHandlerType() {
     Job job = managementService
@@ -449,7 +449,7 @@ public class HistoricJobLogTest {
     assertThat(historicJob.getJobDueDate()).isEqualTo(job.getDuedate());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/history/HistoricJobLogTest.testStartTimerEventInsideEventSubProcess.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/history/HistoricJobLogTest.testStartTimerEventInsideEventSubProcess.bpmn20.xml"})
   @Test
   public void testStartTimerEventInsideEventSubProcessJobHandlerType() {
     runtimeService.startProcessInstanceByKey("process");
@@ -473,7 +473,7 @@ public class HistoricJobLogTest {
     assertThat(historicJob.getJobDueDate()).isEqualTo(job.getDuedate());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/history/HistoricJobLogTest.testIntermediateTimerEvent.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/history/HistoricJobLogTest.testIntermediateTimerEvent.bpmn20.xml"})
   @Test
   public void testIntermediateTimerEventJobHandlerType() {
     runtimeService.startProcessInstanceByKey("process");
@@ -497,7 +497,7 @@ public class HistoricJobLogTest {
     assertThat(historicJob.getJobDueDate()).isEqualTo(job.getDuedate());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/history/HistoricJobLogTest.testBoundaryTimerEvent.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/history/HistoricJobLogTest.testBoundaryTimerEvent.bpmn20.xml"})
   @Test
   public void testBoundaryTimerEventJobHandlerType() {
     runtimeService.startProcessInstanceByKey("process");
@@ -522,8 +522,8 @@ public class HistoricJobLogTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/history/HistoricJobLogTest.testCatchingSignalEvent.bpmn20.xml",
-      "org/camunda/bpm/engine/test/history/HistoricJobLogTest.testThrowingSignalEventAsync.bpmn20.xml"
+      "io/orqueio/bpm/engine/test/history/HistoricJobLogTest.testCatchingSignalEvent.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/history/HistoricJobLogTest.testThrowingSignalEventAsync.bpmn20.xml"
   })
   @Test
   public void testCatchingSignalEventJobHandlerType() {
@@ -553,8 +553,8 @@ public class HistoricJobLogTest {
   }
 
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/history/HistoricJobLogTest.testCatchingSignalEvent.bpmn20.xml",
-    "org/camunda/bpm/engine/test/history/HistoricJobLogTest.testThrowingSignalEventAsync.bpmn20.xml"
+    "io/orqueio/bpm/engine/test/history/HistoricJobLogTest.testCatchingSignalEvent.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/history/HistoricJobLogTest.testThrowingSignalEventAsync.bpmn20.xml"
   })
   @Test
   public void testCatchingSignalEventJobHandlerTypeDueDateSet() {
@@ -585,8 +585,8 @@ public class HistoricJobLogTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/history/HistoricJobLogTest.testCatchingSignalEvent.bpmn20.xml",
-      "org/camunda/bpm/engine/test/history/HistoricJobLogTest.testThrowingSignalEventAsync.bpmn20.xml"
+      "io/orqueio/bpm/engine/test/history/HistoricJobLogTest.testCatchingSignalEvent.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/history/HistoricJobLogTest.testThrowingSignalEventAsync.bpmn20.xml"
   })
   @Test
   public void testCatchingSignalEventActivityId() {
@@ -641,7 +641,7 @@ public class HistoricJobLogTest {
     assertThat(historicJob.getActivityId()).isEqualTo("signalEvent");
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
   @Test
   public void testFailedJobEvents() {
     // given
@@ -753,7 +753,7 @@ public class HistoricJobLogTest {
     assertThat(failedJobLogEntry.getJobRetries()).isEqualTo(0);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
   @Test
   public void testFailedJobEventsExecutedByJobExecutor() {
     // given
@@ -819,7 +819,7 @@ public class HistoricJobLogTest {
     assertThat(failedJobLogEntry.getJobRetries()).isEqualTo(0);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
   @Test
   public void testSuccessfulJobEvent() {
     // given
@@ -851,7 +851,7 @@ public class HistoricJobLogTest {
     assertThat(succeededJobLogEntry.getJobRetries()).isEqualTo(3);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
   @Test
   public void testSuccessfulJobEventExecutedByJobExecutor() {
     // given
@@ -883,7 +883,7 @@ public class HistoricJobLogTest {
     assertThat(succeededJobLogEntry.getJobRetries()).isEqualTo(3);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
   @Test
   public void testSuccessfulAndFailedJobEvents() {
     // given
@@ -1035,8 +1035,8 @@ public class HistoricJobLogTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/history/HistoricJobLogTest.testSuperProcessWithCallActivity.bpmn20.xml",
-      "org/camunda/bpm/engine/test/history/HistoricJobLogTest.testSubProcessWithErrorEndEvent.bpmn20.xml"
+      "io/orqueio/bpm/engine/test/history/HistoricJobLogTest.testSuperProcessWithCallActivity.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/history/HistoricJobLogTest.testSubProcessWithErrorEndEvent.bpmn20.xml"
   })
   @Test
   public void testErrorEndEventInterruptingCallActivity() {
@@ -1106,7 +1106,7 @@ public class HistoricJobLogTest {
     assertThat(taskService.createTaskQuery().count()).isEqualTo(1);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
   @Test
   public void testDeletedJob() {
     // given
@@ -1138,7 +1138,7 @@ public class HistoricJobLogTest {
     assertThat(deletedJobLogEntry.getJobRetries()).isEqualTo(3);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
   @Test
   public void testDeletedProcessInstance() {
     // given
@@ -1170,7 +1170,7 @@ public class HistoricJobLogTest {
     assertThat(deletedJobLogEntry.getJobRetries()).isEqualTo(3);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/history/HistoricJobLogTest.testAsyncContinuation.bpmn20.xml"})
   @Test
   public void testExceptionStacktrace() {
     // given
@@ -1347,8 +1347,8 @@ public class HistoricJobLogTest {
     BpmnModelInstance modelInstance = Bpmn.createExecutableProcess("testProcess")
       .startEvent()
       .manualTask()
-      .camundaAsyncBefore()
-      .camundaAsyncAfter()
+      .orqueioAsyncBefore()
+      .orqueioAsyncAfter()
       .endEvent()
       .done();
 

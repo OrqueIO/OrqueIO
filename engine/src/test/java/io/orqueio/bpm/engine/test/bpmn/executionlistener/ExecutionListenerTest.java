@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -57,7 +57,7 @@ import io.orqueio.bpm.model.bpmn.Bpmn;
 import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
 import io.orqueio.bpm.model.bpmn.builder.ProcessBuilder;
 import io.orqueio.bpm.model.bpmn.instance.SequenceFlow;
-import io.orqueio.bpm.model.bpmn.instance.camunda.CamundaExecutionListener;
+import io.orqueio.bpm.model.bpmn.instance.orqueio.OrqueioExecutionListener;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -119,7 +119,7 @@ public class ExecutionListenerTest {
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/executionlistener/ExecutionListenersProcess.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/bpmn/executionlistener/ExecutionListenersProcess.bpmn20.xml"})
   public void testExecutionListenersOnAllPossibleElements() {
 
     // Process start executionListener will have executionListener class that sets 2 variables
@@ -164,7 +164,7 @@ public class ExecutionListenerTest {
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/executionlistener/ExecutionListenersStartEndEvent.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/bpmn/executionlistener/ExecutionListenersStartEndEvent.bpmn20.xml"})
   public void testExecutionListenersOnStartEndEvents() {
     RecorderExecutionListener.clear();
 
@@ -201,7 +201,7 @@ public class ExecutionListenerTest {
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/executionlistener/ExecutionListenersFieldInjectionProcess.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/bpmn/executionlistener/ExecutionListenersFieldInjectionProcess.bpmn20.xml"})
   public void testExecutionListenerFieldInjection() {
     Map<String, Object> variables = new HashMap<>();
     variables.put("myVar", "listening!");
@@ -217,7 +217,7 @@ public class ExecutionListenerTest {
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/executionlistener/ExecutionListenersCurrentActivity.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/bpmn/executionlistener/ExecutionListenersCurrentActivity.bpmn20.xml"})
   public void testExecutionListenerCurrentActivity() {
 
     CurrentActivityExecutionListener.clear();
@@ -239,7 +239,7 @@ public class ExecutionListenerTest {
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/executionlistener/ExecutionListenerTest.testOnBoundaryEvents.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/bpmn/executionlistener/ExecutionListenerTest.testOnBoundaryEvents.bpmn20.xml"})
   public void testOnBoundaryEvents() {
     RecorderExecutionListener.clear();
 
@@ -293,8 +293,8 @@ public class ExecutionListenerTest {
 
   @Test
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/executionlistener/ExecutionListenerTest.testScriptResourceListener.bpmn20.xml",
-    "org/camunda/bpm/engine/test/bpmn/executionlistener/executionListener.groovy"
+    "io/orqueio/bpm/engine/test/bpmn/executionlistener/ExecutionListenerTest.testScriptResourceListener.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/bpmn/executionlistener/executionListener.groovy"
   })
   public void testScriptResourceListener() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("process");
@@ -335,7 +335,7 @@ public class ExecutionListenerTest {
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/executionlistener/ExecutionListenerTest.testOnCancellingBoundaryEvent.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/bpmn/executionlistener/ExecutionListenerTest.testOnCancellingBoundaryEvent.bpmn"})
   public void testOnCancellingBoundaryEvents() {
     RecorderExecutionListener.clear();
 
@@ -361,10 +361,10 @@ public class ExecutionListenerTest {
           .parallelGateway("fork")
           .userTask("userTask1")
           .serviceTask("sendTask")
-            .camundaExecutionListenerClass(ExecutionListener.EVENTNAME_START, SendMessageDelegate.class.getName())
-            .camundaExpression("${true}")
+            .orqueioExecutionListenerClass(ExecutionListener.EVENTNAME_START, SendMessageDelegate.class.getName())
+            .orqueioExpression("${true}")
           .endEvent("endEvent")
-            .camundaExecutionListenerClass(RecorderExecutionListener.EVENTNAME_START, RecorderExecutionListener.class.getName())
+            .orqueioExecutionListenerClass(RecorderExecutionListener.EVENTNAME_START, RecorderExecutionListener.class.getName())
           .moveToLastGateway()
           .userTask("userTask2")
           .boundaryEvent("boundaryEvent")
@@ -389,7 +389,7 @@ public class ExecutionListenerTest {
 
   public static final BpmnModelInstance PROCESS_SERVICE_TASK_WITH_TWO_EXECUTION_START_LISTENER = modify(PROCESS_SERVICE_TASK_WITH_EXECUTION_START_LISTENER)
           .activityBuilder("sendTask")
-          .camundaExecutionListenerClass(RecorderExecutionListener.EVENTNAME_START, RecorderExecutionListener.class.getName())
+          .orqueioExecutionListenerClass(RecorderExecutionListener.EVENTNAME_START, RecorderExecutionListener.class.getName())
           .done();
 
   @Test
@@ -410,21 +410,21 @@ public class ExecutionListenerTest {
           .startEvent()
           .userTask("userTask")
           .serviceTask("sendTask")
-            .camundaExecutionListenerClass(ExecutionListener.EVENTNAME_START, SendMessageDelegate.class.getName())
-            .camundaExecutionListenerClass(RecorderExecutionListener.EVENTNAME_START, RecorderExecutionListener.class.getName())
-            .camundaExpression("${true}")
+            .orqueioExecutionListenerClass(ExecutionListener.EVENTNAME_START, SendMessageDelegate.class.getName())
+            .orqueioExecutionListenerClass(RecorderExecutionListener.EVENTNAME_START, RecorderExecutionListener.class.getName())
+            .orqueioExpression("${true}")
           .endEvent("endEvent")
-            .camundaExecutionListenerClass(RecorderExecutionListener.EVENTNAME_START, RecorderExecutionListener.class.getName())
+            .orqueioExecutionListenerClass(RecorderExecutionListener.EVENTNAME_START, RecorderExecutionListener.class.getName())
           .done())
           .addSubProcessTo(PROCESS_KEY)
             .triggerByEvent()
             .embeddedSubProcess()
             .startEvent("startSubProcess")
               .interrupting(false)
-              .camundaExecutionListenerClass(RecorderExecutionListener.EVENTNAME_START, RecorderExecutionListener.class.getName())
+              .orqueioExecutionListenerClass(RecorderExecutionListener.EVENTNAME_START, RecorderExecutionListener.class.getName())
               .message(MESSAGE)
             .userTask("subProcessTask")
-              .camundaExecutionListenerClass(RecorderExecutionListener.EVENTNAME_START, RecorderExecutionListener.class.getName())
+              .orqueioExecutionListenerClass(RecorderExecutionListener.EVENTNAME_START, RecorderExecutionListener.class.getName())
             .endEvent("endSubProcess")
           .done();
 
@@ -460,8 +460,8 @@ public class ExecutionListenerTest {
     BpmnModelInstance modelInstance = Bpmn.createExecutableProcess("conditionalProcessKey")
       .startEvent()
       .userTask()
-      .camundaExecutionListenerClass(ExecutionListener.EVENTNAME_END, SetVariableDelegate.class.getName())
-      .camundaExecutionListenerClass(ExecutionListener.EVENTNAME_END, RecorderExecutionListener.class.getName())
+      .orqueioExecutionListenerClass(ExecutionListener.EVENTNAME_END, SetVariableDelegate.class.getName())
+      .orqueioExecutionListenerClass(ExecutionListener.EVENTNAME_END, RecorderExecutionListener.class.getName())
       .endEvent()
       .done();
 
@@ -491,7 +491,7 @@ public class ExecutionListenerTest {
   }
 
   @Test
-  @Deployment(resources = "org/camunda/bpm/engine/test/bpmn/executionlistener/ExecutionListenerTest.testMultiInstanceCancelation.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/bpmn/executionlistener/ExecutionListenerTest.testMultiInstanceCancelation.bpmn20.xml")
   public void testMultiInstanceCancelationDoesNotAffectEndListener() {
     // given
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("MultiInstanceCancelation");
@@ -516,7 +516,7 @@ public class ExecutionListenerTest {
   }
 
   @Test
-  @Deployment(resources = "org/camunda/bpm/engine/test/bpmn/executionlistener/ExecutionListenerTest.testMultiInstanceCancelation.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/bpmn/executionlistener/ExecutionListenerTest.testMultiInstanceCancelation.bpmn20.xml")
   public void testProcessInstanceCancelationNoticedInEndListener() {
     // given
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("MultiInstanceCancelation");
@@ -728,9 +728,9 @@ public class ExecutionListenerTest {
         .endEvent()
         .done();
 
-    CamundaExecutionListener listener = model.newInstance(CamundaExecutionListener.class);
-    listener.setCamundaEvent(ExecutionListener.EVENTNAME_TAKE);
-    listener.setCamundaClass(ThrowBPMNErrorDelegate.class.getName());
+    OrqueioExecutionListener listener = model.newInstance(OrqueioExecutionListener.class);
+    listener.setOrqueioEvent(ExecutionListener.EVENTNAME_TAKE);
+    listener.setOrqueioClass(ThrowBPMNErrorDelegate.class.getName());
     model.<SequenceFlow>getModelElementById("flow1").builder().addExtensionElement(listener);
 
     processBuilder.eventSubProcess()
@@ -755,7 +755,7 @@ public class ExecutionListenerTest {
     ProcessBuilder processBuilder = Bpmn.createExecutableProcess(PROCESS_KEY);
     BpmnModelInstance model = processBuilder
         .startEvent()
-        .camundaExecutionListenerClass(ExecutionListener.EVENTNAME_START, ThrowBPMNErrorDelegate.class.getName())
+        .orqueioExecutionListenerClass(ExecutionListener.EVENTNAME_START, ThrowBPMNErrorDelegate.class.getName())
         .userTask("afterListener")
         .endEvent()
         .done();
@@ -782,7 +782,7 @@ public class ExecutionListenerTest {
         .subProcess("sub")
           .embeddedSubProcess()
             .startEvent("inSub")
-            .camundaExecutionListenerClass(ExecutionListener.EVENTNAME_START, ThrowBPMNErrorDelegate.class.getName())
+            .orqueioExecutionListenerClass(ExecutionListener.EVENTNAME_START, ThrowBPMNErrorDelegate.class.getName())
             .userTask("afterListener")
             .endEvent()
           .subProcessDone()
@@ -813,8 +813,8 @@ public class ExecutionListenerTest {
         .startEvent()
         .userTask("userTask1")
         .serviceTask("throw")
-          .camundaExpression("${true}")
-          .camundaExecutionListenerClass(ExecutionListener.EVENTNAME_END, ThrowBPMNErrorDelegate.class.getName())
+          .orqueioExpression("${true}")
+          .orqueioExecutionListenerClass(ExecutionListener.EVENTNAME_END, ThrowBPMNErrorDelegate.class.getName())
         .done();
 
     processBuilder.eventSubProcess()
@@ -848,8 +848,8 @@ public class ExecutionListenerTest {
         .startEvent()
         .userTask("userTask1")
         .serviceTask("throw")
-          .camundaExpression("${true}")
-          .camundaExecutionListenerClass(ExecutionListener.EVENTNAME_END, ThrowBPMNErrorDelegate.class.getName())
+          .orqueioExpression("${true}")
+          .orqueioExecutionListenerClass(ExecutionListener.EVENTNAME_END, ThrowBPMNErrorDelegate.class.getName())
         .boundaryEvent()
         .error(ERROR_CODE)
         .userTask("afterCatch")
@@ -874,8 +874,8 @@ public class ExecutionListenerTest {
         .startEvent()
         .userTask("userTask1")
         .serviceTask("throw")
-          .camundaExpression("${true}")
-          .camundaExecutionListenerClass(ExecutionListener.EVENTNAME_START, ThrowBPMNErrorDelegate.class.getName())
+          .orqueioExpression("${true}")
+          .orqueioExecutionListenerClass(ExecutionListener.EVENTNAME_START, ThrowBPMNErrorDelegate.class.getName())
         .boundaryEvent()
         .error(ERROR_CODE)
         .userTask("afterCatch")
@@ -903,8 +903,8 @@ public class ExecutionListenerTest {
           .embeddedSubProcess()
             .startEvent("inSub")
             .serviceTask("throw")
-              .camundaExpression("${true}")
-              .camundaExecutionListenerClass(ExecutionListener.EVENTNAME_END, ThrowBPMNErrorDelegate.class.getName())
+              .orqueioExpression("${true}")
+              .orqueioExecutionListenerClass(ExecutionListener.EVENTNAME_END, ThrowBPMNErrorDelegate.class.getName())
         .boundaryEvent()
         .error(ERROR_CODE)
         .userTask("afterCatch")
@@ -935,8 +935,8 @@ public class ExecutionListenerTest {
           .embeddedSubProcess()
             .startEvent("inSub")
             .serviceTask("throw")
-              .camundaExpression("${true}")
-              .camundaExecutionListenerClass(ExecutionListener.EVENTNAME_START, ThrowBPMNErrorDelegate.class.getName())
+              .orqueioExpression("${true}")
+              .orqueioExecutionListenerClass(ExecutionListener.EVENTNAME_START, ThrowBPMNErrorDelegate.class.getName())
         .boundaryEvent()
         .error(ERROR_CODE)
         .userTask("afterCatch")
@@ -964,9 +964,9 @@ public class ExecutionListenerTest {
         .startEvent()
         .userTask("userTask1")
         .serviceTask("throw")
-          .camundaExecutionListenerClass(ExecutionListener.EVENTNAME_START, ThrowBPMNErrorDelegate.class.getName())
-          .camundaExecutionListenerClass(ExecutionListener.EVENTNAME_END, SetsVariableDelegate.class.getName())
-          .camundaExpression("${true}")
+          .orqueioExecutionListenerClass(ExecutionListener.EVENTNAME_START, ThrowBPMNErrorDelegate.class.getName())
+          .orqueioExecutionListenerClass(ExecutionListener.EVENTNAME_END, SetsVariableDelegate.class.getName())
+          .orqueioExpression("${true}")
         .boundaryEvent("errorEvent")
         .error(ERROR_CODE)
         .userTask("afterCatch")
@@ -997,8 +997,8 @@ public class ExecutionListenerTest {
         .startEvent()
         .userTask("userTask1")
         .serviceTask("throw")
-          .camundaExecutionListenerClass(ExecutionListener.EVENTNAME_START, ThrowBPMNErrorDelegate.class.getName())
-          .camundaExpression("${true}")
+          .orqueioExecutionListenerClass(ExecutionListener.EVENTNAME_START, ThrowBPMNErrorDelegate.class.getName())
+          .orqueioExpression("${true}")
         .userTask("afterService")
         .done();
     ProcessBuilder processBuilder = Bpmn.createExecutableProcess(PROCESS_KEY);
@@ -1035,8 +1035,8 @@ public class ExecutionListenerTest {
         .parallelGateway("fork")
         .userTask("userTask1")
         .serviceTask("throw")
-          .camundaExecutionListenerClass(ExecutionListener.EVENTNAME_START, ThrowBPMNErrorDelegate.class.getName())
-          .camundaExpression("${true}")
+          .orqueioExecutionListenerClass(ExecutionListener.EVENTNAME_START, ThrowBPMNErrorDelegate.class.getName())
+          .orqueioExpression("${true}")
         .userTask("afterService")
         .endEvent()
         .moveToLastGateway()
@@ -1068,8 +1068,8 @@ public class ExecutionListenerTest {
         .startEvent()
         .userTask("userTask1")
         .serviceTask("throw")
-          .camundaExecutionListenerExpression(ExecutionListener.EVENTNAME_START, "${myListener.notify(execution)}")
-          .camundaExpression("${true}")
+          .orqueioExecutionListenerExpression(ExecutionListener.EVENTNAME_START, "${myListener.notify(execution)}")
+          .orqueioExpression("${true}")
         .userTask("afterService")
         .endEvent()
         .done();
@@ -1110,8 +1110,8 @@ public class ExecutionListenerTest {
         .startEvent()
         .userTask("userTask1")
         .serviceTask("throw")
-          .camundaExpression("${true}")
-          .camundaExecutionListenerClass(ExecutionListener.EVENTNAME_END, ThrowBPMNErrorDelegate.class.getName())
+          .orqueioExpression("${true}")
+          .orqueioExecutionListenerClass(ExecutionListener.EVENTNAME_END, ThrowBPMNErrorDelegate.class.getName())
         .endEvent()
         .done();
 
@@ -1141,8 +1141,8 @@ public class ExecutionListenerTest {
         .startEvent()
         .userTask("userTask1")
         .serviceTask("throw")
-          .camundaExpression("${true}")
-          .camundaExecutionListenerClass(ExecutionListener.EVENTNAME_START, ThrowBPMNErrorDelegate.class.getName())
+          .orqueioExpression("${true}")
+          .orqueioExecutionListenerClass(ExecutionListener.EVENTNAME_START, ThrowBPMNErrorDelegate.class.getName())
         .endEvent()
         .done();
 
@@ -1174,7 +1174,7 @@ public class ExecutionListenerTest {
           .embeddedSubProcess()
             .startEvent("inSub")
             .userTask("taskWithListener")
-            .camundaExecutionListenerClass(ExecutionListener.EVENTNAME_END, ThrowBPMNErrorDelegate.class.getName())
+            .orqueioExecutionListenerClass(ExecutionListener.EVENTNAME_END, ThrowBPMNErrorDelegate.class.getName())
             .boundaryEvent("errorEvent")
             .error(ERROR_CODE)
             .userTask("afterCatch")
@@ -1214,11 +1214,11 @@ public class ExecutionListenerTest {
         .startEvent()
         .userTask("userTask1")
         .subProcess("sub")
-          .camundaExecutionListenerClass(ExecutionListener.EVENTNAME_START, ThrowBPMNErrorDelegate.class.getName())
+          .orqueioExecutionListenerClass(ExecutionListener.EVENTNAME_START, ThrowBPMNErrorDelegate.class.getName())
           .embeddedSubProcess()
           .startEvent("inSub")
           .serviceTask("throw")
-            .camundaExpression("${true}")
+            .orqueioExpression("${true}")
           .boundaryEvent("errorEvent1")
           .error(ERROR_CODE)
           .subProcessDone()
@@ -1256,9 +1256,9 @@ public class ExecutionListenerTest {
         .userTask("afterCatch")
         .endEvent();
 
-    CamundaExecutionListener listener = model.newInstance(CamundaExecutionListener.class);
-    listener.setCamundaEvent(ExecutionListener.EVENTNAME_START);
-    listener.setCamundaClass(ThrowBPMNErrorDelegate.class.getName());
+    OrqueioExecutionListener listener = model.newInstance(OrqueioExecutionListener.class);
+    listener.setOrqueioEvent(ExecutionListener.EVENTNAME_START);
+    listener.setOrqueioClass(ThrowBPMNErrorDelegate.class.getName());
     model.<io.orqueio.bpm.model.bpmn.instance.Process>getModelElementById(PROCESS_KEY).builder().addExtensionElement(listener);
 
     testRule.deploy(model);
@@ -1288,9 +1288,9 @@ public class ExecutionListenerTest {
         .userTask("afterCatch")
         .endEvent();
 
-    CamundaExecutionListener listener = model.newInstance(CamundaExecutionListener.class);
-    listener.setCamundaEvent(ExecutionListener.EVENTNAME_END);
-    listener.setCamundaClass(ThrowBPMNErrorDelegate.class.getName());
+    OrqueioExecutionListener listener = model.newInstance(OrqueioExecutionListener.class);
+    listener.setOrqueioEvent(ExecutionListener.EVENTNAME_END);
+    listener.setOrqueioClass(ThrowBPMNErrorDelegate.class.getName());
     model.<io.orqueio.bpm.model.bpmn.instance.Process>getModelElementById(PROCESS_KEY).builder().addExtensionElement(listener);
 
     testRule.deploy(model);
@@ -1318,8 +1318,8 @@ public class ExecutionListenerTest {
           .startEvent()
           .userTask("userTask1")
           .serviceTask("throw")
-            .camundaExecutionListenerClass(eventName, throwException ? ThrowRuntimeExceptionDelegate.class : ThrowBPMNErrorDelegate.class)
-            .camundaExpression("${true}")
+            .orqueioExecutionListenerClass(eventName, throwException ? ThrowRuntimeExceptionDelegate.class : ThrowBPMNErrorDelegate.class)
+            .orqueioExpression("${true}")
           .boundaryEvent("errorEvent")
           .error(catchException ? RUNTIME_EXCEPTION.getClass().getName() : ERROR_CODE)
           .userTask("afterCatch")
@@ -1342,8 +1342,8 @@ public class ExecutionListenerTest {
             .embeddedSubProcess()
             .startEvent("inSub")
             .serviceTask("throw")
-              .camundaExecutionListenerClass(eventName, throwException ? ThrowRuntimeExceptionDelegate.class : ThrowBPMNErrorDelegate.class)
-              .camundaExpression("${true}")
+              .orqueioExecutionListenerClass(eventName, throwException ? ThrowRuntimeExceptionDelegate.class : ThrowBPMNErrorDelegate.class)
+              .orqueioExpression("${true}")
               .userTask("afterService")
               .endEvent()
             .subProcessDone()
@@ -1367,8 +1367,8 @@ public class ExecutionListenerTest {
         .startEvent()
         .userTask("userTask1")
         .serviceTask("throw")
-          .camundaExecutionListenerClass(eventName, throwException ? ThrowRuntimeExceptionDelegate.class : ThrowBPMNErrorDelegate.class)
-          .camundaExpression("${true}")
+          .orqueioExecutionListenerClass(eventName, throwException ? ThrowRuntimeExceptionDelegate.class : ThrowBPMNErrorDelegate.class)
+          .orqueioExpression("${true}")
         .userTask("afterService")
         .endEvent()
         .done();

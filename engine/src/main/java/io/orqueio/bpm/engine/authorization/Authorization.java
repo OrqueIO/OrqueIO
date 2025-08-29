@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -34,7 +34,7 @@ import java.util.Date;
  * </ul>
  *
  * <h2>Identities</h2>
- * <p>Camunda Platform distinguishes two types of identities: <em>users</em> and
+ * <p>Orqueio Platform distinguishes two types of identities: <em>users</em> and
  * <em>groups</em>. Authorizations can either range over all users
  * (userId = {@link #ANY}), an individual {@link User} or a {@link Group} of users.</p>
  *
@@ -52,14 +52,14 @@ import java.util.Date;
  * authorization.addPermission(Permissions.UPDATE);
  * authorization.addPermission(Permissions.DELETE);
  * </pre>
- * <p>On top of the built-in permissions, Camunda Platform allows using custom
+ * <p>On top of the built-in permissions, Orqueio Platform allows using custom
  * permission types.</p>
  *
  * <h2>Resources</h2>
  * <p>Resources are the entities the user interacts with. Examples of resources are
  * {@link Resources#GROUP GROUPS}, {@link Resources#USER USERS},
  * process-definitions, process-instances, tasks ... See {@link Resources} for a set
- * of built-in resource. The Camunda Platform framework supports custom resources.</p>
+ * of built-in resource. The Orqueio Platform framework supports custom resources.</p>
  *
  * <h2>Authorization Type</h2>
  * <p>There are three types of authorizations:

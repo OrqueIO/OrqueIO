@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -19,7 +19,7 @@ package io.orqueio.bpm.engine.test.api.form;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static io.orqueio.bpm.engine.test.util.CamundaFormUtils.findAllCamundaFormDefinitionEntities;
+import static io.orqueio.bpm.engine.test.util.OrqueioFormUtils.findAllOrqueioFormDefinitionEntities;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -35,16 +35,16 @@ import io.orqueio.bpm.engine.RepositoryService;
 import io.orqueio.bpm.engine.RuntimeService;
 import io.orqueio.bpm.engine.TaskService;
 import io.orqueio.bpm.engine.exception.NotFoundException;
-import io.orqueio.bpm.engine.form.CamundaFormRef;
+import io.orqueio.bpm.engine.form.OrqueioFormRef;
 import io.orqueio.bpm.engine.form.TaskFormData;
 import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import io.orqueio.bpm.engine.impl.util.ReflectUtil;
-import io.orqueio.bpm.engine.repository.CamundaFormDefinition;
+import io.orqueio.bpm.engine.repository.OrqueioFormDefinition;
 import io.orqueio.bpm.engine.repository.Deployment;
 import io.orqueio.bpm.engine.repository.DeploymentBuilder;
 import io.orqueio.bpm.engine.repository.ProcessDefinition;
 import io.orqueio.bpm.engine.task.Task;
-import io.orqueio.bpm.engine.test.util.CamundaFormUtils;
+import io.orqueio.bpm.engine.test.util.OrqueioFormUtils;
 import io.orqueio.bpm.engine.test.util.ProcessEngineTestRule;
 import io.orqueio.bpm.engine.test.util.ProvidedProcessEngineRule;
 import org.junit.After;
@@ -54,7 +54,7 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.rules.TemporaryFolder;
 
-public class RetrieveCamundaFormRefTest {
+public class RetrieveOrqueioFormRefTest {
 
   protected static final String TASK_FORM_CONTENT_V1 = "{\"id\"=\"myTaskForm\",\"type\": \"default\",\"components\": []}";
   protected static final String TASK_FORM_CONTENT_V2 = "{\"id\"=\"myTaskForm\",\"type\": \"default\",\"components\":[{\"key\": \"textfield1\",\"label\": \"Text Field\",\"type\": \"textfield\"}]}";
@@ -96,14 +96,14 @@ public class RetrieveCamundaFormRefTest {
   public void shouldRetrieveTaskFormBindingLatestWithSingleVersionSeparateDeloyments() throws IOException {
     // given two separate deployments
     deployClasspathResources(true,
-        "org/camunda/bpm/engine/test/api/form/RetrieveCamundaFormRefTest.taskFormBindingLatest.bpmn",
-        "org/camunda/bpm/engine/test/api/form/task.form");
+        "io/orqueio/bpm/engine/test/api/form/RetrieveOrqueioFormRefTest.taskFormBindingLatest.bpmn",
+        "io/orqueio/bpm/engine/test/api/form/task.form");
 
     runtimeService.startProcessInstanceByKey("taskFormBindingLatest");
 
     // when
     List<Deployment> deployments = repositoryService.createDeploymentQuery().list();
-    List<CamundaFormDefinition> definitions = findAllCamundaFormDefinitionEntities(processEngineConfiguration);
+    List<OrqueioFormDefinition> definitions = findAllOrqueioFormDefinitionEntities(processEngineConfiguration);
     Task task = taskService.createTaskQuery().singleResult();
     TaskFormData taskFormData = formService.getTaskFormData(task.getId());
     InputStream deployedForm = formService.getDeployedTaskForm(task.getId());
@@ -114,19 +114,19 @@ public class RetrieveCamundaFormRefTest {
 
     assertTaskFormData(taskFormData, "myTaskForm", "latest", null);
 
-    assertThat(IOUtils.toString(deployedForm, UTF_8)).isEqualTo(getClasspathResourceContent("org/camunda/bpm/engine/test/api/form/task.form"));
+    assertThat(IOUtils.toString(deployedForm, UTF_8)).isEqualTo(getClasspathResourceContent("io/orqueio/bpm/engine/test/api/form/task.form"));
   }
 
   @Test
   public void shouldRetrieveTaskFormBindingLatestWithMultipleVersions() throws IOException {
     // given two versions of the same form
-    deployUpdateFormResource(TASK_FORM_CONTENT_V1, TASK_FORM_CONTENT_V2, "org/camunda/bpm/engine/test/api/form/RetrieveCamundaFormRefTest.taskFormBindingLatest.bpmn");
+    deployUpdateFormResource(TASK_FORM_CONTENT_V1, TASK_FORM_CONTENT_V2, "io/orqueio/bpm/engine/test/api/form/RetrieveOrqueioFormRefTest.taskFormBindingLatest.bpmn");
 
     runtimeService.startProcessInstanceByKey("taskFormBindingLatest");
 
     // when
     List<Deployment> deployments = repositoryService.createDeploymentQuery().list();
-    List<CamundaFormDefinition> definitions = findAllCamundaFormDefinitionEntities(processEngineConfiguration);
+    List<OrqueioFormDefinition> definitions = findAllOrqueioFormDefinitionEntities(processEngineConfiguration);
     Task task = taskService.createTaskQuery().singleResult();
     TaskFormData taskFormData = formService.getTaskFormData(task.getId());
     InputStream deployedForm = formService.getDeployedTaskForm(task.getId());
@@ -143,13 +143,13 @@ public class RetrieveCamundaFormRefTest {
   @Test
   public void shouldRetrieveTaskFormBindingDeployment() throws IOException {
     // given two versions of the same form
-    deployUpdateFormResource(TASK_FORM_CONTENT_V1, TASK_FORM_CONTENT_V2, "org/camunda/bpm/engine/test/api/form/RetrieveCamundaFormRefTest.taskFormBindingDeployment.bpmn");
+    deployUpdateFormResource(TASK_FORM_CONTENT_V1, TASK_FORM_CONTENT_V2, "io/orqueio/bpm/engine/test/api/form/RetrieveOrqueioFormRefTest.taskFormBindingDeployment.bpmn");
 
     runtimeService.startProcessInstanceByKey("taskFormBindingDeployment");
 
     // when
     List<Deployment> deployments = repositoryService.createDeploymentQuery().list();
-    List<CamundaFormDefinition> definitions = findAllCamundaFormDefinitionEntities(processEngineConfiguration);
+    List<OrqueioFormDefinition> definitions = findAllOrqueioFormDefinitionEntities(processEngineConfiguration);
     Task task = taskService.createTaskQuery().singleResult();
     TaskFormData taskFormData = formService.getTaskFormData(task.getId());
     InputStream deployedForm = formService.getDeployedTaskForm(task.getId());
@@ -166,13 +166,13 @@ public class RetrieveCamundaFormRefTest {
   @Test
   public void shouldRetrieveTaskFormBindingVersionWithMultipleVersions() throws IOException {
     // given two versions of the same form
-    deployUpdateFormResource(TASK_FORM_CONTENT_V1, TASK_FORM_CONTENT_V2, "org/camunda/bpm/engine/test/api/form/RetrieveCamundaFormRefTest.taskFormBindingVersion1.bpmn");
+    deployUpdateFormResource(TASK_FORM_CONTENT_V1, TASK_FORM_CONTENT_V2, "io/orqueio/bpm/engine/test/api/form/RetrieveOrqueioFormRefTest.taskFormBindingVersion1.bpmn");
 
     runtimeService.startProcessInstanceByKey("taskFormBindingVersion");
 
     // when
     List<Deployment> deployments = repositoryService.createDeploymentQuery().list();
-    List<CamundaFormDefinition> definitions = findAllCamundaFormDefinitionEntities(processEngineConfiguration);
+    List<OrqueioFormDefinition> definitions = findAllOrqueioFormDefinitionEntities(processEngineConfiguration);
     Task task = taskService.createTaskQuery().singleResult();
     TaskFormData taskFormData = formService.getTaskFormData(task.getId());
     InputStream deployedForm = formService.getDeployedTaskForm(task.getId());
@@ -187,14 +187,14 @@ public class RetrieveCamundaFormRefTest {
   }
 
   @Test
-  @io.orqueio.bpm.engine.test.Deployment(resources = {"org/camunda/bpm/engine/test/api/form/RetrieveCamundaFormRefTest.taskFormBindingLatest.bpmn"})
+  @io.orqueio.bpm.engine.test.Deployment(resources = {"io/orqueio/bpm/engine/test/api/form/RetrieveOrqueioFormRefTest.taskFormBindingLatest.bpmn"})
   public void shouldFailToRetrieveTaskFormBindingLatestUnexistingKey() throws IOException {
     // given BPMN model references missing form
     runtimeService.startProcessInstanceByKey("taskFormBindingLatest");
 
     // when
     List<Deployment> deployments = repositoryService.createDeploymentQuery().list();
-    List<CamundaFormDefinition> definitions = findAllCamundaFormDefinitionEntities(processEngineConfiguration);
+    List<OrqueioFormDefinition> definitions = findAllOrqueioFormDefinitionEntities(processEngineConfiguration);
     Task task = taskService.createTaskQuery().singleResult();
     TaskFormData taskFormData = formService.getTaskFormData(task.getId());
 
@@ -207,18 +207,18 @@ public class RetrieveCamundaFormRefTest {
     assertThatThrownBy(() -> {
       formService.getDeployedTaskForm(task.getId());
     }).isInstanceOf(NotFoundException.class)
-    .hasMessageContaining("No Camunda Form Definition was found for Camunda Form Ref");
+    .hasMessageContaining("No Orqueio Form Definition was found for Orqueio Form Ref");
   }
 
   @Test
-  @io.orqueio.bpm.engine.test.Deployment(resources = {"org/camunda/bpm/engine/test/api/form/RetrieveCamundaFormRefTest.taskFormBindingDeployment.bpmn"})
+  @io.orqueio.bpm.engine.test.Deployment(resources = {"io/orqueio/bpm/engine/test/api/form/RetrieveOrqueioFormRefTest.taskFormBindingDeployment.bpmn"})
   public void shouldFailToRetrieveTaskFormBindingDeploymentUnexistingKey() throws IOException {
     // given BPMN model references missing form
     runtimeService.startProcessInstanceByKey("taskFormBindingDeployment");
 
     // when
     List<Deployment> deployments = repositoryService.createDeploymentQuery().list();
-    List<CamundaFormDefinition> definitions = findAllCamundaFormDefinitionEntities(processEngineConfiguration);
+    List<OrqueioFormDefinition> definitions = findAllOrqueioFormDefinitionEntities(processEngineConfiguration);
     Task task = taskService.createTaskQuery().singleResult();
     TaskFormData taskFormData = formService.getTaskFormData(task.getId());
 
@@ -231,20 +231,20 @@ public class RetrieveCamundaFormRefTest {
     assertThatThrownBy(() -> {
       formService.getDeployedTaskForm(task.getId());
     }).isInstanceOf(NotFoundException.class)
-    .hasMessageContaining("No Camunda Form Definition was found for Camunda Form Ref");
+    .hasMessageContaining("No Orqueio Form Definition was found for Orqueio Form Ref");
   }
 
   @Test
   @io.orqueio.bpm.engine.test.Deployment(resources = {
-      "org/camunda/bpm/engine/test/api/form/RetrieveCamundaFormRefTest.taskFormBindingVersion2.bpmn",
-      "org/camunda/bpm/engine/test/api/form/task.form" })
+      "io/orqueio/bpm/engine/test/api/form/RetrieveOrqueioFormRefTest.taskFormBindingVersion2.bpmn",
+      "io/orqueio/bpm/engine/test/api/form/task.form" })
   public void shouldFailToRetrieveTaskFormBindingVersionUnexistingVersion() throws IOException {
     // given BPMN model references missing form
     runtimeService.startProcessInstanceByKey("taskFormBindingVersion");
 
     // when
     List<Deployment> deployments = repositoryService.createDeploymentQuery().list();
-    List<CamundaFormDefinition> definitions = findAllCamundaFormDefinitionEntities(processEngineConfiguration);
+    List<OrqueioFormDefinition> definitions = findAllOrqueioFormDefinitionEntities(processEngineConfiguration);
     Task task = taskService.createTaskQuery().singleResult();
     TaskFormData taskFormData = formService.getTaskFormData(task.getId());
 
@@ -257,13 +257,13 @@ public class RetrieveCamundaFormRefTest {
     assertThatThrownBy(() -> {
       formService.getDeployedTaskForm(task.getId());
     }).isInstanceOf(NotFoundException.class)
-    .hasMessageContaining("No Camunda Form Definition was found for Camunda Form Ref");
+    .hasMessageContaining("No Orqueio Form Definition was found for Orqueio Form Ref");
   }
 
   @Test
   @io.orqueio.bpm.engine.test.Deployment(resources = {
-      "org/camunda/bpm/engine/test/api/form/RetrieveCamundaFormRefTest.shouldRetrieveTaskFormBindingLatestWithKeyExpression.bpmn",
-      "org/camunda/bpm/engine/test/api/form/task.form" })
+      "io/orqueio/bpm/engine/test/api/form/RetrieveOrqueioFormRefTest.shouldRetrieveTaskFormBindingLatestWithKeyExpression.bpmn",
+      "io/orqueio/bpm/engine/test/api/form/task.form" })
   public void shouldRetrieveTaskFormBindingLatestWithKeyExpression() throws IOException {
     // given BPMN model referencing form by ${key} expression
     Map<String, Object> parameters = new HashMap<>();
@@ -272,7 +272,7 @@ public class RetrieveCamundaFormRefTest {
 
     // when
     List<Deployment> deployments = repositoryService.createDeploymentQuery().list();
-    List<CamundaFormDefinition> definitions = findAllCamundaFormDefinitionEntities(processEngineConfiguration);
+    List<OrqueioFormDefinition> definitions = findAllOrqueioFormDefinitionEntities(processEngineConfiguration);
     Task task = taskService.createTaskQuery().singleResult();
     TaskFormData taskFormData = formService.getTaskFormData(task.getId());
     InputStream deployedForm = formService.getDeployedTaskForm(task.getId());
@@ -283,13 +283,13 @@ public class RetrieveCamundaFormRefTest {
 
     assertTaskFormData(taskFormData, "myTaskForm", "latest", null);
 
-    assertThat(IOUtils.toString(deployedForm, UTF_8)).isEqualTo(getClasspathResourceContent("org/camunda/bpm/engine/test/api/form/task.form"));
+    assertThat(IOUtils.toString(deployedForm, UTF_8)).isEqualTo(getClasspathResourceContent("io/orqueio/bpm/engine/test/api/form/task.form"));
   }
 
   @Test
   @io.orqueio.bpm.engine.test.Deployment(resources = {
-      "org/camunda/bpm/engine/test/api/form/RetrieveCamundaFormRefTest.shouldRetrieveTaskFormBindingVersionWithExpression.bpmn",
-      "org/camunda/bpm/engine/test/api/form/task.form" })
+      "io/orqueio/bpm/engine/test/api/form/RetrieveOrqueioFormRefTest.shouldRetrieveTaskFormBindingVersionWithExpression.bpmn",
+      "io/orqueio/bpm/engine/test/api/form/task.form" })
   public void shouldRetrieveTaskFormBindingVersionWithExpression() throws IOException {
     // given BPMN model referencing version by ${ver} expression
     Map<String, Object> parameters = new HashMap<>();
@@ -298,7 +298,7 @@ public class RetrieveCamundaFormRefTest {
 
     // when
     List<Deployment> deployments = repositoryService.createDeploymentQuery().list();
-    List<CamundaFormDefinition> definitions = findAllCamundaFormDefinitionEntities(processEngineConfiguration);
+    List<OrqueioFormDefinition> definitions = findAllOrqueioFormDefinitionEntities(processEngineConfiguration);
     Task task = taskService.createTaskQuery().singleResult();
     TaskFormData taskFormData = formService.getTaskFormData(task.getId());
     InputStream deployedForm = formService.getDeployedTaskForm(task.getId());
@@ -309,7 +309,7 @@ public class RetrieveCamundaFormRefTest {
 
     assertTaskFormData(taskFormData, "myTaskForm", "version", 1);
 
-    assertThat(IOUtils.toString(deployedForm, UTF_8)).isEqualTo(getClasspathResourceContent("org/camunda/bpm/engine/test/api/form/task.form"));
+    assertThat(IOUtils.toString(deployedForm, UTF_8)).isEqualTo(getClasspathResourceContent("io/orqueio/bpm/engine/test/api/form/task.form"));
   }
 
   /* START FORMS */
@@ -318,14 +318,14 @@ public class RetrieveCamundaFormRefTest {
   public void shouldRetrieveStartFormBindingLatestWithSingleVersionSeparateDeloyments() throws IOException {
     // given two separate deployments
     deployClasspathResources(true,
-        "org/camunda/bpm/engine/test/api/form/RetrieveCamundaFormRefTest.startFormBindingLatest.bpmn",
-        "org/camunda/bpm/engine/test/api/form/start.form");
+        "io/orqueio/bpm/engine/test/api/form/RetrieveOrqueioFormRefTest.startFormBindingLatest.bpmn",
+        "io/orqueio/bpm/engine/test/api/form/start.form");
 
     runtimeService.startProcessInstanceByKey("startFormBindingLatest");
 
     // when
     List<Deployment> deployments = repositoryService.createDeploymentQuery().list();
-    List<CamundaFormDefinition> definitions = findAllCamundaFormDefinitionEntities(processEngineConfiguration);
+    List<OrqueioFormDefinition> definitions = findAllOrqueioFormDefinitionEntities(processEngineConfiguration);
     ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery().singleResult();
     InputStream deployedForm = formService.getDeployedStartForm(processDefinition.getId());
 
@@ -333,19 +333,19 @@ public class RetrieveCamundaFormRefTest {
     assertThat(deployments).hasSize(2);
     assertThat(definitions).hasSize(1);
 
-    assertThat(IOUtils.toString(deployedForm, UTF_8)).isEqualTo(getClasspathResourceContent("org/camunda/bpm/engine/test/api/form/start.form"));
+    assertThat(IOUtils.toString(deployedForm, UTF_8)).isEqualTo(getClasspathResourceContent("io/orqueio/bpm/engine/test/api/form/start.form"));
   }
 
   @Test
   public void shouldRetrieveStartFormBindingLatestWithMultipleVersions() throws IOException {
     // given two versions of the same form
-    deployUpdateFormResource(START_FORM_CONTENT_V1, START_FORM_CONTENT_V2, "org/camunda/bpm/engine/test/api/form/RetrieveCamundaFormRefTest.startFormBindingLatest.bpmn");
+    deployUpdateFormResource(START_FORM_CONTENT_V1, START_FORM_CONTENT_V2, "io/orqueio/bpm/engine/test/api/form/RetrieveOrqueioFormRefTest.startFormBindingLatest.bpmn");
 
     runtimeService.startProcessInstanceByKey("startFormBindingLatest");
 
     // when
     List<Deployment> deployments = repositoryService.createDeploymentQuery().list();
-    List<CamundaFormDefinition> definitions = findAllCamundaFormDefinitionEntities(processEngineConfiguration);
+    List<OrqueioFormDefinition> definitions = findAllOrqueioFormDefinitionEntities(processEngineConfiguration);
     ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery().singleResult();
     InputStream deployedForm = formService.getDeployedStartForm(processDefinition.getId());
 
@@ -359,13 +359,13 @@ public class RetrieveCamundaFormRefTest {
   @Test
   public void shouldRetrieveStartFormBindingDeployment() throws IOException {
     // given two versions of the same form
-    deployUpdateFormResource(START_FORM_CONTENT_V1, START_FORM_CONTENT_V2, "org/camunda/bpm/engine/test/api/form/RetrieveCamundaFormRefTest.startFormBindingDeployment.bpmn");
+    deployUpdateFormResource(START_FORM_CONTENT_V1, START_FORM_CONTENT_V2, "io/orqueio/bpm/engine/test/api/form/RetrieveOrqueioFormRefTest.startFormBindingDeployment.bpmn");
 
     runtimeService.startProcessInstanceByKey("startFormBindingDeployment");
 
     // when
     List<Deployment> deployments = repositoryService.createDeploymentQuery().list();
-    List<CamundaFormDefinition> definitions = findAllCamundaFormDefinitionEntities(processEngineConfiguration);
+    List<OrqueioFormDefinition> definitions = findAllOrqueioFormDefinitionEntities(processEngineConfiguration);
     ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery().singleResult();
     InputStream deployedForm = formService.getDeployedStartForm(processDefinition.getId());
 
@@ -379,13 +379,13 @@ public class RetrieveCamundaFormRefTest {
   @Test
   public void shouldRetrieveStartFormBindingVersionWithMultipleVersions() throws IOException {
     // given two versions of the same form
-    deployUpdateFormResource(START_FORM_CONTENT_V1, START_FORM_CONTENT_V2, "org/camunda/bpm/engine/test/api/form/RetrieveCamundaFormRefTest.startFormBindingVersion1.bpmn");
+    deployUpdateFormResource(START_FORM_CONTENT_V1, START_FORM_CONTENT_V2, "io/orqueio/bpm/engine/test/api/form/RetrieveOrqueioFormRefTest.startFormBindingVersion1.bpmn");
 
     runtimeService.startProcessInstanceByKey("startFormBindingVersion");
 
     // when
     List<Deployment> deployments = repositoryService.createDeploymentQuery().list();
-    List<CamundaFormDefinition> definitions = findAllCamundaFormDefinitionEntities(processEngineConfiguration);
+    List<OrqueioFormDefinition> definitions = findAllOrqueioFormDefinitionEntities(processEngineConfiguration);
     ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery().singleResult();
     InputStream deployedForm = formService.getDeployedStartForm(processDefinition.getId());
 
@@ -397,14 +397,14 @@ public class RetrieveCamundaFormRefTest {
   }
 
   @Test
-  @io.orqueio.bpm.engine.test.Deployment(resources = {"org/camunda/bpm/engine/test/api/form/RetrieveCamundaFormRefTest.startFormBindingLatest.bpmn"})
+  @io.orqueio.bpm.engine.test.Deployment(resources = {"io/orqueio/bpm/engine/test/api/form/RetrieveOrqueioFormRefTest.startFormBindingLatest.bpmn"})
   public void shouldFailToRetrieveStartFormBindingLatestUnexistingKey() throws IOException {
     // given BPMN model references missing form
     runtimeService.startProcessInstanceByKey("startFormBindingLatest");
 
     // when
     List<Deployment> deployments = repositoryService.createDeploymentQuery().list();
-    List<CamundaFormDefinition> definitions = findAllCamundaFormDefinitionEntities(processEngineConfiguration);
+    List<OrqueioFormDefinition> definitions = findAllOrqueioFormDefinitionEntities(processEngineConfiguration);
     ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery().singleResult();
 
     // then
@@ -414,18 +414,18 @@ public class RetrieveCamundaFormRefTest {
     assertThatThrownBy(() -> {
       formService.getDeployedStartForm(processDefinition.getId());
     }).isInstanceOf(BadUserRequestException.class)
-    .hasMessageContaining("No Camunda Form Definition was found for Camunda Form Ref");
+    .hasMessageContaining("No Orqueio Form Definition was found for Orqueio Form Ref");
   }
 
   @Test
-  @io.orqueio.bpm.engine.test.Deployment(resources = {"org/camunda/bpm/engine/test/api/form/RetrieveCamundaFormRefTest.startFormBindingDeployment.bpmn"})
+  @io.orqueio.bpm.engine.test.Deployment(resources = {"io/orqueio/bpm/engine/test/api/form/RetrieveOrqueioFormRefTest.startFormBindingDeployment.bpmn"})
   public void shouldFailToRetrieveStartFormBindingDeploymentUnexistingKey() throws IOException {
     // given BPMN model references missing form
     runtimeService.startProcessInstanceByKey("startFormBindingDeployment");
 
     // when
     List<Deployment> deployments = repositoryService.createDeploymentQuery().list();
-    List<CamundaFormDefinition> definitions = findAllCamundaFormDefinitionEntities(processEngineConfiguration);
+    List<OrqueioFormDefinition> definitions = findAllOrqueioFormDefinitionEntities(processEngineConfiguration);
     ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery().singleResult();
 
     // then
@@ -435,20 +435,20 @@ public class RetrieveCamundaFormRefTest {
     assertThatThrownBy(() -> {
       formService.getDeployedStartForm(processDefinition.getId());
     }).isInstanceOf(BadUserRequestException.class)
-    .hasMessageContaining("No Camunda Form Definition was found for Camunda Form Ref");
+    .hasMessageContaining("No Orqueio Form Definition was found for Orqueio Form Ref");
   }
 
   @Test
   @io.orqueio.bpm.engine.test.Deployment(resources = {
-      "org/camunda/bpm/engine/test/api/form/RetrieveCamundaFormRefTest.startFormBindingVersion2.bpmn",
-      "org/camunda/bpm/engine/test/api/form/start.form" })
+      "io/orqueio/bpm/engine/test/api/form/RetrieveOrqueioFormRefTest.startFormBindingVersion2.bpmn",
+      "io/orqueio/bpm/engine/test/api/form/start.form" })
   public void shouldFailToRetrieveStartFormBindingVersionUnexistingVersion() throws IOException {
     // given BPMN model references missing form
     runtimeService.startProcessInstanceByKey("startFormBindingVersion");
 
     // when
     List<Deployment> deployments = repositoryService.createDeploymentQuery().list();
-    List<CamundaFormDefinition> definitions = findAllCamundaFormDefinitionEntities(processEngineConfiguration);
+    List<OrqueioFormDefinition> definitions = findAllOrqueioFormDefinitionEntities(processEngineConfiguration);
     ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery().singleResult();
 
     // then
@@ -458,16 +458,16 @@ public class RetrieveCamundaFormRefTest {
     assertThatThrownBy(() -> {
       formService.getDeployedStartForm(processDefinition.getId());
     }).isInstanceOf(BadUserRequestException.class)
-    .hasMessageContaining("No Camunda Form Definition was found for Camunda Form Ref");
+    .hasMessageContaining("No Orqueio Form Definition was found for Orqueio Form Ref");
   }
 
   /* HELPER METHODS */
 
   private void assertTaskFormData(TaskFormData taskFormData, String expectedKey, String expectedBinding, Integer expectedVersion) {
-    CamundaFormRef camundaFormRef = taskFormData.getCamundaFormRef();
-    assertThat(camundaFormRef.getKey()).isEqualTo(expectedKey);
-    assertThat(camundaFormRef.getBinding()).isEqualTo(expectedBinding);
-    assertThat(camundaFormRef.getVersion()).isEqualTo(expectedVersion);
+    OrqueioFormRef orqueioFormRef = taskFormData.getOrqueioFormRef();
+    assertThat(orqueioFormRef.getKey()).isEqualTo(expectedKey);
+    assertThat(orqueioFormRef.getBinding()).isEqualTo(expectedBinding);
+    assertThat(orqueioFormRef.getVersion()).isEqualTo(expectedVersion);
     assertThat(taskFormData.getFormKey()).isNull();
   }
 
@@ -489,7 +489,7 @@ public class RetrieveCamundaFormRefTest {
   private void deployUpdateFormResource(String v1Content, String v2Content, String... additionalResourcesForFirstDeployment) throws IOException {
     FileInputStream form;
     // deploy BPMN with first version of form
-    form = CamundaFormUtils.writeTempFormFile("form.form", v1Content, tempFolder);
+    form = OrqueioFormUtils.writeTempFormFile("form.form", v1Content, tempFolder);
     DeploymentBuilder builder = repositoryService.createDeployment().name(getClass().getSimpleName())
         .addInputStream("form", form);
     for (String path : additionalResourcesForFirstDeployment) {
@@ -498,7 +498,7 @@ public class RetrieveCamundaFormRefTest {
     builder.deploy();
 
     // deploy second version of form
-    form = CamundaFormUtils.writeTempFormFile("form.form", v2Content, tempFolder);
+    form = OrqueioFormUtils.writeTempFormFile("form.form", v2Content, tempFolder);
     repositoryService.createDeployment().name(getClass().getSimpleName()).addInputStream("form", form).deploy();
   }
 }

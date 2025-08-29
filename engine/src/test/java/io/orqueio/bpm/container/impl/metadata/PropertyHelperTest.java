@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -141,41 +141,41 @@ public class PropertyHelperTest {
   @Test
   public void testResolvePropertyForExistingProperty() {
     Properties source = new Properties();
-    source.put("camunda.test.someKey", "1234");
-    String result = PropertyHelper.resolveProperty(source, "${camunda.test.someKey}");
+    source.put("orqueio.test.someKey", "1234");
+    String result = PropertyHelper.resolveProperty(source, "${orqueio.test.someKey}");
     Assert.assertEquals("1234", result);
   }
 
   @Test
   public void testResolvePropertyWhitespaceAndMore() {
     Properties source = new Properties();
-    source.put("camunda.test.someKey", "1234");
-    String result = PropertyHelper.resolveProperty(source, " -${ camunda.test.someKey }- ");
+    source.put("orqueio.test.someKey", "1234");
+    String result = PropertyHelper.resolveProperty(source, " -${ orqueio.test.someKey }- ");
     Assert.assertEquals(" -1234- ", result);
   }
 
   @Test
   public void testResolvePropertyForMultiplePropertes() {
     Properties source = new Properties();
-    source.put("camunda.test.oneKey", "1234");
-    source.put("camunda.test.anotherKey", "5678");
-    String result = PropertyHelper.resolveProperty(source, "-${ camunda.test.oneKey }-${ camunda.test.anotherKey}-");
+    source.put("orqueio.test.oneKey", "1234");
+    source.put("orqueio.test.anotherKey", "5678");
+    String result = PropertyHelper.resolveProperty(source, "-${ orqueio.test.oneKey }-${ orqueio.test.anotherKey}-");
     Assert.assertEquals("-1234-5678-", result);
   }
 
   @Test
   public void testResolvePropertyForMissingProperty() {
     Properties source = new Properties();
-    String result = PropertyHelper.resolveProperty(source, "${camunda.test.someKey}");
+    String result = PropertyHelper.resolveProperty(source, "${orqueio.test.someKey}");
     Assert.assertEquals("", result);
   }
 
   @Test
   public void testResolvePropertyNoTemplate() {
     Properties source = new Properties();
-    source.put("camunda.test.someKey", "1234");
-    String result = PropertyHelper.resolveProperty(source, "camunda.test.someKey");
-    Assert.assertEquals("camunda.test.someKey", result);
+    source.put("orqueio.test.someKey", "1234");
+    String result = PropertyHelper.resolveProperty(source, "orqueio.test.someKey");
+    Assert.assertEquals("orqueio.test.someKey", result);
   }
 
   @Test

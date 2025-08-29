@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="Definitions_0oqh0b5" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.1.2">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:orqueio="http://orqueio.io/schema/1.0/bpmn" id="Definitions_0oqh0b5" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Orqueio Modeler" exporterVersion="3.1.2">
   <bpmn:process id="testErrorMessageExpression" isExecutable="true">
     <bpmn:startEvent id="startEvent">
       <bpmn:outgoing>SequenceFlow_03rx5z0</bpmn:outgoing>
@@ -17,7 +17,7 @@
     </bpmn:subProcess>
     <bpmn:boundaryEvent id="errorBoundaryEvent" attachedToRef="subProcess">
       <bpmn:outgoing>SequenceFlow_03npqei</bpmn:outgoing>
-      <bpmn:errorEventDefinition errorRef="Error_1lp3g0b" camunda:errorCodeVariable="errorCode" camunda:errorMessageVariable="errorMessage" />
+      <bpmn:errorEventDefinition errorRef="Error_1lp3g0b" orqueio:errorCodeVariable="errorCode" orqueio:errorMessageVariable="errorMessage" />
     </bpmn:boundaryEvent>
     <bpmn:sequenceFlow id="SequenceFlow_03rx5z0" sourceRef="startEvent" targetRef="subProcess" />
     <bpmn:sequenceFlow id="SequenceFlow_03npqei" sourceRef="errorBoundaryEvent" targetRef="task" />
@@ -30,7 +30,7 @@
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="SequenceFlow_0da6ii3" sourceRef="task" targetRef="endEvent" />
   </bpmn:process>
-  <bpmn:error id="Error_1lp3g0b" name="ErrorWithMessage" errorCode="123" camunda:errorMessage="${errorMessageExpression}" />
+  <bpmn:error id="Error_1lp3g0b" name="ErrorWithMessage" errorCode="123" orqueio:errorMessage="${errorMessageExpression}" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="testErrorMessage">
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="startEvent">

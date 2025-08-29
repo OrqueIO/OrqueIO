@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -50,7 +50,7 @@ public class EnginePersistenceLogger extends ProcessEngineLogger {
 
   protected static final String HINT_TEXT = "Hint: Set <property name=\"databaseSchemaUpdate\" to value=\"true\" or " +
                                             "value=\"create-drop\" (use create-drop for testing only!) in bean " +
-                                            "processEngineConfiguration in camunda.cfg.xml for automatic schema creation";
+                                            "processEngineConfiguration in orqueio.cfg.xml for automatic schema creation";
 
   protected String buildStringFromList(Collection<?> list) {
     StringBuilder message = new StringBuilder();
@@ -316,11 +316,11 @@ public class EnginePersistenceLogger extends ProcessEngineLogger {
       exceptionMessage("028", "Illegal value '{}' for userId for GLOBAL authorization. Must be '{}'", id, expected));
   }
 
-  public AuthorizationException requiredCamundaAdmin() {
-    return requiredCamundaAdminOrPermissionException(null);
+  public AuthorizationException requiredOrqueioAdmin() {
+    return requiredOrqueioAdminOrPermissionException(null);
   }
 
-  public AuthorizationException requiredCamundaAdminOrPermissionException(List<MissingAuthorization> missingAuthorizations) {
+  public AuthorizationException requiredOrqueioAdminOrPermissionException(List<MissingAuthorization> missingAuthorizations) {
     String exceptionCode = "029";
     StringBuilder sb = new StringBuilder();
     sb.append("Required admin authenticated group or user");
@@ -493,7 +493,7 @@ public class EnginePersistenceLogger extends ProcessEngineLogger {
   public WrongDbException wrongDbVersionException(String version, String dbVersion) {
     return new WrongDbException(exceptionMessage(
       "055",
-      "Version mismatch: Camunda library version is '{}' and db version is '{}'. " +
+      "Version mismatch: Orqueio library version is '{}' and db version is '{}'. " +
       HINT_TEXT,
       version,
       dbVersion
@@ -511,7 +511,7 @@ public class EnginePersistenceLogger extends ProcessEngineLogger {
   public ProcessEngineException missingActivitiTablesException() {
     return new ProcessEngineException(exceptionMessage(
       "057",
-      "There are no Camunda tables in the database. " +
+      "There are no Orqueio tables in the database. " +
         HINT_TEXT
     ));
   }
@@ -789,11 +789,11 @@ public class EnginePersistenceLogger extends ProcessEngineLogger {
       taskId);
   }
 
-  public ProcessEngineException multipleTenantsForCamundaFormDefinitionKeyException(String camundaFormDefinitionKey) {
+  public ProcessEngineException multipleTenantsForOrqueioFormDefinitionKeyException(String orqueioFormDefinitionKey) {
     return new ProcessEngineException(exceptionMessage(
         "109",
-        "Cannot resolve a unique Camunda Form definition for key '{}' because it exists for multiple tenants.",
-        camundaFormDefinitionKey
+        "Cannot resolve a unique Orqueio Form definition for key '{}' because it exists for multiple tenants.",
+        orqueioFormDefinitionKey
         ));
   }
 
@@ -807,7 +807,7 @@ public class EnginePersistenceLogger extends ProcessEngineLogger {
     );
   }
 
-  // exception code 110 is already taken. See requiredCamundaAdminOrPermissionException() for details.
+  // exception code 110 is already taken. See requiredOrqueioAdminOrPermissionException() for details.
 
   public static List<SQLException> findRelatedSqlExceptions(Throwable exception) {
     List<SQLException> sqlExceptionList = new ArrayList<>();

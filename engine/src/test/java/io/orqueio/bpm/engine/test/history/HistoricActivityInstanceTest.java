@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -109,7 +109,7 @@ public class HistoricActivityInstanceTest extends PluggableProcessEngineTest {
     assertTrue(((HistoricActivityInstanceEventEntity)historicActivityInstance).getDurationRaw() >= 1000);
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/history/HistoricActivityInstanceTest.testHistoricActivityInstanceReceive.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/history/HistoricActivityInstanceTest.testHistoricActivityInstanceReceive.bpmn20.xml" })
   @Test
   public void testLongRunningHistoricActivityInstanceReceive() {
     final long ONE_YEAR = 1000 * 60 * 60 * 24 * 365;
@@ -260,8 +260,8 @@ public class HistoricActivityInstanceTest extends PluggableProcessEngineTest {
     assertEquals("gonzo", historicActivityInstance.getAssignee());
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/history/calledProcess.bpmn20.xml",
-      "org/camunda/bpm/engine/test/history/HistoricActivityInstanceTest.testCallSimpleSubProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/history/calledProcess.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/history/HistoricActivityInstanceTest.testCallSimpleSubProcess.bpmn20.xml" })
   @Test
   public void testHistoricActivityInstanceCalledProcessId() {
     runtimeService.startProcessInstanceByKey("callSimpleSubProcess");
@@ -273,8 +273,8 @@ public class HistoricActivityInstanceTest extends PluggableProcessEngineTest {
     assertEquals(oldInstance.getId(), historicActivityInstance.getCalledProcessInstanceId());
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/history/calledProcessWaiting.bpmn20.xml",
-  "org/camunda/bpm/engine/test/history/HistoricActivityInstanceTest.testCallSimpleSubProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/history/calledProcessWaiting.bpmn20.xml",
+  "io/orqueio/bpm/engine/test/history/HistoricActivityInstanceTest.testCallSimpleSubProcess.bpmn20.xml" })
   @Test
   public void testHistoricActivityInstanceCalledProcessIdWithWaitState() {
     // given
@@ -361,7 +361,7 @@ public class HistoricActivityInstanceTest extends PluggableProcessEngineTest {
 
     }
   }
-  @Deployment(resources = {"org/camunda/bpm/engine/test/history/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/history/oneTaskProcess.bpmn20.xml"})
   @Test
   public void testHistoricActivityInstanceQueryStartFinishAfterBefore() {
     Calendar startTime = Calendar.getInstance();
@@ -421,7 +421,7 @@ public class HistoricActivityInstanceTest extends PluggableProcessEngineTest {
     testRule.assertProcessEnded(processInstance.getId());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/history/HistoricActivityInstanceTest.testHistoricActivityInstanceQueryByCompleteScope.bpmn")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/history/HistoricActivityInstanceTest.testHistoricActivityInstanceQueryByCompleteScope.bpmn")
   @Test
   public void testHistoricActivityInstanceQueryByCanceled() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("process");
@@ -512,7 +512,7 @@ public class HistoricActivityInstanceTest extends PluggableProcessEngineTest {
     assertEquals("intermediateTimer", historicActivityInstanceQuery.singleResult().getActivityType());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/history/HistoricActivityInstanceTest.testHistoricActivityInstanceTimerEvent.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/history/HistoricActivityInstanceTest.testHistoricActivityInstanceTimerEvent.bpmn20.xml"})
   @Test
   public void testHistoricActivityInstanceMessageEvent() {
     runtimeService.startProcessInstanceByKey("catchSignal");
@@ -756,7 +756,7 @@ public class HistoricActivityInstanceTest extends PluggableProcessEngineTest {
     testRule.assertProcessEnded(pi.getId());
   }
 
-  @Deployment(resources="org/camunda/bpm/engine/test/history/HistoricActivityInstanceTest.testBoundaryCompensateEvent.bpmn20.xml")
+  @Deployment(resources="io/orqueio/bpm/engine/test/history/HistoricActivityInstanceTest.testBoundaryCompensateEvent.bpmn20.xml")
   @Test
   public void testCompensationServiceTaskHasEndTime() {
     ProcessInstance pi = runtimeService.startProcessInstanceByKey("process");
@@ -770,7 +770,7 @@ public class HistoricActivityInstanceTest extends PluggableProcessEngineTest {
     testRule.assertProcessEnded(pi.getId());
   }
 
-  @Deployment(resources="org/camunda/bpm/engine/test/history/HistoricActivityInstanceTest.testBoundaryCancelEvent.bpmn20.xml")
+  @Deployment(resources="io/orqueio/bpm/engine/test/history/HistoricActivityInstanceTest.testBoundaryCancelEvent.bpmn20.xml")
   @Test
   public void testTransaction() {
     ProcessInstance pi = runtimeService.startProcessInstanceByKey("process");
@@ -853,7 +853,7 @@ public class HistoricActivityInstanceTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources="org/camunda/bpm/engine/test/history/HistoricActivityInstanceTest.testEvents.bpmn")
+  @Deployment(resources="io/orqueio/bpm/engine/test/history/HistoricActivityInstanceTest.testEvents.bpmn")
   @Test
   public void testIntermediateCatchEventTypes() {
     HistoricActivityInstanceQuery query = startEventTestProcess("");
@@ -871,7 +871,7 @@ public class HistoricActivityInstanceTest extends PluggableProcessEngineTest {
     assertEquals("intermediateTimer", query.singleResult().getActivityType());
   }
 
-  @Deployment(resources="org/camunda/bpm/engine/test/history/HistoricActivityInstanceTest.testEvents.bpmn")
+  @Deployment(resources="io/orqueio/bpm/engine/test/history/HistoricActivityInstanceTest.testEvents.bpmn")
   @Test
   public void testIntermediateThrowEventTypes() {
     HistoricActivityInstanceQuery query = startEventTestProcess("");
@@ -893,7 +893,7 @@ public class HistoricActivityInstanceTest extends PluggableProcessEngineTest {
     assertEquals("intermediateCompensationThrowEvent", query.singleResult().getActivityType());
   }
 
-  @Deployment(resources="org/camunda/bpm/engine/test/history/HistoricActivityInstanceTest.testEvents.bpmn")
+  @Deployment(resources="io/orqueio/bpm/engine/test/history/HistoricActivityInstanceTest.testEvents.bpmn")
   @Test
   public void testStartEventTypes() {
     HistoricActivityInstanceQuery query = startEventTestProcess("");
@@ -912,7 +912,7 @@ public class HistoricActivityInstanceTest extends PluggableProcessEngineTest {
     assertEquals("messageStartEvent", query.singleResult().getActivityType());
   }
 
-  @Deployment(resources="org/camunda/bpm/engine/test/history/HistoricActivityInstanceTest.testEvents.bpmn")
+  @Deployment(resources="io/orqueio/bpm/engine/test/history/HistoricActivityInstanceTest.testEvents.bpmn")
   @Test
   public void testEndEventTypes() {
     HistoricActivityInstanceQuery query = startEventTestProcess("");
@@ -952,7 +952,7 @@ public class HistoricActivityInstanceTest extends PluggableProcessEngineTest {
     return historyService.createHistoricActivityInstanceQuery();
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/history/HistoricActivityInstanceTest.startEventTypesForEventSubprocess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/history/HistoricActivityInstanceTest.startEventTypesForEventSubprocess.bpmn20.xml")
   @Test
   public void testMessageEventSubprocess() {
     Map<String, Object> vars = new HashMap<String, Object>();
@@ -967,7 +967,7 @@ public class HistoricActivityInstanceTest extends PluggableProcessEngineTest {
     assertEquals("messageStartEvent", historicActivity.getActivityType());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/history/HistoricActivityInstanceTest.startEventTypesForEventSubprocess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/history/HistoricActivityInstanceTest.startEventTypesForEventSubprocess.bpmn20.xml")
   @Test
   public void testSignalEventSubprocess() {
     Map<String, Object> vars = new HashMap<String, Object>();
@@ -982,7 +982,7 @@ public class HistoricActivityInstanceTest extends PluggableProcessEngineTest {
     assertEquals("signalStartEvent", historicActivity.getActivityType());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/history/HistoricActivityInstanceTest.startEventTypesForEventSubprocess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/history/HistoricActivityInstanceTest.startEventTypesForEventSubprocess.bpmn20.xml")
   @Test
   public void testTimerEventSubprocess() {
     Map<String, Object> vars = new HashMap<String, Object>();
@@ -998,7 +998,7 @@ public class HistoricActivityInstanceTest extends PluggableProcessEngineTest {
     assertEquals("startTimerEvent", historicActivity.getActivityType());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/history/HistoricActivityInstanceTest.startEventTypesForEventSubprocess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/history/HistoricActivityInstanceTest.startEventTypesForEventSubprocess.bpmn20.xml")
   @Test
   public void testErrorEventSubprocess() {
     Map<String, Object> vars = new HashMap<String, Object>();
@@ -1012,8 +1012,8 @@ public class HistoricActivityInstanceTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/history/HistoricActivityInstanceTest.testCaseCallActivity.bpmn20.xml",
-      "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
+      "io/orqueio/bpm/engine/test/history/HistoricActivityInstanceTest.testCaseCallActivity.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"
   })
   @Test
   public void testCaseCallActivity() {
@@ -1050,7 +1050,7 @@ public class HistoricActivityInstanceTest extends PluggableProcessEngineTest {
     assertNotNull(historicCallActivity.getEndTime());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/history/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/history/oneTaskProcess.bpmn20.xml"})
   @Test
   public void testProcessDefinitionKeyProperty() {
     // given
@@ -1085,7 +1085,7 @@ public class HistoricActivityInstanceTest extends PluggableProcessEngineTest {
     assertThat(pi.isEnded()).isTrue();
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/history/HistoricActivityInstanceTest.testHistoricActivityInstanceProperties.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/history/HistoricActivityInstanceTest.testHistoricActivityInstanceProperties.bpmn20.xml"})
   @Test
   public void testAssigneeSavedWhenTaskSaved() {
     // given

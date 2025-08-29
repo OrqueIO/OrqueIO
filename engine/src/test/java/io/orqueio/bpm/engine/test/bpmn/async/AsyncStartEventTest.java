@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -72,7 +72,7 @@ public class AsyncStartEventTest extends PluggableProcessEngineTest {
     Assert.assertNotNull(runtimeService.getVariable(instance.getId(), "listener"));
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/bpmn/async/AsyncStartEventTest.testAsyncStartEvent.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/bpmn/async/AsyncStartEventTest.testAsyncStartEvent.bpmn20.xml")
   @Test
   public void testAsyncStartEventActivityInstance() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("asyncStartEvent");
@@ -107,8 +107,8 @@ public class AsyncStartEventTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/bpmn/async/AsyncStartEventTest.testCallActivity-super.bpmn20.xml",
-      "org/camunda/bpm/engine/test/bpmn/async/AsyncStartEventTest.testCallActivity-sub.bpmn20.xml"
+      "io/orqueio/bpm/engine/test/bpmn/async/AsyncStartEventTest.testCallActivity-super.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/bpmn/async/AsyncStartEventTest.testCallActivity-sub.bpmn20.xml"
   })
   @Test
   public void testCallActivity() {
@@ -142,7 +142,7 @@ public class AsyncStartEventTest extends PluggableProcessEngineTest {
     assertNotNull("The subprocess user task should have been reached", task);
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/bpmn/async/AsyncStartEventTest.testAsyncSubProcessStartEvent.bpmn")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/bpmn/async/AsyncStartEventTest.testAsyncSubProcessStartEvent.bpmn")
   @Test
   public void testAsyncSubProcessStartEventActivityInstance() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("process");

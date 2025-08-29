@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -58,7 +58,7 @@ public class CmmnDisabledTest {
 
   @ClassRule
   public static ProcessEngineBootstrapRule bootstrapRule = new ProcessEngineBootstrapRule(
-      "org/camunda/bpm/application/impl/deployment/cmmn.disabled.camunda.cfg.xml");
+      "io/orqueio/bpm/application/impl/deployment/cmmn.disabled.orqueio.cfg.xml");
 
   public ProvidedProcessEngineRule engineRule = new ProvidedProcessEngineRule(bootstrapRule);
   public ProcessEngineTestRule engineTestRule = new ProcessEngineTestRule(engineRule);
@@ -96,7 +96,7 @@ public class CmmnDisabledTest {
   @Test
   public void testCmmnDisabled() {
     ProcessApplicationDeployment deployment = repositoryService.createDeployment(processApplication.getReference())
-        .addClasspathResource("org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
+        .addClasspathResource("io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
         .deploy();
 
     // process is deployed:
@@ -115,7 +115,7 @@ public class CmmnDisabledTest {
   @Test
   public void testVariableInstanceQuery() {
     ProcessApplicationDeployment deployment = repositoryService.createDeployment(processApplication.getReference())
-        .addClasspathResource("org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
+        .addClasspathResource("io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
         .deploy();
 
     VariableMap variables = Variables.createVariables().putValue("my-variable", "a-value");
@@ -140,8 +140,8 @@ public class CmmnDisabledTest {
   @Test
   public void testTaskQueryAuthorization() {
     // given
-    engineTestRule.deploy("org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml");
-    engineTestRule.deploy("org/camunda/bpm/engine/test/api/twoTasksProcess.bpmn20.xml");
+    engineTestRule.deploy("io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml");
+    engineTestRule.deploy("io/orqueio/bpm/engine/test/api/twoTasksProcess.bpmn20.xml");
 
     // a process instance task with read authorization
     ProcessInstance instance1 = runtimeService.startProcessInstanceByKey("oneTaskProcess");

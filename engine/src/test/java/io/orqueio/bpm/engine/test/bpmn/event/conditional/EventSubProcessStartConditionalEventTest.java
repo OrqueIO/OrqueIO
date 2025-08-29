@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -98,7 +98,7 @@ public class EventSubProcessStartConditionalEventTest extends AbstractConditiona
   }
 
   @Test
-  @Deployment(resources ={ "org/camunda/bpm/engine/test/bpmn/event/conditional/EventSubProcessStartConditionalEventTest.testVariableCondition.bpmn20.xml"})
+  @Deployment(resources ={ "io/orqueio/bpm/engine/test/bpmn/event/conditional/EventSubProcessStartConditionalEventTest.testVariableCondition.bpmn20.xml"})
   public void testVariableConditionAndStartingWithVar() {
     //given process with event sub process conditional start event
     Map<String, Object> vars = Variables.createVariables();
@@ -115,7 +115,7 @@ public class EventSubProcessStartConditionalEventTest extends AbstractConditiona
   }
 
   @Test
-  @Deployment(resources ={ "org/camunda/bpm/engine/test/bpmn/event/conditional/EventSubProcessStartConditionalEventTest.testVariableCondition.bpmn20.xml"})
+  @Deployment(resources ={ "io/orqueio/bpm/engine/test/bpmn/event/conditional/EventSubProcessStartConditionalEventTest.testVariableCondition.bpmn20.xml"})
   public void testWrongVariableCondition() {
     //given process with event sub process conditional start event
     ProcessInstance procInst = runtimeService.startProcessInstanceByKey(CONDITIONAL_EVENT_PROCESS_KEY);
@@ -176,7 +176,7 @@ public class EventSubProcessStartConditionalEventTest extends AbstractConditiona
   }
 
   @Test
-  @Deployment(resources ={ "org/camunda/bpm/engine/test/bpmn/event/conditional/EventSubProcessStartConditionalEventTest.testSubProcessVariableCondition.bpmn20.xml"})
+  @Deployment(resources ={ "io/orqueio/bpm/engine/test/bpmn/event/conditional/EventSubProcessStartConditionalEventTest.testSubProcessVariableCondition.bpmn20.xml"})
   public void testSubProcessSetVariableOnTaskCondition() {
     //given process with event sub process conditional start event and user task in sub process
     ProcessInstance procInst = runtimeService.startProcessInstanceByKey(CONDITIONAL_EVENT_PROCESS_KEY);
@@ -195,7 +195,7 @@ public class EventSubProcessStartConditionalEventTest extends AbstractConditiona
   }
 
   @Test
-  @Deployment(resources ={ "org/camunda/bpm/engine/test/bpmn/event/conditional/EventSubProcessStartConditionalEventTest.testSubProcessVariableCondition.bpmn20.xml"})
+  @Deployment(resources ={ "io/orqueio/bpm/engine/test/bpmn/event/conditional/EventSubProcessStartConditionalEventTest.testSubProcessVariableCondition.bpmn20.xml"})
   public void testSubProcessSetVariableOnExecutionCondition() {
     //given process with event sub process conditional start event and user task in sub process
     ProcessInstance procInst = runtimeService.startProcessInstanceByKey(CONDITIONAL_EVENT_PROCESS_KEY);
@@ -242,7 +242,7 @@ public class EventSubProcessStartConditionalEventTest extends AbstractConditiona
     final BpmnModelInstance modelInstance = Bpmn.createExecutableProcess(CONDITIONAL_EVENT_PROCESS_KEY)
                                                   .startEvent().userTask().name(TASK_BEFORE_CONDITION)
                                                   .serviceTask()
-                                                    .camundaClass(SetVariableDelegate.class.getName())
+                                                    .orqueioClass(SetVariableDelegate.class.getName())
                                                   .endEvent().done();
      deployConditionalEventSubProcess(modelInstance, CONDITIONAL_EVENT_PROCESS_KEY, true);
 
@@ -270,7 +270,7 @@ public class EventSubProcessStartConditionalEventTest extends AbstractConditiona
     final BpmnModelInstance modelInstance = Bpmn.createExecutableProcess(CONDITIONAL_EVENT_PROCESS_KEY)
                                                   .startEvent().userTask().name(TASK_BEFORE_CONDITION)
                                                   .serviceTask()
-                                                    .camundaClass(SetVariableDelegate.class.getName())
+                                                    .orqueioClass(SetVariableDelegate.class.getName())
                                                   .userTask()
                                                   .endEvent().done();
      deployConditionalEventSubProcess(modelInstance, CONDITIONAL_EVENT_PROCESS_KEY, false);
@@ -300,7 +300,7 @@ public class EventSubProcessStartConditionalEventTest extends AbstractConditiona
     BpmnModelInstance modelInstance = Bpmn.createExecutableProcess(CONDITIONAL_EVENT_PROCESS_KEY)
       .startEvent()
       .userTask().name(TASK_BEFORE_CONDITION)
-      .serviceTask().camundaClass(SetVariableDelegate.class.getName())
+      .serviceTask().orqueioClass(SetVariableDelegate.class.getName())
       .endEvent().done();
 
     modelInstance = modify(modelInstance)
@@ -337,7 +337,7 @@ public class EventSubProcessStartConditionalEventTest extends AbstractConditiona
     BpmnModelInstance modelInstance = Bpmn.createExecutableProcess(CONDITIONAL_EVENT_PROCESS_KEY)
       .startEvent().userTask().name(TASK_BEFORE_CONDITION)
       .serviceTask()
-      .camundaClass(SetVariableDelegate.class.getName())
+      .orqueioClass(SetVariableDelegate.class.getName())
       .userTask()
       .endEvent().done();
 
@@ -379,8 +379,8 @@ public class EventSubProcessStartConditionalEventTest extends AbstractConditiona
     final BpmnModelInstance modelInstance = Bpmn.createExecutableProcess(CONDITIONAL_EVENT_PROCESS_KEY)
                                                   .startEvent().userTask().name(TASK_BEFORE_CONDITION)
                                                   .serviceTask(TASK_WITH_CONDITION_ID)
-                                                    .camundaInputParameter(VARIABLE_NAME, "1")
-                                                    .camundaExpression(TRUE_CONDITION)
+                                                    .orqueioInputParameter(VARIABLE_NAME, "1")
+                                                    .orqueioExpression(TRUE_CONDITION)
                                                   .userTask().name(TASK_AFTER_SERVICE_TASK)
                                                   .endEvent().done();
      deployConditionalEventSubProcess(modelInstance, CONDITIONAL_EVENT_PROCESS_KEY, true);
@@ -408,8 +408,8 @@ public class EventSubProcessStartConditionalEventTest extends AbstractConditiona
     final BpmnModelInstance modelInstance = Bpmn.createExecutableProcess(CONDITIONAL_EVENT_PROCESS_KEY)
                                                   .startEvent().userTask().name(TASK_BEFORE_CONDITION)
                                                   .serviceTask(TASK_WITH_CONDITION_ID)
-                                                    .camundaInputParameter(VARIABLE_NAME, "1")
-                                                    .camundaExpression(TRUE_CONDITION)
+                                                    .orqueioInputParameter(VARIABLE_NAME, "1")
+                                                    .orqueioExpression(TRUE_CONDITION)
                                                   .userTask().name(TASK_AFTER_SERVICE_TASK)
                                                   .endEvent().done();
      deployConditionalEventSubProcess(modelInstance, CONDITIONAL_EVENT_PROCESS_KEY, false);
@@ -437,7 +437,7 @@ public class EventSubProcessStartConditionalEventTest extends AbstractConditiona
     final BpmnModelInstance modelInstance = Bpmn.createExecutableProcess(CONDITIONAL_EVENT_PROCESS_KEY)
                                                   .startEvent().userTask().name(TASK_BEFORE_CONDITION)
                                                   .serviceTask(TASK_WITH_CONDITION_ID)
-                                                    .camundaExpression("${execution.setVariable(\"variable\", 1)}")
+                                                    .orqueioExpression("${execution.setVariable(\"variable\", 1)}")
                                                   .userTask().name(TASK_AFTER_SERVICE_TASK)
                                                   .endEvent().done();
      deployConditionalEventSubProcess(modelInstance, CONDITIONAL_EVENT_PROCESS_KEY, true);
@@ -464,7 +464,7 @@ public class EventSubProcessStartConditionalEventTest extends AbstractConditiona
     final BpmnModelInstance modelInstance = Bpmn.createExecutableProcess(CONDITIONAL_EVENT_PROCESS_KEY)
                                                   .startEvent().userTask().name(TASK_BEFORE_CONDITION)
                                                   .serviceTask(TASK_WITH_CONDITION_ID)
-                                                    .camundaExpression("${execution.setVariable(\"variable\", 1)}")
+                                                    .orqueioExpression("${execution.setVariable(\"variable\", 1)}")
                                                   .userTask().name(TASK_AFTER_SERVICE_TASK)
                                                   .endEvent().done();
      deployConditionalEventSubProcess(modelInstance, CONDITIONAL_EVENT_PROCESS_KEY, false);
@@ -492,7 +492,7 @@ public class EventSubProcessStartConditionalEventTest extends AbstractConditiona
     final BpmnModelInstance modelInstance = Bpmn.createExecutableProcess(CONDITIONAL_EVENT_PROCESS_KEY)
                                                   .startEvent().userTask().name(TASK_BEFORE_CONDITION)
                                                   .subProcess(SUB_PROCESS_ID)
-                                                    .camundaInputParameter(VARIABLE_NAME, "1")
+                                                    .orqueioInputParameter(VARIABLE_NAME, "1")
                                                     .embeddedSubProcess()
                                                     .startEvent("startSubProcess")
                                                     .userTask().name(TASK_IN_SUB_PROCESS_ID)
@@ -524,7 +524,7 @@ public class EventSubProcessStartConditionalEventTest extends AbstractConditiona
     final BpmnModelInstance modelInstance = Bpmn.createExecutableProcess(CONDITIONAL_EVENT_PROCESS_KEY)
                                                   .startEvent().userTask().name(TASK_BEFORE_CONDITION)
                                                   .subProcess(SUB_PROCESS_ID)
-                                                    .camundaInputParameter(VARIABLE_NAME, "1")
+                                                    .orqueioInputParameter(VARIABLE_NAME, "1")
                                                     .embeddedSubProcess()
                                                     .startEvent()
                                                     .userTask().name(TASK_IN_SUB_PROCESS_ID)
@@ -558,7 +558,7 @@ public class EventSubProcessStartConditionalEventTest extends AbstractConditiona
                                                   .startEvent()
                                                   .userTask(TASK_BEFORE_CONDITION_ID)
                                                     .name(TASK_BEFORE_CONDITION)
-                                                    .camundaOutputParameter(VARIABLE_NAME, "1")
+                                                    .orqueioOutputParameter(VARIABLE_NAME, "1")
                                                   .userTask()
                                                   .endEvent()
                                                   .done();
@@ -587,7 +587,7 @@ public class EventSubProcessStartConditionalEventTest extends AbstractConditiona
                                                   .startEvent()
                                                   .userTask(TASK_BEFORE_CONDITION_ID)
                                                     .name(TASK_BEFORE_CONDITION)
-                                                    .camundaOutputParameter(VARIABLE_NAME, "1")
+                                                    .orqueioOutputParameter(VARIABLE_NAME, "1")
                                                   .userTask()
                                                   .endEvent()
                                                   .done();
@@ -621,7 +621,7 @@ public class EventSubProcessStartConditionalEventTest extends AbstractConditiona
                                                     .name(TASK_BEFORE_CONDITION)
                                                   .callActivity(TASK_WITH_CONDITION_ID)
                                                     .calledElement(DELEGATED_PROCESS_KEY)
-                                                    .camundaOutputParameter(VARIABLE_NAME, "1")
+                                                    .orqueioOutputParameter(VARIABLE_NAME, "1")
                                                   .userTask()
                                                   .endEvent()
                                                   .done();
@@ -654,7 +654,7 @@ public class EventSubProcessStartConditionalEventTest extends AbstractConditiona
                                                     .name(TASK_BEFORE_CONDITION)
                                                   .callActivity(TASK_WITH_CONDITION_ID)
                                                     .calledElement(DELEGATED_PROCESS_KEY)
-                                                    .camundaOutputParameter(VARIABLE_NAME, "1")
+                                                    .orqueioOutputParameter(VARIABLE_NAME, "1")
                                                   .userTask()
                                                   .endEvent()
                                                   .done();
@@ -689,7 +689,7 @@ public class EventSubProcessStartConditionalEventTest extends AbstractConditiona
       .name(TASK_BEFORE_CONDITION)
       .callActivity(TASK_WITH_CONDITION_ID)
       .calledElement(DELEGATED_PROCESS_KEY)
-      .camundaOut(VARIABLE_NAME, VARIABLE_NAME)
+      .orqueioOut(VARIABLE_NAME, VARIABLE_NAME)
       .userTask().name(TASK_AFTER_OUTPUT_MAPPING)
       .endEvent()
       .done();
@@ -722,7 +722,7 @@ public class EventSubProcessStartConditionalEventTest extends AbstractConditiona
       .name(TASK_BEFORE_CONDITION)
       .callActivity(TASK_WITH_CONDITION_ID)
       .calledElement(DELEGATED_PROCESS_KEY)
-      .camundaOut(VARIABLE_NAME, VARIABLE_NAME)
+      .orqueioOut(VARIABLE_NAME, VARIABLE_NAME)
       .userTask().name(TASK_AFTER_OUTPUT_MAPPING)
       .endEvent()
       .done();
@@ -758,7 +758,7 @@ public class EventSubProcessStartConditionalEventTest extends AbstractConditiona
       .name(TASK_BEFORE_CONDITION)
       .callActivity(TASK_WITH_CONDITION_ID)
       .calledElement(DELEGATED_PROCESS_KEY)
-      .camundaIn(VARIABLE_NAME, VARIABLE_NAME)
+      .orqueioIn(VARIABLE_NAME, VARIABLE_NAME)
       .userTask().name(TASK_AFTER_OUTPUT_MAPPING)
       .endEvent()
       .done();
@@ -791,7 +791,7 @@ public class EventSubProcessStartConditionalEventTest extends AbstractConditiona
       .name(TASK_BEFORE_CONDITION)
       .callActivity(TASK_WITH_CONDITION_ID)
       .calledElement(DELEGATED_PROCESS_KEY)
-      .camundaIn(VARIABLE_NAME, VARIABLE_NAME)
+      .orqueioIn(VARIABLE_NAME, VARIABLE_NAME)
       .userTask().name(TASK_AFTER_OUTPUT_MAPPING)
       .endEvent()
       .done();
@@ -889,7 +889,7 @@ public class EventSubProcessStartConditionalEventTest extends AbstractConditiona
                                                   .embeddedSubProcess()
                                                     .startEvent()
                                                     .serviceTask()
-                                                    .camundaExpression(EXPR_SET_VARIABLE)
+                                                    .orqueioExpression(EXPR_SET_VARIABLE)
                                                     .userTask().name(TASK_AFTER_SERVICE_TASK)
                                                     .endEvent()
                                                   .subProcessDone()
@@ -925,7 +925,7 @@ public class EventSubProcessStartConditionalEventTest extends AbstractConditiona
                                                   .embeddedSubProcess()
                                                     .startEvent()
                                                     .serviceTask()
-                                                    .camundaExpression(EXPR_SET_VARIABLE)
+                                                    .orqueioExpression(EXPR_SET_VARIABLE)
                                                     .userTask().name(TASK_AFTER_SERVICE_TASK)
                                                     .endEvent()
                                                   .subProcessDone()
@@ -962,7 +962,7 @@ public class EventSubProcessStartConditionalEventTest extends AbstractConditiona
                                                   .embeddedSubProcess()
                                                     .startEvent()
                                                     .serviceTask()
-                                                    .camundaExpression(EXPR_SET_VARIABLE)
+                                                    .orqueioExpression(EXPR_SET_VARIABLE)
                                                     .userTask().name(TASK_AFTER_SERVICE_TASK)
                                                     .endEvent()
                                                   .subProcessDone()
@@ -998,7 +998,7 @@ public class EventSubProcessStartConditionalEventTest extends AbstractConditiona
                                                   .embeddedSubProcess()
                                                     .startEvent()
                                                     .serviceTask()
-                                                    .camundaExpression(EXPR_SET_VARIABLE)
+                                                    .orqueioExpression(EXPR_SET_VARIABLE)
                                                     .userTask().name(TASK_AFTER_SERVICE_TASK)
                                                     .endEvent()
                                                   .subProcessDone()
@@ -1025,7 +1025,7 @@ public class EventSubProcessStartConditionalEventTest extends AbstractConditiona
   }
 
   @Test
-  @Deployment(resources ={ "org/camunda/bpm/engine/test/bpmn/event/conditional/EventSubProcessStartConditionalEventTest.testSubProcessVariableCondition.bpmn20.xml"})
+  @Deployment(resources ={ "io/orqueio/bpm/engine/test/bpmn/event/conditional/EventSubProcessStartConditionalEventTest.testSubProcessVariableCondition.bpmn20.xml"})
   public void testSubProcessSetVariableOnProcessInstanceCondition() {
     //given process with event sub process conditional start event and user task in sub process
     ProcessInstance procInst = runtimeService.startProcessInstanceByKey(CONDITIONAL_EVENT_PROCESS_KEY);
@@ -1255,7 +1255,7 @@ public class EventSubProcessStartConditionalEventTest extends AbstractConditiona
       .startEvent()
       .userTask(TASK_WITH_CONDITION_ID).name(TASK_WITH_CONDITION)
       .serviceTask()
-      .camundaClass(SetVariableDelegate.class.getName())
+      .orqueioClass(SetVariableDelegate.class.getName())
       .endEvent()
       .done();
 
@@ -1269,7 +1269,7 @@ public class EventSubProcessStartConditionalEventTest extends AbstractConditiona
       .condition(CONDITION_EXPR)
       .conditionalEventDefinitionDone()
       .serviceTask()
-      .camundaClass(LoopDelegate.class.getName())
+      .orqueioClass(LoopDelegate.class.getName())
       .userTask().name(TASK_AFTER_CONDITION)
       .endEvent().done();
 
@@ -1294,7 +1294,7 @@ public class EventSubProcessStartConditionalEventTest extends AbstractConditiona
 
   @Test
   @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_FULL)
-  @Deployment(resources = "org/camunda/bpm/engine/test/bpmn/event/conditional/EventSubProcessStartConditionalEventTest.testVariableCondition.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/bpmn/event/conditional/EventSubProcessStartConditionalEventTest.testVariableCondition.bpmn20.xml")
   public void testVariableConditionWithHistory() {
     // given process with event sub process conditional start event
     ProcessInstance procInst = runtimeService.startProcessInstanceByKey(CONDITIONAL_EVENT_PROCESS_KEY,

@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -115,7 +115,7 @@ public class SuspendJobDefinitionTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn"})
   @Test
   public void testSuspensionById_shouldRetainJobs() {
     // given
@@ -161,7 +161,7 @@ public class SuspendJobDefinitionTest extends PluggableProcessEngineTest {
     assertEquals(0, jobQuery.count());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn"})
   @Test
   public void testSuspensionByIdAndSuspendJobsFlag_shouldRetainJobs() {
     // given
@@ -205,7 +205,7 @@ public class SuspendJobDefinitionTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn"})
   @Test
   public void testSuspensionByIdAndSuspendJobsFlag_shouldSuspendJobs() {
     // given
@@ -245,7 +245,7 @@ public class SuspendJobDefinitionTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn"})
   @Test
   public void testSuspensionById_shouldExecuteImmediatelyAndRetainJobs() {
     // given
@@ -289,7 +289,7 @@ public class SuspendJobDefinitionTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn"})
   @Test
   public void testSuspensionById_shouldExecuteImmediatelyAndSuspendJobs() {
     // given
@@ -329,7 +329,7 @@ public class SuspendJobDefinitionTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn"})
   @Test
   public void testSuspensionById_shouldExecuteDelayedAndRetainJobs() {
     // given
@@ -388,7 +388,7 @@ public class SuspendJobDefinitionTest extends PluggableProcessEngineTest {
     assertEquals(0, jobQuery.count());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn"})
   @Test
   public void testSuspensionById_shouldExecuteDelayedAndSuspendJobs() {
     // given
@@ -501,7 +501,7 @@ public class SuspendJobDefinitionTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn"})
   @Test
   public void testSuspensionByProcessDefinitionId_shouldRetainJobs() {
     // given
@@ -548,7 +548,7 @@ public class SuspendJobDefinitionTest extends PluggableProcessEngineTest {
     assertEquals(0, jobQuery.count());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn"})
   @Test
   public void testSuspensionByProcessDefinitionIdAndSuspendJobsFlag_shouldRetainJobs() {
     // given
@@ -593,7 +593,7 @@ public class SuspendJobDefinitionTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn"})
   @Test
   public void testSuspensionByProcessDefinitionIdAndSuspendJobsFlag_shouldSuspendJobs() {
     // given
@@ -634,7 +634,7 @@ public class SuspendJobDefinitionTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn"})
   @Test
   public void testSuspensionByProcessDefinitionId_shouldExecuteImmediatelyAndRetainJobs() {
     // given
@@ -676,7 +676,7 @@ public class SuspendJobDefinitionTest extends PluggableProcessEngineTest {
     assertFalse(activeJob.isSuspended());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn"})
   @Test
   public void testSuspensionByProcessDefinitionId_shouldExecuteImmediatelyAndSuspendJobs() {
     // given
@@ -717,7 +717,7 @@ public class SuspendJobDefinitionTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn"})
   @Test
   public void testSuspensionByProcessDefinitionId_shouldExecuteDelayedAndRetainJobs() {
     // given
@@ -775,7 +775,7 @@ public class SuspendJobDefinitionTest extends PluggableProcessEngineTest {
     assertEquals(0, jobQuery.count());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn"})
   @Test
   public void testSuspensionByProcessDefinitionId_shouldExecuteDelayedAndSuspendJobs() {
     // given
@@ -885,7 +885,7 @@ public class SuspendJobDefinitionTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn"})
   @Test
   public void testSuspensionByProcessDefinitionKey_shouldRetainJobs() {
     // given
@@ -930,7 +930,7 @@ public class SuspendJobDefinitionTest extends PluggableProcessEngineTest {
     assertFalse(activeJob.isSuspended());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn"})
   @Test
   public void testSuspensionByProcessDefinitionKeyAndSuspendJobsFlag_shouldRetainJobs() {
     // given
@@ -972,7 +972,7 @@ public class SuspendJobDefinitionTest extends PluggableProcessEngineTest {
     assertFalse(activeJob.isSuspended());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn"})
   @Test
   public void testSuspensionByProcessDefinitionKeyAndSuspendJobsFlag_shouldSuspendJobs() {
     // given
@@ -1012,7 +1012,7 @@ public class SuspendJobDefinitionTest extends PluggableProcessEngineTest {
     assertTrue(suspendedJob.isSuspended());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn"})
   @Test
   public void testSuspensionByProcessDefinitionKey_shouldExecuteImmediatelyAndRetainJobs() {
     // given
@@ -1054,7 +1054,7 @@ public class SuspendJobDefinitionTest extends PluggableProcessEngineTest {
     assertFalse(activeJob.isSuspended());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn"})
   @Test
   public void testSuspensionByProcessDefinitionKey_shouldExecuteImmediatelyAndSuspendJobs() {
     // given
@@ -1094,7 +1094,7 @@ public class SuspendJobDefinitionTest extends PluggableProcessEngineTest {
     assertTrue(suspendedJob.isSuspended());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn"})
   @Test
   public void testSuspensionByProcessDefinitionKey_shouldExecuteDelayedAndRetainJobs() {
     // given
@@ -1150,7 +1150,7 @@ public class SuspendJobDefinitionTest extends PluggableProcessEngineTest {
     assertFalse(activeJob.isSuspended());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn"})
   @Test
   public void testSuspensionByProcessDefinitionKey_shouldExecuteDelayedAndSuspendJobs() {
     // given
@@ -1219,7 +1219,7 @@ public class SuspendJobDefinitionTest extends PluggableProcessEngineTest {
     int nrOfProcessDefinitions = 3;
     for (int i=0; i<nrOfProcessDefinitions; i++) {
       repositoryService.createDeployment()
-        .addClasspathResource("org/camunda/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn").deploy();
+        .addClasspathResource("io/orqueio/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn").deploy();
       Map<String, Object> params = new HashMap<>();
       params.put("fail", Boolean.TRUE);
       runtimeService.startProcessInstanceByKey(key, params);
@@ -1258,7 +1258,7 @@ public class SuspendJobDefinitionTest extends PluggableProcessEngineTest {
     int nrOfProcessDefinitions = 3;
     for (int i=0; i<nrOfProcessDefinitions; i++) {
       repositoryService.createDeployment()
-        .addClasspathResource("org/camunda/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn").deploy();
+        .addClasspathResource("io/orqueio/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn").deploy();
       Map<String, Object> params = new HashMap<>();
       params.put("fail", Boolean.TRUE);
       runtimeService.startProcessInstanceByKey(key, params);
@@ -1297,7 +1297,7 @@ public class SuspendJobDefinitionTest extends PluggableProcessEngineTest {
     int nrOfProcessDefinitions = 3;
     for (int i=0; i<nrOfProcessDefinitions; i++) {
       repositoryService.createDeployment()
-        .addClasspathResource("org/camunda/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn").deploy();
+        .addClasspathResource("io/orqueio/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn").deploy();
       Map<String, Object> params = new HashMap<>();
       params.put("fail", Boolean.TRUE);
       runtimeService.startProcessInstanceByKey(key, params);
@@ -1336,7 +1336,7 @@ public class SuspendJobDefinitionTest extends PluggableProcessEngineTest {
     int nrOfProcessDefinitions = 3;
     for (int i=0; i<nrOfProcessDefinitions; i++) {
       repositoryService.createDeployment()
-        .addClasspathResource("org/camunda/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn").deploy();
+        .addClasspathResource("io/orqueio/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn").deploy();
       Map<String, Object> params = new HashMap<>();
       params.put("fail", Boolean.TRUE);
       runtimeService.startProcessInstanceByKey(key, params);
@@ -1375,7 +1375,7 @@ public class SuspendJobDefinitionTest extends PluggableProcessEngineTest {
     int nrOfProcessDefinitions = 3;
     for (int i=0; i<nrOfProcessDefinitions; i++) {
       repositoryService.createDeployment()
-        .addClasspathResource("org/camunda/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn").deploy();
+        .addClasspathResource("io/orqueio/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn").deploy();
       Map<String, Object> params = new HashMap<>();
       params.put("fail", Boolean.TRUE);
       runtimeService.startProcessInstanceByKey(key, params);
@@ -1414,7 +1414,7 @@ public class SuspendJobDefinitionTest extends PluggableProcessEngineTest {
     int nrOfProcessDefinitions = 3;
     for (int i=0; i<nrOfProcessDefinitions; i++) {
       repositoryService.createDeployment()
-        .addClasspathResource("org/camunda/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn").deploy();
+        .addClasspathResource("io/orqueio/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn").deploy();
       Map<String, Object> params = new HashMap<>();
       params.put("fail", Boolean.TRUE);
       runtimeService.startProcessInstanceByKey(key, params);
@@ -1469,7 +1469,7 @@ public class SuspendJobDefinitionTest extends PluggableProcessEngineTest {
     int nrOfProcessDefinitions = 3;
     for (int i=0; i<nrOfProcessDefinitions; i++) {
       repositoryService.createDeployment()
-        .addClasspathResource("org/camunda/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn").deploy();
+        .addClasspathResource("io/orqueio/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn").deploy();
       Map<String, Object> params = new HashMap<>();
       params.put("fail", Boolean.TRUE);
       runtimeService.startProcessInstanceByKey(key, params);
@@ -1515,7 +1515,7 @@ public class SuspendJobDefinitionTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn"})
   @Test
   public void testSuspensionByIdUsingBuilder() {
     // given
@@ -1542,7 +1542,7 @@ public class SuspendJobDefinitionTest extends PluggableProcessEngineTest {
     assertEquals(1, query.suspended().count());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn"})
   @Test
   public void testSuspensionByProcessDefinitionIdUsingBuilder() {
     // given
@@ -1571,7 +1571,7 @@ public class SuspendJobDefinitionTest extends PluggableProcessEngineTest {
     assertEquals(1, query.suspended().count());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn"})
   @Test
   public void testSuspensionByProcessDefinitionKeyUsingBuilder() {
     // given
@@ -1598,7 +1598,7 @@ public class SuspendJobDefinitionTest extends PluggableProcessEngineTest {
     assertEquals(1, query.suspended().count());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn"})
   @Test
   public void testSuspensionJobDefinitionIncludeJobsdUsingBuilder() {
     // given
@@ -1634,7 +1634,7 @@ public class SuspendJobDefinitionTest extends PluggableProcessEngineTest {
     assertEquals(0, jobQuery.active().count());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/SuspensionTest.testBase.bpmn"})
   @Test
   public void testDelayedSuspensionUsingBuilder() {
     // given

@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -58,8 +58,8 @@ public class CaseInstanceQueryTest extends PluggableProcessEngineTest {
   public void setUp() throws Exception {
 
     repositoryService.createDeployment()
-      .addClasspathResource("org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn")
-      .addClasspathResource("org/camunda/bpm/engine/test/api/cmmn/oneTaskCase2.cmmn")
+      .addClasspathResource("io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn")
+      .addClasspathResource("io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase2.cmmn")
       .deploy();
 
     caseInstanceIds = new ArrayList<String>();
@@ -212,7 +212,7 @@ public class CaseInstanceQueryTest extends PluggableProcessEngineTest {
     }
 
     repositoryService.createDeployment()
-        .addClasspathResource("org/camunda/bpm/engine/test/api/cmmn/oneTaskCaseWithManualActivation.cmmn")
+        .addClasspathResource("io/orqueio/bpm/engine/test/api/cmmn/oneTaskCaseWithManualActivation.cmmn")
         .deploy();
 
     for (int i = 0; i < 4; i++) {
@@ -243,7 +243,7 @@ public class CaseInstanceQueryTest extends PluggableProcessEngineTest {
     verifyQueryResults(query, 4);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/runtime/CaseInstanceQueryTest.testQueryByTerminated.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/runtime/CaseInstanceQueryTest.testQueryByTerminated.cmmn"})
   @Test
   public void testQueryByTerminated() {
     String caseInstanceId = caseService
@@ -1570,7 +1570,7 @@ public class CaseInstanceQueryTest extends PluggableProcessEngineTest {
     assertEquals(4, caseService.createCaseInstanceQuery().variableValueLessThanOrEqual("var", Variables.numberValue((short) 123)).count());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/runtime/superProcessWithCaseCallActivity.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/runtime/superProcessWithCaseCallActivity.bpmn20.xml"})
   @Test
   public void testQueryBySuperProcessInstanceId() {
     String superProcessInstanceId = runtimeService.startProcessInstanceByKey("subProcessQueryTest").getId();
@@ -1582,7 +1582,7 @@ public class CaseInstanceQueryTest extends PluggableProcessEngineTest {
     verifyQueryResults(query, 1);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/runtime/superProcessWithCaseCallActivityInsideSubProcess.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/runtime/superProcessWithCaseCallActivityInsideSubProcess.bpmn20.xml"})
   @Test
   public void testQueryBySuperProcessInstanceIdNested() {
     String superProcessInstanceId = runtimeService.startProcessInstanceByKey("subProcessQueryTest").getId();
@@ -1610,8 +1610,8 @@ public class CaseInstanceQueryTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources = {
-      "org/camunda/bpm/engine/test/api/cmmn/oneProcessTaskCase.cmmn",
-      "org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+      "io/orqueio/bpm/engine/test/api/cmmn/oneProcessTaskCase.cmmn",
+      "io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   @Test
   public void testQueryBySubProcessInstanceId() {
     String superCaseInstanceId = caseService.createCaseInstanceByKey("oneProcessTaskCase").getId();
@@ -1648,7 +1648,7 @@ public class CaseInstanceQueryTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/cmmn/oneCaseTaskCase.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/cmmn/oneCaseTaskCase.cmmn"})
   @Test
   public void testQueryBySuperCaseInstanceId() {
     String superCaseInstanceId = caseService.createCaseInstanceByKey("oneCaseTaskCase").getId();
@@ -1676,7 +1676,7 @@ public class CaseInstanceQueryTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/cmmn/oneCaseTaskCase.cmmn"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/cmmn/oneCaseTaskCase.cmmn"})
   @Test
   public void testQueryBySubCaseInstanceId() {
     String superCaseInstanceId = caseService.createCaseInstanceByKey("oneCaseTaskCase").getId();

@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -32,8 +32,8 @@ import org.junit.Test;
 
 public class MultiTenancyDecisionEvaluationTest extends PluggableProcessEngineTest {
 
-  protected static final String DMN_FILE = "org/camunda/bpm/engine/test/api/dmn/Example.dmn";
-  protected static final String DMN_FILE_SECOND_VERSION = "org/camunda/bpm/engine/test/api/dmn/Example_v2.dmn";
+  protected static final String DMN_FILE = "io/orqueio/bpm/engine/test/api/dmn/Example.dmn";
+  protected static final String DMN_FILE_SECOND_VERSION = "io/orqueio/bpm/engine/test/api/dmn/Example_v2.dmn";
 
   protected static final String DECISION_DEFINITION_KEY = "decision";
 

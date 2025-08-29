@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -72,8 +72,8 @@ public class ExecutionQueryTest extends PluggableProcessEngineTest {
   public void setUp() throws Exception {
 
     repositoryService.createDeployment()
-      .addClasspathResource("org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml")
-      .addClasspathResource("org/camunda/bpm/engine/test/api/runtime/concurrentExecution.bpmn20.xml")
+      .addClasspathResource("io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml")
+      .addClasspathResource("io/orqueio/bpm/engine/test/api/runtime/concurrentExecution.bpmn20.xml")
       .deploy();
 
     concurrentProcessInstanceIds = new ArrayList<String>();
@@ -231,7 +231,7 @@ public class ExecutionQueryTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources={
-    "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+    "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   @Test
   public void testQueryStringVariable() {
     Map<String, Object> vars = new HashMap<String, Object>();
@@ -320,7 +320,7 @@ public class ExecutionQueryTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources={
-    "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+    "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   @Test
   public void testQueryLongVariable() {
     Map<String, Object> vars = new HashMap<String, Object>();
@@ -400,7 +400,7 @@ public class ExecutionQueryTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources={
-    "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+    "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   @Test
   public void testQueryDoubleVariable() {
     Map<String, Object> vars = new HashMap<String, Object>();
@@ -480,7 +480,7 @@ public class ExecutionQueryTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources={
-    "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+    "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   @Test
   public void testQueryIntegerVariable() {
     Map<String, Object> vars = new HashMap<String, Object>();
@@ -560,7 +560,7 @@ public class ExecutionQueryTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources={
-    "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+    "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   @Test
   public void testQueryShortVariable() {
     Map<String, Object> vars = new HashMap<String, Object>();
@@ -643,7 +643,7 @@ public class ExecutionQueryTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources={
-    "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+    "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   @Test
   public void testQueryDateVariable() throws Exception {
     Map<String, Object> vars = new HashMap<String, Object>();
@@ -738,7 +738,7 @@ public class ExecutionQueryTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources={
-  "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+  "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   @Test
   public void testBooleanVariable() throws Exception {
 
@@ -810,7 +810,7 @@ public class ExecutionQueryTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources={
-    "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+    "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   @Test
   public void testQueryVariablesUpdatedToNullValue() {
     // Start process instance with different types of variables
@@ -859,7 +859,7 @@ public class ExecutionQueryTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources={
-    "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+    "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   @Test
   public void testQueryNullVariable() throws Exception {
     Map<String, Object> vars = new HashMap<String, Object>();
@@ -940,7 +940,7 @@ public class ExecutionQueryTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources={
-    "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+    "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   @Test
   public void testQueryInvalidTypes() throws Exception {
     Map<String, Object> vars = new HashMap<String, Object>();
@@ -1017,7 +1017,7 @@ public class ExecutionQueryTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources={
-    "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+    "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   @Test
   public void testQueryAllVariableTypes() throws Exception {
     Map<String, Object> vars = new HashMap<String, Object>();
@@ -1049,7 +1049,7 @@ public class ExecutionQueryTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources={
-  "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+  "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   @Test
   public void testClashingValues() throws Exception {
     Map<String, Object> vars = new HashMap<String, Object>();
@@ -1136,7 +1136,7 @@ public class ExecutionQueryTest extends PluggableProcessEngineTest {
     assertEquals(1, runtimeService.createNativeExecutionQuery().sql("SELECT * FROM " + managementService.getTableName(Execution.class)).listPage(2, 1).size());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/concurrentExecution.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/concurrentExecution.bpmn20.xml"})
   @Test
   public void testExecutionQueryWithProcessVariable() {
     Map<String, Object> variables = new HashMap<String, Object>();
@@ -1159,7 +1159,7 @@ public class ExecutionQueryTest extends PluggableProcessEngineTest {
     assertEquals(3, runtimeService.createExecutionQuery().processInstanceId(pi.getId()).processVariableValueNotEquals("x", "xxx").count());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/concurrentExecution.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/concurrentExecution.bpmn20.xml"})
   @Test
   public void testExecutionQueryForSuspendedExecutions() {
     List<Execution> suspendedExecutions = runtimeService.createExecutionQuery().suspended().list();
@@ -1180,7 +1180,7 @@ public class ExecutionQueryTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/failingProcessCreateOneIncident.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/failingProcessCreateOneIncident.bpmn20.xml"})
   @Test
   public void testQueryByIncidentId() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("failingProcess");
@@ -1211,7 +1211,7 @@ public class ExecutionQueryTest extends PluggableProcessEngineTest {
     } catch (ProcessEngineException e) {}
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/failingProcessCreateOneIncident.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/failingProcessCreateOneIncident.bpmn20.xml"})
   @Test
   public void testQueryByIncidentType() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("failingProcess");
@@ -1242,7 +1242,7 @@ public class ExecutionQueryTest extends PluggableProcessEngineTest {
     } catch (ProcessEngineException e) {}
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/failingProcessCreateOneIncident.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/failingProcessCreateOneIncident.bpmn20.xml"})
   @Test
   public void testQueryByIncidentMessage() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("failingProcess");
@@ -1273,7 +1273,7 @@ public class ExecutionQueryTest extends PluggableProcessEngineTest {
     } catch (ProcessEngineException e) {}
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/failingProcessCreateOneIncident.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/failingProcessCreateOneIncident.bpmn20.xml"})
   @Test
   public void testQueryByIncidentMessageLike() {
     runtimeService.startProcessInstanceByKey("failingProcess");
@@ -1302,7 +1302,7 @@ public class ExecutionQueryTest extends PluggableProcessEngineTest {
     } catch (ProcessEngineException e) {}
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/failingSubProcessCreateOneIncident.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/failingSubProcessCreateOneIncident.bpmn20.xml"})
   @Test
   public void testQueryByIncidentIdSubProcess() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("failingSubProcess");
@@ -1323,7 +1323,7 @@ public class ExecutionQueryTest extends PluggableProcessEngineTest {
     assertNotSame(processInstance.getId(), executionList.get(0).getId());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/failingSubProcessCreateOneIncident.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/failingSubProcessCreateOneIncident.bpmn20.xml"})
   @Test
   public void testQueryByIncidentTypeInSubprocess() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("failingSubProcess");
@@ -1344,7 +1344,7 @@ public class ExecutionQueryTest extends PluggableProcessEngineTest {
     assertNotSame(processInstance.getId(), executionList.get(0).getId());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/failingSubProcessCreateOneIncident.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/failingSubProcessCreateOneIncident.bpmn20.xml"})
   @Test
   public void testQueryByIncidentMessageInSubProcess() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("failingSubProcess");
@@ -1365,7 +1365,7 @@ public class ExecutionQueryTest extends PluggableProcessEngineTest {
     assertNotSame(processInstance.getId(), executionList.get(0).getId());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/failingSubProcessCreateOneIncident.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/failingSubProcessCreateOneIncident.bpmn20.xml"})
   @Test
   public void testQueryByIncidentMessageLikeSubProcess() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("failingSubProcess");
@@ -1386,8 +1386,8 @@ public class ExecutionQueryTest extends PluggableProcessEngineTest {
     assertNotSame(processInstance.getId(), executionList.get(0).getId());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml",
-      "org/camunda/bpm/engine/test/api/runtime/oneMessageCatchProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/api/runtime/oneMessageCatchProcess.bpmn20.xml"})
   @Test
   public void testQueryForExecutionsWithMessageEventSubscriptions() {
     runtimeService.startProcessInstanceByKey("oneTaskProcess");
@@ -1409,7 +1409,7 @@ public class ExecutionQueryTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources="org/camunda/bpm/engine/test/api/runtime/oneMessageCatchProcess.bpmn20.xml")
+  @Deployment(resources="io/orqueio/bpm/engine/test/api/runtime/oneMessageCatchProcess.bpmn20.xml")
   @Test
   public void testQueryForExecutionsWithMessageEventSubscriptionsOverlappingFilters() {
 
@@ -1434,7 +1434,7 @@ public class ExecutionQueryTest extends PluggableProcessEngineTest {
     assertEquals(instance.getId(), execution.getProcessInstanceId());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/runtime/twoBoundaryEventSubscriptions.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/runtime/twoBoundaryEventSubscriptions.bpmn20.xml")
   @Test
   public void testQueryForExecutionsWithMultipleSubscriptions() {
     // given two message event subscriptions
@@ -1493,7 +1493,7 @@ public class ExecutionQueryTest extends PluggableProcessEngineTest {
     assertNull(execution);
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
   @Test
   public void testProcessVariableValueEqualsNumber() throws Exception {
     // long
@@ -1542,7 +1542,7 @@ public class ExecutionQueryTest extends PluggableProcessEngineTest {
     assertEquals(1, runtimeService.createExecutionQuery().variableValueEquals("var", Variables.numberValue(null)).count());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
   @Test
   public void testProcessVariableValueNumberComparison() throws Exception {
     // long

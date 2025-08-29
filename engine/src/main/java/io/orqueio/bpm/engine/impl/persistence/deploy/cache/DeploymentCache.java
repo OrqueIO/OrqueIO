@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -24,7 +24,7 @@ import io.orqueio.bpm.engine.impl.dmn.entity.repository.DecisionDefinitionEntity
 import io.orqueio.bpm.engine.impl.dmn.entity.repository.DecisionRequirementsDefinitionEntity;
 import io.orqueio.bpm.engine.impl.dmn.entity.repository.DecisionRequirementsDefinitionQueryImpl;
 import io.orqueio.bpm.engine.impl.persistence.deploy.Deployer;
-import io.orqueio.bpm.engine.impl.persistence.entity.CamundaFormDefinitionEntity;
+import io.orqueio.bpm.engine.impl.persistence.entity.OrqueioFormDefinitionEntity;
 import io.orqueio.bpm.engine.impl.persistence.entity.DeploymentEntity;
 import io.orqueio.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import io.orqueio.bpm.engine.repository.DecisionDefinition;
@@ -47,7 +47,7 @@ public class DeploymentCache {
   protected CaseDefinitionCache caseDefinitionCache;
   protected DecisionDefinitionCache decisionDefinitionCache;
   protected DecisionRequirementsDefinitionCache decisionRequirementsDefinitionCache;
-  protected CamundaFormDefinitionCache camundaFormDefinitionCache;
+  protected OrqueioFormDefinitionCache orqueioFormDefinitionCache;
 
 
   protected BpmnModelInstanceCache bpmnModelInstanceCache;
@@ -60,7 +60,7 @@ public class DeploymentCache {
     caseDefinitionCache = new CaseDefinitionCache(factory, cacheCapacity, cacheDeployer);
     decisionDefinitionCache = new DecisionDefinitionCache(factory, cacheCapacity, cacheDeployer);
     decisionRequirementsDefinitionCache = new DecisionRequirementsDefinitionCache(factory, cacheCapacity, cacheDeployer);
-    camundaFormDefinitionCache = new CamundaFormDefinitionCache(factory, cacheCapacity, cacheDeployer);
+    orqueioFormDefinitionCache = new OrqueioFormDefinitionCache(factory, cacheCapacity, cacheDeployer);
 
     bpmnModelInstanceCache = new BpmnModelInstanceCache(factory, cacheCapacity, processDefinitionEntityCache);
     cmmnModelInstanceCache = new CmmnModelInstanceCache(factory, cacheCapacity, caseDefinitionCache);
@@ -135,18 +135,18 @@ public class DeploymentCache {
     bpmnModelInstanceCache.clear();
   }
 
-  // CAMUNDA FORM DEFINITION ////////////////////////////////////////////////////////////////////////
+  // ORQUEIO FORM DEFINITION ////////////////////////////////////////////////////////////////////////
 
-  public void addCamundaFormDefinition(CamundaFormDefinitionEntity camundaFormDefinition) {
-    camundaFormDefinitionCache.addDefinition(camundaFormDefinition);
+  public void addOrqueioFormDefinition(OrqueioFormDefinitionEntity orqueioFormDefinition) {
+    orqueioFormDefinitionCache.addDefinition(orqueioFormDefinition);
   }
 
-  public void removeCamundaFormDefinition(String camundaFormDefinitionId) {
-    camundaFormDefinitionCache.removeDefinitionFromCache(camundaFormDefinitionId);
+  public void removeOrqueioFormDefinition(String orqueioFormDefinitionId) {
+    orqueioFormDefinitionCache.removeDefinitionFromCache(orqueioFormDefinitionId);
   }
 
-  public void discardCamundaFormDefinitionCache() {
-    camundaFormDefinitionCache.clear();
+  public void discardOrqueioFormDefinitionCache() {
+    orqueioFormDefinitionCache.clear();
   }
 
   // CASE DEFINITION ////////////////////////////////////////////////////////////////////////////////

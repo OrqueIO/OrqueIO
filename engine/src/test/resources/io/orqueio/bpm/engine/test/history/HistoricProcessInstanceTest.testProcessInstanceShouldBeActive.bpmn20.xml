@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions
   xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
-  xmlns:camunda="http://activiti.org/bpmn"
+  xmlns:orqueio="http://activiti.org/bpmn"
   targetNamespace="Examples">
   
   <error id="error" errorCode="errorCode" name="ErrorCodeTest"/>
@@ -22,7 +22,7 @@
 
       <sequenceFlow sourceRef="innerStart" targetRef="service1" />
 
-      <serviceTask id="service1" camunda:expression="${true}" />
+      <serviceTask id="service1" orqueio:expression="${true}" />
 
       <sequenceFlow sourceRef="service1" targetRef="innerGtw" />
 

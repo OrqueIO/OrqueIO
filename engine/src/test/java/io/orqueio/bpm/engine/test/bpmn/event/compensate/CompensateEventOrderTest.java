@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -57,13 +57,13 @@ public class CompensateEventOrderTest {
     BpmnModelInstance model = Bpmn.createExecutableProcess("Process_1")
         .startEvent()
           .serviceTask("serviceTask1")
-            .camundaClass(IncreaseCurrentTimeServiceTask.class.getName())
+            .orqueioClass(IncreaseCurrentTimeServiceTask.class.getName())
             .boundaryEvent("compensationBoundary1")
             .compensateEventDefinition()
             .compensateEventDefinitionDone()
           .moveToActivity("serviceTask1")
           .serviceTask("serviceTask2")
-            .camundaClass(IncreaseCurrentTimeServiceTask.class.getName())
+            .orqueioClass(IncreaseCurrentTimeServiceTask.class.getName())
             .boundaryEvent("compensationBoundary2")
             .compensateEventDefinition()
             .compensateEventDefinitionDone()
@@ -116,7 +116,7 @@ public class CompensateEventOrderTest {
     ServiceTask compensationHandler = modelInstance.newInstance(ServiceTask.class);
     compensationHandler.setId(compensationHandlerId);
     compensationHandler.setForCompensation(true);
-    compensationHandler.setCamundaClass(IncreaseCurrentTimeServiceTask.class.getName());
+    compensationHandler.setOrqueioClass(IncreaseCurrentTimeServiceTask.class.getName());
     scope.addChildElement(compensationHandler);
 
     Association association = modelInstance.newInstance(Association.class);

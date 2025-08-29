@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="_QXbGsM1tEeSUBcAXNpvE3Q" targetNamespace="http://activiti.org/bpmn" exporter="Camunda Modeler" exporterVersion="1.3.0-dev" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd">
+<bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:orqueio="http://orqueio.io/schema/1.0/bpmn" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="_QXbGsM1tEeSUBcAXNpvE3Q" targetNamespace="http://activiti.org/bpmn" exporter="Orqueio Modeler" exporterVersion="1.3.0-dev" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd">
   <bpmn2:process id="Process_MultiInstanceCallAcitivity" isExecutable="true">
     <bpmn2:startEvent id="StartEvent_1" name="pro &#10;&#10;Orderpackage">
       <bpmn2:outgoing>SequenceFlow_1</bpmn2:outgoing>
@@ -8,7 +8,7 @@
     <bpmn2:subProcess id="SubProcess_1" name="pro Order">
       <bpmn2:incoming>SequenceFlow_1</bpmn2:incoming>
       <bpmn2:outgoing>SequenceFlow_7</bpmn2:outgoing>
-      <bpmn2:multiInstanceLoopCharacteristics camunda:collection="${orderIds}" camunda:elementVariable="orderId" />
+      <bpmn2:multiInstanceLoopCharacteristics orqueio:collection="${orderIds}" orqueio:elementVariable="orderId" />
       <bpmn2:startEvent id="StartEvent_2">
         <bpmn2:outgoing>SequenceFlow_2</bpmn2:outgoing>
       </bpmn2:startEvent>
@@ -19,11 +19,11 @@
       <bpmn2:sequenceFlow id="SequenceFlow_4" name="" sourceRef="ServiceTask_LogOrderId" targetRef="Task_0wouv2l" />
       <bpmn2:callActivity id="CallActivity_1" name="call &#10;&#10;Stuffdoer" calledElement="Process_StuffDoer">
         <bpmn2:extensionElements>
-          <camunda:in source="orderId" target="orderId" />
-          <camunda:out source="orderId" target="targetOrderId" local="true" />
-          <camunda:executionListener event="end">
-            <camunda:script scriptFormat="groovy"><![CDATA[execution.setVariable("targetOrderId", targetOrderId,"NOT_EXISTING");]]></camunda:script>
-          </camunda:executionListener>
+          <orqueio:in source="orderId" target="orderId" />
+          <orqueio:out source="orderId" target="targetOrderId" local="true" />
+          <orqueio:executionListener event="end">
+            <orqueio:script scriptFormat="groovy"><![CDATA[execution.setVariable("targetOrderId", targetOrderId,"NOT_EXISTING");]]></orqueio:script>
+          </orqueio:executionListener>
         </bpmn2:extensionElements>
         <bpmn2:incoming>SequenceFlow_2</bpmn2:incoming>
         <bpmn2:outgoing>SequenceFlow_3</bpmn2:outgoing>
@@ -35,7 +35,7 @@
         <bpmn2:script><![CDATA[]]></bpmn2:script>
       </bpmn2:scriptTask>
       <bpmn2:sequenceFlow id="SequenceFlow_0pohyk9" sourceRef="Task_0wouv2l" targetRef="EndEvent_1" />
-      <bpmn2:serviceTask id="Task_0wouv2l" name="assertion" camunda:class="io.orqueio.bpm.engine.test.api.variables.scope.AssertVariableScopeDelegate">
+      <bpmn2:serviceTask id="Task_0wouv2l" name="assertion" orqueio:class="io.orqueio.bpm.engine.test.api.variables.scope.AssertVariableScopeDelegate">
         <bpmn2:incoming>SequenceFlow_4</bpmn2:incoming>
         <bpmn2:outgoing>SequenceFlow_0pohyk9</bpmn2:outgoing>
       </bpmn2:serviceTask>

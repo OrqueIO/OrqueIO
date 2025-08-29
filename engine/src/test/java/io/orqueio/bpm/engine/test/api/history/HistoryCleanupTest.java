@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -153,7 +153,7 @@ public class HistoryCleanupTest {
     repositoryService = engineRule.getRepositoryService();
     identityService = engineRule.getIdentityService();
     processEngineConfiguration = engineRule.getProcessEngineConfiguration();
-    testRule.deploy("org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml", "org/camunda/bpm/engine/test/api/dmn/Example.dmn", "org/camunda/bpm/engine/test/api/cmmn/oneTaskCaseWithHistoryTimeToLive.cmmn");
+    testRule.deploy("io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml", "io/orqueio/bpm/engine/test/api/dmn/Example.dmn", "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCaseWithHistoryTimeToLive.cmmn");
     defaultStartTime = processEngineConfiguration.getHistoryCleanupBatchWindowStartTime();
     defaultEndTime = processEngineConfiguration.getHistoryCleanupBatchWindowEndTime();
     defaultBatchSize = processEngineConfiguration.getHistoryCleanupBatchSize();
@@ -364,8 +364,8 @@ public class HistoryCleanupTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/dmn/businessruletask/DmnBusinessRuleTaskTest.testDecisionRef.bpmn20.xml",
-      "org/camunda/bpm/engine/test/api/history/testDmnWithPojo.dmn11.xml", "org/camunda/bpm/engine/test/api/authorization/oneTaskCase.cmmn" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/dmn/businessruletask/DmnBusinessRuleTaskTest.testDecisionRef.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/api/history/testDmnWithPojo.dmn11.xml", "io/orqueio/bpm/engine/test/api/authorization/oneTaskCase.cmmn" })
   public void testHistoryCleanupOnlyDecisionInstancesRemoved() {
     // given
     prepareInstances(null, HISTORY_TIME_TO_LIVE, null);
@@ -381,7 +381,7 @@ public class HistoryCleanupTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/dmn/businessruletask/DmnBusinessRuleTaskTest.testDecisionRef.bpmn20.xml", "org/camunda/bpm/engine/test/api/history/testDmnWithPojo.dmn11.xml", "org/camunda/bpm/engine/test/api/authorization/oneTaskCase.cmmn"})
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/dmn/businessruletask/DmnBusinessRuleTaskTest.testDecisionRef.bpmn20.xml", "io/orqueio/bpm/engine/test/api/history/testDmnWithPojo.dmn11.xml", "io/orqueio/bpm/engine/test/api/authorization/oneTaskCase.cmmn"})
   public void testHistoryCleanupOnlyProcessInstancesRemoved() {
     // given
     prepareInstances(HISTORY_TIME_TO_LIVE, null, null);
@@ -397,8 +397,8 @@ public class HistoryCleanupTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/dmn/businessruletask/DmnBusinessRuleTaskTest.testDecisionRef.bpmn20.xml",
-      "org/camunda/bpm/engine/test/api/history/testDmnWithPojo.dmn11.xml", "org/camunda/bpm/engine/test/api/authorization/oneTaskCase.cmmn" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/dmn/businessruletask/DmnBusinessRuleTaskTest.testDecisionRef.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/api/history/testDmnWithPojo.dmn11.xml", "io/orqueio/bpm/engine/test/api/authorization/oneTaskCase.cmmn" })
   public void testHistoryCleanupOnlyCaseInstancesRemoved() {
     // given
     prepareInstances(null, null, HISTORY_TIME_TO_LIVE);
@@ -415,8 +415,8 @@ public class HistoryCleanupTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/dmn/businessruletask/DmnBusinessRuleTaskTest.testDecisionRef.bpmn20.xml",
-      "org/camunda/bpm/engine/test/api/history/testDmnWithPojo.dmn11.xml", "org/camunda/bpm/engine/test/api/authorization/oneTaskCase.cmmn" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/dmn/businessruletask/DmnBusinessRuleTaskTest.testDecisionRef.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/api/history/testDmnWithPojo.dmn11.xml", "io/orqueio/bpm/engine/test/api/authorization/oneTaskCase.cmmn" })
   public void testHistoryCleanupOnlyDecisionInstancesNotRemoved() {
     // given
     prepareInstances(HISTORY_TIME_TO_LIVE, null, HISTORY_TIME_TO_LIVE);
@@ -432,8 +432,8 @@ public class HistoryCleanupTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/dmn/businessruletask/DmnBusinessRuleTaskTest.testDecisionRef.bpmn20.xml",
-      "org/camunda/bpm/engine/test/api/history/testDmnWithPojo.dmn11.xml", "org/camunda/bpm/engine/test/api/authorization/oneTaskCase.cmmn" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/dmn/businessruletask/DmnBusinessRuleTaskTest.testDecisionRef.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/api/history/testDmnWithPojo.dmn11.xml", "io/orqueio/bpm/engine/test/api/authorization/oneTaskCase.cmmn" })
   public void testHistoryCleanupOnlyProcessInstancesNotRemoved() {
     // given
     prepareInstances(null, HISTORY_TIME_TO_LIVE, HISTORY_TIME_TO_LIVE);
@@ -449,8 +449,8 @@ public class HistoryCleanupTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/dmn/businessruletask/DmnBusinessRuleTaskTest.testDecisionRef.bpmn20.xml",
-      "org/camunda/bpm/engine/test/api/history/testDmnWithPojo.dmn11.xml", "org/camunda/bpm/engine/test/api/authorization/oneTaskCase.cmmn" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/dmn/businessruletask/DmnBusinessRuleTaskTest.testDecisionRef.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/api/history/testDmnWithPojo.dmn11.xml", "io/orqueio/bpm/engine/test/api/authorization/oneTaskCase.cmmn" })
   public void testHistoryCleanupOnlyCaseInstancesNotRemoved() {
     // given
     prepareInstances(HISTORY_TIME_TO_LIVE, HISTORY_TIME_TO_LIVE, null);
@@ -467,8 +467,8 @@ public class HistoryCleanupTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/dmn/businessruletask/DmnBusinessRuleTaskTest.testDecisionRef.bpmn20.xml",
-      "org/camunda/bpm/engine/test/api/history/testDmnWithPojo.dmn11.xml", "org/camunda/bpm/engine/test/api/authorization/oneTaskCase.cmmn" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/dmn/businessruletask/DmnBusinessRuleTaskTest.testDecisionRef.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/api/history/testDmnWithPojo.dmn11.xml", "io/orqueio/bpm/engine/test/api/authorization/oneTaskCase.cmmn" })
   public void testHistoryCleanupEverythingRemoved() {
     // given
     prepareInstances(HISTORY_TIME_TO_LIVE, HISTORY_TIME_TO_LIVE, HISTORY_TIME_TO_LIVE);
@@ -482,8 +482,8 @@ public class HistoryCleanupTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/dmn/businessruletask/DmnBusinessRuleTaskTest.testDecisionRef.bpmn20.xml",
-      "org/camunda/bpm/engine/test/api/history/testDmnWithPojo.dmn11.xml", "org/camunda/bpm/engine/test/api/authorization/oneTaskCase.cmmn" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/dmn/businessruletask/DmnBusinessRuleTaskTest.testDecisionRef.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/api/history/testDmnWithPojo.dmn11.xml", "io/orqueio/bpm/engine/test/api/authorization/oneTaskCase.cmmn" })
   public void testHistoryCleanupNothingRemoved() {
     // given
     prepareInstances(null, null, null);
@@ -590,7 +590,7 @@ public class HistoryCleanupTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/twoTasksProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/twoTasksProcess.bpmn20.xml" })
   public void testHistoryCleanupJobDefaultTTL() {
     //given
     prepareBPMNData(15, "twoTasksProcess");

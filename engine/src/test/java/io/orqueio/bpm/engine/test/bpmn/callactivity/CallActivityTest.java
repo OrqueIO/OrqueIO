@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -53,8 +53,8 @@ import io.orqueio.bpm.model.bpmn.Bpmn;
 import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
 import io.orqueio.bpm.model.bpmn.builder.CallActivityBuilder;
 import io.orqueio.bpm.model.bpmn.instance.CallActivity;
-import io.orqueio.bpm.model.bpmn.instance.camunda.CamundaIn;
-import io.orqueio.bpm.model.bpmn.instance.camunda.CamundaOut;
+import io.orqueio.bpm.model.bpmn.instance.orqueio.OrqueioIn;
+import io.orqueio.bpm.model.bpmn.instance.orqueio.OrqueioOut;
 import org.junit.Test;
 
 /**
@@ -66,8 +66,8 @@ import org.junit.Test;
 public class CallActivityTest extends PluggableProcessEngineTest {
 
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/callactivity/CallActivity.testCallSimpleSubProcess.bpmn20.xml",
-    "org/camunda/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/CallActivity.testCallSimpleSubProcess.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"
   })
   @Test
   public void testCallSimpleSubProcess() {
@@ -94,8 +94,8 @@ public class CallActivityTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/callactivity/CallActivity.testCallSimpleSubProcess.bpmn20.xml",
-    "org/camunda/bpm/engine/test/bpmn/callactivity/simpleSubProcessParentVariableAccess.bpmn20.xml"
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/CallActivity.testCallSimpleSubProcess.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/simpleSubProcessParentVariableAccess.bpmn20.xml"
   })
   @Test
   public void testAccessSuperInstanceVariables() {
@@ -118,8 +118,8 @@ public class CallActivityTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/callactivity/CallActivity.testCallSimpleSubProcess.bpmn20.xml",
-    "org/camunda/bpm/engine/test/bpmn/callactivity/concurrentSubProcessParentVariableAccess.bpmn20.xml"
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/CallActivity.testCallSimpleSubProcess.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/concurrentSubProcessParentVariableAccess.bpmn20.xml"
   })
   @Test
   public void testAccessSuperInstanceVariablesFromConcurrentExecution() {
@@ -141,8 +141,8 @@ public class CallActivityTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/callactivity/CallActivity.testCallSimpleSubProcessWithExpressions.bpmn20.xml",
-    "org/camunda/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/bpmn/callactivity/CallActivity.testCallSimpleSubProcessWithExpressions.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"})
   @Test
   public void testCallSimpleSubProcessWithExpressions() {
 
@@ -177,8 +177,8 @@ public class CallActivityTest extends PluggableProcessEngineTest {
    * subprocess leads to an end event in the super process instance.
    */
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/callactivity/CallActivity.testSubProcessEndsSuperProcess.bpmn20.xml",
-    "org/camunda/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"})
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/CallActivity.testSubProcessEndsSuperProcess.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"})
   @Test
   public void testSubProcessEndsSuperProcess() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("subProcessEndsSuperProcess");
@@ -195,8 +195,8 @@ public class CallActivityTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/callactivity/CallActivity.testCallParallelSubProcess.bpmn20.xml",
-    "org/camunda/bpm/engine/test/bpmn/callactivity/simpleParallelSubProcess.bpmn20.xml"})
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/CallActivity.testCallParallelSubProcess.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/simpleParallelSubProcess.bpmn20.xml"})
   @Test
   public void testCallParallelSubProcess() {
     runtimeService.startProcessInstanceByKey("callParallelSubProcess");
@@ -223,10 +223,10 @@ public class CallActivityTest extends PluggableProcessEngineTest {
     assertEquals(0, runtimeService.createExecutionQuery().count());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/callactivity/CallActivity.testCallSequentialSubProcess.bpmn20.xml",
-    "org/camunda/bpm/engine/test/bpmn/callactivity/CallActivity.testCallSimpleSubProcessWithExpressions.bpmn20.xml",
-    "org/camunda/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml",
-    "org/camunda/bpm/engine/test/bpmn/callactivity/simpleSubProcess2.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/bpmn/callactivity/CallActivity.testCallSequentialSubProcess.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/CallActivity.testCallSimpleSubProcessWithExpressions.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/simpleSubProcess2.bpmn20.xml"})
   @Test
   public void testCallSequentialSubProcessWithExpressions() {
 
@@ -281,8 +281,8 @@ public class CallActivityTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/callactivity/CallActivity.testTimerOnCallActivity.bpmn20.xml",
-    "org/camunda/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"})
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/CallActivity.testTimerOnCallActivity.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"})
   @Test
   public void testTimerOnCallActivity() {
     // After process start, the task in the subprocess should be active
@@ -308,8 +308,8 @@ public class CallActivityTest extends PluggableProcessEngineTest {
    * Test case for handing over process variables to a sub process
    */
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/callactivity/CallActivity.testSubProcessDataInputOutput.bpmn20.xml",
-    "org/camunda/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"})
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/CallActivity.testSubProcessDataInputOutput.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"})
   @Test
   public void testSubProcessWithDataInputOutput() {
     Map<String, Object> vars = new HashMap<String, Object>();
@@ -371,8 +371,8 @@ public class CallActivityTest extends PluggableProcessEngineTest {
    * api and passing only certain variables
    */
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/callactivity/CallActivity.testSubProcessLimitedDataInputOutputTypedApi.bpmn20.xml",
-    "org/camunda/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"})
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/CallActivity.testSubProcessLimitedDataInputOutputTypedApi.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"})
   @Test
   public void testSubProcessWithLimitedDataInputOutputTypedApi() {
 
@@ -415,8 +415,8 @@ public class CallActivityTest extends PluggableProcessEngineTest {
    * api and passing all variables
    */
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/callactivity/CallActivity.testSubProcessAllDataInputOutputTypedApi.bpmn20.xml",
-    "org/camunda/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"})
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/CallActivity.testSubProcessAllDataInputOutputTypedApi.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"})
   @Test
   public void testSubProcessWithAllDataInputOutputTypedApi() {
 
@@ -468,41 +468,41 @@ public class CallActivityTest extends PluggableProcessEngineTest {
 
     CallActivityBuilder callActivityBuilder = ((CallActivity) modelInstance.getModelElementById("callActivity")).builder();
 
-    // create camunda:in with source but without target
-    CamundaIn camundaIn = modelInstance.newInstance(CamundaIn.class);
-    camundaIn.setCamundaSource("superVariable");
-    callActivityBuilder.addExtensionElement(camundaIn);
+    // create orqueio:in with source but without target
+    OrqueioIn orqueioIn = modelInstance.newInstance(OrqueioIn.class);
+    orqueioIn.setOrqueioSource("superVariable");
+    callActivityBuilder.addExtensionElement(orqueioIn);
 
     deployAndExpectException(modelInstance);
     // set target
-    camundaIn.setCamundaTarget("subVariable");
+    orqueioIn.setOrqueioTarget("subVariable");
 
-    // create camunda:in with sourceExpression but without target
-    camundaIn = modelInstance.newInstance(CamundaIn.class);
-    camundaIn.setCamundaSourceExpression("${x+5}");
-    callActivityBuilder.addExtensionElement(camundaIn);
-
-    deployAndExpectException(modelInstance);
-    // set target
-    camundaIn.setCamundaTarget("subVariable2");
-
-    // create camunda:out with source but without target
-    CamundaOut camundaOut = modelInstance.newInstance(CamundaOut.class);
-    camundaOut.setCamundaSource("subVariable");
-    callActivityBuilder.addExtensionElement(camundaOut);
+    // create orqueio:in with sourceExpression but without target
+    orqueioIn = modelInstance.newInstance(OrqueioIn.class);
+    orqueioIn.setOrqueioSourceExpression("${x+5}");
+    callActivityBuilder.addExtensionElement(orqueioIn);
 
     deployAndExpectException(modelInstance);
     // set target
-    camundaOut.setCamundaTarget("superVariable");
+    orqueioIn.setOrqueioTarget("subVariable2");
 
-    // create camunda:out with sourceExpression but without target
-    camundaOut = modelInstance.newInstance(CamundaOut.class);
-    camundaOut.setCamundaSourceExpression("${y+1}");
-    callActivityBuilder.addExtensionElement(camundaOut);
+    // create orqueio:out with source but without target
+    OrqueioOut orqueioOut = modelInstance.newInstance(OrqueioOut.class);
+    orqueioOut.setOrqueioSource("subVariable");
+    callActivityBuilder.addExtensionElement(orqueioOut);
 
     deployAndExpectException(modelInstance);
     // set target
-    camundaOut.setCamundaTarget("superVariable2");
+    orqueioOut.setOrqueioTarget("superVariable");
+
+    // create orqueio:out with sourceExpression but without target
+    orqueioOut = modelInstance.newInstance(OrqueioOut.class);
+    orqueioOut.setOrqueioSourceExpression("${y+1}");
+    callActivityBuilder.addExtensionElement(orqueioOut);
+
+    deployAndExpectException(modelInstance);
+    // set target
+    orqueioOut.setOrqueioTarget("superVariable2");
 
     try {
       String deploymentId = repositoryService.createDeployment().addModelInstance("process.bpmn", modelInstance).deploy().getId();
@@ -516,8 +516,8 @@ public class CallActivityTest extends PluggableProcessEngineTest {
    * Test case for handing over a null process variables to a sub process
    */
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/callactivity/CallActivity.testSubProcessDataInputOutput.bpmn20.xml",
-    "org/camunda/bpm/engine/test/bpmn/callactivity/dataSubProcess.bpmn20.xml"})
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/CallActivity.testSubProcessDataInputOutput.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/dataSubProcess.bpmn20.xml"})
   @Test
   public void testSubProcessWithNullDataInput() {
     String processInstanceId = runtimeService.startProcessInstanceByKey("subProcessDataInputOutput").getId();
@@ -564,8 +564,8 @@ public class CallActivityTest extends PluggableProcessEngineTest {
    * Test case for handing over a null process variables to a sub process
    */
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/callactivity/CallActivity.testSubProcessDataInputOutputAsExpression.bpmn20.xml",
-    "org/camunda/bpm/engine/test/bpmn/callactivity/dataSubProcess.bpmn20.xml"})
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/CallActivity.testSubProcessDataInputOutputAsExpression.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/dataSubProcess.bpmn20.xml"})
   @Test
   public void testSubProcessWithNullDataInputAsExpression() {
     Map<String, Object> params = new HashMap<String, Object>();
@@ -612,8 +612,8 @@ public class CallActivityTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/callactivity/CallActivity.testSubProcessDataInputOutput.bpmn20.xml",
-    "org/camunda/bpm/engine/test/bpmn/callactivity/dataSubProcess.bpmn20.xml"})
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/CallActivity.testSubProcessDataInputOutput.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/dataSubProcess.bpmn20.xml"})
   @Test
   public void testSubProcessWithNullDataOutput() {
     String processInstanceId = runtimeService.startProcessInstanceByKey("subProcessDataInputOutput").getId();
@@ -666,8 +666,8 @@ public class CallActivityTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/callactivity/CallActivity.testSubProcessDataInputOutputAsExpression.bpmn20.xml",
-    "org/camunda/bpm/engine/test/bpmn/callactivity/dataSubProcess.bpmn20.xml"})
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/CallActivity.testSubProcessDataInputOutputAsExpression.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/dataSubProcess.bpmn20.xml"})
   @Test
   public void testSubProcessWithNullDataOutputAsExpression() {
     Map<String, Object> params = new HashMap<String, Object>();
@@ -742,8 +742,8 @@ public class CallActivityTest extends PluggableProcessEngineTest {
    * Test case for handing over process variables to a sub process
    */
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/callactivity/CallActivity.testTwoSubProcesses.bpmn20.xml",
-    "org/camunda/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"})
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/CallActivity.testTwoSubProcesses.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"})
   @Test
   public void testTwoSubProcesses() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("callTwoSubProcesses");
@@ -771,8 +771,8 @@ public class CallActivityTest extends PluggableProcessEngineTest {
    * Test case for handing all over process variables to a sub process
    */
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/callactivity/CallActivity.testSubProcessAllDataInputOutput.bpmn20.xml",
-    "org/camunda/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"})
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/CallActivity.testSubProcessAllDataInputOutput.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"})
   @Test
   public void testSubProcessAllDataInputOutput() {
     Map<String, Object> vars = new HashMap<String, Object>();
@@ -826,8 +826,8 @@ public class CallActivityTest extends PluggableProcessEngineTest {
    * Test case for handing all over process variables to a sub process
    */
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/callactivity/CallActivity.testSubProcessAllDataInputOutputWithAdditionalInputMapping.bpmn20.xml",
-    "org/camunda/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"})
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/CallActivity.testSubProcessAllDataInputOutputWithAdditionalInputMapping.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"})
   @Test
   public void testSubProcessAllDataInputOutputWithAdditionalInputMapping() {
     Map<String, Object> vars = new HashMap<String, Object>();
@@ -879,15 +879,15 @@ public class CallActivityTest extends PluggableProcessEngineTest {
   }
 
   /**
-   * This testcase verifies that <camunda:out variables="all" /> works also in
+   * This testcase verifies that <orqueio:out variables="all" /> works also in
    * case super process has no variables
    *
    * https://app.camunda.com/jira/browse/CAM-1617
    *
    */
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/callactivity/CallActivity.testSubProcessAllDataInputOutput.bpmn20.xml",
-    "org/camunda/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"})
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/CallActivity.testSubProcessAllDataInputOutput.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"})
   @Test
   public void testSubProcessAllDataOutput() {
 
@@ -927,8 +927,8 @@ public class CallActivityTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/callactivity/CallActivity.testSubProcessLocalInputAllVariables.bpmn20.xml",
-    "org/camunda/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"})
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/CallActivity.testSubProcessLocalInputAllVariables.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"})
   @Test
   public void testSubProcessLocalInputAllVariables() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("subProcessLocalInputAllVariables");
@@ -966,8 +966,8 @@ public class CallActivityTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/callactivity/CallActivity.testSubProcessLocalInputSingleVariable.bpmn20.xml",
-    "org/camunda/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"})
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/CallActivity.testSubProcessLocalInputSingleVariable.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"})
   @Test
   public void testSubProcessLocalInputSingleVariable() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("subProcessLocalInputSingleVariable");
@@ -1006,8 +1006,8 @@ public class CallActivityTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/callactivity/CallActivity.testSubProcessLocalInputSingleVariableExpression.bpmn20.xml",
-    "org/camunda/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"})
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/CallActivity.testSubProcessLocalInputSingleVariableExpression.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"})
   @Test
   public void testSubProcessLocalInputSingleVariableExpression() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("subProcessLocalInputSingleVariableExpression");
@@ -1044,8 +1044,8 @@ public class CallActivityTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/callactivity/CallActivity.testSubProcessLocalOutputAllVariables.bpmn20.xml",
-    "org/camunda/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"})
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/CallActivity.testSubProcessLocalOutputAllVariables.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"})
   @Test
   public void testSubProcessLocalOutputAllVariables() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("subProcessLocalOutputAllVariables");
@@ -1082,8 +1082,8 @@ public class CallActivityTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/callactivity/CallActivity.testSubProcessLocalOutputSingleVariable.bpmn20.xml",
-    "org/camunda/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"})
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/CallActivity.testSubProcessLocalOutputSingleVariable.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"})
   @Test
   public void testSubProcessLocalOutputSingleVariable() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("subProcessLocalOutputSingleVariable");
@@ -1123,8 +1123,8 @@ public class CallActivityTest extends PluggableProcessEngineTest {
    * Test case for handing businessKey to a sub process
    */
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/callactivity/CallActivity.testSubProcessBusinessKeyInput.bpmn20.xml",
-    "org/camunda/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"})
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/CallActivity.testSubProcessBusinessKeyInput.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"})
   @Test
   public void testSubProcessBusinessKeyInput() {
     String businessKey = "myBusinessKey";
@@ -1173,8 +1173,8 @@ public class CallActivityTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/callactivity/CallActivity.testCallSimpleSubProcessWithHashExpressions.bpmn20.xml",
-    "org/camunda/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/bpmn/callactivity/CallActivity.testCallSimpleSubProcessWithHashExpressions.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"})
   @Test
   public void testCallSimpleSubProcessWithHashExpressions() {
 
@@ -1204,8 +1204,8 @@ public class CallActivityTest extends PluggableProcessEngineTest {
     testRule.assertProcessEnded(processInstance.getId());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/callactivity/CallActivity.testInterruptingEventSubProcessEventSubscriptions.bpmn20.xml",
-    "org/camunda/bpm/engine/test/bpmn/callactivity/interruptingEventSubProcessEventSubscriptions.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/bpmn/callactivity/CallActivity.testInterruptingEventSubProcessEventSubscriptions.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/interruptingEventSubProcessEventSubscriptions.bpmn20.xml"})
   @Test
   public void testInterruptingMessageEventSubProcessEventSubscriptionsInsideCallActivity() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("callInterruptingEventSubProcess");
@@ -1238,8 +1238,8 @@ public class CallActivityTest extends PluggableProcessEngineTest {
     testRule.assertProcessEnded(processInstance.getId());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/callactivity/CallActivity.testInterruptingEventSubProcessEventSubscriptions.bpmn20.xml",
-    "org/camunda/bpm/engine/test/bpmn/callactivity/interruptingEventSubProcessEventSubscriptions.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/bpmn/callactivity/CallActivity.testInterruptingEventSubProcessEventSubscriptions.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/interruptingEventSubProcessEventSubscriptions.bpmn20.xml"})
   @Test
   public void testInterruptingSignalEventSubProcessEventSubscriptionsInsideCallActivity() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("callInterruptingEventSubProcess");
@@ -1273,8 +1273,8 @@ public class CallActivityTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/callactivity/CallActivity.testLiteralSourceExpression.bpmn20.xml",
-    "org/camunda/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/CallActivity.testLiteralSourceExpression.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"
   })
   @Test
   public void testInputParameterLiteralSourceExpression() {
@@ -1291,8 +1291,8 @@ public class CallActivityTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/callactivity/CallActivity.testLiteralSourceExpression.bpmn20.xml",
-    "org/camunda/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/CallActivity.testLiteralSourceExpression.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"
   })
   @Test
   public void testOutputParameterLiteralSourceExpression() {
@@ -1309,8 +1309,8 @@ public class CallActivityTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/callactivity/CallActivity.testSubProcessDataOutputOnError.bpmn",
-    "org/camunda/bpm/engine/test/bpmn/callactivity/subProcessWithError.bpmn"
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/CallActivity.testSubProcessDataOutputOnError.bpmn",
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/subProcessWithError.bpmn"
   })
   @Test
   public void testSubProcessDataOutputOnError() {
@@ -1334,8 +1334,8 @@ public class CallActivityTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/callactivity/CallActivity.testSubProcessDataOutputOnThrownError.bpmn",
-    "org/camunda/bpm/engine/test/bpmn/callactivity/subProcessWithThrownError.bpmn"
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/CallActivity.testSubProcessDataOutputOnThrownError.bpmn",
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/subProcessWithThrownError.bpmn"
   })
   @Test
   public void testSubProcessDataOutputOnThrownError() {
@@ -1359,9 +1359,9 @@ public class CallActivityTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/callactivity/CallActivity.testTwoSubProcessesDataOutputOnError.bpmn",
-    "org/camunda/bpm/engine/test/bpmn/callactivity/subProcessCallErrorSubProcess.bpmn",
-    "org/camunda/bpm/engine/test/bpmn/callactivity/subProcessWithError.bpmn"
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/CallActivity.testTwoSubProcessesDataOutputOnError.bpmn",
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/subProcessCallErrorSubProcess.bpmn",
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/subProcessWithError.bpmn"
   })
   @Test
   public void testTwoSubProcessesDataOutputOnError() {
@@ -1386,9 +1386,9 @@ public class CallActivityTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/callactivity/CallActivity.testTwoSubProcessesLimitedDataOutputOnError.bpmn",
-    "org/camunda/bpm/engine/test/bpmn/callactivity/subProcessCallErrorSubProcessWithLimitedOutMapping.bpmn",
-    "org/camunda/bpm/engine/test/bpmn/callactivity/subProcessWithError.bpmn"
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/CallActivity.testTwoSubProcessesLimitedDataOutputOnError.bpmn",
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/subProcessCallErrorSubProcessWithLimitedOutMapping.bpmn",
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/subProcessWithError.bpmn"
   })
   @Test
   public void testTwoSubProcessesLimitedDataOutputOnError() {
@@ -1427,14 +1427,14 @@ public class CallActivityTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/callactivity/CallActivityAdvancedTest.testCallProcessByVersionAsExpression.bpmn20.xml",
-    "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/CallActivityAdvancedTest.testCallProcessByVersionAsExpression.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
   })
   @Test
   public void testCallCaseByVersionAsExpression() {
     // given
 
-    String bpmnResourceName = "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml";
+    String bpmnResourceName = "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml";
 
     String secondDeploymentId = repositoryService.createDeployment()
             .addClasspathResource(bpmnResourceName)
@@ -1469,15 +1469,15 @@ public class CallActivityTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/callactivity/CallActivityAdvancedTest.testCallProcessByVersionAsDelegateExpression.bpmn20.xml",
-    "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/CallActivityAdvancedTest.testCallProcessByVersionAsDelegateExpression.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"
   })
   @Test
   public void testCallCaseByVersionAsDelegateExpression() {
     processEngineConfiguration.getBeans().put("myDelegate", new MyVersionDelegate());
 
     // given
-    String bpmnResourceName = "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml";
+    String bpmnResourceName = "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml";
 
     String secondDeploymentId = repositoryService.createDeployment()
             .addClasspathResource(bpmnResourceName)
@@ -1511,7 +1511,7 @@ public class CallActivityTest extends PluggableProcessEngineTest {
     repositoryService.deleteDeployment(thirdDeploymentId, true);
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/bpmn/callactivity/subProcessWithVersionTag.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/bpmn/callactivity/subProcessWithVersionTag.bpmn20.xml" })
   @Test
   public void testCallProcessByVersionTag() {
     // given
@@ -1530,7 +1530,7 @@ public class CallActivityTest extends PluggableProcessEngineTest {
     cleanupDeployments();
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/bpmn/callactivity/subProcessWithVersionTag.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/bpmn/callactivity/subProcessWithVersionTag.bpmn20.xml" })
   @Test
   public void testCallProcessByVersionTagAsExpression() {
     // given
@@ -1550,7 +1550,7 @@ public class CallActivityTest extends PluggableProcessEngineTest {
     cleanupDeployments();
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/bpmn/callactivity/subProcessWithVersionTag.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/bpmn/callactivity/subProcessWithVersionTag.bpmn20.xml" })
   @Test
   public void testCallProcessByVersionTagAsDelegateExpression() {
     // given
@@ -1577,7 +1577,7 @@ public class CallActivityTest extends PluggableProcessEngineTest {
         .startEvent()
         .callActivity("callActivity")
         .calledElement("subProcess")
-        .camundaCalledElementBinding("versionTag")
+        .orqueioCalledElementBinding("versionTag")
         .endEvent()
         .done();
 
@@ -1609,14 +1609,14 @@ public class CallActivityTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/bpmn/callactivity/subProcessWithVersionTag.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/bpmn/callactivity/subProcessWithVersionTag.bpmn20.xml" })
   @Test
   public void testCallProcessByVersionTagTwoSubprocesses() {
     // given
     BpmnModelInstance modelInstance = getModelWithCallActivityVersionTagBinding("ver_tag_1");
 
    testRule.deploy(modelInstance);
-   testRule.deploy("org/camunda/bpm/engine/test/bpmn/callactivity/subProcessWithVersionTag.bpmn20.xml");
+   testRule.deploy("io/orqueio/bpm/engine/test/bpmn/callactivity/subProcessWithVersionTag.bpmn20.xml");
 
     try {
       // when
@@ -1632,8 +1632,8 @@ public class CallActivityTest extends PluggableProcessEngineTest {
   }
 
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/callactivity/orderProcess.bpmn20.xml",
-    "org/camunda/bpm/engine/test/bpmn/callactivity/checkCreditProcess.bpmn20.xml"
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/orderProcess.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/checkCreditProcess.bpmn20.xml"
   })
   @Test
   public void testOrderProcessWithCallActivity() {
@@ -1658,8 +1658,8 @@ public class CallActivityTest extends PluggableProcessEngineTest {
    * Test case for checking deletion of process instancess in call activity subprocesses
    */
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/callactivity/CallActivity.testCallSimpleSubProcess.bpmn20.xml",
-    "org/camunda/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/CallActivity.testCallSimpleSubProcess.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"
   })
   @Test
   public void testDeleteProcessInstanceInCallActivity() {
@@ -1701,8 +1701,8 @@ public class CallActivityTest extends PluggableProcessEngineTest {
    *
    */
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/callactivity/CallActivity.testTwoSubProcesses.bpmn20.xml",
-    "org/camunda/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"})
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/CallActivity.testTwoSubProcesses.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"})
   @Test
   public void testSingleDeletionWithTwoSubProcesses() {
     // given
@@ -1742,9 +1742,9 @@ public class CallActivityTest extends PluggableProcessEngineTest {
    *
    */
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/callactivity/CallActivity.testCallSimpleSubProcess.bpmn20.xml",
-    "org/camunda/bpm/engine/test/bpmn/callactivity/CallActivity.testNestedCallActivity.bpmn20.xml",
-    "org/camunda/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/CallActivity.testCallSimpleSubProcess.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/CallActivity.testNestedCallActivity.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"
   })
   @Test
   public void testDeleteMultilevelProcessInstanceInCallActivity() {
@@ -1792,10 +1792,10 @@ public class CallActivityTest extends PluggableProcessEngineTest {
    *
    */
   @Deployment(resources = {
-    "org/camunda/bpm/engine/test/bpmn/callactivity/CallActivity.testCallSimpleSubProcess.bpmn20.xml",
-    "org/camunda/bpm/engine/test/bpmn/callactivity/CallActivity.testNestedCallActivity.bpmn20.xml",
-    "org/camunda/bpm/engine/test/bpmn/callactivity/CallActivity.testDoubleNestedCallActivity.bpmn20.xml",
-    "org/camunda/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/CallActivity.testCallSimpleSubProcess.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/CallActivity.testNestedCallActivity.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/CallActivity.testDoubleNestedCallActivity.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/bpmn/callactivity/simpleSubProcess.bpmn20.xml"
   })
   @Test
   public void testDeleteDoubleNestedProcessInstanceInCallActivity() {
@@ -1843,12 +1843,12 @@ public class CallActivityTest extends PluggableProcessEngineTest {
     BpmnModelInstance modelInstance = Bpmn.createExecutableProcess("simpleSubProcess")
       .startEvent()
       .serviceTask()
-      .camundaClass(AssertTransientVariableDelegate.class)
+      .orqueioClass(AssertTransientVariableDelegate.class)
       .userTask()
       .endEvent()
       .done();
 
-   testRule.deploy("org/camunda/bpm/engine/test/bpmn/callactivity/CallActivity.testSubProcessAllDataInputOutputTypedApi.bpmn20.xml");
+   testRule.deploy("io/orqueio/bpm/engine/test/bpmn/callactivity/CallActivity.testSubProcessAllDataInputOutputTypedApi.bpmn20.xml");
    testRule.deploy(modelInstance);
 
     VariableMap variables = Variables.createVariables().putValue("var", Variables.stringValue("value", true));
@@ -1872,15 +1872,15 @@ public class CallActivityTest extends PluggableProcessEngineTest {
       .startEvent()
       .callActivity()
       .calledElement("oneTaskProcess")
-      .camundaOut("var", "var")
+      .orqueioOut("var", "var")
       .serviceTask()
-      .camundaClass(AssertTransientVariableDelegate.class)
+      .orqueioClass(AssertTransientVariableDelegate.class)
       .userTask()
       .endEvent()
       .done();
 
    testRule.deploy(modelInstance);
-   testRule.deploy("org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml");
+   testRule.deploy("io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml");
 
     runtimeService.startProcessInstanceByKey("superProcess");
     Task task = taskService.createTaskQuery().singleResult();
@@ -1916,8 +1916,8 @@ public class CallActivityTest extends PluggableProcessEngineTest {
         .startEvent()
         .callActivity("callActivity")
         .calledElement("subProcess")
-        .camundaCalledElementBinding("versionTag")
-        .camundaCalledElementVersionTag(versionTag)
+        .orqueioCalledElementBinding("versionTag")
+        .orqueioCalledElementVersionTag(versionTag)
         .endEvent()
         .done();
   }

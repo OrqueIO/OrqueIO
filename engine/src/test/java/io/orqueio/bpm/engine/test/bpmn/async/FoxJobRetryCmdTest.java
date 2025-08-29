@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -55,7 +55,7 @@ public class FoxJobRetryCmdTest extends PluggableProcessEngineTest {
 
   SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/bpmn/async/FoxJobRetryCmdTest.testFailedServiceTask.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/bpmn/async/FoxJobRetryCmdTest.testFailedServiceTask.bpmn20.xml" })
   @Test
   public void testFailedServiceTask() {
     ProcessInstance pi = runtimeService.startProcessInstanceByKey("failedServiceTask");
@@ -63,7 +63,7 @@ public class FoxJobRetryCmdTest extends PluggableProcessEngineTest {
     assertJobRetriesForActivity(pi, "failingServiceTask");
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/bpmn/async/FoxJobRetryCmdTest.testFailedUserTask.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/bpmn/async/FoxJobRetryCmdTest.testFailedUserTask.bpmn20.xml" })
   @Test
   public void testFailedUserTask() {
     ProcessInstance pi = runtimeService.startProcessInstanceByKey("failedUserTask");
@@ -71,7 +71,7 @@ public class FoxJobRetryCmdTest extends PluggableProcessEngineTest {
     assertJobRetriesForActivity(pi, "failingUserTask");
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/bpmn/async/FoxJobRetryCmdTest.testFailedBusinessRuleTask.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/bpmn/async/FoxJobRetryCmdTest.testFailedBusinessRuleTask.bpmn20.xml" })
   @Test
   public void testFailedBusinessRuleTask() {
     ProcessInstance pi = runtimeService.startProcessInstanceByKey("failedBusinessRuleTask");
@@ -79,7 +79,7 @@ public class FoxJobRetryCmdTest extends PluggableProcessEngineTest {
     assertJobRetriesForActivity(pi, "failingBusinessRuleTask");
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/bpmn/async/FoxJobRetryCmdTest.testFailedCallActivity.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/bpmn/async/FoxJobRetryCmdTest.testFailedCallActivity.bpmn20.xml" })
   @Test
   public void testFailedCallActivity() {
     ProcessInstance pi = runtimeService.startProcessInstanceByKey("failedCallActivity");
@@ -87,7 +87,7 @@ public class FoxJobRetryCmdTest extends PluggableProcessEngineTest {
     assertJobRetriesForActivity(pi, "failingCallActivity");
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/bpmn/async/FoxJobRetryCmdTest.testFailedScriptTask.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/bpmn/async/FoxJobRetryCmdTest.testFailedScriptTask.bpmn20.xml" })
   @Test
   public void testFailedScriptTask() {
     ProcessInstance pi = runtimeService.startProcessInstanceByKey("failedScriptTask");
@@ -95,7 +95,7 @@ public class FoxJobRetryCmdTest extends PluggableProcessEngineTest {
     assertJobRetriesForActivity(pi, "failingScriptTask");
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/bpmn/async/FoxJobRetryCmdTest.testFailedSendTask.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/bpmn/async/FoxJobRetryCmdTest.testFailedSendTask.bpmn20.xml" })
   @Test
   public void testFailedSendTask() {
     ProcessInstance pi = runtimeService.startProcessInstanceByKey("failedSendTask");
@@ -103,7 +103,7 @@ public class FoxJobRetryCmdTest extends PluggableProcessEngineTest {
     assertJobRetriesForActivity(pi, "failingSendTask");
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/bpmn/async/FoxJobRetryCmdTest.testFailedSubProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/bpmn/async/FoxJobRetryCmdTest.testFailedSubProcess.bpmn20.xml" })
   @Test
   public void testFailedSubProcess() {
     ProcessInstance pi = runtimeService.startProcessInstanceByKey("failedSubProcess");
@@ -111,7 +111,7 @@ public class FoxJobRetryCmdTest extends PluggableProcessEngineTest {
     assertJobRetriesForActivity(pi, "failingSubProcess");
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/bpmn/async/FoxJobRetryCmdTest.testFailedTask.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/bpmn/async/FoxJobRetryCmdTest.testFailedTask.bpmn20.xml" })
   @Test
   public void testFailedTask() {
     ProcessInstance pi = runtimeService.startProcessInstanceByKey("failedTask");
@@ -119,7 +119,7 @@ public class FoxJobRetryCmdTest extends PluggableProcessEngineTest {
     assertJobRetriesForActivity(pi, "failingTask");
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/bpmn/async/FoxJobRetryCmdTest.testFailedTransaction.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/bpmn/async/FoxJobRetryCmdTest.testFailedTransaction.bpmn20.xml" })
   @Test
   public void testFailedTransaction() {
     ProcessInstance pi = runtimeService.startProcessInstanceByKey("failedTask");
@@ -127,7 +127,7 @@ public class FoxJobRetryCmdTest extends PluggableProcessEngineTest {
     assertJobRetriesForActivity(pi, "failingTransaction");
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/bpmn/async/FoxJobRetryCmdTest.testFailedReceiveTask.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/bpmn/async/FoxJobRetryCmdTest.testFailedReceiveTask.bpmn20.xml" })
   @Test
   public void testFailedReceiveTask() {
     ProcessInstance pi = runtimeService.startProcessInstanceByKey("failedReceiveTask");
@@ -135,7 +135,7 @@ public class FoxJobRetryCmdTest extends PluggableProcessEngineTest {
     assertJobRetriesForActivity(pi, "failingReceiveTask");
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/bpmn/async/FoxJobRetryCmdTest.testFailedBoundaryTimerEvent.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/bpmn/async/FoxJobRetryCmdTest.testFailedBoundaryTimerEvent.bpmn20.xml" })
   @Test
   public void testFailedBoundaryTimerEvent() {
     ProcessInstance pi = runtimeService.startProcessInstanceByKey("failedBoundaryTimerEvent");
@@ -143,7 +143,7 @@ public class FoxJobRetryCmdTest extends PluggableProcessEngineTest {
     assertJobRetriesForActivity(pi, "userTask");
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/bpmn/async/FoxJobRetryCmdTest.testFailedIntermediateCatchingTimerEvent.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/bpmn/async/FoxJobRetryCmdTest.testFailedIntermediateCatchingTimerEvent.bpmn20.xml" })
   @Test
   public void testFailedIntermediateCatchingTimerEvent() {
     ProcessInstance pi = runtimeService.startProcessInstanceByKey("failedIntermediateCatchingTimerEvent");
@@ -169,7 +169,7 @@ public class FoxJobRetryCmdTest extends PluggableProcessEngineTest {
     assertJobRetriesForActivity(pi, "task");
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/bpmn/async/FoxJobRetryCmdTest.testBrokenFoxJobRetryValue.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/bpmn/async/FoxJobRetryCmdTest.testBrokenFoxJobRetryValue.bpmn20.xml" })
   @Test
   public void testBrokenFoxJobRetryValue() {
     Job job = managementService.createJobQuery().list().get(0);
@@ -182,7 +182,7 @@ public class FoxJobRetryCmdTest extends PluggableProcessEngineTest {
     assertEquals(1, managementService.createJobQuery().noRetriesLeft().count());
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/bpmn/async/FoxJobRetryCmdTest.testFailedStartTimerEvent.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/bpmn/async/FoxJobRetryCmdTest.testFailedStartTimerEvent.bpmn20.xml" })
   @Test
   public void testFailedTimerStartEvent() {
     // After process start, there should be timer created
@@ -229,8 +229,8 @@ public class FoxJobRetryCmdTest extends PluggableProcessEngineTest {
     assertEquals(1, managementService.createJobQuery().noRetriesLeft().count());
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/bpmn/async/FoxJobRetryCmdTest.testFailedIntermediateThrowingSignalEvent.bpmn20.xml",
-      "org/camunda/bpm/engine/test/bpmn/async/FoxJobRetryCmdTest.failingSignalStart.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/bpmn/async/FoxJobRetryCmdTest.testFailedIntermediateThrowingSignalEvent.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/bpmn/async/FoxJobRetryCmdTest.failingSignalStart.bpmn20.xml" })
   public void FAILING_testFailedIntermediateThrowingSignalEvent() {
     ProcessInstance pi = runtimeService.startProcessInstanceByKey("failedIntermediateThrowingSignalEvent");
 
@@ -264,8 +264,8 @@ public class FoxJobRetryCmdTest extends PluggableProcessEngineTest {
     BpmnModelInstance bpmnModelInstance = Bpmn.createExecutableProcess("process")
         .startEvent()
         .intermediateThrowEvent()
-          .camundaAsyncBefore()
-          .camundaFailedJobRetryTimeCycle("R10/PT5S")
+          .orqueioAsyncBefore()
+          .orqueioFailedJobRetryTimeCycle("R10/PT5S")
           .messageEventDefinition("messageDefinition")
             .message("message")
           .messageEventDefinitionDone()
@@ -273,7 +273,7 @@ public class FoxJobRetryCmdTest extends PluggableProcessEngineTest {
         .done();
 
     MessageEventDefinition messageDefinition = bpmnModelInstance.getModelElementById("messageDefinition");
-    messageDefinition.setCamundaClass(FailingDelegate.class.getName());
+    messageDefinition.setOrqueioClass(FailingDelegate.class.getName());
 
    testRule.deploy(bpmnModelInstance);
 
@@ -293,7 +293,7 @@ public class FoxJobRetryCmdTest extends PluggableProcessEngineTest {
     Assert.assertEquals(9, job.getRetries());
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/bpmn/async/FoxJobRetryCmdTest.testFailedServiceTask.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/bpmn/async/FoxJobRetryCmdTest.testFailedServiceTask.bpmn20.xml" })
   public void FAILING_testFailedRetryWithTimeShift() throws ParseException {
     // set date to hour before time shift (2015-10-25T03:00:00 CEST =>
     // 2015-10-25T02:00:00 CET)
@@ -348,9 +348,9 @@ public class FoxJobRetryCmdTest extends PluggableProcessEngineTest {
     BpmnModelInstance bpmnModelInstance = Bpmn.createExecutableProcess("process")
         .startEvent()
         .serviceTask()
-          .camundaClass("foo")
-          .camundaAsyncBefore()
-          .camundaFailedJobRetryTimeCycle("${var}")
+          .orqueioClass("foo")
+          .orqueioAsyncBefore()
+          .orqueioFailedJobRetryTimeCycle("${var}")
         .endEvent()
         .done();
 
@@ -377,9 +377,9 @@ public class FoxJobRetryCmdTest extends PluggableProcessEngineTest {
     BpmnModelInstance bpmnModelInstance = Bpmn.createExecutableProcess("process")
         .startEvent()
         .serviceTask()
-          .camundaClass("foo")
-          .camundaAsyncBefore()
-          .camundaFailedJobRetryTimeCycle("${var}")
+          .orqueioClass("foo")
+          .orqueioAsyncBefore()
+          .orqueioFailedJobRetryTimeCycle("${var}")
         .endEvent()
         .done();
 
@@ -406,9 +406,9 @@ public class FoxJobRetryCmdTest extends PluggableProcessEngineTest {
     BpmnModelInstance bpmnModelInstance = Bpmn.createExecutableProcess("process")
         .startEvent()
         .serviceTask()
-          .camundaClass("foo")
-          .camundaAsyncBefore()
-          .camundaFailedJobRetryTimeCycle("${var}")
+          .orqueioClass("foo")
+          .orqueioAsyncBefore()
+          .orqueioFailedJobRetryTimeCycle("${var}")
         .endEvent()
         .done();
 
@@ -455,10 +455,10 @@ public class FoxJobRetryCmdTest extends PluggableProcessEngineTest {
   public void testRetryOnTimerStartEventWithExpression() {
     BpmnModelInstance bpmnModelInstance = Bpmn.createExecutableProcess("process")
         .startEvent()
-          .camundaFailedJobRetryTimeCycle("${var}")
+          .orqueioFailedJobRetryTimeCycle("${var}")
           .timerWithDuration("PT5M")
         .serviceTask()
-          .camundaClass("bar")
+          .orqueioClass("bar")
         .endEvent()
         .done();
 
@@ -482,10 +482,10 @@ public class FoxJobRetryCmdTest extends PluggableProcessEngineTest {
   public void testRetryOnAsyncStartEvent() throws Exception {
     BpmnModelInstance bpmnModelInstance = Bpmn.createExecutableProcess("process")
         .startEvent()
-          .camundaAsyncBefore()
-          .camundaFailedJobRetryTimeCycle("R5/PT5M")
+          .orqueioAsyncBefore()
+          .orqueioFailedJobRetryTimeCycle("R5/PT5M")
         .serviceTask()
-          .camundaClass("bar")
+          .orqueioClass("bar")
         .endEvent()
         .done();
 
@@ -521,9 +521,9 @@ public class FoxJobRetryCmdTest extends PluggableProcessEngineTest {
         .startEvent()
         .intermediateCatchEvent()
           .message("foo")
-          .camundaAsyncBefore()
-          .camundaFailedJobRetryTimeCycle("R5/PT5M")
-          .camundaExecutionListenerClass("start", "foo")
+          .orqueioAsyncBefore()
+          .orqueioFailedJobRetryTimeCycle("R5/PT5M")
+          .orqueioExecutionListenerClass("start", "foo")
         .endEvent()
         .done();
 
@@ -558,9 +558,9 @@ public class FoxJobRetryCmdTest extends PluggableProcessEngineTest {
     BpmnModelInstance bpmnModelInstance = Bpmn.createExecutableProcess("process")
         .startEvent()
         .endEvent()
-          .camundaAsyncBefore()
-          .camundaFailedJobRetryTimeCycle("R5/PT5M")
-          .camundaExecutionListenerClass("start", "foo")
+          .orqueioAsyncBefore()
+          .orqueioFailedJobRetryTimeCycle("R5/PT5M")
+          .orqueioExecutionListenerClass("start", "foo")
         .done();
 
    testRule.deploy(bpmnModelInstance);
@@ -594,9 +594,9 @@ public class FoxJobRetryCmdTest extends PluggableProcessEngineTest {
     BpmnModelInstance bpmnModelInstance = Bpmn.createExecutableProcess("process")
         .startEvent()
         .exclusiveGateway()
-          .camundaAsyncBefore()
-          .camundaFailedJobRetryTimeCycle("R5/PT5M")
-          .camundaExecutionListenerClass("start", "foo")
+          .orqueioAsyncBefore()
+          .orqueioFailedJobRetryTimeCycle("R5/PT5M")
+          .orqueioExecutionListenerClass("start", "foo")
         .endEvent()
         .done();
 
@@ -631,9 +631,9 @@ public class FoxJobRetryCmdTest extends PluggableProcessEngineTest {
     BpmnModelInstance bpmnModelInstance = Bpmn.createExecutableProcess("process")
         .startEvent()
         .inclusiveGateway()
-          .camundaAsyncBefore()
-          .camundaFailedJobRetryTimeCycle("R5/PT5M")
-          .camundaExecutionListenerClass("start", "foo")
+          .orqueioAsyncBefore()
+          .orqueioFailedJobRetryTimeCycle("R5/PT5M")
+          .orqueioExecutionListenerClass("start", "foo")
         .endEvent()
         .done();
 
@@ -668,9 +668,9 @@ public class FoxJobRetryCmdTest extends PluggableProcessEngineTest {
     BpmnModelInstance bpmnModelInstance = Bpmn.createExecutableProcess("process")
         .startEvent()
         .eventBasedGateway()
-          .camundaAsyncBefore()
-          .camundaFailedJobRetryTimeCycle("R5/PT5M")
-          .camundaExecutionListenerClass("start", "foo")
+          .orqueioAsyncBefore()
+          .orqueioFailedJobRetryTimeCycle("R5/PT5M")
+          .orqueioExecutionListenerClass("start", "foo")
         .intermediateCatchEvent()
           .condition("${true}")
         .endEvent()
@@ -707,9 +707,9 @@ public class FoxJobRetryCmdTest extends PluggableProcessEngineTest {
     BpmnModelInstance bpmnModelInstance = Bpmn.createExecutableProcess("process")
         .startEvent()
         .parallelGateway()
-          .camundaAsyncBefore()
-          .camundaFailedJobRetryTimeCycle("R5/PT5M")
-          .camundaExecutionListenerClass("start", "foo")
+          .orqueioAsyncBefore()
+          .orqueioFailedJobRetryTimeCycle("R5/PT5M")
+          .orqueioExecutionListenerClass("start", "foo")
         .endEvent()
         .done();
 
@@ -749,9 +749,9 @@ public class FoxJobRetryCmdTest extends PluggableProcessEngineTest {
           .boundaryEvent("timer")
           .cancelActivity(false)
           .timerWithCycle("R4/PT1M")
-          .camundaFailedJobRetryTimeCycle("R2/PT10M")
+          .orqueioFailedJobRetryTimeCycle("R2/PT10M")
         .serviceTask("failing")
-          .camundaClass("foo")
+          .orqueioClass("foo")
         .endEvent()
         .done();
 
@@ -800,14 +800,14 @@ public class FoxJobRetryCmdTest extends PluggableProcessEngineTest {
       .startEvent()
       .parallelGateway("gwt")
         .serviceTask("failing")
-          .camundaClass("foo")
-          .camundaAsyncBefore()
-          .camundaFailedJobRetryTimeCycle("R2/PT5M")
+          .orqueioClass("foo")
+          .orqueioAsyncBefore()
+          .orqueioFailedJobRetryTimeCycle("R2/PT5M")
       .moveToNode("gwt")
         .userTask("beforePassing")
         .serviceTask("passing")
-          .camundaExpression("${true}")
-          .camundaAsyncBefore()
+          .orqueioExpression("${true}")
+          .orqueioAsyncBefore()
         .userTask("afterPassing")
       .done();
 

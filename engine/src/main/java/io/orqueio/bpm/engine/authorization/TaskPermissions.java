@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -17,7 +17,7 @@
 package io.orqueio.bpm.engine.authorization;
 
 /**
- * The set of built-in {@link Permission Permissions} for {@link Resources#TASK Task} in Camunda Platform.
+ * The set of built-in {@link Permission Permissions} for {@link Resources#TASK Task} in Orqueio Platform.
  *
  * @author Yana Vasileva
  *
@@ -56,7 +56,7 @@ public enum TaskPermissions implements Permission {
   /**
    * <p>Indicates that READ_HISTORY interactions are permitted.
    *
-   * @deprecated since the permission is not used by any built-in functionality of Camunda Platform
+   * @deprecated since the permission is not used by any built-in functionality of Orqueio Platform
    */
   @Deprecated
   READ_HISTORY("READ_HISTORY", 4096),

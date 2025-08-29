@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -282,7 +282,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     // related to CAM-12070
     addDatabaseSpecificStatement(MYSQL, "updateByteArraysByBatchId", "updateByteArraysByBatchId_mysql");
 
-    // related to https://github.com/camunda/camunda-bpm-platform/issues/3064
+    // related to https://github.com/orqueio/orqueio-bpm-platform/issues/3064
     addDatabaseSpecificStatement(MYSQL, "updateAttachmentsByRootProcessInstanceId", "updateAttachmentsByRootProcessInstanceId_mysql");
     addDatabaseSpecificStatement(MYSQL, "updateAttachmentsByProcessInstanceId", "updateAttachmentsByProcessInstanceId_mysql");
     addDatabaseSpecificStatement(MYSQL, "updateAuthorizationsByRootProcessInstanceId", "updateAuthorizationsByRootProcessInstanceId_mysql");
@@ -431,7 +431,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     addDatabaseSpecificStatement(POSTGRES, "deleteAuthorizationsByRemovalTime", "deleteAuthorizationsByRemovalTime_postgres_or_db2");
     addDatabaseSpecificStatement(POSTGRES, "deleteTaskMetricsByRemovalTime", "deleteTaskMetricsByRemovalTime_postgres_or_db2");
 
-    // related to https://github.com/camunda/camunda-bpm-platform/issues/3064
+    // related to https://github.com/orqueio/orqueio-bpm-platform/issues/3064
     addDatabaseSpecificStatement(POSTGRES, "updateAttachmentsByRootProcessInstanceId", "updateAttachmentsByRootProcessInstanceId_postgres");
     addDatabaseSpecificStatement(POSTGRES, "updateAttachmentsByProcessInstanceId", "updateAttachmentsByProcessInstanceId_postgres");
     addDatabaseSpecificStatement(POSTGRES, "updateAuthorizationsByRootProcessInstanceId", "updateAuthorizationsByRootProcessInstanceId_postgres");

@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -101,7 +101,7 @@ import org.junit.rules.RuleChain;
 public class TaskServiceTest {
 
 
-  protected static final String TWO_TASKS_PROCESS = "org/camunda/bpm/engine/test/api/twoTasksProcess.bpmn20.xml";
+  protected static final String TWO_TASKS_PROCESS = "io/orqueio/bpm/engine/test/api/twoTasksProcess.bpmn20.xml";
 
   protected static final String USER_TASK_THROW_ERROR = "throw-error";
   protected static final String ERROR_CODE = "300";
@@ -336,7 +336,7 @@ public class TaskServiceTest {
     taskService.deleteTask(taskId, true);
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
   @Test
   public void testDeleteTaskCommentWithProcessInstance() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("oneTaskProcess");
@@ -408,7 +408,7 @@ public class TaskServiceTest {
     taskService.deleteTask(taskId, true);
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
   @Test
   public void testDeleteProcessInstanceTaskComments() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("oneTaskProcess");
@@ -513,7 +513,7 @@ public class TaskServiceTest {
     taskService.deleteTask(taskId, true);
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
   @Test
   public void testUpdateProcessTaskComment() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("oneTaskProcess");
@@ -541,7 +541,7 @@ public class TaskServiceTest {
     }
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
   @Test
   public void testDeleteProcessInstanceCommentNotExistingCommentId() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("oneTaskProcess");
@@ -550,7 +550,7 @@ public class TaskServiceTest {
     taskService.deleteProcessInstanceComment(processInstance.getId(), "notExistingCommentId");
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
   @Test
   public void testDeleteTaskProcessInstanceComment() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("oneTaskProcess");
@@ -569,7 +569,7 @@ public class TaskServiceTest {
     assertThat(shouldBeDeletedLst).isEmpty();
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
   @Test
   public void testDeleteProcessInstanceComment() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("oneTaskProcess");
@@ -606,7 +606,7 @@ public class TaskServiceTest {
     }
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
   @Test
   public void testDeleteProcessInstanceCommentsNoComments() {
 
@@ -616,7 +616,7 @@ public class TaskServiceTest {
     taskService.deleteProcessInstanceComments(processInstance.getId());
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
   @Test
   public void testDeleteProcessInstanceCommentsWithoutTaskComments() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("oneTaskProcess");
@@ -634,7 +634,7 @@ public class TaskServiceTest {
     assertThat(shouldBeDeletedLst).isEmpty();
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
   @Test
   public void testDeleteProcessInstanceCommentsWithTask() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("oneTaskProcess");
@@ -654,7 +654,7 @@ public class TaskServiceTest {
     assertThat(shouldBeDeletedLst).isEmpty();
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
   @Test
   public void testUpdateProcessInstanceCommentNullCommentId() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("oneTaskProcess");
@@ -666,7 +666,7 @@ public class TaskServiceTest {
     }
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
   @Test
   public void testUpdateProcessInstanceCommentNullProcessInstanceId() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("oneTaskProcess");
@@ -681,7 +681,7 @@ public class TaskServiceTest {
     }
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
   @Test
   public void testUpdateProcessInstanceCommentNullMessage() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("oneTaskProcess");
@@ -697,7 +697,7 @@ public class TaskServiceTest {
     }
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
   @Test
   public void testUpdateProcessInstanceCommentNotExistingCommentId() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("oneTaskProcess");
@@ -716,7 +716,7 @@ public class TaskServiceTest {
     }
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
   @Test
   public void testUpdateProcessInstanceCommentWithTask() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("oneTaskProcess");
@@ -738,7 +738,7 @@ public class TaskServiceTest {
     assertEquals(updatedMessage, actual.getFullMessage());
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
   @Test
   public void testUpdateProcessInstanceCommentWithoutTask() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("oneTaskProcess");
@@ -857,7 +857,7 @@ public class TaskServiceTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
   public void testProcessAttachmentsOneProcessExecution() {
     int historyLevel = processEngineConfiguration.getHistoryLevel().getId();
     if (historyLevel > ProcessEngineConfigurationImpl.HISTORYLEVEL_NONE) {
@@ -878,7 +878,7 @@ public class TaskServiceTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/twoParallelTasksProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/twoParallelTasksProcess.bpmn20.xml" })
   public void testProcessAttachmentsTwoProcessExecutions() {
     int historyLevel = processEngineConfiguration.getHistoryLevel().getId();
     if (historyLevel > ProcessEngineConfigurationImpl.HISTORYLEVEL_NONE) {
@@ -910,7 +910,7 @@ public class TaskServiceTest {
       String processInstanceId = "someProcessInstanceId";
       String attachmentName = "attachmentName";
       String attachmentDescription = "attachmentDescription";
-      String url = "http://camunda.org";
+      String url = "http://orqueio.io";
 
       Attachment attachment = taskService.createAttachment(
           attachmentType,
@@ -1270,7 +1270,7 @@ public class TaskServiceTest {
     assertEquals("myValue", variables.get("myParam"));
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/task/TaskServiceTest.testCompleteTaskWithVariablesInReturn.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/task/TaskServiceTest.testCompleteTaskWithVariablesInReturn.bpmn20.xml" })
   @Test
   public void testCompleteTaskWithVariablesInReturn() {
     String processVarName = "processVar";
@@ -1333,7 +1333,7 @@ public class TaskServiceTest {
     historyService.deleteHistoricTaskInstance(taskId);
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/twoParallelTasksProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/twoParallelTasksProcess.bpmn20.xml" })
   @Test
   public void testCompleteTaskWithVariablesInReturnParallel() {
     String processVarName = "processVar";
@@ -1384,7 +1384,7 @@ public class TaskServiceTest {
   {
     // given
     BpmnModelInstance process = Bpmn.createExecutableProcess("process")
-        .camundaHistoryTimeToLive(180)
+        .orqueioHistoryTimeToLive(180)
         .startEvent()
       .subProcess()
       .embeddedSubProcess()
@@ -1418,7 +1418,7 @@ public class TaskServiceTest {
   }
 
   @Test
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/twoTasksProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/twoTasksProcess.bpmn20.xml")
   public void testCompleteTaskWithVariablesInReturnShouldDeserializeObjectValue()
   {
     // given
@@ -1439,7 +1439,7 @@ public class TaskServiceTest {
   }
 
   @Test
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/twoTasksProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/twoTasksProcess.bpmn20.xml")
   public void testCompleteTaskWithVariablesInReturnShouldNotDeserializeObjectValue()
   {
     // given
@@ -1460,7 +1460,7 @@ public class TaskServiceTest {
     assertThat(returnedValue.getValueSerialized()).isEqualTo(serializedValue);
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn" })
   @Test
   public void testCompleteTaskWithVariablesInReturnCMMN() {
     String taskVariableName = "taskVar";
@@ -1477,7 +1477,7 @@ public class TaskServiceTest {
     assertNull(vars);
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testCompleteTaskShouldCompleteCaseExecution() {
     // given
@@ -2217,7 +2217,7 @@ public class TaskServiceTest {
   }
 
   @Deployment(resources = {
-  "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
+  "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
   @Test
   public void testRemoveVariable() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("oneTaskProcess");
@@ -2246,7 +2246,7 @@ public class TaskServiceTest {
   }
 
   @Deployment(resources = {
-  "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
+  "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
   @Test
   public void testRemoveVariables() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("oneTaskProcess");
@@ -2292,7 +2292,7 @@ public class TaskServiceTest {
   }
 
   @Deployment(resources = {
-  "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
+  "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
   @Test
   public void testRemoveVariableLocal() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("oneTaskProcess");
@@ -2322,7 +2322,7 @@ public class TaskServiceTest {
   }
 
   @Deployment(resources = {
-  "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
+  "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
   @Test
   public void testRemoveVariablesLocal() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("oneTaskProcess");
@@ -2367,7 +2367,7 @@ public class TaskServiceTest {
     }
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
   @Test
   public void testUserTaskOptimisticLocking() {
     runtimeService.startProcessInstanceByKey("oneTaskProcess");
@@ -2413,7 +2413,7 @@ public class TaskServiceTest {
     }
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
   @Test
   public void testDeleteTaskPartOfProcess() {
     runtimeService.startProcessInstanceByKey("oneTaskProcess");
@@ -2458,7 +2458,7 @@ public class TaskServiceTest {
 
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testDeleteTaskPartOfCaseInstance() {
     String caseDefinitionId = repositoryService
@@ -2642,7 +2642,7 @@ public class TaskServiceTest {
   }
 
   @Deployment(resources={
-      "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+      "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_AUDIT)
   @Test
   public void testCreateTaskAttachmentWithNullTaskId() throws ParseException {
@@ -2671,7 +2671,7 @@ public class TaskServiceTest {
 
   @Test
   @Deployment(resources={
-  "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+  "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_AUDIT)
   public void testDeleteAttachment() throws ParseException {
     // given
@@ -2707,7 +2707,7 @@ public class TaskServiceTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
   public void testDeleteTaskAttachmentWithTaskIdEmpty() {
     // given
     runtimeService.startProcessInstanceByKey("oneTaskProcess");
@@ -2724,7 +2724,7 @@ public class TaskServiceTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml" })
   public void testDeleteTaskAttachmentWithTaskIdNoLongerExists() {
     // given
     runtimeService.startProcessInstanceByKey("oneTaskProcess");
@@ -2750,7 +2750,7 @@ public class TaskServiceTest {
   }
 
   @Deployment(resources={
-  "org/camunda/bpm/engine/test/api/oneSubProcess.bpmn20.xml"})
+  "io/orqueio/bpm/engine/test/api/oneSubProcess.bpmn20.xml"})
   @Test
   public void testUpdateVariablesLocal() {
     Map<String, Object> globalVars = new HashMap<>();
@@ -2818,7 +2818,7 @@ public class TaskServiceTest {
   }
 
   @Deployment(resources={
-  "org/camunda/bpm/engine/test/api/oneSubProcess.bpmn20.xml"})
+  "io/orqueio/bpm/engine/test/api/oneSubProcess.bpmn20.xml"})
   @Test
   public void testUpdateVariables() {
     Map<String, Object> globalVars = new HashMap<>();
@@ -2907,7 +2907,7 @@ public class TaskServiceTest {
   }
 
   @Deployment(resources={
-  "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+  "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   @Test
   public void testGetVariablesTyped() {
     Map<String, Object> vars = new HashMap<>();
@@ -2921,7 +2921,7 @@ public class TaskServiceTest {
   }
 
   @Deployment(resources={
-  "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+  "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   @Test
   public void testGetVariablesTypedDeserialize() {
 
@@ -2954,7 +2954,7 @@ public class TaskServiceTest {
   }
 
   @Deployment(resources={
-  "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+  "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   @Test
   public void testGetVariablesLocalTyped() {
     Map<String, Object> vars = new HashMap<>();
@@ -2970,7 +2970,7 @@ public class TaskServiceTest {
   }
 
   @Deployment(resources={
-  "org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+  "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   @Test
   public void testGetVariablesLocalTypedDeserialize() {
 
@@ -3003,7 +3003,7 @@ public class TaskServiceTest {
 
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testHumanTaskCompleteWithVariables() {
     // given
@@ -3030,7 +3030,7 @@ public class TaskServiceTest {
     assertEquals(variable.getValue(), variableValue);
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testHumanTaskWithLocalVariablesCompleteWithVariable() {
     // given
@@ -3060,7 +3060,7 @@ public class TaskServiceTest {
     assertEquals(variable.getValue(), variableAnotherValue);
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/twoTasksProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/twoTasksProcess.bpmn20.xml"})
   @Test
   public void testUserTaskWithLocalVariablesCompleteWithVariable() {
     // given
@@ -3084,7 +3084,7 @@ public class TaskServiceTest {
     assertEquals(variable.getValue(), variableAnotherValue);
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/cmmn/oneTaskCase.cmmn"})
   @Test
   public void testHumanTaskLocalVariables() {
     // given
@@ -3116,7 +3116,7 @@ public class TaskServiceTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   public void testGetVariablesByEmptyList() {
     // given
     String processInstanceId = runtimeService.startProcessInstanceByKey("oneTaskProcess").getId();
@@ -3134,7 +3134,7 @@ public class TaskServiceTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   public void testGetVariablesTypedByEmptyList() {
     // given
     String processInstanceId = runtimeService.startProcessInstanceByKey("oneTaskProcess").getId();
@@ -3152,7 +3152,7 @@ public class TaskServiceTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   public void testGetVariablesLocalByEmptyList() {
     // given
     String processInstanceId = runtimeService.startProcessInstanceByKey("oneTaskProcess").getId();
@@ -3170,7 +3170,7 @@ public class TaskServiceTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   public void testGetVariablesLocalTypedByEmptyList() {
     // given
     String processInstanceId = runtimeService.startProcessInstanceByKey("oneTaskProcess").getId();
@@ -3202,7 +3202,7 @@ public class TaskServiceTest {
   public void testThrowBpmnErrorWithoutCatch() {
     // given
     BpmnModelInstance model =Bpmn.createExecutableProcess(PROCESS_KEY)
-        .camundaHistoryTimeToLive(180)
+        .orqueioHistoryTimeToLive(180)
         .startEvent()
         .userTask(USER_TASK_THROW_ERROR)
         .userTask("skipped-error")
@@ -3241,7 +3241,7 @@ public class TaskServiceTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   public void testHandleBpmnErrorWithEmptyErrorCode() {
     // given
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("oneTaskProcess");
@@ -3254,7 +3254,7 @@ public class TaskServiceTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   public void testHandleBpmnErrorWithNullErrorCode() {
     // given
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("oneTaskProcess");
@@ -3350,7 +3350,7 @@ public class TaskServiceTest {
   public void testHandleEscalationWithoutEscalationCode() {
     // given
     BpmnModelInstance model = Bpmn.createExecutableProcess(PROCESS_KEY)
-        .camundaHistoryTimeToLive(180)
+        .orqueioHistoryTimeToLive(180)
         .startEvent()
       .userTask(USER_TASK_THROW_ESCALATION).boundaryEvent("catch-escalation").escalation(ESCALATION_CODE)
       .userTask(USER_TASK_AFTER_CATCH).endEvent().moveToActivity(USER_TASK_THROW_ESCALATION)
@@ -3374,7 +3374,7 @@ public class TaskServiceTest {
   public void testThrowEscalationWithoutCatchEvent() {
     // given
     BpmnModelInstance model =Bpmn.createExecutableProcess(PROCESS_KEY)
-        .camundaHistoryTimeToLive(180)
+        .orqueioHistoryTimeToLive(180)
         .startEvent()
         .userTask(USER_TASK_THROW_ESCALATION)
         .userTask("skipped-error")
@@ -3397,7 +3397,7 @@ public class TaskServiceTest {
   public void testHandleEscalationInterruptEventWithVariables() {
     // given
     BpmnModelInstance model = Bpmn.createExecutableProcess(PROCESS_KEY)
-        .camundaHistoryTimeToLive(180)
+        .orqueioHistoryTimeToLive(180)
         .startEvent()
         .userTask(USER_TASK_THROW_ESCALATION)
           .boundaryEvent("catch-escalation")
@@ -3423,7 +3423,7 @@ public class TaskServiceTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/task/TaskServiceTest.handleUserTaskEscalation.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/task/TaskServiceTest.handleUserTaskEscalation.bpmn20.xml" })
   public void testHandleEscalationNonInterruptWithVariables() {
     // given
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(PROCESS_KEY);
@@ -3446,7 +3446,7 @@ public class TaskServiceTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/task/TaskServiceTest.handleUserTaskEscalation.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/task/TaskServiceTest.handleUserTaskEscalation.bpmn20.xml" })
   public void testHandleEscalationInterruptWithVariables() {
     // given
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(PROCESS_KEY);
@@ -3463,7 +3463,7 @@ public class TaskServiceTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/task/TaskServiceTest.handleUserTaskEscalation.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/task/TaskServiceTest.handleUserTaskEscalation.bpmn20.xml" })
   public void testHandleEscalationNonInterruptEventSubprocess() {
     // given
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(PROCESS_KEY);
@@ -3485,7 +3485,7 @@ public class TaskServiceTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/task/TaskServiceTest.handleUserTaskEscalation.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/task/TaskServiceTest.handleUserTaskEscalation.bpmn20.xml" })
   public void testHandleEscalationInterruptInEventSubprocess() {
     // given
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(PROCESS_KEY);
@@ -3502,7 +3502,7 @@ public class TaskServiceTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/task/TaskServiceTest.handleUserTaskEscalation.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/task/TaskServiceTest.handleUserTaskEscalation.bpmn20.xml" })
   public void testHandleEscalationNonInterruptEmbeddedSubprocess() {
     // given
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(PROCESS_KEY);
@@ -3524,7 +3524,7 @@ public class TaskServiceTest {
   }
 
   @Test
-  @Deployment(resources = { "org/camunda/bpm/engine/test/api/task/TaskServiceTest.handleUserTaskEscalation.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/api/task/TaskServiceTest.handleUserTaskEscalation.bpmn20.xml" })
   public void testHandleEscalationInterruptInEmbeddedSubprocess() {
     // given
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(PROCESS_KEY);
@@ -3542,7 +3542,7 @@ public class TaskServiceTest {
 
   protected BpmnModelInstance createUserTaskProcessWithCatchBoundaryEvent() {
     return Bpmn.createExecutableProcess(PROCESS_KEY)
-        .camundaHistoryTimeToLive(180)
+        .orqueioHistoryTimeToLive(180)
         .startEvent()
         .userTask(USER_TASK_THROW_ERROR)
           .boundaryEvent("catch-error")
@@ -3564,7 +3564,7 @@ public class TaskServiceTest {
     ProcessBuilder processBuilder = Bpmn.createExecutableProcess(PROCESS_KEY);
 
     BpmnModelInstance model = processBuilder
-        .camundaHistoryTimeToLive(180)
+        .orqueioHistoryTimeToLive(180)
         .startEvent()
         .userTask(USER_TASK_THROW_ERROR)
         .userTask(USER_TASK_AFTER_THROW)

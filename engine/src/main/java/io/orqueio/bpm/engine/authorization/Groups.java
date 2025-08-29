@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -17,13 +17,13 @@
 package io.orqueio.bpm.engine.authorization;
 
 /**
- * Holds the set of built-in user identities for Camunda Platform.
+ * Holds the set of built-in user identities for Orqueio Platform.
  *
  * @author Nico Rehwaldt
  */
 public interface Groups {
 
-  public static final String CAMUNDA_ADMIN = "camunda-admin";
+  public static final String ORQUEIO_ADMIN = "orqueio-admin";
   public static final String GROUP_TYPE_SYSTEM = "SYSTEM";
   public static final String GROUP_TYPE_WORKFLOW = "WORKFLOW";
   

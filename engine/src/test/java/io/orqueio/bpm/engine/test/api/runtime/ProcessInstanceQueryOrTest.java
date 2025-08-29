@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -156,7 +156,7 @@ public class ProcessInstanceQueryOrTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   public void shouldReturnProcInstWithEmptyOrQuery() {
     // given
     runtimeService.startProcessInstanceByKey("oneTaskProcess");
@@ -173,7 +173,7 @@ public class ProcessInstanceQueryOrTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   public void shouldReturnProcInstWithVarValue1OrVarValue2() {
     // given
     Map<String, Object> vars = new HashMap<>();
@@ -197,7 +197,7 @@ public class ProcessInstanceQueryOrTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   public void shouldReturnProcInstWithMultipleOrCriteria() {
     // given
     ProcessInstance processInstance1 = runtimeService.startProcessInstanceByKey("oneTaskProcess");
@@ -231,7 +231,7 @@ public class ProcessInstanceQueryOrTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   public void shouldReturnProcInstFilteredByMultipleOrAndCriteria() {
     // given
     Map<String, Object> vars = new HashMap<>();
@@ -268,7 +268,7 @@ public class ProcessInstanceQueryOrTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   public void shouldReturnProcInstFilteredByMultipleOrQueries() {
     // given
     Map<String, Object> vars = new HashMap<>();
@@ -333,7 +333,7 @@ public class ProcessInstanceQueryOrTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   public void shouldReturnProcInstWhereSameCriterionWasAppliedThreeTimesInOneQuery() {
     // given
     ProcessInstance processInstance1 = runtimeService.startProcessInstanceByKey("oneTaskProcess");
@@ -354,7 +354,7 @@ public class ProcessInstanceQueryOrTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   public void shouldReturnProcInstWithVariableValueEqualsOrVariableValueGreaterThan() {
     // given
     Map<String, Object> vars = new HashMap<>();
@@ -528,7 +528,7 @@ public class ProcessInstanceQueryOrTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   public void shouldReturnByProcessDefinitionKeyOrActivityId() {
     // given
     runtimeService.startProcessInstanceByKey("oneTaskProcess");
@@ -562,14 +562,14 @@ public class ProcessInstanceQueryOrTest {
   }
 
   @Test
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml"})
   public void shouldReturnByProcessDefinitionIdOrIncidentType() {
     // given
     String processDefinitionId = runtimeService.startProcessInstanceByKey("oneTaskProcess")
         .getProcessDefinitionId();
 
     BpmnModelInstance aProcessDefinition = Bpmn.createExecutableProcess("process")
-        .startEvent().camundaAsyncBefore()
+        .startEvent().orqueioAsyncBefore()
           .userTask("aUserTask")
         .endEvent()
         .done();

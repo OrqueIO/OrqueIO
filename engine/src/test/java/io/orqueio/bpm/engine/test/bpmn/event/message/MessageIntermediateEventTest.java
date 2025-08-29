@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -149,7 +149,7 @@ public class MessageIntermediateEventTest {
 
     // deploy version 1
     repositoryService.createDeployment()
-        .addClasspathResource("org/camunda/bpm/engine/test/bpmn/event/message/MessageIntermediateEventTest.testSingleIntermediateMessageEvent.bpmn20.xml")
+        .addClasspathResource("io/orqueio/bpm/engine/test/bpmn/event/message/MessageIntermediateEventTest.testSingleIntermediateMessageEvent.bpmn20.xml")
         .deploy();
     // now there is one process deployed
     assertEquals(1, repositoryService.createProcessDefinitionQuery().count());
@@ -163,7 +163,7 @@ public class MessageIntermediateEventTest {
 
     // deploy version 2
     repositoryService.createDeployment()
-        .addClasspathResource("org/camunda/bpm/engine/test/bpmn/event/message/MessageIntermediateEventTest.testSingleIntermediateMessageEvent.bpmn20.xml")
+        .addClasspathResource("io/orqueio/bpm/engine/test/bpmn/event/message/MessageIntermediateEventTest.testSingleIntermediateMessageEvent.bpmn20.xml")
         .deploy();
 
     // now there are two versions deployed:
@@ -187,7 +187,7 @@ public class MessageIntermediateEventTest {
     try {
       repositoryService
           .createDeployment()
-          .addClasspathResource("org/camunda/bpm/engine/test/bpmn/event/message/MessageIntermediateEventTest.testEmptyMessageNameFails.bpmn20.xml")
+          .addClasspathResource("io/orqueio/bpm/engine/test/bpmn/event/message/MessageIntermediateEventTest.testEmptyMessageNameFails.bpmn20.xml")
           .deploy();
       fail("exception expected");
     } catch (ParseException e) {
@@ -196,7 +196,7 @@ public class MessageIntermediateEventTest {
     }
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/bpmn/event/message/MessageIntermediateEventTest.testSingleIntermediateMessageEvent.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/bpmn/event/message/MessageIntermediateEventTest.testSingleIntermediateMessageEvent.bpmn20.xml")
   @Test
   public void testSetSerializedVariableValues() throws IOException, ClassNotFoundException {
 

@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -66,7 +66,7 @@ public class ProcessDefinitionSuspensionTest extends PluggableProcessEngineTest 
     });
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/repository/processOne.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/repository/processOne.bpmn20.xml"})
   @Test
   public void testProcessDefinitionActiveByDefault() {
 
@@ -76,7 +76,7 @@ public class ProcessDefinitionSuspensionTest extends PluggableProcessEngineTest 
 
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/repository/processOne.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/repository/processOne.bpmn20.xml"})
   @Test
   public void testSuspendActivateProcessDefinitionById() {
 
@@ -94,7 +94,7 @@ public class ProcessDefinitionSuspensionTest extends PluggableProcessEngineTest 
     assertFalse(processDefinition.isSuspended());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/repository/processOne.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/repository/processOne.bpmn20.xml"})
   @Test
   public void testSuspendActivateProcessDefinitionByKey() {
 
@@ -112,7 +112,7 @@ public class ProcessDefinitionSuspensionTest extends PluggableProcessEngineTest 
     assertFalse(processDefinition.isSuspended());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/repository/processOne.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/repository/processOne.bpmn20.xml"})
   @Test
   public void testActivateAlreadyActiveProcessDefinition() {
 
@@ -129,7 +129,7 @@ public class ProcessDefinitionSuspensionTest extends PluggableProcessEngineTest 
 
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/repository/processOne.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/repository/processOne.bpmn20.xml"})
   @Test
   public void testSuspendAlreadySuspendedProcessDefinition() {
 
@@ -149,8 +149,8 @@ public class ProcessDefinitionSuspensionTest extends PluggableProcessEngineTest 
   }
 
   @Deployment(resources={
-          "org/camunda/bpm/engine/test/api/repository/processOne.bpmn20.xml",
-          "org/camunda/bpm/engine/test/api/repository/processTwo.bpmn20.xml"
+          "io/orqueio/bpm/engine/test/api/repository/processOne.bpmn20.xml",
+          "io/orqueio/bpm/engine/test/api/repository/processTwo.bpmn20.xml"
           })
   @Test
   public void testQueryForActiveDefinitions() {
@@ -170,8 +170,8 @@ public class ProcessDefinitionSuspensionTest extends PluggableProcessEngineTest 
   }
 
   @Deployment(resources={
-          "org/camunda/bpm/engine/test/api/repository/processOne.bpmn20.xml",
-          "org/camunda/bpm/engine/test/api/repository/processTwo.bpmn20.xml"
+          "io/orqueio/bpm/engine/test/api/repository/processOne.bpmn20.xml",
+          "io/orqueio/bpm/engine/test/api/repository/processTwo.bpmn20.xml"
           })
   @Test
   public void testQueryForSuspendedDefinitions() {
@@ -190,7 +190,7 @@ public class ProcessDefinitionSuspensionTest extends PluggableProcessEngineTest 
     assertEquals(1, repositoryService.createProcessDefinitionQuery().suspended().count());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/repository/processOne.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/repository/processOne.bpmn20.xml"})
   @Test
   public void testStartProcessInstanceForSuspendedProcessDefinition() {
     ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery().singleResult();
@@ -213,7 +213,7 @@ public class ProcessDefinitionSuspensionTest extends PluggableProcessEngineTest 
     }
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   @Test
   public void testContinueProcessAfterProcessDefinitionSuspend() {
 
@@ -234,7 +234,7 @@ public class ProcessDefinitionSuspensionTest extends PluggableProcessEngineTest 
     assertEquals(0, runtimeService.createProcessInstanceQuery().count());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   @Test
   public void testSuspendProcessInstancesDuringProcessDefinitionSuspend() {
 
@@ -283,7 +283,7 @@ public class ProcessDefinitionSuspensionTest extends PluggableProcessEngineTest 
     assertEquals(0, runtimeService.createProcessInstanceQuery().active().count());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   @Test
   public void testSubmitStartFormAfterProcessDefinitionSuspend() {
     ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery().singleResult();
@@ -325,7 +325,7 @@ public class ProcessDefinitionSuspensionTest extends PluggableProcessEngineTest 
     assertEquals(0, managementService.createJobQuery().count());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   @Test
   public void testDelayedSuspendProcessDefinition() {
 
@@ -368,7 +368,7 @@ public class ProcessDefinitionSuspensionTest extends PluggableProcessEngineTest 
     assertEquals(0, repositoryService.createProcessDefinitionQuery().suspended().count());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   @Test
   public void testDelayedSuspendProcessDefinitionIncludingProcessInstances() {
 
@@ -431,7 +431,7 @@ public class ProcessDefinitionSuspensionTest extends PluggableProcessEngineTest 
     assertEquals(0, repositoryService.createProcessDefinitionQuery().suspended().count());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   @Test
   public void testDelayedActivateProcessDefinition() {
 
@@ -476,7 +476,7 @@ public class ProcessDefinitionSuspensionTest extends PluggableProcessEngineTest 
     int nrOfProcessDefinitions = 3;
     for (int i=0; i<nrOfProcessDefinitions; i++) {
       repositoryService.createDeployment()
-        .addClasspathResource("org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml").deploy();
+        .addClasspathResource("io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml").deploy();
     }
     assertEquals(nrOfProcessDefinitions, repositoryService.createProcessDefinitionQuery().count());
     assertEquals(nrOfProcessDefinitions, repositoryService.createProcessDefinitionQuery().active().count());
@@ -523,7 +523,7 @@ public class ProcessDefinitionSuspensionTest extends PluggableProcessEngineTest 
     int nrOfProcessDefinitions = 5;
     for (int i=0; i<nrOfProcessDefinitions; i++) {
       repositoryService.createDeployment()
-        .addClasspathResource("org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml").deploy();
+        .addClasspathResource("io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml").deploy();
     }
     assertEquals(nrOfProcessDefinitions, repositoryService.createProcessDefinitionQuery().count());
     assertEquals(nrOfProcessDefinitions, repositoryService.createProcessDefinitionQuery().active().count());
@@ -580,7 +580,7 @@ public class ProcessDefinitionSuspensionTest extends PluggableProcessEngineTest 
     }
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testWithOneAsyncServiceTask.bpmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testWithOneAsyncServiceTask.bpmn"})
   @Test
   public void testSuspendById_shouldSuspendJobDefinitionAndRetainJob() {
     // given
@@ -623,7 +623,7 @@ public class ProcessDefinitionSuspensionTest extends PluggableProcessEngineTest 
     assertFalse(job.isSuspended());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testWithOneAsyncServiceTask.bpmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testWithOneAsyncServiceTask.bpmn"})
   @Test
   public void testSuspendByKey_shouldSuspendJobDefinitionAndRetainJob() {
     // given
@@ -666,7 +666,7 @@ public class ProcessDefinitionSuspensionTest extends PluggableProcessEngineTest 
     assertFalse(job.isSuspended());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testWithOneAsyncServiceTask.bpmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testWithOneAsyncServiceTask.bpmn"})
   @Test
   public void testSuspendByIdAndIncludeInstancesFlag_shouldSuspendAlsoJobDefinitionAndRetainJob() {
     // a process definition with a asynchronous continuation, so that there
@@ -707,7 +707,7 @@ public class ProcessDefinitionSuspensionTest extends PluggableProcessEngineTest 
     assertFalse(job.isSuspended());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testWithOneAsyncServiceTask.bpmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testWithOneAsyncServiceTask.bpmn"})
   @Test
   public void testSuspendByKeyAndIncludeInstancesFlag_shouldSuspendAlsoJobDefinitionAndRetainJob() {
     // a process definition with a asynchronous continuation, so that there
@@ -748,7 +748,7 @@ public class ProcessDefinitionSuspensionTest extends PluggableProcessEngineTest 
     assertFalse(job.isSuspended());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testWithOneAsyncServiceTask.bpmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testWithOneAsyncServiceTask.bpmn"})
   @Test
   public void testSuspendByIdAndIncludeInstancesFlag_shouldSuspendJobDefinitionAndJob() {
     // a process definition with a asynchronous continuation, so that there
@@ -789,7 +789,7 @@ public class ProcessDefinitionSuspensionTest extends PluggableProcessEngineTest 
     assertTrue(job.isSuspended());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testWithOneAsyncServiceTask.bpmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testWithOneAsyncServiceTask.bpmn"})
   @Test
   public void testSuspendByKeyAndIncludeInstancesFlag_shouldSuspendJobDefinitionAndJob() {
     // a process definition with a asynchronous continuation, so that there
@@ -830,7 +830,7 @@ public class ProcessDefinitionSuspensionTest extends PluggableProcessEngineTest 
     assertTrue(job.isSuspended());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testWithOneAsyncServiceTask.bpmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testWithOneAsyncServiceTask.bpmn"})
   @Test
   public void testDelayedSuspendByIdAndIncludeInstancesFlag_shouldSuspendJobDefinitionAndRetainJob() {
     Date startTime = new Date();
@@ -897,7 +897,7 @@ public class ProcessDefinitionSuspensionTest extends PluggableProcessEngineTest 
     assertFalse(job.isSuspended());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testWithOneAsyncServiceTask.bpmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testWithOneAsyncServiceTask.bpmn"})
   @Test
   public void testDelayedSuspendByKeyAndIncludeInstancesFlag_shouldSuspendJobDefinitionAndRetainJob() {
     Date startTime = new Date();
@@ -965,7 +965,7 @@ public class ProcessDefinitionSuspensionTest extends PluggableProcessEngineTest 
     assertFalse(job.isSuspended());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testWithOneAsyncServiceTask.bpmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testWithOneAsyncServiceTask.bpmn"})
   @Test
   public void testDelayedSuspendByIdAndIncludeInstancesFlag_shouldSuspendJobDefinitionAndJob() {
     Date startTime = new Date();
@@ -1033,7 +1033,7 @@ public class ProcessDefinitionSuspensionTest extends PluggableProcessEngineTest 
     assertTrue(job.isSuspended());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testWithOneAsyncServiceTask.bpmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testWithOneAsyncServiceTask.bpmn"})
   @Test
   public void testDelayedSuspendByKeyAndIncludeInstancesFlag_shouldSuspendJobDefinitionAndJob() {
     Date startTime = new Date();
@@ -1110,7 +1110,7 @@ public class ProcessDefinitionSuspensionTest extends PluggableProcessEngineTest 
     int nrOfProcessDefinitions = 5;
     for (int i=0; i<nrOfProcessDefinitions; i++) {
       repositoryService.createDeployment()
-        .addClasspathResource("org/camunda/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testWithOneAsyncServiceTask.bpmn").deploy();
+        .addClasspathResource("io/orqueio/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testWithOneAsyncServiceTask.bpmn").deploy();
 
       // a running process instance with a failed service task
       Map<String, Object> params = new HashMap<>();
@@ -1150,7 +1150,7 @@ public class ProcessDefinitionSuspensionTest extends PluggableProcessEngineTest 
     int nrOfProcessDefinitions = 5;
     for (int i=0; i<nrOfProcessDefinitions; i++) {
       repositoryService.createDeployment()
-        .addClasspathResource("org/camunda/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testWithOneAsyncServiceTask.bpmn").deploy();
+        .addClasspathResource("io/orqueio/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testWithOneAsyncServiceTask.bpmn").deploy();
 
       // a running process instance with a failed service task
       Map<String, Object> params = new HashMap<>();
@@ -1190,7 +1190,7 @@ public class ProcessDefinitionSuspensionTest extends PluggableProcessEngineTest 
     int nrOfProcessDefinitions = 5;
     for (int i=0; i<nrOfProcessDefinitions; i++) {
       repositoryService.createDeployment()
-        .addClasspathResource("org/camunda/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testWithOneAsyncServiceTask.bpmn").deploy();
+        .addClasspathResource("io/orqueio/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testWithOneAsyncServiceTask.bpmn").deploy();
 
       // a running process instance with a failed service task
       Map<String, Object> params = new HashMap<>();
@@ -1234,7 +1234,7 @@ public class ProcessDefinitionSuspensionTest extends PluggableProcessEngineTest 
     int nrOfProcessDefinitions = 5;
     for (int i=0; i<nrOfProcessDefinitions; i++) {
       repositoryService.createDeployment()
-        .addClasspathResource("org/camunda/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testWithOneAsyncServiceTask.bpmn").deploy();
+        .addClasspathResource("io/orqueio/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testWithOneAsyncServiceTask.bpmn").deploy();
 
       // a running process instance with a failed service task
       Map<String, Object> params = new HashMap<>();
@@ -1295,7 +1295,7 @@ public class ProcessDefinitionSuspensionTest extends PluggableProcessEngineTest 
     int nrOfProcessDefinitions = 5;
     for (int i=0; i<nrOfProcessDefinitions; i++) {
       repositoryService.createDeployment()
-        .addClasspathResource("org/camunda/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testWithOneAsyncServiceTask.bpmn").deploy();
+        .addClasspathResource("io/orqueio/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testWithOneAsyncServiceTask.bpmn").deploy();
 
       // a running process instance with a failed service task
       Map<String, Object> params = new HashMap<>();
@@ -1343,7 +1343,7 @@ public class ProcessDefinitionSuspensionTest extends PluggableProcessEngineTest 
     }
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testWithOneAsyncServiceTask.bpmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testWithOneAsyncServiceTask.bpmn"})
   @Test
   public void testActivationById_shouldActivateJobDefinitionAndRetainJob() {
     // a process definition with a asynchronous continuation, so that there
@@ -1393,7 +1393,7 @@ public class ProcessDefinitionSuspensionTest extends PluggableProcessEngineTest 
     assertTrue(job.isSuspended());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testWithOneAsyncServiceTask.bpmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testWithOneAsyncServiceTask.bpmn"})
   @Test
   public void testActivationByKey_shouldActivateJobDefinitionAndRetainJob() {
     // a process definition with a asynchronous continuation, so that there
@@ -1443,7 +1443,7 @@ public class ProcessDefinitionSuspensionTest extends PluggableProcessEngineTest 
     assertTrue(job.isSuspended());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testWithOneAsyncServiceTask.bpmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testWithOneAsyncServiceTask.bpmn"})
   @Test
   public void testActivationByIdAndIncludeInstancesFlag_shouldActivateAlsoJobDefinitionAndRetainJob() {
     // a process definition with a asynchronous continuation, so that there
@@ -1493,7 +1493,7 @@ public class ProcessDefinitionSuspensionTest extends PluggableProcessEngineTest 
     assertTrue(job.isSuspended());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testWithOneAsyncServiceTask.bpmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testWithOneAsyncServiceTask.bpmn"})
   @Test
   public void testActivationByKeyAndIncludeInstancesFlag_shouldActivateAlsoJobDefinitionAndRetainJob() {
     // a process definition with a asynchronous continuation, so that there
@@ -1543,7 +1543,7 @@ public class ProcessDefinitionSuspensionTest extends PluggableProcessEngineTest 
     assertTrue(job.isSuspended());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testWithOneAsyncServiceTask.bpmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testWithOneAsyncServiceTask.bpmn"})
   @Test
   public void testActivationByIdAndIncludeInstancesFlag_shouldActivateJobDefinitionAndJob() {
     // a process definition with a asynchronous continuation, so that there
@@ -1593,7 +1593,7 @@ public class ProcessDefinitionSuspensionTest extends PluggableProcessEngineTest 
     assertFalse(job.isSuspended());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testWithOneAsyncServiceTask.bpmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testWithOneAsyncServiceTask.bpmn"})
   @Test
   public void testActivationByKeyAndIncludeInstancesFlag_shouldActivateJobDefinitionAndJob() {
     // a process definition with a asynchronous continuation, so that there
@@ -1643,7 +1643,7 @@ public class ProcessDefinitionSuspensionTest extends PluggableProcessEngineTest 
     assertFalse(job.isSuspended());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testWithOneAsyncServiceTask.bpmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testWithOneAsyncServiceTask.bpmn"})
   @Test
   public void testDelayedActivationByIdAndIncludeInstancesFlag_shouldActivateJobDefinitionAndRetainJob() {
     Date startTime = new Date();
@@ -1719,7 +1719,7 @@ public class ProcessDefinitionSuspensionTest extends PluggableProcessEngineTest 
     assertTrue(job.isSuspended());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testWithOneAsyncServiceTask.bpmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testWithOneAsyncServiceTask.bpmn"})
   @Test
   public void testDelayedActivationByKeyAndIncludeInstancesFlag_shouldActivateJobDefinitionAndRetainJob() {
     Date startTime = new Date();
@@ -1796,7 +1796,7 @@ public class ProcessDefinitionSuspensionTest extends PluggableProcessEngineTest 
     assertTrue(job.isSuspended());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testWithOneAsyncServiceTask.bpmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testWithOneAsyncServiceTask.bpmn"})
   @Test
   public void testDelayedActivationByIdAndIncludeInstancesFlag_shouldActivateJobDefinitionAndJob() {
     Date startTime = new Date();
@@ -1873,7 +1873,7 @@ public class ProcessDefinitionSuspensionTest extends PluggableProcessEngineTest 
     assertFalse(job.isSuspended());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testWithOneAsyncServiceTask.bpmn"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testWithOneAsyncServiceTask.bpmn"})
   @Test
   public void testDelayedActivationByKeyAndIncludeInstancesFlag_shouldActivateJobDefinitionAndJob() {
     Date startTime = new Date();
@@ -1959,7 +1959,7 @@ public class ProcessDefinitionSuspensionTest extends PluggableProcessEngineTest 
     int nrOfProcessDefinitions = 5;
     for (int i=0; i<nrOfProcessDefinitions; i++) {
       repositoryService.createDeployment()
-        .addClasspathResource("org/camunda/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testWithOneAsyncServiceTask.bpmn").deploy();
+        .addClasspathResource("io/orqueio/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testWithOneAsyncServiceTask.bpmn").deploy();
 
       // a running process instance with a failed service task
       Map<String, Object> params = new HashMap<>();
@@ -2008,7 +2008,7 @@ public class ProcessDefinitionSuspensionTest extends PluggableProcessEngineTest 
     int nrOfProcessDefinitions = 5;
     for (int i=0; i<nrOfProcessDefinitions; i++) {
       repositoryService.createDeployment()
-        .addClasspathResource("org/camunda/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testWithOneAsyncServiceTask.bpmn").deploy();
+        .addClasspathResource("io/orqueio/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testWithOneAsyncServiceTask.bpmn").deploy();
 
       // a running process instance with a failed service task
       Map<String, Object> params = new HashMap<>();
@@ -2058,7 +2058,7 @@ public class ProcessDefinitionSuspensionTest extends PluggableProcessEngineTest 
     int nrOfProcessDefinitions = 5;
     for (int i=0; i<nrOfProcessDefinitions; i++) {
       repositoryService.createDeployment()
-        .addClasspathResource("org/camunda/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testWithOneAsyncServiceTask.bpmn").deploy();
+        .addClasspathResource("io/orqueio/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testWithOneAsyncServiceTask.bpmn").deploy();
 
       // a running process instance with a failed service task
       Map<String, Object> params = new HashMap<>();
@@ -2111,7 +2111,7 @@ public class ProcessDefinitionSuspensionTest extends PluggableProcessEngineTest 
     int nrOfProcessDefinitions = 5;
     for (int i=0; i<nrOfProcessDefinitions; i++) {
       repositoryService.createDeployment()
-        .addClasspathResource("org/camunda/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testWithOneAsyncServiceTask.bpmn").deploy();
+        .addClasspathResource("io/orqueio/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testWithOneAsyncServiceTask.bpmn").deploy();
 
       // a running process instance with a failed service task
       Map<String, Object> params = new HashMap<>();
@@ -2181,7 +2181,7 @@ public class ProcessDefinitionSuspensionTest extends PluggableProcessEngineTest 
     int nrOfProcessDefinitions = 5;
     for (int i=0; i<nrOfProcessDefinitions; i++) {
       repositoryService.createDeployment()
-        .addClasspathResource("org/camunda/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testWithOneAsyncServiceTask.bpmn").deploy();
+        .addClasspathResource("io/orqueio/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testWithOneAsyncServiceTask.bpmn").deploy();
 
       // a running process instance with a failed service task
       Map<String, Object> params = new HashMap<>();
@@ -2239,7 +2239,7 @@ public class ProcessDefinitionSuspensionTest extends PluggableProcessEngineTest 
   }
 
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testSuspendStartTimerOnProcessDefinitionSuspension.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testSuspendStartTimerOnProcessDefinitionSuspension.bpmn20.xml"})
   @Test
   public void testSuspendStartTimerOnProcessDefinitionSuspensionByKey() {
     Job startTimer = managementService.createJobQuery().timers().singleResult();
@@ -2256,7 +2256,7 @@ public class ProcessDefinitionSuspensionTest extends PluggableProcessEngineTest 
     assertTrue(startTimer.isSuspended());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testSuspendStartTimerOnProcessDefinitionSuspension.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testSuspendStartTimerOnProcessDefinitionSuspension.bpmn20.xml"})
   @Test
   public void testSuspendStartTimerOnProcessDefinitionSuspensionById() {
     ProcessDefinition pd = repositoryService.createProcessDefinitionQuery().singleResult();
@@ -2275,7 +2275,7 @@ public class ProcessDefinitionSuspensionTest extends PluggableProcessEngineTest 
     assertTrue(startTimer.isSuspended());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testSuspendStartTimerOnProcessDefinitionSuspension.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testSuspendStartTimerOnProcessDefinitionSuspension.bpmn20.xml"})
   @Test
   public void testActivateStartTimerOnProcessDefinitionSuspensionByKey() {
     repositoryService.suspendProcessDefinitionByKey("process");
@@ -2292,7 +2292,7 @@ public class ProcessDefinitionSuspensionTest extends PluggableProcessEngineTest 
     assertFalse(startTimer.isSuspended());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testSuspendStartTimerOnProcessDefinitionSuspension.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/repository/ProcessDefinitionSuspensionTest.testSuspendStartTimerOnProcessDefinitionSuspension.bpmn20.xml"})
   @Test
   public void testActivateStartTimerOnProcessDefinitionSuspensionById() {
     ProcessDefinition pd = repositoryService.createProcessDefinitionQuery().singleResult();
@@ -2312,7 +2312,7 @@ public class ProcessDefinitionSuspensionTest extends PluggableProcessEngineTest 
     assertFalse(startTimer.isSuspended());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   @Test
   public void testStartBeforeActivityForSuspendProcessDefinition() {
     ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery().singleResult();
@@ -2333,7 +2333,7 @@ public class ProcessDefinitionSuspensionTest extends PluggableProcessEngineTest 
     }
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   @Test
   public void testStartAfterActivityForSuspendProcessDefinition() {
     ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery().singleResult();
@@ -2354,7 +2354,7 @@ public class ProcessDefinitionSuspensionTest extends PluggableProcessEngineTest 
     }
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/repository/processOne.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/repository/processOne.bpmn20.xml"})
   @Test
   public void testSuspendAndActivateProcessDefinitionByIdUsingBuilder() {
 
@@ -2380,7 +2380,7 @@ public class ProcessDefinitionSuspensionTest extends PluggableProcessEngineTest 
     assertFalse(processDefinition.isSuspended());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/repository/processOne.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/repository/processOne.bpmn20.xml"})
   @Test
   public void testSuspendAndActivateProcessDefinitionByKeyUsingBuilder() {
 
@@ -2406,7 +2406,7 @@ public class ProcessDefinitionSuspensionTest extends PluggableProcessEngineTest 
     assertFalse(processDefinition.isSuspended());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/repository/processOne.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/repository/processOne.bpmn20.xml"})
   @Test
   public void testDelayedSuspendAndActivateProcessDefinitionByKeyUsingBuilder() {
 
@@ -2449,7 +2449,7 @@ public class ProcessDefinitionSuspensionTest extends PluggableProcessEngineTest 
     assertFalse(processDefinition.isSuspended());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   @Test
   public void testDelayedSuspendProcessDefinitionUsingBuilder() {
 
@@ -2477,7 +2477,7 @@ public class ProcessDefinitionSuspensionTest extends PluggableProcessEngineTest 
     assertTrue(processDefinition.isSuspended());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   @Test
   public void testDelayedActivateProcessDefinitionUsingBuilder() {
 
@@ -2511,7 +2511,7 @@ public class ProcessDefinitionSuspensionTest extends PluggableProcessEngineTest 
     assertFalse(processDefinition.isSuspended());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   @Test
   public void testSuspendAndActivateProcessDefinitionIncludeInstancesUsingBuilder() {
 

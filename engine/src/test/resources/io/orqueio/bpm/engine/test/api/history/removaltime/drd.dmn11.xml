@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions xmlns="http://www.omg.org/spec/DMN/20151101/dmn.xsd" xmlns:biodi="http://bpmn.io/schema/dmn/biodi/1.0" id="Definitions_0ugqhu7" name="DRD" namespace="http://camunda.org/schema/1.0/dmn" exporter="Camunda Modeler" exporterVersion="3.0.1">
+<definitions xmlns="http://www.omg.org/spec/DMN/20151101/dmn.xsd" xmlns:biodi="http://bpmn.io/schema/dmn/biodi/1.0" id="Definitions_0ugqhu7" name="DRD" namespace="http://orqueio.io/schema/1.0/dmn" exporter="Orqueio Modeler" exporterVersion="3.0.1">
   <decision id="child" name="child">
     <extensionElements>
       <biodi:bounds x="150" y="203" width="180" height="80" />

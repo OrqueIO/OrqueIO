@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -57,8 +57,8 @@ public class UpdateProcessInstancesSuspendStateTest {
 
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml",
-    "org/camunda/bpm/engine/test/api/externaltask/twoExternalTaskProcess.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/api/externaltask/twoExternalTaskProcess.bpmn20.xml"})
   public void testBatchSuspensionById() {
     // given
     ProcessInstance processInstance1 = runtimeService.startProcessInstanceByKey("oneExternalTaskProcess");
@@ -78,8 +78,8 @@ public class UpdateProcessInstancesSuspendStateTest {
 
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml",
-    "org/camunda/bpm/engine/test/api/externaltask/twoExternalTaskProcess.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/api/externaltask/twoExternalTaskProcess.bpmn20.xml"})
   public void testBatchActivatationById() {
     // given
     ProcessInstance processInstance1 = runtimeService.startProcessInstanceByKey("oneExternalTaskProcess");
@@ -102,8 +102,8 @@ public class UpdateProcessInstancesSuspendStateTest {
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml",
-    "org/camunda/bpm/engine/test/api/externaltask/twoExternalTaskProcess.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/api/externaltask/twoExternalTaskProcess.bpmn20.xml"})
   public void testBatchSuspensionByIdArray() {
     // given
     ProcessInstance processInstance1 = runtimeService.startProcessInstanceByKey("oneExternalTaskProcess");
@@ -122,8 +122,8 @@ public class UpdateProcessInstancesSuspendStateTest {
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml",
-    "org/camunda/bpm/engine/test/api/externaltask/twoExternalTaskProcess.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/api/externaltask/twoExternalTaskProcess.bpmn20.xml"})
   public void testBatchActivatationByIdArray() {
     // given
     ProcessInstance processInstance1 = runtimeService.startProcessInstanceByKey("oneExternalTaskProcess");
@@ -148,8 +148,8 @@ public class UpdateProcessInstancesSuspendStateTest {
 
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml",
-    "org/camunda/bpm/engine/test/api/externaltask/twoExternalTaskProcess.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/api/externaltask/twoExternalTaskProcess.bpmn20.xml"})
   public void testBatchSuspensionByProcessInstanceQuery() {
     // given
     ProcessInstance processInstance1 = runtimeService.startProcessInstanceByKey("oneExternalTaskProcess");
@@ -169,8 +169,8 @@ public class UpdateProcessInstancesSuspendStateTest {
 
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml",
-    "org/camunda/bpm/engine/test/api/externaltask/twoExternalTaskProcess.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/api/externaltask/twoExternalTaskProcess.bpmn20.xml"})
   public void testBatchActivatationByProcessInstanceQuery() {
     // given
     ProcessInstance processInstance1 = runtimeService.startProcessInstanceByKey("oneExternalTaskProcess");
@@ -195,8 +195,8 @@ public class UpdateProcessInstancesSuspendStateTest {
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml",
-    "org/camunda/bpm/engine/test/api/externaltask/twoExternalTaskProcess.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/api/externaltask/twoExternalTaskProcess.bpmn20.xml"})
   @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_ACTIVITY)
   public void testBatchSuspensionByHistoricProcessInstanceQuery() {
     // given
@@ -218,8 +218,8 @@ public class UpdateProcessInstancesSuspendStateTest {
 
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml",
-    "org/camunda/bpm/engine/test/api/externaltask/twoExternalTaskProcess.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/api/externaltask/twoExternalTaskProcess.bpmn20.xml"})
   @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_ACTIVITY)
   public void testBatchActivatationByHistoricProcessInstanceQuery() {
     // given
@@ -271,8 +271,8 @@ public class UpdateProcessInstancesSuspendStateTest {
 
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml",
-    "org/camunda/bpm/engine/test/api/externaltask/twoExternalTaskProcess.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/api/externaltask/twoExternalTaskProcess.bpmn20.xml"})
   public void testNullProcessInstanceListActivate() {
     // given
     ProcessInstance processInstance1 = runtimeService.startProcessInstanceByKey("oneExternalTaskProcess");
@@ -286,8 +286,8 @@ public class UpdateProcessInstancesSuspendStateTest {
   }
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml",
-    "org/camunda/bpm/engine/test/api/externaltask/twoExternalTaskProcess.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml",
+    "io/orqueio/bpm/engine/test/api/externaltask/twoExternalTaskProcess.bpmn20.xml"})
   public void testNullProcessInstanceListSuspend() {
     // given
     ProcessInstance processInstance1 = runtimeService.startProcessInstanceByKey("oneExternalTaskProcess");

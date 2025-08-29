@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -51,7 +51,7 @@ public class HistoricIncidentTest extends PluggableProcessEngineTest {
 
   private static String PROCESS_DEFINITION_KEY = "oneFailingServiceTaskProcess";
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
   @Test
   public void testPropertiesOfHistoricIncident() {
     startProcessInstance(PROCESS_DEFINITION_KEY);
@@ -88,7 +88,7 @@ public class HistoricIncidentTest extends PluggableProcessEngineTest {
     assertFalse(historicIncident.isResolved());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
   @Test
   public void testCreateSecondHistoricIncident() {
     startProcessInstance(PROCESS_DEFINITION_KEY);
@@ -109,7 +109,7 @@ public class HistoricIncidentTest extends PluggableProcessEngineTest {
     assertEquals(1, query.open().count());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
   @Test
   public void testJobLogReferenceWithMultipleHistoricIncidents() {
     startProcessInstance(PROCESS_DEFINITION_KEY);
@@ -133,7 +133,7 @@ public class HistoricIncidentTest extends PluggableProcessEngineTest {
   }
 
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
   @Test
   public void testSetHistoricIncidentToResolved() {
     startProcessInstance(PROCESS_DEFINITION_KEY);
@@ -151,8 +151,8 @@ public class HistoricIncidentTest extends PluggableProcessEngineTest {
     assertTrue(historicIncident.isResolved());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/history/HistoricIncidentQueryTest.testQueryByCauseIncidentId.bpmn20.xml",
-  "org/camunda/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/history/HistoricIncidentQueryTest.testQueryByCauseIncidentId.bpmn20.xml",
+  "io/orqueio/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
   @Test
   public void testSetHistoricIncidentToResolvedRecursive() {
     startProcessInstance("process");
@@ -171,7 +171,7 @@ public class HistoricIncidentTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
   @Test
   public void testSetHistoricIncidentToDeleted() {
     startProcessInstance(PROCESS_DEFINITION_KEY);
@@ -189,8 +189,8 @@ public class HistoricIncidentTest extends PluggableProcessEngineTest {
     assertFalse(historicIncident.isResolved());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/history/HistoricIncidentQueryTest.testQueryByCauseIncidentId.bpmn20.xml",
-  "org/camunda/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/history/HistoricIncidentQueryTest.testQueryByCauseIncidentId.bpmn20.xml",
+  "io/orqueio/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
   @Test
   public void testSetHistoricIncidentToDeletedRecursive() {
     startProcessInstance("process");
@@ -232,8 +232,8 @@ public class HistoricIncidentTest extends PluggableProcessEngineTest {
     assertEquals(jobLog.getId(), historicIncident.getHistoryConfiguration());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/history/HistoricIncidentQueryTest.testQueryByCauseIncidentId.bpmn20.xml",
-  "org/camunda/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/history/HistoricIncidentQueryTest.testQueryByCauseIncidentId.bpmn20.xml",
+  "io/orqueio/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
   @Test
   public void testCreateRecursiveHistoricIncidents() {
     startProcessInstance("process");
@@ -265,8 +265,8 @@ public class HistoricIncidentTest extends PluggableProcessEngineTest {
     assertEquals(rootCauseHistoricIncident.getId(), historicIncident.getRootCauseIncidentId());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/history/HistoricIncidentQueryTest.testQueryByCauseIncidentId.bpmn20.xml",
-  "org/camunda/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/history/HistoricIncidentQueryTest.testQueryByCauseIncidentId.bpmn20.xml",
+  "io/orqueio/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
   @Test
   public void testJobLogReferenceForRecursiveHistoricIncident() {
     startProcessInstance("process");
@@ -294,9 +294,9 @@ public class HistoricIncidentTest extends PluggableProcessEngineTest {
     assertNull(historicIncident.getHistoryConfiguration());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/history/HistoricIncidentTest.testCreateRecursiveHistoricIncidentsForNestedCallActivities.bpmn20.xml",
-      "org/camunda/bpm/engine/test/history/HistoricIncidentQueryTest.testQueryByCauseIncidentId.bpmn20.xml",
-      "org/camunda/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/history/HistoricIncidentTest.testCreateRecursiveHistoricIncidentsForNestedCallActivities.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/history/HistoricIncidentQueryTest.testQueryByCauseIncidentId.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
   @Test
   public void testCreateRecursiveHistoricIncidentsForNestedCallActivities() {
     startProcessInstance("process1");
@@ -340,7 +340,7 @@ public class HistoricIncidentTest extends PluggableProcessEngineTest {
     assertEquals(rootCauseHistoricIncident.getId(), historicIncident.getRootCauseIncidentId());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
   @Test
   public void testDoNotCreateNewIncident() {
     startProcessInstance(PROCESS_DEFINITION_KEY);
@@ -374,7 +374,7 @@ public class HistoricIncidentTest extends PluggableProcessEngineTest {
     assertTrue(tmp.isOpen());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
   @Test
   public void testJobLogReferenceWithNoNewIncidentCreatedOnFailure() {
     startProcessInstance(PROCESS_DEFINITION_KEY);
@@ -415,7 +415,7 @@ public class HistoricIncidentTest extends PluggableProcessEngineTest {
     assertEquals(logsNew.get(0).getId(), incidentNew.getHistoryConfiguration());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
   @Test
   public void testJobLogReferenceWithNewIncidentCreatedOnSetRetriesAfterFailure() {
     startProcessInstance(PROCESS_DEFINITION_KEY, false);
@@ -439,7 +439,7 @@ public class HistoricIncidentTest extends PluggableProcessEngineTest {
     assertEquals(logs.get(0).getId(), incident.getHistoryConfiguration());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
   @Test
   public void testSetRetriesByJobDefinitionIdResolveIncident() {
     startProcessInstance(PROCESS_DEFINITION_KEY);
@@ -476,7 +476,7 @@ public class HistoricIncidentTest extends PluggableProcessEngineTest {
     testRule.assertProcessEnded(pi.getId());
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
   @Test
   public void shouldPropagateSetAnnotationToHistoricIncident() {
     // given
@@ -495,7 +495,7 @@ public class HistoricIncidentTest extends PluggableProcessEngineTest {
     assertThat(historicIncidentQuery.singleResult().getAnnotation()).isEqualTo(annotation);
   }
 
-  @Deployment(resources={"org/camunda/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
+  @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneFailingServiceProcess.bpmn20.xml"})
   @Test
   public void shouldPropagateClearAnnotationToHistoricIncident() {
     // given

@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -174,7 +174,7 @@ public class ManagementServiceTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/ManagementServiceTest.testGetJobExceptionStacktrace.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/ManagementServiceTest.testGetJobExceptionStacktrace.bpmn20.xml"})
   @Test
   public void testSetJobRetries() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("exceptionInJobExecution");
@@ -196,7 +196,7 @@ public class ManagementServiceTest extends PluggableProcessEngineTest {
     assertEquals(5, timerJob.getRetries());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/ManagementServiceTest.testGetJobExceptionStacktrace.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/ManagementServiceTest.testGetJobExceptionStacktrace.bpmn20.xml"})
   @Test
   public void testSetMultipleJobRetries() {
     //given
@@ -229,7 +229,7 @@ public class ManagementServiceTest extends PluggableProcessEngineTest {
       .hasMessageContaining("You must specify exactly one of jobId, jobIds or jobDefinitionId as parameter.");
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/ManagementServiceTest.testGetJobExceptionStacktrace.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/ManagementServiceTest.testGetJobExceptionStacktrace.bpmn20.xml"})
   @Test
   public void shouldSetJobRetriesWithDuedateByJobIds() {
     // given
@@ -248,7 +248,7 @@ public class ManagementServiceTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/ManagementServiceTest.testGetJobExceptionStacktrace.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/ManagementServiceTest.testGetJobExceptionStacktrace.bpmn20.xml"})
   @Test
   public void shouldSetJobRetriesWithDuedateByJobId() {
     // given
@@ -266,7 +266,7 @@ public class ManagementServiceTest extends PluggableProcessEngineTest {
     assertThat(job.getDuedate()).isEqualToIgnoringMillis(TEST_DUE_DATE);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/ManagementServiceTest.testGetJobExceptionStacktrace.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/ManagementServiceTest.testGetJobExceptionStacktrace.bpmn20.xml"})
   @Test
   public void shouldSetJobRetriesWithNullDuedateByJobId() {
     // given
@@ -285,7 +285,7 @@ public class ManagementServiceTest extends PluggableProcessEngineTest {
     assertThat(updatedJob.getDuedate()).isNull();
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/ManagementServiceTest.testGetJobExceptionStacktrace.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/ManagementServiceTest.testGetJobExceptionStacktrace.bpmn20.xml"})
   @Test
   public void shouldSetJobRetriesWithDuedateByJobDefinitionId() {
     // given
@@ -304,7 +304,7 @@ public class ManagementServiceTest extends PluggableProcessEngineTest {
     assertThat(job.getDuedate()).isEqualToIgnoringMillis(TEST_DUE_DATE);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/ManagementServiceTest.testGetJobExceptionStacktrace.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/ManagementServiceTest.testGetJobExceptionStacktrace.bpmn20.xml"})
   @Test
   public void shouldSetJobRetriesWithNullDuedateByJobDefinitionId() {
     // given
@@ -323,7 +323,7 @@ public class ManagementServiceTest extends PluggableProcessEngineTest {
     assertThat(updatedJob.getDuedate()).isNull();
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/ManagementServiceTest.testGetJobExceptionStacktrace.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/ManagementServiceTest.testGetJobExceptionStacktrace.bpmn20.xml"})
   @Test
   public void shouldSetDueDateOnSetJobRetriesWithNullDuedateWhenEnsureDueDateNotNull() {
     // given
@@ -343,7 +343,7 @@ public class ManagementServiceTest extends PluggableProcessEngineTest {
     assertThat(job.getDuedate()).isNotNull();
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/ManagementServiceTest.testGetJobExceptionStacktrace.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/ManagementServiceTest.testGetJobExceptionStacktrace.bpmn20.xml"})
   @Test
   public void shouldSetDueDateNullOnSetJobRetriesWithNullDuedateWhenNotEnsureDueDateNotNull() {
     // given
@@ -371,7 +371,7 @@ public class ManagementServiceTest extends PluggableProcessEngineTest {
       .hasMessageContaining("The number of job retries must be a non-negative Integer, but '-1' has been provided.");
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/ManagementServiceTest.testGetJobExceptionStacktrace.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/ManagementServiceTest.testGetJobExceptionStacktrace.bpmn20.xml"})
   @Test
   public void testSetJobRetriesWithFake() {
     //given
@@ -405,7 +405,7 @@ public class ManagementServiceTest extends PluggableProcessEngineTest {
     return result;
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/ManagementServiceTest.testGetJobExceptionStacktrace.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/ManagementServiceTest.testGetJobExceptionStacktrace.bpmn20.xml"})
   @Test
   public void testSetJobRetriesNullCreatesIncident() {
 
@@ -458,7 +458,7 @@ public class ManagementServiceTest extends PluggableProcessEngineTest {
       .hasMessageContaining("You must specify exactly one of jobId, jobIds or jobDefinitionId as parameter.");
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/ManagementServiceTest.testGetJobExceptionStacktrace.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/ManagementServiceTest.testGetJobExceptionStacktrace.bpmn20.xml"})
   @Test
   public void testSetJobRetriesByJobDefinitionId() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("exceptionInJobExecution");
@@ -570,7 +570,7 @@ public class ManagementServiceTest extends PluggableProcessEngineTest {
     });
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/ManagementServiceTest.testGetJobExceptionStacktrace.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/ManagementServiceTest.testGetJobExceptionStacktrace.bpmn20.xml"})
   @Test
   public void testSetJobRetriesByDefinitionUnlocksInconsistentJobs() {
     // given a job definition
@@ -650,7 +650,7 @@ public class ManagementServiceTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/timerOnTask.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/timerOnTask.bpmn20.xml"})
   @Test
   public void testDeleteJobDeletion() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("timerOnTask");
@@ -663,7 +663,7 @@ public class ManagementServiceTest extends PluggableProcessEngineTest {
     assertNull("There should be no job now. It was deleted", timerJob);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/timerOnTask.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/timerOnTask.bpmn20.xml"})
   @Test
   public void testDeleteJobThatWasAlreadyAcquired() {
     ClockUtil.setCurrentTime(new Date());
@@ -693,7 +693,7 @@ public class ManagementServiceTest extends PluggableProcessEngineTest {
     managementService.executeJob(timerJob.getId());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/ManagementServiceTest.testGetJobExceptionStacktrace.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/ManagementServiceTest.testGetJobExceptionStacktrace.bpmn20.xml"})
   @Test
   public void testSetJobDuedate() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("exceptionInJobExecution");
@@ -722,7 +722,7 @@ public class ManagementServiceTest extends PluggableProcessEngineTest {
         (newTimerJob.getDuedate().getTime() / SECOND) * SECOND);
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/api/mgmt/ManagementServiceTest.testGetJobExceptionStacktrace.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/api/mgmt/ManagementServiceTest.testGetJobExceptionStacktrace.bpmn20.xml"})
   @Test
   public void testSetJobDuedateDateNull() {
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("exceptionInJobExecution");
@@ -776,7 +776,7 @@ public class ManagementServiceTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/bpmn/job/oneTaskProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/bpmn/job/oneTaskProcess.bpmn20.xml")
   @Test
   public void testSetJobDuedateNonTimerJob(){
     runtimeService.startProcessInstanceByKey("oneTaskProcess");
@@ -838,7 +838,7 @@ public class ManagementServiceTest extends PluggableProcessEngineTest {
     assertEquals(processEngineConfiguration.getHistoryLevel().getId(), historyLevel);
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/mgmt/asyncTaskProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/mgmt/asyncTaskProcess.bpmn20.xml")
   @Test
   public void testSetJobPriority() {
     // given
@@ -878,7 +878,7 @@ public class ManagementServiceTest extends PluggableProcessEngineTest {
     }
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/mgmt/asyncTaskProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/mgmt/asyncTaskProcess.bpmn20.xml")
   @Test
   public void testSetJobPriorityToExtremeValues() {
     runtimeService

@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -244,38 +244,38 @@ public class ProcessModels {
 
   public static final BpmnModelInstance SCOPE_TASK_PROCESS = modify(ONE_TASK_PROCESS)
     .activityBuilder(USER_TASK_ID)
-    .camundaInputParameter("foo", "bar")
+    .orqueioInputParameter("foo", "bar")
     .done();
 
   public static final BpmnModelInstance SCOPE_TASK_SUBPROCESS_PROCESS = modify(SUBPROCESS_PROCESS)
     .activityBuilder(USER_TASK_ID)
-    .camundaInputParameter("foo", "bar")
+    .orqueioInputParameter("foo", "bar")
     .done();
 
   public static final BpmnModelInstance PARALLEL_SCOPE_TASKS = modify(PARALLEL_GATEWAY_PROCESS)
     .activityBuilder("userTask1")
-    .camundaInputParameter("foo", "bar")
+    .orqueioInputParameter("foo", "bar")
     .moveToActivity("userTask2")
-    .camundaInputParameter("foo", "bar")
+    .orqueioInputParameter("foo", "bar")
     .done();
 
   public static final BpmnModelInstance PARALLEL_SCOPE_TASKS_SUB_PROCESS = modify(PARALLEL_GATEWAY_SUBPROCESS_PROCESS)
     .activityBuilder("userTask1")
-    .camundaInputParameter("foo", "bar")
+    .orqueioInputParameter("foo", "bar")
     .moveToActivity("userTask2")
-    .camundaInputParameter("foo", "bar")
+    .orqueioInputParameter("foo", "bar")
     .done();
 
   public static final BpmnModelInstance UNSUPPORTED_ACTIVITIES = Bpmn.createExecutableProcess(PROCESS_KEY)
     .startEvent("startEvent")
     .businessRuleTask("decisionTask")
-      .camundaDecisionRef("testDecision")
+      .orqueioDecisionRef("testDecision")
     .intermediateThrowEvent("throwEvent")
       .message("Message")
     .serviceTask("serviceTask")
-      .camundaExpression("${true}")
+      .orqueioExpression("${true}")
     .sendTask("sendTask")
-      .camundaExpression("${true}")
+      .orqueioExpression("${true}")
     .scriptTask("scriptTask")
       .scriptText("foo")
     .endEvent("endEvent")

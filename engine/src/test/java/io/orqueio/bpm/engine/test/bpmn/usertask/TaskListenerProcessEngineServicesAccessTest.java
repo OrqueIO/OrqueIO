@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -22,7 +22,7 @@ import io.orqueio.bpm.engine.test.bpmn.common.AbstractProcessEngineServicesAcces
 import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
 import io.orqueio.bpm.model.bpmn.instance.Task;
 import io.orqueio.bpm.model.bpmn.instance.UserTask;
-import io.orqueio.bpm.model.bpmn.instance.camunda.CamundaTaskListener;
+import io.orqueio.bpm.model.bpmn.instance.orqueio.OrqueioTaskListener;
 
 /**
  * @author Daniel Meyer
@@ -49,9 +49,9 @@ public class TaskListenerProcessEngineServicesAccessTest extends AbstractProcess
   protected Task createModelAccessTask(BpmnModelInstance modelInstance, Class<?> delegateClass) {
     UserTask task = modelInstance.newInstance(UserTask.class);
     task.setId("userTask");
-    CamundaTaskListener executionListener = modelInstance.newInstance(CamundaTaskListener.class);
-    executionListener.setCamundaEvent(TaskListener.EVENTNAME_CREATE);
-    executionListener.setCamundaClass(delegateClass.getName());
+    OrqueioTaskListener executionListener = modelInstance.newInstance(OrqueioTaskListener.class);
+    executionListener.setOrqueioEvent(TaskListener.EVENTNAME_CREATE);
+    executionListener.setOrqueioClass(delegateClass.getName());
     task.builder().addExtensionElement(executionListener);
     return task;
   }

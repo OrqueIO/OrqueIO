@@ -6,7 +6,7 @@
 
   <bean id="processEngineConfiguration" class="io.orqueio.bpm.engine.impl.cfg.StandaloneInMemProcessEngineConfiguration">
     
-    <property name="jdbcUrl" value="jdbc:h2:mem:camunda-DmnEngineConfigurationTest" />
+    <property name="jdbcUrl" value="jdbc:h2:mem:orqueio-DmnEngineConfigurationTest" />
 
     <!-- configure the DMN engine  -->
     <property name="dmnEngineConfiguration">

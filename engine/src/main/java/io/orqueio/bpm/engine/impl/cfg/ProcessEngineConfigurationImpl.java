@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -170,11 +170,11 @@ import io.orqueio.bpm.engine.impl.event.EventHandlerImpl;
 import io.orqueio.bpm.engine.impl.event.EventType;
 import io.orqueio.bpm.engine.impl.event.SignalEventHandler;
 import io.orqueio.bpm.engine.impl.externaltask.DefaultExternalTaskPriorityProvider;
-import io.orqueio.bpm.engine.impl.form.deployer.CamundaFormDefinitionDeployer;
+import io.orqueio.bpm.engine.impl.form.deployer.OrqueioFormDefinitionDeployer;
 import io.orqueio.bpm.engine.impl.form.engine.FormEngine;
 import io.orqueio.bpm.engine.impl.form.engine.HtmlFormEngine;
 import io.orqueio.bpm.engine.impl.form.engine.JuelFormEngine;
-import io.orqueio.bpm.engine.impl.form.entity.CamundaFormDefinitionManager;
+import io.orqueio.bpm.engine.impl.form.entity.OrqueioFormDefinitionManager;
 import io.orqueio.bpm.engine.impl.form.type.AbstractFormFieldType;
 import io.orqueio.bpm.engine.impl.form.type.BooleanFormType;
 import io.orqueio.bpm.engine.impl.form.type.DateFormType;
@@ -338,7 +338,7 @@ import io.orqueio.bpm.engine.impl.runtime.DefaultCorrelationHandler;
 import io.orqueio.bpm.engine.impl.runtime.DefaultDeserializationTypeValidator;
 import io.orqueio.bpm.engine.impl.scripting.ScriptFactory;
 import io.orqueio.bpm.engine.impl.scripting.engine.BeansResolverFactory;
-import io.orqueio.bpm.engine.impl.scripting.engine.CamundaScriptEngineManager;
+import io.orqueio.bpm.engine.impl.scripting.engine.OrqueioScriptEngineManager;
 import io.orqueio.bpm.engine.impl.scripting.engine.DefaultScriptEngineResolver;
 import io.orqueio.bpm.engine.impl.scripting.engine.ResolverFactory;
 import io.orqueio.bpm.engine.impl.scripting.engine.ScriptBindingsFactory;
@@ -402,7 +402,7 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
 
   public static final String DEFAULT_WS_SYNC_FACTORY = "io.orqueio.bpm.engine.impl.webservice.CxfWebServiceClientFactory";
 
-  public static final String DEFAULT_MYBATIS_MAPPING_FILE = "org/camunda/bpm/engine/impl/mapping/mappings.xml";
+  public static final String DEFAULT_MYBATIS_MAPPING_FILE = "io/orqueio/bpm/engine/impl/mapping/mappings.xml";
 
   public static final int DEFAULT_FAILED_JOB_LISTENER_MAX_RETRIES = 3;
 
@@ -410,7 +410,7 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
 
   protected static final Map<Object, Object> DEFAULT_BEANS_MAP = new HashMap<>();
 
-  protected static final String PRODUCT_NAME = "Camunda BPM Runtime";
+  protected static final String PRODUCT_NAME = "Orqueio BPM Runtime";
 
   public static SqlSessionFactory cachedSqlSessionFactory;
 
@@ -577,8 +577,8 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
   protected FormValidators formValidators;
   protected Map<String, Class<? extends FormFieldValidator>> customFormFieldValidators;
 
-  /** don't throw parsing exceptions for Camunda Forms if set to true*/
-  protected boolean disableStrictCamundaFormParsing = false;
+  /** don't throw parsing exceptions for Orqueio Forms if set to true*/
+  protected boolean disableStrictOrqueioFormParsing = false;
 
   protected List<TypedValueSerializer> customPreVariableSerializers;
   protected List<TypedValueSerializer> customPostVariableSerializers;
@@ -1989,7 +1989,7 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
       addSessionFactory(new GenericManagerFactory(DecisionRequirementsDefinitionManager.class));
       addSessionFactory(new GenericManagerFactory(HistoricDecisionInstanceManager.class));
 
-      addSessionFactory(new GenericManagerFactory(CamundaFormDefinitionManager.class));
+      addSessionFactory(new GenericManagerFactory(OrqueioFormDefinitionManager.class));
 
       addSessionFactory(new GenericManagerFactory(OptimizeManager.class));
 
@@ -2157,7 +2157,7 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
     BpmnDeployer bpmnDeployer = getBpmnDeployer();
     defaultDeployers.add(bpmnDeployer);
 
-    defaultDeployers.add(getCamundaFormDeployer());
+    defaultDeployers.add(getOrqueioFormDeployer());
 
     if (isCmmnEnabled()) {
       CmmnDeployer cmmnDeployer = getCmmnDeployer();
@@ -2210,8 +2210,8 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
     return defaultListeners;
   }
 
-  protected CamundaFormDefinitionDeployer getCamundaFormDeployer() {
-    CamundaFormDefinitionDeployer deployer = new CamundaFormDefinitionDeployer();
+  protected OrqueioFormDefinitionDeployer getOrqueioFormDeployer() {
+    OrqueioFormDefinitionDeployer deployer = new OrqueioFormDefinitionDeployer();
     deployer.setIdGenerator(idGenerator);
     return deployer;
   }
@@ -2611,7 +2611,7 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
       resolverFactories.add(new BeansResolverFactory());
     }
     if (scriptEngineResolver == null) {
-      scriptEngineResolver = new DefaultScriptEngineResolver(new CamundaScriptEngineManager());
+      scriptEngineResolver = new DefaultScriptEngineResolver(new OrqueioScriptEngineManager());
     }
     if (scriptingEngines == null) {
       scriptingEngines = new ScriptingEngines(new ScriptBindingsFactory(resolverFactories), scriptEngineResolver);
@@ -2876,8 +2876,8 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
     if (adminGroups == null) {
       adminGroups = new ArrayList<>();
     }
-    if (adminGroups.isEmpty() || !(adminGroups.contains(Groups.CAMUNDA_ADMIN))) {
-      adminGroups.add(Groups.CAMUNDA_ADMIN);
+    if (adminGroups.isEmpty() || !(adminGroups.contains(Groups.ORQUEIO_ADMIN))) {
+      adminGroups.add(Groups.ORQUEIO_ADMIN);
     }
   }
 
@@ -2901,9 +2901,9 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
     InternalsImpl internals = new InternalsImpl(database, diagnosticsRegistry.getApplicationServer(), diagnosticsRegistry.getLicenseKey(), jdk);
     internals.setDataCollectionStartDate(ClockUtil.getCurrentTime());
 
-    String camundaIntegration = diagnosticsRegistry.getCamundaIntegration();
-    if (camundaIntegration != null && !camundaIntegration.isEmpty()) {
-      internals.getCamundaIntegration().add(camundaIntegration);
+    String orqueioIntegration = diagnosticsRegistry.getOrqueioIntegration();
+    if (orqueioIntegration != null && !orqueioIntegration.isEmpty()) {
+      internals.getOrqueioIntegration().add(orqueioIntegration);
     }
 
     ProcessEngineDetails engineInfo = ParseUtil
@@ -4118,13 +4118,13 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
     return formValidators;
   }
 
-  public ProcessEngineConfigurationImpl setDisableStrictCamundaFormParsing(boolean disableStrictCamundaFormParsing) {
-    this.disableStrictCamundaFormParsing = disableStrictCamundaFormParsing;
+  public ProcessEngineConfigurationImpl setDisableStrictOrqueioFormParsing(boolean disableStrictOrqueioFormParsing) {
+    this.disableStrictOrqueioFormParsing = disableStrictOrqueioFormParsing;
     return this;
   }
 
-  public boolean isDisableStrictCamundaFormParsing() {
-    return disableStrictCamundaFormParsing;
+  public boolean isDisableStrictOrqueioFormParsing() {
+    return disableStrictOrqueioFormParsing;
   }
 
   public boolean isExecutionTreePrefetchEnabled() {

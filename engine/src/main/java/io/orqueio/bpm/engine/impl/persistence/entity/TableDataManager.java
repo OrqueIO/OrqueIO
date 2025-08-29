@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -101,7 +101,7 @@ public class TableDataManager extends AbstractManager {
     persistentObjectToTableNameMap.put(MeterLogEntity.class, "ACT_RU_METER_LOG");
     persistentObjectToTableNameMap.put(TaskMeterLogEntity.class, "ACT_RU_TASK_METER_LOG");
 
-    persistentObjectToTableNameMap.put(CamundaFormDefinitionEntity.class, "ACT_RE_CAMFORMDEF");
+    persistentObjectToTableNameMap.put(OrqueioFormDefinitionEntity.class, "ACT_RE_CAMFORMDEF");
     // repository
     persistentObjectToTableNameMap.put(DeploymentEntity.class, "ACT_RE_DEPLOYMENT");
     persistentObjectToTableNameMap.put(ProcessDefinitionEntity.class, "ACT_RE_PROCDEF");

@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -279,7 +279,7 @@ public class StartTimerEventTest extends PluggableProcessEngineTest {
     assertEquals(0, jobQuery.count());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/bpmn/event/timer/StartTimerEventTest.testRecalculateExpressionStartTimerEvent.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/bpmn/event/timer/StartTimerEventTest.testRecalculateExpressionStartTimerEvent.bpmn20.xml")
   @Test
   public void testRecalculateUnchangedExpressionStartTimerEventCreationDateBased() throws Exception {
     // given
@@ -684,8 +684,8 @@ public class StartTimerEventTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/bpmn/event/timer/simpleProcessWithCallActivity.bpmn20.xml",
-      "org/camunda/bpm/engine/test/bpmn/event/timer/StartTimerEventTest.testStartTimerEventWithTwoEventSubProcesses.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/bpmn/event/timer/simpleProcessWithCallActivity.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/bpmn/event/timer/StartTimerEventTest.testStartTimerEventWithTwoEventSubProcesses.bpmn20.xml" })
   @Test
   public void testStartTimerEventSubProcessCalledFromCallActivity() {
     Map<String, Object> variables = new HashMap<String, Object>();
@@ -724,8 +724,8 @@ public class StartTimerEventTest extends PluggableProcessEngineTest {
 
   }
 
-  @Deployment(resources = { "org/camunda/bpm/engine/test/bpmn/event/timer/simpleProcessWithCallActivity.bpmn20.xml",
-      "org/camunda/bpm/engine/test/bpmn/event/timer/StartTimerEventTest.testNonInterruptingStartTimerEventWithTwoEventSubProcesses.bpmn20.xml" })
+  @Deployment(resources = { "io/orqueio/bpm/engine/test/bpmn/event/timer/simpleProcessWithCallActivity.bpmn20.xml",
+      "io/orqueio/bpm/engine/test/bpmn/event/timer/StartTimerEventTest.testNonInterruptingStartTimerEventWithTwoEventSubProcesses.bpmn20.xml" })
   @Test
   public void testNonInterruptingStartTimerEventSubProcessesCalledFromCallActivity() {
     DummyServiceTask.wasExecuted = false;

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="1.8.2">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:orqueio="http://orqueio.io/schema/1.0/bpmn" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Orqueio Modeler" exporterVersion="1.8.2">
   <bpmn:process id="asyncBoundaryEventProcess" isExecutable="true">
     <bpmn:startEvent id="StartEvent_1" name="Start">
       <bpmn:outgoing>SequenceFlow_1uai86c</bpmn:outgoing>
@@ -17,7 +17,7 @@
       <bpmn:incoming>SequenceFlow_16rgc71</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="SequenceFlow_16rgc71" sourceRef="conditionalBoundaryEvent1" targetRef="EndEvent_0oxxgej" />
-    <bpmn:boundaryEvent id="conditionalBoundaryEvent1" camunda:asyncBefore="true" camunda:asyncAfter="true" attachedToRef="Task_1dnwf0r">
+    <bpmn:boundaryEvent id="conditionalBoundaryEvent1" orqueio:asyncBefore="true" orqueio:asyncAfter="true" attachedToRef="Task_1dnwf0r">
       <bpmn:outgoing>SequenceFlow_16rgc71</bpmn:outgoing>
       <bpmn:conditionalEventDefinition>
         <bpmn:condition xsi:type="bpmn:tFormalExpression">${true}</bpmn:condition>
@@ -34,7 +34,7 @@
       </bpmn:conditionalEventDefinition>
     </bpmn:boundaryEvent>
     <bpmn:sequenceFlow id="SequenceFlow_1erk7jr" sourceRef="Task_149l11t" targetRef="EndEvent_1auepvs" />
-    <bpmn:serviceTask id="Task_149l11t" name="ServTask" camunda:class="foo">
+    <bpmn:serviceTask id="Task_149l11t" name="ServTask" orqueio:class="foo">
       <bpmn:incoming>SequenceFlow_0zosj21</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1erk7jr</bpmn:outgoing>
     </bpmn:serviceTask>

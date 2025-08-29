@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -61,7 +61,7 @@ import org.junit.rules.RuleChain;
  */
 public class BoundaryTimerNonInterruptingEventTest {
 
-  protected static final String TIMER_NON_INTERRUPTING_EVENT = "org/camunda/bpm/engine/test/bpmn/event/timer/BoundaryTimerNonInterruptingEventTest.shouldReevaluateTimerCycleWhenDue.bpmn20.xml";
+  protected static final String TIMER_NON_INTERRUPTING_EVENT = "io/orqueio/bpm/engine/test/bpmn/event/timer/BoundaryTimerNonInterruptingEventTest.shouldReevaluateTimerCycleWhenDue.bpmn20.xml";
 
   protected static final long ONE_HOUR = TimeUnit.HOURS.toMillis(1L);
   protected static final long TWO_HOURS = TimeUnit.HOURS.toMillis(2L);
@@ -302,7 +302,7 @@ public class BoundaryTimerNonInterruptingEventTest {
   }
 
   // Difference with previous test: now the join will be reached first
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/event/timer/BoundaryTimerNonInterruptingEventTest.testTimerOnConcurrentTasks.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/bpmn/event/timer/BoundaryTimerNonInterruptingEventTest.testTimerOnConcurrentTasks.bpmn20.xml"})
   @Test
   public void testTimerOnConcurrentTasks2() {
     String procId = runtimeService.startProcessInstanceByKey("nonInterruptingOnConcurrentTasks").getId();
@@ -436,7 +436,7 @@ public class BoundaryTimerNonInterruptingEventTest {
     testHelper.assertProcessEnded(procId);
   }
 
-  @Deployment(resources="org/camunda/bpm/engine/test/bpmn/event/timer/BoundaryTimerNonInterruptingEventTest.testTimerOnConcurrentSubprocess.bpmn20.xml")
+  @Deployment(resources="io/orqueio/bpm/engine/test/bpmn/event/timer/BoundaryTimerNonInterruptingEventTest.testTimerOnConcurrentSubprocess.bpmn20.xml")
   @Test
   public void testTimerOnConcurrentSubprocess2() {
     String procId = runtimeService.startProcessInstanceByKey("testTimerOnConcurrentSubprocess").getId();
@@ -564,7 +564,7 @@ public class BoundaryTimerNonInterruptingEventTest {
     testHelper.assertProcessEnded(pi.getId());
   }
 
-  @Deployment(resources = {"org/camunda/bpm/engine/test/bpmn/event/timer/BoundaryTimerNonInterruptingEventTest.testTimerWithCycle.bpmn20.xml"})
+  @Deployment(resources = {"io/orqueio/bpm/engine/test/bpmn/event/timer/BoundaryTimerNonInterruptingEventTest.testTimerWithCycle.bpmn20.xml"})
   @Test
   public void testTimeCycle() {
     // given
@@ -704,7 +704,7 @@ public class BoundaryTimerNonInterruptingEventTest {
 
     BpmnModelInstance instance = Bpmn.createExecutableProcess("timerProcess")
                                      .startEvent()
-                                       .camundaAsyncBefore()
+                                       .orqueioAsyncBefore()
                                      .userTask("user-task-with-timer")
                                        .boundaryEvent("non-interuption-timer")
                                          .cancelActivity(false)
@@ -740,9 +740,9 @@ public class BoundaryTimerNonInterruptingEventTest {
 
     BpmnModelInstance instance = Bpmn.createExecutableProcess("timoutProcess")
                                      .startEvent()
-                                       .camundaAsyncBefore()
+                                       .orqueioAsyncBefore()
                                      .userTask("user-task-with-timer")
-                                       .camundaTaskListenerExpressionTimeoutWithCycle(
+                                       .orqueioTaskListenerExpressionTimeoutWithCycle(
                                            TaskListener.EVENTNAME_TIMEOUT,
                                            "${true}",
                                            "R/PT3S")

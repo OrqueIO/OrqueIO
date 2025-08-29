@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -58,7 +58,7 @@ public class FallbackSerializerFactoryTest {
     // given
     // that the process engine is configured with a fallback serializer factory
      ProcessEngineConfigurationImpl engineConfiguration = new StandaloneInMemProcessEngineConfiguration()
-       .setJdbcUrl("jdbc:h2:mem:camunda-forceclose")
+       .setJdbcUrl("jdbc:h2:mem:orqueio-forceclose")
        .setProcessEngineName("engine-forceclose");
 
      engineConfiguration.setFallbackSerializerFactory(new ExampleSerializerFactory());
@@ -86,7 +86,7 @@ public class FallbackSerializerFactoryTest {
     // that the process engine is configured with a serializer for a certain format
     // and a fallback serializer factory for the same format
      ProcessEngineConfigurationImpl engineConfiguration = new StandaloneInMemProcessEngineConfiguration()
-       .setJdbcUrl("jdbc:h2:mem:camunda-forceclose")
+       .setJdbcUrl("jdbc:h2:mem:orqueio-forceclose")
        .setProcessEngineName("engine-forceclose");
 
      engineConfiguration.setCustomPreVariableSerializers(Arrays.<TypedValueSerializer>asList(new ExampleConstantSerializer()));
@@ -159,7 +159,7 @@ public class FallbackSerializerFactoryTest {
   protected void deployOneTaskProcess(ProcessEngine engine) {
     deployment = engine.getRepositoryService()
         .createDeployment()
-        .addClasspathResource("org/camunda/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
+        .addClasspathResource("io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
         .deploy()
         .getId();
   }
