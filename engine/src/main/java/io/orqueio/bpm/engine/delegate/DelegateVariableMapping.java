@@ -21,7 +21,7 @@ import io.orqueio.bpm.engine.variable.VariableMap;
 /**
  * Represents a delegated mapping of input and output variables.
  *
- * @author Christopher Zell <christopher.zell@camunda.com>
+ * @author Christopher Zell <christopher.zell@orqueio.com>
  */
 public interface DelegateVariableMapping {
 

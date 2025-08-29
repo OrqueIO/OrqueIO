@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -34,7 +34,7 @@ import io.orqueio.bpm.engine.cdi.BusinessProcess;
 import io.orqueio.bpm.engine.repository.ProcessDefinition;
 
 @ConversationScoped
-@Named("camundaTaskForm")
+@Named("orqueioTaskForm")
 public class TaskForm implements Serializable {
 
   private static Logger log = Logger.getLogger(TaskForm.class.getName());
@@ -71,7 +71,7 @@ public class TaskForm implements Serializable {
         return;
       }
       // return it anyway but log an info message
-      log.log(Level.INFO, "Called startTask method without proper parameter (taskId='"+taskId+"'; callbackUrl='"+callbackUrl+"') even if it seems we are not called by an AJAX Postback. Are you using the camundaTaskForm bean correctly?");
+      log.log(Level.INFO, "Called startTask method without proper parameter (taskId='"+taskId+"'; callbackUrl='"+callbackUrl+"') even if it seems we are not called by an AJAX Postback. Are you using the orqueioTaskForm bean correctly?");
       return;
     }
     // Note that we always run in a conversation
@@ -97,7 +97,7 @@ public class TaskForm implements Serializable {
         return;
       }
       // return it anyway but log an info message
-      log.log(Level.INFO, "Called startTask method without proper parameter (taskId='"+taskId+"'; callbackUrl='"+callbackUrl+"') even if it seems we are not called by an AJAX Postback. Are you using the camundaTaskForm bean correctly?");
+      log.log(Level.INFO, "Called startTask method without proper parameter (taskId='"+taskId+"'; callbackUrl='"+callbackUrl+"') even if it seems we are not called by an AJAX Postback. Are you using the orqueioTaskForm bean correctly?");
       return;
     }
     // Note that we always run in a conversation

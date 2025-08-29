@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -36,7 +36,7 @@ import org.junit.Test;
 /**
  * Represents a test case where the sortControlSupport property is enabled.
  *
- * @author Christopher Zell <christopher.zell@camunda.com>
+ * @author Christopher Zell <christopher.zell@orqueio.com>
  */
 public class LdapEnableSortControlSupportTest {
 
@@ -44,7 +44,7 @@ public class LdapEnableSortControlSupportTest {
   public static LdapTestEnvironmentRule ldapRule = new LdapTestEnvironmentRule();
 
   @Rule
-  public ProcessEngineRule engineRule = new ProcessEngineRule("camunda.ldap.enable.sort.control.support.cfg.xml");
+  public ProcessEngineRule engineRule = new ProcessEngineRule("orqueio.ldap.enable.sort.control.support.cfg.xml");
 
   IdentityService identityService;
   LdapTestEnvironment ldapTestEnvironment;

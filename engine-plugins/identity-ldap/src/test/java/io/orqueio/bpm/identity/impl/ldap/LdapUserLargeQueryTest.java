@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -37,7 +37,7 @@ public class LdapUserLargeQueryTest {
   @ClassRule
   public static LdapTestEnvironmentRule ldapRule = new LdapTestEnvironmentRule().additionalNumberOfUsers(80).additionnalNumberOfGroups(5).additionalNumberOfRoles(5); // Attention, stay under 80, there is a limitation in the query on 100
   @Rule
-  public ProcessEngineRule engineRule = new ProcessEngineRule("camunda.ldap.pages.cfg.xml"); // pageSize = 3 in this configuration
+  public ProcessEngineRule engineRule = new ProcessEngineRule("orqueio.ldap.pages.cfg.xml"); // pageSize = 3 in this configuration
 
   ProcessEngineConfiguration processEngineConfiguration;
   IdentityService identityService;

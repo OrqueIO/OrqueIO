@@ -20,7 +20,7 @@
     <serviceTask id="Send_rejection_notification_via_email__3" name="Send rejection notification via email" orqueio:type="mail">
       <extensionElements>
         <orqueio:field name="to" expression="${email}"></orqueio:field>
-        <orqueio:field name="from" expression="orqueio@camunda.com"></orqueio:field>
+        <orqueio:field name="from" expression="orqueio@orqueio.com"></orqueio:field>
         <orqueio:field name="subject" expression="Your tweet has been rejected"></orqueio:field>
         <orqueio:field name="html">
           <orqueio:expression><![CDATA[<html>

@@ -44,7 +44,7 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 
 /**
- * @author Christopher Zell <christopher.zell@camunda.com>
+ * @author Christopher Zell <christopher.zell@orqueio.com>
  */
 public class MigrationWithoutTriggerConditionTest {
 

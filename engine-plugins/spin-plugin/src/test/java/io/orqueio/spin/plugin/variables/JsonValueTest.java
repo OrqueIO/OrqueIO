@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -50,7 +50,7 @@ import org.skyscreamer.jsonassert.JSONAssert;
  */
 public class JsonValueTest extends PluggableProcessEngineTestCase {
 
-  protected static final String ONE_TASK_PROCESS = "org/camunda/spin/plugin/oneTaskProcess.bpmn20.xml";
+  protected static final String ONE_TASK_PROCESS = "io/orqueio/spin/plugin/oneTaskProcess.bpmn20.xml";
   protected static final String JSON_FORMAT_NAME = DataFormats.JSON_DATAFORMAT_NAME;
 
   protected static final String ONE_TASK_PROCESS_KEY = "oneTaskProcess";
@@ -190,7 +190,7 @@ public class JsonValueTest extends PluggableProcessEngineTestCase {
     }
   }
 
-  @Deployment(resources = "org/camunda/spin/plugin/jsonConditionProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/spin/plugin/jsonConditionProcess.bpmn20.xml")
   public void testJsonValueInCondition() {
     // given
     String jsonString = "{\"age\": 22 }";
@@ -248,14 +248,14 @@ public class JsonValueTest extends PluggableProcessEngineTestCase {
   }
 
   /**
-   * See https://app.camunda.com/jira/browse/CAM-9932
+   * See https://app.orqueio.com/jira/browse/CAM-9932
    */
   public void testTransientJsonSpinVariables() {
     // given
     BpmnModelInstance modelInstance = Bpmn.createExecutableProcess("aProcess")
       .startEvent()
       .serviceTask()
-        .camundaClass(JsonDelegate.class)
+        .orqueioClass(JsonDelegate.class)
       .userTask()
       .endEvent()
       .done();

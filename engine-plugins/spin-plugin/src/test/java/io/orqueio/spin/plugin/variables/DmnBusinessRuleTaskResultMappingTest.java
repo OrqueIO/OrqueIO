@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -30,14 +30,14 @@ import io.orqueio.bpm.engine.variable.Variables;
  */
 public class DmnBusinessRuleTaskResultMappingTest extends ResourceProcessEngineTestCase {
 
-  protected static final String TEST_DECISION = "org/camunda/spin/plugin/DmnBusinessRuleTaskResultMappingTest.dmn11.xml";
-  protected static final String CUSTOM_MAPPING_BPMN = "org/camunda/spin/plugin/DmnBusinessRuleTaskResultMappingTest.testCustomOutputMapping.bpmn20.xml";
-  protected static final String SINGLE_ENTRY_BPMN = "org/camunda/spin/plugin/DmnBusinessRuleTaskResultMappingTest.testSingleEntry.bpmn20.xml";
-  protected static final String DEFAULT_MAPPING_BPMN = "org/camunda/spin/plugin/DmnBusinessRuleTaskResultMappingTest.testDefaultMapping.bpmn20.xml";
-  protected static final String STORE_DECISION_RESULT_BPMN = "org/camunda/spin/plugin/DmnBusinessRuleTaskResultMappingTest.testStoreDecisionResult.bpmn20.xml";
+  protected static final String TEST_DECISION = "io/orqueio/spin/plugin/DmnBusinessRuleTaskResultMappingTest.dmn11.xml";
+  protected static final String CUSTOM_MAPPING_BPMN = "io/orqueio/spin/plugin/DmnBusinessRuleTaskResultMappingTest.testCustomOutputMapping.bpmn20.xml";
+  protected static final String SINGLE_ENTRY_BPMN = "io/orqueio/spin/plugin/DmnBusinessRuleTaskResultMappingTest.testSingleEntry.bpmn20.xml";
+  protected static final String DEFAULT_MAPPING_BPMN = "io/orqueio/spin/plugin/DmnBusinessRuleTaskResultMappingTest.testDefaultMapping.bpmn20.xml";
+  protected static final String STORE_DECISION_RESULT_BPMN = "io/orqueio/spin/plugin/DmnBusinessRuleTaskResultMappingTest.testStoreDecisionResult.bpmn20.xml";
 
   public DmnBusinessRuleTaskResultMappingTest() {
-    super("org/camunda/spin/plugin/json.camunda.cfg.xml");
+    super("io/orqueio/spin/plugin/json.orqueio.cfg.xml");
   }
 
   @Deployment(resources = {STORE_DECISION_RESULT_BPMN, TEST_DECISION })

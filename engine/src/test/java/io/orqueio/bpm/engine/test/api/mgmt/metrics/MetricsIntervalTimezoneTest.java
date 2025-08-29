@@ -33,7 +33,7 @@ import org.junit.Test;
  *
  * This was a problem before the column MILLISECONDS_ was added.
  *
- * @author Christopher Zell <christopher.zell@camunda.com>
+ * @author Christopher Zell <christopher.zell@orqueio.com>
  */
 public class MetricsIntervalTimezoneTest extends AbstractMetricsIntervalTest {
 

@@ -515,7 +515,7 @@ public class SubProcessTest extends PluggableProcessEngineTest {
   }
 
   @Deployment
-  // SEE https://app.camunda.com/jira/browse/CAM-2169
+  // SEE https://app.orqueio.com/jira/browse/CAM-2169
   @Test
   public void testActivityInstanceTreeNestedCmd() {
     GetActInstanceDelegate.activityInstance = null;
@@ -534,7 +534,7 @@ public class SubProcessTest extends PluggableProcessEngineTest {
   }
 
   @Deployment
-  // SEE https://app.camunda.com/jira/browse/CAM-2169
+  // SEE https://app.orqueio.com/jira/browse/CAM-2169
   @Test
   public void testActivityInstanceTreeNestedCmdAfterTx() {
     GetActInstanceDelegate.activityInstance = null;

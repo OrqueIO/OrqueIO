@@ -21,7 +21,7 @@ import io.orqueio.bpm.engine.variable.VariableMap;
 /**
  * Provides access to the snapshot of latest variables of an execution.
  *
- * @author Christopher Zell <christopher.zell@camunda.com>
+ * @author Christopher Zell <christopher.zell@orqueio.com>
  */
 public class ExecutionVariableSnapshotObserver implements ExecutionObserver {
 

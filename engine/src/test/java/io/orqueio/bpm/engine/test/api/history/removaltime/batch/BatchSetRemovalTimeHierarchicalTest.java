@@ -1115,7 +1115,7 @@ public class BatchSetRemovalTimeHierarchicalTest {
       .getId();
 
     Attachment attachment = taskService.createAttachment(null, taskId,
-      null, null, null, "http://camunda.com");
+      null, null, null, "http://orqueio.com");
 
     // assume
     assertThat(attachment.getRemovalTime()).isNull();
@@ -1145,7 +1145,7 @@ public class BatchSetRemovalTimeHierarchicalTest {
     String processInstanceId = testRule.process().call().userTask().deploy().start();
 
     Attachment attachment = taskService.createAttachment(null, null,
-      processInstanceId, null, null, "http://camunda.com");
+      processInstanceId, null, null, "http://orqueio.com");
 
     // assume
     assertThat(attachment.getRemovalTime()).isNull();

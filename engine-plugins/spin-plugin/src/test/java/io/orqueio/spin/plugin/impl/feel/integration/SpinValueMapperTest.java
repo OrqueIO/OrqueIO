@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -16,7 +16,7 @@
  */
 package io.orqueio.spin.plugin.impl.feel.integration;
 
-import static camundajar.impl.scala.jdk.CollectionConverters.ListHasAsScala;
+import static orqueiojar.impl.scala.jdk.CollectionConverters.ListHasAsScala;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Arrays;
@@ -29,13 +29,13 @@ import io.orqueio.bpm.dmn.feel.impl.scala.ScalaFeelLogger;
 import io.orqueio.bpm.dmn.feel.impl.scala.spin.SpinValueMapperFactory;
 import io.orqueio.commons.testing.ProcessEngineLoggingRule;
 import io.orqueio.commons.testing.WatchLogger;
-import org.camunda.feel.impl.DefaultValueMapper;
-import org.camunda.feel.syntaxtree.Val;
-import org.camunda.feel.syntaxtree.ValContext;
-import org.camunda.feel.syntaxtree.ValList;
-import org.camunda.feel.syntaxtree.ValString;
-import org.camunda.feel.valuemapper.CustomValueMapper;
-import org.camunda.feel.valuemapper.ValueMapper;
+import org.orqueio.feel.impl.DefaultValueMapper;
+import org.orqueio.feel.syntaxtree.Val;
+import org.orqueio.feel.syntaxtree.ValContext;
+import org.orqueio.feel.syntaxtree.ValList;
+import org.orqueio.feel.syntaxtree.ValString;
+import org.orqueio.feel.valuemapper.CustomValueMapper;
+import org.orqueio.feel.valuemapper.ValueMapper;
 import io.orqueio.spin.Spin;
 import io.orqueio.spin.json.SpinJsonNode;
 import io.orqueio.spin.xml.SpinXmlElement;
@@ -60,7 +60,7 @@ public class SpinValueMapperTest {
   }
 
   @Test
-  public void shouldMapCamundaSpinJSONObjectAsContext() {
+  public void shouldMapOrqueioSpinJSONObjectAsContext() {
     // given
     Map<String, Val> map = new HashMap<>();
     map.put("customer", new ValString("Kermit"));
@@ -76,7 +76,7 @@ public class SpinValueMapperTest {
   }
 
   @Test
-  public void shouldMapCamundaSpinJSONarrayAsList() {
+  public void shouldMapOrqueioSpinJSONarrayAsList() {
     // given
     List<Val> list = Arrays.asList(new ValString("Kermit"), new ValString("Waldo"));
     ValList feelList = (ValList) valueMapper.toVal(list);
@@ -91,7 +91,7 @@ public class SpinValueMapperTest {
   }
 
   @Test
-  public void shouldMapNestedCamundaSpinJSONObjectAsContext() {
+  public void shouldMapNestedOrqueioSpinJSONObjectAsContext() {
 
     // given
     Map<String, Val> nestedMap = new HashMap<>();
@@ -117,7 +117,7 @@ public class SpinValueMapperTest {
   }
 
   @Test
-  public void shouldMapCamundaSpinXMLObjectWithAttributes() {
+  public void shouldMapOrqueioSpinXMLObjectWithAttributes() {
     // given
     Map<String, Val> xmlInnerMap = new HashMap();
     xmlInnerMap.put("@name", new ValString("Kermit"));
@@ -136,7 +136,7 @@ public class SpinValueMapperTest {
   }
 
   @Test
-  public void shouldMapCamundaSpinXMLObjectWithChildObject() {
+  public void shouldMapOrqueioSpinXMLObjectWithChildObject() {
     // given
     Map<String, Val> xmlAttrMap = new HashMap();
     xmlAttrMap.put("@city", new ValString("Berlin"));
@@ -159,7 +159,7 @@ public class SpinValueMapperTest {
   }
 
   @Test
-  public void shouldMapCamundaSpinXMLObjectWithListOfChildObjects() {
+  public void shouldMapOrqueioSpinXMLObjectWithListOfChildObjects() {
     // given
     SpinXmlElement xml = Spin.XML("<data>" +
                                           "<customer name=\"Kermit\" language=\"en\" />" +
@@ -196,7 +196,7 @@ public class SpinValueMapperTest {
   }
 
   @Test
-  public void shouldMapCamundaSpinXMLObjectWithContent() {
+  public void shouldMapOrqueioSpinXMLObjectWithContent() {
     // given
     SpinXmlElement xml = Spin.XML("<customer>Kermit</customer>");
 
@@ -216,7 +216,7 @@ public class SpinValueMapperTest {
   }
 
   @Test
-  public void shouldMapCamundaSpinXMLObjectWithoutContent() {
+  public void shouldMapOrqueioSpinXMLObjectWithoutContent() {
     // given
     SpinXmlElement xml = Spin.XML("<customer />");
     ValContext context = (ValContext) valueMapper
@@ -230,7 +230,7 @@ public class SpinValueMapperTest {
   }
 
   @Test
-  public void shouldMapCamundaSpinXMLObjectWithPrefix() {
+  public void shouldMapOrqueioSpinXMLObjectWithPrefix() {
     // given
     SpinXmlElement xml = Spin.XML("<data xmlns:p=\"http://www.example.org\">" +
                                           "<p:customer p:name=\"Kermit\" language=\"en\" />" +

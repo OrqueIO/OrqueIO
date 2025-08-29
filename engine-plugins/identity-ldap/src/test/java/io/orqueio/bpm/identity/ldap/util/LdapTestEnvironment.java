@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -65,7 +65,7 @@ public class LdapTestEnvironment {
 
   private final static Logger LOG = LoggerFactory.getLogger(LdapTestEnvironment.class.getName());
 
-  private static final String BASE_DN = "o=camunda,c=org";
+  private static final String BASE_DN = "o=orqueio,c=org";
   public static final String OFFICE_BERKELEY = "office-berkeley";
 
   protected DirectoryService service;
@@ -165,17 +165,17 @@ public class LdapTestEnvironment {
     service.getChangeLog().setEnabled(false);
     service.setDenormalizeOpAttrsEnabled(true);
 
-    Partition camundaPartition = addPartition("camunda", BASE_DN, service.getDnFactory());
-    addIndex(camundaPartition, "objectClass", "ou", "uid");
+    Partition orqueioPartition = addPartition("orqueio", BASE_DN, service.getDnFactory());
+    addIndex(orqueioPartition, "objectClass", "ou", "uid");
 
     service.startup();
 
     // Create the root entry
-    if (!service.getAdminSession().exists(camundaPartition.getSuffixDn())) {
+    if (!service.getAdminSession().exists(orqueioPartition.getSuffixDn())) {
       Dn dn = new Dn(BASE_DN);
       Entry entry = service.newEntry(dn);
       entry.add("objectClass", "top", "domain", "extensibleObject");
-      entry.add("dc", "camunda");
+      entry.add("dc", "orqueio");
       service.getAdminSession().add(entry);
     }
   }
@@ -212,30 +212,30 @@ public class LdapTestEnvironment {
 
     createGroup("office-berlin");
 
-    String dnRoman = createUserUid("roman", "office-berlin", "Roman", "Smirnov", "roman@camunda.org");
-    String dnRobert = createUserUid("robert", "office-berlin", "Robert", "Gimbel", "robert@camunda.org");
-    String dnDaniel = createUserUid("daniel", "office-berlin", "Daniel", "Meyer", "daniel@camunda.org");
-    String dnGonzo = createUserUid("gonzo", "office-berlin", "Gonzo", "The Great", "gonzo@camunda.org");
-    String dnRowlf = createUserUid("rowlf", "office-berlin", "Rowlf", "The Dog", "rowlf@camunda.org");
-    String dnPepe = createUserUid("pepe", "office-berlin", "Pepe", "The King Prawn", "pepe@camunda.org");
-    String dnRizzo = createUserUid("rizzo", "office-berlin", "Rizzo", "The Rat", "rizzo@camunda.org");
+    String dnRoman = createUserUid("roman", "office-berlin", "Roman", "Smirnov", "roman@orqueio.org");
+    String dnRobert = createUserUid("robert", "office-berlin", "Robert", "Gimbel", "robert@orqueio.org");
+    String dnDaniel = createUserUid("daniel", "office-berlin", "Daniel", "Meyer", "daniel@orqueio.org");
+    String dnGonzo = createUserUid("gonzo", "office-berlin", "Gonzo", "The Great", "gonzo@orqueio.org");
+    String dnRowlf = createUserUid("rowlf", "office-berlin", "Rowlf", "The Dog", "rowlf@orqueio.org");
+    String dnPepe = createUserUid("pepe", "office-berlin", "Pepe", "The King Prawn", "pepe@orqueio.org");
+    String dnRizzo = createUserUid("rizzo", "office-berlin", "Rizzo", "The Rat", "rizzo@orqueio.org");
 
     createGroup("office-london");
 
-    String dnOscar = createUserUid("oscar", "office-london", "Oscar", "The Crouch", "oscar@camunda.org");
-    String dnMonster = createUserUid("monster", "office-london", "Cookie", "Monster", "monster@camunda.org");
+    String dnOscar = createUserUid("oscar", "office-london", "Oscar", "The Crouch", "oscar@orqueio.org");
+    String dnMonster = createUserUid("monster", "office-london", "Cookie", "Monster", "monster@orqueio.org");
 
     createGroup("office-home");
 
     // Doesn't work using backslashes, end up with two uid attributes
     // See https://issues.apache.org/jira/browse/DIRSERVER-1442
-    String dnDavid = createUserUid("david(IT)", "office-home", "David", "Howe\\IT\\", "david@camunda.org");
+    String dnDavid = createUserUid("david(IT)", "office-home", "David", "Howe\\IT\\", "david@orqueio.org");
 
-    String dnRuecker = createUserUid("ruecker", "office-home", "Bernd", "Ruecker", "ruecker@camunda.org");
+    String dnRuecker = createUserUid("ruecker", "office-home", "Bernd", "Ruecker", "ruecker@orqueio.org");
 
     createGroup("office-external");
 
-    String dnFozzie = createUserCN("fozzie", "office-external", "Bear", "Fozzie", "fozzie@camunda.org");
+    String dnFozzie = createUserCN("fozzie", "office-external", "Bear", "Fozzie", "fozzie@orqueio.org");
 
     createRole("management", dnRuecker, dnRobert, dnDaniel);
     createRole("development", dnRoman, dnDaniel, dnOscar);
@@ -254,7 +254,7 @@ public class LdapTestEnvironment {
               OFFICE_BERKELEY,
               "jan",
               lastName,
-              "jan.fisher" + lastName + "@camunda.org");
+              "jan.fisher" + lastName + "@orqueio.org");
     }
 
     // Create a lot of groups
@@ -288,13 +288,13 @@ public class LdapTestEnvironment {
   }
 
   protected String createUserUid(String user, String group, String firstname, String lastname, String email) throws Exception {
-    Dn dn = new Dn("uid=" + user + ",ou=" + group + ",o=camunda,c=org");
+    Dn dn = new Dn("uid=" + user + ",ou=" + group + ",o=orqueio,c=org");
     createUser(user, firstname, lastname, email, dn);
     return dn.getNormName();
   }
 
   protected String createUserCN(String user, String group, String firstname, String lastname, String email) throws Exception {
-    Dn dn = new Dn("cn=" + lastname + "\\," + firstname + ",ou=" + group + ",o=camunda,c=org");
+    Dn dn = new Dn("cn=" + lastname + "\\," + firstname + ",ou=" + group + ",o=orqueio,c=org");
     createUser(user, firstname, lastname, email, dn);
     return dn.getNormName();
   }
@@ -322,7 +322,7 @@ public class LdapTestEnvironment {
    * @throws Exception in case of error
    */
   public void createGroup(String name) throws Exception {
-    Dn dn = new Dn("ou=" + name + ",o=camunda,c=org");
+    Dn dn = new Dn("ou=" + name + ",o=orqueio,c=org");
     if (!service.getAdminSession().exists(dn)) {
       Entry entry = service.newEntry(dn);
       entry.add("objectClass", "top", "organizationalUnit");
@@ -341,7 +341,7 @@ public class LdapTestEnvironment {
    * @throws Exception in case of error
    */
   protected void createRole(String roleName, String... users) throws Exception {
-    Dn dn = new Dn("ou=" + roleName + ",o=camunda,c=org");
+    Dn dn = new Dn("ou=" + roleName + ",o=orqueio,c=org");
     if (!service.getAdminSession().exists(dn)) {
       Entry entry = service.newEntry(dn);
       entry.add("objectClass", "top", "groupOfNames");

@@ -188,7 +188,7 @@ public class TaskLastUpdatedTest {
     Date beforeUpdate = getBeforeCurrentTime();
 
     // when
-    taskService.createAttachment(null, task.getId(), processInstance.getId(), "myAttachment", "attachmentDescription", "http://camunda.com");
+    taskService.createAttachment(null, task.getId(), processInstance.getId(), "myAttachment", "attachmentDescription", "http://orqueio.com");
 
     // then
     Task taskResult = taskService.createTaskQuery().processInstanceId(processInstance.getId()).singleResult();
@@ -201,7 +201,7 @@ public class TaskLastUpdatedTest {
     // given
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("oneTaskProcess");
     Task task = taskService.createTaskQuery().processInstanceId(processInstance.getId()).singleResult();
-    Attachment attachment = taskService.createAttachment(null, task.getId(), processInstance.getId(), "myAttachment", "attachmentDescription", "http://camunda.com");
+    Attachment attachment = taskService.createAttachment(null, task.getId(), processInstance.getId(), "myAttachment", "attachmentDescription", "http://orqueio.com");
     attachment.setDescription("updatedDescription");
     Date beforeUpdate = getBeforeCurrentTime();
 
@@ -219,7 +219,7 @@ public class TaskLastUpdatedTest {
     // given
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("oneTaskProcess");
     Task task = taskService.createTaskQuery().processInstanceId(processInstance.getId()).singleResult();
-    Attachment attachment = taskService.createAttachment(null, task.getId(), processInstance.getId(), "myAttachment", "attachmentDescription", "http://camunda.com");
+    Attachment attachment = taskService.createAttachment(null, task.getId(), processInstance.getId(), "myAttachment", "attachmentDescription", "http://orqueio.com");
     Date beforeUpdate = getBeforeCurrentTime();
 
     // when
@@ -236,7 +236,7 @@ public class TaskLastUpdatedTest {
     // given
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("oneTaskProcess");
     Task task = taskService.createTaskQuery().processInstanceId(processInstance.getId()).singleResult();
-    Attachment attachment = taskService.createAttachment(null, task.getId(), processInstance.getId(), "myAttachment", "attachmentDescription", "http://camunda.com");
+    Attachment attachment = taskService.createAttachment(null, task.getId(), processInstance.getId(), "myAttachment", "attachmentDescription", "http://orqueio.com");
     Date beforeUpdate = getBeforeCurrentTime();
 
     // when

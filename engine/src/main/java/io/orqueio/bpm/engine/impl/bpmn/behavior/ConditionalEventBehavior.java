@@ -25,7 +25,7 @@ import io.orqueio.bpm.engine.impl.persistence.entity.EventSubscriptionEntity;
  * Makes it possible to leave the current activity if the condition of the
  * conditional event is satisfied.
  *
- * @author Christopher Zell <christopher.zell@camunda.com>
+ * @author Christopher Zell <christopher.zell@orqueio.com>
  */
 public interface ConditionalEventBehavior {
 

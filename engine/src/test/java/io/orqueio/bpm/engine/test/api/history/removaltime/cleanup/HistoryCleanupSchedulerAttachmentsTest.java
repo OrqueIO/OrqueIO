@@ -92,7 +92,7 @@ public class HistoryCleanupSchedulerAttachmentsTest extends AbstractHistoryClean
     ClockUtil.setCurrentTime(END_DATE);
 
     for (int i = 0; i < 5; i++) {
-      taskService.createAttachment(null, null, processInstanceId, null, null, "http://camunda.com");
+      taskService.createAttachment(null, null, processInstanceId, null, null, "http://orqueio.com");
     }
 
     String taskId = taskService.createTaskQuery().singleResult().getId();
@@ -128,7 +128,7 @@ public class HistoryCleanupSchedulerAttachmentsTest extends AbstractHistoryClean
     ClockUtil.setCurrentTime(END_DATE);
 
     for (int i = 0; i < 5; i++) {
-      taskService.createAttachment(null, null, processInstanceId, null, null, "http://camunda.com");
+      taskService.createAttachment(null, null, processInstanceId, null, null, "http://orqueio.com");
     }
 
     String taskId = taskService.createTaskQuery().singleResult().getId();

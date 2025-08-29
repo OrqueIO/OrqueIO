@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright Toaddlaterccs and/or licensed to Toaddlaterccs
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. Toaddlaterccs this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -82,7 +82,7 @@ public class TaskAssert extends AbstractProcessAssert<TaskAssert, Task> {
    *
    * @param   candidateGroupId id of a candidate group the task is waiting to be assigned to
    * @return  this {@link TaskAssert}
-   * @since   Camunda Platform 7.0
+   * @since   Orqueio Platform 7.0
    */
   public TaskAssert hasCandidateGroup(final String candidateGroupId) {
     return hasCandidateGroup(candidateGroupId, true);
@@ -95,7 +95,7 @@ public class TaskAssert extends AbstractProcessAssert<TaskAssert, Task> {
    *
    * @param   candidateGroupId id of a candidate group the task is associated to
    * @return  this {@link TaskAssert}
-   * @since   Camunda Platform 7.3
+   * @since   Orqueio Platform 7.3
    */
   public TaskAssert hasCandidateGroupAssociated(final String candidateGroupId) {
     return hasCandidateGroup(candidateGroupId, false);
@@ -108,7 +108,7 @@ public class TaskAssert extends AbstractProcessAssert<TaskAssert, Task> {
     if (unassignedOnly) {
       isNotAssigned(); // Useful for better assertion error message in case of assigned task
     } else {
-      taskQuery.includeAssignedTasks(); // Available from Camunda Platform 7.3 onwards
+      taskQuery.includeAssignedTasks(); // Available from Orqueio Platform 7.3 onwards
     }
     final Task inGroup = taskQuery.singleResult();
     Assertions.assertThat(inGroup)
@@ -125,7 +125,7 @@ public class TaskAssert extends AbstractProcessAssert<TaskAssert, Task> {
    *
    * @param   candidateUserId id of a candidate user the task is waiting to be assigned to
    * @return  this {@link TaskAssert}
-   * @since   Camunda Platform 7.0
+   * @since   Orqueio Platform 7.0
    */
   public TaskAssert hasCandidateUser(final String candidateUserId) {
     return hasCandidateUser(candidateUserId, true);
@@ -138,7 +138,7 @@ public class TaskAssert extends AbstractProcessAssert<TaskAssert, Task> {
    *
    * @param   candidateUserId id of a candidate user the task is associated to
    * @return  this {@link TaskAssert}
-   * @since   Camunda Platform 7.3
+   * @since   Orqueio Platform 7.3
    */
   public TaskAssert hasCandidateUserAssociated(final String candidateUserId) {
     return hasCandidateUser(candidateUserId, false);
@@ -151,7 +151,7 @@ public class TaskAssert extends AbstractProcessAssert<TaskAssert, Task> {
     if (unassignedOnly) {
       isNotAssigned(); // Useful for better assertion error message in case of assigned task
     } else {
-      taskQuery.includeAssignedTasks(); // Available from Camunda Platform 7.3 onwards
+      taskQuery.includeAssignedTasks(); // Available from Orqueio Platform 7.3 onwards
     }
     final Task withUser = taskQuery.singleResult();
     Assertions.assertThat(withUser)

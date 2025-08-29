@@ -661,7 +661,7 @@ public class BatchSetRemovalTimeNonHierarchicalTest {
   }
 
   /**
-   * See https://app.camunda.com/jira/browse/CAM-10172
+   * See https://app.orqueio.com/jira/browse/CAM-10172
    */
   @Test
   public void shouldSetRemovalTime_ExternalTaskLog_WithPreservedCreateTime() {
@@ -752,7 +752,7 @@ public class BatchSetRemovalTimeNonHierarchicalTest {
   }
 
   /**
-   * See https://app.camunda.com/jira/browse/CAM-10172
+   * See https://app.orqueio.com/jira/browse/CAM-10172
    */
   @Test
   public void shouldSetRemovalTime_Incident_WithPreservedCreateTime() {
@@ -817,7 +817,7 @@ public class BatchSetRemovalTimeNonHierarchicalTest {
   }
 
   /**
-   * See https://app.camunda.com/jira/browse/CAM-10172
+   * See https://app.orqueio.com/jira/browse/CAM-10172
    */
   @Test
   public void shouldSetRemovalTime_OperationLog_WithPreservedTimestamp() {
@@ -878,7 +878,7 @@ public class BatchSetRemovalTimeNonHierarchicalTest {
   }
 
   /**
-   * See https://app.camunda.com/jira/browse/CAM-10172
+   * See https://app.orqueio.com/jira/browse/CAM-10172
    */
   @Test
   public void shouldSetRemovalTime_IdentityLinkLog_WithPreservedTime() {
@@ -1007,7 +1007,7 @@ public class BatchSetRemovalTimeNonHierarchicalTest {
       .getId();
 
     Attachment attachment = taskService.createAttachment(null, taskId,
-      null, null, null, "http://camunda.com");
+      null, null, null, "http://orqueio.com");
 
     // assume
     assertThat(attachment.getRemovalTime()).isNull();
@@ -1034,7 +1034,7 @@ public class BatchSetRemovalTimeNonHierarchicalTest {
     String processInstanceId = testRule.process().userTask().deploy().start();
 
     Attachment attachment = taskService.createAttachment(null, null,
-      processInstanceId, null, null, "http://camunda.com");
+      processInstanceId, null, null, "http://orqueio.com");
 
     // assume
     assertThat(attachment.getRemovalTime()).isNull();

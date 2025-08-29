@@ -26,7 +26,7 @@ import io.orqueio.bpm.engine.impl.persistence.entity.PropertyChange;
 /**
  * Represents the command to set the priority of an existing external task.
  * 
- * @author Christopher Zell <christopher.zell@camunda.com>
+ * @author Christopher Zell <christopher.zell@orqueio.com>
  */
 public class SetExternalTaskPriorityCmd extends ExternalTaskCmd {
   

@@ -21,7 +21,7 @@ import io.orqueio.bpm.engine.variable.VariableMap;
 /**
  * Represents a process instance with the corresponding latest variables.
  *
- * @author Christopher Zell <christopher.zell@camunda.com>
+ * @author Christopher Zell <christopher.zell@orqueio.com>
  */
 public interface ProcessInstanceWithVariables extends ProcessInstance {
 

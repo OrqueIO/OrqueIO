@@ -24,7 +24,7 @@ import io.orqueio.bpm.engine.variable.VariableMap;
 /**
  * Represents an example implementation for the {@link DelegateVariableMapping} interface.
  * 
- * @author Christopher Zell <christopher.zell@camunda.com>
+ * @author Christopher Zell <christopher.zell@orqueio.com>
  */
 public class DelegatedVarMapping implements DelegateVariableMapping {
 

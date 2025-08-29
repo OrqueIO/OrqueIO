@@ -23,7 +23,7 @@ package io.orqueio.bpm.engine.runtime;
  * a waiting execution (BPMN receive message event) or a process definition
  * (BPMN message start event). The result type indicates which correlation was performed.
  * 
- * @author Christopher Zell <christopher.zell@camunda.com>
+ * @author Christopher Zell <christopher.zell@orqueio.com>
  */
 public enum MessageCorrelationResultType {
 

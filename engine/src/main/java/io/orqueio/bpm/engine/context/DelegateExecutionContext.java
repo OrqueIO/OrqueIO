@@ -25,7 +25,7 @@ import io.orqueio.bpm.engine.impl.persistence.entity.ExecutionEntity;
  * Represents a delegation execution context which should return the current
  * delegation execution.
  *
- * @author Christopher Zell <christopher.zell@camunda.com>
+ * @author Christopher Zell <christopher.zell@orqueio.com>
  */
 public class DelegateExecutionContext {
 

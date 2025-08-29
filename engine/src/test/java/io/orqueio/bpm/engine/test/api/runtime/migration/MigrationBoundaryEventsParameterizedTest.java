@@ -43,7 +43,7 @@ import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
 
 /**
- * @author Christopher Zell <christopher.zell@camunda.com>
+ * @author Christopher Zell <christopher.zell@orqueio.com>
  */
 @RunWith(Parameterized.class)
 public class MigrationBoundaryEventsParameterizedTest {

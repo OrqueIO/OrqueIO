@@ -22,7 +22,7 @@ package io.orqueio.bpm.engine;
  * They typically correspond to the XML tags used in the BPMN 2.0 process definition file.
  *
  * @author Thorben Lindhauer
- * @author Christopher Zell <christopher.zell@camunda.com>
+ * @author Christopher Zell <christopher.zell@orqueio.com>
  */
 public final class ActivityTypes {
 

@@ -656,7 +656,7 @@ public class VariableListenerTest extends PluggableProcessEngineTest {
     assertEquals("injectedValue", LogInjectedValuesListener.getResolvedStringValueExpressions().get(0));
 
     assertEquals(1, LogInjectedValuesListener.getResolvedJuelExpressions().size());
-    assertEquals("cam", LogInjectedValuesListener.getResolvedJuelExpressions().get(0));
+    assertEquals("orq", LogInjectedValuesListener.getResolvedJuelExpressions().get(0));
 
     LogInjectedValuesListener.reset();
   }
@@ -682,7 +682,7 @@ public class VariableListenerTest extends PluggableProcessEngineTest {
     assertEquals("injectedValue", LogInjectedValuesListener.getResolvedStringValueExpressions().get(0));
 
     assertEquals(1, LogInjectedValuesListener.getResolvedJuelExpressions().size());
-    assertEquals("cam", LogInjectedValuesListener.getResolvedJuelExpressions().get(0));
+    assertEquals("orq", LogInjectedValuesListener.getResolvedJuelExpressions().get(0));
 
     LogInjectedValuesListener.reset();
   }

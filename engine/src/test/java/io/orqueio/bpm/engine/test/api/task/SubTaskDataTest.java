@@ -31,7 +31,7 @@ import org.junit.Test;
 
 /**
  *
- * @author Christopher Zell <christopher.zell@camunda.com>
+ * @author Christopher Zell <christopher.zell@orqueio.com>
  */
 public class SubTaskDataTest {
 

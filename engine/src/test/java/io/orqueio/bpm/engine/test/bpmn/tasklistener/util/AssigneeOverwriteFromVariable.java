@@ -24,7 +24,7 @@ import io.orqueio.bpm.engine.delegate.TaskListener;
 
 
 /**
- * @author Falko Menge <falko.menge@camunda.com>
+ * @author Falko Menge <falko.menge@orqueio.com>
  */
 public class AssigneeOverwriteFromVariable implements TaskListener {
 

@@ -17,7 +17,7 @@
 package io.orqueio.bpm.engine.test.api.runtime.migration.models;
 
 /**
- * @author Christopher Zell <christopher.zell@camunda.com>
+ * @author Christopher Zell <christopher.zell@orqueio.com>
  */
 public class ConditionalModels {
 

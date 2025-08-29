@@ -24,7 +24,7 @@ import io.orqueio.bpm.engine.task.Attachment;
 
 
 /**
- * @author kristin.polenz@camunda.com
+ * @author kristin.polenz@orqueio.com
  */
 public class GetTaskAttachmentCmd implements Command<Attachment>, Serializable {
 

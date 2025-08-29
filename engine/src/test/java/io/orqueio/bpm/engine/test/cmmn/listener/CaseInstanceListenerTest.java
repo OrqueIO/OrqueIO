@@ -930,8 +930,8 @@ public class CaseInstanceListenerTest extends CmmnTest {
 
     assertEquals("Hello from The Case", query.variableName("greeting").singleResult().getValue());
     assertEquals("Hello World", query.variableName("helloWorld").singleResult().getValue());
-    assertEquals("cam", query.variableName("prefix").singleResult().getValue());
-    assertEquals("unda", query.variableName("suffix").singleResult().getValue());
+    assertEquals("orq", query.variableName("prefix").singleResult().getValue());
+    assertEquals("ueio", query.variableName("suffix").singleResult().getValue());
 
   }
 
@@ -956,8 +956,8 @@ public class CaseInstanceListenerTest extends CmmnTest {
 
     assertEquals("Hello from The Case", query.variableName("greeting").singleResult().getValue());
     assertEquals("Hello World", query.variableName("helloWorld").singleResult().getValue());
-    assertEquals("cam", query.variableName("prefix").singleResult().getValue());
-    assertEquals("unda", query.variableName("suffix").singleResult().getValue());
+    assertEquals("orq", query.variableName("prefix").singleResult().getValue());
+    assertEquals("ueio", query.variableName("suffix").singleResult().getValue());
 
   }
 

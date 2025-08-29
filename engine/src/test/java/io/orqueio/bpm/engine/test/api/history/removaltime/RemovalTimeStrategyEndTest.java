@@ -953,7 +953,7 @@ public class RemovalTimeStrategyEndTest extends AbstractRemovalTimeTest {
   }
 
   /**
-   * See https://app.camunda.com/jira/browse/CAM-9505
+   * See https://app.orqueio.com/jira/browse/CAM-9505
    */
   @Test
   public void shouldResolveIncidentWithPreservedCreateTime() {
@@ -1068,7 +1068,7 @@ public class RemovalTimeStrategyEndTest extends AbstractRemovalTimeTest {
   }
 
   /**
-   * See https://app.camunda.com/jira/browse/CAM-9505
+   * See https://app.orqueio.com/jira/browse/CAM-9505
    */
   @Test
   public void shouldResolveExternalTaskLogWithTimestampPreserved() {
@@ -1149,7 +1149,7 @@ public class RemovalTimeStrategyEndTest extends AbstractRemovalTimeTest {
   }
 
   /**
-   * See https://app.camunda.com/jira/browse/CAM-9505
+   * See https://app.orqueio.com/jira/browse/CAM-9505
    */
   @Test
   public void shouldResolveJobLogWithTimestampPreserved() {
@@ -1326,7 +1326,7 @@ public class RemovalTimeStrategyEndTest extends AbstractRemovalTimeTest {
     String processInstanceId = runtimeService.createProcessInstanceQuery().activityIdIn("userTask").singleResult().getId();
 
     identityService.setAuthenticatedUserId("aUserId");
-    taskService.createAttachment(null, null, processInstanceId, null, null, "http://camunda.com");
+    taskService.createAttachment(null, null, processInstanceId, null, null, "http://orqueio.com");
     identityService.clearAuthentication();
 
     UserOperationLogEntry userOperationLog = historyService.createUserOperationLogQuery().singleResult();
@@ -1350,7 +1350,7 @@ public class RemovalTimeStrategyEndTest extends AbstractRemovalTimeTest {
   }
 
   /**
-   * See https://app.camunda.com/jira/browse/CAM-9505
+   * See https://app.orqueio.com/jira/browse/CAM-9505
    */
   @Test
   public void shouldResolveUserOperationLogWithTimestampPreserved() {
@@ -1366,7 +1366,7 @@ public class RemovalTimeStrategyEndTest extends AbstractRemovalTimeTest {
     String processInstanceId = runtimeService.createProcessInstanceQuery().activityIdIn("userTask").singleResult().getId();
 
     identityService.setAuthenticatedUserId("aUserId");
-    taskService.createAttachment(null, null, processInstanceId, null, null, "http://camunda.com");
+    taskService.createAttachment(null, null, processInstanceId, null, null, "http://orqueio.com");
     identityService.clearAuthentication();
 
     String taskId = taskService.createTaskQuery().singleResult().getId();
@@ -1419,7 +1419,7 @@ public class RemovalTimeStrategyEndTest extends AbstractRemovalTimeTest {
   }
 
   /**
-   * See https://app.camunda.com/jira/browse/CAM-9505
+   * See https://app.orqueio.com/jira/browse/CAM-9505
    */
   @Test
   public void shouldResolveIdentityLinkWithTimePreserved() {
@@ -1623,7 +1623,7 @@ public class RemovalTimeStrategyEndTest extends AbstractRemovalTimeTest {
       .singleResult()
       .getId();
 
-    String attachmentId = taskService.createAttachment(null, null, processInstanceId, null, null, "http://camunda.com").getId();
+    String attachmentId = taskService.createAttachment(null, null, processInstanceId, null, null, "http://orqueio.com").getId();
 
     Attachment attachment = taskService.getAttachment(attachmentId);
 
@@ -1658,7 +1658,7 @@ public class RemovalTimeStrategyEndTest extends AbstractRemovalTimeTest {
 
     String taskId = taskService.createTaskQuery().singleResult().getId();
 
-    String attachmentId = taskService.createAttachment(null, taskId, null, null, null, "http://camunda.com").getId();
+    String attachmentId = taskService.createAttachment(null, taskId, null, null, null, "http://orqueio.com").getId();
 
     Attachment attachment = taskService.getAttachment(attachmentId);
 
@@ -1694,7 +1694,7 @@ public class RemovalTimeStrategyEndTest extends AbstractRemovalTimeTest {
       .singleResult()
       .getId();
 
-    String attachmentId = taskService.createAttachment(null, "aWrongTaskId", processInstanceId, null, null, "http://camunda.com").getId();
+    String attachmentId = taskService.createAttachment(null, "aWrongTaskId", processInstanceId, null, null, "http://orqueio.com").getId();
 
     Attachment attachment = taskService.getAttachment(attachmentId);
 
@@ -1724,7 +1724,7 @@ public class RemovalTimeStrategyEndTest extends AbstractRemovalTimeTest {
       .singleResult()
       .getId();
 
-    String attachmentId = taskService.createAttachment(null, taskId, "aWrongProcessInstanceId", null, null, "http://camunda.com").getId();
+    String attachmentId = taskService.createAttachment(null, taskId, "aWrongProcessInstanceId", null, null, "http://orqueio.com").getId();
 
     Attachment attachment = taskService.getAttachment(attachmentId);
 
@@ -2252,7 +2252,7 @@ public class RemovalTimeStrategyEndTest extends AbstractRemovalTimeTest {
   }
 
   /**
-   * See https://app.camunda.com/jira/browse/CAM-9505
+   * See https://app.orqueio.com/jira/browse/CAM-9505
    */
   @Test
   public void shouldResolveBatchJobLogWithTimestampPreserved() {
@@ -2423,7 +2423,7 @@ public class RemovalTimeStrategyEndTest extends AbstractRemovalTimeTest {
   }
 
   /**
-   * See https://app.camunda.com/jira/browse/CAM-9505
+   * See https://app.orqueio.com/jira/browse/CAM-9505
    */
   @Test
   public void shouldNotUpdateCreateTimeForIncidentRelatedToBatch() {

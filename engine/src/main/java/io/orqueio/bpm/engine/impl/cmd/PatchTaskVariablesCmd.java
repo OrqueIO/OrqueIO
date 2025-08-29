@@ -26,7 +26,7 @@ import io.orqueio.bpm.engine.impl.persistence.entity.PropertyChange;
  * Patches task variables: First, applies modifications to existing variables and then deletes
  * specified variables.
  *
- * @author kristin.polenz@camunda.com
+ * @author kristin.polenz@orqueio.com
  *
  */
 public class PatchTaskVariablesCmd extends AbstractPatchVariablesCmd {

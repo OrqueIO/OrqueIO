@@ -642,7 +642,7 @@ public class GetHistoricOperationLogsForOptimizeTest {
       processInstanceId,
       "favicon.ico",
       "favicon",
-      "http://camunda.com/favicon.ico"
+      "http://orqueio.com/favicon.ico"
     );
     taskService.deleteAttachment(attachment.getId());
     runtimeService.deleteProcessInstance(processInstanceId, "that's why");

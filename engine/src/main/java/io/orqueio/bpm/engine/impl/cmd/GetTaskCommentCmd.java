@@ -26,7 +26,7 @@ import static io.orqueio.bpm.engine.impl.util.EnsureUtil.*;
 
 
 /**
- * @author kristin.polenz@camunda.com
+ * @author kristin.polenz@orqueio.com
  */
 public class GetTaskCommentCmd implements Command<Comment>, Serializable {
 

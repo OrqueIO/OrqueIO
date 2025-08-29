@@ -22,7 +22,7 @@ import java.util.Map;
  * Represents an interface for the purge reporting.
  * Contains all information of the data which is deleted during the purge.
  *
- * @author Christopher Zell <christopher.zell@camunda.com>
+ * @author Christopher Zell <christopher.zell@orqueio.com>
  */
 public interface PurgeReporting<T> {
 

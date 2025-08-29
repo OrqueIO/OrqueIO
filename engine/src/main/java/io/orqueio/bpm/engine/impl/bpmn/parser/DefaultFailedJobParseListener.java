@@ -43,7 +43,7 @@ public class DefaultFailedJobParseListener extends AbstractBpmnParseListener {
    * deprecated since 7.4, use orqueio ns.
    */
   @Deprecated
-  public static final Namespace FOX_ENGINE_NS = new Namespace("http://www.camunda.com/fox");
+  public static final Namespace FOX_ENGINE_NS = new Namespace("http://www.orqueio.com/fox");
 
   public static final PropertyKey<FailedJobRetryConfiguration> FAILED_JOB_CONFIGURATION = new PropertyKey<FailedJobRetryConfiguration>("FAILED_JOB_CONFIGURATION");
 

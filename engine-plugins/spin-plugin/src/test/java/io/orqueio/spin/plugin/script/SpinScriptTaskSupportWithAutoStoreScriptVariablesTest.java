@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -60,7 +60,7 @@ public class SpinScriptTaskSupportWithAutoStoreScriptVariablesTest extends Plugg
     checkVariables("foo", "var_s", "var_xml", "var_json");
   }
 
-  // Check https://jira.camunda.com/browse/CAM-5869
+  // Check https://jira.orqueio.com/browse/CAM-5869
   public void FAILING_testSpinInternalVariablesNotExportedByJavascriptScriptTask() {
     String importXML = "var XML = io.orqueio.spin.Spin.XML;\n";
     String importJSON = "var JSON = io.orqueio.spin.Spin.JSON;\n";
@@ -159,7 +159,7 @@ public class SpinScriptTaskSupportWithAutoStoreScriptVariablesTest extends Plugg
       .userTask()
       .scriptTask()
         .scriptFormat(scriptFormat)
-        .camundaResource("deployment://testScript.txt")
+        .orqueioResource("deployment://testScript.txt")
       .userTask()
       .endEvent()
     .done();

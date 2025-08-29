@@ -36,7 +36,7 @@ public class CompetingHistoricAttachmentPartitioningTest extends AbstractPartiti
     String processInstanceId = deployAndStartProcess(PROCESS_WITH_USERTASK).getId();
 
     final Attachment attachment = taskService.createAttachment("anAttachmentType", null, processInstanceId,
-      "anAttachmentName", null, "http://camunda.com");
+      "anAttachmentName", null, "http://orqueio.com");
 
     ThreadControl asyncThread = executeControllableCommand(new AsyncThread(attachment.getId()));
     asyncThread.reportInterrupts();

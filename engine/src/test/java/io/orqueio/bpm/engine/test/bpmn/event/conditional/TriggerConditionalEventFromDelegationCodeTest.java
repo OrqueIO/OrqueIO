@@ -37,7 +37,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 /**
- * @author Christopher Zell <christopher.zell@camunda.com>
+ * @author Christopher Zell <christopher.zell@orqueio.com>
  */
 @RunWith(Parameterized.class)
 public class TriggerConditionalEventFromDelegationCodeTest extends AbstractConditionalEventTestCase {

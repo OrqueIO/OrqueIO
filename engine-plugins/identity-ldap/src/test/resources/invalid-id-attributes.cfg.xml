@@ -34,9 +34,9 @@
   <bean id="ldapIdentityProviderPlugin" class="io.orqueio.bpm.identity.impl.ldap.plugin.LdapIdentityProviderPlugin">
   
     <property name="serverUrl" value="ldap://localhost:${ldap.server.port}/" />
-    <property name="managerDn" value="uid=daniel,ou=office-berlin,o=camunda,c=org" />
+    <property name="managerDn" value="uid=daniel,ou=office-berlin,o=orqueio,c=org" />
     <property name="managerPassword" value="daniel" />
-    <property name="baseDn" value="o=camunda,c=org" />
+    <property name="baseDn" value="o=orqueio,c=org" />
     
     <property name="userSearchBase" value="" />
     <property name="userSearchFilter" value="(objectclass=person)" />

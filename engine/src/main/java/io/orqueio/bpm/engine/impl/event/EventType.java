@@ -23,7 +23,7 @@ package io.orqueio.bpm.engine.impl.event;
  * the enum variant can't be used, so we have to reimplement an enum like class.
  * That is done so we can restrict the event types to only the defined ones.
  *
- * @author Christopher Zell <christopher.zell@camunda.com>
+ * @author Christopher Zell <christopher.zell@orqueio.com>
  */
 public final class EventType {
 

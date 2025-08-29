@@ -24,7 +24,7 @@ import io.orqueio.bpm.engine.management.MetricIntervalValue;
 
 /**
  *
- * @author Christopher Zell <christopher.zell@camunda.com>
+ * @author Christopher Zell <christopher.zell@orqueio.com>
  */
 public class MetricIntervalEntity implements MetricIntervalValue, DbEntity, Serializable {
 

@@ -23,7 +23,7 @@ import io.orqueio.bpm.engine.delegate.VariableScope;
 
 /**
  * @author Tom Baeyens
- * @author Christopher Zell <christopher.zell@camunda.com>
+ * @author Christopher Zell <christopher.zell@orqueio.com>
  */
 public interface Condition {
 

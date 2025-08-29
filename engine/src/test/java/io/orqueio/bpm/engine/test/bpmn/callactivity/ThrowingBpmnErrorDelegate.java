@@ -22,7 +22,7 @@ import io.orqueio.bpm.engine.delegate.JavaDelegate;
 
 /**
  *
- * @author Christopher Zell <christopher.zell@camunda.com>
+ * @author Christopher Zell <christopher.zell@orqueio.com>
  */
 public class ThrowingBpmnErrorDelegate implements JavaDelegate {
 

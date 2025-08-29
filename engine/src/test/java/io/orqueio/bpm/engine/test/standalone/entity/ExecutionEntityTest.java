@@ -43,8 +43,8 @@ import org.junit.Test;
 
 /**
  *
- * @author Christopher Zell <christopher.zell@camunda.com>
- * @author Nikola Koevski <nikola.koevski@camunda.com>
+ * @author Christopher Zell <christopher.zell@orqueio.com>
+ * @author Nikola Koevski <nikola.koevski@orqueio.com>
  */
 public class ExecutionEntityTest {
 

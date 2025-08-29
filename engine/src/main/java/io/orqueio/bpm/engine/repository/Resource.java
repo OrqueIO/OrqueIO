@@ -17,7 +17,7 @@
 package io.orqueio.bpm.engine.repository;
 
 /**
- * @author kristin.polenz@camunda.com
+ * @author kristin.polenz@orqueio.com
  */
 public interface Resource {
 

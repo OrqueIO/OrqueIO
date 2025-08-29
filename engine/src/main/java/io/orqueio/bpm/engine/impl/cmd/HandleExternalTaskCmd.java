@@ -27,7 +27,7 @@ import io.orqueio.bpm.engine.impl.util.EnsureUtil;
 /**
  * Represents an abstract class for the handle of external task commands.
  *
- * @author Christopher Zell <christopher.zell@camunda.com>
+ * @author Christopher Zell <christopher.zell@orqueio.com>
  */
 public abstract class HandleExternalTaskCmd extends ExternalTaskCmd {
 

@@ -23,7 +23,7 @@ import io.orqueio.bpm.engine.impl.persistence.entity.ExecutionEntity;
 
 /**
  *
- * @author Christopher Zell <christopher.zell@camunda.com>
+ * @author Christopher Zell <christopher.zell@orqueio.com>
  */
 public class ExecutionTopDownWalker extends ReferenceWalker<ExecutionEntity> {
 

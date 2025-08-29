@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -30,7 +30,7 @@ import io.orqueio.spin.plugin.script.TestVariableScope;
 import io.orqueio.spin.xml.SpinXmlElement;
 
 /**
- * <p>Testcase ensuring integration of camunda Spin into Process Engine expression language.</p>
+ * <p>Testcase ensuring integration of orqueio Spin into Process Engine expression language.</p>
  *
  * @author Daniel Meyer
  *
@@ -92,7 +92,7 @@ public class SpinFunctionsTest extends PluggableProcessEngineTestCase {
     BpmnModelInstance bpmnModelInstance = Bpmn.createExecutableProcess("testProcess")
       .startEvent()
       .serviceTask()
-        .camundaExpression("${ execution.setVariable('customer', "
+        .orqueioExpression("${ execution.setVariable('customer', "
                                 + "S(xmlVar).xPath('/customers/customer').element().toString()"
                              +")}")
       .receiveTask("wait")

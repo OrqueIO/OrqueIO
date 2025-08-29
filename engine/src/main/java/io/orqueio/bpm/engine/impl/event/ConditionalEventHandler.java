@@ -26,7 +26,7 @@ import io.orqueio.bpm.engine.impl.core.variable.event.VariableEvent;
 
 /**
  *
- * @author Christopher Zell <christopher.zell@camunda.com>
+ * @author Christopher Zell <christopher.zell@orqueio.com>
  */
 public class ConditionalEventHandler implements EventHandler {
 

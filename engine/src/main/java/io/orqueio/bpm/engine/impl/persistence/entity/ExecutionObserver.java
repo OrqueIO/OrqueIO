@@ -19,7 +19,7 @@ package io.orqueio.bpm.engine.impl.persistence.entity;
 /**
  * Represents an observer for the exeuction.
  *
- * @author Christopher Zell <christopher.zell@camunda.com>
+ * @author Christopher Zell <christopher.zell@orqueio.com>
  */
 public interface ExecutionObserver {
 

@@ -24,7 +24,7 @@ import io.orqueio.bpm.engine.impl.persistence.entity.ExecutionEntity;
 /**
  * Represents the logger for the external task.
  *
- * @author Christopher Zell <christopher.zell@camunda.com>
+ * @author Christopher Zell <christopher.zell@orqueio.com>
  */
 public class ExternalTaskLogger extends ProcessEngineLogger {
 

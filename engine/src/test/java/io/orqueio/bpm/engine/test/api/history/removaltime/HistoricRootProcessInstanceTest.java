@@ -622,7 +622,7 @@ public class HistoricRootProcessInstanceTest extends AbstractRemovalTimeTest {
 
     // when
     identityService.setAuthenticatedUserId("aUserId");
-    taskService.createAttachment(null, null, runtimeService.createProcessInstanceQuery().activityIdIn("userTask").singleResult().getId(), null, null, "http://camunda.com");
+    taskService.createAttachment(null, null, runtimeService.createProcessInstanceQuery().activityIdIn("userTask").singleResult().getId(), null, null, "http://orqueio.com");
     identityService.clearAuthentication();
 
     UserOperationLogEntry userOperationLog = historyService.createUserOperationLogQuery().singleResult();
@@ -833,7 +833,7 @@ public class HistoricRootProcessInstanceTest extends AbstractRemovalTimeTest {
       .getId();
 
     // when
-    String attachmentId = taskService.createAttachment(null, null, processInstanceId, null, null, "http://camunda.com").getId();
+    String attachmentId = taskService.createAttachment(null, null, processInstanceId, null, null, "http://orqueio.com").getId();
 
     Attachment attachment = taskService.getAttachment(attachmentId);
 
@@ -856,7 +856,7 @@ public class HistoricRootProcessInstanceTest extends AbstractRemovalTimeTest {
     String taskId = taskService.createTaskQuery().singleResult().getId();
 
     // when
-    String attachmentId = taskService.createAttachment(null, taskId, null, null, null, "http://camunda.com").getId();
+    String attachmentId = taskService.createAttachment(null, taskId, null, null, null, "http://orqueio.com").getId();
 
     Attachment attachment = taskService.getAttachment(attachmentId);
 
@@ -882,7 +882,7 @@ public class HistoricRootProcessInstanceTest extends AbstractRemovalTimeTest {
       .getId();
 
     // when
-    String attachmentId = taskService.createAttachment(null, "aWrongTaskId", processInstanceId, null, null, "http://camunda.com").getId();
+    String attachmentId = taskService.createAttachment(null, "aWrongTaskId", processInstanceId, null, null, "http://orqueio.com").getId();
 
     Attachment attachment = taskService.getAttachment(attachmentId);
 
@@ -907,7 +907,7 @@ public class HistoricRootProcessInstanceTest extends AbstractRemovalTimeTest {
       .getId();
 
     // when
-    String attachmentId = taskService.createAttachment(null, taskId, "aWrongProcessInstanceId", null, null, "http://camunda.com").getId();
+    String attachmentId = taskService.createAttachment(null, taskId, "aWrongProcessInstanceId", null, null, "http://orqueio.com").getId();
 
     Attachment attachment = taskService.getAttachment(attachmentId);
 
@@ -923,7 +923,7 @@ public class HistoricRootProcessInstanceTest extends AbstractRemovalTimeTest {
     // given
 
     // when
-    String attachmentId = taskService.createAttachment(null, "aWrongTaskId", null, null, null, "http://camunda.com").getId();
+    String attachmentId = taskService.createAttachment(null, "aWrongTaskId", null, null, null, "http://orqueio.com").getId();
 
     Attachment attachment = taskService.getAttachment(attachmentId);
 

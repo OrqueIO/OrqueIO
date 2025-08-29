@@ -29,7 +29,7 @@ import io.orqueio.bpm.engine.impl.persistence.entity.ResourceEntity;
 
 
 /**
- * @author kristin.polenz@camunda.com
+ * @author kristin.polenz@orqueio.com
  */
 public class GetDeploymentResourceForIdCmd implements Command<InputStream>, Serializable {
 

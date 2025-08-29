@@ -555,7 +555,7 @@ public class SetProcessDefinitionVersionCmdTest extends PluggableProcessEngineTe
   }
 
   /**
-   * See https://app.camunda.com/jira/browse/CAM-9505
+   * See https://app.orqueio.com/jira/browse/CAM-9505
    */
   @Deployment(resources = TEST_PROCESS_ONE_JOB)
   @Test

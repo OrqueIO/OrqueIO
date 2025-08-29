@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -43,7 +43,7 @@ import org.junit.runner.RunWith;
 public class StartProcessTest extends CdiProcessEngineTestCase {
 
   @Test
-  @Deployment(resources = "org/camunda/bpm/engine/cdi/test/api/annotation/StartProcessTest.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/cdi/test/api/annotation/StartProcessTest.bpmn20.xml")
   public void testStartProcessByKey() {
 
     assertNull(runtimeService.createProcessInstanceQuery().singleResult());
@@ -53,13 +53,13 @@ public class StartProcessTest extends CdiProcessEngineTestCase {
 
     assertNotNull(runtimeService.createProcessInstanceQuery().singleResult());
 
-    assertEquals("camunda", businessProcess.getVariable("name"));
+    assertEquals("orqueio", businessProcess.getVariable("name"));
 
     TypedValue nameTypedValue = businessProcess.getVariableTyped("name");
     assertNotNull(nameTypedValue);
     assertTrue(nameTypedValue instanceof StringValue);
     assertEquals(ValueType.STRING, nameTypedValue.getType());
-    assertEquals("camunda", nameTypedValue.getValue());
+    assertEquals("orqueio", nameTypedValue.getValue());
 
     assertEquals("untypedName", businessProcess.getVariable("untypedName"));
 

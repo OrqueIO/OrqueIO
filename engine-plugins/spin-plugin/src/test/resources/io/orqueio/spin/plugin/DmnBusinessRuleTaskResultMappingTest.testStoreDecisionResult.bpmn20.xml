@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions id="taskAssigneeExample"
-  xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
+  xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:orqueio="http://orqueio.org/schema/1.0/bpmn"
   targetNamespace="Examples">
 
   <process id="testProcess" isExecutable="true">
@@ -10,17 +10,17 @@
     <sequenceFlow sourceRef="start" targetRef="ruleTask" />
 
     <businessRuleTask id="ruleTask"
-      camunda:decisionRef="testDecision">
+      orqueio:decisionRef="testDecision">
       <extensionElements>
-        <camunda:inputOutput>
-          <camunda:outputParameter name="result">${decisionResult}</camunda:outputParameter>
-        </camunda:inputOutput>
+        <orqueio:inputOutput>
+          <orqueio:outputParameter name="result">${decisionResult}</orqueio:outputParameter>
+        </orqueio:inputOutput>
       </extensionElements>
     </businessRuleTask>
 
     <sequenceFlow sourceRef="ruleTask" targetRef="end" />
 
-    <endEvent id="end" camunda:asyncBefore="true" />
+    <endEvent id="end" orqueio:asyncBefore="true" />
 
   </process>
 

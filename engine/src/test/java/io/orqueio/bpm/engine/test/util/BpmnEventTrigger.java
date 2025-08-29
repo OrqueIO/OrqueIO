@@ -17,7 +17,7 @@
 package io.orqueio.bpm.engine.test.util;
 
 /**
- * @author Christopher Zell <christopher.zell@camunda.com>
+ * @author Christopher Zell <christopher.zell@orqueio.com>
  */
 
 import io.orqueio.bpm.model.bpmn.BpmnModelInstance;

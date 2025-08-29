@@ -217,7 +217,7 @@ public class MultiTenancyUserOperationLogTest {
     identityService.setAuthentication(USER_ID, null, Arrays.asList(TENANT_ONE));
 
     // when add and delete an attachment
-    Attachment attachment = taskService.createAttachment("image/ico", processTaskId, process.getId(), "favicon.ico", "favicon", "http://camunda.com/favicon.ico");
+    Attachment attachment = taskService.createAttachment("image/ico", processTaskId, process.getId(), "favicon.ico", "favicon", "http://orqueio.com/favicon.ico");
     taskService.deleteAttachment(attachment.getId());
 
     List<UserOperationLogEntry> list = historyService.createUserOperationLogQuery().list();

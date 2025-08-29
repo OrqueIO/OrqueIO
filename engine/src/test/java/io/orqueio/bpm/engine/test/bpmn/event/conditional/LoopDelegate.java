@@ -20,7 +20,7 @@ import io.orqueio.bpm.engine.delegate.DelegateExecution;
 import io.orqueio.bpm.engine.delegate.JavaDelegate;
 
 /**
- * @author Christopher Zell <christopher.zell@camunda.com>
+ * @author Christopher Zell <christopher.zell@orqueio.com>
  */
 public class LoopDelegate implements JavaDelegate {
 

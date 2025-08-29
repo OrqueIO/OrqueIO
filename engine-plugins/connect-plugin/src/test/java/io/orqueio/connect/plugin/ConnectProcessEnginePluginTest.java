@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -59,7 +59,7 @@ public class ConnectProcessEnginePluginTest extends PluggableProcessEngineTestCa
 
   public void testConnectorIdMissing() {
     try {
-      repositoryService.createDeployment().addClasspathResource("org/camunda/connect/plugin/ConnectProcessEnginePluginTest.testConnectorIdMissing.bpmn")
+      repositoryService.createDeployment().addClasspathResource("io/orqueio/connect/plugin/ConnectProcessEnginePluginTest.testConnectorIdMissing.bpmn")
         .deploy();
       fail("Exception expected");
     }
@@ -131,7 +131,7 @@ public class ConnectProcessEnginePluginTest extends PluggableProcessEngineTestCa
     assertEquals(1, out.getValue());
   }
 
-  @Deployment(resources="org/camunda/connect/plugin/ConnectProcessEnginePluginTest.testConnectorWithThrownExceptionInScriptInputOutputMapping.bpmn")
+  @Deployment(resources="io/orqueio/connect/plugin/ConnectProcessEnginePluginTest.testConnectorWithThrownExceptionInScriptInputOutputMapping.bpmn")
   public void testConnectorBpmnErrorThrownInScriptInputMappingIsHandledByBoundaryEvent() {
     Map<String, Object> variables = new HashMap<String, Object>();
     variables.put("throwInMapping", "in");
@@ -142,7 +142,7 @@ public class ConnectProcessEnginePluginTest extends PluggableProcessEngineTestCa
     assertThat(task.getName(), is("User Task"));
   }
 
-  @Deployment(resources="org/camunda/connect/plugin/ConnectProcessEnginePluginTest.testConnectorWithThrownExceptionInScriptInputOutputMapping.bpmn")
+  @Deployment(resources="io/orqueio/connect/plugin/ConnectProcessEnginePluginTest.testConnectorWithThrownExceptionInScriptInputOutputMapping.bpmn")
   public void testConnectorRuntimeExceptionThrownInScriptInputMappingIsNotHandledByBoundaryEvent() {
     String exceptionMessage = "myException";
     Map<String, Object> variables = new HashMap<String, Object>();
@@ -155,7 +155,7 @@ public class ConnectProcessEnginePluginTest extends PluggableProcessEngineTestCa
     }
   }
 
-  @Deployment(resources="org/camunda/connect/plugin/ConnectProcessEnginePluginTest.testConnectorWithThrownExceptionInScriptInputOutputMapping.bpmn")
+  @Deployment(resources="io/orqueio/connect/plugin/ConnectProcessEnginePluginTest.testConnectorWithThrownExceptionInScriptInputOutputMapping.bpmn")
   public void testConnectorBpmnErrorThrownInScriptOutputMappingIsHandledByBoundaryEvent() {
     Map<String, Object> variables = new HashMap<String, Object>();
     variables.put("throwInMapping", "out");
@@ -166,7 +166,7 @@ public class ConnectProcessEnginePluginTest extends PluggableProcessEngineTestCa
     assertThat(task.getName(), is("User Task"));
   }
 
-  @Deployment(resources="org/camunda/connect/plugin/ConnectProcessEnginePluginTest.testConnectorWithThrownExceptionInScriptInputOutputMapping.bpmn")
+  @Deployment(resources="io/orqueio/connect/plugin/ConnectProcessEnginePluginTest.testConnectorWithThrownExceptionInScriptInputOutputMapping.bpmn")
   public void testConnectorRuntimeExceptionThrownInScriptOutputMappingIsNotHandledByBoundaryEvent() {
     String exceptionMessage = "myException";
     Map<String, Object> variables = new HashMap<String, Object>();
@@ -179,7 +179,7 @@ public class ConnectProcessEnginePluginTest extends PluggableProcessEngineTestCa
     }
   }
 
-  @Deployment(resources="org/camunda/connect/plugin/ConnectProcessEnginePluginTest.testConnectorWithThrownExceptionInScriptResourceInputOutputMapping.bpmn")
+  @Deployment(resources="io/orqueio/connect/plugin/ConnectProcessEnginePluginTest.testConnectorWithThrownExceptionInScriptResourceInputOutputMapping.bpmn")
   public void testConnectorBpmnErrorThrownInScriptResourceInputMappingIsHandledByBoundaryEvent() {
     Map<String, Object> variables = new HashMap<String, Object>();
     variables.put("throwInMapping", "in");
@@ -190,7 +190,7 @@ public class ConnectProcessEnginePluginTest extends PluggableProcessEngineTestCa
     assertThat(task.getName(), is("User Task"));
   }
 
-  @Deployment(resources="org/camunda/connect/plugin/ConnectProcessEnginePluginTest.testConnectorWithThrownExceptionInScriptResourceInputOutputMapping.bpmn")
+  @Deployment(resources="io/orqueio/connect/plugin/ConnectProcessEnginePluginTest.testConnectorWithThrownExceptionInScriptResourceInputOutputMapping.bpmn")
   public void testConnectorRuntimeExceptionThrownInScriptResourceInputMappingIsNotHandledByBoundaryEvent() {
     String exceptionMessage = "myException";
     Map<String, Object> variables = new HashMap<String, Object>();
@@ -203,7 +203,7 @@ public class ConnectProcessEnginePluginTest extends PluggableProcessEngineTestCa
     }
   }
 
-  @Deployment(resources="org/camunda/connect/plugin/ConnectProcessEnginePluginTest.testConnectorWithThrownExceptionInScriptResourceInputOutputMapping.bpmn")
+  @Deployment(resources="io/orqueio/connect/plugin/ConnectProcessEnginePluginTest.testConnectorWithThrownExceptionInScriptResourceInputOutputMapping.bpmn")
   public void testConnectorBpmnErrorThrownInScriptResourceOutputMappingIsHandledByBoundaryEvent() {
     Map<String, Object> variables = new HashMap<String, Object>();
     variables.put("throwInMapping", "out");
@@ -214,7 +214,7 @@ public class ConnectProcessEnginePluginTest extends PluggableProcessEngineTestCa
     assertThat(task.getName(), is("User Task"));
   }
 
-  @Deployment(resources="org/camunda/connect/plugin/ConnectProcessEnginePluginTest.testConnectorWithThrownExceptionInScriptResourceInputOutputMapping.bpmn")
+  @Deployment(resources="io/orqueio/connect/plugin/ConnectProcessEnginePluginTest.testConnectorWithThrownExceptionInScriptResourceInputOutputMapping.bpmn")
   public void testConnectorRuntimeExceptionThrownInScriptResourceOutputMappingIsNotHandledByBoundaryEvent() {
     String exceptionMessage = "myException";
     Map<String, Object> variables = new HashMap<String, Object>();
@@ -227,7 +227,7 @@ public class ConnectProcessEnginePluginTest extends PluggableProcessEngineTestCa
     }
   }
 
-  @Deployment(resources="org/camunda/connect/plugin/ConnectProcessEnginePluginTest.testConnectorBpmnErrorThrownInScriptResourceNoAsyncAfterJobIsCreated.bpmn")
+  @Deployment(resources="io/orqueio/connect/plugin/ConnectProcessEnginePluginTest.testConnectorBpmnErrorThrownInScriptResourceNoAsyncAfterJobIsCreated.bpmn")
   public void testConnectorBpmnErrorThrownInScriptResourceNoAsyncAfterJobIsCreated() {
     // given
     Map<String, Object> variables = new HashMap<String, Object>();

@@ -32,7 +32,7 @@ import io.orqueio.bpm.engine.impl.history.producer.HistoryEventProducer;
  * {@link HistoryEvent}. The {@link HistoryEvent} will be handled by the
  * {@link HistoryEventHandler} from the {@link ProcessEngineConfiguration}.</p>
  *
- * @author Christopher Zell <christopher.zell@camunda.com>
+ * @author Christopher Zell <christopher.zell@orqueio.com>
  * @since 7.5
  */
 public class HistoryEventProcessor {

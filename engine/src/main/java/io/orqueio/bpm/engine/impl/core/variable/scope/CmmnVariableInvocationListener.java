@@ -22,7 +22,7 @@ import io.orqueio.bpm.engine.impl.persistence.entity.VariableInstanceEntity;
 
 /**
  *
- * @author Christopher Zell <christopher.zell@camunda.com>
+ * @author Christopher Zell <christopher.zell@orqueio.com>
  */
 public class CmmnVariableInvocationListener implements VariableInstanceLifecycleListener<VariableInstanceEntity> {
 

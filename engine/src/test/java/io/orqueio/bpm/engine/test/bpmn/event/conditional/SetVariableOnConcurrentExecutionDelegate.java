@@ -25,7 +25,7 @@ import io.orqueio.bpm.engine.impl.persistence.entity.TaskEntity;
 import io.orqueio.bpm.engine.task.Task;
 
 /**
- * @author Christopher Zell <christopher.zell@camunda.com>
+ * @author Christopher Zell <christopher.zell@orqueio.com>
  */
 public class SetVariableOnConcurrentExecutionDelegate implements JavaDelegate {
 

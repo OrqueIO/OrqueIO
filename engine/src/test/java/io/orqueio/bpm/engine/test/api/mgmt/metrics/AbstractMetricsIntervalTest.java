@@ -40,7 +40,7 @@ import org.junit.rules.RuleChain;
  * Represents the abstract metrics interval test class, which contains methods
  * for generating metrics and clean up afterwards.
  *
- * @author Christopher Zell <christopher.zell@camunda.com>
+ * @author Christopher Zell <christopher.zell@orqueio.com>
  */
 public abstract class AbstractMetricsIntervalTest {
 

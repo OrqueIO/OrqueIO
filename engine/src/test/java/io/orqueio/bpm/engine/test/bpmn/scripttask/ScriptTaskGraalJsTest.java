@@ -215,10 +215,12 @@ public class ScriptTaskGraalJsTest extends AbstractScriptTaskTest {
   @Test
   public void testJavascriptVariableSerialization() {
     deployProcess(GRAALJS,
-        // GIVEN
-        // setting Java classes as variables
-        "execution.setVariable('date', new java.util.Date(0));"
-      + "execution.setVariable('myVar', new io.orqueio.bpm.engine.test.bpmn.scripttask.MySerializable('test'));");
+            // GIVEN
+            // setting Java classes as variables
+            "execution.setVariable('date', new java.util.Date(0));" +
+                    "var MySerializable = Java.type('io.orqueio.bpm.engine.test.bpmn.scripttask.MySerializable');" +
+                    "execution.setVariable('myVar', new MySerializable('test'));"
+    );
 
     if (enableNashornCompat || configureHostAccess) {
       // WHEN

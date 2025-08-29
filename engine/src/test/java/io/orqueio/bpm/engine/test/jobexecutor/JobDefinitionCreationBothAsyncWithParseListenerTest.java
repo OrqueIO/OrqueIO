@@ -45,7 +45,7 @@ import org.junit.Test;
  * The parse listeners are called after the bpmn xml was parsed.
  * They set the activity asyncBefore and asyncAfter property to true.
  *
- * @author Christopher Zell <christopher.zell@camunda.com>
+ * @author Christopher Zell <christopher.zell@orqueio.com>
  */
 public class JobDefinitionCreationBothAsyncWithParseListenerTest {
 

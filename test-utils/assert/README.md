@@ -1,4 +1,4 @@
-# Camunda Platform Assert
+# Orqueio Platform Assert
 
 **Orque IO Platform Assert** makes it easy to assert the status of your BPMN processes and CMMN cases when driving them forward in your typical unit test methods. Simply write code like
 
@@ -15,7 +15,7 @@ complete(task(instance), withVariables("approved", true));
 
 ## Compatibility
 
-Orque IO Platform Assert works with the corresponding version of Camunda Platform (i.e., Camunda Platform Assert 7.17.0 is compatible to Camunda Platform 7.17.0). The compatibility between earlier versions are as shown [in the documentation](https://docs.camunda.org/manual/latest/user-guide/testing/#assertions-version-compatibility).
+Orque IO Platform Assert works with the corresponding version of Orqueio Platform (i.e., Orqueio Platform Assert 7.17.0 is compatible to Orqueio Platform 7.17.0). The compatibility between earlier versions are as shown [in the documentation](https://docs.orqueio.org/manual/latest/user-guide/testing/#assertions-version-compatibility).
 Orque IO Platform Assert works with multiple Java versions (1.8+). All of this is continuously verified by executing around 500 test cases. 
 
 ## Get started
@@ -31,13 +31,13 @@ Orque IO Platform Assert works with multiple Java versions (1.8+). All of this i
 </dependency>
 ```
 
-Additionally, [AssertJ](https://assertj.github.io/doc/) needs to be provided as a dependency with a version that is compatible with the one documented in the [compatibility matrix](https://docs.camunda.org/manual/latest/user-guide/testing/#assertions-version-compatibility).
+Additionally, [AssertJ](https://assertj.github.io/doc/) needs to be provided as a dependency with a version that is compatible with the one documented in the [compatibility matrix](https://docs.orqueio.org/manual/latest/user-guide/testing/#assertions-version-compatibility).
 
-Please note that if you use [Spring Boot](https://spring.io/projects/spring-boot) or the [Camunda Spring Boot Starter](https://docs.camunda.org/manual/latest/user-guide/spring-boot-integration/) in your project, AssertJ is already included in your project's setup.
+Please note that if you use [Spring Boot](https://spring.io/projects/spring-boot) or the [Orqueio Spring Boot Starter](https://docs.orqueio.org/manual/latest/user-guide/spring-boot-integration/) in your project, AssertJ is already included in your project's setup.
 
 2. Add a static import to your test class
 
-Create your test case just as described in the [Camunda Platform Testing Guide](https://docs.camunda.org/manual/latest/user-guide/testing/) and add Orque IO Platform Assert by statically importing it in your test class:
+Create your test case just as described in the [Orqueio Platform Testing Guide](https://docs.orqueio.org/manual/latest/user-guide/testing/) and add Orque IO Platform Assert by statically importing it in your test class:
 
 ```groovy  
 import static io.orqueio.bpm.engine.test.assertions.ProcessEngineTests.*;
@@ -64,7 +64,7 @@ import static io.orqueio.bpm.engine.test.assertions.ProcessEngineTests.*;
 
 The Orque IO Platform Assert project used to be the community extension, created and supported by
 
-<img src="http://camunda.github.io/camunda-bpm-assert/resources/images/community-award.png" align="right" width="76">
+<img src="http://orqueio.github.io/orqueio-bpm-assert/resources/images/community-award.png" align="right" width="76">
 
 [Martin Schimak](https://github.com/martinschimak) (plexiti GmbH)<a href="http://plexiti.com">
 <img src="https://plexiti.com/images/plexiti-transparent.png" align="right"></img></a><br>
@@ -74,9 +74,9 @@ The Orque IO Platform Assert project used to be the community extension, created
 <a href="http://www.holisticon.de"><img src="https://www.holisticon.de/wp-content/uploads/2020/08/logo2016_black_242.png" align="right" /></a>[Simon Zambrovski](https://github.com/zambrovski) (Holisticon AG)
 
 
-... and [many others](https://github.com/camunda/camunda-bpm-assert/graphs/contributors).
+... and [many others](https://github.com/orqueio/orqueio-bpm-assert/graphs/contributors).
 
-In 2014, the library won the **Camunda Platform Community Award**.
+In 2014, the library won the **Orqueio Platform Community Award**.
 
-Starting from version 3.0.0 it was adopted as part of the Camunda Platform.
-Starting from version 7.17.0 it was merged into the Camunda Platform main repository.
+Starting from version 3.0.0 it was adopted as part of the Orqueio Platform.
+Starting from version 7.17.0 it was merged into the Orqueio Platform main repository.

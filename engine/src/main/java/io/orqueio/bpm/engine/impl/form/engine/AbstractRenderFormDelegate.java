@@ -58,9 +58,9 @@ public abstract class AbstractRenderFormDelegate {
   protected static final String DATEPICKER_POPUP_ATTRIBUTE = "datepicker-popup";
 
   /* orqueio attributes */
-  protected static final String CAM_VARIABLE_TYPE_ATTRIBUTE = "cam-variable-type";
-  protected static final String CAM_VARIABLE_NAME_ATTRIBUTE = "cam-variable-name";
-  protected static final String CAM_SCRIPT_ATTRIBUTE = "cam-script";
+  protected static final String CAM_VARIABLE_TYPE_ATTRIBUTE = "orq-variable-type";
+  protected static final String CAM_VARIABLE_NAME_ATTRIBUTE = "orq-variable-name";
+  protected static final String CAM_SCRIPT_ATTRIBUTE = "orq-script";
 
   /* angular attributes*/
   protected static final String NG_CLICK_ATTRIBUTE = "ng-click";

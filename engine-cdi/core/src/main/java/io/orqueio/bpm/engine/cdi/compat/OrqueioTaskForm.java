@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -23,9 +23,9 @@ import javax.inject.Named;
 import io.orqueio.bpm.engine.cdi.jsf.TaskForm;
 
 @ConversationScoped
-@Named("camunda.taskForm")
-@Typed({CamundaTaskForm.class})
-public class CamundaTaskForm extends TaskForm {
+@Named("orqueio.taskForm")
+@Typed({OrqueioTaskForm.class})
+public class OrqueioTaskForm extends TaskForm {
 
   private static final long serialVersionUID = 9042602064970870095L;
 }

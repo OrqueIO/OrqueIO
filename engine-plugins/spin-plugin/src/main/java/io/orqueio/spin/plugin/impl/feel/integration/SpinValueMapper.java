@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -28,9 +28,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
-import org.camunda.feel.syntaxtree.Val;
-import org.camunda.feel.syntaxtree.ValString;
-import org.camunda.feel.valuemapper.JavaCustomValueMapper;
+import org.orqueio.feel.syntaxtree.Val;
+import org.orqueio.feel.syntaxtree.ValString;
+import org.orqueio.feel.valuemapper.JavaCustomValueMapper;
 import io.orqueio.spin.json.SpinJsonNode;
 import io.orqueio.spin.xml.SpinXmlAttribute;
 import io.orqueio.spin.xml.SpinXmlElement;

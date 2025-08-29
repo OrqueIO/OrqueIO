@@ -23,7 +23,7 @@ package io.orqueio.bpm.engine.impl.pvm.runtime;
  *
  * @param <P> the type of the callback parameter
  * @param <R> the type of the callback result
- * @author Christopher Zell <christopher.zell@camunda.com>
+ * @author Christopher Zell <christopher.zell@orqueio.com>
  */
 public interface Callback<P, R> {
 

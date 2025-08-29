@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -48,7 +48,7 @@ import io.orqueio.spin.xml.SpinXmlElement;
 
 public class XmlSerializationTest extends PluggableProcessEngineTestCase {
 
-  protected static final String ONE_TASK_PROCESS = "org/camunda/spin/plugin/oneTaskProcess.bpmn20.xml";
+  protected static final String ONE_TASK_PROCESS = "io/orqueio/spin/plugin/oneTaskProcess.bpmn20.xml";
 
   protected static final String XML_FORMAT_NAME = DataFormats.XML_DATAFORMAT_NAME;
 
@@ -486,14 +486,14 @@ public class XmlSerializationTest extends PluggableProcessEngineTestCase {
     deployment(Bpmn.createExecutableProcess("spin-xml-issue")
         .startEvent()
         .serviceTask()
-          .camundaExpression("${XML(\"<result/>\").append(xmlInput.xPath(\"//cosigner/*\").elementList()).toString()}")
-          .camundaResultVariable("output")
+          .orqueioExpression("${XML(\"<result/>\").append(xmlInput.xPath(\"//cosigner/*\").elementList()).toString()}")
+          .orqueioResultVariable("output")
         .userTask()
         .endEvent()
         .done());
 
-    Reader xmlInput = SpinIoUtil.classpathResourceAsReader("org/camunda/spin/plugin/XmlSerializationTest-input.xml");
-    String expectedOutput = SpinIoUtil.fileAsString("org/camunda/spin/plugin/XmlSerializationTest-output.xml");
+    Reader xmlInput = SpinIoUtil.classpathResourceAsReader("io/orqueio/spin/plugin/XmlSerializationTest-input.xml");
+    String expectedOutput = SpinIoUtil.fileAsString("io/orqueio/spin/plugin/XmlSerializationTest-output.xml");
     VariableMap variables = Variables.putValue("xmlInput", Spin.XML(xmlInput));
     // when
     runtimeService.startProcessInstanceByKey("spin-xml-issue", variables);

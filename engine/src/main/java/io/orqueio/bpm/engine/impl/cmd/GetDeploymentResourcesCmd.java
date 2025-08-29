@@ -28,7 +28,7 @@ import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
 
 
 /**
- * @author kristin.polenz@camunda.com
+ * @author kristin.polenz@orqueio.com
  */
 @SuppressWarnings("rawtypes")
 public class GetDeploymentResourcesCmd implements Command<List>, Serializable {

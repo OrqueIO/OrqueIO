@@ -1871,7 +1871,7 @@ public class UserOperationLogQueryTest extends AbstractUserOperationLogTest {
     taskService.setPriority(processTaskId, 10);
 
     // add and delete an attachment
-    Attachment attachment = taskService.createAttachment("image/ico", processTaskId, process.getId(), "favicon.ico", "favicon", "http://camunda.com/favicon.ico");
+    Attachment attachment = taskService.createAttachment("image/ico", processTaskId, process.getId(), "favicon.ico", "favicon", "http://orqueio.com/favicon.ico");
     taskService.deleteAttachment(attachment.getId());
 
     // complete the userTask to finish the process

@@ -20,7 +20,7 @@ import io.orqueio.bpm.engine.impl.persistence.entity.ExecutionEntity;
 
 /**
  *
- * @author Christopher Zell <christopher.zell@camunda.com>
+ * @author Christopher Zell <christopher.zell@orqueio.com>
  * @param <T> the type of the extra param to determine the priority
  */
 public interface PriorityProvider<T> {

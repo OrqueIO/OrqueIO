@@ -1058,7 +1058,7 @@ public class HistoryCleanupRemovalTimeTest {
       .singleResult()
       .getId();
 
-    taskService.createAttachment(null, null, processInstanceId, null, null, "http://camunda.com").getId();
+    taskService.createAttachment(null, null, processInstanceId, null, null, "http://orqueio.com").getId();
 
     List<Attachment> attachments = taskService.getProcessInstanceAttachments(processInstanceId);
 
@@ -1820,7 +1820,7 @@ public class HistoryCleanupRemovalTimeTest {
 
         ClockUtil.setCurrentTime(addMinutes(END_DATE, i));
 
-        taskService.createAttachment(null, null, processInstanceId, null, null, "http://camunda.com").getId();
+        taskService.createAttachment(null, null, processInstanceId, null, null, "http://orqueio.com").getId();
 
         String taskId = taskService.createTaskQuery().singleResult().getId();
         taskService.complete(taskId);

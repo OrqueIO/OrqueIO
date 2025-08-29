@@ -27,7 +27,7 @@ import io.orqueio.bpm.engine.impl.persistence.entity.ByteArrayEntity;
 
 
 /**
- * @author kristin.polenz@camunda.com
+ * @author kristin.polenz@orqueio.com
  */
 public class GetTaskAttachmentContentCmd implements Command<InputStream>, Serializable {
 

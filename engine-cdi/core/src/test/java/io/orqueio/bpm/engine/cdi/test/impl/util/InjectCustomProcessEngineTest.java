@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -32,7 +32,7 @@ import org.junit.*;
 import org.junit.runner.RunWith;
 
 /**
- * @author Christopher Zell <christopher.zell@camunda.com>
+ * @author Christopher Zell <christopher.zell@orqueio.com>
  */
 @RunWith(Arquillian.class)
 public class InjectCustomProcessEngineTest extends CdiProcessEngineTestCase {
@@ -42,7 +42,7 @@ public class InjectCustomProcessEngineTest extends CdiProcessEngineTestCase {
 
   @Before
   public void init() {
-    processEngine = TestHelper.getProcessEngine("org/camunda/bpm/engine/cdi/test/impl/util/camunda.cfg.xml");
+    processEngine = TestHelper.getProcessEngine("io/orqueio/bpm/engine/cdi/test/impl/util/orqueio.cfg.xml");
     defaultProcessEngine = BpmPlatform.getProcessEngineService().getDefaultProcessEngine();
 
     if (defaultProcessEngine != null) {

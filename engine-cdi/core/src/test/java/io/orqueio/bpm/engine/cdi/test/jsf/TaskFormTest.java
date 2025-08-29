@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -21,7 +21,7 @@ import java.util.Set;
 import javax.enterprise.inject.AmbiguousResolutionException;
 import javax.enterprise.inject.spi.Bean;
 
-import io.orqueio.bpm.engine.cdi.compat.CamundaTaskForm;
+import io.orqueio.bpm.engine.cdi.compat.OrqueioTaskForm;
 import io.orqueio.bpm.engine.cdi.compat.FoxTaskForm;
 import io.orqueio.bpm.engine.cdi.jsf.TaskForm;
 import io.orqueio.bpm.engine.cdi.test.CdiProcessEngineTestCase;
@@ -55,12 +55,12 @@ public class TaskFormTest extends CdiProcessEngineTestCase {
       Assert.fail("Injection of FoxTaskForm is ambiguous.");
     }
 
-    Set<Bean<?>> camundaTaskForm = beanManager.getBeans(CamundaTaskForm.class);
+    Set<Bean<?>> orqueioTaskForm = beanManager.getBeans(OrqueioTaskForm.class);
     try {
-      Bean<? extends Object> bean = beanManager.resolve(camundaTaskForm);
+      Bean<? extends Object> bean = beanManager.resolve(orqueioTaskForm);
       Assert.assertNotNull(bean);
     }catch(AmbiguousResolutionException e) {
-      Assert.fail("Injection of CamundaTaskForm is ambiguous.");
+      Assert.fail("Injection of OrqueioTaskForm is ambiguous.");
     }
 
   }

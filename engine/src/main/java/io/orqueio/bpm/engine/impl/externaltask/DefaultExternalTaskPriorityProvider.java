@@ -27,7 +27,7 @@ import io.orqueio.bpm.engine.impl.persistence.entity.ExecutionEntity;
 /**
  * Represents the default priority provider for external tasks.
  *
- * @author Christopher Zell <christopher.zell@camunda.com>
+ * @author Christopher Zell <christopher.zell@orqueio.com>
  */
 public class DefaultExternalTaskPriorityProvider extends DefaultPriorityProvider<ExternalTaskActivityBehavior> {
 

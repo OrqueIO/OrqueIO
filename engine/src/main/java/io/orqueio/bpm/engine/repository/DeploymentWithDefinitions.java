@@ -21,7 +21,7 @@ import java.util.List;
 /**
  * An extension of the deployment interface to expose the deployed definitions.
  *
- * @author Christopher Zell <christopher.zell@camunda.com>
+ * @author Christopher Zell <christopher.zell@orqueio.com>
  */
 public interface DeploymentWithDefinitions extends Deployment {
 

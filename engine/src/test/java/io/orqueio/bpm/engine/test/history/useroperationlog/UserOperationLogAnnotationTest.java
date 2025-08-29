@@ -112,7 +112,7 @@ public class UserOperationLogAnnotationTest {
   }
 
   /**
-   * See https://app.camunda.com/jira/browse/CAM-10664
+   * See https://app.orqueio.com/jira/browse/CAM-10664
    */
   @Test
   public void shouldSetAnnotation_WithPreservedTimeStamp() {

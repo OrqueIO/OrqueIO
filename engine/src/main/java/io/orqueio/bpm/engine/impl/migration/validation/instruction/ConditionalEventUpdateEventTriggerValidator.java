@@ -20,7 +20,7 @@ import io.orqueio.bpm.engine.impl.bpmn.behavior.ConditionalEventBehavior;
 import io.orqueio.bpm.engine.impl.pvm.process.ActivityImpl;
 
 /**
- * @author Christopher Zell <christopher.zell@camunda.com>
+ * @author Christopher Zell <christopher.zell@orqueio.com>
  */
 public class ConditionalEventUpdateEventTriggerValidator implements MigrationInstructionValidator {
 
