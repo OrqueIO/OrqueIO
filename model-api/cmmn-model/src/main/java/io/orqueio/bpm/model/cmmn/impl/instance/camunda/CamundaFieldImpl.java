@@ -20,7 +20,7 @@ import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUT
 import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_NAME;
 import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_STRING_VALUE;
 import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ELEMENT_FIELD;
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_NS;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_NS;
 
 import io.orqueio.bpm.model.cmmn.impl.instance.CmmnModelElementInstanceImpl;
 import io.orqueio.bpm.model.cmmn.instance.camunda.CamundaExpression;
@@ -48,7 +48,7 @@ public class CamundaFieldImpl extends CmmnModelElementInstanceImpl implements Ca
 
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CamundaField.class, CAMUNDA_ELEMENT_FIELD)
-      .namespaceUri(CAMUNDA_NS)
+      .namespaceUri(ORQUEIO_NS)
       .instanceProvider(new ModelTypeInstanceProvider<CamundaField>() {
         public CamundaField newInstance(ModelTypeInstanceContext instanceContext) {
           return new CamundaFieldImpl(instanceContext);
@@ -56,15 +56,15 @@ public class CamundaFieldImpl extends CmmnModelElementInstanceImpl implements Ca
       });
 
     camundaNameAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_NAME)
-      .namespace(CAMUNDA_NS)
+      .namespace(ORQUEIO_NS)
       .build();
 
     camundaExpressionAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_EXPRESSION)
-      .namespace(CAMUNDA_NS)
+      .namespace(ORQUEIO_NS)
       .build();
 
     camundaStringValueAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_STRING_VALUE)
-      .namespace(CAMUNDA_NS)
+      .namespace(ORQUEIO_NS)
       .build();
 
     SequenceBuilder sequenceBuilder = typeBuilder.sequence();

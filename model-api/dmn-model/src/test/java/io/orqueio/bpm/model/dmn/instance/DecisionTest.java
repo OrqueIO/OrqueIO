@@ -18,7 +18,7 @@ package io.orqueio.bpm.model.dmn.instance;
 
 import java.util.Arrays;
 import java.util.Collection;
-import static io.orqueio.bpm.model.dmn.impl.DmnModelConstants.CAMUNDA_NS;
+import static io.orqueio.bpm.model.dmn.impl.DmnModelConstants.ORQUEIO_NS;
 
 public class DecisionTest extends DmnModelElementInstanceTest {
 
@@ -46,8 +46,8 @@ public class DecisionTest extends DmnModelElementInstanceTest {
 
   public Collection<AttributeAssumption> getAttributesAssumptions() {
     return Arrays.asList(
-      new AttributeAssumption(CAMUNDA_NS, "versionTag"),
-      new AttributeAssumption(CAMUNDA_NS, "historyTimeToLive")
+      new AttributeAssumption(ORQUEIO_NS, "versionTag"),
+      new AttributeAssumption(ORQUEIO_NS, "historyTimeToLive")
     );
   }
 

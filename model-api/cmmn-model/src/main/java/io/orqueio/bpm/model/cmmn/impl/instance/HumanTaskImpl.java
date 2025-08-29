@@ -23,7 +23,7 @@ import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUT
 import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_FOLLOW_UP_DATE;
 import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_FORM_KEY;
 import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_PRIORITY;
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_NS;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_NS;
 import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CMMN11_NS;
 import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CMMN_ATTRIBUTE_PERFORMER_REF;
 import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CMMN_ELEMENT_HUMAN_TASK;
@@ -189,31 +189,31 @@ public class HumanTaskImpl extends TaskImpl implements HumanTask {
     /** camunda extensions */
 
     camundaAssigneeAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_ASSIGNEE)
-      .namespace(CAMUNDA_NS)
+      .namespace(ORQUEIO_NS)
       .build();
 
     camundaCandidateGroupsAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_CANDIDATE_GROUPS)
-      .namespace(CAMUNDA_NS)
+      .namespace(ORQUEIO_NS)
       .build();
 
     camundaCandidateUsersAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_CANDIDATE_USERS)
-      .namespace(CAMUNDA_NS)
+      .namespace(ORQUEIO_NS)
       .build();
 
     camundaDueDateAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_DUE_DATE)
-      .namespace(CAMUNDA_NS)
+      .namespace(ORQUEIO_NS)
       .build();
 
     camundaFollowUpDateAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_FOLLOW_UP_DATE)
-      .namespace(CAMUNDA_NS)
+      .namespace(ORQUEIO_NS)
       .build();
 
     camundaFormKeyAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_FORM_KEY)
-      .namespace(CAMUNDA_NS)
+      .namespace(ORQUEIO_NS)
       .build();
 
     camundaPriorityAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_PRIORITY)
-      .namespace(CAMUNDA_NS)
+      .namespace(ORQUEIO_NS)
       .build();
 
     SequenceBuilder sequenceBuilder = typeBuilder.sequence();

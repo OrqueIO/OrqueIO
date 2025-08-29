@@ -21,7 +21,7 @@ import io.orqueio.bpm.model.bpmn.instance.BpmnModelElementInstanceTest;
 import java.util.Arrays;
 import java.util.Collection;
 
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_NS;
 
 /**
  * @author Sebastian Menski
@@ -29,7 +29,7 @@ import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
 public class CamundaInTest extends BpmnModelElementInstanceTest {
 
   public TypeAssumption getTypeAssumption() {
-    return new TypeAssumption(CAMUNDA_NS, false);
+    return new TypeAssumption(ORQUEIO_NS, false);
   }
 
   public Collection<ChildElementAssumption> getChildElementAssumptions() {
@@ -38,12 +38,12 @@ public class CamundaInTest extends BpmnModelElementInstanceTest {
 
   public Collection<AttributeAssumption> getAttributesAssumptions() {
     return Arrays.asList(
-      new AttributeAssumption(CAMUNDA_NS, "source"),
-      new AttributeAssumption(CAMUNDA_NS, "sourceExpression"),
-      new AttributeAssumption(CAMUNDA_NS, "variables"),
-      new AttributeAssumption(CAMUNDA_NS, "target"),
-      new AttributeAssumption(CAMUNDA_NS, "businessKey"),
-      new AttributeAssumption(CAMUNDA_NS, "local")
+      new AttributeAssumption(ORQUEIO_NS, "source"),
+      new AttributeAssumption(ORQUEIO_NS, "sourceExpression"),
+      new AttributeAssumption(ORQUEIO_NS, "variables"),
+      new AttributeAssumption(ORQUEIO_NS, "target"),
+      new AttributeAssumption(ORQUEIO_NS, "businessKey"),
+      new AttributeAssumption(ORQUEIO_NS, "local")
     );
   }
 }

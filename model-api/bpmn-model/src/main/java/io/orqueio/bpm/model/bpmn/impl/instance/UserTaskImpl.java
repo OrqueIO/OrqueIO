@@ -30,7 +30,7 @@ import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUT
 import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_FORM_REF_BINDING;
 import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_FORM_REF_VERSION;
 import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_PRIORITY;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_NS;
 
 import java.util.Collection;
 import java.util.List;
@@ -95,47 +95,47 @@ public class UserTaskImpl extends TaskImpl implements UserTask {
     /** camunda extensions */
 
     camundaAssigneeAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_ASSIGNEE)
-      .namespace(CAMUNDA_NS)
+      .namespace(ORQUEIO_NS)
       .build();
 
     camundaCandidateGroupsAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_CANDIDATE_GROUPS)
-      .namespace(CAMUNDA_NS)
+      .namespace(ORQUEIO_NS)
       .build();
 
     camundaCandidateUsersAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_CANDIDATE_USERS)
-      .namespace(CAMUNDA_NS)
+      .namespace(ORQUEIO_NS)
       .build();
 
     camundaDueDateAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_DUE_DATE)
-      .namespace(CAMUNDA_NS)
+      .namespace(ORQUEIO_NS)
       .build();
 
     camundaFollowUpDateAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_FOLLOW_UP_DATE)
-      .namespace(CAMUNDA_NS)
+      .namespace(ORQUEIO_NS)
       .build();
 
     camundaFormHandlerClassAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_FORM_HANDLER_CLASS)
-      .namespace(CAMUNDA_NS)
+      .namespace(ORQUEIO_NS)
       .build();
 
     camundaFormKeyAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_FORM_KEY)
-      .namespace(CAMUNDA_NS)
+      .namespace(ORQUEIO_NS)
       .build();
 
     camundaFormRefAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_FORM_REF)
-        .namespace(CAMUNDA_NS)
+        .namespace(ORQUEIO_NS)
         .build();
 
     camundaFormRefBindingAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_FORM_REF_BINDING)
-        .namespace(CAMUNDA_NS)
+        .namespace(ORQUEIO_NS)
         .build();
 
     camundaFormRefVersionAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_FORM_REF_VERSION)
-        .namespace(CAMUNDA_NS)
+        .namespace(ORQUEIO_NS)
         .build();
 
     camundaPriorityAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_PRIORITY)
-      .namespace(CAMUNDA_NS)
+      .namespace(ORQUEIO_NS)
       .build();
 
     typeBuilder.build();

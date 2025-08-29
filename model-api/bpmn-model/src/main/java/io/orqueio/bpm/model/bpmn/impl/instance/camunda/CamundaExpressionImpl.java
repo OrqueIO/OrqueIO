@@ -23,7 +23,7 @@ import io.orqueio.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import io.orqueio.bpm.model.xml.type.ModelElementTypeBuilder;
 
 import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ELEMENT_EXPRESSION;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_NS;
 import static io.orqueio.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
@@ -35,7 +35,7 @@ public class CamundaExpressionImpl extends BpmnModelElementInstanceImpl implemen
 
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CamundaExpression.class, CAMUNDA_ELEMENT_EXPRESSION)
-      .namespaceUri(CAMUNDA_NS)
+      .namespaceUri(ORQUEIO_NS)
       .instanceProvider(new ModelTypeInstanceProvider<CamundaExpression>() {
         public CamundaExpression newInstance(ModelTypeInstanceContext instanceContext) {
           return new CamundaExpressionImpl(instanceContext);

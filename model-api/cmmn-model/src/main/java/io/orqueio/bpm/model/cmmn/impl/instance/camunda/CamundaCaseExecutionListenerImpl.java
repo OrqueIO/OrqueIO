@@ -21,7 +21,7 @@ import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUT
 import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_EVENT;
 import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_EXPRESSION;
 import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ELEMENT_CASE_EXECUTION_LISTENER;
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_NS;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_NS;
 
 import java.util.Collection;
 
@@ -53,7 +53,7 @@ public class CamundaCaseExecutionListenerImpl extends CmmnModelElementInstanceIm
 
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CamundaCaseExecutionListener.class, CAMUNDA_ELEMENT_CASE_EXECUTION_LISTENER)
-      .namespaceUri(CAMUNDA_NS)
+      .namespaceUri(ORQUEIO_NS)
       .instanceProvider(new ModelTypeInstanceProvider<CamundaCaseExecutionListener>() {
         public CamundaCaseExecutionListener newInstance(ModelTypeInstanceContext instanceContext) {
           return new CamundaCaseExecutionListenerImpl(instanceContext);
@@ -61,19 +61,19 @@ public class CamundaCaseExecutionListenerImpl extends CmmnModelElementInstanceIm
       });
 
     camundaEventAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_EVENT)
-      .namespace(CAMUNDA_NS)
+      .namespace(ORQUEIO_NS)
       .build();
 
     camundaClassAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_CLASS)
-      .namespace(CAMUNDA_NS)
+      .namespace(ORQUEIO_NS)
       .build();
 
     camundaExpressionAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_EXPRESSION)
-      .namespace(CAMUNDA_NS)
+      .namespace(ORQUEIO_NS)
       .build();
 
     camundaDelegateExpressionAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_DELEGATE_EXPRESSION)
-      .namespace(CAMUNDA_NS)
+      .namespace(ORQUEIO_NS)
       .build();
 
     SequenceBuilder sequenceBuilder = typeBuilder.sequence();

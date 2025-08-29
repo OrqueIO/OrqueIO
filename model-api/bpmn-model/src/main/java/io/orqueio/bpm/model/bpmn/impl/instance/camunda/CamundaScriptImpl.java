@@ -27,7 +27,7 @@ import io.orqueio.bpm.model.xml.type.attribute.Attribute;
 import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_RESOURCE;
 import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_SCRIPT_FORMAT;
 import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ELEMENT_SCRIPT;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_NS;
 
 /**
  * The BPMN script camunda extension element
@@ -41,7 +41,7 @@ public class CamundaScriptImpl extends BpmnModelElementInstanceImpl implements C
 
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CamundaScript.class, CAMUNDA_ELEMENT_SCRIPT)
-      .namespaceUri(CAMUNDA_NS)
+      .namespaceUri(ORQUEIO_NS)
       .instanceProvider(new ModelTypeInstanceProvider<CamundaScript>() {
         public CamundaScript newInstance(ModelTypeInstanceContext instanceContext) {
           return new CamundaScriptImpl(instanceContext);

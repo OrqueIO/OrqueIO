@@ -43,7 +43,7 @@ public abstract class AbstractEventDefinitionTest extends BpmnModelElementInstan
 
   @Before
   public void getEvent() {
-    InputStream inputStream = ReflectUtil.getResourceAsStream("org/camunda/bpm/model/bpmn/EventDefinitionsTest.xml");
+    InputStream inputStream = ReflectUtil.getResourceAsStream("io/orqueio/bpm/model/bpmn/EventDefinitionsTest.xml");
     IntermediateThrowEvent event = Bpmn.readModelFromStream(inputStream).getModelElementById("event");
     eventDefinitionQuery = new QueryImpl<EventDefinition>(event.getEventDefinitions());
   }

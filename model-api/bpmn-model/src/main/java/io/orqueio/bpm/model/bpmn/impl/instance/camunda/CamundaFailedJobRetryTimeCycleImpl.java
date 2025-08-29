@@ -23,7 +23,7 @@ import io.orqueio.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import io.orqueio.bpm.model.xml.type.ModelElementTypeBuilder;
 
 import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ELEMENT_FAILED_JOB_RETRY_TIME_CYCLE;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_NS;
 import static io.orqueio.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
@@ -35,7 +35,7 @@ public class CamundaFailedJobRetryTimeCycleImpl extends BpmnModelElementInstance
 
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CamundaFailedJobRetryTimeCycle.class, CAMUNDA_ELEMENT_FAILED_JOB_RETRY_TIME_CYCLE)
-      .namespaceUri(CAMUNDA_NS)
+      .namespaceUri(ORQUEIO_NS)
       .instanceProvider(new ModelTypeInstanceProvider<CamundaFailedJobRetryTimeCycle>() {
         public CamundaFailedJobRetryTimeCycle newInstance(ModelTypeInstanceContext instanceContext) {
           return new CamundaFailedJobRetryTimeCycleImpl(instanceContext);

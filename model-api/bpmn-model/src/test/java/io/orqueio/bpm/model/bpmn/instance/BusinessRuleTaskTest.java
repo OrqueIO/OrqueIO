@@ -16,7 +16,7 @@
  */
 package io.orqueio.bpm.model.bpmn.instance;
 
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_NS;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -41,19 +41,19 @@ public class BusinessRuleTaskTest extends BpmnModelElementInstanceTest {
     return Arrays.asList(
       new AttributeAssumption("implementation", false, false, "##unspecified"),
       /** camunda extensions */
-      new AttributeAssumption(CAMUNDA_NS, "class"),
-      new AttributeAssumption(CAMUNDA_NS, "delegateExpression"),
-      new AttributeAssumption(CAMUNDA_NS, "expression"),
-      new AttributeAssumption(CAMUNDA_NS, "resultVariable"),
-      new AttributeAssumption(CAMUNDA_NS, "topic"),
-      new AttributeAssumption(CAMUNDA_NS, "type"),
-      new AttributeAssumption(CAMUNDA_NS, "decisionRef"),
-      new AttributeAssumption(CAMUNDA_NS, "decisionRefBinding"),
-      new AttributeAssumption(CAMUNDA_NS, "decisionRefVersion"),
-      new AttributeAssumption(CAMUNDA_NS, "decisionRefVersionTag"),
-      new AttributeAssumption(CAMUNDA_NS, "decisionRefTenantId"),
-      new AttributeAssumption(CAMUNDA_NS, "mapDecisionResult"),
-      new AttributeAssumption(CAMUNDA_NS, "taskPriority")
+      new AttributeAssumption(ORQUEIO_NS, "class"),
+      new AttributeAssumption(ORQUEIO_NS, "delegateExpression"),
+      new AttributeAssumption(ORQUEIO_NS, "expression"),
+      new AttributeAssumption(ORQUEIO_NS, "resultVariable"),
+      new AttributeAssumption(ORQUEIO_NS, "topic"),
+      new AttributeAssumption(ORQUEIO_NS, "type"),
+      new AttributeAssumption(ORQUEIO_NS, "decisionRef"),
+      new AttributeAssumption(ORQUEIO_NS, "decisionRefBinding"),
+      new AttributeAssumption(ORQUEIO_NS, "decisionRefVersion"),
+      new AttributeAssumption(ORQUEIO_NS, "decisionRefVersionTag"),
+      new AttributeAssumption(ORQUEIO_NS, "decisionRefTenantId"),
+      new AttributeAssumption(ORQUEIO_NS, "mapDecisionResult"),
+      new AttributeAssumption(ORQUEIO_NS, "taskPriority")
     );
   }
 

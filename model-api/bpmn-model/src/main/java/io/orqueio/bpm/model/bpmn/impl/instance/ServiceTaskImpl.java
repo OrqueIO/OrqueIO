@@ -71,31 +71,31 @@ public class ServiceTaskImpl extends TaskImpl implements ServiceTask {
     /** camunda extensions */
 
     camundaClassAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_CLASS)
-      .namespace(CAMUNDA_NS)
+      .namespace(ORQUEIO_NS)
       .build();
 
     camundaDelegateExpressionAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_DELEGATE_EXPRESSION)
-      .namespace(CAMUNDA_NS)
+      .namespace(ORQUEIO_NS)
       .build();
 
     camundaExpressionAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_EXPRESSION)
-      .namespace(CAMUNDA_NS)
+      .namespace(ORQUEIO_NS)
       .build();
 
     camundaResultVariableAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_RESULT_VARIABLE)
-      .namespace(CAMUNDA_NS)
+      .namespace(ORQUEIO_NS)
       .build();
 
     camundaTopicAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_TOPIC)
-        .namespace(CAMUNDA_NS)
+        .namespace(ORQUEIO_NS)
         .build();
 
     camundaTypeAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_TYPE)
-      .namespace(CAMUNDA_NS)
+      .namespace(ORQUEIO_NS)
       .build();
     
     camundaTaskPriorityAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_TASK_PRIORITY)
-      .namespace(CAMUNDA_NS)
+      .namespace(ORQUEIO_NS)
       .build();
 
     typeBuilder.build();

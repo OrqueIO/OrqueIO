@@ -27,7 +27,7 @@ import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUT
 import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_EXCLUSIVE;
 import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_COLLECTION;
 import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_ELEMENT_VARIABLE;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_NS;
 
 import java.util.Collection;
 
@@ -133,26 +133,26 @@ public class MultiInstanceLoopCharacteristicsImpl extends LoopCharacteristicsImp
       .build();
 
     camundaAsyncAfter = typeBuilder.booleanAttribute(CAMUNDA_ATTRIBUTE_ASYNC_AFTER)
-        .namespace(CAMUNDA_NS)
+        .namespace(ORQUEIO_NS)
         .defaultValue(false)
         .build();
 
     camundaAsyncBefore = typeBuilder.booleanAttribute(CAMUNDA_ATTRIBUTE_ASYNC_BEFORE)
-        .namespace(CAMUNDA_NS)
+        .namespace(ORQUEIO_NS)
         .defaultValue(false)
         .build();
 
     camundaExclusive = typeBuilder.booleanAttribute(CAMUNDA_ATTRIBUTE_EXCLUSIVE)
-        .namespace(CAMUNDA_NS)
+        .namespace(ORQUEIO_NS)
         .defaultValue(true)
         .build();
 
     camundaCollection = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_COLLECTION)
-        .namespace(CAMUNDA_NS)
+        .namespace(ORQUEIO_NS)
         .build();
 
     camundaElementVariable = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_ELEMENT_VARIABLE)
-        .namespace(CAMUNDA_NS)
+        .namespace(ORQUEIO_NS)
         .build();
 
     typeBuilder.build();

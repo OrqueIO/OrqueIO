@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -37,7 +37,7 @@ import static javax.xml.XMLConstants.XMLNS_ATTRIBUTE_NS_URI;
  */
 public class DomElementImpl implements DomElement {
 
-  private static final String MODEL_ELEMENT_KEY = "camunda.modelElementRef";
+  private static final String MODEL_ELEMENT_KEY = "orqueio.modelElementRef";
 
   private final Element element;
   private final Document document;

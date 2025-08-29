@@ -21,7 +21,7 @@ import java.util.Collection;
 
 import io.orqueio.bpm.model.bpmn.instance.BpmnModelElementInstanceTest;
 
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_NS;
 
 /**
  * @author Sebastian Menski
@@ -29,22 +29,22 @@ import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
 public class CamundaExecutionListenerTest extends BpmnModelElementInstanceTest {
 
   public TypeAssumption getTypeAssumption() {
-    return new TypeAssumption(CAMUNDA_NS, false);
+    return new TypeAssumption(ORQUEIO_NS, false);
   }
 
   public Collection<ChildElementAssumption> getChildElementAssumptions() {
     return Arrays.asList(
-      new ChildElementAssumption(CAMUNDA_NS, CamundaField.class),
-      new ChildElementAssumption(CAMUNDA_NS, CamundaScript.class, 0, 1)
+      new ChildElementAssumption(ORQUEIO_NS, CamundaField.class),
+      new ChildElementAssumption(ORQUEIO_NS, CamundaScript.class, 0, 1)
     );
   }
 
   public Collection<AttributeAssumption> getAttributesAssumptions() {
     return Arrays.asList(
-      new AttributeAssumption(CAMUNDA_NS, "event"),
-      new AttributeAssumption(CAMUNDA_NS, "class"),
-      new AttributeAssumption(CAMUNDA_NS, "expression"),
-      new AttributeAssumption(CAMUNDA_NS, "delegateExpression")
+      new AttributeAssumption(ORQUEIO_NS, "event"),
+      new AttributeAssumption(ORQUEIO_NS, "class"),
+      new AttributeAssumption(ORQUEIO_NS, "expression"),
+      new AttributeAssumption(ORQUEIO_NS, "delegateExpression")
     );
   }
 }

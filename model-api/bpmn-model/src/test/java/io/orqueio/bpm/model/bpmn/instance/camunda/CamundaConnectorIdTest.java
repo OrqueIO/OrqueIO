@@ -16,7 +16,7 @@
  */
 package io.orqueio.bpm.model.bpmn.instance.camunda;
 
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_NS;
 
 import java.util.Collection;
 
@@ -25,7 +25,7 @@ import io.orqueio.bpm.model.bpmn.instance.BpmnModelElementInstanceTest;
 public class CamundaConnectorIdTest extends BpmnModelElementInstanceTest {
 
   public TypeAssumption getTypeAssumption() {
-    return new TypeAssumption(CAMUNDA_NS, false);
+    return new TypeAssumption(ORQUEIO_NS, false);
   }
 
   public Collection<ChildElementAssumption> getChildElementAssumptions() {

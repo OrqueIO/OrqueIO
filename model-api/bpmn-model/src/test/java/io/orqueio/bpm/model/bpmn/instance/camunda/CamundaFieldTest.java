@@ -21,7 +21,7 @@ import io.orqueio.bpm.model.bpmn.instance.BpmnModelElementInstanceTest;
 import java.util.Arrays;
 import java.util.Collection;
 
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_NS;
 
 /**
  * @author Sebastian Menski
@@ -29,21 +29,21 @@ import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
 public class CamundaFieldTest extends BpmnModelElementInstanceTest {
 
   public TypeAssumption getTypeAssumption() {
-    return new TypeAssumption(CAMUNDA_NS, false);
+    return new TypeAssumption(ORQUEIO_NS, false);
   }
 
   public Collection<ChildElementAssumption> getChildElementAssumptions() {
     return Arrays.asList(
-      new ChildElementAssumption(CAMUNDA_NS, CamundaExpression.class, 0, 1),
-      new ChildElementAssumption(CAMUNDA_NS, CamundaString.class, 0, 1)
+      new ChildElementAssumption(ORQUEIO_NS, CamundaExpression.class, 0, 1),
+      new ChildElementAssumption(ORQUEIO_NS, CamundaString.class, 0, 1)
     );
   }
 
   public Collection<AttributeAssumption> getAttributesAssumptions() {
     return Arrays.asList(
-      new AttributeAssumption(CAMUNDA_NS, "name"),
-      new AttributeAssumption(CAMUNDA_NS, "expression"),
-      new AttributeAssumption(CAMUNDA_NS, "stringValue")
+      new AttributeAssumption(ORQUEIO_NS, "name"),
+      new AttributeAssumption(ORQUEIO_NS, "expression"),
+      new AttributeAssumption(ORQUEIO_NS, "stringValue")
     );
   }
 }

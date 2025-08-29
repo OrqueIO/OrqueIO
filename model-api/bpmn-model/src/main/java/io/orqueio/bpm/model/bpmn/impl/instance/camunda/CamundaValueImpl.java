@@ -38,7 +38,7 @@ public class CamundaValueImpl extends BpmnModelElementInstanceImpl implements Ca
 
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CamundaValue.class, CAMUNDA_ELEMENT_VALUE)
-      .namespaceUri(CAMUNDA_NS)
+      .namespaceUri(ORQUEIO_NS)
       .instanceProvider(new ModelTypeInstanceProvider<CamundaValue>() {
         public CamundaValue newInstance(ModelTypeInstanceContext instanceContext) {
           return new CamundaValueImpl(instanceContext);
@@ -46,11 +46,11 @@ public class CamundaValueImpl extends BpmnModelElementInstanceImpl implements Ca
       });
 
     camundaIdAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_ID)
-      .namespace(CAMUNDA_NS)
+      .namespace(ORQUEIO_NS)
       .build();
 
     camundaNameAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_NAME)
-      .namespace(CAMUNDA_NS)
+      .namespace(ORQUEIO_NS)
       .build();
 
     typeBuilder.build();

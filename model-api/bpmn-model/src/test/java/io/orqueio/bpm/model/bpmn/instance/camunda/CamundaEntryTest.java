@@ -16,7 +16,7 @@
  */
 package io.orqueio.bpm.model.bpmn.instance.camunda;
 
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_NS;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -26,7 +26,7 @@ import io.orqueio.bpm.model.bpmn.instance.BpmnModelElementInstanceTest;
 public class CamundaEntryTest extends BpmnModelElementInstanceTest {
 
   public TypeAssumption getTypeAssumption() {
-    return new TypeAssumption(CAMUNDA_NS, false);
+    return new TypeAssumption(ORQUEIO_NS, false);
   }
 
   public Collection<ChildElementAssumption> getChildElementAssumptions() {
@@ -35,7 +35,7 @@ public class CamundaEntryTest extends BpmnModelElementInstanceTest {
 
   public Collection<AttributeAssumption> getAttributesAssumptions() {
     return Arrays.asList(
-      new AttributeAssumption(CAMUNDA_NS, "key", false, true)
+      new AttributeAssumption(ORQUEIO_NS, "key", false, true)
     );
   }
 

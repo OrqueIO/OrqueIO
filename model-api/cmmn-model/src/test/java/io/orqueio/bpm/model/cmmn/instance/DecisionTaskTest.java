@@ -16,7 +16,7 @@
  */
 package io.orqueio.bpm.model.cmmn.instance;
 
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_NS;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_NS;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -41,11 +41,11 @@ public class DecisionTaskTest extends CmmnModelElementInstanceTest {
   public Collection<AttributeAssumption> getAttributesAssumptions() {
     return Arrays.asList(
         new AttributeAssumption("decisionRef"),
-        new AttributeAssumption(CAMUNDA_NS, "resultVariable"),
-        new AttributeAssumption(CAMUNDA_NS, "decisionBinding"),
-        new AttributeAssumption(CAMUNDA_NS, "decisionVersion"),
-        new AttributeAssumption(CAMUNDA_NS, "mapDecisionResult"),
-        new AttributeAssumption(CAMUNDA_NS, "decisionTenantId")
+        new AttributeAssumption(ORQUEIO_NS, "resultVariable"),
+        new AttributeAssumption(ORQUEIO_NS, "decisionBinding"),
+        new AttributeAssumption(ORQUEIO_NS, "decisionVersion"),
+        new AttributeAssumption(ORQUEIO_NS, "mapDecisionResult"),
+        new AttributeAssumption(ORQUEIO_NS, "decisionTenantId")
       );
   }
 

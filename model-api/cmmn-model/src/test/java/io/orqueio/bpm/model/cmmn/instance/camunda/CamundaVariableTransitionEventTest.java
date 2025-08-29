@@ -17,7 +17,7 @@
 package io.orqueio.bpm.model.cmmn.instance.camunda;
 
 import java.util.Collection;
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_NS;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_NS;
 
 import io.orqueio.bpm.model.cmmn.instance.CmmnModelElementInstanceTest;
 
@@ -30,7 +30,7 @@ import io.orqueio.bpm.model.cmmn.instance.CmmnModelElementInstanceTest;
 public class CamundaVariableTransitionEventTest extends CmmnModelElementInstanceTest {
 
   public TypeAssumption getTypeAssumption() {
-    return new TypeAssumption(CAMUNDA_NS,false);
+    return new TypeAssumption(ORQUEIO_NS,false);
   }
 
   @Override

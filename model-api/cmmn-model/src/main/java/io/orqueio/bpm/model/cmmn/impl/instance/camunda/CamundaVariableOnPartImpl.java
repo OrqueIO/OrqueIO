@@ -18,7 +18,7 @@ package io.orqueio.bpm.model.cmmn.impl.instance.camunda;
 
 import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_VARIABLE_NAME;
 import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ELEMENT_VARIABLE_ON_PART;
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_NS;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_NS;
 
 import io.orqueio.bpm.model.cmmn.VariableTransition;
 import io.orqueio.bpm.model.cmmn.impl.instance.CmmnModelElementInstanceImpl;
@@ -44,7 +44,7 @@ public class CamundaVariableOnPartImpl extends CmmnModelElementInstanceImpl impl
   public static void registerType(ModelBuilder modelBuilder) {
 
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CamundaVariableOnPart.class, CAMUNDA_ELEMENT_VARIABLE_ON_PART)
-      .namespaceUri(CAMUNDA_NS)
+      .namespaceUri(ORQUEIO_NS)
       .instanceProvider(new ModelTypeInstanceProvider<CamundaVariableOnPart>() {
         public CamundaVariableOnPart newInstance(ModelTypeInstanceContext instanceContext) {
           return new CamundaVariableOnPartImpl(instanceContext);
@@ -52,7 +52,7 @@ public class CamundaVariableOnPartImpl extends CmmnModelElementInstanceImpl impl
     });
 
     camundaVariableNameAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_VARIABLE_NAME)
-      .namespace(CAMUNDA_NS)
+      .namespace(ORQUEIO_NS)
       .build();
 
     SequenceBuilder sequenceBuilder = typeBuilder.sequence();

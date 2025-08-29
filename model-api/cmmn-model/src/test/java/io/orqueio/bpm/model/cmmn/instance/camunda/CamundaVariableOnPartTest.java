@@ -16,7 +16,7 @@
  */
 package io.orqueio.bpm.model.cmmn.instance.camunda;
 
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_NS;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_NS;
 import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CMMN11_NS;
 
 import java.util.Arrays;
@@ -32,18 +32,18 @@ import io.orqueio.bpm.model.cmmn.instance.CmmnModelElementInstanceTest;
 public class CamundaVariableOnPartTest extends CmmnModelElementInstanceTest {
 
   public TypeAssumption getTypeAssumption() {
-    return new TypeAssumption(CAMUNDA_NS, false);
+    return new TypeAssumption(ORQUEIO_NS, false);
   }
 
   public Collection<ChildElementAssumption> getChildElementAssumptions() {
     return Arrays.asList(
-        new ChildElementAssumption(CAMUNDA_NS, CamundaVariableTransitionEvent.class, 0, 1)
+        new ChildElementAssumption(ORQUEIO_NS, CamundaVariableTransitionEvent.class, 0, 1)
     );
   }
 
   public Collection<AttributeAssumption> getAttributesAssumptions() {
     return Arrays.asList(
-      new AttributeAssumption(CAMUNDA_NS, "variableName")
+      new AttributeAssumption(ORQUEIO_NS, "variableName")
     );
   }
 

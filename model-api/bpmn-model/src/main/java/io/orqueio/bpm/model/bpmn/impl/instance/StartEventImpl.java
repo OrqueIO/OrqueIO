@@ -64,32 +64,32 @@ public class StartEventImpl extends CatchEventImpl implements StartEvent {
     /** camunda extensions */
 
     camundaAsyncAttribute = typeBuilder.booleanAttribute(CAMUNDA_ATTRIBUTE_ASYNC)
-      .namespace(CAMUNDA_NS)
+      .namespace(ORQUEIO_NS)
       .defaultValue(false)
       .build();
 
     camundaFormHandlerClassAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_FORM_HANDLER_CLASS)
-      .namespace(CAMUNDA_NS)
+      .namespace(ORQUEIO_NS)
       .build();
 
     camundaFormKeyAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_FORM_KEY)
-      .namespace(CAMUNDA_NS)
+      .namespace(ORQUEIO_NS)
       .build();
 
     camundaFormRefAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_FORM_REF)
-        .namespace(CAMUNDA_NS)
+        .namespace(ORQUEIO_NS)
         .build();
 
     camundaFormRefBindingAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_FORM_REF_BINDING)
-        .namespace(CAMUNDA_NS)
+        .namespace(ORQUEIO_NS)
         .build();
 
     camundaFormRefVersionAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_FORM_REF_VERSION)
-        .namespace(CAMUNDA_NS)
+        .namespace(ORQUEIO_NS)
         .build();
 
     camundaInitiatorAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_INITIATOR)
-      .namespace(CAMUNDA_NS)
+      .namespace(ORQUEIO_NS)
       .build();
 
     typeBuilder.build();

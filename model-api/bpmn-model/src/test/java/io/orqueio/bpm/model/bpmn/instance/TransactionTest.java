@@ -61,7 +61,7 @@ public class TransactionTest extends BpmnModelElementInstanceTest {
 
   @Test
   public void shouldReadTransaction() {
-    InputStream inputStream = ReflectUtil.getResourceAsStream("org/camunda/bpm/model/bpmn/TransactionTest.xml");
+    InputStream inputStream = ReflectUtil.getResourceAsStream("io/orqueio/bpm/model/bpmn/TransactionTest.xml");
     Transaction transaction = Bpmn.readModelFromStream(inputStream).getModelElementById("transaction");
 
     assertThat(transaction).isNotNull();

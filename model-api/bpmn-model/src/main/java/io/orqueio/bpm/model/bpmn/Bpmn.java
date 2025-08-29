@@ -18,7 +18,7 @@ package io.orqueio.bpm.model.bpmn;
 
 import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ACTIVITI_NS;
 import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.BPMN20_NS;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_NS;
 import static io.orqueio.bpm.model.bpmn.impl.instance.ProcessImpl.DEFAULT_HISTORY_TIME_TO_LIVE;
 
 import java.io.File;
@@ -360,7 +360,7 @@ public class Bpmn {
     BpmnModelInstance modelInstance = INSTANCE.doCreateEmptyModel();
     Definitions definitions = modelInstance.newInstance(Definitions.class);
     definitions.setTargetNamespace(BPMN20_NS);
-    definitions.getDomElement().registerNamespace("camunda", CAMUNDA_NS);
+    definitions.getDomElement().registerNamespace("orqueio", ORQUEIO_NS);
     modelInstance.setDefinitions(definitions);
     Process process = modelInstance.newInstance(Process.class);
     definitions.addChildElement(process);
@@ -394,7 +394,7 @@ public class Bpmn {
    */
   protected Bpmn() {
     bpmnModelBuilder = ModelBuilder.createInstance("BPMN Model");
-    bpmnModelBuilder.alternativeNamespace(ACTIVITI_NS, CAMUNDA_NS);
+    bpmnModelBuilder.alternativeNamespace(ACTIVITI_NS, ORQUEIO_NS);
     doRegisterTypes(bpmnModelBuilder);
     bpmnModel = bpmnModelBuilder.build();
   }

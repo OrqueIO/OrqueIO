@@ -38,7 +38,7 @@ public class CamundaConstraintImpl extends BpmnModelElementInstanceImpl implemen
 
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CamundaConstraint.class, CAMUNDA_ELEMENT_CONSTRAINT)
-      .namespaceUri(CAMUNDA_NS)
+      .namespaceUri(ORQUEIO_NS)
       .instanceProvider(new ModelTypeInstanceProvider<CamundaConstraint>() {
         public CamundaConstraint newInstance(ModelTypeInstanceContext instanceContext) {
           return new CamundaConstraintImpl(instanceContext);
@@ -46,11 +46,11 @@ public class CamundaConstraintImpl extends BpmnModelElementInstanceImpl implemen
       });
 
     camundaNameAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_NAME)
-      .namespace(CAMUNDA_NS)
+      .namespace(ORQUEIO_NS)
       .build();
 
     camundaConfigAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_CONFIG)
-      .namespace(CAMUNDA_NS)
+      .namespace(ORQUEIO_NS)
       .build();
 
     typeBuilder.build();

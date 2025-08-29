@@ -40,7 +40,7 @@ import org.xmlunit.diff.Diff;
 
 public abstract class DmnModelTest {
 
-  public final static String TEST_NAMESPACE = "http://camunda.org/schema/1.0/dmn";
+  public final static String TEST_NAMESPACE = "http://orqueio.io/schema/1.0/dmn";
 
   @Rule
   public final ParseDmnModelRule parseDmnModelRule = new ParseDmnModelRule();

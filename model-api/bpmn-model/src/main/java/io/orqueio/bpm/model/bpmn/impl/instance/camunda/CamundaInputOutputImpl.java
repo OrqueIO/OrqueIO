@@ -29,7 +29,7 @@ import io.orqueio.bpm.model.xml.type.child.ChildElementCollection;
 import io.orqueio.bpm.model.xml.type.child.SequenceBuilder;
 
 import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ELEMENT_INPUT_OUTPUT;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_NS;
 
 /**
  * The BPMN inputOutput camunda extension element
@@ -43,7 +43,7 @@ public class CamundaInputOutputImpl extends BpmnModelElementInstanceImpl impleme
 
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CamundaInputOutput.class, CAMUNDA_ELEMENT_INPUT_OUTPUT)
-      .namespaceUri(CAMUNDA_NS)
+      .namespaceUri(ORQUEIO_NS)
       .instanceProvider(new ModelTypeInstanceProvider<CamundaInputOutput>() {
         public CamundaInputOutput newInstance(ModelTypeInstanceContext instanceContext) {
           return new CamundaInputOutputImpl(instanceContext);

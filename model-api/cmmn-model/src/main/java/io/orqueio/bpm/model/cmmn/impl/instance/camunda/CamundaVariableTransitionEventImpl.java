@@ -17,7 +17,7 @@
 package io.orqueio.bpm.model.cmmn.impl.instance.camunda;
 
 import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ELEMENT_VARIABLE_EVENT;
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_NS;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_NS;
 
 import io.orqueio.bpm.model.cmmn.VariableTransition;
 import io.orqueio.bpm.model.cmmn.impl.instance.CmmnModelElementInstanceImpl;
@@ -35,7 +35,7 @@ public class CamundaVariableTransitionEventImpl  extends CmmnModelElementInstanc
 
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CamundaVariableTransitionEvent.class, CAMUNDA_ELEMENT_VARIABLE_EVENT)
-      .namespaceUri(CAMUNDA_NS)
+      .namespaceUri(ORQUEIO_NS)
       .instanceProvider(new ModelTypeInstanceProvider<CamundaVariableTransitionEvent>() {
         public CamundaVariableTransitionEvent newInstance(ModelTypeInstanceContext instanceContext) {
           return new CamundaVariableTransitionEventImpl(instanceContext);

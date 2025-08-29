@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<animals xmlns="http://orqueio.io/animals"
+  xmlns:tns="http://orqueio.io/animals"
+  xmlns:mechanical="http://orqueio.io/mechanical"
+  xmlns:yans="http://orqueio.io/yans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://orqueio.io/animals ../Testmodel.xsd ">
+
+  <bird id="hedwig" gender="Male">
+    <mechanical:wings>wusch</mechanical:wings>
+  </bird>
+  <bird id="birdo" gender="Female">
+   <mechanical:wings>zisch</mechanical:wings>
+  </bird>
+  <bird id="donald" gender="Unknown" yans:canHazExtendedWings="true">
+   <yans:wings>flappy</yans:wings>
+  </bird>
+  <bird id="plucky" gender="Unknown" mechanical:canHazExtendedWings="false"/>
+</animals>

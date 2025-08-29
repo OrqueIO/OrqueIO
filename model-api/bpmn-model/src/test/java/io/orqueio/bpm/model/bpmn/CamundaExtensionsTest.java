@@ -61,7 +61,7 @@ import static io.orqueio.bpm.model.bpmn.BpmnTestConstants.USER_TASK_ID;
 import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ACTIVITI_NS;
 import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_ERROR_CODE_VARIABLE;
 import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_ERROR_MESSAGE_VARIABLE;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_NS;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -145,7 +145,7 @@ public class CamundaExtensionsTest {
   @Parameters(name="Namespace: {0}")
   public static Collection<Object[]> parameters(){
     return Arrays.asList(new Object[][]{
-        {CAMUNDA_NS, Bpmn.readModelFromStream(CamundaExtensionsTest.class.getResourceAsStream("CamundaExtensionsTest.xml"))},
+        {ORQUEIO_NS, Bpmn.readModelFromStream(CamundaExtensionsTest.class.getResourceAsStream("CamundaExtensionsTest.xml"))},
         //for compatability reasons we gotta check the old namespace, too
         {ACTIVITI_NS, Bpmn.readModelFromStream(CamundaExtensionsTest.class.getResourceAsStream("CamundaExtensionsCompatabilityTest.xml"))}
     });
@@ -979,7 +979,7 @@ public class CamundaExtensionsTest {
     CamundaInputParameter inputParameter = findInputParameterByName(serviceTask, "shouldBeList");
     assertThat(inputParameter.getCamundaName()).isEqualTo("shouldBeList");
     assertThat(inputParameter.getTextContent()).isNotEmpty();
-    assertThat(inputParameter.getUniqueChildElementByNameNs(CAMUNDA_NS, "list")).isNotNull();
+    assertThat(inputParameter.getUniqueChildElementByNameNs(ORQUEIO_NS, "list")).isNotNull();
 
     CamundaList list = inputParameter.getValue();
     assertThat(list.getValues()).hasSize(3);
@@ -1053,7 +1053,7 @@ public class CamundaExtensionsTest {
     CamundaInputParameter inputParameter = findInputParameterByName(serviceTask, "shouldBeMap");
     assertThat(inputParameter.getCamundaName()).isEqualTo("shouldBeMap");
     assertThat(inputParameter.getTextContent()).isNotEmpty();
-    assertThat(inputParameter.getUniqueChildElementByNameNs(CAMUNDA_NS, "map")).isNotNull();
+    assertThat(inputParameter.getUniqueChildElementByNameNs(ORQUEIO_NS, "map")).isNotNull();
 
     CamundaMap map = inputParameter.getValue();
     assertThat(map.getCamundaEntries()).hasSize(2);
@@ -1093,7 +1093,7 @@ public class CamundaExtensionsTest {
     CamundaInputParameter inputParameter = findInputParameterByName(serviceTask, "shouldBeScript");
     assertThat(inputParameter.getCamundaName()).isEqualTo("shouldBeScript");
     assertThat(inputParameter.getTextContent()).isNotEmpty();
-    assertThat(inputParameter.getUniqueChildElementByNameNs(CAMUNDA_NS, "script")).isNotNull();
+    assertThat(inputParameter.getUniqueChildElementByNameNs(ORQUEIO_NS, "script")).isNotNull();
     assertThat(inputParameter.getUniqueChildElementByType(CamundaScript.class)).isNotNull();
 
     CamundaScript script = inputParameter.getValue();

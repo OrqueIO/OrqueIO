@@ -2,7 +2,7 @@
         xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
         xmlns:semantics='http://www.omg.org/spec/BPMN/20100524/MODEL'
         xsi:schemaLocation='http://www.omg.org/spec/BPMN/20100524/MODEL http://bpmn.sourceforge.net/schemas/BPMN20.xsd'
-        targetNamespace='http://camunda.org/test' expressionLanguage='http://www.w3.org/1999/XPath'
+        targetNamespace='http://orqueio.io/test' expressionLanguage='http://www.w3.org/1999/XPath'
         typeLanguage='http://www.w3.org/2001/XMLSchema' id='_0' name='definitions'>
     <semantics:resource id='_resource_user' name='user'></semantics:resource>
     <semantics:resource id='_resource_Batman' name='Batman'></semantics:resource>

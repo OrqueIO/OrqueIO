@@ -16,7 +16,7 @@
  */
 package io.orqueio.bpm.model.bpmn.instance;
 
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_NS;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -40,17 +40,17 @@ public class UserTaskTest extends BpmnModelElementInstanceTest {
     return Arrays.asList(
       new AttributeAssumption("implementation", false, false, "##unspecified"),
       /** camunda extensions */
-      new AttributeAssumption(CAMUNDA_NS, "assignee"),
-      new AttributeAssumption(CAMUNDA_NS, "candidateGroups"),
-      new AttributeAssumption(CAMUNDA_NS, "candidateUsers"),
-      new AttributeAssumption(CAMUNDA_NS, "dueDate"),
-      new AttributeAssumption(CAMUNDA_NS, "followUpDate"),
-      new AttributeAssumption(CAMUNDA_NS, "formHandlerClass"),
-      new AttributeAssumption(CAMUNDA_NS, "formKey"),
-      new AttributeAssumption(CAMUNDA_NS, "formRef"),
-      new AttributeAssumption(CAMUNDA_NS, "formRefBinding"),
-      new AttributeAssumption(CAMUNDA_NS, "formRefVersion"),
-      new AttributeAssumption(CAMUNDA_NS, "priority")
+      new AttributeAssumption(ORQUEIO_NS, "assignee"),
+      new AttributeAssumption(ORQUEIO_NS, "candidateGroups"),
+      new AttributeAssumption(ORQUEIO_NS, "candidateUsers"),
+      new AttributeAssumption(ORQUEIO_NS, "dueDate"),
+      new AttributeAssumption(ORQUEIO_NS, "followUpDate"),
+      new AttributeAssumption(ORQUEIO_NS, "formHandlerClass"),
+      new AttributeAssumption(ORQUEIO_NS, "formKey"),
+      new AttributeAssumption(ORQUEIO_NS, "formRef"),
+      new AttributeAssumption(ORQUEIO_NS, "formRefBinding"),
+      new AttributeAssumption(ORQUEIO_NS, "formRefVersion"),
+      new AttributeAssumption(ORQUEIO_NS, "priority")
     );
   }
 }

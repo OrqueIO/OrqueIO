@@ -17,7 +17,7 @@
 package io.orqueio.bpm.model.cmmn.impl.instance.camunda;
 
 import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ELEMENT_EXPRESSION;
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_NS;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_NS;
 
 import io.orqueio.bpm.model.cmmn.impl.instance.CmmnModelElementInstanceImpl;
 import io.orqueio.bpm.model.cmmn.instance.camunda.CamundaExpression;
@@ -34,7 +34,7 @@ public class CamundaExpressionImpl extends CmmnModelElementInstanceImpl implemen
 
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CamundaExpression.class, CAMUNDA_ELEMENT_EXPRESSION)
-      .namespaceUri(CAMUNDA_NS)
+      .namespaceUri(ORQUEIO_NS)
       .instanceProvider(new ModelTypeInstanceProvider<CamundaExpression>() {
         public CamundaExpression newInstance(ModelTypeInstanceContext instanceContext) {
           return new CamundaExpressionImpl(instanceContext);

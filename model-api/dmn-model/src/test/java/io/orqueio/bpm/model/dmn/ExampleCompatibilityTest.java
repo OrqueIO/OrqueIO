@@ -49,7 +49,7 @@ import org.junit.runners.Parameterized;
 @RunWith(Parameterized.class)
 public class ExampleCompatibilityTest extends DmnModelTest {
 
-  public static final String EXAMPLE_DMN = "org/camunda/bpm/model/dmn/Example.dmn";
+  public static final String EXAMPLE_DMN = "io/orqueio/bpm/model/dmn/Example.dmn";
 
   private final DmnModelInstance originalModelInstance;
 

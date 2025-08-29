@@ -17,7 +17,7 @@
 package io.orqueio.bpm.model.cmmn.impl.instance;
 
 import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_REPEAT_ON_STANDARD_EVENT;
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_NS;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_NS;
 import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CMMN11_NS;
 import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CMMN_ATTRIBUTE_CONTEXT_REF;
 import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CMMN_ATTRIBUTE_NAME;
@@ -105,7 +105,7 @@ public class RepetitionRuleImpl extends CmmnElementImpl implements RepetitionRul
     /** Camunda extensions */
 
     camundaRepeatOnStandardEventAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_REPEAT_ON_STANDARD_EVENT)
-      .namespace(CAMUNDA_NS)
+      .namespace(ORQUEIO_NS)
       .build();
 
     SequenceBuilder sequenceBuilder = typeBuilder.sequence();

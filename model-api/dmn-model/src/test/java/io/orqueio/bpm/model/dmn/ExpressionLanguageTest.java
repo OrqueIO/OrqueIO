@@ -35,7 +35,7 @@ import org.junit.Test;
 
 public class ExpressionLanguageTest extends DmnModelTest {
 
-  public static final String EXPRESSION_LANGUAGE_DMN = "org/camunda/bpm/model/dmn/ExpressionLanguageTest.dmn";
+  public static final String EXPRESSION_LANGUAGE_DMN = "io/orqueio/bpm/model/dmn/ExpressionLanguageTest.dmn";
   public static final String EXPRESSION_LANGUAGE = "juel";
 
 

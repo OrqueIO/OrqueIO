@@ -73,22 +73,22 @@ public abstract class FlowNodeImpl extends FlowElementImpl implements FlowNode {
     /** Camunda Attributes */
 
     camundaAsyncAfter = typeBuilder.booleanAttribute(CAMUNDA_ATTRIBUTE_ASYNC_AFTER)
-      .namespace(CAMUNDA_NS)
+      .namespace(ORQUEIO_NS)
       .defaultValue(false)
       .build();
 
     camundaAsyncBefore = typeBuilder.booleanAttribute(CAMUNDA_ATTRIBUTE_ASYNC_BEFORE)
-      .namespace(CAMUNDA_NS)
+      .namespace(ORQUEIO_NS)
       .defaultValue(false)
       .build();
 
     camundaExclusive = typeBuilder.booleanAttribute(CAMUNDA_ATTRIBUTE_EXCLUSIVE)
-      .namespace(CAMUNDA_NS)
+      .namespace(ORQUEIO_NS)
       .defaultValue(true)
       .build();
 
     camundaJobPriority = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_JOB_PRIORITY)
-       .namespace(CAMUNDA_NS)
+       .namespace(ORQUEIO_NS)
        .build();
 
     typeBuilder.build();

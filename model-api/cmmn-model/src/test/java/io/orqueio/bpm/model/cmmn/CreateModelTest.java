@@ -40,7 +40,7 @@ public class CreateModelTest {
   public void createEmptyModel() {
     modelInstance = Cmmn.createEmptyModel();
     definitions = modelInstance.newInstance(Definitions.class);
-    definitions.setTargetNamespace("http://camunda.org/examples");
+    definitions.setTargetNamespace("http://orqueio.io/examples");
     modelInstance.setDefinitions(definitions);
   }
 

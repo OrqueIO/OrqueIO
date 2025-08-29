@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -23,8 +23,8 @@ package io.orqueio.bpm.model.xml.testmodel;
 public abstract class TestModelConstants {
 
   public static final String MODEL_NAME = "animals";
-  public static final String MODEL_NAMESPACE = "http://camunda.org/animals";
-  public static final String NEWER_NAMESPACE = "http://camunda.org/electronic";
+  public static final String MODEL_NAMESPACE = "http://orqueio.io/animals";
+  public static final String NEWER_NAMESPACE = "http://orqueio.io/electronic";
 
   public static final String TYPE_NAME_ANIMAL = "animal";
   public static final String TYPE_NAME_FLYING_ANIMAL = "flyingAnimal";

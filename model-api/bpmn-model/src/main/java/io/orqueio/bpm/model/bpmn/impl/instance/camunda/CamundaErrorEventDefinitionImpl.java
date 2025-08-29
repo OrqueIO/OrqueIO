@@ -24,7 +24,7 @@ import io.orqueio.bpm.model.xml.type.ModelElementTypeBuilder;
 import io.orqueio.bpm.model.xml.type.attribute.Attribute;
 import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_EXPRESSION;
 import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ELEMENT_ERROR_EVENT_DEFINITION;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_NS;
 import static io.orqueio.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 public class CamundaErrorEventDefinitionImpl extends ErrorEventDefinitionImpl implements CamundaErrorEventDefinition {
@@ -33,7 +33,7 @@ public class CamundaErrorEventDefinitionImpl extends ErrorEventDefinitionImpl im
 
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CamundaErrorEventDefinition.class, CAMUNDA_ELEMENT_ERROR_EVENT_DEFINITION)
-      .namespaceUri(CAMUNDA_NS)
+      .namespaceUri(ORQUEIO_NS)
       .instanceProvider(new ModelTypeInstanceProvider<CamundaErrorEventDefinition>() {
         public CamundaErrorEventDefinition newInstance(ModelTypeInstanceContext instanceContext) {
           return new CamundaErrorEventDefinitionImpl(instanceContext);
@@ -41,7 +41,7 @@ public class CamundaErrorEventDefinitionImpl extends ErrorEventDefinitionImpl im
       });
 
     camundaExpressionAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_EXPRESSION)
-        .namespace(CAMUNDA_NS)
+        .namespace(ORQUEIO_NS)
         .build();
 
     typeBuilder.build();

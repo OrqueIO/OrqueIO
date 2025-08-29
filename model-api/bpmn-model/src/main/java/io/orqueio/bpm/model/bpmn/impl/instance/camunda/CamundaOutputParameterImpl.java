@@ -18,7 +18,7 @@ package io.orqueio.bpm.model.bpmn.impl.instance.camunda;
 
 import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_NAME;
 import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ELEMENT_OUTPUT_PARAMETER;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_NS;
 
 import io.orqueio.bpm.model.bpmn.instance.camunda.CamundaOutputParameter;
 import io.orqueio.bpm.model.xml.ModelBuilder;
@@ -38,7 +38,7 @@ public class CamundaOutputParameterImpl extends CamundaGenericValueElementImpl i
 
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CamundaOutputParameter.class, CAMUNDA_ELEMENT_OUTPUT_PARAMETER)
-      .namespaceUri(CAMUNDA_NS)
+      .namespaceUri(ORQUEIO_NS)
       .instanceProvider(new ModelTypeInstanceProvider<CamundaOutputParameter>() {
         public CamundaOutputParameter newInstance(ModelTypeInstanceContext instanceContext) {
           return new CamundaOutputParameterImpl(instanceContext);
@@ -46,7 +46,7 @@ public class CamundaOutputParameterImpl extends CamundaGenericValueElementImpl i
       });
 
     camundaNameAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_NAME)
-      .namespace(CAMUNDA_NS)
+      .namespace(ORQUEIO_NS)
       .required()
       .build();
 

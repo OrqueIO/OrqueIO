@@ -21,7 +21,7 @@ import io.orqueio.bpm.model.bpmn.instance.BpmnModelElementInstanceTest;
 import java.util.Arrays;
 import java.util.Collection;
 
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_NS;
 
 /**
  * @author Sebastian Menski
@@ -29,27 +29,27 @@ import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
 public class CamundaFormPropertyTest extends BpmnModelElementInstanceTest {
 
   public TypeAssumption getTypeAssumption() {
-    return new TypeAssumption(CAMUNDA_NS, false);
+    return new TypeAssumption(ORQUEIO_NS, false);
   }
 
   public Collection<ChildElementAssumption> getChildElementAssumptions() {
     return Arrays.asList(
-      new ChildElementAssumption(CAMUNDA_NS, CamundaValue.class)
+      new ChildElementAssumption(ORQUEIO_NS, CamundaValue.class)
     );
   }
 
   public Collection<AttributeAssumption> getAttributesAssumptions() {
     return Arrays.asList(
-      new AttributeAssumption(CAMUNDA_NS, "id"),
-      new AttributeAssumption(CAMUNDA_NS, "name"),
-      new AttributeAssumption(CAMUNDA_NS, "type"),
-      new AttributeAssumption(CAMUNDA_NS, "required", false, false, false),
-      new AttributeAssumption(CAMUNDA_NS, "readable", false, false, true),
-      new AttributeAssumption(CAMUNDA_NS, "writeable", false, false, true),
-      new AttributeAssumption(CAMUNDA_NS, "variable"),
-      new AttributeAssumption(CAMUNDA_NS, "expression"),
-      new AttributeAssumption(CAMUNDA_NS, "datePattern"),
-      new AttributeAssumption(CAMUNDA_NS, "default")
+      new AttributeAssumption(ORQUEIO_NS, "id"),
+      new AttributeAssumption(ORQUEIO_NS, "name"),
+      new AttributeAssumption(ORQUEIO_NS, "type"),
+      new AttributeAssumption(ORQUEIO_NS, "required", false, false, false),
+      new AttributeAssumption(ORQUEIO_NS, "readable", false, false, true),
+      new AttributeAssumption(ORQUEIO_NS, "writeable", false, false, true),
+      new AttributeAssumption(ORQUEIO_NS, "variable"),
+      new AttributeAssumption(ORQUEIO_NS, "expression"),
+      new AttributeAssumption(ORQUEIO_NS, "datePattern"),
+      new AttributeAssumption(ORQUEIO_NS, "default")
     );
   }
 }

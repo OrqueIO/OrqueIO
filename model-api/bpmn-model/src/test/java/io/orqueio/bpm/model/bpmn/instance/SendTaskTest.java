@@ -19,7 +19,7 @@ package io.orqueio.bpm.model.bpmn.instance;
 import java.util.Arrays;
 import java.util.Collection;
 
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_NS;
 
 /**
  * @author Sebastian Menski
@@ -40,13 +40,13 @@ public class SendTaskTest extends BpmnModelElementInstanceTest {
       new AttributeAssumption("messageRef"),
       new AttributeAssumption("operationRef"),
       /** camunda extensions */
-      new AttributeAssumption(CAMUNDA_NS, "class"),
-      new AttributeAssumption(CAMUNDA_NS, "delegateExpression"),
-      new AttributeAssumption(CAMUNDA_NS, "expression"),
-      new AttributeAssumption(CAMUNDA_NS, "resultVariable"),
-      new AttributeAssumption(CAMUNDA_NS, "topic"),
-      new AttributeAssumption(CAMUNDA_NS, "type"),
-      new AttributeAssumption(CAMUNDA_NS, "taskPriority")
+      new AttributeAssumption(ORQUEIO_NS, "class"),
+      new AttributeAssumption(ORQUEIO_NS, "delegateExpression"),
+      new AttributeAssumption(ORQUEIO_NS, "expression"),
+      new AttributeAssumption(ORQUEIO_NS, "resultVariable"),
+      new AttributeAssumption(ORQUEIO_NS, "topic"),
+      new AttributeAssumption(ORQUEIO_NS, "type"),
+      new AttributeAssumption(ORQUEIO_NS, "taskPriority")
     );
   }
 }

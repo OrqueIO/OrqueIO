@@ -18,7 +18,7 @@ package io.orqueio.bpm.model.dmn.impl.instance;
 
 import static io.orqueio.bpm.model.dmn.impl.DmnModelConstants.CAMUNDA_ATTRIBUTE_HISTORY_TIME_TO_LIVE;
 import static io.orqueio.bpm.model.dmn.impl.DmnModelConstants.CAMUNDA_ATTRIBUTE_VERSION_TAG;
-import static io.orqueio.bpm.model.dmn.impl.DmnModelConstants.CAMUNDA_NS;
+import static io.orqueio.bpm.model.dmn.impl.DmnModelConstants.ORQUEIO_NS;
 import static io.orqueio.bpm.model.dmn.impl.DmnModelConstants.LATEST_DMN_NS;
 import static io.orqueio.bpm.model.dmn.impl.DmnModelConstants.DMN_ELEMENT_DECISION;
 
@@ -236,11 +236,11 @@ public class DecisionImpl extends DrgElementImpl implements Decision {
     // camunda extensions
 
     camundaHistoryTimeToLiveAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_HISTORY_TIME_TO_LIVE)
-        .namespace(CAMUNDA_NS)
+        .namespace(ORQUEIO_NS)
         .build();
 
     camundaVersionTag = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_VERSION_TAG)
-      .namespace(CAMUNDA_NS)
+      .namespace(ORQUEIO_NS)
       .build();
 
     typeBuilder.build();

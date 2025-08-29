@@ -74,7 +74,7 @@ public class SubProcessImpl extends ActivityImpl implements SubProcess {
     /** camunda extensions */
 
     camundaAsyncAttribute = typeBuilder.booleanAttribute(CAMUNDA_ATTRIBUTE_ASYNC)
-      .namespace(CAMUNDA_NS)
+      .namespace(ORQUEIO_NS)
       .defaultValue(false)
       .build();
 

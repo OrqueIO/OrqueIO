@@ -16,7 +16,7 @@
  */
 package io.orqueio.bpm.model.bpmn.instance;
 
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_NS;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -38,7 +38,7 @@ public class ErrorTest extends BpmnModelElementInstanceTest {
     return Arrays.asList(
       new AttributeAssumption("name"),
       new AttributeAssumption("errorCode"),
-      new AttributeAssumption(CAMUNDA_NS, "errorMessage"),
+      new AttributeAssumption(ORQUEIO_NS, "errorMessage"),
       new AttributeAssumption("structureRef")
     );
   }

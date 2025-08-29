@@ -41,7 +41,7 @@ public final class BpmnModelConstants {
   public static final String DI_NS = "http://www.omg.org/spec/DD/20100524/DI";
 
   /** The location of the BPMN 2.0 XML schema. */
-  public static final String BPMN_20_SCHEMA_LOCATION = "org/camunda/bpm/model/bpmn/schema/BPMN20.xsd";
+  public static final String BPMN_20_SCHEMA_LOCATION = "io/orqueio/bpm/model/bpmn/schema/BPMN20.xsd";
 
   /** Xml Schema is the default type language */
   public static final String XML_SCHEMA_NS = "http://www.w3.org/2001/XMLSchema";
@@ -49,13 +49,13 @@ public final class BpmnModelConstants {
   public static final String XPATH_NS = "http://www.w3.org/1999/XPath";
 
   /**
-   * @deprecated use {@link #CAMUNDA_NS}
+   * @deprecated use {@link #ORQUEIO_NS}
    */
   @Deprecated
   public static final String ACTIVITI_NS = "http://activiti.org/bpmn";
 
-  /** CAMUNDA_NS namespace */
-  public static final String CAMUNDA_NS = "http://camunda.org/schema/1.0/bpmn";
+  /** ORQUEIO_NS namespace */
+  public static final String ORQUEIO_NS = "http://orqueio.io/schema/1.0/bpmn";
 
   // elements ////////////////////////////////////////
 

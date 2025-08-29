@@ -16,7 +16,7 @@
  */
 package io.orqueio.bpm.model.bpmn.impl.instance.camunda;
 
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_NS;
 
 import java.util.Collection;
 
@@ -42,7 +42,7 @@ public class CamundaMapImpl extends BpmnModelElementInstanceImpl implements Camu
 
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(CamundaMap.class, BpmnModelConstants.CAMUNDA_ELEMENT_MAP)
-      .namespaceUri(CAMUNDA_NS)
+      .namespaceUri(ORQUEIO_NS)
       .instanceProvider(new ModelTypeInstanceProvider<CamundaMap>() {
         public CamundaMap newInstance(ModelTypeInstanceContext instanceContext) {
           return new CamundaMapImpl(instanceContext);

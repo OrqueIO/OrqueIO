@@ -37,9 +37,9 @@ import java.util.Collection;
 
 public class ReadWriteTest extends DmnModelTest {
 
-  public static final String DECISION_TABLE_ORIENTATION_DMN = "org/camunda/bpm/model/dmn/ReadWriteTest.decisionTableOrientation.dmn";
-  public static final String HIT_POLICY_DMN = "org/camunda/bpm/model/dmn/ReadWriteTest.hitPolicy.dmn";
-  public static final String INPUT_DATA_DMN = "org/camunda/bpm/model/dmn/ReadWriteTest.inputData.dmn";
+  public static final String DECISION_TABLE_ORIENTATION_DMN = "io/orqueio/bpm/model/dmn/ReadWriteTest.decisionTableOrientation.dmn";
+  public static final String HIT_POLICY_DMN = "io/orqueio/bpm/model/dmn/ReadWriteTest.hitPolicy.dmn";
+  public static final String INPUT_DATA_DMN = "io/orqueio/bpm/model/dmn/ReadWriteTest.inputData.dmn";
 
   @Test
   @DmnModelResource(resource = DECISION_TABLE_ORIENTATION_DMN)

@@ -3,7 +3,7 @@
   xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
   xmlns:camunda="http://activiti.org/bpmn"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  targetNamespace="http://camunda.org/test">
+  targetNamespace="http://orqueio.io/test">
 
   <!-- NOTE: this document is not valid and is only used to test all camunda extensions -->
 

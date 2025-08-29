@@ -16,7 +16,7 @@
  */
 package io.orqueio.bpm.model.cmmn.instance.camunda;
 
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_NS;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_NS;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -30,7 +30,7 @@ import io.orqueio.bpm.model.cmmn.instance.CmmnModelElementInstanceTest;
 public class CamundaInTest extends CmmnModelElementInstanceTest {
 
   public TypeAssumption getTypeAssumption() {
-    return new TypeAssumption(CAMUNDA_NS, false);
+    return new TypeAssumption(ORQUEIO_NS, false);
   }
 
   public Collection<ChildElementAssumption> getChildElementAssumptions() {
@@ -39,12 +39,12 @@ public class CamundaInTest extends CmmnModelElementInstanceTest {
 
   public Collection<AttributeAssumption> getAttributesAssumptions() {
     return Arrays.asList(
-      new AttributeAssumption(CAMUNDA_NS, "source"),
-      new AttributeAssumption(CAMUNDA_NS, "sourceExpression"),
-      new AttributeAssumption(CAMUNDA_NS, "variables"),
-      new AttributeAssumption(CAMUNDA_NS, "target"),
-      new AttributeAssumption(CAMUNDA_NS, "businessKey"),
-      new AttributeAssumption(CAMUNDA_NS, "local")
+      new AttributeAssumption(ORQUEIO_NS, "source"),
+      new AttributeAssumption(ORQUEIO_NS, "sourceExpression"),
+      new AttributeAssumption(ORQUEIO_NS, "variables"),
+      new AttributeAssumption(ORQUEIO_NS, "target"),
+      new AttributeAssumption(ORQUEIO_NS, "businessKey"),
+      new AttributeAssumption(ORQUEIO_NS, "local")
     );
   }
 }

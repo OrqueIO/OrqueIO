@@ -22,7 +22,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_NS;
 
 public class ConditionalEventDefinitionTest extends AbstractEventDefinitionTest {
 
@@ -38,8 +38,8 @@ public class ConditionalEventDefinitionTest extends AbstractEventDefinitionTest 
   public Collection<AttributeAssumption> getAttributesAssumptions() {
     return Arrays.asList(
       /** camunda extensions */
-      new AttributeAssumption(CAMUNDA_NS, "variableName"),
-      new AttributeAssumption(CAMUNDA_NS, "variableEvents")
+      new AttributeAssumption(ORQUEIO_NS, "variableName"),
+      new AttributeAssumption(ORQUEIO_NS, "variableEvents")
     );
   }
 

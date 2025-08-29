@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -37,10 +37,10 @@ public class TestModelParser extends AbstractModelParser {
   private static final String JAXP_SCHEMA_SOURCE = "http://java.sun.com/xml/jaxp/properties/schemaSource";
   private static final String JAXP_SCHEMA_LANGUAGE = "http://java.sun.com/xml/jaxp/properties/schemaLanguage";
 
-  private static final String SCHEMA_LOCATION = "org/camunda/bpm/model/xml/testmodel/Testmodel.xsd";
+  private static final String SCHEMA_LOCATION = "io/orqueio/bpm/model/xml/testmodel/Testmodel.xsd";
   private static final String W3C_XML_SCHEMA = "http://www.w3.org/2001/XMLSchema";
 
-  private static final String TEST_NS = "http://camunda.org/animals";
+  private static final String TEST_NS = "http://orqueio.io/animals";
 
   public TestModelParser() {
     this.schemaFactory = SchemaFactory.newInstance(W3C_XML_SCHEMA);

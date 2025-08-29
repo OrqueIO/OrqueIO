@@ -28,7 +28,7 @@ import java.util.Collection;
  */
 public class CamundaPotentialStarterTest extends BpmnModelElementInstanceTest {
   public TypeAssumption getTypeAssumption() {
-    return new TypeAssumption(BpmnModelConstants.CAMUNDA_NS, false);
+    return new TypeAssumption(BpmnModelConstants.ORQUEIO_NS, false);
   }
 
   public Collection<ChildElementAssumption> getChildElementAssumptions() {
