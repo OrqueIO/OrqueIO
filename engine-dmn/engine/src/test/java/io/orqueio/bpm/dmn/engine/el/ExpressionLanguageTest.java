@@ -52,13 +52,13 @@ import static org.mockito.Mockito.verify;
 
 public class ExpressionLanguageTest extends DmnEngineTest {
 
-  public static final String GROOVY_DECISION_TABLE_DMN = "org/camunda/bpm/dmn/engine/el/ExpressionLanguageTest.groovy.decisionTable.dmn";
-  public static final String GROOVY_DECISION_LITERAL_EXPRESSION_DMN = "org/camunda/bpm/dmn/engine/el/ExpressionLanguageTest.groovy.decisionLiteralExpression.dmn";
-  public static final String SCRIPT_DMN = "org/camunda/bpm/dmn/engine/el/ExpressionLanguageTest.script.dmn";
-  public static final String EMPTY_EXPRESSIONS_DMN = "org/camunda/bpm/dmn/engine/el/ExpressionLanguageTest.emptyExpressions.dmn";
-  public static final String DECISION_WITH_LITERAL_EXPRESSION_DMN = "org/camunda/bpm/dmn/engine/el/ExpressionLanguageTest.decisionLiteralExpression.dmn";
-  public static final String CAPITAL_JUEL_DMN = "org/camunda/bpm/dmn/engine/el/ExpressionLanguageTest.JUEL.dmn";
-  public static final String JUEL_EXPRESSIONS_WITH_PROPERTIES_DMN = "org/camunda/bpm/dmn/engine/el/ExpressionLanguageTest.JUEL.expressionsWithProperties.dmn";
+  public static final String GROOVY_DECISION_TABLE_DMN = "io/orqueio/bpm/dmn/engine/el/ExpressionLanguageTest.groovy.decisionTable.dmn";
+  public static final String GROOVY_DECISION_LITERAL_EXPRESSION_DMN = "io/orqueio/bpm/dmn/engine/el/ExpressionLanguageTest.groovy.decisionLiteralExpression.dmn";
+  public static final String SCRIPT_DMN = "io/orqueio/bpm/dmn/engine/el/ExpressionLanguageTest.script.dmn";
+  public static final String EMPTY_EXPRESSIONS_DMN = "io/orqueio/bpm/dmn/engine/el/ExpressionLanguageTest.emptyExpressions.dmn";
+  public static final String DECISION_WITH_LITERAL_EXPRESSION_DMN = "io/orqueio/bpm/dmn/engine/el/ExpressionLanguageTest.decisionLiteralExpression.dmn";
+  public static final String CAPITAL_JUEL_DMN = "io/orqueio/bpm/dmn/engine/el/ExpressionLanguageTest.JUEL.dmn";
+  public static final String JUEL_EXPRESSIONS_WITH_PROPERTIES_DMN = "io/orqueio/bpm/dmn/engine/el/ExpressionLanguageTest.JUEL.expressionsWithProperties.dmn";
   public static final String JUEL = "juel";
 
   protected DefaultScriptEngineResolver scriptEngineResolver;

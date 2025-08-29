@@ -26,10 +26,10 @@ import org.junit.Test;
 
 public class ExpressionEvaluationTest extends DmnEngineTest {
 
-    protected static final String DMN_INPUT_VARIABLE = "org/camunda/bpm/dmn/engine/el/ExpressionEvaluationTest.inputVariableName.dmn";
-    protected static final String DMN_OVERRIDE_INPUT_VARIABLE = "org/camunda/bpm/dmn/engine/el/ExpressionEvaluationTest.overrideInputVariableName.dmn";
-    protected static final String DMN_VARIABLE_CONTEXT = "org/camunda/bpm/dmn/engine/el/ExpressionEvaluationTest.variableContext.dmn";
-    protected static final String DMN_VARIABLE_CONTEXT_WITH_INPUT_VARIABLE = "org/camunda/bpm/dmn/engine/el/ExpressionEvaluationTest.variableContextWithInputVariable.dmn";
+    protected static final String DMN_INPUT_VARIABLE = "io/orqueio/bpm/dmn/engine/el/ExpressionEvaluationTest.inputVariableName.dmn";
+    protected static final String DMN_OVERRIDE_INPUT_VARIABLE = "io/orqueio/bpm/dmn/engine/el/ExpressionEvaluationTest.overrideInputVariableName.dmn";
+    protected static final String DMN_VARIABLE_CONTEXT = "io/orqueio/bpm/dmn/engine/el/ExpressionEvaluationTest.variableContext.dmn";
+    protected static final String DMN_VARIABLE_CONTEXT_WITH_INPUT_VARIABLE = "io/orqueio/bpm/dmn/engine/el/ExpressionEvaluationTest.variableContextWithInputVariable.dmn";
 
     @Test
     @DecisionResource(resource = DMN_INPUT_VARIABLE)

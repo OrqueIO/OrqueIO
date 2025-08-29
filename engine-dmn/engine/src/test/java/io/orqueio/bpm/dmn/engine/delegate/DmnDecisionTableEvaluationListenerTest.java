@@ -39,7 +39,7 @@ import org.junit.Test;
 
 public class DmnDecisionTableEvaluationListenerTest extends DmnEngineTest {
 
-  public static final String DMN_FILE = "org/camunda/bpm/dmn/engine/delegate/DmnDecisionTableListenerTest.test.dmn";
+  public static final String DMN_FILE = "io/orqueio/bpm/dmn/engine/delegate/DmnDecisionTableListenerTest.test.dmn";
 
   public static DmnHitPolicyHandlerRegistry hitPolicyHandlerRegistry;
   public TestDecisionTableEvaluationListener listener;

@@ -306,7 +306,7 @@ public class DmnDataTypeTransformerTest extends DmnEngineTest {
 
     // then
     thrown.expect(DmnEngineException.class);
-    thrown.expectMessage("Unsupported type: 'io.orqueio.feel.syntaxtree.ZonedTime' " +
+    thrown.expectMessage("Unsupported type: 'org.camunda.feel.syntaxtree.ZonedTime' " +
                            "cannot be converted to 'java.util.Date'");
 
     // when

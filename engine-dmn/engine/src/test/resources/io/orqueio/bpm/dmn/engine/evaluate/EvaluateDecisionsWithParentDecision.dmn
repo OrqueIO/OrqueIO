@@ -2,7 +2,7 @@
 <definitions xmlns="http://www.omg.org/spec/DMN/20151101/dmn.xsd"
              id="definitions"
              name="camunda"
-             namespace="http://camunda.org/schema/1.0/dmn">
+             namespace="http://orqueio.io/schema/1.0/dmn">
   <decision id="A" name="A">
      <informationRequirement>
       <requiredDecision href="#B" />
@@ -25,7 +25,7 @@
       </rule>
     </decisionTable>
    </decision>
-    
+
    <decision id="B" name="B">
     <decisionTable id="bbDecisionTable">
       <input id="input4">

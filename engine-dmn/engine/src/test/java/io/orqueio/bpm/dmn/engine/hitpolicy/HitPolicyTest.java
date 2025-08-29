@@ -39,28 +39,28 @@ public class HitPolicyTest extends DmnEngineTest {
 
   protected static final Double DOUBLE_MIN = -Double.MAX_VALUE;
 
-  public static final String DEFAULT_SINGLE = "org/camunda/bpm/dmn/engine/hitpolicy/HitPolicyTest.default.single.dmn";
-  public static final String DEFAULT_COMPOUND = "org/camunda/bpm/dmn/engine/hitpolicy/HitPolicyTest.default.compound.dmn";
-  public static final String UNIQUE_SINGLE = "org/camunda/bpm/dmn/engine/hitpolicy/HitPolicyTest.unique.single.dmn";
-  public static final String UNIQUE_COMPOUND = "org/camunda/bpm/dmn/engine/hitpolicy/HitPolicyTest.unique.compound.dmn";
-  public static final String ANY_SINGLE = "org/camunda/bpm/dmn/engine/hitpolicy/HitPolicyTest.any.single.dmn";
-  public static final String ANY_COMPOUND = "org/camunda/bpm/dmn/engine/hitpolicy/HitPolicyTest.any.compound.dmn";
-  public static final String PRIORITY_SINGLE = "org/camunda/bpm/dmn/engine/hitpolicy/HitPolicyTest.priority.single.dmn";
-  public static final String FIRST_SINGLE = "org/camunda/bpm/dmn/engine/hitpolicy/HitPolicyTest.first.single.dmn";
-  public static final String FIRST_COMPOUND = "org/camunda/bpm/dmn/engine/hitpolicy/HitPolicyTest.first.compound.dmn";
-  public static final String OUTPUT_ORDER_SINGLE = "org/camunda/bpm/dmn/engine/hitpolicy/HitPolicyTest.outputOrder.single.dmn";
-  public static final String RULE_ORDER_SINGLE = "org/camunda/bpm/dmn/engine/hitpolicy/HitPolicyTest.ruleOrder.single.dmn";
-  public static final String RULE_ORDER_COMPOUND = "org/camunda/bpm/dmn/engine/hitpolicy/HitPolicyTest.ruleOrder.compound.dmn";
-  public static final String COLLECT_SINGLE = "org/camunda/bpm/dmn/engine/hitpolicy/HitPolicyTest.collect.single.dmn";
-  public static final String COLLECT_COMPOUND = "org/camunda/bpm/dmn/engine/hitpolicy/HitPolicyTest.collect.compound.dmn";
-  public static final String COLLECT_SUM_SINGLE = "org/camunda/bpm/dmn/engine/hitpolicy/HitPolicyTest.collect.sum.single.dmn";
-  public static final String COLLECT_SUM_COMPOUND = "org/camunda/bpm/dmn/engine/hitpolicy/HitPolicyTest.collect.sum.compound.dmn";
-  public static final String COLLECT_MIN_SINGLE = "org/camunda/bpm/dmn/engine/hitpolicy/HitPolicyTest.collect.min.single.dmn";
-  public static final String COLLECT_MIN_COMPOUND = "org/camunda/bpm/dmn/engine/hitpolicy/HitPolicyTest.collect.min.compound.dmn";
-  public static final String COLLECT_MAX_SINGLE = "org/camunda/bpm/dmn/engine/hitpolicy/HitPolicyTest.collect.max.single.dmn";
-  public static final String COLLECT_MAX_COMPOUND = "org/camunda/bpm/dmn/engine/hitpolicy/HitPolicyTest.collect.max.compound.dmn";
-  public static final String COLLECT_COUNT_SINGLE = "org/camunda/bpm/dmn/engine/hitpolicy/HitPolicyTest.collect.count.single.dmn";
-  public static final String COLLECT_COUNT_COMPOUND = "org/camunda/bpm/dmn/engine/hitpolicy/HitPolicyTest.collect.count.compound.dmn";
+  public static final String DEFAULT_SINGLE = "io/orqueio/bpm/dmn/engine/hitpolicy/HitPolicyTest.default.single.dmn";
+  public static final String DEFAULT_COMPOUND = "io/orqueio/bpm/dmn/engine/hitpolicy/HitPolicyTest.default.compound.dmn";
+  public static final String UNIQUE_SINGLE = "io/orqueio/bpm/dmn/engine/hitpolicy/HitPolicyTest.unique.single.dmn";
+  public static final String UNIQUE_COMPOUND = "io/orqueio/bpm/dmn/engine/hitpolicy/HitPolicyTest.unique.compound.dmn";
+  public static final String ANY_SINGLE = "io/orqueio/bpm/dmn/engine/hitpolicy/HitPolicyTest.any.single.dmn";
+  public static final String ANY_COMPOUND = "io/orqueio/bpm/dmn/engine/hitpolicy/HitPolicyTest.any.compound.dmn";
+  public static final String PRIORITY_SINGLE = "io/orqueio/bpm/dmn/engine/hitpolicy/HitPolicyTest.priority.single.dmn";
+  public static final String FIRST_SINGLE = "io/orqueio/bpm/dmn/engine/hitpolicy/HitPolicyTest.first.single.dmn";
+  public static final String FIRST_COMPOUND = "io/orqueio/bpm/dmn/engine/hitpolicy/HitPolicyTest.first.compound.dmn";
+  public static final String OUTPUT_ORDER_SINGLE = "io/orqueio/bpm/dmn/engine/hitpolicy/HitPolicyTest.outputOrder.single.dmn";
+  public static final String RULE_ORDER_SINGLE = "io/orqueio/bpm/dmn/engine/hitpolicy/HitPolicyTest.ruleOrder.single.dmn";
+  public static final String RULE_ORDER_COMPOUND = "io/orqueio/bpm/dmn/engine/hitpolicy/HitPolicyTest.ruleOrder.compound.dmn";
+  public static final String COLLECT_SINGLE = "io/orqueio/bpm/dmn/engine/hitpolicy/HitPolicyTest.collect.single.dmn";
+  public static final String COLLECT_COMPOUND = "io/orqueio/bpm/dmn/engine/hitpolicy/HitPolicyTest.collect.compound.dmn";
+  public static final String COLLECT_SUM_SINGLE = "io/orqueio/bpm/dmn/engine/hitpolicy/HitPolicyTest.collect.sum.single.dmn";
+  public static final String COLLECT_SUM_COMPOUND = "io/orqueio/bpm/dmn/engine/hitpolicy/HitPolicyTest.collect.sum.compound.dmn";
+  public static final String COLLECT_MIN_SINGLE = "io/orqueio/bpm/dmn/engine/hitpolicy/HitPolicyTest.collect.min.single.dmn";
+  public static final String COLLECT_MIN_COMPOUND = "io/orqueio/bpm/dmn/engine/hitpolicy/HitPolicyTest.collect.min.compound.dmn";
+  public static final String COLLECT_MAX_SINGLE = "io/orqueio/bpm/dmn/engine/hitpolicy/HitPolicyTest.collect.max.single.dmn";
+  public static final String COLLECT_MAX_COMPOUND = "io/orqueio/bpm/dmn/engine/hitpolicy/HitPolicyTest.collect.max.compound.dmn";
+  public static final String COLLECT_COUNT_SINGLE = "io/orqueio/bpm/dmn/engine/hitpolicy/HitPolicyTest.collect.count.single.dmn";
+  public static final String COLLECT_COUNT_COMPOUND = "io/orqueio/bpm/dmn/engine/hitpolicy/HitPolicyTest.collect.count.compound.dmn";
 
   @Test
   @DecisionResource(resource = DEFAULT_SINGLE)

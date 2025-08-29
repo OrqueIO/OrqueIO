@@ -27,7 +27,7 @@ import io.orqueio.commons.utils.IoUtil;
 
 public final class DmnExampleVerifier {
 
-  public static final String EXAMPLE_DMN = "org/camunda/bpm/dmn/engine/api/Example.dmn";
+  public static final String EXAMPLE_DMN = "io/orqueio/bpm/dmn/engine/api/Example.dmn";
 
   public static void assertExample(DmnEngine engine) {
     InputStream inputStream = IoUtil.fileAsStream(EXAMPLE_DMN);

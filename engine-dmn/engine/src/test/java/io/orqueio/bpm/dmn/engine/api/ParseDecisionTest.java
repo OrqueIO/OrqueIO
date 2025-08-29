@@ -36,26 +36,26 @@ import org.junit.Test;
 
 public class ParseDecisionTest extends DmnEngineTest {
 
-  public static final String NO_DECISION_DMN = "org/camunda/bpm/dmn/engine/api/NoDecision.dmn";
-  public static final String NO_INPUT_DMN = "org/camunda/bpm/dmn/engine/api/NoInput.dmn";
-  public static final String INVOCATION_DECISION_DMN = "org/camunda/bpm/dmn/engine/api/InvocationDecision.dmn";
-  public static final String MISSING_DECISION_ID_DMN = "org/camunda/bpm/dmn/engine/api/MissingIds.missingDecisionId.dmn";
-  public static final String MISSING_INPUT_ID_DMN = "org/camunda/bpm/dmn/engine/api/MissingIds.missingInputId.dmn";
-  public static final String MISSING_OUTPUT_ID_DMN = "org/camunda/bpm/dmn/engine/api/MissingIds.missingOutputId.dmn";
-  public static final String MISSING_RULE_ID_DMN = "org/camunda/bpm/dmn/engine/api/MissingIds.missingRuleId.dmn";
-  public static final String MISSING_COMPOUND_OUTPUT_NAME_DMN = "org/camunda/bpm/dmn/engine/api/CompoundOutputs.noName.dmn";
-  public static final String DUPLICATE_COMPOUND_OUTPUT_NAME_DMN = "org/camunda/bpm/dmn/engine/api/CompoundOutputs.duplicateName.dmn";
+  public static final String NO_DECISION_DMN = "io/orqueio/bpm/dmn/engine/api/NoDecision.dmn";
+  public static final String NO_INPUT_DMN = "io/orqueio/bpm/dmn/engine/api/NoInput.dmn";
+  public static final String INVOCATION_DECISION_DMN = "io/orqueio/bpm/dmn/engine/api/InvocationDecision.dmn";
+  public static final String MISSING_DECISION_ID_DMN = "io/orqueio/bpm/dmn/engine/api/MissingIds.missingDecisionId.dmn";
+  public static final String MISSING_INPUT_ID_DMN = "io/orqueio/bpm/dmn/engine/api/MissingIds.missingInputId.dmn";
+  public static final String MISSING_OUTPUT_ID_DMN = "io/orqueio/bpm/dmn/engine/api/MissingIds.missingOutputId.dmn";
+  public static final String MISSING_RULE_ID_DMN = "io/orqueio/bpm/dmn/engine/api/MissingIds.missingRuleId.dmn";
+  public static final String MISSING_COMPOUND_OUTPUT_NAME_DMN = "io/orqueio/bpm/dmn/engine/api/CompoundOutputs.noName.dmn";
+  public static final String DUPLICATE_COMPOUND_OUTPUT_NAME_DMN = "io/orqueio/bpm/dmn/engine/api/CompoundOutputs.duplicateName.dmn";
 
-  public static final String MISSING_VARIABLE_DMN = "org/camunda/bpm/dmn/engine/api/MissingVariable.dmn";
+  public static final String MISSING_VARIABLE_DMN = "io/orqueio/bpm/dmn/engine/api/MissingVariable.dmn";
 
-  public static final String MISSING_REQUIRED_DECISION_REFERENCE_DMN = "org/camunda/bpm/dmn/engine/api/MissingRequiredDecisionReference.dmn";
-  public static final String WRONG_REQUIRED_DECISION_REFERENCE_DMN = "org/camunda/bpm/dmn/engine/api/WrongRequiredDecisionReference.dmn";
-  public static final String MISSING_REQUIRED_DECISION_ATTRIBUTE_DMN = "org/camunda/bpm/dmn/engine/api/MissingRequiredDecisionAttribute.dmn";
-  public static final String NO_INFORMATION_REQUIREMENT_ATTRIBUTE_DMN = "org/camunda/bpm/dmn/engine/api/NoInformationRequirementAttribute.dmn";
-  public static final String MISSING_DECISION_REQUIREMENT_DIAGRAM_ID_DMN = "org/camunda/bpm/dmn/engine/api/MissingIds.missingDrdId.dmn";
+  public static final String MISSING_REQUIRED_DECISION_REFERENCE_DMN = "io/orqueio/bpm/dmn/engine/api/MissingRequiredDecisionReference.dmn";
+  public static final String WRONG_REQUIRED_DECISION_REFERENCE_DMN = "io/orqueio/bpm/dmn/engine/api/WrongRequiredDecisionReference.dmn";
+  public static final String MISSING_REQUIRED_DECISION_ATTRIBUTE_DMN = "io/orqueio/bpm/dmn/engine/api/MissingRequiredDecisionAttribute.dmn";
+  public static final String NO_INFORMATION_REQUIREMENT_ATTRIBUTE_DMN = "io/orqueio/bpm/dmn/engine/api/NoInformationRequirementAttribute.dmn";
+  public static final String MISSING_DECISION_REQUIREMENT_DIAGRAM_ID_DMN = "io/orqueio/bpm/dmn/engine/api/MissingIds.missingDrdId.dmn";
 
-  public static final String DMN12_NO_INPUT_DMN = "org/camunda/bpm/dmn/engine/api/dmn12/NoInput.dmn";
-  public static final String DMN13_NO_INPUT_DMN = "org/camunda/bpm/dmn/engine/api/dmn13/NoInput.dmn";
+  public static final String DMN12_NO_INPUT_DMN = "io/orqueio/bpm/dmn/engine/api/dmn12/NoInput.dmn";
+  public static final String DMN13_NO_INPUT_DMN = "io/orqueio/bpm/dmn/engine/api/dmn13/NoInput.dmn";
 
   @Test
   public void shouldParseDecisionFromInputStream() {

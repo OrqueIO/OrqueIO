@@ -43,7 +43,7 @@ public class ScalaFeelBehaviorTest extends FeelBehavior {
    * This test ensures that context functions cannot be called in the
    * juel as well as the scala-based implementation.
    *
-   * [1] https://docs.camunda.org/manual/7.12/user-guide/process-engine/expression-language/#internal-context-functions
+   * [1] https://docs.orqueio.io/manual/7.12/user-guide/process-engine/expression-language/#internal-context-functions
    */
   @Test
   @DecisionResource(resource = "context_function.dmn")

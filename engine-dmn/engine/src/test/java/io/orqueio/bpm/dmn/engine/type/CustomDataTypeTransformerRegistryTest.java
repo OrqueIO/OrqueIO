@@ -32,8 +32,8 @@ import org.junit.Test;
  */
 public class CustomDataTypeTransformerRegistryTest extends DmnEngineTest {
 
-  protected static final String DMN_INPUT_FILE = "org/camunda/bpm/dmn/engine/type/CustomInputDefinition.dmn";
-  protected static final String DMN_OUTPUT_FILE = "org/camunda/bpm/dmn/engine/type/CustomOutputDefinition.dmn";
+  protected static final String DMN_INPUT_FILE = "io/orqueio/bpm/dmn/engine/type/CustomInputDefinition.dmn";
+  protected static final String DMN_OUTPUT_FILE = "io/orqueio/bpm/dmn/engine/type/CustomOutputDefinition.dmn";
 
   @Override
   public DmnEngineConfiguration getDmnEngineConfiguration() {

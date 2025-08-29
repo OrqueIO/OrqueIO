@@ -50,8 +50,8 @@ import org.junit.Test;
 
 public class DmnTransformListenerTest extends DmnEngineTest {
 
-  public static final String DRG_EXAMPLE_DMN = "org/camunda/bpm/dmn/engine/transform/DrgExample.dmn";
-  public static final String DECISION_TRANSFORM_DMN = "org/camunda/bpm/dmn/engine/transform/DmnDecisionTransform.dmn";
+  public static final String DRG_EXAMPLE_DMN = "io/orqueio/bpm/dmn/engine/transform/DrgExample.dmn";
+  public static final String DECISION_TRANSFORM_DMN = "io/orqueio/bpm/dmn/engine/transform/DmnDecisionTransform.dmn";
 
   protected TestDmnTransformListener listener;
 

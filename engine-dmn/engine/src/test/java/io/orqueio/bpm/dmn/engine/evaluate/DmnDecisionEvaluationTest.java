@@ -36,23 +36,23 @@ import org.junit.Test;
 
 public class DmnDecisionEvaluationTest extends DmnEngineTest {
 
-  public static final String DMN_MULTI_LEVEL_MULTIPLE_INPUT_SINGLE_OUTPUT = "org/camunda/bpm/dmn/engine/evaluate/EvaluateMultiLevelDecisionsWithMultipleInputAndSingleOutput.dmn";
-  public static final String DMN_DECISIONS_WITH_MULTIPLE_MATCHING_RULES = "org/camunda/bpm/dmn/engine/evaluate/EvaluateDecisionsWithMultipleMatchingRules.groovy.dmn";
-  public static final String DMN_DECISIONS_WITH_NO_MATCHING_RULE_IN_PARENT = "org/camunda/bpm/dmn/engine/evaluate/EvaluateDecisionsWithNoMatchingRuleInParent.groovy.dmn";
-  public static final String DMN_DECISIONS_WITH_MULTIPLE_MATCHING_RULES_MULTIPLE_OUTPUTS = "org/camunda/bpm/dmn/engine/evaluate/EvaluateDecisionsWithMultipleMatchingRulesAndMultipleOutputs.groovy.dmn";
-  public static final String DMN_SHARED_DECISIONS = "org/camunda/bpm/dmn/engine/evaluate/EvaluateSharedDecisions.dmn";
-  public static final String DMN_DECISIONS_WITH_DIFFERENT_INPUT_OUTPUT_TYPES = "org/camunda/bpm/dmn/engine/evaluate/EvaluateDecisionsWithDifferentInputAndOutputTypes.groovy.dmn";
-  public static final String DMN_DECISIONS_WITH_DEFAULT_RULE_IN_CHILD = "org/camunda/bpm/dmn/engine/evaluate/EvaluateDecisionsWithDefaultRuleInChild.groovy.dmn";
-  public static final String DMN_DECISIONS_WITH_INVALID_INPUT_TYPE = "org/camunda/bpm/dmn/engine/evaluate/EvaluateDecisionsWithInvalidInputTypeInParent.groovy.dmn";
-  public static final String DMN_DECISIONS_WITH_PARENT_DECISION = "org/camunda/bpm/dmn/engine/evaluate/EvaluateDecisionsWithParentDecision.dmn";
-  public static final String DMN_DECISIONS_WITH_DISH_DECISON_EXAMPLE = "org/camunda/bpm/dmn/engine/evaluate/EvaluateDrdDishDecisionExample.dmn";
+  public static final String DMN_MULTI_LEVEL_MULTIPLE_INPUT_SINGLE_OUTPUT = "io/orqueio/bpm/dmn/engine/evaluate/EvaluateMultiLevelDecisionsWithMultipleInputAndSingleOutput.dmn";
+  public static final String DMN_DECISIONS_WITH_MULTIPLE_MATCHING_RULES = "io/orqueio/bpm/dmn/engine/evaluate/EvaluateDecisionsWithMultipleMatchingRules.groovy.dmn";
+  public static final String DMN_DECISIONS_WITH_NO_MATCHING_RULE_IN_PARENT = "io/orqueio/bpm/dmn/engine/evaluate/EvaluateDecisionsWithNoMatchingRuleInParent.groovy.dmn";
+  public static final String DMN_DECISIONS_WITH_MULTIPLE_MATCHING_RULES_MULTIPLE_OUTPUTS = "io/orqueio/bpm/dmn/engine/evaluate/EvaluateDecisionsWithMultipleMatchingRulesAndMultipleOutputs.groovy.dmn";
+  public static final String DMN_SHARED_DECISIONS = "io/orqueio/bpm/dmn/engine/evaluate/EvaluateSharedDecisions.dmn";
+  public static final String DMN_DECISIONS_WITH_DIFFERENT_INPUT_OUTPUT_TYPES = "io/orqueio/bpm/dmn/engine/evaluate/EvaluateDecisionsWithDifferentInputAndOutputTypes.groovy.dmn";
+  public static final String DMN_DECISIONS_WITH_DEFAULT_RULE_IN_CHILD = "io/orqueio/bpm/dmn/engine/evaluate/EvaluateDecisionsWithDefaultRuleInChild.groovy.dmn";
+  public static final String DMN_DECISIONS_WITH_INVALID_INPUT_TYPE = "io/orqueio/bpm/dmn/engine/evaluate/EvaluateDecisionsWithInvalidInputTypeInParent.groovy.dmn";
+  public static final String DMN_DECISIONS_WITH_PARENT_DECISION = "io/orqueio/bpm/dmn/engine/evaluate/EvaluateDecisionsWithParentDecision.dmn";
+  public static final String DMN_DECISIONS_WITH_DISH_DECISON_EXAMPLE = "io/orqueio/bpm/dmn/engine/evaluate/EvaluateDrdDishDecisionExample.dmn";
 
-  public static final String DMN_DECISION_WITH_LITERAL_EXPRESSION = "org/camunda/bpm/dmn/engine/evaluate/DecisionWithLiteralExpression.dmn";
-  public static final String DMN_DRG_WITH_LITERAL_EXPRESSION = "org/camunda/bpm/dmn/engine/evaluate/DrgWithLiteralExpression.dmn";
-  public static final String DMN_DECISION_WITH_BEAN_INVOCATION_IN_LITERAL_EXPRESSION = "org/camunda/bpm/dmn/engine/evaluate/DecisionWithBeanInvocationInLiteralExpression.dmn";
+  public static final String DMN_DECISION_WITH_LITERAL_EXPRESSION = "io/orqueio/bpm/dmn/engine/evaluate/DecisionWithLiteralExpression.dmn";
+  public static final String DMN_DRG_WITH_LITERAL_EXPRESSION = "io/orqueio/bpm/dmn/engine/evaluate/DrgWithLiteralExpression.dmn";
+  public static final String DMN_DECISION_WITH_BEAN_INVOCATION_IN_LITERAL_EXPRESSION = "io/orqueio/bpm/dmn/engine/evaluate/DecisionWithBeanInvocationInLiteralExpression.dmn";
 
-  public static final String DRG_COLLECT_DMN = "org/camunda/bpm/dmn/engine/transform/DrgCollectTest.dmn";
-  public static final String DRG_RULE_ORDER_DMN = "org/camunda/bpm/dmn/engine/transform/DrgRuleOrderTest.dmn";
+  public static final String DRG_COLLECT_DMN = "io/orqueio/bpm/dmn/engine/transform/DrgCollectTest.dmn";
+  public static final String DRG_RULE_ORDER_DMN = "io/orqueio/bpm/dmn/engine/transform/DrgRuleOrderTest.dmn";
 
   @Override
   public DmnEngineConfiguration getDmnEngineConfiguration() {

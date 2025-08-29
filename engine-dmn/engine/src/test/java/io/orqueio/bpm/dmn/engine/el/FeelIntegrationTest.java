@@ -46,9 +46,9 @@ import org.junit.Test;
 
 public class FeelIntegrationTest extends DmnEngineTest {
 
-  protected static final String DMN = "org/camunda/bpm/dmn/engine/el/FeelIntegrationTest.dmn";
-  protected static final String DMN_12 = "org/camunda/bpm/dmn/engine/el/dmn12/FeelIntegrationTest.dmn";
-  protected static final String DMN_13 = "org/camunda/bpm/dmn/engine/el/dmn13/FeelIntegrationTest.dmn";
+  protected static final String DMN = "io/orqueio/bpm/dmn/engine/el/FeelIntegrationTest.dmn";
+  protected static final String DMN_12 = "io/orqueio/bpm/dmn/engine/el/dmn12/FeelIntegrationTest.dmn";
+  protected static final String DMN_13 = "io/orqueio/bpm/dmn/engine/el/dmn13/FeelIntegrationTest.dmn";
 
   protected FeelEngine feelEngineSpy;
 
@@ -85,7 +85,7 @@ public class FeelIntegrationTest extends DmnEngineTest {
   }
 
   @Test
-  @DecisionResource(resource = "org/camunda/bpm/dmn/engine/el/ExpressionLanguageTest.script.dmn")
+  @DecisionResource(resource = "io/orqueio/bpm/dmn/engine/el/ExpressionLanguageTest.script.dmn")
   public void testFeelExceptionDoesNotContainJuel() {
     try {
       assertExample(dmnEngine, decision);
