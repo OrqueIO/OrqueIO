@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright Toaddlaterccs and/or licensed to Toaddlaterccs
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. Toaddlaterccs this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -16,13 +16,13 @@
  */
 package io.orqueio.bpm.model.cmmn.impl.instance;
 
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_ASSIGNEE;
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_CANDIDATE_GROUPS;
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_CANDIDATE_USERS;
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_DUE_DATE;
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_FOLLOW_UP_DATE;
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_FORM_KEY;
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_PRIORITY;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ATTRIBUTE_ASSIGNEE;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ATTRIBUTE_CANDIDATE_GROUPS;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ATTRIBUTE_CANDIDATE_USERS;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ATTRIBUTE_DUE_DATE;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ATTRIBUTE_FOLLOW_UP_DATE;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ATTRIBUTE_FORM_KEY;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ATTRIBUTE_PRIORITY;
 import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_NS;
 import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CMMN11_NS;
 import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CMMN_ATTRIBUTE_PERFORMER_REF;
@@ -61,14 +61,14 @@ public class HumanTaskImpl extends TaskImpl implements HumanTask {
   // cmmn 1.1
   protected static ChildElement<PlanningTable> planningTableChild;
 
-  /** camunda extensions */
-  protected static Attribute<String> camundaAssigneeAttribute;
-  protected static Attribute<String> camundaCandidateGroupsAttribute;
-  protected static Attribute<String> camundaCandidateUsersAttribute;
-  protected static Attribute<String> camundaDueDateAttribute;
-  protected static Attribute<String> camundaFollowUpDateAttribute;
-  protected static Attribute<String> camundaFormKeyAttribute;
-  protected static Attribute<String> camundaPriorityAttribute;
+  /** orqueio extensions */
+  protected static Attribute<String> orqueioAssigneeAttribute;
+  protected static Attribute<String> orqueioCandidateGroupsAttribute;
+  protected static Attribute<String> orqueioCandidateUsersAttribute;
+  protected static Attribute<String> orqueioDueDateAttribute;
+  protected static Attribute<String> orqueioFollowUpDateAttribute;
+  protected static Attribute<String> orqueioFormKeyAttribute;
+  protected static Attribute<String> orqueioPriorityAttribute;
 
   public HumanTaskImpl(ModelTypeInstanceContext instanceContext) {
     super(instanceContext);
@@ -94,82 +94,82 @@ public class HumanTaskImpl extends TaskImpl implements HumanTask {
     planningTableChild.setChild(this, planningTable);
   }
 
-  /** camunda extensions */
+  /** orqueio extensions */
 
-  public String getCamundaAssignee() {
-    return camundaAssigneeAttribute.getValue(this);
+  public String getOrqueioAssignee() {
+    return orqueioAssigneeAttribute.getValue(this);
   }
 
-  public void setCamundaAssignee(String camundaAssignee) {
-    camundaAssigneeAttribute.setValue(this, camundaAssignee);
+  public void setOrqueioAssignee(String orqueioAssignee) {
+    orqueioAssigneeAttribute.setValue(this, orqueioAssignee);
   }
 
-  public String getCamundaCandidateGroups() {
-    return camundaCandidateGroupsAttribute.getValue(this);
+  public String getOrqueioCandidateGroups() {
+    return orqueioCandidateGroupsAttribute.getValue(this);
   }
 
-  public void setCamundaCandidateGroups(String camundaCandidateGroups) {
-    camundaCandidateGroupsAttribute.setValue(this, camundaCandidateGroups);
+  public void setOrqueioCandidateGroups(String orqueioCandidateGroups) {
+    orqueioCandidateGroupsAttribute.setValue(this, orqueioCandidateGroups);
   }
 
-  public List<String> getCamundaCandidateGroupsList() {
-    String candidateGroups = camundaCandidateGroupsAttribute.getValue(this);
+  public List<String> getOrqueioCandidateGroupsList() {
+    String candidateGroups = orqueioCandidateGroupsAttribute.getValue(this);
     return StringUtil.splitCommaSeparatedList(candidateGroups);
   }
 
-  public void setCamundaCandidateGroupsList(List<String> camundaCandidateGroupsList) {
-    String candidateGroups = StringUtil.joinCommaSeparatedList(camundaCandidateGroupsList);
-    camundaCandidateGroupsAttribute.setValue(this, candidateGroups);
+  public void setOrqueioCandidateGroupsList(List<String> orqueioCandidateGroupsList) {
+    String candidateGroups = StringUtil.joinCommaSeparatedList(orqueioCandidateGroupsList);
+    orqueioCandidateGroupsAttribute.setValue(this, candidateGroups);
   }
 
-  public String getCamundaCandidateUsers() {
-    return camundaCandidateUsersAttribute.getValue(this);
+  public String getOrqueioCandidateUsers() {
+    return orqueioCandidateUsersAttribute.getValue(this);
   }
 
-  public void setCamundaCandidateUsers(String camundaCandidateUsers) {
-    camundaCandidateUsersAttribute.setValue(this, camundaCandidateUsers);
+  public void setOrqueioCandidateUsers(String orqueioCandidateUsers) {
+    orqueioCandidateUsersAttribute.setValue(this, orqueioCandidateUsers);
   }
 
-  public List<String> getCamundaCandidateUsersList() {
-    String candidateUsers = camundaCandidateUsersAttribute.getValue(this);
+  public List<String> getOrqueioCandidateUsersList() {
+    String candidateUsers = orqueioCandidateUsersAttribute.getValue(this);
     return StringUtil.splitCommaSeparatedList(candidateUsers);
   }
 
-  public void setCamundaCandidateUsersList(List<String> camundaCandidateUsersList) {
-    String candidateUsers = StringUtil.joinCommaSeparatedList(camundaCandidateUsersList);
-    camundaCandidateUsersAttribute.setValue(this, candidateUsers);
+  public void setOrqueioCandidateUsersList(List<String> orqueioCandidateUsersList) {
+    String candidateUsers = StringUtil.joinCommaSeparatedList(orqueioCandidateUsersList);
+    orqueioCandidateUsersAttribute.setValue(this, candidateUsers);
   }
 
-  public String getCamundaDueDate() {
-    return camundaDueDateAttribute.getValue(this);
+  public String getOrqueioDueDate() {
+    return orqueioDueDateAttribute.getValue(this);
   }
 
-  public void setCamundaDueDate(String camundaDueDate) {
-    camundaDueDateAttribute.setValue(this, camundaDueDate);
+  public void setOrqueioDueDate(String orqueioDueDate) {
+    orqueioDueDateAttribute.setValue(this, orqueioDueDate);
   }
 
-  public String getCamundaFollowUpDate() {
-    return camundaFollowUpDateAttribute.getValue(this);
+  public String getOrqueioFollowUpDate() {
+    return orqueioFollowUpDateAttribute.getValue(this);
   }
 
-  public void setCamundaFollowUpDate(String camundaFollowUpDate) {
-    camundaFollowUpDateAttribute.setValue(this, camundaFollowUpDate);
+  public void setOrqueioFollowUpDate(String orqueioFollowUpDate) {
+    orqueioFollowUpDateAttribute.setValue(this, orqueioFollowUpDate);
   }
 
-  public String getCamundaFormKey() {
-    return camundaFormKeyAttribute.getValue(this);
+  public String getOrqueioFormKey() {
+    return orqueioFormKeyAttribute.getValue(this);
   }
 
-  public void setCamundaFormKey(String camundaFormKey) {
-    camundaFormKeyAttribute.setValue(this, camundaFormKey);
+  public void setOrqueioFormKey(String orqueioFormKey) {
+    orqueioFormKeyAttribute.setValue(this, orqueioFormKey);
   }
 
-  public String getCamundaPriority() {
-    return camundaPriorityAttribute.getValue(this);
+  public String getOrqueioPriority() {
+    return orqueioPriorityAttribute.getValue(this);
   }
 
-  public void setCamundaPriority(String camundaPriority) {
-    camundaPriorityAttribute.setValue(this, camundaPriority);
+  public void setOrqueioPriority(String orqueioPriority) {
+    orqueioPriorityAttribute.setValue(this, orqueioPriority);
   }
 
   public static void registerType(ModelBuilder modelBuilder) {
@@ -186,33 +186,33 @@ public class HumanTaskImpl extends TaskImpl implements HumanTask {
         .idAttributeReference(Role.class)
         .build();
 
-    /** camunda extensions */
+    /** orqueio extensions */
 
-    camundaAssigneeAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_ASSIGNEE)
+    orqueioAssigneeAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_ASSIGNEE)
       .namespace(ORQUEIO_NS)
       .build();
 
-    camundaCandidateGroupsAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_CANDIDATE_GROUPS)
+    orqueioCandidateGroupsAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_CANDIDATE_GROUPS)
       .namespace(ORQUEIO_NS)
       .build();
 
-    camundaCandidateUsersAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_CANDIDATE_USERS)
+    orqueioCandidateUsersAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_CANDIDATE_USERS)
       .namespace(ORQUEIO_NS)
       .build();
 
-    camundaDueDateAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_DUE_DATE)
+    orqueioDueDateAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_DUE_DATE)
       .namespace(ORQUEIO_NS)
       .build();
 
-    camundaFollowUpDateAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_FOLLOW_UP_DATE)
+    orqueioFollowUpDateAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_FOLLOW_UP_DATE)
       .namespace(ORQUEIO_NS)
       .build();
 
-    camundaFormKeyAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_FORM_KEY)
+    orqueioFormKeyAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_FORM_KEY)
       .namespace(ORQUEIO_NS)
       .build();
 
-    camundaPriorityAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_PRIORITY)
+    orqueioPriorityAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_PRIORITY)
       .namespace(ORQUEIO_NS)
       .build();
 

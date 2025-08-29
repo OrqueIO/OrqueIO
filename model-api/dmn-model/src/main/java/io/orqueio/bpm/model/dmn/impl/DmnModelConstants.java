@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright Toaddlaterccs and/or licensed to Toaddlaterccs
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. Toaddlaterccs this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -27,12 +27,12 @@ public final class DmnModelConstants {
   public static final String LATEST_DMN_NS = DMN13_NS;
 
   /**
-   * The DMN 1.1 namespace URL release with Camunda 7.4.0
+   * The DMN 1.1 namespace URL release with Orqueio 7.4.0
    */
   public static final String DMN11_ALTERNATIVE_NS = "http://www.omg.org/spec/DMN/20151101/dmn11.xsd";
 
   /**
-   * The DMN 1.3 namespace URL release with Camunda 7.13.0
+   * The DMN 1.3 namespace URL release with Orqueio 7.13.0
    */
   public static final String DMN13_ALTERNATIVE_NS = "https://www.omg.org/spec/DMN/20191111/DMN13.xsd";
 
@@ -43,7 +43,7 @@ public final class DmnModelConstants {
   public static final String DMN_14_SCHEMA_LOCATION = "io/orqueio/bpm/model/dmn/schema/DMN14.xsd";
   public static final String DMN_15_SCHEMA_LOCATION = "io/orqueio/bpm/model/dmn/schema/DMN15.xsd";
   /**
-   * The location of the DMN 1.1 XML schema released with Camunda 7.4.0
+   * The location of the DMN 1.1 XML schema released with Orqueio 7.4.0
    */
   public static final String DMN_11_ALTERNATIVE_SCHEMA_LOCATION = "io/orqueio/bpm/model/dmn/schema/DMN11_Alternative.xsd";
 
@@ -54,7 +54,7 @@ public final class DmnModelConstants {
   public static final String FEEL14_NS = "https://www.omg.org/spec/DMN/20211108/FEEL/";
   public static final String FEEL15_NS = "https://www.omg.org/spec/DMN/20230324/FEEL/";
 
-  /** Camunda namespace */
+  /** Orqueio namespace */
   public static final String ORQUEIO_NS = "http://orqueio.io/schema/1.0/dmn";
 
   /** DMN element */
@@ -168,10 +168,10 @@ public final class DmnModelConstants {
   public static final String DMN_ATTRIBUTE_TYPE_REF = "typeRef";
   public static final String DMN_ATTRIBUTE_URI = "URI";
 
-  /** camunda extensions */
+  /** orqueio extensions */
 
-  public static final String CAMUNDA_ATTRIBUTE_INPUT_VARIABLE = "inputVariable";
-  public static final String CAMUNDA_ATTRIBUTE_HISTORY_TIME_TO_LIVE = "historyTimeToLive";
-  public static final String CAMUNDA_ATTRIBUTE_VERSION_TAG = "versionTag";
+  public static final String ORQUEIO_ATTRIBUTE_INPUT_VARIABLE = "inputVariable";
+  public static final String ORQUEIO_ATTRIBUTE_HISTORY_TIME_TO_LIVE = "historyTimeToLive";
+  public static final String ORQUEIO_ATTRIBUTE_VERSION_TAG = "versionTag";
 
 }

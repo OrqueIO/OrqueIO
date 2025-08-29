@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright Toaddlaterccs and/or licensed to Toaddlaterccs
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. Toaddlaterccs this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -43,8 +43,8 @@ public class SubProcessImpl extends ActivityImpl implements SubProcess {
   protected static ChildElementCollection<FlowElement> flowElementCollection;
   protected static ChildElementCollection<Artifact> artifactCollection;
 
-  /** camunda extensions */
-  protected static Attribute<Boolean> camundaAsyncAttribute;
+  /** orqueio extensions */
+  protected static Attribute<Boolean> orqueioAsyncAttribute;
 
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(SubProcess.class, BPMN_ELEMENT_SUB_PROCESS)
@@ -71,9 +71,9 @@ public class SubProcessImpl extends ActivityImpl implements SubProcess {
     artifactCollection = sequenceBuilder.elementCollection(Artifact.class)
       .build();
 
-    /** camunda extensions */
+    /** orqueio extensions */
 
-    camundaAsyncAttribute = typeBuilder.booleanAttribute(CAMUNDA_ATTRIBUTE_ASYNC)
+    orqueioAsyncAttribute = typeBuilder.booleanAttribute(ORQUEIO_ATTRIBUTE_ASYNC)
       .namespace(ORQUEIO_NS)
       .defaultValue(false)
       .build();
@@ -109,22 +109,22 @@ public class SubProcessImpl extends ActivityImpl implements SubProcess {
     return artifactCollection.get(this);
   }
 
-  /** camunda extensions */
+  /** orqueio extensions */
 
   /**
-   * @deprecated use isCamundaAsyncBefore() instead.
+   * @deprecated use isOrqueioAsyncBefore() instead.
    */
   @Deprecated
-  public boolean isCamundaAsync() {
-    return camundaAsyncAttribute.getValue(this);
+  public boolean isOrqueioAsync() {
+    return orqueioAsyncAttribute.getValue(this);
   }
 
   /**
-   * @deprecated use setCamundaAsyncBefore(isCamundaAsyncBefore) instead.
+   * @deprecated use setOrqueioAsyncBefore(isOrqueioAsyncBefore) instead.
    */
   @Deprecated
-  public void setCamundaAsync(boolean isCamundaAsync) {
-    camundaAsyncAttribute.setValue(this, isCamundaAsync);
+  public void setOrqueioAsync(boolean isOrqueioAsync) {
+    orqueioAsyncAttribute.setValue(this, isOrqueioAsync);
   }
 
 }

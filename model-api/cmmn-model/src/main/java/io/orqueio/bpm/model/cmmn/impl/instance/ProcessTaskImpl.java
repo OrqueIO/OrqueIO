@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright Toaddlaterccs and/or licensed to Toaddlaterccs
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. Toaddlaterccs this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -16,9 +16,9 @@
  */
 package io.orqueio.bpm.model.cmmn.impl.instance;
 
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_PROCESS_BINDING;
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_PROCESS_VERSION;
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_PROCESS_TENANT_ID;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ATTRIBUTE_PROCESS_BINDING;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ATTRIBUTE_PROCESS_VERSION;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ATTRIBUTE_PROCESS_TENANT_ID;
 import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_NS;
 import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CMMN11_NS;
 import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CMMN_ATTRIBUTE_PROCESS_REF;
@@ -49,9 +49,9 @@ public class ProcessTaskImpl extends TaskImpl implements ProcessTask {
   protected static ChildElementCollection<ParameterMapping> parameterMappingCollection;
   protected static ChildElement<ProcessRefExpression> processRefExpressionChild;
 
-  protected static Attribute<String> camundaProcessBindingAttribute;
-  protected static Attribute<String> camundaProcessVersionAttribute;
-  protected static Attribute<String> camundaProcessTenantIdAttribute;
+  protected static Attribute<String> orqueioProcessBindingAttribute;
+  protected static Attribute<String> orqueioProcessVersionAttribute;
+  protected static Attribute<String> orqueioProcessTenantIdAttribute;
 
   public ProcessTaskImpl(ModelTypeInstanceContext instanceContext) {
     super(instanceContext);
@@ -77,28 +77,28 @@ public class ProcessTaskImpl extends TaskImpl implements ProcessTask {
     return parameterMappingCollection.get(this);
   }
 
-  public String getCamundaProcessBinding() {
-    return camundaProcessBindingAttribute.getValue(this);
+  public String getOrqueioProcessBinding() {
+    return orqueioProcessBindingAttribute.getValue(this);
   }
 
-  public void setCamundaProcessBinding(String camundaProcessBinding) {
-    camundaProcessBindingAttribute.setValue(this, camundaProcessBinding);
+  public void setOrqueioProcessBinding(String orqueioProcessBinding) {
+    orqueioProcessBindingAttribute.setValue(this, orqueioProcessBinding);
   }
 
-  public String getCamundaProcessVersion() {
-    return camundaProcessVersionAttribute.getValue(this);
+  public String getOrqueioProcessVersion() {
+    return orqueioProcessVersionAttribute.getValue(this);
   }
 
-  public void setCamundaProcessVersion(String camundaProcessVersion) {
-    camundaProcessVersionAttribute.setValue(this, camundaProcessVersion);
+  public void setOrqueioProcessVersion(String orqueioProcessVersion) {
+    orqueioProcessVersionAttribute.setValue(this, orqueioProcessVersion);
   }
 
-  public String getCamundaProcessTenantId() {
-    return camundaProcessTenantIdAttribute.getValue(this);
+  public String getOrqueioProcessTenantId() {
+    return orqueioProcessTenantIdAttribute.getValue(this);
   }
 
-  public void setCamundaProcessTenantId(String camundaProcessTenantId) {
-    camundaProcessTenantIdAttribute.setValue(this, camundaProcessTenantId);
+  public void setOrqueioProcessTenantId(String orqueioProcessTenantId) {
+    orqueioProcessTenantIdAttribute.setValue(this, orqueioProcessTenantId);
   }
 
   public static void registerType(ModelBuilder modelBuilder) {
@@ -114,17 +114,17 @@ public class ProcessTaskImpl extends TaskImpl implements ProcessTask {
     processRefAttribute = typeBuilder.stringAttribute(CMMN_ATTRIBUTE_PROCESS_REF)
         .build();
 
-    /** camunda extensions */
+    /** orqueio extensions */
 
-    camundaProcessBindingAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_PROCESS_BINDING)
+    orqueioProcessBindingAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_PROCESS_BINDING)
       .namespace(ORQUEIO_NS)
       .build();
 
-    camundaProcessVersionAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_PROCESS_VERSION)
+    orqueioProcessVersionAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_PROCESS_VERSION)
       .namespace(ORQUEIO_NS)
       .build();
 
-    camundaProcessTenantIdAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_PROCESS_TENANT_ID)
+    orqueioProcessTenantIdAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_PROCESS_TENANT_ID)
         .namespace(ORQUEIO_NS)
         .build();
 

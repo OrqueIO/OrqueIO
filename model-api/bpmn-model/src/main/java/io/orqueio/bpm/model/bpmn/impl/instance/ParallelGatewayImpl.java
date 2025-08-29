@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright Toaddlaterccs and/or licensed to Toaddlaterccs
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. Toaddlaterccs this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -27,8 +27,8 @@ import io.orqueio.bpm.model.xml.type.attribute.Attribute;
 
 import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.BPMN20_NS;
 import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ELEMENT_PARALLEL_GATEWAY;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_ASYNC;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_EXCLUSIVE;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ATTRIBUTE_ASYNC;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ATTRIBUTE_EXCLUSIVE;
 import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_NS;
 import static io.orqueio.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
@@ -39,7 +39,7 @@ import static io.orqueio.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeIns
  */
 public class ParallelGatewayImpl extends GatewayImpl implements ParallelGateway {
 
-  protected static Attribute<Boolean> camundaAsyncAttribute;
+  protected static Attribute<Boolean> orqueioAsyncAttribute;
 
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(ParallelGateway.class, BPMN_ELEMENT_PARALLEL_GATEWAY)
@@ -51,9 +51,9 @@ public class ParallelGatewayImpl extends GatewayImpl implements ParallelGateway 
         }
       });
 
-    /** camunda extensions */
+    /** orqueio extensions */
 
-    camundaAsyncAttribute = typeBuilder.booleanAttribute(CAMUNDA_ATTRIBUTE_ASYNC)
+    orqueioAsyncAttribute = typeBuilder.booleanAttribute(ORQUEIO_ATTRIBUTE_ASYNC)
       .namespace(ORQUEIO_NS)
       .defaultValue(false)
       .build();
@@ -66,22 +66,22 @@ public class ParallelGatewayImpl extends GatewayImpl implements ParallelGateway 
     return new ParallelGatewayBuilder((BpmnModelInstance) modelInstance, this);
   }
 
-  /** camunda extensions */
+  /** orqueio extensions */
 
   /**
-   * @deprecated use isCamundaAsyncBefore() instead.
+   * @deprecated use isOrqueioAsyncBefore() instead.
    */
   @Deprecated
-  public boolean isCamundaAsync() {
-    return camundaAsyncAttribute.getValue(this);
+  public boolean isOrqueioAsync() {
+    return orqueioAsyncAttribute.getValue(this);
   }
 
   /**
-   * @deprecated use setCamundaAsyncBefore(isCamundaAsyncBefore) instead.
+   * @deprecated use setOrqueioAsyncBefore(isOrqueioAsyncBefore) instead.
    */
   @Deprecated
-  public void setCamundaAsync(boolean isCamundaAsync) {
-    camundaAsyncAttribute.setValue(this, isCamundaAsync);
+  public void setOrqueioAsync(boolean isOrqueioAsync) {
+    orqueioAsyncAttribute.setValue(this, isOrqueioAsync);
   }
 
   public ParallelGatewayImpl(ModelTypeInstanceContext context) {

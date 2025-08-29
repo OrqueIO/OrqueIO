@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright Toaddlaterccs and/or licensed to Toaddlaterccs
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. Toaddlaterccs this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -60,43 +60,43 @@ public abstract class AbstractProcessBuilder<B extends AbstractProcessBuilder<B>
     return myself;
   }
 
-  public B camundaJobPriority(String jobPriority) {
-    element.setCamundaJobPriority(jobPriority);
+  public B orqueioJobPriority(String jobPriority) {
+    element.setOrqueioJobPriority(jobPriority);
     return myself;
   }
 
   /**
-   * Set the camunda task priority attribute.
+   * Set the orqueio task priority attribute.
    * The priority is only used for service tasks which have as type value
    * <code>external</code>
    *
    * @param taskPriority the task priority which should used for the external tasks
    * @return the builder object
    */
-  public B camundaTaskPriority(String taskPriority) {
-    element.setCamundaTaskPriority(taskPriority);
+  public B orqueioTaskPriority(String taskPriority) {
+    element.setOrqueioTaskPriority(taskPriority);
     return myself;
   }
 
   /**
-   * Sets the camunda history time to live.
+   * Sets the orqueio history time to live.
    *
    * @param historyTimeToLive value for history time to live, must be either null or non-negative integer.
    * @return the builder object
    */
-  public B camundaHistoryTimeToLive(Integer historyTimeToLive) {
-    element.setCamundaHistoryTimeToLive(historyTimeToLive);
+  public B orqueioHistoryTimeToLive(Integer historyTimeToLive) {
+    element.setOrqueioHistoryTimeToLive(historyTimeToLive);
     return myself;
   }
 
   /**
-   * Sets the camunda history time to live string.
+   * Sets the orqueio history time to live string.
    *
    * @param historyTimeToLive string value of history time to live, can be null or a valid ISO-8601 value.
    * @return the builder object
    */
-  public B camundaHistoryTimeToLiveString(String historyTimeToLive) {
-    element.setCamundaHistoryTimeToLiveString(historyTimeToLive);
+  public B orqueioHistoryTimeToLiveString(String historyTimeToLive) {
+    element.setOrqueioHistoryTimeToLiveString(historyTimeToLive);
     return myself;
   }
 
@@ -106,8 +106,8 @@ public abstract class AbstractProcessBuilder<B extends AbstractProcessBuilder<B>
    * @param isStartableInTasklist default value is true
    * @return the builder object
    */
-  public B camundaStartableInTasklist(Boolean isStartableInTasklist) {
-    element.setCamundaIsStartableInTasklist(isStartableInTasklist);
+  public B orqueioStartableInTasklist(Boolean isStartableInTasklist) {
+    element.setOrqueioIsStartableInTasklist(isStartableInTasklist);
     return myself;
   }
 
@@ -117,8 +117,8 @@ public abstract class AbstractProcessBuilder<B extends AbstractProcessBuilder<B>
    * @param versionTag the version of the process definition
    * @return the builder object
    */
-  public B camundaVersionTag(String versionTag) {
-    element.setCamundaVersionTag(versionTag);
+  public B orqueioVersionTag(String versionTag) {
+    element.setOrqueioVersionTag(versionTag);
     return myself;
   }
 }

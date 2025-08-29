@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright Toaddlaterccs and/or licensed to Toaddlaterccs
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. Toaddlaterccs this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -16,8 +16,8 @@
  */
 package io.orqueio.bpm.model.dmn.impl.instance;
 
-import static io.orqueio.bpm.model.dmn.impl.DmnModelConstants.CAMUNDA_ATTRIBUTE_HISTORY_TIME_TO_LIVE;
-import static io.orqueio.bpm.model.dmn.impl.DmnModelConstants.CAMUNDA_ATTRIBUTE_VERSION_TAG;
+import static io.orqueio.bpm.model.dmn.impl.DmnModelConstants.ORQUEIO_ATTRIBUTE_HISTORY_TIME_TO_LIVE;
+import static io.orqueio.bpm.model.dmn.impl.DmnModelConstants.ORQUEIO_ATTRIBUTE_VERSION_TAG;
 import static io.orqueio.bpm.model.dmn.impl.DmnModelConstants.ORQUEIO_NS;
 import static io.orqueio.bpm.model.dmn.impl.DmnModelConstants.LATEST_DMN_NS;
 import static io.orqueio.bpm.model.dmn.impl.DmnModelConstants.DMN_ELEMENT_DECISION;
@@ -67,9 +67,9 @@ public class DecisionImpl extends DrgElementImpl implements Decision {
   protected static ChildElementCollection<UsingTaskReference> usingTaskCollection;
   protected static ChildElement<Expression> expressionChild;
 
-  // camunda extensions
-  protected static Attribute<String> camundaHistoryTimeToLiveAttribute;
-  protected static Attribute<String> camundaVersionTag;
+  // orqueio extensions
+  protected static Attribute<String> orqueioHistoryTimeToLiveAttribute;
+  protected static Attribute<String> orqueioVersionTag;
 
   public DecisionImpl(ModelTypeInstanceContext instanceContext) {
     super(instanceContext);
@@ -143,10 +143,10 @@ public class DecisionImpl extends DrgElementImpl implements Decision {
     expressionChild.setChild(this, expression);
   }
 
-  // camunda extensions
+  // orqueio extensions
   @Override
-  public Integer getCamundaHistoryTimeToLive() {
-    String ttl = getCamundaHistoryTimeToLiveString();
+  public Integer getOrqueioHistoryTimeToLive() {
+    String ttl = getOrqueioHistoryTimeToLiveString();
 
     if (ttl != null) {
       return Integer.valueOf(ttl);
@@ -155,28 +155,28 @@ public class DecisionImpl extends DrgElementImpl implements Decision {
   }
 
   @Override
-  public void setCamundaHistoryTimeToLive(Integer historyTimeToLive) {
-    setCamundaHistoryTimeToLiveString(String.valueOf(historyTimeToLive));
+  public void setOrqueioHistoryTimeToLive(Integer historyTimeToLive) {
+    setOrqueioHistoryTimeToLiveString(String.valueOf(historyTimeToLive));
   }
 
   @Override
-  public String getCamundaHistoryTimeToLiveString() {
-    return camundaHistoryTimeToLiveAttribute.getValue(this);
+  public String getOrqueioHistoryTimeToLiveString() {
+    return orqueioHistoryTimeToLiveAttribute.getValue(this);
   }
 
   @Override
-  public void setCamundaHistoryTimeToLiveString(String historyTimeToLive) {
-    camundaHistoryTimeToLiveAttribute.setValue(this, historyTimeToLive);
+  public void setOrqueioHistoryTimeToLiveString(String historyTimeToLive) {
+    orqueioHistoryTimeToLiveAttribute.setValue(this, historyTimeToLive);
   }
 
   @Override
   public String getVersionTag() {
-    return camundaVersionTag.getValue(this);
+    return orqueioVersionTag.getValue(this);
   }
 
   @Override
   public void setVersionTag(String inputVariable) {
-    camundaVersionTag.setValue(this, inputVariable);
+    orqueioVersionTag.setValue(this, inputVariable);
   }
 
   public static void registerType(ModelBuilder modelBuilder) {
@@ -233,13 +233,13 @@ public class DecisionImpl extends DrgElementImpl implements Decision {
     expressionChild = sequenceBuilder.element(Expression.class)
       .build();
 
-    // camunda extensions
+    // orqueio extensions
 
-    camundaHistoryTimeToLiveAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_HISTORY_TIME_TO_LIVE)
+    orqueioHistoryTimeToLiveAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_HISTORY_TIME_TO_LIVE)
         .namespace(ORQUEIO_NS)
         .build();
 
-    camundaVersionTag = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_VERSION_TAG)
+    orqueioVersionTag = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_VERSION_TAG)
       .namespace(ORQUEIO_NS)
       .build();
 

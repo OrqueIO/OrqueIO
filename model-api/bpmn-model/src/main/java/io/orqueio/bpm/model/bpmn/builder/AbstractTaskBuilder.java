@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright Toaddlaterccs and/or licensed to Toaddlaterccs
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. Toaddlaterccs this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -19,11 +19,11 @@ package io.orqueio.bpm.model.bpmn.builder;
 import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
 import io.orqueio.bpm.model.bpmn.instance.ExtensionElements;
 import io.orqueio.bpm.model.bpmn.instance.Task;
-import io.orqueio.bpm.model.bpmn.instance.camunda.CamundaExecutionListener;
-import io.orqueio.bpm.model.bpmn.instance.camunda.CamundaInputOutput;
-import io.orqueio.bpm.model.bpmn.instance.camunda.CamundaInputParameter;
-import io.orqueio.bpm.model.bpmn.instance.camunda.CamundaOutputParameter;
-import io.orqueio.bpm.model.bpmn.instance.camunda.CamundaTaskListener;
+import io.orqueio.bpm.model.bpmn.instance.orqueio.OrqueioExecutionListener;
+import io.orqueio.bpm.model.bpmn.instance.orqueio.OrqueioInputOutput;
+import io.orqueio.bpm.model.bpmn.instance.orqueio.OrqueioInputParameter;
+import io.orqueio.bpm.model.bpmn.instance.orqueio.OrqueioOutputParameter;
+import io.orqueio.bpm.model.bpmn.instance.orqueio.OrqueioTaskListener;
 
 /**
  * @author Sebastian Menski
@@ -34,32 +34,32 @@ public abstract class AbstractTaskBuilder<B extends AbstractTaskBuilder<B, E>, E
     super(modelInstance, element, selfType);
   }
 
-  /** camunda extensions */
+  /** orqueio extensions */
 
   /**
-   * @deprecated use camundaAsyncBefore() instead.
+   * @deprecated use orqueioAsyncBefore() instead.
    *
-   * Sets the camunda async attribute to true.
+   * Sets the orqueio async attribute to true.
    *
    * @return the builder object
    */
   @Deprecated
-  public B camundaAsync() {
-    element.setCamundaAsyncBefore(true);
+  public B orqueioAsync() {
+    element.setOrqueioAsyncBefore(true);
     return myself;
   }
 
   /**
-   * @deprecated use camundaAsyncBefore(isCamundaAsyncBefore) instead.
+   * @deprecated use orqueioAsyncBefore(isOrqueioAsyncBefore) instead.
    *
-   * Sets the camunda async attribute.
+   * Sets the orqueio async attribute.
    *
-   * @param isCamundaAsync  the async state of the task
+   * @param isOrqueioAsync  the async state of the task
    * @return the builder object
    */
   @Deprecated
-  public B camundaAsync(boolean isCamundaAsync) {
-    element.setCamundaAsyncBefore(isCamundaAsync);
+  public B orqueioAsync(boolean isOrqueioAsync) {
+    element.setOrqueioAsyncBefore(isOrqueioAsync);
     return myself;
   }
 

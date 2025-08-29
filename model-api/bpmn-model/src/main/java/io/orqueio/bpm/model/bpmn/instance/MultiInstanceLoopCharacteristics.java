@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright Toaddlaterccs and/or licensed to Toaddlaterccs
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. Toaddlaterccs this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -71,25 +71,25 @@ public interface MultiInstanceLoopCharacteristics extends LoopCharacteristics {
 
   void setNoneBehaviorEventRef(EventDefinition noneBehaviorEventRef);
 
-  String getCamundaCollection();
+  String getOrqueioCollection();
 
-  void setCamundaCollection(String expression);
+  void setOrqueioCollection(String expression);
 
-  String getCamundaElementVariable();
+  String getOrqueioElementVariable();
 
-  void setCamundaElementVariable(String variableName);
+  void setOrqueioElementVariable(String variableName);
 
-  boolean isCamundaAsyncBefore();
+  boolean isOrqueioAsyncBefore();
 
-  void setCamundaAsyncBefore(boolean isCamundaAsyncBefore);
+  void setOrqueioAsyncBefore(boolean isOrqueioAsyncBefore);
 
-  boolean isCamundaAsyncAfter();
+  boolean isOrqueioAsyncAfter();
 
-  void setCamundaAsyncAfter(boolean isCamundaAsyncAfter);
+  void setOrqueioAsyncAfter(boolean isOrqueioAsyncAfter);
 
-  boolean isCamundaExclusive();
+  boolean isOrqueioExclusive();
 
-  void setCamundaExclusive(boolean isCamundaExclusive);
+  void setOrqueioExclusive(boolean isOrqueioExclusive);
 
   MultiInstanceLoopCharacteristicsBuilder builder();
 

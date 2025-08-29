@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright Toaddlaterccs and/or licensed to Toaddlaterccs
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. Toaddlaterccs this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -79,64 +79,64 @@ public class FlowNodeTest extends BpmnModelElementInstanceTest {
   }
 
   @Test
-    public void testCamundaAsyncBefore() {
+    public void testOrqueioAsyncBefore() {
     Task task = modelInstance.newInstance(Task.class);
-    assertThat(task.isCamundaAsyncBefore()).isFalse();
+    assertThat(task.isOrqueioAsyncBefore()).isFalse();
 
-    task.setCamundaAsyncBefore(true);
-    assertThat(task.isCamundaAsyncBefore()).isTrue();
+    task.setOrqueioAsyncBefore(true);
+    assertThat(task.isOrqueioAsyncBefore()).isTrue();
   }
 
   @Test
-  public void testCamundaAsyncAfter() {
+  public void testOrqueioAsyncAfter() {
     Task task = modelInstance.newInstance(Task.class);
-    assertThat(task.isCamundaAsyncAfter()).isFalse();
+    assertThat(task.isOrqueioAsyncAfter()).isFalse();
 
-    task.setCamundaAsyncAfter(true);
-    assertThat(task.isCamundaAsyncAfter()).isTrue();
+    task.setOrqueioAsyncAfter(true);
+    assertThat(task.isOrqueioAsyncAfter()).isTrue();
   }
 
   @Test
-  public void testCamundaAsyncAfterAndBefore() {
+  public void testOrqueioAsyncAfterAndBefore() {
     Task task = modelInstance.newInstance(Task.class);
 
-    assertThat(task.isCamundaAsyncAfter()).isFalse();
-    assertThat(task.isCamundaAsyncBefore()).isFalse();
+    assertThat(task.isOrqueioAsyncAfter()).isFalse();
+    assertThat(task.isOrqueioAsyncBefore()).isFalse();
 
-    task.setCamundaAsyncBefore(true);
+    task.setOrqueioAsyncBefore(true);
 
-    assertThat(task.isCamundaAsyncAfter()).isFalse();
-    assertThat(task.isCamundaAsyncBefore()).isTrue();
+    assertThat(task.isOrqueioAsyncAfter()).isFalse();
+    assertThat(task.isOrqueioAsyncBefore()).isTrue();
 
-    task.setCamundaAsyncAfter(true);
+    task.setOrqueioAsyncAfter(true);
 
-    assertThat(task.isCamundaAsyncAfter()).isTrue();
-    assertThat(task.isCamundaAsyncBefore()).isTrue();
+    assertThat(task.isOrqueioAsyncAfter()).isTrue();
+    assertThat(task.isOrqueioAsyncBefore()).isTrue();
 
-    task.setCamundaAsyncBefore(false);
+    task.setOrqueioAsyncBefore(false);
 
-    assertThat(task.isCamundaAsyncAfter()).isTrue();
-    assertThat(task.isCamundaAsyncBefore()).isFalse();
+    assertThat(task.isOrqueioAsyncAfter()).isTrue();
+    assertThat(task.isOrqueioAsyncBefore()).isFalse();
   }
 
   @Test
-  public void testCamundaExclusive() {
+  public void testOrqueioExclusive() {
     Task task = modelInstance.newInstance(Task.class);
 
-    assertThat(task.isCamundaExclusive()).isTrue();
+    assertThat(task.isOrqueioExclusive()).isTrue();
 
-    task.setCamundaExclusive(false);
+    task.setOrqueioExclusive(false);
 
-    assertThat(task.isCamundaExclusive()).isFalse();
+    assertThat(task.isOrqueioExclusive()).isFalse();
   }
 
   @Test
-  public void testCamundaJobPriority() {
+  public void testOrqueioJobPriority() {
     Task task = modelInstance.newInstance(Task.class);
-    assertThat(task.getCamundaJobPriority()).isNull();
+    assertThat(task.getOrqueioJobPriority()).isNull();
 
-    task.setCamundaJobPriority("15");
+    task.setOrqueioJobPriority("15");
 
-    assertThat(task.getCamundaJobPriority()).isEqualTo("15");
+    assertThat(task.getOrqueioJobPriority()).isEqualTo("15");
   }
 }

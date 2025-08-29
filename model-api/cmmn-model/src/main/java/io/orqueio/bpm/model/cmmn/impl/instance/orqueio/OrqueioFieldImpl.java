@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright Toaddlaterccs and/or licensed to Toaddlaterccs
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. Toaddlaterccs this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -16,10 +16,10 @@
  */
 package io.orqueio.bpm.model.cmmn.impl.instance.orqueio;
 
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_EXPRESSION;
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_NAME;
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_STRING_VALUE;
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ELEMENT_FIELD;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ATTRIBUTE_EXPRESSION;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ATTRIBUTE_NAME;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ATTRIBUTE_STRING_VALUE;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ELEMENT_FIELD;
 import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_NS;
 
 import io.orqueio.bpm.model.cmmn.impl.instance.CmmnModelElementInstanceImpl;
@@ -40,14 +40,14 @@ import io.orqueio.bpm.model.xml.type.child.SequenceBuilder;
  */
 public class OrqueioFieldImpl extends CmmnModelElementInstanceImpl implements OrqueioField {
 
-  protected static Attribute<String> camundaNameAttribute;
-  protected static Attribute<String> camundaExpressionAttribute;
-  protected static Attribute<String> camundaStringValueAttribute;
-  protected static ChildElement<OrqueioExpression> camundaExpressionChild;
-  protected static ChildElement<OrqueioString> camundaStringChild;
+  protected static Attribute<String> orqueioNameAttribute;
+  protected static Attribute<String> orqueioExpressionAttribute;
+  protected static Attribute<String> orqueioStringValueAttribute;
+  protected static ChildElement<OrqueioExpression> orqueioExpressionChild;
+  protected static ChildElement<OrqueioString> orqueioStringChild;
 
   public static void registerType(ModelBuilder modelBuilder) {
-    ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(OrqueioField.class, CAMUNDA_ELEMENT_FIELD)
+    ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(OrqueioField.class, ORQUEIO_ELEMENT_FIELD)
       .namespaceUri(ORQUEIO_NS)
       .instanceProvider(new ModelTypeInstanceProvider<OrqueioField>() {
         public OrqueioField newInstance(ModelTypeInstanceContext instanceContext) {
@@ -55,24 +55,24 @@ public class OrqueioFieldImpl extends CmmnModelElementInstanceImpl implements Or
         }
       });
 
-    camundaNameAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_NAME)
+    orqueioNameAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_NAME)
       .namespace(ORQUEIO_NS)
       .build();
 
-    camundaExpressionAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_EXPRESSION)
+    orqueioExpressionAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_EXPRESSION)
       .namespace(ORQUEIO_NS)
       .build();
 
-    camundaStringValueAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_STRING_VALUE)
+    orqueioStringValueAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_STRING_VALUE)
       .namespace(ORQUEIO_NS)
       .build();
 
     SequenceBuilder sequenceBuilder = typeBuilder.sequence();
 
-    camundaExpressionChild = sequenceBuilder.element(OrqueioExpression.class)
+    orqueioExpressionChild = sequenceBuilder.element(OrqueioExpression.class)
       .build();
 
-    camundaStringChild = sequenceBuilder.element(OrqueioString.class)
+    orqueioStringChild = sequenceBuilder.element(OrqueioString.class)
       .build();
 
     typeBuilder.build();
@@ -82,44 +82,44 @@ public class OrqueioFieldImpl extends CmmnModelElementInstanceImpl implements Or
     super(instanceContext);
   }
 
-  public String getCamundaName() {
-    return camundaNameAttribute.getValue(this);
+  public String getOrqueioName() {
+    return orqueioNameAttribute.getValue(this);
   }
 
-  public void setCamundaName(String camundaName) {
-    camundaNameAttribute.setValue(this, camundaName);
+  public void setOrqueioName(String orqueioName) {
+    orqueioNameAttribute.setValue(this, orqueioName);
   }
 
-  public String getCamundaExpression() {
-    return camundaExpressionAttribute.getValue(this);
+  public String getOrqueioExpression() {
+    return orqueioExpressionAttribute.getValue(this);
   }
 
-  public void setCamundaExpression(String camundaExpression) {
-    camundaExpressionAttribute.setValue(this, camundaExpression);
+  public void setOrqueioExpression(String orqueioExpression) {
+    orqueioExpressionAttribute.setValue(this, orqueioExpression);
   }
 
-  public String getCamundaStringValue() {
-    return camundaStringValueAttribute.getValue(this);
+  public String getOrqueioStringValue() {
+    return orqueioStringValueAttribute.getValue(this);
   }
 
-  public void setCamundaStringValue(String camundaStringValue) {
-    camundaStringValueAttribute.setValue(this, camundaStringValue);
+  public void setOrqueioStringValue(String orqueioStringValue) {
+    orqueioStringValueAttribute.setValue(this, orqueioStringValue);
   }
 
-  public OrqueioString getCamundaString() {
-    return camundaStringChild.getChild(this);
+  public OrqueioString getOrqueioString() {
+    return orqueioStringChild.getChild(this);
   }
 
-  public void setCamundaString(OrqueioString orqueioString) {
-    camundaStringChild.setChild(this, orqueioString);
+  public void setOrqueioString(OrqueioString orqueioString) {
+    orqueioStringChild.setChild(this, orqueioString);
   }
 
-  public OrqueioExpression getCamundaExpressionChild() {
-    return camundaExpressionChild.getChild(this);
+  public OrqueioExpression getOrqueioExpressionChild() {
+    return orqueioExpressionChild.getChild(this);
   }
 
-  public void setCamundaExpressionChild(OrqueioExpression camundaExpression) {
-    camundaExpressionChild.setChild(this, camundaExpression);
+  public void setOrqueioExpressionChild(OrqueioExpression orqueioExpression) {
+    orqueioExpressionChild.setChild(this, orqueioExpression);
   }
 
 }

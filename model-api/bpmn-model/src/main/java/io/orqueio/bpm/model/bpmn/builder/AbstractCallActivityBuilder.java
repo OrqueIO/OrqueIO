@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright Toaddlaterccs and/or licensed to Toaddlaterccs
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. Toaddlaterccs this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -18,8 +18,8 @@ package io.orqueio.bpm.model.bpmn.builder;
 
 import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
 import io.orqueio.bpm.model.bpmn.instance.CallActivity;
-import io.orqueio.bpm.model.bpmn.instance.camunda.CamundaIn;
-import io.orqueio.bpm.model.bpmn.instance.camunda.CamundaOut;
+import io.orqueio.bpm.model.bpmn.instance.orqueio.OrqueioIn;
+import io.orqueio.bpm.model.bpmn.instance.orqueio.OrqueioOut;
 
 /**
  * @author Sebastian Menski
@@ -41,108 +41,108 @@ public class AbstractCallActivityBuilder<B extends AbstractCallActivityBuilder<B
     return myself;
   }
 
-  /** camunda extensions */
+  /** orqueio extensions */
 
   /**
-   * @deprecated use camundaAsyncBefore() instead.
+   * @deprecated use orqueioAsyncBefore() instead.
    *
-   * Sets the camunda async attribute to true.
+   * Sets the orqueio async attribute to true.
    *
    * @return the builder object
    */
   @Deprecated
-  public B camundaAsync() {
-    element.setCamundaAsyncBefore(true);
+  public B orqueioAsync() {
+    element.setOrqueioAsyncBefore(true);
     return myself;
   }
 
   /**
-   * @deprecated use camundaAsyncBefore(isCamundaAsyncBefore) instead
+   * @deprecated use orqueioAsyncBefore(isOrqueioAsyncBefore) instead
    *
-   * Sets the camunda async attribute.
+   * Sets the orqueio async attribute.
    *
-   * @param isCamundaAsync  the async state of the task
+   * @param isOrqueioAsync  the async state of the task
    * @return the builder object
    */
   @Deprecated
-  public B camundaAsync(boolean isCamundaAsync) {
-    element.setCamundaAsyncBefore(isCamundaAsync);
+  public B orqueioAsync(boolean isOrqueioAsync) {
+    element.setOrqueioAsyncBefore(isOrqueioAsync);
     return myself;
   }
 
   /**
-   * Sets the camunda calledElementBinding attribute
+   * Sets the orqueio calledElementBinding attribute
    *
-   * @param camundaCalledElementBinding  the element binding to use
+   * @param orqueioCalledElementBinding  the element binding to use
    * @return the builder object
    */
-  public B camundaCalledElementBinding(String camundaCalledElementBinding) {
-    element.setCamundaCalledElementBinding(camundaCalledElementBinding);
+  public B orqueioCalledElementBinding(String orqueioCalledElementBinding) {
+    element.setOrqueioCalledElementBinding(orqueioCalledElementBinding);
     return myself;
   }
 
   /**
-   * Sets the camunda calledElementVersion attribute
+   * Sets the orqueio calledElementVersion attribute
    *
-   * @param camundaCalledElementVersion  the element version to use
+   * @param orqueioCalledElementVersion  the element version to use
    * @return the builder object
    */
-  public B camundaCalledElementVersion(String camundaCalledElementVersion) {
-    element.setCamundaCalledElementVersion(camundaCalledElementVersion);
+  public B orqueioCalledElementVersion(String orqueioCalledElementVersion) {
+    element.setOrqueioCalledElementVersion(orqueioCalledElementVersion);
     return myself;
   }
 
   /**
-   * Sets the camunda calledElementVersionTag attribute
+   * Sets the orqueio calledElementVersionTag attribute
    *
-   * @param camundaCalledElementVersionTag  the element version to use
+   * @param orqueioCalledElementVersionTag  the element version to use
    * @return the builder object
    */
-  public B camundaCalledElementVersionTag(String camundaCalledElementVersionTag) {
-    element.setCamundaCalledElementVersionTag(camundaCalledElementVersionTag);
+  public B orqueioCalledElementVersionTag(String orqueioCalledElementVersionTag) {
+    element.setOrqueioCalledElementVersionTag(orqueioCalledElementVersionTag);
     return myself;
   }
 
   /**
-   * Sets the camunda calledElementTenantId attribute
-   * @param camundaCalledElementTenantId the called element tenant id
+   * Sets the orqueio calledElementTenantId attribute
+   * @param orqueioCalledElementTenantId the called element tenant id
    * @return the builder object
    */
-  public B camundaCalledElementTenantId(String camundaCalledElementTenantId) {
-    element.setCamundaCalledElementTenantId(camundaCalledElementTenantId);
+  public B orqueioCalledElementTenantId(String orqueioCalledElementTenantId) {
+    element.setOrqueioCalledElementTenantId(orqueioCalledElementTenantId);
     return myself;
   }
 
   /**
-   * Sets the camunda caseRef attribute
+   * Sets the orqueio caseRef attribute
    *
    * @param caseRef the case to call
    * @return the builder object
    */
-  public B camundaCaseRef(String caseRef) {
-    element.setCamundaCaseRef(caseRef);
+  public B orqueioCaseRef(String caseRef) {
+    element.setOrqueioCaseRef(caseRef);
     return myself;
   }
 
   /**
-   * Sets the camunda caseBinding attribute
+   * Sets the orqueio caseBinding attribute
    *
-   * @param camundaCaseBinding  the case binding to use
+   * @param orqueioCaseBinding  the case binding to use
    * @return the builder object
    */
-  public B camundaCaseBinding(String camundaCaseBinding) {
-    element.setCamundaCaseBinding(camundaCaseBinding);
+  public B orqueioCaseBinding(String orqueioCaseBinding) {
+    element.setOrqueioCaseBinding(orqueioCaseBinding);
     return myself;
   }
 
   /**
-   * Sets the camunda caseVersion attribute
+   * Sets the orqueio caseVersion attribute
    *
-   * @param camundaCaseVersion  the case version to use
+   * @param orqueioCaseVersion  the case version to use
    * @return the builder object
    */
-  public B camundaCaseVersion(String camundaCaseVersion) {
-    element.setCamundaCaseVersion(camundaCaseVersion);
+  public B orqueioCaseVersion(String orqueioCaseVersion) {
+    element.setOrqueioCaseVersion(orqueioCaseVersion);
     return myself;
   }
 
@@ -151,89 +151,89 @@ public class AbstractCallActivityBuilder<B extends AbstractCallActivityBuilder<B
    * @param tenantId the tenant id to set
    * @return the builder object
    */
-  public B camundaCaseTenantId(String tenantId) {
-    element.setCamundaCaseTenantId(tenantId);
+  public B orqueioCaseTenantId(String tenantId) {
+    element.setOrqueioCaseTenantId(tenantId);
     return myself;
   }
 
   /**
-   * Sets a "camunda in" parameter to pass a business key from the super process instance to the sub process instance
+   * Sets a "orqueio in" parameter to pass a business key from the super process instance to the sub process instance
    * @param businessKey the business key to set
    * @return the builder object
    */
-  public B camundaInBusinessKey(String businessKey) {
-    CamundaIn param = modelInstance.newInstance(CamundaIn.class);
-    param.setCamundaBusinessKey(businessKey);
+  public B orqueioInBusinessKey(String businessKey) {
+    OrqueioIn param = modelInstance.newInstance(OrqueioIn.class);
+    param.setOrqueioBusinessKey(businessKey);
     addExtensionElement(param);
     return myself;
   }
 
   /**
-   * Sets a "camunda in" parameter to pass a variable from the super process instance to the sub process instance
+   * Sets a "orqueio in" parameter to pass a variable from the super process instance to the sub process instance
    *
    * @param source the name of variable in the super process instance
    * @param target the name of the variable in the sub process instance
    * @return the builder object
    */
-  public B camundaIn(String source, String target) {
-    CamundaIn param = modelInstance.newInstance(CamundaIn.class);
-    param.setCamundaSource(source);
-    param.setCamundaTarget(target);
+  public B orqueioIn(String source, String target) {
+    OrqueioIn param = modelInstance.newInstance(OrqueioIn.class);
+    param.setOrqueioSource(source);
+    param.setOrqueioTarget(target);
     addExtensionElement(param);
     return myself;
   }
 
   /**
-   * Sets a "camunda out" parameter to pass a variable from a sub process instance to the super process instance
+   * Sets a "orqueio out" parameter to pass a variable from a sub process instance to the super process instance
    *
    * @param source the name of variable in the sub process instance
    * @param target the name of the variable in the super process instance
    * @return the builder object
    */
-  public B camundaOut(String source, String target) {
-    CamundaOut param = modelInstance.newInstance(CamundaOut.class);
-    param.setCamundaSource(source);
-    param.setCamundaTarget(target);
+  public B orqueioOut(String source, String target) {
+    OrqueioOut param = modelInstance.newInstance(OrqueioOut.class);
+    param.setOrqueioSource(source);
+    param.setOrqueioTarget(target);
     addExtensionElement(param);
     return myself;
   }
 
   /**
-   * Sets the camunda variableMappingClass attribute. It references on a class which implements the
+   * Sets the orqueio variableMappingClass attribute. It references on a class which implements the
    * {@link DelegateVariableMapping} interface.
    * Is used to delegate the variable in- and output mapping to the given class.
    *
-   * @param camundaVariableMappingClass                  the class name to set
+   * @param orqueioVariableMappingClass                  the class name to set
    * @return                              the builder object
    */
   @SuppressWarnings("rawtypes")
-  public B camundaVariableMappingClass(Class camundaVariableMappingClass) {
-    return camundaVariableMappingClass(camundaVariableMappingClass.getName());
+  public B orqueioVariableMappingClass(Class orqueioVariableMappingClass) {
+    return orqueioVariableMappingClass(orqueioVariableMappingClass.getName());
   }
 
   /**
-   * Sets the camunda variableMappingClass attribute. It references on a class which implements the
+   * Sets the orqueio variableMappingClass attribute. It references on a class which implements the
    * {@link DelegateVariableMapping} interface.
    * Is used to delegate the variable in- and output mapping to the given class.
    *
-   * @param camundaVariableMappingClass                  the class name to set
+   * @param orqueioVariableMappingClass                  the class name to set
    * @return                              the builder object
    */
-  public B camundaVariableMappingClass(String fullQualifiedClassName) {
-    element.setCamundaVariableMappingClass(fullQualifiedClassName);
+  public B orqueioVariableMappingClass(String fullQualifiedClassName) {
+    element.setOrqueioVariableMappingClass(fullQualifiedClassName);
     return myself;
   }
 
   /**
-   * Sets the camunda variableMappingDelegateExpression attribute. The expression when is resolved
+   * Sets the orqueio variableMappingDelegateExpression attribute. The expression when is resolved
    * references to an object of a class, which implements the {@link DelegateVariableMapping} interface.
    * Is used to delegate the variable in- and output mapping to the given class.
    *
-   * @param camundaVariableMappingDelegateExpression     the expression which references a delegate object
+   * @param orqueioVariableMappingDelegateExpression     the expression which references a delegate object
    * @return                              the builder object
    */
-  public B camundaVariableMappingDelegateExpression(String camundaVariableMappingDelegateExpression) {
-    element.setCamundaVariableMappingDelegateExpression(camundaVariableMappingDelegateExpression);
+  public B orqueioVariableMappingDelegateExpression(String orqueioVariableMappingDelegateExpression) {
+    element.setOrqueioVariableMappingDelegateExpression(orqueioVariableMappingDelegateExpression);
     return myself;
   }
 }

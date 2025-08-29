@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright Toaddlaterccs and/or licensed to Toaddlaterccs
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. Toaddlaterccs this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -41,10 +41,10 @@ public class ScriptTaskImpl extends TaskImpl implements ScriptTask {
   protected static Attribute<String> scriptFormatAttribute;
   protected static ChildElement<Script> scriptChild;
 
-  /** camunda extensions */
+  /** orqueio extensions */
 
-  protected static Attribute<String> camundaResultVariableAttribute;
-  protected static Attribute<String> camundaResourceAttribute;
+  protected static Attribute<String> orqueioResultVariableAttribute;
+  protected static Attribute<String> orqueioResourceAttribute;
 
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(ScriptTask.class, BPMN_ELEMENT_SCRIPT_TASK)
@@ -64,13 +64,13 @@ public class ScriptTaskImpl extends TaskImpl implements ScriptTask {
     scriptChild = sequenceBuilder.element(Script.class)
       .build();
 
-    /** camunda extensions */
+    /** orqueio extensions */
 
-    camundaResultVariableAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_RESULT_VARIABLE)
+    orqueioResultVariableAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_RESULT_VARIABLE)
       .namespace(ORQUEIO_NS)
       .build();
 
-    camundaResourceAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_RESOURCE)
+    orqueioResourceAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_RESOURCE)
       .namespace(ORQUEIO_NS)
       .build();
 
@@ -102,22 +102,22 @@ public class ScriptTaskImpl extends TaskImpl implements ScriptTask {
     scriptChild.setChild(this, script);
   }
 
-  /** camunda extensions */
+  /** orqueio extensions */
 
-  public String getCamundaResultVariable() {
-    return camundaResultVariableAttribute.getValue(this);
+  public String getOrqueioResultVariable() {
+    return orqueioResultVariableAttribute.getValue(this);
   }
 
-  public void setCamundaResultVariable(String camundaResultVariable) {
-    camundaResultVariableAttribute.setValue(this, camundaResultVariable);
+  public void setOrqueioResultVariable(String orqueioResultVariable) {
+    orqueioResultVariableAttribute.setValue(this, orqueioResultVariable);
   }
 
-  public String getCamundaResource() {
-    return camundaResourceAttribute.getValue(this);
+  public String getOrqueioResource() {
+    return orqueioResourceAttribute.getValue(this);
   }
 
-  public void setCamundaResource(String camundaResource) {
-    camundaResourceAttribute.setValue(this, camundaResource);
+  public void setOrqueioResource(String orqueioResource) {
+    orqueioResourceAttribute.setValue(this, orqueioResource);
   }
 
 }

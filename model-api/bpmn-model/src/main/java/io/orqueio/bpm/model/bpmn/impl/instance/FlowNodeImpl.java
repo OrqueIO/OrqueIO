@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright Toaddlaterccs and/or licensed to Toaddlaterccs
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. Toaddlaterccs this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -48,11 +48,11 @@ public abstract class FlowNodeImpl extends FlowElementImpl implements FlowNode {
   protected static ElementReferenceCollection<SequenceFlow, Incoming> incomingCollection;
   protected static ElementReferenceCollection<SequenceFlow, Outgoing> outgoingCollection;
 
-  /** Camunda Attributes */
-  protected static Attribute<Boolean> camundaAsyncAfter;
-  protected static Attribute<Boolean> camundaAsyncBefore;
-  protected static Attribute<Boolean> camundaExclusive;
-  protected static Attribute<String> camundaJobPriority;
+  /** Orqueio Attributes */
+  protected static Attribute<Boolean> orqueioAsyncAfter;
+  protected static Attribute<Boolean> orqueioAsyncBefore;
+  protected static Attribute<Boolean> orqueioExclusive;
+  protected static Attribute<String> orqueioJobPriority;
 
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(FlowNode.class, BPMN_ELEMENT_FLOW_NODE)
@@ -70,24 +70,24 @@ public abstract class FlowNodeImpl extends FlowElementImpl implements FlowNode {
       .qNameElementReferenceCollection(SequenceFlow.class)
       .build();
 
-    /** Camunda Attributes */
+    /** Orqueio Attributes */
 
-    camundaAsyncAfter = typeBuilder.booleanAttribute(CAMUNDA_ATTRIBUTE_ASYNC_AFTER)
+    orqueioAsyncAfter = typeBuilder.booleanAttribute(ORQUEIO_ATTRIBUTE_ASYNC_AFTER)
       .namespace(ORQUEIO_NS)
       .defaultValue(false)
       .build();
 
-    camundaAsyncBefore = typeBuilder.booleanAttribute(CAMUNDA_ATTRIBUTE_ASYNC_BEFORE)
+    orqueioAsyncBefore = typeBuilder.booleanAttribute(ORQUEIO_ATTRIBUTE_ASYNC_BEFORE)
       .namespace(ORQUEIO_NS)
       .defaultValue(false)
       .build();
 
-    camundaExclusive = typeBuilder.booleanAttribute(CAMUNDA_ATTRIBUTE_EXCLUSIVE)
+    orqueioExclusive = typeBuilder.booleanAttribute(ORQUEIO_ATTRIBUTE_EXCLUSIVE)
       .namespace(ORQUEIO_NS)
       .defaultValue(true)
       .build();
 
-    camundaJobPriority = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_JOB_PRIORITY)
+    orqueioJobPriority = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_JOB_PRIORITY)
        .namespace(ORQUEIO_NS)
        .build();
 
@@ -149,37 +149,37 @@ public abstract class FlowNodeImpl extends FlowElementImpl implements FlowNode {
     return new QueryImpl<FlowNode>(succeedingNodes);
   }
 
-  /** Camunda Attributes */
+  /** Orqueio Attributes */
 
-  public boolean isCamundaAsyncBefore() {
-    return camundaAsyncBefore.getValue(this);
+  public boolean isOrqueioAsyncBefore() {
+    return orqueioAsyncBefore.getValue(this);
   }
 
-  public void setCamundaAsyncBefore(boolean isCamundaAsyncBefore) {
-    camundaAsyncBefore.setValue(this, isCamundaAsyncBefore);
+  public void setOrqueioAsyncBefore(boolean isOrqueioAsyncBefore) {
+    orqueioAsyncBefore.setValue(this, isOrqueioAsyncBefore);
   }
 
-  public boolean isCamundaAsyncAfter() {
-    return camundaAsyncAfter.getValue(this);
+  public boolean isOrqueioAsyncAfter() {
+    return orqueioAsyncAfter.getValue(this);
   }
 
-  public void setCamundaAsyncAfter(boolean isCamundaAsyncAfter) {
-    camundaAsyncAfter.setValue(this, isCamundaAsyncAfter);
+  public void setOrqueioAsyncAfter(boolean isOrqueioAsyncAfter) {
+    orqueioAsyncAfter.setValue(this, isOrqueioAsyncAfter);
   }
 
-  public boolean isCamundaExclusive() {
-    return camundaExclusive.getValue(this);
+  public boolean isOrqueioExclusive() {
+    return orqueioExclusive.getValue(this);
   }
 
-  public void setCamundaExclusive(boolean isCamundaExclusive) {
-    camundaExclusive.setValue(this, isCamundaExclusive);
+  public void setOrqueioExclusive(boolean isOrqueioExclusive) {
+    orqueioExclusive.setValue(this, isOrqueioExclusive);
   }
 
-  public String getCamundaJobPriority() {
-    return camundaJobPriority.getValue(this);
+  public String getOrqueioJobPriority() {
+    return orqueioJobPriority.getValue(this);
   }
 
-  public void setCamundaJobPriority(String jobPriority) {
-    camundaJobPriority.setValue(this, jobPriority);
+  public void setOrqueioJobPriority(String jobPriority) {
+    orqueioJobPriority.setValue(this, jobPriority);
   }
 }

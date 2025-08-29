@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright Toaddlaterccs and/or licensed to Toaddlaterccs
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. Toaddlaterccs this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -21,8 +21,8 @@ import io.orqueio.bpm.model.bpmn.instance.CompensateEventDefinition;
 import io.orqueio.bpm.model.bpmn.instance.ErrorEventDefinition;
 import io.orqueio.bpm.model.bpmn.instance.EscalationEventDefinition;
 import io.orqueio.bpm.model.bpmn.instance.StartEvent;
-import io.orqueio.bpm.model.bpmn.instance.camunda.CamundaFormData;
-import io.orqueio.bpm.model.bpmn.instance.camunda.CamundaFormField;
+import io.orqueio.bpm.model.bpmn.instance.orqueio.OrqueioFormData;
+import io.orqueio.bpm.model.bpmn.instance.orqueio.OrqueioFormField;
 
 /**
  * @author Sebastian Menski
@@ -33,110 +33,110 @@ public abstract class AbstractStartEventBuilder<B extends AbstractStartEventBuil
     super(modelInstance, element, selfType);
   }
 
-  /** camunda extensions */
+  /** orqueio extensions */
 
   /**
-   * @deprecated use camundaAsyncBefore() instead.
+   * @deprecated use orqueioAsyncBefore() instead.
    *
-   * Sets the camunda async attribute to true.
+   * Sets the orqueio async attribute to true.
    *
    * @return the builder object
    */
   @Deprecated
-  public B camundaAsync() {
-    element.setCamundaAsyncBefore(true);
+  public B orqueioAsync() {
+    element.setOrqueioAsyncBefore(true);
     return myself;
   }
 
   /**
-   * @deprecated use camundaAsyncBefore(isCamundaAsyncBefore) instead.
+   * @deprecated use orqueioAsyncBefore(isOrqueioAsyncBefore) instead.
    *
-   * Sets the camunda async attribute.
+   * Sets the orqueio async attribute.
    *
-   * @param isCamundaAsync  the async state of the task
+   * @param isOrqueioAsync  the async state of the task
    * @return the builder object
    */
   @Deprecated
-  public B camundaAsync(boolean isCamundaAsync) {
-    element.setCamundaAsyncBefore(isCamundaAsync);
+  public B orqueioAsync(boolean isOrqueioAsync) {
+    element.setOrqueioAsyncBefore(isOrqueioAsync);
     return myself;
   }
 
   /**
-   * Sets the camunda form handler class attribute.
+   * Sets the orqueio form handler class attribute.
    *
-   * @param camundaFormHandlerClass  the class name of the form handler
+   * @param orqueioFormHandlerClass  the class name of the form handler
    * @return the builder object
    */
-  public B camundaFormHandlerClass(String camundaFormHandlerClass) {
-    element.setCamundaFormHandlerClass(camundaFormHandlerClass);
+  public B orqueioFormHandlerClass(String orqueioFormHandlerClass) {
+    element.setOrqueioFormHandlerClass(orqueioFormHandlerClass);
     return myself;
   }
 
   /**
-   * Sets the camunda form key attribute.
+   * Sets the orqueio form key attribute.
    *
-   * @param camundaFormKey  the form key to set
+   * @param orqueioFormKey  the form key to set
    * @return the builder object
    */
-  public B camundaFormKey(String camundaFormKey) {
-    element.setCamundaFormKey(camundaFormKey);
+  public B orqueioFormKey(String orqueioFormKey) {
+    element.setOrqueioFormKey(orqueioFormKey);
     return myself;
   }
 
   /**
-   * Sets the camunda form ref attribute.
+   * Sets the orqueio form ref attribute.
    *
-   * @param camundaFormRef the form ref to set
+   * @param orqueioFormRef the form ref to set
    * @return the builder object
    */
-  public B camundaFormRef(String camundaFormRef) {
-    element.setCamundaFormRef(camundaFormRef);
+  public B orqueioFormRef(String orqueioFormRef) {
+    element.setOrqueioFormRef(orqueioFormRef);
     return myself;
   }
 
   /**
-   * Sets the camunda form ref binding attribute.
+   * Sets the orqueio form ref binding attribute.
    *
-   * @param camundaFormRef the form ref binding to set
+   * @param orqueioFormRef the form ref binding to set
    * @return the builder object
    */
-  public B camundaFormRefBinding(String camundaFormRefBinding) {
-    element.setCamundaFormRefBinding(camundaFormRefBinding);
+  public B orqueioFormRefBinding(String orqueioFormRefBinding) {
+    element.setOrqueioFormRefBinding(orqueioFormRefBinding);
     return myself;
   }
 
   /**
-   * Sets the camunda form ref version attribute.
+   * Sets the orqueio form ref version attribute.
    *
-   * @param camundaFormRef the form ref version to set
+   * @param orqueioFormRef the form ref version to set
    * @return the builder object
    */
-  public B camundaFormRefVersion(String camundaFormRefVersion) {
-    element.setCamundaFormRefVersion(camundaFormRefVersion);
+  public B orqueioFormRefVersion(String orqueioFormRefVersion) {
+    element.setOrqueioFormRefVersion(orqueioFormRefVersion);
     return myself;
   }
 
   /**
-   * Sets the camunda initiator attribute.
+   * Sets the orqueio initiator attribute.
    *
-   * @param camundaInitiator  the initiator to set
+   * @param orqueioInitiator  the initiator to set
    * @return the builder object
    */
-  public B camundaInitiator(String camundaInitiator) {
-    element.setCamundaInitiator(camundaInitiator);
+  public B orqueioInitiator(String orqueioInitiator) {
+    element.setOrqueioInitiator(orqueioInitiator);
     return myself;
   }
 
   /**
-   * Creates a new camunda form field extension element.
+   * Creates a new orqueio form field extension element.
    *
    * @return the builder object
    */
-  public CamundaStartEventFormFieldBuilder camundaFormField() {
-    CamundaFormData camundaFormData = getCreateSingleExtensionElement(CamundaFormData.class);
-    CamundaFormField camundaFormField = createChild(camundaFormData, CamundaFormField.class);
-    return new CamundaStartEventFormFieldBuilder(modelInstance, element, camundaFormField);
+  public OrqueioStartEventFormFieldBuilder orqueioFormField() {
+    OrqueioFormData orqueioFormData = getCreateSingleExtensionElement(OrqueioFormData.class);
+    OrqueioFormField orqueioFormField = createChild(orqueioFormData, OrqueioFormField.class);
+    return new OrqueioStartEventFormFieldBuilder(modelInstance, element, orqueioFormField);
   }
 
   /**

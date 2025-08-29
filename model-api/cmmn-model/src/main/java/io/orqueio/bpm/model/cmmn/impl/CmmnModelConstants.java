@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright Toaddlaterccs and/or licensed to Toaddlaterccs
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. Toaddlaterccs this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -39,7 +39,7 @@ public class CmmnModelConstants {
 
   public static final String XPATH_NS = "http://www.w3.org/1999/XPath";
 
-  /** Camunda namespace */
+  /** Orqueio namespace */
   public static final String ORQUEIO_NS = "http://orqueio.io/schema/1.0/cmmn";
 
   // elements ///////////////////////////////////////////////////////////////////////////
@@ -168,18 +168,18 @@ public class CmmnModelConstants {
   // decision
   public static final String CMMN_ELEMENT_DECISION = "decision";
 
-  // camunda elements
-  public static final String CAMUNDA_ELEMENT_IN = "in";
-  public static final String CAMUNDA_ELEMENT_OUT = "out";
-  public static final String CAMUNDA_ELEMENT_TASK_LISTENER = "taskListener";
-  public static final String CAMUNDA_ELEMENT_CASE_EXECUTION_LISTENER = "caseExecutionListener";
-  public static final String CAMUNDA_ELEMENT_VARIABLE_LISTENER = "variableListener";
-  public static final String CAMUNDA_ELEMENT_FIELD = "field";
-  public static final String CAMUNDA_ELEMENT_EXPRESSION = "expression";
-  public static final String CAMUNDA_ELEMENT_STRING = "string";
-  public static final String CAMUNDA_ELEMENT_SCRIPT = "script";
-  public static final String CAMUNDA_ELEMENT_VARIABLE_ON_PART = "variableOnPart";
-  public static final String CAMUNDA_ELEMENT_VARIABLE_EVENT = "variableEvent";
+  // orqueio elements
+  public static final String ORQUEIO_ELEMENT_IN = "in";
+  public static final String ORQUEIO_ELEMENT_OUT = "out";
+  public static final String ORQUEIO_ELEMENT_TASK_LISTENER = "taskListener";
+  public static final String ORQUEIO_ELEMENT_CASE_EXECUTION_LISTENER = "caseExecutionListener";
+  public static final String ORQUEIO_ELEMENT_VARIABLE_LISTENER = "variableListener";
+  public static final String ORQUEIO_ELEMENT_FIELD = "field";
+  public static final String ORQUEIO_ELEMENT_EXPRESSION = "expression";
+  public static final String ORQUEIO_ELEMENT_STRING = "string";
+  public static final String ORQUEIO_ELEMENT_SCRIPT = "script";
+  public static final String ORQUEIO_ELEMENT_VARIABLE_ON_PART = "variableOnPart";
+  public static final String ORQUEIO_ELEMENT_VARIABLE_EVENT = "variableEvent";
 
   // attributes /////////////////////////////////////////////////////////////////////////
 
@@ -225,42 +225,42 @@ public class CmmnModelConstants {
   public static final String CMMN_ATTRIBUTE_ASSOCIATION_DIRECTION = "associationDirection";
   public static final String CMMN_ATTRIBUTE_EXIT_CRITERION_REF = "exitCriterionRef";
 
-  // camunda attribute extensions ////////////////////////////////////////////////////
+  // orqueio attribute extensions ////////////////////////////////////////////////////
 
-  public static final String CAMUNDA_ATTRIBUTE_ASSIGNEE = "assignee";
-  public static final String CAMUNDA_ATTRIBUTE_CANDIDATE_GROUPS = "candidateGroups";
-  public static final String CAMUNDA_ATTRIBUTE_CANDIDATE_USERS = "candidateUsers";
-  public static final String CAMUNDA_ATTRIBUTE_DUE_DATE = "dueDate";
-  public static final String CAMUNDA_ATTRIBUTE_FOLLOW_UP_DATE = "followUpDate";
-  public static final String CAMUNDA_ATTRIBUTE_FORM_KEY = "formKey";
-  public static final String CAMUNDA_ATTRIBUTE_PRIORITY = "priority";
-  public static final String CAMUNDA_ATTRIBUTE_SOURCE = "source";
-  public static final String CAMUNDA_ATTRIBUTE_SOURCE_EXPRESSION = "sourceExpression";
-  public static final String CAMUNDA_ATTRIBUTE_BUSINESS_KEY = "businessKey";
-  public static final String CAMUNDA_ATTRIBUTE_LOCAL = "local";
-  public static final String CAMUNDA_ATTRIBUTE_TARGET = "target";
-  public static final String CAMUNDA_ATTRIBUTE_VARIABLES = "variables";
-  public static final String CAMUNDA_ATTRIBUTE_PROCESS_BINDING = "processBinding";
-  public static final String CAMUNDA_ATTRIBUTE_PROCESS_VERSION = "processVersion";
-  public static final String CAMUNDA_ATTRIBUTE_PROCESS_TENANT_ID = "processTenantId";
-  public static final String CAMUNDA_ATTRIBUTE_CASE_BINDING = "caseBinding";
-  public static final String CAMUNDA_ATTRIBUTE_CASE_VERSION = "caseVersion";
-  public static final String CAMUNDA_ATTRIBUTE_CASE_TENANT_ID = "caseTenantId";
-  public static final String CAMUNDA_ATTRIBUTE_EVENT = "event";
-  public static final String CAMUNDA_ATTRIBUTE_CLASS = "class";
-  public static final String CAMUNDA_ATTRIBUTE_EXPRESSION = "expression";
-  public static final String CAMUNDA_ATTRIBUTE_DELEGATE_EXPRESSION = "delegateExpression";
-  public static final String CAMUNDA_ATTRIBUTE_STRING_VALUE = "stringValue";
-  public static final String CAMUNDA_ATTRIBUTE_NAME = "name";
-  public static final String CAMUNDA_ATTRIBUTE_SCRIPT_FORMAT = "scriptFormat";
-  public static final String CAMUNDA_ATTRIBUTE_RESOURCE = "resource";
-  public static final String CAMUNDA_ATTRIBUTE_REPEAT_ON_STANDARD_EVENT = "repeatOnStandardEvent";
-  public static final String CAMUNDA_ATTRIBUTE_RESULT_VARIABLE = "resultVariable";
-  public static final String CAMUNDA_ATTRIBUTE_DECISION_BINDING = "decisionBinding";
-  public static final String CAMUNDA_ATTRIBUTE_DECISION_VERSION = "decisionVersion";
-  public static final String CAMUNDA_ATTRIBUTE_DECISION_TENANT_ID = "decisionTenantId";
-  public static final String CAMUNDA_ATTRIBUTE_MAP_DECISION_RESULT = "mapDecisionResult";
-  public static final String CAMUNDA_ATTRIBUTE_VARIABLE_NAME = "variableName";
-  public static final String CAMUNDA_ATTRIBUTE_HISTORY_TIME_TO_LIVE = "historyTimeToLive";
+  public static final String ORQUEIO_ATTRIBUTE_ASSIGNEE = "assignee";
+  public static final String ORQUEIO_ATTRIBUTE_CANDIDATE_GROUPS = "candidateGroups";
+  public static final String ORQUEIO_ATTRIBUTE_CANDIDATE_USERS = "candidateUsers";
+  public static final String ORQUEIO_ATTRIBUTE_DUE_DATE = "dueDate";
+  public static final String ORQUEIO_ATTRIBUTE_FOLLOW_UP_DATE = "followUpDate";
+  public static final String ORQUEIO_ATTRIBUTE_FORM_KEY = "formKey";
+  public static final String ORQUEIO_ATTRIBUTE_PRIORITY = "priority";
+  public static final String ORQUEIO_ATTRIBUTE_SOURCE = "source";
+  public static final String ORQUEIO_ATTRIBUTE_SOURCE_EXPRESSION = "sourceExpression";
+  public static final String ORQUEIO_ATTRIBUTE_BUSINESS_KEY = "businessKey";
+  public static final String ORQUEIO_ATTRIBUTE_LOCAL = "local";
+  public static final String ORQUEIO_ATTRIBUTE_TARGET = "target";
+  public static final String ORQUEIO_ATTRIBUTE_VARIABLES = "variables";
+  public static final String ORQUEIO_ATTRIBUTE_PROCESS_BINDING = "processBinding";
+  public static final String ORQUEIO_ATTRIBUTE_PROCESS_VERSION = "processVersion";
+  public static final String ORQUEIO_ATTRIBUTE_PROCESS_TENANT_ID = "processTenantId";
+  public static final String ORQUEIO_ATTRIBUTE_CASE_BINDING = "caseBinding";
+  public static final String ORQUEIO_ATTRIBUTE_CASE_VERSION = "caseVersion";
+  public static final String ORQUEIO_ATTRIBUTE_CASE_TENANT_ID = "caseTenantId";
+  public static final String ORQUEIO_ATTRIBUTE_EVENT = "event";
+  public static final String ORQUEIO_ATTRIBUTE_CLASS = "class";
+  public static final String ORQUEIO_ATTRIBUTE_EXPRESSION = "expression";
+  public static final String ORQUEIO_ATTRIBUTE_DELEGATE_EXPRESSION = "delegateExpression";
+  public static final String ORQUEIO_ATTRIBUTE_STRING_VALUE = "stringValue";
+  public static final String ORQUEIO_ATTRIBUTE_NAME = "name";
+  public static final String ORQUEIO_ATTRIBUTE_SCRIPT_FORMAT = "scriptFormat";
+  public static final String ORQUEIO_ATTRIBUTE_RESOURCE = "resource";
+  public static final String ORQUEIO_ATTRIBUTE_REPEAT_ON_STANDARD_EVENT = "repeatOnStandardEvent";
+  public static final String ORQUEIO_ATTRIBUTE_RESULT_VARIABLE = "resultVariable";
+  public static final String ORQUEIO_ATTRIBUTE_DECISION_BINDING = "decisionBinding";
+  public static final String ORQUEIO_ATTRIBUTE_DECISION_VERSION = "decisionVersion";
+  public static final String ORQUEIO_ATTRIBUTE_DECISION_TENANT_ID = "decisionTenantId";
+  public static final String ORQUEIO_ATTRIBUTE_MAP_DECISION_RESULT = "mapDecisionResult";
+  public static final String ORQUEIO_ATTRIBUTE_VARIABLE_NAME = "variableName";
+  public static final String ORQUEIO_ATTRIBUTE_HISTORY_TIME_TO_LIVE = "historyTimeToLive";
 
 }

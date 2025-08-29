@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright Toaddlaterccs and/or licensed to Toaddlaterccs
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. Toaddlaterccs this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -44,7 +44,7 @@ import io.orqueio.bpm.model.xml.type.child.SequenceBuilder;
 public class CaseImpl extends CmmnElementImpl implements Case {
 
   protected static Attribute<String> nameAttribute;
-  protected static Attribute<String> camundaHistoryTimeToLive;
+  protected static Attribute<String> orqueioHistoryTimeToLive;
 
   protected static ChildElement<CaseFileModel> caseFileModelChild;
   protected static ChildElement<CasePlanModel> casePlanModelChild;
@@ -106,16 +106,16 @@ public class CaseImpl extends CmmnElementImpl implements Case {
     caseFileModelChild.setChild(this, caseFileModel);
   }
 
-  public Integer getCamundaHistoryTimeToLive() {
-    String ttl = getCamundaHistoryTimeToLiveString();
+  public Integer getOrqueioHistoryTimeToLive() {
+    String ttl = getOrqueioHistoryTimeToLiveString();
     if (ttl != null) {
       return Integer.parseInt(ttl);
     }
     return null;
   }
 
-  public void setCamundaHistoryTimeToLive(Integer historyTimeToLive) {
-    setCamundaHistoryTimeToLiveString(String.valueOf(historyTimeToLive));
+  public void setOrqueioHistoryTimeToLive(Integer historyTimeToLive) {
+    setOrqueioHistoryTimeToLiveString(String.valueOf(historyTimeToLive));
   }
 
   public static void registerType(ModelBuilder modelBuilder) {
@@ -131,7 +131,7 @@ public class CaseImpl extends CmmnElementImpl implements Case {
     nameAttribute = typeBuilder.stringAttribute(CMMN_ATTRIBUTE_NAME)
         .build();
 
-    camundaHistoryTimeToLive = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_HISTORY_TIME_TO_LIVE)
+    orqueioHistoryTimeToLive = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_HISTORY_TIME_TO_LIVE)
         .namespace(ORQUEIO_NS)
         .build();
 
@@ -159,13 +159,13 @@ public class CaseImpl extends CmmnElementImpl implements Case {
   }
 
   @Override
-  public String getCamundaHistoryTimeToLiveString() {
-    return camundaHistoryTimeToLive.getValue(this);
+  public String getOrqueioHistoryTimeToLiveString() {
+    return orqueioHistoryTimeToLive.getValue(this);
   }
 
   @Override
-  public void setCamundaHistoryTimeToLiveString(String historyTimeToLive) {
-    camundaHistoryTimeToLive.setValue(this, historyTimeToLive);
+  public void setOrqueioHistoryTimeToLiveString(String historyTimeToLive) {
+    orqueioHistoryTimeToLive.setValue(this, historyTimeToLive);
   }
 
 }

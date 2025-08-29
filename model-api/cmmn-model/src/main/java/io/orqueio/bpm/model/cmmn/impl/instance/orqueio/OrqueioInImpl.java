@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright Toaddlaterccs and/or licensed to Toaddlaterccs
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. Toaddlaterccs this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -16,13 +16,13 @@
  */
 package io.orqueio.bpm.model.cmmn.impl.instance.orqueio;
 
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_BUSINESS_KEY;
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_LOCAL;
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_SOURCE;
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_SOURCE_EXPRESSION;
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_TARGET;
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_VARIABLES;
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ELEMENT_IN;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ATTRIBUTE_BUSINESS_KEY;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ATTRIBUTE_LOCAL;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ATTRIBUTE_SOURCE;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ATTRIBUTE_SOURCE_EXPRESSION;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ATTRIBUTE_TARGET;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ATTRIBUTE_VARIABLES;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ELEMENT_IN;
 import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_NS;
 
 import io.orqueio.bpm.model.cmmn.impl.instance.CmmnModelElementInstanceImpl;
@@ -40,15 +40,15 @@ import io.orqueio.bpm.model.xml.type.attribute.Attribute;
  */
 public class OrqueioInImpl extends CmmnModelElementInstanceImpl implements OrqueioIn {
 
-  protected static Attribute<String> camundaSourceAttribute;
-  protected static Attribute<String> camundaSourceExpressionAttribute;
-  protected static Attribute<String> camundaVariablesAttribute;
-  protected static Attribute<String> camundaTargetAttribute;
-  protected static Attribute<String> camundaBusinessKeyAttribute;
-  protected static Attribute<Boolean> camundaLocalAttribute;
+  protected static Attribute<String> orqueioSourceAttribute;
+  protected static Attribute<String> orqueioSourceExpressionAttribute;
+  protected static Attribute<String> orqueioVariablesAttribute;
+  protected static Attribute<String> orqueioTargetAttribute;
+  protected static Attribute<String> orqueioBusinessKeyAttribute;
+  protected static Attribute<Boolean> orqueioLocalAttribute;
 
   public static void registerType(ModelBuilder modelBuilder) {
-    ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(OrqueioIn.class, CAMUNDA_ELEMENT_IN)
+    ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(OrqueioIn.class, ORQUEIO_ELEMENT_IN)
       .namespaceUri(ORQUEIO_NS)
       .instanceProvider(new ModelTypeInstanceProvider<OrqueioIn>() {
         public OrqueioIn newInstance(ModelTypeInstanceContext instanceContext) {
@@ -56,27 +56,27 @@ public class OrqueioInImpl extends CmmnModelElementInstanceImpl implements Orque
         }
       });
 
-    camundaSourceAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_SOURCE)
+    orqueioSourceAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_SOURCE)
       .namespace(ORQUEIO_NS)
       .build();
 
-    camundaSourceExpressionAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_SOURCE_EXPRESSION)
+    orqueioSourceExpressionAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_SOURCE_EXPRESSION)
       .namespace(ORQUEIO_NS)
       .build();
 
-    camundaVariablesAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_VARIABLES)
+    orqueioVariablesAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_VARIABLES)
       .namespace(ORQUEIO_NS)
       .build();
 
-    camundaTargetAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_TARGET)
+    orqueioTargetAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_TARGET)
       .namespace(ORQUEIO_NS)
       .build();
 
-    camundaBusinessKeyAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_BUSINESS_KEY)
+    orqueioBusinessKeyAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_BUSINESS_KEY)
       .namespace(ORQUEIO_NS)
       .build();
 
-    camundaLocalAttribute = typeBuilder.booleanAttribute(CAMUNDA_ATTRIBUTE_LOCAL)
+    orqueioLocalAttribute = typeBuilder.booleanAttribute(ORQUEIO_ATTRIBUTE_LOCAL)
       .namespace(ORQUEIO_NS)
       .build();
 
@@ -87,52 +87,52 @@ public class OrqueioInImpl extends CmmnModelElementInstanceImpl implements Orque
     super(instanceContext);
   }
 
-  public String getCamundaSource() {
-    return camundaSourceAttribute.getValue(this);
+  public String getOrqueioSource() {
+    return orqueioSourceAttribute.getValue(this);
   }
 
-  public void setCamundaSource(String camundaSource) {
-    camundaSourceAttribute.setValue(this, camundaSource);
+  public void setOrqueioSource(String orqueioSource) {
+    orqueioSourceAttribute.setValue(this, orqueioSource);
   }
 
-  public String getCamundaSourceExpression() {
-    return camundaSourceExpressionAttribute.getValue(this);
+  public String getOrqueioSourceExpression() {
+    return orqueioSourceExpressionAttribute.getValue(this);
   }
 
-  public void setCamundaSourceExpression(String camundaSourceExpression) {
-    camundaSourceExpressionAttribute.setValue(this, camundaSourceExpression);
+  public void setOrqueioSourceExpression(String orqueioSourceExpression) {
+    orqueioSourceExpressionAttribute.setValue(this, orqueioSourceExpression);
   }
 
-  public String getCamundaVariables() {
-    return camundaVariablesAttribute.getValue(this);
+  public String getOrqueioVariables() {
+    return orqueioVariablesAttribute.getValue(this);
   }
 
-  public void setCamundaVariables(String camundaVariables) {
-    camundaVariablesAttribute.setValue(this, camundaVariables);
+  public void setOrqueioVariables(String orqueioVariables) {
+    orqueioVariablesAttribute.setValue(this, orqueioVariables);
   }
 
-  public String getCamundaTarget() {
-    return camundaTargetAttribute.getValue(this);
+  public String getOrqueioTarget() {
+    return orqueioTargetAttribute.getValue(this);
   }
 
-  public void setCamundaTarget(String camundaTarget) {
-    camundaTargetAttribute.setValue(this, camundaTarget);
+  public void setOrqueioTarget(String orqueioTarget) {
+    orqueioTargetAttribute.setValue(this, orqueioTarget);
   }
 
-  public String getCamundaBusinessKey() {
-    return camundaBusinessKeyAttribute.getValue(this);
+  public String getOrqueioBusinessKey() {
+    return orqueioBusinessKeyAttribute.getValue(this);
   }
 
-  public void setCamundaBusinessKey(String camundaBusinessKey) {
-    camundaBusinessKeyAttribute.setValue(this, camundaBusinessKey);
+  public void setOrqueioBusinessKey(String orqueioBusinessKey) {
+    orqueioBusinessKeyAttribute.setValue(this, orqueioBusinessKey);
   }
 
-  public boolean getCamundaLocal() {
-    return camundaLocalAttribute.getValue(this);
+  public boolean getOrqueioLocal() {
+    return orqueioLocalAttribute.getValue(this);
   }
 
-  public void setCamundaLocal(boolean local) {
-    camundaLocalAttribute.setValue(this, local);
+  public void setOrqueioLocal(boolean local) {
+    orqueioLocalAttribute.setValue(this, local);
   }
 
 }

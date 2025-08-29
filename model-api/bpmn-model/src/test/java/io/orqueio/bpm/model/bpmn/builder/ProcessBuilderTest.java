@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright Toaddlaterccs and/or licensed to Toaddlaterccs
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. Toaddlaterccs this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -110,17 +110,17 @@ import io.orqueio.bpm.model.bpmn.instance.TimeDuration;
 import io.orqueio.bpm.model.bpmn.instance.TimerEventDefinition;
 import io.orqueio.bpm.model.bpmn.instance.Transaction;
 import io.orqueio.bpm.model.bpmn.instance.UserTask;
-import io.orqueio.bpm.model.bpmn.instance.camunda.CamundaErrorEventDefinition;
-import io.orqueio.bpm.model.bpmn.instance.camunda.CamundaExecutionListener;
-import io.orqueio.bpm.model.bpmn.instance.camunda.CamundaFailedJobRetryTimeCycle;
-import io.orqueio.bpm.model.bpmn.instance.camunda.CamundaFormData;
-import io.orqueio.bpm.model.bpmn.instance.camunda.CamundaFormField;
-import io.orqueio.bpm.model.bpmn.instance.camunda.CamundaIn;
-import io.orqueio.bpm.model.bpmn.instance.camunda.CamundaInputOutput;
-import io.orqueio.bpm.model.bpmn.instance.camunda.CamundaInputParameter;
-import io.orqueio.bpm.model.bpmn.instance.camunda.CamundaOut;
-import io.orqueio.bpm.model.bpmn.instance.camunda.CamundaOutputParameter;
-import io.orqueio.bpm.model.bpmn.instance.camunda.CamundaTaskListener;
+import io.orqueio.bpm.model.bpmn.instance.orqueio.OrqueioErrorEventDefinition;
+import io.orqueio.bpm.model.bpmn.instance.orqueio.OrqueioExecutionListener;
+import io.orqueio.bpm.model.bpmn.instance.orqueio.OrqueioFailedJobRetryTimeCycle;
+import io.orqueio.bpm.model.bpmn.instance.orqueio.OrqueioFormData;
+import io.orqueio.bpm.model.bpmn.instance.orqueio.OrqueioFormField;
+import io.orqueio.bpm.model.bpmn.instance.orqueio.OrqueioIn;
+import io.orqueio.bpm.model.bpmn.instance.orqueio.OrqueioInputOutput;
+import io.orqueio.bpm.model.bpmn.instance.orqueio.OrqueioInputParameter;
+import io.orqueio.bpm.model.bpmn.instance.orqueio.OrqueioOut;
+import io.orqueio.bpm.model.bpmn.instance.orqueio.OrqueioOutputParameter;
+import io.orqueio.bpm.model.bpmn.instance.orqueio.OrqueioTaskListener;
 import io.orqueio.bpm.model.xml.Model;
 import io.orqueio.bpm.model.xml.instance.ModelElementInstance;
 import io.orqueio.bpm.model.xml.type.ModelElementType;
@@ -193,7 +193,7 @@ public class ProcessBuilderTest {
         .iterator()
         .next();
 
-    assertThat(process.getCamundaHistoryTimeToLiveString())
+    assertThat(process.getOrqueioHistoryTimeToLiveString())
         .isEqualTo("P180D");
   }
 
@@ -205,19 +205,19 @@ public class ProcessBuilderTest {
         .iterator()
         .next();
 
-    assertThat(process.getCamundaHistoryTimeToLiveString())
+    assertThat(process.getOrqueioHistoryTimeToLiveString())
         .isEqualTo("P180D");
   }
 
   @Test
   public void shouldHaveNullHTTLValueOnCreateProcessWithSkipHTTL() {
-    modelInstance = Bpmn.createProcess().camundaHistoryTimeToLive(null).done();
+    modelInstance = Bpmn.createProcess().orqueioHistoryTimeToLive(null).done();
 
     var process = (Process) modelInstance.getModelElementsByType(processType)
         .iterator()
         .next();
 
-    assertThat(process.getCamundaHistoryTimeToLiveString())
+    assertThat(process.getOrqueioHistoryTimeToLiveString())
         .isNull();
   }
 
@@ -227,17 +227,17 @@ public class ProcessBuilderTest {
 
     var process = (Process) modelInstance.getModelElementById(PROCESS_ID);
 
-    assertThat(process.getCamundaHistoryTimeToLiveString())
+    assertThat(process.getOrqueioHistoryTimeToLiveString())
         .isEqualTo("P180D");
   }
 
   @Test
   public void shouldHaveNullHTTLValueOnCreateProcessIdWithSkipHTTL(){
-    modelInstance = Bpmn.createProcess(PROCESS_ID).camundaHistoryTimeToLive(null).done();
+    modelInstance = Bpmn.createProcess(PROCESS_ID).orqueioHistoryTimeToLive(null).done();
 
     var process = (Process) modelInstance.getModelElementById(PROCESS_ID);
 
-    assertThat(process.getCamundaHistoryTimeToLiveString())
+    assertThat(process.getOrqueioHistoryTimeToLiveString())
         .isNull();
   }
 
@@ -551,34 +551,34 @@ public class ProcessBuilderTest {
       .executable()
       .startEvent()
         .name("Invoice received")
-        .camundaFormKey("embedded:app:forms/start-form.html")
+        .orqueioFormKey("embedded:app:forms/start-form.html")
       .userTask()
         .name("Assign Approver")
-        .camundaFormKey("embedded:app:forms/assign-approver.html")
-        .camundaAssignee("demo")
+        .orqueioFormKey("embedded:app:forms/assign-approver.html")
+        .orqueioAssignee("demo")
       .userTask("approveInvoice")
         .name("Approve Invoice")
-        .camundaFormKey("embedded:app:forms/approve-invoice.html")
-        .camundaAssignee("${approver}")
+        .orqueioFormKey("embedded:app:forms/approve-invoice.html")
+        .orqueioAssignee("${approver}")
       .exclusiveGateway()
         .name("Invoice approved?")
         .gatewayDirection(GatewayDirection.Diverging)
       .condition("yes", "${approved}")
       .userTask()
         .name("Prepare Bank Transfer")
-        .camundaFormKey("embedded:app:forms/prepare-bank-transfer.html")
-        .camundaCandidateGroups("accounting")
+        .orqueioFormKey("embedded:app:forms/prepare-bank-transfer.html")
+        .orqueioCandidateGroups("accounting")
       .serviceTask()
         .name("Archive Invoice")
-        .camundaClass("io.orqueio.bpm.example.invoice.service.ArchiveInvoiceService" )
+        .orqueioClass("io.orqueio.bpm.example.invoice.service.ArchiveInvoiceService" )
       .endEvent()
         .name("Invoice processed")
       .moveToLastGateway()
       .condition("no", "${!approved}")
       .userTask()
         .name("Review Invoice")
-        .camundaFormKey("embedded:app:forms/review-invoice.html" )
-        .camundaAssignee("demo")
+        .orqueioFormKey("embedded:app:forms/review-invoice.html" )
+        .orqueioAssignee("demo")
        .exclusiveGateway()
         .name("Review successful?")
         .gatewayDirection(GatewayDirection.Diverging)
@@ -592,23 +592,23 @@ public class ProcessBuilderTest {
   }
 
   @Test
-  public void testProcessCamundaExtensions() {
+  public void testProcessOrqueioExtensions() {
     modelInstance = Bpmn.createProcess(PROCESS_ID)
-      .camundaJobPriority("${somePriority}")
-      .camundaTaskPriority(TEST_PROCESS_TASK_PRIORITY)
-      .camundaHistoryTimeToLive(TEST_HISTORY_TIME_TO_LIVE)
-      .camundaStartableInTasklist(TEST_STARTABLE_IN_TASKLIST)
-      .camundaVersionTag(TEST_VERSION_TAG)
+      .orqueioJobPriority("${somePriority}")
+      .orqueioTaskPriority(TEST_PROCESS_TASK_PRIORITY)
+      .orqueioHistoryTimeToLive(TEST_HISTORY_TIME_TO_LIVE)
+      .orqueioStartableInTasklist(TEST_STARTABLE_IN_TASKLIST)
+      .orqueioVersionTag(TEST_VERSION_TAG)
       .startEvent()
       .endEvent()
       .done();
 
     Process process = modelInstance.getModelElementById(PROCESS_ID);
-    assertThat(process.getCamundaJobPriority()).isEqualTo("${somePriority}");
-    assertThat(process.getCamundaTaskPriority()).isEqualTo(TEST_PROCESS_TASK_PRIORITY);
-    assertThat(process.getCamundaHistoryTimeToLive()).isEqualTo(TEST_HISTORY_TIME_TO_LIVE);
-    assertThat(process.isCamundaStartableInTasklist()).isEqualTo(TEST_STARTABLE_IN_TASKLIST);
-    assertThat(process.getCamundaVersionTag()).isEqualTo(TEST_VERSION_TAG);
+    assertThat(process.getOrqueioJobPriority()).isEqualTo("${somePriority}");
+    assertThat(process.getOrqueioTaskPriority()).isEqualTo(TEST_PROCESS_TASK_PRIORITY);
+    assertThat(process.getOrqueioHistoryTimeToLive()).isEqualTo(TEST_HISTORY_TIME_TO_LIVE);
+    assertThat(process.isOrqueioStartableInTasklist()).isEqualTo(TEST_STARTABLE_IN_TASKLIST);
+    assertThat(process.getOrqueioVersionTag()).isEqualTo(TEST_VERSION_TAG);
   }
 
   @Test
@@ -619,30 +619,30 @@ public class ProcessBuilderTest {
       .done();
 
     Process process = modelInstance.getModelElementById(PROCESS_ID);
-    assertThat(process.isCamundaStartableInTasklist()).isEqualTo(true);
+    assertThat(process.isOrqueioStartableInTasklist()).isEqualTo(true);
   }
 
   @Test
-  public void testTaskCamundaExternalTask() {
+  public void testTaskOrqueioExternalTask() {
     modelInstance = Bpmn.createProcess()
         .startEvent()
         .serviceTask(EXTERNAL_TASK_ID)
-          .camundaExternalTask(TEST_EXTERNAL_TASK_TOPIC)
+          .orqueioExternalTask(TEST_EXTERNAL_TASK_TOPIC)
         .endEvent()
         .done();
 
     ServiceTask serviceTask = modelInstance.getModelElementById(EXTERNAL_TASK_ID);
-    assertThat(serviceTask.getCamundaType()).isEqualTo("external");
-    assertThat(serviceTask.getCamundaTopic()).isEqualTo(TEST_EXTERNAL_TASK_TOPIC);
+    assertThat(serviceTask.getOrqueioType()).isEqualTo("external");
+    assertThat(serviceTask.getOrqueioTopic()).isEqualTo(TEST_EXTERNAL_TASK_TOPIC);
   }
 
   @Test
-  public void testTaskCamundaExternalTaskErrorEventDefinition() {
+  public void testTaskOrqueioExternalTaskErrorEventDefinition() {
     modelInstance = Bpmn.createProcess()
     .startEvent()
     .serviceTask(EXTERNAL_TASK_ID)
-    .camundaExternalTask(TEST_EXTERNAL_TASK_TOPIC)
-      .camundaErrorEventDefinition().id("id").error("myErrorCode", "errorMessage").expression("expression").errorEventDefinitionDone()
+    .orqueioExternalTask(TEST_EXTERNAL_TASK_TOPIC)
+      .orqueioErrorEventDefinition().id("id").error("myErrorCode", "errorMessage").expression("expression").errorEventDefinitionDone()
     .endEvent()
     .moveToActivity(EXTERNAL_TASK_ID)
     .boundaryEvent("boundary").error("myErrorCode", "errorMessage")
@@ -651,253 +651,253 @@ public class ProcessBuilderTest {
 
     ServiceTask externalTask = modelInstance.getModelElementById(EXTERNAL_TASK_ID);
     ExtensionElements extensionElements = externalTask.getExtensionElements();
-    Collection<CamundaErrorEventDefinition> errorEventDefinitions = extensionElements.getChildElementsByType(CamundaErrorEventDefinition.class);
+    Collection<OrqueioErrorEventDefinition> errorEventDefinitions = extensionElements.getChildElementsByType(OrqueioErrorEventDefinition.class);
     assertThat(errorEventDefinitions).hasSize(1);
-    CamundaErrorEventDefinition camundaErrorEventDefinition = errorEventDefinitions.iterator().next();
-    assertThat(camundaErrorEventDefinition).isNotNull();
-    assertThat(camundaErrorEventDefinition.getId()).isEqualTo("id");
-    assertThat(camundaErrorEventDefinition.getCamundaExpression()).isEqualTo("expression");
+    OrqueioErrorEventDefinition orqueioErrorEventDefinition = errorEventDefinitions.iterator().next();
+    assertThat(orqueioErrorEventDefinition).isNotNull();
+    assertThat(orqueioErrorEventDefinition.getId()).isEqualTo("id");
+    assertThat(orqueioErrorEventDefinition.getOrqueioExpression()).isEqualTo("expression");
     assertErrorEventDefinition("boundary", "myErrorCode", "errorMessage");
   }
 
   @Test
-  public void testTaskCamundaExtensions() {
+  public void testTaskOrqueioExtensions() {
     modelInstance = Bpmn.createProcess()
       .startEvent()
       .serviceTask(TASK_ID)
-        .camundaAsyncBefore()
-        .notCamundaExclusive()
-        .camundaJobPriority("${somePriority}")
-        .camundaTaskPriority(TEST_SERVICE_TASK_PRIORITY)
-        .camundaFailedJobRetryTimeCycle(FAILED_JOB_RETRY_TIME_CYCLE)
+        .orqueioAsyncBefore()
+        .notOrqueioExclusive()
+        .orqueioJobPriority("${somePriority}")
+        .orqueioTaskPriority(TEST_SERVICE_TASK_PRIORITY)
+        .orqueioFailedJobRetryTimeCycle(FAILED_JOB_RETRY_TIME_CYCLE)
       .endEvent()
       .done();
 
     ServiceTask serviceTask = modelInstance.getModelElementById(TASK_ID);
-    assertThat(serviceTask.isCamundaAsyncBefore()).isTrue();
-    assertThat(serviceTask.isCamundaExclusive()).isFalse();
-    assertThat(serviceTask.getCamundaJobPriority()).isEqualTo("${somePriority}");
-    assertThat(serviceTask.getCamundaTaskPriority()).isEqualTo(TEST_SERVICE_TASK_PRIORITY);
+    assertThat(serviceTask.isOrqueioAsyncBefore()).isTrue();
+    assertThat(serviceTask.isOrqueioExclusive()).isFalse();
+    assertThat(serviceTask.getOrqueioJobPriority()).isEqualTo("${somePriority}");
+    assertThat(serviceTask.getOrqueioTaskPriority()).isEqualTo(TEST_SERVICE_TASK_PRIORITY);
 
-    assertCamundaFailedJobRetryTimeCycle(serviceTask);
+    assertOrqueioFailedJobRetryTimeCycle(serviceTask);
   }
 
   @Test
-  public void testServiceTaskCamundaExtensions() {
+  public void testServiceTaskOrqueioExtensions() {
     modelInstance = Bpmn.createProcess()
       .startEvent()
       .serviceTask(TASK_ID)
-        .camundaClass(TEST_CLASS_API)
-        .camundaDelegateExpression(TEST_DELEGATE_EXPRESSION_API)
-        .camundaExpression(TEST_EXPRESSION_API)
-        .camundaResultVariable(TEST_STRING_API)
-        .camundaTopic(TEST_STRING_API)
-        .camundaType(TEST_STRING_API)
-        .camundaTaskPriority(TEST_SERVICE_TASK_PRIORITY)
-        .camundaFailedJobRetryTimeCycle(FAILED_JOB_RETRY_TIME_CYCLE)
+        .orqueioClass(TEST_CLASS_API)
+        .orqueioDelegateExpression(TEST_DELEGATE_EXPRESSION_API)
+        .orqueioExpression(TEST_EXPRESSION_API)
+        .orqueioResultVariable(TEST_STRING_API)
+        .orqueioTopic(TEST_STRING_API)
+        .orqueioType(TEST_STRING_API)
+        .orqueioTaskPriority(TEST_SERVICE_TASK_PRIORITY)
+        .orqueioFailedJobRetryTimeCycle(FAILED_JOB_RETRY_TIME_CYCLE)
       .done();
 
     ServiceTask serviceTask = modelInstance.getModelElementById(TASK_ID);
-    assertThat(serviceTask.getCamundaClass()).isEqualTo(TEST_CLASS_API);
-    assertThat(serviceTask.getCamundaDelegateExpression()).isEqualTo(TEST_DELEGATE_EXPRESSION_API);
-    assertThat(serviceTask.getCamundaExpression()).isEqualTo(TEST_EXPRESSION_API);
-    assertThat(serviceTask.getCamundaResultVariable()).isEqualTo(TEST_STRING_API);
-    assertThat(serviceTask.getCamundaTopic()).isEqualTo(TEST_STRING_API);
-    assertThat(serviceTask.getCamundaType()).isEqualTo(TEST_STRING_API);
-    assertThat(serviceTask.getCamundaTaskPriority()).isEqualTo(TEST_SERVICE_TASK_PRIORITY);
+    assertThat(serviceTask.getOrqueioClass()).isEqualTo(TEST_CLASS_API);
+    assertThat(serviceTask.getOrqueioDelegateExpression()).isEqualTo(TEST_DELEGATE_EXPRESSION_API);
+    assertThat(serviceTask.getOrqueioExpression()).isEqualTo(TEST_EXPRESSION_API);
+    assertThat(serviceTask.getOrqueioResultVariable()).isEqualTo(TEST_STRING_API);
+    assertThat(serviceTask.getOrqueioTopic()).isEqualTo(TEST_STRING_API);
+    assertThat(serviceTask.getOrqueioType()).isEqualTo(TEST_STRING_API);
+    assertThat(serviceTask.getOrqueioTaskPriority()).isEqualTo(TEST_SERVICE_TASK_PRIORITY);
 
-    assertCamundaFailedJobRetryTimeCycle(serviceTask);
+    assertOrqueioFailedJobRetryTimeCycle(serviceTask);
   }
 
   @Test
-  public void testServiceTaskCamundaClass() {
+  public void testServiceTaskOrqueioClass() {
     modelInstance = Bpmn.createProcess()
       .startEvent()
       .serviceTask(TASK_ID)
-        .camundaClass(getClass().getName())
+        .orqueioClass(getClass().getName())
       .done();
 
     ServiceTask serviceTask = modelInstance.getModelElementById(TASK_ID);
-    assertThat(serviceTask.getCamundaClass()).isEqualTo(getClass().getName());
+    assertThat(serviceTask.getOrqueioClass()).isEqualTo(getClass().getName());
   }
 
 
   @Test
-  public void testSendTaskCamundaExtensions() {
+  public void testSendTaskOrqueioExtensions() {
     modelInstance = Bpmn.createProcess()
       .startEvent()
       .sendTask(TASK_ID)
-        .camundaClass(TEST_CLASS_API)
-        .camundaDelegateExpression(TEST_DELEGATE_EXPRESSION_API)
-        .camundaExpression(TEST_EXPRESSION_API)
-        .camundaResultVariable(TEST_STRING_API)
-        .camundaTopic(TEST_STRING_API)
-        .camundaType(TEST_STRING_API)
-        .camundaTaskPriority(TEST_SERVICE_TASK_PRIORITY)
-        .camundaFailedJobRetryTimeCycle(FAILED_JOB_RETRY_TIME_CYCLE)
+        .orqueioClass(TEST_CLASS_API)
+        .orqueioDelegateExpression(TEST_DELEGATE_EXPRESSION_API)
+        .orqueioExpression(TEST_EXPRESSION_API)
+        .orqueioResultVariable(TEST_STRING_API)
+        .orqueioTopic(TEST_STRING_API)
+        .orqueioType(TEST_STRING_API)
+        .orqueioTaskPriority(TEST_SERVICE_TASK_PRIORITY)
+        .orqueioFailedJobRetryTimeCycle(FAILED_JOB_RETRY_TIME_CYCLE)
       .endEvent()
       .done();
 
     SendTask sendTask = modelInstance.getModelElementById(TASK_ID);
-    assertThat(sendTask.getCamundaClass()).isEqualTo(TEST_CLASS_API);
-    assertThat(sendTask.getCamundaDelegateExpression()).isEqualTo(TEST_DELEGATE_EXPRESSION_API);
-    assertThat(sendTask.getCamundaExpression()).isEqualTo(TEST_EXPRESSION_API);
-    assertThat(sendTask.getCamundaResultVariable()).isEqualTo(TEST_STRING_API);
-    assertThat(sendTask.getCamundaTopic()).isEqualTo(TEST_STRING_API);
-    assertThat(sendTask.getCamundaType()).isEqualTo(TEST_STRING_API);
-    assertThat(sendTask.getCamundaTaskPriority()).isEqualTo(TEST_SERVICE_TASK_PRIORITY);
+    assertThat(sendTask.getOrqueioClass()).isEqualTo(TEST_CLASS_API);
+    assertThat(sendTask.getOrqueioDelegateExpression()).isEqualTo(TEST_DELEGATE_EXPRESSION_API);
+    assertThat(sendTask.getOrqueioExpression()).isEqualTo(TEST_EXPRESSION_API);
+    assertThat(sendTask.getOrqueioResultVariable()).isEqualTo(TEST_STRING_API);
+    assertThat(sendTask.getOrqueioTopic()).isEqualTo(TEST_STRING_API);
+    assertThat(sendTask.getOrqueioType()).isEqualTo(TEST_STRING_API);
+    assertThat(sendTask.getOrqueioTaskPriority()).isEqualTo(TEST_SERVICE_TASK_PRIORITY);
 
-    assertCamundaFailedJobRetryTimeCycle(sendTask);
+    assertOrqueioFailedJobRetryTimeCycle(sendTask);
   }
 
   @Test
-  public void testSendTaskCamundaClass() {
+  public void testSendTaskOrqueioClass() {
     modelInstance = Bpmn.createProcess()
       .startEvent()
       .sendTask(TASK_ID)
-        .camundaClass(this.getClass())
+        .orqueioClass(this.getClass())
       .endEvent()
       .done();
 
     SendTask sendTask = modelInstance.getModelElementById(TASK_ID);
-    assertThat(sendTask.getCamundaClass()).isEqualTo(this.getClass().getName());
+    assertThat(sendTask.getOrqueioClass()).isEqualTo(this.getClass().getName());
   }
 
   @Test
-  public void testUserTaskCamundaExtensions() {
+  public void testUserTaskOrqueioExtensions() {
     modelInstance = Bpmn.createProcess()
       .startEvent()
       .userTask(TASK_ID)
-        .camundaAssignee(TEST_STRING_API)
-        .camundaCandidateGroups(TEST_GROUPS_API)
-        .camundaCandidateUsers(TEST_USERS_LIST_API)
-        .camundaDueDate(TEST_DUE_DATE_API)
-        .camundaFollowUpDate(TEST_FOLLOW_UP_DATE_API)
-        .camundaFormHandlerClass(TEST_CLASS_API)
-        .camundaFormKey(TEST_STRING_API)
-        .camundaFormRef(FORM_ID)
-        .camundaFormRefBinding(TEST_STRING_FORM_REF_BINDING)
-        .camundaFormRefVersion(TEST_STRING_FORM_REF_VERSION)
-        .camundaPriority(TEST_PRIORITY_API)
-        .camundaFailedJobRetryTimeCycle(FAILED_JOB_RETRY_TIME_CYCLE)
+        .orqueioAssignee(TEST_STRING_API)
+        .orqueioCandidateGroups(TEST_GROUPS_API)
+        .orqueioCandidateUsers(TEST_USERS_LIST_API)
+        .orqueioDueDate(TEST_DUE_DATE_API)
+        .orqueioFollowUpDate(TEST_FOLLOW_UP_DATE_API)
+        .orqueioFormHandlerClass(TEST_CLASS_API)
+        .orqueioFormKey(TEST_STRING_API)
+        .orqueioFormRef(FORM_ID)
+        .orqueioFormRefBinding(TEST_STRING_FORM_REF_BINDING)
+        .orqueioFormRefVersion(TEST_STRING_FORM_REF_VERSION)
+        .orqueioPriority(TEST_PRIORITY_API)
+        .orqueioFailedJobRetryTimeCycle(FAILED_JOB_RETRY_TIME_CYCLE)
       .endEvent()
       .done();
 
     UserTask userTask = modelInstance.getModelElementById(TASK_ID);
-    assertThat(userTask.getCamundaAssignee()).isEqualTo(TEST_STRING_API);
-    assertThat(userTask.getCamundaCandidateGroups()).isEqualTo(TEST_GROUPS_API);
-    assertThat(userTask.getCamundaCandidateGroupsList()).containsAll(TEST_GROUPS_LIST_API);
-    assertThat(userTask.getCamundaCandidateUsers()).isEqualTo(TEST_USERS_API);
-    assertThat(userTask.getCamundaCandidateUsersList()).containsAll(TEST_USERS_LIST_API);
-    assertThat(userTask.getCamundaDueDate()).isEqualTo(TEST_DUE_DATE_API);
-    assertThat(userTask.getCamundaFollowUpDate()).isEqualTo(TEST_FOLLOW_UP_DATE_API);
-    assertThat(userTask.getCamundaFormHandlerClass()).isEqualTo(TEST_CLASS_API);
-    assertThat(userTask.getCamundaFormKey()).isEqualTo(TEST_STRING_API);
-    assertThat(userTask.getCamundaFormRef()).isEqualTo(FORM_ID);
-    assertThat(userTask.getCamundaFormRefBinding()).isEqualTo(TEST_STRING_FORM_REF_BINDING);
-    assertThat(userTask.getCamundaFormRefVersion()).isEqualTo(TEST_STRING_FORM_REF_VERSION);
-    assertThat(userTask.getCamundaPriority()).isEqualTo(TEST_PRIORITY_API);
+    assertThat(userTask.getOrqueioAssignee()).isEqualTo(TEST_STRING_API);
+    assertThat(userTask.getOrqueioCandidateGroups()).isEqualTo(TEST_GROUPS_API);
+    assertThat(userTask.getOrqueioCandidateGroupsList()).containsAll(TEST_GROUPS_LIST_API);
+    assertThat(userTask.getOrqueioCandidateUsers()).isEqualTo(TEST_USERS_API);
+    assertThat(userTask.getOrqueioCandidateUsersList()).containsAll(TEST_USERS_LIST_API);
+    assertThat(userTask.getOrqueioDueDate()).isEqualTo(TEST_DUE_DATE_API);
+    assertThat(userTask.getOrqueioFollowUpDate()).isEqualTo(TEST_FOLLOW_UP_DATE_API);
+    assertThat(userTask.getOrqueioFormHandlerClass()).isEqualTo(TEST_CLASS_API);
+    assertThat(userTask.getOrqueioFormKey()).isEqualTo(TEST_STRING_API);
+    assertThat(userTask.getOrqueioFormRef()).isEqualTo(FORM_ID);
+    assertThat(userTask.getOrqueioFormRefBinding()).isEqualTo(TEST_STRING_FORM_REF_BINDING);
+    assertThat(userTask.getOrqueioFormRefVersion()).isEqualTo(TEST_STRING_FORM_REF_VERSION);
+    assertThat(userTask.getOrqueioPriority()).isEqualTo(TEST_PRIORITY_API);
 
-    assertCamundaFailedJobRetryTimeCycle(userTask);
+    assertOrqueioFailedJobRetryTimeCycle(userTask);
   }
 
   @Test
-  public void testBusinessRuleTaskCamundaExtensions() {
+  public void testBusinessRuleTaskOrqueioExtensions() {
     modelInstance = Bpmn.createProcess()
       .startEvent()
       .businessRuleTask(TASK_ID)
-        .camundaClass(TEST_CLASS_API)
-        .camundaDelegateExpression(TEST_DELEGATE_EXPRESSION_API)
-        .camundaExpression(TEST_EXPRESSION_API)
-        .camundaResultVariable("resultVar")
-        .camundaTopic("topic")
-        .camundaType("type")
-        .camundaDecisionRef("decisionRef")
-        .camundaDecisionRefBinding("latest")
-        .camundaDecisionRefVersion("7")
-        .camundaDecisionRefVersionTag("0.1.0")
-        .camundaDecisionRefTenantId("tenantId")
-        .camundaMapDecisionResult("singleEntry")
-        .camundaTaskPriority(TEST_SERVICE_TASK_PRIORITY)
-        .camundaFailedJobRetryTimeCycle(FAILED_JOB_RETRY_TIME_CYCLE)
+        .orqueioClass(TEST_CLASS_API)
+        .orqueioDelegateExpression(TEST_DELEGATE_EXPRESSION_API)
+        .orqueioExpression(TEST_EXPRESSION_API)
+        .orqueioResultVariable("resultVar")
+        .orqueioTopic("topic")
+        .orqueioType("type")
+        .orqueioDecisionRef("decisionRef")
+        .orqueioDecisionRefBinding("latest")
+        .orqueioDecisionRefVersion("7")
+        .orqueioDecisionRefVersionTag("0.1.0")
+        .orqueioDecisionRefTenantId("tenantId")
+        .orqueioMapDecisionResult("singleEntry")
+        .orqueioTaskPriority(TEST_SERVICE_TASK_PRIORITY)
+        .orqueioFailedJobRetryTimeCycle(FAILED_JOB_RETRY_TIME_CYCLE)
       .endEvent()
       .done();
 
     BusinessRuleTask businessRuleTask = modelInstance.getModelElementById(TASK_ID);
-    assertThat(businessRuleTask.getCamundaClass()).isEqualTo(TEST_CLASS_API);
-    assertThat(businessRuleTask.getCamundaDelegateExpression()).isEqualTo(TEST_DELEGATE_EXPRESSION_API);
-    assertThat(businessRuleTask.getCamundaExpression()).isEqualTo(TEST_EXPRESSION_API);
-    assertThat(businessRuleTask.getCamundaResultVariable()).isEqualTo("resultVar");
-    assertThat(businessRuleTask.getCamundaTopic()).isEqualTo("topic");
-    assertThat(businessRuleTask.getCamundaType()).isEqualTo("type");
-    assertThat(businessRuleTask.getCamundaDecisionRef()).isEqualTo("decisionRef");
-    assertThat(businessRuleTask.getCamundaDecisionRefBinding()).isEqualTo("latest");
-    assertThat(businessRuleTask.getCamundaDecisionRefVersion()).isEqualTo("7");
-    assertThat(businessRuleTask.getCamundaDecisionRefVersionTag()).isEqualTo("0.1.0");
-    assertThat(businessRuleTask.getCamundaDecisionRefTenantId()).isEqualTo("tenantId");
-    assertThat(businessRuleTask.getCamundaMapDecisionResult()).isEqualTo("singleEntry");
-    assertThat(businessRuleTask.getCamundaTaskPriority()).isEqualTo(TEST_SERVICE_TASK_PRIORITY);
+    assertThat(businessRuleTask.getOrqueioClass()).isEqualTo(TEST_CLASS_API);
+    assertThat(businessRuleTask.getOrqueioDelegateExpression()).isEqualTo(TEST_DELEGATE_EXPRESSION_API);
+    assertThat(businessRuleTask.getOrqueioExpression()).isEqualTo(TEST_EXPRESSION_API);
+    assertThat(businessRuleTask.getOrqueioResultVariable()).isEqualTo("resultVar");
+    assertThat(businessRuleTask.getOrqueioTopic()).isEqualTo("topic");
+    assertThat(businessRuleTask.getOrqueioType()).isEqualTo("type");
+    assertThat(businessRuleTask.getOrqueioDecisionRef()).isEqualTo("decisionRef");
+    assertThat(businessRuleTask.getOrqueioDecisionRefBinding()).isEqualTo("latest");
+    assertThat(businessRuleTask.getOrqueioDecisionRefVersion()).isEqualTo("7");
+    assertThat(businessRuleTask.getOrqueioDecisionRefVersionTag()).isEqualTo("0.1.0");
+    assertThat(businessRuleTask.getOrqueioDecisionRefTenantId()).isEqualTo("tenantId");
+    assertThat(businessRuleTask.getOrqueioMapDecisionResult()).isEqualTo("singleEntry");
+    assertThat(businessRuleTask.getOrqueioTaskPriority()).isEqualTo(TEST_SERVICE_TASK_PRIORITY);
 
-    assertCamundaFailedJobRetryTimeCycle(businessRuleTask);
+    assertOrqueioFailedJobRetryTimeCycle(businessRuleTask);
   }
 
   @Test
-  public void testBusinessRuleTaskCamundaClass() {
+  public void testBusinessRuleTaskOrqueioClass() {
     modelInstance = Bpmn.createProcess()
       .startEvent()
       .businessRuleTask(TASK_ID)
-        .camundaClass(Bpmn.class)
+        .orqueioClass(Bpmn.class)
       .endEvent()
       .done();
 
     BusinessRuleTask businessRuleTask = modelInstance.getModelElementById(TASK_ID);
-    assertThat(businessRuleTask.getCamundaClass()).isEqualTo("io.orqueio.bpm.model.bpmn.Bpmn");
+    assertThat(businessRuleTask.getOrqueioClass()).isEqualTo("io.orqueio.bpm.model.bpmn.Bpmn");
   }
 
   @Test
-  public void testScriptTaskCamundaExtensions() {
+  public void testScriptTaskOrqueioExtensions() {
     modelInstance = Bpmn.createProcess()
       .startEvent()
       .scriptTask(TASK_ID)
-        .camundaResultVariable(TEST_STRING_API)
-        .camundaResource(TEST_STRING_API)
-        .camundaFailedJobRetryTimeCycle(FAILED_JOB_RETRY_TIME_CYCLE)
+        .orqueioResultVariable(TEST_STRING_API)
+        .orqueioResource(TEST_STRING_API)
+        .orqueioFailedJobRetryTimeCycle(FAILED_JOB_RETRY_TIME_CYCLE)
       .endEvent()
       .done();
 
     ScriptTask scriptTask = modelInstance.getModelElementById(TASK_ID);
-    assertThat(scriptTask.getCamundaResultVariable()).isEqualTo(TEST_STRING_API);
-    assertThat(scriptTask.getCamundaResource()).isEqualTo(TEST_STRING_API);
+    assertThat(scriptTask.getOrqueioResultVariable()).isEqualTo(TEST_STRING_API);
+    assertThat(scriptTask.getOrqueioResource()).isEqualTo(TEST_STRING_API);
 
-    assertCamundaFailedJobRetryTimeCycle(scriptTask);
+    assertOrqueioFailedJobRetryTimeCycle(scriptTask);
   }
 
   @Test
-  public void testStartEventCamundaExtensions() {
+  public void testStartEventOrqueioExtensions() {
     modelInstance = Bpmn.createProcess()
       .startEvent(START_EVENT_ID)
-        .camundaAsyncBefore()
-        .notCamundaExclusive()
-        .camundaFormHandlerClass(TEST_CLASS_API)
-        .camundaFormKey(TEST_STRING_API)
-        .camundaFormRef(FORM_ID)
-        .camundaFormRefBinding(TEST_STRING_FORM_REF_BINDING)
-        .camundaFormRefVersion(TEST_STRING_FORM_REF_VERSION)
-        .camundaInitiator(TEST_STRING_API)
-        .camundaFailedJobRetryTimeCycle(FAILED_JOB_RETRY_TIME_CYCLE)
+        .orqueioAsyncBefore()
+        .notOrqueioExclusive()
+        .orqueioFormHandlerClass(TEST_CLASS_API)
+        .orqueioFormKey(TEST_STRING_API)
+        .orqueioFormRef(FORM_ID)
+        .orqueioFormRefBinding(TEST_STRING_FORM_REF_BINDING)
+        .orqueioFormRefVersion(TEST_STRING_FORM_REF_VERSION)
+        .orqueioInitiator(TEST_STRING_API)
+        .orqueioFailedJobRetryTimeCycle(FAILED_JOB_RETRY_TIME_CYCLE)
       .done();
 
     StartEvent startEvent = modelInstance.getModelElementById(START_EVENT_ID);
-    assertThat(startEvent.isCamundaAsyncBefore()).isTrue();
-    assertThat(startEvent.isCamundaExclusive()).isFalse();
-    assertThat(startEvent.getCamundaFormHandlerClass()).isEqualTo(TEST_CLASS_API);
-    assertThat(startEvent.getCamundaFormKey()).isEqualTo(TEST_STRING_API);
-    assertThat(startEvent.getCamundaFormRef()).isEqualTo(FORM_ID);
-    assertThat(startEvent.getCamundaFormRefBinding()).isEqualTo(TEST_STRING_FORM_REF_BINDING);
-    assertThat(startEvent.getCamundaFormRefVersion()).isEqualTo(TEST_STRING_FORM_REF_VERSION);
-    assertThat(startEvent.getCamundaInitiator()).isEqualTo(TEST_STRING_API);
+    assertThat(startEvent.isOrqueioAsyncBefore()).isTrue();
+    assertThat(startEvent.isOrqueioExclusive()).isFalse();
+    assertThat(startEvent.getOrqueioFormHandlerClass()).isEqualTo(TEST_CLASS_API);
+    assertThat(startEvent.getOrqueioFormKey()).isEqualTo(TEST_STRING_API);
+    assertThat(startEvent.getOrqueioFormRef()).isEqualTo(FORM_ID);
+    assertThat(startEvent.getOrqueioFormRefBinding()).isEqualTo(TEST_STRING_FORM_REF_BINDING);
+    assertThat(startEvent.getOrqueioFormRefVersion()).isEqualTo(TEST_STRING_FORM_REF_VERSION);
+    assertThat(startEvent.getOrqueioInitiator()).isEqualTo(TEST_STRING_API);
 
-    assertCamundaFailedJobRetryTimeCycle(startEvent);
+    assertOrqueioFailedJobRetryTimeCycle(startEvent);
   }
 
   @Test
@@ -931,80 +931,80 @@ public class ProcessBuilderTest {
   }
 
   @Test
-  public void testCallActivityCamundaExtension() {
+  public void testCallActivityOrqueioExtension() {
     modelInstance = Bpmn.createProcess()
       .startEvent()
       .callActivity(CALL_ACTIVITY_ID)
         .calledElement(TEST_STRING_API)
-        .camundaAsyncBefore()
-        .camundaCalledElementBinding("version")
-        .camundaCalledElementVersion("1.0")
-        .camundaCalledElementVersionTag("ver-1.0")
-        .camundaCalledElementTenantId("t1")
-        .camundaCaseRef("case")
-        .camundaCaseBinding("deployment")
-        .camundaCaseVersion("2")
-        .camundaCaseTenantId("t2")
-        .camundaIn("in-source", "in-target")
-        .camundaOut("out-source", "out-target")
-        .camundaVariableMappingClass(TEST_CLASS_API)
-        .camundaVariableMappingDelegateExpression(TEST_DELEGATE_EXPRESSION_API)
-        .notCamundaExclusive()
-        .camundaFailedJobRetryTimeCycle(FAILED_JOB_RETRY_TIME_CYCLE)
+        .orqueioAsyncBefore()
+        .orqueioCalledElementBinding("version")
+        .orqueioCalledElementVersion("1.0")
+        .orqueioCalledElementVersionTag("ver-1.0")
+        .orqueioCalledElementTenantId("t1")
+        .orqueioCaseRef("case")
+        .orqueioCaseBinding("deployment")
+        .orqueioCaseVersion("2")
+        .orqueioCaseTenantId("t2")
+        .orqueioIn("in-source", "in-target")
+        .orqueioOut("out-source", "out-target")
+        .orqueioVariableMappingClass(TEST_CLASS_API)
+        .orqueioVariableMappingDelegateExpression(TEST_DELEGATE_EXPRESSION_API)
+        .notOrqueioExclusive()
+        .orqueioFailedJobRetryTimeCycle(FAILED_JOB_RETRY_TIME_CYCLE)
       .endEvent()
       .done();
 
     CallActivity callActivity = modelInstance.getModelElementById(CALL_ACTIVITY_ID);
     assertThat(callActivity.getCalledElement()).isEqualTo(TEST_STRING_API);
-    assertThat(callActivity.isCamundaAsyncBefore()).isTrue();
-    assertThat(callActivity.getCamundaCalledElementBinding()).isEqualTo("version");
-    assertThat(callActivity.getCamundaCalledElementVersion()).isEqualTo("1.0");
-    assertThat(callActivity.getCamundaCalledElementVersionTag()).isEqualTo("ver-1.0");
-    assertThat(callActivity.getCamundaCalledElementTenantId()).isEqualTo("t1");
-    assertThat(callActivity.getCamundaCaseRef()).isEqualTo("case");
-    assertThat(callActivity.getCamundaCaseBinding()).isEqualTo("deployment");
-    assertThat(callActivity.getCamundaCaseVersion()).isEqualTo("2");
-    assertThat(callActivity.getCamundaCaseTenantId()).isEqualTo("t2");
-    assertThat(callActivity.isCamundaExclusive()).isFalse();
+    assertThat(callActivity.isOrqueioAsyncBefore()).isTrue();
+    assertThat(callActivity.getOrqueioCalledElementBinding()).isEqualTo("version");
+    assertThat(callActivity.getOrqueioCalledElementVersion()).isEqualTo("1.0");
+    assertThat(callActivity.getOrqueioCalledElementVersionTag()).isEqualTo("ver-1.0");
+    assertThat(callActivity.getOrqueioCalledElementTenantId()).isEqualTo("t1");
+    assertThat(callActivity.getOrqueioCaseRef()).isEqualTo("case");
+    assertThat(callActivity.getOrqueioCaseBinding()).isEqualTo("deployment");
+    assertThat(callActivity.getOrqueioCaseVersion()).isEqualTo("2");
+    assertThat(callActivity.getOrqueioCaseTenantId()).isEqualTo("t2");
+    assertThat(callActivity.isOrqueioExclusive()).isFalse();
 
-    CamundaIn camundaIn = (CamundaIn) callActivity.getExtensionElements().getUniqueChildElementByType(CamundaIn.class);
-    assertThat(camundaIn.getCamundaSource()).isEqualTo("in-source");
-    assertThat(camundaIn.getCamundaTarget()).isEqualTo("in-target");
+    OrqueioIn orqueioIn = (OrqueioIn) callActivity.getExtensionElements().getUniqueChildElementByType(OrqueioIn.class);
+    assertThat(orqueioIn.getOrqueioSource()).isEqualTo("in-source");
+    assertThat(orqueioIn.getOrqueioTarget()).isEqualTo("in-target");
 
-    CamundaOut camundaOut = (CamundaOut) callActivity.getExtensionElements().getUniqueChildElementByType(CamundaOut.class);
-    assertThat(camundaOut.getCamundaSource()).isEqualTo("out-source");
-    assertThat(camundaOut.getCamundaTarget()).isEqualTo("out-target");
+    OrqueioOut orqueioOut = (OrqueioOut) callActivity.getExtensionElements().getUniqueChildElementByType(OrqueioOut.class);
+    assertThat(orqueioOut.getOrqueioSource()).isEqualTo("out-source");
+    assertThat(orqueioOut.getOrqueioTarget()).isEqualTo("out-target");
 
-    assertThat(callActivity.getCamundaVariableMappingClass()).isEqualTo(TEST_CLASS_API);
-    assertThat(callActivity.getCamundaVariableMappingDelegateExpression()).isEqualTo(TEST_DELEGATE_EXPRESSION_API);
-    assertCamundaFailedJobRetryTimeCycle(callActivity);
+    assertThat(callActivity.getOrqueioVariableMappingClass()).isEqualTo(TEST_CLASS_API);
+    assertThat(callActivity.getOrqueioVariableMappingDelegateExpression()).isEqualTo(TEST_DELEGATE_EXPRESSION_API);
+    assertOrqueioFailedJobRetryTimeCycle(callActivity);
   }
 
   @Test
-  public void testCallActivityCamundaBusinessKey() {
+  public void testCallActivityOrqueioBusinessKey() {
     modelInstance = Bpmn.createProcess()
       .startEvent()
       .callActivity(CALL_ACTIVITY_ID)
-        .camundaInBusinessKey("business-key")
+        .orqueioInBusinessKey("business-key")
       .endEvent()
       .done();
 
     CallActivity callActivity = modelInstance.getModelElementById(CALL_ACTIVITY_ID);
-    CamundaIn camundaIn = (CamundaIn) callActivity.getExtensionElements().getUniqueChildElementByType(CamundaIn.class);
-    assertThat(camundaIn.getCamundaBusinessKey()).isEqualTo("business-key");
+    OrqueioIn orqueioIn = (OrqueioIn) callActivity.getExtensionElements().getUniqueChildElementByType(OrqueioIn.class);
+    assertThat(orqueioIn.getOrqueioBusinessKey()).isEqualTo("business-key");
   }
 
   @Test
-  public void testCallActivityCamundaVariableMappingClass() {
+  public void testCallActivityOrqueioVariableMappingClass() {
     modelInstance = Bpmn.createProcess()
       .startEvent()
       .callActivity(CALL_ACTIVITY_ID)
-        .camundaVariableMappingClass(this.getClass())
+        .orqueioVariableMappingClass(this.getClass())
       .endEvent()
       .done();
 
     CallActivity callActivity = modelInstance.getModelElementById(CALL_ACTIVITY_ID);
-    assertThat(callActivity.getCamundaVariableMappingClass()).isEqualTo(this.getClass().getName());
+    assertThat(callActivity.getOrqueioVariableMappingClass()).isEqualTo(this.getClass().getName());
   }
 
   @Test
@@ -1012,7 +1012,7 @@ public class ProcessBuilderTest {
     BpmnModelInstance modelInstance = Bpmn.createProcess()
       .startEvent()
       .subProcess(SUB_PROCESS_ID)
-        .camundaAsyncBefore()
+        .orqueioAsyncBefore()
         .embeddedSubProcess()
           .startEvent()
           .userTask()
@@ -1024,8 +1024,8 @@ public class ProcessBuilderTest {
 
     SubProcess subProcess = modelInstance.getModelElementById(SUB_PROCESS_ID);
     ServiceTask serviceTask = modelInstance.getModelElementById(SERVICE_TASK_ID);
-    assertThat(subProcess.isCamundaAsyncBefore()).isTrue();
-    assertThat(subProcess.isCamundaExclusive()).isTrue();
+    assertThat(subProcess.isOrqueioAsyncBefore()).isTrue();
+    assertThat(subProcess.isOrqueioExclusive()).isTrue();
     assertThat(subProcess.getChildElementsByType(Event.class)).hasSize(2);
     assertThat(subProcess.getChildElementsByType(Task.class)).hasSize(1);
     assertThat(subProcess.getFlowElements()).hasSize(5);
@@ -1044,15 +1044,15 @@ public class ProcessBuilderTest {
     SubProcess subProcess = modelInstance.getModelElementById(SUB_PROCESS_ID);
 
     subProcess.builder()
-      .camundaAsyncBefore()
+      .orqueioAsyncBefore()
       .embeddedSubProcess()
         .startEvent()
         .userTask()
         .endEvent();
 
     ServiceTask serviceTask = modelInstance.getModelElementById(SERVICE_TASK_ID);
-    assertThat(subProcess.isCamundaAsyncBefore()).isTrue();
-    assertThat(subProcess.isCamundaExclusive()).isTrue();
+    assertThat(subProcess.isOrqueioAsyncBefore()).isTrue();
+    assertThat(subProcess.isOrqueioExclusive()).isTrue();
     assertThat(subProcess.getChildElementsByType(Event.class)).hasSize(2);
     assertThat(subProcess.getChildElementsByType(Task.class)).hasSize(1);
     assertThat(subProcess.getFlowElements()).hasSize(5);
@@ -1064,13 +1064,13 @@ public class ProcessBuilderTest {
     modelInstance = Bpmn.createProcess()
       .startEvent()
       .subProcess(SUB_PROCESS_ID + 1)
-        .camundaAsyncBefore()
+        .orqueioAsyncBefore()
         .embeddedSubProcess()
           .startEvent()
           .userTask()
           .subProcess(SUB_PROCESS_ID + 2)
-            .camundaAsyncBefore()
-            .notCamundaExclusive()
+            .orqueioAsyncBefore()
+            .notOrqueioExclusive()
             .embeddedSubProcess()
               .startEvent()
               .userTask()
@@ -1085,8 +1085,8 @@ public class ProcessBuilderTest {
 
     SubProcess subProcess = modelInstance.getModelElementById(SUB_PROCESS_ID + 1);
     ServiceTask serviceTask = modelInstance.getModelElementById(SERVICE_TASK_ID + 2);
-    assertThat(subProcess.isCamundaAsyncBefore()).isTrue();
-    assertThat(subProcess.isCamundaExclusive()).isTrue();
+    assertThat(subProcess.isOrqueioAsyncBefore()).isTrue();
+    assertThat(subProcess.isOrqueioExclusive()).isTrue();
     assertThat(subProcess.getChildElementsByType(Event.class)).hasSize(2);
     assertThat(subProcess.getChildElementsByType(Task.class)).hasSize(2);
     assertThat(subProcess.getChildElementsByType(SubProcess.class)).hasSize(1);
@@ -1095,8 +1095,8 @@ public class ProcessBuilderTest {
 
     SubProcess nestedSubProcess = modelInstance.getModelElementById(SUB_PROCESS_ID + 2);
     ServiceTask nestedServiceTask = modelInstance.getModelElementById(SERVICE_TASK_ID + 1);
-    assertThat(nestedSubProcess.isCamundaAsyncBefore()).isTrue();
-    assertThat(nestedSubProcess.isCamundaExclusive()).isFalse();
+    assertThat(nestedSubProcess.isOrqueioAsyncBefore()).isTrue();
+    assertThat(nestedSubProcess.isOrqueioExclusive()).isFalse();
     assertThat(nestedSubProcess.getChildElementsByType(Event.class)).hasSize(2);
     assertThat(nestedSubProcess.getChildElementsByType(Task.class)).hasSize(1);
     assertThat(nestedSubProcess.getFlowElements()).hasSize(5);
@@ -1123,7 +1123,7 @@ public class ProcessBuilderTest {
     BpmnModelInstance modelInstance = Bpmn.createProcess()
       .startEvent()
       .transaction(TRANSACTION_ID)
-        .camundaAsyncBefore()
+        .orqueioAsyncBefore()
         .method(TransactionMethod.Image)
         .embeddedSubProcess()
           .startEvent()
@@ -1136,8 +1136,8 @@ public class ProcessBuilderTest {
 
     Transaction transaction = modelInstance.getModelElementById(TRANSACTION_ID);
     ServiceTask serviceTask = modelInstance.getModelElementById(SERVICE_TASK_ID);
-    assertThat(transaction.isCamundaAsyncBefore()).isTrue();
-    assertThat(transaction.isCamundaExclusive()).isTrue();
+    assertThat(transaction.isOrqueioAsyncBefore()).isTrue();
+    assertThat(transaction.isOrqueioExclusive()).isTrue();
     assertThat(transaction.getMethod()).isEqualTo(TransactionMethod.Image);
     assertThat(transaction.getChildElementsByType(Event.class)).hasSize(2);
     assertThat(transaction.getChildElementsByType(Task.class)).hasSize(1);
@@ -1157,15 +1157,15 @@ public class ProcessBuilderTest {
     Transaction transaction = modelInstance.getModelElementById(TRANSACTION_ID);
 
     transaction.builder()
-      .camundaAsyncBefore()
+      .orqueioAsyncBefore()
       .embeddedSubProcess()
         .startEvent()
         .userTask()
         .endEvent();
 
     ServiceTask serviceTask = modelInstance.getModelElementById(SERVICE_TASK_ID);
-    assertThat(transaction.isCamundaAsyncBefore()).isTrue();
-    assertThat(transaction.isCamundaExclusive()).isTrue();
+    assertThat(transaction.isOrqueioAsyncBefore()).isTrue();
+    assertThat(transaction.isOrqueioExclusive()).isTrue();
     assertThat(transaction.getChildElementsByType(Event.class)).hasSize(2);
     assertThat(transaction.getChildElementsByType(Task.class)).hasSize(1);
     assertThat(transaction.getFlowElements()).hasSize(5);
@@ -1193,7 +1193,7 @@ public class ProcessBuilderTest {
       modelInstance = Bpmn.createProcess()
         .startEvent()
         .eventBasedGateway()
-          .camundaAsyncAfter()
+          .orqueioAsyncAfter()
         .done();
 
       fail("Expected UnsupportedOperationException");
@@ -1205,7 +1205,7 @@ public class ProcessBuilderTest {
       modelInstance = Bpmn.createProcess()
         .startEvent()
         .eventBasedGateway()
-          .camundaAsyncAfter(true)
+          .orqueioAsyncAfter(true)
         .endEvent()
         .done();
       fail("Expected UnsupportedOperationException");
@@ -1397,15 +1397,15 @@ public class ProcessBuilderTest {
       .messageEventDefinition()
         .id("messageEventDefinition")
         .message("message")
-        .camundaTaskPriority(TEST_SERVICE_TASK_PRIORITY)
-        .camundaType("external")
-        .camundaTopic("TOPIC")
+        .orqueioTaskPriority(TEST_SERVICE_TASK_PRIORITY)
+        .orqueioType("external")
+        .orqueioTopic("TOPIC")
       .done();
 
     MessageEventDefinition event = modelInstance.getModelElementById("messageEventDefinition");
-    assertThat(event.getCamundaTaskPriority()).isEqualTo(TEST_SERVICE_TASK_PRIORITY);
-    assertThat(event.getCamundaTopic()).isEqualTo("TOPIC");
-    assertThat(event.getCamundaType()).isEqualTo("external");
+    assertThat(event.getOrqueioTaskPriority()).isEqualTo(TEST_SERVICE_TASK_PRIORITY);
+    assertThat(event.getOrqueioTopic()).isEqualTo("TOPIC");
+    assertThat(event.getOrqueioType()).isEqualTo("external");
     assertThat(event.getMessage().getName()).isEqualTo("message");
   }
 
@@ -1415,11 +1415,11 @@ public class ProcessBuilderTest {
       .startEvent()
       .intermediateThrowEvent("throw1")
       .messageEventDefinition("messageEventDefinition")
-        .camundaTaskPriority(TEST_SERVICE_TASK_PRIORITY)
+        .orqueioTaskPriority(TEST_SERVICE_TASK_PRIORITY)
       .done();
 
     MessageEventDefinition event = modelInstance.getModelElementById("messageEventDefinition");
-    assertThat(event.getCamundaTaskPriority()).isEqualTo(TEST_SERVICE_TASK_PRIORITY);
+    assertThat(event.getOrqueioTaskPriority()).isEqualTo(TEST_SERVICE_TASK_PRIORITY);
   }
 
   @Test
@@ -1428,11 +1428,11 @@ public class ProcessBuilderTest {
       .startEvent()
       .endEvent("end")
       .messageEventDefinition("messageEventDefinition")
-        .camundaTaskPriority(TEST_SERVICE_TASK_PRIORITY)
+        .orqueioTaskPriority(TEST_SERVICE_TASK_PRIORITY)
       .done();
 
     MessageEventDefinition event = modelInstance.getModelElementById("messageEventDefinition");
-    assertThat(event.getCamundaTaskPriority()).isEqualTo(TEST_SERVICE_TASK_PRIORITY);
+    assertThat(event.getOrqueioTaskPriority()).isEqualTo(TEST_SERVICE_TASK_PRIORITY);
   }
 
   @Test
@@ -1655,10 +1655,10 @@ public class ProcessBuilderTest {
       .startEvent()
       .intermediateThrowEvent("throw")
         .signalEventDefinition("signal")
-          .camundaInSourceTarget("source", "target1")
-          .camundaInSourceExpressionTarget("${'sourceExpression'}", "target2")
-          .camundaInAllVariables("all", true)
-          .camundaInBusinessKey("aBusinessKey")
+          .orqueioInSourceTarget("source", "target1")
+          .orqueioInSourceExpressionTarget("${'sourceExpression'}", "target2")
+          .orqueioInAllVariables("all", true)
+          .orqueioInBusinessKey("aBusinessKey")
           .throwEventDefinitionDone()
       .endEvent()
       .done();
@@ -1668,30 +1668,30 @@ public class ProcessBuilderTest {
 
     assertThat(signalEventDefinition.getSignal().getName()).isEqualTo("signal");
 
-    List<CamundaIn> camundaInParams = signalEventDefinition.getExtensionElements().getElementsQuery().filterByType(CamundaIn.class).list();
-    assertThat(camundaInParams.size()).isEqualTo(4);
+    List<OrqueioIn> orqueioInParams = signalEventDefinition.getExtensionElements().getElementsQuery().filterByType(OrqueioIn.class).list();
+    assertThat(orqueioInParams.size()).isEqualTo(4);
 
     int paramCounter = 0;
-    for (CamundaIn inParam : camundaInParams) {
-      if (inParam.getCamundaVariables() != null) {
-        assertThat(inParam.getCamundaVariables()).isEqualTo("all");
-        if (inParam.getCamundaLocal()) {
+    for (OrqueioIn inParam : orqueioInParams) {
+      if (inParam.getOrqueioVariables() != null) {
+        assertThat(inParam.getOrqueioVariables()).isEqualTo("all");
+        if (inParam.getOrqueioLocal()) {
           paramCounter++;
         }
-      } else if (inParam.getCamundaBusinessKey() != null) {
-        assertThat(inParam.getCamundaBusinessKey()).isEqualTo("aBusinessKey");
+      } else if (inParam.getOrqueioBusinessKey() != null) {
+        assertThat(inParam.getOrqueioBusinessKey()).isEqualTo("aBusinessKey");
         paramCounter++;
-      } else if (inParam.getCamundaSourceExpression() != null) {
-        assertThat(inParam.getCamundaSourceExpression()).isEqualTo("${'sourceExpression'}");
-        assertThat(inParam.getCamundaTarget()).isEqualTo("target2");
+      } else if (inParam.getOrqueioSourceExpression() != null) {
+        assertThat(inParam.getOrqueioSourceExpression()).isEqualTo("${'sourceExpression'}");
+        assertThat(inParam.getOrqueioTarget()).isEqualTo("target2");
         paramCounter++;
-      } else if (inParam.getCamundaSource() != null) {
-        assertThat(inParam.getCamundaSource()).isEqualTo("source");
-        assertThat(inParam.getCamundaTarget()).isEqualTo("target1");
+      } else if (inParam.getOrqueioSource() != null) {
+        assertThat(inParam.getOrqueioSource()).isEqualTo("source");
+        assertThat(inParam.getOrqueioTarget()).isEqualTo("target1");
         paramCounter++;
       }
     }
-    assertThat(paramCounter).isEqualTo(camundaInParams.size());
+    assertThat(paramCounter).isEqualTo(orqueioInParams.size());
   }
 
   @Test
@@ -1700,17 +1700,17 @@ public class ProcessBuilderTest {
       .startEvent()
       .intermediateThrowEvent("throw")
         .signalEventDefinition("signal")
-          .camundaInAllVariables("all")
+          .orqueioInAllVariables("all")
           .throwEventDefinitionDone()
       .endEvent()
       .done();
 
     SignalEventDefinition signalEventDefinition = assertAndGetSingleEventDefinition("throw", SignalEventDefinition.class);
 
-    List<CamundaIn> camundaInParams = signalEventDefinition.getExtensionElements().getElementsQuery().filterByType(CamundaIn.class).list();
-    assertThat(camundaInParams.size()).isEqualTo(1);
+    List<OrqueioIn> orqueioInParams = signalEventDefinition.getExtensionElements().getElementsQuery().filterByType(OrqueioIn.class).list();
+    assertThat(orqueioInParams.size()).isEqualTo(1);
 
-    assertThat(camundaInParams.get(0).getCamundaVariables()).isEqualTo("all");
+    assertThat(orqueioInParams.get(0).getOrqueioVariables()).isEqualTo("all");
   }
 
   @Test
@@ -1780,98 +1780,98 @@ public class ProcessBuilderTest {
   }
 
   @Test
-  public void testCamundaTaskListenerByClassName() {
+  public void testOrqueioTaskListenerByClassName() {
     modelInstance = Bpmn.createProcess()
         .startEvent()
           .userTask("task")
-            .camundaTaskListenerClass("start", "aClass")
+            .orqueioTaskListenerClass("start", "aClass")
         .endEvent()
         .done();
 
     UserTask userTask = modelInstance.getModelElementById("task");
     ExtensionElements extensionElements = userTask.getExtensionElements();
-    Collection<CamundaTaskListener> taskListeners = extensionElements.getChildElementsByType(CamundaTaskListener.class);
+    Collection<OrqueioTaskListener> taskListeners = extensionElements.getChildElementsByType(OrqueioTaskListener.class);
     assertThat(taskListeners).hasSize(1);
 
-    CamundaTaskListener taskListener = taskListeners.iterator().next();
-    assertThat(taskListener.getCamundaClass()).isEqualTo("aClass");
-    assertThat(taskListener.getCamundaEvent()).isEqualTo("start");
+    OrqueioTaskListener taskListener = taskListeners.iterator().next();
+    assertThat(taskListener.getOrqueioClass()).isEqualTo("aClass");
+    assertThat(taskListener.getOrqueioEvent()).isEqualTo("start");
   }
 
   @Test
-  public void testCamundaTaskListenerByClass() {
+  public void testOrqueioTaskListenerByClass() {
     modelInstance = Bpmn.createProcess()
         .startEvent()
           .userTask("task")
-            .camundaTaskListenerClass("start", this.getClass())
+            .orqueioTaskListenerClass("start", this.getClass())
         .endEvent()
         .done();
 
     UserTask userTask = modelInstance.getModelElementById("task");
     ExtensionElements extensionElements = userTask.getExtensionElements();
-    Collection<CamundaTaskListener> taskListeners = extensionElements.getChildElementsByType(CamundaTaskListener.class);
+    Collection<OrqueioTaskListener> taskListeners = extensionElements.getChildElementsByType(OrqueioTaskListener.class);
     assertThat(taskListeners).hasSize(1);
 
-    CamundaTaskListener taskListener = taskListeners.iterator().next();
-    assertThat(taskListener.getCamundaClass()).isEqualTo(this.getClass().getName());
-    assertThat(taskListener.getCamundaEvent()).isEqualTo("start");
+    OrqueioTaskListener taskListener = taskListeners.iterator().next();
+    assertThat(taskListener.getOrqueioClass()).isEqualTo(this.getClass().getName());
+    assertThat(taskListener.getOrqueioEvent()).isEqualTo("start");
   }
 
   @Test
-  public void testCamundaTaskListenerByExpression() {
+  public void testOrqueioTaskListenerByExpression() {
     modelInstance = Bpmn.createProcess()
         .startEvent()
           .userTask("task")
-            .camundaTaskListenerExpression("start", "anExpression")
+            .orqueioTaskListenerExpression("start", "anExpression")
         .endEvent()
         .done();
 
     UserTask userTask = modelInstance.getModelElementById("task");
     ExtensionElements extensionElements = userTask.getExtensionElements();
-    Collection<CamundaTaskListener> taskListeners = extensionElements.getChildElementsByType(CamundaTaskListener.class);
+    Collection<OrqueioTaskListener> taskListeners = extensionElements.getChildElementsByType(OrqueioTaskListener.class);
     assertThat(taskListeners).hasSize(1);
 
-    CamundaTaskListener taskListener = taskListeners.iterator().next();
-    assertThat(taskListener.getCamundaExpression()).isEqualTo("anExpression");
-    assertThat(taskListener.getCamundaEvent()).isEqualTo("start");
+    OrqueioTaskListener taskListener = taskListeners.iterator().next();
+    assertThat(taskListener.getOrqueioExpression()).isEqualTo("anExpression");
+    assertThat(taskListener.getOrqueioEvent()).isEqualTo("start");
   }
 
   @Test
-  public void testCamundaTaskListenerByDelegateExpression() {
+  public void testOrqueioTaskListenerByDelegateExpression() {
     modelInstance = Bpmn.createProcess()
         .startEvent()
           .userTask("task")
-            .camundaTaskListenerDelegateExpression("start", "aDelegate")
+            .orqueioTaskListenerDelegateExpression("start", "aDelegate")
         .endEvent()
         .done();
 
     UserTask userTask = modelInstance.getModelElementById("task");
     ExtensionElements extensionElements = userTask.getExtensionElements();
-    Collection<CamundaTaskListener> taskListeners = extensionElements.getChildElementsByType(CamundaTaskListener.class);
+    Collection<OrqueioTaskListener> taskListeners = extensionElements.getChildElementsByType(OrqueioTaskListener.class);
     assertThat(taskListeners).hasSize(1);
 
-    CamundaTaskListener taskListener = taskListeners.iterator().next();
-    assertThat(taskListener.getCamundaDelegateExpression()).isEqualTo("aDelegate");
-    assertThat(taskListener.getCamundaEvent()).isEqualTo("start");
+    OrqueioTaskListener taskListener = taskListeners.iterator().next();
+    assertThat(taskListener.getOrqueioDelegateExpression()).isEqualTo("aDelegate");
+    assertThat(taskListener.getOrqueioEvent()).isEqualTo("start");
   }
 
   @Test
-  public void testCamundaTimeoutCycleTaskListenerByClassName() {
+  public void testOrqueioTimeoutCycleTaskListenerByClassName() {
     modelInstance = Bpmn.createProcess()
         .startEvent()
           .userTask("task")
-            .camundaTaskListenerClassTimeoutWithCycle("timeout-1", "aClass", "R/PT1H")
+            .orqueioTaskListenerClassTimeoutWithCycle("timeout-1", "aClass", "R/PT1H")
         .endEvent()
         .done();
 
     UserTask userTask = modelInstance.getModelElementById("task");
     ExtensionElements extensionElements = userTask.getExtensionElements();
-    Collection<CamundaTaskListener> taskListeners = extensionElements.getChildElementsByType(CamundaTaskListener.class);
+    Collection<OrqueioTaskListener> taskListeners = extensionElements.getChildElementsByType(OrqueioTaskListener.class);
     assertThat(taskListeners).hasSize(1);
 
-    CamundaTaskListener taskListener = taskListeners.iterator().next();
-    assertThat(taskListener.getCamundaClass()).isEqualTo("aClass");
-    assertThat(taskListener.getCamundaEvent()).isEqualTo("timeout");
+    OrqueioTaskListener taskListener = taskListeners.iterator().next();
+    assertThat(taskListener.getOrqueioClass()).isEqualTo("aClass");
+    assertThat(taskListener.getOrqueioEvent()).isEqualTo("timeout");
 
     Collection<TimerEventDefinition> timeouts = taskListener.getTimeouts();
     assertThat(timeouts.size()).isEqualTo(1);
@@ -1884,22 +1884,22 @@ public class ProcessBuilderTest {
   }
 
   @Test
-  public void testCamundaTimeoutDateTaskListenerByClassName() {
+  public void testOrqueioTimeoutDateTaskListenerByClassName() {
     modelInstance = Bpmn.createProcess()
         .startEvent()
           .userTask("task")
-            .camundaTaskListenerClassTimeoutWithDate("timeout-1", "aClass", "2019-09-09T12:12:12")
+            .orqueioTaskListenerClassTimeoutWithDate("timeout-1", "aClass", "2019-09-09T12:12:12")
         .endEvent()
         .done();
 
     UserTask userTask = modelInstance.getModelElementById("task");
     ExtensionElements extensionElements = userTask.getExtensionElements();
-    Collection<CamundaTaskListener> taskListeners = extensionElements.getChildElementsByType(CamundaTaskListener.class);
+    Collection<OrqueioTaskListener> taskListeners = extensionElements.getChildElementsByType(OrqueioTaskListener.class);
     assertThat(taskListeners).hasSize(1);
 
-    CamundaTaskListener taskListener = taskListeners.iterator().next();
-    assertThat(taskListener.getCamundaClass()).isEqualTo("aClass");
-    assertThat(taskListener.getCamundaEvent()).isEqualTo("timeout");
+    OrqueioTaskListener taskListener = taskListeners.iterator().next();
+    assertThat(taskListener.getOrqueioClass()).isEqualTo("aClass");
+    assertThat(taskListener.getOrqueioEvent()).isEqualTo("timeout");
 
     Collection<TimerEventDefinition> timeouts = taskListener.getTimeouts();
     assertThat(timeouts.size()).isEqualTo(1);
@@ -1912,22 +1912,22 @@ public class ProcessBuilderTest {
   }
 
   @Test
-  public void testCamundaTimeoutDurationTaskListenerByClassName() {
+  public void testOrqueioTimeoutDurationTaskListenerByClassName() {
     modelInstance = Bpmn.createProcess()
         .startEvent()
           .userTask("task")
-            .camundaTaskListenerClassTimeoutWithDuration("timeout-1", "aClass", "PT1H")
+            .orqueioTaskListenerClassTimeoutWithDuration("timeout-1", "aClass", "PT1H")
         .endEvent()
         .done();
 
     UserTask userTask = modelInstance.getModelElementById("task");
     ExtensionElements extensionElements = userTask.getExtensionElements();
-    Collection<CamundaTaskListener> taskListeners = extensionElements.getChildElementsByType(CamundaTaskListener.class);
+    Collection<OrqueioTaskListener> taskListeners = extensionElements.getChildElementsByType(OrqueioTaskListener.class);
     assertThat(taskListeners).hasSize(1);
 
-    CamundaTaskListener taskListener = taskListeners.iterator().next();
-    assertThat(taskListener.getCamundaClass()).isEqualTo("aClass");
-    assertThat(taskListener.getCamundaEvent()).isEqualTo("timeout");
+    OrqueioTaskListener taskListener = taskListeners.iterator().next();
+    assertThat(taskListener.getOrqueioClass()).isEqualTo("aClass");
+    assertThat(taskListener.getOrqueioEvent()).isEqualTo("timeout");
 
     Collection<TimerEventDefinition> timeouts = taskListener.getTimeouts();
     assertThat(timeouts.size()).isEqualTo(1);
@@ -1940,22 +1940,22 @@ public class ProcessBuilderTest {
   }
 
   @Test
-  public void testCamundaTimeoutDurationTaskListenerByClass() {
+  public void testOrqueioTimeoutDurationTaskListenerByClass() {
     modelInstance = Bpmn.createProcess()
         .startEvent()
           .userTask("task")
-            .camundaTaskListenerClassTimeoutWithDuration("timeout-1", this.getClass(), "PT1H")
+            .orqueioTaskListenerClassTimeoutWithDuration("timeout-1", this.getClass(), "PT1H")
         .endEvent()
         .done();
 
     UserTask userTask = modelInstance.getModelElementById("task");
     ExtensionElements extensionElements = userTask.getExtensionElements();
-    Collection<CamundaTaskListener> taskListeners = extensionElements.getChildElementsByType(CamundaTaskListener.class);
+    Collection<OrqueioTaskListener> taskListeners = extensionElements.getChildElementsByType(OrqueioTaskListener.class);
     assertThat(taskListeners).hasSize(1);
 
-    CamundaTaskListener taskListener = taskListeners.iterator().next();
-    assertThat(taskListener.getCamundaClass()).isEqualTo(this.getClass().getName());
-    assertThat(taskListener.getCamundaEvent()).isEqualTo("timeout");
+    OrqueioTaskListener taskListener = taskListeners.iterator().next();
+    assertThat(taskListener.getOrqueioClass()).isEqualTo(this.getClass().getName());
+    assertThat(taskListener.getOrqueioEvent()).isEqualTo("timeout");
 
     Collection<TimerEventDefinition> timeouts = taskListener.getTimeouts();
     assertThat(timeouts.size()).isEqualTo(1);
@@ -1968,22 +1968,22 @@ public class ProcessBuilderTest {
   }
 
   @Test
-  public void testCamundaTimeoutCycleTaskListenerByClass() {
+  public void testOrqueioTimeoutCycleTaskListenerByClass() {
     modelInstance = Bpmn.createProcess()
         .startEvent()
           .userTask("task")
-            .camundaTaskListenerClassTimeoutWithCycle("timeout-1", this.getClass(), "R/PT1H")
+            .orqueioTaskListenerClassTimeoutWithCycle("timeout-1", this.getClass(), "R/PT1H")
         .endEvent()
         .done();
 
     UserTask userTask = modelInstance.getModelElementById("task");
     ExtensionElements extensionElements = userTask.getExtensionElements();
-    Collection<CamundaTaskListener> taskListeners = extensionElements.getChildElementsByType(CamundaTaskListener.class);
+    Collection<OrqueioTaskListener> taskListeners = extensionElements.getChildElementsByType(OrqueioTaskListener.class);
     assertThat(taskListeners).hasSize(1);
 
-    CamundaTaskListener taskListener = taskListeners.iterator().next();
-    assertThat(taskListener.getCamundaClass()).isEqualTo(this.getClass().getName());
-    assertThat(taskListener.getCamundaEvent()).isEqualTo("timeout");
+    OrqueioTaskListener taskListener = taskListeners.iterator().next();
+    assertThat(taskListener.getOrqueioClass()).isEqualTo(this.getClass().getName());
+    assertThat(taskListener.getOrqueioEvent()).isEqualTo("timeout");
 
     Collection<TimerEventDefinition> timeouts = taskListener.getTimeouts();
     assertThat(timeouts.size()).isEqualTo(1);
@@ -1996,22 +1996,22 @@ public class ProcessBuilderTest {
   }
 
   @Test
-  public void testCamundaTimeoutDateTaskListenerByClass() {
+  public void testOrqueioTimeoutDateTaskListenerByClass() {
     modelInstance = Bpmn.createProcess()
         .startEvent()
           .userTask("task")
-            .camundaTaskListenerClassTimeoutWithDate("timeout-1", this.getClass(), "2019-09-09T12:12:12")
+            .orqueioTaskListenerClassTimeoutWithDate("timeout-1", this.getClass(), "2019-09-09T12:12:12")
         .endEvent()
         .done();
 
     UserTask userTask = modelInstance.getModelElementById("task");
     ExtensionElements extensionElements = userTask.getExtensionElements();
-    Collection<CamundaTaskListener> taskListeners = extensionElements.getChildElementsByType(CamundaTaskListener.class);
+    Collection<OrqueioTaskListener> taskListeners = extensionElements.getChildElementsByType(OrqueioTaskListener.class);
     assertThat(taskListeners).hasSize(1);
 
-    CamundaTaskListener taskListener = taskListeners.iterator().next();
-    assertThat(taskListener.getCamundaClass()).isEqualTo(this.getClass().getName());
-    assertThat(taskListener.getCamundaEvent()).isEqualTo("timeout");
+    OrqueioTaskListener taskListener = taskListeners.iterator().next();
+    assertThat(taskListener.getOrqueioClass()).isEqualTo(this.getClass().getName());
+    assertThat(taskListener.getOrqueioEvent()).isEqualTo("timeout");
 
     Collection<TimerEventDefinition> timeouts = taskListener.getTimeouts();
     assertThat(timeouts.size()).isEqualTo(1);
@@ -2024,22 +2024,22 @@ public class ProcessBuilderTest {
   }
 
   @Test
-  public void testCamundaTimeoutCycleTaskListenerByExpression() {
+  public void testOrqueioTimeoutCycleTaskListenerByExpression() {
     modelInstance = Bpmn.createProcess()
         .startEvent()
           .userTask("task")
-            .camundaTaskListenerExpressionTimeoutWithCycle("timeout-1", "anExpression", "R/PT1H")
+            .orqueioTaskListenerExpressionTimeoutWithCycle("timeout-1", "anExpression", "R/PT1H")
         .endEvent()
         .done();
 
     UserTask userTask = modelInstance.getModelElementById("task");
     ExtensionElements extensionElements = userTask.getExtensionElements();
-    Collection<CamundaTaskListener> taskListeners = extensionElements.getChildElementsByType(CamundaTaskListener.class);
+    Collection<OrqueioTaskListener> taskListeners = extensionElements.getChildElementsByType(OrqueioTaskListener.class);
     assertThat(taskListeners).hasSize(1);
 
-    CamundaTaskListener taskListener = taskListeners.iterator().next();
-    assertThat(taskListener.getCamundaExpression()).isEqualTo("anExpression");
-    assertThat(taskListener.getCamundaEvent()).isEqualTo("timeout");
+    OrqueioTaskListener taskListener = taskListeners.iterator().next();
+    assertThat(taskListener.getOrqueioExpression()).isEqualTo("anExpression");
+    assertThat(taskListener.getOrqueioEvent()).isEqualTo("timeout");
 
     Collection<TimerEventDefinition> timeouts = taskListener.getTimeouts();
     assertThat(timeouts.size()).isEqualTo(1);
@@ -2052,22 +2052,22 @@ public class ProcessBuilderTest {
   }
 
   @Test
-  public void testCamundaTimeoutDateTaskListenerByExpression() {
+  public void testOrqueioTimeoutDateTaskListenerByExpression() {
     modelInstance = Bpmn.createProcess()
         .startEvent()
           .userTask("task")
-            .camundaTaskListenerExpressionTimeoutWithDate("timeout-1", "anExpression", "2019-09-09T12:12:12")
+            .orqueioTaskListenerExpressionTimeoutWithDate("timeout-1", "anExpression", "2019-09-09T12:12:12")
         .endEvent()
         .done();
 
     UserTask userTask = modelInstance.getModelElementById("task");
     ExtensionElements extensionElements = userTask.getExtensionElements();
-    Collection<CamundaTaskListener> taskListeners = extensionElements.getChildElementsByType(CamundaTaskListener.class);
+    Collection<OrqueioTaskListener> taskListeners = extensionElements.getChildElementsByType(OrqueioTaskListener.class);
     assertThat(taskListeners).hasSize(1);
 
-    CamundaTaskListener taskListener = taskListeners.iterator().next();
-    assertThat(taskListener.getCamundaExpression()).isEqualTo("anExpression");
-    assertThat(taskListener.getCamundaEvent()).isEqualTo("timeout");
+    OrqueioTaskListener taskListener = taskListeners.iterator().next();
+    assertThat(taskListener.getOrqueioExpression()).isEqualTo("anExpression");
+    assertThat(taskListener.getOrqueioEvent()).isEqualTo("timeout");
 
     Collection<TimerEventDefinition> timeouts = taskListener.getTimeouts();
     assertThat(timeouts.size()).isEqualTo(1);
@@ -2080,22 +2080,22 @@ public class ProcessBuilderTest {
   }
 
   @Test
-  public void testCamundaTimeoutDurationTaskListenerByExpression() {
+  public void testOrqueioTimeoutDurationTaskListenerByExpression() {
     modelInstance = Bpmn.createProcess()
         .startEvent()
           .userTask("task")
-            .camundaTaskListenerExpressionTimeoutWithDuration("timeout-1", "anExpression", "PT1H")
+            .orqueioTaskListenerExpressionTimeoutWithDuration("timeout-1", "anExpression", "PT1H")
         .endEvent()
         .done();
 
     UserTask userTask = modelInstance.getModelElementById("task");
     ExtensionElements extensionElements = userTask.getExtensionElements();
-    Collection<CamundaTaskListener> taskListeners = extensionElements.getChildElementsByType(CamundaTaskListener.class);
+    Collection<OrqueioTaskListener> taskListeners = extensionElements.getChildElementsByType(OrqueioTaskListener.class);
     assertThat(taskListeners).hasSize(1);
 
-    CamundaTaskListener taskListener = taskListeners.iterator().next();
-    assertThat(taskListener.getCamundaExpression()).isEqualTo("anExpression");
-    assertThat(taskListener.getCamundaEvent()).isEqualTo("timeout");
+    OrqueioTaskListener taskListener = taskListeners.iterator().next();
+    assertThat(taskListener.getOrqueioExpression()).isEqualTo("anExpression");
+    assertThat(taskListener.getOrqueioEvent()).isEqualTo("timeout");
 
     Collection<TimerEventDefinition> timeouts = taskListener.getTimeouts();
     assertThat(timeouts.size()).isEqualTo(1);
@@ -2108,22 +2108,22 @@ public class ProcessBuilderTest {
   }
 
   @Test
-  public void testCamundaTimeoutCycleTaskListenerByDelegateExpression() {
+  public void testOrqueioTimeoutCycleTaskListenerByDelegateExpression() {
     modelInstance = Bpmn.createProcess()
         .startEvent()
           .userTask("task")
-            .camundaTaskListenerDelegateExpressionTimeoutWithCycle("timeout-1", "aDelegate", "R/PT1H")
+            .orqueioTaskListenerDelegateExpressionTimeoutWithCycle("timeout-1", "aDelegate", "R/PT1H")
         .endEvent()
         .done();
 
     UserTask userTask = modelInstance.getModelElementById("task");
     ExtensionElements extensionElements = userTask.getExtensionElements();
-    Collection<CamundaTaskListener> taskListeners = extensionElements.getChildElementsByType(CamundaTaskListener.class);
+    Collection<OrqueioTaskListener> taskListeners = extensionElements.getChildElementsByType(OrqueioTaskListener.class);
     assertThat(taskListeners).hasSize(1);
 
-    CamundaTaskListener taskListener = taskListeners.iterator().next();
-    assertThat(taskListener.getCamundaDelegateExpression()).isEqualTo("aDelegate");
-    assertThat(taskListener.getCamundaEvent()).isEqualTo("timeout");
+    OrqueioTaskListener taskListener = taskListeners.iterator().next();
+    assertThat(taskListener.getOrqueioDelegateExpression()).isEqualTo("aDelegate");
+    assertThat(taskListener.getOrqueioEvent()).isEqualTo("timeout");
 
     Collection<TimerEventDefinition> timeouts = taskListener.getTimeouts();
     assertThat(timeouts.size()).isEqualTo(1);
@@ -2136,22 +2136,22 @@ public class ProcessBuilderTest {
   }
 
   @Test
-  public void testCamundaTimeoutDateTaskListenerByDelegateExpression() {
+  public void testOrqueioTimeoutDateTaskListenerByDelegateExpression() {
     modelInstance = Bpmn.createProcess()
         .startEvent()
           .userTask("task")
-            .camundaTaskListenerDelegateExpressionTimeoutWithDate("timeout-1", "aDelegate", "2019-09-09T12:12:12")
+            .orqueioTaskListenerDelegateExpressionTimeoutWithDate("timeout-1", "aDelegate", "2019-09-09T12:12:12")
         .endEvent()
         .done();
 
     UserTask userTask = modelInstance.getModelElementById("task");
     ExtensionElements extensionElements = userTask.getExtensionElements();
-    Collection<CamundaTaskListener> taskListeners = extensionElements.getChildElementsByType(CamundaTaskListener.class);
+    Collection<OrqueioTaskListener> taskListeners = extensionElements.getChildElementsByType(OrqueioTaskListener.class);
     assertThat(taskListeners).hasSize(1);
 
-    CamundaTaskListener taskListener = taskListeners.iterator().next();
-    assertThat(taskListener.getCamundaDelegateExpression()).isEqualTo("aDelegate");
-    assertThat(taskListener.getCamundaEvent()).isEqualTo("timeout");
+    OrqueioTaskListener taskListener = taskListeners.iterator().next();
+    assertThat(taskListener.getOrqueioDelegateExpression()).isEqualTo("aDelegate");
+    assertThat(taskListener.getOrqueioEvent()).isEqualTo("timeout");
 
     Collection<TimerEventDefinition> timeouts = taskListener.getTimeouts();
     assertThat(timeouts.size()).isEqualTo(1);
@@ -2164,22 +2164,22 @@ public class ProcessBuilderTest {
   }
 
   @Test
-  public void testCamundaTimeoutDurationTaskListenerByDelegateExpression() {
+  public void testOrqueioTimeoutDurationTaskListenerByDelegateExpression() {
     modelInstance = Bpmn.createProcess()
         .startEvent()
           .userTask("task")
-            .camundaTaskListenerDelegateExpressionTimeoutWithDuration("timeout-1", "aDelegate", "PT1H")
+            .orqueioTaskListenerDelegateExpressionTimeoutWithDuration("timeout-1", "aDelegate", "PT1H")
         .endEvent()
         .done();
 
     UserTask userTask = modelInstance.getModelElementById("task");
     ExtensionElements extensionElements = userTask.getExtensionElements();
-    Collection<CamundaTaskListener> taskListeners = extensionElements.getChildElementsByType(CamundaTaskListener.class);
+    Collection<OrqueioTaskListener> taskListeners = extensionElements.getChildElementsByType(OrqueioTaskListener.class);
     assertThat(taskListeners).hasSize(1);
 
-    CamundaTaskListener taskListener = taskListeners.iterator().next();
-    assertThat(taskListener.getCamundaDelegateExpression()).isEqualTo("aDelegate");
-    assertThat(taskListener.getCamundaEvent()).isEqualTo("timeout");
+    OrqueioTaskListener taskListener = taskListeners.iterator().next();
+    assertThat(taskListener.getOrqueioDelegateExpression()).isEqualTo("aDelegate");
+    assertThat(taskListener.getOrqueioEvent()).isEqualTo("timeout");
 
     Collection<TimerEventDefinition> timeouts = taskListener.getTimeouts();
     assertThat(timeouts.size()).isEqualTo(1);
@@ -2192,79 +2192,79 @@ public class ProcessBuilderTest {
   }
 
   @Test
-  public void testCamundaExecutionListenerByClassName() {
+  public void testOrqueioExecutionListenerByClassName() {
     modelInstance = Bpmn.createProcess()
       .startEvent()
       .userTask("task")
-      .camundaExecutionListenerClass("start", "aClass")
+      .orqueioExecutionListenerClass("start", "aClass")
       .endEvent()
       .done();
 
     UserTask userTask = modelInstance.getModelElementById("task");
     ExtensionElements extensionElements = userTask.getExtensionElements();
-    Collection<CamundaExecutionListener> executionListeners = extensionElements.getChildElementsByType(CamundaExecutionListener.class);
+    Collection<OrqueioExecutionListener> executionListeners = extensionElements.getChildElementsByType(OrqueioExecutionListener.class);
     assertThat(executionListeners).hasSize(1);
 
-    CamundaExecutionListener executionListener = executionListeners.iterator().next();
-    assertThat(executionListener.getCamundaClass()).isEqualTo("aClass");
-    assertThat(executionListener.getCamundaEvent()).isEqualTo("start");
+    OrqueioExecutionListener executionListener = executionListeners.iterator().next();
+    assertThat(executionListener.getOrqueioClass()).isEqualTo("aClass");
+    assertThat(executionListener.getOrqueioEvent()).isEqualTo("start");
   }
 
   @Test
-  public void testCamundaExecutionListenerByClass() {
+  public void testOrqueioExecutionListenerByClass() {
     modelInstance = Bpmn.createProcess()
       .startEvent()
       .userTask("task")
-      .camundaExecutionListenerClass("start", this.getClass())
+      .orqueioExecutionListenerClass("start", this.getClass())
       .endEvent()
       .done();
 
     UserTask userTask = modelInstance.getModelElementById("task");
     ExtensionElements extensionElements = userTask.getExtensionElements();
-    Collection<CamundaExecutionListener> executionListeners = extensionElements.getChildElementsByType(CamundaExecutionListener.class);
+    Collection<OrqueioExecutionListener> executionListeners = extensionElements.getChildElementsByType(OrqueioExecutionListener.class);
     assertThat(executionListeners).hasSize(1);
 
-    CamundaExecutionListener executionListener = executionListeners.iterator().next();
-    assertThat(executionListener.getCamundaClass()).isEqualTo(this.getClass().getName());
-    assertThat(executionListener.getCamundaEvent()).isEqualTo("start");
+    OrqueioExecutionListener executionListener = executionListeners.iterator().next();
+    assertThat(executionListener.getOrqueioClass()).isEqualTo(this.getClass().getName());
+    assertThat(executionListener.getOrqueioEvent()).isEqualTo("start");
   }
 
   @Test
-  public void testCamundaExecutionListenerByExpression() {
+  public void testOrqueioExecutionListenerByExpression() {
     modelInstance = Bpmn.createProcess()
       .startEvent()
       .userTask("task")
-      .camundaExecutionListenerExpression("start", "anExpression")
+      .orqueioExecutionListenerExpression("start", "anExpression")
       .endEvent()
       .done();
 
     UserTask userTask = modelInstance.getModelElementById("task");
     ExtensionElements extensionElements = userTask.getExtensionElements();
-    Collection<CamundaExecutionListener> executionListeners = extensionElements.getChildElementsByType(CamundaExecutionListener.class);
+    Collection<OrqueioExecutionListener> executionListeners = extensionElements.getChildElementsByType(OrqueioExecutionListener.class);
     assertThat(executionListeners).hasSize(1);
 
-    CamundaExecutionListener executionListener = executionListeners.iterator().next();
-    assertThat(executionListener.getCamundaExpression()).isEqualTo("anExpression");
-    assertThat(executionListener.getCamundaEvent()).isEqualTo("start");
+    OrqueioExecutionListener executionListener = executionListeners.iterator().next();
+    assertThat(executionListener.getOrqueioExpression()).isEqualTo("anExpression");
+    assertThat(executionListener.getOrqueioEvent()).isEqualTo("start");
   }
 
   @Test
-  public void testCamundaExecutionListenerByDelegateExpression() {
+  public void testOrqueioExecutionListenerByDelegateExpression() {
     modelInstance = Bpmn.createProcess()
       .startEvent()
       .userTask("task")
-      .camundaExecutionListenerDelegateExpression("start", "aDelegateExpression")
+      .orqueioExecutionListenerDelegateExpression("start", "aDelegateExpression")
       .endEvent()
       .done();
 
     UserTask userTask = modelInstance.getModelElementById("task");
     ExtensionElements extensionElements = userTask.getExtensionElements();
-    Collection<CamundaExecutionListener> executionListeners = extensionElements.getChildElementsByType(CamundaExecutionListener.class);
+    Collection<OrqueioExecutionListener> executionListeners = extensionElements.getChildElementsByType(OrqueioExecutionListener.class);
     assertThat(executionListeners).hasSize(1);
 
-    CamundaExecutionListener executionListener = executionListeners.iterator().next();
-    assertThat(executionListener.getCamundaDelegateExpression()).isEqualTo("aDelegateExpression");
-    assertThat(executionListener.getCamundaEvent()).isEqualTo("start");
+    OrqueioExecutionListener executionListener = executionListeners.iterator().next();
+    assertThat(executionListener.getOrqueioDelegateExpression()).isEqualTo("aDelegateExpression");
+    assertThat(executionListener.getOrqueioEvent()).isEqualTo("start");
   }
 
   @Test
@@ -2276,8 +2276,8 @@ public class ProcessBuilderTest {
           .sequential()
           .cardinality("card")
           .completionCondition("compl")
-          .camundaCollection("coll")
-          .camundaElementVariable("element")
+          .orqueioCollection("coll")
+          .orqueioElementVariable("element")
         .multiInstanceDone()
       .endEvent()
       .done();
@@ -2292,8 +2292,8 @@ public class ProcessBuilderTest {
     assertThat(miCharacteristic.isSequential()).isTrue();
     assertThat(miCharacteristic.getLoopCardinality().getTextContent()).isEqualTo("card");
     assertThat(miCharacteristic.getCompletionCondition().getTextContent()).isEqualTo("compl");
-    assertThat(miCharacteristic.getCamundaCollection()).isEqualTo("coll");
-    assertThat(miCharacteristic.getCamundaElementVariable()).isEqualTo("element");
+    assertThat(miCharacteristic.getOrqueioCollection()).isEqualTo("coll");
+    assertThat(miCharacteristic.getOrqueioElementVariable()).isEqualTo("element");
 
   }
 
@@ -2319,19 +2319,19 @@ public class ProcessBuilderTest {
   }
 
   @Test
-  public void testTaskWithCamundaInputOutput() {
+  public void testTaskWithOrqueioInputOutput() {
     modelInstance = Bpmn.createProcess()
       .startEvent()
       .userTask("task")
-        .camundaInputParameter("foo", "bar")
-        .camundaInputParameter("yoo", "hoo")
-        .camundaOutputParameter("one", "two")
-        .camundaOutputParameter("three", "four")
+        .orqueioInputParameter("foo", "bar")
+        .orqueioInputParameter("yoo", "hoo")
+        .orqueioOutputParameter("one", "two")
+        .orqueioOutputParameter("three", "four")
       .endEvent()
       .done();
 
     UserTask task = modelInstance.getModelElementById("task");
-    assertCamundaInputOutputParameter(task);
+    assertOrqueioInputOutputParameter(task);
   }
 
   @Test
@@ -2340,7 +2340,7 @@ public class ProcessBuilderTest {
             .startEvent()
             .userTask("task")
             .multiInstance()
-            .camundaAsyncBefore()
+            .orqueioAsyncBefore()
             .parallel()
             .multiInstanceDone()
             .endEvent()
@@ -2354,8 +2354,8 @@ public class ProcessBuilderTest {
 
     MultiInstanceLoopCharacteristics miCharacteristic = miCharacteristics.iterator().next();
     assertThat(miCharacteristic.isSequential()).isFalse();
-    assertThat(miCharacteristic.isCamundaAsyncAfter()).isFalse();
-    assertThat(miCharacteristic.isCamundaAsyncBefore()).isTrue();
+    assertThat(miCharacteristic.isOrqueioAsyncAfter()).isFalse();
+    assertThat(miCharacteristic.isOrqueioAsyncBefore()).isTrue();
   }
 
   @Test
@@ -2364,7 +2364,7 @@ public class ProcessBuilderTest {
             .startEvent()
             .userTask("task")
             .multiInstance()
-            .camundaAsyncAfter()
+            .orqueioAsyncAfter()
             .parallel()
             .multiInstanceDone()
             .endEvent()
@@ -2378,55 +2378,55 @@ public class ProcessBuilderTest {
 
     MultiInstanceLoopCharacteristics miCharacteristic = miCharacteristics.iterator().next();
     assertThat(miCharacteristic.isSequential()).isFalse();
-    assertThat(miCharacteristic.isCamundaAsyncAfter()).isTrue();
-    assertThat(miCharacteristic.isCamundaAsyncBefore()).isFalse();
+    assertThat(miCharacteristic.isOrqueioAsyncAfter()).isTrue();
+    assertThat(miCharacteristic.isOrqueioAsyncBefore()).isFalse();
   }
 
   @Test
-  public void testTaskWithCamundaInputOutputWithExistingExtensionElements() {
+  public void testTaskWithOrqueioInputOutputWithExistingExtensionElements() {
     modelInstance = Bpmn.createProcess()
       .startEvent()
       .userTask("task")
-        .camundaExecutionListenerExpression("end", "${true}")
-        .camundaInputParameter("foo", "bar")
-        .camundaInputParameter("yoo", "hoo")
-        .camundaOutputParameter("one", "two")
-        .camundaOutputParameter("three", "four")
+        .orqueioExecutionListenerExpression("end", "${true}")
+        .orqueioInputParameter("foo", "bar")
+        .orqueioInputParameter("yoo", "hoo")
+        .orqueioOutputParameter("one", "two")
+        .orqueioOutputParameter("three", "four")
       .endEvent()
       .done();
 
     UserTask task = modelInstance.getModelElementById("task");
-    assertCamundaInputOutputParameter(task);
+    assertOrqueioInputOutputParameter(task);
   }
 
   @Test
-  public void testTaskWithCamundaInputOutputWithExistingCamundaInputOutput() {
+  public void testTaskWithOrqueioInputOutputWithExistingOrqueioInputOutput() {
     modelInstance = Bpmn.createProcess()
       .startEvent()
       .userTask("task")
-        .camundaInputParameter("foo", "bar")
-        .camundaOutputParameter("one", "two")
+        .orqueioInputParameter("foo", "bar")
+        .orqueioOutputParameter("one", "two")
       .endEvent()
       .done();
 
     UserTask task = modelInstance.getModelElementById("task");
 
     task.builder()
-      .camundaInputParameter("yoo", "hoo")
-      .camundaOutputParameter("three", "four");
+      .orqueioInputParameter("yoo", "hoo")
+      .orqueioOutputParameter("three", "four");
 
-    assertCamundaInputOutputParameter(task);
+    assertOrqueioInputOutputParameter(task);
   }
 
   @Test
-  public void testSubProcessWithCamundaInputOutput() {
+  public void testSubProcessWithOrqueioInputOutput() {
     modelInstance = Bpmn.createProcess()
       .startEvent()
       .subProcess("subProcess")
-        .camundaInputParameter("foo", "bar")
-        .camundaInputParameter("yoo", "hoo")
-        .camundaOutputParameter("one", "two")
-        .camundaOutputParameter("three", "four")
+        .orqueioInputParameter("foo", "bar")
+        .orqueioInputParameter("yoo", "hoo")
+        .orqueioOutputParameter("one", "two")
+        .orqueioOutputParameter("three", "four")
         .embeddedSubProcess()
           .startEvent()
           .endEvent()
@@ -2435,19 +2435,19 @@ public class ProcessBuilderTest {
       .done();
 
     SubProcess subProcess = modelInstance.getModelElementById("subProcess");
-    assertCamundaInputOutputParameter(subProcess);
+    assertOrqueioInputOutputParameter(subProcess);
   }
 
   @Test
-  public void testSubProcessWithCamundaInputOutputWithExistingExtensionElements() {
+  public void testSubProcessWithOrqueioInputOutputWithExistingExtensionElements() {
     modelInstance = Bpmn.createProcess()
       .startEvent()
       .subProcess("subProcess")
-        .camundaExecutionListenerExpression("end", "${true}")
-        .camundaInputParameter("foo", "bar")
-        .camundaInputParameter("yoo", "hoo")
-        .camundaOutputParameter("one", "two")
-        .camundaOutputParameter("three", "four")
+        .orqueioExecutionListenerExpression("end", "${true}")
+        .orqueioInputParameter("foo", "bar")
+        .orqueioInputParameter("yoo", "hoo")
+        .orqueioOutputParameter("one", "two")
+        .orqueioOutputParameter("three", "four")
         .embeddedSubProcess()
           .startEvent()
           .endEvent()
@@ -2456,16 +2456,16 @@ public class ProcessBuilderTest {
       .done();
 
     SubProcess subProcess = modelInstance.getModelElementById("subProcess");
-    assertCamundaInputOutputParameter(subProcess);
+    assertOrqueioInputOutputParameter(subProcess);
   }
 
   @Test
-  public void testSubProcessWithCamundaInputOutputWithExistingCamundaInputOutput() {
+  public void testSubProcessWithOrqueioInputOutputWithExistingOrqueioInputOutput() {
     modelInstance = Bpmn.createProcess()
       .startEvent()
       .subProcess("subProcess")
-        .camundaInputParameter("foo", "bar")
-        .camundaOutputParameter("one", "two")
+        .orqueioInputParameter("foo", "bar")
+        .orqueioOutputParameter("one", "two")
         .embeddedSubProcess()
           .startEvent()
           .endEvent()
@@ -2476,10 +2476,10 @@ public class ProcessBuilderTest {
     SubProcess subProcess = modelInstance.getModelElementById("subProcess");
 
     subProcess.builder()
-      .camundaInputParameter("yoo", "hoo")
-      .camundaOutputParameter("three", "four");
+      .orqueioInputParameter("yoo", "hoo")
+      .orqueioOutputParameter("three", "four");
 
-    assertCamundaInputOutputParameter(subProcess);
+    assertOrqueioInputOutputParameter(subProcess);
   }
 
   @Test
@@ -3029,111 +3029,111 @@ public class ProcessBuilderTest {
   }
 
   @Test
-  public void testUserTaskCamundaFormField() {
+  public void testUserTaskOrqueioFormField() {
     modelInstance = Bpmn.createProcess()
       .startEvent()
       .userTask(TASK_ID)
-        .camundaFormField()
-          .camundaId("myFormField_1")
-          .camundaLabel("Form Field One")
-          .camundaType("string")
-          .camundaDefaultValue("myDefaultVal_1")
-         .camundaFormFieldDone()
-        .camundaFormField()
-          .camundaId("myFormField_2")
-          .camundaLabel("Form Field Two")
-          .camundaType("integer")
-          .camundaDefaultValue("myDefaultVal_2")
-         .camundaFormFieldDone()
+        .orqueioFormField()
+          .orqueioId("myFormField_1")
+          .orqueioLabel("Form Field One")
+          .orqueioType("string")
+          .orqueioDefaultValue("myDefaultVal_1")
+         .orqueioFormFieldDone()
+        .orqueioFormField()
+          .orqueioId("myFormField_2")
+          .orqueioLabel("Form Field Two")
+          .orqueioType("integer")
+          .orqueioDefaultValue("myDefaultVal_2")
+         .orqueioFormFieldDone()
       .endEvent()
       .done();
 
     UserTask userTask = modelInstance.getModelElementById(TASK_ID);
-    assertCamundaFormField(userTask);
+    assertOrqueioFormField(userTask);
   }
 
   @Test
-  public void testUserTaskCamundaFormFieldWithExistingCamundaFormData() {
+  public void testUserTaskOrqueioFormFieldWithExistingOrqueioFormData() {
     modelInstance = Bpmn.createProcess()
       .startEvent()
       .userTask(TASK_ID)
-        .camundaFormField()
-          .camundaId("myFormField_1")
-          .camundaLabel("Form Field One")
-          .camundaType("string")
-          .camundaDefaultValue("myDefaultVal_1")
-         .camundaFormFieldDone()
+        .orqueioFormField()
+          .orqueioId("myFormField_1")
+          .orqueioLabel("Form Field One")
+          .orqueioType("string")
+          .orqueioDefaultValue("myDefaultVal_1")
+         .orqueioFormFieldDone()
       .endEvent()
       .done();
 
     UserTask userTask = modelInstance.getModelElementById(TASK_ID);
 
     userTask.builder()
-      .camundaFormField()
-        .camundaId("myFormField_2")
-        .camundaLabel("Form Field Two")
-        .camundaType("integer")
-        .camundaDefaultValue("myDefaultVal_2")
-       .camundaFormFieldDone();
+      .orqueioFormField()
+        .orqueioId("myFormField_2")
+        .orqueioLabel("Form Field Two")
+        .orqueioType("integer")
+        .orqueioDefaultValue("myDefaultVal_2")
+       .orqueioFormFieldDone();
 
-    assertCamundaFormField(userTask);
+    assertOrqueioFormField(userTask);
   }
 
   @Test
-  public void testStartEventCamundaFormField() {
+  public void testStartEventOrqueioFormField() {
     modelInstance = Bpmn.createProcess()
       .startEvent(START_EVENT_ID)
-        .camundaFormField()
-          .camundaId("myFormField_1")
-          .camundaLabel("Form Field One")
-          .camundaType("string")
-          .camundaDefaultValue("myDefaultVal_1")
-         .camundaFormFieldDone()
-         .camundaFormField()
-         .camundaId("myFormField_2")
-          .camundaLabel("Form Field Two")
-          .camundaType("integer")
-          .camundaDefaultValue("myDefaultVal_2")
-         .camundaFormFieldDone()
+        .orqueioFormField()
+          .orqueioId("myFormField_1")
+          .orqueioLabel("Form Field One")
+          .orqueioType("string")
+          .orqueioDefaultValue("myDefaultVal_1")
+         .orqueioFormFieldDone()
+         .orqueioFormField()
+         .orqueioId("myFormField_2")
+          .orqueioLabel("Form Field Two")
+          .orqueioType("integer")
+          .orqueioDefaultValue("myDefaultVal_2")
+         .orqueioFormFieldDone()
       .endEvent()
       .done();
 
     StartEvent startEvent = modelInstance.getModelElementById(START_EVENT_ID);
-    assertCamundaFormField(startEvent);
+    assertOrqueioFormField(startEvent);
   }
 
   @Test
-  public void testUserTaskCamundaFormRef() {
+  public void testUserTaskOrqueioFormRef() {
     modelInstance = Bpmn.createProcess()
       .startEvent()
       .userTask(TASK_ID)
-        .camundaFormRef(FORM_ID)
-        .camundaFormRefBinding(TEST_STRING_FORM_REF_BINDING)
-        .camundaFormRefVersion(TEST_STRING_FORM_REF_VERSION)
+        .orqueioFormRef(FORM_ID)
+        .orqueioFormRefBinding(TEST_STRING_FORM_REF_BINDING)
+        .orqueioFormRefVersion(TEST_STRING_FORM_REF_VERSION)
       .endEvent()
       .done();
 
     UserTask userTask = modelInstance.getModelElementById(TASK_ID);
-    assertThat(userTask.getCamundaFormRef()).isEqualTo(FORM_ID);
-    assertThat(userTask.getCamundaFormRefBinding()).isEqualTo(TEST_STRING_FORM_REF_BINDING);
-    assertThat(userTask.getCamundaFormRefVersion()).isEqualTo(TEST_STRING_FORM_REF_VERSION);
+    assertThat(userTask.getOrqueioFormRef()).isEqualTo(FORM_ID);
+    assertThat(userTask.getOrqueioFormRefBinding()).isEqualTo(TEST_STRING_FORM_REF_BINDING);
+    assertThat(userTask.getOrqueioFormRefVersion()).isEqualTo(TEST_STRING_FORM_REF_VERSION);
   }
 
   @Test
-  public void testStartEventCamundaFormRef() {
+  public void testStartEventOrqueioFormRef() {
     modelInstance = Bpmn.createProcess()
         .startEvent(START_EVENT_ID)
-          .camundaFormRef(FORM_ID)
-          .camundaFormRefBinding(TEST_STRING_FORM_REF_BINDING)
-          .camundaFormRefVersion(TEST_STRING_FORM_REF_VERSION)
+          .orqueioFormRef(FORM_ID)
+          .orqueioFormRefBinding(TEST_STRING_FORM_REF_BINDING)
+          .orqueioFormRefVersion(TEST_STRING_FORM_REF_VERSION)
         .userTask()
         .endEvent()
         .done();
 
     StartEvent startEvent = modelInstance.getModelElementById(START_EVENT_ID);
-    assertThat(startEvent.getCamundaFormRef()).isEqualTo(FORM_ID);
-    assertThat(startEvent.getCamundaFormRefBinding()).isEqualTo(TEST_STRING_FORM_REF_BINDING);
-    assertThat(startEvent.getCamundaFormRefVersion()).isEqualTo(TEST_STRING_FORM_REF_VERSION);
+    assertThat(startEvent.getOrqueioFormRef()).isEqualTo(FORM_ID);
+    assertThat(startEvent.getOrqueioFormRefBinding()).isEqualTo(TEST_STRING_FORM_REF_BINDING);
+    assertThat(startEvent.getOrqueioFormRefVersion()).isEqualTo(TEST_STRING_FORM_REF_VERSION);
   }
 
   @Test
@@ -3295,23 +3295,23 @@ public class ProcessBuilderTest {
   }
 
   @Test
-  public void testConditionalEventDefinitionCamundaExtensions() {
+  public void testConditionalEventDefinitionOrqueioExtensions() {
     modelInstance = Bpmn.createProcess()
       .startEvent()
       .intermediateCatchEvent()
       .conditionalEventDefinition(CONDITION_ID)
         .condition(TEST_CONDITION)
-        .camundaVariableEvents(TEST_CONDITIONAL_VARIABLE_EVENTS)
-        .camundaVariableEvents(TEST_CONDITIONAL_VARIABLE_EVENTS_LIST)
-        .camundaVariableName(TEST_CONDITIONAL_VARIABLE_NAME)
+        .orqueioVariableEvents(TEST_CONDITIONAL_VARIABLE_EVENTS)
+        .orqueioVariableEvents(TEST_CONDITIONAL_VARIABLE_EVENTS_LIST)
+        .orqueioVariableName(TEST_CONDITIONAL_VARIABLE_NAME)
       .conditionalEventDefinitionDone()
       .endEvent()
       .done();
 
     ConditionalEventDefinition conditionalEventDef = modelInstance.getModelElementById(CONDITION_ID);
-    assertThat(conditionalEventDef.getCamundaVariableEvents()).isEqualTo(TEST_CONDITIONAL_VARIABLE_EVENTS);
-    assertThat(conditionalEventDef.getCamundaVariableEventsList()).containsAll(TEST_CONDITIONAL_VARIABLE_EVENTS_LIST);
-    assertThat(conditionalEventDef.getCamundaVariableName()).isEqualTo(TEST_CONDITIONAL_VARIABLE_NAME);
+    assertThat(conditionalEventDef.getOrqueioVariableEvents()).isEqualTo(TEST_CONDITIONAL_VARIABLE_EVENTS);
+    assertThat(conditionalEventDef.getOrqueioVariableEventsList()).containsAll(TEST_CONDITIONAL_VARIABLE_EVENTS_LIST);
+    assertThat(conditionalEventDef.getOrqueioVariableName()).isEqualTo(TEST_CONDITIONAL_VARIABLE_NAME);
   }
 
   @Test
@@ -3420,7 +3420,7 @@ public class ProcessBuilderTest {
     Error error = errorEventDefinition.getError();
     assertThat(error).isNotNull();
     assertThat(error.getErrorCode()).isEqualTo(errorCode);
-    assertThat(error.getCamundaErrorMessage()).isEqualTo(errorMessage);
+    assertThat(error.getOrqueioErrorMessage()).isEqualTo(errorMessage);
 
     return error;
   }
@@ -3429,10 +3429,10 @@ public class ProcessBuilderTest {
     ErrorEventDefinition errorEventDefinition = assertAndGetSingleEventDefinition(elementId, ErrorEventDefinition.class);
     assertThat(errorEventDefinition).isNotNull();
     if(errorCodeVariable != null) {
-      assertThat(errorEventDefinition.getCamundaErrorCodeVariable()).isEqualTo(errorCodeVariable);
+      assertThat(errorEventDefinition.getOrqueioErrorCodeVariable()).isEqualTo(errorCodeVariable);
     }
     if(errorMessageVariable != null) {
-      assertThat(errorEventDefinition.getCamundaErrorMessageVariable()).isEqualTo(errorMessageVariable);
+      assertThat(errorEventDefinition.getOrqueioErrorMessageVariable()).isEqualTo(errorMessageVariable);
     }
   }
 
@@ -3459,31 +3459,31 @@ public class ProcessBuilderTest {
     assertAndGetSingleEventDefinition(elementId, CompensateEventDefinition.class);
   }
 
-  protected void assertCamundaInputOutputParameter(BaseElement element) {
-    CamundaInputOutput camundaInputOutput = element.getExtensionElements().getElementsQuery().filterByType(CamundaInputOutput.class).singleResult();
-    assertThat(camundaInputOutput).isNotNull();
+  protected void assertOrqueioInputOutputParameter(BaseElement element) {
+    OrqueioInputOutput orqueioInputOutput = element.getExtensionElements().getElementsQuery().filterByType(OrqueioInputOutput.class).singleResult();
+    assertThat(orqueioInputOutput).isNotNull();
 
-    List<CamundaInputParameter> camundaInputParameters = new ArrayList<>(camundaInputOutput.getCamundaInputParameters());
-    assertThat(camundaInputParameters).hasSize(2);
+    List<OrqueioInputParameter> orqueioInputParameters = new ArrayList<>(orqueioInputOutput.getOrqueioInputParameters());
+    assertThat(orqueioInputParameters).hasSize(2);
 
-    CamundaInputParameter camundaInputParameter = camundaInputParameters.get(0);
-    assertThat(camundaInputParameter.getCamundaName()).isEqualTo("foo");
-    assertThat(camundaInputParameter.getTextContent()).isEqualTo("bar");
+    OrqueioInputParameter orqueioInputParameter = orqueioInputParameters.get(0);
+    assertThat(orqueioInputParameter.getOrqueioName()).isEqualTo("foo");
+    assertThat(orqueioInputParameter.getTextContent()).isEqualTo("bar");
 
-    camundaInputParameter = camundaInputParameters.get(1);
-    assertThat(camundaInputParameter.getCamundaName()).isEqualTo("yoo");
-    assertThat(camundaInputParameter.getTextContent()).isEqualTo("hoo");
+    orqueioInputParameter = orqueioInputParameters.get(1);
+    assertThat(orqueioInputParameter.getOrqueioName()).isEqualTo("yoo");
+    assertThat(orqueioInputParameter.getTextContent()).isEqualTo("hoo");
 
-    List<CamundaOutputParameter> camundaOutputParameters = new ArrayList<>(camundaInputOutput.getCamundaOutputParameters());
-    assertThat(camundaOutputParameters).hasSize(2);
+    List<OrqueioOutputParameter> orqueioOutputParameters = new ArrayList<>(orqueioInputOutput.getOrqueioOutputParameters());
+    assertThat(orqueioOutputParameters).hasSize(2);
 
-    CamundaOutputParameter camundaOutputParameter = camundaOutputParameters.get(0);
-    assertThat(camundaOutputParameter.getCamundaName()).isEqualTo("one");
-    assertThat(camundaOutputParameter.getTextContent()).isEqualTo("two");
+    OrqueioOutputParameter orqueioOutputParameter = orqueioOutputParameters.get(0);
+    assertThat(orqueioOutputParameter.getOrqueioName()).isEqualTo("one");
+    assertThat(orqueioOutputParameter.getTextContent()).isEqualTo("two");
 
-    camundaOutputParameter = camundaOutputParameters.get(1);
-    assertThat(camundaOutputParameter.getCamundaName()).isEqualTo("three");
-    assertThat(camundaOutputParameter.getTextContent()).isEqualTo("four");
+    orqueioOutputParameter = orqueioOutputParameters.get(1);
+    assertThat(orqueioOutputParameter.getOrqueioName()).isEqualTo("three");
+    assertThat(orqueioOutputParameter.getTextContent()).isEqualTo("four");
   }
 
   protected void assertTimerWithDate(String elementId, String timerDate) {
@@ -3521,35 +3521,35 @@ public class ProcessBuilderTest {
     return (T) eventDefinition;
   }
 
-  protected void assertCamundaFormField(BaseElement element) {
+  protected void assertOrqueioFormField(BaseElement element) {
     assertThat(element.getExtensionElements()).isNotNull();
 
-    CamundaFormData camundaFormData = element.getExtensionElements().getElementsQuery().filterByType(CamundaFormData.class).singleResult();
-    assertThat(camundaFormData).isNotNull();
+    OrqueioFormData orqueioFormData = element.getExtensionElements().getElementsQuery().filterByType(OrqueioFormData.class).singleResult();
+    assertThat(orqueioFormData).isNotNull();
 
-    List<CamundaFormField> camundaFormFields = new ArrayList<>(camundaFormData.getCamundaFormFields());
-    assertThat(camundaFormFields).hasSize(2);
+    List<OrqueioFormField> orqueioFormFields = new ArrayList<>(orqueioFormData.getOrqueioFormFields());
+    assertThat(orqueioFormFields).hasSize(2);
 
-    CamundaFormField camundaFormField = camundaFormFields.get(0);
-    assertThat(camundaFormField.getCamundaId()).isEqualTo("myFormField_1");
-    assertThat(camundaFormField.getCamundaLabel()).isEqualTo("Form Field One");
-    assertThat(camundaFormField.getCamundaType()).isEqualTo("string");
-    assertThat(camundaFormField.getCamundaDefaultValue()).isEqualTo("myDefaultVal_1");
+    OrqueioFormField orqueioFormField = orqueioFormFields.get(0);
+    assertThat(orqueioFormField.getOrqueioId()).isEqualTo("myFormField_1");
+    assertThat(orqueioFormField.getOrqueioLabel()).isEqualTo("Form Field One");
+    assertThat(orqueioFormField.getOrqueioType()).isEqualTo("string");
+    assertThat(orqueioFormField.getOrqueioDefaultValue()).isEqualTo("myDefaultVal_1");
 
-    camundaFormField = camundaFormFields.get(1);
-    assertThat(camundaFormField.getCamundaId()).isEqualTo("myFormField_2");
-    assertThat(camundaFormField.getCamundaLabel()).isEqualTo("Form Field Two");
-    assertThat(camundaFormField.getCamundaType()).isEqualTo("integer");
-    assertThat(camundaFormField.getCamundaDefaultValue()).isEqualTo("myDefaultVal_2");
+    orqueioFormField = orqueioFormFields.get(1);
+    assertThat(orqueioFormField.getOrqueioId()).isEqualTo("myFormField_2");
+    assertThat(orqueioFormField.getOrqueioLabel()).isEqualTo("Form Field Two");
+    assertThat(orqueioFormField.getOrqueioType()).isEqualTo("integer");
+    assertThat(orqueioFormField.getOrqueioDefaultValue()).isEqualTo("myDefaultVal_2");
 
   }
 
-  protected void assertCamundaFailedJobRetryTimeCycle(BaseElement element) {
+  protected void assertOrqueioFailedJobRetryTimeCycle(BaseElement element) {
     assertThat(element.getExtensionElements()).isNotNull();
 
-    CamundaFailedJobRetryTimeCycle camundaFailedJobRetryTimeCycle = element.getExtensionElements().getElementsQuery().filterByType(CamundaFailedJobRetryTimeCycle.class).singleResult();
-    assertThat(camundaFailedJobRetryTimeCycle).isNotNull();
-    assertThat(camundaFailedJobRetryTimeCycle.getTextContent()).isEqualTo(FAILED_JOB_RETRY_TIME_CYCLE);
+    OrqueioFailedJobRetryTimeCycle orqueioFailedJobRetryTimeCycle = element.getExtensionElements().getElementsQuery().filterByType(OrqueioFailedJobRetryTimeCycle.class).singleResult();
+    assertThat(orqueioFailedJobRetryTimeCycle).isNotNull();
+    assertThat(orqueioFailedJobRetryTimeCycle.getTextContent()).isEqualTo(FAILED_JOB_RETRY_TIME_CYCLE);
   }
 
   @Test

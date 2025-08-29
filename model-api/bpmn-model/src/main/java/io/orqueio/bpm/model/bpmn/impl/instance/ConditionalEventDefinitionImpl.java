@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright Toaddlaterccs and/or licensed to Toaddlaterccs
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. Toaddlaterccs this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -28,12 +28,12 @@ import io.orqueio.bpm.model.xml.type.child.SequenceBuilder;
 
 import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.BPMN20_NS;
 import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ELEMENT_CONDITIONAL_EVENT_DEFINITION;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_VARIABLE_NAME;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ATTRIBUTE_VARIABLE_NAME;
 import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_NS;
 import io.orqueio.bpm.model.xml.impl.util.StringUtil;
 import static io.orqueio.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import io.orqueio.bpm.model.xml.type.attribute.Attribute;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_VARIABLE_EVENTS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ATTRIBUTE_VARIABLE_EVENTS;
 
 /**
  * The BPMN conditionalEventDefinition element
@@ -43,8 +43,8 @@ import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUT
 public class ConditionalEventDefinitionImpl extends EventDefinitionImpl implements ConditionalEventDefinition {
 
   protected static ChildElement<Condition> conditionChild;
-  protected static Attribute<String> camundaVariableName;
-  protected static Attribute<String> camundaVariableEvents;
+  protected static Attribute<String> orqueioVariableName;
+  protected static Attribute<String> orqueioVariableEvents;
 
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(ConditionalEventDefinition.class, BPMN_ELEMENT_CONDITIONAL_EVENT_DEFINITION)
@@ -64,13 +64,13 @@ public class ConditionalEventDefinitionImpl extends EventDefinitionImpl implemen
       .required()
       .build();
 
-    /** camunda extensions */
+    /** orqueio extensions */
 
-    camundaVariableName = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_VARIABLE_NAME)
+    orqueioVariableName = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_VARIABLE_NAME)
       .namespace(ORQUEIO_NS)
       .build();
 
-    camundaVariableEvents = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_VARIABLE_EVENTS)
+    orqueioVariableEvents = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_VARIABLE_EVENTS)
       .namespace(ORQUEIO_NS)
       .build();
 
@@ -92,34 +92,34 @@ public class ConditionalEventDefinitionImpl extends EventDefinitionImpl implemen
   }
 
   @Override
-  public String getCamundaVariableName() {
-    return camundaVariableName.getValue(this);
+  public String getOrqueioVariableName() {
+    return orqueioVariableName.getValue(this);
   }
 
   @Override
-  public void setCamundaVariableName(String variableName) {
-    camundaVariableName.setValue(this, variableName);
+  public void setOrqueioVariableName(String variableName) {
+    orqueioVariableName.setValue(this, variableName);
   }
 
   @Override
-  public String getCamundaVariableEvents() {
-    return camundaVariableEvents.getValue(this);
+  public String getOrqueioVariableEvents() {
+    return orqueioVariableEvents.getValue(this);
   }
 
   @Override
-  public void setCamundaVariableEvents(String variableEvents) {
-    camundaVariableEvents.setValue(this, variableEvents);
+  public void setOrqueioVariableEvents(String variableEvents) {
+    orqueioVariableEvents.setValue(this, variableEvents);
   }
 
   @Override
-  public List<String> getCamundaVariableEventsList() {
-    String variableEvents = camundaVariableEvents.getValue(this);
+  public List<String> getOrqueioVariableEventsList() {
+    String variableEvents = orqueioVariableEvents.getValue(this);
     return StringUtil.splitCommaSeparatedList(variableEvents);
   }
 
   @Override
-  public void setCamundaVariableEventsList(List<String> variableEventsList) {
+  public void setOrqueioVariableEventsList(List<String> variableEventsList) {
     String variableEvents = StringUtil.joinCommaSeparatedList(variableEventsList);
-    camundaVariableEvents.setValue(this, variableEvents);
+    orqueioVariableEvents.setValue(this, variableEvents);
   }
 }

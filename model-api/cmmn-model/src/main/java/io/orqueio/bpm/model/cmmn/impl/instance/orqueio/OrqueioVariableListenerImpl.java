@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright Toaddlaterccs and/or licensed to Toaddlaterccs
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. Toaddlaterccs this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -16,11 +16,11 @@
  */
 package io.orqueio.bpm.model.cmmn.impl.instance.orqueio;
 
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_CLASS;
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_DELEGATE_EXPRESSION;
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_EVENT;
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_EXPRESSION;
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ELEMENT_VARIABLE_LISTENER;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ATTRIBUTE_CLASS;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ATTRIBUTE_DELEGATE_EXPRESSION;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ATTRIBUTE_EVENT;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ATTRIBUTE_EXPRESSION;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ELEMENT_VARIABLE_LISTENER;
 import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_NS;
 
 import java.util.Collection;
@@ -43,15 +43,15 @@ import io.orqueio.bpm.model.xml.type.child.SequenceBuilder;
  */
 public class OrqueioVariableListenerImpl extends CmmnModelElementInstanceImpl implements OrqueioVariableListener {
 
-  protected static Attribute<String> camundaEventAttribute;
-  protected static Attribute<String> camundaClassAttribute;
-  protected static Attribute<String> camundaExpressionAttribute;
-  protected static Attribute<String> camundaDelegateExpressionAttribute;
-  protected static ChildElementCollection<OrqueioField> camundaFieldCollection;
-  protected static ChildElement<OrqueioScript> camundaScriptChild;
+  protected static Attribute<String> orqueioEventAttribute;
+  protected static Attribute<String> orqueioClassAttribute;
+  protected static Attribute<String> orqueioExpressionAttribute;
+  protected static Attribute<String> orqueioDelegateExpressionAttribute;
+  protected static ChildElementCollection<OrqueioField> orqueioFieldCollection;
+  protected static ChildElement<OrqueioScript> orqueioScriptChild;
 
   public static void registerType(ModelBuilder modelBuilder) {
-    ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(OrqueioVariableListener.class, CAMUNDA_ELEMENT_VARIABLE_LISTENER)
+    ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(OrqueioVariableListener.class, ORQUEIO_ELEMENT_VARIABLE_LISTENER)
       .namespaceUri(ORQUEIO_NS)
       .instanceProvider(new ModelTypeInstanceProvider<OrqueioVariableListener>() {
         public OrqueioVariableListener newInstance(ModelTypeInstanceContext instanceContext) {
@@ -59,28 +59,28 @@ public class OrqueioVariableListenerImpl extends CmmnModelElementInstanceImpl im
         }
       });
 
-    camundaEventAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_EVENT)
+    orqueioEventAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_EVENT)
       .namespace(ORQUEIO_NS)
       .build();
 
-    camundaClassAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_CLASS)
+    orqueioClassAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_CLASS)
       .namespace(ORQUEIO_NS)
       .build();
 
-    camundaExpressionAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_EXPRESSION)
+    orqueioExpressionAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_EXPRESSION)
         .namespace(ORQUEIO_NS)
         .build();
 
-    camundaDelegateExpressionAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_DELEGATE_EXPRESSION)
+    orqueioDelegateExpressionAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_DELEGATE_EXPRESSION)
       .namespace(ORQUEIO_NS)
       .build();
 
     SequenceBuilder sequenceBuilder = typeBuilder.sequence();
 
-    camundaFieldCollection = sequenceBuilder.elementCollection(OrqueioField.class)
+    orqueioFieldCollection = sequenceBuilder.elementCollection(OrqueioField.class)
       .build();
 
-    camundaScriptChild = sequenceBuilder.element(OrqueioScript.class)
+    orqueioScriptChild = sequenceBuilder.element(OrqueioScript.class)
       .build();
 
     typeBuilder.build();
@@ -89,48 +89,48 @@ public class OrqueioVariableListenerImpl extends CmmnModelElementInstanceImpl im
   public OrqueioVariableListenerImpl(ModelTypeInstanceContext instanceContext) {
     super(instanceContext);
   }
-  public String getCamundaEvent() {
-    return camundaEventAttribute.getValue(this);
+  public String getOrqueioEvent() {
+    return orqueioEventAttribute.getValue(this);
   }
 
-  public void setCamundaEvent(String camundaEvent) {
-    camundaEventAttribute.setValue(this, camundaEvent);
+  public void setOrqueioEvent(String orqueioEvent) {
+    orqueioEventAttribute.setValue(this, orqueioEvent);
   }
 
-  public String getCamundaClass() {
-    return camundaClassAttribute.getValue(this);
+  public String getOrqueioClass() {
+    return orqueioClassAttribute.getValue(this);
   }
 
-  public void setCamundaClass(String camundaClass) {
-    camundaClassAttribute.setValue(this, camundaClass);
+  public void setOrqueioClass(String orqueioClass) {
+    orqueioClassAttribute.setValue(this, orqueioClass);
   }
 
-  public String getCamundaExpression() {
-    return camundaExpressionAttribute.getValue(this);
+  public String getOrqueioExpression() {
+    return orqueioExpressionAttribute.getValue(this);
   }
 
-  public void setCamundaExpression(String camundaExpression) {
-    camundaExpressionAttribute.setValue(this, camundaExpression);
+  public void setOrqueioExpression(String orqueioExpression) {
+    orqueioExpressionAttribute.setValue(this, orqueioExpression);
   }
 
-  public String getCamundaDelegateExpression() {
-    return camundaDelegateExpressionAttribute.getValue(this);
+  public String getOrqueioDelegateExpression() {
+    return orqueioDelegateExpressionAttribute.getValue(this);
   }
 
-  public void setCamundaDelegateExpression(String camundaDelegateExpression) {
-    camundaDelegateExpressionAttribute.setValue(this, camundaDelegateExpression);
+  public void setOrqueioDelegateExpression(String orqueioDelegateExpression) {
+    orqueioDelegateExpressionAttribute.setValue(this, orqueioDelegateExpression);
   }
 
-  public OrqueioScript getCamundaScript() {
-    return camundaScriptChild.getChild(this);
+  public OrqueioScript getOrqueioScript() {
+    return orqueioScriptChild.getChild(this);
   }
 
-  public void setCamundaScript(OrqueioScript orqueioScript) {
-    camundaScriptChild.setChild(this, orqueioScript);
+  public void setOrqueioScript(OrqueioScript orqueioScript) {
+    orqueioScriptChild.setChild(this, orqueioScript);
   }
 
-  public Collection<OrqueioField> getCamundaFields() {
-    return camundaFieldCollection.get(this);
+  public Collection<OrqueioField> getOrqueioFields() {
+    return orqueioFieldCollection.get(this);
   }
 
 }

@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright Toaddlaterccs and/or licensed to Toaddlaterccs
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. Toaddlaterccs this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -16,11 +16,11 @@
  */
 package io.orqueio.bpm.model.cmmn.impl.instance;
 
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_DECISION_BINDING;
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_DECISION_VERSION;
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_DECISION_TENANT_ID;
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_MAP_DECISION_RESULT;
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_RESULT_VARIABLE;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ATTRIBUTE_DECISION_BINDING;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ATTRIBUTE_DECISION_VERSION;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ATTRIBUTE_DECISION_TENANT_ID;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ATTRIBUTE_MAP_DECISION_RESULT;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ATTRIBUTE_RESULT_VARIABLE;
 import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_NS;
 import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CMMN11_NS;
 import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CMMN_ATTRIBUTE_DECISION_REF;
@@ -52,12 +52,12 @@ public class DecisionTaskImpl extends TaskImpl implements DecisionTask {
   protected static ChildElementCollection<ParameterMapping> parameterMappingCollection;
   protected static ChildElement<DecisionRefExpression> decisionRefExpressionChild;
 
-  /** Camunda extensions */
-  protected static Attribute<String> camundaResultVariableAttribute;
-  protected static Attribute<String> camundaDecisionBindingAttribute;
-  protected static Attribute<String> camundaDecisionVersionAttribute;
-  protected static Attribute<String> camundaDecisionTenantIdAttribute;
-  protected static Attribute<String> camundaMapDecisionResultAttribute;
+  /** Orqueio extensions */
+  protected static Attribute<String> orqueioResultVariableAttribute;
+  protected static Attribute<String> orqueioDecisionBindingAttribute;
+  protected static Attribute<String> orqueioDecisionVersionAttribute;
+  protected static Attribute<String> orqueioDecisionTenantIdAttribute;
+  protected static Attribute<String> orqueioMapDecisionResultAttribute;
 
   public DecisionTaskImpl(ModelTypeInstanceContext instanceContext) {
     super(instanceContext);
@@ -83,46 +83,46 @@ public class DecisionTaskImpl extends TaskImpl implements DecisionTask {
     decisionRefExpressionChild.setChild(this, decisionExpression);
   }
 
-  public String getCamundaResultVariable() {
-    return camundaResultVariableAttribute.getValue(this);
+  public String getOrqueioResultVariable() {
+    return orqueioResultVariableAttribute.getValue(this);
   }
 
-  public void setCamundaResultVariable(String camundaResultVariable) {
-    camundaResultVariableAttribute.setValue(this, camundaResultVariable);
+  public void setOrqueioResultVariable(String orqueioResultVariable) {
+    orqueioResultVariableAttribute.setValue(this, orqueioResultVariable);
   }
 
-  public String getCamundaDecisionBinding() {
-    return camundaDecisionBindingAttribute.getValue(this);
+  public String getOrqueioDecisionBinding() {
+    return orqueioDecisionBindingAttribute.getValue(this);
   }
 
-  public void setCamundaDecisionBinding(String camundaDecisionBinding) {
-    camundaDecisionBindingAttribute.setValue(this, camundaDecisionBinding);
+  public void setOrqueioDecisionBinding(String orqueioDecisionBinding) {
+    orqueioDecisionBindingAttribute.setValue(this, orqueioDecisionBinding);
   }
 
-  public String getCamundaDecisionVersion() {
-    return camundaDecisionVersionAttribute.getValue(this);
+  public String getOrqueioDecisionVersion() {
+    return orqueioDecisionVersionAttribute.getValue(this);
   }
 
-  public void setCamundaDecisionVersion(String camundaDecisionVersion) {
-    camundaDecisionVersionAttribute.setValue(this, camundaDecisionVersion);
+  public void setOrqueioDecisionVersion(String orqueioDecisionVersion) {
+    orqueioDecisionVersionAttribute.setValue(this, orqueioDecisionVersion);
   }
 
-  public String getCamundaDecisionTenantId() {
-    return camundaDecisionTenantIdAttribute.getValue(this);
+  public String getOrqueioDecisionTenantId() {
+    return orqueioDecisionTenantIdAttribute.getValue(this);
   }
 
-  public void setCamundaDecisionTenantId(String camundaDecisionTenantId) {
-    camundaDecisionTenantIdAttribute.setValue(this, camundaDecisionTenantId);
-  }
-
-  @Override
-  public String getCamundaMapDecisionResult() {
-    return camundaMapDecisionResultAttribute.getValue(this);
+  public void setOrqueioDecisionTenantId(String orqueioDecisionTenantId) {
+    orqueioDecisionTenantIdAttribute.setValue(this, orqueioDecisionTenantId);
   }
 
   @Override
-  public void setCamundaMapDecisionResult(String camundaMapDecisionResult) {
-    camundaMapDecisionResultAttribute.setValue(this, camundaMapDecisionResult);
+  public String getOrqueioMapDecisionResult() {
+    return orqueioMapDecisionResultAttribute.getValue(this);
+  }
+
+  @Override
+  public void setOrqueioMapDecisionResult(String orqueioMapDecisionResult) {
+    orqueioMapDecisionResultAttribute.setValue(this, orqueioMapDecisionResult);
   }
 
   public static void registerType(ModelBuilder modelBuilder) {
@@ -138,25 +138,25 @@ public class DecisionTaskImpl extends TaskImpl implements DecisionTask {
     decisionRefAttribute = typeBuilder.stringAttribute(CMMN_ATTRIBUTE_DECISION_REF)
         .build();
 
-    /** Camunda extensions */
+    /** Orqueio extensions */
 
-    camundaResultVariableAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_RESULT_VARIABLE)
+    orqueioResultVariableAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_RESULT_VARIABLE)
       .namespace(ORQUEIO_NS)
       .build();
 
-    camundaDecisionBindingAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_DECISION_BINDING)
+    orqueioDecisionBindingAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_DECISION_BINDING)
       .namespace(ORQUEIO_NS)
       .build();
 
-    camundaDecisionVersionAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_DECISION_VERSION)
+    orqueioDecisionVersionAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_DECISION_VERSION)
       .namespace(ORQUEIO_NS)
       .build();
 
-    camundaDecisionTenantIdAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_DECISION_TENANT_ID)
+    orqueioDecisionTenantIdAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_DECISION_TENANT_ID)
         .namespace(ORQUEIO_NS)
         .build();
 
-    camundaMapDecisionResultAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_MAP_DECISION_RESULT)
+    orqueioMapDecisionResultAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_MAP_DECISION_RESULT)
       .namespace(ORQUEIO_NS)
       .build();
 

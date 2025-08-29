@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright Toaddlaterccs and/or licensed to Toaddlaterccs
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. Toaddlaterccs this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -48,38 +48,38 @@ public class AbstractConditionalEventDefinitionBuilder<B extends AbstractConditi
   }
 
   /**
-   * Sets the camunda variable name attribute, that defines on
+   * Sets the orqueio variable name attribute, that defines on
    * which variable the condition should be evaluated.
    *
    * @param variableName the variable on which the condition should be evaluated
    * @return the builder object
    */
-  public B camundaVariableName(String variableName) {
-    element.setCamundaVariableName(variableName);
+  public B orqueioVariableName(String variableName) {
+    element.setOrqueioVariableName(variableName);
     return myself;
   }
 
   /**
-   * Set the camunda variable events attribute, that defines the variable
+   * Set the orqueio variable events attribute, that defines the variable
    * event on which the condition should be evaluated.
    *
    * @param variableEvents the events on which the condition should be evaluated
    * @return the builder object
    */
-  public B camundaVariableEvents(String variableEvents) {
-    element.setCamundaVariableEvents(variableEvents);
+  public B orqueioVariableEvents(String variableEvents) {
+    element.setOrqueioVariableEvents(variableEvents);
     return myself;
   }
 
   /**
-   * Set the camunda variable events attribute, that defines the variable
+   * Set the orqueio variable events attribute, that defines the variable
    * event on which the condition should be evaluated.
    *
    * @param variableEvents the events on which the condition should be evaluated
    * @return the builder object
    */
-  public B camundaVariableEvents(List<String> variableEvents) {
-    element.setCamundaVariableEventsList(variableEvents);
+  public B orqueioVariableEvents(List<String> variableEvents) {
+    element.setOrqueioVariableEventsList(variableEvents);
     return myself;
   }
 

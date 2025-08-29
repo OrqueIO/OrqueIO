@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright Toaddlaterccs and/or licensed to Toaddlaterccs
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. Toaddlaterccs this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -36,42 +36,42 @@ public interface HumanTask extends Task {
 
   void setPlanningTable(PlanningTable planningTable);
 
-  /** camunda extensions */
+  /** orqueio extensions */
 
-  String getCamundaAssignee();
+  String getOrqueioAssignee();
 
-  void setCamundaAssignee(String camundaAssignee);
+  void setOrqueioAssignee(String orqueioAssignee);
 
-  String getCamundaCandidateGroups();
+  String getOrqueioCandidateGroups();
 
-  void setCamundaCandidateGroups(String camundaCandidateGroups);
+  void setOrqueioCandidateGroups(String orqueioCandidateGroups);
 
-  List<String> getCamundaCandidateGroupsList();
+  List<String> getOrqueioCandidateGroupsList();
 
-  void setCamundaCandidateGroupsList(List<String> camundaCandidateGroupsList);
+  void setOrqueioCandidateGroupsList(List<String> orqueioCandidateGroupsList);
 
-  String getCamundaCandidateUsers();
+  String getOrqueioCandidateUsers();
 
-  void setCamundaCandidateUsers(String camundaCandidateUsers);
+  void setOrqueioCandidateUsers(String orqueioCandidateUsers);
 
-  List<String> getCamundaCandidateUsersList();
+  List<String> getOrqueioCandidateUsersList();
 
-  void setCamundaCandidateUsersList(List<String> camundaCandidateUsersList);
+  void setOrqueioCandidateUsersList(List<String> orqueioCandidateUsersList);
 
-  String getCamundaDueDate();
+  String getOrqueioDueDate();
 
-  void setCamundaDueDate(String camundaDueDate);
+  void setOrqueioDueDate(String orqueioDueDate);
 
-  String getCamundaFollowUpDate();
+  String getOrqueioFollowUpDate();
 
-  void setCamundaFollowUpDate(String camundaFollowUpDate);
+  void setOrqueioFollowUpDate(String orqueioFollowUpDate);
 
-  String getCamundaFormKey();
+  String getOrqueioFormKey();
 
-  void setCamundaFormKey(String camundaFormKey);
+  void setOrqueioFormKey(String orqueioFormKey);
 
-  String getCamundaPriority();
+  String getOrqueioPriority();
 
-  void setCamundaPriority(String camundaPriority);
+  void setOrqueioPriority(String orqueioPriority);
 
 }

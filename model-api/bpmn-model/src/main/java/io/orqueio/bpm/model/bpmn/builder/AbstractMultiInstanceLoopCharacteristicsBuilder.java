@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright Toaddlaterccs and/or licensed to Toaddlaterccs
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. Toaddlaterccs this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -80,25 +80,25 @@ public class AbstractMultiInstanceLoopCharacteristicsBuilder<B extends AbstractM
   }
 
   /**
-   * Sets the camunda collection expression.
+   * Sets the orqueio collection expression.
    *
    * @param expression the collection expression
    * @return the builder object
    */
-  public B camundaCollection(String expression) {
-    element.setCamundaCollection(expression);
+  public B orqueioCollection(String expression) {
+    element.setOrqueioCollection(expression);
 
     return myself;
   }
 
   /**
-   * Sets the camunda element variable name.
+   * Sets the orqueio element variable name.
    *
    * @param variableName the name of the element variable
    * @return the builder object
    */
-  public B camundaElementVariable(String variableName) {
-    element.setCamundaElementVariable(variableName);
+  public B orqueioElementVariable(String variableName) {
+    element.setOrqueioElementVariable(variableName);
 
     return myself;
   }
@@ -108,8 +108,8 @@ public class AbstractMultiInstanceLoopCharacteristicsBuilder<B extends AbstractM
    *
    * @return  the builder object
    */
-  public B camundaAsyncBefore() {
-    element.setCamundaAsyncBefore(true);
+  public B orqueioAsyncBefore() {
+    element.setOrqueioAsyncBefore(true);
     return myself;
   }
 
@@ -118,8 +118,8 @@ public class AbstractMultiInstanceLoopCharacteristicsBuilder<B extends AbstractM
    *
    * @return  the builder object
    */
-  public B camundaAsyncAfter() {
-    element.setCamundaAsyncAfter(true);
+  public B orqueioAsyncAfter() {
+    element.setOrqueioAsyncAfter(true);
     return myself;
   }
 

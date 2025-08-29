@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright Toaddlaterccs and/or licensed to Toaddlaterccs
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. Toaddlaterccs this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -21,8 +21,8 @@ import io.orqueio.bpm.model.bpmn.BpmnModelException;
 import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
 import io.orqueio.bpm.model.bpmn.instance.*;
 import io.orqueio.bpm.model.bpmn.instance.bpmndi.BpmnShape;
-import io.orqueio.bpm.model.bpmn.instance.camunda.CamundaExecutionListener;
-import io.orqueio.bpm.model.bpmn.instance.camunda.CamundaFailedJobRetryTimeCycle;
+import io.orqueio.bpm.model.bpmn.instance.orqueio.OrqueioExecutionListener;
+import io.orqueio.bpm.model.bpmn.instance.orqueio.OrqueioFailedJobRetryTimeCycle;
 import io.orqueio.bpm.model.xml.instance.ModelElementInstance;
 
 /**
@@ -329,85 +329,85 @@ public abstract class AbstractFlowNodeBuilder<B extends AbstractFlowNodeBuilder<
   }
 
   /**
-   * Sets the Camunda AsyncBefore attribute for the build flow node.
+   * Sets the Orqueio AsyncBefore attribute for the build flow node.
    *
    * @param asyncBefore
    *          boolean value to set
    * @return the builder object
    */
-  public B camundaAsyncBefore(boolean asyncBefore) {
-    element.setCamundaAsyncBefore(asyncBefore);
+  public B orqueioAsyncBefore(boolean asyncBefore) {
+    element.setOrqueioAsyncBefore(asyncBefore);
     return myself;
   }
 
   /**
-   * Sets the Camunda asyncBefore attribute to true.
+   * Sets the Orqueio asyncBefore attribute to true.
    *
    * @return the builder object
    */
-  public B camundaAsyncBefore() {
-    element.setCamundaAsyncBefore(true);
+  public B orqueioAsyncBefore() {
+    element.setOrqueioAsyncBefore(true);
     return myself;
   }
 
   /**
-   * Sets the Camunda asyncAfter attribute for the build flow node.
+   * Sets the Orqueio asyncAfter attribute for the build flow node.
    *
    * @param asyncAfter
    *          boolean value to set
    * @return the builder object
    */
-  public B camundaAsyncAfter(boolean asyncAfter) {
-    element.setCamundaAsyncAfter(asyncAfter);
+  public B orqueioAsyncAfter(boolean asyncAfter) {
+    element.setOrqueioAsyncAfter(asyncAfter);
     return myself;
   }
 
   /**
-   * Sets the Camunda asyncAfter attribute to true.
+   * Sets the Orqueio asyncAfter attribute to true.
    *
    * @return the builder object
    */
-  public B camundaAsyncAfter() {
-    element.setCamundaAsyncAfter(true);
+  public B orqueioAsyncAfter() {
+    element.setOrqueioAsyncAfter(true);
     return myself;
   }
 
   /**
-   * Sets the Camunda exclusive attribute to true.
+   * Sets the Orqueio exclusive attribute to true.
    *
    * @return the builder object
    */
-  public B notCamundaExclusive() {
-    element.setCamundaExclusive(false);
+  public B notOrqueioExclusive() {
+    element.setOrqueioExclusive(false);
     return myself;
   }
 
   /**
-   * Sets the camunda exclusive attribute for the build flow node.
+   * Sets the orqueio exclusive attribute for the build flow node.
    *
    * @param exclusive
    *          boolean value to set
    * @return the builder object
    */
-  public B camundaExclusive(boolean exclusive) {
-    element.setCamundaExclusive(exclusive);
+  public B orqueioExclusive(boolean exclusive) {
+    element.setOrqueioExclusive(exclusive);
     return myself;
   }
 
-  public B camundaJobPriority(String jobPriority) {
-    element.setCamundaJobPriority(jobPriority);
+  public B orqueioJobPriority(String jobPriority) {
+    element.setOrqueioJobPriority(jobPriority);
     return myself;
   }
 
   /**
-   * Sets the camunda failedJobRetryTimeCycle attribute for the build flow node.
+   * Sets the orqueio failedJobRetryTimeCycle attribute for the build flow node.
    *
    * @param retryTimeCycle
    *          the retry time cycle value to set
    * @return the builder object
    */
-  public B camundaFailedJobRetryTimeCycle(String retryTimeCycle) {
-    CamundaFailedJobRetryTimeCycle failedJobRetryTimeCycle = createInstance(CamundaFailedJobRetryTimeCycle.class);
+  public B orqueioFailedJobRetryTimeCycle(String retryTimeCycle) {
+    OrqueioFailedJobRetryTimeCycle failedJobRetryTimeCycle = createInstance(OrqueioFailedJobRetryTimeCycle.class);
     failedJobRetryTimeCycle.setTextContent(retryTimeCycle);
 
     addExtensionElement(failedJobRetryTimeCycle);
@@ -416,34 +416,34 @@ public abstract class AbstractFlowNodeBuilder<B extends AbstractFlowNodeBuilder<
   }
 
   @SuppressWarnings("rawtypes")
-  public B camundaExecutionListenerClass(String eventName, Class listenerClass) {
-    return camundaExecutionListenerClass(eventName, listenerClass.getName());
+  public B orqueioExecutionListenerClass(String eventName, Class listenerClass) {
+    return orqueioExecutionListenerClass(eventName, listenerClass.getName());
   }
 
-  public B camundaExecutionListenerClass(String eventName, String fullQualifiedClassName) {
-    CamundaExecutionListener executionListener = createInstance(CamundaExecutionListener.class);
-    executionListener.setCamundaEvent(eventName);
-    executionListener.setCamundaClass(fullQualifiedClassName);
+  public B orqueioExecutionListenerClass(String eventName, String fullQualifiedClassName) {
+    OrqueioExecutionListener executionListener = createInstance(OrqueioExecutionListener.class);
+    executionListener.setOrqueioEvent(eventName);
+    executionListener.setOrqueioClass(fullQualifiedClassName);
 
     addExtensionElement(executionListener);
 
     return myself;
   }
 
-  public B camundaExecutionListenerExpression(String eventName, String expression) {
-    CamundaExecutionListener executionListener = createInstance(CamundaExecutionListener.class);
-    executionListener.setCamundaEvent(eventName);
-    executionListener.setCamundaExpression(expression);
+  public B orqueioExecutionListenerExpression(String eventName, String expression) {
+    OrqueioExecutionListener executionListener = createInstance(OrqueioExecutionListener.class);
+    executionListener.setOrqueioEvent(eventName);
+    executionListener.setOrqueioExpression(expression);
 
     addExtensionElement(executionListener);
 
     return myself;
   }
 
-  public B camundaExecutionListenerDelegateExpression(String eventName, String delegateExpression) {
-    CamundaExecutionListener executionListener = createInstance(CamundaExecutionListener.class);
-    executionListener.setCamundaEvent(eventName);
-    executionListener.setCamundaDelegateExpression(delegateExpression);
+  public B orqueioExecutionListenerDelegateExpression(String eventName, String delegateExpression) {
+    OrqueioExecutionListener executionListener = createInstance(OrqueioExecutionListener.class);
+    executionListener.setOrqueioEvent(eventName);
+    executionListener.setOrqueioDelegateExpression(delegateExpression);
 
     addExtensionElement(executionListener);
 

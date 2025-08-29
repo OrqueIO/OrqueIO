@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright Toaddlaterccs and/or licensed to Toaddlaterccs
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. Toaddlaterccs this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -57,7 +57,7 @@ public class ProcessTest extends BpmnModelElementInstanceTest {
       new AttributeAssumption("isClosed", false, false, false),
       new AttributeAssumption("isExecutable"),
       // TODO: definitionalCollaborationRef
-      /** camunda extensions */
+      /** orqueio extensions */
       new AttributeAssumption(ORQUEIO_NS, "candidateStarterGroups"),
       new AttributeAssumption(ORQUEIO_NS, "candidateStarterUsers"),
       new AttributeAssumption(ORQUEIO_NS, "jobPriority"),
@@ -69,34 +69,34 @@ public class ProcessTest extends BpmnModelElementInstanceTest {
   }
 
   @Test
-  public void testCamundaJobPriority() {
+  public void testOrqueioJobPriority() {
     Process process = modelInstance.newInstance(Process.class);
-    assertThat(process.getCamundaJobPriority()).isNull();
+    assertThat(process.getOrqueioJobPriority()).isNull();
 
-    process.setCamundaJobPriority("15");
+    process.setOrqueioJobPriority("15");
 
-    assertThat(process.getCamundaJobPriority()).isEqualTo("15");
+    assertThat(process.getOrqueioJobPriority()).isEqualTo("15");
   }
 
   @Test
-  public void testCamundaTaskPriority() {
+  public void testOrqueioTaskPriority() {
     //given
     Process proc = modelInstance.newInstance(Process.class);
-    assertThat(proc.getCamundaTaskPriority()).isNull();
+    assertThat(proc.getOrqueioTaskPriority()).isNull();
     //when
-    proc.setCamundaTaskPriority(BpmnTestConstants.TEST_PROCESS_TASK_PRIORITY);
+    proc.setOrqueioTaskPriority(BpmnTestConstants.TEST_PROCESS_TASK_PRIORITY);
     //then
-    assertThat(proc.getCamundaTaskPriority()).isEqualTo(BpmnTestConstants.TEST_PROCESS_TASK_PRIORITY);
+    assertThat(proc.getOrqueioTaskPriority()).isEqualTo(BpmnTestConstants.TEST_PROCESS_TASK_PRIORITY);
   }
 
   @Test
-  public void testCamundaHistoryTimeToLive() {
+  public void testOrqueioHistoryTimeToLive() {
     //given
     Process proc = modelInstance.newInstance(Process.class);
-    assertThat(proc.getCamundaHistoryTimeToLive()).isNull();
+    assertThat(proc.getOrqueioHistoryTimeToLive()).isNull();
     //when
-    proc.setCamundaHistoryTimeToLive(BpmnTestConstants.TEST_HISTORY_TIME_TO_LIVE);
+    proc.setOrqueioHistoryTimeToLive(BpmnTestConstants.TEST_HISTORY_TIME_TO_LIVE);
     //then
-    assertThat(proc.getCamundaHistoryTimeToLive()).isEqualTo(BpmnTestConstants.TEST_HISTORY_TIME_TO_LIVE);
+    assertThat(proc.getOrqueioHistoryTimeToLive()).isEqualTo(BpmnTestConstants.TEST_HISTORY_TIME_TO_LIVE);
   }
 }

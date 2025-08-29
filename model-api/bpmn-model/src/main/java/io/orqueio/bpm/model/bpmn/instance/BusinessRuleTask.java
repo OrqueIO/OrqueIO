@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright Toaddlaterccs and/or licensed to Toaddlaterccs
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. Toaddlaterccs this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -31,58 +31,58 @@ public interface BusinessRuleTask extends Task {
 
   void setImplementation(String implementation);
 
-  /** camunda extensions */
+  /** orqueio extensions */
 
-  String getCamundaClass();
+  String getOrqueioClass();
 
-  void setCamundaClass(String camundaClass);
+  void setOrqueioClass(String orqueioClass);
 
-  String getCamundaDelegateExpression();
+  String getOrqueioDelegateExpression();
 
-  void setCamundaDelegateExpression(String camundaExpression);
+  void setOrqueioDelegateExpression(String orqueioExpression);
 
-  String getCamundaExpression();
+  String getOrqueioExpression();
 
-  void setCamundaExpression(String camundaExpression);
+  void setOrqueioExpression(String orqueioExpression);
 
-  String getCamundaResultVariable();
+  String getOrqueioResultVariable();
 
-  void setCamundaResultVariable(String camundaResultVariable);
+  void setOrqueioResultVariable(String orqueioResultVariable);
 
-  String getCamundaType();
+  String getOrqueioType();
 
-  void setCamundaType(String camundaType);
+  void setOrqueioType(String orqueioType);
 
-  String getCamundaTopic();
+  String getOrqueioTopic();
 
-  void setCamundaTopic(String camundaTopic);
+  void setOrqueioTopic(String orqueioTopic);
 
-  String getCamundaDecisionRef();
+  String getOrqueioDecisionRef();
 
-  void setCamundaDecisionRef(String camundaDecisionRef);
+  void setOrqueioDecisionRef(String orqueioDecisionRef);
 
-  String getCamundaDecisionRefBinding();
+  String getOrqueioDecisionRefBinding();
 
-  void setCamundaDecisionRefBinding(String camundaDecisionRefBinding);
+  void setOrqueioDecisionRefBinding(String orqueioDecisionRefBinding);
 
-  String getCamundaDecisionRefVersion();
+  String getOrqueioDecisionRefVersion();
 
-  void setCamundaDecisionRefVersion(String camundaDecisionRefVersion);
+  void setOrqueioDecisionRefVersion(String orqueioDecisionRefVersion);
 
-  String getCamundaDecisionRefVersionTag();
+  String getOrqueioDecisionRefVersionTag();
 
-  void setCamundaDecisionRefVersionTag(String camundaDecisionRefVersionTag);
+  void setOrqueioDecisionRefVersionTag(String orqueioDecisionRefVersionTag);
 
-  String getCamundaDecisionRefTenantId();
+  String getOrqueioDecisionRefTenantId();
 
-  void setCamundaDecisionRefTenantId(String tenantId);
+  void setOrqueioDecisionRefTenantId(String tenantId);
 
-  String getCamundaMapDecisionResult();
+  String getOrqueioMapDecisionResult();
 
-  void setCamundaMapDecisionResult(String camundaMapDecisionResult);
+  void setOrqueioMapDecisionResult(String orqueioMapDecisionResult);
 
-  String getCamundaTaskPriority();
+  String getOrqueioTaskPriority();
 
-  void setCamundaTaskPriority(String taskPriority);
+  void setOrqueioTaskPriority(String taskPriority);
 
 }

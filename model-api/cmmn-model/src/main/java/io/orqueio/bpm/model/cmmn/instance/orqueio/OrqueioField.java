@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright Toaddlaterccs and/or licensed to Toaddlaterccs
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. Toaddlaterccs this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -24,24 +24,24 @@ import io.orqueio.bpm.model.cmmn.instance.CmmnModelElementInstance;
  */
 public interface OrqueioField extends CmmnModelElementInstance {
 
-  String getCamundaName();
+  String getOrqueioName();
 
-  void setCamundaName(String camundaName);
+  void setOrqueioName(String orqueioName);
 
-  String getCamundaExpression();
+  String getOrqueioExpression();
 
-  void setCamundaExpression(String camundaExpression);
+  void setOrqueioExpression(String orqueioExpression);
 
-  String getCamundaStringValue();
+  String getOrqueioStringValue();
 
-  void setCamundaStringValue(String camundaStringValue);
+  void setOrqueioStringValue(String orqueioStringValue);
 
-  OrqueioString getCamundaString();
+  OrqueioString getOrqueioString();
 
-  void setCamundaString(OrqueioString orqueioString);
+  void setOrqueioString(OrqueioString orqueioString);
 
-  OrqueioExpression getCamundaExpressionChild();
+  OrqueioExpression getOrqueioExpressionChild();
 
-  void setCamundaExpressionChild(OrqueioExpression camundaExpression);
+  void setOrqueioExpressionChild(OrqueioExpression orqueioExpression);
 
 }

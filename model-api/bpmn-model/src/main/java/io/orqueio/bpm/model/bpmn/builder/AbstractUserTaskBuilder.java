@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright Toaddlaterccs and/or licensed to Toaddlaterccs
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. Toaddlaterccs this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -22,9 +22,9 @@ import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
 import io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants;
 import io.orqueio.bpm.model.bpmn.instance.TimerEventDefinition;
 import io.orqueio.bpm.model.bpmn.instance.UserTask;
-import io.orqueio.bpm.model.bpmn.instance.camunda.CamundaFormData;
-import io.orqueio.bpm.model.bpmn.instance.camunda.CamundaFormField;
-import io.orqueio.bpm.model.bpmn.instance.camunda.CamundaTaskListener;
+import io.orqueio.bpm.model.bpmn.instance.orqueio.OrqueioFormData;
+import io.orqueio.bpm.model.bpmn.instance.orqueio.OrqueioFormField;
+import io.orqueio.bpm.model.bpmn.instance.orqueio.OrqueioTaskListener;
 
 /**
  * @author Sebastian Menski
@@ -46,171 +46,171 @@ public abstract class AbstractUserTaskBuilder<B extends AbstractUserTaskBuilder<
     return myself;
   }
 
-  /** camunda extensions */
+  /** orqueio extensions */
 
   /**
-   * Sets the camunda attribute assignee.
+   * Sets the orqueio attribute assignee.
    *
-   * @param camundaAssignee  the assignee to set
+   * @param orqueioAssignee  the assignee to set
    * @return the builder object
    */
-  public B camundaAssignee(String camundaAssignee) {
-    element.setCamundaAssignee(camundaAssignee);
+  public B orqueioAssignee(String orqueioAssignee) {
+    element.setOrqueioAssignee(orqueioAssignee);
     return myself;
   }
 
   /**
-   * Sets the camunda candidate groups attribute.
+   * Sets the orqueio candidate groups attribute.
    *
-   * @param camundaCandidateGroups  the candidate groups to set
+   * @param orqueioCandidateGroups  the candidate groups to set
    * @return the builder object
    */
-  public B camundaCandidateGroups(String camundaCandidateGroups) {
-    element.setCamundaCandidateGroups(camundaCandidateGroups);
+  public B orqueioCandidateGroups(String orqueioCandidateGroups) {
+    element.setOrqueioCandidateGroups(orqueioCandidateGroups);
     return myself;
   }
 
   /**
-   * Sets the camunda candidate groups attribute.
+   * Sets the orqueio candidate groups attribute.
    *
-   * @param camundaCandidateGroups  the candidate groups to set
+   * @param orqueioCandidateGroups  the candidate groups to set
    * @return the builder object
    */
-  public B camundaCandidateGroups(List<String> camundaCandidateGroups) {
-    element.setCamundaCandidateGroupsList(camundaCandidateGroups);
+  public B orqueioCandidateGroups(List<String> orqueioCandidateGroups) {
+    element.setOrqueioCandidateGroupsList(orqueioCandidateGroups);
     return myself;
   }
 
   /**
-   * Sets the camunda candidate users attribute.
+   * Sets the orqueio candidate users attribute.
    *
-   * @param camundaCandidateUsers  the candidate users to set
+   * @param orqueioCandidateUsers  the candidate users to set
    * @return the builder object
    */
-  public B camundaCandidateUsers(String camundaCandidateUsers) {
-    element.setCamundaCandidateUsers(camundaCandidateUsers);
+  public B orqueioCandidateUsers(String orqueioCandidateUsers) {
+    element.setOrqueioCandidateUsers(orqueioCandidateUsers);
     return myself;
   }
 
   /**
-   * Sets the camunda candidate users attribute.
+   * Sets the orqueio candidate users attribute.
    *
-   * @param camundaCandidateUsers  the candidate users to set
+   * @param orqueioCandidateUsers  the candidate users to set
    * @return the builder object
    */
-  public B camundaCandidateUsers(List<String> camundaCandidateUsers) {
-    element.setCamundaCandidateUsersList(camundaCandidateUsers);
+  public B orqueioCandidateUsers(List<String> orqueioCandidateUsers) {
+    element.setOrqueioCandidateUsersList(orqueioCandidateUsers);
     return myself;
   }
 
   /**
-   * Sets the camunda due date attribute.
+   * Sets the orqueio due date attribute.
    *
-   * @param camundaDueDate  the due date of the user task
+   * @param orqueioDueDate  the due date of the user task
    * @return the builder object
    */
-  public B camundaDueDate(String camundaDueDate) {
-    element.setCamundaDueDate(camundaDueDate);
+  public B orqueioDueDate(String orqueioDueDate) {
+    element.setOrqueioDueDate(orqueioDueDate);
     return myself;
   }
 
   /**
-   * Sets the camunda follow up date attribute.
+   * Sets the orqueio follow up date attribute.
    *
-   * @param camundaFollowUpDate  the follow up date of the user task
+   * @param orqueioFollowUpDate  the follow up date of the user task
    * @return the builder object
    */
-  public B camundaFollowUpDate(String camundaFollowUpDate) {
-    element.setCamundaFollowUpDate(camundaFollowUpDate);
+  public B orqueioFollowUpDate(String orqueioFollowUpDate) {
+    element.setOrqueioFollowUpDate(orqueioFollowUpDate);
     return myself;
   }
 
   /**
-   * Sets the camunda form handler class attribute.
+   * Sets the orqueio form handler class attribute.
    *
-   * @param camundaFormHandlerClass  the class name of the form handler
+   * @param orqueioFormHandlerClass  the class name of the form handler
    * @return the builder object
    */
   @SuppressWarnings("rawtypes")
-  public B camundaFormHandlerClass(Class camundaFormHandlerClass) {
-    return camundaFormHandlerClass(camundaFormHandlerClass.getName());
+  public B orqueioFormHandlerClass(Class orqueioFormHandlerClass) {
+    return orqueioFormHandlerClass(orqueioFormHandlerClass.getName());
   }
 
   /**
-   * Sets the camunda form handler class attribute.
+   * Sets the orqueio form handler class attribute.
    *
-   * @param camundaFormHandlerClass  the class name of the form handler
+   * @param orqueioFormHandlerClass  the class name of the form handler
    * @return the builder object
    */
-  public B camundaFormHandlerClass(String fullQualifiedClassName) {
-    element.setCamundaFormHandlerClass(fullQualifiedClassName);
+  public B orqueioFormHandlerClass(String fullQualifiedClassName) {
+    element.setOrqueioFormHandlerClass(fullQualifiedClassName);
     return myself;
   }
 
   /**
-   * Sets the camunda form key attribute.
+   * Sets the orqueio form key attribute.
    *
-   * @param camundaFormKey  the form key to set
+   * @param orqueioFormKey  the form key to set
    * @return the builder object
    */
-  public B camundaFormKey(String camundaFormKey) {
-    element.setCamundaFormKey(camundaFormKey);
+  public B orqueioFormKey(String orqueioFormKey) {
+    element.setOrqueioFormKey(orqueioFormKey);
     return myself;
   }
 
   /**
-   * Sets the camunda form ref attribute.
+   * Sets the orqueio form ref attribute.
    *
-   * @param camundaFormRef the form ref to set
+   * @param orqueioFormRef the form ref to set
    * @return the builder object
    */
-  public B camundaFormRef(String camundaFormRef) {
-    element.setCamundaFormRef(camundaFormRef);
+  public B orqueioFormRef(String orqueioFormRef) {
+    element.setOrqueioFormRef(orqueioFormRef);
     return myself;
   }
 
   /**
-   * Sets the camunda form ref binding attribute.
+   * Sets the orqueio form ref binding attribute.
    *
-   * @param camundaFormRef the form ref binding to set
+   * @param orqueioFormRef the form ref binding to set
    * @return the builder object
    */
-  public B camundaFormRefBinding(String camundaFormRefBinding) {
-    element.setCamundaFormRefBinding(camundaFormRefBinding);
+  public B orqueioFormRefBinding(String orqueioFormRefBinding) {
+    element.setOrqueioFormRefBinding(orqueioFormRefBinding);
     return myself;
   }
 
   /**
-   * Sets the camunda form ref version attribute.
+   * Sets the orqueio form ref version attribute.
    *
-   * @param camundaFormRef the form ref version to set
+   * @param orqueioFormRef the form ref version to set
    * @return the builder object
    */
-  public B camundaFormRefVersion(String camundaFormRefVersion) {
-    element.setCamundaFormRefVersion(camundaFormRefVersion);
+  public B orqueioFormRefVersion(String orqueioFormRefVersion) {
+    element.setOrqueioFormRefVersion(orqueioFormRefVersion);
     return myself;
   }
 
   /**
-   * Sets the camunda priority attribute.
+   * Sets the orqueio priority attribute.
    *
-   * @param camundaPriority  the priority of the user task
+   * @param orqueioPriority  the priority of the user task
    * @return the builder object
    */
-  public B camundaPriority(String camundaPriority) {
-    element.setCamundaPriority(camundaPriority);
+  public B orqueioPriority(String orqueioPriority) {
+    element.setOrqueioPriority(orqueioPriority);
     return myself;
   }
 
   /**
-   * Creates a new camunda form field extension element.
+   * Creates a new orqueio form field extension element.
    *
    * @return the builder object
    */
-  public CamundaUserTaskFormFieldBuilder camundaFormField() {
-    CamundaFormData camundaFormData = getCreateSingleExtensionElement(CamundaFormData.class);
-    CamundaFormField camundaFormField = createChild(camundaFormData, CamundaFormField.class);
-    return new CamundaUserTaskFormFieldBuilder(modelInstance, element, camundaFormField);
+  public OrqueioUserTaskFormFieldBuilder orqueioFormField() {
+    OrqueioFormData orqueioFormData = getCreateSingleExtensionElement(OrqueioFormData.class);
+    OrqueioFormField orqueioFormField = createChild(orqueioFormData, OrqueioFormField.class);
+    return new OrqueioUserTaskFormFieldBuilder(modelInstance, element, orqueioFormField);
   }
 
   /**
@@ -221,8 +221,8 @@ public abstract class AbstractUserTaskBuilder<B extends AbstractUserTaskBuilder<
    * @return the builder object
    */
   @SuppressWarnings("rawtypes")
-  public B camundaTaskListenerClass(String eventName, Class listenerClass) {
-    return camundaTaskListenerClass(eventName, listenerClass.getName());
+  public B orqueioTaskListenerClass(String eventName, Class listenerClass) {
+    return orqueioTaskListenerClass(eventName, listenerClass.getName());
   }
 
   /**
@@ -232,30 +232,30 @@ public abstract class AbstractUserTaskBuilder<B extends AbstractUserTaskBuilder<
    * @param fullQualifiedClassName - a string representing a class
    * @return the builder object
    */
-  public B camundaTaskListenerClass(String eventName, String fullQualifiedClassName) {
-    CamundaTaskListener executionListener = createInstance(CamundaTaskListener.class);
-    executionListener.setCamundaEvent(eventName);
-    executionListener.setCamundaClass(fullQualifiedClassName);
+  public B orqueioTaskListenerClass(String eventName, String fullQualifiedClassName) {
+    OrqueioTaskListener executionListener = createInstance(OrqueioTaskListener.class);
+    executionListener.setOrqueioEvent(eventName);
+    executionListener.setOrqueioClass(fullQualifiedClassName);
 
     addExtensionElement(executionListener);
 
     return myself;
   }
 
-  public B camundaTaskListenerExpression(String eventName, String expression) {
-    CamundaTaskListener executionListener = createInstance(CamundaTaskListener.class);
-    executionListener.setCamundaEvent(eventName);
-    executionListener.setCamundaExpression(expression);
+  public B orqueioTaskListenerExpression(String eventName, String expression) {
+    OrqueioTaskListener executionListener = createInstance(OrqueioTaskListener.class);
+    executionListener.setOrqueioEvent(eventName);
+    executionListener.setOrqueioExpression(expression);
 
     addExtensionElement(executionListener);
 
     return myself;
   }
 
-  public B camundaTaskListenerDelegateExpression(String eventName, String delegateExpression) {
-    CamundaTaskListener executionListener = createInstance(CamundaTaskListener.class);
-    executionListener.setCamundaEvent(eventName);
-    executionListener.setCamundaDelegateExpression(delegateExpression);
+  public B orqueioTaskListenerDelegateExpression(String eventName, String delegateExpression) {
+    OrqueioTaskListener executionListener = createInstance(OrqueioTaskListener.class);
+    executionListener.setOrqueioEvent(eventName);
+    executionListener.setOrqueioDelegateExpression(delegateExpression);
 
     addExtensionElement(executionListener);
 
@@ -263,78 +263,78 @@ public abstract class AbstractUserTaskBuilder<B extends AbstractUserTaskBuilder<
   }
 
   @SuppressWarnings("rawtypes")
-  public B camundaTaskListenerClassTimeoutWithCycle(String id, Class listenerClass, String timerCycle) {
-    return camundaTaskListenerClassTimeoutWithCycle(id, listenerClass.getName(), timerCycle);
+  public B orqueioTaskListenerClassTimeoutWithCycle(String id, Class listenerClass, String timerCycle) {
+    return orqueioTaskListenerClassTimeoutWithCycle(id, listenerClass.getName(), timerCycle);
   }
 
   @SuppressWarnings("rawtypes")
-  public B camundaTaskListenerClassTimeoutWithDate(String id, Class listenerClass, String timerDate) {
-    return camundaTaskListenerClassTimeoutWithDate(id, listenerClass.getName(), timerDate);
+  public B orqueioTaskListenerClassTimeoutWithDate(String id, Class listenerClass, String timerDate) {
+    return orqueioTaskListenerClassTimeoutWithDate(id, listenerClass.getName(), timerDate);
   }
 
   @SuppressWarnings("rawtypes")
-  public B camundaTaskListenerClassTimeoutWithDuration(String id, Class listenerClass, String timerDuration) {
-    return camundaTaskListenerClassTimeoutWithDuration(id, listenerClass.getName(), timerDuration);
+  public B orqueioTaskListenerClassTimeoutWithDuration(String id, Class listenerClass, String timerDuration) {
+    return orqueioTaskListenerClassTimeoutWithDuration(id, listenerClass.getName(), timerDuration);
   }
 
-  public B camundaTaskListenerClassTimeoutWithCycle(String id, String fullQualifiedClassName, String timerCycle) {
-    return createCamundaTaskListenerClassTimeout(id, fullQualifiedClassName, createTimeCycle(timerCycle));
+  public B orqueioTaskListenerClassTimeoutWithCycle(String id, String fullQualifiedClassName, String timerCycle) {
+    return createOrqueioTaskListenerClassTimeout(id, fullQualifiedClassName, createTimeCycle(timerCycle));
   }
 
-  public B camundaTaskListenerClassTimeoutWithDate(String id, String fullQualifiedClassName, String timerDate) {
-    return createCamundaTaskListenerClassTimeout(id, fullQualifiedClassName, createTimeDate(timerDate));
+  public B orqueioTaskListenerClassTimeoutWithDate(String id, String fullQualifiedClassName, String timerDate) {
+    return createOrqueioTaskListenerClassTimeout(id, fullQualifiedClassName, createTimeDate(timerDate));
   }
 
-  public B camundaTaskListenerClassTimeoutWithDuration(String id, String fullQualifiedClassName, String timerDuration) {
-    return createCamundaTaskListenerClassTimeout(id, fullQualifiedClassName, createTimeDuration(timerDuration));
+  public B orqueioTaskListenerClassTimeoutWithDuration(String id, String fullQualifiedClassName, String timerDuration) {
+    return createOrqueioTaskListenerClassTimeout(id, fullQualifiedClassName, createTimeDuration(timerDuration));
   }
 
-  public B camundaTaskListenerExpressionTimeoutWithCycle(String id, String expression, String timerCycle) {
-    return createCamundaTaskListenerExpressionTimeout(id, expression, createTimeCycle(timerCycle));
+  public B orqueioTaskListenerExpressionTimeoutWithCycle(String id, String expression, String timerCycle) {
+    return createOrqueioTaskListenerExpressionTimeout(id, expression, createTimeCycle(timerCycle));
   }
 
-  public B camundaTaskListenerExpressionTimeoutWithDate(String id, String expression, String timerDate) {
-    return createCamundaTaskListenerExpressionTimeout(id, expression, createTimeDate(timerDate));
+  public B orqueioTaskListenerExpressionTimeoutWithDate(String id, String expression, String timerDate) {
+    return createOrqueioTaskListenerExpressionTimeout(id, expression, createTimeDate(timerDate));
   }
 
-  public B camundaTaskListenerExpressionTimeoutWithDuration(String id, String expression, String timerDuration) {
-    return createCamundaTaskListenerExpressionTimeout(id, expression, createTimeDuration(timerDuration));
+  public B orqueioTaskListenerExpressionTimeoutWithDuration(String id, String expression, String timerDuration) {
+    return createOrqueioTaskListenerExpressionTimeout(id, expression, createTimeDuration(timerDuration));
   }
 
-  public B camundaTaskListenerDelegateExpressionTimeoutWithCycle(String id, String delegateExpression, String timerCycle) {
-    return createCamundaTaskListenerDelegateExpressionTimeout(id, delegateExpression, createTimeCycle(timerCycle));
+  public B orqueioTaskListenerDelegateExpressionTimeoutWithCycle(String id, String delegateExpression, String timerCycle) {
+    return createOrqueioTaskListenerDelegateExpressionTimeout(id, delegateExpression, createTimeCycle(timerCycle));
   }
 
-  public B camundaTaskListenerDelegateExpressionTimeoutWithDate(String id, String delegateExpression, String timerDate) {
-    return createCamundaTaskListenerDelegateExpressionTimeout(id, delegateExpression, createTimeDate(timerDate));
+  public B orqueioTaskListenerDelegateExpressionTimeoutWithDate(String id, String delegateExpression, String timerDate) {
+    return createOrqueioTaskListenerDelegateExpressionTimeout(id, delegateExpression, createTimeDate(timerDate));
   }
 
-  public B camundaTaskListenerDelegateExpressionTimeoutWithDuration(String id, String delegateExpression, String timerDuration) {
-    return createCamundaTaskListenerDelegateExpressionTimeout(id, delegateExpression, createTimeDuration(timerDuration));
+  public B orqueioTaskListenerDelegateExpressionTimeoutWithDuration(String id, String delegateExpression, String timerDuration) {
+    return createOrqueioTaskListenerDelegateExpressionTimeout(id, delegateExpression, createTimeDuration(timerDuration));
   }
 
-  protected B createCamundaTaskListenerClassTimeout(String id, String fullQualifiedClassName, TimerEventDefinition timerDefinition) {
-    CamundaTaskListener executionListener = createCamundaTaskListenerTimeout(id, timerDefinition);
-    executionListener.setCamundaClass(fullQualifiedClassName);
+  protected B createOrqueioTaskListenerClassTimeout(String id, String fullQualifiedClassName, TimerEventDefinition timerDefinition) {
+    OrqueioTaskListener executionListener = createOrqueioTaskListenerTimeout(id, timerDefinition);
+    executionListener.setOrqueioClass(fullQualifiedClassName);
     return myself;
   }
 
-  protected B createCamundaTaskListenerExpressionTimeout(String id, String expression, TimerEventDefinition timerDefinition) {
-    CamundaTaskListener executionListener = createCamundaTaskListenerTimeout(id, timerDefinition);
-    executionListener.setCamundaExpression(expression);
+  protected B createOrqueioTaskListenerExpressionTimeout(String id, String expression, TimerEventDefinition timerDefinition) {
+    OrqueioTaskListener executionListener = createOrqueioTaskListenerTimeout(id, timerDefinition);
+    executionListener.setOrqueioExpression(expression);
     return myself;
   }
 
-  protected B createCamundaTaskListenerDelegateExpressionTimeout(String id, String delegateExpression, TimerEventDefinition timerDefinition) {
-    CamundaTaskListener executionListener = createCamundaTaskListenerTimeout(id, timerDefinition);
-    executionListener.setCamundaDelegateExpression(delegateExpression);
+  protected B createOrqueioTaskListenerDelegateExpressionTimeout(String id, String delegateExpression, TimerEventDefinition timerDefinition) {
+    OrqueioTaskListener executionListener = createOrqueioTaskListenerTimeout(id, timerDefinition);
+    executionListener.setOrqueioDelegateExpression(delegateExpression);
     return myself;
   }
 
-  protected CamundaTaskListener createCamundaTaskListenerTimeout(String id, TimerEventDefinition timerDefinition) {
-    CamundaTaskListener executionListener = createInstance(CamundaTaskListener.class);
+  protected OrqueioTaskListener createOrqueioTaskListenerTimeout(String id, TimerEventDefinition timerDefinition) {
+    OrqueioTaskListener executionListener = createInstance(OrqueioTaskListener.class);
     executionListener.setAttributeValue(BpmnModelConstants.BPMN_ATTRIBUTE_ID, id, true);
-    executionListener.setCamundaEvent("timeout");
+    executionListener.setOrqueioEvent("timeout");
     executionListener.addChildElement(timerDefinition);
     addExtensionElement(executionListener);
     return executionListener;

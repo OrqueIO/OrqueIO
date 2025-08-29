@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright Toaddlaterccs and/or licensed to Toaddlaterccs
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. Toaddlaterccs this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -28,8 +28,8 @@ import io.orqueio.bpm.model.xml.type.reference.AttributeReference;
 import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.BPMN20_NS;
 import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ATTRIBUTE_ERROR_REF;
 import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ELEMENT_ERROR_EVENT_DEFINITION;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_ERROR_CODE_VARIABLE;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_ERROR_MESSAGE_VARIABLE;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ATTRIBUTE_ERROR_CODE_VARIABLE;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ATTRIBUTE_ERROR_MESSAGE_VARIABLE;
 import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_NS;
 import static io.orqueio.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
@@ -42,9 +42,9 @@ public class ErrorEventDefinitionImpl extends EventDefinitionImpl implements Err
 
   protected static AttributeReference<Error> errorRefAttribute;
 
-  protected static Attribute<String> camundaErrorCodeVariableAttribute;
+  protected static Attribute<String> orqueioErrorCodeVariableAttribute;
 
-  protected static Attribute<String> camundaErrorMessageVariableAttribute;
+  protected static Attribute<String> orqueioErrorMessageVariableAttribute;
   
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(ErrorEventDefinition.class, BPMN_ELEMENT_ERROR_EVENT_DEFINITION)
@@ -60,11 +60,11 @@ public class ErrorEventDefinitionImpl extends EventDefinitionImpl implements Err
       .qNameAttributeReference(Error.class)
       .build();
     
-    camundaErrorCodeVariableAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_ERROR_CODE_VARIABLE)
+    orqueioErrorCodeVariableAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_ERROR_CODE_VARIABLE)
         .namespace(ORQUEIO_NS)
         .build();
 
-    camundaErrorMessageVariableAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_ERROR_MESSAGE_VARIABLE)
+    orqueioErrorMessageVariableAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_ERROR_MESSAGE_VARIABLE)
       .namespace(ORQUEIO_NS)
       .build();
     
@@ -84,22 +84,22 @@ public class ErrorEventDefinitionImpl extends EventDefinitionImpl implements Err
   }
 
   @Override
-  public void setCamundaErrorCodeVariable(String camundaErrorCodeVariable) {
-    camundaErrorCodeVariableAttribute.setValue(this, camundaErrorCodeVariable);
+  public void setOrqueioErrorCodeVariable(String orqueioErrorCodeVariable) {
+    orqueioErrorCodeVariableAttribute.setValue(this, orqueioErrorCodeVariable);
   }
 
   @Override
-  public String getCamundaErrorCodeVariable() {
-    return camundaErrorCodeVariableAttribute.getValue(this);
+  public String getOrqueioErrorCodeVariable() {
+    return orqueioErrorCodeVariableAttribute.getValue(this);
   }
 
   @Override
-  public void setCamundaErrorMessageVariable(String camundaErrorMessageVariable) {
-    camundaErrorMessageVariableAttribute.setValue(this, camundaErrorMessageVariable);
+  public void setOrqueioErrorMessageVariable(String orqueioErrorMessageVariable) {
+    orqueioErrorMessageVariableAttribute.setValue(this, orqueioErrorMessageVariable);
   }
 
   @Override
-  public String getCamundaErrorMessageVariable() {
-    return camundaErrorMessageVariableAttribute.getValue(this);
+  public String getOrqueioErrorMessageVariable() {
+    return orqueioErrorMessageVariableAttribute.getValue(this);
   }
 }

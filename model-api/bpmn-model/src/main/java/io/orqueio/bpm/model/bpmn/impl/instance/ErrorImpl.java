@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright Toaddlaterccs and/or licensed to Toaddlaterccs
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. Toaddlaterccs this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -36,7 +36,7 @@ public class ErrorImpl extends RootElementImpl implements Error {
 
   protected static Attribute<String> nameAttribute;
   protected static Attribute<String> errorCodeAttribute;
-  protected static Attribute<String> camundaErrorMessageAttribute;
+  protected static Attribute<String> orqueioErrorMessageAttribute;
   
   protected static AttributeReference<ItemDefinition> structureRefAttribute;
   
@@ -56,7 +56,7 @@ public class ErrorImpl extends RootElementImpl implements Error {
     errorCodeAttribute = typeBuilder.stringAttribute(BPMN_ATTRIBUTE_ERROR_CODE)
       .build();
 
-    camundaErrorMessageAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_ERROR_MESSAGE).namespace(ORQUEIO_NS)
+    orqueioErrorMessageAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_ERROR_MESSAGE).namespace(ORQUEIO_NS)
         .build();
 
     structureRefAttribute = typeBuilder.stringAttribute(BPMN_ATTRIBUTE_STRUCTURE_REF)
@@ -86,12 +86,12 @@ public class ErrorImpl extends RootElementImpl implements Error {
     errorCodeAttribute.setValue(this, errorCode);
   }
 
-  public String getCamundaErrorMessage() {
-    return camundaErrorMessageAttribute.getValue(this);
+  public String getOrqueioErrorMessage() {
+    return orqueioErrorMessageAttribute.getValue(this);
   }
 
-  public void setCamundaErrorMessage(String camundaErrorMessage) {
-    camundaErrorMessageAttribute.setValue(this, camundaErrorMessage);
+  public void setOrqueioErrorMessage(String orqueioErrorMessage) {
+    orqueioErrorMessageAttribute.setValue(this, orqueioErrorMessage);
   }
 
   public ItemDefinition getStructure() {

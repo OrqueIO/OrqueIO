@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright Toaddlaterccs and/or licensed to Toaddlaterccs
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. Toaddlaterccs this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -21,13 +21,13 @@ import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ATTRIBUTE_I
 import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ATTRIBUTE_IS_EXECUTABLE;
 import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ATTRIBUTE_PROCESS_TYPE;
 import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ELEMENT_PROCESS;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_CANDIDATE_STARTER_GROUPS;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_CANDIDATE_STARTER_USERS;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_HISTORY_TIME_TO_LIVE;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_IS_STARTABLE_IN_TASKLIST;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_JOB_PRIORITY;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_TASK_PRIORITY;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_VERSION_TAG;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ATTRIBUTE_CANDIDATE_STARTER_GROUPS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ATTRIBUTE_CANDIDATE_STARTER_USERS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ATTRIBUTE_HISTORY_TIME_TO_LIVE;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ATTRIBUTE_IS_STARTABLE_IN_TASKLIST;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ATTRIBUTE_JOB_PRIORITY;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ATTRIBUTE_TASK_PRIORITY;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ATTRIBUTE_VERSION_TAG;
 import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_NS;
 
 import java.util.Collection;
@@ -80,15 +80,15 @@ public class ProcessImpl extends CallableElementImpl implements Process {
   protected static ChildElementCollection<CorrelationSubscription> correlationSubscriptionCollection;
   protected static ElementReferenceCollection<Process, Supports> supportsCollection;
 
-  /** camunda extensions */
+  /** orqueio extensions */
 
-  protected static Attribute<String> camundaCandidateStarterGroupsAttribute;
-  protected static Attribute<String> camundaCandidateStarterUsersAttribute;
-  protected static Attribute<String> camundaJobPriorityAttribute;
-  protected static Attribute<String> camundaTaskPriorityAttribute;
-  protected static Attribute<String> camundaHistoryTimeToLiveAttribute;
-  protected static Attribute<Boolean> camundaIsStartableInTasklistAttribute;
-  protected static Attribute<String> camundaVersionTagAttribute;
+  protected static Attribute<String> orqueioCandidateStarterGroupsAttribute;
+  protected static Attribute<String> orqueioCandidateStarterUsersAttribute;
+  protected static Attribute<String> orqueioJobPriorityAttribute;
+  protected static Attribute<String> orqueioTaskPriorityAttribute;
+  protected static Attribute<String> orqueioHistoryTimeToLiveAttribute;
+  protected static Attribute<Boolean> orqueioIsStartableInTasklistAttribute;
+  protected static Attribute<String> orqueioVersionTagAttribute;
 
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(Process.class, BPMN_ELEMENT_PROCESS)
@@ -143,34 +143,34 @@ public class ProcessImpl extends CallableElementImpl implements Process {
       .qNameElementReferenceCollection(Process.class)
       .build();
 
-    /** camunda extensions */
+    /** orqueio extensions */
 
-    camundaCandidateStarterGroupsAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_CANDIDATE_STARTER_GROUPS)
+    orqueioCandidateStarterGroupsAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_CANDIDATE_STARTER_GROUPS)
       .namespace(ORQUEIO_NS)
       .build();
 
-    camundaCandidateStarterUsersAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_CANDIDATE_STARTER_USERS)
+    orqueioCandidateStarterUsersAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_CANDIDATE_STARTER_USERS)
       .namespace(ORQUEIO_NS)
       .build();
 
-    camundaJobPriorityAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_JOB_PRIORITY)
+    orqueioJobPriorityAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_JOB_PRIORITY)
       .namespace(ORQUEIO_NS)
       .build();
 
-    camundaTaskPriorityAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_TASK_PRIORITY)
+    orqueioTaskPriorityAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_TASK_PRIORITY)
       .namespace(ORQUEIO_NS)
       .build();
 
-    camundaHistoryTimeToLiveAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_HISTORY_TIME_TO_LIVE)
+    orqueioHistoryTimeToLiveAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_HISTORY_TIME_TO_LIVE)
       .namespace(ORQUEIO_NS)
       .build();
 
-    camundaIsStartableInTasklistAttribute = typeBuilder.booleanAttribute(CAMUNDA_ATTRIBUTE_IS_STARTABLE_IN_TASKLIST)
+    orqueioIsStartableInTasklistAttribute = typeBuilder.booleanAttribute(ORQUEIO_ATTRIBUTE_IS_STARTABLE_IN_TASKLIST)
       .defaultValue(true)
       .namespace(ORQUEIO_NS)
       .build();
 
-    camundaVersionTagAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_VERSION_TAG)
+    orqueioVersionTagAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_VERSION_TAG)
       .namespace(ORQUEIO_NS)
       .build();
 
@@ -254,65 +254,65 @@ public class ProcessImpl extends CallableElementImpl implements Process {
     return supportsCollection.getReferenceTargetElements(this);
   }
 
-  /** camunda extensions */
+  /** orqueio extensions */
 
-  public String getCamundaCandidateStarterGroups() {
-    return camundaCandidateStarterGroupsAttribute.getValue(this);
+  public String getOrqueioCandidateStarterGroups() {
+    return orqueioCandidateStarterGroupsAttribute.getValue(this);
   }
 
-  public void setCamundaCandidateStarterGroups(String camundaCandidateStarterGroups) {
-    camundaCandidateStarterGroupsAttribute.setValue(this, camundaCandidateStarterGroups);
+  public void setOrqueioCandidateStarterGroups(String orqueioCandidateStarterGroups) {
+    orqueioCandidateStarterGroupsAttribute.setValue(this, orqueioCandidateStarterGroups);
   }
 
-  public List<String> getCamundaCandidateStarterGroupsList() {
-    String groupsString = camundaCandidateStarterGroupsAttribute.getValue(this);
+  public List<String> getOrqueioCandidateStarterGroupsList() {
+    String groupsString = orqueioCandidateStarterGroupsAttribute.getValue(this);
     return StringUtil.splitCommaSeparatedList(groupsString);
   }
 
-  public void setCamundaCandidateStarterGroupsList(List<String> camundaCandidateStarterGroupsList) {
-    String candidateStarterGroups = StringUtil.joinCommaSeparatedList(camundaCandidateStarterGroupsList);
-    camundaCandidateStarterGroupsAttribute.setValue(this, candidateStarterGroups);
+  public void setOrqueioCandidateStarterGroupsList(List<String> orqueioCandidateStarterGroupsList) {
+    String candidateStarterGroups = StringUtil.joinCommaSeparatedList(orqueioCandidateStarterGroupsList);
+    orqueioCandidateStarterGroupsAttribute.setValue(this, candidateStarterGroups);
   }
 
-  public String getCamundaCandidateStarterUsers() {
-    return camundaCandidateStarterUsersAttribute.getValue(this);
+  public String getOrqueioCandidateStarterUsers() {
+    return orqueioCandidateStarterUsersAttribute.getValue(this);
   }
 
-  public void setCamundaCandidateStarterUsers(String camundaCandidateStarterUsers) {
-    camundaCandidateStarterUsersAttribute.setValue(this, camundaCandidateStarterUsers);
+  public void setOrqueioCandidateStarterUsers(String orqueioCandidateStarterUsers) {
+    orqueioCandidateStarterUsersAttribute.setValue(this, orqueioCandidateStarterUsers);
   }
 
-  public List<String> getCamundaCandidateStarterUsersList() {
-    String candidateStarterUsers = camundaCandidateStarterUsersAttribute.getValue(this);
+  public List<String> getOrqueioCandidateStarterUsersList() {
+    String candidateStarterUsers = orqueioCandidateStarterUsersAttribute.getValue(this);
     return StringUtil.splitCommaSeparatedList(candidateStarterUsers);
   }
 
-  public void setCamundaCandidateStarterUsersList(List<String> camundaCandidateStarterUsersList) {
-    String candidateStarterUsers = StringUtil.joinCommaSeparatedList(camundaCandidateStarterUsersList);
-    camundaCandidateStarterUsersAttribute.setValue(this, candidateStarterUsers);
+  public void setOrqueioCandidateStarterUsersList(List<String> orqueioCandidateStarterUsersList) {
+    String candidateStarterUsers = StringUtil.joinCommaSeparatedList(orqueioCandidateStarterUsersList);
+    orqueioCandidateStarterUsersAttribute.setValue(this, candidateStarterUsers);
   }
 
-  public String getCamundaJobPriority() {
-    return camundaJobPriorityAttribute.getValue(this);
+  public String getOrqueioJobPriority() {
+    return orqueioJobPriorityAttribute.getValue(this);
   }
 
-  public void setCamundaJobPriority(String jobPriority) {
-    camundaJobPriorityAttribute.setValue(this, jobPriority);
-  }
-
-  @Override
-  public String getCamundaTaskPriority() {
-    return camundaTaskPriorityAttribute.getValue(this);
+  public void setOrqueioJobPriority(String jobPriority) {
+    orqueioJobPriorityAttribute.setValue(this, jobPriority);
   }
 
   @Override
-  public void setCamundaTaskPriority(String taskPriority) {
-    camundaTaskPriorityAttribute.setValue(this, taskPriority);
+  public String getOrqueioTaskPriority() {
+    return orqueioTaskPriorityAttribute.getValue(this);
   }
 
   @Override
-  public Integer getCamundaHistoryTimeToLive() {
-    String ttl = getCamundaHistoryTimeToLiveString();
+  public void setOrqueioTaskPriority(String taskPriority) {
+    orqueioTaskPriorityAttribute.setValue(this, taskPriority);
+  }
+
+  @Override
+  public Integer getOrqueioHistoryTimeToLive() {
+    String ttl = getOrqueioHistoryTimeToLiveString();
     if (ttl != null) {
       return Integer.parseInt(ttl);
     }
@@ -320,42 +320,42 @@ public class ProcessImpl extends CallableElementImpl implements Process {
   }
 
   @Override
-  public void setCamundaHistoryTimeToLive(Integer historyTimeToLive) {
+  public void setOrqueioHistoryTimeToLive(Integer historyTimeToLive) {
     var value = historyTimeToLive == null ? null : String.valueOf(historyTimeToLive);
-    setCamundaHistoryTimeToLiveString(value);
+    setOrqueioHistoryTimeToLiveString(value);
   }
 
   @Override
-  public String getCamundaHistoryTimeToLiveString() {
-    return camundaHistoryTimeToLiveAttribute.getValue(this);
+  public String getOrqueioHistoryTimeToLiveString() {
+    return orqueioHistoryTimeToLiveAttribute.getValue(this);
   }
 
   @Override
-  public void setCamundaHistoryTimeToLiveString(String historyTimeToLive) {
+  public void setOrqueioHistoryTimeToLiveString(String historyTimeToLive) {
     if (historyTimeToLive == null) {
-      camundaHistoryTimeToLiveAttribute.removeAttribute(this);
+      orqueioHistoryTimeToLiveAttribute.removeAttribute(this);
     } else {
-      camundaHistoryTimeToLiveAttribute.setValue(this, historyTimeToLive);
+      orqueioHistoryTimeToLiveAttribute.setValue(this, historyTimeToLive);
     }
   }
 
   @Override
-  public Boolean isCamundaStartableInTasklist() {
-    return camundaIsStartableInTasklistAttribute.getValue(this);
+  public Boolean isOrqueioStartableInTasklist() {
+    return orqueioIsStartableInTasklistAttribute.getValue(this);
   }
 
   @Override
-  public void setCamundaIsStartableInTasklist(Boolean isStartableInTasklist) {
-    camundaIsStartableInTasklistAttribute.setValue(this, isStartableInTasklist);
+  public void setOrqueioIsStartableInTasklist(Boolean isStartableInTasklist) {
+    orqueioIsStartableInTasklistAttribute.setValue(this, isStartableInTasklist);
   }
 
   @Override
-  public String getCamundaVersionTag() {
-    return camundaVersionTagAttribute.getValue(this);
+  public String getOrqueioVersionTag() {
+    return orqueioVersionTagAttribute.getValue(this);
   }
 
   @Override
-  public void setCamundaVersionTag(String versionTag) {
-    camundaVersionTagAttribute.setValue(this, versionTag);
+  public void setOrqueioVersionTag(String versionTag) {
+    orqueioVersionTagAttribute.setValue(this, versionTag);
   }
 }

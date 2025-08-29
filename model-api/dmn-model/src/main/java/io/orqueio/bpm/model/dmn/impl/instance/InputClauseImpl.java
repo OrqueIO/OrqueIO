@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright Toaddlaterccs and/or licensed to Toaddlaterccs
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. Toaddlaterccs this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -16,7 +16,7 @@
  */
 package io.orqueio.bpm.model.dmn.impl.instance;
 
-import static io.orqueio.bpm.model.dmn.impl.DmnModelConstants.CAMUNDA_ATTRIBUTE_INPUT_VARIABLE;
+import static io.orqueio.bpm.model.dmn.impl.DmnModelConstants.ORQUEIO_ATTRIBUTE_INPUT_VARIABLE;
 import static io.orqueio.bpm.model.dmn.impl.DmnModelConstants.ORQUEIO_NS;
 import static io.orqueio.bpm.model.dmn.impl.DmnModelConstants.LATEST_DMN_NS;
 import static io.orqueio.bpm.model.dmn.impl.DmnModelConstants.DMN_ELEMENT_INPUT_CLAUSE;
@@ -38,8 +38,8 @@ public class InputClauseImpl extends DmnElementImpl implements InputClause {
   protected static ChildElement<InputExpression> inputExpressionChild;
   protected static ChildElement<InputValues> inputValuesChild;
 
-  // camunda extensions
-  protected static Attribute<String> camundaInputVariableAttribute;
+  // orqueio extensions
+  protected static Attribute<String> orqueioInputVariableAttribute;
 
   public InputClauseImpl(ModelTypeInstanceContext instanceContext) {
     super(instanceContext);
@@ -61,15 +61,15 @@ public class InputClauseImpl extends DmnElementImpl implements InputClause {
     inputValuesChild.setChild(this, inputValues);
   }
 
-  // camunda extensions
+  // orqueio extensions
 
-  public String getCamundaInputVariable() {
-    return camundaInputVariableAttribute.getValue(this);
+  public String getOrqueioInputVariable() {
+    return orqueioInputVariableAttribute.getValue(this);
   }
 
 
-  public void setCamundaInputVariable(String inputVariable) {
-    camundaInputVariableAttribute.setValue(this, inputVariable);
+  public void setOrqueioInputVariable(String inputVariable) {
+    orqueioInputVariableAttribute.setValue(this, inputVariable);
   }
 
   public static void registerType(ModelBuilder modelBuilder) {
@@ -91,9 +91,9 @@ public class InputClauseImpl extends DmnElementImpl implements InputClause {
     inputValuesChild = sequenceBuilder.element(InputValues.class)
       .build();
 
-    // camunda extensions
+    // orqueio extensions
 
-    camundaInputVariableAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_INPUT_VARIABLE)
+    orqueioInputVariableAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_INPUT_VARIABLE)
       .namespace(ORQUEIO_NS)
       .build();
 

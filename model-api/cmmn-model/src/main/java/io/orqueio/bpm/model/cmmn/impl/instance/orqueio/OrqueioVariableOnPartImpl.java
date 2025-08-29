@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright Toaddlaterccs and/or licensed to Toaddlaterccs
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. Toaddlaterccs this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -16,8 +16,8 @@
  */
 package io.orqueio.bpm.model.cmmn.impl.instance.orqueio;
 
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_VARIABLE_NAME;
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ELEMENT_VARIABLE_ON_PART;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ATTRIBUTE_VARIABLE_NAME;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ELEMENT_VARIABLE_ON_PART;
 import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_NS;
 
 import io.orqueio.bpm.model.cmmn.VariableTransition;
@@ -34,8 +34,8 @@ import io.orqueio.bpm.model.xml.type.child.SequenceBuilder;
 
 public class OrqueioVariableOnPartImpl extends CmmnModelElementInstanceImpl implements OrqueioVariableOnPart {
 
-  protected static Attribute<String> camundaVariableNameAttribute;
-  protected static ChildElement<OrqueioVariableTransitionEvent> camundaVariableEventChild; 
+  protected static Attribute<String> orqueioVariableNameAttribute;
+  protected static ChildElement<OrqueioVariableTransitionEvent> orqueioVariableEventChild; 
   
   public OrqueioVariableOnPartImpl(ModelTypeInstanceContext instanceContext) {
     super(instanceContext);
@@ -43,7 +43,7 @@ public class OrqueioVariableOnPartImpl extends CmmnModelElementInstanceImpl impl
 
   public static void registerType(ModelBuilder modelBuilder) {
 
-    ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(OrqueioVariableOnPart.class, CAMUNDA_ELEMENT_VARIABLE_ON_PART)
+    ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(OrqueioVariableOnPart.class, ORQUEIO_ELEMENT_VARIABLE_ON_PART)
       .namespaceUri(ORQUEIO_NS)
       .instanceProvider(new ModelTypeInstanceProvider<OrqueioVariableOnPart>() {
         public OrqueioVariableOnPart newInstance(ModelTypeInstanceContext instanceContext) {
@@ -51,34 +51,34 @@ public class OrqueioVariableOnPartImpl extends CmmnModelElementInstanceImpl impl
       }
     });
 
-    camundaVariableNameAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_VARIABLE_NAME)
+    orqueioVariableNameAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_VARIABLE_NAME)
       .namespace(ORQUEIO_NS)
       .build();
 
     SequenceBuilder sequenceBuilder = typeBuilder.sequence();
 
-    camundaVariableEventChild = sequenceBuilder.element(OrqueioVariableTransitionEvent.class)
+    orqueioVariableEventChild = sequenceBuilder.element(OrqueioVariableTransitionEvent.class)
       .build();
 
     typeBuilder.build();
   }
 
   public String getVariableName() {
-    return camundaVariableNameAttribute.getValue(this);
+    return orqueioVariableNameAttribute.getValue(this);
   }
 
   public void setVariableName(String name) {
-    camundaVariableNameAttribute.setValue(this, name);
+    orqueioVariableNameAttribute.setValue(this, name);
   }
 
 
   public VariableTransition getVariableEvent() {
-    OrqueioVariableTransitionEvent child = camundaVariableEventChild.getChild(this);
+    OrqueioVariableTransitionEvent child = orqueioVariableEventChild.getChild(this);
     return child.getValue();
   }
 
   public void setVariableEvent(VariableTransition variableTransition) {
-    OrqueioVariableTransitionEvent child = camundaVariableEventChild.getChild(this);
+    OrqueioVariableTransitionEvent child = orqueioVariableEventChild.getChild(this);
     child.setValue(variableTransition);
   }
 

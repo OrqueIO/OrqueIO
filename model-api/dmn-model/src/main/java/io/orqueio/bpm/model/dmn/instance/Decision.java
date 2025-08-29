@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright Toaddlaterccs and/or licensed to Toaddlaterccs
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. Toaddlaterccs this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -54,17 +54,17 @@ public interface Decision extends DrgElement {
 
   void setExpression(Expression expression);
 
-  // camunda extensions
+  // orqueio extensions
   
   @Deprecated
-  Integer getCamundaHistoryTimeToLive();
+  Integer getOrqueioHistoryTimeToLive();
 
   @Deprecated
-  void setCamundaHistoryTimeToLive(Integer historyTimeToLive);
+  void setOrqueioHistoryTimeToLive(Integer historyTimeToLive);
 
-  String getCamundaHistoryTimeToLiveString();
+  String getOrqueioHistoryTimeToLiveString();
   
-  void setCamundaHistoryTimeToLiveString(String historyTimeToLive);
+  void setOrqueioHistoryTimeToLiveString(String historyTimeToLive);
   
   String getVersionTag();
 

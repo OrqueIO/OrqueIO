@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright Toaddlaterccs and/or licensed to Toaddlaterccs
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. Toaddlaterccs this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -29,7 +29,7 @@ import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.BPMN20_NS;
 import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ATTRIBUTE_SIGNAL_REF;
 import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ELEMENT_SIGNAL_EVENT_DEFINITION;
 import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_NS;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_ASYNC;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ATTRIBUTE_ASYNC;
 import static io.orqueio.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
@@ -40,7 +40,7 @@ import static io.orqueio.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeIns
 public class SignalEventDefinitionImpl extends EventDefinitionImpl implements SignalEventDefinition {
 
   protected static AttributeReference<Signal> signalRefAttribute;
-  protected static Attribute<Boolean> camundaAsyncAttribute;
+  protected static Attribute<Boolean> orqueioAsyncAttribute;
 
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(SignalEventDefinition.class, BPMN_ELEMENT_SIGNAL_EVENT_DEFINITION)
@@ -56,8 +56,8 @@ public class SignalEventDefinitionImpl extends EventDefinitionImpl implements Si
       .qNameAttributeReference(Signal.class)
       .build();
 
-    /** Camunda Attributes */
-    camundaAsyncAttribute = typeBuilder.booleanAttribute(CAMUNDA_ATTRIBUTE_ASYNC)
+    /** Orqueio Attributes */
+    orqueioAsyncAttribute = typeBuilder.booleanAttribute(ORQUEIO_ATTRIBUTE_ASYNC)
       .namespace(ORQUEIO_NS)
       .defaultValue(false)
       .build();
@@ -77,11 +77,11 @@ public class SignalEventDefinitionImpl extends EventDefinitionImpl implements Si
     signalRefAttribute.setReferenceTargetElement(this, signal);
   }
 
-  public boolean isCamundaAsync() {
-    return camundaAsyncAttribute.getValue(this);
+  public boolean isOrqueioAsync() {
+    return orqueioAsyncAttribute.getValue(this);
   }
 
-  public void setCamundaAsync(boolean camundaAsync) {
-    camundaAsyncAttribute.setValue(this, camundaAsync);
+  public void setOrqueioAsync(boolean orqueioAsync) {
+    orqueioAsyncAttribute.setValue(this, orqueioAsync);
   }
 }

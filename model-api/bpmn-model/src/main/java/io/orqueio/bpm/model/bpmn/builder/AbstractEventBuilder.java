@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright Toaddlaterccs and/or licensed to Toaddlaterccs
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. Toaddlaterccs this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -18,9 +18,9 @@ package io.orqueio.bpm.model.bpmn.builder;
 
 import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
 import io.orqueio.bpm.model.bpmn.instance.Event;
-import io.orqueio.bpm.model.bpmn.instance.camunda.CamundaInputOutput;
-import io.orqueio.bpm.model.bpmn.instance.camunda.CamundaInputParameter;
-import io.orqueio.bpm.model.bpmn.instance.camunda.CamundaOutputParameter;
+import io.orqueio.bpm.model.bpmn.instance.orqueio.OrqueioInputOutput;
+import io.orqueio.bpm.model.bpmn.instance.orqueio.OrqueioInputParameter;
+import io.orqueio.bpm.model.bpmn.instance.orqueio.OrqueioOutputParameter;
 
 /**
  * @author Sebastian Menski
@@ -32,37 +32,37 @@ public abstract class AbstractEventBuilder<B extends  AbstractEventBuilder<B, E>
   }
 
   /**
-   * Creates a new camunda input parameter extension element with the
+   * Creates a new orqueio input parameter extension element with the
    * given name and value.
    *
    * @param name the name of the input parameter
    * @param value the value of the input parameter
    * @return the builder object
    */
-  public B camundaInputParameter(String name, String value) {
-    CamundaInputOutput camundaInputOutput = getCreateSingleExtensionElement(CamundaInputOutput.class);
+  public B orqueioInputParameter(String name, String value) {
+    OrqueioInputOutput orqueioInputOutput = getCreateSingleExtensionElement(OrqueioInputOutput.class);
 
-    CamundaInputParameter camundaInputParameter = createChild(camundaInputOutput, CamundaInputParameter.class);
-    camundaInputParameter.setCamundaName(name);
-    camundaInputParameter.setTextContent(value);
+    OrqueioInputParameter orqueioInputParameter = createChild(orqueioInputOutput, OrqueioInputParameter.class);
+    orqueioInputParameter.setOrqueioName(name);
+    orqueioInputParameter.setTextContent(value);
 
     return myself;
   }
 
   /**
-   * Creates a new camunda output parameter extension element with the
+   * Creates a new orqueio output parameter extension element with the
    * given name and value.
    *
    * @param name the name of the output parameter
    * @param value the value of the output parameter
    * @return the builder object
    */
-  public B camundaOutputParameter(String name, String value) {
-    CamundaInputOutput camundaInputOutput = getCreateSingleExtensionElement(CamundaInputOutput.class);
+  public B orqueioOutputParameter(String name, String value) {
+    OrqueioInputOutput orqueioInputOutput = getCreateSingleExtensionElement(OrqueioInputOutput.class);
 
-    CamundaOutputParameter camundaOutputParameter = createChild(camundaInputOutput, CamundaOutputParameter.class);
-    camundaOutputParameter.setCamundaName(name);
-    camundaOutputParameter.setTextContent(value);
+    OrqueioOutputParameter orqueioOutputParameter = createChild(orqueioInputOutput, OrqueioOutputParameter.class);
+    orqueioOutputParameter.setOrqueioName(name);
+    orqueioOutputParameter.setTextContent(value);
 
     return myself;
   }

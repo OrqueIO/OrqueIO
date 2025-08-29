@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright Toaddlaterccs and/or licensed to Toaddlaterccs
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. Toaddlaterccs this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -22,11 +22,11 @@ import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ELEMENT_IS_
 import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ELEMENT_MULTI_INSTANCE_LOOP_CHARACTERISTICS;
 import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ELEMENT_NONE_BEHAVIOR_EVENT_REF;
 import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ELEMENT_ONE_BEHAVIOR_EVENT_REF;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_ASYNC_AFTER;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_ASYNC_BEFORE;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_EXCLUSIVE;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_COLLECTION;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_ELEMENT_VARIABLE;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ATTRIBUTE_ASYNC_AFTER;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ATTRIBUTE_ASYNC_BEFORE;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ATTRIBUTE_EXCLUSIVE;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ATTRIBUTE_COLLECTION;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ATTRIBUTE_ELEMENT_VARIABLE;
 import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_NS;
 
 import java.util.Collection;
@@ -73,11 +73,11 @@ public class MultiInstanceLoopCharacteristicsImpl extends LoopCharacteristicsImp
   protected static ChildElement<OutputDataItem> outputDataItemChild;
   protected static ChildElementCollection<ComplexBehaviorDefinition> complexBehaviorDefinitionCollection;
   protected static ChildElement<CompletionCondition> completionConditionChild;
-  protected static Attribute<Boolean> camundaAsyncAfter;
-  protected static Attribute<Boolean> camundaAsyncBefore;
-  protected static Attribute<Boolean> camundaExclusive;
-  protected static Attribute<String> camundaCollection;
-  protected static Attribute<String> camundaElementVariable;
+  protected static Attribute<Boolean> orqueioAsyncAfter;
+  protected static Attribute<Boolean> orqueioAsyncBefore;
+  protected static Attribute<Boolean> orqueioExclusive;
+  protected static Attribute<String> orqueioCollection;
+  protected static Attribute<String> orqueioElementVariable;
 
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder
@@ -132,26 +132,26 @@ public class MultiInstanceLoopCharacteristicsImpl extends LoopCharacteristicsImp
     completionConditionChild = sequenceBuilder.element(CompletionCondition.class)
       .build();
 
-    camundaAsyncAfter = typeBuilder.booleanAttribute(CAMUNDA_ATTRIBUTE_ASYNC_AFTER)
+    orqueioAsyncAfter = typeBuilder.booleanAttribute(ORQUEIO_ATTRIBUTE_ASYNC_AFTER)
         .namespace(ORQUEIO_NS)
         .defaultValue(false)
         .build();
 
-    camundaAsyncBefore = typeBuilder.booleanAttribute(CAMUNDA_ATTRIBUTE_ASYNC_BEFORE)
+    orqueioAsyncBefore = typeBuilder.booleanAttribute(ORQUEIO_ATTRIBUTE_ASYNC_BEFORE)
         .namespace(ORQUEIO_NS)
         .defaultValue(false)
         .build();
 
-    camundaExclusive = typeBuilder.booleanAttribute(CAMUNDA_ATTRIBUTE_EXCLUSIVE)
+    orqueioExclusive = typeBuilder.booleanAttribute(ORQUEIO_ATTRIBUTE_EXCLUSIVE)
         .namespace(ORQUEIO_NS)
         .defaultValue(true)
         .build();
 
-    camundaCollection = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_COLLECTION)
+    orqueioCollection = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_COLLECTION)
         .namespace(ORQUEIO_NS)
         .build();
 
-    camundaElementVariable = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_ELEMENT_VARIABLE)
+    orqueioElementVariable = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_ELEMENT_VARIABLE)
         .namespace(ORQUEIO_NS)
         .build();
 
@@ -250,43 +250,43 @@ public class MultiInstanceLoopCharacteristicsImpl extends LoopCharacteristicsImp
     noneBehaviorEventRefAttribute.setReferenceTargetElement(this, noneBehaviorEventRef);
   }
 
-  public boolean isCamundaAsyncBefore() {
-    return camundaAsyncBefore.getValue(this);
+  public boolean isOrqueioAsyncBefore() {
+    return orqueioAsyncBefore.getValue(this);
   }
 
-  public void setCamundaAsyncBefore(boolean isCamundaAsyncBefore) {
-    camundaAsyncBefore.setValue(this, isCamundaAsyncBefore);
+  public void setOrqueioAsyncBefore(boolean isOrqueioAsyncBefore) {
+    orqueioAsyncBefore.setValue(this, isOrqueioAsyncBefore);
   }
 
-  public boolean isCamundaAsyncAfter() {
-    return camundaAsyncAfter.getValue(this);
+  public boolean isOrqueioAsyncAfter() {
+    return orqueioAsyncAfter.getValue(this);
   }
 
-  public void setCamundaAsyncAfter(boolean isCamundaAsyncAfter) {
-    camundaAsyncAfter.setValue(this, isCamundaAsyncAfter);
+  public void setOrqueioAsyncAfter(boolean isOrqueioAsyncAfter) {
+    orqueioAsyncAfter.setValue(this, isOrqueioAsyncAfter);
   }
 
-  public boolean isCamundaExclusive() {
-    return camundaExclusive.getValue(this);
+  public boolean isOrqueioExclusive() {
+    return orqueioExclusive.getValue(this);
   }
 
-  public void setCamundaExclusive(boolean isCamundaExclusive) {
-    camundaExclusive.setValue(this, isCamundaExclusive);
+  public void setOrqueioExclusive(boolean isOrqueioExclusive) {
+    orqueioExclusive.setValue(this, isOrqueioExclusive);
   }
 
-  public String getCamundaCollection() {
-    return camundaCollection.getValue(this);
+  public String getOrqueioCollection() {
+    return orqueioCollection.getValue(this);
   }
 
-  public void setCamundaCollection(String expression) {
-    camundaCollection.setValue(this, expression);
+  public void setOrqueioCollection(String expression) {
+    orqueioCollection.setValue(this, expression);
   }
 
-  public String getCamundaElementVariable() {
-    return camundaElementVariable.getValue(this);
+  public String getOrqueioElementVariable() {
+    return orqueioElementVariable.getValue(this);
   }
 
-  public void setCamundaElementVariable(String variableName) {
-    camundaElementVariable.setValue(this, variableName);
+  public void setOrqueioElementVariable(String variableName) {
+    orqueioElementVariable.setValue(this, variableName);
   }
 }

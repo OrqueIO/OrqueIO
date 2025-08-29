@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright Toaddlaterccs and/or licensed to Toaddlaterccs
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. Toaddlaterccs this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -16,9 +16,9 @@
  */
 package io.orqueio.bpm.model.cmmn.impl.instance;
 
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_CASE_BINDING;
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_CASE_VERSION;
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_CASE_TENANT_ID;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ATTRIBUTE_CASE_BINDING;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ATTRIBUTE_CASE_VERSION;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ATTRIBUTE_CASE_TENANT_ID;
 import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_NS;
 import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CMMN11_NS;
 import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CMMN_ATTRIBUTE_CASE_REF;
@@ -51,9 +51,9 @@ public class CaseTaskImpl extends TaskImpl implements CaseTask {
   // cmmn 1.1
   protected static ChildElement<CaseRefExpression> caseRefExpressionChild;
 
-  protected static Attribute<String> camundaCaseBindingAttribute;
-  protected static Attribute<String> camundaCaseVersionAttribute;
-  protected static Attribute<String> camundaCaseTenantIdAttribute;
+  protected static Attribute<String> orqueioCaseBindingAttribute;
+  protected static Attribute<String> orqueioCaseVersionAttribute;
+  protected static Attribute<String> orqueioCaseTenantIdAttribute;
 
   public CaseTaskImpl(ModelTypeInstanceContext instanceContext) {
     super(instanceContext);
@@ -79,28 +79,28 @@ public class CaseTaskImpl extends TaskImpl implements CaseTask {
     return parameterMappingCollection.get(this);
   }
 
-  public String getCamundaCaseBinding() {
-    return camundaCaseBindingAttribute.getValue(this);
+  public String getOrqueioCaseBinding() {
+    return orqueioCaseBindingAttribute.getValue(this);
   }
 
-  public void setCamundaCaseBinding(String camundaCaseBinding) {
-    camundaCaseBindingAttribute.setValue(this, camundaCaseBinding);
+  public void setOrqueioCaseBinding(String orqueioCaseBinding) {
+    orqueioCaseBindingAttribute.setValue(this, orqueioCaseBinding);
   }
 
-  public String getCamundaCaseVersion() {
-    return camundaCaseVersionAttribute.getValue(this);
+  public String getOrqueioCaseVersion() {
+    return orqueioCaseVersionAttribute.getValue(this);
   }
 
-  public void setCamundaCaseVersion(String camundaCaseVersion) {
-    camundaCaseVersionAttribute.setValue(this, camundaCaseVersion);
+  public void setOrqueioCaseVersion(String orqueioCaseVersion) {
+    orqueioCaseVersionAttribute.setValue(this, orqueioCaseVersion);
   }
 
-  public String getCamundaCaseTenantId() {
-    return camundaCaseTenantIdAttribute.getValue(this);
+  public String getOrqueioCaseTenantId() {
+    return orqueioCaseTenantIdAttribute.getValue(this);
   }
 
-  public void setCamundaCaseTenantId(String camundaCaseTenantId) {
-    camundaCaseTenantIdAttribute.setValue(this, camundaCaseTenantId);
+  public void setOrqueioCaseTenantId(String orqueioCaseTenantId) {
+    orqueioCaseTenantIdAttribute.setValue(this, orqueioCaseTenantId);
   }
 
   public static void registerType(ModelBuilder modelBuilder) {
@@ -116,17 +116,17 @@ public class CaseTaskImpl extends TaskImpl implements CaseTask {
     caseRefAttribute = typeBuilder.stringAttribute(CMMN_ATTRIBUTE_CASE_REF)
         .build();
 
-    /** camunda extensions */
+    /** orqueio extensions */
 
-    camundaCaseBindingAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_CASE_BINDING)
+    orqueioCaseBindingAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_CASE_BINDING)
       .namespace(ORQUEIO_NS)
       .build();
 
-    camundaCaseVersionAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_CASE_VERSION)
+    orqueioCaseVersionAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_CASE_VERSION)
       .namespace(ORQUEIO_NS)
       .build();
 
-    camundaCaseTenantIdAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_CASE_TENANT_ID)
+    orqueioCaseTenantIdAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_CASE_TENANT_ID)
         .namespace(ORQUEIO_NS)
         .build();
 

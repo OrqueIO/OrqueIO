@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright Toaddlaterccs and/or licensed to Toaddlaterccs
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. Toaddlaterccs this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -74,94 +74,94 @@ public abstract class AbstractSendTaskBuilder<B extends AbstractSendTaskBuilder<
     return myself;
   }
 
-  /** camunda extensions */
+  /** orqueio extensions */
 
   /**
-   * Sets the camunda class attribute.
+   * Sets the orqueio class attribute.
    *
-   * @param camundaClass  the class name to set
+   * @param orqueioClass  the class name to set
    * @return the builder object
    */
-  public B camundaClass(Class delegateClass) {
-    return camundaClass(delegateClass.getName());
+  public B orqueioClass(Class delegateClass) {
+    return orqueioClass(delegateClass.getName());
   }
 
   /**
-   * Sets the camunda class attribute.
+   * Sets the orqueio class attribute.
    *
-   * @param camundaClass  the class name to set
+   * @param orqueioClass  the class name to set
    * @return the builder object
    */
-  public B camundaClass(String fullQualifiedClassName) {
-    element.setCamundaClass(fullQualifiedClassName);
+  public B orqueioClass(String fullQualifiedClassName) {
+    element.setOrqueioClass(fullQualifiedClassName);
     return myself;
   }
 
   /**
-   * Sets the camunda delegateExpression attribute.
+   * Sets the orqueio delegateExpression attribute.
    *
-   * @param camundaExpression  the delegateExpression to set
+   * @param orqueioExpression  the delegateExpression to set
    * @return the builder object
    */
-  public B camundaDelegateExpression(String camundaExpression) {
-    element.setCamundaDelegateExpression(camundaExpression);
+  public B orqueioDelegateExpression(String orqueioExpression) {
+    element.setOrqueioDelegateExpression(orqueioExpression);
     return myself;
   }
 
   /**
-   * Sets the camunda expression attribute.
+   * Sets the orqueio expression attribute.
    *
-   * @param camundaExpression  the expression to set
+   * @param orqueioExpression  the expression to set
    * @return the builder object
    */
-  public B camundaExpression(String camundaExpression) {
-    element.setCamundaExpression(camundaExpression);
+  public B orqueioExpression(String orqueioExpression) {
+    element.setOrqueioExpression(orqueioExpression);
     return myself;
   }
 
   /**
-   * Sets the camunda resultVariable attribute.
+   * Sets the orqueio resultVariable attribute.
    *
-   * @param camundaResultVariable  the name of the process variable
+   * @param orqueioResultVariable  the name of the process variable
    * @return the builder object
    */
-  public B camundaResultVariable(String camundaResultVariable) {
-    element.setCamundaResultVariable(camundaResultVariable);
+  public B orqueioResultVariable(String orqueioResultVariable) {
+    element.setOrqueioResultVariable(orqueioResultVariable);
     return myself;
   }
 
   /**
-   * Sets the camunda topic attribute.
+   * Sets the orqueio topic attribute.
    *
-   * @param camundaTopic  the topic to set
+   * @param orqueioTopic  the topic to set
    * @return the builder object
    */
-  public B camundaTopic(String camundaTopic) {
-    element.setCamundaTopic(camundaTopic);
+  public B orqueioTopic(String orqueioTopic) {
+    element.setOrqueioTopic(orqueioTopic);
     return myself;
   }
 
   /**
-   * Sets the camunda type attribute.
+   * Sets the orqueio type attribute.
    *
-   * @param camundaType  the type of the service task
+   * @param orqueioType  the type of the service task
    * @return the builder object
    */
-  public B camundaType(String camundaType) {
-    element.setCamundaType(camundaType);
+  public B orqueioType(String orqueioType) {
+    element.setOrqueioType(orqueioType);
     return myself;
   }
 
   /**
-   * Set the camunda task priority attribute.
+   * Set the orqueio task priority attribute.
    * The priority is only used for service tasks which have as type value
    * <code>external</code>
    * 
    * @param taskPriority the task priority which should used for the external tasks
    * @return the builder object
    */
-  public B camundaTaskPriority(String taskPriority) {
-    element.setCamundaTaskPriority(taskPriority);
+  public B orqueioTaskPriority(String taskPriority) {
+    element.setOrqueioTaskPriority(taskPriority);
     return myself;
   }
 }

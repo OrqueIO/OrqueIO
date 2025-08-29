@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright Toaddlaterccs and/or licensed to Toaddlaterccs
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. Toaddlaterccs this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -19,7 +19,7 @@ package io.orqueio.bpm.model.cmmn.instance.orqueio;
 import io.orqueio.bpm.model.cmmn.instance.CmmnModelElementInstance;
 
 /**
- * The CMMN out camunda extension element
+ * The CMMN out orqueio extension element
  *
  * @author Sebastian Menski
  * @author Roman Smirnov
@@ -27,20 +27,20 @@ import io.orqueio.bpm.model.cmmn.instance.CmmnModelElementInstance;
  */
 public interface OrqueioOut extends CmmnModelElementInstance {
 
-  String getCamundaSource();
+  String getOrqueioSource();
 
-  void setCamundaSource(String camundaSource);
+  void setOrqueioSource(String orqueioSource);
 
-  String getCamundaSourceExpression();
+  String getOrqueioSourceExpression();
 
-  void setCamundaSourceExpression(String camundaSourceExpression);
+  void setOrqueioSourceExpression(String orqueioSourceExpression);
 
-  String getCamundaVariables();
+  String getOrqueioVariables();
 
-  void setCamundaVariables(String camundaVariables);
+  void setOrqueioVariables(String orqueioVariables);
 
-  String getCamundaTarget();
+  String getOrqueioTarget();
 
-  void setCamundaTarget(String camundaTarget);
+  void setOrqueioTarget(String orqueioTarget);
 
 }

@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright Toaddlaterccs and/or licensed to Toaddlaterccs
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. Toaddlaterccs this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -36,15 +36,15 @@ public class StartEventImpl extends CatchEventImpl implements StartEvent {
 
   protected static Attribute<Boolean> isInterruptingAttribute;
 
-  /** camunda extensions */
+  /** orqueio extensions */
 
-  protected static Attribute<Boolean> camundaAsyncAttribute;
-  protected static Attribute<String> camundaFormHandlerClassAttribute;
-  protected static Attribute<String> camundaFormKeyAttribute;
-  protected static Attribute<String> camundaFormRefAttribute;
-  protected static Attribute<String> camundaFormRefBindingAttribute;
-  protected static Attribute<String> camundaFormRefVersionAttribute;
-  protected static Attribute<String> camundaInitiatorAttribute;
+  protected static Attribute<Boolean> orqueioAsyncAttribute;
+  protected static Attribute<String> orqueioFormHandlerClassAttribute;
+  protected static Attribute<String> orqueioFormKeyAttribute;
+  protected static Attribute<String> orqueioFormRefAttribute;
+  protected static Attribute<String> orqueioFormRefBindingAttribute;
+  protected static Attribute<String> orqueioFormRefVersionAttribute;
+  protected static Attribute<String> orqueioInitiatorAttribute;
 
   public static void registerType(ModelBuilder modelBuilder) {
 
@@ -61,34 +61,34 @@ public class StartEventImpl extends CatchEventImpl implements StartEvent {
       .defaultValue(true)
       .build();
 
-    /** camunda extensions */
+    /** orqueio extensions */
 
-    camundaAsyncAttribute = typeBuilder.booleanAttribute(CAMUNDA_ATTRIBUTE_ASYNC)
+    orqueioAsyncAttribute = typeBuilder.booleanAttribute(ORQUEIO_ATTRIBUTE_ASYNC)
       .namespace(ORQUEIO_NS)
       .defaultValue(false)
       .build();
 
-    camundaFormHandlerClassAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_FORM_HANDLER_CLASS)
+    orqueioFormHandlerClassAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_FORM_HANDLER_CLASS)
       .namespace(ORQUEIO_NS)
       .build();
 
-    camundaFormKeyAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_FORM_KEY)
+    orqueioFormKeyAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_FORM_KEY)
       .namespace(ORQUEIO_NS)
       .build();
 
-    camundaFormRefAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_FORM_REF)
+    orqueioFormRefAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_FORM_REF)
         .namespace(ORQUEIO_NS)
         .build();
 
-    camundaFormRefBindingAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_FORM_REF_BINDING)
+    orqueioFormRefBindingAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_FORM_REF_BINDING)
         .namespace(ORQUEIO_NS)
         .build();
 
-    camundaFormRefVersionAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_FORM_REF_VERSION)
+    orqueioFormRefVersionAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_FORM_REF_VERSION)
         .namespace(ORQUEIO_NS)
         .build();
 
-    camundaInitiatorAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_INITIATOR)
+    orqueioInitiatorAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_INITIATOR)
       .namespace(ORQUEIO_NS)
       .build();
 
@@ -112,70 +112,70 @@ public class StartEventImpl extends CatchEventImpl implements StartEvent {
     isInterruptingAttribute.setValue(this, isInterrupting);
   }
 
-  /** camunda extensions */
+  /** orqueio extensions */
 
   /**
-   * @deprecated use isCamundaAsyncBefore() instead.
+   * @deprecated use isOrqueioAsyncBefore() instead.
    */
   @Deprecated
-  public boolean isCamundaAsync() {
-    return camundaAsyncAttribute.getValue(this);
+  public boolean isOrqueioAsync() {
+    return orqueioAsyncAttribute.getValue(this);
   }
 
   /**
-   * @deprecated use setCamundaAsyncBefore(isCamundaAsyncBefore) instead.
+   * @deprecated use setOrqueioAsyncBefore(isOrqueioAsyncBefore) instead.
    */
   @Deprecated
-  public void setCamundaAsync(boolean isCamundaAsync) {
-    camundaAsyncAttribute.setValue(this, isCamundaAsync);
+  public void setOrqueioAsync(boolean isOrqueioAsync) {
+    orqueioAsyncAttribute.setValue(this, isOrqueioAsync);
   }
 
-  public String getCamundaFormHandlerClass() {
-    return camundaFormHandlerClassAttribute.getValue(this);
+  public String getOrqueioFormHandlerClass() {
+    return orqueioFormHandlerClassAttribute.getValue(this);
   }
 
-  public void setCamundaFormHandlerClass(String camundaFormHandlerClass) {
-    camundaFormHandlerClassAttribute.setValue(this, camundaFormHandlerClass);
+  public void setOrqueioFormHandlerClass(String orqueioFormHandlerClass) {
+    orqueioFormHandlerClassAttribute.setValue(this, orqueioFormHandlerClass);
   }
 
-  public String getCamundaFormKey() {
-    return camundaFormKeyAttribute.getValue(this);
+  public String getOrqueioFormKey() {
+    return orqueioFormKeyAttribute.getValue(this);
   }
 
-  public void setCamundaFormKey(String camundaFormKey) {
-    camundaFormKeyAttribute.setValue(this, camundaFormKey);
+  public void setOrqueioFormKey(String orqueioFormKey) {
+    orqueioFormKeyAttribute.setValue(this, orqueioFormKey);
   }
 
 
-  public String getCamundaFormRef() {
-    return camundaFormRefAttribute.getValue(this);
+  public String getOrqueioFormRef() {
+    return orqueioFormRefAttribute.getValue(this);
   }
 
-  public void setCamundaFormRef(String camundaFormRef) {
-    camundaFormRefAttribute.setValue(this, camundaFormRef);
+  public void setOrqueioFormRef(String orqueioFormRef) {
+    orqueioFormRefAttribute.setValue(this, orqueioFormRef);
   }
 
-  public String getCamundaFormRefBinding() {
-    return camundaFormRefBindingAttribute.getValue(this);
+  public String getOrqueioFormRefBinding() {
+    return orqueioFormRefBindingAttribute.getValue(this);
   }
 
-  public void setCamundaFormRefBinding(String camundaFormRefBinding) {
-    camundaFormRefBindingAttribute.setValue(this, camundaFormRefBinding);
+  public void setOrqueioFormRefBinding(String orqueioFormRefBinding) {
+    orqueioFormRefBindingAttribute.setValue(this, orqueioFormRefBinding);
   }
 
-  public String getCamundaFormRefVersion() {
-    return camundaFormRefVersionAttribute.getValue(this);
+  public String getOrqueioFormRefVersion() {
+    return orqueioFormRefVersionAttribute.getValue(this);
   }
 
-  public void setCamundaFormRefVersion(String camundaFormRefVersion) {
-    camundaFormRefVersionAttribute.setValue(this, camundaFormRefVersion);
+  public void setOrqueioFormRefVersion(String orqueioFormRefVersion) {
+    orqueioFormRefVersionAttribute.setValue(this, orqueioFormRefVersion);
   }
 
-  public String getCamundaInitiator() {
-    return camundaInitiatorAttribute.getValue(this);
+  public String getOrqueioInitiator() {
+    return orqueioInitiatorAttribute.getValue(this);
   }
 
-  public void setCamundaInitiator(String camundaInitiator) {
-    camundaInitiatorAttribute.setValue(this, camundaInitiator);
+  public void setOrqueioInitiator(String orqueioInitiator) {
+    orqueioInitiatorAttribute.setValue(this, orqueioInitiator);
   }
 }

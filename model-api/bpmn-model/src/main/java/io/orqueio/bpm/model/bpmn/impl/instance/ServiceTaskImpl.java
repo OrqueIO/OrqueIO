@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright Toaddlaterccs and/or licensed to Toaddlaterccs
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. Toaddlaterccs this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -40,15 +40,15 @@ public class ServiceTaskImpl extends TaskImpl implements ServiceTask {
   protected static Attribute<String> implementationAttribute;
   protected static AttributeReference<Operation> operationRefAttribute;
 
-  /** camunda extensions */
+  /** orqueio extensions */
 
-  protected static Attribute<String> camundaClassAttribute;
-  protected static Attribute<String> camundaDelegateExpressionAttribute;
-  protected static Attribute<String> camundaExpressionAttribute;
-  protected static Attribute<String> camundaResultVariableAttribute;
-  protected static Attribute<String> camundaTopicAttribute;
-  protected static Attribute<String> camundaTypeAttribute;
-  protected static Attribute<String> camundaTaskPriorityAttribute;
+  protected static Attribute<String> orqueioClassAttribute;
+  protected static Attribute<String> orqueioDelegateExpressionAttribute;
+  protected static Attribute<String> orqueioExpressionAttribute;
+  protected static Attribute<String> orqueioResultVariableAttribute;
+  protected static Attribute<String> orqueioTopicAttribute;
+  protected static Attribute<String> orqueioTypeAttribute;
+  protected static Attribute<String> orqueioTaskPriorityAttribute;
 
   public static void registerType(ModelBuilder modelBuilder) {
     ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(ServiceTask.class, BPMN_ELEMENT_SERVICE_TASK)
@@ -68,33 +68,33 @@ public class ServiceTaskImpl extends TaskImpl implements ServiceTask {
       .qNameAttributeReference(Operation.class)
       .build();
 
-    /** camunda extensions */
+    /** orqueio extensions */
 
-    camundaClassAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_CLASS)
+    orqueioClassAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_CLASS)
       .namespace(ORQUEIO_NS)
       .build();
 
-    camundaDelegateExpressionAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_DELEGATE_EXPRESSION)
+    orqueioDelegateExpressionAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_DELEGATE_EXPRESSION)
       .namespace(ORQUEIO_NS)
       .build();
 
-    camundaExpressionAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_EXPRESSION)
+    orqueioExpressionAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_EXPRESSION)
       .namespace(ORQUEIO_NS)
       .build();
 
-    camundaResultVariableAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_RESULT_VARIABLE)
+    orqueioResultVariableAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_RESULT_VARIABLE)
       .namespace(ORQUEIO_NS)
       .build();
 
-    camundaTopicAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_TOPIC)
+    orqueioTopicAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_TOPIC)
         .namespace(ORQUEIO_NS)
         .build();
 
-    camundaTypeAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_TYPE)
+    orqueioTypeAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_TYPE)
       .namespace(ORQUEIO_NS)
       .build();
     
-    camundaTaskPriorityAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_TASK_PRIORITY)
+    orqueioTaskPriorityAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_TASK_PRIORITY)
       .namespace(ORQUEIO_NS)
       .build();
 
@@ -126,63 +126,63 @@ public class ServiceTaskImpl extends TaskImpl implements ServiceTask {
     operationRefAttribute.setReferenceTargetElement(this, operation);
   }
 
-  /** camunda extensions */
+  /** orqueio extensions */
 
-  public String getCamundaClass() {
-    return camundaClassAttribute.getValue(this);
+  public String getOrqueioClass() {
+    return orqueioClassAttribute.getValue(this);
   }
 
-  public void setCamundaClass(String camundaClass) {
-    camundaClassAttribute.setValue(this, camundaClass);
+  public void setOrqueioClass(String orqueioClass) {
+    orqueioClassAttribute.setValue(this, orqueioClass);
   }
 
-  public String getCamundaDelegateExpression() {
-    return camundaDelegateExpressionAttribute.getValue(this);
+  public String getOrqueioDelegateExpression() {
+    return orqueioDelegateExpressionAttribute.getValue(this);
   }
 
-  public void setCamundaDelegateExpression(String camundaExpression) {
-    camundaDelegateExpressionAttribute.setValue(this, camundaExpression);
+  public void setOrqueioDelegateExpression(String orqueioExpression) {
+    orqueioDelegateExpressionAttribute.setValue(this, orqueioExpression);
   }
 
-  public String getCamundaExpression() {
-    return camundaExpressionAttribute.getValue(this);
+  public String getOrqueioExpression() {
+    return orqueioExpressionAttribute.getValue(this);
   }
 
-  public void setCamundaExpression(String camundaExpression) {
-    camundaExpressionAttribute.setValue(this, camundaExpression);
+  public void setOrqueioExpression(String orqueioExpression) {
+    orqueioExpressionAttribute.setValue(this, orqueioExpression);
   }
 
-  public String getCamundaResultVariable() {
-    return camundaResultVariableAttribute.getValue(this);
+  public String getOrqueioResultVariable() {
+    return orqueioResultVariableAttribute.getValue(this);
   }
 
-  public void setCamundaResultVariable(String camundaResultVariable) {
-    camundaResultVariableAttribute.setValue(this, camundaResultVariable);
+  public void setOrqueioResultVariable(String orqueioResultVariable) {
+    orqueioResultVariableAttribute.setValue(this, orqueioResultVariable);
   }
 
-  public String getCamundaTopic() {
-    return camundaTopicAttribute.getValue(this);
+  public String getOrqueioTopic() {
+    return orqueioTopicAttribute.getValue(this);
   }
 
-  public void setCamundaTopic(String camundaTopic) {
-    camundaTopicAttribute.setValue(this, camundaTopic);
+  public void setOrqueioTopic(String orqueioTopic) {
+    orqueioTopicAttribute.setValue(this, orqueioTopic);
   }
 
-  public String getCamundaType() {
-    return camundaTypeAttribute.getValue(this);
+  public String getOrqueioType() {
+    return orqueioTypeAttribute.getValue(this);
   }
 
-  public void setCamundaType(String camundaType) {
-    camundaTypeAttribute.setValue(this, camundaType);
-  }
-
-  @Override
-  public String getCamundaTaskPriority() {
-    return camundaTaskPriorityAttribute.getValue(this);    
+  public void setOrqueioType(String orqueioType) {
+    orqueioTypeAttribute.setValue(this, orqueioType);
   }
 
   @Override
-  public void setCamundaTaskPriority(String taskPriority) {
-    camundaTaskPriorityAttribute.setValue(this, taskPriority);
+  public String getOrqueioTaskPriority() {
+    return orqueioTaskPriorityAttribute.getValue(this);
+  }
+
+  @Override
+  public void setOrqueioTaskPriority(String taskPriority) {
+    orqueioTaskPriorityAttribute.setValue(this, taskPriority);
   }
 }

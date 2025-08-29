@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright Toaddlaterccs and/or licensed to Toaddlaterccs
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. Toaddlaterccs this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -57,27 +57,27 @@ public abstract class AbstractScriptTaskBuilder<B extends AbstractScriptTaskBuil
     return myself;
   }
 
-  /** camunda extensions */
+  /** orqueio extensions */
 
   /**
-   * Sets the camunda result variable of the build script task.
+   * Sets the orqueio result variable of the build script task.
    *
-   * @param camundaResultVariable  the result variable to set
+   * @param orqueioResultVariable  the result variable to set
    * @return the builder object
    */
-  public B camundaResultVariable(String camundaResultVariable) {
-    element.setCamundaResultVariable(camundaResultVariable);
+  public B orqueioResultVariable(String orqueioResultVariable) {
+    element.setOrqueioResultVariable(orqueioResultVariable);
     return myself;
   }
 
   /**
-   * Sets the camunda resource of the build script task.
+   * Sets the orqueio resource of the build script task.
    *
-   * @param camundaResource  the resource to set
+   * @param orqueioResource  the resource to set
    * @return the builder object
    */
-  public B camundaResource(String camundaResource) {
-    element.setCamundaResource(camundaResource);
+  public B orqueioResource(String orqueioResource) {
+    element.setOrqueioResource(orqueioResource);
     return myself;
   }
 

@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright Toaddlaterccs and/or licensed to Toaddlaterccs
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. Toaddlaterccs this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -69,47 +69,47 @@ public interface Process extends CallableElement {
 
   Collection<Process> getSupports();
 
-  /** camunda extensions */
+  /** orqueio extensions */
 
-  String getCamundaCandidateStarterGroups();
+  String getOrqueioCandidateStarterGroups();
 
-  void setCamundaCandidateStarterGroups(String camundaCandidateStarterGroups);
+  void setOrqueioCandidateStarterGroups(String orqueioCandidateStarterGroups);
 
-  List<String> getCamundaCandidateStarterGroupsList();
+  List<String> getOrqueioCandidateStarterGroupsList();
 
-  void setCamundaCandidateStarterGroupsList(List<String> camundaCandidateStarterGroupsList);
+  void setOrqueioCandidateStarterGroupsList(List<String> orqueioCandidateStarterGroupsList);
 
-  String getCamundaCandidateStarterUsers();
+  String getOrqueioCandidateStarterUsers();
 
-  void setCamundaCandidateStarterUsers(String camundaCandidateStarterUsers);
+  void setOrqueioCandidateStarterUsers(String orqueioCandidateStarterUsers);
 
-  List<String> getCamundaCandidateStarterUsersList();
+  List<String> getOrqueioCandidateStarterUsersList();
 
-  void setCamundaCandidateStarterUsersList(List<String> camundaCandidateStarterUsersList);
+  void setOrqueioCandidateStarterUsersList(List<String> orqueioCandidateStarterUsersList);
 
-  String getCamundaJobPriority();
+  String getOrqueioJobPriority();
 
-  void setCamundaJobPriority(String jobPriority);
+  void setOrqueioJobPriority(String jobPriority);
 
-  String getCamundaTaskPriority();
+  String getOrqueioTaskPriority();
 
-  void setCamundaTaskPriority(String taskPriority);
-
-  @Deprecated
-  Integer getCamundaHistoryTimeToLive();
+  void setOrqueioTaskPriority(String taskPriority);
 
   @Deprecated
-  void setCamundaHistoryTimeToLive(Integer historyTimeToLive);
+  Integer getOrqueioHistoryTimeToLive();
 
-  String getCamundaHistoryTimeToLiveString();
+  @Deprecated
+  void setOrqueioHistoryTimeToLive(Integer historyTimeToLive);
 
-  void setCamundaHistoryTimeToLiveString(String historyTimeToLive);
+  String getOrqueioHistoryTimeToLiveString();
 
-  Boolean isCamundaStartableInTasklist();
+  void setOrqueioHistoryTimeToLiveString(String historyTimeToLive);
 
-  void setCamundaIsStartableInTasklist(Boolean isStartableInTasklist);
+  Boolean isOrqueioStartableInTasklist();
 
-  String getCamundaVersionTag();
+  void setOrqueioIsStartableInTasklist(Boolean isStartableInTasklist);
 
-  void setCamundaVersionTag(String versionTag);
+  String getOrqueioVersionTag();
+
+  void setOrqueioVersionTag(String versionTag);
 }

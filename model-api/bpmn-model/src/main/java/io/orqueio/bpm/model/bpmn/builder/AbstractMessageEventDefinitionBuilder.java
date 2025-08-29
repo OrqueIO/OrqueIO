@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright Toaddlaterccs and/or licensed to Toaddlaterccs
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. Toaddlaterccs this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -48,38 +48,38 @@ public abstract class AbstractMessageEventDefinitionBuilder<B extends AbstractMe
   }
 
   /**
-   * Sets the camunda topic attribute. This is only meaningful when
-   * the {@link #camundaType(String)} attribute has the value <code>external</code>.
+   * Sets the orqueio topic attribute. This is only meaningful when
+   * the {@link #orqueioType(String)} attribute has the value <code>external</code>.
    *
-   * @param camundaTopic the topic to set
+   * @param orqueioTopic the topic to set
    * @return the builder object
    */
-  public B camundaTopic(String camundaTopic) {
-    element.setCamundaTopic(camundaTopic);
+  public B orqueioTopic(String orqueioTopic) {
+    element.setOrqueioTopic(orqueioTopic);
     return myself;
   }
 
   /**
-   * Sets the camunda type attribute.
+   * Sets the orqueio type attribute.
    *
-   * @param camundaType  the type of the service task
+   * @param orqueioType  the type of the service task
    * @return the builder object
    */
-  public B camundaType(String camundaType) {
-    element.setCamundaType(camundaType);
+  public B orqueioType(String orqueioType) {
+    element.setOrqueioType(orqueioType);
     return myself;
   }
 
   /**
-   * Sets the camunda task priority attribute. This is only meaningful when
-   * the {@link #camundaType(String)} attribute has the value <code>external</code>.
+   * Sets the orqueio task priority attribute. This is only meaningful when
+   * the {@link #orqueioType(String)} attribute has the value <code>external</code>.
    *
    *
    * @param taskPriority the priority for the external task
    * @return the builder object
    */
-  public B camundaTaskPriority(String taskPriority) {
-    element.setCamundaTaskPriority(taskPriority);
+  public B orqueioTaskPriority(String taskPriority) {
+    element.setOrqueioTaskPriority(taskPriority);
     return myself;
   }
 

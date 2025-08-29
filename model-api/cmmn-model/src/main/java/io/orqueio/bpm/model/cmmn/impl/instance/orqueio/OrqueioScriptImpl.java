@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright Toaddlaterccs and/or licensed to Toaddlaterccs
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. Toaddlaterccs this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -16,9 +16,9 @@
  */
 package io.orqueio.bpm.model.cmmn.impl.instance.orqueio;
 
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_RESOURCE;
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_SCRIPT_FORMAT;
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ELEMENT_SCRIPT;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ATTRIBUTE_RESOURCE;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ATTRIBUTE_SCRIPT_FORMAT;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ELEMENT_SCRIPT;
 import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_NS;
 
 import io.orqueio.bpm.model.cmmn.impl.instance.CmmnModelElementInstanceImpl;
@@ -35,11 +35,11 @@ import io.orqueio.bpm.model.xml.type.attribute.Attribute;
  */
 public class OrqueioScriptImpl extends CmmnModelElementInstanceImpl implements OrqueioScript {
 
-  protected static Attribute<String> camundaScriptFormatAttribute;
-  protected static Attribute<String> camundaResourceAttribute;
+  protected static Attribute<String> orqueioScriptFormatAttribute;
+  protected static Attribute<String> orqueioResourceAttribute;
 
   public static void registerType(ModelBuilder modelBuilder) {
-    ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(OrqueioScript.class, CAMUNDA_ELEMENT_SCRIPT)
+    ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(OrqueioScript.class, ORQUEIO_ELEMENT_SCRIPT)
       .namespaceUri(ORQUEIO_NS)
       .instanceProvider(new ModelTypeInstanceProvider<OrqueioScript>() {
         public OrqueioScript newInstance(ModelTypeInstanceContext instanceContext) {
@@ -47,11 +47,11 @@ public class OrqueioScriptImpl extends CmmnModelElementInstanceImpl implements O
         }
       });
 
-    camundaScriptFormatAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_SCRIPT_FORMAT)
+    orqueioScriptFormatAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_SCRIPT_FORMAT)
         .namespace(ORQUEIO_NS)
         .build();
 
-    camundaResourceAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_RESOURCE)
+    orqueioResourceAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_RESOURCE)
         .namespace(ORQUEIO_NS)
         .build();
 
@@ -62,20 +62,20 @@ public class OrqueioScriptImpl extends CmmnModelElementInstanceImpl implements O
     super(instanceContext);
   }
 
-  public String getCamundaScriptFormat() {
-    return camundaScriptFormatAttribute.getValue(this);
+  public String getOrqueioScriptFormat() {
+    return orqueioScriptFormatAttribute.getValue(this);
   }
 
-  public void setCamundaScriptFormat(String scriptFormat) {
-    camundaScriptFormatAttribute.setValue(this, scriptFormat);
+  public void setOrqueioScriptFormat(String scriptFormat) {
+    orqueioScriptFormatAttribute.setValue(this, scriptFormat);
   }
 
-  public String getCamundaResource() {
-    return camundaResourceAttribute.getValue(this);
+  public String getOrqueioResource() {
+    return orqueioResourceAttribute.getValue(this);
   }
 
-  public void setCamundaResoure(String resource) {
-    camundaResourceAttribute.setValue(this, resource);
+  public void setOrqueioResoure(String resource) {
+    orqueioResourceAttribute.setValue(this, resource);
   }
 
 }
