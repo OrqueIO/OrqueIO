@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -57,11 +57,11 @@ public class ResteasySpecifics implements ContainerSpecifics {
             .setContextPath("/rest-test/rest")
             .setClassLoader(ResteasyUndertowServerBootstrap.class.getClassLoader())
             .addListener(Servlets.listener(ResteasyBootstrap.class))
-            .addFilter(Servlets.filter("camunda-auth", ProcessEngineAuthenticationFilter.class)
+            .addFilter(Servlets.filter("orqueio-auth", ProcessEngineAuthenticationFilter.class)
                 .addInitParam("authentication-provider",
                     "io.orqueio.bpm.engine.rest.security.auth.impl.HttpBasicAuthenticationProvider"))
-            .addFilterUrlMapping("camunda-auth", "/*", DispatcherType.REQUEST)
-            .addServlet(Servlets.servlet("camunda-app", HttpServletDispatcher.class)
+            .addFilterUrlMapping("orqueio-auth", "/*", DispatcherType.REQUEST)
+            .addServlet(Servlets.servlet("orqueio-app", HttpServletDispatcher.class)
                 .addMapping("/*")
                 .addInitParam("jakarta.ws.rs.Application",
                     "io.orqueio.bpm.engine.rest.util.container.JaxrsApplication"))));
@@ -72,11 +72,11 @@ public class ResteasySpecifics implements ContainerSpecifics {
             .setContextPath("/rest-test/rest")
             .setClassLoader(ResteasyUndertowServerBootstrap.class.getClassLoader())
             .addListener(Servlets.listener(ResteasyBootstrap.class))
-            .addFilter(Servlets.filter("camunda-auth", ProcessEngineAuthenticationFilter.class)
+            .addFilter(Servlets.filter("orqueio-auth", ProcessEngineAuthenticationFilter.class)
                 .addInitParam("authentication-provider",
                     "io.orqueio.bpm.engine.rest.security.auth.impl.HttpBasicAuthenticationProvider")
                 .addInitParam("rest-url-pattern-prefix", ""))
-            .addFilterUrlMapping("camunda-auth", "/*", DispatcherType.REQUEST)
+            .addFilterUrlMapping("orqueio-auth", "/*", DispatcherType.REQUEST)
             .addFilter(Servlets.filter("Resteasy", FilterDispatcher.class)
                 .addInitParam("jakarta.ws.rs.Application",
                     "io.orqueio.bpm.engine.rest.util.container.JaxrsApplication"))
@@ -91,7 +91,7 @@ public class ResteasySpecifics implements ContainerSpecifics {
             .addFilter(Servlets.filter("EmptyBodyFilter", io.orqueio.bpm.engine.rest.filter.EmptyBodyFilter.class)
                 .addInitParam("rest-url-pattern-prefix", ""))
             .addFilterUrlMapping("EmptyBodyFilter", "/*", DispatcherType.REQUEST)
-            .addServlet(Servlets.servlet("camunda-app", HttpServletDispatcher.class)
+            .addServlet(Servlets.servlet("orqueio-app", HttpServletDispatcher.class)
                 .addMapping("/*")
                 .addInitParam("jakarta.ws.rs.Application",
                     "io.orqueio.bpm.engine.rest.util.container.JaxrsApplication"))));

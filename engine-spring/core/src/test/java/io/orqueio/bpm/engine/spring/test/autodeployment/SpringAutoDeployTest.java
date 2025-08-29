@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -39,26 +39,26 @@ import java.util.Set;
 public class SpringAutoDeployTest extends PvmTestCase {
 
   protected static final String CTX_PATH
-    = "org/camunda/bpm/engine/spring/test/autodeployment/SpringAutoDeployTest-context.xml";
+    = "io/orqueio/bpm/engine/spring/test/autodeployment/SpringAutoDeployTest-context.xml";
   protected static final String CTX_CREATE_DROP_CLEAN_DB
-    = "org/camunda/bpm/engine/spring/test/autodeployment/SpringAutoDeployTest-create-drop-clean-db-context.xml";
+    = "io/orqueio/bpm/engine/spring/test/autodeployment/SpringAutoDeployTest-create-drop-clean-db-context.xml";
   protected static final String CTX_DYNAMIC_DEPLOY_PATH
-  = "org/camunda/bpm/engine/spring/test/autodeployment/SpringAutoDeployTest-dynamic-deployment-context.xml";
+  = "io/orqueio/bpm/engine/spring/test/autodeployment/SpringAutoDeployTest-dynamic-deployment-context.xml";
 
   protected static final String CTX_CMMN_PATH
-    = "org/camunda/bpm/engine/spring/test/autodeployment/SpringAutoDeployCmmnTest-context.xml";
+    = "io/orqueio/bpm/engine/spring/test/autodeployment/SpringAutoDeployCmmnTest-context.xml";
 
   protected static final String CTX_CMMN_BPMN_TOGETHER_PATH
-      = "org/camunda/bpm/engine/spring/test/autodeployment/SpringAutoDeployCmmnBpmnTest-context.xml";
+      = "io/orqueio/bpm/engine/spring/test/autodeployment/SpringAutoDeployCmmnBpmnTest-context.xml";
 
   protected static final String CTX_DEPLOY_CHANGE_ONLY_PATH
-      = "org/camunda/bpm/engine/spring/test/autodeployment/SpringAutoDeployDeployChangeOnlyTest-context.xml";
+      = "io/orqueio/bpm/engine/spring/test/autodeployment/SpringAutoDeployDeployChangeOnlyTest-context.xml";
 
   protected static final String CTX_TENANT_ID_PATH
-      = "org/camunda/bpm/engine/spring/test/autodeployment/SpringAutoDeployTenantIdTest-context.xml";
+      = "io/orqueio/bpm/engine/spring/test/autodeployment/SpringAutoDeployTenantIdTest-context.xml";
 
   protected static final String CTX_CUSTOM_NAME_PATH
-      = "org/camunda/bpm/engine/spring/test/autodeployment/SpringAutoDeployCustomNameTest-context.xml";
+      = "io/orqueio/bpm/engine/spring/test/autodeployment/SpringAutoDeployCustomNameTest-context.xml";
 
 
   protected ClassPathXmlApplicationContext applicationContext;

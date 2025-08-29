@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -28,7 +28,7 @@ import javax.ws.rs.core.MultivaluedMap;
 import io.orqueio.bpm.engine.ProcessEngine;
 import io.orqueio.bpm.engine.history.HistoricCaseActivityInstanceQuery;
 import io.orqueio.bpm.engine.rest.dto.AbstractQueryDto;
-import io.orqueio.bpm.engine.rest.dto.CamundaQueryParam;
+import io.orqueio.bpm.engine.rest.dto.OrqueioQueryParam;
 import io.orqueio.bpm.engine.rest.dto.converter.BooleanConverter;
 import io.orqueio.bpm.engine.rest.dto.converter.DateConverter;
 import io.orqueio.bpm.engine.rest.dto.converter.StringListConverter;
@@ -97,122 +97,122 @@ public class HistoricCaseActivityInstanceQueryDto extends AbstractQueryDto<Histo
     super(objectMapper, queryParameters);
   }
 
-  @CamundaQueryParam("caseActivityInstanceId")
+  @OrqueioQueryParam("caseActivityInstanceId")
   public void setCaseActivityInstanceId(String caseActivityInstanceId) {
     this.caseActivityInstanceId = caseActivityInstanceId;
   }
 
-  @CamundaQueryParam(value = "caseActivityInstanceIdIn", converter = StringListConverter.class)
+  @OrqueioQueryParam(value = "caseActivityInstanceIdIn", converter = StringListConverter.class)
   public void setCaseActivityInstanceIdIn(List<String> caseActivityInstanceIds) {
     this.caseActivityInstanceIds = caseActivityInstanceIds;
   }
 
-  @CamundaQueryParam("caseInstanceId")
+  @OrqueioQueryParam("caseInstanceId")
   public void setCaseInstanceId(String caseInstanceId) {
     this.caseInstanceId = caseInstanceId;
   }
 
-  @CamundaQueryParam("caseDefinitionId")
+  @OrqueioQueryParam("caseDefinitionId")
   public void setCaseDefinitionId(String caseDefinitionId) {
     this.caseDefinitionId = caseDefinitionId;
   }
 
-  @CamundaQueryParam("caseExecutionId")
+  @OrqueioQueryParam("caseExecutionId")
   public void setCaseExecutionId(String caseExecutionId) {
     this.caseExecutionId = caseExecutionId;
   }
 
-  @CamundaQueryParam("caseActivityId")
+  @OrqueioQueryParam("caseActivityId")
   public void setCaseActivityId(String caseActivityId) {
     this.caseActivityId = caseActivityId;
   }
 
-  @CamundaQueryParam(value = "caseActivityIdIn", converter = StringListConverter.class)
+  @OrqueioQueryParam(value = "caseActivityIdIn", converter = StringListConverter.class)
   public void setCaseActivityIdIn(List<String> caseActivityIds) {
     this.caseActivityIds = caseActivityIds;
   }
 
-  @CamundaQueryParam("caseActivityName")
+  @OrqueioQueryParam("caseActivityName")
   public void setCaseActivityName(String caseActivityName) {
     this.caseActivityName = caseActivityName;
   }
 
-  @CamundaQueryParam("caseActivityType")
+  @OrqueioQueryParam("caseActivityType")
   public void setCaseActivityType(String caseActivityType) {
     this.caseActivityType = caseActivityType;
   }
 
-  @CamundaQueryParam(value = "createdBefore", converter = DateConverter.class)
+  @OrqueioQueryParam(value = "createdBefore", converter = DateConverter.class)
   public void setCreatedBefore(Date createdBefore) {
     this.createdBefore = createdBefore;
   }
 
-  @CamundaQueryParam(value = "createdAfter", converter = DateConverter.class)
+  @OrqueioQueryParam(value = "createdAfter", converter = DateConverter.class)
   public void setCreatedAfter(Date createdAfter) {
     this.createdAfter = createdAfter;
   }
 
-  @CamundaQueryParam(value = "endedBefore", converter = DateConverter.class)
+  @OrqueioQueryParam(value = "endedBefore", converter = DateConverter.class)
   public void setEndedBefore(Date endedBefore) {
     this.endedBefore = endedBefore;
   }
 
-  @CamundaQueryParam(value = "endedAfter", converter = DateConverter.class)
+  @OrqueioQueryParam(value = "endedAfter", converter = DateConverter.class)
   public void setEndedAfter(Date endedAfter) {
     this.endedAfter = endedAfter;
   }
 
-  @CamundaQueryParam(value = "required", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value = "required", converter = BooleanConverter.class)
   public void setRequired(Boolean required) {
     this.required = required;
   }
 
-  @CamundaQueryParam(value = "finished", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value = "finished", converter = BooleanConverter.class)
   public void setFinished(Boolean finished) {
     this.finished = finished;
   }
 
-  @CamundaQueryParam(value = "unfinished", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value = "unfinished", converter = BooleanConverter.class)
   public void setUnfinished(Boolean unfinished) {
     this.unfinished = unfinished;
   }
 
-  @CamundaQueryParam(value = "available", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value = "available", converter = BooleanConverter.class)
   public void setAvailable(Boolean available) {
     this.available = available;
   }
 
-  @CamundaQueryParam(value = "enabled", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value = "enabled", converter = BooleanConverter.class)
   public void setEnabled(Boolean enabled) {
     this.enabled = enabled;
   }
 
-  @CamundaQueryParam(value = "disabled", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value = "disabled", converter = BooleanConverter.class)
   public void setDisabled(Boolean disabled) {
     this.disabled = disabled;
   }
 
-  @CamundaQueryParam(value = "active", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value = "active", converter = BooleanConverter.class)
   public void setActive(Boolean active) {
     this.active = active;
   }
 
-  @CamundaQueryParam(value = "completed", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value = "completed", converter = BooleanConverter.class)
   public void setCompleted(Boolean completed) {
     this.completed = completed;
   }
 
-  @CamundaQueryParam(value = "terminated", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value = "terminated", converter = BooleanConverter.class)
   public void setTerminated(Boolean terminated) {
     this.terminated = terminated;
   }
 
-  @CamundaQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
+  @OrqueioQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
   public void setTenantIdIn(List<String> tenantIds) {
     this.tenantIds = tenantIds;
   }
 
-  @CamundaQueryParam(value = "withoutTenantId", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value = "withoutTenantId", converter = BooleanConverter.class)
   public void setWithoutTenantId(Boolean withoutTenantId) {
     this.withoutTenantId = withoutTenantId;
   }

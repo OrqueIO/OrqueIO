@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -414,7 +414,7 @@ public class ProcessDefinitionRestServiceInteractionTest extends AbstractRestSer
   }
 
   @Test
-  public void testGetStartForm_shouldReturnCamundaFormRef() {
+  public void testGetStartForm_shouldReturnOrqueioFormRef() {
     StartFormData mockStartFormData = MockProvider.createMockStartFormDataUsingFormRef();
     when(formServiceMock.getStartFormData(anyString())).thenReturn(mockStartFormData);
 
@@ -422,9 +422,9 @@ public class ProcessDefinitionRestServiceInteractionTest extends AbstractRestSer
     .then().expect()
       .statusCode(Status.OK.getStatusCode())
       .body("key", nullValue())
-      .body("camundaFormRef.key", equalTo(MockProvider.EXAMPLE_FORM_KEY))
-      .body("camundaFormRef.binding", equalTo(MockProvider.EXAMPLE_FORM_REF_BINDING))
-      .body("camundaFormRef.version", equalTo(MockProvider.EXAMPLE_FORM_REF_VERSION))
+      .body("orqueioFormRef.key", equalTo(MockProvider.EXAMPLE_FORM_KEY))
+      .body("orqueioFormRef.binding", equalTo(MockProvider.EXAMPLE_FORM_REF_BINDING))
+      .body("orqueioFormRef.version", equalTo(MockProvider.EXAMPLE_FORM_REF_VERSION))
     .when().get(START_FORM_URL);
   }
 

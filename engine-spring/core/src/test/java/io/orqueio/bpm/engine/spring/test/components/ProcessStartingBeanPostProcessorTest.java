@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -37,7 +37,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * @author Josh Long
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("classpath:org/camunda/bpm/engine/spring/test/components/ProcessStartingBeanPostProcessorTest-context.xml")
+@ContextConfiguration("classpath:io/orqueio/bpm/engine/spring/test/components/ProcessStartingBeanPostProcessorTest-context.xml")
 public class ProcessStartingBeanPostProcessorTest {
 
 	private Logger log = Logger.getLogger(getClass().getName());
@@ -54,8 +54,8 @@ public class ProcessStartingBeanPostProcessorTest {
 	@Before
 	public void before() {
 	  repositoryService.createDeployment()
-	    .addClasspathResource("org/camunda/bpm/engine/spring/test/autodeployment/autodeploy.b.bpmn20.xml")
-	    .addClasspathResource("org/camunda/bpm/engine/spring/test/components/waiter.bpmn20.xml")
+	    .addClasspathResource("io/orqueio/bpm/engine/spring/test/autodeployment/autodeploy.b.bpmn20.xml")
+	    .addClasspathResource("io/orqueio/bpm/engine/spring/test/components/waiter.bpmn20.xml")
 	    .deploy();
 	}
 

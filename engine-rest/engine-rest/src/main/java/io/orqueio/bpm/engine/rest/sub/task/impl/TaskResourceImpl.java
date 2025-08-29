@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -466,8 +466,8 @@ public class TaskResourceImpl implements TaskResource {
     String formKey = task.getFormKey();
     if(formKey != null) {
       return ContentTypeUtil.getFormContentType(formKey);
-    } else if(task.getCamundaFormRef() != null) {
-      return ContentTypeUtil.getFormContentType(task.getCamundaFormRef());
+    } else if(task.getOrqueioFormRef() != null) {
+      return ContentTypeUtil.getFormContentType(task.getOrqueioFormRef());
     }
     return MediaType.APPLICATION_XHTML_XML;
   }

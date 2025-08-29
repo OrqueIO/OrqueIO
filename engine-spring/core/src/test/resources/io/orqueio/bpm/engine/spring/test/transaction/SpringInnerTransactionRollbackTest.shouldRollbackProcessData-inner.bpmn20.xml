@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1fom8sc" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.1.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:orqueio="http://orqueio.io/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1fom8sc" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Orqueio Modeler" exporterVersion="3.1.0">
   <bpmn:process id="InnerTxNestedTransactionTest" name="Inner Transaction Process" isExecutable="true">
     <bpmn:startEvent id="StartEvent_1" name="Start Inner TX">
       <bpmn:outgoing>SequenceFlow_0xcnqy3</bpmn:outgoing>
@@ -9,7 +9,7 @@
       <bpmn:incoming>SequenceFlow_0q610er</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="SequenceFlow_0q610er" sourceRef="Task_1djyki0" targetRef="EndEvent_0s23van" />
-    <bpmn:serviceTask id="Task_1djyki0" name="Do Something" camunda:asyncAfter="true" camunda:expression="${true}" camunda:resultVariable="innerVariable">
+    <bpmn:serviceTask id="Task_1djyki0" name="Do Something" orqueio:asyncAfter="true" orqueio:expression="${true}" orqueio:resultVariable="innerVariable">
       <bpmn:incoming>SequenceFlow_0xcnqy3</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0q610er</bpmn:outgoing>
     </bpmn:serviceTask>

@@ -24,7 +24,7 @@
   <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
     <property name="dataSource" ref="dataSource"/>
     <property name="persistenceXmlLocation">
-      <value>classpath:/org/camunda/bpm/engine/spring/test/jpa/custom-persistence.xml</value>
+      <value>classpath:/io/orqueio/bpm/engine/spring/test/jpa/custom-persistence.xml</value>
     </property>
     <property name="jpaVendorAdapter">
       <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">

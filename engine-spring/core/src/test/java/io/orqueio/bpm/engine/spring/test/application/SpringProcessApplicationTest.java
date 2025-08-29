@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -40,7 +40,7 @@ public class SpringProcessApplicationTest {
     Assert.assertEquals(0, BpmPlatform.getProcessApplicationService().getProcessApplicationNames().size());
 
     // start a spring application context
-    AbstractApplicationContext applicationContext = new ClassPathXmlApplicationContext("org/camunda/bpm/engine/spring/test/application/SpringProcessApplicationDeploymentTest-context.xml");
+    AbstractApplicationContext applicationContext = new ClassPathXmlApplicationContext("io/orqueio/bpm/engine/spring/test/application/SpringProcessApplicationDeploymentTest-context.xml");
     applicationContext.start();
 
     // assert that there is a process application deployed with the name of the process application bean
@@ -60,7 +60,7 @@ public class SpringProcessApplicationTest {
   public void testDeployProcessArchive() {
 
     // start a spring application context
-    AbstractApplicationContext applicationContext = new ClassPathXmlApplicationContext("org/camunda/bpm/engine/spring/test/application/SpringProcessArchiveDeploymentTest-context.xml");
+    AbstractApplicationContext applicationContext = new ClassPathXmlApplicationContext("io/orqueio/bpm/engine/spring/test/application/SpringProcessArchiveDeploymentTest-context.xml");
     applicationContext.start();
 
     // assert the process archive is deployed:
@@ -78,7 +78,7 @@ public class SpringProcessApplicationTest {
   public void testPostDeployRegistrationPa() {
     // this test verifies that a process application is able to register a deployment from the @PostDeploy callback:
 
-    AbstractApplicationContext applicationContext = new ClassPathXmlApplicationContext("org/camunda/bpm/engine/spring/test/application/PostDeployRegistrationPaTest-context.xml");
+    AbstractApplicationContext applicationContext = new ClassPathXmlApplicationContext("io/orqueio/bpm/engine/spring/test/application/PostDeployRegistrationPaTest-context.xml");
     applicationContext.start();
 
     ProcessEngine processEngine = BpmPlatform.getDefaultProcessEngine();
@@ -86,7 +86,7 @@ public class SpringProcessApplicationTest {
     // create a manual deployment:
     Deployment deployment = processEngine.getRepositoryService()
       .createDeployment()
-      .addClasspathResource("org/camunda/bpm/engine/spring/test/application/process.bpmn20.xml")
+      .addClasspathResource("io/orqueio/bpm/engine/spring/test/application/process.bpmn20.xml")
       .deploy();
 
     // lookup the process application spring bean:
@@ -131,7 +131,7 @@ public class SpringProcessApplicationTest {
      */
 
     AbstractApplicationContext applicationContext = new ClassPathXmlApplicationContext(
-        "org/camunda/bpm/engine/spring/test/application/PostDeployWithNestedContext-context.xml");
+        "io/orqueio/bpm/engine/spring/test/application/PostDeployWithNestedContext-context.xml");
     applicationContext.start();
 
     // lookup the process application spring bean:

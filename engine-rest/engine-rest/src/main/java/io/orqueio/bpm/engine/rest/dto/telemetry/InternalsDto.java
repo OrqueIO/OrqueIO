@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class InternalsDto {
 
   public static final String SERIALIZED_APPLICATION_SERVER = "application-server";
-  public static final String SERIALIZED_CAMUNDA_INTEGRATION = "camunda-integration";
+  public static final String SERIALIZED_CAMUNDA_INTEGRATION = "orqueio-integration";
   public static final String SERIALIZED_LICENSE_KEY = "license-key";
   public static final String SERIALIZED_TELEMETRY_DATA_COLLECTION_START_DATE = "data-collection-start-date";
 
@@ -40,7 +40,7 @@ public class InternalsDto {
   @JsonProperty(value = SERIALIZED_LICENSE_KEY)
   protected LicenseKeyDataDto licenseKey;
   @JsonProperty(value = SERIALIZED_CAMUNDA_INTEGRATION)
-  protected Set<String> camundaIntegration;
+  protected Set<String> orqueioIntegration;
   @JsonProperty(value = SERIALIZED_TELEMETRY_DATA_COLLECTION_START_DATE)
   protected Date dataCollectionStartDate;
   protected Map<String, CommandDto> commands;
@@ -55,7 +55,7 @@ public class InternalsDto {
     this.licenseKey = licenseKey;
     this.commands = new HashMap<>();
     this.jdk = jdk;
-    this.camundaIntegration = new HashSet<>();
+    this.orqueioIntegration = new HashSet<>();
   }
 
   public DatabaseDto getDatabase() {
@@ -98,12 +98,12 @@ public class InternalsDto {
     this.jdk = jdk;
   }
 
-  public Set<String> getCamundaIntegration() {
-    return camundaIntegration;
+  public Set<String> getOrqueioIntegration() {
+    return orqueioIntegration;
   }
 
-  public void setCamundaIntegration(Set<String> camundaIntegration) {
-    this.camundaIntegration = camundaIntegration;
+  public void setOrqueioIntegration(Set<String> orqueioIntegration) {
+    this.orqueioIntegration = orqueioIntegration;
   }
 
   public LicenseKeyDataDto getLicenseKey() {
@@ -148,7 +148,7 @@ public class InternalsDto {
     other.getMetrics().forEach((name, metric) -> dto.metrics.put(name, new MetricDto(metric.getCount())));
 
     dto.setWebapps(other.getWebapps());
-    dto.setCamundaIntegration(other.getCamundaIntegration());
+    dto.setOrqueioIntegration(other.getOrqueioIntegration());
 
     return dto;
   }

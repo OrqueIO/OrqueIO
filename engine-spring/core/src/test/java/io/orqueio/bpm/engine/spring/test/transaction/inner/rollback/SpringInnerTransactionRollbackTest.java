@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -35,7 +35,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:org/camunda/bpm/engine/spring/test/transaction/"
+@ContextConfiguration(locations = {"classpath:io/orqueio/bpm/engine/spring/test/transaction/"
   + "SpringInnerTransactionRollbackTest-applicationContext.xml"})
 public class SpringInnerTransactionRollbackTest {
 
@@ -54,9 +54,9 @@ public class SpringInnerTransactionRollbackTest {
 
   @Test
   @Deployment(resources = {
-    "org/camunda/bpm/engine/spring/test/transaction/"
+    "io/orqueio/bpm/engine/spring/test/transaction/"
       + "SpringInnerTransactionRollbackTest.shouldRollbackProcessData-outer.bpmn20.xml",
-    "org/camunda/bpm/engine/spring/test/transaction/"
+    "io/orqueio/bpm/engine/spring/test/transaction/"
       + "SpringInnerTransactionRollbackTest.shouldRollbackProcessData-inner.bpmn20.xml"
   })
   public void shouldRollbackProcessData() {

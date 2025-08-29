@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -124,11 +124,11 @@ public class TelemetryRestServiceTest extends AbstractRestServiceTest {
         .body("product.internals.application-server.version", equalTo(MockProvider.EXAMPLE_TELEMETRY_APP_SERVER_VERSION))
         .body("product.internals.license-key.customer", equalTo(MockProvider.EXAMPLE_TELEMETRY_LICENSE_CUSTOMER_NAME))
         .body("product.internals.license-key.type", equalTo(MockProvider.EXAMPLE_TELEMETRY_LICENSE_TYPE))
-        .body("product.internals.license-key.features.camundaBPM", equalTo("true"))
+        .body("product.internals.license-key.features.orqueioBPM", equalTo("true"))
         .body("product.internals.license-key.raw", equalTo(MockProvider.EXAMPLE_TELEMETRY_LICENSE_RAW))
         .body("product.internals.license-key.unlimited", equalTo(MockProvider.EXAMPLE_TELEMETRY_LICENSE_UNLIMITED))
         .body("product.internals.license-key.valid-until", equalTo(MockProvider.EXAMPLE_TELEMETRY_LICENSE_VALID_UNTIL))
-        .body("product.internals.camunda-integration[0]", equalTo("spring-boot"))
+        .body("product.internals.orqueio-integration[0]", equalTo("spring-boot"))
         .body("product.internals.data-collection-start-date", equalTo(MockProvider.EXAMPLE_TELEMETRY_DATA_COLLECTION_START_DATE))
     .when()
       .get(TELEMETRY_DATA_URL);
@@ -152,7 +152,7 @@ public class TelemetryRestServiceTest extends AbstractRestServiceTest {
     when(product.getInternals()).thenReturn(internals);
 
     when(internals.getApplicationServer()).thenReturn(mock(ApplicationServer.class));
-    when(internals.getCamundaIntegration()).thenReturn(new HashSet<>());
+    when(internals.getOrqueioIntegration()).thenReturn(new HashSet<>());
     when(internals.getCommands()).thenReturn(new HashMap<>());
     when(internals.getDatabase()).thenReturn(mock(Database.class));
     when(internals.getJdk()).thenReturn(mock(Jdk.class));

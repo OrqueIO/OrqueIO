@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -22,7 +22,7 @@ import javax.ws.rs.core.UriBuilder;
 
 import io.orqueio.bpm.engine.BadUserRequestException;
 import io.orqueio.bpm.engine.ProcessEngine;
-import io.orqueio.bpm.engine.form.CamundaFormRef;
+import io.orqueio.bpm.engine.form.OrqueioFormRef;
 import io.orqueio.bpm.engine.rest.CaseDefinitionRestService;
 import io.orqueio.bpm.engine.rest.CaseExecutionRestService;
 import io.orqueio.bpm.engine.rest.CaseInstanceRestService;
@@ -87,7 +87,7 @@ public class HalTask extends HalResource<HalTask> {
   private String caseDefinitionId;
   private boolean suspended;
   private String formKey;
-  private CamundaFormRef camundaFormRef;
+  private OrqueioFormRef orqueioFormRef;
   private String tenantId;
 
   public static HalTask generate(Task task, ProcessEngine engine) {
@@ -125,7 +125,7 @@ public class HalTask extends HalResource<HalTask> {
     dto.tenantId = task.getTenantId();
     try {
       dto.formKey = task.getFormKey();
-      dto.camundaFormRef = task.getCamundaFormRef();
+      dto.orqueioFormRef = task.getOrqueioFormRef();
     }
     catch (BadUserRequestException e) {
       // ignore (initializeFormKeys was not called)
@@ -228,8 +228,8 @@ public class HalTask extends HalResource<HalTask> {
     return formKey;
   }
 
-  public CamundaFormRef getCamundaFormRef() {
-    return camundaFormRef;
+  public OrqueioFormRef getOrqueioFormRef() {
+    return orqueioFormRef;
   }
 
   public String getTenantId() {

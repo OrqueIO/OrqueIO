@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -29,7 +29,7 @@ import io.orqueio.bpm.engine.RuntimeService;
 import io.orqueio.bpm.engine.batch.Batch;
 import io.orqueio.bpm.engine.exception.NotFoundException;
 import io.orqueio.bpm.engine.exception.NullValueException;
-import io.orqueio.bpm.engine.form.CamundaFormRef;
+import io.orqueio.bpm.engine.form.OrqueioFormRef;
 import io.orqueio.bpm.engine.form.StartFormData;
 import io.orqueio.bpm.engine.impl.form.validator.FormFieldValidationException;
 import io.orqueio.bpm.engine.impl.util.IoUtil;
@@ -325,7 +325,7 @@ public class ProcessDefinitionResourceImpl implements ProcessDefinitionResource 
       throw new InvalidRequestException(Status.BAD_REQUEST, e, "Cannot get start form data for process definition " + processDefinitionId);
     }
     FormDto dto = FormDto.fromFormData(formData);
-    if((dto.getKey() == null || dto.getKey().isEmpty()) && dto.getCamundaFormRef() == null) {
+    if((dto.getKey() == null || dto.getKey().isEmpty()) && dto.getOrqueioFormRef() == null) {
       if(formData != null && formData.getFormFields() != null && !formData.getFormFields().isEmpty()) {
         dto.setKey("embedded:engine://engine/:engine/process-definition/"+processDefinitionId+"/rendered-form");
       }
@@ -462,11 +462,11 @@ public class ProcessDefinitionResourceImpl implements ProcessDefinitionResource 
 
   protected String getStartFormMediaType(String processDefinitionId) {
     String formKey = engine.getFormService().getStartFormKey(processDefinitionId);
-    CamundaFormRef camundaFormRef = engine.getFormService().getStartFormData(processDefinitionId).getCamundaFormRef();
+    OrqueioFormRef orqueioFormRef = engine.getFormService().getStartFormData(processDefinitionId).getOrqueioFormRef();
     if(formKey != null) {
       return ContentTypeUtil.getFormContentType(formKey);
-    } else if(camundaFormRef != null) {
-      return ContentTypeUtil.getFormContentType(camundaFormRef);
+    } else if(orqueioFormRef != null) {
+      return ContentTypeUtil.getFormContentType(orqueioFormRef);
     }
     return MediaType.APPLICATION_XHTML_XML;
   }

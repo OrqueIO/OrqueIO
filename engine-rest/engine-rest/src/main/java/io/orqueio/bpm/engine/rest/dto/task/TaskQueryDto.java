@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -39,7 +39,7 @@ import io.orqueio.bpm.engine.impl.persistence.entity.SuspensionState;
 import io.orqueio.bpm.engine.query.Query;
 import io.orqueio.bpm.engine.query.QueryProperty;
 import io.orqueio.bpm.engine.rest.dto.AbstractQueryDto;
-import io.orqueio.bpm.engine.rest.dto.CamundaQueryParam;
+import io.orqueio.bpm.engine.rest.dto.OrqueioQueryParam;
 import io.orqueio.bpm.engine.rest.dto.SortingDto;
 import io.orqueio.bpm.engine.rest.dto.VariableQueryParameterDto;
 import io.orqueio.bpm.engine.rest.dto.VariableValueDto;
@@ -228,515 +228,515 @@ public class TaskQueryDto extends AbstractQueryDto<TaskQuery> {
     super(objectMapper, queryParameters);
   }
 
-  @CamundaQueryParam("orQueries")
+  @OrqueioQueryParam("orQueries")
   public void setOrQueries(List<TaskQueryDto> orQueries) {
     this.orQueries = orQueries;
   }
 
-  @CamundaQueryParam("processInstanceBusinessKey")
+  @OrqueioQueryParam("processInstanceBusinessKey")
   public void setProcessInstanceBusinessKey(String businessKey) {
     this.processInstanceBusinessKey = businessKey;
   }
 
-  @CamundaQueryParam("processInstanceBusinessKeyExpression")
+  @OrqueioQueryParam("processInstanceBusinessKeyExpression")
   public void setProcessInstanceBusinessKeyExpression(String businessKeyExpression) {
     this.processInstanceBusinessKeyExpression = businessKeyExpression;
   }
 
-  @CamundaQueryParam(value = "processInstanceBusinessKeyIn", converter = StringArrayConverter.class)
+  @OrqueioQueryParam(value = "processInstanceBusinessKeyIn", converter = StringArrayConverter.class)
   public void setProcessInstanceBusinessKeyIn(String[] processInstanceBusinessKeyIn) {
     this.processInstanceBusinessKeyIn = processInstanceBusinessKeyIn;
   }
 
-  @CamundaQueryParam("processInstanceBusinessKeyLike")
+  @OrqueioQueryParam("processInstanceBusinessKeyLike")
   public void setProcessInstanceBusinessKeyLike(String businessKeyLike) {
     this.processInstanceBusinessKeyLike = businessKeyLike;
   }
 
-  @CamundaQueryParam("processInstanceBusinessKeyLikeExpression")
+  @OrqueioQueryParam("processInstanceBusinessKeyLikeExpression")
   public void setProcessInstanceBusinessKeyLikeExpression(String businessKeyLikeExpression) {
     this.processInstanceBusinessKeyLikeExpression = businessKeyLikeExpression;
   }
 
-  @CamundaQueryParam("processDefinitionKey")
+  @OrqueioQueryParam("processDefinitionKey")
   public void setProcessDefinitionKey(String processDefinitionKey) {
     this.processDefinitionKey = processDefinitionKey;
   }
 
-  @CamundaQueryParam(value = "processDefinitionKeyIn", converter = StringArrayConverter.class)
+  @OrqueioQueryParam(value = "processDefinitionKeyIn", converter = StringArrayConverter.class)
   public void setProcessDefinitionKeyIn(String[] processDefinitionKeyIn) {
     this.processDefinitionKeyIn = processDefinitionKeyIn;
   }
 
-  @CamundaQueryParam("processDefinitionId")
+  @OrqueioQueryParam("processDefinitionId")
   public void setProcessDefinitionId(String processDefinitionId) {
     this.processDefinitionId = processDefinitionId;
   }
 
-  @CamundaQueryParam("executionId")
+  @OrqueioQueryParam("executionId")
   public void setExecutionId(String executionId) {
     this.executionId = executionId;
   }
 
-  @CamundaQueryParam(value="activityInstanceIdIn", converter = StringArrayConverter.class)
+  @OrqueioQueryParam(value="activityInstanceIdIn", converter = StringArrayConverter.class)
   public void setActivityInstanceIdIn(String[] activityInstanceIdIn) {
     this.activityInstanceIdIn = activityInstanceIdIn;
   }
 
-  @CamundaQueryParam(value="tenantIdIn", converter = StringArrayConverter.class)
+  @OrqueioQueryParam(value="tenantIdIn", converter = StringArrayConverter.class)
   public void setTenantIdIn(String[] tenantIdIn) {
     this.tenantIdIn = tenantIdIn;
   }
 
-  @CamundaQueryParam(value = "withoutTenantId", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value = "withoutTenantId", converter = BooleanConverter.class)
   public void setWithoutTenantId(Boolean withoutTenantId) {
     this.withoutTenantId = withoutTenantId;
   }
 
-  @CamundaQueryParam("processDefinitionName")
+  @OrqueioQueryParam("processDefinitionName")
   public void setProcessDefinitionName(String processDefinitionName) {
     this.processDefinitionName = processDefinitionName;
   }
 
-  @CamundaQueryParam("processDefinitionNameLike")
+  @OrqueioQueryParam("processDefinitionNameLike")
   public void setProcessDefinitionNameLike(String processDefinitionNameLike) {
     this.processDefinitionNameLike = processDefinitionNameLike;
   }
 
-  @CamundaQueryParam("processInstanceId")
+  @OrqueioQueryParam("processInstanceId")
   public void setProcessInstanceId(String processInstanceId) {
     this.processInstanceId = processInstanceId;
   }
 
-  @CamundaQueryParam(value = "processInstanceIdIn", converter = StringArrayConverter.class)
+  @OrqueioQueryParam(value = "processInstanceIdIn", converter = StringArrayConverter.class)
   public void setProcessInstanceIdIn(String[] processInstanceIdIn) {
     this.processInstanceIdIn = processInstanceIdIn;
   }
 
-  @CamundaQueryParam("assignee")
+  @OrqueioQueryParam("assignee")
   public void setAssignee(String assignee) {
     this.assignee = assignee;
   }
 
-  @CamundaQueryParam("assigneeExpression")
+  @OrqueioQueryParam("assigneeExpression")
   public void setAssigneeExpression(String assigneeExpression) {
     this.assigneeExpression = assigneeExpression;
   }
 
-  @CamundaQueryParam("assigneeLike")
+  @OrqueioQueryParam("assigneeLike")
   public void setAssigneeLike(String assigneeLike) {
     this.assigneeLike = assigneeLike;
   }
 
-  @CamundaQueryParam(value = "assigneeIn", converter = StringArrayConverter.class)
+  @OrqueioQueryParam(value = "assigneeIn", converter = StringArrayConverter.class)
   public void setAssigneeIn(String[] assigneeIn) {
     this.assigneeIn = assigneeIn;
   }
 
-  @CamundaQueryParam(value = "assigneeNotIn", converter = StringArrayConverter.class)
+  @OrqueioQueryParam(value = "assigneeNotIn", converter = StringArrayConverter.class)
   public void setAssigneeNotIn(String[] assigneeNotIn) {
     this.assigneeNotIn = assigneeNotIn;
   }
 
-  @CamundaQueryParam("assigneeLikeExpression")
+  @OrqueioQueryParam("assigneeLikeExpression")
   public void setAssigneeLikeExpression(String assigneeLikeExpression) {
     this.assigneeLikeExpression = assigneeLikeExpression;
   }
 
-  @CamundaQueryParam("candidateGroup")
+  @OrqueioQueryParam("candidateGroup")
   public void setCandidateGroup(String candidateGroup) {
     this.candidateGroup = candidateGroup;
   }
 
-  @CamundaQueryParam("candidateGroupExpression")
+  @OrqueioQueryParam("candidateGroupExpression")
   public void setCandidateGroupExpression(String candidateGroupExpression) {
     this.candidateGroupExpression = candidateGroupExpression;
   }
 
-  @CamundaQueryParam("candidateGroupLike")
+  @OrqueioQueryParam("candidateGroupLike")
   public void setCandidateGroupLike(String candidateGroupLike) {
     this.candidateGroupLike = candidateGroupLike;
   }
 
-  @CamundaQueryParam(value = "withCandidateGroups", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value = "withCandidateGroups", converter = BooleanConverter.class)
   public void setWithCandidateGroups(Boolean withCandidateGroups) {
     this.withCandidateGroups = withCandidateGroups;
   }
 
-  @CamundaQueryParam(value = "withoutCandidateGroups", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value = "withoutCandidateGroups", converter = BooleanConverter.class)
   public void setWithoutCandidateGroups(Boolean withoutCandidateGroups) {
     this.withoutCandidateGroups = withoutCandidateGroups;
   }
 
-  @CamundaQueryParam(value = "withCandidateUsers", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value = "withCandidateUsers", converter = BooleanConverter.class)
   public void setWithCandidateUsers(Boolean withCandidateUsers) {
     this.withCandidateUsers = withCandidateUsers;
   }
 
-  @CamundaQueryParam(value = "withoutCandidateUsers", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value = "withoutCandidateUsers", converter = BooleanConverter.class)
   public void setWithoutCandidateUsers(Boolean withoutCandidateUsers) {
     this.withoutCandidateUsers = withoutCandidateUsers;
   }
 
-  @CamundaQueryParam("candidateUser")
+  @OrqueioQueryParam("candidateUser")
   public void setCandidateUser(String candidateUser) {
     this.candidateUser = candidateUser;
   }
 
-  @CamundaQueryParam("candidateUserExpression")
+  @OrqueioQueryParam("candidateUserExpression")
   public void setCandidateUserExpression(String candidateUserExpression) {
     this.candidateUserExpression = candidateUserExpression;
   }
 
-  @CamundaQueryParam(value = "includeAssignedTasks", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value = "includeAssignedTasks", converter = BooleanConverter.class)
   public void setIncludeAssignedTasks(Boolean includeAssignedTasks){
     this.includeAssignedTasks = includeAssignedTasks;
   }
 
-  @CamundaQueryParam("taskId")
+  @OrqueioQueryParam("taskId")
   public void setTaskId(String taskId) {
     this.taskId = taskId;
   }
 
-  @CamundaQueryParam(value = "taskIdIn", converter= StringArrayConverter.class)
+  @OrqueioQueryParam(value = "taskIdIn", converter= StringArrayConverter.class)
   public void setTaskIdIn(String[] taskIdIn) {
     this.taskIdIn = taskIdIn;
   }
 
-  @CamundaQueryParam("taskDefinitionKey")
+  @OrqueioQueryParam("taskDefinitionKey")
   public void setTaskDefinitionKey(String taskDefinitionKey) {
     this.taskDefinitionKey = taskDefinitionKey;
   }
 
-  @CamundaQueryParam(value = "taskDefinitionKeyIn", converter= StringArrayConverter.class)
+  @OrqueioQueryParam(value = "taskDefinitionKeyIn", converter= StringArrayConverter.class)
   public void setTaskDefinitionKeyIn(String[] taskDefinitionKeyIn) {
     this.taskDefinitionKeyIn = taskDefinitionKeyIn;
   }
 
-  @CamundaQueryParam(value = "taskDefinitionKeyNotIn", converter= StringArrayConverter.class)
+  @OrqueioQueryParam(value = "taskDefinitionKeyNotIn", converter= StringArrayConverter.class)
   public void setTaskDefinitionKeyNotIn(String[] taskDefinitionKeyNotIn) {
     this.taskDefinitionKeyNotIn = taskDefinitionKeyNotIn;
   }
 
-  @CamundaQueryParam("taskDefinitionKeyLike")
+  @OrqueioQueryParam("taskDefinitionKeyLike")
   public void setTaskDefinitionKeyLike(String taskDefinitionKeyLike) {
     this.taskDefinitionKeyLike = taskDefinitionKeyLike;
   }
 
-  @CamundaQueryParam("description")
+  @OrqueioQueryParam("description")
   public void setDescription(String description) {
     this.description = description;
   }
 
-  @CamundaQueryParam("descriptionLike")
+  @OrqueioQueryParam("descriptionLike")
   public void setDescriptionLike(String descriptionLike) {
     this.descriptionLike = descriptionLike;
   }
 
-  @CamundaQueryParam("involvedUser")
+  @OrqueioQueryParam("involvedUser")
   public void setInvolvedUser(String involvedUser) {
     this.involvedUser = involvedUser;
   }
 
-  @CamundaQueryParam("involvedUserExpression")
+  @OrqueioQueryParam("involvedUserExpression")
   public void setInvolvedUserExpression(String involvedUserExpression) {
     this.involvedUserExpression = involvedUserExpression;
   }
 
-  @CamundaQueryParam(value = "maxPriority", converter = IntegerConverter.class)
+  @OrqueioQueryParam(value = "maxPriority", converter = IntegerConverter.class)
   public void setMaxPriority(Integer maxPriority) {
     this.maxPriority = maxPriority;
   }
 
-  @CamundaQueryParam(value = "minPriority", converter = IntegerConverter.class)
+  @OrqueioQueryParam(value = "minPriority", converter = IntegerConverter.class)
   public void setMinPriority(Integer minPriority) {
     this.minPriority = minPriority;
   }
 
-  @CamundaQueryParam("name")
+  @OrqueioQueryParam("name")
   public void setName(String name) {
     this.name = name;
   }
 
-  @CamundaQueryParam("nameNotEqual")
+  @OrqueioQueryParam("nameNotEqual")
   public void setNameNotEqual(String nameNotEqual) {
     this.nameNotEqual = nameNotEqual;
   }
 
-  @CamundaQueryParam("nameLike")
+  @OrqueioQueryParam("nameLike")
   public void setNameLike(String nameLike) {
     this.nameLike = nameLike;
   }
 
-  @CamundaQueryParam("nameNotLike")
+  @OrqueioQueryParam("nameNotLike")
   public void setNameNotLike(String nameNotLike) {
     this.nameNotLike = nameNotLike;
   }
 
-  @CamundaQueryParam("owner")
+  @OrqueioQueryParam("owner")
   public void setOwner(String owner) {
     this.owner = owner;
   }
 
-  @CamundaQueryParam("ownerExpression")
+  @OrqueioQueryParam("ownerExpression")
   public void setOwnerExpression(String ownerExpression) {
     this.ownerExpression = ownerExpression;
   }
 
-  @CamundaQueryParam(value = "priority", converter = IntegerConverter.class)
+  @OrqueioQueryParam(value = "priority", converter = IntegerConverter.class)
   public void setPriority(Integer priority) {
     this.priority = priority;
   }
 
-  @CamundaQueryParam("parentTaskId")
+  @OrqueioQueryParam("parentTaskId")
   public void setParentTaskId(String parentTaskId) {
     this.parentTaskId = parentTaskId;
   }
 
-  @CamundaQueryParam(value = "assigned", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value = "assigned", converter = BooleanConverter.class)
   public void setAssigned(Boolean assigned) {
     this.assigned = assigned;
   }
 
-  @CamundaQueryParam(value = "unassigned", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value = "unassigned", converter = BooleanConverter.class)
   public void setUnassigned(Boolean unassigned) {
     this.unassigned = unassigned;
   }
 
-  @CamundaQueryParam(value = "active", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value = "active", converter = BooleanConverter.class)
   public void setActive(Boolean active) {
     this.active = active;
   }
 
-  @CamundaQueryParam(value = "suspended", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value = "suspended", converter = BooleanConverter.class)
   public void setSuspended(Boolean suspended) {
     this.suspended = suspended;
   }
 
-  @CamundaQueryParam(value = "dueAfter", converter = DateConverter.class)
+  @OrqueioQueryParam(value = "dueAfter", converter = DateConverter.class)
   public void setDueAfter(Date dueAfter) {
     this.dueAfter = dueAfter;
   }
 
-  @CamundaQueryParam(value = "dueAfterExpression")
+  @OrqueioQueryParam(value = "dueAfterExpression")
   public void setDueAfterExpression(String dueAfterExpression) {
     this.dueAfterExpression = dueAfterExpression;
   }
 
-  @CamundaQueryParam(value = "dueBefore", converter = DateConverter.class)
+  @OrqueioQueryParam(value = "dueBefore", converter = DateConverter.class)
   public void setDueBefore(Date dueBefore) {
     this.dueBefore = dueBefore;
   }
 
-  @CamundaQueryParam(value = "dueBeforeExpression")
+  @OrqueioQueryParam(value = "dueBeforeExpression")
   public void setDueBeforeExpression(String dueBeforeExpression) {
     this.dueBeforeExpression = dueBeforeExpression;
   }
 
-  @CamundaQueryParam(value = "dueDate", converter = DateConverter.class)
+  @OrqueioQueryParam(value = "dueDate", converter = DateConverter.class)
   public void setDueDate(Date dueDate) {
     this.dueDate = dueDate;
   }
 
   @Deprecated
-  @CamundaQueryParam(value = "due", converter = DateConverter.class)
+  @OrqueioQueryParam(value = "due", converter = DateConverter.class)
   public void setDue(Date dueDate) {
     this.dueDate = dueDate;
   }
 
-  @CamundaQueryParam(value = "dueDateExpression")
+  @OrqueioQueryParam(value = "dueDateExpression")
   public void setDueDateExpression(String dueDateExpression) {
     this.dueDateExpression = dueDateExpression;
   }
 
-  @CamundaQueryParam(value = "withoutDueDate", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value = "withoutDueDate", converter = BooleanConverter.class)
   public void setWithoutDueDate(Boolean withoutDueDate) {
     this.withoutDueDate = withoutDueDate;
   }
 
-  @CamundaQueryParam(value = "followUpAfter", converter = DateConverter.class)
+  @OrqueioQueryParam(value = "followUpAfter", converter = DateConverter.class)
   public void setFollowUpAfter(Date followUpAfter) {
     this.followUpAfter = followUpAfter;
   }
 
-  @CamundaQueryParam(value = "followUpAfterExpression")
+  @OrqueioQueryParam(value = "followUpAfterExpression")
   public void setFollowUpAfterExpression(String followUpAfterExpression) {
     this.followUpAfterExpression = followUpAfterExpression;
   }
 
-  @CamundaQueryParam(value = "followUpBefore", converter = DateConverter.class)
+  @OrqueioQueryParam(value = "followUpBefore", converter = DateConverter.class)
   public void setFollowUpBefore(Date followUpBefore) {
     this.followUpBefore = followUpBefore;
   }
 
-  @CamundaQueryParam(value = "followUpBeforeOrNotExistentExpression")
+  @OrqueioQueryParam(value = "followUpBeforeOrNotExistentExpression")
   public void setFollowUpBeforeOrNotExistentExpression(String followUpBeforeExpression) {
     this.followUpBeforeOrNotExistentExpression = followUpBeforeExpression;
   }
 
-  @CamundaQueryParam(value = "followUpBeforeOrNotExistent", converter = DateConverter.class)
+  @OrqueioQueryParam(value = "followUpBeforeOrNotExistent", converter = DateConverter.class)
   public void setFollowUpBeforeOrNotExistent(Date followUpBefore) {
     this.followUpBeforeOrNotExistent = followUpBefore;
   }
 
-  @CamundaQueryParam(value = "followUpBeforeExpression")
+  @OrqueioQueryParam(value = "followUpBeforeExpression")
   public void setFollowUpBeforeExpression(String followUpBeforeExpression) {
     this.followUpBeforeExpression = followUpBeforeExpression;
   }
 
-  @CamundaQueryParam(value = "followUpDate", converter = DateConverter.class)
+  @OrqueioQueryParam(value = "followUpDate", converter = DateConverter.class)
   public void setFollowUpDate(Date followUpDate) {
     this.followUpDate = followUpDate;
   }
 
   @Deprecated
-  @CamundaQueryParam(value = "followUp", converter = DateConverter.class)
+  @OrqueioQueryParam(value = "followUp", converter = DateConverter.class)
   public void setFollowUp(Date followUpDate) {
     this.followUpDate = followUpDate;
   }
 
-  @CamundaQueryParam(value = "followUpDateExpression")
+  @OrqueioQueryParam(value = "followUpDateExpression")
   public void setFollowUpDateExpression(String followUpDateExpression) {
     this.followUpDateExpression = followUpDateExpression;
   }
 
-  @CamundaQueryParam(value = "createdAfter", converter = DateConverter.class)
+  @OrqueioQueryParam(value = "createdAfter", converter = DateConverter.class)
   public void setCreatedAfter(Date createdAfter) {
     this.createdAfter = createdAfter;
   }
 
-  @CamundaQueryParam(value = "createdAfterExpression")
+  @OrqueioQueryParam(value = "createdAfterExpression")
   public void setCreatedAfterExpression(String createdAfterExpression) {
     this.createdAfterExpression = createdAfterExpression;
   }
 
-  @CamundaQueryParam(value = "createdBefore", converter = DateConverter.class)
+  @OrqueioQueryParam(value = "createdBefore", converter = DateConverter.class)
   public void setCreatedBefore(Date createdBefore) {
     this.createdBefore = createdBefore;
   }
 
-  @CamundaQueryParam(value = "createdBeforeExpression")
+  @OrqueioQueryParam(value = "createdBeforeExpression")
   public void setCreatedBeforeExpression(String createdBeforeExpression) {
     this.createdBeforeExpression = createdBeforeExpression;
   }
 
-  @CamundaQueryParam(value = "createdOn", converter = DateConverter.class)
+  @OrqueioQueryParam(value = "createdOn", converter = DateConverter.class)
   public void setCreatedOn(Date createdOn) {
     this.createdOn = createdOn;
   }
 
   @Deprecated
-  @CamundaQueryParam(value = "created", converter = DateConverter.class)
+  @OrqueioQueryParam(value = "created", converter = DateConverter.class)
   public void setCreated(Date createdOn) {
     this.createdOn = createdOn;
   }
 
-  @CamundaQueryParam(value = "createdOnExpression")
+  @OrqueioQueryParam(value = "createdOnExpression")
   public void setCreatedOnExpression(String createdOnExpression) {
     this.createdOnExpression = createdOnExpression;
   }
 
-  @CamundaQueryParam(value = "updatedAfter", converter = DateConverter.class)
+  @OrqueioQueryParam(value = "updatedAfter", converter = DateConverter.class)
   public void setUpdatedAfter(Date updatedAfter) {
     this.updatedAfter = updatedAfter;
   }
 
-  @CamundaQueryParam(value = "updatedAfterExpression")
+  @OrqueioQueryParam(value = "updatedAfterExpression")
   public void setUpdatedAfterExpression(String updatedAfterExpression) {
     this.updatedAfterExpression = updatedAfterExpression;
   }
 
-  @CamundaQueryParam(value = "delegationState")
+  @OrqueioQueryParam(value = "delegationState")
   public void setDelegationState(String taskDelegationState) {
     this.delegationState = taskDelegationState;
   }
 
-  @CamundaQueryParam(value = "candidateGroups", converter = StringListConverter.class)
+  @OrqueioQueryParam(value = "candidateGroups", converter = StringListConverter.class)
   public void setCandidateGroups(List<String> candidateGroups) {
     this.candidateGroups = candidateGroups;
   }
 
-  @CamundaQueryParam(value = "candidateGroupsExpression")
+  @OrqueioQueryParam(value = "candidateGroupsExpression")
   public void setCandidateGroupsExpression(String candidateGroupsExpression) {
     this.candidateGroupsExpression = candidateGroupsExpression;
   }
 
-  @CamundaQueryParam(value = "taskVariables", converter = VariableListConverter.class)
+  @OrqueioQueryParam(value = "taskVariables", converter = VariableListConverter.class)
   public void setTaskVariables(List<VariableQueryParameterDto> taskVariables) {
     this.taskVariables = taskVariables;
   }
 
-  @CamundaQueryParam(value = "processVariables", converter = VariableListConverter.class)
+  @OrqueioQueryParam(value = "processVariables", converter = VariableListConverter.class)
   public void setProcessVariables(List<VariableQueryParameterDto> processVariables) {
     this.processVariables = processVariables;
   }
 
-  @CamundaQueryParam("caseDefinitionId")
+  @OrqueioQueryParam("caseDefinitionId")
   public void setCaseDefinitionId(String caseDefinitionId) {
     this.caseDefinitionId = caseDefinitionId;
   }
 
-  @CamundaQueryParam("caseDefinitionKey")
+  @OrqueioQueryParam("caseDefinitionKey")
   public void setCaseDefinitionKey(String caseDefinitionKey) {
     this.caseDefinitionKey = caseDefinitionKey;
   }
 
-  @CamundaQueryParam("caseDefinitionName")
+  @OrqueioQueryParam("caseDefinitionName")
   public void setCaseDefinitionName(String caseDefinitionName) {
     this.caseDefinitionName = caseDefinitionName;
   }
 
-  @CamundaQueryParam("caseDefinitionNameLike")
+  @OrqueioQueryParam("caseDefinitionNameLike")
   public void setCaseDefinitionNameLike(String caseDefinitionNameLike) {
     this.caseDefinitionNameLike = caseDefinitionNameLike;
   }
 
-  @CamundaQueryParam("caseExecutionId")
+  @OrqueioQueryParam("caseExecutionId")
   public void setCaseExecutionId(String caseExecutionId) {
     this.caseExecutionId = caseExecutionId;
   }
 
-  @CamundaQueryParam("caseInstanceBusinessKey")
+  @OrqueioQueryParam("caseInstanceBusinessKey")
   public void setCaseInstanceBusinessKey(String caseInstanceBusinessKey) {
     this.caseInstanceBusinessKey = caseInstanceBusinessKey;
   }
 
-  @CamundaQueryParam("caseInstanceBusinessKeyLike")
+  @OrqueioQueryParam("caseInstanceBusinessKeyLike")
   public void setCaseInstanceBusinessKeyLike(String caseInstanceBusinessKeyLike) {
     this.caseInstanceBusinessKeyLike = caseInstanceBusinessKeyLike;
   }
 
-  @CamundaQueryParam("caseInstanceId")
+  @OrqueioQueryParam("caseInstanceId")
   public void setCaseInstanceId(String caseInstanceId) {
     this.caseInstanceId = caseInstanceId;
   }
 
-  @CamundaQueryParam(value = "caseInstanceVariables", converter = VariableListConverter.class)
+  @OrqueioQueryParam(value = "caseInstanceVariables", converter = VariableListConverter.class)
   public void setCaseInstanceVariables(List<VariableQueryParameterDto> caseInstanceVariables) {
     this.caseInstanceVariables = caseInstanceVariables;
   }
 
-  @CamundaQueryParam(value = "variableNamesIgnoreCase", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value = "variableNamesIgnoreCase", converter = BooleanConverter.class)
   public void setVariableNamesIgnoreCase(Boolean variableNamesCaseInsensitive) {
     this.variableNamesIgnoreCase = variableNamesCaseInsensitive;
   }
 
-  @CamundaQueryParam(value ="variableValuesIgnoreCase", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value ="variableValuesIgnoreCase", converter = BooleanConverter.class)
   public void setVariableValuesIgnoreCase(Boolean variableValuesCaseInsensitive) {
     this.variableValuesIgnoreCase = variableValuesCaseInsensitive;
   }
 
-  @CamundaQueryParam(value = "withCommentAttachmentInfo", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value = "withCommentAttachmentInfo", converter = BooleanConverter.class)
   public void setWithCommentAttachmentInfo(Boolean withCommentAttachmentInfo) {
     this.withCommentAttachmentInfo = withCommentAttachmentInfo;
   }
 
-  @CamundaQueryParam(value = "withTaskVariablesInReturn", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value = "withTaskVariablesInReturn", converter = BooleanConverter.class)
   public void setWithTaskVariablesInReturn(Boolean withTaskVariablesInReturn) {
     this.withTaskVariablesInReturn = withTaskVariablesInReturn;
   }
 
-  @CamundaQueryParam(value = "withTaskLocalVariablesInReturn", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value = "withTaskLocalVariablesInReturn", converter = BooleanConverter.class)
   public void setWithTaskLocalVariablesInReturn(Boolean withTaskLocalVariablesInReturn) {
     this.withTaskLocalVariablesInReturn = withTaskLocalVariablesInReturn;
   }

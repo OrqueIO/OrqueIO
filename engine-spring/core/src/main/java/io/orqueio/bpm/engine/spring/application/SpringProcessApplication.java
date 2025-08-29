@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -44,7 +44,7 @@ import org.springframework.context.event.ContextRefreshedEvent;
  * <p>The SpringProcessApplication will use the Bean Name assigned to the bean in the spring
  * application context (see {@link BeanNameAware}). You should always assign a unique bean name
  * to a process application bean. That is, the bean name must be unique accross all applications
- * deployed to the Camunda Platform.</p>
+ * deployed to the Orqueio Platform.</p>
  *
  * @author Daniel Meyer
  *

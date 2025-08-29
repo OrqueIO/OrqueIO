@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -21,8 +21,8 @@ import static org.mockito.Mockito.when;
 
 import java.util.Date;
 
-import io.orqueio.bpm.engine.form.CamundaFormRef;
-import io.orqueio.bpm.engine.impl.form.CamundaFormRefImpl;
+import io.orqueio.bpm.engine.form.OrqueioFormRef;
+import io.orqueio.bpm.engine.impl.form.OrqueioFormRefImpl;
 import io.orqueio.bpm.engine.task.DelegationState;
 import io.orqueio.bpm.engine.task.Task;
 
@@ -48,7 +48,7 @@ public class MockTaskBuilder {
   private String caseInstanceId;
   private String caseExecutionId;
   private String formKey;
-  private CamundaFormRef camundaFormRef;
+  private OrqueioFormRef orqueioFormRef;
   private String tenantId;
   private boolean hasAttachment;
 
@@ -158,10 +158,10 @@ public class MockTaskBuilder {
     return this;
   }
 
-  public MockTaskBuilder camundaFormRef(String key, String binding, Integer version) {
-    CamundaFormRefImpl camundaFormRef = new CamundaFormRefImpl(key, binding);
-    camundaFormRef.setVersion(version);
-    this.camundaFormRef = camundaFormRef;
+  public MockTaskBuilder orqueioFormRef(String key, String binding, Integer version) {
+    OrqueioFormRefImpl orqueioFormRef = new OrqueioFormRefImpl(key, binding);
+    orqueioFormRef.setVersion(version);
+    this.orqueioFormRef = orqueioFormRef;
     return this;
   }
 
@@ -207,7 +207,7 @@ public class MockTaskBuilder {
     when(mockTask.getCaseInstanceId()).thenReturn(caseInstanceId);
     when(mockTask.getCaseExecutionId()).thenReturn(caseExecutionId);
     when(mockTask.getFormKey()).thenReturn(formKey);
-    when(mockTask.getCamundaFormRef()).thenReturn(camundaFormRef);
+    when(mockTask.getOrqueioFormRef()).thenReturn(orqueioFormRef);
     when(mockTask.getTenantId()).thenReturn(tenantId);
     when(mockTask.getTaskState()).thenReturn(taskState);
     when(mockTask.hasAttachment()).thenReturn(hasAttachment);

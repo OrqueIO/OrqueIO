@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -26,7 +26,7 @@ import javax.ws.rs.core.MultivaluedMap;
 
 import io.orqueio.bpm.engine.ProcessEngine;
 import io.orqueio.bpm.engine.rest.dto.AbstractQueryDto;
-import io.orqueio.bpm.engine.rest.dto.CamundaQueryParam;
+import io.orqueio.bpm.engine.rest.dto.OrqueioQueryParam;
 import io.orqueio.bpm.engine.rest.dto.converter.BooleanConverter;
 import io.orqueio.bpm.engine.rest.dto.converter.StringListConverter;
 import io.orqueio.bpm.engine.runtime.EventSubscriptionQuery;
@@ -67,7 +67,7 @@ public class EventSubscriptionQueryDto extends AbstractQueryDto<EventSubscriptio
     return eventSubscriptionId;
   }
 
-  @CamundaQueryParam("eventSubscriptionId")
+  @OrqueioQueryParam("eventSubscriptionId")
   public void setEventSubscriptionId(String eventSubscriptionId) {
     this.eventSubscriptionId = eventSubscriptionId;
   }
@@ -76,7 +76,7 @@ public class EventSubscriptionQueryDto extends AbstractQueryDto<EventSubscriptio
     return eventName;
   }
 
-  @CamundaQueryParam("eventName")
+  @OrqueioQueryParam("eventName")
   public void setEventName(String eventName) {
     this.eventName = eventName;
   }
@@ -85,7 +85,7 @@ public class EventSubscriptionQueryDto extends AbstractQueryDto<EventSubscriptio
     return eventType;
   }
 
-  @CamundaQueryParam("eventType")
+  @OrqueioQueryParam("eventType")
   public void setEventType(String eventType) {
     this.eventType = eventType;
   }
@@ -94,7 +94,7 @@ public class EventSubscriptionQueryDto extends AbstractQueryDto<EventSubscriptio
     return executionId;
   }
 
-  @CamundaQueryParam("executionId")
+  @OrqueioQueryParam("executionId")
   public void setExecutionId(String executionId) {
     this.executionId = executionId;
   }
@@ -103,7 +103,7 @@ public class EventSubscriptionQueryDto extends AbstractQueryDto<EventSubscriptio
     return processInstanceId;
   }
 
-  @CamundaQueryParam("processInstanceId")
+  @OrqueioQueryParam("processInstanceId")
   public void setProcessInstanceId(String processInstanceId) {
     this.processInstanceId = processInstanceId;
   }
@@ -112,7 +112,7 @@ public class EventSubscriptionQueryDto extends AbstractQueryDto<EventSubscriptio
     return activityId;
   }
 
-  @CamundaQueryParam("activityId")
+  @OrqueioQueryParam("activityId")
   public void setActivityId(String activityId) {
     this.activityId = activityId;
   }
@@ -121,7 +121,7 @@ public class EventSubscriptionQueryDto extends AbstractQueryDto<EventSubscriptio
     return tenantIdIn;
   }
 
-  @CamundaQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
+  @OrqueioQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
   public void setTenantIdIn(List<String> tenantIdIn) {
     this.tenantIdIn = tenantIdIn;
   }
@@ -130,7 +130,7 @@ public class EventSubscriptionQueryDto extends AbstractQueryDto<EventSubscriptio
     return withoutTenantId;
   }
 
-  @CamundaQueryParam(value = "withoutTenantId", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value = "withoutTenantId", converter = BooleanConverter.class)
   public void setWithoutTenantId(Boolean withoutTenantId) {
     this.withoutTenantId = withoutTenantId;
   }
@@ -139,7 +139,7 @@ public class EventSubscriptionQueryDto extends AbstractQueryDto<EventSubscriptio
     return includeEventSubscriptionsWithoutTenantId;
   }
 
-  @CamundaQueryParam(value = "includeEventSubscriptionsWithoutTenantId", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value = "includeEventSubscriptionsWithoutTenantId", converter = BooleanConverter.class)
   public void setIncludeEventSubscriptionsWithoutTenantId(Boolean includeEventSubscriptionsWithoutTenantId) {
     this.includeEventSubscriptionsWithoutTenantId = includeEventSubscriptionsWithoutTenantId;
   }

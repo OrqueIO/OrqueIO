@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -65,7 +65,7 @@ public abstract class AbstractSearchQueryDto {
   }
 
   /**
-   * Finds the methods that are annotated with a {@link CamundaQueryParam} with a value that matches the key parameter.
+   * Finds the methods that are annotated with a {@link OrqueioQueryParam} with a value that matches the key parameter.
    * Before invoking these methods, the annotated {@link StringToTypeConverter} is used to convert the String value to the desired Java type.
    * @param key
    * @param value
@@ -106,8 +106,8 @@ public abstract class AbstractSearchQueryDto {
 
       for (int j = 0; j < methodAnnotations.length; j++) {
         Annotation annotation = methodAnnotations[j];
-        if (annotation instanceof CamundaQueryParam) {
-          CamundaQueryParam parameterAnnotation = (CamundaQueryParam) annotation;
+        if (annotation instanceof OrqueioQueryParam) {
+          OrqueioQueryParam parameterAnnotation = (OrqueioQueryParam) annotation;
           if (parameterAnnotation.value().equals(parameterName)) {
             result.add(method);
           }
@@ -122,8 +122,8 @@ public abstract class AbstractSearchQueryDto {
 
     for (int j = 0; j < methodAnnotations.length; j++) {
       Annotation annotation = methodAnnotations[j];
-      if (annotation instanceof CamundaQueryParam) {
-        CamundaQueryParam parameterAnnotation = (CamundaQueryParam) annotation;
+      if (annotation instanceof OrqueioQueryParam) {
+        OrqueioQueryParam parameterAnnotation = (OrqueioQueryParam) annotation;
         return parameterAnnotation.converter();
       }
     }

@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -22,7 +22,7 @@ import java.util.Map;
 import io.orqueio.bpm.engine.variable.type.SerializableValueType;
 
 /**
- * <p>Builds maps that fulfill the camunda variable json format.</p>
+ * <p>Builds maps that fulfill the orqueio variable json format.</p>
  * <p>
  * For example, if VariablesBuilder.variable("aKey", "aValue").variable("anotherKey", "anotherValue", "String").getVariables()
  * a map is returned that is supposed to be mapped to JSON by rest-assured as follows:

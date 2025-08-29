@@ -28,9 +28,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
-import org.orqueio.feel.syntaxtree.Val;
-import org.orqueio.feel.syntaxtree.ValString;
-import org.orqueio.feel.valuemapper.JavaCustomValueMapper;
+import io.orqueio.feel.syntaxtree.Val;
+import io.orqueio.feel.syntaxtree.ValString;
+import io.orqueio.feel.valuemapper.JavaCustomValueMapper;
 import io.orqueio.spin.json.SpinJsonNode;
 import io.orqueio.spin.xml.SpinXmlAttribute;
 import io.orqueio.spin.xml.SpinXmlElement;

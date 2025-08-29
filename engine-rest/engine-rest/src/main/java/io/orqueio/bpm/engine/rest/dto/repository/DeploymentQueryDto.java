@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -29,7 +29,7 @@ import javax.ws.rs.core.Response.Status;
 import io.orqueio.bpm.engine.ProcessEngine;
 import io.orqueio.bpm.engine.repository.DeploymentQuery;
 import io.orqueio.bpm.engine.rest.dto.AbstractQueryDto;
-import io.orqueio.bpm.engine.rest.dto.CamundaQueryParam;
+import io.orqueio.bpm.engine.rest.dto.OrqueioQueryParam;
 import io.orqueio.bpm.engine.rest.dto.converter.BooleanConverter;
 import io.orqueio.bpm.engine.rest.dto.converter.DateConverter;
 import io.orqueio.bpm.engine.rest.dto.converter.StringListConverter;
@@ -71,52 +71,52 @@ public class DeploymentQueryDto extends AbstractQueryDto<DeploymentQuery> {
     super(objectMapper, queryParameters);
   }
 
-  @CamundaQueryParam("id")
+  @OrqueioQueryParam("id")
   public void setId(String id) {
     this.id = id;
   }
 
-  @CamundaQueryParam("name")
+  @OrqueioQueryParam("name")
   public void setName(String name) {
     this.name = name;
   }
 
-  @CamundaQueryParam("nameLike")
+  @OrqueioQueryParam("nameLike")
   public void setNameLike(String nameLike) {
     this.nameLike = nameLike;
   }
 
-  @CamundaQueryParam("source")
+  @OrqueioQueryParam("source")
   public void setSource(String source) {
     this.source = source;
   }
 
-  @CamundaQueryParam(value = "withoutSource", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value = "withoutSource", converter = BooleanConverter.class)
   public void setWithoutSource(Boolean withoutSource) {
     this.withoutSource = withoutSource;
   }
 
-  @CamundaQueryParam(value = "before", converter = DateConverter.class)
+  @OrqueioQueryParam(value = "before", converter = DateConverter.class)
   public void setDeploymentBefore(Date deploymentBefore) {
     this.before = deploymentBefore;
   }
 
-  @CamundaQueryParam(value = "after", converter = DateConverter.class)
+  @OrqueioQueryParam(value = "after", converter = DateConverter.class)
   public void setDeploymentAfter(Date deploymentAfter) {
     this.after = deploymentAfter;
   }
 
-  @CamundaQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
+  @OrqueioQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
   public void setTenantIdIn(List<String> tenantIds) {
     this.tenantIds = tenantIds;
   }
 
-  @CamundaQueryParam(value = "withoutTenantId", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value = "withoutTenantId", converter = BooleanConverter.class)
   public void setWithoutTenantId(Boolean withoutTenantId) {
     this.withoutTenantId = withoutTenantId;
   }
 
-  @CamundaQueryParam(value = "includeDeploymentsWithoutTenantId", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value = "includeDeploymentsWithoutTenantId", converter = BooleanConverter.class)
   public void setIncludeDeploymentsWithoutTenantId(Boolean includeDeploymentsWithoutTenantId) {
     this.includeDeploymentsWithoutTenantId = includeDeploymentsWithoutTenantId;
   }

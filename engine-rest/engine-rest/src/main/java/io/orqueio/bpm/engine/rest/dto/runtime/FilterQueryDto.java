@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -25,7 +25,7 @@ import javax.ws.rs.core.MultivaluedMap;
 import io.orqueio.bpm.engine.ProcessEngine;
 import io.orqueio.bpm.engine.filter.FilterQuery;
 import io.orqueio.bpm.engine.rest.dto.AbstractQueryDto;
-import io.orqueio.bpm.engine.rest.dto.CamundaQueryParam;
+import io.orqueio.bpm.engine.rest.dto.OrqueioQueryParam;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -62,27 +62,27 @@ public class FilterQueryDto extends AbstractQueryDto<FilterQuery> {
     super(objectMapper, queryParameters);
   }
 
-  @CamundaQueryParam("filterId")
+  @OrqueioQueryParam("filterId")
   public void setFilterId(String filterId) {
     this.filterId = filterId;
   }
 
-  @CamundaQueryParam("resourceType")
+  @OrqueioQueryParam("resourceType")
   public void setResourceType(String resourceType) {
     this.resourceType = resourceType;
   }
 
-  @CamundaQueryParam("name")
+  @OrqueioQueryParam("name")
   public void setName(String name) {
     this.name = name;
   }
 
-  @CamundaQueryParam("nameLike")
+  @OrqueioQueryParam("nameLike")
   public void setNameLike(String nameLike) {
     this.nameLike = nameLike;
   }
 
-  @CamundaQueryParam("owner")
+  @OrqueioQueryParam("owner")
   public void setOwner(String owner) {
     this.owner = owner;
   }

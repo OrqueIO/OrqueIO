@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -83,7 +83,7 @@ import io.orqueio.bpm.engine.identity.Tenant;
 import io.orqueio.bpm.engine.identity.User;
 import io.orqueio.bpm.engine.impl.TaskQueryImpl;
 import io.orqueio.bpm.engine.impl.calendar.DateTimeUtil;
-import io.orqueio.bpm.engine.impl.form.CamundaFormRefImpl;
+import io.orqueio.bpm.engine.impl.form.OrqueioFormRefImpl;
 import io.orqueio.bpm.engine.impl.identity.Authentication;
 import io.orqueio.bpm.engine.impl.persistence.entity.MetricIntervalEntity;
 import io.orqueio.bpm.engine.impl.persistence.entity.ResourceEntity;
@@ -419,8 +419,8 @@ public abstract class MockProvider {
   public static final String EXAMPLE_DEPLOYMENT_TXT_RESOURCE_ID = "aDeploymentTxtResourceId";
   public static final String EXAMPLE_DEPLOYMENT_TXT_RESOURCE_NAME = "a-txt-resource.txt";
 
-  public static final String EXAMPLE_DEPLOYMENT_CAMFORM_RESOURCE_ID = "aDeploymentCamundaFormResourceId";
-  public static final String EXAMPLE_DEPLOYMENT_CAMFORM_RESOURCE_NAME = "a-camunda-form-resource.form";
+  public static final String EXAMPLE_DEPLOYMENT_CAMFORM_RESOURCE_ID = "aDeploymentOrqueioFormResourceId";
+  public static final String EXAMPLE_DEPLOYMENT_CAMFORM_RESOURCE_NAME = "a-orqueio-form-resource.form";
 
   public static final String EXAMPLE_DEPLOYMENT_RESOURCE_FILENAME_ID = "aDeploymentResourceFilenameId";
   public static final String EXAMPLE_DEPLOYMENT_RESOURCE_FILENAME_PATH = "my/path/to/my/bpmn/";
@@ -535,7 +535,7 @@ public abstract class MockProvider {
 
   // process applications
   public static final String EXAMPLE_PROCESS_APPLICATION_NAME = "aProcessApplication";
-  public static final String EXAMPLE_PROCESS_APPLICATION_CONTEXT_PATH = "http://camunda.org/someContext";
+  public static final String EXAMPLE_PROCESS_APPLICATION_CONTEXT_PATH = "http://orqueio.org/someContext";
 
   // Historic Process Instance
   public static final String EXAMPLE_HISTORIC_PROCESS_INSTANCE_DELETE_REASON = "aDeleteReason";
@@ -995,7 +995,7 @@ public abstract class MockProvider {
 
   // Telemetry
   public static final String EXAMPLE_TELEMETRY_INSTALLATION_ID = "8343cc7a-8ad1-42d4-97d2-43452c0bdfa3";
-  public static final String EXAMPLE_TELEMETRY_PRODUCT_NAME = "Camunda BPM Runtime";
+  public static final String EXAMPLE_TELEMETRY_PRODUCT_NAME = "Orqueio BPM Runtime";
   public static final String EXAMPLE_TELEMETRY_PRODUCT_VERSION = "7.14.0";
   public static final String EXAMPLE_TELEMETRY_PRODUCT_EDITION = "enterprise";
   public static final String EXAMPLE_TELEMETRY_DB_VENDOR = "h2";
@@ -1009,8 +1009,8 @@ public abstract class MockProvider {
   public static final String EXAMPLE_TELEMETRY_LICENSE_TYPE = "UNIFIED";
   public static final String EXAMPLE_TELEMETRY_LICENSE_VALID_UNTIL = "2022-09-30";
   public static final boolean EXAMPLE_TELEMETRY_LICENSE_UNLIMITED = false;
-  public static final Map<String, String> EXAMPLE_TELEMETRY_LICENSE_FEATURES = Collections.singletonMap("camundaBPM", "true");
-  public static final String EXAMPLE_TELEMETRY_LICENSE_RAW = "customer=customer name;expiryDate=2022-09-30;camundaBPM=true;optimize=false;cawemo=false";
+  public static final Map<String, String> EXAMPLE_TELEMETRY_LICENSE_FEATURES = Collections.singletonMap("orqueioBPM", "true");
+  public static final String EXAMPLE_TELEMETRY_LICENSE_RAW = "customer=customer name;expiryDate=2022-09-30;orqueioBPM=true;optimize=false;cawemo=false";
   public static final String EXAMPLE_TELEMETRY_JDK_VERSION = "14.0.2";
   public static final String EXAMPLE_TELEMETRY_JDK_VENDOR = "Oracle Corporation";
   public static final String EXAMPLE_TELEMETRY_DATA_COLLECTION_START_DATE = withTimezone("2022-01-01T00:00:00");
@@ -1026,8 +1026,8 @@ public abstract class MockProvider {
   public static final InternalsImpl EXAMPLE_TELEMETRY_INTERNALS = new InternalsImpl(EXAMPLE_TELEMETRY_DATABASE,
       EXAMPLE_TELEMETRY_SERVER, EXAMPLE_TELEMETRY_LICENSE, EXAMPLE_TELEMETRY_JDK);
   static {
-    EXAMPLE_TELEMETRY_INTERNALS.setCamundaIntegration(
-        Stream.of("spring-boot-starter", "camunda-bpm-run").collect(Collectors.toCollection(HashSet::new)));
+    EXAMPLE_TELEMETRY_INTERNALS.setOrqueioIntegration(
+        Stream.of("spring-boot-starter", "orqueio-bpm-run").collect(Collectors.toCollection(HashSet::new)));
     EXAMPLE_TELEMETRY_INTERNALS
         .setWebapps(Stream.of("cockpit", "admin").collect(Collectors.toCollection(HashSet::new)));
     EXAMPLE_TELEMETRY_INTERNALS
@@ -1037,7 +1037,7 @@ public abstract class MockProvider {
         .of(new Object[][] { { "process-instances", 936L }, { "flow-node-instances", 6125L },
             { "decision-instances", 140L }, { "executed-decision-elements", 732L } })
         .collect(Collectors.toMap(data -> (String) data[0], data -> new MetricImpl((Long) data[1]))));
-    EXAMPLE_TELEMETRY_INTERNALS.setCamundaIntegration(Collections.singleton("spring-boot"));
+    EXAMPLE_TELEMETRY_INTERNALS.setOrqueioIntegration(Collections.singleton("spring-boot"));
     EXAMPLE_TELEMETRY_INTERNALS.setWebapps(Collections.singleton("cockpit"));
     EXAMPLE_TELEMETRY_INTERNALS.setDataCollectionStartDate(DateTimeUtil.parseDate(EXAMPLE_TELEMETRY_DATA_COLLECTION_START_DATE));
   }
@@ -1068,7 +1068,7 @@ public abstract class MockProvider {
       .caseInstanceId(EXAMPLE_CASE_INSTANCE_ID)
       .caseExecutionId(EXAMPLE_CASE_EXECUTION_ID)
       .formKey(EXAMPLE_FORM_KEY)
-      .camundaFormRef(EXAMPLE_FORM_KEY, EXAMPLE_FORM_REF_BINDING, EXAMPLE_FORM_REF_VERSION)
+      .orqueioFormRef(EXAMPLE_FORM_KEY, EXAMPLE_FORM_REF_BINDING, EXAMPLE_FORM_REF_VERSION)
       .tenantId(EXAMPLE_TENANT_ID)
       .taskState(EXAMPLE_HISTORIC_TASK_STATE)
       .hasAttachment(EXAMPLE_TASK_ATTACHMENT_STATE)
@@ -1130,9 +1130,9 @@ public abstract class MockProvider {
     TaskFormData mockFormData = mock(TaskFormData.class);
     when(mockFormData.getDeploymentId()).thenReturn(EXAMPLE_DEPLOYMENT_ID);
 
-    CamundaFormRefImpl formRef = new CamundaFormRefImpl(EXAMPLE_FORM_KEY, EXAMPLE_FORM_REF_BINDING);
+    OrqueioFormRefImpl formRef = new OrqueioFormRefImpl(EXAMPLE_FORM_KEY, EXAMPLE_FORM_REF_BINDING);
     formRef.setVersion(EXAMPLE_FORM_REF_VERSION);
-    when(mockFormData.getCamundaFormRef()).thenReturn(formRef);
+    when(mockFormData.getOrqueioFormRef()).thenReturn(formRef);
 
     return mockFormData;
   }
@@ -1281,9 +1281,9 @@ public abstract class MockProvider {
     StartFormData mockFormData = mock(StartFormData.class);
     when(mockFormData.getDeploymentId()).thenReturn(EXAMPLE_DEPLOYMENT_ID);
 
-    CamundaFormRefImpl formRef = new CamundaFormRefImpl(EXAMPLE_FORM_KEY, EXAMPLE_FORM_REF_BINDING);
+    OrqueioFormRefImpl formRef = new OrqueioFormRefImpl(EXAMPLE_FORM_KEY, EXAMPLE_FORM_REF_BINDING);
     formRef.setVersion(EXAMPLE_FORM_REF_VERSION);
-    when(mockFormData.getCamundaFormRef()).thenReturn(formRef);
+    when(mockFormData.getOrqueioFormRef()).thenReturn(formRef);
 
     return mockFormData;
   }
@@ -1778,7 +1778,7 @@ public abstract class MockProvider {
     return mockResource;
   }
 
-  public static Resource createMockDeploymentCamundaFormResource() {
+  public static Resource createMockDeploymentOrqueioFormResource() {
     Resource mockResource = mock(ResourceEntity.class);
     when(mockResource.getId()).thenReturn(EXAMPLE_DEPLOYMENT_CAMFORM_RESOURCE_ID);
     when(mockResource.getName()).thenReturn(EXAMPLE_DEPLOYMENT_CAMFORM_RESOURCE_NAME);

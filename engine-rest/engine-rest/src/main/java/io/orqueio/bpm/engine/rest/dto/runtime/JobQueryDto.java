@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -30,7 +30,7 @@ import javax.ws.rs.core.Response.Status;
 import io.orqueio.bpm.engine.ProcessEngine;
 import io.orqueio.bpm.engine.impl.util.CollectionUtil;
 import io.orqueio.bpm.engine.rest.dto.AbstractQueryDto;
-import io.orqueio.bpm.engine.rest.dto.CamundaQueryParam;
+import io.orqueio.bpm.engine.rest.dto.OrqueioQueryParam;
 import io.orqueio.bpm.engine.rest.dto.ConditionQueryParameterDto;
 import io.orqueio.bpm.engine.rest.dto.converter.BooleanConverter;
 import io.orqueio.bpm.engine.rest.dto.converter.ConditionListConverter;
@@ -105,137 +105,137 @@ public class JobQueryDto extends AbstractQueryDto<JobQuery> {
     super(objectMapper, queryParameters);
   }
 
-  @CamundaQueryParam("activityId")
+  @OrqueioQueryParam("activityId")
   public void setActivityId(String activityId) {
     this.activityId = activityId;
   }
 
-  @CamundaQueryParam("failedActivityId")
+  @OrqueioQueryParam("failedActivityId")
   public void setFailedActivityId(String activityId) {
     this.failedActivityId = activityId;
   }
 
-  @CamundaQueryParam("jobId")
+  @OrqueioQueryParam("jobId")
   public void setJobId(String jobId) {
     this.jobId = jobId;
   }
 
-  @CamundaQueryParam(value = "jobIds", converter = StringSetConverter.class)
+  @OrqueioQueryParam(value = "jobIds", converter = StringSetConverter.class)
   public void setJobIds(Set<String> jobIds) {
     this.jobIds = jobIds;
   }
 
-  @CamundaQueryParam("executionId")
+  @OrqueioQueryParam("executionId")
   public void setExecutionId(String executionId) {
     this.executionId = executionId;
   }
 
-  @CamundaQueryParam("processInstanceId")
+  @OrqueioQueryParam("processInstanceId")
   public void setProcessInstanceId(String processInstanceId) {
     this.processInstanceId = processInstanceId;
   }
 
-  @CamundaQueryParam(value = "processInstanceIds", converter = StringSetConverter.class)
+  @OrqueioQueryParam(value = "processInstanceIds", converter = StringSetConverter.class)
   public void setProcessInstanceIds(Set<String> processInstanceIds) {
     this.processInstanceIds = processInstanceIds;
   }
 
-  @CamundaQueryParam("processDefinitionId")
+  @OrqueioQueryParam("processDefinitionId")
   public void setProcessDefinitionId(String processDefinitionId) {
     this.processDefinitionId = processDefinitionId;
   }
 
-  @CamundaQueryParam("processDefinitionKey")
+  @OrqueioQueryParam("processDefinitionKey")
   public void setProcessDefinitionKey(String processDefinitionKey) {
     this.processDefinitionKey = processDefinitionKey;
   }
 
-  @CamundaQueryParam(value="withRetriesLeft", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value="withRetriesLeft", converter = BooleanConverter.class)
   public void setWithRetriesLeft(Boolean withRetriesLeft) {
     this.withRetriesLeft = withRetriesLeft;
   }
 
-  @CamundaQueryParam(value="executable", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value="executable", converter = BooleanConverter.class)
   public void setExecutable(Boolean executable) {
     this.executable = executable;
   }
 
-  @CamundaQueryParam(value="timers", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value="timers", converter = BooleanConverter.class)
   public void setTimers(Boolean timers) {
     this.timers = timers;
   }
 
-  @CamundaQueryParam(value="withException", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value="withException", converter = BooleanConverter.class)
   public void setWithException(Boolean withException) {
     this.withException = withException;
   }
 
-  @CamundaQueryParam(value="messages", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value="messages", converter = BooleanConverter.class)
   public void setMessages(Boolean messages) {
     this.messages = messages;
   }
 
-  @CamundaQueryParam("exceptionMessage")
+  @OrqueioQueryParam("exceptionMessage")
   public void setExceptionMessage(String exceptionMessage) {
     this.exceptionMessage = exceptionMessage;
   }
 
-  @CamundaQueryParam(value = "dueDates", converter = ConditionListConverter.class)
+  @OrqueioQueryParam(value = "dueDates", converter = ConditionListConverter.class)
   public void setDueDates(List<ConditionQueryParameterDto> dueDates) {
     this.dueDates = dueDates;
   }
 
-  @CamundaQueryParam(value = "createTimes", converter = ConditionListConverter.class)
+  @OrqueioQueryParam(value = "createTimes", converter = ConditionListConverter.class)
   public void setCreateTimes(List<ConditionQueryParameterDto> createTimes) {
     this.createTimes = createTimes;
   }
 
-  @CamundaQueryParam(value="noRetriesLeft", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value="noRetriesLeft", converter = BooleanConverter.class)
   public void setNoRetriesLeft(Boolean noRetriesLeft) {
     this.noRetriesLeft = noRetriesLeft;
   }
 
-  @CamundaQueryParam(value="active", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value="active", converter = BooleanConverter.class)
   public void setActive(Boolean active) {
     this.active = active;
   }
 
-  @CamundaQueryParam(value="suspended", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value="suspended", converter = BooleanConverter.class)
   public void setSuspended(Boolean suspended) {
     this.suspended = suspended;
   }
 
-  @CamundaQueryParam(value="priorityHigherThanOrEquals", converter = LongConverter.class)
+  @OrqueioQueryParam(value="priorityHigherThanOrEquals", converter = LongConverter.class)
   public void setPriorityHigherThanOrEquals(Long priorityHigherThanOrEquals) {
     this.priorityHigherThanOrEquals = priorityHigherThanOrEquals;
   }
 
-  @CamundaQueryParam(value="priorityLowerThanOrEquals", converter = LongConverter.class)
+  @OrqueioQueryParam(value="priorityLowerThanOrEquals", converter = LongConverter.class)
   public void setPriorityLowerThanOrEquals(Long priorityLowerThanOrEquals) {
     this.priorityLowerThanOrEquals = priorityLowerThanOrEquals;
   }
 
-  @CamundaQueryParam("jobDefinitionId")
+  @OrqueioQueryParam("jobDefinitionId")
   public void setJobDefinitionId(String jobDefinitionId) {
     this.jobDefinitionId = jobDefinitionId;
   }
 
-  @CamundaQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
+  @OrqueioQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
   public void setTenantIdIn(List<String> tenantIds) {
     this.tenantIds = tenantIds;
   }
 
-  @CamundaQueryParam(value = "withoutTenantId", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value = "withoutTenantId", converter = BooleanConverter.class)
   public void setWithoutTenantId(Boolean withoutTenantId) {
     this.withoutTenantId = withoutTenantId;
   }
 
-  @CamundaQueryParam(value = "includeJobsWithoutTenantId", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value = "includeJobsWithoutTenantId", converter = BooleanConverter.class)
   public void setIncludeJobsWithoutTenantId(Boolean includeJobsWithoutTenantId) {
     this.includeJobsWithoutTenantId = includeJobsWithoutTenantId;
   }
 
-  @CamundaQueryParam(value="acquired", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value="acquired", converter = BooleanConverter.class)
   public void setAcquired(Boolean acquired) {
     this.acquired = acquired;
   }

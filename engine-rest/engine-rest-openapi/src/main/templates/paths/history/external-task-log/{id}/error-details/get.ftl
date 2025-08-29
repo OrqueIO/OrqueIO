@@ -1,4 +1,4 @@
-<#-- Generated From File: camunda-docs-manual/public/reference/rest/history/external-task-log/get-external-task-log-error-details/index.html -->
+<#-- Generated From File: orqueio-docs-manual/public/reference/rest/history/external-task-log/get-external-task-log-error-details/index.html -->
 <#macro endpoint_macro docsUrl="">
 {
   <@lib.endpointInfo

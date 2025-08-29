@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -44,7 +44,7 @@ import java.util.logging.Logger;
  * @author Josh Long
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("classpath:org/camunda/bpm/engine/spring/test/components/ScopingTests-context.xml")
+@ContextConfiguration("classpath:io/orqueio/bpm/engine/spring/test/components/ScopingTests-context.xml")
 public class ScopingTest {
 
 	@Autowired
@@ -64,9 +64,9 @@ public class ScopingTest {
 		this.taskService = this.processEngine.getTaskService();
 
 		repositoryService.createDeployment()
-		  .addClasspathResource("org/camunda/bpm/engine/spring/test/autodeployment/autodeploy.b.bpmn20.xml")
-		  .addClasspathResource("org/camunda/bpm/engine/spring/test/components/waiter.bpmn20.xml")
-		  .addClasspathResource("org/camunda/bpm/engine/spring/test/components/spring-component-waiter.bpmn20.xml")
+		  .addClasspathResource("io/orqueio/bpm/engine/spring/test/autodeployment/autodeploy.b.bpmn20.xml")
+		  .addClasspathResource("io/orqueio/bpm/engine/spring/test/components/waiter.bpmn20.xml")
+		  .addClasspathResource("io/orqueio/bpm/engine/spring/test/components/spring-component-waiter.bpmn20.xml")
 		  .deploy();
 	}
 

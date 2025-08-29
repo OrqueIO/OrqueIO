@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -24,7 +24,7 @@ import javax.ws.rs.core.MultivaluedMap;
 import io.orqueio.bpm.engine.ProcessEngine;
 import io.orqueio.bpm.engine.history.HistoricActivityStatisticsQuery;
 import io.orqueio.bpm.engine.rest.dto.AbstractQueryDto;
-import io.orqueio.bpm.engine.rest.dto.CamundaQueryParam;
+import io.orqueio.bpm.engine.rest.dto.OrqueioQueryParam;
 import io.orqueio.bpm.engine.rest.dto.converter.BooleanConverter;
 import io.orqueio.bpm.engine.rest.dto.converter.DateConverter;
 import io.orqueio.bpm.engine.rest.dto.converter.StringArrayConverter;
@@ -60,47 +60,47 @@ public class HistoricActivityStatisticsQueryDto extends AbstractQueryDto<Histori
     this.processDefinitionId = processDefinitionId;
   }
 
-  @CamundaQueryParam(value = "canceled", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value = "canceled", converter = BooleanConverter.class)
   public void setIncludeCanceled(Boolean includeCanceled) {
     this.includeCanceled = includeCanceled;
   }
 
-  @CamundaQueryParam(value = "finished", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value = "finished", converter = BooleanConverter.class)
   public void setIncludeFinished(Boolean includeFinished) {
     this.includeFinished = includeFinished;
   }
 
-  @CamundaQueryParam(value = "completeScope", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value = "completeScope", converter = BooleanConverter.class)
   public void setIncludeCompleteScope(Boolean includeCompleteScope) {
     this.includeCompleteScope = includeCompleteScope;
   }
 
-  @CamundaQueryParam(value = "incidents", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value = "incidents", converter = BooleanConverter.class)
   public void setIncludeIncidents(Boolean includeClosedIncidents) {
     this.includeIncidents = includeClosedIncidents;
   }
 
-  @CamundaQueryParam(value = "startedAfter", converter = DateConverter.class)
+  @OrqueioQueryParam(value = "startedAfter", converter = DateConverter.class)
   public void setStartedAfter(Date startedAfter) {
     this.startedAfter = startedAfter;
   }
 
-  @CamundaQueryParam(value = "startedBefore", converter = DateConverter.class)
+  @OrqueioQueryParam(value = "startedBefore", converter = DateConverter.class)
   public void setStartedBefore(Date startedBefore) {
     this.startedBefore = startedBefore;
   }
 
-  @CamundaQueryParam(value = "finishedAfter", converter = DateConverter.class)
+  @OrqueioQueryParam(value = "finishedAfter", converter = DateConverter.class)
   public void setFinishedAfter(Date finishedAfter) {
     this.finishedAfter = finishedAfter;
   }
 
-  @CamundaQueryParam(value = "finishedBefore", converter = DateConverter.class)
+  @OrqueioQueryParam(value = "finishedBefore", converter = DateConverter.class)
   public void setFinishedBefore(Date finishedBefore) {
     this.finishedBefore = finishedBefore;
   }
 
-  @CamundaQueryParam(value = "processInstanceIdIn", converter = StringArrayConverter.class)
+  @OrqueioQueryParam(value = "processInstanceIdIn", converter = StringArrayConverter.class)
   public void setProcessInstanceIdIn(String[] processInstanceIdIn) {
     this.processInstanceIdIn = processInstanceIdIn;
   }

@@ -29,8 +29,8 @@
     <property name="taskMetricsEnabled" value="false" />
     <property name="deploymentResources">
       <array>
-        <value>classpath*:/org/camunda/bpm/engine/spring/test/autodeployment/autodeploy.*.cmmn</value>
-        <value>classpath*:/org/camunda/bpm/engine/spring/test/autodeployment/autodeploy.*.bpmn20.xml</value>
+        <value>classpath*:/io/orqueio/bpm/engine/spring/test/autodeployment/autodeploy.*.cmmn</value>
+        <value>classpath*:/io/orqueio/bpm/engine/spring/test/autodeployment/autodeploy.*.bpmn20.xml</value>
       </array>
     </property>
     <property name="enforceHistoryTimeToLive" value="false" />

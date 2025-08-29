@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -19,7 +19,7 @@ package io.orqueio.bpm.engine.rest.dto.task;
 import java.util.Date;
 
 import io.orqueio.bpm.engine.BadUserRequestException;
-import io.orqueio.bpm.engine.form.CamundaFormRef;
+import io.orqueio.bpm.engine.form.OrqueioFormRef;
 import io.orqueio.bpm.engine.rest.dto.converter.DelegationStateConverter;
 import io.orqueio.bpm.engine.runtime.ProcessInstance;
 import io.orqueio.bpm.engine.task.DelegationState;
@@ -48,7 +48,7 @@ public class TaskDto {
   private String caseDefinitionId;
   private boolean suspended;
   private String formKey;
-  private CamundaFormRef camundaFormRef;
+  private OrqueioFormRef orqueioFormRef;
   private String tenantId;
   /**
    * Returns task State of task
@@ -87,7 +87,7 @@ public class TaskDto {
     this.taskState = task.getTaskState();
     try {
       this.formKey = task.getFormKey();
-      this.camundaFormRef = task.getCamundaFormRef();
+      this.orqueioFormRef = task.getOrqueioFormRef();
     }
     catch (BadUserRequestException e) {
       // ignore (initializeFormKeys was not called)
@@ -225,8 +225,8 @@ public class TaskDto {
     return formKey;
   }
 
-  public CamundaFormRef getCamundaFormRef() {
-    return camundaFormRef;
+  public OrqueioFormRef getOrqueioFormRef() {
+    return orqueioFormRef;
   }
 
   public String getTenantId() {
@@ -275,7 +275,7 @@ public class TaskDto {
 
     try {
       dto.formKey = task.getFormKey();
-      dto.camundaFormRef = task.getCamundaFormRef();
+      dto.orqueioFormRef = task.getOrqueioFormRef();
     }
     catch (BadUserRequestException e) {
       // ignore (initializeFormKeys was not called)

@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -24,7 +24,7 @@ import javax.ws.rs.core.MultivaluedMap;
 import io.orqueio.bpm.engine.ProcessEngine;
 import io.orqueio.bpm.engine.history.UserOperationLogQuery;
 import io.orqueio.bpm.engine.rest.dto.AbstractQueryDto;
-import io.orqueio.bpm.engine.rest.dto.CamundaQueryParam;
+import io.orqueio.bpm.engine.rest.dto.OrqueioQueryParam;
 import io.orqueio.bpm.engine.rest.dto.converter.DateConverter;
 import io.orqueio.bpm.engine.rest.dto.converter.StringArrayConverter;
 
@@ -156,117 +156,117 @@ public class UserOperationLogQueryDto extends AbstractQueryDto<UserOperationLogQ
     }
   }
 
-  @CamundaQueryParam("deploymentId")
+  @OrqueioQueryParam("deploymentId")
   public void setDeploymentId(String deploymentId) {
     this.deploymentId = deploymentId;
   }
 
-  @CamundaQueryParam("processDefinitionId")
+  @OrqueioQueryParam("processDefinitionId")
   public void setProcessDefinitionId(String processDefinitionId) {
     this.processDefinitionId = processDefinitionId;
   }
 
-  @CamundaQueryParam("processDefinitionKey")
+  @OrqueioQueryParam("processDefinitionKey")
   public void setProcessDefinitionKey(String processDefinitionKey) {
     this.processDefinitionKey = processDefinitionKey;
   }
 
-  @CamundaQueryParam("processInstanceId")
+  @OrqueioQueryParam("processInstanceId")
   public void setProcessInstanceId(String processInstanceId) {
     this.processInstanceId = processInstanceId;
   }
 
-  @CamundaQueryParam("executionId")
+  @OrqueioQueryParam("executionId")
   public void setExecutionId(String executionId) {
     this.executionId = executionId;
   }
 
-  @CamundaQueryParam("caseDefinitionId")
+  @OrqueioQueryParam("caseDefinitionId")
   public void setCaseDefinitionId(String caseDefinitionId) {
     this.caseDefinitionId = caseDefinitionId;
   }
 
-  @CamundaQueryParam("caseInstanceId")
+  @OrqueioQueryParam("caseInstanceId")
   public void setCaseInstanceId(String caseInstanceId) {
     this.caseInstanceId = caseInstanceId;
   }
 
-  @CamundaQueryParam("caseExecutionId")
+  @OrqueioQueryParam("caseExecutionId")
   public void setCaseExecutionId(String caseExecutionId) {
     this.caseExecutionId = caseExecutionId;
   }
 
-  @CamundaQueryParam("taskId")
+  @OrqueioQueryParam("taskId")
   public void setTaskId(String taskId) {
     this.taskId = taskId;
   }
 
-  @CamundaQueryParam("jobId")
+  @OrqueioQueryParam("jobId")
   public void setJobId(String jobId) {
     this.jobId = jobId;
   }
 
-  @CamundaQueryParam("jobDefinitionId")
+  @OrqueioQueryParam("jobDefinitionId")
   public void setJobDefinitionId(String jobDefinitionId) {
     this.jobDefinitionId = jobDefinitionId;
   }
 
-  @CamundaQueryParam("batchId")
+  @OrqueioQueryParam("batchId")
   public void setBatchId(String batchId) {
     this.batchId = batchId;
   }
 
-  @CamundaQueryParam("userId")
+  @OrqueioQueryParam("userId")
   public void setUserId(String userId) {
     this.userId = userId;
   }
 
-  @CamundaQueryParam("operationId")
+  @OrqueioQueryParam("operationId")
   public void setOperationId(String operationId) {
     this.operationId = operationId;
   }
   
-  @CamundaQueryParam("externalTaskId")
+  @OrqueioQueryParam("externalTaskId")
   public void setExternalTaskId(String externalTaskId) {
     this.externalTaskId = externalTaskId;
   }
 
-  @CamundaQueryParam("operationType")
+  @OrqueioQueryParam("operationType")
   public void setOperationType(String operationType) {
     this.operationType = operationType;
   }
 
-  @CamundaQueryParam("entityType")
+  @OrqueioQueryParam("entityType")
   public void setEntityType(String entityType) {
     this.entityType = entityType;
   }
 
-  @CamundaQueryParam(value = "entityTypeIn", converter = StringArrayConverter.class)
+  @OrqueioQueryParam(value = "entityTypeIn", converter = StringArrayConverter.class)
   public void setEntityTypeIn(String[] entityTypes) {
     this.entityTypes = entityTypes;
   }
   
-  @CamundaQueryParam("category")
+  @OrqueioQueryParam("category")
   public void setcategory(String category) {
     this.category = category;
   }
 
-  @CamundaQueryParam(value = "categoryIn", converter = StringArrayConverter.class)
+  @OrqueioQueryParam(value = "categoryIn", converter = StringArrayConverter.class)
   public void setCategoryIn(String[] categories) {
     this.categories = categories;
   }
   
-  @CamundaQueryParam("property")
+  @OrqueioQueryParam("property")
   public void setProperty(String property) {
     this.property = property;
   }
 
-  @CamundaQueryParam(value = "afterTimestamp", converter = DateConverter.class)
+  @OrqueioQueryParam(value = "afterTimestamp", converter = DateConverter.class)
   public void setAfterTimestamp(Date after) {
     this.afterTimestamp = after;
   }
 
-  @CamundaQueryParam(value = "beforeTimestamp", converter = DateConverter.class)
+  @OrqueioQueryParam(value = "beforeTimestamp", converter = DateConverter.class)
   public void setBeforeTimestamp(Date before) {
     this.beforeTimestamp = before;
   }

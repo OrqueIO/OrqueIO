@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -107,7 +107,7 @@ import io.orqueio.bpm.engine.identity.UserQuery;
 import io.orqueio.bpm.engine.impl.calendar.DateTimeUtil;
 import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import io.orqueio.bpm.engine.impl.digest._apacheCommonsCodec.Base64;
-import io.orqueio.bpm.engine.impl.form.CamundaFormRefImpl;
+import io.orqueio.bpm.engine.impl.form.OrqueioFormRefImpl;
 import io.orqueio.bpm.engine.impl.form.validator.FormFieldValidationException;
 import io.orqueio.bpm.engine.impl.util.IoUtil;
 import io.orqueio.bpm.engine.repository.CaseDefinition;
@@ -754,20 +754,20 @@ public class TaskRestServiceInteractionTest extends
       .header("accept", MediaType.APPLICATION_JSON)
       .then().expect().statusCode(Status.OK.getStatusCode())
       .body("key", equalTo(MockProvider.EXAMPLE_FORM_KEY))
-      .body("camundaFormRef", nullValue())
+      .body("orqueioFormRef", nullValue())
       .body("contextPath", equalTo(MockProvider.EXAMPLE_PROCESS_APPLICATION_CONTEXT_PATH))
       .when().get(TASK_FORM_URL);
   }
 
   @Test
-  public void testGetTaskshouldContainCamundaFormRef() {
+  public void testGetTaskshouldContainOrqueioFormRef() {
     given().pathParam("id", MockProvider.EXAMPLE_TASK_ID)
       .header("accept", MediaType.APPLICATION_JSON)
       .then().expect()
         .statusCode(Status.OK.getStatusCode())
-        .body("camundaFormRef.key", equalTo(MockProvider.EXAMPLE_FORM_KEY))
-        .body("camundaFormRef.binding", equalTo(MockProvider.EXAMPLE_FORM_REF_BINDING))
-        .body("camundaFormRef.version", equalTo(MockProvider.EXAMPLE_FORM_REF_VERSION))
+        .body("orqueioFormRef.key", equalTo(MockProvider.EXAMPLE_FORM_KEY))
+        .body("orqueioFormRef.binding", equalTo(MockProvider.EXAMPLE_FORM_REF_BINDING))
+        .body("orqueioFormRef.version", equalTo(MockProvider.EXAMPLE_FORM_REF_VERSION))
         .body("key", nullValue())
       .when().get(SINGLE_TASK_URL);
   }
@@ -796,9 +796,9 @@ public class TaskRestServiceInteractionTest extends
      .header("accept", MediaType.APPLICATION_JSON)
      .then().expect()
        .statusCode(Status.OK.getStatusCode())
-       .body("camundaFormRef.key", equalTo(MockProvider.EXAMPLE_FORM_KEY))
-       .body("camundaFormRef.binding", equalTo(MockProvider.EXAMPLE_FORM_REF_BINDING))
-       .body("camundaFormRef.version", equalTo(MockProvider.EXAMPLE_FORM_REF_VERSION))
+       .body("orqueioFormRef.key", equalTo(MockProvider.EXAMPLE_FORM_KEY))
+       .body("orqueioFormRef.binding", equalTo(MockProvider.EXAMPLE_FORM_REF_BINDING))
+       .body("orqueioFormRef.version", equalTo(MockProvider.EXAMPLE_FORM_REF_VERSION))
        .body("key", nullValue())
        .body("contextPath", equalTo(MockProvider.EXAMPLE_PROCESS_APPLICATION_CONTEXT_PATH))
      .when().get(TASK_FORM_URL);
@@ -3577,7 +3577,7 @@ public class TaskRestServiceInteractionTest extends
     InputStream deployedFormMock = new ByteArrayInputStream("{\"id\":\"myForm\"}".getBytes());
     when(formServiceMock.getDeployedTaskForm(anyString())).thenReturn(deployedFormMock);
     when(mockTask.getFormKey()).thenReturn(null);
-    when(mockTask.getCamundaFormRef()).thenReturn(new CamundaFormRefImpl("myForm", "latest"));
+    when(mockTask.getOrqueioFormRef()).thenReturn(new OrqueioFormRefImpl("myForm", "latest"));
 
     given()
       .pathParam("id", MockProvider.EXAMPLE_TASK_ID)

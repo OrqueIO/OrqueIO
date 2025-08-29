@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -25,7 +25,7 @@ import javax.ws.rs.core.MultivaluedMap;
 import io.orqueio.bpm.engine.ProcessEngine;
 import io.orqueio.bpm.engine.identity.GroupQuery;
 import io.orqueio.bpm.engine.rest.dto.AbstractQueryDto;
-import io.orqueio.bpm.engine.rest.dto.CamundaQueryParam;
+import io.orqueio.bpm.engine.rest.dto.OrqueioQueryParam;
 import io.orqueio.bpm.engine.rest.dto.converter.StringArrayConverter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -64,37 +64,37 @@ public class GroupQueryDto extends AbstractQueryDto<GroupQuery> {
     super(objectMapper, queryParameters);
   }
 
-  @CamundaQueryParam("id")
+  @OrqueioQueryParam("id")
   public void setId(String groupId) {
     this.id = groupId;
   }
 
-  @CamundaQueryParam(value = "idIn", converter = StringArrayConverter.class)
+  @OrqueioQueryParam(value = "idIn", converter = StringArrayConverter.class)
   public void setIdIn(String[] groupIds) {
     this.ids = groupIds;
   }
 
-  @CamundaQueryParam("name")
+  @OrqueioQueryParam("name")
   public void setName(String groupName) {
     this.name = groupName;
   }
 
-  @CamundaQueryParam("nameLike")
+  @OrqueioQueryParam("nameLike")
   public void setNameLike(String groupNameLike) {
     this.nameLike = groupNameLike;
   }
 
-  @CamundaQueryParam("type")
+  @OrqueioQueryParam("type")
   public void setType(String groupType) {
     this.type = groupType;
   }
 
-  @CamundaQueryParam("member")
+  @OrqueioQueryParam("member")
   public void setMember(String member) {
     this.member = member;
   }
 
-  @CamundaQueryParam("memberOfTenant")
+  @OrqueioQueryParam("memberOfTenant")
   public void setMemberOfTenant(String tenantId) {
     this.tenantId = tenantId;
   }

@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -18,7 +18,7 @@ package io.orqueio.bpm.engine.rest.util;
 
 import javax.ws.rs.core.MediaType;
 
-import io.orqueio.bpm.engine.form.CamundaFormRef;
+import io.orqueio.bpm.engine.form.OrqueioFormRef;
 
 public class ContentTypeUtil {
 
@@ -35,7 +35,7 @@ public class ContentTypeUtil {
     return MediaType.APPLICATION_XHTML_XML;
   }
 
-  public static String getFormContentType(CamundaFormRef formRef) {
+  public static String getFormContentType(OrqueioFormRef formRef) {
     if(formRef != null && formRef.getKey() != null && formRef.getBinding() != null) {
       return MediaType.APPLICATION_JSON;
     }

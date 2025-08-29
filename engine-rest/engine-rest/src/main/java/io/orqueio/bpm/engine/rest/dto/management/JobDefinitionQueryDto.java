@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -27,7 +27,7 @@ import javax.ws.rs.core.MultivaluedMap;
 import io.orqueio.bpm.engine.ProcessEngine;
 import io.orqueio.bpm.engine.management.JobDefinitionQuery;
 import io.orqueio.bpm.engine.rest.dto.AbstractQueryDto;
-import io.orqueio.bpm.engine.rest.dto.CamundaQueryParam;
+import io.orqueio.bpm.engine.rest.dto.OrqueioQueryParam;
 import io.orqueio.bpm.engine.rest.dto.converter.BooleanConverter;
 import io.orqueio.bpm.engine.rest.dto.converter.StringArrayConverter;
 import io.orqueio.bpm.engine.rest.dto.converter.StringListConverter;
@@ -79,62 +79,62 @@ public class JobDefinitionQueryDto extends AbstractQueryDto<JobDefinitionQuery> 
     super(objectMapper, queryParameters);
   }
 
-  @CamundaQueryParam("jobDefinitionId")
+  @OrqueioQueryParam("jobDefinitionId")
   public void setJobDefinitionId(String jobDefinitionId) {
     this.jobDefinitionId = jobDefinitionId;
   }
 
-  @CamundaQueryParam(value="activityIdIn", converter = StringArrayConverter.class)
+  @OrqueioQueryParam(value="activityIdIn", converter = StringArrayConverter.class)
   public void setActivityIdIn(String[] activityIdIn) {
     this.activityIdIn = activityIdIn;
   }
 
-  @CamundaQueryParam("processDefinitionId")
+  @OrqueioQueryParam("processDefinitionId")
   public void setProcessDefinitionId(String processDefinitionId) {
     this.processDefinitionId = processDefinitionId;
   }
 
-  @CamundaQueryParam("processDefinitionKey")
+  @OrqueioQueryParam("processDefinitionKey")
   public void setProcessDefinitionKey(String processDefinitionKey) {
     this.processDefinitionKey = processDefinitionKey;
   }
 
-  @CamundaQueryParam("jobType")
+  @OrqueioQueryParam("jobType")
   public void setJobType(String jobType) {
     this.jobType = jobType;
   }
 
-  @CamundaQueryParam("jobConfiguration")
+  @OrqueioQueryParam("jobConfiguration")
   public void setJobConfiguration(String jobConfiguration) {
     this.jobConfiguration = jobConfiguration;
   }
 
-  @CamundaQueryParam(value="active", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value="active", converter = BooleanConverter.class)
   public void setActive(Boolean active) {
     this.active = active;
   }
 
-  @CamundaQueryParam(value="suspended", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value="suspended", converter = BooleanConverter.class)
   public void setSuspended(Boolean suspended) {
     this.suspended = suspended;
   }
 
-  @CamundaQueryParam(value="withOverridingJobPriority", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value="withOverridingJobPriority", converter = BooleanConverter.class)
   public void setWithOverridingJobPriority(Boolean withOverridingJobPriority) {
     this.withOverridingJobPriority = withOverridingJobPriority;
   }
 
-  @CamundaQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
+  @OrqueioQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
   public void setTenantIdIn(List<String> tenantIds) {
     this.tenantIds = tenantIds;
   }
 
-  @CamundaQueryParam(value = "withoutTenantId", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value = "withoutTenantId", converter = BooleanConverter.class)
   public void setWithoutTenantId(Boolean withoutTenantId) {
     this.withoutTenantId = withoutTenantId;
   }
 
-  @CamundaQueryParam(value = "includeJobDefinitionsWithoutTenantId", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value = "includeJobDefinitionsWithoutTenantId", converter = BooleanConverter.class)
   public void setIncludeJobDefinitionsWithoutTenantId(Boolean includeJobDefinitionsWithoutTenantId) {
     this.includeJobDefinitionsWithoutTenantId = includeJobDefinitionsWithoutTenantId;
   }

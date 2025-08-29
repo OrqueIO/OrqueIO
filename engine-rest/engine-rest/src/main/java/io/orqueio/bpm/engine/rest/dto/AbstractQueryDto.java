@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -34,7 +34,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * Defines common query operations, such as sorting options and validation.
- * Also allows to access its setter methods based on {@link CamundaQueryParam} annotations which is
+ * Also allows to access its setter methods based on {@link OrqueioQueryParam} annotations which is
  * used for processing Http query parameters.
  *
  * @author Thorben Lindhauer
@@ -69,7 +69,7 @@ public abstract class AbstractQueryDto<T extends Query<?, ?>>  extends AbstractS
   }
 
 
-  @CamundaQueryParam("sortBy")
+  @OrqueioQueryParam("sortBy")
   public void setSortBy(String sortBy) {
     if (!isValidSortByValue(sortBy)) {
       throw new InvalidRequestException(Status.BAD_REQUEST, "sortBy parameter has invalid value: " + sortBy);
@@ -77,7 +77,7 @@ public abstract class AbstractQueryDto<T extends Query<?, ?>>  extends AbstractS
     this.sortBy = sortBy;
   }
 
-  @CamundaQueryParam("sortOrder")
+  @OrqueioQueryParam("sortOrder")
   public void setSortOrder(String sortOrder) {
     if (!VALID_SORT_ORDER_VALUES.contains(sortOrder)) {
       throw new InvalidRequestException(Status.BAD_REQUEST, "sortOrder parameter has invalid value: " + sortOrder);

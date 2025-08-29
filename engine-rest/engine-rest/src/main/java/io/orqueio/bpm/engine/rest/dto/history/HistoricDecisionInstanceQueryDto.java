@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -28,7 +28,7 @@ import javax.ws.rs.core.MultivaluedMap;
 import io.orqueio.bpm.engine.ProcessEngine;
 import io.orqueio.bpm.engine.history.HistoricDecisionInstanceQuery;
 import io.orqueio.bpm.engine.rest.dto.AbstractQueryDto;
-import io.orqueio.bpm.engine.rest.dto.CamundaQueryParam;
+import io.orqueio.bpm.engine.rest.dto.OrqueioQueryParam;
 import io.orqueio.bpm.engine.rest.dto.converter.BooleanConverter;
 import io.orqueio.bpm.engine.rest.dto.converter.DateConverter;
 import io.orqueio.bpm.engine.rest.dto.converter.StringArrayConverter;
@@ -89,147 +89,147 @@ public class HistoricDecisionInstanceQueryDto extends AbstractQueryDto<HistoricD
     super(objectMapper, queryParameters);
   }
 
-  @CamundaQueryParam("decisionInstanceId")
+  @OrqueioQueryParam("decisionInstanceId")
   public void setDecisionInstanceId(String decisionInstanceId) {
     this.decisionInstanceId = decisionInstanceId;
   }
 
-  @CamundaQueryParam(value = "decisionInstanceIdIn", converter = StringArrayConverter.class)
+  @OrqueioQueryParam(value = "decisionInstanceIdIn", converter = StringArrayConverter.class)
   public void setDecisionInstanceIdIn(String[] decisionInstanceIdIn) {
     this.decisionInstanceIdIn = decisionInstanceIdIn;
   }
 
-  @CamundaQueryParam("decisionDefinitionId")
+  @OrqueioQueryParam("decisionDefinitionId")
   public void setDecisionDefinitionId(String decisionDefinitionId) {
     this.decisionDefinitionId = decisionDefinitionId;
   }
 
-  @CamundaQueryParam(value = "decisionDefinitionIdIn", converter = StringArrayConverter.class)
+  @OrqueioQueryParam(value = "decisionDefinitionIdIn", converter = StringArrayConverter.class)
   public void setDecisionDefinitionIdIn(String[] decisionDefinitionIdIn) {
     this.decisionDefinitionIdIn = decisionDefinitionIdIn;
   }
 
-  @CamundaQueryParam("decisionDefinitionKey")
+  @OrqueioQueryParam("decisionDefinitionKey")
   public void setDecisionDefinitionKey(String decisionDefinitionKey) {
     this.decisionDefinitionKey = decisionDefinitionKey;
   }
 
-  @CamundaQueryParam(value = "decisionDefinitionKeyIn", converter = StringArrayConverter.class)
+  @OrqueioQueryParam(value = "decisionDefinitionKeyIn", converter = StringArrayConverter.class)
   public void setDecisionDefinitionKeyIn(String[] decisionDefinitionKeyIn) {
     this.decisionDefinitionKeyIn = decisionDefinitionKeyIn;
   }
 
-  @CamundaQueryParam("decisionDefinitionName")
+  @OrqueioQueryParam("decisionDefinitionName")
   public void setDecisionDefinitionName(String decisionDefinitionName) {
     this.decisionDefinitionName = decisionDefinitionName;
   }
 
-  @CamundaQueryParam("decisionDefinitionNameLike")
+  @OrqueioQueryParam("decisionDefinitionNameLike")
   public void setDecisionDefinitionNameLike(String decisionDefinitionNameLike) {
     this.decisionDefinitionNameLike = decisionDefinitionNameLike;
   }
 
-  @CamundaQueryParam("processDefinitionId")
+  @OrqueioQueryParam("processDefinitionId")
   public void setProcessDefinitionId(String processDefinitionId) {
     this.processDefinitionId = processDefinitionId;
   }
 
-  @CamundaQueryParam("processDefinitionKey")
+  @OrqueioQueryParam("processDefinitionKey")
   public void setProcessDefinitionKey(String processDefinitionKey) {
     this.processDefinitionKey = processDefinitionKey;
   }
 
-  @CamundaQueryParam("processInstanceId")
+  @OrqueioQueryParam("processInstanceId")
   public void setProcessInstanceId(String processInstanceId) {
     this.processInstanceId = processInstanceId;
   }
 
-  @CamundaQueryParam("caseDefinitionId")
+  @OrqueioQueryParam("caseDefinitionId")
   public void setCaseDefinitionId(String caseDefinitionId) {
     this.caseDefinitionId = caseDefinitionId;
   }
 
-  @CamundaQueryParam("caseDefinitionKey")
+  @OrqueioQueryParam("caseDefinitionKey")
   public void setCaseDefinitionKey(String caseDefinitionKey) {
     this.caseDefinitionKey = caseDefinitionKey;
   }
 
-  @CamundaQueryParam("caseInstanceId")
+  @OrqueioQueryParam("caseInstanceId")
   public void setCaseInstanceId(String caseInstanceId) {
     this.caseInstanceId = caseInstanceId;
   }
 
-  @CamundaQueryParam(value="activityIdIn", converter = StringArrayConverter.class)
+  @OrqueioQueryParam(value="activityIdIn", converter = StringArrayConverter.class)
   public void setActivityIdIn(String[] activityIdIn) {
     this.activityIdIn = activityIdIn;
   }
 
-  @CamundaQueryParam(value="activityInstanceIdIn", converter = StringArrayConverter.class)
+  @OrqueioQueryParam(value="activityInstanceIdIn", converter = StringArrayConverter.class)
   public void setActivityInstanceIdIn(String[] activityInstanceIdIn) {
     this.activityInstanceIdIn = activityInstanceIdIn;
   }
 
-  @CamundaQueryParam(value = "evaluatedBefore", converter = DateConverter.class)
+  @OrqueioQueryParam(value = "evaluatedBefore", converter = DateConverter.class)
   public void setEvaluatedBefore(Date evaluatedBefore) {
     this.evaluatedBefore = evaluatedBefore;
   }
 
-  @CamundaQueryParam(value = "evaluatedAfter", converter = DateConverter.class)
+  @OrqueioQueryParam(value = "evaluatedAfter", converter = DateConverter.class)
   public void setEvaluatedAfter(Date evaluatedAfter) {
     this.evaluatedAfter = evaluatedAfter;
   }
 
-  @CamundaQueryParam(value = "userId")
+  @OrqueioQueryParam(value = "userId")
   public void setUserId(String userId) {
     this.userId = userId;
   }
 
-  @CamundaQueryParam(value = "includeInputs", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value = "includeInputs", converter = BooleanConverter.class)
   public void setIncludeInputs(Boolean includeInputs) {
     this.includeInputs = includeInputs;
   }
 
-  @CamundaQueryParam(value = "includeOutputs", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value = "includeOutputs", converter = BooleanConverter.class)
   public void setIncludeOutputs(Boolean includeOutputs) {
     this.includeOutputs = includeOutputs;
   }
 
-  @CamundaQueryParam(value = "disableBinaryFetching", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value = "disableBinaryFetching", converter = BooleanConverter.class)
   public void setDisableBinaryFetching(Boolean disableBinaryFetching) {
     this.disableBinaryFetching = disableBinaryFetching;
   }
 
-  @CamundaQueryParam(value = "disableCustomObjectDeserialization", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value = "disableCustomObjectDeserialization", converter = BooleanConverter.class)
   public void setDisableCustomObjectDeserialization(Boolean disableCustomObjectDeserialization) {
     this.disableCustomObjectDeserialization = disableCustomObjectDeserialization;
   }
 
-  @CamundaQueryParam(value = "rootDecisionInstanceId")
+  @OrqueioQueryParam(value = "rootDecisionInstanceId")
   public void setRootDecisionInstanceId(String rootDecisionInstanceId) {
     this.rootDecisionInstanceId = rootDecisionInstanceId;
   }
 
-  @CamundaQueryParam(value = "rootDecisionInstancesOnly", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value = "rootDecisionInstancesOnly", converter = BooleanConverter.class)
   public void setRootDecisionInstancesOnly(Boolean rootDecisionInstancesOnly) {
     this.rootDecisionInstancesOnly = rootDecisionInstancesOnly;
   }
 
-  @CamundaQueryParam(value = "decisionRequirementsDefinitionId")
+  @OrqueioQueryParam(value = "decisionRequirementsDefinitionId")
   public void setDecisionRequirementsDefinitionId(String decisionRequirementsDefinitionId) {
     this.decisionRequirementsDefinitionId = decisionRequirementsDefinitionId;
   }
 
-  @CamundaQueryParam(value = "decisionRequirementsDefinitionKey")
+  @OrqueioQueryParam(value = "decisionRequirementsDefinitionKey")
   public void setDecisionRequirementsDefinitionKey(String decisionRequirementsDefinitionKey) {
     this.decisionRequirementsDefinitionKey = decisionRequirementsDefinitionKey;
   }
 
-  @CamundaQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
+  @OrqueioQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
   public void setTenantIdIn(List<String> tenantIds) {
     this.tenantIds = tenantIds;
   }
 
-  @CamundaQueryParam(value = "withoutTenantId", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value = "withoutTenantId", converter = BooleanConverter.class)
   public void setWithoutTenantId(Boolean withoutTenantId) {
     this.withoutTenantId = withoutTenantId;
   }

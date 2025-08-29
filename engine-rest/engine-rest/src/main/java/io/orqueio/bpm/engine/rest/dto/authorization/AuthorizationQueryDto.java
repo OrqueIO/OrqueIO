@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -25,7 +25,7 @@ import javax.ws.rs.core.MultivaluedMap;
 import io.orqueio.bpm.engine.ProcessEngine;
 import io.orqueio.bpm.engine.authorization.AuthorizationQuery;
 import io.orqueio.bpm.engine.rest.dto.AbstractQueryDto;
-import io.orqueio.bpm.engine.rest.dto.CamundaQueryParam;
+import io.orqueio.bpm.engine.rest.dto.OrqueioQueryParam;
 import io.orqueio.bpm.engine.rest.dto.converter.IntegerConverter;
 import io.orqueio.bpm.engine.rest.dto.converter.StringArrayConverter;
 
@@ -62,32 +62,32 @@ public class AuthorizationQueryDto extends AbstractQueryDto<AuthorizationQuery> 
     super(objectMapper, queryParameters);
   }
 
-  @CamundaQueryParam("id")
+  @OrqueioQueryParam("id")
   public void setId(String id) {
     this.id = id;
   }
 
-  @CamundaQueryParam(value="type", converter = IntegerConverter.class)
+  @OrqueioQueryParam(value="type", converter = IntegerConverter.class)
   public void setType(Integer type) {
     this.type = type;
   }
 
-  @CamundaQueryParam(value="userIdIn", converter = StringArrayConverter.class)
+  @OrqueioQueryParam(value="userIdIn", converter = StringArrayConverter.class)
   public void setUserIdIn(String[] userIdIn) {
     this.userIdIn = userIdIn;
   }
 
-  @CamundaQueryParam(value="groupIdIn", converter = StringArrayConverter.class)
+  @OrqueioQueryParam(value="groupIdIn", converter = StringArrayConverter.class)
   public void setGroupIdIn(String[] groupIdIn) {
     this.groupIdIn = groupIdIn;
   }
 
-  @CamundaQueryParam(value="resourceType", converter = IntegerConverter.class)
+  @OrqueioQueryParam(value="resourceType", converter = IntegerConverter.class)
   public void setResourceType(int resourceType) {
     this.resourceType = resourceType;
   }
 
-  @CamundaQueryParam("resourceId")
+  @OrqueioQueryParam("resourceId")
   public void setResourceId(String resourceId) {
     this.resourceId = resourceId;
   }

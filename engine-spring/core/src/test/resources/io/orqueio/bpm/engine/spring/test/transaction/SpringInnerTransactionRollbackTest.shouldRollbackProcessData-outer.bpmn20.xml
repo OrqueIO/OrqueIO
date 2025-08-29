@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1ys0ol0" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.1.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:orqueio="http://orqueio.io/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1ys0ol0" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Orqueio Modeler" exporterVersion="3.1.0">
   <bpmn:process id="OuterTxNestedTransactionTest" name="Outer Transaction Process" isExecutable="true">
     <bpmn:startEvent id="StartEvent_1" name="Start Outer TX">
       <bpmn:outgoing>SequenceFlow_1xrn9u3</bpmn:outgoing>
@@ -9,7 +9,7 @@
       <bpmn:incoming>SequenceFlow_0n3vfv0</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="SequenceFlow_0n3vfv0" sourceRef="Task_0p68azq" targetRef="EndEvent_115acy2" />
-    <bpmn:serviceTask id="Task_0p68azq" name="Do Nested Transaction" camunda:delegateExpression="${transactionTestDelegate}">
+    <bpmn:serviceTask id="Task_0p68azq" name="Do Nested Transaction" orqueio:delegateExpression="${transactionTestDelegate}">
       <bpmn:incoming>SequenceFlow_1xrn9u3</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0n3vfv0</bpmn:outgoing>
     </bpmn:serviceTask>

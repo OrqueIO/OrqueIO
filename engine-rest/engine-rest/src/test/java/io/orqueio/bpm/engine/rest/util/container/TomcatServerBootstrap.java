@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -149,7 +149,7 @@ public abstract class TomcatServerBootstrap extends AbstractServerBootstrap {
    *
    * Why?
    *
-   * - The BOM is imported in the dependencyManagement section of this pom (via camunda-parent)
+   * - The BOM is imported in the dependencyManagement section of this pom (via orqueio-parent)
    * - As the BOM is part of the reactor, it will not be fetched from remote by the Maven build
    * - As we do not run "install", Maven does not put the BOM into the local repository
    * - Shrinkwrap will not be able to resolve the BOM then; note: this is different if a pom is referenced

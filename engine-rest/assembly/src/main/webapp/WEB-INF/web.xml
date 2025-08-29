@@ -3,7 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 
-  <display-name>Camunda Platform rest api</display-name>
+  <display-name>Orqueio Platform rest api</display-name>
 
   <!-- rest bootstrap listener -->
   <listener>
@@ -30,7 +30,7 @@
   
   <!-- Http Basic Authentication Filter -->
   <!-- <filter>
-    <filter-name>camunda-auth</filter-name>
+    <filter-name>orqueio-auth</filter-name>
     <filter-class>
       io.orqueio.bpm.engine.rest.security.auth.ProcessEngineAuthenticationFilter
     </filter-class>
@@ -42,7 +42,7 @@
   </filter>
 
   <filter-mapping>
-    <filter-name>camunda-auth</filter-name>
+    <filter-name>orqueio-auth</filter-name>
     <url-pattern>/*</url-pattern>
   </filter-mapping> -->
   

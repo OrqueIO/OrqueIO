@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -28,7 +28,7 @@ import javax.ws.rs.core.MultivaluedMap;
 import io.orqueio.bpm.engine.ProcessEngine;
 import io.orqueio.bpm.engine.repository.ProcessDefinitionQuery;
 import io.orqueio.bpm.engine.rest.dto.AbstractQueryDto;
-import io.orqueio.bpm.engine.rest.dto.CamundaQueryParam;
+import io.orqueio.bpm.engine.rest.dto.OrqueioQueryParam;
 import io.orqueio.bpm.engine.rest.dto.converter.BooleanConverter;
 import io.orqueio.bpm.engine.rest.dto.converter.DateConverter;
 import io.orqueio.bpm.engine.rest.dto.converter.IntegerConverter;
@@ -103,63 +103,63 @@ public class ProcessDefinitionQueryDto extends AbstractQueryDto<ProcessDefinitio
     super(objectMapper, queryParameters);
   }
 
-  @CamundaQueryParam("processDefinitionId")
+  @OrqueioQueryParam("processDefinitionId")
   public void setProcessDefinitionId(String processDefinitionId) {
     this.processDefinitionId = processDefinitionId;
   }
 
-  @CamundaQueryParam(value = "processDefinitionIdIn", converter = StringListConverter.class)
+  @OrqueioQueryParam(value = "processDefinitionIdIn", converter = StringListConverter.class)
   public void setProcessDefinitionIdIn(List<String> processDefinitionIdIn) {
     this.processDefinitionIdIn = processDefinitionIdIn;
   }
 
-  @CamundaQueryParam("category")
+  @OrqueioQueryParam("category")
   public void setCategory(String category) {
     this.category = category;
   }
 
-  @CamundaQueryParam("categoryLike")
+  @OrqueioQueryParam("categoryLike")
   public void setCategoryLike(String categoryLike) {
     this.categoryLike = categoryLike;
   }
 
-  @CamundaQueryParam("name")
+  @OrqueioQueryParam("name")
   public void setName(String name) {
     this.name = name;
   }
 
-  @CamundaQueryParam("nameLike")
+  @OrqueioQueryParam("nameLike")
   public void setNameLike(String nameLike) {
     this.nameLike = nameLike;
   }
 
-  @CamundaQueryParam("deploymentId")
+  @OrqueioQueryParam("deploymentId")
   public void setDeploymentId(String deploymentId) {
     this.deploymentId = deploymentId;
   }
 
-  @CamundaQueryParam(value = "deployedAfter", converter = DateConverter.class)
+  @OrqueioQueryParam(value = "deployedAfter", converter = DateConverter.class)
   public void setDeployedAfter(Date deployedAfter) {
     this.deployedAfter = deployedAfter;
   }
 
-  @CamundaQueryParam(value = "deployedAt", converter = DateConverter.class)
+  @OrqueioQueryParam(value = "deployedAt", converter = DateConverter.class)
   public void setDeployedAt(Date deployedAt) {
     this.deployedAt = deployedAt;
   }
 
-  @CamundaQueryParam("key")
+  @OrqueioQueryParam("key")
   public void setKey(String key) {
     this.key = key;
   }
 
 
-  @CamundaQueryParam(value = "keysIn", converter = StringListConverter.class)
+  @OrqueioQueryParam(value = "keysIn", converter = StringListConverter.class)
   public void setKeysIn(List<String> keys) {
     this.keys = keys;
   }
 
-  @CamundaQueryParam("keyLike")
+  @OrqueioQueryParam("keyLike")
   public void setKeyLike(String keyLike) {
     this.keyLike = keyLike;
   }
@@ -168,12 +168,12 @@ public class ProcessDefinitionQueryDto extends AbstractQueryDto<ProcessDefinitio
    * @deprecated use {@link #setVersion(Integer)}
    */
   @Deprecated
-  @CamundaQueryParam(value = "ver", converter = IntegerConverter.class)
+  @OrqueioQueryParam(value = "ver", converter = IntegerConverter.class)
   public void setVer(Integer ver) {
     setVersion(ver);
   }
 
-  @CamundaQueryParam(value = "version", converter = IntegerConverter.class)
+  @OrqueioQueryParam(value = "version", converter = IntegerConverter.class)
   public void setVersion(Integer version) {
     this.version = version;
   }
@@ -182,102 +182,102 @@ public class ProcessDefinitionQueryDto extends AbstractQueryDto<ProcessDefinitio
    * @deprecated use {@link #setLatestVersion(Boolean)}
    */
   @Deprecated
-  @CamundaQueryParam(value = "latest", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value = "latest", converter = BooleanConverter.class)
   public void setLatest(Boolean latest) {
     setLatestVersion(latest);
   }
 
-  @CamundaQueryParam(value = "latestVersion", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value = "latestVersion", converter = BooleanConverter.class)
   public void setLatestVersion(Boolean latestVersion) {
     this.latestVersion = latestVersion;
   }
 
-  @CamundaQueryParam("resourceName")
+  @OrqueioQueryParam("resourceName")
   public void setResourceName(String resourceName) {
     this.resourceName = resourceName;
   }
 
-  @CamundaQueryParam("resourceNameLike")
+  @OrqueioQueryParam("resourceNameLike")
   public void setResourceNameLike(String resourceNameLike) {
     this.resourceNameLike = resourceNameLike;
   }
 
-  @CamundaQueryParam("startableBy")
+  @OrqueioQueryParam("startableBy")
   public void setStartableBy(String startableBy) {
     this.startableBy = startableBy;
   }
 
-  @CamundaQueryParam(value = "active", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value = "active", converter = BooleanConverter.class)
   public void setActive(Boolean active) {
     this.active = active;
   }
 
-  @CamundaQueryParam(value = "suspended", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value = "suspended", converter = BooleanConverter.class)
   public void setSuspended(Boolean suspended) {
     this.suspended = suspended;
   }
 
-  @CamundaQueryParam(value = "incidentId")
+  @OrqueioQueryParam(value = "incidentId")
   public void setIncidentId(String incidentId) {
     this.incidentId = incidentId;
   }
 
-  @CamundaQueryParam(value = "incidentType")
+  @OrqueioQueryParam(value = "incidentType")
   public void setIncidentType(String incidentType) {
     this.incidentType = incidentType;
   }
 
-  @CamundaQueryParam(value = "incidentMessage")
+  @OrqueioQueryParam(value = "incidentMessage")
   public void setIncidentMessage(String incidentMessage) {
     this.incidentMessage = incidentMessage;
   }
 
-  @CamundaQueryParam(value = "incidentMessageLike")
+  @OrqueioQueryParam(value = "incidentMessageLike")
   public void setIncidentMessageLike(String incidentMessageLike) {
     this.incidentMessageLike = incidentMessageLike;
   }
 
-  @CamundaQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
+  @OrqueioQueryParam(value = "tenantIdIn", converter = StringListConverter.class)
   public void setTenantIdIn(List<String> tenantIds) {
     this.tenantIds = tenantIds;
   }
 
-  @CamundaQueryParam(value = "withoutTenantId", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value = "withoutTenantId", converter = BooleanConverter.class)
   public void setWithoutTenantId(Boolean withoutTenantId) {
     this.withoutTenantId = withoutTenantId;
   }
 
-  @CamundaQueryParam(value = "includeProcessDefinitionsWithoutTenantId", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value = "includeProcessDefinitionsWithoutTenantId", converter = BooleanConverter.class)
   public void setIncludeProcessDefinitionsWithoutTenantId(Boolean includeDefinitionsWithoutTenantId) {
     this.includeDefinitionsWithoutTenantId = includeDefinitionsWithoutTenantId;
   }
 
-  @CamundaQueryParam(value = "versionTag")
+  @OrqueioQueryParam(value = "versionTag")
   public void setVersionTag(String versionTag) {
     this.versionTag = versionTag;
   }
 
-  @CamundaQueryParam(value = "versionTagLike")
+  @OrqueioQueryParam(value = "versionTagLike")
   public void setVersionTagLike(String versionTagLike) {
     this.versionTagLike = versionTagLike;
   }
 
-  @CamundaQueryParam(value = "withoutVersionTag", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value = "withoutVersionTag", converter = BooleanConverter.class)
   public void setWithoutVersionTag(Boolean withoutVersionTag) {
     this.withoutVersionTag = withoutVersionTag;
   }
 
-  @CamundaQueryParam(value = "startableInTasklist", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value = "startableInTasklist", converter = BooleanConverter.class)
   public void setStartableInTasklist(Boolean startableInTasklist) {
     this.startableInTasklist = startableInTasklist;
   }
 
-  @CamundaQueryParam(value = "notStartableInTasklist", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value = "notStartableInTasklist", converter = BooleanConverter.class)
   public void setNotStartableInTasklist(Boolean notStartableInTasklist) {
     this.notStartableInTasklist = notStartableInTasklist;
   }
 
-  @CamundaQueryParam(value = "startablePermissionCheck", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value = "startablePermissionCheck", converter = BooleanConverter.class)
   public void setStartablePermissionCheck(Boolean startablePermissionCheck) {
     this.startablePermissionCheck = startablePermissionCheck;
   }

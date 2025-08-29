@@ -36,7 +36,7 @@
         <property name="enforceHistoryTimeToLive" value="false" />
         <property name="deploymentResources">
             <list>
-                <value>classpath:/org/camunda/bpm/engine/spring/test/autodeployment/autodeploy.*.bpmn20.xml</value>
+                <value>classpath:/io/orqueio/bpm/engine/spring/test/autodeployment/autodeploy.*.bpmn20.xml</value>
                 <value>classpath:/org/activiti/spring/test/components/waiter.bpmn20.xml</value>
             </list>
         </property>

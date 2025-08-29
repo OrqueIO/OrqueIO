@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -39,7 +39,7 @@ public class ManagedProcessEngineFactoryBeanTest {
     Assert.assertEquals(0, BpmPlatform.getProcessEngineService().getProcessEngines().size());
     
     // start spring application context
-    AbstractApplicationContext applicationContext = new ClassPathXmlApplicationContext("org/camunda/bpm/engine/spring/test/container/ManagedProcessEngineFactoryBean-context.xml");
+    AbstractApplicationContext applicationContext = new ClassPathXmlApplicationContext("io/orqueio/bpm/engine/spring/test/container/ManagedProcessEngineFactoryBean-context.xml");
     applicationContext.start();
     
     // assert that now the process engine is registered:

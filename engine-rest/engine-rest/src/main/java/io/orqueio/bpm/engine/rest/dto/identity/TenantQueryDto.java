@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -25,7 +25,7 @@ import javax.ws.rs.core.MultivaluedMap;
 import io.orqueio.bpm.engine.ProcessEngine;
 import io.orqueio.bpm.engine.identity.TenantQuery;
 import io.orqueio.bpm.engine.rest.dto.AbstractQueryDto;
-import io.orqueio.bpm.engine.rest.dto.CamundaQueryParam;
+import io.orqueio.bpm.engine.rest.dto.OrqueioQueryParam;
 import io.orqueio.bpm.engine.rest.dto.converter.BooleanConverter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -57,32 +57,32 @@ public class TenantQueryDto extends AbstractQueryDto<TenantQuery> {
     super(objectMapper, queryParameters);
   }
 
-  @CamundaQueryParam("id")
+  @OrqueioQueryParam("id")
   public void setId(String id) {
     this.id = id;
   }
 
-  @CamundaQueryParam("name")
+  @OrqueioQueryParam("name")
   public void setName(String name) {
     this.name = name;
   }
 
-  @CamundaQueryParam("nameLike")
+  @OrqueioQueryParam("nameLike")
   public void setNameLike(String nameLike) {
     this.nameLike = nameLike;
   }
 
-  @CamundaQueryParam("userMember")
+  @OrqueioQueryParam("userMember")
   public void setUserMember(String userId) {
     this.userId = userId;
   }
 
-  @CamundaQueryParam("groupMember")
+  @OrqueioQueryParam("groupMember")
   public void setGroupMember(String groupId) {
     this.groupId = groupId;
   }
 
-  @CamundaQueryParam(value = "includingGroupsOfUser", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value = "includingGroupsOfUser", converter = BooleanConverter.class)
   public void setIncludingGroupsOfUser(Boolean includingGroupsOfUser) {
     this.includingGroupsOfUser = includingGroupsOfUser;
   }

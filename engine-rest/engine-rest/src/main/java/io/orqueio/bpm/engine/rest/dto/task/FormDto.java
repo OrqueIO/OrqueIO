@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -16,7 +16,7 @@
  */
 package io.orqueio.bpm.engine.rest.dto.task;
 
-import io.orqueio.bpm.engine.form.CamundaFormRef;
+import io.orqueio.bpm.engine.form.OrqueioFormRef;
 import io.orqueio.bpm.engine.form.FormData;
 
 /**
@@ -26,7 +26,7 @@ import io.orqueio.bpm.engine.form.FormData;
 public class FormDto {
 
   private String key;
-  private CamundaFormRef camundaFormRef;
+  private OrqueioFormRef orqueioFormRef;
   private String contextPath;
 
   public void setKey(String form) {
@@ -37,12 +37,12 @@ public class FormDto {
     return key;
   }
 
-  public CamundaFormRef getCamundaFormRef() {
-    return camundaFormRef;
+  public OrqueioFormRef getOrqueioFormRef() {
+    return orqueioFormRef;
   }
 
-  public void setCamundaFormRef(CamundaFormRef camundaFormRef) {
-    this.camundaFormRef = camundaFormRef;
+  public void setOrqueioFormRef(OrqueioFormRef orqueioFormRef) {
+    this.orqueioFormRef = orqueioFormRef;
   }
 
   public void setContextPath(String contextPath) {
@@ -58,7 +58,7 @@ public class FormDto {
 
     if (formData != null) {
       dto.key = formData.getFormKey();
-      dto.camundaFormRef = formData.getCamundaFormRef();
+      dto.orqueioFormRef = formData.getOrqueioFormRef();
     }
 
     return dto;
