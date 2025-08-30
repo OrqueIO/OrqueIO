@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 /**
  * @author Stefan Hentschel.
  */
-@XmlRootElement(name = "customers", namespace = "http://camunda.org/example")
+@XmlRootElement(name = "customers", namespace = "http://orqueio.io/example")
 public class Order {
   private String order;
   private Date dueUntil;
@@ -36,7 +36,7 @@ public class Order {
   private OrderDetails orderDetails;
 
   // <order-details>
-  @XmlElement(name = "order-details", namespace = "http://camunda.org/example")
+  @XmlElement(name = "order-details", namespace = "http://orqueio.io/example")
   public OrderDetails getOrderDetails() {
     return orderDetails;
   }
@@ -70,7 +70,7 @@ public class Order {
 
 
   // <customer tags>
-  @XmlElement(namespace = "http://camunda.org/example")
+  @XmlElement(namespace = "http://orqueio.io/example")
   public LinkedList<Customer> getCustomer() {
     return customer;
   }

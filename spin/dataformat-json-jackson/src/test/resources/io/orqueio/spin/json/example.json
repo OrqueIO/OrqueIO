@@ -17,7 +17,7 @@
     }
   ],
   "orderDetails": {
-    "article": "camundaBPM",
+    "article": "orqueioBPM",
     "price": 1234567.13,
     "roundedPrice": 1234567,
     "currencies": [

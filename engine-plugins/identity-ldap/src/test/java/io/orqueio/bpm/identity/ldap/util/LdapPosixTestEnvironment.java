@@ -64,12 +64,12 @@ public class LdapPosixTestEnvironment extends LdapTestEnvironment {
     startServer();
 
     createGroup("office-berlin");
-    createUserUid("daniel", "office-berlin", "Daniel", "Meyer", "daniel@orqueio.org");
+    createUserUid("daniel", "office-berlin", "Daniel", "Meyer", "daniel@orqueio.io");
 
     createGroup("people");
-    createUserUid("ruecker", "people", "Bernd", "Ruecker", "ruecker@orqueio.org");
-    createUserUid("monster", "people", "Cookie", "Monster", "monster@orqueio.org");
-    createUserUid("fozzie", "people", "Bear", "Fozzie", "fozzie@orqueio.org");
+    createUserUid("ruecker", "people", "Bernd", "Ruecker", "ruecker@orqueio.io");
+    createUserUid("monster", "people", "Cookie", "Monster", "monster@orqueio.io");
+    createUserUid("fozzie", "people", "Bear", "Fozzie", "fozzie@orqueio.io");
 
     createGroup("groups");
     createPosixGroup("1", "posix-group-without-members");

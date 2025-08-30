@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -49,7 +49,7 @@ public class ProcessModels {
     BpmnModelInstance modelInstance = newModel(processKey)
         .startEvent()
         .serviceTask()
-          .camundaExternalTask(EXTERNAL_TASK_TOPIC_FOO)
+          .orqueioExternalTask(EXTERNAL_TASK_TOPIC_FOO)
         .exclusiveGateway("gtw")
           .sequenceFlowId("flow1")
           .condition("cond", condition)
@@ -72,9 +72,9 @@ public class ProcessModels {
       newModel()
       .startEvent("startEvent")
       .serviceTask(EXTERNAL_TASK_ONE_ID)
-        .camundaExternalTask(EXTERNAL_TASK_TOPIC_FOO)
+        .orqueioExternalTask(EXTERNAL_TASK_TOPIC_FOO)
       .serviceTask(EXTERNAL_TASK_TWO_ID)
-        .camundaExternalTask(EXTERNAL_TASK_TOPIC_BAR)
+        .orqueioExternalTask(EXTERNAL_TASK_TOPIC_BAR)
       .endEvent("endEvent")
       .done();
 
@@ -83,13 +83,13 @@ public class ProcessModels {
           .startEvent("startEvent")
             .parallelGateway("parallelGateway")
             .serviceTask(EXTERNAL_TASK_ONE_ID)
-              .camundaExternalTask(EXTERNAL_TASK_TOPIC_FOO)
-                .camundaTaskPriority(String.valueOf(EXTERNAL_TASK_PRIORITY))
+              .orqueioExternalTask(EXTERNAL_TASK_TOPIC_FOO)
+                .orqueioTaskPriority(String.valueOf(EXTERNAL_TASK_PRIORITY))
             .endEvent("endEvent1")
             .moveToLastGateway()
             .serviceTask(EXTERNAL_TASK_TWO_ID)
-              .camundaExternalTask(EXTERNAL_TASK_TOPIC_FOO)
-                .camundaTaskPriority(String.valueOf(EXTERNAL_TASK_PRIORITY + 1000L))
+              .orqueioExternalTask(EXTERNAL_TASK_TOPIC_FOO)
+                .orqueioTaskPriority(String.valueOf(EXTERNAL_TASK_PRIORITY + 1000L))
             .endEvent("endEvent2")
             .done();
 
@@ -97,18 +97,18 @@ public class ProcessModels {
       newModel(PROCESS_KEY_2)
       .startEvent("startEvent")
       .serviceTask(EXTERNAL_TASK_ID)
-        .camundaExternalTask(EXTERNAL_TASK_TOPIC_FOO)
-        .camundaOutputParameter("bar", "${foo}")
+        .orqueioExternalTask(EXTERNAL_TASK_TOPIC_FOO)
+        .orqueioOutputParameter("bar", "${foo}")
       .userTask(USER_TASK_ID)
       .endEvent("endEvent")
       .done();
 
   public static final BpmnModelInstance ONE_EXTERNAL_TASK_WITH_VERSION_TAG =
       newModel(PROCESS_DEFINITION_VERSION_TAG)
-      .camundaVersionTag(PROCESS_DEFINITION_VERSION_TAG)
+      .orqueioVersionTag(PROCESS_DEFINITION_VERSION_TAG)
       .startEvent()
       .serviceTask(EXTERNAL_TASK_ID)
-        .camundaExternalTask(EXTERNAL_TASK_TOPIC_FOO)
+        .orqueioExternalTask(EXTERNAL_TASK_TOPIC_FOO)
       .endEvent()
       .done();
 
@@ -116,8 +116,8 @@ public class ProcessModels {
       newModel()
       .startEvent()
       .serviceTask(EXTERNAL_TASK_ID)
-        .camundaExternalTask(EXTERNAL_TASK_TOPIC_FOO)
-        .camundaTaskPriority(String.valueOf(EXTERNAL_TASK_PRIORITY))
+        .orqueioExternalTask(EXTERNAL_TASK_TOPIC_FOO)
+        .orqueioTaskPriority(String.valueOf(EXTERNAL_TASK_PRIORITY))
       .userTask(USER_TASK_ID)
       .endEvent()
       .moveToActivity(EXTERNAL_TASK_ID)
@@ -131,10 +131,10 @@ public class ProcessModels {
       newModel()
       .startEvent()
       .serviceTask(EXTERNAL_TASK_ID)
-        .camundaExternalTask(EXTERNAL_TASK_TOPIC_FOO)
-        .camundaTaskPriority(String.valueOf(EXTERNAL_TASK_PRIORITY))
-        .camundaOutputParameter("bar", "${foo}")
-        .camundaErrorEventDefinition().id("id").error("500", "errorMessage").expression("${true}").errorEventDefinitionDone()
+        .orqueioExternalTask(EXTERNAL_TASK_TOPIC_FOO)
+        .orqueioTaskPriority(String.valueOf(EXTERNAL_TASK_PRIORITY))
+        .orqueioOutputParameter("bar", "${foo}")
+        .orqueioErrorEventDefinition().id("id").error("500", "errorMessage").expression("${true}").errorEventDefinitionDone()
       .userTask(USER_TASK_ID)
       .endEvent()
       .moveToActivity(EXTERNAL_TASK_ID)

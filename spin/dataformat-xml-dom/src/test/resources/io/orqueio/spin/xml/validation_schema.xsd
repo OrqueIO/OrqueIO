@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-           xmlns="http://camunda.org/example"
-           xmlns:ex="http://camunda.org/test-example"
-           targetNamespace="http://camunda.org/example"
+           xmlns="http://orqueio.io/example"
+           xmlns:ex="http://orqueio.io/test-example"
+           targetNamespace="http://orqueio.io/example"
            elementFormDefault="qualified"
            attributeFormDefault="unqualified">
 
-  <xs:import namespace="http://camunda.org/test-example" schemaLocation="validation_schema_extension.xsd" />
+  <xs:import namespace="http://orqueio.io/test-example" schemaLocation="validation_schema_extension.xsd" />
 
   <xs:element name="customers">
     <xs:complexType>

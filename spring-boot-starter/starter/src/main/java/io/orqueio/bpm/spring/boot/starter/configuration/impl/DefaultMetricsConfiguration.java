@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -17,18 +17,18 @@
 package io.orqueio.bpm.spring.boot.starter.configuration.impl;
 
 import io.orqueio.bpm.engine.spring.SpringProcessEngineConfiguration;
-import io.orqueio.bpm.spring.boot.starter.configuration.CamundaMetricsConfiguration;
+import io.orqueio.bpm.spring.boot.starter.configuration.OrqueioMetricsConfiguration;
 import io.orqueio.bpm.spring.boot.starter.property.MetricsProperty;
 
 import jakarta.annotation.PostConstruct;
 
-public class DefaultMetricsConfiguration extends AbstractCamundaConfiguration implements CamundaMetricsConfiguration {
+public class DefaultMetricsConfiguration extends AbstractOrqueioConfiguration implements OrqueioMetricsConfiguration {
 
   private MetricsProperty metrics;
 
   @PostConstruct
   void init() {
-    metrics = camundaBpmProperties.getMetrics();
+    metrics = orqueioBpmProperties.getMetrics();
   }
 
   @Override

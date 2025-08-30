@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import io.orqueio.bpm.engine.ProcessEngines;
 import io.orqueio.bpm.engine.impl.cfg.IdGenerator;
 import io.orqueio.bpm.engine.spring.SpringProcessEngineConfiguration;
-import io.orqueio.bpm.spring.boot.starter.property.CamundaBpmProperties;
+import io.orqueio.bpm.spring.boot.starter.property.OrqueioBpmProperties;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -32,11 +32,11 @@ public class DefaultProcessEngineConfigurationTest {
 
   private final DefaultProcessEngineConfiguration instance = new DefaultProcessEngineConfiguration();
   private final SpringProcessEngineConfiguration configuration = new SpringProcessEngineConfiguration();
-  private final CamundaBpmProperties properties = new CamundaBpmProperties();
+  private final OrqueioBpmProperties properties = new OrqueioBpmProperties();
 
   @Before
   public void setUp() throws Exception {
-    ReflectionTestUtils.setField(instance, "camundaBpmProperties", properties);
+    ReflectionTestUtils.setField(instance, "orqueioBpmProperties", properties);
     initIdGenerator(null);
   }
 

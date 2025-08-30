@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -18,7 +18,7 @@ package io.orqueio.bpm.run.test.config.rest;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeType;
-import io.orqueio.bpm.run.property.CamundaBpmRunRestProperties;
+import io.orqueio.bpm.run.property.OrqueioBpmRunRestProperties;
 import io.orqueio.bpm.run.test.AbstractRestTest;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
@@ -27,7 +27,7 @@ import org.springframework.test.context.TestPropertySource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@TestPropertySource(properties = { CamundaBpmRunRestProperties.PREFIX + ".disable-wadl=true" })
+@TestPropertySource(properties = { OrqueioBpmRunRestProperties.PREFIX + ".disable-wadl=true" })
 public class WadlDisabledTest extends AbstractRestTest {
 
   @Test

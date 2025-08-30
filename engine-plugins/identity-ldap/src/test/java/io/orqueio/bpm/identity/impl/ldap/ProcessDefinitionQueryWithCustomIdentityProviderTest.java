@@ -41,6 +41,9 @@ public class ProcessDefinitionQueryWithCustomIdentityProviderTest {
   RepositoryService repositoryService;
 
   @Before
+  @Deployment(resources = {
+          "io/orqueio/bpm/identity/impl/ldap/ProcessDefinitionQueryWithCustomIdentityProviderTest.bpmn20.xml"
+  })
   public void setup() {
     repositoryService = engineRule.getRepositoryService();
   }

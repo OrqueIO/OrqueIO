@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -48,7 +48,7 @@ public class RequestExecutor {
   protected static final EngineClientLogger LOG = ExternalTaskClientLogger.ENGINE_CLIENT_LOGGER;
 
   protected static final Header HEADER_CONTENT_TYPE_JSON = new BasicHeader(HttpHeaders.CONTENT_TYPE, "application/json");
-  protected static final Header HEADER_USER_AGENT = new BasicHeader(HttpHeaders.USER_AGENT, "Camunda External Task Client");
+  protected static final Header HEADER_USER_AGENT = new BasicHeader(HttpHeaders.USER_AGENT, "Orqueio External Task Client");
 
   protected HttpClient httpClient;
   protected ObjectMapper objectMapper;

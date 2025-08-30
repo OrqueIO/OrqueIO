@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -19,14 +19,14 @@ package io.orqueio.bpm.spring.boot.starter.configuration.impl;
 import io.orqueio.bpm.engine.ProcessEngines;
 import io.orqueio.bpm.engine.impl.cfg.IdGenerator;
 import io.orqueio.bpm.engine.spring.SpringProcessEngineConfiguration;
-import io.orqueio.bpm.spring.boot.starter.configuration.CamundaProcessEngineConfiguration;
-import io.orqueio.bpm.spring.boot.starter.property.CamundaBpmProperties;
+import io.orqueio.bpm.spring.boot.starter.configuration.OrqueioProcessEngineConfiguration;
+import io.orqueio.bpm.spring.boot.starter.property.OrqueioBpmProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 
 import java.util.Optional;
 
-public class DefaultProcessEngineConfiguration extends AbstractCamundaConfiguration implements CamundaProcessEngineConfiguration {
+public class DefaultProcessEngineConfiguration extends AbstractOrqueioConfiguration implements OrqueioProcessEngineConfiguration {
 
   @Autowired
   private Optional<IdGenerator> idGenerator;
@@ -45,7 +45,7 @@ public class DefaultProcessEngineConfiguration extends AbstractCamundaConfigurat
   }
 
   private void setDefaultSerializationFormat(SpringProcessEngineConfiguration configuration) {
-    String defaultSerializationFormat = camundaBpmProperties.getDefaultSerializationFormat();
+    String defaultSerializationFormat = orqueioBpmProperties.getDefaultSerializationFormat();
     if (StringUtils.hasText(defaultSerializationFormat)) {
       configuration.setDefaultSerializationFormat(defaultSerializationFormat);
     } else {
@@ -54,30 +54,30 @@ public class DefaultProcessEngineConfiguration extends AbstractCamundaConfigurat
   }
 
   private void setProcessEngineName(SpringProcessEngineConfiguration configuration) {
-    String processEngineName = StringUtils.trimAllWhitespace(camundaBpmProperties.getProcessEngineName());
+    String processEngineName = StringUtils.trimAllWhitespace(orqueioBpmProperties.getProcessEngineName());
     if (!StringUtils.isEmpty(processEngineName) && !processEngineName.contains("-")) {
 
-      if (camundaBpmProperties.getGenerateUniqueProcessEngineName()) {
+      if (orqueioBpmProperties.getGenerateUniqueProcessEngineName()) {
         if (!processEngineName.equals(ProcessEngines.NAME_DEFAULT)) {
           throw new RuntimeException(String.format("A unique processEngineName cannot be generated "
             + "if a custom processEngineName is already set: %s", processEngineName));
         }
-        processEngineName = CamundaBpmProperties.getUniqueName(camundaBpmProperties.UNIQUE_ENGINE_NAME_PREFIX);
+        processEngineName = OrqueioBpmProperties.getUniqueName(orqueioBpmProperties.UNIQUE_ENGINE_NAME_PREFIX);
       }
 
       configuration.setProcessEngineName(processEngineName);
     } else {
-      logger.warn("Ignoring invalid processEngineName='{}' - must not be null, blank or contain hyphen", camundaBpmProperties.getProcessEngineName());
+      logger.warn("Ignoring invalid processEngineName='{}' - must not be null, blank or contain hyphen", orqueioBpmProperties.getProcessEngineName());
     }
   }
 
   private void setJobExecutorAcquireByPriority(SpringProcessEngineConfiguration configuration) {
-    Optional.ofNullable(camundaBpmProperties.getJobExecutorAcquireByPriority())
+    Optional.ofNullable(orqueioBpmProperties.getJobExecutorAcquireByPriority())
       .ifPresent(configuration::setJobExecutorAcquireByPriority);
   }
 
   private void setDefaultNumberOfRetries(SpringProcessEngineConfiguration configuration) {
-    Optional.ofNullable(camundaBpmProperties.getDefaultNumberOfRetries())
+    Optional.ofNullable(orqueioBpmProperties.getDefaultNumberOfRetries())
       .ifPresent(configuration::setDefaultNumberOfRetries);
   }
 }

@@ -24,7 +24,7 @@
 
   <dependencyManagement>
     <dependencies>
-      <!-- override the Spring Boot Groovy version with the Camunda Groovy version -->
+      <!-- override the Spring Boot Groovy version with the Orqueio Groovy version -->
       <dependency>
         <groupId>org.apache.groovy</groupId>
         <artifactId>groovy-bom</artifactId>

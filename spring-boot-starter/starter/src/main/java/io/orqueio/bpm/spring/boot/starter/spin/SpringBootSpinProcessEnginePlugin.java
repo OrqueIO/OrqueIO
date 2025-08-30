@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -31,13 +31,13 @@ import org.springframework.core.io.support.SpringFactoriesLoader;
 public class SpringBootSpinProcessEnginePlugin extends SpinProcessEnginePlugin {
 
   @Autowired
-  protected Optional<CamundaJacksonFormatConfiguratorJSR310> dataFormatConfiguratorJsr310;
+  protected Optional<OrqueioJacksonFormatConfiguratorJSR310> dataFormatConfiguratorJsr310;
 
   @Autowired
-  protected Optional<CamundaJacksonFormatConfiguratorParameterNames> dataFormatConfiguratorParameterNames;
+  protected Optional<OrqueioJacksonFormatConfiguratorParameterNames> dataFormatConfiguratorParameterNames;
 
   @Autowired
-  protected Optional<CamundaJacksonFormatConfiguratorJdk8> dataFormatConfiguratorJdk8;
+  protected Optional<OrqueioJacksonFormatConfiguratorJdk8> dataFormatConfiguratorJdk8;
 
   @Override
   public void preInit(ProcessEngineConfigurationImpl processEngineConfiguration) {

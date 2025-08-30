@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><customers xmlns="http://camunda.org/example" xmlns:ns2="http://camunda.org/test-example" dueUntil="20150112" order="order1">
+<?xml version="1.0" encoding="UTF-8"?><customers xmlns="http://orqueio.io/example" xmlns:ns2="http://orqueio.io/test-example" dueUntil="20150112" order="order1">
   <customer id="customer1">
     <contractStartDate>1354539722</contractStartDate>
     <name>Kermit</name>
@@ -14,6 +14,6 @@
   <order-details>
     <ns2:date>2015-04-04T00:00:00+02:00</ns2:date>
     <ns2:id>1234567890</ns2:id>
-    <ns2:product>camunda BPM</ns2:product>
+    <ns2:product>orqueio BPM</ns2:product>
   </order-details>
 </customers>

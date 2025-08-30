@@ -1,6 +1,6 @@
 package io.orqueio.spin.groovy.xml.dom
 def map = [
-  a:"http://camunda.com"
+  a:"http://orqueio.io"
 ]
 
 query = S(input).xPath(expression).ns(map)

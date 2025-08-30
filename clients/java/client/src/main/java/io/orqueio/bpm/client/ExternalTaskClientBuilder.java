@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -24,24 +24,24 @@ import io.orqueio.bpm.client.exception.ExternalTaskClientException;
 import io.orqueio.bpm.client.interceptor.ClientRequestInterceptor;
 
 /**
- * <p>A fluent builder to configure the Camunda client</p>
+ * <p>A fluent builder to configure the Orqueio client</p>
  *
  * @author Tassilo Weidner
  */
 public interface ExternalTaskClientBuilder {
 
   /**
-   * Base url of the Camunda BPM Platform REST API. This information is mandatory.
+   * Base url of the Orqueio BPM Platform REST API. This information is mandatory.
    * <p>
    * If this method is used, it will create a permanent url resolver with the given baseUrl.
    *
-   * @param baseUrl of the Camunda BPM Platform REST API
+   * @param baseUrl of the Orqueio BPM Platform REST API
    * @return the builder
    */
   ExternalTaskClientBuilder baseUrl(String baseUrl);
 
   /**
-   * Url resolver of the Camunda 7 REST API. This information is mandatory.
+   * Url resolver of the Orqueio 7 REST API. This information is mandatory.
    * <p>
    * If the server is in a cluster or you are using spring cloud, you can create a class which implements UrlResolver..
    * <p>
@@ -65,7 +65,7 @@ public interface ExternalTaskClientBuilder {
    *   }
    * }
    * </pre>
-   * @param urlResolver of the Camunda 7 REST API
+   * @param urlResolver of the Orqueio 7 REST API
    * @return the builder
    */
   ExternalTaskClientBuilder urlResolver(UrlResolver urlResolver);
@@ -222,7 +222,7 @@ public interface ExternalTaskClientBuilder {
   ExternalTaskClientBuilder customizeHttpClient(Consumer<HttpClientBuilder> httpClientConsumer);
 
   /**
-   * Bootstraps the Camunda client
+   * Bootstraps the Orqueio client
    *
    * @return the builder
    * @throws ExternalTaskClientException <ul>

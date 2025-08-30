@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -16,32 +16,32 @@
  */
 package io.orqueio.bpm.spring.boot.starter.runlistener;
 
-import io.orqueio.bpm.spring.boot.starter.util.CamundaBpmVersion;
+import io.orqueio.bpm.spring.boot.starter.util.OrqueioBpmVersion;
 import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent;
 import org.springframework.context.ApplicationListener;
 
 /**
- * Adds camunda.bpm.version properties to environment.
+ * Adds orqueio.bpm.version properties to environment.
  */
 public class PropertiesListener implements ApplicationListener<ApplicationEnvironmentPreparedEvent> {
 
-  private final CamundaBpmVersion version;
+  private final OrqueioBpmVersion version;
 
   /**
    * Default constructor, used when initializing via spring.factories.
    *
-   * @see PropertiesListener#PropertiesListener(CamundaBpmVersion)
+   * @see PropertiesListener#PropertiesListener(OrqueioBpmVersion)
    */
   public PropertiesListener() {
-    this(new CamundaBpmVersion());
+    this(new OrqueioBpmVersion());
   }
 
   /**
    * Initialize with version.
    *
-   * @param version the current camundaBpmVersion instance.
+   * @param version the current orqueioBpmVersion instance.
    */
-  PropertiesListener(CamundaBpmVersion version) {
+  PropertiesListener(OrqueioBpmVersion version) {
     this.version = version;
   }
 

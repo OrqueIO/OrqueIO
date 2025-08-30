@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -20,7 +20,7 @@ import java.util.Set;
 
 import io.orqueio.bpm.engine.impl.cfg.JtaProcessEngineConfiguration;
 import io.orqueio.bpm.engine.impl.persistence.StrongUuidGenerator;
-import io.orqueio.bpm.engine.impl.diagnostics.CamundaIntegration;
+import io.orqueio.bpm.engine.impl.diagnostics.OrqueioIntegration;
 
 /**
  *
@@ -44,8 +44,8 @@ public class ManagedJtaProcessEngineConfiguration extends JtaProcessEngineConfig
   @Override
   protected void initTelemetryData() {
     super.initTelemetryData();
-    Set<String> camundaIntegration = telemetryData.getProduct().getInternals().getCamundaIntegration();
-    camundaIntegration.add(CamundaIntegration.WILDFLY_SUBSYSTEM);
+    Set<String> orqueioIntegration = telemetryData.getProduct().getInternals().getOrqueioIntegration();
+    orqueioIntegration.add(OrqueioIntegration.WILDFLY_SUBSYSTEM);
   }
 
 }

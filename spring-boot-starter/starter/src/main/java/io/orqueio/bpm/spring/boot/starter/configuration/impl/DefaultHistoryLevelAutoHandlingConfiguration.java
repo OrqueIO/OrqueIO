@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -17,7 +17,7 @@
 package io.orqueio.bpm.spring.boot.starter.configuration.impl;
 
 import io.orqueio.bpm.engine.spring.SpringProcessEngineConfiguration;
-import io.orqueio.bpm.spring.boot.starter.configuration.CamundaHistoryLevelAutoHandlingConfiguration;
+import io.orqueio.bpm.spring.boot.starter.configuration.OrqueioHistoryLevelAutoHandlingConfiguration;
 import io.orqueio.bpm.spring.boot.starter.configuration.Ordering;
 import io.orqueio.bpm.spring.boot.starter.jdbc.HistoryLevelDeterminator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.util.StringUtils;
 
 @Order(Ordering.DEFAULT_ORDER + 1)
-public class DefaultHistoryLevelAutoHandlingConfiguration extends AbstractCamundaConfiguration implements CamundaHistoryLevelAutoHandlingConfiguration {
+public class DefaultHistoryLevelAutoHandlingConfiguration extends AbstractOrqueioConfiguration implements OrqueioHistoryLevelAutoHandlingConfiguration {
 
   @Autowired
   protected HistoryLevelDeterminator historyLevelDeterminator;

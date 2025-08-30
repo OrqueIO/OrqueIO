@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -16,7 +16,7 @@
  */
 package io.orqueio.bpm.spring.boot.starter.configuration.impl;
 
-import static io.orqueio.bpm.spring.boot.starter.util.CamundaSpringBootUtil.join;
+import static io.orqueio.bpm.spring.boot.starter.util.OrqueioSpringBootUtil.join;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,9 +26,9 @@ import io.orqueio.bpm.engine.impl.jobexecutor.JobHandler;
 import io.orqueio.bpm.engine.impl.jobexecutor.NotifyAcquisitionRejectedJobsHandler;
 import io.orqueio.bpm.engine.spring.SpringProcessEngineConfiguration;
 import io.orqueio.bpm.engine.spring.components.jobexecutor.SpringJobExecutor;
-import io.orqueio.bpm.spring.boot.starter.configuration.CamundaJobConfiguration;
+import io.orqueio.bpm.spring.boot.starter.configuration.OrqueioJobConfiguration;
 import io.orqueio.bpm.spring.boot.starter.event.JobExecutorStartingEventListener;
-import io.orqueio.bpm.spring.boot.starter.property.CamundaBpmProperties;
+import io.orqueio.bpm.spring.boot.starter.property.OrqueioBpmProperties;
 import io.orqueio.bpm.spring.boot.starter.property.JobExecutionProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -42,7 +42,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 /**
  * Prepares JobExecutor and registers all known custom JobHandlers.
  */
-public class DefaultJobConfiguration extends AbstractCamundaConfiguration implements CamundaJobConfiguration {
+public class DefaultJobConfiguration extends AbstractOrqueioConfiguration implements OrqueioJobConfiguration {
 
   @Autowired
   protected JobExecutor jobExecutor;
@@ -67,19 +67,19 @@ public class DefaultJobConfiguration extends AbstractCamundaConfiguration implem
     // note: the job executor will be activated in
     // io.orqueio.bpm.spring.boot.starter.runlistener.JobExecutorRunListener
     configuration.setJobExecutorActivate(false);
-    configuration.setJobExecutorDeploymentAware(camundaBpmProperties.getJobExecution().isDeploymentAware());
+    configuration.setJobExecutorDeploymentAware(orqueioBpmProperties.getJobExecution().isDeploymentAware());
     configuration.setJobExecutor(jobExecutor);
 
   }
 
   public static class JobConfiguration {
 
-    public static final String CAMUNDA_TASK_EXECUTOR_QUALIFIER = "camundaTaskExecutor";
+    public static final String ORQUEIO_TASK_EXECUTOR_QUALIFIER = "orqueioTaskExecutor";
 
-    @Bean(name = CAMUNDA_TASK_EXECUTOR_QUALIFIER)
-    @ConditionalOnMissingBean(name = CAMUNDA_TASK_EXECUTOR_QUALIFIER)
-    @ConditionalOnProperty(prefix = "camunda.bpm.job-execution", name = "enabled", havingValue = "true", matchIfMissing = true)
-    public static TaskExecutor camundaTaskExecutor(CamundaBpmProperties properties) {
+    @Bean(name = ORQUEIO_TASK_EXECUTOR_QUALIFIER)
+    @ConditionalOnMissingBean(name = ORQUEIO_TASK_EXECUTOR_QUALIFIER)
+    @ConditionalOnProperty(prefix = "orqueio.bpm.job-execution", name = "enabled", havingValue = "true", matchIfMissing = true)
+    public static TaskExecutor orqueioTaskExecutor(OrqueioBpmProperties properties) {
       int corePoolSize = properties.getJobExecution().getCorePoolSize();
       int maxPoolSize = properties.getJobExecution().getMaxPoolSize();
       int queueCapacity = properties.getJobExecution().getQueueCapacity();
@@ -99,8 +99,8 @@ public class DefaultJobConfiguration extends AbstractCamundaConfiguration implem
 
     @Bean
     @ConditionalOnMissingBean(JobExecutor.class)
-    @ConditionalOnProperty(prefix = "camunda.bpm.job-execution", name = "enabled", havingValue = "true", matchIfMissing = true)
-    public static JobExecutor jobExecutor(@Qualifier(CAMUNDA_TASK_EXECUTOR_QUALIFIER) final TaskExecutor taskExecutor, CamundaBpmProperties properties) {
+    @ConditionalOnProperty(prefix = "orqueio.bpm.job-execution", name = "enabled", havingValue = "true", matchIfMissing = true)
+    public static JobExecutor jobExecutor(@Qualifier(ORQUEIO_TASK_EXECUTOR_QUALIFIER) final TaskExecutor taskExecutor, OrqueioBpmProperties properties) {
       final SpringJobExecutor springJobExecutor = new SpringJobExecutor();
       springJobExecutor.setTaskExecutor(taskExecutor);
       springJobExecutor.setRejectedJobsHandler(new NotifyAcquisitionRejectedJobsHandler());
@@ -119,7 +119,7 @@ public class DefaultJobConfiguration extends AbstractCamundaConfiguration implem
     }
 
     @Bean
-    @ConditionalOnProperty(prefix = "camunda.bpm.job-execution", name = "enabled", havingValue = "true", matchIfMissing = true)
+    @ConditionalOnProperty(prefix = "orqueio.bpm.job-execution", name = "enabled", havingValue = "true", matchIfMissing = true)
     @ConditionalOnBean(JobExecutor.class)
     public static JobExecutorStartingEventListener jobExecutorStartingEventListener() {
       return new JobExecutorStartingEventListener();

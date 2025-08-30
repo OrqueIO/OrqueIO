@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -17,7 +17,7 @@
 package io.orqueio.bpm.spring.boot.starter.event;
 
 import io.orqueio.bpm.engine.spring.SpringProcessEngineConfiguration;
-import io.orqueio.bpm.spring.boot.starter.property.CamundaBpmProperties;
+import io.orqueio.bpm.spring.boot.starter.property.OrqueioBpmProperties;
 import io.orqueio.bpm.spring.boot.starter.property.EventingProperty;
 import io.orqueio.bpm.spring.boot.starter.util.SpringBootProcessEnginePlugin;
 import org.slf4j.Logger;
@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
 
 /**
- * Engine Plugin forwarding Camunda task, execution and history events as Spring Events.
+ * Engine Plugin forwarding Orqueio task, execution and history events as Spring Events.
  */
 public class EventPublisherPlugin extends SpringBootProcessEnginePlugin {
 
@@ -34,7 +34,7 @@ public class EventPublisherPlugin extends SpringBootProcessEnginePlugin {
   private final EventingProperty property;
   private final ApplicationEventPublisher publisher;
 
-  public EventPublisherPlugin(final CamundaBpmProperties properties, final ApplicationEventPublisher publisher) {
+  public EventPublisherPlugin(final OrqueioBpmProperties properties, final ApplicationEventPublisher publisher) {
     this(properties.getEventing(), publisher);
   }
 
@@ -47,13 +47,13 @@ public class EventPublisherPlugin extends SpringBootProcessEnginePlugin {
   public void preInit(SpringProcessEngineConfiguration processEngineConfiguration) {
 
     if (!property.isTask() && !property.isExecution() && !property.isHistory()) {
-      logger.info("EVENTING-002: Camunda Spring Boot Eventing Plugin is found, but disabled via property.");
+      logger.info("EVENTING-002: Orqueio Spring Boot Eventing Plugin is found, but disabled via property.");
       return;
     }
 
     if (property.isTask() || property.isExecution()) {
 
-      logger.info("EVENTING-001: Initialized Camunda Spring Boot Eventing Engine Plugin.");
+      logger.info("EVENTING-001: Initialized Orqueio Spring Boot Eventing Engine Plugin.");
       if (property.isTask()) {
         logger.info("EVENTING-003: Task events will be published as Spring Events.");
       } else {

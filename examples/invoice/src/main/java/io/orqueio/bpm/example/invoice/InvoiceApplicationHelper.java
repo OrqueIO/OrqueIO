@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -134,7 +134,7 @@ public class InvoiceApplicationHelper {
         calendar.add(Calendar.DAY_OF_MONTH, 14);
         ClockUtil.setCurrentTime(calendar.getTime());
 
-        processEngine.getIdentityService().setAuthentication("demo", Arrays.asList(Groups.CAMUNDA_ADMIN));
+        processEngine.getIdentityService().setAuthentication("demo", Arrays.asList(Groups.ORQUEIO_ADMIN));
         Task task = processEngine.getTaskService().createTaskQuery().processInstanceId(pi.getId()).singleResult();
         processEngine.getTaskService().claim(task.getId(), "demo");
         processEngine.getTaskService().complete(task.getId(), createVariables().putValue("approved", true));

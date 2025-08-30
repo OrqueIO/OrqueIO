@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -46,7 +46,7 @@ public class ReflectionCompatibilityTest {
             "]" +
             "}"
     );
-    StandardResourceDescriptionResolver testStandardResourceDescriptionResolver = new StandardResourceDescriptionResolver("camunda-bpm-platform", BpmPlatformExtension.class.getPackage().getName() + ".TestLocalDescriptions", BpmPlatformExtension.class.getClassLoader());
+    StandardResourceDescriptionResolver testStandardResourceDescriptionResolver = new StandardResourceDescriptionResolver("orqueio-bpm-platform", BpmPlatformExtension.class.getPackage().getName() + ".TestLocalDescriptions", BpmPlatformExtension.class.getClassLoader());
     SimpleMapAttributeDefinition simpleMapAttributeDefinition = new SimpleMapAttributeDefinition.Builder("test-map", false).build();
     FixedObjectTypeAttributeDefinition fixedObjectTypeAttributeDefinition = FixedObjectTypeAttributeDefinition.Builder.of("test-fixed-object", simpleMapAttributeDefinition).build();
     ResourceBundle resourceBundle = testStandardResourceDescriptionResolver.getResourceBundle(null);

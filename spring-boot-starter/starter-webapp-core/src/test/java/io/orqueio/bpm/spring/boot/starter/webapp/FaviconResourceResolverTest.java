@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -41,13 +41,13 @@ class FaviconResourceResolverTest {
   @Test
   void shouldStripPathExceptLastSegment() throws IOException {
     // given
-    String resourcePath = "/camunda/favicon.ico";
+    String resourcePath = "/orqueio/favicon.ico";
     String lastSegment = "/favicon.ico";
     Resource expectedFavicon = Mockito.mock(Resource.class);
 
-    when(location.getURL()).thenReturn(new URL("file:///camunda/"));
+    when(location.getURL()).thenReturn(new URL("file:///orqueio/"));
     when(location.createRelative(lastSegment)).thenReturn(expectedFavicon);
-    when(expectedFavicon.getURL()).thenReturn(new URL("file:///camunda/favicon.ico"));
+    when(expectedFavicon.getURL()).thenReturn(new URL("file:///orqueio/favicon.ico"));
     when(expectedFavicon.isReadable()).thenReturn(true);
 
     // when

@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -24,14 +24,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 /**
  * @author Stefan Hentschel.
  */
-@XmlRootElement(name = "order-details", namespace = "http://camunda.org/test-example")
+@XmlRootElement(name = "order-details", namespace = "http://orqueio.io/test-example")
 public class OrderDetails {
 
   private long id;
   private Date date;
   private String product;
 
-  @XmlElement(namespace = "http://camunda.org/test-example")
+  @XmlElement(namespace = "http://orqueio.io/test-example")
   public long getId() {
     return id;
   }
@@ -40,7 +40,7 @@ public class OrderDetails {
     this.id = id;
   }
 
-  @XmlElement(namespace = "http://camunda.org/test-example")
+  @XmlElement(namespace = "http://orqueio.io/test-example")
   public Date getDate() {
     return date;
   }
@@ -49,7 +49,7 @@ public class OrderDetails {
     this.date = date;
   }
 
-  @XmlElement(namespace = "http://camunda.org/test-example")
+  @XmlElement(namespace = "http://orqueio.io/test-example")
   public String getProduct() {
     return product;
   }

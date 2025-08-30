@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -18,17 +18,17 @@ package io.orqueio.bpm.spring.boot.starter.property;
 
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
-import static io.orqueio.bpm.spring.boot.starter.property.CamundaBpmProperties.joinOn;
+import static io.orqueio.bpm.spring.boot.starter.property.OrqueioBpmProperties.joinOn;
 
 public class WebappProperty {
 
-  public static final String DEFAULT_APP_PATH = "/camunda";
+  public static final String DEFAULT_APP_PATH = "/orqueio";
 
-  public static final String PREFIX = CamundaBpmProperties.PREFIX + ".webapp";
+  public static final String PREFIX = OrqueioBpmProperties.PREFIX + ".webapp";
 
   protected boolean indexRedirectEnabled = true;
 
-  protected String webjarClasspath = "/META-INF/resources/webjars/camunda";
+  protected String webjarClasspath = "/META-INF/resources/webjars/orqueio";
 
   protected String securityConfigFile = "/securityFilterRules.json";
 

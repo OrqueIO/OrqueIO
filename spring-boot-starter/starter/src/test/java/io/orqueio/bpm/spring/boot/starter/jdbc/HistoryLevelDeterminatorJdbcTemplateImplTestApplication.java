@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -18,8 +18,8 @@ package io.orqueio.bpm.spring.boot.starter.jdbc;
 
 import javax.sql.DataSource;
 
-import io.orqueio.bpm.spring.boot.starter.CamundaBpmAutoConfiguration;
-import io.orqueio.bpm.spring.boot.starter.property.CamundaBpmProperties;
+import io.orqueio.bpm.spring.boot.starter.OrqueioBpmAutoConfiguration;
+import io.orqueio.bpm.spring.boot.starter.property.OrqueioBpmProperties;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -27,19 +27,19 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 
-@EnableAutoConfiguration(exclude = CamundaBpmAutoConfiguration.class)
+@EnableAutoConfiguration(exclude = OrqueioBpmAutoConfiguration.class)
 public class HistoryLevelDeterminatorJdbcTemplateImplTestApplication {
 
   @Bean
-  public CamundaBpmProperties camundaBpmProperties() {
-    return new CamundaBpmProperties();
+  public OrqueioBpmProperties orqueioBpmProperties() {
+    return new OrqueioBpmProperties();
   }
 
   @Bean
   public DataSource dataSource() {
     EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
     EmbeddedDatabase db = builder.setName("testdbForHistoryLevelDetermination").setType(EmbeddedDatabaseType.H2)
-        .addScript("/org/camunda/bpm/engine/db/create/activiti.h2.create.engine.sql").addScript("db/sql/insert-history-data.sql").continueOnError(true).build();
+        .addScript("/io/orqueio/bpm/engine/db/create/activiti.h2.create.engine.sql").addScript("db/sql/insert-history-data.sql").continueOnError(true).build();
     return db;
   }
 
@@ -49,7 +49,7 @@ public class HistoryLevelDeterminatorJdbcTemplateImplTestApplication {
   }
 
   @Bean
-  public HistoryLevelDeterminator historyLevelDeterminator(JdbcTemplate jdbcTemplate, CamundaBpmProperties camundaBpmProperties) {
-    return HistoryLevelDeterminatorJdbcTemplateImpl.createHistoryLevelDeterminator(camundaBpmProperties, jdbcTemplate);
+  public HistoryLevelDeterminator historyLevelDeterminator(JdbcTemplate jdbcTemplate, OrqueioBpmProperties orqueioBpmProperties) {
+    return HistoryLevelDeterminatorJdbcTemplateImpl.createHistoryLevelDeterminator(orqueioBpmProperties, jdbcTemplate);
   }
 }

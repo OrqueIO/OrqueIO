@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -25,8 +25,8 @@ import org.slf4j.LoggerFactory;
 public class PropertyUtil {
 
   public static final String DEFAULT_PROPERTIES_PATH = "integration-rules.properties";
-  public static final String CAMUNDA_ENGINE_REST = "camunda.engine.rest";
-  public static final String CAMUNDA_ENGINE_NAME = "camunda.engine.name";
+  public static final String CAMUNDA_ENGINE_REST = "orqueio.engine.rest";
+  public static final String CAMUNDA_ENGINE_NAME = "orqueio.engine.name";
 
   private static Logger logger = LoggerFactory.getLogger(PropertyUtil.class);
 

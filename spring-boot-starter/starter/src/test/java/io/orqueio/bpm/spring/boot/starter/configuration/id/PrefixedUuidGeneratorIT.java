@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -18,9 +18,9 @@ package io.orqueio.bpm.spring.boot.starter.configuration.id;
 
 import io.orqueio.bpm.engine.ProcessEngine;
 import io.orqueio.bpm.engine.impl.cfg.IdGenerator;
-import io.orqueio.bpm.spring.boot.starter.property.CamundaBpmProperties;
+import io.orqueio.bpm.spring.boot.starter.property.OrqueioBpmProperties;
 import io.orqueio.bpm.spring.boot.starter.test.nonpa.TestApplication;
-import io.orqueio.bpm.spring.boot.starter.util.CamundaSpringBootUtil;
+import io.orqueio.bpm.spring.boot.starter.util.OrqueioSpringBootUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +33,7 @@ import static io.orqueio.bpm.spring.boot.starter.configuration.id.IdGeneratorCon
 @SpringBootTest(
   classes = {TestApplication.class},
   properties = {
-    "camunda.bpm.id-generator=" + PREFIXED,
+    "orqueio.bpm.id-generator=" + PREFIXED,
     "spring.application.name=myapp"
   })
 public class PrefixedUuidGeneratorIT {
@@ -42,7 +42,7 @@ public class PrefixedUuidGeneratorIT {
   private IdGenerator idGenerator;
 
   @Autowired
-  private CamundaBpmProperties properties;
+  private OrqueioBpmProperties properties;
 
   @Autowired
   private ProcessEngine processEngine;
@@ -54,7 +54,7 @@ public class PrefixedUuidGeneratorIT {
 
   @Test
   public void configured_idGenerator_is_uuid() throws Exception {
-    final IdGenerator idGenerator = CamundaSpringBootUtil.get(processEngine).getIdGenerator();
+    final IdGenerator idGenerator = OrqueioSpringBootUtil.get(processEngine).getIdGenerator();
 
     assertThat(idGenerator).isOfAnyClassIn(PrefixedUuidGenerator.class);
   }

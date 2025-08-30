@@ -38,7 +38,7 @@
     <dependencySet>
       <outputDirectory>lib</outputDirectory>
       <includes>
-        <include>io.orqueio.bpm.javaee:camunda-ejb-client-jakarta:jar:${project.version}</include>
+        <include>io.orqueio.bpm.javaee:orqueio-ejb-client-jakarta:jar:${project.version}</include>
         <include>io.orqueio.bpm:*</include>
         <include>io.orqueio.bpm.identity:*</include>
         <include>io.orqueio.bpm.model:*</include>
@@ -79,12 +79,12 @@
       <outputDirectory></outputDirectory>
     </file>
     <file>
-      <source>src/start-camunda.bat</source>
+      <source>src/start-orqueio.bat</source>
       <filtered>true</filtered>
       <outputDirectory></outputDirectory>
     </file>
     <file>
-      <source>src/start-camunda.sh</source>
+      <source>src/start-orqueio.sh</source>
       <filtered>true</filtered>
       <outputDirectory></outputDirectory>
       <fileMode>0755</fileMode>

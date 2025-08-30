@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -44,14 +44,14 @@ import org.xml.sax.SAXException;
  */
 public class XmlTestConstants {
 
-  public static final String EXAMPLE_NAMESPACE = "http://camunda.org/example";
+  public static final String EXAMPLE_NAMESPACE = "http://orqueio.io/example";
 
-  public static final String EXAMPLE_XML_FILE_NAME = "org/camunda/spin/xml/example.xml";
+  public static final String EXAMPLE_XML_FILE_NAME = "io/orqueio/spin/xml/example.xml";
 
-  public static final String EXAMPLE_VALIDATION_XSD_FILE_NAME = "org/camunda/spin/xml/validation_schema.xsd";
-  public static final String EXAMPLE_VALIDATION_EXTENSION_XSD_FILE_NAME = "org/camunda/spin/xml/validation_schema_extension.xsd";
+  public static final String EXAMPLE_VALIDATION_XSD_FILE_NAME = "io/orqueio/spin/xml/validation_schema.xsd";
+  public static final String EXAMPLE_VALIDATION_EXTENSION_XSD_FILE_NAME = "io/orqueio/spin/xml/validation_schema_extension.xsd";
 
-  public static final String EXAMPLE_VALIDATION_XML_FILE_NAME = "org/camunda/spin/xml/validation_example.xml";
+  public static final String EXAMPLE_VALIDATION_XML_FILE_NAME = "io/orqueio/spin/xml/validation_example.xml";
 
   public static final String EXAMPLE_XML = SpinIoUtil.fileAsString(EXAMPLE_XML_FILE_NAME);
 
@@ -150,7 +150,7 @@ public class XmlTestConstants {
 
     details.setDate(detailsDate);
     details.setId(1234567890L);
-    details.setProduct("camunda BPM");
+    details.setProduct("orqueio BPM");
 
     order.setOrder("order1");
     order.setDueUntil(dueUntilDate);

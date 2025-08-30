@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -23,7 +23,7 @@ import java.util.List;
 import io.orqueio.bpm.engine.impl.cfg.CompositeProcessEnginePlugin;
 import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import io.orqueio.bpm.engine.impl.cfg.ProcessEnginePlugin;
-import io.orqueio.bpm.run.CamundaBpmRun;
+import io.orqueio.bpm.run.OrqueioBpmRun;
 import io.orqueio.bpm.spring.boot.starter.spin.SpringBootSpinProcessEnginePlugin;
 import org.junit.Before;
 import org.junit.Test;
@@ -36,7 +36,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = { CamundaBpmRun.class })
+@SpringBootTest(classes = { OrqueioBpmRun.class })
 @ActiveProfiles(profiles = { "test-new-plugins", "test-plugins-config-override" }, inheritProfiles = true)
 public class ProcessEnginePluginsConfigurationOverrideTest {
 
@@ -45,7 +45,7 @@ public class ProcessEnginePluginsConfigurationOverrideTest {
 
   // IDEs can't autowire the Spin plugin bean since it's conditionally
   // created in our SB starter when the Spin plugin dependency is present.
-  // This dependency is present in Camunda Run by default, so we can suppress this warning.
+  // This dependency is present in Orqueio Run by default, so we can suppress this warning.
   @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
   @Autowired
   protected SpringBootSpinProcessEnginePlugin spinPlugin;

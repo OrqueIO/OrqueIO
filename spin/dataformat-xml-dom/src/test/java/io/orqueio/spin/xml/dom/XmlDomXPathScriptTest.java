@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -34,8 +34,8 @@ import org.junit.Test;
 public abstract class XmlDomXPathScriptTest extends ScriptTest {
 
   private static final String xml = "<root><child id=\"child\"><a id=\"a\"/><b id=\"b\"/><a id=\"c\"/></child></root>";
-  private static final String xmlWithNamespace = "<root xmlns:bar=\"http://camunda.org\" xmlns:foo=\"http://camunda.com\"><foo:child id=\"child\"><bar:a id=\"a\"/><foo:b id=\"b\"/><a id=\"c\"/></foo:child></root>";
-  private static final String xmlWithDefaultNamespace = "<root xmlns=\"http://camunda.com/example\" xmlns:bar=\"http://camunda.org\" xmlns:foo=\"http://camunda.com\"><foo:child id=\"child\"><bar:a id=\"a\"/><foo:b id=\"b\"/><a id=\"c\"/></foo:child></root>";
+  private static final String xmlWithNamespace = "<root xmlns:bar=\"http://orqueio.io\" xmlns:foo=\"http://orqueio.io\"><foo:child id=\"child\"><bar:a id=\"a\"/><foo:b id=\"b\"/><a id=\"c\"/></foo:child></root>";
+  private static final String xmlWithDefaultNamespace = "<root xmlns=\"http://orqueio.io/example\" xmlns:bar=\"http://orqueio.io\" xmlns:foo=\"http://orqueio.io\"><foo:child id=\"child\"><bar:a id=\"a\"/><foo:b id=\"b\"/><a id=\"c\"/></foo:child></root>";
 
   @Test(expected = SpinXPathException.class)
   @Script(
@@ -402,7 +402,7 @@ public abstract class XmlDomXPathScriptTest extends ScriptTest {
     SpinXmlElement child = query.element();
 
     assertThat(child.name()).isEqualTo("child");
-    assertThat(child.namespace()).isEqualTo("http://camunda.com");
+    assertThat(child.namespace()).isEqualTo("http://orqueio.io");
     assertThat(child.attr("id").value()).isEqualTo("child");
   }
 
@@ -418,7 +418,7 @@ public abstract class XmlDomXPathScriptTest extends ScriptTest {
     SpinXmlElement child = query.element();
 
     assertThat(child.name()).isEqualTo("child");
-    assertThat(child.namespace()).isEqualTo("http://camunda.com");
+    assertThat(child.namespace()).isEqualTo("http://orqueio.io");
     assertThat(child.attr("id").value()).isEqualTo("child");
   }
 
@@ -435,7 +435,7 @@ public abstract class XmlDomXPathScriptTest extends ScriptTest {
     SpinXmlElement child = query.element();
 
     assertThat(child.name()).isEqualTo("child");
-    assertThat(child.namespace()).isEqualTo("http://camunda.com");
+    assertThat(child.namespace()).isEqualTo("http://orqueio.io");
     assertThat(child.attr("id").value()).isEqualTo("child");
   }
 }

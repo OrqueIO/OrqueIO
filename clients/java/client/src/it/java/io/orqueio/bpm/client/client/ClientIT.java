@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -288,7 +288,7 @@ public class ClientIT {
     try {
       // given
       ExternalTaskClientBuilder externalTaskClientBuilder = ExternalTaskClient.create()
-          .baseUrl("http://camunda.com/engine-rest");
+          .baseUrl("http://orqueio.io/engine-rest");
       
       // then
       thrown.expect(ExternalTaskClientException.class);
@@ -339,7 +339,7 @@ public class ClientIT {
     try {
       // given
       ExternalTaskClientBuilder clientBuilder = ExternalTaskClient.create()
-          .baseUrl("http://camunda.com/engine-rest")
+          .baseUrl("http://orqueio.io/engine-rest")
           .asyncResponseTimeout(0);
       
       // then
@@ -413,7 +413,7 @@ public class ClientIT {
     try {
       // given
       ExternalTaskClientBuilder externalTaskClientBuilder = ExternalTaskClient.create()
-          .baseUrl("http://camunda.com/engine-rest")
+          .baseUrl("http://orqueio.io/engine-rest")
           .lockDuration(0);
       
       // then
@@ -436,7 +436,7 @@ public class ClientIT {
     try {
       // given
       ExternalTaskClientBuilder externalTaskClientBuilder = ExternalTaskClient.create()
-        .baseUrl("http://camunda.com/engine-rest")
+        .baseUrl("http://orqueio.io/engine-rest")
         .addInterceptor(null);
 
       // then

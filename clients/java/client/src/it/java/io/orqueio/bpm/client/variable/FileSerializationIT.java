@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -128,11 +128,11 @@ public class FileSerializationIT {
         Bpmn.createExecutableProcess("process")
         .startEvent("startEvent")
         .serviceTask("serviceTaskFoo")
-          .camundaExternalTask(EXTERNAL_TASK_TOPIC_FOO)
+          .orqueioExternalTask(EXTERNAL_TASK_TOPIC_FOO)
             // create the local file variable with the same content but different name
-          .camundaInputParameter(LOCAL_VARIABLE_NAME_FILE, "${execution.getVariableTyped('fileVariable')}")
+          .orqueioInputParameter(LOCAL_VARIABLE_NAME_FILE, "${execution.getVariableTyped('fileVariable')}")
         .serviceTask("serviceTaskBar")
-          .camundaExternalTask(EXTERNAL_TASK_TOPIC_BAR)
+          .orqueioExternalTask(EXTERNAL_TASK_TOPIC_BAR)
         .endEvent("endEvent")
         .done()
     ).get(0);
@@ -216,11 +216,11 @@ public class FileSerializationIT {
         Bpmn.createExecutableProcess("process")
         .startEvent("startEvent")
         .serviceTask("serviceTaskFoo")
-          .camundaExternalTask(EXTERNAL_TASK_TOPIC_FOO)
+          .orqueioExternalTask(EXTERNAL_TASK_TOPIC_FOO)
             // create the local file variable with the same content but different name
-          .camundaInputParameter(LOCAL_VARIABLE_NAME_FILE, "${execution.getVariableTyped('fileVariable')}")
+          .orqueioInputParameter(LOCAL_VARIABLE_NAME_FILE, "${execution.getVariableTyped('fileVariable')}")
         .serviceTask("serviceTaskBar")
-          .camundaExternalTask(EXTERNAL_TASK_TOPIC_BAR)
+          .orqueioExternalTask(EXTERNAL_TASK_TOPIC_BAR)
         .endEvent("endEvent")
         .done()
     ).get(0);

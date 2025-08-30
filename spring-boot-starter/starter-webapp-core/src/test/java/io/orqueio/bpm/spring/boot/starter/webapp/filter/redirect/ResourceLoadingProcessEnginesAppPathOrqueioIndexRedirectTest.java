@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -33,9 +33,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest(classes = { FilterTestApp.class},
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
     properties = {
-        "camunda.bpm.webapp.application-path=/camunda",
-        "camunda.bpm.webapp.index-redirect-enabled=true",
-        "camunda.bpm.admin-user.id=admin" })
+        "orqueio.bpm.webapp.application-path=/orqueio",
+        "orqueio.bpm.webapp.index-redirect-enabled=true",
+        "orqueio.bpm.admin-user.id=admin" })
 @DirtiesContext
 public class ResourceLoadingProcessEnginesAppPathOrqueioIndexRedirectTest {
 
@@ -48,11 +48,11 @@ public class ResourceLoadingProcessEnginesAppPathOrqueioIndexRedirectTest {
   @Test
   public void shouldRedirectRequestToTasklist_contextRoot() {
     // when
-    // send GET request to /camunda
-    HttpURLConnection con = rule.performRequest("http://localhost:" + port + "/camunda");
+    // send GET request to /orqueio
+    HttpURLConnection con = rule.performRequest("http://localhost:" + port + "/orqueio");
 
     // then
     // the request should have been redirected to Tasklist
-    assertThat(con.getURL().toString()).isEqualTo("http://localhost:" + port + "/camunda/app/tasklist/default/");
+    assertThat(con.getURL().toString()).isEqualTo("http://localhost:" + port + "/orqueio/app/tasklist/default/");
   }
 }

@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -42,7 +42,7 @@ import static io.orqueio.bpm.webapp.impl.security.filter.headersec.provider.impl
     classes = { WebappTestApp.class },
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(properties = {
-    "camunda.bpm.webapp.applicationPath=" + ChangedAppPathIT.MY_APP_PATH
+    "orqueio.bpm.webapp.applicationPath=" + ChangedAppPathIT.MY_APP_PATH
 })
 public class ChangedAppPathIT {
 

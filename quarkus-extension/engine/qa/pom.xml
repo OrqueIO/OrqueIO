@@ -58,12 +58,12 @@
           </dependenciesToScan>
 
           <excludes>
-            <!-- See https://jira.camunda.com/browse/CAM-13751 -->
+            <!-- See https://jira.orqueio..com/browse/CAM-13751 -->
             <exclude>**/BeanPropertyElTest.java</exclude>
 
             <!-- See ProgrammaticBeanLookupTest in quarkus-extension/engine/deployment module -->
             <exclude>**/ProgrammaticBeanLookupTest.java</exclude>
-            <!-- See https://github.com/camunda/camunda-bpm-platform/issues/3419 -->
+            <!-- See https://github.com/orqueio./orqueio.-bpm-platform/issues/3419 -->
             <exclude>**/TaskFormTest.java</exclude>
           </excludes>
         </configuration>
@@ -72,7 +72,7 @@
   </build>
 
   <dependencies>
-    <!-- Camunda dependencies -->
+    <!-- Orqueio dependencies -->
 
     <dependency>
       <groupId>io.orqueio.bpm.quarkus</groupId>

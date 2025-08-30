@@ -127,8 +127,8 @@
               <goal>parse-version</goal>
             </goals>
             <configuration>
-              <propertyPrefix>camunda.old</propertyPrefix>
-              <versionString>${camunda.version.old}</versionString>
+              <propertyPrefix>orqueio.old</propertyPrefix>
+              <versionString>${orqueio.version.old}</versionString>
             </configuration>
           </execution>
         </executions>
@@ -279,57 +279,57 @@
               <target>
                 <!-- create concatenated patch scripts for easier testing -->
                 <!-- db2 patches -->
-                <concat destfile="target/upgrade-test/sql/upgrade/db2_engine_${camunda.current.majorVersion}.${camunda.current.minorVersion}_patch.sql" fixlastline="yes">
-                  <fileset dir="target/orqueio-engine-${project.version}/io/orqueio/bpm/engine/db/upgrade" includes="db2_engine_${camunda.current.majorVersion}.${camunda.current.minorVersion}_patch*.sql" />
+                <concat destfile="target/upgrade-test/sql/upgrade/db2_engine_${orqueio.current.majorVersion}.${orqueio.current.minorVersion}_patch.sql" fixlastline="yes">
+                  <fileset dir="target/orqueio-engine-${project.version}/io/orqueio/bpm/engine/db/upgrade" includes="db2_engine_${orqueio.current.majorVersion}.${orqueio.current.minorVersion}_patch*.sql" />
                 </concat>
 
-                <concat destfile="target/upgrade-test/sql/upgrade/db2_engine_${camunda.old.majorVersion}.${camunda.old.minorVersion}_patch.sql" fixlastline="yes">
-                  <fileset dir="target/orqueio-engine-${project.version}/io/orqueio/bpm/engine/db/upgrade" includes="db2_engine_${camunda.old.majorVersion}.${camunda.old.minorVersion}_patch*.sql" />
+                <concat destfile="target/upgrade-test/sql/upgrade/db2_engine_${orqueio.old.majorVersion}.${orqueio.old.minorVersion}_patch.sql" fixlastline="yes">
+                  <fileset dir="target/orqueio-engine-${project.version}/io/orqueio/bpm/engine/db/upgrade" includes="db2_engine_${orqueio.old.majorVersion}.${orqueio.old.minorVersion}_patch*.sql" />
                 </concat>
 
                 <!-- h2 patches -->
-                <concat destfile="target/upgrade-test/sql/upgrade/h2_engine_${camunda.current.majorVersion}.${camunda.current.minorVersion}_patch.sql" fixlastline="yes">
-                  <fileset dir="target/orqueio-engine-${project.version}/io/orqueio/bpm/engine/db/upgrade" includes="h2_engine_${camunda.current.majorVersion}.${camunda.current.minorVersion}_patch*.sql" />
+                <concat destfile="target/upgrade-test/sql/upgrade/h2_engine_${orqueio.current.majorVersion}.${orqueio.current.minorVersion}_patch.sql" fixlastline="yes">
+                  <fileset dir="target/orqueio-engine-${project.version}/io/orqueio/bpm/engine/db/upgrade" includes="h2_engine_${orqueio.current.majorVersion}.${orqueio.current.minorVersion}_patch*.sql" />
                 </concat>
 
-                <concat destfile="target/upgrade-test/sql/upgrade/h2_engine_${camunda.old.majorVersion}.${camunda.old.minorVersion}_patch.sql" fixlastline="yes">
-                  <fileset dir="target/orqueio-engine-${project.version}/io/orqueio/bpm/engine/db/upgrade" includes="h2_engine_${camunda.old.majorVersion}.${camunda.old.minorVersion}_patch*.sql" />
+                <concat destfile="target/upgrade-test/sql/upgrade/h2_engine_${orqueio.old.majorVersion}.${orqueio.old.minorVersion}_patch.sql" fixlastline="yes">
+                  <fileset dir="target/orqueio-engine-${project.version}/io/orqueio/bpm/engine/db/upgrade" includes="h2_engine_${orqueio.old.majorVersion}.${orqueio.old.minorVersion}_patch*.sql" />
                 </concat>
 
                 <!-- mssql patches -->
-                <concat destfile="target/upgrade-test/sql/upgrade/mssql_engine_${camunda.current.majorVersion}.${camunda.current.minorVersion}_patch.sql" fixlastline="yes">
-                  <fileset dir="target/orqueio-engine-${project.version}/io/orqueio/bpm/engine/db/upgrade" includes="mssql_engine_${camunda.current.majorVersion}.${camunda.current.minorVersion}_patch*.sql" />
+                <concat destfile="target/upgrade-test/sql/upgrade/mssql_engine_${orqueio.current.majorVersion}.${orqueio.current.minorVersion}_patch.sql" fixlastline="yes">
+                  <fileset dir="target/orqueio-engine-${project.version}/io/orqueio/bpm/engine/db/upgrade" includes="mssql_engine_${orqueio.current.majorVersion}.${orqueio.current.minorVersion}_patch*.sql" />
                 </concat>
 
-                <concat destfile="target/upgrade-test/sql/upgrade/mssql_engine_${camunda.old.majorVersion}.${camunda.old.minorVersion}_patch.sql" fixlastline="yes">
-                  <fileset dir="target/orqueio-engine-${project.version}/io/orqueio/bpm/engine/db/upgrade" includes="mssql_engine_${camunda.old.majorVersion}.${camunda.old.minorVersion}_patch*.sql" />
+                <concat destfile="target/upgrade-test/sql/upgrade/mssql_engine_${orqueio.old.majorVersion}.${orqueio.old.minorVersion}_patch.sql" fixlastline="yes">
+                  <fileset dir="target/orqueio-engine-${project.version}/io/orqueio/bpm/engine/db/upgrade" includes="mssql_engine_${orqueio.old.majorVersion}.${orqueio.old.minorVersion}_patch*.sql" />
                 </concat>
 
                 <!-- mysql patches -->
-                <concat destfile="target/upgrade-test/sql/upgrade/mysql_engine_${camunda.current.majorVersion}.${camunda.current.minorVersion}_patch.sql" fixlastline="yes">
-                  <fileset dir="target/orqueio-engine-${project.version}/io/orqueio/bpm/engine/db/upgrade" includes="mysql_engine_${camunda.current.majorVersion}.${camunda.current.minorVersion}_patch*.sql" />
+                <concat destfile="target/upgrade-test/sql/upgrade/mysql_engine_${orqueio.current.majorVersion}.${orqueio.current.minorVersion}_patch.sql" fixlastline="yes">
+                  <fileset dir="target/orqueio-engine-${project.version}/io/orqueio/bpm/engine/db/upgrade" includes="mysql_engine_${orqueio.current.majorVersion}.${orqueio.current.minorVersion}_patch*.sql" />
                 </concat>
 
-                <concat destfile="target/upgrade-test/sql/upgrade/mysql_engine_${camunda.old.majorVersion}.${camunda.old.minorVersion}_patch.sql" fixlastline="yes">
-                  <fileset dir="target/orqueio-engine-${project.version}/io/orqueio/bpm/engine/db/upgrade" includes="mysql_engine_${camunda.old.majorVersion}.${camunda.old.minorVersion}_patch*.sql" />
+                <concat destfile="target/upgrade-test/sql/upgrade/mysql_engine_${orqueio.old.majorVersion}.${orqueio.old.minorVersion}_patch.sql" fixlastline="yes">
+                  <fileset dir="target/orqueio-engine-${project.version}/io/orqueio/bpm/engine/db/upgrade" includes="mysql_engine_${orqueio.old.majorVersion}.${orqueio.old.minorVersion}_patch*.sql" />
                 </concat>
 
                 <!-- oracle patches -->
-                <concat destfile="target/upgrade-test/sql/upgrade/oracle_engine_${camunda.current.majorVersion}.${camunda.current.minorVersion}_patch.sql" fixlastline="yes">
-                  <fileset dir="target/orqueio-engine-${project.version}/io/orqueio/bpm/engine/db/upgrade" includes="oracle_engine_${camunda.current.majorVersion}.${camunda.current.minorVersion}_patch*.sql" />
+                <concat destfile="target/upgrade-test/sql/upgrade/oracle_engine_${orqueio.current.majorVersion}.${orqueio.current.minorVersion}_patch.sql" fixlastline="yes">
+                  <fileset dir="target/orqueio-engine-${project.version}/io/orqueio/bpm/engine/db/upgrade" includes="oracle_engine_${orqueio.current.majorVersion}.${orqueio.current.minorVersion}_patch*.sql" />
                 </concat>
 
-                <concat destfile="target/upgrade-test/sql/upgrade/oracle_engine_${camunda.old.majorVersion}.${camunda.old.minorVersion}_patch.sql" fixlastline="yes">
-                  <fileset dir="target/orqueio-engine-${project.version}/io/orqueio/bpm/engine/db/upgrade" includes="oracle_engine_${camunda.old.majorVersion}.${camunda.old.minorVersion}_patch*.sql" />
+                <concat destfile="target/upgrade-test/sql/upgrade/oracle_engine_${orqueio.old.majorVersion}.${orqueio.old.minorVersion}_patch.sql" fixlastline="yes">
+                  <fileset dir="target/orqueio-engine-${project.version}/io/orqueio/bpm/engine/db/upgrade" includes="oracle_engine_${orqueio.old.majorVersion}.${orqueio.old.minorVersion}_patch*.sql" />
                 </concat>
 
                 <!-- postgres patches -->
-                <concat destfile="target/upgrade-test/sql/upgrade/postgres_engine_${camunda.current.majorVersion}.${camunda.current.minorVersion}_patch.sql" fixlastline="yes">
-                  <fileset dir="target/orqueio-engine-${project.version}/io/orqueio/bpm/engine/db/upgrade" includes="postgres_engine_${camunda.current.majorVersion}.${camunda.current.minorVersion}_patch*.sql" />
+                <concat destfile="target/upgrade-test/sql/upgrade/postgres_engine_${orqueio.current.majorVersion}.${orqueio.current.minorVersion}_patch.sql" fixlastline="yes">
+                  <fileset dir="target/orqueio-engine-${project.version}/io/orqueio/bpm/engine/db/upgrade" includes="postgres_engine_${orqueio.current.majorVersion}.${orqueio.current.minorVersion}_patch*.sql" />
                 </concat>
 
-                <concat destfile="target/upgrade-test/sql/upgrade/postgres_engine_${camunda.old.majorVersion}.${camunda.old.minorVersion}_patch.sql" fixlastline="yes">
-                  <fileset dir="target/orqueio-engine-${project.version}/io/orqueio/bpm/engine/db/upgrade" includes="postgres_engine_${camunda.old.majorVersion}.${camunda.old.minorVersion}_patch*.sql" />
+                <concat destfile="target/upgrade-test/sql/upgrade/postgres_engine_${orqueio.old.majorVersion}.${orqueio.old.minorVersion}_patch.sql" fixlastline="yes">
+                  <fileset dir="target/orqueio-engine-${project.version}/io/orqueio/bpm/engine/db/upgrade" includes="postgres_engine_${orqueio.old.majorVersion}.${orqueio.old.minorVersion}_patch*.sql" />
                 </concat>
 
                 <copy todir="target/upgrade-test/sql/upgrade">
@@ -421,8 +421,8 @@
                   <artifactItems>
                     <artifactItem>
                       <groupId>io.orqueio.bpm.distro</groupId>
-                      <artifactId>camunda-sql-scripts</artifactId>
-                      <version>${camunda.version.old}</version>
+                      <artifactId>orqueio-sql-scripts</artifactId>
+                      <version>${orqueio.version.old}</version>
                       <outputDirectory>${project.build.directory}/test-classes/scripts-old</outputDirectory>
                       <overWrite>true</overWrite>
                     </artifactItem>
@@ -447,8 +447,8 @@
                     <!-- create the SQL scripts so that the files exist even if they do not exist in the distribution.
                     (this can be the case if there are no db upgrades (yet) for a particular release ) -->
 
-                    <touch file="${project.build.directory}/test-classes/local-upgrade-test/sql/upgrade/${database.type}_engine_${camunda.old.majorVersion}.${camunda.old.minorVersion}_patch.sql" />
-                    <touch file="${project.build.directory}/test-classes/local-upgrade-test/sql/upgrade/${database.type}_engine_${camunda.current.majorVersion}.${camunda.current.minorVersion}_patch.sql" />
+                    <touch file="${project.build.directory}/test-classes/local-upgrade-test/sql/upgrade/${database.type}_engine_${orqueio.old.majorVersion}.${orqueio.old.minorVersion}_patch.sql" />
+                    <touch file="${project.build.directory}/test-classes/local-upgrade-test/sql/upgrade/${database.type}_engine_${orqueio.current.majorVersion}.${orqueio.current.minorVersion}_patch.sql" />
 
                   </target>
                 </configuration>

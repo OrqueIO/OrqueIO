@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -25,8 +25,8 @@ import io.orqueio.bpm.engine.ProcessEngine;
 import io.orqueio.bpm.engine.identity.User;
 import io.orqueio.bpm.engine.identity.UserQuery;
 import io.orqueio.bpm.identity.impl.ldap.plugin.LdapIdentityProviderPlugin;
-import io.orqueio.bpm.run.CamundaBpmRun;
-import io.orqueio.bpm.run.property.CamundaBpmRunLdapProperties;
+import io.orqueio.bpm.run.OrqueioBpmRun;
+import io.orqueio.bpm.run.property.OrqueioBpmRunLdapProperties;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,7 +38,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = { CamundaBpmRun.class })
+@SpringBootTest(classes = { OrqueioBpmRun.class })
 @ActiveProfiles(profiles = { "test-auth-disabled", "test-demo-user" })
 public class DemoUserConfigurationTest {
 
@@ -47,7 +47,7 @@ public class DemoUserConfigurationTest {
   IdentityService identityService;
 
   @Autowired(required = false)
-  CamundaBpmRunLdapProperties props;
+  OrqueioBpmRunLdapProperties props;
 
   @Autowired(required = false)
   LdapIdentityProviderPlugin ldapPlugin;

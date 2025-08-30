@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -23,8 +23,8 @@ import org.springframework.test.context.TestPropertySource;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @TestPropertySource(properties = {
-    "camunda.bpm.webapp.auth.cache.ttl-enabled=false",
-    "camunda.bpm.webapp.auth.cache.time-to-live=6",
+    "orqueio.bpm.webapp.auth.cache.ttl-enabled=false",
+    "orqueio.bpm.webapp.auth.cache.time-to-live=6",
 })
 public class AuthCacheTTLPropertyTest extends ParsePropertiesHelper {
 

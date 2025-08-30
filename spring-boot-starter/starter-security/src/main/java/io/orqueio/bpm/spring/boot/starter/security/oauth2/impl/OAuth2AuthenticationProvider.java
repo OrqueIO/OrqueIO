@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -44,13 +44,13 @@ public class OAuth2AuthenticationProvider extends ContainerBasedAuthenticationPr
       return AuthenticationResult.unsuccessful();
     }
     var oauth2 = (OAuth2AuthenticationToken) authentication;
-    String camundaUserId = oauth2.getName();
-    if (camundaUserId == null || camundaUserId.isEmpty()) {
+    String orqueioUserId = oauth2.getName();
+    if (orqueioUserId == null || orqueioUserId.isEmpty()) {
       logger.debug("UserId is empty");
       return AuthenticationResult.unsuccessful();
     }
 
-    logger.debug("Authenticated user '{}'", camundaUserId);
-    return AuthenticationResult.successful(camundaUserId);
+    logger.debug("Authenticated user '{}'", orqueioUserId);
+    return AuthenticationResult.successful(orqueioUserId);
   }
 }

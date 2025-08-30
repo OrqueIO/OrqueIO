@@ -12,7 +12,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 =end
 
-# This is the default environment for using camunda Spin in Ruby applications.
+# This is the default environment for using orqueio Spin in Ruby applications.
 
 # expose Spin's S(...) function globally
 def S(*args)

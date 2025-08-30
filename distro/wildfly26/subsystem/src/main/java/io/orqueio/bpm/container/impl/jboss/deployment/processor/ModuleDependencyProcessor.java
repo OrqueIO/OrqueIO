@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -38,7 +38,7 @@ import org.jboss.msc.service.ServiceName;
  * <p>This Processor creates implicit module dependencies for process applications</p>
  *
  * <p>Concretely speaking, this processor adds a module dependency from the process
- * application module (deployment unit) to the process engine module (and other camunda libraries
+ * application module (deployment unit) to the process engine module (and other orqueio libraries
  * which are useful for process apps).</p>
  *
  * @author Daniel Meyer
@@ -48,16 +48,16 @@ public class ModuleDependencyProcessor implements DeploymentUnitProcessor {
 
   public static final int PRIORITY = 0x2300;
 
-  public static ModuleIdentifier MODULE_IDENTIFYER_PROCESS_ENGINE = ModuleIdentifier.create("io.orqueio.bpm.camunda-engine");
-  public static ModuleIdentifier MODULE_IDENTIFYER_XML_MODEL = ModuleIdentifier.create("io.orqueio.bpm.model.camunda-xml-model");
-  public static ModuleIdentifier MODULE_IDENTIFYER_BPMN_MODEL = ModuleIdentifier.create("io.orqueio.bpm.model.camunda-bpmn-model");
-  public static ModuleIdentifier MODULE_IDENTIFYER_CMMN_MODEL = ModuleIdentifier.create("io.orqueio.bpm.model.camunda-cmmn-model");
-  public static ModuleIdentifier MODULE_IDENTIFYER_DMN_MODEL = ModuleIdentifier.create("io.orqueio.bpm.model.camunda-dmn-model");
-  public static ModuleIdentifier MODULE_IDENTIFYER_SPIN = ModuleIdentifier.create("io.orqueio.spin.camunda-spin-core");
-  public static ModuleIdentifier MODULE_IDENTIFYER_CONNECT = ModuleIdentifier.create("io.orqueio.connect.camunda-connect-core");
-  public static ModuleIdentifier MODULE_IDENTIFYER_ENGINE_DMN = ModuleIdentifier.create("io.orqueio.bpm.dmn.camunda-engine-dmn");
+  public static ModuleIdentifier MODULE_IDENTIFYER_PROCESS_ENGINE = ModuleIdentifier.create("io.orqueio.bpm.orqueio-engine");
+  public static ModuleIdentifier MODULE_IDENTIFYER_XML_MODEL = ModuleIdentifier.create("io.orqueio.bpm.model.orqueio-xml-model");
+  public static ModuleIdentifier MODULE_IDENTIFYER_BPMN_MODEL = ModuleIdentifier.create("io.orqueio.bpm.model.orqueio-bpmn-model");
+  public static ModuleIdentifier MODULE_IDENTIFYER_CMMN_MODEL = ModuleIdentifier.create("io.orqueio.bpm.model.orqueio-cmmn-model");
+  public static ModuleIdentifier MODULE_IDENTIFYER_DMN_MODEL = ModuleIdentifier.create("io.orqueio.bpm.model.orqueio-dmn-model");
+  public static ModuleIdentifier MODULE_IDENTIFYER_SPIN = ModuleIdentifier.create("io.orqueio.spin.orqueio-spin-core");
+  public static ModuleIdentifier MODULE_IDENTIFYER_CONNECT = ModuleIdentifier.create("io.orqueio.connect.orqueio-connect-core");
+  public static ModuleIdentifier MODULE_IDENTIFYER_ENGINE_DMN = ModuleIdentifier.create("io.orqueio.bpm.dmn.orqueio-engine-dmn");
   public static ModuleIdentifier MODULE_IDENTIFYER_GRAAL_JS = ModuleIdentifier.create("org.graalvm.js.js-scriptengine");
-  public static ModuleIdentifier MODULE_IDENTIFYER_JUEL = ModuleIdentifier.create("io.orqueio.bpm.juel.camunda-juel");
+  public static ModuleIdentifier MODULE_IDENTIFYER_JUEL = ModuleIdentifier.create("io.orqueio.bpm.juel.orqueio-juel");
 
   public void deploy(DeploymentPhaseContext phaseContext) throws DeploymentUnitProcessingException {
 

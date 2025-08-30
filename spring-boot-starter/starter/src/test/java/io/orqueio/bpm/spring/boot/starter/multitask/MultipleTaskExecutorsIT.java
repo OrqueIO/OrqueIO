@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -18,7 +18,7 @@ package io.orqueio.bpm.spring.boot.starter.multitask;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import io.orqueio.bpm.spring.boot.starter.AbstractCamundaAutoConfigurationIT;
+import io.orqueio.bpm.spring.boot.starter.AbstractOrqueioAutoConfigurationIT;
 import io.orqueio.bpm.spring.boot.starter.configuration.impl.DefaultJobConfiguration.JobConfiguration;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,23 +36,23 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 
 /**
  * @see <a href=
- *      "https://github.com/camunda/camunda-bpm-spring-boot-starter/issues/209">#209</a>
+ *      "https://github.com/orqueio/orqueio-bpm-spring-boot-starter/issues/209">#209</a>
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = { MultipleTaskExecutorsIT.MultipleTaskExecutorsConfig.class })
-public class MultipleTaskExecutorsIT extends AbstractCamundaAutoConfigurationIT {
+public class MultipleTaskExecutorsIT extends AbstractOrqueioAutoConfigurationIT {
 
   @Autowired
   private TaskExecutor[] taskExecutors;
 
   @Autowired
-  @Qualifier(JobConfiguration.CAMUNDA_TASK_EXECUTOR_QUALIFIER)
-  private TaskExecutor camundaTaskExecutor;
+  @Qualifier(JobConfiguration.ORQUEIO_TASK_EXECUTOR_QUALIFIER)
+  private TaskExecutor orqueioTaskExecutor;
 
   @Test
   public void startWithMultipleTaskExecutorsTest() {
     assertThat(taskExecutors.length).isGreaterThan(1);
-    assertThat(taskExecutors).contains(camundaTaskExecutor);
+    assertThat(taskExecutors).contains(orqueioTaskExecutor);
   }
 
   @SpringBootApplication

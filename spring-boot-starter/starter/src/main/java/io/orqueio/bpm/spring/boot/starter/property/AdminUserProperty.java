@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -20,7 +20,7 @@ import org.apache.commons.lang3.StringUtils;
 import io.orqueio.bpm.engine.identity.User;
 
 import static java.util.Objects.requireNonNull;
-import static io.orqueio.bpm.spring.boot.starter.property.CamundaBpmProperties.joinOn;
+import static io.orqueio.bpm.spring.boot.starter.property.OrqueioBpmProperties.joinOn;
 
 
 public class AdminUserProperty implements User {
@@ -31,8 +31,8 @@ public class AdminUserProperty implements User {
   private String password;
 
   public User init() {
-    requireNonNull(getId(), "missing field: camunda.bpm.admin-user.id");
-    requireNonNull(getPassword(), "missing field: camunda.bpm.admin-user.password");
+    requireNonNull(getId(), "missing field: orqueio.bpm.admin-user.id");
+    requireNonNull(getPassword(), "missing field: orqueio.bpm.admin-user.password");
 
     if (StringUtils.isBlank(getFirstName())) {
       setFirstName(StringUtils.capitalize(id));

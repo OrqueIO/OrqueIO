@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -30,7 +30,7 @@ import io.orqueio.bpm.engine.ProcessEngine;
 import io.orqueio.bpm.engine.filter.Filter;
 import io.orqueio.bpm.engine.filter.FilterQuery;
 import io.orqueio.bpm.engine.test.ProcessEngineRule;
-import io.orqueio.bpm.spring.boot.starter.property.CamundaBpmProperties;
+import io.orqueio.bpm.spring.boot.starter.property.OrqueioBpmProperties;
 import io.orqueio.bpm.spring.boot.starter.test.helper.StandaloneInMemoryTestConfiguration;
 import io.orqueio.bpm.spring.boot.starter.util.SpringBootProcessEngineLogger;
 import io.orqueio.commons.testing.ProcessEngineLoggingRule;
@@ -43,16 +43,16 @@ import java.util.List;
 
 public class CreateFilterConfigurationTest {
 
-  private final CamundaBpmProperties camundaBpmProperties = new CamundaBpmProperties();
+  private final OrqueioBpmProperties orqueioBpmProperties = new OrqueioBpmProperties();
 
   {
-    camundaBpmProperties.getFilter().setCreate("All");
+    orqueioBpmProperties.getFilter().setCreate("All");
   }
 
   private final CreateFilterConfiguration configuration = new CreateFilterConfiguration();
 
   {
-    ReflectionTestUtils.setField(configuration, "camundaBpmProperties", camundaBpmProperties);
+    ReflectionTestUtils.setField(configuration, "orqueioBpmProperties", orqueioBpmProperties);
     configuration.init();
   }
 
@@ -74,9 +74,9 @@ public class CreateFilterConfigurationTest {
   @Test
   public void fail_if_not_configured_onInit() throws Exception {
     thrown.expect(IllegalStateException.class);
-    CamundaBpmProperties camundaBpmProperties = new CamundaBpmProperties();
+    OrqueioBpmProperties orqueioBpmProperties = new OrqueioBpmProperties();
     final CreateFilterConfiguration configuration = new CreateFilterConfiguration();
-    ReflectionTestUtils.setField(configuration, "camundaBpmProperties", camundaBpmProperties);
+    ReflectionTestUtils.setField(configuration, "orqueioBpmProperties", orqueioBpmProperties);
     configuration.init();
   }
 
@@ -84,10 +84,10 @@ public class CreateFilterConfigurationTest {
   public void fail_if_not_configured_onExecution() throws Exception {
     thrown.expect(NullPointerException.class);
 
-    CamundaBpmProperties camundaBpmProperties = new CamundaBpmProperties();
-    camundaBpmProperties.getFilter().setCreate("All");
+    OrqueioBpmProperties orqueioBpmProperties = new OrqueioBpmProperties();
+    orqueioBpmProperties.getFilter().setCreate("All");
     final CreateFilterConfiguration configuration = new CreateFilterConfiguration();
-    ReflectionTestUtils.setField(configuration, "camundaBpmProperties", camundaBpmProperties);
+    ReflectionTestUtils.setField(configuration, "orqueioBpmProperties", orqueioBpmProperties);
     configuration.init();
     configuration.filterName = null;
 
@@ -96,10 +96,10 @@ public class CreateFilterConfigurationTest {
 
   @Test
   public void do_not_create_when_already_exist() throws Exception {
-    CamundaBpmProperties camundaBpmProperties = new CamundaBpmProperties();
-    camundaBpmProperties.getFilter().setCreate("All");
+    OrqueioBpmProperties orqueioBpmProperties = new OrqueioBpmProperties();
+    orqueioBpmProperties.getFilter().setCreate("All");
     final CreateFilterConfiguration configuration = new CreateFilterConfiguration();
-    ReflectionTestUtils.setField(configuration, "camundaBpmProperties", camundaBpmProperties);
+    ReflectionTestUtils.setField(configuration, "orqueioBpmProperties", orqueioBpmProperties);
     configuration.init();
 
     ProcessEngine engine = mock(ProcessEngine.class);

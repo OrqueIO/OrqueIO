@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -18,7 +18,7 @@ package io.orqueio.bpm.spring.boot.starter.configuration.id;
 
 import io.orqueio.bpm.engine.impl.cfg.IdGenerator;
 import io.orqueio.bpm.engine.impl.persistence.StrongUuidGenerator;
-import io.orqueio.bpm.spring.boot.starter.property.CamundaBpmProperties;
+import io.orqueio.bpm.spring.boot.starter.property.OrqueioBpmProperties;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -35,7 +35,7 @@ public class IdGeneratorConfiguration {
 
   @Bean
   @ConditionalOnMissingBean(IdGenerator.class)
-  @ConditionalOnProperty(prefix = CamundaBpmProperties.PREFIX, name = PROPERTY_NAME, havingValue = STRONG, matchIfMissing = true)
+  @ConditionalOnProperty(prefix = OrqueioBpmProperties.PREFIX, name = PROPERTY_NAME, havingValue = STRONG, matchIfMissing = true)
   public IdGenerator strongUuidGenerator() {
     return new StrongUuidGenerator();
   }
@@ -43,7 +43,7 @@ public class IdGeneratorConfiguration {
 
   @Bean
   @ConditionalOnMissingBean(IdGenerator.class)
-  @ConditionalOnProperty(prefix = CamundaBpmProperties.PREFIX, name = PROPERTY_NAME, havingValue = PREFIXED)
+  @ConditionalOnProperty(prefix = OrqueioBpmProperties.PREFIX, name = PROPERTY_NAME, havingValue = PREFIXED)
   public IdGenerator prefixedUuidGenerator(@Value("${spring.application.name}") String applicationName) {
     return new PrefixedUuidGenerator(applicationName);
   }

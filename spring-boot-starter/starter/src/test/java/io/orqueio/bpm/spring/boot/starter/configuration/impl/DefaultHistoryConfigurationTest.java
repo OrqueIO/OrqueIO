@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -26,7 +26,7 @@ import java.util.List;
 import io.orqueio.bpm.engine.impl.history.HistoryLevel;
 import io.orqueio.bpm.engine.impl.history.handler.HistoryEventHandler;
 import io.orqueio.bpm.engine.spring.SpringProcessEngineConfiguration;
-import io.orqueio.bpm.spring.boot.starter.property.CamundaBpmProperties;
+import io.orqueio.bpm.spring.boot.starter.property.OrqueioBpmProperties;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,15 +40,15 @@ public class DefaultHistoryConfigurationTest {
   @Mock
   private SpringProcessEngineConfiguration springProcessEngineConfiguration;
 
-  private CamundaBpmProperties camundaBpmProperties;
+  private OrqueioBpmProperties orqueioBpmProperties;
 
   private DefaultHistoryConfiguration defaultHistoryConfiguration;
 
   @Before
   public void before() {
-    camundaBpmProperties = new CamundaBpmProperties();
+    orqueioBpmProperties = new OrqueioBpmProperties();
     defaultHistoryConfiguration = new DefaultHistoryConfiguration();
-    defaultHistoryConfiguration.camundaBpmProperties = camundaBpmProperties;
+    defaultHistoryConfiguration.orqueioBpmProperties = orqueioBpmProperties;
   }
 
   @Test
@@ -59,7 +59,7 @@ public class DefaultHistoryConfigurationTest {
 
   @Test
   public void historyLevelTest() {
-    camundaBpmProperties.setHistoryLevel(HistoryLevel.HISTORY_LEVEL_AUDIT.getName());
+    orqueioBpmProperties.setHistoryLevel(HistoryLevel.HISTORY_LEVEL_AUDIT.getName());
     defaultHistoryConfiguration.preInit(springProcessEngineConfiguration);
     verify(springProcessEngineConfiguration).setHistory(HistoryLevel.HISTORY_LEVEL_AUDIT.getName());
   }

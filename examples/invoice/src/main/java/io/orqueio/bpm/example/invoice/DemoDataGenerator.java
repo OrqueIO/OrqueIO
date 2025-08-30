@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -79,28 +79,28 @@ public class DemoDataGenerator {
       user.setFirstName("Demo");
       user.setLastName("Demo");
       user.setPassword("demo");
-      user.setEmail("demo@camunda.org");
+      user.setEmail("demo@orqueio.io");
       identityService.saveUser(user, true);
 
       User user2 = identityService.newUser("john");
       user2.setFirstName("John");
       user2.setLastName("Doe");
       user2.setPassword("john");
-      user2.setEmail("john@camunda.org");
+      user2.setEmail("john@orqueio.io");
       identityService.saveUser(user2, true);
 
       User user3 = identityService.newUser("mary");
       user3.setFirstName("Mary");
       user3.setLastName("Anne");
       user3.setPassword("mary");
-      user3.setEmail("mary@camunda.org");
+      user3.setEmail("mary@orqueio.io");
       identityService.saveUser(user3, true);
 
       User user4 = identityService.newUser("peter");
       user4.setFirstName("Peter");
       user4.setLastName("Meter");
       user4.setPassword("peter");
-      user4.setEmail("peter@camunda.org");
+      user4.setEmail("peter@orqueio.io");
       identityService.saveUser(user4, true);
 
       Group salesGroup = identityService.newGroup("sales");
@@ -121,18 +121,18 @@ public class DemoDataGenerator {
       final AuthorizationService authorizationService = engine.getAuthorizationService();
 
       // create group
-      if(identityService.createGroupQuery().groupId(Groups.CAMUNDA_ADMIN).count() == 0) {
-        Group camundaAdminGroup = identityService.newGroup(Groups.CAMUNDA_ADMIN);
-        camundaAdminGroup.setName("camunda BPM Administrators");
-        camundaAdminGroup.setType(Groups.GROUP_TYPE_SYSTEM);
-        identityService.saveGroup(camundaAdminGroup);
+      if(identityService.createGroupQuery().groupId(Groups.ORQUEIO_ADMIN).count() == 0) {
+        Group orqueioAdminGroup = identityService.newGroup(Groups.ORQUEIO_ADMIN);
+        orqueioAdminGroup.setName("orqueio BPM Administrators");
+        orqueioAdminGroup.setType(Groups.GROUP_TYPE_SYSTEM);
+        identityService.saveGroup(orqueioAdminGroup);
       }
 
       // create ADMIN authorizations on all built-in resources
       for (Resource resource : Resources.values()) {
-        if(authorizationService.createAuthorizationQuery().groupIdIn(Groups.CAMUNDA_ADMIN).resourceType(resource).resourceId(ANY).count() == 0) {
+        if(authorizationService.createAuthorizationQuery().groupIdIn(Groups.ORQUEIO_ADMIN).resourceType(resource).resourceId(ANY).count() == 0) {
           AuthorizationEntity userAdminAuth = new AuthorizationEntity(AUTH_TYPE_GRANT);
-          userAdminAuth.setGroupId(Groups.CAMUNDA_ADMIN);
+          userAdminAuth.setGroupId(Groups.ORQUEIO_ADMIN);
           userAdminAuth.setResource(resource);
           userAdminAuth.setResourceId(ANY);
           userAdminAuth.addPermission(ALL);
@@ -143,7 +143,7 @@ public class DemoDataGenerator {
       identityService.createMembership("demo", "sales");
       identityService.createMembership("demo", "accounting");
       identityService.createMembership("demo", "management");
-      identityService.createMembership("demo", "camunda-admin");
+      identityService.createMembership("demo", "orqueio-admin");
 
       identityService.createMembership("john", "sales");
       identityService.createMembership("mary", "accounting");

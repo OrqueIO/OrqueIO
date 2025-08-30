@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -27,32 +27,32 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author Nikola Koevski
  */
 @TestPropertySource(properties = {
-  "camunda.bpm.webapp.indexRedirectEnabled=false",
-  "camunda.bpm.webapp.csrf.targetOrigin=localhost:8080",
-  "camunda.bpm.webapp.csrf.denyStatus=405",
-  "camunda.bpm.webapp.csrf.randomClass=java.util.Random",
-  "camunda.bpm.webapp.csrf.entryPoints[0]=/api/engine/engine/default/history/task/count",
-  "camunda.bpm.webapp.csrf.entryPoints[1]=/api/engine/engine/default/history/variable/count"
+  "orqueio.bpm.webapp.indexRedirectEnabled=false",
+  "orqueio.bpm.webapp.csrf.targetOrigin=localhost:8080",
+  "orqueio.bpm.webapp.csrf.denyStatus=405",
+  "orqueio.bpm.webapp.csrf.randomClass=java.util.Random",
+  "orqueio.bpm.webapp.csrf.entryPoints[0]=/api/engine/engine/default/history/task/count",
+  "orqueio.bpm.webapp.csrf.entryPoints[1]=/api/engine/engine/default/history/variable/count"
 })
 public class WebappPropertyTest extends ParsePropertiesHelper {
 
   @Test
   public void testIndexRedirectEnabled() {
-    // given Camunda properties are set
+    // given Orqueio properties are set
     // then
     assertThat(webapp.isIndexRedirectEnabled()).isFalse();
   }
 
   @Test
   public void testCsrfProperty() {
-    // given Camunda properties are set
+    // given Orqueio properties are set
     // then
     assertThat(webapp.getCsrf()).isNotNull();
   }
 
   @Test
   public void testCsrfTargetOriginProperty() {
-    // given the Camunda CSRF TargetOrigin property is defined
+    // given the Orqueio CSRF TargetOrigin property is defined
     // then
     assertThat(webapp.getCsrf().getTargetOrigin()).isNotNull();
     assertThat(webapp.getCsrf().getTargetOrigin()).isNotBlank();
@@ -61,7 +61,7 @@ public class WebappPropertyTest extends ParsePropertiesHelper {
 
   @Test
   public void testCsrfDenyStatusProperty() {
-    // given the Camunda CSRF DenyStatus property is defined
+    // given the Orqueio CSRF DenyStatus property is defined
     // then
     assertThat(webapp.getCsrf().getDenyStatus()).isNotNull();
     assertThat(webapp.getCsrf().getDenyStatus()).isEqualTo(405);
@@ -69,7 +69,7 @@ public class WebappPropertyTest extends ParsePropertiesHelper {
 
   @Test
   public void testCsrfRandomClassProperty() {
-    // given the Camunda CSRF RandomClass property is defined
+    // given the Orqueio CSRF RandomClass property is defined
     // then
     assertThat(webapp.getCsrf().getRandomClass()).isNotNull();
     assertThat(webapp.getCsrf().getRandomClass()).isEqualTo("java.util.Random");
@@ -77,7 +77,7 @@ public class WebappPropertyTest extends ParsePropertiesHelper {
 
   @Test
   public void testCsrfEntryPointsProperty() {
-    // given the Camunda CSRF EntryPoints property is defined
+    // given the Orqueio CSRF EntryPoints property is defined
     // then
     assertThat(webapp.getCsrf().getEntryPoints()).isNotNull();
     assertThat(webapp.getCsrf().getEntryPoints()).isNotEmpty();

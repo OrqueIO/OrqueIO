@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -22,7 +22,7 @@ import static org.mockito.Mockito.mock;
 import javax.sql.DataSource;
 
 import io.orqueio.bpm.engine.spring.SpringProcessEngineConfiguration;
-import io.orqueio.bpm.spring.boot.starter.property.CamundaBpmProperties;
+import io.orqueio.bpm.spring.boot.starter.property.OrqueioBpmProperties;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,7 +38,7 @@ public class DefaultDatasourceConfigurationTest {
   @Mock
   private PlatformTransactionManager platformTransactionManager;
 
-  private CamundaBpmProperties camundaBpmProperties;
+  private OrqueioBpmProperties orqueioBpmProperties;
 
   @InjectMocks
   private DefaultDatasourceConfiguration defaultDatasourceConfiguration;
@@ -48,8 +48,8 @@ public class DefaultDatasourceConfigurationTest {
   @Before
   public void before() {
     configuration = new SpringProcessEngineConfiguration();
-    camundaBpmProperties = new CamundaBpmProperties();
-    defaultDatasourceConfiguration.camundaBpmProperties = camundaBpmProperties;
+    orqueioBpmProperties = new OrqueioBpmProperties();
+    defaultDatasourceConfiguration.orqueioBpmProperties = orqueioBpmProperties;
   }
 
   @Test
@@ -60,12 +60,12 @@ public class DefaultDatasourceConfigurationTest {
   }
 
   @Test
-  public void camundaTransactionManagerTest() {
+  public void orqueioTransactionManagerTest() {
     defaultDatasourceConfiguration.dataSource = mock(DataSource.class);
-    PlatformTransactionManager camundaTransactionManager = mock(PlatformTransactionManager.class);
-    defaultDatasourceConfiguration.camundaTransactionManager = camundaTransactionManager;
+    PlatformTransactionManager orqueioTransactionManager = mock(PlatformTransactionManager.class);
+    defaultDatasourceConfiguration.orqueioTransactionManager = orqueioTransactionManager;
     defaultDatasourceConfiguration.preInit(configuration);
-    assertSame(camundaTransactionManager, configuration.getTransactionManager());
+    assertSame(orqueioTransactionManager, configuration.getTransactionManager());
   }
 
   @Test
@@ -77,12 +77,12 @@ public class DefaultDatasourceConfigurationTest {
   }
 
   @Test
-  public void camundaDataSourceTest() {
-    DataSource camundaDatasourceMock = mock(DataSource.class);
-    defaultDatasourceConfiguration.camundaDataSource = camundaDatasourceMock;
+  public void orqueioDataSourceTest() {
+    DataSource orqueioDatasourceMock = mock(DataSource.class);
+    defaultDatasourceConfiguration.orqueioDataSource = orqueioDatasourceMock;
     defaultDatasourceConfiguration.dataSource = mock(DataSource.class);
     defaultDatasourceConfiguration.preInit(configuration);
-    assertSame(camundaDatasourceMock, getDataSourceFromConfiguration());
+    assertSame(orqueioDatasourceMock, getDataSourceFromConfiguration());
   }
 
   private DataSource getDataSourceFromConfiguration() {

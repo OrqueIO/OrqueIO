@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -36,8 +36,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest(classes = { FilterTestApp.class},
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
     properties = {
-        "camunda.bpm.webapp.application-path=/",
-        "camunda.bpm.webapp.index-redirect-enabled=false" })
+        "orqueio.bpm.webapp.application-path=/",
+        "orqueio.bpm.webapp.index-redirect-enabled=false" })
 @DirtiesContext
 public class ResourceLoadingProcessEnginesAppPathRootTest {
 
@@ -59,8 +59,8 @@ public class ResourceLoadingProcessEnginesAppPathRootTest {
 
     // then
     assertThat(con.getResponseCode()).isEqualTo(200);
-    // since index-redirect-enabled=false, Camunda should not redirect to Tasklist
-    assertThat(body).doesNotContain("Tasklist").doesNotContain("Camunda");
+    // since index-redirect-enabled=false, Orqueio should not redirect to Tasklist
+    assertThat(body).doesNotContain("Tasklist").doesNotContain("Orqueio");
     // the static index.html from /src/test/resources/static was served instead
     // this is the default Spring Boot behavior that we document for this case
     assertThat(body).contains("Hello World!");

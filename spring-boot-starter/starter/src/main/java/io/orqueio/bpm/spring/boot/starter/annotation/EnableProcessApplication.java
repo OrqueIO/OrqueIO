@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -32,7 +32,7 @@ import java.lang.annotation.Target;
  * auto-deploy feature and instead uses the required META-INF/processes.xml
  * as an indicator for resource scanning. This also allows all processes.xml
  * configuration features described here:
- * <a href="https://docs.camunda.org/manual/latest/user-guide/process-applications/the-processes-xml-deployment-descriptor/">The processes.xml Deployment Descriptor</a>
+ * <a href="https://docs.orqueio.io/manual/latest/user-guide/process-applications/the-processes-xml-deployment-descriptor/">The processes.xml Deployment Descriptor</a>
  * 
  * <p>To use it, just add the annotation to your Spring Boot application class:</p>
  * <pre>

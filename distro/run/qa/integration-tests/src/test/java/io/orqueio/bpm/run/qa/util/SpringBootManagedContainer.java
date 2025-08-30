@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -45,7 +45,7 @@ public class SpringBootManagedContainer {
   public static final String USERLIB_PATH = "configuration/userlib";
 
   protected static final String BASE_TEST_APPLICATION_YML = "base-test-application.yml";
-  protected static final String RUN_HOME_VARIABLE = "camunda.run.home";
+  protected static final String RUN_HOME_VARIABLE = "orqueio.run.home";
 
   protected static final long RAMP_UP_SECONDS = 60;
   protected static final long RAMP_DOWN_SECONDS = 20;
@@ -77,8 +77,8 @@ public class SpringBootManagedContainer {
   }
 
   /**
-   * @return the home directory of Camunda Platform Run based on the
-   *         "camunda.run.home" system property.
+   * @return the home directory of Orqueio Platform Run based on the
+   *         "orqueio.run.home" system property.
    */
   public static String getRunHome() {
     String runHomeDirectory = System.getProperty(RUN_HOME_VARIABLE);
@@ -194,7 +194,7 @@ public class SpringBootManagedContainer {
     hconn.setUseCaches(false);
     hconn.setDoOutput(false);
     hconn.setRequestMethod("OPTIONS");
-    hconn.setRequestProperty("User-Agent", "Camunda-Managed-SpringBoot-Container/1.0");
+    hconn.setRequestProperty("User-Agent", "Orqueio-Managed-SpringBoot-Container/1.0");
     hconn.setRequestProperty("Accept", "text/plain");
     hconn.connect();
     hconn.disconnect();

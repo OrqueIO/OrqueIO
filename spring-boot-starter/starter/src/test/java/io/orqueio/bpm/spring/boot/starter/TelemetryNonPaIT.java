@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.Set;
 
 import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import io.orqueio.bpm.engine.impl.diagnostics.CamundaIntegration;
+import io.orqueio.bpm.engine.impl.diagnostics.OrqueioIntegration;
 import io.orqueio.bpm.engine.impl.diagnostics.DiagnosticsRegistry;
 import io.orqueio.bpm.engine.impl.telemetry.dto.ApplicationServerImpl;
 import io.orqueio.bpm.engine.impl.telemetry.dto.TelemetryDataImpl;
@@ -37,7 +37,7 @@ import org.springframework.test.context.junit4.SpringRunner;
   classes = {TestApplication.class},
   webEnvironment = WebEnvironment.RANDOM_PORT
 )
-public class TelemetryNonPaIT extends AbstractCamundaAutoConfigurationIT {
+public class TelemetryNonPaIT extends AbstractOrqueioAutoConfigurationIT {
 
   @Test
   public void shouldSubmitApplicationServerData() {
@@ -51,15 +51,15 @@ public class TelemetryNonPaIT extends AbstractCamundaAutoConfigurationIT {
   }
 
   @Test
-  public void shouldAddCamundaIntegration() {
+  public void shouldAddOrqueioIntegration() {
     // given default configuration
     ProcessEngineConfigurationImpl processEngineConfiguration = (ProcessEngineConfigurationImpl) processEngine.getProcessEngineConfiguration();
 
     // then
     TelemetryDataImpl telemetryData = processEngineConfiguration.getTelemetryData();
-    Set<String> camundaIntegration = telemetryData.getProduct().getInternals().getCamundaIntegration();
-    assertThat(camundaIntegration.size()).isOne();
-    assertThat(camundaIntegration).containsExactly(CamundaIntegration.SPRING_BOOT_STARTER);
+    Set<String> orqueioIntegration = telemetryData.getProduct().getInternals().getOrqueioIntegration();
+    assertThat(orqueioIntegration.size()).isOne();
+    assertThat(orqueioIntegration).containsExactly(OrqueioIntegration.SPRING_BOOT_STARTER);
   }
 
 }

@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -34,7 +34,7 @@ import org.junit.Test;
 public class CockpitPluginAutoDeploymentIT {
 
   static final String EXAMPLE_PLUGIN_HOME = "example.plugin.home";
-  static final String PLUGIN_ENDPOINT = "/camunda/api/cockpit/plugin/test-cockpit-plugin/test-string";
+  static final String PLUGIN_ENDPOINT = "/orqueio/api/cockpit/plugin/test-cockpit-plugin/test-string";
 
   static SpringBootManagedContainer container;
   static String baseDirectory = SpringBootManagedContainer.getRunHome();
@@ -73,7 +73,7 @@ public class CockpitPluginAutoDeploymentIT {
   @Test
   public void shouldAutoDeployCockpitPlugin() throws IOException {
     // given
-    deployPlugin("camunda-bpm-run-example-plugin.jar");
+    deployPlugin("orqueio-bpm-run-example-plugin.jar");
     runStartScript();
 
     // when

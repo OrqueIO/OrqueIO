@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0o4l4e4" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.9.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.15.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:orqueio.="http://orqueio.io/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://orqueio.io/schema/modeler/1.0" id="Definitions_0o4l4e4" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Orqueio Modeler" exporterVersion="4.9.0" modeler:executionPlatform="Orqueio Platform" modeler:executionPlatformVersion="7.15.0">
   <bpmn:process id="asyncTaskProcess" isExecutable="true">
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>Flow_1kyojiy</bpmn:outgoing>
@@ -9,7 +9,7 @@
       <bpmn:incoming>Flow_0ol67i5</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="Flow_0ol67i5" sourceRef="Activity_1wnde44" targetRef="Event_0opmjta" />
-    <bpmn:serviceTask id="Activity_1wnde44" name="Async Task" camunda:asyncBefore="true" camunda:expression="${true}">
+    <bpmn:serviceTask id="Activity_1wnde44" name="Async Task" orqueio.:asyncBefore="true" orqueio.:expression="${true}">
       <bpmn:incoming>Flow_1kyojiy</bpmn:incoming>
       <bpmn:outgoing>Flow_0ol67i5</bpmn:outgoing>
     </bpmn:serviceTask>

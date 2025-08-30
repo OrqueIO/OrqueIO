@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -45,7 +45,7 @@ import java.util.logging.Logger;
 
 
 /**
- * <p>Bootstrap for the Camunda Platform using a singleton EJB</p>
+ * <p>Bootstrap for the Orqueio Platform using a singleton EJB</p>
  *
  * @author Daniel Meyer
  */
@@ -67,7 +67,7 @@ public class EjbBpmPlatformBootstrap {
 
     final RuntimeContainerDelegateImpl containerDelegate = getContainerDelegate();
 
-    containerDelegate.getServiceContainer().createDeploymentOperation("deploying Camunda Platform")
+    containerDelegate.getServiceContainer().createDeploymentOperation("deploying Orqueio Platform")
       .addStep(new EjbJarParsePlatformXmlStep())
       .addStep(new DiscoverBpmPlatformPluginsStep())
       .addStep(new StartJcaExecutorServiceStep(executorServiceBean))
@@ -78,7 +78,7 @@ public class EjbBpmPlatformBootstrap {
     processEngineService = containerDelegate.getProcessEngineService();
     processApplicationService = containerDelegate.getProcessApplicationService();
 
-    LOGGER.log(Level.INFO, "Camunda Platform started successfully.");
+    LOGGER.log(Level.INFO, "Orqueio Platform started successfully.");
   }
 
   @PreDestroy
@@ -86,7 +86,7 @@ public class EjbBpmPlatformBootstrap {
 
     final RuntimeContainerDelegateImpl containerDelegate = getContainerDelegate();
 
-    containerDelegate.getServiceContainer().createUndeploymentOperation("undeploying Camunda Platform")
+    containerDelegate.getServiceContainer().createUndeploymentOperation("undeploying Orqueio Platform")
       .addStep(new StopProcessApplicationsStep())
       .addStep(new StopProcessEnginesStep())
       .addStep(new StopJobExecutorStep())
@@ -94,7 +94,7 @@ public class EjbBpmPlatformBootstrap {
       .addStep(new UnregisterBpmPlatformPluginsStep())
       .execute();
 
-    LOGGER.log(Level.INFO, "Camunda Platform stopped.");
+    LOGGER.log(Level.INFO, "Orqueio Platform stopped.");
 
   }
 

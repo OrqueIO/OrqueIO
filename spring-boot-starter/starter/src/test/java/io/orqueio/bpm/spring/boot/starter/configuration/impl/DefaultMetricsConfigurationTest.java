@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -21,18 +21,18 @@ import static org.springframework.test.util.ReflectionTestUtils.invokeMethod;
 import static org.springframework.test.util.ReflectionTestUtils.setField;
 
 import io.orqueio.bpm.engine.spring.SpringProcessEngineConfiguration;
-import io.orqueio.bpm.spring.boot.starter.property.CamundaBpmProperties;
+import io.orqueio.bpm.spring.boot.starter.property.OrqueioBpmProperties;
 import org.junit.Before;
 import org.junit.Test;
 
 public class DefaultMetricsConfigurationTest {
   private DefaultMetricsConfiguration defaultMetricsConfiguration = new DefaultMetricsConfiguration();
-  private CamundaBpmProperties camundaBpmProperties = new CamundaBpmProperties();
+  private OrqueioBpmProperties orqueioBpmProperties = new OrqueioBpmProperties();
   private SpringProcessEngineConfiguration configuration = new SpringProcessEngineConfiguration();
 
   @Before
   public void setUp() {
-    setField(defaultMetricsConfiguration, "camundaBpmProperties", camundaBpmProperties);
+    setField(defaultMetricsConfiguration, "orqueioBpmProperties", orqueioBpmProperties);
     defaultMetricsConfiguration.init();
 
     invokeMethod(configuration, "initMetrics");
@@ -41,13 +41,13 @@ public class DefaultMetricsConfigurationTest {
   @Test
   public void enabled() {
     assertThat(configuration.isMetricsEnabled()).isTrue();
-    assertThat(camundaBpmProperties.getMetrics().isEnabled()).isTrue();
+    assertThat(orqueioBpmProperties.getMetrics().isEnabled()).isTrue();
 
-    camundaBpmProperties.getMetrics().setEnabled(false);
+    orqueioBpmProperties.getMetrics().setEnabled(false);
     defaultMetricsConfiguration.preInit(configuration);
     assertThat(configuration.isMetricsEnabled()).isFalse();
 
-    camundaBpmProperties.getMetrics().setEnabled(true);
+    orqueioBpmProperties.getMetrics().setEnabled(true);
     defaultMetricsConfiguration.preInit(configuration);
     assertThat(configuration.isMetricsEnabled()).isTrue();
   }
@@ -55,13 +55,13 @@ public class DefaultMetricsConfigurationTest {
   @Test
   public void dbMetricsReporterActivate() {
     assertThat(configuration.isDbMetricsReporterActivate()).isTrue();
-    assertThat(camundaBpmProperties.getMetrics().isDbReporterActivate()).isTrue();
+    assertThat(orqueioBpmProperties.getMetrics().isDbReporterActivate()).isTrue();
 
-    camundaBpmProperties.getMetrics().setDbReporterActivate(false);
+    orqueioBpmProperties.getMetrics().setDbReporterActivate(false);
     defaultMetricsConfiguration.preInit(configuration);
     assertThat(configuration.isDbMetricsReporterActivate()).isFalse();
 
-    camundaBpmProperties.getMetrics().setDbReporterActivate(true);
+    orqueioBpmProperties.getMetrics().setDbReporterActivate(true);
     defaultMetricsConfiguration.preInit(configuration);
     assertThat(configuration.isDbMetricsReporterActivate()).isTrue();
   }

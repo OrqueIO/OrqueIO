@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -42,7 +42,7 @@ public class SessionCookieIT {
 
   @Test
   public void shouldSetCookieWebapp() {
-    httpClientRule.performRequest("http://localhost:" + port + "/camunda/app/tasklist/default");
+    httpClientRule.performRequest("http://localhost:" + port + "/orqueio/app/tasklist/default");
 
     String sessionCookieValue = httpClientRule.getSessionCookie();
 
@@ -51,7 +51,7 @@ public class SessionCookieIT {
 
   @Test
   public void shouldSetCookieWebappRest() {
-    httpClientRule.performRequest("http://localhost:" + port + "/camunda/api/engine/engine/");
+    httpClientRule.performRequest("http://localhost:" + port + "/orqueio/api/engine/engine/");
 
     String sessionCookieValue = httpClientRule.getSessionCookie();
 

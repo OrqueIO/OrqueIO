@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -25,7 +25,7 @@ import io.orqueio.bpm.engine.authorization.Resources;
 import io.orqueio.bpm.engine.identity.Group;
 import io.orqueio.bpm.engine.identity.User;
 import io.orqueio.bpm.engine.impl.persistence.entity.AuthorizationEntity;
-import io.orqueio.bpm.spring.boot.starter.configuration.impl.AbstractCamundaConfiguration;
+import io.orqueio.bpm.spring.boot.starter.configuration.impl.AbstractOrqueioConfiguration;
 import io.orqueio.bpm.spring.boot.starter.property.AdminUserProperty;
 import org.springframework.beans.BeanUtils;
 
@@ -36,16 +36,16 @@ import java.util.Optional;
 import static java.util.Objects.requireNonNull;
 import static io.orqueio.bpm.engine.authorization.Authorization.ANY;
 import static io.orqueio.bpm.engine.authorization.Authorization.AUTH_TYPE_GRANT;
-import static io.orqueio.bpm.engine.authorization.Groups.CAMUNDA_ADMIN;
+import static io.orqueio.bpm.engine.authorization.Groups.ORQUEIO_ADMIN;
 import static io.orqueio.bpm.engine.authorization.Permissions.ALL;
 
-public class CreateAdminUserConfiguration extends AbstractCamundaConfiguration {
+public class CreateAdminUserConfiguration extends AbstractOrqueioConfiguration {
 
   private User adminUser;
 
   @PostConstruct
   void init() {
-    adminUser = Optional.ofNullable(camundaBpmProperties.getAdminUser())
+    adminUser = Optional.ofNullable(orqueioBpmProperties.getAdminUser())
       .map(AdminUserProperty::init)
       .orElseThrow(fail("adminUser not configured!"));
   }
@@ -64,18 +64,18 @@ public class CreateAdminUserConfiguration extends AbstractCamundaConfiguration {
     createUser(identityService, adminUser);
 
     // create group
-    if (identityService.createGroupQuery().groupId(CAMUNDA_ADMIN).count() == 0) {
-      Group camundaAdminGroup = identityService.newGroup(CAMUNDA_ADMIN);
-      camundaAdminGroup.setName("camunda BPM Administrators");
-      camundaAdminGroup.setType(Groups.GROUP_TYPE_SYSTEM);
-      identityService.saveGroup(camundaAdminGroup);
+    if (identityService.createGroupQuery().groupId(ORQUEIO_ADMIN).count() == 0) {
+      Group orqueioAdminGroup = identityService.newGroup(ORQUEIO_ADMIN);
+      orqueioAdminGroup.setName("orqueio BPM Administrators");
+      orqueioAdminGroup.setType(Groups.GROUP_TYPE_SYSTEM);
+      identityService.saveGroup(orqueioAdminGroup);
     }
 
     // create ADMIN authorizations on all built-in resources
     for (Resource resource : Resources.values()) {
-      if (authorizationService.createAuthorizationQuery().groupIdIn(CAMUNDA_ADMIN).resourceType(resource).resourceId(ANY).count() == 0) {
+      if (authorizationService.createAuthorizationQuery().groupIdIn(ORQUEIO_ADMIN).resourceType(resource).resourceId(ANY).count() == 0) {
         AuthorizationEntity userAdminAuth = new AuthorizationEntity(AUTH_TYPE_GRANT);
-        userAdminAuth.setGroupId(CAMUNDA_ADMIN);
+        userAdminAuth.setGroupId(ORQUEIO_ADMIN);
         userAdminAuth.setResource(resource);
         userAdminAuth.setResourceId(ANY);
         userAdminAuth.addPermission(ALL);
@@ -83,7 +83,7 @@ public class CreateAdminUserConfiguration extends AbstractCamundaConfiguration {
       }
     }
 
-    identityService.createMembership(adminUser.getId(), CAMUNDA_ADMIN);
+    identityService.createMembership(adminUser.getId(), ORQUEIO_ADMIN);
     LOG.creatingInitialAdminUser(adminUser);
   }
 

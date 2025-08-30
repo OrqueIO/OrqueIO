@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -22,7 +22,7 @@ import java.util.Map;
 /**
  * An Element.
  * 
- * @author christian.lipphardt@camunda.com
+ * @author christian.lipphardt@orqueio.com
  */
 public enum Namespace {
   /**
@@ -30,13 +30,13 @@ public enum Namespace {
    */
   UNKNOWN((String) null),
   
-  CAMUNDA_BPM_PLATFORM_1_1("urn:io.orqueio.bpm.jboss:1.1");
+  ORQUEIO_BPM_PLATFORM_1_1("urn:io.orqueio.bpm.jboss:1.1");
   
   /**
    * The current namespace version.
    */
   
-  public static final Namespace CURRENT = CAMUNDA_BPM_PLATFORM_1_1;
+  public static final Namespace CURRENT = ORQUEIO_BPM_PLATFORM_1_1;
   
   private final String name;
 

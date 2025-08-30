@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -169,7 +169,7 @@ public class JsonTreeReadPropertyTest {
   @Test
   public void shouldReadStringValue() {
     assertThat(order.stringValue()).isEqualTo("order1");
-    assertThat(orderDetails.prop("article").stringValue()).isEqualTo("camundaBPM");
+    assertThat(orderDetails.prop("article").stringValue()).isEqualTo("orqueioBPM");
     assertThat(customers.elements().get(0).prop("name").stringValue()).isEqualTo("Kermit");
   }
 
@@ -436,7 +436,7 @@ public class JsonTreeReadPropertyTest {
   @Test
   public void shouldNotFailWithJackson146Bug() {
     // this should not fail
-    SpinJsonNode node = JSON(SpinIoUtil.fileAsString("org/camunda/spin/json/jackson146.json"));
+    SpinJsonNode node = JSON(SpinIoUtil.fileAsString("io/orqueio/spin/json/jackson146.json"));
 
     // file has 4000 characters in length a
     // 20 characters per repeated JSON object

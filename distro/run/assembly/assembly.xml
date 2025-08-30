@@ -15,21 +15,21 @@
     <dependencySet>
       <outputDirectory>internal/</outputDirectory>
       <includes>
-        <include>io.orqueio.bpm.run:camunda-bpm-run-core</include>
+        <include>io.orqueio.bpm.run:orqueio-bpm-run-core</include>
       </includes>
       <outputFileNameMapping>${artifact.artifactId}.${artifact.extension}</outputFileNameMapping>
     </dependencySet>
     <dependencySet>
       <outputDirectory>internal/oauth2/</outputDirectory>
       <includes>
-        <include>io.orqueio.bpm.run:camunda-bpm-run-modules-oauth2</include>
+        <include>io.orqueio.bpm.run:orqueio-bpm-run-modules-oauth2</include>
       </includes>
       <outputFileNameMapping>${artifact.artifactId}.${artifact.extension}</outputFileNameMapping>
     </dependencySet>
     <dependencySet>
       <outputDirectory>internal/example/</outputDirectory>
       <includes>
-        <include>io.orqueio.bpm.run:camunda-bpm-run-modules-example-invoice</include>
+        <include>io.orqueio.bpm.run:orqueio-bpm-run-modules-example-invoice</include>
       </includes>
       <outputFileNameMapping>${artifact.artifactId}.${artifact.extension}</outputFileNameMapping>
     </dependencySet>

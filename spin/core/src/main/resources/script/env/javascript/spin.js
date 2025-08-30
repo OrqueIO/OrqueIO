@@ -12,7 +12,7 @@
  */
 
 /**
- * This is the default environment for using camunda Spin in Javascript applications.
+ * This is the default environment for using orqueio Spin in Javascript applications.
  */
 
 /**

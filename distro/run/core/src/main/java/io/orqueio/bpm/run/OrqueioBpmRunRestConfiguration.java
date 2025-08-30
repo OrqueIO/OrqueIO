@@ -1,0 +1,119 @@
+/*
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
+ * under one or more contributor license agreements. See the NOTICE file
+ * distributed with this work for additional information regarding copyright
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
+ * Version 2.0; you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.orqueio.bpm.run;
+
+import jakarta.servlet.Filter;
+import org.apache.catalina.filters.CorsFilter;
+import io.orqueio.bpm.engine.rest.security.auth.ProcessEngineAuthenticationFilter;
+import io.orqueio.bpm.run.property.OrqueioBpmRunAuthenticationProperties;
+import io.orqueio.bpm.run.property.OrqueioBpmRunCorsProperty;
+import io.orqueio.bpm.run.property.OrqueioBpmRunProperties;
+import io.orqueio.bpm.spring.boot.starter.OrqueioBpmAutoConfiguration;
+import io.orqueio.bpm.spring.boot.starter.rest.OrqueioBpmRestInitializer;
+import io.orqueio.bpm.spring.boot.starter.rest.OrqueioJerseyResourceConfig;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.web.servlet.JerseyApplicationPath;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import java.util.Collections;
+
+@EnableConfigurationProperties(OrqueioBpmRunProperties.class)
+@Configuration
+@AutoConfigureAfter({ OrqueioBpmAutoConfiguration.class })
+@ConditionalOnClass(OrqueioBpmRestInitializer.class)
+public class OrqueioBpmRunRestConfiguration {
+
+  @Autowired
+  OrqueioBpmRunProperties orqueioBpmRunProperties;
+
+  /*
+   * The CORS and Authentication filters need to run before other orqueio
+   * filters because they potentially block the request and this should be done
+   * as early as possible.
+   * 
+   * The default order parameter for spring-boot managed filters is
+   * org.springframework.core.Ordered.LOWEST_PRECEDENCE = Integer.MAX_VALUE.
+   * Order can range from -Integer.MAX_VALUE to Integer.MAX_VALUE.
+   * 
+   * The CORS filter must run before the Authentication filter because CORS
+   * preflight requests must not contain authentication. The CORS filter will
+   * not invoke the next filter in the chain for preflight requests.
+   */
+  private static int CORS_FILTER_PRECEDENCE = 0;
+  private static int AUTH_FILTER_PRECEDENCE = 1;
+
+  @Bean
+  @ConditionalOnProperty(name = "enabled", havingValue = "true", prefix = OrqueioBpmRunAuthenticationProperties.PREFIX)
+  public FilterRegistrationBean<Filter> processEngineAuthenticationFilter(JerseyApplicationPath applicationPath) {
+    FilterRegistrationBean<Filter> registration = new FilterRegistrationBean<>();
+    registration.setName("orqueio-auth");
+    registration.setFilter(new ProcessEngineAuthenticationFilter());
+    registration.setOrder(AUTH_FILTER_PRECEDENCE);
+
+    String restApiPathPattern = applicationPath.getUrlMapping();
+    registration.addUrlPatterns(restApiPathPattern);
+
+    // if nothing is set, use Http Basic authentication
+    OrqueioBpmRunAuthenticationProperties properties = orqueioBpmRunProperties.getAuth();
+    if (properties.getAuthentication() == null || OrqueioBpmRunAuthenticationProperties.DEFAULT_AUTH.equals(properties.getAuthentication())) {
+      registration.addInitParameter("authentication-provider", "io.orqueio.bpm.engine.rest.security.auth.impl.HttpBasicAuthenticationProvider");
+    }
+    return registration;
+  }
+
+  @Bean
+  @ConditionalOnProperty(name = "enabled", havingValue = "true", prefix = OrqueioBpmRunCorsProperty.PREFIX)
+  public FilterRegistrationBean<Filter> corsFilter(JerseyApplicationPath applicationPath) {
+    FilterRegistrationBean<Filter> registration = new FilterRegistrationBean<>();
+    registration.setName("orqueio-cors");
+    CorsFilter corsFilter = new CorsFilter();
+    registration.setFilter(corsFilter);
+    registration.setOrder(CORS_FILTER_PRECEDENCE);
+
+    String restApiPathPattern = applicationPath.getUrlMapping();
+    registration.addUrlPatterns(restApiPathPattern);
+
+    registration.addInitParameter(CorsFilter.PARAM_CORS_ALLOWED_ORIGINS,
+                                  orqueioBpmRunProperties.getCors().getAllowedOrigins());
+    registration.addInitParameter(CorsFilter.PARAM_CORS_ALLOWED_METHODS,
+                                  OrqueioBpmRunCorsProperty.DEFAULT_HTTP_METHODS);
+    registration.addInitParameter(CorsFilter.PARAM_CORS_ALLOWED_HEADERS,
+                                  orqueioBpmRunProperties.getCors().getAllowedHeaders());
+    registration.addInitParameter(CorsFilter.PARAM_CORS_EXPOSED_HEADERS,
+                                  orqueioBpmRunProperties.getCors().getExposedHeaders());
+    registration.addInitParameter(CorsFilter.PARAM_CORS_SUPPORT_CREDENTIALS,
+                                  String.valueOf(orqueioBpmRunProperties.getCors().getAllowCredentials()));
+    registration.addInitParameter(CorsFilter.PARAM_CORS_PREFLIGHT_MAXAGE,
+                                  orqueioBpmRunProperties.getCors().getPreflightMaxAge());
+
+    return registration;
+  }
+
+  @Bean
+  public OrqueioJerseyResourceConfig orqueioRunJerseyResourceConfig() {
+    OrqueioJerseyResourceConfig orqueioJerseyResourceConfig = new OrqueioJerseyResourceConfig();
+    orqueioJerseyResourceConfig.setProperties(Collections.singletonMap("jersey.config.server.wadl.disableWadl", orqueioBpmRunProperties.getRest().isDisableWadl()));
+    return orqueioJerseyResourceConfig;
+  }
+
+}

@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -22,7 +22,7 @@ import io.orqueio.bpm.example.invoice.InvoiceApplicationHelper;
 import io.orqueio.bpm.example.invoice.InvoiceProcessApplication;
 import io.orqueio.bpm.spring.boot.starter.annotation.EnableProcessApplication;
 import io.orqueio.bpm.spring.boot.starter.event.PostDeployEvent;
-import io.orqueio.bpm.spring.boot.starter.property.CamundaBpmProperties;
+import io.orqueio.bpm.spring.boot.starter.property.OrqueioBpmProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-@ConditionalOnProperty(name = "enabled", havingValue = "true", prefix = CamundaBpmProperties.PREFIX + ".run.example")
+@ConditionalOnProperty(name = "enabled", havingValue = "true", prefix = OrqueioBpmProperties.PREFIX + ".run.example")
 @Configuration
 @EnableProcessApplication("invoiceProcessApplicationSpringBoot")
 public class Application implements WebMvcConfigurer {
@@ -59,7 +59,7 @@ public class Application implements WebMvcConfigurer {
   @Override
   public void addResourceHandlers(ResourceHandlerRegistry registry) {
     registry.addResourceHandler("/forms/**").addResourceLocations("classpath:/forms/");
-    registry.addResourceHandler("/camunda-invoice/**").addResourceLocations("classpath:/camunda-invoice/");
+    registry.addResourceHandler("/orqueio-invoice/**").addResourceLocations("classpath:/orqueio-invoice/");
   }
 
 }

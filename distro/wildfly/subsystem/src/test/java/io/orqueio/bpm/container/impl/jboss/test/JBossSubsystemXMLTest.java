@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -67,8 +67,8 @@ import org.junit.Test;
 
 /**
  *
- * @author nico.rehwaldt@camunda.com
- * @author christian.lipphardt@camunda.com
+ * @author nico.rehwaldt@orqueio.com
+ * @author christian.lipphardt@orqueio.com
  */
 public class JBossSubsystemXMLTest extends AbstractSubsystemTest {
 
@@ -98,7 +98,7 @@ public class JBossSubsystemXMLTest extends AbstractSubsystemTest {
       ServiceNames.forManagedThreadPool(SubsystemAttributeDefinitons.THREAD_POOL_NAME.getDefaultValue().asString());
 
   public static final ServiceName PROCESS_ENGINE_SERVICE_BINDING_SERVICE_NAME = ContextNames.GLOBAL_CONTEXT_SERVICE_NAME
-    .append("camunda-bpm-platform")
+    .append("orqueio-bpm-platform")
     .append("process-engine")
     .append("ProcessEngineService!io.orqueio.bpm.ProcessEngineService");
 

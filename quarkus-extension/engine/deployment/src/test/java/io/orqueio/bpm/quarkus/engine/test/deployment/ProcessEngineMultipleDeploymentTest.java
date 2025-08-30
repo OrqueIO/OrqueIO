@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -31,7 +31,7 @@ import io.orqueio.bpm.engine.repository.Deployment;
 import io.orqueio.bpm.engine.repository.ProcessDefinition;
 import io.orqueio.bpm.model.bpmn.Bpmn;
 import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
-import io.orqueio.bpm.quarkus.engine.extension.event.CamundaEngineStartupEvent;
+import io.orqueio.bpm.quarkus.engine.extension.event.OrqueioEngineStartupEvent;
 import io.orqueio.bpm.quarkus.engine.test.helper.ProcessEngineAwareExtension;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
@@ -43,7 +43,7 @@ public class ProcessEngineMultipleDeploymentTest {
   @RegisterExtension
   protected static final QuarkusUnitTest unitTest = new ProcessEngineAwareExtension()
       .setArchiveProducer(() -> ShrinkWrap.create(JavaArchive.class)
-          .addAsResource("org/camunda/bpm/quarkus/engine/test/deployment/simpleServiceTaskProcess.bpmn"));
+          .addAsResource("io/orqueio/bpm/quarkus/engine/test/deployment/simpleServiceTaskProcess.bpmn"));
 
   @ApplicationScoped
   static class MyConfig {
@@ -57,14 +57,14 @@ public class ProcessEngineMultipleDeploymentTest {
     BpmnModelInstance process2 = Bpmn.createExecutableProcess("process-two")
         .startEvent()
         .serviceTask()
-          .camundaExpression("${true}")
+          .orqueioExpression("${true}")
         .endEvent()
         .done();
 
     @Inject
     RepositoryService repositoryService;
 
-    public void createDeployment1(@Observes CamundaEngineStartupEvent event) {
+    public void createDeployment1(@Observes OrqueioEngineStartupEvent event) {
       repositoryService.createDeployment()
           .name("deployment-1")
           .addModelInstance("process-one.bpmn", process1)
@@ -72,10 +72,10 @@ public class ProcessEngineMultipleDeploymentTest {
           .deploy();
     }
 
-    public void createDeployment2(@Observes CamundaEngineStartupEvent event) {
+    public void createDeployment2(@Observes OrqueioEngineStartupEvent event) {
       repositoryService.createDeployment()
           .name("deployment-2")
-          .addClasspathResource("org/camunda/bpm/quarkus/engine/test/deployment/simpleServiceTaskProcess.bpmn")
+          .addClasspathResource("io/orqueio/bpm/quarkus/engine/test/deployment/simpleServiceTaskProcess.bpmn")
           .deploy();
     }
 

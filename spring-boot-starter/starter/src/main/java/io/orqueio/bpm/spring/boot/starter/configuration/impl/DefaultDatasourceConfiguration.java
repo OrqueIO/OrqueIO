@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -19,43 +19,43 @@ package io.orqueio.bpm.spring.boot.starter.configuration.impl;
 import javax.sql.DataSource;
 
 import io.orqueio.bpm.engine.spring.SpringProcessEngineConfiguration;
-import io.orqueio.bpm.spring.boot.starter.configuration.CamundaDatasourceConfiguration;
+import io.orqueio.bpm.spring.boot.starter.configuration.OrqueioDatasourceConfiguration;
 import io.orqueio.bpm.spring.boot.starter.property.DatabaseProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.util.StringUtils;
 
-public class DefaultDatasourceConfiguration extends AbstractCamundaConfiguration implements CamundaDatasourceConfiguration {
+public class DefaultDatasourceConfiguration extends AbstractOrqueioConfiguration implements OrqueioDatasourceConfiguration {
 
   @Autowired
   protected PlatformTransactionManager transactionManager;
 
   @Autowired(required = false)
-  @Qualifier("camundaBpmTransactionManager")
-  protected PlatformTransactionManager camundaTransactionManager;
+  @Qualifier("orqueioBpmTransactionManager")
+  protected PlatformTransactionManager orqueioTransactionManager;
 
   @Autowired
   protected DataSource dataSource;
 
   @Autowired(required = false)
-  @Qualifier("camundaBpmDataSource")
-  protected DataSource camundaDataSource;
+  @Qualifier("orqueioBpmDataSource")
+  protected DataSource orqueioDataSource;
 
   @Override
   public void preInit(SpringProcessEngineConfiguration configuration) {
-    final DatabaseProperty database = camundaBpmProperties.getDatabase();
+    final DatabaseProperty database = orqueioBpmProperties.getDatabase();
 
-    if (camundaTransactionManager == null) {
+    if (orqueioTransactionManager == null) {
       configuration.setTransactionManager(transactionManager);
     } else {
-      configuration.setTransactionManager(camundaTransactionManager);
+      configuration.setTransactionManager(orqueioTransactionManager);
     }
 
-    if (camundaDataSource == null) {
+    if (orqueioDataSource == null) {
       configuration.setDataSource(dataSource);
     } else {
-      configuration.setDataSource(camundaDataSource);
+      configuration.setDataSource(orqueioDataSource);
     }
 
     configuration.setDatabaseType(database.getType());
@@ -80,12 +80,12 @@ public class DefaultDatasourceConfiguration extends AbstractCamundaConfiguration
     this.transactionManager = transactionManager;
   }
 
-  public PlatformTransactionManager getCamundaTransactionManager() {
-    return camundaTransactionManager;
+  public PlatformTransactionManager getOrqueioTransactionManager() {
+    return orqueioTransactionManager;
   }
 
-  public void setCamundaTransactionManager(PlatformTransactionManager camundaTransactionManager) {
-    this.camundaTransactionManager = camundaTransactionManager;
+  public void setOrqueioTransactionManager(PlatformTransactionManager orqueioTransactionManager) {
+    this.orqueioTransactionManager = orqueioTransactionManager;
   }
 
   public DataSource getDataSource() {
@@ -96,12 +96,12 @@ public class DefaultDatasourceConfiguration extends AbstractCamundaConfiguration
     this.dataSource = dataSource;
   }
 
-  public DataSource getCamundaDataSource() {
-    return camundaDataSource;
+  public DataSource getOrqueioDataSource() {
+    return orqueioDataSource;
   }
 
-  public void setCamundaDataSource(DataSource camundaDataSource) {
-    this.camundaDataSource = camundaDataSource;
+  public void setOrqueioDataSource(DataSource orqueioDataSource) {
+    this.orqueioDataSource = orqueioDataSource;
   }
 
 }

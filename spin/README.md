@@ -1,11 +1,11 @@
-camunda-spin
+orqueio-spin
 ============
 
 <p>
-  <a href="https://camunda.com/">Home</a> |
-  <a href="https://docs.camunda.org/manual/reference/spin/">Documentation</a> |
-  <a href="https://forum.camunda.org/">Forum</a> |
-  <a href="https://app.camunda.com/jira/browse/CAM">Issues</a> |
+  <a href="https://orqueio.com/">Home</a> |
+  <a href="https://docs.orqueio.io/manual/reference/spin/">Documentation</a> |
+  <a href="https://forum.orqueio.io/">Forum</a> |
+  <a href="https://app.orqueio.com/jira/browse/CAM">Issues</a> |
   <a href="../LICENSE">License</a> |
   <a href="../CONTRIBUTING.md">Contribute</a>
 </p>
@@ -72,7 +72,7 @@ Element e = XML( xmlSource ).childElement("customer").unwrap();
 
 # Contributing
 
-Have a look at our [contribution guide](https://github.com/camunda/camunda-bpm-platform/blob/master/CONTRIBUTING.md) for how to contribute to this repository.
+Have a look at our [contribution guide](https://github.com/orqueio/orqueio-bpm-platform/blob/master/CONTRIBUTING.md) for how to contribute to this repository.
 
 
 # License:

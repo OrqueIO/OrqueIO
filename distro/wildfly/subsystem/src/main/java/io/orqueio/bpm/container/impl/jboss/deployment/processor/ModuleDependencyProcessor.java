@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -42,7 +42,7 @@ import org.jboss.msc.service.ServiceName;
  * <p>This Processor creates implicit module dependencies for process applications</p>
  *
  * <p>Concretely speaking, this processor adds a module dependency from the process
- * application module (deployment unit) to the process engine module (and other camunda libraries
+ * application module (deployment unit) to the process engine module (and other orqueio libraries
  * which are useful for process apps).</p>
  *
  * @author Daniel Meyer
@@ -53,16 +53,16 @@ public class ModuleDependencyProcessor implements DeploymentUnitProcessor {
 
   public static final int PRIORITY = 0x2300;
 
-  public static String MODULE_IDENTIFIER_PROCESS_ENGINE = "io.orqueio.bpm.camunda-engine";
-  public static String MODULE_IDENTIFIER_XML_MODEL = "io.orqueio.bpm.model.camunda-xml-model";
-  public static String MODULE_IDENTIFIER_BPMN_MODEL = "io.orqueio.bpm.model.camunda-bpmn-model";
-  public static String MODULE_IDENTIFIER_CMMN_MODEL = "io.orqueio.bpm.model.camunda-cmmn-model";
-  public static String MODULE_IDENTIFIER_DMN_MODEL = "io.orqueio.bpm.model.camunda-dmn-model";
-  public static String MODULE_IDENTIFIER_SPIN = "io.orqueio.spin.camunda-spin-core";
-  public static String MODULE_IDENTIFIER_CONNECT = "io.orqueio.connect.camunda-connect-core";
-  public static String MODULE_IDENTIFIER_ENGINE_DMN = "io.orqueio.bpm.dmn.camunda-engine-dmn";
+  public static String MODULE_IDENTIFIER_PROCESS_ENGINE = "io.orqueio.bpm.orqueio-engine";
+  public static String MODULE_IDENTIFIER_XML_MODEL = "io.orqueio.bpm.model.orqueio-xml-model";
+  public static String MODULE_IDENTIFIER_BPMN_MODEL = "io.orqueio.bpm.model.orqueio-bpmn-model";
+  public static String MODULE_IDENTIFIER_CMMN_MODEL = "io.orqueio.bpm.model.orqueio-cmmn-model";
+  public static String MODULE_IDENTIFIER_DMN_MODEL = "io.orqueio.bpm.model.orqueio-dmn-model";
+  public static String MODULE_IDENTIFIER_SPIN = "io.orqueio.spin.orqueio-spin-core";
+  public static String MODULE_IDENTIFIER_CONNECT = "io.orqueio.connect.orqueio-connect-core";
+  public static String MODULE_IDENTIFIER_ENGINE_DMN = "io.orqueio.bpm.dmn.orqueio-engine-dmn";
   public static String MODULE_IDENTIFIER_GRAAL_JS = "org.graalvm.js.js-scriptengine";
-  public static String MODULE_IDENTIFIER_JUEL = "io.orqueio.bpm.juel.camunda-juel";
+  public static String MODULE_IDENTIFIER_JUEL = "io.orqueio.bpm.juel.orqueio-juel";
 
   @Override
   public void deploy(DeploymentPhaseContext phaseContext) throws DeploymentUnitProcessingException {

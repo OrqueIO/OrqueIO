@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -42,7 +42,7 @@ import static io.orqueio.bpm.engine.test.assertions.bpmn.AbstractAssertions.init
 @SpringBootTest(
   classes = { TestApplication.class },
   properties = {
-    "camunda.bpm.generate-unique-process-engine-name=true",
+    "orqueio.bpm.generate-unique-process-engine-name=true",
     "spring.datasource.generate-unique-name=true",
     "test5Property=test5Value"
   },
@@ -55,7 +55,7 @@ public class NonPaContextCacheTest5 extends AbstractContextCacheTest {
     this.testName = "nonPaTest5";
     this.contextMap.put(this.testName, applicationContext.hashCode());
 
-    // ensure that Camunda Platform Assert is using the non-default engine
+    // ensure that Orqueio Platform Assert is using the non-default engine
     init(processEngine);
   }
 

@@ -1,4 +1,4 @@
-# Camunda Platform Engine Quarkus Extension
+# Orqueio Platform Engine Quarkus Extension
 
 You can add the Orque IO Platform Engine Quarkus Extension into your Quarkus application by adding
 the following dependency into your `pom.xml` file.

@@ -103,7 +103,7 @@ public class LdapUserQueryTest {
     assertThat(user.getId()).isEqualTo("oscar");
     assertThat(user.getFirstName()).isEqualTo("Oscar");
     assertThat(user.getLastName()).isEqualTo("The Crouch");
-    assertThat(user.getEmail()).isEqualTo("oscar@orqueio.org");
+    assertThat(user.getEmail()).isEqualTo("oscar@orqueio.io");
   }
 
   @Test
@@ -159,7 +159,7 @@ public class LdapUserQueryTest {
       assertThat(user.getId()).isEqualTo("oscar");
       assertThat(user.getFirstName()).isEqualTo("Oscar");
       assertThat(user.getLastName()).isEqualTo("The Crouch");
-      assertThat(user.getEmail()).isEqualTo("oscar@orqueio.org");
+      assertThat(user.getEmail()).isEqualTo("oscar@orqueio.io");
     } finally {
       processEngineConfiguration.setAuthorizationEnabled(false);
       identityService.clearAuthentication();
@@ -359,11 +359,11 @@ public class LdapUserQueryTest {
     // given
 
     // when
-    User user = identityService.createUserQuery().userEmail("oscar@orqueio.org").singleResult();
+    User user = identityService.createUserQuery().userEmail("oscar@orqueio.io").singleResult();
 
     // then
     assertThat(user).isNotNull();
-    assertThat(user.getEmail()).isEqualTo("oscar@orqueio.org");
+    assertThat(user.getEmail()).isEqualTo("oscar@orqueio.io");
   }
 
   @Test
@@ -386,7 +386,7 @@ public class LdapUserQueryTest {
 
     // then
     assertThat(user).isNotNull();
-    assertThat(user.getEmail()).isEqualTo("oscar@orqueio.org");
+    assertThat(user.getEmail()).isEqualTo("oscar@orqueio.io");
   }
 
   @Test
@@ -394,11 +394,11 @@ public class LdapUserQueryTest {
     // given
 
     // when
-    User user = identityService.createUserQuery().userEmailLike("*car@orqueio.org").singleResult();
+    User user = identityService.createUserQuery().userEmailLike("*car@orqueio.io").singleResult();
 
     // then
     assertThat(user).isNotNull();
-    assertThat(user.getEmail()).isEqualTo("oscar@orqueio.org");
+    assertThat(user.getEmail()).isEqualTo("oscar@orqueio.io");
   }
 
   @Test
@@ -410,7 +410,7 @@ public class LdapUserQueryTest {
 
     // then
     assertThat(user).isNotNull();
-    assertThat(user.getEmail()).isEqualTo("oscar@orqueio.org");
+    assertThat(user.getEmail()).isEqualTo("oscar@orqueio.io");
   }
 
   @Test
@@ -418,11 +418,11 @@ public class LdapUserQueryTest {
     // given
 
     // when
-    User user = identityService.createUserQuery().userEmailLike("oscar@*.org").singleResult();
+    User user = identityService.createUserQuery().userEmailLike("oscar@*.io").singleResult();
 
     // then
     assertThat(user).isNotNull();
-    assertThat(user.getEmail()).isEqualTo("oscar@orqueio.org");
+    assertThat(user.getEmail()).isEqualTo("oscar@orqueio.io");
   }
 
   @Test
@@ -445,7 +445,7 @@ public class LdapUserQueryTest {
 
     // then
     assertThat(user).isNotNull();
-    assertThat(user.getEmail()).isEqualTo("oscar@orqueio.org");
+    assertThat(user.getEmail()).isEqualTo("oscar@orqueio.io");
   }
 
   @Test
@@ -512,12 +512,12 @@ public class LdapUserQueryTest {
     // when
     List<User> result = identityService.createUserQuery()
             .memberOfGroup("development")
-            .userEmail("oscar@orqueio.org")
+            .userEmail("oscar@orqueio.io")
             .list();
 
     // then
     assertThat(result).hasSize(1);
-    assertThat(result.get(0).getEmail()).isEqualTo("oscar@orqueio.org");
+    assertThat(result.get(0).getEmail()).isEqualTo("oscar@orqueio.io");
   }
 
   @Test
@@ -527,12 +527,12 @@ public class LdapUserQueryTest {
     // when
     List<User> result = identityService.createUserQuery()
             .memberOfGroup("development")
-            .userEmailLike("*@orqueio.org")
+            .userEmailLike("*@orqueio.io")
             .list();
 
     // then
     assertThat(result).hasSize(3);
-    assertThat(result).extracting("email").containsOnly("daniel@orqueio.org", "roman@orqueio.org", "oscar@orqueio.org");
+    assertThat(result).extracting("email").containsOnly("daniel@orqueio.io", "roman@orqueio.io", "oscar@orqueio.io");
   }
 
   @Test

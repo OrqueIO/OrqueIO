@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -59,7 +59,7 @@ public class DomXmlDataFormatWriterTest {
 
 
   // this is what execution.setVariable("test", spinXml); does
-  // see https://github.com/camunda/camunda-bpm-platform/blob/master/engine-plugins/spin-plugin/src/main/java/org/camunda/spin/plugin/impl/SpinValueSerializer.java
+  // see https://github.com/orqueio/orqueio-bpm-platform/blob/master/engine-plugins/spin-plugin/src/main/java/io/orqueio/spin/plugin/impl/SpinValueSerializer.java
   private byte[] serializeValue(SpinXmlElement spinXml) throws UnsupportedEncodingException {
     ByteArrayOutputStream out = new ByteArrayOutputStream();
     OutputStreamWriter outWriter = new OutputStreamWriter(out, "UTF-8");
@@ -206,7 +206,7 @@ public class DomXmlDataFormatWriterTest {
   }
 
   /**
-   * new feature provided by https://github.com/camunda/camunda-bpm-platform/issues/3633: custom formatting
+   * new feature provided by https://github.com/orqueio/orqueio-bpm-platform/issues/3633: custom formatting
    * configuration to preserve-space.
    */
   @Test
@@ -214,7 +214,7 @@ public class DomXmlDataFormatWriterTest {
     final DataFormat<SpinXmlElement> dataFormat = new DomXmlDataFormat(DataFormats.XML_DATAFORMAT_NAME);
 
     try (final InputStream inputStream = DomXmlDataFormatWriterTest.class.getClassLoader()
-        .getResourceAsStream("org/camunda/spin/strip-space-preserve-space.xsl")) {
+        .getResourceAsStream("io/orqueio/spin/strip-space-preserve-space.xsl")) {
       ((DomXmlDataFormat) dataFormat).setFormattingConfiguration(inputStream);
     }
 

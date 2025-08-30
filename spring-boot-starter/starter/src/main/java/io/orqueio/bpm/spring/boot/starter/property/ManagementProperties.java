@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -18,7 +18,7 @@ package io.orqueio.bpm.spring.boot.starter.property;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-import static io.orqueio.bpm.spring.boot.starter.property.CamundaBpmProperties.joinOn;
+import static io.orqueio.bpm.spring.boot.starter.property.OrqueioBpmProperties.joinOn;
 
 @ConfigurationProperties("management")
 public class ManagementProperties {
@@ -46,30 +46,30 @@ public class ManagementProperties {
 
   public static class Health {
 
-    private Camunda camunda = new Camunda();
+    private Orqueio orqueio = new Orqueio();
 
     /**
-     * @return the camunda
+     * @return the orqueio
      */
-    public Camunda getCamunda() {
-      return camunda;
+    public Orqueio getOrqueio() {
+      return orqueio;
     }
 
     /**
-     * @param camunda the camunda to set
+     * @param orqueio the orqueio to set
      */
-    public void setCamunda(Camunda camunda) {
-      this.camunda = camunda;
+    public void setOrqueio(Orqueio orqueio) {
+      this.orqueio = orqueio;
     }
 
     @Override
     public String toString() {
       return joinOn(this.getClass())
-        .add("camunda=" + camunda)
+        .add("orqueio=" + orqueio)
         .toString();
     }
 
-    public class Camunda {
+    public class Orqueio {
       private boolean enabled = true;
 
       /**

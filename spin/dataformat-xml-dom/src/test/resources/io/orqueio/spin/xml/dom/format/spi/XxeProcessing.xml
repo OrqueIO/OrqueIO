@@ -2,10 +2,10 @@
 <!DOCTYPE foo [<!ELEMENT bpmn:incoming ANY >
   <!ENTITY xxe SYSTEM "./file.txt" >]>
 
-<animals xmlns="http://camunda.org/animals"
-  xmlns:tns="http://camunda.org/animals"
+<animals xmlns="http://orqueio.io/animals"
+  xmlns:tns="http://orqueio.io/animals"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://camunda.org/animals ../Testmodel.xsd ">
+  xsi:schemaLocation="http://orqueio.io/animals ../Testmodel.xsd ">
 
   <bird id="timmy" gender="Male" >
     <guardEgg>egg1 egg2 &xxe;</guardEgg>

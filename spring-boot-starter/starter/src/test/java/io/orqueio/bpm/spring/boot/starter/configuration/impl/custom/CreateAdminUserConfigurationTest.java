@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -22,7 +22,7 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import io.orqueio.bpm.engine.identity.User;
 import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import io.orqueio.bpm.engine.test.ProcessEngineRule;
-import io.orqueio.bpm.spring.boot.starter.property.CamundaBpmProperties;
+import io.orqueio.bpm.spring.boot.starter.property.OrqueioBpmProperties;
 import io.orqueio.bpm.spring.boot.starter.test.helper.StandaloneInMemoryTestConfiguration;
 import io.orqueio.bpm.spring.boot.starter.util.SpringBootProcessEngineLogger;
 import io.orqueio.commons.testing.ProcessEngineLoggingRule;
@@ -36,15 +36,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class CreateAdminUserConfigurationTest {
 
-  private final CamundaBpmProperties camundaBpmProperties = new CamundaBpmProperties();
+  private final OrqueioBpmProperties orqueioBpmProperties = new OrqueioBpmProperties();
   {
-    camundaBpmProperties.getAdminUser().setId("admin");
-    camundaBpmProperties.getAdminUser().setPassword("password");
+    orqueioBpmProperties.getAdminUser().setId("admin");
+    orqueioBpmProperties.getAdminUser().setPassword("password");
   }
 
   private final CreateAdminUserConfiguration createAdminUserConfiguration = new CreateAdminUserConfiguration();
   {
-    ReflectionTestUtils.setField(createAdminUserConfiguration, "camundaBpmProperties", camundaBpmProperties);
+    ReflectionTestUtils.setField(createAdminUserConfiguration, "orqueioBpmProperties", orqueioBpmProperties);
     createAdminUserConfiguration.init();
   }
 

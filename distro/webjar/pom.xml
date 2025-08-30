@@ -82,7 +82,7 @@
             <configuration>
             <skip>${skip.frontend.build}</skip>
               <target>
-                <move file="${project.build.outputDirectory}/META-INF/resources/webjars/orqueio/WEB-INF/securityFilterRules.json" todir="${project.build.outputDirectory}/META-INF/resources/webjars/camunda/" />
+                <move file="${project.build.outputDirectory}/META-INF/resources/webjars/orqueio/WEB-INF/securityFilterRules.json" todir="${project.build.outputDirectory}/META-INF/resources/webjars/orqueio/" />
                 <delete dir="${project.build.outputDirectory}/META-INF/resources/webjars/orqueio/WEB-INF" />
                 <move file="${project.build.outputDirectory}/META-INF/resources/webjars/orqueio/plugin" tofile="${project.build.outputDirectory}/META-INF/resources/plugin" verbose="true" />
                 <!-- add orqueio-welcome page -->

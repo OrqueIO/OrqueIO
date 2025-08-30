@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -29,7 +29,7 @@ import io.orqueio.bpm.engine.impl.jobexecutor.JobHandler;
 import io.orqueio.bpm.engine.impl.jobexecutor.NotifyAcquisitionRejectedJobsHandler;
 import io.orqueio.bpm.engine.impl.jobexecutor.RejectedJobsHandler;
 import io.orqueio.bpm.engine.spring.SpringProcessEngineConfiguration;
-import io.orqueio.bpm.spring.boot.starter.property.CamundaBpmProperties;
+import io.orqueio.bpm.spring.boot.starter.property.OrqueioBpmProperties;
 import io.orqueio.bpm.spring.boot.starter.test.nonpa.TestApplication;
 import org.junit.Before;
 import org.junit.Test;
@@ -49,14 +49,14 @@ public class DefaultJobConfigurationTest {
 
   private final SpringProcessEngineConfiguration processEngineConfiguration = new SpringProcessEngineConfiguration();
   private final DefaultJobConfiguration jobConfiguration = new DefaultJobConfiguration();
-  private final CamundaBpmProperties properties = new CamundaBpmProperties();
+  private final OrqueioBpmProperties properties = new OrqueioBpmProperties();
 
   @Autowired
   JobExecutor jobExecutor;
 
   @Before
   public void setUp() {
-    setField(jobConfiguration, "camundaBpmProperties", properties);
+    setField(jobConfiguration, "orqueioBpmProperties", properties);
   }
 
   @Test

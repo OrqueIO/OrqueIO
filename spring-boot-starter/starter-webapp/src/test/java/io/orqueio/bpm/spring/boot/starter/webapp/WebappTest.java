@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -43,7 +43,7 @@ public class WebappTest {
   @Test
   public void testEeResourceNotAvailable() {
     ResponseEntity<String> response =
-        testRestTemplate.getForEntity("/camunda/plugin/adminEE/app/plugin.js", String.class);
+        testRestTemplate.getForEntity("/orqueio/plugin/adminEE/app/plugin.js", String.class);
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
   }
@@ -51,7 +51,7 @@ public class WebappTest {
   @Test
   public void testAdminEndpointAvailable() {
     ResponseEntity<String> response =
-        testRestTemplate.getForEntity("/camunda/app/admin/", String.class);
+        testRestTemplate.getForEntity("/orqueio/app/admin/", String.class);
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
   }

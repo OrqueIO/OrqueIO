@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -17,7 +17,7 @@
 package io.orqueio.bpm.spring.boot.starter.configuration.impl;
 
 import io.orqueio.bpm.engine.spring.SpringProcessEngineConfiguration;
-import io.orqueio.bpm.spring.boot.starter.configuration.CamundaDeploymentConfiguration;
+import io.orqueio.bpm.spring.boot.starter.configuration.OrqueioDeploymentConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
@@ -33,12 +33,12 @@ import java.util.stream.Collectors;
 
 import static java.util.Collections.EMPTY_SET;
 
-public class DefaultDeploymentConfiguration extends AbstractCamundaConfiguration implements CamundaDeploymentConfiguration {
+public class DefaultDeploymentConfiguration extends AbstractOrqueioConfiguration implements OrqueioDeploymentConfiguration {
   private final Logger logger = LoggerFactory.getLogger(DefaultDeploymentConfiguration.class);
 
   @Override
   public void preInit(SpringProcessEngineConfiguration configuration) {
-    if (camundaBpmProperties.isAutoDeploymentEnabled()) {
+    if (orqueioBpmProperties.isAutoDeploymentEnabled()) {
       final Set<Resource> resources = getDeploymentResources();
       configuration.setDeploymentResources(resources.toArray(new Resource[resources.size()]));
       LOG.autoDeployResources(resources);
@@ -51,7 +51,7 @@ public class DefaultDeploymentConfiguration extends AbstractCamundaConfiguration
     final ResourceArrayPropertyEditor resolver = new ResourceArrayPropertyEditor();
 
     try {
-      final String[] resourcePattern = camundaBpmProperties.getDeploymentResourcePattern();
+      final String[] resourcePattern = orqueioBpmProperties.getDeploymentResourcePattern();
       logger.debug("resolving deployment resources for pattern {}", (Object[]) resourcePattern);
       resolver.setValue(resourcePattern);
 

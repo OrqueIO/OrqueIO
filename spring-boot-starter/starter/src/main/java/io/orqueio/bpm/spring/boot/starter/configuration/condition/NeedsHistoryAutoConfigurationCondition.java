@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -30,12 +30,12 @@ public class NeedsHistoryAutoConfigurationCondition extends SpringBootCondition 
   @Override
   public ConditionOutcome getMatchOutcome(ConditionContext context, AnnotatedTypeMetadata metadata) {
     return needsAdditionalConfiguration(context)
-      ? ConditionOutcome.match("camunda version needs additional configuration for history level auto")
-      : ConditionOutcome.noMatch("camunda version supports history level auto");
+      ? ConditionOutcome.match("orqueio version needs additional configuration for history level auto")
+      : ConditionOutcome.noMatch("orqueio version supports history level auto");
   }
 
   protected boolean needsAdditionalConfiguration(ConditionContext context) {
-    String historyLevel = context.getEnvironment().getProperty("camunda.bpm.history-level");
+    String historyLevel = context.getEnvironment().getProperty("orqueio.bpm.history-level");
     if (HISTORY_AUTO.equals(historyLevel)) {
       return !isHistoryAutoSupported();
     }
@@ -44,7 +44,7 @@ public class NeedsHistoryAutoConfigurationCondition extends SpringBootCondition 
 
   protected boolean isHistoryAutoSupported() {
     // FIXME see
-    // https://github.com/camunda/camunda-bpm-spring-boot-starter/issues/30
+    // https://github.com/orqueio/orqueio-bpm-spring-boot-starter/issues/30
     return false;
     // return ReflectionUtils.findField(ProcessEngineConfiguration.class,
     // historyAutoFieldName) != null;

@@ -1,0 +1,76 @@
+/*
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
+ * under one or more contributor license agreements. See the NOTICE file
+ * distributed with this work for additional information regarding copyright
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
+ * Version 2.0; you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.orqueio.bpm.quarkus.engine.test.config;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+import jakarta.inject.Inject;
+import java.sql.SQLException;
+
+import io.quarkus.test.QuarkusUnitTest;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.jobexecutor.JobExecutor;
+import io.orqueio.bpm.quarkus.engine.extension.OrqueioEngineConfig;
+import io.orqueio.bpm.quarkus.engine.test.helper.ProcessEngineAwareExtension;
+import org.jboss.shrinkwrap.api.ShrinkWrap;
+import org.jboss.shrinkwrap.api.spec.JavaArchive;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
+
+public class OrqueioEngineConfigFileTest {
+
+  @RegisterExtension
+  static final QuarkusUnitTest unitTest = new ProcessEngineAwareExtension()
+      .withConfigurationResource("io/orqueio/bpm/quarkus/engine/test/config/mixed-application.properties")
+      .setArchiveProducer(() -> ShrinkWrap.create(JavaArchive.class));
+
+  @Inject
+  OrqueioEngineConfig config;
+
+  @Inject
+  ProcessEngine processEngine;
+
+  @Test
+  public void shouldLoadAllConfigProperties() throws SQLException {
+    // given
+    // a .properties file with process engine and job executor configuration
+
+    // when
+    ProcessEngineConfigurationImpl configuration
+        = (ProcessEngineConfigurationImpl) processEngine.getProcessEngineConfiguration();
+    JobExecutor jobExecutor = configuration.getJobExecutor();
+
+    // then
+    // assert engine config properties
+    assertThat(configuration.isCmmnEnabled()).isFalse();
+    assertThat(configuration.isDmnEnabled()).isFalse();
+    assertThat(configuration.getHistory()).isEqualTo("none");
+    // assert job executor properties
+    assertThat(jobExecutor.getMaxJobsPerAcquisition()).isEqualTo(5);
+    assertThat(jobExecutor.getLockTimeInMillis()).isEqualTo(500000);
+    assertThat(jobExecutor.getWaitTimeInMillis()).isEqualTo(7000);
+    assertThat(jobExecutor.getMaxWait()).isEqualTo(65000);
+    assertThat(jobExecutor.getBackoffTimeInMillis()).isEqualTo(5);
+    // assert correct thread pool config
+    assertThat(config.jobExecutor().threadPool().maxPoolSize()).isEqualTo(12);
+    assertThat(config.jobExecutor().threadPool().queueSize()).isEqualTo(5);
+    // assert correct datasource
+    assertThat(config.datasource()).hasValue("orqueio.");
+    assertThat(configuration.getDataSource().getConnection()).asString().contains("h2:mem:orqueio.");
+  }
+}

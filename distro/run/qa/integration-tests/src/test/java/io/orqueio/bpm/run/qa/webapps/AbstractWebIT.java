@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -29,8 +29,8 @@ import java.util.logging.Logger;
 
 /**
  * NOTE: copied from
- * <a href="https://github.com/camunda/camunda-bpm-platform/blob/master/qa/integration-tests-webapps/integration-tests/src/test/java/org/camunda/bpm/AbstractWebIntegrationTest.java">platform</a>,
- * might be removed with https://jira.camunda.com/browse/CAM-11379
+ * <a href="https://github.com/orqueio/orqueio-bpm-platform/blob/master/qa/integration-tests-webapps/integration-tests/src/test/java/io/orqueio/bpm/AbstractWebIntegrationTest.java">platform</a>,
+ * might be removed with https://jira.orqueio.com/browse/CAM-11379
  */
 public abstract class AbstractWebIT {
 

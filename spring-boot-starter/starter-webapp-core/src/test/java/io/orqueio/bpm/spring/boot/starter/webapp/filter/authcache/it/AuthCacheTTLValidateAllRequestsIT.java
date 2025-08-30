@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -37,9 +37,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = { FilterTestApp.class }, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(properties = {
-  "camunda.bpm.admin-user.id=demo",
-  "camunda.bpm.admin-user.password=demo",
-  "camunda.bpm.webapp.auth.cache.time-to-live=0"
+  "orqueio.bpm.admin-user.id=demo",
+  "orqueio.bpm.admin-user.password=demo",
+  "orqueio.bpm.webapp.auth.cache.time-to-live=0"
 })
 @DirtiesContext
 public class AuthCacheTTLValidateAllRequestsIT {
@@ -56,7 +56,7 @@ public class AuthCacheTTLValidateAllRequestsIT {
   @Test
   public void shouldRemoveCache() {
     // given
-    httpClientRule.performRequest("http://localhost:" + port + "/camunda/app/welcome/default");
+    httpClientRule.performRequest("http://localhost:" + port + "/orqueio/app/welcome/default");
 
     Map<String, String> headers = new HashMap<>();
     headers.put("X-XSRF-TOKEN", httpClientRule.getHeaderXsrfToken());
@@ -64,7 +64,7 @@ public class AuthCacheTTLValidateAllRequestsIT {
     headers.put("Content-Type", "application/x-www-form-urlencoded");
     headers.put("Accept", "application/json");
     httpClientRule.performPostRequest("http://localhost:" + port +
-        "/camunda/api/admin/auth/user/default/login/welcome", headers, "username=demo&password=demo");
+        "/orqueio/api/admin/auth/user/default/login/welcome", headers, "username=demo&password=demo");
 
     headers = new HashMap<>();
     headers.put("Cookie", httpClientRule.getSessionCookieValue());
@@ -87,7 +87,7 @@ public class AuthCacheTTLValidateAllRequestsIT {
 
   protected void doGetRequestToProfileEndpoint(Map<String, String> headers) {
     String baseUrl = "http://localhost:" + port;
-    String profileEndpointPath = "/camunda/api/engine/engine/default/user/demo/profile";
+    String profileEndpointPath = "/orqueio/api/engine/engine/default/user/demo/profile";
     httpClientRule.performRequest( baseUrl + profileEndpointPath, headers);
   }
 

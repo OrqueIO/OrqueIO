@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -41,8 +41,8 @@ public class XmlDomXPathTest {
   @Before
   public void parseXml() {
     element = S("<root><child id=\"child\"><a id=\"a\"/><b id=\"b\"/><a id=\"c\"/></child></root>");
-    elementWithNamespace = S("<root xmlns:bar=\"http://camunda.org\" xmlns:foo=\"http://camunda.com\"><foo:child id=\"child\"><bar:a id=\"a\"/><foo:b id=\"b\"/><a id=\"c\"/></foo:child></root>");
-    elementWithDefaultNamespace = S("<root xmlns=\"http://camunda.com/example\" xmlns:bar=\"http://camunda.org\" xmlns:foo=\"http://camunda.com\"><foo:child id=\"child\"><bar:a id=\"a\"/><foo:b id=\"b\"/><a id=\"c\"/></foo:child></root>");
+    elementWithNamespace = S("<root xmlns:bar=\"http://orqueio.io\" xmlns:foo=\"http://orqueio.io\"><foo:child id=\"child\"><bar:a id=\"a\"/><foo:b id=\"b\"/><a id=\"c\"/></foo:child></root>");
+    elementWithDefaultNamespace = S("<root xmlns=\"http://orqueio.io/example\" xmlns:bar=\"http://orqueio.io\" xmlns:foo=\"http://orqueio.io\"><foo:child id=\"child\"><bar:a id=\"a\"/><foo:b id=\"b\"/><a id=\"c\"/></foo:child></root>");
   }
 
   @Test(expected = SpinXPathException.class)
@@ -184,37 +184,37 @@ public class XmlDomXPathTest {
   @Test
   public void canQueryElementWithNamespace() {
     SpinXmlElement child = elementWithNamespace.xPath("/root/a:child")
-      .ns("a", "http://camunda.com")
+      .ns("a", "http://orqueio.io")
       .element();
 
     assertThat(child.name()).isEqualTo("child");
-    assertThat(child.namespace()).isEqualTo("http://camunda.com");
+    assertThat(child.namespace()).isEqualTo("http://orqueio.io");
     assertThat(child.attr("id").value()).isEqualTo("child");
   }
 
   @Test
   public void canQueryElementWithNamespaceMap() {
     Map<String, String> namespaces = new HashMap<String, String>();
-    namespaces.put("a", "http://camunda.com");
-    namespaces.put("b", "http://camunda.org");
+    namespaces.put("a", "http://orqueio.io");
+    namespaces.put("b", "http://orqueio.io");
 
     SpinXmlElement child = elementWithNamespace.xPath("/root/a:child/b:a")
       .ns(namespaces)
       .element();
 
     assertThat(child.name()).isEqualTo("a");
-    assertThat(child.namespace()).isEqualTo("http://camunda.org");
+    assertThat(child.namespace()).isEqualTo("http://orqueio.io");
     assertThat(child.attr("id").value()).isEqualTo("a");
   }
 
   @Test
   public void canQueryElementWithDefaultNamespace() {
     SpinXmlElement child = elementWithDefaultNamespace.xPath("/:root/a:child")
-      .ns("a", "http://camunda.com")
+      .ns("a", "http://orqueio.io")
       .element();
 
     assertThat(child.name()).isEqualTo("child");
-    assertThat(child.namespace()).isEqualTo("http://camunda.com");
+    assertThat(child.namespace()).isEqualTo("http://orqueio.io");
     assertThat(child.attr("id").value()).isEqualTo("child");
   }
 }

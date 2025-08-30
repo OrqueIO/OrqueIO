@@ -17,7 +17,7 @@
       <property name="authorizationEnabled">true</property>
       <property name="jobExecutorDeploymentAware">true</property>
 
-      <property name="jdbcUrl">jdbc:h2:mem:camunda1;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE</property>
+      <property name="jdbcUrl">jdbc:h2:mem:orqueio1;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE</property>
       <property name="jdbcDriver">org.h2.Driver</property>
       <property name="jdbcUsername">sa</property>
       <property name="jdbcPassword"></property>
@@ -31,7 +31,7 @@
         <class>io.orqueio.bpm.application.impl.event.ProcessApplicationEventListenerPlugin</class>
       </plugin>
 
-      <!-- plugin enabling integration of camunda Spin -->
+      <!-- plugin enabling integration of orqueio Spin -->
       <plugin>
         <class>io.orqueio.spin.plugin.impl.SpinProcessEnginePlugin</class>
       </plugin>
@@ -54,7 +54,7 @@
       <property name="authorizationEnabled">true</property>
       <property name="jobExecutorDeploymentAware">true</property>
 
-      <property name="jdbcUrl">jdbc:h2:mem:camunda1;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE</property>
+      <property name="jdbcUrl">jdbc:h2:mem:orqueio1;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE</property>
       <property name="jdbcDriver">org.h2.Driver</property>
       <property name="jdbcUsername">sa</property>
       <property name="jdbcPassword"></property>
@@ -69,7 +69,7 @@
         <class>io.orqueio.bpm.application.impl.event.ProcessApplicationEventListenerPlugin</class>
       </plugin>
 
-      <!-- plugin enabling integration of camunda Spin -->
+      <!-- plugin enabling integration of orqueio Spin -->
       <plugin>
         <class>io.orqueio.spin.plugin.impl.SpinProcessEnginePlugin</class>
       </plugin>

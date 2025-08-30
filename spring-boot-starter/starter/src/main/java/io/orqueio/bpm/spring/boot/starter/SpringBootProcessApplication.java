@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -32,10 +32,10 @@ import io.orqueio.bpm.container.RuntimeContainerDelegate;
 import io.orqueio.bpm.engine.ProcessEngine;
 import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import io.orqueio.bpm.engine.spring.application.SpringProcessApplication;
-import io.orqueio.bpm.spring.boot.starter.configuration.CamundaDeploymentConfiguration;
+import io.orqueio.bpm.spring.boot.starter.configuration.OrqueioDeploymentConfiguration;
 import io.orqueio.bpm.spring.boot.starter.event.PostDeployEvent;
 import io.orqueio.bpm.spring.boot.starter.event.PreUndeployEvent;
-import io.orqueio.bpm.spring.boot.starter.property.CamundaBpmProperties;
+import io.orqueio.bpm.spring.boot.starter.property.OrqueioBpmProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
@@ -50,8 +50,8 @@ import org.springframework.web.context.ServletContextAware;
 public class SpringBootProcessApplication extends SpringProcessApplication {
 
   @Bean
-  public static CamundaDeploymentConfiguration deploymentConfiguration() {
-    return new CamundaDeploymentConfiguration() {
+  public static OrqueioDeploymentConfiguration deploymentConfiguration() {
+    return new OrqueioDeploymentConfiguration() {
       @Override
       public Set<Resource> getDeploymentResources() {
         return Collections.emptySet();
@@ -75,7 +75,7 @@ public class SpringBootProcessApplication extends SpringProcessApplication {
   protected String contextPath = "/";
 
   @Autowired
-  protected CamundaBpmProperties camundaBpmProperties;
+  protected OrqueioBpmProperties orqueioBpmProperties;
 
   @Autowired
   protected ProcessEngine processEngine;
@@ -89,8 +89,8 @@ public class SpringBootProcessApplication extends SpringProcessApplication {
       .apply(springApplicationName)
       .ifPresent(this::setBeanName);
 
-    if (camundaBpmProperties.getGenerateUniqueProcessApplicationName()) {
-      setBeanName(CamundaBpmProperties.getUniqueName(CamundaBpmProperties.UNIQUE_APPLICATION_NAME_PREFIX));
+    if (orqueioBpmProperties.getGenerateUniqueProcessApplicationName()) {
+      setBeanName(OrqueioBpmProperties.getUniqueName(OrqueioBpmProperties.UNIQUE_APPLICATION_NAME_PREFIX));
     }
 
     String processEngineName = processEngine.getName();

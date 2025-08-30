@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. TOADDLATERCCS this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -21,7 +21,7 @@ package io.orqueio.bpm.container.impl.jboss.extension;
  * Constants used in the model
  * 
  * @author Daniel Meyer
- * @author christian.lipphardt@camunda.com
+ * @author christian.lipphardt@orqueio.com
  */
 public interface ModelConstants {
   
@@ -55,5 +55,5 @@ public interface ModelConstants {
   String KEEPALIVE_TIME = "keepalive-time";
 
   /** The name of our subsystem within the model. */
-  String SUBSYSTEM_NAME = "camunda-bpm-platform";
+  String SUBSYSTEM_NAME = "orqueio-bpm-platform";
 }
