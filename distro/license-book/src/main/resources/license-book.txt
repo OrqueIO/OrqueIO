@@ -3061,7 +3061,7 @@ Licensed under MIT
 Notice file:
 The MIT License (MIT)
 
-Copyright (c) 2019-present TOADDLATERCCS
+Copyright (c) 2019-present Camunda Services GmbH
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -3087,7 +3087,7 @@ THE SOFTWARE.
 
 Licensed under MIT
 Notice file:
-Copyright (c) 2023-present TOADDLATERCCS
+Copyright (c) 2023-present Camunda Services GmbH
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
@@ -3122,7 +3122,7 @@ Licensed under MIT
 Notice file:
 The MIT License (MIT)
 
-Copyright (c) 2022-present TOADDLATERCCS
+Copyright (c) 2022-present Camunda Services GmbH
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -3150,7 +3150,7 @@ Licensed under MIT
 Notice file:
 The MIT License (MIT)
 
-Copyright (c) 2020-present TOADDLATERCCS
+Copyright (c) 2020-present Camunda Services GmbH
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -3179,7 +3179,7 @@ Licensed under MIT
 Notice file:
 The MIT License (MIT)
 
-Copyright (c) 2023-present TOADDLATERCCS
+Copyright (c) 2023-present Camunda Services GmbH
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -3290,7 +3290,7 @@ THE SOFTWARE.
 git+https://github.com/bpmn-io/form-js.git
 Licensed under SEE LICENSE IN LICENSE
 Notice file:
-Copyright (c) 2021-present TOADDLATERCCS
+Copyright (c) 2021-present Camunda Services GmbH
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
@@ -3330,7 +3330,7 @@ OR OTHER DEALINGS IN THE SOFTWARE.
 git+https://github.com/bpmn-io/form-js.git
 Licensed under SEE LICENSE IN LICENSE
 Notice file:
-Copyright (c) 2021-present TOADDLATERCCS
+Copyright (c) 2021-present Camunda Services GmbH
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
@@ -3370,7 +3370,7 @@ OR OTHER DEALINGS IN THE SOFTWARE.
 git+https://github.com/bpmn-io/form-js.git
 Licensed under SEE LICENSE IN LICENSE
 Notice file:
-Copyright (c) 2021-present TOADDLATERCCS
+Copyright (c) 2021-present Camunda Services GmbH
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
@@ -3410,7 +3410,7 @@ OR OTHER DEALINGS IN THE SOFTWARE.
 git+https://github.com/bpmn-io/form-js.git
 Licensed under SEE LICENSE IN LICENSE
 Notice file:
-Copyright (c) 2021-present TOADDLATERCCS
+Copyright (c) 2021-present Camunda Services GmbH
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
@@ -3452,7 +3452,7 @@ Licensed under MIT
 Notice file:
 The MIT License (MIT)
 
-Copyright (c) 2021-present TOADDLATERCCS
+Copyright (c) 2021-present Camunda Services GmbH
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -4743,7 +4743,7 @@ bpmn-font@0.12.1
 https://github.com/bpmn-io/bpmn-font
 Licensed under SIL
 Notice file:
-Copyright (c) 2014-present, TOADDLATERCCS
+Copyright (c) 2014-present, Camunda Services GmbH
 
 This Font Software is licensed under the SIL Open Font License, Version 1.1.
 This license is copied below, and is also available with a FAQ at:
@@ -4843,7 +4843,7 @@ bpmn-js@16.5.0
 https://github.com/bpmn-io/bpmn-js
 Licensed under SEE LICENSE IN LICENSE
 Notice file:
-Copyright (c) 2014-present TOADDLATERCCS
+Copyright (c) 2014-present Camunda Services GmbH
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
@@ -4941,10 +4941,10 @@ orqueio-bpm-webapp@7.23.0-SNAPSHOT
 
 Licensed under 
 Notice file:
-Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
+Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
 under one or more contributor license agreements. See the NOTICE file
 distributed with this work for additional information regarding copyright
-ownership. TOADDLATERCCS this file to you under the Apache License,
+ownership. Camunda licenses this file to you under the Apache License,
 Version 2.0; you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
@@ -4965,7 +4965,7 @@ Licensed under MIT
 Notice file:
 The MIT License (MIT)
 
-Copyright (c) 2022-present TOADDLATERCCS
+Copyright (c) 2022-present Camunda Services GmbH
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -5133,7 +5133,7 @@ cmmn-js@0.20.0
 https://github.com/bpmn-io/cmmn-js
 Licensed under SEE LICENSE IN LICENSE
 Notice file:
-Copyright (c) 2014-present TOADDLATERCCS
+Copyright (c) 2014-present Camunda Services GmbH
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
@@ -5349,7 +5349,7 @@ Licensed under MIT
 Notice file:
 The MIT License (MIT)
 
-Copyright (c) 2014-present TOADDLATERCCS
+Copyright (c) 2014-present Camunda Services GmbH
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -5589,7 +5589,7 @@ dmn-js@15.1.0
 https://github.com/bpmn-io/dmn-js
 Licensed under SEE LICENSE IN LICENSE
 Notice file:
-Copyright (c) 2014-present TOADDLATERCCS
+Copyright (c) 2014-present Camunda Services GmbH
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
@@ -5629,7 +5629,7 @@ dmn-js-decision-table@15.1.0
 https://github.com/bpmn-io/dmn-js
 Licensed under SEE LICENSE IN LICENSE
 Notice file:
-Copyright (c) 2014-present TOADDLATERCCS
+Copyright (c) 2014-present Camunda Services GmbH
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
@@ -5669,7 +5669,7 @@ dmn-js-drd@15.1.0
 https://github.com/bpmn-io/dmn-js
 Licensed under SEE LICENSE IN LICENSE
 Notice file:
-Copyright (c) 2014-present TOADDLATERCCS
+Copyright (c) 2014-present Camunda Services GmbH
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
@@ -5709,7 +5709,7 @@ dmn-js-literal-expression@15.1.0
 https://github.com/bpmn-io/dmn-js
 Licensed under SEE LICENSE IN LICENSE
 Notice file:
-Copyright (c) 2014-present TOADDLATERCCS
+Copyright (c) 2014-present Camunda Services GmbH
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
@@ -5777,7 +5777,7 @@ dmn-js-shared@15.1.0
 https://github.com/bpmn-io/dmn-js
 Licensed under SEE LICENSE IN LICENSE
 Notice file:
-Copyright (c) 2014-present TOADDLATERCCS
+Copyright (c) 2014-present Camunda Services GmbH
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
@@ -6658,7 +6658,7 @@ feelers@1.4.0
 
 Licensed under MIT
 Notice file:
-Copyright (c) 2023-present TOADDLATERCCS
+Copyright (c) 2023-present Camunda Services GmbH
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
@@ -7694,7 +7694,7 @@ Licensed under MIT
 Notice file:
 The MIT License (MIT)
 
-Copyright (c) 2014-present TOADDLATERCCS
+Copyright (c) 2014-present Camunda Services GmbH
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

@@ -1,8 +1,8 @@
 /*
- * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
+ * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. TOADDLATERCCS this file to you under the Apache License,
+ * ownership. Camunda licenses this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -37,7 +37,7 @@ import org.junit.runner.RunWith;
  * FAILING ATM!
  * Expected a job with an exception but it isn't left in db with 0 retries, instead it is completely removed from the job table!
  *
- * @author christian.lipphardt@orqueio.com
+ * @author christian.lipphardt@camunda.com
  */
 @RunWith(Arquillian.class)
 public class FailingJobBoundaryTimerWithDelegateVariablesTest extends AbstractFoxPlatformIntegrationTest {

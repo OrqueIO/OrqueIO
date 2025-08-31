@@ -23,7 +23,7 @@
   @memberof cam.cockpit.filter
   @type angular.filter
 
-  @author Roman Smirnov <roman.smirnov@orqueio.com>
+  @author Roman Smirnov <roman.smirnov@camunda.com>
  */
 'use strict';
 
