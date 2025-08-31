@@ -211,7 +211,7 @@
               <comparisonVersion>${spin.version.old}</comparisonVersion>
               <logResults>true</logResults>
               <excludes>
-                <exclude>org/orqueio/spin/impl/**</exclude>
+                <exclude>io/orqueio/spin/impl/**</exclude>
               </excludes>
             </configuration>
             <executions>

@@ -47,11 +47,11 @@ public class TestPaAsEjbJar extends AbstractFoxPlatformIntegrationTest {
    *        |-- NamedCdiBean.class
    *        |-- AbstractFoxPlatformIntegrationTest.class
    *        |-- TestPaAsEjbJar.class
-   *        |-- org/camunda/bpm/integrationtest/deployment/ear/paAsEjbJar-process.bpmn20.xml
+   *        |-- io/orqueio/bpm/integrationtest/deployment/ear/paAsEjbJar-process.bpmn20.xml
    *        |-- META-INF/processes.xml
    *        |-- META-INF/beans.xml
    *
-   *    |-- camunda-engine-cdi.jar
+   *    |-- orqueio-engine-cdi.jar
    *        |-- META-INF/MANIFEST.MF
    *
    */
@@ -63,9 +63,9 @@ public class TestPaAsEjbJar extends AbstractFoxPlatformIntegrationTest {
       .addClass(NamedCdiBean.class)
       .addClass(AbstractFoxPlatformIntegrationTest.class)
       .addClass(TestPaAsEjbJar.class)
-      .addAsResource("org/camunda/bpm/integrationtest/deployment/ear/paAsEjbJar-process.bpmn20.xml")
+      .addAsResource("io/orqueio/bpm/integrationtest/deployment/ear/paAsEjbJar-process.bpmn20.xml")
       .addAsResource("META-INF/processes.xml", "META-INF/processes.xml")
-      .addAsManifestResource("org/camunda/bpm/integrationtest/beans.xml", "beans.xml");
+      .addAsManifestResource("io/orqueio/bpm/integrationtest/beans.xml", "beans.xml");
 
     return ShrinkWrap.create(EnterpriseArchive.class, "paAsEjbModule.ear")
       .addAsModule(processArchive1Jar)

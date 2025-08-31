@@ -128,9 +128,9 @@ public class ProcessDefinitionRestServiceTenantCheckTest extends AbstractCockpit
   }
 
   @Test
-  public void queryStatisticsWithCamundaAdmin() {
+  public void queryStatisticsWithOrqueioAdmin() {
     // given
-    identityService.setAuthentication("user", Collections.singletonList(Groups.CAMUNDA_ADMIN), null);
+    identityService.setAuthentication("user", Collections.singletonList(Groups.ORQUEIO_ADMIN), null);
 
     // when
     List<ProcessDefinitionStatisticsDto> actual = resource.queryStatistics(uriInfo, null, null);
@@ -213,9 +213,9 @@ public class ProcessDefinitionRestServiceTenantCheckTest extends AbstractCockpit
   }
 
   @Test
-  public void getStatisticsCountWithCamundaAdmin() {
+  public void getStatisticsCountWithOrqueioAdmin() {
     // given
-    identityService.setAuthentication("user", Collections.singletonList(Groups.CAMUNDA_ADMIN), null);
+    identityService.setAuthentication("user", Collections.singletonList(Groups.ORQUEIO_ADMIN), null);
 
     // when
     CountResultDto actual = resource.getStatisticsCount(uriInfo);

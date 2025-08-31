@@ -114,9 +114,9 @@ public class ProcessInstanceRestServiceTenantCheckTest extends AbstractCockpitPl
   }
 
   @Test
-  public void queryCountWithCamundaAdmin() {
+  public void queryCountWithOrqueioAdmin() {
 
-    identityService.setAuthentication("user", Collections.singletonList(Groups.CAMUNDA_ADMIN), null);
+    identityService.setAuthentication("user", Collections.singletonList(Groups.ORQUEIO_ADMIN), null);
 
     CountResultDto result = resource.queryProcessInstancesCount(queryParameter);
     assertThat(result).isNotNull();
@@ -166,9 +166,9 @@ public class ProcessInstanceRestServiceTenantCheckTest extends AbstractCockpitPl
   }
 
   @Test
-  public void queryWithContainingIncidentsWithCamundaAdmin() {
+  public void queryWithContainingIncidentsWithOrqueioAdmin() {
 
-    identityService.setAuthentication("user", Collections.singletonList(Groups.CAMUNDA_ADMIN), null);
+    identityService.setAuthentication("user", Collections.singletonList(Groups.ORQUEIO_ADMIN), null);
 
     List<ProcessInstanceDto> result = resource.queryProcessInstances(queryParameter, null, null);
     assertThat(result).isNotEmpty();

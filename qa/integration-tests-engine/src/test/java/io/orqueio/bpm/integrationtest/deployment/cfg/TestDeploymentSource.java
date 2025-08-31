@@ -36,7 +36,7 @@ public class TestDeploymentSource extends AbstractFoxPlatformIntegrationTest {
   @Deployment
   public static WebArchive processArchive() {
     return initWebArchiveDeployment()
-        .addAsResource("org/camunda/bpm/integrationtest/deployment/cfg/invoice-it.bpmn20.xml");
+        .addAsResource("io/orqueio/bpm/integrationtest/deployment/cfg/invoice-it.bpmn20.xml");
   }
 
   @Test

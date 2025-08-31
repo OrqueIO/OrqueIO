@@ -50,7 +50,7 @@ public class PaContextSwitchCustomSerializerTest extends AbstractFoxPlatformInte
         .addClass(XmlSerializable.class)
         .addClass(XmlSerializableJsonDeserializer.class)
         .addClass(XmlSerializableJsonSerializer.class)
-        .addAsResource("org/camunda/bpm/integrationtest/functional/spin/paContextSwitchCustomSerializer.bpmn20.xml")
+        .addAsResource("io/orqueio/bpm/integrationtest/functional/spin/paContextSwitchCustomSerializer.bpmn20.xml")
         .addClass(CustomDataFormatConfigurator.class)
         .addAsServiceProvider(DataFormatConfigurator.class, CustomDataFormatConfigurator.class);
 
@@ -62,7 +62,7 @@ public class PaContextSwitchCustomSerializerTest extends AbstractFoxPlatformInte
   @Deployment(name = "pa4")
   public static WebArchive createDeployment2() {
     WebArchive webArchive = ShrinkWrap.create(WebArchive.class, "pa4.war")
-        .addAsWebInfResource("org/camunda/bpm/integrationtest/beans.xml", "beans.xml")
+        .addAsWebInfResource("io/orqueio/bpm/integrationtest/beans.xml", "beans.xml")
         .addAsLibraries(DeploymentHelper.getEngineCdi())
         .addAsResource("META-INF/processes.xml")
         .addClass(AbstractFoxPlatformIntegrationTest.class)

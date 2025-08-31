@@ -39,7 +39,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class TaskFilterPropertiesTest {
 
   @Rule
-  public ProcessEngineRule engineRule = new ProcessEngineRule("camunda.cfg.xml");
+  public ProcessEngineRule engineRule = new ProcessEngineRule("orqueio.cfg.xml");
 
   @ScenarioUnderTest("initTaskFilterProperties.1")
   @Test

@@ -9,7 +9,7 @@
     </encoder>
   </appender>
 
-  <!-- camunda -->
+  <!-- orqueio -->
   <logger name="io.orqueio" level="info" />
 
   <!-- common dependencies -->

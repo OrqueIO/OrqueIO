@@ -31,7 +31,7 @@ public class SetRemovalTimeToProcessInstanceScenario {
 
   @Deployment
   public static String deployOneTask() {
-    return "org/camunda/bpm/qa/upgrade/batch/SetRemovalTimeToProcessInstanceScenario.oneTaskProcess.bpmn20.xml";
+    return "io/orqueio/bpm/qa/upgrade/batch/SetRemovalTimeToProcessInstanceScenario.oneTaskProcess.bpmn20.xml";
   }
 
   @DescribesScenario("createSetRetriesBatch")

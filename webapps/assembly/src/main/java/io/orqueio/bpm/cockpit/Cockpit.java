@@ -21,7 +21,7 @@ import io.orqueio.bpm.cockpit.db.QueryService;
 import io.orqueio.bpm.engine.ProcessEngine;
 
 /**
- * <p>Provides access to the camunda cockpit core services.</p>
+ * <p>Provides access to the orqueio cockpit core services.</p>
  *
  * @author roman.smirnov
  * @author nico.rehwaldt
@@ -30,7 +30,7 @@ public class Cockpit {
 
   /**
    * The {@link CockpitRuntimeDelegate} is an delegate that will be
-   * initialized by bootstrapping camunda cockpit with an specific
+   * initialized by bootstrapping orqueio cockpit with an specific
    * instance
    */
   protected static CockpitRuntimeDelegate COCKPIT_RUNTIME_DELEGATE;

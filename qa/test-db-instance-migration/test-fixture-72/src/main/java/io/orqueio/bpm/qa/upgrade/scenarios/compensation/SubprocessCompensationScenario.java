@@ -32,12 +32,12 @@ public class SubprocessCompensationScenario {
 
   @Deployment
   public static String deployProcess() {
-    return "org/camunda/bpm/qa/upgrade/compensation/subprocessCompensationProcess.bpmn20.xml";
+    return "io/orqueio/bpm/qa/upgrade/compensation/subprocessCompensationProcess.bpmn20.xml";
   }
 
   @Deployment
   public static String deployConcurrentCompensationProcess() {
-    return "org/camunda/bpm/qa/upgrade/compensation/subprocessConcurrentCompensationProcess.bpmn20.xml";
+    return "io/orqueio/bpm/qa/upgrade/compensation/subprocessConcurrentCompensationProcess.bpmn20.xml";
   }
 
   @DescribesScenario("init")

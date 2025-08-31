@@ -30,7 +30,7 @@ public class ParallelMultiInstanceSubprocessScenario {
 
   @Deployment
   public static String deployProcessWithNonInterruptingBoundaryEvent() {
-    return "org/camunda/bpm/qa/upgrade/multiinstance/parallelMultiInstanceSubprocessNonInterruptingBoundaryEvent.bpmn20.xml";
+    return "io/orqueio/bpm/qa/upgrade/multiinstance/parallelMultiInstanceSubprocessNonInterruptingBoundaryEvent.bpmn20.xml";
   }
 
   @DescribesScenario("initNonInterruptingBoundaryEvent")

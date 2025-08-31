@@ -57,7 +57,7 @@
     <endEvent id="Rechnungseingang_abgearbeitet_174" name="Rechnungseingang abgearbeitet">
       <incoming>SequenceFlow_1</incoming>
     </endEvent>
-    <serviceTask id="PDF_aus_SVN_entfernen_160" orqueio:class="com.orqueio.fox.showcase.invoice.de.PDFToSVNDelegate" name="PDF in SVN ablegen" implementation="##WebService">
+    <serviceTask id="PDF_aus_SVN_entfernen_160" orqueio:class="io.orqueio.fox.showcase.invoice.de.PDFToSVNDelegate" name="PDF in SVN ablegen" implementation="##WebService">
       <incoming>sequenceFlow_179</incoming>
       <outgoing>SequenceFlow_1</outgoing>
     </serviceTask>

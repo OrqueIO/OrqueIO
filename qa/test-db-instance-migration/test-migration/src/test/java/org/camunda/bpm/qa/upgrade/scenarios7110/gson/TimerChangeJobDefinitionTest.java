@@ -44,7 +44,7 @@ public class TimerChangeJobDefinitionTest {
   protected static final Date FIXED_DATE_FOUR = new Date(1363607700000L);
 
   @Rule
-  public ProcessEngineRule engineRule = new ProcessEngineRule("camunda.cfg.xml");
+  public ProcessEngineRule engineRule = new ProcessEngineRule("orqueio.cfg.xml");
 
   @After
   public void activateDefinitions() {

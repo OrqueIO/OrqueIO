@@ -33,7 +33,7 @@ import io.orqueio.bpm.qa.upgrade.DescribesScenario;
 import io.orqueio.bpm.qa.upgrade.ScenarioSetup;
 
 /**
- * This actually simulates creation of a job in Camunda 7.0;
+ * This actually simulates creation of a job in Orqueio 7.0;
  * we use 7.3
  *
  * @author Thorben Lindhauer

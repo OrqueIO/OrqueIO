@@ -33,7 +33,7 @@ public class SetJobRetriesWithDueDateScenario {
 
   @Deployment
   public static String deployOneTask() {
-    return "org/camunda/bpm/qa/upgrade/job/SetJobRetriesWithDueDateScenario.oneTaskProcess.bpmn20.xml";
+    return "io/orqueio/bpm/qa/upgrade/job/SetJobRetriesWithDueDateScenario.oneTaskProcess.bpmn20.xml";
   }
 
   @DescribesScenario("createSetRetriesBatch")

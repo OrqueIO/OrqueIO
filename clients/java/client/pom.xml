@@ -135,12 +135,12 @@
     </dependency>
 
     <dependency>
-      <groupId>io.orqueio.bpm</groupId>
-      <artifactId>orqueio-engine-rest-jakarta</artifactId>
+      <groupId>org.camunda.bpm</groupId>
+      <artifactId>camunda-engine-rest-jakarta</artifactId>
       <scope>test</scope>
       <type>war</type>
       <classifier>tomcat</classifier>
-      <version>${project.version}</version>
+      <version>7.24.0-SNAPSHOT</version>
     </dependency>
 
     <dependency>
@@ -260,6 +260,7 @@
           <skip>${skipTests}</skip>
           <!-- Container configuration -->
           <container>
+            <timeout>600000</timeout>
             <type>installed</type>
             <containerId>tomcat10x</containerId>
             <append>false</append>
@@ -286,8 +287,8 @@
           </configuration>
           <deployables>
             <deployable>
-              <groupId>io.orqueio.bpm</groupId>
-              <artifactId>orqueio-engine-rest-jakarta</artifactId>
+              <groupId>org.camunda.bpm</groupId>
+              <artifactId>camunda-engine-rest-jakarta</artifactId>
               <type>war</type>
               <classifier>tomcat</classifier>
               <pingURL>
@@ -304,7 +305,6 @@
               <type>war</type>
             </deployable>
           </deployables>
-          <wait>false</wait>
         </configuration>
       </plugin>
 

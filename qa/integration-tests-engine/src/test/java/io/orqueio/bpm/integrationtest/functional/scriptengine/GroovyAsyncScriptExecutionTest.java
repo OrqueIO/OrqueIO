@@ -37,12 +37,12 @@ public class GroovyAsyncScriptExecutionTest extends AbstractFoxPlatformIntegrati
       "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n" +
       "<definitions id=\"definitions\" \r\n" +
       "  xmlns=\"http://www.omg.org/spec/BPMN/20100524/MODEL\"\r\n" +
-      "  xmlns:camunda=\"http://camunda.org/schema/1.0/bpmn\"\r\n" +
+      "  xmlns:orqueio=\"http://orqueio.io/schema/1.0/bpmn\"\r\n" +
       "  targetNamespace=\"Examples\">\r\n" +
-      "  <process id=\"process\" isExecutable=\"true\" camunda:historyTimeToLive=\"P180D\">\r\n" +
+      "  <process id=\"process\" isExecutable=\"true\" orqueio:historyTimeToLive=\"P180D\">\r\n" +
       "    <startEvent id=\"theStart\" />\r\n" +
       "    <sequenceFlow id=\"flow1\" sourceRef=\"theStart\" targetRef=\"theScriptTask\" />\r\n" +
-      "    <scriptTask id=\"theScriptTask\" name=\"Execute script\" scriptFormat=\"groovy\" camunda:asyncBefore=\"true\">\r\n" +
+      "    <scriptTask id=\"theScriptTask\" name=\"Execute script\" scriptFormat=\"groovy\" orqueio:asyncBefore=\"true\">\r\n" +
       "      <script>execution.setVariable(\"foo\", S(\"&lt;bar /&gt;\").name())</script>\r\n" +
       "    </scriptTask>\r\n" +
       "    <sequenceFlow id=\"flow2\" sourceRef=\"theScriptTask\" targetRef=\"theTask\" />\r\n" +
@@ -55,7 +55,7 @@ public class GroovyAsyncScriptExecutionTest extends AbstractFoxPlatformIntegrati
   @Deployment(name="clientDeployment")
   public static WebArchive clientDeployment() {
     WebArchive deployment = ShrinkWrap.create(WebArchive.class, "client.war")
-            .addAsWebInfResource("org/camunda/bpm/integrationtest/beans.xml", "beans.xml")
+            .addAsWebInfResource("io/orqueio/bpm/integrationtest/beans.xml", "beans.xml")
             .addClass(AbstractFoxPlatformIntegrationTest.class)
             .addAsLibraries(DeploymentHelper.getEngineCdi());
     TestContainer.addContainerSpecificResourcesForNonPa(deployment);

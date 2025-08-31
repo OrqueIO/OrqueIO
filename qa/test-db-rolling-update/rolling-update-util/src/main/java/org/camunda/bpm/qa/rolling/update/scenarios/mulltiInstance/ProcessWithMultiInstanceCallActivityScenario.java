@@ -26,7 +26,7 @@ import io.orqueio.bpm.qa.upgrade.Times;
 
 /**
  *
- * @author Christopher Zell <christopher.zell@camunda.com>
+ * @author Christopher Zell <christopher.zell@orqueio.com>
  */
 public class ProcessWithMultiInstanceCallActivityScenario {
 
@@ -34,12 +34,12 @@ public class ProcessWithMultiInstanceCallActivityScenario {
 
   @Deployment
   public static String deploy() {
-    return "org/camunda/bpm/qa/rolling/update/processWithMultiInstanceCallActivity.bpmn20.xml";
+    return "io/orqueio/bpm/qa/rolling/update/processWithMultiInstanceCallActivity.bpmn20.xml";
   }
 
   @Deployment
   public static String deploySubProcess() {
-    return "org/camunda/bpm/qa/rolling/update/simpleSubProcess.bpmn20.xml";
+    return "io/orqueio/bpm/qa/rolling/update/simpleSubProcess.bpmn20.xml";
   }
 
   @DescribesScenario("init")

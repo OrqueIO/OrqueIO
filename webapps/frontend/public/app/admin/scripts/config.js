@@ -1,8 +1,8 @@
 /*
- * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
+ * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. TOADDLATERCCS this file to you under the Apache License,
+ * ownership. Camunda licenses this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -22,7 +22,7 @@ export default {
   //   vendor: 'Company'
   // },
   // // custom libraries and scripts loading and initialization,
-  // // see: http://docs.camunda.org/guides/user-guide/#tasklist-customizing-custom-scripts
+  // // see: http://docs.orqueio.io/guides/user-guide/#tasklist-customizing-custom-scripts
   // customScripts: [
   //   // If you have a folder called 'my-custom-script' (in the 'admin' folder)
   //   // with a file called 'customScript.js' in it

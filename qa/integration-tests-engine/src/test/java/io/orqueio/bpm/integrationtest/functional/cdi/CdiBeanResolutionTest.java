@@ -49,14 +49,14 @@ public class CdiBeanResolutionTest extends AbstractFoxPlatformIntegrationTest {
   public static WebArchive processArchive() {
     return initWebArchiveDeployment()
             .addClass(ExampleBean.class)
-            .addAsResource("org/camunda/bpm/integrationtest/functional/cdi/CdiBeanResolutionTest.testResolveBean.bpmn20.xml")
-            .addAsResource("org/camunda/bpm/integrationtest/functional/cdi/CdiBeanResolutionTest.testResolveBeanFromJobExecutor.bpmn20.xml");
+            .addAsResource("io/orqueio/bpm/integrationtest/functional/cdi/CdiBeanResolutionTest.testResolveBean.bpmn20.xml")
+            .addAsResource("io/orqueio/bpm/integrationtest/functional/cdi/CdiBeanResolutionTest.testResolveBeanFromJobExecutor.bpmn20.xml");
   }
 
   @Deployment(name="clientDeployment")
   public static WebArchive clientDeployment() {
     WebArchive deployment = ShrinkWrap.create(WebArchive.class, "client.war")
-            .addAsWebInfResource("org/camunda/bpm/integrationtest/beans.xml", "beans.xml")
+            .addAsWebInfResource("io/orqueio/bpm/integrationtest/beans.xml", "beans.xml")
             .addClass(AbstractFoxPlatformIntegrationTest.class)
             .addAsLibraries(DeploymentHelper.getEngineCdi());
 

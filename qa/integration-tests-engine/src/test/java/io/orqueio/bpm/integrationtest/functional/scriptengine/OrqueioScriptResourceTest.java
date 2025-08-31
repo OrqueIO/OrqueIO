@@ -38,8 +38,8 @@ public class OrqueioScriptResourceTest extends AbstractFoxPlatformIntegrationTes
   public static WebArchive processArchive() {
 
     return initWebArchiveDeployment()
-      .addAsResource("org/camunda/bpm/integrationtest/functional/scriptengine/CamundaScriptResourceTest.examplescript.js", "CamundaScriptResourceTest.examplescript.js")
-      .addAsResource("org/camunda/bpm/integrationtest/functional/scriptengine/CamundaScriptResourceTest.exampleprocess.bpmn", "CamundaScriptResourceTest.exampleprocess.bpmn");
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/scriptengine/OrqueioScriptResourceTest.examplescript.js", "OrqueioScriptResourceTest.examplescript.js")
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/scriptengine/OrqueioScriptResourceTest.exampleprocess.bpmn", "OrqueioScriptResourceTest.exampleprocess.bpmn");
   }
 
   @Test

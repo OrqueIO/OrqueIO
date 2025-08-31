@@ -1,8 +1,8 @@
 /*
- * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
+ * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. TOADDLATERCCS this file to you under the Apache License,
+ * ownership. Camunda licenses this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -20,7 +20,7 @@
 var Base = require('./../base');
 
 module.exports = Base.extend({
-  url: '/camunda/app/admin/default/#/tenant-create',
+  url: '/orqueio/app/admin/default/#/tenant-create',
 
   newTenantIdInput: function(inputValue) {
     var inputField = element(by.model('tenant.id'));

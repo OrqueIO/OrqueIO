@@ -61,23 +61,23 @@ public class AuthorizationTest {
   }
 
   @Test
-  public void testDefaultAuthorizationQueryForCamundaAdminOnUpgrade() {
+  public void testDefaultAuthorizationQueryForOrqueioAdminOnUpgrade() {
 
     processEngineConfiguration.setAuthorizationEnabled(true);
 
     assertEquals(1, authorizationService.createAuthorizationQuery()
       .resourceType(Resources.TENANT)
-      .groupIdIn(Groups.CAMUNDA_ADMIN)
+      .groupIdIn(Groups.ORQUEIO_ADMIN)
       .hasPermission(Permissions.ALL).count());
 
     assertEquals(1, authorizationService.createAuthorizationQuery()
       .resourceType(Resources.TENANT_MEMBERSHIP)
-      .groupIdIn(Groups.CAMUNDA_ADMIN)
+      .groupIdIn(Groups.ORQUEIO_ADMIN)
       .hasPermission(Permissions.ALL).count());
 
     assertEquals(1, authorizationService.createAuthorizationQuery()
       .resourceType(Resources.BATCH)
-      .groupIdIn(Groups.CAMUNDA_ADMIN)
+      .groupIdIn(Groups.ORQUEIO_ADMIN)
       .hasPermission(Permissions.ALL).count());
 
   }
@@ -87,11 +87,11 @@ public class AuthorizationTest {
   // Update: Upgrading to 1.4.190 did not help, still failing
   @Test
   @RequiredDatabase(excludes = DbSqlSessionFactory.H2)
-  public void testDefaultAuthorizationForCamundaAdminOnUpgrade() {
+  public void testDefaultAuthorizationForOrqueioAdminOnUpgrade() {
 
     processEngineConfiguration.setAuthorizationEnabled(true);
-    assertEquals(true,authorizationService.isUserAuthorized(null, Collections.singletonList(Groups.CAMUNDA_ADMIN), Permissions.ALL, Resources.TENANT));
-    assertEquals(true,authorizationService.isUserAuthorized(null, Collections.singletonList(Groups.CAMUNDA_ADMIN), Permissions.ALL, Resources.TENANT_MEMBERSHIP));
-    assertEquals(true,authorizationService.isUserAuthorized(null, Collections.singletonList(Groups.CAMUNDA_ADMIN), Permissions.ALL, Resources.BATCH));
+    assertEquals(true,authorizationService.isUserAuthorized(null, Collections.singletonList(Groups.ORQUEIO_ADMIN), Permissions.ALL, Resources.TENANT));
+    assertEquals(true,authorizationService.isUserAuthorized(null, Collections.singletonList(Groups.ORQUEIO_ADMIN), Permissions.ALL, Resources.TENANT_MEMBERSHIP));
+    assertEquals(true,authorizationService.isUserAuthorized(null, Collections.singletonList(Groups.ORQUEIO_ADMIN), Permissions.ALL, Resources.BATCH));
   }
 }

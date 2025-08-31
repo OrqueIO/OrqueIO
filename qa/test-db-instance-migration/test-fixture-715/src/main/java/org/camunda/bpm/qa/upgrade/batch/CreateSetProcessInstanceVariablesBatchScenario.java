@@ -32,7 +32,7 @@ public class CreateSetProcessInstanceVariablesBatchScenario {
 
   @Deployment
   public static String modelDeployment() {
-    return "org/camunda/bpm/qa/upgrade/batch/oneTaskProcess.bpmn20.xml";
+    return "io/orqueio/bpm/qa/upgrade/batch/oneTaskProcess.bpmn20.xml";
   }
 
   @DescribesScenario("createSeedCreatedScenario")

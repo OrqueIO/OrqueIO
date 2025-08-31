@@ -131,9 +131,9 @@ public class IncidentRestServiceTenantCheckTest extends AbstractCockpitPluginTes
   }
 
   @Test
-  public void queryIncidentsByProcessInstanceIdsWithCamundaAdmin() {
+  public void queryIncidentsByProcessInstanceIdsWithOrqueioAdmin() {
 
-    identityService.setAuthentication("user", Collections.singletonList(Groups.CAMUNDA_ADMIN), null);
+    identityService.setAuthentication("user", Collections.singletonList(Groups.ORQUEIO_ADMIN), null);
 
 
     List<IncidentDto> result = resource.queryIncidents(queryParameter, null, null);

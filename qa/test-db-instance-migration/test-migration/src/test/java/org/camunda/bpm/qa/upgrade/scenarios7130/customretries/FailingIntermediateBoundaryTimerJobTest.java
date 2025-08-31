@@ -38,7 +38,7 @@ import org.junit.Test;
 public class FailingIntermediateBoundaryTimerJobTest {
 
   @Rule
-  public ProcessEngineRule engineRule = new ProcessEngineRule("camunda.cfg.xml");
+  public ProcessEngineRule engineRule = new ProcessEngineRule("orqueio.cfg.xml");
 
   ManagementService managementService;
 

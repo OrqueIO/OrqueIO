@@ -46,7 +46,7 @@ public class TestJarDeployment extends AbstractFoxPlatformIntegrationTest {
       .addClass(AbstractFoxPlatformIntegrationTest.class)
       .addClass(DefaultEjbProcessApplication.class)
       .addAsResource("META-INF/processes.xml", "META-INF/processes.xml")
-      .addAsResource("org/camunda/bpm/integrationtest/testDeployProcessArchive.bpmn20.xml");
+      .addAsResource("io/orqueio/bpm/integrationtest/testDeployProcessArchive.bpmn20.xml");
   }
   
   @Test

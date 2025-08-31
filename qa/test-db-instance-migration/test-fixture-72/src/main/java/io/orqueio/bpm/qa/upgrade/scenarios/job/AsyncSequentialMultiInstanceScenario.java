@@ -30,12 +30,12 @@ public class AsyncSequentialMultiInstanceScenario {
 
   @Deployment
   public static String deployAsyncBeforeProcess() {
-    return "org/camunda/bpm/qa/upgrade/job/asyncBeforeSequentialMultiInstanceSubprocess.bpmn20.xml";
+    return "io/orqueio/bpm/qa/upgrade/job/asyncBeforeSequentialMultiInstanceSubprocess.bpmn20.xml";
   }
 
   @Deployment
   public static String deployAsyncBeforeTask() {
-    return "org/camunda/bpm/qa/upgrade/job/asyncBeforeSequentialMultiInstanceTask.bpmn20.xml";
+    return "io/orqueio/bpm/qa/upgrade/job/asyncBeforeSequentialMultiInstanceTask.bpmn20.xml";
   }
 
   @DescribesScenario("initAsyncBeforeSubprocess")

@@ -24,12 +24,12 @@ public class AsyncJoinScenario {
 
   @Deployment
   public static String modelParallelDeployment() {
-    return "org/camunda/bpm/qa/upgrade/pvm/asyncParallelGateway.bpmn20.xml";
+    return "io/orqueio/bpm/qa/upgrade/pvm/asyncParallelGateway.bpmn20.xml";
   }
   
   @Deployment
   public static String modelInclusiveDeployment() {
-    return "org/camunda/bpm/qa/upgrade/pvm/asyncInclusiveGateway.bpmn20.xml";
+    return "io/orqueio/bpm/qa/upgrade/pvm/asyncInclusiveGateway.bpmn20.xml";
   }
 
   @DescribesScenario("asyncJoinParallel")

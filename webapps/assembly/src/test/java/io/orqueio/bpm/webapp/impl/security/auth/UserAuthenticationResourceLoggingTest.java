@@ -41,7 +41,7 @@ import org.springframework.mock.web.MockHttpServletRequest;
 public class UserAuthenticationResourceLoggingTest {
 
   @Rule
-  public ProcessEngineRule processEngineRule = new ProcessEngineRule("camunda-test-engine.cfg.xml");
+  public ProcessEngineRule processEngineRule = new ProcessEngineRule("orqueio-test-engine.cfg.xml");
   @Rule
   public ProcessEngineLoggingRule loggingRule = new ProcessEngineLoggingRule().watch("io.orqueio.bpm.webapp")
       .level(Level.INFO);

@@ -46,6 +46,9 @@ public class OrqueioBpmVersionTest {
   @Test
   public void currentVersion() {
     final OrqueioBpmVersion version =  new OrqueioBpmVersion();
+    if (currentVersion == null) {
+      currentVersion = "";
+    }
     assertThat(version.isEnterprise()).isFalse();
     assertThat(version.get()).startsWith(currentVersion);
 

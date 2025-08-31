@@ -31,7 +31,7 @@ import org.junit.runner.RunWith;
 
 
 /**
- * This test verifies that a process archive packaging the Camunda Platform client
+ * This test verifies that a process archive packaging the Orqueio Platform client
  * can be packaged inside an EAR application.
  *
  *
@@ -50,7 +50,7 @@ public class TestFoxPlatformClientAsLibInWebModule extends AbstractFoxPlatformIn
    *            |-- fox-platform-client.jar
    *        |-- WEB-INF/classes
    *            |-- META-INF/processes.xml
-   *        |-- org/camunda/bpm/integrationtest/testDeployProcessArchive.bpmn20.xml
+   *        |-- io/orqueio/bpm/integrationtest/testDeployProcessArchive.bpmn20.xml
    *
    */
   @Deployment
@@ -58,7 +58,7 @@ public class TestFoxPlatformClientAsLibInWebModule extends AbstractFoxPlatformIn
 
     // this creates the process archive as a WAR file
     WebArchive processArchive = initWebArchiveDeployment()
-      .addAsResource("org/camunda/bpm/integrationtest/testDeployProcessArchive.bpmn20.xml")
+      .addAsResource("io/orqueio/bpm/integrationtest/testDeployProcessArchive.bpmn20.xml")
       .addClass(TestFoxPlatformClientAsLibInWebModule.class);
 
     // this packages the WAR file inside an EAR file

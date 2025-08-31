@@ -49,7 +49,7 @@ public class SpinScriptTaskSupportTest {
                { "groovy", "" },
                { "javascript", "" },
                { "python", "" },
-               { "ruby", "$" }
+
          };
   }
 

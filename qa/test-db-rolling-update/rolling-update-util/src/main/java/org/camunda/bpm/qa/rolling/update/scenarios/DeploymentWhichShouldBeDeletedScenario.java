@@ -24,7 +24,7 @@ import io.orqueio.bpm.qa.upgrade.Times;
 
 /**
  *
- * @author Christopher Zell <christopher.zell@camunda.com>
+ * @author Christopher Zell <christopher.zell@orqueio.com>
  */
 public class DeploymentWhichShouldBeDeletedScenario {
 
@@ -32,7 +32,7 @@ public class DeploymentWhichShouldBeDeletedScenario {
 
   @Deployment
   public static String deploy() {
-    return "org/camunda/bpm/qa/rolling/update/processWithAsyncServiceTask.bpmn20.xml";
+    return "io/orqueio/bpm/qa/rolling/update/processWithAsyncServiceTask.bpmn20.xml";
   }
 
   @DescribesScenario("init")

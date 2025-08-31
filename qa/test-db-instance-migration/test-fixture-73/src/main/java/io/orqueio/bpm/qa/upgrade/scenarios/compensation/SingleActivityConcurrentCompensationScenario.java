@@ -32,7 +32,7 @@ public class SingleActivityConcurrentCompensationScenario {
 
   @Deployment
   public static String deployProcess() {
-    return "org/camunda/bpm/qa/upgrade/compensation/concurrentCompensationProcess.bpmn20.xml";
+    return "io/orqueio/bpm/qa/upgrade/compensation/concurrentCompensationProcess.bpmn20.xml";
   }
 
   @DescribesScenario("init")

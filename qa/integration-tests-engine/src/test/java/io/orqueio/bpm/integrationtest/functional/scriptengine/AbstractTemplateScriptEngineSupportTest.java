@@ -44,12 +44,12 @@ public abstract class AbstractTemplateScriptEngineSupportTest extends AbstractFo
 
   protected static StringAsset createScriptTaskProcess(String scriptFormat, String scriptText) {
     BpmnModelInstance modelInstance = Bpmn.createExecutableProcess(PROCESS_ID)
-        .camundaHistoryTimeToLive(180)
+        .orqueioHistoryTimeToLive(180)
       .startEvent()
       .scriptTask()
         .scriptFormat(scriptFormat)
         .scriptText(scriptText)
-        .camundaResultVariable(RESULT_VARIABLE)
+        .orqueioResultVariable(RESULT_VARIABLE)
       .userTask()
       .endEvent()
       .done();

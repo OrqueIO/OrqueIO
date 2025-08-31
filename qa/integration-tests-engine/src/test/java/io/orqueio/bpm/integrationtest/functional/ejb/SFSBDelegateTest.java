@@ -43,8 +43,8 @@ public class SFSBDelegateTest extends AbstractFoxPlatformIntegrationTest {
     return initWebArchiveDeployment()
       .addClass(SFSBDelegate.class)
       .addClass(SFSBClientDelegate.class)
-      .addAsResource("org/camunda/bpm/integrationtest/functional/ejb/SFSBDelegateTest.testBeanResolution.bpmn20.xml")
-      .addAsResource("org/camunda/bpm/integrationtest/functional/ejb/SFSBDelegateTest.testBeanResolutionFromClient.bpmn20.xml");
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/ejb/SFSBDelegateTest.testBeanResolution.bpmn20.xml")
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/ejb/SFSBDelegateTest.testBeanResolutionFromClient.bpmn20.xml");
   }
 
 

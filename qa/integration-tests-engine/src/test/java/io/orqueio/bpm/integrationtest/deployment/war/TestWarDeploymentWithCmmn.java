@@ -32,7 +32,7 @@ public class TestWarDeploymentWithCmmn extends AbstractFoxPlatformIntegrationTes
   @Deployment
   public static WebArchive processArchive() {
     return initWebArchiveDeployment()
-            .addAsResource("org/camunda/bpm/integrationtest/testDeployProcessArchiveWithCmmn.cmmn");
+            .addAsResource("io/orqueio/bpm/integrationtest/testDeployProcessArchiveWithCmmn.cmmn");
   }
 
   @Test

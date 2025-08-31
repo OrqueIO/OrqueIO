@@ -46,13 +46,13 @@ public class TestWarDeploymentResumePreviousOnProcessDefinitionKey  extends Abst
   @Deployment(order=1, name=PA1)
   public static WebArchive processArchive1() {
     return initWebArchiveDeployment("pa1.war")
-      .addAsResource("org/camunda/bpm/integrationtest/deployment/war/testDeployProcessArchiveV1.bpmn20.xml");
+      .addAsResource("io/orqueio/bpm/integrationtest/deployment/war/testDeployProcessArchiveV1.bpmn20.xml");
   }
 
   @Deployment(order=2, name=PA2)
   public static WebArchive processArchive2() {
-    return initWebArchiveDeployment("pa2.war", "org/camunda/bpm/integrationtest/deployment/war/resumePreviousVersionsOnProcessDefinitionKey_processes.xml")
-      .addAsResource("org/camunda/bpm/integrationtest/deployment/war/testDeployProcessArchiveV2.bpmn20.xml");
+    return initWebArchiveDeployment("pa2.war", "io/orqueio/bpm/integrationtest/deployment/war/resumePreviousVersionsOnProcessDefinitionKey_processes.xml")
+      .addAsResource("io/orqueio/bpm/integrationtest/deployment/war/testDeployProcessArchiveV2.bpmn20.xml");
 
   }
 

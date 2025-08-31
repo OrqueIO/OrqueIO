@@ -1,19 +1,17 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>camunda-qa-tomcat9-runtime</artifactId>
+  <artifactId>orqueio-qa-tomcat9-runtime</artifactId>
   <packaging>pom</packaging>
 
-  <description>
-    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://camunda.com/contact/
-  </description>
 
-  <name>Camunda Platform - QA Tomcat 9 Test Runtime</name>
+
+  <name>Orqueio Platform - QA Tomcat 9 Test Runtime</name>
 
   <parent>
     <groupId>io.orqueio.bpm.qa</groupId>
     <artifactId>orqueio-qa</artifactId>
-    <version>7.24.0-SNAPSHOT</version>
+    <version>0.24.0-SNAPSHOT</version>
   </parent>
 
   <dependencies>
@@ -117,7 +115,7 @@
 
         <dependency>
           <groupId>io.orqueio.bpm</groupId>
-          <artifactId>camunda-engine</artifactId>
+          <artifactId>orqueio-engine</artifactId>
           <exclusions>
             <exclusion>
               <groupId>org.springframework</groupId>
@@ -132,52 +130,52 @@
 
         <dependency>
           <groupId>io.orqueio.bpm.identity</groupId>
-          <artifactId>camunda-identity-ldap</artifactId>
+          <artifactId>orqueio-identity-ldap</artifactId>
         </dependency>
 
         <dependency>
           <groupId>io.orqueio.spin</groupId>
-          <artifactId>camunda-spin-core</artifactId>
+          <artifactId>orqueio-spin-core</artifactId>
         </dependency>
 
         <dependency>
           <groupId>io.orqueio.bpm</groupId>
-          <artifactId>camunda-engine-plugin-spin</artifactId>
+          <artifactId>orqueio-engine-plugin-spin</artifactId>
         </dependency>
 
         <dependency>
           <groupId>io.orqueio.spin</groupId>
-          <artifactId>camunda-spin-dataformat-all</artifactId>
+          <artifactId>orqueio-spin-dataformat-all</artifactId>
         </dependency>
 
         <dependency>
           <groupId>io.orqueio.connect</groupId>
-          <artifactId>camunda-connect-core</artifactId>
+          <artifactId>orqueio-connect-core</artifactId>
         </dependency>
 
         <dependency>
           <groupId>io.orqueio.bpm</groupId>
-          <artifactId>camunda-engine-plugin-connect</artifactId>
+          <artifactId>orqueio-engine-plugin-connect</artifactId>
         </dependency>
 
         <dependency>
           <groupId>io.orqueio.connect</groupId>
-          <artifactId>camunda-connect-connectors-all</artifactId>
+          <artifactId>orqueio-connect-connectors-all</artifactId>
           <exclusions>
             <exclusion>
               <groupId>io.orqueio.connect</groupId>
-              <artifactId>camunda-connect-http-client</artifactId>
+              <artifactId>orqueio-connect-http-client</artifactId>
             </exclusion>
             <exclusion>
               <groupId>io.orqueio.connect</groupId>
-              <artifactId>camunda-connect-soap-http-client</artifactId>
+              <artifactId>orqueio-connect-soap-http-client</artifactId>
             </exclusion>
           </exclusions>
         </dependency>
 
         <dependency>
           <groupId>io.orqueio.template-engines</groupId>
-          <artifactId>camunda-template-engines-freemarker</artifactId>
+          <artifactId>orqueio-template-engines-freemarker</artifactId>
         </dependency>
 
         <dependency>
@@ -198,7 +196,7 @@
         <!-- The order of declaration of the plugin executions is important to preserve the correct build sequence of
              a) packing b) unpacking the server c) copy libs so that the properties are resolved correctly. -->
         <plugins>
-          <!-- Produces the camunda-qa-tomcat9.tar.gz -->
+          <!-- Produces the orqueio-qa-tomcat9.tar.gz -->
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-assembly-plugin</artifactId>
@@ -218,7 +216,7 @@
                   <outputDirectory>target/</outputDirectory>
                   <workDirectory>target/assembly/work</workDirectory>
                   <tarLongFileMode>gnu</tarLongFileMode>
-                  <finalName>camunda-qa-tomcat9</finalName>
+                  <finalName>orqueio-qa-tomcat9</finalName>
                 </configuration>
               </execution>
             </executions>
@@ -235,7 +233,7 @@
                 <phase>generate-resources</phase>
                 <configuration>
                   <target>
-                    <untar src="${project.build.directory}/camunda-qa-tomcat9.tar.gz" dest="${project.build.directory}/" compression="gzip" />
+                    <untar src="${project.build.directory}/orqueio-qa-tomcat9.tar.gz" dest="${project.build.directory}/" compression="gzip" />
                   </target>
                 </configuration>
                 <goals>

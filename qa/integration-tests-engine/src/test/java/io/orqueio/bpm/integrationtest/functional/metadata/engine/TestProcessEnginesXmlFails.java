@@ -45,7 +45,7 @@ public class TestProcessEnginesXmlFails {
   public static WebArchive processArchive() {    
     
     return  ShrinkWrap.create(WebArchive.class)
-            .addAsWebInfResource("org/camunda/bpm/integrationtest/beans.xml", "beans.xml")
+            .addAsWebInfResource("io/orqueio/bpm/integrationtest/beans.xml", "beans.xml")
             .addAsLibraries(DeploymentHelper.getEjbClient())
             .addAsResource("META-INF/processes.xml", "META-INF/processes.xml")
             .addAsLibraries(

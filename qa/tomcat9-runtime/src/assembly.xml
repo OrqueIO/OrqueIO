@@ -29,8 +29,8 @@
 
         <include>com.h2database:h2:jar</include>
 
-        <include>io.orqueio.bpm:camunda-engine:jar</include>
-        <include>io.orqueio.bpm.identity:camunda-identity-ldap:jar</include>
+        <include>io.orqueio.bpm:orqueio-engine:jar</include>
+        <include>io.orqueio.bpm.identity:orqueio-identity-ldap:jar</include>
 
         <include>org.mybatis:mybatis:jar:*</include>
         <include>com.fasterxml.uuid:java-uuid-generator:jar:*</include>
@@ -49,9 +49,9 @@
         <include>com.ibm.icu:icu4j:jar:*</include>
         <include>org.slf4j:slf4j-api:jar:*</include>
 
-        <include>io.orqueio.bpm:camunda-engine-plugin-*:jar</include>
-        <include>io.orqueio.spin:camunda-spin-core*:jar</include>
-        <include>io.orqueio.spin:camunda-spin-dataformat-all*:jar</include>
+        <include>io.orqueio.bpm:orqueio-engine-plugin-*:jar</include>
+        <include>io.orqueio.spin:orqueio-spin-core*:jar</include>
+        <include>io.orqueio.spin:orqueio-spin-dataformat-all*:jar</include>
         <include>io.orqueio.connect:*:jar</include>
         <include>io.orqueio.commons:*:jar</include>
 
@@ -72,8 +72,8 @@
 
         <include>com.h2database:h2:jar</include>
 
-        <include>io.orqueio.bpm:camunda-engine:jar</include>
-        <include>io.orqueio.bpm.identity:camunda-identity-ldap:jar</include>
+        <include>io.orqueio.bpm:orqueio-engine:jar</include>
+        <include>io.orqueio.bpm.identity:orqueio-identity-ldap:jar</include>
 
         <include>org.mybatis:mybatis:jar:*</include>
         <include>com.fasterxml.uuid:java-uuid-generator:jar:*</include>
@@ -92,9 +92,9 @@
         <include>com.ibm.icu:icu4j:jar:*</include>
         <include>org.slf4j:slf4j-api:jar:*</include>
 
-        <include>io.orqueio.bpm:camunda-engine-plugin-*:jar</include>
-        <include>io.orqueio.spin:camunda-spin-core*:jar</include>
-        <include>io.orqueio.spin:camunda-spin-dataformat-all*:jar</include>
+        <include>io.orqueio.bpm:orqueio-engine-plugin-*:jar</include>
+        <include>io.orqueio.spin:orqueio-spin-core*:jar</include>
+        <include>io.orqueio.spin:orqueio-spin-dataformat-all*:jar</include>
         <include>io.orqueio.connect:*:jar</include>
         <include>io.orqueio.commons:*:jar</include>
 

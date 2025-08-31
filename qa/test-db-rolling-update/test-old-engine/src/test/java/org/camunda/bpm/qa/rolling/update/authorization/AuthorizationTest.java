@@ -42,7 +42,7 @@ import static org.junit.Assert.assertNotNull;
 
 /**
  *
- * @author Christopher Zell <christopher.zell@camunda.com>
+ * @author Christopher Zell <christopher.zell@orqueio.com>
  */
 @ScenarioUnderTest("AuthorizationScenario")
 public class AuthorizationTest extends AbstractRollingUpdateTestCase {

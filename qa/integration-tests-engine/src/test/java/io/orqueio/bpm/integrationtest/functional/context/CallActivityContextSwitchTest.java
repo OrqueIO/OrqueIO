@@ -55,20 +55,20 @@ public class CallActivityContextSwitchTest extends AbstractFoxPlatformIntegratio
     return initWebArchiveDeployment("mainDeployment.war")
       .addClass(DelegateBefore.class)
       .addClass(DelegateAfter.class)
-      .addAsResource("org/camunda/bpm/integrationtest/functional/context/CallActivityContextSwitchTest.mainProcessSync.bpmn20.xml")
-      .addAsResource("org/camunda/bpm/integrationtest/functional/context/CallActivityContextSwitchTest.mainProcessSyncNoWait.bpmn20.xml")
-      .addAsResource("org/camunda/bpm/integrationtest/functional/context/CallActivityContextSwitchTest.mainProcessASync.bpmn20.xml")
-      .addAsResource("org/camunda/bpm/integrationtest/functional/context/CallActivityContextSwitchTest.mainProcessASyncBefore.bpmn20.xml")
-      .addAsResource("org/camunda/bpm/integrationtest/functional/context/CallActivityContextSwitchTest.mainProcessASyncAfter.bpmn20.xml");
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/context/CallActivityContextSwitchTest.mainProcessSync.bpmn20.xml")
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/context/CallActivityContextSwitchTest.mainProcessSyncNoWait.bpmn20.xml")
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/context/CallActivityContextSwitchTest.mainProcessASync.bpmn20.xml")
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/context/CallActivityContextSwitchTest.mainProcessASyncBefore.bpmn20.xml")
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/context/CallActivityContextSwitchTest.mainProcessASyncAfter.bpmn20.xml");
   }
 
   @Deployment(name="calledDeployment")
   public static WebArchive createSecondProcessArchiveDeployment() {
     return initWebArchiveDeployment("calledDeployment.war")
       .addClass(CalledProcessDelegate.class)
-      .addAsResource("org/camunda/bpm/integrationtest/functional/context/CallActivityContextSwitchTest.calledProcessSync.bpmn20.xml")
-      .addAsResource("org/camunda/bpm/integrationtest/functional/context/CallActivityContextSwitchTest.calledProcessSyncNoWait.bpmn20.xml")
-      .addAsResource("org/camunda/bpm/integrationtest/functional/context/CallActivityContextSwitchTest.calledProcessASync.bpmn20.xml");
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/context/CallActivityContextSwitchTest.calledProcessSync.bpmn20.xml")
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/context/CallActivityContextSwitchTest.calledProcessSyncNoWait.bpmn20.xml")
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/context/CallActivityContextSwitchTest.calledProcessASync.bpmn20.xml");
   }
 
   @Inject

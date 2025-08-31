@@ -43,14 +43,14 @@ public class TestAdditionalResourceSuffixes extends AbstractFoxPlatformIntegrati
   public static WebArchive processArchive() {
 
     WebArchive archive = ShrinkWrap.create(WebArchive.class, "test.war")
-        .addAsWebInfResource("org/camunda/bpm/integrationtest/beans.xml", "beans.xml")
+        .addAsWebInfResource("io/orqueio/bpm/integrationtest/beans.xml", "beans.xml")
         .addAsLibraries(DeploymentHelper.getEngineCdi())
-        .addAsResource("org/camunda/bpm/integrationtest/deployment/cfg/processes-additional-resource-suffixes.xml", "META-INF/processes.xml")
+        .addAsResource("io/orqueio/bpm/integrationtest/deployment/cfg/processes-additional-resource-suffixes.xml", "META-INF/processes.xml")
         .addClass(AbstractFoxPlatformIntegrationTest.class)
         .addClass(DummyProcessApplication.class)
-        .addAsResource("org/camunda/bpm/integrationtest/deployment/cfg/invoice-it.bpmn20.xml")
-        .addAsResource("org/camunda/bpm/integrationtest/deployment/cfg/hello.groovy")
-        .addAsResource("org/camunda/bpm/integrationtest/deployment/cfg/hello.py");
+        .addAsResource("io/orqueio/bpm/integrationtest/deployment/cfg/invoice-it.bpmn20.xml")
+        .addAsResource("io/orqueio/bpm/integrationtest/deployment/cfg/hello.groovy")
+        .addAsResource("io/orqueio/bpm/integrationtest/deployment/cfg/hello.py");
 
     return archive;
   }

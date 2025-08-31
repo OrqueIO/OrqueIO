@@ -29,7 +29,7 @@ public class EmptyStringVariableScenario {
 
   @Deployment
   public static String deploy() {
-    return "org/camunda/bpm/qa/rolling/update/oneTaskProcess.bpmn20.xml";
+    return "io/orqueio/bpm/qa/rolling/update/oneTaskProcess.bpmn20.xml";
   }
 
   @DescribesScenario("init")

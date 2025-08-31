@@ -32,12 +32,12 @@ public class NonInterruptingBoundaryEventScenario {
 
   @Deployment
   public static String deployTimerBoundary() {
-    return "org/camunda/bpm/qa/upgrade/boundary/nonInterruptingTimerBoundaryEvent.bpmn20.xml";
+    return "io/orqueio/bpm/qa/upgrade/boundary/nonInterruptingTimerBoundaryEvent.bpmn20.xml";
   }
 
   @Deployment
   public static String deployMessageBoundary() {
-    return "org/camunda/bpm/qa/upgrade/boundary/nonInterruptingMessageBoundaryEvent.bpmn20.xml";
+    return "io/orqueio/bpm/qa/upgrade/boundary/nonInterruptingMessageBoundaryEvent.bpmn20.xml";
   }
 
   @DescribesScenario("initTimer")

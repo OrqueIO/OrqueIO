@@ -36,7 +36,7 @@ public class MigrationBatchScenario {
       public void execute(ProcessEngine engine, String scenarioName) {
 
         String sourceProcessDefinitionId = engine.getRepositoryService().createDeployment()
-          .addClasspathResource("org/camunda/bpm/qa/upgrade/gson/oneTaskProcessMigrationV1.bpmn20.xml")
+          .addClasspathResource("io/orqueio/bpm/qa/upgrade/gson/oneTaskProcessMigrationV1.bpmn20.xml")
           .deployWithResult()
           .getDeployedProcessDefinitions()
           .get(0)
@@ -51,7 +51,7 @@ public class MigrationBatchScenario {
         }
 
         String targetProcessDefinitionId = engine.getRepositoryService().createDeployment()
-          .addClasspathResource("org/camunda/bpm/qa/upgrade/gson/oneTaskProcessMigrationV2.bpmn20.xml")
+          .addClasspathResource("io/orqueio/bpm/qa/upgrade/gson/oneTaskProcessMigrationV2.bpmn20.xml")
           .deployWithResult()
           .getDeployedProcessDefinitions()
           .get(0)

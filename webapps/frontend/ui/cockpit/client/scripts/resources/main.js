@@ -1,8 +1,8 @@
 /*
- * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
+ * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. TOADDLATERCCS this file to you under the Apache License,
+ * ownership. Camunda licenses this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -17,9 +17,9 @@
 
 'use strict';
 
-var angular = require('camunda-commons-ui/vendor/angular');
+var angular = require('orqueio-commons-ui/vendor/angular');
 
-require('camunda-commons-ui/lib/util/index');
+require('orqueio-commons-ui/lib/util/index');
 
 var processDefinitionResource = require('./processDefinitionResource'),
   incidentResource = require('./incidentResource'),

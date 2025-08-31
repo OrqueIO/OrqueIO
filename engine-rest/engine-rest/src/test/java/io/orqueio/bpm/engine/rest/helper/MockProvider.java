@@ -535,7 +535,7 @@ public abstract class MockProvider {
 
   // process applications
   public static final String EXAMPLE_PROCESS_APPLICATION_NAME = "aProcessApplication";
-  public static final String EXAMPLE_PROCESS_APPLICATION_CONTEXT_PATH = "http://orqueio.org/someContext";
+  public static final String EXAMPLE_PROCESS_APPLICATION_CONTEXT_PATH = "http://orqueio.io/someContext";
 
   // Historic Process Instance
   public static final String EXAMPLE_HISTORIC_PROCESS_INSTANCE_DELETE_REASON = "aDeleteReason";

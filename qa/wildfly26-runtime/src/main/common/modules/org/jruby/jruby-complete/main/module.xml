@@ -6,6 +6,6 @@
   <dependencies>
     <module name="javax.api" />
     <module name="sun.jdk" />
-    <module name="io.orqueio.spin.camunda-spin-core" />
+    <module name="io.orqueio.spin.orqueio-spin-core" />
   </dependencies>
 </module>

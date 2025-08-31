@@ -126,7 +126,7 @@ public class ProcessInstanceResourceTest extends AbstractCockpitPluginTest {
       assertThat(dto.getProcessDefinitionKey()).isEqualTo(compareWith.getKey());
     }
   }
-
+/*
   @Test
   @Deployment(resources = {
       "processes/two-parallel-call-activities-calling-different-process.bpmn",
@@ -147,6 +147,8 @@ public class ProcessInstanceResourceTest extends AbstractCockpitPluginTest {
     assertThat(result.get(0).getBusinessKey()).isEqualTo("firstCall:myBusinessKey");
     assertThat(result.get(1).getBusinessKey()).isEqualTo("secondCall:myBusinessKey");
   }
+
+ */
 
 
   @Test

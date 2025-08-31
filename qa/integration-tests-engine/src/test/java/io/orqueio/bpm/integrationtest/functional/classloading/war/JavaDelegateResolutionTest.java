@@ -46,8 +46,8 @@ public class JavaDelegateResolutionTest extends AbstractFoxPlatformIntegrationTe
   public static WebArchive createProcessArchiveDeplyoment() {
     return initWebArchiveDeployment()
             .addClass(ExampleDelegate.class)
-            .addAsResource("org/camunda/bpm/integrationtest/functional/classloading/JavaDelegateResolutionTest.testResolveClass.bpmn20.xml")
-            .addAsResource("org/camunda/bpm/integrationtest/functional/classloading/JavaDelegateResolutionTest.testResolveClassFromJobExecutor.bpmn20.xml");
+            .addAsResource("io/orqueio/bpm/integrationtest/functional/classloading/JavaDelegateResolutionTest.testResolveClass.bpmn20.xml")
+            .addAsResource("io/orqueio/bpm/integrationtest/functional/classloading/JavaDelegateResolutionTest.testResolveClassFromJobExecutor.bpmn20.xml");
   }
 
   @Deployment(name="clientDeployment")

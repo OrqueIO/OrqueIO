@@ -37,7 +37,7 @@ import org.junit.Test;
 public class SetJobRetriesBatchTest {
 
   @Rule
-  public ProcessEngineRule engineRule = new ProcessEngineRule("camunda.cfg.xml");
+  public ProcessEngineRule engineRule = new ProcessEngineRule("orqueio.cfg.xml");
 
   @ScenarioUnderTest("initSetJobRetriesBatch.1")
   @Test

@@ -44,7 +44,7 @@ public class UpgradeTestRule extends ProcessEngineRule {
   protected String tag;
 
   public UpgradeTestRule() {
-    super("camunda.cfg.xml");
+    super("orqueio.cfg.xml");
   }
 
   public UpgradeTestRule(String configurationResource) {

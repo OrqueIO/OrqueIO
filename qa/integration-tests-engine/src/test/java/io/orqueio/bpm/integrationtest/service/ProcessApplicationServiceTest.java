@@ -42,13 +42,13 @@ public class ProcessApplicationServiceTest extends AbstractFoxPlatformIntegratio
   @Deployment(name="test1")
   public static WebArchive app1() {    
     return initWebArchiveDeployment("test1.war")
-            .addAsResource("org/camunda/bpm/integrationtest/testDeployProcessArchive.bpmn20.xml");
+            .addAsResource("io/orqueio/bpm/integrationtest/testDeployProcessArchive.bpmn20.xml");
   }
   
   @Deployment(name="test2")
   public static WebArchive app2() {    
     return initWebArchiveDeployment("test2.war")
-            .addAsResource("org/camunda/bpm/integrationtest/testDeployProcessArchiveWithoutActivitiCdi.bpmn20.xml");
+            .addAsResource("io/orqueio/bpm/integrationtest/testDeployProcessArchiveWithoutActivitiCdi.bpmn20.xml");
   }
   
   @Test

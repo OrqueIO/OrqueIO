@@ -12,7 +12,7 @@
   <artifactId>orqueio-bom</artifactId>
   <packaging>pom</packaging>
   <name>orqueio Platform - Bom</name>
-  <url>http://orqueio.org</url>
+  <url>http://orqueio.io</url>
 
   <description>
     orqueio Platform bill of material.

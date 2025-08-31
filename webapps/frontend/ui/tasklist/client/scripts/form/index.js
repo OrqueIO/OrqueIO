@@ -1,8 +1,8 @@
 /*
- * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
+ * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. TOADDLATERCCS this file to you under the Apache License,
+ * ownership. Camunda licenses this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -17,13 +17,13 @@
 
 'use strict';
 
-var angular = require('camunda-commons-ui/vendor/angular'),
+var angular = require('orqueio-commons-ui/vendor/angular'),
   camTasklistForm = require('./directives/cam-tasklist-form'),
   camTasklistFormGeneric = require('./directives/cam-tasklist-form-generic'),
   camTasklistFormGenericVariables = require('./directives/cam-tasklist-form-generic-variables'),
   camTasklistFormEmbedded = require('./directives/cam-tasklist-form-embedded'),
   camTasklistFormExternal = require('./directives/cam-tasklist-form-external'),
-  camTasklistFormCamunda = require('./directives/cam-tasklist-form-camunda'),
+  camTasklistFormOrqueio = require('./directives/cam-tasklist-form-orqueio'),
   camTasklistUniqueValue = require('./directives/cam-tasklist-unique-value');
 
 var formModule = angular.module('cam.tasklist.form', ['ui.bootstrap']);
@@ -36,7 +36,7 @@ formModule.directive(
 );
 formModule.directive('camTasklistFormEmbedded', camTasklistFormEmbedded);
 formModule.directive('camTasklistFormExternal', camTasklistFormExternal);
-formModule.directive('camTasklistFormCamunda', camTasklistFormCamunda);
+formModule.directive('camTasklistFormOrqueio', camTasklistFormOrqueio);
 
 formModule.directive('camUniqueValue', camTasklistUniqueValue);
 

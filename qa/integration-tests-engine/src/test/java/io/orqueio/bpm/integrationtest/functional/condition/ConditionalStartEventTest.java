@@ -40,7 +40,7 @@ public class ConditionalStartEventTest extends AbstractFoxPlatformIntegrationTes
   public static WebArchive createProcessArchiveDeployment() {
     return initWebArchiveDeployment()
       .addClass(ConditionalBean.class)
-      .addAsResource("org/camunda/bpm/integrationtest/functional/condition/ConditionalStartEventTest.bpmn20.xml");
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/condition/ConditionalStartEventTest.bpmn20.xml");
   }
 
   @Test

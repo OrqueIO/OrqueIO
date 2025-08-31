@@ -33,7 +33,7 @@ public class TwoLevelNestedNonInterruptingEventSubprocessScenario {
 
   @Deployment
   public static String deployProcess() {
-    return "org/camunda/bpm/qa/upgrade/eventsubprocess/twoLevelNestedNonInterruptingMessageEventSubprocess.bpmn20.xml";
+    return "io/orqueio/bpm/qa/upgrade/eventsubprocess/twoLevelNestedNonInterruptingMessageEventSubprocess.bpmn20.xml";
   }
 
   @DescribesScenario("initLevel1")

@@ -75,7 +75,7 @@
         <directory>src/test/resources</directory>
         <filtering>true</filtering>
         <includes>
-          <include>**/camunda.cfg.xml</include>
+          <include>**/orqueio.cfg.xml</include>
         </includes>
       </testResource>
     </testResources>

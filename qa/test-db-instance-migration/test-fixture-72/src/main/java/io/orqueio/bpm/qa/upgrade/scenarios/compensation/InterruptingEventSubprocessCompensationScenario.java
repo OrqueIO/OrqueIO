@@ -32,7 +32,7 @@ public class InterruptingEventSubprocessCompensationScenario {
 
   @Deployment
   public static String deployProcess() {
-    return "org/camunda/bpm/qa/upgrade/compensation/interruptingEventSubprocessCompensationProcess.bpmn20.xml";
+    return "io/orqueio/bpm/qa/upgrade/compensation/interruptingEventSubprocessCompensationProcess.bpmn20.xml";
   }
 
   @DescribesScenario("init")

@@ -40,7 +40,7 @@ public class ModificationContextSwitchTest extends AbstractFoxPlatformIntegratio
   public static WebArchive createProcessArchiveDeplyoment() {
     return initWebArchiveDeployment()
             .addClass(ExampleDelegate.class)
-            .addAsResource("org/camunda/bpm/integrationtest/functional/modification/ModificationContextSwitchTest.testModificationClassloading.bpmn20.xml");
+            .addAsResource("io/orqueio/bpm/integrationtest/functional/modification/ModificationContextSwitchTest.testModificationClassloading.bpmn20.xml");
   }
 
   @Deployment(name="clientDeployment")

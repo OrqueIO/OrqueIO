@@ -67,7 +67,7 @@ import org.junit.runner.RunWith;
 public class TestWarDeploymentWithMultiplePasAsSubdeployment2 extends AbstractFoxPlatformIntegrationTest {
   
   public final static String PROCESSES_XML = 
-    "<process-application xmlns=\"http://www.camunda.org/schema/1.0/ProcessApplication\">" +
+    "<process-application xmlns=\"http://www.orqueio.io/schema/1.0/ProcessApplication\">" +
           
       "<process-archive name=\"PA_NAME\">" +
         "<properties>" +        
@@ -108,7 +108,7 @@ public class TestWarDeploymentWithMultiplePasAsSubdeployment2 extends AbstractFo
             .addAsResource(processAssets[8], "alternateDirectory/process8.bpmn");
     
     WebArchive deployment = ShrinkWrap.create(WebArchive.class, "test.war")
-            .addAsWebInfResource("org/camunda/bpm/integrationtest/beans.xml", "beans.xml")
+            .addAsWebInfResource("io/orqueio/bpm/integrationtest/beans.xml", "beans.xml")
             .addAsLibraries(DeploymentHelper.getEngineCdi())
             
             .addAsLibraries(pa2)

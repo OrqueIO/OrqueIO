@@ -23,16 +23,16 @@ public class EnforceHistoryTimeToLiveScenario {
 
   @Deployment
   public static String processWithoutHTTL() {
-    return "org/camunda/bpm/qa/upgrade/httl/process_without_httl.bpmn20.xml";
+    return "io/orqueio/bpm/qa/upgrade/httl/process_without_httl.bpmn20.xml";
   }
 
   @Deployment
   public static String decisionWithoutHTTL() {
-    return "org/camunda/bpm/qa/upgrade/httl/decision_without_httl.dmn";
+    return "io/orqueio/bpm/qa/upgrade/httl/decision_without_httl.dmn";
   }
 
   @Deployment
   public static String caseWithoutHTTL() {
-    return "org/camunda/bpm/qa/upgrade/httl/case_without_httl.cmmn";
+    return "io/orqueio/bpm/qa/upgrade/httl/case_without_httl.cmmn";
   }
 }

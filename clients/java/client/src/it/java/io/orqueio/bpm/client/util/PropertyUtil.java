@@ -25,8 +25,8 @@ import org.slf4j.LoggerFactory;
 public class PropertyUtil {
 
   public static final String DEFAULT_PROPERTIES_PATH = "integration-rules.properties";
-  public static final String CAMUNDA_ENGINE_REST = "orqueio.engine.rest";
-  public static final String CAMUNDA_ENGINE_NAME = "orqueio.engine.name";
+  public static final String ORQUEIO_ENGINE_REST = "orqueio.engine.rest";
+  public static final String ORQUEIO_ENGINE_NAME = "orqueio.engine.name";
 
   private static Logger logger = LoggerFactory.getLogger(PropertyUtil.class);
 

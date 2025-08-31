@@ -39,7 +39,7 @@ import java.util.Map;
 public class DefaultAdminRuntimeDelegate extends AbstractAppRuntimeDelegate<AdminPlugin> implements AdminRuntimeDelegate {
 
   private static final List<String> MAPPING_FILES = List.of(
-      "org/camunda/bpm/admin/plugin/base/queries/metrics.xml"
+      "io/orqueio/bpm/admin/plugin/base/queries/metrics.xml"
   );
 
   protected final Map<String, CommandExecutor> commandExecutors;

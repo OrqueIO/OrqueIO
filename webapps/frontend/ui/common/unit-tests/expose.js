@@ -1,8 +1,8 @@
 /*
- * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
+ * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. TOADDLATERCCS this file to you under the Apache License,
+ * ownership. Camunda licenses this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -16,16 +16,16 @@
  */
 
 var $ = (window.jQuery = window.$ = require('jquery'));
-var commons = require('camunda-commons-ui/lib');
-var sdk = require('camunda-bpm-sdk-js/lib/angularjs/index');
+var commons = require('orqueio-commons-ui/lib');
+var sdk = require('orqueio-bpm-sdk-js/lib/angularjs/index');
 var dataDepend = require('angular-data-depend');
-var angular = require('camunda-commons-ui/vendor/angular');
+var angular = require('orqueio-commons-ui/vendor/angular');
 
 window.angular = angular;
 window.jquery = $;
-window['camunda-commons-ui'] = commons;
-window['camunda-bpm-sdk-js'] = sdk;
+window['orqueio-commons-ui'] = commons;
+window['orqueio-bpm-sdk-js'] = sdk;
 window['angular-data-depend'] = dataDepend;
-window['moment'] = require('camunda-commons-ui/vendor/moment');
+window['moment'] = require('orqueio-commons-ui/vendor/moment');
 window['events'] = require('events');
 window['cam-common'] = require('../scripts/module');

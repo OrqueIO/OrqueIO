@@ -27,7 +27,7 @@ public class AuthorizationCheckProcessDefinitionScenario {
 
   @Deployment
   public static String deploy() {
-    return "org/camunda/bpm/qa/upgrade/useroperationlog/annotation/oneTaskProcess.bpmn20.xml";
+    return "io/orqueio/bpm/qa/upgrade/useroperationlog/annotation/oneTaskProcess.bpmn20.xml";
   }
 
   @DescribesScenario("prepareAuthorizationCheckProcessDefinition")

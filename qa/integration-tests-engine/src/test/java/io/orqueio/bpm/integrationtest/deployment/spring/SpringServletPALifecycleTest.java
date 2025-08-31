@@ -40,9 +40,9 @@ public class SpringServletPALifecycleTest extends AbstractFoxPlatformIntegration
     return ShrinkWrap.create(WebArchive.class, "test.war")
       .addClass(AbstractFoxPlatformIntegrationTest.class)
       .addClass(CustomSpringServletProcessApplication.class)
-      .addAsWebInfResource("org/camunda/bpm/integrationtest/deployment/spring/SpringServletPALifecycleTest-context.xml", "applicationContext.xml")
+      .addAsWebInfResource("io/orqueio/bpm/integrationtest/deployment/spring/SpringServletPALifecycleTest-context.xml", "applicationContext.xml")
       .addAsLibraries(DeploymentHelper.getEngineSpring())
-      .addAsWebInfResource("org/camunda/bpm/integrationtest/deployment/spring/web.xml", "web.xml");
+      .addAsWebInfResource("io/orqueio/bpm/integrationtest/deployment/spring/web.xml", "web.xml");
   }
 
   @Test

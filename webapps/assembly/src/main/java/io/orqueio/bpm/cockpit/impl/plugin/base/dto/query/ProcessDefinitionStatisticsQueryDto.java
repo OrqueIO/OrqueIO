@@ -18,7 +18,7 @@ package io.orqueio.bpm.cockpit.impl.plugin.base.dto.query;
 
 import io.orqueio.bpm.cockpit.impl.plugin.base.dto.ProcessDefinitionStatisticsDto;
 import io.orqueio.bpm.cockpit.rest.dto.AbstractRestQueryParametersDto;
-import io.orqueio.bpm.engine.rest.dto.CamundaQueryParam;
+import io.orqueio.bpm.engine.rest.dto.OrqueioQueryParam;
 
 import javax.ws.rs.core.MultivaluedMap;
 import java.util.HashMap;
@@ -45,22 +45,22 @@ public class ProcessDefinitionStatisticsQueryDto extends AbstractRestQueryParame
     super(queryParameters);
   }
 
-  @CamundaQueryParam("key")
+  @OrqueioQueryParam("key")
   public void setKey(String key) {
     this.key = key;
   }
 
-  @CamundaQueryParam("keyLike")
+  @OrqueioQueryParam("keyLike")
   public void setKeyLike(String keyLike) {
     this.keyLike = keyLike;
   }
 
-  @CamundaQueryParam("name")
+  @OrqueioQueryParam("name")
   public void setName(String name) {
     this.name = name;
   }
 
-  @CamundaQueryParam("nameLike")
+  @OrqueioQueryParam("nameLike")
   public void setNameLike(String nameLike) {
     this.nameLike = nameLike;
   }

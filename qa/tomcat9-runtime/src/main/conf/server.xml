@@ -68,14 +68,14 @@
               minIdle="5"
               maxIdle="20" />
               
-    <Resource name="global/camunda-bpm-platform/process-engine/ProcessEngineService!io.orqueio.bpm.ProcessEngineService" auth="Container"
+    <Resource name="global/orqueio-bpm-platform/process-engine/ProcessEngineService!io.orqueio.bpm.ProcessEngineService" auth="Container"
               type="io.orqueio.bpm.ProcessEngineService"
-              description="Camunda Platform Process Engine Service"
+              description="Orqueio Platform Process Engine Service"
               factory="io.orqueio.bpm.container.impl.jndi.ProcessEngineServiceObjectFactory" />
               
-    <Resource name="global/camunda-bpm-platform/process-engine/ProcessApplicationService!io.orqueio.bpm.ProcessApplicationService" auth="Container"
+    <Resource name="global/orqueio-bpm-platform/process-engine/ProcessApplicationService!io.orqueio.bpm.ProcessApplicationService" auth="Container"
               type="io.orqueio.bpm.ProcessApplicationService"
-              description="Camunda Platform Process Application Service"
+              description="Orqueio Platform Process Application Service"
               factory="io.orqueio.bpm.container.impl.jndi.ProcessApplicationServiceObjectFactory" />
               
   </GlobalNamingResources>

@@ -38,7 +38,7 @@
         <extension module="org.wildfly.extension.request-controller"/>
         <extension module="org.wildfly.extension.security.manager"/>
         <extension module="org.wildfly.extension.undertow"/>
-        <extension module="io.orqueio.bpm.wildfly.camunda-wildfly-subsystem"/>
+        <extension module="io.orqueio.bpm.wildfly.orqueio-wildfly-subsystem"/>
     </extensions>
     <management>
         <audit-log>
@@ -505,7 +505,7 @@
                             <class>io.orqueio.bpm.application.impl.event.ProcessApplicationEventListenerPlugin</class>
                         </plugin>
 
-                        <!-- plugin enabling integration of camunda Spin -->
+                        <!-- plugin enabling integration of orqueio Spin -->
                         <plugin>
                             <class>io.orqueio.spin.plugin.impl.SpinProcessEnginePlugin</class>
                         </plugin>
@@ -517,7 +517,7 @@
 
                         <!-- LDAP CONFIGURATION -->
                         <!-- Uncomment this section in order to enable LDAP support for this process engine -->
-                        <!-- Adjust configuration, see ( http://docs.camunda.org/latest/guides/user-guide/#process-engine-identity-service-the-ldap-identity-service ) -->
+                        <!-- Adjust configuration, see ( http://docs.orqueio.io/latest/guides/user-guide/#process-engine-identity-service-the-ldap-identity-service ) -->
                         <!--
                             <plugin>
                                 <class>io.orqueio.bpm.identity.impl.ldap.plugin.LdapIdentityProviderPlugin</class>
@@ -525,10 +525,10 @@
                                 <properties>
                                     <property name="serverUrl">ldaps://localhost:4334/</property>
                                     <property name="acceptUntrustedCertificates">false</property>
-                                    <property name="managerDn">uid=jonny,ou=office-berlin,o=camunda,c=org</property>
+                                    <property name="managerDn">uid=jonny,ou=office-berlin,o=orqueio,c=org</property>
                                     <property name="managerPassword">s3cr3t</property>
 
-                                    <property name="baseDn">o=camunda,c=org</property>
+                                    <property name="baseDn">o=orqueio,c=org</property>
 
                                     <property name="userSearchBase">ou=employees</property>
                                     <property name="userSearchFilter">(objectclass=person)</property>

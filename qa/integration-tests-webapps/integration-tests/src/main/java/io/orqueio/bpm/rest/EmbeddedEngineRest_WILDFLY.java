@@ -67,7 +67,7 @@ public class EmbeddedEngineRest_WILDFLY {
   }
 
   private static JavaArchive[] getEngineRestClasses() {
-    String coordinates = "io.orqueio.bpm:camunda-engine-rest:jar:classes:" + System.getProperty("projectversion");
+    String coordinates = "io.orqueio.bpm:orqueio-engine-rest:jar:classes:" + System.getProperty("projectversion");
 
     JavaArchive[] resolvedArchives = Maven.configureResolver()
           .workOffline()

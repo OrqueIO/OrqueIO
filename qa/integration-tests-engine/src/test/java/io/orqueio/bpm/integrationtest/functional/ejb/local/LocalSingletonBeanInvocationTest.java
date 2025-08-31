@@ -52,15 +52,15 @@ public class LocalSingletonBeanInvocationTest extends AbstractFoxPlatformIntegra
   public static WebArchive processArchive() {
     return initWebArchiveDeployment()
       .addClass(LocalSingletonBeanClientDelegateBean.class)
-      .addAsResource("org/camunda/bpm/integrationtest/functional/ejb/local/LocalSingletonBeanInvocationTest.testInvokeBean.bpmn20.xml")
-      .addAsWebInfResource("org/camunda/bpm/integrationtest/functional/ejb/local/jboss-deployment-structure.xml","jboss-deployment-structure.xml");
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/ejb/local/LocalSingletonBeanInvocationTest.testInvokeBean.bpmn20.xml")
+      .addAsWebInfResource("io/orqueio/bpm/integrationtest/functional/ejb/local/jboss-deployment-structure.xml","jboss-deployment-structure.xml");
   }
 
   @Deployment(order=1)
   public static WebArchive delegateDeployment() {
     WebArchive webArchive = ShrinkWrap.create(WebArchive.class, "service.war")
       .addAsLibraries(DeploymentHelper.getEjbClient())
-      .addAsWebInfResource("org/camunda/bpm/integrationtest/beans.xml", "beans.xml")
+      .addAsWebInfResource("io/orqueio/bpm/integrationtest/beans.xml", "beans.xml")
       .addClass(AbstractFoxPlatformIntegrationTest.class)
       .addClass(LocalSingletonBean.class) // the EJB
       .addClass(BusinessInterface.class); // the business interface

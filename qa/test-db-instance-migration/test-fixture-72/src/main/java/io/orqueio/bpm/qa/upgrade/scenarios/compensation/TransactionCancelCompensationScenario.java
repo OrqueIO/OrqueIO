@@ -32,7 +32,7 @@ public class TransactionCancelCompensationScenario {
 
   @Deployment
   public static String deployProcess() {
-    return "org/camunda/bpm/qa/upgrade/compensation/transactionCancelCompensationProcess.bpmn20.xml";
+    return "io/orqueio/bpm/qa/upgrade/compensation/transactionCancelCompensationProcess.bpmn20.xml";
   }
 
   @DescribesScenario("init")

@@ -30,7 +30,7 @@ public class NestedInterruptingEventSubprocessParallelScenario {
 
   @Deployment
   public static String deployProcess() {
-    return "org/camunda/bpm/qa/upgrade/eventsubprocess/nestedInterruptingMessageEventSubprocessParallel.bpmn20.xml";
+    return "io/orqueio/bpm/qa/upgrade/eventsubprocess/nestedInterruptingMessageEventSubprocessParallel.bpmn20.xml";
   }
 
   @DescribesScenario("init")

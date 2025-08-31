@@ -34,7 +34,7 @@ import org.junit.runner.RunWith;
 
 
 /**
- * This test verifies that a process archive packaging the Camunda Platform client
+ * This test verifies that a process archive packaging the Orqueio Platform client
  * can be packaged inside an EAR application.
  *
  * @author Daniel Meyer
@@ -50,7 +50,7 @@ public class TestFoxPlatformClientAsEjbModule_pasAsEjbModule extends AbstractFox
    * test-application.ear
    *    |-- pa.jar
    *        |-- META-INF/processes.xml
-   *        |-- org/camunda/bpm/integrationtest/deployment/ear/paAsEjbModule-process.bpmn20.xml
+   *        |-- io/orqueio/bpm/integrationtest/deployment/ear/paAsEjbModule-process.bpmn20.xml
    *
    *    |-- fox-platform-client.jar
    *        |-- META-INF/MANIFEST.MF
@@ -66,13 +66,13 @@ public class TestFoxPlatformClientAsEjbModule_pasAsEjbModule extends AbstractFox
 
     JavaArchive processArchive1Jar = ShrinkWrap.create(JavaArchive.class, "pa.jar")
       .addClass(EeComponent.class) // need to add at least one EE component, otherwise the jar is not detected as an EJB module by Jboss AS
-      .addAsResource("org/camunda/bpm/integrationtest/deployment/ear/paAsEjbModule-process.bpmn20.xml")
-      .addAsResource("org/camunda/bpm/integrationtest/deployment/ear/paAsEjbModule-pa.xml", "META-INF/processes.xml");
+      .addAsResource("io/orqueio/bpm/integrationtest/deployment/ear/paAsEjbModule-process.bpmn20.xml")
+      .addAsResource("io/orqueio/bpm/integrationtest/deployment/ear/paAsEjbModule-pa.xml", "META-INF/processes.xml");
 
     JavaArchive foxPlatformClientJar = DeploymentHelper.getEjbClient();
 
     WebArchive testJar = ShrinkWrap.create(WebArchive.class, "paAsEjbModule-test.war")
-      .addAsWebInfResource("org/camunda/bpm/integrationtest/beans.xml", "beans.xml")
+      .addAsWebInfResource("io/orqueio/bpm/integrationtest/beans.xml", "beans.xml")
       .addClass(AbstractFoxPlatformIntegrationTest.class)
       .addClass(TestFoxPlatformClientAsEjbModule_pasAsEjbModule.class);
 

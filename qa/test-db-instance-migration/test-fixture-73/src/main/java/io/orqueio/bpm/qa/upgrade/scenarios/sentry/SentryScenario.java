@@ -32,7 +32,7 @@ public class SentryScenario {
   
   @Deployment
   public static String deployOneTaskProcess() {
-    return "org/camunda/bpm/qa/upgrade/sentry/sentry.cmmn";
+    return "io/orqueio/bpm/qa/upgrade/sentry/sentry.cmmn";
   }
 
   @DescribesScenario("triggerTaskEntryCriterion")

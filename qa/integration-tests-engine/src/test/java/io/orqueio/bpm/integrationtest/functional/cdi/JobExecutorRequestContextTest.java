@@ -47,9 +47,9 @@ public class JobExecutorRequestContextTest extends AbstractFoxPlatformIntegratio
   public static WebArchive processArchive() {
     return initWebArchiveDeployment()
       .addClass(RequestScopedDelegateBean.class)
-      .addAsResource("org/camunda/bpm/integrationtest/functional/cdi/JobExecutorRequestContextTest.testResolveBean.bpmn20.xml")
-      .addAsResource("org/camunda/bpm/integrationtest/functional/cdi/JobExecutorRequestContextTest.testScoping.bpmn20.xml")
-      .addAsResource("org/camunda/bpm/integrationtest/functional/cdi/JobExecutorRequestContextTest.testScopingExclusiveJobs.bpmn20.xml");
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/cdi/JobExecutorRequestContextTest.testResolveBean.bpmn20.xml")
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/cdi/JobExecutorRequestContextTest.testScoping.bpmn20.xml")
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/cdi/JobExecutorRequestContextTest.testScopingExclusiveJobs.bpmn20.xml");
   }
 
 

@@ -59,15 +59,15 @@ public class JobExecutorRequestContextLocalInvocationTest extends AbstractFoxPla
       .addClass(RequestScopedSFSBDelegate.class)
       .addClass(InvocationCounterDelegateBean.class)
       .addClass(InvocationCounterDelegateBeanLocal.class)
-      .addAsResource("org/camunda/bpm/integrationtest/functional/ejb/request/JobExecutorRequestContextLocalInvocationTest.testContextPropagationEjbLocal.bpmn20.xml")
-      .addAsWebInfResource("org/camunda/bpm/integrationtest/functional/ejb/request/jboss-deployment-structure.xml","jboss-deployment-structure.xml");
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/ejb/request/JobExecutorRequestContextLocalInvocationTest.testContextPropagationEjbLocal.bpmn20.xml")
+      .addAsWebInfResource("io/orqueio/bpm/integrationtest/functional/ejb/request/jboss-deployment-structure.xml","jboss-deployment-structure.xml");
   }
 
   @Deployment(order=1)
   public static WebArchive delegateDeployment() {
 
     WebArchive webArchive = ShrinkWrap.create(WebArchive.class, "service.war")
-      .addAsWebInfResource("org/camunda/bpm/integrationtest/beans.xml", "beans.xml")
+      .addAsWebInfResource("io/orqueio/bpm/integrationtest/beans.xml", "beans.xml")
       .addClass(AbstractFoxPlatformIntegrationTest.class)
       .addClass(InvocationCounter.class) // @RequestScoped CDI bean
       .addClass(InvocationCounterService.class) // interface (remote)

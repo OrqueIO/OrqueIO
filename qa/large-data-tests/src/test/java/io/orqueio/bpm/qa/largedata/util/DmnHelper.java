@@ -26,7 +26,7 @@ import io.orqueio.bpm.model.dmn.instance.NamedElement;
 import io.orqueio.bpm.model.dmn.instance.Output;
 
 public class DmnHelper {
-  public final static String TEST_NAMESPACE = "http://camunda.org/schema/1.0/dmn";
+  public final static String TEST_NAMESPACE = "http://orqueio.io/schema/1.0/dmn";
 
   public static DmnModelInstance createSimpleDmnModel(final String decisionKey) {
     final DmnModelInstance modelInstance = Dmn.createEmptyModel();

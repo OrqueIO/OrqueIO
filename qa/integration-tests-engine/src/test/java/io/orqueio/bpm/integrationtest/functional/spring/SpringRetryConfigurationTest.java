@@ -53,7 +53,7 @@ public class SpringRetryConfigurationTest extends AbstractFoxPlatformIntegration
       .addClass(ErrorDelegate.class)
       .addClass(RetryConfig.class)
       // add process definitions
-      .addAsResource("org/camunda/bpm/integrationtest/functional/RetryConfigurationTest.testResolveRetryConfigBean.bpmn20.xml")
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/RetryConfigurationTest.testResolveRetryConfigBean.bpmn20.xml")
 
       // add custom servlet process application
       .addClass(CustomServletProcessApplication.class)
@@ -61,14 +61,14 @@ public class SpringRetryConfigurationTest extends AbstractFoxPlatformIntegration
       .addAsResource("META-INF/processes.xml", "META-INF/processes.xml")
 
       // web xml that bootstrapps spring
-      .addAsWebInfResource("org/camunda/bpm/integrationtest/functional/spring/web.xml", "web.xml")
+      .addAsWebInfResource("io/orqueio/bpm/integrationtest/functional/spring/web.xml", "web.xml")
 
       // spring application context & libs
-      .addAsWebInfResource("org/camunda/bpm/integrationtest/functional/spring/SpringRetryConfigurationTest-context.xml", "applicationContext.xml")
+      .addAsWebInfResource("io/orqueio/bpm/integrationtest/functional/spring/SpringRetryConfigurationTest-context.xml", "applicationContext.xml")
       .addAsLibraries(DeploymentHelper.getEngineSpring())
 
       // adding module dependency on process engine module (jboss only)
-      .addAsManifestResource("org/camunda/bpm/integrationtest/functional/spring/jboss-deployment-structure.xml", "jboss-deployment-structure.xml");
+      .addAsManifestResource("io/orqueio/bpm/integrationtest/functional/spring/jboss-deployment-structure.xml", "jboss-deployment-structure.xml");
   }
 
 
@@ -78,7 +78,7 @@ public class SpringRetryConfigurationTest extends AbstractFoxPlatformIntegration
     // the test is deployed as a seperate deployment
 
     WebArchive deployment = ShrinkWrap.create(WebArchive.class, "client.war")
-            .addAsWebInfResource("org/camunda/bpm/integrationtest/beans.xml", "beans.xml")
+            .addAsWebInfResource("io/orqueio/bpm/integrationtest/beans.xml", "beans.xml")
             .addClass(AbstractFoxPlatformIntegrationTest.class)
             .addAsLibraries(DeploymentHelper.getEngineCdi());
 

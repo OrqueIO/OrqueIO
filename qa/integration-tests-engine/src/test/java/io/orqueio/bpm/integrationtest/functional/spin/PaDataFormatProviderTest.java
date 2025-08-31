@@ -48,7 +48,7 @@ public class PaDataFormatProviderTest extends AbstractFoxPlatformIntegrationTest
     WebArchive webArchive = ShrinkWrap.create(WebArchive.class, "PaDataFormatTest.war")
         .addAsResource("META-INF/processes.xml")
         .addClass(AbstractFoxPlatformIntegrationTest.class)
-        .addAsResource("org/camunda/bpm/integrationtest/oneTaskProcess.bpmn")
+        .addAsResource("io/orqueio/bpm/integrationtest/oneTaskProcess.bpmn")
         .addClass(Foo.class)
         .addClass(FooDataFormat.class)
         .addClass(FooDataFormatProvider.class)

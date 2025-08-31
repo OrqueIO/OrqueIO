@@ -36,13 +36,13 @@ public class TestWarDeploymentDuplicateFiltering extends AbstractFoxPlatformInte
   @Deployment(order=1, name=PA1)
   public static WebArchive processArchive1() {
     return initWebArchiveDeployment("pa2.war")
-            .addAsResource("org/camunda/bpm/integrationtest/testDeployProcessArchive.bpmn20.xml");
+            .addAsResource("io/orqueio/bpm/integrationtest/testDeployProcessArchive.bpmn20.xml");
   }
 
   @Deployment(order=2, name=PA2)
   public static WebArchive processArchive2() {
     return initWebArchiveDeployment("pa1.war")
-            .addAsResource("org/camunda/bpm/integrationtest/testDeployProcessArchive.bpmn20.xml");
+            .addAsResource("io/orqueio/bpm/integrationtest/testDeployProcessArchive.bpmn20.xml");
 
   }
 

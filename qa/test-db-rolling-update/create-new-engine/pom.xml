@@ -3,26 +3,26 @@
 
   <parent>
     <groupId>io.orqueio.bpm.qa.upgrade</groupId>
-    <artifactId>camunda-qa-db-rolling-update</artifactId>
+    <artifactId>orqueio-qa-db-rolling-update</artifactId>
     <version>7.24.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>camunda-qa-db-create-new-engine</artifactId>
+  <artifactId>orqueio-qa-db-create-new-engine</artifactId>
   <packaging>jar</packaging>
 
   <description>
-    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://camunda.com/contact/
+    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://orqueio.com/contact/
   </description>
-  <name>Camunda Platform - QA - upgrade - rolling update - create new engine</name>
+  <name>Orqueio Platform - QA - upgrade - rolling update - create new engine</name>
 
   <properties>
-    <camunda.version.current>${project.version}</camunda.version.current>
-    <camunda.version.previous>7.23.0</camunda.version.previous>
+    <orqueio.version.current>${project.version}</orqueio.version.current>
+    <orqueio.version.previous>7.23.0</orqueio.version.previous>
   </properties>
 
   <dependencies>
     <!-- NOTE: this pulls transitive dependencies of version ${project.version} in unless
-      you declare them to be ${camunda.version.current} here -->
+      you declare them to be ${orqueio.version.current} here -->
     <dependency>
       <groupId>io.orqueio.bpm</groupId>
       <artifactId>orqueio-engine</artifactId>
@@ -30,7 +30,7 @@
 
     <dependency>
       <groupId>io.orqueio.bpm.qa.upgrade</groupId>
-      <artifactId>camunda-qa-db-rolling-update-util</artifactId>
+      <artifactId>orqueio-qa-db-rolling-update-util</artifactId>
       <version>${project.version}</version>
     </dependency>
   </dependencies>
@@ -64,8 +64,8 @@
                 <phase>generate-test-sources</phase>
                 <configuration>
                   <target>
-                    <property name="current.minor.version" value="${camunda.current.majorVersion}.${camunda.current.minorVersion}" />
-                    <property name="previous.minor.version" value="${camunda.previous.majorVersion}.${camunda.previous.minorVersion}" />
+                    <property name="current.minor.version" value="${orqueio.current.majorVersion}.${orqueio.current.minorVersion}" />
+                    <property name="previous.minor.version" value="${orqueio.previous.majorVersion}.${orqueio.previous.minorVersion}" />
                     <property name="current.sql.upgrade.dir" value="${project.build.directory}/scripts-current/sql/upgrade" />
                     <property name="minor.version.upgrade.script.previous.to.current.engine" value="${database.type}_engine_${previous.minor.version}_to_${current.minor.version}.sql" />
                     <property name="minor.version.upgrade.script.previous.to.current.identity" value="${database.type}_identity_${previous.minor.version}_to_${current.minor.version}.sql" />
@@ -77,8 +77,8 @@
                     <mkdir dir="${current.sql.upgrade.dir}/" />
 
                     <!-- concatenated patches for last minor version -->
-                    <touch file="${project.build.directory}/scripts-current/sql/upgrade/${database.type}_engine_${camunda.previous.majorVersion}.${camunda.previous.minorVersion}_patch.sql" />
-                    <touch file="${project.build.directory}/scripts-current/sql/upgrade/${database.type}_identity_${camunda.previous.majorVersion}.${camunda.previous.minorVersion}_patch.sql" />
+                    <touch file="${project.build.directory}/scripts-current/sql/upgrade/${database.type}_engine_${orqueio.previous.majorVersion}.${orqueio.previous.minorVersion}_patch.sql" />
+                    <touch file="${project.build.directory}/scripts-current/sql/upgrade/${database.type}_identity_${orqueio.previous.majorVersion}.${orqueio.previous.minorVersion}_patch.sql" />
 
                     <!-- minor version upgrade from previous to current version -->
                     <touch file="${current.sql.upgrade.dir}/${minor.version.upgrade.script.previous.to.current.engine}" />
@@ -107,8 +107,8 @@
                   <artifactItems>
                     <artifactItem>
                       <groupId>io.orqueio.bpm.distro</groupId>
-                      <artifactId>camunda-sql-scripts</artifactId>
-                      <version>${camunda.version.current}</version>
+                      <artifactId>orqueio-sql-scripts</artifactId>
+                      <version>${orqueio.version.current}</version>
                       <type>test-jar</type>
                       <outputDirectory>${project.build.directory}/scripts-current</outputDirectory>
                       <overWrite>true</overWrite>
@@ -130,8 +130,8 @@
                   <goal>parse-version</goal>
                 </goals>
                 <configuration>
-                  <propertyPrefix>camunda.current</propertyPrefix>
-                  <versionString>${camunda.version.current}</versionString>
+                  <propertyPrefix>orqueio.current</propertyPrefix>
+                  <versionString>${orqueio.version.current}</versionString>
                 </configuration>
               </execution>
               <execution>
@@ -140,8 +140,8 @@
                   <goal>parse-version</goal>
                 </goals>
                 <configuration>
-                  <propertyPrefix>camunda.previous</propertyPrefix>
-                  <versionString>${camunda.version.previous}</versionString>
+                  <propertyPrefix>orqueio.previous</propertyPrefix>
+                  <versionString>${orqueio.version.previous}</versionString>
                 </configuration>
               </execution>
             </executions>
@@ -160,8 +160,8 @@
                 <configuration>
                   <srcFiles>
                     <!-- now patch old version of the schema -->
-                    <srcFile>${project.build.directory}/scripts-current/sql/upgrade/${database.type}_engine_${camunda.previous.majorVersion}.${camunda.previous.minorVersion}_patch.sql</srcFile>
-                    <srcFile>${project.build.directory}/scripts-current/sql/upgrade/${database.type}_identity_${camunda.previous.majorVersion}.${camunda.previous.minorVersion}_patch.sql</srcFile>
+                    <srcFile>${project.build.directory}/scripts-current/sql/upgrade/${database.type}_engine_${orqueio.previous.majorVersion}.${orqueio.previous.minorVersion}_patch.sql</srcFile>
+                    <srcFile>${project.build.directory}/scripts-current/sql/upgrade/${database.type}_identity_${orqueio.previous.majorVersion}.${orqueio.previous.minorVersion}_patch.sql</srcFile>
                   </srcFiles>
                 </configuration>
               </execution>
@@ -174,8 +174,8 @@
                 <configuration>
                   <srcFiles>
                     <!-- now perform the schema migrations -->
-                    <srcFile>${project.build.directory}/scripts-current/sql/upgrade/${database.type}_engine_${camunda.previous.majorVersion}.${camunda.previous.minorVersion}_to_${camunda.current.majorVersion}.${camunda.current.minorVersion}.sql</srcFile>
-                    <srcFile>${project.build.directory}/scripts-current/sql/upgrade/${database.type}_identity_${camunda.previous.majorVersion}.${camunda.previous.minorVersion}_to_${camunda.current.majorVersion}.${camunda.current.minorVersion}.sql</srcFile>
+                    <srcFile>${project.build.directory}/scripts-current/sql/upgrade/${database.type}_engine_${orqueio.previous.majorVersion}.${orqueio.previous.minorVersion}_to_${orqueio.current.majorVersion}.${orqueio.current.minorVersion}.sql</srcFile>
+                    <srcFile>${project.build.directory}/scripts-current/sql/upgrade/${database.type}_identity_${orqueio.previous.majorVersion}.${orqueio.previous.minorVersion}_to_${orqueio.current.majorVersion}.${orqueio.current.minorVersion}.sql</srcFile>
                   </srcFiles>
                 </configuration>
               </execution>
@@ -190,7 +190,7 @@
                     <!-- now perform the schema migrations -->
                     <!-- now patch new version of the schema, apply any patches explicitly -->
                     <!-- example:
-                    <srcFile>${project.build.directory}/scripts-current/sql/upgrade/${database.type}_engine_${camunda.current.majorVersion}.${camunda.current.minorVersion}_patch_${camunda.current.majorVersion}.${camunda.current.minorVersion}.0_to_${camunda.current.majorVersion}.${camunda.current.minorVersion}.1.sql</srcFile>
+                    <srcFile>${project.build.directory}/scripts-current/sql/upgrade/${database.type}_engine_${orqueio.current.majorVersion}.${orqueio.current.minorVersion}_patch_${orqueio.current.majorVersion}.${orqueio.current.minorVersion}.0_to_${orqueio.current.majorVersion}.${orqueio.current.minorVersion}.1.sql</srcFile>
                     -->
                   </srcFiles>
                 </configuration>

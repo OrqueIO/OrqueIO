@@ -37,7 +37,7 @@ public class JodaTimeClassloadingTest extends AbstractFoxPlatformIntegrationTest
 
   @Deployment
   public static WebArchive createDeployment() {
-    return initWebArchiveDeployment().addAsResource("org/camunda/bpm/integrationtest/functional/jodatime/JodaTimeClassloadingTest.bpmn20.xml");
+    return initWebArchiveDeployment().addAsResource("io/orqueio/bpm/integrationtest/functional/jodatime/JodaTimeClassloadingTest.bpmn20.xml");
   }
   
   

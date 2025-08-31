@@ -25,7 +25,7 @@ import io.orqueio.bpm.qa.upgrade.Times;
 
 /**
  *
- * @author Christopher Zell <christopher.zell@camunda.com>
+ * @author Christopher Zell <christopher.zell@orqueio.com>
  */
 public class ProcessWithExternalTaskScenario {
 
@@ -43,11 +43,11 @@ public class ProcessWithExternalTaskScenario {
    */
   public static void deploy(ProcessEngine engine, String topicName) {
     BpmnModelInstance instance = Bpmn.createExecutableProcess(PROCESS_DEF_KEY)
-        .camundaHistoryTimeToLive(180)
+        .orqueioHistoryTimeToLive(180)
         .startEvent()
         .serviceTask(EXTERNAL_TASK)
-        .camundaType(EXTERNAL_TASK_TYPE)
-        .camundaTopic(topicName)
+        .orqueioType(EXTERNAL_TASK_TYPE)
+        .orqueioTopic(topicName)
         .endEvent()
         .done();
 

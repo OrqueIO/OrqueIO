@@ -33,7 +33,7 @@ import io.orqueio.bpm.qa.upgrade.Times;
 
 /**
  *
- * @author Christopher Zell <christopher.zell@camunda.com>
+ * @author Christopher Zell <christopher.zell@orqueio.com>
  */
 public class AuthorizationScenario {
 
@@ -43,7 +43,7 @@ public class AuthorizationScenario {
 
   @Deployment
   public static String deployOneTaskProcess() {
-    return "org/camunda/bpm/qa/rolling/update/oneTaskProcess.bpmn20.xml";
+    return "io/orqueio/bpm/qa/rolling/update/oneTaskProcess.bpmn20.xml";
   }
 
   @DescribesScenario("startProcessInstance")

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" xmlns:camunda="http://camunda.org/schema/1.0/bpmn">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" xmlns:orqueio="http://orqueio.io/schema/1.0/bpmn">
   <bpmn:process id="Process" name="Process" isExecutable="true">
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>SequenceFlow_0qinhnp</bpmn:outgoing>
@@ -9,7 +9,7 @@
       <bpmn:incoming>SequenceFlow_0mnn9ba</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="SequenceFlow_0mnn9ba" sourceRef="ServiceTask_0bk3eqs" targetRef="EndEvent_00kdk3k" />
-    <bpmn:serviceTask id="ServiceTask_0bk3eqs" name="no-op" camunda:expression="${true}">
+    <bpmn:serviceTask id="ServiceTask_0bk3eqs" name="no-op" orqueio:expression="${true}">
       <bpmn:incoming>SequenceFlow_0qinhnp</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0mnn9ba</bpmn:outgoing>
     </bpmn:serviceTask>

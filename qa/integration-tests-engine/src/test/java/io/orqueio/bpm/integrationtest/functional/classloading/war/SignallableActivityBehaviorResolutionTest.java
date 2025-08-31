@@ -42,8 +42,8 @@ public class SignallableActivityBehaviorResolutionTest extends AbstractFoxPlatfo
   public static WebArchive createProcessArchiveDeplyoment() {
     return initWebArchiveDeployment()
             .addClass(ExampleSignallableActivityBehavior.class)
-            .addAsResource("org/camunda/bpm/integrationtest/functional/classloading/SignallableActivityBehaviorResolutionTest.testResolveClass.bpmn20.xml")
-            .addAsResource("org/camunda/bpm/integrationtest/functional/classloading/SignallableActivityBehaviorResolutionTest.testResolveClassFromJobExecutor.bpmn20.xml");
+            .addAsResource("io/orqueio/bpm/integrationtest/functional/classloading/SignallableActivityBehaviorResolutionTest.testResolveClass.bpmn20.xml")
+            .addAsResource("io/orqueio/bpm/integrationtest/functional/classloading/SignallableActivityBehaviorResolutionTest.testResolveClassFromJobExecutor.bpmn20.xml");
   }
 
   @Deployment(name="clientDeployment")

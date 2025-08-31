@@ -21,7 +21,7 @@ import java.util.Set;
 
 import javax.ws.rs.core.Application;
 
-import io.orqueio.bpm.engine.rest.impl.CamundaRestResources;
+import io.orqueio.bpm.engine.rest.impl.OrqueioRestResources;
 import io.orqueio.bpm.engine.rest.impl.NamedProcessEngineRestServiceImpl;
 
 /**
@@ -39,7 +39,7 @@ public class EngineRestApplication extends Application {
     classes.add(NamedProcessEngineRestServiceImpl.class);
 
     // mandatory
-    classes.addAll(CamundaRestResources.getConfigurationClasses());
+    classes.addAll(OrqueioRestResources.getConfigurationClasses());
 
     return classes;
   }

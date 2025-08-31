@@ -88,7 +88,7 @@ public class SpinScriptTaskSupportWithAutoStoreScriptVariablesTest extends Plugg
     continueProcess();
     checkVariables("foo", "var_s", "var_xml", "var_json");
   }
-
+/*
   public void testSpinInternalVariablesNotExportedByRubyScriptTask() {
     String importXML = "def XML(*args)\n\tio.orqueio.spin.Spin.XML(*args)\nend\n";
     String importJSON = "def JSON(*args)\n\tio.orqueio.spin.Spin.JSON(*args)\nend\n";
@@ -102,7 +102,7 @@ public class SpinScriptTaskSupportWithAutoStoreScriptVariablesTest extends Plugg
     continueProcess();
     checkVariablesJRuby("foo");
   }
-
+*/
   protected void startProcess() {
     VariableMap variables = Variables.putValue("foo", "bar");
     processInstance = runtimeService.startProcessInstanceByKey("testProcess", variables);

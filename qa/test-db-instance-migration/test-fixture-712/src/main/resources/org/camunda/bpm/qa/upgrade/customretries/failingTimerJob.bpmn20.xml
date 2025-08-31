@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_0nq4kqu" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.5.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:orqueio="http://orqueio.io/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_0nq4kqu" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Orqueio Modeler" exporterVersion="3.5.0">
   <bpmn:process id="failingTimer" isExecutable="true">
     <bpmn:startEvent id="StartEvent_1" name="Start">
       <bpmn:outgoing>SequenceFlow_1</bpmn:outgoing>
@@ -15,13 +15,13 @@
       <bpmn:outgoing>SequenceFlow_2</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:sequenceFlow id="SequenceFlow_3" sourceRef="IntermediateThrowEvent_Timer" targetRef="service" />
-    <bpmn:serviceTask id="service" name="Failing Service" camunda:class="io.orqueio.UnexistingClass">
+    <bpmn:serviceTask id="service" name="Failing Service" orqueio:class="io.orqueio.UnexistingClass">
       <bpmn:incoming>SequenceFlow_3</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0zrwn6e</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:boundaryEvent id="IntermediateThrowEvent_Timer" name="Timer" cancelActivity="false" attachedToRef="Task_0a4ov5t">
       <bpmn:extensionElements>
-        <camunda:failedJobRetryTimeCycle>R2/PT1S</camunda:failedJobRetryTimeCycle>
+        <orqueio:failedJobRetryTimeCycle>R2/PT1S</orqueio:failedJobRetryTimeCycle>
       </bpmn:extensionElements>
       <bpmn:outgoing>SequenceFlow_3</bpmn:outgoing>
       <bpmn:timerEventDefinition id="TimerEventDefinition_1yxwkdp">

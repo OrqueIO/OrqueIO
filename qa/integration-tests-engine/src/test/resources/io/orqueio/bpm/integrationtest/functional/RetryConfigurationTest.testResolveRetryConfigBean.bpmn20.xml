@@ -2,10 +2,10 @@
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
                   xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
                   xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                  xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="Definitions_1"
-                  targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler"
+                  xmlns:orqueio="http://orqueio.io/schema/1.0/bpmn" id="Definitions_1"
+                  targetNamespace="http://bpmn.io/schema/bpmn" exporter="Orqueio Modeler"
                   exporterVersion="1.10.0">
-  <bpmn:process id="testRetry" name="Retry config" isExecutable="true" camunda:historyTimeToLive="P180D">
+  <bpmn:process id="testRetry" name="Retry config" isExecutable="true" orqueio:historyTimeToLive="P180D">
     <bpmn:startEvent id="startEventProcessStarted" name="Process&#10;started">
       <bpmn:outgoing>SequenceFlow1</bpmn:outgoing>
     </bpmn:startEvent>
@@ -14,10 +14,10 @@
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="SequenceFlow1" sourceRef="startEventProcessStarted" targetRef="Task_1a7s6c9" />
     <bpmn:sequenceFlow id="SequenceFlow_1qnaq1y" sourceRef="Task_1a7s6c9" targetRef="endEventProcessEnded" />
-    <bpmn:serviceTask id="Task_1a7s6c9" name="test" camunda:asyncBefore="true" camunda:delegateExpression="${errorDelegate}">
+    <bpmn:serviceTask id="Task_1a7s6c9" name="test" orqueio:asyncBefore="true" orqueio:delegateExpression="${errorDelegate}">
       <bpmn:extensionElements>
-        <camunda:failedJobRetryTimeCycle>${retryConfig.defaultConfig()}
-        </camunda:failedJobRetryTimeCycle>
+        <orqueio:failedJobRetryTimeCycle>${retryConfig.defaultConfig()}
+        </orqueio:failedJobRetryTimeCycle>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow1</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1qnaq1y</bpmn:outgoing>

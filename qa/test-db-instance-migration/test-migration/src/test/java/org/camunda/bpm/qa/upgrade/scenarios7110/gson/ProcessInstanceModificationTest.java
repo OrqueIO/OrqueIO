@@ -38,7 +38,7 @@ import static org.junit.Assert.assertThat;
 public class ProcessInstanceModificationTest {
 
   @Rule
-  public ProcessEngineRule engineRule = new ProcessEngineRule("camunda.cfg.xml");
+  public ProcessEngineRule engineRule = new ProcessEngineRule("orqueio.cfg.xml");
 
   @ScenarioUnderTest("initProcessInstanceModification.1")
   @Test

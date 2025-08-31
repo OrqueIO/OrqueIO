@@ -26,7 +26,7 @@ import io.orqueio.bpm.engine.rest.util.WebApplicationUtil;
 
 /**
  * A servlet context listener that bootstraps cockpit on a
- * running Camunda Platform.
+ * running Orqueio Platform.
  *
  * @author nico.rehwaldt
  */

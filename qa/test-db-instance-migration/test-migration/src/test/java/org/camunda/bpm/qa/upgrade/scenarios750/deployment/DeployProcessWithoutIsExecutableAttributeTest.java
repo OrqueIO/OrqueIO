@@ -27,14 +27,14 @@ import org.junit.Test;
 
 /**
  *
- * @author Christopher Zell <christopher.zell@camunda.com>
+ * @author Christopher Zell <christopher.zell@orqueio.com>
  */
 @ScenarioUnderTest("DeployProcessWithoutIsExecutableAttributeScenario")
 @Origin("7.5.0")
 public class DeployProcessWithoutIsExecutableAttributeTest {
 
   @Rule
-  public ProcessEngineRule engineRule = new ProcessEngineRule("camunda.cfg.xml");
+  public ProcessEngineRule engineRule = new ProcessEngineRule("orqueio.cfg.xml");
 
 
   @Test

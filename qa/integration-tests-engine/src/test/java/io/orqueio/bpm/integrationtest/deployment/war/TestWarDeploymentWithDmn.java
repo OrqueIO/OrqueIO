@@ -31,7 +31,7 @@ public class TestWarDeploymentWithDmn extends AbstractFoxPlatformIntegrationTest
   @Deployment
   public static WebArchive processArchive() {
     return initWebArchiveDeployment()
-            .addAsResource("org/camunda/bpm/integrationtest/testDeployProcessArchiveWithDmn.dmn");
+            .addAsResource("io/orqueio/bpm/integrationtest/testDeployProcessArchiveWithDmn.dmn");
   }
 
   @Test

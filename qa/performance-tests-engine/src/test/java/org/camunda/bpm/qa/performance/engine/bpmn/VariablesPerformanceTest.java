@@ -42,7 +42,7 @@ public class VariablesPerformanceTest extends ProcessEnginePerformanceTestCase {
 
   @Test
   @Deployment(resources =
-    {"org/camunda/bpm/qa/performance/engine/bpmn/StartEventPerformanceTest.noneStartEvent.bpmn"})
+    {"io/orqueio/bpm/qa/performance/engine/bpmn/StartEventPerformanceTest.noneStartEvent.bpmn"})
   public void noneStartEventStringVar() {
     HashMap<String, Object> variables = new HashMap<String, Object>();
     variables.put(VARIABLE1, "someValue");
@@ -54,7 +54,7 @@ public class VariablesPerformanceTest extends ProcessEnginePerformanceTestCase {
 
   @Test
   @Deployment(resources =
-    {"org/camunda/bpm/qa/performance/engine/bpmn/StartEventPerformanceTest.noneStartEvent.bpmn"})
+    {"io/orqueio/bpm/qa/performance/engine/bpmn/StartEventPerformanceTest.noneStartEvent.bpmn"})
   public void noneStartEvent10StringVars() {
     HashMap<String, Object> variables = new HashMap<String, Object>();
     variables.put(VARIABLE1, "someValue");
@@ -75,7 +75,7 @@ public class VariablesPerformanceTest extends ProcessEnginePerformanceTestCase {
 
   @Test
   @Deployment(resources =
-    {"org/camunda/bpm/qa/performance/engine/bpmn/StartEventPerformanceTest.noneStartEvent.bpmn"})
+    {"io/orqueio/bpm/qa/performance/engine/bpmn/StartEventPerformanceTest.noneStartEvent.bpmn"})
   public void noneStartEventStringVar2() {
     HashMap<String, Object> variables = new HashMap<String, Object>();
     variables.put(VARIABLE1, "Some Text which is considerably longer than the first one.");
@@ -87,7 +87,7 @@ public class VariablesPerformanceTest extends ProcessEnginePerformanceTestCase {
 
   @Test
   @Deployment(resources =
-    {"org/camunda/bpm/qa/performance/engine/bpmn/StartEventPerformanceTest.noneStartEvent.bpmn"})
+    {"io/orqueio/bpm/qa/performance/engine/bpmn/StartEventPerformanceTest.noneStartEvent.bpmn"})
   public void noneStartEventDoubleVar() {
     HashMap<String, Object> variables = new HashMap<String, Object>();
     variables.put(VARIABLE1, 2d);
@@ -99,7 +99,7 @@ public class VariablesPerformanceTest extends ProcessEnginePerformanceTestCase {
 
   @Test
   @Deployment(resources =
-    {"org/camunda/bpm/qa/performance/engine/bpmn/StartEventPerformanceTest.noneStartEvent.bpmn"})
+    {"io/orqueio/bpm/qa/performance/engine/bpmn/StartEventPerformanceTest.noneStartEvent.bpmn"})
   public void noneStartEventByteVar() {
     HashMap<String, Object> variables = new HashMap<String, Object>();
     variables.put(VARIABLE1, "This string will be saved as a byte array.".getBytes());
@@ -111,7 +111,7 @@ public class VariablesPerformanceTest extends ProcessEnginePerformanceTestCase {
 
   @Test
   @Deployment(resources =
-    {"org/camunda/bpm/qa/performance/engine/bpmn/StartEventPerformanceTest.noneStartEvent.bpmn"})
+    {"io/orqueio/bpm/qa/performance/engine/bpmn/StartEventPerformanceTest.noneStartEvent.bpmn"})
   public void noneStartEvent10ByteVars() {
     HashMap<String, Object> variables = new HashMap<String, Object>();
     variables.put(VARIABLE1, "This string will be saved as a byte array.".getBytes());
@@ -132,7 +132,7 @@ public class VariablesPerformanceTest extends ProcessEnginePerformanceTestCase {
 
   @Test
   @Deployment(resources =
-    {"org/camunda/bpm/qa/performance/engine/bpmn/StartEventPerformanceTest.noneStartEvent.bpmn"})
+    {"io/orqueio/bpm/qa/performance/engine/bpmn/StartEventPerformanceTest.noneStartEvent.bpmn"})
   public void noneStartEventLargeByteVar() {
     HashMap<String, Object> variables = new HashMap<String, Object>();
     byte[] bytes = new byte[5*1024];

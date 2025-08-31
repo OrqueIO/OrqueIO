@@ -37,7 +37,7 @@ import org.junit.Test;
 public class DeleteDeploymentCascadeTest {
 
   @Rule
-  public ProcessEngineRule processEngineRule = new ProcessEngineRule("camunda.cfg.xml");
+  public ProcessEngineRule processEngineRule = new ProcessEngineRule("orqueio.cfg.xml");
 
   protected static final String DATA_PREFIX = DeleteDeploymentCascadeTest.class.getSimpleName();
 

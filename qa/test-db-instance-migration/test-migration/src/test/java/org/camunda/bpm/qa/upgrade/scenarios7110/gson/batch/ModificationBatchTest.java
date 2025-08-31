@@ -40,7 +40,7 @@ import static org.junit.Assert.assertThat;
 public class ModificationBatchTest {
 
   @Rule
-  public ProcessEngineRule engineRule = new ProcessEngineRule("camunda.cfg.xml");
+  public ProcessEngineRule engineRule = new ProcessEngineRule("orqueio.cfg.xml");
 
   @ScenarioUnderTest("initModificationBatch.1")
   @Test

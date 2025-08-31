@@ -39,7 +39,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author Christopher Zell <christopher.zell@camunda.com>
+ * @author Christopher Zell <christopher.zell@orqueio.com>
  */
 @RunWith(Arquillian.class)
 public class PurgeDatabaseTest extends AbstractFoxPlatformIntegrationTest {
@@ -52,7 +52,7 @@ public class PurgeDatabaseTest extends AbstractFoxPlatformIntegrationTest {
   @Deployment
   public static WebArchive processArchive() {
     return initWebArchiveDeployment()
-      .addAsResource("org/camunda/bpm/integrationtest/testDeployProcessArchive.bpmn20.xml");
+      .addAsResource("io/orqueio/bpm/integrationtest/testDeployProcessArchive.bpmn20.xml");
   }
 
   @Test

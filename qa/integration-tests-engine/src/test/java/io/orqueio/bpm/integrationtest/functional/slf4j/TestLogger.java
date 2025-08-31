@@ -24,7 +24,7 @@ public class TestLogger extends BaseLogger {
   public static final TestLogger INSTANCE = BaseLogger.createLogger(TestLogger.class, "QA", "io.orqueio.bpm.qa", "01");
 
   /**
-   * Verify that camunda commons log a messages with a single format parameter.
+   * Verify that orqueio commons log a messages with a single format parameter.
    * The return type of {@link MessageFormatter#format(String, Object)} changed with slf4j-api:1.6.0
    */
   public void testLogWithSingleFormatParameter() {
@@ -32,7 +32,7 @@ public class TestLogger extends BaseLogger {
   }
 
   /**
-   * Verify that camunda commons log a messages with two format parameters.
+   * Verify that orqueio commons log a messages with two format parameters.
    * The return type of {@link MessageFormatter#format(String, Object, Object)} changed with slf4j-api:1.6.0
    */
   public void testLogWithTwoFormatParameters() {
@@ -40,7 +40,7 @@ public class TestLogger extends BaseLogger {
   }
 
   /**
-   * Verify that camunda commons log a messages which uses the array formatter (more than two format parameters).
+   * Verify that orqueio commons log a messages which uses the array formatter (more than two format parameters).
    * The return type of {@link MessageFormatter#arrayFormat(String, Object[])} changed with slf4j-api:1.6.0
    */
   public void testLogWithArrayFormatter() {

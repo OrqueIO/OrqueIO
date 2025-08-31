@@ -45,7 +45,7 @@ public class TestPostDeployFailure_JBOSS {
     
     WebArchive archive = ShrinkWrap.create(WebArchive.class, "failingDeployment.war")
         .addAsResource("META-INF/processes.xml", "META-INF/processes.xml")
-        .addAsResource("org/camunda/bpm/integrationtest/invoice-it.bpmn20.xml")
+        .addAsResource("io/orqueio/bpm/integrationtest/invoice-it.bpmn20.xml")
         .addClass(PostDeployFailureApp.class);
 
     return archive;

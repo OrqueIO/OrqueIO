@@ -565,7 +565,7 @@
                 </goals>
                 <configuration>
                   <target>
-                    <copy file="target/test-classes/camunda.cfg.prefix.xml" tofile="target/test-classes/camunda.cfg.xml" overwrite="true" />
+                    <copy file="target/test-classes/orqueio.cfg.prefix.xml" tofile="target/test-classes/orqueio.cfg.xml" overwrite="true" />
                   </target>
                 </configuration>
               </execution>

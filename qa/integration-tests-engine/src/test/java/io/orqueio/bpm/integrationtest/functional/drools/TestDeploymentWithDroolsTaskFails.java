@@ -46,10 +46,10 @@ public class TestDeploymentWithDroolsTaskFails {
   public static WebArchive processArchive() {    
     
     return  ShrinkWrap.create(WebArchive.class, "test.war")
-      .addAsWebInfResource("org/camunda/bpm/integrationtest/beans.xml", "beans.xml")
+      .addAsWebInfResource("io/orqueio/bpm/integrationtest/beans.xml", "beans.xml")
       .addAsLibraries(DeploymentHelper.getEjbClient())
       .addAsResource("META-INF/processes.xml", "META-INF/processes.xml")
-      .addAsResource("org/camunda/bpm/integrationtest/functional/drools/TestDeploymentWithDroolsTaskFails.testDeployDroolsFails.bpmn20.xml");           
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/drools/TestDeploymentWithDroolsTaskFails.testDeployDroolsFails.bpmn20.xml");
   }
   
   @Test

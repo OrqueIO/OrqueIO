@@ -1,12 +1,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>camunda-qa-performance-tests-engine</artifactId>
+  <artifactId>orqueio-qa-performance-tests-engine</artifactId>
   <packaging>jar</packaging>
 
   <description>
-    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://camunda.com/contact/
+    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://orqueio.com/contact/
   </description>
-  <name>Camunda Platform - QA Performance Tests Engine</name>
+  <name>Orqueio Platform - QA Performance Tests Engine</name>
 
   <parent>
     <groupId>io.orqueio.bpm.qa</groupId>

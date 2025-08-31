@@ -698,7 +698,7 @@
                 <exclude>**/ManagedJobExecutorTest.java</exclude>
 
                 <!-- TODO Please delete the following exclusions after the Tomcat 10 issue with Arquillian -->
-                <!-- See Relevant issue: https://github.com/camunda/camunda-bpm-platform/issues/4434 -->
+                <!-- See Relevant issue: https://github.com/orqueio/orqueio-bpm-platform/issues/4434 -->
                 <exclude>**/CallActivityContextSwitchTest.java</exclude>
                 <exclude>**/CdiBeanCallActivityResolutionTest.java</exclude>
 
@@ -792,7 +792,7 @@
                 <exclude>**/TestWarDeploymentWithProcessEnginePlugin.exclude</exclude>
 
                 <exclude>**/SpringServletPATimerStartEventExpressionTest.java</exclude>
-                <!-- https://github.com/camunda/camunda-bpm-platform/issues/5037-->
+                <!-- https://github.com/orqueio/orqueio-bpm-platform/issues/5037-->
                 <exclude>**/FeelEngineTest.java</exclude>
               </excludes>
               <redirectTestOutputToFile>${redirect.test.output}</redirectTestOutputToFile>
@@ -915,7 +915,7 @@
                 <!-- CAM-1778 -->
                 <exludes>**/TestWarDeploymentWithProcessEnginePlugin.java</exludes>
 
-                <!-- https://github.com/camunda/camunda-bpm-platform/issues/5037 -->
+                <!-- https://github.com/orqueio/orqueio-bpm-platform/issues/5037 -->
                 <exclude>**/FeelEngineTest.java</exclude>
                 <exclude>**/SpringServletPATimerStartEventExpressionTest.java</exclude>
               </excludes>

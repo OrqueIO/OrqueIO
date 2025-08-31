@@ -42,7 +42,7 @@ public class SerializableVariableTest extends AbstractFoxPlatformIntegrationTest
       .addClass(GetVariableDelegate.class)
       .addClass(SetVariableDelegate.class)
       .addClass(SerializableVariable.class)
-      .addAsResource("org/camunda/bpm/integrationtest/functional/classloading/SerializableVariableTest.testResolveVariable.bpmn20.xml");
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/classloading/SerializableVariableTest.testResolveVariable.bpmn20.xml");
   }
 
   @Test

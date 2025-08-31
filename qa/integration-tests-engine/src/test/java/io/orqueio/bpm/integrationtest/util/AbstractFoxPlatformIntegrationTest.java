@@ -65,7 +65,7 @@ public abstract class AbstractFoxPlatformIntegrationTest {
 
   public static WebArchive initWebArchiveDeployment(String name, String processesXmlPath) {
     WebArchive archive = ShrinkWrap.create(WebArchive.class, name)
-              .addAsWebInfResource("org/camunda/bpm/integrationtest/beans.xml", "beans.xml")
+              .addAsWebInfResource("io/orqueio/bpm/integrationtest/beans.xml", "beans.xml")
               .addAsLibraries(DeploymentHelper.getEngineCdi())
               .addAsResource(processesXmlPath, "META-INF/processes.xml")
               .addClass(AbstractFoxPlatformIntegrationTest.class)

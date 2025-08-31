@@ -43,8 +43,8 @@ public class JPAIntegrationTest extends AbstractFoxPlatformIntegrationTest {
       .addClass(SomeEntity.class)
       .addClass(PersistenceDelegateBean.class)
       .addClass(AsyncPersistenceDelegateBean.class)
-      .addAsResource("org/camunda/bpm/integrationtest/functional/jpa/TransactionIntegrationTest.testDelegateParticipateInApplicationTx.bpmn20.xml")
-      .addAsResource("org/camunda/bpm/integrationtest/functional/jpa/TransactionIntegrationTest.testAsyncDelegateNewTx.bpmn20.xml")
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/jpa/TransactionIntegrationTest.testDelegateParticipateInApplicationTx.bpmn20.xml")
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/jpa/TransactionIntegrationTest.testAsyncDelegateNewTx.bpmn20.xml")
       .addAsWebInfResource("persistence.xml", "classes/META-INF/persistence.xml");
   }
 

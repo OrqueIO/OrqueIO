@@ -28,7 +28,7 @@ import io.orqueio.bpm.qa.upgrade.Times;
 /**
  * Starts the process with a parallel gateway and user task's on the old engine.
  *
- * @author Christopher Zell <christopher.zell@camunda.com>
+ * @author Christopher Zell <christopher.zell@orqueio.com>
  */
 public class ProcessWithParallelGatewayScenario {
 
@@ -36,7 +36,7 @@ public class ProcessWithParallelGatewayScenario {
 
   @Deployment
   public static String deploy() {
-    return "org/camunda/bpm/qa/rolling/update/processWithParallelGateway.bpmn20.xml";
+    return "io/orqueio/bpm/qa/rolling/update/processWithParallelGateway.bpmn20.xml";
   }
 
   @DescribesScenario("init.none")

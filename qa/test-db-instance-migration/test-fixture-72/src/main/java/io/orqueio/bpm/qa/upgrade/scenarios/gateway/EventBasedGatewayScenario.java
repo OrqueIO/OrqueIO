@@ -30,7 +30,7 @@ public class EventBasedGatewayScenario {
 
   @Deployment
   public static String deployProcess() {
-    return "org/camunda/bpm/qa/upgrade/gateway/eventBasedGatewayProcess.bpmn20.xml";
+    return "io/orqueio/bpm/qa/upgrade/gateway/eventBasedGatewayProcess.bpmn20.xml";
   }
 
   @DescribesScenario("init")

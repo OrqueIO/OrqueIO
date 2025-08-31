@@ -40,7 +40,7 @@ public class ErrorPageIT extends AbstractWebIntegrationTest {
     assertEquals(404, response.getStatus());
     assertTrue(response.getHeaders().get("Content-Type").get(0).startsWith("text/html"));
     String responseEntity = response.getBody();
-    assertTrue(responseEntity.contains("Camunda"));
+    assertTrue(responseEntity.contains("Orqueio"));
     assertTrue(responseEntity.contains("Not Found"));
   }
 

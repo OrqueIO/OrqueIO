@@ -43,7 +43,7 @@ public class CreateStandaloneTaskAuthorizationTest {
   private static final String USER_ID = "jane" + "CreateStandaloneTask";
 
   @Rule
-  public ProcessEngineRule engineRule = new ProcessEngineRule("camunda.cfg.xml");
+  public ProcessEngineRule engineRule = new ProcessEngineRule("orqueio.cfg.xml");
 
   protected HistoryService historyService;
   protected AuthorizationService authorizationService;

@@ -1,8 +1,8 @@
 /*
- * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
+ * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. TOADDLATERCCS this file to you under the Apache License,
+ * ownership. Camunda licenses this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -20,7 +20,7 @@
 var Page = require('./../base');
 
 module.exports = Page.extend({
-  url: '/camunda/app/cockpit/default/#/reports',
+  url: '/orqueio/app/cockpit/default/#/reports',
 
   reportsType: function() {
     return element(by.css('[cam-reports-type]'));

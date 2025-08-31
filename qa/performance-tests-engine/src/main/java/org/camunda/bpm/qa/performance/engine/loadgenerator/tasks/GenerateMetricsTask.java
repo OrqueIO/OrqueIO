@@ -27,7 +27,7 @@ import io.orqueio.bpm.engine.impl.util.ClockUtil;
 /**
  * Represents an task which generates metrics of an year.
  *
- * @author Christopher Zell <christopher.zell@camunda.com>
+ * @author Christopher Zell <christopher.zell@orqueio.com>
  */
 public class GenerateMetricsTask implements Runnable {
 

@@ -22,24 +22,24 @@ import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 
 public class DeploymentHelper extends AbstractDeploymentHelper {
 
-  protected static final String CAMUNDA_EJB_CLIENT = "io.orqueio.bpm.javaee:camunda-ejb-client-jakarta";
-  protected static final String CAMUNDA_ENGINE_CDI = "io.orqueio.bpm:camunda-engine-cdi-jakarta";
-  protected static final String CAMUNDA_ENGINE_SPRING = "io.orqueio.bpm:camunda-engine-spring-6";
+  protected static final String ORQUEIO_EJB_CLIENT = "io.orqueio.bpm.javaee:orqueio-ejb-client-jakarta";
+  protected static final String ORQUEIO_ENGINE_CDI = "io.orqueio.bpm:orqueio-engine-cdi-jakarta";
+  protected static final String ORQUEIO_ENGINE_SPRING = "io.orqueio.bpm:orqueio-engine-spring-6";
 
   public static JavaArchive getEjbClient() {
-    return getEjbClient(CAMUNDA_EJB_CLIENT);
+    return getEjbClient(ORQUEIO_EJB_CLIENT);
   }
 
   public static JavaArchive getEngineCdi() {
-    return getEngineCdi(CAMUNDA_ENGINE_CDI);
+    return getEngineCdi(ORQUEIO_ENGINE_CDI);
   }
 
   public static JavaArchive[] getWeld() {
-    return getWeld(CAMUNDA_ENGINE_CDI);
+    return getWeld(ORQUEIO_ENGINE_CDI);
   }
 
   public static JavaArchive[] getEngineSpring() {
-    return getEngineSpring(CAMUNDA_ENGINE_SPRING);
+    return getEngineSpring(ORQUEIO_ENGINE_SPRING);
   }
 
   protected static JavaArchive[] getWeld(String engineCdiArtifactName) {

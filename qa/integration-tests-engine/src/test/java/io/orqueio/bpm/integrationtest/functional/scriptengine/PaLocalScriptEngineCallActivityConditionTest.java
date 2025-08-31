@@ -44,19 +44,19 @@ public class PaLocalScriptEngineCallActivityConditionTest extends AbstractFoxPla
       .addClass(AlwaysTrueScriptEngineFactory.class)
       .addAsResource(new StringAsset(AlwaysTrueScriptEngineFactory.class.getName()),
           PaLocalScriptEngineSupportTest.SCRIPT_ENGINE_FACTORY_PATH)
-      .addAsResource("org/camunda/bpm/integrationtest/functional/scriptengine/PaLocalScriptEngineCallActivityConditionTest.callingProcessScriptConditionalFlow.bpmn20.xml");
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/scriptengine/PaLocalScriptEngineCallActivityConditionTest.callingProcessScriptConditionalFlow.bpmn20.xml");
   }
 
   @Deployment(name="pa2")
   public static WebArchive createCalledProcessDeployment() {
     return initWebArchiveDeployment("pa2.war")
-      .addAsResource("org/camunda/bpm/integrationtest/functional/scriptengine/PaLocalScriptEngineCallActivityConditionTest.calledProcess.bpmn20.xml");
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/scriptengine/PaLocalScriptEngineCallActivityConditionTest.calledProcess.bpmn20.xml");
   }
 
   @Deployment(name="clientDeployment")
   public static WebArchive clientDeployment() {
     WebArchive deployment = ShrinkWrap.create(WebArchive.class, "client.war")
-            .addAsWebInfResource("org/camunda/bpm/integrationtest/beans.xml", "beans.xml")
+            .addAsWebInfResource("io/orqueio/bpm/integrationtest/beans.xml", "beans.xml")
             .addClass(AbstractFoxPlatformIntegrationTest.class);
 
     TestContainer.addContainerSpecificResourcesForNonPa(deployment);

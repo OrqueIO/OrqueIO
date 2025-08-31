@@ -40,10 +40,10 @@ public class SpringLookupManagedProcessEngineTest extends AbstractFoxPlatformInt
   public static WebArchive processArchive() {    
     return ShrinkWrap.create(WebArchive.class, "test.war")
       .addClass(AbstractFoxPlatformIntegrationTest.class)
-      .addAsWebInfResource("org/camunda/bpm/integrationtest/deployment/spring/SpringLookupManagedProcessEngineTest-context.xml", "applicationContext.xml")
+      .addAsWebInfResource("io/orqueio/bpm/integrationtest/deployment/spring/SpringLookupManagedProcessEngineTest-context.xml", "applicationContext.xml")
       .addAsLibraries(DeploymentHelper.getEngineSpring())
-      .addAsManifestResource("org/camunda/bpm/integrationtest/deployment/spring/jboss-deployment-structure.xml", "jboss-deployment-structure.xml")
-      .addAsWebInfResource("org/camunda/bpm/integrationtest/deployment/spring/web.xml", "web.xml");
+      .addAsManifestResource("io/orqueio/bpm/integrationtest/deployment/spring/jboss-deployment-structure.xml", "jboss-deployment-structure.xml")
+      .addAsWebInfResource("io/orqueio/bpm/integrationtest/deployment/spring/web.xml", "web.xml");
   }
   
     

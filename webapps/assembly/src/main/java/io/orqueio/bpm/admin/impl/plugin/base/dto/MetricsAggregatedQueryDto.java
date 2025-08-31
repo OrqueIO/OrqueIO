@@ -21,7 +21,7 @@ import io.orqueio.bpm.engine.impl.util.ClockUtil;
 import io.orqueio.bpm.webapp.rest.dto.AbstractRestQueryParametersDto;
 import io.orqueio.bpm.engine.impl.metrics.util.MetricsUtil;
 import io.orqueio.bpm.engine.management.Metrics;
-import io.orqueio.bpm.engine.rest.dto.CamundaQueryParam;
+import io.orqueio.bpm.engine.rest.dto.OrqueioQueryParam;
 import io.orqueio.bpm.engine.rest.dto.converter.DateConverter;
 import io.orqueio.bpm.engine.rest.dto.converter.StringListConverter;
 import io.orqueio.bpm.engine.rest.exception.InvalidRequestException;
@@ -67,7 +67,7 @@ public class MetricsAggregatedQueryDto extends AbstractRestQueryParametersDto<Me
     maxResultsLimitEnabled = false;
   }
 
-  @CamundaQueryParam("groupBy")
+  @OrqueioQueryParam("groupBy")
   public void setGroupBy(String groupBy) {
     this.groupBy = groupBy;
   }
@@ -76,7 +76,7 @@ public class MetricsAggregatedQueryDto extends AbstractRestQueryParametersDto<Me
     return groupBy;
   }
 
-  @CamundaQueryParam(value = "metrics", converter = StringListConverter.class)
+  @OrqueioQueryParam(value = "metrics", converter = StringListConverter.class)
   public void setMetrics(List<String> metrics) {
     boolean valid = new HashSet<>(VALID_METRIC_VALUES).containsAll(metrics);
     if (!valid) {
@@ -89,7 +89,7 @@ public class MetricsAggregatedQueryDto extends AbstractRestQueryParametersDto<Me
     return metrics;
   }
 
-  @CamundaQueryParam(value = "subscriptionStartDate", converter = DateConverter.class)
+  @OrqueioQueryParam(value = "subscriptionStartDate", converter = DateConverter.class)
   public void setSubscriptionStartDate(Date subscriptionStartDate) {
     this.subscriptionStartDate = subscriptionStartDate;
 
@@ -102,12 +102,12 @@ public class MetricsAggregatedQueryDto extends AbstractRestQueryParametersDto<Me
     }
   }
 
-  @CamundaQueryParam(value = "startDate", converter = DateConverter.class)
+  @OrqueioQueryParam(value = "startDate", converter = DateConverter.class)
   public void setStartDate(Date startDate) {
     this.startDate = startDate;
   }
 
-  @CamundaQueryParam(value = "endDate", converter = DateConverter.class)
+  @OrqueioQueryParam(value = "endDate", converter = DateConverter.class)
   public void setEndDate(Date endDate) {
     this.endDate = endDate;
   }

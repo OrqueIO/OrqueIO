@@ -25,7 +25,7 @@ import io.orqueio.bpm.webapp.plugin.resource.PluginResourceOverride;
 import io.orqueio.bpm.webapp.plugin.spi.AppPlugin;
 
 /**
- * The list of services provided by a camunda webapplication, providing
+ * The list of services provided by a orqueio webapplication, providing
  * a plugin registry and access to the process engine.
  *
  * @author Daniel Meyer

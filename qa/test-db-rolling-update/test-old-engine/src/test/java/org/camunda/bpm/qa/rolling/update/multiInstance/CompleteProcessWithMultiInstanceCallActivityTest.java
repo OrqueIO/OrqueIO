@@ -26,7 +26,7 @@ import static org.junit.Assert.assertNotNull;
 
 /**
  *
- * @author Christopher Zell <christopher.zell@camunda.com>
+ * @author Christopher Zell <christopher.zell@orqueio.com>
  */
 @ScenarioUnderTest("ProcessWithMultiInstanceCallActivityScenario")
 public class CompleteProcessWithMultiInstanceCallActivityTest extends AbstractRollingUpdateTestCase {

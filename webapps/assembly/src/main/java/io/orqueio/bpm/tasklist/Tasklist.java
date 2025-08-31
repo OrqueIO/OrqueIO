@@ -26,7 +26,7 @@ public class Tasklist {
 
   /**
    * The {@link TasklistRuntimeDelegate} is an delegate that will be
-   * initialized by bootstrapping camunda admin with an specific
+   * initialized by bootstrapping orqueio admin with an specific
    * instance
    */
   protected static TasklistRuntimeDelegate TASKLIST_RUNTIME_DELEGATE;

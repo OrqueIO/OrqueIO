@@ -48,7 +48,7 @@ public class TestPaAnnotatedEjb extends AbstractFoxPlatformIntegrationTest {
    *        |-- deployment-descriptor-with-custom-filename.xml
    *        |-- META-INF/beans.xml
    *
-   *    |-- camunda-engine-cdi.jar
+   *    |-- orqueio-engine-cdi.jar
    *        |-- META-INF/MANIFEST.MF
    *
    */
@@ -59,7 +59,7 @@ public class TestPaAnnotatedEjb extends AbstractFoxPlatformIntegrationTest {
       .addClass(AbstractFoxPlatformIntegrationTest.class)
       .addClass(TestPaAnnotatedEjb.class)
       .addClass(AnnotatedEjbPa.class)
-      .addAsResource("org/camunda/bpm/integrationtest/deployment/ear/process1.bpmn20.xml", "process.bpmn")
+      .addAsResource("io/orqueio/bpm/integrationtest/deployment/ear/process1.bpmn20.xml", "process.bpmn")
       .addAsResource("META-INF/processes.xml", "deployment-descriptor-with-custom-filename.xml")
       .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
 

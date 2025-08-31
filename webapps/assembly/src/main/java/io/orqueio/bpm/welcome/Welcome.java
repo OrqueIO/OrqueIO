@@ -26,7 +26,7 @@ public class Welcome {
 
   /**
    * The {@link WelcomeRuntimeDelegate} is an delegate that will be
-   * initialized by bootstrapping camunda welcome with an specific
+   * initialized by bootstrapping orqueio welcome with an specific
    * instance
    */
   protected static WelcomeRuntimeDelegate WELCOME_RUNTIME_DELEGATE;

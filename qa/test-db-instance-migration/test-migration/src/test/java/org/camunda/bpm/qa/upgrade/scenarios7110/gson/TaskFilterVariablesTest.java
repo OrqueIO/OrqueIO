@@ -34,7 +34,7 @@ import static org.hamcrest.core.Is.is;
 public class TaskFilterVariablesTest {
 
   @Rule
-  public ProcessEngineRule engineRule = new ProcessEngineRule("camunda.cfg.xml");
+  public ProcessEngineRule engineRule = new ProcessEngineRule("orqueio.cfg.xml");
 
   @ScenarioUnderTest("initTaskFilterVariables.1")
   @Test

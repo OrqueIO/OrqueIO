@@ -39,7 +39,7 @@ public class RedeployProcessClassloadingTest extends AbstractFoxPlatformIntegrat
   public static WebArchive createProcessArchiveDeplyoment() {
     return initWebArchiveDeployment()
             .addClass(MyCustomDelegate.class)
-            .addAsResource("org/camunda/bpm/integrationtest/functional/classloading/deployment/RedeployProcessClassloadingTest.testRedeployClassloading.bpmn20.xml");
+            .addAsResource("io/orqueio/bpm/integrationtest/functional/classloading/deployment/RedeployProcessClassloadingTest.testRedeployClassloading.bpmn20.xml");
   }
 
 

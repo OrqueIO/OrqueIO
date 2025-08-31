@@ -32,7 +32,7 @@ public class SubprocessParallelThrowCompensationScenario {
 
   @Deployment
   public static String deployProcess() {
-    return "org/camunda/bpm/qa/upgrade/compensation/subprocessParallelThrowCompensationProcess.bpmn20.xml";
+    return "io/orqueio/bpm/qa/upgrade/compensation/subprocessParallelThrowCompensationProcess.bpmn20.xml";
   }
 
   @DescribesScenario("init")

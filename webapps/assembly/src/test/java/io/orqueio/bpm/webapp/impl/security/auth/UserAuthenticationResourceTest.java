@@ -48,7 +48,7 @@ import org.springframework.mock.web.MockHttpServletRequest;
 public class UserAuthenticationResourceTest {
 
   @Rule
-  public ProcessEngineRule processEngineRule = new ProcessEngineRule("camunda-test-engine.cfg.xml");
+  public ProcessEngineRule processEngineRule = new ProcessEngineRule("orqueio-test-engine.cfg.xml");
 
   protected ProcessEngine processEngine;
   protected ProcessEngineConfiguration processEngineConfiguration;

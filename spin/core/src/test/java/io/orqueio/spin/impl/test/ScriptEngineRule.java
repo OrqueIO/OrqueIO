@@ -98,5 +98,7 @@ public class ScriptEngineRule implements TestRule {
     // make sure GraalVM JS can provide access the host and can lookup classes
     scriptEngine.getContext().setAttribute("polyglot.js.allowHostAccess", true, ScriptContext.ENGINE_SCOPE);
     scriptEngine.getContext().setAttribute("polyglot.js.allowHostClassLookup", true, ScriptContext.ENGINE_SCOPE);
+
+
   }
 }

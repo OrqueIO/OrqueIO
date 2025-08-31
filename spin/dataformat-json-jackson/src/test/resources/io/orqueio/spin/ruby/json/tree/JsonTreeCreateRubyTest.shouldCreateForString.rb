@@ -1,4 +1,6 @@
-$json1 = S($input, io.orqueio.spin.DataFormats.json())
+DataFormats = Java::IoOrqueioSpin::DataFormats
+
+$json1 = S($input, DataFormats.json())
 
 $json2 = S($input, "application/json")
 

@@ -36,7 +36,7 @@ import static org.junit.Assert.assertThat;
 public class SetAnnotationAuthorizationTest {
 
   @Rule
-  public ProcessEngineRule engineRule = new ProcessEngineRule("camunda.cfg.xml");
+  public ProcessEngineRule engineRule = new ProcessEngineRule("orqueio.cfg.xml");
 
   protected HistoryService historyService;
   protected AuthorizationService authorizationService;

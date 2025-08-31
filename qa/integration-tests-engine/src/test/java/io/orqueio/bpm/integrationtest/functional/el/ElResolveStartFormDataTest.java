@@ -36,7 +36,7 @@ public class ElResolveStartFormDataTest extends AbstractFoxPlatformIntegrationTe
   public static WebArchive processArchive() {
     return initWebArchiveDeployment()
       .addClass(ResolveFormDataBean.class)
-      .addAsResource("org/camunda/bpm/integrationtest/functional/el/elStartFormProcessWithFormData.bpmn20.xml");
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/el/elStartFormProcessWithFormData.bpmn20.xml");
   }
 
   @Test

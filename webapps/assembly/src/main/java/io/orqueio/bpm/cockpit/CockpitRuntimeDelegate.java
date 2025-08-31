@@ -24,7 +24,7 @@ import io.orqueio.bpm.webapp.AppRuntimeDelegate;
 
 /**
  * <p>The {@link CockpitRuntimeDelegate} is a delegate to provide
- * the camunda cockpit plugin service.</p>
+ * the orqueio cockpit plugin service.</p>
  *
  * @author roman.smirnov
  */

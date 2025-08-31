@@ -34,7 +34,7 @@ public class SuspendProcessDefinitionDeleteScenario {
 
   @Deployment
   public static String deploy() {
-    return "org/camunda/bpm/qa/upgrade/useroperationlog/timerBoundaryEventProcess.bpmn20.xml";
+    return "io/orqueio/bpm/qa/upgrade/useroperationlog/timerBoundaryEventProcess.bpmn20.xml";
   }
 
   @DescribesScenario("createUserOperationLogEntriesForDelete")

@@ -50,7 +50,7 @@ public class SuspendProcessDefinitionDeleteAuthorizationTest {
   private static final String USER_ID = "jane" + "SuspendProcessDefinitionDelete";
 
   @Rule
-  public ProcessEngineRule engineRule = new ProcessEngineRule("camunda.cfg.xml");
+  public ProcessEngineRule engineRule = new ProcessEngineRule("orqueio.cfg.xml");
 
   protected HistoryService historyService;
   protected AuthorizationService authorizationService;

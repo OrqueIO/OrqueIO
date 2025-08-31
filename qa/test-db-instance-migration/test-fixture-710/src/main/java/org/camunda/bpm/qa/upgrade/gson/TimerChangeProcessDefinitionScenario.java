@@ -37,7 +37,7 @@ public class TimerChangeProcessDefinitionScenario {
       public void execute(ProcessEngine engine, String scenarioName) {
 
         String processDefinitionIdWithoutTenant = engine.getRepositoryService().createDeployment()
-          .addClasspathResource("org/camunda/bpm/qa/upgrade/gson/oneTaskProcessTimer.bpmn20.xml")
+          .addClasspathResource("io/orqueio/bpm/qa/upgrade/gson/oneTaskProcessTimer.bpmn20.xml")
           .tenantId(null)
           .deployWithResult()
           .getDeployedProcessDefinitions()
@@ -55,7 +55,7 @@ public class TimerChangeProcessDefinitionScenario {
           .suspend();
 
         String processDefinitionIdWithTenant = engine.getRepositoryService().createDeployment()
-          .addClasspathResource("org/camunda/bpm/qa/upgrade/gson/oneTaskProcessTimer.bpmn20.xml")
+          .addClasspathResource("io/orqueio/bpm/qa/upgrade/gson/oneTaskProcessTimer.bpmn20.xml")
           .tenantId("aTenantId")
           .deployWithResult()
           .getDeployedProcessDefinitions()

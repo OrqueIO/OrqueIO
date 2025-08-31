@@ -44,7 +44,7 @@ public class HistoricInstancePermissionsAuthorizationTest {
   protected final String USER_ID = getClass().getName() + "-User";
 
   @Rule
-  public ProcessEngineRule engineRule = new ProcessEngineRule("camunda.cfg.xml");
+  public ProcessEngineRule engineRule = new ProcessEngineRule("orqueio.cfg.xml");
 
   protected HistoryService historyService;
   protected AuthorizationService authorizationService;

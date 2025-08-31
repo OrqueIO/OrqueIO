@@ -26,7 +26,7 @@ public class HistoricInstancePermissionsWithoutProcDefKeyScenario {
 
   @Deployment
   public static String deploy() {
-    return "org/camunda/bpm/qa/upgrade/oneTaskProcess.bpmn20.xml";
+    return "io/orqueio/bpm/qa/upgrade/oneTaskProcess.bpmn20.xml";
   }
 
   @DescribesScenario("createProcInstancesAndOpLogs")

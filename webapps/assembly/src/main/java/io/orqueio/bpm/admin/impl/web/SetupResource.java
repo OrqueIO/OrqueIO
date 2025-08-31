@@ -97,12 +97,12 @@ public class SetupResource {
     UserRestServiceImpl userRestServiceImpl = new UserRestServiceImpl(processEngineName, objectMapper);
     userRestServiceImpl.createUser(user);
 
-    // crate the camunda admin group
-    ensureCamundaAdminGroupExists(processEngine);
+    // crate the orqueio admin group
+    ensureOrqueioAdminGroupExists(processEngine);
 
     // create group membership (add new user to admin group)
     processEngine.getIdentityService()
-      .createMembership(user.getProfile().getId(), Groups.CAMUNDA_ADMIN);
+      .createMembership(user.getProfile().getId(), Groups.ORQUEIO_ADMIN);
   }
 
   protected ObjectMapper getObjectMapper() {
@@ -115,24 +115,24 @@ public class SetupResource {
     }
   }
 
-  protected void ensureCamundaAdminGroupExists(ProcessEngine processEngine) {
+  protected void ensureOrqueioAdminGroupExists(ProcessEngine processEngine) {
 
     final IdentityService identityService = processEngine.getIdentityService();
     final AuthorizationService authorizationService = processEngine.getAuthorizationService();
 
     // create group
-    if(identityService.createGroupQuery().groupId(Groups.CAMUNDA_ADMIN).count() == 0) {
-      Group camundaAdminGroup = identityService.newGroup(Groups.CAMUNDA_ADMIN);
-      camundaAdminGroup.setName("camunda BPM Administrators");
-      camundaAdminGroup.setType(Groups.GROUP_TYPE_SYSTEM);
-      identityService.saveGroup(camundaAdminGroup);
+    if(identityService.createGroupQuery().groupId(Groups.ORQUEIO_ADMIN).count() == 0) {
+      Group orqueioAdminGroup = identityService.newGroup(Groups.ORQUEIO_ADMIN);
+      orqueioAdminGroup.setName("orqueio BPM Administrators");
+      orqueioAdminGroup.setType(Groups.GROUP_TYPE_SYSTEM);
+      identityService.saveGroup(orqueioAdminGroup);
     }
 
     // create ADMIN authorizations on all built-in resources
     for (Resource resource : Resources.values()) {
-      if(authorizationService.createAuthorizationQuery().groupIdIn(Groups.CAMUNDA_ADMIN).resourceType(resource).resourceId(ANY).count() == 0) {
+      if(authorizationService.createAuthorizationQuery().groupIdIn(Groups.ORQUEIO_ADMIN).resourceType(resource).resourceId(ANY).count() == 0) {
         AuthorizationEntity userAdminAuth = new AuthorizationEntity(AUTH_TYPE_GRANT);
-        userAdminAuth.setGroupId(Groups.CAMUNDA_ADMIN);
+        userAdminAuth.setGroupId(Groups.ORQUEIO_ADMIN);
         userAdminAuth.setResource(resource);
         userAdminAuth.setResourceId(ANY);
         userAdminAuth.addPermission(ALL);
@@ -144,7 +144,7 @@ public class SetupResource {
 
   protected void ensureSetupAvailable(ProcessEngine processEngine) {
     if (processEngine.getIdentityService().isReadOnly()
-        || (processEngine.getIdentityService().createUserQuery().memberOfGroup(Groups.CAMUNDA_ADMIN).count() > 0)) {
+        || (processEngine.getIdentityService().createUserQuery().memberOfGroup(Groups.ORQUEIO_ADMIN).count() > 0)) {
 
       throw LOGGER.setupActionNotAvailable();
     }

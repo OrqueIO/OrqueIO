@@ -46,8 +46,8 @@ public class AsyncJobExecutionTest extends AbstractFoxPlatformIntegrationTest {
             .addClass(GetVersionInfoDelegate.class)
             .addClass(UpdateRouterConfiguration.class)
             .addClass(FailingTransactionListenerDelegate.class)
-            .addAsResource("org/camunda/bpm/integrationtest/functional/transactions/AsyncJobExecutionTest.testAsyncServiceTasks.bpmn20.xml")
-            .addAsResource("org/camunda/bpm/integrationtest/functional/transactions/AsyncJobExecutionTest.failingTransactionListener.bpmn20.xml")
+            .addAsResource("io/orqueio/bpm/integrationtest/functional/transactions/AsyncJobExecutionTest.testAsyncServiceTasks.bpmn20.xml")
+            .addAsResource("io/orqueio/bpm/integrationtest/functional/transactions/AsyncJobExecutionTest.failingTransactionListener.bpmn20.xml")
             .addAsWebInfResource("persistence.xml", "classes/META-INF/persistence.xml");
   }
 

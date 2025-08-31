@@ -71,8 +71,8 @@ public class ClientIT {
 
   static {
     Properties properties = loadProperties(DEFAULT_PROPERTIES_PATH);
-    String engineRest = properties.getProperty(PropertyUtil.CAMUNDA_ENGINE_REST);
-    String engineName = properties.getProperty(PropertyUtil.CAMUNDA_ENGINE_NAME);
+    String engineRest = properties.getProperty(PropertyUtil.ORQUEIO_ENGINE_REST);
+    String engineName = properties.getProperty(PropertyUtil.ORQUEIO_ENGINE_NAME);
     BASE_URL = engineRest + engineName;
   }
 

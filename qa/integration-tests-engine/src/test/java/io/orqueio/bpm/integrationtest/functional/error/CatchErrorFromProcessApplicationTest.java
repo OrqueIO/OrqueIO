@@ -45,18 +45,18 @@ public class CatchErrorFromProcessApplicationTest extends AbstractFoxPlatformInt
     return initWebArchiveDeployment()
       .addClass(ThrowErrorDelegate.class)
       .addClass(MyBusinessException.class)
-      .addAsResource("org/camunda/bpm/integrationtest/functional/error/CatchErrorFromProcessApplicationTest.bpmn20.xml")
-      .addAsResource("org/camunda/bpm/integrationtest/functional/error/CatchErrorFromProcessApplicationTest.delegateExpression.bpmn20.xml")
-      .addAsResource("org/camunda/bpm/integrationtest/functional/error/CatchErrorFromProcessApplicationTest.sequentialMultiInstance.bpmn20.xml")
-      .addAsResource("org/camunda/bpm/integrationtest/functional/error/CatchErrorFromProcessApplicationTest.delegateExpression.sequentialMultiInstance.bpmn20.xml")
-      .addAsResource("org/camunda/bpm/integrationtest/functional/error/CatchErrorFromProcessApplicationTest.parallelMultiInstance.bpmn20.xml")
-      .addAsResource("org/camunda/bpm/integrationtest/functional/error/CatchErrorFromProcessApplicationTest.delegateExpression.parallelMultiInstance.bpmn20.xml");
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/error/CatchErrorFromProcessApplicationTest.bpmn20.xml")
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/error/CatchErrorFromProcessApplicationTest.delegateExpression.bpmn20.xml")
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/error/CatchErrorFromProcessApplicationTest.sequentialMultiInstance.bpmn20.xml")
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/error/CatchErrorFromProcessApplicationTest.delegateExpression.sequentialMultiInstance.bpmn20.xml")
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/error/CatchErrorFromProcessApplicationTest.parallelMultiInstance.bpmn20.xml")
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/error/CatchErrorFromProcessApplicationTest.delegateExpression.parallelMultiInstance.bpmn20.xml");
   }
 
   @Deployment(name="clientDeployment")
   public static WebArchive clientDeployment() {
     WebArchive deployment = ShrinkWrap.create(WebArchive.class, "client.war")
-      .addAsWebInfResource("org/camunda/bpm/integrationtest/beans.xml", "beans.xml")
+      .addAsWebInfResource("io/orqueio/bpm/integrationtest/beans.xml", "beans.xml")
       .addClass(AbstractFoxPlatformIntegrationTest.class)
       .addAsLibraries(DeploymentHelper.getEngineCdi());
 

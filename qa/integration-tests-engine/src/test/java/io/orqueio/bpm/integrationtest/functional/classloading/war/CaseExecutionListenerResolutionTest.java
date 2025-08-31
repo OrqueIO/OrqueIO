@@ -40,7 +40,7 @@ public class CaseExecutionListenerResolutionTest extends AbstractFoxPlatformInte
   public static WebArchive createProcessArchiveDeplyoment() {
     return initWebArchiveDeployment()
             .addClass(ExampleCaseExecutionListener.class)
-            .addAsResource("org/camunda/bpm/integrationtest/functional/classloading/CaseExecutionListenerResolutionTest.cmmn");
+            .addAsResource("io/orqueio/bpm/integrationtest/functional/classloading/CaseExecutionListenerResolutionTest.cmmn");
   }
 
   @Deployment(name="clientDeployment")

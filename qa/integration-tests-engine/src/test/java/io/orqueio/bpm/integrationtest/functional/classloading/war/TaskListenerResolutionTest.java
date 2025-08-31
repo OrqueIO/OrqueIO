@@ -38,7 +38,7 @@ public class TaskListenerResolutionTest extends AbstractFoxPlatformIntegrationTe
   public static WebArchive createProcessArchiveDeplyoment() {
     return initWebArchiveDeployment()
             .addClass(ExampleTaskListener.class)
-            .addAsResource("org/camunda/bpm/integrationtest/functional/classloading/TaskListenerResolutionTest.bpmn20.xml");
+            .addAsResource("io/orqueio/bpm/integrationtest/functional/classloading/TaskListenerResolutionTest.bpmn20.xml");
   }
 
   @Deployment(name="clientDeployment")

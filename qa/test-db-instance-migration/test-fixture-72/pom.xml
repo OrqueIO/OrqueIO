@@ -16,7 +16,7 @@
   <properties>
   <!-- Due to https://issues.apache.org/jira/browse/MRELEASE-799 the release test fails when
      the version is managed in a property. Thus we use explicit versions everywhere. -->
-<!--     <camunda.version.current>7.2.0</camunda.version.current> -->
+<!--     <orqueio.version.current>7.2.0</orqueio.version.current> -->
 
     <version.h2>${version.h2-v1}</version.h2>
   </properties>
@@ -35,7 +35,7 @@
 
   <dependencies>
     <!-- NOTE: this pulls transitive dependencies of version ${project.version} in unless
-      you declare them to be ${camunda.version.current} here -->
+      you declare them to be ${orqueio.version.current} here -->
     <dependency>
       <groupId>io.orqueio.bpm</groupId>
       <artifactId>orqueio-engine</artifactId>

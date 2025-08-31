@@ -37,7 +37,7 @@ import static org.junit.Assert.assertEquals;
  * Assert that we can deploy a WAR with a process engine plugin
  * which ships and requires groovy as a dependency for scripting purposes.
  *
- * Does not work on JBoss, see https://app.camunda.com/jira/browse/CAM-1778
+ * Does not work on JBoss, see https://app.orqueio.com/jira/browse/CAM-1778
  */
 @RunWith(Arquillian.class)
 public class TestWarDeploymentWithProcessEnginePlugin extends AbstractFoxPlatformIntegrationTest {
@@ -46,8 +46,8 @@ public class TestWarDeploymentWithProcessEnginePlugin extends AbstractFoxPlatfor
   public static WebArchive processArchive() {
     return initWebArchiveDeployment("test.war", "singleEngineWithProcessEnginePlugin.xml")
         .addClass(GroovyProcessEnginePlugin.class)
-        .addAsResource("org/camunda/bpm/integrationtest/deployment/war/groovy.bpmn20.xml")
-        .addAsResource("org/camunda/bpm/integrationtest/deployment/war/groovyAsync.bpmn20.xml")
+        .addAsResource("io/orqueio/bpm/integrationtest/deployment/war/groovy.bpmn20.xml")
+        .addAsResource("io/orqueio/bpm/integrationtest/deployment/war/groovyAsync.bpmn20.xml")
         .addAsLibraries(Maven.resolver()
             .offline()
             .loadPomFromFile("pom.xml")

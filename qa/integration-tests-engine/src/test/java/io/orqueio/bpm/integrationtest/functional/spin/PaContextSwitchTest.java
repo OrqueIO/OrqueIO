@@ -55,7 +55,7 @@ public class PaContextSwitchTest extends AbstractFoxPlatformIntegrationTest {
         .addClass(ProcessApplication1.class)
         .addClass(JsonSerializable.class)
         .addClass(RuntimeServiceDelegate.class)
-        .addAsResource("org/camunda/bpm/integrationtest/functional/spin/paContextSwitch.bpmn20.xml")
+        .addAsResource("io/orqueio/bpm/integrationtest/functional/spin/paContextSwitch.bpmn20.xml")
         .addClass(JsonDataFormatConfigurator.class)
         .addAsServiceProvider(DataFormatConfigurator.class, JsonDataFormatConfigurator.class);
 
@@ -67,7 +67,7 @@ public class PaContextSwitchTest extends AbstractFoxPlatformIntegrationTest {
   @Deployment(name = "pa2")
   public static WebArchive createDeployment2() {
     WebArchive webArchive = ShrinkWrap.create(WebArchive.class, "pa2.war")
-        .addAsWebInfResource("org/camunda/bpm/integrationtest/beans.xml", "beans.xml")
+        .addAsWebInfResource("io/orqueio/bpm/integrationtest/beans.xml", "beans.xml")
         .addAsLibraries(DeploymentHelper.getEngineCdi())
         .addAsResource("META-INF/processes.xml")
         .addClass(AbstractFoxPlatformIntegrationTest.class)

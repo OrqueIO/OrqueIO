@@ -89,10 +89,10 @@ public class DefaultLoadGenerator {
 
   protected static BpmnModelInstance createProcess(int id){
     return Bpmn.createExecutableProcess("process" + id)
-        .camundaHistoryTimeToLive(180)
+        .orqueioHistoryTimeToLive(180)
         .startEvent()
         .userTask()
-        .camundaAssignee("demo")
+        .orqueioAssignee("demo")
         .endEvent()
         .done();
   }

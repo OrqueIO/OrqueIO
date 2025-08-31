@@ -37,7 +37,7 @@ public class CreateProcessInstanceWithJsonVariablesScenario {
 
   @Deployment
   public static String deployProcess() {
-    return "org/camunda/bpm/qa/upgrade/json/simpleProcess.bpmn20.xml";
+    return "io/orqueio/bpm/qa/upgrade/json/simpleProcess.bpmn20.xml";
   }
 
   @DescribesScenario("initProcessInstanceWithDifferentVariables")
@@ -64,7 +64,7 @@ public class CreateProcessInstanceWithJsonVariablesScenario {
     order.setActive(true);
 
     OrderDetails orderDetails = new OrderDetails();
-    orderDetails.setArticle("camundaBPM");
+    orderDetails.setArticle("orqueioBPM");
     orderDetails.setPrice(32000.45);
     orderDetails.setRoundedPrice(32000);
 

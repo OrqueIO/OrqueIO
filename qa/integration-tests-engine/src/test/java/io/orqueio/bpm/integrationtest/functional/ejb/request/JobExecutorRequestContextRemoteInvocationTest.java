@@ -53,13 +53,13 @@ public class JobExecutorRequestContextRemoteInvocationTest extends AbstractFoxPl
     return initWebArchiveDeployment()
       .addClass(InvocationCounterDelegateBean.class)
       .addClass(InvocationCounterService.class) // interface (remote)
-      .addAsResource("org/camunda/bpm/integrationtest/functional/ejb/request/JobExecutorRequestContextRemoteInvocationTest.testContextPropagationEjbRemote.bpmn20.xml");
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/ejb/request/JobExecutorRequestContextRemoteInvocationTest.testContextPropagationEjbRemote.bpmn20.xml");
   }
 
   @Deployment(order=1)
   public static WebArchive delegateDeployment() {
     return ShrinkWrap.create(WebArchive.class, "service.war")
-      .addAsWebInfResource("org/camunda/bpm/integrationtest/beans.xml", "beans.xml")
+      .addAsWebInfResource("io/orqueio/bpm/integrationtest/beans.xml", "beans.xml")
       .addClass(AbstractFoxPlatformIntegrationTest.class)
       .addClass(InvocationCounter.class) // @RequestScoped CDI bean
       .addClass(InvocationCounterService.class) // interface (remote)

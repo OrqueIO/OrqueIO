@@ -33,7 +33,7 @@ public class IntermediateMessageCatchEventTest extends AbstractFoxPlatformIntegr
   @Deployment
   public static WebArchive createProcessArchiveDeployment() {
     return initWebArchiveDeployment()
-      .addAsResource("org/camunda/bpm/integrationtest/functional/message/IntermediateMessageCatchEventTest.bpmn20.xml");
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/message/IntermediateMessageCatchEventTest.bpmn20.xml");
   }
 
   @Test

@@ -45,11 +45,11 @@ public class ManagedJobExecutorTest {
   @Deployment
   public static WebArchive createDeployment() {
     WebArchive archive = ShrinkWrap.create(WebArchive.class, "test.war")
-        .addAsWebInfResource("org/camunda/bpm/integrationtest/beans.xml", "beans.xml")
+        .addAsWebInfResource("io/orqueio/bpm/integrationtest/beans.xml", "beans.xml")
         .addAsLibraries(DeploymentHelper.getEngineCdi())
         .addClass(ManagedJobExecutorTest.class)
         .addClass(ManagedJobExecutorBean.class)
-        .addAsResource("org/camunda/bpm/integrationtest/jobexecutor/ManagedJobExecutorTest.testManagedExecutorUsed.bpmn20.xml");
+        .addAsResource("io/orqueio/bpm/integrationtest/jobexecutor/ManagedJobExecutorTest.testManagedExecutorUsed.bpmn20.xml");
 
     TestContainer.addContainerSpecificResourcesForNonPa(archive);
 
@@ -77,7 +77,7 @@ public class ManagedJobExecutorTest {
   @Test
   public void testManagedExecutorUsed() throws InterruptedException {
     io.orqueio.bpm.engine.repository.Deployment deployment = processEngine.getRepositoryService().createDeployment()
-      .addClasspathResource("org/camunda/bpm/integrationtest/jobexecutor/ManagedJobExecutorTest.testManagedExecutorUsed.bpmn20.xml")
+      .addClasspathResource("io/orqueio/bpm/integrationtest/jobexecutor/ManagedJobExecutorTest.testManagedExecutorUsed.bpmn20.xml")
       .deploy();
 
     try {

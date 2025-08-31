@@ -26,7 +26,7 @@ public class Admin {
 
   /**
    * The {@link AdminRuntimeDelegate} is an delegate that will be
-   * initialized by bootstrapping camunda admin with an specific
+   * initialized by bootstrapping orqueio admin with an specific
    * instance
    */
   protected static AdminRuntimeDelegate ADMIN_RUNTIME_DELEGATE;

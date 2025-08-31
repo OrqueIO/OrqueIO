@@ -255,28 +255,28 @@ public class EngineDataGenerator {
 
   protected BpmnModelInstance createSimpleServiceTaskProcess() {
     return Bpmn.createExecutableProcess(getAutoCompleteProcessKey())
-        .camundaHistoryTimeToLive(180)
+        .orqueioHistoryTimeToLive(180)
         .startEvent()
       .serviceTask()
-        .camundaExpression("${true}")
+        .orqueioExpression("${true}")
       .endEvent()
       .done();
   }
 
   protected BpmnModelInstance createAsyncServiceTaskProcess() {
     return Bpmn.createExecutableProcess(getAsyncTaskProcessKey())
-        .camundaHistoryTimeToLive(180)
+        .orqueioHistoryTimeToLive(180)
         .startEvent()
         .serviceTask()
-          .camundaAsyncBefore()
-          .camundaExpression("${true}")
+          .orqueioAsyncBefore()
+          .orqueioExpression("${true}")
         .endEvent()
         .done();
   }
 
   protected BpmnModelInstance createUserTaskProcess() {
     return Bpmn.createExecutableProcess(getUserTaskProcessKey())
-        .camundaHistoryTimeToLive(180)
+        .orqueioHistoryTimeToLive(180)
         .startEvent()
       .userTask("userTaskToComplete")
       .userTask("pendingUserTask")

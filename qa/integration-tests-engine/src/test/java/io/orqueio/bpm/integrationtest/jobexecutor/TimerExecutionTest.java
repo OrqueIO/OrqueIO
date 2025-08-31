@@ -38,7 +38,7 @@ public class TimerExecutionTest extends AbstractFoxPlatformIntegrationTest {
   @Deployment
   public static WebArchive processArchive() {
     WebArchive archive = initWebArchiveDeployment()
-            .addAsResource("org/camunda/bpm/integrationtest/jobexecutor/TimerExecution.bpmn20.xml")
+            .addAsResource("io/orqueio/bpm/integrationtest/jobexecutor/TimerExecution.bpmn20.xml")
             .addClass(SampleServiceBean.class);
 
     return archive;

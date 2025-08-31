@@ -26,7 +26,7 @@ public class JsonTreeEditListPropertyJavascriptTest extends JsonTreeEditListProp
 
   /**
    * Ignored since javascript implementation changed
-   * see: https://app.orqueio.com/jira/browse/CAM-3612
+   * see: https://app.orqueio.io/jira/browse/CAM-3612
    */
   @Test
   @Ignore
@@ -35,7 +35,7 @@ public class JsonTreeEditListPropertyJavascriptTest extends JsonTreeEditListProp
 
   /**
    * Ignored since javascript implementation changed
-   * see: https://app.orqueio.com/jira/browse/CAM-3612
+   * see: https://app.orqueio.io/jira/browse/CAM-3612
    */
   @Test
   @Ignore
@@ -44,7 +44,7 @@ public class JsonTreeEditListPropertyJavascriptTest extends JsonTreeEditListProp
 
   /**
    * Ignored since javascript implementation changed
-   * see: https://app.orqueio.com/jira/browse/CAM-3612
+   * see: https://app.orqueio.io/jira/browse/CAM-3612
    */
   @Test
   @Ignore
@@ -53,7 +53,7 @@ public class JsonTreeEditListPropertyJavascriptTest extends JsonTreeEditListProp
 
   /**
    * Ignored since javascript implementation changed
-   * see: https://app.orqueio.com/jira/browse/CAM-3612
+   * see: https://app.orqueio.io/jira/browse/CAM-3612
    */
   @Test
   @Ignore

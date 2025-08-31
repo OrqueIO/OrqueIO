@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions id="definitions" xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:camunda="http://activiti.org/bpmn" targetNamespace="Examples"
+<definitions id="definitions" xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:orqueio="http://activiti.org/bpmn" targetNamespace="Examples"
   xmlns:tns="Examples">
   <message id="messageId" name="Message" />
   <error id="errorId" errorCode="ThrowBpmnErrorDelegate"/>
@@ -28,7 +28,7 @@
         <sequenceFlow sourceRef="fork" targetRef="eventSubProcessTask1" />
         <userTask id="eventSubProcessTask1" />
         <sequenceFlow sourceRef="eventSubProcessTask1" targetRef="throwErrorServiceTask" />
-        <serviceTask id="throwErrorServiceTask" camunda:class="io.orqueio.bpm.qa.upgrade.util.ThrowBpmnErrorDelegate" />
+        <serviceTask id="throwErrorServiceTask" orqueio:class="io.orqueio.bpm.qa.upgrade.util.ThrowBpmnErrorDelegate" />
         <sequenceFlow sourceRef="throwErrorServiceTask" targetRef="join" />
 
         <sequenceFlow sourceRef="fork" targetRef="eventSubProcessTask2" />

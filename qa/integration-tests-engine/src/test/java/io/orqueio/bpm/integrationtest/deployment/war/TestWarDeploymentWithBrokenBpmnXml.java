@@ -47,9 +47,9 @@ public class TestWarDeploymentWithBrokenBpmnXml {
   public static WebArchive processArchive() {    
     
     WebArchive deployment = ShrinkWrap.create(WebArchive.class, "test.war")
-      .addAsWebInfResource("org/camunda/bpm/integrationtest/beans.xml", "beans.xml")
+      .addAsWebInfResource("io/orqueio/bpm/integrationtest/beans.xml", "beans.xml")
       .addAsResource("META-INF/processes.xml", "META-INF/processes.xml")
-      .addAsResource("org/camunda/bpm/integrationtest/deployment/war/TestWarDeploymentWithBrokenBpmnXml.testXmlInvalid.bpmn20.xml");
+      .addAsResource("io/orqueio/bpm/integrationtest/deployment/war/TestWarDeploymentWithBrokenBpmnXml.testXmlInvalid.bpmn20.xml");
     
     TestContainer.addContainerSpecificResources(deployment);
     

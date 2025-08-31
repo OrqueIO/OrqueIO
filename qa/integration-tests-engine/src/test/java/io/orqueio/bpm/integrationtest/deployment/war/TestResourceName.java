@@ -43,7 +43,7 @@ import org.junit.runner.RunWith;
 public class TestResourceName extends AbstractFoxPlatformIntegrationTest {
 
   public final static String PROCESSES_XML =
-      "<process-application xmlns=\"http://www.camunda.org/schema/1.0/ProcessApplication\">" +
+      "<process-application xmlns=\"http://www.orqueio.io/schema/1.0/ProcessApplication\">" +
 
         "<process-archive name=\"PA_NAME\">" +
           "<properties>" +
@@ -54,7 +54,7 @@ public class TestResourceName extends AbstractFoxPlatformIntegrationTest {
       "</process-application>";
 
   public final static String PROCESSES_XML_WITH_RESOURCE_ROOT_PATH =
-      "<process-application xmlns=\"http://www.camunda.org/schema/1.0/ProcessApplication\">" +
+      "<process-application xmlns=\"http://www.orqueio.io/schema/1.0/ProcessApplication\">" +
 
         "<process-archive name=\"PA_NAME\">" +
           "<properties>" +
@@ -126,7 +126,7 @@ public class TestResourceName extends AbstractFoxPlatformIntegrationTest {
             .addAsResource(pa4ProcessesXml, "META-INF/processes.xml");
 
     WebArchive archive = ShrinkWrap.create(WebArchive.class, "test.war")
-        .addAsWebInfResource("org/camunda/bpm/integrationtest/beans.xml", "beans.xml")
+        .addAsWebInfResource("io/orqueio/bpm/integrationtest/beans.xml", "beans.xml")
         .addAsLibraries(DeploymentHelper.getEngineCdi())
 
         .addAsLibraries(pa1)

@@ -71,7 +71,7 @@ import org.springframework.mock.web.MockServletContext;
 @RunWith(Parameterized.class)
 public class ContainerAuthenticationFilterTest {
 
-  protected static final String SERVICE_PATH = "/camunda";
+  protected static final String SERVICE_PATH = "/orqueio";
 
   private Authentications authentications;
 

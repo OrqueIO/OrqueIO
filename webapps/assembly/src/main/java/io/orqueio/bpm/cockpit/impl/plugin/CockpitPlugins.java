@@ -34,9 +34,9 @@ public class CockpitPlugins extends AbstractCockpitPlugin {
   public static final String ID = "cockpitPlugins";
 
   private static final String[] MAPPING_FILES = {
-    "org/camunda/bpm/cockpit/plugin/base/queries/processDefinition.xml",
-    "org/camunda/bpm/cockpit/plugin/base/queries/processInstance.xml",
-    "org/camunda/bpm/cockpit/plugin/base/queries/incident.xml"
+    "io/orqueio/bpm/cockpit/plugin/base/queries/processDefinition.xml",
+    "io/orqueio/bpm/cockpit/plugin/base/queries/processInstance.xml",
+    "io/orqueio/bpm/cockpit/plugin/base/queries/incident.xml"
   };
 
   @Override

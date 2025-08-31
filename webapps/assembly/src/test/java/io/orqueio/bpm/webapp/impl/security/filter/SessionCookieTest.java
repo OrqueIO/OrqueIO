@@ -37,7 +37,7 @@ public class SessionCookieTest {
     headerRule.performRequest();
 
     // then
-    assertThat(headerRule.getCookieHeader()).matches(headerRule.getSessionCookieRegex("camunda", "Lax", false));
+    assertThat(headerRule.getCookieHeader()).matches(headerRule.getSessionCookieRegex("orqueio", "Lax", false));
   }
 
   @Test
@@ -61,7 +61,7 @@ public class SessionCookieTest {
     headerRule.performRequest();
 
     // then
-    assertThat(headerRule.getCookieHeader()).matches(headerRule.getSessionCookieRegex("camunda", "Lax", true));
+    assertThat(headerRule.getCookieHeader()).matches(headerRule.getSessionCookieRegex("orqueio", "Lax", true));
   }
 
   @Test
@@ -73,7 +73,7 @@ public class SessionCookieTest {
     headerRule.performRequest();
 
     // then
-    assertThat(headerRule.getCookieHeader()).matches(headerRule.getSessionCookieRegex("camunda", null, false));
+    assertThat(headerRule.getCookieHeader()).matches(headerRule.getSessionCookieRegex("orqueio", null, false));
   }
 
   @Test
@@ -85,7 +85,7 @@ public class SessionCookieTest {
     headerRule.performRequest();
 
     // then
-    assertThat(headerRule.getCookieHeader()).matches(headerRule.getSessionCookieRegex("camunda", "Strict", false));
+    assertThat(headerRule.getCookieHeader()).matches(headerRule.getSessionCookieRegex("orqueio", "Strict", false));
   }
 
   @Test
@@ -97,7 +97,7 @@ public class SessionCookieTest {
     headerRule.performRequest();
 
     // then
-    assertThat(headerRule.getCookieHeader()).matches(headerRule.getSessionCookieRegex("camunda", "Lax", false));
+    assertThat(headerRule.getCookieHeader()).matches(headerRule.getSessionCookieRegex("orqueio", "Lax", false));
   }
 
   @Test
@@ -109,7 +109,7 @@ public class SessionCookieTest {
     headerRule.performRequest();
 
     // then
-    assertThat(headerRule.getCookieHeader()).matches(headerRule.getSessionCookieRegex("camunda", "aCustomValue", false));
+    assertThat(headerRule.getCookieHeader()).matches(headerRule.getSessionCookieRegex("orqueio", "aCustomValue", false));
   }
 
   @Test
@@ -153,7 +153,7 @@ public class SessionCookieTest {
     headerRule.performRequest();
 
     // then
-    assertThat(headerRule.getCookieHeader()).matches(headerRule.getSessionCookieRegex("camunda", "Lax", true));
+    assertThat(headerRule.getCookieHeader()).matches(headerRule.getSessionCookieRegex("orqueio", "Lax", true));
   }
   
   @Test
@@ -165,7 +165,7 @@ public class SessionCookieTest {
     headerRule.performRequest();
 
     // then
-    assertThat(headerRule.getCookieHeader()).matches(headerRule.getSessionCookieRegex("camunda", "MYCOOKIENAME", "Lax", false));
+    assertThat(headerRule.getCookieHeader()).matches(headerRule.getSessionCookieRegex("orqueio", "MYCOOKIENAME", "Lax", false));
   }
 
   @Test
@@ -177,7 +177,7 @@ public class SessionCookieTest {
     headerRule.performRequestWithHeader("Cookie", "JSESSIONID=aToken");
 
     // then
-    assertThat(headerRule.getCookieHeader()).matches(headerRule.getSessionCookieRegex("camunda", "Lax", false));
+    assertThat(headerRule.getCookieHeader()).matches(headerRule.getSessionCookieRegex("orqueio", "Lax", false));
   }
   
 }

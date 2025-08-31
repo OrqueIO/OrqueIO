@@ -201,7 +201,7 @@ public class ProcessEnginesFilter extends AbstractTemplateFilter {
 
     Set<String> processEngineNames = runtimeDelegate.getProcessEngineNames();
     if(processEngineNames.isEmpty()) {
-      throw new IllegalWebAppConfigurationException("No process engine found. camunda Webapp cannot work without a process engine. ");
+      throw new IllegalWebAppConfigurationException("No process engine found. orqueio Webapp cannot work without a process engine. ");
 
     } else {
       ProcessEngine defaultProcessEngine = runtimeDelegate.getDefaultProcessEngine();
@@ -255,7 +255,7 @@ public class ProcessEnginesFilter extends AbstractTemplateFilter {
         public Boolean execute() {
           return processEngine.getIdentityService()
               .createUserQuery()
-              .memberOfGroup(Groups.CAMUNDA_ADMIN).count() == 0;
+              .memberOfGroup(Groups.ORQUEIO_ADMIN).count() == 0;
         }
       }, processEngine);
 

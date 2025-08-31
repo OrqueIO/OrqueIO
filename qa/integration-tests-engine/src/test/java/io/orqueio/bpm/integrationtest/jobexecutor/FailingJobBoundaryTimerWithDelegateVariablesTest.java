@@ -33,11 +33,11 @@ import org.junit.runner.RunWith;
 
 
 /**
- * Test Camunda Platform container job exectuor.
+ * Test Orqueio Platform container job exectuor.
  * FAILING ATM!
  * Expected a job with an exception but it isn't left in db with 0 retries, instead it is completely removed from the job table!
  *
- * @author christian.lipphardt@camunda.com
+ * @author christian.lipphardt@orqueio.com
  */
 @RunWith(Arquillian.class)
 public class FailingJobBoundaryTimerWithDelegateVariablesTest extends AbstractFoxPlatformIntegrationTest {
@@ -47,7 +47,7 @@ public class FailingJobBoundaryTimerWithDelegateVariablesTest extends AbstractFo
     return initWebArchiveDeployment()
             .addClass(DemoDelegate.class)
             .addClass(DemoVariableClass.class)
-            .addAsResource("org/camunda/bpm/integrationtest/jobexecutor/ImmediatelyFailing.bpmn20.xml");
+            .addAsResource("io/orqueio/bpm/integrationtest/jobexecutor/ImmediatelyFailing.bpmn20.xml");
   }
 
   @Test

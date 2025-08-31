@@ -1,8 +1,8 @@
 /*
- * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
+ * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. TOADDLATERCCS this file to you under the Apache License,
+ * ownership. Camunda licenses this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -21,7 +21,7 @@ var dateExpLangHelp =
   'E.g.: `${ now() }`, `${ dateTime() }` or `${ dateTime().plusWeeks(2) }`';
 var userExpLangHelp = 'E.g.: `${ currentUser() }`';
 var commaSeparatedExps =
-  'List of values separated by comma or an expression which evaluates to a list. E.g.: `camunda-admin, accounting` or `${ currentUserGroups() }`';
+  'List of values separated by comma or an expression which evaluates to a list. E.g.: `orqueio-admin, accounting` or `${ currentUserGroups() }`';
 var commaSeparatedValues =
   'List of values seperated by comma. E.g.: `keyC, keyA, keyB`';
 

@@ -48,17 +48,17 @@ public class SpringPAExpressionResolvingTest extends AbstractFoxPlatformIntegrat
       // add example bean to serve as JavaDelegate
       .addClass(ExampleBean.class)
       // add process definitions
-      .addAsResource("org/camunda/bpm/integrationtest/functional/spring/SpringExpressionResolvingTest.testResolveBean.bpmn20.xml")
-      .addAsResource("org/camunda/bpm/integrationtest/functional/spring/SpringExpressionResolvingTest.testResolveBeanFromJobExecutor.bpmn20.xml")
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/spring/SpringExpressionResolvingTest.testResolveBean.bpmn20.xml")
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/spring/SpringExpressionResolvingTest.testResolveBeanFromJobExecutor.bpmn20.xml")
 
       // regular deployment descriptor
       .addAsResource("META-INF/processes.xml", "META-INF/processes.xml")
 
       // web xml that bootstrapps spring
-      .addAsWebInfResource("org/camunda/bpm/integrationtest/functional/spring/web.xml", "web.xml")
+      .addAsWebInfResource("io/orqueio/bpm/integrationtest/functional/spring/web.xml", "web.xml")
 
       // spring application context & libs
-      .addAsWebInfResource("org/camunda/bpm/integrationtest/functional/spring/SpringPAExpressionResolvingTest-context.xml", "applicationContext.xml")
+      .addAsWebInfResource("io/orqueio/bpm/integrationtest/functional/spring/SpringPAExpressionResolvingTest-context.xml", "applicationContext.xml")
       .addAsLibraries(DeploymentHelper.getEngineSpring());
   }
 
@@ -69,7 +69,7 @@ public class SpringPAExpressionResolvingTest extends AbstractFoxPlatformIntegrat
     // the test is deployed as a seperate deployment
 
     WebArchive deployment = ShrinkWrap.create(WebArchive.class, "client.war")
-            .addAsWebInfResource("org/camunda/bpm/integrationtest/beans.xml", "beans.xml")
+            .addAsWebInfResource("io/orqueio/bpm/integrationtest/beans.xml", "beans.xml")
             .addClass(AbstractFoxPlatformIntegrationTest.class)
             .addAsLibraries(DeploymentHelper.getEngineCdi());
 

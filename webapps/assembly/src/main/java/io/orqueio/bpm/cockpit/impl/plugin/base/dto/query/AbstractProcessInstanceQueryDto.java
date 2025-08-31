@@ -20,7 +20,7 @@ import io.orqueio.bpm.cockpit.impl.plugin.base.dto.ProcessInstanceDto;
 import io.orqueio.bpm.cockpit.rest.dto.AbstractRestQueryParametersDto;
 import io.orqueio.bpm.engine.impl.QueryVariableValue;
 import io.orqueio.bpm.engine.impl.variable.serializer.VariableSerializers;
-import io.orqueio.bpm.engine.rest.dto.CamundaQueryParam;
+import io.orqueio.bpm.engine.rest.dto.OrqueioQueryParam;
 import io.orqueio.bpm.engine.rest.dto.ConditionQueryParameterDto;
 import io.orqueio.bpm.engine.rest.dto.VariableQueryParameterDto;
 import io.orqueio.bpm.engine.rest.dto.converter.BooleanConverter;
@@ -79,7 +79,7 @@ public abstract class AbstractProcessInstanceQueryDto<T extends ProcessInstanceD
     return processDefinitionId;
   }
 
-  @CamundaQueryParam(value="processDefinitionId")
+  @OrqueioQueryParam(value="processDefinitionId")
   public void setProcessDefinitionId(String processDefinitionId) {
     this.processDefinitionId = processDefinitionId;
   }
@@ -88,12 +88,12 @@ public abstract class AbstractProcessInstanceQueryDto<T extends ProcessInstanceD
     return parentProcessDefinitionId;
   }
 
-  @CamundaQueryParam(value="parentProcessDefinitionId")
+  @OrqueioQueryParam(value="parentProcessDefinitionId")
   public void setParentProcessDefinitionId(String parentProcessDefinitionId) {
     this.parentProcessDefinitionId = parentProcessDefinitionId;
   }
 
-  @CamundaQueryParam(value = "variables", converter = VariableListConverter.class)
+  @OrqueioQueryParam(value = "variables", converter = VariableListConverter.class)
   public void setVariables(List<VariableQueryParameterDto> variables) {
     this.variables = variables;
   }
@@ -110,7 +110,7 @@ public abstract class AbstractProcessInstanceQueryDto<T extends ProcessInstanceD
     return parentProcessInstanceId;
   }
 
-  @CamundaQueryParam(value="parentProcessInstanceId")
+  @OrqueioQueryParam(value="parentProcessInstanceId")
   public void setParentProcessInstanceId(String parentProcessInstanceId) {
     this.parentProcessInstanceId = parentProcessInstanceId;
   }
@@ -119,7 +119,7 @@ public abstract class AbstractProcessInstanceQueryDto<T extends ProcessInstanceD
     return activityIdIn;
   }
 
-  @CamundaQueryParam(value="activityIdIn", converter = StringArrayConverter.class)
+  @OrqueioQueryParam(value="activityIdIn", converter = StringArrayConverter.class)
   public void setActivityIdIn(String[] activityIdIn) {
     this.activityIdIn = activityIdIn;
   }
@@ -128,7 +128,7 @@ public abstract class AbstractProcessInstanceQueryDto<T extends ProcessInstanceD
     return activityInstanceIdIn;
   }
 
-  @CamundaQueryParam(value="activityInstanceIdIn", converter = StringArrayConverter.class)
+  @OrqueioQueryParam(value="activityInstanceIdIn", converter = StringArrayConverter.class)
   public void setActivityInstanceIdIn(String[] activityInstanceIdIn) {
     this.activityInstanceIdIn = activityInstanceIdIn;
   }
@@ -137,7 +137,7 @@ public abstract class AbstractProcessInstanceQueryDto<T extends ProcessInstanceD
     return businessKey;
   }
 
-  @CamundaQueryParam(value="businessKey")
+  @OrqueioQueryParam(value="businessKey")
   public void setBusinessKey(String businessKey) {
     this.businessKey = businessKey;
   }
@@ -146,7 +146,7 @@ public abstract class AbstractProcessInstanceQueryDto<T extends ProcessInstanceD
     return startedBefore;
   }
 
-  @CamundaQueryParam(value="startedBefore", converter = DateConverter.class)
+  @OrqueioQueryParam(value="startedBefore", converter = DateConverter.class)
   public void setStartedBefore(Date startedBefore) {
     this.startedBefore = startedBefore;
   }
@@ -155,7 +155,7 @@ public abstract class AbstractProcessInstanceQueryDto<T extends ProcessInstanceD
     return startedAfter;
   }
 
-  @CamundaQueryParam(value="startedAfter", converter = DateConverter.class)
+  @OrqueioQueryParam(value="startedAfter", converter = DateConverter.class)
   public void setStartedAfter(Date startedAfter) {
     this.startedAfter = startedAfter;
   }
@@ -164,7 +164,7 @@ public abstract class AbstractProcessInstanceQueryDto<T extends ProcessInstanceD
     return withIncident;
   }
 
-  @CamundaQueryParam(value="withIncident", converter = BooleanConverter.class)
+  @OrqueioQueryParam(value="withIncident", converter = BooleanConverter.class)
   public void setWithIncident(Boolean withIncident) {
     this.withIncident = withIncident;
   }

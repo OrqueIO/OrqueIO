@@ -43,7 +43,7 @@ public class TestWarDeploymentEmptyProcessesXml extends AbstractFoxPlatformInteg
   @Deployment
   public static WebArchive processArchive() {
     return initWebArchiveDeployment("test.war", "META-INF/empty_processes.xml")
-        .addAsResource("org/camunda/bpm/integrationtest/testDeployProcessArchive.bpmn20.xml");
+        .addAsResource("io/orqueio/bpm/integrationtest/testDeployProcessArchive.bpmn20.xml");
   }
 
   @Test

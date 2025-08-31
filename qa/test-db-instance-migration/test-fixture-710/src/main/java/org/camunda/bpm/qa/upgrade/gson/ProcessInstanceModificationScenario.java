@@ -29,7 +29,7 @@ public class ProcessInstanceModificationScenario {
 
   @Deployment
   public static String deploy() {
-    return "org/camunda/bpm/qa/upgrade/gson/oneTaskProcessInstanceModification.bpmn20.xml";
+    return "io/orqueio/bpm/qa/upgrade/gson/oneTaskProcessInstanceModification.bpmn20.xml";
   }
 
   @DescribesScenario("ProcessInstanceModificationScenario")

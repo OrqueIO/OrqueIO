@@ -31,8 +31,8 @@ import org.junit.Test;
 public class WebappsDatabaseNamingConsistencyTest {
 
   public static String COLUMN_NAME_REGEX = "([a-zA-Z_]*(?=[a-z]+)[a-zA-Z_]+_)[,\\s]";
-  public static String[] SCANNED_FOLDERS = { "org/camunda/bpm/cockpit/plugin/base/queries",
-      "org/camunda/bpm/admin/plugin/base/queries" };
+  public static String[] SCANNED_FOLDERS = { "io/orqueio/bpm/cockpit/plugin/base/queries",
+      "io/orqueio/bpm/admin/plugin/base/queries" };
 
   @Test
   public void shouldNotFindLowercaseDbColumnNamesInMappings() {

@@ -41,7 +41,7 @@ public class OptimizeApiPageSizeTest {
   private static final int OPTIMIZE_PAGE_SIZE = 10_000;
 
   @ClassRule
-  public static ProcessEngineRule processEngineRule = new ProcessEngineRule("camunda.cfg.xml");
+  public static ProcessEngineRule processEngineRule = new ProcessEngineRule("orqueio.cfg.xml");
 
   @BeforeClass
   public static void init() {

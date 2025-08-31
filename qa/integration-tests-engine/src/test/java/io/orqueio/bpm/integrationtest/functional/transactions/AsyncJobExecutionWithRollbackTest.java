@@ -45,8 +45,8 @@ public class AsyncJobExecutionWithRollbackTest extends AbstractFoxPlatformIntegr
   public static WebArchive processArchive() {
     return initWebArchiveDeployment()
             .addClass(TransactionRollbackDelegate.class)
-            .addAsResource("org/camunda/bpm/integrationtest/functional/transactions/AsyncJobExecutionWithRollbackTest.transactionRollbackInServiceTask.bpmn20.xml")
-            .addAsResource("org/camunda/bpm/integrationtest/functional/transactions/AsyncJobExecutionWithRollbackTest.transactionRollbackInServiceTaskWithCustomRetryCycle.bpmn20.xml")
+            .addAsResource("io/orqueio/bpm/integrationtest/functional/transactions/AsyncJobExecutionWithRollbackTest.transactionRollbackInServiceTask.bpmn20.xml")
+            .addAsResource("io/orqueio/bpm/integrationtest/functional/transactions/AsyncJobExecutionWithRollbackTest.transactionRollbackInServiceTaskWithCustomRetryCycle.bpmn20.xml")
             .addAsWebInfResource("persistence.xml", "classes/META-INF/persistence.xml");
   }
 

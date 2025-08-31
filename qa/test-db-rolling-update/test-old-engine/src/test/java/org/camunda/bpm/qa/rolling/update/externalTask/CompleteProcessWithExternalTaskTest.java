@@ -28,7 +28,7 @@ import static org.junit.Assert.assertNull;
 
 /**
  *
- * @author Christopher Zell <christopher.zell@camunda.com>
+ * @author Christopher Zell <christopher.zell@orqueio.com>
  */
 @ScenarioUnderTest("ProcessWithExternalTaskScenario")
 public class CompleteProcessWithExternalTaskTest extends AbstractRollingUpdateTestCase {

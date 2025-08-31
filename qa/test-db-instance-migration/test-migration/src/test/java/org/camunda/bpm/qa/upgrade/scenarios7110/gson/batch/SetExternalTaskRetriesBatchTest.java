@@ -38,7 +38,7 @@ import static org.junit.Assert.assertThat;
 public class SetExternalTaskRetriesBatchTest {
 
   @Rule
-  public ProcessEngineRule engineRule = new ProcessEngineRule("camunda.cfg.xml");
+  public ProcessEngineRule engineRule = new ProcessEngineRule("orqueio.cfg.xml");
 
   @ScenarioUnderTest("initSetExternalTaskRetriesBatch.1")
   @Test

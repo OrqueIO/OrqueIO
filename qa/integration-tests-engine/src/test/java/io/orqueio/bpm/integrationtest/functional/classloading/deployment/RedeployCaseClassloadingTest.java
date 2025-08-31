@@ -40,7 +40,7 @@ public class RedeployCaseClassloadingTest extends AbstractFoxPlatformIntegration
   public static WebArchive createProcessArchiveDeplyoment() {
     return initWebArchiveDeployment()
             .addClass(ExampleCaseExecutionListener.class)
-            .addAsResource("org/camunda/bpm/integrationtest/functional/classloading/deployment/RedeployCaseClassloadingTest.testRedeployClassloading.cmmn10.xml");
+            .addAsResource("io/orqueio/bpm/integrationtest/functional/classloading/deployment/RedeployCaseClassloadingTest.testRedeployClassloading.cmmn10.xml");
   }
 
 

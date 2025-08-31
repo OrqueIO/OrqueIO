@@ -40,7 +40,7 @@ import org.junit.Test;
 public class RestartProcessIntanceWithInitialVariablesTest {
 
   @Rule
-  public ProcessEngineRule engineRule = new ProcessEngineRule("camunda.cfg.xml");
+  public ProcessEngineRule engineRule = new ProcessEngineRule("orqueio.cfg.xml");
 
   RuntimeService runtimeService;
   HistoryService historyService;

@@ -33,12 +33,12 @@ public class DeploymentAwareBatchesScenario {
 
   @Deployment
   public static String deployOneTask() {
-    return "org/camunda/bpm/qa/upgrade/batch/deploymentaware/oneTaskProcess.bpmn20.xml";
+    return "io/orqueio/bpm/qa/upgrade/batch/deploymentaware/oneTaskProcess.bpmn20.xml";
   }
 
   @Deployment
   public static String deployTwoTasks() {
-    return "org/camunda/bpm/qa/upgrade/batch/deploymentaware/twoTasksProcess.bpmn20.xml";
+    return "io/orqueio/bpm/qa/upgrade/batch/deploymentaware/twoTasksProcess.bpmn20.xml";
   }
 
   @DescribesScenario("createDeleteInstancesBatch")

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn">
-  <bpmn:process id="timerProcess" isExecutable="true" camunda:historyTimeToLive="P180D">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:orqueio="http://orqueio.io/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn">
+  <bpmn:process id="timerProcess" isExecutable="true" orqueio:historyTimeToLive="P180D">
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>SequenceFlow_18to9vk</bpmn:outgoing>
     </bpmn:startEvent>
     <bpmn:sequenceFlow id="SequenceFlow_18to9vk" sourceRef="StartEvent_1" targetRef="ServiceTask_0y3m72v" />
-    <bpmn:serviceTask id="ServiceTask_0y3m72v" name="a task" camunda:class="io.orqueio.bpm.integrationtest.functional.context.beans.NoOpJavaDelegate">
+    <bpmn:serviceTask id="ServiceTask_0y3m72v" name="a task" orqueio:class="io.orqueio.bpm.integrationtest.functional.context.beans.NoOpJavaDelegate">
       <bpmn:incoming>SequenceFlow_18to9vk</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0fyz444</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -17,7 +17,7 @@
       </bpmn:timerEventDefinition>
     </bpmn:intermediateCatchEvent>
     <bpmn:sequenceFlow id="SequenceFlow_183bo5m" sourceRef="IntermediateCatchEvent_157f4sb" targetRef="ServiceTask_07b7d8u" />
-    <bpmn:serviceTask id="ServiceTask_07b7d8u" name="another task" camunda:class="io.orqueio.bpm.integrationtest.functional.context.beans.NoOpJavaDelegate">
+    <bpmn:serviceTask id="ServiceTask_07b7d8u" name="another task" orqueio:class="io.orqueio.bpm.integrationtest.functional.context.beans.NoOpJavaDelegate">
       <bpmn:incoming>SequenceFlow_183bo5m</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0yo1qn6</bpmn:outgoing>
     </bpmn:serviceTask>

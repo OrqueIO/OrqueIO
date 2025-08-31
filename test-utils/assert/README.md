@@ -15,7 +15,7 @@ complete(task(instance), withVariables("approved", true));
 
 ## Compatibility
 
-Orque IO Platform Assert works with the corresponding version of Orqueio Platform (i.e., Orqueio Platform Assert 7.17.0 is compatible to Orqueio Platform 7.17.0). The compatibility between earlier versions are as shown [in the documentation](https://docs.orqueio.org/manual/latest/user-guide/testing/#assertions-version-compatibility).
+Orque IO Platform Assert works with the corresponding version of Orqueio Platform (i.e., Orqueio Platform Assert 7.17.0 is compatible to Orqueio Platform 7.17.0). The compatibility between earlier versions are as shown [in the documentation](https://docs.orqueio.io/manual/latest/user-guide/testing/#assertions-version-compatibility).
 Orque IO Platform Assert works with multiple Java versions (1.8+). All of this is continuously verified by executing around 500 test cases. 
 
 ## Get started
@@ -31,13 +31,13 @@ Orque IO Platform Assert works with multiple Java versions (1.8+). All of this i
 </dependency>
 ```
 
-Additionally, [AssertJ](https://assertj.github.io/doc/) needs to be provided as a dependency with a version that is compatible with the one documented in the [compatibility matrix](https://docs.orqueio.org/manual/latest/user-guide/testing/#assertions-version-compatibility).
+Additionally, [AssertJ](https://assertj.github.io/doc/) needs to be provided as a dependency with a version that is compatible with the one documented in the [compatibility matrix](https://docs.orqueio.io/manual/latest/user-guide/testing/#assertions-version-compatibility).
 
-Please note that if you use [Spring Boot](https://spring.io/projects/spring-boot) or the [Orqueio Spring Boot Starter](https://docs.orqueio.org/manual/latest/user-guide/spring-boot-integration/) in your project, AssertJ is already included in your project's setup.
+Please note that if you use [Spring Boot](https://spring.io/projects/spring-boot) or the [Orqueio Spring Boot Starter](https://docs.orqueio.io/manual/latest/user-guide/spring-boot-integration/) in your project, AssertJ is already included in your project's setup.
 
 2. Add a static import to your test class
 
-Create your test case just as described in the [Orqueio Platform Testing Guide](https://docs.orqueio.org/manual/latest/user-guide/testing/) and add Orque IO Platform Assert by statically importing it in your test class:
+Create your test case just as described in the [Orqueio Platform Testing Guide](https://docs.orqueio.io/manual/latest/user-guide/testing/) and add Orque IO Platform Assert by statically importing it in your test class:
 
 ```groovy  
 import static io.orqueio.bpm.engine.test.assertions.ProcessEngineTests.*;

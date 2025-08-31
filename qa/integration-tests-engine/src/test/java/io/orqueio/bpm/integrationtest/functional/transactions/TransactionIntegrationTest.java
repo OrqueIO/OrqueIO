@@ -43,9 +43,9 @@ public class TransactionIntegrationTest extends AbstractFoxPlatformIntegrationTe
   public static WebArchive processArchive() {    
     return initWebArchiveDeployment()
       .addClass(FailingDelegate.class)
-      .addAsResource("org/camunda/bpm/integrationtest/functional/transactions/TransactionIntegrationTest.testProcessFailure.bpmn20.xml")
-      .addAsResource("org/camunda/bpm/integrationtest/functional/transactions/TransactionIntegrationTest.testApplicationFailure.bpmn20.xml")
-      .addAsResource("org/camunda/bpm/integrationtest/functional/transactions/TransactionIntegrationTest.testTxSuccess.bpmn20.xml")     
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/transactions/TransactionIntegrationTest.testProcessFailure.bpmn20.xml")
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/transactions/TransactionIntegrationTest.testApplicationFailure.bpmn20.xml")
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/transactions/TransactionIntegrationTest.testTxSuccess.bpmn20.xml")
       .addAsWebInfResource("persistence.xml", "classes/META-INF/persistence.xml");
   }
   

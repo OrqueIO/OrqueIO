@@ -7,16 +7,16 @@
     <version>7.24.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>camunda-qa-old-engine</artifactId>
+  <artifactId>orqueio-qa-old-engine</artifactId>
   <packaging>jar</packaging>
 
   <description>
-    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://camunda.com/contact/
+    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://orqueio.com/contact/
   </description>
-  <name>Camunda Platform - QA - test new schema with old engine</name>
+  <name>Orqueio Platform - QA - test new schema with old engine</name>
 
   <properties>
-    <camunda.old.engine.version>7.23.0</camunda.old.engine.version>
+    <orqueio.old.engine.version>7.23.0</orqueio.old.engine.version>
   </properties>
 
   <build>
@@ -26,8 +26,8 @@
         <directory>${project.build.directory}/engine-test-sources</directory>
         <excludes>
           <exclude>**/*.java</exclude>
-          <exclude>camunda.cfg.xml</exclude>
-          <exclude>**/historycleanup.camunda.cfg.xml</exclude>
+          <exclude>orqueio.cfg.xml</exclude>
+          <exclude>**/historycleanup.orqueio.cfg.xml</exclude>
         </excludes>
       </testResource>
       <testResource>
@@ -82,7 +82,7 @@
         <dependencies>
           <dependency>
             <groupId>io.orqueio.bpm</groupId>
-            <artifactId>camunda-bom</artifactId>
+            <artifactId>orqueio-bom</artifactId>
             <!-- Cannot use variables due to bug in Maven Release Plugin -->
             <version>7.23.0</version>
             <scope>import</scope>
@@ -179,14 +179,14 @@
 
         <dependency>
           <groupId>io.orqueio.bpm.distro</groupId>
-          <artifactId>camunda-sql-scripts</artifactId>
+          <artifactId>orqueio-sql-scripts</artifactId>
           <version>${project.version}</version>
           <type>test-jar</type>
         </dependency>
 
         <dependency>
           <groupId>io.orqueio.bpm</groupId>
-          <artifactId>camunda-engine</artifactId>
+          <artifactId>orqueio-engine</artifactId>
           <scope>test</scope>
         </dependency>
         <dependency>
@@ -211,7 +211,7 @@
 
         <dependency>
           <groupId>io.orqueio.commons</groupId>
-          <artifactId>camunda-commons-testing</artifactId>
+          <artifactId>orqueio-commons-testing</artifactId>
           <scope>test</scope>
         </dependency>
 
@@ -280,8 +280,8 @@
                   <artifactItems>
                     <artifactItem>
                       <groupId>io.orqueio.bpm</groupId>
-                      <artifactId>camunda-engine</artifactId>
-                      <version>${camunda.old.engine.version}</version>
+                      <artifactId>orqueio-engine</artifactId>
+                      <version>${orqueio.old.engine.version}</version>
                       <type>test-jar</type>
                       <outputDirectory>${project.build.directory}/test-classes</outputDirectory>
                     </artifactItem>
@@ -300,7 +300,7 @@
                   <artifactItems>
                     <artifactItem>
                       <groupId>io.orqueio.bpm.distro</groupId>
-                      <artifactId>camunda-sql-scripts</artifactId>
+                      <artifactId>orqueio-sql-scripts</artifactId>
                       <version>${project.version}</version>
                       <type>test-jar</type>
                       <outputDirectory>${project.build.directory}/scripts-current</outputDirectory>
@@ -402,7 +402,7 @@
                 <exclude>**/ManagementServiceTableCountTest.java</exclude>
 
                 <!-- The test is not relevant in `old-engine` setup since the feature has been removed -->
-                <!-- See https://github.com/camunda/camunda-bpm-platform/pull/4544#discussion_r1728748399 -->
+                <!-- See https://github.com/orqueio/orqueio-bpm-platform/pull/4544#discussion_r1728748399 -->
                 <exclude>**/ConcurrentTelemetryConfigurationTest.java</exclude>
 
                 <!-- The test is not relevant in `old-engine` setup and lacks necessary resource files -->

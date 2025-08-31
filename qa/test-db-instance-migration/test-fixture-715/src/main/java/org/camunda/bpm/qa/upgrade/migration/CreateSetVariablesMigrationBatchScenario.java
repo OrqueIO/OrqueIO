@@ -26,12 +26,12 @@ public class CreateSetVariablesMigrationBatchScenario {
 
   @Deployment
   public static String sourceDeployment() {
-    return "org/camunda/bpm/qa/upgrade/migration/oneTaskProcess-source.bpmn20.xml";
+    return "io/orqueio/bpm/qa/upgrade/migration/oneTaskProcess-source.bpmn20.xml";
   }
 
   @Deployment
   public static String targetDeployment() {
-    return "org/camunda/bpm/qa/upgrade/migration/oneTaskProcess-target.bpmn20.xml";
+    return "io/orqueio/bpm/qa/upgrade/migration/oneTaskProcess-target.bpmn20.xml";
   }
 
   @DescribesScenario("createSetVariablesMigrationBatchScenario")

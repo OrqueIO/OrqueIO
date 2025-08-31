@@ -40,7 +40,7 @@ import static org.junit.Assert.assertTrue;
 public class CreateProcessInstanceWithJsonVariablesTest {
 
   @Rule
-  public ProcessEngineRule engineRule = new ProcessEngineRule("camunda.json.cfg.xml");
+  public ProcessEngineRule engineRule = new ProcessEngineRule("orqueio.json.cfg.xml");
 
   @ScenarioUnderTest("initProcessInstance.1")
   @Test

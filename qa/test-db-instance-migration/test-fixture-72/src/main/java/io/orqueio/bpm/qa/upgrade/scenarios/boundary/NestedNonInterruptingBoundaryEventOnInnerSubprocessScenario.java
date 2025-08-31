@@ -32,12 +32,12 @@ public class NestedNonInterruptingBoundaryEventOnInnerSubprocessScenario {
 
   @Deployment
   public static String deployTimerBoundary() {
-    return "org/camunda/bpm/qa/upgrade/boundary/nestedNonInterruptingTimerBoundaryEventOnInnerSubprocess.bpmn20.xml";
+    return "io/orqueio/bpm/qa/upgrade/boundary/nestedNonInterruptingTimerBoundaryEventOnInnerSubprocess.bpmn20.xml";
   }
 
   @Deployment
   public static String deployMessageBoundary() {
-    return "org/camunda/bpm/qa/upgrade/boundary/nestedNonInterruptingMessageBoundaryEventOnInnerSubprocess.bpmn20.xml";
+    return "io/orqueio/bpm/qa/upgrade/boundary/nestedNonInterruptingMessageBoundaryEventOnInnerSubprocess.bpmn20.xml";
   }
 
   @DescribesScenario("initMessage")

@@ -47,7 +47,7 @@ public class JobExecutorRequestContextSFSBDelegateTest extends AbstractFoxPlatfo
   public static WebArchive processArchive() {
     return initWebArchiveDeployment()
       .addClass(RequestScopedSFSBDelegate.class)
-      .addAsResource("org/camunda/bpm/integrationtest/functional/ejb/request/JobExecutorRequestContextSFSBDelegateTest.testScopingSFSB.bpmn20.xml");
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/ejb/request/JobExecutorRequestContextSFSBDelegateTest.testScopingSFSB.bpmn20.xml");
   }
 
 

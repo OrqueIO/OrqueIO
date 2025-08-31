@@ -40,7 +40,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 /**
- * <p>Smoketest Make sure camunda spin can be used in a process application </p>
+ * <p>Smoketest Make sure orqueio spin can be used in a process application </p>
  *
  * @author Daniel Meyer
  */
@@ -50,8 +50,8 @@ public class PaSpinSupportTest extends AbstractFoxPlatformIntegrationTest {
   @Deployment
   public static WebArchive createDeployment() {
     return initWebArchiveDeployment()
-        .addAsResource("org/camunda/bpm/integrationtest/oneTaskProcess.bpmn")
-        .addAsResource("org/camunda/bpm/integrationtest/functional/spin/jackson146.json");
+        .addAsResource("io/orqueio/bpm/integrationtest/oneTaskProcess.bpmn")
+        .addAsResource("io/orqueio/bpm/integrationtest/functional/spin/jackson146.json");
   }
 
   @Test
@@ -91,7 +91,7 @@ public class PaSpinSupportTest extends AbstractFoxPlatformIntegrationTest {
 
   @Test
   public void testJacksonBug146() {
-    InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream("org/camunda/bpm/integrationtest/functional/spin/jackson146.json");
+    InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream("io/orqueio/bpm/integrationtest/functional/spin/jackson146.json");
     String jackson146 = SpinIoUtil.inputStreamAsString(resourceAsStream);
 
     // this should not fail
@@ -104,7 +104,7 @@ public class PaSpinSupportTest extends AbstractFoxPlatformIntegrationTest {
 
   @Test
   public void testJacksonBug146AsVariable() {
-    InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream("org/camunda/bpm/integrationtest/functional/spin/jackson146.json");
+    InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream("io/orqueio/bpm/integrationtest/functional/spin/jackson146.json");
     String jackson146 = SpinIoUtil.inputStreamAsString(resourceAsStream);
 
     ProcessInstance pi = runtimeService.startProcessInstanceByKey("testProcess", Variables.createVariables()

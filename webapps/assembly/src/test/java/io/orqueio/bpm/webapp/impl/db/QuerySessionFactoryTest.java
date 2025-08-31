@@ -28,7 +28,7 @@ import org.junit.Test;
 public class QuerySessionFactoryTest {
 
   @Rule
-  public ProcessEngineRule processEngineRule = new ProcessEngineRule("camunda-skip-check.cfg.xml");
+  public ProcessEngineRule processEngineRule = new ProcessEngineRule("orqueio-skip-check.cfg.xml");
 
   private ProcessEngineConfigurationImpl processEngineConfiguration;
 

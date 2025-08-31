@@ -43,10 +43,10 @@ public class JobPrioritizationTest extends AbstractFoxPlatformIntegrationTest {
   public static WebArchive createDeployment() {
     return initWebArchiveDeployment()
       .addClass(PriorityBean.class)
-      .addAsResource("org/camunda/bpm/integrationtest/jobexecutor/JobPrioritizationTest.priorityProcess.bpmn20.xml")
-      .addAsResource("org/camunda/bpm/integrationtest/jobexecutor/JobPrioritizationTest.serviceTask.bpmn20.xml")
-      .addAsResource("org/camunda/bpm/integrationtest/jobexecutor/JobPrioritizationTest.userTask.bpmn20.xml")
-      .addAsResource("org/camunda/bpm/integrationtest/jobexecutor/JobPrioritizationTest.intermediateMessage.bpmn20.xml");
+      .addAsResource("io/orqueio/bpm/integrationtest/jobexecutor/JobPrioritizationTest.priorityProcess.bpmn20.xml")
+      .addAsResource("io/orqueio/bpm/integrationtest/jobexecutor/JobPrioritizationTest.serviceTask.bpmn20.xml")
+      .addAsResource("io/orqueio/bpm/integrationtest/jobexecutor/JobPrioritizationTest.userTask.bpmn20.xml")
+      .addAsResource("io/orqueio/bpm/integrationtest/jobexecutor/JobPrioritizationTest.intermediateMessage.bpmn20.xml");
   }
 
   @After

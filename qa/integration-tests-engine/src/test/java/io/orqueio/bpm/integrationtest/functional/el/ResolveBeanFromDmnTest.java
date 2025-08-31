@@ -39,8 +39,8 @@ public class ResolveBeanFromDmnTest extends AbstractFoxPlatformIntegrationTest {
   public static WebArchive processArchive() {
     return initWebArchiveDeployment()
       .addClass(GreeterBean.class)
-      .addAsResource("org/camunda/bpm/integrationtest/functional/el/BusinessRuleProcess.bpmn20.xml")
-      .addAsResource("org/camunda/bpm/integrationtest/functional/el/BeanResolvingDecision.dmn11.xml");
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/el/BusinessRuleProcess.bpmn20.xml")
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/el/BeanResolvingDecision.dmn11.xml");
   }
 
   @Test

@@ -37,7 +37,7 @@ import io.orqueio.bpm.webapp.impl.AbstractAppRuntimeDelegate;
 
 /**
  * <p>This is the default {@link CockpitRuntimeDelegate} implementation that provides
- * the camunda cockpit plugin services (i.e. {@link QueryService} and
+ * the orqueio cockpit plugin services (i.e. {@link QueryService} and
  * {@link CommandExecutor}).</p>
  *
  * @author roman.smirnov

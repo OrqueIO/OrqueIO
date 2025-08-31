@@ -36,7 +36,7 @@ public class JpaVariableScenario {
 
   @Deployment
   public static String deployOneTask() {
-    return "org/camunda/bpm/qa/upgrade/variables/JpaEntitiesScenario.oneTaskProcess.bpmn20.xml";
+    return "io/orqueio/bpm/qa/upgrade/variables/JpaEntitiesScenario.oneTaskProcess.bpmn20.xml";
   }
 
   @DescribesScenario("createJpaVariable")

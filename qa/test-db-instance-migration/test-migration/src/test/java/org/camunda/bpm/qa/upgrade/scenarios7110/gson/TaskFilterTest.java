@@ -47,7 +47,7 @@ import static org.junit.Assert.assertTrue;
 public class TaskFilterTest {
 
   @Rule
-  public ProcessEngineRule engineRule = new ProcessEngineRule("camunda.cfg.xml");
+  public ProcessEngineRule engineRule = new ProcessEngineRule("orqueio.cfg.xml");
 
   @ScenarioUnderTest("initTaskFilter.1")
   @Test

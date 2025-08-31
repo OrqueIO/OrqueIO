@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:orqueio="http://orqueio.io/schema/1.0/bpmn"
   xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
   xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema"
   expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="Examples">
   
-  <process id="testInvokeBean" isExecutable="true" camunda:historyTimeToLive="5">
+  <process id="testInvokeBean" isExecutable="true" orqueio:historyTimeToLive="5">
   
     <startEvent id="theStart" />
 
     <serviceTask id="servicetask1"      
-      camunda:delegateExpression="${localSingletonBeanClientDelegateBean}" />
+      orqueio:delegateExpression="${localSingletonBeanClientDelegateBean}" />
       
     <userTask id="waitHere" />
     
     <serviceTask id="servicetask3"      
-      camunda:delegateExpression="${localSingletonBeanClientDelegateBean}"
-      camunda:async="true" />
+      orqueio:delegateExpression="${localSingletonBeanClientDelegateBean}"
+      orqueio:async="true" />
       
     <userTask id="waitAgain" />
 

@@ -30,7 +30,7 @@ public class NestedSequentialMultiInstanceSubprocessScenario {
 
   @Deployment
   public static String deployProcess() {
-    return "org/camunda/bpm/qa/upgrade/multiinstance/nestedSequentialMultiInstanceSubprocess.bpmn20.xml";
+    return "io/orqueio/bpm/qa/upgrade/multiinstance/nestedSequentialMultiInstanceSubprocess.bpmn20.xml";
   }
 
   @DescribesScenario("init")

@@ -16,7 +16,7 @@
  */
 package io.orqueio.bpm.rest.beans;
 
-import io.orqueio.bpm.engine.rest.impl.CamundaRestResources;
+import io.orqueio.bpm.engine.rest.impl.OrqueioRestResources;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
@@ -30,11 +30,11 @@ public class CustomRestApplication extends Application {
   public Set<Class<?>> getClasses() {
     Set<Class<?>> classes = new HashSet<>();
 
-    // add all camunda engine rest resources (or just add those that you actually need).
-    classes.addAll(CamundaRestResources.getResourceClasses());
+    // add all orqueio engine rest resources (or just add those that you actually need).
+    classes.addAll(OrqueioRestResources.getResourceClasses());
 
     // mandatory
-    classes.addAll(CamundaRestResources.getConfigurationClasses());
+    classes.addAll(OrqueioRestResources.getConfigurationClasses());
 
     return classes;
   }

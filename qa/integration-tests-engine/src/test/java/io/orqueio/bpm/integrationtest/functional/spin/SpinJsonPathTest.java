@@ -33,7 +33,7 @@ public class SpinJsonPathTest extends AbstractFoxPlatformIntegrationTest {
   @Deployment
   public static WebArchive createDeployment() {
     return initWebArchiveDeployment()
-        .addAsResource("org/camunda/bpm/integrationtest/jsonpath-process.bpmn");
+        .addAsResource("io/orqueio/bpm/integrationtest/jsonpath-process.bpmn");
   }
 
   @Test

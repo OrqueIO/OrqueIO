@@ -39,9 +39,9 @@ public class ElResolverLookupTest extends AbstractFoxPlatformIntegrationTest {
       .addClass(NullELResolver.class)
       .addClass(ResolveExpressionBean.class)
       .addAsResource(
-          "org/camunda/bpm/integrationtest/functional/el/services/io.orqueio.bpm.application.ProcessApplicationElResolver",
+          "io/orqueio/bpm/integrationtest/functional/el/services/io.orqueio.bpm.application.ProcessApplicationElResolver",
           "META-INF/services/io.orqueio.bpm.application.ProcessApplicationElResolver")
-      .addAsResource("org/camunda/bpm/integrationtest/functional/el/elServiceTaskProcess.bpmn20.xml");
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/el/elServiceTaskProcess.bpmn20.xml");
   }
 
   @Test

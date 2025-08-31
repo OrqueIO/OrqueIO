@@ -1,8 +1,8 @@
 /*
- * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
+ * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. TOADDLATERCCS this file to you under the Apache License,
+ * ownership. Camunda licenses this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -31,18 +31,18 @@ module.exports = (_env, argv = {}) => {
 
   const addEngines = engines => {
     return engines.reduce((acc, engine) => {
-      acc[`/camunda/app/*/${engine}/`] = {
+      acc[`/orqueio/app/*/${engine}/`] = {
         target: 'http://localhost:8081/',
         pathRewrite: path => {
-          return path.replace(`/${engine}`, '').replace('/camunda', '');
+          return path.replace(`/${engine}`, '').replace('/orqueio', '');
         }
       };
-      acc[`/camunda/app/*/${engine}/setup/`] = {
+      acc[`/orqueio/app/*/${engine}/setup/`] = {
         target: 'http://localhost:8081/',
         pathRewrite: path => {
           return path
             .replace(`/${engine}`, '')
-            .replace('/camunda', '')
+            .replace('/orqueio', '')
             .replace('/setup', '');
         }
       };
@@ -67,33 +67,33 @@ module.exports = (_env, argv = {}) => {
       https: false,
       proxy: {
         '/api': {
-          target: 'http://localhost:8080/camunda/api',
+          target: 'http://localhost:8080/orqueio/api',
           logLevel: 'debug',
           pathRewrite: {
             '^/api': ''
           }
         },
-        '/camunda-welcome': {
+        '/orqueio-welcome': {
           target: 'http://localhost:8080/',
           logLevel: 'debug'
         },
         ...addEngines(['default', 'engine2', 'engine3']),
-        '/camunda/*': {
+        '/orqueio/*': {
           target: 'http://localhost:8081/',
           logLevel: 'debug',
           pathRewrite: path => {
-            return path.replace('/camunda', '');
+            return path.replace('/orqueio', '');
           }
         },
-        '/camunda/api/*': {
+        '/orqueio/api/*': {
           target: 'http://localhost:8081/',
           logLevel: 'debug',
           pathRewrite: path => {
-            return path.replace('/camunda', '');
+            return path.replace('/orqueio', '');
           }
         }
       },
-      open: ['/camunda/app/cockpit/default/']
+      open: ['/orqueio/app/cockpit/default/']
     }
   };
 
@@ -140,9 +140,9 @@ module.exports = (_env, argv = {}) => {
       const options = plugin.options;
       plugin.options = {
         ...options,
-        publicPath: '/camunda',
-        appRoot: '/camunda',
-        appBase: `/camunda/app/${options['appName']}/{ENGINE}/`,
+        publicPath: '/orqueio',
+        appRoot: '/orqueio',
+        appBase: `/orqueio/app/${options['appName']}/{ENGINE}/`,
         pluginDeps: getPluginDeps(options['appName']),
         pluginPackages: getPluginPackages(options['appName'])
       };

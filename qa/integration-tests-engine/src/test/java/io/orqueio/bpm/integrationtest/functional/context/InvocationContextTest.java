@@ -53,9 +53,9 @@ public class InvocationContextTest extends AbstractFoxPlatformIntegrationTest {
         .addClass(ProcessApplicationWithInvocationContext.class)
         .addClass(NoOpJavaDelegate.class)
         .addClass(SignalableTask.class)
-        .addAsResource("org/camunda/bpm/integrationtest/functional/context/InvocationContextTest-timer.bpmn")
-        .addAsResource("org/camunda/bpm/integrationtest/functional/context/InvocationContextTest-message.bpmn")
-        .addAsResource("org/camunda/bpm/integrationtest/functional/context/InvocationContextTest-signalTask.bpmn");
+        .addAsResource("io/orqueio/bpm/integrationtest/functional/context/InvocationContextTest-timer.bpmn")
+        .addAsResource("io/orqueio/bpm/integrationtest/functional/context/InvocationContextTest-message.bpmn")
+        .addAsResource("io/orqueio/bpm/integrationtest/functional/context/InvocationContextTest-signalTask.bpmn");
   }
 
   @After

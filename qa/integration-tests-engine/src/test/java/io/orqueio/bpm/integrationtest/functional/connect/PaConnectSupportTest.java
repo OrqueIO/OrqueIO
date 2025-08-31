@@ -29,7 +29,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 /**
- * <p>Smoketest Make sure camunda connect can be used in a process application </p>
+ * <p>Smoketest Make sure orqueio connect can be used in a process application </p>
  *
  * @author Daniel Meyer
  */
@@ -39,7 +39,7 @@ public class PaConnectSupportTest extends AbstractFoxPlatformIntegrationTest {
   @Deployment
   public static WebArchive createDeployment() {
     return initWebArchiveDeployment()
-      .addAsResource("org/camunda/bpm/integrationtest/functional/connect/PaConnectSupportTest.connectorServiceTask.bpmn20.xml")
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/connect/PaConnectSupportTest.connectorServiceTask.bpmn20.xml")
       .addClass(TestConnector.class)
       .addClass(TestConnectorRequest.class)
       .addClass(TestConnectorResponse.class)

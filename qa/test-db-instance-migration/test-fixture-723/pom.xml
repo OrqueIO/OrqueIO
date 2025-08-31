@@ -7,23 +7,23 @@
     <version>7.24.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>camunda-qa-upgrade-test-fixture-723</artifactId>
+  <artifactId>orqueio-qa-upgrade-test-fixture-723</artifactId>
   <packaging>jar</packaging>
 
   <description>
-    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://camunda.com/contact/
+    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://orqueio.com/contact/
   </description>
-  <name>camunda BPM - QA - upgrade - instance migration - test fixture - 7.23.0</name>
+  <name>orqueio BPM - QA - upgrade - instance migration - test fixture - 7.23.0</name>
 
   <properties>
-    <camunda.version.previous>7.23.0</camunda.version.previous>
+    <orqueio.version.previous>7.23.0</orqueio.version.previous>
   </properties>
 
    <dependencyManagement>
      <dependencies>
        <dependency>
          <groupId>io.orqueio.bpm</groupId>
-         <artifactId>camunda-bom</artifactId>
+         <artifactId>orqueio-bom</artifactId>
          <version>7.23.0</version>
          <scope>import</scope>
          <type>pom</type>
@@ -49,7 +49,7 @@
 
     <dependency>
       <groupId>io.orqueio.bpm.qa.upgrade</groupId>
-      <artifactId>camunda-qa-upgrade-scenario-util</artifactId>
+      <artifactId>orqueio-qa-upgrade-scenario-util</artifactId>
       <version>${project.version}</version>
     </dependency>
   </dependencies>
@@ -85,7 +85,7 @@
                   <goal>update</goal>
                 </goals>
                 <configuration>
-                  <changeLogFile>camunda-changelog.xml</changeLogFile>
+                  <changeLogFile>orqueio-changelog.xml</changeLogFile>
                   <changeLogDirectory>${project.build.directory}/scripts-current/sql/liquibase/</changeLogDirectory>
                 </configuration>
               </execution>
@@ -106,7 +106,7 @@
                   <artifactItems>
                     <artifactItem>
                       <groupId>io.orqueio.bpm.distro</groupId>
-                      <artifactId>camunda-sql-scripts</artifactId>
+                      <artifactId>orqueio-sql-scripts</artifactId>
                       <version>7.23.0</version>
                       <type>test-jar</type>
                       <outputDirectory>${project.build.directory}/scripts-current</outputDirectory>

@@ -25,7 +25,7 @@ import io.orqueio.bpm.cockpit.impl.plugin.base.dto.ProcessDefinitionDto;
 import io.orqueio.bpm.cockpit.rest.dto.AbstractRestQueryParametersDto;
 import io.orqueio.bpm.engine.impl.QueryVariableValue;
 import io.orqueio.bpm.engine.impl.variable.serializer.VariableSerializers;
-import io.orqueio.bpm.engine.rest.dto.CamundaQueryParam;
+import io.orqueio.bpm.engine.rest.dto.OrqueioQueryParam;
 import io.orqueio.bpm.engine.rest.dto.ConditionQueryParameterDto;
 import io.orqueio.bpm.engine.rest.dto.VariableQueryParameterDto;
 import io.orqueio.bpm.engine.rest.dto.converter.StringArrayConverter;
@@ -57,7 +57,7 @@ public class ProcessDefinitionQueryDto extends AbstractRestQueryParametersDto<Pr
     return parentProcessDefinitionId;
   }
 
-  @CamundaQueryParam(value="parentProcessDefinitionId")
+  @OrqueioQueryParam(value="parentProcessDefinitionId")
   public void setParentProcessDefinitionId(String parentProcessDefinitionId) {
     this.parentProcessDefinitionId = parentProcessDefinitionId;
   }
@@ -66,7 +66,7 @@ public class ProcessDefinitionQueryDto extends AbstractRestQueryParametersDto<Pr
     return superProcessDefinitionId;
   }
 
-  @CamundaQueryParam(value="superProcessDefinitionId")
+  @OrqueioQueryParam(value="superProcessDefinitionId")
   public void setSuperProcessDefinitionId(String superProcessDefinitionId) {
     this.superProcessDefinitionId = superProcessDefinitionId;
   }
@@ -75,7 +75,7 @@ public class ProcessDefinitionQueryDto extends AbstractRestQueryParametersDto<Pr
     return activityIdIn;
   }
 
-  @CamundaQueryParam(value="activityIdIn", converter = StringArrayConverter.class)
+  @OrqueioQueryParam(value="activityIdIn", converter = StringArrayConverter.class)
   public void setActivityIdIn(String[] activityIdIn) {
     this.activityIdIn = activityIdIn;
   }
@@ -84,12 +84,12 @@ public class ProcessDefinitionQueryDto extends AbstractRestQueryParametersDto<Pr
     return businessKey;
   }
 
-  @CamundaQueryParam(value="businessKey")
+  @OrqueioQueryParam(value="businessKey")
   public void setBusinessKey(String businessKey) {
     this.businessKey = businessKey;
   }
 
-  @CamundaQueryParam(value = "variables", converter = VariableListConverter.class)
+  @OrqueioQueryParam(value = "variables", converter = VariableListConverter.class)
   public void setVariables(List<VariableQueryParameterDto> variables) {
     this.variables = variables;
   }

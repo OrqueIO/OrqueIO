@@ -70,7 +70,7 @@ public abstract class AuthorizationPerformanceTestCase {
 
   public PerfTestBuilder performanceTest() {
     PerfTestConfiguration configuration = testConfigurationRule.getPerformanceTestConfiguration();
-    configuration.setPlatform("camunda BPM");
+    configuration.setPlatform("orqueio BPM");
     return new PerfTestBuilder(configuration, resultRecorderRule);
   }
 

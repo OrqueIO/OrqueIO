@@ -18,7 +18,7 @@
 
 		<sequenceFlow id="flow1" sourceRef="theStart" targetRef="failingServiceTask" />
 		
-		<serviceTask id="failingServiceTask" orqueio:class="com.orqueio.fox.engine.test.cmd.FailingDelegate" />
+		<serviceTask id="failingServiceTask" orqueio:class="io.orqueio.fox.engine.test.cmd.FailingDelegate" />
         
 		<sequenceFlow id="flow2" sourceRef="failingServiceTask" targetRef="theEnd" />
 		

@@ -48,8 +48,8 @@ public class TestJavaDelegateResolution_ClientAsLibInWebModule extends AbstractF
   public static EnterpriseArchive createProcessArchiveDeplyoment() {
     WebArchive processArchiveWar = initWebArchiveDeployment()
       .addClass(ExampleDelegate.class)
-      .addAsResource("org/camunda/bpm/integrationtest/functional/classloading/JavaDelegateResolutionTest.testResolveClass.bpmn20.xml")
-      .addAsResource("org/camunda/bpm/integrationtest/functional/classloading/JavaDelegateResolutionTest.testResolveClassFromJobExecutor.bpmn20.xml");
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/classloading/JavaDelegateResolutionTest.testResolveClass.bpmn20.xml")
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/classloading/JavaDelegateResolutionTest.testResolveClassFromJobExecutor.bpmn20.xml");
 
     return ShrinkWrap.create(EnterpriseArchive.class, "test-app.ear")
       .addAsModule(processArchiveWar);

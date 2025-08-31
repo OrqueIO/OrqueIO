@@ -68,7 +68,7 @@ public class JobPrioritizationFailureTest extends AbstractFoxPlatformIntegration
   public static WebArchive createDeployment() {
     return initWebArchiveDeployment()
       .addClass(PriorityBean.class)
-      .addAsResource("org/camunda/bpm/integrationtest/jobexecutor/JobPrioritizationTest.priorityProcess.bpmn20.xml");
+      .addAsResource("io/orqueio/bpm/integrationtest/jobexecutor/JobPrioritizationTest.priorityProcess.bpmn20.xml");
   }
 
   @Deployment(name = "dummy-client", order = 2)

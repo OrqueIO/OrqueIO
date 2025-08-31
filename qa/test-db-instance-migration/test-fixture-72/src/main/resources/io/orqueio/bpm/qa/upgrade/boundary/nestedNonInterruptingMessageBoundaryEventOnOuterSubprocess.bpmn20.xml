@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions id="definitions"
-  xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:camunda="http://activiti.org/bpmn"
+  xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:orqueio="http://activiti.org/bpmn"
   targetNamespace="Examples">
   <message id="receiveTaskMessageId" name="ReceiveTaskMessage" />
   <message id="boundaryMessageId" name="BoundaryEventMessage" />
@@ -23,7 +23,7 @@
         <sequenceFlow sourceRef="innerSubProcessTask" targetRef="throwErrorServiceTask" />
 
         <!-- throws an BpmnError if requested via process variable -->
-        <serviceTask id="throwErrorServiceTask" camunda:class="io.orqueio.bpm.qa.upgrade.util.ThrowBpmnErrorDelegate" />
+        <serviceTask id="throwErrorServiceTask" orqueio:class="io.orqueio.bpm.qa.upgrade.util.ThrowBpmnErrorDelegate" />
         <sequenceFlow id="flow4" sourceRef="throwErrorServiceTask" targetRef="innerSubProcessEnd" />
         <endEvent id="innerSubProcessEnd" />
       </subProcess>

@@ -37,8 +37,8 @@ public class SignalEventCatchBoundaryWithVariablesTest extends AbstractFoxPlatfo
     return initWebArchiveDeployment()
             .addClass(SendSignalDelegate.class)
             .addClass(SignalReceivedDelegate.class)
-            .addAsResource("org/camunda/bpm/integrationtest/jobexecutor/SignalEventCatchBoundaryWithVariablesTest.catchAlertSignalBoundaryWithReceiveTask.bpmn20.xml")
-            .addAsResource("org/camunda/bpm/integrationtest/jobexecutor/SignalEventCatchBoundaryWithVariablesTest.throwAlertSignalWithDelegate.bpmn20.xml");
+            .addAsResource("io/orqueio/bpm/integrationtest/jobexecutor/SignalEventCatchBoundaryWithVariablesTest.catchAlertSignalBoundaryWithReceiveTask.bpmn20.xml")
+            .addAsResource("io/orqueio/bpm/integrationtest/jobexecutor/SignalEventCatchBoundaryWithVariablesTest.throwAlertSignalWithDelegate.bpmn20.xml");
   }
 
   @Test

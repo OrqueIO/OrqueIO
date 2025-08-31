@@ -6,11 +6,11 @@
       factory="org.jboss.weld.resources.ManagerObjectFactory"/>
       
    <ResourceLink name="ProcessEngineService"
-            global="global/camunda-bpm-platform/process-engine/ProcessEngineService!io.orqueio.bpm.ProcessEngineService"
+            global="global/orqueio-bpm-platform/process-engine/ProcessEngineService!io.orqueio.bpm.ProcessEngineService"
             type="io.orqueio.bpm.ProcessEngineService" />
             
    <ResourceLink name="ProcessApplicationService"
-            global="global/camunda-bpm-platform/process-engine/ProcessApplicationService!io.orqueio.bpm.ProcessApplicationService"
+            global="global/orqueio-bpm-platform/process-engine/ProcessApplicationService!io.orqueio.bpm.ProcessApplicationService"
             type="io.orqueio.bpm.ProcessApplicationService" />
             
    <ResourceLink name="ProcessEngineDataSource" global="jdbc/ProcessEngine" type="javax.sql.DataSource"/>

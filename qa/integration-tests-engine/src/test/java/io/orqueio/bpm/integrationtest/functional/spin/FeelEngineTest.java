@@ -38,7 +38,7 @@ import static org.junit.Assert.assertEquals;
 @RunWith(Arquillian.class)
 public class FeelEngineTest extends AbstractFoxPlatformIntegrationTest {
 
-  protected static final String PATH = "org/camunda/bpm/integrationtest/functional/spin/feel/";
+  protected static final String PATH = "io/orqueio/bpm/integrationtest/functional/spin/feel/";
 
   protected static final String DMN_JSON = "feel-spin-json-decision.dmn";
   protected static final String DMN_XML = "feel-spin-xml-decision.dmn";

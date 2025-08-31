@@ -33,7 +33,7 @@ import static org.hamcrest.core.IsNull.nullValue;
 public class DeployUserWithoutSaltForPasswordHashingTest {
 
   @Rule
-  public ProcessEngineRule engineRule = new ProcessEngineRule("camunda.cfg.xml");
+  public ProcessEngineRule engineRule = new ProcessEngineRule("orqueio.cfg.xml");
 
   @Test
   public void testDeployUserWithoutSaltForPasswordHashing() {

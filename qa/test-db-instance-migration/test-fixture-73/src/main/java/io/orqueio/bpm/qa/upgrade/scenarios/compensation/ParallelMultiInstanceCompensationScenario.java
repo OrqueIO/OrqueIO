@@ -34,7 +34,7 @@ public class ParallelMultiInstanceCompensationScenario {
 
   @Deployment
   public static String deploySingleActivityHandler() {
-    return "org/camunda/bpm/qa/upgrade/compensation/parallelMultiInstanceCompensationSingleActivityHandlerProcess.bpmn20.xml";
+    return "io/orqueio/bpm/qa/upgrade/compensation/parallelMultiInstanceCompensationSingleActivityHandlerProcess.bpmn20.xml";
   }
 
   @DescribesScenario("singleActivityHandler.multiInstancePartial")
@@ -90,7 +90,7 @@ public class ParallelMultiInstanceCompensationScenario {
 
   @Deployment
   public static String deployDefaultHandler() {
-    return "org/camunda/bpm/qa/upgrade/compensation/parallelMultiInstanceCompensationDefaultHandlerProcess.bpmn20.xml";
+    return "io/orqueio/bpm/qa/upgrade/compensation/parallelMultiInstanceCompensationDefaultHandlerProcess.bpmn20.xml";
   }
 
   @DescribesScenario("defaultHandler.multiInstancePartial")
@@ -146,7 +146,7 @@ public class ParallelMultiInstanceCompensationScenario {
 
   @Deployment
   public static String deploySubProcessHandler() {
-    return "org/camunda/bpm/qa/upgrade/compensation/parallelMultiInstanceCompensationSubProcessHandlerProcess.bpmn20.xml";
+    return "io/orqueio/bpm/qa/upgrade/compensation/parallelMultiInstanceCompensationSubProcessHandlerProcess.bpmn20.xml";
   }
 
   @DescribesScenario("subProcessHandler.multiInstancePartial")

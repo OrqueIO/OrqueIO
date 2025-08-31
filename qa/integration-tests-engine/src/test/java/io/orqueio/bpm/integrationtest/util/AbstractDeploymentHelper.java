@@ -105,7 +105,7 @@ public abstract class AbstractDeploymentHelper {
           .loadPomFromFile("pom.xml")
           .addDependencies(
               MavenDependencies.createDependency(engineSpringArtifactName, ScopeType.COMPILE, false,
-                  MavenDependencies.createExclusion("io.orqueio.bpm:camunda-engine")),
+                  MavenDependencies.createExclusion("io.orqueio.bpm:orqueio-engine")),
                   MavenDependencies.createDependency("org.springframework:spring-context", ScopeType.COMPILE, false),
                   MavenDependencies.createDependency("org.springframework:spring-jdbc", ScopeType.COMPILE, false),
                   MavenDependencies.createDependency("org.springframework:spring-tx", ScopeType.COMPILE, false),
@@ -158,11 +158,11 @@ public abstract class AbstractDeploymentHelper {
       return Maven.configureResolver()
           .workOffline()
           .loadPomFromFile("pom.xml")
-          .resolve("io.orqueio.spin:camunda-spin-dataformat-json-jackson")
+          .resolve("io.orqueio.spin:orqueio-spin-dataformat-json-jackson")
           .using(new RejectDependenciesStrategy(false,
-              "io.orqueio.spin:camunda-spin-core",
-              "io.orqueio.commons:camunda-commons-logging",
-              "io.orqueio.commons:camunda-commons-utils"))
+              "io.orqueio.spin:orqueio-spin-core",
+              "io.orqueio.commons:orqueio-commons-logging",
+              "io.orqueio.commons:orqueio-commons-utils"))
           .as(JavaArchive.class);
     } else {
       throw new RuntimeException("Unable to determine dependencies for spinJacksonJsonDataFormat: " + server);

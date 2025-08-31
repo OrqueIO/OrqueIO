@@ -23,7 +23,7 @@ import io.orqueio.bpm.qa.performance.engine.framework.PerfTestRunContext;
 
 /**
  *
- * @author Christopher Zell <christopher.zell@camunda.com>
+ * @author Christopher Zell <christopher.zell@orqueio.com>
  */
 public class MetricIntervalStep extends ProcessEngineAwareStep {
 

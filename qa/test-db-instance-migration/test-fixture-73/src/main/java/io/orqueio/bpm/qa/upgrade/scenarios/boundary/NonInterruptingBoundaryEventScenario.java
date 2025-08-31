@@ -30,7 +30,7 @@ public class NonInterruptingBoundaryEventScenario {
 
   @Deployment
   public static String deployMessageBoundary() {
-    return "org/camunda/bpm/qa/upgrade/boundary/nonInterruptingMessageBoundaryEvent.bpmn20.xml";
+    return "io/orqueio/bpm/qa/upgrade/boundary/nonInterruptingMessageBoundaryEvent.bpmn20.xml";
   }
 
   @DescribesScenario("init")

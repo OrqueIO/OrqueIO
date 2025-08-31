@@ -40,7 +40,7 @@ public class CaseVariableListenerResolutionTest extends AbstractFoxPlatformInteg
   public static WebArchive createProcessArchiveDeplyoment() {
     return initWebArchiveDeployment()
             .addClass(ExampleCaseVariableListener.class)
-            .addAsResource("org/camunda/bpm/integrationtest/functional/classloading/CaseVariableListenerResolutionTest.cmmn");
+            .addAsResource("io/orqueio/bpm/integrationtest/functional/classloading/CaseVariableListenerResolutionTest.cmmn");
   }
 
   @Deployment(name="clientDeployment")

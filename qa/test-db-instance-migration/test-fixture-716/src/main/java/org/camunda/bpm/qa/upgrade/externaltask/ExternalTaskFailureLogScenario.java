@@ -27,7 +27,7 @@ public class ExternalTaskFailureLogScenario {
 
   @Deployment
   public static String modelDeployment() {
-    return "org/camunda/bpm/qa/upgrade/externaltask/oneTaskProcess.bpmn20.xml";
+    return "io/orqueio/bpm/qa/upgrade/externaltask/oneTaskProcess.bpmn20.xml";
   }
 
   @DescribesScenario("failedTaskWithRetries")

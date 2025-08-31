@@ -27,7 +27,7 @@ public class JobFailureLogScenario {
 
   @Deployment
   public static String modelDeployment() {
-    return "org/camunda/bpm/qa/upgrade/job/oneTaskProcess.bpmn20.xml";
+    return "io/orqueio/bpm/qa/upgrade/job/oneTaskProcess.bpmn20.xml";
   }
 
   @DescribesScenario("failedJobWithRetries")

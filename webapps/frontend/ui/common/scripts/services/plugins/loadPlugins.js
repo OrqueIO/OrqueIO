@@ -1,8 +1,8 @@
 /*
- * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
+ * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. TOADDLATERCCS this file to you under the Apache License,
+ * ownership. Camunda licenses this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -17,7 +17,7 @@
 
 const appRoot = document.querySelector('base').getAttribute('app-root');
 
-const camundaPlugins = [
+const orqueioPlugins = [
   'admin-plugin-adminPlugins',
   'admin-plugin-adminEE',
   'cockpit-plugin-cockpitPlugins',
@@ -42,18 +42,18 @@ module.exports = async function loadPlugins(config, appName) {
 
   const JARScripts = window.PLUGIN_PACKAGES.filter(
     el =>
-      !camundaPlugins.includes(el.name) &&
+      !orqueioPlugins.includes(el.name) &&
       !el.name.startsWith(`${appName}-plugin-legacy`)
   ).map(el => {
-    addCssSource(`${el.location}/plugin.css?bust=${CAMUNDA_VERSION}`); // eslint-disable-line
-    return `${el.location}/${el.main}?bust=${CAMUNDA_VERSION}`; // eslint-disable-line
+    addCssSource(`${el.location}/plugin.css?bust=${ORQUEIO_VERSION}`); // eslint-disable-line
+    return `${el.location}/${el.main}?bust=${ORQUEIO_VERSION}`; // eslint-disable-line
   });
 
   const baseImportPath = `${appRoot}/app/${appName}/`;
   const fetchers = customScripts.map(url =>
     // eslint-disable-next-line
     _import(
-      baseImportPath + withSuffix(url, '.js') + `?bust=${CAMUNDA_VERSION}` // eslint-disable-line
+      baseImportPath + withSuffix(url, '.js') + `?bust=${ORQUEIO_VERSION}` // eslint-disable-line
     ).catch(
       e => console.error(e) // eslint-disable-line
     )

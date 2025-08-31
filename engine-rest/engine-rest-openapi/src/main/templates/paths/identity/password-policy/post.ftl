@@ -23,7 +23,7 @@
                          "id": "jonny1",
                          "firstName": "John",
                          "lastName": "Doe",
-                         "email": "jonny@orqueio.org"
+                         "email": "jonny@orqueio.io"
                        }
                      }
                    }']

@@ -27,7 +27,7 @@ public class CreateProcessInstanceWithVariableScenario {
 
   @Deployment
   public static String deployProcess() {
-    return "org/camunda/bpm/qa/upgrade/variable/simpleProcess.bpmn20.xml";
+    return "io/orqueio/bpm/qa/upgrade/variable/simpleProcess.bpmn20.xml";
   }
 
   @DescribesScenario("initProcessInstance")

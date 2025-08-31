@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd" id="_dRH8cID2EeOOIZyaRZ2vvg" targetNamespace="http://camunda.org/schema/1.0/bpmn">
+<bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:orqueio="http://orqueio.io/schema/1.0/bpmn" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd" id="_dRH8cID2EeOOIZyaRZ2vvg" targetNamespace="http://orqueio.io/schema/1.0/bpmn">
   <bpmn2:process id="process" isExecutable="true">
     <bpmn2:subProcess id="SubProcess_3">
       <bpmn2:incoming>SequenceFlow_5</bpmn2:incoming>
@@ -23,7 +23,7 @@
           <bpmn2:sequenceFlow id="SequenceFlow_19" name="" sourceRef="StartEvent_2" targetRef="Task_1"/>
           <bpmn2:receiveTask id="Task_1" name="Wait">
             <bpmn2:extensionElements>
-              <camunda:executionListener class="io.orqueio.bpm.qa.performance.engine.steps.ExecutionIdRecorder" event="start"/>
+              <orqueio:executionListener class="io.orqueio.bpm.qa.performance.engine.steps.ExecutionIdRecorder" event="start"/>
             </bpmn2:extensionElements>
             <bpmn2:incoming>SequenceFlow_19</bpmn2:incoming>
             <bpmn2:outgoing>SequenceFlow_20</bpmn2:outgoing>

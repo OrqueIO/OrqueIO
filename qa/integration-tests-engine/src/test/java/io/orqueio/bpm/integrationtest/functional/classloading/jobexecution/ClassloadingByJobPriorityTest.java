@@ -38,24 +38,24 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 /*
-  See https://jira.camunda.com/browse/CAM-9913
+  See https://jira.orqueio.com/browse/CAM-9913
  */
 @RunWith(Arquillian.class)
 public class ClassloadingByJobPriorityTest extends AbstractFoxPlatformIntegrationTest {
 
   protected static final BpmnModelInstance process = Bpmn.createExecutableProcess("asyncTaskProcess")
-                                                         .camundaHistoryTimeToLive(180)
+                                                         .orqueioHistoryTimeToLive(180)
                                                          .startEvent()
                                                          .serviceTask()
-                                                           .camundaExpression("${true}")
-                                                           .camundaAsyncBefore()
+                                                           .orqueioExpression("${true}")
+                                                           .orqueioAsyncBefore()
                                                          .endEvent()
                                                          .done();
 
   @Deployment(name= "engineWithPriorityJobAcquisition")
   public static WebArchive processArchive() {
     WebArchive webArchive = initWebArchiveDeployment("processApp.war",
-        "org/camunda/bpm/integrationtest/functional/classloading/jobexecution/engineWithAcquireJobsByPriority.xml")
+        "io/orqueio/bpm/integrationtest/functional/classloading/jobexecution/engineWithAcquireJobsByPriority.xml")
                .addClass(AbstractFoxPlatformIntegrationTest.class)
                .addAsResource(modelAsAsset(process), "ClassloadingByJobPriorityTest.testDeployProcessArchive.bpmn");
     TestContainer.addContainerSpecificResources(webArchive);

@@ -43,8 +43,8 @@ public class SingletonBeanDelegateTest extends AbstractFoxPlatformIntegrationTes
     return initWebArchiveDeployment()
       .addClass(SingletonBeanDelegate.class)
       .addClass(SingletonBeanClientDelegate.class)
-      .addAsResource("org/camunda/bpm/integrationtest/functional/ejb/SingletonBeanDelegateTest.testBeanResolution.bpmn20.xml")
-      .addAsResource("org/camunda/bpm/integrationtest/functional/ejb/SingletonBeanDelegateTest.testBeanResolutionFromClient.bpmn20.xml");
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/ejb/SingletonBeanDelegateTest.testBeanResolution.bpmn20.xml")
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/ejb/SingletonBeanDelegateTest.testBeanResolutionFromClient.bpmn20.xml");
   }
 
 

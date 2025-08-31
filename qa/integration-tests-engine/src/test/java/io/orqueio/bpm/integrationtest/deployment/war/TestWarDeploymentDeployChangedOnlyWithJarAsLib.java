@@ -57,11 +57,11 @@ public class TestWarDeploymentDeployChangedOnlyWithJarAsLib extends AbstractFoxP
   public static WebArchive archive1() {
 
     JavaArchive processArchiveJar = ShrinkWrap.create(JavaArchive.class, "test-v1.jar")
-      .addAsResource("org/camunda/bpm/integrationtest/deployment/war/testDeployProcessArchiveUnchanged.bpmn20.xml", "process.bpmn")
+      .addAsResource("io/orqueio/bpm/integrationtest/deployment/war/testDeployProcessArchiveUnchanged.bpmn20.xml", "process.bpmn")
       .addAsResource("META-INF/processes.xml");
 
     WebArchive archive = ShrinkWrap.create(WebArchive.class, "pa1.war")
-        .addAsWebInfResource("org/camunda/bpm/integrationtest/beans.xml", "beans.xml")
+        .addAsWebInfResource("io/orqueio/bpm/integrationtest/beans.xml", "beans.xml")
         .addAsLibraries(DeploymentHelper.getEngineCdi())
 
         .addAsLibraries(processArchiveJar)
@@ -88,11 +88,11 @@ public class TestWarDeploymentDeployChangedOnlyWithJarAsLib extends AbstractFoxP
   public static WebArchive archive2() {
 
     JavaArchive processArchiveJar = ShrinkWrap.create(JavaArchive.class, "test-v2.jar")
-      .addAsResource("org/camunda/bpm/integrationtest/deployment/war/testDeployProcessArchiveUnchanged.bpmn20.xml", "process.bpmn")
+      .addAsResource("io/orqueio/bpm/integrationtest/deployment/war/testDeployProcessArchiveUnchanged.bpmn20.xml", "process.bpmn")
       .addAsResource("META-INF/processes.xml");
 
     WebArchive archive = ShrinkWrap.create(WebArchive.class, "pa2.war")
-        .addAsWebInfResource("org/camunda/bpm/integrationtest/beans.xml", "beans.xml")
+        .addAsWebInfResource("io/orqueio/bpm/integrationtest/beans.xml", "beans.xml")
         .addAsLibraries(DeploymentHelper.getEngineCdi())
 
         .addAsLibraries(processArchiveJar)

@@ -33,12 +33,12 @@ public class NestedMultiInstanceCompensationScenario {
 
   @Deployment
   public static String deployThrowInnerProcess() {
-    return "org/camunda/bpm/qa/upgrade/compensation/nestedMultiInstanceCompensationThrowInnerProcess.bpmn20.xml";
+    return "io/orqueio/bpm/qa/upgrade/compensation/nestedMultiInstanceCompensationThrowInnerProcess.bpmn20.xml";
   }
 
   @Deployment
   public static String deployThrowOuterProcess() {
-    return "org/camunda/bpm/qa/upgrade/compensation/nestedMultiInstanceCompensationThrowOuterProcess.bpmn20.xml";
+    return "io/orqueio/bpm/qa/upgrade/compensation/nestedMultiInstanceCompensationThrowOuterProcess.bpmn20.xml";
   }
 
   @DescribesScenario("init.throwInner")

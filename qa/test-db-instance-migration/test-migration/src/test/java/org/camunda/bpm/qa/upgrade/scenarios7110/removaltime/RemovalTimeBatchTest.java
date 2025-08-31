@@ -39,7 +39,7 @@ import static org.junit.Assert.assertThat;
 public class RemovalTimeBatchTest {
 
   @Rule
-  public ProcessEngineRule engineRule = new ProcessEngineRule("camunda.cfg.xml");
+  public ProcessEngineRule engineRule = new ProcessEngineRule("orqueio.cfg.xml");
 
   protected HistoryService historyService;
 

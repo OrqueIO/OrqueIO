@@ -33,7 +33,7 @@ public class FailedJobCommandTest extends AbstractFoxPlatformIntegrationTest {
   public static WebArchive createDeployment() {
     return initWebArchiveDeployment()
       .addClass(FailingSLSB.class)
-      .addAsResource("org/camunda/bpm/integrationtest/jobexecutor/FailedJobCommandTest.bpmn20.xml");
+      .addAsResource("io/orqueio/bpm/integrationtest/jobexecutor/FailedJobCommandTest.bpmn20.xml");
 
   }
 

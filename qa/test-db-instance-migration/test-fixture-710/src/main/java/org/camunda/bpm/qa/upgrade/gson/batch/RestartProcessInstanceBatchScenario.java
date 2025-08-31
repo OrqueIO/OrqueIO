@@ -33,7 +33,7 @@ public class RestartProcessInstanceBatchScenario {
 
   @Deployment
   public static String deploy() {
-    return "org/camunda/bpm/qa/upgrade/gson/oneTaskProcessRestart.bpmn20.xml";
+    return "io/orqueio/bpm/qa/upgrade/gson/oneTaskProcessRestart.bpmn20.xml";
   }
 
   @DescribesScenario("initRestartProcessInstanceBatch")

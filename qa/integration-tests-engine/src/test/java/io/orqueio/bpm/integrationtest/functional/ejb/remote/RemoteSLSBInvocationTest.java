@@ -53,14 +53,14 @@ public class RemoteSLSBInvocationTest extends AbstractFoxPlatformIntegrationTest
     return initWebArchiveDeployment()
       .addClass(RemoteSLSBClientDelegateBean.class)
       .addClass(BusinessInterface.class) // the business interface
-      .addAsResource("org/camunda/bpm/integrationtest/functional/ejb/remote/RemoteSLSBInvocationTest.testInvokeBean.bpmn20.xml");
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/ejb/remote/RemoteSLSBInvocationTest.testInvokeBean.bpmn20.xml");
   }
 
   @Deployment(order=1)
   public static WebArchive delegateDeployment() {
     WebArchive webArchive = ShrinkWrap.create(WebArchive.class, "service.war")
       .addAsLibraries(DeploymentHelper.getEjbClient())
-      .addAsWebInfResource("org/camunda/bpm/integrationtest/beans.xml", "beans.xml")
+      .addAsWebInfResource("io/orqueio/bpm/integrationtest/beans.xml", "beans.xml")
       .addClass(AbstractFoxPlatformIntegrationTest.class)
       .addClass(RemoteSLSBean.class) // the EJB
       .addClass(BusinessInterface.class); // the business interface

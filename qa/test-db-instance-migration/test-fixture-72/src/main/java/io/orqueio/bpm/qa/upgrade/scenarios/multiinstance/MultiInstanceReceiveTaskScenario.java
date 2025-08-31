@@ -30,12 +30,12 @@ public class MultiInstanceReceiveTaskScenario {
 
   @Deployment
   public static String deployProcessParallel() {
-    return "org/camunda/bpm/qa/upgrade/multiinstance/parallelMultiInstanceReceiveTask.bpmn20.xml";
+    return "io/orqueio/bpm/qa/upgrade/multiinstance/parallelMultiInstanceReceiveTask.bpmn20.xml";
   }
 
   @Deployment
   public static String deployProcessSequential() {
-    return "org/camunda/bpm/qa/upgrade/multiinstance/sequentialMultiInstanceReceiveTask.bpmn20.xml";
+    return "io/orqueio/bpm/qa/upgrade/multiinstance/sequentialMultiInstanceReceiveTask.bpmn20.xml";
   }
 
   @DescribesScenario("initParallel")

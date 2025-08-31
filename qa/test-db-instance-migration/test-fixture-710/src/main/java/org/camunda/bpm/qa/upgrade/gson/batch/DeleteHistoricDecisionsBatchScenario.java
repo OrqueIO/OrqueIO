@@ -34,7 +34,7 @@ public class DeleteHistoricDecisionsBatchScenario {
 
   @Deployment
   public static String deploy() {
-    return "org/camunda/bpm/qa/upgrade/gson/Example.dmn";
+    return "io/orqueio/bpm/qa/upgrade/gson/Example.dmn";
   }
 
   @DescribesScenario("initDeleteHistoricDecisionsBatch")

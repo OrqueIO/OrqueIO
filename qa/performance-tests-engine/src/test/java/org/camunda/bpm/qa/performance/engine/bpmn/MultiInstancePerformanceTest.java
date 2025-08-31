@@ -29,8 +29,8 @@ import org.junit.Test;
 public class MultiInstancePerformanceTest extends ProcessEngineJobExecutorPerformanceTestCase {
 
   @Test
-  @Deployment(resources = {"org/camunda/bpm/qa/performance/engine/bpmn/MultiInstancePerformanceTest.oneAsyncServiceTask.bpmn",
-      "org/camunda/bpm/qa/performance/engine/bpmn/MultiInstancePerformanceTest.subProcessWithAsyncCallActivity.bpmn"})
+  @Deployment(resources = {"io/orqueio/bpm/qa/performance/engine/bpmn/MultiInstancePerformanceTest.oneAsyncServiceTask.bpmn",
+      "io/orqueio/bpm/qa/performance/engine/bpmn/MultiInstancePerformanceTest.subProcessWithAsyncCallActivity.bpmn"})
   public void subProcessWithAsyncCallActivity() {
 
     performanceTest()

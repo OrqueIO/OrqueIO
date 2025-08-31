@@ -61,7 +61,7 @@ public abstract class ProcessEnginePerformanceTestCase {
 
   protected PerfTestBuilder performanceTest() {
     PerfTestConfiguration configuration = testConfigurationRule.getPerformanceTestConfiguration();
-    configuration.setPlatform("camunda BPM");
+    configuration.setPlatform("orqueio BPM");
     return new PerfTestBuilder(configuration, resultRecorderRule);
   }
 

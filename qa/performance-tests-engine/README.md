@@ -67,7 +67,7 @@ for the next run.
 
 ```Shell
 mvn clean install -Pbenchmark,h2 \ 
-                  -DlongTermBenchmarkResultFile=C:\\Arbeit\\camunda\\performanceTests\\longtermResults.csv
+                  -DlongTermBenchmarkResultFile=C:\\Arbeit\\orqueio\\performanceTests\\longtermResults.csv
 ```
 
 The results file may look like this:
@@ -185,7 +185,7 @@ The raw JSON result files allow you to inspect the activity execution on a fine 
     "historyLevel" : "full",
     "watchActivities" : [ "start", "timer", "end" ],
     "startTime" : 1430124594459,
-    "platform" : "camunda BPM"
+    "platform" : "orqueio BPM"
   },
   "passResults" : [ {
     "duration" : 15627,
@@ -248,7 +248,7 @@ Example for command line parameters:
 ```Shell
 mvn clean install -Pbenchmark,mysql \
                   -Ddatabase.driver=com.mysql.jdbc.Driver \
-                  -Ddatabase.url=jdbc:mysql://localhost:3306:camunda \
+                  -Ddatabase.url=jdbc:mysql://localhost:3306:orqueio \
                   -Ddatabase.username=oscar \
                   -Ddatabase.password=s3cret \
 ```

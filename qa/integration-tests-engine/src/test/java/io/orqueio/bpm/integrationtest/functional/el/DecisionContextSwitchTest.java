@@ -44,12 +44,12 @@ import org.junit.runner.RunWith;
 @RunWith(Arquillian.class)
 public class DecisionContextSwitchTest extends AbstractFoxPlatformIntegrationTest {
 
-  protected static final String DMN_RESOURCE_NAME = "org/camunda/bpm/integrationtest/functional/el/BeanResolvingDecision.dmn11.xml";
+  protected static final String DMN_RESOURCE_NAME = "io/orqueio/bpm/integrationtest/functional/el/BeanResolvingDecision.dmn11.xml";
 
   @Deployment(name="bpmnDeployment")
   public static WebArchive createBpmnDeployment() {
     return initWebArchiveDeployment("bpmn-deployment.war")
-      .addAsResource("org/camunda/bpm/integrationtest/functional/el/BusinessRuleProcess.bpmn20.xml");
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/el/BusinessRuleProcess.bpmn20.xml");
   }
 
   @Deployment(name="dmnDeployment")

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions id="definitions" xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:camunda="http://activiti.org/bpmn" targetNamespace="Examples"
+<definitions id="definitions" xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:orqueio="http://activiti.org/bpmn" targetNamespace="Examples"
   xmlns:tns="Examples">
   <message id="boundaryMessageId" name="BoundaryEventMessage" />
   <error id="errorId" errorCode="ThrowBpmnErrorDelegate"/>
@@ -16,7 +16,7 @@
       <sequenceFlow sourceRef="subProcessStart" targetRef="subProcessTask" />
       <userTask id="subProcessTask" />
       <sequenceFlow sourceRef="subProcessTask" targetRef="throwErrorServiceTask" />
-      <serviceTask id="throwErrorServiceTask" camunda:class="io.orqueio.bpm.qa.upgrade.util.ThrowBpmnErrorDelegate" />
+      <serviceTask id="throwErrorServiceTask" orqueio:class="io.orqueio.bpm.qa.upgrade.util.ThrowBpmnErrorDelegate" />
       <sequenceFlow sourceRef="throwErrorServiceTask" targetRef="subProcessEnd" />
       <endEvent id="subProcessEnd" />
     </subProcess>

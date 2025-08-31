@@ -22,7 +22,7 @@ import java.security.Principal;
 /**
  * <p>Represents an active authentication of a given identity (usually a user).</p>
  *
- * <p>In camunda webapps, an authentication exists between some identity (user) and
+ * <p>In orqueio webapps, an authentication exists between some identity (user) and
  * a process engine</p>
  *
  * <p>Implements java.security.Principal so that this object may be used everywhere where a

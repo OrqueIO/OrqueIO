@@ -38,7 +38,7 @@ import static org.junit.Assert.assertThat;
 public class MigrationBatchTest {
 
   @Rule
-  public ProcessEngineRule engineRule = new ProcessEngineRule("camunda.cfg.xml");
+  public ProcessEngineRule engineRule = new ProcessEngineRule("orqueio.cfg.xml");
 
   @ScenarioUnderTest("initMigrationBatch.1")
   @Test

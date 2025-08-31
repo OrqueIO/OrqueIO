@@ -31,7 +31,7 @@ public class ModificationBatchScenario {
 
   @Deployment
   public static String deploy() {
-    return "org/camunda/bpm/qa/upgrade/gson/oneTaskProcessModification.bpmn20.xml";
+    return "io/orqueio/bpm/qa/upgrade/gson/oneTaskProcessModification.bpmn20.xml";
   }
 
   @DescribesScenario("ModificationBatchScenario")

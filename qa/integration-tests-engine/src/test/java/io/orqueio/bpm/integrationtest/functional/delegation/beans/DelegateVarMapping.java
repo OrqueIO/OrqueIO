@@ -23,7 +23,7 @@ import io.orqueio.bpm.engine.delegate.VariableScope;
 import io.orqueio.bpm.engine.variable.VariableMap;
 /**
  *
- * @author Christopher Zell <christopher.zell@camunda.com>
+ * @author Christopher Zell <christopher.zell@orqueio.com>
  */
 @Named
 public class DelegateVarMapping implements DelegateVariableMapping {

@@ -27,7 +27,7 @@ public class StartProcessIntanceWithInitialVariablesScenario {
 
   @Deployment
   public static String deploy() {
-    return "org/camunda/bpm/qa/upgrade/async/oneAsyncTaskProcess.bpmn20.xml";
+    return "io/orqueio/bpm/qa/upgrade/async/oneAsyncTaskProcess.bpmn20.xml";
   }
 
   @DescribesScenario("startProcessIntanceWithInitialVariablesScenario")

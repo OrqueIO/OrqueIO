@@ -43,20 +43,20 @@ public class CdiBeanCaseTaskResolutionTest extends AbstractFoxPlatformIntegratio
   @Deployment(name="pa1")
   public static WebArchive createCallingProcessDeployment() {
     return initWebArchiveDeployment("pa1.war")
-            .addAsResource("org/camunda/bpm/integrationtest/functional/cdi/CdiBeanCallActivityResolutionTest.callingCase.cmmn");
+            .addAsResource("io/orqueio/bpm/integrationtest/functional/cdi/CdiBeanCallActivityResolutionTest.callingCase.cmmn");
   }
 
   @Deployment(name="pa2")
   public static WebArchive createCalledProcessDeployment() {
     return initWebArchiveDeployment("pa2.war")
             .addClass(CaseVariableBean.class)
-            .addAsResource("org/camunda/bpm/integrationtest/functional/cdi/CdiBeanCallActivityResolutionTest.calledCase.cmmn");
+            .addAsResource("io/orqueio/bpm/integrationtest/functional/cdi/CdiBeanCallActivityResolutionTest.calledCase.cmmn");
   }
 
   @Deployment(name="clientDeployment")
   public static WebArchive clientDeployment() {
     WebArchive deployment = ShrinkWrap.create(WebArchive.class, "client.war")
-            .addAsWebInfResource("org/camunda/bpm/integrationtest/beans.xml", "beans.xml")
+            .addAsWebInfResource("io/orqueio/bpm/integrationtest/beans.xml", "beans.xml")
             .addClass(AbstractFoxPlatformIntegrationTest.class)
             .addAsLibraries(DeploymentHelper.getEngineCdi());
 

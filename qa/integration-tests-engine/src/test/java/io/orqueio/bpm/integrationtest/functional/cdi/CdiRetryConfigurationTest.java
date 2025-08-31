@@ -42,13 +42,13 @@ public class CdiRetryConfigurationTest extends AbstractFoxPlatformIntegrationTes
     return initWebArchiveDeployment()
       .addClass(ErrorDelegate.class)
       .addClass(RetryConfig.class)
-      .addAsResource("org/camunda/bpm/integrationtest/functional/RetryConfigurationTest.testResolveRetryConfigBean.bpmn20.xml");
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/RetryConfigurationTest.testResolveRetryConfigBean.bpmn20.xml");
   }
 
   @Deployment(name="clientDeployment")
   public static WebArchive clientDeployment() {
     WebArchive deployment = ShrinkWrap.create(WebArchive.class, "client.war")
-            .addAsWebInfResource("org/camunda/bpm/integrationtest/beans.xml", "beans.xml")
+            .addAsWebInfResource("io/orqueio/bpm/integrationtest/beans.xml", "beans.xml")
             .addClass(AbstractFoxPlatformIntegrationTest.class)
             .addClass(DependentScopedBean.class)
             .addAsLibraries(DeploymentHelper.getEngineCdi());

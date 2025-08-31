@@ -32,7 +32,7 @@ public class NestedNonInterruptingEventSubprocessScenario {
 
   @Deployment
   public static String deployProcess() {
-    return "org/camunda/bpm/qa/upgrade/eventsubprocess/nestedNonInterruptingMessageEventSubprocess.bpmn20.xml";
+    return "io/orqueio/bpm/qa/upgrade/eventsubprocess/nestedNonInterruptingMessageEventSubprocess.bpmn20.xml";
   }
 
   @DescribesScenario("init")

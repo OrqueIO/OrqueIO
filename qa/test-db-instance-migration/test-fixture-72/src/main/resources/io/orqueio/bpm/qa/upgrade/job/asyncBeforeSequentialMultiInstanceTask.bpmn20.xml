@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions id="definitions" xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:camunda="http://activiti.org/bpmn" targetNamespace="Examples"
+<definitions id="definitions" xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:orqueio="http://activiti.org/bpmn" targetNamespace="Examples"
   xmlns:tns="Examples">
   <message id="boundaryMessageId" name="BoundaryEventMessage" />
   <error id="errorId" errorCode="ThrowBpmnErrorDelegate"/>
@@ -8,7 +8,7 @@
     <startEvent id="theStart" />
     <sequenceFlow sourceRef="theStart" targetRef="miTask" />
     
-    <userTask id="miTask" camunda:asyncBefore="true">
+    <userTask id="miTask" orqueio:asyncBefore="true">
       <multiInstanceLoopCharacteristics isSequential="true">
         <loopCardinality>3</loopCardinality>
       </multiInstanceLoopCharacteristics>

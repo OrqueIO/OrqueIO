@@ -50,7 +50,7 @@ public class DeserializableVariableTest extends AbstractFoxPlatformIntegrationTe
       .addClass(GetDeserializableVariableDelegate.class)
       .addClass(SetVariableDelegate.class)
       .addClass(SerializableVariable.class)
-      .addAsResource("org/camunda/bpm/integrationtest/functional/classloading/DeserializableVariableTest.testVariableDeserializationOnProcessApplicationRestart.bpmn20.xml");
+      .addAsResource("io/orqueio/bpm/integrationtest/functional/classloading/DeserializableVariableTest.testVariableDeserializationOnProcessApplicationRestart.bpmn20.xml");
   }
 
   @Deployment(name="clientDeployment")

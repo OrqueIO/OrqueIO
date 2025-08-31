@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd" id="__hiYAGQLEeSn4PUJP2d52Q" exporter="camunda modeler" exporterVersion="2.6.0" targetNamespace="http://camunda.org/schema/1.0/bpmn">
-  <process id="testProcess" isExecutable="true" camunda:historyTimeToLive="5">
+<definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:orqueio="http://orqueio.io/schema/1.0/bpmn" xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd" id="__hiYAGQLEeSn4PUJP2d52Q" exporter="orqueio modeler" exporterVersion="2.6.0" targetNamespace="http://orqueio.io/schema/1.0/bpmn">
+  <process id="testProcess" isExecutable="true" orqueio:historyTimeToLive="5">
     <startEvent id="start" />
     <sequenceFlow sourceRef="start" targetRef="serviceTask" />
     <serviceTask id="serviceTask" name="HTTP Post">
       <extensionElements>
-        <camunda:connector>
-          <camunda:connectorId>pa-test-connector</camunda:connectorId>
-          <camunda:inputOutput>
-            <camunda:inputParameter name="method">POST</camunda:inputParameter>
-            <camunda:inputParameter name="url">http://camunda.org</camunda:inputParameter>
-            <camunda:inputParameter name="headers">
-              <camunda:map>
-                <camunda:entry key="Content-Type">
+        <orqueio:connector>
+          <orqueio:connectorId>pa-test-connector</orqueio:connectorId>
+          <orqueio:inputOutput>
+            <orqueio:inputParameter name="method">POST</orqueio:inputParameter>
+            <orqueio:inputParameter name="url">http://orqueio.io</orqueio:inputParameter>
+            <orqueio:inputParameter name="headers">
+              <orqueio:map>
+                <orqueio:entry key="Content-Type">
                   text/plain
-                </camunda:entry>
-                <camunda:entry key="SOAPAction">
+                </orqueio:entry>
+                <orqueio:entry key="SOAPAction">
                   doIt
-                </camunda:entry>
-              </camunda:map>
-            </camunda:inputParameter>
-            <camunda:inputParameter name="payload">Hello world!</camunda:inputParameter>
-            <camunda:outputParameter name="payload">${payload}</camunda:outputParameter>
-          </camunda:inputOutput>
-        </camunda:connector>
+                </orqueio:entry>
+              </orqueio:map>
+            </orqueio:inputParameter>
+            <orqueio:inputParameter name="payload">Hello world!</orqueio:inputParameter>
+            <orqueio:outputParameter name="payload">${payload}</orqueio:outputParameter>
+          </orqueio:inputOutput>
+        </orqueio:connector>
       </extensionElements>
     </serviceTask>
     <sequenceFlow sourceRef="serviceTask" targetRef="userTask" />

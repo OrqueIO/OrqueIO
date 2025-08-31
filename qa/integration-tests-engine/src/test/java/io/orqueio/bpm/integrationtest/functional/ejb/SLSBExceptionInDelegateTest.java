@@ -43,8 +43,8 @@ public class SLSBExceptionInDelegateTest extends AbstractFoxPlatformIntegrationT
   @Deployment
   public static WebArchive processArchive() {
     return initWebArchiveDeployment().addClass(SLSBThrowExceptionDelegate.class).addClass(SLSBClientDelegate.class)
-        .addAsResource("org/camunda/bpm/integrationtest/functional/ejb/SLSBExceptionInDelegateTest.testOriginalExceptionFromEjbReachesCaller.bpmn20.xml")
-        .addAsResource("org/camunda/bpm/integrationtest/functional/ejb/SLSBExceptionInDelegateTest.callProcess.bpmn20.xml");
+        .addAsResource("io/orqueio/bpm/integrationtest/functional/ejb/SLSBExceptionInDelegateTest.testOriginalExceptionFromEjbReachesCaller.bpmn20.xml")
+        .addAsResource("io/orqueio/bpm/integrationtest/functional/ejb/SLSBExceptionInDelegateTest.callProcess.bpmn20.xml");
   }
 
   @Test

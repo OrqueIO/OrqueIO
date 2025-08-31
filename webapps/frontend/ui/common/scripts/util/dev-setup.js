@@ -1,8 +1,8 @@
 /*
- * Copyright TOADDLATERCCS and/or licensed to TOADDLATERCCS
+ * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. TOADDLATERCCS this file to you under the Apache License,
+ * ownership. Camunda licenses this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -24,8 +24,8 @@ export const setupDev = () => {
   const newPath = href.replace('{ENGINE}', engine);
   base.attr('href', newPath);
 
-  if (!window.location.href.includes(`/camunda/app/admin/${engine}/setup/`)) {
-    fetch(`/camunda/api/admin/setup/${engine}/user/create`, {
+  if (!window.location.href.includes(`/orqueio/app/admin/${engine}/setup/`)) {
+    fetch(`/orqueio/api/admin/setup/${engine}/user/create`, {
       method: 'POST',
       body: JSON.stringify({}),
       headers: {
@@ -37,7 +37,7 @@ export const setupDev = () => {
         .json()
         .then(json => {
           if (json.message !== 'Setup action not available') {
-            window.location.href = `/camunda/app/admin/${engine}/setup/#setup`;
+            window.location.href = `/orqueio/app/admin/${engine}/setup/#setup`;
           }
         })
         .catch(() => {});
