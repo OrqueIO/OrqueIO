@@ -22,10 +22,9 @@ pipeline {
     	stage('Upload') {
     		steps {
                 sh "cd bom && mvn clean install -DskipTests -X"
-                sh "cd connect/bom && mvn clean install -DskipTests"
-                sh "cd commons/bom && mvn clean install -DskipTests"
-                sh "cd commons/logging && mvn clean install -DskipTests"
-                sh "cd test-utils/archunit && mvn clean install -DskipTests"
+                sh "cd connect/bom && mvn clean install -DskipTests -X"
+                sh "cd commons/bom && mvn clean install -DskipTests  -X"
+                sh "cd test-utils/archunit && mvn clean install -DskipTests -X"
                 sh "mvn clean deploy  -X -Pcentral-sonatype-publish -DskipTests -Dclirr.skip=true"
 	    	}
 	 	}
