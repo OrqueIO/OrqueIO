@@ -6,14 +6,14 @@
   <parent>
     <groupId>io.orqueio.bpm.springboot.project</groupId>
     <artifactId>orqueio-bpm-spring-boot-starter-root</artifactId>
-    <version>0.24.0-alpha</version>
+    <version>0.25.0-SNAPSHOT</version>
     <relativePath>../../pom.xml</relativePath>
   </parent>
   <description>orqueio-external-task-client-spring</description>
 
   <groupId>io.orqueio.bpm</groupId>
   <artifactId>orqueio-external-task-client-spring</artifactId>
-  <version>0.24.0-alpha</version>
+  <version>0.25.0-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>Orque IO Platform - Spring Boot Starter - Client - Spring</name>
 

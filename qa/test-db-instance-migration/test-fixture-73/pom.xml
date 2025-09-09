@@ -4,7 +4,7 @@
   <parent>
     <groupId>io.orqueio.bpm.qa.upgrade</groupId>
     <artifactId>orqueio-qa-db-instance-migration</artifactId>
-    <version>0.24.0-alpha</version>
+    <version>0.25.0-SNAPSHOT</version>
   </parent>
 
   <artifactId>orqueio-qa-upgrade-test-fixture-73</artifactId>

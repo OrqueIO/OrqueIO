@@ -9,7 +9,7 @@
   <parent>
     <artifactId>orqueio-qa</artifactId>
     <groupId>io.orqueio.bpm.qa</groupId>
-    <version>0.24.0-alpha</version>
+    <version>0.25.0-SNAPSHOT</version>
   </parent>
 
   <dependencies>

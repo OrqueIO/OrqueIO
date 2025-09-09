@@ -9,7 +9,7 @@
   <parent>
     <groupId>io.orqueio.bpm.tomcat</groupId>
     <artifactId>orqueio-tomcat</artifactId>
-    <version>0.24.0-alpha</version>
+    <version>0.25.0-SNAPSHOT</version>
   </parent>
 
   <name>Orque IO Platform - tomcat Distro</name>

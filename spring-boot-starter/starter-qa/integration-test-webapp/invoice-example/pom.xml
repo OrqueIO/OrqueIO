@@ -8,9 +8,9 @@
   <parent>
     <groupId>io.orqueio.bpm.springboot.project</groupId>
     <artifactId>qa-webapp</artifactId>
-    <version>0.24.0-alpha</version>
+    <version>0.25.0-SNAPSHOT</version>
   </parent>
-  <version>0.24.0-alpha</version>
+  <version>0.25.0-SNAPSHOT</version>
   <description>qa-webapp-invoice-example</description>
   <groupId>io.orqueio.bpm.springboot.project</groupId>
   <artifactId>qa-webapp-invoice-example</artifactId>

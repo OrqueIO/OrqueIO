@@ -4,13 +4,13 @@
   <parent>
     <groupId>io.orqueio.bpm</groupId>
     <artifactId>orqueio-root</artifactId>
-    <version>0.24.0-alpha</version>
+    <version>0.25.0-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
   <groupId>io.orqueio.bpm</groupId>
   <artifactId>orqueio-parent</artifactId>
-  <version>0.24.0-alpha</version>
+  <version>0.25.0-SNAPSHOT</version>
   <name>Orque IO Platform - Parent Pom</name>
   <inceptionYear>2013</inceptionYear>
   <packaging>pom</packaging>

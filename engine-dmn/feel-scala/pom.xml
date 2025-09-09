@@ -6,12 +6,12 @@
   <parent>
     <groupId>io.orqueio.bpm.dmn</groupId>
     <artifactId>orqueio-engine-dmn-root</artifactId>
-    <version>0.24.0-alpha</version>
+    <version>0.25.0-SNAPSHOT</version>
   </parent>
   <description>orqueio-engine-feel-scala</description>
   <groupId>io.orqueio.bpm.dmn</groupId>
   <artifactId>orqueio-engine-feel-scala</artifactId>
-  <version>0.24.0-alpha</version>
+  <version>0.25.0-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>orqueio DMN - engine FEEL - SCALA</name>
   <properties>
@@ -29,7 +29,7 @@
     <dependency>
       <groupId>io.orqueio.bpm.dmn</groupId>
       <artifactId>orqueio-engine-feel-api</artifactId>
-      <version>0.24.0-alpha</version>
+      <version>0.25.0-SNAPSHOT</version>
     </dependency>
 
     <dependency>

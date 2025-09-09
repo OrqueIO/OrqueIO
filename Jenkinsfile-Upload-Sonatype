@@ -1,0 +1,36 @@
+
+#!/usr/bin/env groovy
+
+pipeline {
+
+    agent any
+
+    tools {
+        jdk 'jdk17'
+        maven 'maven'
+    }
+
+
+
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '5'))
+    }
+
+
+
+    stages {
+
+    	stage('Upload') {
+    		steps {
+                sh "cd test-utils/archunit && mvn clean install -DskipTests"
+                sh "mvn clean deploy -Dmaven.compiler.source=17 -Dmaven.compiler.target=17 -X -Pcentral-sonatype-publish -DskipTests -Dclirr.skip=true"
+	    	}
+	 	}
+    }
+
+    post {
+        always {
+            cleanWs()
+        }
+    }
+}

@@ -6,14 +6,14 @@
   <parent>
     <groupId>io.orqueio.bpm</groupId>
     <artifactId>orqueio-root</artifactId>
-    <version>0.24.0-alpha</version>
+    <version>0.25.0-SNAPSHOT</version>
     <relativePath>../../pom.xml</relativePath>
   </parent>
   <description>orqueio-commons-bom</description>
 
   <groupId>io.orqueio.commons</groupId>
   <artifactId>orqueio-commons-bom</artifactId>
-  <version>0.24.0-alpha</version>
+  <version>0.25.0-SNAPSHOT</version>
   <name>Orque IO Commons - Bom</name>
   <packaging>pom</packaging>
 
@@ -25,25 +25,25 @@
       <dependency>
         <groupId>io.orqueio.commons</groupId>
         <artifactId>camunda-commons-logging</artifactId>
-        <version>0.24.0-alpha</version>
+        <version>0.25.0-SNAPSHOT</version>
       </dependency>
 
       <dependency>
         <groupId>io.orqueio.commons</groupId>
         <artifactId>orqueio-commons-utils</artifactId>
-        <version>0.24.0-alpha</version>
+        <version>0.25.0-SNAPSHOT</version>
       </dependency>
 
       <dependency>
         <groupId>io.orqueio.commons</groupId>
         <artifactId>orqueio-commons-testing</artifactId>
-        <version>0.24.0-alpha</version>
+        <version>0.25.0-SNAPSHOT</version>
       </dependency>
 
       <dependency>
         <groupId>io.orqueio.commons</groupId>
         <artifactId>orqueio-commons-typed-values</artifactId>
-        <version>0.24.0-alpha</version>
+        <version>0.25.0-SNAPSHOT</version>
       </dependency>
 
     </dependencies>

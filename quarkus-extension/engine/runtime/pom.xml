@@ -8,12 +8,12 @@
   <parent>
     <groupId>io.orqueio.bpm.quarkus</groupId>
     <artifactId>orqueio-bpm-quarkus-engine-parent</artifactId>
-    <version>0.24.0-alpha</version>
+    <version>0.25.0-SNAPSHOT</version>
   </parent>
   <description>orqueio-bpm-quarkus-engine</description>
   <groupId>io.orqueio.bpm.quarkus</groupId>
   <artifactId>orqueio-bpm-quarkus-engine</artifactId>
-  <version>0.24.0-alpha</version>
+  <version>0.25.0-SNAPSHOT</version>
   <name>Orque IO Platform - Quarkus Extension - Engine - Runtime</name>
   <packaging>jar</packaging>
   <dependencies>
@@ -22,13 +22,13 @@
     <dependency>
       <groupId>io.orqueio.bpm</groupId>
       <artifactId>orqueio-engine</artifactId>
-      <version>0.24.0-alpha</version>
+      <version>0.25.0-SNAPSHOT</version>
     </dependency>
 
     <dependency>
       <groupId>io.orqueio.bpm</groupId>
       <artifactId>orqueio-engine-cdi-jakarta</artifactId>
-      <version>0.24.0-alpha</version>
+      <version>0.25.0-SNAPSHOT</version>
     </dependency>
 
     <dependency>

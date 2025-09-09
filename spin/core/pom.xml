@@ -6,13 +6,13 @@
   <parent>
     <groupId>io.orqueio.spin</groupId>
     <artifactId>orqueio-spin-root</artifactId>
-    <version>0.24.0-alpha</version>
+    <version>0.25.0-SNAPSHOT</version>
   </parent>
   <description>orqueio-spin-core</description>
   <groupId>io.orqueio.spin</groupId>
   <artifactId>orqueio-spin-core</artifactId>
   <name>Orque IO Spin - core</name>
-  <version>0.24.0-alpha</version>
+  <version>0.25.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <dependencies>
@@ -20,13 +20,13 @@
     <dependency>
       <groupId>io.orqueio.commons</groupId>
       <artifactId>orqueio-commons-logging</artifactId>
-      <version>0.24.0-alpha</version>
+      <version>0.25.0-SNAPSHOT</version>
     </dependency>
 
     <dependency>
       <groupId>io.orqueio.commons</groupId>
       <artifactId>orqueio-commons-utils</artifactId>
-      <version>0.24.0-alpha</version>
+      <version>0.25.0-SNAPSHOT</version>
     </dependency>
 
     <dependency>

@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.orqueio.bpm</groupId>
   <artifactId>orqueio-engine-rest-openapi-generator</artifactId>
-  <version>0.24.0-alpha</version>
+  <version>0.25.0-SNAPSHOT</version>
   <name>Orque IO Platform - engine - REST - OpenAPI (JSON Generator)</name>
   <packaging>jar</packaging>
   <description>orqueio-engine-rest-openapi-generator</description>
@@ -13,7 +13,7 @@
     <groupId>io.orqueio.bpm</groupId>
     <artifactId>orqueio-engine-rest-root</artifactId>
     <relativePath>../pom.xml</relativePath>
-    <version>0.24.0-alpha</version>
+    <version>0.25.0-SNAPSHOT</version>
   </parent>
 
   <properties>

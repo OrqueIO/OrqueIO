@@ -5,11 +5,11 @@
     <groupId>io.orqueio.bpm</groupId>
     <artifactId>orqueio-database-settings</artifactId>
     <relativePath>../../database</relativePath>
-    <version>0.24.0-alpha</version>
+    <version>0.25.0-SNAPSHOT</version>
   </parent>
   <groupId>io.orqueio.bpm</groupId>
   <artifactId>orqueio-test-utils-testcontainers</artifactId>
-  <version>0.24.0-alpha</version>
+  <version>0.25.0-SNAPSHOT</version>
   <name>Orque IO Test Utils - Testcontainers</name>
   <packaging>jar</packaging>
   <description>orqueio-test-utils-testcontainers</description>
