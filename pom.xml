@@ -350,7 +350,7 @@
         <module>webapps</module>
 
         <module>engine-plugins</module>
-
+        <module>examples</module>
         <module>distro/webjar</module>
         <module>distro/tomcat</module>
         <module>clients/java</module>
