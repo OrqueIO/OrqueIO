@@ -337,9 +337,8 @@
         <module>engine-dmn</module>
         <module>connect</module>
         <module>juel</module>
-        <module>spin/bom</module>
-          <module>spin/core</module>
-          <module>spin/dataformat-all</module>
+        <module>spin</module>
+
 
 
           <module>commons</module>
