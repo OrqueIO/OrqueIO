@@ -2,16 +2,19 @@
 
   <modelVersion>4.0.0</modelVersion>
 
+  <description>orqueio-engine</description>
 
-
+<packaging>jar</packaging>
   <name>Orque IO Platform - engine</name>
+  <groupId>io.orqueio.bpm</groupId>
+  <version>0.24.0-alpha</version>
   <artifactId>orqueio-engine</artifactId>
 
   <parent>
     <groupId>io.orqueio.bpm</groupId>
     <artifactId>orqueio-database-settings</artifactId>
     <relativePath>../database</relativePath>
-    <version>0.24.0-SNAPSHOT</version>
+    <version>0.24.0-alpha</version>
   </parent>
 
   <dependencyManagement>
@@ -51,21 +54,28 @@
     <dependency>
       <groupId>io.orqueio.bpm.model</groupId>
       <artifactId>orqueio-bpmn-model</artifactId>
+      <version>0.24.0-alpha</version>
     </dependency>
 
     <dependency>
       <groupId>io.orqueio.bpm.model</groupId>
       <artifactId>orqueio-cmmn-model</artifactId>
+        <version>0.24.0-alpha</version>
+
     </dependency>
 
     <dependency>
       <groupId>io.orqueio.bpm.juel</groupId>
       <artifactId>orqueio-juel</artifactId>
+      <version>0.24.0-alpha</version>
+
     </dependency>
 
     <dependency>
       <groupId>io.orqueio.bpm.dmn</groupId>
       <artifactId>orqueio-engine-dmn</artifactId>
+      <version>0.24.0-alpha</version>
+
       <exclusions>
         <!-- these exclusions are needed when building with Maven >= 3.3
           see CAM-11822 for details -->
@@ -91,17 +101,21 @@
     <dependency>
       <groupId>io.orqueio.commons</groupId>
       <artifactId>orqueio-commons-logging</artifactId>
-      <version>0.24.0-SNAPSHOT</version>
+      <version>0.24.0-alpha</version>
     </dependency>
 
     <dependency>
       <groupId>io.orqueio.commons</groupId>
       <artifactId>orqueio-commons-typed-values</artifactId>
+      <version>0.24.0-alpha</version>
     </dependency>
 
     <dependency>
       <groupId>org.mybatis</groupId>
       <artifactId>mybatis</artifactId>
+
+      <version>3.5.15</version>
+
     </dependency>
 
     <dependency>
@@ -112,11 +126,14 @@
     <dependency>
       <groupId>joda-time</groupId>
       <artifactId>joda-time</artifactId>
+      <version>2.12.5</version>
     </dependency>
 
     <dependency>
       <groupId>com.google.code.gson</groupId>
       <artifactId>gson</artifactId>
+      <version>2.8.9</version>
+
     </dependency>
 
     <!-- provided dependencies -->
@@ -124,24 +141,32 @@
     <dependency>
       <groupId>org.apache.ant</groupId>
       <artifactId>ant</artifactId>
-      <scope>provided</scope>
+        <version>1.7.1</version>
+
+        <scope>provided</scope>
     </dependency>
 
     <dependency>
       <groupId>org.apache.geronimo.specs</groupId>
       <artifactId>geronimo-jta_1.1_spec</artifactId>
-      <scope>provided</scope>
+        <version>1.1.1</version>
+
+        <scope>provided</scope>
     </dependency>
 
     <dependency>
       <groupId>com.fasterxml.uuid</groupId>
       <artifactId>java-uuid-generator</artifactId>
+      <version>4.3.0</version>
+
       <scope>provided</scope>
     </dependency>
 
     <dependency>
       <groupId>org.jboss.spec</groupId>
       <artifactId>jboss-javaee-web-6.0</artifactId>
+      <version>3.0.2.Final</version>
+
       <type>pom</type>
       <scope>provided</scope>
       <exclusions>
@@ -159,18 +184,22 @@
     <dependency>
       <groupId>jakarta.transaction</groupId>
       <artifactId>jakarta.transaction-api</artifactId>
+      <version>2.0.1</version>
+
       <scope>provided</scope>
     </dependency>
 
     <dependency>
       <groupId>jakarta.servlet</groupId>
       <artifactId>jakarta.servlet-api</artifactId>
+      <version>6.0.0</version>
       <scope>provided</scope>
     </dependency>
 
     <dependency>
       <groupId>jakarta.ejb</groupId>
       <artifactId>jakarta.ejb-api</artifactId>
+      <version>4.0.1</version>
       <scope>provided</scope>
     </dependency>
 
@@ -397,6 +426,9 @@
   </properties>
 
   <build>
+
+
+
     <!-- filter test configurations to inject properties -->
     <resources>
       <resource>
@@ -429,6 +461,81 @@
     </testResources>
 
     <plugins>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <version>2.9.1</version>
+          <executions>
+            <execution>
+              <id>attach-javadocs</id>
+              <goals>
+                <goal>jar</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-source-plugin</artifactId>
+          <version>2.2.1</version>
+          <executions>
+            <execution>
+              <id>attach-sources</id>
+              <goals>
+                <goal>jar-no-fork</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
+          <groupId>org.sonatype.central</groupId>
+          <artifactId>central-publishing-maven-plugin</artifactId>
+          <version>0.8.0</version>
+          <extensions>true</extensions>
+          <configuration>
+            <publishingServerId>central</publishingServerId>
+            <autoPublish>true</autoPublish>
+            <waitUntil>published</waitUntil>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-gpg-plugin</artifactId>
+          <version>3.1.0</version>
+          <executions>
+            <execution>
+              <id>sign-artifacts</id>
+              <phase>verify</phase>
+              <goals>
+                <goal>sign</goal>
+              </goals>
+            </execution>
+          </executions>
+          <configuration>
+            <!-- Tells plugin to fetch passphrase from settings.xml -->
+            <passphraseServerId>gpg.passphrase</passphraseServerId>
+
+            <!-- Needed for gpg2 (avoids GUI pinentry) -->
+            <gpgArguments>
+              <arg>--pinentry-mode</arg>
+              <arg>loopback</arg>
+            </gpgArguments>
+
+            <!-- Make sure it calls the right binary -->
+            <executable>gpg</executable>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>license-maven-plugin</artifactId>
+          <version>1.14</version>
+          <configuration>
+            <acceptPomPackaging>true</acceptPomPackaging>
+            <excludedScopes>test</excludedScopes>
+          </configuration>
+        </plugin>
+
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
@@ -966,5 +1073,33 @@
     </profile>
 
   </profiles>
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+    </license>
+  </licenses>
 
+  <organization>
+    <name>Orque IO</name>
+    <url>https://www.orqueio.io</url>
+  </organization>
+
+  <url>https://www.orqueio.io</url>
+
+  <developers>
+    <developer>
+      <id>orqueio.io</id>
+      <name>Orque IO Platform Community</name>
+      <organization>orqueio.io</organization>
+      <organizationUrl>https://www.orqueio.io</organizationUrl>
+    </developer>
+  </developers>
+
+  <scm>
+    <url>https://github.com/orqueio/orqueio</url>
+    <connection>scm:git:git@github.com:orqueio/orqueio.git</connection>
+    <developerConnection>scm:git:git@github.com:orqueio/orqueio.git</developerConnection>
+    <tag>HEAD</tag>
+  </scm>
 </project>

@@ -8,10 +8,13 @@
   <parent>
     <groupId>io.orqueio.bpm.springboot.project</groupId>
     <artifactId>qa-plugins-spin</artifactId>
-    <version>0.24.0-SNAPSHOT</version>
+    <version>0.24.0-alpha</version>
   </parent>
-
+  <version>0.24.0-alpha</version>
+  <description>qa-plugins-spin-dataformat-json-jackson</description>
+  <groupId>io.orqueio.bpm.springboot.project</groupId>
   <artifactId>qa-plugins-spin-dataformat-json-jackson</artifactId>
+  <packaging>jar</packaging>
   <name>Orque IO Platform - Spring Boot Starter - QA - Plugins - Spin Json Jackson</name>
 
   <dependencies>
@@ -24,21 +27,25 @@
     <dependency>
       <groupId>io.orqueio.bpm.springboot</groupId>
       <artifactId>orqueio-bpm-spring-boot-starter-test</artifactId>
+      <version>0.24.0-alpha</version>
     </dependency>
 
     <dependency>
       <groupId>io.orqueio.bpm</groupId>
       <artifactId>orqueio-engine-plugin-spin</artifactId>
+      <version>0.24.0-alpha</version>
     </dependency>
 
     <dependency>
       <groupId>io.orqueio.spin</groupId>
       <artifactId>orqueio-spin-dataformat-json-jackson</artifactId>
+      <version>0.24.0-alpha</version>
     </dependency>
 
     <dependency>
       <groupId>com.h2database</groupId>
       <artifactId>h2</artifactId>
+      <version>2.3.232</version>
     </dependency>
 
   </dependencies>
@@ -73,5 +80,33 @@
       </build>
     </profile>
   </profiles>
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+    </license>
+  </licenses>
 
+  <organization>
+    <name>Orque IO</name>
+    <url>https://www.orqueio.io</url>
+  </organization>
+
+  <url>https://www.orqueio.io</url>
+
+  <developers>
+    <developer>
+      <id>orqueio.io</id>
+      <name>Orque IO Platform Community</name>
+      <organization>orqueio.io</organization>
+      <organizationUrl>https://www.orqueio.io</organizationUrl>
+    </developer>
+  </developers>
+
+  <scm>
+    <url>https://github.com/orqueio/orqueio</url>
+    <connection>scm:git:git@github.com:orqueio/orqueio.git</connection>
+    <developerConnection>scm:git:git@github.com:orqueio/orqueio.git</developerConnection>
+    <tag>HEAD</tag>
+  </scm>
 </project>

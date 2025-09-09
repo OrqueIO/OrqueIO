@@ -6,10 +6,13 @@
   <parent>
     <groupId>io.orqueio.spin</groupId>
     <artifactId>orqueio-spin-root</artifactId>
-    <version>0.24.0-SNAPSHOT</version>
+    <version>0.24.0-alpha</version>
   </parent>
-
+  <description>orqueio-spin-dataformat-all</description>
+  <groupId>io.orqueio.spin</groupId>
   <artifactId>orqueio-spin-dataformat-all</artifactId>
+  <version>0.24.0-alpha</version>
+  <packaging>jar</packaging>
   <name>Orque IO Spin - all dataformats in one</name>
 
   <properties>
@@ -25,28 +28,111 @@
     <dependency>
       <groupId>io.orqueio.spin</groupId>
       <artifactId>orqueio-spin-dataformat-json-jackson</artifactId>
+      <version>0.24.0-alpha</version>
     </dependency>
 
     <dependency>
       <groupId>io.orqueio.spin</groupId>
       <artifactId>orqueio-spin-dataformat-xml-dom</artifactId>
+      <version>0.24.0-alpha</version>
     </dependency>
 
     <dependency>
       <groupId>jakarta.xml.bind</groupId>
       <artifactId>jakarta.xml.bind-api</artifactId>
+      <version>2.3.3</version>
     </dependency>
 
     <dependency>
       <groupId>com.sun.xml.bind</groupId>
       <artifactId>jaxb-impl</artifactId>
+      <version>2.3.6</version>
     </dependency>
 
   </dependencies>
 
   <build>
+
     <plugins>
-      <plugin>
+
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <version>2.9.1</version>
+            <configuration>
+
+            </configuration>
+            <executions>
+              <execution>
+                <id>attach-javadocs</id>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-source-plugin</artifactId>
+            <version>2.2.1</version>
+            <executions>
+              <execution>
+                <id>attach-sources</id>
+                <goals>
+                  <goal>jar-no-fork</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.sonatype.central</groupId>
+            <artifactId>central-publishing-maven-plugin</artifactId>
+            <version>0.8.0</version>
+            <extensions>true</extensions>
+            <configuration>
+              <publishingServerId>central</publishingServerId>
+              <autoPublish>true</autoPublish>
+              <waitUntil>published</waitUntil>
+            </configuration>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <version>3.1.0</version>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
+            <configuration>
+              <!-- Tells plugin to fetch passphrase from settings.xml -->
+              <passphraseServerId>gpg.passphrase</passphraseServerId>
+
+              <!-- Needed for gpg2 (avoids GUI pinentry) -->
+              <gpgArguments>
+                <arg>--pinentry-mode</arg>
+                <arg>loopback</arg>
+              </gpgArguments>
+
+              <!-- Make sure it calls the right binary -->
+              <executable>gpg</executable>
+            </configuration>
+          </plugin>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>license-maven-plugin</artifactId>
+            <version>1.14</version>
+            <configuration>
+              <acceptPomPackaging>true</acceptPomPackaging>
+              <excludedScopes>test</excludedScopes>
+            </configuration>
+          </plugin>
+
+   <!--   <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
         <version>3.5.0</version>
@@ -130,10 +216,10 @@
             </configuration>
           </execution>
         </executions>
-      </plugin>
-      <plugin>
+      </plugin>-->
+      <!-- <plugin> -->
         <!-- make sure javadocs are generated for spin-all -->
-        <groupId>org.apache.maven.plugins</groupId>
+        <!--<groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
         <configuration>
           <includeDependencySources>true</includeDependencySources>
@@ -147,7 +233,7 @@
            </additionalDependency>
           </additionalDependencies>
         </configuration>
-      </plugin>
+      </plugin>-->
        <plugin>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
@@ -187,4 +273,33 @@
       </plugin>
     </plugins>
   </build>
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+    </license>
+  </licenses>
+
+  <organization>
+    <name>Orque IO</name>
+    <url>https://www.orqueio.io</url>
+  </organization>
+
+  <url>https://www.orqueio.io</url>
+
+  <developers>
+    <developer>
+      <id>orqueio.io</id>
+      <name>Orque IO Platform Community</name>
+      <organization>orqueio.io</organization>
+      <organizationUrl>https://www.orqueio.io</organizationUrl>
+    </developer>
+  </developers>
+
+  <scm>
+    <url>https://github.com/orqueio/orqueio</url>
+    <connection>scm:git:git@github.com:orqueio/orqueio.git</connection>
+    <developerConnection>scm:git:git@github.com:orqueio/orqueio.git</developerConnection>
+    <tag>HEAD</tag>
+  </scm>
 </project>

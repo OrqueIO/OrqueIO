@@ -6,10 +6,13 @@
     <groupId>io.orqueio.bpm</groupId>
     <artifactId>orqueio-parent</artifactId>
     <relativePath>../parent</relativePath>
-    <version>0.24.0-SNAPSHOT</version>
+    <version>0.24.0-alpha</version>
   </parent>
-
+  <version>0.24.0-alpha</version>
+  <description>orqueio-database-settings</description>
+  <groupId>io.orqueio.bpm</groupId>
   <artifactId>orqueio-database-settings</artifactId>
+
   <packaging>pom</packaging>
   <name>Orque IO Platform - database settings</name>
 
@@ -400,4 +403,33 @@
 
   </profiles>
 
+
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+    </license>
+  </licenses>
+
+  <organization>
+    <name>Orque IO</name>
+    <url>http://www.orqueio.io</url>
+  </organization>
+
+  <url>http://www.orqueio.io</url>
+  <developers>
+    <developer>
+      <id>orqueio.io</id>
+      <name>Orque IO Platform Community</name>
+      <organization>orqueio.io</organization>
+      <organizationUrl>https://www.orqueio.io</organizationUrl>
+    </developer>
+  </developers>
+
+  <scm>
+    <url>https://github.com/orqueio/orqueio</url>
+    <connection>scm:git:git@github.com:orqueio/orqueio.git</connection>
+    <developerConnection>scm:git:git@github.com:orqueio/orqueio.git</developerConnection>
+    <tag>HEAD</tag>
+  </scm>
 </project>

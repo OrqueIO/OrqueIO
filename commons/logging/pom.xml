@@ -4,9 +4,11 @@
   <parent>
     <groupId>io.orqueio.commons</groupId>
     <artifactId>orqueio-commons-root</artifactId>
-    <version>0.24.0-SNAPSHOT</version>
+    <version>0.24.0-alpha</version>
   </parent>
-
+  <version>0.24.0-alpha</version>
+  <description>orqueio-commons-logging</description>
+  <groupId>io.orqueio.commons</groupId>
   <artifactId>orqueio-commons-logging</artifactId>
   <name>Orque IO Commons - Logging</name>
   <packaging>jar</packaging>
@@ -17,31 +19,62 @@
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
+      <version>1.7.26</version>
+      <scope>compile</scope>
     </dependency>
-
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
+      <version>1.2.11</version>
       <scope>test</scope>
     </dependency>
-
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
+      <version>4.13.1</version>
       <scope>test</scope>
     </dependency>
-
     <dependency>
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
+      <version>2.9.1</version>
       <scope>test</scope>
     </dependency>
-
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
+      <version>4.6.0</version>
       <scope>test</scope>
     </dependency>
-
   </dependencies>
+
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+    </license>
+  </licenses>
+
+  <organization>
+    <name>Orque IO</name>
+    <url>https://www.orqueio.io</url>
+  </organization>
+
+  <url>https://www.orqueio.io</url>
+
+  <developers>
+    <developer>
+      <id>orqueio.io</id>
+      <name>Orque IO Platform Community</name>
+      <organization>orqueio.io</organization>
+      <organizationUrl>https://www.orqueio.io</organizationUrl>
+    </developer>
+  </developers>
+
+  <scm>
+    <url>https://github.com/orqueio/orqueio</url>
+    <connection>scm:git:git@github.com:orqueio/orqueio.git</connection>
+    <developerConnection>scm:git:git@github.com:orqueio/orqueio.git</developerConnection>
+    <tag>HEAD</tag>
+  </scm>
 </project>

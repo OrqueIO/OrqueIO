@@ -7,10 +7,11 @@
     <groupId>io.orqueio.bpm</groupId>
     <artifactId>orqueio-parent</artifactId>
     <relativePath>../../parent</relativePath>
-    <version>0.24.0-SNAPSHOT</version>
+    <version>0.24.0-alpha</version>
   </parent>
-
+<description>orqueio-webapp-webjar</description>
   <groupId>io.orqueio.bpm.webapp</groupId>
+  <version>0.24.0-alpha</version>
   <artifactId>orqueio-webapp-webjar</artifactId>
   <packaging>jar</packaging>
 
@@ -49,6 +50,7 @@
       <!-- first fetch and unpack the war -->
       <plugin>
         <artifactId>maven-dependency-plugin</artifactId>
+        <version>2.8</version>
         <executions>
           <execution>
             <id>unpack</id>
@@ -108,5 +110,33 @@
       </properties>
     </profile>
   </profiles>
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+    </license>
+  </licenses>
 
+  <organization>
+    <name>Orque IO</name>
+    <url>https://www.orqueio.io</url>
+  </organization>
+
+  <url>https://www.orqueio.io</url>
+
+  <developers>
+    <developer>
+      <id>orqueio.io</id>
+      <name>Orque IO Platform Community</name>
+      <organization>orqueio.io</organization>
+      <organizationUrl>https://www.orqueio.io</organizationUrl>
+    </developer>
+  </developers>
+
+  <scm>
+    <url>https://github.com/orqueio/orqueio</url>
+    <connection>scm:git:git@github.com:orqueio/orqueio.git</connection>
+    <developerConnection>scm:git:git@github.com:orqueio/orqueio.git</developerConnection>
+    <tag>HEAD</tag>
+  </scm>
 </project>

@@ -6,12 +6,13 @@
   <parent>
     <groupId>io.orqueio.bpm</groupId>
     <artifactId>orqueio-database-settings</artifactId>
-    <version>0.24.0-SNAPSHOT</version>
+    <version>0.24.0-alpha</version>
     <relativePath>../database</relativePath>
   </parent>
-
+  <description>orqueio-webapp-root</description>
   <artifactId>orqueio-webapp-root</artifactId>
   <groupId>io.orqueio.bpm.webapp</groupId>
+  <version>0.24.0-alpha</version>
   <packaging>pom</packaging>
 
 
@@ -62,13 +63,15 @@
     <dependency>
       <groupId>io.orqueio.bpm</groupId>
       <artifactId>orqueio-engine</artifactId>
+      <version>0.24.0-alpha</version>
+
       <scope>provided</scope>
     </dependency>
 
     <dependency>
       <groupId>io.orqueio.commons</groupId>
       <artifactId>orqueio-commons-logging</artifactId>
-      <version>0.24.0-SNAPSHOT</version>
+      <version>0.24.0-alpha</version>
       <exclusions>
         <exclusion>
           <groupId>org.slf4j</groupId>
@@ -82,35 +85,42 @@
     <dependency>
       <groupId>io.orqueio.commons</groupId>
       <artifactId>orqueio-commons-testing</artifactId>
+      <version>0.24.0-alpha</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
+      <version>4.13.1</version>
       <scope>provided</scope>
     </dependency>
 
     <dependency>
       <groupId>com.fasterxml.uuid</groupId>
       <artifactId>java-uuid-generator</artifactId>
+      <version>4.3.0</version>
       <scope>test</scope>
     </dependency>
 
     <dependency>
       <groupId>com.h2database</groupId>
       <artifactId>h2</artifactId>
+      <version>2.3.232</version>
       <scope>test</scope>
     </dependency>
 
     <dependency>
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
+      <version>2.9.1</version>
       <scope>test</scope>
     </dependency>
 
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
+      <version>5.10.0</version>
+
       <scope>test</scope>
     </dependency>
 
@@ -131,6 +141,7 @@
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
+      <version>1.2.11</version>
       <scope>test</scope>
     </dependency>
 
@@ -334,5 +345,33 @@
       </properties>
     </profile>
   </profiles>
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+    </license>
+  </licenses>
 
+  <organization>
+    <name>Orque IO</name>
+    <url>https://www.orqueio.io</url>
+  </organization>
+
+  <url>https://www.orqueio.io</url>
+
+  <developers>
+    <developer>
+      <id>orqueio.io</id>
+      <name>Orque IO Platform Community</name>
+      <organization>orqueio.io</organization>
+      <organizationUrl>https://www.orqueio.io</organizationUrl>
+    </developer>
+  </developers>
+
+  <scm>
+    <url>https://github.com/orqueio/orqueio</url>
+    <connection>scm:git:git@github.com:orqueio/orqueio.git</connection>
+    <developerConnection>scm:git:git@github.com:orqueio/orqueio.git</developerConnection>
+    <tag>HEAD</tag>
+  </scm>
 </project>

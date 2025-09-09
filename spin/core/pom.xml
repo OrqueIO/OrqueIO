@@ -6,64 +6,75 @@
   <parent>
     <groupId>io.orqueio.spin</groupId>
     <artifactId>orqueio-spin-root</artifactId>
-    <version>0.24.0-SNAPSHOT</version>
+    <version>0.24.0-alpha</version>
   </parent>
-
+  <description>orqueio-spin-core</description>
+  <groupId>io.orqueio.spin</groupId>
   <artifactId>orqueio-spin-core</artifactId>
   <name>Orque IO Spin - core</name>
+  <version>0.24.0-alpha</version>
+  <packaging>jar</packaging>
 
   <dependencies>
 
     <dependency>
       <groupId>io.orqueio.commons</groupId>
       <artifactId>orqueio-commons-logging</artifactId>
-      <version>0.24.0-SNAPSHOT</version>
+      <version>0.24.0-alpha</version>
     </dependency>
 
     <dependency>
       <groupId>io.orqueio.commons</groupId>
       <artifactId>orqueio-commons-utils</artifactId>
+      <version>0.24.0-alpha</version>
     </dependency>
 
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
+      <version>4.13.1</version>
       <scope>provided</scope>
     </dependency>
 
     <dependency>
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
+      <version>2.9.1</version>
       <scope>test</scope>
     </dependency>
 
     <dependency>
       <groupId>org.apache.groovy</groupId>
       <artifactId>groovy-jsr223</artifactId>
+      <version>4.0.22</version>
       <scope>test</scope>
     </dependency>
 
     <dependency>
       <groupId>org.python</groupId>
       <artifactId>jython</artifactId>
+      <version>2.5.3</version>
       <scope>test</scope>
     </dependency>
 
     <dependency>
       <groupId>org.jruby</groupId>
       <artifactId>jruby-complete</artifactId>
+      <version>9.1.17.0</version>
       <scope>test</scope>
     </dependency>
     
     <dependency>
       <groupId>org.graalvm.js</groupId>
       <artifactId>js</artifactId>
+      <version>21.3.12</version>
       <scope>test</scope>
     </dependency>
     
     <dependency>
       <groupId>org.graalvm.js</groupId>
       <artifactId>js-scriptengine</artifactId>
+      <version>21.3.12</version>
       <scope>test</scope>
     </dependency>
     
@@ -71,23 +82,27 @@
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
+      <version>1.2.11</version>
       <scope>test</scope>
     </dependency>
 
     <dependency>
       <groupId>net.javacrumbs.json-unit</groupId>
       <artifactId>json-unit-fluent</artifactId>
+      <version>1.1.6</version>
       <scope>test</scope>
     </dependency>
 
     <dependency>
       <groupId>org.powermock</groupId>
       <artifactId>powermock-module-junit4</artifactId>
+      <version>2.0.9</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.powermock</groupId>
       <artifactId>powermock-api-mockito2</artifactId>
+      <version>2.0.9</version>
       <scope>test</scope>
     </dependency>
 
@@ -265,4 +280,33 @@
       </plugin>
     </plugins>
   </build>
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+    </license>
+  </licenses>
+
+  <organization>
+    <name>Orque IO</name>
+    <url>https://www.orqueio.io</url>
+  </organization>
+
+  <url>https://www.orqueio.io</url>
+
+  <developers>
+    <developer>
+      <id>orqueio.io</id>
+      <name>Orque IO Platform Community</name>
+      <organization>orqueio.io</organization>
+      <organizationUrl>https://www.orqueio.io</organizationUrl>
+    </developer>
+  </developers>
+
+  <scm>
+    <url>https://github.com/orqueio/orqueio</url>
+    <connection>scm:git:git@github.com:orqueio/orqueio.git</connection>
+    <developerConnection>scm:git:git@github.com:orqueio/orqueio.git</developerConnection>
+    <tag>HEAD</tag>
+  </scm>
 </project>

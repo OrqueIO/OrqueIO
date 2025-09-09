@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
+  <groupId>io.orqueio.bpm</groupId>
   <artifactId>orqueio-engine-rest-core-jakarta</artifactId>
+  <version>0.24.0-alpha</version>
   <name>Orque IO Platform - engine - REST Jakarta</name>
   <packaging>jar</packaging>
 
-
+  <description>orqueio-engine-rest-core-jakarta</description>
 
   <parent>
     <groupId>io.orqueio.bpm</groupId>
     <artifactId>orqueio-engine-rest-root</artifactId>
     <relativePath>../pom.xml</relativePath>
-    <version>0.24.0-SNAPSHOT</version>
+    <version>0.24.0-alpha</version>
   </parent>
 
   <properties>
@@ -43,6 +45,7 @@
     <dependency>
       <groupId>commons-fileupload</groupId>
       <artifactId>commons-fileupload</artifactId>
+      <version>1.6.0</version>
       <exclusions>
         <exclusion>
           <groupId>commons-io</groupId>
@@ -54,11 +57,13 @@
     <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
+      <version>2.17.0</version>
     </dependency>
 
     <dependency>
       <groupId>com.fasterxml.jackson.jakarta.rs</groupId>
       <artifactId>jackson-jakarta-rs-json-provider</artifactId>
+      <version>2.15.2</version>
       <exclusions>
         <exclusion>
           <groupId>jakarta.activation</groupId>
@@ -74,38 +79,46 @@
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
+      <version>2.15.2</version>
     </dependency>
 
     <dependency>
       <groupId>com.fasterxml.jackson.datatype</groupId>
       <artifactId>jackson-datatype-jsr310</artifactId>
+      <version>2.15.2</version>
     </dependency>
 
     <!-- provided deps -->
     <dependency>
       <groupId>jakarta.servlet</groupId>
       <artifactId>jakarta.servlet-api</artifactId>
+      <version>6.0.0</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>jakarta.activation</groupId>
       <artifactId>jakarta.activation-api</artifactId>
+      <version>2.1.0</version>
+
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>jakarta.ws.rs</groupId>
       <artifactId>jakarta.ws.rs-api</artifactId>
+      <version>3.1.0</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>jakarta.xml.bind</groupId>
       <artifactId>jakarta.xml.bind-api</artifactId>
+      <version>4.0.0</version>
       <scope>provided</scope>
     </dependency>
 
     <dependency>
       <groupId>io.orqueio.bpm</groupId>
       <artifactId>orqueio-engine</artifactId>
+      <version>0.24.0-alpha</version>
       <scope>provided</scope>
       <exclusions>
         <exclusion>
@@ -118,7 +131,7 @@
     <dependency>
       <groupId>io.orqueio.commons</groupId>
       <artifactId>orqueio-commons-logging</artifactId>
-      <version>0.24.0-SNAPSHOT</version>
+      <version>0.24.0-alpha</version>
       <scope>provided</scope>
     </dependency>
 
@@ -154,12 +167,14 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
+      <version>4.13.1</version>
       <scope>test</scope>
     </dependency>
 
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
+      <version>5.10.0</version>
       <scope>test</scope>
       <exclusions>
         <exclusion>
@@ -172,36 +187,42 @@
     <dependency>
       <groupId>io.rest-assured</groupId>
       <artifactId>rest-assured</artifactId>
+      <version>4.5.0</version>
       <scope>test</scope>
     </dependency>
 
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpcore</artifactId>
+      <version>4.4.5</version>
       <scope>test</scope>
     </dependency>
 
     <dependency>
       <groupId>commons-codec</groupId>
       <artifactId>commons-codec</artifactId>
+      <version>1.15</version>
       <scope>test</scope>
     </dependency>
 
     <dependency>
       <groupId>com.h2database</groupId>
       <artifactId>h2</artifactId>
+      <version>2.3.232</version>
       <scope>test</scope>
     </dependency>
 
     <dependency>
       <groupId>io.orqueio.commons</groupId>
       <artifactId>orqueio-commons-testing</artifactId>
+      <version>0.24.0-alpha</version>
       <scope>test</scope>
     </dependency>
 
     <dependency>
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
+      <version>2.9.1</version>
       <scope>test</scope>
     </dependency>
 
@@ -727,5 +748,33 @@
       </dependencies>
     </profile>
   </profiles>
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+    </license>
+  </licenses>
 
+  <organization>
+    <name>Orque IO</name>
+    <url>https://www.orqueio.io</url>
+  </organization>
+
+  <url>https://www.orqueio.io</url>
+
+  <developers>
+    <developer>
+      <id>orqueio.io</id>
+      <name>Orque IO Platform Community</name>
+      <organization>orqueio.io</organization>
+      <organizationUrl>https://www.orqueio.io</organizationUrl>
+    </developer>
+  </developers>
+
+  <scm>
+    <url>https://github.com/orqueio/orqueio</url>
+    <connection>scm:git:git@github.com:orqueio/orqueio.git</connection>
+    <developerConnection>scm:git:git@github.com:orqueio/orqueio.git</developerConnection>
+    <tag>HEAD</tag>
+  </scm>
 </project>

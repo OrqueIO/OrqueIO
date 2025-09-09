@@ -5,11 +5,12 @@
   <parent>
     <groupId>io.orqueio.bpm</groupId>
     <artifactId>orqueio-bom-root</artifactId>
-    <version>0.24.0-SNAPSHOT</version>
+    <version>0.24.0-alpha</version>
     <relativePath>../</relativePath>
   </parent>
-
+  <groupId>io.orqueio.bpm</groupId>
   <artifactId>orqueio-bom</artifactId>
+  <version>0.24.0-alpha</version>
   <packaging>pom</packaging>
   <name>orqueio Platform - Bom</name>
   <url>http://orqueio.io</url>
@@ -36,26 +37,46 @@
       <dependency>
         <groupId>org.mybatis</groupId>
         <artifactId>mybatis</artifactId>
-        <version>${version.mybatis}</version>
+        <version>3.5.15</version>
       </dependency>
       <dependency>
         <groupId>joda-time</groupId>
         <artifactId>joda-time</artifactId>
-        <version>${version.joda-time}</version>
+        <version>2.12.5</version>
       </dependency>
       <dependency>
         <groupId>com.fasterxml.uuid</groupId>
         <artifactId>java-uuid-generator</artifactId>
-        <version>${version.uuid-generator}</version>
+        <version>4.3.0</version>
       </dependency>
       <!-- orqueio Platform public artifacts -->
       <dependency>
         <groupId>io.orqueio.bpm</groupId>
         <artifactId>orqueio-only-bom</artifactId>
-        <version>${project.version}</version>
+        <version>0.24.0-alpha</version>
         <scope>import</scope>
         <type>pom</type>
       </dependency>
     </dependencies>
   </dependencyManagement>
+
+
+
+
+
+  <developers>
+    <developer>
+      <id>orqueio.io</id>
+      <name>Orque IO Platform Community</name>
+      <organization>orqueio.io</organization>
+      <organizationUrl>https://www.orqueio.io</organizationUrl>
+    </developer>
+  </developers>
+
+  <scm>
+    <url>https://github.com/orqueio/orqueio</url>
+    <connection>scm:git:git@github.com:orqueio/orqueio.git</connection>
+    <developerConnection>scm:git:git@github.com:orqueio/orqueio.git</developerConnection>
+    <tag>HEAD</tag>
+  </scm>
 </project>

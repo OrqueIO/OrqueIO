@@ -4,7 +4,7 @@
   <parent>
     <groupId>io.orqueio.bpm.run</groupId>
     <artifactId>orqueio-bpm-run-qa</artifactId>
-    <version>0.24.0-SNAPSHOT</version>
+    <version>0.24.0-alpha</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 

@@ -4,11 +4,13 @@
   <parent>
     <groupId>io.orqueio.bpm</groupId>
     <artifactId>orqueio-root</artifactId>
-    <version>0.24.0-SNAPSHOT</version>
+    <version>0.24.0-alpha</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
+  <groupId>io.orqueio.bpm</groupId>
   <artifactId>orqueio-parent</artifactId>
+  <version>0.24.0-alpha</version>
   <name>Orque IO Platform - Parent Pom</name>
   <inceptionYear>2013</inceptionYear>
   <packaging>pom</packaging>
@@ -362,6 +364,21 @@
   </organization>
 
   <url>http://www.orqueio.io</url>
+  <developers>
+    <developer>
+      <id>orqueio.io</id>
+      <name>Orque IO Platform Community</name>
+      <organization>orqueio.io</organization>
+      <organizationUrl>https://www.orqueio.io</organizationUrl>
+    </developer>
+  </developers>
+
+  <scm>
+    <url>https://github.com/orqueio/orqueio</url>
+    <connection>scm:git:git@github.com:orqueio/orqueio.git</connection>
+    <developerConnection>scm:git:git@github.com:orqueio/orqueio.git</developerConnection>
+    <tag>HEAD</tag>
+  </scm>
 </project>
 
 

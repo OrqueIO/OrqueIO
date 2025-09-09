@@ -6,11 +6,13 @@
   <parent>
     <groupId>io.orqueio.bpm.webapp</groupId>
     <artifactId>orqueio-webapp-root</artifactId>
-    <version>0.24.0-SNAPSHOT</version>
+    <version>0.24.0-alpha</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
-
+  <description>orqueio-webapp</description>
+  <groupId>io.orqueio.bpm.webapp</groupId>
   <artifactId>orqueio-webapp</artifactId>
+  <version>0.24.0-alpha</version>
   <packaging>war</packaging>
 
 
@@ -53,6 +55,7 @@
     <dependency>
       <groupId>org.jboss.spec</groupId>
       <artifactId>jboss-javaee-6.0</artifactId>
+      <version>3.0.2.Final</version>
       <type>pom</type>
       <scope>provided</scope>
       <exclusions>
@@ -66,6 +69,7 @@
     <dependency>
       <groupId>org.jboss.spec.javax.ws.rs</groupId>
       <artifactId>jboss-jaxrs-api_2.1_spec</artifactId>
+      <version>2.0.1.Final</version>
       <scope>provided</scope>
     </dependency>
 
@@ -73,6 +77,7 @@
     <dependency>
       <groupId>io.orqueio.bpm</groupId>
       <artifactId>orqueio-engine-rest-core</artifactId>
+      <version>0.24.0-alpha</version>
     </dependency>
 
     <dependency>
@@ -619,5 +624,33 @@
     </profile>
 
   </profiles>
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+    </license>
+  </licenses>
 
+  <organization>
+    <name>Orque IO</name>
+    <url>https://www.orqueio.io</url>
+  </organization>
+
+  <url>https://www.orqueio.io</url>
+
+  <developers>
+    <developer>
+      <id>orqueio.io</id>
+      <name>Orque IO Platform Community</name>
+      <organization>orqueio.io</organization>
+      <organizationUrl>https://www.orqueio.io</organizationUrl>
+    </developer>
+  </developers>
+
+  <scm>
+    <url>https://github.com/orqueio/orqueio</url>
+    <connection>scm:git:git@github.com:orqueio/orqueio.git</connection>
+    <developerConnection>scm:git:git@github.com:orqueio/orqueio.git</developerConnection>
+    <tag>HEAD</tag>
+  </scm>
 </project>

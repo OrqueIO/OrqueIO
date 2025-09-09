@@ -124,8 +124,10 @@ public class ScriptTaskNashornTest extends AbstractScriptTaskTest {
     Date date = (Date) runtimeService.getVariable(pi.getId(), "date");
     assertEquals(0, date.getTime());
 
-    deployProcess(NASHORN, "execution.setVariable('myVar', new io.orqueio.bpm.engine.test.bpmn.scripttask.MySerializable('test'));");
-
+    deployProcess(NASHORN,
+            "var MySerializable = Java.type('io.orqueio.bpm.engine.test.bpmn.scripttask.MySerializable');" +
+                    "execution.setVariable('myVar', new MySerializable('test'));"
+    );
     pi = runtimeService.startProcessInstanceByKey("testProcess");
 
     MySerializable myVar = (MySerializable) runtimeService.getVariable(pi.getId(), "myVar");

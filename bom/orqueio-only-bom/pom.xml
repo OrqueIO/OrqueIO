@@ -5,11 +5,12 @@
   <parent>
     <groupId>io.orqueio.bpm</groupId>
     <artifactId>orqueio-bom-root</artifactId>
-    <version>0.24.0-SNAPSHOT</version>
+    <version>0.24.0-alpha</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
-
+  <groupId>io.orqueio.bpm</groupId>
   <artifactId>orqueio-only-bom</artifactId>
+  <version>0.24.0-alpha</version>
   <packaging>pom</packaging>
   <name>Orque IO Platform Only - Bom</name>
   <url>http://www.orqueio.io</url>
@@ -32,251 +33,332 @@
 
   <dependencyManagement>
     <dependencies>
-      <!-- orqueio Platform public artifacts -->
       <dependency>
         <groupId>io.orqueio.bpm</groupId>
         <artifactId>orqueio-engine</artifactId>
-        <version>${project.version}</version>
+        <version>0.24.0-alpha</version>
       </dependency>
       <dependency>
         <groupId>io.orqueio.bpm</groupId>
         <artifactId>orqueio-engine-cdi</artifactId>
-        <version>${project.version}</version>
+        <version>0.24.0-alpha</version>
       </dependency>
       <dependency>
         <groupId>io.orqueio.bpm</groupId>
         <artifactId>orqueio-engine-cdi-jakarta</artifactId>
-        <version>${project.version}</version>
+        <version>0.24.0-alpha</version>
       </dependency>
       <dependency>
         <groupId>io.orqueio.bpm</groupId>
         <artifactId>orqueio-engine-spring</artifactId>
-        <version>${project.version}</version>
+        <version>0.24.0-alpha</version>
       </dependency>
       <dependency>
         <groupId>io.orqueio.bpm</groupId>
         <artifactId>orqueio-engine-spring-6</artifactId>
-        <version>${project.version}</version>
+        <version>0.24.0-alpha</version>
       </dependency>
       <dependency>
         <groupId>io.orqueio.bpm</groupId>
         <artifactId>orqueio-engine-rest-core</artifactId>
-        <version>${project.version}</version>
+        <version>0.24.0-alpha</version>
       </dependency>
       <dependency>
         <groupId>io.orqueio.bpm</groupId>
         <artifactId>orqueio-engine-rest-core-jakarta</artifactId>
-        <version>${project.version}</version>
+        <version>0.24.0-alpha</version>
       </dependency>
       <dependency>
         <groupId>io.orqueio.bpm.identity</groupId>
         <artifactId>orqueio-identity-ldap</artifactId>
-        <version>${project.version}</version>
+        <version>0.24.0-alpha</version>
       </dependency>
       <dependency>
         <groupId>io.orqueio.bpm</groupId>
         <artifactId>orqueio-engine-plugin-spin</artifactId>
-        <version>${project.version}</version>
+        <version>0.24.0-alpha</version>
       </dependency>
       <dependency>
         <groupId>io.orqueio.bpm</groupId>
         <artifactId>orqueio-engine-plugin-connect</artifactId>
-        <version>${project.version}</version>
+        <version>0.24.0-alpha</version>
       </dependency>
       <dependency>
         <groupId>io.orqueio.bpm.javaee</groupId>
         <artifactId>orqueio-ejb-client</artifactId>
-        <version>${project.version}</version>
+        <version>0.24.0-alpha</version>
       </dependency>
       <dependency>
         <groupId>io.orqueio.bpm.javaee</groupId>
         <artifactId>orqueio-ejb-client-jakarta</artifactId>
-        <version>${project.version}</version>
+        <version>0.24.0-alpha</version>
       </dependency>
       <dependency>
         <groupId>io.orqueio.bpm.juel</groupId>
         <artifactId>orqueio-juel</artifactId>
-        <version>${project.version}</version>
+        <version>0.24.0-alpha</version>
       </dependency>
       <dependency>
         <groupId>io.orqueio.bpm.model</groupId>
         <artifactId>orqueio-xml-model</artifactId>
-        <version>${project.version}</version>
+        <version>0.24.0-alpha</version>
       </dependency>
       <dependency>
         <groupId>io.orqueio.bpm.model</groupId>
         <artifactId>orqueio-bpmn-model</artifactId>
-        <version>${project.version}</version>
+        <version>0.24.0-alpha</version>
       </dependency>
       <dependency>
         <groupId>io.orqueio.bpm.model</groupId>
         <artifactId>orqueio-cmmn-model</artifactId>
-        <version>${project.version}</version>
+        <version>0.24.0-alpha</version>
       </dependency>
       <dependency>
         <groupId>io.orqueio.bpm.model</groupId>
         <artifactId>orqueio-dmn-model</artifactId>
-        <version>${project.version}</version>
+        <version>0.24.0-alpha</version>
       </dependency>
       <dependency>
         <groupId>io.orqueio.bpm</groupId>
         <artifactId>orqueio-engine-rest</artifactId>
-        <version>${project.version}</version>
+        <version>0.24.0-alpha</version>
         <classifier>classes</classifier>
       </dependency>
       <dependency>
         <groupId>io.orqueio.bpm</groupId>
         <artifactId>orqueio-engine-rest-jakarta</artifactId>
-        <version>${project.version}</version>
+        <version>0.24.0-alpha</version>
         <classifier>classes</classifier>
       </dependency>
       <dependency>
         <groupId>io.orqueio.bpm.webapp</groupId>
         <artifactId>orqueio-webapp-webjar</artifactId>
-        <version>${project.version}</version>
+        <version>0.24.0-alpha</version>
       </dependency>
       <dependency>
         <groupId>io.orqueio.bpm.webapp</groupId>
         <artifactId>orqueio-webapp</artifactId>
-        <version>${project.version}</version>
+        <version>0.24.0-alpha</version>
         <type>war</type>
       </dependency>
       <dependency>
         <groupId>io.orqueio.bpm.webapp</groupId>
         <artifactId>orqueio-webapp-jakarta</artifactId>
-        <version>${project.version}</version>
+        <version>0.24.0-alpha</version>
         <type>war</type>
       </dependency>
       <dependency>
         <groupId>io.orqueio.bpm.webapp</groupId>
         <artifactId>orqueio-webapp</artifactId>
-        <version>${project.version}</version>
-        <type>jar</type>
+        <version>0.24.0-alpha</version>
         <classifier>classes</classifier>
       </dependency>
       <dependency>
         <groupId>io.orqueio.bpm.webapp</groupId>
         <artifactId>orqueio-webapp-jakarta</artifactId>
-        <version>${project.version}</version>
-        <type>jar</type>
+        <version>0.24.0-alpha</version>
         <classifier>classes</classifier>
       </dependency>
       <dependency>
         <groupId>io.orqueio.bpm.webapp</groupId>
         <artifactId>orqueio-webapp-webjar-ee</artifactId>
-        <version>${project.version}</version>
+        <version>0.24.0-alpha</version>
       </dependency>
       <dependency>
         <groupId>io.orqueio.bpm.springboot</groupId>
         <artifactId>orqueio-bpm-spring-boot-starter</artifactId>
-        <version>${project.version}</version>
+        <version>0.24.0-alpha</version>
       </dependency>
       <dependency>
         <groupId>io.orqueio.bpm.springboot</groupId>
         <artifactId>orqueio-bpm-spring-boot-starter-rest</artifactId>
-        <version>${project.version}</version>
+        <version>0.24.0-alpha</version>
       </dependency>
       <dependency>
         <groupId>io.orqueio.bpm.springboot</groupId>
         <artifactId>orqueio-bpm-spring-boot-starter-webapp</artifactId>
-        <version>${project.version}</version>
+        <version>0.24.0-alpha</version>
       </dependency>
       <dependency>
         <groupId>io.orqueio.bpm.springboot</groupId>
         <artifactId>orqueio-bpm-spring-boot-starter-security</artifactId>
-        <version>${project.version}</version>
+        <version>0.24.0-alpha</version>
       </dependency>
       <dependency>
         <groupId>io.orqueio.bpm.springboot</groupId>
         <artifactId>orqueio-bpm-spring-boot-starter-webapp-ee</artifactId>
-        <version>${project.version}</version>
+        <version>0.24.0-alpha</version>
       </dependency>
       <dependency>
         <groupId>io.orqueio.bpm.springboot</groupId>
         <artifactId>orqueio-bpm-spring-boot-starter-test</artifactId>
-        <version>${project.version}</version>
+        <version>0.24.0-alpha</version>
       </dependency>
       <dependency>
         <groupId>io.orqueio.bpm.quarkus</groupId>
         <artifactId>orqueio-bpm-quarkus-engine</artifactId>
-        <version>${project.version}</version>
+        <version>0.24.0-alpha</version>
       </dependency>
       <dependency>
         <groupId>io.orqueio.bpm</groupId>
         <artifactId>orqueio-bpm-junit5</artifactId>
-        <version>${project.version}</version>
+        <version>0.24.0-alpha</version>
       </dependency>
       <dependency>
         <groupId>io.orqueio.bpm</groupId>
         <artifactId>orqueio-bpm-assert</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>io.orqueio.spin</groupId>
-        <artifactId>orqueio-spin-bom</artifactId>
-        <version>${project.version}</version>
-        <scope>import</scope>
-        <type>pom</type>
-      </dependency>
-      <dependency>
-        <groupId>io.orqueio.commons</groupId>
-        <artifactId>orqueio-commons-bom</artifactId>
-        <version>${project.version}</version>
-        <scope>import</scope>
-        <type>pom</type>
+        <version>0.24.0-alpha</version>
       </dependency>
       <dependency>
         <groupId>io.orqueio.template-engines</groupId>
         <artifactId>orqueio-template-engines-freemarker</artifactId>
-        <version>${project.version}</version>
+        <version>0.24.0-alpha</version>
       </dependency>
-      <dependency>
-        <groupId>io.orqueio.connect</groupId>
-        <artifactId>orqueio-connect-bom</artifactId>
-        <version>${project.version}</version>
-        <scope>import</scope>
-        <type>pom</type>
-      </dependency>
-
-      <!-- dmn engine dependencies
-       -->
       <dependency>
         <groupId>io.orqueio.bpm.dmn</groupId>
         <artifactId>orqueio-engine-dmn</artifactId>
-        <version>${project.version}</version>
+        <version>0.24.0-alpha</version>
       </dependency>
       <dependency>
         <groupId>io.orqueio.bpm.dmn</groupId>
         <artifactId>orqueio-engine-feel-api</artifactId>
-        <version>${project.version}</version>
+        <version>0.24.0-alpha</version>
       </dependency>
       <dependency>
         <groupId>io.orqueio.bpm.dmn</groupId>
         <artifactId>orqueio-engine-feel-juel</artifactId>
-        <version>${project.version}</version>
+        <version>0.24.0-alpha</version>
       </dependency>
       <dependency>
         <groupId>io.orqueio.bpm.dmn</groupId>
         <artifactId>orqueio-engine-feel-scala</artifactId>
-        <version>${project.version}</version>
+        <version>0.24.0-alpha</version>
       </dependency>
-
-      <!-- Java External Task Client -->
       <dependency>
         <groupId>io.orqueio.bpm</groupId>
         <artifactId>orqueio-external-task-client</artifactId>
-        <version>${project.version}</version>
+        <version>0.24.0-alpha</version>
       </dependency>
       <dependency>
         <groupId>io.orqueio.bpm</groupId>
         <artifactId>orqueio-external-task-client-spring</artifactId>
-        <version>${project.version}</version>
+        <version>0.24.0-alpha</version>
       </dependency>
       <dependency>
         <groupId>io.orqueio.bpm.springboot</groupId>
         <artifactId>orqueio-bpm-spring-boot-starter-external-task-client</artifactId>
-        <version>${project.version}</version>
+        <version>0.24.0-alpha</version>
+      </dependency>
+      <dependency>
+        <groupId>io.orqueio.spin</groupId>
+        <artifactId>orqueio-spin-core</artifactId>
+        <version>0.24.0-alpha</version>
+      </dependency>
+      <dependency>
+        <groupId>io.orqueio.spin</groupId>
+        <artifactId>orqueio-spin-core</artifactId>
+        <version>0.24.0-alpha</version>
+        <type>test-jar</type>
+      </dependency>
+      <dependency>
+        <groupId>io.orqueio.spin</groupId>
+        <artifactId>orqueio-spin-dataformat-all</artifactId>
+        <version>0.24.0-alpha</version>
+        <exclusions>
+          <exclusion>
+            <groupId>io.orqueio.spin</groupId>
+            <artifactId>orqueio-spin-dataformat-json-jackson</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>io.orqueio.spin</groupId>
+            <artifactId>orqueio-spin-dataformat-xml-dom</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>jakarta.xml.bind</groupId>
+            <artifactId>jakarta.xml.bind-api</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-impl</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>io.orqueio.spin</groupId>
+        <artifactId>orqueio-spin-dataformat-json-jackson</artifactId>
+        <version>0.24.0-alpha</version>
+      </dependency>
+      <dependency>
+        <groupId>io.orqueio.spin</groupId>
+        <artifactId>orqueio-spin-dataformat-xml-dom</artifactId>
+        <version>0.24.0-alpha</version>
+      </dependency>
+      <dependency>
+        <groupId>io.orqueio.spin</groupId>
+        <artifactId>orqueio-spin-dataformat-xml-dom-jakarta</artifactId>
+        <version>0.24.0-alpha</version>
+      </dependency>
+      <dependency>
+        <groupId>io.orqueio.commons</groupId>
+        <artifactId>camunda-commons-logging</artifactId>
+        <version>0.24.0-alpha</version>
+      </dependency>
+      <dependency>
+        <groupId>io.orqueio.commons</groupId>
+        <artifactId>orqueio-commons-utils</artifactId>
+        <version>0.24.0-alpha</version>
+      </dependency>
+      <dependency>
+        <groupId>io.orqueio.commons</groupId>
+        <artifactId>orqueio-commons-testing</artifactId>
+        <version>0.24.0-alpha</version>
+      </dependency>
+      <dependency>
+        <groupId>io.orqueio.commons</groupId>
+        <artifactId>orqueio-commons-typed-values</artifactId>
+        <version>0.24.0-alpha</version>
+      </dependency>
+      <dependency>
+        <groupId>io.orqueio.connect</groupId>
+        <artifactId>orqueio-connect-core</artifactId>
+        <version>0.24.0-alpha</version>
+      </dependency>
+      <dependency>
+        <groupId>io.orqueio.connect</groupId>
+        <artifactId>orqueio-connect-http-client</artifactId>
+        <version>0.24.0-alpha</version>
+      </dependency>
+      <dependency>
+        <groupId>io.orqueio.connect</groupId>
+        <artifactId>orqueio-connect-soap-http-client</artifactId>
+        <version>0.24.0-alpha</version>
+      </dependency>
+      <dependency>
+        <groupId>io.orqueio.connect</groupId>
+        <artifactId>orqueio-connect-connectors-all</artifactId>
+        <version>0.24.0-alpha</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
+
+
+
+
+
+
+  <developers>
+    <developer>
+      <id>orqueio.io</id>
+      <name>Orque IO Platform Community</name>
+      <organization>orqueio.io</organization>
+      <organizationUrl>https://www.orqueio.io</organizationUrl>
+    </developer>
+  </developers>
+
+  <scm>
+    <url>https://github.com/orqueio/orqueio</url>
+    <connection>scm:git:git@github.com:orqueio/orqueio.git</connection>
+    <developerConnection>scm:git:git@github.com:orqueio/orqueio.git</developerConnection>
+    <tag>HEAD</tag>
+  </scm>
 </project>

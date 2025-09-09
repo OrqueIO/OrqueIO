@@ -6,14 +6,15 @@
   <parent>
     <groupId>io.orqueio.bpm</groupId>
     <artifactId>orqueio-root</artifactId>
-    <version>0.24.0-SNAPSHOT</version>
+    <version>0.24.0-alpha</version>
     <relativePath>../../pom.xml</relativePath>
   </parent>
+  <description>orqueio-spin-bom</description>
 
   <groupId>io.orqueio.spin</groupId>
   <artifactId>orqueio-spin-bom</artifactId>
   <name>orqueio spin - bom</name>
-  <version>0.24.0-SNAPSHOT</version>
+  <version>0.24.0-alpha</version>
   <packaging>pom</packaging>
 
 
@@ -85,5 +86,28 @@
     <developerConnection>scm:git:git@github.com:orqueio/orqueio-.git</developerConnection>
     <tag>HEAD</tag>
   </scm>
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+    </license>
+  </licenses>
+
+  <organization>
+    <name>Orque IO</name>
+    <url>https://www.orqueio.io</url>
+  </organization>
+
+  <url>https://www.orqueio.io</url>
+
+  <developers>
+    <developer>
+      <id>orqueio.io</id>
+      <name>Orque IO Platform Community</name>
+      <organization>orqueio.io</organization>
+      <organizationUrl>https://www.orqueio.io</organizationUrl>
+    </developer>
+  </developers>
+
 
 </project>
