@@ -30,6 +30,7 @@ pipeline {
                 sh "cd test-utils/testcontainers && mvn clean install -DskipTests -X"
                 sh "cd spin && mvn clean install -DskipTests -X"
                 sh "cd distro/license-book && mvn clean install -DskipTests -X"
+                sh "cd distro/sql-script && mvn clean install -DskipTests -X"
                 sh "mvn clean deploy  -X -Pcentral-sonatype-publish -DskipTests -Dclirr.skip=true"
 	    	}
 	 	}
