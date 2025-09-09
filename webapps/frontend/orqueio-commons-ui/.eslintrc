@@ -12,7 +12,7 @@
   },
   "extends": [
     "eslint:recommended",
-    "plugin:orqueio-licensed/apache",
+    "plugin:camunda-licensed/apache",
     "plugin:prettier/recommended"
   ],
   "parserOptions": {
