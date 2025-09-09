@@ -26,6 +26,7 @@ pipeline {
                 sh "cd connect/bom && mvn clean install -DskipTests -X"
                 sh "cd commons/bom && mvn clean install -DskipTests  -X"
                 sh "cd test-utils/archunit && mvn clean install -DskipTests -X"
+                sh "cd internal-dependencies && mvn clean install -DskipTests -X"
                 sh "cd test-utils/testcontainers && mvn clean install -DskipTests -X"
                 sh "mvn clean deploy  -X -Pcentral-sonatype-publish -DskipTests -Dclirr.skip=true"
 	    	}
