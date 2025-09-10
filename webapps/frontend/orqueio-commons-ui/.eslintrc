@@ -12,7 +12,6 @@
   },
   "extends": [
     "eslint:recommended",
-    "plugin:camunda-licensed/apache",
     "plugin:prettier/recommended"
   ],
   "parserOptions": {

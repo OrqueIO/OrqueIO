@@ -77,7 +77,7 @@ END OF TERMS AND CONDITIONS
 Bpmn.io License (bpmn.io)
 The following license text for the BSD-3-Clause license is cited only once. 
 bpmn.io License
-Copyright (c) 2014-present orqueio Services GmbH
+Copyright (c) 2014-present Camunda Services GmbH
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 The source code responsible for displaying the bpmn.io logo (two green cogwheels in a box) that links back to http://bpmn.io as part of rendered diagrams MUST NOT be removed or changed. When this software is being used in a website or application, the logo must stay fully visible and not visually overlapped by other elements.
@@ -3236,7 +3236,7 @@ Licensed under MIT
 Notice file:
 The MIT License (MIT)
 
-Copyright (c) 2015 orqueio Services GmbH
+Copyright (c) 2015 Camunda Services GmbH
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -3264,7 +3264,7 @@ Licensed under MIT
 Notice file:
 The MIT License (MIT)
 
-Copyright (c) 2022 orqueio Services GmbH
+Copyright (c) 2022 Camunda Services GmbH
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -4886,7 +4886,7 @@ Licensed under MIT
 Notice file:
 The MIT License (MIT)
 
-Copyright (c) 2014 orqueio Services GmbH
+Copyright (c) 2014 Camunda Services GmbH
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -4993,7 +4993,7 @@ Licensed under MIT
 Notice file:
 The MIT License (MIT)
 
-Copyright (c) 2014-2018 orqueio Services GmbH
+Copyright (c) 2014-2018 Camunda Services GmbH
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -5176,7 +5176,7 @@ Licensed under MIT
 Notice file:
 The MIT License (MIT)
 
-Copyright (c) 2014 orqueio Services GmbH
+Copyright (c) 2014 Camunda Services GmbH
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -5377,7 +5377,7 @@ Licensed under MIT
 Notice file:
 The MIT License (MIT)
 
-Copyright (c) 2014-2017 orqueio Services GmbH
+Copyright (c) 2014-2017 Camunda Services GmbH
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -5405,7 +5405,7 @@ Licensed under MIT
 Notice file:
 The MIT License (MIT)
 
-Copyright (c) 2023-present orqueio Services GmbH
+Copyright (c) 2023-present Camunda Services GmbH
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -5489,7 +5489,7 @@ dmn-font@0.6.2
 https://github.com/bpmn-io/dmn-font
 Licensed under SIL
 Notice file:
-Copyright (c) 2014, orqueio Services GmbH
+Copyright (c) 2014, Camunda Services GmbH
 
 This Font Software is licensed under the SIL Open Font License, Version 1.1.
 This license is copied below, and is also available with a FAQ at:
@@ -5751,7 +5751,7 @@ Licensed under MIT
 Notice file:
 The MIT License (MIT)
 
-Copyright (c) 2015-2018 orqueio Services GmbH
+Copyright (c) 2015-2018 Camunda Services GmbH
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -5819,7 +5819,7 @@ Licensed under MIT
 Notice file:
 The MIT License (MIT)
 
-Copyright (c) 2015-2017 orqueio Services GmbH
+Copyright (c) 2015-2017 Camunda Services GmbH
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -7247,7 +7247,7 @@ Licensed under MIT
 Notice file:
 The MIT License (MIT)
 
-Copyright (c) 2014 orqueio Services GmbH
+Copyright (c) 2014 Camunda Services GmbH
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -7580,7 +7580,7 @@ Licensed under MIT
 Notice file:
 The MIT License (MIT)
 
-Copyright (c) 2017-present orqueio Services GmbH
+Copyright (c) 2017-present Camunda Services GmbH
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -7609,7 +7609,7 @@ Notice file:
 The MIT License (MIT)
 
 Copyright (c) 2014 Nico Rehwaldt
-Copyright (c) 2015-present orqueio Services GmbH
+Copyright (c) 2015-present Camunda Services GmbH
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -7666,7 +7666,7 @@ Licensed under MIT
 Notice file:
 The MIT License (MIT)
 
-Copyright (c) 2014 orqueio Services GmbH
+Copyright (c) 2014 Camunda Services GmbH
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -7982,7 +7982,7 @@ Licensed under MIT
 Notice file:
 The MIT License (MIT)
 
-Copyright (c) 2014-present orqueio Services GmbH
+Copyright (c) 2014-present Camunda Services GmbH
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -8010,7 +8010,7 @@ Licensed under MIT
 Notice file:
 The MIT License (MIT)
 
-Copyright (c) 2017 orqueio Services GmbH
+Copyright (c) 2017 Camunda Services GmbH
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -8360,7 +8360,7 @@ Licensed under MIT
 Notice file:
 The MIT License (MIT)
 
-Copyright (c) 2017-present orqueio Services GmbH
+Copyright (c) 2017-present Camunda Services GmbH
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -8389,7 +8389,7 @@ Notice file:
 The MIT License (MIT)
 
 Copyright (c) 2014 Nico Rehwaldt
-Copyright (c) 2015-present orqueio Services GmbH
+Copyright (c) 2015-present Camunda Services GmbH
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

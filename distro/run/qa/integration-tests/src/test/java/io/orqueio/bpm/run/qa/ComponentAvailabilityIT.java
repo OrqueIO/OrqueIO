@@ -106,7 +106,7 @@ public class ComponentAvailabilityIT {
     if (webappsAvailable) {
       response.then()
         .statusCode(200)
-        .body("html.head.title", equalTo("Orqueio Welcome"));
+        .body("html.head.title", equalTo("OrqueIO Welcome"));
     } else {
       response.then()
         .statusCode(404);
