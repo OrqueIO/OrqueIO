@@ -107,7 +107,7 @@
     "AUTH_DAY_CONTEXT_WEEKEND": "weekend",
     "AUTH_FAILED_TO_DISPLAY_RESOURCE": "Failed to display resource",
     "AUTH_LOGOUT_SUCCESSFUL": "Logout successful",
-    "AUTH_LOGOUT_THANKS": "Thank you for using Orqueio today. Have a great {{dayContext}}!",
+    "AUTH_LOGOUT_THANKS": "Thank you for using OrqueIO today. Have a great {{dayContext}}!",
     "BACK": "Back",
     "BANNER_CE_EOL_TEXT": "It is time to migrate to Orqueio 8. The last release of Orqueio 7 CE will be in October 2025. Please have a look at our <a href=\"https://docs.orqueio.io/docs/guides/migrating-from-orqueio-7/\">migration guide</a>.",
     "BATCHES_BREAD_BATCHES": "Batches",

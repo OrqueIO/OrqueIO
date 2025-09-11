@@ -122,7 +122,7 @@
     "AUTH_DAY_CONTEXT_WEEKEND": "weekend",
     "AUTH_FAILED_TO_DISPLAY_RESOURCE": "Failed to display resource",
     "AUTH_LOGOUT_SUCCESSFUL": "Logout successful",
-    "AUTH_LOGOUT_THANKS": "Thank you for using Orqueio today. Have a great {{dayContext}}!",
+    "AUTH_LOGOUT_THANKS": "Thank you for using OrqueIO today. Have a great {{dayContext}}!",
     "Activate": "Activate",
     "AddAttachment": "Add Attachment",
     "AddGroupLink": "Add Group Link",
