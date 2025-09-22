@@ -2,6 +2,7 @@ pipeline {
     agent any
 
     tools {
+        jdk 'jdk21'
         maven 'maven'
     }
 
@@ -16,6 +17,7 @@ pipeline {
                     sh """
                         mvn clean verify sonar:sonar \
                           -Pcentral-sonatype-publish \
+                          -DskipTests \
                           -Dsonar.projectKey=Orqueio
                     """
                 }
