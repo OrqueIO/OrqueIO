@@ -500,33 +500,6 @@
           </configuration>
         </plugin>
         <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-gpg-plugin</artifactId>
-          <version>3.1.0</version>
-          <executions>
-            <execution>
-              <id>sign-artifacts</id>
-              <phase>verify</phase>
-              <goals>
-                <goal>sign</goal>
-              </goals>
-            </execution>
-          </executions>
-          <configuration>
-            <!-- Tells plugin to fetch passphrase from settings.xml -->
-            <passphraseServerId>gpg.passphrase</passphraseServerId>
-
-            <!-- Needed for gpg2 (avoids GUI pinentry) -->
-            <gpgArguments>
-              <arg>--pinentry-mode</arg>
-              <arg>loopback</arg>
-            </gpgArguments>
-
-            <!-- Make sure it calls the right binary -->
-            <executable>gpg</executable>
-          </configuration>
-        </plugin>
-        <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>license-maven-plugin</artifactId>
           <version>1.14</version>

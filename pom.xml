@@ -308,33 +308,6 @@
               <publishingServerId>central</publishingServerId>
             </configuration>
           </plugin>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-gpg-plugin</artifactId>
-            <version>3.1.0</version>
-            <executions>
-              <execution>
-                <id>sign-artifacts</id>
-                <phase>verify</phase>
-                <goals>
-                  <goal>sign</goal>
-                </goals>
-              </execution>
-            </executions>
-            <configuration>
-              <!-- Tells plugin to fetch passphrase from settings.xml -->
-              <passphraseServerId>gpg.passphrase</passphraseServerId>
-
-              <!-- Needed for gpg2 (avoids GUI pinentry) -->
-              <gpgArguments>
-                <arg>--pinentry-mode</arg>
-                <arg>loopback</arg>
-              </gpgArguments>
-
-              <!-- Make sure it calls the right binary -->
-              <executable>gpg</executable>
-            </configuration>
-          </plugin>
         </plugins>
       </build>
       <modules>
@@ -393,28 +366,19 @@
 
   </profiles>
 
-  <repositories>
-   <!-- <repository>
-      <id>maven-central</id>
-      <name>Maven Central</name>
-      <url>https://repo1.maven.org/maven2</url>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </repository>
-    <repository>
-
-      <id>orqueio-public-repository</id>
-      <name>orqueio Platform Maven Repository</name>
-      <url>https://artifacts.orqueio.com/artifactory/public/</url>
-    </repository>
-    <repository>
-
-      <id>orqueio-nexus</id>
-      <name>orqueio Nexus</name>
-      <url>https://artifacts.orqueio.com/artifactory/internal</url>
-    </repository> -->
-  </repositories>
+   <repositories>
+     <repository>
+       <id>central-portal-snapshots</id>
+       <name>Central Portal Snapshots</name>
+       <url>https://central.sonatype.com/repository/maven-snapshots/</url>
+       <releases>
+         <enabled>false</enabled>
+       </releases>
+       <snapshots>
+         <enabled>true</enabled>
+       </snapshots>
+     </repository>
+   </repositories>
 
   <licenses>
     <license>
