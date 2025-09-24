@@ -16,6 +16,7 @@
  */
 package io.orqueio.bpm.engine.test.history.dmn;
 
+import static io.orqueio.bpm.engine.test.api.runtime.TestOrderingUtil.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 
@@ -176,6 +177,28 @@ public class HistoricDecisionInstanceQueryTest extends PluggableProcessEngineTes
 
     List<HistoricDecisionInstance> orderDesc = historyService.createHistoricDecisionInstanceQuery().orderByEvaluationTime().desc().list();
     assertThat(orderDesc.get(0).getEvaluationTime().after(orderDesc.get(1).getEvaluationTime())).isTrue();
+  }
+
+  @Deployment(resources = { DECISION_PROCESS, DECISION_SINGLE_OUTPUT_DMN })
+  @Test
+  public void testQuerySortByDecisionInstanceId() {
+    for (int i = 0; i < 5; i++) {
+      startProcessInstanceAndEvaluateDecision();
+    }
+
+    List<HistoricDecisionInstance> orderAsc = historyService.createHistoricDecisionInstanceQuery()
+            .orderByDecisionInstanceId()
+            .asc()
+            .list();
+    assertThat(orderAsc.size()).isEqualTo(5);
+    verifySorting(orderAsc, propertyComparator(HistoricDecisionInstance::getId));
+
+    List<HistoricDecisionInstance> orderDesc = historyService.createHistoricDecisionInstanceQuery()
+            .orderByDecisionInstanceId()
+            .desc()
+            .list();
+    assertThat(orderDesc.size()).isEqualTo(5);
+    verifySorting(orderDesc, inverted(propertyComparator(HistoricDecisionInstance::getId)));
   }
 
   @Deployment(resources = { DECISION_PROCESS, DECISION_SINGLE_OUTPUT_DMN })
