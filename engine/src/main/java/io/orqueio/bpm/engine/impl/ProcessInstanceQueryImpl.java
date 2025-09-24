@@ -71,7 +71,6 @@ public class ProcessInstanceQueryImpl extends AbstractVariableQueryImpl<ProcessI
   protected String[] activityIds;
   protected boolean isRootProcessInstances;
   protected boolean isLeafProcessInstances;
-  protected String idAfter;
 
   protected boolean isTenantIdSet = false;
   protected String[] tenantIds;
@@ -185,10 +184,6 @@ public class ProcessInstanceQueryImpl extends AbstractVariableQueryImpl<ProcessI
     return this;
   }
 
-  public ProcessInstanceQuery idAfter(String id) {
-    idAfter = id;
-    return this;
-  }
 
   public ProcessInstanceQuery orderByProcessInstanceId() {
     if (isOrQueryActive) {
@@ -508,9 +503,6 @@ public class ProcessInstanceQueryImpl extends AbstractVariableQueryImpl<ProcessI
     return tenantIds;
   }
 
-  public String getIdAfter() {
-    return idAfter;
-  }
 
   @Override
   public ProcessInstanceQuery or() {
