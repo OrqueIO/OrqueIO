@@ -13,7 +13,7 @@
   <parent>
     <groupId>io.orqueio.bpm.qa</groupId>
     <artifactId>orqueio-external-task-client-qa</artifactId>
-    <version>0.25.0-SNAPSHOT</version>
+    <version>1.0.0</version>
   </parent>
 
   <dependencies>

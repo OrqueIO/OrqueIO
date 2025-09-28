@@ -5,13 +5,13 @@
   <parent>
     <groupId>io.orqueio.bpm</groupId>
     <artifactId>orqueio-root</artifactId>
-    <version>0.25.0-SNAPSHOT</version>
+    <version>1.0.0</version>
     <relativePath>../../pom.xml</relativePath>
   </parent>
   <description>io.orqueio.bpm.dmn</description>
   <groupId>io.orqueio.bpm.dmn</groupId>
   <artifactId>orqueio-engine-dmn-bom</artifactId>
-  <version>0.25.0-SNAPSHOT</version>
+  <version>1.0.0</version>
   <name>orqueio DMN - engine - bom</name>
   <packaging>pom</packaging>
 

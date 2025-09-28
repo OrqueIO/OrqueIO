@@ -5,9 +5,9 @@
     <groupId>io.orqueio.bpm</groupId>
     <artifactId>orqueio-database-settings</artifactId>
     <relativePath>../database</relativePath>
-    <version>0.25.0-SNAPSHOT</version>
+    <version>1.0.0</version>
   </parent>
-  <version>0.25.0-SNAPSHOT</version>
+  <version>1.0.0</version>
   <description>orqueio-engine-rest-root</description>
   <groupId>io.orqueio.bpm</groupId>
   <artifactId>orqueio-engine-rest-root</artifactId>

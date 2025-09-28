@@ -5,11 +5,11 @@
     <groupId>io.orqueio.bpm.model</groupId>
     <artifactId>orqueio-model-apis</artifactId>
     <relativePath>../pom.xml</relativePath>
-    <version>0.25.0-SNAPSHOT</version>
+    <version>1.0.0</version>
   </parent>
   <groupId>io.orqueio.bpm.model</groupId>
   <artifactId>orqueio-cmmn-model</artifactId>
-  <version>0.25.0-SNAPSHOT</version>
+  <version>1.0.0</version>
   <packaging>jar</packaging>
 
   <description>orqueio-cmmn-model</description>
@@ -29,7 +29,7 @@
     <dependency>
       <groupId>io.orqueio.bpm.model</groupId>
       <artifactId>orqueio-xml-model</artifactId>
-      <version>0.25.0-SNAPSHOT</version>
+      <version>1.0.0</version>
     </dependency>
 
     <dependency>

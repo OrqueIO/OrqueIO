@@ -11,7 +11,7 @@ Add the dependency to your pom.xml
     <dependency>
       <groupId>io.orqueio.bpm.dmn</groupId>
       <artifactId>orqueio-dmn-junit5</artifactId>
-      <version>0.25.0-SNAPSHOT</version>
+      <version>1.0.0</version>
       <scope>test</scope>
     </dependency>
 ```
