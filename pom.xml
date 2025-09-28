@@ -66,7 +66,7 @@
 
         <module>quarkus-extension</module>
 
-        <module>qa</module>
+
 
         <module>javaee/ejb-service</module>
         <module>javaee/ejb-client</module>
@@ -163,7 +163,6 @@
     <profile>
       <id>distro-serverless</id>
       <modules>
-        <module>qa</module>
 
         <module>engine</module>
         <module>engine-cdi</module>
@@ -272,6 +271,33 @@
         <plugins>
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <version>3.1.0</version>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
+            <configuration>
+              <!-- Tells plugin to fetch passphrase from settings.xml -->
+              <passphraseServerId>gpg.passphrase</passphraseServerId>
+
+              <!-- Needed for gpg2 (avoids GUI pinentry) -->
+              <gpgArguments>
+                <arg>--pinentry-mode</arg>
+                <arg>loopback</arg>
+              </gpgArguments>
+
+              <!-- Make sure it calls the right binary -->
+              <executable>gpg</executable>
+            </configuration>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-javadoc-plugin</artifactId>
             <version>2.9.1</version>
             <configuration>
@@ -324,10 +350,8 @@
         <module>connect</module>
         <module>juel</module>
         <module>spin</module>
-
-
-
-          <module>commons</module>
+        <module>juel</module>
+        <module>commons</module>
         <module>freemarker-template-engine</module>
 
         <module>javaee/ejb-client</module>
@@ -340,11 +364,13 @@
         <module>distro/webjar</module>
         <module>distro/tomcat</module>
         <module>clients/java</module>
-
+        <module>test-utils/archunit</module>
+        <module>test-utils/testcontainers</module>
         <module>test-utils/junit5-extension</module>
         <module>test-utils/junit5-extension-dmn</module>
         <module>test-utils/assert</module>
-
+        <module>distro/sql-script</module>
+        <module>distro/license-book</module>
         <module>internal-dependencies</module>
         <module>database</module>
         <module>parent</module>
@@ -371,9 +397,6 @@
        <id>central-portal-snapshots</id>
        <name>Central Portal Snapshots</name>
        <url>https://central.sonatype.com/repository/maven-snapshots/</url>
-       <releases>
-         <enabled>false</enabled>
-       </releases>
        <snapshots>
          <enabled>true</enabled>
        </snapshots>

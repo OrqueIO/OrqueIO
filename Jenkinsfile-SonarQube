@@ -16,8 +16,6 @@ pipeline {
                 withSonarQubeEnv('AWS SONAR') {
                     sh """
                         mvn clean verify sonar:sonar \
-                          -Pcentral-sonatype-publish \
-                          -DskipTests \
                           -Dsonar.projectKey=Orqueio
                     """
                 }
