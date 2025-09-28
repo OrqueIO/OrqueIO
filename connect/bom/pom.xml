@@ -6,14 +6,14 @@
   <parent>
     <groupId>io.orqueio.bpm</groupId>
     <artifactId>orqueio-root</artifactId>
-    <version>0.25.0-SNAPSHOT</version>
+    <version>1.0.0</version>
     <relativePath>../../pom.xml</relativePath>
   </parent>
   <description>orqueio-connect</description>
 
   <groupId>io.orqueio.connect</groupId>
   <artifactId>orqueio-connect-bom</artifactId>
-  <version>0.25.0-SNAPSHOT</version>
+  <version>1.0.0</version>
   <name>Orque IO Platform - connect - bom</name>
   <packaging>pom</packaging>
 
@@ -25,25 +25,25 @@
       <dependency>
         <groupId>io.orqueio.connect</groupId>
         <artifactId>orqueio-connect-core</artifactId>
-        <version>0.25.0-SNAPSHOT</version>
+        <version>1.0.0</version>
       </dependency>
 
       <dependency>
         <groupId>io.orqueio.connect</groupId>
         <artifactId>orqueio-connect-http-client</artifactId>
-        <version>0.25.0-SNAPSHOT</version>
+        <version>1.0.0</version>
       </dependency>
 
       <dependency>
         <groupId>io.orqueio.connect</groupId>
         <artifactId>orqueio-connect-soap-http-client</artifactId>
-        <version>0.25.0-SNAPSHOT</version>
+        <version>1.0.0</version>
       </dependency>
 
       <dependency>
         <groupId>io.orqueio.connect</groupId>
         <artifactId>orqueio-connect-connectors-all</artifactId>
-        <version>0.25.0-SNAPSHOT</version>
+        <version>1.0.0</version>
       </dependency>
 
     </dependencies>

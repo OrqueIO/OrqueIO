@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.orqueio.bpm</groupId>
   <artifactId>orqueio-engine-rest-jakarta</artifactId>
-  <version>0.25.0-SNAPSHOT</version>
+  <version>1.0.0</version>
   <name>Orque IO Platform - engine - REST - Assembly Jakarta</name>
   <packaging>war</packaging>
   <description>orqueio-engine-rest-jakarta</description>
@@ -13,7 +13,7 @@
   <parent>
     <groupId>io.orqueio.bpm</groupId>
     <artifactId>orqueio-engine-rest-root</artifactId>
-    <version>0.25.0-SNAPSHOT</version>
+    <version>1.0.0</version>
   </parent>
 
   <properties>
