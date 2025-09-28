@@ -1,4 +1,6 @@
-xml1 = S(input, io.orqueio.spin.DataFormats.xml());
+var DataFormats = Java.type("io.orqueio.spin.DataFormats");
+
+xml1 = S(input, DataFormats.xml());
 
 xml2 = S(input, "application/xml");
 

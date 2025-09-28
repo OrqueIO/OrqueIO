@@ -9,7 +9,7 @@ Orque IO is a flexible framework for workflow and process automation. Its core i
 - Getting Started: https://docs.orqueio.io/
 - User Forum: https://forum.camunda.org/
 - Issue Tracker: https://github.com/orqueio/orqueio/issues
-- Contribution Guidelines: https://camunda.org/contribute/
+- Contribution Guidelines: https://orqueio.io/contribute/
 
 ## Components
 
