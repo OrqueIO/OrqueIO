@@ -350,7 +350,6 @@
         <module>connect</module>
         <module>juel</module>
         <module>spin</module>
-        <module>juel</module>
         <module>commons</module>
         <module>freemarker-template-engine</module>
 
