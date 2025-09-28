@@ -25,6 +25,7 @@ pipeline {
                 sh "cd bom && mvn clean install -DskipTests -X"
                 sh "cd connect/bom && mvn clean install -DskipTests -X"
                 sh "cd commons/bom && mvn clean install -DskipTests  -X"
+                sh "cd parent && mvn clean install -DskipTests  -X"
                 sh "cd test-utils/archunit && mvn clean install -DskipTests -X"
                 sh "cd internal-dependencies && mvn clean install -DskipTests -X"
                 sh "cd test-utils/testcontainers && mvn clean install -DskipTests -X"
