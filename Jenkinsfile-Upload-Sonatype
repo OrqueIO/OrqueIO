@@ -22,7 +22,7 @@ pipeline {
     	stage('Upload') {
     		steps {
                 sh "mvn clean install -DskipTests"
-                sh "mvn clean deploy  -X -Pcentral-sonatype-publish -DskipTests -Dclirr.skip=true"
+                sh "mvn clean deploy  -X -Pcentral-sonatype-publish -DskipTests"
 	    	}
 	 	}
     }
