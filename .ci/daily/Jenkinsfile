@@ -45,7 +45,7 @@ pipeline {
                         ".m2/org/camunda/**/*-SNAPSHOT/**",
                         "**/qa/**,**/*qa*/**,**/*.zip,**/*.tar.gz")
             cambpmStash("platform-stash-qa",
-                        ".m2/org/camunda/bpm/**/qa/**/*-SNAPSHOT/**,.m2/org/camunda/bpm/**/*qa*/**/*-SNAPSHOT/**",
+                        ".m2/io/orqueio/bpm/**/qa/**/*-SNAPSHOT/**,.m2/io/orqueio/bpm/**/*qa*/**/*-SNAPSHOT/**",
                         "**/*.zip,**/*.tar.gz")
           }
         ])
@@ -79,7 +79,6 @@ pipeline {
                 cambpmRunMaven('.',
                   "package javadoc:javadoc javadoc:aggregate -Pdistro,distro-wildfly,distro-webjar,javadocs -pl " +
                   "'!distro/wildfly/modules,!distro/wildfly26/modules,!engine-rest/engine-rest-openapi' -DskipTests=true -Dskip.frontend.build=true",
-                  withNpm: true,
                   jdkVersion: 'jdk-17-latest')
                 def projectVersion = env.JOB_NAME.split('/')[0] + "-SNAPSHOT"
                 cambpmPublishDocs("\"target/site/apidocs/\"", projectVersion, "javadoc")
@@ -101,7 +100,6 @@ pipeline {
                 sh "apk -U add openjdk17-jdk maven rsync openssh libstdc++ libgcc bash"
                 cambpmRunMaven('./engine-rest',
                   "package -Dmaven.test.skip -pl '!engine-rest,!assembly'",
-                  withNpm: true,
                   jdkVersion: 'jdk-11-latest',
                   withPodSpec: true)
                 def projectVersion = env.JOB_NAME.split('/')[0] + "-SNAPSHOT"
@@ -122,7 +120,7 @@ pipeline {
               cloud "kubernetes"
               label "${utils.envPrefix()}ci-infra-camunda-cloud-build_${env.JOB_BASE_NAME.take(15)}-${env.BUILD_ID}"
               defaultContainer 'alpine'
-              yaml org.camunda.helper.Podspec.getAgentPodspec(this, 'alpine-small', [
+              yaml io.orqueio.helper.Podspec.getAgentPodspec(this, 'alpine-small', [
                   useStableNodePool: false
               ])
             }
@@ -164,7 +162,6 @@ pipeline {
               runSteps: {
                 cambpmRunMaven('.',
                   "deploy source:jar source:test-jar javadoc:javadoc -Dskip-zip-frontend-sources=true -DaltStagingDirectory=${WORKSPACE}/staging -DskipRemoteStaging=true -B",
-                  withNpm: true,
                   jdkVersion: 'jdk-17-latest',
                   withPodSpec: true)
                 script {
@@ -174,7 +171,6 @@ pipeline {
                
                 cambpmRunMaven('.',
                   "org.sonatype.plugins:nexus-staging-maven-plugin:deploy-staged -DaltStagingDirectory=${WORKSPACE}/staging -DskipStaging=true -B",
-                  withNpm: true,
                   jdkVersion: 'jdk-17-latest',
                   withPodSpec: true)
               },
@@ -200,7 +196,6 @@ pipeline {
               runSteps: {
                 cambpmRunMaven('.',
                   "install source:jar -Pdistro,distro-ce,distro-wildfly,distro-webjar -B",
-                  withNpm: true,
                   jdkVersion: 'jdk-17-latest',
                   settingsXml: 'public-repo',
                   withPodSpec: true)

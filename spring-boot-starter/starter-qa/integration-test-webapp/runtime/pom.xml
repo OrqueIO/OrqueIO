@@ -3,18 +3,17 @@
 
   <modelVersion>4.0.0</modelVersion>
 
-  <description>
-    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://camunda.com/contact/
-  </description>
+
 
   <parent>
-    <groupId>org.camunda.bpm.springboot.project</groupId>
+    <groupId>io.orqueio.bpm.springboot.project</groupId>
     <artifactId>qa-webapp</artifactId>
-    <version>7.24.0-SNAPSHOT</version>
+    <version>1.0.1</version>
   </parent>
+  <description>qa-webapp-ce-runtime</description>
 
   <artifactId>qa-webapp-ce-runtime</artifactId>
-  <name>Camunda Platform - Spring Boot Starter - QA - Webapps Runtime</name>
+  <name>Orque IO Platform - Spring Boot Starter - QA - Webapps Runtime</name>
 
   <properties>
     <version.jersey-json>1.15</version.jersey-json>
@@ -25,7 +24,7 @@
     <version.chromedriver>112.0.5615.49</version.chromedriver>
 
     <http.port>58080</http.port>
-    <http.ctx-path.webapp>camunda/</http.ctx-path.webapp>
+    <http.ctx-path.webapp>orqueio/</http.ctx-path.webapp>
     <http.ctx-path.rest>engine-rest/</http.ctx-path.rest>
   </properties>
 
@@ -37,27 +36,27 @@
 
         <!-- Web Applications -->
         <dependency>
-          <groupId>org.camunda.bpm.springboot</groupId>
-          <artifactId>camunda-bpm-spring-boot-starter-webapp</artifactId>
+          <groupId>io.orqueio.bpm.springboot</groupId>
+          <artifactId>orqueio-bpm-spring-boot-starter-webapp</artifactId>
           <version>${project.version}</version>
         </dependency>
 
         <!-- REST API -->
         <dependency>
-          <groupId>org.camunda.bpm.springboot</groupId>
-          <artifactId>camunda-bpm-spring-boot-starter-rest</artifactId>
+          <groupId>io.orqueio.bpm.springboot</groupId>
+          <artifactId>orqueio-bpm-spring-boot-starter-rest</artifactId>
           <version>${project.version}</version>
         </dependency>
 
         <dependency>
-          <groupId>org.camunda.bpm.qa</groupId>
-          <artifactId>camunda-qa-integration-tests-webapps</artifactId>
+          <groupId>io.orqueio.bpm.qa</groupId>
+          <artifactId>orqueio-qa-integration-tests-webapps</artifactId>
           <version>${project.version}</version>
           <scope>test</scope>
         </dependency>
 
         <dependency>
-          <groupId>org.camunda.bpm.springboot.project</groupId>
+          <groupId>io.orqueio.bpm.springboot.project</groupId>
           <artifactId>qa-webapp-invoice-example</artifactId>
           <version>${project.version}</version>
         </dependency>
@@ -65,6 +64,7 @@
         <dependency>
           <groupId>com.h2database</groupId>
           <artifactId>h2</artifactId>
+          <version>2.3.232</version>
         </dependency>
 
         <dependency>
@@ -125,7 +125,7 @@
             <artifactId>spring-boot-maven-plugin</artifactId>
             <version>${version.spring-boot}</version>
             <configuration>
-              <mainClass>org.camunda.bpm.qa.Application</mainClass>
+              <mainClass>io.orqueio.bpm.qa.Application</mainClass>
             </configuration>
             <executions>
               <execution>
@@ -148,7 +148,7 @@
             <version>3.0.0-M3</version>
             <configuration>
               <dependenciesToScan>
-                <dependency>org.camunda.bpm.qa:camunda-qa-integration-tests-webapps</dependency>
+                <dependency>io.orqueio.bpm.qa:orqueio-qa-integration-tests-webapps</dependency>
               </dependenciesToScan>
               <skipTests>false</skipTests>
             </configuration>

@@ -1,0 +1,2 @@
+io.orqueio.connect.dummy.DummyConnectorProvider
+io.orqueio.connect.dummy.MyHttpConnectorProvider

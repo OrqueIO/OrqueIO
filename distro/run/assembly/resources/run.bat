@@ -8,7 +8,7 @@ SET WEBAPPS_PATH=%BASEDIR%webapps
 SET OAUTH2_PATH=%BASEDIR%oauth2
 SET REST_PATH=%BASEDIR%rest
 SET EXAMPLE_PATH=%BASEDIR%example
-SET APPNAME=Camunda Run
+SET APPNAME=Orqueio Run
 
 IF [%~1]==[start] GOTO Startup
 IF [%~1]==[stop] GOTO Stop
@@ -50,7 +50,7 @@ SET JAVA_VERSION=%JAVA_VERSION:"=%
 ECHO Java version is %JAVA_VERSION%
 FOR /f "delims=. tokens=1" %%v in ("%JAVA_VERSION%") do (
   IF %%v LSS %EXPECTED_JAVA_VERSION% (
-    ECHO You must use at least JDK 17 to start Camunda Platform Run.
+    ECHO You must use at least JDK 17 to start Orqueio Platform Run.
     GOTO :EOF
   )
 )
@@ -136,10 +136,10 @@ ECHO classpath: %classPath%
 REM start the application
 IF [%detachProcess%]==[true] (
   REM in the background
-  start "%APPNAME%" "%JAVA%" -Dloader.path="%classPath%" -Dcamunda.deploymentDir="%DEPLOYMENTDIR%" %JAVA_OPTS% -jar "%BASEDIR%camunda-bpm-run-core.jar" --spring.config.location=file:"%configuration%"
+  start "%APPNAME%" "%JAVA%" -Dloader.path="%classPath%" -Dorqueio.deploymentDir="%DEPLOYMENTDIR%" %JAVA_OPTS% -jar "%BASEDIR%orqueio-bpm-run-core.jar" --spring.config.location=file:"%configuration%"
 
 ) ELSE (
-  call "%JAVA%" -Dloader.path="%classPath%" -Dcamunda.deploymentDir="%DEPLOYMENTDIR%" %JAVA_OPTS% -jar "%BASEDIR%camunda-bpm-run-core.jar" --spring.config.location=file:"%configuration%"
+  call "%JAVA%" -Dloader.path="%classPath%" -Dorqueio.deploymentDir="%DEPLOYMENTDIR%" %JAVA_OPTS% -jar "%BASEDIR%orqueio-bpm-run-core.jar" --spring.config.location=file:"%configuration%"
 )
 
 GOTO End
@@ -148,8 +148,8 @@ GOTO End
 REM remove argument
 SHIFT
 
-REM shut down Camunda Run
-ECHO Camunda Run is shutting down.
+REM shut down Orqueio Run
+ECHO Orqueio Run is shutting down.
 TASKKILL /FI "WINDOWTITLE eq %APPNAME%"
 
 GOTO End
@@ -158,11 +158,11 @@ GOTO End
 ECHO Usage: run.bat [start^|stop] (options...)
 :ArgsHelp
 ECHO Options:
-ECHO   --webapps    - Enables the Camunda Platform Webapps
-ECHO   --oauth2     - Enables the Camunda Platform Spring Security OAuth2 integration
+ECHO   --webapps    - Enables the Orqueio Platform Webapps
+ECHO   --oauth2     - Enables the Orqueio Platform Spring Security OAuth2 integration
 ECHO   --rest       - Enables the REST API
 ECHO   --example    - Enables the example application
 ECHO   --production - Applies the production.yaml configuration file
-ECHO   --detached   - Starts Camunda Run as a detached process
+ECHO   --detached   - Starts Orqueio Run as a detached process
 
 :End

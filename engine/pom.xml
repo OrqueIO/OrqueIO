@@ -2,26 +2,27 @@
 
   <modelVersion>4.0.0</modelVersion>
 
-  <description>
-    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://camunda.com/contact/
-  </description>
+  <description>orqueio-engine</description>
 
-  <name>Camunda Platform - engine</name>
-  <artifactId>camunda-engine</artifactId>
+<packaging>jar</packaging>
+  <name>Orque IO Platform - engine</name>
+  <groupId>io.orqueio.bpm</groupId>
+  <version>1.0.1</version>
+  <artifactId>orqueio-engine</artifactId>
 
   <parent>
-    <groupId>org.camunda.bpm</groupId>
-    <artifactId>camunda-database-settings</artifactId>
+    <groupId>io.orqueio.bpm</groupId>
+    <artifactId>orqueio-database-settings</artifactId>
     <relativePath>../database</relativePath>
-    <version>7.24.0-SNAPSHOT</version>
+    <version>1.0.1</version>
   </parent>
 
   <dependencyManagement>
     <dependencies>
 
       <dependency>
-        <groupId>org.camunda.bpm</groupId>
-        <artifactId>camunda-core-internal-dependencies</artifactId>
+        <groupId>io.orqueio.bpm</groupId>
+        <artifactId>orqueio-core-internal-dependencies</artifactId>
         <version>${project.version}</version>
         <scope>import</scope>
         <type>pom</type>
@@ -48,26 +49,33 @@
 
   <dependencies>
 
-    <!-- camunda dependencies -->
+    <!-- orqueio dependencies -->
 
     <dependency>
-      <groupId>org.camunda.bpm.model</groupId>
-      <artifactId>camunda-bpmn-model</artifactId>
+      <groupId>io.orqueio.bpm.model</groupId>
+      <artifactId>orqueio-bpmn-model</artifactId>
+      <version>1.0.1</version>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm.model</groupId>
-      <artifactId>camunda-cmmn-model</artifactId>
+      <groupId>io.orqueio.bpm.model</groupId>
+      <artifactId>orqueio-cmmn-model</artifactId>
+        <version>1.0.1</version>
+
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm.juel</groupId>
-      <artifactId>camunda-juel</artifactId>
+      <groupId>io.orqueio.bpm.juel</groupId>
+      <artifactId>orqueio-juel</artifactId>
+      <version>1.0.1</version>
+
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm.dmn</groupId>
-      <artifactId>camunda-engine-dmn</artifactId>
+      <groupId>io.orqueio.bpm.dmn</groupId>
+      <artifactId>orqueio-engine-dmn</artifactId>
+      <version>1.0.1</version>
+
       <exclusions>
         <!-- these exclusions are needed when building with Maven >= 3.3
           see CAM-11822 for details -->
@@ -91,18 +99,23 @@
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.commons</groupId>
-      <artifactId>camunda-commons-logging</artifactId>
+      <groupId>io.orqueio.commons</groupId>
+      <artifactId>orqueio-commons-logging</artifactId>
+      <version>1.0.1</version>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.commons</groupId>
-      <artifactId>camunda-commons-typed-values</artifactId>
+      <groupId>io.orqueio.commons</groupId>
+      <artifactId>orqueio-commons-typed-values</artifactId>
+      <version>1.0.1</version>
     </dependency>
 
     <dependency>
       <groupId>org.mybatis</groupId>
       <artifactId>mybatis</artifactId>
+
+      <version>3.5.15</version>
+
     </dependency>
 
     <dependency>
@@ -113,11 +126,14 @@
     <dependency>
       <groupId>joda-time</groupId>
       <artifactId>joda-time</artifactId>
+      <version>2.12.5</version>
     </dependency>
 
     <dependency>
       <groupId>com.google.code.gson</groupId>
       <artifactId>gson</artifactId>
+      <version>2.8.9</version>
+
     </dependency>
 
     <!-- provided dependencies -->
@@ -125,24 +141,32 @@
     <dependency>
       <groupId>org.apache.ant</groupId>
       <artifactId>ant</artifactId>
-      <scope>provided</scope>
+        <version>1.7.1</version>
+
+        <scope>provided</scope>
     </dependency>
 
     <dependency>
       <groupId>org.apache.geronimo.specs</groupId>
       <artifactId>geronimo-jta_1.1_spec</artifactId>
-      <scope>provided</scope>
+        <version>1.1.1</version>
+
+        <scope>provided</scope>
     </dependency>
 
     <dependency>
       <groupId>com.fasterxml.uuid</groupId>
       <artifactId>java-uuid-generator</artifactId>
+      <version>4.3.0</version>
+
       <scope>provided</scope>
     </dependency>
 
     <dependency>
       <groupId>org.jboss.spec</groupId>
       <artifactId>jboss-javaee-web-6.0</artifactId>
+      <version>3.0.2.Final</version>
+
       <type>pom</type>
       <scope>provided</scope>
       <exclusions>
@@ -160,24 +184,28 @@
     <dependency>
       <groupId>jakarta.transaction</groupId>
       <artifactId>jakarta.transaction-api</artifactId>
+      <version>2.0.1</version>
+
       <scope>provided</scope>
     </dependency>
 
     <dependency>
       <groupId>jakarta.servlet</groupId>
       <artifactId>jakarta.servlet-api</artifactId>
+      <version>6.0.0</version>
       <scope>provided</scope>
     </dependency>
 
     <dependency>
       <groupId>jakarta.ejb</groupId>
       <artifactId>jakarta.ejb-api</artifactId>
+      <version>4.0.1</version>
       <scope>provided</scope>
     </dependency>
 
     <dependency>
       <groupId>org.apache.tomcat</groupId>
-      <artifactId>catalina</artifactId>
+      <artifactId>tomcat-catalina</artifactId>
       <scope>provided</scope>
     </dependency>
 
@@ -252,14 +280,14 @@
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.commons</groupId>
-      <artifactId>camunda-commons-testing</artifactId>
+      <groupId>io.orqueio.commons</groupId>
+      <artifactId>orqueio-commons-testing</artifactId>
       <scope>test</scope>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
-      <artifactId>camunda-test-utils-testcontainers</artifactId>
+      <groupId>io.orqueio.bpm</groupId>
+      <artifactId>orqueio-test-utils-testcontainers</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
     </dependency>
@@ -338,8 +366,8 @@
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
-      <artifactId>camunda-bpm-archunit</artifactId>
+      <groupId>io.orqueio.bpm</groupId>
+      <artifactId>orqueio-bpm-archunit</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
     </dependency>
@@ -366,17 +394,17 @@
     for the license book -->
     <skip-third-party-bom>false</skip-third-party-bom>
 
-    <camunda.artifact>
-      org.camunda.bpm
-    </camunda.artifact>
-    <camunda.osgi.export.pkg>
-      !${camunda.artifact}.engine.variable.*,
-      ${camunda.artifact},
-      ${camunda.artifact}.application.*,
-      ${camunda.artifact}.container.*,
-      ${camunda.artifact}.engine.*
-    </camunda.osgi.export.pkg>
-    <camunda.osgi.import.additional>
+    <orqueio.artifact>
+      io.orqueio.bpm
+    </orqueio.artifact>
+    <orqueio.osgi.export.pkg>
+      !${orqueio.artifact}.engine.variable.*,
+      ${orqueio.artifact},
+      ${orqueio.artifact}.application.*,
+      ${orqueio.artifact}.container.*,
+      ${orqueio.artifact}.engine.*
+    </orqueio.osgi.export.pkg>
+    <orqueio.osgi.import.additional>
       !com.google.gson.*,
       junit*;resolution:=optional,
       org.junit*;resolution:=optional,
@@ -394,10 +422,13 @@
       org.springframework*;resolution:=optional,
       com.fasterxml*;resolution:=optional,
       org.jboss.vfs*;resolution:=optional
-    </camunda.osgi.import.additional>
+    </orqueio.osgi.import.additional>
   </properties>
 
   <build>
+
+
+
     <!-- filter test configurations to inject properties -->
     <resources>
       <resource>
@@ -407,7 +438,7 @@
         <directory>src/main/resources</directory>
         <filtering>true</filtering>
         <includes>
-          <include>org/camunda/bpm/engine/product-info.properties</include>
+          <include>io/orqueio/bpm/engine/product-info.properties</include>
         </includes>
       </resource>
     </resources>
@@ -419,9 +450,9 @@
         <directory>src/test/resources</directory>
         <filtering>true</filtering>
         <includes>
-          <include>**/camunda.cfg.xml</include>
-          <include>**/*camunda.cfg.xml</include>
-          <include>**/camunda.cfg.*.xml</include>
+          <include>**/orqueio.cfg.xml</include>
+          <include>**/*orqueio.cfg.xml</include>
+          <include>**/orqueio.cfg.*.xml</include>
           <include>testconfig.properties</include>
           <include>database.properties</include>
           <include>**/testcontainers.properties</include>
@@ -430,6 +461,54 @@
     </testResources>
 
     <plugins>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <version>2.9.1</version>
+          <executions>
+            <execution>
+              <id>attach-javadocs</id>
+              <goals>
+                <goal>jar</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-source-plugin</artifactId>
+          <version>2.2.1</version>
+          <executions>
+            <execution>
+              <id>attach-sources</id>
+              <goals>
+                <goal>jar-no-fork</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
+          <groupId>org.sonatype.central</groupId>
+          <artifactId>central-publishing-maven-plugin</artifactId>
+          <version>0.8.0</version>
+          <extensions>true</extensions>
+          <configuration>
+            <publishingServerId>central</publishingServerId>
+            <autoPublish>true</autoPublish>
+            <waitUntil>published</waitUntil>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>license-maven-plugin</artifactId>
+          <version>1.14</version>
+          <configuration>
+            <acceptPomPackaging>true</acceptPomPackaging>
+            <excludedScopes>test</excludedScopes>
+          </configuration>
+        </plugin>
+
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
@@ -444,7 +523,7 @@
             <exclude>%regex[.*(${test.excludes}).*Test.*.class]</exclude>
           </excludes>
           <dependenciesToScan>
-            <dependency>org.camunda.bpm:camunda-bpm-archunit</dependency>
+            <dependency>io.orqueio.bpm:orqueio-bpm-archunit</dependency>
           </dependenciesToScan>
         </configuration>
       </plugin>
@@ -488,11 +567,11 @@
           <keepDependenciesWithProvidedScope>true</keepDependenciesWithProvidedScope>
           <artifactSet>
             <excludes>
-              <exclude>org.camunda.bpm.model:*</exclude>
-              <exclude>org.camunda.bpm.dmn:*</exclude>
-              <exclude>org.camunda.bpm.juel:*</exclude>
-              <exclude>org.camunda.commons:*</exclude>
-              <exclude>org.camunda.feel:*</exclude>
+              <exclude>io.orqueio.bpm.model:*</exclude>
+              <exclude>io.orqueio.bpm.dmn:*</exclude>
+              <exclude>io.orqueio.bpm.juel:*</exclude>
+              <exclude>io.orqueio.commons:*</exclude>
+              <exclude>io.orqueio.feel:*</exclude>
 
               <exclude>org.springframework:*</exclude>
               <exclude>org.slf4j:*</exclude>
@@ -505,11 +584,11 @@
           <relocations>
             <relocation>
               <pattern>com.google.gson</pattern>
-              <shadedPattern>camundajar.impl.com.google.gson</shadedPattern>
+              <shadedPattern>orqueiojar.impl.com.google.gson</shadedPattern>
             </relocation>
             <relocation>
               <pattern>com.cronutils</pattern>
-              <shadedPattern>camundajar.impl.com.cronutils</shadedPattern>
+              <shadedPattern>orqueiojar.impl.com.cronutils</shadedPattern>
             </relocation>
           </relocations>
           <transformers>
@@ -532,9 +611,9 @@
               <target>
 
                 <!-- copy all upgrade scripts after 7.15 -->
-                <mkdir dir="target/classes/org/camunda/bpm/engine/db/liquibase/upgrade" />
-                <copy todir="target/classes/org/camunda/bpm/engine/db/liquibase/upgrade">
-                  <fileset dir="target/classes/org/camunda/bpm/engine/db/upgrade" excludes="*_6.*_*,*_7.0_*,*_7.1_*,*_7.2_*,*_7.3_*,*_7.4_*,*_7.5_*,*_7.6_*,*_7.7_*, *_7.8_*,*_7.9_*,*_7.10_*,*_7.11_*,*_7.12_*,*_7.13_*,*_7.14_*,*_7.15_*" />
+                <mkdir dir="target/classes/io/orqueio/bpm/engine/db/liquibase/upgrade" />
+                <copy todir="target/classes/io/orqueio/bpm/engine/db/liquibase/upgrade">
+                  <fileset dir="target/classes/io/orqueio/bpm/engine/db/upgrade" excludes="*_6.*_*,*_7.0_*,*_7.1_*,*_7.2_*,*_7.3_*,*_7.4_*,*_7.5_*,*_7.6_*,*_7.7_*, *_7.8_*,*_7.9_*,*_7.10_*,*_7.11_*,*_7.12_*,*_7.13_*,*_7.14_*,*_7.15_*" />
                 </copy>
 
               </target>
@@ -543,40 +622,6 @@
         </executions>
       </plugin>
     </plugins>
-    <pluginManagement>
-      <plugins>
-        <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
-        <plugin>
-          <groupId>org.eclipse.m2e</groupId>
-          <artifactId>lifecycle-mapping</artifactId>
-          <version>1.0.0</version>
-          <configuration>
-            <lifecycleMappingMetadata>
-              <pluginExecutions>
-                <pluginExecution>
-                  <pluginExecutionFilter>
-                    <groupId>org.apache.felix</groupId>
-                    <artifactId>
-                      maven-bundle-plugin
-                    </artifactId>
-                    <versionRange>
-                      [2.1.0,)
-                    </versionRange>
-                    <goals>
-                      <goal>cleanVersions</goal>
-                      <goal>manifest</goal>
-                    </goals>
-                  </pluginExecutionFilter>
-                  <action>
-                    <ignore />
-                  </action>
-                </pluginExecution>
-              </pluginExecutions>
-            </lifecycleMappingMetadata>
-          </configuration>
-        </plugin>
-      </plugins>
-    </pluginManagement>
   </build>
 
   <profiles>
@@ -626,7 +671,7 @@
               </execution>
             </executions>
             <configuration>
-              <mainClass>org.camunda.bpm.engine.impl.db.DbSchemaDrop</mainClass>
+              <mainClass>io.orqueio.bpm.engine.impl.db.DbSchemaDrop</mainClass>
               <classpathScope>test</classpathScope>
               <cleanupDaemonThreads>false</cleanupDaemonThreads>
             </configuration>
@@ -681,7 +726,7 @@
               <redirectTestOutputToFile>true</redirectTestOutputToFile>
               <reuseForks>true</reuseForks>
               <systemPropertyVariables>
-                <jdbcUrl>jdbc:h2:mem:camunda_${surefire.forkNumber};DB_CLOSE_DELAY=1000</jdbcUrl>
+                <jdbcUrl>jdbc:h2:mem:orqueio_${surefire.forkNumber};DB_CLOSE_DELAY=1000</jdbcUrl>
               </systemPropertyVariables>
             </configuration>
           </plugin>
@@ -724,12 +769,12 @@
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>clirr-maven-plugin</artifactId>
             <configuration>
-              <comparisonVersion>${camunda.version.old}</comparisonVersion>
+              <comparisonVersion>${orqueio.version.old}</comparisonVersion>
               <logResults>true</logResults>
               <excludes>
-                <exclude>org/camunda/bpm/*/impl/**</exclude>
-                <exclude>org/camunda/bpm/engine/test/ProcessEngineRule</exclude>
-                <exclude>camundajar/**/*</exclude>
+                <exclude>io/orqueio/bpm/*/impl/**</exclude>
+                <exclude>io/orqueio/bpm/engine/test/ProcessEngineRule</exclude>
+                <exclude>orqueiojar/**/*</exclude>
               </excludes>
             </configuration>
             <executions>
@@ -767,28 +812,28 @@
       <id>check-plugins</id>
       <dependencies>
         <dependency>
-          <groupId>org.camunda.bpm</groupId>
-          <artifactId>camunda-engine-plugin-spin</artifactId>
+          <groupId>io.orqueio.bpm</groupId>
+          <artifactId>orqueio-engine-plugin-spin</artifactId>
         </dependency>
         <dependency>
-          <groupId>org.camunda.spin</groupId>
-          <artifactId>camunda-spin-dataformat-all</artifactId>
+          <groupId>io.orqueio.spin</groupId>
+          <artifactId>orqueio-spin-dataformat-all</artifactId>
         </dependency>
         <dependency>
-          <groupId>org.camunda.bpm</groupId>
-          <artifactId>camunda-engine-plugin-connect</artifactId>
+          <groupId>io.orqueio.bpm</groupId>
+          <artifactId>orqueio-engine-plugin-connect</artifactId>
         </dependency>
         <dependency>
-          <groupId>org.camunda.connect</groupId>
-          <artifactId>camunda-connect-connectors-all</artifactId>
+          <groupId>io.orqueio.connect</groupId>
+          <artifactId>orqueio-connect-connectors-all</artifactId>
           <exclusions>
             <exclusion>
-              <groupId>org.camunda.connect</groupId>
-              <artifactId>camunda-connect-http-client</artifactId>
+              <groupId>io.orqueio.connect</groupId>
+              <artifactId>orqueio-connect-http-client</artifactId>
             </exclusion>
             <exclusion>
-              <groupId>org.camunda.connect</groupId>
-              <artifactId>camunda-connect-soap-http-client</artifactId>
+              <groupId>io.orqueio.connect</groupId>
+              <artifactId>orqueio-connect-soap-http-client</artifactId>
             </exclusion>
           </exclusions>
         </dependency>
@@ -799,15 +844,15 @@
             <artifactId>maven-antrun-plugin</artifactId>
             <executions>
               <execution>
-                <id>copy-camunda-cfg</id>
+                <id>copy-orqueio-cfg</id>
                 <phase>process-test-classes</phase>
                 <goals>
                   <goal>run</goal>
                 </goals>
                 <configuration>
                   <target>
-                    <echo message="Copying camunda.cfg.plugins.xml to camunda.cfg.xml" />
-                    <copy file="target/test-classes/camunda.cfg.plugins.xml" tofile="target/test-classes/camunda.cfg.xml" overwrite="true" />
+                    <echo message="Copying orqueio.cfg.plugins.xml to orqueio.cfg.xml" />
+                    <copy file="target/test-classes/orqueio.cfg.plugins.xml" tofile="target/test-classes/orqueio.cfg.xml" overwrite="true" />
                   </target>
                 </configuration>
               </execution>
@@ -840,7 +885,7 @@
                 </goals>
                 <configuration>
                   <target>
-                    <copy file="target/test-classes/camunda.cfg.prefix.xml" tofile="target/test-classes/camunda.cfg.xml" overwrite="true" />
+                    <copy file="target/test-classes/orqueio.cfg.prefix.xml" tofile="target/test-classes/orqueio.cfg.xml" overwrite="true" />
                   </target>
                 </configuration>
               </execution>
@@ -967,5 +1012,33 @@
     </profile>
 
   </profiles>
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+    </license>
+  </licenses>
 
+  <organization>
+    <name>Orque IO</name>
+    <url>https://www.orqueio.io</url>
+  </organization>
+
+  <url>https://www.orqueio.io</url>
+
+  <developers>
+    <developer>
+      <id>orqueio.io</id>
+      <name>Orque IO Platform Community</name>
+      <organization>orqueio.io</organization>
+      <organizationUrl>https://www.orqueio.io</organizationUrl>
+    </developer>
+  </developers>
+
+  <scm>
+    <url>https://github.com/orqueio/orqueio</url>
+    <connection>scm:git:git@github.com:orqueio/orqueio.git</connection>
+    <developerConnection>scm:git:git@github.com:orqueio/orqueio.git</developerConnection>
+    <tag>HEAD</tag>
+  </scm>
 </project>

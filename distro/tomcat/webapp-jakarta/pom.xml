@@ -1,20 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <parent>
-    <groupId>org.camunda.bpm.tomcat</groupId>
-    <artifactId>camunda-tomcat</artifactId>
-    <version>7.24.0-SNAPSHOT</version>
+    <groupId>io.orqueio.bpm.tomcat</groupId>
+    <artifactId>orqueio-tomcat</artifactId>
+    <version>1.0.1</version>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
-  <name>Camunda Platform - webapp - Tomcat - Jakarta</name>
-  <groupId>org.camunda.bpm.webapp</groupId>
-  <artifactId>camunda-webapp-tomcat-jakarta</artifactId>
+  <name>Orque IO Platform - webapp - Tomcat - Jakarta</name>
+  <groupId>io.orqueio.bpm.webapp</groupId>
+  <artifactId>orqueio-webapp-tomcat-jakarta</artifactId>
   <packaging>war</packaging>
 
-  <description>
-    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://camunda.com/contact/
-  </description>
+
   
   <properties>
     <skip-third-party-bom>false</skip-third-party-bom>
@@ -25,8 +23,8 @@
   <dependencies>
 
     <dependency>
-      <groupId>org.camunda.bpm.webapp</groupId>
-      <artifactId>camunda-webapp-jakarta</artifactId>
+      <groupId>io.orqueio.bpm.webapp</groupId>
+      <artifactId>orqueio-webapp-jakarta</artifactId>
       <version>${project.version}</version>
       <type>war</type>
       <scope>runtime</scope>
@@ -40,7 +38,7 @@
   </dependencies>
 
   <build>
-    <finalName>camunda-webapp</finalName>
+    <finalName>orqueio-webapp</finalName>
 
     <plugins>
       <plugin>

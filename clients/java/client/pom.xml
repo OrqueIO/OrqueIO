@@ -1,24 +1,22 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
-  <name>Camunda Platform - Java External Task Client - CLIENT</name>
+  <name>Orque IO Platform - Java External Task Client - CLIENT</name>
 
-  <artifactId>camunda-external-task-client</artifactId>
+  <artifactId>orqueio-external-task-client</artifactId>
 
   <packaging>jar</packaging>
 
-  <description>
-    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://camunda.com/contact/
-  </description>
+
 
   <parent>
-    <groupId>org.camunda.bpm</groupId>
-    <artifactId>camunda-external-task-client-root</artifactId>
-    <version>7.24.0-SNAPSHOT</version>
+    <groupId>io.orqueio.bpm</groupId>
+    <artifactId>orqueio-external-task-client-root</artifactId>
+    <version>1.0.1</version>
   </parent>
 
   <properties>
-    <engine.runtime>${project.build.directory}/camunda-tomcat</engine.runtime>
+    <engine.runtime>${project.build.directory}/orqueio-tomcat</engine.runtime>
     <tomcat.runtime>${engine.runtime}/server/apache-tomcat-${version.tomcat}</tomcat.runtime>
     <http.port>${tomcat.connector.http.port}</http.port>
 
@@ -35,8 +33,8 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>org.camunda.bpm</groupId>
-        <artifactId>camunda-core-internal-dependencies</artifactId>
+        <groupId>io.orqueio.bpm</groupId>
+        <artifactId>orqueio-core-internal-dependencies</artifactId>
         <version>${project.version}</version>
         <scope>import</scope>
         <type>pom</type>
@@ -55,13 +53,14 @@
 
     <!-- mandatory dependencies -->
     <dependency>
-      <groupId>org.camunda.commons</groupId>
-      <artifactId>camunda-commons-logging</artifactId>
+      <groupId>io.orqueio.commons</groupId>
+      <artifactId>orqueio-commons-logging</artifactId>
+      <version>1.0.1</version>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.commons</groupId>
-      <artifactId>camunda-commons-typed-values</artifactId>
+      <groupId>io.orqueio.commons</groupId>
+      <artifactId>orqueio-commons-typed-values</artifactId>
     </dependency>
 
     <dependency>
@@ -96,8 +95,8 @@
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm.model</groupId>
-      <artifactId>camunda-bpmn-model</artifactId>
+      <groupId>io.orqueio.bpm.model</groupId>
+      <artifactId>orqueio-bpmn-model</artifactId>
       <scope>test</scope>
     </dependency>
 
@@ -108,13 +107,26 @@
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.spin</groupId>
-      <artifactId>camunda-spin-dataformat-all</artifactId>
+      <groupId>io.orqueio.spin</groupId>
+      <artifactId>orqueio-spin-dataformat-all</artifactId>
       <scope>test</scope>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm.qa</groupId>
+      <groupId>io.orqueio.spin</groupId>
+      <artifactId>orqueio-spin-dataformat-json-jackson</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+
+    <dependency>
+      <groupId>io.orqueio.spin</groupId>
+      <artifactId>orqueio-spin-core</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>io.orqueio.bpm.qa</groupId>
       <artifactId>engine-variable-test</artifactId>
       <version>${project.version}</version>
       <classifier>classes</classifier>
@@ -122,8 +134,8 @@
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm.tomcat</groupId>
-      <artifactId>camunda-tomcat-assembly</artifactId>
+      <groupId>io.orqueio.bpm.tomcat</groupId>
+      <artifactId>orqueio-tomcat-assembly</artifactId>
       <version>${project.version}</version>
       <type>tar.gz</type>
       <scope>test</scope>
@@ -136,16 +148,16 @@
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
-      <artifactId>camunda-engine-rest-jakarta</artifactId>
+      <groupId>io.orqueio.bpm</groupId>
+      <artifactId>orqueio-engine-rest-jakarta</artifactId>
       <scope>test</scope>
       <type>war</type>
       <classifier>tomcat</classifier>
-      <version>${project.version}</version>
+      <version>1.0.1</version>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm.qa</groupId>
+      <groupId>io.orqueio.bpm.qa</groupId>
       <artifactId>engine-variable-test</artifactId>
       <scope>test</scope>
       <type>war</type>
@@ -210,8 +222,8 @@
               <skip>${skipTests}</skip>
               <artifactItems>
                 <artifactItem>
-                  <groupId>org.camunda.bpm.tomcat</groupId>
-                  <artifactId>camunda-tomcat-assembly</artifactId>
+                  <groupId>io.orqueio.bpm.tomcat</groupId>
+                  <artifactId>orqueio-tomcat-assembly</artifactId>
                   <version>${project.version}</version>
                   <type>tar.gz</type>
                   <outputDirectory>${engine.runtime}</outputDirectory>
@@ -223,7 +235,7 @@
         </executions>
       </plugin>
 
-      <plugin>
+  <!--    <plugin>
         <artifactId>maven-failsafe-plugin</artifactId>
         <configuration>
           <redirectTestOutputToFile>true</redirectTestOutputToFile>
@@ -236,7 +248,7 @@
             </goals>
           </execution>
         </executions>
-      </plugin>
+      </plugin>-->
 
       <plugin>
         <groupId>org.codehaus.cargo</groupId>
@@ -261,6 +273,7 @@
           <skip>${skipTests}</skip>
           <!-- Container configuration -->
           <container>
+            <timeout>600000</timeout>
             <type>installed</type>
             <containerId>tomcat10x</containerId>
             <append>false</append>
@@ -287,8 +300,8 @@
           </configuration>
           <deployables>
             <deployable>
-              <groupId>org.camunda.bpm</groupId>
-              <artifactId>camunda-engine-rest-jakarta</artifactId>
+              <groupId>io.orqueio.bpm</groupId>
+              <artifactId>orqueio-engine-rest-jakarta</artifactId>
               <type>war</type>
               <classifier>tomcat</classifier>
               <pingURL>
@@ -300,12 +313,11 @@
               </properties>
             </deployable>
             <deployable>
-              <groupId>org.camunda.bpm.qa</groupId>
+              <groupId>io.orqueio.bpm.qa</groupId>
               <artifactId>engine-variable-test</artifactId>
               <type>war</type>
             </deployable>
           </deployables>
-          <wait>false</wait>
         </configuration>
       </plugin>
 

@@ -1,0 +1,9 @@
+{
+  "amount": 2000,
+  "customer": {
+    "name": "Kermit",
+    "contractStartDate": 20130505,
+    "@class": "io.orqueio.spin.json.mapping.RegularCustomer"
+  },
+  "@class": "io.orqueio.spin.json.mapping.Invoice"
+}

@@ -4,19 +4,19 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.camunda.bpm.webapp</groupId>
-    <artifactId>camunda-webapp-root</artifactId>
-    <version>7.24.0-SNAPSHOT</version>
-    <relativePath>../</relativePath>
+    <groupId>io.orqueio.bpm.webapp</groupId>
+    <artifactId>orqueio-webapp-root</artifactId>
+    <version>1.0.1</version>
+    <relativePath>../pom.xml</relativePath>
   </parent>
-
-  <artifactId>camunda-webapp-jakarta</artifactId>
+  <description>orqueio-webapp-jakarta</description>
+  <groupId>io.orqueio.bpm.webapp</groupId>
+  <artifactId>orqueio-webapp-jakarta</artifactId>
+  <version>1.0.1</version>
   <packaging>war</packaging>
 
-  <description>
-    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://camunda.com/contact/
-  </description>
-  <name>Camunda Platform - Webapp - Assembly Jakarta</name>
+
+  <name>Orque IO Platform - Webapp - Assembly Jakarta</name>
 
   <properties>
     <jakarta.webapp>${project.build.directory}/generated-resources/jakarta-webapp</jakarta.webapp>
@@ -39,13 +39,13 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>org.camunda.bpm</groupId>
-        <artifactId>camunda-engine-rest-core-jakarta</artifactId>
+        <groupId>io.orqueio.bpm</groupId>
+        <artifactId>orqueio-engine-rest-core-jakarta</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.camunda.bpm</groupId>
-        <artifactId>camunda-engine-rest-jakarta</artifactId>
+        <groupId>io.orqueio.bpm</groupId>
+        <artifactId>orqueio-engine-rest-jakarta</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
@@ -70,6 +70,7 @@
     <dependency>
       <groupId>com.fasterxml.jackson.jakarta.rs</groupId>
       <artifactId>jackson-jakarta-rs-json-provider</artifactId>
+      <version>2.15.2</version>
       <exclusions>
         <exclusion>
           <groupId>jakarta.activation</groupId>
@@ -85,42 +86,49 @@
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
+      <version>2.15.2</version>
     </dependency>
 
     <dependency>
       <groupId>com.fasterxml.jackson.datatype</groupId>
       <artifactId>jackson-datatype-jsr310</artifactId>
+      <version>2.15.2</version>
     </dependency>
 
     <dependency>
       <groupId>jakarta.servlet</groupId>
       <artifactId>jakarta.servlet-api</artifactId>
+      <version>6.0.0</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>jakarta.activation</groupId>
       <artifactId>jakarta.activation-api</artifactId>
+      <version>2.1.0</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>jakarta.ws.rs</groupId>
       <artifactId>jakarta.ws.rs-api</artifactId>
+      <version>3.1.0</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>jakarta.xml.bind</groupId>
       <artifactId>jakarta.xml.bind-api</artifactId>
+      <version>4.0.0</version>
       <scope>provided</scope>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
-      <artifactId>camunda-engine-rest-core-jakarta</artifactId>
+      <groupId>io.orqueio.bpm</groupId>
+      <artifactId>orqueio-engine-rest-core-jakarta</artifactId>
+      <version>1.0.1</version>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
-      <artifactId>camunda-engine-rest-core-jakarta</artifactId>
+      <groupId>io.orqueio.bpm</groupId>
+      <artifactId>orqueio-engine-rest-core-jakarta</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
       <classifier>tests</classifier>
@@ -128,7 +136,7 @@
   </dependencies>
 
   <build>
-    <finalName>camunda-webapp-jakarta</finalName>
+    <finalName>orqueio-webapp-jakarta</finalName>
 
     <plugins>
       <plugin>
@@ -484,28 +492,28 @@
           <artifactId>jakarta.ws.rs-api</artifactId>
         </dependency>
         <dependency>
-          <groupId>org.camunda.bpm</groupId>
-          <artifactId>camunda-engine</artifactId>
+          <groupId>io.orqueio.bpm</groupId>
+          <artifactId>orqueio-engine</artifactId>
         </dependency>
         <dependency>
-          <groupId>org.camunda.bpm</groupId>
-          <artifactId>camunda-engine-plugin-spin</artifactId>
+          <groupId>io.orqueio.bpm</groupId>
+          <artifactId>orqueio-engine-plugin-spin</artifactId>
         </dependency>
         <dependency>
-          <groupId>org.camunda.spin</groupId>
-          <artifactId>camunda-spin-dataformat-json-jackson</artifactId>
+          <groupId>io.orqueio.spin</groupId>
+          <artifactId>orqueio-spin-dataformat-json-jackson</artifactId>
         </dependency>
         <dependency>
-          <groupId>org.camunda.spin</groupId>
-          <artifactId>camunda-spin-dataformat-xml-dom-jakarta</artifactId>
+          <groupId>io.orqueio.spin</groupId>
+          <artifactId>orqueio-spin-dataformat-xml-dom-jakarta</artifactId>
         </dependency>
         <dependency>
-          <groupId>org.camunda.bpm</groupId>
-          <artifactId>camunda-engine-plugin-connect</artifactId>
+          <groupId>io.orqueio.bpm</groupId>
+          <artifactId>orqueio-engine-plugin-connect</artifactId>
         </dependency>
         <dependency>
-          <groupId>org.camunda.bpm.identity</groupId>
-          <artifactId>camunda-identity-ldap</artifactId>
+          <groupId>io.orqueio.bpm.identity</groupId>
+          <artifactId>orqueio-identity-ldap</artifactId>
         </dependency>
         <dependency>
           <groupId>com.h2database</groupId>
@@ -540,7 +548,7 @@
             <artifactId>jetty-maven-plugin</artifactId>
             <configuration>
               <webApp>
-                <contextPath>/camunda</contextPath>
+                <contextPath>/orqueio</contextPath>
                 <defaultsDescriptor>${jakarta.runtime}/develop/jetty/webdefault.xml</defaultsDescriptor>
                 <resourceBases>
                   <resourceBase>${project.basedir}/target/webapp</resourceBase>
@@ -688,5 +696,33 @@
       </dependencies>
     </profile>
   </profiles>
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+    </license>
+  </licenses>
 
+  <organization>
+    <name>Orque IO</name>
+    <url>https://www.orqueio.io</url>
+  </organization>
+
+  <url>https://www.orqueio.io</url>
+
+  <developers>
+    <developer>
+      <id>orqueio.io</id>
+      <name>Orque IO Platform Community</name>
+      <organization>orqueio.io</organization>
+      <organizationUrl>https://www.orqueio.io</organizationUrl>
+    </developer>
+  </developers>
+
+  <scm>
+    <url>https://github.com/orqueio/orqueio</url>
+    <connection>scm:git:git@github.com:orqueio/orqueio.git</connection>
+    <developerConnection>scm:git:git@github.com:orqueio/orqueio.git</developerConnection>
+    <tag>HEAD</tag>
+  </scm>
 </project>

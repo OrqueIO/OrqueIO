@@ -1,20 +1,20 @@
-License Book for Camunda Platform 7.23
+License Book for Orqueio Platform 7.23
 
-This is a license book. It contains licensing information for third-party libraries which are used in this release of Camunda Platform 7.23
+This is a license book. It contains licensing information for third-party libraries which are used in this release of Orqueio Platform 7.23
 (Document generated on: 2025-03-31)
 
 Introduction
-This Licensing Information document is a part of the program documentation and is intended to help you understand the license terms and copyright for third-party libraries associated with the Camunda Platform software.
+This Licensing Information document is a part of the program documentation and is intended to help you understand the license terms and copyright for third-party libraries associated with the Orqueio Platform software.
 
-Product License - Camunda Platform 7.23
-This is a distribution of Camunda Platform v7.23 (visit http://docs.camunda.org/) a Java-based framework. The software is mainly published under the Apache License 2.0 and other open source licenses (Community Platform) and in parts under a commercial license agreement (additional features of the Enterprise Platform). Which components are published under an open source license is clearly stated in the license header of a source code file or a LICENSE file present in the root directory of the software code repository.
+Product License - Orqueio Platform 7.23
+This is a distribution of Orqueio Platform v7.23 (visit http://docs.orqueio.io/) a Java-based framework. The software is mainly published under the Apache License 2.0 and other open source licenses (Community Platform) and in parts under a commercial license agreement (additional features of the Enterprise Platform). Which components are published under an open source license is clearly stated in the license header of a source code file or a LICENSE file present in the root directory of the software code repository.
 
 Licenses for Third-Party Libraries
-The following sections contain licensing information for third-party libraries that we distribute with the Camunda Platform source code and binaries (Community and Enterprise Platform) for your convenience. None of the Libraries are modified or changed and they are solely distributed as is. For practicality, the license text is only referenced once. Each library (whether provided in source or object form) is licensed to you by its copyright holders under the original open source license listed in this License Book. Nothing in this License Book or any license agreement we enter into with you removes or restricts any rights you may have in respect of any component under its original open source license, or makes any of the original authors or copyright holders of the component liable to you in respect of your use or distribution of that component.
+The following sections contain licensing information for third-party libraries that we distribute with the Orqueio Platform source code and binaries (Community and Enterprise Platform) for your convenience. None of the Libraries are modified or changed and they are solely distributed as is. For practicality, the license text is only referenced once. Each library (whether provided in source or object form) is licensed to you by its copyright holders under the original open source license listed in this License Book. Nothing in this License Book or any license agreement we enter into with you removes or restricts any rights you may have in respect of any component under its original open source license, or makes any of the original authors or copyright holders of the component liable to you in respect of your use or distribution of that component.
 
 We are thankful to all individuals that have created these.
 
-The Libraries used within the Camunda Platform v7.23 are published under the following licenses:
+The Libraries used within the Orqueio Platform v7.23 are published under the following licenses:
 
 * Apache 2.0
 * bpmn.io
@@ -34,7 +34,7 @@ The Libraries used within the Camunda Platform v7.23 are published under the fol
 * The HeroDevs NES License
 
 GNU Lesser/Library General Public License LGPL (any version)
-Where the Camunda Platform binaries contain components licensed under any version of LGPL, that licence allows you to extract the object code of the LGPL component from the binary as distributed by us (this is normally distributed as a compressed .tar.gz file which contains a number of files, such as .jar files which are themselves archives containing further components, all of which can be extracted using commonly available tools such as gzip). Using the source code of the library (which we will provide on request, or you can download it from the location specified in this license book), you can make modifications or bug fixes to the library, recompile the library (again, using commonly available tools) and replace the binary of the library you extracted with the recompiled object code. Full details of this process are available on request. This will enable you to modify any LGPL-licensed library and re-integrate that modified library into the Camunda Platform binaries (accepting that this will only work provided you have not broken the library or the interface). 
+Where the Orqueio Platform binaries contain components licensed under any version of LGPL, that licence allows you to extract the object code of the LGPL component from the binary as distributed by us (this is normally distributed as a compressed .tar.gz file which contains a number of files, such as .jar files which are themselves archives containing further components, all of which can be extracted using commonly available tools such as gzip). Using the source code of the library (which we will provide on request, or you can download it from the location specified in this license book), you can make modifications or bug fixes to the library, recompile the library (again, using commonly available tools) and replace the binary of the library you extracted with the recompiled object code. Full details of this process are available on request. This will enable you to modify any LGPL-licensed library and re-integrate that modified library into the Orqueio Platform binaries (accepting that this will only work provided you have not broken the library or the interface).
 
 ===========================================================================================
 
@@ -77,7 +77,7 @@ END OF TERMS AND CONDITIONS
 Bpmn.io License (bpmn.io)
 The following license text for the BSD-3-Clause license is cited only once. 
 bpmn.io License
-Copyright (c) 2014-present camunda Services GmbH
+Copyright (c) 2014-present Camunda Services GmbH
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 The source code responsible for displaying the bpmn.io logo (two green cogwheels in a box) that links back to http://bpmn.io as part of rendered diagrams MUST NOT be removed or changed. When this software is being used in a website or application, the logo must stay fully visible and not visually overlapped by other elements.
@@ -3236,7 +3236,7 @@ Licensed under MIT
 Notice file:
 The MIT License (MIT)
 
-Copyright (c) 2015 camunda Services GmbH
+Copyright (c) 2015 Camunda Services GmbH
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -3264,7 +3264,7 @@ Licensed under MIT
 Notice file:
 The MIT License (MIT)
 
-Copyright (c) 2022 camunda Services GmbH
+Copyright (c) 2022 Camunda Services GmbH
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -4886,7 +4886,7 @@ Licensed under MIT
 Notice file:
 The MIT License (MIT)
 
-Copyright (c) 2014 camunda Services GmbH
+Copyright (c) 2014 Camunda Services GmbH
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -4937,7 +4937,7 @@ SOFTWARE.
 ===========================================================================================
 
 ===========================================================================================
-camunda-bpm-webapp@7.23.0-SNAPSHOT
+orqueio-bpm-webapp@7.23.0-SNAPSHOT
 
 Licensed under 
 Notice file:
@@ -4959,8 +4959,8 @@ limitations under the License.
 ===========================================================================================
 
 ===========================================================================================
-camunda-dmn-js@1.8.0
-https://github.com/camunda/camunda-dmn-js
+orqueio-dmn-js@1.8.0
+https://github.com/orqueio/orqueio-dmn-js
 Licensed under MIT
 Notice file:
 The MIT License (MIT)
@@ -4987,13 +4987,13 @@ THE SOFTWARE.
 ===========================================================================================
 
 ===========================================================================================
-camunda-dmn-moddle@1.3.0
-https://github.com/camunda/camunda-dmn-moddle
+orqueio-dmn-moddle@1.3.0
+https://github.com/orqueio/orqueio-dmn-moddle
 Licensed under MIT
 Notice file:
 The MIT License (MIT)
 
-Copyright (c) 2014-2018 camunda Services GmbH
+Copyright (c) 2014-2018 Camunda Services GmbH
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -5176,7 +5176,7 @@ Licensed under MIT
 Notice file:
 The MIT License (MIT)
 
-Copyright (c) 2014 camunda Services GmbH
+Copyright (c) 2014 Camunda Services GmbH
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -5377,7 +5377,7 @@ Licensed under MIT
 Notice file:
 The MIT License (MIT)
 
-Copyright (c) 2014-2017 camunda Services GmbH
+Copyright (c) 2014-2017 Camunda Services GmbH
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -5405,7 +5405,7 @@ Licensed under MIT
 Notice file:
 The MIT License (MIT)
 
-Copyright (c) 2023-present camunda Services GmbH
+Copyright (c) 2023-present Camunda Services GmbH
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -5489,7 +5489,7 @@ dmn-font@0.6.2
 https://github.com/bpmn-io/dmn-font
 Licensed under SIL
 Notice file:
-Copyright (c) 2014, camunda Services GmbH
+Copyright (c) 2014, Camunda Services GmbH
 
 This Font Software is licensed under the SIL Open Font License, Version 1.1.
 This license is copied below, and is also available with a FAQ at:
@@ -5751,7 +5751,7 @@ Licensed under MIT
 Notice file:
 The MIT License (MIT)
 
-Copyright (c) 2015-2018 camunda Services GmbH
+Copyright (c) 2015-2018 Camunda Services GmbH
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -5819,7 +5819,7 @@ Licensed under MIT
 Notice file:
 The MIT License (MIT)
 
-Copyright (c) 2015-2017 camunda Services GmbH
+Copyright (c) 2015-2017 Camunda Services GmbH
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -7247,7 +7247,7 @@ Licensed under MIT
 Notice file:
 The MIT License (MIT)
 
-Copyright (c) 2014 camunda Services GmbH
+Copyright (c) 2014 Camunda Services GmbH
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -7580,7 +7580,7 @@ Licensed under MIT
 Notice file:
 The MIT License (MIT)
 
-Copyright (c) 2017-present camunda Services GmbH
+Copyright (c) 2017-present Camunda Services GmbH
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -7609,7 +7609,7 @@ Notice file:
 The MIT License (MIT)
 
 Copyright (c) 2014 Nico Rehwaldt
-Copyright (c) 2015-present camunda Services GmbH
+Copyright (c) 2015-present Camunda Services GmbH
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -7666,7 +7666,7 @@ Licensed under MIT
 Notice file:
 The MIT License (MIT)
 
-Copyright (c) 2014 camunda Services GmbH
+Copyright (c) 2014 Camunda Services GmbH
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -7982,7 +7982,7 @@ Licensed under MIT
 Notice file:
 The MIT License (MIT)
 
-Copyright (c) 2014-present camunda Services GmbH
+Copyright (c) 2014-present Camunda Services GmbH
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -8010,7 +8010,7 @@ Licensed under MIT
 Notice file:
 The MIT License (MIT)
 
-Copyright (c) 2017 camunda Services GmbH
+Copyright (c) 2017 Camunda Services GmbH
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -8360,7 +8360,7 @@ Licensed under MIT
 Notice file:
 The MIT License (MIT)
 
-Copyright (c) 2017-present camunda Services GmbH
+Copyright (c) 2017-present Camunda Services GmbH
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -8389,7 +8389,7 @@ Notice file:
 The MIT License (MIT)
 
 Copyright (c) 2014 Nico Rehwaldt
-Copyright (c) 2015-present camunda Services GmbH
+Copyright (c) 2015-present Camunda Services GmbH
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

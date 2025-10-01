@@ -1,18 +1,19 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>camunda-engine-rest-core</artifactId>
-  <name>Camunda Platform - engine - REST</name>
+  <groupId>io.orqueio.bpm</groupId>
+  <artifactId>orqueio-engine-rest-core</artifactId>
+  <version>1.0.1</version>
+  <name>Orque IO Platform - engine - REST</name>
   <packaging>jar</packaging>
+  <description>orqueio-engine-rest-core</description>
 
-  <description>
-    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://camunda.com/contact/
-  </description>
+
 
   <parent>
-    <groupId>org.camunda.bpm</groupId>
-    <artifactId>camunda-engine-rest-root</artifactId>
-    <relativePath>../</relativePath>
-    <version>7.24.0-SNAPSHOT</version>
+    <groupId>io.orqueio.bpm</groupId>
+    <artifactId>orqueio-engine-rest-root</artifactId>
+    <relativePath>../pom.xml</relativePath>
+    <version>1.0.1</version>
   </parent>
 
   <properties>
@@ -26,6 +27,7 @@
     <dependency>
       <groupId>commons-fileupload</groupId>
       <artifactId>commons-fileupload</artifactId>
+      <version>1.6.0</version>
       <exclusions>
         <exclusion>
           <groupId>commons-io</groupId>
@@ -37,11 +39,13 @@
     <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
+      <version>2.17.0</version>
     </dependency>
 
     <dependency>
       <groupId>com.fasterxml.jackson.jaxrs</groupId>
       <artifactId>jackson-jaxrs-json-provider</artifactId>
+      <version>2.15.2</version>
       <!--
       * Since version 2.10.0 this dependency comes with transitive Jakarta dependencies
       * These trans-deps are directly included in JDKs <= Java 8 * For Java >= 9 compatible containers, we make sure to include these dependencies
@@ -61,23 +65,27 @@
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
+      <version>2.15.2</version>
     </dependency>
 
     <dependency>
       <groupId>com.fasterxml.jackson.datatype</groupId>
       <artifactId>jackson-datatype-jsr310</artifactId>
+      <version>2.15.2</version>
     </dependency>
 
     <!-- provided deps -->
     <dependency>
       <groupId>org.jboss.spec.javax.servlet</groupId>
       <artifactId>jboss-servlet-api_3.0_spec</artifactId>
+      <version>1.0.2.Final</version>
       <scope>provided</scope>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
-      <artifactId>camunda-engine</artifactId>
+      <groupId>io.orqueio.bpm</groupId>
+      <artifactId>orqueio-engine</artifactId>
+      <version>1.0.1</version>
       <scope>provided</scope>
       <exclusions>
         <exclusion>
@@ -88,8 +96,9 @@
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.commons</groupId>
-      <artifactId>camunda-commons-logging</artifactId>
+      <groupId>io.orqueio.commons</groupId>
+      <artifactId>orqueio-commons-logging</artifactId>
+      <version>1.0.1</version>
       <scope>provided</scope>
     </dependency>
 
@@ -103,6 +112,7 @@
     <dependency>
       <groupId>com.sun.xml.bind</groupId>
       <artifactId>jaxb-impl</artifactId>
+      <version>2.3.6</version>
       <scope>test</scope>
     </dependency>
 
@@ -111,16 +121,16 @@
       BOMs must be installed before this module is built
     -->
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
-      <artifactId>camunda-bom</artifactId>
+      <groupId>io.orqueio.bpm</groupId>
+      <artifactId>orqueio-bom</artifactId>
       <version>${project.version}</version>
       <type>pom</type>
       <scope>test</scope>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
-      <artifactId>camunda-core-internal-dependencies</artifactId>
+      <groupId>io.orqueio.bpm</groupId>
+      <artifactId>orqueio-core-internal-dependencies</artifactId>
       <version>${project.version}</version>
       <type>pom</type>
       <scope>test</scope>
@@ -130,6 +140,7 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
+      <version>4.13.1</version>
       <scope>test</scope>
     </dependency>
 
@@ -153,6 +164,7 @@
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
+      <version>5.10.0</version>
       <scope>test</scope>
       <exclusions>
         <exclusion>
@@ -165,24 +177,28 @@
     <dependency>
       <groupId>io.rest-assured</groupId>
       <artifactId>rest-assured</artifactId>
+      <version>4.5.0</version>
       <scope>test</scope>
     </dependency>
 
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpcore</artifactId>
+      <version>4.4.5</version>
       <scope>test</scope>
     </dependency>
 
     <dependency>
       <groupId>commons-codec</groupId>
       <artifactId>commons-codec</artifactId>
+      <version>1.15</version>
       <scope>test</scope>
     </dependency>
 
     <dependency>
       <groupId>com.h2database</groupId>
       <artifactId>h2</artifactId>
+      <version>2.3.232</version>
       <scope>test</scope>
     </dependency>
 
@@ -203,24 +219,28 @@
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
+      <version>1.2.11</version>
       <scope>test</scope>
     </dependency>
 
    <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>jcl-over-slf4j</artifactId>
-      <scope>test</scope>
+     <version>1.7.26</version>
+     <scope>test</scope>
    </dependency>
 
    <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>jul-to-slf4j</artifactId>
-      <scope>test</scope>
+     <version>1.7.26</version>
+     <scope>test</scope>
    </dependency>
 
     <dependency>
-      <groupId>org.camunda.commons</groupId>
-      <artifactId>camunda-commons-testing</artifactId>
+      <groupId>io.orqueio.commons</groupId>
+      <artifactId>orqueio-commons-testing</artifactId>
+      <version>1.0.1</version>
       <scope>test</scope>
     </dependency>
 
@@ -241,6 +261,7 @@
     <dependency>
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
+      <version>2.9.1</version>
       <scope>test</scope>
     </dependency>
 
@@ -540,7 +561,7 @@
       <id>wildfly-compatibility</id>
       <properties>
         <!-- Test with Resteasy version used by the oldest
-             Camunda-supported Wildfly/JBoss EAP version.
+             orqueio-supported Wildfly/JBoss EAP version.
              Currently, this is JBoss EAP 7.2. -->
         <version.resteasy>3.6.1.SP2</version.resteasy>
         <version.netty>4.1.42.Final</version.netty>
@@ -642,4 +663,33 @@
     </profile>
 
   </profiles>
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+    </license>
+  </licenses>
+
+  <organization>
+    <name>Orque IO</name>
+    <url>https://www.orqueio.io</url>
+  </organization>
+
+  <url>https://www.orqueio.io</url>
+
+  <developers>
+    <developer>
+      <id>orqueio.io</id>
+      <name>Orque IO Platform Community</name>
+      <organization>orqueio.io</organization>
+      <organizationUrl>https://www.orqueio.io</organizationUrl>
+    </developer>
+  </developers>
+
+  <scm>
+    <url>https://github.com/orqueio/orqueio</url>
+    <connection>scm:git:git@github.com:orqueio/orqueio.git</connection>
+    <developerConnection>scm:git:git@github.com:orqueio/orqueio.git</developerConnection>
+    <tag>HEAD</tag>
+  </scm>
 </project>

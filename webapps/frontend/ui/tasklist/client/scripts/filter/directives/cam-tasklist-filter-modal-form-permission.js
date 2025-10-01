@@ -19,7 +19,7 @@
 
 var template = require('./cam-tasklist-filter-modal-form-permission.html?raw');
 
-var angular = require('camunda-commons-ui/vendor/angular');
+var angular = require('orqueio-commons-ui/vendor/angular');
 
 var copy = angular.copy;
 

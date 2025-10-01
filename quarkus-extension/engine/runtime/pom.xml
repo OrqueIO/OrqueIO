@@ -3,47 +3,51 @@
 
   <modelVersion>4.0.0</modelVersion>
 
-  <description>
-    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://camunda.com/contact/
-  </description>
+
 
   <parent>
-    <groupId>org.camunda.bpm.quarkus</groupId>
-    <artifactId>camunda-bpm-quarkus-engine-parent</artifactId>
-    <version>7.24.0-SNAPSHOT</version>
+    <groupId>io.orqueio.bpm.quarkus</groupId>
+    <artifactId>orqueio-bpm-quarkus-engine-parent</artifactId>
+    <version>1.0.1</version>
   </parent>
-
-  <artifactId>camunda-bpm-quarkus-engine</artifactId>
-
-  <name>Camunda Platform - Quarkus Extension - Engine - Runtime</name>
-
+  <description>orqueio-bpm-quarkus-engine</description>
+  <groupId>io.orqueio.bpm.quarkus</groupId>
+  <artifactId>orqueio-bpm-quarkus-engine</artifactId>
+  <version>1.0.1</version>
+  <name>Orque IO Platform - Quarkus Extension - Engine - Runtime</name>
+  <packaging>jar</packaging>
   <dependencies>
 
-    <!-- Camunda dependencies -->
+    <!-- Orque IO dependencies -->
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
-      <artifactId>camunda-engine</artifactId>
+      <groupId>io.orqueio.bpm</groupId>
+      <artifactId>orqueio-engine</artifactId>
+      <version>1.0.1</version>
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
-      <artifactId>camunda-engine-cdi-jakarta</artifactId>
+      <groupId>io.orqueio.bpm</groupId>
+      <artifactId>orqueio-engine-cdi-jakarta</artifactId>
+      <version>1.0.1</version>
     </dependency>
 
     <dependency>
       <groupId>com.fasterxml.uuid</groupId>
       <artifactId>java-uuid-generator</artifactId>
+      <version>4.3.0</version>
     </dependency>
 
     <!-- Quarkus dependencies -->
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-arc</artifactId>
+      <version>3.20.0</version>
     </dependency>
 
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-agroal</artifactId>
+      <version>3.20.0</version>
     </dependency>
 
   </dependencies>
@@ -80,4 +84,33 @@
       </plugin>
     </plugins>
   </build>
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+    </license>
+  </licenses>
+
+  <organization>
+    <name>Orque IO</name>
+    <url>https://www.orqueio.io</url>
+  </organization>
+
+  <url>https://www.orqueio.io</url>
+
+  <developers>
+    <developer>
+      <id>orqueio.io</id>
+      <name>Orque IO Platform Community</name>
+      <organization>orqueio.io</organization>
+      <organizationUrl>https://www.orqueio.io</organizationUrl>
+    </developer>
+  </developers>
+
+  <scm>
+    <url>https://github.com/orqueio/orqueio</url>
+    <connection>scm:git:git@github.com:orqueio/orqueio.git</connection>
+    <developerConnection>scm:git:git@github.com:orqueio/orqueio.git</developerConnection>
+    <tag>HEAD</tag>
+  </scm>
 </project>

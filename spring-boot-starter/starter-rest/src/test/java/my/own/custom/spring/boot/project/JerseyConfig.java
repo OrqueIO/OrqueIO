@@ -18,12 +18,12 @@ package my.own.custom.spring.boot.project;
 
 import jakarta.ws.rs.ApplicationPath;
 
-import org.camunda.bpm.spring.boot.starter.rest.CamundaJerseyResourceConfig;
+import io.orqueio.bpm.spring.boot.starter.rest.OrqueioJerseyResourceConfig;
 import org.springframework.stereotype.Component;
 
 @Component
 @ApplicationPath("/engine-rest")
-public class JerseyConfig extends CamundaJerseyResourceConfig {
+public class JerseyConfig extends OrqueioJerseyResourceConfig {
 
   @Override
   protected void registerAdditionalResources() {
