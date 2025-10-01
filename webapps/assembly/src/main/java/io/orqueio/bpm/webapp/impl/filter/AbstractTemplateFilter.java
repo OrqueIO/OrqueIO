@@ -23,6 +23,8 @@ import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -32,7 +34,6 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 /**
  * A {@link Filter} implementation that can be used to realize basic templating.
  *
@@ -53,8 +54,8 @@ public abstract class AbstractTemplateFilter implements Filter {
   }
 
   @Override
-  public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-
+  public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+          throws IOException, ServletException {
     applyFilter((HttpServletRequest) request, (HttpServletResponse) response, chain);
   }
 
@@ -70,22 +71,39 @@ public abstract class AbstractTemplateFilter implements Filter {
    * @throws IOException
    * @throws ServletException
    */
-  protected abstract void applyFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException;
+  protected abstract void applyFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+          throws IOException, ServletException;
 
   /**
    * Returns true if the given web resource exists.
    *
-   * @param name
-   * @return
+   * @param name the resource path
+   * @return true if the resource exists
+   * @throws SecurityException if the path is invalid
    */
   protected boolean hasWebResource(String name) {
+    // Reject null or empty input
+    if (name == null || name.isBlank()) {
+      return false;
+    }
+
+    // Normalize path to prevent path traversal
+    Path basePath = Paths.get("/"); // webapp root
+    Path normalizedPath = basePath.resolve(name).normalize();
+
+    // Ensure the resource stays inside the webapp root
+    if (!normalizedPath.startsWith(basePath)) {
+      return false; // invalid path
+    }
+
     try {
-      URL resource = filterConfig.getServletContext().getResource(name);
+      URL resource = filterConfig.getServletContext().getResource(normalizedPath.toString());
       return resource != null;
     } catch (MalformedURLException e) {
       return false;
     }
   }
+
 
   /**
    * Returns the string contents of a web resource with the given name.
@@ -97,28 +115,38 @@ public abstract class AbstractTemplateFilter implements Filter {
    * @return the resource contents
    *
    * @throws IOException
+   * @throws SecurityException if the path is invalid
    */
   protected String getWebResourceContents(String name) throws IOException {
+    // Reject null or empty input
+    if (name == null || name.isBlank()) {
+      throw new SecurityException("Resource name cannot be null or empty");
+    }
 
-    InputStream is = null;
+    // Normalize the path to prevent path traversal
+    Path basePath = Paths.get("/"); // webapp root
+    Path normalizedPath = basePath.resolve(name).normalize();
 
-    try {
-      is = filterConfig.getServletContext().getResourceAsStream(name);
+    // Ensure the resource stays inside the webapp root
+    if (!normalizedPath.startsWith(basePath)) {
+      throw new SecurityException("Invalid resource path: " + name);
+    }
 
-      BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-
-      StringWriter writer = new StringWriter();
-      String line = null;
-
-      while ((line = reader.readLine()) != null) {
-        writer.write(line);
-        writer.append("\n");
+    // Load the resource safely using try-with-resources
+    try (InputStream is = filterConfig.getServletContext().getResourceAsStream(normalizedPath.toString())) {
+      if (is == null) {
+        throw new IOException("Resource not found: " + normalizedPath);
       }
 
-      return writer.toString();
-    } finally {
-      if (is != null) {
-        try { is.close(); } catch (IOException e) { }
+      try (BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+           StringWriter writer = new StringWriter()) {
+
+        String line;
+        while ((line = reader.readLine()) != null) {
+          writer.write(line);
+          writer.append("\n");
+        }
+        return writer.toString();
       }
     }
   }

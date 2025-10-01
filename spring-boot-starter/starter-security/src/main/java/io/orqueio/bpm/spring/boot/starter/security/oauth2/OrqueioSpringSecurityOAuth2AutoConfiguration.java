@@ -51,6 +51,7 @@ import org.springframework.security.oauth2.client.OAuth2AuthorizedClientManager;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 import java.util.Map;
 
@@ -79,7 +80,7 @@ public class OrqueioSpringSecurityOAuth2AutoConfiguration {
     filterRegistration.setName("Container Based Authentication Filter");
     filterRegistration.setFilter(new ContainerBasedAuthenticationFilter());
     filterRegistration.setInitParameters(Map.of(
-        ProcessEngineAuthenticationFilter.AUTHENTICATION_PROVIDER_PARAM, OAuth2AuthenticationProvider.class.getName()));
+            ProcessEngineAuthenticationFilter.AUTHENTICATION_PROVIDER_PARAM, OAuth2AuthenticationProvider.class.getName()));
     // make sure the filter is registered after the Spring Security Filter Chain
     filterRegistration.setOrder(SecurityProperties.DEFAULT_FILTER_ORDER + 1);
     filterRegistration.addUrlPatterns(webappPath + "/app/*", webappPath + "/api/*");
@@ -123,21 +124,25 @@ public class OrqueioSpringSecurityOAuth2AutoConfiguration {
 
     // @formatter:off
     http.authorizeHttpRequests(c -> c
-            .requestMatchers(webappPath + "/app/**").authenticated()
-            .requestMatchers(webappPath + "/api/**").authenticated()
-            .anyRequest().permitAll()
-        )
-        .addFilterAfter(authorizeTokenFilter, OAuth2AuthorizationRequestRedirectFilter.class)
-        .anonymous(AbstractHttpConfigurer::disable)
-        .oidcLogout(c -> c.backChannel(Customizer.withDefaults()))
-        .oauth2Login(Customizer.withDefaults())
-        .logout(c -> c
-            .clearAuthentication(true)
-            .invalidateHttpSession(true)
-        )
-        .oauth2Client(Customizer.withDefaults())
-        .cors(AbstractHttpConfigurer::disable)
-        .csrf(AbstractHttpConfigurer::disable);
+                    .requestMatchers(webappPath + "/app/**").authenticated()
+                    .requestMatchers(webappPath + "/api/**").authenticated()
+                    .anyRequest().permitAll()
+            )
+            .addFilterAfter(authorizeTokenFilter, OAuth2AuthorizationRequestRedirectFilter.class)
+            .anonymous(AbstractHttpConfigurer::disable)
+            .oidcLogout(c -> c.backChannel(Customizer.withDefaults()))
+            .oauth2Login(Customizer.withDefaults())
+            .logout(c -> c
+                    .clearAuthentication(true)
+                    .invalidateHttpSession(true)
+            )
+            .oauth2Client(Customizer.withDefaults())
+            .cors(AbstractHttpConfigurer::disable)
+            .csrf(csrf -> csrf
+                    // Enable CSRF for UI endpoints, ignore for APIs
+                    .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                    .ignoringRequestMatchers(webappPath + "/api/**")
+            );
     // @formatter:on
 
     if (oAuth2Properties.getSsoLogout().isEnabled()) {
@@ -146,5 +151,5 @@ public class OrqueioSpringSecurityOAuth2AutoConfiguration {
 
     return http.build();
   }
-
 }
+

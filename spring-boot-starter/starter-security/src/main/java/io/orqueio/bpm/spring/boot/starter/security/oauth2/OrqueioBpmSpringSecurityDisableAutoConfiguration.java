@@ -24,6 +24,7 @@ import org.springframework.context.annotation.Conditional;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 @Conditional(ClientsNotConfiguredCondition.class)
 public class OrqueioBpmSpringSecurityDisableAutoConfiguration {
@@ -35,9 +36,13 @@ public class OrqueioBpmSpringSecurityDisableAutoConfiguration {
     logger.info("Disabling Orqueio Spring Security oauth2 integration");
 
     http.authorizeHttpRequests(customizer -> customizer.anyRequest().permitAll())
-        .cors(AbstractHttpConfigurer::disable)
-        .csrf(AbstractHttpConfigurer::disable);
+            .cors(AbstractHttpConfigurer::disable)
+            .csrf(csrf -> csrf
+                    .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+            );
+
     return http.build();
   }
+
 
 }

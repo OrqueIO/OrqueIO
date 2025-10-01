@@ -225,15 +225,19 @@ public class ProcessEnginesFilter extends AbstractTemplateFilter {
 
     // check if resource exists
     if (hasWebResource(requestUri)) {
-
-      // if so, include it
       chain.doFilter(request, response);
     } else {
       // strip engine namespace and check if resource would exist
       String cleanAppUri = String.format("%s/app/%s/%s", applicationPath, appName, pageUri);
 
       if (hasWebResource(cleanAppUri)) {
-        request.getRequestDispatcher(cleanAppUri).forward(request, response);
+        // Only allow forwards inside your known application path
+        if (cleanAppUri.startsWith(applicationPath + "/app/")) {
+          request.getRequestDispatcher(cleanAppUri).forward(request, response);
+        } else {
+          // Reject suspicious paths
+          response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid forward target");
+        }
       } else {
         chain.doFilter(request, response);
       }
