@@ -7,7 +7,7 @@
   <parent>
     <groupId>io.orqueio.bpm.run</groupId>
     <artifactId>orqueio-bpm-run-modules</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
   </parent>
 
   <artifactId>orqueio-bpm-run-modules-example-invoice</artifactId>

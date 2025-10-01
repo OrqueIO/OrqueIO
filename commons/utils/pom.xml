@@ -4,11 +4,11 @@
   <parent>
     <groupId>io.orqueio.commons</groupId>
     <artifactId>orqueio-commons-root</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
   </parent>
   <description>orqueio-commons-utils</description>
   <groupId>io.orqueio.commons</groupId>
-  <version>1.0.0</version>
+  <version>1.0.1</version>
   <artifactId>orqueio-commons-utils</artifactId>
   <name>Orque IO Commons - Utils</name>
   <packaging>jar</packaging>
@@ -19,7 +19,7 @@
     <dependency>
       <groupId>io.orqueio.commons</groupId>
       <artifactId>orqueio-commons-logging</artifactId>
-      <version>1.0.0</version>
+      <version>1.0.1</version>
     </dependency>
 
     <dependency>

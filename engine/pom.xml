@@ -7,14 +7,14 @@
 <packaging>jar</packaging>
   <name>Orque IO Platform - engine</name>
   <groupId>io.orqueio.bpm</groupId>
-  <version>1.0.0</version>
+  <version>1.0.1</version>
   <artifactId>orqueio-engine</artifactId>
 
   <parent>
     <groupId>io.orqueio.bpm</groupId>
     <artifactId>orqueio-database-settings</artifactId>
     <relativePath>../database</relativePath>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
   </parent>
 
   <dependencyManagement>
@@ -54,27 +54,27 @@
     <dependency>
       <groupId>io.orqueio.bpm.model</groupId>
       <artifactId>orqueio-bpmn-model</artifactId>
-      <version>1.0.0</version>
+      <version>1.0.1</version>
     </dependency>
 
     <dependency>
       <groupId>io.orqueio.bpm.model</groupId>
       <artifactId>orqueio-cmmn-model</artifactId>
-        <version>1.0.0</version>
+        <version>1.0.1</version>
 
     </dependency>
 
     <dependency>
       <groupId>io.orqueio.bpm.juel</groupId>
       <artifactId>orqueio-juel</artifactId>
-      <version>1.0.0</version>
+      <version>1.0.1</version>
 
     </dependency>
 
     <dependency>
       <groupId>io.orqueio.bpm.dmn</groupId>
       <artifactId>orqueio-engine-dmn</artifactId>
-      <version>1.0.0</version>
+      <version>1.0.1</version>
 
       <exclusions>
         <!-- these exclusions are needed when building with Maven >= 3.3
@@ -101,13 +101,13 @@
     <dependency>
       <groupId>io.orqueio.commons</groupId>
       <artifactId>orqueio-commons-logging</artifactId>
-      <version>1.0.0</version>
+      <version>1.0.1</version>
     </dependency>
 
     <dependency>
       <groupId>io.orqueio.commons</groupId>
       <artifactId>orqueio-commons-typed-values</artifactId>
-      <version>1.0.0</version>
+      <version>1.0.1</version>
     </dependency>
 
     <dependency>
