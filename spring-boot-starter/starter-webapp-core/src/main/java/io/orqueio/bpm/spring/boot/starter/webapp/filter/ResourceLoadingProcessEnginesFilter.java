@@ -60,10 +60,15 @@ public class ResourceLoadingProcessEnginesFilter extends ProcessEnginesFilter im
 
   @Override
   protected String getWebResourceContents(String name) throws IOException {
+    // Simple validation: reject null, empty, or path traversal sequences
+    if (name == null || name.isBlank() || name.contains("..") || name.startsWith("/") || name.contains("\\")) {
+      throw new SecurityException("Invalid resource path: " + name);
+    }
+
     InputStream is = null;
 
     try {
-      Resource resource = resourceLoader.getResource("classpath:"+webappProperty.getWebjarClasspath() + name);
+      Resource resource = resourceLoader.getResource("classpath:" + webappProperty.getWebjarClasspath() + name);
       is = resource.getInputStream();
 
       BufferedReader reader = new BufferedReader(new InputStreamReader(is));
@@ -82,6 +87,7 @@ public class ResourceLoadingProcessEnginesFilter extends ProcessEnginesFilter im
         try {
           is.close();
         } catch (IOException e) {
+          // ignore
         }
       }
     }
