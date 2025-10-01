@@ -14,7 +14,7 @@
    <dependencySet>
       <outputDirectory>/</outputDirectory>
       <includes>
-        <include>io.orqueio.bpm:license-book:zip</include>
+        <include>org.camunda.bpm:license-book:zip</include>
       </includes>
       <unpack>true</unpack>
     </dependencySet>
@@ -36,8 +36,8 @@
 
         <include>com.h2database:h2:jar</include>
 
-        <include>io.orqueio.bpm:orqueio-engine:jar</include>
-        <include>io.orqueio.bpm.identity:orqueio-identity-ldap:jar</include>
+        <include>org.camunda.bpm:camunda-engine:jar</include>
+        <include>org.camunda.bpm.identity:camunda-identity-ldap:jar</include>
 
         <include>org.mybatis:mybatis:jar:*</include>
         <include>com.fasterxml.uuid:java-uuid-generator:jar:*</include>
@@ -58,20 +58,20 @@
         <include>org.slf4j:slf4j-api:jar:*</include>
         <include>org.slf4j:slf4j-jdk14:jar:*</include>
 
-        <include>io.orqueio.bpm:orqueio-engine-plugin-*:jar</include>
-        <include>io.orqueio.spin:orqueio-spin-core*:jar</include>
-        <include>io.orqueio.spin:orqueio-spin-dataformat-all*:jar</include>
-        <include>io.orqueio.connect:*:jar</include>
-        <include>io.orqueio.commons:*:jar</include>
+        <include>org.camunda.bpm:camunda-engine-plugin-*:jar</include>
+        <include>org.camunda.spin:camunda-spin-core*:jar</include>
+        <include>org.camunda.spin:camunda-spin-dataformat-all*:jar</include>
+        <include>org.camunda.connect:*:jar</include>
+        <include>org.camunda.commons:*:jar</include>
 
-        <include>io.orqueio.bpm.model:*:jar</include>
-        <include>io.orqueio.bpm.dmn:*:jar</include>
-        <include>io.orqueio.bpm.juel:*:jar</include>
+        <include>org.camunda.bpm.model:*:jar</include>
+        <include>org.camunda.bpm.dmn:*:jar</include>
+        <include>org.camunda.bpm.juel:*:jar</include>
 
-        <include>io.orqueio.feel:*:jar</include>
+        <include>org.camunda.feel:*:jar</include>
 
         <include>org.freemarker:*:jar</include>
-        <include>io.orqueio.template-engines:*:jar</include>
+        <include>org.camunda.template-engines:*:jar</include>
       </includes>
     </dependencySet>
 
@@ -81,8 +81,8 @@
 
         <include>com.h2database:h2:jar</include>
 
-        <include>io.orqueio.bpm:orqueio-engine:jar</include>
-        <include>io.orqueio.bpm.identity:orqueio-identity-ldap:jar</include>
+        <include>org.camunda.bpm:camunda-engine:jar</include>
+        <include>org.camunda.bpm.identity:camunda-identity-ldap:jar</include>
 
         <include>org.mybatis:mybatis:jar:*</include>
         <include>com.fasterxml.uuid:java-uuid-generator:jar:*</include>
@@ -102,21 +102,21 @@
         <include>org.slf4j:slf4j-api:jar:*</include>
         <include>org.slf4j:slf4j-jdk14:jar:*</include>
 
-        <include>io.orqueio.bpm:orqueio-engine-plugin-*:jar</include>
-        <include>io.orqueio.spin:orqueio-spin-core*:jar</include>
-        <include>io.orqueio.spin:orqueio-spin-dataformat-all*:jar</include>
-        <include>io.orqueio.connect:*:jar</include>
-        <include>io.orqueio.commons:*:jar</include>
+        <include>org.camunda.bpm:camunda-engine-plugin-*:jar</include>
+        <include>org.camunda.spin:camunda-spin-core*:jar</include>
+        <include>org.camunda.spin:camunda-spin-dataformat-all*:jar</include>
+        <include>org.camunda.connect:*:jar</include>
+        <include>org.camunda.commons:*:jar</include>
 
-        <include>io.orqueio.bpm.model:*:jar</include>
+        <include>org.camunda.bpm.model:*:jar</include>
 
-        <include>io.orqueio.bpm.dmn:*:jar</include>
-        <include>io.orqueio.bpm.juel:*:jar</include>
+        <include>org.camunda.bpm.dmn:*:jar</include>
+        <include>org.camunda.bpm.juel:*:jar</include>
 
-        <include>io.orqueio.feel:*:jar</include>
+        <include>org.camunda.feel:*:jar</include>
 
         <include>org.freemarker:*:jar</include>
-        <include>io.orqueio.template-engines:*:jar</include>
+        <include>org.camunda.template-engines:*:jar</include>
       </includes>
     </dependencySet>
   </dependencySets>
@@ -141,23 +141,23 @@
       <outputDirectory></outputDirectory>
     </file>
     <file>
-      <source>src/start-orqueio.bat</source>
+      <source>src/start-camunda.bat</source>
       <filtered>true</filtered>
       <outputDirectory></outputDirectory>
     </file>
     <file>
-      <source>src/start-orqueio.sh</source>
+      <source>src/start-camunda.sh</source>
       <filtered>true</filtered>
       <outputDirectory></outputDirectory>
       <fileMode>0755</fileMode>
     </file>
     <file>
-      <source>src/shutdown-orqueio.bat</source>
+      <source>src/shutdown-camunda.bat</source>
       <filtered>true</filtered>
       <outputDirectory></outputDirectory>
     </file>
     <file>
-      <source>src/shutdown-orqueio.sh</source>
+      <source>src/shutdown-camunda.sh</source>
       <filtered>true</filtered>
       <outputDirectory></outputDirectory>
       <fileMode>0755</fileMode>

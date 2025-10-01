@@ -1,1 +1,1 @@
-io.orqueio.bpm.engine.cdi.test.ArquillianAutomaticDeployment
+org.camunda.bpm.engine.cdi.test.ArquillianAutomaticDeployment

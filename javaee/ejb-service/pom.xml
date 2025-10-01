@@ -1,28 +1,28 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>io.orqueio.bpm.javaee</groupId>
-  <artifactId>orqueio-ejb-service</artifactId>
-  <version>1.0.1</version>
+  <groupId>org.camunda.bpm.javaee</groupId>
+  <artifactId>camunda-ejb-service</artifactId>
   <packaging>ejb</packaging>
 
+  <description>
+    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://camunda.com/contact/
+  </description>
 
-  <description>io.orqueio.bpm.javaee</description>
-
-  <name>Orque IO Platform - EJB Service</name>
+  <name>Camunda Platform - EJB Service</name>
 
   <parent>
-    <groupId>io.orqueio.bpm</groupId>
-    <artifactId>orqueio-database-settings</artifactId>
+    <groupId>org.camunda.bpm</groupId>
+    <artifactId>camunda-database-settings</artifactId>
     <relativePath>../../database</relativePath>
-    <version>1.0.1</version>
+    <version>7.24.0-SNAPSHOT</version>
   </parent>
 
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>io.orqueio.bpm</groupId>
-        <artifactId>orqueio-core-internal-dependencies</artifactId>
+        <groupId>org.camunda.bpm</groupId>
+        <artifactId>camunda-core-internal-dependencies</artifactId>
         <version>${project.version}</version>
         <scope>import</scope>
         <type>pom</type>
@@ -32,14 +32,14 @@
 
   <dependencies>
     <dependency>
-      <groupId>io.orqueio.bpm</groupId>
-      <artifactId>orqueio-engine</artifactId>
+      <groupId>org.camunda.bpm</groupId>
+      <artifactId>camunda-engine</artifactId>
       <scope>provided</scope>
     </dependency>
 
     <dependency>
-      <groupId>io.orqueio.bpm.javaee</groupId>
-      <artifactId>orqueio-jobexecutor-ra</artifactId>
+      <groupId>org.camunda.bpm.javaee</groupId>
+      <artifactId>camunda-jobexecutor-ra</artifactId>
       <scope>provided</scope>
       <version>${project.version}</version>
     </dependency>
@@ -57,40 +57,8 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-ejb-plugin</artifactId>
-        <version>3.1.0</version>
-        <configuration>
-          <ejbVersion>3.0</ejbVersion>
-        </configuration>
       </plugin>
     </plugins>
   </build>
-  <licenses>
-    <license>
-      <name>The Apache Software License, Version 2.0</name>
-      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-    </license>
-  </licenses>
 
-  <organization>
-    <name>Orque IO</name>
-    <url>https://www.orqueio.io</url>
-  </organization>
-
-  <url>https://www.orqueio.io</url>
-
-  <developers>
-    <developer>
-      <id>orqueio.io</id>
-      <name>Orque IO Platform Community</name>
-      <organization>orqueio.io</organization>
-      <organizationUrl>https://www.orqueio.io</organizationUrl>
-    </developer>
-  </developers>
-
-  <scm>
-    <url>https://github.com/orqueio/orqueio</url>
-    <connection>scm:git:git@github.com:orqueio/orqueio.git</connection>
-    <developerConnection>scm:git:git@github.com:orqueio/orqueio.git</developerConnection>
-    <tag>HEAD</tag>
-  </scm>
 </project>

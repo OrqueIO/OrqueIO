@@ -20,7 +20,7 @@
 var Page = require('./page');
 
 module.exports = Page.extend({
-  url: '/orqueio/app/:webapp/default/#/login',
+  url: '/camunda/app/:webapp/default/#/login',
 
   formElement: function() {
     return element(by.css('form[name="signinForm"]'));

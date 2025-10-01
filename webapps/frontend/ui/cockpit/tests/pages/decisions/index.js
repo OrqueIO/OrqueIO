@@ -22,7 +22,7 @@ var DeployedDecisionsListPage = require('./deployed-decisions-list');
 var AuthenticationPage = require('../../../../common/tests/pages/authentication');
 
 var Page = Base.extend({
-  url: '/orqueio/app/cockpit/default/#/decisions',
+  url: '/camunda/app/cockpit/default/#/decisions',
 
   pluginList: function() {
     return element.all(by.css('.dashboard'));

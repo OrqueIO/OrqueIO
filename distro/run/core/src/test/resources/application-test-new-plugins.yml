@@ -1,11 +1,11 @@
-orqueio.bpm.run.process-engine-plugins:
-  - plugin-class: io.orqueio.bpm.run.test.plugins.TestFirstPlugin
+camunda.bpm.run.process-engine-plugins:
+  - plugin-class: org.camunda.bpm.run.test.plugins.TestFirstPlugin
     plugin-parameters:
       parameterOne: valueOne
       parameterTwo: true
-  - plugin-class: io.orqueio.bpm.run.test.plugins.TestSecondPlugin
+  - plugin-class: org.camunda.bpm.run.test.plugins.TestSecondPlugin
     plugin-parameters:
       parameterOne: 1.222
       parameterTwo: false
       parameterThree: 123
-  - plugin-class: io.orqueio.bpm.run.test.plugins.TestDefaultValuesPlugin
+  - plugin-class: org.camunda.bpm.run.test.plugins.TestDefaultValuesPlugin

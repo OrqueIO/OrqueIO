@@ -1,7 +1,7 @@
 REST API
 ========
 
-A JAX-RS-based REST API for Orqueio Platform.
+A JAX-RS-based REST API for Camunda Platform.
 
 Running Tests
 -------------
@@ -19,5 +19,5 @@ Writing Tests
 
 For a test case that tests the implementation of a JAX-RS resource, do the following:
 
-* Subclass `io.orqueio.bpm.engine.rest.AbstractRestServiceTest`
-* Declare an instance of `io.orqueio.bpm.engine.rest.util.container.TestContainerRule` as a JUnit `@ClassRule`
+* Subclass `org.camunda.bpm.engine.rest.AbstractRestServiceTest`
+* Declare an instance of `org.camunda.bpm.engine.rest.util.container.TestContainerRule` as a JUnit `@ClassRule`

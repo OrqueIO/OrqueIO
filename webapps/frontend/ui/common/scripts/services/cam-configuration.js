@@ -67,7 +67,7 @@ module.exports = function(config, app) {
   return [
     function() {
       var storage = window.localStorage;
-      var values = JSON.parse(storage.getItem('orqueio-web') || '{}');
+      var values = JSON.parse(storage.getItem('camunda-web') || '{}');
 
       this.get = function(key, defaultValue) {
         return typeof values[key] !== 'undefined' ? values[key] : defaultValue;
@@ -75,7 +75,7 @@ module.exports = function(config, app) {
 
       this.set = function(key, value) {
         values[key] = value;
-        storage.setItem('orqueio-web', JSON.stringify(values));
+        storage.setItem('camunda-web', JSON.stringify(values));
       };
 
       // Removes old translations - default localStorage is limited to 10MB
@@ -86,7 +86,7 @@ module.exports = function(config, app) {
           }
         }
 
-        window.localStorage.setItem('orqueio-web', JSON.stringify(values));
+        window.localStorage.setItem('camunda-web', JSON.stringify(values));
       };
 
       this.getDateFormat = function(formatName) {
@@ -117,7 +117,7 @@ module.exports = function(config, app) {
       };
 
       this.getAppVendor = function() {
-        return config.app && config.app.vendor ? config.app.vendor : 'Orqueio';
+        return config.app && config.app.vendor ? config.app.vendor : 'Camunda';
       };
 
       this.getAppName = function() {

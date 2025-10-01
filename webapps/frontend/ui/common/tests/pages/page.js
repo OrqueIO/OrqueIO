@@ -60,13 +60,13 @@ Page.prototype.isActive = function(params) {
 };
 
 Page.prototype.navigateToWebapp = function(appName) {
-  browser.get('orqueio/app/' + appName.toLowerCase() + '/');
+  browser.get('camunda/app/' + appName.toLowerCase() + '/');
   browser.driver
     .manage()
     .window()
     .maximize();
 
-  expect(this.navbarBrand().getText()).to.eventually.eql('Orqueio ' + appName);
+  expect(this.navbarBrand().getText()).to.eventually.eql('Camunda ' + appName);
 };
 
 Page.prototype.navbarBrand = function() {

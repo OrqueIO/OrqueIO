@@ -3,17 +3,19 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>io.orqueio.bpm.run</groupId>
-    <artifactId>orqueio-bpm-run-modules</artifactId>
-    <version>1.0.1</version>
+    <groupId>org.camunda.bpm.run</groupId>
+    <artifactId>camunda-bpm-run-modules</artifactId>
+    <version>7.24.0-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>
 
-  <artifactId>orqueio-bpm-run-modules-rest</artifactId>
-  <name>Orque IO Platform - Run - Module REST</name>
+  <artifactId>camunda-bpm-run-modules-rest</artifactId>
+  <name>Camunda Platform - Run - Module REST</name>
   <packaging>pom</packaging>
 
-
+  <description>
+    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://camunda.com/contact/
+  </description>
   
   <properties>
     <!-- generate a bom of compile time dependencies for the license book.
@@ -25,8 +27,8 @@
   <dependencies>
 
     <dependency>
-      <groupId>io.orqueio.bpm.springboot</groupId>
-      <artifactId>orqueio-bpm-spring-boot-starter-rest</artifactId>
+      <groupId>org.camunda.bpm.springboot</groupId>
+      <artifactId>camunda-bpm-spring-boot-starter-rest</artifactId>
     </dependency>
 
   </dependencies>

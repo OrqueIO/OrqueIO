@@ -30,7 +30,7 @@ async function generateDocs() {
 
     const state = await store.toJS()
 
-    const orqueioVersion = require('./package.json').version;
+    const camundaVersion = require('./package.json').version;
 
     const page = `<!DOCTYPE html>
 <html>
@@ -39,12 +39,12 @@ async function generateDocs() {
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
         new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
         j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-        'https://ssgtm.orqueio.io/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        'https://ssgtm.camunda.org/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
         })(window,document,'script','dataLayer','GTM-PP9MHKW');</script>
     <!-- End Google Tag Manager -->
 
     <meta charset="utf8"/>
-    <title>Orqueio Automation Platform ${orqueioVersion} REST API</title>
+    <title>Camunda Automation Platform ${camundaVersion} REST API</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Security-Policy"
           content="default-src 'self'; script-src 'unsafe-inline' blob:; style-src 'unsafe-inline' 'self'; img-src 'self' data:;">

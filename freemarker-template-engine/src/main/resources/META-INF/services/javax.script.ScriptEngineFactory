@@ -1,1 +1,1 @@
-io.orqueio.templateengines.FreeMarkerScriptEngineFactory
+org.camunda.templateengines.FreeMarkerScriptEngineFactory

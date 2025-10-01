@@ -1,4 +1,4 @@
-orqueio.bpm.run.admin-auth:
+camunda.bpm.run.admin-auth:
   enabled: true
   authorization-enabled: true
   administrator-group-name: admins

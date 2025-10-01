@@ -1,27 +1,26 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
+  <description>
+    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://camunda.com/contact/
+  </description>
 
+  <name>Camunda Platform - engine - Spring</name>
+  <artifactId>camunda-engine-spring</artifactId>
 
-  <name>Orque IO Platform - engine - Spring</name>
-  <groupId>io.orqueio.bpm</groupId>
-  <artifactId>orqueio-engine-spring</artifactId>
-  <version>1.0.1</version>
-  <packaging>jar</packaging>
-  <description>orqueio-engine-spring</description>
   <parent>
-    <groupId>io.orqueio.bpm</groupId>
-    <artifactId>orqueio-database-settings</artifactId>
+    <groupId>org.camunda.bpm</groupId>
+    <artifactId>camunda-database-settings</artifactId>
     <relativePath>../../database</relativePath>
-    <version>1.0.1</version>
+    <version>7.24.0-SNAPSHOT</version>
   </parent>
 
   <dependencyManagement>
     <dependencies>
 
       <dependency>
-        <groupId>io.orqueio.bpm</groupId>
-        <artifactId>orqueio-core-internal-dependencies</artifactId>
+        <groupId>org.camunda.bpm</groupId>
+        <artifactId>camunda-core-internal-dependencies</artifactId>
         <version>${project.version}</version>
         <scope>import</scope>
         <type>pom</type>
@@ -40,38 +39,32 @@
 
   <dependencies>
     <dependency>
-      <groupId>io.orqueio.bpm</groupId>
-      <artifactId>orqueio-engine</artifactId>
-        <version>1.0.1</version>
+      <groupId>org.camunda.bpm</groupId>
+      <artifactId>camunda-engine</artifactId>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-context</artifactId>
-      <version>5.3.39</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-jdbc</artifactId>
-      <version>5.3.39</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-tx</artifactId>
-      <version>5.3.39</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-orm</artifactId>
-      <version>5.3.39</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-web</artifactId>
-      <version>5.3.39</version>
       <!--  do not expose -->
       <scope>provided</scope>
     </dependency>
@@ -80,68 +73,57 @@
     <dependency>
       <groupId>org.jboss.spec.javax.servlet</groupId>
       <artifactId>jboss-servlet-api_3.0_spec</artifactId>
-      <version>1.0.2.Final</version>
       <scope>provided</scope>
     </dependency>
     
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-test</artifactId>
-      <version>5.3.39</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.13.1</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>cglib</groupId>
       <artifactId>cglib</artifactId>
-      <version>2.2.2</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.groovy</groupId>
       <artifactId>groovy-jsr223</artifactId>
-      <version>4.0.22</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.python</groupId>
       <artifactId>jython</artifactId>
-      <version>2.5.3</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.graalvm.js</groupId>
       <artifactId>js</artifactId>
-      <version>21.3.12</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.graalvm.js</groupId>
       <artifactId>js-scriptengine</artifactId>
-      <version>21.3.12</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.h2database</groupId>
       <artifactId>h2</artifactId>
-      <version>2.3.232</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-      <version>5.10.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
-      <version>2.9.1</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -160,26 +142,22 @@
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
-      <version>1.2.11</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>jcl-over-slf4j</artifactId>
-      <version>1.7.26</version>
-
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>jul-to-slf4j</artifactId>
-      <version>1.7.26</version>
       <scope>test</scope>
     </dependency>
 
     <dependency>
-      <groupId>io.orqueio.bpm</groupId>
-      <artifactId>orqueio-bpm-archunit</artifactId>
+      <groupId>org.camunda.bpm</groupId>
+      <artifactId>camunda-bpm-archunit</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
     </dependency>
@@ -193,7 +171,7 @@
         <configuration>
           <redirectTestOutputToFile>true</redirectTestOutputToFile>
           <dependenciesToScan>
-            <dependency>io.orqueio.bpm:orqueio-bpm-archunit</dependency>
+            <dependency>org.camunda.bpm:camunda-bpm-archunit</dependency>
           </dependenciesToScan>
         </configuration>
       </plugin>
@@ -213,7 +191,7 @@
               <forceCreation>true</forceCreation>
               <excludes>
                 <!-- this is re-defined in the consuming artifacts -->
-                <exclude>META-INF/services/io.orqueio.bpm.engine.spring.test.SpringTestHelper</exclude>
+                <exclude>META-INF/services/org.camunda.bpm.engine.spring.test.SpringTestHelper</exclude>
               </excludes>
             </configuration>
           </execution>
@@ -246,33 +224,4 @@
       </build>
     </profile>
   </profiles>
-  <licenses>
-    <license>
-      <name>The Apache Software License, Version 2.0</name>
-      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-    </license>
-  </licenses>
-
-  <organization>
-    <name>Orque IO</name>
-    <url>https://www.orqueio.io</url>
-  </organization>
-
-  <url>https://www.orqueio.io</url>
-
-  <developers>
-    <developer>
-      <id>orqueio.io</id>
-      <name>Orque IO Platform Community</name>
-      <organization>orqueio.io</organization>
-      <organizationUrl>https://www.orqueio.io</organizationUrl>
-    </developer>
-  </developers>
-
-  <scm>
-    <url>https://github.com/orqueio/orqueio</url>
-    <connection>scm:git:git@github.com:orqueio/orqueio.git</connection>
-    <developerConnection>scm:git:git@github.com:orqueio/orqueio.git</developerConnection>
-    <tag>HEAD</tag>
-  </scm>
 </project>

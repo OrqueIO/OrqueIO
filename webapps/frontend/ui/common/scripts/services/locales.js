@@ -16,8 +16,8 @@
  */
 
 'use strict';
-var moment = require('orqueio-commons-ui/vendor/moment'),
-  angular = require('orqueio-commons-ui/vendor/angular');
+var moment = require('camunda-commons-ui/vendor/moment'),
+  angular = require('camunda-commons-ui/vendor/angular');
 
 module.exports = function(ngModule, appRoot, appName) {
   ngModule.factory('sanitizeMissingTranslationKey', [
@@ -66,7 +66,7 @@ module.exports = function(ngModule, appRoot, appName) {
               url: [options.prefix, options.key, options.suffix].join(''),
               method: 'GET',
               // Use `now` instead of `window.bust` to update translations without rebuilding the app
-              params: {bust: ORQUEIO_VERSION} // eslint-disable-line
+              params: {bust: CAMUNDA_VERSION} // eslint-disable-line
             },
             options.$http
           )

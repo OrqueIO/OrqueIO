@@ -16,7 +16,7 @@
     <dependencySet>
       <unpack>true</unpack>
       <includes>
-        <include>io.orqueio.bpm.wildfly:orqueio-wildfly-assembly</include>
+        <include>org.camunda.bpm.wildfly:camunda-wildfly-assembly</include>
       </includes>
       <outputDirectory />
     </dependencySet>
@@ -30,28 +30,28 @@
         </excludes>
       </unpackOptions>
       <includes>
-        <include>io.orqueio.bpm.distro:orqueio-sql-scripts:jar:*</include>
+        <include>org.camunda.bpm.distro:camunda-sql-scripts:jar:*</include>
       </includes>
     </dependencySet>
 
     <dependencySet>
         <outputFileNameMapping>${artifact.artifactId}-${artifact.version}.${artifact.extension}</outputFileNameMapping>
         <includes>
-            <include>io.orqueio.bpm:orqueio-engine-rest-jakarta:war:*</include>
+            <include>org.camunda.bpm:camunda-engine-rest-jakarta:war:*</include>
         </includes>
         <outputDirectory>server/wildfly-${version.wildfly}/standalone/deployments</outputDirectory>
     </dependencySet>
     
     <dependencySet>
         <includes>
-          <include>io.orqueio.bpm.webapp:orqueio-webapp-wildfly:war:*</include>
+          <include>org.camunda.bpm.webapp:camunda-webapp-wildfly:war:*</include>
         </includes>
         <outputDirectory>server/wildfly-${version.wildfly}/standalone/deployments</outputDirectory>
     </dependencySet>
 
     <dependencySet>
         <includes>
-          <include>io.orqueio.bpm.example:orqueio-example-invoice-jakarta:war:*</include>
+          <include>org.camunda.bpm.example:camunda-example-invoice-jakarta:war:*</include>
         </includes>
         <outputDirectory>server/wildfly-${version.wildfly}/standalone/deployments</outputDirectory>
     </dependencySet>
@@ -60,8 +60,8 @@
   
   <fileSets>
     <fileSet>
-      <directory>../../orqueio-welcome</directory>
-      <outputDirectory>server/wildfly-${version.wildfly}/standalone/deployments/orqueio-welcome.war</outputDirectory>
+      <directory>../../camunda-welcome</directory>
+      <outputDirectory>server/wildfly-${version.wildfly}/standalone/deployments/camunda-welcome.war</outputDirectory>
     </fileSet>
   </fileSets>
   
@@ -69,7 +69,7 @@
      <file>
       <source>src/EMPTY_FILE</source>
       <outputDirectory>server/wildfly-${version.wildfly}/standalone/deployments/</outputDirectory>
-      <destName>orqueio-welcome.war.dodeploy</destName>
+      <destName>camunda-welcome.war.dodeploy</destName>
     </file>  
   </files>
   

@@ -23,7 +23,7 @@
                                   {
                                     "name": "myVariable",
                                     "operator": "eq",
-                                    "value": "orqueio"
+                                    "value": "camunda"
                                   },
                                   {
                                     "name": "mySecondVariable",

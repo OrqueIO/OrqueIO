@@ -1,17 +1,17 @@
-= orqueio BPMN model API
+= camunda BPMN model API
 
-The orqueio BPMN model API is a simple, lightweight Java library for parsing, creating and editing BPMN 2.0 XML files. It is licensed under the Apache 2.0 license.
+The camunda BPMN model API is a simple, lightweight Java library for parsing, creating and editing BPMN 2.0 XML files. It is licensed under the Apache 2.0 license.
 
 [NOTE]
 ====
-orqueio BPMN model can be used standalone, independenly of Orqueio Platform / process engine.
+camunda BPMN model can be used standalone, independenly of Camunda Platform / process engine.
 ====
 
-* Web Site: https://orqueio.com/
-* User Guide: link:http://docs.orqueio.io/latest/guides/user-guide/#bpmn-model-api[http://docs.orqueio.io]
-* Examples: link:https://github.com/orqueio/orqueio-bpm-examples/tree/master/bpmn-model-api[https://github.com/orqueio/orqueio-bpm-examples]
-* Issue Tracker: https://app.orqueio.com/jira/
-* Contribution Guidelines: https://orqueio.com/learn/community/#contribute
+* Web Site: https://camunda.com/
+* User Guide: link:http://docs.camunda.org/latest/guides/user-guide/#bpmn-model-api[http://docs.camunda.org]
+* Examples: link:https://github.com/camunda/camunda-bpm-examples/tree/master/bpmn-model-api[https://github.com/camunda/camunda-bpm-examples]
+* Issue Tracker: https://app.camunda.com/jira/
+* Contribution Guidelines: https://camunda.com/learn/community/#contribute
 
 == Features
 
@@ -19,7 +19,7 @@ orqueio BPMN model can be used standalone, independenly of Orqueio Platform / pr
 
 To easily create simple BPMN 2.0 processes we provide the fluent builder API. It supports most BPMN 2.0
 elements and allows you to set attributes and add some child elements. The following process is deployable
-and can be executed by the Orqueio Platform.
+and can be executed by the Camunda Platform.
 
 [source,java]
 ----
@@ -30,9 +30,9 @@ BpmnModelInstance modelInstance = Bpmn.createExecutableProcess("processId")
   .done();
 ----
 
-For more complex examples see the link:https://docs.orqueio.io/manual/latest/user-guide/model-api/bpmn-model-api/fluent-builder-api/[docs],
-the tests in link:src/test/java/io/orqueio/bpm/model/bpmn/builder/ProcessBuilderTest.java[ProcessBuilderTest.java] or this
-link:https://github.com/orqueio/orqueio-bpm-examples/tree/master/bpmn-model-api/generate-process-fluent-api[example].
+For more complex examples see the link:https://docs.camunda.org/manual/latest/user-guide/model-api/bpmn-model-api/fluent-builder-api/[docs],
+the tests in link:src/test/java/org/camunda/bpm/model/bpmn/builder/ProcessBuilderTest.java[ProcessBuilderTest.java] or this
+link:https://github.com/camunda/camunda-bpm-examples/tree/master/bpmn-model-api/generate-process-fluent-api[example].
 
 === Create an empty BPMN model
 
@@ -42,7 +42,7 @@ You can easily create a new empty BPMN model.
 ----
 BpmnModelInstance modelInstance = Bpmn.createEmptyModel();
 Definitions definitions = modelInstance.newInstance(Definitions.class);
-definitions.setTargetNamespace("http://orqueio.io/examples");
+definitions.setTargetNamespace("http://camunda.org/examples");
 modelInstance.setDefinitions(definitions);
 ----
 
@@ -63,7 +63,7 @@ However, not all elements supported by the model are exposed through fluent
 builders and the fluent api may not be the appropriate API style for all usecases.
 In such cases, the full API can be used for creating a process model.
 The following code creates a simple Process as a jUnit4 test using the full API:
-link:src/test/java/io/orqueio/bpm/model/bpmn/CreateModelTest.java[CreateModelTest.java].
+link:src/test/java/org/camunda/bpm/model/bpmn/CreateModelTest.java[CreateModelTest.java].
 
 === Find elements inside the model
 
@@ -108,14 +108,14 @@ Bpmn.writeModelToFile(file, modelInstance);
 
 === What is BPMN 2.0?
 
-Read the https://orqueio.com/bpmn/[BPMN 2.0 Tutorial on orqueio.com].
+Read the https://camunda.com/bpmn/[BPMN 2.0 Tutorial on camunda.com].
 
 === Which Java (JRE) Version is required?
 
-Java JRE 1.8+ is required. We test orqueio BPMN model API on Oracle and IBM JVMs.
+Java JRE 1.8+ is required. We test camunda BPMN model API on Oracle and IBM JVMs.
 
 === Does this API support all BPMN 2.0 Elements?
 
 No, but support is already quite extensive. See
-link:src/main/java/io/orqueio/bpm/model/bpmn/instance[io.orqueio.bpm.model.bpmn.instance]
+link:src/main/java/org/camunda/bpm/model/bpmn/instance[org.camunda.bpm.model.bpmn.instance]
 for a list of currently supported elements.

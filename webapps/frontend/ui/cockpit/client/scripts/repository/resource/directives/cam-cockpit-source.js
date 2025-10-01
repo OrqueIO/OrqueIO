@@ -19,8 +19,8 @@
 
 var template = require('./cam-cockpit-source.html?raw');
 
-var angular = require('orqueio-commons-ui/vendor/angular');
-require('orqueio-commons-ui/vendor/prism');
+var angular = require('camunda-commons-ui/vendor/angular');
+require('camunda-commons-ui/vendor/prism');
 
 module.exports = [
   '$window',

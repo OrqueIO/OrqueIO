@@ -1,5 +1,5 @@
 <#macro endpoint_macro docsUrl="">
-<#-- Generated From File: orqueio-docs-manual/public/reference/rest/execution/get-query-count/index.html -->
+<#-- Generated From File: camunda-docs-manual/public/reference/rest/execution/get-query-count/index.html -->
 {
   <@lib.endpointInfo
       id = "getExecutionsCount"
@@ -29,7 +29,7 @@
         dto = "CountResultDto"
         desc = "Request successful."
         examples = ['"example-1": {
-                       "description": "GET `/execution/count?variables=myVariable_eq_orqueio`",
+                       "description": "GET `/execution/count?variables=myVariable_eq_camunda`",
                        "value": {
                          "count": 1
                        }

@@ -1,4 +1,4 @@
-<#-- Generated From File: orqueio-docs-manual/public/reference/rest/history/decision-instance/post-delete/index.html -->
+<#-- Generated From File: camunda-docs-manual/public/reference/rest/history/decision-instance/post-delete/index.html -->
 <#macro endpoint_macro docsUrl="">
 {
   <@lib.endpointInfo

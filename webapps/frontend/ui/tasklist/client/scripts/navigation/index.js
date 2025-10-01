@@ -17,14 +17,14 @@
 
 'use strict';
 
-var angular = require('orqueio-commons-ui/vendor/angular'),
+var angular = require('camunda-commons-ui/vendor/angular'),
   camLayoutCtrl = require('./controllers/cam-layout-ctrl'),
   camHeaderViewsCtrl = require('./controllers/cam-header-views-ctrl');
 
-require('orqueio-commons-ui/lib/util/index');
+require('camunda-commons-ui/lib/util/index');
 
 var navigationModule = angular.module('cam.tasklist.navigation', [
-  require('orqueio-commons-ui/lib/util/index').name,
+  require('camunda-commons-ui/lib/util/index').name,
   'ui.bootstrap'
 ]);
 

@@ -1,15 +1,15 @@
 # Find more available configuration properties on the following pages of the documentation.
-# https://docs.orqueio.io/manual/latest/user-guide/orqueio-bpm-run/#configure-orqueio-bpm-run
-# https://docs.orqueio.io/manual/latest/user-guide/spring-boot-integration/configuration/#orqueio-engine-properties
+# https://docs.camunda.org/manual/latest/user-guide/camunda-bpm-run/#configure-camunda-bpm-run
+# https://docs.camunda.org/manual/latest/user-guide/spring-boot-integration/configuration/#camunda-engine-properties
 
-orqueio.bpm:
+camunda.bpm:
   admin-user:
     id: demo
     password: demo
   filter:
     create: All tasks
   run:
-# https://docs.orqueio.io/manual/latest/user-guide/orqueio-bpm-run/#cross-origin-resource-sharing
+# https://docs.camunda.org/manual/latest/user-guide/camunda-bpm-run/#cross-origin-resource-sharing
     cors:
       enabled: true
       allowed-origins: "*"
@@ -17,13 +17,13 @@ orqueio.bpm:
       disable-wadl: false
     deployment:
       deploy-changed-only: true
-# https://docs.orqueio.io/manual/latest/user-guide/orqueio-bpm-run/#example-application
+# https://docs.camunda.org/manual/latest/user-guide/camunda-bpm-run/#example-application
     example:
       enabled: true
 
 # datasource configuration is required
 spring.datasource:
-  url: jdbc:h2:./orqueio-h2-default/process-engine;TRACE_LEVEL_FILE=0;DB_CLOSE_ON_EXIT=FALSE
+  url: jdbc:h2:./camunda-h2-default/process-engine;TRACE_LEVEL_FILE=0;DB_CLOSE_ON_EXIT=FALSE
   driver-class-name: org.h2.Driver
   username: sa
   password: sa

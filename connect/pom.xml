@@ -2,21 +2,21 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>io.orqueio.bpm</groupId>
-    <artifactId>orqueio-parent</artifactId>
+    <groupId>org.camunda.bpm</groupId>
+    <artifactId>camunda-parent</artifactId>
     <relativePath>../parent</relativePath>
-    <version>1.0.1</version>
+    <version>7.24.0-SNAPSHOT</version>
   </parent>
-  <description>orqueio-connect-root</description>
 
-  <groupId>io.orqueio.connect</groupId>
-  <artifactId>orqueio-connect-root</artifactId>
-  <version>1.0.1</version>
-  <name>Orque IO Platform - connect - root</name>
+  <groupId>org.camunda.connect</groupId>
+  <artifactId>camunda-connect-root</artifactId>
+  <name>Camunda Platform - connect - root</name>
   <inceptionYear>2014</inceptionYear>
   <packaging>pom</packaging>
 
-
+  <description>
+    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://camunda.com/contact/
+  </description>
 
   <properties>
     <commons-codec.version>1.15</commons-codec.version>
@@ -43,37 +43,37 @@
       <dependency>
         <groupId>org.apache.httpcomponents.client5</groupId>
         <artifactId>httpclient5</artifactId>
-        <version>5.4.3</version>
+        <version>${version.httpclient5}</version>
       </dependency>
 
       <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
-        <version>4.13.1</version>
+        <version>${version.junit}</version>
       </dependency>
 
       <dependency>
         <groupId>org.assertj</groupId>
         <artifactId>assertj-core</artifactId>
-        <version>2.9.1</version>
+        <version>${version.assertj}</version>
       </dependency>
 
       <dependency>
         <groupId>ch.qos.logback</groupId>
         <artifactId>logback-classic</artifactId>
-        <version>1.2.11</version>
+        <version>${version.logback}</version>
       </dependency>
 
       <dependency>
         <groupId>com.github.tomakehurst</groupId>
         <artifactId>wiremock</artifactId>
-        <version>1.58</version>
+        <version>${wiremock.version}</version>
       </dependency>
 
       <dependency>
         <groupId>org.mockito</groupId>
         <artifactId>mockito-core</artifactId>
-        <version>1.9.5</version>
+        <version>${mockito.version}</version>
       </dependency>
 
     </dependencies>
@@ -85,11 +85,11 @@
         <plugin>
           <groupId>org.apache.felix</groupId>
           <artifactId>maven-bundle-plugin</artifactId>
-          <version>5.1.1</version>
+          <version>${maven-bundle-plugin.version}</version>
           <configuration>
             <instructions>
               <Export-Package>
-                io.orqueio.connect*
+                org.camunda.connect*
               </Export-Package>
             </instructions>
           </configuration>
@@ -132,33 +132,10 @@
   </profiles>
 
   <scm>
-    <url>https://github.com/orqueio/orqueio</url>
-    <connection>scm:git:git@github.com:orqueio/orqueio.git</connection>
-    <developerConnection>scm:git:git@github.com:orqueio/orqueio-bpm.git</developerConnection>
+    <url>https://github.com/camunda/camunda-bpm-platform</url>
+    <connection>scm:git:git@github.com:camunda/camunda-bpm-platform.git</connection>
+    <developerConnection>scm:git:git@github.com:camunda/camunda-bpm-platform.git</developerConnection>
     <tag>HEAD</tag>
   </scm>
-  <licenses>
-    <license>
-      <name>The Apache Software License, Version 2.0</name>
-      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-    </license>
-  </licenses>
-
-  <organization>
-    <name>Orque IO</name>
-    <url>https://www.orqueio.io</url>
-  </organization>
-
-  <url>https://www.orqueio.io</url>
-
-  <developers>
-    <developer>
-      <id>orqueio.io</id>
-      <name>Orque IO Platform Community</name>
-      <organization>orqueio.io</organization>
-      <organizationUrl>https://www.orqueio.io</organizationUrl>
-    </developer>
-  </developers>
-
 
 </project>

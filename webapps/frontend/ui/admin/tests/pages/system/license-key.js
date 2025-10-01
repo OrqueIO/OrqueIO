@@ -22,5 +22,5 @@ var Page = require('./system-base');
 var groupsSection = element(by.id('groups'));
 
 module.exports = Page.extend({
-  url: '/orqueio/app/admin/default/#/system?section=system-settings-license'
+  url: '/camunda/app/admin/default/#/system?section=system-settings-license'
 });

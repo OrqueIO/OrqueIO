@@ -31,18 +31,18 @@ module.exports = (_env, argv = {}) => {
 
   const addEngines = engines => {
     return engines.reduce((acc, engine) => {
-      acc[`/orqueio/app/*/${engine}/`] = {
+      acc[`/camunda/app/*/${engine}/`] = {
         target: 'http://localhost:8081/',
         pathRewrite: path => {
-          return path.replace(`/${engine}`, '').replace('/orqueio', '');
+          return path.replace(`/${engine}`, '').replace('/camunda', '');
         }
       };
-      acc[`/orqueio/app/*/${engine}/setup/`] = {
+      acc[`/camunda/app/*/${engine}/setup/`] = {
         target: 'http://localhost:8081/',
         pathRewrite: path => {
           return path
             .replace(`/${engine}`, '')
-            .replace('/orqueio', '')
+            .replace('/camunda', '')
             .replace('/setup', '');
         }
       };
@@ -67,33 +67,33 @@ module.exports = (_env, argv = {}) => {
       https: false,
       proxy: {
         '/api': {
-          target: 'http://localhost:8080/orqueio/api',
+          target: 'http://localhost:8080/camunda/api',
           logLevel: 'debug',
           pathRewrite: {
             '^/api': ''
           }
         },
-        '/orqueio-welcome': {
+        '/camunda-welcome': {
           target: 'http://localhost:8080/',
           logLevel: 'debug'
         },
         ...addEngines(['default', 'engine2', 'engine3']),
-        '/orqueio/*': {
+        '/camunda/*': {
           target: 'http://localhost:8081/',
           logLevel: 'debug',
           pathRewrite: path => {
-            return path.replace('/orqueio', '');
+            return path.replace('/camunda', '');
           }
         },
-        '/orqueio/api/*': {
+        '/camunda/api/*': {
           target: 'http://localhost:8081/',
           logLevel: 'debug',
           pathRewrite: path => {
-            return path.replace('/orqueio', '');
+            return path.replace('/camunda', '');
           }
         }
       },
-      open: ['/orqueio/app/cockpit/default/']
+      open: ['/camunda/app/cockpit/default/']
     }
   };
 
@@ -140,9 +140,9 @@ module.exports = (_env, argv = {}) => {
       const options = plugin.options;
       plugin.options = {
         ...options,
-        publicPath: '/orqueio',
-        appRoot: '/orqueio',
-        appBase: `/orqueio/app/${options['appName']}/{ENGINE}/`,
+        publicPath: '/camunda',
+        appRoot: '/camunda',
+        appBase: `/camunda/app/${options['appName']}/{ENGINE}/`,
         pluginDeps: getPluginDeps(options['appName']),
         pluginPackages: getPluginPackages(options['appName'])
       };

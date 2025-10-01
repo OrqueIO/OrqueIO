@@ -4,19 +4,19 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>io.orqueio.bpm.springboot.project</groupId>
-    <artifactId>orqueio-bpm-spring-boot-starter-qa</artifactId>
-    <version>1.0.1</version>
+    <groupId>org.camunda.bpm.springboot.project</groupId>
+    <artifactId>camunda-bpm-spring-boot-starter-qa</artifactId>
+    <version>7.24.0-SNAPSHOT</version>
   </parent>
-  <groupId>io.orqueio.bpm.springboot.project</groupId>
-  <version>1.0.1</version>
+
   <packaging>pom</packaging>
-  <description>qa-webapp</description>
 
-
+  <description>
+    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://camunda.com/contact/
+  </description>
 
   <artifactId>qa-webapp</artifactId>
-  <name>Orque IO Platform - Spring Boot Starter - QA - Webapps</name>
+  <name>Camunda Platform - Spring Boot Starter - QA - Webapps</name>
 
   <modules>
     <module>invoice-example</module>
@@ -59,33 +59,5 @@
     </profile>
 
   </profiles>
-  <licenses>
-    <license>
-      <name>The Apache Software License, Version 2.0</name>
-      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-    </license>
-  </licenses>
 
-  <organization>
-    <name>Orque IO</name>
-    <url>https://www.orqueio.io</url>
-  </organization>
-
-  <url>https://www.orqueio.io</url>
-
-  <developers>
-    <developer>
-      <id>orqueio.io</id>
-      <name>Orque IO Platform Community</name>
-      <organization>orqueio.io</organization>
-      <organizationUrl>https://www.orqueio.io</organizationUrl>
-    </developer>
-  </developers>
-
-  <scm>
-    <url>https://github.com/orqueio/orqueio</url>
-    <connection>scm:git:git@github.com:orqueio/orqueio.git</connection>
-    <developerConnection>scm:git:git@github.com:orqueio/orqueio.git</developerConnection>
-    <tag>HEAD</tag>
-  </scm>
 </project>

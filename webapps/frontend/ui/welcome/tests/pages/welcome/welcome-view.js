@@ -20,7 +20,7 @@
 var Base = require('./../base');
 
 module.exports = Base.extend({
-  url: '/orqueio/app/welcome/default/#/welcome',
+  url: '/camunda/app/welcome/default/#/welcome',
 
   webappLinks: function() {
     return element(by.css('.webapps'));

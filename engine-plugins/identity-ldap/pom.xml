@@ -1,18 +1,19 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <description>io.orqueio.bpm.identity</description>
-  <groupId>io.orqueio.bpm.identity</groupId>
-  <artifactId>orqueio-identity-ldap</artifactId>
-  <version>1.0.1</version>
+
+  <groupId>org.camunda.bpm.identity</groupId>
+  <artifactId>camunda-identity-ldap</artifactId>
   <packaging>jar</packaging>
 
-
-  <name>Orque IO Platform - engine plugins - identity - ldap</name>
+  <description>
+    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://camunda.com/contact/
+  </description>
+  <name>Camunda Platform - engine plugins - identity - ldap</name>
 
   <parent>
-    <groupId>io.orqueio.bpm</groupId>
-    <artifactId>orqueio-engine-plugins</artifactId>
-    <version>1.0.1</version>
+    <groupId>org.camunda.bpm</groupId>
+    <artifactId>camunda-engine-plugins</artifactId>
+    <version>7.24.0-SNAPSHOT</version>
   </parent>
 
   <properties>
@@ -22,16 +23,14 @@
 
   <dependencies>
     <dependency>
-      <groupId>io.orqueio.commons</groupId>
-      <artifactId>orqueio-commons-logging</artifactId>
-      <version>1.0.1</version>
+      <groupId>org.camunda.commons</groupId>
+      <artifactId>camunda-commons-logging</artifactId>
     </dependency>
 
     <!-- LDAP Libraries to start test server -->
     <dependency>
       <groupId>org.apache.directory.server</groupId>
       <artifactId>apacheds-all</artifactId>
-      <version>2.0.0-M23</version>
       <exclusions>
         <exclusion>
           <groupId>org.apache.directory.shared</groupId>
@@ -45,16 +44,12 @@
       <!-- required for LdapTestEnvironment -->
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
-      <version>2.17.0</version>
-
       <scope>test</scope>
     </dependency>
     
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
-      <version>1.2.11</version>
-
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -69,7 +64,6 @@
     <plugins>
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>2.22.2</version>
         <configuration>
           <failIfNoTests>false</failIfNoTests>
           <trimStackTrace>false</trimStackTrace>
@@ -78,33 +72,5 @@
       </plugin>
     </plugins>
   </build>
-  <licenses>
-    <license>
-      <name>The Apache Software License, Version 2.0</name>
-      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-    </license>
-  </licenses>
 
-  <organization>
-    <name>Orque IO</name>
-    <url>https://www.orqueio.io</url>
-  </organization>
-
-  <url>https://www.orqueio.io</url>
-
-  <developers>
-    <developer>
-      <id>orqueio.io</id>
-      <name>Orque IO Platform Community</name>
-      <organization>orqueio.io</organization>
-      <organizationUrl>https://www.orqueio.io</organizationUrl>
-    </developer>
-  </developers>
-
-  <scm>
-    <url>https://github.com/orqueio/orqueio</url>
-    <connection>scm:git:git@github.com:orqueio/orqueio.git</connection>
-    <developerConnection>scm:git:git@github.com:orqueio/orqueio.git</developerConnection>
-    <tag>HEAD</tag>
-  </scm>
 </project>

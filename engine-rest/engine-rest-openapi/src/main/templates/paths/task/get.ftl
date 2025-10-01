@@ -63,8 +63,8 @@
                            "taskDefinitionKey":"aTaskDefinitionKey",
                            "suspended": false,
                            "formKey":"aFormKey",
-                           "orqueioFormRef":{
-                             "key": "aOrqueioFormKey",
+                           "camundaFormRef":{
+                             "key": "aCamundaFormKey",
                              "binding": "version",
                              "version": 2
                            },
@@ -99,8 +99,8 @@
                            "taskDefinitionKey":"aTaskDefinitionKey",
                            "suspended": false,
                            "formKey":"aFormKey",
-                           "orqueioFormRef":{
-                             "key": "aOrqueioFormKey",
+                           "camundaFormRef":{
+                             "key": "aCamundaFormKey",
                              "binding": "version",
                              "version": 2
                            },
@@ -137,8 +137,8 @@
                            "taskDefinitionKey":"aTaskDefinitionKey",
                            "suspended": false,
                            "formKey":"aFormKey",
-                           "orqueioFormRef":{
-                             "key": "aOrqueioFormKey",
+                           "camundaFormRef":{
+                             "key": "aCamundaFormKey",
                              "binding": "version",
                              "version": 2
                            },
@@ -187,8 +187,8 @@
                            "taskDefinitionKey":"aTaskDefinitionKey",
                            "suspended": false,
                            "formKey":"aFormKey",
-                           "orqueioFormRef":{
-                             "key": "aOrqueioFormKey",
+                           "camundaFormRef":{
+                             "key": "aCamundaFormKey",
                              "binding": "version",
                              "version": 2
                            },

@@ -1,4 +1,4 @@
-orqueio.bpm.run.ldap:
+camunda.bpm.run.ldap:
   enabled: true
   server-url: http://foo.bar
   manager-dn: managerdn

@@ -20,7 +20,7 @@
 var Base = require('./../base');
 
 module.exports = Base.extend({
-  url: '/orqueio/app/cockpit/default/#/dashboard',
+  url: '/camunda/app/cockpit/default/#/dashboard',
 
   pluginList: function() {
     return element.all(by.css('.dashboard > .sections > section'));

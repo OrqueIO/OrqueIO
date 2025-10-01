@@ -1,4 +1,4 @@
-<#-- Generated From File: orqueio-docs-manual/public/reference/rest/history/batch/get/index.html -->
+<#-- Generated From File: camunda-docs-manual/public/reference/rest/history/batch/get/index.html -->
 <#macro endpoint_macro docsUrl="">
 {
   <@lib.endpointInfo

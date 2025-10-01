@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<animals xmlns="http://orqueio.io/animals"
-  xmlns:tns="http://orqueio.io/animals"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://orqueio.io/animals ../../testmodel/Testmodel.xsd ">
-
-  <bird id="tweety" gender="Female"/>
-</animals>

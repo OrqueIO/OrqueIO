@@ -20,7 +20,7 @@
 var Base = require('./../base');
 
 module.exports = Base.extend({
-  url: '/orqueio/app/admin/default/#/tenants',
+  url: '/camunda/app/admin/default/#/tenants',
 
   newTenantButton: function() {
     return element(by.css('[ng-show="availableOperations.create"] > a'));

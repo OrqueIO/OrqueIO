@@ -1,4 +1,4 @@
-<#-- Generated From File: orqueio-docs-manual/public/reference/rest/job-definition/get-query/index.html -->
+<#-- Generated From File: camunda-docs-manual/public/reference/rest/job-definition/get-query/index.html -->
 <#macro endpoint_macro docsUrl="">
 {
   <@lib.endpointInfo

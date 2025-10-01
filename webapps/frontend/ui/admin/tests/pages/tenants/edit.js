@@ -20,7 +20,7 @@
 var Page = require('./../base');
 
 module.exports = Page.extend({
-  url: '/orqueio/app/admin/default/#/tenants/:tenant?tab=tenant',
+  url: '/camunda/app/admin/default/#/tenants/:tenant?tab=tenant',
 
   updateTenantButton: function() {
     return element(by.css('[ng-click="updateTenant()"]'));

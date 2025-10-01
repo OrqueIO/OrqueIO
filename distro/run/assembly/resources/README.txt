@@ -1,18 +1,18 @@
 This is a distribution of
 
-       Orqueio Platform v${project.version}
+       Camunda Platform v${project.version}
 
 visit
-       http://docs.orqueio.io/
+       http://docs.camunda.org/
 
-The Orqueio Platform is a dual-license Java-based framework.
-This particular copy of the Orqueio Platform is released either
+The Camunda Platform is a dual-license Java-based framework.
+This particular copy of the Camunda Platform is released either
 under the Apache License 2.0 (Community Platform) OR a commercial
 license agreement (Enterprise Platform).
 
 License information can be found in the LICENSE file.
  
-The Orqueio Platform includes libraries developed by third
+The Camunda Platform includes libraries developed by third
 parties. For license and attribution notices for these libraries,
 please refer to the documentation that accompanies this distribution
 (see the LICENSE_BOOK-${project.version} file).
@@ -34,17 +34,17 @@ Contents:
 
   internal/
         This directory contains the Java application and optional components
-        that Orqueio Platform Run consists of.
+        that Camunda Platform Run consists of.
 
   configuration/
         This directory contains all resources to configure the distro.
         Find a detailed guide on how to use this directory on the following
         documentation pages:
-        https://docs.orqueio.io/manual/latest/installation/orqueio-bpm-run/
-        https://docs.orqueio.io/manual/latest/user-guide/orqueio-bpm-run/
+        https://docs.camunda.org/manual/latest/installation/camunda-bpm-run/
+        https://docs.camunda.org/manual/latest/user-guide/camunda-bpm-run/
 
 ==================
 
-Orqueio Platform version: ${project.version}
+Camunda Platform version: ${project.version}
 
 =================

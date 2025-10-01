@@ -152,9 +152,9 @@ describe('Admin Groups Spec', function() {
       // then
       testHelper.expectStringEqual(
         groupsPage.editGroup.pageHeader(),
-        'orqueio BPM Administrators'
+        'camunda BPM Administrators'
       );
-      groupsPage.editGroup.isActive({group: 'orqueio-admin'});
+      groupsPage.editGroup.isActive({group: 'camunda-admin'});
       expect(
         groupsPage.editGroup.updateGroupButton().isEnabled()
       ).to.eventually.eql(false);
@@ -168,7 +168,7 @@ describe('Admin Groups Spec', function() {
       // then
       testHelper.expectStringEqual(
         groupsPage.editGroup.pageHeader(),
-        'orqueio BPM Administratorsi'
+        'camunda BPM Administratorsi'
       );
     });
 
@@ -198,9 +198,9 @@ describe('Admin Groups Spec', function() {
       groupsPage.editGroup.selectUserNavbarItem('Tenants');
 
       // then
-      groupsPage.editGroupTenants.isActive({group: 'orqueio-admin'});
+      groupsPage.editGroupTenants.isActive({group: 'camunda-admin'});
       expect(groupsPage.editGroupTenants.subHeader()).to.eventually.eql(
-        "orqueio BPM Administrators's" + ' ' + 'Tenants'
+        "camunda BPM Administrators's" + ' ' + 'Tenants'
       );
       expect(
         groupsPage.editGroupTenants.tenantList().count()
@@ -242,7 +242,7 @@ describe('Admin Groups Spec', function() {
       groupsPage.editGroup.selectUserNavbarItem('Tenants');
 
       // then
-      groupsPage.editGroupTenants.isActive({group: 'orqueio-admin'});
+      groupsPage.editGroupTenants.isActive({group: 'camunda-admin'});
       expect(
         groupsPage.editGroupTenants.tenantList().count()
       ).to.eventually.eql(1);

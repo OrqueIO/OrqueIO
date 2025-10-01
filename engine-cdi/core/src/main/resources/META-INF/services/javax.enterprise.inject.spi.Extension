@@ -1,1 +1,1 @@
-io.orqueio.bpm.engine.cdi.impl.ProcessEngineExtension
+org.camunda.bpm.engine.cdi.impl.ProcessEngineExtension

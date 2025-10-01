@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: User Forum
+    url: https://forum.camunda.io/
+    about: Ask questions about using Camunda Platform here.
+  - name: Enterprise Support
+    url: https://camunda.com/services/enterprise-support-guide/
+    about: As an enterprise customer, contact our product support here.

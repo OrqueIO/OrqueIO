@@ -3,19 +3,19 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>io.orqueio.bpm</groupId>
-    <artifactId>orqueio-parent</artifactId>
+    <groupId>org.camunda.bpm</groupId>
+    <artifactId>camunda-parent</artifactId>
     <relativePath>../parent</relativePath>
-    <version>1.0.1</version>
+    <version>7.24.0-SNAPSHOT</version>
   </parent>
-  <version>1.0.1</version>
-  <description>orqueio-database-settings</description>
-  <groupId>io.orqueio.bpm</groupId>
-  <artifactId>orqueio-database-settings</artifactId>
 
+  <artifactId>camunda-database-settings</artifactId>
   <packaging>pom</packaging>
-  <name>Orque IO Platform - database settings</name>
-
+  <name>Camunda Platform - database settings</name>
+  <description>
+    Provides general dependencies and profiles for database testing.
+    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://camunda.com/contact/
+  </description>
 
   <properties>
 
@@ -148,7 +148,7 @@
         <activeByDefault>true</activeByDefault>
       </activation>
       <properties>
-        <database.url>jdbc:h2:mem:orqueio;DB_CLOSE_DELAY=1000;LOCK_TIMEOUT=10000</database.url>
+        <database.url>jdbc:h2:mem:camunda;DB_CLOSE_DELAY=1000;LOCK_TIMEOUT=10000</database.url>
         <database.driver>org.h2.Driver</database.driver>
         <database.username>sa</database.username>
         <database.password />
@@ -403,33 +403,4 @@
 
   </profiles>
 
-
-  <licenses>
-    <license>
-      <name>The Apache Software License, Version 2.0</name>
-      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-    </license>
-  </licenses>
-
-  <organization>
-    <name>Orque IO</name>
-    <url>http://www.orqueio.io</url>
-  </organization>
-
-  <url>http://www.orqueio.io</url>
-  <developers>
-    <developer>
-      <id>orqueio.io</id>
-      <name>Orque IO Platform Community</name>
-      <organization>orqueio.io</organization>
-      <organizationUrl>https://www.orqueio.io</organizationUrl>
-    </developer>
-  </developers>
-
-  <scm>
-    <url>https://github.com/orqueio/orqueio</url>
-    <connection>scm:git:git@github.com:orqueio/orqueio.git</connection>
-    <developerConnection>scm:git:git@github.com:orqueio/orqueio.git</developerConnection>
-    <tag>HEAD</tag>
-  </scm>
 </project>

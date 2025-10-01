@@ -1,9 +1,9 @@
 REST API Jakarta
 ================
 
-A Jakarta JAX-RS-based REST API for Orque IO Platform.
+A Jakarta JAX-RS-based REST API for Camunda Platform.
 
-> This module copies and transforms the `orqueio-engine-rest-core` module.  
+> This module copies and transforms the `camunda-engine-rest-core` module.  
 > It contains only implementations for classes where there are breaking changes either in the updated dependencies or due to JakartaEE.
 
 Running Tests
@@ -18,5 +18,5 @@ In order to run the tests against Resteasy, execute `mvn clean install -Presteas
 Writing Tests
 -------------
 
-See the `orqueio-engine-rest-core` module's README about writing tests and add your test in that module.
+See the `camunda-engine-rest-core` module's README about writing tests and add your test in that module.
 

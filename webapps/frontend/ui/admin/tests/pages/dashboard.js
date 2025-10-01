@@ -21,7 +21,7 @@ var Page = require('./base');
 var AuthenticationPage = require('../../../common/tests/pages/authentication');
 
 var DashboardPage = Page.extend({
-  url: '/orqueio/app/admin/default/#/',
+  url: '/camunda/app/admin/default/#/',
 
   section: function(name) {
     return element(by.css('[data-plugin-id="' + name + '"]'));

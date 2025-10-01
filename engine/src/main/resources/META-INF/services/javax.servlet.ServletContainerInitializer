@@ -1,1 +1,1 @@
-io.orqueio.bpm.application.impl.ServletProcessApplicationDeployer
+org.camunda.bpm.application.impl.ServletProcessApplicationDeployer

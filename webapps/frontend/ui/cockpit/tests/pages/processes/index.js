@@ -23,7 +23,7 @@ var DeployedProcessesPreviewsPage = require('./deployed-processes-previews');
 var AuthenticationPage = require('../../../../common/tests/pages/authentication');
 
 var Page = Base.extend({
-  url: '/orqueio/app/cockpit/default/#/processes',
+  url: '/camunda/app/cockpit/default/#/processes',
 
   pluginList: function() {
     return element.all(by.css('.dashboard'));

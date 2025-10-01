@@ -29,7 +29,7 @@
                        "value": {
                             "id": "aDecisionDefinitionId",
                             "key": "dish-decision",
-                            "category": "http://orqueio.io/schema/1.0/dmn",
+                            "category": "http://camunda.org/schema/1.0/dmn",
                             "name": "Dish Decision",
                             "version": 1,
                             "resource": "drd-dish-decision.dmn",

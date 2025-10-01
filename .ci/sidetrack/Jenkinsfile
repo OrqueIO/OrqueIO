@@ -43,7 +43,7 @@ pipeline {
                         ".m2/org/camunda/**/*-SNAPSHOT/**",
                         "**/qa/**,**/*qa*/**,**/*.zip,**/*.tar.gz")
             cambpmStash("platform-stash-qa",
-                        ".m2/io/orqueio/bpm/**/qa/**/*-SNAPSHOT/**,.m2/io/orqueio/bpm/**/*qa*/**/*-SNAPSHOT/**",
+                        ".m2/org/camunda/bpm/**/qa/**/*-SNAPSHOT/**,.m2/org/camunda/bpm/**/*qa*/**/*-SNAPSHOT/**",
                         "**/*.zip,**/*.tar.gz")
           }
         ])

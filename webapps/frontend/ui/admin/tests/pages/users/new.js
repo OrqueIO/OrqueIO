@@ -20,7 +20,7 @@
 var Base = require('./new-base');
 
 module.exports = Base.extend({
-  url: '/orqueio/app/admin/default/#/user-create',
+  url: '/camunda/app/admin/default/#/user-create',
 
   createNewUserButton: function() {
     return element(by.css('[ng-click="createUser()"]'));

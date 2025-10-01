@@ -1,1 +1,1 @@
-io.orqueio.bpm.engine.cdi.test.ArquillianExtension
+org.camunda.bpm.engine.cdi.test.ArquillianExtension

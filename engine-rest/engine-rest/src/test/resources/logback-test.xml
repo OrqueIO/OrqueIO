@@ -6,7 +6,7 @@
     </layout>
   </appender>
 
-  <logger name="io.orqueio" level="debug" />
+  <logger name="org.camunda" level="debug" />
 
   <root level="info">
     <appender-ref ref="STDOUT" />

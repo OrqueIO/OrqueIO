@@ -49,8 +49,8 @@ module.exports = function(config) {
             expose: {
               angular: 'angular',
               jquery: 'jquery',
-              'orqueio-commons-ui': 'orqueio-commons-ui',
-              'orqueio-bpm-sdk-js': 'orqueio-bpm-sdk-js',
+              'camunda-commons-ui': 'camunda-commons-ui',
+              'camunda-bpm-sdk-js': 'camunda-bpm-sdk-js',
               'angular-data-depend': 'angular-data-depend',
               moment: 'moment',
               events: 'events',

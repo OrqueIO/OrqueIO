@@ -1,1 +1,1 @@
-io.orqueio.bpm.spring.boot.starter.OrqueioBpmAutoConfiguration
+org.camunda.bpm.spring.boot.starter.CamundaBpmAutoConfiguration

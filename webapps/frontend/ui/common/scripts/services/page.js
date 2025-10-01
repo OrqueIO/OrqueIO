@@ -17,7 +17,7 @@
 
 'use strict';
 
-var angular = require('orqueio-commons-ui/vendor/angular');
+var angular = require('camunda-commons-ui/vendor/angular');
 
 /**
  * A service to manage a page page.
@@ -35,12 +35,12 @@ module.exports = [
   'camAPI',
   function($rootScope, $location, camAPI) {
     var page = {
-      title: 'Orqueio',
+      title: 'Camunda',
       breadcrumbs: []
     };
 
     var headTitle = angular.element(document.querySelector('head title'));
-    var originalTitle = headTitle[0].textContent || 'OrqueIO Cockpit';
+    var originalTitle = headTitle[0].textContent || 'Camunda Cockpit';
 
     // add a listener to the $rootScope to propagate the changes in the page title
     // sure... we could put that in the titleSet() function

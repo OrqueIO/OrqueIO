@@ -1,20 +1,18 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-
+  <description>
+    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://camunda.com/contact/
+  </description>
 
   <parent>
-    <groupId>io.orqueio.connect</groupId>
-    <artifactId>orqueio-connect-root</artifactId>
-    <version>1.0.1</version>
+    <groupId>org.camunda.connect</groupId>
+    <artifactId>camunda-connect-root</artifactId>
+    <version>7.24.0-SNAPSHOT</version>
   </parent>
-  <description>orqueio-connect-connectors-all</description>
- <groupId>io.orqueio.connect</groupId>
-  <version>1.0.1</version>
-  <artifactId>orqueio-connect-connectors-all</artifactId>
-  <packaging>jar</packaging>
 
-  <name>Orque IO Platform - connect - all connectors in one</name>
+  <artifactId>camunda-connect-connectors-all</artifactId>
+  <name>Camunda Platform - connect - all connectors in one</name>
 
   <properties>
     <!-- We shade artifacts into the jar, so we need to generate 
@@ -25,16 +23,13 @@
   <dependencies>
 
     <dependency>
-      <groupId>io.orqueio.connect</groupId>
-      <artifactId>orqueio-connect-http-client</artifactId>
-      <version>1.0.1</version>
+      <groupId>org.camunda.connect</groupId>
+      <artifactId>camunda-connect-http-client</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>io.orqueio.connect</groupId>
-      <artifactId>orqueio-connect-soap-http-client</artifactId>
-      <version>1.0.1</version>
-
+      <groupId>org.camunda.connect</groupId>
+      <artifactId>camunda-connect-soap-http-client</artifactId>
     </dependency>
 
   </dependencies>
@@ -44,8 +39,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
-        <version>3.6.0</version>
-
         <executions>
           <execution>
             <phase>package</phase>
@@ -58,8 +51,8 @@
               <promoteTransitiveDependencies>true</promoteTransitiveDependencies>
               <artifactSet>
                 <excludes>
-                  <exclude>io.orqueio.commons:*</exclude>
-                  <exclude>io.orqueio.connect:orqueio-connect-core</exclude>
+                  <exclude>org.camunda.commons:*</exclude>
+                  <exclude>org.camunda.connect:camunda-connect-core</exclude>
                   <exclude>org.slf4j:*</exclude>
                 </excludes>
               </artifactSet>
@@ -80,27 +73,24 @@
         <!-- make sure javadocs are generated for connect-all -->
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <version>2.9.1</version>
         <configuration>
           <includeDependencySources>true</includeDependencySources>
           <includeTransitiveDependencySources>true</includeTransitiveDependencySources>
           <dependencySourceIncludes>
-            <include>io.orqueio.connect:*</include>
+            <include>org.camunda.connect:*</include>
           </dependencySourceIncludes>
         </configuration>
       </plugin>
       <plugin>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
-        <version>5.1.1</version>
-
         <configuration>
           <unpackBundle>false</unpackBundle>
           <instructions>
             <Import-Package>
               !connectjar*,
               javax.*;resolution:=optional,
-              io.orqueio.commons.logging
+              org.camunda.commons.logging
             </Import-Package>
             <Bundle-ClassPath>.</Bundle-ClassPath>
             <Embed-Dependency>*;inline=true</Embed-Dependency>
@@ -119,33 +109,4 @@
       </plugin>
     </plugins>
   </build>
-  <licenses>
-    <license>
-      <name>The Apache Software License, Version 2.0</name>
-      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-    </license>
-  </licenses>
-
-  <organization>
-    <name>Orque IO</name>
-    <url>https://www.orqueio.io</url>
-  </organization>
-
-  <url>https://www.orqueio.io</url>
-
-  <developers>
-    <developer>
-      <id>orqueio.io</id>
-      <name>Orque IO Platform Community</name>
-      <organization>orqueio.io</organization>
-      <organizationUrl>https://www.orqueio.io</organizationUrl>
-    </developer>
-  </developers>
-
-  <scm>
-    <url>https://github.com/orqueio/orqueio</url>
-    <connection>scm:git:git@github.com:orqueio/orqueio.git</connection>
-    <developerConnection>scm:git:git@github.com:orqueio/orqueio.git</developerConnection>
-    <tag>HEAD</tag>
-  </scm>
 </project>

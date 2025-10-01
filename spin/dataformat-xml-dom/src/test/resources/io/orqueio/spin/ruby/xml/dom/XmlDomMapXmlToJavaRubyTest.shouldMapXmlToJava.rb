@@ -1,1 +1,0 @@
-$order = S($input, "application/xml").mapTo("io.orqueio.spin.xml.mapping.Order")

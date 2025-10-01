@@ -1,3 +1,0 @@
-io.orqueio.bpm.client.variable.impl.format.json.JacksonJsonDataFormatProvider
-io.orqueio.bpm.client.variable.impl.format.serializable.SerializableDataFormatProvider
-io.orqueio.bpm.client.variable.impl.format.xml.DomXmlDataFormatProvider

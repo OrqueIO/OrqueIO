@@ -17,8 +17,8 @@
 
 'use strict';
 
-var angular = require('orqueio-commons-ui/vendor/angular');
-var debouncePromiseFactory = require('orqueio-bpm-sdk-js').utils
+var angular = require('camunda-commons-ui/vendor/angular');
+var debouncePromiseFactory = require('camunda-bpm-sdk-js').utils
   .debouncePromiseFactory;
 var debouncePromise = debouncePromiseFactory();
 

@@ -20,5 +20,5 @@
 var Page = require('./authorizations-base');
 
 module.exports = Page.extend({
-  url: '/orqueio/app/admin/default/#/authorization?resource=6'
+  url: '/camunda/app/admin/default/#/authorization?resource=6'
 });

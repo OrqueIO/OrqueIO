@@ -12,6 +12,6 @@
   <dependencies>
     <module name="javax.api" />
     <module name="sun.jdk" />
-    <module name="io.orqueio.spin.orqueio-spin-core" />
+    <module name="org.camunda.spin.camunda-spin-core" />
   </dependencies>
 </module>

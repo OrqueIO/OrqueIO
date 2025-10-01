@@ -19,7 +19,7 @@
 
 var template = require('./cam-tasklist-form-embedded.html?raw');
 
-var angular = require('orqueio-commons-ui/vendor/angular');
+var angular = require('camunda-commons-ui/vendor/angular');
 var $ = require('jquery');
 
 module.exports = [
