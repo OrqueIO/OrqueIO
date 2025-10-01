@@ -15,15 +15,7 @@
   <name>Orque IO Platform - Wildfly Distro</name>
 
   <dependencies>
-    <dependency>
-      <!-- this dependency is to make sure that we are executed after the
-        integration tests have passed in the reactor -->
-      <groupId>io.orqueio.bpm.qa</groupId>
-      <artifactId>orqueio-qa</artifactId>
-      <version>${project.version}</version>
-      <type>pom</type>
-      <scope>provided</scope>
-    </dependency>
+
 
     <dependency>
       <groupId>io.orqueio.bpm.wildfly</groupId>

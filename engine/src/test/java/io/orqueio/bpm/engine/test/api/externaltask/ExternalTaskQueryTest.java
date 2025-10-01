@@ -687,7 +687,7 @@ public class ExternalTaskQueryTest extends PluggableProcessEngineTest {
     assertThat(task.getProcessDefinitionVersionTag()).isEqualTo("1.2.3.4");
   }
 
-  @Deployment(resources="org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
+  @Deployment(resources="io/orqueio/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
   @Test
   public void testProcessDefinitionKey() throws Exception {
     assertEquals(0, externalTaskService.createExternalTaskQuery().processDefinitionKey("oneExternalTaskProcess").count());
@@ -695,7 +695,7 @@ public class ExternalTaskQueryTest extends PluggableProcessEngineTest {
     assertEquals(1, externalTaskService.createExternalTaskQuery().processDefinitionKey("oneExternalTaskProcess").count());
   }
 
-  @Deployment(resources="org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
+  @Deployment(resources="io/orqueio/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
   @Test
   public void testProcessDefinitionKeyIn() throws Exception {
     assertEquals(0, externalTaskService.createExternalTaskQuery().processDefinitionKeyIn("oneExternalTaskProcess").count());
@@ -703,7 +703,7 @@ public class ExternalTaskQueryTest extends PluggableProcessEngineTest {
     assertEquals(1, externalTaskService.createExternalTaskQuery().processDefinitionKeyIn("oneExternalTaskProcess").count());
   }
 
-  @Deployment(resources="org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
+  @Deployment(resources="io/orqueio/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
   @Test
   public void testProcessDefinitionName() throws Exception {
     assertEquals(0, externalTaskService.createExternalTaskQuery().processDefinitionName("One external task process").count());
@@ -711,7 +711,7 @@ public class ExternalTaskQueryTest extends PluggableProcessEngineTest {
     assertEquals(1, externalTaskService.createExternalTaskQuery().processDefinitionName("One external task process").count());
   }
 
-  @Deployment(resources="org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
+  @Deployment(resources="io/orqueio/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
   @Test
   public void processDefinitionNameLike() throws Exception {
     assertEquals(0, externalTaskService.createExternalTaskQuery().processDefinitionNameLike("One external task proc%").count());
@@ -719,7 +719,7 @@ public class ExternalTaskQueryTest extends PluggableProcessEngineTest {
     assertEquals(1, externalTaskService.createExternalTaskQuery().processDefinitionNameLike("One external task proc%").count());
   }
 
-  @Deployment(resources="org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
+  @Deployment(resources="io/orqueio/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
   @Test
   public void testProcessVariableValueEquals() throws Exception {
     Map<String, Object> variables = new HashMap<>();
@@ -766,7 +766,7 @@ public class ExternalTaskQueryTest extends PluggableProcessEngineTest {
     assertEquals(0, externalTaskService.createExternalTaskQuery().processVariableValueNotEquals("longVar", 928374L).count());
   }
 
-  @Deployment(resources="org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
+  @Deployment(resources="io/orqueio/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
   @Test
   public void testProcessVariableNameEqualsIgnoreCase() throws Exception {
     String variableName = "someVariable";
@@ -784,7 +784,7 @@ public class ExternalTaskQueryTest extends PluggableProcessEngineTest {
     assertEquals(1, externalTaskService.createExternalTaskQuery().processVariableValueEquals(variableName.toLowerCase(), variableValue).matchVariableNamesIgnoreCase().count());
   }
 
-  @Deployment(resources="org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
+  @Deployment(resources="io/orqueio/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
   @Test
   public void testProcessVariableValueEqualsIgnoreCase() throws Exception {
     String variableName = "someVariable";
@@ -815,7 +815,7 @@ public class ExternalTaskQueryTest extends PluggableProcessEngineTest {
     assertEquals(0, externalTaskService.createExternalTaskQuery().matchVariableValuesIgnoreCase().processVariableValueNotEquals(variableName, variableValue.toLowerCase()).count());
   }
 
-  @Deployment(resources="org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
+  @Deployment(resources="io/orqueio/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
   @Test
   public void testProcessVariableValueLike() throws Exception {
     Map<String, Object> variables = new HashMap<>();
@@ -840,7 +840,7 @@ public class ExternalTaskQueryTest extends PluggableProcessEngineTest {
     } catch (final ProcessEngineException e) {/*OK*/}
   }
 
-  @Deployment(resources="org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
+  @Deployment(resources="io/orqueio/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
   @Test
   public void testProcessVariableValueLikeIgnoreCase() throws Exception {
 
@@ -867,7 +867,7 @@ public class ExternalTaskQueryTest extends PluggableProcessEngineTest {
     } catch (final ProcessEngineException e) {/*OK*/}
   }
 
-  @Deployment(resources="org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
+  @Deployment(resources="io/orqueio/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
   @Test
   public void testProcessVariableValueNotLike() throws Exception {
     Map<String, Object> variables = new HashMap<>();
@@ -890,7 +890,7 @@ public class ExternalTaskQueryTest extends PluggableProcessEngineTest {
             .isInstanceOf(ProcessEngineException.class);
   }
 
-  @Deployment(resources="org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
+  @Deployment(resources="io/orqueio/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
   @Test
   public void testProcessVariableValueNotLikeIgnoreCase() throws Exception {
     Map<String, Object> variables = new HashMap<>();
@@ -914,7 +914,7 @@ public class ExternalTaskQueryTest extends PluggableProcessEngineTest {
             .isInstanceOf(ProcessEngineException.class);
   }
 
-  @Deployment(resources="org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
+  @Deployment(resources="io/orqueio/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
   @Test
   public void testProcessVariableValueCompare() throws Exception {
 
@@ -1021,7 +1021,7 @@ public class ExternalTaskQueryTest extends PluggableProcessEngineTest {
     assertEquals(0, externalTaskService.createExternalTaskQuery().processVariableValueLessThanOrEquals("nonExisting", 123).count());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
   @Test
   public void testProcessVariableValueEqualsNumber() throws Exception {
     // long
@@ -1063,7 +1063,7 @@ public class ExternalTaskQueryTest extends PluggableProcessEngineTest {
     assertEquals(1, externalTaskService.createExternalTaskQuery().processVariableValueEquals("var", Variables.numberValue(null)).count());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
   @Test
   public void testProcessVariableValueNumberComparison() throws Exception {
     // long
@@ -1104,7 +1104,7 @@ public class ExternalTaskQueryTest extends PluggableProcessEngineTest {
     assertEquals(4, externalTaskService.createExternalTaskQuery().processVariableValueLessThanOrEquals("var", Variables.numberValue(123)).count());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
   @Test
   public void testVariableEqualsNumberMax() throws Exception {
     runtimeService.startProcessInstanceByKey("oneExternalTaskProcess",
@@ -1116,7 +1116,7 @@ public class ExternalTaskQueryTest extends PluggableProcessEngineTest {
     assertEquals(1, externalTaskService.createExternalTaskQuery().processVariableValueEquals("var", Variables.numberValue(Long.MAX_VALUE)).count());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
   @Test
   public void testVariableEqualsNumberLongValueOverflow() throws Exception {
     runtimeService.startProcessInstanceByKey("oneExternalTaskProcess",
@@ -1130,7 +1130,7 @@ public class ExternalTaskQueryTest extends PluggableProcessEngineTest {
     assertEquals(1, externalTaskService.createExternalTaskQuery().processVariableValueEquals("var", Variables.numberValue(MAX_DOUBLE_VALUE)).count());
   }
 
-  @Deployment(resources = "org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
   @Test
   public void testVariableEqualsNumberNonIntegerDoubleShouldNotMatchInteger() throws Exception {
     runtimeService.startProcessInstanceByKey("oneExternalTaskProcess",

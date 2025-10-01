@@ -23,6 +23,7 @@
     <module>core</module>
     <module>dataformat-json-jackson</module>
     <module>dataformat-xml-dom</module>
+    <module>dataformat-xml-dom-jakarta</module>
     <module>dataformat-all</module>
   </modules>
 
@@ -201,17 +202,6 @@
                 </goals>
               </execution>
             </executions>
-          </plugin>
-          <plugin>
-            <groupId>org.sonatype.central</groupId>
-            <artifactId>central-publishing-maven-plugin</artifactId>
-            <version>0.8.0</version>
-            <extensions>true</extensions>
-            <configuration>
-              <publishingServerId>central</publishingServerId>
-              <autoPublish>true</autoPublish>
-              <waitUntil>published</waitUntil>
-            </configuration>
           </plugin>
           <plugin>
             <groupId>org.codehaus.mojo</groupId>

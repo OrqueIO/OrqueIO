@@ -7,7 +7,6 @@ Orque IO is a flexible framework for workflow and process automation. Its core i
 
 - Web Site: https://www.orqueio.io/
 - Getting Started: https://docs.orqueio.io/
-- User Forum: https://forum.camunda.org/
 - Issue Tracker: https://github.com/orqueio/orqueio/issues
 - Contribution Guidelines: https://orqueio.io/contribute/
 
@@ -23,26 +22,24 @@ Orque IO provides a rich set of components centered around the BPM lifecycle.
 
 #### Process Design
 
-- Camunda Modeler - A [standalone desktop application](https://github.com/camunda/camunda-modeler) that allows business users and developers to design & configure processes.
+- OrqueIO Modeler - A [standalone desktop application](https://github.com/orqueio/orqueio-modeler) that allows business users and developers to design & configure processes.
 
 #### Process Operations
 
-- Camunda Engine - JMX and advanced Runtime Container Integration for process engine monitoring.
-- Camunda Cockpit - Web application tool for process operations.
-- Camunda Admin - Web application for managing users, groups, and their access permissions.
+- OrqueIO Engine - JMX and advanced Runtime Container Integration for process engine monitoring.
+- OrqueIO Cockpit - Web application tool for process operations.
+- OrqueIO Admin - Web application for managing users, groups, and their access permissions.
 
 #### Human Task Management
 
-- Camunda Tasklist - Web application for managing and completing user tasks in the context of processes.
+- OrqueIO Tasklist - Web application for managing and completing user tasks in the context of processes.
 
 #### And there's more...
 
 - [bpmn.io](https://bpmn.io/) - Toolkits for BPMN, CMMN, and DMN in JavaScript (rendering, modeling)
-- [Community Extensions](https://docs.camunda.org/manual/7.5/introduction/extensions/) - Extensions on top of Orque IO provided and maintained by our great open source community
-
 ## A Framework
 
-In contrast to other vendor BPM platforms, Orque IO strives to be highly integrable and embeddable. We seek to deliver a great experience to developers that want to use BPM technology in their projects.
+In contrast to other vendor BPM platforms, OrqueIO strives to be highly integrable and embeddable. We seek to deliver a great experience to developers that want to use BPM technology in their projects.
 
 ### Highly Integrable
 

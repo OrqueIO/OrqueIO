@@ -97,7 +97,6 @@
         <module>modules/example</module>
         <module>core</module>
         <module>assembly</module>
-        <module>qa</module>
       </modules>
     </profile>
     <profile>
@@ -108,13 +107,7 @@
       <modules>
         <module>modules/webapps</module>
         <module>distro</module>
-        <module>qa</module>
-      </modules>
-    </profile>
-    <profile>
-      <id>integration-test-orqueio-run</id>
-      <modules>
-        <module>qa</module>
+
       </modules>
     </profile>
   </profiles>

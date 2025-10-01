@@ -8,7 +8,6 @@ pipeline {
 
     stages {
         stage('SonarQube analysis') {
-            when { branch "upload-sonatype" }
             environment {
                 scannerHome = tool 'scannerHome'
             }
