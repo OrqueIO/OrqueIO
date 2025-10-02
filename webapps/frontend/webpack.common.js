@@ -34,10 +34,10 @@ module.exports = (_env, argv = {}) => {
   return {
     entry: {
       /* Cockpit */
-      'app/cockpit/camunda-cockpit-bootstrap': {
+      'app/cockpit/orqueio-cockpit-bootstrap': {
         import: path.resolve(
           __dirname,
-          'ui/cockpit/client/scripts/camunda-cockpit-bootstrap.js'
+          'ui/cockpit/client/scripts/orqueio-cockpit-bootstrap.js'
         )
       },
       'plugin/cockpit/app/plugin': {
@@ -45,10 +45,10 @@ module.exports = (_env, argv = {}) => {
       },
 
       /* Tasklist */
-      'app/tasklist/camunda-tasklist-bootstrap': {
+      'app/tasklist/orqueio-tasklist-bootstrap': {
         import: path.resolve(
           __dirname,
-          'ui/tasklist/client/scripts/camunda-tasklist-bootstrap.js'
+          'ui/tasklist/client/scripts/orqueio-tasklist-bootstrap.js'
         )
       },
       'plugin/tasklist/app/plugin': {
@@ -56,10 +56,10 @@ module.exports = (_env, argv = {}) => {
       },
 
       /* Admin */
-      'app/admin/camunda-admin-bootstrap': {
+      'app/admin/orqueio-admin-bootstrap': {
         import: path.resolve(
           __dirname,
-          'ui/admin/client/scripts/camunda-admin-bootstrap.js'
+          'ui/admin/client/scripts/orqueio-admin-bootstrap.js'
         )
       },
       'plugin/admin/app/plugin': {
@@ -67,10 +67,10 @@ module.exports = (_env, argv = {}) => {
       },
 
       /* Welcome */
-      'app/welcome/camunda-welcome-bootstrap': {
+      'app/welcome/orqueio-welcome-bootstrap': {
         import: path.resolve(
           __dirname,
-          'ui/welcome/client/scripts/camunda-welcome-bootstrap.js'
+          'ui/welcome/client/scripts/orqueio-welcome-bootstrap.js'
         )
       }
     },
@@ -90,9 +90,9 @@ module.exports = (_env, argv = {}) => {
       },
       extensions: ['.js', '.less'],
       alias: {
-        'camunda-commons-ui': path.resolve(__dirname, 'camunda-commons-ui'),
+        'orqueio-commons-ui': path.resolve(__dirname, 'orqueio-commons-ui'),
         ui: path.resolve(__dirname, 'ui'),
-        'camunda-bpm-sdk-js': path.resolve(__dirname, 'camunda-bpm-sdk-js'),
+        'orqueio-bpm-sdk-js': path.resolve(__dirname, 'orqueio-bpm-sdk-js'),
         'cam-common': path.resolve(__dirname, 'ui/common/scripts/module'),
         jquery: path.resolve(__dirname, 'node_modules/jquery'),
         'core-js': path.resolve(__dirname, 'node_modules/core-js'),
@@ -149,7 +149,7 @@ module.exports = (_env, argv = {}) => {
         appName: 'cockpit',
         template: path.resolve(__dirname, 'ui/cockpit/client/scripts/index.html'),
         filename: 'app/cockpit/index.html',
-        chunks: ['app/cockpit/camunda-cockpit-bootstrap'],
+        chunks: ['app/cockpit/orqueio-cockpit-bootstrap'],
         favicon: path.resolve(__dirname, 'ui/common/images/favicon.ico'),
         publicPath: '$APP_ROOT',
         version
@@ -160,7 +160,7 @@ module.exports = (_env, argv = {}) => {
         appName: 'tasklist',
         template: path.resolve(__dirname, 'ui/tasklist/client/index.html'),
         filename: 'app/tasklist/index.html',
-        chunks: ['app/tasklist/camunda-tasklist-bootstrap'],
+        chunks: ['app/tasklist/orqueio-tasklist-bootstrap'],
         favicon: path.resolve(__dirname, 'ui/common/images/favicon.ico'),
         publicPath: '$APP_ROOT',
         version
@@ -171,7 +171,7 @@ module.exports = (_env, argv = {}) => {
         appName: 'admin',
         template: path.resolve(__dirname, 'ui/admin/client/scripts/index.html'),
         filename: 'app/admin/index.html',
-        chunks: ['app/admin/camunda-admin-bootstrap'],
+        chunks: ['app/admin/orqueio-admin-bootstrap'],
         favicon: path.resolve(__dirname, 'ui/common/images/favicon.ico'),
         publicPath: '$APP_ROOT',
         version
@@ -182,7 +182,7 @@ module.exports = (_env, argv = {}) => {
         appName: 'welcome',
         template: path.resolve(__dirname, 'ui/welcome/client/scripts/index.html'),
         filename: 'app/welcome/index.html',
-        chunks: ['app/welcome/camunda-welcome-bootstrap'],
+        chunks: ['app/welcome/orqueio-welcome-bootstrap'],
         favicon: path.resolve(__dirname, 'ui/common/images/favicon.ico'),
         publicPath: '$APP_ROOT',
         version
@@ -217,13 +217,13 @@ module.exports = (_env, argv = {}) => {
         ]
       }),
       new webpack.DefinePlugin({
-        CAMUNDA_VERSION: `'${version}'`,
-        CAMUNDA_EDITION: eeBuild ? '"EE"' : '"CE"',
+        ORQUEIO_VERSION: `'${version}'`,
+        ORQUEIO_EDITION: eeBuild ? '"EE"' : '"CE"',
         DEV_MODE: devMode,
         _import: 'function(filePath) { return import(filePath) }' // dynamic import workaround
       }),
       new webpack.ProvidePlugin({
-        CAMUNDA_EDITION: eeBuild ? '"EE"' : '"CE"',
+        ORQUEIO_EDITION: eeBuild ? '"EE"' : '"CE"',
         DEV_MODE: devMode
       }),
       new ESLintPlugin()

@@ -1,0 +1,35 @@
+#!/usr/bin/env groovy
+
+pipeline {
+
+    agent any
+
+    tools {
+        jdk 'jdk21'
+        maven 'maven'
+    }
+
+
+
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '5'))
+    }
+
+
+
+    stages {
+
+        stage('Upload') {
+            steps {
+                sh "mvn clean install -DskipTests"
+                sh "mvn clean deploy  -X -Pcentral-sonatype-publish -DskipTests"
+            }
+        }
+    }
+
+    post {
+        always {
+            cleanWs()
+        }
+    }
+}

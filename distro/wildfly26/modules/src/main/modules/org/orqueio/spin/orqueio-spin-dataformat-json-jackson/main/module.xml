@@ -1,0 +1,18 @@
+<module xmlns="urn:jboss:module:1.0" name="io.orqueio.spin.orqueio-spin-dataformat-json-jackson">
+  <resources>
+    <resource-root path="orqueio-spin-dataformat-json-jackson-@project.version@.jar" />
+  </resources>
+
+  <dependencies>
+    <module name="javax.api"/>
+
+    <module name="io.orqueio.spin.orqueio-spin-core" />
+    <module name="io.orqueio.commons.orqueio-commons-logging" />
+    <module name="io.orqueio.commons.orqueio-commons-utils" />
+    <module name="io.orqueio.commons.orqueio-commons-typed-values" />
+
+    <module name="com.fasterxml.jackson.core.jackson-databind" slot="@version.jackson@" />
+    <module name="com.jayway.jsonpath.json-path" />
+  </dependencies>
+
+</module>

@@ -2,27 +2,28 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.camunda.bpm</groupId>
-    <artifactId>camunda-root</artifactId>
-    <version>7.24.0-SNAPSHOT</version>
-    <relativePath>../</relativePath>
+    <groupId>io.orqueio.bpm</groupId>
+    <artifactId>orqueio-root</artifactId>
+    <version>1.0.2</version>
+    <relativePath>../pom.xml</relativePath>
   </parent>
 
-  <artifactId>camunda-parent</artifactId>
-  <name>Camunda Platform - Parent Pom</name>
+  <groupId>io.orqueio.bpm</groupId>
+  <artifactId>orqueio-parent</artifactId>
+  <version>1.0.2</version>
+  <name>Orque IO Platform - Parent Pom</name>
   <inceptionYear>2013</inceptionYear>
   <packaging>pom</packaging>
 
   <description>
-    This pom is the parent of all Camunda Platform projects.
-    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://camunda.com/contact/
+    This pom is the parent of all Orque IO Platform projects.
   </description>
 
   <properties>
-    <version.quarkus>3.20.0</version.quarkus>
+    <version.quarkus>3.27.0.CR1</version.quarkus>
     <version.spring.framework>5.3.39</version.spring.framework>
-    <version.spring.framework6>6.2.9</version.spring.framework6>
-    <version.spring-boot>3.5.4</version.spring-boot>
+    <version.spring.framework6>6.2.10</version.spring.framework6>
+    <version.spring-boot>3.5.5</version.spring-boot>
     <version.resteasy>3.15.6.Final</version.resteasy>
     <version.jersey2>2.34</version.jersey2>
     <!-- use minimum version of resteasy and jersey -->
@@ -82,41 +83,41 @@
     <version.npm>10.7.0</version.npm>
 
     <!-- OSGi bundles properties -->
-    <camunda.artifact />
-    <camunda.osgi.import.camunda.spin.version>version="[$(version;==;${camunda.spin.version.clean}),$(version;=+;${camunda.spin.version.clean}))"</camunda.osgi.import.camunda.spin.version>
-    <camunda.osgi.import.camunda.connect.version>version="[$(version;==;${camunda.connect.version.clean}),$(version;=+;${camunda.connect.version.clean}))"</camunda.osgi.import.camunda.connect.version>
-    <camunda.osgi.import.camunda.commons.version>version="[$(version;==;${camunda.commons.version.clean}),$(version;=+;${camunda.commons.version.clean}))"</camunda.osgi.import.camunda.commons.version>
-    <camunda.osgi.import.camunda.version>version="[$(version;==;${camunda.osgi.version.clean}),$(version;=+;${camunda.osgi.version.clean}))"</camunda.osgi.import.camunda.version>
-    <camunda.osgi.import.strict.version>version="[$(version;===;${camunda.osgi.version.clean}),$(version;==+;${camunda.osgi.version.clean}))"</camunda.osgi.import.strict.version>
-    <camunda.osgi.import.default.version>[$(version;==;$(@)),$(version;+;$(@)))</camunda.osgi.import.default.version>
-    <camunda.osgi.import.defaults>
-    </camunda.osgi.import.defaults>
-    <camunda.osgi.import.before.defaults />
-    <camunda.osgi.import.additional />
-    <camunda.osgi.import.pkg>
-      ${camunda.osgi.import.before.defaults},
-      ${camunda.osgi.import.defaults},
-      ${camunda.osgi.import.additional},
+    <orqueio.artifact />
+    <orqueio.osgi.import.orqueio.spin.version>version="[$(version;==;${orqueio.spin.version.clean}),$(version;=+;${orqueio.spin.version.clean}))"</orqueio.osgi.import.orqueio.spin.version>
+    <orqueio.osgi.import.orqueio.connect.version>version="[$(version;==;${orqueio.connect.version.clean}),$(version;=+;${orqueio.connect.version.clean}))"</orqueio.osgi.import.orqueio.connect.version>
+    <orqueio.osgi.import.orqueio.commons.version>version="[$(version;==;${orqueio.commons.version.clean}),$(version;=+;${orqueio.commons.version.clean}))"</orqueio.osgi.import.orqueio.commons.version>
+    <orqueio.osgi.import.orqueio.version>version="[$(version;==;${orqueio.osgi.version.clean}),$(version;=+;${orqueio.osgi.version.clean}))"</orqueio.osgi.import.orqueio.version>
+    <orqueio.osgi.import.strict.version>version="[$(version;===;${orqueio.osgi.version.clean}),$(version;==+;${orqueio.osgi.version.clean}))"</orqueio.osgi.import.strict.version>
+    <orqueio.osgi.import.default.version>[$(version;==;$(@)),$(version;+;$(@)))</orqueio.osgi.import.default.version>
+    <orqueio.osgi.import.defaults>
+    </orqueio.osgi.import.defaults>
+    <orqueio.osgi.import.before.defaults />
+    <orqueio.osgi.import.additional />
+    <orqueio.osgi.import.pkg>
+      ${orqueio.osgi.import.before.defaults},
+      ${orqueio.osgi.import.defaults},
+      ${orqueio.osgi.import.additional},
       *
-    </camunda.osgi.import.pkg>
-    <camunda.osgi.activator />
-    <camunda.osgi.failok>false</camunda.osgi.failok>
-    <camunda.osgi.export>${camunda.osgi.export.pkg};${camunda.osgi.version};-noimport:=true</camunda.osgi.export>
+    </orqueio.osgi.import.pkg>
+    <orqueio.osgi.activator />
+    <orqueio.osgi.failok>false</orqueio.osgi.failok>
+    <orqueio.osgi.export>${orqueio.osgi.export.pkg};${orqueio.osgi.version};-noimport:=true</orqueio.osgi.export>
     <!--
-    <camunda.osgi.export.pkg>!*.impl;${camunda.artifact}*</camunda.osgi.export.pkg>
-    <camunda.osgi.private.pkg>${camunda.artifact}*.impl</camunda.osgi.private.pkg>
+    <orqueio.osgi.export.pkg>!*.impl;${orqueio.artifact}*</orqueio.osgi.export.pkg>
+    <orqueio.osgi.private.pkg>${orqueio.artifact}*.impl</orqueio.osgi.private.pkg>
     -->
-    <camunda.osgi.export.pkg>${camunda.artifact}*</camunda.osgi.export.pkg>
-    <camunda.osgi.private.pkg />
-    <camunda.osgi.version>version=${project.version}</camunda.osgi.version>
-    <camunda.osgi.split.pkg>-split-package:=first</camunda.osgi.split.pkg>
-    <camunda.osgi.import>${camunda.osgi.import.pkg}</camunda.osgi.import>
-    <camunda.osgi.dynamic />
-    <camunda.osgi.symbolic.name>${camunda.artifact}</camunda.osgi.symbolic.name>
-    <camunda.osgi.exclude.dependencies>false</camunda.osgi.exclude.dependencies>
-    <camunda.osgi.remove.headers>Ignore-Package,Include-Resource,Private-Package,Bundle-DocURL</camunda.osgi.remove.headers>
-    <camunda.osgi.include.resource>{maven-resources}</camunda.osgi.include.resource>
-    <camunda.osgi.embed />
+    <orqueio.osgi.export.pkg>${orqueio.artifact}*</orqueio.osgi.export.pkg>
+    <orqueio.osgi.private.pkg />
+    <orqueio.osgi.version>version=${project.version}</orqueio.osgi.version>
+    <orqueio.osgi.split.pkg>-split-package:=first</orqueio.osgi.split.pkg>
+    <orqueio.osgi.import>${orqueio.osgi.import.pkg}</orqueio.osgi.import>
+    <orqueio.osgi.dynamic />
+    <orqueio.osgi.symbolic.name>${orqueio.artifact}</orqueio.osgi.symbolic.name>
+    <orqueio.osgi.exclude.dependencies>false</orqueio.osgi.exclude.dependencies>
+    <orqueio.osgi.remove.headers>Ignore-Package,Include-Resource,Private-Package,Bundle-DocURL</orqueio.osgi.remove.headers>
+    <orqueio.osgi.include.resource>{maven-resources}</orqueio.osgi.include.resource>
+    <orqueio.osgi.embed />
     <plugin.version.maven-bundle>5.1.9</plugin.version.maven-bundle> <!-- compatible with JDK 17 -->
   </properties>
 
@@ -124,8 +125,8 @@
     <dependencies>
 
       <dependency>
-        <groupId>org.camunda.bpm</groupId>
-        <artifactId>camunda-bom</artifactId>
+        <groupId>io.orqueio.bpm</groupId>
+        <artifactId>orqueio-bom</artifactId>
         <version>${project.version}</version>
         <type>pom</type>
         <scope>import</scope>
@@ -215,30 +216,30 @@
           <artifactId>maven-bundle-plugin</artifactId>
           <version>${plugin.version.maven-bundle}</version>
           <configuration>
-           <excludeDependencies>${camunda.osgi.exclude.dependencies}</excludeDependencies>
+           <excludeDependencies>${orqueio.osgi.exclude.dependencies}</excludeDependencies>
            <instructions>
              <Bundle-Name>${project.name}</Bundle-Name>
-             <Bundle-SymbolicName>${camunda.osgi.symbolic.name}</Bundle-SymbolicName>
-             <Bundle-Activator>${camunda.osgi.activator}</Bundle-Activator>
-             <Export-Package>${camunda.osgi.export}</Export-Package>
-             <Import-Package>${camunda.osgi.import}</Import-Package>
-             <DynamicImport-Package>${camunda.osgi.dynamic}</DynamicImport-Package>
-             <Private-Package>${camunda.osgi.private.pkg}</Private-Package>
-             <Implementation-Title>camunda</Implementation-Title>
+             <Bundle-SymbolicName>${orqueio.osgi.symbolic.name}</Bundle-SymbolicName>
+             <Bundle-Activator>${orqueio.osgi.activator}</Bundle-Activator>
+             <Export-Package>${orqueio.osgi.export}</Export-Package>
+             <Import-Package>${orqueio.osgi.import}</Import-Package>
+             <DynamicImport-Package>${orqueio.osgi.dynamic}</DynamicImport-Package>
+             <Private-Package>${orqueio.osgi.private.pkg}</Private-Package>
+             <Implementation-Title>orqueio</Implementation-Title>
              <Implementation-Version>${project.version}</Implementation-Version>
-             <Include-Resource>${camunda.osgi.include.resource}</Include-Resource>
-             <_versionpolicy>${camunda.osgi.import.default.version}</_versionpolicy>
-             <_removeheaders>${camunda.osgi.remove.headers}</_removeheaders>
-             <_failok>${camunda.osgi.failok}</_failok>
-             <Export-Service>${camunda.osgi.export.service}</Export-Service>
-             <Import-Service>${camunda.osgi.import.service}</Import-Service>
-             <Embed-Dependency>${camunda.osgi.embed}</Embed-Dependency>
+             <Include-Resource>${orqueio.osgi.include.resource}</Include-Resource>
+             <_versionpolicy>${orqueio.osgi.import.default.version}</_versionpolicy>
+             <_removeheaders>${orqueio.osgi.remove.headers}</_removeheaders>
+             <_failok>${orqueio.osgi.failok}</_failok>
+             <Export-Service>${orqueio.osgi.export.service}</Export-Service>
+             <Import-Service>${orqueio.osgi.import.service}</Import-Service>
+             <Embed-Dependency>${orqueio.osgi.embed}</Embed-Dependency>
             </instructions>
            <versions>
-            <camunda.osgi.version.clean>${project.version}</camunda.osgi.version.clean>
-            <camunda.connect.version.clean>${project.version}</camunda.connect.version.clean>
-            <camunda.spin.version.clean>${project.version}</camunda.spin.version.clean>
-            <camunda.commons.version.clean>${project.version}</camunda.commons.version.clean>
+            <orqueio.osgi.version.clean>${project.version}</orqueio.osgi.version.clean>
+            <orqueio.connect.version.clean>${project.version}</orqueio.connect.version.clean>
+            <orqueio.spin.version.clean>${project.version}</orqueio.spin.version.clean>
+            <orqueio.commons.version.clean>${project.version}</orqueio.commons.version.clean>
            </versions>
           </configuration>
         </plugin>
@@ -285,8 +286,8 @@
               <additionalJOption>-Xdoclint:none</additionalJOption>
               <additionalJOption>--ignore-source-errors</additionalJOption>
             </additionalJOptions>
-            <doctitle>Camunda Platform Javadocs ${project.version}</doctitle>
-            <windowtitle>Camunda Platform Javadocs ${project.version}</windowtitle>
+            <doctitle>orqueio Platform Javadocs ${project.version}</doctitle>
+            <windowtitle>orqueio Platform Javadocs ${project.version}</windowtitle>
           </configuration>
         </plugin>
 
@@ -298,8 +299,8 @@
             <rules>
               <jakartaDefaults>true</jakartaDefaults>
               <renames>
-                <rename>jar:file:${org.camunda.bpm:camunda-engine:jar}!/META-INF/jakarta-renames.properties</rename>
-                <rename>jar:file:${org.camunda.bpm:camunda-engine:jar}!/META-INF/camunda-renames.properties</rename>
+                <rename>jar:file:${io.orqueio.bpm:orqueio-engine:jar}!/META-INF/jakarta-renames.properties</rename>
+                <rename>jar:file:${io.orqueio.bpm:orqueio-engine:jar}!/META-INF/orqueio-renames.properties</rename>
               </renames>
             </rules>
             <classifier>jakarta</classifier>
@@ -320,7 +321,7 @@
           <groupId>org.springframework.boot</groupId>
           <artifactId>spring-boot-maven-plugin</artifactId>
           <configuration>
-            <!-- https://github.com/camunda/camunda-bpm-platform/issues/3996 -->
+            <!-- https://github.com/orqueio/orqueio-bpm-platform/issues/3996 -->
             <wait>750</wait>
           </configuration>
         </plugin>
@@ -358,11 +359,26 @@
   </licenses>
 
   <organization>
-    <name>camunda services GmbH</name>
-    <url>http://www.camunda.com</url>
+    <name>Orque IO</name>
+    <url>http://www.orqueio.io</url>
   </organization>
 
-  <url>http://www.camunda.org</url>
+  <url>http://www.orqueio.io</url>
+  <developers>
+    <developer>
+      <id>orqueio.io</id>
+      <name>Orque IO Platform Community</name>
+      <organization>orqueio.io</organization>
+      <organizationUrl>https://www.orqueio.io</organizationUrl>
+    </developer>
+  </developers>
+
+  <scm>
+    <url>https://github.com/orqueio/orqueio</url>
+    <connection>scm:git:git@github.com:orqueio/orqueio.git</connection>
+    <developerConnection>scm:git:git@github.com:orqueio/orqueio.git</developerConnection>
+    <tag>HEAD</tag>
+  </scm>
 </project>
 
 

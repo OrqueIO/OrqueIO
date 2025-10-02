@@ -6,9 +6,9 @@
            http://java.sun.com/xml/ns/j2ee/connector_1_6.xsd"
   version="1.6" metadata-complete="false">
 
-  <module-name>camunda-jobexecutor-rar</module-name>
-  <display-name>Camunda Platform jobexecutor resource adapter</display-name>
-  <vendor-name>camunda services GmbH</vendor-name>
+  <module-name>orqueio-jobexecutor-rar</module-name>
+  <display-name>Orque IO Platform jobexecutor resource adapter</display-name>
+  <vendor-name>orqueio</vendor-name>
   
   <resourceadapter>
 

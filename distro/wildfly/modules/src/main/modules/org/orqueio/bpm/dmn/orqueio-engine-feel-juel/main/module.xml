@@ -1,0 +1,13 @@
+<module xmlns="urn:jboss:module:1.0" name="io.orqueio.bpm.dmn.orqueio-engine-feel-juel">
+  <resources>
+    <resource-root path="orqueio-engine-feel-juel-@project.version@.jar" />
+  </resources>
+
+  <dependencies>
+    <module name="io.orqueio.bpm.dmn.orqueio-engine-feel-api" />
+    <module name="io.orqueio.bpm.juel.orqueio-juel" services="import"/>
+    <module name="io.orqueio.commons.orqueio-commons-logging" />
+    <module name="io.orqueio.commons.orqueio-commons-typed-values" />
+    <module name="io.orqueio.commons.orqueio-commons-utils" />
+  </dependencies>
+</module>

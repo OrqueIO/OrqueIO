@@ -3,22 +3,20 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.camunda.bpm</groupId>
-    <artifactId>camunda-database-settings</artifactId>
+    <groupId>io.orqueio.bpm</groupId>
+    <artifactId>orqueio-database-settings</artifactId>
     <relativePath>../database</relativePath>
-    <version>7.24.0-SNAPSHOT</version>
+    <version>1.0.2</version>
   </parent>
-
-  <artifactId>camunda-bpm-quarkus-parent</artifactId>
-  <groupId>org.camunda.bpm.quarkus</groupId>
-
-  <name>Camunda Platform - Quarkus Extension - Parent</name>
+  <description>orqueio-bpm-quarkus-parent</description>
+  <artifactId>orqueio-bpm-quarkus-parent</artifactId>
+  <groupId>io.orqueio.bpm.quarkus</groupId>
+  <version>1.0.2</version>
+  <name>Orque IO Platform - Quarkus Extension - Parent</name>
 
   <packaging>pom</packaging>
 
-  <description>
-    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://camunda.com/contact/
-  </description>
+
 
   <dependencyManagement>
     <dependencies>
@@ -77,4 +75,33 @@
       </build>
     </profile>
   </profiles>
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+    </license>
+  </licenses>
+
+  <organization>
+    <name>Orque IO</name>
+    <url>https://www.orqueio.io</url>
+  </organization>
+
+  <url>https://www.orqueio.io</url>
+
+  <developers>
+    <developer>
+      <id>orqueio.io</id>
+      <name>Orque IO Platform Community</name>
+      <organization>orqueio.io</organization>
+      <organizationUrl>https://www.orqueio.io</organizationUrl>
+    </developer>
+  </developers>
+
+  <scm>
+    <url>https://github.com/orqueio/orqueio</url>
+    <connection>scm:git:git@github.com:orqueio/orqueio.git</connection>
+    <developerConnection>scm:git:git@github.com:orqueio/orqueio.git</developerConnection>
+    <tag>HEAD</tag>
+  </scm>
 </project>

@@ -19,7 +19,7 @@
 var _links = [
   {
     label: 'DOCUMENTATION',
-    href: 'https://docs.camunda.org/manual/latest/webapps/',
+    href: 'https://docs.orqueio.io/manual/latest/webapps/',
     description: 'DOCUMENTATION_DESCRIPTION'
   }
 ];
