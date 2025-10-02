@@ -27,7 +27,7 @@ var deleteUserFormElement = element(
 );
 
 module.exports = Page.extend({
-  url: '/camunda/app/admin/default/#/users/:user?tab=account',
+  url: '/orqueio/app/admin/default/#/users/:user?tab=account',
 
   subHeaderChangePassword: function() {
     return changePasswordFormElement.element(by.css('.h4')).getText();

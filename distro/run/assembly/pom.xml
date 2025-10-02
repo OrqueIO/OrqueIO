@@ -3,19 +3,17 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.camunda.bpm.run</groupId>
-    <artifactId>camunda-bpm-run-root</artifactId>
-    <version>7.24.0-SNAPSHOT</version>
-    <relativePath>..</relativePath>
+    <groupId>io.orqueio.bpm.run</groupId>
+    <artifactId>orqueio-bpm-run-root</artifactId>
+    <version>1.0.2</version>
+    <relativePath>../pom.xml</relativePath>
   </parent>
 
-  <artifactId>camunda-bpm-run-assembly</artifactId>
-  <name>Camunda Platform - Run - Assembly</name>
+  <artifactId>orqueio-bpm-run-assembly</artifactId>
+  <name>Orque IO Platform - Run - Assembly</name>
   <packaging>pom</packaging>
 
-  <description>
-    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://camunda.com/contact/
-  </description>
+
   
   <properties>
     <!-- generate a bom of compile time dependencies for the license book.
@@ -26,7 +24,7 @@
 
   <dependencyManagement>
     <dependencies>
-      <!-- override the Spring Boot Groovy version with the Camunda Groovy version -->
+      <!-- override the Spring Boot Groovy version with the Orqueio Groovy version -->
       <dependency>
         <groupId>org.apache.groovy</groupId>
         <artifactId>groovy-bom</artifactId>
@@ -40,8 +38,8 @@
   <dependencies>
     <!-- make sure the assembly runs after the REST module -->
     <dependency>
-      <groupId>org.camunda.bpm.run</groupId>
-      <artifactId>camunda-bpm-run-modules-rest</artifactId>
+      <groupId>io.orqueio.bpm.run</groupId>
+      <artifactId>orqueio-bpm-run-modules-rest</artifactId>
       <version>${project.version}</version>
       <type>pom</type>
       <exclusions>
@@ -55,8 +53,8 @@
 
     <!-- make sure this runs after the oauth2 module -->
     <dependency>
-      <groupId>org.camunda.bpm.run</groupId>
-      <artifactId>camunda-bpm-run-modules-oauth2</artifactId>
+      <groupId>io.orqueio.bpm.run</groupId>
+      <artifactId>orqueio-bpm-run-modules-oauth2</artifactId>
       <version>${project.version}</version>
       <type>pom</type>
       <exclusions>
@@ -69,8 +67,8 @@
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm.run</groupId>
-      <artifactId>camunda-bpm-run-modules-example-invoice</artifactId>
+      <groupId>io.orqueio.bpm.run</groupId>
+      <artifactId>orqueio-bpm-run-modules-example-invoice</artifactId>
       <version>${project.version}</version>
       <type>jar</type>
       <exclusions>
@@ -83,8 +81,8 @@
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm.run</groupId>
-      <artifactId>camunda-bpm-run-core</artifactId>
+      <groupId>io.orqueio.bpm.run</groupId>
+      <artifactId>orqueio-bpm-run-core</artifactId>
       <version>${project.version}</version>
       <exclusions>
         <!-- we consume an uberjar that contains all of its dependencies -->
@@ -96,7 +94,7 @@
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
+      <groupId>io.orqueio.bpm</groupId>
       <artifactId>license-book</artifactId>
       <version>${project.version}</version>
       <type>zip</type>

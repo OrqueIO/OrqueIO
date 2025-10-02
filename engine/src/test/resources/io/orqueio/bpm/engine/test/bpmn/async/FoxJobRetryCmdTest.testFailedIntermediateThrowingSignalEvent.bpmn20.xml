@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions id="definitions"
+  xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+  xmlns:orqueio="http://orqueio.io/schema/1.0/bpmn"
+  xmlns:fox="http://www.orqueio.com/fox"
+  targetNamespace="Examples">
+
+  <signal id="signal" name="abort" />
+
+  <process id="failedIntermediateThrowingSignalEvent" isExecutable="true">
+
+    <startEvent id="theStart" />
+    
+    <sequenceFlow sourceRef="theStart" targetRef="failingSignalEvent" />
+    
+    <intermediateThrowEvent id="failingSignalEvent">
+      <extensionElements>
+        <orqueio:failedJobRetryTimeCycle>R5/PT5M</orqueio:failedJobRetryTimeCycle>
+      </extensionElements>
+      <signalEventDefinition signalRef="signal" orqueio:async="true" />
+    </intermediateThrowEvent>
+        
+    <sequenceFlow sourceRef="failingSignalEvent" targetRef="end" />
+        
+    <endEvent id="end" />
+
+  </process>
+
+</definitions>
