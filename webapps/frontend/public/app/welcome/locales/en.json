@@ -17,7 +17,6 @@
     "AUTH_LOGOUT_SUCCESSFUL": "Logout successful",
     "AUTH_LOGOUT_THANKS": "Thank you for using OrqueIO today. Have a great {{dayContext}}!",
     "BACK": "Back",
-    "BANNER_CE_EOL_TEXT": "It is time to migrate to Orqueio 8. The last release of Orqueio 7 CE will be in October 2025. Please have a look at our <a href=\"https://docs.orqueio.io/docs/guides/migrating-from-orqueio-7/\">migration guide</a>.",
     "BOOLEAN": "Boolean",
     "CAM_WIDGET_BPMN_VIEWER_ERROR": "Could not render diagram:",
     "CAM_WIDGET_BPMN_VIEWER_LOADING": "Loading diagram",

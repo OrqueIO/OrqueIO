@@ -13,7 +13,7 @@
     <groupId>io.orqueio.bpm</groupId>
     <artifactId>orqueio-parent</artifactId>
     <relativePath>../../parent</relativePath>
-    <version>1.0.0</version>
+    <version>1.0.2</version>
   </parent>
 
   <dependencyManagement>
@@ -40,7 +40,7 @@
     <dependency>
       <groupId>io.orqueio.bpm</groupId>
       <artifactId>orqueio-engine</artifactId>
-      <version>1.0.0</version>
+      <version>1.0.2</version>
       <scope>provided</scope>
       <exclusions>
         <exclusion>

@@ -6,13 +6,13 @@
   <parent>
     <groupId>io.orqueio.bpm.webapp</groupId>
     <artifactId>orqueio-webapp-root</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.2</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
   <description>orqueio-webapp-jakarta</description>
   <groupId>io.orqueio.bpm.webapp</groupId>
   <artifactId>orqueio-webapp-jakarta</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.2</version>
   <packaging>war</packaging>
 
 
@@ -123,7 +123,7 @@
     <dependency>
       <groupId>io.orqueio.bpm</groupId>
       <artifactId>orqueio-engine-rest-core-jakarta</artifactId>
-      <version>1.0.0</version>
+      <version>1.0.2</version>
     </dependency>
 
     <dependency>

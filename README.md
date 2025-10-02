@@ -1,28 +1,25 @@
-# Orque IO - The open source BPMN platform
+# OrqueIO - The open source BPMN platform
 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.orqueio.bpm/camunda-parent/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.orqueio.bpm/camunda-parent) [![camunda manual latest](https://img.shields.io/badge/manual-latest-brown.svg)](https://docs.camunda.org/manual/latest/) [![License](https://img.shields.io/github/license/camunda/camunda-bpm-platform?color=blue&logo=apache)](https://github.com/camunda/camunda-bpm-platform/blob/master/LICENSE) [![Forum](https://img.shields.io/badge/forum-camunda-green)](https://forum.camunda.org/)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.orqueio.bpm/orqueio-parent/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.orqueio.bpm/orqueio-parent) [![orqueio manual](https://img.shields.io/badge/manual-latest-brown.svg)](https://docs.orqueio.io) [![License](https://img.shields.io/github/license/orqueio/orqueio?color=blue&logo=apache)](https://github.com/orqueio/orqueio/blob/master/LICENSE)
 
 
-Orque IO is a flexible framework for workflow and process automation. Its core is a native BPMN 2.0 process engine that runs inside the Java Virtual Machine. It can be embedded inside any Java application and any Runtime Container. It integrates with Java EE 6 and is a perfect match for the Spring Framework. On top of the process engine, you can choose from a stack of tools for human workflow management, operations and monitoring.
+OrqueIO is a flexible framework for workflow and process automation. Its core is a native BPMN 2.0 process engine that runs inside the Java Virtual Machine. It can be embedded inside any Java application and any Runtime Container. It integrates with Java EE 6 and is a perfect match for the Spring Framework. On top of the process engine, you can choose from a stack of tools for human workflow management, operations and monitoring.
 
 - Web Site: https://www.orqueio.io/
 - Getting Started: https://docs.orqueio.io/
 - Issue Tracker: https://github.com/orqueio/orqueio/issues
-- Contribution Guidelines: https://orqueio.io/contribute/
+- Contribution Guidelines: https://github.com/OrqueIO/OrqueIO/blob/master/CONTRIBUTING.md
 
 ## Components
 
-Orque IO provides a rich set of components centered around the BPM lifecycle.
+OrqueIO provides a rich set of components centered around the BPM lifecycle.
 
 #### Process Implementation and Execution
 
-- Orque IO Engine - The core component responsible for executing BPMN 2.0 processes.
+- OrqueIO Engine - The core component responsible for executing BPMN 2.0 processes.
 - REST API - The REST API provides remote access to running processes.
 - Spring, CDI Integration - Programming model integration that allows developers to write Java Applications that interact with running processes.
 
-#### Process Design
-
-- OrqueIO Modeler - A [standalone desktop application](https://github.com/orqueio/orqueio-modeler) that allows business users and developers to design & configure processes.
 
 #### Process Operations
 
@@ -43,7 +40,7 @@ In contrast to other vendor BPM platforms, OrqueIO strives to be highly integrab
 
 ### Highly Integrable
 
-Out of the box, Orque IO provides infrastructure-level integration with Java EE Application Servers and Servlet Containers.
+Out of the box, OrqueIO provides infrastructure-level integration with Java EE Application Servers and Servlet Containers.
 
 ### Embeddable
 
@@ -61,5 +58,3 @@ To run the tests in this repository, please see our [testing tips and tricks](TE
 ## License
 
 The source files in this repository are made available under the [Apache License Version 2.0](./LICENSE).
-
-Orque IO uses and includes third-party dependencies published under various licenses. By downloading and using Orque IO artifacts, you agree to their terms and conditions. Refer to https://docs.camunda.org/manual/latest/introduction/third-party-libraries/ for an overview of third-party libraries and particularly important third-party licenses we want to make you aware of.

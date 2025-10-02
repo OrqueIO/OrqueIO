@@ -6,11 +6,11 @@
     <groupId>io.orqueio.bpm</groupId>
     <artifactId>orqueio-parent</artifactId>
     <relativePath>../parent</relativePath>
-    <version>1.0.0</version>
+    <version>1.0.2</version>
   </parent>
   <groupId>io.orqueio.bpm</groupId>
   <artifactId>orqueio-core-internal-dependencies</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.2</version>
   <packaging>pom</packaging>
   <name>Orque IO Platform - Core - Internal Dependencies</name>
 

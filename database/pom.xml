@@ -6,9 +6,9 @@
     <groupId>io.orqueio.bpm</groupId>
     <artifactId>orqueio-parent</artifactId>
     <relativePath>../parent</relativePath>
-    <version>1.0.0</version>
+    <version>1.0.2</version>
   </parent>
-  <version>1.0.0</version>
+  <version>1.0.2</version>
   <description>orqueio-database-settings</description>
   <groupId>io.orqueio.bpm</groupId>
   <artifactId>orqueio-database-settings</artifactId>

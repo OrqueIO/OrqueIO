@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.orqueio.bpm</groupId>
   <artifactId>orqueio-engine-rest</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.2</version>
   <name>Orque IO Platform - engine - REST - Assembly</name>
   <packaging>war</packaging>
   <description>orqueio-engine-rest</description>
@@ -12,7 +12,7 @@
     <groupId>io.orqueio.bpm</groupId>
     <artifactId>orqueio-engine-rest-root</artifactId>
     <relativePath>../pom.xml</relativePath>
-    <version>1.0.0</version>
+    <version>1.0.2</version>
   </parent>
   
   <properties>

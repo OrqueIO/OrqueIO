@@ -8,9 +8,9 @@
   <parent>
     <groupId>io.orqueio.bpm.springboot.project</groupId>
     <artifactId>qa-plugins-spin</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.2</version>
   </parent>
-  <version>1.0.0</version>
+  <version>1.0.2</version>
   <description>qa-plugins-spin-dataformat-json-jackson</description>
   <groupId>io.orqueio.bpm.springboot.project</groupId>
   <artifactId>qa-plugins-spin-dataformat-json-jackson</artifactId>
@@ -27,19 +27,19 @@
     <dependency>
       <groupId>io.orqueio.bpm.springboot</groupId>
       <artifactId>orqueio-bpm-spring-boot-starter-test</artifactId>
-      <version>1.0.0</version>
+      <version>1.0.2</version>
     </dependency>
 
     <dependency>
       <groupId>io.orqueio.bpm</groupId>
       <artifactId>orqueio-engine-plugin-spin</artifactId>
-      <version>1.0.0</version>
+      <version>1.0.2</version>
     </dependency>
 
     <dependency>
       <groupId>io.orqueio.spin</groupId>
       <artifactId>orqueio-spin-dataformat-json-jackson</artifactId>
-      <version>1.0.0</version>
+      <version>1.0.2</version>
     </dependency>
 
     <dependency>

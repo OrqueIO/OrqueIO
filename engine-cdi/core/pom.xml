@@ -6,7 +6,7 @@
   <name>Orque IO Platform - engine - Cdi</name>
   <groupId>io.orqueio.bpm</groupId>
   <artifactId>orqueio-engine-cdi</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.2</version>
   <packaging>jar</packaging>
 
 
@@ -15,7 +15,7 @@
     <groupId>io.orqueio.bpm</groupId>
     <artifactId>orqueio-database-settings</artifactId>
     <relativePath>../../database</relativePath>
-    <version>1.0.0</version>
+    <version>1.0.2</version>
   </parent>
 
   <properties>
@@ -49,7 +49,7 @@
     <dependency>
       <groupId>io.orqueio.bpm</groupId>
       <artifactId>orqueio-engine</artifactId>
-      <version>1.0.0</version>
+      <version>1.0.2</version>
       <scope>provided</scope>
       <exclusions>
         <exclusion>
