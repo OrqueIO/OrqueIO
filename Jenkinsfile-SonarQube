@@ -1,0 +1,30 @@
+pipeline {
+    agent any
+
+    tools {
+        jdk 'jdk21'
+        maven 'maven'
+    }
+
+    stages {
+        stage('SonarQube analysis') {
+            environment {
+                scannerHome = tool 'scannerHome'
+            }
+            steps {
+                withSonarQubeEnv('AWS SONAR') {
+                    sh """
+                        mvn clean verify sonar:sonar \
+                          -Dsonar.projectKey=Orqueio
+                    """
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            cleanWs()
+        }
+    }
+}

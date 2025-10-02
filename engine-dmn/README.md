@@ -4,8 +4,8 @@
 Lightweight Execution Engine for DMN (Decision Model and Notation) written in Java.
 
 <p>
-  <a href="http://camunda.org/">Home</a> |
-  <a href="http://camunda.org/community/forum.html">Forum</a> |
+  <a href="http://orqueio.io/">Home</a> |
+  <a href="http://orqueio.io/community/forum.html">Forum</a> |
   <a href="https://app.camunda.com/jira/browse/CAM">Issues</a> |
 </p>
 
@@ -17,7 +17,7 @@ Add the following Maven Coordinates to your project:
 
 ```xml
 <dependency>
-  <groupId>org.camunda.bpm.dmn</groupId>
+  <groupId>io.orqueio.bpm.dmn</groupId>
   <artifactId>camunda-engine-dmn</artifactId>
   <version>${version.camunda}</version>
 </dependency>
@@ -53,7 +53,7 @@ public class DmnApp {
 Add the following Maven Coordinates to your project:
 ```xml
 <dependency>
-  <groupId>org.camunda.bpm</groupId>
+  <groupId>io.orqueio.bpm</groupId>
   <artifactId>camunda-engine</artifactId>
   <version>${version.camunda}</versions>
 </dependency>

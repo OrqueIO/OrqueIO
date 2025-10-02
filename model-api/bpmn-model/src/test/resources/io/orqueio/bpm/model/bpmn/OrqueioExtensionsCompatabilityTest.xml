@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions
+  xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+  xmlns:orqueio="http://activiti.org/bpmn"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  targetNamespace="http://orqueio.io/test">
+
+  <!-- NOTE: this document is not valid and is only used to test all orqueio extensions -->
+
+  <process id="process"
+      orqueio:candidateStarterGroups="group1, ${group2(a, b)}, group3"
+      orqueio:candidateStarterUsers="user1, ${user2(a, b)}, user3"
+      orqueio:jobPriority="15"
+      orqueio:taskPriority="13"
+      orqueio:historyTimeToLive="5"
+      orqueio:isStartableInTasklist="false"
+      orqueio:versionTag="v1.0.0">
+    <extensionElements>
+      <orqueio:executionListener event="start" class="io.orqueio.test.Test"/>
+    </extensionElements>
+
+    <startEvent id="startEvent"
+        orqueio:initiator="test"
+        orqueio:formHandlerClass="io.orqueio.test.Test"
+        orqueio:formKey="test"
+        orqueio:asyncBefore="true"
+        orqueio:asyncAfter="true"
+        orqueio:jobPriority="${test}">
+      <extensionElements>
+        <orqueio:executionListener event="start" expression="${test}"/>
+        <orqueio:potentialStarter>
+          <resourceAssignmentExpression>
+            <formalExpression>group1, ${group2(a, b)}, group3</formalExpression>
+          </resourceAssignmentExpression>
+        </orqueio:potentialStarter>
+        <orqueio:formProperty id="test" name="test" type="test" variable="test" expression="${test}" datePattern="test" default="test"/>
+      </extensionElements>
+      <errorEventDefinition orqueio:errorCodeVariable="errorVariable" orqueio:errorMessageVariable="errorMessageVariable"/>
+    </startEvent>
+
+    <sequenceFlow id="sequenceFlow" sourceRef="startEvent" targetRef="userTask">
+      <extensionElements>
+        <orqueio:executionListener>
+          <orqueio:script scriptFormat="groovy">println 'Hello World'</orqueio:script>
+        </orqueio:executionListener>
+      </extensionElements>
+    </sequenceFlow>
+
+    <userTask id="userTask"
+        orqueio:assignee="test"
+        orqueio:async="true"
+        orqueio:asyncBefore="true"
+        orqueio:asyncAfter="true"
+        orqueio:candidateGroups="group1, ${group2(a, b)}, group3"
+        orqueio:candidateUsers="user1, ${user2(a, b)}, user3"
+        orqueio:dueDate="2014-02-27"
+        orqueio:exclusive="false"
+        orqueio:formHandlerClass="io.orqueio.test.Test"
+        orqueio:formKey="test"
+        orqueio:priority="12"
+        orqueio:jobPriority="${test}">
+      <extensionElements>
+        <orqueio:taskListener event="create" class="io.orqueio.test.Test" expression="${test}" delegateExpression="${io.orqueio.test.Test}">
+          <orqueio:field name="test">
+            <orqueio:string>test</orqueio:string>
+          </orqueio:field>
+          <timerEventDefinition>
+            <timeDuration xsi:type="tFormalExpression">PT1H</timeDuration>
+          </timerEventDefinition>
+        </orqueio:taskListener>
+        <orqueio:taskListener>
+          <orqueio:script scriptFormat="groovy" resource="test.groovy" />
+        </orqueio:taskListener>
+        <orqueio:formData>
+          <orqueio:formField id="test" label="test" type="test" datePattern="test" defaultValue="test">
+            <orqueio:properties>
+              <orqueio:property id="test" value="test"/>
+            </orqueio:properties>
+            <orqueio:validation>
+              <orqueio:constraint name="test" config="test"/>
+            </orqueio:validation>
+            <orqueio:value id="test" name="test"/>
+          </orqueio:formField>
+        </orqueio:formData>
+      </extensionElements>
+    </userTask>
+
+    <serviceTask id="serviceTask"
+        orqueio:expression="${test}"
+        orqueio:class="io.orqueio.test.Test"
+        orqueio:delegateExpression="${io.orqueio.test.Test}"
+        orqueio:resultVariable="test"
+        orqueio:topic="test"
+        orqueio:type="mail"
+        orqueio:taskPriority="${test}">
+      <extensionElements>
+        <orqueio:executionListener event="start" delegateExpression="${io.orqueio.test.Test}"/>
+        <orqueio:connector>
+          <orqueio:connectorId>soap-http-connector</orqueio:connectorId>
+          <orqueio:inputOutput>
+            <orqueio:inputParameter name="endpointUrl">http://example.com/webservice</orqueio:inputParameter>
+            <orqueio:outputParameter name="result">output</orqueio:outputParameter>
+          </orqueio:inputOutput>
+        </orqueio:connector>
+        <orqueio:inputOutput>
+          <orqueio:inputParameter name="shouldBeNull"/>
+          <orqueio:inputParameter name="shouldBeConstant">foo</orqueio:inputParameter>
+          <orqueio:inputParameter name="shouldBeExpression">${1 + 1}</orqueio:inputParameter>
+          <orqueio:inputParameter name="shouldBeList">
+            <orqueio:list>
+              <orqueio:value>a</orqueio:value>
+              <orqueio:value>b</orqueio:value>
+              <orqueio:value>c</orqueio:value>
+            </orqueio:list>
+          </orqueio:inputParameter>
+          <orqueio:inputParameter name="shouldBeMap">
+            <orqueio:map>
+              <orqueio:entry key="foo">bar</orqueio:entry>
+              <orqueio:entry key="hello">world</orqueio:entry>
+            </orqueio:map>
+          </orqueio:inputParameter>
+          <orqueio:inputParameter name="shouldBeScript">
+            <orqueio:script scriptFormat="groovy">1 + 1</orqueio:script>
+          </orqueio:inputParameter>
+          <orqueio:outputParameter name="nested">
+            <orqueio:list>
+              <orqueio:value>
+                <orqueio:list>
+                  <orqueio:value>list</orqueio:value>
+                  <orqueio:value>list</orqueio:value>
+                </orqueio:list>
+              </orqueio:value>
+              <orqueio:value>
+                <orqueio:map>
+                  <orqueio:entry key="list">
+                    <orqueio:list>
+                      <orqueio:value>map</orqueio:value>
+                      <orqueio:value>map</orqueio:value>
+                      <orqueio:value>map</orqueio:value>
+                    </orqueio:list>
+                  </orqueio:entry>
+                  <orqueio:entry key="map">
+                    <orqueio:map>
+                      <orqueio:entry key="so">nested</orqueio:entry>
+                    </orqueio:map>
+                  </orqueio:entry>
+                </orqueio:map>
+              </orqueio:value>
+            </orqueio:list>
+          </orqueio:outputParameter>
+        </orqueio:inputOutput>
+      </extensionElements>
+    </serviceTask>
+
+    <sendTask id="sendTask">
+      <extensionElements>
+        <orqueio:failedJobRetryTimeCycle>test</orqueio:failedJobRetryTimeCycle>
+        <orqueio:field name="test" stringValue="test" expression="${test}">
+          <orqueio:expression>${test}</orqueio:expression>
+          <orqueio:string>test</orqueio:string>
+        </orqueio:field>
+      </extensionElements>
+    </sendTask>
+
+    <scriptTask id="scriptTask" scriptFormat="groovy" orqueio:resource="test.groovy" />
+
+    <callActivity id="callActivity"
+                  orqueio:calledElementBinding="test"
+                  orqueio:calledElementVersion="test"
+                  orqueio:calledElementVersionTag="test"
+                  orqueio:calledElementTenantId="test"
+                  orqueio:caseRef="test"
+                  orqueio:caseBinding="test"
+                  orqueio:caseVersion="test"
+                  orqueio:caseTenantId="test"
+                  orqueio:exclusive="false"
+                  orqueio:variableMappingClass="io.orqueio.test.Test"
+                  orqueio:variableMappingDelegateExpression="${io.orqueio.test.Test}">
+      <extensionElements>
+        <orqueio:in source="test" sourceExpression="${test}" variables="test" businessKey="${test}" target="test" local="true"/>
+        <orqueio:out source="test" sourceExpression="${test}" variables="test" target="test" local="true"/>
+      </extensionElements>
+    </callActivity>
+
+    <businessRuleTask id="businessRuleTask"
+                      orqueio:decisionRef="test"
+                      orqueio:decisionRefBinding="test"
+                      orqueio:decisionRefVersion="test"
+                      orqueio:decisionRefVersionTag="test"
+                      orqueio:decisionRefTenantId="test"
+                      orqueio:mapDecisionResult="test"
+                      orqueio:taskPriority="test"    />
+
+    <endEvent id="endEvent"
+              orqueio:asyncAfter="true"
+              orqueio:asyncBefore="true"
+              orqueio:jobPriority="${test}">
+      <extensionElements>
+        <orqueio:properties>
+          <orqueio:property name="name1" value="value1"/>
+          <orqueio:property name="name2" value="value2"/>
+        </orqueio:properties>
+      </extensionElements>
+      <messageEventDefinition
+        orqueio:class="io.orqueio.test.Test"
+        orqueio:expression="${test}"
+        orqueio:delegateExpression="${io.orqueio.test.Test}"
+        orqueio:resultVariable="test"
+        orqueio:topic="test"
+        orqueio:type="test"/>
+    </endEvent>
+
+    <parallelGateway id="parallelGateway"
+                     orqueio:async="true"
+                     orqueio:asyncBefore="true"
+                     orqueio:asyncAfter="true"
+                     orqueio:jobPriority="${test}">
+
+    </parallelGateway>
+
+  </process>
+
+  <error id="error" orqueio:errorMessage="test" />
+</definitions>

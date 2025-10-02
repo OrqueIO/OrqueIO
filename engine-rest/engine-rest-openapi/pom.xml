@@ -1,18 +1,18 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>camunda-engine-rest-openapi</artifactId>
-  <name>Camunda Platform - engine - REST - OpenAPI</name>
+  <groupId>io.orqueio.bpm</groupId>
+  <artifactId>orqueio-engine-rest-openapi</artifactId>
+  <version>1.0.2</version>
+  <name>Orque IO Platform - engine - REST - OpenAPI</name>
   <packaging>jar</packaging>
+  <description>orqueio-engine-rest-openapi</description>
 
-  <description>
-    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://camunda.com/contact/
-  </description>
 
   <parent>
-    <groupId>org.camunda.bpm</groupId>
-    <artifactId>camunda-engine-rest-root</artifactId>
-    <relativePath>../</relativePath>
-    <version>7.24.0-SNAPSHOT</version>
+    <groupId>io.orqueio.bpm</groupId>
+    <artifactId>orqueio-engine-rest-root</artifactId>
+    <relativePath>../pom.xml</relativePath>
+    <version>1.0.2</version>
   </parent>
 
   <properties>
@@ -35,8 +35,8 @@
   <dependencies>
 
     <dependency>
-      <groupId>org.camunda.bpm</groupId>
-      <artifactId>camunda-engine-rest-openapi-generator</artifactId>
+      <groupId>io.orqueio.bpm</groupId>
+      <artifactId>orqueio-engine-rest-openapi-generator</artifactId>
       <scope>test</scope>
       <version>${project.version}</version>
     </dependency>
@@ -45,6 +45,7 @@
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-jdk14</artifactId>
+      <version>1.7.26</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -56,6 +57,7 @@
     <dependency>
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
+      <version>2.9.1</version>
       <scope>test</scope>
     </dependency>
 
@@ -135,7 +137,7 @@
             </goals>
             <configuration>
               <classpathScope>test</classpathScope>
-              <mainClass>org.camunda.bpm.engine.rest.openapi.generator.impl.TemplateParser</mainClass>
+              <mainClass>io.orqueio.bpm.engine.rest.openapi.generator.impl.TemplateParser</mainClass>
               <arguments>
                 <argument>${project.basedir}/src/main/templates</argument>
                 <argument>main.ftl</argument>
@@ -152,7 +154,7 @@
             </goals>
             <configuration>
               <classpathScope>test</classpathScope>
-              <mainClass>org.camunda.bpm.engine.rest.openapi.generator.impl.SchemaValidator</mainClass>
+              <mainClass>io.orqueio.bpm.engine.rest.openapi.generator.impl.SchemaValidator</mainClass>
               <arguments>
                 <!-- The following json schema is a copy from https://github.com/OAI/OpenAPI-Specification/blob/master/schemas/v3.0/schema.json -->
                 <!-- Date: 11-Feb-2020 -->
@@ -190,7 +192,7 @@
             <phase>generate-test-sources</phase>
             <configuration>
               <sources>
-                <source>${project.build.directory}/camunda-openapi-client/src/main/java</source>
+                <source>${project.build.directory}/orqueio-openapi-client/src/main/java</source>
               </sources>
             </configuration>
           </execution>
@@ -210,7 +212,7 @@
             </goals>
             <configuration>
               <inputSpec>${generated-directory}/${generated-file}</inputSpec>
-              <output>${project.build.directory}/camunda-openapi-client</output>
+              <output>${project.build.directory}/orqueio-openapi-client</output>
               <generatorName>java</generatorName>
               <configOptions>
                 <dateLibrary>legacy</dateLibrary>
@@ -253,5 +255,33 @@
       </build>
     </profile>
   </profiles>
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+    </license>
+  </licenses>
 
+  <organization>
+    <name>Orque IO</name>
+    <url>https://www.orqueio.io</url>
+  </organization>
+
+  <url>https://www.orqueio.io</url>
+
+  <developers>
+    <developer>
+      <id>orqueio.io</id>
+      <name>Orque IO Platform Community</name>
+      <organization>orqueio.io</organization>
+      <organizationUrl>https://www.orqueio.io</organizationUrl>
+    </developer>
+  </developers>
+
+  <scm>
+    <url>https://github.com/orqueio/orqueio</url>
+    <connection>scm:git:git@github.com:orqueio/orqueio.git</connection>
+    <developerConnection>scm:git:git@github.com:orqueio/orqueio.git</developerConnection>
+    <tag>HEAD</tag>
+  </scm>
 </project>

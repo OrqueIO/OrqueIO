@@ -1,4 +1,4 @@
-camunda-xml-model
+orqueio-xml-model
 ==================
 
 XML model API written in Java.
