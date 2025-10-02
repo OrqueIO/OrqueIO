@@ -1,0 +1,17 @@
+<module xmlns="urn:jboss:module:1.0" name="io.orqueio.bpm.dmn.orqueio-engine-feel-scala">
+  <resources>
+    <resource-root path="orqueio-engine-feel-scala-@project.version@.jar" />
+  </resources>
+
+  <dependencies>
+    <module name="org.slf4j" />
+    <module name="sun.jdk" />
+    <module name="io.orqueio.bpm.dmn.orqueio-engine-feel-api" />
+    <module name="io.orqueio.commons.orqueio-commons-typed-values" />
+    <module name="io.orqueio.commons.orqueio-commons-logging" />
+
+    <module name="io.orqueio.bpm.orqueio-engine-plugin-spin" optional="true" />
+
+    <module name="io.orqueio.feel.feel-engine" />
+  </dependencies>
+</module>

@@ -1,19 +1,20 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>camunda-bpm-assert-root</artifactId>
+  <groupId>io.orqueio.bpm</groupId>
+  <artifactId>orqueio-bpm-assert-root</artifactId>
+  <version>1.0.2</version>
   <packaging>pom</packaging>
 
-  <description>
-    Note: 7.24.0 is the last community edition release published on Maven Central. This library will not receive any new versions or releases. However, if you are interested in extended maintenance you could look into our enterprise edition. Get in touch with us: https://camunda.com/contact/
-  </description>
+  <description>orqueio-bpm-assert-root</description>
 
-  <name>Camunda Platform - Assert - Root</name>
+
+  <name>Orque IO Platform - Assert - Root</name>
 
   <parent>
-    <groupId>org.camunda.bpm</groupId>
-    <artifactId>camunda-database-settings</artifactId>
+    <groupId>io.orqueio.bpm</groupId>
+    <artifactId>orqueio-database-settings</artifactId>
     <relativePath>../../database</relativePath>
-    <version>7.24.0-SNAPSHOT</version>
+    <version>1.0.2</version>
   </parent>
 
   <dependencyManagement>
@@ -21,7 +22,7 @@
       <!-- spring-framework-bom as first element in the list
            ensures to be chosen over spring-boot-dependencies
            to load spring-beans with Spring 5.
-           Can be removed if camunda-engine supports Spring 6 -->
+           Can be removed if orqueio-engine supports Spring 6 -->
       <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-framework-bom</artifactId>
@@ -39,8 +40,8 @@
         <type>pom</type>
       </dependency>
       <dependency>
-        <groupId>org.camunda.bpm</groupId>
-        <artifactId>camunda-core-internal-dependencies</artifactId>
+        <groupId>io.orqueio.bpm</groupId>
+        <artifactId>orqueio-core-internal-dependencies</artifactId>
         <version>${project.version}</version>
         <scope>import</scope>
         <type>pom</type>
@@ -67,5 +68,33 @@
       </modules>
     </profile>
   </profiles>
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+    </license>
+  </licenses>
 
+  <organization>
+    <name>Orque IO</name>
+    <url>https://www.orqueio.io</url>
+  </organization>
+
+  <url>https://www.orqueio.io</url>
+
+  <developers>
+    <developer>
+      <id>orqueio.io</id>
+      <name>Orque IO Platform Community</name>
+      <organization>orqueio.io</organization>
+      <organizationUrl>https://www.orqueio.io</organizationUrl>
+    </developer>
+  </developers>
+
+  <scm>
+    <url>https://github.com/orqueio/orqueio</url>
+    <connection>scm:git:git@github.com:orqueio/orqueio.git</connection>
+    <developerConnection>scm:git:git@github.com:orqueio/orqueio.git</developerConnection>
+    <tag>HEAD</tag>
+  </scm>
 </project>

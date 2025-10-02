@@ -16,8 +16,8 @@
  */
 
 'use strict';
-var angular = require('camunda-commons-ui/vendor/angular'),
-  CamSDK = require('camunda-bpm-sdk-js/lib/angularjs/index');
+var angular = require('orqueio-commons-ui/vendor/angular'),
+  CamSDK = require('orqueio-bpm-sdk-js/lib/angularjs/index');
 
 var apiModule = angular.module('cam.tasklist.client', []);
 

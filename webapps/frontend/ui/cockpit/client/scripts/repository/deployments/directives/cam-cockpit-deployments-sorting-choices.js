@@ -19,7 +19,7 @@
 
 var template = require('./cam-cockpit-deployments-sorting-choices.html?raw');
 
-var angular = require('camunda-commons-ui/vendor/angular');
+var angular = require('orqueio-commons-ui/vendor/angular');
 
 module.exports = [
   '$translate',

@@ -1,1 +1,1 @@
-org.camunda.bpm.spring.boot.starter.rest.CamundaBpmRestJerseyAutoConfiguration
+io.orqueio.bpm.spring.boot.starter.rest.OrqueioBpmRestJerseyAutoConfiguration

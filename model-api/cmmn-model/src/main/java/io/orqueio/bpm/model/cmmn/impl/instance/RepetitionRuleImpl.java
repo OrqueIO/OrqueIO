@@ -1,0 +1,119 @@
+/*
+ * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * under one or more contributor license agreements. See the NOTICE file
+ * distributed with this work for additional information regarding copyright
+ * ownership. Camunda licenses this file to you under the Apache License,
+ * Version 2.0; you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.orqueio.bpm.model.cmmn.impl.instance;
+
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ATTRIBUTE_REPEAT_ON_STANDARD_EVENT;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_NS;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CMMN11_NS;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CMMN_ATTRIBUTE_CONTEXT_REF;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CMMN_ATTRIBUTE_NAME;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CMMN_ELEMENT_REPETITION_RULE;
+
+import io.orqueio.bpm.model.cmmn.instance.CaseFileItem;
+import io.orqueio.bpm.model.cmmn.instance.CmmnElement;
+import io.orqueio.bpm.model.cmmn.instance.ConditionExpression;
+import io.orqueio.bpm.model.cmmn.instance.RepetitionRule;
+import io.orqueio.bpm.model.xml.ModelBuilder;
+import io.orqueio.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
+import io.orqueio.bpm.model.xml.type.ModelElementTypeBuilder;
+import io.orqueio.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
+import io.orqueio.bpm.model.xml.type.attribute.Attribute;
+import io.orqueio.bpm.model.xml.type.child.ChildElement;
+import io.orqueio.bpm.model.xml.type.child.SequenceBuilder;
+import io.orqueio.bpm.model.xml.type.reference.AttributeReference;
+
+/**
+ * @author Roman Smirnov
+ *
+ */
+public class RepetitionRuleImpl extends CmmnElementImpl implements RepetitionRule {
+
+  protected static Attribute<String> nameAttribute;
+  protected static AttributeReference<CaseFileItem> contextRefAttribute;
+  protected static ChildElement<ConditionExpression> conditionChild;
+
+  /* Orqueio extensions */
+  protected static Attribute<String> orqueioRepeatOnStandardEventAttribute;
+
+  public RepetitionRuleImpl(ModelTypeInstanceContext instanceContext) {
+    super(instanceContext);
+  }
+
+  public String getName() {
+    return nameAttribute.getValue(this);
+  }
+
+  public void setName(String name) {
+    nameAttribute.setValue(this, name);
+  }
+
+  public CaseFileItem getContext() {
+    return contextRefAttribute.getReferenceTargetElement(this);
+  }
+
+  public void setContext(CaseFileItem caseFileItem) {
+    contextRefAttribute.setReferenceTargetElement(this, caseFileItem);
+  }
+
+  public ConditionExpression getCondition() {
+    return conditionChild.getChild(this);
+  }
+
+  public void setCondition(ConditionExpression condition) {
+    conditionChild.setChild(this, condition);
+  }
+
+  public String getOrqueioRepeatOnStandardEvent() {
+    return orqueioRepeatOnStandardEventAttribute.getValue(this);
+  }
+
+  public void setOrqueioRepeatOnStandardEvent(String standardEvent) {
+    orqueioRepeatOnStandardEventAttribute.setValue(this, standardEvent);
+  }
+
+  public static void registerType(ModelBuilder modelBuilder) {
+    ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(RepetitionRule.class, CMMN_ELEMENT_REPETITION_RULE)
+        .namespaceUri(CMMN11_NS)
+        .extendsType(CmmnElement.class)
+        .instanceProvider(new ModelTypeInstanceProvider<RepetitionRule>() {
+          public RepetitionRule newInstance(ModelTypeInstanceContext instanceContext) {
+            return new RepetitionRuleImpl(instanceContext);
+          }
+        });
+
+    nameAttribute = typeBuilder.stringAttribute(CMMN_ATTRIBUTE_NAME)
+        .build();
+
+    contextRefAttribute = typeBuilder.stringAttribute(CMMN_ATTRIBUTE_CONTEXT_REF)
+        .idAttributeReference(CaseFileItem.class)
+        .build();
+
+    /** Orqueio extensions */
+
+    orqueioRepeatOnStandardEventAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_REPEAT_ON_STANDARD_EVENT)
+      .namespace(ORQUEIO_NS)
+      .build();
+
+    SequenceBuilder sequenceBuilder = typeBuilder.sequence();
+
+    conditionChild = sequenceBuilder.element(ConditionExpression.class)
+        .build();
+
+    typeBuilder.build();
+  }
+
+}

@@ -74,8 +74,8 @@ export default {
   // bpmnJs: {
   //   moddleExtensions: {
   //     // if you have a folder called 'my-custom-moddle' (in the 'cockpit' folder)
-  //     // with a file called 'camunda.json' in it defining the 'camunda' moddle extension
-  //     camunda: 'my-custom-moddle/camunda'
+  //     // with a file called 'orqueio.json' in it defining the 'orqueio' moddle extension
+  //     orqueio: 'my-custom-moddle/orqueio'
   //   },
   //   additionalModules: [
   //     // if you have a folder called 'my-custom-module' (in the 'cockpit' folder)
