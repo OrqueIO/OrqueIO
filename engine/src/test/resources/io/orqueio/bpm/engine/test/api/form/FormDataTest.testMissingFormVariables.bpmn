@@ -1,46 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL"
-  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:orqueio="http://activiti.org/bpmn" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:camunda="http://activiti.org/bpmn" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
   xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd"
   id="_2W98ULIfEeSn_ck3OOWGQQ" exporter="orqueio modeler" exporterVersion="2.6.1" targetNamespace="userTaskProcess">
   <bpmn2:process id="date-form-property-test" name="DateFormPropertyTest" isExecutable="true">
     <bpmn2:startEvent id="StartEvent_1">
       <bpmn2:extensionElements>
-        <orqueio:formData>
-          <orqueio:formField id="myDate" label="My Date" type="date" />
-          <orqueio:formField id="myLong" label="My long" type="long" />
-          <orqueio:formField id="myString" label="My string" type="string" />
-          <orqueio:formField id="myBoolean" label="My boolean" type="boolean" />
-          <orqueio:formField id="myEnum" label="My enum" type="enum" />
-        </orqueio:formData>
+        <camunda:formData>
+          <camunda:formField id="myDate" label="My Date" type="date" />
+          <camunda:formField id="myLong" label="My long" type="long" />
+          <camunda:formField id="myString" label="My string" type="string" />
+          <camunda:formField id="myBoolean" label="My boolean" type="boolean" />
+          <camunda:formField id="myEnum" label="My enum" type="enum" />
+        </camunda:formData>
       </bpmn2:extensionElements>
       <bpmn2:outgoing>SequenceFlow_1</bpmn2:outgoing>
     </bpmn2:startEvent>
     <bpmn2:userTask id="UserTask_1" name="User Task">
       <bpmn2:extensionElements>
-        <orqueio:formData>
-          <orqueio:formField id="myDate" label="My Date" type="date" />
-          <orqueio:formField id="myLong" label="My long" type="long" />
-          <orqueio:formField id="myString" label="My string" type="string" />
-          <orqueio:formField id="myBoolean" label="My boolean" type="boolean" />
-          <orqueio:formField id="myEnum" label="My enum" type="enum" />
-        </orqueio:formData>
-        <orqueio:inputOutput>
-          <orqueio:inputParameter name="myDate">${execution.getVariable('myDate')}</orqueio:inputParameter>
-          <orqueio:outputParameter name="myDate">${execution.getVariable('myDate')}</orqueio:outputParameter>
+        <camunda:formData>
+          <camunda:formField id="myDate" label="My Date" type="date" />
+          <camunda:formField id="myLong" label="My long" type="long" />
+          <camunda:formField id="myString" label="My string" type="string" />
+          <camunda:formField id="myBoolean" label="My boolean" type="boolean" />
+          <camunda:formField id="myEnum" label="My enum" type="enum" />
+        </camunda:formData>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="myDate">${execution.getVariable('myDate')}</camunda:inputParameter>
+          <camunda:outputParameter name="myDate">${execution.getVariable('myDate')}</camunda:outputParameter>
 
-          <orqueio:inputParameter name="myLong">${execution.getVariable('myLong')}</orqueio:inputParameter>
-          <orqueio:outputParameter name="myLong">${execution.getVariable('myLong')}</orqueio:outputParameter>
+          <camunda:inputParameter name="myLong">${execution.getVariable('myLong')}</camunda:inputParameter>
+          <camunda:outputParameter name="myLong">${execution.getVariable('myLong')}</camunda:outputParameter>
 
-          <orqueio:inputParameter name="myString">${execution.getVariable('myString')}</orqueio:inputParameter>
-          <orqueio:outputParameter name="myString">${execution.getVariable('myString')}</orqueio:outputParameter>
+          <camunda:inputParameter name="myString">${execution.getVariable('myString')}</camunda:inputParameter>
+          <camunda:outputParameter name="myString">${execution.getVariable('myString')}</camunda:outputParameter>
 
-          <orqueio:inputParameter name="myBoolean">${execution.getVariable('myBoolean')}</orqueio:inputParameter>
-          <orqueio:outputParameter name="myBoolean">${execution.getVariable('myBoolean')}</orqueio:outputParameter>
+          <camunda:inputParameter name="myBoolean">${execution.getVariable('myBoolean')}</camunda:inputParameter>
+          <camunda:outputParameter name="myBoolean">${execution.getVariable('myBoolean')}</camunda:outputParameter>
 
-          <orqueio:inputParameter name="myEnum">${execution.getVariable('myEnum')}</orqueio:inputParameter>
-          <orqueio:outputParameter name="myEnum">${execution.getVariable('myEnum')}</orqueio:outputParameter>
-        </orqueio:inputOutput>
+          <camunda:inputParameter name="myEnum">${execution.getVariable('myEnum')}</camunda:inputParameter>
+          <camunda:outputParameter name="myEnum">${execution.getVariable('myEnum')}</camunda:outputParameter>
+        </camunda:inputOutput>
       </bpmn2:extensionElements>
       <bpmn2:incoming>SequenceFlow_1</bpmn2:incoming>
       <bpmn2:outgoing>SequenceFlow_2</bpmn2:outgoing>

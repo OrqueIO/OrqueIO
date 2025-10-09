@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions id="definitions" xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
-  xmlns:orqueio="http://orqueio.io/schema/1.0/bpmn" targetNamespace="Examples">
+  xmlns:camunda="http://camunda.org/schema/1.0/bpmn" targetNamespace="Examples">
 
   <message id="messageId" name="newMessage" />
 
   <process id="process" isExecutable="true">
     <extensionElements>
-      <orqueio:executionListener event="end" delegateExpression="${listener}" />
+      <camunda:executionListener event="end" delegateExpression="${listener}" />
     </extensionElements>
 
     <startEvent id="theStart" />
@@ -15,7 +15,7 @@
 
     <subProcess id="subProcess">
       <extensionElements>
-        <orqueio:executionListener event="end" delegateExpression="${listener}" />
+        <camunda:executionListener event="end" delegateExpression="${listener}" />
       </extensionElements>
 
       <startEvent id="theStart1" />

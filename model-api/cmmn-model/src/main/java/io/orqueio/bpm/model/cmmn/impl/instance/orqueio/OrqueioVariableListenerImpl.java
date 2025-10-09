@@ -16,12 +16,12 @@
  */
 package io.orqueio.bpm.model.cmmn.impl.instance.orqueio;
 
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ATTRIBUTE_CLASS;
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ATTRIBUTE_DELEGATE_EXPRESSION;
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ATTRIBUTE_EVENT;
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ATTRIBUTE_EXPRESSION;
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ELEMENT_VARIABLE_LISTENER;
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_NS;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_CLASS;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_DELEGATE_EXPRESSION;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_EVENT;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_EXPRESSION;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ELEMENT_VARIABLE_LISTENER;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_NS;
 
 import java.util.Collection;
 
@@ -51,28 +51,28 @@ public class OrqueioVariableListenerImpl extends CmmnModelElementInstanceImpl im
   protected static ChildElement<OrqueioScript> orqueioScriptChild;
 
   public static void registerType(ModelBuilder modelBuilder) {
-    ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(OrqueioVariableListener.class, ORQUEIO_ELEMENT_VARIABLE_LISTENER)
-      .namespaceUri(ORQUEIO_NS)
+    ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(OrqueioVariableListener.class, CAMUNDA_ELEMENT_VARIABLE_LISTENER)
+      .namespaceUri(CAMUNDA_NS)
       .instanceProvider(new ModelTypeInstanceProvider<OrqueioVariableListener>() {
         public OrqueioVariableListener newInstance(ModelTypeInstanceContext instanceContext) {
           return new OrqueioVariableListenerImpl(instanceContext);
         }
       });
 
-    orqueioEventAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_EVENT)
-      .namespace(ORQUEIO_NS)
+    orqueioEventAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_EVENT)
+      .namespace(CAMUNDA_NS)
       .build();
 
-    orqueioClassAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_CLASS)
-      .namespace(ORQUEIO_NS)
+    orqueioClassAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_CLASS)
+      .namespace(CAMUNDA_NS)
       .build();
 
-    orqueioExpressionAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_EXPRESSION)
-        .namespace(ORQUEIO_NS)
+    orqueioExpressionAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_EXPRESSION)
+        .namespace(CAMUNDA_NS)
         .build();
 
-    orqueioDelegateExpressionAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_DELEGATE_EXPRESSION)
-      .namespace(ORQUEIO_NS)
+    orqueioDelegateExpressionAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_DELEGATE_EXPRESSION)
+      .namespace(CAMUNDA_NS)
       .build();
 
     SequenceBuilder sequenceBuilder = typeBuilder.sequence();

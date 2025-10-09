@@ -16,8 +16,8 @@
  */
 package io.orqueio.bpm.model.bpmn.impl.instance.orqueio;
 
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ELEMENT_CONNECTOR_ID;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_NS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ELEMENT_CONNECTOR_ID;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
 
 import io.orqueio.bpm.model.bpmn.impl.instance.BpmnModelElementInstanceImpl;
 import io.orqueio.bpm.model.bpmn.instance.orqueio.OrqueioConnectorId;
@@ -34,8 +34,8 @@ import io.orqueio.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstancePr
 public class OrqueioConnectorIdImpl extends BpmnModelElementInstanceImpl implements OrqueioConnectorId {
 
   public static void registerType(ModelBuilder modelBuilder) {
-    ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(OrqueioConnectorId.class, ORQUEIO_ELEMENT_CONNECTOR_ID)
-      .namespaceUri(ORQUEIO_NS)
+    ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(OrqueioConnectorId.class, CAMUNDA_ELEMENT_CONNECTOR_ID)
+      .namespaceUri(CAMUNDA_NS)
       .instanceProvider(new ModelTypeInstanceProvider<OrqueioConnectorId>() {
         public OrqueioConnectorId newInstance(ModelTypeInstanceContext instanceContext) {
           return new OrqueioConnectorIdImpl(instanceContext);

@@ -32,7 +32,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = { FilterTestApp.class }, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(properties = {
-  "orqueio.bpm.webapp.session-cookie.sameSiteCookieValue=aCustomValue"
+  "camunda.bpm.webapp.session-cookie.sameSiteCookieValue=aCustomValue"
 })
 @DirtiesContext
 public class SameSiteCustomValueIT {

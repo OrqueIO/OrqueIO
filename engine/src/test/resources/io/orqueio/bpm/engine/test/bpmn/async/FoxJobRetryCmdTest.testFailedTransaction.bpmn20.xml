@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions id="definitions"
-	xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:orqueio="http://orqueio.io/schema/1.0/bpmn"
+	xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
 	xmlns:fox="http://www.orqueio.com/fox" targetNamespace="Examples">
 
 	<process id="failedTask" isExecutable="true">
@@ -8,7 +8,7 @@
 		<startEvent id="theStart" />
 		<sequenceFlow id="flow1" sourceRef="theStart" targetRef="failingTransaction" />
 
-		<transaction id="failingTransaction" orqueio:async="true">
+		<transaction id="failingTransaction" camunda:async="true">
 			<extensionElements>
 				<fox:failedJobRetryTimeCycle>R5/PT5M</fox:failedJobRetryTimeCycle>
 			</extensionElements>
@@ -18,7 +18,7 @@
 			<sequenceFlow sourceRef="subStart" targetRef="service" />
 
 			<serviceTask id="service"
-				orqueio:class="io.orqueio.bpm.engine.test.cmd.FailingDelegate" />
+				camunda:class="io.orqueio.bpm.engine.test.cmd.FailingDelegate" />
 
 			<sequenceFlow sourceRef="service" targetRef="subEnd" />
 

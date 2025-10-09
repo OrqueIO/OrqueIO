@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:orqueio="http://orqueio.io/schema/1.0/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.signavio.com/bpmn20">
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.signavio.com/bpmn20">
   <process id="TwitterDemoProcess" name="TwitterDemoProcess" isExecutable="true">
-    <startEvent id="new_tweet_3" name="Start" orqueio:initiator="initiator">
+    <startEvent id="new_tweet_3" name="Start" camunda:initiator="initiator">
       <extensionElements>
-        <orqueio:formProperty id="email" name="email" type="string" required="true" readable="true" writable="true"></orqueio:formProperty>
-        <orqueio:formProperty id="content" name="content" type="string" required="true" readable="true" writable="true"></orqueio:formProperty>
+        <camunda:formProperty id="email" name="email" type="string" required="true" readable="true" writable="true"></camunda:formProperty>
+        <camunda:formProperty id="content" name="content" type="string" required="true" readable="true" writable="true"></camunda:formProperty>
       </extensionElements>
     </startEvent>
-    <userTask id="Review_Tweet_3" name="Review Tweet" orqueio:assignee="kermit">
+    <userTask id="Review_Tweet_3" name="Review Tweet" camunda:assignee="kermit">
       <extensionElements>
-        <orqueio:formProperty id="initiator" name="user" type="string" readable="true" writable="false"></orqueio:formProperty>
-        <orqueio:formProperty id="email" name="email" type="string" readable="true" writable="false"></orqueio:formProperty>
-        <orqueio:formProperty id="content" name="content" type="string" readable="true" writable="false"></orqueio:formProperty>
-        <orqueio:formProperty id="approved" name="approved" type="boolean" readable="true" writable="true"></orqueio:formProperty>
-        <orqueio:formProperty id="comments" name="comments" type="string" readable="true" writable="true"></orqueio:formProperty>
+        <camunda:formProperty id="initiator" name="user" type="string" readable="true" writable="false"></camunda:formProperty>
+        <camunda:formProperty id="email" name="email" type="string" readable="true" writable="false"></camunda:formProperty>
+        <camunda:formProperty id="content" name="content" type="string" readable="true" writable="false"></camunda:formProperty>
+        <camunda:formProperty id="approved" name="approved" type="boolean" readable="true" writable="true"></camunda:formProperty>
+        <camunda:formProperty id="comments" name="comments" type="string" readable="true" writable="true"></camunda:formProperty>
       </extensionElements>
     </userTask>
     <exclusiveGateway id="Approved__3" name="Approved?"></exclusiveGateway>
-    <serviceTask id="Send_rejection_notification_via_email__3" name="Send rejection notification via email" orqueio:type="mail">
+    <serviceTask id="Send_rejection_notification_via_email__3" name="Send rejection notification via email" camunda:type="mail">
       <extensionElements>
-        <orqueio:field name="to" expression="${email}"></orqueio:field>
-        <orqueio:field name="from" expression="orqueio@orqueio.com"></orqueio:field>
-        <orqueio:field name="subject" expression="Your tweet has been rejected"></orqueio:field>
-        <orqueio:field name="html">
-          <orqueio:expression><![CDATA[<html>
+        <camunda:field name="to" expression="${email}"></camunda:field>
+        <camunda:field name="from" expression="orqueio@orqueio.com"></camunda:field>
+        <camunda:field name="subject" expression="Your tweet has been rejected"></camunda:field>
+        <camunda:field name="html">
+          <camunda:expression><![CDATA[<html>
 <body>
 Hi!<br/><br/>
 
@@ -33,11 +33,11 @@ Original content: ${content}<br /><br/>
 
 Comment: ${comments}<br /><br/>
 
-Sorry, please try with better content the next time :-)]]></orqueio:expression>
-        </orqueio:field>
+Sorry, please try with better content the next time :-)]]></camunda:expression>
+        </camunda:field>
       </extensionElements>
     </serviceTask>
-    <serviceTask id="Publish_on_Twitter_3" name="Publish on Twitter" orqueio:class="io.orqueio.bpm.demo.twitter.TweetContentDelegate"></serviceTask>
+    <serviceTask id="Publish_on_Twitter_3" name="Publish on Twitter" camunda:class="io.orqueio.bpm.demo.twitter.TweetContentDelegate"></serviceTask>
     <exclusiveGateway id="Exclusive_Databased_Gateway_3" name="Exclusive_Databased_Gateway"></exclusiveGateway>
     <endEvent id="EndNoneEvent_3" name="End"></endEvent>
     <sequenceFlow id="SequenceFlow_2" name="" sourceRef="new_tweet_3" targetRef="Review_Tweet_3"></sequenceFlow>

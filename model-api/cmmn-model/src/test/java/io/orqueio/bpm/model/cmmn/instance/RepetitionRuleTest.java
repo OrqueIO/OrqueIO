@@ -41,7 +41,7 @@ public class RepetitionRuleTest extends CmmnModelElementInstanceTest {
     return Arrays.asList(
           new AttributeAssumption("name"),
           new AttributeAssumption("contextRef"),
-          new AttributeAssumption(CmmnModelConstants.ORQUEIO_NS, "repeatOnStandardEvent")
+          new AttributeAssumption(CmmnModelConstants.CAMUNDA_NS, "repeatOnStandardEvent")
         );
   }
 

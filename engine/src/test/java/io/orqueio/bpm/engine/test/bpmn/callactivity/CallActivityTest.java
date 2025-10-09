@@ -468,7 +468,7 @@ public class CallActivityTest extends PluggableProcessEngineTest {
 
     CallActivityBuilder callActivityBuilder = ((CallActivity) modelInstance.getModelElementById("callActivity")).builder();
 
-    // create orqueio:in with source but without target
+    // create camunda:in with source but without target
     OrqueioIn orqueioIn = modelInstance.newInstance(OrqueioIn.class);
     orqueioIn.setOrqueioSource("superVariable");
     callActivityBuilder.addExtensionElement(orqueioIn);
@@ -477,7 +477,7 @@ public class CallActivityTest extends PluggableProcessEngineTest {
     // set target
     orqueioIn.setOrqueioTarget("subVariable");
 
-    // create orqueio:in with sourceExpression but without target
+    // create camunda:in with sourceExpression but without target
     orqueioIn = modelInstance.newInstance(OrqueioIn.class);
     orqueioIn.setOrqueioSourceExpression("${x+5}");
     callActivityBuilder.addExtensionElement(orqueioIn);
@@ -486,7 +486,7 @@ public class CallActivityTest extends PluggableProcessEngineTest {
     // set target
     orqueioIn.setOrqueioTarget("subVariable2");
 
-    // create orqueio:out with source but without target
+    // create camunda:out with source but without target
     OrqueioOut orqueioOut = modelInstance.newInstance(OrqueioOut.class);
     orqueioOut.setOrqueioSource("subVariable");
     callActivityBuilder.addExtensionElement(orqueioOut);
@@ -495,7 +495,7 @@ public class CallActivityTest extends PluggableProcessEngineTest {
     // set target
     orqueioOut.setOrqueioTarget("superVariable");
 
-    // create orqueio:out with sourceExpression but without target
+    // create camunda:out with sourceExpression but without target
     orqueioOut = modelInstance.newInstance(OrqueioOut.class);
     orqueioOut.setOrqueioSourceExpression("${y+1}");
     callActivityBuilder.addExtensionElement(orqueioOut);
@@ -879,7 +879,7 @@ public class CallActivityTest extends PluggableProcessEngineTest {
   }
 
   /**
-   * This testcase verifies that <orqueio:out variables="all" /> works also in
+   * This testcase verifies that <camunda:out variables="all" /> works also in
    * case super process has no variables
    *
    * https://app.orqueio.com/jira/browse/CAM-1617

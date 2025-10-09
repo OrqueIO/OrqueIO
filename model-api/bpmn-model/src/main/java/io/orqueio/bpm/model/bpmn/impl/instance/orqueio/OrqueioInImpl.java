@@ -41,36 +41,36 @@ public class OrqueioInImpl extends BpmnModelElementInstanceImpl implements Orque
   protected static Attribute<Boolean> orqueioLocalAttribute;
 
   public static void registerType(ModelBuilder modelBuilder) {
-    ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(OrqueioIn.class, ORQUEIO_ELEMENT_IN)
-      .namespaceUri(ORQUEIO_NS)
+    ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(OrqueioIn.class, CAMUNDA_ELEMENT_IN)
+      .namespaceUri(CAMUNDA_NS)
       .instanceProvider(new ModelTypeInstanceProvider<OrqueioIn>() {
         public OrqueioIn newInstance(ModelTypeInstanceContext instanceContext) {
           return new OrqueioInImpl(instanceContext);
         }
       });
 
-    orqueioSourceAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_SOURCE)
-      .namespace(ORQUEIO_NS)
+    orqueioSourceAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_SOURCE)
+      .namespace(CAMUNDA_NS)
       .build();
 
-    orqueioSourceExpressionAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_SOURCE_EXPRESSION)
-      .namespace(ORQUEIO_NS)
+    orqueioSourceExpressionAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_SOURCE_EXPRESSION)
+      .namespace(CAMUNDA_NS)
       .build();
 
-    orqueioVariablesAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_VARIABLES)
-      .namespace(ORQUEIO_NS)
+    orqueioVariablesAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_VARIABLES)
+      .namespace(CAMUNDA_NS)
       .build();
 
-    orqueioTargetAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_TARGET)
-      .namespace(ORQUEIO_NS)
+    orqueioTargetAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_TARGET)
+      .namespace(CAMUNDA_NS)
       .build();
 
-    orqueioBusinessKeyAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_BUSINESS_KEY)
-      .namespace(ORQUEIO_NS)
+    orqueioBusinessKeyAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_BUSINESS_KEY)
+      .namespace(CAMUNDA_NS)
       .build();
 
-    orqueioLocalAttribute = typeBuilder.booleanAttribute(ORQUEIO_ATTRIBUTE_LOCAL)
-      .namespace(ORQUEIO_NS)
+    orqueioLocalAttribute = typeBuilder.booleanAttribute(CAMUNDA_ATTRIBUTE_LOCAL)
+      .namespace(CAMUNDA_NS)
       .build();
 
     typeBuilder.build();

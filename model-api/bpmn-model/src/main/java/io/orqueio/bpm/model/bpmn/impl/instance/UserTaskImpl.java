@@ -19,18 +19,18 @@ package io.orqueio.bpm.model.bpmn.impl.instance;
 import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.BPMN20_NS;
 import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ATTRIBUTE_IMPLEMENTATION;
 import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ELEMENT_USER_TASK;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ATTRIBUTE_ASSIGNEE;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ATTRIBUTE_CANDIDATE_GROUPS;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ATTRIBUTE_CANDIDATE_USERS;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ATTRIBUTE_DUE_DATE;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ATTRIBUTE_FOLLOW_UP_DATE;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ATTRIBUTE_FORM_HANDLER_CLASS;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ATTRIBUTE_FORM_KEY;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ATTRIBUTE_FORM_REF;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ATTRIBUTE_FORM_REF_BINDING;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ATTRIBUTE_FORM_REF_VERSION;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ATTRIBUTE_PRIORITY;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_NS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_ASSIGNEE;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_CANDIDATE_GROUPS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_CANDIDATE_USERS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_DUE_DATE;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_FOLLOW_UP_DATE;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_FORM_HANDLER_CLASS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_FORM_KEY;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_FORM_REF;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_FORM_REF_BINDING;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_FORM_REF_VERSION;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_PRIORITY;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
 
 import java.util.Collection;
 import java.util.List;
@@ -94,48 +94,48 @@ public class UserTaskImpl extends TaskImpl implements UserTask {
 
     /** orqueio extensions */
 
-    orqueioAssigneeAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_ASSIGNEE)
-      .namespace(ORQUEIO_NS)
+    orqueioAssigneeAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_ASSIGNEE)
+      .namespace(CAMUNDA_NS)
       .build();
 
-    orqueioCandidateGroupsAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_CANDIDATE_GROUPS)
-      .namespace(ORQUEIO_NS)
+    orqueioCandidateGroupsAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_CANDIDATE_GROUPS)
+      .namespace(CAMUNDA_NS)
       .build();
 
-    orqueioCandidateUsersAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_CANDIDATE_USERS)
-      .namespace(ORQUEIO_NS)
+    orqueioCandidateUsersAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_CANDIDATE_USERS)
+      .namespace(CAMUNDA_NS)
       .build();
 
-    orqueioDueDateAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_DUE_DATE)
-      .namespace(ORQUEIO_NS)
+    orqueioDueDateAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_DUE_DATE)
+      .namespace(CAMUNDA_NS)
       .build();
 
-    orqueioFollowUpDateAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_FOLLOW_UP_DATE)
-      .namespace(ORQUEIO_NS)
+    orqueioFollowUpDateAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_FOLLOW_UP_DATE)
+      .namespace(CAMUNDA_NS)
       .build();
 
-    orqueioFormHandlerClassAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_FORM_HANDLER_CLASS)
-      .namespace(ORQUEIO_NS)
+    orqueioFormHandlerClassAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_FORM_HANDLER_CLASS)
+      .namespace(CAMUNDA_NS)
       .build();
 
-    orqueioFormKeyAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_FORM_KEY)
-      .namespace(ORQUEIO_NS)
+    orqueioFormKeyAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_FORM_KEY)
+      .namespace(CAMUNDA_NS)
       .build();
 
-    orqueioFormRefAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_FORM_REF)
-        .namespace(ORQUEIO_NS)
+    orqueioFormRefAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_FORM_REF)
+        .namespace(CAMUNDA_NS)
         .build();
 
-    orqueioFormRefBindingAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_FORM_REF_BINDING)
-        .namespace(ORQUEIO_NS)
+    orqueioFormRefBindingAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_FORM_REF_BINDING)
+        .namespace(CAMUNDA_NS)
         .build();
 
-    orqueioFormRefVersionAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_FORM_REF_VERSION)
-        .namespace(ORQUEIO_NS)
+    orqueioFormRefVersionAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_FORM_REF_VERSION)
+        .namespace(CAMUNDA_NS)
         .build();
 
-    orqueioPriorityAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_PRIORITY)
-      .namespace(ORQUEIO_NS)
+    orqueioPriorityAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_PRIORITY)
+      .namespace(CAMUNDA_NS)
       .build();
 
     typeBuilder.build();

@@ -39,7 +39,7 @@
                                     <definitions xmlns=\\"http://www.omg.org/spec/DMN/20151101/dmn.xsd\\"
                                                  id=\\"definitions\\"
                                                  name=\\"orqueio\\"
-                                                 namespace=\\"http://orqueio.io/schema/1.0/dmn\\">
+                                                 namespace=\\"http://camunda.org/schema/1.0/dmn\\">
                                       <decision id=\\"testDecision\\" name=\\"decision\\">
                                         <decisionTable id=\\"table\\">
                                           <output id=\\"result\\" name=\\"result\\" >

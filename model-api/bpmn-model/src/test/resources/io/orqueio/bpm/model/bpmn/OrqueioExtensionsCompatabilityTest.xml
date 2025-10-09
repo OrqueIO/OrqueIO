@@ -1,224 +1,224 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions
   xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
-  xmlns:orqueio="http://activiti.org/bpmn"
+  xmlns:camunda="http://activiti.org/bpmn"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   targetNamespace="http://orqueio.io/test">
 
   <!-- NOTE: this document is not valid and is only used to test all orqueio extensions -->
 
   <process id="process"
-      orqueio:candidateStarterGroups="group1, ${group2(a, b)}, group3"
-      orqueio:candidateStarterUsers="user1, ${user2(a, b)}, user3"
-      orqueio:jobPriority="15"
-      orqueio:taskPriority="13"
-      orqueio:historyTimeToLive="5"
-      orqueio:isStartableInTasklist="false"
-      orqueio:versionTag="v1.0.0">
+      camunda:candidateStarterGroups="group1, ${group2(a, b)}, group3"
+      camunda:candidateStarterUsers="user1, ${user2(a, b)}, user3"
+      camunda:jobPriority="15"
+      camunda:taskPriority="13"
+      camunda:historyTimeToLive="5"
+      camunda:isStartableInTasklist="false"
+      camunda:versionTag="v1.0.0">
     <extensionElements>
-      <orqueio:executionListener event="start" class="io.orqueio.test.Test"/>
+      <camunda:executionListener event="start" class="io.orqueio.test.Test"/>
     </extensionElements>
 
     <startEvent id="startEvent"
-        orqueio:initiator="test"
-        orqueio:formHandlerClass="io.orqueio.test.Test"
-        orqueio:formKey="test"
-        orqueio:asyncBefore="true"
-        orqueio:asyncAfter="true"
-        orqueio:jobPriority="${test}">
+        camunda:initiator="test"
+        camunda:formHandlerClass="io.orqueio.test.Test"
+        camunda:formKey="test"
+        camunda:asyncBefore="true"
+        camunda:asyncAfter="true"
+        camunda:jobPriority="${test}">
       <extensionElements>
-        <orqueio:executionListener event="start" expression="${test}"/>
-        <orqueio:potentialStarter>
+        <camunda:executionListener event="start" expression="${test}"/>
+        <camunda:potentialStarter>
           <resourceAssignmentExpression>
             <formalExpression>group1, ${group2(a, b)}, group3</formalExpression>
           </resourceAssignmentExpression>
-        </orqueio:potentialStarter>
-        <orqueio:formProperty id="test" name="test" type="test" variable="test" expression="${test}" datePattern="test" default="test"/>
+        </camunda:potentialStarter>
+        <camunda:formProperty id="test" name="test" type="test" variable="test" expression="${test}" datePattern="test" default="test"/>
       </extensionElements>
-      <errorEventDefinition orqueio:errorCodeVariable="errorVariable" orqueio:errorMessageVariable="errorMessageVariable"/>
+      <errorEventDefinition camunda:errorCodeVariable="errorVariable" camunda:errorMessageVariable="errorMessageVariable"/>
     </startEvent>
 
     <sequenceFlow id="sequenceFlow" sourceRef="startEvent" targetRef="userTask">
       <extensionElements>
-        <orqueio:executionListener>
-          <orqueio:script scriptFormat="groovy">println 'Hello World'</orqueio:script>
-        </orqueio:executionListener>
+        <camunda:executionListener>
+          <camunda:script scriptFormat="groovy">println 'Hello World'</camunda:script>
+        </camunda:executionListener>
       </extensionElements>
     </sequenceFlow>
 
     <userTask id="userTask"
-        orqueio:assignee="test"
-        orqueio:async="true"
-        orqueio:asyncBefore="true"
-        orqueio:asyncAfter="true"
-        orqueio:candidateGroups="group1, ${group2(a, b)}, group3"
-        orqueio:candidateUsers="user1, ${user2(a, b)}, user3"
-        orqueio:dueDate="2014-02-27"
-        orqueio:exclusive="false"
-        orqueio:formHandlerClass="io.orqueio.test.Test"
-        orqueio:formKey="test"
-        orqueio:priority="12"
-        orqueio:jobPriority="${test}">
+        camunda:assignee="test"
+        camunda:async="true"
+        camunda:asyncBefore="true"
+        camunda:asyncAfter="true"
+        camunda:candidateGroups="group1, ${group2(a, b)}, group3"
+        camunda:candidateUsers="user1, ${user2(a, b)}, user3"
+        camunda:dueDate="2014-02-27"
+        camunda:exclusive="false"
+        camunda:formHandlerClass="io.orqueio.test.Test"
+        camunda:formKey="test"
+        camunda:priority="12"
+        camunda:jobPriority="${test}">
       <extensionElements>
-        <orqueio:taskListener event="create" class="io.orqueio.test.Test" expression="${test}" delegateExpression="${io.orqueio.test.Test}">
-          <orqueio:field name="test">
-            <orqueio:string>test</orqueio:string>
-          </orqueio:field>
+        <camunda:taskListener event="create" class="io.orqueio.test.Test" expression="${test}" delegateExpression="${io.orqueio.test.Test}">
+          <camunda:field name="test">
+            <camunda:string>test</camunda:string>
+          </camunda:field>
           <timerEventDefinition>
             <timeDuration xsi:type="tFormalExpression">PT1H</timeDuration>
           </timerEventDefinition>
-        </orqueio:taskListener>
-        <orqueio:taskListener>
-          <orqueio:script scriptFormat="groovy" resource="test.groovy" />
-        </orqueio:taskListener>
-        <orqueio:formData>
-          <orqueio:formField id="test" label="test" type="test" datePattern="test" defaultValue="test">
-            <orqueio:properties>
-              <orqueio:property id="test" value="test"/>
-            </orqueio:properties>
-            <orqueio:validation>
-              <orqueio:constraint name="test" config="test"/>
-            </orqueio:validation>
-            <orqueio:value id="test" name="test"/>
-          </orqueio:formField>
-        </orqueio:formData>
+        </camunda:taskListener>
+        <camunda:taskListener>
+          <camunda:script scriptFormat="groovy" resource="test.groovy" />
+        </camunda:taskListener>
+        <camunda:formData>
+          <camunda:formField id="test" label="test" type="test" datePattern="test" defaultValue="test">
+            <camunda:properties>
+              <camunda:property id="test" value="test"/>
+            </camunda:properties>
+            <camunda:validation>
+              <camunda:constraint name="test" config="test"/>
+            </camunda:validation>
+            <camunda:value id="test" name="test"/>
+          </camunda:formField>
+        </camunda:formData>
       </extensionElements>
     </userTask>
 
     <serviceTask id="serviceTask"
-        orqueio:expression="${test}"
-        orqueio:class="io.orqueio.test.Test"
-        orqueio:delegateExpression="${io.orqueio.test.Test}"
-        orqueio:resultVariable="test"
-        orqueio:topic="test"
-        orqueio:type="mail"
-        orqueio:taskPriority="${test}">
+        camunda:expression="${test}"
+        camunda:class="io.orqueio.test.Test"
+        camunda:delegateExpression="${io.orqueio.test.Test}"
+        camunda:resultVariable="test"
+        camunda:topic="test"
+        camunda:type="mail"
+        camunda:taskPriority="${test}">
       <extensionElements>
-        <orqueio:executionListener event="start" delegateExpression="${io.orqueio.test.Test}"/>
-        <orqueio:connector>
-          <orqueio:connectorId>soap-http-connector</orqueio:connectorId>
-          <orqueio:inputOutput>
-            <orqueio:inputParameter name="endpointUrl">http://example.com/webservice</orqueio:inputParameter>
-            <orqueio:outputParameter name="result">output</orqueio:outputParameter>
-          </orqueio:inputOutput>
-        </orqueio:connector>
-        <orqueio:inputOutput>
-          <orqueio:inputParameter name="shouldBeNull"/>
-          <orqueio:inputParameter name="shouldBeConstant">foo</orqueio:inputParameter>
-          <orqueio:inputParameter name="shouldBeExpression">${1 + 1}</orqueio:inputParameter>
-          <orqueio:inputParameter name="shouldBeList">
-            <orqueio:list>
-              <orqueio:value>a</orqueio:value>
-              <orqueio:value>b</orqueio:value>
-              <orqueio:value>c</orqueio:value>
-            </orqueio:list>
-          </orqueio:inputParameter>
-          <orqueio:inputParameter name="shouldBeMap">
-            <orqueio:map>
-              <orqueio:entry key="foo">bar</orqueio:entry>
-              <orqueio:entry key="hello">world</orqueio:entry>
-            </orqueio:map>
-          </orqueio:inputParameter>
-          <orqueio:inputParameter name="shouldBeScript">
-            <orqueio:script scriptFormat="groovy">1 + 1</orqueio:script>
-          </orqueio:inputParameter>
-          <orqueio:outputParameter name="nested">
-            <orqueio:list>
-              <orqueio:value>
-                <orqueio:list>
-                  <orqueio:value>list</orqueio:value>
-                  <orqueio:value>list</orqueio:value>
-                </orqueio:list>
-              </orqueio:value>
-              <orqueio:value>
-                <orqueio:map>
-                  <orqueio:entry key="list">
-                    <orqueio:list>
-                      <orqueio:value>map</orqueio:value>
-                      <orqueio:value>map</orqueio:value>
-                      <orqueio:value>map</orqueio:value>
-                    </orqueio:list>
-                  </orqueio:entry>
-                  <orqueio:entry key="map">
-                    <orqueio:map>
-                      <orqueio:entry key="so">nested</orqueio:entry>
-                    </orqueio:map>
-                  </orqueio:entry>
-                </orqueio:map>
-              </orqueio:value>
-            </orqueio:list>
-          </orqueio:outputParameter>
-        </orqueio:inputOutput>
+        <camunda:executionListener event="start" delegateExpression="${io.orqueio.test.Test}"/>
+        <camunda:connector>
+          <camunda:connectorId>soap-http-connector</camunda:connectorId>
+          <camunda:inputOutput>
+            <camunda:inputParameter name="endpointUrl">http://example.com/webservice</camunda:inputParameter>
+            <camunda:outputParameter name="result">output</camunda:outputParameter>
+          </camunda:inputOutput>
+        </camunda:connector>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="shouldBeNull"/>
+          <camunda:inputParameter name="shouldBeConstant">foo</camunda:inputParameter>
+          <camunda:inputParameter name="shouldBeExpression">${1 + 1}</camunda:inputParameter>
+          <camunda:inputParameter name="shouldBeList">
+            <camunda:list>
+              <camunda:value>a</camunda:value>
+              <camunda:value>b</camunda:value>
+              <camunda:value>c</camunda:value>
+            </camunda:list>
+          </camunda:inputParameter>
+          <camunda:inputParameter name="shouldBeMap">
+            <camunda:map>
+              <camunda:entry key="foo">bar</camunda:entry>
+              <camunda:entry key="hello">world</camunda:entry>
+            </camunda:map>
+          </camunda:inputParameter>
+          <camunda:inputParameter name="shouldBeScript">
+            <camunda:script scriptFormat="groovy">1 + 1</camunda:script>
+          </camunda:inputParameter>
+          <camunda:outputParameter name="nested">
+            <camunda:list>
+              <camunda:value>
+                <camunda:list>
+                  <camunda:value>list</camunda:value>
+                  <camunda:value>list</camunda:value>
+                </camunda:list>
+              </camunda:value>
+              <camunda:value>
+                <camunda:map>
+                  <camunda:entry key="list">
+                    <camunda:list>
+                      <camunda:value>map</camunda:value>
+                      <camunda:value>map</camunda:value>
+                      <camunda:value>map</camunda:value>
+                    </camunda:list>
+                  </camunda:entry>
+                  <camunda:entry key="map">
+                    <camunda:map>
+                      <camunda:entry key="so">nested</camunda:entry>
+                    </camunda:map>
+                  </camunda:entry>
+                </camunda:map>
+              </camunda:value>
+            </camunda:list>
+          </camunda:outputParameter>
+        </camunda:inputOutput>
       </extensionElements>
     </serviceTask>
 
     <sendTask id="sendTask">
       <extensionElements>
-        <orqueio:failedJobRetryTimeCycle>test</orqueio:failedJobRetryTimeCycle>
-        <orqueio:field name="test" stringValue="test" expression="${test}">
-          <orqueio:expression>${test}</orqueio:expression>
-          <orqueio:string>test</orqueio:string>
-        </orqueio:field>
+        <camunda:failedJobRetryTimeCycle>test</camunda:failedJobRetryTimeCycle>
+        <camunda:field name="test" stringValue="test" expression="${test}">
+          <camunda:expression>${test}</camunda:expression>
+          <camunda:string>test</camunda:string>
+        </camunda:field>
       </extensionElements>
     </sendTask>
 
-    <scriptTask id="scriptTask" scriptFormat="groovy" orqueio:resource="test.groovy" />
+    <scriptTask id="scriptTask" scriptFormat="groovy" camunda:resource="test.groovy" />
 
     <callActivity id="callActivity"
-                  orqueio:calledElementBinding="test"
-                  orqueio:calledElementVersion="test"
-                  orqueio:calledElementVersionTag="test"
-                  orqueio:calledElementTenantId="test"
-                  orqueio:caseRef="test"
-                  orqueio:caseBinding="test"
-                  orqueio:caseVersion="test"
-                  orqueio:caseTenantId="test"
-                  orqueio:exclusive="false"
-                  orqueio:variableMappingClass="io.orqueio.test.Test"
-                  orqueio:variableMappingDelegateExpression="${io.orqueio.test.Test}">
+                  camunda:calledElementBinding="test"
+                  camunda:calledElementVersion="test"
+                  camunda:calledElementVersionTag="test"
+                  camunda:calledElementTenantId="test"
+                  camunda:caseRef="test"
+                  camunda:caseBinding="test"
+                  camunda:caseVersion="test"
+                  camunda:caseTenantId="test"
+                  camunda:exclusive="false"
+                  camunda:variableMappingClass="io.orqueio.test.Test"
+                  camunda:variableMappingDelegateExpression="${io.orqueio.test.Test}">
       <extensionElements>
-        <orqueio:in source="test" sourceExpression="${test}" variables="test" businessKey="${test}" target="test" local="true"/>
-        <orqueio:out source="test" sourceExpression="${test}" variables="test" target="test" local="true"/>
+        <camunda:in source="test" sourceExpression="${test}" variables="test" businessKey="${test}" target="test" local="true"/>
+        <camunda:out source="test" sourceExpression="${test}" variables="test" target="test" local="true"/>
       </extensionElements>
     </callActivity>
 
     <businessRuleTask id="businessRuleTask"
-                      orqueio:decisionRef="test"
-                      orqueio:decisionRefBinding="test"
-                      orqueio:decisionRefVersion="test"
-                      orqueio:decisionRefVersionTag="test"
-                      orqueio:decisionRefTenantId="test"
-                      orqueio:mapDecisionResult="test"
-                      orqueio:taskPriority="test"    />
+                      camunda:decisionRef="test"
+                      camunda:decisionRefBinding="test"
+                      camunda:decisionRefVersion="test"
+                      camunda:decisionRefVersionTag="test"
+                      camunda:decisionRefTenantId="test"
+                      camunda:mapDecisionResult="test"
+                      camunda:taskPriority="test"    />
 
     <endEvent id="endEvent"
-              orqueio:asyncAfter="true"
-              orqueio:asyncBefore="true"
-              orqueio:jobPriority="${test}">
+              camunda:asyncAfter="true"
+              camunda:asyncBefore="true"
+              camunda:jobPriority="${test}">
       <extensionElements>
-        <orqueio:properties>
-          <orqueio:property name="name1" value="value1"/>
-          <orqueio:property name="name2" value="value2"/>
-        </orqueio:properties>
+        <camunda:properties>
+          <camunda:property name="name1" value="value1"/>
+          <camunda:property name="name2" value="value2"/>
+        </camunda:properties>
       </extensionElements>
       <messageEventDefinition
-        orqueio:class="io.orqueio.test.Test"
-        orqueio:expression="${test}"
-        orqueio:delegateExpression="${io.orqueio.test.Test}"
-        orqueio:resultVariable="test"
-        orqueio:topic="test"
-        orqueio:type="test"/>
+        camunda:class="io.orqueio.test.Test"
+        camunda:expression="${test}"
+        camunda:delegateExpression="${io.orqueio.test.Test}"
+        camunda:resultVariable="test"
+        camunda:topic="test"
+        camunda:type="test"/>
     </endEvent>
 
     <parallelGateway id="parallelGateway"
-                     orqueio:async="true"
-                     orqueio:asyncBefore="true"
-                     orqueio:asyncAfter="true"
-                     orqueio:jobPriority="${test}">
+                     camunda:async="true"
+                     camunda:asyncBefore="true"
+                     camunda:asyncAfter="true"
+                     camunda:jobPriority="${test}">
 
     </parallelGateway>
 
   </process>
 
-  <error id="error" orqueio:errorMessage="test" />
+  <error id="error" camunda:errorMessage="test" />
 </definitions>

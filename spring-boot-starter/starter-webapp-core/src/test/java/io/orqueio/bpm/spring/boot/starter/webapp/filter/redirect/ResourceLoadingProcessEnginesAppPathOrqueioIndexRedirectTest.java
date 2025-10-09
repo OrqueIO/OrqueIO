@@ -33,9 +33,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest(classes = { FilterTestApp.class},
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
     properties = {
-        "orqueio.bpm.webapp.application-path=/orqueio",
-        "orqueio.bpm.webapp.index-redirect-enabled=true",
-        "orqueio.bpm.admin-user.id=admin" })
+        "camunda.bpm.webapp.application-path=/orqueio",
+        "camunda.bpm.webapp.index-redirect-enabled=true",
+        "camunda.bpm.admin-user.id=admin" })
 @DirtiesContext
 public class ResourceLoadingProcessEnginesAppPathOrqueioIndexRedirectTest {
 

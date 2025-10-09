@@ -66,12 +66,12 @@ public class ScriptTaskImpl extends TaskImpl implements ScriptTask {
 
     /** orqueio extensions */
 
-    orqueioResultVariableAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_RESULT_VARIABLE)
-      .namespace(ORQUEIO_NS)
+    orqueioResultVariableAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_RESULT_VARIABLE)
+      .namespace(CAMUNDA_NS)
       .build();
 
-    orqueioResourceAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_RESOURCE)
-      .namespace(ORQUEIO_NS)
+    orqueioResourceAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_RESOURCE)
+      .namespace(CAMUNDA_NS)
       .build();
 
     typeBuilder.build();

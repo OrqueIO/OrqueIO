@@ -25,23 +25,23 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.entry;
 
 @TestPropertySource(properties = {
-    "orqueio.bpm.client.subscriptions.topic-one.auto-open=false",
-    "orqueio.bpm.client.subscriptions.topic-one.lock-duration=555",
-    "orqueio.bpm.client.subscriptions.topic-one.variable-names=var-one,var-two",
-    "orqueio.bpm.client.subscriptions.topic-one.local-variables=true",
-    "orqueio.bpm.client.subscriptions.topic-one.business-key=business-key",
-    "orqueio.bpm.client.subscriptions.topic-one.process-definition-id=definition-id",
-    "orqueio.bpm.client.subscriptions.topic-one.process-definition-id-in=id-one,id-two",
-    "orqueio.bpm.client.subscriptions.topic-one.process-definition-key=key",
-    "orqueio.bpm.client.subscriptions.topic-one.process-definition-key-in=key-one,key-two",
-    "orqueio.bpm.client.subscriptions.topic-one.process-definition-version-tag=version-tag",
-    "orqueio.bpm.client.subscriptions.topic-one.process-variables.var-name-foo=var-val-foo",
-    "orqueio.bpm.client.subscriptions.topic-one.process-variables.var-name-bar=var-val-bar",
-    "orqueio.bpm.client.subscriptions.topic-one.without-tenant-id=true",
-    "orqueio.bpm.client.subscriptions.topic-one.tenant-id-in=tenant-id-one,tenant-id-two",
-    "orqueio.bpm.client.subscriptions.topic-one.include-extension-properties=true",
+    "camunda.bpm.client.subscriptions.topic-one.auto-open=false",
+    "camunda.bpm.client.subscriptions.topic-one.lock-duration=555",
+    "camunda.bpm.client.subscriptions.topic-one.variable-names=var-one,var-two",
+    "camunda.bpm.client.subscriptions.topic-one.local-variables=true",
+    "camunda.bpm.client.subscriptions.topic-one.business-key=business-key",
+    "camunda.bpm.client.subscriptions.topic-one.process-definition-id=definition-id",
+    "camunda.bpm.client.subscriptions.topic-one.process-definition-id-in=id-one,id-two",
+    "camunda.bpm.client.subscriptions.topic-one.process-definition-key=key",
+    "camunda.bpm.client.subscriptions.topic-one.process-definition-key-in=key-one,key-two",
+    "camunda.bpm.client.subscriptions.topic-one.process-definition-version-tag=version-tag",
+    "camunda.bpm.client.subscriptions.topic-one.process-variables.var-name-foo=var-val-foo",
+    "camunda.bpm.client.subscriptions.topic-one.process-variables.var-name-bar=var-val-bar",
+    "camunda.bpm.client.subscriptions.topic-one.without-tenant-id=true",
+    "camunda.bpm.client.subscriptions.topic-one.tenant-id-in=tenant-id-one,tenant-id-two",
+    "camunda.bpm.client.subscriptions.topic-one.include-extension-properties=true",
 
-    "orqueio.bpm.client.subscriptions.topic-two.lock-duration=6666",
+    "camunda.bpm.client.subscriptions.topic-two.lock-duration=6666",
 })
 public class SubscriptionConfigurationTest extends ParsePropertiesHelper {
 

@@ -35,7 +35,7 @@ public class NeedsHistoryAutoConfigurationCondition extends SpringBootCondition 
   }
 
   protected boolean needsAdditionalConfiguration(ConditionContext context) {
-    String historyLevel = context.getEnvironment().getProperty("orqueio.bpm.history-level");
+    String historyLevel = context.getEnvironment().getProperty("camunda.bpm.history-level");
     if (HISTORY_AUTO.equals(historyLevel)) {
       return !isHistoryAutoSupported();
     }

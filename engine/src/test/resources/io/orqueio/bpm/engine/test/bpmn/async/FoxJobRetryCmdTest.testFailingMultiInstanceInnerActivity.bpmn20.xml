@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions id="definitions"
   xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
-  xmlns:orqueio="http://orqueio.io/schema/1.0/bpmn"
+  xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
   xmlns:fox="http://www.orqueio.com/fox"
   targetNamespace="Examples">
 
@@ -12,11 +12,11 @@
 
      <userTask id="task">
       <extensionElements>
-        <orqueio:executionListener event="start" class="io.orqueio.bpm.engine.test.cmd.FailingExecutionListener" />
+        <camunda:executionListener event="start" class="io.orqueio.bpm.engine.test.cmd.FailingExecutionListener" />
       </extensionElements>
-      <multiInstanceLoopCharacteristics isSequential="true" orqueio:asyncBefore="true">
+      <multiInstanceLoopCharacteristics isSequential="true" camunda:asyncBefore="true">
         <extensionElements>
-          <orqueio:failedJobRetryTimeCycle>R5/PT5M</orqueio:failedJobRetryTimeCycle>
+          <camunda:failedJobRetryTimeCycle>R5/PT5M</camunda:failedJobRetryTimeCycle>
         </extensionElements>
         <loopCardinality>5</loopCardinality>
       </multiInstanceLoopCharacteristics>

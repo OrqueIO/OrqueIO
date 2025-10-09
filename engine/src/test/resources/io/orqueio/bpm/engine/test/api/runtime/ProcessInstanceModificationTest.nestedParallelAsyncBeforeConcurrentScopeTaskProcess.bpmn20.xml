@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions
   xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
-  xmlns:orqueio="http://orqueio.io/schema/1.0/bpmn"
+  xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
   targetNamespace="io.orqueio.bpm.engine.test.enginge.test.api.runtime">
 
   <process id="nestedConcurrentTasksProcess" isExecutable="true">
@@ -22,7 +22,7 @@
       <parallelGateway id="innerFork" />
       
       <sequenceFlow id="flow6" sourceRef="innerFork" targetRef="innerTask1" />
-      <userTask id="innerTask1" orqueio:asyncBefore="true"/>    
+      <userTask id="innerTask1" camunda:asyncBefore="true"/>
       <sequenceFlow id="flow7" sourceRef="innerTask1" targetRef="subProcessEnd1" />
       <endEvent id="subProcessEnd1" />
       
@@ -37,7 +37,7 @@
       <endEvent id="boundaryEnd1" />
       
       <sequenceFlow id="flow10" sourceRef="innerFork" targetRef="innerTask2" />
-      <userTask id="innerTask2" orqueio:asyncBefore="true"/>    
+      <userTask id="innerTask2" camunda:asyncBefore="true"/>
       <sequenceFlow id="flow11" sourceRef="innerTask2" targetRef="subProcessEnd2" />
       <endEvent id="subProcessEnd2" />
       

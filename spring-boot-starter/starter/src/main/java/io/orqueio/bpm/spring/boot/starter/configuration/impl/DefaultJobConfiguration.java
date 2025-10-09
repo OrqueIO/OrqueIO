@@ -78,7 +78,7 @@ public class DefaultJobConfiguration extends AbstractOrqueioConfiguration implem
 
     @Bean(name = ORQUEIO_TASK_EXECUTOR_QUALIFIER)
     @ConditionalOnMissingBean(name = ORQUEIO_TASK_EXECUTOR_QUALIFIER)
-    @ConditionalOnProperty(prefix = "orqueio.bpm.job-execution", name = "enabled", havingValue = "true", matchIfMissing = true)
+    @ConditionalOnProperty(prefix = "camunda.bpm.job-execution", name = "enabled", havingValue = "true", matchIfMissing = true)
     public static TaskExecutor orqueioTaskExecutor(OrqueioBpmProperties properties) {
       int corePoolSize = properties.getJobExecution().getCorePoolSize();
       int maxPoolSize = properties.getJobExecution().getMaxPoolSize();
@@ -99,7 +99,7 @@ public class DefaultJobConfiguration extends AbstractOrqueioConfiguration implem
 
     @Bean
     @ConditionalOnMissingBean(JobExecutor.class)
-    @ConditionalOnProperty(prefix = "orqueio.bpm.job-execution", name = "enabled", havingValue = "true", matchIfMissing = true)
+    @ConditionalOnProperty(prefix = "camunda.bpm.job-execution", name = "enabled", havingValue = "true", matchIfMissing = true)
     public static JobExecutor jobExecutor(@Qualifier(ORQUEIO_TASK_EXECUTOR_QUALIFIER) final TaskExecutor taskExecutor, OrqueioBpmProperties properties) {
       final SpringJobExecutor springJobExecutor = new SpringJobExecutor();
       springJobExecutor.setTaskExecutor(taskExecutor);
@@ -119,7 +119,7 @@ public class DefaultJobConfiguration extends AbstractOrqueioConfiguration implem
     }
 
     @Bean
-    @ConditionalOnProperty(prefix = "orqueio.bpm.job-execution", name = "enabled", havingValue = "true", matchIfMissing = true)
+    @ConditionalOnProperty(prefix = "camunda.bpm.job-execution", name = "enabled", havingValue = "true", matchIfMissing = true)
     @ConditionalOnBean(JobExecutor.class)
     public static JobExecutorStartingEventListener jobExecutorStartingEventListener() {
       return new JobExecutorStartingEventListener();

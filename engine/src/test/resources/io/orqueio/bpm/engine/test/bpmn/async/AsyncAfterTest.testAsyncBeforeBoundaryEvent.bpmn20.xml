@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:orqueio="http://orqueio.io/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Orqueio Modeler" exporterVersion="1.8.2">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Orqueio Modeler" exporterVersion="1.8.2">
   <bpmn:process id="Process" isExecutable="true">
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>SequenceFlow_1u1pe4k</bpmn:outgoing>
@@ -22,7 +22,7 @@
       <bpmn:incoming>SequenceFlow_1k84rla</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="SequenceFlow_1k84rla" sourceRef="Task_137o7om" targetRef="EndEvent_0yrivoq" />
-    <bpmn:boundaryEvent id="BoundaryEvent_1wxlmji" name="boundaryEvent" orqueio:asyncBefore="true" attachedToRef="Task_137o7om">
+    <bpmn:boundaryEvent id="BoundaryEvent_1wxlmji" name="boundaryEvent" camunda:asyncBefore="true" attachedToRef="Task_137o7om">
       <bpmn:outgoing>SequenceFlow_1c20zqs</bpmn:outgoing>
       <bpmn:messageEventDefinition messageRef="Message_07iqrc7" />
     </bpmn:boundaryEvent>

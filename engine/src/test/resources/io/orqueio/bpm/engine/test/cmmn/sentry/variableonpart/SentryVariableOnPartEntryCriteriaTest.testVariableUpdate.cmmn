@@ -2,7 +2,7 @@
 <cmmn:definitions xmlns:dc="http://www.omg.org/spec/CMMN/20151109/DC"
    xmlns:di="http://www.omg.org/spec/CMMN/20151109/DI"
    xmlns:cmmndi="http://www.omg.org/spec/CMMN/20151109/CMMNDI"
-   xmlns:orqueio="http://orqueio.io/schema/1.0/cmmn"
+   xmlns:camunda="http://camunda.org/schema/1.0/cmmn"
    xmlns:cmmn="http://www.omg.org/spec/CMMN/20151109/MODEL"
    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
    id="Test" targetNamespace="http://bpmn.io/schema/cmmn" exporter="Orqueio Modeler" exporterVersion="1.2.0">
@@ -13,9 +13,9 @@
       </cmmn:planItem>
       <cmmn:sentry id="Sentry1" >
         <cmmn:extensionElements>
-          <orqueio:variableOnPart variableName = "variable_1">
-            <orqueio:variableEvent>update</orqueio:variableEvent>
-          </orqueio:variableOnPart>
+          <camunda:variableOnPart variableName = "variable_1">
+            <camunda:variableEvent>update</camunda:variableEvent>
+          </camunda:variableOnPart>
         </cmmn:extensionElements>
       </cmmn:sentry>  
       <cmmn:humanTask id="HumanTask_1m45ynk" name="HumanTask_1" >

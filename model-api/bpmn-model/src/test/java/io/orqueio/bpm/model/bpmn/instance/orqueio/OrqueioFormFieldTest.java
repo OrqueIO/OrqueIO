@@ -21,7 +21,7 @@ import io.orqueio.bpm.model.bpmn.instance.BpmnModelElementInstanceTest;
 import java.util.Arrays;
 import java.util.Collection;
 
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_NS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
 
 /**
  * @author Sebastian Menski
@@ -29,24 +29,24 @@ import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_NS;
 public class OrqueioFormFieldTest extends BpmnModelElementInstanceTest {
 
   public TypeAssumption getTypeAssumption() {
-    return new TypeAssumption(ORQUEIO_NS, false);
+    return new TypeAssumption(CAMUNDA_NS, false);
   }
 
   public Collection<ChildElementAssumption> getChildElementAssumptions() {
     return Arrays.asList(
-      new ChildElementAssumption(ORQUEIO_NS, OrqueioProperties.class, 0, 1),
-      new ChildElementAssumption(ORQUEIO_NS, OrqueioValidation.class, 0, 1),
-      new ChildElementAssumption(ORQUEIO_NS, OrqueioValue.class)
+      new ChildElementAssumption(CAMUNDA_NS, OrqueioProperties.class, 0, 1),
+      new ChildElementAssumption(CAMUNDA_NS, OrqueioValidation.class, 0, 1),
+      new ChildElementAssumption(CAMUNDA_NS, OrqueioValue.class)
     );
   }
 
   public Collection<AttributeAssumption> getAttributesAssumptions() {
     return Arrays.asList(
-      new AttributeAssumption(ORQUEIO_NS, "id"),
-      new AttributeAssumption(ORQUEIO_NS, "label"),
-      new AttributeAssumption(ORQUEIO_NS, "type"),
-      new AttributeAssumption(ORQUEIO_NS, "datePattern"),
-      new AttributeAssumption(ORQUEIO_NS, "defaultValue")
+      new AttributeAssumption(CAMUNDA_NS, "id"),
+      new AttributeAssumption(CAMUNDA_NS, "label"),
+      new AttributeAssumption(CAMUNDA_NS, "type"),
+      new AttributeAssumption(CAMUNDA_NS, "datePattern"),
+      new AttributeAssumption(CAMUNDA_NS, "defaultValue")
     );
   }
 }

@@ -32,7 +32,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest(
   classes = { TestApplication.class, AdditionalCammundaBpmConfigurations.class },
   webEnvironment = WebEnvironment.NONE,
-  properties = { "orqueio.bpm.admin-user.id=admin"}
+  properties = { "camunda.bpm.admin-user.id=admin"}
 )
 public class OrqueioAutoConfigurationIT extends AbstractOrqueioAutoConfigurationIT {
 

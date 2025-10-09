@@ -16,10 +16,10 @@
  */
 package io.orqueio.bpm.model.cmmn.impl.instance;
 
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ATTRIBUTE_PROCESS_BINDING;
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ATTRIBUTE_PROCESS_VERSION;
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ATTRIBUTE_PROCESS_TENANT_ID;
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_NS;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_PROCESS_BINDING;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_PROCESS_VERSION;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_PROCESS_TENANT_ID;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_NS;
 import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CMMN11_NS;
 import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CMMN_ATTRIBUTE_PROCESS_REF;
 import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CMMN_ELEMENT_PROCESS_TASK;
@@ -116,16 +116,16 @@ public class ProcessTaskImpl extends TaskImpl implements ProcessTask {
 
     /** orqueio extensions */
 
-    orqueioProcessBindingAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_PROCESS_BINDING)
-      .namespace(ORQUEIO_NS)
+    orqueioProcessBindingAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_PROCESS_BINDING)
+      .namespace(CAMUNDA_NS)
       .build();
 
-    orqueioProcessVersionAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_PROCESS_VERSION)
-      .namespace(ORQUEIO_NS)
+    orqueioProcessVersionAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_PROCESS_VERSION)
+      .namespace(CAMUNDA_NS)
       .build();
 
-    orqueioProcessTenantIdAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_PROCESS_TENANT_ID)
-        .namespace(ORQUEIO_NS)
+    orqueioProcessTenantIdAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_PROCESS_TENANT_ID)
+        .namespace(CAMUNDA_NS)
         .build();
 
     SequenceBuilder sequenceBuilder = typeBuilder.sequence();

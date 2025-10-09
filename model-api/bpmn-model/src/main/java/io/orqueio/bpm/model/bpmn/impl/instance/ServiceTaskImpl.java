@@ -70,32 +70,32 @@ public class ServiceTaskImpl extends TaskImpl implements ServiceTask {
 
     /** orqueio extensions */
 
-    orqueioClassAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_CLASS)
-      .namespace(ORQUEIO_NS)
+    orqueioClassAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_CLASS)
+      .namespace(CAMUNDA_NS)
       .build();
 
-    orqueioDelegateExpressionAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_DELEGATE_EXPRESSION)
-      .namespace(ORQUEIO_NS)
+    orqueioDelegateExpressionAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_DELEGATE_EXPRESSION)
+      .namespace(CAMUNDA_NS)
       .build();
 
-    orqueioExpressionAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_EXPRESSION)
-      .namespace(ORQUEIO_NS)
+    orqueioExpressionAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_EXPRESSION)
+      .namespace(CAMUNDA_NS)
       .build();
 
-    orqueioResultVariableAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_RESULT_VARIABLE)
-      .namespace(ORQUEIO_NS)
+    orqueioResultVariableAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_RESULT_VARIABLE)
+      .namespace(CAMUNDA_NS)
       .build();
 
-    orqueioTopicAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_TOPIC)
-        .namespace(ORQUEIO_NS)
+    orqueioTopicAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_TOPIC)
+        .namespace(CAMUNDA_NS)
         .build();
 
-    orqueioTypeAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_TYPE)
-      .namespace(ORQUEIO_NS)
+    orqueioTypeAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_TYPE)
+      .namespace(CAMUNDA_NS)
       .build();
     
-    orqueioTaskPriorityAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_TASK_PRIORITY)
-      .namespace(ORQUEIO_NS)
+    orqueioTaskPriorityAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_TASK_PRIORITY)
+      .namespace(CAMUNDA_NS)
       .build();
 
     typeBuilder.build();

@@ -30,10 +30,10 @@ import org.springframework.test.context.TestPropertySource;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @TestPropertySource(properties = {
-    "orqueio.bpm.client.subscriptions.topic-one.auto-open=false",
-    "orqueio.bpm.client.subscriptions.topic-one.variable-names=var-one,var-two",
-    "orqueio.bpm.client.subscriptions.topic-one.business-key=business-key",
-    "orqueio.bpm.client.subscriptions.topic-one.process-definition-id=id-one",
+    "camunda.bpm.client.subscriptions.topic-one.auto-open=false",
+    "camunda.bpm.client.subscriptions.topic-one.variable-names=var-one,var-two",
+    "camunda.bpm.client.subscriptions.topic-one.business-key=business-key",
+    "camunda.bpm.client.subscriptions.topic-one.process-definition-id=id-one",
 })
 @ContextConfiguration(classes = {
     ParsePropertiesHelper.TestConfig.class,

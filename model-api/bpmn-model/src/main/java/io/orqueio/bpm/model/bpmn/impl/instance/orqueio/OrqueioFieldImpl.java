@@ -44,24 +44,24 @@ public class OrqueioFieldImpl extends BpmnModelElementInstanceImpl implements Or
   protected static ChildElement<OrqueioString> orqueioStringChild;
 
   public static void registerType(ModelBuilder modelBuilder) {
-    ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(OrqueioField.class, ORQUEIO_ELEMENT_FIELD)
-      .namespaceUri(ORQUEIO_NS)
+    ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(OrqueioField.class, CAMUNDA_ELEMENT_FIELD)
+      .namespaceUri(CAMUNDA_NS)
       .instanceProvider(new ModelTypeInstanceProvider<OrqueioField>() {
         public OrqueioField newInstance(ModelTypeInstanceContext instanceContext) {
           return new OrqueioFieldImpl(instanceContext);
         }
       });
 
-    orqueioNameAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_NAME)
-      .namespace(ORQUEIO_NS)
+    orqueioNameAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_NAME)
+      .namespace(CAMUNDA_NS)
       .build();
 
-    orqueioExpressionAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_EXPRESSION)
-      .namespace(ORQUEIO_NS)
+    orqueioExpressionAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_EXPRESSION)
+      .namespace(CAMUNDA_NS)
       .build();
 
-    orqueioStringValueAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_STRING_VALUE)
-      .namespace(ORQUEIO_NS)
+    orqueioStringValueAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_STRING_VALUE)
+      .namespace(CAMUNDA_NS)
       .build();
 
     SequenceBuilder sequenceBuilder = typeBuilder.sequence();

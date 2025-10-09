@@ -16,7 +16,7 @@
  */
 package io.orqueio.bpm.engine.test.bpmn.executionlistener;
 
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_NS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -219,9 +219,9 @@ public class ExecutionListenerBpmnModelExecutionContextTest extends PluggablePro
 
   private void addExecutionListener(BaseElement element, String eventName) {
     ExtensionElements extensionElements = element.getModelInstance().newInstance(ExtensionElements.class);
-    ModelElementInstance executionListener = extensionElements.addExtensionElement(ORQUEIO_NS, "executionListener");
-    executionListener.setAttributeValueNs(ORQUEIO_NS, "class", ModelExecutionContextExecutionListener.class.getName());
-    executionListener.setAttributeValueNs(ORQUEIO_NS, "event", eventName);
+    ModelElementInstance executionListener = extensionElements.addExtensionElement(CAMUNDA_NS, "executionListener");
+    executionListener.setAttributeValueNs(CAMUNDA_NS, "class", ModelExecutionContextExecutionListener.class.getName());
+    executionListener.setAttributeValueNs(CAMUNDA_NS, "event", eventName);
     element.setExtensionElements(extensionElements);
   }
 

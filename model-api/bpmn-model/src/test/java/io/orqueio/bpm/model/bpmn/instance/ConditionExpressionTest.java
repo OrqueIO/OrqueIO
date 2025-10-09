@@ -19,7 +19,7 @@ package io.orqueio.bpm.model.bpmn.instance;
 import java.util.Arrays;
 import java.util.Collection;
 
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_NS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
 import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.XSI_NS;
 
 /**
@@ -38,7 +38,7 @@ public class ConditionExpressionTest extends BpmnModelElementInstanceTest {
   public Collection<AttributeAssumption> getAttributesAssumptions() {
     return Arrays.asList(
       new AttributeAssumption(XSI_NS, "type", false, false, "tFormalExpression"),
-      new AttributeAssumption(ORQUEIO_NS, "resource")
+      new AttributeAssumption(CAMUNDA_NS, "resource")
     );
   }
 }

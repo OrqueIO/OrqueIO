@@ -33,10 +33,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = { FilterTestApp.class }, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(properties = {
-  "orqueio.bpm.webapp.headerSecurity.xssProtectionDisabled=true",
-  "orqueio.bpm.webapp.headerSecurity.contentSecurityPolicyDisabled=true",
-  "orqueio.bpm.webapp.headerSecurity.contentTypeOptionsDisabled=true",
-  "orqueio.bpm.webapp.headerSecurity.hstsDisabled=true"
+  "camunda.bpm.webapp.headerSecurity.xssProtectionDisabled=true",
+  "camunda.bpm.webapp.headerSecurity.contentSecurityPolicyDisabled=true",
+  "camunda.bpm.webapp.headerSecurity.contentTypeOptionsDisabled=true",
+  "camunda.bpm.webapp.headerSecurity.hstsDisabled=true"
 })
 @DirtiesContext
 public class HttpHeaderSecurityAbsenceIT {

@@ -16,7 +16,7 @@
  */
 package io.orqueio.bpm.model.cmmn.instance.orqueio;
 
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_NS;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_NS;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -30,7 +30,7 @@ import io.orqueio.bpm.model.cmmn.instance.CmmnModelElementInstanceTest;
 public class OrqueioScriptTest extends CmmnModelElementInstanceTest {
 
   public TypeAssumption getTypeAssumption() {
-    return new TypeAssumption(ORQUEIO_NS, false);
+    return new TypeAssumption(CAMUNDA_NS, false);
   }
 
   public Collection<ChildElementAssumption> getChildElementAssumptions() {
@@ -39,8 +39,8 @@ public class OrqueioScriptTest extends CmmnModelElementInstanceTest {
 
   public Collection<AttributeAssumption> getAttributesAssumptions() {
     return Arrays.asList(
-        new AttributeAssumption(ORQUEIO_NS, "scriptFormat"),
-        new AttributeAssumption(ORQUEIO_NS, "resource")
+        new AttributeAssumption(CAMUNDA_NS, "scriptFormat"),
+        new AttributeAssumption(CAMUNDA_NS, "resource")
       );
   }
 

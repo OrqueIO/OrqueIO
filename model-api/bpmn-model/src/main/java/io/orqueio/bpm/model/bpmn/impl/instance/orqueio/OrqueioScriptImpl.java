@@ -24,10 +24,10 @@ import io.orqueio.bpm.model.xml.type.ModelElementTypeBuilder;
 import io.orqueio.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 import io.orqueio.bpm.model.xml.type.attribute.Attribute;
 
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ATTRIBUTE_RESOURCE;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ATTRIBUTE_SCRIPT_FORMAT;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ELEMENT_SCRIPT;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_NS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_RESOURCE;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_SCRIPT_FORMAT;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ELEMENT_SCRIPT;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
 
 /**
  * The BPMN script orqueio extension element
@@ -40,19 +40,19 @@ public class OrqueioScriptImpl extends BpmnModelElementInstanceImpl implements O
   protected static Attribute<String> orqueioResourceAttribute;
 
   public static void registerType(ModelBuilder modelBuilder) {
-    ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(OrqueioScript.class, ORQUEIO_ELEMENT_SCRIPT)
-      .namespaceUri(ORQUEIO_NS)
+    ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(OrqueioScript.class, CAMUNDA_ELEMENT_SCRIPT)
+      .namespaceUri(CAMUNDA_NS)
       .instanceProvider(new ModelTypeInstanceProvider<OrqueioScript>() {
         public OrqueioScript newInstance(ModelTypeInstanceContext instanceContext) {
           return new OrqueioScriptImpl(instanceContext);
         }
       });
 
-    orqueioScriptFormatAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_SCRIPT_FORMAT)
+    orqueioScriptFormatAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_SCRIPT_FORMAT)
       .required()
       .build();
 
-    orqueioResourceAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_RESOURCE)
+    orqueioResourceAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_RESOURCE)
       .build();
 
     typeBuilder.build();

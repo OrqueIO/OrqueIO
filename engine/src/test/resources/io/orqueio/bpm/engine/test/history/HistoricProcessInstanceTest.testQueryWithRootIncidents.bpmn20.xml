@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:orqueio="http://orqueio.io/schema/1.0/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Orqueio Modeler" exporterVersion="1.11.2">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Orqueio Modeler" exporterVersion="1.11.2">
   <bpmn:process id="Process_1" isExecutable="true">
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>SequenceFlow_0zl7ivl</bpmn:outgoing>
@@ -8,9 +8,9 @@
       <bpmn:incoming>SequenceFlow_1hkga5h</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="SequenceFlow_1hkga5h" sourceRef="ServiceTask_3" targetRef="EndEvent_1" />
-    <bpmn:serviceTask id="ServiceTask_3" orqueio:asyncBefore="true" orqueio:expression="${incidentTrigger1}">
+    <bpmn:serviceTask id="ServiceTask_3" camunda:asyncBefore="true" camunda:expression="${incidentTrigger1}">
       <bpmn:extensionElements>
-        <orqueio:failedJobRetryTimeCycle>R1/PT1M</orqueio:failedJobRetryTimeCycle>
+        <camunda:failedJobRetryTimeCycle>R1/PT1M</camunda:failedJobRetryTimeCycle>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_0zl7ivl</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1hkga5h</bpmn:outgoing>

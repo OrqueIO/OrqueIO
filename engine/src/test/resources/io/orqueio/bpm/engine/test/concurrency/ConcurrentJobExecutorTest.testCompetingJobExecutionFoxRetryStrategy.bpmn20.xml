@@ -2,7 +2,7 @@
 <definitions id="definition" 
   xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns:orqueio="http://orqueio.io/schema/1.0/bpmn"
+  xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
   xmlns:fox="http://www.orqueio.com/fox"
   targetNamespace="Examples">
   
@@ -18,7 +18,7 @@
       
       <startEvent id="subProcessStart" />
       <sequenceFlow id="subFlow1" sourceRef="subProcessStart" targetRef="subProcessTask" />
-      <serviceTask id="subProcessTask" name="task one" orqueio:async="true" orqueio:expression="${true}">
+      <serviceTask id="subProcessTask" name="task one" camunda:async="true" camunda:expression="${true}">
         <extensionElements>
           <fox:failedJobRetryTimeCycle>R5/PT5M</fox:failedJobRetryTimeCycle>
         </extensionElements>

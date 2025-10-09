@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions id="definitions"
 	xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
-	xmlns:orqueio="http://orqueio.io/schema/1.0/bpmn"
+	xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
 	xmlns:fox="http://www.orqueio.com/fox"
 	targetNamespace="Examples">
 
@@ -10,18 +10,18 @@
 		<startEvent id="theStart" />
 		<sequenceFlow id="flow1" sourceRef="theStart" targetRef="failingSendTask" />
 
-		<sendTask id="failingSendTask" orqueio:type="mail" orqueio:async="true">
+		<sendTask id="failingSendTask" camunda:type="mail" camunda:async="true">
 			<extensionElements>
 	       		<fox:failedJobRetryTimeCycle>R5/PT5M</fox:failedJobRetryTimeCycle>
-	       		<orqueio:field name="to">
-					<orqueio:string>Hello Kermit!</orqueio:string>
-				</orqueio:field>
-				<orqueio:field name="subject">
-					<orqueio:string>Hello Kermit!</orqueio:string>
-				</orqueio:field>
-				<orqueio:field name="text">
-					<orqueio:string>This a text only e-mail.</orqueio:string>
-				</orqueio:field>
+	       		<camunda:field name="to">
+					<camunda:string>Hello Kermit!</camunda:string>
+				</camunda:field>
+				<camunda:field name="subject">
+					<camunda:string>Hello Kermit!</camunda:string>
+				</camunda:field>
+				<camunda:field name="text">
+					<camunda:string>This a text only e-mail.</camunda:string>
+				</camunda:field>
 			</extensionElements>
 		</sendTask>
 		

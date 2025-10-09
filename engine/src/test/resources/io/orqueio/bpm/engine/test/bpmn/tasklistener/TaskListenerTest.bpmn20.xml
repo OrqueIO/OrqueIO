@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions id="taskListenerExample" 
   xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
-  xmlns:orqueio="http://orqueio.io/schema/1.0/bpmn"
+  xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
 	targetNamespace="Examples">
 
   <message id="message1" name="message"/>
@@ -16,12 +16,12 @@
 		    Schedule a meeting with management.
 		  </documentation>
 		  <extensionElements>
-		    <orqueio:taskListener event="create" class="io.orqueio.bpm.engine.test.bpmn.tasklistener.util.TaskCreateListener" />
-		    <orqueio:taskListener event="complete" class="io.orqueio.bpm.engine.test.bpmn.tasklistener.util.TaskCompleteListener">
-		      <orqueio:field name="greeter" stringValue="The Process" />
-          <orqueio:field name="shortName" expression="${'Activiti'.substring(0,3)}" />
-		    </orqueio:taskListener>
-        <orqueio:taskListener event="delete" class="io.orqueio.bpm.engine.test.bpmn.tasklistener.util.TaskDeleteListener" />
+		    <camunda:taskListener event="create" class="io.orqueio.bpm.engine.test.bpmn.tasklistener.util.TaskCreateListener" />
+		    <camunda:taskListener event="complete" class="io.orqueio.bpm.engine.test.bpmn.tasklistener.util.TaskCompleteListener">
+		      <camunda:field name="greeter" stringValue="The Process" />
+          <camunda:field name="shortName" expression="${'Activiti'.substring(0,3)}" />
+		    </camunda:taskListener>
+        <camunda:taskListener event="delete" class="io.orqueio.bpm.engine.test.bpmn.tasklistener.util.TaskDeleteListener" />
 		  </extensionElements>
 		</userTask>
 
@@ -38,7 +38,7 @@
         Write meeting notes after meeting with management.
       </documentation>
       <extensionElements>
-        <orqueio:taskListener event="create" expression="${execution.setVariable('greeting2', task.name)}" />
+        <camunda:taskListener event="create" expression="${execution.setVariable('greeting2', task.name)}" />
       </extensionElements>
     </userTask>
     

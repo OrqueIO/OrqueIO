@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:orqueio="http://orqueio.io/schema/1.0/bpmn" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Orqueio Modeler" exporterVersion="1.3.2">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Orqueio Modeler" exporterVersion="1.3.2">
   <bpmn:process id="conditionalEventProcess" isExecutable="true">
     <bpmn:startEvent id="StartEvent_1" name="Start">
       <bpmn:outgoing>SequenceFlow_0lng0jp</bpmn:outgoing>
@@ -7,7 +7,7 @@
     <bpmn:sequenceFlow id="SequenceFlow_0lng0jp" sourceRef="StartEvent_1" targetRef="taskWithCondition" />
     <bpmn:userTask id="taskWithCondition" name="Task with condition">
       <bpmn:extensionElements>
-        <orqueio:executionListener expression="${execution.setVariable(&#34;variable&#34;, 1)}" event="end" />
+        <camunda:executionListener expression="${execution.setVariable(&#34;variable&#34;, 1)}" event="end" />
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_0lng0jp</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1l3rbai</bpmn:outgoing>

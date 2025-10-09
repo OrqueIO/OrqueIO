@@ -16,8 +16,8 @@
  */
 package io.orqueio.bpm.model.dmn.impl.instance;
 
-import static io.orqueio.bpm.model.dmn.impl.DmnModelConstants.ORQUEIO_ATTRIBUTE_INPUT_VARIABLE;
-import static io.orqueio.bpm.model.dmn.impl.DmnModelConstants.ORQUEIO_NS;
+import static io.orqueio.bpm.model.dmn.impl.DmnModelConstants.CAMUNDA_ATTRIBUTE_INPUT_VARIABLE;
+import static io.orqueio.bpm.model.dmn.impl.DmnModelConstants.CAMUNDA_NS;
 import static io.orqueio.bpm.model.dmn.impl.DmnModelConstants.LATEST_DMN_NS;
 import static io.orqueio.bpm.model.dmn.impl.DmnModelConstants.DMN_ELEMENT_INPUT_CLAUSE;
 
@@ -93,8 +93,8 @@ public class InputClauseImpl extends DmnElementImpl implements InputClause {
 
     // orqueio extensions
 
-    orqueioInputVariableAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_INPUT_VARIABLE)
-      .namespace(ORQUEIO_NS)
+    orqueioInputVariableAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_INPUT_VARIABLE)
+      .namespace(CAMUNDA_NS)
       .build();
 
     typeBuilder.build();

@@ -19,7 +19,7 @@ package io.orqueio.bpm.model.bpmn.instance;
 import java.util.Arrays;
 import java.util.Collection;
 
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_NS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
 
 /**
  * @author Sebastian Menski
@@ -38,13 +38,13 @@ public class StartEventTest extends BpmnModelElementInstanceTest {
     return Arrays.asList(
       new AttributeAssumption("isInterrupting", false, false, true),
       /** orqueio extensions */
-      new AttributeAssumption(ORQUEIO_NS, "async", false, false, false),
-      new AttributeAssumption(ORQUEIO_NS, "formHandlerClass"),
-      new AttributeAssumption(ORQUEIO_NS, "formKey"),
-      new AttributeAssumption(ORQUEIO_NS, "formRef"),
-      new AttributeAssumption(ORQUEIO_NS, "formRefBinding"),
-      new AttributeAssumption(ORQUEIO_NS, "formRefVersion"),
-      new AttributeAssumption(ORQUEIO_NS, "initiator")
+      new AttributeAssumption(CAMUNDA_NS, "async", false, false, false),
+      new AttributeAssumption(CAMUNDA_NS, "formHandlerClass"),
+      new AttributeAssumption(CAMUNDA_NS, "formKey"),
+      new AttributeAssumption(CAMUNDA_NS, "formRef"),
+      new AttributeAssumption(CAMUNDA_NS, "formRefBinding"),
+      new AttributeAssumption(CAMUNDA_NS, "formRefVersion"),
+      new AttributeAssumption(CAMUNDA_NS, "initiator")
     );
   }
 }

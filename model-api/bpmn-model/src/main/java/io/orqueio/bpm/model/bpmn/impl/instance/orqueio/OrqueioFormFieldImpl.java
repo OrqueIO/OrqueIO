@@ -51,32 +51,32 @@ public class OrqueioFormFieldImpl extends BpmnModelElementInstanceImpl implement
   protected static ChildElementCollection<OrqueioValue> orqueioValueCollection;
 
   public static void registerType(ModelBuilder modelBuilder) {
-    ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(OrqueioFormField.class, ORQUEIO_ELEMENT_FORM_FIELD)
-      .namespaceUri(ORQUEIO_NS)
+    ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(OrqueioFormField.class, CAMUNDA_ELEMENT_FORM_FIELD)
+      .namespaceUri(CAMUNDA_NS)
       .instanceProvider(new ModelTypeInstanceProvider<OrqueioFormField>() {
         public OrqueioFormField newInstance(ModelTypeInstanceContext instanceContext) {
           return new OrqueioFormFieldImpl(instanceContext);
         }
       });
 
-    orqueioIdAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_ID)
-      .namespace(ORQUEIO_NS)
+    orqueioIdAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_ID)
+      .namespace(CAMUNDA_NS)
       .build();
 
-    orqueioLabelAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_LABEL)
-      .namespace(ORQUEIO_NS)
+    orqueioLabelAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_LABEL)
+      .namespace(CAMUNDA_NS)
       .build();
 
-    orqueioTypeAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_TYPE)
-      .namespace(ORQUEIO_NS)
+    orqueioTypeAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_TYPE)
+      .namespace(CAMUNDA_NS)
       .build();
 
-    orqueioDatePatternAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_DATE_PATTERN)
-      .namespace(ORQUEIO_NS)
+    orqueioDatePatternAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_DATE_PATTERN)
+      .namespace(CAMUNDA_NS)
       .build();
 
-    orqueioDefaultValueAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_DEFAULT_VALUE)
-      .namespace(ORQUEIO_NS)
+    orqueioDefaultValueAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_DEFAULT_VALUE)
+      .namespace(CAMUNDA_NS)
       .build();
 
     SequenceBuilder sequenceBuilder = typeBuilder.sequence();

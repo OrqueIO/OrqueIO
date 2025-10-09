@@ -16,8 +16,8 @@
  */
 package io.orqueio.bpm.model.bpmn.impl.instance.orqueio;
 
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ELEMENT_LIST;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_NS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ELEMENT_LIST;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -40,8 +40,8 @@ import io.orqueio.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstancePr
 public class OrqueioListImpl extends BpmnModelElementInstanceImpl implements OrqueioList {
 
   public static void registerType(ModelBuilder modelBuilder) {
-    ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(OrqueioList.class, ORQUEIO_ELEMENT_LIST)
-      .namespaceUri(ORQUEIO_NS)
+    ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(OrqueioList.class, CAMUNDA_ELEMENT_LIST)
+      .namespaceUri(CAMUNDA_NS)
       .instanceProvider(new ModelTypeInstanceProvider<OrqueioList>() {
         public OrqueioList newInstance(ModelTypeInstanceContext instanceContext) {
           return new OrqueioListImpl(instanceContext);

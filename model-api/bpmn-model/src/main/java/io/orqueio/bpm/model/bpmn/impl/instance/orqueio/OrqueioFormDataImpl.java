@@ -28,7 +28,7 @@ import io.orqueio.bpm.model.xml.type.child.SequenceBuilder;
 
 import java.util.Collection;
 
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ELEMENT_FORM_DATA;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ELEMENT_FORM_DATA;
 import static io.orqueio.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
@@ -41,8 +41,8 @@ public class OrqueioFormDataImpl extends BpmnModelElementInstanceImpl implements
   protected static ChildElementCollection<OrqueioFormField> orqueioFormFieldCollection;
 
   public static void registerType(ModelBuilder modelBuilder) {
-    ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(OrqueioFormData.class, ORQUEIO_ELEMENT_FORM_DATA)
-      .namespaceUri(BpmnModelConstants.ORQUEIO_NS)
+    ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(OrqueioFormData.class, CAMUNDA_ELEMENT_FORM_DATA)
+      .namespaceUri(BpmnModelConstants.CAMUNDA_NS)
       .instanceProvider(new ModelTypeInstanceProvider<OrqueioFormData>() {
         public OrqueioFormData newInstance(ModelTypeInstanceContext instanceContext) {
           return new OrqueioFormDataImpl(instanceContext);

@@ -16,7 +16,7 @@
  */
 package io.orqueio.bpm.model.dmn.instance;
 
-import static io.orqueio.bpm.model.dmn.impl.DmnModelConstants.ORQUEIO_NS;
+import static io.orqueio.bpm.model.dmn.impl.DmnModelConstants.CAMUNDA_NS;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -37,7 +37,7 @@ public class InputClauseTest extends DmnModelElementInstanceTest {
   public Collection<AttributeAssumption> getAttributesAssumptions() {
     return Arrays.asList(
       // orqueio extensions
-      new AttributeAssumption(ORQUEIO_NS, "inputVariable")
+      new AttributeAssumption(CAMUNDA_NS, "inputVariable")
     );
   }
 

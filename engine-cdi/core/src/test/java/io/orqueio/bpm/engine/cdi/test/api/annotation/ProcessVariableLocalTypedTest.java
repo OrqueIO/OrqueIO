@@ -45,14 +45,14 @@ public class ProcessVariableLocalTypedTest extends CdiProcessEngineTestCase {
   public void testProcessVariableLocalTypeAnnotation() {
     BusinessProcess businessProcess = getBeanInstance(BusinessProcess.class);
 
-    VariableMap variables = Variables.createVariables().putValue("injectedLocalValue", "orqueio");
+    VariableMap variables = Variables.createVariables().putValue("injectedLocalValue", "camunda");
     businessProcess.startProcessByKey("keyOfTheProcess", variables);
 
     TypedValue value = getBeanInstance(DeclarativeProcessController.class).getInjectedLocalValue();
     assertNotNull(value);
     assertTrue(value instanceof StringValue);
     assertEquals(ValueType.STRING, value.getType());
-    assertEquals("orqueio", value.getValue());
+    assertEquals("camunda", value.getValue());
   }
 
 }

@@ -35,7 +35,7 @@ import static org.assertj.core.api.Assertions.assertThat;
     classes = { WebappTestApp.class },
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(properties = {
-    "orqueio.bpm.webapp.applicationPath=" + EmptyAppPathIT.MY_APP_PATH
+    "camunda.bpm.webapp.applicationPath=" + EmptyAppPathIT.MY_APP_PATH
 })
 public class EmptyAppPathIT {
 

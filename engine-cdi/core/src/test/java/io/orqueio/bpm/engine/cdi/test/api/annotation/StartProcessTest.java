@@ -53,13 +53,13 @@ public class StartProcessTest extends CdiProcessEngineTestCase {
 
     assertNotNull(runtimeService.createProcessInstanceQuery().singleResult());
 
-    assertEquals("orqueio", businessProcess.getVariable("name"));
+    assertEquals("camunda", businessProcess.getVariable("name"));
 
     TypedValue nameTypedValue = businessProcess.getVariableTyped("name");
     assertNotNull(nameTypedValue);
     assertTrue(nameTypedValue instanceof StringValue);
     assertEquals(ValueType.STRING, nameTypedValue.getType());
-    assertEquals("orqueio", nameTypedValue.getValue());
+    assertEquals("camunda", nameTypedValue.getValue());
 
     assertEquals("untypedName", businessProcess.getVariable("untypedName"));
 
