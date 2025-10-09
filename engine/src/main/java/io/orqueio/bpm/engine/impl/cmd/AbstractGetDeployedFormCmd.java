@@ -56,7 +56,7 @@ public abstract class AbstractGetDeployedFormCmd implements Command<InputStream>
     } else if(orqueioFormRef != null && orqueioFormRef.getKey() != null) {
       return getResourceForOrqueioFormRef(orqueioFormRef, formData.getDeploymentId());
     } else {
-      throw new BadUserRequestException("One of the attributes 'formKey' and 'orqueio:formRef' must be supplied but none were set.");
+      throw new BadUserRequestException("One of the attributes 'formKey' and 'camunda:formRef' must be supplied but none were set.");
     }
   }
 

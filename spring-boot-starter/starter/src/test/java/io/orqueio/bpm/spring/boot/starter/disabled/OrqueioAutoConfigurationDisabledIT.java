@@ -33,7 +33,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest(
   classes = {OrqueioAutoConfigurationDisabledIT.NoOrqueioApplication.class},
   webEnvironment = WebEnvironment.NONE,
-  properties = {"orqueio.bpm.enabled=false"}
+  properties = {"camunda.bpm.enabled=false"}
 )
 public class OrqueioAutoConfigurationDisabledIT {
 

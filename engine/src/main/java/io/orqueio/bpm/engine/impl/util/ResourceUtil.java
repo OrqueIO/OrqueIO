@@ -32,7 +32,7 @@ public final class ResourceUtil {
   private static final EngineUtilLogger LOG = ProcessEngineLogger.UTIL_LOGGER;
 
   /**
-   * Parse a orqueio:resource attribute and loads the resource depending on the url scheme.
+   * Parse a camunda:resource attribute and loads the resource depending on the url scheme.
    * Supported URL schemes are <code>classpath://</code> and <code>deployment://</code>.
    * If the scheme is omitted <code>classpath://</code> is assumed.
    *

@@ -306,7 +306,7 @@ public class ErrorEventSubProcessTest extends PluggableProcessEngineTest {
   @Test
   public void testCatchErrorEventSubprocessSetErrorVariables(){
     runtimeService.startProcessInstanceByKey("Process_1");
-    //the name used in "orqueio:errorCodeVariable" in the BPMN
+    //the name used in "camunda:errorCodeVariable" in the BPMN
     String variableName = "errorCode";
     VariableInstance errorVariable = runtimeService.createVariableInstanceQuery().variableName(variableName).singleResult();
 
@@ -324,7 +324,7 @@ public class ErrorEventSubProcessTest extends PluggableProcessEngineTest {
   @Test
   public void testCatchErrorFromCallActivitySetsErrorVariable(){
     runtimeService.startProcessInstanceByKey("Process_1");
-    //the name used in "orqueio:errorCodeVariable" in the BPMN
+    //the name used in "camunda:errorCodeVariable" in the BPMN
     String variableName = "errorCode";
     VariableInstance errorVariable = runtimeService.createVariableInstanceQuery().variableName(variableName).singleResult();
 
@@ -343,7 +343,7 @@ public class ErrorEventSubProcessTest extends PluggableProcessEngineTest {
     runtimeService.startProcessInstanceByKey("Process_1");
     Task task = taskService.createTaskQuery().singleResult();
     taskService.complete(task.getId());
-    //the name used in "orqueio:errorCodeVariable" in the BPMN
+    //the name used in "camunda:errorCodeVariable" in the BPMN
     String variableName = "errorCode";
     //the code we gave the thrown error
     Object errorCode = "errorCode";

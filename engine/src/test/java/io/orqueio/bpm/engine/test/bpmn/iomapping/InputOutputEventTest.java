@@ -131,7 +131,7 @@ public class InputOutputEventTest extends PluggableProcessEngineTest {
         .deploy();
       fail("expected exception");
     } catch (ParseException e) {
-      testRule.assertTextPresent("orqueio:inputOutput mapping unsupported for element type 'startEvent'", e.getMessage());
+      testRule.assertTextPresent("camunda:inputOutput mapping unsupported for element type 'startEvent'", e.getMessage());
       assertThat(e.getResorceReports().get(0).getErrors().get(0).getMainElementId()).isEqualTo("start");
     }
   }
@@ -145,7 +145,7 @@ public class InputOutputEventTest extends PluggableProcessEngineTest {
         .deploy();
       fail("expected exception");
     } catch (ParseException e) {
-      testRule.assertTextPresent("orqueio:outputParameter not allowed for element type 'endEvent'", e.getMessage());
+      testRule.assertTextPresent("camunda:outputParameter not allowed for element type 'endEvent'", e.getMessage());
       assertThat(e.getResorceReports().get(0).getErrors().get(0).getMainElementId()).isEqualTo("endMapping");
     }
   }
@@ -261,7 +261,7 @@ public class InputOutputEventTest extends PluggableProcessEngineTest {
         .deploy();
       fail("expected exception");
     } catch (ParseException e) {
-      testRule.assertTextPresent("orqueio:inputOutput mapping unsupported for element type 'boundaryEvent'", e.getMessage());
+      testRule.assertTextPresent("camunda:inputOutput mapping unsupported for element type 'boundaryEvent'", e.getMessage());
       assertThat(e.getResorceReports().get(0).getErrors().get(0).getMainElementId()).isEqualTo("messageBoundary");
     }
   }

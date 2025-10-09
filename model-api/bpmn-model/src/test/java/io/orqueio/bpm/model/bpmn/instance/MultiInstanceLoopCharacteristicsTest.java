@@ -16,7 +16,7 @@
  */
 package io.orqueio.bpm.model.bpmn.instance;
 
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_NS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -55,11 +55,11 @@ public class MultiInstanceLoopCharacteristicsTest extends BpmnModelElementInstan
       new AttributeAssumption("behavior", false, false, MultiInstanceFlowCondition.All),
       new AttributeAssumption("oneBehaviorEventRef"),
       new AttributeAssumption("noneBehaviorEventRef"),
-      new AttributeAssumption(ORQUEIO_NS, "asyncBefore", false, false, false),
-      new AttributeAssumption(ORQUEIO_NS, "asyncAfter", false, false, false),
-      new AttributeAssumption(ORQUEIO_NS, "exclusive", false, false, true),
-      new AttributeAssumption(ORQUEIO_NS, "collection"),
-      new AttributeAssumption(ORQUEIO_NS, "elementVariable")
+      new AttributeAssumption(CAMUNDA_NS, "asyncBefore", false, false, false),
+      new AttributeAssumption(CAMUNDA_NS, "asyncAfter", false, false, false),
+      new AttributeAssumption(CAMUNDA_NS, "exclusive", false, false, true),
+      new AttributeAssumption(CAMUNDA_NS, "collection"),
+      new AttributeAssumption(CAMUNDA_NS, "elementVariable")
     );
   }
 }

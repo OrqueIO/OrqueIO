@@ -22,9 +22,9 @@ package io.orqueio.bpm.engine;
  * <br/>
  * Samples:
  * <pre>
- *     &lt;orqueio:taskListener class="org.mypackage.MyListener".../&gt;
+ *     &lt;camunda:taskListener class="org.mypackage.MyListener".../&gt;
  *     or
- *     &lt;serviceTask orqueio:class=""org.mypackage.MyJavaDelegate".. /&gt;
+ *     &lt;serviceTask camunda:class=""org.mypackage.MyJavaDelegate".. /&gt;
  * </pre>
  *
  * The default implementation uses Class.newInstance to create artifacts.

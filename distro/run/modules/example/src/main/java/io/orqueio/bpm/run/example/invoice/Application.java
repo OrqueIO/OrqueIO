@@ -59,7 +59,7 @@ public class Application implements WebMvcConfigurer {
   @Override
   public void addResourceHandlers(ResourceHandlerRegistry registry) {
     registry.addResourceHandler("/forms/**").addResourceLocations("classpath:/forms/");
-    registry.addResourceHandler("/orqueio-invoice/**").addResourceLocations("classpath:/orqueio-invoice/");
+    registry.addResourceHandler("/camunda-invoice/**").addResourceLocations("classpath:/camunda-invoice/");
   }
 
 }

@@ -28,8 +28,8 @@ import io.orqueio.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstancePr
 import io.orqueio.bpm.model.xml.type.child.ChildElementCollection;
 import io.orqueio.bpm.model.xml.type.child.SequenceBuilder;
 
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ELEMENT_INPUT_OUTPUT;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_NS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ELEMENT_INPUT_OUTPUT;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
 
 /**
  * The BPMN inputOutput orqueio extension element
@@ -42,8 +42,8 @@ public class OrqueioInputOutputImpl extends BpmnModelElementInstanceImpl impleme
   protected static ChildElementCollection<OrqueioOutputParameter> orqueioOutputParameterCollection;
 
   public static void registerType(ModelBuilder modelBuilder) {
-    ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(OrqueioInputOutput.class, ORQUEIO_ELEMENT_INPUT_OUTPUT)
-      .namespaceUri(ORQUEIO_NS)
+    ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(OrqueioInputOutput.class, CAMUNDA_ELEMENT_INPUT_OUTPUT)
+      .namespaceUri(CAMUNDA_NS)
       .instanceProvider(new ModelTypeInstanceProvider<OrqueioInputOutput>() {
         public OrqueioInputOutput newInstance(ModelTypeInstanceContext instanceContext) {
           return new OrqueioInputOutputImpl(instanceContext);

@@ -24,10 +24,10 @@ import org.springframework.test.context.TestPropertySource;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @TestPropertySource(properties = {
-  "orqueio.bpm.webapp.headerSecurity.hstsDisabled=false",
-  "orqueio.bpm.webapp.headerSecurity.hstsIncludeSubdomainsDisabled=false",
-  "orqueio.bpm.webapp.headerSecurity.hstsMaxAge=47",
-  "orqueio.bpm.webapp.headerSecurity.hstsValue=Foo"
+  "camunda.bpm.webapp.headerSecurity.hstsDisabled=false",
+  "camunda.bpm.webapp.headerSecurity.hstsIncludeSubdomainsDisabled=false",
+  "camunda.bpm.webapp.headerSecurity.hstsMaxAge=47",
+  "camunda.bpm.webapp.headerSecurity.hstsValue=Foo"
 })
 public class HstsPropertiesTest extends ParsePropertiesHelper {
 

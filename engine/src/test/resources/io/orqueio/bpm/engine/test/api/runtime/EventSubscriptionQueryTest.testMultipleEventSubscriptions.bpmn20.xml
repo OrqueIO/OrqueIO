@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn2:definitions xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:orqueio="http://orqueio.io/schema/1.0/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="_7FrToMrfEeOyYYI9xhG4Cw" targetNamespace="http://activiti.org/bpmn" exporter="orqueio modeler" exporterVersion="2.5.0" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd">
+<bpmn2:definitions xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="_7FrToMrfEeOyYYI9xhG4Cw" targetNamespace="http://activiti.org/bpmn" exporter="orqueio modeler" exporterVersion="2.5.0" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd">
   <bpmn2:process id="testProcess" isExecutable="true">
     <bpmn2:subProcess id="SubProcess_1">
       <bpmn2:incoming>SequenceFlow_3</bpmn2:incoming>
@@ -7,7 +7,7 @@
       <bpmn2:startEvent id="StartEvent_2">
         <bpmn2:outgoing>SequenceFlow_5</bpmn2:outgoing>
       </bpmn2:startEvent>
-      <bpmn2:serviceTask id="ServiceTask_1" name="service task" orqueio:expression="${true}">
+      <bpmn2:serviceTask id="ServiceTask_1" name="service task" camunda:expression="${true}">
         <bpmn2:incoming>SequenceFlow_5</bpmn2:incoming>
         <bpmn2:outgoing>SequenceFlow_15</bpmn2:outgoing>
       </bpmn2:serviceTask>
@@ -15,7 +15,7 @@
       <bpmn2:endEvent id="EndEvent_2">
         <bpmn2:incoming>SequenceFlow_7</bpmn2:incoming>
       </bpmn2:endEvent>
-      <bpmn2:serviceTask id="ServiceTask_2" name="service task 2" orqueio:expression="${true}" orqueio:async="true">
+      <bpmn2:serviceTask id="ServiceTask_2" name="service task 2" camunda:expression="${true}" camunda:async="true">
         <bpmn2:incoming>SequenceFlow_15</bpmn2:incoming>
         <bpmn2:outgoing>SequenceFlow_7</bpmn2:outgoing>
       </bpmn2:serviceTask>
@@ -23,7 +23,7 @@
       <bpmn2:boundaryEvent id="BoundaryEvent_2" name="" attachedToRef="ServiceTask_1">
         <bpmn2:compensateEventDefinition id="_CompensateEventDefinition_2" waitForCompletion="false" />
       </bpmn2:boundaryEvent>
-      <bpmn2:serviceTask id="ServiceTask_3" name="cancel" isForCompensation="true" orqueio:delegateExpression="#{serviceTask3}" />
+      <bpmn2:serviceTask id="ServiceTask_3" name="cancel" isForCompensation="true" camunda:delegateExpression="#{serviceTask3}" />
       <bpmn2:sequenceFlow id="SequenceFlow_15" name="" sourceRef="ServiceTask_1" targetRef="ServiceTask_2" />
     </bpmn2:subProcess>
     <bpmn2:endEvent id="EndEvent_3" name="canceled">

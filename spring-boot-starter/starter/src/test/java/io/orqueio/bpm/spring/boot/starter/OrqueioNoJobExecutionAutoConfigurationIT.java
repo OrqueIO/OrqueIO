@@ -30,7 +30,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest(classes = { TestApplication.class },
   webEnvironment = WebEnvironment.NONE,
   properties = {
-    "orqueio.bpm.generate-unique-process-application-name=true",
+    "camunda.bpm.generate-unique-process-application-name=true",
     "spring.datasource.generate-unique-name=true",
   })
 @ActiveProfiles("nojobexecution")

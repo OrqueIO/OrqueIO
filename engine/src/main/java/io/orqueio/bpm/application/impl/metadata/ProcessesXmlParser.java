@@ -31,7 +31,7 @@ public class ProcessesXmlParser extends Parser {
   /**
    * The process application namespace
    */
-  public static final String PROCESS_APP_NS = "http://www.orqueio.io/schema/1.0/ProcessApplication";
+  public static final String PROCESS_APP_NS = "http://www.camunda.org/schema/1.0/ProcessApplication";
   
   /**
    * The location of the XSD file in the classpath.

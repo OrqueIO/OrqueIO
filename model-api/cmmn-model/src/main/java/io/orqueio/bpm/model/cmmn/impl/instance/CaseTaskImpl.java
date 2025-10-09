@@ -16,10 +16,10 @@
  */
 package io.orqueio.bpm.model.cmmn.impl.instance;
 
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ATTRIBUTE_CASE_BINDING;
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ATTRIBUTE_CASE_VERSION;
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ATTRIBUTE_CASE_TENANT_ID;
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_NS;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_CASE_BINDING;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_CASE_VERSION;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_CASE_TENANT_ID;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_NS;
 import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CMMN11_NS;
 import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CMMN_ATTRIBUTE_CASE_REF;
 import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CMMN_ELEMENT_CASE_TASK;
@@ -118,16 +118,16 @@ public class CaseTaskImpl extends TaskImpl implements CaseTask {
 
     /** orqueio extensions */
 
-    orqueioCaseBindingAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_CASE_BINDING)
-      .namespace(ORQUEIO_NS)
+    orqueioCaseBindingAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_CASE_BINDING)
+      .namespace(CAMUNDA_NS)
       .build();
 
-    orqueioCaseVersionAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_CASE_VERSION)
-      .namespace(ORQUEIO_NS)
+    orqueioCaseVersionAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_CASE_VERSION)
+      .namespace(CAMUNDA_NS)
       .build();
 
-    orqueioCaseTenantIdAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_CASE_TENANT_ID)
-        .namespace(ORQUEIO_NS)
+    orqueioCaseTenantIdAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_CASE_TENANT_ID)
+        .namespace(CAMUNDA_NS)
         .build();
 
     SequenceBuilder sequenceBuilder = typeBuilder.sequence();

@@ -16,8 +16,8 @@
  */
 package io.orqueio.bpm.model.cmmn.impl.instance.orqueio;
 
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ELEMENT_STRING;
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_NS;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ELEMENT_STRING;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_NS;
 
 import io.orqueio.bpm.model.cmmn.impl.instance.CmmnModelElementInstanceImpl;
 import io.orqueio.bpm.model.cmmn.instance.orqueio.OrqueioString;
@@ -33,8 +33,8 @@ import io.orqueio.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstancePr
 public class OrqueioStringImpl extends CmmnModelElementInstanceImpl implements OrqueioString {
 
   public static void registerType(ModelBuilder modelBuilder) {
-    ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(OrqueioString.class, ORQUEIO_ELEMENT_STRING)
-      .namespaceUri(ORQUEIO_NS)
+    ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(OrqueioString.class, CAMUNDA_ELEMENT_STRING)
+      .namespaceUri(CAMUNDA_NS)
       .instanceProvider(new ModelTypeInstanceProvider<OrqueioString>() {
         public OrqueioString newInstance(ModelTypeInstanceContext instanceContext) {
           return new OrqueioStringImpl(instanceContext);

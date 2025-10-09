@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" 
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-    xmlns:orqueio="http://orqueio.io/schema/1.0/bpmn"
+    xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
     xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" 
     xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" 
     xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" 
@@ -13,21 +13,21 @@
 
     <startEvent id="start">
       <extensionElements>
-        <orqueio:formData>
-          <orqueio:formField 
+        <camunda:formData>
+          <camunda:formField
               id="enumField" label="Enum Field" type="enum"
               defaultValue="a">
-              <orqueio:value id="a" name="A"/>
-              <orqueio:value id="b" name="B"/>
-              <orqueio:value id="c" name="C"/>
-          </orqueio:formField> 
-        </orqueio:formData>
+              <camunda:value id="a" name="A"/>
+              <camunda:value id="b" name="B"/>
+              <camunda:value id="c" name="C"/>
+          </camunda:formField>
+        </camunda:formData>
       </extensionElements>
     </startEvent>
 
     <sequenceFlow sourceRef="start" targetRef="usertask" />
 
-    <userTask id="usertask" name="Task" orqueio:candidateGroups="dummy" />
+    <userTask id="usertask" name="Task" camunda:candidateGroups="dummy" />
 
     <sequenceFlow sourceRef="usertask" targetRef="task2" />
 

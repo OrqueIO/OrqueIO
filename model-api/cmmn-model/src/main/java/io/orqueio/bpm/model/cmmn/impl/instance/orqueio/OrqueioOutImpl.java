@@ -16,12 +16,12 @@
  */
 package io.orqueio.bpm.model.cmmn.impl.instance.orqueio;
 
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ATTRIBUTE_SOURCE;
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ATTRIBUTE_SOURCE_EXPRESSION;
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ATTRIBUTE_TARGET;
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ATTRIBUTE_VARIABLES;
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ELEMENT_OUT;
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_NS;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_SOURCE;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_SOURCE_EXPRESSION;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_TARGET;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_VARIABLES;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ELEMENT_OUT;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_NS;
 
 import io.orqueio.bpm.model.cmmn.impl.instance.CmmnModelElementInstanceImpl;
 import io.orqueio.bpm.model.cmmn.instance.orqueio.OrqueioOut;
@@ -44,28 +44,28 @@ public class OrqueioOutImpl extends CmmnModelElementInstanceImpl implements Orqu
   protected static Attribute<String> orqueioTargetAttribute;
 
   public static void registerType(ModelBuilder modelBuilder) {
-    ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(OrqueioOut.class, ORQUEIO_ELEMENT_OUT)
-      .namespaceUri(ORQUEIO_NS)
+    ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(OrqueioOut.class, CAMUNDA_ELEMENT_OUT)
+      .namespaceUri(CAMUNDA_NS)
       .instanceProvider(new ModelTypeInstanceProvider<OrqueioOut>() {
         public OrqueioOut newInstance(ModelTypeInstanceContext instanceContext) {
           return new OrqueioOutImpl(instanceContext);
         }
       });
 
-    orqueioSourceAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_SOURCE)
-      .namespace(ORQUEIO_NS)
+    orqueioSourceAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_SOURCE)
+      .namespace(CAMUNDA_NS)
       .build();
 
-    orqueioSourceExpressionAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_SOURCE_EXPRESSION)
-      .namespace(ORQUEIO_NS)
+    orqueioSourceExpressionAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_SOURCE_EXPRESSION)
+      .namespace(CAMUNDA_NS)
       .build();
 
-    orqueioVariablesAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_VARIABLES)
-      .namespace(ORQUEIO_NS)
+    orqueioVariablesAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_VARIABLES)
+      .namespace(CAMUNDA_NS)
       .build();
 
-    orqueioTargetAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_TARGET)
-      .namespace(ORQUEIO_NS)
+    orqueioTargetAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_TARGET)
+      .namespace(CAMUNDA_NS)
       .build();
 
     typeBuilder.build();

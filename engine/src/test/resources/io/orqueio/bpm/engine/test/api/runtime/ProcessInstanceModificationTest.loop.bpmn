@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:orqueio="http://orqueio.io/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://orqueio.io/schema/modeler/1.0" id="Definitions_0jxg5tl" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Orqueio Modeler" exporterVersion="5.17.0" modeler:executionPlatform="Orqueio Platform" modeler:executionPlatformVersion="7.21.0">
-  <bpmn:process id="loopProcess" name="loopProcess" isExecutable="true" orqueio:historyTimeToLive="730">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0jxg5tl" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Orqueio Modeler" exporterVersion="5.17.0" modeler:executionPlatform="Orqueio Platform" modeler:executionPlatformVersion="7.21.0">
+  <bpmn:process id="loopProcess" name="loopProcess" isExecutable="true" camunda:historyTimeToLive="730">
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>Flow_10b3t9t</bpmn:outgoing>
     </bpmn:startEvent>
     <bpmn:subProcess id="loop" name="loop">
       <bpmn:incoming>Flow_10b3t9t</bpmn:incoming>
       <bpmn:outgoing>Flow_13ek3ki</bpmn:outgoing>
-      <bpmn:multiInstanceLoopCharacteristics orqueio:collection="${ids}" orqueio:elementVariable="id" />
-      <bpmn:serviceTask id="task" name="task" orqueio:type="external" orqueio:topic="not-existent">
+      <bpmn:multiInstanceLoopCharacteristics camunda:collection="${ids}" camunda:elementVariable="id" />
+      <bpmn:serviceTask id="task" name="task" camunda:type="external" camunda:topic="not-existent">
         <bpmn:incoming>Flow_1qch4x2</bpmn:incoming>
         <bpmn:outgoing>Flow_0tvbudp</bpmn:outgoing>
       </bpmn:serviceTask>

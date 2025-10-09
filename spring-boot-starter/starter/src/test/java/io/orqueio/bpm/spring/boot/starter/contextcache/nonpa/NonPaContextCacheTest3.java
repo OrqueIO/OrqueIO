@@ -42,7 +42,7 @@ import static io.orqueio.bpm.engine.test.assertions.bpmn.AbstractAssertions.init
 @SpringBootTest(
   classes = { TestApplication.class },
   properties = {
-    "orqueio.bpm.process-engine-name=foo",
+    "camunda.bpm.process-engine-name=foo",
     "spring.datasource.generate-unique-name=true",
     "test1Property=test1Value"
   },

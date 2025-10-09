@@ -3,13 +3,14 @@
   <parent>
     <groupId>io.orqueio.bpm.jboss</groupId>
     <artifactId>orqueio-jboss</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.orqueio.bpm.webapp</groupId>
   <name>Orque IO Platform - webapp - JBoss</name>
   <artifactId>orqueio-webapp-jboss</artifactId>
+  <version>1.0.3</version>
   <packaging>war</packaging>
 
 

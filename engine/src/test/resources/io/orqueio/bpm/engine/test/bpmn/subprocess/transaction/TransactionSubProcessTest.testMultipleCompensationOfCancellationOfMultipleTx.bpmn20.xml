@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:orqueio="http://orqueio.io/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bioc="http://bpmn.io/schema/bpmn/biocolor/1.0" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Orqueio Modeler" exporterVersion="1.10.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bioc="http://bpmn.io/schema/bpmn/biocolor/1.0" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Orqueio Modeler" exporterVersion="1.10.0">
   <bpmn:collaboration id="Collaboration_1mzqg2w">
     <bpmn:participant id="Participant_0rs68gc" name="order" processRef="order" />
     <bpmn:participant id="Participant_1a8pibz" name="Supplier (?)" />
@@ -13,15 +13,15 @@
     <bpmn:transaction id="SubProcess_11jxdy7" name="Configure goods">
       <bpmn:incoming>SequenceFlow_1ly2udj</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_023jo5k</bpmn:outgoing>
-      <bpmn:multiInstanceLoopCharacteristics orqueio:collection="#{devices}" orqueio:elementVariable="device" />
+      <bpmn:multiInstanceLoopCharacteristics camunda:collection="#{devices}" camunda:elementVariable="device" />
       <bpmn:startEvent id="StartEvent_SubProcess">
         <bpmn:outgoing>SequenceFlow_0g53hk4</bpmn:outgoing>
       </bpmn:startEvent>
-      <bpmn:serviceTask id="ServiceTask_ConfigureDevice" name="Configure device" orqueio:expression="${true}">
+      <bpmn:serviceTask id="ServiceTask_ConfigureDevice" name="Configure device" camunda:expression="${true}">
         <bpmn:incoming>SequenceFlow_0g53hk4</bpmn:incoming>
         <bpmn:outgoing>SequenceFlow_1jqwdbq</bpmn:outgoing>
       </bpmn:serviceTask>
-      <bpmn:serviceTask id="ServiceTask_CompensateConfiguration" name="Abort goods compensation" isForCompensation="true" orqueio:expression="${true}" />
+      <bpmn:serviceTask id="ServiceTask_CompensateConfiguration" name="Abort goods compensation" isForCompensation="true" camunda:expression="${true}" />
       <bpmn:boundaryEvent id="BoundaryEvent_17zhdzr" attachedToRef="ServiceTask_ConfigureDevice">
         <bpmn:compensateEventDefinition />
       </bpmn:boundaryEvent>

@@ -8,13 +8,13 @@
     <groupId>io.orqueio.bpm</groupId>
     <artifactId>orqueio-database-settings</artifactId>
     <relativePath>../database</relativePath>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
   </parent>
   <description>orqueio-juel</description>
 
   <groupId>io.orqueio.bpm.juel</groupId>
   <artifactId>orqueio-juel</artifactId>
-  <version>1.0.2</version>
+  <version>1.0.3</version>
   <packaging>jar</packaging>
   <name>Orque IO Platform - JUEL</name>
 

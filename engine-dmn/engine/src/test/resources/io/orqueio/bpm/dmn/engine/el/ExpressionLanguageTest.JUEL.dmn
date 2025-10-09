@@ -3,7 +3,7 @@
              id="definitions"
              expressionLanguage="JUEL"
              name="camunda"
-             namespace="http://orqueio.io/schema/1.0/dmn">
+             namespace="http://camunda.org/schema/1.0/dmn">
   <decision id="decision" name="CheckOrder">
     <decisionTable id="decisionTable">
       <input id="clause1" label="CustomerStatus">

@@ -22,12 +22,12 @@ import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ELEMENT_IS_
 import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ELEMENT_MULTI_INSTANCE_LOOP_CHARACTERISTICS;
 import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ELEMENT_NONE_BEHAVIOR_EVENT_REF;
 import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ELEMENT_ONE_BEHAVIOR_EVENT_REF;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ATTRIBUTE_ASYNC_AFTER;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ATTRIBUTE_ASYNC_BEFORE;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ATTRIBUTE_EXCLUSIVE;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ATTRIBUTE_COLLECTION;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ATTRIBUTE_ELEMENT_VARIABLE;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_NS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_ASYNC_AFTER;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_ASYNC_BEFORE;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_EXCLUSIVE;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_COLLECTION;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_ELEMENT_VARIABLE;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
 
 import java.util.Collection;
 
@@ -132,27 +132,27 @@ public class MultiInstanceLoopCharacteristicsImpl extends LoopCharacteristicsImp
     completionConditionChild = sequenceBuilder.element(CompletionCondition.class)
       .build();
 
-    orqueioAsyncAfter = typeBuilder.booleanAttribute(ORQUEIO_ATTRIBUTE_ASYNC_AFTER)
-        .namespace(ORQUEIO_NS)
+    orqueioAsyncAfter = typeBuilder.booleanAttribute(CAMUNDA_ATTRIBUTE_ASYNC_AFTER)
+        .namespace(CAMUNDA_NS)
         .defaultValue(false)
         .build();
 
-    orqueioAsyncBefore = typeBuilder.booleanAttribute(ORQUEIO_ATTRIBUTE_ASYNC_BEFORE)
-        .namespace(ORQUEIO_NS)
+    orqueioAsyncBefore = typeBuilder.booleanAttribute(CAMUNDA_ATTRIBUTE_ASYNC_BEFORE)
+        .namespace(CAMUNDA_NS)
         .defaultValue(false)
         .build();
 
-    orqueioExclusive = typeBuilder.booleanAttribute(ORQUEIO_ATTRIBUTE_EXCLUSIVE)
-        .namespace(ORQUEIO_NS)
+    orqueioExclusive = typeBuilder.booleanAttribute(CAMUNDA_ATTRIBUTE_EXCLUSIVE)
+        .namespace(CAMUNDA_NS)
         .defaultValue(true)
         .build();
 
-    orqueioCollection = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_COLLECTION)
-        .namespace(ORQUEIO_NS)
+    orqueioCollection = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_COLLECTION)
+        .namespace(CAMUNDA_NS)
         .build();
 
-    orqueioElementVariable = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_ELEMENT_VARIABLE)
-        .namespace(ORQUEIO_NS)
+    orqueioElementVariable = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_ELEMENT_VARIABLE)
+        .namespace(CAMUNDA_NS)
         .build();
 
     typeBuilder.build();
