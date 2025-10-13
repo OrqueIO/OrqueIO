@@ -22,9 +22,9 @@ import io.orqueio.bpm.model.xml.ModelBuilder;
 import io.orqueio.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import io.orqueio.bpm.model.xml.type.ModelElementTypeBuilder;
 import io.orqueio.bpm.model.xml.type.attribute.Attribute;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ATTRIBUTE_EXPRESSION;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ELEMENT_ERROR_EVENT_DEFINITION;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_NS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_EXPRESSION;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ELEMENT_ERROR_EVENT_DEFINITION;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
 import static io.orqueio.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 public class OrqueioErrorEventDefinitionImpl extends ErrorEventDefinitionImpl implements OrqueioErrorEventDefinition {
@@ -32,16 +32,16 @@ public class OrqueioErrorEventDefinitionImpl extends ErrorEventDefinitionImpl im
   protected static Attribute<String> orqueioExpressionAttribute;
 
   public static void registerType(ModelBuilder modelBuilder) {
-    ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(OrqueioErrorEventDefinition.class, ORQUEIO_ELEMENT_ERROR_EVENT_DEFINITION)
-      .namespaceUri(ORQUEIO_NS)
+    ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(OrqueioErrorEventDefinition.class, CAMUNDA_ELEMENT_ERROR_EVENT_DEFINITION)
+      .namespaceUri(CAMUNDA_NS)
       .instanceProvider(new ModelTypeInstanceProvider<OrqueioErrorEventDefinition>() {
         public OrqueioErrorEventDefinition newInstance(ModelTypeInstanceContext instanceContext) {
           return new OrqueioErrorEventDefinitionImpl(instanceContext);
         }
       });
 
-    orqueioExpressionAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_EXPRESSION)
-        .namespace(ORQUEIO_NS)
+    orqueioExpressionAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_EXPRESSION)
+        .namespace(CAMUNDA_NS)
         .build();
 
     typeBuilder.build();

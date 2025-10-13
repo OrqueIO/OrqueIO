@@ -1,1 +1,1 @@
-orqueio.bpm.run.auth.enabled: false
+camunda.bpm.run.auth.enabled: false

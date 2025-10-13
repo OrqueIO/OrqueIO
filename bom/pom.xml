@@ -5,10 +5,10 @@
   <parent>
     <groupId>io.orqueio.bpm</groupId>
     <artifactId>orqueio-root</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
     <relativePath>../</relativePath>
   </parent>
-  <version>1.0.2</version>
+  <version>1.0.3</version>
   <description>orqueio-bom-root</description>
   <groupId>io.orqueio.bpm</groupId>
   <artifactId>orqueio-bom-root</artifactId>

@@ -51,55 +51,55 @@ public class OrqueioFormPropertyImpl extends BpmnModelElementInstanceImpl implem
   protected static ChildElementCollection<OrqueioValue> orqueioValueCollection;
 
   public static void registerType(ModelBuilder modelBuilder) {
-    ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(OrqueioFormProperty.class, ORQUEIO_ELEMENT_FORM_PROPERTY)
-      .namespaceUri(ORQUEIO_NS)
+    ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(OrqueioFormProperty.class, CAMUNDA_ELEMENT_FORM_PROPERTY)
+      .namespaceUri(CAMUNDA_NS)
       .instanceProvider(new ModelTypeInstanceProvider<OrqueioFormProperty>() {
         public OrqueioFormProperty newInstance(ModelTypeInstanceContext instanceContext) {
           return new OrqueioFormPropertyImpl(instanceContext);
         }
       });
 
-    orqueioIdAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_ID)
-      .namespace(ORQUEIO_NS)
+    orqueioIdAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_ID)
+      .namespace(CAMUNDA_NS)
       .build();
 
-    orqueioNameAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_NAME)
-      .namespace(ORQUEIO_NS)
+    orqueioNameAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_NAME)
+      .namespace(CAMUNDA_NS)
       .build();
 
-    orqueioTypeAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_TYPE)
-      .namespace(ORQUEIO_NS)
+    orqueioTypeAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_TYPE)
+      .namespace(CAMUNDA_NS)
       .build();
 
-    orqueioRequiredAttribute = typeBuilder.booleanAttribute(ORQUEIO_ATTRIBUTE_REQUIRED)
-      .namespace(ORQUEIO_NS)
+    orqueioRequiredAttribute = typeBuilder.booleanAttribute(CAMUNDA_ATTRIBUTE_REQUIRED)
+      .namespace(CAMUNDA_NS)
       .defaultValue(false)
       .build();
 
-    orqueioReadableAttribute = typeBuilder.booleanAttribute(ORQUEIO_ATTRIBUTE_READABLE)
-      .namespace(ORQUEIO_NS)
+    orqueioReadableAttribute = typeBuilder.booleanAttribute(CAMUNDA_ATTRIBUTE_READABLE)
+      .namespace(CAMUNDA_NS)
       .defaultValue(true)
       .build();
 
-    orqueioWriteableAttribute = typeBuilder.booleanAttribute(ORQUEIO_ATTRIBUTE_WRITEABLE)
-      .namespace(ORQUEIO_NS)
+    orqueioWriteableAttribute = typeBuilder.booleanAttribute(CAMUNDA_ATTRIBUTE_WRITEABLE)
+      .namespace(CAMUNDA_NS)
       .defaultValue(true)
       .build();
 
-    orqueioVariableAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_VARIABLE)
-      .namespace(ORQUEIO_NS)
+    orqueioVariableAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_VARIABLE)
+      .namespace(CAMUNDA_NS)
       .build();
 
-    orqueioExpressionAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_EXPRESSION)
-      .namespace(ORQUEIO_NS)
+    orqueioExpressionAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_EXPRESSION)
+      .namespace(CAMUNDA_NS)
       .build();
 
-    orqueioDatePatternAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_DATE_PATTERN)
-      .namespace(ORQUEIO_NS)
+    orqueioDatePatternAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_DATE_PATTERN)
+      .namespace(CAMUNDA_NS)
       .build();
 
-    orqueioDefaultAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_DEFAULT)
-      .namespace(ORQUEIO_NS)
+    orqueioDefaultAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_DEFAULT)
+      .namespace(CAMUNDA_NS)
       .build();
 
     SequenceBuilder sequenceBuilder = typeBuilder.sequence();

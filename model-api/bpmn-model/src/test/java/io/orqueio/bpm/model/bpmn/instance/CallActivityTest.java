@@ -16,7 +16,7 @@
  */
 package io.orqueio.bpm.model.bpmn.instance;
 
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_NS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -41,17 +41,17 @@ public class CallActivityTest extends BpmnModelElementInstanceTest {
     return Arrays.asList(
       new AttributeAssumption("calledElement"),
       /** orqueio extensions */
-      new AttributeAssumption(ORQUEIO_NS, "async", false, false, false),
-      new AttributeAssumption(ORQUEIO_NS, "calledElementBinding"),
-      new AttributeAssumption(ORQUEIO_NS, "calledElementVersion"),
-      new AttributeAssumption(ORQUEIO_NS, "calledElementVersionTag"),
-      new AttributeAssumption(ORQUEIO_NS, "calledElementTenantId"),
-      new AttributeAssumption(ORQUEIO_NS, "caseRef"),
-      new AttributeAssumption(ORQUEIO_NS, "caseBinding"),
-      new AttributeAssumption(ORQUEIO_NS, "caseVersion"),
-      new AttributeAssumption(ORQUEIO_NS, "caseTenantId"),
-      new AttributeAssumption(ORQUEIO_NS, "variableMappingClass"),
-      new AttributeAssumption(ORQUEIO_NS, "variableMappingDelegateExpression")
+      new AttributeAssumption(CAMUNDA_NS, "async", false, false, false),
+      new AttributeAssumption(CAMUNDA_NS, "calledElementBinding"),
+      new AttributeAssumption(CAMUNDA_NS, "calledElementVersion"),
+      new AttributeAssumption(CAMUNDA_NS, "calledElementVersionTag"),
+      new AttributeAssumption(CAMUNDA_NS, "calledElementTenantId"),
+      new AttributeAssumption(CAMUNDA_NS, "caseRef"),
+      new AttributeAssumption(CAMUNDA_NS, "caseBinding"),
+      new AttributeAssumption(CAMUNDA_NS, "caseVersion"),
+      new AttributeAssumption(CAMUNDA_NS, "caseTenantId"),
+      new AttributeAssumption(CAMUNDA_NS, "variableMappingClass"),
+      new AttributeAssumption(CAMUNDA_NS, "variableMappingDelegateExpression")
     );
   }
 }

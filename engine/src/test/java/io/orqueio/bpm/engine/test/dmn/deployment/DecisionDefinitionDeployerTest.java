@@ -98,7 +98,7 @@ public class DecisionDefinitionDeployerTest {
     DecisionDefinition decisionDefinition = query.singleResult();
 
     assertTrue(decisionDefinition.getId().startsWith("decision:1:"));
-    assertEquals("http://orqueio.io/schema/1.0/dmn", decisionDefinition.getCategory());
+    assertEquals("http://camunda.org/schema/1.0/dmn", decisionDefinition.getCategory());
     assertEquals("CheckOrder", decisionDefinition.getName());
     assertEquals("decision", decisionDefinition.getKey());
     assertEquals(1, decisionDefinition.getVersion());
@@ -123,7 +123,7 @@ public class DecisionDefinitionDeployerTest {
     DecisionDefinition decisionDefinition = query.singleResult();
 
     assertTrue(decisionDefinition.getId().startsWith("decision:1:"));
-    assertEquals("http://orqueio.io/schema/1.0/dmn", decisionDefinition.getCategory());
+    assertEquals("http://camunda.org/schema/1.0/dmn", decisionDefinition.getCategory());
     assertEquals("CheckOrder", decisionDefinition.getName());
     assertEquals("decision", decisionDefinition.getKey());
     assertEquals(1, decisionDefinition.getVersion());
@@ -147,7 +147,7 @@ public class DecisionDefinitionDeployerTest {
     DecisionDefinition decisionDefinition = query.singleResult();
 
     assertTrue(decisionDefinition.getId().startsWith("decisionLiteralExpression:1:"));
-    assertEquals("http://orqueio.io/schema/1.0/dmn", decisionDefinition.getCategory());
+    assertEquals("http://camunda.org/schema/1.0/dmn", decisionDefinition.getCategory());
     assertEquals("decisionLiteralExpression", decisionDefinition.getKey());
     assertEquals("Decision with Literal Expression", decisionDefinition.getName());
     assertEquals(1, decisionDefinition.getVersion());
@@ -377,7 +377,7 @@ public class DecisionDefinitionDeployerTest {
     Definitions definitions = modelInstance.newInstance(Definitions.class);
     definitions.setId(DmnModelConstants.DMN_ELEMENT_DEFINITIONS);
     definitions.setName(DmnModelConstants.DMN_ELEMENT_DEFINITIONS);
-    definitions.setNamespace(DmnModelConstants.ORQUEIO_NS);
+    definitions.setNamespace(DmnModelConstants.CAMUNDA_NS);
     modelInstance.setDefinitions(definitions);
 
     Decision decision = modelInstance.newInstance(Decision.class);
@@ -394,7 +394,7 @@ public class DecisionDefinitionDeployerTest {
     Definitions definitions = modelInstance.newInstance(Definitions.class);
     definitions.setId(DmnModelConstants.DMN_ELEMENT_DEFINITIONS);
     definitions.setName(DmnModelConstants.DMN_ELEMENT_DEFINITIONS);
-    definitions.setNamespace(DmnModelConstants.ORQUEIO_NS);
+    definitions.setNamespace(DmnModelConstants.CAMUNDA_NS);
     modelInstance.setDefinitions(definitions);
 
     Decision decision = modelInstance.newInstance(Decision.class);
@@ -461,7 +461,7 @@ public class DecisionDefinitionDeployerTest {
     Definitions definitions = modelInstance.newInstance(Definitions.class);
     definitions.setId(DmnModelConstants.DMN_ELEMENT_DEFINITIONS);
     definitions.setName(DmnModelConstants.DMN_ELEMENT_DEFINITIONS);
-    definitions.setNamespace(DmnModelConstants.ORQUEIO_NS);
+    definitions.setNamespace(DmnModelConstants.CAMUNDA_NS);
     modelInstance.setDefinitions(definitions);
 
     // when decision model is deployed

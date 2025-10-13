@@ -2,7 +2,7 @@
 <!DOCTYPE foo [<!ELEMENT bpmn:incoming ANY >
   <!ENTITY xxe SYSTEM "./file.txt" >]>
 
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:orqueio="http://orqueio.io/schema/1.0/bpmn" id="Definitions_19meldu" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Orqueio Modeler" exporterVersion="2.0.1">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="Definitions_19meldu" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Orqueio Modeler" exporterVersion="2.0.1">
   <bpmn:process id="Process_1" isExecutable="true">
     <bpmn:sequenceFlow id="SequenceFlow_0z1a0n2" sourceRef="StartEvent_1" targetRef="Task_1m7g3wy" />
     <bpmn:endEvent id="EndEvent_0edeh1n">
@@ -10,7 +10,7 @@
       <bpmn:incoming>&xxe;</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="SequenceFlow_0f75jmi" sourceRef="Task_1m7g3wy" targetRef="EndEvent_0edeh1n" />
-    <bpmn:serviceTask id="Task_1m7g3wy" name="Service Task" orqueio:expression="{}">
+    <bpmn:serviceTask id="Task_1m7g3wy" name="Service Task" camunda:expression="{}">
       <bpmn:incoming>SequenceFlow_0z1a0n2</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0f75jmi</bpmn:outgoing>
     </bpmn:serviceTask>

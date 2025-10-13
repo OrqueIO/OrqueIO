@@ -28,7 +28,7 @@ import org.jboss.msc.service.ServiceName;
  */
 public class ServiceNames {
 
-  private final static ServiceName BPM_PLATFORM = ServiceName.of("org", "orqueio", "bpm", "platform");
+  private final static ServiceName BPM_PLATFORM = ServiceName.of("io", "orqueio", "bpm", "platform");
 
   private final static ServiceName PROCESS_ENGINE = BPM_PLATFORM.append("process-engine");
   private final static ServiceName JOB_EXECUTOR = BPM_PLATFORM.append("job-executor");

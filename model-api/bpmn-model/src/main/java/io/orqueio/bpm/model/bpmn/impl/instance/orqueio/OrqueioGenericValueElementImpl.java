@@ -27,8 +27,8 @@ import io.orqueio.bpm.model.xml.instance.DomElement;
 
 /**
  * A helper interface for orqueio extension elements which
- * hold a generic child element like orqueio:inputParameter,
- * orqueio:outputParameter and orqueio:entry.
+ * hold a generic child element like camunda:inputParameter,
+ * camunda:outputParameter and camunda:entry.
  *
  * @author Sebastian Menski
  */

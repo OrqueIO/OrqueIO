@@ -16,10 +16,10 @@
  */
 package io.orqueio.bpm.model.cmmn.impl.instance.orqueio;
 
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ATTRIBUTE_RESOURCE;
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ATTRIBUTE_SCRIPT_FORMAT;
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ELEMENT_SCRIPT;
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_NS;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_RESOURCE;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_SCRIPT_FORMAT;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ELEMENT_SCRIPT;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_NS;
 
 import io.orqueio.bpm.model.cmmn.impl.instance.CmmnModelElementInstanceImpl;
 import io.orqueio.bpm.model.cmmn.instance.orqueio.OrqueioScript;
@@ -39,20 +39,20 @@ public class OrqueioScriptImpl extends CmmnModelElementInstanceImpl implements O
   protected static Attribute<String> orqueioResourceAttribute;
 
   public static void registerType(ModelBuilder modelBuilder) {
-    ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(OrqueioScript.class, ORQUEIO_ELEMENT_SCRIPT)
-      .namespaceUri(ORQUEIO_NS)
+    ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(OrqueioScript.class, CAMUNDA_ELEMENT_SCRIPT)
+      .namespaceUri(CAMUNDA_NS)
       .instanceProvider(new ModelTypeInstanceProvider<OrqueioScript>() {
         public OrqueioScript newInstance(ModelTypeInstanceContext instanceContext) {
           return new OrqueioScriptImpl(instanceContext);
         }
       });
 
-    orqueioScriptFormatAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_SCRIPT_FORMAT)
-        .namespace(ORQUEIO_NS)
+    orqueioScriptFormatAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_SCRIPT_FORMAT)
+        .namespace(CAMUNDA_NS)
         .build();
 
-    orqueioResourceAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_RESOURCE)
-        .namespace(ORQUEIO_NS)
+    orqueioResourceAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_RESOURCE)
+        .namespace(CAMUNDA_NS)
         .build();
 
     typeBuilder.build();

@@ -23,8 +23,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 
 @TestPropertySource(properties = {
-        "orqueio.bpm.rest-api.fetch-and-lock.unique-worker-request=true",
-        "orqueio.bpm.rest-api.fetch-and-lock.queue-capacity=333"
+        "camunda.bpm.rest-api.fetch-and-lock.unique-worker-request=true",
+        "camunda.bpm.rest-api.fetch-and-lock.queue-capacity=333"
 })
 public class RestApiPropertyTest extends ParsePropertiesHelper {
 

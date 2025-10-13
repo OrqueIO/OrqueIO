@@ -1,2 +1,2 @@
-orqueio.bpm.run.ldap:
+camunda.bpm.run.ldap:
   password-check-catch-authentication-exception: false

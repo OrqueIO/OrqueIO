@@ -16,9 +16,9 @@
  */
 package io.orqueio.bpm.model.bpmn.impl.instance.orqueio;
 
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ATTRIBUTE_NAME;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ELEMENT_INPUT_PARAMETER;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_NS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_NAME;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ELEMENT_INPUT_PARAMETER;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
 
 import io.orqueio.bpm.model.bpmn.instance.orqueio.OrqueioInputParameter;
 import io.orqueio.bpm.model.xml.ModelBuilder;
@@ -37,16 +37,16 @@ public class OrqueioInputParameterImpl extends OrqueioGenericValueElementImpl im
   protected static Attribute<String> orqueioNameAttribute;
 
   public static void registerType(ModelBuilder modelBuilder) {
-    ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(OrqueioInputParameter.class, ORQUEIO_ELEMENT_INPUT_PARAMETER)
-      .namespaceUri(ORQUEIO_NS)
+    ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(OrqueioInputParameter.class, CAMUNDA_ELEMENT_INPUT_PARAMETER)
+      .namespaceUri(CAMUNDA_NS)
       .instanceProvider(new ModelTypeInstanceProvider<OrqueioInputParameter>() {
         public OrqueioInputParameter newInstance(ModelTypeInstanceContext instanceContext) {
           return new OrqueioInputParameterImpl(instanceContext);
         }
       });
 
-    orqueioNameAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_NAME)
-      .namespace(ORQUEIO_NS)
+    orqueioNameAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_NAME)
+      .namespace(CAMUNDA_NS)
       .required()
       .build();
 

@@ -45,14 +45,14 @@ public class ProcessVariableTypedTest extends CdiProcessEngineTestCase {
   public void testProcessVariableTypeAnnotation() {
     BusinessProcess businessProcess = getBeanInstance(BusinessProcess.class);
 
-    VariableMap variables = Variables.createVariables().putValue("injectedValue", "orqueio");
+    VariableMap variables = Variables.createVariables().putValue("injectedValue", "camunda");
     businessProcess.startProcessByKey("keyOfTheProcess", variables);
 
     TypedValue value = getBeanInstance(DeclarativeProcessController.class).getInjectedValue();
     assertNotNull(value);
     assertTrue(value instanceof StringValue);
     assertEquals(ValueType.STRING, value.getType());
-    assertEquals("orqueio", value.getValue());
+    assertEquals("camunda", value.getValue());
   }
 
 }

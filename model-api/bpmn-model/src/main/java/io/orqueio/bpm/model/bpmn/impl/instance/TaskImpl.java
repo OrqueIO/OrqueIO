@@ -53,8 +53,8 @@ public class TaskImpl extends ActivityImpl implements Task {
 
     /** orqueio extensions */
 
-    orqueioAsyncAttribute = typeBuilder.booleanAttribute(ORQUEIO_ATTRIBUTE_ASYNC)
-      .namespace(ORQUEIO_NS)
+    orqueioAsyncAttribute = typeBuilder.booleanAttribute(CAMUNDA_ATTRIBUTE_ASYNC)
+      .namespace(CAMUNDA_NS)
       .defaultValue(false)
       .build();
 

@@ -33,7 +33,7 @@ import static io.orqueio.bpm.spring.boot.starter.configuration.id.IdGeneratorCon
 @SpringBootTest(
   classes = {TestApplication.class},
   properties = {
-    "orqueio.bpm.id-generator=" + PREFIXED,
+    "camunda.bpm.id-generator=" + PREFIXED,
     "spring.application.name=myapp"
   })
 public class PrefixedUuidGeneratorIT {

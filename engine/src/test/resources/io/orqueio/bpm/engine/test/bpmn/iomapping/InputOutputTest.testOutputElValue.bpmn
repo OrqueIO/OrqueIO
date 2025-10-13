@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:orqueio="http://orqueio.io/schema/1.0/bpmn" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd" id="_FVEpwO_VEeOtYvXzz5ksgw" exporter="orqueio modeler" exporterVersion="2.5.0" targetNamespace="http://orqueio.io/schema/1.0/bpmn">
+<bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd" id="_FVEpwO_VEeOtYvXzz5ksgw" exporter="orqueio modeler" exporterVersion="2.5.0" targetNamespace="http://camunda.org/schema/1.0/bpmn">
   <bpmn2:process id="testProcess" isExecutable="true">
     <bpmn2:endEvent id="EndEvent_1">
       <bpmn2:incoming>SequenceFlow_2</bpmn2:incoming>
@@ -9,11 +9,11 @@
       <bpmn2:outgoing>SequenceFlow_2</bpmn2:outgoing>
     </bpmn2:receiveTask>
     <bpmn2:sequenceFlow id="SequenceFlow_2" name="" sourceRef="wait" targetRef="EndEvent_1"/>
-    <bpmn2:serviceTask id="ServiceTask_1" name="run" orqueio:expression="${true}">
+    <bpmn2:serviceTask id="ServiceTask_1" name="run" camunda:expression="${true}">
       <bpmn2:extensionElements>
-        <orqueio:inputOutput>
-            <orqueio:outputParameter name="var1">${ 1 + 1 }</orqueio:outputParameter>
-        </orqueio:inputOutput>
+        <camunda:inputOutput>
+            <camunda:outputParameter name="var1">${ 1 + 1 }</camunda:outputParameter>
+        </camunda:inputOutput>
       </bpmn2:extensionElements>
       <bpmn2:incoming>SequenceFlow_1</bpmn2:incoming>
       <bpmn2:outgoing>SequenceFlow_3</bpmn2:outgoing>

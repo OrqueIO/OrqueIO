@@ -16,9 +16,9 @@
  */
 package io.orqueio.bpm.model.bpmn.impl.instance.orqueio;
 
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ATTRIBUTE_KEY;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ELEMENT_ENTRY;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_NS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_KEY;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ELEMENT_ENTRY;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
 
 import io.orqueio.bpm.model.bpmn.instance.orqueio.OrqueioEntry;
 import io.orqueio.bpm.model.xml.ModelBuilder;
@@ -35,16 +35,16 @@ public class OrqueioEntryImpl extends OrqueioGenericValueElementImpl implements 
   protected static Attribute<String> orqueioKeyAttribute;
 
   public static void registerType(ModelBuilder modelBuilder) {
-    ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(OrqueioEntry.class, ORQUEIO_ELEMENT_ENTRY)
-      .namespaceUri(ORQUEIO_NS)
+    ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(OrqueioEntry.class, CAMUNDA_ELEMENT_ENTRY)
+      .namespaceUri(CAMUNDA_NS)
       .instanceProvider(new ModelTypeInstanceProvider<OrqueioEntry>() {
         public OrqueioEntry newInstance(ModelTypeInstanceContext instanceContext) {
           return new OrqueioEntryImpl(instanceContext);
         }
       });
 
-    orqueioKeyAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_KEY)
-      .namespace(ORQUEIO_NS)
+    orqueioKeyAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_KEY)
+      .namespace(CAMUNDA_NS)
       .required()
       .build();
 

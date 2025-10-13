@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
-             xmlns:orqueio="http://orqueio.io/schema/1.0/bpmn"
-             id="_FVEpwO_VEeOtYvXzz5ksgw" exporter="orqueio modeler" exporterVersion="2.5.0" targetNamespace="http://orqueio.io/schema/1.0/bpmn">
+             xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
+             id="_FVEpwO_VEeOtYvXzz5ksgw" exporter="orqueio modeler" exporterVersion="2.5.0" targetNamespace="http://camunda.org/schema/1.0/bpmn">
 
   <message id="messageId" name="Message" />
 
@@ -14,8 +14,8 @@
 
     <receiveTask id="task" messageRef="messageId">
       <extensionElements>
-        <orqueio:executionListener class="io.orqueio.bpm.engine.test.concurrency.CompetingMessageCorrelationTest$InvocationLogListener" event="end"/>
-        <orqueio:executionListener class="io.orqueio.bpm.engine.test.concurrency.CompetingMessageCorrelationTest$WaitingListener" event="end"/>
+        <camunda:executionListener class="io.orqueio.bpm.engine.test.concurrency.CompetingMessageCorrelationTest$InvocationLogListener" event="end"/>
+        <camunda:executionListener class="io.orqueio.bpm.engine.test.concurrency.CompetingMessageCorrelationTest$WaitingListener" event="end"/>
       </extensionElements>
       <multiInstanceLoopCharacteristics>
         <loopCardinality xsi:type="tFormalExpression">2</loopCardinality>

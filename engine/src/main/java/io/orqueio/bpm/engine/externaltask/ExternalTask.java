@@ -24,7 +24,7 @@ import io.orqueio.bpm.engine.ExternalTaskService;
 /**
  * Represents an instance of an external task that is created when
  * a service-task like activity (i.e. service task, send task, ...) with
- * attribute <code>orqueio:type="external"</code> is executed.
+ * attribute <code>camunda:type="external"</code> is executed.
  *
  * @author Thorben Lindhauer
  */
