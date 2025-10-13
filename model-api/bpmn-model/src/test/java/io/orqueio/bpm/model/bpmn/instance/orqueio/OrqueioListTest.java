@@ -16,7 +16,7 @@
  */
 package io.orqueio.bpm.model.bpmn.instance.orqueio;
 
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_NS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
 import static org.junit.Assert.fail;
 
 import java.util.Collection;
@@ -28,7 +28,7 @@ import org.junit.Test;
 public class OrqueioListTest extends BpmnModelElementInstanceTest {
 
   public TypeAssumption getTypeAssumption() {
-    return new TypeAssumption(ORQUEIO_NS, false);
+    return new TypeAssumption(CAMUNDA_NS, false);
   }
 
   public Collection<ChildElementAssumption> getChildElementAssumptions() {

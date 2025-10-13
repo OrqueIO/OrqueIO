@@ -6,13 +6,13 @@
   <parent>
     <groupId>io.orqueio.bpm.springboot.project</groupId>
     <artifactId>orqueio-bpm-spring-boot-starter-root</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
   </parent>
   <description>orqueio-bpm-spring-boot-starter-webapp-core</description>
 
   <groupId>io.orqueio.bpm.springboot</groupId>
   <artifactId>orqueio-bpm-spring-boot-starter-webapp-core</artifactId>
-  <version>1.0.2</version>
+  <version>1.0.3</version>
   <packaging>jar</packaging>
   <name>Orque IO Platform - Spring Boot Starter - Webapps Core</name>
   <dependencies>
@@ -25,7 +25,7 @@
     <dependency>
       <groupId>io.orqueio.bpm.webapp</groupId>
       <artifactId>orqueio-webapp-jakarta</artifactId>
-      <version>1.0.2</version>
+      <version>${project.version}</version>
       <type>jar</type>
       <classifier>classes</classifier>
     </dependency>
@@ -33,7 +33,7 @@
     <dependency>
       <groupId>io.orqueio.bpm.webapp</groupId>
       <artifactId>orqueio-webapp-webjar</artifactId>
-      <version>1.0.2</version>
+      <version>${project.version}</version>
       <scope>test</scope>
     </dependency>
 

@@ -34,7 +34,7 @@ import static org.springframework.core.io.support.ResourcePatternResolver.CLASSP
 @ConfigurationProperties(OrqueioBpmProperties.PREFIX)
 public class OrqueioBpmProperties {
 
-  public static final String PREFIX = "orqueio.bpm";
+  public static final String PREFIX = "camunda.bpm";
   public static final String UNIQUE_ENGINE_NAME_PREFIX = "processEngine";
   public static final String UNIQUE_APPLICATION_NAME_PREFIX = "processApplication";
 

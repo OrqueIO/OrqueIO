@@ -1613,7 +1613,7 @@ public class FormServiceTest {
     assertThatThrownBy(() -> {
       formService.getDeployedStartForm(processDefinitionId);
     }).isInstanceOf(BadUserRequestException.class)
-    .hasMessage("One of the attributes 'formKey' and 'orqueio:formRef' must be supplied but none were set.");
+    .hasMessage("One of the attributes 'formKey' and 'camunda:formRef' must be supplied but none were set.");
   }
 
   @Test
@@ -1627,7 +1627,7 @@ public class FormServiceTest {
     assertThatThrownBy(() -> {
       formService.getDeployedTaskForm(taskId);
     }).isInstanceOf(BadUserRequestException.class)
-    .hasMessage("One of the attributes 'formKey' and 'orqueio:formRef' must be supplied but none were set.");
+    .hasMessage("One of the attributes 'formKey' and 'camunda:formRef' must be supplied but none were set.");
   }
 
   @Deployment(resources = {

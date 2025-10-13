@@ -2,7 +2,7 @@
 <definitions id="definitions" 
   xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns:orqueio="http://orqueio.io/schema/1.0/bpmn"
+  xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
   targetNamespace="Examples"
   xmlns:tns="Examples">
   
@@ -27,15 +27,15 @@
      </sequenceFlow>
      
      <endEvent id="expressionEnd">
-       <messageEventDefinition orqueio:expression="#{endEventBean.getJavaDelegate().execute(execution)}" />
+       <messageEventDefinition camunda:expression="#{endEventBean.getJavaDelegate().execute(execution)}" />
      </endEvent>
 
      <endEvent id="delegateExpressionEnd">
-       <messageEventDefinition orqueio:delegateExpression="#{endEventBean.getJavaDelegate()}" />
+       <messageEventDefinition camunda:delegateExpression="#{endEventBean.getJavaDelegate()}" />
      </endEvent>
   
      <endEvent id="classEnd">
-       <messageEventDefinition orqueio:class="io.orqueio.bpm.engine.test.bpmn.event.end.DummyServiceTask" />
+       <messageEventDefinition camunda:class="io.orqueio.bpm.engine.test.bpmn.event.end.DummyServiceTask" />
      </endEvent>
     
   </process>

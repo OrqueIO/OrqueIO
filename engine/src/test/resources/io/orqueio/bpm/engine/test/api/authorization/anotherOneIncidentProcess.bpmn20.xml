@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions id="definitions"
   xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
-  xmlns:orqueio="http://orqueio.io/schema/1.0/bpmn"
+  xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
   targetNamespace="io.orqueio.bpm.engine.test.enginge.test.api.mgmt">
 
   <process id="anotherOneIncidentProcess" isExecutable="true">
@@ -10,7 +10,7 @@
 
     <sequenceFlow sourceRef="theStart" targetRef="scriptTask" />
 
-    <scriptTask id="scriptTask" scriptFormat="groovy" orqueio:asyncBefore="true">
+    <scriptTask id="scriptTask" scriptFormat="groovy" camunda:asyncBefore="true">
       <script>
         throw new RuntimeException("This is an exception thrown from scriptTask")
       </script>

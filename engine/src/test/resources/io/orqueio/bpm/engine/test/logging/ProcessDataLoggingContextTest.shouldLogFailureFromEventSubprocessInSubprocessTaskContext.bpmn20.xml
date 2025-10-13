@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:orqueio="http://orqueio.io/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1p689a6" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Orqueio Modeler" exporterVersion="3.2.1">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1p689a6" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Orqueio Modeler" exporterVersion="3.2.1">
   <bpmn:process id="process" isExecutable="true">
     <bpmn:startEvent id="start">
       <bpmn:outgoing>SequenceFlow_16gobwy</bpmn:outgoing>
@@ -23,7 +23,7 @@
         <bpmn:outgoing>SequenceFlow_1t7qsgf</bpmn:outgoing>
         <bpmn:messageEventDefinition messageRef="Message_1auh2zd" />
       </bpmn:startEvent>
-      <bpmn:serviceTask id="sub_failingTask" orqueio:class="io.orqueio.bpm.engine.test.logging.ProcessDataLoggingContextTest.FailingDelegate">
+      <bpmn:serviceTask id="sub_failingTask" camunda:class="io.orqueio.bpm.engine.test.logging.ProcessDataLoggingContextTest.FailingDelegate">
         <bpmn:incoming>SequenceFlow_1t7qsgf</bpmn:incoming>
         <bpmn:outgoing>SequenceFlow_1jfwjy5</bpmn:outgoing>
       </bpmn:serviceTask>

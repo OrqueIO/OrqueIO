@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions id="definitions" 
   xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
-  xmlns:orqueio="http://orqueio.io/schema/1.0/bpmn"
+  xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
   targetNamespace="Examples">
 
   <error id="myError" errorCode="MyError" />
@@ -13,7 +13,7 @@
 
     <sequenceFlow id="flow1" sourceRef="start" targetRef="serviceTask" />
     
-    <serviceTask id="serviceTask" orqueio:class="io.orqueio.bpm.engine.test.bpmn.event.error.PassThroughDelegate" />
+    <serviceTask id="serviceTask" camunda:class="io.orqueio.bpm.engine.test.bpmn.event.error.PassThroughDelegate" />
     
     <boundaryEvent id="catchException" attachedToRef="serviceTask">
       <errorEventDefinition errorRef="myException"/>
@@ -21,7 +21,7 @@
 
     <sequenceFlow id="flow2" sourceRef="serviceTask" targetRef="serviceTask2" />
     
-    <serviceTask id="serviceTask2" orqueio:class="io.orqueio.bpm.engine.test.bpmn.event.error.ThrowErrorDelegate" />
+    <serviceTask id="serviceTask2" camunda:class="io.orqueio.bpm.engine.test.bpmn.event.error.ThrowErrorDelegate" />
     
     <sequenceFlow id="flow7" sourceRef="serviceTask2" targetRef="end" />
 

@@ -16,7 +16,7 @@
  */
 package io.orqueio.bpm.model.cmmn.instance.orqueio;
 
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_NS;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_NS;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -30,22 +30,22 @@ import io.orqueio.bpm.model.cmmn.instance.CmmnModelElementInstanceTest;
 public class OrqueioCaseExecutionListenerTest extends CmmnModelElementInstanceTest {
 
   public TypeAssumption getTypeAssumption() {
-    return new TypeAssumption(ORQUEIO_NS, false);
+    return new TypeAssumption(CAMUNDA_NS, false);
   }
 
   public Collection<ChildElementAssumption> getChildElementAssumptions() {
     return Arrays.asList(
-        new ChildElementAssumption(ORQUEIO_NS, OrqueioField.class),
-        new ChildElementAssumption(ORQUEIO_NS, OrqueioScript.class, 0, 1)
+        new ChildElementAssumption(CAMUNDA_NS, OrqueioField.class),
+        new ChildElementAssumption(CAMUNDA_NS, OrqueioScript.class, 0, 1)
     );
   }
 
   public Collection<AttributeAssumption> getAttributesAssumptions() {
     return Arrays.asList(
-        new AttributeAssumption(ORQUEIO_NS, "event"),
-      new AttributeAssumption(ORQUEIO_NS, "class"),
-      new AttributeAssumption(ORQUEIO_NS, "expression"),
-      new AttributeAssumption(ORQUEIO_NS, "delegateExpression")
+        new AttributeAssumption(CAMUNDA_NS, "event"),
+      new AttributeAssumption(CAMUNDA_NS, "class"),
+      new AttributeAssumption(CAMUNDA_NS, "expression"),
+      new AttributeAssumption(CAMUNDA_NS, "delegateExpression")
     );
   }
 

@@ -33,7 +33,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = { FilterTestApp.class }, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(properties = {
-  "orqueio.bpm.webapp.csrf.enableSameSiteCookie=false"
+  "camunda.bpm.webapp.csrf.enableSameSiteCookie=false"
 })
 @DirtiesContext
 public class SameSiteDisabledIT {

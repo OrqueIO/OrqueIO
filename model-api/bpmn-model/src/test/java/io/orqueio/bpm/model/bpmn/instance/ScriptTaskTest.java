@@ -19,7 +19,7 @@ package io.orqueio.bpm.model.bpmn.instance;
 import java.util.Arrays;
 import java.util.Collection;
 
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_NS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
 
 /**
  * @author Sebastian Menski
@@ -40,8 +40,8 @@ public class ScriptTaskTest extends BpmnModelElementInstanceTest {
     return Arrays.asList(
       new AttributeAssumption("scriptFormat"),
       /** orqueio extensions */
-      new AttributeAssumption(ORQUEIO_NS, "resultVariable"),
-      new AttributeAssumption(ORQUEIO_NS, "resource")
+      new AttributeAssumption(CAMUNDA_NS, "resultVariable"),
+      new AttributeAssumption(CAMUNDA_NS, "resource")
     );
   }
 }

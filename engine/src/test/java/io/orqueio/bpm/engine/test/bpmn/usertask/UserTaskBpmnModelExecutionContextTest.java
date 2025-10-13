@@ -16,7 +16,7 @@
  */
 package io.orqueio.bpm.engine.test.bpmn.usertask;
 
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_NS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -184,9 +184,9 @@ public class UserTaskBpmnModelExecutionContextTest {
     UserTask userTask = ModelExecutionContextTaskListener.userTask;
     assertNotNull(userTask);
 
-    ModelElementInstance taskListener = userTask.getExtensionElements().getUniqueChildElementByNameNs(ORQUEIO_NS, "taskListener");
-    assertEquals(eventName, taskListener.getAttributeValueNs(ORQUEIO_NS, "event"));
-    assertEquals(ModelExecutionContextTaskListener.class.getName(), taskListener.getAttributeValueNs(ORQUEIO_NS, "class"));
+    ModelElementInstance taskListener = userTask.getExtensionElements().getUniqueChildElementByNameNs(CAMUNDA_NS, "taskListener");
+    assertEquals(eventName, taskListener.getAttributeValueNs(CAMUNDA_NS, "event"));
+    assertEquals(ModelExecutionContextTaskListener.class.getName(), taskListener.getAttributeValueNs(CAMUNDA_NS, "class"));
 
     BpmnModelInstance modelInstance = ModelExecutionContextTaskListener.modelInstance;
     Collection<ModelElementInstance> tasks = modelInstance.getModelElementsByType(modelInstance.getModel().getType(Task.class));

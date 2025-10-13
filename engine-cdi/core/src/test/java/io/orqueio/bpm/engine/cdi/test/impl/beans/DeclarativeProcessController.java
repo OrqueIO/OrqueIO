@@ -54,7 +54,7 @@ public class DeclarativeProcessController {
 
   @StartProcess("keyOfTheProcess")
   public void startProcessByKey() {
-    name = "orqueio";
+    name = "camunda";
     untypedName = "untypedName";
     typedName = Variables.stringValue("typedName");
   }

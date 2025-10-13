@@ -30,7 +30,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static io.orqueio.bpm.spring.boot.starter.configuration.id.IdGeneratorConfiguration.SIMPLE;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = { TestApplication.class }, properties = "orqueio.bpm.id-generator=" + SIMPLE)
+@SpringBootTest(classes = { TestApplication.class }, properties = "camunda.bpm.id-generator=" + SIMPLE)
 public class SimpleUuidGeneratorIT {
 
   @Autowired

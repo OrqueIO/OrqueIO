@@ -1,4 +1,4 @@
-orqueio:
+camunda:
   bpm:
     client:
       base-url: http://localhost:8081/engine-rest

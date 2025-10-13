@@ -16,7 +16,7 @@
  */
 package io.orqueio.bpm.model.cmmn.instance;
 
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_NS;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_NS;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -41,9 +41,9 @@ public class ProcessTaskTest extends CmmnModelElementInstanceTest {
   public Collection<AttributeAssumption> getAttributesAssumptions() {
     return Arrays.asList(
         new AttributeAssumption("processRef"),
-        new AttributeAssumption(ORQUEIO_NS, "processBinding"),
-        new AttributeAssumption(ORQUEIO_NS, "processVersion"),
-        new AttributeAssumption(ORQUEIO_NS, "processTenantId")
+        new AttributeAssumption(CAMUNDA_NS, "processBinding"),
+        new AttributeAssumption(CAMUNDA_NS, "processVersion"),
+        new AttributeAssumption(CAMUNDA_NS, "processTenantId")
       );
   }
 

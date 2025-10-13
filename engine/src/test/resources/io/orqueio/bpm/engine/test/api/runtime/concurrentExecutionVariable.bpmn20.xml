@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:orqueio="http://orqueio.io/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_0luai3l" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Orqueio Modeler" exporterVersion="4.12.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_0luai3l" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Orqueio Modeler" exporterVersion="4.12.0">
   <bpmn:collaboration id="Collaboration_10hvrux">
     <bpmn:participant id="DAV-2-POC-1" name="DAV-2 POC-1" processRef="process" />
   </bpmn:collaboration>
@@ -9,9 +9,9 @@
     </bpmn:endEvent>
     <bpmn:startEvent id="StartEvent_1" name="Start feature development process">
       <bpmn:extensionElements>
-        <orqueio:formData>
-          <orqueio:formField id="featureIssueId" label="Issue Id" type="long" />
-        </orqueio:formData>
+        <camunda:formData>
+          <camunda:formField id="featureIssueId" label="Issue Id" type="long" />
+        </camunda:formData>
       </bpmn:extensionElements>
       <bpmn:outgoing>Flow_1f9as0w</bpmn:outgoing>
       <bpmn:outgoing>Flow_0ai3cua</bpmn:outgoing>
@@ -25,7 +25,7 @@
     </bpmn:endEvent>
     <bpmn:boundaryEvent id="Implement_feature_issue_id_set" name="`issue ID`&#10;is set" cancelActivity="false" attachedToRef="Implement_feature">
       <bpmn:outgoing>Flow_14ux7cc</bpmn:outgoing>
-      <bpmn:conditionalEventDefinition id="ConditionalEventDefinition_0z87gtz" orqueio:variableName="issueId">
+      <bpmn:conditionalEventDefinition id="ConditionalEventDefinition_0z87gtz" camunda:variableName="issueId">
         <bpmn:condition xsi:type="bpmn:tFormalExpression" language="groovy">def issueId = execution.getVariable("issueId")
 def implIssueId = execution.getVariable("implementationIssue")
 

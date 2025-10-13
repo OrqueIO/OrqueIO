@@ -33,7 +33,7 @@ import static org.assertj.core.api.Assertions.assertThat;
     classes = { ContainerBasedAuthTestApp.class },
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(properties = {
-    "orqueio.bpm.webapp.applicationPath=" + ChangedAppPathContainerBasedAuthIT.MY_APP_PATH
+    "camunda.bpm.webapp.applicationPath=" + ChangedAppPathContainerBasedAuthIT.MY_APP_PATH
 })
 public class ChangedAppPathContainerBasedAuthIT {
 

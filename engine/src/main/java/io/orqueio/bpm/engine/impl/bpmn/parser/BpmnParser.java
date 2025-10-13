@@ -49,7 +49,7 @@ public class BpmnParser extends Parser {
   /**
    * The namespace of the orqueio custom BPMN extensions.
    */
-  public static final String ORQUEIO_BPMN_EXTENSIONS_NS = "http://orqueio.io/schema/1.0/bpmn";
+  public static final String ORQUEIO_BPMN_EXTENSIONS_NS = "http://camunda.org/schema/1.0/bpmn";
 
   /**
    * The namespace of the Activiti custom BPMN extensions.

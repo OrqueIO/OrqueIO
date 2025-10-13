@@ -48,7 +48,7 @@ public class DmnModelInstanceTest {
     // given
     DmnModelInstance modelInstance = Dmn.createEmptyModel();
     Definitions definitions = modelInstance.newInstance(Definitions.class);
-    definitions.setNamespace("http://orqueio.io/schema/1.0/dmn");
+    definitions.setNamespace("http://camunda.org/schema/1.0/dmn");
     definitions.setName("definitions");
     definitions.setId("definitions");
     modelInstance.setDefinitions(definitions);

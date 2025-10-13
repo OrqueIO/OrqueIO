@@ -33,7 +33,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 public class TestApplication {
 
-  @ConditionalOnProperty(prefix = "orqueio.bpm", name = "process-engine-name", havingValue = "nojpaTestEngine")
+  @ConditionalOnProperty(prefix = "camunda.bpm", name = "process-engine-name", havingValue = "nojpaTestEngine")
   @Configuration
   public class TestConfiguration {
 
