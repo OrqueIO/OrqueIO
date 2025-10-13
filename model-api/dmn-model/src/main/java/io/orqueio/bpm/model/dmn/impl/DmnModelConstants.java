@@ -55,7 +55,7 @@ public final class DmnModelConstants {
   public static final String FEEL15_NS = "https://www.omg.org/spec/DMN/20230324/FEEL/";
 
   /** Orqueio namespace */
-  public static final String ORQUEIO_NS = "http://orqueio.io/schema/1.0/dmn";
+  public static final String CAMUNDA_NS = "http://camunda.org/schema/1.0/dmn";
 
   /** DMN element */
 
@@ -170,8 +170,8 @@ public final class DmnModelConstants {
 
   /** orqueio extensions */
 
-  public static final String ORQUEIO_ATTRIBUTE_INPUT_VARIABLE = "inputVariable";
-  public static final String ORQUEIO_ATTRIBUTE_HISTORY_TIME_TO_LIVE = "historyTimeToLive";
-  public static final String ORQUEIO_ATTRIBUTE_VERSION_TAG = "versionTag";
+  public static final String CAMUNDA_ATTRIBUTE_INPUT_VARIABLE = "inputVariable";
+  public static final String CAMUNDA_ATTRIBUTE_HISTORY_TIME_TO_LIVE = "historyTimeToLive";
+  public static final String CAMUNDA_ATTRIBUTE_VERSION_TAG = "versionTag";
 
 }

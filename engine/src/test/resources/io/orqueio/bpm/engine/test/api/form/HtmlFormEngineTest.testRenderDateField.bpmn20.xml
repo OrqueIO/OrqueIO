@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" 
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-    xmlns:orqueio="http://orqueio.io/schema/1.0/bpmn"
+    xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
     xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" 
     xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" 
     xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" 
@@ -13,19 +13,19 @@
 
     <startEvent id="start">
       <extensionElements>
-        <orqueio:formData>
-            <orqueio:formField 
+        <camunda:formData>
+            <camunda:formField
                 id="dateField" label="Date Field" type="date"
                 defaultValue="10/11/2014">
-            </orqueio:formField>
-            <orqueio:formField
+            </camunda:formField>
+            <camunda:formField
                 id="readOnlyDateField" label="Read Only Field" type="date"
                 defaultValue="12/12/2014">
-                <orqueio:validation>
-                  <orqueio:constraint name="readonly" />
-                </orqueio:validation>
-            </orqueio:formField>
-        </orqueio:formData>
+                <camunda:validation>
+                  <camunda:constraint name="readonly" />
+                </camunda:validation>
+            </camunda:formField>
+        </camunda:formData>
       </extensionElements>
     </startEvent>
 

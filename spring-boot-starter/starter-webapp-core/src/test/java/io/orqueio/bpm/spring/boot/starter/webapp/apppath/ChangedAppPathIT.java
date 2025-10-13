@@ -42,7 +42,7 @@ import static io.orqueio.bpm.webapp.impl.security.filter.headersec.provider.impl
     classes = { WebappTestApp.class },
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(properties = {
-    "orqueio.bpm.webapp.applicationPath=" + ChangedAppPathIT.MY_APP_PATH
+    "camunda.bpm.webapp.applicationPath=" + ChangedAppPathIT.MY_APP_PATH
 })
 public class ChangedAppPathIT {
 

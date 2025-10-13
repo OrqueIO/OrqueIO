@@ -839,7 +839,7 @@ public class InputOutputTest extends PluggableProcessEngineTest {
       fail("exception expected");
     } catch (ParseException e) {
       // happy path
-      testRule.assertTextPresent("orqueio:inputOutput mapping unsupported for element type 'subProcess' with attribute 'triggeredByEvent = true'", e.getMessage());
+      testRule.assertTextPresent("camunda:inputOutput mapping unsupported for element type 'subProcess' with attribute 'triggeredByEvent = true'", e.getMessage());
       assertThat(e.getResorceReports().get(0).getErrors().get(0).getMainElementId()).isEqualTo("SubProcess_1");
     }
   }
@@ -1022,7 +1022,7 @@ public class InputOutputTest extends PluggableProcessEngineTest {
       .deploy();
       fail("Exception expected");
     } catch (ParseException e) {
-      testRule.assertTextPresent("orqueio:outputParameter not allowed for multi-instance constructs", e.getMessage());
+      testRule.assertTextPresent("camunda:outputParameter not allowed for multi-instance constructs", e.getMessage());
       assertThat(e.getResorceReports().get(0).getErrors().get(0).getMainElementId()).isEqualTo("miTask");
     }
 

@@ -58,3 +58,6 @@ To run the tests in this repository, please see our [testing tips and tricks](TE
 ## License
 
 The source files in this repository are made available under the [Apache License Version 2.0](./LICENSE).
+
+Camunda is a registered trademark of Camunda Services GmbH.
+OrqueIO is an independent project, not affiliated with, authorized by, or sponsored by Camunda Services GmbH.

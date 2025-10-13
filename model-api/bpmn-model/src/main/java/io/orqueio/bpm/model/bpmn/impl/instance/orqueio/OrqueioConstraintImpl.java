@@ -37,20 +37,20 @@ public class OrqueioConstraintImpl extends BpmnModelElementInstanceImpl implemen
   protected static Attribute<String> orqueioConfigAttribute;
 
   public static void registerType(ModelBuilder modelBuilder) {
-    ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(OrqueioConstraint.class, ORQUEIO_ELEMENT_CONSTRAINT)
-      .namespaceUri(ORQUEIO_NS)
+    ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(OrqueioConstraint.class, CAMUNDA_ELEMENT_CONSTRAINT)
+      .namespaceUri(CAMUNDA_NS)
       .instanceProvider(new ModelTypeInstanceProvider<OrqueioConstraint>() {
         public OrqueioConstraint newInstance(ModelTypeInstanceContext instanceContext) {
           return new OrqueioConstraintImpl(instanceContext);
         }
       });
 
-    orqueioNameAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_NAME)
-      .namespace(ORQUEIO_NS)
+    orqueioNameAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_NAME)
+      .namespace(CAMUNDA_NS)
       .build();
 
-    orqueioConfigAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_CONFIG)
-      .namespace(ORQUEIO_NS)
+    orqueioConfigAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_CONFIG)
+      .namespace(CAMUNDA_NS)
       .build();
 
     typeBuilder.build();

@@ -1225,7 +1225,7 @@ public class BpmnParse extends Parse {
   }
 
   /**
-   * Sets the value for "orqueio:errorCodeVariable" on the passed definition if
+   * Sets the value for "camunda:errorCodeVariable" on the passed definition if
    * it's present.
    *
    * @param errorEventDefinition
@@ -1241,7 +1241,7 @@ public class BpmnParse extends Parse {
   }
 
   /**
-   * Sets the value for "orqueio:errorMessageVariable" on the passed definition if
+   * Sets the value for "camunda:errorMessageVariable" on the passed definition if
    * it's present.
    *
    * @param errorEventDefinition
@@ -2255,8 +2255,8 @@ public class BpmnParse extends Parse {
   /**
    * @param elementName
    * @param serviceTaskElement the element that contains the orqueio service task definition
-   *   (e.g. orqueio:class attributes)
-   * @param orqueioPropertiesElement the element that contains the orqueio:properties extension elements
+   *   (e.g. camunda:class attributes)
+   * @param orqueioPropertiesElement the element that contains the camunda:properties extension elements
    *   that apply to this service task. Usually, but not always, this is the same as serviceTaskElement
    * @param scope
    * @return
@@ -4830,12 +4830,12 @@ public class BpmnParse extends Parse {
         || tagName.equals("transaction")
         || tagName.equals("subProcess")
         || tagName.equals("callActivity"))) {
-      addError("orqueio:inputOutput mapping unsupported for element type '" + tagName + "'.", activityElement);
+      addError("camunda:inputOutput mapping unsupported for element type '" + tagName + "'.", activityElement);
       return false;
     }
 
     if (tagName.equals("subProcess") && TRUE.equals(activityElement.attribute("triggeredByEvent"))) {
-      addError("orqueio:inputOutput mapping unsupported for element type '" + tagName + "' with attribute 'triggeredByEvent = true'.", activityElement);
+      addError("camunda:inputOutput mapping unsupported for element type '" + tagName + "' with attribute 'triggeredByEvent = true'.", activityElement);
       return false;
     }
 
@@ -4850,10 +4850,10 @@ public class BpmnParse extends Parse {
     String tagName = activityElement.getTagName();
 
     if (tagName.equals("endEvent")) {
-      addError("orqueio:outputParameter not allowed for element type '" + tagName + "'.", activityElement);
+      addError("camunda:outputParameter not allowed for element type '" + tagName + "'.", activityElement);
       return true;
     } else if (getMultiInstanceScope(activity) != null) {
-      addError("orqueio:outputParameter not allowed for multi-instance constructs", activityElement);
+      addError("camunda:outputParameter not allowed for multi-instance constructs", activityElement);
       return false;
     } else {
       return true;
@@ -4863,7 +4863,7 @@ public class BpmnParse extends Parse {
   protected void ensureNoIoMappingDefined(Element element) {
     Element inputOutput = findOrqueioExtensionElement(element, "inputOutput");
     if (inputOutput != null) {
-      addError("orqueio:inputOutput mapping unsupported for element type '" + element.getTagName() + "'.", element);
+      addError("camunda:inputOutput mapping unsupported for element type '" + element.getTagName() + "'.", element);
     }
   }
 

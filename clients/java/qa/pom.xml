@@ -14,7 +14,7 @@
   <parent>
     <groupId>io.orqueio.bpm</groupId>
     <artifactId>orqueio-external-task-client-root</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
   </parent>
 
   <modules>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cam="http://orqueio.io/schema/1.0/bpmn"
-             xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:orqueio="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:signavio="http://www.signavio.com" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd" id="sid-0b0aaa25-3baf-4875-9d7a-0907d599a9ef" exporter="Signavio Process Editor, http://www.signavio.com" exporterVersion="5.4.1" targetNamespace="http://www.omg.org/spec/BPMN/20100524/MODEL">
+<definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cam="http://camunda.org/schema/1.0/bpmn"
+             xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:camunda="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:signavio="http://www.signavio.com" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd" id="sid-0b0aaa25-3baf-4875-9d7a-0907d599a9ef" exporter="Signavio Process Editor, http://www.signavio.com" exporterVersion="5.4.1" targetNamespace="http://www.omg.org/spec/BPMN/20100524/MODEL">
   <dataStore id="FinancialAccountingSystem" isUnlimited="false" name="Financial Accounting System">
     <dataState id="DataState_1"/>
   </dataStore>
@@ -27,7 +27,7 @@
         <flowNodeRef>invoiceProcessed</flowNodeRef>
       </lane>
     </laneSet>
-    <userTask id="approveInvoice" orqueio:formKey="app:develop/invoice/approve.html" orqueio:expression="${true}" name="approve invoice" orqueio:candidateGroups="management">
+    <userTask id="approveInvoice" camunda:formKey="app:develop/invoice/approve.html" camunda:expression="${true}" name="approve invoice" camunda:candidateGroups="management">
       <incoming>sequenceFlow_178</incoming>
       <incoming>reviewSuccessful</incoming>
       <outgoing>sequenceFlow_180</outgoing>
@@ -39,47 +39,47 @@
     </exclusiveGateway>
     <startEvent id="invoiceReceived" name="invoice received">
       <extensionElements>
-        <orqueio:formData>
-            <orqueio:formField
+        <camunda:formData>
+            <camunda:formField
                 id="readonly" label="Readonly" type="string" defaultValue="read only value">
-                <orqueio:validation>
-                   <orqueio:constraint name="readonly" />
-                </orqueio:validation>
-            </orqueio:formField>
-            <orqueio:formField
+                <camunda:validation>
+                   <camunda:constraint name="readonly" />
+                </camunda:validation>
+            </camunda:formField>
+            <camunda:formField
                 id="firstname" label="Firstname" type="string">
-                <orqueio:validation>
-                   <orqueio:constraint name="maxlength" config="25" />
-                   <orqueio:constraint name="required" />
-                </orqueio:validation>
-            </orqueio:formField>
-            <orqueio:formField
+                <camunda:validation>
+                   <camunda:constraint name="maxlength" config="25" />
+                   <camunda:constraint name="required" />
+                </camunda:validation>
+            </camunda:formField>
+            <camunda:formField
                 id="lastname" label="Lastname" type="string">
-                <orqueio:validation>
-                   <orqueio:constraint name="maxlength" config="25" />
-                   <orqueio:constraint name="required" />
-                </orqueio:validation>
-            </orqueio:formField>
-            <orqueio:formField
+                <camunda:validation>
+                   <camunda:constraint name="maxlength" config="25" />
+                   <camunda:constraint name="required" />
+                </camunda:validation>
+            </camunda:formField>
+            <camunda:formField
                 id="dateOfBirth" label="Date of Birth" type="date" defaultValue="10/12/2014">
-                <orqueio:validation>
-                   <orqueio:constraint name="readonly" />
-                </orqueio:validation>
-            </orqueio:formField>
-            <orqueio:formField
+                <camunda:validation>
+                   <camunda:constraint name="readonly" />
+                </camunda:validation>
+            </camunda:formField>
+            <camunda:formField
                 id="enumField" label="Enum Field" type="enum"
                 defaultValue="a">
-                <orqueio:value id="a" name="A"/>
-                <orqueio:value id="b" name="B"/>
-                <orqueio:value id="c" name="C"/>
-              </orqueio:formField>
-              <orqueio:formField id="boolField" label="Bool Field" type="boolean"/>
-        </orqueio:formData>
+                <camunda:value id="a" name="A"/>
+                <camunda:value id="b" name="B"/>
+                <camunda:value id="c" name="C"/>
+              </camunda:formField>
+              <camunda:formField id="boolField" label="Bool Field" type="boolean"/>
+        </camunda:formData>
       </extensionElements>
       <outgoing>sequenceFlow_187</outgoing>
       <messageEventDefinition id="messageEventDefinition_30" messageRef="foxMessage_en"/>
     </startEvent>
-    <userTask id="reviewInvoice" orqueio:expression="${true}" name="review invoice">
+    <userTask id="reviewInvoice" camunda:expression="${true}" name="review invoice">
       <incoming>invoiceNotApproved</incoming>
       <outgoing>sequenceFlow_183</outgoing>
     </userTask>
@@ -91,11 +91,11 @@
     <endEvent id="invoiceNotProcessed" name="invoice not processed">
       <incoming>reviewNotSuccessful</incoming>
     </endEvent>
-    <serviceTask id="saveInvoiceToSVN" orqueio:expression="${true}" name="save invoice to SVN">
+    <serviceTask id="saveInvoiceToSVN" camunda:expression="${true}" name="save invoice to SVN">
       <incoming>sequenceFlow_179</incoming>
       <outgoing>SequenceFlow_1</outgoing>
     </serviceTask>
-    <userTask id="prepareBankTransfer" orqueio:expression="${true}" name="prepare bank transfer">
+    <userTask id="prepareBankTransfer" camunda:expression="${true}" name="prepare bank transfer">
       <incoming>invoiceApproved</incoming>
       <outgoing>sequenceFlow_179</outgoing>
     </userTask>
@@ -120,34 +120,34 @@
     <endEvent id="invoiceProcessed" name="invoice processed">
       <incoming>SequenceFlow_1</incoming>
     </endEvent>
-    <userTask id="assignApprover" orqueio:candidateGroups="management" name="assign approver">
+    <userTask id="assignApprover" camunda:candidateGroups="management" name="assign approver">
       <extensionElements>
-        <orqueio:formData>
-            <orqueio:formField
+        <camunda:formData>
+            <camunda:formField
                 id="firstname" label="Firstname" type="string">
-                <orqueio:validation>
-                   <orqueio:constraint name="maxlength" config="25" />
-                   <orqueio:constraint name="readonly" />
-                </orqueio:validation>
-            </orqueio:formField>
-            <orqueio:formField
+                <camunda:validation>
+                   <camunda:constraint name="maxlength" config="25" />
+                   <camunda:constraint name="readonly" />
+                </camunda:validation>
+            </camunda:formField>
+            <camunda:formField
                 id="lastname" label="Lastname" type="string">
-                <orqueio:validation>
-                   <orqueio:constraint name="maxlength" config="25" />
-                   <orqueio:constraint name="required" />
-                </orqueio:validation>
-            </orqueio:formField>
-            <orqueio:formField
+                <camunda:validation>
+                   <camunda:constraint name="maxlength" config="25" />
+                   <camunda:constraint name="required" />
+                </camunda:validation>
+            </camunda:formField>
+            <camunda:formField
                 id="dateOfBirth" label="Date of Birth" type="date" defaultValue="10/12/2014" />
-            <orqueio:formField
+            <camunda:formField
                 id="enumField" label="Enum Field" type="enum"
                 defaultValue="a">
-                <orqueio:value id="a" name="A"/>
-                <orqueio:value id="b" name="B"/>
-                <orqueio:value id="c" name="C"/>
-              </orqueio:formField>
-              <orqueio:formField id="boolField" label="Bool Field" type="boolean"/>
-        </orqueio:formData>
+                <camunda:value id="a" name="A"/>
+                <camunda:value id="b" name="B"/>
+                <camunda:value id="c" name="C"/>
+              </camunda:formField>
+              <camunda:formField id="boolField" label="Bool Field" type="boolean"/>
+        </camunda:formData>
       </extensionElements>
       <incoming>sequenceFlow_187</incoming>
       <outgoing>sequenceFlow_178</outgoing>

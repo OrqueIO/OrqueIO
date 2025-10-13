@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:orqueio="http://orqueio.io/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_0cv21hf" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Orqueio Modeler" exporterVersion="4.0.0-alpha.3">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_0cv21hf" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Orqueio Modeler" exporterVersion="4.0.0-alpha.3">
   <bpmn:process id="oneExternalTaskWithNestedErrorEventDefinition" isExecutable="true">
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>Flow_0h3dhqj</bpmn:outgoing>
     </bpmn:startEvent>
     <bpmn:sequenceFlow id="Flow_0h3dhqj" sourceRef="StartEvent_1" targetRef="Activity_0vvwq4z" />
-    <bpmn:serviceTask id="Activity_0vvwq4z" orqueio:type="external" orqueio:topic="externalTaskTopic">
+    <bpmn:serviceTask id="Activity_0vvwq4z" camunda:type="external" camunda:topic="externalTaskTopic">
       <bpmn:extensionElements>
-        <orqueio:inputOutput>
-          <orqueio:outputParameter name="a">${a}</orqueio:outputParameter>
-          <orqueio:outputParameter name="b">${b}</orqueio:outputParameter>
-        </orqueio:inputOutput>
-        <orqueio:errorEventDefinition id="OrqueioErrorEventDefinition_A" errorRef="Error_A" expression="${a}" />
-        <orqueio:errorEventDefinition id="OrqueioErrorEventDefinition_B" errorRef="Error_B" expression="${b}" />
+        <camunda:inputOutput>
+          <camunda:outputParameter name="a">${a}</camunda:outputParameter>
+          <camunda:outputParameter name="b">${b}</camunda:outputParameter>
+        </camunda:inputOutput>
+        <camunda:errorEventDefinition id="OrqueioErrorEventDefinition_A" errorRef="Error_A" expression="${a}" />
+        <camunda:errorEventDefinition id="OrqueioErrorEventDefinition_B" errorRef="Error_B" expression="${b}" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0h3dhqj</bpmn:incoming>
       <bpmn:outgoing>Flow_0a7f6ee</bpmn:outgoing>

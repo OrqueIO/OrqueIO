@@ -16,12 +16,12 @@
  */
 package io.orqueio.bpm.model.cmmn.impl.instance;
 
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ATTRIBUTE_DECISION_BINDING;
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ATTRIBUTE_DECISION_VERSION;
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ATTRIBUTE_DECISION_TENANT_ID;
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ATTRIBUTE_MAP_DECISION_RESULT;
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ATTRIBUTE_RESULT_VARIABLE;
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_NS;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_DECISION_BINDING;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_DECISION_VERSION;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_DECISION_TENANT_ID;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_MAP_DECISION_RESULT;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_RESULT_VARIABLE;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_NS;
 import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CMMN11_NS;
 import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CMMN_ATTRIBUTE_DECISION_REF;
 import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CMMN_ELEMENT_DECISION_TASK;
@@ -140,24 +140,24 @@ public class DecisionTaskImpl extends TaskImpl implements DecisionTask {
 
     /** Orqueio extensions */
 
-    orqueioResultVariableAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_RESULT_VARIABLE)
-      .namespace(ORQUEIO_NS)
+    orqueioResultVariableAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_RESULT_VARIABLE)
+      .namespace(CAMUNDA_NS)
       .build();
 
-    orqueioDecisionBindingAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_DECISION_BINDING)
-      .namespace(ORQUEIO_NS)
+    orqueioDecisionBindingAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_DECISION_BINDING)
+      .namespace(CAMUNDA_NS)
       .build();
 
-    orqueioDecisionVersionAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_DECISION_VERSION)
-      .namespace(ORQUEIO_NS)
+    orqueioDecisionVersionAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_DECISION_VERSION)
+      .namespace(CAMUNDA_NS)
       .build();
 
-    orqueioDecisionTenantIdAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_DECISION_TENANT_ID)
-        .namespace(ORQUEIO_NS)
+    orqueioDecisionTenantIdAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_DECISION_TENANT_ID)
+        .namespace(CAMUNDA_NS)
         .build();
 
-    orqueioMapDecisionResultAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_MAP_DECISION_RESULT)
-      .namespace(ORQUEIO_NS)
+    orqueioMapDecisionResultAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_MAP_DECISION_RESULT)
+      .namespace(CAMUNDA_NS)
       .build();
 
     SequenceBuilder sequenceBuilder = typeBuilder.sequence();

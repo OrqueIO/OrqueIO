@@ -1,1 +1,1 @@
-orqueio.bpm.run.cors.enabled: true
+camunda.bpm.run.cors.enabled: true

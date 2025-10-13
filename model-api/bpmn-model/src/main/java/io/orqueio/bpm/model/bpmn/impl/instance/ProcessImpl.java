@@ -21,14 +21,14 @@ import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ATTRIBUTE_I
 import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ATTRIBUTE_IS_EXECUTABLE;
 import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ATTRIBUTE_PROCESS_TYPE;
 import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ELEMENT_PROCESS;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ATTRIBUTE_CANDIDATE_STARTER_GROUPS;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ATTRIBUTE_CANDIDATE_STARTER_USERS;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ATTRIBUTE_HISTORY_TIME_TO_LIVE;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ATTRIBUTE_IS_STARTABLE_IN_TASKLIST;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ATTRIBUTE_JOB_PRIORITY;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ATTRIBUTE_TASK_PRIORITY;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ATTRIBUTE_VERSION_TAG;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_NS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_CANDIDATE_STARTER_GROUPS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_CANDIDATE_STARTER_USERS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_HISTORY_TIME_TO_LIVE;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_IS_STARTABLE_IN_TASKLIST;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_JOB_PRIORITY;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_TASK_PRIORITY;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_VERSION_TAG;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
 
 import java.util.Collection;
 import java.util.List;
@@ -145,33 +145,33 @@ public class ProcessImpl extends CallableElementImpl implements Process {
 
     /** orqueio extensions */
 
-    orqueioCandidateStarterGroupsAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_CANDIDATE_STARTER_GROUPS)
-      .namespace(ORQUEIO_NS)
+    orqueioCandidateStarterGroupsAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_CANDIDATE_STARTER_GROUPS)
+      .namespace(CAMUNDA_NS)
       .build();
 
-    orqueioCandidateStarterUsersAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_CANDIDATE_STARTER_USERS)
-      .namespace(ORQUEIO_NS)
+    orqueioCandidateStarterUsersAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_CANDIDATE_STARTER_USERS)
+      .namespace(CAMUNDA_NS)
       .build();
 
-    orqueioJobPriorityAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_JOB_PRIORITY)
-      .namespace(ORQUEIO_NS)
+    orqueioJobPriorityAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_JOB_PRIORITY)
+      .namespace(CAMUNDA_NS)
       .build();
 
-    orqueioTaskPriorityAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_TASK_PRIORITY)
-      .namespace(ORQUEIO_NS)
+    orqueioTaskPriorityAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_TASK_PRIORITY)
+      .namespace(CAMUNDA_NS)
       .build();
 
-    orqueioHistoryTimeToLiveAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_HISTORY_TIME_TO_LIVE)
-      .namespace(ORQUEIO_NS)
+    orqueioHistoryTimeToLiveAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_HISTORY_TIME_TO_LIVE)
+      .namespace(CAMUNDA_NS)
       .build();
 
-    orqueioIsStartableInTasklistAttribute = typeBuilder.booleanAttribute(ORQUEIO_ATTRIBUTE_IS_STARTABLE_IN_TASKLIST)
+    orqueioIsStartableInTasklistAttribute = typeBuilder.booleanAttribute(CAMUNDA_ATTRIBUTE_IS_STARTABLE_IN_TASKLIST)
       .defaultValue(true)
-      .namespace(ORQUEIO_NS)
+      .namespace(CAMUNDA_NS)
       .build();
 
-    orqueioVersionTagAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_VERSION_TAG)
-      .namespace(ORQUEIO_NS)
+    orqueioVersionTagAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_VERSION_TAG)
+      .namespace(CAMUNDA_NS)
       .build();
 
     typeBuilder.build();

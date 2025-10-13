@@ -802,7 +802,7 @@ public class BpmnParseTest {
     try {
       String resource = TestHelper.getBpmnProcessDefinitionResource(getClass(), "testNoOrqueioInSourceThrowsError");
       repositoryService.createDeployment().name(resource).addClasspathResource(resource).deploy();
-      fail("Process orqueio:in extension element should contain source!");
+      fail("Process camunda:in extension element should contain source!");
     } catch (ParseException e) {
       testRule.assertTextPresent("Missing parameter 'source' or 'sourceExpression' when passing variables", e.getMessage());
       testRule.assertTextPresent("Missing attribute 'target' when attribute 'source' or 'sourceExpression' is set", e.getMessage());
@@ -830,7 +830,7 @@ public class BpmnParseTest {
     try {
       String resource = TestHelper.getBpmnProcessDefinitionResource(getClass(), "testEmptyOrqueioInSourceThrowsError");
       repositoryService.createDeployment().name(resource).addClasspathResource(resource).deploy();
-      fail("Process orqueio:in extension element should contain source!");
+      fail("Process camunda:in extension element should contain source!");
     } catch (ParseException e) {
       testRule.assertTextPresent("Empty attribute 'source' when passing variables", e.getMessage());
       testRule.assertTextPresent("Missing attribute 'target' when attribute 'source' or 'sourceExpression' is set", e.getMessage());
@@ -858,7 +858,7 @@ public class BpmnParseTest {
     try {
       String resource = TestHelper.getBpmnProcessDefinitionResource(getClass(), "testNoOrqueioInTargetThrowsError");
       repositoryService.createDeployment().name(resource).addClasspathResource(resource).deploy();
-      fail("Process orqueio:in extension element should contain target!");
+      fail("Process camunda:in extension element should contain target!");
     } catch (ParseException e) {
       testRule.assertTextPresent("Missing attribute 'target' when attribute 'source' or 'sourceExpression' is set", e.getMessage());
       assertErrors(e.getResorceReports().get(0).getErrors(), "callActivity");
@@ -872,7 +872,7 @@ public class BpmnParseTest {
 
       String resource = TestHelper.getBpmnProcessDefinitionResource(getClass(), "testNoOrqueioInTargetThrowsError");
       repositoryService.createDeployment().name(resource).addClasspathResource(resource).deploy();
-      fail("Process orqueio:in extension element should contain target!");
+      fail("Process camunda:in extension element should contain target!");
     } catch (ParseException e) {
       testRule.assertTextPresent("Missing attribute 'target' when attribute 'source' or 'sourceExpression' is set", e.getMessage());
       assertErrors(e.getResorceReports().get(0).getErrors(), "callActivity");
@@ -886,7 +886,7 @@ public class BpmnParseTest {
     try {
       String resource = TestHelper.getBpmnProcessDefinitionResource(getClass(), "testEmptyOrqueioInTargetThrowsError");
       repositoryService.createDeployment().name(resource).addClasspathResource(resource).deploy();
-      fail("Process orqueio:in extension element should contain target!");
+      fail("Process camunda:in extension element should contain target!");
     } catch (ParseException e) {
       testRule.assertTextPresent("Empty attribute 'target' when attribute 'source' or 'sourceExpression' is set", e.getMessage());
       assertErrors(e.getResorceReports().get(0).getErrors(), "callActivity");
@@ -910,7 +910,7 @@ public class BpmnParseTest {
     try {
       String resource = TestHelper.getBpmnProcessDefinitionResource(getClass(), "testNoOrqueioOutSourceThrowsError");
       repositoryService.createDeployment().name(resource).addClasspathResource(resource).deploy();
-      fail("Process orqueio:out extension element should contain source!");
+      fail("Process camunda:out extension element should contain source!");
     } catch (ParseException e) {
       testRule.assertTextPresent("Missing parameter 'source' or 'sourceExpression' when passing variables", e.getMessage());
       testRule.assertTextPresent("Missing attribute 'target' when attribute 'source' or 'sourceExpression' is set", e.getMessage());
@@ -938,7 +938,7 @@ public class BpmnParseTest {
     try {
       String resource = TestHelper.getBpmnProcessDefinitionResource(getClass(), "testEmptyOrqueioOutSourceThrowsError");
       repositoryService.createDeployment().name(resource).addClasspathResource(resource).deploy();
-      fail("Process orqueio:out extension element should contain source!");
+      fail("Process camunda:out extension element should contain source!");
     } catch (ParseException e) {
       testRule.assertTextPresent("Empty attribute 'source' when passing variables", e.getMessage());
       testRule.assertTextPresent("Missing attribute 'target' when attribute 'source' or 'sourceExpression' is set", e.getMessage());
@@ -966,7 +966,7 @@ public class BpmnParseTest {
     try {
       String resource = TestHelper.getBpmnProcessDefinitionResource(getClass(), "testNoOrqueioOutTargetThrowsError");
       repositoryService.createDeployment().name(resource).addClasspathResource(resource).deploy();
-      fail("Process orqueio:out extension element should contain target!");
+      fail("Process camunda:out extension element should contain target!");
     } catch (ParseException e) {
       testRule.assertTextPresent("Missing attribute 'target' when attribute 'source' or 'sourceExpression' is set", e.getMessage());
       assertErrors(e.getResorceReports().get(0).getErrors(), "callActivity");
@@ -980,7 +980,7 @@ public class BpmnParseTest {
 
       String resource = TestHelper.getBpmnProcessDefinitionResource(getClass(), "testNoOrqueioOutTargetThrowsError");
       repositoryService.createDeployment().name(resource).addClasspathResource(resource).deploy();
-      fail("Process orqueio:out extension element should contain target!");
+      fail("Process camunda:out extension element should contain target!");
     } catch (ParseException e) {
       testRule.assertTextPresent("Missing attribute 'target' when attribute 'source' or 'sourceExpression' is set", e.getMessage());
       assertErrors(e.getResorceReports().get(0).getErrors(), "callActivity");
@@ -994,7 +994,7 @@ public class BpmnParseTest {
     try {
       String resource = TestHelper.getBpmnProcessDefinitionResource(getClass(), "testEmptyOrqueioOutTargetThrowsError");
       repositoryService.createDeployment().name(resource).addClasspathResource(resource).deploy();
-      fail("Process orqueio:out extension element should contain target!");
+      fail("Process camunda:out extension element should contain target!");
     } catch (ParseException e) {
       testRule.assertTextPresent("Empty attribute 'target' when attribute 'source' or 'sourceExpression' is set", e.getMessage());
       assertErrors(e.getResorceReports().get(0).getErrors(), "callActivity");
@@ -1309,7 +1309,7 @@ public class BpmnParseTest {
       String timerWithoutDetails = "<?xml version='1.0' encoding='UTF-8'?>" +
           "<definitions xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'" +
           "  xmlns='http://www.omg.org/spec/BPMN/20100524/MODEL'" +
-          "  xmlns:orqueio='http://orqueio.io/schema/1.0/bpmn'" +
+          "  xmlns:camunda='http://camunda.org/schema/1.0/bpmn'" +
           "  targetNamespace='Examples'>" +
           "  <process id='process' isExecutable='true'>" +
           "    <startEvent id='start'>" +
@@ -1333,7 +1333,7 @@ public class BpmnParseTest {
       String incorrectSequenceFlow = "<?xml version='1.0' encoding='UTF-8'?>" +
           "<definitions xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'" +
           "  xmlns='http://www.omg.org/spec/BPMN/20100524/MODEL'" +
-          "  xmlns:orqueio='http://orqueio.io/schema/1.0/bpmn'" +
+          "  xmlns:camunda='http://camunda.org/schema/1.0/bpmn'" +
           "  targetNamespace='Examples'>" +
           "  <process id='process' isExecutable='true'>" +
           "    <startEvent id='start'/>" +

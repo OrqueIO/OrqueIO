@@ -131,8 +131,8 @@ public class CaseImpl extends CmmnElementImpl implements Case {
     nameAttribute = typeBuilder.stringAttribute(CMMN_ATTRIBUTE_NAME)
         .build();
 
-    orqueioHistoryTimeToLive = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_HISTORY_TIME_TO_LIVE)
-        .namespace(ORQUEIO_NS)
+    orqueioHistoryTimeToLive = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_HISTORY_TIME_TO_LIVE)
+        .namespace(CAMUNDA_NS)
         .build();
 
     SequenceBuilder sequenceBuilder = typeBuilder.sequence();

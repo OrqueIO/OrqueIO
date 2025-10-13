@@ -56,7 +56,7 @@ public class ErrorImpl extends RootElementImpl implements Error {
     errorCodeAttribute = typeBuilder.stringAttribute(BPMN_ATTRIBUTE_ERROR_CODE)
       .build();
 
-    orqueioErrorMessageAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_ERROR_MESSAGE).namespace(ORQUEIO_NS)
+    orqueioErrorMessageAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_ERROR_MESSAGE).namespace(CAMUNDA_NS)
         .build();
 
     structureRefAttribute = typeBuilder.stringAttribute(BPMN_ATTRIBUTE_STRUCTURE_REF)

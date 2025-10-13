@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:orqueio="http://orqueio.io/schema/1.0/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn">
   <bpmn:process id="testProcess" isExecutable="true">
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>SequenceFlow_1hadnq8</bpmn:outgoing>
@@ -11,7 +11,7 @@
     <bpmn:sequenceFlow id="SequenceFlow_0wt1g9p" sourceRef="UserTask_14hvx2r" targetRef="EndEvent_1uyztcd" />
     <bpmn:userTask id="UserTask_14hvx2r" name="task">
       <bpmn:extensionElements>
-        <orqueio:taskListener class="io.orqueio.bpm.engine.test.api.delegate.AssertingTaskListener" event="create" />
+        <camunda:taskListener class="io.orqueio.bpm.engine.test.api.delegate.AssertingTaskListener" event="create" />
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_1hadnq8</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0wt1g9p</bpmn:outgoing>

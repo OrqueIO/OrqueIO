@@ -59,9 +59,9 @@ import static io.orqueio.bpm.model.bpmn.BpmnTestConstants.TEST_USERS_LIST_XML;
 import static io.orqueio.bpm.model.bpmn.BpmnTestConstants.TEST_USERS_XML;
 import static io.orqueio.bpm.model.bpmn.BpmnTestConstants.USER_TASK_ID;
 import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ACTIVITI_NS;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ATTRIBUTE_ERROR_CODE_VARIABLE;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ATTRIBUTE_ERROR_MESSAGE_VARIABLE;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_NS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_ERROR_CODE_VARIABLE;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_ERROR_MESSAGE_VARIABLE;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -145,7 +145,7 @@ public class OrqueioExtensionsTest {
   @Parameters(name="Namespace: {0}")
   public static Collection<Object[]> parameters(){
     return Arrays.asList(new Object[][]{
-        {ORQUEIO_NS, Bpmn.readModelFromStream(OrqueioExtensionsTest.class.getResourceAsStream("OrqueioExtensionsTest.xml"))},
+        {CAMUNDA_NS, Bpmn.readModelFromStream(OrqueioExtensionsTest.class.getResourceAsStream("OrqueioExtensionsTest.xml"))},
         //for compatability reasons we gotta check the old namespace, too
         {ACTIVITI_NS, Bpmn.readModelFromStream(OrqueioExtensionsTest.class.getResourceAsStream("OrqueioExtensionsCompatabilityTest.xml"))}
     });
@@ -458,13 +458,13 @@ public class OrqueioExtensionsTest {
   @Test
   public void testErrorCodeVariable(){
     ErrorEventDefinition errorEventDefinition = startEvent.getChildElementsByType(ErrorEventDefinition.class).iterator().next();
-    assertThat(errorEventDefinition.getAttributeValueNs(namespace, ORQUEIO_ATTRIBUTE_ERROR_CODE_VARIABLE)).isEqualTo("errorVariable");
+    assertThat(errorEventDefinition.getAttributeValueNs(namespace, CAMUNDA_ATTRIBUTE_ERROR_CODE_VARIABLE)).isEqualTo("errorVariable");
   }
 
   @Test
   public void testErrorMessageVariable(){
     ErrorEventDefinition errorEventDefinition = startEvent.getChildElementsByType(ErrorEventDefinition.class).iterator().next();
-    assertThat(errorEventDefinition.getAttributeValueNs(namespace, ORQUEIO_ATTRIBUTE_ERROR_MESSAGE_VARIABLE)).isEqualTo("errorMessageVariable");
+    assertThat(errorEventDefinition.getAttributeValueNs(namespace, CAMUNDA_ATTRIBUTE_ERROR_MESSAGE_VARIABLE)).isEqualTo("errorMessageVariable");
   }
 
   @Test
@@ -979,7 +979,7 @@ public class OrqueioExtensionsTest {
     OrqueioInputParameter inputParameter = findInputParameterByName(serviceTask, "shouldBeList");
     assertThat(inputParameter.getOrqueioName()).isEqualTo("shouldBeList");
     assertThat(inputParameter.getTextContent()).isNotEmpty();
-    assertThat(inputParameter.getUniqueChildElementByNameNs(ORQUEIO_NS, "list")).isNotNull();
+    assertThat(inputParameter.getUniqueChildElementByNameNs(CAMUNDA_NS, "list")).isNotNull();
 
     OrqueioList list = inputParameter.getValue();
     assertThat(list.getValues()).hasSize(3);
@@ -1053,7 +1053,7 @@ public class OrqueioExtensionsTest {
     OrqueioInputParameter inputParameter = findInputParameterByName(serviceTask, "shouldBeMap");
     assertThat(inputParameter.getOrqueioName()).isEqualTo("shouldBeMap");
     assertThat(inputParameter.getTextContent()).isNotEmpty();
-    assertThat(inputParameter.getUniqueChildElementByNameNs(ORQUEIO_NS, "map")).isNotNull();
+    assertThat(inputParameter.getUniqueChildElementByNameNs(CAMUNDA_NS, "map")).isNotNull();
 
     OrqueioMap map = inputParameter.getValue();
     assertThat(map.getOrqueioEntries()).hasSize(2);
@@ -1093,7 +1093,7 @@ public class OrqueioExtensionsTest {
     OrqueioInputParameter inputParameter = findInputParameterByName(serviceTask, "shouldBeScript");
     assertThat(inputParameter.getOrqueioName()).isEqualTo("shouldBeScript");
     assertThat(inputParameter.getTextContent()).isNotEmpty();
-    assertThat(inputParameter.getUniqueChildElementByNameNs(ORQUEIO_NS, "script")).isNotNull();
+    assertThat(inputParameter.getUniqueChildElementByNameNs(CAMUNDA_NS, "script")).isNotNull();
     assertThat(inputParameter.getUniqueChildElementByType(OrqueioScript.class)).isNotNull();
 
     OrqueioScript script = inputParameter.getValue();
@@ -1168,7 +1168,7 @@ public class OrqueioExtensionsTest {
         return orqueioInputParameter;
       }
     }
-    throw new BpmnModelException("Unable to find orqueio:inputParameter with name '" + name + "' for element with id '" + baseElement.getId() + "'");
+    throw new BpmnModelException("Unable to find camunda:inputParameter with name '" + name + "' for element with id '" + baseElement.getId() + "'");
   }
 
   @After

@@ -16,7 +16,7 @@
  */
 package io.orqueio.bpm.model.cmmn.instance;
 
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_NS;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_NS;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -41,9 +41,9 @@ public class CaseTaskTest extends CmmnModelElementInstanceTest {
   public Collection<AttributeAssumption> getAttributesAssumptions() {
     return Arrays.asList(
           new AttributeAssumption("caseRef"),
-          new AttributeAssumption(ORQUEIO_NS, "caseBinding"),
-          new AttributeAssumption(ORQUEIO_NS, "caseVersion"),
-          new AttributeAssumption(ORQUEIO_NS, "caseTenantId")
+          new AttributeAssumption(CAMUNDA_NS, "caseBinding"),
+          new AttributeAssumption(CAMUNDA_NS, "caseVersion"),
+          new AttributeAssumption(CAMUNDA_NS, "caseTenantId")
         );
   }
 }

@@ -32,7 +32,7 @@ public class BpmPlatformXmlParser extends Parser {
   /**
    * The Orqueio Platform namespace
    */
-  public static final String BPM_PLATFORM_NS = "http://www.orqueio.io/schema/1.0/BpmPlatform";
+  public static final String BPM_PLATFORM_NS = "http://www.camunda.org/schema/1.0/BpmPlatform";
 
   /**
    * The location of the XSD file in the classpath.

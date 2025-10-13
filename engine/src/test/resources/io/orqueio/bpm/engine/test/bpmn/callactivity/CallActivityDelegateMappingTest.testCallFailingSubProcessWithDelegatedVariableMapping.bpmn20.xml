@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions id="definitions"
              xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
-             xmlns:orqueio="http://orqueio.io/schema/1.0/bpmn"
+             xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
              targetNamespace="Examples">
 
 
@@ -11,15 +11,15 @@
 
     <sequenceFlow id="flow1" sourceRef="theStart" targetRef="callSubProcess" />
 
-    <callActivity id="callSubProcess" calledElement="failingSubProcess" orqueio:variableMappingClass="io.orqueio.bpm.engine.test.bpmn.callactivity.DelegatedVarMapping" />
+    <callActivity id="callSubProcess" calledElement="failingSubProcess" camunda:variableMappingClass="io.orqueio.bpm.engine.test.bpmn.callactivity.DelegatedVarMapping" />
 
     <sequenceFlow id="flow4" sourceRef="callSubProcess" targetRef="theEnd" />
 
     <endEvent id="theEnd" />
 
     <boundaryEvent id="catchError" attachedToRef="callSubProcess">
-      <errorEventDefinition orqueio:errorCodeVariable="myErrorVariable"
-                            orqueio:errorMessageVariable="myErrorMessageVariable" />
+      <errorEventDefinition camunda:errorCodeVariable="myErrorVariable"
+                            camunda:errorMessageVariable="myErrorMessageVariable" />
     </boundaryEvent>
 
     <sequenceFlow id="flow3" sourceRef="catchError" targetRef="taskAfterSubProcess" />

@@ -16,9 +16,9 @@
  */
 package io.orqueio.bpm.model.cmmn.impl.instance.orqueio;
 
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ATTRIBUTE_VARIABLE_NAME;
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_ELEMENT_VARIABLE_ON_PART;
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_NS;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ATTRIBUTE_VARIABLE_NAME;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_ELEMENT_VARIABLE_ON_PART;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_NS;
 
 import io.orqueio.bpm.model.cmmn.VariableTransition;
 import io.orqueio.bpm.model.cmmn.impl.instance.CmmnModelElementInstanceImpl;
@@ -43,16 +43,16 @@ public class OrqueioVariableOnPartImpl extends CmmnModelElementInstanceImpl impl
 
   public static void registerType(ModelBuilder modelBuilder) {
 
-    ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(OrqueioVariableOnPart.class, ORQUEIO_ELEMENT_VARIABLE_ON_PART)
-      .namespaceUri(ORQUEIO_NS)
+    ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(OrqueioVariableOnPart.class, CAMUNDA_ELEMENT_VARIABLE_ON_PART)
+      .namespaceUri(CAMUNDA_NS)
       .instanceProvider(new ModelTypeInstanceProvider<OrqueioVariableOnPart>() {
         public OrqueioVariableOnPart newInstance(ModelTypeInstanceContext instanceContext) {
           return new OrqueioVariableOnPartImpl(instanceContext);
       }
     });
 
-    orqueioVariableNameAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_VARIABLE_NAME)
-      .namespace(ORQUEIO_NS)
+    orqueioVariableNameAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_VARIABLE_NAME)
+      .namespace(CAMUNDA_NS)
       .build();
 
     SequenceBuilder sequenceBuilder = typeBuilder.sequence();

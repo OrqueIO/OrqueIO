@@ -37,9 +37,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = { FilterTestApp.class }, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(properties = {
-  "orqueio.bpm.admin-user.id=demo",
-  "orqueio.bpm.admin-user.password=demo",
-  "orqueio.bpm.webapp.auth.cache.time-to-live=0"
+  "camunda.bpm.admin-user.id=demo",
+  "camunda.bpm.admin-user.password=demo",
+  "camunda.bpm.webapp.auth.cache.time-to-live=0"
 })
 @DirtiesContext
 public class AuthCacheTTLValidateAllRequestsIT {

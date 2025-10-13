@@ -24,7 +24,7 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import java.util.HashMap;
 import java.util.Map;
 
-@ConfigurationProperties(prefix = "orqueio.bpm.client")
+@ConfigurationProperties(prefix = "camunda.bpm.client")
 public class ClientProperties extends ClientConfiguration {
 
   @NestedConfigurationProperty

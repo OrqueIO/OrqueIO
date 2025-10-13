@@ -91,7 +91,7 @@ public class OrqueioBpmConfiguration {
 
   @Bean
   @ConditionalOnMissingBean(OrqueioJobConfiguration.class)
-  @ConditionalOnProperty(prefix = "orqueio.bpm.job-execution", name = "enabled", havingValue = "true", matchIfMissing = true)
+  @ConditionalOnProperty(prefix = "camunda.bpm.job-execution", name = "enabled", havingValue = "true", matchIfMissing = true)
   public static OrqueioJobConfiguration orqueioJobConfiguration() {
     return new DefaultJobConfiguration();
   }
@@ -111,7 +111,7 @@ public class OrqueioBpmConfiguration {
   //TODO to be removed within CAM-8108
   @Bean(name = "historyLevelAutoConfiguration")
   @ConditionalOnMissingBean(OrqueioHistoryLevelAutoHandlingConfiguration.class)
-  @ConditionalOnProperty(prefix = "orqueio.bpm", name = "history-level", havingValue = "auto", matchIfMissing = false)
+  @ConditionalOnProperty(prefix = "camunda.bpm", name = "history-level", havingValue = "auto", matchIfMissing = false)
   @Conditional(NeedsHistoryAutoConfigurationCondition.class)
   public static OrqueioHistoryLevelAutoHandlingConfiguration historyLevelAutoHandlingConfiguration() {
     return new DefaultHistoryLevelAutoHandlingConfiguration();
@@ -152,7 +152,7 @@ public class OrqueioBpmConfiguration {
   }
 
   @Bean
-  @ConditionalOnProperty(prefix = "orqueio.bpm.admin-user", name = "id")
+  @ConditionalOnProperty(prefix = "camunda.bpm.admin-user", name = "id")
   public CreateAdminUserConfiguration createAdminUserConfiguration() {
     return new CreateAdminUserConfiguration();
   }
@@ -164,7 +164,7 @@ public class OrqueioBpmConfiguration {
   }
 
   @Bean
-  @ConditionalOnProperty(prefix = "orqueio.bpm.filter", name = "create")
+  @ConditionalOnProperty(prefix = "camunda.bpm.filter", name = "create")
   public CreateFilterConfiguration createFilterConfiguration() {
     return new CreateFilterConfiguration();
   }

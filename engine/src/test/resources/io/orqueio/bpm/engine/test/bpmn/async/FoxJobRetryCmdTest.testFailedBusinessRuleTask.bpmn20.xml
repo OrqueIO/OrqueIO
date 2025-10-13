@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions id="definitions"
 	xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
-	xmlns:orqueio="http://orqueio.io/schema/1.0/bpmn"
+	xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
 	xmlns:fox="http://www.orqueio.com/fox"
 	targetNamespace="Examples">
 
@@ -11,8 +11,8 @@
 		<sequenceFlow id="flow1" sourceRef="theStart" targetRef="failingBusinessRuleTask" />
 		
 		<businessRuleTask id="failingBusinessRuleTask" name="business rule task" 
-						  orqueio:class="io.orqueio.bpm.engine.test.cmd.FailingDelegate"
-						  orqueio:async="true">
+						  camunda:class="io.orqueio.bpm.engine.test.cmd.FailingDelegate"
+						  camunda:async="true">
  		<extensionElements>
 	       		<fox:failedJobRetryTimeCycle>R5/PT5M</fox:failedJobRetryTimeCycle>
 	       	</extensionElements>

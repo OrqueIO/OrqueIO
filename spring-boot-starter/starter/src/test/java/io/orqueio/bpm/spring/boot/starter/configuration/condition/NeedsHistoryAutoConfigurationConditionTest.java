@@ -51,7 +51,7 @@ public class NeedsHistoryAutoConfigurationConditionTest {
     ConditionContext context = mock(ConditionContext.class);
     Environment environment = mock(Environment.class);
     when(context.getEnvironment()).thenReturn(environment);
-    when(environment.getProperty("orqueio.bpm.history-level")).thenReturn(NeedsHistoryAutoConfigurationCondition.HISTORY_AUTO);
+    when(environment.getProperty("camunda.bpm.history-level")).thenReturn(NeedsHistoryAutoConfigurationCondition.HISTORY_AUTO);
     when(condition.isHistoryAutoSupported()).thenReturn(true);
     assertFalse(condition.needsAdditionalConfiguration(context));
   }
@@ -62,7 +62,7 @@ public class NeedsHistoryAutoConfigurationConditionTest {
     ConditionContext context = mock(ConditionContext.class);
     Environment environment = mock(Environment.class);
     when(context.getEnvironment()).thenReturn(environment);
-    when(environment.getProperty("orqueio.bpm.history-level")).thenReturn(NeedsHistoryAutoConfigurationCondition.HISTORY_AUTO);
+    when(environment.getProperty("camunda.bpm.history-level")).thenReturn(NeedsHistoryAutoConfigurationCondition.HISTORY_AUTO);
     when(condition.isHistoryAutoSupported()).thenReturn(false);
     assertTrue(condition.needsAdditionalConfiguration(context));
   }
@@ -73,7 +73,7 @@ public class NeedsHistoryAutoConfigurationConditionTest {
     ConditionContext context = mock(ConditionContext.class);
     Environment environment = mock(Environment.class);
     when(context.getEnvironment()).thenReturn(environment);
-    when(environment.getProperty("orqueio.bpm.history-level")).thenReturn(NeedsHistoryAutoConfigurationCondition.HISTORY_AUTO);
+    when(environment.getProperty("camunda.bpm.history-level")).thenReturn(NeedsHistoryAutoConfigurationCondition.HISTORY_AUTO);
     when(condition.needsAdditionalConfiguration(context)).thenReturn(true);
     assertTrue(condition.getMatchOutcome(context, null).isMatch());
   }
@@ -84,7 +84,7 @@ public class NeedsHistoryAutoConfigurationConditionTest {
     ConditionContext context = mock(ConditionContext.class);
     Environment environment = mock(Environment.class);
     when(context.getEnvironment()).thenReturn(environment);
-    when(environment.getProperty("orqueio.bpm.history-level")).thenReturn(NeedsHistoryAutoConfigurationCondition.HISTORY_AUTO);
+    when(environment.getProperty("camunda.bpm.history-level")).thenReturn(NeedsHistoryAutoConfigurationCondition.HISTORY_AUTO);
     when(condition.needsAdditionalConfiguration(context)).thenReturn(false);
     assertFalse(condition.getMatchOutcome(context, null).isMatch());
   }

@@ -76,7 +76,7 @@ public class ErrorEndEventTest {
   @Test
   @Deployment
   public void testErrorMessage() {
-    // given a process definition including an error with orqueio:errorMessage property
+    // given a process definition including an error with camunda:errorMessage property
     ProcessInstance instance = runtimeService.startProcessInstanceByKey("testErrorMessage");
 
     // when
@@ -91,7 +91,7 @@ public class ErrorEndEventTest {
   @Test
   @Deployment
   public void testErrorMessageExpression() {
-    // given a process definition including an error with orqueio:errorMessage property with an expression value
+    // given a process definition including an error with camunda:errorMessage property with an expression value
     String errorMessage = "This is the error message indicating what went wrong.";
     Map<String, Object> initialVariables = new HashMap<>();
     initialVariables.put("errorMessageExpression", errorMessage);
