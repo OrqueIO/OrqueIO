@@ -1,4 +1,4 @@
-orqueio.bpm.run.process-engine-plugins:
+camunda.bpm.run.process-engine-plugins:
   - plugin-class: io.orqueio.spin.plugin.impl.SpinProcessEnginePlugin
     plugin-parameters:
       enableXxeProcessing: true

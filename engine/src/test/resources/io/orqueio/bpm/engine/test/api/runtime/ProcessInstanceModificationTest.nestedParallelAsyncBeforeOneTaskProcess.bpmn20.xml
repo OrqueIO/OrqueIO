@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions
   xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
-  xmlns:orqueio="http://orqueio.io/schema/1.0/bpmn"
+  xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
   targetNamespace="io.orqueio.bpm.engine.test.enginge.test.api.runtime">
 
   <process id="nestedOneTaskProcess" isExecutable="true">
@@ -19,7 +19,7 @@
     <subProcess id="subProcess">
       <startEvent id="subProcessStart" />
       <sequenceFlow id="flow5" sourceRef="subProcessStart" targetRef="innerTask" />
-      <userTask id="innerTask" orqueio:asyncBefore="true"/>    
+      <userTask id="innerTask" camunda:asyncBefore="true"/>
       <sequenceFlow id="flow6" sourceRef="innerTask" targetRef="subProcessEnd" />
       <endEvent id="subProcessEnd" />
     </subProcess>

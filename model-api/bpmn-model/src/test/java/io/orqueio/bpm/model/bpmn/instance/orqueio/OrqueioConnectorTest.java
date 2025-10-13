@@ -16,7 +16,7 @@
  */
 package io.orqueio.bpm.model.bpmn.instance.orqueio;
 
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_NS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -26,13 +26,13 @@ import io.orqueio.bpm.model.bpmn.instance.BpmnModelElementInstanceTest;
 public class OrqueioConnectorTest extends BpmnModelElementInstanceTest {
 
   public TypeAssumption getTypeAssumption() {
-    return new TypeAssumption(ORQUEIO_NS, false);
+    return new TypeAssumption(CAMUNDA_NS, false);
   }
 
   public Collection<ChildElementAssumption> getChildElementAssumptions() {
     return Arrays.asList(
-      new ChildElementAssumption(ORQUEIO_NS, OrqueioConnectorId.class, 1, 1),
-      new ChildElementAssumption(ORQUEIO_NS, OrqueioInputOutput.class, 0, 1)
+      new ChildElementAssumption(CAMUNDA_NS, OrqueioConnectorId.class, 1, 1),
+      new ChildElementAssumption(CAMUNDA_NS, OrqueioInputOutput.class, 0, 1)
     );
   }
 

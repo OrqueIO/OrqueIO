@@ -16,7 +16,7 @@
  */
 package io.orqueio.bpm.model.bpmn.instance;
 
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_NS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
 
 import org.junit.Test;
 
@@ -30,8 +30,8 @@ public class ErrorEventDefinitionTest extends AbstractEventDefinitionTest {
   public Collection<AttributeAssumption> getAttributesAssumptions() {
     return Arrays.asList(
       new AttributeAssumption("errorRef"),
-      new AttributeAssumption(ORQUEIO_NS, "errorCodeVariable"),
-      new AttributeAssumption(ORQUEIO_NS, "errorMessageVariable")
+      new AttributeAssumption(CAMUNDA_NS, "errorCodeVariable"),
+      new AttributeAssumption(CAMUNDA_NS, "errorMessageVariable")
     );
   }
 

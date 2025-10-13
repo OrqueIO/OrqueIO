@@ -31,12 +31,12 @@ import io.orqueio.bpm.model.xml.type.child.ChildElement;
 import io.orqueio.bpm.model.xml.type.child.ChildElementCollection;
 import io.orqueio.bpm.model.xml.type.child.SequenceBuilder;
 
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ATTRIBUTE_CLASS;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ATTRIBUTE_DELEGATE_EXPRESSION;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ATTRIBUTE_EVENT;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ATTRIBUTE_EXPRESSION;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ELEMENT_TASK_LISTENER;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_NS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_CLASS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_DELEGATE_EXPRESSION;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_EVENT;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_EXPRESSION;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ELEMENT_TASK_LISTENER;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
 import static io.orqueio.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
@@ -55,28 +55,28 @@ public class OrqueioTaskListenerImpl extends BpmnModelElementInstanceImpl implem
   protected static ChildElementCollection<TimerEventDefinition> timeoutCollection;
 
   public static void registerType(ModelBuilder modelBuilder) {
-    ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(OrqueioTaskListener.class, ORQUEIO_ELEMENT_TASK_LISTENER)
-      .namespaceUri(ORQUEIO_NS)
+    ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(OrqueioTaskListener.class, CAMUNDA_ELEMENT_TASK_LISTENER)
+      .namespaceUri(CAMUNDA_NS)
       .instanceProvider(new ModelTypeInstanceProvider<OrqueioTaskListener>() {
         public OrqueioTaskListener newInstance(ModelTypeInstanceContext instanceContext) {
           return new OrqueioTaskListenerImpl(instanceContext);
         }
       });
 
-    orqueioEventAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_EVENT)
-      .namespace(ORQUEIO_NS)
+    orqueioEventAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_EVENT)
+      .namespace(CAMUNDA_NS)
       .build();
 
-    orqueioClassAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_CLASS)
-      .namespace(ORQUEIO_NS)
+    orqueioClassAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_CLASS)
+      .namespace(CAMUNDA_NS)
       .build();
 
-    orqueioExpressionAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_EXPRESSION)
-      .namespace(ORQUEIO_NS)
+    orqueioExpressionAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_EXPRESSION)
+      .namespace(CAMUNDA_NS)
       .build();
 
-    orqueioDelegateExpressionAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_DELEGATE_EXPRESSION)
-      .namespace(ORQUEIO_NS)
+    orqueioDelegateExpressionAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_DELEGATE_EXPRESSION)
+      .namespace(CAMUNDA_NS)
       .build();
 
     SequenceBuilder sequenceBuilder = typeBuilder.sequence();

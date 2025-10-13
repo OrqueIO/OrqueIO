@@ -30,7 +30,7 @@ public abstract class AbstractSignalEventDefinitionBuilder<B extends AbstractSig
   }
 
   /**
-   * Sets a "orqueio:in" parameter to pass a variable from the signal-throwing
+   * Sets a "camunda:in" parameter to pass a variable from the signal-throwing
    * process instance to the signal-catching process instance
    *
    * @param source the name of the variable in the signal-throwing process instance
@@ -49,7 +49,7 @@ public abstract class AbstractSignalEventDefinitionBuilder<B extends AbstractSig
   }
 
   /**
-   * Sets a "orqueio:in" parameter to pass an expression from the signal-throwing
+   * Sets a "camunda:in" parameter to pass an expression from the signal-throwing
    * process instance to a variable in the signal-catching process instance
    *
    * @param sourceExpression the expression in the signal-throwing process instance
@@ -68,7 +68,7 @@ public abstract class AbstractSignalEventDefinitionBuilder<B extends AbstractSig
   }
 
   /**
-   * Sets a "orqueio:in" parameter to pass the business key from the signal-throwing
+   * Sets a "camunda:in" parameter to pass the business key from the signal-throwing
    * process instance to the signal-catching process instance
    *
    * @param businessKey the business key string or expression of the signal-throwing process instance
@@ -85,7 +85,7 @@ public abstract class AbstractSignalEventDefinitionBuilder<B extends AbstractSig
   }
 
   /**
-   * Sets a "orqueio:in" parameter to pass all the process variables of the
+   * Sets a "camunda:in" parameter to pass all the process variables of the
    * signal-throwing process instance to the signal-catching process instance
    *
    * @param variables a String flag to declare that all of the signal-throwing process-instance variables should be passed
@@ -107,7 +107,7 @@ public abstract class AbstractSignalEventDefinitionBuilder<B extends AbstractSig
   }
 
   /**
-   * Sets a "orqueio:in" parameter to pass all the process variables of the
+   * Sets a "camunda:in" parameter to pass all the process variables of the
    * signal-throwing process instance to the signal-catching process instance
    *
    * @param variables a String flag to declare that all of the signal-throwing process-instance variables should be passed

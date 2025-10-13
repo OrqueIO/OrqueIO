@@ -1,4 +1,4 @@
-orqueio.bpm.run.process-engine-plugins:
+ camunda.bpm.run.process-engine-plugins:
   - plugin-class: io.orqueio.bpm.run.test.plugins.TestFirstPlugin
     plugin-parameters:
       parameterOne: valueOne

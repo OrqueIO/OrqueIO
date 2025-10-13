@@ -63,33 +63,33 @@ public class StartEventImpl extends CatchEventImpl implements StartEvent {
 
     /** orqueio extensions */
 
-    orqueioAsyncAttribute = typeBuilder.booleanAttribute(ORQUEIO_ATTRIBUTE_ASYNC)
-      .namespace(ORQUEIO_NS)
+    orqueioAsyncAttribute = typeBuilder.booleanAttribute(CAMUNDA_ATTRIBUTE_ASYNC)
+      .namespace(CAMUNDA_NS)
       .defaultValue(false)
       .build();
 
-    orqueioFormHandlerClassAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_FORM_HANDLER_CLASS)
-      .namespace(ORQUEIO_NS)
+    orqueioFormHandlerClassAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_FORM_HANDLER_CLASS)
+      .namespace(CAMUNDA_NS)
       .build();
 
-    orqueioFormKeyAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_FORM_KEY)
-      .namespace(ORQUEIO_NS)
+    orqueioFormKeyAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_FORM_KEY)
+      .namespace(CAMUNDA_NS)
       .build();
 
-    orqueioFormRefAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_FORM_REF)
-        .namespace(ORQUEIO_NS)
+    orqueioFormRefAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_FORM_REF)
+        .namespace(CAMUNDA_NS)
         .build();
 
-    orqueioFormRefBindingAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_FORM_REF_BINDING)
-        .namespace(ORQUEIO_NS)
+    orqueioFormRefBindingAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_FORM_REF_BINDING)
+        .namespace(CAMUNDA_NS)
         .build();
 
-    orqueioFormRefVersionAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_FORM_REF_VERSION)
-        .namespace(ORQUEIO_NS)
+    orqueioFormRefVersionAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_FORM_REF_VERSION)
+        .namespace(CAMUNDA_NS)
         .build();
 
-    orqueioInitiatorAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_INITIATOR)
-      .namespace(ORQUEIO_NS)
+    orqueioInitiatorAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_INITIATOR)
+      .namespace(CAMUNDA_NS)
       .build();
 
     typeBuilder.build();

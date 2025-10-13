@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.Test;
 import org.springframework.test.context.TestPropertySource;
 
-@TestPropertySource(properties = {"orqueio.bpm.metrics.enabled=false", "orqueio.bpm.metrics.db-reporter-activate=false"})
+@TestPropertySource(properties = {"camunda.bpm.metrics.enabled=false", "camunda.bpm.metrics.db-reporter-activate=false"})
 public class MetricsPropertiesTest extends ParsePropertiesHelper {
 
   @Test

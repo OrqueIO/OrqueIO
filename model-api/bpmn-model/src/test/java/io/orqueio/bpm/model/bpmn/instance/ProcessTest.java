@@ -17,7 +17,7 @@
 package io.orqueio.bpm.model.bpmn.instance;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_NS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -58,13 +58,13 @@ public class ProcessTest extends BpmnModelElementInstanceTest {
       new AttributeAssumption("isExecutable"),
       // TODO: definitionalCollaborationRef
       /** orqueio extensions */
-      new AttributeAssumption(ORQUEIO_NS, "candidateStarterGroups"),
-      new AttributeAssumption(ORQUEIO_NS, "candidateStarterUsers"),
-      new AttributeAssumption(ORQUEIO_NS, "jobPriority"),
-      new AttributeAssumption(ORQUEIO_NS, "taskPriority"),
-      new AttributeAssumption(ORQUEIO_NS, "historyTimeToLive"),
-      new AttributeAssumption(ORQUEIO_NS, "isStartableInTasklist", false, false, true),
-      new AttributeAssumption(ORQUEIO_NS, "versionTag")
+      new AttributeAssumption(CAMUNDA_NS, "candidateStarterGroups"),
+      new AttributeAssumption(CAMUNDA_NS, "candidateStarterUsers"),
+      new AttributeAssumption(CAMUNDA_NS, "jobPriority"),
+      new AttributeAssumption(CAMUNDA_NS, "taskPriority"),
+      new AttributeAssumption(CAMUNDA_NS, "historyTimeToLive"),
+      new AttributeAssumption(CAMUNDA_NS, "isStartableInTasklist", false, false, true),
+      new AttributeAssumption(CAMUNDA_NS, "versionTag")
     );
   }
 

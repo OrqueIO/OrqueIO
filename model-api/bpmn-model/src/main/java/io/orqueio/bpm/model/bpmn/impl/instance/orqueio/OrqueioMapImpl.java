@@ -16,7 +16,7 @@
  */
 package io.orqueio.bpm.model.bpmn.impl.instance.orqueio;
 
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_NS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
 
 import java.util.Collection;
 
@@ -41,8 +41,8 @@ public class OrqueioMapImpl extends BpmnModelElementInstanceImpl implements Orqu
   protected static ChildElementCollection<OrqueioEntry> orqueioEntryCollection;
 
   public static void registerType(ModelBuilder modelBuilder) {
-    ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(OrqueioMap.class, BpmnModelConstants.ORQUEIO_ELEMENT_MAP)
-      .namespaceUri(ORQUEIO_NS)
+    ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(OrqueioMap.class, BpmnModelConstants.CAMUNDA_ELEMENT_MAP)
+      .namespaceUri(CAMUNDA_NS)
       .instanceProvider(new ModelTypeInstanceProvider<OrqueioMap>() {
         public OrqueioMap newInstance(ModelTypeInstanceContext instanceContext) {
           return new OrqueioMapImpl(instanceContext);

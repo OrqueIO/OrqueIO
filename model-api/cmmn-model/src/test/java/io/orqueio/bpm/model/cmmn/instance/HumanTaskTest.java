@@ -16,7 +16,7 @@
  */
 package io.orqueio.bpm.model.cmmn.instance;
 
-import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.ORQUEIO_NS;
+import static io.orqueio.bpm.model.cmmn.impl.CmmnModelConstants.CAMUNDA_NS;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -41,13 +41,13 @@ public class HumanTaskTest extends CmmnModelElementInstanceTest {
     return Arrays.asList(
           new AttributeAssumption("performerRef"),
           /** orqueio extensions */
-          new AttributeAssumption(ORQUEIO_NS, "assignee"),
-          new AttributeAssumption(ORQUEIO_NS, "candidateGroups"),
-          new AttributeAssumption(ORQUEIO_NS, "candidateUsers"),
-          new AttributeAssumption(ORQUEIO_NS, "dueDate"),
-          new AttributeAssumption(ORQUEIO_NS, "followUpDate"),
-          new AttributeAssumption(ORQUEIO_NS, "formKey"),
-          new AttributeAssumption(ORQUEIO_NS, "priority")
+          new AttributeAssumption(CAMUNDA_NS, "assignee"),
+          new AttributeAssumption(CAMUNDA_NS, "candidateGroups"),
+          new AttributeAssumption(CAMUNDA_NS, "candidateUsers"),
+          new AttributeAssumption(CAMUNDA_NS, "dueDate"),
+          new AttributeAssumption(CAMUNDA_NS, "followUpDate"),
+          new AttributeAssumption(CAMUNDA_NS, "formKey"),
+          new AttributeAssumption(CAMUNDA_NS, "priority")
         );
   }
 

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:orqueio="http://orqueio.io/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Orqueio Modeler" exporterVersion="1.11.3">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Orqueio Modeler" exporterVersion="1.11.3">
   <bpmn:process id="process" isExecutable="true">
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>SequenceFlow_1pbpft9</bpmn:outgoing>
     </bpmn:startEvent>
     <bpmn:sequenceFlow id="SequenceFlow_1pbpft9" sourceRef="StartEvent_1" targetRef="service" />
-    <bpmn:serviceTask id="service" orqueio:class="io.orqueio.bpm.engine.test.bpmn.gateway.SignalableBehavior">
+    <bpmn:serviceTask id="service" camunda:class="io.orqueio.bpm.engine.test.bpmn.gateway.SignalableBehavior">
       <bpmn:incoming>SequenceFlow_1pbpft9</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1sg58we</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -19,17 +19,17 @@
     </bpmn:boundaryEvent>
     <bpmn:sequenceFlow id="SequenceFlow_0s6o4jy" sourceRef="ExclusiveGateway_0pzh43g" targetRef="task1">
       <bpmn:extensionElements>
-        <orqueio:executionListener class="io.orqueio.bpm.engine.test.bpmn.gateway.SequenceFlowListener" event="take" />
+        <camunda:executionListener class="io.orqueio.bpm.engine.test.bpmn.gateway.SequenceFlowListener" event="take" />
       </bpmn:extensionElements>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_11t3cfk" sourceRef="ExclusiveGateway_0pzh43g" targetRef="task2">
       <bpmn:extensionElements>
-        <orqueio:executionListener class="io.orqueio.bpm.engine.test.bpmn.gateway.SequenceFlowListener" event="take" />
+        <camunda:executionListener class="io.orqueio.bpm.engine.test.bpmn.gateway.SequenceFlowListener" event="take" />
       </bpmn:extensionElements>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_1sg58we" sourceRef="service" targetRef="ExclusiveGateway_0pzh43g">
       <bpmn:extensionElements>
-        <orqueio:executionListener class="io.orqueio.bpm.engine.test.bpmn.gateway.SequenceFlowListener" event="take" />
+        <camunda:executionListener class="io.orqueio.bpm.engine.test.bpmn.gateway.SequenceFlowListener" event="take" />
       </bpmn:extensionElements>
     </bpmn:sequenceFlow>
     <bpmn:endEvent id="EndEvent_0swie5x">
@@ -58,7 +58,7 @@
     </bpmn:userTask>
     <bpmn:sequenceFlow id="SequenceFlow_0kys5fz" sourceRef="ExclusiveGateway_0pzh43g" targetRef="task3">
       <bpmn:extensionElements>
-        <orqueio:executionListener class="io.orqueio.bpm.engine.test.bpmn.gateway.SequenceFlowListener" event="take" />
+        <camunda:executionListener class="io.orqueio.bpm.engine.test.bpmn.gateway.SequenceFlowListener" event="take" />
       </bpmn:extensionElements>
     </bpmn:sequenceFlow>
     <bpmn:parallelGateway id="ExclusiveGateway_0pzh43g">

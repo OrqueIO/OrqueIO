@@ -19,21 +19,21 @@ package io.orqueio.bpm.model.bpmn.impl.instance;
 import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.BPMN20_NS;
 import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ATTRIBUTE_CALLED_ELEMENT;
 import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.BPMN_ELEMENT_CALL_ACTIVITY;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ATTRIBUTE_ASYNC;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ATTRIBUTE_CALLED_ELEMENT_BINDING;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ATTRIBUTE_CALLED_ELEMENT_TENANT_ID;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ATTRIBUTE_CALLED_ELEMENT_VERSION;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ATTRIBUTE_CALLED_ELEMENT_VERSION_TAG;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ATTRIBUTE_CASE_BINDING;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ATTRIBUTE_CASE_REF;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ATTRIBUTE_CASE_TENANT_ID;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ATTRIBUTE_CASE_VERSION;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_ASYNC;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_CALLED_ELEMENT_BINDING;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_CALLED_ELEMENT_TENANT_ID;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_CALLED_ELEMENT_VERSION;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_CALLED_ELEMENT_VERSION_TAG;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_CASE_BINDING;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_CASE_REF;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_CASE_TENANT_ID;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_CASE_VERSION;
 
 import io.orqueio.bpm.model.bpmn.BpmnModelInstance;
 import io.orqueio.bpm.model.bpmn.builder.CallActivityBuilder;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ATTRIBUTE_VARIABLE_MAPPING_CLASS;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ATTRIBUTE_VARIABLE_MAPPING_DELEGATE_EXPRESSION;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_NS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_VARIABLE_MAPPING_CLASS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ATTRIBUTE_VARIABLE_MAPPING_DELEGATE_EXPRESSION;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
 import io.orqueio.bpm.model.bpmn.instance.Activity;
 import io.orqueio.bpm.model.bpmn.instance.CallActivity;
 import io.orqueio.bpm.model.xml.ModelBuilder;
@@ -82,49 +82,49 @@ public class CallActivityImpl extends ActivityImpl implements CallActivity {
 
     /** orqueio extensions */
 
-    orqueioAsyncAttribute = typeBuilder.booleanAttribute(ORQUEIO_ATTRIBUTE_ASYNC)
-      .namespace(ORQUEIO_NS)
+    orqueioAsyncAttribute = typeBuilder.booleanAttribute(CAMUNDA_ATTRIBUTE_ASYNC)
+      .namespace(CAMUNDA_NS)
       .defaultValue(false)
       .build();
 
-    orqueioCalledElementBindingAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_CALLED_ELEMENT_BINDING)
-      .namespace(ORQUEIO_NS)
+    orqueioCalledElementBindingAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_CALLED_ELEMENT_BINDING)
+      .namespace(CAMUNDA_NS)
       .build();
 
-    orqueioCalledElementVersionAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_CALLED_ELEMENT_VERSION)
-      .namespace(ORQUEIO_NS)
+    orqueioCalledElementVersionAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_CALLED_ELEMENT_VERSION)
+      .namespace(CAMUNDA_NS)
       .build();
 
-    orqueioCalledElementVersionTagAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_CALLED_ELEMENT_VERSION_TAG)
-      .namespace(ORQUEIO_NS)
+    orqueioCalledElementVersionTagAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_CALLED_ELEMENT_VERSION_TAG)
+      .namespace(CAMUNDA_NS)
       .build();
 
-    orqueioCaseRefAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_CASE_REF)
-       .namespace(ORQUEIO_NS)
+    orqueioCaseRefAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_CASE_REF)
+       .namespace(CAMUNDA_NS)
        .build();
 
-    orqueioCaseBindingAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_CASE_BINDING)
-        .namespace(ORQUEIO_NS)
+    orqueioCaseBindingAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_CASE_BINDING)
+        .namespace(CAMUNDA_NS)
         .build();
 
-    orqueioCaseVersionAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_CASE_VERSION)
-        .namespace(ORQUEIO_NS)
+    orqueioCaseVersionAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_CASE_VERSION)
+        .namespace(CAMUNDA_NS)
         .build();
 
-    orqueioCalledElementTenantIdAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_CALLED_ELEMENT_TENANT_ID)
-        .namespace(ORQUEIO_NS)
+    orqueioCalledElementTenantIdAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_CALLED_ELEMENT_TENANT_ID)
+        .namespace(CAMUNDA_NS)
         .build();
 
-    orqueioCaseTenantIdAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_CASE_TENANT_ID)
-        .namespace(ORQUEIO_NS)
+    orqueioCaseTenantIdAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_CASE_TENANT_ID)
+        .namespace(CAMUNDA_NS)
         .build();
 
-    orqueioVariableMappingClassAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_VARIABLE_MAPPING_CLASS)
-      .namespace(ORQUEIO_NS)
+    orqueioVariableMappingClassAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_VARIABLE_MAPPING_CLASS)
+      .namespace(CAMUNDA_NS)
       .build();
 
-    orqueioVariableMappingDelegateExpressionAttribute = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_VARIABLE_MAPPING_DELEGATE_EXPRESSION)
-      .namespace(ORQUEIO_NS)
+    orqueioVariableMappingDelegateExpressionAttribute = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_VARIABLE_MAPPING_DELEGATE_EXPRESSION)
+      .namespace(CAMUNDA_NS)
       .build();
 
 

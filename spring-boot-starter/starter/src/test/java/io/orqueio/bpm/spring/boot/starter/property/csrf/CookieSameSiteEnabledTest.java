@@ -24,7 +24,7 @@ import org.springframework.test.context.TestPropertySource;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @TestPropertySource(properties = {
-  "orqueio.bpm.webapp.csrf.enableSameSiteCookie=true"
+  "camunda.bpm.webapp.csrf.enableSameSiteCookie=true"
 })
 public class CookieSameSiteEnabledTest extends ParsePropertiesHelper {
 

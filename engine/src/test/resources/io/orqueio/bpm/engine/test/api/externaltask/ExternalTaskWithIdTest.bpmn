@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:orqueio="http://orqueio.io/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Orqueio Modeler" exporterVersion="1.6.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Orqueio Modeler" exporterVersion="1.6.0">
   <bpmn:process id="Process_1" isExecutable="true">
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>SequenceFlow_0tyslkg</bpmn:outgoing>
@@ -12,7 +12,7 @@
     <bpmn:sequenceFlow id="SequenceFlow_1in6n7e" sourceRef="Task_05b8zv6" targetRef="EndEvent_1brkhj2" />
     <bpmn:endEvent id="EndEvent_1brkhj2">
       <bpmn:incoming>SequenceFlow_1in6n7e</bpmn:incoming>
-      <bpmn:messageEventDefinition id="MessageEvent_blaghng" orqueio:type="external" orqueio:topic="sdfsdf" />
+      <bpmn:messageEventDefinition id="MessageEvent_blaghng" camunda:type="external" camunda:topic="sdfsdf" />
     </bpmn:endEvent>
   </bpmn:process>
   <bpmn:message id="Message_1577kjv" name="Message_17n2ft9" />

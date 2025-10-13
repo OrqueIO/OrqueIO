@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:orqueio="http://orqueio.io/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Orqueio Modeler" exporterVersion="1.2.2">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Orqueio Modeler" exporterVersion="1.2.2">
   <bpmn:process id="process" isExecutable="true">
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>SequenceFlow_0ymvnxm</bpmn:outgoing>
@@ -10,7 +10,7 @@
       <bpmn:incoming>SequenceFlow_03t5ok6</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="SequenceFlow_03t5ok6" sourceRef="Task_1" targetRef="EndEvent_0lxn4mv" />
-    <bpmn:serviceTask id="Task_1bpsy6l" name="Set var = 1" orqueio:class="io.orqueio.bpm.engine.test.bpmn.event.conditional.SetVariableDelegate">
+    <bpmn:serviceTask id="Task_1bpsy6l" name="Set var = 1" camunda:class="io.orqueio.bpm.engine.test.bpmn.event.conditional.SetVariableDelegate">
       <bpmn:incoming>SequenceFlow_0ymvnxm</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1ste9vp</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -21,7 +21,7 @@
     <bpmn:subProcess id="SubProcess_0l7xpin" triggeredByEvent="true">
       <bpmn:startEvent id="StartEvent_0dcsa93" isInterrupting="false">
         <bpmn:outgoing>SequenceFlow_0bca2es</bpmn:outgoing>
-        <bpmn:conditionalEventDefinition orqueio:variableName="variable">
+        <bpmn:conditionalEventDefinition camunda:variableName="variable">
           <bpmn:condition xsi:type="bpmn:tFormalExpression">${variable == 1}</bpmn:condition>
         </bpmn:conditionalEventDefinition>
       </bpmn:startEvent>
@@ -35,7 +35,7 @@
         <bpmn:incoming>SequenceFlow_0fpxh8r</bpmn:incoming>
         <bpmn:outgoing>SequenceFlow_1o99nbn</bpmn:outgoing>
       </bpmn:userTask>
-      <bpmn:serviceTask id="Task_17xhxvc" name="Set var = 2 (3x)" orqueio:class="io.orqueio.bpm.engine.test.bpmn.event.conditional.SetMultipleSameVariableDelegate">
+      <bpmn:serviceTask id="Task_17xhxvc" name="Set var = 2 (3x)" camunda:class="io.orqueio.bpm.engine.test.bpmn.event.conditional.SetMultipleSameVariableDelegate">
         <bpmn:incoming>SequenceFlow_0bca2es</bpmn:incoming>
         <bpmn:outgoing>SequenceFlow_0fpxh8r</bpmn:outgoing>
       </bpmn:serviceTask>
@@ -52,7 +52,7 @@
       </bpmn:userTask>
       <bpmn:startEvent id="StartEvent_04f3ex0" isInterrupting="false">
         <bpmn:outgoing>SequenceFlow_0asf1vl</bpmn:outgoing>
-        <bpmn:conditionalEventDefinition orqueio:variableName="variable2">
+        <bpmn:conditionalEventDefinition camunda:variableName="variable2">
           <bpmn:condition xsi:type="bpmn:tFormalExpression">${variable2 == 1}</bpmn:condition>
         </bpmn:conditionalEventDefinition>
       </bpmn:startEvent>

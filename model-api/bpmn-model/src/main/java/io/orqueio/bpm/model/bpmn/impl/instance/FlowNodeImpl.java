@@ -72,23 +72,23 @@ public abstract class FlowNodeImpl extends FlowElementImpl implements FlowNode {
 
     /** Orqueio Attributes */
 
-    orqueioAsyncAfter = typeBuilder.booleanAttribute(ORQUEIO_ATTRIBUTE_ASYNC_AFTER)
-      .namespace(ORQUEIO_NS)
+    orqueioAsyncAfter = typeBuilder.booleanAttribute(CAMUNDA_ATTRIBUTE_ASYNC_AFTER)
+      .namespace(CAMUNDA_NS)
       .defaultValue(false)
       .build();
 
-    orqueioAsyncBefore = typeBuilder.booleanAttribute(ORQUEIO_ATTRIBUTE_ASYNC_BEFORE)
-      .namespace(ORQUEIO_NS)
+    orqueioAsyncBefore = typeBuilder.booleanAttribute(CAMUNDA_ATTRIBUTE_ASYNC_BEFORE)
+      .namespace(CAMUNDA_NS)
       .defaultValue(false)
       .build();
 
-    orqueioExclusive = typeBuilder.booleanAttribute(ORQUEIO_ATTRIBUTE_EXCLUSIVE)
-      .namespace(ORQUEIO_NS)
+    orqueioExclusive = typeBuilder.booleanAttribute(CAMUNDA_ATTRIBUTE_EXCLUSIVE)
+      .namespace(CAMUNDA_NS)
       .defaultValue(true)
       .build();
 
-    orqueioJobPriority = typeBuilder.stringAttribute(ORQUEIO_ATTRIBUTE_JOB_PRIORITY)
-       .namespace(ORQUEIO_NS)
+    orqueioJobPriority = typeBuilder.stringAttribute(CAMUNDA_ATTRIBUTE_JOB_PRIORITY)
+       .namespace(CAMUNDA_NS)
        .build();
 
     typeBuilder.build();

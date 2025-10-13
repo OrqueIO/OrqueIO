@@ -6,10 +6,10 @@
   <parent>
     <artifactId>orqueio-bpm-quarkus-parent</artifactId>
     <groupId>io.orqueio.bpm.quarkus</groupId>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
   </parent>
   <groupId>io.orqueio.bpm.quarkus</groupId>
-  <version>1.0.2</version>
+  <version>1.0.3</version>
   <description>orqueio-bpm-quarkus-engine-parent</description>
   <artifactId>orqueio-bpm-quarkus-engine-parent</artifactId>
 

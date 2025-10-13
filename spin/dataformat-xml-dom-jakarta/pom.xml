@@ -6,7 +6,7 @@
   <parent>
     <groupId>io.orqueio.spin</groupId>
     <artifactId>orqueio-spin-root</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
   </parent>
 
   <artifactId>orqueio-spin-dataformat-xml-dom-jakarta</artifactId>
@@ -25,7 +25,7 @@
     <dependency>
       <groupId>io.orqueio.commons</groupId>
       <artifactId>orqueio-commons-logging</artifactId>
-      <version>1.0.2</version>
+      <version>1.0.3</version>
     </dependency>
 
     <dependency>

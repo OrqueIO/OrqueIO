@@ -23,7 +23,7 @@ import org.springframework.test.context.TestPropertySource;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @TestPropertySource(properties = {
-    "orqueio.bpm.webapp.applicationPath=",
+    "camunda.bpm.webapp.applicationPath=",
 })
 public class WebAppPathPropertyEmptyTest extends ParsePropertiesHelper {
 

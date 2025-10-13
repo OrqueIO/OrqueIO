@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:orqueio="http://orqueio.io/schema/1.0/bpmn" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Orqueio Modeler" exporterVersion="1.8.2">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Orqueio Modeler" exporterVersion="1.8.2">
   <bpmn:process id="Process_1" name="Expression Parsing Error" isExecutable="true">
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>SequenceFlow_1urzyqn</bpmn:outgoing>
@@ -9,7 +9,7 @@
       <bpmn:incoming>SequenceFlow_00hqnyl</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="SequenceFlow_00hqnyl" sourceRef="Task_1p99tc1" targetRef="EndEvent_1dykugf" />
-    <bpmn:userTask id="Task_1p99tc1" name="Test Expression Parsing Error Message" orqueio:assignee="${currentUser()">
+    <bpmn:userTask id="Task_1p99tc1" name="Test Expression Parsing Error Message" camunda:assignee="${currentUser()">
       <bpmn:incoming>SequenceFlow_1urzyqn</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_00hqnyl</bpmn:outgoing>
     </bpmn:userTask>

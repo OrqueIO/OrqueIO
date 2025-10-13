@@ -24,7 +24,7 @@ import org.springframework.test.context.TestPropertySource;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @TestPropertySource(properties = {
-  "orqueio.bpm.webapp.csrf.enableSecureCookie=true"
+  "camunda.bpm.webapp.csrf.enableSecureCookie=true"
 })
 public class CookieSecureEnabledTest extends ParsePropertiesHelper {
 

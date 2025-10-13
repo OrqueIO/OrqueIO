@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <definitions id="definitions"
-             targetNamespace="http://orqueio.io/schema/1.0/bpmn20"
+             targetNamespace="http://camunda.org/schema/1.0/bpmn20"
              xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
-             xmlns:orqueio="http://orqueio.io/schema/1.0/bpmn">
+             xmlns:camunda="http://camunda.org/schema/1.0/bpmn">
   
   <process id="FormPropertyHandlingProcess" isExecutable="true">
   
     <startEvent id="start">
       <extensionElements>
-        <orqueio:formProperty id="speaker" variable="SpeakerName"/>
-        <orqueio:formProperty id="duration" type="long"/>
-        <orqueio:formProperty id="free" type="boolean" />
+        <camunda:formProperty id="speaker" variable="SpeakerName"/>
+        <camunda:formProperty id="duration" type="long"/>
+        <camunda:formProperty id="free" type="boolean" />
       </extensionElements>
     </startEvent>
 
     <sequenceFlow id="flow1" sourceRef="start" targetRef="task" />
     
     <userTask id="task"
-              orqueio:assignee="kermit">
+              camunda:assignee="kermit">
       <extensionElements>
-        <orqueio:formProperty id="room" />
-        <orqueio:formProperty id="duration" type="long"/>
-        <orqueio:formProperty id="speaker" variable="SpeakerName" writable="false" />
-        <orqueio:formProperty id="street" expression="#{address.street}" required="true" />
-        <orqueio:formProperty id="free" type="boolean"/>
+        <camunda:formProperty id="room" />
+        <camunda:formProperty id="duration" type="long"/>
+        <camunda:formProperty id="speaker" variable="SpeakerName" writable="false" />
+        <camunda:formProperty id="street" expression="#{address.street}" required="true" />
+        <camunda:formProperty id="free" type="boolean"/>
       </extensionElements>
     </userTask>
 

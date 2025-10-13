@@ -22,8 +22,8 @@ import io.orqueio.bpm.model.xml.ModelBuilder;
 import io.orqueio.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import io.orqueio.bpm.model.xml.type.ModelElementTypeBuilder;
 
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ELEMENT_EXPRESSION;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_NS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ELEMENT_EXPRESSION;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
 import static io.orqueio.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
@@ -34,8 +34,8 @@ import static io.orqueio.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeIns
 public class OrqueioExpressionImpl extends BpmnModelElementInstanceImpl implements OrqueioExpression {
 
   public static void registerType(ModelBuilder modelBuilder) {
-    ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(OrqueioExpression.class, ORQUEIO_ELEMENT_EXPRESSION)
-      .namespaceUri(ORQUEIO_NS)
+    ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(OrqueioExpression.class, CAMUNDA_ELEMENT_EXPRESSION)
+      .namespaceUri(CAMUNDA_NS)
       .instanceProvider(new ModelTypeInstanceProvider<OrqueioExpression>() {
         public OrqueioExpression newInstance(ModelTypeInstanceContext instanceContext) {
           return new OrqueioExpressionImpl(instanceContext);

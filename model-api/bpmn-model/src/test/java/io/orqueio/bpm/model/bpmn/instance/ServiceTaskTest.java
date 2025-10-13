@@ -21,7 +21,7 @@ import java.util.Collection;
 import static org.assertj.core.api.Assertions.assertThat;
 import io.orqueio.bpm.model.bpmn.BpmnTestConstants;
 
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_NS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
 import static io.orqueio.bpm.model.xml.test.AbstractModelElementInstanceTest.modelInstance;
 import org.junit.Test;
 
@@ -43,13 +43,13 @@ public class ServiceTaskTest extends BpmnModelElementInstanceTest {
       new AttributeAssumption("implementation", false, false, "##WebService"),
       new AttributeAssumption("operationRef"),
       /** orqueio extensions */
-      new AttributeAssumption(ORQUEIO_NS, "class"),
-      new AttributeAssumption(ORQUEIO_NS, "delegateExpression"),
-      new AttributeAssumption(ORQUEIO_NS, "expression"),
-      new AttributeAssumption(ORQUEIO_NS, "resultVariable"),
-      new AttributeAssumption(ORQUEIO_NS, "topic"),
-      new AttributeAssumption(ORQUEIO_NS, "type"),
-      new AttributeAssumption(ORQUEIO_NS, "taskPriority")
+      new AttributeAssumption(CAMUNDA_NS, "class"),
+      new AttributeAssumption(CAMUNDA_NS, "delegateExpression"),
+      new AttributeAssumption(CAMUNDA_NS, "expression"),
+      new AttributeAssumption(CAMUNDA_NS, "resultVariable"),
+      new AttributeAssumption(CAMUNDA_NS, "topic"),
+      new AttributeAssumption(CAMUNDA_NS, "type"),
+      new AttributeAssumption(CAMUNDA_NS, "taskPriority")
     );
   }
   

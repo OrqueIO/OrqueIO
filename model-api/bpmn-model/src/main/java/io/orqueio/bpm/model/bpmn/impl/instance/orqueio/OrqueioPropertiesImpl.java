@@ -27,8 +27,8 @@ import io.orqueio.bpm.model.xml.type.child.SequenceBuilder;
 
 import java.util.Collection;
 
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ELEMENT_PROPERTIES;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_NS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ELEMENT_PROPERTIES;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
 import static io.orqueio.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
@@ -41,8 +41,8 @@ public class OrqueioPropertiesImpl extends BpmnModelElementInstanceImpl implemen
   protected static ChildElementCollection<OrqueioProperty> orqueioPropertyCollection;
 
   public static void registerType(ModelBuilder modelBuilder) {
-    ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(OrqueioProperties.class, ORQUEIO_ELEMENT_PROPERTIES)
-      .namespaceUri(ORQUEIO_NS)
+    ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(OrqueioProperties.class, CAMUNDA_ELEMENT_PROPERTIES)
+      .namespaceUri(CAMUNDA_NS)
       .instanceProvider(new ModelTypeInstanceProvider<OrqueioProperties>() {
         public OrqueioProperties newInstance(ModelTypeInstanceContext instanceContext) {
           return new OrqueioPropertiesImpl(instanceContext);

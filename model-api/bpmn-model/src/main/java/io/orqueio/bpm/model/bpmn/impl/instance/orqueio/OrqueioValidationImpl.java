@@ -27,8 +27,8 @@ import io.orqueio.bpm.model.xml.type.child.SequenceBuilder;
 
 import java.util.Collection;
 
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ELEMENT_VALIDATION;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_NS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ELEMENT_VALIDATION;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
 import static io.orqueio.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
@@ -41,8 +41,8 @@ public class OrqueioValidationImpl extends BpmnModelElementInstanceImpl implemen
   protected static ChildElementCollection<OrqueioConstraint> orqueioConstraintCollection;
 
   public static void registerType(ModelBuilder modelBuilder) {
-    ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(OrqueioValidation.class, ORQUEIO_ELEMENT_VALIDATION)
-      .namespaceUri(ORQUEIO_NS)
+    ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(OrqueioValidation.class, CAMUNDA_ELEMENT_VALIDATION)
+      .namespaceUri(CAMUNDA_NS)
       .instanceProvider(new ModelTypeInstanceProvider<OrqueioValidation>() {
         public OrqueioValidation newInstance(ModelTypeInstanceContext instanceContext) {
           return new OrqueioValidationImpl(instanceContext);

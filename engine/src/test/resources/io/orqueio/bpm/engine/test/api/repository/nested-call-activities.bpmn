@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:orqueio="http://orqueio.io/schema/1.0/bpmn" xmlns:modeler="http://orqueio.io/schema/modeler/1.0" id="Definitions_0fq6hhw" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Orqueio Modeler" exporterVersion="4.8.0" modeler:executionPlatform="Orqueio Platform" modeler:executionPlatformVersion="7.15.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0fq6hhw" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Orqueio Modeler" exporterVersion="4.8.0" modeler:executionPlatform="Orqueio Platform" modeler:executionPlatformVersion="7.15.0">
   <bpmn:escalation id="Escalation_1ntnzkr" name="Escalation_11gl7ql" />
   <bpmn:collaboration id="Collaboration_133lzok">
     <bpmn:participant id="Participant_15inkfh" processRef="nested-call-activities" />
@@ -22,7 +22,7 @@
         <bpmn:loopCardinality xsi:type="bpmn:tFormalExpression">4</bpmn:loopCardinality>
       </bpmn:multiInstanceLoopCharacteristics>
     </bpmn:callActivity>
-    <bpmn:callActivity id="loop-marker-call-activity" name="Loop Marker Instance" calledElement="failingProcess" orqueio:variableMappingDelegateExpression="${&#39;4&#39;}">
+    <bpmn:callActivity id="loop-marker-call-activity" name="Loop Marker Instance" calledElement="failingProcess" camunda:variableMappingDelegateExpression="${&#39;4&#39;}">
       <bpmn:incoming>Flow_148kfpx</bpmn:incoming>
       <bpmn:outgoing>Flow_0p4dg9h</bpmn:outgoing>
       <bpmn:standardLoopCharacteristics />

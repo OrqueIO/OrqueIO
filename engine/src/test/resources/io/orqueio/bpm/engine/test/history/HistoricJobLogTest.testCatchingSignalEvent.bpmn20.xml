@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions id="definitions"
   xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
-  xmlns:orqueio="http://orqueio.io/schema/1.0/bpmn"
+  xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
   targetNamespace="Examples">
 
   <signal id="alertSignal" name="alert" />
@@ -18,7 +18,7 @@
 
     <sequenceFlow sourceRef="signalEvent" targetRef="serviceTask" />
 
-    <serviceTask id="serviceTask" orqueio:class="io.orqueio.bpm.engine.test.api.runtime.FailingDelegate" />
+    <serviceTask id="serviceTask" camunda:class="io.orqueio.bpm.engine.test.api.runtime.FailingDelegate" />
 
     <sequenceFlow sourceRef="serviceTask" targetRef="end" />
 

@@ -25,8 +25,8 @@ import io.orqueio.bpm.model.xml.type.ModelElementTypeBuilder;
 import io.orqueio.bpm.model.xml.type.child.ChildElement;
 import io.orqueio.bpm.model.xml.type.child.SequenceBuilder;
 
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_ELEMENT_POTENTIAL_STARTER;
-import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.ORQUEIO_NS;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_ELEMENT_POTENTIAL_STARTER;
+import static io.orqueio.bpm.model.bpmn.impl.BpmnModelConstants.CAMUNDA_NS;
 import static io.orqueio.bpm.model.xml.type.ModelElementTypeBuilder.ModelTypeInstanceProvider;
 
 /**
@@ -39,8 +39,8 @@ public class OrqueioPotentialStarterImpl extends BpmnModelElementInstanceImpl im
   protected static ChildElement<ResourceAssignmentExpression> resourceAssignmentExpressionChild;
 
   public static void registerType(ModelBuilder modelBuilder) {
-    ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(OrqueioPotentialStarter.class, ORQUEIO_ELEMENT_POTENTIAL_STARTER)
-      .namespaceUri(ORQUEIO_NS)
+    ModelElementTypeBuilder typeBuilder = modelBuilder.defineType(OrqueioPotentialStarter.class, CAMUNDA_ELEMENT_POTENTIAL_STARTER)
+      .namespaceUri(CAMUNDA_NS)
       .instanceProvider(new ModelTypeInstanceProvider<OrqueioPotentialStarter>() {
         public OrqueioPotentialStarter newInstance(ModelTypeInstanceContext instanceContext) {
           return new OrqueioPotentialStarterImpl(instanceContext);

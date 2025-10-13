@@ -41,7 +41,7 @@ public class DomTest extends TestModelTest {
 
   private static final String TEST_NS = "http://orqueio.io/test";
   private static final String UNKNOWN_NS = "http://orqueio.io/unknown";
-  private static final String ORQUEIO_NS = "http://activiti.org/bpmn";
+  private static final String CAMUNDA_NS = "http://activiti.org/bpmn";
   private static final String FOX_NS = "http://www.orqueio.io/fox";
   private static final String BPMN_NS = "http://www.omg.org/spec/BPMN/20100524/MODEL";
 
@@ -135,12 +135,12 @@ public class DomTest extends TestModelTest {
 
   @Test
   public void testKnownPrefix() {
-    document.registerNamespace(ORQUEIO_NS);
+    document.registerNamespace(CAMUNDA_NS);
     document.registerNamespace(FOX_NS);
 
     DomElement rootElement = document.getRootElement();
     assertThat(rootElement.hasAttribute(XMLNS_ATTRIBUTE_NS_URI, "orqueio")).isTrue();
-    assertThat(rootElement.getAttribute(XMLNS_ATTRIBUTE_NS_URI, "orqueio")).isEqualTo(ORQUEIO_NS);
+    assertThat(rootElement.getAttribute(XMLNS_ATTRIBUTE_NS_URI, "orqueio")).isEqualTo(CAMUNDA_NS);
     assertThat(rootElement.hasAttribute(XMLNS_ATTRIBUTE_NS_URI, "fox")).isTrue();
     assertThat(rootElement.getAttribute(XMLNS_ATTRIBUTE_NS_URI, "fox")).isEqualTo(FOX_NS);
   }
@@ -148,13 +148,13 @@ public class DomTest extends TestModelTest {
   @Test
   public void testAlreadyUsedPrefix() {
     document.registerNamespace("orqueio", TEST_NS);
-    document.registerNamespace(ORQUEIO_NS);
+    document.registerNamespace(CAMUNDA_NS);
 
     DomElement rootElement = document.getRootElement();
     assertThat(rootElement.hasAttribute(XMLNS_ATTRIBUTE_NS_URI, "orqueio")).isTrue();
     assertThat(rootElement.getAttribute(XMLNS_ATTRIBUTE_NS_URI, "orqueio")).isEqualTo(TEST_NS);
     assertThat(rootElement.hasAttribute(XMLNS_ATTRIBUTE_NS_URI, "ns0")).isTrue();
-    assertThat(rootElement.getAttribute(XMLNS_ATTRIBUTE_NS_URI, "ns0")).isEqualTo(ORQUEIO_NS);
+    assertThat(rootElement.getAttribute(XMLNS_ATTRIBUTE_NS_URI, "ns0")).isEqualTo(CAMUNDA_NS);
   }
 
   @Test

@@ -157,7 +157,7 @@ public class AbstractCallActivityBuilder<B extends AbstractCallActivityBuilder<B
   }
 
   /**
-   * Sets a "orqueio in" parameter to pass a business key from the super process instance to the sub process instance
+   * Sets a "camunda in" parameter to pass a business key from the super process instance to the sub process instance
    * @param businessKey the business key to set
    * @return the builder object
    */
@@ -169,7 +169,7 @@ public class AbstractCallActivityBuilder<B extends AbstractCallActivityBuilder<B
   }
 
   /**
-   * Sets a "orqueio in" parameter to pass a variable from the super process instance to the sub process instance
+   * Sets a "camunda in" parameter to pass a variable from the super process instance to the sub process instance
    *
    * @param source the name of variable in the super process instance
    * @param target the name of the variable in the sub process instance
@@ -184,7 +184,7 @@ public class AbstractCallActivityBuilder<B extends AbstractCallActivityBuilder<B
   }
 
   /**
-   * Sets a "orqueio out" parameter to pass a variable from a sub process instance to the super process instance
+   * Sets a "camunda out" parameter to pass a variable from a sub process instance to the super process instance
    *
    * @param source the name of variable in the sub process instance
    * @param target the name of the variable in the super process instance
