@@ -7,8 +7,8 @@
 
 The **Orque IO External Task Client (Java)** allows to set up remote Service Tasks for your workflow.
 
-* [Quick Start](https://docs.orqueio.io/get-started/quick-start/)
-* [Documentation](https://docs.orqueio.io/manual/develop/user-guide/ext-client/)
+* [Quick Start](https://docs.orqueio.io/)
+* [Documentation](https://docs.orqueio.io/)
 * [Examples](https://github.com/orqueio/orqueio-bpm-examples/tree/master/clients/java)
 
 ## Features

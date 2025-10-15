@@ -458,7 +458,7 @@ public class HistoricActivityInstanceTest extends PluggableProcessEngineTest {
   }
 
   /**
-   * https://app.orqueio.com/jira/browse/CAM-1537
+   * https://app.camunda.com/jira/browse/CAM-1537
    */
   @Deployment
   @Test

@@ -42,9 +42,9 @@ import org.junit.Test;
 
 public class HttpConnectorTest {
 
-  public static final String EXAMPLE_URL = "http://camunda.org/example";
+  public static final String EXAMPLE_URL = "http://orqueio.io/example";
   public static final String EXAMPLE_CONTENT_TYPE = "application/json";
-  public static final String EXAMPLE_PAYLOAD = "camunda";
+  public static final String EXAMPLE_PAYLOAD = "orqueio";
 
   protected HttpConnector connector;
   protected DebugRequestInterceptor interceptor;

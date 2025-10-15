@@ -6,12 +6,12 @@
     <groupId>io.orqueio.bpm</groupId>
     <artifactId>orqueio-database-settings</artifactId>
     <relativePath>../database</relativePath>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
   </parent>
   <description>orqueio-bpm-quarkus-parent</description>
   <artifactId>orqueio-bpm-quarkus-parent</artifactId>
   <groupId>io.orqueio.bpm.quarkus</groupId>
-  <version>1.0.3</version>
+  <version>1.0.4</version>
   <name>Orque IO Platform - Quarkus Extension - Parent</name>
 
   <packaging>pom</packaging>

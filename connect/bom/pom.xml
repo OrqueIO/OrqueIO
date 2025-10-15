@@ -1,19 +1,19 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <!-- HEADS-UP: Do not use camunda-parent as parent,
+  <!-- HEADS-UP: Do not use orqueio-parent as parent,
   it would introduce a cyclic dependency to this bom -->
   <parent>
     <groupId>io.orqueio.bpm</groupId>
     <artifactId>orqueio-root</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
     <relativePath>../../pom.xml</relativePath>
   </parent>
   <description>orqueio-connect</description>
 
   <groupId>io.orqueio.connect</groupId>
   <artifactId>orqueio-connect-bom</artifactId>
-  <version>1.0.3</version>
+  <version>1.0.4</version>
   <name>Orque IO Platform - connect - bom</name>
   <packaging>pom</packaging>
 

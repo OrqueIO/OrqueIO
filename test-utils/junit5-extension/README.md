@@ -49,7 +49,7 @@ If you don't want to create a configuration file, you can add a process engine, 
 ```java
     public ProcessEngine myProcessEngine = ProcessEngineConfiguration
         .createStandaloneInMemProcessEngineConfiguration()
-        .setJdbcUrl("jdbc:h2:mem:orqueio;DB_CLOSE_DELAY=1000")
+        .setJdbcUrl("jdbc:h2:mem:camunda;DB_CLOSE_DELAY=1000")
         .buildProcessEngine();
     
     @RegisterExtension

@@ -8,13 +8,13 @@
   <parent>
     <groupId>io.orqueio.bpm.springboot.project</groupId>
     <artifactId>qa-plugins-spin</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
   </parent>
 
   <description>qa-plugins-spin-dataformat-all</description>
   <groupId>io.orqueio.bpm.springboot.project</groupId>
   <artifactId>qa-plugins-spin-dataformat-all</artifactId>
-  <version>1.0.3</version>
+  <version>1.0.4</version>
   <packaging>jar</packaging>
   <name>Orque IO Platform - Spring Boot Starter - QA - Plugins - Spin All</name>
 
@@ -35,7 +35,7 @@
     <dependency>
       <groupId>io.orqueio.spin</groupId>
       <artifactId>orqueio-spin-dataformat-all</artifactId>
-      <version>1.0.3</version>
+      <version>1.0.4</version>
     </dependency>
 
     <dependency>

@@ -43,7 +43,7 @@ quarkus.orqueio..job-executor.generic-config.backoff-time-in-millis=5
 quarkus.datasource.my-datasource.db-kind=h2
 quarkus.datasource.my-datasource.username=orqueio.
 quarkus.datasource.my-datasource.password=orqueio.
-quarkus.datasource.my-datasource.jdbc.url=jdbc:h2:mem:orqueio.;TRACE_LEVEL_FILE=0;DB_CLOSE_ON_EXIT=FALSE
+quarkus.datasource.my-datasource.jdbc.url=jdbc:h2:mem:camunda.;TRACE_LEVEL_FILE=0;DB_CLOSE_ON_EXIT=FALSE
 quarkus.orqueio..datasource=my-datasource
 ```
 

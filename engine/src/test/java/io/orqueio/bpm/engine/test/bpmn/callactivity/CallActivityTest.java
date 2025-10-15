@@ -882,7 +882,7 @@ public class CallActivityTest extends PluggableProcessEngineTest {
    * This testcase verifies that <camunda:out variables="all" /> works also in
    * case super process has no variables
    *
-   * https://app.orqueio.com/jira/browse/CAM-1617
+   * https://app.camunda.com/jira/browse/CAM-1617
    *
    */
   @Deployment(resources = {

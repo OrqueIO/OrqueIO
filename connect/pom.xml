@@ -5,13 +5,13 @@
     <groupId>io.orqueio.bpm</groupId>
     <artifactId>orqueio-parent</artifactId>
     <relativePath>../parent</relativePath>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
   </parent>
   <description>orqueio-connect-root</description>
 
   <groupId>io.orqueio.connect</groupId>
   <artifactId>orqueio-connect-root</artifactId>
-  <version>1.0.3</version>
+  <version>1.0.4</version>
   <name>Orque IO Platform - connect - root</name>
   <inceptionYear>2014</inceptionYear>
   <packaging>pom</packaging>
@@ -49,31 +49,31 @@
       <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
-        <version>4.13.1</version>
+        <version>${version.junit}</version>
       </dependency>
 
       <dependency>
         <groupId>org.assertj</groupId>
         <artifactId>assertj-core</artifactId>
-        <version>2.9.1</version>
+        <version>${version.assertj}</version>
       </dependency>
 
       <dependency>
         <groupId>ch.qos.logback</groupId>
         <artifactId>logback-classic</artifactId>
-        <version>1.2.11</version>
+        <version>${version.logback}</version>
       </dependency>
 
       <dependency>
         <groupId>com.github.tomakehurst</groupId>
         <artifactId>wiremock</artifactId>
-        <version>1.58</version>
+        <version>${wiremock.version}</version>
       </dependency>
 
       <dependency>
         <groupId>org.mockito</groupId>
         <artifactId>mockito-core</artifactId>
-        <version>1.9.5</version>
+        <version>${mockito.version}</version>
       </dependency>
 
     </dependencies>
