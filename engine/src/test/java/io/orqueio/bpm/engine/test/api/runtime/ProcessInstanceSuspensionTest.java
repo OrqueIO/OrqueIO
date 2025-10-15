@@ -308,7 +308,7 @@ public class ProcessInstanceSuspensionTest extends PluggableProcessEngineTest {
   }
 
   /**
-   * See https://app.orqueio.com/jira/browse/CAM-9505
+   * See https://app.camunda.com/jira/browse/CAM-9505
    */
   @Deployment(resources={"io/orqueio/bpm/engine/test/api/runtime/oneTaskProcess.bpmn20.xml"})
   @Test

@@ -66,7 +66,7 @@ public class CreateAdminUserConfiguration extends AbstractOrqueioConfiguration {
     // create group
     if (identityService.createGroupQuery().groupId(ORQUEIO_ADMIN).count() == 0) {
       Group orqueioAdminGroup = identityService.newGroup(ORQUEIO_ADMIN);
-      orqueioAdminGroup.setName("orqueio BPM Administrators");
+      orqueioAdminGroup.setName("OrqueIO BPM Administrators");
       orqueioAdminGroup.setType(Groups.GROUP_TYPE_SYSTEM);
       identityService.saveGroup(orqueioAdminGroup);
     }

@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.orqueio.bpm</groupId>
   <artifactId>orqueio-engine-rest-jakarta</artifactId>
-  <version>1.0.3</version>
+  <version>1.0.4</version>
   <name>Orque IO Platform - engine - REST - Assembly Jakarta</name>
   <packaging>war</packaging>
   <description>orqueio-engine-rest-jakarta</description>
@@ -13,7 +13,7 @@
   <parent>
     <groupId>io.orqueio.bpm</groupId>
     <artifactId>orqueio-engine-rest-root</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
   </parent>
 
   <properties>
@@ -77,14 +77,12 @@
     <dependency>
       <groupId>jakarta.ws.rs</groupId>
       <artifactId>jakarta.ws.rs-api</artifactId>
-      <version>3.1.0</version>
       <scope>provided</scope>
     </dependency>
 
     <dependency>
       <groupId>jakarta.servlet</groupId>
       <artifactId>jakarta.servlet-api</artifactId>
-      <version>6.0.0</version>
       <scope>provided</scope>
     </dependency>
 
@@ -93,7 +91,6 @@
     <dependency>
       <groupId>org.jboss.resteasy</groupId>
       <artifactId>resteasy-core</artifactId>
-      <version>6.2.3.Final</version>
       <scope>provided</scope>
     </dependency>
 

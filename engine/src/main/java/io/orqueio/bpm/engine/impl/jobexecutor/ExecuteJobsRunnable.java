@@ -122,7 +122,7 @@ public class ExecuteJobsRunnable implements Runnable {
    * io.orqueio.bpm.container.impl.threading.ra.inflow.JcaInflowExecuteJobsRunnable#switchClassLoader()
    * - where the classloader switch is not required
    *
-   * @see https://app.orqueio.com/jira/browse/CAM-10379
+   * @see https://app.camunda.com/jira/browse/CAM-10379
    *
    * @return the classloader before the switch to return it back after the job execution
    */

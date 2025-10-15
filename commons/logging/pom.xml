@@ -4,9 +4,9 @@
   <parent>
     <groupId>io.orqueio.commons</groupId>
     <artifactId>orqueio-commons-root</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
   </parent>
-  <version>1.0.3</version>
+  <version>1.0.4</version>
   <description>orqueio-commons-logging</description>
   <groupId>io.orqueio.commons</groupId>
   <artifactId>orqueio-commons-logging</artifactId>
@@ -19,31 +19,26 @@
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
-      <version>1.7.26</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
-      <version>1.2.11</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.13.1</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
-      <version>2.9.1</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-      <version>4.6.0</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

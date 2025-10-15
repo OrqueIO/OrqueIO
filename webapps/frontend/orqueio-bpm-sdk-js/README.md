@@ -49,7 +49,7 @@ grunt watch:mochacli
 
 ### Issues
 
-https://app.orqueio.com/jira/browse/CAM/component/12351
+https://app.camunda.com/jira/browse/CAM/component/12351
 
 ## Releasing
 
