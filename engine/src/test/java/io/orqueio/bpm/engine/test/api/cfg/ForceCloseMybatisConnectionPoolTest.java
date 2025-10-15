@@ -37,7 +37,7 @@ public class ForceCloseMybatisConnectionPoolTest {
     // given
     // that the process engine is configured with forceCloseMybatisConnectionPool = true
     ProcessEngineConfigurationImpl configurationImpl = new StandaloneInMemProcessEngineConfiguration()
-     .setJdbcUrl("jdbc:h2:mem:orqueio-forceclose")
+     .setJdbcUrl("jdbc:h2:mem:camunda-forceclose")
      .setProcessEngineName("engine-forceclose")
      .setForceCloseMybatisConnectionPool(true);
 
@@ -63,7 +63,7 @@ public class ForceCloseMybatisConnectionPoolTest {
     // given
     // that the process engine is configured with forceCloseMybatisConnectionPool = false
     ProcessEngineConfigurationImpl configurationImpl = new StandaloneInMemProcessEngineConfiguration()
-     .setJdbcUrl("jdbc:h2:mem:orqueio-forceclose")
+     .setJdbcUrl("jdbc:h2:mem:camunda-forceclose")
      .setProcessEngineName("engine-forceclose")
      .setForceCloseMybatisConnectionPool(false);
 

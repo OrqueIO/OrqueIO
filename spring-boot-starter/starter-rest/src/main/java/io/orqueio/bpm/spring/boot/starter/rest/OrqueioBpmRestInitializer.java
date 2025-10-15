@@ -34,7 +34,7 @@ import java.util.Map;
 
 /**
  * Inspired by:
- * https://groups.google.com/forum/#!msg/orqueio-bpm-users/BQHdcLIivzs
+ * https://groups.google.com/forum/#!msg/camunda-bpm-users/BQHdcLIivzs
  * /iNVix8GkhYAJ (Christoph Berg)
  */
 public class OrqueioBpmRestInitializer implements ServletContextInitializer {

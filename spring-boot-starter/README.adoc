@@ -20,9 +20,8 @@ the https://github.com/orqueio/orqueio-bpm-examples/tree/master/spring-boot-star
 
 ## Resources
 
-* https://app.orqueio.com/jira/browse/CAM/component/13850[Issue Tracker] - if you have an idea for a new feature or want to file a bug ... this is the place to go.
+* https://github.com/OrqueIO/OrqueIO/issues - if you have an idea for a new feature or want to file a bug ... this is the place to go.
 * https://github.com/orqueio/orqueio-bpm-spring-boot-starter/blob/master/.github/CONTRIBUTING.md[Contributing] - check this if you want to contribute
-* https://forum.orqueio.io/c/spring-boot-starter[Discussion Forum] - this project has it's own sub-category at the orqueio forum ... use it!
 
 ## Resources for versions older than 2.3.0
 

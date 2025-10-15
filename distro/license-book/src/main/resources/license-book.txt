@@ -4937,7 +4937,7 @@ SOFTWARE.
 ===========================================================================================
 
 ===========================================================================================
-orqueio-bpm-webapp@7.23.0-SNAPSHOT
+orqueio-bpm-webapp@1.0.4
 
 Licensed under 
 Notice file:
@@ -4959,8 +4959,8 @@ limitations under the License.
 ===========================================================================================
 
 ===========================================================================================
-orqueio-dmn-js@1.8.0
-https://github.com/orqueio/orqueio-dmn-js
+camunda-dmn-js@1.8.0
+https://github.com/camunda/camunda-dmn-js
 Licensed under MIT
 Notice file:
 The MIT License (MIT)
@@ -4987,8 +4987,8 @@ THE SOFTWARE.
 ===========================================================================================
 
 ===========================================================================================
-orqueio-dmn-moddle@1.3.0
-https://github.com/orqueio/orqueio-dmn-moddle
+camunda-dmn-moddle@1.3.0
+https://github.com/camunda/camunda-dmn-moddle
 Licensed under MIT
 Notice file:
 The MIT License (MIT)

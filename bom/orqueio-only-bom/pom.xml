@@ -5,12 +5,12 @@
   <parent>
     <groupId>io.orqueio.bpm</groupId>
     <artifactId>orqueio-bom-root</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
   <groupId>io.orqueio.bpm</groupId>
   <artifactId>orqueio-only-bom</artifactId>
-  <version>1.0.3</version>
+  <version>1.0.4</version>
   <packaging>pom</packaging>
   <name>Orque IO Platform Only - Bom</name>
   <url>http://www.orqueio.io</url>
@@ -300,7 +300,7 @@
       </dependency>
       <dependency>
         <groupId>io.orqueio.commons</groupId>
-        <artifactId>camunda-commons-logging</artifactId>
+        <artifactId>orqueio-commons-logging</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>

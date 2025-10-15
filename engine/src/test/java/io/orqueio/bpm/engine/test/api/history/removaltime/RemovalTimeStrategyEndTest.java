@@ -953,7 +953,7 @@ public class RemovalTimeStrategyEndTest extends AbstractRemovalTimeTest {
   }
 
   /**
-   * See https://app.orqueio.com/jira/browse/CAM-9505
+   * See https://app.camunda.com/jira/browse/CAM-9505
    */
   @Test
   public void shouldResolveIncidentWithPreservedCreateTime() {
@@ -1068,7 +1068,7 @@ public class RemovalTimeStrategyEndTest extends AbstractRemovalTimeTest {
   }
 
   /**
-   * See https://app.orqueio.com/jira/browse/CAM-9505
+   * See https://app.camunda.com/jira/browse/CAM-9505
    */
   @Test
   public void shouldResolveExternalTaskLogWithTimestampPreserved() {
@@ -1149,7 +1149,7 @@ public class RemovalTimeStrategyEndTest extends AbstractRemovalTimeTest {
   }
 
   /**
-   * See https://app.orqueio.com/jira/browse/CAM-9505
+   * See https://app.camunda.com/jira/browse/CAM-9505
    */
   @Test
   public void shouldResolveJobLogWithTimestampPreserved() {
@@ -1350,7 +1350,7 @@ public class RemovalTimeStrategyEndTest extends AbstractRemovalTimeTest {
   }
 
   /**
-   * See https://app.orqueio.com/jira/browse/CAM-9505
+   * See https://app.camunda.com/jira/browse/CAM-9505
    */
   @Test
   public void shouldResolveUserOperationLogWithTimestampPreserved() {
@@ -1419,7 +1419,7 @@ public class RemovalTimeStrategyEndTest extends AbstractRemovalTimeTest {
   }
 
   /**
-   * See https://app.orqueio.com/jira/browse/CAM-9505
+   * See https://app.camunda.com/jira/browse/CAM-9505
    */
   @Test
   public void shouldResolveIdentityLinkWithTimePreserved() {
@@ -2252,7 +2252,7 @@ public class RemovalTimeStrategyEndTest extends AbstractRemovalTimeTest {
   }
 
   /**
-   * See https://app.orqueio.com/jira/browse/CAM-9505
+   * See https://app.camunda.com/jira/browse/CAM-9505
    */
   @Test
   public void shouldResolveBatchJobLogWithTimestampPreserved() {
@@ -2423,7 +2423,7 @@ public class RemovalTimeStrategyEndTest extends AbstractRemovalTimeTest {
   }
 
   /**
-   * See https://app.orqueio.com/jira/browse/CAM-9505
+   * See https://app.camunda.com/jira/browse/CAM-9505
    */
   @Test
   public void shouldNotUpdateCreateTimeForIncidentRelatedToBatch() {

@@ -248,7 +248,7 @@ public class JsonValueTest extends PluggableProcessEngineTestCase {
   }
 
   /**
-   * See https://app.orqueio.com/jira/browse/CAM-9932
+   * See https://app.camunda.com/jira/browse/CAM-9932
    */
   public void testTransientJsonSpinVariables() {
     // given

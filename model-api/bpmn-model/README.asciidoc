@@ -10,7 +10,7 @@ orqueio BPMN model can be used standalone, independenly of Orqueio Platform / pr
 * Web Site: https://orqueio.com/
 * User Guide: link:http://docs.orqueio.io/latest/guides/user-guide/#bpmn-model-api[http://docs.orqueio.io]
 * Examples: link:https://github.com/orqueio/orqueio-bpm-examples/tree/master/bpmn-model-api[https://github.com/orqueio/orqueio-bpm-examples]
-* Issue Tracker: https://app.orqueio.com/jira/
+* Issue Tracker: https://app.camunda.com/jira/
 * Contribution Guidelines: https://orqueio.com/learn/community/#contribute
 
 == Features

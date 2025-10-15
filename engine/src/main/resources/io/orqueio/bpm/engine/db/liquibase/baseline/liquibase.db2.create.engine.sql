@@ -546,7 +546,7 @@ alter table ACT_RU_VARIABLE
     foreign key (BATCH_ID_)
     references ACT_RU_BATCH (ID_);
 
--- indexes for concurrency problems - https://app.orqueio.com/jira/browse/CAM-1646 --
+-- indexes for concurrency problems - https://app.camunda.com/jira/browse/CAM-1646 --
 create index ACT_IDX_EXECUTION_PROC on ACT_RU_EXECUTION(PROC_DEF_ID_);
 create index ACT_IDX_EXECUTION_PARENT on ACT_RU_EXECUTION(PARENT_ID_);
 create index ACT_IDX_EXECUTION_SUPER on ACT_RU_EXECUTION(SUPER_EXEC_);
@@ -566,9 +566,9 @@ create index ACT_IDX_VARIABLE_PROCINST on ACT_RU_VARIABLE(PROC_INST_ID_);
 create index ACT_IDX_TASK_EXEC on ACT_RU_TASK(EXECUTION_ID_);
 create index ACT_IDX_TASK_PROCINST on ACT_RU_TASK(PROC_INST_ID_);
 create index ACT_IDX_TASK_PROC_DEF_ID on ACT_RU_TASK(PROC_DEF_ID_);
--- index for deadlock problem - https://app.orqueio.com/jira/browse/CAM-4440 --
+-- index for deadlock problem - https://app.camunda.com/jira/browse/CAM-4440 --
 create index ACT_IDX_AUTH_RESOURCE_ID on ACT_RU_AUTHORIZATION(RESOURCE_ID_);
--- index to prevent deadlock on fk constraint - https://app.orqueio.com/jira/browse/CAM-5440 --
+-- index to prevent deadlock on fk constraint - https://app.camunda.com/jira/browse/CAM-5440 --
 create index ACT_IDX_EXT_TASK_EXEC on ACT_RU_EXT_TASK(EXECUTION_ID_);
 
 

@@ -3,9 +3,7 @@ orqueio-spin
 
 <p>
   <a href="https://orqueio.io/">Home</a> |
-  <a href="https://docs.orqueio.io/manual/reference/spin/">Documentation</a> |
-  <a href="https://forum.orqueio.io/">Forum</a> |
-  <a href="https://app.orqueio.io/jira/browse/CAM">Issues</a> |
+  <a href="https://docs.orqueio.io">Documentation</a> |
   <a href="../LICENSE">License</a> |
   <a href="../CONTRIBUTING.md">Contribute</a>
 </p>

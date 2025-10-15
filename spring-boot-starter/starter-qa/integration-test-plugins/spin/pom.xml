@@ -6,9 +6,9 @@
   <parent>
     <groupId>io.orqueio.bpm.springboot.project</groupId>
     <artifactId>qa-plugins</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
   </parent>
-  <version>1.0.3</version>
+  <version>1.0.4</version>
 
   <packaging>pom</packaging>
   <description>qa-plugins-spin</description>
