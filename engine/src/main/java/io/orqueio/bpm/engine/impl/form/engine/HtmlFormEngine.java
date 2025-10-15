@@ -35,7 +35,7 @@ import io.orqueio.bpm.engine.impl.form.type.StringFormType;
 /**
  * <p>A simple {@link FormEngine} implementaiton which renders
  * forms as HTML such that they can be used as embedded forms
- * inside orqueio Tasklist.</p>
+ * inside OrqueIO Tasklist.</p>
  *
  * @author Daniel Meyer
  *

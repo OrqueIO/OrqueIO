@@ -6,7 +6,7 @@
   xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
   xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
   id="Definitions_1a96hxn" targetNamespace="http://bpmn.io/schema/bpmn"
-  exporter="Orqueio Modeler" exporterVersion="3.1.0">
+  exporter="Camunda Modeler" exporterVersion="3.1.0">
   <bpmn:process id="Process" isExecutable="true">
     <bpmn:subProcess id="SubProcess_0m6uku1">
       <bpmn:incoming>SequenceFlow_0qyrgj5</bpmn:incoming>

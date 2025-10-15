@@ -153,8 +153,7 @@ Have a look at our [contribution guide](https://github.com/orqueio/orqueio-bpm-p
 
 ## Help and support
 
-* [Documentation](http://docs.orqueio.io/manual/latest/)
-* [Forum](https://forum.orqueio.io)
+* [Documentation](http://docs.orqueio.io/)
 * [Stackoverflow](https://stackoverflow.com/questions/tagged/orqueio)
 
 ## License

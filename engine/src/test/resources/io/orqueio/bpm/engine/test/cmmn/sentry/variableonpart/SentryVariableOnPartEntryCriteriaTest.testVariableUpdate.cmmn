@@ -5,7 +5,7 @@
    xmlns:camunda="http://camunda.org/schema/1.0/cmmn"
    xmlns:cmmn="http://www.omg.org/spec/CMMN/20151109/MODEL"
    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-   id="Test" targetNamespace="http://bpmn.io/schema/cmmn" exporter="Orqueio Modeler" exporterVersion="1.2.0">
+   id="Test" targetNamespace="http://bpmn.io/schema/cmmn" exporter="Camunda Modeler" exporterVersion="1.2.0">
   <cmmn:case id="Case_1">
     <cmmn:casePlanModel id="CasePlanModel_1" name="A CasePlanModel">
       <cmmn:planItem id="HumanTask_1" name="HumanTask1" definitionRef="HumanTask_1m45ynk">

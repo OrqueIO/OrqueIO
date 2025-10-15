@@ -152,7 +152,7 @@ describe('Admin Groups Spec', function() {
       // then
       testHelper.expectStringEqual(
         groupsPage.editGroup.pageHeader(),
-        'orqueio BPM Administrators'
+        'OrqueIO BPM Administrators'
       );
       groupsPage.editGroup.isActive({group: 'orqueio-admin'});
       expect(
@@ -168,7 +168,7 @@ describe('Admin Groups Spec', function() {
       // then
       testHelper.expectStringEqual(
         groupsPage.editGroup.pageHeader(),
-        'orqueio BPM Administratorsi'
+        'OrqueIO BPM Administratorsi'
       );
     });
 
@@ -200,7 +200,7 @@ describe('Admin Groups Spec', function() {
       // then
       groupsPage.editGroupTenants.isActive({group: 'orqueio-admin'});
       expect(groupsPage.editGroupTenants.subHeader()).to.eventually.eql(
-        "orqueio BPM Administrators's" + ' ' + 'Tenants'
+        "OrqueIO BPM Administrators's" + ' ' + 'Tenants'
       );
       expect(
         groupsPage.editGroupTenants.tenantList().count()

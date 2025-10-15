@@ -92,7 +92,7 @@ public class TelemetryDynamicDataTest {
   public void shouldCountCommandsFromEngineStartAfterTelemetryActivation() {
     // when
     processEngineInMem =  new StandaloneInMemProcessEngineConfiguration()
-        .setJdbcUrl("jdbc:h2:mem:orqueio" + getClass().getSimpleName())
+        .setJdbcUrl("jdbc:h2:mem:camunda" + getClass().getSimpleName())
         .buildProcessEngine();
 
     // then

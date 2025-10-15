@@ -202,7 +202,7 @@ public class CompensateEventTest extends PluggableProcessEngineTest {
 
   }
 
-  // See: https://app.orqueio.com/jira/browse/CAM-1410
+  // See: https://app.camunda.com/jira/browse/CAM-1410
   @Deployment
   @Test
   public void testCompensateActivityRef() {
@@ -505,7 +505,7 @@ public class CompensateEventTest extends PluggableProcessEngineTest {
   /**
    * enable test case when bug is fixed
    *
-   * @see <a href="https://app.orqueio.com/jira/browse/CAM-4304">https://app.orqueio.com/jira/browse/CAM-4304</a>
+   * @see <a href="https://app.camunda.com/jira/browse/CAM-4304">https://app.camunda.com/jira/browse/CAM-4304</a>
    */
   @Deployment(resources = { "io/orqueio/bpm/engine/test/bpmn/event/compensate/CompensateEventTest.testCompensationInEventSubProcess.bpmn20.xml" })
   @Test

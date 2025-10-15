@@ -661,7 +661,7 @@ public class BatchSetRemovalTimeNonHierarchicalTest {
   }
 
   /**
-   * See https://app.orqueio.com/jira/browse/CAM-10172
+   * See https://app.camunda.com/jira/browse/CAM-10172
    */
   @Test
   public void shouldSetRemovalTime_ExternalTaskLog_WithPreservedCreateTime() {
@@ -752,7 +752,7 @@ public class BatchSetRemovalTimeNonHierarchicalTest {
   }
 
   /**
-   * See https://app.orqueio.com/jira/browse/CAM-10172
+   * See https://app.camunda.com/jira/browse/CAM-10172
    */
   @Test
   public void shouldSetRemovalTime_Incident_WithPreservedCreateTime() {
@@ -817,7 +817,7 @@ public class BatchSetRemovalTimeNonHierarchicalTest {
   }
 
   /**
-   * See https://app.orqueio.com/jira/browse/CAM-10172
+   * See https://app.camunda.com/jira/browse/CAM-10172
    */
   @Test
   public void shouldSetRemovalTime_OperationLog_WithPreservedTimestamp() {
@@ -878,7 +878,7 @@ public class BatchSetRemovalTimeNonHierarchicalTest {
   }
 
   /**
-   * See https://app.orqueio.com/jira/browse/CAM-10172
+   * See https://app.camunda.com/jira/browse/CAM-10172
    */
   @Test
   public void shouldSetRemovalTime_IdentityLinkLog_WithPreservedTime() {

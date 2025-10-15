@@ -232,7 +232,7 @@ public class HistoryCleanupOnEngineBootstrapTest {
     final ProcessEngineConfigurationImpl standaloneInMemProcessEngineConfiguration = (ProcessEngineConfigurationImpl)ProcessEngineConfiguration.createStandaloneInMemProcessEngineConfiguration();
     standaloneInMemProcessEngineConfiguration.setHistoryCleanupBatchWindowStartTime("23:00");
     standaloneInMemProcessEngineConfiguration.setHistoryCleanupBatchWindowEndTime("01:00");
-    standaloneInMemProcessEngineConfiguration.setJdbcUrl("jdbc:h2:mem:orqueio" + getClass().getSimpleName() + "testHistoryCleanupJobScheduled");
+    standaloneInMemProcessEngineConfiguration.setJdbcUrl("jdbc:h2:mem:camunda" + getClass().getSimpleName() + "testHistoryCleanupJobScheduled");
 
     ProcessEngine engine = standaloneInMemProcessEngineConfiguration
       .buildProcessEngine();
@@ -258,7 +258,7 @@ public class HistoryCleanupOnEngineBootstrapTest {
     standaloneInMemProcessEngineConfiguration.setHistoryCleanupBatchWindowStartTime("23:00");
     standaloneInMemProcessEngineConfiguration.setHistoryCleanupBatchWindowEndTime("01:00");
     standaloneInMemProcessEngineConfiguration
-        .setJdbcUrl("jdbc:h2:mem:orqueio" + getClass().getSimpleName() + "testHistoryCleanupJobScheduled");
+        .setJdbcUrl("jdbc:h2:mem:camunda" + getClass().getSimpleName() + "testHistoryCleanupJobScheduled");
 
     ProcessEngine engine = standaloneInMemProcessEngineConfiguration.buildProcessEngine();
     try {
@@ -281,7 +281,7 @@ public class HistoryCleanupOnEngineBootstrapTest {
     final ProcessEngineConfigurationImpl configuration = (ProcessEngineConfigurationImpl)ProcessEngineConfiguration.createStandaloneInMemProcessEngineConfiguration();
     //we have batch window only once per week - Monday afternoon
     configuration.getHistoryCleanupBatchWindows().put(Calendar.MONDAY, new BatchWindowConfiguration("18:00", "20:00"));
-    configuration.setJdbcUrl("jdbc:h2:mem:orqueio" + getClass().getSimpleName() + "testBatchWindowOneDayOfWeek");
+    configuration.setJdbcUrl("jdbc:h2:mem:camunda" + getClass().getSimpleName() + "testBatchWindowOneDayOfWeek");
 
     //when
     //we're on Monday evening
@@ -319,7 +319,7 @@ public class HistoryCleanupOnEngineBootstrapTest {
     final ProcessEngineConfigurationImpl configuration = (ProcessEngineConfigurationImpl)ProcessEngineConfiguration.createStandaloneInMemProcessEngineConfiguration();
     //we have batch window for 24 hours
     configuration.getHistoryCleanupBatchWindows().put(Calendar.MONDAY, new BatchWindowConfiguration("06:00", "06:00"));
-    configuration.setJdbcUrl("jdbc:h2:mem:orqueio" + getClass().getSimpleName() + "testBatchWindow24Hours");
+    configuration.setJdbcUrl("jdbc:h2:mem:camunda" + getClass().getSimpleName() + "testBatchWindow24Hours");
 
     //when
     //we're on Monday early morning

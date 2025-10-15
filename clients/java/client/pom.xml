@@ -12,7 +12,7 @@
   <parent>
     <groupId>io.orqueio.bpm</groupId>
     <artifactId>orqueio-external-task-client-root</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
   </parent>
 
   <properties>
@@ -61,6 +61,7 @@
     <dependency>
       <groupId>io.orqueio.commons</groupId>
       <artifactId>orqueio-commons-typed-values</artifactId>
+      <version>${project.version}</version>
     </dependency>
 
     <dependency>
@@ -109,19 +110,6 @@
     <dependency>
       <groupId>io.orqueio.spin</groupId>
       <artifactId>orqueio-spin-dataformat-all</artifactId>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>io.orqueio.spin</groupId>
-      <artifactId>orqueio-spin-dataformat-json-jackson</artifactId>
-      <scope>test</scope>
-    </dependency>
-
-
-    <dependency>
-      <groupId>io.orqueio.spin</groupId>
-      <artifactId>orqueio-spin-core</artifactId>
       <scope>test</scope>
     </dependency>
 
@@ -235,7 +223,7 @@
         </executions>
       </plugin>
 
-  <!--    <plugin>
+     <plugin>
         <artifactId>maven-failsafe-plugin</artifactId>
         <configuration>
           <redirectTestOutputToFile>true</redirectTestOutputToFile>
@@ -248,7 +236,7 @@
             </goals>
           </execution>
         </executions>
-      </plugin>-->
+      </plugin>
 
       <plugin>
         <groupId>org.codehaus.cargo</groupId>
@@ -296,6 +284,7 @@
                 <tofile>conf/bpm-platform.xml</tofile>
                 <overwrite>true</overwrite>
               </copy>
+
             </files>
           </configuration>
           <deployables>
@@ -320,6 +309,7 @@
           </deployables>
         </configuration>
       </plugin>
+
 
     </plugins>
 

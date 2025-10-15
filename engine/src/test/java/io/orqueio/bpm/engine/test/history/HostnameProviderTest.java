@@ -84,7 +84,7 @@ public class HostnameProviderTest {
             .createStandaloneInMemProcessEngineConfiguration();
 
     configuration
-        .setJdbcUrl("jdbc:h2:mem:orqueio" + getClass().getSimpleName() + "testHostnameProvider")
+        .setJdbcUrl("jdbc:h2:mem:camunda" + getClass().getSimpleName() + "testHostnameProvider")
         .setProcessEngineName(ENGINE_NAME)
         .setHostname(hostname)
         .setHostnameProvider(hostnameProvider)

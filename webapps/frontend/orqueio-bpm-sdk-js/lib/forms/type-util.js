@@ -91,7 +91,7 @@ var convertToType = function(value, type) {
  * This reformates the date into a ISO8601 conform string which will mirror the selected date in local format.
  * TODO: Remove this when it is fixed by angularjs
  *
- * @see https://app.orqueio.com/jira/browse/CAM-4746
+ * @see https://app.camunda.com/jira/browse/CAM-4746
  *
  */
 var pad = function(number) {

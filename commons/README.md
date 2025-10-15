@@ -1,20 +1,20 @@
 # camunda commons
 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.orqueio.commons/camunda-commons-bom/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.orqueio.commons/camunda-commons-bom)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.orqueio.commons/orqueio-commons-bom/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.orqueio.commons/orqueio-commons-bom)
 
 
-camunda commons is a collection of shared libraries used by camunda open source projects.
+orqueio commons is a collection of shared libraries used by camunda open source projects.
 
 ## List of libraries
 
-* [camunda commons logging][logging]
-* [camunda commons utils][utils]
-* [camunda-bpm-platform][typed-values]
+* [orqueio commons logging][logging]
+* [orqueio commons utils][utils]
+* [orqueio-bpm-platform][typed-values]
 
 
 ## Getting started
 
-If your project is a maven project, start by importing the `camunda-commons-bom`.
+If your project is a maven project, start by importing the `orqueio-commons-bom`.
 This will ensure that your project uses all commons libraries in the same version:
 
 ```xml
@@ -22,7 +22,7 @@ This will ensure that your project uses all commons libraries in the same versio
   <dependencies>
     <dependency>
       <groupId>io.orqueio.commons</groupId>
-      <artifactId>camunda-commons-bom</artifactId>
+      <artifactId>orqueio-commons-bom</artifactId>
       <version>${version}</version>
       <type>pom</type>
       <scope>import</scope>
@@ -36,7 +36,7 @@ Now you can reference individual commons projects:
 ```xml
 <dependency>
   <groupId>io.orqueio.commons</groupId>
-  <artifactId>camunda-commons-logging</artifactId>
+  <artifactId>orqueio-commons-logging</artifactId>
 </dependency>
 ```
 
@@ -48,7 +48,7 @@ Java JRE 11+ is required.
 
 ## Contributing
 
-Have a look at our [contribution guide](https://github.com/camunda/camunda-bpm-platform/blob/master/CONTRIBUTING.md) for how to contribute to this repository.
+Have a look at our [contribution guide](https://github.com/orqueio/orqueio/blob/master/CONTRIBUTING.md) for how to contribute to this repository.
 
 
 ## License:

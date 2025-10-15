@@ -19,7 +19,7 @@ package io.orqueio.bpm.engine.repository;
 /** An object structure representing a Orqueio Form used to present forms to users
  * either when starting a process instance or when assigned to a User Task.
  *
- * Orqueio Forms are usually composed with the help of tools like the Orqueio Modeler
+ * Orqueio Forms are usually composed with the help of tools like the Camunda Modeler
  * and deployed to the engine along with or separate from other resources, like process
  * definitions.
  *

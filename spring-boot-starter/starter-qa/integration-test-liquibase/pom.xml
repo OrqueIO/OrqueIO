@@ -8,9 +8,9 @@
   <parent>
     <groupId>io.orqueio.bpm.springboot.project</groupId>
     <artifactId>orqueio-bpm-spring-boot-starter-qa</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
   </parent>
-  <version>1.0.3</version>
+  <version>1.0.4</version>
   <description>qa-liquibase</description>
   <groupId>io.orqueio.bpm.springboot.project</groupId>
   <artifactId>qa-liquibase</artifactId>
@@ -41,7 +41,7 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-data-jpa</artifactId>
-      <version>3.5.4</version>
+      <version>3.5.6</version>
     </dependency>
     
     <dependency>

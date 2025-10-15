@@ -6,7 +6,7 @@
   <name>Orque IO Platform - engine - Cdi - Jakarta</name>
   <groupId>io.orqueio.bpm</groupId>
   <artifactId>orqueio-engine-cdi-jakarta</artifactId>
-  <version>1.0.3</version>
+  <version>1.0.4</version>
   <packaging>jar</packaging>
 
 
@@ -14,7 +14,7 @@
     <groupId>io.orqueio.bpm</groupId>
     <artifactId>orqueio-database-settings</artifactId>
     <relativePath>../../database</relativePath>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
   </parent>
 
   <properties>
@@ -54,7 +54,6 @@
       <groupId>io.orqueio.bpm</groupId>
       <artifactId>orqueio-engine</artifactId>
       <version>${project.version}</version>
-
         <exclusions>
         <exclusion>
           <artifactId>livetribe-jsr223</artifactId>
@@ -66,39 +65,31 @@
     <dependency>
       <groupId>jakarta.enterprise.concurrent</groupId>
       <artifactId>jakarta.enterprise.concurrent-api</artifactId>
-      <version>3.0.1</version>
-
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>jakarta.enterprise</groupId>
       <artifactId>jakarta.enterprise.cdi-api</artifactId>
-      <version>4.0.1</version>
-
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>jakarta.faces</groupId>
       <artifactId>jakarta.faces-api</artifactId>
-      <version>4.0.1</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>jakarta.inject</groupId>
       <artifactId>jakarta.inject-api</artifactId>
-      <version>2.0.1</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>jakarta.el</groupId>
       <artifactId>jakarta.el-api</artifactId>
-      <version>5.0.1</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>jakarta.interceptor</groupId>
       <artifactId>jakarta.interceptor-api</artifactId>
-      <version>2.1.0</version>
       <scope>provided</scope>
     </dependency>
 
@@ -111,21 +102,16 @@
     <dependency>
       <groupId>org.jboss.weld</groupId>
       <artifactId>weld-core-impl</artifactId>
-      <version>5.0.1.Final</version>
-
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.jboss.weld.module</groupId>
       <artifactId>weld-web</artifactId>
-      <version>5.0.1.Final</version>
-
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.jboss.weld</groupId>
       <artifactId>weld-api</artifactId>
-      <version>5.0.SP2</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -137,40 +123,31 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.13.1</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
-      <version>2.9.1</version>
-
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.h2database</groupId>
       <artifactId>h2</artifactId>
-      <version>2.3.232</version>
-
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
-      <version>1.2.11</version>
-
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>jcl-over-slf4j</artifactId>
-      <version>1.7.26</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>jul-to-slf4j</artifactId>
-      <version>1.7.26</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -181,7 +158,6 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-resources-plugin</artifactId>
         <version>2.6</version>
-
         <executions>
           <execution>
             <id>sources</id>

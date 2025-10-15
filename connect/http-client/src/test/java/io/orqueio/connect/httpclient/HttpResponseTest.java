@@ -88,7 +88,7 @@ public class HttpResponseTest {
   }
 
   protected HttpResponse getResponse() {
-    return connector.createRequest().url("http://camunda.com").get().execute();
+    return connector.createRequest().url("http://orqueio.io").get().execute();
   }
 
   @Test
@@ -127,7 +127,7 @@ public class HttpResponseTest {
     testResponse.code(500);
     try {
       // when
-      connector.createRequest().configOption("throw-http-error", "TRUE").url("http://camunda.com").get().execute();
+      connector.createRequest().configOption("throw-http-error", "TRUE").url("http://orqueio.io").get().execute();
       Assertions.fail("ConnectorRequestException should be thrown");
     } catch (ConnectorRequestException e) {
       // then
@@ -141,7 +141,7 @@ public class HttpResponseTest {
     testResponse.code(400);
     try {
       // when
-      connector.createRequest().configOption("throw-http-error", "TRUE").url("http://camunda.com").get().execute();
+      connector.createRequest().configOption("throw-http-error", "TRUE").url("http://orqueio.io").get().execute();
       Assertions.fail("ConnectorRequestException should be thrown");
     } catch (ConnectorRequestException e) {
       // then
@@ -154,7 +154,7 @@ public class HttpResponseTest {
     // given
     testResponse.code(200);
     // when
-    connector.createRequest().configOption("throw-http-error", "TRUE").url("http://camunda.com").get().execute();
+    connector.createRequest().configOption("throw-http-error", "TRUE").url("http://orqueio.io").get().execute();
     // then
     HttpResponse response = getResponse();
     assertThat(response.getStatusCode()).isEqualTo(200);
@@ -165,7 +165,7 @@ public class HttpResponseTest {
     // given
     testResponse.code(400);
     // when
-    connector.createRequest().configOption("throw-http-error", "FALSE").url("http://camunda.com").get().execute();
+    connector.createRequest().configOption("throw-http-error", "FALSE").url("http://orqueio.io").get().execute();
     // then
     HttpResponse response = getResponse();
     assertThat(response.getStatusCode()).isEqualTo(400);
