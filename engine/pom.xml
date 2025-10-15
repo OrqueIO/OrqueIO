@@ -7,14 +7,14 @@
 <packaging>jar</packaging>
   <name>Orque IO Platform - engine</name>
   <groupId>io.orqueio.bpm</groupId>
-  <version>1.0.3</version>
+  <version>1.0.4</version>
   <artifactId>orqueio-engine</artifactId>
 
   <parent>
     <groupId>io.orqueio.bpm</groupId>
     <artifactId>orqueio-database-settings</artifactId>
     <relativePath>../database</relativePath>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
   </parent>
 
   <dependencyManagement>
@@ -113,9 +113,7 @@
     <dependency>
       <groupId>org.mybatis</groupId>
       <artifactId>mybatis</artifactId>
-
       <version>3.5.15</version>
-
     </dependency>
 
     <dependency>
@@ -726,7 +724,7 @@
               <redirectTestOutputToFile>true</redirectTestOutputToFile>
               <reuseForks>true</reuseForks>
               <systemPropertyVariables>
-                <jdbcUrl>jdbc:h2:mem:orqueio_${surefire.forkNumber};DB_CLOSE_DELAY=1000</jdbcUrl>
+                <jdbcUrl>jdbc:h2:mem:camunda_${surefire.forkNumber};DB_CLOSE_DELAY=1000</jdbcUrl>
               </systemPropertyVariables>
             </configuration>
           </plugin>

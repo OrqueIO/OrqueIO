@@ -5,8 +5,7 @@ Lightweight Execution Engine for DMN (Decision Model and Notation) written in Ja
 
 <p>
   <a href="http://orqueio.io/">Home</a> |
-  <a href="http://orqueio.io/community/forum.html">Forum</a> |
-  <a href="https://app.camunda.com/jira/browse/CAM">Issues</a> |
+  <a href="https://github.com/OrqueIO/OrqueIO/issues">Issues</a> |
 </p>
 
 The Decision Engine can be used seamlessly in combination with BPMN and CMMN or standalone.
@@ -18,8 +17,8 @@ Add the following Maven Coordinates to your project:
 ```xml
 <dependency>
   <groupId>io.orqueio.bpm.dmn</groupId>
-  <artifactId>camunda-engine-dmn</artifactId>
-  <version>${version.camunda}</version>
+  <artifactId>orqueio-engine-dmn</artifactId>
+  <version>${version.orqueio}</version>
 </dependency>
 ```
 
@@ -54,8 +53,8 @@ Add the following Maven Coordinates to your project:
 ```xml
 <dependency>
   <groupId>io.orqueio.bpm</groupId>
-  <artifactId>camunda-engine</artifactId>
-  <version>${version.camunda}</versions>
+  <artifactId>orqueio-engine</artifactId>
+  <version>${version.orqueio}</versions>
 </dependency>
 <dependency>
   <groupId>com.h2database</groupId>

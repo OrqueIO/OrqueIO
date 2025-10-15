@@ -32,7 +32,7 @@ import java.util.Map;
  *  req.execute();
  * </code>
  * This makes it possible to use the connector in a generic / configurable system like
- * the camunda process engine.
+ * the orqueio process engine.
  * </p>
  *
  * <p>Optionally, a connector may also extend the request interface and provide

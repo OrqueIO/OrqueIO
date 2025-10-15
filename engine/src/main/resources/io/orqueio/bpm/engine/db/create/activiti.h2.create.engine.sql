@@ -409,15 +409,15 @@ create index ACT_IDX_EXT_TASK_ERR_DETAILS ON ACT_RU_EXT_TASK(ERROR_DETAILS_ID_);
 create index ACT_IDX_AUTH_GROUP_ID ON ACT_RU_AUTHORIZATION(GROUP_ID_);
 create index ACT_IDX_JOB_JOB_DEF_ID on ACT_RU_JOB(JOB_DEF_ID_);
 
--- indexes for deadlock problems - https://app.orqueio.com/jira/browse/CAM-2567 --
+-- indexes for deadlock problems - https://app.camunda.com/jira/browse/CAM-2567 --
 create index ACT_IDX_INC_CAUSEINCID on ACT_RU_INCIDENT(CAUSE_INCIDENT_ID_);
 create index ACT_IDX_INC_EXID on ACT_RU_INCIDENT(EXECUTION_ID_);
 create index ACT_IDX_INC_PROCDEFID on ACT_RU_INCIDENT(PROC_DEF_ID_);
 create index ACT_IDX_INC_PROCINSTID on ACT_RU_INCIDENT(PROC_INST_ID_);
 create index ACT_IDX_INC_ROOTCAUSEINCID on ACT_RU_INCIDENT(ROOT_CAUSE_INCIDENT_ID_);
--- index for deadlock problem - https://app.orqueio.com/jira/browse/CAM-4440 --
+-- index for deadlock problem - https://app.camunda.com/jira/browse/CAM-4440 --
 create index ACT_IDX_AUTH_RESOURCE_ID on ACT_RU_AUTHORIZATION(RESOURCE_ID_);
--- index to prevent deadlock on fk constraint - https://app.orqueio.com/jira/browse/CAM-5440 --
+-- index to prevent deadlock on fk constraint - https://app.camunda.com/jira/browse/CAM-5440 --
 create index ACT_IDX_EXT_TASK_EXEC on ACT_RU_EXT_TASK(EXECUTION_ID_);
 
 -- indexes to improve deployment

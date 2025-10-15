@@ -199,7 +199,7 @@ public class DmnEngineConfigurationTest {
 
   protected ProcessEngineConfigurationImpl createProcessEngineConfiguration() {
     return (ProcessEngineConfigurationImpl) ProcessEngineConfiguration.createStandaloneInMemProcessEngineConfiguration()
-        .setJdbcUrl("jdbc:h2:mem:orqueio" + getClass().getSimpleName());
+        .setJdbcUrl("jdbc:h2:mem:camunda" + getClass().getSimpleName());
   }
 
   protected DefaultDmnEngineConfiguration getConfigurationOfDmnEngine() {

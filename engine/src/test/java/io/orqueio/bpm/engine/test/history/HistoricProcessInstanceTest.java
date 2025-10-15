@@ -390,7 +390,7 @@ public class HistoricProcessInstanceTest {
   }
 
   /**
-   * See: https://app.orqueio.com/jira/browse/CAM-1324
+   * See: https://app.camunda.com/jira/browse/CAM-1324
    */
   @Test
   @Deployment

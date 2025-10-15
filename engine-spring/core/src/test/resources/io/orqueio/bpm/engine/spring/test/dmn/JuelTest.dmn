@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" id="Definitions_1ov1jf9" name="DRD" namespace="http://camunda.org/schema/1.0/dmn" exporter="Orqueio Modeler" exporterVersion="4.0.0-alpha.3">
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" id="Definitions_1ov1jf9" name="DRD" namespace="http://camunda.org/schema/1.0/dmn" exporter="Camunda Modeler" exporterVersion="4.0.0-alpha.3">
   <decision id="drg-with-bean-expression" name="Decision 1">
     <decisionTable id="DecisionTable_1ju7hid">
       <input id="Input_1">

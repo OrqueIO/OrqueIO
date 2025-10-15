@@ -45,7 +45,7 @@ public class SoapHttpConnectorTest {
   public void shouldCreateHttpPostRequestByDefault() {
     DebugRequestInterceptor interceptor = new DebugRequestInterceptor(false);
     connector.addRequestInterceptor(interceptor);
-    connector.createRequest().url("http://camunda.org").payload("test").soapAction("as").execute();
+    connector.createRequest().url("http://orqueio.io").payload("test").soapAction("as").execute();
 
     Object target = interceptor.getTarget();
     assertThat(target).isInstanceOf(HttpPost.class);

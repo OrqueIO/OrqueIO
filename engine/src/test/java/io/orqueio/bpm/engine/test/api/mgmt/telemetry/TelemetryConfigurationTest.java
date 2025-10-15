@@ -104,7 +104,7 @@ public class TelemetryConfigurationTest {
     String testLicenseKey = "signature=;my company;unlimited";
     inMemoryConfiguration = new StandaloneInMemProcessEngineConfiguration();
     inMemoryConfiguration
-        .setJdbcUrl("jdbc:h2:mem:orqueio-test" + getClass().getSimpleName())
+        .setJdbcUrl("jdbc:h2:mem:camunda-test" + getClass().getSimpleName())
         // keep data alive at process engine close
         .setDatabaseSchemaUpdate(ProcessEngineConfigurationImpl.DB_SCHEMA_UPDATE_CREATE)
         .setDbMetricsReporterActivate(false);

@@ -6,7 +6,7 @@
   <name>Orque IO Platform - engine - Cdi</name>
   <groupId>io.orqueio.bpm</groupId>
   <artifactId>orqueio-engine-cdi</artifactId>
-  <version>1.0.3</version>
+  <version>1.0.4</version>
   <packaging>jar</packaging>
 
 
@@ -15,7 +15,7 @@
     <groupId>io.orqueio.bpm</groupId>
     <artifactId>orqueio-database-settings</artifactId>
     <relativePath>../../database</relativePath>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
   </parent>
 
   <properties>
@@ -60,13 +60,11 @@
     </dependency>
     <dependency>
       <groupId>org.jboss.spec</groupId>
-      <artifactId>jboss-javaee-8.0</artifactId>
-      <version>1.0.4.Final</version>
-
+      <artifactId>${javaee.spec}</artifactId>
+      <version>${javaee.spec.version}</version>
       <type>pom</type>
       <scope>provided</scope>
     </dependency>
-
     <dependency>
       <groupId>org.jboss.arquillian.container</groupId>
       <artifactId>arquillian-weld-embedded</artifactId>
@@ -76,19 +74,16 @@
     <dependency>
       <groupId>org.jboss.weld</groupId>
       <artifactId>weld-core-impl</artifactId>
-      <version>3.1.9.Final</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.jboss.weld.module</groupId>
       <artifactId>weld-web</artifactId>
-      <version>3.1.9.Final</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.jboss.weld</groupId>
       <artifactId>weld-api</artifactId>
-      <version>3.1.SP4</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -100,21 +95,16 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.13.1</version>
-
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
-      <version>2.9.1</version>
-
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.h2database</groupId>
       <artifactId>h2</artifactId>
-      <version>2.3.232</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -126,14 +116,11 @@
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>jcl-over-slf4j</artifactId>
-      <version>1.7.26</version>
-
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>jul-to-slf4j</artifactId>
-      <version>1.7.26</version>
       <scope>test</scope>
     </dependency>
     <dependency>

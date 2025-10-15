@@ -36,7 +36,7 @@ public class RegisterNewProcessEngineTest {
       .setProcessEngineName("testEngine")
       // Use a new database to resolve the conflict with existing
       // in-memory-database. The tables will be removed after the test.
-      .setJdbcUrl("jdbc:h2:mem:orqueio-test")
+      .setJdbcUrl("jdbc:h2:mem:camunda-test")
       .buildProcessEngine();
 
   @RegisterExtension

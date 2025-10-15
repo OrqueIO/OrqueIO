@@ -35,7 +35,7 @@ import org.junit.Test;
 
 public class HttpRequestTest {
 
-  public static final String EXAMPLE_URL = "http://camunda.org";
+  public static final String EXAMPLE_URL = "http://orqueio.io";
   public static final String EXAMPLE_CONTENT_TYPE = "text/plain";
   public static final String EXAMPLE_PAYLOAD = "test";
 

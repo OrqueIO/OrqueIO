@@ -34,7 +34,7 @@ import io.orqueio.bpm.engine.test.util.PluggableProcessEngineTest;
 import org.junit.Test;
 
 /**
- * see https://app.orqueio.com/jira/browse/CAM-1612
+ * see https://app.camunda.com/jira/browse/CAM-1612
  *
  * @author Daniel Meyer
  * @author Danny Gräf

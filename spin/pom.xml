@@ -5,13 +5,13 @@
     <groupId>io.orqueio.bpm</groupId>
     <artifactId>orqueio-parent</artifactId>
     <relativePath>../parent</relativePath>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
   </parent>
   <description>orqueio-spin-root</description>
 
   <groupId>io.orqueio.spin</groupId>
   <artifactId>orqueio-spin-root</artifactId>
-  <version>1.0.3</version>
+  <version>1.0.4</version>
   <name>Orque IO Spin - root</name>
   <inceptionYear>2014</inceptionYear>
   <packaging>pom</packaging>

@@ -6,13 +6,13 @@
   <parent>
     <groupId>io.orqueio.bpm</groupId>
     <artifactId>orqueio-database-settings</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
     <relativePath>../database</relativePath>
   </parent>
   <description>orqueio-webapp-root</description>
   <artifactId>orqueio-webapp-root</artifactId>
   <groupId>io.orqueio.bpm.webapp</groupId>
-  <version>1.0.3</version>
+  <version>1.0.4</version>
   <packaging>pom</packaging>
 
 
@@ -57,21 +57,17 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
-
   <dependencies>
 
     <dependency>
       <groupId>io.orqueio.bpm</groupId>
       <artifactId>orqueio-engine</artifactId>
-      <version>1.0.2</version>
-
       <scope>provided</scope>
     </dependency>
 
     <dependency>
       <groupId>io.orqueio.commons</groupId>
       <artifactId>orqueio-commons-logging</artifactId>
-      <version>1.0.2</version>
       <exclusions>
         <exclusion>
           <groupId>org.slf4j</groupId>
@@ -85,7 +81,6 @@
     <dependency>
       <groupId>io.orqueio.commons</groupId>
       <artifactId>orqueio-commons-testing</artifactId>
-      <version>1.0.2</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -119,8 +114,6 @@
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-      <version>5.10.0</version>
-
       <scope>test</scope>
     </dependency>
 

@@ -8,9 +8,9 @@
   <parent>
     <groupId>io.orqueio.bpm.quarkus</groupId>
     <artifactId>orqueio-bpm-quarkus-engine-parent</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
   </parent>
-  <version>1.0.3</version>
+  <version>1.0.4</version>
   <description>orqueio-bpm-quarkus-engine-deployment</description>
   <groupId>io.orqueio.bpm.quarkus</groupId>
   <artifactId>orqueio-bpm-quarkus-engine-deployment</artifactId>
@@ -30,27 +30,23 @@
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-arc-deployment</artifactId>
-      <version>3.20.0</version>
     </dependency>
 
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-agroal-deployment</artifactId>
-      <version>3.20.0</version>
     </dependency>
 
     <!-- Test dependencies -->
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-junit5-internal</artifactId>
-      <version>3.20.0</version>
       <scope>test</scope>
     </dependency>
 
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-jdbc-h2-deployment</artifactId>
-      <version>3.20.0</version>
       <scope>test</scope>
     </dependency>
 
