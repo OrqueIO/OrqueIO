@@ -38,6 +38,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -100,6 +101,25 @@ public class OAuth2IdentityProvider extends DbIdentityServiceProvider {
       user.setFirstName(oidcUser.getGivenName());
       user.setLastName(oidcUser.getFamilyName());
       user.setEmail(oidcUser.getEmail());
+    } else if (principal instanceof OAuth2User) {
+      var oauth2User = (OAuth2User) principal;
+
+      String fullName = oauth2User.getAttribute("name");
+      if (fullName != null && !fullName.isEmpty()) {
+        String[] nameParts = fullName.split("\\s+", 2);
+        user.setFirstName(nameParts[0]);
+        if (nameParts.length > 1) {
+          user.setLastName(nameParts[1]);
+        } else {
+          user.setLastName("");
+        }
+      } else {
+        user.setFirstName(userId);
+        user.setLastName("");  
+      }
+
+      String email = oauth2User.getAttribute("email");
+      user.setEmail(email);
     }
     return user;
   }

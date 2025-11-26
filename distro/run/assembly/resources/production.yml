@@ -63,6 +63,76 @@ orqueio.bpm:
 #      administrator-user-name: admin
 #      administrator-group-name: admins
 
+# Universal SSO Configuration (OIDC/OAuth2)
+# This replaces the old oauth2.identity-provider approach
+# When using --oauth2 flag, the mode is set to OIDC to activate Universal OIDC authentication
+  security:
+    mode: OIDC
+    auto-create-users: true
+    auto-update-users: true
+    sync-groups: true
+    fallback-to-database: true
+
+# Spring Security OAuth2 Client Configuration (for OIDC)
+# Supports multiple identity providers: Keycloak, Google, GitHub
+spring.security.oauth2.client:
+  registration:
+    # Keycloak (local instance)
+    keycloak:
+      client-id: YOUR_KEYCLOAK_CLIENT_ID
+      client-secret: YOUR_KEYCLOAK_CLIENT_SECRET
+      scope:
+        - openid
+        - profile
+        - email
+      authorization-grant-type: authorization_code
+      redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+
+    # Google OAuth2
+    # To use Google: Obtain credentials from https://console.cloud.google.com
+    # 1. Create project → APIs & Services → Credentials → Create OAuth 2.0 Client ID
+    # 2. Set redirect URI: http://localhost:8080/login/oauth2/code/google (or https://yourdomain.com/login/oauth2/code/google for production)
+    # 3. Replace CLIENT_ID and CLIENT_SECRET below
+    google:
+      client-id: YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com
+      client-secret: YOUR_GOOGLE_CLIENT_SECRET
+      scope:
+        - openid
+        - profile
+        - email
+      authorization-grant-type: authorization_code
+      redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+
+    # GitHub OAuth2
+    # To use GitHub: Create OAuth App at https://github.com/settings/developers
+    # 1. New OAuth App → Set callback URL: http://localhost:8080/login/oauth2/code/github (or https://yourdomain.com/login/oauth2/code/github for production)
+    # 2. Replace CLIENT_ID and CLIENT_SECRET below
+    github:
+      client-id: YOUR_GITHUB_CLIENT_ID
+      client-secret: YOUR_GITHUB_CLIENT_SECRET
+      scope:
+        - read:user
+        - user:email
+      authorization-grant-type: authorization_code
+      redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+
+  provider:
+    keycloak:
+      issuer-uri: http://localhost:9090/realms/orqueio
+      user-name-attribute: preferred_username
+
+    # Google provider (auto-discovered from issuer-uri)
+    google:
+      issuer-uri: https://accounts.google.com
+      user-name-attribute: email
+
+    # GitHub provider (manual configuration - GitHub doesn't support OIDC discovery)
+    github:
+      authorization-uri: https://github.com/login/oauth/authorize
+      token-uri: https://github.com/login/oauth/access_token
+      user-info-uri: https://api.github.com/user
+      user-name-attribute: login
+
 server:
 # https://docs.orqueio.io/manual/latest/user-guide/orqueio-bpm-run/#https
 # do not use the provided certificate in production

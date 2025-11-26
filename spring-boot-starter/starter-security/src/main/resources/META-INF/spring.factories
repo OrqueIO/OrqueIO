@@ -1,0 +1,4 @@
+# Spring Boot Auto-Configuration
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+io.orqueio.bpm.spring.boot.starter.security.oauth2.OrqueioSpringSecurityOAuth2AutoConfiguration,\
+io.orqueio.bpm.spring.boot.starter.security.oidc.UniversalOIDCAutoConfiguration
