@@ -2,7 +2,7 @@
 # The provided links to documentation guides for each property will give more information about the purpose of each property.
 # security guide: https://docs.orqueio.io/manual/latest/user-guide/security/
 
-orqueio.bpm:
+camunda.bpm:
 # https://docs.orqueio.io/manual/latest/user-guide/security/#http-header-security-in-webapps
 # https://docs.orqueio.io/manual/latest/webapps/shared-options/header-security/
   webapp:
@@ -63,15 +63,23 @@ orqueio.bpm:
 #      administrator-user-name: admin
 #      administrator-group-name: admins
 
-# Universal SSO Configuration (OIDC/OAuth2)
-# This replaces the old oauth2.identity-provider approach
-# When using --oauth2 flag, the mode is set to OIDC to activate Universal OIDC authentication
-  security:
-    mode: OIDC
-    auto-create-users: true
-    auto-update-users: true
-    sync-groups: true
-    fallback-to-database: true
+# OAuth2/OIDC Configuration
+  oauth2:
+    # SSO Logout Configuration
+    # Enable SSO logout to terminate session at identity provider
+    sso-logout:
+      enabled: true
+      post-logout-redirect-uri: "{baseUrl}"
+    # User Synchronization Configuration
+    # Synchronize OAuth2/OIDC users to database on login
+    # This allows users to be visible in OrqueIO Admin and assignable to tasks
+    user-sync:
+      enabled: true
+      auto-create-users: true
+      auto-update-users: true
+      sync-groups: true
+      # Warning: Only enable if OAuth2/OIDC is the single source of truth for groups
+      remove-obsolete-group-memberships: false
 
 # Spring Security OAuth2 Client Configuration (for OIDC)
 # Supports multiple identity providers: Keycloak, Google, GitHub
@@ -136,13 +144,14 @@ spring.security.oauth2.client:
 server:
 # https://docs.orqueio.io/manual/latest/user-guide/orqueio-bpm-run/#https
 # do not use the provided certificate in production
-  ssl:
-    key-store: classpath:keystore.p12
-    key-store-password: orqueio
-    key-store-type: pkcs12
-    key-alias: orqueio
-    key-password: orqueio
-  port: 8443
+# SSL configuration disabled for development/testing
+#  ssl:
+#    key-store: classpath:keystore.p12
+#    key-store-password: orqueio
+#    key-store-type: pkcs12
+#    key-alias: orqueio
+#    key-password: orqueio
+  port: 8080
 
 # https://docs.orqueio.io/manual/latest/user-guide/security/#http-header-security-in-webapps
 # https://docs.orqueio.io/manual/latest/webapps/shared-options/header-security/

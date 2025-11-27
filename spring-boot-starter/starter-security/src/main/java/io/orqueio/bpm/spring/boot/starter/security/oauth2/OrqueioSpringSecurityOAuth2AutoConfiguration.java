@@ -24,10 +24,13 @@ import io.orqueio.bpm.engine.spring.SpringProcessEngineServicesConfiguration;
 import io.orqueio.bpm.spring.boot.starter.OrqueioBpmAutoConfiguration;
 import io.orqueio.bpm.spring.boot.starter.property.OrqueioBpmProperties;
 import io.orqueio.bpm.spring.boot.starter.property.WebappProperty;
+import io.orqueio.bpm.engine.IdentityService;
 import io.orqueio.bpm.spring.boot.starter.security.oauth2.impl.AuthorizeTokenFilter;
 import io.orqueio.bpm.spring.boot.starter.security.oauth2.impl.OAuth2AuthenticationProvider;
+import io.orqueio.bpm.spring.boot.starter.security.oauth2.impl.OAuth2AuthenticationSuccessHandler;
 import io.orqueio.bpm.spring.boot.starter.security.oauth2.impl.OAuth2GrantedAuthoritiesMapper;
 import io.orqueio.bpm.spring.boot.starter.security.oauth2.impl.OAuth2IdentityProviderPlugin;
+import io.orqueio.bpm.spring.boot.starter.security.oauth2.impl.OAuth2UserSynchronizer;
 import io.orqueio.bpm.spring.boot.starter.security.oauth2.impl.SsoLogoutSuccessHandler;
 import io.orqueio.bpm.webapp.impl.security.auth.ContainerBasedAuthenticationFilter;
 import org.slf4j.Logger;
@@ -115,9 +118,24 @@ public class OrqueioSpringSecurityOAuth2AutoConfiguration {
   }
 
   @Bean
+  @ConditionalOnProperty(name = "user-sync.enabled", havingValue = "true", prefix = OAuth2Properties.PREFIX)
+  protected OAuth2UserSynchronizer oauth2UserSynchronizer(IdentityService identityService) {
+    logger.debug("Registering OAuth2UserSynchronizer");
+    return new OAuth2UserSynchronizer(identityService, oAuth2Properties);
+  }
+
+  @Bean
+  @ConditionalOnProperty(name = "user-sync.enabled", havingValue = "true", prefix = OAuth2Properties.PREFIX)
+  protected OAuth2AuthenticationSuccessHandler oauth2AuthenticationSuccessHandler(OAuth2UserSynchronizer synchronizer) {
+    logger.debug("Registering OAuth2AuthenticationSuccessHandler");
+    return new OAuth2AuthenticationSuccessHandler(synchronizer);
+  }
+
+  @Bean
   public SecurityFilterChain filterChain(HttpSecurity http,
                                          AuthorizeTokenFilter authorizeTokenFilter,
-                                         @Nullable SsoLogoutSuccessHandler ssoLogoutSuccessHandler) throws Exception {
+                                         @Nullable SsoLogoutSuccessHandler ssoLogoutSuccessHandler,
+                                         @Nullable OAuth2AuthenticationSuccessHandler oauth2AuthenticationSuccessHandler) throws Exception {
 
     logger.info("Enabling Orqueio Spring Security oauth2 integration");
 
@@ -130,15 +148,23 @@ public class OrqueioSpringSecurityOAuth2AutoConfiguration {
         .addFilterAfter(authorizeTokenFilter, OAuth2AuthorizationRequestRedirectFilter.class)
         .anonymous(AbstractHttpConfigurer::disable)
         .oidcLogout(c -> c.backChannel(Customizer.withDefaults()))
-        .oauth2Login(Customizer.withDefaults())
         .logout(c -> c
             .clearAuthentication(true)
             .invalidateHttpSession(true)
         )
         .oauth2Client(Customizer.withDefaults())
+        .headers(headers -> headers.frameOptions(frame -> frame.sameOrigin()))  // Allow frames for H2 console
         .cors(AbstractHttpConfigurer::disable)
         .csrf(AbstractHttpConfigurer::disable);
     // @formatter:on
+
+    // Configure OAuth2 login with optional success handler for user synchronization
+    if (oauth2AuthenticationSuccessHandler != null) {
+      logger.info("User synchronization enabled - using custom OAuth2AuthenticationSuccessHandler");
+      http.oauth2Login(c -> c.successHandler(oauth2AuthenticationSuccessHandler));
+    } else {
+      http.oauth2Login(Customizer.withDefaults());
+    }
 
     if (oAuth2Properties.getSsoLogout().isEnabled()) {
       http.logout(c -> c.logoutSuccessHandler(ssoLogoutSuccessHandler));

@@ -23,8 +23,10 @@ import io.orqueio.bpm.spring.boot.starter.security.oauth2.OAuth2Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.client.oidc.web.logout.OidcClientInitiatedLogoutSuccessHandler;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 
 import java.io.IOException;
 
@@ -44,7 +46,34 @@ public class SsoLogoutSuccessHandler extends OidcClientInitiatedLogoutSuccessHan
   @Override
   public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
       throws IOException, ServletException {
-    logger.debug("Initiating SSO logout for '{}'", authentication.getName());
+    if (authentication == null) {
+      logger.warn("SSO Logout: No authentication found, redirecting to home");
+      response.sendRedirect(request.getContextPath() + "/");
+      return;
+    }
+
+    String registrationId = "unknown";
+    if (authentication instanceof OAuth2AuthenticationToken) {
+      registrationId = ((OAuth2AuthenticationToken) authentication).getAuthorizedClientRegistrationId();
+    }
+
+    boolean isOidcUser = authentication.getPrincipal() instanceof OidcUser;
+
+    logger.info("SSO Logout: user='{}', provider='{}', isOidcUser={}, principalType={}",
+        authentication.getName(),
+        registrationId,
+        isOidcUser,
+        authentication.getPrincipal().getClass().getSimpleName());
+
+    if (isOidcUser) {
+      OidcUser oidcUser = (OidcUser) authentication.getPrincipal();
+      logger.info("SSO Logout: OIDC issuer='{}', has id_token={}",
+          oidcUser.getIssuer(),
+          oidcUser.getIdToken() != null);
+    }
+
+    // OidcClientInitiatedLogoutSuccessHandler only works with OidcUser
+    // For OAuth2User (like GitHub), it will just do local logout
     super.onLogoutSuccess(request, response, authentication);
   }
 }

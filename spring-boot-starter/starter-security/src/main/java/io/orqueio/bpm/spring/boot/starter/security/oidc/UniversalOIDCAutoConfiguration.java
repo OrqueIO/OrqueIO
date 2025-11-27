@@ -139,21 +139,34 @@ public class UniversalOIDCAutoConfiguration {
 
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public OidcLogoutSuccessHandler oidcLogoutSuccessHandler(
+        ClientRegistrationRepository clientRegistrationRepository
+    ) {
+        logger.info("Configuring OIDC logout success handler");
+        // Post-logout redirect URI: where to send user after IdP logout
+        String postLogoutRedirectUri = webappPath + "/";
+        return new OidcLogoutSuccessHandler(clientRegistrationRepository, postLogoutRedirectUri);
+    }
+
+    @Bean
+    public SecurityFilterChain filterChain(
+        HttpSecurity http,
+        OidcLogoutSuccessHandler oidcLogoutSuccessHandler
+    ) throws Exception {
         logger.info("Configuring Spring Security filter chain for OIDC");
 
         http
             .authorizeHttpRequests(authorize -> authorize
-                .requestMatchers(webappPath + "/app/**").authenticated()  
-                .requestMatchers(webappPath + "/api/**").authenticated()  
-                .anyRequest().permitAll()  
+                .requestMatchers(webappPath + "/app/**").authenticated()
+                .requestMatchers(webappPath + "/api/**").authenticated()
+                .anyRequest().permitAll()
             )
             .oauth2Login(Customizer.withDefaults())
             .oauth2Client(Customizer.withDefaults())
             .logout(logout -> logout
                 .clearAuthentication(true)
                 .invalidateHttpSession(true)
-                .logoutSuccessUrl("/")
+                .logoutSuccessHandler(oidcLogoutSuccessHandler)
             )
             .anonymous(AbstractHttpConfigurer::disable)
             .cors(AbstractHttpConfigurer::disable)

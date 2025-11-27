@@ -38,6 +38,80 @@ public class OAuth2Properties {
   @NestedConfigurationProperty
   private OAuth2IdentityProviderProperties identityProvider = new OAuth2IdentityProviderProperties();
 
+  /**
+   * User synchronization properties.
+   */
+  @NestedConfigurationProperty
+  private UserSyncProperties userSync = new UserSyncProperties();
+
+  public static class UserSyncProperties {
+    /**
+     * Enable user synchronization to database on login. Default {@code false}.
+     */
+    private boolean enabled = false;
+
+    /**
+     * Automatically create users in the database if they don't exist. Default {@code true}.
+     */
+    private boolean autoCreateUsers = true;
+
+    /**
+     * Automatically update user attributes (firstName, lastName, email) on each login. Default {@code true}.
+     */
+    private boolean autoUpdateUsers = true;
+
+    /**
+     * Synchronize groups from OAuth2/OIDC to database. Default {@code true}.
+     */
+    private boolean syncGroups = true;
+
+    /**
+     * Remove group memberships that are not present in the OAuth2/OIDC token. Default {@code false}.
+     * Warning: Enable only if OAuth2/OIDC is the single source of truth for group memberships.
+     */
+    private boolean removeObsoleteGroupMemberships = false;
+
+    public boolean isEnabled() {
+      return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+      this.enabled = enabled;
+    }
+
+    public boolean isAutoCreateUsers() {
+      return autoCreateUsers;
+    }
+
+    public void setAutoCreateUsers(boolean autoCreateUsers) {
+      this.autoCreateUsers = autoCreateUsers;
+    }
+
+    public boolean isAutoUpdateUsers() {
+      return autoUpdateUsers;
+    }
+
+    public void setAutoUpdateUsers(boolean autoUpdateUsers) {
+      this.autoUpdateUsers = autoUpdateUsers;
+    }
+
+    public boolean isSyncGroups() {
+      return syncGroups;
+    }
+
+    public void setSyncGroups(boolean syncGroups) {
+      this.syncGroups = syncGroups;
+    }
+
+    public boolean isRemoveObsoleteGroupMemberships() {
+      return removeObsoleteGroupMemberships;
+    }
+
+    public void setRemoveObsoleteGroupMemberships(boolean removeObsoleteGroupMemberships) {
+      this.removeObsoleteGroupMemberships = removeObsoleteGroupMemberships;
+    }
+  }
+
   public static class OAuth2SSOLogoutProperties {
     /**
      * Enable SSO Logout. Default {@code false}.
@@ -121,5 +195,13 @@ public class OAuth2Properties {
 
   public void setIdentityProvider(OAuth2IdentityProviderProperties identityProvider) {
     this.identityProvider = identityProvider;
+  }
+
+  public UserSyncProperties getUserSync() {
+    return userSync;
+  }
+
+  public void setUserSync(UserSyncProperties userSync) {
+    this.userSync = userSync;
   }
 }
