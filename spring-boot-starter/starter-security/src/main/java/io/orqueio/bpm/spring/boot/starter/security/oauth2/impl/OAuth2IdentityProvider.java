@@ -172,12 +172,14 @@ public class OAuth2IdentityProvider extends DbIdentityServiceProvider {
 
   @Override
   public UserQuery createUserQuery() {
-    return springSecurityAuthentication() ? new OAuth2UserQuery() : super.createUserQuery();
+    // Always use database for user queries to find synchronized users
+    return super.createUserQuery();
   }
 
   @Override
   public UserQueryImpl createUserQuery(CommandContext commandContext) {
-    return springSecurityAuthentication() ? new OAuth2UserQuery() : super.createUserQuery(commandContext);
+    // Always use database for user queries to find synchronized users
+    return super.createUserQuery(commandContext);
   }
 
   @Override
@@ -233,12 +235,15 @@ public class OAuth2IdentityProvider extends DbIdentityServiceProvider {
 
   @Override
   public GroupQuery createGroupQuery() {
-    return springSecurityAuthentication() ? new OAuth2GroupQuery() : super.createGroupQuery();
+    // Always use database for group queries to include synchronized groups (like orqueio-admin)
+    // The OAuth2GroupQuery only returns groups from the token, but we need DB groups for authorization
+    return super.createGroupQuery();
   }
 
   @Override
   public GroupQuery createGroupQuery(CommandContext commandContext) {
-    return springSecurityAuthentication() ? new OAuth2GroupQuery() : super.createGroupQuery(commandContext);
+    // Always use database for group queries to include synchronized groups (like orqueio-admin)
+    return super.createGroupQuery(commandContext);
   }
 
   public static class OAuth2TenantQuery extends TenantQueryImpl {

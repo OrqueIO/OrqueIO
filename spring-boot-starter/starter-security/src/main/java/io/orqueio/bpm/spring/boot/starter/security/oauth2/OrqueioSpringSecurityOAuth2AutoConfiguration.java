@@ -24,7 +24,7 @@ import io.orqueio.bpm.engine.spring.SpringProcessEngineServicesConfiguration;
 import io.orqueio.bpm.spring.boot.starter.OrqueioBpmAutoConfiguration;
 import io.orqueio.bpm.spring.boot.starter.property.OrqueioBpmProperties;
 import io.orqueio.bpm.spring.boot.starter.property.WebappProperty;
-import io.orqueio.bpm.engine.IdentityService;
+import io.orqueio.bpm.engine.ProcessEngine;
 import io.orqueio.bpm.spring.boot.starter.security.oauth2.impl.AuthorizeTokenFilter;
 import io.orqueio.bpm.spring.boot.starter.security.oauth2.impl.OAuth2AuthenticationProvider;
 import io.orqueio.bpm.spring.boot.starter.security.oauth2.impl.OAuth2AuthenticationSuccessHandler;
@@ -119,9 +119,9 @@ public class OrqueioSpringSecurityOAuth2AutoConfiguration {
 
   @Bean
   @ConditionalOnProperty(name = "user-sync.enabled", havingValue = "true", prefix = OAuth2Properties.PREFIX)
-  protected OAuth2UserSynchronizer oauth2UserSynchronizer(IdentityService identityService) {
+  protected OAuth2UserSynchronizer oauth2UserSynchronizer(ProcessEngine processEngine) {
     logger.debug("Registering OAuth2UserSynchronizer");
-    return new OAuth2UserSynchronizer(identityService, oAuth2Properties);
+    return new OAuth2UserSynchronizer(processEngine, oAuth2Properties);
   }
 
   @Bean
@@ -141,6 +141,7 @@ public class OrqueioSpringSecurityOAuth2AutoConfiguration {
 
     // @formatter:off
     http.authorizeHttpRequests(c -> c
+            .requestMatchers("/h2-console/**").permitAll()  // Allow H2 console access
             .requestMatchers(webappPath + "/app/**").authenticated()
             .requestMatchers(webappPath + "/api/**").authenticated()
             .anyRequest().permitAll()

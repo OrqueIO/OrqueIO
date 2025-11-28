@@ -16,7 +16,14 @@
  */
 package io.orqueio.bpm.spring.boot.starter.security.oauth2.impl;
 
+import io.orqueio.bpm.engine.AuthorizationService;
 import io.orqueio.bpm.engine.IdentityService;
+import io.orqueio.bpm.engine.ProcessEngine;
+import io.orqueio.bpm.engine.authorization.Authorization;
+import io.orqueio.bpm.engine.authorization.Groups;
+import io.orqueio.bpm.engine.authorization.Permissions;
+import io.orqueio.bpm.engine.authorization.Resource;
+import io.orqueio.bpm.engine.authorization.Resources;
 import io.orqueio.bpm.engine.identity.Group;
 import io.orqueio.bpm.engine.identity.User;
 import io.orqueio.bpm.spring.boot.starter.security.oauth2.OAuth2Properties;
@@ -45,13 +52,15 @@ public class OAuth2UserSynchronizer {
   private static final Logger logger = LoggerFactory.getLogger(OAuth2UserSynchronizer.class);
 
   private final IdentityService identityService;
+  private final AuthorizationService authorizationService;
   private final OAuth2Properties.UserSyncProperties syncProperties;
   private final OAuth2Properties.OAuth2IdentityProviderProperties identityProviderProperties;
 
   public OAuth2UserSynchronizer(
-      IdentityService identityService,
+      ProcessEngine processEngine,
       OAuth2Properties oAuth2Properties) {
-    this.identityService = identityService;
+    this.identityService = processEngine.getIdentityService();
+    this.authorizationService = processEngine.getAuthorizationService();
     this.syncProperties = oAuth2Properties.getUserSync();
     this.identityProviderProperties = oAuth2Properties.getIdentityProvider();
   }
@@ -197,6 +206,65 @@ public class OAuth2UserSynchronizer {
     identityService.saveUser(newUser);
     logger.debug("Created user: id='{}', firstName='{}', lastName='{}', email='{}'",
         userInfo.userId, userInfo.firstName, userInfo.lastName, userInfo.email);
+
+    // Add user to orqueio-admin group (same as basic auth users)
+    addUserToAdminGroup(userInfo.userId);
+  }
+
+  /**
+   * Adds a user to the orqueio-admin group if not already a member.
+   * This is the same group used for basic auth admin users.
+   * Also creates all necessary authorizations for the group (same as CreateAdminUserConfiguration).
+   */
+  private void addUserToAdminGroup(String userId) {
+    // Ensure orqueio-admin group exists
+    Group adminGroup = identityService.createGroupQuery()
+        .groupId(Groups.ORQUEIO_ADMIN)
+        .singleResult();
+
+    if (adminGroup == null) {
+      logger.info("Creating orqueio-admin group with full authorizations");
+      Group newGroup = identityService.newGroup(Groups.ORQUEIO_ADMIN);
+      newGroup.setName("OrqueIO BPM Administrators");
+      newGroup.setType(Groups.GROUP_TYPE_SYSTEM);
+      identityService.saveGroup(newGroup);
+
+      // Create ADMIN authorizations on all built-in resources (same as CreateAdminUserConfiguration)
+      createAdminAuthorizations();
+    }
+
+    // Check if user is already a member
+    List<Group> existingGroups = identityService.createGroupQuery()
+        .groupMember(userId)
+        .groupId(Groups.ORQUEIO_ADMIN)
+        .list();
+
+    if (existingGroups.isEmpty()) {
+      logger.info("Adding user '{}' to orqueio-admin group", userId);
+      identityService.createMembership(userId, Groups.ORQUEIO_ADMIN);
+    }
+  }
+
+  /**
+   * Creates ADMIN authorizations on all built-in resources for the orqueio-admin group.
+   * This is the same logic as in CreateAdminUserConfiguration.
+   */
+  private void createAdminAuthorizations() {
+    for (Resource resource : Resources.values()) {
+      if (authorizationService.createAuthorizationQuery()
+          .groupIdIn(Groups.ORQUEIO_ADMIN)
+          .resourceType(resource)
+          .resourceId(Authorization.ANY)
+          .count() == 0) {
+        logger.info("Creating authorization for orqueio-admin on resource: {}", resource.resourceName());
+        Authorization auth = authorizationService.createNewAuthorization(Authorization.AUTH_TYPE_GRANT);
+        auth.setGroupId(Groups.ORQUEIO_ADMIN);
+        auth.setResource(resource);
+        auth.setResourceId(Authorization.ANY);
+        auth.addPermission(Permissions.ALL);
+        authorizationService.saveAuthorization(auth);
+      }
+    }
   }
 
   private void updateUser(User existingUser, UserInfo userInfo) {

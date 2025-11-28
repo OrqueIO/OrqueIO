@@ -50,7 +50,25 @@ public class OAuth2AuthenticationProvider extends ContainerBasedAuthenticationPr
       return AuthenticationResult.unsuccessful();
     }
 
-    logger.debug("Authenticated user '{}'", orqueioUserId);
-    return AuthenticationResult.successful(orqueioUserId);
+    // Sanitize the userId to match the format used in OAuth2UserSynchronizer
+    // OrqueIO default pattern: [a-zA-Z0-9]+|orqueio-admin
+    String sanitizedUserId = sanitizeId(orqueioUserId);
+    logger.debug("Authenticated user '{}' (sanitized: '{}')", orqueioUserId, sanitizedUserId);
+    return AuthenticationResult.successful(sanitizedUserId);
+  }
+
+  /**
+   * Sanitizes an ID to be a valid OrqueIO/Camunda resource identifier.
+   * Must match the sanitization logic in OAuth2UserSynchronizer.
+   */
+  private String sanitizeId(String id) {
+    if (id == null) {
+      return null;
+    }
+    String sanitized = id.replaceAll("[^a-zA-Z0-9]", "");
+    if (sanitized.isEmpty()) {
+      sanitized = "user" + Math.abs(id.hashCode());
+    }
+    return sanitized;
   }
 }
