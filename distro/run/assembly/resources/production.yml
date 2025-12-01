@@ -77,7 +77,7 @@ camunda.bpm:
       enabled: true
       auto-create-users: true
       auto-update-users: true
-      sync-groups: true
+      sync-groups: false
       # Warning: Only enable if OAuth2/OIDC is the single source of truth for groups
       remove-obsolete-group-memberships: false
 
