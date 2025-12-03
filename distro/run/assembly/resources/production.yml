@@ -2,7 +2,7 @@
 # The provided links to documentation guides for each property will give more information about the purpose of each property.
 # security guide: https://docs.orqueio.io/manual/latest/user-guide/security/
 
-camunda.bpm:
+orqueio.bpm:
 # https://docs.orqueio.io/manual/latest/user-guide/security/#http-header-security-in-webapps
 # https://docs.orqueio.io/manual/latest/webapps/shared-options/header-security/
   webapp:
