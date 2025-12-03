@@ -196,6 +196,9 @@ public class OAuth2UserSynchronizer {
   private void createUser(UserInfo userInfo) {
     logger.info("Creating new user '{}' in database", userInfo.userId);
 
+    boolean isFirstUser = !hasAdminUser();
+    logger.info("isFirstUser={} (no admin exists yet)", isFirstUser);
+
     User newUser = identityService.newUser(userInfo.userId);
     newUser.setFirstName(userInfo.firstName);
     newUser.setLastName(userInfo.lastName);
@@ -207,8 +210,26 @@ public class OAuth2UserSynchronizer {
     logger.debug("Created user: id='{}', firstName='{}', lastName='{}', email='{}'",
         userInfo.userId, userInfo.firstName, userInfo.lastName, userInfo.email);
 
-    // Add user to orqueio-admin group (same as basic auth users)
-    addUserToAdminGroup(userInfo.userId);
+    if (isFirstUser) {
+      logger.info("First SSO user '{}' will be granted admin privileges", userInfo.userId);
+      addUserToAdminGroup(userInfo.userId);
+    } else {
+      logger.info("User '{}' created as normal user (admin already exists)", userInfo.userId);
+    }
+  }
+
+  /**
+   * Checks if any admin user exists in the system.
+   * This is used to determine if the current SSO user should become admin.
+   *
+   * @return true if at least one user is a member of the orqueio-admin group
+   */
+  private boolean hasAdminUser() {
+    long adminCount = identityService.createUserQuery()
+        .memberOfGroup(Groups.ORQUEIO_ADMIN)
+        .count();
+    logger.debug("Admin user count: {}", adminCount);
+    return adminCount > 0;
   }
 
   /**
@@ -217,7 +238,6 @@ public class OAuth2UserSynchronizer {
    * Also creates all necessary authorizations for the group (same as CreateAdminUserConfiguration).
    */
   private void addUserToAdminGroup(String userId) {
-    // Ensure orqueio-admin group exists
     Group adminGroup = identityService.createGroupQuery()
         .groupId(Groups.ORQUEIO_ADMIN)
         .singleResult();
@@ -229,11 +249,9 @@ public class OAuth2UserSynchronizer {
       newGroup.setType(Groups.GROUP_TYPE_SYSTEM);
       identityService.saveGroup(newGroup);
 
-      // Create ADMIN authorizations on all built-in resources (same as CreateAdminUserConfiguration)
       createAdminAuthorizations();
     }
 
-    // Check if user is already a member
     List<Group> existingGroups = identityService.createGroupQuery()
         .groupMember(userId)
         .groupId(Groups.ORQUEIO_ADMIN)
@@ -292,7 +310,6 @@ public class OAuth2UserSynchronizer {
   }
 
   private void syncGroups(String userId, Collection<? extends GrantedAuthority> authorities) {
-    // Extract group names from authorities and sanitize them
     Set<String> oauthGroups = authorities.stream()
         .map(GrantedAuthority::getAuthority)
         .filter(auth -> !auth.startsWith("ROLE_") && !auth.startsWith("SCOPE_"))
@@ -302,7 +319,6 @@ public class OAuth2UserSynchronizer {
 
     logger.debug("OAuth2 groups for user '{}': {}", userId, oauthGroups);
 
-    // Get existing group memberships
     List<Group> existingGroups = identityService.createGroupQuery()
         .groupMember(userId)
         .list();
@@ -310,9 +326,7 @@ public class OAuth2UserSynchronizer {
         .map(Group::getId)
         .collect(Collectors.toSet());
 
-    // Create missing groups and add memberships
     for (String groupId : oauthGroups) {
-      // Ensure group exists
       Group group = identityService.createGroupQuery()
           .groupId(groupId)
           .singleResult();
@@ -325,14 +339,12 @@ public class OAuth2UserSynchronizer {
         identityService.saveGroup(newGroup);
       }
 
-      // Add membership if not exists
       if (!existingGroupIds.contains(groupId)) {
         logger.info("Adding user '{}' to group '{}'", userId, groupId);
         identityService.createMembership(userId, groupId);
       }
     }
 
-    // Remove obsolete memberships if enabled
     if (syncProperties.isRemoveObsoleteGroupMemberships()) {
       for (String existingGroupId : existingGroupIds) {
         if (!oauthGroups.contains(existingGroupId)) {

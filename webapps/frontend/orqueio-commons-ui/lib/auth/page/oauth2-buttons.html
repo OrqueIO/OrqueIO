@@ -1,0 +1,15 @@
+<!-- # CE - orqueio-commons-ui/lib/auth/page/oauth2-buttons.html -->
+<div class="oauth2-login-section" ng-if="oauth2Providers.length > 0">
+  <div class="oauth2-divider">
+    <span>{{ 'PAGE_LOGIN_OR' | translate }}</span>
+  </div>
+  <div class="oauth2-buttons">
+    <a ng-repeat="provider in oauth2Providers"
+       ng-href="{{ provider.loginUrl }}"
+       class="btn-oauth2-circle"
+       title="{{ provider.name }}">
+      <span class="oauth2-icon oauth2-icon-{{ provider.id }}"></span>
+    </a>
+  </div>
+</div>
+<!-- / CE - orqueio-commons-ui/lib/auth/page/oauth2-buttons.html -->

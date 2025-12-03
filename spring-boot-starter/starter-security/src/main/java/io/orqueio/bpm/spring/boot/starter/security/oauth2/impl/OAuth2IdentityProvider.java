@@ -162,23 +162,16 @@ public class OAuth2IdentityProvider extends DbIdentityServiceProvider {
 
   @Override
   public UserEntity findUserById(String userId) {
-    if (springSecurityAuthentication()) {
-      var user = transformUser();
-      return user != null && Objects.equals(userId, user.getId()) ? user : null;
-    } else {
-      return super.findUserById(userId);
-    }
+    return super.findUserById(userId);
   }
 
   @Override
   public UserQuery createUserQuery() {
-    // Always use database for user queries to find synchronized users
     return super.createUserQuery();
   }
 
   @Override
   public UserQueryImpl createUserQuery(CommandContext commandContext) {
-    // Always use database for user queries to find synchronized users
     return super.createUserQuery(commandContext);
   }
 
@@ -225,24 +218,16 @@ public class OAuth2IdentityProvider extends DbIdentityServiceProvider {
 
   @Override
   public GroupEntity findGroupById(String groupId) {
-    if (springSecurityAuthentication()) {
-      var groups = transformGroups();
-      return (GroupEntity) groups.stream().filter(g -> g.getId().equals(groupId)).findFirst().orElse(null);
-    } else {
-      return super.findGroupById(groupId);
-    }
+    return super.findGroupById(groupId);
   }
 
   @Override
   public GroupQuery createGroupQuery() {
-    // Always use database for group queries to include synchronized groups (like orqueio-admin)
-    // The OAuth2GroupQuery only returns groups from the token, but we need DB groups for authorization
     return super.createGroupQuery();
   }
 
   @Override
   public GroupQuery createGroupQuery(CommandContext commandContext) {
-    // Always use database for group queries to include synchronized groups (like orqueio-admin)
     return super.createGroupQuery(commandContext);
   }
 

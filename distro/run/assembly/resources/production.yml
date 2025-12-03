@@ -124,6 +124,33 @@ spring.security.oauth2.client:
       authorization-grant-type: authorization_code
       redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
 
+    # Auth0 OAuth2/OIDC
+    # Domain: dev-qolsre8ehh7bljdd.us.auth0.com
+    auth0:
+      client-id: YOUR_AUTH0_CLIENT_ID
+      client-secret: YOUR_AUTH0_CLIENT_SECRET
+      scope:
+        - openid
+        - profile
+        - email
+      authorization-grant-type: authorization_code
+      redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+
+    # Okta OAuth2/OIDC
+    # To use Okta: Create account at https://developer.okta.com
+    # 1. Applications → Create App Integration → OIDC → Web Application
+    # 2. Set redirect URI: http://localhost:8080/login/oauth2/code/okta
+    # 3. Replace YOUR_OKTA_DOMAIN, CLIENT_ID and CLIENT_SECRET below
+    okta:
+      client-id: YOUR_OKTA_CLIENT_ID
+      client-secret: YOUR_OKTA_CLIENT_SECRET
+      scope:
+        - openid
+        - profile
+        - email
+      authorization-grant-type: authorization_code
+      redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+
   provider:
     keycloak:
       issuer-uri: http://localhost:9090/realms/orqueio
@@ -140,6 +167,16 @@ spring.security.oauth2.client:
       token-uri: https://github.com/login/oauth/access_token
       user-info-uri: https://api.github.com/user
       user-name-attribute: login
+
+    # Auth0 provider
+    auth0:
+      issuer-uri: YOUR_AUTH0_ISSUER_URI
+      user-name-attribute: email
+
+    # Okta provider
+    okta:
+      issuer-uri: YOUR_OKTA_ISSUER_URI
+      user-name-attribute: email
 
 server:
 # https://docs.orqueio.io/manual/latest/user-guide/orqueio-bpm-run/#https
