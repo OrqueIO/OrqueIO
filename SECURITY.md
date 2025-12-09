@@ -10,8 +10,7 @@ We recommend that all users upgrade to the most recent release to receive the la
 If you discover a security vulnerability in OrqueIO, please help us protect the community by responsibly disclosing the issue.
 
 * Do not open a public GitHub issue with sensitive details.
-* Instead, report the vulnerability privately by creating an issue in our GitHub repository:
-  [https://github.com/Orqueio/Orqueio/issues](https://github.com/Orqueio/Orqueio/issues)
+* Instead, report the vulnerability by sending an email to security@orqueio.io
 
 When submitting a report, please include:
 
