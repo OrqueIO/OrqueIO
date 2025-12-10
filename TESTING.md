@@ -56,14 +56,11 @@ To build the whole project, or just a module, one of the following commands may 
 # build the engine module
 ./mvnw clean install -f engine/pom.xml
 
-# run the rolling-update IT tests with the H2 database
-./mvnw verify -f qa/test-db-rolling-update/pom.xml -Prolling-update,h2
 ```
 
 > Note: Above the `mvn -f` command line option is recommended over the `mvn -pl` option. The reason is that `-pl` will
 build only the specified module, and will ignore any sub-modules that it might contain (unless the `-amd` option is also
-added). As the OrqueIO Platform project has a multi-tiered module hierarchy (e.g. the [qa](qa/) module has modules of
-it's own), the `mvn -f` command option is simpler.
+added). 
 
 ## What about database technology X in environment Y?
 
