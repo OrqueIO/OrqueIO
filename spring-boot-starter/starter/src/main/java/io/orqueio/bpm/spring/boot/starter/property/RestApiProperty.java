@@ -22,8 +22,18 @@ import static io.orqueio.bpm.spring.boot.starter.property.OrqueioBpmProperties.j
 
 public class RestApiProperty {
 
+  private boolean basicAuthEnabled = true;
+
   @NestedConfigurationProperty
   protected FetchAndLockProperties fetchAndLock = new FetchAndLockProperties();
+
+  public boolean isBasicAuthEnabled() {
+    return basicAuthEnabled;
+  }
+
+  public void setBasicAuthEnabled(boolean basicAuthEnabled) {
+    this.basicAuthEnabled = basicAuthEnabled;
+  }
 
   public FetchAndLockProperties getFetchAndLock() {
     return fetchAndLock;
@@ -36,6 +46,7 @@ public class RestApiProperty {
   @Override
   public String toString() {
     return joinOn(this.getClass())
+      .add("basicAuthEnabled=" + basicAuthEnabled)
       .add("fetchAndLock='" + fetchAndLock + '\'')
       .toString();
   }

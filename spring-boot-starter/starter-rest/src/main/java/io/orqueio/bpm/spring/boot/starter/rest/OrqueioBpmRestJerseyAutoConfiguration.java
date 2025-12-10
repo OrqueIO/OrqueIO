@@ -16,19 +16,27 @@
  */
 package io.orqueio.bpm.spring.boot.starter.rest;
 
+import jakarta.servlet.Filter;
 import io.orqueio.bpm.engine.rest.impl.FetchAndLockContextListener;
+import io.orqueio.bpm.engine.rest.security.auth.ProcessEngineAuthenticationFilter;
 import io.orqueio.bpm.spring.boot.starter.OrqueioBpmAutoConfiguration;
 import io.orqueio.bpm.spring.boot.starter.property.OrqueioBpmProperties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.jersey.JerseyAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.servlet.JerseyApplicationPath;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 
 @AutoConfigureBefore({ JerseyAutoConfiguration.class })
 @AutoConfigureAfter({ OrqueioBpmAutoConfiguration.class })
 public class OrqueioBpmRestJerseyAutoConfiguration {
+
+  private static final Logger logger = LoggerFactory.getLogger(OrqueioBpmRestJerseyAutoConfiguration.class);
 
   @Bean
   @ConditionalOnMissingBean(OrqueioJerseyResourceConfig.class)
@@ -44,5 +52,27 @@ public class OrqueioBpmRestJerseyAutoConfiguration {
   @Bean
   public OrqueioBpmRestInitializer orqueioBpmRestInitializer(JerseyApplicationPath applicationPath, OrqueioBpmProperties props) {
     return new OrqueioBpmRestInitializer(applicationPath, props);
+  }
+
+
+  @Bean
+  @ConditionalOnProperty(name = "camunda.bpm.rest-api.basic-auth-enabled", havingValue = "true", matchIfMissing = true)
+  @ConditionalOnMissingBean(name = "processEngineAuthenticationFilter")
+  public FilterRegistrationBean<Filter> processEngineAuthenticationFilter(JerseyApplicationPath applicationPath) {
+    logger.info("Registering ProcessEngineAuthenticationFilter for REST API Basic authentication");
+
+    FilterRegistrationBean<Filter> registration = new FilterRegistrationBean<>();
+    registration.setName("orqueio-rest-auth");
+    registration.setFilter(new ProcessEngineAuthenticationFilter());
+    registration.setOrder(1);
+
+    String restApiPathPattern = applicationPath.getUrlMapping();
+    registration.addUrlPatterns(restApiPathPattern);
+    logger.info("REST API authentication filter registered for pattern: {}", restApiPathPattern);
+
+    registration.addInitParameter("authentication-provider",
+        "io.orqueio.bpm.engine.rest.security.auth.impl.HttpBasicAuthenticationProvider");
+
+    return registration;
   }
 }
