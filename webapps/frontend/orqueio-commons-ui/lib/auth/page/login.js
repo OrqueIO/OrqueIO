@@ -59,35 +59,9 @@ var Controller = [
 
     $rootScope.showBreadcrumbs = false;
 
+    // First login welcome message - disabled as orqueio-welcome is not always available
+    // in all deployment modes (Spring Boot Run doesn't serve static resources by default)
     $scope.showFirstLogin = false;
-    var showFirstLogin =
-      !configuration.getDisableWelcomeMessage() &&
-      localConf.get('firstVisit', true);
-
-    if (showFirstLogin) {
-      $http({
-        method: 'GET',
-        url: '/orqueio-welcome'
-      })
-        .then(function(res) {
-          if (res.status !== 200) {
-            $scope.dismissInfoBox();
-            return;
-          }
-          localConf.set('firstVisit', true);
-          $scope.showFirstLogin = true;
-
-          const unregisterListener = $scope.$on(
-            'first-visit-info-box-dismissed',
-            $scope.dismissInfoBox
-          );
-
-          $scope.$on('$destroy', function() {
-            unregisterListener();
-          });
-        })
-        .catch($scope.dismissInfoBox);
-    }
 
     $translate('FIRST_LOGIN_INFO').then(function(string) {
       $scope.FirstLoginMessage = $sce.trustAsHtml(string);
