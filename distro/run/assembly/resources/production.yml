@@ -2,7 +2,12 @@
 # The provided links to documentation guides for each property will give more information about the purpose of each property.
 # security guide: https://docs.orqueio.io/manual/latest/user-guide/security/
 
-orqueio.bpm:
+camunda.bpm:
+#  admin-user:
+#    id: demo
+#    password: demo
+#  filter:
+#    create: All tasks
 # https://docs.orqueio.io/manual/latest/user-guide/security/#http-header-security-in-webapps
 # https://docs.orqueio.io/manual/latest/webapps/shared-options/header-security/
   webapp:
@@ -23,7 +28,7 @@ orqueio.bpm:
     deserialization-allowed-classes:
 # https://docs.orqueio.io/manual/latest/user-guide/security/#password-policy
 # https://docs.orqueio.io/manual/latest/user-guide/process-engine/password-policy/
-    enable-password-policy: true
+    enable-password-policy: false
 
   run:
 # https://docs.orqueio.io/manual/latest/user-guide/security/#authentication
@@ -64,22 +69,18 @@ orqueio.bpm:
 #      administrator-group-name: admins
 
 # OAuth2/OIDC Configuration
-  oauth2:
-    # SSO Logout Configuration
-    # Enable SSO logout to terminate session at identity provider
-    sso-logout:
-      enabled: true
-      post-logout-redirect-uri: "{baseUrl}"
-    # User Synchronization Configuration
-    # Synchronize OAuth2/OIDC users to database on login
-    # This allows users to be visible in OrqueIO Admin and assignable to tasks
-    user-sync:
-      enabled: true
-      auto-create-users: true
-      auto-update-users: true
-      sync-groups: false
-      # Warning: Only enable if OAuth2/OIDC is the single source of truth for groups
-      remove-obsolete-group-memberships: false
+# User synchronization and SSO logout are enabled by default.
+# Uncomment below to customize (all options are true by default except sync-groups):
+#  oauth2:
+#    sso-logout:
+#      enabled: true                          # Logout from IdP on OrqueIO logout
+#      post-logout-redirect-uri: "{baseUrl}"  # Redirect after IdP logout
+#    user-sync:
+#      enabled: true                          # Sync users to database
+#      auto-create-users: true                # Create users on first login
+#      auto-update-users: true                # Update user info on each login
+#      sync-groups: false                     # Sync groups from IdP (disabled by default)
+#      remove-obsolete-group-memberships: false
 
 # Spring Security OAuth2 Client Configuration (for OIDC)
 # Supports multiple identity providers: Keycloak, Google, GitHub

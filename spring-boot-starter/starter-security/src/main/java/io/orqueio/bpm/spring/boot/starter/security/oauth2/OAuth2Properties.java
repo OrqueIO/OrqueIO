@@ -46,9 +46,10 @@ public class OAuth2Properties {
 
   public static class UserSyncProperties {
     /**
-     * Enable user synchronization to database on login. Default {@code false}.
+     * Enable user synchronization to database on login. Default {@code true}.
+     * This is required for SSO users to be visible in OrqueIO Admin and assignable to tasks.
      */
-    private boolean enabled = false;
+    private boolean enabled = true;
 
     /**
      * Automatically create users in the database if they don't exist. Default {@code true}.
@@ -61,9 +62,9 @@ public class OAuth2Properties {
     private boolean autoUpdateUsers = true;
 
     /**
-     * Synchronize groups from OAuth2/OIDC to database. Default {@code true}.
+     * Synchronize groups from OAuth2/OIDC to database. Default {@code false}.
      */
-    private boolean syncGroups = true;
+    private boolean syncGroups = false;
 
     /**
      * Remove group memberships that are not present in the OAuth2/OIDC token. Default {@code false}.
@@ -114,9 +115,10 @@ public class OAuth2Properties {
 
   public static class OAuth2SSOLogoutProperties {
     /**
-     * Enable SSO Logout. Default {@code false}.
+     * Enable SSO Logout. Default {@code true}.
+     * When enabled, logout terminates session at both OrqueIO and the Identity Provider.
      */
-    private boolean enabled = false;
+    private boolean enabled = true;
 
     /**
      * URI the user is redirected after SSO logout from the provider. Default {@code {baseUrl}}.
