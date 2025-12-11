@@ -16,7 +16,6 @@
  */
 package io.orqueio.bpm.spring.boot.starter.security.oauth2;
 
-import jakarta.annotation.Nullable;
 import jakarta.servlet.DispatcherType;
 import jakarta.servlet.Filter;
 import io.orqueio.bpm.engine.spring.SpringProcessEngineServicesConfiguration;
@@ -25,6 +24,7 @@ import io.orqueio.bpm.spring.boot.starter.property.OrqueioBpmProperties;
 import io.orqueio.bpm.spring.boot.starter.property.WebappProperty;
 import io.orqueio.bpm.engine.ProcessEngine;
 import io.orqueio.bpm.spring.boot.starter.security.oauth2.impl.AuthorizeTokenFilter;
+import io.orqueio.bpm.spring.boot.starter.security.oauth2.impl.OAuth2AuthenticationFailureHandler;
 import io.orqueio.bpm.spring.boot.starter.security.oauth2.impl.OAuth2AuthenticationSuccessHandler;
 import io.orqueio.bpm.spring.boot.starter.security.oauth2.impl.OAuth2GrantedAuthoritiesMapper;
 import io.orqueio.bpm.spring.boot.starter.security.oauth2.impl.OAuth2IdentityProviderPlugin;
@@ -55,7 +55,7 @@ import org.springframework.security.oauth2.client.OAuth2AuthorizedClientManager;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
+import org.springframework.core.annotation.Order;
 
 @Configuration
 @AutoConfigureOrder(OrqueioSpringSecurityOAuth2AutoConfiguration.ORQUEIO_OAUTH2_ORDER)
@@ -104,7 +104,6 @@ public class OrqueioSpringSecurityOAuth2AutoConfiguration {
   }
 
   @Bean
-  @ConditionalOnProperty(name = "sso-logout.enabled", havingValue = "true", prefix = OAuth2Properties.PREFIX)
   protected SsoLogoutSuccessHandler ssoLogoutSuccessHandler(ClientRegistrationRepository clientRegistrationRepository) {
     logger.debug("Registering SsoLogoutSuccessHandler");
     return new SsoLogoutSuccessHandler(clientRegistrationRepository, oAuth2Properties);
@@ -117,32 +116,33 @@ public class OrqueioSpringSecurityOAuth2AutoConfiguration {
   }
 
   @Bean
-  @ConditionalOnProperty(name = "user-sync.enabled", havingValue = "true", prefix = OAuth2Properties.PREFIX)
   protected OAuth2UserSynchronizer oauth2UserSynchronizer(ProcessEngine processEngine) {
     logger.debug("Registering OAuth2UserSynchronizer");
     return new OAuth2UserSynchronizer(processEngine, oAuth2Properties);
   }
 
   @Bean
-  @ConditionalOnProperty(name = "user-sync.enabled", havingValue = "true", prefix = OAuth2Properties.PREFIX)
   protected OAuth2AuthenticationSuccessHandler oauth2AuthenticationSuccessHandler(OAuth2UserSynchronizer synchronizer) {
     logger.debug("Registering OAuth2AuthenticationSuccessHandler");
     return new OAuth2AuthenticationSuccessHandler(synchronizer);
   }
 
   @Bean
+  @Order(2)
   public SecurityFilterChain filterChain(HttpSecurity http,
                                          AuthorizeTokenFilter authorizeTokenFilter,
-                                         @Nullable SsoLogoutSuccessHandler ssoLogoutSuccessHandler,
-                                         @Nullable OAuth2AuthenticationSuccessHandler oauth2AuthenticationSuccessHandler) throws Exception {
+                                         SsoLogoutSuccessHandler ssoLogoutSuccessHandler,
+                                         OAuth2AuthenticationSuccessHandler oauth2AuthenticationSuccessHandler) throws Exception {
 
-    logger.info("Enabling Orqueio Spring Security oauth2 integration with hybrid authentication");
+    logger.info("Enabling Orqueio Spring Security OAuth2/OIDC integration");
+
+    String loginPage = webappPath + "/app/welcome/default/#!/login";
 
     http.authorizeHttpRequests(c -> c
             .requestMatchers("/h2-console/**").permitAll()
-            .requestMatchers(webappPath + "/api/oauth2/providers").permitAll()  // OAuth2 providers list for login page
-            .requestMatchers(webappPath + "/app/**").permitAll()   // OrqueIO handles webapp auth
-            .requestMatchers(webappPath + "/api/**").permitAll()   // OrqueIO handles API auth
+            .requestMatchers(webappPath + "/api/oauth2/providers").permitAll()
+            .requestMatchers(webappPath + "/app/**").permitAll()
+            .requestMatchers(webappPath + "/api/**").permitAll()
             .requestMatchers(webappPath + "/lib/**").permitAll()
             .anyRequest().permitAll()
         )
@@ -152,28 +152,17 @@ public class OrqueioSpringSecurityOAuth2AutoConfiguration {
         .logout(c -> c
             .clearAuthentication(true)
             .invalidateHttpSession(true)
+            .logoutSuccessHandler(ssoLogoutSuccessHandler)
         )
         .oauth2Client(Customizer.withDefaults())
+        .oauth2Login(c -> c
+            .loginPage(loginPage)
+            .successHandler(oauth2AuthenticationSuccessHandler)
+            .failureHandler(new OAuth2AuthenticationFailureHandler(
+                webappPath + "/app/welcome/default/?oauth2_error=true#!/login")))
         .headers(headers -> headers.frameOptions(frame -> frame.sameOrigin()))
         .cors(AbstractHttpConfigurer::disable)
         .csrf(AbstractHttpConfigurer::disable);
-    // @formatter:on
-
-    SimpleUrlAuthenticationFailureHandler oauth2FailureHandler =
-        new SimpleUrlAuthenticationFailureHandler(webappPath + "/app/welcome/default/?oauth2_error=true#!/login");
-
-    if (oauth2AuthenticationSuccessHandler != null) {
-      logger.info("User synchronization enabled - using custom OAuth2AuthenticationSuccessHandler");
-      http.oauth2Login(c -> c
-          .successHandler(oauth2AuthenticationSuccessHandler)
-          .failureHandler(oauth2FailureHandler));
-    } else {
-      http.oauth2Login(c -> c.failureHandler(oauth2FailureHandler));
-    }
-
-    if (oAuth2Properties.getSsoLogout().isEnabled()) {
-      http.logout(c -> c.logoutSuccessHandler(ssoLogoutSuccessHandler));
-    }
 
     return http.build();
   }
