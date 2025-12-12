@@ -194,7 +194,7 @@ server:
 # https://docs.orqueio.io/manual/latest/user-guide/security/#http-header-security-in-webapps
 # https://docs.orqueio.io/manual/latest/webapps/shared-options/header-security/
   servlet.session.cookie:
-    secure: true
+    secure: false
     http-only: true
 
 # https://docs.orqueio.io/manual/latest/user-guide/orqueio-bpm-run/#logging
