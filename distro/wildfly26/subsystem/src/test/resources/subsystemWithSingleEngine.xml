@@ -1,9 +1,0 @@
-<subsystem xmlns="urn:io.orqueio.bpm.jboss:1.1">
-  <process-engines>
-    <process-engine name="__default" default="true">
-      <datasource>java:jboss/datasources/ExampleDS</datasource>
-      <history-level>audit</history-level>
-      <configuration>io.orqueio.bpm.container.impl.jboss.config.ManagedJtaProcessEngineConfiguration</configuration>
-    </process-engine>
-  </process-engines>
-</subsystem>

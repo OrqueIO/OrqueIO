@@ -57,7 +57,6 @@
       </activation>
       <modules>
         <module>core</module>
-        <module>qa</module>
       </modules>
     </profile>
 

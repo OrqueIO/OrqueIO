@@ -1,9 +1,0 @@
-server:
-  ssl:
-    key-store: classpath:keystore.p12
-    key-store-password: orqueio
-    key-store-type: pkcs12
-    key-alias: orqueio
-    key-password: orqueio
-  port: 8443
-spring.http.client.factory: simple

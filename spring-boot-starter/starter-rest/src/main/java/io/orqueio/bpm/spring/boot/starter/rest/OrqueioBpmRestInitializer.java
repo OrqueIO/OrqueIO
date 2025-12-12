@@ -21,7 +21,6 @@ import io.orqueio.bpm.engine.rest.filter.EmptyBodyFilter;
 import io.orqueio.bpm.spring.boot.starter.property.OrqueioBpmProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.autoconfigure.web.servlet.JerseyApplicationPath;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 
 import jakarta.servlet.DispatcherType;
@@ -40,16 +39,14 @@ import java.util.Map;
 public class OrqueioBpmRestInitializer implements ServletContextInitializer {
 
   private static final Logger log = LoggerFactory.getLogger(OrqueioBpmRestInitializer.class);
-
   private static final EnumSet<DispatcherType> DISPATCHER_TYPES = EnumSet.of(DispatcherType.REQUEST);
 
   private ServletContext servletContext;
 
-  private JerseyApplicationPath applicationPath;
-
+  private final String applicationPath;
   private final OrqueioBpmProperties properties;
 
-  public OrqueioBpmRestInitializer(JerseyApplicationPath applicationPath, OrqueioBpmProperties properties) {
+  public OrqueioBpmRestInitializer(String applicationPath, OrqueioBpmProperties properties) {
     this.applicationPath = applicationPath;
     this.properties = properties;
   }
@@ -60,18 +57,27 @@ public class OrqueioBpmRestInitializer implements ServletContextInitializer {
 
     properties.getRestApi().getFetchAndLock().getInitParams().forEach(servletContext::setInitParameter);
 
-    String restApiPathPattern = applicationPath.getUrlMapping();
+    // Spring Boot 4: path must already be the URL mapping string (e.g., "/engine-rest/*")
+    String restApiPathPattern = applicationPath;
 
     registerFilter("EmptyBodyFilter", EmptyBodyFilter.class, restApiPathPattern);
     registerFilter("CacheControlFilter", CacheControlFilter.class, restApiPathPattern);
   }
 
-  private FilterRegistration registerFilter(final String filterName, final Class<? extends Filter> filterClass, final String... urlPatterns) {
+  private FilterRegistration registerFilter(
+          final String filterName,
+          final Class<? extends Filter> filterClass,
+          final String... urlPatterns) {
+
     return registerFilter(filterName, filterClass, null, urlPatterns);
   }
 
-  private FilterRegistration registerFilter(final String filterName, final Class<? extends Filter> filterClass, final Map<String, String> initParameters,
-                                            final String... urlPatterns) {
+  private FilterRegistration registerFilter(
+          final String filterName,
+          final Class<? extends Filter> filterClass,
+          final Map<String, String> initParameters,
+          final String... urlPatterns) {
+
     FilterRegistration filterRegistration = servletContext.getFilterRegistration(filterName);
 
     if (filterRegistration == null) {
@@ -87,5 +93,5 @@ public class OrqueioBpmRestInitializer implements ServletContextInitializer {
 
     return filterRegistration;
   }
-
 }
+

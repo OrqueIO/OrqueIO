@@ -101,9 +101,7 @@
 
         <module>distro/license-book</module>
         <module>distro/jboss</module>
-        <module>distro/tomcat</module>
         <module>distro/sql-script</module>
-        <module>distro/run</module>
 
         <module>clients/java</module>
 
@@ -126,8 +124,6 @@
 
         <module>distro/license-book</module>
         <module>distro/jboss</module>
-        <module>distro/tomcat</module>
-        <module>distro/run</module>
       </modules>
     </profile>
 
@@ -191,43 +187,13 @@
       </activation>
       <modules>
         <module>distro/license-book</module>
-        <module>distro/tomcat</module>
       </modules>
     </profile>
 
-    <profile>
-      <id>distro-wildfly</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-      <modules>
-        <module>javaee/ejb-client</module>
-        <module>javaee/ejb-client-jakarta</module>
-        <module>distro/license-book</module>
-        <module>distro/wildfly</module>
-        <module>distro/wildfly26</module>
-      </modules>
-    </profile>
 
-    <profile>
-      <id>distro-webjar</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-      <modules>
-        <module>distro/webjar</module>
-      </modules>
-    </profile>
 
-    <profile>
-      <id>distro-run</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-      <modules>
-        <module>distro/run</module>
-      </modules>
-    </profile>
+
+
 
     <profile>
       <id>distro-starter</id>
@@ -262,6 +228,16 @@
         <module>internal-dependencies</module>
         <module>parent</module>
         <module>bom</module>
+      </modules>
+    </profile>
+
+    <profile>
+      <id>distro-webjar</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <modules>
+        <module>distro/webjar</module>
       </modules>
     </profile>
 
@@ -347,6 +323,7 @@
         <module>engine-cdi</module>
         <module>engine-spring</module>
         <module>engine-rest</module>
+        <module>distro/webjar</module>
 
         <module>engine-dmn</module>
         <module>connect</module>
@@ -362,8 +339,6 @@
 
         <module>engine-plugins</module>
         <module>examples</module>
-        <module>distro/webjar</module>
-        <module>distro/tomcat</module>
         <module>clients/java</module>
         <module>test-utils/archunit</module>
         <module>test-utils/testcontainers</module>

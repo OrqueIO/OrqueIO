@@ -17,7 +17,6 @@
 package io.orqueio.bpm.spring.boot.starter.webapp.apppath.containerbasedauth;
 
 import io.orqueio.bpm.webapp.impl.security.auth.ContainerBasedAuthenticationFilter;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,18 +25,22 @@ import org.springframework.core.annotation.Order;
 import java.util.Collections;
 
 @Configuration
-@Order(SecurityProperties.BASIC_AUTH_ORDER - 15)
+@Order(100)  // Runs after Spring Security filter chain
 public class ContainerBasedAuthFilterRegistration {
 
     @Bean
     public FilterRegistrationBean<ContainerBasedAuthenticationFilter> containerBasedAuthFilter() {
         FilterRegistrationBean<ContainerBasedAuthenticationFilter> filterRegistration =
-            new FilterRegistrationBean<>();
+                new FilterRegistrationBean<>();
+
         filterRegistration.setFilter(new ContainerBasedAuthenticationFilter());
-        filterRegistration.setInitParameters(Collections.singletonMap("authentication-provider",
-            "io.orqueio.bpm.engine.rest.security.auth.impl.ContainerBasedAuthenticationProvider"));
+        filterRegistration.setInitParameters(Collections.singletonMap(
+                "authentication-provider",
+                "io.orqueio.bpm.engine.rest.security.auth.impl.ContainerBasedAuthenticationProvider"
+        ));
+
         filterRegistration.addUrlPatterns(ChangedAppPathContainerBasedAuthIT.MY_APP_PATH + "/*");
+
         return filterRegistration;
     }
-
 }

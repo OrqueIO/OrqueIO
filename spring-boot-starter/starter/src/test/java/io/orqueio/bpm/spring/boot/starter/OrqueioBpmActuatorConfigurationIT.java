@@ -16,20 +16,19 @@
  */
 package io.orqueio.bpm.spring.boot.starter;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import io.orqueio.bpm.spring.boot.starter.test.nonpa.TestApplication;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.resttestclient.TestRestTemplate;
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit4.SpringRunner;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest(classes = { TestApplication.class }, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class OrqueioBpmActuatorConfigurationIT extends AbstractOrqueioAutoConfigurationIT{
+@AutoConfigureTestRestTemplate
+public class OrqueioBpmActuatorConfigurationIT extends AbstractOrqueioAutoConfigurationIT {
 
   @Autowired
   private TestRestTemplate testRestTemplate;
@@ -37,13 +36,13 @@ public class OrqueioBpmActuatorConfigurationIT extends AbstractOrqueioAutoConfig
   @Test
   public void jobExecutorHealthIndicatorTest() {
     final String body = getHealthBody();
-    assertTrue("wrong body " + body, body.contains("jobExecutor\":{\"status\":\"UP\""));
+    assertTrue(body.contains("jobExecutor\":{\"status\":\"UP\""), "wrong body " + body);
   }
 
   @Test
   public void processEngineHealthIndicatorTest() {
     final String body = getHealthBody();
-    assertTrue("wrong body " + body, body.contains("processEngine\":{\"status\":\"UP\",\"details\":{\"name\":\"testEngine\"}}"));
+    assertTrue(body.contains("processEngine\":{\"status\":\"UP\",\"details\":{\"name\":\"testEngine\"}}"), "wrong body " + body);
   }
 
   private String getHealthBody() {
