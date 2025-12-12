@@ -5,7 +5,7 @@
 
   <groupId>io.orqueio.bpm</groupId>
   <artifactId>orqueio-root</artifactId>
-  <version>1.0.4</version>
+  <version>2.0.0</version>
   <packaging>pom</packaging>
   <name>orqueio Platform - Root Pom</name>
   <inceptionYear>2013</inceptionYear>
@@ -103,7 +103,6 @@
         <module>distro/jboss</module>
         <module>distro/sql-script</module>
 
-        <module>clients/java</module>
 
         <module>internal-dependencies</module>
         <module>database</module>
@@ -339,7 +338,6 @@
 
         <module>engine-plugins</module>
         <module>examples</module>
-        <module>clients/java</module>
         <module>test-utils/archunit</module>
         <module>test-utils/testcontainers</module>
         <module>test-utils/junit5-extension</module>

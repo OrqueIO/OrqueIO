@@ -6,7 +6,7 @@
   <parent>
     <groupId>io.orqueio.spin</groupId>
     <artifactId>orqueio-spin-root</artifactId>
-    <version>1.0.4</version>
+    <version>2.0.0</version>
   </parent>
 
   <artifactId>orqueio-spin-dataformat-json-jackson</artifactId>

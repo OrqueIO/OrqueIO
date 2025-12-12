@@ -4,9 +4,9 @@
   <parent>
     <groupId>io.orqueio.commons</groupId>
     <artifactId>orqueio-commons-root</artifactId>
-    <version>1.0.4</version>
+    <version>2.0.0</version>
   </parent>
-  <version>1.0.4</version>
+  <version>2.0.0</version>
   <description>orqueio-commons-logging</description>
   <groupId>io.orqueio.commons</groupId>
   <artifactId>orqueio-commons-logging</artifactId>
