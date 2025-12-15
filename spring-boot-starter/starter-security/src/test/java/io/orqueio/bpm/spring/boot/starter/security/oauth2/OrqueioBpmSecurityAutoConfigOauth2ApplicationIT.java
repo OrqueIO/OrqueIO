@@ -27,8 +27,8 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
@@ -65,7 +65,7 @@ public class OrqueioBpmSecurityAutoConfigOauth2ApplicationIT extends AbstractSpr
   @Autowired
   private ClientRegistrationRepository registrations;
 
-  @MockBean
+  @MockitoBean
   private OAuth2AuthorizedClientService authorizedClientService;
 
   @Rule

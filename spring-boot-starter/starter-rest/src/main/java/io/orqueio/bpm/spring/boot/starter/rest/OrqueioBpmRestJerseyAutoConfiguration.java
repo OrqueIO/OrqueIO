@@ -19,20 +19,20 @@ package io.orqueio.bpm.spring.boot.starter.rest;
 import io.orqueio.bpm.engine.rest.impl.FetchAndLockContextListener;
 import io.orqueio.bpm.spring.boot.starter.OrqueioBpmAutoConfiguration;
 import io.orqueio.bpm.spring.boot.starter.property.OrqueioBpmProperties;
+import jakarta.servlet.ServletRegistration;
+import org.glassfish.jersey.server.ResourceConfig;
+import org.glassfish.jersey.servlet.ServletContainer;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
-import org.springframework.boot.autoconfigure.AutoConfigureBefore;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.jersey.JerseyAutoConfiguration;
-import org.springframework.boot.autoconfigure.web.servlet.JerseyApplicationPath;
+import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
-@AutoConfigureBefore({ JerseyAutoConfiguration.class })
-@AutoConfigureAfter({ OrqueioBpmAutoConfiguration.class })
+@Configuration
+@AutoConfigureAfter(OrqueioBpmAutoConfiguration.class)
 public class OrqueioBpmRestJerseyAutoConfiguration {
 
   @Bean
-  @ConditionalOnMissingBean(OrqueioJerseyResourceConfig.class)
-  public OrqueioJerseyResourceConfig createRestConfig() {
+  public ResourceConfig jerseyResourceConfig() {
     return new OrqueioJerseyResourceConfig();
   }
 
@@ -42,7 +42,9 @@ public class OrqueioBpmRestJerseyAutoConfiguration {
   }
 
   @Bean
-  public OrqueioBpmRestInitializer orqueioBpmRestInitializer(JerseyApplicationPath applicationPath, OrqueioBpmProperties props) {
-    return new OrqueioBpmRestInitializer(applicationPath, props);
+  public FetchAndLockContextListener fetchAndLockContextListener() {
+    return new FetchAndLockContextListener();
   }
 }
+
+

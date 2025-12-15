@@ -41,6 +41,7 @@ public class OrqueioBpmVersionTest {
   @BeforeClass
   public static void setUp() throws IOException {
     currentVersion = ProcessEngine.class.getPackage().getImplementationVersion();
+    System.out.println("version"+currentVersion);
   }
 
   @Test
