@@ -1,7 +1,0 @@
-<module xmlns="urn:jboss:module:1.0" name="io.orqueio.bpm.orqueio-engine-plugins">
-
-  <dependencies>
-    <!-- Add custom engine plugins here -->
-    <!-- <module name="io.orqueio.bpm.orqueio-custom-engine-plugin" export="true" /> -->
-  </dependencies>
-</module>

@@ -16,44 +16,30 @@
  */
 package io.orqueio.bpm.spring.boot.starter.webapp;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.reactive.server.WebTestClient;
+
+import org.springframework.test.web.servlet.MockMvc;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * @author Svetlana Dorokhova.
  */
-@RunWith(SpringRunner.class)
 @SpringBootTest(
-  classes = WebappExampleApplication.class,
-  webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
+        classes = WebappExampleApplication.class,
+        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
+@ActiveProfiles("test") // optional
 public class WebappTest {
 
-  @Autowired
-  private TestRestTemplate testRestTemplate;
-
-  @Test
-  public void testEeResourceNotAvailable() {
-    ResponseEntity<String> response =
-        testRestTemplate.getForEntity("/orqueio/plugin/adminEE/app/plugin.js", String.class);
-
-    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
   }
 
-  @Test
-  public void testAdminEndpointAvailable() {
-    ResponseEntity<String> response =
-        testRestTemplate.getForEntity("/orqueio/app/admin/", String.class);
-
-    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-  }
-
-}

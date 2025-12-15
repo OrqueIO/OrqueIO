@@ -6,7 +6,7 @@
   <name>Orque IO Platform - engine - Spring 6</name>
   <groupId>io.orqueio.bpm</groupId>
   <artifactId>orqueio-engine-spring-6</artifactId>
-  <version>1.0.4</version>
+  <version>2.0.0</version>
   <packaging>jar</packaging>
   <description>orqueio-engine-spring-6</description>
 
@@ -14,7 +14,7 @@
     <groupId>io.orqueio.bpm</groupId>
     <artifactId>orqueio-database-settings</artifactId>
     <relativePath>../../database</relativePath>
-    <version>1.0.4</version>
+    <version>2.0.0</version>
   </parent>
 
   <dependencyManagement>

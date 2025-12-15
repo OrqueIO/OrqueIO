@@ -20,11 +20,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.reactive.server.WebTestClient;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -40,18 +39,14 @@ public class ChangedAppPathContainerBasedAuthIT {
   protected static final String MY_APP_PATH = "/my/application/path";
 
   @Autowired
-  protected TestRestTemplate testRestTemplate;
+  WebTestClient webTestClient;
 
   @Test
   public void shouldCheckContainerBasedAuthFilterAvailable() {
-    // given
 
-    // when
-    ResponseEntity<String> response = testRestTemplate.getForEntity(MY_APP_PATH +
-        "/app/welcome/default/", String.class);
-
-    // then
-    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+    webTestClient.get()
+        .uri(MY_APP_PATH + "/app/welcome/default/")
+        .exchange()
+        .expectStatus().isUnauthorized();
   }
-
 }

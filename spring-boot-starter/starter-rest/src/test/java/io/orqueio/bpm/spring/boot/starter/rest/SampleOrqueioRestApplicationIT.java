@@ -16,42 +16,30 @@
  */
 package io.orqueio.bpm.spring.boot.starter.rest;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
-
-import java.io.ByteArrayInputStream;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import io.orqueio.bpm.engine.RuntimeService;
 import io.orqueio.bpm.engine.rest.dto.runtime.ProcessInstanceDto;
 import io.orqueio.bpm.engine.runtime.ProcessInstance;
 import io.orqueio.bpm.engine.runtime.VariableInstance;
 import io.orqueio.bpm.spring.boot.starter.property.OrqueioBpmProperties;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import my.own.custom.spring.boot.project.SampleOrqueioRestApplication;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
+import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.core.io.ClassPathResource;
 
-import my.own.custom.spring.boot.project.SampleOrqueioRestApplication;
+import java.io.ByteArrayInputStream;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes = SampleOrqueioRestApplication.class, webEnvironment = RANDOM_PORT)
+@SpringBootTest(classes = SampleOrqueioRestApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class SampleOrqueioRestApplicationIT {
 
   @Autowired
-  private TestRestTemplate testRestTemplate;
+  private WebTestClient webTestClient;
 
   @Autowired
   private RuntimeService runtimeService;
@@ -60,64 +48,73 @@ public class SampleOrqueioRestApplicationIT {
   private OrqueioBpmProperties orqueioBpmProperties;
 
   @Test
-  public void restApiIsAvailable() throws Exception {
-    ResponseEntity<String> entity = testRestTemplate.getForEntity("/engine-rest/engine/", String.class);
-    assertEquals(HttpStatus.OK, entity.getStatusCode());
-    assertEquals("[{\"name\":\"testEngine\"}]", entity.getBody());
+  public void restApiIsAvailable() {
+    webTestClient.get()
+            .uri("/engine-rest/engine/")
+            .exchange()
+            .expectStatus().isOk()
+            .expectBody(String.class)
+            .value(body -> assertEquals("[{\"name\":\"testEngine\"}]", body));
   }
 
   @Test
-  public void startProcessInstanceByCustomResource() throws Exception {
-    ResponseEntity<ProcessInstanceDto> entity = testRestTemplate.postForEntity("/engine-rest/process/start", HttpEntity.EMPTY, ProcessInstanceDto.class);
-    assertEquals(HttpStatus.OK, entity.getStatusCode());
-    assertNotNull(entity.getBody());
+  public void startProcessInstanceByCustomResource() {
+    ProcessInstanceDto body = webTestClient.post()
+            .uri("/engine-rest/process/start")
+            .exchange()
+            .expectStatus().isOk()
+            .expectBody(ProcessInstanceDto.class)
+            .returnResult()
+            .getResponseBody();
 
-    // find the process instance
-    final ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceId(entity.getBody().getId()).singleResult();
-    assertEquals(processInstance.getProcessInstanceId(), entity.getBody().getId());
+    assertNotNull(body);
+
+    ProcessInstance processInstance = runtimeService.createProcessInstanceQuery()
+            .processInstanceId(body.getId())
+            .singleResult();
+    assertEquals(processInstance.getProcessInstanceId(), body.getId());
   }
 
   @Test
   public void multipartFileUploadOrqueioRestIsWorking() throws Exception {
     final String variableName = "testvariable";
     ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("TestProcess");
-    LinkedMultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
-    map.add("data", new ClassPathResource("/bpmn/test.bpmn"));
-    map.add("valueType", "File");
-    HttpHeaders headers = new HttpHeaders();
-    headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-    headers.setContentDispositionFormData("data", "test.bpmn");
 
-    HttpEntity<LinkedMultiValueMap<String, Object>> requestEntity = new HttpEntity<>(map, headers);
-    ResponseEntity<String> exchange = testRestTemplate.exchange("/engine-rest/engine/{enginename}/process-instance/{id}/variables/{variableName}/data",
-        HttpMethod.POST, requestEntity, String.class, orqueioBpmProperties.getProcessEngineName(), processInstance.getId(), variableName);
+    webTestClient.post()
+            .uri("/engine-rest/engine/{enginename}/process-instance/{id}/variables/{variableName}/data",
+                    orqueioBpmProperties.getProcessEngineName(),
+                    processInstance.getId(),
+                    variableName)
+            .contentType(MediaType.MULTIPART_FORM_DATA)
+            .bodyValue(new ClassPathResource("/bpmn/test.bpmn"))
+            .exchange()
+            .expectStatus().isNoContent();
 
-    assertEquals(HttpStatus.NO_CONTENT, exchange.getStatusCode());
+    VariableInstance variableInstance = runtimeService.createVariableInstanceQuery()
+            .processInstanceIdIn(processInstance.getId())
+            .variableName(variableName)
+            .singleResult();
 
-    VariableInstance variableInstance = runtimeService.createVariableInstanceQuery().processInstanceIdIn(processInstance.getId()).variableName(variableName)
-        .singleResult();
-    ByteArrayInputStream byteArrayInputStream = (ByteArrayInputStream) variableInstance.getValue();
-    assertTrue(byteArrayInputStream.available() > 0);
+    assertNotNull(variableInstance);
+    assertTrue(((ByteArrayInputStream) variableInstance.getValue()).available() > 0);
   }
 
   @Test
-  public void fetchAndLockExternalTaskWithLongPollingIsRunning() throws Exception {
-
+  public void fetchAndLockExternalTaskWithLongPollingIsRunning() {
     String requestJson = "{"
-      + "  \"workerId\":\"aWorkerId\","
-      + "  \"maxTasks\":2,"
-      + "  \"topics\":"
-      + "      [{\"topicName\": \"aTopicName\","
-      + "      \"lockDuration\": 10000"
-      + "      }]"
-      + "}";
-    HttpHeaders headers = new HttpHeaders();
-    headers.setContentType(MediaType.APPLICATION_JSON);
-    HttpEntity<String> requestEntity = new HttpEntity<String>(requestJson, headers);
-    ResponseEntity<String> entity = testRestTemplate.postForEntity("/engine-rest/engine/{enginename}/external-task/fetchAndLock", requestEntity, String.class,
-      orqueioBpmProperties.getProcessEngineName());
-    assertEquals(HttpStatus.OK, entity.getStatusCode());
-    assertEquals("[]", entity.getBody());
-  }
+            + "  \"workerId\":\"aWorkerId\","
+            + "  \"maxTasks\":2,"
+            + "  \"topics\":[{\"topicName\":\"aTopicName\",\"lockDuration\":10000}]"
+            + "}";
 
+    webTestClient.post()
+            .uri("/engine-rest/engine/{enginename}/external-task/fetchAndLock", orqueioBpmProperties.getProcessEngineName())
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(requestJson)
+            .exchange()
+            .expectStatus().isOk()
+            .expectBody(String.class)
+            .value(body -> assertEquals("[]", body));
+  }
 }
+

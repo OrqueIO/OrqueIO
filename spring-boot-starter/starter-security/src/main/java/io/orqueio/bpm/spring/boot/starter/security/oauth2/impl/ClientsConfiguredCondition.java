@@ -1,8 +1,8 @@
 /*
- * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * Copyright OrqueIO and/or licensed to OrqueIO
  * under one or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information regarding copyright
- * ownership. Camunda licenses this file to you under the Apache License,
+ * ownership. OrqueIO licenses this file to you under the Apache License,
  * Version 2.0; you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -28,24 +28,24 @@ import java.util.Collections;
 import java.util.Map;
 
 /**
- * Condition that matches if no {@code spring.security.oauth2.client.registration} properties are defined.
+ * Condition that matches if {@code spring.security.oauth2.client.registration} properties are defined.
  */
-public class ClientsNotConfiguredCondition extends SpringBootCondition {
+public class ClientsConfiguredCondition extends SpringBootCondition {
 
-  private static final String OAUTH2_CLIENTS_PROPERTY = "spring.security.oauth2.client.registration";
-  private static final Bindable<Map<String, Object>> STRING_OBJECT_MAP = Bindable.mapOf(String.class, Object.class);
+    private static final String OAUTH2_CLIENTS_PROPERTY = "spring.security.oauth2.client.registration";
+    private static final Bindable<Map<String, Object>> STRING_OBJECT_MAP = Bindable.mapOf(String.class, Object.class);
 
-  @Override
-  public ConditionOutcome getMatchOutcome(ConditionContext context, AnnotatedTypeMetadata metadata) {
-    ConditionMessage.Builder message = ConditionMessage.forCondition("OAuth2 Clients Not Configured");
-    
-    Map<String, Object> registrations = Binder.get(context.getEnvironment())
-        .bind(OAUTH2_CLIENTS_PROPERTY, STRING_OBJECT_MAP)
-        .orElse(Collections.emptyMap());
-    
-    if (!registrations.isEmpty()) {
-      return ConditionOutcome.noMatch(message.foundExactly("OAuth2 client registrations"));
+    @Override
+    public ConditionOutcome getMatchOutcome(ConditionContext context, AnnotatedTypeMetadata metadata) {
+        ConditionMessage.Builder message = ConditionMessage.forCondition("OAuth2 Clients Configured");
+
+        Map<String, Object> registrations = Binder.get(context.getEnvironment())
+                .bind(OAUTH2_CLIENTS_PROPERTY, STRING_OBJECT_MAP)
+                .orElse(Collections.emptyMap());
+
+        if (!registrations.isEmpty()) {
+            return ConditionOutcome.match(message.foundExactly("OAuth2 client registrations"));
+        }
+        return ConditionOutcome.noMatch(message.didNotFind("OAuth2 client registrations").atAll());
     }
-    return ConditionOutcome.match(message.didNotFind("OAuth2 client registrations").atAll());
-  }
 }
