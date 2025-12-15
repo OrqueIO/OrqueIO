@@ -37,9 +37,9 @@ import io.orqueio.bpm.spring.boot.starter.security.oauth2.AbstractSpringSecurity
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.boot.resttestclient.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -70,7 +70,7 @@ public class OrqueioIdentityProviderIT extends AbstractSpringSecurityIT {
   @Autowired
   private ClientRegistrationRepository registrations;
 
-  @MockBean
+  @MockitoBean
   private OAuth2AuthorizedClientService authorizedClientService;
 
   public static OAuth2IdentityProvider spiedIdentityProvider = spy(new OAuth2IdentityProvider());

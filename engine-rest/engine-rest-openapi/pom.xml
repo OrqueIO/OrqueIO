@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.orqueio.bpm</groupId>
   <artifactId>orqueio-engine-rest-openapi</artifactId>
-  <version>1.0.4</version>
+  <version>2.0.0</version>
   <name>Orque IO Platform - engine - REST - OpenAPI</name>
   <packaging>jar</packaging>
   <description>orqueio-engine-rest-openapi</description>
@@ -12,7 +12,7 @@
     <groupId>io.orqueio.bpm</groupId>
     <artifactId>orqueio-engine-rest-root</artifactId>
     <relativePath>../pom.xml</relativePath>
-    <version>1.0.4</version>
+    <version>2.0.0</version>
   </parent>
 
   <properties>

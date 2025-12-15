@@ -16,7 +16,8 @@
  */
 package io.orqueio.bpm.spring.boot.starter.actuator;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -26,15 +27,14 @@ import java.util.List;
 import io.orqueio.bpm.engine.impl.ProcessEngineImpl;
 import io.orqueio.bpm.engine.impl.jobexecutor.JobExecutor;
 import io.orqueio.bpm.spring.boot.starter.actuator.JobExecutorHealthIndicator.Details;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.boot.actuate.health.Health;
-import org.springframework.boot.actuate.health.Status;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.health.contributor.Health;
+import org.springframework.boot.health.contributor.Status;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class JobExecutorHealthIndicatorTest {
 
   private static final String LOCK_OWNER = "lockowner";
@@ -54,8 +54,7 @@ public class JobExecutorHealthIndicatorTest {
   @Mock
   private JobExecutor jobExecutor;
 
-  @Before
-  public void init() {
+  private void setupJobExecutorMock() {
     when(jobExecutor.getLockOwner()).thenReturn(LOCK_OWNER);
     when(jobExecutor.getLockTimeInMillis()).thenReturn(LOCK_TIME_IN_MILLIS);
     when(jobExecutor.getMaxJobsPerAcquisition()).thenReturn(MAX_JOBS_PER_ACQUISITION);
@@ -64,13 +63,14 @@ public class JobExecutorHealthIndicatorTest {
     when(jobExecutor.getProcessEngines()).thenReturn(PROCESS_ENGINES);
   }
 
-  @Test(expected = NullPointerException.class)
+  @Test
   public void nullTest() {
-    new JobExecutorHealthIndicator(null);
+    assertThrows(NullPointerException.class, () -> new JobExecutorHealthIndicator(null));
   }
 
   @Test
   public void upTest() {
+    setupJobExecutorMock();
     when(jobExecutor.isActive()).thenReturn(true);
     JobExecutorHealthIndicator indicator = new JobExecutorHealthIndicator(jobExecutor);
     Health health = indicator.health();
@@ -80,6 +80,7 @@ public class JobExecutorHealthIndicatorTest {
 
   @Test
   public void downTest() {
+    setupJobExecutorMock();
     when(jobExecutor.isActive()).thenReturn(false);
     JobExecutorHealthIndicator indicator = new JobExecutorHealthIndicator(jobExecutor);
     Health health = indicator.health();

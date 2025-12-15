@@ -23,9 +23,9 @@ import io.orqueio.bpm.client.spring.boot.starter.ParsePropertiesHelper;
 import io.orqueio.bpm.client.spring.boot.starter.impl.ClientAutoConfiguration;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -42,7 +42,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 })
 public class MergeSubscriptionConfigurationTest extends ParsePropertiesHelper {
 
-  @MockBean
+  @MockitoBean
   public ExternalTaskClient externalTaskClient;
 
   @Autowired

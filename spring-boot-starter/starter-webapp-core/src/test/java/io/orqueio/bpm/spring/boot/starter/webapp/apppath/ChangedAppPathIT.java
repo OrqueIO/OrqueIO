@@ -23,12 +23,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.reactive.server.WebTestClient;
 
 import java.util.List;
 
@@ -46,137 +46,127 @@ import static io.orqueio.bpm.webapp.impl.security.filter.headersec.provider.impl
 })
 public class ChangedAppPathIT {
 
-  protected static final String MY_APP_PATH = "/my/application/path";
+    protected static final String MY_APP_PATH = "/my/application/path";
 
-  @Rule
-  public HttpClientRule httpClientRule = new HttpClientRule();
+    @Rule
+    public HttpClientRule httpClientRule = new HttpClientRule();
 
-  @LocalServerPort
-  public int port;
+    @LocalServerPort
+    public int port;
 
-  @Autowired
-  protected TestRestTemplate restClient;
+    @Autowired
+    protected WebTestClient webClient;
 
-  @Test
-  public void shouldCheckPresenceOfCsrfPreventionFilter() {
-    // given
+    @Test
+    public void shouldCheckPresenceOfCsrfPreventionFilter() {
+        httpClientRule.performRequest("http://localhost:" + port + MY_APP_PATH +
+            "/app/tasklist/default");
 
-    // when
-    httpClientRule.performRequest("http://localhost:" + port + MY_APP_PATH +
-        "/app/tasklist/default");
+        String xsrfCookieValue = httpClientRule.getXsrfCookie();
+        String xsrfTokenHeader = httpClientRule.getXsrfTokenHeader();
 
-    // then
-    String xsrfCookieValue = httpClientRule.getXsrfCookie();
-    String xsrfTokenHeader = httpClientRule.getXsrfTokenHeader();
+        assertThat(xsrfCookieValue).matches("XSRF-TOKEN=[A-Z0-9]{32};Path=" + MY_APP_PATH + ";SameSite=Lax");
+        assertThat(xsrfTokenHeader).matches("[A-Z0-9]{32}");
+        assertThat(xsrfCookieValue).contains(xsrfTokenHeader);
+    }
 
-    assertThat(xsrfCookieValue).matches("XSRF-TOKEN=[A-Z0-9]{32};" +
-        "Path=" + MY_APP_PATH + ";SameSite=Lax");
-    assertThat(xsrfTokenHeader).matches("[A-Z0-9]{32}");
+    @Test
+    public void shouldCheckPresenceOfRedirection() {
+        httpClientRule.performRequest("http://localhost:" + port + "/");
 
-    assertThat(xsrfCookieValue).contains(xsrfTokenHeader);
-  }
+        assertThat(httpClientRule.getHeader("Location"))
+            .isEqualTo("http://localhost:" + port + MY_APP_PATH + "/app/");
+    }
 
-  @Test
-  public void shouldCheckPresenceOfRedirection() {
-    // given
+    @Test
+    public void shouldCheckPresenceOfHeaderSecurityFilter() {
+        var result = webClient.get()
+            .uri(MY_APP_PATH + "/app/tasklist/default")
+            .exchange()
+            .expectStatus().is2xxSuccessful()
+            .expectBody(String.class)
+            .returnResult();
 
-    // when
-    httpClientRule.performRequest("http://localhost:" + port + "/");
+        ResponseEntity<String> response = ResponseEntity
+            .status(result.getStatus().value())
+            .headers(result.getResponseHeaders())
+            .body(result.getResponseBody());
 
-    // then
-    assertThat(httpClientRule.getHeader("Location")).isEqualTo("http://localhost:" + port +
-        MY_APP_PATH + "/app/");
-  }
+        List<String> headers = response.getHeaders().get(HEADER_NAME);
 
-  @Test
-  public void shouldCheckPresenceOfHeaderSecurityFilter() {
-    // given
+        String expected = HEADER_DEFAULT_VALUE.replace(
+            HEADER_NONCE_PLACEHOLDER,
+            "'nonce-([-_a-zA-Z\\d]*)'"
+        );
+        assertThat(headers).anyMatch(h -> h.matches(expected));
+    }
 
-    // when
-    ResponseEntity<String> response = restClient.getForEntity(MY_APP_PATH +
-        "/app/tasklist/default", String.class);
+    @Test
+    public void shouldCheckPresenceOfCacheControlFilter() {
+        var result = webClient.get()
+            .uri(MY_APP_PATH + "/app/admin/styles/styles.css")
+            .exchange()
+            .expectStatus().is2xxSuccessful()
+            .expectBody(String.class)
+            .returnResult();
 
-    // then
-    List<String> contentSecurityPolicyHeaders = response.getHeaders()
-        .get(HEADER_NAME);
+        ResponseEntity<String> response = ResponseEntity
+            .status(result.getStatus().value())
+            .headers(result.getResponseHeaders())
+            .body(result.getResponseBody());
 
-    String expectedHeaderPattern = HEADER_DEFAULT_VALUE.replace(HEADER_NONCE_PLACEHOLDER, "'nonce-([-_a-zA-Z\\d]*)'");
-    assertThat(contentSecurityPolicyHeaders).anyMatch(val -> val.matches(expectedHeaderPattern));
-  }
+        assertThat(response.getHeaders().get("Cache-Control"))
+            .containsExactly("no-cache");
+    }
 
-  @Test
-  public void shouldCheckPresenceOfCacheControlFilter() {
-    // given
+    @Test
+    public void shouldCheckPresenceOfRestApi() {
+        var result = webClient.get()
+            .uri(MY_APP_PATH + "/api/engine/engine/")
+            .exchange()
+            .expectStatus().is2xxSuccessful()
+            .expectBody(String.class)
+            .returnResult();
 
-    // when
-    ResponseEntity<String> response = restClient.getForEntity(MY_APP_PATH +
-        "/app/admin/styles/styles.css", String.class);
+        ResponseEntity<String> response = ResponseEntity
+            .status(result.getStatus().value())
+            .headers(result.getResponseHeaders())
+            .body(result.getResponseBody());
 
-    // then
-    List<String> cacheControlHeaders = response.getHeaders()
-        .get("Cache-Control");
+        assertThat(response.getBody()).isEqualTo("[{\"name\":\"default\"}]");
+    }
 
-    assertThat(cacheControlHeaders).containsExactly("no-cache");
-  }
+    @Test
+    public void shouldCheckPresenceOfSecurityFilter() {
+        webClient.get()
+            .uri(MY_APP_PATH + "/api/engine/engine/default/group/count")
+            .exchange()
+            .expectStatus().isUnauthorized();
+    }
 
-  @Test
-  public void shouldCheckPresenceOfRestApi() {
-    // given
+    @Test
+    public void shouldCheckPresenceOfLibResources() {
+        webClient.get()
+            .uri(MY_APP_PATH + "/lib/deps.js")
+            .exchange()
+            .expectStatus().isOk();
+    }
 
-    // when
-    ResponseEntity<String> response = restClient.getForEntity(MY_APP_PATH +
-        "/api/engine/engine/", String.class);
+    @Test
+    public void shouldCheckPresenceOfAppResources() {
+        webClient.get()
+            .uri(MY_APP_PATH + "/app/admin/styles/user-styles.css")
+            .exchange()
+            .expectStatus().isOk();
+    }
 
-    // then
-    assertThat(response.getBody()).isEqualTo("[{\"name\":\"default\"}]");
-  }
-
-  @Test
-  public void shouldCheckPresenceOfSecurityFilter() {
-    // given
-
-    // when
-    ResponseEntity<String> response = restClient.getForEntity(MY_APP_PATH +
-        "/api/engine/engine/default/group/count", String.class);
-
-    // then
-    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
-  }
-
-  @Test
-  public void shouldCheckPresenceOfLibResources() {
-    // given
-
-    // when
-    ResponseEntity<String> response = restClient.getForEntity(MY_APP_PATH +
-        "/lib/deps.js", String.class);
-
-    // then
-    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-  }
-
-  @Test
-  public void shouldCheckPresenceOfAppResources() {
-    // given
-
-    // when
-    ResponseEntity<String> response = restClient.getForEntity(MY_APP_PATH +
-        "/app/admin/styles/user-styles.css", String.class);
-
-    // then
-    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-  }
-
-  @Test
-  public void shouldCheckPresenceOfApiResources() {
-    // given
-
-    // when
-    ResponseEntity<String> response = restClient.getForEntity(MY_APP_PATH +
-        "/api/admin/plugin/adminPlugins/static/app/plugin.css", String.class);
-
-    // then
-    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-  }
-
+    @Test
+    public void shouldCheckPresenceOfApiResources() {
+        webClient.get()
+            .uri(MY_APP_PATH + "/api/admin/plugin/adminPlugins/static/app/plugin.css")
+            .exchange()
+            .expectStatus().isOk();
+    }
 }
+
+
