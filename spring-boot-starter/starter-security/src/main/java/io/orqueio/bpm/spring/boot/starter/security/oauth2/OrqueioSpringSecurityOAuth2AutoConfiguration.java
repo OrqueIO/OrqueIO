@@ -36,8 +36,8 @@ import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
-import org.springframework.boot.autoconfigure.security.oauth2.client.ClientsConfiguredCondition;
+import org.springframework.boot.security.autoconfigure.SecurityProperties;
+import io.orqueio.bpm.spring.boot.starter.security.oauth2.impl.ClientsConfiguredCondition;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -81,7 +81,7 @@ public class OrqueioSpringSecurityOAuth2AutoConfiguration {
     filterRegistration.setInitParameters(Map.of(
         ProcessEngineAuthenticationFilter.AUTHENTICATION_PROVIDER_PARAM, OAuth2AuthenticationProvider.class.getName()));
     // make sure the filter is registered after the Spring Security Filter Chain
-    filterRegistration.setOrder(SecurityProperties.DEFAULT_FILTER_ORDER + 1);
+    filterRegistration.setOrder(-99);
     filterRegistration.addUrlPatterns(webappPath + "/app/*", webappPath + "/api/*");
     filterRegistration.setDispatcherTypes(DispatcherType.REQUEST);
     return filterRegistration;

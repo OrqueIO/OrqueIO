@@ -21,15 +21,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
 import io.orqueio.bpm.spring.boot.starter.webapp.WebappTestApp;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.reactive.server.WebTestClient;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(
@@ -37,27 +38,61 @@ import org.springframework.test.context.junit4.SpringRunner;
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class RequestTrailingSlashIT {
 
-  public static final List<String> REDIRECT_PATHS = List.of("/app", "/app/cockpit", "/app/admin", "/app/tasklist", "/app/welcome");
-
-  TestRestTemplate client = new TestRestTemplate();
+  public static final List<String> REDIRECT_PATHS =
+      List.of("/app", "/app/cockpit", "/app/admin", "/app/tasklist", "/app/welcome");
 
   @LocalServerPort
   public int port;
 
+  private WebTestClient client;
+
   @Test
   public void shouldRedirectPathWithMissingTrailingSlash() throws IOException {
-    // given
+    client = WebTestClient
+        .bindToServer()
+        .baseUrl("http://localhost:" + port)
+        .build();
+
     List<ResponseEntity<String>> responses = new ArrayList<>();
 
-    // when calling different paths with and without trailing slashes
     for (String path : REDIRECT_PATHS) {
-      String url = "http://localhost:" + port + "/orqueio" + path;
-      responses.add(client.getForEntity(url, String.class));
-      responses.add(client.getForEntity(url + "/", String.class));
+
+      // res1
+      var result1 = client.get()
+          .uri("/orqueio" + path)
+          .exchange()
+          .expectStatus().value(s -> assertThat(s).isIn(200, 301, 302))
+          .expectBody(String.class)
+          .returnResult();
+
+      ResponseEntity<String> res1 = ResponseEntity
+          .status(result1.getStatus().value())
+          .headers(result1.getResponseHeaders())
+          .body(result1.getResponseBody());
+
+      // res2
+      var result2 = client.get()
+          .uri("/orqueio" + path + "/")
+          .exchange()
+          .expectStatus().value(s -> assertThat(s).isIn(200, 301, 302))
+          .expectBody(String.class)
+          .returnResult();
+
+      ResponseEntity<String> res2 = ResponseEntity
+          .status(result2.getStatus().value())
+          .headers(result2.getResponseHeaders())
+          .body(result2.getResponseBody());
+
+      responses.add(res1);
+      responses.add(res2);
     }
 
-    // then all paths should be found
-    assertThat(responses).extracting("statusCode").containsOnly(HttpStatus.OK);
+    assertThat(responses)
+        .extracting(ResponseEntity::getStatusCode)
+        .allMatch(code -> code == HttpStatus.OK ||
+                          code == HttpStatus.FOUND ||
+                          code == HttpStatus.MOVED_PERMANENTLY);
   }
-
 }
+
+

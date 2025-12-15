@@ -16,40 +16,40 @@
  */
 package io.orqueio.bpm.spring.boot.starter.rest;
 
-import static org.junit.Assert.assertEquals;
-
 import io.orqueio.bpm.engine.rest.dto.repository.ProcessDefinitionDto;
 import io.orqueio.bpm.spring.boot.starter.property.OrqueioBpmProperties;
 import io.orqueio.bpm.spring.boot.starter.rest.test.TestRestApplication;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.reactive.server.WebTestClient;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes = { TestRestApplication.class }, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = TestRestApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class OrqueioBpmRestConfigurationIT {
 
   @Autowired
-  private TestRestTemplate testRestTemplate;
+  private WebTestClient webTestClient;
 
   @Autowired
   private OrqueioBpmProperties orqueioBpmProperties;
 
   @Test
   public void processDefinitionTest() {
-    // start process
-    testRestTemplate.postForEntity("/engine-rest/start/process", HttpEntity.EMPTY, String.class);
+    // Start process
+    webTestClient.post()
+            .uri("/engine-rest/start/process")
+            .exchange()
+            .expectStatus().isOk();
 
-    ResponseEntity<ProcessDefinitionDto> entity = testRestTemplate.getForEntity("/engine-rest/engine/{engineName}/process-definition/key/TestProcess/",
-        ProcessDefinitionDto.class, orqueioBpmProperties.getProcessEngineName());
-
-    assertEquals(HttpStatus.OK, entity.getStatusCode());
-    assertEquals("TestProcess", entity.getBody().getKey());
+    // Verify process definition
+    webTestClient.get()
+            .uri("/engine-rest/engine/{engineName}/process-definition/key/TestProcess/", orqueioBpmProperties.getProcessEngineName())
+            .exchange()
+            .expectStatus().isOk()
+            .expectBody(ProcessDefinitionDto.class)
+            .value(pd -> {
+              assert pd.getKey().equals("TestProcess");
+            });
   }
 }
+

@@ -5,5 +5,5 @@
   \___/  |_|   \__, |  \_,_| \___| |___|  \___/    |_|   |_| \__,_|  \__| |_|   \___/ |_|   |_|_|_|
                   |_|
   Spring-Boot: ${spring-boot.formatted-version}
-  Orque IO Platform: ${orqueio.bpm.formatted-version}
+  Orque IO Platform: (v@project.version@)
   Orque IO Platform Spring Boot Starter: (v@project.version@)
