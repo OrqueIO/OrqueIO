@@ -7,11 +7,11 @@
   <parent>
     <groupId>io.orqueio.bpm.dmn</groupId>
     <artifactId>orqueio-engine-dmn-root</artifactId>
-    <version>1.0.4</version>
+    <version>1.0.5</version>
   </parent>
   <description>orqueio-engine-dmn</description>
   <groupId>io.orqueio.bpm.dmn</groupId>
-  <version>1.0.4</version>
+  <version>1.0.5</version>
   <artifactId>orqueio-engine-dmn</artifactId>
   <name>orqueio DMN - engine</name>
   <packaging>jar</packaging>

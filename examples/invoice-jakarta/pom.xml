@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.orqueio.bpm.example</groupId>
   <artifactId>orqueio-example-invoice-jakarta</artifactId>
-  <version>1.0.4</version>
+  <version>1.0.5</version>
   <packaging>war</packaging>
 
   <description>orqueio-example-invoice-jakarta</description>
@@ -13,7 +13,7 @@
     <groupId>io.orqueio.bpm.example</groupId>
     <artifactId>orqueio-example-root</artifactId>
     <relativePath>../pom.xml</relativePath>
-    <version>1.0.4</version>
+    <version>1.0.5</version>
   </parent>
 
   <dependencyManagement>

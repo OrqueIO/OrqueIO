@@ -5,13 +5,13 @@
     <groupId>io.orqueio.bpm</groupId>
     <artifactId>orqueio-parent</artifactId>
     <relativePath>../parent</relativePath>
-    <version>1.0.4</version>
+    <version>1.0.5</version>
   </parent>
   <description>orqueio-connect-root</description>
 
   <groupId>io.orqueio.connect</groupId>
   <artifactId>orqueio-connect-root</artifactId>
-  <version>1.0.4</version>
+  <version>1.0.5</version>
   <name>Orque IO Platform - connect - root</name>
   <inceptionYear>2014</inceptionYear>
   <packaging>pom</packaging>

@@ -6,9 +6,9 @@
   <parent>
     <groupId>io.orqueio.bpm.springboot.project</groupId>
     <artifactId>orqueio-bpm-spring-boot-starter-root</artifactId>
-    <version>1.0.4</version>
+    <version>1.0.5</version>
   </parent>
-  <version>1.0.4</version>
+  <version>1.0.5</version>
 
   <packaging>pom</packaging>
 

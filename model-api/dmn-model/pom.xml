@@ -5,11 +5,11 @@
     <groupId>io.orqueio.bpm.model</groupId>
     <artifactId>orqueio-model-apis</artifactId>
     <relativePath>../pom.xml</relativePath>
-    <version>1.0.4</version>
+    <version>1.0.5</version>
   </parent>
   <groupId>io.orqueio.bpm.model</groupId>
   <artifactId>orqueio-dmn-model</artifactId>
-  <version>1.0.4</version>
+  <version>1.0.5</version>
   <packaging>jar</packaging>
 
   <description>orqueio-dmn-model</description>

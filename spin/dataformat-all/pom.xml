@@ -6,12 +6,12 @@
   <parent>
     <groupId>io.orqueio.spin</groupId>
     <artifactId>orqueio-spin-root</artifactId>
-    <version>1.0.4</version>
+    <version>1.0.5</version>
   </parent>
   <description>orqueio-spin-dataformat-all</description>
   <groupId>io.orqueio.spin</groupId>
   <artifactId>orqueio-spin-dataformat-all</artifactId>
-  <version>1.0.4</version>
+  <version>1.0.5</version>
   <packaging>jar</packaging>
   <name>Orque IO Spin - all dataformats in one</name>
 
