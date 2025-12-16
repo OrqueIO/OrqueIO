@@ -5,13 +5,13 @@
     <groupId>io.orqueio.bpm</groupId>
     <artifactId>orqueio-parent</artifactId>
     <relativePath>../parent</relativePath>
-    <version>1.0.4</version>
+    <version>1.0.5</version>
   </parent>
   <description>orqueio-commons</description>
 
   <groupId>io.orqueio.commons</groupId>
   <artifactId>orqueio-commons-root</artifactId>
-  <version>1.0.4</version>
+  <version>1.0.5</version>
   <name>Orque IO Commons - Root Pom</name>
   <inceptionYear>2014</inceptionYear>
   <packaging>pom</packaging>

@@ -5,11 +5,11 @@
     <groupId>io.orqueio.bpm</groupId>
     <artifactId>orqueio-database-settings</artifactId>
     <relativePath>../../database</relativePath>
-    <version>1.0.4</version>
+    <version>1.0.5</version>
   </parent>
   <groupId>io.orqueio.bpm</groupId>
   <artifactId>license-book</artifactId>
-  <version>1.0.4</version>
+  <version>1.0.5</version>
   <packaging>pom</packaging>
 
 

@@ -6,7 +6,7 @@
   <parent>
     <groupId>io.orqueio.bpm</groupId>
     <artifactId>orqueio-root</artifactId>
-    <version>1.0.4</version>
+    <version>1.0.5</version>
     <relativePath>../../pom.xml</relativePath>
   </parent>
   <description>orqueio-spin-bom</description>
@@ -14,7 +14,7 @@
   <groupId>io.orqueio.spin</groupId>
   <artifactId>orqueio-spin-bom</artifactId>
   <name>orqueio spin - bom</name>
-  <version>1.0.4</version>
+  <version>1.0.5</version>
   <packaging>pom</packaging>
 
 

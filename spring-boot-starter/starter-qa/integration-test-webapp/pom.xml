@@ -6,10 +6,10 @@
   <parent>
     <groupId>io.orqueio.bpm.springboot.project</groupId>
     <artifactId>orqueio-bpm-spring-boot-starter-qa</artifactId>
-    <version>1.0.4</version>
+    <version>1.0.5</version>
   </parent>
   <groupId>io.orqueio.bpm.springboot.project</groupId>
-  <version>1.0.4</version>
+  <version>1.0.5</version>
   <packaging>pom</packaging>
   <description>qa-webapp</description>
 

@@ -5,12 +5,12 @@
   <parent>
     <groupId>io.orqueio.bpm</groupId>
     <artifactId>orqueio-bom-root</artifactId>
-    <version>1.0.4</version>
+    <version>1.0.5</version>
     <relativePath>../</relativePath>
   </parent>
   <groupId>io.orqueio.bpm</groupId>
   <artifactId>orqueio-bom</artifactId>
-  <version>1.0.4</version>
+  <version>1.0.5</version>
   <packaging>pom</packaging>
   <name>orqueio Platform - Bom</name>
   <url>http://orqueio.io</url>

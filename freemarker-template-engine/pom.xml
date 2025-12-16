@@ -6,12 +6,12 @@
     <groupId>io.orqueio.bpm</groupId>
     <artifactId>orqueio-parent</artifactId>
     <relativePath>../parent</relativePath>
-    <version>1.0.4</version>
+    <version>1.0.5</version>
   </parent>
   <description>io.orqueio.template-engines</description>
   <groupId>io.orqueio.template-engines</groupId>
   <artifactId>orqueio-template-engines-freemarker</artifactId>
-  <version>1.0.4</version>
+  <version>1.0.5</version>
   <packaging>jar</packaging>
   <name>orqueio template engine jsr223 freemarker</name>
 

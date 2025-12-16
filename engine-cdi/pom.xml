@@ -5,9 +5,9 @@
     <groupId>io.orqueio.bpm</groupId>
     <artifactId>orqueio-database-settings</artifactId>
     <relativePath>../database</relativePath>
-    <version>1.0.4</version>
+    <version>1.0.5</version>
   </parent>
-  <version>1.0.4</version>
+  <version>1.0.5</version>
   <description>orqueio-cdi-compatibility-root</description>
   <groupId>io.orqueio.bpm</groupId>
   <artifactId>orqueio-cdi-compatibility-root</artifactId>

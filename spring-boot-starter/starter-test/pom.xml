@@ -7,13 +7,13 @@
   <parent>
     <groupId>io.orqueio.bpm.springboot.project</groupId>
     <artifactId>orqueio-bpm-spring-boot-starter-root</artifactId>
-    <version>1.0.4</version>
+    <version>1.0.5</version>
   </parent>
   <description>orqueio-bpm-spring-boot-starter-test</description>
 
   <groupId>io.orqueio.bpm.springboot</groupId>
   <artifactId>orqueio-bpm-spring-boot-starter-test</artifactId>
-  <version>1.0.4</version>
+  <version>1.0.5</version>
   <packaging>jar</packaging>
   <name>Orque IO Platform - Spring Boot Starter - Test</name>
 
