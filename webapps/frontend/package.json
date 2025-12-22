@@ -1,7 +1,7 @@
 {
   "name": "orqueio-bpm-webapp",
   "private": true,
-  "version": "1.0.4",
+  "version": "1.0.6-SSO",
   "main": "index.js",
   "scripts": {
     "dependencies": "license-checker --production --json --relativeLicensePath",

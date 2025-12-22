@@ -6,7 +6,7 @@
 
   <groupId>io.orqueio.commons</groupId>
   <artifactId>orqueio-commons-typed-values</artifactId>
-  <version>1.0.4</version>
+  <version>1.0.6-SSO</version>
   <packaging>jar</packaging>
 
   <name>Orque IO Commons - Typed Values</name>
@@ -15,7 +15,7 @@
     <groupId>io.orqueio.bpm</groupId>
     <artifactId>orqueio-database-settings</artifactId>
     <relativePath>../../database</relativePath>
-    <version>1.0.4</version>
+    <version>1.0.6-SSO</version>
   </parent>
 
   <dependencyManagement>

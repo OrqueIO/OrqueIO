@@ -6,7 +6,7 @@
   <parent>
     <groupId>io.orqueio.spin</groupId>
     <artifactId>orqueio-spin-root</artifactId>
-    <version>1.0.4</version>
+    <version>1.0.6-SSO</version>
   </parent>
 
   <artifactId>orqueio-spin-dataformat-xml-dom</artifactId>

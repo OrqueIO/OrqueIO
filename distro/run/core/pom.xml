@@ -5,12 +5,12 @@
   <parent>
     <groupId>io.orqueio.bpm.run</groupId>
     <artifactId>orqueio-bpm-run-root</artifactId>
-    <version>1.0.4</version>
+    <version>1.0.6-SSO</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
   <groupId>io.orqueio.bpm.run</groupId>
   <artifactId>orqueio-bpm-run-core</artifactId>
-  <version>1.0.4</version>
+  <version>1.0.6-SSO</version>
   <name>Orque IO Platform - Run - Core</name>
   <packaging>jar</packaging>
 

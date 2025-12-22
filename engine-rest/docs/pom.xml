@@ -3,9 +3,9 @@
   <parent>
     <artifactId>orqueio-engine-rest-root</artifactId>
     <groupId>io.orqueio.bpm</groupId>
-    <version>1.0.4</version>
+    <version>1.0.6-SSO</version>
   </parent>
-  <version>1.0.4</version>
+  <version>1.0.6-SSO</version>
   <modelVersion>4.0.0</modelVersion>
   <description>docs</description>
   <groupId>io.orqueio.bpm</groupId>

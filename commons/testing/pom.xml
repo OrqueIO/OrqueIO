@@ -4,11 +4,11 @@
   <parent>
     <groupId>io.orqueio.commons</groupId>
     <artifactId>orqueio-commons-root</artifactId>
-    <version>1.0.4</version>
+    <version>1.0.6-SSO</version>
   </parent>
   <description>orqueio-commons-testing</description>
   <groupId>io.orqueio.commons</groupId>
-  <version>1.0.4</version>
+  <version>1.0.6-SSO</version>
   <artifactId>orqueio-commons-testing</artifactId>
   <name>Orque IO Commons - Testing</name>
   <packaging>jar</packaging>

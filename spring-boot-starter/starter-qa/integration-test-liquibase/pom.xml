@@ -8,9 +8,9 @@
   <parent>
     <groupId>io.orqueio.bpm.springboot.project</groupId>
     <artifactId>orqueio-bpm-spring-boot-starter-qa</artifactId>
-    <version>1.0.4</version>
+    <version>1.0.6-SSO</version>
   </parent>
-  <version>1.0.4</version>
+  <version>1.0.6-SSO</version>
   <description>qa-liquibase</description>
   <groupId>io.orqueio.bpm.springboot.project</groupId>
   <artifactId>qa-liquibase</artifactId>

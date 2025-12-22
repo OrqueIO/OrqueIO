@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
 <groupId>io.orqueio.bpm.example</groupId>
   <artifactId>orqueio-example-invoice</artifactId>
-  <version>1.0.4</version>
+  <version>1.0.6-SSO</version>
   <packaging>war</packaging>
   <description>orqueio-example-invoice</description>
 
@@ -12,7 +12,7 @@
     <groupId>io.orqueio.bpm.example</groupId>
     <artifactId>orqueio-example-root</artifactId>
     <relativePath>../pom.xml</relativePath>
-    <version>1.0.4</version>
+    <version>1.0.6-SSO</version>
   </parent>
 
   <dependencies>
