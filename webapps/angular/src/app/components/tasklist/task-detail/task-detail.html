@@ -1,0 +1,122 @@
+<!-- Loading State -->
+<div class="loading-overlay" *ngIf="loading$ | async">
+  <span class="spinner"></span>
+</div>
+
+<!-- Task Card -->
+<section class="task-card" [class.task-removed]="!taskExists">
+  <!-- Header -->
+  <header class="task-header">
+    <div class="header-content">
+      <!-- Tenant ID -->
+      <div class="tenant-id" *ngIf="task.tenantId" [title]="task.tenantId">
+        {{ task.tenantId }}
+      </div>
+
+      <!-- Task Names -->
+      <div class="names">
+        <h2 class="task-name">{{ getTaskDisplayName() }}</h2>
+
+        <div class="definition-name">
+          <h4 class="process-definition" *ngIf="task.processDefinitionId">
+            {{ getProcessName() }}
+            <span *ngIf="getProcessVersion()" class="version">
+              (v. {{ getProcessVersion() }})
+            </span>
+          </h4>
+
+          <h4 class="case-definition" *ngIf="task.caseDefinitionId">
+            {{ getCaseName() }}
+          </h4>
+
+          <a class="instance-link"
+             *ngIf="getInstanceLink()"
+             [href]="getInstanceLink()"
+             target="_blank"
+             [title]="'tasklist.viewInstance' | translate">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
+              <polyline points="15 3 21 3 21 9"/>
+              <line x1="10" y1="14" x2="21" y2="3"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Task Meta (Dates & Assignee) -->
+      <app-task-meta
+        [task]="task"
+        [isAssignee]="isCurrentUserAssignee()"
+        [currentUserId]="getCurrentUserId()"
+        (claim)="claimTask()"
+        (unclaim)="unclaimTask()"
+        (assigneeChange)="setAssignee($event)"
+        (taskUpdate)="updateTask($event)">
+      </app-task-meta>
+    </div>
+  </header>
+
+  <!-- Task Removed Alert -->
+  <div class="task-removed-alert" *ngIf="!taskExists">
+    <div class="alert alert-info">
+      <div class="alert-content">
+        <span class="alert-message">{{ 'tasklist.taskHasBeenRemoved' | translate }}</span>
+      </div>
+      <div class="alert-actions">
+        <button class="btn btn-secondary" (click)="dismissTask()">
+          {{ 'tasklist.closeTask' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabs Navigation -->
+  <div class="tabbed-content" *ngIf="taskExists">
+    <ul class="nav nav-tabs">
+      <li *ngFor="let tab of tabs"
+          [class.active]="isActiveTab(tab)">
+        <a href="javascript:void(0)"
+           (click)="selectTab(tab)">
+          {{ tab.label | translate }}
+        </a>
+      </li>
+    </ul>
+
+    <!-- Tab Content -->
+    <div class="tab-content">
+      <!-- Form Tab -->
+      <div class="tab-pane" [class.active]="activeTab === 'form'" [hidden]="activeTab !== 'form'">
+        <app-task-form-tab
+          [task]="task"
+          [form]="form$ | async"
+          [isAssignee]="isCurrentUserAssignee()"
+          (complete)="completeTask($event)">
+        </app-task-form-tab>
+      </div>
+
+      <!-- History Tab -->
+      <div class="tab-pane" [class.active]="activeTab === 'history'" [hidden]="activeTab !== 'history'">
+        <app-task-history-tab
+          [task]="task"
+          [history]="(history$ | async) || []"
+          [comments]="(comments$ | async) || []">
+        </app-task-history-tab>
+      </div>
+
+      <!-- Diagram Tab - Keep alive to avoid re-importing BPMN -->
+      <div class="tab-pane" [class.active]="activeTab === 'diagram'" [hidden]="activeTab !== 'diagram'">
+        <app-task-diagram-tab
+          [task]="task"
+          [isActive]="activeTab === 'diagram'">
+        </app-task-diagram-tab>
+      </div>
+
+      <!-- Description Tab -->
+      <div class="tab-pane" [class.active]="activeTab === 'description'" [hidden]="activeTab !== 'description'">
+        <app-task-description-tab
+          [task]="task">
+        </app-task-description-tab>
+      </div>
+    </div>
+  </div>
+</section>

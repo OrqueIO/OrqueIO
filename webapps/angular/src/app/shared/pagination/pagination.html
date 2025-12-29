@@ -1,0 +1,36 @@
+<div class="pagination-container">
+  <div class="pagination-info">
+    <span>{{ 'SHOWING' | translate }} {{ startIndex }}-{{ endIndex }} {{ 'OF' | translate }} {{ total }}</span>
+  </div>
+
+  <div class="pagination-controls">
+    <button
+      class="pagination-btn"
+      [disabled]="!hasPrevious"
+      (click)="previousPage()">
+      <fa-icon [icon]="faChevronLeft"></fa-icon>
+    </button>
+
+    <span class="pagination-page">
+      {{ 'PAGE' | translate }} {{ current }} {{ 'OF' | translate }} {{ totalPages }}
+    </span>
+
+    <button
+      class="pagination-btn"
+      [disabled]="!hasNext"
+      (click)="nextPage()">
+      <fa-icon [icon]="faChevronRight"></fa-icon>
+    </button>
+  </div>
+
+  <div class="pagination-size">
+    <label>
+      {{ 'ITEMS_PER_PAGE' | translate }}:
+      <select (change)="changePageSize($event)" [value]="size">
+        <option *ngFor="let pageSize of availableSizes" [value]="pageSize">
+          {{ pageSize }}
+        </option>
+      </select>
+    </label>
+  </div>
+</div>

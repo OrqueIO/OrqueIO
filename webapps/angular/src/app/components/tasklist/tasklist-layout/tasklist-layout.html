@@ -1,0 +1,94 @@
+<div class="tasklist-container" *ngIf="vm$ | async as vm">
+  <!-- Filters Column -->
+  <aside class="filters-column"
+         [class.collapsed]="vm.filtersCollapsed">
+    <header class="column-header">
+      <h3 class="column-title">{{ 'tasklist.filters' | translate }}</h3>
+      <button class="btn-toggle"
+              (click)="toggleFilters()"
+              [attr.aria-label]="(vm.filtersCollapsed ? 'tasklist.expandFilters' : 'tasklist.collapseFilters') | translate">
+        <span class="toggle-icon" [class.rotated]="vm.filtersCollapsed"></span>
+      </button>
+    </header>
+
+    <div class="column-content" *ngIf="!vm.filtersCollapsed">
+      <app-task-filters
+        [filters]="vm.filters"
+        [selectedFilterId]="vm.selectedFilterId"
+        [filterCount]="vm.filterCount"
+        (filterSelect)="onFilterSelect($event)">
+      </app-task-filters>
+    </div>
+  </aside>
+
+  <!-- Task List Column -->
+  <main class="list-column">
+    <header class="column-header">
+      <div class="header-content">
+        <h3 class="column-title">{{ 'tasklist.tasks' | translate }}</h3>
+        <span class="task-count" *ngIf="vm.total > 0">
+          ({{ vm.total }})
+        </span>
+      </div>
+
+      <!-- Sorting controls will be added here -->
+      <div class="sorting-controls">
+        <!-- TaskSortingComponent -->
+      </div>
+    </header>
+
+    <div class="column-content">
+      <app-task-list
+        [tasks]="vm.tasks"
+        [selectedTaskId]="vm.selectedTaskId"
+        [loading]="vm.loading"
+        [total]="vm.total"
+        [page]="vm.page"
+        [pageSize]="vm.pageSize"
+        (taskSelect)="onTaskSelect($event)"
+        (pageChange)="onPageChange($event)"
+        (sortingChange)="onSortingChange($event)">
+      </app-task-list>
+    </div>
+  </main>
+
+  <!-- Task Detail Column -->
+  <aside class="detail-column"
+         [class.collapsed]="vm.detailCollapsed"
+         [class.no-task]="!vm.selectedTaskId">
+    <header class="column-header">
+      <button class="btn-toggle left"
+              (click)="toggleDetail()"
+              [attr.aria-label]="(vm.detailCollapsed ? 'tasklist.expandDetail' : 'tasklist.collapseDetail') | translate">
+        <span class="toggle-icon" [class.rotated]="!vm.detailCollapsed"></span>
+      </button>
+      <h3 class="column-title" *ngIf="!vm.detailCollapsed">
+        {{ 'tasklist.taskDetail' | translate }}
+      </h3>
+    </header>
+
+    <div class="column-content" *ngIf="!vm.detailCollapsed">
+      <app-task-detail
+        *ngIf="taskDetail$ | async as task; else noTaskSelected"
+        [task]="task"
+        [activeTab]="(activeTab$ | async) || 'form'"
+        (tabChange)="onTabChange($event)"
+        (taskAction)="onTaskAction($event)"
+        (dismiss)="onTaskDismiss()">
+      </app-task-detail>
+
+      <ng-template #noTaskSelected>
+        <div class="no-task-message">
+          <span class="icon">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/>
+              <rect x="9" y="3" width="6" height="4" rx="1"/>
+              <path d="M9 12h6M9 16h6"/>
+            </svg>
+          </span>
+          <p>{{ 'tasklist.selectTaskHint' | translate }}</p>
+        </div>
+      </ng-template>
+    </div>
+  </aside>
+</div>

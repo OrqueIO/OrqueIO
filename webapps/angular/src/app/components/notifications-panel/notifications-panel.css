@@ -1,0 +1,131 @@
+.notifications-panel {
+  position: fixed;
+  bottom: 20px;
+  right: 30px;
+  z-index: 1060;
+  max-height: 70%;
+  max-width: 400px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.alert {
+  position: relative;
+  padding: 0.875rem 2.5rem 0.875rem 1rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  animation: slideIn 0.3s ease-out;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  min-width: 280px;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.close-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.75rem;
+  background: transparent;
+  border: none;
+  font-size: 1.25rem;
+  font-weight: bold;
+  cursor: pointer;
+  opacity: 0.5;
+  line-height: 1;
+  padding: 0;
+  transition: opacity 0.15s;
+}
+
+.close-btn:hover {
+  opacity: 0.8;
+}
+
+.status {
+  font-weight: 600;
+}
+
+.message {
+  display: block;
+  margin-top: 0.25rem;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Alert variants */
+.alert-info {
+  background-color: #eff6ff;
+  border: 1px solid #bfdbfe;
+  color: #1e40af;
+}
+
+.alert-info .close-btn {
+  color: #1e40af;
+}
+
+.alert-success {
+  background-color: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  color: #166534;
+}
+
+.alert-success .close-btn {
+  color: #166534;
+}
+
+.alert-warning {
+  background-color: #fffbeb;
+  border: 1px solid #fde68a;
+  color: #92400e;
+}
+
+.alert-warning .close-btn {
+  color: #92400e;
+}
+
+.alert-danger {
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #991b1b;
+}
+
+.alert-danger .close-btn {
+  color: #991b1b;
+}
+
+/* Scrollbar styling */
+.notifications-panel::-webkit-scrollbar {
+  width: 6px;
+}
+
+.notifications-panel::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.notifications-panel::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+}
+
+@media (max-width: 480px) {
+  .notifications-panel {
+    left: 1rem;
+    right: 1rem;
+    bottom: 1rem;
+    max-width: none;
+  }
+
+  .alert {
+    min-width: auto;
+  }
+}

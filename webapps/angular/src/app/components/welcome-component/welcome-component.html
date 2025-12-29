@@ -1,0 +1,30 @@
+<div class="welcome-container">
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Apps Section -->
+    <section class="section apps-section">
+      <div class="section-header">
+        <h2 class="section-title">{{ 'YOUR_APPS' | translate }}</h2>
+      </div>
+      <div class="cards-grid">
+        <app-card *ngFor="let app of apps" [icon]="app.icon" [title]="app.title" [subtitle]="app.subtitle"
+          [description]="app.description" [daysLeft]="app.daysLeft" [route]="app.route || ''">
+        </app-card>
+      </div>
+    </section>
+
+    <!-- Resources Section -->
+    <section class="section resources-section">
+      <div class="section-header">
+        <h2 class="section-title">{{ 'RESOURCES' | translate }}</h2>
+      </div>
+      <div class="resources-grid">
+        <div *ngFor="let resource of resources" class="resource-item" (click)="openResource(resource.link)">
+          <fa-icon [icon]="resource.icon" class="resource-fa-icon"></fa-icon>
+          <span class="resource-title">{{ resource.title }}</span>
+          <span class="resource-arrow">→</span>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>

@@ -1,0 +1,33 @@
+@if (route) {
+  <a [routerLink]="route" class="card card-link" [class.card-resource]="isResource">
+    <div class="card-header">
+      <div class="card-icon" [class.icon-large]="!isResource">
+        @if (icon && (icon.includes('.svg') || icon.includes('.png') || icon.includes('.jpg') || icon.includes('.jpeg'))) {
+          <img [src]="icon" [alt]="title" class="icon-image">
+        } @else {
+          <i class="icon" [ngClass]="'icon-' + icon"></i>
+        }
+      </div>
+    </div>
+    <div class="card-content">
+      <h3 class="card-title">{{ title }}</h3>
+      <p class="card-description">{{ description }}</p>
+    </div>
+  </a>
+} @else {
+  <div class="card" [class.card-resource]="isResource">
+    <div class="card-header">
+      <div class="card-icon" [class.icon-large]="!isResource">
+        @if (icon && (icon.includes('.svg') || icon.includes('.png') || icon.includes('.jpg') || icon.includes('.jpeg'))) {
+          <img [src]="icon" [alt]="title" class="icon-image">
+        } @else {
+          <i class="icon" [ngClass]="'icon-' + icon"></i>
+        }
+      </div>
+    </div>
+    <div class="card-content">
+      <h3 class="card-title">{{ title }}</h3>
+      <p class="card-description">{{ description }}</p>
+    </div>
+  </div>
+}

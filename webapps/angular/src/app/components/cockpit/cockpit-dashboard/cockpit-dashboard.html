@@ -1,0 +1,67 @@
+<div class="cockpit-layout">
+  <main class="cockpit-main">
+    <app-cockpit-header
+      titleKey="cockpit.dashboard.title"
+      [showRefresh]="true"
+      [breadcrumbs]="[{ label: 'Dashboard', translateKey: 'cockpit.menu.dashboard' }]"
+    ></app-cockpit-header>
+
+    <div class="dashboard-content">
+      <!-- Stats Cards -->
+      <section class="stats-section">
+        <div class="stats-grid">
+          <a
+            *ngFor="let card of statCards"
+            [routerLink]="card.route"
+            class="stat-card"
+            [style.--card-color]="card.color"
+          >
+            <div class="stat-icon" [style.background]="card.color">
+              <fa-icon [icon]="card.icon"></fa-icon>
+            </div>
+            <div class="stat-info">
+              <span class="stat-value">
+                <ng-container *ngIf="!card.loading">{{ card.value }}</ng-container>
+                <fa-icon *ngIf="card.loading" [icon]="faSpinner" animation="spin" class="loading-icon"></fa-icon>
+              </span>
+              <span class="stat-title">{{ card.titleKey | translate }}</span>
+            </div>
+            <div class="stat-arrow">
+              <fa-icon [icon]="faArrowRight"></fa-icon>
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <!-- Quick Access Section -->
+      <section class="quick-access-section">
+        <h2 class="section-title">{{ 'cockpit.dashboard.processDefinitions' | translate }}</h2>
+
+        <div class="definitions-list" *ngIf="((processDefinitions$ | async) ?? []).length > 0">
+          <a
+            *ngFor="let def of (processDefinitions$ | async)?.slice(0, 5)"
+            [routerLink]="['/cockpit/processes', def.key, 'instances']"
+            class="definition-item"
+          >
+            <div class="definition-icon">
+              <fa-icon [icon]="faArrowRight"></fa-icon>
+            </div>
+            <div class="definition-info">
+              <span class="definition-name">{{ def.name || def.key }}</span>
+              <span class="definition-key">{{ def.key }} (v{{ def.version }})</span>
+            </div>
+          </a>
+        </div>
+
+        <div class="empty-state" *ngIf="((processDefinitions$ | async) ?? []).length === 0 && !(loading$ | async)">
+          <p>{{ 'cockpit.dashboard.noProcessDefinitions' | translate }}</p>
+        </div>
+
+        <div class="loading-state" *ngIf="loading$ | async">
+          <fa-icon [icon]="faSpinner" animation="spin"></fa-icon>
+          <span>{{ 'common.loading' | translate }}</span>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>

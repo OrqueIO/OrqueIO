@@ -1,0 +1,15 @@
+<div class="notifications-panel">
+  <div
+    *ngFor="let notification of notifications; trackBy: trackByNotification"
+    class="alert"
+    [ngClass]="getNotificationClass(notification)"
+    role="alert"
+  >
+    <button type="button" class="close-btn" (click)="removeNotification(notification)" aria-label="Close">
+      &times;
+    </button>
+    <strong class="status">{{ notification.status }}</strong>
+    <span *ngIf="notification.message"> : </span>
+    <span class="message" *ngIf="notification.message">{{ notification.message }}</span>
+  </div>
+</div>

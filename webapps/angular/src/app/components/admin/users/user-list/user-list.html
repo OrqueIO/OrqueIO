@@ -1,0 +1,50 @@
+<div class="user-list-container">
+  <app-admin-page-header
+    titleKey="admin.users.title"
+    [breadcrumbs]="[{ label: 'Users', translateKey: 'admin.dashboard.users' }]"
+    [showRefresh]="true"
+    [showCreate]="true"
+    createLabel="admin.users.createUser"
+    (create)="onCreateUser()"
+    (refresh)="refresh()">
+  </app-admin-page-header>
+
+  <div class="search-section">
+    <app-search-bar
+      placeholderKey="admin.users.searchPlaceholder"
+      (search)="onSearch($event)">
+    </app-search-bar>
+  </div>
+
+  <app-data-table
+    [columns]="columns"
+    [data]="(users$ | async) ?? []"
+    [loading]="(loading$ | async) ?? false"
+    [sortBy]="sortBy"
+    [sortOrder]="sortOrder"
+    emptyMessageKey="admin.users.noUsers"
+    (sortChange)="onSort($event)"
+    (rowClick)="onRowClick($event)">
+  </app-data-table>
+
+  <app-pagination
+    [current]="currentPage"
+    [size]="pageSize"
+    [total]="(total$ | async) ?? 0"
+    (pageChange)="onPageChange($event)">
+  </app-pagination>
+
+  <!-- Actions template -->
+  <ng-template #actionsTemplate let-user>
+    <a (click)="editUser(user, $event)" class="action-link">
+      {{ 'admin.users.edit' | translate }}
+    </a>
+  </ng-template>
+</div>
+
+<!-- Create User Dialog -->
+<app-user-create-dialog
+  *ngIf="showCreateDialog"
+  (created)="onUserCreated()"
+  (cancel)="onCreateDialogCancel()">
+</app-user-create-dialog>

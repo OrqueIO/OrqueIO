@@ -1,0 +1,35 @@
+<div class="dialog-backdrop" (click)="onBackdropClick($event)">
+  <div class="dialog-container" role="dialog" aria-modal="true">
+    <div class="dialog-header" [class.danger]="isDanger">
+      <h3 class="dialog-title">{{ title }}</h3>
+    </div>
+    <div class="dialog-body">
+      <p class="dialog-message">{{ message }}</p>
+
+      <div class="input-group" *ngIf="showInput">
+        <label *ngIf="inputLabel">{{ inputLabel }}</label>
+        <input
+          type="text"
+          [value]="inputValue"
+          (input)="onInputChange($any($event.target).value)"
+          [placeholder]="inputPlaceholder"
+        />
+      </div>
+    </div>
+    <div class="dialog-footer">
+      <button
+        type="button"
+        class="btn btn-secondary"
+        (click)="onCancel()">
+        {{ cancelLabel }}
+      </button>
+      <button
+        type="button"
+        class="btn"
+        [ngClass]="isDanger ? 'btn-danger' : confirmButtonClass"
+        (click)="onConfirm()">
+        {{ confirmLabel }}
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,68 @@
+<nav class="navbar" [class.transparent]="transparent">
+  <div class="navbar-container">
+    <a routerLink="/" class="navbar-logo">
+      <img src="images/orqueio.png" alt="OrqueIO Logo" class="logo-image">
+    </a>
+
+    <!-- Menu Items -->
+    <div class="navbar-menu" *ngIf="menuItems.length > 0">
+      <a
+        *ngFor="let item of menuItems"
+        [routerLink]="item.route"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: item.exact ?? false }"
+        class="menu-item"
+      >
+        <fa-icon [icon]="item.icon" class="menu-icon"></fa-icon>
+        <span class="menu-label">{{ item.label | translate }}</span>
+      </a>
+    </div>
+
+    <div class="navbar-actions">
+      <button
+        type="button"
+        class="lang-toggle"
+        (click)="toggleLanguage()"
+        [title]="currentLang === 'fr' ? 'Switch to English' : 'Passer en Français'"
+      >
+        <span class="flag" *ngIf="currentLang === 'fr'">
+          <svg viewBox="0 0 3 2" width="28" height="18">
+            <rect width="1" height="2" fill="#002395"/>
+            <rect width="1" height="2" x="1" fill="#fff"/>
+            <rect width="1" height="2" x="2" fill="#ED2939"/>
+          </svg>
+          <strong>FR</strong>
+        </span>
+        <span class="flag" *ngIf="currentLang === 'en'">
+          <svg viewBox="0 0 50 30" width="28" height="18">
+            <rect width="50" height="30" fill="#012169"/>
+            <path d="M0,0 L50,30 M50,0 L0,30" stroke="#fff" stroke-width="6"/>
+            <path d="M0,0 L50,30" stroke="#C8102E" stroke-width="2" transform="translate(0,0)"/>
+            <path d="M50,0 L0,30" stroke="#C8102E" stroke-width="2"/>
+            <path d="M25,0 V30 M0,15 H50" stroke="#fff" stroke-width="10"/>
+            <path d="M25,0 V30 M0,15 H50" stroke="#C8102E" stroke-width="6"/>
+          </svg>
+          <strong>EN</strong>
+        </span>
+      </button>
+
+      <ng-container *ngIf="showAuth && isAuthenticated">
+        <a routerLink="/profile" class="nav-link profile-link">
+          <span class="nav-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+          </span>
+          <span class="nav-username">{{ userName }}</span>
+        </a>
+
+        <button type="button" class="logout-btn" (click)="onLogout()" [title]="'LOGOUT' | translate">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/>
+          </svg>
+        </button>
+      </ng-container>
+    </div>
+  </div>
+</nav>

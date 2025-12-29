@@ -1,0 +1,42 @@
+<div class="data-table-container">
+  <div *ngIf="loading" class="loading-overlay">
+    <fa-icon [icon]="faSpinner" [animation]="'spin'" size="2x"></fa-icon>
+    <p>{{ 'LOADING' | translate }}</p>
+  </div>
+
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th *ngFor="let column of columns"
+            [class.sortable]="column.sortable"
+            (click)="onSort(column)">
+          {{ column.labelKey | translate }}
+          <fa-icon *ngIf="column.sortable"
+                   [icon]="getSortIcon(column)"
+                   class="sort-icon">
+          </fa-icon>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngIf="!loading && data.length === 0">
+        <td [attr.colspan]="columns.length" class="empty-message">
+          {{ emptyMessageKey | translate }}
+        </td>
+      </tr>
+      <tr *ngFor="let row of data"
+          (click)="onRowClick(row)"
+          class="data-row">
+        <td *ngFor="let column of columns">
+          <ng-container *ngIf="column.template; else defaultCell">
+            <ng-container *ngTemplateOutlet="column.template; context: { $implicit: row }">
+            </ng-container>
+          </ng-container>
+          <ng-template #defaultCell>
+            {{ row[column.key] }}
+          </ng-template>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

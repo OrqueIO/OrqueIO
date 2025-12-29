@@ -1,0 +1,50 @@
+<div class="group-list-container">
+  <app-admin-page-header
+    titleKey="admin.groups.title"
+    [breadcrumbs]="[{ label: 'Groups', translateKey: 'admin.dashboard.groups' }]"
+    [showRefresh]="true"
+    [showCreate]="true"
+    createLabel="admin.groups.createGroup"
+    (create)="onCreateGroup()"
+    (refresh)="refresh()">
+  </app-admin-page-header>
+
+  <div class="search-section">
+    <app-search-bar
+      placeholderKey="admin.groups.searchPlaceholder"
+      (search)="onSearch($event)">
+    </app-search-bar>
+  </div>
+
+  <app-data-table
+    [columns]="columns"
+    [data]="groups"
+    [loading]="loading"
+    [sortBy]="sortBy"
+    [sortOrder]="sortOrder"
+    emptyMessageKey="admin.groups.noGroups"
+    (sortChange)="onSort($event)"
+    (rowClick)="onRowClick($event)">
+  </app-data-table>
+
+  <app-pagination
+    [current]="currentPage"
+    [size]="pageSize"
+    [total]="totalGroups"
+    (pageChange)="onPageChange($event)">
+  </app-pagination>
+
+  <!-- Actions template -->
+  <ng-template #actionsTemplate let-group>
+    <a (click)="editGroup(group, $event)" class="action-link">
+      {{ 'admin.users.edit' | translate }}
+    </a>
+  </ng-template>
+</div>
+
+<!-- Create Group Dialog -->
+<app-group-create-dialog
+  *ngIf="showCreateDialog"
+  (created)="onGroupCreated()"
+  (cancel)="onCreateDialogCancel()">
+</app-group-create-dialog>

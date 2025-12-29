@@ -6,13 +6,13 @@
   <parent>
     <groupId>io.orqueio.bpm</groupId>
     <artifactId>orqueio-database-settings</artifactId>
-    <version>1.0.5</version>
+    <version>1.0.4</version>
     <relativePath>../database</relativePath>
   </parent>
   <description>orqueio-webapp-root</description>
   <artifactId>orqueio-webapp-root</artifactId>
   <groupId>io.orqueio.bpm.webapp</groupId>
-  <version>1.0.5</version>
+  <version>1.0.4</version>
   <packaging>pom</packaging>
 
 
@@ -150,9 +150,16 @@
             <fileset>
               <directory>./frontend/target</directory>
             </fileset>
+            <fileset>
+              <directory>./angular/dist</directory>
+            </fileset>
+            <fileset>
+              <directory>./angular/.angular</directory>
+            </fileset>
           </filesets>
         </configuration>
       </plugin>
+      <!-- AngularJS Frontend Build -->
       <plugin>
         <groupId>com.github.eirslett</groupId>
         <artifactId>frontend-maven-plugin</artifactId>
@@ -163,6 +170,7 @@
           <skip>${skip.frontend.build}</skip>
         </configuration>
         <executions>
+          <!-- AngularJS executions -->
           <execution>
             <id>install node and npm</id>
             <goals>
@@ -206,6 +214,43 @@
             </goals>
             <phase>generate-resources</phase>
             <configuration>
+              <arguments>run build</arguments>
+            </configuration>
+          </execution>
+          <!-- Angular 21 executions -->
+          <execution>
+            <id>angular-install-node-and-npm</id>
+            <goals>
+              <goal>install-node-and-npm</goal>
+            </goals>
+            <configuration>
+              <workingDirectory>./angular</workingDirectory>
+              <installDirectory>./angular</installDirectory>
+              <nodeVersion>v22.16.0</nodeVersion>
+              <npmVersion>10.9.2</npmVersion>
+            </configuration>
+          </execution>
+          <execution>
+            <id>angular-npm-ci</id>
+            <goals>
+              <goal>npm</goal>
+            </goals>
+            <phase>generate-resources</phase>
+            <configuration>
+              <workingDirectory>./angular</workingDirectory>
+              <installDirectory>./angular</installDirectory>
+              <arguments>ci</arguments>
+            </configuration>
+          </execution>
+          <execution>
+            <id>angular-build</id>
+            <goals>
+              <goal>npm</goal>
+            </goals>
+            <phase>generate-resources</phase>
+            <configuration>
+              <workingDirectory>./angular</workingDirectory>
+              <installDirectory>./angular</installDirectory>
               <arguments>run build</arguments>
             </configuration>
           </execution>

@@ -21,5 +21,6 @@ faces-config.NavData
 **/overlays
 **/node_modules
 camunda-h2-dbs
-
+**/.angular
+**/dist
 *.DS_Store

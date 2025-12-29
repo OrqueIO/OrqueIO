@@ -1,0 +1,24 @@
+.tenant-list-container {
+  padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.search-section {
+  margin-bottom: 20px;
+}
+
+.action-link {
+  color: #007bff;
+  text-decoration: none;
+  cursor: pointer;
+  font-weight: 500;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.action-link:hover {
+  background-color: #f8f9fa;
+  text-decoration: underline;
+}
