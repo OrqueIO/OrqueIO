@@ -1,0 +1,191 @@
+<div class="user-detail-container" *ngIf="!loading">
+  <div class="detail-header">
+    <button class="btn-back" (click)="goBack()">
+      <fa-icon [icon]="faArrowLeft"></fa-icon>
+      {{ 'BACK' | translate }}
+    </button>
+    <h1>{{ user?.id }}</h1>
+    <div class="header-actions">
+      <button class="btn-unlock" (click)="unlockUser()">
+        <fa-icon [icon]="faUnlock"></fa-icon>
+        {{ 'admin.users.unlock' | translate }}
+      </button>
+      <button class="btn-delete" (click)="deleteUser()">
+        <fa-icon [icon]="faTrash"></fa-icon>
+        {{ 'DELETE' | translate }}
+      </button>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button
+      class="tab"
+      [class.active]="activeTab === 'profile'"
+      (click)="setActiveTab('profile')">
+      {{ 'admin.users.tabs.profile' | translate }}
+    </button>
+    <button
+      class="tab"
+      [class.active]="activeTab === 'credentials'"
+      (click)="setActiveTab('credentials')">
+      {{ 'admin.users.tabs.credentials' | translate }}
+    </button>
+    <button
+      class="tab"
+      [class.active]="activeTab === 'groups'"
+      (click)="setActiveTab('groups')">
+      {{ 'admin.users.tabs.groups' | translate }}
+    </button>
+    <button
+      class="tab"
+      [class.active]="activeTab === 'tenants'"
+      (click)="setActiveTab('tenants')">
+      {{ 'admin.users.tabs.tenants' | translate }}
+    </button>
+  </div>
+
+  <div class="tab-content">
+    <!-- Profile Tab -->
+    <div *ngIf="activeTab === 'profile'" class="tab-panel">
+      <form [formGroup]="profileForm" (ngSubmit)="saveProfile()">
+        <div class="form-group">
+          <label>{{ 'admin.users.firstName' | translate }}</label>
+          <input type="text" formControlName="firstName" class="form-control" />
+        </div>
+
+        <div class="form-group">
+          <label>{{ 'admin.users.lastName' | translate }}</label>
+          <input type="text" formControlName="lastName" class="form-control" />
+        </div>
+
+        <div class="form-group">
+          <label>{{ 'admin.users.email' | translate }}</label>
+          <input type="email" formControlName="email" class="form-control" />
+          <span *ngIf="profileForm.get('email')?.invalid && profileForm.get('email')?.touched"
+                class="error-message">
+            {{ 'INVALID_EMAIL' | translate }}
+          </span>
+        </div>
+
+        <button type="submit" class="btn-primary" [disabled]="!profileForm.valid">
+          <fa-icon [icon]="faSave"></fa-icon>
+          {{ 'SAVE' | translate }}
+        </button>
+      </form>
+    </div>
+
+    <!-- Credentials Tab -->
+    <div *ngIf="activeTab === 'credentials'" class="tab-panel">
+      <form [formGroup]="credentialsForm" (ngSubmit)="updateCredentials()">
+        <div class="form-group">
+          <label>{{ 'admin.users.currentPassword' | translate }}</label>
+          <input type="password" formControlName="authenticatedUserPassword" class="form-control" />
+        </div>
+
+        <div class="form-group">
+          <label>{{ 'admin.users.newPassword' | translate }}</label>
+          <input type="password" formControlName="password" class="form-control" />
+          <span *ngIf="credentialsForm.get('password')?.invalid && credentialsForm.get('password')?.touched"
+                class="error-message">
+            {{ 'PASSWORD_MIN_LENGTH' | translate }}
+          </span>
+        </div>
+
+        <div class="form-group">
+          <label>{{ 'admin.users.confirmPassword' | translate }}</label>
+          <input type="password" formControlName="password2" class="form-control" />
+          <span *ngIf="credentialsForm.hasError('passwordMismatch') && credentialsForm.get('password2')?.touched"
+                class="error-message">
+            {{ 'PASSWORDS_DO_NOT_MATCH' | translate }}
+          </span>
+        </div>
+
+        <button type="submit" class="btn-primary" [disabled]="!credentialsForm.valid">
+          <fa-icon [icon]="faSave"></fa-icon>
+          {{ 'UPDATE_PASSWORD' | translate }}
+        </button>
+      </form>
+    </div>
+
+    <!-- Groups Tab -->
+    <div *ngIf="activeTab === 'groups'" class="tab-panel">
+      <div class="tab-header">
+        <h3>{{ 'admin.users.userGroups' | translate }}</h3>
+        <button class="btn-add" (click)="openAddGroupDialog()">
+          <fa-icon [icon]="faPlus"></fa-icon>
+          {{ 'admin.users.addGroup' | translate }}
+        </button>
+      </div>
+
+      <div *ngIf="loadingGroups" class="loading">{{ 'LOADING' | translate }}...</div>
+
+      <ul *ngIf="!loadingGroups" class="list">
+        <li *ngFor="let group of userGroups" class="list-item">
+          <div class="item-content">
+            <a [routerLink]="['/admin/groups', group.id]">{{ group.id }}</a>
+            <span *ngIf="group.name" class="item-name"> - {{ group.name }}</span>
+          </div>
+          <button class="btn-remove" (click)="removeGroup(group.id)" [title]="'REMOVE' | translate">
+            <fa-icon [icon]="faTimes"></fa-icon>
+          </button>
+        </li>
+        <li *ngIf="userGroups.length === 0" class="empty-message">
+          {{ 'admin.users.noGroups' | translate }}
+        </li>
+      </ul>
+    </div>
+
+    <!-- Tenants Tab -->
+    <div *ngIf="activeTab === 'tenants'" class="tab-panel">
+      <div class="tab-header">
+        <h3>{{ 'admin.users.userTenants' | translate }}</h3>
+        <button class="btn-add" (click)="openAddTenantDialog()">
+          <fa-icon [icon]="faPlus"></fa-icon>
+          {{ 'admin.users.addTenant' | translate }}
+        </button>
+      </div>
+
+      <div *ngIf="loadingTenants" class="loading">{{ 'LOADING' | translate }}...</div>
+
+      <ul *ngIf="!loadingTenants" class="list">
+        <li *ngFor="let tenant of userTenants" class="list-item">
+          <div class="item-content">
+            <a [routerLink]="['/admin/tenants', tenant.id]">{{ tenant.id }}</a>
+            <span *ngIf="tenant.name" class="item-name"> - {{ tenant.name }}</span>
+          </div>
+          <button class="btn-remove" (click)="removeTenant(tenant.id)" [title]="'REMOVE' | translate">
+            <fa-icon [icon]="faTimes"></fa-icon>
+          </button>
+        </li>
+        <li *ngIf="userTenants.length === 0" class="empty-message">
+          {{ 'admin.users.noTenants' | translate }}
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="loading-container" *ngIf="loading">
+  <p>{{ 'LOADING' | translate }}...</p>
+</div>
+
+<!-- Delete Confirmation Dialog -->
+<app-confirm-dialog
+  *ngIf="showDeleteConfirm"
+  title="admin.users.deleteConfirmTitle"
+  [message]="'admin.users.deleteConfirmMessage' | translate: { userId: userId }"
+  confirmLabel="DELETE"
+  confirmButtonClass="btn-danger"
+  (confirm)="confirmDelete()"
+  (cancel)="cancelDelete()">
+</app-confirm-dialog>
+
+<!-- Add Membership Dialog -->
+<app-add-membership-dialog
+  *ngIf="showAddMembershipDialog"
+  [userId]="userId"
+  [type]="membershipDialogType"
+  [excludeIds]="membershipDialogType === 'group' ? excludedGroupIds : excludedTenantIds"
+  (added)="membershipDialogType === 'group' ? onGroupAdded() : onTenantAdded()"
+  (cancel)="onMembershipDialogCancel()">
+</app-add-membership-dialog>

@@ -1,0 +1,116 @@
+<div class="cockpit-layout">
+  <main class="cockpit-main">
+    <app-cockpit-header
+      titleKey="cockpit.taskDashboard.title"
+      [breadcrumbs]="breadcrumbs"
+      [showRefresh]="true"
+    ></app-cockpit-header>
+
+    <div class="page-content">
+      <div class="dashboard-row">
+        <!-- Left Column: Task Assignment by Type -->
+        <section class="dashboard-section">
+          <div class="section-inner">
+            <header class="section-header">
+              <h2 class="section-title">{{ 'cockpit.taskDashboard.assignmentByType' | translate }}</h2>
+            </header>
+
+            <table class="stats-table cam-table">
+              <thead>
+                <tr>
+                  <th class="col-count">{{ 'cockpit.taskDashboard.tasks' | translate }}</th>
+                  <th class="col-label">{{ 'cockpit.taskDashboard.type' | translate }}</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr *ngFor="let stat of taskStatistics">
+                  <td class="col-count">
+                    <fa-icon *ngIf="stat.loading" [icon]="faSpinner" animation="spin" class="loading-icon"></fa-icon>
+                    <a *ngIf="!stat.loading" class="count-link" (click)="navigateToSearch(stat.searchType)">
+                      {{ stat.count }}
+                    </a>
+                  </td>
+                  <td class="col-label">
+                    <fa-icon [icon]="stat.searchType === 'assignedToUsers' ? faUser : (stat.searchType === 'assignedToGroups' ? faUsers : faQuestionCircle)" class="type-icon"></fa-icon>
+                    {{ stat.translateKey | translate }}
+                  </td>
+                </tr>
+              </tbody>
+
+              <tfoot>
+                <tr class="total-row">
+                  <td class="col-count">
+                    <fa-icon *ngIf="openTasksLoading" [icon]="faSpinner" animation="spin" class="loading-icon"></fa-icon>
+                    <a *ngIf="!openTasksLoading" class="count-link total" (click)="navigateToSearch('all')">
+                      {{ openTasksCount }}
+                    </a>
+                  </td>
+                  <td class="col-label total-label">
+                    <fa-icon [icon]="faTasks" class="type-icon"></fa-icon>
+                    {{ 'cockpit.taskDashboard.totalOpenTasks' | translate }}
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </section>
+
+        <!-- Right Column: Task Assignment by Group -->
+        <section class="dashboard-section">
+          <div class="section-inner">
+            <header class="section-header">
+              <h2 class="section-title">{{ 'cockpit.taskDashboard.assignmentByGroup' | translate }}</h2>
+            </header>
+
+            <table class="stats-table cam-table">
+              <thead>
+                <tr>
+                  <th class="col-count">{{ 'cockpit.taskDashboard.tasks' | translate }}</th>
+                  <th class="col-label">{{ 'cockpit.taskDashboard.group' | translate }}</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr *ngIf="taskGroupsLoading">
+                  <td colspan="2" class="loading-cell">
+                    <fa-icon [icon]="faSpinner" animation="spin" class="loading-icon"></fa-icon>
+                  </td>
+                </tr>
+                <tr *ngIf="!taskGroupsLoading && taskGroups.length === 0">
+                  <td colspan="2" class="empty-cell">
+                    {{ 'cockpit.taskDashboard.noGroups' | translate }}
+                  </td>
+                </tr>
+                <tr *ngFor="let group of taskGroups">
+                  <td class="col-count">
+                    <a class="count-link" (click)="navigateToGroupSearch(group.groupId)">
+                      {{ group.taskCount }}
+                    </a>
+                  </td>
+                  <td class="col-label">
+                    <fa-icon [icon]="faUsers" class="type-icon"></fa-icon>
+                    {{ formatGroupName(group.groupName) }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <p class="legend-info" *ngIf="!taskGroupsLoading && taskGroups.length > 0">
+              <fa-icon [icon]="faInfoCircle" class="info-icon"></fa-icon>
+              {{ 'cockpit.taskDashboard.legendInfo' | translate }}
+            </p>
+          </div>
+        </section>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="quick-actions">
+        <a [routerLink]="['/cockpit/tasks/list']" class="action-card">
+          <fa-icon [icon]="faSearch" class="action-icon"></fa-icon>
+          <span class="action-label">{{ 'cockpit.taskDashboard.searchTasks' | translate }}</span>
+        </a>
+      </div>
+    </div>
+  </main>
+</div>

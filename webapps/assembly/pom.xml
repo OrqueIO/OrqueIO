@@ -6,13 +6,13 @@
   <parent>
     <groupId>io.orqueio.bpm.webapp</groupId>
     <artifactId>orqueio-webapp-root</artifactId>
-    <version>1.0.5</version>
+    <version>1.0.4</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
   <description>orqueio-webapp</description>
   <groupId>io.orqueio.bpm.webapp</groupId>
   <artifactId>orqueio-webapp</artifactId>
-  <version>1.0.5</version>
+  <version>1.0.4</version>
   <packaging>war</packaging>
 
 
@@ -183,6 +183,23 @@
               <resources>
                 <resource>
                   <directory>${basedir}/../frontend/target/webapp</directory>
+                  <filtering>false</filtering>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+          <!-- Copy Angular 21 build output to app/angular/ -->
+          <execution>
+            <id>copy-angular-resources</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${basedir}/target/webapp/app/angular</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>${basedir}/../angular/dist/OrqueIO-angular/browser</directory>
                   <filtering>false</filtering>
                 </resource>
               </resources>

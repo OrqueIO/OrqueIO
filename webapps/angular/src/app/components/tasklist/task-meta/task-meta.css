@@ -1,0 +1,163 @@
+/* Task Meta Component */
+.meta-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.meta-list.dates {
+  margin-bottom: 12px;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+}
+
+/* Icons */
+.meta-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary, #666);
+  flex-shrink: 0;
+}
+
+/* Values */
+.meta-value {
+  color: var(--text-primary, #333);
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 3px;
+  transition: background-color 0.15s;
+}
+
+.meta-value:hover {
+  background-color: var(--bg-hover, #f0f0f0);
+}
+
+.meta-value.overdue {
+  color: #cc0000;
+  font-weight: 500;
+}
+
+.meta-value.assignee-name {
+  font-weight: 500;
+}
+
+/* Links */
+.meta-link {
+  color: var(--primary-color, #0066cc);
+  text-decoration: none;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 3px;
+  transition: background-color 0.15s;
+}
+
+.meta-link:hover {
+  text-decoration: underline;
+  background-color: var(--bg-hover, #f0f0f0);
+}
+
+/* Input */
+.meta-input {
+  padding: 4px 8px;
+  border: 1px solid var(--border-color, #ccc);
+  border-radius: 4px;
+  font-size: 13px;
+  min-width: 140px;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.meta-input:focus {
+  border-color: var(--primary-color, #0066cc);
+  box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.1);
+}
+
+.meta-input.invalid {
+  border-color: #cc0000;
+}
+
+.meta-input.validating {
+  background-color: #f9f9f9;
+}
+
+/* Buttons */
+.btn-reset {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary, #666);
+  cursor: pointer;
+  border-radius: 3px;
+  opacity: 0;
+  transition: opacity 0.15s, color 0.15s, background-color 0.15s;
+}
+
+.meta-item:hover .btn-reset {
+  opacity: 1;
+}
+
+.btn-reset:hover {
+  color: #cc0000;
+  background-color: rgba(204, 0, 0, 0.1);
+}
+
+.btn-claim {
+  padding: 4px 12px;
+  border: none;
+  background: transparent;
+  color: var(--primary-color, #0066cc);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 3px;
+  transition: background-color 0.15s;
+}
+
+.btn-claim:hover:not(:disabled) {
+  background-color: rgba(0, 102, 204, 0.1);
+}
+
+.btn-claim:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Validation Spinner */
+.validation-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--border-color, #e0e0e0);
+  border-top-color: var(--primary-color, #0066cc);
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Groups */
+.meta-item.groups {
+  cursor: pointer;
+}
+
+.meta-item.groups:hover {
+  background-color: var(--bg-hover, #f0f0f0);
+  border-radius: 4px;
+  margin: -4px;
+  padding: 4px;
+}

@@ -1,0 +1,152 @@
+<div class="admin-dashboard">
+  <!-- Stats Overview -->
+  <div class="stats-overview">
+    <div class="stat-item" *ngFor="let stat of stats">
+      <div class="stat-value">
+        <fa-icon *ngIf="stat.loading" [icon]="faSpinner" [animation]="'spin'" class="loading-icon"></fa-icon>
+        <span *ngIf="!stat.loading">{{ stat.count }}</span>
+      </div>
+      <div class="stat-label">{{ stat.titleKey | translate }}</div>
+    </div>
+  </div>
+
+  <!-- Dashboard Sections -->
+  <div class="dashboard-grid">
+    <!-- Users Section -->
+    <section class="dashboard-section">
+      <div class="section-header">
+        <div class="section-icon users-icon">
+          <fa-icon [icon]="faUsers"></fa-icon>
+        </div>
+        <div class="section-title-wrapper">
+          <h2 class="section-title">
+            <a routerLink="/admin/users">{{ 'admin.dashboard.users' | translate }}</a>
+          </h2>
+          <span class="section-count" *ngIf="!stats[0].loading">{{ stats[0].count }}</span>
+        </div>
+      </div>
+      <ul class="section-links">
+        <li>
+          <a (click)="openCreateUserDialog()" class="action-link">
+            <fa-icon [icon]="faPlus" class="link-icon"></fa-icon>
+            {{ 'admin.dashboard.createUser' | translate }}
+          </a>
+        </li>
+        <li>
+          <a routerLink="/admin/users" class="action-link">
+            <fa-icon [icon]="faList" class="link-icon"></fa-icon>
+            {{ 'admin.dashboard.listUsers' | translate }}
+          </a>
+        </li>
+        <li>
+          <a [routerLink]="['/admin/users', currentUserId]" class="action-link" *ngIf="currentUserId">
+            <fa-icon [icon]="faUser" class="link-icon"></fa-icon>
+            {{ 'admin.dashboard.myProfile' | translate }}
+          </a>
+        </li>
+      </ul>
+    </section>
+
+    <!-- Groups Section -->
+    <section class="dashboard-section">
+      <div class="section-header">
+        <div class="section-icon groups-icon">
+          <fa-icon [icon]="faUsersCog"></fa-icon>
+        </div>
+        <div class="section-title-wrapper">
+          <h2 class="section-title">
+            <a routerLink="/admin/groups">{{ 'admin.dashboard.groups' | translate }}</a>
+          </h2>
+          <span class="section-count" *ngIf="!stats[1].loading">{{ stats[1].count }}</span>
+        </div>
+      </div>
+      <ul class="section-links">
+        <li>
+          <a (click)="openCreateGroupDialog()" class="action-link">
+            <fa-icon [icon]="faPlus" class="link-icon"></fa-icon>
+            {{ 'admin.dashboard.createGroup' | translate }}
+          </a>
+        </li>
+        <li>
+          <a routerLink="/admin/groups" class="action-link">
+            <fa-icon [icon]="faList" class="link-icon"></fa-icon>
+            {{ 'admin.dashboard.listGroups' | translate }}
+          </a>
+        </li>
+      </ul>
+    </section>
+
+    <!-- Tenants Section -->
+    <section class="dashboard-section">
+      <div class="section-header">
+        <div class="section-icon tenants-icon">
+          <fa-icon [icon]="faBuilding"></fa-icon>
+        </div>
+        <div class="section-title-wrapper">
+          <h2 class="section-title">
+            <a routerLink="/admin/tenants">{{ 'admin.dashboard.tenants' | translate }}</a>
+          </h2>
+          <span class="section-count" *ngIf="!stats[2].loading">{{ stats[2].count }}</span>
+        </div>
+      </div>
+      <ul class="section-links">
+        <li>
+          <a (click)="openCreateTenantDialog()" class="action-link">
+            <fa-icon [icon]="faPlus" class="link-icon"></fa-icon>
+            {{ 'admin.dashboard.createTenant' | translate }}
+          </a>
+        </li>
+        <li>
+          <a routerLink="/admin/tenants" class="action-link">
+            <fa-icon [icon]="faList" class="link-icon"></fa-icon>
+            {{ 'admin.dashboard.listTenants' | translate }}
+          </a>
+        </li>
+      </ul>
+    </section>
+
+    <!-- Authorizations Section -->
+    <section class="dashboard-section">
+      <div class="section-header">
+        <div class="section-icon auth-icon">
+          <fa-icon [icon]="faShieldAlt"></fa-icon>
+        </div>
+        <div class="section-title-wrapper">
+          <h2 class="section-title">
+            <a routerLink="/admin/authorizations">{{ 'admin.dashboard.authorizations' | translate }}</a>
+          </h2>
+          <span class="section-count" *ngIf="!stats[3].loading">{{ stats[3].count }}</span>
+        </div>
+      </div>
+      <ul class="section-links">
+        <li>
+          <a routerLink="/admin/authorizations" class="action-link">
+            <fa-icon [icon]="faKey" class="link-icon"></fa-icon>
+            {{ 'admin.dashboard.manageAuthorizations' | translate }}
+          </a>
+        </li>
+      </ul>
+    </section>
+  </div>
+</div>
+
+<!-- Create User Dialog -->
+<app-user-create-dialog
+  *ngIf="showCreateUserDialog"
+  (created)="onUserCreated()"
+  (cancel)="closeCreateUserDialog()">
+</app-user-create-dialog>
+
+<!-- Create Group Dialog -->
+<app-group-create-dialog
+  *ngIf="showCreateGroupDialog"
+  (created)="onGroupCreated()"
+  (cancel)="closeCreateGroupDialog()">
+</app-group-create-dialog>
+
+<!-- Create Tenant Dialog -->
+<app-tenant-create-dialog
+  *ngIf="showCreateTenantDialog"
+  (created)="onTenantCreated()"
+  (cancel)="closeCreateTenantDialog()">
+</app-tenant-create-dialog>

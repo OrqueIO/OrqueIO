@@ -1,0 +1,256 @@
+/* Task Filters Component */
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Loading State */
+.loading-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 20px;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #e5e7eb;
+  border-top-color: #667eea;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Error State */
+.error-state {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  margin: 8px;
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 4px;
+  color: #dc2626;
+  font-size: 13px;
+}
+
+.error-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  background-color: #dc2626;
+  color: white;
+  border-radius: 50%;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+/* Empty State */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  text-align: center;
+  color: #6b7280;
+}
+
+.info-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  margin-bottom: 12px;
+  background-color: #f3f4f6;
+  border-radius: 50%;
+  font-weight: bold;
+  font-style: italic;
+  color: #6b7280;
+}
+
+.empty-state p {
+  margin: 0 0 16px 0;
+  font-size: 13px;
+}
+
+/* Filters List */
+.filters-list {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.filter-items {
+  list-style: none;
+  margin: 0;
+  padding: 8px 0;
+}
+
+/* Filter Item */
+.filter-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  margin: 0 8px 4px 8px;
+  border-radius: 4px;
+  border-left: 3px solid transparent;
+  cursor: pointer;
+  transition: background-color 0.15s, border-color 0.15s;
+}
+
+.filter-item:hover {
+  background-color: #f3f4f6;
+}
+
+.filter-item.active {
+  background-color: #ede9fe;
+  border-left-color: #667eea;
+}
+
+/* Filter Content */
+.filter-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.filter-name {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.filter-name a {
+  text-decoration: none;
+  color: #1f2937;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.filter-name a:hover {
+  text-decoration: underline;
+}
+
+.filter-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  background-color: #667eea;
+  color: white;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.filter-description {
+  margin: 4px 0 0 0;
+  font-size: 12px;
+  color: #6b7280;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Filter Actions */
+.filter-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.filter-item:hover .filter-actions,
+.filter-item.active .filter-actions {
+  opacity: 1;
+}
+
+.btn-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 4px;
+  color: #6b7280;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.btn-action:hover {
+  background-color: #e5e7eb;
+  color: #1f2937;
+}
+
+/* Add Filter Button */
+.add-filter-container {
+  padding: 8px 16px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.btn-add-filter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px dashed #d1d5db;
+  background: transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #6b7280;
+  font-size: 13px;
+  transition: border-color 0.15s, color 0.15s, background-color 0.15s;
+}
+
+.btn-add-filter:hover {
+  border-color: #667eea;
+  color: #667eea;
+  background-color: #f9fafb;
+}
+
+.plus-icon {
+  font-size: 16px;
+  font-weight: 300;
+}
+
+/* Scrollbar */
+.filters-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.filters-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.filters-list::-webkit-scrollbar-thumb {
+  background-color: #d1d5db;
+  border-radius: 3px;
+}
+
+.filters-list::-webkit-scrollbar-thumb:hover {
+  background-color: #9ca3af;
+}

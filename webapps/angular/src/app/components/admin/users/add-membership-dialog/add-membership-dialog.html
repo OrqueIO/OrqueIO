@@ -1,0 +1,55 @@
+<div class="dialog-backdrop" (click)="onBackdropClick($event)">
+  <div class="dialog-container" role="dialog" aria-modal="true">
+    <div class="dialog-header">
+      <h3 class="dialog-title">{{ titleKey | translate }}</h3>
+    </div>
+
+    <div class="dialog-body">
+      <div class="search-box">
+        <input
+          type="text"
+          class="form-control"
+          [(ngModel)]="searchTerm"
+          (input)="onSearchChange()"
+          [placeholder]="searchPlaceholderKey | translate" />
+      </div>
+
+      <div class="items-list" *ngIf="!loading">
+        <div
+          *ngFor="let item of filteredItems"
+          class="item"
+          [class.selected]="selectedId === item.id"
+          (click)="selectItem(item.id)">
+          <div class="item-id">{{ item.id }}</div>
+          <div class="item-name" *ngIf="item.name">{{ item.name }}</div>
+        </div>
+
+        <div class="empty-message" *ngIf="filteredItems.length === 0">
+          {{ emptyMessageKey | translate }}
+        </div>
+      </div>
+
+      <div class="loading" *ngIf="loading">
+        {{ 'LOADING' | translate }}...
+      </div>
+    </div>
+
+    <div class="dialog-footer">
+      <button
+        type="button"
+        class="btn btn-secondary"
+        (click)="onCancel()"
+        [disabled]="saving">
+        {{ 'CANCEL' | translate }}
+      </button>
+      <button
+        type="button"
+        class="btn btn-primary"
+        (click)="onSubmit()"
+        [disabled]="!selectedId || saving">
+        <span *ngIf="saving">{{ 'ADDING' | translate }}...</span>
+        <span *ngIf="!saving">{{ 'ADD' | translate }}</span>
+      </button>
+    </div>
+  </div>
+</div>

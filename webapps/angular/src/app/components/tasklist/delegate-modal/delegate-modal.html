@@ -1,0 +1,96 @@
+<!-- Modal Backdrop -->
+<div class="modal-backdrop" *ngIf="isOpen" (click)="onBackdropClick($event)">
+  <div class="modal-container">
+    <!-- Modal Header -->
+    <div class="modal-header">
+      <h2 class="modal-title">{{ 'delegate.title' | translate }}</h2>
+      <button class="close-btn" (click)="onClose()" [title]="'common.close' | translate">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Modal Body -->
+    <div class="modal-body">
+      <p class="task-info">
+        {{ 'delegate.taskLabel' | translate }}: <strong>{{ taskName }}</strong>
+      </p>
+
+      <div class="form-group">
+        <label for="userId">{{ 'delegate.selectUser' | translate }}</label>
+        <div class="input-wrapper">
+          <input type="text"
+                 id="userId"
+                 [(ngModel)]="userId"
+                 (input)="onUserIdChange()"
+                 (focus)="onInputFocus()"
+                 (blur)="onInputBlur()"
+                 (keydown)="onKeyDown($event)"
+                 [class.is-valid]="isValid === true"
+                 [class.is-invalid]="isValid === false"
+                 [placeholder]="'delegate.userPlaceholder' | translate"
+                 class="form-input"
+                 autocomplete="off">
+
+          <!-- Validation indicator -->
+          <span class="validation-icon valid" *ngIf="isValid === true">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+          </span>
+          <span class="validation-icon invalid" *ngIf="isValid === false">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </span>
+          <span class="validation-icon loading" *ngIf="validating">
+            <span class="spinner"></span>
+          </span>
+
+          <!-- Suggestions Dropdown -->
+          <div class="suggestions-dropdown" *ngIf="showSuggestions && suggestions.length > 0">
+            <div *ngFor="let user of suggestions; let i = index"
+                 class="suggestion-item"
+                 [class.selected]="i === selectedIndex"
+                 (click)="selectUser(user)">
+              <span class="user-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
+                  <circle cx="12" cy="7" r="4"/>
+                </svg>
+              </span>
+              <div class="user-info">
+                <span class="user-name">{{ getUserDisplayName(user) }}</span>
+                <span class="user-id" *ngIf="getUserDisplayName(user) !== user.id">{{ user.id }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Error Message -->
+        <p class="error-message" *ngIf="errorMessage">
+          {{ errorMessage | translate }}
+        </p>
+
+        <p class="help-text">{{ 'delegate.help' | translate }}</p>
+      </div>
+    </div>
+
+    <!-- Modal Footer -->
+    <div class="modal-footer">
+      <button class="btn btn-secondary" (click)="onClose()" type="button">
+        {{ 'common.cancel' | translate }}
+      </button>
+      <button class="btn btn-primary"
+              (click)="validateAndDelegate()"
+              [disabled]="!userId.trim() || validating"
+              type="button">
+        <span class="spinner small" *ngIf="validating"></span>
+        {{ 'delegate.confirm' | translate }}
+      </button>
+    </div>
+  </div>
+</div>

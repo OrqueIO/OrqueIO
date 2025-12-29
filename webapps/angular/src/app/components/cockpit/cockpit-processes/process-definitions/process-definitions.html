@@ -1,0 +1,173 @@
+<div class="cockpit-layout">
+  <main class="cockpit-main">
+    <app-cockpit-header
+      titleKey="cockpit.processes.deployedDefinitions"
+      [breadcrumbs]="breadcrumbs"
+      [showRefresh]="true"
+      (refresh)="loadProcessDefinitions()"
+    ></app-cockpit-header>
+
+    <div class="page-content">
+      <!-- Toolbar with search and view toggle -->
+      <div class="toolbar">
+        <div class="search-bar">
+          <div class="search-input-wrapper">
+            <fa-icon [icon]="faSearch" class="search-icon"></fa-icon>
+            <input
+              type="text"
+              class="search-input"
+              [placeholder]="'cockpit.processes.searchPlaceholder' | translate"
+              [(ngModel)]="searchQuery"
+              (input)="onSearchChange()"
+            />
+          </div>
+        </div>
+        <div class="view-toggle">
+          <button
+            type="button"
+            class="view-btn"
+            [class.active]="viewMode === 'list'"
+            (click)="setViewMode('list')"
+            [title]="'cockpit.processes.viewMode.list' | translate"
+          >
+            <fa-icon [icon]="faList"></fa-icon>
+          </button>
+          <button
+            type="button"
+            class="view-btn"
+            [class.active]="viewMode === 'tile'"
+            (click)="setViewMode('tile')"
+            [title]="'cockpit.processes.viewMode.tile' | translate"
+          >
+            <fa-icon [icon]="faThLarge"></fa-icon>
+          </button>
+        </div>
+      </div>
+
+      <!-- Results info -->
+      <div class="results-info">
+        <span *ngIf="!loading && filteredDefinitions.length > 0">
+          {{ filteredDefinitions.length }} {{ 'cockpit.processes.definitionsFound' | translate }}
+        </span>
+        <span *ngIf="!loading && filteredDefinitions.length === 0 && processDefinitions.length > 0">
+          {{ 'cockpit.processes.noMatchingDefinitions' | translate }}
+        </span>
+        <span *ngIf="!loading && processDefinitions.length === 0">
+          {{ 'cockpit.processes.noDeployedDefinitions' | translate }}
+        </span>
+      </div>
+
+      <!-- Process definitions list view -->
+      <div class="table-container" *ngIf="viewMode === 'list' && !loading && filteredDefinitions.length > 0">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th class="col-state">{{ 'cockpit.processes.columns.state' | translate }}</th>
+              <th class="col-incidents">{{ 'cockpit.processes.columns.incidents' | translate }}</th>
+              <th class="col-instances">{{ 'cockpit.processes.columns.runningInstances' | translate }}</th>
+              <th class="col-key">{{ 'cockpit.processes.columns.key' | translate }}</th>
+              <th class="col-name">{{ 'cockpit.processes.columns.name' | translate }}</th>
+              <th class="col-tenant">{{ 'cockpit.processes.columns.tenant' | translate }}</th>
+              <th class="col-actions">{{ 'cockpit.processes.columns.actions' | translate }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let def of filteredDefinitions" class="definition-row">
+              <td class="col-state">
+                <span class="state-indicator" [ngClass]="getStateClass(def)">
+                  <fa-icon [icon]="getStateIcon(def)"></fa-icon>
+                </span>
+              </td>
+              <td class="col-incidents">
+                <span class="incidents-count" [class.has-incidents]="getTotalIncidents(def) > 0">
+                  <fa-icon *ngIf="getTotalIncidents(def) > 0" [icon]="faExclamationTriangle"></fa-icon>
+                  {{ getTotalIncidents(def) }}
+                </span>
+              </td>
+              <td class="col-instances">
+                <span class="instances-count" [class.has-instances]="def.instances > 0">
+                  {{ def.instances }}
+                </span>
+              </td>
+              <td class="col-key">
+                <a [routerLink]="['/cockpit/processes', getDefinitionKey(def), 'instances']" class="definition-link mono" appClipboard [appClipboard]="getDefinitionKey(def)">
+                  {{ getDefinitionKey(def) }}
+                </a>
+              </td>
+              <td class="col-name">
+                <a [routerLink]="['/cockpit/processes', getDefinitionKey(def), 'instances']" class="definition-link" *ngIf="getDefinitionName(def) !== getDefinitionKey(def)">
+                  {{ getDefinitionName(def) }}
+                </a>
+                <span class="null-value" *ngIf="getDefinitionName(def) === getDefinitionKey(def)">-</span>
+              </td>
+              <td class="col-tenant">
+                <span *ngIf="def.tenantId">{{ def.tenantId }}</span>
+                <span class="null-value" *ngIf="!def.tenantId">-</span>
+              </td>
+              <td class="col-actions">
+                <a
+                  [routerLink]="['/cockpit/processes', getDefinitionKey(def), 'instances']"
+                  class="action-btn"
+                  [title]="'cockpit.processes.viewInstances' | translate"
+                >
+                  <fa-icon [icon]="faEye"></fa-icon>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Process definitions tile view -->
+      <div class="tile-container" *ngIf="viewMode === 'tile' && !loading && filteredDefinitions.length > 0">
+        <a
+          *ngFor="let def of filteredDefinitions"
+          [routerLink]="['/cockpit/processes', getDefinitionKey(def), 'instances']"
+          class="definition-tile"
+          [ngClass]="getStateClass(def)"
+        >
+          <div class="tile-header">
+            <span class="state-indicator" [ngClass]="getStateClass(def)">
+              <fa-icon [icon]="getStateIcon(def)"></fa-icon>
+            </span>
+            <span class="tile-name">{{ getDefinitionName(def) }}</span>
+          </div>
+          <div class="tile-key">
+            <code>{{ getDefinitionKey(def) }}</code>
+          </div>
+          <div class="tile-stats">
+            <div class="stat">
+              <span class="stat-value" [class.has-instances]="def.instances > 0">{{ def.instances }}</span>
+              <span class="stat-label">{{ 'cockpit.processes.columns.runningInstances' | translate }}</span>
+            </div>
+            <div class="stat">
+              <span class="stat-value" [class.has-incidents]="getTotalIncidents(def) > 0">
+                <fa-icon *ngIf="getTotalIncidents(def) > 0" [icon]="faExclamationTriangle"></fa-icon>
+                {{ getTotalIncidents(def) }}
+              </span>
+              <span class="stat-label">{{ 'cockpit.processes.columns.incidents' | translate }}</span>
+            </div>
+          </div>
+          <div class="tile-footer">
+            <span class="view-link">
+              <fa-icon [icon]="faEye"></fa-icon>
+              {{ 'cockpit.processes.viewInstances' | translate }}
+            </span>
+          </div>
+        </a>
+      </div>
+
+      <!-- Loading state -->
+      <div class="loading-state" *ngIf="loading">
+        <fa-icon [icon]="faSpinner" animation="spin"></fa-icon>
+        <span>{{ 'common.loading' | translate }}</span>
+      </div>
+
+      <!-- Empty state -->
+      <div class="empty-state" *ngIf="!loading && processDefinitions.length === 0">
+        <fa-icon [icon]="faCogs" class="empty-icon"></fa-icon>
+        <p>{{ 'cockpit.processes.noDeployedDefinitions' | translate }}</p>
+      </div>
+    </div>
+  </main>
+</div>

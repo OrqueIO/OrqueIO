@@ -1,0 +1,58 @@
+<div class="dialog-backdrop" (click)="onBackdropClick($event)">
+  <div class="dialog-container" role="dialog" aria-modal="true">
+    <div class="dialog-header">
+      <h3 class="dialog-title">{{ 'admin.groups.addMember' | translate }}</h3>
+    </div>
+
+    <div class="dialog-body">
+      <div class="search-box">
+        <input
+          type="text"
+          class="form-control"
+          [(ngModel)]="searchTerm"
+          (input)="onSearchChange()"
+          [placeholder]="'admin.groups.searchUsers' | translate" />
+      </div>
+
+      <div class="items-list" *ngIf="!loading">
+        <div
+          *ngFor="let user of filteredUsers"
+          class="item"
+          [class.selected]="selectedUserId === user.id"
+          (click)="selectUser(user.id)">
+          <div class="item-id">{{ user.id }}</div>
+          <div class="item-name" *ngIf="user.firstName || user.lastName">
+            {{ user.firstName }} {{ user.lastName }}
+          </div>
+          <div class="item-email" *ngIf="user.email">{{ user.email }}</div>
+        </div>
+
+        <div class="empty-message" *ngIf="filteredUsers.length === 0">
+          {{ 'admin.groups.noAvailableUsers' | translate }}
+        </div>
+      </div>
+
+      <div class="loading" *ngIf="loading">
+        {{ 'LOADING' | translate }}...
+      </div>
+    </div>
+
+    <div class="dialog-footer">
+      <button
+        type="button"
+        class="btn btn-secondary"
+        (click)="onCancel()"
+        [disabled]="saving">
+        {{ 'CANCEL' | translate }}
+      </button>
+      <button
+        type="button"
+        class="btn btn-primary"
+        (click)="onSubmit()"
+        [disabled]="!selectedUserId || saving">
+        <span *ngIf="saving">{{ 'ADDING' | translate }}...</span>
+        <span *ngIf="!saving">{{ 'ADD' | translate }}</span>
+      </button>
+    </div>
+  </div>
+</div>

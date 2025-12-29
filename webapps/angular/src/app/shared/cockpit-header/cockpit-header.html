@@ -1,0 +1,36 @@
+<header class="cockpit-header">
+  <div class="header-content">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <ol class="breadcrumb-list">
+        <li class="breadcrumb-item">
+          <a routerLink="/cockpit" class="breadcrumb-link">
+            <fa-icon [icon]="faHome"></fa-icon>
+          </a>
+        </li>
+        <ng-container *ngFor="let item of breadcrumbs; let last = last">
+          <li class="breadcrumb-separator">
+            <fa-icon [icon]="faChevronRight"></fa-icon>
+          </li>
+          <li class="breadcrumb-item" [class.active]="last">
+            <a *ngIf="item.route && !last" [routerLink]="item.route" class="breadcrumb-link">
+              {{ item.translateKey ? (item.translateKey | translate) : item.label }}
+            </a>
+            <span *ngIf="!item.route || last" class="breadcrumb-text">
+              {{ item.translateKey ? (item.translateKey | translate) : item.label }}
+            </span>
+          </li>
+        </ng-container>
+      </ol>
+    </nav>
+
+    <h1 class="page-title">
+      {{ titleKey ? (titleKey | translate) : title }}
+    </h1>
+  </div>
+
+  <div class="header-actions">
+    <button *ngIf="showRefresh" class="action-btn" (click)="onRefresh()" [title]="'common.refresh' | translate">
+      <fa-icon [icon]="faRefresh"></fa-icon>
+    </button>
+  </div>
+</header>

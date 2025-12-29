@@ -1,0 +1,153 @@
+<div class="modal-backdrop" (click)="onBackdropClick($event)">
+  <div class="modal-container" role="dialog" aria-modal="true">
+    <div class="modal-header">
+      <h3 class="modal-title">
+        {{ (isEditMode ? 'AUTHORIZATION_EDIT' : 'AUTHORIZATION_CREATE_NEW_AUTHORIZATION') | translate }}
+      </h3>
+      <button type="button" class="close-btn" (click)="onCancel()" aria-label="Close">
+        <fa-icon [icon]="faTimes"></fa-icon>
+      </button>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="modal-body">
+        <!-- Resource Type (Read-only) -->
+        <div class="form-group">
+          <label class="form-label">{{ 'AUTHORIZATION_RESOURCE' | translate }}</label>
+          <div class="resource-type-display">
+            {{ (resourceTypeInfo?.labelKey || '') | translate }}
+          </div>
+        </div>
+
+        <!-- Authorization Type -->
+        <div class="form-group">
+          <label class="form-label" for="type">{{ 'AUTHORIZATION_TYPE' | translate }}</label>
+          <select
+            id="type"
+            formControlName="type"
+            class="form-select">
+            <option *ngFor="let authType of authorizationTypes" [ngValue]="authType.value">
+              {{ authType.labelKey | translate }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Identity (User/Group) -->
+        <div class="form-group" [class.disabled]="isGlobalType">
+          <label class="form-label">{{ 'AUTHORIZATION_IDENTITY' | translate }}</label>
+
+          <div class="identity-input-group">
+            <button
+              type="button"
+              class="identity-toggle"
+              [disabled]="isGlobalType"
+              (click)="toggleIdentityType()"
+              [title]="identityType === 'user' ? ('AUTHORIZATION_USER' | translate) : ('AUTHORIZATION_GROUP' | translate)">
+              <fa-icon [icon]="identityType === 'user' ? faUser : faUsers"></fa-icon>
+            </button>
+
+            <input
+              type="text"
+              formControlName="identityId"
+              class="form-input identity-input"
+              [placeholder]="(identityType === 'user' ? 'AUTHORIZATION_USER_ID_PLACEHOLDER' : 'AUTHORIZATION_GROUP_ID_PLACEHOLDER') | translate"
+              [disabled]="isGlobalType">
+          </div>
+
+          <!-- User warning -->
+          <div class="user-warning" *ngIf="showUserWarning">
+            <fa-icon [icon]="faExclamationTriangle"></fa-icon>
+            <span>{{ 'AUTHORIZATION_USER_WARNING' | translate }}</span>
+          </div>
+
+          <div class="form-error" *ngIf="form.get('identityId')?.touched && form.get('identityId')?.errors?.['required'] && !isGlobalType">
+            {{ 'AUTHORIZATION_IDENTITY_REQUIRED' | translate }}
+          </div>
+        </div>
+
+        <!-- Permissions -->
+        <div class="form-group">
+          <label class="form-label">{{ 'AUTHORIZATION_PERMISSIONS' | translate }}</label>
+
+          <div class="permissions-container">
+            <button
+              type="button"
+              class="permissions-trigger"
+              (click)="togglePermissionsDropdown()">
+              <span class="permissions-display">{{ formattedPermissions }}</span>
+              <span class="dropdown-arrow">▼</span>
+            </button>
+
+            <div class="permissions-dropdown" *ngIf="showPermissionsDropdown">
+              <div class="permissions-actions">
+                <button type="button" class="btn-link" (click)="selectAllPermissions()">
+                  {{ 'AUTHORIZATION_SELECT_ALL' | translate }}
+                </button>
+                <button type="button" class="btn-link" (click)="clearAllPermissions()">
+                  {{ 'AUTHORIZATION_CLEAR_ALL' | translate }}
+                </button>
+              </div>
+
+              <div class="permissions-list">
+                <!-- ALL option -->
+                <label class="permission-item">
+                  <input
+                    type="checkbox"
+                    [checked]="selectedPermissions.has('ALL')"
+                    (change)="togglePermission('ALL')">
+                  <span class="permission-label">ALL</span>
+                </label>
+
+                <hr class="permissions-divider">
+
+                <!-- Individual permissions -->
+                <label
+                  *ngFor="let permission of availablePermissions"
+                  class="permission-item">
+                  <input
+                    type="checkbox"
+                    [checked]="isPermissionSelected(permission)"
+                    (change)="togglePermission(permission)">
+                  <span class="permission-label">{{ permission }}</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-error" *ngIf="selectedPermissions.size === 0">
+            {{ 'AUTHORIZATION_PERMISSIONS_REQUIRED' | translate }}
+          </div>
+        </div>
+
+        <!-- Resource ID -->
+        <div class="form-group">
+          <label class="form-label" for="resourceId">{{ 'AUTHORIZATION_RESOURCE_ID' | translate }}</label>
+          <input
+            type="text"
+            id="resourceId"
+            formControlName="resourceId"
+            class="form-input"
+            placeholder="*">
+          <div class="form-hint">{{ 'AUTHORIZATION_RESOURCE_ID_HINT' | translate }}</div>
+          <div class="form-hint" *ngIf="resourceType === 0">{{ 'AUTHORIZATION_COCKPIT_OR_TASKLIST' | translate }}</div>
+          <div class="form-error" *ngIf="form.get('resourceId')?.touched && form.get('resourceId')?.errors?.['required']">
+            {{ 'AUTHORIZATION_RESOURCE_ID_REQUIRED' | translate }}
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="onCancel()">
+          {{ 'CANCEL' | translate }}
+        </button>
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="form.invalid || selectedPermissions.size === 0">
+          <fa-icon [icon]="faCheck"></fa-icon>
+          {{ (isEditMode ? 'SAVE' : 'CREATE') | translate }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,131 @@
+.activity-tree {
+  font-size: 0.875rem;
+}
+
+.tree-node {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  padding-right: 12px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.15s ease;
+}
+
+.tree-node:hover {
+  background: #f3f4f6;
+}
+
+.tree-node.selected {
+  background: #ede9fe;
+}
+
+.tree-node.selected:hover {
+  background: #ddd6fe;
+}
+
+/* Expand button */
+.expand-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #6b7280;
+  cursor: pointer;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.expand-btn:hover {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.expand-placeholder {
+  width: 20px;
+  flex-shrink: 0;
+}
+
+/* State indicator */
+.state-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  font-size: 12px;
+}
+
+.state-running {
+  color: #3b82f6;
+}
+
+.state-completed {
+  color: #22c55e;
+}
+
+.state-canceled {
+  color: #ef4444;
+}
+
+/* Activity icon */
+.activity-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  background: #f3f4f6;
+  border-radius: 4px;
+  color: #6b7280;
+  flex-shrink: 0;
+  font-size: 12px;
+}
+
+.tree-node:hover .activity-icon {
+  background: #e5e7eb;
+}
+
+.tree-node.selected .activity-icon {
+  background: #c4b5fd;
+  color: #5b21b6;
+}
+
+/* Activity name */
+.activity-name {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #374151;
+}
+
+.tree-node.selected .activity-name {
+  color: #5b21b6;
+  font-weight: 500;
+}
+
+/* Incident indicator */
+.incident-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ef4444;
+  flex-shrink: 0;
+}
+
+/* Empty state */
+.empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  color: #9ca3af;
+  font-style: italic;
+}

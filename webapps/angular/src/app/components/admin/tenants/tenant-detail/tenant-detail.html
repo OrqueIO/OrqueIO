@@ -1,0 +1,216 @@
+<div class="tenant-detail-container" *ngIf="!loading">
+  <div class="detail-header">
+    <button class="btn-back" (click)="goBack()">
+      <fa-icon [icon]="faArrowLeft"></fa-icon>
+      {{ 'BACK' | translate }}
+    </button>
+    <h1>{{ tenant?.id }}</h1>
+    <button class="btn-delete" (click)="deleteTenant()">
+      <fa-icon [icon]="faTrash"></fa-icon>
+      {{ 'DELETE' | translate }}
+    </button>
+  </div>
+
+  <div class="tabs">
+    <button
+      class="tab"
+      [class.active]="activeTab === 'info'"
+      (click)="setActiveTab('info')">
+      {{ 'admin.tenants.tabs.info' | translate }}
+    </button>
+    <button
+      class="tab"
+      [class.active]="activeTab === 'users'"
+      (click)="setActiveTab('users')">
+      {{ 'admin.tenants.tabs.users' | translate }}
+    </button>
+    <button
+      class="tab"
+      [class.active]="activeTab === 'groups'"
+      (click)="setActiveTab('groups')">
+      {{ 'admin.tenants.tabs.groups' | translate }}
+    </button>
+  </div>
+
+  <div class="tab-content">
+    <!-- Info Tab -->
+    <div *ngIf="activeTab === 'info'" class="tab-panel">
+      <form [formGroup]="tenantForm" (ngSubmit)="saveTenant()">
+        <div class="form-group">
+          <label>{{ 'admin.tenants.id' | translate }}</label>
+          <input type="text" formControlName="id" class="form-control" />
+        </div>
+
+        <div class="form-group">
+          <label>{{ 'admin.tenants.name' | translate }}</label>
+          <input type="text" formControlName="name" class="form-control" />
+        </div>
+
+        <button type="submit" class="btn-primary" [disabled]="!tenantForm.valid">
+          <fa-icon [icon]="faSave"></fa-icon>
+          {{ 'SAVE' | translate }}
+        </button>
+      </form>
+    </div>
+
+    <!-- Users Tab -->
+    <div *ngIf="activeTab === 'users'" class="tab-panel">
+      <div class="tab-header">
+        <h3>{{ 'admin.tenants.tenantUsers' | translate }}</h3>
+        <button class="btn-add" (click)="openAddUserDialog()">
+          <fa-icon [icon]="faPlus"></fa-icon>
+          {{ 'admin.tenants.addUser' | translate }}
+        </button>
+      </div>
+      <div *ngIf="loadingUsers" class="loading">{{ 'LOADING' | translate }}...</div>
+      <ul *ngIf="!loadingUsers" class="list">
+        <li *ngFor="let user of tenantUsers" class="list-item">
+          <div class="list-item-content">
+            <a [routerLink]="['/admin/users', user.id]">{{ user.id }}</a>
+            <span *ngIf="user.firstName || user.lastName">
+              - {{ user.firstName }} {{ user.lastName }}
+            </span>
+          </div>
+          <button class="btn-remove" (click)="confirmRemoveUser(user)" title="{{ 'REMOVE' | translate }}">
+            <fa-icon [icon]="faTimes"></fa-icon>
+          </button>
+        </li>
+        <li *ngIf="tenantUsers.length === 0" class="empty-message">
+          {{ 'admin.tenants.noUsers' | translate }}
+        </li>
+      </ul>
+    </div>
+
+    <!-- Groups Tab -->
+    <div *ngIf="activeTab === 'groups'" class="tab-panel">
+      <div class="tab-header">
+        <h3>{{ 'admin.tenants.tenantGroups' | translate }}</h3>
+        <button class="btn-add" (click)="openAddGroupDialog()">
+          <fa-icon [icon]="faPlus"></fa-icon>
+          {{ 'admin.tenants.addGroup' | translate }}
+        </button>
+      </div>
+      <div *ngIf="loadingGroups" class="loading">{{ 'LOADING' | translate }}...</div>
+      <ul *ngIf="!loadingGroups" class="list">
+        <li *ngFor="let group of tenantGroups" class="list-item">
+          <div class="list-item-content">
+            <a [routerLink]="['/admin/groups', group.id]">{{ group.id }}</a>
+            <span *ngIf="group.name"> - {{ group.name }}</span>
+          </div>
+          <button class="btn-remove" (click)="confirmRemoveGroup(group)" title="{{ 'REMOVE' | translate }}">
+            <fa-icon [icon]="faTimes"></fa-icon>
+          </button>
+        </li>
+        <li *ngIf="tenantGroups.length === 0" class="empty-message">
+          {{ 'admin.tenants.noGroups' | translate }}
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="loading-container" *ngIf="loading">
+  <p>{{ 'LOADING' | translate }}...</p>
+</div>
+
+<!-- Add User Dialog -->
+<div class="dialog-backdrop" *ngIf="showAddUserDialog" (click)="closeAddUserDialog()">
+  <div class="dialog" (click)="$event.stopPropagation()">
+    <div class="dialog-header">
+      <h2>{{ 'admin.tenants.addUser' | translate }}</h2>
+      <button class="btn-close" (click)="closeAddUserDialog()">
+        <fa-icon [icon]="faTimes"></fa-icon>
+      </button>
+    </div>
+    <div class="dialog-content">
+      <div class="search-box">
+        <input
+          type="text"
+          [(ngModel)]="userSearchTerm"
+          (input)="onUserSearch()"
+          placeholder="{{ 'admin.tenants.searchUsers' | translate }}"
+          class="form-control" />
+      </div>
+      <div *ngIf="loadingAvailableUsers" class="loading">{{ 'LOADING' | translate }}...</div>
+      <ul *ngIf="!loadingAvailableUsers" class="dialog-list">
+        <li *ngFor="let user of availableUsers" class="dialog-list-item" (click)="addUser(user)">
+          <span class="user-id">{{ user.id }}</span>
+          <span *ngIf="user.firstName || user.lastName" class="user-name">
+            {{ user.firstName }} {{ user.lastName }}
+          </span>
+        </li>
+        <li *ngIf="availableUsers.length === 0" class="empty-message">
+          {{ 'admin.tenants.noAvailableUsers' | translate }}
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Add Group Dialog -->
+<div class="dialog-backdrop" *ngIf="showAddGroupDialog" (click)="closeAddGroupDialog()">
+  <div class="dialog" (click)="$event.stopPropagation()">
+    <div class="dialog-header">
+      <h2>{{ 'admin.tenants.addGroup' | translate }}</h2>
+      <button class="btn-close" (click)="closeAddGroupDialog()">
+        <fa-icon [icon]="faTimes"></fa-icon>
+      </button>
+    </div>
+    <div class="dialog-content">
+      <div class="search-box">
+        <input
+          type="text"
+          [(ngModel)]="groupSearchTerm"
+          (input)="onGroupSearch()"
+          placeholder="{{ 'admin.tenants.searchGroups' | translate }}"
+          class="form-control" />
+      </div>
+      <div *ngIf="loadingAvailableGroups" class="loading">{{ 'LOADING' | translate }}...</div>
+      <ul *ngIf="!loadingAvailableGroups" class="dialog-list">
+        <li *ngFor="let group of availableGroups" class="dialog-list-item" (click)="addGroup(group)">
+          <span class="group-id">{{ group.id }}</span>
+          <span *ngIf="group.name" class="group-name"> - {{ group.name }}</span>
+        </li>
+        <li *ngIf="availableGroups.length === 0" class="empty-message">
+          {{ 'admin.tenants.noAvailableGroups' | translate }}
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Tenant Confirm Dialog -->
+<app-confirm-dialog
+  *ngIf="showDeleteConfirm"
+  [title]="'admin.tenants.deleteConfirmTitle'"
+  [message]="'admin.tenants.deleteConfirmMessage'"
+  [confirmLabel]="'DELETE'"
+  [cancelLabel]="'CANCEL'"
+  confirmButtonClass="btn-danger"
+  (confirm)="confirmDelete()"
+  (cancel)="cancelDelete()">
+</app-confirm-dialog>
+
+<!-- Remove User Confirm Dialog -->
+<app-confirm-dialog
+  *ngIf="showRemoveUserConfirm"
+  [title]="'admin.tenants.removeUserTitle'"
+  [message]="'admin.tenants.removeUserMessage'"
+  [confirmLabel]="'REMOVE'"
+  [cancelLabel]="'CANCEL'"
+  confirmButtonClass="btn-danger"
+  (confirm)="removeUser()"
+  (cancel)="cancelRemoveUser()">
+</app-confirm-dialog>
+
+<!-- Remove Group Confirm Dialog -->
+<app-confirm-dialog
+  *ngIf="showRemoveGroupConfirm"
+  [title]="'admin.tenants.removeGroupTitle'"
+  [message]="'admin.tenants.removeGroupMessage'"
+  [confirmLabel]="'REMOVE'"
+  [cancelLabel]="'CANCEL'"
+  confirmButtonClass="btn-danger"
+  (confirm)="removeGroup()"
+  (cancel)="cancelRemoveGroup()">
+</app-confirm-dialog>

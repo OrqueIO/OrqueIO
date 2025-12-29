@@ -1,0 +1,50 @@
+<div class="tenant-list-container">
+  <app-admin-page-header
+    titleKey="admin.tenants.title"
+    [breadcrumbs]="[{ label: 'Tenants', translateKey: 'admin.dashboard.tenants' }]"
+    [showRefresh]="true"
+    [showCreate]="true"
+    createLabel="admin.tenants.createTenant"
+    (create)="onCreateTenant()"
+    (refresh)="refresh()">
+  </app-admin-page-header>
+
+  <div class="search-section">
+    <app-search-bar
+      placeholderKey="admin.tenants.searchPlaceholder"
+      (search)="onSearch($event)">
+    </app-search-bar>
+  </div>
+
+  <app-data-table
+    [columns]="columns"
+    [data]="tenants"
+    [loading]="loading"
+    [sortBy]="sortBy"
+    [sortOrder]="sortOrder"
+    emptyMessageKey="admin.tenants.noTenants"
+    (sortChange)="onSort($event)"
+    (rowClick)="onRowClick($event)">
+  </app-data-table>
+
+  <app-pagination
+    [current]="currentPage"
+    [size]="pageSize"
+    [total]="totalTenants"
+    (pageChange)="onPageChange($event)">
+  </app-pagination>
+
+  <!-- Actions template -->
+  <ng-template #actionsTemplate let-tenant>
+    <a (click)="editTenant(tenant, $event)" class="action-link">
+      {{ 'admin.users.edit' | translate }}
+    </a>
+  </ng-template>
+</div>
+
+<!-- Create Tenant Dialog -->
+<app-tenant-create-dialog
+  *ngIf="showCreateDialog"
+  (created)="onTenantCreated()"
+  (cancel)="onCreateDialogCancel()">
+</app-tenant-create-dialog>
