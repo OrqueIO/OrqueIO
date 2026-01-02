@@ -1,253 +1,185 @@
-<!-- Dates Section -->
-<ul class="meta-list dates">
-  <!-- Follow-up Date -->
-  <li class="meta-item followup">
-    <span class="meta-icon"
-          [appTooltip]="'tasklist.followUpDate' | translate"
-          tooltipPlacement="left">
+<div class="meta-grid">
+  <!-- Follow-up Date Card -->
+  <div class="meta-card" (click)="!editingFollowUp && startEditFollowUp()">
+    <div class="meta-card-label">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
         <line x1="16" y1="2" x2="16" y2="6"/>
         <line x1="8" y1="2" x2="8" y2="6"/>
         <line x1="3" y1="10" x2="21" y2="10"/>
       </svg>
-    </span>
-
-    <!-- View mode -->
-    <ng-container *ngIf="!editingFollowUp">
-      <span class="meta-value"
-            [class.overdue]="isOverdue(task.followUp)"
-            *ngIf="task.followUp"
-            [appTooltip]="getFullDateTooltip(task.followUp)"
-            tooltipPlacement="top"
-            (click)="startEditFollowUp()">
-        {{ task.followUp | timeAgo }}
-      </span>
-
-      <a class="meta-link" *ngIf="!task.followUp" (click)="startEditFollowUp()">
-        {{ 'tasklist.setFollowUpDate' | translate }}
-      </a>
-
-      <button class="btn-reset"
+      {{ 'tasklist.followUpDate' | translate }}
+    </div>
+    <div class="meta-card-value">
+      <ng-container *ngIf="!editingFollowUp">
+        <span class="meta-value"
+              [class.overdue]="isOverdue(task.followUp)"
+              [class.muted]="!task.followUp"
               *ngIf="task.followUp"
-              (click)="resetFollowUpDate()"
-              [appTooltip]="'tasklist.resetFollowUpDate' | translate"
-              tooltipPlacement="right">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <line x1="18" y1="6" x2="6" y2="18"/>
-          <line x1="6" y1="6" x2="18" y2="18"/>
-        </svg>
-      </button>
-    </ng-container>
+              [appTooltip]="getFullDateTooltip(task.followUp)"
+              tooltipPlacement="top">
+          {{ task.followUp | timeAgo }}
+        </span>
+        <span class="meta-value muted" *ngIf="!task.followUp">
+          {{ 'tasklist.setFollowUpDate' | translate }}
+        </span>
+        <button class="btn-reset"
+                *ngIf="task.followUp"
+                (click)="$event.stopPropagation(); resetFollowUpDate()"
+                [appTooltip]="'tasklist.resetFollowUpDate' | translate"
+                tooltipPlacement="right">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </ng-container>
+      <ng-container *ngIf="editingFollowUp">
+        <input type="datetime-local"
+               class="meta-input"
+               [(ngModel)]="followUpValue"
+               (click)="$event.stopPropagation()"
+               (keydown)="onKeydown($event, 'followUp')"
+               (blur)="saveFollowUpDate()">
+      </ng-container>
+    </div>
+  </div>
 
-    <!-- Edit mode -->
-    <ng-container *ngIf="editingFollowUp">
-      <input type="datetime-local"
-             class="meta-input"
-             [(ngModel)]="followUpValue"
-             (keydown)="onKeydown($event, 'followUp')"
-             (blur)="saveFollowUpDate()">
-    </ng-container>
-  </li>
-
-  <!-- Due Date -->
-  <li class="meta-item due">
-    <span class="meta-icon"
-          [appTooltip]="'tasklist.dueDate' | translate"
-          tooltipPlacement="left">
+  <!-- Due Date Card -->
+  <div class="meta-card" (click)="!editingDueDate && startEditDueDate()">
+    <div class="meta-card-label">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/>
         <path d="M13.73 21a2 2 0 01-3.46 0"/>
       </svg>
-    </span>
-
-    <!-- View mode -->
-    <ng-container *ngIf="!editingDueDate">
-      <span class="meta-value"
-            [class.overdue]="isOverdue(task.due)"
-            *ngIf="task.due"
-            [appTooltip]="getFullDateTooltip(task.due)"
-            tooltipPlacement="top"
-            (click)="startEditDueDate()">
-        {{ task.due | timeAgo }}
-      </span>
-
-      <a class="meta-link" *ngIf="!task.due" (click)="startEditDueDate()">
-        {{ 'tasklist.setDueDate' | translate }}
-      </a>
-
-      <button class="btn-reset"
+      {{ 'tasklist.dueDate' | translate }}
+    </div>
+    <div class="meta-card-value">
+      <ng-container *ngIf="!editingDueDate">
+        <span class="meta-value"
+              [class.overdue]="isOverdue(task.due)"
               *ngIf="task.due"
-              (click)="resetDueDate()"
-              [appTooltip]="'tasklist.resetDueDate' | translate"
-              tooltipPlacement="right">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <line x1="18" y1="6" x2="6" y2="18"/>
-          <line x1="6" y1="6" x2="18" y2="18"/>
-        </svg>
-      </button>
-    </ng-container>
+              [appTooltip]="getFullDateTooltip(task.due)"
+              tooltipPlacement="top">
+          {{ task.due | timeAgo }}
+        </span>
+        <span class="meta-value muted" *ngIf="!task.due">
+          {{ 'tasklist.setDueDate' | translate }}
+        </span>
+        <button class="btn-reset"
+                *ngIf="task.due"
+                (click)="$event.stopPropagation(); resetDueDate()"
+                [appTooltip]="'tasklist.resetDueDate' | translate"
+                tooltipPlacement="right">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </ng-container>
+      <ng-container *ngIf="editingDueDate">
+        <input type="datetime-local"
+               class="meta-input"
+               [(ngModel)]="dueDateValue"
+               (click)="$event.stopPropagation()"
+               (keydown)="onKeydown($event, 'due')"
+               (blur)="saveDueDate()">
+      </ng-container>
+    </div>
+  </div>
 
-    <!-- Edit mode -->
-    <ng-container *ngIf="editingDueDate">
-      <input type="datetime-local"
-             class="meta-input"
-             [(ngModel)]="dueDateValue"
-             (keydown)="onKeydown($event, 'due')"
-             (blur)="saveDueDate()">
-    </ng-container>
-  </li>
-</ul>
-
-<!-- Actors Section -->
-<ul class="meta-list actors">
-  <!-- Groups -->
-  <li class="meta-item groups" (click)="openGroupsModal()">
-    <span class="meta-icon"
-          [appTooltip]="'tasklist.groups' | translate"
-          tooltipPlacement="left">
+  <!-- Groups Card -->
+  <div class="meta-card clickable" (click)="openGroupsModal()">
+    <div class="meta-card-label">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
         <circle cx="9" cy="7" r="4"/>
         <path d="M23 21v-2a4 4 0 00-3-3.87"/>
         <path d="M16 3.13a4 4 0 010 7.75"/>
       </svg>
-    </span>
-
-    <a class="meta-link" *ngIf="getCandidateGroups().length > 0">
-      {{ getCandidateGroups().join(', ') }}
-    </a>
-
-    <a class="meta-link muted" *ngIf="getCandidateGroups().length === 0">
-      {{ 'tasklist.addGroups' | translate }}
-    </a>
-  </li>
-
-  <!-- Assignee (Not assigned) -->
-  <li class="meta-item assignee" *ngIf="!hasAssignee()">
-    <span class="meta-icon"
-          [appTooltip]="'tasklist.assignee' | translate"
-          tooltipPlacement="left">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
-        <circle cx="12" cy="7" r="4"/>
-      </svg>
-    </span>
-
-    <button class="btn-claim"
-            (click)="onClaim()"
-            [disabled]="submitting">
-      <span class="spinner-small" *ngIf="submitting"></span>
-      {{ 'tasklist.claimTask' | translate }}
-    </button>
-  </li>
-
-  <!-- Assignee (Assigned) -->
-  <li class="meta-item assignee" *ngIf="hasAssignee()">
-    <span class="meta-icon"
-          [appTooltip]="'tasklist.assignee' | translate"
-          tooltipPlacement="left">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
-        <circle cx="12" cy="7" r="4"/>
-      </svg>
-    </span>
-
-    <!-- View mode -->
-    <ng-container *ngIf="!editingAssignee">
-      <span class="meta-value assignee-name"
-            (click)="startEditAssignee()"
-            [appTooltip]="task.assignee || ''"
-            tooltipPlacement="top">
-        {{ getAssigneeName() }}
+      {{ 'tasklist.groups' | translate }}
+    </div>
+    <div class="meta-card-value">
+      <span class="groups-badge" *ngIf="getCandidateGroups().length > 0">
+        {{ getCandidateGroups().join(', ') }}
       </span>
+      <span class="meta-value muted" *ngIf="getCandidateGroups().length === 0">
+        {{ 'tasklist.addGroups' | translate }}
+      </span>
+    </div>
+  </div>
 
-      <button class="btn-reset"
-              *ngIf="isAssignee"
-              (click)="onUnclaim()"
-              [disabled]="submitting"
-              [appTooltip]="'tasklist.unclaimTask' | translate"
-              tooltipPlacement="right">
-        <span class="spinner-small" *ngIf="submitting"></span>
-        <svg *ngIf="!submitting" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <line x1="18" y1="6" x2="6" y2="18"/>
-          <line x1="6" y1="6" x2="18" y2="18"/>
-        </svg>
-      </button>
-
-      <button class="btn-reset"
-              *ngIf="!isAssignee"
-              (click)="resetAssignee()"
-              [appTooltip]="'tasklist.resetAssignee' | translate"
-              tooltipPlacement="right">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <line x1="18" y1="6" x2="6" y2="18"/>
-          <line x1="6" y1="6" x2="18" y2="18"/>
-        </svg>
-      </button>
-    </ng-container>
-
-    <!-- Edit mode -->
-    <ng-container *ngIf="editingAssignee">
-      <div class="assignee-edit-container">
-        <input type="text"
-               class="meta-input"
-               [class.invalid]="!assigneeValid"
-               [class.validating]="validatingAssignee"
-               [(ngModel)]="assigneeValue"
-               (keydown)="onKeydown($event, 'assignee')"
-               (blur)="validateAndSaveAssignee()"
-               [placeholder]="'tasklist.enterAssigneeId' | translate">
-
-        <span class="validation-spinner" *ngIf="validatingAssignee"></span>
-
-        <span class="validation-error" *ngIf="!assigneeValid && assigneeError">
-          {{ assigneeError }}
-        </span>
-      </div>
-    </ng-container>
-  </li>
-</ul>
-
-<!-- Process/Case Instance Link -->
-<ul class="meta-list instance" *ngIf="task.processInstanceId || task.caseInstanceId">
-  <li class="meta-item instance-link">
-    <span class="meta-icon"
-          [appTooltip]="(task.processInstanceId ? 'tasklist.processInstance' : 'tasklist.caseInstance') | translate"
-          tooltipPlacement="left">
+  <!-- Assignee Card -->
+  <div class="meta-card" [class.clickable]="!editingAssignee" (click)="!editingAssignee && !hasAssignee() ? null : (!editingAssignee && startEditAssignee())">
+    <div class="meta-card-label">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <circle cx="12" cy="12" r="10"/>
-        <path d="M8 12h8"/>
-        <path d="M12 8v8"/>
+        <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
+        <circle cx="12" cy="7" r="4"/>
       </svg>
-    </span>
+      {{ 'tasklist.assignee' | translate }}
+    </div>
+    <div class="meta-card-value">
+      <!-- Not assigned -->
+      <ng-container *ngIf="!hasAssignee() && !editingAssignee">
+        <button class="btn-claim"
+                (click)="$event.stopPropagation(); onClaim()"
+                [disabled]="submitting">
+          <span class="spinner-small" *ngIf="submitting"></span>
+          {{ 'tasklist.claimTask' | translate }}
+        </button>
+      </ng-container>
 
-    <a class="meta-link instance"
-       *ngIf="task.processInstanceId"
-       [href]="'/cockpit/#/process-instance/' + task.processInstanceId"
-       target="_blank"
-       [appTooltip]="'tasklist.viewProcessInstance' | translate"
-       tooltipPlacement="right">
-      {{ task.processInstanceId | slice:0:8 }}...
-      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
-        <polyline points="15 3 21 3 21 9"/>
-        <line x1="10" y1="14" x2="21" y2="3"/>
-      </svg>
-    </a>
+      <!-- Assigned - View mode -->
+      <ng-container *ngIf="hasAssignee() && !editingAssignee">
+        <span class="assignee-badge"
+              [class.current-user]="isAssignee"
+              [appTooltip]="task.assignee || ''"
+              tooltipPlacement="top">
+          {{ getAssigneeName() }}
+        </span>
 
-    <a class="meta-link instance"
-       *ngIf="task.caseInstanceId"
-       [href]="'/cockpit/#/case-instance/' + task.caseInstanceId"
-       target="_blank"
-       [appTooltip]="'tasklist.viewCaseInstance' | translate"
-       tooltipPlacement="right">
-      {{ task.caseInstanceId | slice:0:8 }}...
-      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
-        <polyline points="15 3 21 3 21 9"/>
-        <line x1="10" y1="14" x2="21" y2="3"/>
-      </svg>
-    </a>
-  </li>
-</ul>
+        <button class="btn-reset"
+                *ngIf="isAssignee"
+                (click)="$event.stopPropagation(); onUnclaim()"
+                [disabled]="submitting"
+                [appTooltip]="'tasklist.unclaimTask' | translate"
+                tooltipPlacement="right">
+          <span class="spinner-small" *ngIf="submitting"></span>
+          <svg *ngIf="!submitting" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+
+        <button class="btn-reset"
+                *ngIf="!isAssignee"
+                (click)="$event.stopPropagation(); resetAssignee()"
+                [appTooltip]="'tasklist.resetAssignee' | translate"
+                tooltipPlacement="right">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </ng-container>
+
+      <!-- Assigned - Edit mode -->
+      <ng-container *ngIf="editingAssignee">
+        <div class="assignee-edit-container" (click)="$event.stopPropagation()">
+          <input type="text"
+                 class="meta-input"
+                 [class.invalid]="!assigneeValid"
+                 [class.validating]="validatingAssignee"
+                 [(ngModel)]="assigneeValue"
+                 (keydown)="onKeydown($event, 'assignee')"
+                 (blur)="validateAndSaveAssignee()"
+                 [placeholder]="'tasklist.enterAssigneeId' | translate">
+          <span class="validation-spinner" *ngIf="validatingAssignee"></span>
+          <span class="validation-error" *ngIf="!assigneeValid && assigneeError">
+            {{ assigneeError }}
+          </span>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>

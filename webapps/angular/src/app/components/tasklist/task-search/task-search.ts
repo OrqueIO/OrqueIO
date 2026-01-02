@@ -1,24 +1,36 @@
-import { Component, EventEmitter, Input, Output, OnInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ElementRef, ViewChild, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Store } from '@ngrx/store';
+import { Subject, debounceTime, takeUntil, Observable, combineLatest } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { TranslatePipe } from '../../../i18n/translate.pipe';
-import { FILTER_CRITERIA, FilterCriterionOption } from '../../../models/tasklist/filter.model';
-import { Subject, debounceTime, takeUntil } from 'rxjs';
-
-export interface SearchPill {
-  id: string;
-  key: string;
-  label: string;
-  operator: string;
-  value: string;
-  type: string;
-}
+import {
+  SearchPill,
+  SearchOperator,
+  FILTER_CRITERIA,
+  FilterCriterionOption,
+  SEARCH_OPERATORS,
+  EXPRESSION_SUPPORTED_FIELDS,
+  FilterVariable
+} from '../../../models/tasklist/filter.model';
+import { TasklistUIActions } from '../../../store/tasklist/tasklist.actions';
+import {
+  selectSearchPills,
+  selectMatchAny,
+  selectFilterVariables,
+  selectIsSearchActive
+} from '../../../store/tasklist/tasklist.selectors';
 
 interface SearchSuggestion {
   key: string;
   label: string;
-  type: string;
+  type: 'string' | 'number' | 'date' | 'boolean';
   group: string;
+  expressionSupport?: boolean;
+  variableType?: 'processVariables' | 'taskVariables' | 'caseInstanceVariables';
+  isVariable?: boolean;
+  variableName?: string;
 }
 
 @Component({
@@ -29,11 +41,21 @@ interface SearchSuggestion {
   styleUrl: './task-search.css'
 })
 export class TaskSearchComponent implements OnInit, OnDestroy {
-  @Input() pills: SearchPill[] = [];
-  @Output() pillsChange = new EventEmitter<SearchPill[]>();
-  @Output() search = new EventEmitter<SearchPill[]>();
+  private readonly store = inject(Store);
 
   @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;
+  @ViewChild('variableNameInput') variableNameInput!: ElementRef<HTMLInputElement>;
+
+  // Store observables
+  pills$: Observable<SearchPill[]> = this.store.select(selectSearchPills);
+  matchAny$: Observable<boolean> = this.store.select(selectMatchAny);
+  filterVariables$: Observable<FilterVariable[]> = this.store.select(selectFilterVariables);
+  isSearchActive$: Observable<boolean> = this.store.select(selectIsSearchActive);
+
+  // Local state for pills (synced with store)
+  pills: SearchPill[] = [];
+  matchAny = false;
+  filterVariables: FilterVariable[] = [];
 
   searchText = '';
   showSuggestions = false;
@@ -44,35 +66,32 @@ export class TaskSearchComponent implements OnInit, OnDestroy {
   // Currently editing pill
   editingPill: SearchPill | null = null;
   pendingCriterion: SearchSuggestion | null = null;
-  pendingOperator = '';
-  inputMode: 'criterion' | 'operator' | 'value' = 'criterion';
+  pendingOperator: SearchOperator | null = null;
+  pendingVariableName = '';
+  inputMode: 'criterion' | 'operator' | 'variableName' | 'value' = 'criterion';
 
-  // Operators
-  operators: Record<string, { value: string; label: string }[]> = {
-    string: [
-      { value: 'eq', label: '=' },
-      { value: 'neq', label: '!=' },
-      { value: 'like', label: 'like' }
-    ],
-    date: [
-      { value: 'before', label: 'before' },
-      { value: 'after', label: 'after' }
-    ],
-    number: [
-      { value: 'eq', label: '=' },
-      { value: 'neq', label: '!=' },
-      { value: 'gt', label: '>' },
-      { value: 'gteq', label: '>=' },
-      { value: 'lt', label: '<' },
-      { value: 'lteq', label: '<=' }
-    ]
-  };
+  // Operators from filter model
+  readonly operators = SEARCH_OPERATORS;
 
   private searchSubject = new Subject<string>();
   private destroy$ = new Subject<void>();
 
   ngOnInit(): void {
     this.buildSuggestions();
+
+    // Subscribe to store
+    combineLatest([
+      this.pills$,
+      this.matchAny$,
+      this.filterVariables$
+    ]).pipe(takeUntil(this.destroy$))
+      .subscribe(([pills, matchAny, filterVariables]) => {
+        this.pills = pills;
+        this.matchAny = matchAny;
+        this.filterVariables = filterVariables;
+        // Rebuild suggestions when filter variables change
+        this.buildSuggestions();
+      });
 
     // Debounce search input
     this.searchSubject
@@ -90,13 +109,32 @@ export class TaskSearchComponent implements OnInit, OnDestroy {
   private buildSuggestions(): void {
     this.suggestions = [];
 
+    // Add standard filter criteria
     for (const group of FILTER_CRITERIA) {
       for (const option of group.options) {
         this.suggestions.push({
           key: option.key,
-          label: option.labelKey, // Will be translated in template
+          label: option.labelKey,
           type: option.type,
-          group: group.groupKey
+          group: group.groupKey,
+          expressionSupport: option.expressionSupport,
+          variableType: option.variableType
+        });
+      }
+    }
+
+    // Add filter-defined variables as suggestions
+    if (this.filterVariables.length > 0) {
+      for (const variable of this.filterVariables) {
+        // Add as process variable suggestion
+        this.suggestions.push({
+          key: 'processVariables',
+          label: variable.label || variable.name,
+          type: 'string',
+          group: 'filter.criteria.filterVariables',
+          variableType: 'processVariables',
+          isVariable: true,
+          variableName: variable.name
         });
       }
     }
@@ -104,15 +142,16 @@ export class TaskSearchComponent implements OnInit, OnDestroy {
 
   private filterSuggestions(text: string): void {
     if (!text.trim()) {
-      this.filteredSuggestions = this.suggestions.slice(0, 10);
+      this.filteredSuggestions = this.suggestions.slice(0, 15);
     } else {
       const lowerText = text.toLowerCase();
       this.filteredSuggestions = this.suggestions
         .filter(s =>
           s.key.toLowerCase().includes(lowerText) ||
-          s.label.toLowerCase().includes(lowerText)
+          s.label.toLowerCase().includes(lowerText) ||
+          (s.variableName && s.variableName.toLowerCase().includes(lowerText))
         )
-        .slice(0, 10);
+        .slice(0, 15);
     }
     this.selectedSuggestionIndex = -1;
   }
@@ -164,6 +203,8 @@ export class TaskSearchComponent implements OnInit, OnDestroy {
         event.preventDefault();
         if (this.inputMode === 'criterion' && this.selectedSuggestionIndex >= 0) {
           this.selectSuggestion(this.filteredSuggestions[this.selectedSuggestionIndex]);
+        } else if (this.inputMode === 'variableName' && this.pendingVariableName.trim()) {
+          this.confirmVariableName();
         } else if (this.inputMode === 'value' && this.searchText.trim()) {
           this.confirmPill();
         }
@@ -175,15 +216,25 @@ export class TaskSearchComponent implements OnInit, OnDestroy {
         break;
 
       case 'Backspace':
-        if (!this.searchText && this.inputMode === 'criterion' && this.pills.length > 0) {
-          // Remove last pill
-          this.removePill(this.pills[this.pills.length - 1].id);
-        } else if (!this.searchText && this.inputMode === 'operator') {
-          // Go back to criterion mode
-          this.inputMode = 'criterion';
-          this.pendingCriterion = null;
-          this.filterSuggestions('');
-          this.showSuggestions = true;
+        if (!this.searchText) {
+          if (this.inputMode === 'criterion' && this.pills.length > 0) {
+            this.dispatchRemovePill(this.pills[this.pills.length - 1].id);
+          } else if (this.inputMode === 'operator') {
+            this.inputMode = 'criterion';
+            this.pendingCriterion = null;
+            this.filterSuggestions('');
+            this.showSuggestions = true;
+          } else if (this.inputMode === 'variableName' && !this.pendingVariableName) {
+            this.inputMode = 'operator';
+            this.pendingOperator = null;
+          } else if (this.inputMode === 'value') {
+            if (this.pendingCriterion?.variableType) {
+              this.inputMode = 'variableName';
+            } else {
+              this.inputMode = 'operator';
+              this.pendingOperator = null;
+            }
+          }
         }
         break;
     }
@@ -191,16 +242,35 @@ export class TaskSearchComponent implements OnInit, OnDestroy {
 
   selectSuggestion(suggestion: SearchSuggestion): void {
     this.pendingCriterion = suggestion;
-    this.inputMode = 'operator';
+
+    // If it's a pre-defined variable from filter, skip variable name input
+    if (suggestion.isVariable && suggestion.variableName) {
+      this.pendingVariableName = suggestion.variableName;
+      this.inputMode = 'operator';
+    } else if (suggestion.variableType) {
+      // Variable type - need to enter variable name
+      this.inputMode = 'variableName';
+      this.pendingVariableName = '';
+    } else {
+      this.inputMode = 'operator';
+    }
+
     this.searchText = '';
     this.showSuggestions = false;
   }
 
+  confirmVariableName(): void {
+    if (this.pendingVariableName.trim()) {
+      this.inputMode = 'operator';
+      setTimeout(() => this.searchInput?.nativeElement?.focus(), 0);
+    }
+  }
+
   selectOperator(operator: string): void {
-    this.pendingOperator = operator;
+    this.pendingOperator = operator as SearchOperator;
     this.inputMode = 'value';
     this.searchText = '';
-    this.searchInput?.nativeElement?.focus();
+    setTimeout(() => this.searchInput?.nativeElement?.focus(), 0);
   }
 
   confirmPill(): void {
@@ -214,19 +284,26 @@ export class TaskSearchComponent implements OnInit, OnDestroy {
         type: this.pendingCriterion.type
       };
 
-      const updatedPills = [...this.pills, newPill];
-      this.pillsChange.emit(updatedPills);
-      this.search.emit(updatedPills);
+      // Add variable info if applicable
+      if (this.pendingCriterion.variableType && this.pendingVariableName) {
+        newPill.variableType = this.pendingCriterion.variableType;
+        newPill.variableName = this.pendingVariableName;
+      }
 
+      this.dispatchAddPill(newPill);
       this.resetInput();
     }
   }
 
-  removePill(id: string): void {
-    const updatedPills = this.pills.filter(p => p.id !== id);
-    this.pillsChange.emit(updatedPills);
-    this.search.emit(updatedPills);
-    this.searchInput?.nativeElement?.focus();
+  dispatchRemovePill(id: string): void {
+    this.store.dispatch(TasklistUIActions.removeSearchPill({ id }));
+    this.store.dispatch(TasklistUIActions.applySearch());
+    setTimeout(() => this.searchInput?.nativeElement?.focus(), 0);
+  }
+
+  dispatchAddPill(pill: SearchPill): void {
+    this.store.dispatch(TasklistUIActions.addSearchPill({ pill }));
+    this.store.dispatch(TasklistUIActions.applySearch());
   }
 
   editPill(pill: SearchPill): void {
@@ -236,22 +313,25 @@ export class TaskSearchComponent implements OnInit, OnDestroy {
       key: pill.key,
       label: pill.label,
       type: pill.type,
-      group: ''
+      group: '',
+      variableType: pill.variableType
     };
     this.pendingOperator = pill.operator;
+    this.pendingVariableName = pill.variableName || '';
     this.inputMode = 'value';
-    this.searchInput?.nativeElement?.focus();
+    setTimeout(() => this.searchInput?.nativeElement?.focus(), 0);
   }
 
   updatePill(): void {
-    if (this.editingPill && this.searchText.trim()) {
-      const updatedPills = this.pills.map(p =>
-        p.id === this.editingPill!.id
-          ? { ...p, value: this.searchText.trim(), operator: this.pendingOperator }
-          : p
-      );
-      this.pillsChange.emit(updatedPills);
-      this.search.emit(updatedPills);
+    if (this.editingPill && this.searchText.trim() && this.pendingOperator) {
+      this.store.dispatch(TasklistUIActions.updateSearchPill({
+        id: this.editingPill.id,
+        pill: {
+          value: this.searchText.trim(),
+          operator: this.pendingOperator
+        }
+      }));
+      this.store.dispatch(TasklistUIActions.applySearch());
       this.resetInput();
     }
   }
@@ -261,15 +341,23 @@ export class TaskSearchComponent implements OnInit, OnDestroy {
   }
 
   clearAll(): void {
-    this.pillsChange.emit([]);
-    this.search.emit([]);
+    this.store.dispatch(TasklistUIActions.clearSearchPills());
+    this.store.dispatch(TasklistUIActions.applySearch());
     this.resetInput();
+  }
+
+  toggleMatchAny(): void {
+    this.store.dispatch(TasklistUIActions.setMatchAny({ matchAny: !this.matchAny }));
+    if (this.pills.length > 0) {
+      this.store.dispatch(TasklistUIActions.applySearch());
+    }
   }
 
   private resetInput(): void {
     this.searchText = '';
     this.pendingCriterion = null;
-    this.pendingOperator = '';
+    this.pendingOperator = null;
+    this.pendingVariableName = '';
     this.inputMode = 'criterion';
     this.editingPill = null;
     this.showSuggestions = false;
@@ -294,11 +382,25 @@ export class TaskSearchComponent implements OnInit, OnDestroy {
         return 'search.selectCriterion';
       case 'operator':
         return 'search.selectOperator';
+      case 'variableName':
+        return 'search.enterVariableName';
       case 'value':
         return 'search.enterValue';
       default:
         return 'search.placeholder';
     }
+  }
+
+  getPillDisplayLabel(pill: SearchPill): string {
+    if (pill.variableName) {
+      return `${pill.variableName}`;
+    }
+    return pill.label;
+  }
+
+  isExpressionSupported(criterion: SearchSuggestion | null): boolean {
+    if (!criterion) return false;
+    return criterion.expressionSupport || EXPRESSION_SUPPORTED_FIELDS.includes(criterion.key);
   }
 
   private generateId(): string {

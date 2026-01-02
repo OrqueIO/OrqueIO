@@ -45,9 +45,17 @@
   opacity: 0.7;
 }
 
+.task-card.instance-suspended {
+  border-top: 3px solid #f59e0b;
+}
+
+.task-card.actions-disabled .task-header {
+  opacity: 0.85;
+}
+
 /* Header */
 .task-header {
-  padding: 16px;
+  padding: 12px 14px;
   border-bottom: 1px solid #e5e7eb;
   background-color: #ffffff;
 }
@@ -55,7 +63,7 @@
 .header-content {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
 }
 
 /* Tenant ID */
@@ -79,6 +87,12 @@
   gap: 4px;
 }
 
+.task-name-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .task-name {
   margin: 0;
   font-size: 18px;
@@ -91,7 +105,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 
 .process-definition,
@@ -108,6 +122,7 @@
 
 .instance-link {
   display: inline-flex;
+  flex-shrink: 0;
   align-items: center;
   justify-content: center;
   width: 24px;
@@ -121,25 +136,79 @@
   color: #667eea;
 }
 
-/* Task Removed Alert */
-.task-removed-alert {
-  padding: 16px;
+/* Task Status Alerts */
+.task-status-alert {
+  padding: 12px 16px;
 }
 
 .alert {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 16px;
+  align-items: flex-start;
+  padding: 14px 16px;
+  border-radius: 6px;
+  gap: 12px;
+}
+
+.alert.alert-info {
   background-color: #dbeafe;
   border: 1px solid #93c5fd;
-  border-radius: 4px;
-  gap: 16px;
+}
+
+.alert.alert-warning {
+  background-color: #fef3c7;
+  border: 1px solid #fcd34d;
+}
+
+.alert-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+}
+
+.alert-info .alert-icon {
+  background-color: #bfdbfe;
+  color: #1d4ed8;
+}
+
+.alert-warning .alert-icon {
+  background-color: #fde68a;
+  color: #b45309;
+}
+
+.alert-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.alert-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1f2937;
 }
 
 .alert-message {
-  font-size: 14px;
+  font-size: 13px;
+}
+
+.alert-info .alert-message {
   color: #1d4ed8;
+}
+
+.alert-warning .alert-message {
+  color: #92400e;
+}
+
+.alert-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
 }
 
 .alert-actions .btn {
@@ -159,7 +228,7 @@
   display: flex;
   list-style: none;
   margin: 0;
-  padding: 0 16px;
+  padding: 0 12px;
   border-bottom: 1px solid #e5e7eb;
   background-color: #ffffff;
   flex-shrink: 0;
@@ -171,7 +240,7 @@
 
 .nav-tabs li a {
   display: block;
-  padding: 12px 16px;
+  padding: 10px 12px;
   color: #6b7280;
   text-decoration: none;
   font-size: 13px;
@@ -264,4 +333,105 @@
 
 .tab-content::-webkit-scrollbar-thumb:hover {
   background-color: #9ca3af;
+}
+
+/* Task Info Grid */
+.task-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 10px;
+  padding: 12px;
+  margin-top: 6px;
+  background-color: #f9fafb;
+  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.info-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.info-value {
+  font-size: 13px;
+  color: #1f2937;
+  word-break: break-word;
+}
+
+.info-value.monospace {
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+  font-size: 12px;
+  background-color: #f3f4f6;
+  padding: 2px 6px;
+  border-radius: 3px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Priority Badge */
+.priority-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 22px;
+  padding: 0 8px;
+  border-radius: 11px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.priority-badge.high {
+  background-color: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+}
+
+.priority-badge.normal {
+  background-color: #f3f4f6;
+  color: #4b5563;
+  border: 1px solid #e5e7eb;
+}
+
+.priority-badge.low {
+  background-color: #ecfdf5;
+  color: #059669;
+  border: 1px solid #a7f3d0;
+}
+
+/* Delegation Badge */
+.delegation-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.delegation-badge.pending {
+  background-color: #fef3c7;
+  color: #d97706;
+}
+
+.delegation-badge.resolved {
+  background-color: #d1fae5;
+  color: #059669;
+}
+
+@media (max-width: 600px) {
+  .task-info-grid {
+    grid-template-columns: 1fr 1fr;
+  }
 }

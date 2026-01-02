@@ -1,0 +1,251 @@
+/* Task Variables Tab - Two Column Layout */
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+/* ==================== States ==================== */
+.loading-state,
+.error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 40px 16px;
+  color: #62757f;
+  text-align: center;
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #e0e0e0;
+  border-top-color: #1976d2;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.error-state {
+  color: #c62828;
+}
+
+.error-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background: #ffebee;
+  color: #c62828;
+  border-radius: 50%;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.error-message {
+  font-size: 13px;
+  color: #78909c;
+  max-width: 300px;
+  line-height: 1.5;
+}
+
+/* ==================== Empty State ==================== */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 48px 16px;
+  color: #90a4ae;
+  text-align: center;
+}
+
+.empty-state svg {
+  opacity: 0.5;
+}
+
+.empty-state span {
+  font-size: 14px;
+}
+
+/* ==================== Variables Content ==================== */
+.variables-content {
+  flex: 1;
+  overflow: auto;
+  padding: 16px;
+}
+
+/* ==================== Variables Grid - Two Column Layout ==================== */
+.variables-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px 32px;
+}
+
+.variable-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px 0;
+  border-bottom: 1px solid #f5f5f5;
+}
+
+.variable-item:hover {
+  background-color: #fafafa;
+  margin: 0 -8px;
+  padding: 8px;
+  border-radius: 4px;
+  border-bottom-color: transparent;
+}
+
+/* ==================== Variable Header ==================== */
+.variable-header {
+  display: flex;
+  align-items: center;
+}
+
+.variable-name {
+  font-weight: 600;
+  font-size: 14px;
+  color: #37474f;
+}
+
+/* ==================== Variable Body ==================== */
+.variable-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* Type display */
+.variable-type {
+  font-size: 13px;
+}
+
+.type-link {
+  color: #1976d2;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.type-link:hover {
+  text-decoration: underline;
+}
+
+.type-text {
+  color: #62757f;
+}
+
+/* Value display */
+.variable-value {
+  font-size: 14px;
+  color: #37474f;
+  word-break: break-word;
+}
+
+.empty-value {
+  color: #90a4ae;
+  font-style: italic;
+}
+
+.simple-value {
+  color: #37474f;
+}
+
+.date-value {
+  color: #37474f;
+}
+
+.bytes-value {
+  color: #1976d2;
+}
+
+/* Links */
+.download-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #1976d2;
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  padding: 2px 0;
+}
+
+.download-link:hover {
+  text-decoration: underline;
+}
+
+.download-link svg {
+  flex-shrink: 0;
+}
+
+.object-link {
+  color: #1976d2;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 13px;
+}
+
+.object-link:hover {
+  text-decoration: underline;
+}
+
+/* ==================== Buttons ==================== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.4;
+  text-align: center;
+  white-space: nowrap;
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+  user-select: none;
+  transition: background-color 0.15s, box-shadow 0.15s;
+  gap: 6px;
+}
+
+.btn:hover:not(:disabled) {
+  text-decoration: none;
+}
+
+.btn-secondary {
+  color: #37474f;
+  background: #ffffff;
+  border: 1px solid #cfd8dc;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: #f5f5f5;
+  border-color: #b0bec5;
+}
+
+/* ==================== Responsive ==================== */
+@media (max-width: 768px) {
+  .variables-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .variables-content {
+    padding: 12px;
+  }
+
+  .variable-item {
+    padding: 12px 0;
+  }
+}

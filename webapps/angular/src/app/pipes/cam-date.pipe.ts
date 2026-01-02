@@ -1,148 +1,113 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import { Pipe, PipeTransform, inject, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { TranslateService } from '../i18n/translate.service';
+import { CamDateFormatService } from './cam-date-format.service';
 
 /**
  * Pipe to format dates in various formats
- * Equivalent to AngularJS camDate filter
+ * Equivalent to AngularJS camDate filter with moment.js
+ *
+ * Supports dynamic locale based on current language setting.
+ *
+ * Usage:
+ *   {{ date | camDate }}           → Default 'normal' format
+ *   {{ date | camDate:'short' }}   → Short format (date only)
+ *   {{ date | camDate:'long' }}    → Long format with weekday
+ *   {{ date | camDate:'day' }}     → Day number only
+ *   {{ date | camDate:'monthName' }} → Full month name
+ *   {{ date | camDate:'time' }}    → Time only
+ *   {{ date | camDate:'iso' }}     → ISO 8601 string
  */
 @Pipe({
   name: 'camDate',
-  standalone: true
+  standalone: true,
+  pure: false // Impure to react to language changes
 })
-export class CamDatePipe implements PipeTransform {
+export class CamDatePipe implements PipeTransform, OnDestroy {
+  private readonly translateService = inject(TranslateService);
+  private readonly formatService = inject(CamDateFormatService);
+  private readonly cdr = inject(ChangeDetectorRef);
 
-  private readonly locale = 'en-US'; // Can be made configurable
+  private langSubscription: Subscription | null = null;
+  private cachedLocale: string = 'en';
+  private cachedValue: string | Date | number | null = null;
+  private cachedFormat: string = 'normal';
+  private cachedResult: string = '';
 
-  transform(value: string | Date | null | undefined, format: string = 'short'): string {
+  constructor() {
+    // Subscribe to language changes
+    this.langSubscription = this.translateService.currentLang$.subscribe(lang => {
+      this.cachedLocale = this.getLocaleFromLang(lang);
+      // Clear cache to force recalculation
+      this.cachedValue = null;
+      this.cdr.markForCheck();
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.langSubscription?.unsubscribe();
+  }
+
+  transform(value: string | Date | number | null | undefined, format: string = 'normal'): string {
     if (!value) {
       return '';
     }
 
-    const date = value instanceof Date ? value : new Date(value);
+    // Use cache if same value and format
+    if (this.cachedValue === value && this.cachedFormat === format) {
+      return this.cachedResult;
+    }
+
+    let date: Date;
+
+    if (value instanceof Date) {
+      date = value;
+    } else if (typeof value === 'number') {
+      date = new Date(value);
+    } else {
+      // Parse ISO 8601 string
+      date = new Date(value);
+    }
 
     if (isNaN(date.getTime())) {
       return '';
     }
 
-    switch (format) {
-      case 'long':
-        return this.formatLong(date);
-      case 'short':
-        return this.formatShort(date);
-      case 'day':
-        return this.formatDay(date);
-      case 'monthName':
-        return this.formatMonthName(date);
-      case 'monthShort':
-        return this.formatMonthShort(date);
-      case 'year':
-        return this.formatYear(date);
-      case 'time':
-        return this.formatTime(date);
-      case 'timeShort':
-        return this.formatTimeShort(date);
-      case 'dateOnly':
-        return this.formatDateOnly(date);
-      case 'datetime':
-        return this.formatDateTime(date);
-      case 'iso':
-        return date.toISOString();
-      default:
-        return this.formatShort(date);
+    // Special case for ISO format
+    if (format === 'iso') {
+      this.cachedValue = value;
+      this.cachedFormat = format;
+      this.cachedResult = date.toISOString();
+      return this.cachedResult;
     }
+
+    const formatOptions = this.formatService.getFormat(format);
+
+    try {
+      this.cachedResult = new Intl.DateTimeFormat(this.cachedLocale, formatOptions).format(date);
+    } catch {
+      // Fallback to en locale if current locale fails
+      this.cachedResult = new Intl.DateTimeFormat('en', formatOptions).format(date);
+    }
+
+    this.cachedValue = value;
+    this.cachedFormat = format;
+    return this.cachedResult;
   }
 
   /**
-   * Long format: "December 29, 2025 at 2:30:45 PM"
+   * Convert language code to full locale
    */
-  private formatLong(date: Date): string {
-    return date.toLocaleDateString(this.locale, {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit'
-    });
-  }
-
-  /**
-   * Short format: "12/29/25, 2:30 PM"
-   */
-  private formatShort(date: Date): string {
-    return date.toLocaleDateString(this.locale, {
-      year: '2-digit',
-      month: 'numeric',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  }
-
-  /**
-   * Day format: "29"
-   */
-  private formatDay(date: Date): string {
-    return date.getDate().toString().padStart(2, '0');
-  }
-
-  /**
-   * Month name format: "December"
-   */
-  private formatMonthName(date: Date): string {
-    return date.toLocaleDateString(this.locale, { month: 'long' });
-  }
-
-  /**
-   * Month short format: "Dec"
-   */
-  private formatMonthShort(date: Date): string {
-    return date.toLocaleDateString(this.locale, { month: 'short' });
-  }
-
-  /**
-   * Year format: "2025"
-   */
-  private formatYear(date: Date): string {
-    return date.getFullYear().toString();
-  }
-
-  /**
-   * Time format: "2:30:45 PM"
-   */
-  private formatTime(date: Date): string {
-    return date.toLocaleTimeString(this.locale, {
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit'
-    });
-  }
-
-  /**
-   * Time short format: "14:30"
-   */
-  private formatTimeShort(date: Date): string {
-    return date.toLocaleTimeString(this.locale, {
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: false
-    });
-  }
-
-  /**
-   * Date only format: "December 29, 2025"
-   */
-  private formatDateOnly(date: Date): string {
-    return date.toLocaleDateString(this.locale, {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
-  }
-
-  /**
-   * DateTime format: "12/29/2025 2:30:45 PM"
-   */
-  private formatDateTime(date: Date): string {
-    return date.toLocaleString(this.locale);
+  private getLocaleFromLang(lang: string): string {
+    const localeMap: Record<string, string> = {
+      'fr': 'fr-FR',
+      'en': 'en-US',
+      'de': 'de-DE',
+      'es': 'es-ES',
+      'it': 'it-IT',
+      'pt': 'pt-PT',
+      'nl': 'nl-NL'
+    };
+    return localeMap[lang] || 'en-US';
   }
 }

@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, inject, HostListener, NgZone } from '@ang
 import { CommonModule } from '@angular/common';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Subject, takeUntil, interval, switchMap, filter, distinctUntilChanged, map } from 'rxjs';
+import { Subject, takeUntil, interval, switchMap, filter, distinctUntilChanged, map, take } from 'rxjs';
 import { TranslatePipe } from '../../../i18n/translate.pipe';
 
 import {
@@ -14,12 +14,20 @@ import {
   selectSelectedTask,
   selectTaskDetail,
   selectActiveTab,
-  selectSelectedFilter
+  selectSelectedFilter,
+  selectMaximizedColumn
 } from '../../../store/tasklist';
+import { MaximizedColumn } from '../../../store/tasklist/tasklist.state';
 
 import { TaskFiltersComponent } from '../task-filters/task-filters';
 import { TaskListComponent } from '../task-list/task-list';
 import { TaskDetailComponent } from '../task-detail/task-detail';
+import { StartProcessModalComponent } from '../start-process-modal/start-process-modal';
+import { FilterModalComponent } from '../filter-modal/filter-modal';
+import { KeyboardShortcutsModalComponent } from '../keyboard-shortcuts-modal/keyboard-shortcuts-modal';
+import { CreateTaskModalComponent } from '../create-task-modal/create-task-modal';
+import { TaskFilter } from '../../../models/tasklist/filter.model';
+import { NavActionsService } from '../../../services/nav-actions.service';
 
 // Auto-refresh interval in milliseconds (10 seconds like AngularJS)
 const AUTO_REFRESH_INTERVAL = 10000;
@@ -33,7 +41,11 @@ const AUTO_REFRESH_INTERVAL = 10000;
     TranslatePipe,
     TaskFiltersComponent,
     TaskListComponent,
-    TaskDetailComponent
+    TaskDetailComponent,
+    StartProcessModalComponent,
+    FilterModalComponent,
+    KeyboardShortcutsModalComponent,
+    CreateTaskModalComponent
   ],
   templateUrl: './tasklist-layout.html',
   styleUrl: './tasklist-layout.css'
@@ -43,6 +55,7 @@ export class TasklistLayoutComponent implements OnInit, OnDestroy {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly ngZone = inject(NgZone);
+  private readonly navActionsService = inject(NavActionsService);
   private readonly destroy$ = new Subject<void>();
 
   vm$ = this.store.select(selectTasklistViewModel);
@@ -50,8 +63,42 @@ export class TasklistLayoutComponent implements OnInit, OnDestroy {
   taskDetail$ = this.store.select(selectTaskDetail);
   activeTab$ = this.store.select(selectActiveTab);
   selectedFilter$ = this.store.select(selectSelectedFilter);
+  maximizedColumn$ = this.store.select(selectMaximizedColumn);
+
+  // Modal states
+  showStartProcessModal = false;
+  showFilterModal = false;
+  showCreateTaskModal = false;
+  showKeyboardShortcutsModal = false;
+  editingFilter: TaskFilter | null = null;
+
+  // Assign notification state (like AngularJS cam-tasklist-assign-notification)
+  assignNotification: { taskId: string; taskName: string; processName: string } | null = null;
 
   ngOnInit(): void {
+    // Register navbar actions
+    this.navActionsService.setActions([
+      {
+        id: 'keyboard-shortcuts',
+        label: 'tasklist.keyboardShortcuts',
+        svgIcon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M8 12h.01M12 12h.01M16 12h.01M8 16h8"/></svg>',
+        callback: () => this.openKeyboardShortcutsModal()
+      },
+      {
+        id: 'create-task',
+        label: 'tasklist.createTask',
+        svgIcon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>',
+        callback: () => this.openCreateTaskModal()
+      },
+      {
+        id: 'start-process',
+        label: 'tasklist.startProcess',
+        svgIcon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M10 8l6 4-6 4V8z"/></svg>',
+        primary: true,
+        callback: () => this.openStartProcessModal()
+      }
+    ]);
+
     // Load filters on init
     this.store.dispatch(FiltersActions.loadFilters());
 
@@ -105,6 +152,7 @@ export class TasklistLayoutComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.navActionsService.clearActions();
     this.destroy$.next();
     this.destroy$.complete();
   }
@@ -177,28 +225,74 @@ export class TasklistLayoutComponent implements OnInit, OnDestroy {
   // Keyboard navigation
   @HostListener('document:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent): void {
-    // Skip if focused on input
-    if (this.isInputFocused()) return;
+    // Handle Escape key for closing modals (works even in inputs)
+    if (event.key === 'Escape') {
+      if (this.showKeyboardShortcutsModal) {
+        this.closeKeyboardShortcutsModal();
+      } else if (this.showCreateTaskModal) {
+        this.closeCreateTaskModal();
+      } else if (this.showFilterModal) {
+        this.closeFilterModal();
+      } else if (this.showStartProcessModal) {
+        this.closeStartProcessModal();
+      }
+      return;
+    }
 
-    switch (event.key) {
-      case 'ArrowUp':
-        event.preventDefault();
-        this.navigateTasks('up');
-        break;
-      case 'ArrowDown':
-        event.preventDefault();
-        this.navigateTasks('down');
-        break;
-      case 'c':
-      case 'C':
-        // Claim task shortcut
-        this.claimCurrentTask();
-        break;
-      case 'Escape':
-        this.store.dispatch(TasksActions.clearSelection());
-        this.store.dispatch(TaskDetailActions.clearTaskDetail());
-        this.updateUrl({ task: null });
-        break;
+    // ctrl+alt+c - Claim task
+    if (event.ctrlKey && event.altKey && event.key.toLowerCase() === 'c') {
+      event.preventDefault();
+      this.claimCurrentTask();
+      return;
+    }
+
+    // ctrl+shift+f - Focus first filter
+    if (event.ctrlKey && event.shiftKey && event.key.toLowerCase() === 'f') {
+      event.preventDefault();
+      this.focusFirstFilter();
+      return;
+    }
+
+    // ctrl+alt+l - Focus first task in list
+    if (event.ctrlKey && event.altKey && event.key.toLowerCase() === 'l') {
+      event.preventDefault();
+      this.focusFirstTask();
+      return;
+    }
+
+    // ctrl+alt+f - Focus first input in form
+    if (event.ctrlKey && event.altKey && event.key.toLowerCase() === 'f') {
+      event.preventDefault();
+      this.focusFirstFormInput();
+      return;
+    }
+
+    // ctrl+alt+p - Open start process modal
+    if (event.ctrlKey && event.altKey && event.key.toLowerCase() === 'p') {
+      event.preventDefault();
+      this.openStartProcessModal();
+      return;
+    }
+  }
+
+  private focusFirstFilter(): void {
+    const firstFilter = document.querySelector('.filter-item') as HTMLElement;
+    if (firstFilter) {
+      firstFilter.focus();
+    }
+  }
+
+  private focusFirstTask(): void {
+    const firstTask = document.querySelector('.task-item') as HTMLElement;
+    if (firstTask) {
+      firstTask.focus();
+    }
+  }
+
+  private focusFirstFormInput(): void {
+    const firstInput = document.querySelector('.task-detail input, .task-detail textarea') as HTMLElement;
+    if (firstInput) {
+      firstInput.focus();
     }
   }
 
@@ -222,15 +316,166 @@ export class TasklistLayoutComponent implements OnInit, OnDestroy {
   }
 
   toggleFilters(): void {
-    this.store.dispatch(TasklistUIActions.toggleFiltersPanel());
+    this.vm$.pipe(take(1)).subscribe(vm => {
+      // If trying to collapse, check if at least one other column stays expanded
+      if (!vm.filtersCollapsed && vm.listCollapsed && vm.detailCollapsed) {
+        return; // Don't collapse if it would leave no columns visible
+      }
+      this.store.dispatch(TasklistUIActions.toggleFiltersPanel());
+    });
+  }
+
+  toggleList(): void {
+    this.vm$.pipe(take(1)).subscribe(vm => {
+      // If trying to collapse, check if at least one other column stays expanded
+      if (!vm.listCollapsed && vm.filtersCollapsed && vm.detailCollapsed) {
+        return; // Don't collapse if it would leave no columns visible
+      }
+      this.store.dispatch(TasklistUIActions.toggleListPanel());
+    });
   }
 
   toggleDetail(): void {
-    this.store.dispatch(TasklistUIActions.toggleDetailPanel());
+    this.vm$.pipe(take(1)).subscribe(vm => {
+      // If trying to collapse, check if at least one other column stays expanded
+      if (!vm.detailCollapsed && vm.filtersCollapsed && vm.listCollapsed) {
+        return; // Don't collapse if it would leave no columns visible
+      }
+      this.store.dispatch(TasklistUIActions.toggleDetailPanel());
+    });
+  }
+
+  // Column maximize methods (matching AngularJS maximize-column-left/right)
+  maximizeColumn(column: MaximizedColumn): void {
+    this.store.dispatch(TasklistUIActions.maximizeColumn({ column }));
+  }
+
+  resetColumnSizes(): void {
+    this.store.dispatch(TasklistUIActions.resetColumnSizes());
+  }
+
+  isColumnMaximized(column: MaximizedColumn): boolean {
+    let result = false;
+    this.maximizedColumn$.pipe(take(1)).subscribe(maximized => {
+      result = maximized === column;
+    });
+    return result;
+  }
+
+  // Start Process Modal
+  openStartProcessModal(): void {
+    this.showStartProcessModal = true;
+  }
+
+  closeStartProcessModal(): void {
+    this.showStartProcessModal = false;
+  }
+
+  onProcessStarted(processInstanceId: string): void {
+    // Refresh task list after starting a process
+    this.store.dispatch(TasksActions.refreshTasks());
+    this.closeStartProcessModal();
+  }
+
+  // Assign notification (matches AngularJS cam-tasklist-assign-notification)
+  onTaskAssignedAfterStart(data: { taskId: string; taskName: string; processName: string }): void {
+    this.assignNotification = data;
+    // Auto-dismiss after 10 seconds
+    setTimeout(() => {
+      if (this.assignNotification?.taskId === data.taskId) {
+        this.assignNotification = null;
+      }
+    }, 10000);
+  }
+
+  navigateToAssignedTask(): void {
+    if (this.assignNotification) {
+      this.onTaskSelect(this.assignNotification.taskId);
+      this.assignNotification = null;
+    }
+  }
+
+  dismissAssignNotification(): void {
+    this.assignNotification = null;
+  }
+
+  // Create Task Modal
+  openCreateTaskModal(): void {
+    this.showCreateTaskModal = true;
+  }
+
+  closeCreateTaskModal(): void {
+    this.showCreateTaskModal = false;
+  }
+
+  onTaskCreated(taskId: string): void {
+    // Refresh task list after creating a task
+    this.store.dispatch(TasksActions.refreshTasks());
+    this.closeCreateTaskModal();
+  }
+
+  // Keyboard Shortcuts Modal
+  openKeyboardShortcutsModal(): void {
+    this.showKeyboardShortcutsModal = true;
+  }
+
+  closeKeyboardShortcutsModal(): void {
+    this.showKeyboardShortcutsModal = false;
+  }
+
+  // Edit current filter
+  private editCurrentFilter(): void {
+    this.selectedFilter$.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(filter => {
+      if (filter) {
+        this.onFilterEdit(filter);
+      }
+    }).unsubscribe();
+  }
+
+  // Filter Modal
+  onFilterCreate(): void {
+    this.editingFilter = null;
+    this.showFilterModal = true;
+  }
+
+  onFilterEdit(filter: TaskFilter): void {
+    this.editingFilter = filter;
+    this.showFilterModal = true;
+  }
+
+  closeFilterModal(): void {
+    this.showFilterModal = false;
+    this.editingFilter = null;
+  }
+
+  onFilterSave(filterData: Partial<TaskFilter>): void {
+    if (filterData.id) {
+      // Update existing filter
+      this.store.dispatch(FiltersActions.updateFilter({
+        filterId: filterData.id,
+        filter: filterData
+      }));
+    } else {
+      // Create new filter
+      this.store.dispatch(FiltersActions.createFilter({
+        filter: filterData as Omit<TaskFilter, 'id'>
+      }));
+    }
+    this.closeFilterModal();
+  }
+
+  onFilterDelete(filterId: string): void {
+    if (confirm('Are you sure you want to delete this filter?')) {
+      this.store.dispatch(FiltersActions.deleteFilter({ filterId }));
+      this.closeFilterModal();
+    }
   }
 
   onFilterSelect(filterId: string | null): void {
     this.store.dispatch(FiltersActions.selectFilter({ filterId }));
+    this.store.dispatch(TasksActions.setPage({ page: 1 }));
     this.store.dispatch(TasksActions.clearSelection());
     this.store.dispatch(TaskDetailActions.clearTaskDetail());
     this.updateUrl({ filter: filterId, task: null, page: null });

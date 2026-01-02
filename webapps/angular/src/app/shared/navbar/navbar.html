@@ -19,6 +19,21 @@
     </div>
 
     <div class="navbar-actions">
+      <!-- Dynamic Action Buttons -->
+      <div class="nav-action-buttons" *ngIf="navActions.length > 0">
+        <button
+          *ngFor="let action of navActions"
+          type="button"
+          class="nav-action-btn"
+          [class.primary]="action.primary"
+          (click)="onActionClick(action)"
+          [title]="action.label | translate"
+        >
+          <span class="action-icon" *ngIf="action.svgIcon" [innerHTML]="sanitizeSvg(action.svgIcon)"></span>
+          <span class="action-label">{{ action.label | translate }}</span>
+        </button>
+      </div>
+
       <button
         type="button"
         class="lang-toggle"

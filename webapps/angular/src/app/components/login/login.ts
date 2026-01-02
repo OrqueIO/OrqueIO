@@ -95,6 +95,14 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Handle Enter key in username field - move focus to password
+   */
+  onUsernameEnter(event: Event, passwordInput: HTMLInputElement): void {
+    event.preventDefault();
+    passwordInput.focus();
+  }
+
+  /**
    * Handle social login button click
    * Shows a message that the provider is not configured
    */

@@ -1,12 +1,18 @@
 <!-- Loading State -->
 <div class="loading-state" *ngIf="loading">
   <span class="spinner"></span>
-  {{ 'common.loading' | translate }}
+  <span>{{ 'common.loading' | translate }}</span>
 </div>
 
 <!-- Error State -->
 <div class="error-state" *ngIf="loadingError">
-  <span class="error-icon">!</span>
+  <span class="error-icon">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"/>
+      <line x1="12" y1="8" x2="12" y2="12"/>
+      <line x1="12" y1="16" x2="12.01" y2="16"/>
+    </svg>
+  </span>
   <strong>{{ 'tasklist.formFailure' | translate }}</strong>
   <span class="error-message">{{ loadingError }}</span>
 </div>
@@ -14,7 +20,7 @@
 <!-- Form Content -->
 <div class="form-content" *ngIf="!loading && !loadingError" #formContainer>
 
-  <!-- Embedded Form (iframe) -->
+  <!-- ==================== Embedded Form (iframe) ==================== -->
   <div class="embedded-form" *ngIf="isEmbeddedForm()">
     <iframe
       [src]="getSafeFormUrl()"
@@ -24,7 +30,7 @@
     </iframe>
   </div>
 
-  <!-- Orqueio Forms -->
+  <!-- ==================== Orqueio Forms ==================== -->
   <div class="orqueio-form" *ngIf="isOrqueioForm()">
     <iframe
       [src]="getSafeFormUrl()"
@@ -33,11 +39,11 @@
     </iframe>
   </div>
 
-  <!-- External Form -->
+  <!-- ==================== External Form ==================== -->
   <div class="external-form" *ngIf="isExternalForm()">
     <div class="external-form-info">
       <span class="info-icon">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="10"/>
           <line x1="12" y1="16" x2="12" y2="12"/>
           <line x1="12" y1="8" x2="12.01" y2="8"/>
@@ -47,7 +53,7 @@
       <button type="button"
               class="btn btn-primary"
               (click)="openExternalForm()">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
           <polyline points="15 3 21 3 21 9"/>
           <line x1="10" y1="14" x2="21" y2="3"/>
@@ -57,9 +63,43 @@
     </div>
   </div>
 
-  <!-- Generic Form -->
+  <!-- ==================== Generic Form ==================== -->
   <div class="generic-form" *ngIf="isGenericForm()">
-    <!-- Help text -->
+    <!-- Restored from Storage Notification -->
+    <div class="restored-notification" *ngIf="hasBeenRestoredFromStorage">
+      <div class="restored-content">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+          <path d="M3 3v5h5"/>
+        </svg>
+        <span>{{ 'tasklist.formRestoredFromStorage' | translate }}</span>
+      </div>
+      <div class="restored-actions">
+        <button type="button" class="btn btn-link" (click)="discardRestoredState()">
+          {{ 'tasklist.discardAndReload' | translate }}
+        </button>
+        <button type="button" class="btn btn-link" (click)="dismissRestoredNotification()">
+          {{ 'common.dismiss' | translate }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Complete Error Message -->
+    <div class="complete-error" *ngIf="completeError">
+      <div class="error-content">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="15" y1="9" x2="9" y2="15"/>
+          <line x1="9" y1="9" x2="15" y2="15"/>
+        </svg>
+        <span>{{ completeError }}</span>
+      </div>
+      <button type="button" class="btn btn-link" (click)="completeError = null">
+        {{ 'common.dismiss' | translate }}
+      </button>
+    </div>
+
+    <!-- Help Text Banner -->
     <div class="form-help-text">
       <span class="info-icon">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -72,139 +112,292 @@
     </div>
 
     <form (ngSubmit)="onComplete()" (keydown)="onKeyDown($event)">
-      <!-- Variables Section -->
-      <div class="variables-section">
-        <div class="section-header">
-          <h4>{{ 'tasklist.formVariables' | translate }}</h4>
-          <button type="button"
-                  class="btn-add"
-                  *ngIf="!hideLoadVariablesButton && !disableAddVariableButton"
-                  (click)="addVariable()"
-                  [appTooltip]="'tasklist.addVariableHint' | translate"
-                  tooltipPlacement="left">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <line x1="12" y1="5" x2="12" y2="19"/>
-              <line x1="5" y1="12" x2="19" y2="12"/>
-            </svg>
-            {{ 'tasklist.addVariable' | translate }}
-          </button>
-        </div>
+      <!-- Variables Table -->
+      <div class="variables-table-container">
+        <table class="variables-table">
+          <!-- Table Header -->
+          <thead>
+            <tr>
+              <th class="col-actions"></th>
+              <th class="col-name">{{ 'tasklist.variableName' | translate }}</th>
+              <th class="col-type">{{ 'tasklist.variableType' | translate }}</th>
+              <th class="col-value">{{ 'tasklist.variableValue' | translate }}</th>
+            </tr>
+          </thead>
 
-        <!-- No Variables -->
-        <div class="no-variables" *ngIf="variables.length === 0">
-          <p>{{ 'tasklist.noFormVariables' | translate }}</p>
-        </div>
+          <!-- Table Body -->
+          <tbody>
+            <!-- Action Links Row (Load Variables + Add Variable) -->
+            <tr class="action-links-row">
+              <td class="col-actions">
+                <!-- Load Variables -->
+                <a class="load-variables-link" *ngIf="!hideLoadVariablesButton && !variablesLoaded" (click)="loadVariables()">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <polyline points="7 10 12 15 17 10"/>
+                    <line x1="12" y1="15" x2="12" y2="3"/>
+                  </svg>
+                  {{ 'tasklist.loadVariables' | translate }}
+                </a>
+                <!-- After loading: show collapse/expand chevron -->
+                <a class="load-variables-link" *ngIf="!hideLoadVariablesButton && variablesLoaded" (click)="toggleVariables()">
+                  <svg *ngIf="variablesCollapsed" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="9 18 15 12 9 6"/>
+                  </svg>
+                  <svg *ngIf="!variablesCollapsed" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"/>
+                  </svg>
+                  {{ 'tasklist.loadVariables' | translate }}
+                </a>
+              </td>
+              <td colspan="2"></td>
+              <td class="col-value add-variable-cell">
+                <!-- Add Variable -->
+                <a class="add-variable-link" *ngIf="!disableAddVariableButton" (click)="addVariable()">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="8" x2="12" y2="16"/>
+                    <line x1="8" y1="12" x2="16" y2="12"/>
+                  </svg>
+                  {{ 'tasklist.addVariable' | translate }}
+                </a>
+              </td>
+            </tr>
 
-        <!-- Variable List -->
-        <div class="variables-list" *ngIf="variables.length > 0">
-          <div class="variable-row" *ngFor="let variable of variables; let i = index; trackBy: trackByIndex">
-            <!-- Variable Name (editable for new variables) -->
-            <div class="variable-name">
-              <ng-container *ngIf="variable.originalValue !== undefined">
-                <label [for]="'var-' + i">{{ variable.label || variable.name }}</label>
-                <span class="variable-type">({{ variable.type }})</span>
-              </ng-container>
-              <ng-container *ngIf="variable.originalValue === undefined || variable.originalValue === ''">
-                <input type="text"
-                       [(ngModel)]="variable.name"
-                       [name]="'var-name-' + i"
-                       placeholder="{{ 'tasklist.variableName' | translate }}"
-                       class="form-input variable-name-input"
-                       [disabled]="disableForm"
-                       (ngModelChange)="onVariableChange()">
-                <select [(ngModel)]="variable.type"
-                        [name]="'var-type-' + i"
-                        class="form-select variable-type-select"
-                        [disabled]="disableForm"
-                        (ngModelChange)="onVariableChange()">
-                  <option value="String">String</option>
-                  <option value="Integer">Integer</option>
-                  <option value="Long">Long</option>
-                  <option value="Double">Double</option>
-                  <option value="Boolean">Boolean</option>
-                  <option value="Date">Date</option>
-                </select>
-              </ng-container>
-            </div>
-
-            <!-- Variable Value -->
-            <div class="variable-value">
-              <!-- Text/Number/Date input -->
-              <input *ngIf="getInputType(variable.type) !== 'checkbox'"
-                     [type]="getInputType(variable.type)"
-                     [id]="'var-' + i"
-                     [(ngModel)]="variable.value"
-                     [name]="'var-' + i"
-                     class="form-input"
-                     [disabled]="disableForm"
-                     (ngModelChange)="onVariableChange()">
-
-              <!-- Checkbox input -->
-              <label *ngIf="getInputType(variable.type) === 'checkbox'" class="checkbox-wrapper">
-                <input type="checkbox"
-                       [id]="'var-' + i"
-                       [(ngModel)]="variable.value"
-                       [name]="'var-' + i"
-                       class="form-checkbox"
-                       [disabled]="disableForm"
-                       (ngModelChange)="onVariableChange()">
-                <span class="checkbox-label">{{ variable.value ? 'true' : 'false' }}</span>
-              </label>
-
-              <!-- Remove button -->
-              <button type="button"
-                      class="btn-remove"
-                      *ngIf="!disableForm"
-                      (click)="removeVariable(i)"
-                      [appTooltip]="'tasklist.removeVariable' | translate"
-                      tooltipPlacement="top">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <line x1="18" y1="6" x2="6" y2="18"/>
-                  <line x1="6" y1="6" x2="18" y2="18"/>
+            <!-- Empty State -->
+            <tr *ngIf="variablesLoaded && !variablesCollapsed && variables.length === 0" class="empty-row">
+              <td colspan="4" class="empty-state">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.4; margin-bottom: 8px;">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                  <polyline points="14 2 14 8 20 8"/>
+                  <line x1="16" y1="13" x2="8" y2="13"/>
+                  <line x1="16" y1="17" x2="8" y2="17"/>
+                  <polyline points="10 9 9 9 8 9"/>
                 </svg>
-              </button>
-            </div>
-          </div>
-        </div>
+                <div>{{ 'tasklist.noFormVariables' | translate }}</div>
+              </td>
+            </tr>
+
+            <!-- Variable Rows (hidden when collapsed) -->
+            <ng-container *ngIf="!variablesCollapsed">
+            <ng-container *ngFor="let variable of variables; let i = index; trackBy: trackByIndex">
+              <tr class="variable-row" [class.new-variable]="!variable.fixedName">
+                <!-- Remove Link - Only when fixedName is false/undefined -->
+                <td class="col-actions">
+                  <a class="remove-link"
+                     *ngIf="!disableForm && !variable.fixedName"
+                     (click)="removeVariable(i)">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="3 6 5 6 21 6"/>
+                      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                    </svg>
+                    <span class="remove-text">{{ 'tasklist.remove' | translate }}</span>
+                  </a>
+                </td>
+
+                <!-- Name Column - readonly when fixedName || readonly -->
+                <td class="col-name">
+                  <ng-container *ngIf="variable.fixedName || variable.readonly">
+                    <span class="variable-name-text">{{ variable.label || variable.name }}</span>
+                  </ng-container>
+                  <ng-container *ngIf="!variable.fixedName && !variable.readonly">
+                    <div class="input-wrapper" [class.has-error]="variable.errors?.name">
+                      <input type="text"
+                             [(ngModel)]="variable.name"
+                             [name]="'var-name-' + i"
+                             [placeholder]="'tasklist.variableName' | translate"
+                             class="form-input"
+                             [class.input-error]="variable.errors?.name"
+                             [disabled]="disableForm"
+                             (ngModelChange)="onVariableChange(); clearValidationError(i, 'name')">
+                      <span class="error-message" *ngIf="variable.errors?.name">
+                        {{ variable.errors!.name! | translate }}
+                      </span>
+                    </div>
+                  </ng-container>
+                </td>
+
+                <!-- Type Column - disabled when readonly -->
+                <td class="col-type">
+                  <ng-container *ngIf="variable.fixedName || variable.readonly">
+                    <span class="variable-type-text">{{ variable.type }}</span>
+                  </ng-container>
+                  <ng-container *ngIf="!variable.fixedName && !variable.readonly">
+                    <div class="input-wrapper" [class.has-error]="variable.errors?.type">
+                      <select [(ngModel)]="variable.type"
+                              [name]="'var-type-' + i"
+                              class="form-select"
+                              [class.input-error]="variable.errors?.type"
+                              [disabled]="disableForm || !variable.name"
+                              (ngModelChange)="onVariableChange(); clearValidationError(i, 'type')">
+                        <option value="" disabled>{{ 'tasklist.variableType' | translate }}</option>
+                        <option value="String">String</option>
+                        <option value="Integer">Integer</option>
+                        <option value="Long">Long</option>
+                        <option value="Double">Double</option>
+                        <option value="Boolean">Boolean</option>
+                        <option value="Date">Date</option>
+                        <option value="Object">Object</option>
+                        <option value="File">File</option>
+                      </select>
+                      <span class="error-message" *ngIf="variable.errors?.type">
+                        {{ variable.errors!.type! | translate }}
+                      </span>
+                    </div>
+                  </ng-container>
+                </td>
+
+                <!-- Value Column -->
+                <td class="col-value">
+                  <!-- Object Type with valueInfo - inline display -->
+                  <ng-container *ngIf="variable.type === 'Object' && variable.valueInfo">
+                    <div class="object-inline-details">
+                      <div class="object-field-inline">
+                        <label>{{ 'tasklist.objectTypeName' | translate }}</label>
+                        <input type="text"
+                               [(ngModel)]="variable.valueInfo.objectTypeName"
+                               [name]="'var-objectType-' + i"
+                               class="form-input"
+                               required
+                               [disabled]="disableForm"
+                               (ngModelChange)="onVariableChange()">
+                      </div>
+                      <div class="object-field-inline">
+                        <label>{{ 'tasklist.serializationFormat' | translate }}</label>
+                        <input type="text"
+                               [(ngModel)]="variable.valueInfo.serializationDataFormat"
+                               [name]="'var-format-' + i"
+                               class="form-input"
+                               required
+                               [disabled]="disableForm"
+                               (ngModelChange)="onVariableChange()">
+                      </div>
+                      <div class="object-field-inline">
+                        <label>{{ 'tasklist.serializedValue' | translate }}</label>
+                        <textarea [(ngModel)]="variable.value"
+                                  [name]="'var-serialized-' + i"
+                                  class="form-textarea"
+                                  rows="3"
+                                  required
+                                  [disabled]="disableForm"
+                                  (ngModelChange)="onVariableChange()"></textarea>
+                      </div>
+                    </div>
+                  </ng-container>
+
+                  <!-- Object Type - Only show [Object] text if no valueInfo (new object variable) -->
+                  <ng-container *ngIf="variable.type === 'Object' && !variable.valueInfo">
+                    <span class="object-value-text">[Object]</span>
+                  </ng-container>
+
+                  <!-- Boolean Checkbox -->
+                  <ng-container *ngIf="variable.type === 'Boolean'">
+                    <label class="checkbox-wrapper">
+                      <input type="checkbox"
+                             [id]="'var-' + i"
+                             [(ngModel)]="variable.value"
+                             [name]="'var-' + i"
+                             class="form-checkbox"
+                             [disabled]="disableForm"
+                             (ngModelChange)="onVariableChange()">
+                      <span class="checkbox-label">{{ variable.value ? 'true' : 'false' }}</span>
+                    </label>
+                  </ng-container>
+
+                  <!-- File Type - Download link for readonly, file input for new -->
+                  <ng-container *ngIf="variable.type === 'File'">
+                    <a *ngIf="variable.readonly && variable.downloadUrl"
+                       [href]="variable.downloadUrl"
+                       class="download-link">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="7 10 12 15 17 10"/>
+                        <line x1="12" y1="15" x2="12" y2="3"/>
+                      </svg>
+                      {{ 'tasklist.download' | translate }}
+                    </a>
+                    <input *ngIf="!variable.readonly"
+                           type="file"
+                           [id]="'var-' + i"
+                           [name]="'var-' + i"
+                           class="form-input"
+                           [disabled]="disableForm"
+                           (change)="onFileChange($event, i)">
+                  </ng-container>
+
+                  <!-- Standard Input -->
+                  <ng-container *ngIf="variable.type !== 'Object' && variable.type !== 'Boolean' && variable.type !== 'File'">
+                    <div class="input-wrapper" [class.has-error]="variable.errors?.value">
+                      <input [type]="getInputType(variable.type)"
+                             [id]="'var-' + i"
+                             [(ngModel)]="variable.value"
+                             [name]="'var-' + i"
+                             class="form-input"
+                             [class.input-error]="variable.errors?.value"
+                             [placeholder]="'tasklist.variableValue' | translate"
+                             [disabled]="disableForm"
+                             [readonly]="!variable.type"
+                             (ngModelChange)="onVariableChange(); clearValidationError(i, 'value')">
+                      <span class="error-message" *ngIf="variable.errors?.value">
+                        {{ variable.errors!.value! | translate }}
+                      </span>
+                    </div>
+                  </ng-container>
+                </td>
+              </tr>
+            </ng-container>
+            </ng-container>
+
+          </tbody>
+        </table>
       </div>
 
-      <!-- Actions -->
+      <!-- Form Actions -->
       <div class="form-actions" *ngIf="!hideCompleteButton || !hideSaveButton">
         <!-- Save Button -->
         <button type="button"
                 class="btn btn-secondary"
                 *ngIf="!hideSaveButton"
                 [disabled]="disableForm || saving || !isDirty"
-                (click)="onSave()"
-                [appTooltip]="'tasklist.saveHint' | translate"
-                tooltipPlacement="top">
+                (click)="onSave()">
           <span class="spinner-small" *ngIf="saving"></span>
+          <svg *ngIf="!saving" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+            <polyline points="17 21 17 13 7 13 7 21"/>
+            <polyline points="7 3 7 8 15 8"/>
+          </svg>
           {{ 'tasklist.save' | translate }}
         </button>
 
-        <!-- Complete Button -->
+        <!-- Complete Task Button -->
         <button type="submit"
                 class="btn btn-primary"
                 *ngIf="!hideCompleteButton"
                 [disabled]="disableCompleteButton || submitting">
           <span class="spinner-small" *ngIf="submitting"></span>
+          <svg *ngIf="!submitting" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
           {{ 'tasklist.completeTask' | translate }}
         </button>
       </div>
     </form>
   </div>
 
-  <!-- Form Actions for Embedded/External Forms -->
+  <!-- ==================== Actions for Embedded/Orqueio Forms ==================== -->
   <div class="form-actions external-actions"
        *ngIf="(isEmbeddedForm() || isOrqueioForm()) && !hideCompleteButton">
     <button type="button"
             class="btn btn-secondary"
             *ngIf="!hideSaveButton"
             [disabled]="disableForm || saving || !isDirty"
-            (click)="onSave()"
-            [appTooltip]="'tasklist.saveHint' | translate"
-            tooltipPlacement="top">
+            (click)="onSave()">
       <span class="spinner-small" *ngIf="saving"></span>
+      <svg *ngIf="!saving" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+        <polyline points="17 21 17 13 7 13 7 21"/>
+        <polyline points="7 3 7 8 15 8"/>
+      </svg>
       {{ 'tasklist.save' | translate }}
     </button>
 
@@ -213,6 +406,9 @@
             [disabled]="disableCompleteButton || submitting"
             (click)="onComplete()">
       <span class="spinner-small" *ngIf="submitting"></span>
+      <svg *ngIf="!submitting" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="20 6 9 17 4 12"/>
+      </svg>
       {{ 'tasklist.completeTask' | translate }}
     </button>
   </div>

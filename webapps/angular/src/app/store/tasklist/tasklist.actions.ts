@@ -1,7 +1,7 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
-import { Task, TaskQueryParams, TaskComment, UserOperationLogEntry, IdentityLink } from '../../models/tasklist';
+import { Task, TaskQueryParams, TaskComment, UserOperationLogEntry, IdentityLink, SearchPill } from '../../models/tasklist';
 import { TaskFilter } from '../../models/tasklist';
-import { SearchPill } from './tasklist.state';
+import { TaskErrorType, MaximizedColumn } from './tasklist.state';
 
 // ==================== TASKS ACTIONS ====================
 
@@ -34,7 +34,7 @@ export const TasksActions = createActionGroup({
 
     'Complete Task': props<{ taskId: string; variables?: Record<string, any> }>(),
     'Complete Task Success': props<{ taskId: string }>(),
-    'Complete Task Failure': props<{ error: string }>(),
+    'Complete Task Failure': props<{ taskId: string; error: string }>(),
 
     'Update Task': props<{ taskId: string; updates: Partial<Task> }>(),
     'Update Task Success': props<{ task: Task }>(),
@@ -43,6 +43,11 @@ export const TasksActions = createActionGroup({
     'Set Assignee': props<{ taskId: string; userId: string | null }>(),
     'Set Assignee Success': props<{ task: Task }>(),
     'Set Assignee Failure': props<{ error: string }>(),
+
+    // Delegate task (new)
+    'Delegate Task': props<{ taskId: string; userId: string }>(),
+    'Delegate Task Success': props<{ task: Task }>(),
+    'Delegate Task Failure': props<{ error: string }>(),
 
     // Refresh
     'Refresh Tasks': emptyProps()
@@ -86,8 +91,14 @@ export const TaskDetailActions = createActionGroup({
     // Load detail
     'Load Task Detail': props<{ taskId: string }>(),
     'Load Task Detail Success': props<{ task: Task }>(),
-    'Load Task Detail Failure': props<{ error: string }>(),
+    'Load Task Detail Failure': props<{ error: string; errorType?: TaskErrorType }>(),
     'Clear Task Detail': emptyProps(),
+
+    // Task not found (AngularJS TASK_NOT_EXIST)
+    'Task Not Found': props<{ taskId: string }>(),
+
+    // Instance suspended state (AngularJS INSTANCE_SUSPENDED)
+    'Set Instance Suspended': props<{ suspended: boolean }>(),
 
     // Form
     'Load Task Form': props<{ taskId: string }>(),
@@ -131,13 +142,32 @@ export const TaskDetailActions = createActionGroup({
 export const TasklistUIActions = createActionGroup({
   source: 'Tasklist UI',
   events: {
+    // Panel collapse/expand
     'Toggle Filters Panel': emptyProps(),
+    'Toggle List Panel': emptyProps(),
     'Toggle Detail Panel': emptyProps(),
     'Set Filters Collapsed': props<{ collapsed: boolean }>(),
+    'Set List Collapsed': props<{ collapsed: boolean }>(),
     'Set Detail Collapsed': props<{ collapsed: boolean }>(),
+
+    // Column maximize (AngularJS parity)
+    'Maximize Column': props<{ column: MaximizedColumn }>(),
+    'Reset Column Sizes': emptyProps(),
+
+    // Search (text query)
     'Set Search Query': props<{ query: string }>(),
+
+    // Search pills (advanced search matching AngularJS)
+    'Set Search Pills': props<{ pills: SearchPill[] }>(),
     'Add Search Pill': props<{ pill: SearchPill }>(),
-    'Remove Search Pill': props<{ index: number }>(),
-    'Clear Search Pills': emptyProps()
+    'Update Search Pill': props<{ id: string; pill: Partial<SearchPill> }>(),
+    'Remove Search Pill': props<{ id: string }>(),
+    'Clear Search Pills': emptyProps(),
+
+    // OR query mode (AngularJS matchAny)
+    'Set Match Any': props<{ matchAny: boolean }>(),
+
+    // Trigger search (will reload tasks with current search state)
+    'Apply Search': emptyProps()
   }
 });

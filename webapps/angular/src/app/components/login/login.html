@@ -29,6 +29,7 @@
             class="form-input"
             [placeholder]="'PAGE_LOGIN_USERNAME_PLACEHOLDER' | translate"
             autofocus
+            (keydown.enter)="onUsernameEnter($event, passwordInput)"
           />
           <div class="error-message" *ngIf="username?.invalid && username?.touched">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -51,6 +52,7 @@
           </label>
           <div class="password-wrapper">
             <input
+              #passwordInput
               [type]="showPassword ? 'text' : 'password'"
               id="password"
               formControlName="password"
