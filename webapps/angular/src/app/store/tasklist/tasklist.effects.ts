@@ -4,14 +4,149 @@ import { Store } from '@ngrx/store';
 import { of, forkJoin } from 'rxjs';
 import { map, catchError, switchMap, withLatestFrom, tap, concatMap } from 'rxjs/operators';
 import { TasklistService } from '../../services/tasklist/tasklist.service';
-import { TasksActions, FiltersActions, TaskDetailActions } from './tasklist.actions';
-import { selectTasksQueryParams, selectSelectedFilterId } from './tasklist.selectors';
+import { TasksActions, FiltersActions, TaskDetailActions, TasklistUIActions } from './tasklist.actions';
+import {
+  selectTasksQueryParams,
+  selectSelectedFilterId,
+  selectSearchPills,
+  selectMatchAny
+} from './tasklist.selectors';
+import {
+  SearchPill,
+  SearchQuery,
+  EXPRESSION_REGEX,
+  EXPRESSION_SUPPORTED_FIELDS,
+  ISO_DATE_REGEX
+} from '../../models/tasklist';
+import { TaskQueryParams, VariableFilter } from '../../models/tasklist';
 
 @Injectable()
 export class TasklistEffects {
   private readonly actions$ = inject(Actions);
   private readonly store = inject(Store);
   private readonly tasklistService = inject(TasklistService);
+
+  // ==================== SEARCH QUERY BUILDER (matching AngularJS) ====================
+
+  /**
+   * Parse value matching AngularJS parseValue function
+   * Handles type coercion: number, boolean, null, quoted strings
+   */
+  private parseValue(value: string, enforceString = false): any {
+    if (enforceString) {
+      return '' + value;
+    }
+    if (!isNaN(Number(value)) && value.trim() !== '') {
+      return +value;
+    }
+    if (value === 'true') return true;
+    if (value === 'false') return false;
+    if (value === 'NULL') return null;
+    // Handle quoted strings
+    if (value.indexOf("'") === 0 && value.lastIndexOf("'") === value.length - 1) {
+      return value.substr(1, value.length - 2);
+    }
+    return value;
+  }
+
+  /**
+   * Sanitize value matching AngularJS sanitizeValue function
+   * Auto-wraps LIKE queries with %, handles IN operator, parses dates
+   */
+  private sanitizeValue(value: string, operator: string, allowDates = true): any {
+    // Regex for escaped wildcards
+    const specialWildCardCharExp = /(\\%)|(\\_)/g;
+    const wildCardExp = /(%)|(_)/;
+
+    if ((operator.toLowerCase() === 'like' || operator.toLowerCase() === 'notlike') &&
+        !wildCardExp.test(value.replace(specialWildCardCharExp, ''))) {
+      // Auto-wrap with % for like queries (matching AngularJS)
+      return '%' + value + '%';
+    } else if (operator === 'in') {
+      // Split by comma for IN operator
+      return value.split(',').map(v => v.trim());
+    } else if (allowDates && ISO_DATE_REGEX.test(value)) {
+      // Parse ISO date
+      return new Date(value).toISOString();
+    }
+    return value;
+  }
+
+  /**
+   * Sanitize property name matching AngularJS sanitizeProperty function
+   * Handles Like/Before/After suffixes and Expression support
+   */
+  private sanitizeProperty(key: string, operator: string, value: string): string {
+    let out = key;
+
+    // Add operator suffix for certain operators
+    if (['like', 'before', 'after'].includes(operator.toLowerCase())) {
+      out += operator.charAt(0).toUpperCase() + operator.slice(1).toLowerCase();
+    }
+
+    // Add Expression suffix for expression values on supported fields
+    if (EXPRESSION_REGEX.test(value) && EXPRESSION_SUPPORTED_FIELDS.includes(key)) {
+      out += 'Expression';
+    }
+
+    // Special case for priority
+    if (key === 'priority' && operator !== 'eq') {
+      out = operator + 'Priority';
+    }
+
+    return out;
+  }
+
+  /**
+   * Build search query from pills matching AngularJS cam-tasklist-search-plugin
+   */
+  private buildSearchQuery(pills: SearchPill[], matchAny: boolean): SearchQuery {
+    const baseQuery: SearchQuery = {};
+    let targetQuery: SearchQuery;
+
+    if (matchAny) {
+      baseQuery.orQueries = [{}];
+      targetQuery = baseQuery.orQueries[0];
+      targetQuery.processVariables = [];
+      targetQuery.taskVariables = [];
+      targetQuery.caseInstanceVariables = [];
+    } else {
+      baseQuery.processVariables = [];
+      baseQuery.taskVariables = [];
+      baseQuery.caseInstanceVariables = [];
+      targetQuery = baseQuery;
+    }
+
+    for (const pill of pills) {
+      const parsedValue = this.parseValue(pill.value, pill.type === 'string');
+      const sanitizedValue = this.sanitizeValue(String(parsedValue), pill.operator);
+
+      // Variable searches
+      if (pill.variableType && pill.variableName) {
+        const varArray = targetQuery[pill.variableType] as VariableFilter[];
+        if (varArray) {
+          varArray.push({
+            name: pill.variableName,
+            operator: pill.operator as VariableFilter['operator'],
+            value: sanitizedValue
+          });
+        }
+      } else {
+        // Direct property search
+        const propertyKey = this.sanitizeProperty(pill.key, pill.operator, String(parsedValue));
+        targetQuery[propertyKey] = sanitizedValue;
+      }
+    }
+
+    // Clean up empty arrays
+    if (!matchAny) {
+      if ((baseQuery.processVariables as any[])?.length === 0) delete baseQuery.processVariables;
+      if ((baseQuery.taskVariables as any[])?.length === 0) delete baseQuery.taskVariables;
+      if ((baseQuery.caseInstanceVariables as any[])?.length === 0) delete baseQuery.caseInstanceVariables;
+    }
+
+    return baseQuery;
+  }
 
   // ==================== TASKS EFFECTS ====================
 
@@ -20,17 +155,31 @@ export class TasklistEffects {
       ofType(TasksActions.loadTasks, TasksActions.refreshTasks),
       withLatestFrom(
         this.store.select(selectTasksQueryParams),
-        this.store.select(selectSelectedFilterId)
+        this.store.select(selectSelectedFilterId),
+        this.store.select(selectSearchPills),
+        this.store.select(selectMatchAny)
       ),
-      switchMap(([_, queryParams, filterId]) => {
+      switchMap(([_, queryParams, filterId, searchPills, matchAny]) => {
+        // Build search query from pills (matching AngularJS)
+        const searchQuery = searchPills.length > 0
+          ? this.buildSearchQuery(searchPills, matchAny)
+          : {};
+
+        // Merge search query with query params
+        const combinedParams: TaskQueryParams = {
+          ...queryParams,
+          ...searchQuery
+        };
+
         if (filterId) {
-          // Load tasks from filter
+          // Load tasks from filter with search query
           return forkJoin({
             tasks: this.tasklistService.executeFilter(filterId, {
               firstResult: queryParams.firstResult,
-              maxResults: queryParams.maxResults
+              maxResults: queryParams.maxResults,
+              ...searchQuery // Include search in filter execution
             }),
-            count: this.tasklistService.executeFilterCount(filterId)
+            count: this.tasklistService.executeFilterCount(filterId, searchQuery)
           }).pipe(
             map(({ tasks, count }) =>
               TasksActions.loadTasksSuccess({ tasks, total: count })
@@ -40,10 +189,10 @@ export class TasklistEffects {
             )
           );
         } else {
-          // Load tasks with query params
+          // Load tasks with combined query params
           return forkJoin({
-            result: this.tasklistService.getTasks(queryParams),
-            count: this.tasklistService.getTasksCount(queryParams)
+            result: this.tasklistService.getTasks(combinedParams),
+            count: this.tasklistService.getTasksCount(combinedParams)
           }).pipe(
             map(({ result, count }) =>
               TasksActions.loadTasksSuccess({
@@ -70,6 +219,14 @@ export class TasklistEffects {
         TasksActions.setSorting,
         FiltersActions.selectFilter
       ),
+      map(() => TasksActions.loadTasks())
+    )
+  );
+
+  // Reload tasks when search is applied
+  applySearch$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(TasklistUIActions.applySearch),
       map(() => TasksActions.loadTasks())
     )
   );
@@ -117,9 +274,11 @@ export class TasklistEffects {
       concatMap(({ taskId, variables }) =>
         this.tasklistService.completeTask(taskId, variables).pipe(
           map(() => TasksActions.completeTaskSuccess({ taskId })),
-          catchError(error =>
-            of(TasksActions.completeTaskFailure({ error: error.message }))
-          )
+          catchError(error => {
+            // Extract actual error message from server response
+            const errorMessage = error.error?.message || error.error?.errorMessage || error.message || 'Failed to complete task';
+            return of(TasksActions.completeTaskFailure({ taskId, error: errorMessage }));
+          })
         )
       )
     )
@@ -155,6 +314,25 @@ export class TasklistEffects {
           ),
           catchError(error =>
             of(TasksActions.updateTaskFailure({ error: error.message }))
+          )
+        )
+      )
+    )
+  );
+
+  // Delegate task effect
+  delegateTask$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(TasksActions.delegateTask),
+      concatMap(({ taskId, userId }) =>
+        this.tasklistService.delegateTask(taskId, userId).pipe(
+          switchMap(() => this.tasklistService.getTask(taskId)),
+          map(task => task
+            ? TasksActions.delegateTaskSuccess({ task })
+            : TasksActions.delegateTaskFailure({ error: 'Task not found' })
+          ),
+          catchError(error =>
+            of(TasksActions.delegateTaskFailure({ error: error.message }))
           )
         )
       )

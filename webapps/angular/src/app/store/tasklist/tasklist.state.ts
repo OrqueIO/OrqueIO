@@ -1,6 +1,6 @@
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { Task, TaskQueryParams, TaskSorting } from '../../models/tasklist';
-import { TaskFilter } from '../../models/tasklist';
+import { TaskFilter, SearchPill, SearchQuery } from '../../models/tasklist';
 
 // ==================== TASKS STATE ====================
 
@@ -62,6 +62,11 @@ export const initialFiltersState: FiltersState = filtersAdapter.getInitialState(
 
 // ==================== TASK DETAIL STATE ====================
 
+/**
+ * Task error types matching AngularJS errorHandler
+ */
+export type TaskErrorType = 'TASK_NOT_EXIST' | 'INSTANCE_SUSPENDED' | 'GENERAL_ERROR' | null;
+
 export interface TaskDetailState {
   task: Task | null;
   form: any | null;
@@ -70,7 +75,10 @@ export interface TaskDetailState {
   identityLinks: any[];
   loading: boolean;
   error: string | null;
+  errorType: TaskErrorType;
   activeTab: 'form' | 'history' | 'diagram' | 'description';
+  // Instance suspended state (matching AngularJS)
+  instanceSuspended: boolean;
 }
 
 export const initialTaskDetailState: TaskDetailState = {
@@ -81,30 +89,43 @@ export const initialTaskDetailState: TaskDetailState = {
   identityLinks: [],
   loading: false,
   error: null,
-  activeTab: 'form'
+  errorType: null,
+  activeTab: 'form',
+  instanceSuspended: false
 };
 
 // ==================== UI STATE ====================
 
+/**
+ * Column maximize mode - which column is maximized (null = none)
+ * Matches AngularJS maximize-column-left/right functionality
+ */
+export type MaximizedColumn = 'filters' | 'list' | 'detail' | null;
+
 export interface TasklistUIState {
   filtersCollapsed: boolean;
+  listCollapsed: boolean;
   detailCollapsed: boolean;
+  // Column maximize feature (AngularJS parity)
+  maximizedColumn: MaximizedColumn;
+  // Search state
   searchQuery: string;
   searchPills: SearchPill[];
+  // OR query mode (AngularJS matchAny)
+  matchAny: boolean;
 }
 
-export interface SearchPill {
-  type: string;
-  key: string;
-  operator: string;
-  value: string;
-}
+// Re-export SearchPill from filter.model for convenience
+export type { SearchPill } from '../../models/tasklist';
 
 export const initialUIState: TasklistUIState = {
   filtersCollapsed: false,
+  listCollapsed: false,
   detailCollapsed: false,
+  maximizedColumn: null,
   searchQuery: '',
-  searchPills: []
+  searchPills: [],
+  matchAny: false
 };
 
 // ==================== ROOT STATE ====================

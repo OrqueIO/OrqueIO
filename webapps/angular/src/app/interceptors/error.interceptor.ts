@@ -11,22 +11,25 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
         // Client-side error
         errorMessage = error.error.message;
       } else {
-        // Server-side error
+        // Server-side error - try to extract actual message from response body
+        const serverMessage = error.error?.message || error.error?.errorMessage;
+
         switch (error.status) {
           case 401:
-            errorMessage = 'Unauthorized access';
+            errorMessage = serverMessage || 'Unauthorized access';
             break;
           case 403:
-            errorMessage = 'Access forbidden';
+            errorMessage = serverMessage || 'Access forbidden';
             break;
           case 404:
-            errorMessage = 'Resource not found';
+            errorMessage = serverMessage || 'Resource not found';
             break;
           case 500:
-            errorMessage = 'Internal server error';
+            // For 500 errors, show the actual backend error message if available
+            errorMessage = serverMessage || 'Internal server error';
             break;
           default:
-            errorMessage = error.error?.message || error.message;
+            errorMessage = serverMessage || error.message;
         }
       }
 

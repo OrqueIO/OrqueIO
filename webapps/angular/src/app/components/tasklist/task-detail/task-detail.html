@@ -4,7 +4,10 @@
 </div>
 
 <!-- Task Card -->
-<section class="task-card" [class.task-removed]="!taskExists">
+<section class="task-card"
+         [class.task-removed]="!taskExists"
+         [class.instance-suspended]="instanceSuspended"
+         [class.actions-disabled]="areActionsDisabled()">
   <!-- Header -->
   <header class="task-header">
     <div class="header-content">
@@ -15,20 +18,8 @@
 
       <!-- Task Names -->
       <div class="names">
-        <h2 class="task-name">{{ getTaskDisplayName() }}</h2>
-
-        <div class="definition-name">
-          <h4 class="process-definition" *ngIf="task.processDefinitionId">
-            {{ getProcessName() }}
-            <span *ngIf="getProcessVersion()" class="version">
-              (v. {{ getProcessVersion() }})
-            </span>
-          </h4>
-
-          <h4 class="case-definition" *ngIf="task.caseDefinitionId">
-            {{ getCaseName() }}
-          </h4>
-
+        <div class="task-name-row">
+          <h2 class="task-name">{{ getTaskDisplayName() }}</h2>
           <a class="instance-link"
              *ngIf="getInstanceLink()"
              [href]="getInstanceLink()"
@@ -41,6 +32,19 @@
             </svg>
           </a>
         </div>
+
+        <div class="definition-name" *ngIf="task.processDefinitionId || task.caseDefinitionId">
+          <h4 class="process-definition" *ngIf="task.processDefinitionId">
+            {{ getProcessName() }}
+            <span *ngIf="getProcessVersion()" class="version">
+              (v. {{ getProcessVersion() }})
+            </span>
+          </h4>
+
+          <h4 class="case-definition" *ngIf="task.caseDefinitionId">
+            {{ getCaseName() }}
+          </h4>
+        </div>
       </div>
 
       <!-- Task Meta (Dates & Assignee) -->
@@ -48,24 +52,49 @@
         [task]="task"
         [isAssignee]="isCurrentUserAssignee()"
         [currentUserId]="getCurrentUserId()"
+        [identityLinks]="(identityLinks$ | async) || []"
         (claim)="claimTask()"
         (unclaim)="unclaimTask()"
         (assigneeChange)="setAssignee($event)"
-        (taskUpdate)="updateTask($event)">
+        (taskUpdate)="updateTask($event)"
+        (groupsEdit)="openGroupsModal()">
       </app-task-meta>
     </div>
   </header>
 
-  <!-- Task Removed Alert -->
-  <div class="task-removed-alert" *ngIf="!taskExists">
-    <div class="alert alert-info">
+  <!-- Task Status Alert (Task Removed or Instance Suspended) -->
+  <div class="task-status-alert" *ngIf="shouldShowAlert()">
+    <!-- Task Removed (TASK_NOT_EXIST) -->
+    <div class="alert alert-warning" *ngIf="!taskExists">
+      <div class="alert-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="8" x2="12" y2="12"/>
+          <line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+      </div>
       <div class="alert-content">
+        <span class="alert-title">{{ 'tasklist.taskRemoved' | translate }}</span>
         <span class="alert-message">{{ 'tasklist.taskHasBeenRemoved' | translate }}</span>
       </div>
       <div class="alert-actions">
         <button class="btn btn-secondary" (click)="dismissTask()">
           {{ 'tasklist.closeTask' | translate }}
         </button>
+      </div>
+    </div>
+
+    <!-- Instance Suspended -->
+    <div class="alert alert-info" *ngIf="taskExists && instanceSuspended">
+      <div class="alert-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="6" y="4" width="4" height="16"/>
+          <rect x="14" y="4" width="4" height="16"/>
+        </svg>
+      </div>
+      <div class="alert-content">
+        <span class="alert-title">{{ 'tasklist.instanceSuspendedTitle' | translate }}</span>
+        <span class="alert-message">{{ 'tasklist.instanceSuspended' | translate }}</span>
       </div>
     </div>
   </div>
@@ -90,6 +119,7 @@
           [task]="task"
           [form]="form$ | async"
           [isAssignee]="isCurrentUserAssignee()"
+          [actionsDisabled]="areActionsDisabled()"
           (complete)="completeTask($event)">
         </app-task-form-tab>
       </div>
@@ -117,6 +147,23 @@
           [task]="task">
         </app-task-description-tab>
       </div>
+
+      <!-- Variables Tab -->
+      <div class="tab-pane" [class.active]="activeTab === 'variables'" [hidden]="activeTab !== 'variables'">
+        <app-task-variables-tab
+          [task]="task">
+        </app-task-variables-tab>
+      </div>
     </div>
   </div>
 </section>
+
+<!-- Groups Modal -->
+<app-groups-modal
+  [isOpen]="showGroupsModal"
+  [taskId]="task.id"
+  [taskName]="getTaskDisplayName()"
+  [identityLinks]="currentIdentityLinks"
+  (update)="onGroupsUpdate($event)"
+  (close)="closeGroupsModal()">
+</app-groups-modal>

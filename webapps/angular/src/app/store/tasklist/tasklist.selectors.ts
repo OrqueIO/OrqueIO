@@ -184,6 +184,18 @@ export const selectTaskDetailError = createSelector(
   (state) => state.error
 );
 
+// Error type selector (AngularJS parity - TASK_NOT_EXIST, INSTANCE_SUSPENDED)
+export const selectTaskDetailErrorType = createSelector(
+  selectTaskDetailState,
+  (state) => state.errorType
+);
+
+// Instance suspended selector (AngularJS parity)
+export const selectInstanceSuspended = createSelector(
+  selectTaskDetailState,
+  (state) => state.instanceSuspended
+);
+
 export const selectActiveTab = createSelector(
   selectTaskDetailState,
   (state) => state.activeTab
@@ -200,6 +212,13 @@ export const selectTaskCandidateUsers = createSelector(
   (links) => links.filter(l => l.type === 'candidate' && l.userId)
 );
 
+// Check if task actions should be disabled (suspended or no task)
+export const selectTaskActionsDisabled = createSelector(
+  selectTaskDetail,
+  selectInstanceSuspended,
+  (task, suspended) => !task || suspended
+);
+
 // ==================== UI SELECTORS ====================
 
 export const selectUIState = createSelector(
@@ -212,9 +231,20 @@ export const selectFiltersCollapsed = createSelector(
   (state) => state.filtersCollapsed
 );
 
+export const selectListCollapsed = createSelector(
+  selectUIState,
+  (state) => state.listCollapsed
+);
+
 export const selectDetailCollapsed = createSelector(
   selectUIState,
   (state) => state.detailCollapsed
+);
+
+// Column maximize selector (AngularJS parity)
+export const selectMaximizedColumn = createSelector(
+  selectUIState,
+  (state) => state.maximizedColumn
 );
 
 export const selectSearchQuery = createSelector(
@@ -225,6 +255,18 @@ export const selectSearchQuery = createSelector(
 export const selectSearchPills = createSelector(
   selectUIState,
   (state) => state.searchPills
+);
+
+// OR query mode selector (AngularJS matchAny)
+export const selectMatchAny = createSelector(
+  selectUIState,
+  (state) => state.matchAny
+);
+
+// Check if search is active (has pills)
+export const selectIsSearchActive = createSelector(
+  selectSearchPills,
+  (pills) => pills.length > 0
 );
 
 // ==================== COMBINED SELECTORS ====================
@@ -240,8 +282,13 @@ export const selectTasklistViewModel = createSelector(
   selectSelectedFilterId,
   selectSelectedFilterCount,
   selectFiltersCollapsed,
+  selectListCollapsed,
   selectDetailCollapsed,
-  (tasks, total, loading, selectedTaskId, page, pageSize, filters, selectedFilterId, filterCount, filtersCollapsed, detailCollapsed) => ({
+  selectMaximizedColumn,
+  selectSearchPills,
+  selectMatchAny,
+  (tasks, total, loading, selectedTaskId, page, pageSize, filters, selectedFilterId, filterCount,
+   filtersCollapsed, listCollapsed, detailCollapsed, maximizedColumn, searchPills, matchAny) => ({
     tasks,
     total,
     loading,
@@ -252,6 +299,16 @@ export const selectTasklistViewModel = createSelector(
     selectedFilterId,
     filterCount,
     filtersCollapsed,
-    detailCollapsed
+    listCollapsed,
+    detailCollapsed,
+    maximizedColumn,
+    searchPills,
+    matchAny
   })
+);
+
+// Filter variables selector for search suggestions (AngularJS parity)
+export const selectFilterVariables = createSelector(
+  selectSelectedFilter,
+  (filter) => filter?.properties?.variables || []
 );

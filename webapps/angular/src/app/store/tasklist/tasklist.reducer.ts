@@ -87,6 +87,7 @@ export const tasksReducer = createReducer(
   // Task actions
   on(TasksActions.claimTaskSuccess, TasksActions.unclaimTaskSuccess,
      TasksActions.updateTaskSuccess, TasksActions.setAssigneeSuccess,
+     TasksActions.delegateTaskSuccess,
     (state, { task }) => tasksAdapter.updateOne(
       { id: task.id, changes: task },
       state
@@ -172,20 +173,39 @@ export const taskDetailReducer = createReducer(
   on(TaskDetailActions.loadTaskDetail, (state) => ({
     ...state,
     loading: true,
-    error: null
+    error: null,
+    errorType: null
   })),
 
   on(TaskDetailActions.loadTaskDetailSuccess, (state, { task }) => ({
     ...state,
     task,
     loading: false,
-    error: null
+    error: null,
+    errorType: null,
+    instanceSuspended: false
   })),
 
-  on(TaskDetailActions.loadTaskDetailFailure, (state, { error }) => ({
+  on(TaskDetailActions.loadTaskDetailFailure, (state, { error, errorType }) => ({
     ...state,
     loading: false,
-    error
+    error,
+    errorType: errorType ?? 'GENERAL_ERROR'
+  })),
+
+  // Task not found (AngularJS TASK_NOT_EXIST)
+  on(TaskDetailActions.taskNotFound, (state, { taskId }) => ({
+    ...state,
+    task: null,
+    loading: false,
+    error: `Task ${taskId} not found`,
+    errorType: 'TASK_NOT_EXIST' as const
+  })),
+
+  // Instance suspended (AngularJS INSTANCE_SUSPENDED)
+  on(TaskDetailActions.setInstanceSuspended, (state, { suspended }) => ({
+    ...state,
+    instanceSuspended: suspended
   })),
 
   on(TaskDetailActions.clearTaskDetail, () => initialTaskDetailState),
@@ -243,14 +263,23 @@ export const taskDetailReducer = createReducer(
 export const uiReducer = createReducer(
   initialUIState,
 
+  // Panel collapse/expand
   on(TasklistUIActions.toggleFiltersPanel, (state) => ({
     ...state,
-    filtersCollapsed: !state.filtersCollapsed
+    filtersCollapsed: !state.filtersCollapsed,
+    maximizedColumn: null // Reset maximize when toggling
+  })),
+
+  on(TasklistUIActions.toggleListPanel, (state) => ({
+    ...state,
+    listCollapsed: !state.listCollapsed,
+    maximizedColumn: null
   })),
 
   on(TasklistUIActions.toggleDetailPanel, (state) => ({
     ...state,
-    detailCollapsed: !state.detailCollapsed
+    detailCollapsed: !state.detailCollapsed,
+    maximizedColumn: null
   })),
 
   on(TasklistUIActions.setFiltersCollapsed, (state, { collapsed }) => ({
@@ -258,29 +287,73 @@ export const uiReducer = createReducer(
     filtersCollapsed: collapsed
   })),
 
+  on(TasklistUIActions.setListCollapsed, (state, { collapsed }) => ({
+    ...state,
+    listCollapsed: collapsed
+  })),
+
   on(TasklistUIActions.setDetailCollapsed, (state, { collapsed }) => ({
     ...state,
     detailCollapsed: collapsed
   })),
 
+  // Column maximize (AngularJS parity)
+  on(TasklistUIActions.maximizeColumn, (state, { column }) => ({
+    ...state,
+    maximizedColumn: state.maximizedColumn === column ? null : column // Toggle if same column
+  })),
+
+  on(TasklistUIActions.resetColumnSizes, (state) => ({
+    ...state,
+    maximizedColumn: null,
+    filtersCollapsed: false,
+    listCollapsed: false,
+    detailCollapsed: false
+  })),
+
+  // Search query
   on(TasklistUIActions.setSearchQuery, (state, { query }) => ({
     ...state,
     searchQuery: query
   })),
 
+  // Search pills - set all at once
+  on(TasklistUIActions.setSearchPills, (state, { pills }) => ({
+    ...state,
+    searchPills: pills
+  })),
+
+  // Add single pill
   on(TasklistUIActions.addSearchPill, (state, { pill }) => ({
     ...state,
     searchPills: [...state.searchPills, pill]
   })),
 
-  on(TasklistUIActions.removeSearchPill, (state, { index }) => ({
+  // Update pill by id
+  on(TasklistUIActions.updateSearchPill, (state, { id, pill }) => ({
     ...state,
-    searchPills: state.searchPills.filter((_, i) => i !== index)
+    searchPills: state.searchPills.map(p =>
+      p.id === id ? { ...p, ...pill } : p
+    )
   })),
 
+  // Remove pill by id
+  on(TasklistUIActions.removeSearchPill, (state, { id }) => ({
+    ...state,
+    searchPills: state.searchPills.filter(p => p.id !== id)
+  })),
+
+  // Clear all pills
   on(TasklistUIActions.clearSearchPills, (state) => ({
     ...state,
-    searchPills: []
+    searchPills: [],
+    matchAny: false
+  })),
+
+  // OR query mode (AngularJS matchAny)
+  on(TasklistUIActions.setMatchAny, (state, { matchAny }) => ({
+    ...state,
+    matchAny
   }))
 );
 

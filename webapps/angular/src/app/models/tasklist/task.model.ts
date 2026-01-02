@@ -237,3 +237,38 @@ export interface GroupRef {
   name?: string;
   type?: string;
 }
+
+/**
+ * Process Definition - full definition for starting processes
+ */
+export interface ProcessDefinition {
+  id: string;
+  key: string;
+  name?: string;
+  description?: string;
+  version: number;
+  versionTag?: string;
+  category?: string;
+  deploymentId?: string;
+  resource?: string;
+  diagram?: string;
+  suspended?: boolean;
+  tenantId?: string;
+  historyTimeToLive?: number;
+  startableInTasklist?: boolean;
+  hasStartFormKey?: boolean;
+}
+
+/**
+ * Process Instance - result of starting a process
+ */
+export interface ProcessInstance {
+  id: string;
+  definitionId: string;
+  businessKey?: string;
+  caseInstanceId?: string;
+  tenantId?: string;
+  ended?: boolean;
+  suspended?: boolean;
+  links?: { href: string; rel: string; method?: string }[];
+}

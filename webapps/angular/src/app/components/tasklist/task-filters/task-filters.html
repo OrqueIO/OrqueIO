@@ -34,15 +34,13 @@
         [ngStyle]="getFilterStyle(filter)"
         (click)="selectFilter(filter)">
 
-      <div class="filter-content">
+      <!-- Header Row: Name + Actions on same line -->
+      <div class="filter-header">
         <h4 class="filter-name">
           <a href="javascript:void(0)"
-             [ngStyle]="getFilterTextStyle(filter)"
-             [appTooltip]="filter.properties?.description || ''"
-             tooltipPlacement="right">
+             [ngStyle]="getFilterTextStyle(filter)">
             {{ filter.name }}
           </a>
-
           <!-- Auto-refresh indicator -->
           <span class="refresh-indicator"
                 *ngIf="hasRefreshEnabled(filter)"
@@ -53,34 +51,30 @@
               <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
             </svg>
           </span>
-
-          <!-- Item count badge -->
-          <span class="filter-count"
-                *ngIf="isSelected(filter) && filterCount > 0"
-                [class.high-count]="filterCount > 100">
-            {{ filterCount }}
-          </span>
         </h4>
 
-        <!-- Description (shown when selected) -->
-        <p class="filter-description"
-           *ngIf="filter.properties?.description && isSelected(filter)">
-          {{ filter.properties.description }}
-        </p>
+        <!-- Actions group: count badge + edit button -->
+        <div class="filter-actions" *ngIf="isSelected(filter)">
+          <span class="filter-count" *ngIf="filterCount > 0">
+            {{ filterCount }}
+          </span>
+          <button class="btn-action"
+                  (click)="openEditModal($event, filter)"
+                  [appTooltip]="'tasklist.filterDetails' | translate"
+                  tooltipPlacement="left">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+              <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+            </svg>
+          </button>
+        </div>
       </div>
 
-      <!-- Actions (shown when selected) -->
-      <div class="filter-actions" *ngIf="isSelected(filter)">
-        <button class="btn-action"
-                (click)="openEditModal($event, filter)"
-                [appTooltip]="'tasklist.filterDetails' | translate"
-                tooltipPlacement="left">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
-            <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
-          </svg>
-        </button>
-      </div>
+      <!-- Description (shown below header when selected) -->
+      <p class="filter-description"
+         *ngIf="filter.properties && filter.properties.description && isSelected(filter)">
+        {{ filter.properties.description }}
+      </p>
     </li>
   </ul>
 

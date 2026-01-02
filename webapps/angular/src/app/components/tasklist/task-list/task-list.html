@@ -11,8 +11,8 @@
   <span class="error-message">{{ error }}</span>
 </div>
 
-<!-- Empty State -->
-<div class="empty-state" *ngIf="!loading && !error && tasks.length === 0">
+<!-- Empty State (only when no tasks at all) -->
+<div class="empty-state" *ngIf="!loading && !error && tasks.length === 0 && total === 0">
   <span class="info-icon">
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <circle cx="12" cy="12" r="10"/>
@@ -23,8 +23,8 @@
   <p>{{ 'tasklist.noMatchingTasks' | translate }}</p>
 </div>
 
-<!-- Restriction Notice -->
-<div class="restriction-notice" *ngIf="!loading && total > 0 && tasks.length === 0">
+<!-- Restriction Notice (only when on page > 1 and current page is empty) -->
+<div class="restriction-notice" *ngIf="!loading && total > 0 && tasks.length === 0 && page > 1">
   <span class="info-icon">i</span>
   <span>{{ 'tasklist.restrictionNotice' | translate }}</span>
   <a href="javascript:void(0)" (click)="goToFirstPage()">

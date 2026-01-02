@@ -12,7 +12,9 @@ import {
   UserOperationLogEntry,
   IdentityLink,
   UserRef,
-  GroupRef
+  GroupRef,
+  ProcessDefinition,
+  ProcessInstance
 } from '../../models/tasklist/task.model';
 import {
   TaskFilter,
@@ -115,6 +117,19 @@ export class TasklistService {
   }
 
   /**
+   * Create a standalone task
+   */
+  createTask(task: {
+    name: string;
+    assignee?: string | null;
+    tenantId?: string | null;
+    description?: string | null;
+    priority?: number;
+  }): Promise<{ id: string }> {
+    return this.http.post<{ id: string }>(`${this.baseUrl}/task/create`, task).toPromise() as Promise<{ id: string }>;
+  }
+
+  /**
    * Get task form
    */
   getTaskForm(taskId: string): Observable<TaskForm | null> {
@@ -127,7 +142,8 @@ export class TasklistService {
    * Get task form variables
    */
   getTaskFormVariables(taskId: string): Observable<Record<string, any>> {
-    return this.http.get<Record<string, any>>(`${this.baseUrl}/task/${taskId}/form-variables`).pipe(
+    const params = new HttpParams().set('deserializeValues', 'false');
+    return this.http.get<Record<string, any>>(`${this.baseUrl}/task/${taskId}/form-variables`, { params }).pipe(
       catchError(() => of({}))
     );
   }
@@ -136,12 +152,26 @@ export class TasklistService {
    * Get specific task variables by names
    */
   getTaskVariables(taskId: string, variableNames?: string[]): Observable<Record<string, any>> {
-    let params = new HttpParams();
+    let params = new HttpParams().set('deserializeValues', 'false');
     if (variableNames && variableNames.length > 0) {
       params = params.set('variableNames', variableNames.join(','));
     }
     return this.http.get<Record<string, any>>(`${this.baseUrl}/task/${taskId}/variables`, { params }).pipe(
       catchError(() => of({}))
+    );
+  }
+
+  /**
+   * Get a single task variable with deserialization enabled
+   * Used for viewing the deserialized value of Object type variables
+   */
+  getTaskVariableDeserialized(taskId: string, variableName: string): Observable<any> {
+    // Note: deserializeValues defaults to true when not specified
+    return this.http.get<any>(`${this.baseUrl}/task/${taskId}/variables/${variableName}`).pipe(
+      catchError((error) => {
+        // Return the error so the component can show the deserialization error
+        throw error.error || error;
+      })
     );
   }
 
@@ -382,8 +412,20 @@ export class TasklistService {
 
   /**
    * Execute filter count
+   * @param filterId The filter ID
+   * @param searchQuery Optional search query to apply with the filter
    */
-  executeFilterCount(filterId: string): Observable<number> {
+  executeFilterCount(filterId: string, searchQuery?: Record<string, any>): Observable<number> {
+    // If search query provided, use POST with body, otherwise GET
+    if (searchQuery && Object.keys(searchQuery).length > 0) {
+      return this.http.post<{ count: number }>(
+        `${this.baseUrl}/filter/${filterId}/count`,
+        searchQuery
+      ).pipe(
+        map(res => res.count),
+        catchError(() => of(0))
+      );
+    }
     return this.http.get<{ count: number }>(`${this.baseUrl}/filter/${filterId}/count`).pipe(
       map(res => res.count),
       catchError(() => of(0))
@@ -500,6 +542,105 @@ export class TasklistService {
       `${this.baseUrl}/case-definition/${caseDefinitionId}/xml`
     ).pipe(
       catchError(() => of(null))
+    );
+  }
+
+  // ==================== PROCESS DEFINITIONS ====================
+
+  /**
+   * Get startable process definitions (latest versions only)
+   * Matches AngularJS behavior with startablePermissionCheck
+   */
+  getStartableProcessDefinitions(params?: {
+    firstResult?: number;
+    maxResults?: number;
+    nameLike?: string;
+  }): Observable<ProcessDefinition[]> {
+    let httpParams = new HttpParams()
+      .set('latestVersion', 'true')
+      .set('active', 'true')
+      .set('startableInTasklist', 'true')
+      .set('startablePermissionCheck', 'true') // Match AngularJS
+      .set('sortBy', 'name')
+      .set('sortOrder', 'asc');
+
+    if (params?.firstResult !== undefined) {
+      httpParams = httpParams.set('firstResult', params.firstResult.toString());
+    }
+    if (params?.maxResults !== undefined) {
+      httpParams = httpParams.set('maxResults', params.maxResults.toString());
+    }
+    if (params?.nameLike) {
+      httpParams = httpParams.set('nameLike', params.nameLike);
+    }
+
+    return this.http.get<ProcessDefinition[]>(`${this.baseUrl}/process-definition`, { params: httpParams }).pipe(
+      catchError(() => of([]))
+    );
+  }
+
+  /**
+   * Get startable process definitions count
+   */
+  getStartableProcessDefinitionsCount(nameLike?: string): Observable<number> {
+    let httpParams = new HttpParams()
+      .set('latestVersion', 'true')
+      .set('active', 'true')
+      .set('startableInTasklist', 'true')
+      .set('startablePermissionCheck', 'true'); // Match AngularJS
+
+    if (nameLike) {
+      httpParams = httpParams.set('nameLike', nameLike);
+    }
+
+    return this.http.get<{ count: number }>(`${this.baseUrl}/process-definition/count`, { params: httpParams }).pipe(
+      map(res => res.count),
+      catchError(() => of(0))
+    );
+  }
+
+  /**
+   * Get process definition start form
+   */
+  getProcessDefinitionStartForm(processDefinitionId: string): Observable<TaskForm | null> {
+    return this.http.get<TaskForm>(`${this.baseUrl}/process-definition/${processDefinitionId}/startForm`).pipe(
+      catchError(() => of(null))
+    );
+  }
+
+  /**
+   * Get process definition start form variables
+   */
+  getProcessDefinitionFormVariables(processDefinitionId: string): Observable<Record<string, any>> {
+    const params = new HttpParams().set('deserializeValues', 'false');
+    return this.http.get<Record<string, any>>(
+      `${this.baseUrl}/process-definition/${processDefinitionId}/form-variables`,
+      { params }
+    ).pipe(
+      catchError(() => of({}))
+    );
+  }
+
+  /**
+   * Start a process instance
+   */
+  startProcessInstance(processDefinitionId: string, data: {
+    businessKey?: string;
+    variables?: Record<string, any>;
+  }): Observable<ProcessInstance> {
+    return this.http.post<ProcessInstance>(
+      `${this.baseUrl}/process-definition/${processDefinitionId}/start`,
+      data
+    );
+  }
+
+  /**
+   * Submit start form and start process instance
+   */
+  submitStartForm(processDefinitionId: string, variables: Record<string, any>): Observable<ProcessInstance> {
+    return this.http.post<ProcessInstance>(
+      `${this.baseUrl}/process-definition/${processDefinitionId}/submit-form`,
+      { variables }
     );
   }
 
