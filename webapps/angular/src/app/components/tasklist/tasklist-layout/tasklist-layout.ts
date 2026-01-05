@@ -137,8 +137,8 @@ export class TasklistLayoutComponent implements OnInit, OnDestroy {
 
       // Handle details tab from URL
       if (params['detailsTab']) {
-        const tab = params['detailsTab'] as 'form' | 'history' | 'diagram' | 'description';
-        if (['form', 'history', 'diagram', 'description'].includes(tab)) {
+        const tab = params['detailsTab'] as 'form' | 'history' | 'diagram' | 'description' | 'variables';
+        if (['form', 'history', 'diagram', 'description', 'variables'].includes(tab)) {
           this.store.dispatch(TaskDetailActions.setActiveTab({ tab }));
         }
       }
@@ -497,7 +497,7 @@ export class TasklistLayoutComponent implements OnInit, OnDestroy {
     this.updateUrl({ sorting: JSON.stringify(sorting) });
   }
 
-  onTabChange(tab: 'form' | 'history' | 'diagram' | 'description'): void {
+  onTabChange(tab: 'form' | 'history' | 'diagram' | 'description' | 'variables'): void {
     this.store.dispatch(TaskDetailActions.setActiveTab({ tab }));
     this.updateUrl({ detailsTab: tab !== 'form' ? tab : null });
   }

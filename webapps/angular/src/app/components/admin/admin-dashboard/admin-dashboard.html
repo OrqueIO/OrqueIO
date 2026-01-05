@@ -127,6 +127,40 @@
         </li>
       </ul>
     </section>
+
+    <!-- System Section -->
+    <section class="dashboard-section">
+      <div class="section-header">
+        <div class="section-icon system-icon">
+          <fa-icon [icon]="faServer"></fa-icon>
+        </div>
+        <div class="section-title-wrapper">
+          <h2 class="section-title">
+            <a routerLink="/admin/system">{{ 'admin.dashboard.system' | translate }}</a>
+          </h2>
+        </div>
+      </div>
+      <ul class="section-links">
+        <li>
+          <a routerLink="/admin/system/general" class="action-link">
+            <fa-icon [icon]="faCogs" class="link-icon"></fa-icon>
+            {{ 'admin.dashboard.generalSettings' | translate }}
+          </a>
+        </li>
+        <li>
+          <a routerLink="/admin/system/metrics" class="action-link">
+            <fa-icon [icon]="faChartBar" class="link-icon"></fa-icon>
+            {{ 'admin.dashboard.executionMetrics' | translate }}
+          </a>
+        </li>
+        <li>
+          <a routerLink="/admin/system/diagnostics" class="action-link">
+            <fa-icon [icon]="faHeartbeat" class="link-icon"></fa-icon>
+            {{ 'admin.dashboard.diagnostics' | translate }}
+          </a>
+        </li>
+      </ul>
+    </section>
   </div>
 </div>
 

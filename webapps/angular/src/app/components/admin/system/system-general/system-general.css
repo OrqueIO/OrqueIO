@@ -1,0 +1,73 @@
+.system-general {
+  max-width: 900px;
+}
+
+.system-general h3 {
+  margin: 0 0 1.25rem 0;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #111827;
+  letter-spacing: -0.01em;
+}
+
+/* Modern Success Alert */
+.system-general .alert {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 0;
+  border: none;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+  box-shadow:
+    0 1px 3px rgba(16, 185, 129, 0.1),
+    0 4px 12px rgba(16, 185, 129, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+.system-general .alert fa-icon {
+  font-size: 1.5rem;
+  color: #059669;
+  filter: drop-shadow(0 1px 2px rgba(5, 150, 105, 0.2));
+}
+
+.system-general .alert > div {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.system-general .alert strong {
+  color: #065f46;
+  font-weight: 600;
+}
+
+.system-general .alert code {
+  padding: 0.35rem 0.75rem;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(4px);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #047857;
+  border: 1px solid rgba(5, 150, 105, 0.15);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+/* Animation on load */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.system-general .alert {
+  animation: slideIn 0.3s ease-out;
+}

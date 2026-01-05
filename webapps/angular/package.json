@@ -40,6 +40,7 @@
     "@ngrx/store": "^21.0.0",
     "@ngrx/store-devtools": "^21.0.0",
     "bpmn-js": "^16.5.0",
+    "chart.js": "^4.5.1",
     "dmn-js": "^17.5.0",
     "dmn-js-decision-table": "^17.5.0",
     "dmn-js-shared": "^17.5.0",

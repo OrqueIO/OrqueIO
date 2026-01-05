@@ -14,6 +14,7 @@ import { adminReducers } from './store/admin';
 import { UsersEffects } from './store/admin/users/users.effects';
 import { AuthorizationsEffects } from './store/admin/authorizations/authorizations.effects';
 import { TenantsEffects } from './store/admin/tenants/tenants.effects';
+import { SystemEffects } from './store/admin/system/system.effects';
 
 // Cockpit State
 import { cockpitReducers } from './store/cockpit';
@@ -56,6 +57,7 @@ export const appConfig: ApplicationConfig = {
       UsersEffects,
       AuthorizationsEffects,
       TenantsEffects,
+      SystemEffects,
       // Cockpit Effects
       DashboardEffects,
       ProcessesEffects,

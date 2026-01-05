@@ -103,6 +103,11 @@
   color: #ea580c;
 }
 
+.section-icon.system-icon {
+  background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+  color: #4f46e5;
+}
+
 .section-title-wrapper {
   flex: 1;
   display: flex;
