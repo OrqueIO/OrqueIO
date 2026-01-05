@@ -9,6 +9,10 @@ import { GroupDetailComponent } from './groups/group-detail/group-detail';
 import { TenantListComponent } from './tenants/tenant-list/tenant-list';
 import { TenantDetailComponent } from './tenants/tenant-detail/tenant-detail';
 import { AuthorizationListComponent } from './authorizations/authorization-list/authorization-list';
+import { SystemDashboardComponent } from './system/system-dashboard/system-dashboard';
+import { SystemGeneralComponent } from './system/system-general/system-general';
+import { SystemMetricsComponent } from './system/system-metrics/system-metrics';
+import { SystemDiagnosticsComponent } from './system/system-diagnostics/system-diagnostics';
 
 export const adminRoutes: Routes = [
   {
@@ -23,7 +27,17 @@ export const adminRoutes: Routes = [
       { path: 'groups/:id', component: GroupDetailComponent },
       { path: 'tenants', component: TenantListComponent },
       { path: 'tenants/:id', component: TenantDetailComponent },
-      { path: 'authorizations', component: AuthorizationListComponent }
+      { path: 'authorizations', component: AuthorizationListComponent },
+      {
+        path: 'system',
+        component: SystemDashboardComponent,
+        children: [
+          { path: '', redirectTo: 'general', pathMatch: 'full' },
+          { path: 'general', component: SystemGeneralComponent },
+          { path: 'metrics', component: SystemMetricsComponent },
+          { path: 'diagnostics', component: SystemDiagnosticsComponent }
+        ]
+      }
     ]
   }
 ];

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { NotificationsService, Notification, NotificationType } from '../../services/notifications.service';
@@ -15,6 +15,7 @@ export class NotificationsPanelComponent implements OnInit, OnDestroy {
 
   notifications: Notification[] = [];
   private subscription?: Subscription;
+  private cdr = inject(ChangeDetectorRef);
 
   constructor(private notificationsService: NotificationsService) {}
 
@@ -25,6 +26,7 @@ export class NotificationsPanelComponent implements OnInit, OnDestroy {
       } else {
         this.notifications = notifications;
       }
+      this.cdr.detectChanges();
     });
   }
 

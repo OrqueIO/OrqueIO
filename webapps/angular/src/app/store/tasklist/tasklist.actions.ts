@@ -133,7 +133,7 @@ export const TaskDetailActions = createActionGroup({
     'Remove Identity Link Failure': props<{ error: string }>(),
 
     // Tab
-    'Set Active Tab': props<{ tab: 'form' | 'history' | 'diagram' | 'description' }>()
+    'Set Active Tab': props<{ tab: 'form' | 'history' | 'diagram' | 'description' | 'variables' }>()
   }
 });
 

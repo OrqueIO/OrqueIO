@@ -236,7 +236,7 @@ export class TaskFormTabComponent implements OnInit, OnChanges, OnDestroy {
 
             // For File types, add download URL
             if (isFileType) {
-              variable.downloadUrl = `/api/engine/engine/default/task/${this.task.id}/variables/${name}/data`;
+              variable.downloadUrl = `/orqueio/api/engine/engine/default/task/${this.task.id}/variables/${name}/data`;
             }
 
             return variable;

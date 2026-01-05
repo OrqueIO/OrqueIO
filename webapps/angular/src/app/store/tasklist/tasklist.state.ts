@@ -76,7 +76,7 @@ export interface TaskDetailState {
   loading: boolean;
   error: string | null;
   errorType: TaskErrorType;
-  activeTab: 'form' | 'history' | 'diagram' | 'description';
+  activeTab: 'form' | 'history' | 'diagram' | 'description' | 'variables';
   // Instance suspended state (matching AngularJS)
   instanceSuspended: boolean;
 }

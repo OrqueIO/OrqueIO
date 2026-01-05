@@ -3,7 +3,8 @@ import {
   faUsers,
   faUsersCog,
   faBuilding,
-  faShieldAlt
+  faShieldAlt,
+  faServer
 } from '@fortawesome/free-solid-svg-icons';
 import { NavMenuItem } from './navbar/navbar';
 
@@ -36,6 +37,12 @@ export const ADMIN_MENU_ITEMS: NavMenuItem[] = [
     icon: faShieldAlt,
     label: 'admin.menu.authorizations',
     route: '/admin/authorizations',
+    exact: false
+  },
+  {
+    icon: faServer,
+    label: 'admin.menu.system',
+    route: '/admin/system',
     exact: false
   }
 ];

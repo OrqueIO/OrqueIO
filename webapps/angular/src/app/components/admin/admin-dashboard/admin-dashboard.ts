@@ -12,7 +12,11 @@ import {
   faPlus,
   faList,
   faUser,
-  faKey
+  faKey,
+  faServer,
+  faCogs,
+  faChartBar,
+  faHeartbeat
 } from '@fortawesome/free-solid-svg-icons';
 import { TranslatePipe } from '../../../i18n/translate.pipe';
 import { UserService } from '../../../services/admin/user.service';
@@ -66,6 +70,10 @@ export class AdminDashboardComponent implements OnInit {
   faList = faList;
   faUser = faUser;
   faKey = faKey;
+  faServer = faServer;
+  faCogs = faCogs;
+  faChartBar = faChartBar;
+  faHeartbeat = faHeartbeat;
 
   // State
   isRefreshing = false;

@@ -23,4 +23,5 @@ faces-config.NavData
 camunda-h2-dbs
 **/.angular
 **/dist
+./claude
 *.DS_Store

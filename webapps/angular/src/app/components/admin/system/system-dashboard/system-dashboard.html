@@ -1,0 +1,50 @@
+<div class="system-dashboard">
+  <!-- Header -->
+  <div class="system-header">
+    <div class="header-left">
+      <h1 class="page-title">
+        <fa-icon [icon]="faServer" class="title-icon"></fa-icon>
+        {{ 'admin.system.title' | translate }}
+      </h1>
+    </div>
+    <div class="header-right">
+      <!-- Engine Selector -->
+      <div class="engine-selector" *ngIf="engines.length > 1">
+        <label for="engineSelect">
+          <fa-icon [icon]="faExchangeAlt"></fa-icon>
+          {{ 'admin.system.engine' | translate }}:
+        </label>
+        <select id="engineSelect" [value]="currentEngine" (change)="onEngineChange($event)">
+          <option *ngFor="let engine of engines" [value]="engine.name">
+            {{ engine.name }}
+          </option>
+        </select>
+      </div>
+      <button class="refresh-btn" (click)="refresh()" [disabled]="loading">
+        <fa-icon [icon]="loading ? faSpinner : faSync" [animation]="loading ? 'spin' : undefined"></fa-icon>
+        {{ 'admin.system.refresh' | translate }}
+      </button>
+    </div>
+  </div>
+
+  <div class="system-content">
+    <!-- Sidebar Navigation -->
+    <aside class="system-sidebar">
+      <nav class="system-nav">
+        <ul>
+          <li *ngFor="let section of sections" routerLinkActive="active">
+            <a [routerLink]="section.route" routerLinkActive="active-link">
+              <fa-icon [icon]="section.icon" class="nav-icon"></fa-icon>
+              <span class="nav-label">{{ section.labelKey | translate }}</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="system-main">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>
