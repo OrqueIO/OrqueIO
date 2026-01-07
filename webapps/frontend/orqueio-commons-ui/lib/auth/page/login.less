@@ -27,7 +27,7 @@
 // =============================================================================
 
 // Login page layout variables
-@login-header-offset: 50px; // Header height approximation
+@login-header-offset: 64px; // Header height approximation
 
 // Keep header visible, hide footer on login page
 body:has(.login-page-wrapper) {
@@ -66,7 +66,7 @@ body:has(.login-page-wrapper) {
   align-items: center;
   justify-content: center;
   width: 100%;
-  max-width: 420px;
+  max-width: 480px;
   margin: 0;
   padding: 0 20px;
 }
@@ -75,18 +75,16 @@ body:has(.login-page-wrapper) {
   background-color: @login-card-bg;
   border-radius: @login-radius;
   box-shadow: @login-shadow-lg;
-  padding: 32px;
+  padding: 32px 40px;
   width: 100%;
-  max-height: calc(100vh - @login-header-offset - 40px);
-  overflow-y: auto;
 
   // Header
   .login-header {
     text-align: center;
-    margin-bottom: 24px;
+    margin-bottom: 20px;
 
     .login-title {
-      font-size: 24px;
+      font-size: 26px;
       font-weight: 700;
       color: @login-text-primary;
       margin: 0;
@@ -165,9 +163,9 @@ body:has(.login-page-wrapper) {
   // Modern inputs
   .form-control-modern {
     width: 100%;
-    height: 44px;
-    padding: 10px 14px;
-    font-size: 14px;
+    height: 48px;
+    padding: 12px 16px;
+    font-size: 15px;
     color: @login-text-primary;
     background-color: @login-card-bg;
     border: 1.5px solid @login-input-border;
@@ -248,12 +246,12 @@ body:has(.login-page-wrapper) {
   // Sign in button
   .btn-signin {
     width: 100%;
-    height: 44px;
+    height: 48px;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    font-size: 15px;
+    gap: 10px;
+    font-size: 16px;
     font-weight: 600;
     color: #FFFFFF;
     background: linear-gradient(135deg, @login-primary-color 0%, @login-primary-hover 100%);
@@ -346,14 +344,14 @@ body:has(.login-page-wrapper) {
 // OAUTH2 / SSO SECTION
 // =============================================================================
 .oauth2-login-section {
-  margin-top: 20px;
+  margin-top: 16px;
   width: 100%;
 
   .oauth2-divider {
     display: flex;
     align-items: center;
     text-align: center;
-    margin: 16px 0 14px 0;
+    margin: 12px 0;
 
     &::before,
     &::after {
@@ -389,11 +387,11 @@ body:has(.login-page-wrapper) {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 4px;
-  padding: 6px 6px;
-  min-width: 80px;
-  max-width: 95px;
-  height: 32px;
+  gap: 6px;
+  padding: 8px 10px;
+  min-width: 95px;
+  max-width: 110px;
+  height: 38px;
   flex: 0 0 calc(33.333% - 8px);
   border-radius: @login-radius-sm;
   text-decoration: none;
@@ -401,7 +399,7 @@ body:has(.login-page-wrapper) {
   border: 1.5px solid @login-border-color;
   background-color: @login-card-bg;
   cursor: pointer;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 500;
   color: @login-text-primary;
   overflow: hidden;
@@ -427,8 +425,8 @@ body:has(.login-page-wrapper) {
   }
 
   .oauth2-icon {
-    width: 14px;
-    height: 14px;
+    width: 18px;
+    height: 18px;
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -440,8 +438,8 @@ body:has(.login-page-wrapper) {
     font-weight: 500;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 55px;
-    font-size: 10px;
+    max-width: 70px;
+    font-size: 11px;
   }
 }
 
@@ -565,22 +563,21 @@ body:has(.login-page-wrapper) {
   }
 
   .form-signin {
-    padding: 24px 20px;
+    padding: 20px 16px;
     border-radius: @login-radius-sm;
-    max-height: calc(100vh - @login-header-offset - 48px);
 
     .login-header {
-      margin-bottom: 20px;
+      margin-bottom: 14px;
 
       .login-title {
-        font-size: 22px;
+        font-size: 20px;
       }
     }
   }
 
   .login-form {
     .form-group-modern {
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }
 
     .form-control-modern {
@@ -595,15 +592,20 @@ body:has(.login-page-wrapper) {
   }
 
   .oauth2-login-section {
-    margin-top: 16px;
+    margin-top: 12px;
 
     .oauth2-divider {
-      margin: 12px 0;
+      margin: 8px 0;
     }
 
     .oauth2-buttons {
       gap: 6px;
     }
+  }
+
+  .register-link-container {
+    margin-top: 12px;
+    padding-top: 12px;
   }
 
   .btn-oauth2-provider {
