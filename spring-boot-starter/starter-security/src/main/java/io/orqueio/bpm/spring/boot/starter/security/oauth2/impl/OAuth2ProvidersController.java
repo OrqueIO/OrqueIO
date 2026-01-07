@@ -92,12 +92,47 @@ public class OAuth2ProvidersController {
    */
   private String getDisplayName(ClientRegistration registration) {
     String clientName = registration.getClientName();
+    String registrationId = registration.getRegistrationId();
+
+    // If clientName is set and is not a URL or the registration ID, use it
     if (clientName != null && !clientName.isEmpty() &&
-        !clientName.equals(registration.getRegistrationId())) {
+        !clientName.equals(registrationId) &&
+        !clientName.startsWith("http://") &&
+        !clientName.startsWith("https://")) {
       return clientName;
     }
 
-    String id = registration.getRegistrationId();
-    return id.substring(0, 1).toUpperCase() + id.substring(1);
+    // Otherwise, format the registration ID nicely
+    return formatProviderName(registrationId);
+  }
+
+  /**
+   * Formats a provider ID into a user-friendly name.
+   * e.g., "keycloak" -> "Keycloak", "google-oauth" -> "Google Oauth"
+   */
+  private String formatProviderName(String id) {
+    if (id == null || id.isEmpty()) {
+      return id;
+    }
+
+    // Replace hyphens and underscores with spaces
+    String formatted = id.replace("-", " ").replace("_", " ");
+
+    // Capitalize each word
+    StringBuilder result = new StringBuilder();
+    boolean capitalizeNext = true;
+    for (char c : formatted.toCharArray()) {
+      if (c == ' ') {
+        result.append(c);
+        capitalizeNext = true;
+      } else if (capitalizeNext) {
+        result.append(Character.toUpperCase(c));
+        capitalizeNext = false;
+      } else {
+        result.append(c);
+      }
+    }
+
+    return result.toString();
   }
 }

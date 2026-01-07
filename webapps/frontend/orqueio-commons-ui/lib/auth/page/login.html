@@ -1,30 +1,28 @@
 <!-- # CE - orqueio-commons-ui/lib/auth/page/login.html -->
-<div class="form-signin-container">
-  <div class="form-signin">
+<div class="login-page-wrapper">
+  <div class="form-signin-container">
+    <div class="form-signin">
 
-    <div class="login-header">
-      <div class="login-logo" ng-bind-html="logo"></div>
-
-      <div class="app-name">
-        {{ appName }}
+      <div class="login-header">
+        <h1 class="login-title">{{ 'PAGE_LOGIN_WELCOME' | translate }}</h1>
       </div>
-    </div>
 
-    <div notifications-panel
-         ng-if="signinForm.$dirty"
-         class="notifications-panel"></div>
+      <div notifications-panel
+           ng-if="signinForm.$dirty"
+           class="notifications-panel"></div>
 
-    <view
-      ng-repeat="plugin in loginPlugins"
-      data-plugin-id="{{ plugin.id }}"
-      provider="plugin"></view>
+      <view
+        ng-repeat="plugin in loginPlugins"
+        data-plugin-id="{{ plugin.id }}"
+        provider="plugin"></view>
 
-    <div ng-if="showFirstLogin"
-         class="alert-info alert">
-      <div>
-        <button type="button" class="close" ng-click="dismissInfoBox()">×</button>
-        <strong class="status">{{ 'FIRST_LOGIN_HEADING' | translate }}</strong>
-        <span class="message" ng-bind-html="FirstLoginMessage"></span>
+      <div ng-if="showFirstLogin"
+           class="alert-info alert first-login-alert">
+        <div>
+          <button type="button" class="close" ng-click="dismissInfoBox()">&times;</button>
+          <strong class="status">{{ 'FIRST_LOGIN_HEADING' | translate }}</strong>
+          <span class="message" ng-bind-html="FirstLoginMessage"></span>
+        </div>
       </div>
     </div>
   </div>

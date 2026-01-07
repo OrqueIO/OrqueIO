@@ -17,8 +17,9 @@
 
 'use strict';
 
+require('./login.less');
+
 var template = require('./login.html?raw');
-var logo = require('svg-inline-loader?classPrefix&removeSVGTagAttrs=false!./logo.svg');
 
 var Controller = [
   '$scope',
@@ -29,7 +30,6 @@ var Controller = [
   'widgetLocalConf',
   '$sce',
   'configuration',
-  '$http',
   'Views',
   'canonicalAppName',
   function(
@@ -41,11 +41,9 @@ var Controller = [
     localConf,
     $sce,
     configuration,
-    $http,
     views,
     canonicalAppName
   ) {
-    $scope.logo = $sce.trustAsHtml(logo);
     $scope.status = 'INIT';
     $scope.appName = configuration.getAppName();
 
