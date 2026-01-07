@@ -4,7 +4,7 @@
   <parent>
     <artifactId>orqueio-engine-plugins</artifactId>
     <groupId>io.orqueio.bpm</groupId>
-    <version>1.0.4</version>
+    <version>1.0.6-SSO</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
@@ -12,7 +12,7 @@
   <description>orqueio-engine-plugin-spin</description>
     <groupId>io.orqueio.bpm</groupId>
   <artifactId>orqueio-engine-plugin-spin</artifactId>
-    <version>1.0.4</version>
+    <version>1.0.6-SSO</version>
     <packaging>jar</packaging>
   <name>Orque IO Platform - engine plugins - spin</name>
 

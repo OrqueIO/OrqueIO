@@ -3,7 +3,7 @@
 
   <groupId>io.orqueio.bpm.example</groupId>
   <artifactId>orqueio-example-root</artifactId>
-  <version>1.0.4</version>
+  <version>1.0.6-SSO</version>
   <packaging>pom</packaging>
 
   <description>orqueio-example-root</description>
@@ -14,7 +14,7 @@
     <groupId>io.orqueio.bpm</groupId>
     <artifactId>orqueio-database-settings</artifactId>
     <relativePath>../database</relativePath>
-    <version>1.0.4</version>
+    <version>1.0.6-SSO</version>
   </parent>
 
   <properties>

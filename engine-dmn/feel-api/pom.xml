@@ -7,12 +7,12 @@
   <parent>
     <groupId>io.orqueio.bpm.dmn</groupId>
     <artifactId>orqueio-engine-dmn-root</artifactId>
-    <version>1.0.4</version>
+    <version>1.0.6-SSO</version>
   </parent>
   <description>orqueio-engine-feel-api</description>
   <groupId>io.orqueio.bpm.dmn</groupId>
   <artifactId>orqueio-engine-feel-api</artifactId>
-  <version>1.0.4</version>
+  <version>1.0.6-SSO</version>
   <name>orqueio DMN - engine FEEL - API</name>
   <properties>
     <orqueio.artifact>io.orqueio.bpm.dmn.feel.impl</orqueio.artifact>

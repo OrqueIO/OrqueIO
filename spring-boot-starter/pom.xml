@@ -5,13 +5,13 @@
     <groupId>io.orqueio.bpm</groupId>
     <artifactId>orqueio-database-settings</artifactId>
     <relativePath>../database</relativePath>
-    <version>1.0.4</version>
+    <version>1.0.6-SSO</version>
   </parent>
   <description>orqueio-bpm-spring-boot-starter-root</description>
 
   <groupId>io.orqueio.bpm.springboot.project</groupId>
   <artifactId>orqueio-bpm-spring-boot-starter-root</artifactId>
-  <version>1.0.4</version>
+  <version>1.0.6-SSO</version>
   <name>Orque IO Platform - Spring Boot Starter - Root Pom</name>
   <inceptionYear>2015</inceptionYear>
 

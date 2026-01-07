@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.orqueio.bpm</groupId>
   <artifactId>orqueio-bpm-junit5</artifactId>
-  <version>1.0.4</version>
+  <version>1.0.6-SSO</version>
   <packaging>jar</packaging>
   <description>orqueio-bpm-junit5</description>
 
@@ -14,7 +14,7 @@
     <groupId>io.orqueio.bpm</groupId>
     <artifactId>orqueio-database-settings</artifactId>
     <relativePath>../../database</relativePath>
-    <version>1.0.4</version>
+    <version>1.0.6-SSO</version>
   </parent>
 
   <properties>

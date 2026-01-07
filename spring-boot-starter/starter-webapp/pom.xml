@@ -6,13 +6,13 @@
   <parent>
     <groupId>io.orqueio.bpm.springboot.project</groupId>
     <artifactId>orqueio-bpm-spring-boot-starter-root</artifactId>
-    <version>1.0.4</version>
+    <version>1.0.6-SSO</version>
   </parent>
   <description>orqueio-bpm-spring-boot-starter-webapp</description>
 
   <groupId>io.orqueio.bpm.springboot</groupId>
   <artifactId>orqueio-bpm-spring-boot-starter-webapp</artifactId>
-  <version>1.0.4</version>
+  <version>1.0.6-SSO</version>
   <packaging>jar</packaging>
   <name>Orque IO Platform - Spring Boot Starter - Webapps</name>
 

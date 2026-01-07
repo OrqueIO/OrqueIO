@@ -4,7 +4,7 @@
   <artifactId>orqueio-ejb-client-jakarta</artifactId>
   <groupId>io.orqueio.bpm.javaee</groupId>
   <name>Orque IO Platform - EJB Client Jakarta</name>
-  <version>1.0.4</version>
+  <version>1.0.6-SSO</version>
   <packaging>jar</packaging>
 
   <description>orqueio-ejb-client-jakarta</description>
@@ -13,7 +13,7 @@
     <groupId>io.orqueio.bpm</groupId>
     <artifactId>orqueio-parent</artifactId>
     <relativePath>../../parent</relativePath>
-    <version>1.0.4</version>
+    <version>1.0.6-SSO</version>
   </parent>
 
   <dependencyManagement>

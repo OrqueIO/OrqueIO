@@ -6,13 +6,13 @@
   <parent>
     <groupId>io.orqueio.bpm.webapp</groupId>
     <artifactId>orqueio-webapp-root</artifactId>
-    <version>1.0.4</version>
+    <version>1.0.6-SSO</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
   <description>orqueio-webapp-jakarta</description>
   <groupId>io.orqueio.bpm.webapp</groupId>
   <artifactId>orqueio-webapp-jakarta</artifactId>
-  <version>1.0.4</version>
+  <version>1.0.6-SSO</version>
   <packaging>war</packaging>
 
 
