@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none">
+  <defs>
+    <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#60a5fa;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:1" />
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#94a3b8" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+
+  <!-- Main card background -->
+  <rect x="15" y="20" width="90" height="80" rx="12" fill="white" filter="url(#shadow)"/>
+
+  <!-- Top section with indicators -->
+  <rect x="15" y="20" width="90" height="30" rx="12" fill="#f8fafc"/>
+  <rect x="15" y="38" width="90" height="12" fill="#f8fafc"/>
+
+  <!-- Green indicator dot -->
+  <circle cx="30" cy="35" r="4" fill="#22c55e"/>
+  <!-- Gray indicator dot -->
+  <circle cx="42" cy="35" r="4" fill="#cbd5e1"/>
+
+  <!-- Mini bar chart on right -->
+  <rect x="70" y="30" width="6" height="15" rx="2" fill="#e2e8f0"/>
+  <rect x="80" y="26" width="6" height="19" rx="2" fill="#e2e8f0"/>
+  <rect x="90" y="32" width="6" height="13" rx="2" fill="#e2e8f0"/>
+
+  <!-- Divider line -->
+  <line x1="25" y1="52" x2="95" y2="52" stroke="#e2e8f0" stroke-width="1"/>
+
+  <!-- Bottom section - Chart area -->
+  <rect x="25" y="58" width="70" height="35" rx="6" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="1"/>
+
+  <!-- Area chart / Wave -->
+  <path d="M25 85 L35 78 L50 82 L65 70 L80 75 L95 65 L95 93 L25 93 Z" fill="url(#blueGrad)" opacity="0.3"/>
+  <path d="M25 85 L35 78 L50 82 L65 70 L80 75 L95 65" stroke="url(#blueGrad)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+
+  <!-- Chart dots -->
+  <circle cx="35" cy="78" r="3" fill="#3b82f6"/>
+  <circle cx="50" cy="82" r="3" fill="#3b82f6"/>
+  <circle cx="65" cy="70" r="3" fill="#3b82f6"/>
+  <circle cx="80" cy="75" r="3" fill="#3b82f6"/>
+</svg>
