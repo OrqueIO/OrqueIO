@@ -20,6 +20,7 @@
 require('./login.less');
 
 var template = require('./login.html?raw');
+var logoUrl = require('../../widgets/header/logo.png');
 
 var Controller = [
   '$scope',
@@ -46,6 +47,7 @@ var Controller = [
   ) {
     $scope.status = 'INIT';
     $scope.appName = configuration.getAppName();
+    $scope.logoUrl = logoUrl;
 
     $scope.loginPlugins = views.getProviders({
       component: `${canonicalAppName}.login`

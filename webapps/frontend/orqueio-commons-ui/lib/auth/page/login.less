@@ -42,6 +42,46 @@ body:has(.login-page-wrapper) {
     padding: 0;
     margin: 0;
   }
+
+  // Hide logo and most header elements on login page
+  [cam-widget-header] {
+    .navbar-header {
+      // Hide the logo from header - it will be shown in the form
+      .navbar-brand {
+        display: none !important;
+      }
+
+      .navbar-toggle,
+      .small-screen-warning {
+        display: none !important;
+      }
+    }
+
+    .cam-nav {
+      // Ensure cam-nav is visible for engine-select
+      display: block !important;
+
+      > ul {
+        display: flex !important;
+      }
+
+      // Keep engine-select visible
+      .engine-select {
+        display: list-item !important;
+      }
+
+      // Hide app-switch (home icon), account and dividers
+      .app-switch,
+      .account,
+      .divider-vertical {
+        display: none !important;
+      }
+    }
+
+    .sections-menu {
+      display: none;
+    }
+  }
 }
 
 .login-page-wrapper {
@@ -75,20 +115,41 @@ body:has(.login-page-wrapper) {
   background-color: @login-card-bg;
   border-radius: @login-radius;
   box-shadow: @login-shadow-lg;
-  padding: 32px 40px;
+  padding: 28px 40px;
   width: 100%;
+
+  // Logo container - centered at top of form
+  .login-logo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 12px;
+
+    .login-logo {
+      height: 36px;
+      width: auto;
+    }
+  }
 
   // Header
   .login-header {
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
 
     .login-title {
-      font-size: 26px;
+      font-size: 20px;
       font-weight: 700;
       color: @login-text-primary;
-      margin: 0;
+      margin: 0 0 4px 0;
       letter-spacing: -0.5px;
+    }
+
+    .login-subtitle {
+      font-size: 13px;
+      font-weight: 400;
+      color: @login-text-secondary;
+      margin: 0;
+      line-height: 1.4;
     }
 
     .app-name {
@@ -139,7 +200,7 @@ body:has(.login-page-wrapper) {
 .login-form {
   // Form group
   .form-group-modern {
-    margin-bottom: 16px;
+    margin-bottom: 14px;
   }
 
   // Labels
@@ -150,7 +211,7 @@ body:has(.login-page-wrapper) {
     font-size: 14px;
     font-weight: 500;
     color: @login-text-secondary;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
 
     .input-icon {
       width: 16px;
@@ -163,8 +224,8 @@ body:has(.login-page-wrapper) {
   // Modern inputs
   .form-control-modern {
     width: 100%;
-    height: 48px;
-    padding: 12px 16px;
+    height: 44px;
+    padding: 10px 14px;
     font-size: 15px;
     color: @login-text-primary;
     background-color: @login-card-bg;
@@ -246,12 +307,12 @@ body:has(.login-page-wrapper) {
   // Sign in button
   .btn-signin {
     width: 100%;
-    height: 48px;
+    height: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 600;
     color: #FFFFFF;
     background: linear-gradient(135deg, @login-primary-color 0%, @login-primary-hover 100%);
@@ -566,11 +627,23 @@ body:has(.login-page-wrapper) {
     padding: 20px 16px;
     border-radius: @login-radius-sm;
 
+    .login-logo-container {
+      margin-bottom: 10px;
+
+      .login-logo {
+        height: 30px;
+      }
+    }
+
     .login-header {
       margin-bottom: 14px;
 
       .login-title {
-        font-size: 20px;
+        font-size: 18px;
+      }
+
+      .login-subtitle {
+        font-size: 11px;
       }
     }
   }
@@ -635,11 +708,6 @@ body:has(.login-page-wrapper) {
       width: 18px;
       height: 18px;
     }
-  }
-
-  .register-link-container {
-    margin-top: 14px;
-    padding-top: 14px;
   }
 }
 
