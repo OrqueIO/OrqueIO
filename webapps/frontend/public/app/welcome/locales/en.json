@@ -128,7 +128,7 @@
     "PAGE_LOGIN_PASSWORD_PLACEHOLDER": "Enter your password",
     "PAGE_LOGIN_PLEASE_SIGN_IN": "Please Log in",
     "PAGE_LOGIN_SIGN_IN_ACTION": "Sign in",
-    "PAGE_LOGIN_USERNAME": "Username or email",
+    "PAGE_LOGIN_USERNAME": "Username",
     "PAGE_LOGIN_USERNAME_PLACEHOLDER": "Enter your username",
     "PAGE_LOGIN_WELCOME": "OrqueIO Cockpit",
     "PAGE_LOGIN_SUBTITLE": "Monitor, Control & Orchestrate Your Workflows",
