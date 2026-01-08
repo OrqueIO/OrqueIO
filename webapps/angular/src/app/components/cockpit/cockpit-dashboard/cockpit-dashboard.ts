@@ -1,8 +1,10 @@
-import { Component, OnInit, OnDestroy, DestroyRef, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, OnDestroy, DestroyRef, inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { trigger, transition, style, animate } from '@angular/animations';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Observable, forkJoin } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
   faSpinner,
@@ -10,12 +12,19 @@ import {
   faExclamationTriangle,
   faTasks,
   faCubes,
-  faArrowRight
+  faArrowRight,
+  faSync,
+  faChevronUp,
+  faChevronDown,
+  faTable,
+  faBriefcase,
+  faCloudUploadAlt,
+  faChartBar
 } from '@fortawesome/free-solid-svg-icons';
 
 import { CockpitHeaderComponent } from '../../../shared/cockpit-header/cockpit-header';
 import { COCKPIT_MENU_ITEMS } from '../../../shared/cockpit-menu';
-import { DashboardStats, ProcessDefinition } from '../../../services/cockpit.service';
+import { DashboardStats, ProcessDefinition, CockpitService } from '../../../services/cockpit.service';
 import { NavMenuService } from '../../../services/nav-menu.service';
 import { TranslatePipe } from '../../../i18n/translate.pipe';
 import * as DashboardActions from '../../../store/cockpit/dashboard/dashboard.actions';
@@ -23,12 +32,20 @@ import * as DashboardSelectors from '../../../store/cockpit/dashboard/dashboard.
 import * as ProcessesActions from '../../../store/cockpit/processes/processes.actions';
 import * as ProcessesSelectors from '../../../store/cockpit/processes/processes.selectors';
 
-interface StatCard {
-  icon: any;
-  titleKey: string;
-  value: number;
-  route: string;
-  color: string;
+// Chart components
+import {
+  TasksChartComponent,
+  TasksByGroupChartComponent,
+  ProcessDistributionChartComponent,
+  OpenIncidentsChartComponent,
+  TimelineChartComponent
+} from '../dashboard-charts';
+
+interface DeployedStats {
+  processDefinitions: number;
+  decisionDefinitions: number;
+  caseDefinitions: number;
+  deployments: number;
   loading: boolean;
 }
 
@@ -40,71 +57,76 @@ interface StatCard {
     RouterModule,
     FontAwesomeModule,
     CockpitHeaderComponent,
-    TranslatePipe
+    TranslatePipe,
+    // Chart components
+    TasksChartComponent,
+    TasksByGroupChartComponent,
+    ProcessDistributionChartComponent,
+    OpenIncidentsChartComponent,
+    TimelineChartComponent
   ],
   templateUrl: './cockpit-dashboard.html',
   styleUrls: ['./cockpit-dashboard.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  animations: [
+    trigger('slideDown', [
+      transition(':enter', [
+        style({ opacity: 0, height: 0, overflow: 'hidden' }),
+        animate('200ms ease-out', style({ opacity: 1, height: '*' }))
+      ]),
+      transition(':leave', [
+        style({ opacity: 1, height: '*', overflow: 'hidden' }),
+        animate('150ms ease-in', style({ opacity: 0, height: 0 }))
+      ])
+    ])
+  ]
 })
 export class CockpitDashboardComponent implements OnInit, OnDestroy {
   private destroyRef = inject(DestroyRef);
   private navMenuService = inject(NavMenuService);
   private store = inject(Store);
+  private cdr = inject(ChangeDetectorRef);
+  private cockpitService = inject(CockpitService);
 
   // Icons
   faSpinner = faSpinner;
   faArrowRight = faArrowRight;
+  faSync = faSync;
+  faChevronUp = faChevronUp;
+  faChevronDown = faChevronDown;
+  faProjectDiagram = faProjectDiagram;
+  faExclamationTriangle = faExclamationTriangle;
+  faTasks = faTasks;
+  faCubes = faCubes;
+  faTable = faTable;
+  faBriefcase = faBriefcase;
+  faCloudUploadAlt = faCloudUploadAlt;
+  faChartBar = faChartBar;
+
+  // Section visibility flags
+  rightNowVisible = true;
+  deployedVisible = true;
+  chartsVisible = true;
+  secondaryChartsVisible = false;
+
+  // Deployed stats
+  deployedStats: DeployedStats = {
+    processDefinitions: 0,
+    decisionDefinitions: 0,
+    caseDefinitions: 0,
+    deployments: 0,
+    loading: true
+  };
 
   // Observables from store
   stats$ = this.store.select(DashboardSelectors.selectDashboardStats);
   loading$ = this.store.select(DashboardSelectors.selectDashboardLoading);
   processDefinitions$ = this.store.select(ProcessesSelectors.selectProcessDefinitions);
 
-  statCards: StatCard[] = [
-    {
-      icon: faProjectDiagram,
-      titleKey: 'cockpit.dashboard.runningProcesses',
-      value: 0,
-      route: '/cockpit/processes',
-      color: '#0f62fe',
-      loading: true
-    },
-    {
-      icon: faExclamationTriangle,
-      titleKey: 'cockpit.dashboard.openIncidents',
-      value: 0,
-      route: '/cockpit/processes',
-      color: '#da1e28',
-      loading: true
-    },
-    {
-      icon: faTasks,
-      titleKey: 'cockpit.dashboard.openTasks',
-      value: 0,
-      route: '/cockpit/tasks',
-      color: '#24a148',
-      loading: true
-    },
-    {
-      icon: faCubes,
-      titleKey: 'cockpit.dashboard.deployedDefinitions',
-      value: 0,
-      route: '/cockpit/processes',
-      color: '#ff8200',
-      loading: true
-    }
-  ];
-
   ngOnInit(): void {
     this.navMenuService.setMenuItems(COCKPIT_MENU_ITEMS);
     this.loadDashboardData();
-
-    // Subscribe to stats updates
-    this.stats$.subscribe(stats => {
-      if (stats) {
-        this.updateStatCards(stats);
-      }
-    });
+    this.loadDeployedStats();
   }
 
   ngOnDestroy(): void {
@@ -112,28 +134,67 @@ export class CockpitDashboardComponent implements OnInit, OnDestroy {
   }
 
   private loadDashboardData(): void {
-    // Dispatch actions to load data
+    // Dispatch actions to load stats and process definitions
     this.store.dispatch(DashboardActions.loadDashboardStats());
     this.store.dispatch(ProcessesActions.loadProcessDefinitions());
+
+    // Load all chart data
+    this.store.dispatch(DashboardActions.loadAllChartsData());
   }
 
-  private updateStatCards(stats: DashboardStats): void {
-    this.statCards[0].value = stats.runningProcessInstances;
-    this.statCards[0].loading = false;
+  private loadDeployedStats(): void {
+    this.deployedStats.loading = true;
+    this.cdr.markForCheck();
 
-    this.statCards[1].value = stats.openIncidents;
-    this.statCards[1].loading = false;
-
-    this.statCards[2].value = stats.openTasks;
-    this.statCards[2].loading = false;
-
-    this.statCards[3].value = stats.deployedDefinitions;
-    this.statCards[3].loading = false;
+    forkJoin({
+      processDefinitions: this.cockpitService.getProcessDefinitionsCount(),
+      decisionDefinitions: this.cockpitService.getDecisionDefinitionsCount(),
+      caseDefinitions: this.cockpitService.getCaseDefinitionsCount(),
+      deployments: this.cockpitService.getDeploymentsCount()
+    })
+    .pipe(takeUntilDestroyed(this.destroyRef))
+    .subscribe({
+      next: (stats) => {
+        this.deployedStats = {
+          ...stats,
+          loading: false
+        };
+        this.cdr.markForCheck();
+      },
+      error: () => {
+        this.deployedStats.loading = false;
+        this.cdr.markForCheck();
+      }
+    });
   }
 
   refresh(): void {
-    this.statCards.forEach(card => card.loading = true);
     this.store.dispatch(DashboardActions.refreshDashboard());
     this.store.dispatch(ProcessesActions.loadProcessDefinitions());
+    // Refresh all charts
+    this.store.dispatch(DashboardActions.refreshAllCharts());
+    // Refresh deployed stats
+    this.loadDeployedStats();
+    this.cdr.markForCheck();
+  }
+
+  toggleRightNowSection(): void {
+    this.rightNowVisible = !this.rightNowVisible;
+    this.cdr.markForCheck();
+  }
+
+  toggleDeployedSection(): void {
+    this.deployedVisible = !this.deployedVisible;
+    this.cdr.markForCheck();
+  }
+
+  toggleCharts(): void {
+    this.chartsVisible = !this.chartsVisible;
+    this.cdr.markForCheck();
+  }
+
+  toggleSecondaryCharts(): void {
+    this.secondaryChartsVisible = !this.secondaryChartsVisible;
+    this.cdr.markForCheck();
   }
 }

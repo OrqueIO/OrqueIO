@@ -1,67 +1,148 @@
-<div class="cockpit-layout">
-  <main class="cockpit-main">
-    <app-cockpit-header
-      titleKey="cockpit.dashboard.title"
-      [showRefresh]="true"
-      [breadcrumbs]="[{ label: 'Dashboard', translateKey: 'cockpit.menu.dashboard' }]"
-    ></app-cockpit-header>
+<div class="dashboard">
+  <!-- Header -->
+  <app-cockpit-header
+    titleKey="cockpit.dashboard.title"
+    [showRefresh]="true"
+    [breadcrumbs]="[{ label: 'Dashboard', translateKey: 'cockpit.menu.dashboard' }]"
+  ></app-cockpit-header>
 
-    <div class="dashboard-content">
-      <!-- Stats Cards -->
-      <section class="stats-section">
-        <div class="stats-grid">
-          <a
-            *ngFor="let card of statCards"
-            [routerLink]="card.route"
-            class="stat-card"
-            [style.--card-color]="card.color"
-          >
-            <div class="stat-icon" [style.background]="card.color">
-              <fa-icon [icon]="card.icon"></fa-icon>
-            </div>
-            <div class="stat-info">
-              <span class="stat-value">
-                <ng-container *ngIf="!card.loading">{{ card.value }}</ng-container>
-                <fa-icon *ngIf="card.loading" [icon]="faSpinner" animation="spin" class="loading-icon"></fa-icon>
-              </span>
-              <span class="stat-title">{{ card.titleKey | translate }}</span>
-            </div>
-            <div class="stat-arrow">
-              <fa-icon [icon]="faArrowRight"></fa-icon>
-            </div>
-          </a>
+  <!-- Main Content -->
+  <div class="dashboard__content">
+    <!-- Deployed Stats -->
+    <section class="dashboard__section">
+      <div class="stats-grid">
+        <a class="stat-card stat-card--blue" routerLink="/cockpit/processes">
+          <div class="stat-card__icon-wrapper">
+            <fa-icon [icon]="faProjectDiagram" class="stat-card__icon"></fa-icon>
+          </div>
+          <div class="stat-card__body">
+            <span class="stat-card__value">
+              <ng-container *ngIf="!deployedStats.loading; else loadingTpl">{{ deployedStats.processDefinitions }}</ng-container>
+            </span>
+            <span class="stat-card__label">{{ 'cockpit.dashboard.processDefinitions' | translate }}</span>
+          </div>
+          <div class="stat-card__arrow">
+            <fa-icon [icon]="faArrowRight"></fa-icon>
+          </div>
+        </a>
+
+        <a class="stat-card stat-card--purple" routerLink="/cockpit/decisions">
+          <div class="stat-card__icon-wrapper">
+            <fa-icon [icon]="faTable" class="stat-card__icon"></fa-icon>
+          </div>
+          <div class="stat-card__body">
+            <span class="stat-card__value">
+              <ng-container *ngIf="!deployedStats.loading; else loadingTpl">{{ deployedStats.decisionDefinitions }}</ng-container>
+            </span>
+            <span class="stat-card__label">{{ 'cockpit.dashboard.decisionDefinitions' | translate }}</span>
+          </div>
+          <div class="stat-card__arrow">
+            <fa-icon [icon]="faArrowRight"></fa-icon>
+          </div>
+        </a>
+
+        <a class="stat-card stat-card--teal" routerLink="/cockpit/cases">
+          <div class="stat-card__icon-wrapper">
+            <fa-icon [icon]="faBriefcase" class="stat-card__icon"></fa-icon>
+          </div>
+          <div class="stat-card__body">
+            <span class="stat-card__value">
+              <ng-container *ngIf="!deployedStats.loading; else loadingTpl">{{ deployedStats.caseDefinitions }}</ng-container>
+            </span>
+            <span class="stat-card__label">{{ 'cockpit.dashboard.caseDefinitions' | translate }}</span>
+          </div>
+          <div class="stat-card__arrow">
+            <fa-icon [icon]="faArrowRight"></fa-icon>
+          </div>
+        </a>
+
+        <a class="stat-card stat-card--orange" routerLink="/cockpit/deployments">
+          <div class="stat-card__icon-wrapper">
+            <fa-icon [icon]="faCloudUploadAlt" class="stat-card__icon"></fa-icon>
+          </div>
+          <div class="stat-card__body">
+            <span class="stat-card__value">
+              <ng-container *ngIf="!deployedStats.loading; else loadingTpl">{{ deployedStats.deployments }}</ng-container>
+            </span>
+            <span class="stat-card__label">{{ 'cockpit.dashboard.deployments' | translate }}</span>
+          </div>
+          <div class="stat-card__arrow">
+            <fa-icon [icon]="faArrowRight"></fa-icon>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- Donut Charts Row -->
+    <section class="dashboard__section dashboard__section--flex">
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <app-process-distribution-chart></app-process-distribution-chart>
         </div>
-      </section>
-
-      <!-- Quick Access Section -->
-      <section class="quick-access-section">
-        <h2 class="section-title">{{ 'cockpit.dashboard.processDefinitions' | translate }}</h2>
-
-        <div class="definitions-list" *ngIf="((processDefinitions$ | async) ?? []).length > 0">
-          <a
-            *ngFor="let def of (processDefinitions$ | async)?.slice(0, 5)"
-            [routerLink]="['/cockpit/processes', def.key, 'instances']"
-            class="definition-item"
-          >
-            <div class="definition-icon">
-              <fa-icon [icon]="faArrowRight"></fa-icon>
-            </div>
-            <div class="definition-info">
-              <span class="definition-name">{{ def.name || def.key }}</span>
-              <span class="definition-key">{{ def.key }} (v{{ def.version }})</span>
-            </div>
-          </a>
+        <div class="metric-card">
+          <app-open-incidents-chart></app-open-incidents-chart>
         </div>
-
-        <div class="empty-state" *ngIf="((processDefinitions$ | async) ?? []).length === 0 && !(loading$ | async)">
-          <p>{{ 'cockpit.dashboard.noProcessDefinitions' | translate }}</p>
+        <div class="metric-card">
+          <app-tasks-chart></app-tasks-chart>
         </div>
+      </div>
+    </section>
 
-        <div class="loading-state" *ngIf="loading$ | async">
-          <fa-icon [icon]="faSpinner" animation="spin"></fa-icon>
-          <span>{{ 'common.loading' | translate }}</span>
+    <!-- Quick Access -->
+    <section class="quick-access" *ngIf="((processDefinitions$ | async) ?? []).length > 0">
+      <div class="quick-access__header">
+        <span class="quick-access__label">{{ 'cockpit.dashboard.processDefinitions' | translate }}</span>
+      </div>
+      <div class="quick-access__items">
+        <a
+          *ngFor="let def of (processDefinitions$ | async)?.slice(0, 5)"
+          [routerLink]="['/cockpit/processes', def.key, 'instances']"
+          class="quick-access__link"
+        >
+          <fa-icon [icon]="faProjectDiagram" class="quick-access__link-icon"></fa-icon>
+          <span class="quick-access__link-text">{{ def.name || def.key }}</span>
+        </a>
+        <a
+          *ngIf="((processDefinitions$ | async) ?? []).length > 5"
+          routerLink="/cockpit/processes"
+          class="quick-access__link quick-access__link--more"
+        >
+          <span class="quick-access__link-text">
+            +{{ ((processDefinitions$ | async) ?? []).length - 5 }} {{ 'cockpit.dashboard.more' | translate }}
+          </span>
+          <fa-icon [icon]="faArrowRight" class="quick-access__link-icon"></fa-icon>
+        </a>
+      </div>
+    </section>
+
+    <!-- Analytics Section -->
+    <section class="dashboard__section">
+      <div class="section-header section-header--muted" (click)="toggleSecondaryCharts()">
+        <div class="section-header__left">
+          <div class="section-header__icon-wrapper">
+            <fa-icon [icon]="faChartBar" class="section-header__icon"></fa-icon>
+          </div>
+          <h2 class="section-header__title">{{ 'cockpit.dashboard.moreCharts' | translate }}</h2>
         </div>
-      </section>
-    </div>
-  </main>
+        <button class="section-header__toggle" [class.section-header__toggle--open]="secondaryChartsVisible">
+          <fa-icon [icon]="faChevronDown"></fa-icon>
+        </button>
+      </div>
+
+      <div class="section-body" *ngIf="secondaryChartsVisible" @slideDown>
+        <div class="charts-grid">
+          <div class="chart-card">
+            <app-timeline-chart></app-timeline-chart>
+          </div>
+          <div class="chart-card">
+            <app-tasks-by-group-chart></app-tasks-by-group-chart>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
 </div>
+
+<ng-template #loadingTpl>
+  <fa-icon [icon]="faSpinner" animation="spin" class="loading-spinner"></fa-icon>
+</ng-template>

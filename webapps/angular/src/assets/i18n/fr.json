@@ -111,10 +111,20 @@
   "cockpit.dashboard.deployedDefinitions": "Définitions déployées",
   "cockpit.dashboard.processDefinitions": "Définitions de processus",
   "cockpit.dashboard.noProcessDefinitions": "Aucune définition de processus déployée",
+  "cockpit.dashboard.moreCharts": "Plus de graphiques",
+  "cockpit.dashboard.more": "plus",
+  "cockpit.dashboard.rightNow": "En ce moment",
+  "cockpit.dashboard.deployed": "Déployé",
+  "cockpit.dashboard.decisionDefinitions": "Définitions de décision",
+  "cockpit.dashboard.caseDefinitions": "Définitions de cas",
+  "cockpit.dashboard.deployments": "Déploiements",
   "cockpit.dashboard.quickLinks": "Liens rapides",
   "cockpit.dashboard.viewAllProcesses": "Voir toutes les instances de processus",
   "cockpit.dashboard.viewAllDecisions": "Voir toutes les définitions de décision",
   "cockpit.dashboard.viewAllTasks": "Voir toutes les tâches ouvertes",
+
+  "cockpit.charts.tasks.humanTasks": "Tâches humaines ouvertes",
+  "cockpit.charts.processActivity.title": "Activité des processus",
 
   "cockpit.processes.title": "Instances de processus",
   "cockpit.processes.deployedDefinitions": "Définitions de processus déployées",
@@ -1118,5 +1128,13 @@
   "CANDIDATE_GROUP_ADDED": "Groupe candidat ajouté",
   "CANDIDATE_USER_REMOVED": "Utilisateur candidat retiré",
   "CANDIDATE_GROUP_REMOVED": "Groupe candidat retiré",
-  "COMMENT": "Commentaire"
+  "COMMENT": "Commentaire",
+
+  "OPEN": "Ouvrir",
+  "ENGINE_ACTIVE": "Moteur actif",
+  "ENGINE_INACTIVE": "Moteur inactif",
+  "RUNNING_PROCESSES": "Processus en cours",
+  "TASKS_COMPLETED": "Tâches terminées",
+  "OPEN_INCIDENTS": "Incidents ouverts",
+  "DEPLOYMENTS": "Déploiements"
 }

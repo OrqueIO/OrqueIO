@@ -449,6 +449,33 @@ export class CockpitService {
       );
   }
 
+  // Public count methods for dashboard
+  getProcessDefinitionsCount(): Observable<number> {
+    return this.http.get<{ count: number }>(`${this.baseUrl}/process-definition/count`, {
+      params: { latestVersion: 'true' }
+    }).pipe(
+      map(res => res.count),
+      catchError(() => of(0))
+    );
+  }
+
+  getCaseDefinitionsCount(): Observable<number> {
+    return this.http.get<{ count: number }>(`${this.baseUrl}/case-definition/count`, {
+      params: { latestVersion: 'true' }
+    }).pipe(
+      map(res => res.count),
+      catchError(() => of(0))
+    );
+  }
+
+  getDeploymentsCount(): Observable<number> {
+    return this.http.get<{ count: number }>(`${this.baseUrl}/deployment/count`)
+      .pipe(
+        map(res => res.count),
+        catchError(() => of(0))
+      );
+  }
+
   // Process Definitions
   getProcessDefinitions(maxResults: number = 1000): Observable<ProcessDefinition[]> {
     return this.http.get<ProcessDefinition[]>(`${this.baseUrl}/process-definition`, {
@@ -1344,5 +1371,280 @@ export class CockpitService {
         map(res => res.count),
         catchError(() => of(0))
       );
+  }
+
+  // ============================================
+  // Dashboard Charts API Methods
+  // ============================================
+
+  /**
+   * Get count of suspended process instances
+   */
+  getSuspendedProcessCount(): Observable<number> {
+    return this.http.get<{ count: number }>(`${this.baseUrl}/process-instance/count`, {
+      params: { suspended: 'true' }
+    }).pipe(
+      map(res => res.count),
+      catchError(() => of(0))
+    );
+  }
+
+  /**
+   * Get count of finished process instances (from history)
+   */
+  getFinishedProcessCount(params?: {
+    finishedAfter?: string;
+    finishedBefore?: string;
+  }): Observable<number> {
+    let httpParams = new HttpParams().set('finished', 'true');
+    if (params?.finishedAfter) {
+      httpParams = httpParams.set('finishedAfter', params.finishedAfter);
+    }
+    if (params?.finishedBefore) {
+      httpParams = httpParams.set('finishedBefore', params.finishedBefore);
+    }
+    return this.http.get<{ count: number }>(`${this.historyUrl}/process-instance/count`, {
+      params: httpParams
+    }).pipe(
+      map(res => res.count),
+      catchError(() => of(0))
+    );
+  }
+
+  /**
+   * Get process stats for charts (active, suspended, completed)
+   */
+  getProcessStatsForChart(): Observable<{
+    active: number;
+    suspended: number;
+    completed: number;
+  }> {
+    return forkJoin({
+      active: this.getRunningProcessCount(),
+      suspended: this.getSuspendedProcessCount(),
+      completed: this.getFinishedProcessCount()
+    });
+  }
+
+  /**
+   * Get task stats for charts (assigned, with candidate groups, without)
+   * Categories are mutually exclusive to match AngularJS behavior:
+   * - assigned: tasks assigned to a specific user
+   * - unassigned: unassigned tasks that have candidate groups (assigned to a group)
+   * - withoutCandidateGroups: unassigned tasks without any candidate groups
+   */
+  getTaskStatsForChart(): Observable<{
+    assigned: number;
+    unassigned: number;
+    withCandidateGroups: number;
+    withoutCandidateGroups: number;
+  }> {
+    return forkJoin({
+      // Tasks assigned to a specific user
+      assigned: this.getTasksCountWithParams({ assigned: true }),
+      // Unassigned tasks with candidate groups (assigned to a group)
+      unassigned: this.getTasksCountWithParams({ unassigned: true, withCandidateGroups: true }),
+      // Keep for compatibility
+      withCandidateGroups: this.getTasksCountWithParams({ unassigned: true, withCandidateGroups: true }),
+      // Unassigned tasks without any candidate groups (completely unassigned)
+      withoutCandidateGroups: this.getTasksCountWithParams({ unassigned: true, withoutCandidateGroups: true })
+    });
+  }
+
+  /**
+   * Get incidents grouped by type
+   */
+  getIncidentsByType(): Observable<{ type: string; count: number }[]> {
+    return this.http.get<Incident[]>(`${this.baseUrl}/incident`, {
+      params: { maxResults: '10000' }
+    }).pipe(
+      map(incidents => {
+        const grouped = incidents.reduce((acc, inc) => {
+          const type = inc.incidentType || 'unknown';
+          acc[type] = (acc[type] || 0) + 1;
+          return acc;
+        }, {} as Record<string, number>);
+
+        return Object.entries(grouped)
+          .map(([type, count]) => ({ type, count }))
+          .sort((a, b) => b.count - a.count);
+      }),
+      catchError(() => of([]))
+    );
+  }
+
+  /**
+   * Get incidents aggregated by process definition
+   * Uses /process-definition/statistics?rootIncidents=true to match AngularJS behavior
+   * This only counts ROOT incidents (where incident.id = incident.rootCauseIncidentId)
+   */
+  getIncidentsByProcess(): Observable<{
+    processKey: string;
+    processName: string;
+    incidentCount: number;
+    instances: number;
+  }[]> {
+    // Use the same endpoint as AngularJS: /process-definition/statistics?rootIncidents=true
+    return this.http.get<ProcessDefinitionStatistics[]>(
+      `${this.baseUrl}/process-definition/statistics`,
+      { params: { rootIncidents: 'true' } }
+    ).pipe(
+      map(stats => {
+        // Aggregate by process key (combine all versions)
+        const aggregatedMap = new Map<string, {
+          key: string;
+          name: string;
+          incidentCount: number;
+          instances: number;
+        }>();
+
+        stats.forEach(stat => {
+          const key = stat.definition?.key || stat.id;
+          const name = stat.definition?.name || stat.definition?.key || stat.id;
+          const incidentCount = stat.incidents?.reduce((sum, inc) => sum + inc.incidentCount, 0) || 0;
+
+          if (incidentCount > 0) {
+            const existing = aggregatedMap.get(key);
+            if (existing) {
+              existing.incidentCount += incidentCount;
+              existing.instances += stat.instances;
+            } else {
+              aggregatedMap.set(key, {
+                key,
+                name,
+                incidentCount,
+                instances: stat.instances
+              });
+            }
+          }
+        });
+
+        const result = Array.from(aggregatedMap.values())
+          .map(item => ({
+            processKey: item.key,
+            processName: item.name,
+            incidentCount: item.incidentCount,
+            instances: item.instances
+          }))
+          .sort((a, b) => b.incidentCount - a.incidentCount);
+
+        return result;
+      }),
+      catchError((err) => {
+        console.error('[CockpitService] Error fetching incidents:', err);
+        return of([]);
+      })
+    );
+  }
+
+  /**
+   * Get process instances timeline data for a given number of days
+   */
+  getProcessInstancesTimeline(days: number): Observable<{
+    date: string;
+    started: number;
+    completed: number;
+  }[]> {
+    const results: Observable<{ date: string; started: number; completed: number }>[] = [];
+    const today = new Date();
+
+    for (let i = days - 1; i >= 0; i--) {
+      const date = new Date(today);
+      date.setDate(date.getDate() - i);
+      date.setHours(0, 0, 0, 0);
+
+      const dateStr = date.toISOString().split('T')[0];
+      const startOfDay = `${dateStr}T00:00:00.000+0000`;
+      const endOfDay = `${dateStr}T23:59:59.999+0000`;
+
+      results.push(
+        forkJoin({
+          started: this.getProcessInstancesCount({
+            startedAfter: startOfDay,
+            startedBefore: endOfDay
+          }),
+          completed: this.getFinishedProcessCount({
+            finishedAfter: startOfDay,
+            finishedBefore: endOfDay
+          })
+        }).pipe(
+          map(r => ({ date: dateStr, ...r }))
+        )
+      );
+    }
+
+    return forkJoin(results);
+  }
+
+  /**
+   * Get process distribution (instances per process definition)
+   */
+  getProcessDistribution(): Observable<{
+    key: string;
+    name: string;
+    instanceCount: number;
+    percentage: number;
+  }[]> {
+    return this.getProcessDefinitionsWithStatistics(false).pipe(
+      map(stats => {
+        const totalInstances = stats.reduce((sum, s) => sum + s.instances, 0);
+
+        return stats
+          .filter(s => s.instances > 0)
+          .map(s => ({
+            key: s.definition?.key || s.id,
+            name: s.definition?.name || s.definition?.key || s.id,
+            instanceCount: s.instances,
+            percentage: totalInstances > 0 ? (s.instances / totalInstances) * 100 : 0
+          }))
+          .sort((a, b) => b.instanceCount - a.instanceCount);
+      }),
+      catchError(() => of([]))
+    );
+  }
+
+  /**
+   * Get tasks grouped by candidate group with group names
+   */
+  getTasksByGroupWithNames(): Observable<{
+    groupId: string;
+    groupName: string;
+    taskCount: number;
+  }[]> {
+    return this.getTaskCountByCandidateGroup().pipe(
+      map(groups => {
+        // Filter out null group names and map to required format
+        return groups
+          .filter(g => g.groupName !== null)
+          .map(g => ({
+            groupId: g.id || g.groupName || 'unknown',
+            groupName: g.groupName || 'Unknown Group',
+            taskCount: g.taskCount
+          }))
+          .sort((a, b) => b.taskCount - a.taskCount);
+      }),
+      catchError(() => of([]))
+    );
+  }
+
+  /**
+   * Get all dashboard charts data in a single call
+   */
+  getDashboardChartsData(): Observable<{
+    processStats: { active: number; suspended: number; completed: number };
+    taskStats: { assigned: number; unassigned: number; withCandidateGroups: number; withoutCandidateGroups: number };
+    incidentsByType: { type: string; count: number }[];
+    incidentsByProcess: { processKey: string; processName: string; incidentCount: number; instances: number }[];
+    tasksByGroup: { groupId: string; groupName: string; taskCount: number }[];
+    processDistribution: { key: string; name: string; instanceCount: number; percentage: number }[];
+  }> {
+    return forkJoin({
+      processStats: this.getProcessStatsForChart(),
+      taskStats: this.getTaskStatsForChart(),
+      incidentsByType: this.getIncidentsByType(),
+      incidentsByProcess: this.getIncidentsByProcess(),
+      tasksByGroup: this.getTasksByGroupWithNames(),
+      processDistribution: this.getProcessDistribution()
+    });
   }
 }
