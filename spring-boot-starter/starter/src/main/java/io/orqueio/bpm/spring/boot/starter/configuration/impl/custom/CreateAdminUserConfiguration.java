@@ -20,6 +20,7 @@ import io.orqueio.bpm.engine.AuthorizationService;
 import io.orqueio.bpm.engine.IdentityService;
 import io.orqueio.bpm.engine.ProcessEngine;
 import io.orqueio.bpm.engine.authorization.Groups;
+import io.orqueio.bpm.engine.authorization.Permissions;
 import io.orqueio.bpm.engine.authorization.Resource;
 import io.orqueio.bpm.engine.authorization.Resources;
 import io.orqueio.bpm.engine.identity.Group;
@@ -37,7 +38,9 @@ import static java.util.Objects.requireNonNull;
 import static io.orqueio.bpm.engine.authorization.Authorization.ANY;
 import static io.orqueio.bpm.engine.authorization.Authorization.AUTH_TYPE_GRANT;
 import static io.orqueio.bpm.engine.authorization.Groups.ORQUEIO_ADMIN;
+import static io.orqueio.bpm.engine.authorization.Groups.ORQUEIO_USER;
 import static io.orqueio.bpm.engine.authorization.Permissions.ALL;
+import static io.orqueio.bpm.engine.authorization.Permissions.READ;
 
 public class CreateAdminUserConfiguration extends AbstractOrqueioConfiguration {
 
@@ -63,7 +66,6 @@ public class CreateAdminUserConfiguration extends AbstractOrqueioConfiguration {
 
     createUser(identityService, adminUser);
 
-    // create group
     if (identityService.createGroupQuery().groupId(ORQUEIO_ADMIN).count() == 0) {
       Group orqueioAdminGroup = identityService.newGroup(ORQUEIO_ADMIN);
       orqueioAdminGroup.setName("OrqueIO BPM Administrators");
@@ -71,7 +73,6 @@ public class CreateAdminUserConfiguration extends AbstractOrqueioConfiguration {
       identityService.saveGroup(orqueioAdminGroup);
     }
 
-    // create ADMIN authorizations on all built-in resources
     for (Resource resource : Resources.values()) {
       if (authorizationService.createAuthorizationQuery().groupIdIn(ORQUEIO_ADMIN).resourceType(resource).resourceId(ANY).count() == 0) {
         AuthorizationEntity userAdminAuth = new AuthorizationEntity(AUTH_TYPE_GRANT);
@@ -82,6 +83,8 @@ public class CreateAdminUserConfiguration extends AbstractOrqueioConfiguration {
         authorizationService.saveAuthorization(userAdminAuth);
       }
     }
+
+    ensureOrqueioUserGroupExists(identityService, authorizationService);
 
     identityService.createMembership(adminUser.getId(), ORQUEIO_ADMIN);
     LOG.creatingInitialAdminUser(adminUser);
@@ -103,6 +106,38 @@ public class CreateAdminUserConfiguration extends AbstractOrqueioConfiguration {
     BeanUtils.copyProperties(adminUser, newUser);
     identityService.saveUser(newUser);
     return newUser;
+  }
+
+  static void ensureOrqueioUserGroupExists(IdentityService identityService, AuthorizationService authorizationService) {
+    if (identityService.createGroupQuery().groupId(ORQUEIO_USER).count() == 0) {
+      Group orqueioUserGroup = identityService.newGroup(ORQUEIO_USER);
+      orqueioUserGroup.setName("OrqueIO BPM Users");
+      orqueioUserGroup.setType(Groups.GROUP_TYPE_SYSTEM);
+      identityService.saveGroup(orqueioUserGroup);
+    }
+
+    for (Resource resource : READ.getTypes()) {
+      if (authorizationService.createAuthorizationQuery().groupIdIn(ORQUEIO_USER).resourceType(resource).resourceId(ANY).count() == 0) {
+        AuthorizationEntity readAuth = new AuthorizationEntity(AUTH_TYPE_GRANT);
+        readAuth.setGroupId(ORQUEIO_USER);
+        readAuth.setResource(resource);
+        readAuth.setResourceId(ANY);
+        readAuth.addPermission(READ);
+        authorizationService.saveAuthorization(readAuth);
+      }
+    }
+
+    String[] allowedApps = {"welcome", "cockpit", "tasklist"};
+    for (String appId : allowedApps) {
+      if (authorizationService.createAuthorizationQuery().groupIdIn(ORQUEIO_USER).resourceType(Resources.APPLICATION).resourceId(appId).count() == 0) {
+        AuthorizationEntity accessAuth = new AuthorizationEntity(AUTH_TYPE_GRANT);
+        accessAuth.setGroupId(ORQUEIO_USER);
+        accessAuth.setResource(Resources.APPLICATION);
+        accessAuth.setResourceId(appId);
+        accessAuth.addPermission(Permissions.ACCESS);
+        authorizationService.saveAuthorization(accessAuth);
+      }
+    }
   }
 
 }

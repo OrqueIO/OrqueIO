@@ -18,7 +18,9 @@ package io.orqueio.bpm.admin.impl.web;
 
 import static io.orqueio.bpm.engine.authorization.Authorization.ANY;
 import static io.orqueio.bpm.engine.authorization.Authorization.AUTH_TYPE_GRANT;
+import static io.orqueio.bpm.engine.authorization.Permissions.ACCESS;
 import static io.orqueio.bpm.engine.authorization.Permissions.ALL;
+import static io.orqueio.bpm.engine.authorization.Permissions.READ;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
@@ -100,6 +102,9 @@ public class SetupResource {
     // crate the orqueio admin group
     ensureOrqueioAdminGroupExists(processEngine);
 
+    // create the orqueio user group
+    ensureOrqueioUserGroupExists(processEngine);
+
     // create group membership (add new user to admin group)
     processEngine.getIdentityService()
       .createMembership(user.getProfile().getId(), Groups.ORQUEIO_ADMIN);
@@ -137,6 +142,45 @@ public class SetupResource {
         userAdminAuth.setResourceId(ANY);
         userAdminAuth.addPermission(ALL);
         authorizationService.saveAuthorization(userAdminAuth);
+      }
+    }
+
+  }
+
+  protected void ensureOrqueioUserGroupExists(ProcessEngine processEngine) {
+
+    final IdentityService identityService = processEngine.getIdentityService();
+    final AuthorizationService authorizationService = processEngine.getAuthorizationService();
+
+    if(identityService.createGroupQuery().groupId(Groups.ORQUEIO_USER).count() == 0) {
+      Group orqueioUserGroup = identityService.newGroup(Groups.ORQUEIO_USER);
+      orqueioUserGroup.setName("OrqueIO BPM Users");
+      orqueioUserGroup.setType(Groups.GROUP_TYPE_SYSTEM);
+      identityService.saveGroup(orqueioUserGroup);
+    }
+
+    // Grant READ permission on resources that support it
+    for (Resource resource : READ.getTypes()) {
+      if(authorizationService.createAuthorizationQuery().groupIdIn(Groups.ORQUEIO_USER).resourceType(resource).resourceId(ANY).count() == 0) {
+        AuthorizationEntity readAuth = new AuthorizationEntity(AUTH_TYPE_GRANT);
+        readAuth.setGroupId(Groups.ORQUEIO_USER);
+        readAuth.setResource(resource);
+        readAuth.setResourceId(ANY);
+        readAuth.addPermission(READ);
+        authorizationService.saveAuthorization(readAuth);
+      }
+    }
+
+    // Grant ACCESS permission on specific applications (not admin)
+    String[] allowedApps = {"welcome", "cockpit", "tasklist"};
+    for (String appId : allowedApps) {
+      if(authorizationService.createAuthorizationQuery().groupIdIn(Groups.ORQUEIO_USER).resourceType(Resources.APPLICATION).resourceId(appId).count() == 0) {
+        AuthorizationEntity accessAuth = new AuthorizationEntity(AUTH_TYPE_GRANT);
+        accessAuth.setGroupId(Groups.ORQUEIO_USER);
+        accessAuth.setResource(Resources.APPLICATION);
+        accessAuth.setResourceId(appId);
+        accessAuth.addPermission(ACCESS);
+        authorizationService.saveAuthorization(accessAuth);
       }
     }
 

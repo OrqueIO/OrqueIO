@@ -214,7 +214,8 @@ public class OAuth2UserSynchronizer {
       logger.info("First SSO user '{}' will be granted admin privileges", userInfo.userId);
       addUserToAdminGroup(userInfo.userId);
     } else {
-      logger.info("User '{}' created as normal user (admin already exists)", userInfo.userId);
+      logger.info("User '{}' created as normal user, adding to orqueio-user group", userInfo.userId);
+      addUserToUserGroup(userInfo.userId);
     }
   }
 
@@ -280,6 +281,76 @@ public class OAuth2UserSynchronizer {
         auth.setResource(resource);
         auth.setResourceId(Authorization.ANY);
         auth.addPermission(Permissions.ALL);
+        authorizationService.saveAuthorization(auth);
+      }
+    }
+  }
+
+  /**
+   * Adds a user to the orqueio-user group for normal users (non-admin).
+   * Creates the group and READ authorizations if they don't exist.
+   */
+  private void addUserToUserGroup(String userId) {
+    Group userGroup = identityService.createGroupQuery()
+        .groupId(Groups.ORQUEIO_USER)
+        .singleResult();
+
+    if (userGroup == null) {
+      logger.info("Creating orqueio-user group with READ authorizations");
+      Group newGroup = identityService.newGroup(Groups.ORQUEIO_USER);
+      newGroup.setName("OrqueIO BPM Users");
+      newGroup.setType(Groups.GROUP_TYPE_SYSTEM);
+      identityService.saveGroup(newGroup);
+
+      createUserAuthorizations();
+    }
+
+    List<Group> existingGroups = identityService.createGroupQuery()
+        .groupMember(userId)
+        .groupId(Groups.ORQUEIO_USER)
+        .list();
+
+    if (existingGroups.isEmpty()) {
+      logger.info("Adding user '{}' to orqueio-user group", userId);
+      identityService.createMembership(userId, Groups.ORQUEIO_USER);
+    }
+  }
+
+  /**
+   * Creates READ authorizations on resources that support it for the orqueio-user group.
+   * Also grants ACCESS on APPLICATION resource for webapp access.
+   */
+  private void createUserAuthorizations() {
+    // Grant READ permission on resources that support it
+    for (Resource resource : Permissions.READ.getTypes()) {
+      if (authorizationService.createAuthorizationQuery()
+          .groupIdIn(Groups.ORQUEIO_USER)
+          .resourceType(resource)
+          .resourceId(Authorization.ANY)
+          .count() == 0) {
+        logger.info("Creating READ authorization for orqueio-user on resource: {}", resource.resourceName());
+        Authorization auth = authorizationService.createNewAuthorization(Authorization.AUTH_TYPE_GRANT);
+        auth.setGroupId(Groups.ORQUEIO_USER);
+        auth.setResource(resource);
+        auth.setResourceId(Authorization.ANY);
+        auth.addPermission(Permissions.READ);
+        authorizationService.saveAuthorization(auth);
+      }
+    }
+
+    String[] allowedApps = {"welcome", "cockpit", "tasklist"};
+    for (String appId : allowedApps) {
+      if (authorizationService.createAuthorizationQuery()
+          .groupIdIn(Groups.ORQUEIO_USER)
+          .resourceType(Resources.APPLICATION)
+          .resourceId(appId)
+          .count() == 0) {
+        logger.info("Creating ACCESS authorization for orqueio-user on {} application", appId);
+        Authorization auth = authorizationService.createNewAuthorization(Authorization.AUTH_TYPE_GRANT);
+        auth.setGroupId(Groups.ORQUEIO_USER);
+        auth.setResource(Resources.APPLICATION);
+        auth.setResourceId(appId);
+        auth.addPermission(Permissions.ACCESS);
         authorizationService.saveAuthorization(auth);
       }
     }
