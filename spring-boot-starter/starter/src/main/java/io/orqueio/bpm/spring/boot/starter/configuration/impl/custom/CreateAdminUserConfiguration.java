@@ -116,6 +116,7 @@ public class CreateAdminUserConfiguration extends AbstractOrqueioConfiguration {
       identityService.saveGroup(orqueioUserGroup);
     }
 
+    // Grant READ permission on resources that support it
     for (Resource resource : READ.getTypes()) {
       if (authorizationService.createAuthorizationQuery().groupIdIn(ORQUEIO_USER).resourceType(resource).resourceId(ANY).count() == 0) {
         AuthorizationEntity readAuth = new AuthorizationEntity(AUTH_TYPE_GRANT);
@@ -127,6 +128,7 @@ public class CreateAdminUserConfiguration extends AbstractOrqueioConfiguration {
       }
     }
 
+    // Grant ACCESS on welcome, cockpit and tasklist (not admin)
     String[] allowedApps = {"welcome", "cockpit", "tasklist"};
     for (String appId : allowedApps) {
       if (authorizationService.createAuthorizationQuery().groupIdIn(ORQUEIO_USER).resourceType(Resources.APPLICATION).resourceId(appId).count() == 0) {

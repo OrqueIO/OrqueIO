@@ -158,6 +158,8 @@
     "REQUIRED_FIELD": "Required field",
     "REQUIRED_HEX_COLOR_FIELD": "Value must be an hexadecimal color",
     "REQUIRED_INTEGER_FIELD": "Value must be an integer",
+    "RESTRICTED_ACCESS_TITLE": "Limited Access",
+    "RESTRICTED_ACCESS_MESSAGE": "You currently have access to the Welcome page only. To access Cockpit, Tasklist, please contact your administrator to request additional permissions.",
     "SAVE": "Save",
     "SERVICES_RESOURCE_RESOLVER_AUTH_FAILED": "Authentication failed. Your session might have expired, you need to login.",
     "SERVICES_RESOURCE_RESOLVER_DISPLAY_FAILED": "Failed to display {{resourceName}}",

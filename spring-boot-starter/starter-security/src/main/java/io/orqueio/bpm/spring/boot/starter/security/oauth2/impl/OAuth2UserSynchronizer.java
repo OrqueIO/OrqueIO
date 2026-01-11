@@ -214,8 +214,29 @@ public class OAuth2UserSynchronizer {
       logger.info("First SSO user '{}' will be granted admin privileges", userInfo.userId);
       addUserToAdminGroup(userInfo.userId);
     } else {
-      logger.info("User '{}' created as normal user, adding to orqueio-user group", userInfo.userId);
-      addUserToUserGroup(userInfo.userId);
+      logger.info("User '{}' created with welcome-only access - admin must assign groups for more permissions", userInfo.userId);
+      grantWelcomeAccessToUser(userInfo.userId);
+      ensureOrqueioUserGroupExists();
+    }
+  }
+
+  /**
+   * Grants ACCESS permission on the welcome application to a specific user.
+   * This is the minimum access for new users until admin assigns them to a group.
+   */
+  private void grantWelcomeAccessToUser(String userId) {
+    if (authorizationService.createAuthorizationQuery()
+        .userIdIn(userId)
+        .resourceType(Resources.APPLICATION)
+        .resourceId("welcome")
+        .count() == 0) {
+      logger.info("Granting ACCESS on welcome application to user '{}'", userId);
+      Authorization auth = authorizationService.createNewAuthorization(Authorization.AUTH_TYPE_GRANT);
+      auth.setUserId(userId);
+      auth.setResource(Resources.APPLICATION);
+      auth.setResourceId("welcome");
+      auth.addPermission(Permissions.ACCESS);
+      authorizationService.saveAuthorization(auth);
     }
   }
 
@@ -287,10 +308,10 @@ public class OAuth2UserSynchronizer {
   }
 
   /**
-   * Adds a user to the orqueio-user group for normal users (non-admin).
-   * Creates the group and READ authorizations if they don't exist.
+   * Ensures the orqueio-user group exists with proper authorizations.
+   * This group is optional and must be assigned manually by admin.
    */
-  private void addUserToUserGroup(String userId) {
+  private void ensureOrqueioUserGroupExists() {
     Group userGroup = identityService.createGroupQuery()
         .groupId(Groups.ORQUEIO_USER)
         .singleResult();
@@ -303,16 +324,6 @@ public class OAuth2UserSynchronizer {
       identityService.saveGroup(newGroup);
 
       createUserAuthorizations();
-    }
-
-    List<Group> existingGroups = identityService.createGroupQuery()
-        .groupMember(userId)
-        .groupId(Groups.ORQUEIO_USER)
-        .list();
-
-    if (existingGroups.isEmpty()) {
-      logger.info("Adding user '{}' to orqueio-user group", userId);
-      identityService.createMembership(userId, Groups.ORQUEIO_USER);
     }
   }
 
@@ -338,6 +349,7 @@ public class OAuth2UserSynchronizer {
       }
     }
 
+    // Grant ACCESS on welcome, cockpit and tasklist (not admin)
     String[] allowedApps = {"welcome", "cockpit", "tasklist"};
     for (String appId : allowedApps) {
       if (authorizationService.createAuthorizationQuery()

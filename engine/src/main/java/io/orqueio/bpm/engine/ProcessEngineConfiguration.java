@@ -312,7 +312,7 @@ public abstract class ProcessEngineConfiguration {
    * and Tenant IDs. The pattern can be defined by using the standard
    * Java Regular Expression syntax should be used.
    *
-   * <p>By default only alphanumeric values (or 'orqueio-admin' or 'orqueio-user') will be accepted.</p>
+   * <p>By default only alphanumeric values (or 'orqueio-admin', 'orqueio-user') will be accepted.</p>
    */
   protected String generalResourceWhitelistPattern =  "[a-zA-Z0-9]+|orqueio-admin|orqueio-user";
 

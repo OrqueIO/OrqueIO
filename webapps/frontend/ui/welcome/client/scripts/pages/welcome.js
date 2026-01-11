@@ -40,6 +40,17 @@ var RouteConfig = [
             return 12 / (auth.authorizedApps.length - 1);
           };
 
+          // Check if user has restricted access (only welcome, no cockpit/tasklist/admin)
+          $scope.isRestrictedUser = function() {
+            var apps = auth.authorizedApps;
+            var hasWelcome = apps.indexOf('welcome') > -1;
+            var hasCockpit = apps.indexOf('cockpit') > -1;
+            var hasTasklist = apps.indexOf('tasklist') > -1;
+            var hasAdmin = apps.indexOf('admin') > -1;
+            // User is restricted if they only have access to welcome
+            return hasWelcome && !hasCockpit && !hasTasklist && !hasAdmin;
+          };
+
           $scope.profilePlugins = Views.getProviders({
             component: 'welcome.profile'
           });
