@@ -171,7 +171,7 @@ public class SetupResource {
       }
     }
 
-    // Grant ACCESS permission on specific applications (not admin)
+    // Grant ACCESS on welcome, cockpit and tasklist (not admin)
     String[] allowedApps = {"welcome", "cockpit", "tasklist"};
     for (String appId : allowedApps) {
       if(authorizationService.createAuthorizationQuery().groupIdIn(Groups.ORQUEIO_USER).resourceType(Resources.APPLICATION).resourceId(appId).count() == 0) {
