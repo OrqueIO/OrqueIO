@@ -135,6 +135,7 @@
     "PAGE_LOGIN_OR": "or",
     "PAGE_LOGIN_ALTERNATIVE_LOGINS": "Alternative Logins",
     "PAGE_LOGIN_SSO_WITH": "Sign in with",
+    "PAGE_LOGIN_SSO_DISABLED_SETUP": "SSO login is disabled until admin account is created",
     "PAGE_LOGIN_NO_ACCOUNT": "First time here?",
     "PAGE_LOGIN_CREATE_ACCOUNT": "Set up admin account",
     "PAGINATION_FIRST": "First",

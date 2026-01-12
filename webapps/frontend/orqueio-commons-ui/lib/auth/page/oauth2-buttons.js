@@ -27,13 +27,25 @@ module.exports = [
   'Uri',
   function($scope, $http, Uri) {
     $scope.oauth2Providers = [];
+    $scope.setupRequired = false;
 
     var providersUrl = Uri.appUri(':appRoot/api/oauth2/providers');
+    var setupCheckUrl = Uri.appUri(':appRoot/api/oauth2/setup-required');
 
     console.log(
       'OAuth2 buttons controller initialized, fetching from:',
       providersUrl
     );
+
+    // Check if admin setup is required (no admin exists)
+    $http
+      .get(setupCheckUrl)
+      .then(function(response) {
+        $scope.setupRequired = response.data.setupRequired === true;
+      })
+      .catch(function() {
+        $scope.setupRequired = false;
+      });
 
     $http
       .get(providersUrl)

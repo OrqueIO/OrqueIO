@@ -5,11 +5,14 @@
   </div>
   <div class="oauth2-buttons">
     <a ng-repeat="provider in oauth2Providers"
-       ng-href="{{ provider.loginUrl }}"
+       ng-href="{{ setupRequired ? '' : provider.loginUrl }}"
        class="btn-oauth2-provider"
-       title="{{ provider.name || provider.id }}"
+       ng-class="{'disabled': setupRequired}"
+       ng-click="setupRequired && $event.preventDefault()"
+       title="{{ setupRequired ? ('PAGE_LOGIN_SSO_DISABLED_SETUP' | translate) : (provider.name || provider.id) }}"
        role="button"
-       aria-label="{{ 'PAGE_LOGIN_SSO_WITH' | translate }} {{ provider.name || provider.id }}">
+       aria-label="{{ 'PAGE_LOGIN_SSO_WITH' | translate }} {{ provider.name || provider.id }}"
+       aria-disabled="{{ setupRequired }}">
       <span class="oauth2-icon oauth2-icon-{{ provider.id }}"></span>
       <span class="oauth2-provider-name">{{ provider.name || provider.id }}</span>
     </a>

@@ -485,6 +485,20 @@ body:has(.login-page-wrapper) {
     max-width: 70px;
     font-size: 11px;
   }
+
+  // Disabled state when admin setup is required
+  &.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: auto;
+
+    &:hover {
+      transform: none;
+      box-shadow: none;
+      border-color: @login-border-color;
+      background-color: @login-card-bg;
+    }
+  }
 }
 
 // Circular button variant (backwards compatibility)
