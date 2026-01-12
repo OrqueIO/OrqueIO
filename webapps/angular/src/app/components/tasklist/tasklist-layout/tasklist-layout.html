@@ -123,7 +123,8 @@
         [activeTab]="(activeTab$ | async) || 'form'"
         (tabChange)="onTabChange($event)"
         (taskAction)="onTaskAction($event)"
-        (dismiss)="onTaskDismiss()">
+        (dismiss)="onTaskDismiss()"
+        (diagramExpand)="onDiagramExpand($event)">
       </app-task-detail>
 
       <ng-template #noTaskSelected>

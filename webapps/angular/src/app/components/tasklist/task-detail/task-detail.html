@@ -7,9 +7,10 @@
 <section class="task-card"
          [class.task-removed]="!taskExists"
          [class.instance-suspended]="instanceSuspended"
-         [class.actions-disabled]="areActionsDisabled()">
-  <!-- Header -->
-  <header class="task-header">
+         [class.actions-disabled]="areActionsDisabled()"
+         [class.diagram-expanded]="diagramExpanded">
+  <!-- Header - Hidden when diagram is expanded -->
+  <header class="task-header" *ngIf="!diagramExpanded">
     <div class="header-content">
       <!-- Tenant ID -->
       <div class="tenant-id" *ngIf="task.tenantId" [title]="task.tenantId">
@@ -62,8 +63,8 @@
     </div>
   </header>
 
-  <!-- Task Status Alert (Task Removed or Instance Suspended) -->
-  <div class="task-status-alert" *ngIf="shouldShowAlert()">
+  <!-- Task Status Alert (Task Removed or Instance Suspended) - Hidden when diagram is expanded -->
+  <div class="task-status-alert" *ngIf="shouldShowAlert() && !diagramExpanded">
     <!-- Task Removed (TASK_NOT_EXIST) -->
     <div class="alert alert-warning" *ngIf="!taskExists">
       <div class="alert-icon">
@@ -100,8 +101,8 @@
   </div>
 
   <!-- Tabs Navigation -->
-  <div class="tabbed-content" *ngIf="taskExists">
-    <ul class="nav nav-tabs">
+  <div class="tabbed-content" *ngIf="taskExists" [class.diagram-fullscreen]="diagramExpanded">
+    <ul class="nav nav-tabs" *ngIf="!diagramExpanded">
       <li *ngFor="let tab of tabs"
           [class.active]="isActiveTab(tab)">
         <a href="javascript:void(0)"
@@ -137,7 +138,9 @@
       <div class="tab-pane" [class.active]="activeTab === 'diagram'" [hidden]="activeTab !== 'diagram'">
         <app-task-diagram-tab
           [task]="task"
-          [isActive]="activeTab === 'diagram'">
+          [isActive]="activeTab === 'diagram'"
+          [isExpanded]="diagramExpanded"
+          (expandToggle)="onDiagramExpandToggle($event)">
         </app-task-diagram-tab>
       </div>
 

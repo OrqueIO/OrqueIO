@@ -889,6 +889,7 @@
 
   "tasklist.maximize": "Maximize",
   "tasklist.restore": "Restore",
+  "tasklist.expandDiagram": "Expand Diagram",
   "tasklist.zoomIn": "Zoom In",
   "tasklist.zoomOut": "Zoom Out",
   "tasklist.resetZoom": "Reset Zoom",
@@ -1173,6 +1174,10 @@
   "tasklist.noMatchingTasks": "No matching tasks",
   "tasklist.restrictionNotice": "The filter includes a restriction that limits the displayed results",
   "tasklist.resetPage": "Reset page",
+  "tasklist.showingVariables": "Showing",
+  "tasklist.loadMore": "Load More",
+  "tasklist.loadAll": "Load All",
+  "tasklist.remaining": "remaining",
 
   "tasklist.validation.nameRequired": "Variable name is required",
   "tasklist.validation.nameInvalid": "Invalid name (use letters, numbers, underscore)",

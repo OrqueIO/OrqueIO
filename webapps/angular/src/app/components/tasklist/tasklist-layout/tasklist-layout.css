@@ -5,6 +5,7 @@
   width: 100%;
   overflow: hidden;
   background-color: #f3f4f6;
+  min-height: 0; /* Essential for flex children to scroll properly */
 }
 
 /* Column Base Styles */
@@ -16,6 +17,8 @@
   background-color: #ffffff;
   border-right: 1px solid #e5e7eb;
   transition: width 0.3s ease, min-width 0.3s ease, max-width 0.3s ease, flex 0.3s ease;
+  min-height: 0; /* Essential for flex children to scroll properly */
+  overflow: hidden;
 }
 
 /* Filters Column */
@@ -111,7 +114,8 @@
   padding: 8px 12px;
   border-bottom: 1px solid #e5e7eb;
   background-color: #ffffff;
-  min-height: 44px;
+  min-height: 40px;
+  flex-shrink: 0; /* Prevent header from shrinking */
 }
 
 .column-title {
@@ -276,7 +280,8 @@
 
 /* Column Content */
 .column-content {
-  flex: 1;
+  flex: 1 1 0;
+  min-height: 0; /* Critical for flexbox scroll containers */
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -296,8 +301,9 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100%;
-  padding: 40px 20px;
+  flex: 1;
+  min-height: 0;
+  padding: 24px 16px;
   text-align: center;
   color: #6b7280;
 }

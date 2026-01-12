@@ -68,6 +68,9 @@ export class TaskDetailComponent implements OnInit, OnDestroy, OnChanges {
   @Output() taskAction = new EventEmitter<{ type: string; taskId: string; data?: any }>();
   @Output() dismiss = new EventEmitter<void>();
   @Output() taskRemoved = new EventEmitter<string>();
+  @Output() diagramExpand = new EventEmitter<boolean>();
+
+  diagramExpanded = false;
 
   loading$ = this.store.select(selectTaskDetailLoading);
   form$ = this.store.select(selectTaskForm);
@@ -343,5 +346,13 @@ export class TaskDetailComponent implements OnInit, OnDestroy, OnChanges {
    */
   shouldShowAlert(): boolean {
     return !this.taskExists || this.instanceSuspended;
+  }
+
+  /**
+   * Handle diagram expand toggle from diagram tab
+   */
+  onDiagramExpandToggle(expanded: boolean): void {
+    this.diagramExpanded = expanded;
+    this.diagramExpand.emit(expanded);
   }
 }

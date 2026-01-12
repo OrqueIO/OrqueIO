@@ -115,6 +115,17 @@
   border-color: #5a67d8;
 }
 
+.toolbar-btn.active {
+  background-color: #667eea;
+  border-color: #667eea;
+  color: white;
+}
+
+.toolbar-btn.active:hover {
+  background-color: #5a67d8;
+  border-color: #5a67d8;
+}
+
 /* Diagram Container */
 .diagram-container {
   flex: 1;
