@@ -847,6 +847,9 @@
   "tasklist.setFollowUp": "Définir le suivi",
   "tasklist.moreActions": "Plus d'actions",
 
+  "tasklist.maximize": "Agrandir",
+  "tasklist.restore": "Restaurer",
+  "tasklist.expandDiagram": "Agrandir le diagramme",
   "tasklist.zoomIn": "Zoom avant",
   "tasklist.zoomOut": "Zoom arrière",
   "tasklist.resetZoom": "Réinitialiser le zoom",
@@ -1088,6 +1091,10 @@
   "tasklist.noMatchingTasks": "Aucune tâche correspondante",
   "tasklist.restrictionNotice": "Le filtre inclut une restriction qui limite les résultats affichés",
   "tasklist.resetPage": "Réinitialiser la page",
+  "tasklist.showingVariables": "Affichage",
+  "tasklist.loadMore": "Charger plus",
+  "tasklist.loadAll": "Tout charger",
+  "tasklist.remaining": "restantes",
 
   "tasklist.validation.nameRequired": "Le nom de la variable est requis",
   "tasklist.validation.nameInvalid": "Nom invalide (utilisez lettres, chiffres, underscore)",

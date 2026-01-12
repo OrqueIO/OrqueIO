@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnChanges, SimpleChanges, ViewChild, inject, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges, ViewChild, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslatePipe } from '../../../i18n/translate.pipe';
 import { Task } from '../../../models/tasklist';
@@ -21,6 +21,9 @@ export class TaskDiagramTabComponent implements OnInit, OnChanges {
 
   @Input() task!: Task;
   @Input() isActive = false;
+  @Input() isExpanded = false;
+
+  @Output() expandToggle = new EventEmitter<boolean>();
 
   @ViewChild('bpmnViewer') bpmnViewer!: BpmnViewerComponent;
 
@@ -46,6 +49,14 @@ export class TaskDiagramTabComponent implements OnInit, OnChanges {
       setTimeout(() => {
         this.bpmnViewer?.onContainerVisible();
       }, 0);
+    }
+
+    // Handle expand/collapse - resize diagram to fit new container dimensions
+    if (changes['isExpanded'] && !changes['isExpanded'].firstChange && this.bpmnViewer) {
+      // Delay to allow CSS transition (300ms) and DOM update to complete
+      setTimeout(() => {
+        this.bpmnViewer?.resize();
+      }, 350);
     }
 
     if (changes['task'] && !changes['task'].firstChange) {
@@ -160,14 +171,6 @@ export class TaskDiagramTabComponent implements OnInit, OnChanges {
     this.error = err.message || 'Failed to render diagram';
   }
 
-  zoomIn(): void {
-    this.bpmnViewer?.zoomIn();
-  }
-
-  zoomOut(): void {
-    this.bpmnViewer?.zoomOut();
-  }
-
   resetZoom(): void {
     this.bpmnViewer?.resetZoom();
   }
@@ -177,5 +180,9 @@ export class TaskDiagramTabComponent implements OnInit, OnChanges {
     if (taskDefKey && this.bpmnViewer) {
       this.bpmnViewer.scrollToElement(taskDefKey);
     }
+  }
+
+  toggleExpand(): void {
+    this.expandToggle.emit(!this.isExpanded);
   }
 }

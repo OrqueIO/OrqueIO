@@ -416,11 +416,24 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
       this.diagramMaximized = false;
     }
     this.cdr.markForCheck();
+    // Resize diagram after transition completes
+    if (!this.diagramCollapsed) {
+      this.resizeDiagramAfterTransition();
+    }
   }
 
   toggleDiagramMaximize(): void {
     this.diagramMaximized = !this.diagramMaximized;
     this.cdr.markForCheck();
+    // Resize diagram after transition completes
+    this.resizeDiagramAfterTransition();
+  }
+
+  private resizeDiagramAfterTransition(): void {
+    // Wait for CSS transition (0.3s) to complete before resizing
+    setTimeout(() => {
+      this.bpmnViewer?.resize();
+    }, 350);
   }
 
   // Activity selection (AngularJS style with multi-select support)

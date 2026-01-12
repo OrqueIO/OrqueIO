@@ -25,34 +25,41 @@
     <span>{{ 'tasklist.noVariables' | translate }}</span>
   </div>
 
-  <!-- Variables Grid -->
+  <!-- Variables Header with count -->
+  <div class="variables-header" *ngIf="totalCount > 0">
+    <span class="variables-count">
+      {{ 'tasklist.showingVariables' | translate }} {{ displayedCount }} / {{ totalCount }}
+    </span>
+  </div>
+
+  <!-- Variables Grid - Using pre-computed properties for performance -->
   <div class="variables-grid" *ngIf="variables.length > 0">
-    <div class="variable-item" *ngFor="let variable of variables">
+    <div class="variable-item" *ngFor="let variable of variables; trackBy: trackByName">
       <div class="variable-header">
         <span class="variable-name">{{ variable.name }}:</span>
       </div>
       <div class="variable-body">
-        <!-- Type display -->
+        <!-- Type display - using pre-computed flags -->
         <div class="variable-type">
           <a class="type-link"
-             *ngIf="isObjectType(variable) || isSerializedType(variable)"
+             *ngIf="variable.isObject || variable.isSerialized"
              (click)="openVariableDetail(variable)"
              [title]="'tasklist.viewObject' | translate">
-            {{ getDisplayType(variable) }}
+            {{ variable.displayType }}
           </a>
-          <span class="type-text" *ngIf="!isObjectType(variable) && !isSerializedType(variable)">
-            {{ getDisplayType(variable) }}
+          <span class="type-text" *ngIf="!variable.isObject && !variable.isSerialized">
+            {{ variable.displayType }}
           </span>
         </div>
 
-        <!-- Value display -->
+        <!-- Value display - using pre-computed flags -->
         <div class="variable-value">
           <!-- Empty value -->
-          <span class="empty-value" *ngIf="isEmptyValue(variable)">&lt;Empty&gt;</span>
+          <span class="empty-value" *ngIf="variable.isEmpty">&lt;Empty&gt;</span>
 
           <!-- File type - Download link -->
-          <ng-container *ngIf="isFileType(variable) && !isEmptyValue(variable)">
-            <a class="download-link" [href]="getFileDownloadUrl(variable)" target="_blank">
+          <ng-container *ngIf="variable.isFile && !variable.isEmpty">
+            <a class="download-link" [href]="variable.downloadUrl" target="_blank">
               {{ 'tasklist.download' | translate }}
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <circle cx="12" cy="12" r="10"/>
@@ -63,29 +70,39 @@
           </ng-container>
 
           <!-- Bytes type -->
-          <ng-container *ngIf="isBytesType(variable) && !isEmptyValue(variable)">
-            <span class="bytes-value">{{ getDisplayType(variable) }}</span>
+          <ng-container *ngIf="variable.isBytes && !variable.isEmpty">
+            <span class="bytes-value">{{ variable.displayType }}</span>
           </ng-container>
 
           <!-- Object type - Clickable link to view details -->
-          <ng-container *ngIf="isObjectType(variable) && !isEmptyValue(variable)">
+          <ng-container *ngIf="variable.isObject && !variable.isEmpty">
             <a class="object-link" (click)="openVariableDetail(variable)">
               {{ 'tasklist.viewObject' | translate }}
             </a>
           </ng-container>
 
           <!-- Date type -->
-          <ng-container *ngIf="isDateType(variable) && !isEmptyValue(variable)">
+          <ng-container *ngIf="variable.isDate && !variable.isEmpty">
             <span class="date-value">{{ variable.value | camDate:'long' }}</span>
           </ng-container>
 
           <!-- Simple types (String, Integer, Long, Short, Double, Boolean) -->
-          <ng-container *ngIf="!isFileType(variable) && !isBytesType(variable) && !isObjectType(variable) && !isDateType(variable) && !isEmptyValue(variable)">
-            <span class="simple-value">{{ getDisplayValue(variable) }}</span>
+          <ng-container *ngIf="!variable.isFile && !variable.isBytes && !variable.isObject && !variable.isDate && !variable.isEmpty">
+            <span class="simple-value">{{ variable.displayValue }}</span>
           </ng-container>
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- Load More Button -->
+  <div class="load-more-container" *ngIf="hasMore">
+    <button class="btn btn-load-more" (click)="loadMore()">
+      {{ 'tasklist.loadMore' | translate }} ({{ remainingCount }} {{ 'tasklist.remaining' | translate }})
+    </button>
+    <button class="btn btn-load-all" (click)="loadAll()" *ngIf="remainingCount > 20">
+      {{ 'tasklist.loadAll' | translate }}
+    </button>
   </div>
 </div>
 

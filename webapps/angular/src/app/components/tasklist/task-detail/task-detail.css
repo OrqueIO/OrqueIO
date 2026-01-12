@@ -53,6 +53,30 @@
   opacity: 0.85;
 }
 
+/* Diagram Expanded Mode - Full screen diagram */
+.task-card.diagram-expanded {
+  padding: 0;
+}
+
+.task-card.diagram-expanded .tabbed-content {
+  height: 100%;
+}
+
+.task-card.diagram-expanded .tab-content {
+  background-color: #ffffff;
+}
+
+.tabbed-content.diagram-fullscreen {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.tabbed-content.diagram-fullscreen .tab-content {
+  flex: 1;
+  overflow: hidden;
+}
+
 /* Header */
 .task-header {
   padding: 12px 14px;

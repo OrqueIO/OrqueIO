@@ -8,7 +8,8 @@ import {
   OnDestroy,
   SimpleChanges,
   ViewChild,
-  AfterViewInit
+  AfterViewInit,
+  HostListener
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -54,9 +55,21 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
   private badgeOverlayIds: Map<string, string[]> = new Map();
   private currentXml: string | null = null; // Track loaded XML to avoid re-import
   private needsZoomFit = false; // Track if zoom fit is pending
+  private resizeTimeout: ReturnType<typeof setTimeout> | null = null;
 
   loading = true;
   errorMessage: string | null = null;
+
+  @HostListener('window:resize')
+  onWindowResize(): void {
+    // Debounce resize events to avoid excessive recalculations
+    if (this.resizeTimeout) {
+      clearTimeout(this.resizeTimeout);
+    }
+    this.resizeTimeout = setTimeout(() => {
+      this.resize();
+    }, 200);
+  }
 
   ngAfterViewInit(): void {
     this.initViewer();
@@ -84,6 +97,9 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
   }
 
   ngOnDestroy(): void {
+    if (this.resizeTimeout) {
+      clearTimeout(this.resizeTimeout);
+    }
     this.destroyViewer();
   }
 
@@ -150,9 +166,18 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
       if (!this.viewer || !this.needsZoomFit) return;
 
       if (this.isContainerVisible()) {
-        const canvas = this.viewer.get('canvas');
-        canvas.zoom('fit-viewport');
-        this.needsZoomFit = false;
+        try {
+          const canvas = this.viewer.get('canvas');
+          this.safeZoomFit(canvas);
+          this.needsZoomFit = false;
+        } catch (e) {
+          // Retry on failure
+          if (retryCount < maxRetries) {
+            setTimeout(() => {
+              this.scheduleFitToViewport(retryCount + 1);
+            }, retryDelay);
+          }
+        }
       } else if (retryCount < maxRetries) {
         // Container not visible yet, retry after a delay
         setTimeout(() => {
@@ -372,8 +397,31 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
   resetZoom(): void {
     if (this.viewer && this.isContainerVisible()) {
       const canvas = this.viewer.get('canvas');
-      canvas.zoom('fit-viewport');
+      this.safeZoomFit(canvas);
     }
+  }
+
+  /**
+   * Call this when the container size changes (e.g., expand/collapse)
+   * Notifies BPMN.js of the size change and re-fits the diagram
+   */
+  resize(): void {
+    if (!this.viewer) return;
+
+    // Small delay to ensure DOM has updated with new dimensions
+    requestAnimationFrame(() => {
+      if (!this.viewer || !this.isContainerVisible()) return;
+
+      try {
+        const canvas = this.viewer.get('canvas');
+        // Notify BPMN.js that container size changed
+        canvas.resized();
+        // Re-fit diagram to new viewport
+        this.safeZoomFit(canvas);
+      } catch (e) {
+        // Ignore zoom errors when container dimensions are invalid
+      }
+    });
   }
 
   /**
@@ -381,9 +429,29 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
    */
   onContainerVisible(): void {
     if (this.needsZoomFit && this.viewer && this.isContainerVisible()) {
-      const canvas = this.viewer.get('canvas');
-      canvas.zoom('fit-viewport');
-      this.needsZoomFit = false;
+      try {
+        const canvas = this.viewer.get('canvas');
+        this.safeZoomFit(canvas);
+        this.needsZoomFit = false;
+      } catch (e) {
+        // Retry later if zoom fails
+      }
+    }
+  }
+
+  /**
+   * Safely zoom to fit viewport, handling edge cases where dimensions are invalid
+   */
+  private safeZoomFit(canvas: any): void {
+    try {
+      // Check if canvas has valid inner/outer viewbox before zooming
+      const viewbox = canvas.viewbox();
+      if (viewbox && isFinite(viewbox.width) && isFinite(viewbox.height) &&
+          viewbox.width > 0 && viewbox.height > 0) {
+        canvas.zoom('fit-viewport');
+      }
+    } catch (e) {
+      // Silently ignore zoom errors
     }
   }
 

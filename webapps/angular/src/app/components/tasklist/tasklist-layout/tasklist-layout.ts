@@ -541,6 +541,14 @@ export class TasklistLayoutComponent implements OnInit, OnDestroy {
     this.updateUrl({ task: null, detailsTab: null });
   }
 
+  onDiagramExpand(expanded: boolean): void {
+    if (expanded) {
+      this.maximizeColumn('detail');
+    } else {
+      this.resetColumnSizes();
+    }
+  }
+
   private updateUrl(params: Record<string, string | number | null>): void {
     const currentParams = { ...this.route.snapshot.queryParams };
 

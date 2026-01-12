@@ -84,6 +84,36 @@
   padding: 16px;
 }
 
+/* ==================== Variables Header ==================== */
+.variables-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-bottom: 16px;
+}
+
+.variables-count {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #64748b;
+}
+
+.variables-count::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background: #667eea;
+  border-radius: 50%;
+}
+
 /* ==================== Variables Grid - Two Column Layout ==================== */
 .variables-grid {
   display: grid;
@@ -234,6 +264,48 @@
   border-color: #b0bec5;
 }
 
+/* ==================== Load More Container ==================== */
+.load-more-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 16px;
+  margin-top: 8px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.btn-load-more,
+.btn-load-all {
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.15s, border-color 0.15s;
+}
+
+.btn-load-more {
+  background: #667eea;
+  color: #ffffff;
+  border: 1px solid #667eea;
+}
+
+.btn-load-more:hover {
+  background: #5a67d8;
+  border-color: #5a67d8;
+}
+
+.btn-load-all {
+  background: #ffffff;
+  color: #667eea;
+  border: 1px solid #667eea;
+}
+
+.btn-load-all:hover {
+  background: #f5f3ff;
+}
+
 /* ==================== Responsive ==================== */
 @media (max-width: 768px) {
   .variables-grid {
@@ -247,5 +319,15 @@
 
   .variable-item {
     padding: 12px 0;
+  }
+
+  .load-more-container {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .btn-load-more,
+  .btn-load-all {
+    width: 100%;
   }
 }
