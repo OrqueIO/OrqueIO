@@ -27,9 +27,7 @@
                 <tr *ngFor="let stat of taskStatistics">
                   <td class="col-count">
                     <fa-icon *ngIf="stat.loading" [icon]="faSpinner" animation="spin" class="loading-icon"></fa-icon>
-                    <a *ngIf="!stat.loading" class="count-link" (click)="navigateToSearch(stat.searchType)">
-                      {{ stat.count }}
-                    </a>
+                    <span *ngIf="!stat.loading" class="count-value">{{ stat.count }}</span>
                   </td>
                   <td class="col-label">
                     <fa-icon [icon]="stat.searchType === 'assignedToUsers' ? faUser : (stat.searchType === 'assignedToGroups' ? faUsers : faQuestionCircle)" class="type-icon"></fa-icon>
@@ -42,9 +40,7 @@
                 <tr class="total-row">
                   <td class="col-count">
                     <fa-icon *ngIf="openTasksLoading" [icon]="faSpinner" animation="spin" class="loading-icon"></fa-icon>
-                    <a *ngIf="!openTasksLoading" class="count-link total" (click)="navigateToSearch('all')">
-                      {{ openTasksCount }}
-                    </a>
+                    <span *ngIf="!openTasksLoading" class="count-value total">{{ openTasksCount }}</span>
                   </td>
                   <td class="col-label total-label">
                     <fa-icon [icon]="faTasks" class="type-icon"></fa-icon>
@@ -84,9 +80,7 @@
                 </tr>
                 <tr *ngFor="let group of taskGroups">
                   <td class="col-count">
-                    <a class="count-link" (click)="navigateToGroupSearch(group.groupId)">
-                      {{ group.taskCount }}
-                    </a>
+                    <span class="count-value">{{ group.taskCount }}</span>
                   </td>
                   <td class="col-label">
                     <fa-icon [icon]="faUsers" class="type-icon"></fa-icon>
@@ -102,14 +96,6 @@
             </p>
           </div>
         </section>
-      </div>
-
-      <!-- Quick Actions -->
-      <div class="quick-actions">
-        <a [routerLink]="['/cockpit/tasks/list']" class="action-card">
-          <fa-icon [icon]="faSearch" class="action-icon"></fa-icon>
-          <span class="action-label">{{ 'cockpit.taskDashboard.searchTasks' | translate }}</span>
-        </a>
       </div>
     </div>
   </main>

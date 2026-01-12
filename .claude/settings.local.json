@@ -9,7 +9,8 @@
       "Bash(npm run:*)",
       "Bash(mkdir:*)",
       "Bash(npx ng lint)",
-      "Bash(npx tsc:*)"
+      "Bash(npx tsc:*)",
+      "Bash(npx ng build:*)"
     ]
   }
 }

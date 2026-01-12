@@ -577,6 +577,12 @@
   background: linear-gradient(135deg, #fafbfc 0%, #f0f2f5 100%);
 }
 
+.diagram-container app-bpmn-viewer {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
 .diagram-loading {
   position: absolute;
   top: 0;

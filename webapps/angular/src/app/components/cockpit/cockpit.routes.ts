@@ -8,7 +8,6 @@ import { DecisionListComponent } from './cockpit-decisions/decision-list/decisio
 import { DecisionDetailComponent } from './cockpit-decisions/decision-detail/decision-detail';
 import { DecisionInstanceComponent } from './cockpit-decisions/decision-instance/decision-instance';
 import { TaskDashboardComponent } from './cockpit-tasks/task-dashboard/task-dashboard';
-import { TaskListComponent } from './cockpit-tasks/task-list/task-list';
 
 export const cockpitRoutes: Routes = [
   {
@@ -22,8 +21,7 @@ export const cockpitRoutes: Routes = [
       { path: 'decisions', component: DecisionListComponent },
       { path: 'decisions/:id', component: DecisionDetailComponent },
       { path: 'decision-instance/:id', component: DecisionInstanceComponent },
-      { path: 'tasks', component: TaskDashboardComponent },
-      { path: 'tasks/list', component: TaskListComponent }
+      { path: 'tasks', component: TaskDashboardComponent }
     ]
   }
 ];

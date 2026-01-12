@@ -16,7 +16,8 @@ import {
   faChevronRight,
   faAnglesLeft,
   faAnglesRight,
-  faSitemap
+  faSitemap,
+  faSearch
 } from '@fortawesome/free-solid-svg-icons';
 import { forkJoin } from 'rxjs';
 
@@ -63,6 +64,7 @@ export class DecisionListComponent implements OnInit, OnDestroy {
   faAnglesLeft = faAnglesLeft;
   faAnglesRight = faAnglesRight;
   faSitemap = faSitemap;
+  faSearch = faSearch;
 
   breadcrumbs: BreadcrumbItem[] = [
     { label: 'Decisions', translateKey: 'cockpit.menu.decisions' }
@@ -70,7 +72,11 @@ export class DecisionListComponent implements OnInit, OnDestroy {
 
   loading = true;
   decisionDefinitions: DecisionDefinition[] = [];
+  filteredDefinitions: DecisionDefinition[] = [];
   totalCount = 0;
+
+  // Search
+  searchQuery = '';
 
   // Pagination
   currentPage = 1;
@@ -138,6 +144,7 @@ export class DecisionListComponent implements OnInit, OnDestroy {
         next: ({ count, data }) => {
           this.totalCount = count;
           this.decisionDefinitions = data;
+          this.applyFilter();
           this.loading = false;
           this.cdr.detectChanges();
         },
@@ -146,6 +153,25 @@ export class DecisionListComponent implements OnInit, OnDestroy {
           this.cdr.detectChanges();
         }
       });
+  }
+
+  applyFilter(): void {
+    if (!this.searchQuery.trim()) {
+      this.filteredDefinitions = [...this.decisionDefinitions];
+    } else {
+      const query = this.searchQuery.toLowerCase();
+      this.filteredDefinitions = this.decisionDefinitions.filter(def => {
+        const name = (def.name || '').toLowerCase();
+        const key = (def.key || '').toLowerCase();
+        const tenant = (def.tenantId || '').toLowerCase();
+        return name.includes(query) || key.includes(query) || tenant.includes(query);
+      });
+    }
+  }
+
+  onSearchChange(): void {
+    this.applyFilter();
+    this.cdr.detectChanges();
   }
 
   onSort(columnId: string): void {

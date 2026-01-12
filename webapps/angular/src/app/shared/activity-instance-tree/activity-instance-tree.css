@@ -1,28 +1,32 @@
 .activity-tree {
-  font-size: 0.875rem;
+  font-size: var(--font-size-base);
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .tree-node {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 8px;
-  padding-right: 12px;
+  gap: var(--space-2);
+  padding: var(--space-2);
+  padding-right: var(--space-3);
   cursor: pointer;
-  border-radius: 4px;
-  transition: background-color 0.15s ease;
+  border-radius: var(--radius-sm);
+  transition: background-color var(--transition-fast);
 }
 
 .tree-node:hover {
-  background: #f3f4f6;
+  background: var(--color-gray-100);
 }
 
 .tree-node.selected {
-  background: #ede9fe;
+  background: var(--color-primary-bg);
 }
 
 .tree-node.selected:hover {
-  background: #ddd6fe;
+  background: rgba(37, 99, 235, 0.12);
 }
 
 /* Expand button */
@@ -35,15 +39,15 @@
   padding: 0;
   border: none;
   background: transparent;
-  color: #6b7280;
+  color: var(--text-secondary);
   cursor: pointer;
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   flex-shrink: 0;
 }
 
 .expand-btn:hover {
-  background: #e5e7eb;
-  color: #374151;
+  background: var(--border-color);
+  color: var(--text-primary);
 }
 
 .expand-placeholder {
@@ -59,19 +63,19 @@
   width: 18px;
   height: 18px;
   flex-shrink: 0;
-  font-size: 12px;
+  font-size: var(--font-size-xs);
 }
 
 .state-running {
-  color: #3b82f6;
+  color: var(--color-primary);
 }
 
 .state-completed {
-  color: #22c55e;
+  color: var(--color-success);
 }
 
 .state-canceled {
-  color: #ef4444;
+  color: var(--color-danger);
 }
 
 /* Activity icon */
@@ -81,20 +85,20 @@
   justify-content: center;
   width: 24px;
   height: 24px;
-  background: #f3f4f6;
-  border-radius: 4px;
-  color: #6b7280;
+  background: var(--color-gray-100);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
   flex-shrink: 0;
-  font-size: 12px;
+  font-size: var(--font-size-xs);
 }
 
 .tree-node:hover .activity-icon {
-  background: #e5e7eb;
+  background: var(--border-color);
 }
 
 .tree-node.selected .activity-icon {
-  background: #c4b5fd;
-  color: #5b21b6;
+  background: var(--color-primary-bg);
+  color: var(--color-primary);
 }
 
 /* Activity name */
@@ -103,12 +107,12 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  color: #374151;
+  color: var(--text-primary);
 }
 
 .tree-node.selected .activity-name {
-  color: #5b21b6;
-  font-weight: 500;
+  color: var(--color-primary);
+  font-weight: var(--font-weight-medium);
 }
 
 /* Incident indicator */
@@ -116,7 +120,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #ef4444;
+  color: var(--color-danger);
   flex-shrink: 0;
 }
 
@@ -125,7 +129,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 24px;
-  color: #9ca3af;
+  padding: var(--space-6);
+  color: var(--text-muted);
   font-style: italic;
 }
