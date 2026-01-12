@@ -122,6 +122,12 @@
   background-color: white;
 }
 
+.diagram-container app-bpmn-viewer {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
 /* BPMN-js highlight styles */
 :host ::ng-deep .highlight .djs-visual > :first-child {
   stroke: #667eea !important;

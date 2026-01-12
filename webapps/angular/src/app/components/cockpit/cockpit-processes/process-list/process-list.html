@@ -8,32 +8,6 @@
     ></app-cockpit-header>
 
     <div class="page-content">
-      <!-- Process definition header -->
-      <div class="definition-header" *ngIf="processDefinition">
-        <div class="definition-info">
-          <h2 class="definition-name">{{ processDefinition.name || processDefinition.key }}</h2>
-          <span class="definition-key">{{ processDefinition.key }}</span>
-          <span class="definition-version" *ngIf="selectedVersion === 'all'">
-            {{ 'cockpit.processes.allVersions' | translate }}
-          </span>
-          <span class="tenant-id" *ngIf="processDefinition.tenantId">
-            <fa-icon [icon]="faCog"></fa-icon>
-            {{ processDefinition.tenantId }}
-          </span>
-        </div>
-
-        <!-- Version selector -->
-        <div class="version-selector" *ngIf="processDefinitionVersions.length > 1">
-          <label>{{ 'cockpit.processes.version' | translate }}:</label>
-          <select [(ngModel)]="selectedVersion" (change)="onVersionChange()">
-            <option value="all">{{ 'cockpit.processes.allVersions' | translate }}</option>
-            <option *ngFor="let v of processDefinitionVersions" [value]="v.id">
-              {{ getVersionLabel(v) }}
-            </option>
-          </select>
-        </div>
-      </div>
-
       <!-- Main layout: Sidebar (filters) + Content (BPMN + table) -->
       <div class="main-layout">
         <!-- Left sidebar: Filters (always visible) -->
@@ -157,8 +131,31 @@
           <!-- BPMN Diagram section (always visible) -->
           <section class="diagram-section">
             <div class="section-header">
-              <fa-icon [icon]="faProjectDiagram"></fa-icon>
-              <span>{{ 'cockpit.processDetail.diagram' | translate }}</span>
+              <div class="section-title">
+                <fa-icon [icon]="faProjectDiagram"></fa-icon>
+                <span>{{ 'cockpit.processDetail.diagram' | translate }}</span>
+              </div>
+              <div class="definition-info" *ngIf="processDefinition">
+                <span class="definition-name">{{ processDefinition.name || processDefinition.key }}</span>
+                <span class="definition-key">{{ processDefinition.key }}</span>
+                <span class="definition-version" *ngIf="selectedVersion === 'all'">
+                  {{ 'cockpit.processes.allVersions' | translate }}
+                </span>
+                <span class="tenant-id" *ngIf="processDefinition.tenantId">
+                  <fa-icon [icon]="faCog"></fa-icon>
+                  {{ processDefinition.tenantId }}
+                </span>
+                <!-- Version selector -->
+                <div class="version-selector" *ngIf="processDefinitionVersions.length > 1">
+                  <label>{{ 'cockpit.processes.version' | translate }}:</label>
+                  <select [(ngModel)]="selectedVersion" (change)="onVersionChange()">
+                    <option value="all">{{ 'cockpit.processes.allVersions' | translate }}</option>
+                    <option *ngFor="let v of processDefinitionVersions" [value]="v.id">
+                      {{ getVersionLabel(v) }}
+                    </option>
+                  </select>
+                </div>
+              </div>
             </div>
 
             <div class="diagram-container">

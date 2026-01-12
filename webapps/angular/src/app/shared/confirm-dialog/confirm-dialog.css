@@ -4,22 +4,24 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: var(--bg-overlay);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1050;
+  z-index: var(--z-modal-backdrop);
 }
 
 .dialog-container {
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xl);
   max-width: 450px;
   width: 90%;
   max-height: 90vh;
   overflow: hidden;
-  animation: dialogSlideIn 0.2s ease-out;
+  display: flex;
+  flex-direction: column;
+  animation: dialogSlideIn var(--transition-base) ease-out;
 }
 
 @keyframes dialogSlideIn {
@@ -34,105 +36,110 @@
 }
 
 .dialog-header {
-  padding: 16px 20px;
-  border-bottom: 1px solid #e5e7eb;
+  padding: var(--space-4) var(--space-5);
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
 }
 
 .dialog-title {
   margin: 0;
-  font-size: 18px;
-  font-weight: 600;
-  color: #111827;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
 }
 
 .dialog-body {
-  padding: 20px;
+  padding: var(--space-5);
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
 }
 
 .dialog-message {
   margin: 0;
-  color: #4b5563;
-  font-size: 14px;
-  line-height: 1.5;
+  color: var(--text-secondary);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
 }
 
 .dialog-footer {
-  padding: 16px 20px;
-  border-top: 1px solid #e5e7eb;
+  padding: var(--space-4) var(--space-5);
+  border-top: 1px solid var(--border-color);
   display: flex;
   justify-content: flex-end;
-  gap: 12px;
+  gap: var(--space-3);
+  flex-shrink: 0;
 }
 
 .btn {
-  padding: 8px 16px;
-  border-radius: 6px;
-  font-size: 14px;
-  font-weight: 500;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
   cursor: pointer;
   border: none;
-  transition: all 0.15s ease;
+  transition: all var(--transition-fast);
 }
 
 .btn-secondary {
-  background-color: #f3f4f6;
-  color: #374151;
+  background-color: var(--color-gray-100);
+  color: var(--text-primary);
 }
 
 .btn-secondary:hover {
-  background-color: #e5e7eb;
+  background-color: var(--border-color);
 }
 
 .btn-danger {
-  background-color: #dc2626;
-  color: white;
+  background-color: var(--color-danger);
+  color: var(--text-inverse);
 }
 
 .btn-danger:hover {
-  background-color: #b91c1c;
+  background-color: var(--color-danger-dark);
 }
 
 .btn-primary {
-  background-color: #2563eb;
-  color: white;
+  background-color: var(--color-primary);
+  color: var(--text-inverse);
 }
 
 .btn-primary:hover {
-  background-color: #1d4ed8;
+  background-color: var(--color-primary-dark);
 }
 
 .dialog-header.danger {
-  background-color: #fef2f2;
+  background-color: var(--color-danger-bg);
 }
 
 .dialog-header.danger .dialog-title {
-  color: #991b1b;
+  color: var(--color-danger-dark);
 }
 
 .input-group {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  margin-top: 16px;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
 }
 
 .input-group label {
-  font-size: 14px;
-  font-weight: 500;
-  color: #374151;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-primary);
 }
 
 .input-group input {
-  padding: 10px 12px;
-  border: 1px solid #e5e7eb;
-  border-radius: 6px;
-  font-size: 14px;
-  color: #374151;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-base);
+  color: var(--text-primary);
+  transition: border-color var(--transition-base), box-shadow var(--transition-base);
 }
 
 .input-group input:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-focus);
 }

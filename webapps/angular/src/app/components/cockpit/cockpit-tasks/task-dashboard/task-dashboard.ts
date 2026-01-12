@@ -10,8 +10,7 @@ import {
   faUser,
   faUsers,
   faQuestionCircle,
-  faInfoCircle,
-  faSearch
+  faInfoCircle
 } from '@fortawesome/free-solid-svg-icons';
 
 import { CockpitHeaderComponent, BreadcrumbItem } from '../../../../shared/cockpit-header/cockpit-header';
@@ -59,7 +58,6 @@ export class TaskDashboardComponent implements OnInit, OnDestroy {
   faUsers = faUsers;
   faQuestionCircle = faQuestionCircle;
   faInfoCircle = faInfoCircle;
-  faSearch = faSearch;
 
   breadcrumbs: BreadcrumbItem[] = [
     { label: 'Tasks', translateKey: 'cockpit.menu.tasks' }
@@ -226,40 +224,6 @@ export class TaskDashboardComponent implements OnInit, OnDestroy {
           this.cdr.detectChanges();
         }
       });
-  }
-
-  navigateToSearch(searchType: string): void {
-    // Navigate to task list with search filter
-    // The search query will be handled by the task-list component
-    const queryParams: Record<string, string> = {};
-
-    switch (searchType) {
-      case 'assignedToUsers':
-        queryParams['filter'] = 'assigned';
-        break;
-      case 'assignedToGroups':
-        queryParams['filter'] = 'withCandidateGroups';
-        break;
-      case 'unassigned':
-        queryParams['filter'] = 'unassigned';
-        break;
-      case 'all':
-        // No filter - show all open tasks
-        break;
-    }
-
-    // Navigate to task list with query params
-    window.location.href = `/cockpit/tasks/list?${new URLSearchParams(queryParams).toString()}`;
-  }
-
-  navigateToGroupSearch(groupId: string | null): void {
-    const queryParams: Record<string, string> = {};
-    if (groupId) {
-      queryParams['candidateGroup'] = groupId;
-    } else {
-      queryParams['filter'] = 'withoutCandidateGroups';
-    }
-    window.location.href = `/cockpit/tasks/list?${new URLSearchParams(queryParams).toString()}`;
   }
 
   formatGroupName(name: string | null): string {

@@ -368,6 +368,10 @@ export interface TaskQueryParams {
   unassigned?: boolean;
   withCandidateGroups?: boolean;
   withoutCandidateGroups?: boolean;
+  createdAfter?: string;
+  createdBefore?: string;
+  dueAfter?: string;
+  dueBefore?: string;
   firstResult?: number;
   maxResults?: number;
   sortBy?: string;

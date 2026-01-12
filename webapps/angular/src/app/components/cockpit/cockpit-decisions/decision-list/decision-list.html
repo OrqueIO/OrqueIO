@@ -7,6 +7,22 @@
     ></app-cockpit-header>
 
     <div class="page-content">
+      <!-- Toolbar with search -->
+      <div class="toolbar">
+        <div class="search-bar">
+          <div class="search-input-wrapper">
+            <fa-icon [icon]="faSearch" class="search-icon"></fa-icon>
+            <input
+              type="text"
+              class="search-input"
+              [placeholder]="'cockpit.decisions.searchPlaceholder' | translate"
+              [(ngModel)]="searchQuery"
+              (input)="onSearchChange()"
+            />
+          </div>
+        </div>
+      </div>
+
       <!-- Loading state -->
       <div class="loading-state" *ngIf="loading">
         <fa-icon [icon]="faSpinner" animation="spin"></fa-icon>
@@ -51,7 +67,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let decision of decisionDefinitions">
+                  <tr *ngFor="let decision of filteredDefinitions">
                     <td class="name-cell">
                       <a [routerLink]="['/cockpit/decisions', decision.id]" class="decision-link">
                         {{ getDisplayName(decision) }}

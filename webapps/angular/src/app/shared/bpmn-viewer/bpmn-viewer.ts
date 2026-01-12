@@ -142,6 +142,26 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
     return rect.width > 0 && rect.height > 0;
   }
 
+  private scheduleFitToViewport(retryCount = 0): void {
+    const maxRetries = 5;
+    const retryDelay = 100; // ms
+
+    requestAnimationFrame(() => {
+      if (!this.viewer || !this.needsZoomFit) return;
+
+      if (this.isContainerVisible()) {
+        const canvas = this.viewer.get('canvas');
+        canvas.zoom('fit-viewport');
+        this.needsZoomFit = false;
+      } else if (retryCount < maxRetries) {
+        // Container not visible yet, retry after a delay
+        setTimeout(() => {
+          this.scheduleFitToViewport(retryCount + 1);
+        }, retryDelay);
+      }
+    });
+  }
+
   private async loadDiagram(): Promise<void> {
     if (!this.viewer || !this.xml) {
       return;
@@ -166,15 +186,9 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
         console.warn('BPMN import warnings:', result.warnings);
       }
 
-      // Fit diagram to viewport only if container is visible
-      if (this.isContainerVisible()) {
-        const canvas = this.viewer.get('canvas');
-        canvas.zoom('fit-viewport');
-        this.needsZoomFit = false;
-      } else {
-        // Container is hidden, schedule zoom for later
-        this.needsZoomFit = true;
-      }
+      // Fit diagram to viewport - use requestAnimationFrame to ensure DOM is fully rendered
+      this.needsZoomFit = true;
+      this.scheduleFitToViewport();
 
       // Apply all visual states
       this.updateHighlights();

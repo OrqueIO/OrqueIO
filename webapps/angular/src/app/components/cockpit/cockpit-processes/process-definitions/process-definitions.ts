@@ -12,11 +12,15 @@ import {
   faCheckCircle,
   faPlayCircle,
   faEye,
-  faList,
-  faThLarge
+  faSort,
+  faSortUp,
+  faSortDown
 } from '@fortawesome/free-solid-svg-icons';
 
-type ViewMode = 'list' | 'tile';
+interface SortConfig {
+  sortBy: string;
+  sortOrder: 'asc' | 'desc';
+}
 
 import { CockpitHeaderComponent, BreadcrumbItem } from '../../../../shared/cockpit-header/cockpit-header';
 import { COCKPIT_MENU_ITEMS } from '../../../../shared/cockpit-menu';
@@ -55,8 +59,9 @@ export class ProcessDefinitionsComponent implements OnInit, OnDestroy {
   faCheckCircle = faCheckCircle;
   faPlayCircle = faPlayCircle;
   faEye = faEye;
-  faList = faList;
-  faThLarge = faThLarge;
+  faSort = faSort;
+  faSortUp = faSortUp;
+  faSortDown = faSortDown;
 
   breadcrumbs: BreadcrumbItem[] = [
     { label: 'Processes', translateKey: 'cockpit.menu.processes' }
@@ -70,27 +75,53 @@ export class ProcessDefinitionsComponent implements OnInit, OnDestroy {
   // Filters
   searchQuery = '';
 
-  // View mode
-  viewMode: ViewMode = 'list';
-  private readonly VIEW_MODE_KEY = 'cockpit.processes.viewMode';
+  // Sorting
+  sortConfig: SortConfig = {
+    sortBy: 'name',
+    sortOrder: 'asc'
+  };
+  private readonly SORT_CONFIG_KEY = 'cockpit.processes.sortConfig';
 
   ngOnInit(): void {
     this.navMenuService.setMenuItems(COCKPIT_MENU_ITEMS);
-    this.loadViewMode();
+    this.loadSortConfig();
     this.loadProcessDefinitions();
   }
 
-  private loadViewMode(): void {
-    const savedMode = localStorage.getItem(this.VIEW_MODE_KEY);
-    if (savedMode === 'list' || savedMode === 'tile') {
-      this.viewMode = savedMode;
+  private loadSortConfig(): void {
+    const saved = localStorage.getItem(this.SORT_CONFIG_KEY);
+    if (saved) {
+      try {
+        const config = JSON.parse(saved);
+        if (config.sortBy && config.sortOrder) {
+          this.sortConfig = config;
+        }
+      } catch {
+        // Use default
+      }
     }
   }
 
-  setViewMode(mode: ViewMode): void {
-    this.viewMode = mode;
-    localStorage.setItem(this.VIEW_MODE_KEY, mode);
-    this.cdr.markForCheck();
+  private saveSortConfig(): void {
+    localStorage.setItem(this.SORT_CONFIG_KEY, JSON.stringify(this.sortConfig));
+  }
+
+  onSort(columnId: string): void {
+    if (this.sortConfig.sortBy === columnId) {
+      this.sortConfig.sortOrder = this.sortConfig.sortOrder === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortConfig.sortBy = columnId;
+      this.sortConfig.sortOrder = 'asc';
+    }
+    this.saveSortConfig();
+    this.applyFilter();
+  }
+
+  getSortIcon(columnId: string): any {
+    if (this.sortConfig.sortBy !== columnId) {
+      return this.faSort;
+    }
+    return this.sortConfig.sortOrder === 'asc' ? this.faSortUp : this.faSortDown;
   }
 
   ngOnDestroy(): void {
@@ -128,6 +159,43 @@ export class ProcessDefinitionsComponent implements OnInit, OnDestroy {
         return name.includes(query) || key.includes(query);
       });
     }
+
+    // Apply sorting
+    this.filteredDefinitions.sort((a, b) => {
+      let valueA: any;
+      let valueB: any;
+
+      switch (this.sortConfig.sortBy) {
+        case 'name':
+          valueA = this.getDefinitionName(a).toLowerCase();
+          valueB = this.getDefinitionName(b).toLowerCase();
+          break;
+        case 'key':
+          valueA = this.getDefinitionKey(a).toLowerCase();
+          valueB = this.getDefinitionKey(b).toLowerCase();
+          break;
+        case 'tenant':
+          valueA = (a.definition?.tenantId || '').toLowerCase();
+          valueB = (b.definition?.tenantId || '').toLowerCase();
+          break;
+        case 'instances':
+          valueA = a.instances || 0;
+          valueB = b.instances || 0;
+          break;
+        case 'incidents':
+          valueA = this.getTotalIncidents(a);
+          valueB = this.getTotalIncidents(b);
+          break;
+        default:
+          valueA = this.getDefinitionName(a).toLowerCase();
+          valueB = this.getDefinitionName(b).toLowerCase();
+      }
+
+      if (valueA < valueB) return this.sortConfig.sortOrder === 'asc' ? -1 : 1;
+      if (valueA > valueB) return this.sortConfig.sortOrder === 'asc' ? 1 : -1;
+      return 0;
+    });
+
     this.cdr.markForCheck();
   }
 
