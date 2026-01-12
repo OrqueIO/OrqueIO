@@ -5,7 +5,7 @@
 
   <groupId>io.orqueio.bpm</groupId>
   <artifactId>orqueio-root</artifactId>
-  <version>1.0.6-SSO</version>
+  <version>1.0.6-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>orqueio Platform - Root Pom</name>
   <inceptionYear>2013</inceptionYear>
