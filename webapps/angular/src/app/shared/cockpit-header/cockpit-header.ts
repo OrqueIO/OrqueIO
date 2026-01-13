@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -23,6 +23,7 @@ export class CockpitHeaderComponent {
   @Input() titleKey = '';
   @Input() breadcrumbs: BreadcrumbItem[] = [];
   @Input() showRefresh = false;
+  @Output() refresh = new EventEmitter<void>();
 
   // Icons
   faHome = faHome;
@@ -30,6 +31,10 @@ export class CockpitHeaderComponent {
   faRefresh = faRefresh;
 
   onRefresh(): void {
-    window.location.reload();
+    if (this.refresh.observed) {
+      this.refresh.emit();
+    } else {
+      window.location.reload();
+    }
   }
 }

@@ -1,6 +1,7 @@
-<div class="cockpit-layout">
+<div class="cockpit-layout" [class.diagram-fullscreen]="diagramMaximized" [class.table-fullscreen]="tableMaximized">
   <main class="cockpit-main">
     <app-cockpit-header
+      *ngIf="!diagramMaximized && !tableMaximized"
       titleKey="cockpit.processes.instances"
       [breadcrumbs]="breadcrumbs"
       [showRefresh]="true"
@@ -10,8 +11,8 @@
     <div class="page-content">
       <!-- Main layout: Sidebar (filters) + Content (BPMN + table) -->
       <div class="main-layout">
-        <!-- Left sidebar: Filters (always visible) -->
-        <aside class="filters-sidebar">
+        <!-- Left sidebar: Filters (hidden when maximized) -->
+        <aside class="filters-sidebar" *ngIf="!diagramMaximized && !tableMaximized">
           <div class="sidebar-header">
             <fa-icon [icon]="faFilter"></fa-icon>
             <span>{{ 'cockpit.processes.filters' | translate }}</span>
@@ -127,10 +128,10 @@
         </aside>
 
         <!-- Right content area -->
-        <div class="content-area">
-          <!-- BPMN Diagram section (always visible) -->
-          <section class="diagram-section">
-            <div class="section-header">
+        <div class="content-area" [class.fullscreen]="diagramMaximized" [class.table-expanded]="tableMaximized">
+          <!-- BPMN Diagram section -->
+          <section class="diagram-section" [class.maximized]="diagramMaximized" [class.collapsed]="tableMaximized">
+            <div class="section-header" *ngIf="!diagramMaximized">
               <div class="section-title">
                 <fa-icon [icon]="faProjectDiagram"></fa-icon>
                 <span>{{ 'cockpit.processDetail.diagram' | translate }}</span>
@@ -158,16 +159,20 @@
               </div>
             </div>
 
-            <div class="diagram-container">
+            <div class="diagram-container" *ngIf="!tableMaximized">
               <div class="diagram-loading" *ngIf="loadingDiagram">
                 <fa-icon [icon]="faSpinner" animation="spin"></fa-icon>
                 <span>{{ 'common.loading' | translate }}</span>
               </div>
 
               <app-bpmn-viewer
+                #bpmnViewer
                 *ngIf="!loadingDiagram && bpmnXml"
                 [xml]="bpmnXml"
                 [activityBadges]="activityBadges"
+                [showExpandButton]="true"
+                [isExpanded]="diagramMaximized"
+                (expandToggle)="toggleDiagramMaximize()"
               ></app-bpmn-viewer>
 
               <div class="empty-state" *ngIf="!loadingDiagram && !bpmnXml">
@@ -177,8 +182,8 @@
             </div>
           </section>
 
-          <!-- Instances table section (always visible) -->
-          <section class="instances-section">
+          <!-- Instances table section (hidden when diagram maximized, expanded when table maximized) -->
+          <section class="instances-section" *ngIf="!diagramMaximized">
             <!-- Toolbar -->
             <div class="section-toolbar">
               <div class="results-info">
@@ -197,6 +202,15 @@
                 <select [(ngModel)]="pageSize" (change)="onPageSizeChange()">
                   <option *ngFor="let size of pageSizeOptions" [value]="size">{{ size }}</option>
                 </select>
+              </div>
+
+              <!-- Expand/Collapse table button -->
+              <div class="toolbar-actions">
+                <a class="expand-table-btn"
+                   (click)="toggleTableMaximize()"
+                   [title]="tableMaximized ? ('cockpit.processDetail.showDiagram' | translate) : ('cockpit.processDetail.hideDiagram' | translate)">
+                  <fa-icon [icon]="tableMaximized ? faChevronDown : faChevronUp"></fa-icon>
+                </a>
               </div>
             </div>
 

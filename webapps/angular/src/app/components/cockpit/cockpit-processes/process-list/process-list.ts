@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, DestroyRef, inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, DestroyRef, inject, ChangeDetectionStrategy, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -10,6 +10,8 @@ import {
   faEye,
   faChevronLeft,
   faChevronRight,
+  faChevronUp,
+  faChevronDown,
   faExclamationTriangle,
   faCheckCircle,
   faTimesCircle,
@@ -24,7 +26,11 @@ import {
   faAngleDoubleRight,
   faCog,
   faHistory,
-  faProjectDiagram
+  faProjectDiagram,
+  faExpand,
+  faCompress,
+  faPlus,
+  faMinus
 } from '@fortawesome/free-solid-svg-icons';
 import { forkJoin } from 'rxjs';
 
@@ -84,6 +90,8 @@ export class ProcessListComponent implements OnInit, OnDestroy {
   faEye = faEye;
   faChevronLeft = faChevronLeft;
   faChevronRight = faChevronRight;
+  faChevronUp = faChevronUp;
+  faChevronDown = faChevronDown;
   faExclamationTriangle = faExclamationTriangle;
   faCheckCircle = faCheckCircle;
   faTimesCircle = faTimesCircle;
@@ -99,6 +107,12 @@ export class ProcessListComponent implements OnInit, OnDestroy {
   faCog = faCog;
   faHistory = faHistory;
   faProjectDiagram = faProjectDiagram;
+  faExpand = faExpand;
+  faCompress = faCompress;
+  faPlus = faPlus;
+  faMinus = faMinus;
+
+  @ViewChild('bpmnViewer') bpmnViewer!: BpmnViewerComponent;
 
   breadcrumbs: BreadcrumbItem[] = [
     { label: 'Processes', translateKey: 'cockpit.menu.processes', route: '/cockpit/processes' }
@@ -114,6 +128,8 @@ export class ProcessListComponent implements OnInit, OnDestroy {
   bpmnXml: string | null = null;
   loadingDiagram = false;
   activityStatistics: ActivityStatistics[] = [];
+  diagramMaximized = false;
+  tableMaximized = false;
 
   // Process instances
   processInstances: ProcessInstance[] = [];
@@ -144,7 +160,7 @@ export class ProcessListComponent implements OnInit, OnDestroy {
 
   // Sorting
   sortConfig: SortConfig = { column: 'startTime', direction: 'desc' };
-  sortableColumns = ['startTime', 'endTime', 'businessKey', 'state'];
+  sortableColumns = ['startTime', 'endTime', 'businessKey'];
 
   ngOnInit(): void {
     this.navMenuService.setMenuItems(COCKPIT_MENU_ITEMS);
@@ -174,7 +190,13 @@ export class ProcessListComponent implements OnInit, OnDestroy {
       try {
         const prefs = JSON.parse(saved);
         if (prefs.pageSize) this.pageSize = prefs.pageSize;
-        if (prefs.sortConfig) this.sortConfig = prefs.sortConfig;
+        // Validate sortConfig before applying - only accept valid Camunda sort columns
+        if (prefs.sortConfig?.column && prefs.sortConfig?.direction) {
+          const validColumns = ['startTime', 'endTime', 'businessKey'];
+          if (validColumns.includes(prefs.sortConfig.column)) {
+            this.sortConfig = prefs.sortConfig;
+          }
+        }
       } catch (e) {
         // Ignore invalid saved preferences
       }
@@ -529,5 +551,26 @@ export class ProcessListComponent implements OnInit, OnDestroy {
 
   getVersionLabel(def: ProcessDefinition): string {
     return `v${def.version}${def.tenantId ? ` (${def.tenantId})` : ''}`;
+  }
+
+  toggleDiagramMaximize(): void {
+    this.diagramMaximized = !this.diagramMaximized;
+    this.cdr.markForCheck();
+    // Resize diagram after CSS transition
+    setTimeout(() => {
+      this.bpmnViewer?.resize();
+    }, 350);
+  }
+
+  toggleTableMaximize(): void {
+    this.tableMaximized = !this.tableMaximized;
+    this.cdr.markForCheck();
+
+    // If showing diagram again, resize it after DOM updates
+    if (!this.tableMaximized) {
+      setTimeout(() => {
+        this.bpmnViewer?.resize();
+      }, 100);
+    }
   }
 }

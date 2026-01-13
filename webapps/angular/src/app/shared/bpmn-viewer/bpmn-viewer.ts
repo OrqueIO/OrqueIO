@@ -9,7 +9,9 @@ import {
   SimpleChanges,
   ViewChild,
   AfterViewInit,
-  HostListener
+  HostListener,
+  ChangeDetectorRef,
+  inject
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -36,6 +38,8 @@ export interface BpmnElement {
   styleUrls: ['./bpmn-viewer.css']
 })
 export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy {
+  private cdr = inject(ChangeDetectorRef);
+
   @ViewChild('canvas', { static: true }) private canvasRef!: ElementRef<HTMLDivElement>;
 
   @Input() xml: string | null = null;
@@ -43,11 +47,14 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
   @Input() runningActivities: string[] = [];
   @Input() activityBadges: ActivityBadge[] = [];
   @Input() selectedActivity: string | null = null;
+  @Input() showExpandButton = false;
+  @Input() isExpanded = false;
 
   @Output() elementClick = new EventEmitter<BpmnElement>();
   @Output() elementHover = new EventEmitter<BpmnElement | null>();
   @Output() viewerReady = new EventEmitter<void>();
   @Output() error = new EventEmitter<Error>();
+  @Output() expandToggle = new EventEmitter<void>();
 
   private viewer: any = null;
   private overlays: any = null;
@@ -222,11 +229,13 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
       this.updateSelection();
 
       this.loading = false;
+      this.cdr.detectChanges();
       this.viewerReady.emit();
     } catch (err: any) {
       this.loading = false;
       this.currentXml = null; // Reset on error
       this.errorMessage = err.message || 'Failed to load BPMN diagram';
+      this.cdr.detectChanges();
       this.error.emit(err);
       console.error('BPMN import error:', err);
     }

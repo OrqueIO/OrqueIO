@@ -600,9 +600,9 @@ export class CockpitService {
       }
       if (params.sortBy) {
         httpParams = httpParams.set('sortBy', params.sortBy);
-      }
-      if (params.sortOrder) {
-        httpParams = httpParams.set('sortOrder', params.sortOrder);
+        if (params.sortOrder) {
+          httpParams = httpParams.set('sortOrder', params.sortOrder);
+        }
       }
     }
 
@@ -713,9 +713,9 @@ export class CockpitService {
     }
     if (params.sortBy) {
       httpParams = httpParams.set('sortBy', params.sortBy);
-    }
-    if (params.sortOrder) {
-      httpParams = httpParams.set('sortOrder', params.sortOrder);
+      if (params.sortOrder) {
+        httpParams = httpParams.set('sortOrder', params.sortOrder);
+      }
     }
     if (params.latestVersion !== false) {
       httpParams = httpParams.set('latestVersion', 'true');
@@ -830,9 +830,9 @@ export class CockpitService {
     }
     if (params.sortBy) {
       httpParams = httpParams.set('sortBy', params.sortBy);
-    }
-    if (params.sortOrder) {
-      httpParams = httpParams.set('sortOrder', params.sortOrder);
+      if (params.sortOrder) {
+        httpParams = httpParams.set('sortOrder', params.sortOrder);
+      }
     }
     if (params.includeInputs) {
       httpParams = httpParams.set('includeInputs', 'true');
@@ -893,9 +893,9 @@ export class CockpitService {
       }
       if (params.sortBy) {
         httpParams = httpParams.set('sortBy', params.sortBy);
-      }
-      if (params.sortOrder) {
-        httpParams = httpParams.set('sortOrder', params.sortOrder);
+        if (params.sortOrder) {
+          httpParams = httpParams.set('sortOrder', params.sortOrder);
+        }
       }
     }
 
@@ -1201,9 +1201,11 @@ export class CockpitService {
 
   // Count process instances with POST (supports complex filters)
   queryProcessInstancesCount(body: any): Observable<number> {
+    // Remove sorting from count query - count endpoint doesn't support it
+    const { sorting, ...countBody } = body || {};
     return this.http.post<{ count: number }>(
       `${this.historyUrl}/process-instance/count`,
-      body
+      countBody
     ).pipe(
       map(res => res.count),
       catchError(() => of(0))
@@ -1282,8 +1284,10 @@ export class CockpitService {
     if (params.withCandidateGroups) httpParams = httpParams.set('withCandidateGroups', 'true');
     if (params.withoutCandidateGroups) httpParams = httpParams.set('withoutCandidateGroups', 'true');
     if (params.firstResult !== undefined) httpParams = httpParams.set('firstResult', params.firstResult.toString());
-    if (params.sortBy) httpParams = httpParams.set('sortBy', params.sortBy);
-    if (params.sortOrder) httpParams = httpParams.set('sortOrder', params.sortOrder);
+    if (params.sortBy) {
+      httpParams = httpParams.set('sortBy', params.sortBy);
+      if (params.sortOrder) httpParams = httpParams.set('sortOrder', params.sortOrder);
+    }
 
     const maxResults = params.maxResults ?? 100;
     httpParams = httpParams.set('maxResults', maxResults.toString());
@@ -1346,8 +1350,10 @@ export class CockpitService {
     if (params?.suspended) httpParams = httpParams.set('suspended', 'true');
     if (params?.active) httpParams = httpParams.set('active', 'true');
     if (params?.firstResult !== undefined) httpParams = httpParams.set('firstResult', params.firstResult.toString());
-    if (params?.sortBy) httpParams = httpParams.set('sortBy', params.sortBy);
-    if (params?.sortOrder) httpParams = httpParams.set('sortOrder', params.sortOrder);
+    if (params?.sortBy) {
+      httpParams = httpParams.set('sortBy', params.sortBy);
+      if (params?.sortOrder) httpParams = httpParams.set('sortOrder', params.sortOrder);
+    }
 
     const maxResults = params?.maxResults ?? 100;
     httpParams = httpParams.set('maxResults', maxResults.toString());

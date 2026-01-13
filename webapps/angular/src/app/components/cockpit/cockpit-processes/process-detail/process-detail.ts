@@ -51,6 +51,7 @@ import { BpmnViewerComponent, ActivityBadge, BpmnElement } from '../../../../sha
 import { ActivityInstanceTreeComponent } from '../../../../shared/activity-instance-tree/activity-instance-tree';
 import { ConfirmDialogComponent } from '../../../../shared/confirm-dialog/confirm-dialog';
 import { ClipboardDirective } from '../../../../shared/clipboard-directive/clipboard.directive';
+import { CockpitHeaderComponent, BreadcrumbItem } from '../../../../shared/cockpit-header/cockpit-header';
 
 type TabType = 'variables' | 'incidents' | 'calledInstances' | 'userTasks' | 'jobs' | 'externalTasks';
 type SidebarTab = 'info' | 'filter';
@@ -74,7 +75,8 @@ interface VariableEdit {
     BpmnViewerComponent,
     ActivityInstanceTreeComponent,
     ConfirmDialogComponent,
-    ClipboardDirective
+    ClipboardDirective,
+    CockpitHeaderComponent
   ],
   templateUrl: './process-detail.html',
   styleUrls: ['./process-detail.css'],
@@ -116,6 +118,9 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
   loading = true;
   loadingDiagram = false;
   actionInProgress = false;
+
+  // Breadcrumbs for header
+  breadcrumbs: BreadcrumbItem[] = [];
 
   // Data
   processInstance: ProcessInstanceDetail | null = null;
@@ -218,6 +223,7 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
         next: (instance) => {
           this.processInstance = instance;
           this.loading = false;
+          this.updateBreadcrumbs();
           this.cdr.markForCheck();
 
           if (instance?.processDefinitionId) {
@@ -332,9 +338,34 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (definition) => {
           this.processDefinition = definition;
+          this.updateBreadcrumbs();
           this.cdr.markForCheck();
         }
       });
+  }
+
+  private updateBreadcrumbs(): void {
+    if (!this.processInstance) {
+      this.breadcrumbs = [];
+      return;
+    }
+
+    const processName = this.processDefinition?.name || this.processInstance.processDefinitionKey;
+
+    this.breadcrumbs = [
+      {
+        label: 'Processes',
+        translateKey: 'cockpit.menu.processes',
+        route: '/cockpit/processes'
+      },
+      {
+        label: processName,
+        route: `/cockpit/processes/${this.processInstance.processDefinitionKey}/instances`
+      },
+      {
+        label: this.processInstance.id
+      }
+    ];
   }
 
   private loadActivityInstanceTree(): void {
