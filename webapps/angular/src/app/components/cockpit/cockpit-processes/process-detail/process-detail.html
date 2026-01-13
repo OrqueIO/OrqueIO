@@ -14,74 +14,20 @@
     </a>
   </div>
 
-  <!-- Toolbar - Outside content container, at the top -->
-  <div class="ctn-toolbar" *ngIf="!loading && processInstance">
-    <!-- Breadcrumb -->
-    <div class="toolbar-breadcrumb">
-      <a [routerLink]="['/cockpit/processes']">
-        <fa-icon [icon]="faHome"></fa-icon>
-        {{ 'cockpit.menu.processes' | translate }}
-      </a>
-      <span class="breadcrumb-separator">/</span>
-      <a [routerLink]="['/cockpit/processes', processInstance.processDefinitionKey, 'instances']">
-        {{ processDefinition?.name || processInstance.processDefinitionKey }}
-      </a>
-      <span class="breadcrumb-separator">/</span>
-      <span class="current">{{ processInstance.id }}</span>
-    </div>
+  <!-- Header - Outside content container, at the top (hidden when diagram maximized) -->
+  <app-cockpit-header
+    *ngIf="!loading && processInstance && !diagramMaximized"
+    [title]="processDefinition?.name || processInstance?.processDefinitionKey || ''"
+    [breadcrumbs]="breadcrumbs"
+    [showRefresh]="true"
+    (refresh)="loadProcessData()"
+  ></app-cockpit-header>
 
-    <!-- Toolbar actions -->
-    <div class="toolbar-actions" *ngIf="isProcessRunning()">
-      <!-- Cancel Instance -->
-      <button class="toolbar-btn danger"
-              (click)="showCancelDialog = true"
-              [disabled]="actionInProgress"
-              [title]="'cockpit.processDetail.actions.cancel' | translate">
-        <fa-icon [icon]="faTimes"></fa-icon>
-      </button>
-
-      <!-- Suspend/Resume Instance -->
-      <button class="toolbar-btn warning"
-              *ngIf="processInstance.state === 'ACTIVE'"
-              (click)="showSuspendDialog = true"
-              [disabled]="actionInProgress"
-              [title]="'cockpit.processDetail.actions.suspend' | translate">
-        <fa-icon [icon]="faPause"></fa-icon>
-      </button>
-      <button class="toolbar-btn success"
-              *ngIf="processInstance.state === 'SUSPENDED'"
-              (click)="resumeInstance()"
-              [disabled]="actionInProgress"
-              [title]="'cockpit.processDetail.actions.resume' | translate">
-        <fa-icon [icon]="faPlay"></fa-icon>
-      </button>
-
-      <!-- Add Variable -->
-      <button class="toolbar-btn"
-              (click)="startAddVariable()"
-              [disabled]="actionInProgress"
-              [title]="'cockpit.processDetail.actions.addVariable' | translate">
-        <fa-icon [icon]="faPlus"></fa-icon>
-      </button>
-
-      <!-- Retry Failed Jobs -->
-      <button class="toolbar-btn warning has-badge"
-              *ngIf="hasFailedJobs()"
-              (click)="retryAllJobs()"
-              [disabled]="actionInProgress"
-              [title]="'cockpit.processDetail.actions.retryJobs' | translate">
-        <fa-icon [icon]="faRedo"></fa-icon>
-        <span class="badge">{{ getFailedJobsCount() }}</span>
-      </button>
-    </div>
-  </div>
-
-  <!-- Main content container (sidebar + content area) -->
-  <div class="ctn-content-container" *ngIf="!loading && processInstance">
-    <!-- Sidebar -->
-    <div class="ctn-column ctn-sidebar ctn-scroll">
-      <!-- Sidebar tabs -->
-      <ul class="nav nav-tabs">
+  <!-- Unified toolbar: sidebar tabs + process info + actions -->
+  <div class="ctn-unified-toolbar" *ngIf="!loading && processInstance && !diagramMaximized">
+    <!-- Left: Sidebar tabs -->
+    <div class="toolbar-section toolbar-tabs-section">
+      <ul class="toolbar-tabs">
         <li [class.active]="sidebarTab === 'info'">
           <a (click)="sidebarTab = 'info'">{{ 'cockpit.processDetail.sidebarTabs.info' | translate }}</a>
         </li>
@@ -89,6 +35,66 @@
           <a (click)="sidebarTab = 'filter'">{{ 'cockpit.processDetail.sidebarTabs.filter' | translate }}</a>
         </li>
       </ul>
+    </div>
+
+    <!-- Center: Process title -->
+    <div class="toolbar-section toolbar-title-section">
+      <h1>{{ processDefinition?.name || processInstance?.processDefinitionKey }}</h1>
+      <span class="definition-key">{{ processInstance.processDefinitionKey }}</span>
+    </div>
+
+    <!-- Right: Actions -->
+    <div class="toolbar-section toolbar-actions-section">
+      <div class="toolbar-actions" *ngIf="isProcessRunning()">
+        <!-- Cancel Instance -->
+        <button class="toolbar-btn danger"
+                (click)="showCancelDialog = true"
+                [disabled]="actionInProgress"
+                [title]="'cockpit.processDetail.actions.cancel' | translate">
+          <fa-icon [icon]="faTimes"></fa-icon>
+        </button>
+
+        <!-- Suspend/Resume Instance -->
+        <button class="toolbar-btn warning"
+                *ngIf="processInstance.state === 'ACTIVE'"
+                (click)="showSuspendDialog = true"
+                [disabled]="actionInProgress"
+                [title]="'cockpit.processDetail.actions.suspend' | translate">
+          <fa-icon [icon]="faPause"></fa-icon>
+        </button>
+        <button class="toolbar-btn success"
+                *ngIf="processInstance.state === 'SUSPENDED'"
+                (click)="resumeInstance()"
+                [disabled]="actionInProgress"
+                [title]="'cockpit.processDetail.actions.resume' | translate">
+          <fa-icon [icon]="faPlay"></fa-icon>
+        </button>
+
+        <!-- Add Variable -->
+        <button class="toolbar-btn"
+                (click)="startAddVariable()"
+                [disabled]="actionInProgress"
+                [title]="'cockpit.processDetail.actions.addVariable' | translate">
+          <fa-icon [icon]="faPlus"></fa-icon>
+        </button>
+
+        <!-- Retry Failed Jobs -->
+        <button class="toolbar-btn warning has-badge"
+                *ngIf="hasFailedJobs()"
+                (click)="retryAllJobs()"
+                [disabled]="actionInProgress"
+                [title]="'cockpit.processDetail.actions.retryJobs' | translate">
+          <fa-icon [icon]="faRedo"></fa-icon>
+          <span class="badge">{{ getFailedJobsCount() }}</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main content container (sidebar + content area) -->
+  <div class="ctn-content-container" *ngIf="!loading && processInstance" [class.diagram-fullscreen]="diagramMaximized">
+    <!-- Sidebar (hidden when diagram maximized) -->
+    <div class="ctn-column ctn-sidebar ctn-scroll" *ngIf="!diagramMaximized">
 
       <!-- Info Tab Content -->
       <div class="tab-content" *ngIf="sidebarTab === 'info'">
@@ -257,8 +263,11 @@
             [activityBadges]="activityBadges"
             [selectedActivity]="selectedActivityId"
             [highlightedActivities]="selectedActivityIds"
+            [showExpandButton]="true"
+            [isExpanded]="diagramMaximized"
             (elementClick)="handleBpmnElementSelection($event)"
             (elementHover)="onDiagramElementHover($event)"
+            (expandToggle)="toggleDiagramMaximize()"
           ></app-bpmn-viewer>
 
           <div class="empty-diagram" *ngIf="!loadingDiagram && !bpmnXml">
@@ -267,26 +276,6 @@
           </div>
         </div>
 
-        <!-- Diagram collapse/maximize controls -->
-        <div class="diagram-controls">
-          <a class="hide-collapsable"
-             (click)="toggleDiagramCollapse()"
-             [title]="diagramCollapsed ? ('cockpit.processDetail.showDiagram' | translate) : ('cockpit.processDetail.hideDiagram' | translate)">
-            <fa-icon [icon]="diagramCollapsed ? faChevronDown : faChevronUp"></fa-icon>
-          </a>
-          <a class="maximize-collapsable"
-             *ngIf="!diagramCollapsed && !diagramMaximized"
-             (click)="toggleDiagramMaximize()"
-             [title]="'cockpit.processDetail.maximizeDiagram' | translate">
-            <fa-icon [icon]="faExpand"></fa-icon>
-          </a>
-          <a class="restore-collapsable"
-             *ngIf="diagramMaximized"
-             (click)="toggleDiagramMaximize()"
-             [title]="'cockpit.processDetail.restoreDiagram' | translate">
-            <fa-icon [icon]="faCompress"></fa-icon>
-          </a>
-        </div>
       </div>
 
       <!-- Content bottom pane - Tabs -->
@@ -294,20 +283,29 @@
            [class.hidden]="diagramMaximized">
 
         <!-- Tabs header -->
-        <ul class="nav nav-tabs">
-          <li *ngFor="let tab of tabs"
-              [class.active]="activeTab === tab.id"
-              (click)="setActiveTab(tab.id)">
-            <a>
-              {{ tab.labelKey | translate }}
-              <span *ngIf="getTabBadgeCount(tab)"
-                    class="badge"
-                    [class.badge-warning]="tab.id === 'incidents'">
-                {{ getTabBadgeCount(tab) }}
-              </span>
+        <div class="tabs-header">
+          <ul class="nav nav-tabs">
+            <li *ngFor="let tab of tabs"
+                [class.active]="activeTab === tab.id"
+                (click)="setActiveTab(tab.id)">
+              <a>
+                {{ tab.labelKey | translate }}
+                <span *ngIf="getTabBadgeCount(tab)"
+                      class="badge"
+                      [class.badge-warning]="tab.id === 'incidents'">
+                  {{ getTabBadgeCount(tab) }}
+                </span>
+              </a>
+            </li>
+          </ul>
+          <div class="tabs-actions">
+            <a class="collapse-diagram-btn"
+               (click)="toggleDiagramCollapse()"
+               [title]="diagramCollapsed ? ('cockpit.processDetail.showDiagram' | translate) : ('cockpit.processDetail.hideDiagram' | translate)">
+              <fa-icon [icon]="diagramCollapsed ? faChevronDown : faChevronUp"></fa-icon>
             </a>
-          </li>
-        </ul>
+          </div>
+        </div>
 
         <!-- Tab content -->
         <div class="tab-content-area">

@@ -286,6 +286,109 @@
 }
 
 /* ========================================
+   Unified Toolbar (tabs + title + actions)
+   ======================================== */
+
+.ctn-unified-toolbar {
+  display: flex;
+  align-items: stretch;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  position: relative;
+  z-index: 10;
+  min-height: 44px;
+}
+
+.ctn-unified-toolbar .toolbar-section {
+  display: flex;
+  align-items: center;
+}
+
+/* Left: Tabs section */
+.ctn-unified-toolbar .toolbar-tabs-section {
+  width: 300px;
+  min-width: 300px;
+  background: var(--bg-secondary);
+}
+
+.ctn-unified-toolbar .toolbar-tabs {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.ctn-unified-toolbar .toolbar-tabs li {
+  flex: 1;
+}
+
+.ctn-unified-toolbar .toolbar-tabs li a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 12px 14px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  border-bottom: 2px solid transparent;
+}
+
+.ctn-unified-toolbar .toolbar-tabs li a:hover {
+  background: rgba(230, 126, 34, 0.1);
+  color: #e67e22;
+}
+
+.ctn-unified-toolbar .toolbar-tabs li.active a {
+  color: #e67e22;
+  border-bottom-color: #e67e22;
+  background: var(--bg-primary);
+}
+
+/* Center: Title section */
+.ctn-unified-toolbar .toolbar-title-section {
+  flex: 1;
+  padding: 0 20px;
+  gap: 12px;
+  background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+  justify-content: flex-start;
+}
+
+.ctn-unified-toolbar .toolbar-title-section h1 {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.ctn-unified-toolbar .toolbar-title-section .definition-key {
+  font-size: 10px;
+  font-family: 'SF Mono', 'Consolas', monospace;
+  color: rgba(255, 255, 255, 0.7);
+  background: rgba(0, 0, 0, 0.2);
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+}
+
+/* Right: Actions section */
+.ctn-unified-toolbar .toolbar-actions-section {
+  background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+  padding: 0 16px;
+}
+
+.ctn-unified-toolbar .toolbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ========================================
    Sidebar
    ======================================== */
 
@@ -299,46 +402,6 @@
   flex-direction: column;
   overflow: hidden;
   box-shadow: 2px 0 8px rgba(0, 0, 0, 0.04);
-}
-
-.ctn-sidebar .nav.nav-tabs {
-  display: flex;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  border-bottom: 1px solid var(--border-color);
-  background: var(--bg-secondary);
-  flex-shrink: 0;
-}
-
-.ctn-sidebar .nav-tabs li {
-  flex: 1;
-}
-
-.ctn-sidebar .nav-tabs li a {
-  display: block;
-  padding: 12px 14px;
-  text-align: center;
-  color: var(--text-secondary);
-  text-decoration: none;
-  font-size: 12px;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.4px;
-  border-bottom: 2px solid transparent;
-  cursor: pointer;
-  transition: all var(--transition-fast);
-}
-
-.ctn-sidebar .nav-tabs li a:hover {
-  background: rgba(0, 0, 0, 0.03);
-  color: var(--text-primary);
-}
-
-.ctn-sidebar .nav-tabs li.active a {
-  background: var(--bg-primary);
-  color: var(--primary-color);
-  border-bottom-color: var(--primary-color);
 }
 
 .ctn-sidebar .tab-content {
@@ -401,11 +464,11 @@
 }
 
 .process-information dt:hover {
-  color: var(--primary-color);
+  color: #e67e22;
 }
 
 .process-information dt:hover::before {
-  background: var(--primary-color);
+  background: #e67e22;
 }
 
 .process-information dd {
@@ -421,19 +484,19 @@
 }
 
 .process-information dd:hover {
-  background: var(--bg-tertiary);
-  border-left-color: var(--accent-color);
+  background: rgba(230, 126, 34, 0.1);
+  border-left-color: #e67e22;
 }
 
 .process-information dd a {
-  color: var(--accent-color);
+  color: #e67e22;
   text-decoration: none;
   font-weight: 500;
 }
 
 .process-information dd a:hover {
   text-decoration: underline;
-  color: var(--accent-hover);
+  color: #d35400;
 }
 
 .null-value {
@@ -563,10 +626,31 @@
   min-height: 44px;
 }
 
+.ctn-content-top.collapsed .diagram-controls {
+  top: 50%;
+  bottom: auto;
+  transform: translateY(-50%);
+}
+
 .ctn-content-top.maximized {
   flex: 1;
   height: auto;
   z-index: 100;
+}
+
+/* Fullscreen diagram mode - hide sidebar, expand content */
+.ctn-content-container.diagram-fullscreen {
+  padding: 0;
+}
+
+.ctn-content-container.diagram-fullscreen .ctn-column.ctn-content {
+  width: 100%;
+  flex: 1;
+}
+
+.ctn-content-container.diagram-fullscreen .ctn-row.ctn-content-top {
+  height: 100%;
+  border-bottom: none;
 }
 
 .diagram-container {
@@ -668,6 +752,49 @@
   display: none;
 }
 
+.tabs-header {
+  display: flex;
+  align-items: center;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.tabs-header .nav.nav-tabs {
+  flex: 1;
+  border-bottom: none;
+  background: transparent;
+}
+
+.tabs-actions {
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+}
+
+.collapse-diagram-btn,
+.expand-diagram-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+}
+
+.collapse-diagram-btn:hover,
+.expand-diagram-btn:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: var(--text-primary);
+}
+
+.collapse-diagram-btn fa-icon,
+.expand-diagram-btn fa-icon {
+  font-size: 12px;
+}
+
 .ctn-content-bottom .nav.nav-tabs {
   display: flex;
   margin: 0;
@@ -705,13 +832,13 @@
 }
 
 .ctn-content-bottom .nav-tabs li a:hover {
-  color: var(--text-primary);
-  background: rgba(0, 0, 0, 0.03);
+  color: #e67e22;
+  background: rgba(230, 126, 34, 0.1);
 }
 
 .ctn-content-bottom .nav-tabs li.active a {
-  color: var(--primary-color);
-  border-bottom-color: var(--primary-color);
+  color: #e67e22;
+  border-bottom-color: #e67e22;
   background: var(--bg-primary);
 }
 

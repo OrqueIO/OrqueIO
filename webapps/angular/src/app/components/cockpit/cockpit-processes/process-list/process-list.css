@@ -55,22 +55,22 @@
 .definition-name {
   font-size: 0.875rem;
   font-weight: 600;
-  color: var(--text-primary);
+  color: #fff;
 }
 
 .definition-key {
   font-size: 0.75rem;
-  color: var(--text-secondary);
+  color: rgba(255, 255, 255, 0.8);
   font-family: var(--font-family-mono);
-  background: var(--color-gray-100);
+  background: rgba(255, 255, 255, 0.1);
   padding: 0.2rem 0.5rem;
   border-radius: var(--radius-sm);
 }
 
 .definition-version {
   font-size: 0.6875rem;
-  color: var(--color-primary);
-  background: var(--color-primary-bg);
+  color: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.1);
   padding: 0.2rem 0.5rem;
   border-radius: var(--radius-sm);
   font-weight: 500;
@@ -78,7 +78,7 @@
 
 .tenant-id {
   font-size: 0.75rem;
-  color: var(--text-muted);
+  color: rgba(255, 255, 255, 0.5);
   display: flex;
   align-items: center;
   gap: 0.25rem;
@@ -96,16 +96,16 @@
 
 .version-selector label {
   font-size: 0.75rem;
-  color: var(--text-secondary);
+  color: rgba(255, 255, 255, 0.6);
   font-weight: 500;
 }
 
 .version-selector select {
   padding: 0.25rem 0.5rem;
-  border: 1px solid var(--border-color);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: var(--radius-md);
-  background: var(--bg-card);
-  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
   font-size: 0.75rem;
   cursor: pointer;
   min-width: 100px;
@@ -113,13 +113,14 @@
 }
 
 .version-selector select:hover {
-  border-color: var(--color-gray-300);
+  border-color: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.15);
 }
 
 .version-selector select:focus {
   outline: none;
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 2px var(--color-primary-bg);
+  border-color: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.15);
 }
 
 /* =====================================================
@@ -139,9 +140,9 @@
    ===================================================== */
 
 .filters-sidebar {
-  width: 280px;
-  min-width: 280px;
-  max-width: 280px;
+  width: 300px;
+  min-width: 300px;
+  max-width: 300px;
   flex-shrink: 0;
   background: var(--bg-card);
   border-right: 1px solid var(--border-color);
@@ -322,7 +323,7 @@
    ===================================================== */
 
 .content-area {
-  width: calc(100% - 280px);
+  width: calc(100% - 300px);
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -353,10 +354,11 @@
   justify-content: space-between;
   gap: 1rem;
   padding: 0.75rem 1rem;
-  background: var(--color-gray-50);
-  border-bottom: 1px solid var(--border-color-light);
+  background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+  border-bottom: none;
+  border-left: 3px solid #e67e22;
   font-weight: 600;
-  color: var(--text-primary);
+  color: var(--text-inverse, #fff);
   font-size: 0.8125rem;
   flex-shrink: 0;
   flex-wrap: wrap;
@@ -369,7 +371,7 @@
 }
 
 .section-title fa-icon {
-  color: var(--color-primary);
+  color: #e67e22;
   font-size: 0.875rem;
 }
 
@@ -384,6 +386,61 @@
   display: block;
   width: 100%;
   height: 100%;
+}
+
+/* Fullscreen diagram mode */
+.cockpit-layout.diagram-fullscreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  background: var(--bg-card);
+}
+
+.cockpit-layout.diagram-fullscreen .page-content {
+  height: 100%;
+}
+
+.cockpit-layout.diagram-fullscreen .main-layout {
+  height: 100%;
+}
+
+.content-area.fullscreen {
+  width: 100%;
+}
+
+.diagram-section.maximized {
+  height: 100%;
+  flex: 1;
+  border-bottom: none;
+}
+
+/* Diagram collapsed mode (only header visible) */
+.diagram-section.collapsed {
+  height: auto;
+  min-height: auto;
+  flex: none;
+  border-bottom: none;
+}
+
+.diagram-section.collapsed .section-header {
+  padding: 0.5rem 1rem;
+}
+
+.diagram-section.collapsed .section-title {
+  display: none;
+}
+
+.diagram-section.collapsed .definition-info {
+  flex: 1;
+}
+
+/* Table expanded mode */
+.content-area.table-expanded .instances-section {
+  flex: 1;
+  height: auto;
 }
 
 .diagram-loading {
@@ -423,7 +480,7 @@
   justify-content: space-between;
   padding: 0.75rem 1rem;
   background: var(--color-gray-50);
-  border-bottom: 1px solid var(--border-color-light);
+  border-bottom: 1px solid var(--border-color);
   gap: 1rem;
   flex-shrink: 0;
 }
@@ -463,7 +520,34 @@
 .page-size-selector select:focus {
   outline: none;
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 2px var(--color-primary-bg);
+  box-shadow: 0 0 0 3px var(--color-primary-bg);
+}
+
+.toolbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: auto;
+}
+
+.expand-diagram-btn,
+.expand-table-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  color: var(--text-muted);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+  text-decoration: none;
+}
+
+.expand-diagram-btn:hover,
+.expand-table-btn:hover {
+  background: var(--color-gray-100);
+  color: var(--text-primary);
 }
 
 /* =====================================================
