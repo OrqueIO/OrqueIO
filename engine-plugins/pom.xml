@@ -5,9 +5,9 @@
     <groupId>io.orqueio.bpm</groupId>
     <artifactId>orqueio-database-settings</artifactId>
     <relativePath>../database</relativePath>
-    <version>1.0.6-SSO</version>
+    <version>1.0.6-SNAPSHOT</version>
   </parent>
-  <version>1.0.6-SSO</version>
+  <version>1.0.6-SNAPSHOT</version>
   <description>orqueio-engine-plugins</description>
   <groupId>io.orqueio.bpm</groupId>
   <artifactId>orqueio-engine-plugins</artifactId>
