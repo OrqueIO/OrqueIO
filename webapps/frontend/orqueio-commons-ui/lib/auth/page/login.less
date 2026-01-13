@@ -1,7 +1,3 @@
-// =============================================================================
-// LOGIN PAGE - Modern UI Design
-// =============================================================================
-// Colors and variables aligned with new design system
 
 // Design tokens
 @login-primary-color: #4F46E5;        // Indigo/blue primary
@@ -22,14 +18,9 @@
 @login-radius-sm: 8px;
 @login-transition: all 0.2s ease;
 
-// =============================================================================
-// PAGE WRAPPER
-// =============================================================================
 
-// Login page layout variables
-@login-header-offset: 64px; // Header height approximation
+@login-header-offset: 64px;
 
-// Keep header visible, hide footer on login page
 body:has(.login-page-wrapper) {
   overflow: hidden;
 
@@ -43,10 +34,8 @@ body:has(.login-page-wrapper) {
     margin: 0;
   }
 
-  // Hide logo and most header elements on login page
   [cam-widget-header] {
     .navbar-header {
-      // Hide the logo from header - it will be shown in the form
       .navbar-brand {
         display: none !important;
       }
@@ -81,9 +70,6 @@ body:has(.login-page-wrapper) {
   overflow: hidden;
 }
 
-// =============================================================================
-// FORM CONTAINER
-// =============================================================================
 .form-signin-container {
   display: flex;
   align-items: center;
@@ -101,7 +87,6 @@ body:has(.login-page-wrapper) {
   padding: 28px 40px;
   width: 100%;
 
-  // Logo container - centered at top of form
   .login-logo-container {
     display: flex;
     justify-content: center;
@@ -114,7 +99,6 @@ body:has(.login-page-wrapper) {
     }
   }
 
-  // Header
   .login-header {
     text-align: center;
     margin-bottom: 16px;
@@ -136,11 +120,10 @@ body:has(.login-page-wrapper) {
     }
 
     .app-name {
-      display: none; // Hide app name as per new design
+      display: none;
     }
   }
 
-  // Notifications panel
   .notifications-panel {
     margin-bottom: 20px;
 
@@ -164,7 +147,6 @@ body:has(.login-page-wrapper) {
     }
   }
 
-  // First login alert
   .first-login-alert {
     margin-top: 24px;
     margin-bottom: 0;
@@ -177,16 +159,11 @@ body:has(.login-page-wrapper) {
   }
 }
 
-// =============================================================================
-// LOGIN FORM
-// =============================================================================
 .login-form {
-  // Form group
   .form-group-modern {
     margin-bottom: 14px;
   }
 
-  // Labels
   .input-label {
     display: flex;
     align-items: center;
@@ -204,7 +181,6 @@ body:has(.login-page-wrapper) {
     }
   }
 
-  // Modern inputs
   .form-control-modern {
     width: 100%;
     height: 44px;
@@ -236,7 +212,6 @@ body:has(.login-page-wrapper) {
       opacity: 0.7;
     }
 
-    // Validation states
     &.ng-invalid.ng-touched {
       border-color: @login-error-color;
 
@@ -246,7 +221,6 @@ body:has(.login-page-wrapper) {
     }
   }
 
-  // Password input wrapper
   .password-input-wrapper {
     position: relative;
     display: flex;
@@ -352,9 +326,6 @@ body:has(.login-page-wrapper) {
   }
 }
 
-// =============================================================================
-// REGISTER LINK
-// =============================================================================
 .register-link-container {
   display: flex;
   justify-content: center;
@@ -384,9 +355,6 @@ body:has(.login-page-wrapper) {
   }
 }
 
-// =============================================================================
-// OAUTH2 / SSO SECTION
-// =============================================================================
 .oauth2-login-section {
   margin-top: 16px;
   width: 100%;
@@ -426,7 +394,6 @@ body:has(.login-page-wrapper) {
   }
 }
 
-// OAuth2 provider button - Flex style with icon + name (3 per row, centered)
 .btn-oauth2-provider {
   display: flex;
   align-items: center;
@@ -486,7 +453,6 @@ body:has(.login-page-wrapper) {
     font-size: 11px;
   }
 
-  // Disabled state when admin setup is required
   &.disabled {
     opacity: 0.5;
     cursor: not-allowed;
@@ -501,7 +467,6 @@ body:has(.login-page-wrapper) {
   }
 }
 
-// Circular button variant (backwards compatibility)
 .btn-oauth2-circle {
   display: flex;
   align-items: center;
@@ -544,11 +509,7 @@ body:has(.login-page-wrapper) {
   }
 }
 
-// =============================================================================
-// OAUTH2 PROVIDER ICONS
-// =============================================================================
 .oauth2-icon {
-  // Default icon
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%2364748B' d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z'/%3E%3C/svg%3E");
 }
 
@@ -593,9 +554,7 @@ body:has(.login-page-wrapper) {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23eb5424' d='M21.98 7.448L19.62 0H4.347L2.02 7.448c-1.352 4.312.03 9.206 3.815 12.015L12.007 24l6.157-4.552c3.755-2.81 5.182-7.688 3.815-12.015l-6.16 4.58 2.343 7.45-6.157-4.597-6.158 4.58 2.358-7.433-6.188-4.55 7.63-.045L12.008 0l2.356 7.404 7.615.044z'/%3E%3C/svg%3E");
 }
 
-// =============================================================================
-// ANIMATIONS
-// =============================================================================
+
 @keyframes spin {
   from {
     transform: rotate(0deg);
@@ -605,9 +564,6 @@ body:has(.login-page-wrapper) {
   }
 }
 
-// =============================================================================
-// RESPONSIVE DESIGN
-// =============================================================================
 @media screen and (max-width: 480px) {
   .login-page-wrapper {
     padding: 16px;
@@ -652,7 +608,7 @@ body:has(.login-page-wrapper) {
 
     .form-control-modern {
       height: 42px;
-      font-size: 16px; // Prevent iOS zoom
+      font-size: 16px;
     }
 
     .btn-signin {
@@ -708,14 +664,12 @@ body:has(.login-page-wrapper) {
   }
 }
 
-// High DPI / Retina displays
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
   .form-signin {
     box-shadow: @login-shadow;
   }
 }
 
-// Reduced motion preference
 @media (prefers-reduced-motion: reduce) {
   .btn-signin,
   .btn-oauth2-provider,
@@ -736,8 +690,6 @@ body:has(.login-page-wrapper) {
   }
 }
 
-// Dark mode support (future-proof)
 @media (prefers-color-scheme: dark) {
-  // Add dark mode styles here when needed
-  // Currently keeping light theme as per design
+
 }

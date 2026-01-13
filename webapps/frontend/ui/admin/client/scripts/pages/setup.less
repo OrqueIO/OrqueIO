@@ -1,8 +1,4 @@
-// =============================================================================
-// SETUP PAGE - Modern UI Design (Matching Login Page)
-// =============================================================================
 
-// Design tokens (same as login page)
 @setup-primary-color: #4F46E5;
 @setup-primary-hover: #4338CA;
 @setup-bg-color: #F1F5F9;
@@ -21,9 +17,7 @@
 @setup-radius-sm: 6px;
 @setup-transition: all 0.2s ease;
 
-// =============================================================================
-// PAGE WRAPPER
-// =============================================================================
+
 @setup-header-offset: 52px;
 
 body:has(.setup-page-wrapper) {
@@ -39,7 +33,7 @@ body:has(.setup-page-wrapper) {
     margin: 0;
   }
 
-  // Hide header elements on setup page
+
   [cam-widget-header] {
     .navbar-header {
       .navbar-brand {
@@ -58,7 +52,7 @@ body:has(.setup-page-wrapper) {
     }
   }
 
-  // Reset section wrapper styles
+
   [ng-view] > section {
     position: relative !important;
     padding: 0 !important;
@@ -106,9 +100,7 @@ body:has(.setup-page-wrapper) {
   overflow: hidden;
 }
 
-// =============================================================================
-// FORM CONTAINER
-// =============================================================================
+
 .form-setup-container {
   display: flex;
   align-items: center;
@@ -127,7 +119,7 @@ body:has(.setup-page-wrapper) {
   width: 100%;
   box-sizing: border-box;
 
-  // Logo container
+
   .setup-logo-container {
     display: flex;
     justify-content: center;
@@ -140,7 +132,7 @@ body:has(.setup-page-wrapper) {
     }
   }
 
-  // Header
+
   .setup-header {
     text-align: center;
     margin-bottom: 10px;
@@ -162,7 +154,7 @@ body:has(.setup-page-wrapper) {
     }
   }
 
-  // Notifications panel
+
   .notifications-panel {
     margin-bottom: 8px;
 
@@ -187,11 +179,8 @@ body:has(.setup-page-wrapper) {
   }
 }
 
-// =============================================================================
-// SETUP FORM
-// =============================================================================
 .setup-form {
-  // Form sections
+
   .form-section {
     margin-bottom: 8px;
 
@@ -207,12 +196,11 @@ body:has(.setup-page-wrapper) {
     }
   }
 
-  // Form group
+
   .form-group-modern {
     margin-bottom: 6px;
   }
 
-  // Labels
   .input-label {
     display: flex;
     align-items: center;
@@ -230,7 +218,6 @@ body:has(.setup-page-wrapper) {
     }
   }
 
-  // Modern inputs
   .form-control-modern {
     width: 100%;
     height: 36px;
@@ -264,7 +251,6 @@ body:has(.setup-page-wrapper) {
       opacity: 0.7;
     }
 
-    // Validation states
     &.ng-invalid.ng-touched {
       border-color: @setup-error-color;
 
@@ -274,7 +260,6 @@ body:has(.setup-page-wrapper) {
     }
   }
 
-  // Password widget styling
   [cam-widget-password] {
     .form-control {
       width: 100%;
@@ -305,7 +290,6 @@ body:has(.setup-page-wrapper) {
     }
   }
 
-  // Help text / error messages
   .help-inline {
     display: block;
     margin-top: 2px;
@@ -313,7 +297,6 @@ body:has(.setup-page-wrapper) {
     color: @setup-error-color;
   }
 
-  // Password input wrapper with toggle
   .password-input-wrapper {
     position: relative;
     display: flex;
@@ -358,7 +341,6 @@ body:has(.setup-page-wrapper) {
     }
   }
 
-  // Submit button
   .btn-setup-submit {
     width: 100%;
     height: 34px;
@@ -406,9 +388,6 @@ body:has(.setup-page-wrapper) {
   }
 }
 
-// =============================================================================
-// BACK LINK
-// =============================================================================
 .back-link-container {
   display: flex;
   justify-content: center;
@@ -438,9 +417,6 @@ body:has(.setup-page-wrapper) {
   }
 }
 
-// =============================================================================
-// SUCCESS STATE
-// =============================================================================
 .setup-page-wrapper:has(.setup-success) {
   height: calc(100vh - 180px);
   justify-content: center;
@@ -519,9 +495,6 @@ body:has(.setup-page-wrapper) {
   }
 }
 
-// =============================================================================
-// RESPONSIVE DESIGN
-// =============================================================================
 @media screen and (max-width: 480px) {
   .setup-page-wrapper {
     padding: 8px;
@@ -580,7 +553,6 @@ body:has(.setup-page-wrapper) {
   }
 }
 
-// Reduced motion preference
 @media (prefers-reduced-motion: reduce) {
   .btn-setup-submit,
   .btn-setup-action,
