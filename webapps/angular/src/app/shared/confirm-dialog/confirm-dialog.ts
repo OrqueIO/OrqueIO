@@ -39,7 +39,7 @@ export class ConfirmDialogComponent {
   }
 
   onBackdropClick(event: MouseEvent): void {
-    if ((event.target as HTMLElement).classList.contains('dialog-backdrop')) {
+    if ((event.target as HTMLElement).classList.contains('modal-backdrop')) {
       this.onCancel();
     }
   }

@@ -4,7 +4,8 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faSave, faTrash, faArrowLeft, faPlus, faUnlock, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faSave, faTrash, faArrowLeft, faPlus, faUnlock, faTimes, faUsers, faBuilding, faUser, faShield, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
+import { trigger, transition, style, animate } from '@angular/animations';
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
 import { UserService } from '../../../../services/admin/user.service';
 import { GroupService } from '../../../../services/admin/group.service';
@@ -12,6 +13,7 @@ import { TenantService } from '../../../../services/admin/tenant.service';
 import { NotificationsService } from '../../../../services/notifications.service';
 import { ConfirmDialogComponent } from '../../../../shared/confirm-dialog/confirm-dialog';
 import { AddMembershipDialogComponent, MembershipType } from '../add-membership-dialog/add-membership-dialog';
+import { AdminPageHeaderComponent } from '../../../../shared/admin-page-header/admin-page-header';
 import { UserProfile } from '../../../../models/admin/user.model';
 import { Group } from '../../../../models/admin/group.model';
 import { Tenant } from '../../../../models/admin/tenant.model';
@@ -26,10 +28,19 @@ import { Tenant } from '../../../../models/admin/tenant.model';
     FontAwesomeModule,
     TranslatePipe,
     ConfirmDialogComponent,
-    AddMembershipDialogComponent
+    AddMembershipDialogComponent,
+    AdminPageHeaderComponent
   ],
   templateUrl: './user-detail.html',
-  styleUrls: ['./user-detail.css']
+  styleUrls: ['./user-detail.css'],
+  animations: [
+    trigger('fadeIn', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateY(10px)' }),
+        animate('200ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
+      ])
+    ])
+  ]
 })
 export class UserDetailComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
@@ -47,7 +58,12 @@ export class UserDetailComponent implements OnInit {
   faArrowLeft = faArrowLeft;
   faPlus = faPlus;
   faUnlock = faUnlock;
+  faCheckCircle = faCheckCircle;
   faTimes = faTimes;
+  faUsers = faUsers;
+  faBuilding = faBuilding;
+  faUser = faUser;
+  faShield = faShield;
 
   userId: string = '';
   user: UserProfile | null = null;
@@ -57,8 +73,13 @@ export class UserDetailComponent implements OnInit {
   profileForm!: FormGroup;
   credentialsForm!: FormGroup;
 
-  // Tabs
-  activeTab: 'profile' | 'credentials' | 'groups' | 'tenants' = 'profile';
+  // Sections navigation
+  activeSection: 'profile' | 'security' | 'memberships' = 'profile';
+
+  // Loading states
+  savingProfile: boolean = false;
+  savingPassword: boolean = false;
+  unlocking: boolean = false;
 
   // Groups & Tenants
   userGroups: Group[] = [];
@@ -125,28 +146,44 @@ export class UserDetailComponent implements OnInit {
   }
 
   saveProfile(): void {
-    if (!this.profileForm.valid) return;
+    if (!this.profileForm.valid || this.savingProfile) return;
 
+    this.savingProfile = true;
     const updates = this.profileForm.value;
     this.userService.updateUserProfile(this.userId, updates)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
+          this.savingProfile = false;
           this.notifications.addSuccess('admin.users.profileUpdated', 'Profile updated successfully');
           this.loadUser();
         },
         error: () => {
+          this.savingProfile = false;
           this.notifications.addError({
             status: 'admin.users.updateError',
             message: 'Failed to update profile'
           });
+          this.cdr.detectChanges();
         }
       });
   }
 
-  updateCredentials(): void {
-    if (!this.credentialsForm.valid) return;
+  resetProfileForm(): void {
+    if (this.user) {
+      this.profileForm.patchValue({
+        firstName: this.user.firstName,
+        lastName: this.user.lastName,
+        email: this.user.email
+      });
+      this.profileForm.markAsPristine();
+    }
+  }
 
+  updateCredentials(): void {
+    if (!this.credentialsForm.valid || this.savingPassword) return;
+
+    this.savingPassword = true;
     const { authenticatedUserPassword, password } = this.credentialsForm.value;
     this.userService.updateUserCredentials(this.userId, {
       authenticatedUserPassword,
@@ -155,14 +192,18 @@ export class UserDetailComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
+          this.savingPassword = false;
           this.notifications.addSuccess('admin.users.passwordUpdated', 'Password updated successfully');
           this.credentialsForm.reset();
+          this.cdr.detectChanges();
         },
         error: () => {
+          this.savingPassword = false;
           this.notifications.addError({
             status: 'admin.users.passwordUpdateError',
             message: 'Failed to update password'
           });
+          this.cdr.detectChanges();
         }
       });
   }
@@ -196,28 +237,48 @@ export class UserDetailComponent implements OnInit {
   }
 
   unlockUser(): void {
+    if (this.unlocking) return;
+
+    this.unlocking = true;
     this.userService.unlockUser(this.userId)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
+          this.unlocking = false;
           this.notifications.addSuccess('admin.users.userUnlocked', 'User unlocked successfully');
+          this.cdr.detectChanges();
         },
         error: (err) => {
+          this.unlocking = false;
           this.notifications.addError({
             status: 'admin.users.unlockError',
             message: err?.error?.message || 'Failed to unlock user'
           });
+          this.cdr.detectChanges();
         }
       });
   }
 
-  setActiveTab(tab: 'profile' | 'credentials' | 'groups' | 'tenants'): void {
-    this.activeTab = tab;
-    if (tab === 'groups' && this.userGroups.length === 0) {
-      this.loadGroups();
-    } else if (tab === 'tenants' && this.userTenants.length === 0) {
-      this.loadTenants();
+  setActiveSection(section: 'profile' | 'security' | 'memberships'): void {
+    this.activeSection = section;
+    if (section === 'memberships') {
+      if (this.userGroups.length === 0) {
+        this.loadGroups();
+      }
+      if (this.userTenants.length === 0) {
+        this.loadTenants();
+      }
     }
+  }
+
+  getInitials(): string {
+    const first = this.user?.firstName?.charAt(0) || '';
+    const last = this.user?.lastName?.charAt(0) || '';
+    return (first + last).toUpperCase() || this.user?.id?.charAt(0)?.toUpperCase() || '?';
+  }
+
+  getTotalMemberships(): number {
+    return this.userGroups.length + this.userTenants.length;
   }
 
   private loadGroups(): void {
@@ -256,6 +317,14 @@ export class UserDetailComponent implements OnInit {
 
   goBack(): void {
     this.router.navigate(['/admin/users']);
+  }
+
+  loadData(): void {
+    this.loadUser();
+    if (this.activeSection === 'memberships') {
+      this.loadGroups();
+      this.loadTenants();
+    }
   }
 
   // Group membership management

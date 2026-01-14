@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -29,6 +28,21 @@ export class AdminService {
   }
 
   /**
+   * Build headers with CSRF token
+   */
+  protected buildHeaders(contentType = true): HttpHeaders {
+    let headers = new HttpHeaders();
+    if (contentType) {
+      headers = headers.set('Content-Type', 'application/json');
+    }
+    const csrfToken = this.getCsrfTokenFromCookie();
+    if (csrfToken) {
+      headers = headers.set('X-XSRF-TOKEN', csrfToken);
+    }
+    return headers;
+  }
+
+  /**
    * Perform GET request with credentials
    */
   protected get<T>(url: string, params?: HttpParams): Observable<T> {
@@ -39,49 +53,30 @@ export class AdminService {
    * Perform POST request with CSRF token
    */
   protected post<T>(url: string, body: any): Observable<T> {
-    // First GET request to ensure we have an up-to-date CSRF cookie
-    return this.http.get(this.engineUrl, { withCredentials: true }).pipe(
-      switchMap(() => {
-        const csrfToken = this.getCsrfTokenFromCookie();
-        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-        if (csrfToken) {
-          headers = headers.set('X-XSRF-TOKEN', csrfToken);
-        }
-        return this.http.post<T>(url, body, { headers, withCredentials: true });
-      })
-    );
+    return this.http.post<T>(url, body, {
+      headers: this.buildHeaders(),
+      withCredentials: true
+    });
   }
 
   /**
    * Perform PUT request with CSRF token
    */
   protected put<T>(url: string, body: any): Observable<T> {
-    return this.http.get(this.engineUrl, { withCredentials: true }).pipe(
-      switchMap(() => {
-        const csrfToken = this.getCsrfTokenFromCookie();
-        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-        if (csrfToken) {
-          headers = headers.set('X-XSRF-TOKEN', csrfToken);
-        }
-        return this.http.put<T>(url, body, { headers, withCredentials: true });
-      })
-    );
+    return this.http.put<T>(url, body, {
+      headers: this.buildHeaders(),
+      withCredentials: true
+    });
   }
 
   /**
    * Perform DELETE request with CSRF token
    */
   protected delete<T>(url: string): Observable<T> {
-    return this.http.get(this.engineUrl, { withCredentials: true }).pipe(
-      switchMap(() => {
-        const csrfToken = this.getCsrfTokenFromCookie();
-        let headers = new HttpHeaders();
-        if (csrfToken) {
-          headers = headers.set('X-XSRF-TOKEN', csrfToken);
-        }
-        return this.http.delete<T>(url, { headers, withCredentials: true });
-      })
-    );
+    return this.http.delete<T>(url, {
+      headers: this.buildHeaders(false),
+      withCredentials: true
+    });
   }
 
   /**

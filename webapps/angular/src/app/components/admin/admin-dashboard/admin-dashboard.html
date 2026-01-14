@@ -1,166 +1,156 @@
-<div class="admin-dashboard">
-  <!-- Stats Overview -->
-  <div class="stats-overview">
-    <div class="stat-item" *ngFor="let stat of stats">
-      <div class="stat-value">
-        <fa-icon *ngIf="stat.loading" [icon]="faSpinner" [animation]="'spin'" class="loading-icon"></fa-icon>
-        <span *ngIf="!stat.loading">{{ stat.count }}</span>
-      </div>
-      <div class="stat-label">{{ stat.titleKey | translate }}</div>
-    </div>
-  </div>
+<app-admin-page-header
+  [breadcrumbs]="[{ label: 'Dashboard', translateKey: 'admin.dashboard.breadcrumb' }]"
+  [showRefresh]="true"
+  (refresh)="refresh()">
+</app-admin-page-header>
 
-  <!-- Dashboard Sections -->
-  <div class="dashboard-grid">
-    <!-- Users Section -->
-    <section class="dashboard-section">
-      <div class="section-header">
-        <div class="section-icon users-icon">
+<div class="admin-dashboard">
+  <!-- Header -->
+  <header class="dashboard-header">
+    <div class="header-left">
+      <h1 class="dashboard-title">{{ 'admin.dashboard.title' | translate }}</h1>
+      <p class="dashboard-subtitle">{{ 'admin.dashboard.subtitle' | translate }}</p>
+    </div>
+  </header>
+
+  <!-- Main KPI Cards -->
+  <div class="kpi-grid">
+    <!-- Users Card -->
+    <article class="kpi-card users-card">
+      <div class="kpi-header">
+        <div class="kpi-icon users-icon">
           <fa-icon [icon]="faUsers"></fa-icon>
         </div>
-        <div class="section-title-wrapper">
-          <h2 class="section-title">
-            <a routerLink="/admin/users">{{ 'admin.dashboard.users' | translate }}</a>
-          </h2>
-          <span class="section-count" *ngIf="!stats[0].loading">{{ stats[0].count }}</span>
+        <div class="kpi-metric">
+          <fa-icon *ngIf="stats[0].loading" [icon]="faSpinner" [animation]="'spin'" class="loading-icon"></fa-icon>
+          <span *ngIf="!stats[0].loading" class="kpi-value">{{ stats[0].count }}</span>
         </div>
       </div>
-      <ul class="section-links">
-        <li>
-          <a (click)="openCreateUserDialog()" class="action-link">
-            <fa-icon [icon]="faPlus" class="link-icon"></fa-icon>
-            {{ 'admin.dashboard.createUser' | translate }}
-          </a>
-        </li>
-        <li>
-          <a routerLink="/admin/users" class="action-link">
-            <fa-icon [icon]="faList" class="link-icon"></fa-icon>
-            {{ 'admin.dashboard.listUsers' | translate }}
-          </a>
-        </li>
-        <li>
-          <a [routerLink]="['/admin/users', currentUserId]" class="action-link" *ngIf="currentUserId">
-            <fa-icon [icon]="faUser" class="link-icon"></fa-icon>
-            {{ 'admin.dashboard.myProfile' | translate }}
-          </a>
-        </li>
-      </ul>
-    </section>
+      <h2 class="kpi-title">{{ 'admin.dashboard.users' | translate }}</h2>
 
-    <!-- Groups Section -->
-    <section class="dashboard-section">
-      <div class="section-header">
-        <div class="section-icon groups-icon">
+      <!-- Card actions -->
+      <div class="kpi-actions">
+        <a routerLink="/admin/users" class="btn-card-action btn-outline">
+          <fa-icon [icon]="faList"></fa-icon>
+          {{ 'admin.dashboard.viewAll' | translate }}
+        </a>
+        <button class="btn-card-action btn-secondary" (click)="openCreateUserDialog()">
+          <fa-icon [icon]="faUserPlus"></fa-icon>
+          {{ 'admin.dashboard.createUser' | translate }}
+        </button>
+        <a *ngIf="currentUserId" [routerLink]="['/admin/users', currentUserId]" class="btn-card-action btn-outline">
+          <fa-icon [icon]="faUser"></fa-icon>
+          {{ 'admin.dashboard.myProfile' | translate }}
+        </a>
+      </div>
+    </article>
+
+    <!-- Groups Card -->
+    <article class="kpi-card groups-card">
+      <div class="kpi-header">
+        <div class="kpi-icon groups-icon">
           <fa-icon [icon]="faUsersCog"></fa-icon>
         </div>
-        <div class="section-title-wrapper">
-          <h2 class="section-title">
-            <a routerLink="/admin/groups">{{ 'admin.dashboard.groups' | translate }}</a>
-          </h2>
-          <span class="section-count" *ngIf="!stats[1].loading">{{ stats[1].count }}</span>
+        <div class="kpi-metric">
+          <fa-icon *ngIf="stats[1].loading" [icon]="faSpinner" [animation]="'spin'" class="loading-icon"></fa-icon>
+          <span *ngIf="!stats[1].loading" class="kpi-value">{{ stats[1].count }}</span>
         </div>
       </div>
-      <ul class="section-links">
-        <li>
-          <a (click)="openCreateGroupDialog()" class="action-link">
-            <fa-icon [icon]="faPlus" class="link-icon"></fa-icon>
-            {{ 'admin.dashboard.createGroup' | translate }}
-          </a>
-        </li>
-        <li>
-          <a routerLink="/admin/groups" class="action-link">
-            <fa-icon [icon]="faList" class="link-icon"></fa-icon>
-            {{ 'admin.dashboard.listGroups' | translate }}
-          </a>
-        </li>
-      </ul>
-    </section>
+      <h2 class="kpi-title">{{ 'admin.dashboard.groups' | translate }}</h2>
 
-    <!-- Tenants Section -->
-    <section class="dashboard-section">
-      <div class="section-header">
-        <div class="section-icon tenants-icon">
+      <!-- Card actions -->
+      <div class="kpi-actions">
+        <a routerLink="/admin/groups" class="btn-card-action btn-outline">
+          <fa-icon [icon]="faList"></fa-icon>
+          {{ 'admin.dashboard.viewAll' | translate }}
+        </a>
+        <button class="btn-card-action btn-secondary" (click)="openCreateGroupDialog()">
+          <fa-icon [icon]="faPlus"></fa-icon>
+          {{ 'admin.dashboard.createGroup' | translate }}
+        </button>
+      </div>
+    </article>
+
+    <!-- Tenants Card -->
+    <article class="kpi-card tenants-card">
+      <div class="kpi-header">
+        <div class="kpi-icon tenants-icon">
           <fa-icon [icon]="faBuilding"></fa-icon>
         </div>
-        <div class="section-title-wrapper">
-          <h2 class="section-title">
-            <a routerLink="/admin/tenants">{{ 'admin.dashboard.tenants' | translate }}</a>
-          </h2>
-          <span class="section-count" *ngIf="!stats[2].loading">{{ stats[2].count }}</span>
+        <div class="kpi-metric">
+          <fa-icon *ngIf="stats[2].loading" [icon]="faSpinner" [animation]="'spin'" class="loading-icon"></fa-icon>
+          <span *ngIf="!stats[2].loading" class="kpi-value">{{ stats[2].count }}</span>
         </div>
       </div>
-      <ul class="section-links">
-        <li>
-          <a (click)="openCreateTenantDialog()" class="action-link">
-            <fa-icon [icon]="faPlus" class="link-icon"></fa-icon>
-            {{ 'admin.dashboard.createTenant' | translate }}
-          </a>
-        </li>
-        <li>
-          <a routerLink="/admin/tenants" class="action-link">
-            <fa-icon [icon]="faList" class="link-icon"></fa-icon>
-            {{ 'admin.dashboard.listTenants' | translate }}
-          </a>
-        </li>
-      </ul>
-    </section>
+      <h2 class="kpi-title">{{ 'admin.dashboard.tenants' | translate }}</h2>
 
-    <!-- Authorizations Section -->
-    <section class="dashboard-section">
-      <div class="section-header">
-        <div class="section-icon auth-icon">
+      <!-- Card actions -->
+      <div class="kpi-actions">
+        <a routerLink="/admin/tenants" class="btn-card-action btn-outline">
+          <fa-icon [icon]="faList"></fa-icon>
+          {{ 'admin.dashboard.viewAll' | translate }}
+        </a>
+        <button class="btn-card-action btn-secondary" (click)="openCreateTenantDialog()">
+          <fa-icon [icon]="faPlus"></fa-icon>
+          {{ 'admin.dashboard.createTenant' | translate }}
+        </button>
+      </div>
+    </article>
+  </div>
+
+  <!-- Secondary Section: Authorizations & System -->
+  <div class="secondary-grid">
+    <!-- Authorizations Card -->
+    <article class="secondary-card" routerLink="/admin/authorizations">
+      <div class="secondary-header">
+        <div class="secondary-icon auth-icon">
           <fa-icon [icon]="faShieldAlt"></fa-icon>
         </div>
-        <div class="section-title-wrapper">
-          <h2 class="section-title">
-            <a routerLink="/admin/authorizations">{{ 'admin.dashboard.authorizations' | translate }}</a>
-          </h2>
-          <span class="section-count" *ngIf="!stats[3].loading">{{ stats[3].count }}</span>
+        <div class="secondary-info">
+          <h3 class="secondary-title">{{ 'admin.dashboard.authorizations' | translate }}</h3>
+          <span class="secondary-count" *ngIf="!stats[3].loading">
+            {{ stats[3].count }} {{ 'admin.dashboard.rules' | translate }}
+          </span>
+          <fa-icon *ngIf="stats[3].loading" [icon]="faSpinner" [animation]="'spin'" class="loading-icon-sm"></fa-icon>
         </div>
       </div>
-      <ul class="section-links">
-        <li>
-          <a routerLink="/admin/authorizations" class="action-link">
-            <fa-icon [icon]="faKey" class="link-icon"></fa-icon>
-            {{ 'admin.dashboard.manageAuthorizations' | translate }}
-          </a>
-        </li>
-      </ul>
-    </section>
+      <p class="secondary-desc">{{ 'admin.dashboard.authorizationsDesc' | translate }}</p>
+      <div class="secondary-action">
+        <fa-icon [icon]="faKey"></fa-icon>
+        {{ 'admin.dashboard.manageAuthorizations' | translate }}
+        <fa-icon [icon]="faArrowRight" class="arrow-icon"></fa-icon>
+      </div>
+    </article>
 
-    <!-- System Section -->
-    <section class="dashboard-section">
-      <div class="section-header">
-        <div class="section-icon system-icon">
+    <!-- System Card -->
+    <article class="secondary-card" routerLink="/admin/system">
+      <div class="secondary-header">
+        <div class="secondary-icon system-icon">
           <fa-icon [icon]="faServer"></fa-icon>
         </div>
-        <div class="section-title-wrapper">
-          <h2 class="section-title">
-            <a routerLink="/admin/system">{{ 'admin.dashboard.system' | translate }}</a>
-          </h2>
+        <div class="secondary-info">
+          <h3 class="secondary-title">{{ 'admin.dashboard.system' | translate }}</h3>
+          <span class="secondary-status">
+            <span class="status-dot"></span>
+            {{ 'admin.dashboard.systemOnline' | translate }}
+          </span>
         </div>
       </div>
-      <ul class="section-links">
-        <li>
-          <a routerLink="/admin/system/general" class="action-link">
-            <fa-icon [icon]="faCogs" class="link-icon"></fa-icon>
-            {{ 'admin.dashboard.generalSettings' | translate }}
-          </a>
-        </li>
-        <li>
-          <a routerLink="/admin/system/metrics" class="action-link">
-            <fa-icon [icon]="faChartBar" class="link-icon"></fa-icon>
-            {{ 'admin.dashboard.executionMetrics' | translate }}
-          </a>
-        </li>
-        <li>
-          <a routerLink="/admin/system/diagnostics" class="action-link">
-            <fa-icon [icon]="faHeartbeat" class="link-icon"></fa-icon>
-            {{ 'admin.dashboard.diagnostics' | translate }}
-          </a>
-        </li>
-      </ul>
-    </section>
+      <div class="system-links">
+        <a routerLink="/admin/system/general" class="system-link" (click)="$event.stopPropagation()">
+          <fa-icon [icon]="faCogs"></fa-icon>
+          {{ 'admin.dashboard.generalSettings' | translate }}
+        </a>
+        <a routerLink="/admin/system/metrics" class="system-link" (click)="$event.stopPropagation()">
+          <fa-icon [icon]="faChartBar"></fa-icon>
+          {{ 'admin.dashboard.executionMetrics' | translate }}
+        </a>
+        <a routerLink="/admin/system/diagnostics" class="system-link" (click)="$event.stopPropagation()">
+          <fa-icon [icon]="faHeartbeat"></fa-icon>
+          {{ 'admin.dashboard.diagnostics' | translate }}
+        </a>
+      </div>
+    </article>
   </div>
 </div>
 

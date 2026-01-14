@@ -1,55 +1,47 @@
-<div class="dialog-backdrop" (click)="onBackdropClick($event)">
-  <div class="dialog-container">
-    <div class="dialog-header">
-      <h2 class="dialog-title">{{ 'admin.tenants.createNewTenant' | translate }}</h2>
+<div class="modal-backdrop" (click)="onBackdropClick($event)">
+  <div class="modal-container modal-sm" role="dialog" aria-modal="true">
+    <div class="modal-header">
+      <h3 class="modal-title">{{ 'admin.tenants.createNewTenant' | translate }}</h3>
     </div>
 
     <form [formGroup]="tenantForm" (ngSubmit)="onSubmit()">
-      <div class="dialog-body">
-        <!-- Tenant ID -->
-        <div class="form-group">
-          <label for="tenantId" class="form-label">
-            {{ 'admin.tenants.id' | translate }} *
-          </label>
+      <div class="modal-body">
+        <div class="modal-form-group">
+          <label for="tenantId">{{ 'admin.tenants.id' | translate }} <span class="required">*</span></label>
           <input
             type="text"
             id="tenantId"
             formControlName="id"
-            class="form-control"
+            class="modal-input"
             [class.is-invalid]="idError"
-            autocomplete="off"
-          />
-          <div class="form-error" *ngIf="idError">
+            autocomplete="off" />
+          <span *ngIf="idError" class="modal-error">
             {{ idError | translate }}
-          </div>
+          </span>
         </div>
 
-        <!-- Tenant Name -->
-        <div class="form-group">
-          <label for="tenantName" class="form-label">
-            {{ 'admin.tenants.name' | translate }}
-          </label>
+        <div class="modal-form-group">
+          <label for="tenantName">{{ 'admin.tenants.name' | translate }}</label>
           <input
             type="text"
             id="tenantName"
             formControlName="name"
-            class="form-control"
-            autocomplete="off"
-          />
+            class="modal-input"
+            autocomplete="off" />
         </div>
       </div>
 
-      <div class="dialog-footer">
+      <div class="modal-footer">
         <button
           type="button"
-          class="btn btn-secondary"
+          class="modal-btn modal-btn-secondary"
           (click)="onCancel()"
           [disabled]="saving">
           {{ 'CANCEL' | translate }}
         </button>
         <button
           type="submit"
-          class="btn btn-primary"
+          class="modal-btn modal-btn-primary"
           [disabled]="!tenantForm.valid || saving">
           <span *ngIf="!saving">{{ 'CREATE' | translate }}</span>
           <span *ngIf="saving">{{ 'CREATING' | translate }}</span>

@@ -15,7 +15,7 @@ export class TenantService extends AdminService {
    * Get list of tenants
    */
   getTenants(queryParams?: TenantQueryParams): Observable<Tenant[]> {
-    const params = this.buildParams(queryParams);
+    const params = this.buildParams({ maxResults: 1000, ...queryParams });
     return this.get<Tenant[]>(this.tenantUrl, params);
   }
 

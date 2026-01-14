@@ -16,7 +16,10 @@ import {
   faServer,
   faCogs,
   faChartBar,
-  faHeartbeat
+  faHeartbeat,
+  faUserPlus,
+  faArrowRight,
+  faSearch
 } from '@fortawesome/free-solid-svg-icons';
 import { TranslatePipe } from '../../../i18n/translate.pipe';
 import { UserService } from '../../../services/admin/user.service';
@@ -27,6 +30,7 @@ import { AuthService } from '../../../services/auth';
 import { UserCreateDialogComponent } from '../users/user-create-dialog/user-create-dialog';
 import { GroupCreateDialogComponent } from '../groups/group-create-dialog/group-create-dialog';
 import { TenantCreateDialogComponent } from '../tenants/tenant-create-dialog/tenant-create-dialog';
+import { AdminPageHeaderComponent } from '../../../shared/admin-page-header/admin-page-header';
 
 interface AdminStat {
   icon: any;
@@ -46,7 +50,8 @@ interface AdminStat {
     TranslatePipe,
     UserCreateDialogComponent,
     GroupCreateDialogComponent,
-    TenantCreateDialogComponent
+    TenantCreateDialogComponent,
+    AdminPageHeaderComponent
   ],
   templateUrl: './admin-dashboard.html',
   styleUrls: ['./admin-dashboard.css']
@@ -74,6 +79,9 @@ export class AdminDashboardComponent implements OnInit {
   faCogs = faCogs;
   faChartBar = faChartBar;
   faHeartbeat = faHeartbeat;
+  faUserPlus = faUserPlus;
+  faArrowRight = faArrowRight;
+  faSearch = faSearch;
 
   // State
   isRefreshing = false;

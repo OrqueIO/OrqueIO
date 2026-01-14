@@ -4,7 +4,8 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faSave, faTrash, faArrowLeft, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faSave, faTrash, faArrowLeft, faPlus, faUsers, faBuilding, faUser, faInfoCircle, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { trigger, transition, style, animate } from '@angular/animations';
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
 import { GroupService } from '../../../../services/admin/group.service';
 import { UserService } from '../../../../services/admin/user.service';
@@ -16,6 +17,7 @@ import { Tenant } from '../../../../models/admin/tenant.model';
 import { AddMemberDialogComponent } from '../add-member-dialog/add-member-dialog';
 import { AddTenantDialogComponent } from '../add-tenant-dialog/add-tenant-dialog';
 import { ConfirmDialogComponent } from '../../../../shared/confirm-dialog/confirm-dialog';
+import { AdminPageHeaderComponent } from '../../../../shared/admin-page-header/admin-page-header';
 
 @Component({
   selector: 'app-group-detail',
@@ -28,10 +30,19 @@ import { ConfirmDialogComponent } from '../../../../shared/confirm-dialog/confir
     TranslatePipe,
     AddMemberDialogComponent,
     AddTenantDialogComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    AdminPageHeaderComponent
   ],
   templateUrl: './group-detail.html',
-  styleUrls: ['./group-detail.css']
+  styleUrls: ['./group-detail.css'],
+  animations: [
+    trigger('fadeIn', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateY(10px)' }),
+        animate('200ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
+      ])
+    ])
+  ]
 })
 export class GroupDetailComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
@@ -48,16 +59,22 @@ export class GroupDetailComponent implements OnInit {
   faTrash = faTrash;
   faArrowLeft = faArrowLeft;
   faPlus = faPlus;
+  faUsers = faUsers;
+  faBuilding = faBuilding;
+  faUser = faUser;
+  faInfoCircle = faInfoCircle;
+  faTimes = faTimes;
 
   groupId: string = '';
   group: Group | null = null;
   loading: boolean = false;
+  savingGroup: boolean = false;
 
   // Form
   groupForm!: FormGroup;
 
-  // Tabs
-  activeTab: 'info' | 'members' | 'tenants' = 'info';
+  // Sections navigation
+  activeSection: 'info' | 'members' | 'tenants' = 'info';
 
   // Members & Tenants
   groupMembers: User[] = [];
@@ -116,8 +133,9 @@ export class GroupDetailComponent implements OnInit {
   }
 
   saveGroup(): void {
-    if (!this.groupForm.valid) return;
+    if (!this.groupForm.valid || this.savingGroup) return;
 
+    this.savingGroup = true;
     const updates = {
       name: this.groupForm.value.name,
       type: this.groupForm.value.type
@@ -127,16 +145,30 @@ export class GroupDetailComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
+          this.savingGroup = false;
           this.notifications.addSuccess('admin.groups.groupUpdated', 'Group updated successfully');
           this.loadGroup();
         },
         error: () => {
+          this.savingGroup = false;
           this.notifications.addError({
             status: 'admin.groups.updateError',
             message: 'Failed to update group'
           });
+          this.cdr.detectChanges();
         }
       });
+  }
+
+  resetGroupForm(): void {
+    if (this.group) {
+      this.groupForm.patchValue({
+        id: this.group.id,
+        name: this.group.name,
+        type: this.group.type
+      });
+      this.groupForm.markAsPristine();
+    }
   }
 
   deleteGroup(): void {
@@ -165,11 +197,20 @@ export class GroupDetailComponent implements OnInit {
     this.showDeleteConfirm = false;
   }
 
-  setActiveTab(tab: 'info' | 'members' | 'tenants'): void {
-    this.activeTab = tab;
-    if (tab === 'members' && this.groupMembers.length === 0) {
+  setActiveSection(section: 'info' | 'members' | 'tenants'): void {
+    this.activeSection = section;
+    if (section === 'members' && this.groupMembers.length === 0) {
       this.loadMembers();
-    } else if (tab === 'tenants' && this.groupTenants.length === 0) {
+    } else if (section === 'tenants' && this.groupTenants.length === 0) {
+      this.loadTenants();
+    }
+  }
+
+  loadData(): void {
+    this.loadGroup();
+    if (this.activeSection === 'members') {
+      this.loadMembers();
+    } else if (this.activeSection === 'tenants') {
       this.loadTenants();
     }
   }
