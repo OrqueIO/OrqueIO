@@ -4,6 +4,8 @@ import { Router, RouterModule } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faPlus, faPen } from '@fortawesome/free-solid-svg-icons';
 import { AdminPageHeaderComponent } from '../../../../shared/admin-page-header/admin-page-header';
 import { DataTableComponent, ColumnDef, SortEvent } from '../../../../shared/data-table/data-table';
 import { PaginationComponent, PageChangeEvent } from '../../../../shared/pagination/pagination';
@@ -21,6 +23,7 @@ import * as UsersSelectors from '../../../../store/admin/users/users.selectors';
   imports: [
     CommonModule,
     RouterModule,
+    FontAwesomeModule,
     AdminPageHeaderComponent,
     DataTableComponent,
     PaginationComponent,
@@ -39,6 +42,10 @@ export class UserListComponent implements OnInit {
   private cdr = inject(ChangeDetectorRef);
 
   @ViewChild('actionsTemplate', { static: true }) actionsTemplate!: TemplateRef<any>;
+
+  // Icons
+  faPlus = faPlus;
+  faPen = faPen;
 
   showCreateDialog = false;
 

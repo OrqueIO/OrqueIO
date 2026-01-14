@@ -1,46 +1,60 @@
-<div class="tenant-list-container">
-  <app-admin-page-header
-    titleKey="admin.tenants.title"
-    [breadcrumbs]="[{ label: 'Tenants', translateKey: 'admin.dashboard.tenants' }]"
-    [showRefresh]="true"
-    [showCreate]="true"
-    createLabel="admin.tenants.createTenant"
-    (create)="onCreateTenant()"
-    (refresh)="refresh()">
-  </app-admin-page-header>
+<div class="admin-layout">
+  <main class="admin-main">
+    <app-admin-page-header
+      [breadcrumbs]="[{ label: 'Tenants', translateKey: 'admin.dashboard.tenants' }]"
+      [showRefresh]="true"
+      (refresh)="refresh()">
+    </app-admin-page-header>
 
-  <div class="search-section">
-    <app-search-bar
-      placeholderKey="admin.tenants.searchPlaceholder"
-      (search)="onSearch($event)">
-    </app-search-bar>
-  </div>
+    <div class="page-content">
+      <!-- Toolbar with search and create button -->
+      <div class="toolbar">
+        <app-search-bar
+          placeholderKey="admin.tenants.searchPlaceholder"
+          (search)="onSearch($event)">
+        </app-search-bar>
+        <button class="btn-create" (click)="onCreateTenant()">
+          <fa-icon [icon]="faPlus"></fa-icon>
+          <span>{{ 'admin.tenants.createTenant' | translate }}</span>
+        </button>
+      </div>
 
-  <app-data-table
-    [columns]="columns"
-    [data]="tenants"
-    [loading]="loading"
-    [sortBy]="sortBy"
-    [sortOrder]="sortOrder"
-    emptyMessageKey="admin.tenants.noTenants"
-    (sortChange)="onSort($event)"
-    (rowClick)="onRowClick($event)">
-  </app-data-table>
+      <!-- Results info -->
+      <header class="results-info">
+        <h2 class="results-title">
+          {{ totalTenants }} {{ 'admin.tenants.title' | translate | lowercase }}
+        </h2>
+      </header>
 
-  <app-pagination
-    [current]="currentPage"
-    [size]="pageSize"
-    [total]="totalTenants"
-    (pageChange)="onPageChange($event)">
-  </app-pagination>
+      <!-- Data table -->
+      <app-data-table
+        [columns]="columns"
+        [data]="tenants"
+        [loading]="loading"
+        [sortBy]="sortBy"
+        [sortOrder]="sortOrder"
+        emptyMessageKey="admin.tenants.noTenants"
+        (sortChange)="onSort($event)"
+        (rowClick)="onRowClick($event)">
+      </app-data-table>
 
-  <!-- Actions template -->
-  <ng-template #actionsTemplate let-tenant>
-    <a (click)="editTenant(tenant, $event)" class="action-link">
-      {{ 'admin.users.edit' | translate }}
-    </a>
-  </ng-template>
+      <!-- Pagination -->
+      <app-pagination
+        [current]="currentPage"
+        [size]="pageSize"
+        [total]="totalTenants"
+        (pageChange)="onPageChange($event)">
+      </app-pagination>
+    </div>
+  </main>
 </div>
+
+<!-- Actions template -->
+<ng-template #actionsTemplate let-tenant>
+  <button class="btn-icon" (click)="editTenant(tenant, $event)" [title]="'admin.users.edit' | translate">
+    <fa-icon [icon]="faPen"></fa-icon>
+  </button>
+</ng-template>
 
 <!-- Create Tenant Dialog -->
 <app-tenant-create-dialog

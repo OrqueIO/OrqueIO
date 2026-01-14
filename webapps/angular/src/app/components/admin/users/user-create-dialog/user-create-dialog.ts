@@ -28,13 +28,20 @@ export class UserCreateDialogComponent {
 
   constructor() {
     this.userForm = this.fb.group({
-      id: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9_-]+$/)]],
+      id: ['', Validators.required],
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
-      email: ['', Validators.email],
-      password: ['', [Validators.required, Validators.minLength(8)]],
+      email: [''],
+      password: ['', Validators.required],
       password2: ['', Validators.required]
     }, { validators: this.passwordMatchValidator });
+  }
+
+  focusNext(nextFieldId: string): void {
+    const nextField = document.getElementById(nextFieldId);
+    if (nextField) {
+      nextField.focus();
+    }
   }
 
   @HostListener('document:keydown.escape')
@@ -85,7 +92,7 @@ export class UserCreateDialogComponent {
   }
 
   onBackdropClick(event: MouseEvent): void {
-    if ((event.target as HTMLElement).classList.contains('dialog-backdrop')) {
+    if ((event.target as HTMLElement).classList.contains('modal-backdrop')) {
       this.onCancel();
     }
   }
@@ -95,9 +102,6 @@ export class UserCreateDialogComponent {
     if (control?.hasError('required') && control?.touched) {
       return 'admin.users.idRequired';
     }
-    if (control?.hasError('pattern') && control?.touched) {
-      return 'admin.users.idInvalid';
-    }
     return null;
   }
 
@@ -105,9 +109,6 @@ export class UserCreateDialogComponent {
     const control = this.userForm.get('password');
     if (control?.hasError('required') && control?.touched) {
       return 'admin.users.passwordRequired';
-    }
-    if (control?.hasError('minlength') && control?.touched) {
-      return 'admin.users.passwordMinLength';
     }
     return null;
   }

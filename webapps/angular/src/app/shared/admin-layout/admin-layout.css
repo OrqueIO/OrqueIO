@@ -1,4 +1,12 @@
+:host {
+  display: block;
+  height: calc(100vh - 60px);
+  overflow: hidden;
+}
+
 .admin-layout {
-  min-height: calc(100vh - 60px);
-  background: white;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #f8fafc;
 }

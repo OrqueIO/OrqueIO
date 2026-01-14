@@ -15,7 +15,7 @@ export class GroupService extends AdminService {
    * Get list of groups
    */
   getGroups(queryParams?: GroupQueryParams): Observable<Group[]> {
-    const params = this.buildParams(queryParams);
+    const params = this.buildParams({ maxResults: 1000, ...queryParams });
     return this.get<Group[]>(this.groupUrl, params);
   }
 

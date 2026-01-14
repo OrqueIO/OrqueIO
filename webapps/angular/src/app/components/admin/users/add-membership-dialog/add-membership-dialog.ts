@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit, inject, DestroyRef, HostListener } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, inject, DestroyRef, HostListener, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -20,6 +20,7 @@ export type MembershipType = 'group' | 'tenant';
 })
 export class AddMembershipDialogComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
+  private cdr = inject(ChangeDetectorRef);
   private groupService = inject(GroupService);
   private tenantService = inject(TenantService);
   private notifications = inject(NotificationsService);
@@ -51,29 +52,35 @@ export class AddMembershipDialogComponent implements OnInit {
     this.loading = true;
 
     if (this.type === 'group') {
-      this.groupService.getGroups({ maxResults: 1000 })
+      this.groupService.getGroups()
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: (groups) => {
             this.availableItems = groups.filter(g => !this.excludeIds.includes(g.id));
             this.filteredItems = [...this.availableItems];
             this.loading = false;
+            this.cdr.detectChanges();
           },
-          error: () => {
+          error: (err) => {
+            console.error('Error loading groups:', err);
             this.loading = false;
+            this.cdr.detectChanges();
           }
         });
     } else {
-      this.tenantService.getTenants({ maxResults: 1000 })
+      this.tenantService.getTenants()
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: (tenants) => {
             this.availableItems = tenants.filter(t => !this.excludeIds.includes(t.id));
             this.filteredItems = [...this.availableItems];
             this.loading = false;
+            this.cdr.detectChanges();
           },
-          error: () => {
+          error: (err) => {
+            console.error('Error loading tenants:', err);
             this.loading = false;
+            this.cdr.detectChanges();
           }
         });
     }
@@ -132,7 +139,7 @@ export class AddMembershipDialogComponent implements OnInit {
   }
 
   onBackdropClick(event: MouseEvent): void {
-    if ((event.target as HTMLElement).classList.contains('dialog-backdrop')) {
+    if ((event.target as HTMLElement).classList.contains('modal-backdrop')) {
       this.onCancel();
     }
   }

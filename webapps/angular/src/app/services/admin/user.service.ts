@@ -15,7 +15,7 @@ export class UserService extends AdminService {
    * Get list of users with pagination
    */
   getUsers(queryParams?: UserQueryParams): Observable<User[]> {
-    const params = this.buildParams(queryParams);
+    const params = this.buildParams({ maxResults: 1000, ...queryParams });
     return this.get<User[]>(this.userUrl, params);
   }
 

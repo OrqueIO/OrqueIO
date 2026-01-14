@@ -1,46 +1,60 @@
-<div class="user-list-container">
-  <app-admin-page-header
-    titleKey="admin.users.title"
-    [breadcrumbs]="[{ label: 'Users', translateKey: 'admin.dashboard.users' }]"
-    [showRefresh]="true"
-    [showCreate]="true"
-    createLabel="admin.users.createUser"
-    (create)="onCreateUser()"
-    (refresh)="refresh()">
-  </app-admin-page-header>
+<div class="admin-layout">
+  <main class="admin-main">
+    <app-admin-page-header
+      [breadcrumbs]="[{ label: 'Users', translateKey: 'admin.dashboard.users' }]"
+      [showRefresh]="true"
+      (refresh)="refresh()">
+    </app-admin-page-header>
 
-  <div class="search-section">
-    <app-search-bar
-      placeholderKey="admin.users.searchPlaceholder"
-      (search)="onSearch($event)">
-    </app-search-bar>
-  </div>
+    <div class="page-content">
+      <!-- Toolbar with search and create button -->
+      <div class="toolbar">
+        <app-search-bar
+          placeholderKey="admin.users.searchPlaceholder"
+          (search)="onSearch($event)">
+        </app-search-bar>
+        <button class="btn-create" (click)="onCreateUser()">
+          <fa-icon [icon]="faPlus"></fa-icon>
+          <span>{{ 'admin.users.createUser' | translate }}</span>
+        </button>
+      </div>
 
-  <app-data-table
-    [columns]="columns"
-    [data]="(users$ | async) ?? []"
-    [loading]="(loading$ | async) ?? false"
-    [sortBy]="sortBy"
-    [sortOrder]="sortOrder"
-    emptyMessageKey="admin.users.noUsers"
-    (sortChange)="onSort($event)"
-    (rowClick)="onRowClick($event)">
-  </app-data-table>
+      <!-- Results info -->
+      <header class="results-info">
+        <h2 class="results-title">
+          {{ (total$ | async) ?? 0 }} {{ 'admin.users.title' | translate | lowercase }}
+        </h2>
+      </header>
 
-  <app-pagination
-    [current]="currentPage"
-    [size]="pageSize"
-    [total]="(total$ | async) ?? 0"
-    (pageChange)="onPageChange($event)">
-  </app-pagination>
+      <!-- Data table -->
+      <app-data-table
+        [columns]="columns"
+        [data]="(users$ | async) ?? []"
+        [loading]="(loading$ | async) ?? false"
+        [sortBy]="sortBy"
+        [sortOrder]="sortOrder"
+        emptyMessageKey="admin.users.noUsers"
+        (sortChange)="onSort($event)"
+        (rowClick)="onRowClick($event)">
+      </app-data-table>
 
-  <!-- Actions template -->
-  <ng-template #actionsTemplate let-user>
-    <a (click)="editUser(user, $event)" class="action-link">
-      {{ 'admin.users.edit' | translate }}
-    </a>
-  </ng-template>
+      <!-- Pagination -->
+      <app-pagination
+        [current]="currentPage"
+        [size]="pageSize"
+        [total]="(total$ | async) ?? 0"
+        (pageChange)="onPageChange($event)">
+      </app-pagination>
+    </div>
+  </main>
 </div>
+
+<!-- Actions template -->
+<ng-template #actionsTemplate let-user>
+  <button class="btn-icon" (click)="editUser(user, $event)" [title]="'admin.users.edit' | translate">
+    <fa-icon [icon]="faPen"></fa-icon>
+  </button>
+</ng-template>
 
 <!-- Create User Dialog -->
 <app-user-create-dialog

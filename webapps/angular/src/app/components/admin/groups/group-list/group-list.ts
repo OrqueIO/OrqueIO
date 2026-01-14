@@ -2,6 +2,8 @@ import { Component, OnInit, inject, DestroyRef, TemplateRef, ViewChild, ChangeDe
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faPlus, faPen } from '@fortawesome/free-solid-svg-icons';
 import { AdminPageHeaderComponent } from '../../../../shared/admin-page-header/admin-page-header';
 import { DataTableComponent, ColumnDef, SortEvent } from '../../../../shared/data-table/data-table';
 import { PaginationComponent, PageChangeEvent } from '../../../../shared/pagination/pagination';
@@ -19,6 +21,7 @@ import { GroupCreateDialogComponent } from '../group-create-dialog/group-create-
   imports: [
     CommonModule,
     RouterModule,
+    FontAwesomeModule,
     AdminPageHeaderComponent,
     DataTableComponent,
     PaginationComponent,
@@ -37,6 +40,10 @@ export class GroupListComponent implements OnInit {
   private notifications = inject(NotificationsService);
 
   @ViewChild('actionsTemplate', { static: true }) actionsTemplate!: TemplateRef<any>;
+
+  // Icons
+  faPlus = faPlus;
+  faPen = faPen;
 
   groups: Group[] = [];
   loading: boolean = false;

@@ -1,32 +1,32 @@
-<div class="dialog-backdrop" (click)="onBackdropClick($event)">
-  <div class="dialog-container" role="dialog" aria-modal="true">
-    <div class="dialog-header" [class.danger]="isDanger">
-      <h3 class="dialog-title">{{ title }}</h3>
+<div class="modal-backdrop" (click)="onBackdropClick($event)">
+  <div class="modal-container modal-sm" role="dialog" aria-modal="true">
+    <div class="modal-header" [class.modal-header-danger]="isDanger">
+      <h3 class="modal-title">{{ title }}</h3>
     </div>
-    <div class="dialog-body">
-      <p class="dialog-message">{{ message }}</p>
+    <div class="modal-body">
+      <p>{{ message }}</p>
 
-      <div class="input-group" *ngIf="showInput">
+      <div class="modal-form-group" *ngIf="showInput">
         <label *ngIf="inputLabel">{{ inputLabel }}</label>
         <input
           type="text"
+          class="modal-input"
           [value]="inputValue"
           (input)="onInputChange($any($event.target).value)"
-          [placeholder]="inputPlaceholder"
-        />
+          [placeholder]="inputPlaceholder" />
       </div>
     </div>
-    <div class="dialog-footer">
+    <div class="modal-footer">
       <button
         type="button"
-        class="btn btn-secondary"
+        class="modal-btn modal-btn-secondary"
         (click)="onCancel()">
         {{ cancelLabel }}
       </button>
       <button
         type="button"
-        class="btn"
-        [ngClass]="isDanger ? 'btn-danger' : confirmButtonClass"
+        class="modal-btn"
+        [ngClass]="isDanger ? 'modal-btn-danger' : 'modal-btn-primary'"
         (click)="onConfirm()">
         {{ confirmLabel }}
       </button>

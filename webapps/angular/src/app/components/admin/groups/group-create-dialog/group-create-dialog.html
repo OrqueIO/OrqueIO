@@ -1,58 +1,58 @@
-<div class="dialog-backdrop" (click)="onBackdropClick($event)">
-  <div class="dialog-container" role="dialog" aria-modal="true">
-    <div class="dialog-header">
-      <h3 class="dialog-title">{{ 'admin.groups.createGroup' | translate }}</h3>
+<div class="modal-backdrop" (click)="onBackdropClick($event)">
+  <div class="modal-container modal-sm" role="dialog" aria-modal="true">
+    <div class="modal-header">
+      <h3 class="modal-title">{{ 'admin.groups.createGroup' | translate }}</h3>
     </div>
 
     <form [formGroup]="groupForm" (ngSubmit)="onSubmit()">
-      <div class="dialog-body">
-        <div class="form-group">
-          <label for="groupId">{{ 'admin.groups.id' | translate }} *</label>
+      <div class="modal-body">
+        <div class="modal-form-group">
+          <label for="groupId">{{ 'admin.groups.id' | translate }} <span class="required">*</span></label>
           <input
             id="groupId"
             type="text"
             formControlName="id"
-            class="form-control"
+            class="modal-input"
             [class.is-invalid]="idError" />
-          <span *ngIf="idError" class="error-message">
+          <span *ngIf="idError" class="modal-error">
             {{ idError | translate }}
           </span>
         </div>
 
-        <div class="form-group">
-          <label for="groupName">{{ 'admin.groups.name' | translate }} *</label>
+        <div class="modal-form-group">
+          <label for="groupName">{{ 'admin.groups.name' | translate }} <span class="required">*</span></label>
           <input
             id="groupName"
             type="text"
             formControlName="name"
-            class="form-control"
+            class="modal-input"
             [class.is-invalid]="nameError" />
-          <span *ngIf="nameError" class="error-message">
+          <span *ngIf="nameError" class="modal-error">
             {{ nameError | translate }}
           </span>
         </div>
 
-        <div class="form-group">
+        <div class="modal-form-group">
           <label for="groupType">{{ 'admin.groups.type' | translate }}</label>
           <input
             id="groupType"
             type="text"
             formControlName="type"
-            class="form-control" />
+            class="modal-input" />
         </div>
       </div>
 
-      <div class="dialog-footer">
+      <div class="modal-footer">
         <button
           type="button"
-          class="btn btn-secondary"
+          class="modal-btn modal-btn-secondary"
           (click)="onCancel()"
           [disabled]="saving">
           {{ 'CANCEL' | translate }}
         </button>
         <button
           type="submit"
-          class="btn btn-primary"
+          class="modal-btn modal-btn-primary"
           [disabled]="!groupForm.valid || saving">
           <span *ngIf="saving">{{ 'CREATING' | translate }}...</span>
           <span *ngIf="!saving">{{ 'admin.groups.createNewGroup' | translate }}</span>

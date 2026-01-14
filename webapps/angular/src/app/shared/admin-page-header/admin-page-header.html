@@ -22,19 +22,12 @@
         </ng-container>
       </ol>
     </nav>
-
-    <h1 class="page-title">
-      {{ titleKey ? (titleKey | translate) : title }}
-    </h1>
   </div>
 
   <div class="header-actions">
+    <ng-content></ng-content>
     <button *ngIf="showRefresh" class="action-btn" (click)="onRefresh()" [title]="'common.refresh' | translate">
       <fa-icon [icon]="faRefresh"></fa-icon>
-    </button>
-    <button *ngIf="showCreate" class="action-btn primary" (click)="onCreate()">
-      <fa-icon [icon]="faPlus"></fa-icon>
-      <span>{{ createLabel | translate }}</span>
     </button>
   </div>
 </header>

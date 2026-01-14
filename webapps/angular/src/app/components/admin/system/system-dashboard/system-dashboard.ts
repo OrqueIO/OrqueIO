@@ -15,6 +15,7 @@ import {
   faExchangeAlt
 } from '@fortawesome/free-solid-svg-icons';
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
+import { AdminPageHeaderComponent } from '../../../../shared/admin-page-header/admin-page-header';
 import * as SystemActions from '../../../../store/admin/system/system.actions';
 import * as SystemSelectors from '../../../../store/admin/system/system.selectors';
 import { ProcessEngine } from '../../../../models/admin/system.model';
@@ -33,7 +34,8 @@ interface SystemSection {
     CommonModule,
     RouterModule,
     FontAwesomeModule,
-    TranslatePipe
+    TranslatePipe,
+    AdminPageHeaderComponent
   ],
   templateUrl: './system-dashboard.html',
   styleUrls: ['./system-dashboard.css']

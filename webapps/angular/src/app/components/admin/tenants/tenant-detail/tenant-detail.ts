@@ -4,9 +4,11 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder, FormGroup, FormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faSave, faTrash, faArrowLeft, faPlus, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faSave, faTrash, faArrowLeft, faPlus, faTimes, faBuilding, faUsers, faUser, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import { trigger, transition, style, animate } from '@angular/animations';
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
 import { ConfirmDialogComponent } from '../../../../shared/confirm-dialog/confirm-dialog';
+import { AdminPageHeaderComponent } from '../../../../shared/admin-page-header/admin-page-header';
 import { TenantService } from '../../../../services/admin/tenant.service';
 import { UserService } from '../../../../services/admin/user.service';
 import { GroupService } from '../../../../services/admin/group.service';
@@ -25,10 +27,19 @@ import { Group } from '../../../../models/admin/group.model';
     FormsModule,
     FontAwesomeModule,
     TranslatePipe,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    AdminPageHeaderComponent
   ],
   templateUrl: './tenant-detail.html',
-  styleUrls: ['./tenant-detail.css']
+  styleUrls: ['./tenant-detail.css'],
+  animations: [
+    trigger('fadeIn', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateY(10px)' }),
+        animate('200ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
+      ])
+    ])
+  ]
 })
 export class TenantDetailComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
@@ -46,16 +57,21 @@ export class TenantDetailComponent implements OnInit {
   faArrowLeft = faArrowLeft;
   faPlus = faPlus;
   faTimes = faTimes;
+  faBuilding = faBuilding;
+  faUsers = faUsers;
+  faUser = faUser;
+  faInfoCircle = faInfoCircle;
 
   tenantId: string = '';
   tenant: Tenant | null = null;
   loading: boolean = false;
+  savingTenant: boolean = false;
 
   // Form
   tenantForm!: FormGroup;
 
-  // Tabs
-  activeTab: 'info' | 'users' | 'groups' = 'info';
+  // Sections navigation
+  activeSection: 'info' | 'users' | 'groups' = 'info';
 
   // Users & Groups
   tenantUsers: User[] = [];
@@ -120,8 +136,9 @@ export class TenantDetailComponent implements OnInit {
   }
 
   saveTenant(): void {
-    if (!this.tenantForm.valid) return;
+    if (!this.tenantForm.valid || this.savingTenant) return;
 
+    this.savingTenant = true;
     const updates = {
       name: this.tenantForm.value.name
     };
@@ -130,16 +147,29 @@ export class TenantDetailComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
+          this.savingTenant = false;
           this.notifications.addSuccess('admin.tenants.tenantUpdated', 'Tenant updated successfully');
           this.loadTenant();
         },
         error: () => {
+          this.savingTenant = false;
           this.notifications.addError({
             status: 'admin.tenants.updateError',
             message: 'Failed to update tenant'
           });
+          this.cdr.detectChanges();
         }
       });
+  }
+
+  resetTenantForm(): void {
+    if (this.tenant) {
+      this.tenantForm.patchValue({
+        id: this.tenant.id,
+        name: this.tenant.name
+      });
+      this.tenantForm.markAsPristine();
+    }
   }
 
   deleteTenant(): void {
@@ -168,11 +198,20 @@ export class TenantDetailComponent implements OnInit {
     this.showDeleteConfirm = false;
   }
 
-  setActiveTab(tab: 'info' | 'users' | 'groups'): void {
-    this.activeTab = tab;
-    if (tab === 'users' && this.tenantUsers.length === 0) {
+  setActiveSection(section: 'info' | 'users' | 'groups'): void {
+    this.activeSection = section;
+    if (section === 'users' && this.tenantUsers.length === 0) {
       this.loadUsers();
-    } else if (tab === 'groups' && this.tenantGroups.length === 0) {
+    } else if (section === 'groups' && this.tenantGroups.length === 0) {
+      this.loadGroups();
+    }
+  }
+
+  loadData(): void {
+    this.loadTenant();
+    if (this.activeSection === 'users') {
+      this.loadUsers();
+    } else if (this.activeSection === 'groups') {
       this.loadGroups();
     }
   }
