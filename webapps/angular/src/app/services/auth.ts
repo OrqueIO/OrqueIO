@@ -252,6 +252,40 @@ export class AuthService {
   }
 
   /**
+   * Change user password
+   */
+  changePassword(currentPassword: string, newPassword: string): Observable<void> {
+    const userId = this.currentAuthentication?.name;
+    if (!userId) {
+      return throwError(() => 'User not authenticated');
+    }
+
+    return this.http.get(this.engineUrl, { withCredentials: true }).pipe(
+      switchMap(() => {
+        const csrfToken = this.getCsrfTokenFromCookie();
+        let headers = new HttpHeaders({
+          'Content-Type': 'application/json'
+        });
+        if (csrfToken) {
+          headers = headers.set('X-XSRF-TOKEN', csrfToken);
+        }
+
+        return this.http.put<void>(
+          `/orqueio/api/user/${userId}/credentials`,
+          {
+            authenticatedUserPassword: currentPassword,
+            password: newPassword
+          },
+          { headers, withCredentials: true }
+        );
+      }),
+      catchError(error => {
+        return throwError(() => this.parseError(error));
+      })
+    );
+  }
+
+  /**
    * Update authentication state
    */
   private updateAuthentication(authentication: Authentication | null): void {

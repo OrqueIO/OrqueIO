@@ -192,10 +192,14 @@
 }
 
 .lang-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 38px;
   background: #f9fafb;
   border: 1px solid #e5e7eb;
   border-radius: 6px;
-  padding: 0.4rem 0.75rem;
+  padding: 0 0.75rem;
   font-size: 0.75rem;
   font-weight: 600;
   color: #374151;
@@ -224,8 +228,10 @@
 .nav-link {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
-  padding: 0.5rem 0.75rem;
+  height: 38px;
+  padding: 0 0.75rem;
   border-radius: 6px;
   text-decoration: none;
   color: #4b5563;
@@ -240,9 +246,10 @@
 }
 
 .profile-link {
+  height: 38px;
   background: #f9fafb;
   border: 1px solid #e5e7eb;
-  padding: 0.5rem 1rem;
+  padding: 0 1rem;
 }
 
 .profile-link:hover {
@@ -255,6 +262,7 @@
   align-items: center;
   justify-content: center;
   color: #6b7280;
+  font-size: 0.9rem;
 }
 
 .nav-username {
@@ -277,6 +285,7 @@
   color: #6b7280;
   cursor: pointer;
   transition: all 0.2s ease;
+  font-size: 1rem;
 }
 
 .logout-btn:hover {
@@ -386,7 +395,7 @@
   }
 
   .profile-link {
-    padding: 0.5rem;
+    padding: 0 0.5rem;
   }
 
   .navbar-actions {
