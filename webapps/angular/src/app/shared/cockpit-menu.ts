@@ -2,7 +2,8 @@ import {
   faTachometerAlt,
   faProjectDiagram,
   faTable,
-  faTasks
+  faTasks,
+  faLayerGroup
 } from '@fortawesome/free-solid-svg-icons';
 import { NavMenuItem } from './navbar/navbar';
 
@@ -29,6 +30,15 @@ export const COCKPIT_MENU_ITEMS: NavMenuItem[] = [
     icon: faTasks,
     label: 'cockpit.menu.tasks',
     route: '/cockpit/tasks',
+    exact: false
+  }
+];
+
+export const COCKPIT_MORE_MENU_ITEMS: NavMenuItem[] = [
+  {
+    icon: faLayerGroup,
+    label: 'cockpit.menu.batches',
+    route: '/cockpit/batch',
     exact: false
   }
 ];

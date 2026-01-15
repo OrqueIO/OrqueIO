@@ -18,7 +18,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 import { CockpitHeaderComponent, BreadcrumbItem } from '../../../../shared/cockpit-header/cockpit-header';
-import { COCKPIT_MENU_ITEMS } from '../../../../shared/cockpit-menu';
+import { COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS } from '../../../../shared/cockpit-menu';
 import {
   CockpitService,
   DecisionDefinition,
@@ -86,7 +86,7 @@ export class DecisionInstanceComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.navMenuService.setMenuItems(COCKPIT_MENU_ITEMS);
+    this.navMenuService.setMenuItems(COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS);
 
     this.route.params
       .pipe(takeUntilDestroyed(this.destroyRef))

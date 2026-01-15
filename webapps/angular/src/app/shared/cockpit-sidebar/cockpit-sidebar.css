@@ -153,3 +153,73 @@
 .sidebar-nav::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.3);
 }
+
+/* More dropdown styles */
+.nav-item-more {
+  position: relative;
+}
+
+.more-toggle {
+  width: 100%;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+}
+
+.more-toggle:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.more-toggle.expanded {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
+.chevron-icon {
+  margin-left: auto;
+  font-size: 0.75rem;
+  opacity: 0.7;
+}
+
+.more-menu {
+  list-style: none;
+  margin: 0;
+  padding: 0.25rem 0 0.25rem 0.5rem;
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 0 0 8px 8px;
+}
+
+.more-menu-item {
+  margin: 0.125rem 0;
+}
+
+.more-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.625rem 1rem;
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  font-size: 0.85rem;
+}
+
+.more-link:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.more-link.active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+}
+
+.more-link .nav-icon {
+  width: 18px;
+  font-size: 0.9rem;
+}

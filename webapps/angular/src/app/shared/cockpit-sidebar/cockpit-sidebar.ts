@@ -7,8 +7,12 @@ import {
   faProjectDiagram,
   faTable,
   faTasks,
+  faLayerGroup,
   faChevronLeft,
-  faChevronRight
+  faChevronRight,
+  faChevronDown,
+  faChevronUp,
+  faEllipsisH
 } from '@fortawesome/free-solid-svg-icons';
 import { TranslatePipe } from '../../i18n/translate.pipe';
 
@@ -28,11 +32,16 @@ interface MenuItem {
 })
 export class CockpitSidebarComponent {
   isCollapsed = false;
+  moreExpanded = false;
 
   // Icons
   faChevronLeft = faChevronLeft;
   faChevronRight = faChevronRight;
+  faChevronDown = faChevronDown;
+  faChevronUp = faChevronUp;
+  faEllipsisH = faEllipsisH;
 
+  // Main menu items
   menuItems: MenuItem[] = [
     {
       icon: faTachometerAlt,
@@ -60,7 +69,24 @@ export class CockpitSidebarComponent {
     }
   ];
 
+  // More menu items (dropdown)
+  moreMenuItems: MenuItem[] = [
+    {
+      icon: faLayerGroup,
+      label: 'cockpit.menu.batches',
+      route: '/cockpit/batch',
+      exact: false
+    }
+  ];
+
   toggleSidebar(): void {
     this.isCollapsed = !this.isCollapsed;
+    if (this.isCollapsed) {
+      this.moreExpanded = false;
+    }
+  }
+
+  toggleMore(): void {
+    this.moreExpanded = !this.moreExpanded;
   }
 }

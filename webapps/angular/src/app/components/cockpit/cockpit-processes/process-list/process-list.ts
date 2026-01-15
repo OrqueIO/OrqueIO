@@ -35,7 +35,7 @@ import {
 import { forkJoin } from 'rxjs';
 
 import { CockpitHeaderComponent, BreadcrumbItem } from '../../../../shared/cockpit-header/cockpit-header';
-import { COCKPIT_MENU_ITEMS } from '../../../../shared/cockpit-menu';
+import { COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS } from '../../../../shared/cockpit-menu';
 import { CockpitService, ProcessInstance, ProcessDefinition, ProcessQueryParams, ActivityStatistics } from '../../../../services/cockpit.service';
 import { NavMenuService } from '../../../../services/nav-menu.service';
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
@@ -163,7 +163,7 @@ export class ProcessListComponent implements OnInit, OnDestroy {
   sortableColumns = ['startTime', 'endTime', 'businessKey'];
 
   ngOnInit(): void {
-    this.navMenuService.setMenuItems(COCKPIT_MENU_ITEMS);
+    this.navMenuService.setMenuItems(COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS);
     this.loadSavedPreferences();
 
     // Get the process definition key from route params
