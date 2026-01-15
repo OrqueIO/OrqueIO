@@ -4,6 +4,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faUser, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import { TranslatePipe } from '../../i18n/translate.pipe';
 import { TranslateService, Language } from '../../i18n/translate.service';
 import { AuthService } from '../../services/auth';
@@ -34,6 +35,10 @@ export class NavbarComponent implements OnInit {
   userName = '';
   isAuthenticated = false;
   navActions: NavAction[] = [];
+
+  // Icons
+  faUser = faUser;
+  faSignOut = faSignOutAlt;
 
   private destroyRef = inject(DestroyRef);
 
