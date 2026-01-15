@@ -13,7 +13,7 @@ import {
   ChangeDetectorRef
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Subject, fromEvent, takeUntil } from 'rxjs';
+import { Subject, fromEvent, interval, takeUntil } from 'rxjs';
 import { TranslatePipe } from '../../../i18n/translate.pipe';
 import { TimeAgoPipe, CamDatePipe } from '../../../pipes';
 import { Task, TaskSorting } from '../../../models/tasklist';
@@ -60,10 +60,12 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
     });
 
     // Update "now" every minute for relative dates
-    setInterval(() => {
+    interval(60000).pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(() => {
       this.now = new Date();
       this.cdr.markForCheck();
-    }, 60000);
+    });
   }
 
   ngOnDestroy(): void {
