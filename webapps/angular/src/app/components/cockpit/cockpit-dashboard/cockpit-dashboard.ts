@@ -23,7 +23,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 import { CockpitHeaderComponent } from '../../../shared/cockpit-header/cockpit-header';
-import { COCKPIT_MENU_ITEMS } from '../../../shared/cockpit-menu';
+import { COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS } from '../../../shared/cockpit-menu';
 import { DashboardStats, ProcessDefinition, CockpitService } from '../../../services/cockpit.service';
 import { NavMenuService } from '../../../services/nav-menu.service';
 import { TranslatePipe } from '../../../i18n/translate.pipe';
@@ -124,7 +124,7 @@ export class CockpitDashboardComponent implements OnInit, OnDestroy {
   processDefinitions$ = this.store.select(ProcessesSelectors.selectProcessDefinitions);
 
   ngOnInit(): void {
-    this.navMenuService.setMenuItems(COCKPIT_MENU_ITEMS);
+    this.navMenuService.setMenuItems(COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS);
     this.loadDashboardData();
     this.loadDeployedStats();
   }

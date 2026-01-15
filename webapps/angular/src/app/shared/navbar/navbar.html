@@ -5,7 +5,7 @@
     </a>
 
     <!-- Menu Items -->
-    <div class="navbar-menu" *ngIf="menuItems.length > 0">
+    <div class="navbar-menu" *ngIf="menuItems.length > 0 || moreMenuItems.length > 0">
       <a
         *ngFor="let item of menuItems"
         [routerLink]="item.route"
@@ -16,6 +16,34 @@
         <fa-icon [icon]="item.icon" class="menu-icon"></fa-icon>
         <span class="menu-label">{{ item.label | translate }}</span>
       </a>
+
+      <!-- More Dropdown -->
+      <div class="more-dropdown" *ngIf="moreMenuItems.length > 0">
+        <button
+          type="button"
+          class="menu-item more-toggle"
+          [class.open]="moreMenuOpen"
+          (click)="toggleMoreMenu($event)"
+        >
+          <fa-icon [icon]="faEllipsisH" class="menu-icon"></fa-icon>
+          <span class="menu-label">{{ 'cockpit.menu.more' | translate }}</span>
+          <fa-icon [icon]="faChevronDown" class="chevron" [class.rotated]="moreMenuOpen"></fa-icon>
+        </button>
+
+        <div class="more-menu" *ngIf="moreMenuOpen">
+          <a
+            *ngFor="let item of moreMenuItems"
+            [routerLink]="item.route"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: item.exact ?? false }"
+            class="more-menu-item"
+            (click)="closeMoreMenu()"
+          >
+            <fa-icon [icon]="item.icon" class="menu-icon"></fa-icon>
+            <span class="menu-label">{{ item.label | translate }}</span>
+          </a>
+        </div>
+      </div>
     </div>
 
     <div class="navbar-actions">

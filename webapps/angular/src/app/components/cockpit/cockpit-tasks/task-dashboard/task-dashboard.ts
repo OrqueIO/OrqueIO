@@ -14,7 +14,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 import { CockpitHeaderComponent, BreadcrumbItem } from '../../../../shared/cockpit-header/cockpit-header';
-import { COCKPIT_MENU_ITEMS } from '../../../../shared/cockpit-menu';
+import { COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS } from '../../../../shared/cockpit-menu';
 import { CockpitService, TaskGroupCount, Group } from '../../../../services/cockpit.service';
 import { NavMenuService } from '../../../../services/nav-menu.service';
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
@@ -98,7 +98,7 @@ export class TaskDashboardComponent implements OnInit, OnDestroy {
   constructor(private cockpitService: CockpitService) {}
 
   ngOnInit(): void {
-    this.navMenuService.setMenuItems(COCKPIT_MENU_ITEMS);
+    this.navMenuService.setMenuItems(COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS);
     this.loadStatistics();
   }
 

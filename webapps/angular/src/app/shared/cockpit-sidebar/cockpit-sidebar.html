@@ -11,6 +11,7 @@
 
   <nav class="sidebar-nav">
     <ul class="nav-list">
+      <!-- Main menu items -->
       <li *ngFor="let item of menuItems" class="nav-item">
         <a
           [routerLink]="item.route"
@@ -23,6 +24,49 @@
           <span class="nav-label" *ngIf="!isCollapsed">{{ item.label | translate }}</span>
         </a>
       </li>
+
+      <!-- More dropdown -->
+      <li class="nav-item nav-item-more" *ngIf="!isCollapsed">
+        <button
+          class="nav-link more-toggle"
+          [class.expanded]="moreExpanded"
+          (click)="toggleMore()"
+        >
+          <fa-icon [icon]="faEllipsisH" class="nav-icon"></fa-icon>
+          <span class="nav-label">{{ 'cockpit.menu.more' | translate }}</span>
+          <fa-icon [icon]="moreExpanded ? faChevronUp : faChevronDown" class="chevron-icon"></fa-icon>
+        </button>
+
+        <!-- Dropdown menu -->
+        <ul class="more-menu" *ngIf="moreExpanded">
+          <li *ngFor="let item of moreMenuItems" class="more-menu-item">
+            <a
+              [routerLink]="item.route"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: item.exact }"
+              class="more-link"
+            >
+              <fa-icon [icon]="item.icon" class="nav-icon"></fa-icon>
+              <span class="nav-label">{{ item.label | translate }}</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+
+      <!-- Collapsed state: show more items directly -->
+      <ng-container *ngIf="isCollapsed">
+        <li *ngFor="let item of moreMenuItems" class="nav-item">
+          <a
+            [routerLink]="item.route"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: item.exact }"
+            class="nav-link"
+            [title]="item.label | translate"
+          >
+            <fa-icon [icon]="item.icon" class="nav-icon"></fa-icon>
+          </a>
+        </li>
+      </ng-container>
     </ul>
   </nav>
 

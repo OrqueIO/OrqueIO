@@ -23,6 +23,7 @@ import { DashboardEffects } from './store/cockpit/dashboard/dashboard.effects';
 import { ProcessesEffects } from './store/cockpit/processes/processes.effects';
 import { DecisionsEffects } from './store/cockpit/decisions/decisions.effects';
 import { TasksEffects } from './store/cockpit/tasks/tasks.effects';
+import { BatchEffects } from './store/cockpit/batch/batch.effects';
 
 // Tasklist State
 import { tasklistReducer } from './store/tasklist/tasklist.reducer';
@@ -65,6 +66,7 @@ export const appConfig: ApplicationConfig = {
       ProcessesEffects,
       DecisionsEffects,
       TasksEffects,
+      BatchEffects,
       // Tasklist Effects
       TasklistEffects
     ]),

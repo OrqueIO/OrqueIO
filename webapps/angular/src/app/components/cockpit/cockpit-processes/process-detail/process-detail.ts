@@ -31,7 +31,7 @@ import {
 import { forkJoin } from 'rxjs';
 
 import { NavMenuService } from '../../../../services/nav-menu.service';
-import { COCKPIT_MENU_ITEMS } from '../../../../shared/cockpit-menu';
+import { COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS } from '../../../../shared/cockpit-menu';
 import {
   CockpitService,
   ProcessInstanceDetail,
@@ -195,7 +195,7 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.navMenuService.setMenuItems(COCKPIT_MENU_ITEMS);
+    this.navMenuService.setMenuItems(COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS);
 
     this.route.params
       .pipe(takeUntilDestroyed(this.destroyRef))

@@ -7,13 +7,18 @@ import { NavMenuItem } from '../shared/navbar/navbar';
 })
 export class NavMenuService {
   private menuItemsSubject = new BehaviorSubject<NavMenuItem[]>([]);
-  menuItems$ = this.menuItemsSubject.asObservable();
+  private moreMenuItemsSubject = new BehaviorSubject<NavMenuItem[]>([]);
 
-  setMenuItems(items: NavMenuItem[]): void {
+  menuItems$ = this.menuItemsSubject.asObservable();
+  moreMenuItems$ = this.moreMenuItemsSubject.asObservable();
+
+  setMenuItems(items: NavMenuItem[], moreItems: NavMenuItem[] = []): void {
     this.menuItemsSubject.next(items);
+    this.moreMenuItemsSubject.next(moreItems);
   }
 
   clearMenuItems(): void {
     this.menuItemsSubject.next([]);
+    this.moreMenuItemsSubject.next([]);
   }
 }

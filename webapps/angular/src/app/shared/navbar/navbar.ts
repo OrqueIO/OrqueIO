@@ -1,10 +1,10 @@
-import { Component, Input, Output, EventEmitter, OnInit, DestroyRef, inject, SecurityContext } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, DestroyRef, inject, SecurityContext, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faUser, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faSignOutAlt, faEllipsisH, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { TranslatePipe } from '../../i18n/translate.pipe';
 import { TranslateService, Language } from '../../i18n/translate.service';
 import { AuthService } from '../../services/auth';
@@ -35,10 +35,14 @@ export class NavbarComponent implements OnInit {
   userName = '';
   isAuthenticated = false;
   navActions: NavAction[] = [];
+  moreMenuItems: NavMenuItem[] = [];
+  moreMenuOpen = false;
 
   // Icons
   faUser = faUser;
   faSignOut = faSignOutAlt;
+  faEllipsisH = faEllipsisH;
+  faChevronDown = faChevronDown;
 
   private destroyRef = inject(DestroyRef);
 
@@ -84,6 +88,30 @@ export class NavbarComponent implements OnInit {
       .subscribe(actions => {
         this.navActions = actions;
       });
+
+    // Subscribe to more menu items from service
+    this.navMenuService.moreMenuItems$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(items => {
+        this.moreMenuItems = items;
+      });
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: Event): void {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.more-dropdown')) {
+      this.moreMenuOpen = false;
+    }
+  }
+
+  toggleMoreMenu(event: Event): void {
+    event.stopPropagation();
+    this.moreMenuOpen = !this.moreMenuOpen;
+  }
+
+  closeMoreMenu(): void {
+    this.moreMenuOpen = false;
   }
 
   onActionClick(action: NavAction): void {
