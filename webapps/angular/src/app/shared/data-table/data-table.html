@@ -7,7 +7,7 @@
   <table class="data-table">
     <thead>
       <tr>
-        <th *ngFor="let column of columns"
+        <th *ngFor="let column of columns; trackBy: trackByColumn"
             [class.sortable]="column.sortable"
             (click)="onSort(column)">
           {{ column.labelKey | translate }}
@@ -24,10 +24,10 @@
           {{ emptyMessageKey | translate }}
         </td>
       </tr>
-      <tr *ngFor="let row of data"
+      <tr *ngFor="let row of data; trackBy: trackByRow"
           (click)="onRowClick(row)"
           class="data-row">
-        <td *ngFor="let column of columns">
+        <td *ngFor="let column of columns; trackBy: trackByColumn">
           <ng-container *ngIf="column.template; else defaultCell">
             <ng-container *ngTemplateOutlet="column.template; context: { $implicit: row }">
             </ng-container>

@@ -30,6 +30,7 @@ export class DataTableComponent {
   @Input() emptyMessageKey: string = 'NO_DATA';
   @Input() sortBy: string = 'id';
   @Input() sortOrder: 'asc' | 'desc' = 'asc';
+  @Input() trackByKey: string = 'id';
 
   @Output() sortChange = new EventEmitter<SortEvent>();
   @Output() rowClick = new EventEmitter<any>();
@@ -62,5 +63,13 @@ export class DataTableComponent {
 
   onRowClick(row: any): void {
     this.rowClick.emit(row);
+  }
+
+  trackByColumn(_index: number, column: ColumnDef): string {
+    return column.key;
+  }
+
+  trackByRow(_index: number, row: any): any {
+    return row[this.trackByKey] ?? _index;
   }
 }
