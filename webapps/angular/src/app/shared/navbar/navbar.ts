@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit, DestroyRef, inject } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, DestroyRef, inject, SecurityContext } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
@@ -50,9 +50,9 @@ export class NavbarComponent implements OnInit {
     private sanitizer: DomSanitizer
   ) {}
 
-  sanitizeSvg(svg: string | undefined): SafeHtml {
+  sanitizeSvg(svg: string | undefined): string {
     if (!svg) return '';
-    return this.sanitizer.bypassSecurityTrustHtml(svg);
+    return this.sanitizer.sanitize(SecurityContext.HTML, svg) || '';
   }
 
   ngOnInit(): void {
