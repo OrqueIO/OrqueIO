@@ -23,6 +23,7 @@ export interface ProcessDefinition {
   versionTag?: string;
   historyTimeToLive?: number;
   startableInTasklist?: boolean;
+  resource?: string;
 }
 
 // Process definition with aggregated statistics (instances, incidents)
@@ -400,6 +401,40 @@ export interface IdentityLink {
   userId?: string;
   groupId?: string;
   type: string;
+}
+
+export interface Deployment {
+  id: string;
+  name: string | null;
+  source: string | null;
+  deploymentTime: string;
+  tenantId: string | null;
+}
+
+export interface DeploymentResource {
+  id: string;
+  name: string;
+  deploymentId: string;
+}
+
+export interface DeploymentWithResources extends Deployment {
+  resources?: DeploymentResource[];
+}
+
+export interface DeploymentQueryParams {
+  id?: string;
+  name?: string;
+  nameLike?: string;
+  source?: string;
+  withoutSource?: boolean;
+  tenantIdIn?: string[];
+  withoutTenantId?: boolean;
+  deploymentBefore?: string;
+  deploymentAfter?: string;
+  sortBy?: 'id' | 'name' | 'deploymentTime';
+  sortOrder?: 'asc' | 'desc';
+  firstResult?: number;
+  maxResults?: number;
 }
 
 @Injectable({
@@ -1656,5 +1691,168 @@ export class CockpitService {
       tasksByGroup: this.getTasksByGroupWithNames(),
       processDistribution: this.getProcessDistribution()
     });
+  }
+
+  // ============================================
+  // Deployments API
+  // ============================================
+
+  /**
+   * Get deployments with optional filtering and pagination
+   */
+  getDeployments(params?: DeploymentQueryParams): Observable<Deployment[]> {
+    let httpParams = new HttpParams();
+
+    if (params?.id) httpParams = httpParams.set('id', params.id);
+    if (params?.name) httpParams = httpParams.set('name', params.name);
+    if (params?.nameLike) httpParams = httpParams.set('nameLike', params.nameLike);
+    if (params?.source) httpParams = httpParams.set('source', params.source);
+    if (params?.withoutSource) httpParams = httpParams.set('withoutSource', 'true');
+    if (params?.tenantIdIn?.length) httpParams = httpParams.set('tenantIdIn', params.tenantIdIn.join(','));
+    if (params?.withoutTenantId) httpParams = httpParams.set('withoutTenantId', 'true');
+    if (params?.deploymentBefore) httpParams = httpParams.set('before', params.deploymentBefore);
+    if (params?.deploymentAfter) httpParams = httpParams.set('after', params.deploymentAfter);
+    if (params?.sortBy) {
+      httpParams = httpParams.set('sortBy', params.sortBy);
+      if (params?.sortOrder) httpParams = httpParams.set('sortOrder', params.sortOrder);
+    }
+    if (params?.firstResult !== undefined) httpParams = httpParams.set('firstResult', params.firstResult.toString());
+
+    const maxResults = params?.maxResults ?? 50;
+    httpParams = httpParams.set('maxResults', maxResults.toString());
+
+    return this.http.get<Deployment[]>(`${this.baseUrl}/deployment`, { params: httpParams })
+      .pipe(catchError(() => of([])));
+  }
+
+  /**
+   * Get deployments count with optional filtering
+   */
+  getDeploymentsCountWithParams(params?: DeploymentQueryParams): Observable<number> {
+    let httpParams = new HttpParams();
+
+    if (params?.id) httpParams = httpParams.set('id', params.id);
+    if (params?.name) httpParams = httpParams.set('name', params.name);
+    if (params?.nameLike) httpParams = httpParams.set('nameLike', params.nameLike);
+    if (params?.source) httpParams = httpParams.set('source', params.source);
+    if (params?.withoutSource) httpParams = httpParams.set('withoutSource', 'true');
+    if (params?.tenantIdIn?.length) httpParams = httpParams.set('tenantIdIn', params.tenantIdIn.join(','));
+    if (params?.withoutTenantId) httpParams = httpParams.set('withoutTenantId', 'true');
+    if (params?.deploymentBefore) httpParams = httpParams.set('before', params.deploymentBefore);
+    if (params?.deploymentAfter) httpParams = httpParams.set('after', params.deploymentAfter);
+
+    return this.http.get<{ count: number }>(`${this.baseUrl}/deployment/count`, { params: httpParams })
+      .pipe(
+        map(res => res.count),
+        catchError(() => of(0))
+      );
+  }
+
+  /**
+   * Delete a deployment with optional cascade and skip options
+   */
+  deleteDeployment(id: string, options?: {
+    cascade?: boolean;
+    skipCustomListeners?: boolean;
+    skipIoMappings?: boolean;
+  }): Observable<void> {
+    let httpParams = new HttpParams();
+
+    if (options?.cascade) httpParams = httpParams.set('cascade', 'true');
+    if (options?.skipCustomListeners) httpParams = httpParams.set('skipCustomListeners', 'true');
+    if (options?.skipIoMappings) httpParams = httpParams.set('skipIoMappings', 'true');
+
+    return this.http.delete<void>(`${this.baseUrl}/deployment/${id}`, { params: httpParams })
+      .pipe(catchError((err) => {
+        throw err;
+      }));
+  }
+
+  /**
+   * Get process instance count by deployment ID
+   */
+  getProcessInstanceCountByDeployment(deploymentId: string): Observable<number> {
+    return this.http.get<{ count: number }>(`${this.baseUrl}/process-instance/count`, {
+      params: { deploymentId }
+    }).pipe(
+      map(res => res.count),
+      catchError(() => of(0))
+    );
+  }
+
+  /**
+   * Get case instance count by deployment ID
+   */
+  getCaseInstanceCountByDeployment(deploymentId: string): Observable<number> {
+    return this.http.get<{ count: number }>(`${this.baseUrl}/case-instance/count`, {
+      params: { deploymentId }
+    }).pipe(
+      map(res => res.count),
+      catchError(() => of(0))
+    );
+  }
+
+  // ============================================
+  // Deployment Resources API
+  // ============================================
+
+  /**
+   * Get all resources for a deployment
+   */
+  getDeploymentResources(deploymentId: string): Observable<DeploymentResource[]> {
+    return this.http.get<DeploymentResource[]>(`${this.baseUrl}/deployment/${deploymentId}/resources`)
+      .pipe(catchError(() => of([])));
+  }
+
+  /**
+   * Get a specific resource data (binary)
+   */
+  getDeploymentResourceData(deploymentId: string, resourceId: string): Observable<Blob> {
+    return this.http.get(`${this.baseUrl}/deployment/${deploymentId}/resources/${resourceId}/data`, {
+      responseType: 'blob'
+    }).pipe(catchError(() => of(new Blob())));
+  }
+
+  /**
+   * Get resource data as text (for BPMN XML, etc.)
+   */
+  getDeploymentResourceText(deploymentId: string, resourceId: string): Observable<string> {
+    return this.http.get(`${this.baseUrl}/deployment/${deploymentId}/resources/${resourceId}/data`, {
+      responseType: 'text'
+    }).pipe(catchError(() => of('')));
+  }
+
+  /**
+   * Get process definitions for a deployment
+   */
+  getProcessDefinitionsByDeployment(deploymentId: string): Observable<ProcessDefinition[]> {
+    return this.http.get<ProcessDefinition[]>(`${this.baseUrl}/process-definition`, {
+      params: { deploymentId, maxResults: '1000' }
+    }).pipe(catchError(() => of([])));
+  }
+
+  /**
+   * Get decision definitions for a deployment
+   */
+  getDecisionDefinitionsByDeployment(deploymentId: string): Observable<DecisionDefinition[]> {
+    return this.http.get<DecisionDefinition[]>(`${this.baseUrl}/decision-definition`, {
+      params: { deploymentId, maxResults: '1000' }
+    }).pipe(catchError(() => of([])));
+  }
+
+  /**
+   * Get case definitions for a deployment
+   */
+  getCaseDefinitionsByDeployment(deploymentId: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/case-definition`, {
+      params: { deploymentId, maxResults: '1000' }
+    }).pipe(catchError(() => of([])));
+  }
+
+  /**
+   * Get URL for downloading a resource
+   */
+  getResourceDownloadUrl(deploymentId: string, resourceId: string): string {
+    return `${this.baseUrl}/deployment/${deploymentId}/resources/${resourceId}/data`;
   }
 }

@@ -49,12 +49,15 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
   @Input() selectedActivity: string | null = null;
   @Input() showExpandButton = false;
   @Input() isExpanded = false;
+  @Input() showFocusButton = false;
+  @Input() focusElementId: string | null | undefined = null;
 
   @Output() elementClick = new EventEmitter<BpmnElement>();
   @Output() elementHover = new EventEmitter<BpmnElement | null>();
   @Output() viewerReady = new EventEmitter<void>();
   @Output() error = new EventEmitter<Error>();
   @Output() expandToggle = new EventEmitter<void>();
+  @Output() focusClick = new EventEmitter<void>();
 
   private viewer: any = null;
   private overlays: any = null;
