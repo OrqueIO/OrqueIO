@@ -10,7 +10,8 @@
       "Bash(mkdir:*)",
       "Bash(npx ng lint)",
       "Bash(npx tsc:*)",
-      "Bash(npx ng build:*)"
+      "Bash(npx ng build:*)",
+      "Bash(git add:*)"
     ]
   }
 }

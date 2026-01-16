@@ -51,11 +51,26 @@
   color: #374151;
   cursor: pointer;
   transition: all 0.15s ease;
+  padding: 0;
+  margin: 0;
+  line-height: 1;
+}
+
+.zoom-btn svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
 }
 
 .zoom-btn:hover {
   background: #f3f4f6;
   border-color: #d1d5db;
+}
+
+.zoom-btn:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
 }
 
 .zoom-btn:active {

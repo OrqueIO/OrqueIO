@@ -63,67 +63,10 @@
 
 /* Diagram Wrapper */
 .diagram-wrapper {
+  position: relative;
   display: flex;
   flex-direction: column;
   height: 100%;
-}
-
-/* Toolbar */
-.diagram-toolbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 8px 12px;
-  background-color: #ffffff;
-  border-bottom: 1px solid #e5e7eb;
-}
-
-.toolbar-group {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.toolbar-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  padding: 6px 10px;
-  border: 1px solid #d1d5db;
-  border-radius: 4px;
-  background-color: #ffffff;
-  color: #1f2937;
-  cursor: pointer;
-  font-size: 12px;
-  transition: background-color 0.15s, border-color 0.15s;
-}
-
-.toolbar-btn:hover {
-  background-color: #f3f4f6;
-  border-color: #9ca3af;
-}
-
-.toolbar-btn.primary {
-  background-color: #667eea;
-  border-color: #667eea;
-  color: white;
-}
-
-.toolbar-btn.primary:hover {
-  background-color: #5a67d8;
-  border-color: #5a67d8;
-}
-
-.toolbar-btn.active {
-  background-color: #667eea;
-  border-color: #667eea;
-  color: white;
-}
-
-.toolbar-btn.active:hover {
-  background-color: #5a67d8;
-  border-color: #5a67d8;
 }
 
 /* Diagram Container */

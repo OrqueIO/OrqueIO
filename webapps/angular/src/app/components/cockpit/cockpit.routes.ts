@@ -9,6 +9,7 @@ import { DecisionDetailComponent } from './cockpit-decisions/decision-detail/dec
 import { DecisionInstanceComponent } from './cockpit-decisions/decision-instance/decision-instance';
 import { TaskDashboardComponent } from './cockpit-tasks/task-dashboard/task-dashboard';
 import { BatchPageComponent } from './cockpit-batch/batch-page/batch-page';
+import { DeploymentListComponent } from './cockpit-deployments/deployment-list/deployment-list';
 
 export const cockpitRoutes: Routes = [
   {
@@ -23,7 +24,8 @@ export const cockpitRoutes: Routes = [
       { path: 'decisions/:id', component: DecisionDetailComponent },
       { path: 'decision-instance/:id', component: DecisionInstanceComponent },
       { path: 'tasks', component: TaskDashboardComponent },
-      { path: 'batch', component: BatchPageComponent }
+      { path: 'batch', component: BatchPageComponent },
+      { path: 'deployments', component: DeploymentListComponent }
     ]
   }
 ];
