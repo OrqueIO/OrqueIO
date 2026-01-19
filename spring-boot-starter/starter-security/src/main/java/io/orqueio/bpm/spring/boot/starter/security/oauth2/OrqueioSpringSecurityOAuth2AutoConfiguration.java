@@ -38,11 +38,13 @@ import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.security.oauth2.client.autoconfigure.OAuth2ClientAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.Ordered;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -55,8 +57,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.core.annotation.Order;
 
 @Configuration
-@AutoConfigureOrder(OrqueioSpringSecurityOAuth2AutoConfiguration.ORQUEIO_OAUTH2_ORDER)
-@AutoConfigureAfter({ OrqueioBpmAutoConfiguration.class, SpringProcessEngineServicesConfiguration.class })
+@AutoConfigureOrder(Ordered.HIGHEST_PRECEDENCE)
+@AutoConfigureAfter({ OrqueioBpmAutoConfiguration.class, SpringProcessEngineServicesConfiguration.class, OAuth2ClientAutoConfiguration.class })
 @ConditionalOnBean({OrqueioBpmProperties.class, ClientRegistrationRepository.class})
 @EnableConfigurationProperties(OAuth2Properties.class)
 @Import(OAuth2ProvidersController.class)
@@ -73,6 +75,7 @@ public class OrqueioSpringSecurityOAuth2AutoConfiguration {
     this.oAuth2Properties = oAuth2Properties;
     WebappProperty webapp = properties.getWebapp();
     this.webappPath = webapp.getApplicationPath();
+    logger.info("OrqueioSpringSecurityOAuth2AutoConfiguration initialized with webappPath: {}", webappPath);
   }
 
   @Bean
@@ -125,15 +128,17 @@ public class OrqueioSpringSecurityOAuth2AutoConfiguration {
   }
 
   @Bean
-  @Order(2)
-  public SecurityFilterChain filterChain(HttpSecurity http,
-                                         AuthorizeTokenFilter authorizeTokenFilter,
-                                         SsoLogoutSuccessHandler ssoLogoutSuccessHandler,
-                                         OAuth2AuthenticationSuccessHandler oauth2AuthenticationSuccessHandler) throws Exception {
+  @Order(Ordered.HIGHEST_PRECEDENCE)
+  @Primary
+  public SecurityFilterChain orqueioSecurityFilterChain(HttpSecurity http,
+                                                        AuthorizeTokenFilter authorizeTokenFilter,
+                                                        SsoLogoutSuccessHandler ssoLogoutSuccessHandler,
+                                                        OAuth2AuthenticationSuccessHandler oauth2AuthenticationSuccessHandler) throws Exception {
 
     logger.info("Enabling Orqueio Spring Security OAuth2/OIDC integration");
 
     String loginPage = webappPath + "/app/welcome/default/#!/login";
+    logger.info("Configured login page: {}", loginPage);
 
     http.authorizeHttpRequests(c -> c
                     .requestMatchers("/h2-console/**").permitAll()
