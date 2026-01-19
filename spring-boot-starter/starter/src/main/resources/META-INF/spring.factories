@@ -1,2 +1,5 @@
 # Application Listeners
 org.springframework.context.ApplicationListener=io.orqueio.bpm.spring.boot.starter.runlistener.PropertiesListener
+
+# Environment Post Processors
+org.springframework.boot.env.EnvironmentPostProcessor=io.orqueio.bpm.spring.boot.starter.property.OrqueioBpmPropertyAliasPostProcessor

@@ -1,11 +1,11 @@
- <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
 
 
   <groupId>io.orqueio.bpm</groupId>
   <artifactId>orqueio-root</artifactId>
-  <version>2.0.0</version>
+  <version>2.0.1</version>
   <packaging>pom</packaging>
   <name>orqueio Platform - Root Pom</name>
   <inceptionYear>2013</inceptionYear>
@@ -15,17 +15,17 @@
     The parent pom for all 0rque IO Platform projects can be found in the parent directory relative to this file.
   </description>
 
-    <properties>
-        <license.includeTransitiveDependencies>false</license.includeTransitiveDependencies>
+  <properties>
+    <license.includeTransitiveDependencies>false</license.includeTransitiveDependencies>
 
-        <!-- These properties are used in both the BOM as well as orqueio-parent and subprojects -->
-        <version.mybatis>3.5.15</version.mybatis>
-        <version.joda-time>2.12.5</version.joda-time>
-        <version.uuid-generator>4.3.0</version.uuid-generator>
-        <version.feel-scala>1.19.3</version.feel-scala>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
-    </properties>
+    <!-- These properties are used in both the BOM as well as orqueio-parent and subprojects -->
+    <version.mybatis>3.5.15</version.mybatis>
+    <version.joda-time>2.12.5</version.joda-time>
+    <version.uuid-generator>4.3.0</version.uuid-generator>
+    <version.feel-scala>1.19.3</version.feel-scala>
+    <maven.compiler.source>21</maven.compiler.source>
+    <maven.compiler.target>21</maven.compiler.target>
+  </properties>
 
   <build>
     <plugins>
@@ -101,8 +101,10 @@
 
         <module>distro/license-book</module>
         <module>distro/jboss</module>
+        <module>distro/tomcat</module>
         <module>distro/sql-script</module>
 
+        <module>clients/java</module>
 
         <module>internal-dependencies</module>
         <module>database</module>
@@ -123,6 +125,7 @@
 
         <module>distro/license-book</module>
         <module>distro/jboss</module>
+        <module>distro/tomcat</module>
       </modules>
     </profile>
 
@@ -186,11 +189,21 @@
       </activation>
       <modules>
         <module>distro/license-book</module>
+        <module>distro/tomcat</module>
       </modules>
     </profile>
 
 
 
+    <profile>
+      <id>distro-webjar</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <modules>
+        <module>distro/webjar</module>
+      </modules>
+    </profile>
 
 
 
@@ -227,16 +240,6 @@
         <module>internal-dependencies</module>
         <module>parent</module>
         <module>bom</module>
-      </modules>
-    </profile>
-
-    <profile>
-      <id>distro-webjar</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-      <modules>
-        <module>distro/webjar</module>
       </modules>
     </profile>
 
@@ -322,7 +325,6 @@
         <module>engine-cdi</module>
         <module>engine-spring</module>
         <module>engine-rest</module>
-        <module>distro/webjar</module>
 
         <module>engine-dmn</module>
         <module>connect</module>
@@ -338,6 +340,9 @@
 
         <module>engine-plugins</module>
         <module>examples</module>
+        <module>distro/webjar</module>
+        <module>distro/tomcat</module>
+        <module>clients/java</module>
         <module>test-utils/archunit</module>
         <module>test-utils/testcontainers</module>
         <module>test-utils/junit5-extension</module>
@@ -366,16 +371,16 @@
 
   </profiles>
 
-   <repositories>
-     <repository>
-       <id>central-portal-snapshots</id>
-       <name>Central Portal Snapshots</name>
-       <url>https://central.sonatype.com/repository/maven-snapshots/</url>
-       <snapshots>
-         <enabled>true</enabled>
-       </snapshots>
-     </repository>
-   </repositories>
+  <repositories>
+    <repository>
+      <id>central-portal-snapshots</id>
+      <name>Central Portal Snapshots</name>
+      <url>https://central.sonatype.com/repository/maven-snapshots/</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
 
   <licenses>
     <license>

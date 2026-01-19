@@ -56,6 +56,14 @@ ngModule
         template: require('./page/form.html?raw'),
         priority: 0
       });
+
+      // Register OAuth2 SSO buttons below the login form
+      ViewsProvider.registerDefaultView(`${canonicalAppName()}.login`, {
+        id: 'oauth2-login-buttons',
+        controller: require('./page/oauth2-buttons'),
+        template: require('./page/oauth2-buttons.html?raw'),
+        priority: -10 // Lower priority to appear after the login form
+      });
     }
   ])
   .config(loginPage)

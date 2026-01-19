@@ -1,5 +1,20 @@
 <div class="row welcome-page">
   <div class="col-sm-8 col-xs-12">
+    <!-- Info banner for users with restricted access (only welcome) -->
+    <div ng-if="isRestrictedUser()" class="restricted-access-banner">
+      <div class="banner-content">
+        <div class="banner-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="28" height="28">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+          </svg>
+        </div>
+        <div class="banner-text">
+          <h4 class="banner-title">{{'RESTRICTED_ACCESS_TITLE' | translate}}</h4>
+          <p class="banner-message">{{'RESTRICTED_ACCESS_MESSAGE' | translate}}</p>
+        </div>
+      </div>
+    </div>
+
     <section ng-init="authorized = $root.authentication.authorizedApps"
              class="webapps">
       <div class="inner"
