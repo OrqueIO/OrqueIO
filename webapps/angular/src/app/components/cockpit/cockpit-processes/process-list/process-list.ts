@@ -115,7 +115,7 @@ export class ProcessListComponent implements OnInit, OnDestroy {
   @ViewChild('bpmnViewer') bpmnViewer!: BpmnViewerComponent;
 
   breadcrumbs: BreadcrumbItem[] = [
-    { label: 'Processes', translateKey: 'cockpit.menu.processes', route: '/cockpit/processes' }
+    { translateKey: 'cockpit.menu.processes', route: '/cockpit/processes' }
   ];
 
   // Process definition info

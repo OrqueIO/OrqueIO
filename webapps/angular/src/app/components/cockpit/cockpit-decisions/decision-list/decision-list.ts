@@ -67,7 +67,7 @@ export class DecisionListComponent implements OnInit, OnDestroy {
   faSearch = faSearch;
 
   breadcrumbs: BreadcrumbItem[] = [
-    { label: 'Decisions', translateKey: 'cockpit.menu.decisions' }
+    { translateKey: 'cockpit.menu.decisions' }
   ];
 
   loading = true;

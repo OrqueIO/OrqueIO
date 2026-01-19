@@ -7,6 +7,7 @@ import { faUser, faShield, faSave, faSignOutAlt, faHome, faChevronRight, faSync 
 import { RouterModule } from '@angular/router';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { TranslatePipe } from '../../i18n/translate.pipe';
+import { TranslateService } from '../../i18n/translate.service';
 import { AuthService } from '../../services/auth';
 import { NotificationsService } from '../../services/notifications.service';
 import { UserService } from '../../services/admin/user.service';
@@ -39,6 +40,7 @@ export class ProfilePageComponent implements OnInit {
   private authService = inject(AuthService);
   private userService = inject(UserService);
   private notifications = inject(NotificationsService);
+  private translateService = inject(TranslateService);
 
   // Icons
   faUser = faUser;
@@ -153,8 +155,8 @@ export class ProfilePageComponent implements OnInit {
         error: () => {
           this.savingProfile = false;
           this.notifications.addError({
-            status: 'profile.updateError',
-            message: 'Failed to update profile'
+            status: this.translateService.instant('profile.updateError'),
+            message: this.translateService.instant('profile.updateError')
           });
           this.cdr.detectChanges();
         }
@@ -188,8 +190,8 @@ export class ProfilePageComponent implements OnInit {
         error: () => {
           this.savingPassword = false;
           this.notifications.addError({
-            status: 'profile.passwordUpdateError',
-            message: 'Failed to update password'
+            status: this.translateService.instant('profile.passwordUpdateError'),
+            message: this.translateService.instant('profile.passwordUpdateError')
           });
           this.cdr.detectChanges();
         }

@@ -354,7 +354,6 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
 
     this.breadcrumbs = [
       {
-        label: 'Processes',
         translateKey: 'cockpit.menu.processes',
         route: '/cockpit/processes'
       },

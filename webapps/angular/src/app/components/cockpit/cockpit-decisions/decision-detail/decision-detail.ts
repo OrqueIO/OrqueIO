@@ -141,7 +141,7 @@ export class DecisionDetailComponent implements OnInit, OnDestroy {
       .subscribe(params => {
         this.decisionId = params['id'];
         this.breadcrumbs = [
-          { label: 'Decisions', translateKey: 'cockpit.menu.decisions', route: '/cockpit/decisions' },
+          { translateKey: 'cockpit.menu.decisions', route: '/cockpit/decisions' },
           { label: this.decisionId }
         ];
         this.loadDecisionData();
