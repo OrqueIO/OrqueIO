@@ -21,7 +21,7 @@ var $ = require('jquery');
 
 var angular = require('orqueio-bpm-sdk-js/vendor/angular'),
   template = require('./cam-widget-header.html?raw'),
-  logo = require('./logo-2020-round.svg?raw');
+  logoUrl = require('./logo.png');
 
 var apps = {
   welcome: {
@@ -75,7 +75,7 @@ module.exports = function() {
       '$sce',
       'configuration',
       function($scope, AuthenticationService, $sce, configuration) {
-        $scope.logo = $sce.trustAsHtml(logo);
+        $scope.logoUrl = logoUrl;
         $scope.brandName =
           configuration.getAppVendor() + ' ' + configuration.getAppName();
         $('head title').text($scope.brandName);

@@ -12,11 +12,9 @@
   </button>
 
   <a class="navbar-brand app-banner"
-     ng-if="authentication.name"
      href="#/"
      title="{{ brandName }} {{ appName }}">
-     <span ng-bind-html="logo" class="brand-logo"></span>
-     <span class="brand-name" ng-cloak>{{ brandName }}</span>
+     <img ng-src="{{ logoUrl }}" alt="OrqueIO" class="brand-logo" />
   </a>
 
   <div class="small-screen-warning">
@@ -67,7 +65,7 @@
         ng-cloak></li>
 
     <li class="app-switch dropdown"
-        ng-if="showAppDropDown"
+        ng-if="showAppDropDown && authentication.name"
         uib-dropdown>
       <a href
          class="dropdown-toggle"
