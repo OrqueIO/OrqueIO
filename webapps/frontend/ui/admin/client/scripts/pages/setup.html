@@ -1,187 +1,212 @@
 <!-- # CE - orqueio-bpm-webapp/ui/admin/client/scripts/pages/setup.html -->
-<section>
-  <!-- <aside></aside> -->
-  <div class="section-content"
-       id="users"
-       ng-switch on="created">
-    <header class="row">
-      <div class="col-xs-8">
-        <h3>{{ 'SETUP_SETUP' | translate }}</h3>
-      </div>
-      <div class="col-xs-4 text-right">
-      </div>
-    </header>
+<div class="setup-page-wrapper">
+  <div class="form-setup-container">
+    <div class="form-setup" ng-switch on="created">
 
-    <div class="row"
-         ng-switch-when="true">
-      <div class="col-md-12">
+      <!-- Success state after user creation -->
+      <div ng-switch-when="true" class="setup-success">
+        <div class="success-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+          </svg>
+        </div>
+        <h3 class="success-title">{{ 'SETUP_USER_CREATED' | translate }}</h3>
+        <p class="success-message">{{ 'SETUP_USER_INITIAL' | translate }}</p>
+        <a href="./#/login" class="btn btn-primary btn-setup-action">
+          <span class="btn-text">{{ 'SETUP_USER_REDIRECT_2' | translate }}</span>
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+            <polyline points="10 17 15 12 10 7"></polyline>
+            <line x1="15" y1="12" x2="3" y2="12"></line>
+          </svg>
+        </a>
+      </div>
 
-        <div uib-alert class="alert alert-success">
-          <strong>{{ 'SETUP_USER_CREATED' | translate }}</strong>
-          {{ 'SETUP_USER_INITIAL' | translate }}
+      <!-- Setup form -->
+      <div ng-switch-when="false">
+        <!-- Logo -->
+        <div class="setup-logo-container">
+          <img src="/webjars/orqueio/assets/logo.png?bust=1.0.6" alt="OrqueIO" class="setup-logo">
         </div>
 
-        {{ 'SETUP_USER_REDIRECT_1' | translate }} <a href="./#/login">{{ 'SETUP_USER_REDIRECT_2' | translate }}</a> {{ 'SETUP_USER_REDIRECT_3' | translate }}
-      </div>
-    </div>
+        <!-- Header -->
+        <div class="setup-header">
+          <h2 class="setup-title">{{ 'SETUP_SETUP' | translate }}</h2>
+          <p class="setup-subtitle">{{ 'SETUP_ADMIN_SUBTITLE' | translate }}</p>
+        </div>
 
-    <div class="row"
-         ng-switch-when="false">
-      <div class="col-md-8 box">
+        <!-- Notifications -->
+        <div notifications-panel class="notifications-panel"></div>
 
-        <div notifications-panel
-             class="notifications-panel"></div>
+        <!-- Form -->
+        <form class="setup-form" name="createUserForm" ng-submit="createUser()">
 
-        <form class="form-horizontal"
-              name="createUserForm">
-          <div class="h4">{{ 'SETUP_USER_ACCOUNT' | translate }}</div>
+          <!-- Account Credentials Section -->
+          <div class="form-section">
+            <div class="section-title">{{ 'SETUP_USER_ACCOUNT' | translate }}</div>
 
-          <div class="form-group">
-            <label class="control-label col-sm-4"
-                   for="inputUserId">{{ 'SETUP_USER_ID' | translate }}</label>
-
-            <div class="col-sm-8">
+            <div class="form-group-modern">
+              <label class="input-label" for="inputUserId">
+                <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                {{ 'SETUP_USER_ID' | translate }}
+              </label>
               <input id="inputUserId"
                      name="userId"
-                     class="form-control"
+                     class="form-control form-control-modern"
                      type="text"
                      ng-model="profile.id"
-                     novalidate required></input>
-
-              <span class="help-inline"
-                    ng-show="createUserForm.userId.$error.required">
+                     placeholder="{{ 'SETUP_USER_ID_PLACEHOLDER' | translate }}"
+                     novalidate required>
+              <span class="help-inline" ng-show="createUserForm.userId.$error.required && createUserForm.userId.$touched">
                 {{ 'SETUP_USER_ID_REQUIRED' | translate }}
               </span>
             </div>
-          </div>
 
-          <div class="form-group">
-            <label class="control-label col-sm-4"
-                   for="inputPassword">{{ 'SETUP_USER_PASSWORD' | translate }}</label>
-
-            <div class="col-sm-8">
+            <div class="form-group-modern">
+              <label class="input-label" for="inputPassword">
+                <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+                {{ 'SETUP_USER_PASSWORD' | translate }}
+              </label>
               <div cam-widget-password
                    cam-widget-password-profile="profile"
                    cam-widget-password-password="credentials.password"
                    cam-widget-password-valid="credentials.valid"></div>
-
-              <span class="help-inline"
-                    ng-show="createUserForm.inputPassword.$error.password">
-                {{ 'SETUP_USER_PASSWORD_LENGTH' | translate }}
-              </span>
-              <span class="help-inline"
-                    ng-show="createUserForm.inputPassword.$error.required">
-                {{ 'SETUP_USER_PASSWORD_REQUIRED' | translate }}
-              </span>
             </div>
-          </div>
 
-          <div class="form-group">
-            <label class="control-label col-sm-4"
-                   for="inputPasswordRepeat">{{ 'SETUP_USER_PASSWORD_REPEAT' | translate }}</label>
-
-            <div class="col-sm-8">
-              <input id="inputPasswordRepeat"
-                  name="inputPasswordRepeat"
-                  class="form-control"
-                  type="password"
-                  ng-model="credentials.password2"
-                  data-password-repeat="credentials.password"></input>
-
-              <span class="help-inline"
-                    ng-show="createUserForm.inputPasswordRepeat.$error.passwordRepeat">
+            <div class="form-group-modern">
+              <label class="input-label" for="inputPasswordRepeat">
+                <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+                {{ 'SETUP_USER_PASSWORD_REPEAT' | translate }}
+              </label>
+              <div class="password-input-wrapper">
+                <input id="inputPasswordRepeat"
+                       name="inputPasswordRepeat"
+                       class="form-control form-control-modern"
+                       ng-attr-type="{{ showConfirmPassword ? 'text' : 'password' }}"
+                       ng-model="credentials.password2"
+                       placeholder="{{ 'SETUP_USER_PASSWORD_REPEAT_PLACEHOLDER' | translate }}"
+                       data-password-repeat="credentials.password">
+                <button type="button"
+                        class="password-toggle"
+                        tabindex="-1"
+                        ng-click="showConfirmPassword = !showConfirmPassword"
+                        aria-label="{{ showConfirmPassword ? 'Hide password' : 'Show password' }}">
+                  <svg ng-if="!showConfirmPassword" class="toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                  <svg ng-if="showConfirmPassword" class="toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                  </svg>
+                </button>
+              </div>
+              <span class="help-inline" ng-show="createUserForm.inputPasswordRepeat.$error.passwordRepeat">
                 {{ 'SETUP_USER_PASSWORD_MUST_MATCH' | translate }}
               </span>
             </div>
           </div>
 
-          <div class="h4">{{ 'SETUP_USER_PROFILE' | translate }}</div>
+          <!-- User Profile Section -->
+          <div class="form-section">
+            <div class="section-title">{{ 'SETUP_USER_PROFILE' | translate }}</div>
 
-          <div class="form-group">
-            <label class="control-label col-sm-4"
-                for="inputFirstname">{{ 'SETUP_USER_FIRSTNAME' | translate }}</label>
-
-            <div class="col-sm-8">
+            <div class="form-group-modern">
+              <label class="input-label" for="inputFirstname">
+                <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                {{ 'SETUP_USER_FIRSTNAME' | translate }}
+              </label>
               <input id="inputFirstname"
                      name="firstname"
                      type="text"
-                     class="form-control"
+                     class="form-control form-control-modern"
                      ng-model="profile.firstName"
+                     placeholder="{{ 'SETUP_USER_FIRSTNAME_PLACEHOLDER' | translate }}"
                      novalidate
-                     required></input>
-
-              <span class="help-inline text-danger"
-                    ng-show="createUserForm.firstname.$error.required">
+                     required>
+              <span class="help-inline" ng-show="createUserForm.firstname.$error.required && createUserForm.firstname.$touched">
                 {{ 'SETUP_USER_FIRSTNAME_REQUIRED' | translate }}
               </span>
             </div>
-          </div>
 
-          <div class="form-group">
-            <label class="control-label col-sm-4"
-                for="inputLastname">{{ 'SETUP_USER_LASTNAME' | translate }}</label>
-
-            <div class="col-sm-8">
+            <div class="form-group-modern">
+              <label class="input-label" for="inputLastname">
+                <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                {{ 'SETUP_USER_LASTNAME' | translate }}
+              </label>
               <input id="inputLastname"
-                  type="text"
-                  class="form-control"
-                  ng-model="profile.lastName"
-                  novalidate
-                  required></input>
-
-              <span class="help-inline"
-                    ng-show="createUserForm.firstname.$error.required">
+                     name="lastname"
+                     type="text"
+                     class="form-control form-control-modern"
+                     ng-model="profile.lastName"
+                     placeholder="{{ 'SETUP_USER_LASTNAME_PLACEHOLDER' | translate }}"
+                     novalidate
+                     required>
+              <span class="help-inline" ng-show="createUserForm.lastname.$error.required && createUserForm.lastname.$touched">
                 {{ 'SETUP_USER_LASTNAME_REQUIRED' | translate }}
               </span>
             </div>
-          </div>
 
-          <div class="form-group">
-            <label class="control-label col-sm-4"
-                for="inputEmail">{{ 'SETUP_USER_EMAIL' | translate }}</label>
-
-            <div class="col-sm-8">
+            <div class="form-group-modern">
+              <label class="input-label" for="inputEmail">
+                <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                  <polyline points="22,6 12,13 2,6"></polyline>
+                </svg>
+                {{ 'SETUP_USER_EMAIL' | translate }}
+              </label>
               <input id="inputEmail"
-                  name="email"
-                  type="text"
-                  class="form-control"
-                  ng-model="profile.email"
-                  data-email></input>
-
-              <span class="help-inline"
-                    ng-show="createUserForm.email.$error.email">
+                     name="email"
+                     type="text"
+                     class="form-control form-control-modern"
+                     ng-model="profile.email"
+                     placeholder="{{ 'SETUP_USER_EMAIL_PLACEHOLDER' | translate }}"
+                     data-email>
+              <span class="help-inline" ng-show="createUserForm.email.$error.email">
                 {{ 'SETUP_USER_EMAIL_NOT_VALID' | translate }}
               </span>
             </div>
           </div>
 
-          <div class="form-group">
-            <div class="col-sm-8 col-sm-offset-4">
-              <button type="submit"
-                      class="btn btn-primary"
-                      ng-disabled="!createUserForm.$valid || !credentials.valid"
-                      ng-click="createUser()">{{ 'SETUP_USER_NEW_USER' | translate }}</button>
-            </div>
-          </div>
+          <!-- Submit Button -->
+          <button type="submit"
+                  class="btn btn-lg btn-primary btn-setup-submit"
+                  ng-disabled="!createUserForm.$valid || !credentials.valid">
+            <span class="btn-text">{{ 'SETUP_USER_NEW_USER' | translate }}</span>
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="8.5" cy="7" r="4"></circle>
+              <line x1="20" y1="8" x2="20" y2="14"></line>
+              <line x1="23" y1="11" x2="17" y2="11"></line>
+            </svg>
+          </button>
 
         </form>
+
+        <!-- Back to login link -->
+        <div class="back-link-container">
+          <span class="back-text">{{ 'SETUP_ALREADY_HAVE_ACCOUNT' | translate }}</span>
+          <a href="./#/login" class="back-link">{{ 'SETUP_BACK_TO_LOGIN' | translate }}</a>
+        </div>
       </div>
 
-      <div class="col-md-4">
-        <div class="well">
-          <div class="h4">{{ 'SETUP_USER_MESSAGE_1' | translate }}</div>
-          <p>{{ 'SETUP_USER_MESSAGE_2' | translate }}<strong>{{ engineName }}</strong>
-          {{ 'SETUP_USER_MESSAGE_3' | translate }}
-          {{ 'SETUP_USER_MESSAGE_4' | translate }}</p>
-          <p>
-            <a href="https://docs.orqueio.io/manual/installation/"
-               class="btn btn-success">
-              {{ 'SETUP_USER_MESSAGE_5' | translate }}
-            </a>
-          </p>
-        </div>
-        </div>
     </div>
   </div>
-</section>
+</div>
 <!-- / CE - orqueio-bpm-webapp/ui/admin/client/scripts/pages/setup.html -->
