@@ -16,32 +16,35 @@
  */
 package io.orqueio.bpm.spring.boot.starter.security.oauth2;
 
-import jakarta.annotation.Nullable;
 import jakarta.servlet.DispatcherType;
 import jakarta.servlet.Filter;
-import io.orqueio.bpm.engine.rest.security.auth.ProcessEngineAuthenticationFilter;
 import io.orqueio.bpm.engine.spring.SpringProcessEngineServicesConfiguration;
 import io.orqueio.bpm.spring.boot.starter.OrqueioBpmAutoConfiguration;
 import io.orqueio.bpm.spring.boot.starter.property.OrqueioBpmProperties;
 import io.orqueio.bpm.spring.boot.starter.property.WebappProperty;
+import io.orqueio.bpm.engine.ProcessEngine;
 import io.orqueio.bpm.spring.boot.starter.security.oauth2.impl.AuthorizeTokenFilter;
-import io.orqueio.bpm.spring.boot.starter.security.oauth2.impl.OAuth2AuthenticationProvider;
+import io.orqueio.bpm.spring.boot.starter.security.oauth2.impl.OAuth2AuthenticationFailureHandler;
+import io.orqueio.bpm.spring.boot.starter.security.oauth2.impl.OAuth2AuthenticationSuccessHandler;
 import io.orqueio.bpm.spring.boot.starter.security.oauth2.impl.OAuth2GrantedAuthoritiesMapper;
 import io.orqueio.bpm.spring.boot.starter.security.oauth2.impl.OAuth2IdentityProviderPlugin;
+import io.orqueio.bpm.spring.boot.starter.security.oauth2.impl.OAuth2ProvidersController;
+import io.orqueio.bpm.spring.boot.starter.security.oauth2.impl.OAuth2SessionAuthenticationFilter;
+import io.orqueio.bpm.spring.boot.starter.security.oauth2.impl.OAuth2UserSynchronizer;
 import io.orqueio.bpm.spring.boot.starter.security.oauth2.impl.SsoLogoutSuccessHandler;
-import io.orqueio.bpm.webapp.impl.security.auth.ContainerBasedAuthenticationFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.security.autoconfigure.SecurityProperties;
-import io.orqueio.bpm.spring.boot.starter.security.oauth2.impl.ClientsConfiguredCondition;
+import org.springframework.boot.security.oauth2.client.autoconfigure.OAuth2ClientAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Conditional;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.Ordered;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -51,18 +54,19 @@ import org.springframework.security.oauth2.client.OAuth2AuthorizedClientManager;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.core.annotation.Order;
 
-import java.util.Map;
-
-@AutoConfigureOrder(OrqueioSpringSecurityOAuth2AutoConfiguration.ORQUEIO_OAUTH2_ORDER)
-@AutoConfigureAfter({ OrqueioBpmAutoConfiguration.class, SpringProcessEngineServicesConfiguration.class })
-@ConditionalOnBean(OrqueioBpmProperties.class)
-@Conditional(ClientsConfiguredCondition.class)
+@Configuration
+@AutoConfigureOrder(Ordered.HIGHEST_PRECEDENCE)
+@AutoConfigureAfter({ OrqueioBpmAutoConfiguration.class, SpringProcessEngineServicesConfiguration.class, OAuth2ClientAutoConfiguration.class })
+@ConditionalOnBean({OrqueioBpmProperties.class, ClientRegistrationRepository.class})
 @EnableConfigurationProperties(OAuth2Properties.class)
+@Import(OAuth2ProvidersController.class)
 public class OrqueioSpringSecurityOAuth2AutoConfiguration {
 
   private static final Logger logger = LoggerFactory.getLogger(OrqueioSpringSecurityOAuth2AutoConfiguration.class);
   public static final int ORQUEIO_OAUTH2_ORDER = Ordered.HIGHEST_PRECEDENCE + 100;
+  private static final int DEFAULT_FILTER_ORDER = -100;
   private final OAuth2Properties oAuth2Properties;
   private final String webappPath;
 
@@ -71,17 +75,15 @@ public class OrqueioSpringSecurityOAuth2AutoConfiguration {
     this.oAuth2Properties = oAuth2Properties;
     WebappProperty webapp = properties.getWebapp();
     this.webappPath = webapp.getApplicationPath();
+    logger.info("OrqueioSpringSecurityOAuth2AutoConfiguration initialized with webappPath: {}", webappPath);
   }
 
   @Bean
   public FilterRegistrationBean<?> webappAuthenticationFilter() {
     FilterRegistrationBean<Filter> filterRegistration = new FilterRegistrationBean<>();
-    filterRegistration.setName("Container Based Authentication Filter");
-    filterRegistration.setFilter(new ContainerBasedAuthenticationFilter());
-    filterRegistration.setInitParameters(Map.of(
-        ProcessEngineAuthenticationFilter.AUTHENTICATION_PROVIDER_PARAM, OAuth2AuthenticationProvider.class.getName()));
-    // make sure the filter is registered after the Spring Security Filter Chain
-    filterRegistration.setOrder(-99);
+    filterRegistration.setName("OAuth2 Session Authentication Filter");
+    filterRegistration.setFilter(new OAuth2SessionAuthenticationFilter());
+    filterRegistration.setOrder(DEFAULT_FILTER_ORDER + 1);
     filterRegistration.addUrlPatterns(webappPath + "/app/*", webappPath + "/api/*");
     filterRegistration.setDispatcherTypes(DispatcherType.REQUEST);
     return filterRegistration;
@@ -102,7 +104,6 @@ public class OrqueioSpringSecurityOAuth2AutoConfiguration {
   }
 
   @Bean
-  @ConditionalOnProperty(name = "sso-logout.enabled", havingValue = "true", prefix = OAuth2Properties.PREFIX)
   protected SsoLogoutSuccessHandler ssoLogoutSuccessHandler(ClientRegistrationRepository clientRegistrationRepository) {
     logger.debug("Registering SsoLogoutSuccessHandler");
     return new SsoLogoutSuccessHandler(clientRegistrationRepository, oAuth2Properties);
@@ -115,34 +116,55 @@ public class OrqueioSpringSecurityOAuth2AutoConfiguration {
   }
 
   @Bean
-  public SecurityFilterChain filterChain(HttpSecurity http,
-                                         AuthorizeTokenFilter authorizeTokenFilter,
-                                         @Nullable SsoLogoutSuccessHandler ssoLogoutSuccessHandler) throws Exception {
+  protected OAuth2UserSynchronizer oauth2UserSynchronizer(ProcessEngine processEngine) {
+    logger.debug("Registering OAuth2UserSynchronizer");
+    return new OAuth2UserSynchronizer(processEngine, oAuth2Properties);
+  }
 
-    logger.info("Enabling Orqueio Spring Security oauth2 integration");
+  @Bean
+  protected OAuth2AuthenticationSuccessHandler oauth2AuthenticationSuccessHandler(OAuth2UserSynchronizer synchronizer) {
+    logger.debug("Registering OAuth2AuthenticationSuccessHandler");
+    return new OAuth2AuthenticationSuccessHandler(synchronizer);
+  }
 
-    // @formatter:off
+  @Bean
+  @Order(Ordered.HIGHEST_PRECEDENCE)
+  @Primary
+  public SecurityFilterChain orqueioSecurityFilterChain(HttpSecurity http,
+                                                        AuthorizeTokenFilter authorizeTokenFilter,
+                                                        SsoLogoutSuccessHandler ssoLogoutSuccessHandler,
+                                                        OAuth2AuthenticationSuccessHandler oauth2AuthenticationSuccessHandler) throws Exception {
+
+    logger.info("Enabling Orqueio Spring Security OAuth2/OIDC integration");
+
+    String loginPage = webappPath + "/app/welcome/default/#!/login";
+    logger.info("Configured login page: {}", loginPage);
+
     http.authorizeHttpRequests(c -> c
-            .requestMatchers(webappPath + "/app/**").authenticated()
-            .requestMatchers(webappPath + "/api/**").authenticated()
-            .anyRequest().permitAll()
-        )
-        .addFilterAfter(authorizeTokenFilter, OAuth2AuthorizationRequestRedirectFilter.class)
-        .anonymous(AbstractHttpConfigurer::disable)
-        .oidcLogout(c -> c.backChannel(Customizer.withDefaults()))
-        .oauth2Login(Customizer.withDefaults())
-        .logout(c -> c
-            .clearAuthentication(true)
-            .invalidateHttpSession(true)
-        )
-        .oauth2Client(Customizer.withDefaults())
-        .cors(AbstractHttpConfigurer::disable)
-        .csrf(AbstractHttpConfigurer::disable);
-    // @formatter:on
-
-    if (oAuth2Properties.getSsoLogout().isEnabled()) {
-      http.logout(c -> c.logoutSuccessHandler(ssoLogoutSuccessHandler));
-    }
+                    .requestMatchers("/h2-console/**").permitAll()
+                    .requestMatchers(webappPath + "/api/oauth2/providers").permitAll()
+                    .requestMatchers(webappPath + "/app/**").permitAll()
+                    .requestMatchers(webappPath + "/api/**").permitAll()
+                    .requestMatchers(webappPath + "/lib/**").permitAll()
+                    .anyRequest().permitAll()
+            )
+            .addFilterAfter(authorizeTokenFilter, OAuth2AuthorizationRequestRedirectFilter.class)
+            .anonymous(AbstractHttpConfigurer::disable)
+            .oidcLogout(c -> c.backChannel(Customizer.withDefaults()))
+            .logout(c -> c
+                    .clearAuthentication(true)
+                    .invalidateHttpSession(true)
+                    .logoutSuccessHandler(ssoLogoutSuccessHandler)
+            )
+            .oauth2Client(Customizer.withDefaults())
+            .oauth2Login(c -> c
+                    .loginPage(loginPage)
+                    .successHandler(oauth2AuthenticationSuccessHandler)
+                    .failureHandler(new OAuth2AuthenticationFailureHandler(
+                            webappPath + "/app/welcome/default/?oauth2_error=true#!/login")))
+            .headers(headers -> headers.frameOptions(frame -> frame.sameOrigin()))
+            .cors(AbstractHttpConfigurer::disable)
+            .csrf(AbstractHttpConfigurer::disable);
 
     return http.build();
   }

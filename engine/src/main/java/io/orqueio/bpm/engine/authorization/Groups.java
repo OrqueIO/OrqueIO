@@ -24,7 +24,8 @@ package io.orqueio.bpm.engine.authorization;
 public interface Groups {
 
   public static final String ORQUEIO_ADMIN = "orqueio-admin";
+  public static final String ORQUEIO_USER = "orqueio-user";
   public static final String GROUP_TYPE_SYSTEM = "SYSTEM";
   public static final String GROUP_TYPE_WORKFLOW = "WORKFLOW";
-  
+
 }
