@@ -9,6 +9,7 @@ import { DataTableComponent, ColumnDef, SortEvent } from '../../../../shared/dat
 import { PaginationComponent, PageChangeEvent } from '../../../../shared/pagination/pagination';
 import { SearchBarComponent } from '../../../../shared/search-bar/search-bar';
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
+import { TranslateService } from '../../../../i18n/translate.service';
 import { TenantCreateDialogComponent } from '../tenant-create-dialog/tenant-create-dialog';
 import { TenantService } from '../../../../services/admin/tenant.service';
 import { NotificationsService } from '../../../../services/notifications.service';
@@ -38,6 +39,7 @@ export class TenantListComponent implements OnInit {
   private router = inject(Router);
   private tenantService = inject(TenantService);
   private notifications = inject(NotificationsService);
+  private translateService = inject(TranslateService);
 
   @ViewChild('actionsTemplate', { static: true }) actionsTemplate!: TemplateRef<any>;
 
@@ -105,8 +107,8 @@ export class TenantListComponent implements OnInit {
           this.loading = false;
           this.cdr.detectChanges();
           this.notifications.addError({
-            status: 'admin.tenants.loadError',
-            message: 'Failed to load tenants'
+            status: this.translateService.instant('admin.tenants.loadError'),
+            message: this.translateService.instant('admin.tenants.loadError')
           });
         }
       });

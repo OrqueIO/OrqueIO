@@ -7,6 +7,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faSave, faTrash, faArrowLeft, faPlus, faUnlock, faTimes, faUsers, faBuilding, faUser, faShield, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
+import { TranslateService } from '../../../../i18n/translate.service';
 import { UserService } from '../../../../services/admin/user.service';
 import { GroupService } from '../../../../services/admin/group.service';
 import { TenantService } from '../../../../services/admin/tenant.service';
@@ -52,6 +53,7 @@ export class UserDetailComponent implements OnInit {
   private groupService = inject(GroupService);
   private tenantService = inject(TenantService);
   private notifications = inject(NotificationsService);
+  private translateService = inject(TranslateService);
 
   faSave = faSave;
   faTrash = faTrash;
@@ -137,8 +139,8 @@ export class UserDetailComponent implements OnInit {
           this.loading = false;
           this.cdr.detectChanges();
           this.notifications.addError({
-            status: 'admin.users.loadError',
-            message: 'Failed to load user'
+            status: this.translateService.instant('admin.users.loadError'),
+            message: this.translateService.instant('admin.users.loadError')
           });
           this.router.navigate(['/admin/users']);
         }
@@ -161,8 +163,8 @@ export class UserDetailComponent implements OnInit {
         error: () => {
           this.savingProfile = false;
           this.notifications.addError({
-            status: 'admin.users.updateError',
-            message: 'Failed to update profile'
+            status: this.translateService.instant('admin.users.updateError'),
+            message: this.translateService.instant('admin.users.updateError')
           });
           this.cdr.detectChanges();
         }
@@ -200,8 +202,8 @@ export class UserDetailComponent implements OnInit {
         error: () => {
           this.savingPassword = false;
           this.notifications.addError({
-            status: 'admin.users.passwordUpdateError',
-            message: 'Failed to update password'
+            status: this.translateService.instant('admin.users.passwordUpdateError'),
+            message: this.translateService.instant('admin.users.passwordUpdateError')
           });
           this.cdr.detectChanges();
         }
@@ -224,8 +226,8 @@ export class UserDetailComponent implements OnInit {
         },
         error: () => {
           this.notifications.addError({
-            status: 'admin.users.deleteError',
-            message: 'Failed to delete user'
+            status: this.translateService.instant('admin.users.deleteError'),
+            message: this.translateService.instant('admin.users.deleteError')
           });
         }
       });

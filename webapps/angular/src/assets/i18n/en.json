@@ -41,11 +41,26 @@
 
   "SOCIAL_LOGIN_NOT_CONFIGURED": "{{provider}} is not configured. Contact your administrator.",
 
+  "PROVIDER_GOOGLE": "Google",
+  "PROVIDER_GOOGLE_OAUTH": "Google OAuth",
+  "PROVIDER_KEYCLOAK": "Keycloak",
+  "PROVIDER_AUTH0": "Auth0",
+  "PROVIDER_OKTA": "Okta",
+  "PROVIDER_AZURE_AD": "Azure AD",
+
   "WELCOME_BACK": "Welcome back",
   "WELCOME_MESSAGE": "You're in your OrqueIO account! Feel free to explore the platform through our different apps.",
   "YOUR_APPS": "YOUR APPS",
   "APPS_COUNT": "{{count}} apps",
   "RESOURCES": "RESOURCES",
+
+  "GUEST": "Guest",
+
+  "ENV_LOCAL": "Local",
+  "ENV_DEVELOPMENT": "Development",
+  "ENV_STAGING": "Staging",
+  "ENV_TESTING": "Testing",
+  "ENV_PRODUCTION": "Production",
 
   "APP_COCKPIT_TITLE": "Cockpit",
   "APP_COCKPIT_SUBTITLE": "Dashboard",
@@ -1402,5 +1417,20 @@
   "BATCHES_PROGRESS_IN": "Batches In Progress",
   "BATCHES_PROGRESS_NO_RUNNING": "No batches currently running",
   "BATCHES_PROGRESS_END": "Completed Batches",
-  "BATCHES_LOAD_ENDED": "Load Completed Batches"
+  "BATCHES_LOAD_ENDED": "Load Completed Batches",
+
+  "DATA_TYPE_STRING": "String",
+  "DATA_TYPE_INTEGER": "Integer",
+  "DATA_TYPE_LONG": "Long",
+  "DATA_TYPE_DOUBLE": "Double",
+  "DATA_TYPE_BOOLEAN": "Boolean",
+  "DATA_TYPE_DATE": "Date",
+  "DATA_TYPE_OBJECT": "Object",
+  "DATA_TYPE_FILE": "File",
+
+  "CHART_STARTED": "Started",
+  "CHART_COMPLETED": "Completed",
+
+  "COLUMN_KEY": "Key",
+  "COLUMN_VERSION": "Version"
 }

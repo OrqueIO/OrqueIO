@@ -7,6 +7,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faSave, faTrash, faArrowLeft, faPlus, faUsers, faBuilding, faUser, faInfoCircle, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
+import { TranslateService } from '../../../../i18n/translate.service';
 import { GroupService } from '../../../../services/admin/group.service';
 import { UserService } from '../../../../services/admin/user.service';
 import { TenantService } from '../../../../services/admin/tenant.service';
@@ -54,6 +55,7 @@ export class GroupDetailComponent implements OnInit {
   private userService = inject(UserService);
   private tenantService = inject(TenantService);
   private notifications = inject(NotificationsService);
+  private translateService = inject(TranslateService);
 
   faSave = faSave;
   faTrash = faTrash;
@@ -124,8 +126,8 @@ export class GroupDetailComponent implements OnInit {
           this.loading = false;
           this.cdr.detectChanges();
           this.notifications.addError({
-            status: 'admin.groups.loadError',
-            message: 'Failed to load group'
+            status: this.translateService.instant('admin.groups.loadError'),
+            message: this.translateService.instant('admin.groups.loadError')
           });
           this.router.navigate(['/admin/groups']);
         }
@@ -152,8 +154,8 @@ export class GroupDetailComponent implements OnInit {
         error: () => {
           this.savingGroup = false;
           this.notifications.addError({
-            status: 'admin.groups.updateError',
-            message: 'Failed to update group'
+            status: this.translateService.instant('admin.groups.updateError'),
+            message: this.translateService.instant('admin.groups.updateError')
           });
           this.cdr.detectChanges();
         }
@@ -186,8 +188,8 @@ export class GroupDetailComponent implements OnInit {
         },
         error: () => {
           this.notifications.addError({
-            status: 'admin.groups.deleteError',
-            message: 'Failed to delete group'
+            status: this.translateService.instant('admin.groups.deleteError'),
+            message: this.translateService.instant('admin.groups.deleteError')
           });
         }
       });
@@ -289,8 +291,8 @@ export class GroupDetailComponent implements OnInit {
         error: (err) => {
           this.memberToRemove = null;
           this.notifications.addError({
-            status: 'admin.groups.memberRemoveError',
-            message: err?.error?.message || 'Failed to remove user from group'
+            status: this.translateService.instant('admin.groups.memberRemoveError'),
+            message: err?.error?.message || this.translateService.instant('admin.groups.memberRemoveError')
           });
         }
       });
@@ -341,8 +343,8 @@ export class GroupDetailComponent implements OnInit {
         error: (err) => {
           this.tenantToRemove = null;
           this.notifications.addError({
-            status: 'admin.groups.tenantRemoveError',
-            message: err?.error?.message || 'Failed to remove group from tenant'
+            status: this.translateService.instant('admin.groups.tenantRemoveError'),
+            message: err?.error?.message || this.translateService.instant('admin.groups.tenantRemoveError')
           });
         }
       });

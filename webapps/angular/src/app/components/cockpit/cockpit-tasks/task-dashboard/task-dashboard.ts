@@ -60,27 +60,24 @@ export class TaskDashboardComponent implements OnInit, OnDestroy {
   faInfoCircle = faInfoCircle;
 
   breadcrumbs: BreadcrumbItem[] = [
-    { label: 'Tasks', translateKey: 'cockpit.menu.tasks' }
+    { translateKey: 'cockpit.menu.tasks' }
   ];
 
   // Statistics by Type
   taskStatistics: TaskStatistic[] = [
     {
-      label: 'Assigned to Users',
       translateKey: 'cockpit.taskDashboard.assignedToUsers',
       count: 0,
       loading: true,
       searchType: 'assignedToUsers'
     },
     {
-      label: 'Assigned to Groups',
       translateKey: 'cockpit.taskDashboard.assignedToGroups',
       count: 0,
       loading: true,
       searchType: 'assignedToGroups'
     },
     {
-      label: 'Unassigned',
       translateKey: 'cockpit.taskDashboard.unassigned',
       count: 0,
       loading: true,

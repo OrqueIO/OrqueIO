@@ -7,6 +7,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faSave, faTrash, faArrowLeft, faPlus, faTimes, faBuilding, faUsers, faUser, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
+import { TranslateService } from '../../../../i18n/translate.service';
 import { ConfirmDialogComponent } from '../../../../shared/confirm-dialog/confirm-dialog';
 import { AdminPageHeaderComponent } from '../../../../shared/admin-page-header/admin-page-header';
 import { TenantService } from '../../../../services/admin/tenant.service';
@@ -51,6 +52,7 @@ export class TenantDetailComponent implements OnInit {
   private userService = inject(UserService);
   private groupService = inject(GroupService);
   private notifications = inject(NotificationsService);
+  private translateService = inject(TranslateService);
 
   faSave = faSave;
   faTrash = faTrash;
@@ -127,8 +129,8 @@ export class TenantDetailComponent implements OnInit {
           this.loading = false;
           this.cdr.detectChanges();
           this.notifications.addError({
-            status: 'admin.tenants.loadError',
-            message: 'Failed to load tenant'
+            status: this.translateService.instant('admin.tenants.loadError'),
+            message: this.translateService.instant('admin.tenants.loadError')
           });
           this.router.navigate(['/admin/tenants']);
         }
@@ -154,8 +156,8 @@ export class TenantDetailComponent implements OnInit {
         error: () => {
           this.savingTenant = false;
           this.notifications.addError({
-            status: 'admin.tenants.updateError',
-            message: 'Failed to update tenant'
+            status: this.translateService.instant('admin.tenants.updateError'),
+            message: this.translateService.instant('admin.tenants.updateError')
           });
           this.cdr.detectChanges();
         }
@@ -187,8 +189,8 @@ export class TenantDetailComponent implements OnInit {
         },
         error: () => {
           this.notifications.addError({
-            status: 'admin.tenants.deleteError',
-            message: 'Failed to delete tenant'
+            status: this.translateService.instant('admin.tenants.deleteError'),
+            message: this.translateService.instant('admin.tenants.deleteError')
           });
         }
       });
@@ -301,8 +303,8 @@ export class TenantDetailComponent implements OnInit {
         },
         error: () => {
           this.notifications.addError({
-            status: 'admin.tenants.userAddError',
-            message: 'Failed to add user to tenant'
+            status: this.translateService.instant('admin.tenants.userAddError'),
+            message: this.translateService.instant('admin.tenants.userAddError')
           });
         }
       });
@@ -330,8 +332,8 @@ export class TenantDetailComponent implements OnInit {
         },
         error: () => {
           this.notifications.addError({
-            status: 'admin.tenants.userRemoveError',
-            message: 'Failed to remove user from tenant'
+            status: this.translateService.instant('admin.tenants.userRemoveError'),
+            message: this.translateService.instant('admin.tenants.userRemoveError')
           });
           this.userToRemove = null;
         }
@@ -390,8 +392,8 @@ export class TenantDetailComponent implements OnInit {
         },
         error: () => {
           this.notifications.addError({
-            status: 'admin.tenants.groupAddError',
-            message: 'Failed to add group to tenant'
+            status: this.translateService.instant('admin.tenants.groupAddError'),
+            message: this.translateService.instant('admin.tenants.groupAddError')
           });
         }
       });
@@ -419,8 +421,8 @@ export class TenantDetailComponent implements OnInit {
         },
         error: () => {
           this.notifications.addError({
-            status: 'admin.tenants.groupRemoveError',
-            message: 'Failed to remove group from tenant'
+            status: this.translateService.instant('admin.tenants.groupRemoveError'),
+            message: this.translateService.instant('admin.tenants.groupRemoveError')
           });
           this.groupToRemove = null;
         }

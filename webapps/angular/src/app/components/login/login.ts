@@ -107,14 +107,15 @@ export class LoginComponent implements OnInit, OnDestroy {
    * Shows a message that the provider is not configured
    */
   onSocialLogin(provider: string): void {
-    const providerMessages: { [key: string]: string } = {
-      'google': 'Google OAuth',
-      'keycloak': 'Keycloak',
-      'auth0': 'Auth0',
-      'okta': 'Okta',
-      'azure': 'Azure AD'
+    const providerKeys: { [key: string]: string } = {
+      'google': 'PROVIDER_GOOGLE_OAUTH',
+      'keycloak': 'PROVIDER_KEYCLOAK',
+      'auth0': 'PROVIDER_AUTH0',
+      'okta': 'PROVIDER_OKTA',
+      'azure': 'PROVIDER_AZURE_AD'
     };
-    const providerName = providerMessages[provider] || provider;
+    const providerKey = providerKeys[provider];
+    const providerName = providerKey ? this.translateService.instant(providerKey) : provider;
     const message = this.translateService.instant('SOCIAL_LOGIN_NOT_CONFIGURED', { provider: providerName });
     this.notifications.addError({
       status: this.translateService.instant('PAGE_LOGIN_FAILED'),

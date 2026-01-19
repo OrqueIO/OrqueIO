@@ -9,6 +9,7 @@ import { DataTableComponent, ColumnDef, SortEvent } from '../../../../shared/dat
 import { PaginationComponent, PageChangeEvent } from '../../../../shared/pagination/pagination';
 import { SearchBarComponent } from '../../../../shared/search-bar/search-bar';
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
+import { TranslateService } from '../../../../i18n/translate.service';
 import { GroupService } from '../../../../services/admin/group.service';
 import { NotificationsService } from '../../../../services/notifications.service';
 import { Group } from '../../../../models/admin/group.model';
@@ -38,6 +39,7 @@ export class GroupListComponent implements OnInit {
   private router = inject(Router);
   private groupService = inject(GroupService);
   private notifications = inject(NotificationsService);
+  private translateService = inject(TranslateService);
 
   @ViewChild('actionsTemplate', { static: true }) actionsTemplate!: TemplateRef<any>;
 
@@ -108,8 +110,8 @@ export class GroupListComponent implements OnInit {
           this.loading = false;
           this.cdr.detectChanges();
           this.notifications.addError({
-            status: 'admin.groups.loadError',
-            message: 'Failed to load groups'
+            status: this.translateService.instant('admin.groups.loadError'),
+            message: this.translateService.instant('admin.groups.loadError')
           });
         }
       });

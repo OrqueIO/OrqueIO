@@ -114,7 +114,7 @@ export class DeploymentListComponent implements OnInit, OnDestroy {
   faPlay = faPlay;
 
   breadcrumbs: BreadcrumbItem[] = [
-    { label: 'Deployments', translateKey: 'cockpit.menu.deployments', route: '/cockpit/deployments' }
+    { translateKey: 'cockpit.menu.deployments', route: '/cockpit/deployments' }
   ];
 
   // Deployments

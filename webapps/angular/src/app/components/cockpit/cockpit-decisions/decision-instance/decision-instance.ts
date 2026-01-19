@@ -93,7 +93,7 @@ export class DecisionInstanceComponent implements OnInit, OnDestroy {
       .subscribe(params => {
         this.instanceId = params['id'];
         this.breadcrumbs = [
-          { label: 'Decisions', translateKey: 'cockpit.menu.decisions', route: '/cockpit/decisions' },
+          { translateKey: 'cockpit.menu.decisions', route: '/cockpit/decisions' },
           { label: this.instanceId }
         ];
         this.loadDecisionInstance();
@@ -115,7 +115,7 @@ export class DecisionInstanceComponent implements OnInit, OnDestroy {
           if (instance) {
             // Update breadcrumbs
             this.breadcrumbs = [
-              { label: 'Decisions', translateKey: 'cockpit.menu.decisions', route: '/cockpit/decisions' },
+              { translateKey: 'cockpit.menu.decisions', route: '/cockpit/decisions' },
               { label: instance.decisionDefinitionName || instance.decisionDefinitionKey, route: `/cockpit/decisions/${instance.decisionDefinitionId}` },
               { label: this.truncateId(instance.id, 8) }
             ];

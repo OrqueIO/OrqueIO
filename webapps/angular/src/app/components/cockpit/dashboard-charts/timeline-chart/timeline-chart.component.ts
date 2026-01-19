@@ -16,6 +16,7 @@ import Chart from 'chart.js/auto';
 
 import { ChartCardComponent } from '../chart-card/chart-card.component';
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
+import { TranslateService } from '../../../../i18n/translate.service';
 import {
   TimelineDataPoint,
   TimelinePeriod,
@@ -163,6 +164,7 @@ export class TimelineChartComponent implements OnInit, OnDestroy {
   private destroyRef = inject(DestroyRef);
   private store = inject(Store);
   private cdr = inject(ChangeDetectorRef);
+  private translateService = inject(TranslateService);
 
   private chart: Chart<'line'> | null = null;
 
@@ -269,7 +271,7 @@ export class TimelineChartComponent implements OnInit, OnDestroy {
         labels,
         datasets: [
           {
-            label: 'Started',
+            label: this.translateService.instant('CHART_STARTED'),
             data: startedData,
             borderColor: this.colors.started,
             backgroundColor: this.getGradient(ctx, this.colors.started),
@@ -282,7 +284,7 @@ export class TimelineChartComponent implements OnInit, OnDestroy {
             pointBorderWidth: 2
           },
           {
-            label: 'Completed',
+            label: this.translateService.instant('CHART_COMPLETED'),
             data: completedData,
             borderColor: this.colors.completed,
             backgroundColor: this.getGradient(ctx, this.colors.completed),

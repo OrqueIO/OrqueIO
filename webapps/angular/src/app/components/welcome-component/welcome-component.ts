@@ -22,17 +22,17 @@ import {
 
 interface App {
   icon: string;
-  title: string;
-  subtitle: string;
-  description: string;
+  titleKey: string;
+  subtitleKey: string;
+  descriptionKey: string;
   route: string;
   accentColor: string;
 }
 
 interface Resource {
   icon: IconDefinition;
-  title: string;
-  description: string;
+  titleKey: string;
+  descriptionKey: string;
   link: string;
 }
 
@@ -45,7 +45,7 @@ interface EngineStatus {
 interface QuickStat {
   icon: IconDefinition;
   value: string;
-  label: string;
+  labelKey: string;
   bgColor: string;
 }
 
@@ -82,7 +82,7 @@ export class WelcomeComponent implements OnInit {
     this.authService.authentication$
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(auth => {
-        this.userName = auth?.name || 'Invité';
+        this.userName = auth?.name || this.translateService.instant('GUEST');
       });
 
     this.translateService.currentLang$
@@ -120,16 +120,17 @@ export class WelcomeComponent implements OnInit {
 
   private detectEnvironment(): string {
     const hostname = window.location.hostname;
+    let envKey = 'ENV_PRODUCTION';
     if (hostname === 'localhost' || hostname === '127.0.0.1') {
-      return 'Local';
+      envKey = 'ENV_LOCAL';
     } else if (hostname.includes('dev') || hostname.includes('development')) {
-      return 'Development';
+      envKey = 'ENV_DEVELOPMENT';
     } else if (hostname.includes('staging') || hostname.includes('stg')) {
-      return 'Staging';
+      envKey = 'ENV_STAGING';
     } else if (hostname.includes('test') || hostname.includes('qa')) {
-      return 'Testing';
+      envKey = 'ENV_TESTING';
     }
-    return 'Production';
+    return this.translateService.instant(envKey);
   }
 
   toggleLanguage(): void {
@@ -148,25 +149,25 @@ export class WelcomeComponent implements OnInit {
   apps: App[] = [
     {
       icon: 'images/icons/cockpit-icon.svg',
-      title: 'Cockpit',
-      subtitle: 'Process Monitoring',
-      description: 'Monitor and analyze your BPMN processes.',
+      titleKey: 'APP_COCKPIT_TITLE',
+      subtitleKey: 'APP_COCKPIT_SUBTITLE',
+      descriptionKey: 'APP_COCKPIT_DESC',
       route: '/cockpit',
       accentColor: '#3b82f6'
     },
     {
       icon: 'images/icons/tasklist-icon.svg',
-      title: 'Tasklist',
-      subtitle: 'Task Management',
-      description: 'Manage and complete workflow tasks.',
+      titleKey: 'APP_TASKLIST_TITLE',
+      subtitleKey: 'APP_TASKLIST_SUBTITLE',
+      descriptionKey: 'APP_TASKLIST_DESC',
       route: '/tasklist',
       accentColor: '#10b981'
     },
     {
       icon: 'images/icons/admin-icon.svg',
-      title: 'Admin',
-      subtitle: 'Administration',
-      description: 'Configure users, groups and settings.',
+      titleKey: 'APP_ADMIN_TITLE',
+      subtitleKey: 'APP_ADMIN_SUBTITLE',
+      descriptionKey: 'APP_ADMIN_DESC',
       route: '/admin',
       accentColor: '#8b5cf6'
     }
@@ -177,25 +178,25 @@ export class WelcomeComponent implements OnInit {
     {
       icon: this.faCogs,
       value: '24',
-      label: 'Running Processes',
+      labelKey: 'RUNNING_PROCESSES',
       bgColor: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)'
     },
     {
       icon: this.faCheckCircle,
       value: '156',
-      label: 'Tasks Completed',
+      labelKey: 'TASKS_COMPLETED',
       bgColor: 'linear-gradient(135deg, #10b981 0%, #059669 100%)'
     },
     {
       icon: this.faExclamationTriangle,
       value: '3',
-      label: 'Open Incidents',
+      labelKey: 'OPEN_INCIDENTS',
       bgColor: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)'
     },
     {
       icon: this.faLayerGroup,
       value: '12',
-      label: 'Deployments',
+      labelKey: 'DEPLOYMENTS',
       bgColor: 'linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%)'
     }
   ];
@@ -204,21 +205,21 @@ export class WelcomeComponent implements OnInit {
   resources: Resource[] = [
     {
       icon: this.faBook,
-      title: 'Documentation',
-      description: 'Complete guides and API references',
-      link: 'https://docs.camunda.org'
+      titleKey: 'RESOURCE_DOCS_TITLE',
+      descriptionKey: 'RESOURCE_DOCS_DESC',
+      link: 'https://docs.orqueio.io/'
     },
     {
       icon: this.faVideo,
-      title: 'Learn',
-      description: 'Video tutorials and best practices',
-      link: 'https://academy.camunda.com'
+      titleKey: 'RESOURCE_LEARN_TITLE',
+      descriptionKey: 'RESOURCE_LEARN_DESC',
+      link: 'https://www.youtube.com/watch?v=mxv_dxGk3pQ'
     },
     {
       icon: this.faCode,
-      title: 'Source Code',
-      description: 'Explore and contribute on GitHub',
-      link: 'https://github.com/camunda'
+      titleKey: 'RESOURCE_SOURCE_TITLE',
+      descriptionKey: 'RESOURCE_SOURCE_DESC',
+      link: 'https://github.com/OrqueIO/OrqueIO'
     }
   ];
 
