@@ -17,7 +17,7 @@
   <!-- Header - Outside content container, at the top (hidden when diagram maximized) -->
   <app-cockpit-header
     *ngIf="!loading && processInstance && !diagramMaximized"
-    [title]="processDefinition?.name || processInstance?.processDefinitionKey || ''"
+    [title]="processDefinition?.name || processInstance.processDefinitionKey || ''"
     [breadcrumbs]="breadcrumbs"
     [showRefresh]="true"
     (refresh)="loadProcessData()"
@@ -39,7 +39,7 @@
 
     <!-- Center: Process title -->
     <div class="toolbar-section toolbar-title-section">
-      <h1>{{ processDefinition?.name || processInstance?.processDefinitionKey }}</h1>
+      <h1>{{ processDefinition?.name || processInstance.processDefinitionKey }}</h1>
       <span class="definition-key">{{ processInstance.processDefinitionKey }}</span>
     </div>
 

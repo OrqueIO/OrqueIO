@@ -20,7 +20,7 @@ import { NavMenuService } from '../../../../services/nav-menu.service';
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
 
 interface TaskStatistic {
-  label: string;
+  label?: string;
   translateKey: string;
   count: number;
   loading: boolean;

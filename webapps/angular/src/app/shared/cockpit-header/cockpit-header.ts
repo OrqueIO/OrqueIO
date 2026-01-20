@@ -6,7 +6,7 @@ import { faHome, faChevronRight, faRefresh } from '@fortawesome/free-solid-svg-i
 import { TranslatePipe } from '../../i18n/translate.pipe';
 
 export interface BreadcrumbItem {
-  label: string;
+  label?: string;
   route?: string;
   translateKey?: string;
 }
