@@ -174,24 +174,15 @@ public class ProcessEnginesFilter extends AbstractTemplateFilter {
       // access to /app/{engineName}/
       boolean setupPage = SETUP_PAGE.equals(pageUri);
 
-      if (needsInitialUser(engineName)) {
-        if (!setupPage) {
-          // redirect to setup
-          String setupPath = "%s%s/app/admin/%s/setup/#/setup";
-          response.sendRedirect(String.format(setupPath, contextPath, applicationPath, engineName));
-        } else {
-          // serve the index page as a setup page
-          // setup will be handled by app
-          serveIndexPage(appName, engineName, applicationPath, contextPath, response, request.getServletContext());
-        }
-      } else {
-        if (!setupPage) {
-          // correctly serving index page
+      if (setupPage) {
+        if (needsInitialUser(engineName)) {
           serveIndexPage(appName, engineName, applicationPath, contextPath, response, request.getServletContext());
         } else {
           response.sendRedirect(String.format("%s%s/app/%s/%s/", contextPath, applicationPath,
             appName, engineName));
         }
+      } else {
+        serveIndexPage(appName, engineName, applicationPath, contextPath, response, request.getServletContext());
       }
     }
   }
@@ -223,13 +214,11 @@ public class ProcessEnginesFilter extends AbstractTemplateFilter {
                                HttpServletResponse response,
                                FilterChain chain) throws IOException, ServletException {
 
-    // check if resource exists
     if (hasWebResource(requestUri)) {
 
-      // if so, include it
       chain.doFilter(request, response);
     } else {
-      // strip engine namespace and check if resource would exist
+
       String cleanAppUri = String.format("%s/app/%s/%s", applicationPath, appName, pageUri);
 
       if (hasWebResource(cleanAppUri)) {

@@ -5,7 +5,7 @@
 
   <groupId>io.orqueio.bpm</groupId>
   <artifactId>orqueio-root</artifactId>
-  <version>1.0.5</version>
+  <version>1.0.6</version>
   <packaging>pom</packaging>
   <name>orqueio Platform - Root Pom</name>
   <inceptionYear>2013</inceptionYear>
@@ -103,7 +103,6 @@
         <module>distro/jboss</module>
         <module>distro/tomcat</module>
         <module>distro/sql-script</module>
-        <module>distro/run</module>
 
         <module>clients/java</module>
 
@@ -127,7 +126,6 @@
         <module>distro/license-book</module>
         <module>distro/jboss</module>
         <module>distro/tomcat</module>
-        <module>distro/run</module>
       </modules>
     </profile>
 
@@ -219,15 +217,7 @@
       </modules>
     </profile>
 
-    <profile>
-      <id>distro-run</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-      <modules>
-        <module>distro/run</module>
-      </modules>
-    </profile>
+
 
     <profile>
       <id>distro-starter</id>
