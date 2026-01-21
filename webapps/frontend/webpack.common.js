@@ -82,7 +82,8 @@ module.exports = (_env, argv = {}) => {
       libraryTarget: 'umd',
       filename: `[name].js?bust=${version}`,
       assetModuleFilename: `assets/[name][ext]?bust=${version}`,
-      path: path.resolve(__dirname, 'target/webapp')
+      path: path.resolve(__dirname, 'target/webapp'),
+      publicPath: '/webjars/orqueio/'
     },
     resolve: {
       fallback: {
@@ -139,6 +140,10 @@ module.exports = (_env, argv = {}) => {
           test: /\.js$/,
           exclude: /node_modules/,
           use: ['babel-loader']
+        },
+        {
+          test: /\.(png|jpe?g|gif|webp)$/i,
+          type: 'asset/resource'
         }
       ]
     },

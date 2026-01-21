@@ -25,3 +25,6 @@ camunda-h2-dbs
 **/dist
 ./claude
 *.DS_Store
+
+# OAuth2/OIDC configuration with real credentials (use production.yml template instead)
+distro/run/assembly/resources/production-sso-example.yml

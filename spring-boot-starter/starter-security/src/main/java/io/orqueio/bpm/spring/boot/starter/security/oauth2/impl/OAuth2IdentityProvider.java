@@ -38,6 +38,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -100,6 +101,25 @@ public class OAuth2IdentityProvider extends DbIdentityServiceProvider {
       user.setFirstName(oidcUser.getGivenName());
       user.setLastName(oidcUser.getFamilyName());
       user.setEmail(oidcUser.getEmail());
+    } else if (principal instanceof OAuth2User) {
+      var oauth2User = (OAuth2User) principal;
+
+      String fullName = oauth2User.getAttribute("name");
+      if (fullName != null && !fullName.isEmpty()) {
+        String[] nameParts = fullName.split("\\s+", 2);
+        user.setFirstName(nameParts[0]);
+        if (nameParts.length > 1) {
+          user.setLastName(nameParts[1]);
+        } else {
+          user.setLastName("");
+        }
+      } else {
+        user.setFirstName(userId);
+        user.setLastName("");  
+      }
+
+      String email = oauth2User.getAttribute("email");
+      user.setEmail(email);
     }
     return user;
   }
@@ -142,22 +162,17 @@ public class OAuth2IdentityProvider extends DbIdentityServiceProvider {
 
   @Override
   public UserEntity findUserById(String userId) {
-    if (springSecurityAuthentication()) {
-      var user = transformUser();
-      return user != null && Objects.equals(userId, user.getId()) ? user : null;
-    } else {
-      return super.findUserById(userId);
-    }
+    return super.findUserById(userId);
   }
 
   @Override
   public UserQuery createUserQuery() {
-    return springSecurityAuthentication() ? new OAuth2UserQuery() : super.createUserQuery();
+    return super.createUserQuery();
   }
 
   @Override
   public UserQueryImpl createUserQuery(CommandContext commandContext) {
-    return springSecurityAuthentication() ? new OAuth2UserQuery() : super.createUserQuery(commandContext);
+    return super.createUserQuery(commandContext);
   }
 
   @Override
@@ -203,22 +218,17 @@ public class OAuth2IdentityProvider extends DbIdentityServiceProvider {
 
   @Override
   public GroupEntity findGroupById(String groupId) {
-    if (springSecurityAuthentication()) {
-      var groups = transformGroups();
-      return (GroupEntity) groups.stream().filter(g -> g.getId().equals(groupId)).findFirst().orElse(null);
-    } else {
-      return super.findGroupById(groupId);
-    }
+    return super.findGroupById(groupId);
   }
 
   @Override
   public GroupQuery createGroupQuery() {
-    return springSecurityAuthentication() ? new OAuth2GroupQuery() : super.createGroupQuery();
+    return super.createGroupQuery();
   }
 
   @Override
   public GroupQuery createGroupQuery(CommandContext commandContext) {
-    return springSecurityAuthentication() ? new OAuth2GroupQuery() : super.createGroupQuery(commandContext);
+    return super.createGroupQuery(commandContext);
   }
 
   public static class OAuth2TenantQuery extends TenantQueryImpl {
@@ -266,129 +276,81 @@ public class OAuth2IdentityProvider extends DbIdentityServiceProvider {
 
   @Override
   public UserEntity createNewUser(String userId) {
-    if (springSecurityAuthentication()) {
-      unsupportedOperationForOAuth2();
-    }
     return super.createNewUser(userId);
   }
 
   @Override
   public IdentityOperationResult saveUser(User user) {
-    if (springSecurityAuthentication()) {
-      unsupportedOperationForOAuth2();
-    }
     return super.saveUser(user);
   }
 
   @Override
   public IdentityOperationResult deleteUser(String userId) {
-    if (springSecurityAuthentication()) {
-      unsupportedOperationForOAuth2();
-    }
     return super.deleteUser(userId);
   }
 
   @Override
   public IdentityOperationResult unlockUser(String userId) {
-    if (springSecurityAuthentication()) {
-      unsupportedOperationForOAuth2();
-    }
     return super.unlockUser(userId);
   }
 
   @Override
   public GroupEntity createNewGroup(String groupId) {
-    if (springSecurityAuthentication()) {
-      unsupportedOperationForOAuth2();
-    }
     return super.createNewGroup(groupId);
   }
 
   @Override
   public IdentityOperationResult saveGroup(Group group) {
-    if (springSecurityAuthentication()) {
-      unsupportedOperationForOAuth2();
-    }
     return super.saveGroup(group);
   }
 
   @Override
   public IdentityOperationResult deleteGroup(String groupId) {
-    if (springSecurityAuthentication()) {
-      unsupportedOperationForOAuth2();
-    }
     return super.deleteGroup(groupId);
   }
 
   @Override
   public Tenant createNewTenant(String tenantId) {
-    if (springSecurityAuthentication()) {
-      unsupportedOperationForOAuth2();
-    }
     return super.createNewTenant(tenantId);
   }
 
   @Override
   public IdentityOperationResult saveTenant(Tenant tenant) {
-    if (springSecurityAuthentication()) {
-      unsupportedOperationForOAuth2();
-    }
     return super.saveTenant(tenant);
   }
 
   @Override
   public IdentityOperationResult deleteTenant(String tenantId) {
-    if (springSecurityAuthentication()) {
-      unsupportedOperationForOAuth2();
-    }
     return super.deleteTenant(tenantId);
   }
 
   @Override
   public IdentityOperationResult createMembership(String userId, String groupId) {
-    if (springSecurityAuthentication()) {
-      unsupportedOperationForOAuth2();
-    }
     return super.createMembership(userId, groupId);
   }
 
   @Override
   public IdentityOperationResult deleteMembership(String userId, String groupId) {
-    if (springSecurityAuthentication()) {
-      unsupportedOperationForOAuth2();
-    }
     return super.deleteMembership(userId, groupId);
   }
 
   @Override
   public IdentityOperationResult createTenantUserMembership(String tenantId, String userId) {
-    if (springSecurityAuthentication()) {
-      unsupportedOperationForOAuth2();
-    }
     return super.createTenantUserMembership(tenantId, userId);
   }
 
   @Override
   public IdentityOperationResult createTenantGroupMembership(String tenantId, String groupId) {
-    if (springSecurityAuthentication()) {
-      unsupportedOperationForOAuth2();
-    }
     return super.createTenantGroupMembership(tenantId, groupId);
   }
 
   @Override
   public IdentityOperationResult deleteTenantUserMembership(String tenantId, String userId) {
-    if (springSecurityAuthentication()) {
-      unsupportedOperationForOAuth2();
-    }
     return super.deleteTenantUserMembership(tenantId, userId);
   }
 
   @Override
   public IdentityOperationResult deleteTenantGroupMembership(String tenantId, String groupId) {
-    if (springSecurityAuthentication()) {
-      unsupportedOperationForOAuth2();
-    }
     return super.deleteTenantGroupMembership(tenantId, groupId);
   }
 
