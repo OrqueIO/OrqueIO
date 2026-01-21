@@ -159,6 +159,23 @@
               </resources>
             </configuration>
           </execution>
+          <!-- Copy Angular 21 build output to app/angular/ -->
+          <execution>
+            <id>copy-angular-resources</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${basedir}/target/webapp/app/angular</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>${basedir}/../angular/dist/OrqueIO-angular/browser</directory>
+                  <filtering>false</filtering>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
           <execution>
             <id>copy-sources</id>
             <phase>generate-sources</phase>

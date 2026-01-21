@@ -1,0 +1,64 @@
+<div class="admin-layout">
+  <main class="admin-main">
+    <app-admin-page-header
+      [breadcrumbs]="[{ label: 'Groups', translateKey: 'admin.dashboard.groups' }]"
+      [showRefresh]="true"
+      (refresh)="refresh()">
+    </app-admin-page-header>
+
+    <div class="page-content">
+      <!-- Toolbar with search and create button -->
+      <div class="toolbar">
+        <app-search-bar
+          placeholderKey="admin.groups.searchPlaceholder"
+          (search)="onSearch($event)">
+        </app-search-bar>
+        <button class="btn-create" (click)="onCreateGroup()">
+          <fa-icon [icon]="faPlus"></fa-icon>
+          <span>{{ 'admin.groups.createGroup' | translate }}</span>
+        </button>
+      </div>
+
+      <!-- Results info -->
+      <header class="results-info">
+        <h2 class="results-title">
+          {{ totalGroups }} {{ 'admin.groups.title' | translate | lowercase }}
+        </h2>
+      </header>
+
+      <!-- Data table -->
+      <app-data-table
+        [columns]="columns"
+        [data]="groups"
+        [loading]="loading"
+        [sortBy]="sortBy"
+        [sortOrder]="sortOrder"
+        emptyMessageKey="admin.groups.noGroups"
+        (sortChange)="onSort($event)"
+        (rowClick)="onRowClick($event)">
+      </app-data-table>
+
+      <!-- Pagination -->
+      <app-pagination
+        [current]="currentPage"
+        [size]="pageSize"
+        [total]="totalGroups"
+        (pageChange)="onPageChange($event)">
+      </app-pagination>
+    </div>
+  </main>
+</div>
+
+<!-- Actions template -->
+<ng-template #actionsTemplate let-group>
+  <button class="btn-icon" (click)="editGroup(group, $event)" [title]="'admin.users.edit' | translate">
+    <fa-icon [icon]="faPen"></fa-icon>
+  </button>
+</ng-template>
+
+<!-- Create Group Dialog -->
+<app-group-create-dialog
+  *ngIf="showCreateDialog"
+  (created)="onGroupCreated()"
+  (cancel)="onCreateDialogCancel()">
+</app-group-create-dialog>

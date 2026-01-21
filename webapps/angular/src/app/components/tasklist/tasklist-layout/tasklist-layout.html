@@ -1,0 +1,201 @@
+<div class="tasklist-container" *ngIf="vm$ | async as vm">
+  <!-- Filters Column -->
+  <aside class="filters-column"
+         [class.collapsed]="vm.filtersCollapsed"
+         [class.maximized]="vm.maximizedColumn === 'filters'"
+         [class.minimized]="vm.maximizedColumn && vm.maximizedColumn !== 'filters'">
+    <header class="column-header">
+      <h3 class="column-title">{{ 'tasklist.filters' | translate }}</h3>
+      <div class="column-header-actions">
+        <!-- Maximize/Restore Button -->
+        <button class="btn-maximize"
+                *ngIf="!vm.filtersCollapsed"
+                (click)="maximizeColumn('filters')"
+                [title]="(vm.maximizedColumn === 'filters' ? 'tasklist.restore' : 'tasklist.maximize') | translate">
+          <svg *ngIf="vm.maximizedColumn !== 'filters'" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/>
+          </svg>
+          <svg *ngIf="vm.maximizedColumn === 'filters'" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="14" y1="10" x2="21" y2="3"/><line x1="3" y1="21" x2="10" y2="14"/>
+          </svg>
+        </button>
+        <button class="btn-toggle"
+                (click)="toggleFilters()"
+                [attr.aria-label]="(vm.filtersCollapsed ? 'tasklist.expandFilters' : 'tasklist.collapseFilters') | translate">
+          <span class="toggle-icon" [class.rotated]="!vm.filtersCollapsed"></span>
+        </button>
+      </div>
+    </header>
+
+    <div class="column-content" *ngIf="!vm.filtersCollapsed">
+      <app-task-filters
+        [filters]="vm.filters"
+        [selectedFilterId]="vm.selectedFilterId"
+        [filterCount]="vm.filterCount"
+        (filterSelect)="onFilterSelect($event)"
+        (filterCreate)="onFilterCreate()"
+        (filterEdit)="onFilterEdit($event)">
+      </app-task-filters>
+    </div>
+  </aside>
+
+  <!-- Task List Column -->
+  <main class="list-column"
+        [class.collapsed]="vm.listCollapsed"
+        [class.maximized]="vm.maximizedColumn === 'list'"
+        [class.minimized]="vm.maximizedColumn && vm.maximizedColumn !== 'list'">
+    <header class="column-header">
+      <button class="btn-toggle left"
+              (click)="toggleList()"
+              [attr.aria-label]="(vm.listCollapsed ? 'tasklist.expandList' : 'tasklist.collapseList') | translate">
+        <span class="toggle-icon" [class.rotated]="!vm.listCollapsed"></span>
+      </button>
+
+      <div class="header-content" *ngIf="!vm.listCollapsed">
+        <h3 class="column-title">{{ 'tasklist.tasks' | translate }}</h3>
+        <span class="task-count" *ngIf="vm.total > 0">
+          ({{ vm.total }})
+        </span>
+      </div>
+
+      <!-- Maximize/Restore Button -->
+      <button class="btn-maximize"
+              *ngIf="!vm.listCollapsed"
+              (click)="maximizeColumn('list')"
+              [title]="(vm.maximizedColumn === 'list' ? 'tasklist.restore' : 'tasklist.maximize') | translate">
+        <svg *ngIf="vm.maximizedColumn !== 'list'" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/>
+        </svg>
+        <svg *ngIf="vm.maximizedColumn === 'list'" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="14" y1="10" x2="21" y2="3"/><line x1="3" y1="21" x2="10" y2="14"/>
+        </svg>
+      </button>
+    </header>
+
+    <div class="column-content" *ngIf="!vm.listCollapsed">
+      <app-task-list
+        [tasks]="vm.tasks"
+        [selectedTaskId]="vm.selectedTaskId"
+        [loading]="vm.loading"
+        [total]="vm.total"
+        [page]="vm.page"
+        [pageSize]="vm.pageSize"
+        (taskSelect)="onTaskSelect($event)"
+        (pageChange)="onPageChange($event)"
+        (sortingChange)="onSortingChange($event)">
+      </app-task-list>
+    </div>
+  </main>
+
+  <!-- Task Detail Column -->
+  <aside class="detail-column"
+         [class.collapsed]="vm.detailCollapsed"
+         [class.maximized]="vm.maximizedColumn === 'detail'"
+         [class.minimized]="vm.maximizedColumn && vm.maximizedColumn !== 'detail'"
+         [class.no-task]="!vm.selectedTaskId">
+    <header class="column-header">
+      <button class="btn-toggle left"
+              (click)="toggleDetail()"
+              [attr.aria-label]="(vm.detailCollapsed ? 'tasklist.expandDetail' : 'tasklist.collapseDetail') | translate">
+        <span class="toggle-icon" [class.rotated]="!vm.detailCollapsed"></span>
+      </button>
+      <h3 class="column-title" *ngIf="!vm.detailCollapsed">
+        {{ 'tasklist.taskDetail' | translate }}
+      </h3>
+      <!-- Maximize/Restore Button -->
+      <button class="btn-maximize"
+              *ngIf="!vm.detailCollapsed"
+              (click)="maximizeColumn('detail')"
+              [title]="(vm.maximizedColumn === 'detail' ? 'tasklist.restore' : 'tasklist.maximize') | translate">
+        <svg *ngIf="vm.maximizedColumn !== 'detail'" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/>
+        </svg>
+        <svg *ngIf="vm.maximizedColumn === 'detail'" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="14" y1="10" x2="21" y2="3"/><line x1="3" y1="21" x2="10" y2="14"/>
+        </svg>
+      </button>
+    </header>
+
+    <div class="column-content" *ngIf="!vm.detailCollapsed">
+      <app-task-detail
+        *ngIf="taskDetail$ | async as task; else noTaskSelected"
+        [task]="task"
+        [activeTab]="(activeTab$ | async) || 'form'"
+        (tabChange)="onTabChange($event)"
+        (taskAction)="onTaskAction($event)"
+        (dismiss)="onTaskDismiss()"
+        (diagramExpand)="onDiagramExpand($event)">
+      </app-task-detail>
+
+      <ng-template #noTaskSelected>
+        <div class="no-task-message">
+          <span class="icon">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/>
+              <rect x="9" y="3" width="6" height="4" rx="1"/>
+              <path d="M9 12h6M9 16h6"/>
+            </svg>
+          </span>
+          <p>{{ 'tasklist.selectTaskHint' | translate }}</p>
+        </div>
+      </ng-template>
+    </div>
+  </aside>
+</div>
+
+<!-- Start Process Modal -->
+<app-start-process-modal
+  [isOpen]="showStartProcessModal"
+  (close)="closeStartProcessModal()"
+  (processStarted)="onProcessStarted($event)"
+  (taskAssigned)="onTaskAssignedAfterStart($event)">
+</app-start-process-modal>
+
+<!-- Assign Notification -->
+<div class="assign-notification" *ngIf="assignNotification">
+  <div class="notification-content">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+      <polyline points="22 4 12 14.01 9 11.01"/>
+    </svg>
+    <div class="notification-text">
+      <span class="notification-title">{{ 'tasklist.assignNotification.title' | translate }}</span>
+      <span class="notification-message">
+        {{ 'tasklist.assignNotification.message' | translate:{ taskName: assignNotification.taskName, processName: assignNotification.processName } }}
+      </span>
+    </div>
+    <div class="notification-actions">
+      <button class="btn btn-link" (click)="navigateToAssignedTask()">
+        {{ 'tasklist.assignNotification.view' | translate }}
+      </button>
+      <button class="btn-dismiss" (click)="dismissAssignNotification()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Create Task Modal -->
+<app-create-task-modal
+  [isOpen]="showCreateTaskModal"
+  (close)="closeCreateTaskModal()"
+  (taskCreated)="onTaskCreated($event)">
+</app-create-task-modal>
+
+<!-- Keyboard Shortcuts Modal -->
+<app-keyboard-shortcuts-modal
+  [isOpen]="showKeyboardShortcutsModal"
+  (close)="closeKeyboardShortcutsModal()">
+</app-keyboard-shortcuts-modal>
+
+<!-- Filter Modal -->
+<app-filter-modal
+  [isOpen]="showFilterModal"
+  [filter]="editingFilter"
+  (save)="onFilterSave($event)"
+  (delete)="onFilterDelete($event)"
+  (close)="closeFilterModal()">
+</app-filter-modal>

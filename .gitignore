@@ -21,7 +21,9 @@ faces-config.NavData
 **/overlays
 **/node_modules
 camunda-h2-dbs
-
+**/.angular
+**/dist
+./claude
 *.DS_Store
 
 # OAuth2/OIDC configuration with real credentials (use production.yml template instead)

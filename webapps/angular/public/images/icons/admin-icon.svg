@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none">
+  <defs>
+    <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#a78bfa;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#8b5cf6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#6366f1;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="shieldHighlight" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#c4b5fd;stop-opacity:0.6" />
+      <stop offset="100%" style="stop-color:#a78bfa;stop-opacity:0" />
+    </linearGradient>
+    <filter id="shieldShadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#8b5cf6" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+
+  <!-- Shield shape -->
+  <path d="M60 10 L100 25 L100 55 C100 80 80 100 60 110 C40 100 20 80 20 55 L20 25 Z"
+        fill="url(#shieldGrad)" filter="url(#shieldShadow)"/>
+
+  <!-- Shield highlight -->
+  <path d="M60 10 L100 25 L100 55 C100 80 80 100 60 110 C40 100 20 80 20 55 L20 25 Z"
+        fill="url(#shieldHighlight)" opacity="0.3"/>
+
+  <!-- Inner shield border -->
+  <path d="M60 18 L92 30 L92 54 C92 74 76 90 60 98 C44 90 28 74 28 54 L28 30 Z"
+        fill="none" stroke="white" stroke-width="1" opacity="0.3"/>
+
+  <!-- Gear/Cog icon -->
+  <g transform="translate(60, 58)">
+    <!-- Outer gear teeth -->
+    <path d="M0 -22 L4 -22 L5 -18 L9 -17 L12 -20 L15 -17 L13 -13 L15 -10 L19 -10 L20 -6 L16 -4 L16 0 L20 2 L20 6 L16 7 L15 11 L18 14 L15 17 L12 15 L9 17 L8 21 L4 22 L3 18 L0 18 L-3 18 L-4 22 L-8 21 L-9 17 L-12 15 L-15 17 L-18 14 L-15 11 L-16 7 L-20 6 L-20 2 L-16 0 L-16 -4 L-20 -6 L-19 -10 L-15 -10 L-13 -13 L-15 -17 L-12 -20 L-9 -17 L-5 -18 L-4 -22 Z"
+          fill="white" opacity="0.95"/>
+    <!-- Inner circle -->
+    <circle cx="0" cy="0" r="9" fill="url(#shieldGrad)"/>
+    <!-- Center dot -->
+    <circle cx="0" cy="0" r="4" fill="white" opacity="0.9"/>
+  </g>
+</svg>

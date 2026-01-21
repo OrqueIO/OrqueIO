@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run build:*)",
+      "Bash(cat:*)",
+      "Bash(npm install:*)",
+      "Bash(ls:*)",
+      "Bash(npm run build:dev:*)",
+      "Bash(npm run:*)",
+      "Bash(mkdir:*)",
+      "Bash(npx ng lint)",
+      "Bash(npx tsc:*)",
+      "Bash(npx ng build:*)",
+      "Bash(git add:*)"
+    ]
+  }
+}

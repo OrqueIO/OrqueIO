@@ -1,0 +1,157 @@
+<!-- Loading State -->
+<div class="loading-state" *ngIf="loading && tasks.length === 0">
+  <span class="spinner"></span>
+  {{ 'common.loading' | translate }}
+</div>
+
+<!-- Error State -->
+<div class="error-state" *ngIf="error">
+  <span class="error-icon">!</span>
+  <strong>{{ 'common.error' | translate }}:</strong>
+  <span class="error-message">{{ error }}</span>
+</div>
+
+<!-- Empty State (only when no tasks at all) -->
+<div class="empty-state" *ngIf="!loading && !error && tasks.length === 0 && total === 0">
+  <span class="info-icon">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="10"/>
+      <line x1="12" y1="16" x2="12" y2="12"/>
+      <line x1="12" y1="8" x2="12.01" y2="8"/>
+    </svg>
+  </span>
+  <p>{{ 'tasklist.noMatchingTasks' | translate }}</p>
+</div>
+
+<!-- Restriction Notice (only when on page > 1 and current page is empty) -->
+<div class="restriction-notice" *ngIf="!loading && total > 0 && tasks.length === 0 && page > 1">
+  <span class="info-icon">i</span>
+  <span>{{ 'tasklist.restrictionNotice' | translate }}</span>
+  <a href="javascript:void(0)" (click)="goToFirstPage()">
+    {{ 'tasklist.resetPage' | translate }}
+  </a>
+</div>
+
+<!-- Task List -->
+<div class="task-list-container"
+     #taskListContainer
+     *ngIf="!error && tasks.length > 0"
+     (keydown)="handleKeydown($event)"
+     tabindex="0">
+
+  <ol class="tasks-list">
+    <li *ngFor="let task of tasks; trackBy: trackByTaskId"
+        class="task-item"
+        [class.active]="isSelected(task)"
+        [attr.data-task-id]="task.id"
+        (click)="selectTask(task)">
+
+      <div class="task-card clickable">
+        <!-- Task Names -->
+        <div class="names">
+          <h4 class="task-name">
+            <a [href]="getTaskUrl(task)"
+               (click)="$event.preventDefault(); selectTask(task)">
+              {{ getTaskDisplayName(task) }}
+            </a>
+          </h4>
+
+          <h6 class="process-definition" *ngIf="task.processDefinitionId">
+            {{ getProcessName(task) }}
+          </h6>
+
+          <h6 class="case-definition" *ngIf="task.caseDefinitionId">
+            {{ getCaseName(task) }}
+          </h6>
+
+          <h5 class="assignee" *ngIf="hasAssignee(task)" [title]="task.assignee">
+            {{ getAssigneeName(task) }}
+          </h5>
+        </div>
+
+        <!-- Task Meta -->
+        <div class="cells-wrapper">
+          <div class="dates">
+            <!-- Due Date -->
+            <span class="due-date"
+                  *ngIf="task.due"
+                  [class.overdue]="isOverdue(task.due)">
+              {{ 'tasklist.due' | translate }}
+              <span [appTooltip]="task.due | camDate:'long'"
+                    tooltipPlacement="top">
+                {{ task.due | timeAgo }}
+              </span>
+            </span>
+
+            <!-- Follow-up Date -->
+            <span class="followup-date"
+                  *ngIf="task.followUp"
+                  [class.overdue]="isOverdue(task.followUp)">
+              {{ 'tasklist.followUp' | translate }}
+              <span [appTooltip]="task.followUp | camDate:'long'"
+                    tooltipPlacement="top">
+                {{ task.followUp | timeAgo }}
+              </span>
+            </span>
+
+            <!-- Creation Date -->
+            <span class="creation-date">
+              {{ 'tasklist.created' | translate }}
+              <span [appTooltip]="task.created | camDate:'long'"
+                    tooltipPlacement="top">
+                {{ task.created | timeAgo }}
+              </span>
+            </span>
+          </div>
+
+          <!-- Priority -->
+          <div class="priority"
+               [class.high]="task.priority > 50"
+               [class.low]="task.priority < 50"
+               [appTooltip]="'tasklist.priority' | translate"
+               tooltipPlacement="right">
+            {{ task.priority }}
+          </div>
+        </div>
+
+        <!-- Expandable Card Details -->
+        <div class="task-card-details"
+             [class.expanded]="isExpanded(task)">
+
+          <!-- Plugin content goes here -->
+          <app-task-card
+            *ngIf="isExpanded(task)"
+            [task]="task">
+          </app-task-card>
+
+          <!-- Expand/Collapse Button -->
+          <div class="shutter actions"
+               (click)="toggleExpand($event, task)"
+               [title]="(isExpanded(task) ? 'tasklist.showLess' : 'tasklist.showMore') | translate">
+            <a class="toggle-icon"
+               [class.expanded]="isExpanded(task)"
+               href="javascript:void(0)">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </li>
+  </ol>
+
+  <!-- Loading overlay for pagination -->
+  <div class="loading-overlay" *ngIf="loading && tasks.length > 0">
+    <span class="spinner"></span>
+  </div>
+</div>
+
+<!-- Pagination -->
+<app-pagination
+  *ngIf="total > pageSize"
+  [current]="page"
+  [size]="pageSize"
+  [total]="total"
+  (pageChange)="onPageChange($event)">
+</app-pagination>

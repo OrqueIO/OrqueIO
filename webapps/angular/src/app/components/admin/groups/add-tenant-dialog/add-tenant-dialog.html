@@ -1,0 +1,55 @@
+<div class="modal-backdrop" (click)="onBackdropClick($event)">
+  <div class="modal-container modal-sm" role="dialog" aria-modal="true">
+    <div class="modal-header">
+      <h3 class="modal-title">{{ 'admin.groups.addToTenant' | translate }}</h3>
+    </div>
+
+    <div class="modal-body">
+      <div class="search-box">
+        <input
+          type="text"
+          class="modal-input"
+          [(ngModel)]="searchTerm"
+          (input)="onSearchChange()"
+          [placeholder]="'admin.groups.searchTenants' | translate" />
+      </div>
+
+      <div class="items-list" *ngIf="!loading">
+        <div
+          *ngFor="let tenant of filteredTenants"
+          class="item"
+          [class.selected]="selectedTenantId === tenant.id"
+          (click)="selectTenant(tenant.id)">
+          <div class="item-id">{{ tenant.id }}</div>
+          <div class="item-name" *ngIf="tenant.name">{{ tenant.name }}</div>
+        </div>
+
+        <div class="empty-message" *ngIf="filteredTenants.length === 0">
+          {{ 'admin.groups.noAvailableTenants' | translate }}
+        </div>
+      </div>
+
+      <div class="loading-state" *ngIf="loading">
+        {{ 'LOADING' | translate }}...
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="modal-btn modal-btn-secondary"
+        (click)="onCancel()"
+        [disabled]="saving">
+        {{ 'CANCEL' | translate }}
+      </button>
+      <button
+        type="button"
+        class="modal-btn modal-btn-primary"
+        (click)="onSubmit()"
+        [disabled]="!selectedTenantId || saving">
+        <span *ngIf="saving">{{ 'ADDING' | translate }}...</span>
+        <span *ngIf="!saving">{{ 'ADD' | translate }}</span>
+      </button>
+    </div>
+  </div>
+</div>

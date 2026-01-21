@@ -1,0 +1,121 @@
+<div class="modal-overlay" *ngIf="isOpen" (click)="onOverlayClick($event)">
+  <div class="modal-container">
+    <header class="modal-header">
+      <h2 class="modal-title">{{ 'tasklist.createTask' | translate }}</h2>
+      <button class="btn-close" (click)="onClose()" type="button" [disabled]="submitting">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 6L6 18M6 6l12 12"/>
+        </svg>
+      </button>
+    </header>
+
+    <form class="modal-body" (ngSubmit)="onSubmit()">
+      <!-- Error Message -->
+      <div class="error-message" *ngIf="error">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M12 8v4M12 16h.01"/>
+        </svg>
+        <span>{{ error }}</span>
+      </div>
+
+      <!-- Task Name -->
+      <div class="form-group">
+        <label for="taskName" class="form-label required">
+          {{ 'tasklist.taskName' | translate }}
+        </label>
+        <input
+          type="text"
+          id="taskName"
+          name="taskName"
+          class="form-input"
+          [(ngModel)]="task.name"
+          [placeholder]="'tasklist.taskNamePlaceholder' | translate"
+          required
+          autofocus
+          [disabled]="submitting">
+      </div>
+
+      <!-- Assignee -->
+      <div class="form-group">
+        <label for="taskAssignee" class="form-label">
+          {{ 'tasklist.assignee' | translate }}
+        </label>
+        <input
+          type="text"
+          id="taskAssignee"
+          name="taskAssignee"
+          class="form-input"
+          [(ngModel)]="task.assignee"
+          [placeholder]="'tasklist.assigneePlaceholder' | translate"
+          [disabled]="submitting">
+      </div>
+
+      <!-- Tenant ID -->
+      <div class="form-group">
+        <label for="taskTenantId" class="form-label">
+          {{ 'tasklist.tenantId' | translate }}
+        </label>
+        <input
+          type="text"
+          id="taskTenantId"
+          name="taskTenantId"
+          class="form-input"
+          [(ngModel)]="task.tenantId"
+          [placeholder]="'tasklist.tenantIdPlaceholder' | translate"
+          [disabled]="submitting">
+      </div>
+
+      <!-- Description -->
+      <div class="form-group">
+        <label for="taskDescription" class="form-label">
+          {{ 'tasklist.description' | translate }}
+        </label>
+        <textarea
+          id="taskDescription"
+          name="taskDescription"
+          class="form-input form-textarea"
+          [(ngModel)]="task.description"
+          [placeholder]="'tasklist.descriptionPlaceholder' | translate"
+          rows="4"
+          [disabled]="submitting">
+        </textarea>
+      </div>
+
+      <!-- Priority -->
+      <div class="form-group">
+        <label for="taskPriority" class="form-label">
+          {{ 'tasklist.priority' | translate }}
+        </label>
+        <input
+          type="number"
+          id="taskPriority"
+          name="taskPriority"
+          class="form-input form-input-small"
+          [(ngModel)]="task.priority"
+          min="0"
+          max="100"
+          [disabled]="submitting">
+        <span class="form-hint">{{ 'tasklist.priorityHint' | translate }}</span>
+      </div>
+    </form>
+
+    <footer class="modal-footer">
+      <button
+        class="btn btn-secondary"
+        (click)="onClose()"
+        type="button"
+        [disabled]="submitting">
+        {{ 'common.cancel' | translate }}
+      </button>
+      <button
+        class="btn btn-primary"
+        (click)="onSubmit()"
+        type="submit"
+        [disabled]="!isValid() || submitting">
+        <span class="spinner" *ngIf="submitting"></span>
+        {{ submitting ? ('common.creating' | translate) : ('common.create' | translate) }}
+      </button>
+    </footer>
+  </div>
+</div>

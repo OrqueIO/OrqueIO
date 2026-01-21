@@ -1,0 +1,61 @@
+<div class="welcome-container">
+  <!-- Header Section -->
+  <header class="welcome-header">
+    <div class="header-content">
+      <div class="welcome-text">
+        <h1 class="welcome-title">{{ 'WELCOME_BACK' | translate }}, <span class="user-name">{{ userName }}</span></h1>
+        <p class="welcome-subtitle">{{ 'WELCOME_MESSAGE' | translate }}</p>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <!-- Apps Section -->
+    <section class="section apps-section">
+      <div class="section-header">
+        <h2 class="section-title">{{ 'YOUR_APPS' | translate }}</h2>
+      </div>
+
+      <div class="cards-grid">
+        @for (app of apps; track app.route) {
+          <a [routerLink]="app.route" class="app-card" [style.--accent-color]="app.accentColor">
+            <div class="card-accent-bar"></div>
+            <div class="card-content">
+              <div class="card-icon-wrapper">
+                <img [src]="app.icon" [alt]="app.titleKey | translate" class="card-icon">
+              </div>
+              <div class="card-info">
+                <h3 class="card-title">{{ app.titleKey | translate }}</h3>
+                <span class="card-subtitle">{{ app.subtitleKey | translate }}</span>
+                <p class="card-description">{{ app.descriptionKey | translate }}</p>
+              </div>
+            </div>
+            <div class="card-action">
+              <svg class="action-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </div>
+          </a>
+        }
+      </div>
+    </section>
+
+    <!-- Resources Section -->
+    <section class="section resources-section">
+      <div class="resources-grid">
+        @for (resource of resources; track resource.link) {
+          <button class="resource-item" (click)="openResource(resource.link)" type="button">
+            <div class="resource-icon-wrapper">
+              <fa-icon [icon]="resource.icon" class="resource-fa-icon"></fa-icon>
+            </div>
+            <span class="resource-title">{{ resource.titleKey | translate }}</span>
+            <svg class="resource-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M7 17L17 7M17 7H7M17 7V17"/>
+            </svg>
+          </button>
+        }
+      </div>
+    </section>
+  </main>
+</div>

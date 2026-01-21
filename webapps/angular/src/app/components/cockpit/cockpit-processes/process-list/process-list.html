@@ -1,0 +1,361 @@
+<div class="cockpit-layout" [class.diagram-fullscreen]="diagramMaximized" [class.table-fullscreen]="tableMaximized">
+  <main class="cockpit-main">
+    <app-cockpit-header
+      *ngIf="!diagramMaximized && !tableMaximized"
+      titleKey="cockpit.processes.instances"
+      [breadcrumbs]="breadcrumbs"
+      [showRefresh]="true"
+      (refresh)="loadProcessInstances()"
+    ></app-cockpit-header>
+
+    <div class="page-content">
+      <!-- Main layout: Sidebar (filters) + Content (BPMN + table) -->
+      <div class="main-layout">
+        <!-- Left sidebar: Filters (hidden when maximized) -->
+        <aside class="filters-sidebar" *ngIf="!diagramMaximized && !tableMaximized">
+          <div class="sidebar-header">
+            <fa-icon [icon]="faFilter"></fa-icon>
+            <span>{{ 'cockpit.processes.filters' | translate }}</span>
+            <span class="filter-count" *ngIf="activeFiltersCount > 0">{{ activeFiltersCount }}</span>
+          </div>
+
+          <div class="filters-content">
+            <!-- Business Key filter -->
+            <div class="filter-group">
+              <label>{{ 'cockpit.processes.filters.businessKey' | translate }}</label>
+              <select [(ngModel)]="filters.businessKeyOperator" class="operator-select">
+                <option value="like">{{ 'cockpit.processes.filters.contains' | translate }}</option>
+                <option value="eq">{{ 'cockpit.processes.filters.equals' | translate }}</option>
+              </select>
+              <input
+                type="text"
+                [(ngModel)]="filters.businessKey"
+                [placeholder]="'cockpit.processes.filters.businessKeyPlaceholder' | translate"
+              />
+            </div>
+
+            <!-- Activity ID filter -->
+            <div class="filter-group">
+              <label>{{ 'cockpit.processes.filters.activityId' | translate }}</label>
+              <input
+                type="text"
+                [(ngModel)]="filters.activityIds"
+                [placeholder]="'cockpit.processes.filters.activityIdPlaceholder' | translate"
+              />
+            </div>
+
+            <!-- State filter -->
+            <div class="filter-group">
+              <label>{{ 'cockpit.processes.filters.state' | translate }}</label>
+              <select [(ngModel)]="filters.state">
+                <option value="all">{{ 'cockpit.processes.filters.allStates' | translate }}</option>
+                <option value="active">{{ 'cockpit.processes.filters.stateActive' | translate }}</option>
+                <option value="suspended">{{ 'cockpit.processes.filters.stateSuspended' | translate }}</option>
+                <option value="completed">{{ 'cockpit.processes.filters.stateCompleted' | translate }}</option>
+                <option value="terminated">{{ 'cockpit.processes.filters.stateTerminated' | translate }}</option>
+              </select>
+            </div>
+
+            <!-- With incidents filter -->
+            <div class="filter-group filter-checkbox">
+              <label>
+                <input type="checkbox" [(ngModel)]="filters.withIncidents" />
+                {{ 'cockpit.processes.filters.withIncidents' | translate }}
+              </label>
+            </div>
+
+            <!-- Started After -->
+            <div class="filter-group">
+              <label>{{ 'cockpit.processes.filters.startedAfter' | translate }}</label>
+              <input type="datetime-local" [(ngModel)]="filters.startedAfter" />
+            </div>
+
+            <!-- Started Before -->
+            <div class="filter-group">
+              <label>{{ 'cockpit.processes.filters.startedBefore' | translate }}</label>
+              <input type="datetime-local" [(ngModel)]="filters.startedBefore" />
+            </div>
+
+            <!-- Finished After -->
+            <div class="filter-group">
+              <label>{{ 'cockpit.processes.filters.finishedAfter' | translate }}</label>
+              <input type="datetime-local" [(ngModel)]="filters.finishedAfter" />
+            </div>
+
+            <!-- Finished Before -->
+            <div class="filter-group">
+              <label>{{ 'cockpit.processes.filters.finishedBefore' | translate }}</label>
+              <input type="datetime-local" [(ngModel)]="filters.finishedBefore" />
+            </div>
+
+            <!-- Variable filter -->
+            <div class="filter-group">
+              <label>{{ 'cockpit.processes.filters.variable' | translate }}</label>
+              <input
+                type="text"
+                [(ngModel)]="filters.variableName"
+                [placeholder]="'cockpit.processes.filters.variableName' | translate"
+              />
+              <div class="variable-row">
+                <select [(ngModel)]="filters.variableOperator" class="variable-operator">
+                  <option value="eq">=</option>
+                  <option value="neq">≠</option>
+                  <option value="gt">&gt;</option>
+                  <option value="lt">&lt;</option>
+                  <option value="like">~</option>
+                </select>
+                <input
+                  type="text"
+                  [(ngModel)]="filters.variableValue"
+                  [placeholder]="'cockpit.processes.filters.variableValue' | translate"
+                  class="variable-value"
+                />
+              </div>
+            </div>
+
+            <!-- Filter actions -->
+            <div class="filter-actions">
+              <button class="btn-secondary" (click)="resetFilters()">
+                <fa-icon [icon]="faTimes"></fa-icon>
+                {{ 'cockpit.processes.filters.reset' | translate }}
+              </button>
+              <button class="btn-primary" (click)="applyFilters()">
+                <fa-icon [icon]="faSearch"></fa-icon>
+                {{ 'cockpit.processes.filters.apply' | translate }}
+              </button>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Right content area -->
+        <div class="content-area" [class.fullscreen]="diagramMaximized" [class.table-expanded]="tableMaximized">
+          <!-- BPMN Diagram section -->
+          <section class="diagram-section" [class.maximized]="diagramMaximized" [class.collapsed]="tableMaximized">
+            <div class="section-header" *ngIf="!diagramMaximized">
+              <div class="section-title">
+                <fa-icon [icon]="faProjectDiagram"></fa-icon>
+                <span>{{ 'cockpit.processDetail.diagram' | translate }}</span>
+              </div>
+              <div class="definition-info" *ngIf="processDefinition">
+                <span class="definition-name">{{ processDefinition.name || processDefinition.key }}</span>
+                <span class="definition-key">{{ processDefinition.key }}</span>
+                <span class="definition-version" *ngIf="selectedVersion === 'all'">
+                  {{ 'cockpit.processes.allVersions' | translate }}
+                </span>
+                <span class="tenant-id" *ngIf="processDefinition.tenantId">
+                  <fa-icon [icon]="faCog"></fa-icon>
+                  {{ processDefinition.tenantId }}
+                </span>
+                <!-- Version selector -->
+                <div class="version-selector" *ngIf="processDefinitionVersions.length > 1">
+                  <label>{{ 'cockpit.processes.version' | translate }}:</label>
+                  <select [(ngModel)]="selectedVersion" (change)="onVersionChange()">
+                    <option value="all">{{ 'cockpit.processes.allVersions' | translate }}</option>
+                    <option *ngFor="let v of processDefinitionVersions" [value]="v.id">
+                      {{ getVersionLabel(v) }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="diagram-container" *ngIf="!tableMaximized">
+              <div class="diagram-loading" *ngIf="loadingDiagram">
+                <fa-icon [icon]="faSpinner" animation="spin"></fa-icon>
+                <span>{{ 'common.loading' | translate }}</span>
+              </div>
+
+              <app-bpmn-viewer
+                #bpmnViewer
+                *ngIf="!loadingDiagram && bpmnXml"
+                [xml]="bpmnXml"
+                [activityBadges]="activityBadges"
+                [showExpandButton]="true"
+                [isExpanded]="diagramMaximized"
+                (expandToggle)="toggleDiagramMaximize()"
+              ></app-bpmn-viewer>
+
+              <div class="empty-state" *ngIf="!loadingDiagram && !bpmnXml">
+                <fa-icon [icon]="faExclamationTriangle"></fa-icon>
+                <p>{{ 'cockpit.processDetail.noDiagram' | translate }}</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Instances table section (hidden when diagram maximized, expanded when table maximized) -->
+          <section class="instances-section" *ngIf="!diagramMaximized">
+            <!-- Toolbar -->
+            <div class="section-toolbar">
+              <div class="results-info">
+                <span *ngIf="!loading && totalCount > 0">
+                  {{ 'cockpit.processes.showing' | translate }} {{ startIndex }} - {{ endIndex }}
+                  {{ 'cockpit.processes.of' | translate }} {{ totalCount }}
+                </span>
+                <span *ngIf="!loading && totalCount === 0">
+                  {{ 'cockpit.processes.noResults' | translate }}
+                </span>
+              </div>
+
+              <!-- Page size selector -->
+              <div class="page-size-selector">
+                <label>{{ 'cockpit.processes.pageSize' | translate }}:</label>
+                <select [(ngModel)]="pageSize" (change)="onPageSizeChange()">
+                  <option *ngFor="let size of pageSizeOptions" [value]="size">{{ size }}</option>
+                </select>
+              </div>
+
+              <!-- Expand/Collapse table button -->
+              <div class="toolbar-actions">
+                <a class="expand-table-btn"
+                   (click)="toggleTableMaximize()"
+                   [title]="tableMaximized ? ('cockpit.processDetail.showDiagram' | translate) : ('cockpit.processDetail.hideDiagram' | translate)">
+                  <fa-icon [icon]="tableMaximized ? faChevronDown : faChevronUp"></fa-icon>
+                </a>
+              </div>
+            </div>
+
+            <!-- Table -->
+            <div class="table-container">
+              <table class="data-table" *ngIf="!loading && processInstances.length > 0">
+                <thead>
+                  <tr>
+                    <th class="sortable" (click)="onSort('state')">
+                      {{ 'cockpit.processes.columns.state' | translate }}
+                      <fa-icon
+                        [icon]="getSortIcon('state')"
+                        [class.active]="isSortActive('state')"
+                      ></fa-icon>
+                    </th>
+                    <th>{{ 'cockpit.processes.columns.id' | translate }}</th>
+                    <th class="sortable" (click)="onSort('businessKey')">
+                      {{ 'cockpit.processes.columns.businessKey' | translate }}
+                      <fa-icon
+                        [icon]="getSortIcon('businessKey')"
+                        [class.active]="isSortActive('businessKey')"
+                      ></fa-icon>
+                    </th>
+                    <th class="sortable" (click)="onSort('startTime')">
+                      {{ 'cockpit.processes.columns.startTime' | translate }}
+                      <fa-icon
+                        [icon]="getSortIcon('startTime')"
+                        [class.active]="isSortActive('startTime')"
+                      ></fa-icon>
+                    </th>
+                    <th class="sortable" (click)="onSort('endTime')">
+                      {{ 'cockpit.processes.columns.endTime' | translate }}
+                      <fa-icon
+                        [icon]="getSortIcon('endTime')"
+                        [class.active]="isSortActive('endTime')"
+                      ></fa-icon>
+                    </th>
+                    <th *ngIf="processInstances[0]?.tenantId">
+                      {{ 'cockpit.processes.columns.tenant' | translate }}
+                    </th>
+                    <th>{{ 'cockpit.processes.columns.actions' | translate }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let instance of processInstances">
+                    <td>
+                      <span class="state-badge" [ngClass]="getStateClass(instance.state)">
+                        <fa-icon [icon]="getStateIcon(instance.state)"></fa-icon>
+                        {{ getStateLabel(instance.state) }}
+                      </span>
+                    </td>
+                    <td class="id-cell">
+                      <a [routerLink]="['/cockpit/processes/instance', instance.id]" class="instance-link">
+                        {{ instance.id }}
+                      </a>
+                      <span class="super-process-link" *ngIf="instance.superProcessInstanceId">
+                        <fa-icon [icon]="faHistory" [title]="'cockpit.processes.hasParent' | translate"></fa-icon>
+                      </span>
+                    </td>
+                    <td>{{ instance.businessKey || '-' }}</td>
+                    <td>{{ formatDate(instance.startTime) }}</td>
+                    <td>{{ formatDate(instance.endTime!) }}</td>
+                    <td *ngIf="processInstances[0]?.tenantId">{{ instance.tenantId || '-' }}</td>
+                    <td>
+                      <a
+                        [routerLink]="['/cockpit/processes/instance', instance.id]"
+                        class="action-link"
+                        [title]="'cockpit.processes.viewDetails' | translate"
+                      >
+                        <fa-icon [icon]="faEye"></fa-icon>
+                      </a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <!-- Loading state -->
+              <div class="loading-state" *ngIf="loading">
+                <fa-icon [icon]="faSpinner" animation="spin"></fa-icon>
+                <span>{{ 'common.loading' | translate }}</span>
+              </div>
+
+              <!-- Empty state -->
+              <div class="empty-state" *ngIf="!loading && processInstances.length === 0">
+                <p>{{ 'cockpit.processes.noProcessInstances' | translate }}</p>
+              </div>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination" *ngIf="totalPages > 1">
+              <button
+                class="pagination-btn"
+                [disabled]="currentPage === 1"
+                (click)="onPageChange(1)"
+                [title]="'cockpit.pagination.first' | translate"
+              >
+                <fa-icon [icon]="faAngleDoubleLeft"></fa-icon>
+              </button>
+
+              <button
+                class="pagination-btn"
+                [disabled]="currentPage === 1"
+                (click)="onPageChange(currentPage - 1)"
+                [title]="'cockpit.pagination.previous' | translate"
+              >
+                <fa-icon [icon]="faChevronLeft"></fa-icon>
+              </button>
+
+              <div class="page-numbers">
+                <button
+                  *ngFor="let page of pageNumbers"
+                  class="page-number"
+                  [class.active]="page === currentPage"
+                  (click)="onPageChange(page)"
+                >
+                  {{ page }}
+                </button>
+              </div>
+
+              <button
+                class="pagination-btn"
+                [disabled]="currentPage === totalPages"
+                (click)="onPageChange(currentPage + 1)"
+                [title]="'cockpit.pagination.next' | translate"
+              >
+                <fa-icon [icon]="faChevronRight"></fa-icon>
+              </button>
+
+              <button
+                class="pagination-btn"
+                [disabled]="currentPage === totalPages"
+                (click)="onPageChange(totalPages)"
+                [title]="'cockpit.pagination.last' | translate"
+              >
+                <fa-icon [icon]="faAngleDoubleRight"></fa-icon>
+              </button>
+
+              <span class="pagination-info">
+                {{ 'cockpit.pagination.page' | translate }} {{ currentPage }}
+                {{ 'cockpit.pagination.of' | translate }} {{ totalPages }}
+              </span>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

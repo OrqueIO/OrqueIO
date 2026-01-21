@@ -1,0 +1,235 @@
+:host {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 200px;
+}
+
+.bpmn-viewer-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 200px;
+  background: #fafafa;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.bpmn-canvas {
+  width: 100%;
+  height: 100%;
+  min-height: 200px;
+}
+
+/* Zoom controls */
+.zoom-controls {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: #fff;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  padding: 4px;
+}
+
+.zoom-btn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 4px;
+  font-size: 18px;
+  font-weight: 500;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  padding: 0;
+  margin: 0;
+  line-height: 1;
+}
+
+.zoom-btn svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.zoom-btn:hover {
+  background: #f3f4f6;
+  border-color: #d1d5db;
+}
+
+.zoom-btn:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
+}
+
+.zoom-btn:active {
+  background: #e5e7eb;
+}
+
+/* Loading overlay */
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.9);
+  z-index: 5;
+  gap: 12px;
+  color: #6b7280;
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #e5e7eb;
+  border-top-color: #667eea;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Error overlay */
+.error-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.95);
+  z-index: 5;
+  gap: 12px;
+  color: #dc2626;
+}
+
+.error-icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fee2e2;
+  border-radius: 50%;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+/* ========================================
+   BPMN Element Markers & Highlights
+   ======================================== */
+
+/* Running activity marker (green animated border) */
+:host ::ng-deep .running .djs-visual > :nth-child(1) {
+  stroke: #22c55e !important;
+  stroke-width: 3px !important;
+}
+
+:host ::ng-deep .running .djs-outline {
+  stroke: #22c55e !important;
+  stroke-width: 2px !important;
+  stroke-dasharray: 4 2;
+  animation: running-dash 0.5s linear infinite;
+}
+
+@keyframes running-dash {
+  to {
+    stroke-dashoffset: -6;
+  }
+}
+
+/* Highlighted activity (blue border) */
+:host ::ng-deep .highlight .djs-visual > :nth-child(1) {
+  stroke: #3b82f6 !important;
+  stroke-width: 2px !important;
+}
+
+/* Selected activity (purple border with glow) */
+:host ::ng-deep .selected .djs-visual > :nth-child(1) {
+  stroke: #8b5cf6 !important;
+  stroke-width: 3px !important;
+}
+
+:host ::ng-deep .selected .djs-outline {
+  stroke: #8b5cf6 !important;
+  stroke-width: 2px !important;
+  opacity: 0.5;
+}
+
+/* ========================================
+   Activity Badges (Overlays)
+   ======================================== */
+
+:host ::ng-deep .bpmn-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  pointer-events: auto;
+  cursor: default;
+}
+
+:host ::ng-deep .bpmn-badge span {
+  line-height: 1;
+}
+
+/* Instance count badge (blue) */
+:host ::ng-deep .bpmn-badge-instances {
+  background: #3b82f6;
+}
+
+/* Incident count badge (red) */
+:host ::ng-deep .bpmn-badge-incidents {
+  background: #ef4444;
+}
+
+/* ========================================
+   Hide BPMN.js default elements
+   ======================================== */
+
+:host ::ng-deep .djs-palette {
+  display: none;
+}
+
+:host ::ng-deep .bjs-powered-by {
+  display: none;
+}
+
+/* ========================================
+   Hover state for clickable elements
+   ======================================== */
+
+:host ::ng-deep .djs-element:not(.djs-connection):hover .djs-outline {
+  visibility: visible !important;
+  stroke: #667eea !important;
+  stroke-width: 1px !important;
+  opacity: 0.5;
+}
