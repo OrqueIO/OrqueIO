@@ -97,21 +97,21 @@ export class SystemDashboardComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(engines => {
         this.engines = engines;
-        this.cdr.detectChanges();
+        this.cdr.markForCheck();
       });
 
     this.store.select(SystemSelectors.selectCurrentEngine)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(engine => {
         this.currentEngine = engine;
-        this.cdr.detectChanges();
+        this.cdr.markForCheck();
       });
 
     this.store.select(SystemSelectors.selectLoading)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(loading => {
         this.loading = loading;
-        this.cdr.detectChanges();
+        this.cdr.markForCheck();
       });
   }
 
@@ -139,7 +139,7 @@ export class SystemDashboardComponent implements OnInit {
     } else {
       this.activeSection = 'general';
     }
-    this.cdr.detectChanges();
+    this.cdr.markForCheck();
   }
 
   onEngineChange(event: Event): void {

@@ -62,21 +62,21 @@ export class SystemDiagnosticsComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(data => {
         this.telemetryData = data;
-        this.cdr.detectChanges();
+        this.cdr.markForCheck();
       });
 
     this.store.select(SystemSelectors.selectTelemetryLoading)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(loading => {
         this.loading = loading;
-        this.cdr.detectChanges();
+        this.cdr.markForCheck();
       });
 
     this.store.select(SystemSelectors.selectTelemetryError)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(error => {
         this.error = error;
-        this.cdr.detectChanges();
+        this.cdr.markForCheck();
       });
   }
 
@@ -90,7 +90,7 @@ export class SystemDiagnosticsComponent implements OnInit {
     } else {
       this.expandedSections.add(section);
     }
-    this.cdr.detectChanges();
+    this.cdr.markForCheck();
   }
 
   isSectionExpanded(section: string): boolean {

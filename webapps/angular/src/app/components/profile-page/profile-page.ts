@@ -83,7 +83,7 @@ export class ProfilePageComponent implements OnInit {
 
     this.passwordForm = this.fb.group({
       currentPassword: ['', Validators.required],
-      newPassword: ['', [Validators.required, Validators.minLength(8)]],
+      newPassword: ['', Validators.required],
       confirmPassword: ['', Validators.required]
     }, { validators: this.passwordMatchValidator });
   }
@@ -138,7 +138,12 @@ export class ProfilePageComponent implements OnInit {
     if (!this.profileForm.valid || this.savingProfile) return;
 
     this.savingProfile = true;
-    const updates = this.profileForm.value;
+    const updates = {
+      id: this.userId,
+      firstName: this.profileForm.value.firstName || '',
+      lastName: this.profileForm.value.lastName || '',
+      email: this.profileForm.value.email || ''
+    };
 
     this.userService.updateUserProfile(this.userId, updates)
       .pipe(takeUntilDestroyed(this.destroyRef))

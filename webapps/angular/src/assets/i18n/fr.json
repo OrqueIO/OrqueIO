@@ -816,6 +816,7 @@
   "AUTHORIZATION_DELETE": "Supprimer",
   "AUTHORIZATION_DELETE_TITLE": "Supprimer l'autorisation",
   "AUTHORIZATION_CONFIRM_DELETE_MESSAGE": "Êtes-vous sûr de vouloir supprimer cette autorisation ? Cette action est irréversible.",
+  "AUTHORIZATION_DUPLICATE_ERROR": "Une autorisation avec cette combinaison (type, identité, ressource) existe déjà.",
   "AUTHORIZATION_NO_AUTHORIZATIONS": "Aucune autorisation trouvée pour ce type de ressource.",
 
   "AUTHORIZATION_TYPE": "Type",

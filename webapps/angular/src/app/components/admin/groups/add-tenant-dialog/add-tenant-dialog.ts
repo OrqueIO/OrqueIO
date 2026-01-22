@@ -1,8 +1,9 @@
-import { Component, Input, Output, EventEmitter, OnInit, inject, DestroyRef, HostListener } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, inject, DestroyRef, HostListener, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
+import { TranslateService } from '../../../../i18n/translate.service';
 import { TenantService } from '../../../../services/admin/tenant.service';
 import { NotificationsService } from '../../../../services/notifications.service';
 import { Tenant } from '../../../../models/admin/tenant.model';
@@ -16,8 +17,10 @@ import { Tenant } from '../../../../models/admin/tenant.model';
 })
 export class AddTenantDialogComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
+  private cdr = inject(ChangeDetectorRef);
   private tenantService = inject(TenantService);
   private notifications = inject(NotificationsService);
+  private translateService = inject(TranslateService);
 
   @Input() groupId!: string;
   @Input() excludeTenantIds: string[] = [];
@@ -51,9 +54,11 @@ export class AddTenantDialogComponent implements OnInit {
           this.availableTenants = tenants.filter(t => !this.excludeTenantIds.includes(t.id));
           this.filteredTenants = [...this.availableTenants];
           this.loading = false;
+          this.cdr.markForCheck();
         },
         error: () => {
           this.loading = false;
+          this.cdr.markForCheck();
         }
       });
   }
@@ -69,6 +74,15 @@ export class AddTenantDialogComponent implements OnInit {
   onSubmit(): void {
     if (!this.selectedTenantId || this.saving) return;
 
+    // Double-check for duplicate membership (defensive check)
+    if (this.excludeTenantIds.includes(this.selectedTenantId)) {
+      this.notifications.addError({
+        status: this.translateService.instant('admin.groups.tenantAddError'),
+        message: this.translateService.instant('admin.groups.tenantAlreadyAssigned') || 'Group is already assigned to this tenant'
+      });
+      return;
+    }
+
     this.saving = true;
 
     this.tenantService.addGroupToTenant(this.selectedTenantId, this.groupId)
@@ -80,12 +94,25 @@ export class AddTenantDialogComponent implements OnInit {
         },
         error: (err) => {
           this.saving = false;
+          this.cdr.markForCheck();
           this.notifications.addError({
-            status: 'admin.groups.tenantAddError',
-            message: err?.error?.message || 'Failed to add group to tenant'
+            status: this.translateService.instant('admin.groups.tenantAddError'),
+            message: this.extractErrorMessage(err) || this.translateService.instant('admin.groups.tenantAddError')
           });
         }
       });
+  }
+
+  /**
+   * Extract error message from API error response
+   */
+  private extractErrorMessage(err: any): string | null {
+    if (!err) return null;
+    if (err.error?.message) return err.error.message;
+    if (err.error?.error?.message) return err.error.error.message;
+    if (err.message) return err.message;
+    if (typeof err.error === 'string') return err.error;
+    return null;
   }
 
   onCancel(): void {
