@@ -232,11 +232,15 @@ export interface CreateAuthorizationRequest {
 
 /**
  * Request to update an authorization
+ * Note: Camunda API requires the full authorization object for updates
+ * Only userId OR groupId should be provided, not both
  */
 export interface UpdateAuthorizationRequest {
-  type?: AuthorizationType;
-  resourceId?: string;
-  permissions?: string[];
+  id: string;
+  type: AuthorizationType;
+  resourceType: ResourceType;
+  resourceId: string;
+  permissions: string[];
   userId?: string;
   groupId?: string;
 }
@@ -300,4 +304,16 @@ export function getIdentityInfo(auth: Authorization): { type: IdentityType; id: 
     return { type: 'group', id: auth.groupId };
   }
   return { type: 'user', id: '' };
+}
+
+/**
+ * Normalize authorization data from API response
+ * Ensures type and resourceType are numbers (API might return strings)
+ */
+export function normalizeAuthorization(auth: Authorization): Authorization {
+  return {
+    ...auth,
+    type: typeof auth.type === 'string' ? parseInt(auth.type, 10) as AuthorizationType : auth.type,
+    resourceType: typeof auth.resourceType === 'string' ? parseInt(auth.resourceType, 10) as ResourceType : auth.resourceType
+  };
 }

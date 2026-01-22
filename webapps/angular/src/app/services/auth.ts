@@ -271,7 +271,7 @@ export class AuthService {
         }
 
         return this.http.put<void>(
-          `/orqueio/api/user/${userId}/credentials`,
+          `${this.engineUrl}/${this.engine}/user/${userId}/credentials`,
           {
             authenticatedUserPassword: currentPassword,
             password: newPassword

@@ -1,11 +1,12 @@
 import { Component, Input, Output, EventEmitter, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { TranslatePipe } from '../../i18n/translate.pipe';
 
 @Component({
   selector: 'app-confirm-dialog',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, TranslatePipe],
   templateUrl: './confirm-dialog.html',
   styleUrls: ['./confirm-dialog.css']
 })

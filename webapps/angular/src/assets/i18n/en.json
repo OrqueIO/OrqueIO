@@ -948,6 +948,7 @@
   "AUTHORIZATION_DELETE": "Delete",
   "AUTHORIZATION_DELETE_TITLE": "Delete Authorization",
   "AUTHORIZATION_CONFIRM_DELETE_MESSAGE": "Are you sure you want to delete this authorization? This action cannot be undone.",
+  "AUTHORIZATION_DUPLICATE_ERROR": "An authorization with this combination (type, identity, resource) already exists.",
   "AUTHORIZATION_NO_AUTHORIZATIONS": "No authorizations found for this resource type.",
 
   "AUTHORIZATION_TYPE": "Type",

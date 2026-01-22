@@ -331,3 +331,70 @@
 .btn-primary:hover:not(:disabled) {
   background-color: #1d4ed8;
 }
+
+/* Autocomplete styles */
+.autocomplete-container {
+  position: relative;
+  flex: 1;
+}
+
+.autocomplete-loading {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.spinner-small {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #e5e7eb;
+  border-top-color: #2563eb;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.autocomplete-suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: 4px;
+  background: white;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  max-height: 200px;
+  overflow-y: auto;
+  list-style: none;
+  padding: 4px 0;
+  margin: 4px 0 0 0;
+}
+
+.suggestion-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #374151;
+  transition: background-color 0.1s ease;
+}
+
+.suggestion-item:hover {
+  background-color: #f3f4f6;
+}
+
+.suggestion-icon {
+  color: #6b7280;
+  font-size: 14px;
+}

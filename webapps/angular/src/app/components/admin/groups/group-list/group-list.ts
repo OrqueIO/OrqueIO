@@ -47,6 +47,7 @@ export class GroupListComponent implements OnInit {
   faPlus = faPlus;
   faPen = faPen;
 
+  allGroups: Group[] = [];
   groups: Group[] = [];
   loading: boolean = false;
 
@@ -86,35 +87,46 @@ export class GroupListComponent implements OnInit {
     this.loading = true;
 
     const queryParams: GroupQueryParams = {
-      firstResult: (this.currentPage - 1) * this.pageSize,
-      maxResults: this.pageSize,
+      maxResults: 1000,
       sortBy: this.sortBy,
       sortOrder: this.sortOrder
     };
-
-    // Add search filter if needed
-    if (this.searchTerm) {
-      queryParams.id = this.searchTerm;
-    }
 
     this.groupService.getGroupsWithCount(queryParams)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: response => {
-          this.groups = response.data;
-          this.totalGroups = response.total;
+          this.allGroups = response.data;
+          this.applyFilter();
           this.loading = false;
-          this.cdr.detectChanges();
+          this.cdr.markForCheck();
         },
         error: () => {
           this.loading = false;
-          this.cdr.detectChanges();
+          this.cdr.markForCheck();
           this.notifications.addError({
             status: this.translateService.instant('admin.groups.loadError'),
             message: this.translateService.instant('admin.groups.loadError')
           });
         }
       });
+  }
+
+  private applyFilter(): void {
+    let filtered = this.allGroups;
+
+    if (this.searchTerm) {
+      const term = this.searchTerm.toLowerCase();
+      filtered = this.allGroups.filter(group =>
+        group.id.toLowerCase().includes(term) ||
+        (group.name && group.name.toLowerCase().includes(term)) ||
+        (group.type && group.type.toLowerCase().includes(term))
+      );
+    }
+
+    this.totalGroups = filtered.length;
+    const start = (this.currentPage - 1) * this.pageSize;
+    this.groups = filtered.slice(start, start + this.pageSize);
   }
 
   onSort(event: SortEvent): void {
@@ -126,13 +138,15 @@ export class GroupListComponent implements OnInit {
   onPageChange(event: PageChangeEvent): void {
     this.currentPage = event.current;
     this.pageSize = event.size;
-    this.loadGroups();
+    this.applyFilter();
+    this.cdr.markForCheck();
   }
 
   onSearch(term: string): void {
     this.searchTerm = term;
     this.currentPage = 1;
-    this.loadGroups();
+    this.applyFilter();
+    this.cdr.markForCheck();
   }
 
   onRowClick(group: Group): void {

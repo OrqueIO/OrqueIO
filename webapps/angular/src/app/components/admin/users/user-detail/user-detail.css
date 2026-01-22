@@ -1,8 +1,12 @@
+/* Import Roboto font */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap');
+
 /* Host */
 :host {
   display: block;
   height: 100%;
   overflow: auto;
+  font-family: 'Roboto', sans-serif;
 }
 
 /* Admin Layout */
@@ -132,6 +136,7 @@ app-admin-page-header {
   transition: all 0.2s ease;
   text-align: left;
   color: var(--text-secondary, #6b7280);
+  font-family: 'Roboto', sans-serif;
   font-size: 14px;
   font-weight: 500;
 }

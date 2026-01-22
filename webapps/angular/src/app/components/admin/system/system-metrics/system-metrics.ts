@@ -109,7 +109,7 @@ export class SystemMetricsComponent implements OnInit, AfterViewInit, OnDestroy 
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(metrics => {
         this.monthlyMetrics = metrics;
-        this.cdr.detectChanges();
+        this.cdr.markForCheck();
         this.updateChart();
       });
 
@@ -117,42 +117,42 @@ export class SystemMetricsComponent implements OnInit, AfterViewInit, OnDestroy 
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(metrics => {
         this.annualMetrics = metrics;
-        this.cdr.detectChanges();
+        this.cdr.markForCheck();
       });
 
     this.store.select(SystemSelectors.selectMonthlyLoadingState)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(state => {
         this.monthlyLoadingState = state;
-        this.cdr.detectChanges();
+        this.cdr.markForCheck();
       });
 
     this.store.select(SystemSelectors.selectAnnualLoadingState)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(state => {
         this.annualLoadingState = state;
-        this.cdr.detectChanges();
+        this.cdr.markForCheck();
       });
 
     this.store.select(SystemSelectors.selectMonthlyError)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(error => {
         this.monthlyError = error;
-        this.cdr.detectChanges();
+        this.cdr.markForCheck();
       });
 
     this.store.select(SystemSelectors.selectAnnualError)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(error => {
         this.annualError = error;
-        this.cdr.detectChanges();
+        this.cdr.markForCheck();
       });
 
     this.store.select(SystemSelectors.selectTelemetryData)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(data => {
         this.telemetryData = data;
-        this.cdr.detectChanges();
+        this.cdr.markForCheck();
       });
 
     this.store.select(SystemSelectors.selectMonthlyMetricsForChart)
