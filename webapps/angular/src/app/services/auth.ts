@@ -47,6 +47,10 @@ export class AuthService {
   private authEventsSubject = new Subject<AuthEvent>();
   public authEvents$ = this.authEventsSubject.asObservable();
 
+  // Cross-tab synchronization channel
+  private authChannel: BroadcastChannel | null = null;
+  private readonly AUTH_CHANNEL_NAME = 'orqueio_auth_sync';
+
   private readonly baseUrl = '/orqueio/api/admin/auth/user';
   private readonly engineUrl = '/orqueio/api/engine/engine';
   private readonly appName = 'welcome';
@@ -55,7 +59,90 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     private router: Router
-  ) {}
+  ) {
+    this.initCrossTabSync();
+  }
+
+  /**
+   * Initialize cross-tab authentication synchronization.
+   * When a user logs out in one tab, all other tabs are notified and redirected to login.
+   */
+  private initCrossTabSync(): void {
+    // Check if BroadcastChannel is supported
+    if (typeof BroadcastChannel !== 'undefined') {
+      this.authChannel = new BroadcastChannel(this.AUTH_CHANNEL_NAME);
+
+      this.authChannel.onmessage = (event) => {
+        const { type, data } = event.data;
+
+        if (type === 'logout' || type === 'session_expired') {
+          console.log(`Received ${type} event from another tab`);
+          // Clear local authentication state without making API call
+          this.authenticationSubject.next(null);
+          this.authCheckPending = null;
+          this.emit('authentication.logout.success');
+          // Redirect to login page if not already there
+          if (!this.router.url.startsWith('/login')) {
+            this.router.navigate(['/login']);
+          }
+        } else if (type === 'login' && data) {
+          console.log('Received login event from another tab');
+          // Update local authentication state
+          this.authenticationSubject.next(data);
+          this.emit('authentication.login.success', data);
+        }
+      };
+    } else {
+      // Fallback to localStorage for older browsers
+      window.addEventListener('storage', (event) => {
+        if (event.key === this.AUTH_CHANNEL_NAME) {
+          const message = event.newValue ? JSON.parse(event.newValue) : null;
+          if (message?.type === 'logout' || message?.type === 'session_expired') {
+            console.log(`Received ${message.type} event from another tab (localStorage)`);
+            this.authenticationSubject.next(null);
+            this.authCheckPending = null;
+            this.emit('authentication.logout.success');
+            if (!this.router.url.startsWith('/login')) {
+              this.router.navigate(['/login']);
+            }
+          }
+        }
+      });
+    }
+  }
+
+  /**
+   * Broadcast authentication event to other tabs.
+   */
+  private broadcastAuthEvent(type: 'login' | 'logout' | 'session_expired', data?: Authentication | null): void {
+    const message = { type, data, timestamp: Date.now() };
+
+    if (this.authChannel) {
+      this.authChannel.postMessage(message);
+    } else {
+      // Fallback to localStorage
+      localStorage.setItem(this.AUTH_CHANNEL_NAME, JSON.stringify(message));
+      // Clean up immediately (we just need the storage event to fire)
+      localStorage.removeItem(this.AUTH_CHANNEL_NAME);
+    }
+  }
+
+  /**
+   * Handle session expired event (401 error).
+   * Clears local state and notifies other tabs.
+   * Called by the error interceptor when a 401 is received.
+   */
+  handleSessionExpired(): void {
+    // Only broadcast if we were previously authenticated
+    if (this.currentAuthentication) {
+      console.log('Session expired, notifying other tabs');
+      this.authenticationSubject.next(null);
+      this.authCheckPending = null;
+      this.emit('authentication.login.required');
+      // Notify other tabs about session expiration
+      this.broadcastAuthEvent('session_expired');
+    }
+  }
 
   /**
    * Get CSRF token from cookie
@@ -126,6 +213,8 @@ export class AuthService {
         console.log('Authorized Apps:', authentication.authorizedApps);
         this.updateAuthentication(authentication);
         this.emit('authentication.login.success', authentication);
+        // Notify other tabs about login
+        this.broadcastAuthEvent('login', authentication);
       }),
       // Refresh CSRF token after successful login
       switchMap(authentication => {
@@ -168,6 +257,8 @@ export class AuthService {
       tap(() => {
         this.updateAuthentication(null);
         this.emit('authentication.logout.success');
+        // Notify other tabs about logout
+        this.broadcastAuthEvent('logout');
         this.router.navigate(['/login']);
       }),
       catchError(error => {
@@ -339,5 +430,120 @@ export class AuthService {
 
     console.log('Error message:', message);
     return message;
+  }
+
+  // ==================== SSO Methods ====================
+
+  private readonly RETURN_URL_KEY = 'orqueio_return_url';
+  private readonly SSO_LOGIN_KEY = 'orqueio_sso_login';
+
+  /**
+   * Saves the current or specified URL for post-login redirect.
+   * Used before redirecting to OAuth2 provider.
+   */
+  saveReturnUrl(url?: string): void {
+    const urlToSave = url || this.router.url;
+    if (urlToSave && urlToSave !== '/login' && !urlToSave.startsWith('/login?')) {
+      sessionStorage.setItem(this.RETURN_URL_KEY, urlToSave);
+    }
+  }
+
+  /**
+   * Retrieves and removes the saved return URL.
+   * Used after successful OAuth2 login.
+   */
+  consumeReturnUrl(): string {
+    const url = sessionStorage.getItem(this.RETURN_URL_KEY);
+    sessionStorage.removeItem(this.RETURN_URL_KEY);
+    return url || '/';
+  }
+
+  /**
+   * Checks if there is a saved return URL.
+   */
+  hasReturnUrl(): boolean {
+    return sessionStorage.getItem(this.RETURN_URL_KEY) !== null;
+  }
+
+  /**
+   * Performs SSO logout by redirecting to the backend logout endpoint.
+   * This triggers OIDC back-channel logout if configured.
+   */
+  ssoLogout(): void {
+    this.updateAuthentication(null);
+    this.emit('authentication.logout.success');
+    // Notify other tabs about logout
+    this.broadcastAuthEvent('logout');
+    window.location.href = this.getSsoLogoutUrl();
+  }
+
+  /**
+   * Gets the SSO logout URL.
+   */
+  private getSsoLogoutUrl(): string {
+    const baseElement = document.querySelector('base');
+    const appRoot = baseElement?.getAttribute('app-root') || '/orqueio';
+    return appRoot + '/logout';
+  }
+
+  /**
+   * Checks if the current URL contains an OAuth2 error parameter.
+   */
+  checkOAuth2Error(): boolean {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('oauth2_error') === 'true';
+  }
+
+  /**
+   * Clears the OAuth2 error parameter from the URL.
+   */
+  clearOAuth2Error(): void {
+    if (this.checkOAuth2Error()) {
+      const cleanUrl = window.location.pathname + window.location.hash;
+      window.history.replaceState({}, document.title, cleanUrl);
+    }
+  }
+
+  /**
+   * Marks the current session as SSO-authenticated.
+   * Called when user logs in via OAuth2 provider.
+   */
+  markSsoLogin(): void {
+    sessionStorage.setItem(this.SSO_LOGIN_KEY, 'true');
+  }
+
+  /**
+   * Checks if the current session was authenticated via SSO.
+   */
+  isSsoSession(): boolean {
+    return sessionStorage.getItem(this.SSO_LOGIN_KEY) === 'true';
+  }
+
+  /**
+   * Clears the SSO login marker.
+   * Called during logout.
+   */
+  clearSsoMarker(): void {
+    sessionStorage.removeItem(this.SSO_LOGIN_KEY);
+  }
+
+  /**
+   * Smart logout that automatically chooses between SSO and regular logout.
+   * - If session was authenticated via SSO, performs SSO logout (redirect to /logout)
+   * - Otherwise, performs regular REST logout
+   */
+  smartLogout(): Observable<void> {
+    if (this.isSsoSession()) {
+      // SSO logout - redirect to backend logout endpoint
+      this.clearSsoMarker();
+      this.ssoLogout();
+      // Return an observable that never completes since we're redirecting
+      return new Observable<void>();
+    } else {
+      // Regular logout via REST API
+      return this.logout().pipe(
+        tap(() => this.clearSsoMarker())
+      );
+    }
   }
 }

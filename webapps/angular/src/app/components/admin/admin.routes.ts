@@ -20,22 +20,22 @@ export const adminRoutes: Routes = [
     component: AdminLayoutComponent,
     canActivate: [authGuard],
     children: [
-      { path: '', component: AdminDashboardComponent },
-      { path: 'users', component: UserListComponent },
-      { path: 'users/:id', component: UserDetailComponent },
-      { path: 'groups', component: GroupListComponent },
-      { path: 'groups/:id', component: GroupDetailComponent },
-      { path: 'tenants', component: TenantListComponent },
-      { path: 'tenants/:id', component: TenantDetailComponent },
-      { path: 'authorizations', component: AuthorizationListComponent },
+      { path: '', component: AdminDashboardComponent, title: 'PAGE_TITLE_ADMIN' },
+      { path: 'users', component: UserListComponent, title: 'PAGE_TITLE_ADMIN_USERS' },
+      { path: 'users/:id', component: UserDetailComponent, title: 'PAGE_TITLE_ADMIN_USER_DETAIL' },
+      { path: 'groups', component: GroupListComponent, title: 'PAGE_TITLE_ADMIN_GROUPS' },
+      { path: 'groups/:id', component: GroupDetailComponent, title: 'PAGE_TITLE_ADMIN_GROUP_DETAIL' },
+      { path: 'tenants', component: TenantListComponent, title: 'PAGE_TITLE_ADMIN_TENANTS' },
+      { path: 'tenants/:id', component: TenantDetailComponent, title: 'PAGE_TITLE_ADMIN_TENANT_DETAIL' },
+      { path: 'authorizations', component: AuthorizationListComponent, title: 'PAGE_TITLE_ADMIN_AUTHORIZATIONS' },
       {
         path: 'system',
         component: SystemDashboardComponent,
         children: [
           { path: '', redirectTo: 'general', pathMatch: 'full' },
-          { path: 'general', component: SystemGeneralComponent },
-          { path: 'metrics', component: SystemMetricsComponent },
-          { path: 'diagnostics', component: SystemDiagnosticsComponent }
+          { path: 'general', component: SystemGeneralComponent, title: 'PAGE_TITLE_ADMIN_SYSTEM_GENERAL' },
+          { path: 'metrics', component: SystemMetricsComponent, title: 'PAGE_TITLE_ADMIN_SYSTEM_METRICS' },
+          { path: 'diagnostics', component: SystemDiagnosticsComponent, title: 'PAGE_TITLE_ADMIN_SYSTEM_DIAGNOSTICS' }
         ]
       }
     ]

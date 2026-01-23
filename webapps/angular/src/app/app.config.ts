@@ -1,5 +1,5 @@
 import { ApplicationConfig, provideBrowserGlobalErrorListeners, APP_INITIALIZER, isDevMode } from '@angular/core';
-import { provideRouter, withRouterConfig } from '@angular/router';
+import { provideRouter, withRouterConfig, TitleStrategy } from '@angular/router';
 import { provideHttpClient, withXsrfConfiguration, withInterceptors } from '@angular/common/http';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideStore } from '@ngrx/store';
@@ -9,6 +9,7 @@ import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { routes } from './app.routes';
 import { TranslateService } from './i18n/translate.service';
 import { errorInterceptor } from './interceptors/error.interceptor';
+import { PageTitleStrategy } from './services/page-title.strategy';
 
 // Admin State
 import { adminReducers } from './store/admin';
@@ -83,6 +84,10 @@ export const appConfig: ApplicationConfig = {
       useFactory: initializeTranslations,
       deps: [TranslateService],
       multi: true
+    },
+    {
+      provide: TitleStrategy,
+      useClass: PageTitleStrategy
     }
   ]
 };
