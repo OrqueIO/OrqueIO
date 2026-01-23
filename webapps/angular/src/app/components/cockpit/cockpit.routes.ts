@@ -16,16 +16,16 @@ export const cockpitRoutes: Routes = [
     path: 'cockpit',
     canActivate: [authGuard],
     children: [
-      { path: '', component: CockpitDashboardComponent },
-      { path: 'processes', component: ProcessDefinitionsComponent },
-      { path: 'processes/:key/instances', component: ProcessListComponent },
-      { path: 'processes/instance/:id', component: ProcessDetailComponent },
-      { path: 'decisions', component: DecisionListComponent },
-      { path: 'decisions/:id', component: DecisionDetailComponent },
-      { path: 'decision-instance/:id', component: DecisionInstanceComponent },
-      { path: 'tasks', component: TaskDashboardComponent },
-      { path: 'batch', component: BatchPageComponent },
-      { path: 'deployments', component: DeploymentListComponent }
+      { path: '', component: CockpitDashboardComponent, title: 'PAGE_TITLE_COCKPIT' },
+      { path: 'processes', component: ProcessDefinitionsComponent, title: 'PAGE_TITLE_COCKPIT_PROCESSES' },
+      { path: 'processes/:key/instances', component: ProcessListComponent, title: 'PAGE_TITLE_COCKPIT_PROCESS_INSTANCES' },
+      { path: 'processes/instance/:id', component: ProcessDetailComponent, title: 'PAGE_TITLE_COCKPIT_PROCESS_DETAIL' },
+      { path: 'decisions', component: DecisionListComponent, title: 'PAGE_TITLE_COCKPIT_DECISIONS' },
+      { path: 'decisions/:id', component: DecisionDetailComponent, title: 'PAGE_TITLE_COCKPIT_DECISION_DETAIL' },
+      { path: 'decision-instance/:id', component: DecisionInstanceComponent, title: 'PAGE_TITLE_COCKPIT_DECISION_INSTANCE' },
+      { path: 'tasks', component: TaskDashboardComponent, title: 'PAGE_TITLE_COCKPIT_TASKS' },
+      { path: 'batch', component: BatchPageComponent, title: 'PAGE_TITLE_COCKPIT_BATCH' },
+      { path: 'deployments', component: DeploymentListComponent, title: 'PAGE_TITLE_COCKPIT_DEPLOYMENTS' }
     ]
   }
 ];

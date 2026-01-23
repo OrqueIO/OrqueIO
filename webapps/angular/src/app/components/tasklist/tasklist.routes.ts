@@ -5,16 +5,16 @@ export const TASKLIST_ROUTES: Routes = [
   {
     path: '',
     component: TasklistLayoutComponent,
-    title: 'Tasklist'
+    title: 'PAGE_TITLE_TASKLIST'
   },
   {
     path: ':filterId',
     component: TasklistLayoutComponent,
-    title: 'Tasklist'
+    title: 'PAGE_TITLE_TASKLIST'
   },
   {
     path: ':filterId/:taskId',
     component: TasklistLayoutComponent,
-    title: 'Tasklist'
+    title: 'PAGE_TITLE_TASKLIST'
   }
 ];

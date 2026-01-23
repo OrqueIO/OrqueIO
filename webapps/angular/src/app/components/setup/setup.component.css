@@ -1,10 +1,26 @@
+/*
+ * Copyright 2026 OrqueIO (https://www.orqueio.io/).
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at:
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 :host {
   display: flex;
   flex: 1;
 }
 
 /* Page wrapper with centered card */
-.login-page {
+.setup-page {
   flex: 1;
   display: flex;
   align-items: center;
@@ -17,7 +33,7 @@
 }
 
 /* Main card container */
-.login-card {
+.setup-card {
   display: flex;
   width: 100%;
   max-width: 1000px;
@@ -30,7 +46,7 @@
 }
 
 /* Left panel - Branding */
-.login-branding {
+.setup-branding {
   flex: 0 0 38%;
   background: linear-gradient(145deg, #1e3a5f 0%, #0d2137 100%);
   display: flex;
@@ -99,86 +115,61 @@
 }
 
 /* Right panel - Form */
-.login-form-panel {
+.setup-form-panel {
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
   padding: 2.5rem 2rem 1.5rem 2rem;
   overflow-y: auto;
   max-height: 85vh;
 }
 
 /* Form header */
-.login-header {
+.setup-header {
   text-align: center;
-  margin-bottom: 2.5rem;
+  margin-bottom: 0.75rem;
 }
 
-.login-title {
-  font-size: 1.75rem;
+.setup-title {
+  font-size: 1.25rem;
   font-weight: 600;
   color: #1f2937;
-  margin: 0 0 0.5rem 0;
+  margin: 0 0 0.25rem 0;
 }
 
-.login-subtitle {
+.setup-subtitle {
   font-size: 0.8rem;
   color: #6b7280;
   margin: 0;
 }
 
-/* Message area - reserves space for error/info messages */
-.message-area {
-  min-height: 4.5rem;
+/* Form sections */
+.form-section {
   margin-bottom: 0.5rem;
 }
 
-/* First Login Info Box */
-.first-login-box {
-  position: relative;
-  background: #eff6ff;
-  border: 1px solid #bfdbfe;
-  border-radius: 6px;
-  padding: 0.75rem 1rem;
+.section-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.4rem;
 }
 
-.first-login-box .close-btn {
-  position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-  background: none;
-  border: none;
-  font-size: 1rem;
-  color: #3b82f6;
-  cursor: pointer;
-  padding: 0.25rem;
-  line-height: 1;
-  border-radius: 2px;
-  transition: color 0.15s;
+/* Form row for horizontal inputs */
+.form-row {
+  display: flex;
+  gap: 0.6rem;
 }
 
-.first-login-box .close-btn:hover {
-  color: #1d4ed8;
-}
-
-.first-login-heading {
-  display: block;
-  color: #1e40af;
-  font-size: 0.85rem;
-  margin-bottom: 0.25rem;
-}
-
-.first-login-message {
-  color: #1e3a8a;
-  font-size: 0.8rem;
-  margin: 0;
-  line-height: 1.4;
+.form-row .form-group {
+  flex: 1;
 }
 
 /* Form groups */
 .form-group {
-  margin-bottom: 1rem;
+  margin-bottom: 0.15rem;
 }
 
 .form-label {
@@ -186,13 +177,13 @@
   font-size: 0.85rem;
   font-weight: 500;
   color: #374151;
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.2rem;
 }
 
 /* Form controls */
 .form-input {
   width: 100%;
-  padding: 0.6rem 0.75rem;
+  padding: 0.45rem 0.6rem;
   border: 1px solid #e5e7eb;
   border-radius: 4px;
   background-color: #ffffff;
@@ -272,12 +263,11 @@
   height: 16px;
 }
 
-/* Error messages - fixed height to prevent layout shift */
+/* Error messages */
 .error-space {
-  height: 1.25rem;
+  min-height: 1.1rem;
   display: flex;
   align-items: flex-start;
-  overflow: hidden;
 }
 
 .error-message {
@@ -286,8 +276,7 @@
   gap: 0.25rem;
   color: #ef4444;
   font-size: 0.75rem;
-  margin-top: 0.2rem;
-  line-height: 1;
+  margin-top: 0.1rem;
 }
 
 .error-message svg {
@@ -298,48 +287,13 @@
   color: #6b7280;
 }
 
-/* Error box for login failures */
-.error-box {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.75rem;
-  background-color: #fef2f2;
-  border: 1px solid #fecaca;
-  border-radius: 6px;
-  padding: 0.75rem;
-}
-
-.error-box svg {
-  color: #ef4444;
-  flex-shrink: 0;
-  margin-top: 0.125rem;
-  width: 18px;
-  height: 18px;
-}
-
-.error-content {
-  flex: 1;
-}
-
-.error-title {
-  color: #991b1b;
-  font-weight: 600;
-  font-size: 0.85rem;
-  margin-bottom: 0.15rem;
-}
-
-.error-detail {
-  color: #b91c1c;
-  font-size: 0.8rem;
-}
-
 /* Submit button */
 .btn-submit {
   width: 100%;
   background: #2563eb;
   color: white;
   font-weight: 600;
-  padding: 0.75rem 1.25rem;
+  padding: 0.65rem 1.25rem;
   border: none;
   border-radius: 6px;
   display: flex;
@@ -348,8 +302,8 @@
   gap: 0.5rem;
   cursor: pointer;
   transition: background-color 0.15s ease, box-shadow 0.15s ease;
-  font-size: 0.95rem;
-  margin-top: 1rem;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
 }
 
 .btn-submit:hover:not(:disabled) {
@@ -381,108 +335,107 @@
   to { transform: rotate(360deg); }
 }
 
-/* Divider */
-.divider {
-  display: flex;
-  align-items: center;
-  margin: 1rem 0;
-}
-
-.divider::before,
-.divider::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background-color: #e5e7eb;
-}
-
-.divider span {
-  padding: 0 0.75rem;
-  font-size: 0.7rem;
-  color: #9ca3af;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-/* Social login buttons */
-.social-logins {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.5rem;
-}
-
-.social-logins .social-btn {
-  width: calc((100% - 1rem) / 3);
-}
-
-.social-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.35rem;
-  padding: 0.5rem 0.4rem;
-  border: 1px solid #e5e7eb;
-  border-radius: 4px;
-  background: #ffffff;
-  color: #374151;
-  font-size: 0.7rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.15s ease;
-  white-space: nowrap;
-}
-
-.social-btn svg {
-  flex-shrink: 0;
-  width: 16px;
-  height: 16px;
-}
-
-.social-btn:hover {
-  border-color: #f59e0b;
-  background-color: #fffbeb;
-}
-
-/* Signup link */
-.signup-link-container {
+/* Back to login link */
+.back-link-container {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 0.25rem;
-  margin-top: 1rem;
+  margin-top: 0.5rem;
 }
 
-.signup-text {
+.back-text {
   color: #6b7280;
   font-size: 0.85rem;
 }
 
-.signup-link {
+.back-link {
   color: #d97706;
   font-size: 0.85rem;
   font-weight: 600;
   text-decoration: none;
 }
 
-.signup-link:hover {
-  color: #b45309;
+.back-link:hover {
+  color: #d97706;
   text-decoration: underline;
 }
 
-.signup-link:focus {
+.back-link:focus {
   outline: 2px solid #2563eb;
   outline-offset: 2px;
   border-radius: 2px;
 }
 
+/* Success state */
+.setup-success {
+  text-align: center;
+  padding: 1.5rem 0;
+}
+
+.success-icon {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 1rem;
+  color: #10b981;
+  background: #ecfdf5;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.success-icon svg {
+  width: 30px;
+  height: 30px;
+}
+
+.success-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 0.5rem 0;
+}
+
+.success-message {
+  font-size: 0.85rem;
+  color: #6b7280;
+  margin: 0 0 1rem 0;
+  line-height: 1.4;
+}
+
+.btn-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #ffffff;
+  background: #2563eb;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.btn-action:hover {
+  background: #1d4ed8;
+}
+
+.btn-action svg {
+  width: 16px;
+  height: 16px;
+}
+
 /* Responsive - Tablet */
 @media screen and (max-width: 900px) {
-  .login-card {
+  .setup-card {
     max-width: 95%;
   }
 
-  .login-branding {
+  .setup-branding {
     flex: 0 0 40%;
     padding: 1.5rem;
   }
@@ -498,18 +451,17 @@
 
 /* Responsive - Mobile */
 @media screen and (max-width: 700px) {
-  .login-page {
+  .setup-page {
     padding: 1rem;
     align-items: flex-start;
   }
 
-  .login-card {
+  .setup-card {
     flex-direction: column;
     max-width: 100%;
-    min-height: auto;
   }
 
-  .login-branding {
+  .setup-branding {
     flex: 0 0 auto;
     padding: 1.5rem;
   }
@@ -518,7 +470,12 @@
     display: none;
   }
 
-  .login-form-panel {
+  .setup-form-panel {
     max-height: none;
+  }
+
+  .form-row {
+    flex-direction: column;
+    gap: 0;
   }
 }

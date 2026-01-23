@@ -3,6 +3,10 @@ import { CanActivateFn, Router } from '@angular/router';
 import { AuthService } from '../services/auth';
 import { map, take } from 'rxjs/operators';
 
+/**
+ * Guard that prevents authenticated users from accessing guest-only pages (like login).
+ * Also handles post-OAuth2 login redirection to the originally requested URL.
+ */
 export const guestGuard: CanActivateFn = () => {
   const authService = inject(AuthService);
   const router = inject(Router);
@@ -14,6 +18,15 @@ export const guestGuard: CanActivateFn = () => {
         console.log('GuestGuard: User not authenticated, access granted');
         return true;
       }
+
+      // User is authenticated - redirect to saved return URL or home
+      // This handles the post-OAuth2 login flow
+      if (authService.hasReturnUrl()) {
+        const returnUrl = authService.consumeReturnUrl();
+        console.log('GuestGuard: User authenticated, redirecting to saved URL:', returnUrl);
+        return router.createUrlTree([returnUrl]);
+      }
+
       console.log('GuestGuard: User authenticated, redirecting to home');
       return router.createUrlTree(['/']);
     })

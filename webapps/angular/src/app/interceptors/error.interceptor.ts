@@ -1,8 +1,16 @@
 import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
-import { inject } from '@angular/core';
+import { inject, Injector } from '@angular/core';
+import { Router } from '@angular/router';
 import { catchError, throwError } from 'rxjs';
+import { AuthService } from '../services/auth';
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
+  const injector = inject(Injector);
+
+  // Lazy inject Router and AuthService to avoid circular dependency during app initialization
+  const getRouter = () => injector.get(Router);
+  const getAuthService = () => injector.get(AuthService);
+
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
       let errorMessage = 'An error occurred';
@@ -17,6 +25,19 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
         switch (error.status) {
           case 401:
             errorMessage = serverMessage || 'Unauthorized access';
+            // Handle 401 - session expired or not authenticated
+            // Don't redirect if already on login page or if it's a login request
+            const router = getRouter();
+            const authService = getAuthService();
+            if (!req.url.includes('/login') && !router.url.startsWith('/login')) {
+              console.warn('Session expired or unauthorized, redirecting to login');
+              // Save current URL for redirect after login
+              authService.saveReturnUrl(router.url);
+              // Handle session expiration and notify other tabs
+              authService.handleSessionExpired();
+              // Redirect to login
+              router.navigate(['/login']);
+            }
             break;
           case 403:
             errorMessage = serverMessage || 'Access forbidden';

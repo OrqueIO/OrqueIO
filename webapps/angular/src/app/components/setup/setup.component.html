@@ -1,0 +1,315 @@
+<div class="setup-page">
+  <div class="setup-card">
+    <!-- Left panel - Branding -->
+    <aside class="setup-branding">
+      <div class="branding-content">
+        <img src="images/orqueio.png" alt="OrqueIO" class="branding-logo" />
+        <h1 class="branding-title">{{ 'SETUP_WELCOME' | translate }}</h1>
+        <p class="branding-subtitle">{{ 'SETUP_BRANDING_SUBTITLE' | translate }}</p>
+
+        <div class="branding-features">
+          <div class="feature-item">
+            <span class="feature-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                <polyline points="22 4 12 14.01 9 11.01"/>
+              </svg>
+            </span>
+            <span>{{ 'SETUP_FEATURE_1' | translate }}</span>
+          </div>
+          <div class="feature-item">
+            <span class="feature-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+              </svg>
+            </span>
+            <span>{{ 'SETUP_FEATURE_2' | translate }}</span>
+          </div>
+          <div class="feature-item">
+            <span class="feature-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                <path d="M2 17l10 5 10-5"/>
+                <path d="M2 12l10 5 10-5"/>
+              </svg>
+            </span>
+            <span>{{ 'SETUP_FEATURE_3' | translate }}</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Right panel - Form -->
+    <main class="setup-form-panel">
+
+      <!-- Success state after user creation -->
+      @if (status === 'SUCCESS') {
+        <div class="setup-success">
+          <div class="success-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+              <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+          </div>
+          <h3 class="success-title">{{ 'SETUP_USER_CREATED' | translate }}</h3>
+          <p class="success-message">{{ 'SETUP_USER_INITIAL' | translate }}</p>
+          <button type="button" class="btn-action" (click)="goToLogin()">
+            <span>{{ 'SETUP_USER_REDIRECT_2' | translate }}</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+              <polyline points="10 17 15 12 10 7"></polyline>
+              <line x1="15" y1="12" x2="3" y2="12"></line>
+            </svg>
+          </button>
+        </div>
+      }
+
+      <!-- Setup form -->
+      @if (status !== 'SUCCESS') {
+        <!-- Header -->
+        <div class="setup-header">
+          <h2 class="setup-title">{{ 'SETUP_SETUP' | translate }}</h2>
+          <p class="setup-subtitle">{{ 'SETUP_ADMIN_SUBTITLE' | translate }}</p>
+        </div>
+
+        <!-- Form -->
+        <form [formGroup]="setupForm" (ngSubmit)="onSubmit()">
+
+          <!-- Account Credentials Section -->
+          <div class="form-section">
+            <div class="section-title">{{ 'SETUP_USER_ACCOUNT' | translate }}</div>
+
+            <!-- User ID & Email in row -->
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="inputUserId">{{ 'SETUP_USER_ID' | translate }}</label>
+                <input id="inputUserId"
+                       type="text"
+                       formControlName="userId"
+                       class="form-input"
+                       [class.error]="userId?.invalid && userId?.touched"
+                       [placeholder]="'SETUP_USER_ID_PLACEHOLDER' | translate"
+                       autocomplete="username">
+                <div class="error-space">
+                  @if (userId?.invalid && userId?.touched) {
+                    <div class="error-message">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="12" y1="8" x2="12" y2="12"/>
+                        <line x1="12" y1="16" x2="12.01" y2="16"/>
+                      </svg>
+                      @if (userId?.errors?.['required']) {
+                        <span>{{ 'SETUP_USER_ID_REQUIRED' | translate }}</span>
+                      }
+                    </div>
+                  }
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="inputEmail">{{ 'SETUP_USER_EMAIL' | translate }}</label>
+                <input id="inputEmail"
+                       type="email"
+                       formControlName="email"
+                       class="form-input"
+                       [class.error]="email?.invalid && email?.touched"
+                       [placeholder]="'SETUP_USER_EMAIL_PLACEHOLDER' | translate"
+                       autocomplete="email">
+                <div class="error-space">
+                  @if (email?.invalid && email?.touched) {
+                    <div class="error-message">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="12" y1="8" x2="12" y2="12"/>
+                        <line x1="12" y1="16" x2="12.01" y2="16"/>
+                      </svg>
+                      @if (email?.errors?.['email']) {
+                        <span>{{ 'SETUP_USER_EMAIL_NOT_VALID' | translate }}</span>
+                      }
+                    </div>
+                  }
+                </div>
+              </div>
+            </div>
+
+            <!-- Password & Confirm Password in row -->
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="inputPassword">{{ 'SETUP_USER_PASSWORD' | translate }}</label>
+                <div class="password-wrapper">
+                  <input id="inputPassword"
+                         [type]="showPassword ? 'text' : 'password'"
+                         formControlName="password"
+                         class="form-input"
+                         [class.error]="(password?.invalid && password?.touched) || !passwordValid"
+                         [placeholder]="'SETUP_USER_PASSWORD_PLACEHOLDER' | translate"
+                         autocomplete="new-password">
+                  <button type="button" class="password-toggle" tabindex="0" (click)="togglePasswordVisibility()"
+                    [disabled]="status === 'LOADING'"
+                    [attr.aria-label]="showPassword ? ('PASSWORD_HIDE' | translate) : ('PASSWORD_SHOW' | translate)"
+                    [attr.title]="showPassword ? ('PASSWORD_HIDE' | translate) : ('PASSWORD_SHOW' | translate)">
+                    @if (!showPassword) {
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                      </svg>
+                    } @else {
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                        <line x1="1" y1="1" x2="23" y2="23"></line>
+                      </svg>
+                    }
+                  </button>
+                </div>
+                <div class="error-space">
+                  @if (!passwordValid && !passwordValidating) {
+                    <div class="error-message">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="12" y1="8" x2="12" y2="12"/>
+                        <line x1="12" y1="16" x2="12.01" y2="16"/>
+                      </svg>
+                      <span>{{ 'SETUP_USER_PASSWORD_POLICY_ERROR' | translate }}</span>
+                    </div>
+                  } @else if (password?.invalid && password?.touched && password?.errors?.['required']) {
+                    <div class="error-message">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="12" y1="8" x2="12" y2="12"/>
+                        <line x1="12" y1="16" x2="12.01" y2="16"/>
+                      </svg>
+                      <span>{{ 'SETUP_USER_PASSWORD_REQUIRED' | translate }}</span>
+                    </div>
+                  }
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="inputPasswordRepeat">{{ 'SETUP_USER_PASSWORD_REPEAT' | translate }}</label>
+                <div class="password-wrapper">
+                  <input id="inputPasswordRepeat"
+                         [type]="showConfirmPassword ? 'text' : 'password'"
+                         formControlName="confirmPassword"
+                         class="form-input"
+                         [class.error]="confirmPassword?.invalid && confirmPassword?.touched"
+                         [placeholder]="'SETUP_USER_PASSWORD_REPEAT_PLACEHOLDER' | translate"
+                         autocomplete="new-password">
+                  <button type="button" class="password-toggle" tabindex="0" (click)="toggleConfirmPasswordVisibility()"
+                    [disabled]="status === 'LOADING'"
+                    [attr.aria-label]="showConfirmPassword ? ('PASSWORD_HIDE' | translate) : ('PASSWORD_SHOW' | translate)"
+                    [attr.title]="showConfirmPassword ? ('PASSWORD_HIDE' | translate) : ('PASSWORD_SHOW' | translate)">
+                    @if (!showConfirmPassword) {
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                      </svg>
+                    } @else {
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                        <line x1="1" y1="1" x2="23" y2="23"></line>
+                      </svg>
+                    }
+                  </button>
+                </div>
+                <div class="error-space">
+                  @if (confirmPassword?.errors?.['passwordMismatch'] && confirmPassword?.touched) {
+                    <div class="error-message">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="12" y1="8" x2="12" y2="12"/>
+                        <line x1="12" y1="16" x2="12.01" y2="16"/>
+                      </svg>
+                      <span>{{ 'SETUP_USER_PASSWORD_MUST_MATCH' | translate }}</span>
+                    </div>
+                  }
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- User Profile Section -->
+          <div class="form-section">
+            <div class="section-title">{{ 'SETUP_USER_PROFILE' | translate }}</div>
+
+            <!-- First Name & Last Name in row -->
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="inputFirstname">{{ 'SETUP_USER_FIRSTNAME' | translate }}</label>
+                <input id="inputFirstname"
+                       type="text"
+                       formControlName="firstName"
+                       class="form-input"
+                       [class.error]="firstName?.invalid && firstName?.touched"
+                       [placeholder]="'SETUP_USER_FIRSTNAME_PLACEHOLDER' | translate"
+                       autocomplete="given-name">
+                <div class="error-space">
+                  @if (firstName?.invalid && firstName?.touched) {
+                    <div class="error-message">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="12" y1="8" x2="12" y2="12"/>
+                        <line x1="12" y1="16" x2="12.01" y2="16"/>
+                      </svg>
+                      @if (firstName?.errors?.['required']) {
+                        <span>{{ 'SETUP_USER_FIRSTNAME_REQUIRED' | translate }}</span>
+                      }
+                    </div>
+                  }
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="inputLastname">{{ 'SETUP_USER_LASTNAME' | translate }}</label>
+                <input id="inputLastname"
+                       type="text"
+                       formControlName="lastName"
+                       class="form-input"
+                       [class.error]="lastName?.invalid && lastName?.touched"
+                       [placeholder]="'SETUP_USER_LASTNAME_PLACEHOLDER' | translate"
+                       autocomplete="family-name">
+                <div class="error-space">
+                  @if (lastName?.invalid && lastName?.touched) {
+                    <div class="error-message">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="12" y1="8" x2="12" y2="12"/>
+                        <line x1="12" y1="16" x2="12.01" y2="16"/>
+                      </svg>
+                      @if (lastName?.errors?.['required']) {
+                        <span>{{ 'SETUP_USER_LASTNAME_REQUIRED' | translate }}</span>
+                      }
+                    </div>
+                  }
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit"
+                  class="btn-submit"
+                  [disabled]="!isFormValid || status === 'LOADING'">
+            @if (status === 'LOADING') {
+              <svg class="spinner" width="16" height="16" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" fill="none" opacity="0.25"/>
+                <path d="M12 2a10 10 0 0 1 10 10" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round"/>
+              </svg>
+              <span>{{ 'SETUP_CREATING_USER' | translate }}</span>
+            } @else {
+              <span>{{ 'SETUP_USER_NEW_USER' | translate }}</span>
+            }
+          </button>
+
+        </form>
+
+        <!-- Back to login link -->
+        <div class="back-link-container">
+          <span class="back-text">{{ 'SETUP_ALREADY_HAVE_ACCOUNT' | translate }}</span>
+          <a routerLink="/login" class="back-link">{{ 'SETUP_BACK_TO_LOGIN' | translate }}</a>
+        </div>
+      }
+
+    </main>
+  </div>
+</div>
