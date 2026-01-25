@@ -1,8 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { TranslatePipe } from '../../i18n/translate.pipe';
 
 export interface PageChangeEvent {
@@ -13,7 +11,7 @@ export interface PageChangeEvent {
 @Component({
   selector: 'app-pagination',
   standalone: true,
-  imports: [CommonModule, FormsModule, FontAwesomeModule, TranslatePipe],
+  imports: [CommonModule, FormsModule, TranslatePipe],
   templateUrl: './pagination.html',
   styleUrls: ['./pagination.css']
 })
@@ -22,11 +20,9 @@ export class PaginationComponent {
   @Input() size: number = 50;
   @Input() total: number = 0;
   @Input() availableSizes: number[] = [10, 25, 50, 100];
+  @Input() compact: boolean = false;
 
   @Output() pageChange = new EventEmitter<PageChangeEvent>();
-
-  faChevronLeft = faChevronLeft;
-  faChevronRight = faChevronRight;
 
   get totalPages(): number {
     return Math.ceil(this.total / this.size);
@@ -49,9 +45,10 @@ export class PaginationComponent {
   }
 
   goToPage(page: number): void {
-    if (page >= 1 && page <= this.totalPages) {
-      this.current = page;
-      this.emitPageChange();
+    if (page >= 1 && page <= this.totalPages && page !== this.current) {
+      // Don't mutate Input properties - just emit the event
+      // The parent component should update the current page through Input binding
+      this.pageChange.emit({ current: page, size: this.size });
     }
   }
 
@@ -68,13 +65,10 @@ export class PaginationComponent {
   }
 
   changePageSize(event: Event): void {
-    const size = parseInt((event.target as HTMLSelectElement).value, 10);
-    this.size = size;
-    this.current = 1;
-    this.emitPageChange();
-  }
-
-  private emitPageChange(): void {
-    this.pageChange.emit({ current: this.current, size: this.size });
+    const newSize = parseInt((event.target as HTMLSelectElement).value, 10);
+    if (newSize !== this.size) {
+      // Emit with page 1 and new size - parent will update both values
+      this.pageChange.emit({ current: 1, size: newSize });
+    }
   }
 }

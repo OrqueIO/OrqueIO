@@ -106,6 +106,15 @@ export const tasksReducer = createReducer(
   on(TasksActions.refreshTasks, (state) => ({
     ...state,
     loading: true
+  })),
+
+  // Reset page when filter changes
+  on(FiltersActions.selectFilter, (state) => ({
+    ...state,
+    queryParams: {
+      ...state.queryParams,
+      firstResult: 0
+    }
   }))
 );
 
@@ -255,7 +264,21 @@ export const taskDetailReducer = createReducer(
   on(TaskDetailActions.setActiveTab, (state, { tab }) => ({
     ...state,
     activeTab: tab
-  }))
+  })),
+
+  // Sync task detail when task is updated via TasksActions
+  // This ensures the task detail view updates reactively
+  on(TasksActions.updateTaskSuccess, TasksActions.claimTaskSuccess,
+     TasksActions.unclaimTaskSuccess, TasksActions.setAssigneeSuccess,
+     TasksActions.delegateTaskSuccess,
+    (state, { task }) => {
+      // Only update if this is the currently viewed task
+      if (state.task?.id === task.id) {
+        return { ...state, task };
+      }
+      return state;
+    }
+  )
 );
 
 // ==================== UI REDUCER ====================

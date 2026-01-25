@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, OnChanges, SimpleChanges, inject, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Store } from '@ngrx/store';
-import { Subject, takeUntil, fromEvent, interval, switchMap, filter } from 'rxjs';
+import { Subject, takeUntil, fromEvent, interval, switchMap, filter, forkJoin, of, catchError } from 'rxjs';
 import { TranslatePipe } from '../../../i18n/translate.pipe';
 import { Task, IdentityLink } from '../../../models/tasklist';
 import { AuthService } from '../../../services/auth';
@@ -248,26 +248,55 @@ export class TaskDetailComponent implements OnInit, OnDestroy, OnChanges {
   onGroupsUpdate(changes: { added: string[]; removed: string[] }): void {
     if (!this.task) return;
 
-    // Add new groups
+    const taskId = this.task.id;
+    const operations: ReturnType<typeof this.tasklistService.addIdentityLink>[] = [];
+
+    // Add new groups - each operation handles its own error
     for (const groupId of changes.added) {
-      this.tasklistService.addIdentityLink(this.task.id, {
-        groupId,
-        type: 'candidate'
-      }).subscribe();
+      operations.push(
+        this.tasklistService.addIdentityLink(taskId, {
+          groupId,
+          type: 'candidate'
+        }).pipe(
+          catchError(err => {
+            console.error(`Failed to add group ${groupId}:`, err);
+            return of(void 0); // Continue with other operations
+          })
+        )
+      );
     }
 
-    // Remove groups
+    // Remove groups - each operation handles its own error
     for (const groupId of changes.removed) {
-      this.tasklistService.deleteIdentityLink(this.task.id, {
-        groupId,
-        type: 'candidate'
-      }).subscribe();
+      operations.push(
+        this.tasklistService.deleteIdentityLink(taskId, {
+          groupId,
+          type: 'candidate'
+        }).pipe(
+          catchError(err => {
+            console.error(`Failed to remove group ${groupId}:`, err);
+            return of(void 0); // Continue with other operations
+          })
+        )
+      );
     }
 
     this.closeGroupsModal();
 
-    // Emit action to refresh identity links
-    this.taskAction.emit({ type: 'refreshIdentityLinks', taskId: this.task.id });
+    // Wait for all operations to complete before refreshing
+    if (operations.length > 0) {
+      forkJoin(operations).subscribe({
+        next: () => {
+          // Emit action to refresh identity links after all operations complete
+          this.taskAction.emit({ type: 'refreshIdentityLinks', taskId });
+        },
+        error: (err) => {
+          console.error('Failed to update identity links:', err);
+          // Still refresh to show current state
+          this.taskAction.emit({ type: 'refreshIdentityLinks', taskId });
+        }
+      });
+    }
   }
 
   // ==================== Helpers ====================

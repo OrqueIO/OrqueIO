@@ -109,6 +109,32 @@
     </div>
   </div>
 
+  <!-- Instance Link Card - Link to Cockpit (matches AngularJS setLink function) -->
+  <div class="meta-card" *ngIf="hasInstance()">
+    <div class="meta-card-label">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/>
+        <path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/>
+      </svg>
+      {{ getInstanceTypeLabel() }}
+    </div>
+    <div class="meta-card-value">
+      <a class="instance-link"
+         [href]="getCockpitInstanceLink()"
+         target="_blank"
+         (click)="$event.stopPropagation()"
+         [appTooltip]="'tasklist.openInCockpit' | translate"
+         tooltipPlacement="top">
+        <span class="instance-id">{{ getInstanceId() | slice:0:8 }}...</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
+          <polyline points="15 3 21 3 21 9"/>
+          <line x1="10" y1="14" x2="21" y2="3"/>
+        </svg>
+      </a>
+    </div>
+  </div>
+
   <!-- Assignee Card -->
   <div class="meta-card" [class.clickable]="!editingAssignee" (click)="!editingAssignee && !hasAssignee() ? null : (!editingAssignee && startEditAssignee())">
     <div class="meta-card-label">

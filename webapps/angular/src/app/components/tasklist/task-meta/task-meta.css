@@ -265,6 +265,46 @@
   color: #059669;
 }
 
+/* Instance Link (Cockpit) - 5th card color */
+.meta-card:nth-child(5) {
+  border-left-color: #ec4899;
+}
+
+.meta-card:nth-child(5) .meta-card-label svg {
+  color: #ec4899;
+}
+
+.instance-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background-color: #fdf2f8;
+  border: 1px solid #fbcfe8;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #db2777;
+  text-decoration: none;
+  transition: background-color 0.15s, border-color 0.15s;
+}
+
+.instance-link:hover {
+  background-color: #fce7f3;
+  border-color: #f9a8d4;
+  text-decoration: none;
+}
+
+.instance-link .instance-id {
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+
+.instance-link svg {
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+
 /* Validation */
 .assignee-edit-container {
   display: flex;

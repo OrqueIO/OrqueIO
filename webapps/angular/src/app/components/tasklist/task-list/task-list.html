@@ -1,157 +1,137 @@
-<!-- Loading State -->
-<div class="loading-state" *ngIf="loading && tasks.length === 0">
-  <span class="spinner"></span>
-  {{ 'common.loading' | translate }}
-</div>
+<!-- Task List Container -->
+<div class="task-list-container">
 
-<!-- Error State -->
-<div class="error-state" *ngIf="error">
-  <span class="error-icon">!</span>
-  <strong>{{ 'common.error' | translate }}:</strong>
-  <span class="error-message">{{ error }}</span>
-</div>
+  <!-- Pagination Header -->
+  <div class="task-pagination">
+    <span class="pagination-info">
+      {{ 'SHOWING' | translate }} {{ startIndex }}-{{ endIndex }} {{ 'OF' | translate }} {{ total }}
+    </span>
+    <div class="pagination-controls">
+      <button class="btn-nav" [disabled]="!canGoPrevious" (click)="goToPage(page - 1)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+      </button>
+      <span class="pagination-page">{{ page }} / {{ totalPages }}</span>
+      <button class="btn-nav" [disabled]="!canGoNext" (click)="goToPage(page + 1)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </button>
+    </div>
+  </div>
 
-<!-- Empty State (only when no tasks at all) -->
-<div class="empty-state" *ngIf="!loading && !error && tasks.length === 0 && total === 0">
-  <span class="info-icon">
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <circle cx="12" cy="12" r="10"/>
-      <line x1="12" y1="16" x2="12" y2="12"/>
-      <line x1="12" y1="8" x2="12.01" y2="8"/>
-    </svg>
-  </span>
-  <p>{{ 'tasklist.noMatchingTasks' | translate }}</p>
-</div>
+  <!-- Scrollable Task Area -->
+  <div class="task-scroll-area" #taskListContainer tabindex="0" (keydown)="handleKeydown($event)">
 
-<!-- Restriction Notice (only when on page > 1 and current page is empty) -->
-<div class="restriction-notice" *ngIf="!loading && total > 0 && tasks.length === 0 && page > 1">
-  <span class="info-icon">i</span>
-  <span>{{ 'tasklist.restrictionNotice' | translate }}</span>
-  <a href="javascript:void(0)" (click)="goToFirstPage()">
-    {{ 'tasklist.resetPage' | translate }}
-  </a>
-</div>
+    <!-- Loading State -->
+    <div class="empty-message" *ngIf="loading && tasks.length === 0">
+      <div class="spinner"></div>
+      <span>{{ 'common.loading' | translate }}</span>
+    </div>
 
-<!-- Task List -->
-<div class="task-list-container"
-     #taskListContainer
-     *ngIf="!error && tasks.length > 0"
-     (keydown)="handleKeydown($event)"
-     tabindex="0">
+    <!-- Error State -->
+    <div class="empty-message error" *ngIf="error">
+      <span class="error-text">{{ error }}</span>
+    </div>
 
-  <ol class="tasks-list">
-    <li *ngFor="let task of tasks; trackBy: trackByTaskId"
-        class="task-item"
-        [class.active]="isSelected(task)"
-        [attr.data-task-id]="task.id"
-        (click)="selectTask(task)">
+    <!-- Empty State -->
+    <div class="empty-message" *ngIf="!loading && !error && tasks.length === 0">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.4">
+        <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/>
+        <rect x="9" y="3" width="6" height="4" rx="1"/>
+        <path d="M9 12h6M9 16h6"/>
+      </svg>
+      <span>{{ 'tasklist.noMatchingTasks' | translate }}</span>
+    </div>
 
-      <div class="task-card clickable">
-        <!-- Task Names -->
-        <div class="names">
-          <h4 class="task-name">
-            <a [href]="getTaskUrl(task)"
-               (click)="$event.preventDefault(); selectTask(task)">
-              {{ getTaskDisplayName(task) }}
-            </a>
-          </h4>
+    <!-- Task Items -->
+    <div class="task-card"
+         *ngFor="let task of tasks; let i = index; trackBy: trackByTaskId"
+         [attr.data-task-index]="i"
+         [attr.data-task-id]="task.id"
+         [class.selected]="isSelected(task)"
+         [class.expanded]="isExpanded(task)"
+         (click)="selectTask(task)">
 
-          <h6 class="process-definition" *ngIf="task.processDefinitionId">
-            {{ getProcessName(task) }}
-          </h6>
+      <!-- Priority Indicator Bar -->
+      <div class="task-priority-bar"
+           [class.high]="task.priority > 50"
+           [class.normal]="task.priority === 50"
+           [class.low]="task.priority < 50">
+      </div>
 
-          <h6 class="case-definition" *ngIf="task.caseDefinitionId">
-            {{ getCaseName(task) }}
-          </h6>
-
-          <h5 class="assignee" *ngIf="hasAssignee(task)" [title]="task.assignee">
-            {{ getAssigneeName(task) }}
-          </h5>
-        </div>
-
-        <!-- Task Meta -->
-        <div class="cells-wrapper">
-          <div class="dates">
-            <!-- Due Date -->
-            <span class="due-date"
-                  *ngIf="task.due"
-                  [class.overdue]="isOverdue(task.due)">
-              {{ 'tasklist.due' | translate }}
-              <span [appTooltip]="task.due | camDate:'long'"
-                    tooltipPlacement="top">
-                {{ task.due | timeAgo }}
-              </span>
-            </span>
-
-            <!-- Follow-up Date -->
-            <span class="followup-date"
-                  *ngIf="task.followUp"
-                  [class.overdue]="isOverdue(task.followUp)">
-              {{ 'tasklist.followUp' | translate }}
-              <span [appTooltip]="task.followUp | camDate:'long'"
-                    tooltipPlacement="top">
-                {{ task.followUp | timeAgo }}
-              </span>
-            </span>
-
-            <!-- Creation Date -->
-            <span class="creation-date">
-              {{ 'tasklist.created' | translate }}
-              <span [appTooltip]="task.created | camDate:'long'"
-                    tooltipPlacement="top">
-                {{ task.created | timeAgo }}
-              </span>
-            </span>
-          </div>
-
-          <!-- Priority -->
-          <div class="priority"
-               [class.high]="task.priority > 50"
-               [class.low]="task.priority < 50"
-               [appTooltip]="'tasklist.priority' | translate"
-               tooltipPlacement="right">
+      <!-- Task Content -->
+      <div class="task-content">
+        <!-- Header Row -->
+        <div class="task-header">
+          <span class="task-name" [title]="getTaskDisplayName(task)">
+            {{ getTaskDisplayName(task) }}
+          </span>
+          <span class="priority-badge"
+                [class.high]="task.priority > 50"
+                [class.normal]="task.priority === 50"
+                [class.low]="task.priority < 50">
             {{ task.priority }}
-          </div>
+          </span>
         </div>
 
-        <!-- Expandable Card Details -->
-        <div class="task-card-details"
-             [class.expanded]="isExpanded(task)">
+        <!-- Process Name -->
+        <div class="task-process" *ngIf="getProcessName(task)">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M10 8l6 4-6 4V8z"/>
+          </svg>
+          <span>{{ getProcessName(task) }}</span>
+        </div>
 
-          <!-- Plugin content goes here -->
-          <app-task-card
-            *ngIf="isExpanded(task)"
-            [task]="task">
-          </app-task-card>
+        <!-- Metadata Row -->
+        <div class="task-meta">
+          <!-- Assignee -->
+          <span class="meta-item assignee" *ngIf="hasAssignee(task)">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+            <span>{{ getAssigneeName(task) }}</span>
+          </span>
 
-          <!-- Expand/Collapse Button -->
-          <div class="shutter actions"
-               (click)="toggleExpand($event, task)"
-               [title]="(isExpanded(task) ? 'tasklist.showLess' : 'tasklist.showMore') | translate">
-            <a class="toggle-icon"
-               [class.expanded]="isExpanded(task)"
-               href="javascript:void(0)">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="6 9 12 15 18 9"></polyline>
-              </svg>
-            </a>
-          </div>
+          <!-- Due Date -->
+          <span class="meta-item due-date" *ngIf="task.due" [class.overdue]="isOverdue(task.due)">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12 6 12 12 16 14"/>
+            </svg>
+            <span>{{ task.due | timeAgo }}</span>
+          </span>
+
+          <!-- Created Date -->
+          <span class="meta-item created">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+              <line x1="16" y1="2" x2="16" y2="6"/>
+              <line x1="8" y1="2" x2="8" y2="6"/>
+              <line x1="3" y1="10" x2="21" y2="10"/>
+            </svg>
+            <span>{{ task.created | timeAgo }}</span>
+          </span>
         </div>
       </div>
-    </li>
-  </ol>
 
-  <!-- Loading overlay for pagination -->
-  <div class="loading-overlay" *ngIf="loading && tasks.length > 0">
-    <span class="spinner"></span>
+      <!-- Expand Button -->
+      <button class="btn-expand"
+              (click)="toggleExpand($event, task)"
+              [attr.aria-expanded]="isExpanded(task)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline [attr.points]="isExpanded(task) ? '18 15 12 9 6 15' : '6 9 12 15 18 9'"></polyline>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" *ngIf="loading && tasks.length > 0">
+      <div class="spinner"></div>
+    </div>
   </div>
-</div>
 
-<!-- Pagination -->
-<app-pagination
-  *ngIf="total > pageSize"
-  [current]="page"
-  [size]="pageSize"
-  [total]="total"
-  (pageChange)="onPageChange($event)">
-</app-pagination>
+</div>

@@ -14,11 +14,12 @@
 .detail-column {
   display: flex;
   flex-direction: column;
+  height: 100%; /* CRITICAL: explicit height for flex column children */
   background-color: #ffffff;
   border-right: 1px solid #e5e7eb;
   transition: width 0.3s ease, min-width 0.3s ease, max-width 0.3s ease, flex 0.3s ease;
   min-height: 0; /* Essential for flex children to scroll properly */
-  overflow: hidden;
+  overflow: hidden; /* Contain children */
 }
 
 /* Filters Column */
@@ -280,11 +281,9 @@
 
 /* Column Content */
 .column-content {
-  flex: 1 1 0;
-  min-height: 0; /* Critical for flexbox scroll containers */
+  flex: 1;
+  height: 0; /* Forces flex to calculate height */
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
 }
 
 /* Sorting Controls */
@@ -301,8 +300,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  flex: 1;
-  min-height: 0;
+  height: 100%;
   padding: 24px 16px;
   text-align: center;
   color: #6b7280;

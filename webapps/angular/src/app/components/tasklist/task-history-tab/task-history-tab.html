@@ -83,20 +83,20 @@
                 <div class="property-values">
                   <!-- New Value -->
                   <div class="new-value" *ngIf="sub.newValue">
-                    <ng-container *ngIf="isDateProperty(sub.property || '')">
-                      {{ sub.newValue | camDate:'short' }}
+                    <ng-container *ngIf="sub.propertyIsDate">
+                      {{ +sub.newValue | camDate:'short' }}
                     </ng-container>
-                    <ng-container *ngIf="!isDateProperty(sub.property || '')">
+                    <ng-container *ngIf="!sub.propertyIsDate">
                       {{ sub.newValue }}
                     </ng-container>
                   </div>
 
                   <!-- Original Value -->
                   <div class="original-value" *ngIf="sub.orgValue">
-                    <ng-container *ngIf="isDateProperty(sub.property || '')">
-                      {{ sub.orgValue | camDate:'short' }}
+                    <ng-container *ngIf="sub.propertyIsDate">
+                      {{ +sub.orgValue | camDate:'short' }}
                     </ng-container>
-                    <ng-container *ngIf="!isDateProperty(sub.property || '')">
+                    <ng-container *ngIf="!sub.propertyIsDate">
                       {{ sub.orgValue }}
                     </ng-container>
                   </div>
