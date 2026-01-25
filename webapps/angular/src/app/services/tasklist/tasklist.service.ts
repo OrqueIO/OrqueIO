@@ -111,9 +111,50 @@ export class TasklistService {
 
   /**
    * Update task properties
+   * Formats dates to match Camunda API expectations (YYYY-MM-DDTHH:mm:ss.SSSZZ format)
    */
   updateTask(taskId: string, updates: Partial<Task>): Observable<void> {
-    return this.http.put<void>(`${this.baseUrl}/task/${taskId}`, updates);
+    // Format dates to match Camunda's expected format (matches AngularJS fixDate service)
+    const formattedUpdates: Record<string, any> = { ...updates };
+
+    // Handle date fields - fixDate returns null for clearing, or formatted string
+    if ('due' in formattedUpdates) {
+      formattedUpdates['due'] = this.fixDate(formattedUpdates['due']);
+    }
+    if ('followUp' in formattedUpdates) {
+      formattedUpdates['followUp'] = this.fixDate(formattedUpdates['followUp']);
+    }
+
+    // Remove HAL properties that shouldn't be sent to API
+    delete formattedUpdates['_embedded'];
+    delete formattedUpdates['_links'];
+
+    return this.http.put<void>(`${this.baseUrl}/task/${taskId}`, formattedUpdates);
+  }
+
+  /**
+   * Format date to Camunda API format (matches AngularJS fixDate service)
+   * Converts to YYYY-MM-DDTHH:mm:ss.SSS+0000 format
+   * Returns null for falsy values (to clear the date)
+   */
+  private fixDate(value: string | null | undefined): string | null {
+    if (!value) {
+      return null;
+    }
+    const date = new Date(value);
+    if (isNaN(date.getTime())) {
+      return null;
+    }
+    // Format: YYYY-MM-DDTHH:mm:ss.SSS+0000 (timezone offset without colon)
+    const pad = (n: number, len = 2) => n.toString().padStart(len, '0');
+    const offset = -date.getTimezoneOffset();
+    const sign = offset >= 0 ? '+' : '-';
+    const offsetHours = Math.floor(Math.abs(offset) / 60);
+    const offsetMinutes = Math.abs(offset) % 60;
+
+    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T` +
+           `${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}.` +
+           `${pad(date.getMilliseconds(), 3)}${sign}${pad(offsetHours)}${pad(offsetMinutes)}`;
   }
 
   /**

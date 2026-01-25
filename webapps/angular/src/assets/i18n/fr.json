@@ -798,6 +798,8 @@
   "OF": "sur",
   "PAGE": "Page",
   "ITEMS_PER_PAGE": "Éléments par page",
+  "NEXT": "Suivant",
+  "PREVIOUS": "Précédent",
   "SEARCH_PLACEHOLDER": "Rechercher...",
   "INVALID_EMAIL": "Adresse email invalide",
   "PASSWORD_MIN_LENGTH": "Le mot de passe doit contenir au moins 8 caractères",

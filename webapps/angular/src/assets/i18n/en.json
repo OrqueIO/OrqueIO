@@ -930,6 +930,8 @@
   "OF": "of",
   "PAGE": "Page",
   "ITEMS_PER_PAGE": "Items per page",
+  "NEXT": "Next",
+  "PREVIOUS": "Previous",
   "SEARCH_PLACEHOLDER": "Search...",
   "INVALID_EMAIL": "Invalid email address",
   "PASSWORD_MIN_LENGTH": "Password must be at least 8 characters",

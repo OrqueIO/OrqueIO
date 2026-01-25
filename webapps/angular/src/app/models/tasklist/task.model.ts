@@ -5,11 +5,11 @@
 export interface Task {
   id: string;
   name: string;
-  assignee?: string;
-  owner?: string;
+  assignee?: string | null;
+  owner?: string | null;
   created: string;
-  due?: string;
-  followUp?: string;
+  due?: string | null;
+  followUp?: string | null;
   priority: number;
   parentTaskId?: string;
   processDefinitionId?: string;
@@ -224,6 +224,8 @@ export interface UserOperationLogEntry {
   jobDefinitionId?: string;
   removalTime?: string;
   rootProcessInstanceId?: string;
+  // Added by frontend for date formatting
+  propertyIsDate?: boolean;
 }
 
 export interface IdentityLink {

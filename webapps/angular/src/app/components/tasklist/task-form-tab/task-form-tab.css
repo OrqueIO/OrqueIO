@@ -198,6 +198,131 @@
   background: #ffffff;
 }
 
+/* CamForm SDK Container - Matches AngularJS embedded form styles */
+.camform-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  overflow: auto;
+  background: #ffffff;
+}
+
+/* CamForm injected wrapper */
+.camform-container .injected-form-wrapper {
+  flex: 1;
+}
+
+/* Style injected forms to match the application */
+.camform-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.camform-container .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.camform-container label {
+  font-size: 13px;
+  font-weight: 500;
+  color: #37474f;
+}
+
+.camform-container input[type="text"],
+.camform-container input[type="number"],
+.camform-container input[type="email"],
+.camform-container input[type="date"],
+.camform-container input[type="datetime-local"],
+.camform-container select,
+.camform-container textarea {
+  display: block;
+  width: 100%;
+  height: 36px;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.4;
+  color: #37474f;
+  background-color: #ffffff;
+  border: 1px solid #cfd8dc;
+  border-radius: 4px;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.camform-container textarea {
+  height: auto;
+  min-height: 80px;
+  resize: vertical;
+}
+
+.camform-container input:focus,
+.camform-container select:focus,
+.camform-container textarea:focus {
+  border-color: #1976d2;
+  outline: 0;
+  box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
+}
+
+.camform-container input:disabled,
+.camform-container select:disabled,
+.camform-container textarea:disabled {
+  background-color: #f5f5f5;
+  color: #78909c;
+  cursor: not-allowed;
+}
+
+.camform-container input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #1976d2;
+}
+
+/* CamForm Loading State */
+.camform-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 40px 16px;
+  color: #62757f;
+  text-align: center;
+}
+
+/* CamForm Error State */
+.camform-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 40px 16px;
+  color: #c62828;
+  text-align: center;
+}
+
+.camform-error .error-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background: #ffebee;
+  color: #c62828;
+  border-radius: 50%;
+}
+
+.camform-error .error-message {
+  font-size: 13px;
+  color: #78909c;
+  max-width: 300px;
+  line-height: 1.5;
+}
+
 /* ==================== Generic Form ==================== */
 .generic-form {
   flex: 1;

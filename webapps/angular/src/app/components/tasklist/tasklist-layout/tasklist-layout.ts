@@ -531,6 +531,11 @@ export class TasklistLayoutComponent implements OnInit, OnDestroy {
           updates: action.data
         }));
         break;
+      case 'refreshIdentityLinks':
+        this.store.dispatch(TaskDetailActions.loadIdentityLinks({
+          taskId: action.taskId
+        }));
+        break;
     }
   }
 
@@ -563,7 +568,6 @@ export class TasklistLayoutComponent implements OnInit, OnDestroy {
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: currentParams,
-      queryParamsHandling: 'merge',
       replaceUrl: true
     });
   }

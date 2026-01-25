@@ -89,7 +89,26 @@ export class TaskHistoryTabComponent implements OnInit, OnChanges {
         events.push(parentEvent);
       }
 
-      parentEvent.subEvents!.push(entry);
+      // Preprocess date values - convert string timestamps to numbers
+      // The API returns timestamps as strings like "1705597200000"
+      const processedEntry: UserOperationLogEntry = { ...entry };
+      if (this.isTimestampProperty(entry.property || '')) {
+        processedEntry.propertyIsDate = true;
+        if (processedEntry.newValue) {
+          const parsed = parseInt(processedEntry.newValue, 10);
+          if (!isNaN(parsed)) {
+            processedEntry.newValue = parsed.toString();
+          }
+        }
+        if (processedEntry.orgValue) {
+          const parsed = parseInt(processedEntry.orgValue, 10);
+          if (!isNaN(parsed)) {
+            processedEntry.orgValue = parsed.toString();
+          }
+        }
+      }
+
+      parentEvent.subEvents!.push(processedEntry);
       days.set(dateKey, events);
     }
 
@@ -222,8 +241,16 @@ export class TaskHistoryTabComponent implements OnInit, OnChanges {
     return labels[property] || property;
   }
 
+  /**
+   * Check if property is a timestamp that needs date formatting
+   * Matches AngularJS isTimestampProperty function
+   */
+  isTimestampProperty(property: string): boolean {
+    return ['dueDate', 'followUpDate'].includes(property);
+  }
+
   isDateProperty(property: string): boolean {
-    return ['dueDate', 'followUpDate', 'created', 'timestamp'].includes(property);
+    return this.isTimestampProperty(property);
   }
 
   formatValue(value: string | null, property: string): string {
