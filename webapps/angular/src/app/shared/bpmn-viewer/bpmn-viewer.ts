@@ -460,7 +460,8 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
       const viewbox = canvas.viewbox();
       if (viewbox && isFinite(viewbox.width) && isFinite(viewbox.height) &&
           viewbox.width > 0 && viewbox.height > 0) {
-        canvas.zoom('fit-viewport');
+        // Use 'auto' center to properly center the diagram
+        canvas.zoom('fit-viewport', 'auto');
       }
     } catch (e) {
       // Silently ignore zoom errors

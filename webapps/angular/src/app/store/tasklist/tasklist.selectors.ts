@@ -269,6 +269,12 @@ export const selectIsSearchActive = createSelector(
   (pills) => pills.length > 0
 );
 
+// Filter variables selector for search suggestions (AngularJS parity)
+export const selectFilterVariables = createSelector(
+  selectSelectedFilter,
+  (filter) => filter?.properties?.variables || []
+);
+
 // ==================== COMBINED SELECTORS ====================
 
 export const selectTasklistViewModel = createSelector(
@@ -287,8 +293,11 @@ export const selectTasklistViewModel = createSelector(
   selectMaximizedColumn,
   selectSearchPills,
   selectMatchAny,
+  selectFilterVariables,
+  selectSelectedFilter,
   (tasks, total, loading, selectedTaskId, page, pageSize, filters, selectedFilterId, filterCount,
-   filtersCollapsed, listCollapsed, detailCollapsed, maximizedColumn, searchPills, matchAny) => ({
+   filtersCollapsed, listCollapsed, detailCollapsed, maximizedColumn, searchPills, matchAny,
+   filterVariables, selectedFilter) => ({
     tasks,
     total,
     loading,
@@ -303,12 +312,8 @@ export const selectTasklistViewModel = createSelector(
     detailCollapsed,
     maximizedColumn,
     searchPills,
-    matchAny
+    matchAny,
+    filterVariables,
+    showUndefinedVariable: selectedFilter?.properties?.showUndefinedVariable ?? false
   })
-);
-
-// Filter variables selector for search suggestions (AngularJS parity)
-export const selectFilterVariables = createSelector(
-  selectSelectedFilter,
-  (filter) => filter?.properties?.variables || []
 );

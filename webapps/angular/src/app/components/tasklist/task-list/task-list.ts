@@ -16,12 +16,13 @@ import { CommonModule } from '@angular/common';
 import { Subject, fromEvent, interval, takeUntil } from 'rxjs';
 import { TranslatePipe } from '../../../i18n/translate.pipe';
 import { TimeAgoPipe } from '../../../pipes';
-import { Task, TaskSorting } from '../../../models/tasklist';
+import { Task, TaskSorting, FilterVariable } from '../../../models/tasklist';
+import { TaskCardComponent } from '../task-card/task-card';
 
 @Component({
   selector: 'app-task-list',
   standalone: true,
-  imports: [CommonModule, TranslatePipe, TimeAgoPipe],
+  imports: [CommonModule, TranslatePipe, TimeAgoPipe, TaskCardComponent],
   templateUrl: './task-list.html',
   styleUrl: './task-list.css'
 })
@@ -39,6 +40,8 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
   @Input() page = 1;
   @Input() pageSize = 15;
   @Input() sorting: TaskSorting[] = [{ sortBy: 'created', sortOrder: 'desc' }];
+  @Input() filterVariables: FilterVariable[] = [];
+  @Input() showUndefinedVariable = false;
 
   @Output() taskSelect = new EventEmitter<string>();
   @Output() pageChange = new EventEmitter<number>();
@@ -121,13 +124,19 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
   toggleExpand(event: Event, task: Task): void {
     event.stopPropagation();
 
-    if (this.expandedTasks.has(task.id)) {
-      this.expandedTasks.delete(task.id);
+    // Create a new Set to ensure Angular detects the change
+    const newExpandedTasks = new Set(this.expandedTasks);
+
+    if (newExpandedTasks.has(task.id)) {
+      newExpandedTasks.delete(task.id);
       this.taskExpand.emit({ taskId: task.id, expanded: false });
     } else {
-      this.expandedTasks.add(task.id);
+      newExpandedTasks.add(task.id);
       this.taskExpand.emit({ taskId: task.id, expanded: true });
     }
+
+    this.expandedTasks = newExpandedTasks;
+    this.cdr.detectChanges();
   }
 
   onPageChange(event: { current: number }): void {

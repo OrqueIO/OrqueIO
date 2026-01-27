@@ -80,6 +80,8 @@
         [total]="vm.total"
         [page]="vm.page"
         [pageSize]="vm.pageSize"
+        [filterVariables]="vm.filterVariables"
+        [showUndefinedVariable]="vm.showUndefinedVariable"
         (taskSelect)="onTaskSelect($event)"
         (pageChange)="onPageChange($event)"
         (sortingChange)="onSortingChange($event)">

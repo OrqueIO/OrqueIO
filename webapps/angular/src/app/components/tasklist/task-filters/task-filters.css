@@ -1,26 +1,31 @@
-/* Task Filters Component */
+/* ==========================================================
+   TASK FILTERS COMPONENT - Camunda 8 / Material Design Style
+   ========================================================== */
+
 :host {
   display: flex;
   flex-direction: column;
   height: 100%;
+  min-height: 0;  /* Essential for flex children to scroll */
+  overflow: hidden;
 }
 
-/* Loading State */
+/* ==================== LOADING STATE ==================== */
 .loading-state {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  padding: 20px;
-  color: #6b7280;
+  gap: 10px;
+  padding: 24px;
+  color: #64748b;
   font-size: 13px;
 }
 
 .spinner {
-  width: 16px;
-  height: 16px;
-  border: 2px solid #e5e7eb;
-  border-top-color: #667eea;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #e2e8f0;
+  border-top-color: #3b82f6;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
@@ -29,16 +34,16 @@
   to { transform: rotate(360deg); }
 }
 
-/* Error State */
+/* ==================== ERROR STATE ==================== */
 .error-state {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   padding: 12px 16px;
-  margin: 8px;
+  margin: 12px;
   background-color: #fef2f2;
   border: 1px solid #fecaca;
-  border-radius: 4px;
+  border-radius: 8px;
   color: #dc2626;
   font-size: 13px;
 }
@@ -54,82 +59,113 @@
   border-radius: 50%;
   font-weight: bold;
   font-size: 12px;
+  flex-shrink: 0;
 }
 
-/* Empty State */
+/* ==================== EMPTY STATE ==================== */
 .empty-state {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 40px 20px;
+  padding: 48px 24px;
   text-align: center;
-  color: #6b7280;
+  color: #64748b;
 }
 
 .info-icon {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
-  margin-bottom: 12px;
-  background-color: #f3f4f6;
+  width: 40px;
+  height: 40px;
+  margin-bottom: 16px;
+  background-color: #f1f5f9;
   border-radius: 50%;
   font-weight: bold;
   font-style: italic;
-  color: #6b7280;
+  color: #64748b;
+  font-size: 18px;
 }
 
 .empty-state p {
-  margin: 0 0 16px 0;
+  margin: 0 0 20px 0;
   font-size: 13px;
+  line-height: 1.5;
 }
 
-/* Filters List */
+/* ==================== FILTERS LIST ==================== */
 .filters-list {
   flex: 1;
+  min-height: 0;  /* Critical for proper flex scrolling */
   overflow-y: auto;
+  padding: 8px 0;
+
+  /* Modern thin scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148, 163, 184, 0.3) transparent;
+}
+
+.filters-list::-webkit-scrollbar {
+  width: 5px;
+}
+
+.filters-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.filters-list::-webkit-scrollbar-thumb {
+  background-color: rgba(148, 163, 184, 0.3);
+  border-radius: 3px;
+}
+
+.filters-list::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(148, 163, 184, 0.5);
 }
 
 .filter-items {
   list-style: none;
   margin: 0;
-  padding: 4px 0;
+  padding: 0;
 }
 
-/* Filter Item */
+/* ==================== FILTER ITEM ==================== */
 .filter-item {
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  padding: 8px 12px;
-  margin: 0 6px 2px 6px;
-  border-radius: 5px;
+  gap: 4px;
+  padding: 10px 16px;
+  margin: 2px 8px;
+  border-radius: 8px;
   border-left: 3px solid transparent;
   cursor: pointer;
-  transition: background-color 0.15s, border-color 0.15s;
+  transition: all 0.15s ease;
 }
 
 .filter-item:hover {
-  background-color: #f3f4f6;
+  background-color: #f8fafc;
 }
 
 .filter-item:hover .btn-action {
   opacity: 1;
 }
 
+/* Active Filter - Clear visual distinction */
 .filter-item.active {
-  background-color: #ede9fe;
-  border-left-color: #667eea;
+  background-color: #eff6ff;
+  border-left-color: #3b82f6;
 }
 
-/* Filter Header - Name + Action on same line */
+.filter-item.active:hover {
+  background-color: #dbeafe;
+}
+
+/* ==================== FILTER HEADER ==================== */
 .filter-header {
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   min-width: 0;
 }
 
@@ -137,7 +173,7 @@
   flex: 1;
   min-width: 0;
   margin: 0;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
   display: flex;
   align-items: center;
@@ -146,64 +182,72 @@
 
 .filter-name a {
   text-decoration: none;
-  color: #1f2937;
+  color: #334155;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  transition: color 0.15s ease;
+}
+
+.filter-item:hover .filter-name a {
+  color: #3b82f6;
 }
 
 .filter-item.active .filter-name a {
-  color: #4c51bf;
+  color: #1d4ed8;
   font-weight: 600;
 }
 
 .filter-name a:hover {
-  text-decoration: underline;
+  text-decoration: none;
 }
 
-/* Refresh indicator */
+/* ==================== REFRESH INDICATOR ==================== */
 .refresh-indicator {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: #667eea;
+  color: #3b82f6;
   flex-shrink: 0;
+  opacity: 0.7;
 }
 
+/* ==================== FILTER COUNT BADGE ==================== */
 .filter-count {
   flex-shrink: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   min-width: 24px;
-  height: 20px;
-  padding: 0 6px;
-  background-color: #667eea;
+  height: 22px;
+  padding: 0 8px;
+  background-color: #3b82f6;
   color: white;
-  border-radius: 10px;
+  border-radius: 11px;
   font-size: 11px;
   font-weight: 600;
 }
 
+/* ==================== FILTER DESCRIPTION ==================== */
 .filter-description {
   margin: 0;
   padding-left: 2px;
   font-size: 12px;
-  color: #6b7280;
+  color: #64748b;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  line-height: 1.4;
 }
 
-/* Filter Actions Group */
+/* ==================== FILTER ACTIONS ==================== */
 .filter-actions {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   flex-shrink: 0;
 }
 
-/* Filter Action Button */
 .btn-action {
   display: flex;
   flex-shrink: 0;
@@ -216,53 +260,57 @@
   background: transparent;
   cursor: pointer;
   border-radius: 6px;
-  color: #9ca3af;
-  transition: background-color 0.15s, color 0.15s, border-color 0.15s;
+  color: #94a3b8;
+  transition: all 0.15s ease;
+  opacity: 0;
 }
 
 .btn-action:hover {
-  background-color: #f3f4f6;
-  border-color: #e5e7eb;
-  color: #4c51bf;
+  background-color: #ffffff;
+  border-color: #e2e8f0;
+  color: #3b82f6;
 }
 
 .filter-item.active .btn-action {
-  color: #667eea;
+  color: #3b82f6;
+  opacity: 1;
 }
 
 .filter-item.active .btn-action:hover {
-  background-color: #ddd6fe;
-  border-color: #c4b5fd;
-  color: #4c51bf;
+  background-color: #ffffff;
+  border-color: #bfdbfe;
+  color: #1d4ed8;
 }
 
-/* Add Filter Button */
+/* ==================== ADD FILTER BUTTON ==================== */
 .add-filter-container {
-  padding: 8px 12px;
-  border-top: 1px solid #e5e7eb;
+  padding: 12px 16px;
+  border-top: 1px solid #e2e8f0;
+  background: #ffffff;
 }
 
 .btn-add-filter {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 8px;
   width: 100%;
-  padding: 10px 12px;
-  border: 1px dashed #d1d5db;
+  padding: 10px 14px;
+  border: 1px dashed #cbd5e1;
   background: transparent;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
-  color: #6b7280;
+  color: #64748b;
   font-size: 13px;
   font-weight: 500;
-  transition: border-color 0.15s, color 0.15s, background-color 0.15s;
+  transition: all 0.15s ease;
 }
 
 .btn-add-filter:hover {
-  border-color: #667eea;
-  color: #667eea;
-  background-color: #ede9fe;
+  border-color: #3b82f6;
+  border-style: solid;
+  color: #3b82f6;
+  background-color: #eff6ff;
 }
 
 .plus-icon {
@@ -271,20 +319,14 @@
   line-height: 1;
 }
 
-/* Scrollbar */
-.filters-list::-webkit-scrollbar {
-  width: 6px;
+/* ==================== FOCUS STATES (Accessibility) ==================== */
+.filter-item:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: -2px;
 }
 
-.filters-list::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.filters-list::-webkit-scrollbar-thumb {
-  background-color: #d1d5db;
-  border-radius: 3px;
-}
-
-.filters-list::-webkit-scrollbar-thumb:hover {
-  background-color: #9ca3af;
+.btn-action:focus-visible,
+.btn-add-filter:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
 }

@@ -1,32 +1,47 @@
-/* Tasklist Layout - 3 Column Structure */
-.tasklist-container {
+/* ==========================================================
+   TASKLIST LAYOUT - Camunda 8 / Material Design Style
+   3 Column Structure with Clean Professional Look
+   ========================================================== */
+
+/* Host element - CRITICAL for proper height inheritance from flex parent */
+:host {
   display: flex;
-  height: calc(100vh - 60px);
+  flex-direction: column;
+  height: 100%;
   width: 100%;
+  min-height: 0;  /* Essential for flex children to scroll */
   overflow: hidden;
-  background-color: #f3f4f6;
-  min-height: 0; /* Essential for flex children to scroll properly */
 }
 
-/* Column Base Styles */
+.tasklist-container {
+  display: flex;
+  flex: 1;  /* Fill available space from host */
+  height: 100%;  /* Inherit from flex parent, NOT viewport */
+  width: 100%;
+  overflow: hidden;
+  background-color: #f1f5f9;
+  min-height: 0;  /* Critical for nested flex scrolling */
+}
+
+/* ==================== COLUMN BASE STYLES ==================== */
 .filters-column,
 .list-column,
 .detail-column {
   display: flex;
   flex-direction: column;
-  height: 100%; /* CRITICAL: explicit height for flex column children */
+  height: 100%;
   background-color: #ffffff;
-  border-right: 1px solid #e5e7eb;
+  border-right: 1px solid #e2e8f0;
   transition: width 0.3s ease, min-width 0.3s ease, max-width 0.3s ease, flex 0.3s ease;
-  min-height: 0; /* Essential for flex children to scroll properly */
-  overflow: hidden; /* Contain children */
+  min-height: 0;
+  overflow: hidden;
 }
 
 /* Filters Column */
 .filters-column {
-  width: 220px;
-  min-width: 220px;
-  max-width: 220px;
+  width: 240px;
+  min-width: 240px;
+  max-width: 240px;
   flex-shrink: 0;
 }
 
@@ -40,10 +55,10 @@
 
 /* List Column */
 .list-column {
-  flex: 0 0 320px;
-  min-width: 280px;
-  max-width: 360px;
-  border-right: 1px solid var(--border-color, #e0e0e0);
+  flex: 0 0 340px;
+  min-width: 300px;
+  max-width: 380px;
+  border-right: 1px solid #e2e8f0;
 }
 
 .list-column.collapsed {
@@ -56,7 +71,7 @@
 
 .list-column.collapsed .column-header {
   justify-content: center;
-  padding: 8px 10px;
+  padding: 12px 10px;
 }
 
 .list-column.collapsed .btn-toggle.left {
@@ -88,10 +103,10 @@
 }
 
 .detail-column.no-task:not(.collapsed) {
-  background-color: #f9fafb;
+  background-color: #f8fafc;
 }
 
-/* Maximized Column State - takes full width */
+/* Maximized Column State */
 .filters-column.maximized,
 .list-column.maximized,
 .detail-column.maximized {
@@ -100,30 +115,30 @@
   max-width: 100% !important;
 }
 
-/* Minimized Column State - hidden when another column is maximized */
+/* Minimized Column State */
 .filters-column.minimized,
 .list-column.minimized,
 .detail-column.minimized {
   display: none !important;
 }
 
-/* Column Header */
+/* ==================== COLUMN HEADER ==================== */
 .column-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px 12px;
-  border-bottom: 1px solid #e5e7eb;
+  padding: 12px 16px;
+  border-bottom: 1px solid #e2e8f0;
   background-color: #ffffff;
-  min-height: 40px;
-  flex-shrink: 0; /* Prevent header from shrinking */
+  min-height: 48px;
+  flex-shrink: 0;
 }
 
 .column-title {
   margin: 0;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
-  color: #1f2937;
+  color: #334155;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -136,8 +151,8 @@
 
 .task-count {
   font-size: 13px;
-  color: #6b7280;
-  font-weight: normal;
+  color: #64748b;
+  font-weight: 500;
 }
 
 /* Header Actions */
@@ -148,7 +163,7 @@
   margin-left: auto;
 }
 
-/* Action Buttons */
+/* ==================== ACTION BUTTONS ==================== */
 .btn-action {
   display: flex;
   align-items: center;
@@ -157,17 +172,17 @@
   padding: 8px;
   border: none;
   background: transparent;
-  color: #6b7280;
+  color: #64748b;
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
-  border-radius: 6px;
-  transition: background-color 0.15s, color 0.15s;
+  border-radius: 8px;
+  transition: all 0.15s ease;
 }
 
 .btn-action:hover {
-  background-color: #f3f4f6;
-  color: #1f2937;
+  background-color: #f1f5f9;
+  color: #334155;
 }
 
 .btn-action svg {
@@ -175,13 +190,13 @@
 }
 
 .btn-action.btn-primary {
-  background: #667eea;
+  background: #3b82f6;
   color: #ffffff;
-  padding: 8px 14px;
+  padding: 8px 16px;
 }
 
 .btn-action.btn-primary:hover {
-  background-color: #5a67d8;
+  background-color: #2563eb;
 }
 
 .btn-action .btn-text {
@@ -198,7 +213,7 @@
   }
 }
 
-/* Toggle Button */
+/* ==================== TOGGLE BUTTON ==================== */
 .btn-toggle {
   display: flex;
   align-items: center;
@@ -209,14 +224,14 @@
   border: none;
   background: transparent;
   cursor: pointer;
-  border-radius: 4px;
-  color: #6b7280;
-  transition: background-color 0.2s, color 0.2s;
+  border-radius: 6px;
+  color: #64748b;
+  transition: all 0.15s ease;
 }
 
 .btn-toggle:hover {
-  background-color: #f3f4f6;
-  color: #1f2937;
+  background-color: #f1f5f9;
+  color: #334155;
 }
 
 .btn-toggle.left {
@@ -230,14 +245,14 @@
   border-style: solid;
   border-width: 5px 0 5px 8px;
   border-color: transparent transparent transparent currentColor;
-  transition: transform 0.2s;
+  transition: transform 0.2s ease;
 }
 
 .toggle-icon.rotated {
   transform: rotate(180deg);
 }
 
-/* Maximize Button */
+/* ==================== MAXIMIZE BUTTON ==================== */
 .btn-maximize {
   display: flex;
   align-items: center;
@@ -248,15 +263,15 @@
   border: none;
   background: transparent;
   cursor: pointer;
-  border-radius: 4px;
-  color: #6b7280;
-  transition: background-color 0.2s, color 0.2s;
+  border-radius: 6px;
+  color: #64748b;
+  transition: all 0.15s ease;
   margin-left: auto;
 }
 
 .btn-maximize:hover {
-  background-color: #f3f4f6;
-  color: #1f2937;
+  background-color: #f1f5f9;
+  color: #334155;
 }
 
 /* Column Header Actions Container */
@@ -271,7 +286,7 @@
 .filters-column.collapsed .column-header,
 .detail-column.collapsed .column-header {
   justify-content: center;
-  padding: 8px;
+  padding: 12px;
 }
 
 .filters-column.collapsed .column-title,
@@ -279,14 +294,16 @@
   display: none;
 }
 
-/* Column Content */
+/* ==================== COLUMN CONTENT ==================== */
 .column-content {
+  display: flex;
+  flex-direction: column;
   flex: 1;
-  height: 0; /* Forces flex to calculate height */
+  min-height: 0;  /* Critical: enables proper scrolling in child components */
   overflow: hidden;
 }
 
-/* Sorting Controls */
+/* ==================== SORTING CONTROLS ==================== */
 .sorting-controls {
   display: flex;
   align-items: center;
@@ -294,41 +311,42 @@
   margin-left: auto;
 }
 
-/* No Task Message */
+/* ==================== NO TASK MESSAGE ==================== */
 .no-task-message {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   height: 100%;
-  padding: 24px 16px;
+  padding: 32px 24px;
   text-align: center;
-  color: #6b7280;
+  color: #64748b;
 }
 
 .no-task-message .icon {
-  margin-bottom: 16px;
-  opacity: 0.5;
+  margin-bottom: 20px;
+  opacity: 0.4;
 }
 
 .no-task-message p {
   margin: 0;
   font-size: 14px;
-  max-width: 200px;
+  max-width: 220px;
+  line-height: 1.5;
 }
 
-/* Responsive Adjustments */
+/* ==================== RESPONSIVE ADJUSTMENTS ==================== */
 @media (max-width: 1200px) {
   .filters-column {
-    width: 200px;
-    min-width: 200px;
-    max-width: 200px;
+    width: 220px;
+    min-width: 220px;
+    max-width: 220px;
   }
 
   .list-column {
-    flex: 0 0 300px;
-    min-width: 260px;
-    max-width: 320px;
+    flex: 0 0 320px;
+    min-width: 280px;
+    max-width: 340px;
   }
 
   .detail-column {
@@ -339,15 +357,15 @@
 
 @media (max-width: 992px) {
   .filters-column {
-    width: 180px;
-    min-width: 180px;
-    max-width: 180px;
+    width: 200px;
+    min-width: 200px;
+    max-width: 200px;
   }
 
   .list-column {
-    flex: 0 0 280px;
-    min-width: 240px;
-    max-width: 300px;
+    flex: 0 0 300px;
+    min-width: 260px;
+    max-width: 320px;
   }
 
   .detail-column {
@@ -368,7 +386,7 @@
     max-width: 100% !important;
     min-width: 100% !important;
     border-right: none;
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom: 1px solid #e2e8f0;
   }
 
   .filters-column {
@@ -404,7 +422,7 @@
   }
 }
 
-/* Assign Notification (matches AngularJS cam-tasklist-assign-notification) */
+/* ==================== ASSIGN NOTIFICATION ==================== */
 .assign-notification {
   position: fixed;
   bottom: 24px;
@@ -427,13 +445,13 @@
 .notification-content {
   display: flex;
   align-items: flex-start;
-  gap: 12px;
+  gap: 14px;
   padding: 16px 20px;
   background-color: #ffffff;
-  border: 1px solid #e5e7eb;
+  border: 1px solid #e2e8f0;
   border-left: 4px solid #22c55e;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12), 0 4px 8px rgba(0, 0, 0, 0.08);
   max-width: 420px;
 }
 
@@ -454,12 +472,12 @@
 .notification-title {
   font-size: 14px;
   font-weight: 600;
-  color: #1f2937;
+  color: #1e293b;
 }
 
 .notification-message {
   font-size: 13px;
-  color: #6b7280;
+  color: #64748b;
   line-height: 1.4;
 }
 
@@ -474,16 +492,16 @@
   padding: 6px 12px;
   font-size: 13px;
   font-weight: 500;
-  color: #667eea;
+  color: #3b82f6;
   background: none;
   border: none;
   cursor: pointer;
-  border-radius: 4px;
-  transition: background-color 0.15s;
+  border-radius: 6px;
+  transition: background-color 0.15s ease;
 }
 
 .notification-actions .btn-link:hover {
-  background-color: #f3f4f6;
+  background-color: #eff6ff;
 }
 
 .btn-dismiss {
@@ -495,13 +513,22 @@
   padding: 0;
   border: none;
   background: transparent;
-  color: #9ca3af;
+  color: #94a3b8;
   cursor: pointer;
-  border-radius: 4px;
-  transition: background-color 0.15s, color 0.15s;
+  border-radius: 6px;
+  transition: all 0.15s ease;
 }
 
 .btn-dismiss:hover {
-  background-color: #f3f4f6;
-  color: #6b7280;
+  background-color: #f1f5f9;
+  color: #64748b;
+}
+
+/* ==================== FOCUS STATES (Accessibility) ==================== */
+.btn-toggle:focus-visible,
+.btn-maximize:focus-visible,
+.btn-action:focus-visible,
+.btn-dismiss:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
 }

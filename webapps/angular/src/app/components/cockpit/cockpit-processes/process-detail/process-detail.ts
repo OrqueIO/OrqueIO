@@ -52,6 +52,7 @@ import { ActivityInstanceTreeComponent } from '../../../../shared/activity-insta
 import { ConfirmDialogComponent } from '../../../../shared/confirm-dialog/confirm-dialog';
 import { ClipboardDirective } from '../../../../shared/clipboard-directive/clipboard.directive';
 import { CockpitHeaderComponent, BreadcrumbItem } from '../../../../shared/cockpit-header/cockpit-header';
+import { SearchWidgetComponent, SearchType, SearchCriteria } from '../../../../shared/search-widget/search-widget';
 
 type TabType = 'variables' | 'incidents' | 'calledInstances' | 'userTasks' | 'jobs' | 'externalTasks';
 type SidebarTab = 'info' | 'filter';
@@ -76,7 +77,8 @@ interface VariableEdit {
     ActivityInstanceTreeComponent,
     ConfirmDialogComponent,
     ClipboardDirective,
-    CockpitHeaderComponent
+    CockpitHeaderComponent,
+    SearchWidgetComponent
   ],
   templateUrl: './process-detail.html',
   styleUrls: ['./process-detail.css'],
@@ -148,6 +150,43 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
   variableFilter = '';
   variableSortBy: 'name' | 'type' = 'name';
   variableSortOrder: 'asc' | 'desc' = 'asc';
+  variableSearchCriteria: SearchCriteria[] = [];
+
+  // Variable search types configuration (like AngularJS)
+  variableSearchTypes: SearchType[] = [
+    {
+      key: 'variableName',
+      label: 'Name',
+      operators: [
+        { key: 'eq', label: '=' },
+        { key: 'like', label: 'like' }
+      ],
+      placeholder: 'Variable name'
+    },
+    {
+      key: 'variableValue',
+      label: 'Value',
+      operators: [
+        { key: 'eq', label: '=' },
+        { key: 'neq', label: '!=' },
+        { key: 'gt', label: '>' },
+        { key: 'gteq', label: '>=' },
+        { key: 'lt', label: '<' },
+        { key: 'lteq', label: '<=' },
+        { key: 'like', label: 'like' }
+      ],
+      allowName: true,
+      placeholder: 'Value'
+    },
+    {
+      key: 'activityInstanceIdIn',
+      label: 'Activity Instance ID',
+      operators: [
+        { key: 'eq', label: '=' }
+      ],
+      placeholder: 'Activity instance ID'
+    }
+  ];
 
   // Task editing
   editingTaskAssignee: string | null = null;
@@ -767,14 +806,9 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
   applyVariableFilter(): void {
     let filtered = [...this.variables];
 
-    // Apply text filter
-    if (this.variableFilter.trim()) {
-      const query = this.variableFilter.toLowerCase();
-      filtered = filtered.filter(v =>
-        v.name.toLowerCase().includes(query) ||
-        v.type.toLowerCase().includes(query) ||
-        String(v.value).toLowerCase().includes(query)
-      );
+    // Apply search criteria filters
+    if (this.variableSearchCriteria.length > 0) {
+      filtered = filtered.filter(v => this.matchesSearchCriteria(v));
     }
 
     // Apply sorting
@@ -786,6 +820,56 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
     });
 
     this.filteredVariables = filtered;
+  }
+
+  private matchesSearchCriteria(variable: Variable): boolean {
+    // All criteria must match (AND logic)
+    return this.variableSearchCriteria.every(criteria => {
+      switch (criteria.type.key) {
+        case 'variableName':
+          return this.matchOperator(variable.name, criteria.operator.key, criteria.value);
+        case 'variableValue':
+          // If criteria has a name, it must match the variable name
+          if (criteria.name && variable.name !== criteria.name) {
+            return false;
+          }
+          return this.matchOperator(String(variable.value), criteria.operator.key, criteria.value);
+        case 'activityInstanceIdIn':
+          return variable.activityInstanceId === criteria.value;
+        default:
+          return true;
+      }
+    });
+  }
+
+  private matchOperator(actual: string, operator: string, expected: string): boolean {
+    const actualLower = actual.toLowerCase();
+    const expectedLower = expected.toLowerCase();
+
+    switch (operator) {
+      case 'eq':
+        return actualLower === expectedLower;
+      case 'neq':
+        return actualLower !== expectedLower;
+      case 'like':
+        return actualLower.includes(expectedLower);
+      case 'gt':
+        return parseFloat(actual) > parseFloat(expected);
+      case 'gteq':
+        return parseFloat(actual) >= parseFloat(expected);
+      case 'lt':
+        return parseFloat(actual) < parseFloat(expected);
+      case 'lteq':
+        return parseFloat(actual) <= parseFloat(expected);
+      default:
+        return true;
+    }
+  }
+
+  onVariableSearchChange(criteria: SearchCriteria[]): void {
+    this.variableSearchCriteria = criteria;
+    this.applyVariableFilter();
+    this.cdr.markForCheck();
   }
 
   sortVariables(column: 'name' | 'type'): void {
@@ -814,6 +898,25 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
     }
 
     return null;
+  }
+
+  getVariableScopeTooltip(variable: Variable): string {
+    const scopeName = this.getVariableScope(variable);
+    if (!scopeName) return '';
+
+    // Find activity details for more context
+    const activity = this.activities.find(a => a.id === variable.activityInstanceId);
+    if (activity) {
+      const parts = [];
+      if (activity.activityName) parts.push(activity.activityName);
+      if (activity.activityType) parts.push(`(${activity.activityType})`);
+      if (activity.activityId && activity.activityId !== activity.activityName) {
+        parts.push(`ID: ${activity.activityId}`);
+      }
+      return parts.join(' ');
+    }
+
+    return `Scope: ${scopeName}`;
   }
 
   private findActivityNameInTree(tree: ActivityInstanceTree, activityInstanceId: string): string | null {

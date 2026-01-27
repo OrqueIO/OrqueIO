@@ -179,6 +179,31 @@ export interface Job {
   jobType?: string;
 }
 
+// Job Definition interface
+export interface JobDefinition {
+  id: string;
+  processDefinitionId: string;
+  processDefinitionKey: string;
+  activityId: string;
+  jobType: string;
+  jobConfiguration?: string;
+  suspended: boolean;
+  overridingJobPriority?: number;
+  tenantId?: string;
+  deploymentId?: string;
+}
+
+// Called Process Definition (for Call Activities)
+export interface CalledProcessDefinition {
+  id: string;
+  key: string;
+  name?: string;
+  version: number;
+  calledFromActivityIds: string[];
+  callingProcessDefinitionId: string;
+  state?: 'running' | 'referenced' | 'running-and-referenced';
+}
+
 // User Task for User Tasks tab
 export interface UserTask {
   id: string;
@@ -607,6 +632,116 @@ export class CockpitService {
       `${this.baseUrl}/process-definition/${processDefinitionId}/statistics`,
       { params }
     ).pipe(catchError(() => of([])));
+  }
+
+  // Get incidents for a process definition key (all versions)
+  getIncidentsByProcessDefinitionKey(processDefinitionKey: string, maxResults = 1000): Observable<Incident[]> {
+    return this.http.get<Incident[]>(`${this.baseUrl}/incident`, {
+      params: { processDefinitionKey, maxResults: maxResults.toString() }
+    }).pipe(catchError(() => of([])));
+  }
+
+  // Get incidents for a specific process definition ID (specific version)
+  getIncidentsByProcessDefinitionId(processDefinitionId: string, maxResults = 1000): Observable<Incident[]> {
+    return this.http.get<Incident[]>(`${this.baseUrl}/incident`, {
+      params: { processDefinitionId, maxResults: maxResults.toString() }
+    }).pipe(catchError(() => of([])));
+  }
+
+  // Get job definitions for a process definition key with count (all versions)
+  getJobDefinitionsByProcessDefinitionKey(processDefinitionKey: string, firstResult = 0, maxResults = 50): Observable<{ jobDefinitions: JobDefinition[]; count: number }> {
+    return forkJoin({
+      jobDefinitions: this.http.get<JobDefinition[]>(`${this.baseUrl}/job-definition`, {
+        params: { processDefinitionKey, firstResult: firstResult.toString(), maxResults: maxResults.toString() }
+      }),
+      count: this.http.get<{ count: number }>(`${this.baseUrl}/job-definition/count`, {
+        params: { processDefinitionKey }
+      }).pipe(map(res => res.count))
+    }).pipe(catchError(() => of({ jobDefinitions: [], count: 0 })));
+  }
+
+  // Get job definitions for a specific process definition ID with count (specific version)
+  getJobDefinitionsByProcessDefinitionId(processDefinitionId: string, firstResult = 0, maxResults = 50): Observable<{ jobDefinitions: JobDefinition[]; count: number }> {
+    return forkJoin({
+      jobDefinitions: this.http.get<JobDefinition[]>(`${this.baseUrl}/job-definition`, {
+        params: { processDefinitionId, firstResult: firstResult.toString(), maxResults: maxResults.toString() }
+      }),
+      count: this.http.get<{ count: number }>(`${this.baseUrl}/job-definition/count`, {
+        params: { processDefinitionId }
+      }).pipe(map(res => res.count))
+    }).pipe(catchError(() => of({ jobDefinitions: [], count: 0 })));
+  }
+
+  // Suspend/Activate a job definition
+  updateJobDefinitionSuspensionState(jobDefinitionId: string, suspended: boolean): Observable<void> {
+    return this.http.put<void>(`${this.baseUrl}/job-definition/${jobDefinitionId}/suspended`, {
+      suspended,
+      includeJobs: true
+    });
+  }
+
+  // Get called process definitions (Call Activities) - merge running and static
+  getCalledProcessDefinitions(processDefinitionId: string): Observable<CalledProcessDefinition[]> {
+    return forkJoin({
+      // Get running called process definitions
+      running: this.http.post<any[]>(
+        `${this.baseUrl}/process-definition/${processDefinitionId}/called-process-definitions`,
+        {}
+      ).pipe(catchError(() => of([]))),
+      // Get static called process definitions
+      static: this.http.get<any[]>(
+        `${this.baseUrl}/process-definition/${processDefinitionId}/static-called-process-definitions`
+      ).pipe(catchError(() => of([])))
+    }).pipe(
+      map(({ running, static: staticDefs }) => this.mergeCalledProcessDefinitions(running, staticDefs, processDefinitionId)),
+      catchError(() => of([]))
+    );
+  }
+
+  // Merge running instances and static references (like AngularJS)
+  private mergeCalledProcessDefinitions(
+    running: any[],
+    staticDefs: any[],
+    callingProcessDefinitionId: string
+  ): CalledProcessDefinition[] {
+    const map = new Map<string, CalledProcessDefinition>();
+
+    // Process running instances
+    running.forEach(dto => {
+      map.set(dto.id, {
+        id: dto.id,
+        key: dto.key,
+        name: dto.name,
+        version: dto.version,
+        calledFromActivityIds: dto.calledFromActivityIds || [],
+        callingProcessDefinitionId,
+        state: 'running'
+      });
+    });
+
+    // Process static references and merge
+    staticDefs.forEach(dto => {
+      if (map.has(dto.id)) {
+        // Merge - both running and referenced
+        const existing = map.get(dto.id)!;
+        const merged = new Set([...existing.calledFromActivityIds, ...(dto.calledFromActivityIds || [])]);
+        existing.calledFromActivityIds = Array.from(merged).sort();
+        existing.state = 'running-and-referenced';
+      } else {
+        // Only statically referenced
+        map.set(dto.id, {
+          id: dto.id,
+          key: dto.key,
+          name: dto.name,
+          version: dto.version,
+          calledFromActivityIds: (dto.calledFromActivityIds || []).sort(),
+          callingProcessDefinitionId,
+          state: 'referenced'
+        });
+      }
+    });
+
+    return Array.from(map.values());
   }
 
   // Runtime activity instance tree for a running process instance

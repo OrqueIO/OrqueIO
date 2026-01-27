@@ -91,8 +91,8 @@ export class OAuth2ProviderService {
       this.providersCache$ = this.http.get<OAuth2Provider[]>(this.providersUrl, {
         withCredentials: true
       }).pipe(
-        catchError(error => {
-          console.warn('Failed to fetch OAuth2 providers:', error);
+        catchError(() => {
+          // OAuth2 may not be configured - return empty array silently
           return of([]);
         }),
         shareReplay(1)
@@ -114,8 +114,8 @@ export class OAuth2ProviderService {
         withCredentials: true
       }).pipe(
         map(response => response.setupRequired === true),
-        catchError(error => {
-          console.warn('Failed to check setup required status:', error);
+        catchError(() => {
+          // Setup check may not be available - return false silently
           return of(false);
         }),
         shareReplay(1)

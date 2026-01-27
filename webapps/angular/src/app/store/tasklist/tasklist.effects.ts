@@ -1,4 +1,5 @@
 import { Injectable, inject } from '@angular/core';
+import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { of, forkJoin } from 'rxjs';
@@ -24,6 +25,7 @@ import { TaskQueryParams, VariableFilter } from '../../models/tasklist';
 export class TasklistEffects {
   private readonly actions$ = inject(Actions);
   private readonly store = inject(Store);
+  private readonly router = inject(Router);
   private readonly tasklistService = inject(TasklistService);
 
   // ==================== SEARCH QUERY BUILDER (matching AngularJS) ====================
@@ -282,6 +284,43 @@ export class TasklistEffects {
         )
       )
     )
+  );
+
+  // Refresh task list after task completion (success or failure)
+  // This ensures the UI stays in sync with the server state
+  refreshAfterComplete$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(TasksActions.completeTaskSuccess, TasksActions.completeTaskFailure),
+      map(() => TasksActions.refreshTasks())
+    )
+  );
+
+  // Clear task selection after successful completion
+  // This prevents 404 errors when trying to load a completed task
+  clearSelectionAfterComplete$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(TasksActions.completeTaskSuccess),
+      switchMap(() => [
+        TasksActions.clearSelection(),
+        TaskDetailActions.clearTaskDetail()
+      ])
+    )
+  );
+
+  // Update URL to remove task parameter after successful completion
+  // This prevents the app from trying to reload the completed task from URL
+  updateUrlAfterComplete$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(TasksActions.completeTaskSuccess),
+      tap(() => {
+        // Get current URL and remove task-related params
+        const urlTree = this.router.parseUrl(this.router.url);
+        delete urlTree.queryParams['task'];
+        delete urlTree.queryParams['detailsTab'];
+        this.router.navigateByUrl(urlTree, { replaceUrl: true });
+      })
+    ),
+    { dispatch: false }
   );
 
   setAssignee$ = createEffect(() =>
