@@ -5,7 +5,7 @@
       <div class="branding-content">
         <img src="images/orqueio.png" alt="OrqueIO" class="branding-logo" />
         <h1 class="branding-title">{{ 'SETUP_WELCOME' | translate }}</h1>
-        <p class="branding-subtitle">{{ 'BRANDING_SUBTITLE' | translate }}</p>
+        <p class="branding-subtitle" [innerHTML]="'BRANDING_SUBTITLE' | translate"></p>
 
         <div class="branding-features">
           <div class="feature-item">

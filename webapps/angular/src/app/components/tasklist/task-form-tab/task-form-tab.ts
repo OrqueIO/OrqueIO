@@ -645,9 +645,16 @@ export class TaskFormTabComponent implements OnInit, OnChanges, OnDestroy, After
 
   private buildVariablesObject(): Record<string, any> {
     const variables: Record<string, any> = {};
+
     for (const v of this.variables) {
       // Skip File types without files - they're handled separately
       if (v.type === 'File' && !v.file) {
+        continue;
+      }
+
+      // Skip Object types with Java serialization (ENGINE-17007 security restriction)
+      // Java-serialized objects are read-only and cannot be modified from forms
+      if (v.type === 'Object' && v.valueInfo?.serializationDataFormat === 'application/x-java-serialized-object') {
         continue;
       }
 
@@ -656,13 +663,14 @@ export class TaskFormTabComponent implements OnInit, OnChanges, OnDestroy, After
         type: v.type
       };
 
-      // Add valueInfo for Object types
+      // Add valueInfo for Object types (only JSON-serialized)
       if (v.type === 'Object' && v.valueInfo) {
         varData.valueInfo = v.valueInfo;
       }
 
       variables[v.name] = varData;
     }
+
     return variables;
   }
 
@@ -674,6 +682,17 @@ export class TaskFormTabComponent implements OnInit, OnChanges, OnDestroy, After
     const variables: Record<string, any> = {};
 
     for (const v of this.variables) {
+      // Skip File types without files
+      if (v.type === 'File' && !v.file) {
+        continue;
+      }
+
+      // Skip Object types with Java serialization (ENGINE-17007 security restriction)
+      // Java-serialized objects are read-only and cannot be modified from forms
+      if (v.type === 'Object' && v.valueInfo?.serializationDataFormat === 'application/x-java-serialized-object') {
+        continue;
+      }
+
       const varData: { value: any; type: string; valueInfo?: any } = {
         value: v.value,
         type: v.type
@@ -692,12 +711,9 @@ export class TaskFormTabComponent implements OnInit, OnChanges, OnDestroy, After
           console.error(`Failed to convert file ${v.name}:`, error);
           continue;
         }
-      } else if (v.type === 'File' && !v.file) {
-        // Skip file variables without files
-        continue;
       }
 
-      // Add valueInfo for Object types
+      // Add valueInfo for Object types (only JSON-serialized)
       if (v.type === 'Object' && v.valueInfo) {
         varData.valueInfo = v.valueInfo;
       }

@@ -42,6 +42,168 @@
 }
 
 /* =====================================================
+   PROCESS TABS NAVIGATION
+   ===================================================== */
+
+.process-tabs {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0 1rem;
+  flex-shrink: 0;
+}
+
+.process-tab {
+  position: relative;
+  padding: 0.625rem 1rem;
+  font-size: 0.8125rem;
+  font-weight: 400;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+  white-space: nowrap;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  cursor: pointer;
+}
+
+.process-tab:hover {
+  color: var(--text-primary);
+}
+
+.process-tab.active {
+  color: var(--color-primary);
+  font-weight: 500;
+  border-bottom-color: var(--color-primary);
+}
+
+.tab-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 200px;
+}
+
+.tab-content .table-container {
+  flex: 1;
+  overflow: auto;
+}
+
+.incident-type {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  background: var(--color-danger-bg);
+  color: var(--color-danger);
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.incident-type-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--color-danger);
+  font-weight: 500;
+}
+
+.incident-icon {
+  color: var(--color-danger);
+}
+
+.activity-link {
+  color: var(--color-primary);
+  text-decoration: none;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.activity-link:hover {
+  text-decoration: underline;
+}
+
+.incident-message {
+  max-width: 400px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mono {
+  font-family: var(--font-family-mono);
+  font-size: 0.75rem;
+}
+
+.tab-toolbar {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background: var(--color-gray-50);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.results-count {
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.definition-link {
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.definition-link:hover {
+  text-decoration: underline;
+}
+
+.definition-key {
+  display: block;
+  font-size: 0.6875rem;
+  color: var(--text-muted);
+  margin-top: 0.125rem;
+}
+
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.action-btn:hover {
+  background: var(--color-primary-bg);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.state-info {
+  background: var(--color-info-bg);
+  color: var(--color-info);
+}
+
+.state-warning {
+  background: var(--color-warning-bg);
+  color: var(--color-warning);
+}
+
+.state-error {
+  background: var(--color-danger-bg);
+  color: var(--color-danger);
+}
+
+/* =====================================================
    DEFINITION INFO (in section header)
    ===================================================== */
 
@@ -489,6 +651,47 @@
   font-size: 0.8125rem;
   color: var(--text-secondary);
   font-weight: 500;
+}
+
+/* Compact Pagination */
+.compact-pagination {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.pagination-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.pagination-nav:hover:not(:disabled) {
+  background: var(--color-gray-100);
+  border-color: var(--color-gray-300);
+  color: var(--text-primary);
+}
+
+.pagination-nav:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pagination-current {
+  font-size: 0.8125rem;
+  color: var(--text-primary);
+  font-weight: 500;
+  min-width: 50px;
+  text-align: center;
 }
 
 .page-size-selector {

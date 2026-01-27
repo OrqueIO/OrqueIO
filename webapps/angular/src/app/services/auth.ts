@@ -42,6 +42,7 @@ export class AuthService {
   private authenticationSubject = new BehaviorSubject<Authentication | null>(null);
   public authentication$ = this.authenticationSubject.asObservable();
   private authCheckPending: Observable<Authentication | null> | null = null;
+  private authInitialized = false;
 
   // Authentication events
   private authEventsSubject = new Subject<AuthEvent>();
@@ -50,6 +51,9 @@ export class AuthService {
   // Cross-tab synchronization channel
   private authChannel: BroadcastChannel | null = null;
   private readonly AUTH_CHANNEL_NAME = 'orqueio_auth_sync';
+
+  // Storage key for persisting authentication
+  private readonly AUTH_STORAGE_KEY = 'orqueio_auth';
 
   private readonly baseUrl = '/orqueio/api/admin/auth/user';
   private readonly engineUrl = '/orqueio/api/engine/engine';
@@ -61,6 +65,43 @@ export class AuthService {
     private router: Router
   ) {
     this.initCrossTabSync();
+    this.restoreAuthFromStorage();
+  }
+
+  /**
+   * Restore authentication state from localStorage on app initialization.
+   * This allows the app to immediately show the authenticated state on page refresh,
+   * while still verifying with the server in the background.
+   */
+  private restoreAuthFromStorage(): void {
+    try {
+      const stored = localStorage.getItem(this.AUTH_STORAGE_KEY);
+      if (stored) {
+        const auth = JSON.parse(stored) as Authentication;
+        if (auth && auth.name) {
+          console.log('AuthService: Restoring authentication from storage for user:', auth.name);
+          this.authenticationSubject.next(auth);
+        }
+      }
+    } catch (e) {
+      // Invalid JSON or other error - clear storage
+      localStorage.removeItem(this.AUTH_STORAGE_KEY);
+    }
+  }
+
+  /**
+   * Save authentication state to localStorage for persistence across page refreshes.
+   */
+  private saveAuthToStorage(auth: Authentication | null): void {
+    try {
+      if (auth) {
+        localStorage.setItem(this.AUTH_STORAGE_KEY, JSON.stringify(auth));
+      } else {
+        localStorage.removeItem(this.AUTH_STORAGE_KEY);
+      }
+    } catch (e) {
+      // localStorage might be full or disabled - ignore
+    }
   }
 
   /**
@@ -79,6 +120,7 @@ export class AuthService {
           console.log(`Received ${type} event from another tab`);
           // Clear local authentication state without making API call
           this.authenticationSubject.next(null);
+          this.saveAuthToStorage(null); // Also clear localStorage
           this.authCheckPending = null;
           this.emit('authentication.logout.success');
           // Redirect to login page if not already there
@@ -89,6 +131,7 @@ export class AuthService {
           console.log('Received login event from another tab');
           // Update local authentication state
           this.authenticationSubject.next(data);
+          this.saveAuthToStorage(data); // Also update localStorage
           this.emit('authentication.login.success', data);
         }
       };
@@ -100,6 +143,7 @@ export class AuthService {
           if (message?.type === 'logout' || message?.type === 'session_expired') {
             console.log(`Received ${message.type} event from another tab (localStorage)`);
             this.authenticationSubject.next(null);
+            this.saveAuthToStorage(null); // Also clear localStorage
             this.authCheckPending = null;
             this.emit('authentication.logout.success');
             if (!this.router.url.startsWith('/login')) {
@@ -136,7 +180,7 @@ export class AuthService {
     // Only broadcast if we were previously authenticated
     if (this.currentAuthentication) {
       console.log('Session expired, notifying other tabs');
-      this.authenticationSubject.next(null);
+      this.updateAuthentication(null); // This also clears localStorage
       this.authCheckPending = null;
       this.emit('authentication.login.required');
       // Notify other tabs about session expiration
@@ -269,31 +313,50 @@ export class AuthService {
   }
 
   /**
-   * Get current authentication status
+   * Get current authentication status.
+   *
+   * On page refresh, this method:
+   * 1. Returns cached auth from localStorage immediately (for fast UI response)
+   * 2. Verifies with server in background
+   * 3. Updates state if server says user is not authenticated
    */
   getAuthentication(): Observable<Authentication | null> {
-    // Si on a déjà vérifié et qu'on a une authentification, retourner la valeur en cache
-    if (this.currentAuthentication) {
+    // If we already have verified authentication, return it
+    if (this.authInitialized && this.currentAuthentication) {
       return of(this.currentAuthentication);
     }
 
-    // Si une requête est déjà en cours, retourner la même Observable
+    // If a verification request is already pending, return the same Observable
     if (this.authCheckPending) {
       return this.authCheckPending;
     }
 
-    // Créer une nouvelle requête avec shareReplay pour partager le résultat
+    // If we have cached auth from storage (not yet verified with server),
+    // return it but also trigger a background verification
+    const cachedAuth = this.currentAuthentication;
+    if (cachedAuth && !this.authInitialized) {
+      // Start background verification
+      this.verifyAuthWithServer();
+      // Return cached auth immediately for fast UI response
+      return of(cachedAuth);
+    }
+
+    // No cached auth - must verify with server
     this.authCheckPending = this.http.get<LoginResponse>(`${this.baseUrl}/${this.engine}`, { withCredentials: true }).pipe(
       map(response => this.parseResponse(response)),
       tap(authentication => {
+        this.authInitialized = true;
         this.updateAuthentication(authentication);
       }),
       catchError(() => {
+        this.authInitialized = true;
+        // Clear any stale auth from storage
+        this.updateAuthentication(null);
         return of(null);
       }),
       shareReplay(1),
       finalize(() => {
-        // Réinitialiser après un court délai pour permettre les futures vérifications
+        // Reset after a short delay to allow future verifications
         setTimeout(() => {
           this.authCheckPending = null;
         }, 100);
@@ -301,6 +364,32 @@ export class AuthService {
     );
 
     return this.authCheckPending;
+  }
+
+  /**
+   * Verify authentication with server in the background.
+   * If server says user is not authenticated, clear local state and redirect to login.
+   */
+  private verifyAuthWithServer(): void {
+    this.http.get<LoginResponse>(`${this.baseUrl}/${this.engine}`, { withCredentials: true }).pipe(
+      map(response => this.parseResponse(response)),
+      catchError(() => of(null))
+    ).subscribe(serverAuth => {
+      this.authInitialized = true;
+      if (!serverAuth) {
+        // Server says not authenticated - clear local state
+        console.log('AuthService: Server verification failed, clearing authentication');
+        this.updateAuthentication(null);
+        // Redirect to login if on a protected route
+        if (!this.router.url.startsWith('/login')) {
+          this.saveReturnUrl(this.router.url);
+          this.router.navigate(['/login']);
+        }
+      } else if (serverAuth.name !== this.currentAuthentication?.name) {
+        // User changed - update local state
+        this.updateAuthentication(serverAuth);
+      }
+    });
   }
 
   /**
@@ -377,10 +466,11 @@ export class AuthService {
   }
 
   /**
-   * Update authentication state
+   * Update authentication state and persist to storage
    */
   private updateAuthentication(authentication: Authentication | null): void {
     this.authenticationSubject.next(authentication);
+    this.saveAuthToStorage(authentication);
     // Clear pending check when explicitly setting authentication (e.g., logout)
     if (authentication === null) {
       this.authCheckPending = null;

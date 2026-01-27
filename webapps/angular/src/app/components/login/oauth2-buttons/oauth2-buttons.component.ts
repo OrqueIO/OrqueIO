@@ -60,13 +60,21 @@ export class OAuth2ButtonsComponent implements OnInit, OnDestroy {
   /** Demo mode - set to true to show static SSO buttons for testing UI */
   private readonly DEMO_MODE = false;
 
+  /** Disable OAuth2 - set to true to skip OAuth2 provider loading (avoids 404 errors when not configured) */
+  private readonly DISABLE_OAUTH2 = true;
+
   private subscription?: Subscription;
   private oauth2Service = inject(OAuth2ProviderService);
   private authService = inject(AuthService);
   private translateService = inject(TranslateService);
 
   ngOnInit(): void {
-    if (this.DEMO_MODE) {
+    if (this.DISABLE_OAUTH2) {
+      // OAuth2 not configured - skip loading to avoid 404 errors
+      this.providers = [];
+      this.setupRequired = false;
+      this.loading = false;
+    } else if (this.DEMO_MODE) {
       this.loadDemoProviders();
     } else {
       this.loadProviders();

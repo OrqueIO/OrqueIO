@@ -184,35 +184,87 @@
 
           <!-- Instances table section (hidden when diagram maximized, expanded when table maximized) -->
           <section class="instances-section" *ngIf="!diagramMaximized">
-            <!-- Toolbar -->
-            <div class="section-toolbar">
-              <div class="results-info">
-                <span *ngIf="!loading && totalCount > 0">
-                  {{ 'cockpit.processes.showing' | translate }} {{ startIndex }} - {{ endIndex }}
-                  {{ 'cockpit.processes.of' | translate }} {{ totalCount }}
-                </span>
-                <span *ngIf="!loading && totalCount === 0">
-                  {{ 'cockpit.processes.noResults' | translate }}
-                </span>
-              </div>
+            <!-- Process Definition Tabs -->
+            <nav class="process-tabs">
+              <a
+                class="process-tab"
+                [class.active]="activeTab === 'instances'"
+                (click)="switchTab('instances')"
+              >
+                {{ 'cockpit.processes.tabs.processInstances' | translate }}
+              </a>
+              <a
+                class="process-tab"
+                [class.active]="activeTab === 'incidents'"
+                (click)="switchTab('incidents')"
+              >
+                {{ 'cockpit.processes.tabs.incidents' | translate }}
+              </a>
+              <a
+                class="process-tab"
+                [class.active]="activeTab === 'called-definitions'"
+                (click)="switchTab('called-definitions')"
+              >
+                {{ 'cockpit.processes.tabs.calledProcessDefinitions' | translate }}
+              </a>
+              <a
+                class="process-tab"
+                [class.active]="activeTab === 'job-definitions'"
+                (click)="switchTab('job-definitions')"
+              >
+                {{ 'cockpit.processes.tabs.jobDefinitions' | translate }}
+              </a>
+            </nav>
 
-              <!-- Page size selector -->
-              <div class="page-size-selector">
-                <label>{{ 'cockpit.processes.pageSize' | translate }}:</label>
-                <select [(ngModel)]="pageSize" (change)="onPageSizeChange()">
-                  <option *ngFor="let size of pageSizeOptions" [value]="size">{{ size }}</option>
-                </select>
-              </div>
+            <!-- Tab Content: Process Instances -->
+            <ng-container *ngIf="activeTab === 'instances'">
+              <!-- Toolbar -->
+              <div class="section-toolbar">
+                <div class="results-info">
+                  <span *ngIf="!loading && totalCount > 0">
+                    {{ 'cockpit.processes.showing' | translate }} {{ startIndex }} - {{ endIndex }}
+                    {{ 'cockpit.processes.of' | translate }} {{ totalCount }}
+                  </span>
+                  <span *ngIf="!loading && totalCount === 0">
+                    {{ 'cockpit.processes.noResults' | translate }}
+                  </span>
+                </div>
 
-              <!-- Expand/Collapse table button -->
-              <div class="toolbar-actions">
-                <a class="expand-table-btn"
-                   (click)="toggleTableMaximize()"
-                   [title]="tableMaximized ? ('cockpit.processDetail.showDiagram' | translate) : ('cockpit.processDetail.hideDiagram' | translate)">
-                  <fa-icon [icon]="tableMaximized ? faChevronDown : faChevronUp"></fa-icon>
-                </a>
+                <!-- Compact Pagination -->
+                <div class="compact-pagination" *ngIf="totalPages > 0">
+                  <button
+                    class="pagination-nav"
+                    [disabled]="currentPage === 1"
+                    (click)="onPageChange(currentPage - 1)"
+                  >
+                    <fa-icon [icon]="faChevronLeft"></fa-icon>
+                  </button>
+                  <span class="pagination-current">{{ currentPage }} / {{ totalPages }}</span>
+                  <button
+                    class="pagination-nav"
+                    [disabled]="currentPage === totalPages"
+                    (click)="onPageChange(currentPage + 1)"
+                  >
+                    <fa-icon [icon]="faChevronRight"></fa-icon>
+                  </button>
+                </div>
+
+                <!-- Page size selector -->
+                <div class="page-size-selector">
+                  <select [(ngModel)]="pageSize" (change)="onPageSizeChange()">
+                    <option *ngFor="let size of pageSizeOptions" [value]="size">{{ size }}</option>
+                  </select>
+                </div>
+
+                <!-- Expand/Collapse table button -->
+                <div class="toolbar-actions">
+                  <a class="expand-table-btn"
+                     (click)="toggleTableMaximize()"
+                     [title]="tableMaximized ? ('cockpit.processDetail.showDiagram' | translate) : ('cockpit.processDetail.hideDiagram' | translate)">
+                    <fa-icon [icon]="tableMaximized ? faChevronDown : faChevronUp"></fa-icon>
+                  </a>
+                </div>
               </div>
-            </div>
 
             <!-- Table -->
             <div class="table-container">
@@ -257,9 +309,9 @@
                 <tbody>
                   <tr *ngFor="let instance of processInstances">
                     <td>
-                      <span class="state-badge" [ngClass]="getStateClass(instance.state)">
-                        <fa-icon [icon]="getStateIcon(instance.state)"></fa-icon>
-                        {{ getStateLabel(instance.state) }}
+                      <span class="state-badge" [ngClass]="getStateClass(instance)">
+                        <fa-icon [icon]="getStateIcon(instance)"></fa-icon>
+                        {{ getStateLabel(instance) }}
                       </span>
                     </td>
                     <td class="id-cell">
@@ -298,60 +350,227 @@
                 <p>{{ 'cockpit.processes.noProcessInstances' | translate }}</p>
               </div>
             </div>
+            </ng-container>
 
-            <!-- Pagination -->
-            <div class="pagination" *ngIf="totalPages > 1">
-              <button
-                class="pagination-btn"
-                [disabled]="currentPage === 1"
-                (click)="onPageChange(1)"
-                [title]="'cockpit.pagination.first' | translate"
-              >
-                <fa-icon [icon]="faAngleDoubleLeft"></fa-icon>
-              </button>
+            <!-- Tab Content: Incidents -->
+            <ng-container *ngIf="activeTab === 'incidents'">
+              <!-- Toolbar -->
+              <div class="section-toolbar">
+                <div class="results-info">
+                  <span *ngIf="!incidentsLoading && incidents.length > 0">
+                    {{ 'cockpit.processes.showing' | translate }} 1 - {{ incidents.length }}
+                    {{ 'cockpit.processes.of' | translate }} {{ incidents.length }}
+                  </span>
+                  <span *ngIf="!incidentsLoading && incidents.length === 0">
+                    {{ 'cockpit.processes.noResults' | translate }}
+                  </span>
+                </div>
+              </div>
 
-              <button
-                class="pagination-btn"
-                [disabled]="currentPage === 1"
-                (click)="onPageChange(currentPage - 1)"
-                [title]="'cockpit.pagination.previous' | translate"
-              >
-                <fa-icon [icon]="faChevronLeft"></fa-icon>
-              </button>
+              <!-- Table -->
+              <div class="table-container">
+                <table class="data-table" *ngIf="!incidentsLoading && incidents.length > 0">
+                  <thead>
+                    <tr>
+                      <th>{{ 'cockpit.incidents.columns.type' | translate }}</th>
+                      <th>{{ 'cockpit.incidents.columns.message' | translate }}</th>
+                      <th>{{ 'cockpit.incidents.columns.activity' | translate }}</th>
+                      <th>{{ 'cockpit.incidents.columns.createTime' | translate }}</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let incident of incidents">
+                      <td>
+                        <span class="incident-type-badge">
+                          <fa-icon [icon]="faExclamationTriangle" class="incident-icon"></fa-icon>
+                          {{ incident.incidentType }}
+                        </span>
+                      </td>
+                      <td class="incident-message" [title]="incident.incidentMessage || ''">
+                        {{ incident.incidentMessage || '-' }}
+                      </td>
+                      <td>
+                        <a class="activity-link" (click)="scrollToActivity(incident.activityId)">
+                          {{ incident.activityId }}
+                        </a>
+                      </td>
+                      <td>{{ formatDate(incident.createTime) || '-' }}</td>
+                      <td>
+                        <a
+                          [routerLink]="['/cockpit/processes/instance', incident.processInstanceId]"
+                          class="action-link"
+                          [title]="'cockpit.incidents.retry' | translate"
+                        >
+                          <fa-icon [icon]="faSync"></fa-icon>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
 
-              <div class="page-numbers">
+                <!-- Loading state -->
+                <div class="loading-state" *ngIf="incidentsLoading">
+                  <fa-icon [icon]="faSpinner" animation="spin"></fa-icon>
+                  <span>{{ 'common.loading' | translate }}</span>
+                </div>
+
+                <!-- Empty state -->
+                <div class="empty-state" *ngIf="!incidentsLoading && incidents.length === 0">
+                  <fa-icon [icon]="faCheckCircle"></fa-icon>
+                  <p>{{ 'cockpit.incidents.noIncidents' | translate }}</p>
+                </div>
+              </div>
+            </ng-container>
+
+            <!-- Tab Content: Called Process Definitions -->
+            <div class="tab-content" *ngIf="activeTab === 'called-definitions'">
+              <div class="loading-state" *ngIf="calledProcessDefinitionsLoading">
+                <fa-icon [icon]="faSpinner" animation="spin"></fa-icon>
+                <span>{{ 'common.loading' | translate }}</span>
+              </div>
+
+              <div class="tab-toolbar" *ngIf="!calledProcessDefinitionsLoading && calledProcessDefinitions.length > 0">
+                <span class="results-count">{{ calledProcessDefinitions.length }} {{ 'cockpit.calledDefinitions.found' | translate }}</span>
+              </div>
+
+              <div class="table-container" *ngIf="!calledProcessDefinitionsLoading && calledProcessDefinitions.length > 0">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>{{ 'cockpit.calledDefinitions.columns.name' | translate }}</th>
+                      <th>{{ 'cockpit.calledDefinitions.columns.state' | translate }}</th>
+                      <th>{{ 'cockpit.calledDefinitions.columns.calledFrom' | translate }}</th>
+                      <th>{{ 'cockpit.calledDefinitions.columns.actions' | translate }}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let calledDef of calledProcessDefinitions">
+                      <td>
+                        <a [routerLink]="['/cockpit/processes', calledDef.key, 'instances']" class="definition-link">
+                          {{ calledDef.name || calledDef.key }}
+                        </a>
+                        <span class="definition-key mono" *ngIf="calledDef.name">{{ calledDef.key }}</span>
+                      </td>
+                      <td>
+                        <span class="state-badge" [ngClass]="getCalledDefStateClass(calledDef.state)">
+                          {{ getCalledDefStateLabel(calledDef.state) }}
+                        </span>
+                      </td>
+                      <td>
+                        <span *ngFor="let activityId of calledDef.calledFromActivityIds; let last = last">
+                          {{ activityId }}<span *ngIf="!last">, </span>
+                        </span>
+                      </td>
+                      <td>
+                        <a
+                          [routerLink]="['/cockpit/processes', calledDef.key, 'instances']"
+                          class="action-link"
+                          [title]="'cockpit.processes.viewInstances' | translate"
+                        >
+                          <fa-icon [icon]="faEye"></fa-icon>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="empty-state" *ngIf="!calledProcessDefinitionsLoading && calledProcessDefinitions.length === 0">
+                <fa-icon [icon]="faProjectDiagram"></fa-icon>
+                <p>{{ 'cockpit.calledDefinitions.noCalledDefinitions' | translate }}</p>
+              </div>
+            </div>
+
+            <!-- Tab Content: Job Definitions -->
+            <div class="tab-content" *ngIf="activeTab === 'job-definitions'">
+              <div class="loading-state" *ngIf="jobDefinitionsLoading">
+                <fa-icon [icon]="faSpinner" animation="spin"></fa-icon>
+                <span>{{ 'common.loading' | translate }}</span>
+              </div>
+
+              <div class="tab-toolbar" *ngIf="!jobDefinitionsLoading && jobDefinitions.length > 0">
+                <span class="results-count">{{ jobDefinitionsCount }} {{ 'cockpit.jobDefinitions.found' | translate }}</span>
+              </div>
+
+              <div class="table-container" *ngIf="!jobDefinitionsLoading && jobDefinitions.length > 0">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>{{ 'cockpit.jobDefinitions.columns.state' | translate }}</th>
+                      <th>{{ 'cockpit.jobDefinitions.columns.activity' | translate }}</th>
+                      <th>{{ 'cockpit.jobDefinitions.columns.type' | translate }}</th>
+                      <th>{{ 'cockpit.jobDefinitions.columns.configuration' | translate }}</th>
+                      <th>{{ 'cockpit.jobDefinitions.columns.priority' | translate }}</th>
+                      <th>{{ 'cockpit.jobDefinitions.columns.actions' | translate }}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let jobDef of jobDefinitions">
+                      <td>
+                        <span class="state-badge" [ngClass]="jobDef.suspended ? 'state-suspended' : 'state-active'">
+                          <fa-icon [icon]="jobDef.suspended ? faPauseCircle : faPlayCircle"></fa-icon>
+                          {{ jobDef.suspended ? 'Suspended' : 'Active' }}
+                        </span>
+                      </td>
+                      <td>{{ jobDef.activityId }}</td>
+                      <td>{{ jobDef.jobType }}</td>
+                      <td class="mono">{{ jobDef.jobConfiguration || '-' }}</td>
+                      <td>{{ jobDef.overridingJobPriority ?? '-' }}</td>
+                      <td>
+                        <button
+                          class="action-btn"
+                          [title]="jobDef.suspended ? ('cockpit.jobDefinitions.activate' | translate) : ('cockpit.jobDefinitions.suspend' | translate)"
+                          (click)="toggleJobDefinitionSuspension(jobDef)"
+                        >
+                          <fa-icon [icon]="jobDef.suspended ? faPlayCircle : faPauseCircle"></fa-icon>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Pagination for Job Definitions -->
+              <div class="pagination" *ngIf="jobDefinitionsCount > jobDefinitionsPageSize">
                 <button
-                  *ngFor="let page of pageNumbers"
-                  class="page-number"
-                  [class.active]="page === currentPage"
-                  (click)="onPageChange(page)"
+                  class="pagination-btn"
+                  [disabled]="jobDefinitionsPage === 1"
+                  (click)="onJobDefinitionsPageChange(1)"
                 >
-                  {{ page }}
+                  <fa-icon [icon]="faAngleDoubleLeft"></fa-icon>
+                </button>
+                <button
+                  class="pagination-btn"
+                  [disabled]="jobDefinitionsPage === 1"
+                  (click)="onJobDefinitionsPageChange(jobDefinitionsPage - 1)"
+                >
+                  <fa-icon [icon]="faChevronLeft"></fa-icon>
+                </button>
+                <span class="pagination-info">
+                  {{ 'cockpit.pagination.page' | translate }} {{ jobDefinitionsPage }}
+                  {{ 'cockpit.pagination.of' | translate }} {{ (jobDefinitionsCount / jobDefinitionsPageSize) | number:'1.0-0' }}
+                </span>
+                <button
+                  class="pagination-btn"
+                  [disabled]="jobDefinitionsPage * jobDefinitionsPageSize >= jobDefinitionsCount"
+                  (click)="onJobDefinitionsPageChange(jobDefinitionsPage + 1)"
+                >
+                  <fa-icon [icon]="faChevronRight"></fa-icon>
+                </button>
+                <button
+                  class="pagination-btn"
+                  [disabled]="jobDefinitionsPage * jobDefinitionsPageSize >= jobDefinitionsCount"
+                  (click)="onJobDefinitionsPageChange(Math.ceil(jobDefinitionsCount / jobDefinitionsPageSize))"
+                >
+                  <fa-icon [icon]="faAngleDoubleRight"></fa-icon>
                 </button>
               </div>
 
-              <button
-                class="pagination-btn"
-                [disabled]="currentPage === totalPages"
-                (click)="onPageChange(currentPage + 1)"
-                [title]="'cockpit.pagination.next' | translate"
-              >
-                <fa-icon [icon]="faChevronRight"></fa-icon>
-              </button>
-
-              <button
-                class="pagination-btn"
-                [disabled]="currentPage === totalPages"
-                (click)="onPageChange(totalPages)"
-                [title]="'cockpit.pagination.last' | translate"
-              >
-                <fa-icon [icon]="faAngleDoubleRight"></fa-icon>
-              </button>
-
-              <span class="pagination-info">
-                {{ 'cockpit.pagination.page' | translate }} {{ currentPage }}
-                {{ 'cockpit.pagination.of' | translate }} {{ totalPages }}
-              </span>
+              <div class="empty-state" *ngIf="!jobDefinitionsLoading && jobDefinitions.length === 0">
+                <fa-icon [icon]="faCog"></fa-icon>
+                <p>{{ 'cockpit.jobDefinitions.noJobDefinitions' | translate }}</p>
+              </div>
             </div>
           </section>
         </div>

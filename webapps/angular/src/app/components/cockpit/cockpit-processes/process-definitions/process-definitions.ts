@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy, DestroyRef, inject, ChangeDetectionStrate
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { forkJoin } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
@@ -70,6 +71,7 @@ export class ProcessDefinitionsComponent implements OnInit, OnDestroy {
   // Data
   processDefinitions: ProcessDefinitionStatistics[] = [];
   filteredDefinitions: ProcessDefinitionStatistics[] = [];
+  totalCount = 0;
   loading = true;
 
   // Filters
@@ -132,11 +134,15 @@ export class ProcessDefinitionsComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.cdr.markForCheck();
 
-    this.cockpitService.getProcessDefinitionsWithStatistics()
+    forkJoin({
+      definitions: this.cockpitService.getProcessDefinitionsWithStatistics(),
+      count: this.cockpitService.getProcessDefinitionsCount()
+    })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: (definitions) => {
+        next: ({ definitions, count }) => {
           this.processDefinitions = definitions;
+          this.totalCount = count;
           this.applyFilter();
           this.loading = false;
           this.cdr.markForCheck();

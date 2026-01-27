@@ -126,6 +126,15 @@
           <polyline [attr.points]="isExpanded(task) ? '18 15 12 9 6 15' : '6 9 12 15 18 9'"></polyline>
         </svg>
       </button>
+
+      <!-- Expanded Content - Variables and Task Info -->
+      <div class="task-expanded-content" *ngIf="isExpanded(task)">
+        <app-task-card
+          [task]="task"
+          [filterVariables]="filterVariables"
+          [showUndefinedVariable]="showUndefinedVariable">
+        </app-task-card>
+      </div>
     </div>
 
     <!-- Loading Overlay -->

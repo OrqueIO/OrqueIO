@@ -27,7 +27,7 @@
       <!-- Results info -->
       <header class="results-info">
         <h1 class="results-title" *ngIf="!loading && filteredDefinitions.length > 0">
-          {{ filteredDefinitions.length }} {{ 'cockpit.processes.definitionsFound' | translate }}
+          {{ searchQuery ? filteredDefinitions.length : totalCount }} {{ 'cockpit.processes.definitionsFound' | translate }}
         </h1>
         <h1 class="results-title" *ngIf="!loading && filteredDefinitions.length === 0 && processDefinitions.length > 0">
           {{ 'cockpit.processes.noMatchingDefinitions' | translate }}

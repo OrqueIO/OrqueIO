@@ -30,13 +30,14 @@ import {
   faExpand,
   faCompress,
   faPlus,
-  faMinus
+  faMinus,
+  faSync
 } from '@fortawesome/free-solid-svg-icons';
 import { forkJoin } from 'rxjs';
 
 import { CockpitHeaderComponent, BreadcrumbItem } from '../../../../shared/cockpit-header/cockpit-header';
 import { COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS } from '../../../../shared/cockpit-menu';
-import { CockpitService, ProcessInstance, ProcessDefinition, ProcessQueryParams, ActivityStatistics } from '../../../../services/cockpit.service';
+import { CockpitService, ProcessInstance, ProcessDefinition, ProcessQueryParams, ActivityStatistics, Incident, JobDefinition, CalledProcessDefinition } from '../../../../services/cockpit.service';
 import { NavMenuService } from '../../../../services/nav-menu.service';
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
 import { BpmnViewerComponent, ActivityBadge } from '../../../../shared/bpmn-viewer/bpmn-viewer';
@@ -84,6 +85,9 @@ export class ProcessListComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
   private cdr = inject(ChangeDetectorRef);
 
+  // Expose Math for template
+  Math = Math;
+
   // Icons
   faSpinner = faSpinner;
   faSearch = faSearch;
@@ -111,6 +115,7 @@ export class ProcessListComponent implements OnInit, OnDestroy {
   faCompress = faCompress;
   faPlus = faPlus;
   faMinus = faMinus;
+  faSync = faSync;
 
   @ViewChild('bpmnViewer') bpmnViewer!: BpmnViewerComponent;
 
@@ -161,6 +166,25 @@ export class ProcessListComponent implements OnInit, OnDestroy {
   // Sorting
   sortConfig: SortConfig = { column: 'startTime', direction: 'desc' };
   sortableColumns = ['startTime', 'endTime', 'businessKey'];
+
+  // Tabs
+  activeTab: 'instances' | 'incidents' | 'called-definitions' | 'job-definitions' = 'instances';
+
+  // Tab data - Incidents
+  incidents: Incident[] = [];
+  incidentsLoading = false;
+  incidentsCount = 0;
+
+  // Tab data - Job Definitions
+  jobDefinitions: JobDefinition[] = [];
+  jobDefinitionsLoading = false;
+  jobDefinitionsCount = 0;
+  jobDefinitionsPage = 1;
+  jobDefinitionsPageSize = 50;
+
+  // Tab data - Called Process Definitions
+  calledProcessDefinitions: CalledProcessDefinition[] = [];
+  calledProcessDefinitionsLoading = false;
 
   ngOnInit(): void {
     this.navMenuService.setMenuItems(COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS);
@@ -216,6 +240,10 @@ export class ProcessListComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (definition) => {
           this.processDefinition = definition;
+          // Initialize selectedVersion to the latest version (current definition ID)
+          if (definition?.id) {
+            this.selectedVersion = definition.id;
+          }
           const name = definition?.name || this.processDefinitionKey;
           this.breadcrumbs = [
             { label: 'Processes', translateKey: 'cockpit.menu.processes', route: '/cockpit/processes' },
@@ -288,15 +316,25 @@ export class ProcessListComponent implements OnInit, OnDestroy {
     const queryBody = this.buildQueryBody();
     const firstResult = (this.currentPage - 1) * this.pageSize;
 
-    // Load count and instances in parallel
+    // Load count, instances and incidents in parallel
+    // Use processDefinitionId when a specific version is selected, otherwise use processDefinitionKey
+    const incidentsObservable = this.selectedVersion === 'all'
+      ? this.cockpitService.getIncidentsByProcessDefinitionKey(this.processDefinitionKey)
+      : this.cockpitService.getIncidentsByProcessDefinitionId(this.selectedVersion);
+
     forkJoin({
       count: this.cockpitService.queryProcessInstancesCount(queryBody),
-      instances: this.cockpitService.queryProcessInstances(queryBody, firstResult, this.pageSize)
+      instances: this.cockpitService.queryProcessInstances(queryBody, firstResult, this.pageSize),
+      incidents: incidentsObservable
     }).pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: ({ count, instances }) => {
+        next: ({ count, instances, incidents }) => {
           this.totalCount = count;
-          this.processInstances = instances;
+          // Associate incidents with process instances
+          this.processInstances = instances.map(instance => {
+            const instanceIncidents = incidents.filter(inc => inc.processInstanceId === instance.id);
+            return { ...instance, incidents: instanceIncidents };
+          });
           this.loading = false;
           this.updateActiveFiltersCount();
           this.cdr.markForCheck();
@@ -428,6 +466,13 @@ export class ProcessListComponent implements OnInit, OnDestroy {
   onVersionChange(): void {
     this.currentPage = 1;
 
+    // Reset tab data so it gets reloaded with new version filter
+    this.incidents = [];
+    this.incidentsCount = 0;
+    this.jobDefinitions = [];
+    this.jobDefinitionsCount = 0;
+    this.calledProcessDefinitions = [];
+
     // Reload BPMN diagram for selected version
     const definitionId = this.selectedVersion === 'all'
       ? this.processDefinition?.id
@@ -439,6 +484,15 @@ export class ProcessListComponent implements OnInit, OnDestroy {
     }
 
     this.loadProcessInstances();
+
+    // Reload current tab data if not on instances tab
+    if (this.activeTab === 'incidents') {
+      this.loadIncidents();
+    } else if (this.activeTab === 'job-definitions') {
+      this.loadJobDefinitions();
+    } else if (this.activeTab === 'called-definitions') {
+      this.loadCalledProcessDefinitions();
+    }
   }
 
   onPageChange(page: number): void {
@@ -500,46 +554,78 @@ export class ProcessListComponent implements OnInit, OnDestroy {
     return pages;
   }
 
-  getStateIcon(state: string): any {
-    switch (state) {
-      case 'ACTIVE':
+  /**
+   * Compute the visual state of a process instance like AngularJS
+   * Priority: incidents > suspended > running/completed based on endTime
+   */
+  getComputedState(instance: ProcessInstance): 'running' | 'completed' | 'suspended' | 'incidents' | 'terminated' {
+    // Check for incidents first (highest priority)
+    if (instance.incidents && instance.incidents.length > 0) {
+      return 'incidents';
+    }
+
+    // Check API state field
+    if (instance.state === 'SUSPENDED') {
+      return 'suspended';
+    }
+
+    if (instance.state === 'EXTERNALLY_TERMINATED' || instance.state === 'INTERNALLY_TERMINATED') {
+      return 'terminated';
+    }
+
+    // Check if still running (no endTime) or completed (has endTime)
+    if (!instance.endTime) {
+      return 'running';
+    }
+
+    return 'completed';
+  }
+
+  getStateIcon(instance: ProcessInstance): any {
+    const computedState = this.getComputedState(instance);
+    switch (computedState) {
+      case 'running':
         return this.faPlayCircle;
-      case 'SUSPENDED':
+      case 'suspended':
         return this.faPauseCircle;
-      case 'COMPLETED':
+      case 'completed':
         return this.faCheckCircle;
-      case 'EXTERNALLY_TERMINATED':
-      case 'INTERNALLY_TERMINATED':
+      case 'incidents':
+        return this.faExclamationTriangle;
+      case 'terminated':
         return this.faTimesCircle;
       default:
         return this.faCheckCircle;
     }
   }
 
-  getStateClass(state: string): string {
-    switch (state) {
-      case 'ACTIVE':
+  getStateClass(instance: ProcessInstance): string {
+    const computedState = this.getComputedState(instance);
+    switch (computedState) {
+      case 'running':
         return 'state-active';
-      case 'SUSPENDED':
+      case 'suspended':
         return 'state-suspended';
-      case 'COMPLETED':
+      case 'completed':
         return 'state-completed';
-      case 'EXTERNALLY_TERMINATED':
-      case 'INTERNALLY_TERMINATED':
+      case 'incidents':
+        return 'state-error';
+      case 'terminated':
         return 'state-terminated';
       default:
         return '';
     }
   }
 
-  getStateLabel(state: string): string {
-    switch (state) {
-      case 'ACTIVE': return 'Active';
-      case 'SUSPENDED': return 'Suspended';
-      case 'COMPLETED': return 'Completed';
-      case 'EXTERNALLY_TERMINATED': return 'Terminated';
-      case 'INTERNALLY_TERMINATED': return 'Terminated';
-      default: return state;
+  getStateLabel(instance: ProcessInstance): string {
+    const computedState = this.getComputedState(instance);
+    switch (computedState) {
+      case 'running': return 'Running';
+      case 'suspended': return 'Suspended';
+      case 'completed': return 'Completed';
+      case 'incidents': return 'Incidents';
+      case 'terminated': return 'Terminated';
+      default: return '';
     }
   }
 
@@ -572,5 +658,161 @@ export class ProcessListComponent implements OnInit, OnDestroy {
         this.bpmnViewer?.resize();
       }, 100);
     }
+  }
+
+  scrollToActivity(activityId: string): void {
+    if (this.bpmnViewer && activityId) {
+      this.bpmnViewer.scrollToElement(activityId);
+    }
+  }
+
+  switchTab(tab: 'instances' | 'incidents' | 'called-definitions' | 'job-definitions'): void {
+    this.activeTab = tab;
+
+    // Load data for the tab if not already loaded
+    switch (tab) {
+      case 'incidents':
+        if (this.incidents.length === 0 && !this.incidentsLoading) {
+          this.loadIncidents();
+        }
+        break;
+      case 'job-definitions':
+        if (this.jobDefinitions.length === 0 && !this.jobDefinitionsLoading) {
+          this.loadJobDefinitions();
+        }
+        break;
+      case 'called-definitions':
+        if (this.calledProcessDefinitions.length === 0 && !this.calledProcessDefinitionsLoading) {
+          this.loadCalledProcessDefinitions();
+        }
+        break;
+    }
+
+    this.cdr.markForCheck();
+  }
+
+  private loadIncidents(): void {
+    this.incidentsLoading = true;
+    this.cdr.markForCheck();
+
+    // Use processDefinitionId when a specific version is selected, otherwise use processDefinitionKey
+    const incidentsObservable = this.selectedVersion === 'all'
+      ? this.cockpitService.getIncidentsByProcessDefinitionKey(this.processDefinitionKey)
+      : this.cockpitService.getIncidentsByProcessDefinitionId(this.selectedVersion);
+
+    incidentsObservable
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (incidents) => {
+          this.incidents = incidents;
+          this.incidentsCount = incidents.length;
+          this.incidentsLoading = false;
+          this.cdr.markForCheck();
+        },
+        error: () => {
+          this.incidentsLoading = false;
+          this.cdr.markForCheck();
+        }
+      });
+  }
+
+  private loadJobDefinitions(): void {
+    this.jobDefinitionsLoading = true;
+    this.cdr.markForCheck();
+
+    const firstResult = (this.jobDefinitionsPage - 1) * this.jobDefinitionsPageSize;
+
+    // Use processDefinitionId when a specific version is selected, otherwise use processDefinitionKey
+    const jobDefinitionsObservable = this.selectedVersion === 'all'
+      ? this.cockpitService.getJobDefinitionsByProcessDefinitionKey(
+          this.processDefinitionKey,
+          firstResult,
+          this.jobDefinitionsPageSize
+        )
+      : this.cockpitService.getJobDefinitionsByProcessDefinitionId(
+          this.selectedVersion,
+          firstResult,
+          this.jobDefinitionsPageSize
+        );
+
+    jobDefinitionsObservable
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: ({ jobDefinitions, count }) => {
+          this.jobDefinitions = jobDefinitions;
+          this.jobDefinitionsCount = count;
+          this.jobDefinitionsLoading = false;
+          this.cdr.markForCheck();
+        },
+        error: () => {
+          this.jobDefinitionsLoading = false;
+          this.cdr.markForCheck();
+        }
+      });
+  }
+
+  onJobDefinitionsPageChange(page: number): void {
+    this.jobDefinitionsPage = page;
+    this.loadJobDefinitions();
+  }
+
+  toggleJobDefinitionSuspension(jobDef: JobDefinition): void {
+    const newState = !jobDef.suspended;
+    this.cockpitService.updateJobDefinitionSuspensionState(jobDef.id, newState)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          jobDef.suspended = newState;
+          this.cdr.markForCheck();
+        },
+        error: () => {
+          // Handle error - could show a notification
+          this.cdr.markForCheck();
+        }
+      });
+  }
+
+  getCalledDefStateLabel(state?: string): string {
+    switch (state) {
+      case 'running': return 'Running';
+      case 'referenced': return 'Referenced';
+      case 'running-and-referenced': return 'Running and Referenced';
+      default: return '-';
+    }
+  }
+
+  getCalledDefStateClass(state?: string): string {
+    switch (state) {
+      case 'running': return 'state-active';
+      case 'referenced': return 'state-info';
+      case 'running-and-referenced': return 'state-warning';
+      default: return '';
+    }
+  }
+
+  private loadCalledProcessDefinitions(): void {
+    // Use selected version or default process definition id
+    const processDefinitionId = this.selectedVersion === 'all'
+      ? this.processDefinition?.id
+      : this.selectedVersion;
+
+    if (!processDefinitionId) return;
+
+    this.calledProcessDefinitionsLoading = true;
+    this.cdr.markForCheck();
+
+    this.cockpitService.getCalledProcessDefinitions(processDefinitionId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (calledDefs) => {
+          this.calledProcessDefinitions = calledDefs;
+          this.calledProcessDefinitionsLoading = false;
+          this.cdr.markForCheck();
+        },
+        error: () => {
+          this.calledProcessDefinitionsLoading = false;
+          this.cdr.markForCheck();
+        }
+      });
   }
 }

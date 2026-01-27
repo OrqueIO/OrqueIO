@@ -1,22 +1,25 @@
 /* ==========================================================
-   TASK LIST COMPONENT
-   Structure: :host > .task-list-container > [pagination, scroll-area]
+   TASK LIST COMPONENT - Camunda 8 / Material Design Style
    ========================================================== */
 
-/* Host element - fills parent completely */
+/* Host element - CRITICAL for proper height inheritance */
 :host {
-  display: block;
-  height: 100%;
-  width: 100%;
-  overflow: hidden;
-}
-
-/* Main container - uses height with flex for scroll */
-.task-list-container {
   display: flex;
   flex-direction: column;
   height: 100%;
   width: 100%;
+  min-height: 0;  /* Essential for flex children to scroll */
+  overflow: hidden;
+}
+
+/* Main container */
+.task-list-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;  /* Fill available space */
+  height: 100%;
+  width: 100%;
+  min-height: 0;  /* Critical for nested flex scrolling */
   background: #f8fafc;
   overflow: hidden;
 }
@@ -26,50 +29,51 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 12px;
-  background: #fff;
+  padding: 12px 16px;
+  background: #ffffff;
   border-bottom: 1px solid #e2e8f0;
   flex-shrink: 0;
-  box-sizing: border-box;
 }
 
 .pagination-info {
-  font-size: 12px;
+  font-size: 13px;
   color: #64748b;
+  font-weight: 400;
 }
 
 .pagination-controls {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
 }
 
 .pagination-page {
-  font-size: 12px;
-  font-weight: 600;
-  color: #1e293b;
-  min-width: 50px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #334155;
+  min-width: 56px;
   text-align: center;
+  padding: 0 8px;
 }
 
 .btn-nav {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   border: 1px solid #e2e8f0;
-  border-radius: 6px;
-  background: #fff;
+  border-radius: 8px;
+  background: #ffffff;
   color: #64748b;
   cursor: pointer;
   transition: all 0.15s ease;
 }
 
 .btn-nav:hover:not(:disabled) {
-  border-color: #6366f1;
-  color: #6366f1;
-  background: #f5f3ff;
+  border-color: #3b82f6;
+  color: #3b82f6;
+  background: #eff6ff;
 }
 
 .btn-nav:disabled {
@@ -77,21 +81,18 @@
   cursor: not-allowed;
 }
 
-.btn-nav svg {
-  display: block;
-}
-
 /* ==================== SCROLL AREA ==================== */
 .task-scroll-area {
   flex: 1;
-  height: 0; /* Forces flex to calculate height, critical for scroll */
+  min-height: 0;  /* CRITICAL: Forces flex to calculate proper height for scrolling */
   overflow-y: auto;
   overflow-x: hidden;
-  padding: 8px;
+  padding: 12px;
+  position: relative;  /* For loading overlay positioning */
 
-  /* Custom scrollbar */
+  /* Modern thin scrollbar */
   scrollbar-width: thin;
-  scrollbar-color: #cbd5e1 #f1f5f9;
+  scrollbar-color: rgba(148, 163, 184, 0.4) transparent;
 }
 
 .task-scroll-area::-webkit-scrollbar {
@@ -99,23 +100,16 @@
 }
 
 .task-scroll-area::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: rgba(148, 163, 184, 0.4);
   border-radius: 3px;
 }
 
 .task-scroll-area::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: rgba(148, 163, 184, 0.6);
 }
 
 .task-scroll-area::-webkit-scrollbar-track {
-  background: #f1f5f9;
-}
-
-/* Inner wrapper for proper spacing */
-.task-scroll-area::after {
-  content: '';
-  display: block;
-  height: 8px; /* Bottom padding for last element */
+  background: transparent;
 }
 
 /* ==================== EMPTY/LOADING STATES ==================== */
@@ -124,10 +118,10 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 48px 20px;
+  padding: 48px 24px;
   color: #64748b;
-  font-size: 13px;
-  gap: 12px;
+  font-size: 14px;
+  gap: 16px;
   height: 100%;
 }
 
@@ -136,10 +130,10 @@
 }
 
 .spinner {
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   border: 3px solid #e2e8f0;
-  border-top-color: #6366f1;
+  border-top-color: #3b82f6;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
@@ -154,22 +148,25 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.85);
   z-index: 10;
+  backdrop-filter: blur(2px);
 }
 
 /* ==================== TASK CARD ==================== */
 .task-card {
   display: flex;
+  flex-wrap: wrap;
   align-items: stretch;
-  background: #fff;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  margin-bottom: 8px;
+  background: #ffffff;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  margin-bottom: 10px;
   cursor: pointer;
   transition: all 0.2s ease;
   overflow: hidden;
   position: relative;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06);
 }
 
 .task-card:last-child {
@@ -177,27 +174,29 @@
 }
 
 .task-card:hover {
-  border-color: #a5b4fc;
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.12);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.04);
   transform: translateY(-1px);
 }
 
+/* Selected Task - Clear visual distinction */
 .task-card.selected {
-  border-color: #6366f1;
-  background: linear-gradient(135deg, #faf5ff 0%, #f5f3ff 100%);
-  box-shadow: 0 4px 16px rgba(99, 102, 241, 0.2);
+  background: linear-gradient(to right, #eff6ff, #ffffff);
+  border-color: #3b82f6;
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.15), 0 2px 4px rgba(59, 130, 246, 0.1);
 }
 
 .task-card.selected .task-priority-bar {
   width: 5px;
+  background: linear-gradient(180deg, #3b82f6 0%, #60a5fa 100%) !important;
 }
 
-/* ==================== PRIORITY BAR ==================== */
+/* ==================== PRIORITY BAR (Accent Bar) ==================== */
 .task-priority-bar {
   width: 4px;
   flex-shrink: 0;
   background: #e2e8f0;
-  transition: width 0.2s ease;
+  transition: all 0.2s ease;
+  border-radius: 4px 0 0 4px;
 }
 
 .task-priority-bar.high {
@@ -205,7 +204,7 @@
 }
 
 .task-priority-bar.normal {
-  background: linear-gradient(180deg, #6366f1 0%, #818cf8 100%);
+  background: linear-gradient(180deg, #3b82f6 0%, #60a5fa 100%);
 }
 
 .task-priority-bar.low {
@@ -215,23 +214,23 @@
 /* ==================== TASK CONTENT ==================== */
 .task-content {
   flex: 1;
-  padding: 12px 14px;
+  padding: 14px 16px;
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
 }
 
-/* Header Row */
+/* Header Row - Task Name + Badge */
 .task-header {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 10px;
+  gap: 12px;
 }
 
 .task-name {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   color: #1e293b;
   line-height: 1.4;
@@ -243,19 +242,20 @@
 }
 
 .task-card:hover .task-name {
-  color: #6366f1;
+  color: #3b82f6;
 }
 
 .task-card.selected .task-name {
-  color: #4f46e5;
+  color: #1d4ed8;
+  font-weight: 600;
 }
 
-/* Priority Badge */
+/* Priority Badge - Soft background, right aligned */
 .priority-badge {
   font-size: 11px;
-  font-weight: 700;
-  padding: 3px 8px;
-  border-radius: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 16px;
   background: #f1f5f9;
   color: #64748b;
   flex-shrink: 0;
@@ -263,33 +263,33 @@
 }
 
 .priority-badge.high {
-  background: linear-gradient(135deg, #fef2f2, #fee2e2);
+  background: #fef2f2;
   color: #dc2626;
 }
 
 .priority-badge.normal {
-  background: linear-gradient(135deg, #f5f3ff, #ede9fe);
-  color: #6366f1;
+  background: #eff6ff;
+  color: #3b82f6;
 }
 
 .priority-badge.low {
-  background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+  background: #f0fdf4;
   color: #16a34a;
 }
 
-/* Process Name */
+/* Process Name - Secondary info */
 .task-process {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 11px;
+  font-size: 12px;
   color: #64748b;
   overflow: hidden;
 }
 
 .task-process svg {
   flex-shrink: 0;
-  opacity: 0.6;
+  opacity: 0.5;
 }
 
 .task-process span {
@@ -298,30 +298,36 @@
   white-space: nowrap;
 }
 
-/* Metadata Row */
+/* Metadata Row - Muted smaller text */
 .task-meta {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 2px;
+  gap: 14px;
+  margin-top: 4px;
 }
 
 .meta-item {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  font-size: 11px;
+  gap: 5px;
+  font-size: 12px;
   color: #94a3b8;
 }
 
 .meta-item svg {
   flex-shrink: 0;
-  opacity: 0.7;
+  opacity: 0.6;
+  width: 14px;
+  height: 14px;
 }
 
 .meta-item.assignee {
-  color: #6366f1;
+  color: #3b82f6;
   font-weight: 500;
+}
+
+.meta-item.assignee svg {
+  opacity: 0.8;
 }
 
 .meta-item.due-date {
@@ -334,6 +340,7 @@
 
 .meta-item.due-date.overdue svg {
   color: #dc2626;
+  opacity: 1;
 }
 
 .meta-item.created {
@@ -345,7 +352,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
+  width: 36px;
   flex-shrink: 0;
   border: none;
   background: transparent;
@@ -353,6 +360,7 @@
   cursor: pointer;
   transition: all 0.15s ease;
   opacity: 0;
+  margin-right: 4px;
 }
 
 .task-card:hover .btn-expand {
@@ -361,11 +369,56 @@
 }
 
 .btn-expand:hover {
-  color: #6366f1;
-  background: #f5f3ff;
+  color: #3b82f6;
+  background: #eff6ff;
+  border-radius: 6px;
 }
 
 .task-card.expanded .btn-expand {
   opacity: 1;
-  color: #6366f1;
+  color: #3b82f6;
+}
+
+/* ==================== FOCUS STATES (Accessibility) ==================== */
+.task-card:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+.btn-nav:focus-visible,
+.btn-expand:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* ==================== EXPANDED CONTENT ==================== */
+.task-expanded-content {
+  width: 100%;
+  flex-basis: 100%;
+  padding: 0 16px 14px 20px;
+  border-top: 1px solid #e2e8f0;
+  margin-top: 0;
+  background: #fafbfc;
+  animation: expandContent 0.2s ease;
+}
+
+@keyframes expandContent {
+  from {
+    opacity: 0;
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 500px;
+  }
+}
+
+.task-card.expanded {
+  border-color: #e2e8f0;
+}
+
+.task-card.expanded .task-priority-bar {
+  align-self: flex-start;
+  height: auto;
+  min-height: 100%;
 }
