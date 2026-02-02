@@ -107,7 +107,7 @@
   </filter>
   <filter-mapping>
     <filter-name>Angular SPA Filter</filter-name>
-    <url-pattern>/app/angular/*</url-pattern>
+    <url-pattern>/app/*</url-pattern>
     <dispatcher>REQUEST</dispatcher>
   </filter-mapping>
 

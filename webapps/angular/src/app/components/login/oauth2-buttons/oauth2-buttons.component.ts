@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Component, OnInit, OnDestroy, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { OAuth2ProviderService, OAuth2Provider } from '../../../services/oauth2-provider.service';
@@ -61,12 +61,13 @@ export class OAuth2ButtonsComponent implements OnInit, OnDestroy {
   private readonly DEMO_MODE = false;
 
   /** Disable OAuth2 - set to true to skip OAuth2 provider loading (avoids 404 errors when not configured) */
-  private readonly DISABLE_OAUTH2 = true;
+  private readonly DISABLE_OAUTH2 = false;
 
   private subscription?: Subscription;
   private oauth2Service = inject(OAuth2ProviderService);
   private authService = inject(AuthService);
   private translateService = inject(TranslateService);
+  private cdr = inject(ChangeDetectorRef);
 
   ngOnInit(): void {
     if (this.DISABLE_OAUTH2) {
@@ -108,11 +109,13 @@ export class OAuth2ButtonsComponent implements OnInit, OnDestroy {
         this.providers = providers;
         this.setupRequired = setupRequired;
         this.loading = false;
+        this.cdr.detectChanges();
       },
       error: () => {
         this.providers = [];
         this.setupRequired = false;
         this.loading = false;
+        this.cdr.detectChanges();
       }
     });
   }
@@ -169,30 +172,26 @@ export class OAuth2ButtonsComponent implements OnInit, OnDestroy {
   /**
    * Builds the full OAuth2 login URL.
    * This URL redirects to Spring Security's OAuth2 authorization endpoint.
+   * Note: OAuth2 endpoints are at the server root, not under the webapp path.
+   *
+   * IMPORTANT: Adds `prompt=login` parameter to force re-authentication at the IdP.
+   * This ensures users must enter credentials even if they have an active IdP session,
+   * allowing account switching after logout.
    */
   getLoginUrl(provider: OAuth2Provider): string {
-    // Build the base URL (origin without Angular app path)
-    const baseUrl = this.getBaseUrl();
-    return baseUrl + provider.loginUrl;
-  }
-
-  /**
-   * Gets the application base URL (before the Angular app path)
-   */
-  private getBaseUrl(): string {
-    // Get the app-root from <base> tag if available
-    const baseElement = document.querySelector('base');
-    const appRoot = baseElement?.getAttribute('app-root') || '/orqueio';
-
-    // Find where app-root starts in current URL
-    const currentUrl = window.location.href;
-    const idx = currentUrl.indexOf(appRoot);
-
-    if (idx !== -1) {
-      return currentUrl.substring(0, idx + appRoot.length);
+    // Use provider.loginUrl if it contains the provider ID, otherwise construct it
+    let loginPath = provider.loginUrl;
+    if (!loginPath || !loginPath.includes(provider.id)) {
+      // Fallback: construct the URL using the provider ID
+      loginPath = `/oauth2/authorization/${provider.id}`;
     }
 
-    // Fallback to origin + app-root
-    return window.location.origin + appRoot;
+    // OAuth2 endpoints are at the server root (no /orqueio prefix)
+    const baseUrl = window.location.origin + loginPath;
+
+    // Add prompt=login to force re-authentication at the identity provider
+    // This prevents automatic login when IdP session is still active
+    const separator = baseUrl.includes('?') ? '&' : '?';
+    return `${baseUrl}${separator}prompt=login`;
   }
 }

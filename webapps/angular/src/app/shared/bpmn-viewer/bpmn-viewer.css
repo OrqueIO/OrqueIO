@@ -134,9 +134,7 @@
   font-weight: bold;
 }
 
-/* ========================================
-   BPMN Element Markers & Highlights
-   ======================================== */
+/* BPMN Element Markers & Highlights */
 
 /* Running activity marker (green animated border) */
 :host ::ng-deep .running .djs-visual > :nth-child(1) {
@@ -175,9 +173,7 @@
   opacity: 0.5;
 }
 
-/* ========================================
-   Activity Badges (Overlays)
-   ======================================== */
+/* Activity Badges (Overlays) */
 
 :host ::ng-deep .bpmn-badge {
   display: flex;
@@ -209,9 +205,7 @@
   background: #ef4444;
 }
 
-/* ========================================
-   Hide BPMN.js default elements
-   ======================================== */
+/* Hide BPMN.js default elements */
 
 :host ::ng-deep .djs-palette {
   display: none;
@@ -221,9 +215,7 @@
   display: none;
 }
 
-/* ========================================
-   Hover state for clickable elements
-   ======================================== */
+/* Hover state for clickable elements */
 
 :host ::ng-deep .djs-element:not(.djs-connection):hover .djs-outline {
   visibility: visible !important;

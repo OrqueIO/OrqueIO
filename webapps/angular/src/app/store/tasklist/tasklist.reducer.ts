@@ -15,7 +15,7 @@ import {
 } from './tasklist.state';
 import { TasksActions, FiltersActions, TaskDetailActions, TasklistUIActions } from './tasklist.actions';
 
-// ==================== TASKS REDUCER ====================
+//  TASKS REDUCER 
 
 export const tasksReducer = createReducer(
   initialTasksState,
@@ -118,7 +118,7 @@ export const tasksReducer = createReducer(
   }))
 );
 
-// ==================== FILTERS REDUCER ====================
+//  FILTERS REDUCER 
 
 export const filtersReducer = createReducer(
   initialFiltersState,
@@ -173,7 +173,7 @@ export const filtersReducer = createReducer(
   )
 );
 
-// ==================== TASK DETAIL REDUCER ====================
+//  TASK DETAIL REDUCER 
 
 export const taskDetailReducer = createReducer(
   initialTaskDetailState,
@@ -202,7 +202,6 @@ export const taskDetailReducer = createReducer(
     errorType: errorType ?? 'GENERAL_ERROR'
   })),
 
-  // Task not found (AngularJS TASK_NOT_EXIST)
   on(TaskDetailActions.taskNotFound, (state, { taskId }) => ({
     ...state,
     task: null,
@@ -211,7 +210,6 @@ export const taskDetailReducer = createReducer(
     errorType: 'TASK_NOT_EXIST' as const
   })),
 
-  // Instance suspended (AngularJS INSTANCE_SUSPENDED)
   on(TaskDetailActions.setInstanceSuspended, (state, { suspended }) => ({
     ...state,
     instanceSuspended: suspended
@@ -266,13 +264,10 @@ export const taskDetailReducer = createReducer(
     activeTab: tab
   })),
 
-  // Sync task detail when task is updated via TasksActions
-  // This ensures the task detail view updates reactively
   on(TasksActions.updateTaskSuccess, TasksActions.claimTaskSuccess,
      TasksActions.unclaimTaskSuccess, TasksActions.setAssigneeSuccess,
      TasksActions.delegateTaskSuccess,
     (state, { task }) => {
-      // Only update if this is the currently viewed task
       if (state.task?.id === task.id) {
         return { ...state, task };
       }
@@ -281,7 +276,7 @@ export const taskDetailReducer = createReducer(
   )
 );
 
-// ==================== UI REDUCER ====================
+//  UI REDUCER 
 
 export const uiReducer = createReducer(
   initialUIState,
@@ -290,7 +285,7 @@ export const uiReducer = createReducer(
   on(TasklistUIActions.toggleFiltersPanel, (state) => ({
     ...state,
     filtersCollapsed: !state.filtersCollapsed,
-    maximizedColumn: null // Reset maximize when toggling
+    maximizedColumn: null 
   })),
 
   on(TasklistUIActions.toggleListPanel, (state) => ({
@@ -320,7 +315,7 @@ export const uiReducer = createReducer(
     detailCollapsed: collapsed
   })),
 
-  // Column maximize (AngularJS parity)
+  // Column maximize
   on(TasklistUIActions.maximizeColumn, (state, { column }) => ({
     ...state,
     maximizedColumn: state.maximizedColumn === column ? null : column // Toggle if same column
@@ -373,14 +368,14 @@ export const uiReducer = createReducer(
     matchAny: false
   })),
 
-  // OR query mode (AngularJS matchAny)
+  // OR query mode
   on(TasklistUIActions.setMatchAny, (state, { matchAny }) => ({
     ...state,
     matchAny
   }))
 );
 
-// ==================== COMBINED TASKLIST REDUCER ====================
+//  COMBINED TASKLIST REDUCER 
 
 const combinedReducer = (state: TasklistState | undefined, action: any): TasklistState => {
   return {

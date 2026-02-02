@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, DestroyRef, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, inject, DestroyRef, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -43,7 +43,8 @@ import { AdminPageHeaderComponent } from '../../../../shared/admin-page-header/a
         animate('200ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
       ])
     ])
-  ]
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GroupDetailComponent implements OnInit {
   private destroyRef = inject(DestroyRef);

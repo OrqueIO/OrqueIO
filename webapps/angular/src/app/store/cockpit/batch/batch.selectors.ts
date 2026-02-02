@@ -4,9 +4,9 @@ import { BatchStatistics } from '../../../models/cockpit/batch.model';
 
 export const selectBatchState = createFeatureSelector<BatchState>('batch');
 
-// ============================================
+
 // RUNTIME BATCHES
-// ============================================
+
 
 export const selectRuntimeState = createSelector(
   selectBatchState,
@@ -48,9 +48,9 @@ export const selectRuntimeUsers = createSelector(
   (runtime) => runtime.users
 );
 
-// ============================================
+
 // HISTORY BATCHES
-// ============================================
+
 
 export const selectHistoryState = createSelector(
   selectBatchState,
@@ -92,9 +92,9 @@ export const selectHistoryShouldLoad = createSelector(
   (history) => history.shouldLoad
 );
 
-// ============================================
+
 // SELECTION (Batch Details)
-// ============================================
+
 
 export const selectSelectionState = createSelector(
   selectBatchState,
@@ -135,9 +135,9 @@ export const selectIsSuspended = createSelector(
   }
 );
 
-// ============================================
+
 // FAILED JOBS
-// ============================================
+
 
 export const selectJobsState = createSelector(
   selectBatchState,
@@ -179,27 +179,27 @@ export const selectHasFailedJobs = createSelector(
   (count) => count > 0
 );
 
-// ============================================
+
 // POLLING
-// ============================================
+
 
 export const selectPollingEnabled = createSelector(
   selectBatchState,
   (state) => state.pollingEnabled
 );
 
-// ============================================
+
 // GLOBAL
-// ============================================
+
 
 export const selectError = createSelector(
   selectBatchState,
   (state) => state.error
 );
 
-// ============================================
+
 // COMPUTED / HELPERS
-// ============================================
+
 
 export const selectBatchJobDefinitionId = createSelector(
   selectSelectedBatch,

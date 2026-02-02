@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
-import { authGuard } from '../../guards/auth.guard';
+import { provideState } from '@ngrx/store';
+import { provideEffects } from '@ngrx/effects';
 import { AdminLayoutComponent } from '../../shared/admin-layout/admin-layout';
 import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard';
 import { UserListComponent } from './users/user-list/user-list';
@@ -14,11 +15,36 @@ import { SystemGeneralComponent } from './system/system-general/system-general';
 import { SystemMetricsComponent } from './system/system-metrics/system-metrics';
 import { SystemDiagnosticsComponent } from './system/system-diagnostics/system-diagnostics';
 
-export const adminRoutes: Routes = [
+// Admin NgRx State - lazy loaded with this module
+import { usersReducer } from '../../store/admin/users/users.reducer';
+import { groupsReducer } from '../../store/admin/groups/groups.reducer';
+import { tenantsReducer } from '../../store/admin/tenants/tenants.reducer';
+import { authorizationsReducer } from '../../store/admin/authorizations/authorizations.reducer';
+import { systemReducer } from '../../store/admin/system/system.reducer';
+import { UsersEffects } from '../../store/admin/users/users.effects';
+import { AuthorizationsEffects } from '../../store/admin/authorizations/authorizations.effects';
+import { TenantsEffects } from '../../store/admin/tenants/tenants.effects';
+import { SystemEffects } from '../../store/admin/system/system.effects';
+
+/**
+ * Admin module routes - lazy loaded from app.routes.ts
+ * NgRx state is registered here and loaded only when this module is accessed
+ * Guards are applied at the parent route level in app.routes.ts
+ */
+export const ADMIN_ROUTES: Routes = [
   {
-    path: 'admin',
+    path: '',
     component: AdminLayoutComponent,
-    canActivate: [authGuard],
+    providers: [
+      // Register admin state slices
+      provideState('users', usersReducer),
+      provideState('groups', groupsReducer),
+      provideState('tenants', tenantsReducer),
+      provideState('authorizations', authorizationsReducer),
+      provideState('system', systemReducer),
+      // Register admin effects
+      provideEffects(UsersEffects, AuthorizationsEffects, TenantsEffects, SystemEffects)
+    ],
     children: [
       { path: '', component: AdminDashboardComponent, title: 'PAGE_TITLE_ADMIN' },
       { path: 'users', component: UserListComponent, title: 'PAGE_TITLE_ADMIN_USERS' },
@@ -41,3 +67,6 @@ export const adminRoutes: Routes = [
     ]
   }
 ];
+
+// Default export for lazy loading
+export default ADMIN_ROUTES;

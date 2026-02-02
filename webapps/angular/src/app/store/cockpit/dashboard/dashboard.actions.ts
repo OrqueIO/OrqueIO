@@ -9,9 +9,9 @@ import {
   TimelinePeriod
 } from '../../../models/cockpit/dashboard-charts.model';
 
-// ============================================
+
 // Load Dashboard Stats (existing)
-// ============================================
+
 
 export const loadDashboardStats = createAction(
   '[Dashboard] Load Dashboard Stats'
@@ -32,9 +32,9 @@ export const refreshDashboard = createAction(
   '[Dashboard] Refresh Dashboard'
 );
 
-// ============================================
+
 // Load All Charts Data
-// ============================================
+
 
 export const loadAllChartsData = createAction(
   '[Dashboard Charts] Load All Charts Data'
@@ -44,9 +44,9 @@ export const refreshAllCharts = createAction(
   '[Dashboard Charts] Refresh All Charts'
 );
 
-// ============================================
+
 // Task Stats Chart Actions
-// ============================================
+
 
 export const loadTaskStats = createAction(
   '[Dashboard Charts] Load Task Stats'
@@ -62,9 +62,9 @@ export const loadTaskStatsFailure = createAction(
   props<{ error: string }>()
 );
 
-// ============================================
+
 // Incidents by Process Chart Actions
-// ============================================
+
 
 export const loadIncidentsByProcess = createAction(
   '[Dashboard Charts] Load Incidents By Process'
@@ -80,9 +80,9 @@ export const loadIncidentsByProcessFailure = createAction(
   props<{ error: string }>()
 );
 
-// ============================================
+
 // Timeline Chart Actions
-// ============================================
+
 
 export const loadTimeline = createAction(
   '[Dashboard Charts] Load Timeline',
@@ -104,9 +104,9 @@ export const setTimelinePeriod = createAction(
   props<{ period: TimelinePeriod }>()
 );
 
-// ============================================
+
 // Process Distribution Chart Actions
-// ============================================
+
 
 export const loadProcessDistribution = createAction(
   '[Dashboard Charts] Load Process Distribution'
@@ -122,9 +122,9 @@ export const loadProcessDistributionFailure = createAction(
   props<{ error: string }>()
 );
 
-// ============================================
+
 // Tasks by Group Chart Actions
-// ============================================
+
 
 export const loadTasksByGroup = createAction(
   '[Dashboard Charts] Load Tasks By Group'
@@ -140,9 +140,9 @@ export const loadTasksByGroupFailure = createAction(
   props<{ error: string }>()
 );
 
-// ============================================
+
 // Charts Configuration Actions
-// ============================================
+
 
 export const setAutoRefresh = createAction(
   '[Dashboard Charts] Set Auto Refresh',

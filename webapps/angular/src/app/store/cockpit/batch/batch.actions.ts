@@ -8,9 +8,9 @@ import {
 } from '../../../models/cockpit/batch.model';
 import { UserProfile } from './batch.state';
 
-// ============================================
+
 // RUNTIME BATCHES
-// ============================================
+
 
 export const loadRuntimeBatches = createAction(
   '[Batch] Load Runtime Batches'
@@ -41,9 +41,9 @@ export const setRuntimeQuery = createAction(
   props<{ query: Record<string, any> }>()
 );
 
-// ============================================
+
 // HISTORY BATCHES
-// ============================================
+
 
 export const loadHistoryBatches = createAction(
   '[Batch] Load History Batches'
@@ -73,9 +73,9 @@ export const enableHistoryLoading = createAction(
   '[Batch] Enable History Loading'
 );
 
-// ============================================
+
 // BATCH DETAILS (Selection)
-// ============================================
+
 
 export const loadBatchDetails = createAction(
   '[Batch] Load Batch Details',
@@ -101,9 +101,9 @@ export const clearSelection = createAction(
   '[Batch] Clear Selection'
 );
 
-// ============================================
+
 // BATCH ACTIONS
-// ============================================
+
 
 export const toggleBatchSuspension = createAction(
   '[Batch] Toggle Batch Suspension',
@@ -133,9 +133,9 @@ export const deleteBatchFailure = createAction(
   props<{ error: string }>()
 );
 
-// ============================================
+
 // FAILED JOBS
-// ============================================
+
 
 export const loadFailedJobs = createAction(
   '[Batch] Load Failed Jobs',
@@ -162,9 +162,9 @@ export const setJobsSorting = createAction(
   props<{ sorting: BatchSorting }>()
 );
 
-// ============================================
+
 // JOB ACTIONS
-// ============================================
+
 
 export const retryJob = createAction(
   '[Batch] Retry Job',
@@ -208,9 +208,9 @@ export const deleteJobFailure = createAction(
   props<{ error: string }>()
 );
 
-// ============================================
+
 // POLLING
-// ============================================
+
 
 export const startPolling = createAction(
   '[Batch] Start Polling'
@@ -224,9 +224,9 @@ export const pollTick = createAction(
   '[Batch] Poll Tick'
 );
 
-// ============================================
+
 // GLOBAL
-// ============================================
+
 
 export const clearError = createAction(
   '[Batch] Clear Error'

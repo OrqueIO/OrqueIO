@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, DestroyRef, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, inject, DestroyRef, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -42,7 +42,8 @@ import { Tenant } from '../../../../models/admin/tenant.model';
         animate('200ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
       ])
     ])
-  ]
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UserDetailComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
@@ -235,11 +236,12 @@ export class UserDetailComponent implements OnInit {
 
           // If user deleted their own account, logout from all engines
           if (isSelfDeletion) {
-            this.authService.logout()
+            // Use smartLogout to handle both SSO and regular logout
+            this.authService.smartLogout()
               .pipe(takeUntilDestroyed(this.destroyRef))
               .subscribe({
                 next: () => {
-                  // Logout will redirect to login page
+                  this.router.navigate(['/login']);
                 },
                 error: () => {
                   // Force redirect to login even if logout fails

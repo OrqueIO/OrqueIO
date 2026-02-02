@@ -65,7 +65,6 @@ export class AdminDashboardComponent implements OnInit {
   private authorizationService = inject(AuthorizationService);
   private authService = inject(AuthService);
 
-  // Icons
   faUsers = faUsers;
   faUsersCog = faUsersCog;
   faBuilding = faBuilding;
@@ -83,11 +82,9 @@ export class AdminDashboardComponent implements OnInit {
   faArrowRight = faArrowRight;
   faSearch = faSearch;
 
-  // State
   isRefreshing = false;
   currentUserId = '';
 
-  // Dialogs
   showCreateUserDialog = false;
   showCreateGroupDialog = false;
   showCreateTenantDialog = false;
@@ -138,7 +135,6 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   private loadDashboardStats(): void {
-    // Load users count
     this.userService.getUsersCount()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
@@ -155,7 +151,6 @@ export class AdminDashboardComponent implements OnInit {
         }
       });
 
-    // Load groups count
     this.groupService.getGroupsCount()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
@@ -172,7 +167,6 @@ export class AdminDashboardComponent implements OnInit {
         }
       });
 
-    // Load tenants count
     this.tenantService.getTenantsCount()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
@@ -189,7 +183,6 @@ export class AdminDashboardComponent implements OnInit {
         }
       });
 
-    // Load authorizations count
     this.authorizationService.getAuthorizationsCount()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
@@ -219,7 +212,6 @@ export class AdminDashboardComponent implements OnInit {
     this.loadDashboardStats();
   }
 
-  // User dialog
   openCreateUserDialog(): void {
     this.showCreateUserDialog = true;
     this.cdr.markForCheck();
@@ -235,7 +227,6 @@ export class AdminDashboardComponent implements OnInit {
     this.refresh();
   }
 
-  // Group dialog
   openCreateGroupDialog(): void {
     this.showCreateGroupDialog = true;
     this.cdr.markForCheck();
@@ -251,7 +242,6 @@ export class AdminDashboardComponent implements OnInit {
     this.refresh();
   }
 
-  // Tenant dialog
   openCreateTenantDialog(): void {
     this.showCreateTenantDialog = true;
     this.cdr.markForCheck();

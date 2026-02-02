@@ -52,7 +52,6 @@ export class AuthorizationsEffects {
             return AuthorizationsActions.createAuthorizationSuccess({ authorization: normalizeAuthorization(createdAuth) });
           }),
           catchError(error => {
-            // Check for duplicate authorization error
             const errorMessage = error?.error?.message || error?.message || '';
             const isDuplicate = errorMessage.includes('Unique index') ||
                                errorMessage.includes('primary key violation') ||
@@ -120,7 +119,6 @@ export class AuthorizationsEffects {
     )
   );
 
-  // Reload authorizations when resource type changes
   setSelectedResourceType$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthorizationsActions.setSelectedResourceType),

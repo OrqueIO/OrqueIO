@@ -37,8 +37,10 @@ public class OAuth2AuthenticationSuccessHandler extends SavedRequestAwareAuthent
 
   private final OAuth2UserSynchronizer userSynchronizer;
 
-  public OAuth2AuthenticationSuccessHandler(OAuth2UserSynchronizer userSynchronizer) {
+  public OAuth2AuthenticationSuccessHandler(OAuth2UserSynchronizer userSynchronizer, String defaultTargetUrl) {
     this.userSynchronizer = userSynchronizer;
+    // Set default redirect URL for when no saved request exists
+    setDefaultTargetUrl(defaultTargetUrl);
   }
 
   @Override

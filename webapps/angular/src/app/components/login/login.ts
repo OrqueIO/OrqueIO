@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
@@ -38,7 +38,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     private http: HttpClient,
     private notifications: NotificationsService,
     public translateService: TranslateService,
-    private initialUserService: InitialUserService
+    private initialUserService: InitialUserService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -51,6 +52,13 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.langSubscription = this.translateService.currentLang$.subscribe(lang => {
       this.currentLang = lang;
     });
+
+    // CRITICAL: Check for OAuth2 successful callback FIRST
+    // This must run before other checks to handle SSO redirect properly
+    if (this.handleOAuth2Callback()) {
+      // OAuth2 callback detected and being handled - skip other init logic
+      return;
+    }
 
     // Check for first visit
     this.checkFirstVisit();
@@ -66,9 +74,11 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.initialUserService.isSetupAvailable().subscribe({
       next: (available) => {
         this.showSetupLink = available;
+        this.cdr.detectChanges();
       },
       error: () => {
         this.showSetupLink = false;
+        this.cdr.detectChanges();
       }
     });
   }
@@ -121,6 +131,73 @@ export class LoginComponent implements OnInit, OnDestroy {
   onUsernameEnter(event: Event, passwordInput: HTMLInputElement): void {
     event.preventDefault();
     passwordInput.focus();
+  }
+
+  /**
+   * Handle OAuth2 successful callback after authentication.
+   *
+   * When the user authenticates via SSO, Spring Security:
+   * 1. Processes the OAuth2 callback (/login/oauth2/code/*)
+   * 2. Creates a session with Set-Cookie header
+   * 3. Redirects to /orqueio/app/ (or saved request URL)
+   *
+   * Angular then:
+   * 1. Loads the app at the redirect URL
+   * 2. This method detects we're coming from OAuth2
+   * 3. Verifies authentication with the backend
+   * 4. Navigates to the intended destination
+   *
+   * This fixes the "double login" issue where users had to click SSO twice.
+   *
+   * @returns true if OAuth2 callback was detected and is being handled
+   */
+  private handleOAuth2Callback(): boolean {
+    const currentUrl = window.location.pathname;
+
+    // Check if we're on /login after being redirected from OAuth2
+    // The presence of SSO marker indicates we initiated an OAuth2 flow
+    if (this.authService.isSsoSession() && currentUrl.includes('/login')) {
+      // Set loading state
+      this.status = 'LOADING';
+
+      // Verify authentication with backend
+      // The session cookie should have been set by the OAuth2 callback
+      this.authService.getAuthentication().subscribe({
+        next: (auth) => {
+          if (auth) {
+            this.status = 'DONE';
+
+            // Navigate to the saved return URL or home
+            const returnUrl = this.authService.consumeReturnUrl();
+            this.router.navigate([returnUrl]);
+          } else {
+            // No authentication found - this shouldn't happen if SSO marker is set
+            console.warn('OAuth2 callback: No authentication found despite SSO marker');
+            this.authService.clearSsoMarker();
+            this.status = 'INIT';
+          }
+        },
+        error: (err) => {
+          // Authentication failed - session might not be ready yet
+          console.error('OAuth2 callback: Authentication check failed', err);
+
+          // Clear SSO marker to prevent infinite loop
+          this.authService.clearSsoMarker();
+
+          // Show error to user
+          this.notifications.addError({
+            status: this.translateService.instant('PAGE_LOGIN_OAUTH2_FAILED'),
+            message: this.translateService.instant('PAGE_LOGIN_OAUTH2_SESSION_ERROR')
+          });
+
+          this.status = 'INIT';
+        }
+      });
+
+      return true; // OAuth2 callback detected and being handled
+    }
+
+    return false; // Not an OAuth2 callback
   }
 
   /**

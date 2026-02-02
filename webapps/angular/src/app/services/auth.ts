@@ -1,8 +1,9 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Injector, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, throwError, Subject } from 'rxjs';
-import { map, catchError, switchMap, tap, shareReplay, finalize } from 'rxjs/operators';
+import { map, catchError, switchMap, tap, shareReplay, finalize, take } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { CsrfTokenService } from './csrf-token.service';
 
 // Authentication event types 
 export type AuthEventType =
@@ -52,55 +53,38 @@ export class AuthService {
   private authChannel: BroadcastChannel | null = null;
   private readonly AUTH_CHANNEL_NAME = 'orqueio_auth_sync';
 
-  // Storage key for persisting authentication
-  private readonly AUTH_STORAGE_KEY = 'orqueio_auth';
+  // SECURITY: Authentication is NOT persisted in localStorage
+  // This follows the AngularJS pattern where auth is only kept in memory ($rootScope)
+  // On page refresh, the backend is always consulted to validate the session
+  // This prevents client-side manipulation of authorization data
+  private readonly LEGACY_AUTH_STORAGE_KEY = 'orqueio_auth';
 
   private readonly baseUrl = '/orqueio/api/admin/auth/user';
   private readonly engineUrl = '/orqueio/api/engine/engine';
   private readonly appName = 'welcome';
   private readonly engine = 'default';
 
+  private csrfService = inject(CsrfTokenService);
+
   constructor(
     private http: HttpClient,
-    private router: Router
+    private router: Router,
+    private injector: Injector
   ) {
     this.initCrossTabSync();
-    this.restoreAuthFromStorage();
+    // Clean up any legacy localStorage data from previous versions
+    this.clearLegacyStorage();
   }
 
   /**
-   * Restore authentication state from localStorage on app initialization.
-   * This allows the app to immediately show the authenticated state on page refresh,
-   * while still verifying with the server in the background.
+   * Clear any legacy authentication data from localStorage.
+   * This ensures we don't have stale/manipulable data persisted.
    */
-  private restoreAuthFromStorage(): void {
+  private clearLegacyStorage(): void {
     try {
-      const stored = localStorage.getItem(this.AUTH_STORAGE_KEY);
-      if (stored) {
-        const auth = JSON.parse(stored) as Authentication;
-        if (auth && auth.name) {
-          console.log('AuthService: Restoring authentication from storage for user:', auth.name);
-          this.authenticationSubject.next(auth);
-        }
-      }
+      localStorage.removeItem(this.LEGACY_AUTH_STORAGE_KEY);
     } catch (e) {
-      // Invalid JSON or other error - clear storage
-      localStorage.removeItem(this.AUTH_STORAGE_KEY);
-    }
-  }
-
-  /**
-   * Save authentication state to localStorage for persistence across page refreshes.
-   */
-  private saveAuthToStorage(auth: Authentication | null): void {
-    try {
-      if (auth) {
-        localStorage.setItem(this.AUTH_STORAGE_KEY, JSON.stringify(auth));
-      } else {
-        localStorage.removeItem(this.AUTH_STORAGE_KEY);
-      }
-    } catch (e) {
-      // localStorage might be full or disabled - ignore
+      // localStorage might be disabled - ignore
     }
   }
 
@@ -117,34 +101,31 @@ export class AuthService {
         const { type, data } = event.data;
 
         if (type === 'logout' || type === 'session_expired') {
-          console.log(`Received ${type} event from another tab`);
           // Clear local authentication state without making API call
           this.authenticationSubject.next(null);
-          this.saveAuthToStorage(null); // Also clear localStorage
           this.authCheckPending = null;
+          this.authInitialized = false;
           this.emit('authentication.logout.success');
           // Redirect to login page if not already there
           if (!this.router.url.startsWith('/login')) {
             this.router.navigate(['/login']);
           }
         } else if (type === 'login' && data) {
-          console.log('Received login event from another tab');
-          // Update local authentication state
+          // Update local authentication state (in memory only)
           this.authenticationSubject.next(data);
-          this.saveAuthToStorage(data); // Also update localStorage
+          this.authInitialized = true;
           this.emit('authentication.login.success', data);
         }
       };
     } else {
-      // Fallback to localStorage for older browsers
+      // Fallback to localStorage events for older browsers (for cross-tab sync only)
       window.addEventListener('storage', (event) => {
         if (event.key === this.AUTH_CHANNEL_NAME) {
           const message = event.newValue ? JSON.parse(event.newValue) : null;
           if (message?.type === 'logout' || message?.type === 'session_expired') {
-            console.log(`Received ${message.type} event from another tab (localStorage)`);
             this.authenticationSubject.next(null);
-            this.saveAuthToStorage(null); // Also clear localStorage
             this.authCheckPending = null;
+            this.authInitialized = false;
             this.emit('authentication.logout.success');
             if (!this.router.url.startsWith('/login')) {
               this.router.navigate(['/login']);
@@ -179,28 +160,12 @@ export class AuthService {
   handleSessionExpired(): void {
     // Only broadcast if we were previously authenticated
     if (this.currentAuthentication) {
-      console.log('Session expired, notifying other tabs');
       this.updateAuthentication(null); // This also clears localStorage
       this.authCheckPending = null;
       this.emit('authentication.login.required');
       // Notify other tabs about session expiration
       this.broadcastAuthEvent('session_expired');
     }
-  }
-
-  /**
-   * Get CSRF token from cookie
-   */
-  private getCsrfTokenFromCookie(): string | null {
-    const name = 'XSRF-TOKEN=';
-    const cookies = document.cookie.split(';');
-    for (let cookie of cookies) {
-      cookie = cookie.trim();
-      if (cookie.startsWith(name)) {
-        return cookie.substring(name.length);
-      }
-    }
-    return null;
   }
 
   get currentAuthentication(): Authentication | null {
@@ -215,29 +180,15 @@ export class AuthService {
    * Login into the application with the given credentials
    */
   login(username: string, password: string): Observable<Authentication> {
-    console.log('=== LOGIN ATTEMPT ===');
-    console.log('Username:', username);
-
     const formData = new URLSearchParams();
     formData.set('username', username);
     formData.set('password', password);
 
     // First GET request to ensure we have an up-to-date CSRF cookie
-    return this.http.get(this.engineUrl, { withCredentials: true }).pipe(
+    return this.csrfService.refreshToken().pipe(
       switchMap(() => {
-        // Get CSRF token from cookie (set by the GET request)
-        const csrfToken = this.getCsrfTokenFromCookie();
-        console.log('CSRF Token from cookie:', csrfToken);
-
-        // Build headers with CSRF token
-        let headers = new HttpHeaders({
-          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-        });
-        if (csrfToken) {
-          headers = headers.set('X-XSRF-TOKEN', csrfToken);
-        }
-
-        console.log('Sending login request to:', `${this.baseUrl}/${this.engine}/login/${this.appName}`);
+        // Build headers with CSRF token for form-urlencoded content
+        const headers = this.csrfService.buildHeaders('application/x-www-form-urlencoded;charset=UTF-8');
 
         // Then perform the login POST request
         return this.http.post<LoginResponse>(
@@ -246,15 +197,8 @@ export class AuthService {
           { headers, withCredentials: true }
         );
       }),
-      tap(response => {
-        console.log('=== LOGIN RESPONSE ===');
-        console.log('Response:', response);
-      }),
       map(response => this.parseResponse(response)),
       tap(authentication => {
-        console.log('=== LOGIN SUCCESS ===');
-        console.log('User:', authentication.name);
-        console.log('Authorized Apps:', authentication.authorizedApps);
         this.updateAuthentication(authentication);
         this.emit('authentication.login.success', authentication);
         // Notify other tabs about login
@@ -267,9 +211,6 @@ export class AuthService {
         );
       }),
       catchError(error => {
-        console.log('=== LOGIN ERROR ===');
-        console.log('Status:', error.status);
-        console.log('Error:', error);
         this.emit('authentication.login.failure', null, error);
         return throwError(() => this.parseError(error));
       })
@@ -281,21 +222,12 @@ export class AuthService {
    */
   logout(): Observable<void> {
     // First GET request to get CSRF token
-    return this.http.get(this.engineUrl, { withCredentials: true }).pipe(
+    return this.csrfService.refreshToken().pipe(
       switchMap(() => {
-        // Get CSRF token from cookie
-        const csrfToken = this.getCsrfTokenFromCookie();
-        console.log('Logout CSRF Token from cookie:', csrfToken);
-
-        let headers = new HttpHeaders();
-        if (csrfToken) {
-          headers = headers.set('X-XSRF-TOKEN', csrfToken);
-        }
-
         return this.http.post<void>(
           `${this.baseUrl}/${this.engine}/logout`,
           {},
-          { headers, withCredentials: true }
+          { headers: this.csrfService.buildHeadersWithoutContentType(), withCredentials: true }
         );
       }),
       tap(() => {
@@ -303,7 +235,7 @@ export class AuthService {
         this.emit('authentication.logout.success');
         // Notify other tabs about logout
         this.broadcastAuthEvent('logout');
-        this.router.navigate(['/login']);
+        // Note: Navigation is handled by the component calling this method
       }),
       catchError(error => {
         this.emit('authentication.logout.failure', null, error);
@@ -315,13 +247,18 @@ export class AuthService {
   /**
    * Get current authentication status.
    *
-   * On page refresh, this method:
-   * 1. Returns cached auth from localStorage immediately (for fast UI response)
-   * 2. Verifies with server in background
-   * 3. Updates state if server says user is not authenticated
+   * SECURITY: This method always validates with the backend on first call.
+   * Unlike the previous implementation, we do NOT restore from localStorage.
+   * This follows the AngularJS pattern where authentication is verified
+   * with the server on every page load.
+   *
+   * Flow:
+   * 1. If already verified with backend in this session, return cached auth
+   * 2. If a verification request is pending, return that same Observable (deduplication)
+   * 3. Otherwise, validate with backend and cache the result
    */
   getAuthentication(): Observable<Authentication | null> {
-    // If we already have verified authentication, return it
+    // If we already have backend-verified authentication in this session, return it
     if (this.authInitialized && this.currentAuthentication) {
       return of(this.currentAuthentication);
     }
@@ -331,17 +268,7 @@ export class AuthService {
       return this.authCheckPending;
     }
 
-    // If we have cached auth from storage (not yet verified with server),
-    // return it but also trigger a background verification
-    const cachedAuth = this.currentAuthentication;
-    if (cachedAuth && !this.authInitialized) {
-      // Start background verification
-      this.verifyAuthWithServer();
-      // Return cached auth immediately for fast UI response
-      return of(cachedAuth);
-    }
-
-    // No cached auth - must verify with server
+    // Always verify with backend - no localStorage shortcuts
     this.authCheckPending = this.http.get<LoginResponse>(`${this.baseUrl}/${this.engine}`, { withCredentials: true }).pipe(
       map(response => this.parseResponse(response)),
       tap(authentication => {
@@ -350,7 +277,6 @@ export class AuthService {
       }),
       catchError(() => {
         this.authInitialized = true;
-        // Clear any stale auth from storage
         this.updateAuthentication(null);
         return of(null);
       }),
@@ -367,29 +293,13 @@ export class AuthService {
   }
 
   /**
-   * Verify authentication with server in the background.
-   * If server says user is not authenticated, clear local state and redirect to login.
+   * Force re-verification with backend.
+   * Useful when you suspect the session state might have changed.
    */
-  private verifyAuthWithServer(): void {
-    this.http.get<LoginResponse>(`${this.baseUrl}/${this.engine}`, { withCredentials: true }).pipe(
-      map(response => this.parseResponse(response)),
-      catchError(() => of(null))
-    ).subscribe(serverAuth => {
-      this.authInitialized = true;
-      if (!serverAuth) {
-        // Server says not authenticated - clear local state
-        console.log('AuthService: Server verification failed, clearing authentication');
-        this.updateAuthentication(null);
-        // Redirect to login if on a protected route
-        if (!this.router.url.startsWith('/login')) {
-          this.saveReturnUrl(this.router.url);
-          this.router.navigate(['/login']);
-        }
-      } else if (serverAuth.name !== this.currentAuthentication?.name) {
-        // User changed - update local state
-        this.updateAuthentication(serverAuth);
-      }
-    });
+  revalidateAuthentication(): Observable<Authentication | null> {
+    this.authInitialized = false;
+    this.authCheckPending = null;
+    return this.getAuthentication();
   }
 
   /**
@@ -405,20 +315,12 @@ export class AuthService {
    * Update user profile
    */
   updateProfile(updates: ProfileUpdate): Observable<Authentication> {
-    return this.http.get(this.engineUrl, { withCredentials: true }).pipe(
+    return this.csrfService.refreshToken().pipe(
       switchMap(() => {
-        const csrfToken = this.getCsrfTokenFromCookie();
-        let headers = new HttpHeaders({
-          'Content-Type': 'application/json'
-        });
-        if (csrfToken) {
-          headers = headers.set('X-XSRF-TOKEN', csrfToken);
-        }
-
         return this.http.put<LoginResponse>(
           `${this.baseUrl}/${this.engine}/profile`,
           updates,
-          { headers, withCredentials: true }
+          { headers: this.csrfService.buildHeaders(), withCredentials: true }
         );
       }),
       map(response => this.parseResponse(response)),
@@ -440,23 +342,15 @@ export class AuthService {
       return throwError(() => 'User not authenticated');
     }
 
-    return this.http.get(this.engineUrl, { withCredentials: true }).pipe(
+    return this.csrfService.refreshToken().pipe(
       switchMap(() => {
-        const csrfToken = this.getCsrfTokenFromCookie();
-        let headers = new HttpHeaders({
-          'Content-Type': 'application/json'
-        });
-        if (csrfToken) {
-          headers = headers.set('X-XSRF-TOKEN', csrfToken);
-        }
-
         return this.http.put<void>(
           `${this.engineUrl}/${this.engine}/user/${userId}/credentials`,
           {
             authenticatedUserPassword: currentPassword,
             password: newPassword
           },
-          { headers, withCredentials: true }
+          { headers: this.csrfService.buildHeaders(), withCredentials: true }
         );
       }),
       catchError(error => {
@@ -466,14 +360,15 @@ export class AuthService {
   }
 
   /**
-   * Update authentication state and persist to storage
+   * Update authentication state (in memory only - no localStorage persistence).
+   * This follows the AngularJS pattern for security.
    */
   private updateAuthentication(authentication: Authentication | null): void {
     this.authenticationSubject.next(authentication);
-    this.saveAuthToStorage(authentication);
     // Clear pending check when explicitly setting authentication (e.g., logout)
     if (authentication === null) {
       this.authCheckPending = null;
+      this.authInitialized = false;
     }
     this.emit('authentication.changed', authentication);
   }
@@ -518,7 +413,6 @@ export class AuthService {
       message = error.error?.message || 'An error occurred during login.';
     }
 
-    console.log('Error message:', message);
     return message;
   }
 
@@ -557,9 +451,21 @@ export class AuthService {
 
   /**
    * Performs SSO logout by redirecting to the backend logout endpoint.
-   * This triggers OIDC back-channel logout if configured.
+   *
+   * ⚠️ WARNING: This method is deprecated and should not be used directly.
+   * Use smartLogout() instead.
+   *
+   * PROBLEM: The /logout endpoint only exists when OAuth2 is configured.
+   * If OAuth2 is not configured, this will result in a 404 error.
+   *
+   * The Spring Security logout endpoint (/orqueio/logout) is configured in
+   * OrqueioSpringSecurityOAuth2AutoConfiguration, which is conditional on
+   * OAuth2 clients being configured.
+   *
+   * @deprecated Use smartLogout() instead, which uses the REST API logout
    */
   ssoLogout(): void {
+    console.warn('ssoLogout() is deprecated - use smartLogout() instead');
     this.updateAuthentication(null);
     this.emit('authentication.logout.success');
     // Notify other tabs about logout
@@ -569,6 +475,11 @@ export class AuthService {
 
   /**
    * Gets the SSO logout URL.
+   *
+   * ⚠️ WARNING: This URL may not exist if OAuth2 is not configured.
+   * Returns: /orqueio/logout (or app-root/logout)
+   *
+   * @deprecated This endpoint is conditional - use REST logout instead
    */
   private getSsoLogoutUrl(): string {
     const baseElement = document.querySelector('base');
@@ -618,22 +529,14 @@ export class AuthService {
   }
 
   /**
-   * Smart logout that automatically chooses between SSO and regular logout.
-   * - If session was authenticated via SSO, performs SSO logout (redirect to /logout)
-   * - Otherwise, performs regular REST logout
+   * Simple logout - exactly like AngularJS implementation
+   * Just calls the REST logout endpoint
    */
   smartLogout(): Observable<void> {
-    if (this.isSsoSession()) {
-      // SSO logout - redirect to backend logout endpoint
-      this.clearSsoMarker();
-      this.ssoLogout();
-      // Return an observable that never completes since we're redirecting
-      return new Observable<void>();
-    } else {
-      // Regular logout via REST API
-      return this.logout().pipe(
-        tap(() => this.clearSsoMarker())
-      );
-    }
+    return this.logout().pipe(
+      tap(() => {
+        this.clearSsoMarker();
+      })
+    );
   }
 }

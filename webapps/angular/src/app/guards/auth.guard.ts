@@ -15,12 +15,10 @@ export const authGuard: CanActivateFn = (route: ActivatedRouteSnapshot, state: R
     take(1),
     map(auth => {
       if (auth) {
-        console.log('AuthGuard: User authenticated, access granted');
         return true;
       }
 
       // Save the requested URL for post-login redirect
-      console.log('AuthGuard: User not authenticated, saving URL and redirecting to login');
       authService.saveReturnUrl(state.url);
       authService.emitLoginRequired();
 

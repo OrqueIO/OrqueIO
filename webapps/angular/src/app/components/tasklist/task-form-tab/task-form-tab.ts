@@ -8,6 +8,8 @@ import { TranslatePipe } from '../../../i18n/translate.pipe';
 import { Task, TaskForm } from '../../../models/tasklist';
 import { TasklistService } from '../../../services/tasklist/tasklist.service';
 import { CamFormService, CamFormInstance } from '../../../services/tasklist/cam-form.service';
+import { FormStateStorageService, StoredVariable } from '../../../services/tasklist/form-state-storage.service';
+import { FormValidationService, ValidationErrors } from '../../../services/tasklist/form-validation.service';
 import { TasksActions } from '../../../store/tasklist';
 
 interface FormVariable {
@@ -44,6 +46,8 @@ type FormType = 'embedded' | 'orqueio-forms' | 'external' | 'generic';
 export class TaskFormTabComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit {
   private readonly tasklistService = inject(TasklistService);
   private readonly camFormService = inject(CamFormService);
+  private readonly formStateStorage = inject(FormStateStorageService);
+  private readonly formValidation = inject(FormValidationService);
   private readonly sanitizer = inject(DomSanitizer);
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly actions$ = inject(Actions);
@@ -59,9 +63,6 @@ export class TaskFormTabComponent implements OnInit, OnChanges, OnDestroy, After
 
   @Output() complete = new EventEmitter<Record<string, any>>();
   @Output() save = new EventEmitter<Record<string, any>>();
-
-  // LocalStorage key prefix for form state recovery (matches AngularJS camFormStateToLocal)
-  private readonly STORAGE_KEY_PREFIX = 'orqueio:task-form:';
 
   loading = false;
   loadingError: string | null = null;
@@ -409,33 +410,7 @@ export class TaskFormTabComponent implements OnInit, OnChanges, OnDestroy, After
     const variable = this.variables[index];
     if (!variable) return;
 
-    variable.errors = {};
-
-    // Skip validation for loaded variables with fixedName
-    if (variable.fixedName && variable.originalValue !== undefined) {
-      return;
-    }
-
-    // Validate name
-    if (variable.name && variable.name.trim() !== '') {
-      if (!/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(variable.name)) {
-        variable.errors.name = 'tasklist.validation.nameInvalid';
-      } else {
-        // Check for duplicates
-        const duplicateIndex = this.variables.findIndex((v, i) => i !== index && v.name === variable.name);
-        if (duplicateIndex !== -1) {
-          variable.errors.name = 'tasklist.validation.nameDuplicate';
-        }
-      }
-    }
-
-    // Validate value based on type
-    if (variable.type && variable.value !== undefined && variable.value !== null && variable.value !== '') {
-      const valueError = this.validateValueForType(variable.value, variable.type);
-      if (valueError) {
-        variable.errors.value = valueError;
-      }
-    }
+    variable.errors = this.formValidation.validateSingle(variable, this.variables, index);
   }
 
   private checkDirty(): boolean {
@@ -553,85 +528,19 @@ export class TaskFormTabComponent implements OnInit, OnChanges, OnDestroy, After
    * @returns true if all variables are valid, false otherwise
    */
   private validateVariables(): boolean {
-    let isValid = true;
-    const variableNames = new Set<string>();
-
-    for (const variable of this.variables) {
-      variable.errors = {};
-
-      // Skip validation for loaded variables with fixedName (they're already valid)
-      if (variable.fixedName && variable.originalValue !== undefined) {
-        continue;
-      }
-
-      // Validate name (required for new variables)
-      if (!variable.name || variable.name.trim() === '') {
-        variable.errors.name = 'tasklist.validation.nameRequired';
-        isValid = false;
-      } else if (!/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(variable.name)) {
-        // Variable name must be a valid identifier
-        variable.errors.name = 'tasklist.validation.nameInvalid';
-        isValid = false;
-      } else if (variableNames.has(variable.name)) {
-        // Check for duplicate names
-        variable.errors.name = 'tasklist.validation.nameDuplicate';
-        isValid = false;
-      }
-
-      if (variable.name) {
-        variableNames.add(variable.name);
-      }
-
-      // Validate type (required)
-      if (!variable.type) {
-        variable.errors.type = 'tasklist.validation.typeRequired';
-        isValid = false;
-      }
-
-      // Validate value based on type
-      if (variable.type && variable.value !== undefined && variable.value !== null && variable.value !== '') {
-        const valueError = this.validateValueForType(variable.value, variable.type);
-        if (valueError) {
-          variable.errors.value = valueError;
-          isValid = false;
-        }
-      }
-    }
-
-    return isValid;
-  }
-
-  /**
-   * Validates a value for a specific type
-   */
-  private validateValueForType(value: any, type: string): string | null {
-    switch (type) {
-      case 'Integer':
-      case 'Long':
-      case 'Short':
-        if (value !== '' && !Number.isInteger(Number(value))) {
-          return 'tasklist.validation.integerRequired';
-        }
-        break;
-      case 'Double':
-        if (value !== '' && isNaN(Number(value))) {
-          return 'tasklist.validation.numberRequired';
-        }
-        break;
-      case 'Date':
-        if (value !== '' && isNaN(Date.parse(value))) {
-          return 'tasklist.validation.dateInvalid';
-        }
-        break;
-    }
-    return null;
+    const result = this.formValidation.validateAll(this.variables);
+    // Update variables with errors from validation
+    this.variables.forEach((v, i) => {
+      v.errors = result.variables[i]?.errors;
+    });
+    return result.isValid;
   }
 
   /**
    * Check if form has any validation errors
    */
   hasValidationErrors(): boolean {
-    return this.variables.some(v => v.errors && (v.errors.name || v.errors.type || v.errors.value));
+    return this.formValidation.hasAnyErrors(this.variables);
   }
 
   /**
@@ -926,78 +835,37 @@ export class TaskFormTabComponent implements OnInit, OnChanges, OnDestroy, After
   }
 
   // ==================== LocalStorage Form State Recovery ====================
-  // Matches AngularJS camFormStateToLocal behavior
-
-  /**
-   * Get the localStorage key for the current task
-   */
-  private getStorageKey(): string | null {
-    if (!this.task?.id) return null;
-    return `${this.STORAGE_KEY_PREFIX}${this.task.id}`;
-  }
+  // Delegates to FormStateStorageService
 
   /**
    * Save form state to localStorage (called when switching tasks or on window unload)
    */
   private saveToLocalStorage(): void {
-    const key = this.getStorageKey();
-    if (!key || this.variables.length === 0) return;
-
-    try {
-      const state = {
-        variables: this.variables.map(v => ({
-          name: v.name,
-          type: v.type,
-          value: v.value,
-          valueInfo: v.valueInfo
-        })),
-        timestamp: Date.now()
-      };
-      localStorage.setItem(key, JSON.stringify(state));
-    } catch (e) {
-      // localStorage might be full or disabled - ignore
-      console.warn('Could not save form state to localStorage:', e);
-    }
+    if (!this.task?.id || this.variables.length === 0) return;
+    this.formStateStorage.saveState(this.task.id, this.variables as StoredVariable[]);
   }
 
   /**
    * Restore form state from localStorage (called on task change)
    */
   private restoreFromLocalStorage(): void {
-    const key = this.getStorageKey();
-    if (!key) return;
+    if (!this.task?.id) return;
 
-    try {
-      const stored = localStorage.getItem(key);
-      if (!stored) return;
-
-      const state = JSON.parse(stored);
-
-      // Check if stored state is too old (e.g., > 24 hours)
-      const MAX_AGE = 24 * 60 * 60 * 1000; // 24 hours in ms
-      if (state.timestamp && (Date.now() - state.timestamp) > MAX_AGE) {
-        localStorage.removeItem(key);
-        return;
-      }
-
-      if (state.variables && Array.isArray(state.variables) && state.variables.length > 0) {
-        this.variables = state.variables.map((v: any) => ({
-          name: v.name,
-          type: v.type,
-          value: v.value,
-          valueInfo: v.valueInfo,
-          // Variables restored from storage are treated as new/manually added
-          originalValue: undefined,
-          fixedName: false
-        }));
-        this.variablesLoaded = true;
-        this.isDirty = true;
-        this.hasBeenRestoredFromStorage = true;
-        this.cdr.detectChanges();
-      }
-    } catch (e) {
-      // Invalid JSON or other error - ignore
-      console.warn('Could not restore form state from localStorage:', e);
+    const state = this.formStateStorage.restoreState(this.task.id);
+    if (state) {
+      this.variables = state.variables.map(v => ({
+        name: v.name,
+        type: v.type,
+        value: v.value,
+        valueInfo: v.valueInfo,
+        // Variables restored from storage are treated as new/manually added
+        originalValue: undefined,
+        fixedName: false
+      }));
+      this.variablesLoaded = true;
+      this.isDirty = true;
+      this.hasBeenRestoredFromStorage = true;
+      this.cdr.detectChanges();
     }
   }
 
@@ -1005,13 +873,8 @@ export class TaskFormTabComponent implements OnInit, OnChanges, OnDestroy, After
    * Clear stored form state (called after successful save/complete)
    */
   private clearLocalStorage(): void {
-    const key = this.getStorageKey();
-    if (key) {
-      try {
-        localStorage.removeItem(key);
-      } catch (e) {
-        // Ignore
-      }
+    if (this.task?.id) {
+      this.formStateStorage.clearState(this.task.id);
     }
   }
 

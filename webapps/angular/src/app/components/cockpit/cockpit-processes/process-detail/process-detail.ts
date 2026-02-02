@@ -964,7 +964,6 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
 
   openIdentityLinksModal(task: UserTask, type: 'user' | 'group'): void {
     // TODO: Implement identity links modal
-    console.log(`Open ${type} identity links modal for task ${task.id}`);
   }
 
   // Computed properties for BPMN viewer

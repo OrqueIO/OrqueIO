@@ -220,7 +220,7 @@ export class ActivityInstanceTreeComponent {
       'task': faCog
     };
 
-    // Extract base type from full type (e.g., "bpmn:UserTask" -> "userTask")
+    // Extract base type from full type
     let baseType = type.replace('bpmn:', '');
     baseType = baseType.charAt(0).toLowerCase() + baseType.slice(1);
 
