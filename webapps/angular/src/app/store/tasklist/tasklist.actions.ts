@@ -3,7 +3,7 @@ import { Task, TaskQueryParams, TaskComment, UserOperationLogEntry, IdentityLink
 import { TaskFilter } from '../../models/tasklist';
 import { TaskErrorType, MaximizedColumn } from './tasklist.state';
 
-// ==================== TASKS ACTIONS ====================
+//  TASKS ACTIONS 
 
 export const TasksActions = createActionGroup({
   source: 'Tasklist Tasks',
@@ -54,7 +54,7 @@ export const TasksActions = createActionGroup({
   }
 });
 
-// ==================== FILTERS ACTIONS ====================
+//  FILTERS ACTIONS 
 
 export const FiltersActions = createActionGroup({
   source: 'Tasklist Filters',
@@ -83,7 +83,7 @@ export const FiltersActions = createActionGroup({
   }
 });
 
-// ==================== TASK DETAIL ACTIONS ====================
+//  TASK DETAIL ACTIONS 
 
 export const TaskDetailActions = createActionGroup({
   source: 'Tasklist Task Detail',
@@ -137,7 +137,7 @@ export const TaskDetailActions = createActionGroup({
   }
 });
 
-// ==================== UI ACTIONS ====================
+//  UI ACTIONS 
 
 export const TasklistUIActions = createActionGroup({
   source: 'Tasklist UI',

@@ -1,7 +1,7 @@
-import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, OnChanges, SimpleChanges, inject, NgZone } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, OnChanges, SimpleChanges, inject, NgZone, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Store } from '@ngrx/store';
-import { Subject, takeUntil, fromEvent, interval, switchMap, filter, forkJoin, of, catchError } from 'rxjs';
+import { Subject, takeUntil, take, fromEvent, interval, switchMap, filter, forkJoin, of, catchError } from 'rxjs';
 import { TranslatePipe } from '../../../i18n/translate.pipe';
 import { Task, IdentityLink } from '../../../models/tasklist';
 import { AuthService } from '../../../services/auth';
@@ -52,13 +52,15 @@ interface Tab {
     GroupsModalComponent
   ],
   templateUrl: './task-detail.html',
-  styleUrl: './task-detail.css'
+  styleUrl: './task-detail.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TaskDetailComponent implements OnInit, OnDestroy, OnChanges {
   private readonly store = inject(Store);
   private readonly authService = inject(AuthService);
   private readonly tasklistService = inject(TasklistService);
   private readonly ngZone = inject(NgZone);
+  private readonly cdr = inject(ChangeDetectorRef);
   private readonly destroy$ = new Subject<void>();
 
   @Input() task!: Task;
@@ -120,11 +122,13 @@ export class TaskDetailComponent implements OnInit, OnDestroy, OnChanges {
       if (errorType === 'TASK_NOT_EXIST') {
         this.taskExists = false;
       }
+      this.cdr.markForCheck();
     });
 
     // Subscribe to instance suspended state
     this.instanceSuspended$.pipe(takeUntil(this.destroy$)).subscribe(suspended => {
       this.instanceSuspended = suspended;
+      this.cdr.markForCheck();
     });
 
     // Setup periodic task existence check
@@ -175,6 +179,7 @@ export class TaskDetailComponent implements OnInit, OnDestroy, OnChanges {
         this.ngZone.run(() => {
           this.taskExists = false;
           this.taskRemoved.emit(this.task.id);
+          this.cdr.markForCheck();
         });
       }
     });
@@ -232,17 +237,17 @@ export class TaskDetailComponent implements OnInit, OnDestroy, OnChanges {
   // ==================== Groups Modal ====================
 
   openGroupsModal(): void {
-    // Get current identity links from store
-    this.identityLinks$.pipe(
-      takeUntil(this.destroy$)
-    ).subscribe(links => {
+    // Get current identity links from store (take(1) for single value)
+    this.identityLinks$.pipe(take(1)).subscribe(links => {
       this.currentIdentityLinks = links;
-    }).unsubscribe();
+    });
     this.showGroupsModal = true;
+    this.cdr.markForCheck();
   }
 
   closeGroupsModal(): void {
     this.showGroupsModal = false;
+    this.cdr.markForCheck();
   }
 
   onGroupsUpdate(changes: { added: string[]; removed: string[] }): void {
@@ -383,5 +388,6 @@ export class TaskDetailComponent implements OnInit, OnDestroy, OnChanges {
   onDiagramExpandToggle(expanded: boolean): void {
     this.diagramExpanded = expanded;
     this.diagramExpand.emit(expanded);
+    this.cdr.markForCheck();
   }
 }

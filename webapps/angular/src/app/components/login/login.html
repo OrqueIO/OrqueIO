@@ -82,7 +82,6 @@
             [class.error]="username?.invalid && username?.touched"
             [placeholder]="'PAGE_LOGIN_USERNAME_PLACEHOLDER' | translate"
             autocomplete="username"
-            autofocus
             (keydown.enter)="onUsernameEnter($event, passwordInput)"
           />
           <div class="error-space">

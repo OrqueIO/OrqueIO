@@ -5,7 +5,6 @@ import * as AuthorizationsActions from './authorizations.actions';
 export const authorizationsReducer = createReducer(
   initialAuthorizationsState,
 
-  // Load Authorizations
   on(AuthorizationsActions.loadAuthorizations, (state) => ({
     ...state,
     loading: true,
@@ -27,7 +26,6 @@ export const authorizationsReducer = createReducer(
     error
   })),
 
-  // Create Authorization
   on(AuthorizationsActions.createAuthorization, (state) => ({
     ...state,
     loading: true,
@@ -49,7 +47,6 @@ export const authorizationsReducer = createReducer(
     error
   })),
 
-  // Update Authorization
   on(AuthorizationsActions.updateAuthorization, (state) => ({
     ...state,
     loading: true,
@@ -73,7 +70,6 @@ export const authorizationsReducer = createReducer(
     error
   })),
 
-  // Delete Authorization
   on(AuthorizationsActions.deleteAuthorization, (state) => ({
     ...state,
     loading: true,
@@ -95,7 +91,6 @@ export const authorizationsReducer = createReducer(
     error
   })),
 
-  // Set Selected Resource Type
   on(AuthorizationsActions.setSelectedResourceType, (state, { resourceType }) => ({
     ...state,
     selectedResourceType: resourceType,
@@ -106,13 +101,11 @@ export const authorizationsReducer = createReducer(
     }
   })),
 
-  // Set Query Params
   on(AuthorizationsActions.setAuthorizationsQueryParams, (state, { params }) => ({
     ...state,
     queryParams: params
   })),
 
-  // Clear Authorizations
   on(AuthorizationsActions.clearAuthorizations, (state) =>
     authorizationsAdapter.removeAll({
       ...state,

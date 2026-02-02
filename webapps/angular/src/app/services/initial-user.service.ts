@@ -15,9 +15,10 @@
  */
 
 import { Injectable, inject } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { switchMap, catchError } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
+import { Observable, throwError, of } from 'rxjs';
+import { switchMap, catchError, map } from 'rxjs/operators';
+import { CsrfTokenService } from './csrf-token.service';
 
 /**
  * User profile for initial admin creation
@@ -81,25 +82,10 @@ export interface PasswordValidationResponse {
 })
 export class InitialUserService {
   private readonly setupUrl = '/orqueio/api/admin/setup';
-  private readonly engineUrl = '/orqueio/api/engine/engine';
   private readonly engine = 'default';
 
   private http = inject(HttpClient);
-
-  /**
-   * Get CSRF token from cookie
-   */
-  private getCsrfTokenFromCookie(): string | null {
-    const name = 'XSRF-TOKEN=';
-    const cookies = document.cookie.split(';');
-    for (let cookie of cookies) {
-      cookie = cookie.trim();
-      if (cookie.startsWith(name)) {
-        return cookie.substring(name.length);
-      }
-    }
-    return null;
-  }
+  private csrfService = inject(CsrfTokenService);
 
   /**
    * Creates the initial administrator user.
@@ -109,21 +95,12 @@ export class InitialUserService {
    */
   createInitialUser(request: CreateInitialUserRequest): Observable<void> {
     // First GET request to ensure we have an up-to-date CSRF cookie
-    return this.http.get(this.engineUrl, { withCredentials: true }).pipe(
+    return this.csrfService.refreshToken().pipe(
       switchMap(() => {
-        const csrfToken = this.getCsrfTokenFromCookie();
-
-        let headers = new HttpHeaders({
-          'Content-Type': 'application/json'
-        });
-        if (csrfToken) {
-          headers = headers.set('X-XSRF-TOKEN', csrfToken);
-        }
-
         return this.http.post<void>(
           `${this.setupUrl}/${this.engine}/user/create`,
           request,
-          { headers, withCredentials: true }
+          { headers: this.csrfService.buildHeaders(), withCredentials: true }
         );
       }),
       catchError(error => {
@@ -159,21 +136,12 @@ export class InitialUserService {
    * @returns Observable of validation response
    */
   validatePassword(password: string, profile: UserProfile): Observable<PasswordValidationResponse> {
-    return this.http.get(this.engineUrl, { withCredentials: true }).pipe(
+    return this.csrfService.refreshToken().pipe(
       switchMap(() => {
-        const csrfToken = this.getCsrfTokenFromCookie();
-
-        let headers = new HttpHeaders({
-          'Content-Type': 'application/json'
-        });
-        if (csrfToken) {
-          headers = headers.set('X-XSRF-TOKEN', csrfToken);
-        }
-
         return this.http.post<PasswordValidationResponse>(
           `${this.setupUrl}/${this.engine}/user/password-policy`,
           { password, profile },
-          { headers, withCredentials: true }
+          { headers: this.csrfService.buildHeaders(), withCredentials: true }
         );
       }),
       catchError(error => {
@@ -186,43 +154,19 @@ export class InitialUserService {
 
   /**
    * Checks if setup is available (no admin user exists).
+   * Uses the OAuth2 setup-required endpoint which checks for admin users.
    *
    * @returns Observable of boolean indicating if setup is available
    */
   isSetupAvailable(): Observable<boolean> {
-    return this.http.get(this.engineUrl, { withCredentials: true }).pipe(
-      switchMap(() => {
-        const csrfToken = this.getCsrfTokenFromCookie();
-
-        let headers = new HttpHeaders({
-          'Content-Type': 'application/json'
-        });
-        if (csrfToken) {
-          headers = headers.set('X-XSRF-TOKEN', csrfToken);
-        }
-
-        // Try to call the setup endpoint with empty body
-        // If it returns "Setup action not available", setup is not needed
-        return this.http.post<{ message?: string }>(
-          `${this.setupUrl}/${this.engine}/user/create`,
-          {},
-          { headers, withCredentials: true }
-        );
-      }),
-      switchMap(response => {
-        // If we get here without error, check the response
-        if (response?.message === 'Setup action not available') {
-          return [false];
-        }
-        return [true];
-      }),
-      catchError(error => {
-        // 400 error with validation means setup is available
-        if (error.status === 400) {
-          return [true];
-        }
-        // Other errors mean setup is not available
-        return [false];
+    return this.http.get<{ setupRequired: boolean }>(
+      '/orqueio/api/oauth2/setup-required',
+      { withCredentials: true }
+    ).pipe(
+      map(response => response.setupRequired === true),
+      catchError(() => {
+        // On error, assume setup is not available
+        return of(false);
       })
     );
   }

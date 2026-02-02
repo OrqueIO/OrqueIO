@@ -19,6 +19,11 @@
   flex: 1;
 }
 
+/* ============================================
+   SETUP PAGE - Modern SaaS Design
+   Consistent with Login page styling
+   ============================================ */
+
 /* Page wrapper with centered card */
 .setup-page {
   flex: 1;
@@ -27,7 +32,7 @@
   justify-content: center;
   min-height: calc(100vh - 120px);
   background-color: #f3f4f6;
-  padding: 1.5rem 2rem;
+  padding: 1.5rem;
   font-family: 'IBM Plex Sans', system-ui, sans-serif;
   box-sizing: border-box;
 }
@@ -36,73 +41,99 @@
 .setup-card {
   display: flex;
   width: 100%;
-  max-width: 1000px;
+  max-width: 920px;
   min-height: 520px;
   background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
   overflow: hidden;
   border-top: 4px solid #f59e0b;
 }
 
-/* Left panel - Branding */
+/* ============================================
+   LEFT PANEL - Marketing / Branding
+   Balanced at 45% for better visual weight
+   ============================================ */
 .setup-branding {
-  flex: 0 0 38%;
-  background: linear-gradient(145deg, #1e3a5f 0%, #0d2137 100%);
+  flex: 0 0 45%;
+  background: linear-gradient(155deg, #1e3a5f 0%, #0d2137 100%);
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
-  padding: 2.5rem 1.5rem 2rem 1.5rem;
+  justify-content: center;
+  padding: 2.5rem 2rem;
   color: #ffffff;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle pattern overlay */
+.setup-branding::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.03) 0%, transparent 50%),
+              radial-gradient(circle at 70% 80%, rgba(255,255,255,0.02) 0%, transparent 40%);
+  pointer-events: none;
 }
 
 .branding-content {
   text-align: center;
-  max-width: 100%;
-  padding: 0 1rem;
+  max-width: 280px;
+  position: relative;
+  z-index: 1;
 }
 
 .branding-logo {
-  width: 180px;
+  width: 160px;
   height: auto;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.75rem;
+  filter: drop-shadow(0 2px 8px rgba(0,0,0,0.2));
 }
 
 .branding-title {
-  font-size: 1.75rem;
+  font-size: 1.625rem;
   font-weight: 700;
-  margin: 0 0 0.5rem 0;
+  margin: 0 0 0.75rem 0;
   letter-spacing: -0.3px;
+  line-height: 1.2;
 }
 
 .branding-subtitle {
-  font-size: 0.95rem;
-  opacity: 0.9;
-  margin: 0 0 1.5rem 0;
-  line-height: 1.5;
+  font-size: 0.9rem;
+  opacity: 0.85;
+  margin: 0 0 2rem 0;
+  line-height: 1.6;
+  font-weight: 400;
 }
 
+/* Features list - more compact */
 .branding-features {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 0.875rem;
   text-align: left;
+  width: 100%;
 }
 
 .feature-item {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
-  font-size: 0.9rem;
+  gap: 0.75rem;
+  font-size: 0.875rem;
   opacity: 0.9;
+  font-weight: 400;
 }
 
 .feature-icon {
-  width: 26px;
-  height: 26px;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  background: rgba(245, 158, 11, 0.2);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -112,14 +143,18 @@
 .feature-icon svg {
   width: 14px;
   height: 14px;
+  color: #fbbf24;
 }
 
-/* Right panel - Form */
+/* ============================================
+   RIGHT PANEL - Setup Form
+   ============================================ */
 .setup-form-panel {
   flex: 1;
   display: flex;
   flex-direction: column;
-  padding: 2.5rem 2rem 1.5rem 2rem;
+  justify-content: center;
+  padding: 2rem 2.5rem;
   overflow-y: auto;
   max-height: 85vh;
 }
@@ -127,102 +162,123 @@
 /* Form header */
 .setup-header {
   text-align: center;
-  margin-bottom: 0.75rem;
+  margin-bottom: 1.25rem;
 }
 
 .setup-title {
-  font-size: 1.25rem;
-  font-weight: 600;
+  font-size: 1.375rem;
+  font-weight: 700;
   color: #1f2937;
   margin: 0 0 0.25rem 0;
 }
 
 .setup-subtitle {
-  font-size: 0.8rem;
+  font-size: 0.875rem;
   color: #6b7280;
   margin: 0;
 }
 
-/* Form sections */
+/* ============================================
+   FORM SECTIONS
+   ============================================ */
 .form-section {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
 }
 
 .section-title {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   font-weight: 600;
   color: #9ca3af;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 0.4rem;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.625rem;
+  padding-bottom: 0.375rem;
+  border-bottom: 1px solid #f3f4f6;
 }
 
 /* Form row for horizontal inputs */
 .form-row {
   display: flex;
-  gap: 0.6rem;
+  gap: 1rem;
 }
 
 .form-row .form-group {
   flex: 1;
 }
 
-/* Form groups */
+/* ============================================
+   FORM GROUPS
+   ============================================ */
 .form-group {
-  margin-bottom: 0.15rem;
+  margin-bottom: 0.125rem;
 }
 
 .form-label {
   display: block;
-  font-size: 0.85rem;
-  font-weight: 500;
+  font-size: 0.8rem;
+  font-weight: 600;
   color: #374151;
-  margin-bottom: 0.2rem;
+  margin-bottom: 0.375rem;
+  letter-spacing: 0.01em;
 }
 
-/* Form controls */
+/* ============================================
+   FORM INPUTS - Enhanced states
+   ============================================ */
 .form-input {
   width: 100%;
-  padding: 0.45rem 0.6rem;
-  border: 1px solid #e5e7eb;
-  border-radius: 4px;
+  padding: 0.625rem 0.75rem;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 8px;
   background-color: #ffffff;
   color: #1f2937;
-  font-size: 0.9rem;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
   box-sizing: border-box;
 }
 
 .form-input::placeholder {
-  color: #6b7280;
-  font-size: 0.85rem;
+  color: #9ca3af;
+  font-size: 0.8rem;
 }
 
-.form-input:hover {
+.form-input:hover:not(:focus):not(:disabled):not(.error) {
   border-color: #d1d5db;
+  background-color: #fafafa;
 }
 
 .form-input:focus {
   outline: none;
   border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+  background-color: #ffffff;
+}
+
+.form-input:disabled {
+  background-color: #f3f4f6;
+  color: #9ca3af;
+  cursor: not-allowed;
+  opacity: 0.7;
 }
 
 .form-input.error {
   border-color: #ef4444;
+  background-color: #fef2f2;
 }
 
 .form-input.error:focus {
-  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.1);
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.12);
 }
 
-/* Password input wrapper */
+/* ============================================
+   PASSWORD INPUT - Enhanced visibility
+   ============================================ */
 .password-wrapper {
   position: relative;
 }
 
 .password-wrapper .form-input {
-  padding-right: 2.5rem;
+  padding-right: 2.75rem;
 }
 
 .password-toggle {
@@ -230,20 +286,20 @@
   right: 0.5rem;
   top: 50%;
   transform: translateY(-50%);
-  background: none;
+  background: transparent;
   border: none;
   cursor: pointer;
-  padding: 0.25rem;
-  color: #9ca3af;
-  border-radius: 4px;
-  transition: color 0.15s;
+  padding: 0.375rem;
+  color: #6b7280;
+  border-radius: 6px;
+  transition: all 0.15s ease;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.password-toggle:hover {
-  color: #374151;
+.password-toggle:hover:not(:disabled) {
+  color: #1f2937;
   background: #f3f4f6;
 }
 
@@ -251,73 +307,115 @@
   outline: none;
   color: #2563eb;
   background: #eff6ff;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+.password-toggle:active:not(:disabled) {
+  background: #e5e7eb;
+  transform: translateY(-50%) scale(0.95);
 }
 
 .password-toggle:disabled {
-  opacity: 0.5;
+  opacity: 0.4;
   cursor: not-allowed;
 }
 
+/* Larger, more visible icon */
 .password-toggle svg {
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
 }
 
-/* Error messages */
+/* ============================================
+   ERROR MESSAGES
+   ============================================ */
 .error-space {
-  min-height: 1.1rem;
+  min-height: 1.125rem;
   display: flex;
   align-items: flex-start;
+  margin-top: 0.125rem;
 }
 
 .error-message {
   display: flex;
   align-items: center;
   gap: 0.25rem;
-  color: #ef4444;
-  font-size: 0.75rem;
-  margin-top: 0.1rem;
+  color: #dc2626;
+  font-size: 0.7rem;
+  font-weight: 500;
+  line-height: 1.2;
 }
 
 .error-message svg {
   flex-shrink: 0;
+  color: #ef4444;
 }
 
 .error-message.validating {
   color: #6b7280;
 }
 
-/* Submit button */
+/* ============================================
+   SUBMIT BUTTON
+   ============================================ */
 .btn-submit {
   width: 100%;
-  background: #2563eb;
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
   color: white;
   font-weight: 600;
-  padding: 0.65rem 1.25rem;
+  padding: 0.75rem 1.25rem;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
   cursor: pointer;
-  transition: background-color 0.15s ease, box-shadow 0.15s ease;
+  transition: all 0.2s ease;
   font-size: 0.9rem;
-  margin-top: 0.5rem;
+  margin-top: 0.75rem;
+  box-shadow: 0 1px 3px rgba(37, 99, 235, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-submit::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.btn-submit:hover:not(:disabled)::before {
+  left: 100%;
 }
 
 .btn-submit:hover:not(:disabled) {
-  background: #1d4ed8;
+  background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+  transform: translateY(-1px);
 }
 
 .btn-submit:focus {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.4);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.4), 0 4px 12px rgba(37, 99, 235, 0.25);
+}
+
+.btn-submit:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 1px 3px rgba(37, 99, 235, 0.3);
 }
 
 .btn-submit:disabled {
-  opacity: 0.6;
+  opacity: 0.65;
   cursor: not-allowed;
+  transform: none;
+  background: #93c5fd;
+  box-shadow: none;
 }
 
 .btn-submit svg {
@@ -327,7 +425,7 @@
 
 /* Loading spinner */
 .spinner {
-  animation: spin 1s linear infinite;
+  animation: spin 0.8s linear infinite;
 }
 
 @keyframes spin {
@@ -335,13 +433,17 @@
   to { transform: rotate(360deg); }
 }
 
-/* Back to login link */
+/* ============================================
+   BACK TO LOGIN LINK
+   ============================================ */
 .back-link-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 0.25rem;
-  margin-top: 0.5rem;
+  gap: 0.375rem;
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #f3f4f6;
 }
 
 .back-text {
@@ -354,54 +456,73 @@
   font-size: 0.85rem;
   font-weight: 600;
   text-decoration: none;
+  transition: all 0.15s ease;
 }
 
 .back-link:hover {
-  color: #d97706;
+  color: #b45309;
   text-decoration: underline;
 }
 
 .back-link:focus {
-  outline: 2px solid #2563eb;
+  outline: 2px solid #f59e0b;
   outline-offset: 2px;
   border-radius: 2px;
 }
 
-/* Success state */
+/* ============================================
+   SUCCESS STATE
+   ============================================ */
 .setup-success {
   text-align: center;
-  padding: 1.5rem 0;
+  padding: 2rem 1rem;
 }
 
 .success-icon {
-  width: 56px;
-  height: 56px;
-  margin: 0 auto 1rem;
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 1.25rem;
   color: #10b981;
-  background: #ecfdf5;
+  background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+  animation: scaleIn 0.3s ease-out;
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 .success-icon svg {
-  width: 30px;
-  height: 30px;
+  width: 32px;
+  height: 32px;
 }
 
 .success-title {
-  font-size: 1.25rem;
+  font-size: 1.375rem;
   font-weight: 700;
   color: #1f2937;
   margin: 0 0 0.5rem 0;
 }
 
 .success-message {
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   color: #6b7280;
-  margin: 0 0 1rem 0;
-  line-height: 1.4;
+  margin: 0 0 1.5rem 0;
+  line-height: 1.5;
+  max-width: 320px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .btn-action {
@@ -411,17 +532,25 @@
   gap: 0.5rem;
   padding: 0.75rem 1.5rem;
   font-size: 0.9rem;
-  font-weight: 500;
+  font-weight: 600;
   color: #ffffff;
-  background: #2563eb;
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
   border: none;
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.15s ease;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(37, 99, 235, 0.3);
 }
 
 .btn-action:hover {
-  background: #1d4ed8;
+  background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+  transform: translateY(-1px);
+}
+
+.btn-action:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.4);
 }
 
 .btn-action svg {
@@ -429,41 +558,76 @@
   height: 16px;
 }
 
-/* Responsive - Tablet */
+/* ============================================
+   RESPONSIVE - Tablet
+   ============================================ */
 @media screen and (max-width: 900px) {
   .setup-card {
     max-width: 95%;
   }
 
   .setup-branding {
-    flex: 0 0 40%;
-    padding: 1.5rem;
+    flex: 0 0 42%;
+    padding: 2rem 1.5rem;
   }
 
   .branding-logo {
-    width: 100px;
+    width: 120px;
+    margin-bottom: 1.25rem;
   }
 
   .branding-title {
-    font-size: 1.25rem;
+    font-size: 1.375rem;
+  }
+
+  .branding-subtitle {
+    font-size: 0.85rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .setup-form-panel {
+    padding: 1.5rem;
+  }
+
+  .form-row {
+    gap: 0.75rem;
   }
 }
 
-/* Responsive - Mobile */
+/* ============================================
+   RESPONSIVE - Mobile
+   ============================================ */
 @media screen and (max-width: 700px) {
   .setup-page {
     padding: 1rem;
     align-items: flex-start;
+    padding-top: 1.5rem;
   }
 
   .setup-card {
     flex-direction: column;
     max-width: 100%;
+    min-height: auto;
+    border-radius: 12px;
   }
 
   .setup-branding {
     flex: 0 0 auto;
-    padding: 1.5rem;
+    padding: 1.5rem 1.25rem;
+  }
+
+  .branding-logo {
+    width: 100px;
+    margin-bottom: 1rem;
+  }
+
+  .branding-title {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .branding-subtitle {
+    margin-bottom: 0;
   }
 
   .branding-features {
@@ -471,11 +635,50 @@
   }
 
   .setup-form-panel {
+    padding: 1.25rem;
     max-height: none;
   }
 
   .form-row {
     flex-direction: column;
     gap: 0;
+  }
+}
+
+/* ============================================
+   ACCESSIBILITY - Reduced motion
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation: none;
+  }
+
+  .btn-submit,
+  .btn-action,
+  .form-input,
+  .password-toggle {
+    transition: none;
+  }
+
+  .btn-submit::before {
+    display: none;
+  }
+
+  .success-icon {
+    animation: none;
+  }
+}
+
+/* ============================================
+   HIGH CONTRAST MODE
+   ============================================ */
+@media (prefers-contrast: high) {
+  .form-input {
+    border-width: 2px;
+  }
+
+  .btn-submit,
+  .btn-action {
+    border: 2px solid #1e40af;
   }
 }

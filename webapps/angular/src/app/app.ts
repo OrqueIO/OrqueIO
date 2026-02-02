@@ -32,10 +32,8 @@ export class App implements OnInit {
   }
 
   onLogout(): void {
-    this.authService.logout()
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => {
-        this.router.navigate(['/login']);
-      });
+    this.authService.clearSsoMarker();
+    sessionStorage.clear();
+    window.location.href = '/logout';
   }
 }

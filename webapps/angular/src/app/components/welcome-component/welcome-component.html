@@ -9,6 +9,25 @@
     </div>
   </header>
 
+  <!-- Limited Access Banner -->
+  @if (isLimitedAccess) {
+    <div class="limited-access-banner">
+      <div class="limited-access-content">
+        <div class="limited-access-icon">
+          <fa-icon [icon]="faLock"></fa-icon>
+        </div>
+        <div class="limited-access-text">
+          <h3 class="limited-access-title">{{ 'LIMITED_ACCESS_TITLE' | translate }}</h3>
+          <p class="limited-access-message">{{ 'LIMITED_ACCESS_MESSAGE' | translate }}</p>
+        </div>
+      </div>
+      <div class="limited-access-action">
+        <fa-icon [icon]="faEnvelope" class="contact-icon"></fa-icon>
+        <span>{{ 'LIMITED_ACCESS_CONTACT_ADMIN' | translate }}</span>
+      </div>
+    </div>
+  }
+
   <!-- Main Content -->
   <main class="main-content">
     <!-- Apps Section -->
@@ -17,28 +36,45 @@
         <h2 class="section-title">{{ 'YOUR_APPS' | translate }}</h2>
       </div>
 
-      <div class="cards-grid">
-        @for (app of apps; track app.route) {
-          <a [routerLink]="app.route" class="app-card" [style.--accent-color]="app.accentColor">
-            <div class="card-accent-bar"></div>
-            <div class="card-content">
-              <div class="card-icon-wrapper">
-                <img [src]="app.icon" [alt]="app.titleKey | translate" class="card-icon">
+      @if (isLimitedAccess) {
+        <!-- Limited Access: No apps available -->
+        <div class="no-apps-container">
+          <div class="no-apps-icon">
+            <fa-icon [icon]="faLock"></fa-icon>
+          </div>
+          <p class="no-apps-message">{{ 'LIMITED_ACCESS_NO_APPS' | translate }}</p>
+          <p class="no-apps-submessage">{{ 'LIMITED_ACCESS_APPS_HINT' | translate }}</p>
+        </div>
+      } @else if (apps.length === 0) {
+        <!-- Loading or truly no apps -->
+        <div class="no-apps-container">
+          <p class="no-apps-message">{{ 'NO_APPS_AVAILABLE' | translate }}</p>
+        </div>
+      } @else {
+        <!-- Normal view with apps -->
+        <div class="cards-grid">
+          @for (app of apps; track app.route) {
+            <a [routerLink]="app.route" class="app-card" [style.--accent-color]="app.accentColor">
+              <div class="card-accent-bar"></div>
+              <div class="card-content">
+                <div class="card-icon-wrapper">
+                  <img [src]="app.icon" [alt]="app.titleKey | translate" class="card-icon">
+                </div>
+                <div class="card-info">
+                  <h3 class="card-title">{{ app.titleKey | translate }}</h3>
+                  <span class="card-subtitle">{{ app.subtitleKey | translate }}</span>
+                  <p class="card-description">{{ app.descriptionKey | translate }}</p>
+                </div>
               </div>
-              <div class="card-info">
-                <h3 class="card-title">{{ app.titleKey | translate }}</h3>
-                <span class="card-subtitle">{{ app.subtitleKey | translate }}</span>
-                <p class="card-description">{{ app.descriptionKey | translate }}</p>
+              <div class="card-action">
+                <svg class="action-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
               </div>
-            </div>
-            <div class="card-action">
-              <svg class="action-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M5 12h14M12 5l7 7-7 7"/>
-              </svg>
-            </div>
-          </a>
-        }
-      </div>
+            </a>
+          }
+        </div>
+      }
     </section>
 
     <!-- Resources Section -->

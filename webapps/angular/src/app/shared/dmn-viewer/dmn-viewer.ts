@@ -14,9 +14,7 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-// Import dmn-js Viewer (read-only mode)
 import DmnViewer from 'dmn-js/lib/Viewer';
-// Import DMN migration utility for older DMN versions
 import { migrateDiagram } from '@bpmn-io/dmn-migrate';
 
 // Interface for decision input/output values

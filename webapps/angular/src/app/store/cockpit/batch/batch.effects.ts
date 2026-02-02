@@ -25,9 +25,9 @@ export class BatchEffects {
   private batchService = inject(BatchService);
   private notifications = inject(NotificationsService);
 
-  // ============================================
+  
   // RUNTIME BATCHES
-  // ============================================
+  
 
   loadRuntimeBatches$ = createEffect(() =>
     this.actions$.pipe(
@@ -61,9 +61,9 @@ export class BatchEffects {
     )
   );
 
-  // ============================================
+  
   // HISTORY BATCHES
-  // ============================================
+  
 
   loadHistoryBatches$ = createEffect(() =>
     this.actions$.pipe(
@@ -92,9 +92,9 @@ export class BatchEffects {
     )
   );
 
-  // ============================================
+  
   // BATCH DETAILS
-  // ============================================
+  
 
   loadBatchDetails$ = createEffect(() =>
     this.actions$.pipe(
@@ -142,9 +142,9 @@ export class BatchEffects {
     )
   );
 
-  // ============================================
+  
   // BATCH ACTIONS
-  // ============================================
+  
 
   toggleBatchSuspension$ = createEffect(() =>
     this.actions$.pipe(
@@ -188,9 +188,9 @@ export class BatchEffects {
     )
   );
 
-  // ============================================
+  
   // FAILED JOBS
-  // ============================================
+  
 
   loadFailedJobs$ = createEffect(() =>
     this.actions$.pipe(
@@ -224,9 +224,9 @@ export class BatchEffects {
     )
   );
 
-  // ============================================
+  
   // JOB ACTIONS
-  // ============================================
+  
 
   retryJob$ = createEffect(() =>
     this.actions$.pipe(
@@ -306,9 +306,9 @@ export class BatchEffects {
     )
   );
 
-  // ============================================
+  
   // POLLING
-  // ============================================
+  
 
   startPolling$ = createEffect(() =>
     this.actions$.pipe(

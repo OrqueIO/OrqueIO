@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnChanges, SimpleChanges, inject, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, SimpleChanges, inject, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslatePipe } from '../../../i18n/translate.pipe';
 import { TooltipDirective } from '../../../shared/tooltip/tooltip.directive';
@@ -17,7 +17,8 @@ interface TaskVariable {
   standalone: true,
   imports: [CommonModule, TranslatePipe, TooltipDirective],
   templateUrl: './task-card.html',
-  styleUrl: './task-card.css'
+  styleUrl: './task-card.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TaskCardComponent implements OnInit, OnChanges {
   private readonly tasklistService = inject(TasklistService);

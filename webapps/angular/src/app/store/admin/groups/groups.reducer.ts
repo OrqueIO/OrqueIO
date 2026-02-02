@@ -5,7 +5,6 @@ import * as GroupsActions from './groups.actions';
 export const groupsReducer = createReducer(
   initialGroupsState,
 
-  // Load Groups
   on(GroupsActions.loadGroups, (state) => ({
     ...state,
     loading: true,
@@ -27,7 +26,6 @@ export const groupsReducer = createReducer(
     error
   })),
 
-  // Load Group Detail
   on(GroupsActions.loadGroup, (state) => ({
     ...state,
     loading: true,
@@ -47,7 +45,6 @@ export const groupsReducer = createReducer(
     error
   })),
 
-  // Create Group
   on(GroupsActions.createGroup, (state) => ({
     ...state,
     loading: true,
@@ -69,7 +66,6 @@ export const groupsReducer = createReducer(
     error
   })),
 
-  // Update Group
   on(GroupsActions.updateGroup, (state) => ({
     ...state,
     loading: true,
@@ -94,7 +90,6 @@ export const groupsReducer = createReducer(
     error
   })),
 
-  // Delete Group
   on(GroupsActions.deleteGroup, (state) => ({
     ...state,
     loading: true,
@@ -116,13 +111,11 @@ export const groupsReducer = createReducer(
     error
   })),
 
-  // Set Query Params
   on(GroupsActions.setGroupsQueryParams, (state, { params }) => ({
     ...state,
     queryParams: params
   })),
 
-  // Clear Selected Group
   on(GroupsActions.clearSelectedGroup, (state) => ({
     ...state,
     selectedGroup: null

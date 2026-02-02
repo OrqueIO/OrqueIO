@@ -199,9 +199,9 @@ export class TasklistLayoutComponent implements OnInit, OnDestroy {
 
     this.ngZone.runOutsideAngular(() => {
       this.autoRefreshTimer = setInterval(() => {
-        // Check if we still should refresh
+        // Check if we still should refresh using take(1) instead of subscribe/unsubscribe
         this.selectedFilter$.pipe(
-          takeUntil(this.destroy$)
+          take(1)
         ).subscribe(selectedFilter => {
           if (selectedFilter?.properties?.refresh) {
             this.ngZone.run(() => {
@@ -210,7 +210,7 @@ export class TasklistLayoutComponent implements OnInit, OnDestroy {
           } else {
             this.stopAutoRefresh();
           }
-        }).unsubscribe();
+        });
       }, AUTO_REFRESH_INTERVAL);
     });
   }
@@ -426,12 +426,12 @@ export class TasklistLayoutComponent implements OnInit, OnDestroy {
   // Edit current filter
   private editCurrentFilter(): void {
     this.selectedFilter$.pipe(
-      takeUntil(this.destroy$)
+      take(1)
     ).subscribe(filter => {
       if (filter) {
         this.onFilterEdit(filter);
       }
-    }).unsubscribe();
+    });
   }
 
   // Filter Modal

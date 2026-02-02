@@ -155,12 +155,16 @@ export class SystemService extends AdminService {
   /**
    * Get telemetry/diagnostics data
    * Returns the complete raw data from the API without filtering
+   * Note: Returns empty data silently for non-admin users (403 is expected)
    */
   getTelemetryData(engineName?: string): Observable<TelemetryData> {
     const url = `${this.getEngineUrl(engineName)}/telemetry/data`;
     return this.get<TelemetryData>(url).pipe(
       catchError(error => {
-        console.error('Failed to fetch telemetry data:', error);
+        // 403 is expected for non-admin users - don't log as error
+        if (error.status !== 403) {
+          console.error('Failed to fetch telemetry data:', error);
+        }
         return of({} as TelemetryData);
       })
     );

@@ -2,7 +2,7 @@ import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { Task, TaskQueryParams, TaskSorting } from '../../models/tasklist';
 import { TaskFilter, SearchPill, SearchQuery } from '../../models/tasklist';
 
-// ==================== TASKS STATE ====================
+//  TASKS STATE 
 
 export interface TasksState extends EntityState<Task> {
   selectedTaskId: string | null;
@@ -29,7 +29,7 @@ export const initialTasksState: TasksState = tasksAdapter.getInitialState({
   error: null
 });
 
-// ==================== FILTERS STATE ====================
+//  FILTERS STATE 
 
 export interface FiltersState extends EntityState<TaskFilter> {
   selectedFilterId: string | null;
@@ -42,7 +42,6 @@ export interface FiltersState extends EntityState<TaskFilter> {
 export const filtersAdapter: EntityAdapter<TaskFilter> = createEntityAdapter<TaskFilter>({
   selectId: (filter) => filter.id,
   sortComparer: (a, b) => {
-    // Sort by priority first, then by name
     const priorityA = a.properties?.priority ?? 0;
     const priorityB = b.properties?.priority ?? 0;
     if (priorityA !== priorityB) {
@@ -60,11 +59,8 @@ export const initialFiltersState: FiltersState = filtersAdapter.getInitialState(
   canCreate: false
 });
 
-// ==================== TASK DETAIL STATE ====================
+//  TASK DETAIL STATE 
 
-/**
- * Task error types matching AngularJS errorHandler
- */
 export type TaskErrorType = 'TASK_NOT_EXIST' | 'INSTANCE_SUSPENDED' | 'GENERAL_ERROR' | null;
 
 export interface TaskDetailState {
@@ -77,7 +73,6 @@ export interface TaskDetailState {
   error: string | null;
   errorType: TaskErrorType;
   activeTab: 'form' | 'history' | 'diagram' | 'description' | 'variables';
-  // Instance suspended state (matching AngularJS)
   instanceSuspended: boolean;
 }
 
@@ -94,24 +89,17 @@ export const initialTaskDetailState: TaskDetailState = {
   instanceSuspended: false
 };
 
-// ==================== UI STATE ====================
+//  UI STATE 
 
-/**
- * Column maximize mode - which column is maximized (null = none)
- * Matches AngularJS maximize-column-left/right functionality
- */
 export type MaximizedColumn = 'filters' | 'list' | 'detail' | null;
 
 export interface TasklistUIState {
   filtersCollapsed: boolean;
   listCollapsed: boolean;
   detailCollapsed: boolean;
-  // Column maximize feature (AngularJS parity)
   maximizedColumn: MaximizedColumn;
-  // Search state
   searchQuery: string;
   searchPills: SearchPill[];
-  // OR query mode (AngularJS matchAny)
   matchAny: boolean;
 }
 
@@ -128,7 +116,7 @@ export const initialUIState: TasklistUIState = {
   matchAny: false
 };
 
-// ==================== ROOT STATE ====================
+//  ROOT STATE 
 
 export interface TasklistState {
   tasks: TasksState;

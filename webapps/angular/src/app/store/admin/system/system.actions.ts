@@ -8,9 +8,7 @@ import {
   LoadingState
 } from '../../../models/admin/system.model';
 
-// =====================
 // Process Engines
-// =====================
 
 export const loadEngines = createAction('[System] Load Engines');
 
@@ -29,9 +27,7 @@ export const setCurrentEngine = createAction(
   props<{ engineName: string }>()
 );
 
-// =====================
 // Engine Info
-// =====================
 
 export const loadEngineInfo = createAction(
   '[System] Load Engine Info',
@@ -48,9 +44,7 @@ export const loadEngineInfoFailure = createAction(
   props<{ error: any }>()
 );
 
-// =====================
 // Job Executor
-// =====================
 
 export const loadJobExecutorStatus = createAction(
   '[System] Load Job Executor Status',
@@ -95,9 +89,7 @@ export const stopJobExecutorFailure = createAction(
   props<{ error: any }>()
 );
 
-// =====================
 // Metrics
-// =====================
 
 export const loadMonthlyMetrics = createAction(
   '[System] Load Monthly Metrics',
@@ -139,9 +131,7 @@ export const setDisplayLegacyMetrics = createAction(
   props<{ display: boolean }>()
 );
 
-// =====================
 // Telemetry/Diagnostics
-// =====================
 
 export const loadTelemetryData = createAction(
   '[System] Load Telemetry Data',
@@ -158,8 +148,6 @@ export const loadTelemetryDataFailure = createAction(
   props<{ error: string }>()
 );
 
-// =====================
 // Reset
-// =====================
 
 export const resetSystemState = createAction('[System] Reset State');

@@ -9,15 +9,18 @@ import { AuthService } from '../services/auth';
 const SILENT_ERROR_URLS = [
   '/api/admin/auth/user/',      // Auth check - fails when not logged in
   '/api/oauth2/setup-required', // OAuth2 setup check - fails if OAuth2 not configured
-  '/api/oauth2/providers'       // OAuth2 providers - fails if OAuth2 not configured
+  '/api/oauth2/providers',      // OAuth2 providers - fails if OAuth2 not configured
+  '/api/admin/setup/',          // Setup check - fails with 403 if already configured
+  '/management/health',         // Health check - may fail with 403
+  '/telemetry/data'             // Telemetry - requires admin/System READ permission (403 expected for non-admins)
 ];
 
 /**
  * Check if the error should be silently handled (not logged and no redirect)
  */
 function shouldSuppressError(url: string, status: number): boolean {
-  // Suppress 404 and 401 errors for expected-to-fail endpoints
-  if (status !== 404 && status !== 401) return false;
+  // Suppress 404, 401, and 403 errors for expected-to-fail endpoints
+  if (status !== 404 && status !== 401 && status !== 403) return false;
   return SILENT_ERROR_URLS.some(pattern => url.includes(pattern));
 }
 
@@ -66,6 +69,15 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
             break;
           case 403:
             errorMessage = serverMessage || 'Access forbidden';
+            // Handle 403 - user lacks permission
+            // IMPORTANT: Do NOT redirect to access-denied from the interceptor!
+            // Route guards (adminGuard, cockpitGuard, tasklistGuard) handle access control
+            // for navigation. The interceptor should only log API 403 errors.
+            // Redirecting here causes issues for Limited Access users who should stay
+            // on the Welcome page even when API calls return 403.
+            if (!suppressLogging) {
+              console.warn('Access forbidden (403) for:', req.url);
+            }
             break;
           case 404:
             errorMessage = serverMessage || 'Resource not found';

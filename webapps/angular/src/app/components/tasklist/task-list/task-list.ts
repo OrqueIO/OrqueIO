@@ -10,7 +10,8 @@ import {
   ElementRef,
   ViewChild,
   inject,
-  ChangeDetectorRef
+  ChangeDetectorRef,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subject, fromEvent, interval, takeUntil } from 'rxjs';
@@ -24,7 +25,8 @@ import { TaskCardComponent } from '../task-card/task-card';
   standalone: true,
   imports: [CommonModule, TranslatePipe, TimeAgoPipe, TaskCardComponent],
   templateUrl: './task-list.html',
-  styleUrl: './task-list.css'
+  styleUrl: './task-list.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
   private readonly cdr = inject(ChangeDetectorRef);
