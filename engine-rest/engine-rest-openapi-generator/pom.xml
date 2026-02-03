@@ -17,7 +17,7 @@
   </parent>
 
   <properties>
-    <version.json-schema-validator>1.0.7-SNAPSHOT6</version.json-schema-validator>
+    <version.json-schema-validator>1.0.7-SNAPSHOT</version.json-schema-validator>
   </properties>
 
   <dependencies>
