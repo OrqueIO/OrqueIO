@@ -45,14 +45,40 @@
    PROCESS TABS NAVIGATION
    ===================================================== */
 
+.process-tabs-container {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+}
+
 .process-tabs {
   display: flex;
   align-items: stretch;
   gap: 0;
-  background: var(--bg-card);
-  border-bottom: 1px solid var(--border-color);
   padding: 0 1rem;
   flex-shrink: 0;
+}
+
+.tabs-expand-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  padding: 0;
+  color: var(--text-muted);
+  background: transparent;
+  border: none;
+  border-left: 1px solid var(--border-color);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.tabs-expand-btn:hover {
+  background: var(--color-gray-100);
+  color: var(--text-primary);
 }
 
 .process-tab {
@@ -154,6 +180,7 @@
   color: var(--color-primary);
   text-decoration: none;
   font-weight: 500;
+  cursor: pointer;
 }
 
 .definition-link:hover {
@@ -500,14 +527,13 @@
    ===================================================== */
 
 .diagram-section {
-  height: 55%;
+  flex: 1.2;
   min-height: 200px;
   background: var(--bg-card);
   border-bottom: 1px solid var(--border-color);
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  flex-shrink: 0;
 }
 
 .section-header {
@@ -573,36 +599,31 @@
   width: 100%;
 }
 
+/* Table fullscreen mode (hide diagram, sidebar, header) */
+.cockpit-layout.table-fullscreen .content-area {
+  width: 100%;
+}
+
+.cockpit-layout.table-fullscreen .instances-section {
+  height: 100%;
+  flex: 1;
+}
+
 .diagram-section.maximized {
   height: 100%;
   flex: 1;
   border-bottom: none;
 }
 
-/* Diagram collapsed mode (only header visible) */
+/* Diagram collapsed mode (completely hidden) */
 .diagram-section.collapsed {
-  height: auto;
-  min-height: auto;
-  flex: none;
-  border-bottom: none;
-}
-
-.diagram-section.collapsed .section-header {
-  padding: 0.5rem 1rem;
-}
-
-.diagram-section.collapsed .section-title {
   display: none;
-}
-
-.diagram-section.collapsed .definition-info {
-  flex: 1;
 }
 
 /* Table expanded mode */
 .content-area.table-expanded .instances-section {
   flex: 1;
-  height: auto;
+  height: 100%;
 }
 
 .diagram-loading {
@@ -628,7 +649,7 @@
    ===================================================== */
 
 .instances-section {
-  height: 45%;
+  flex: 1;
   min-height: 150px;
   display: flex;
   flex-direction: column;
@@ -1079,11 +1100,11 @@
   }
 
   .diagram-section {
-    height: 45%;
+    flex: 1;
   }
 
   .instances-section {
-    height: 55%;
+    flex: 1.2;
   }
 }
 

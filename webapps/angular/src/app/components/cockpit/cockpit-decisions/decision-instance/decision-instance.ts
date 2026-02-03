@@ -71,6 +71,7 @@ export class DecisionInstanceComponent implements OnInit, OnDestroy {
 
   activeTab: TabType = 'inputs';
   breadcrumbs: BreadcrumbItem[] = [];
+  isDmnExpanded = false;
 
   // Clipboard
   copiedField: string | null = null;
@@ -240,5 +241,10 @@ export class DecisionInstanceComponent implements OnInit, OnDestroy {
       .map(output => output.ruleId)
       .filter((id): id is string => !!id);
     return [...new Set(ruleIds)];
+  }
+
+  toggleDmnExpand(): void {
+    this.isDmnExpanded = !this.isDmnExpanded;
+    this.cdr.detectChanges();
   }
 }

@@ -46,7 +46,7 @@ export const ADMIN_ROUTES: Routes = [
       provideEffects(UsersEffects, AuthorizationsEffects, TenantsEffects, SystemEffects)
     ],
     children: [
-      { path: '', component: AdminDashboardComponent, title: 'PAGE_TITLE_ADMIN' },
+      { path: '', component: AdminDashboardComponent, pathMatch: 'full', title: 'PAGE_TITLE_ADMIN' },
       { path: 'users', component: UserListComponent, title: 'PAGE_TITLE_ADMIN_USERS' },
       { path: 'users/:id', component: UserDetailComponent, title: 'PAGE_TITLE_ADMIN_USER_DETAIL' },
       { path: 'groups', component: GroupListComponent, title: 'PAGE_TITLE_ADMIN_GROUPS' },

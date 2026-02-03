@@ -25,6 +25,7 @@ export const TASKLIST_ROUTES: Routes = [
       {
         path: '',
         component: TasklistLayoutComponent,
+        pathMatch: 'full',
         title: 'PAGE_TITLE_TASKLIST'
       },
       {

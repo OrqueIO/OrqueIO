@@ -31,6 +31,7 @@ import { forkJoin } from 'rxjs';
 import { CockpitHeaderComponent, BreadcrumbItem } from '../../../../shared/cockpit-header/cockpit-header';
 import { BpmnViewerComponent } from '../../../../shared/bpmn-viewer/bpmn-viewer';
 import { CmmnViewerComponent } from '../../../../shared/cmmn-viewer/cmmn-viewer';
+import { DmnViewerComponent } from '../../../../shared/dmn-viewer/dmn-viewer';
 import { COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS } from '../../../../shared/cockpit-menu';
 import {
   CockpitService,
@@ -78,6 +79,7 @@ interface ResourceWithDefinitions extends DeploymentResource {
     CockpitHeaderComponent,
     BpmnViewerComponent,
     CmmnViewerComponent,
+    DmnViewerComponent,
     TranslatePipe,
     DeleteDeploymentModalComponent
   ],

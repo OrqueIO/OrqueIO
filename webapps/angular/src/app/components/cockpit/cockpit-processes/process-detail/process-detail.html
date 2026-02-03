@@ -39,6 +39,7 @@
 
     <!-- Center: Process title -->
     <div class="toolbar-section toolbar-title-section">
+      <fa-icon [icon]="faSitemap" class="title-icon"></fa-icon>
       <h1>{{ processDefinition?.name || processInstance.processDefinitionKey }}</h1>
       <span class="definition-key">{{ processInstance.processDefinitionKey }}</span>
     </div>
@@ -298,13 +299,12 @@
               </a>
             </li>
           </ul>
-          <div class="tabs-actions">
-            <a class="collapse-diagram-btn"
-               (click)="toggleDiagramCollapse()"
-               [title]="diagramCollapsed ? ('cockpit.processDetail.showDiagram' | translate) : ('cockpit.processDetail.hideDiagram' | translate)">
-              <fa-icon [icon]="diagramCollapsed ? faChevronDown : faChevronUp"></fa-icon>
-            </a>
-          </div>
+          <button class="collapse-diagram-btn"
+                  (click)="toggleDiagramCollapse()"
+                  type="button"
+                  [title]="diagramCollapsed ? ('cockpit.processDetail.showDiagram' | translate) : ('cockpit.processDetail.hideDiagram' | translate)">
+            <fa-icon [icon]="diagramCollapsed ? faChevronDown : faChevronUp"></fa-icon>
+          </button>
         </div>
 
         <!-- Tab content -->
@@ -575,15 +575,12 @@
                         </button>
                       </ng-container>
                       <div class="inline-edit" *ngIf="editingTaskAssignee === task.id">
-                        <input type="text"
-                               class="form-control input-sm"
-                               [(ngModel)]="editingTaskAssigneeValue" />
-                        <button class="btn btn-xs btn-primary" (click)="saveTaskAssignee(task)">
-                          <fa-icon [icon]="faCheck"></fa-icon>
-                        </button>
-                        <button class="btn btn-xs btn-default" (click)="cancelEditTaskAssignee()">
-                          <fa-icon [icon]="faTimes"></fa-icon>
-                        </button>
+                        <app-user-autocomplete
+                          [initialValue]="editingTaskAssigneeValue"
+                          [placeholder]="'cockpit.processDetail.userTasks.searchUser' | translate"
+                          (userSelected)="onTaskAssigneeSelected(task, $event)"
+                          (cancelled)="cancelEditTaskAssignee()"
+                        ></app-user-autocomplete>
                       </div>
                     </td>
                     <td class="task-owner">{{ task.owner || '-' }}</td>

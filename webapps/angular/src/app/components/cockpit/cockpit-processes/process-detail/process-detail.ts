@@ -26,7 +26,8 @@ import {
   faChevronUp,
   faChevronDown,
   faExpand,
-  faCompress
+  faCompress,
+  faSitemap
 } from '@fortawesome/free-solid-svg-icons';
 import { forkJoin } from 'rxjs';
 
@@ -53,6 +54,8 @@ import { ConfirmDialogComponent } from '../../../../shared/confirm-dialog/confir
 import { ClipboardDirective } from '../../../../shared/clipboard-directive/clipboard.directive';
 import { CockpitHeaderComponent, BreadcrumbItem } from '../../../../shared/cockpit-header/cockpit-header';
 import { SearchWidgetComponent, SearchType, SearchCriteria } from '../../../../shared/search-widget/search-widget';
+import { UserAutocompleteComponent } from '../../../../shared/user-autocomplete/user-autocomplete';
+import { User } from '../../../../models/admin/user.model';
 
 type TabType = 'variables' | 'incidents' | 'calledInstances' | 'userTasks' | 'jobs' | 'externalTasks';
 type SidebarTab = 'info' | 'filter';
@@ -78,7 +81,8 @@ interface VariableEdit {
     ConfirmDialogComponent,
     ClipboardDirective,
     CockpitHeaderComponent,
-    SearchWidgetComponent
+    SearchWidgetComponent,
+    UserAutocompleteComponent
   ],
   templateUrl: './process-detail.html',
   styleUrls: ['./process-detail.css'],
@@ -115,6 +119,7 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
   faChevronDown = faChevronDown;
   faExpand = faExpand;
   faCompress = faCompress;
+  faSitemap = faSitemap;
 
   processId = '';
   loading = true;
@@ -943,23 +948,39 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
   cancelEditTaskAssignee(): void {
     this.editingTaskAssignee = null;
     this.editingTaskAssigneeValue = '';
+    this.cdr.markForCheck();
   }
 
-  saveTaskAssignee(task: UserTask): void {
-    this.cockpitService.setTaskAssignee(task.id, this.editingTaskAssigneeValue || null)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: () => {
-          this.editingTaskAssignee = null;
-          this.editingTaskAssigneeValue = '';
-          this.loadUserTasks();
-        }
-      });
+  onTaskAssigneeSelected(task: UserTask, user: User | null): void {
+    if (user) {
+      this.cockpitService.setTaskAssignee(task.id, user.id)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: () => {
+            this.editingTaskAssignee = null;
+            this.editingTaskAssigneeValue = '';
+            this.loadUserTasks();
+            this.cdr.markForCheck();
+          }
+        });
+    } else {
+      // Clear assignee
+      this.cockpitService.setTaskAssignee(task.id, null)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: () => {
+            this.editingTaskAssignee = null;
+            this.editingTaskAssigneeValue = '';
+            this.loadUserTasks();
+            this.cdr.markForCheck();
+          }
+        });
+    }
   }
 
   getTasklistUrl(task: UserTask): string {
-    // Returns URL to tasklist for this task
-    return `/camunda/app/tasklist/default/#/?task=${task.id}`;
+    // Returns URL to Angular tasklist for this task
+    return `/orqueio/app/tasklist?task=${task.id}`;
   }
 
   openIdentityLinksModal(task: UserTask, type: 'user' | 'group'): void {

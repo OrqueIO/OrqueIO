@@ -306,8 +306,8 @@
 
 /* Left: Tabs section */
 .ctn-unified-toolbar .toolbar-tabs-section {
-  width: 300px;
-  min-width: 300px;
+  width: 280px;
+  min-width: 280px;
   background: var(--bg-secondary);
 }
 
@@ -341,13 +341,13 @@
 }
 
 .ctn-unified-toolbar .toolbar-tabs li a:hover {
-  background: rgba(230, 126, 34, 0.1);
-  color: #e67e22;
+  background: rgba(21, 92, 181, 0.1);
+  color: var(--accent-color);
 }
 
 .ctn-unified-toolbar .toolbar-tabs li.active a {
-  color: #e67e22;
-  border-bottom-color: #e67e22;
+  color: var(--accent-color);
+  border-bottom-color: var(--accent-color);
   background: var(--bg-primary);
 }
 
@@ -376,6 +376,11 @@
   border-radius: var(--radius-sm);
 }
 
+.ctn-unified-toolbar .toolbar-title-section .title-icon {
+  font-size: 16px;
+  color: #e67e22;
+}
+
 /* Right: Actions section */
 .ctn-unified-toolbar .toolbar-actions-section {
   background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
@@ -393,15 +398,14 @@
    ======================================== */
 
 .ctn-column.ctn-sidebar {
-  width: 300px;
-  min-width: 300px;
-  max-width: 300px;
+  width: 280px;
+  min-width: 280px;
+  max-width: 280px;
   background: var(--bg-primary);
   border-right: 1px solid var(--border-color);
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.04);
 }
 
 .ctn-sidebar .tab-content {
@@ -464,11 +468,11 @@
 }
 
 .process-information dt:hover {
-  color: #e67e22;
+  color: var(--accent-color);
 }
 
 .process-information dt:hover::before {
-  background: #e67e22;
+  background: var(--accent-color);
 }
 
 .process-information dd {
@@ -484,19 +488,19 @@
 }
 
 .process-information dd:hover {
-  background: rgba(230, 126, 34, 0.1);
-  border-left-color: #e67e22;
+  background: rgba(21, 92, 181, 0.1);
+  border-left-color: var(--accent-color);
 }
 
 .process-information dd a {
-  color: #e67e22;
+  color: var(--accent-color);
   text-decoration: none;
-  font-weight: 500;
+  font-weight: normal;
 }
 
 .process-information dd a:hover {
   text-decoration: underline;
-  color: #d35400;
+  color: var(--accent-hover);
 }
 
 .null-value {
@@ -543,9 +547,9 @@
 
 .quick-filter input:focus {
   outline: none;
-  border-color: var(--primary-color);
+  border-color: var(--accent-color);
   background: var(--bg-primary);
-  box-shadow: 0 0 0 3px rgba(181, 21, 43, 0.1);
+  box-shadow: 0 0 0 3px rgba(21, 92, 181, 0.1);
 }
 
 .quick-filter input::placeholder {
@@ -596,7 +600,7 @@
    ======================================== */
 
 .ctn-column.ctn-content {
-  width: calc(100% - 300px);
+  width: calc(100% - 280px);
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -622,14 +626,7 @@
 }
 
 .ctn-content-top.collapsed {
-  flex: 0 0 44px;
-  min-height: 44px;
-}
-
-.ctn-content-top.collapsed .diagram-controls {
-  top: 50%;
-  bottom: auto;
-  transform: translateY(-50%);
+  display: none;
 }
 
 .ctn-content-top.maximized {
@@ -757,10 +754,10 @@
 .tabs-header {
   display: flex;
   align-items: stretch;
+  justify-content: space-between;
   gap: 0;
   background: var(--bg-card, #fff);
   border-bottom: 1px solid var(--border-color, #e1e5e9);
-  padding: 0 1rem;
   flex-shrink: 0;
 }
 
@@ -770,16 +767,10 @@
   align-items: stretch;
   gap: 0;
   margin: 0;
-  padding: 0;
+  padding: 0 1rem;
   list-style: none;
   border-bottom: none;
   background: transparent;
-}
-
-.tabs-actions {
-  display: flex;
-  align-items: center;
-  padding: 0;
 }
 
 .collapse-diagram-btn,
@@ -787,11 +778,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
-  color: var(--text-muted, #95a5a6);
+  width: 40px;
+  padding: 0;
+  color: var(--text-muted, #6c757d);
+  background: transparent;
+  border: none;
+  border-left: 1px solid var(--border-color, #e1e5e9);
   cursor: pointer;
-  border-radius: var(--radius-sm, 4px);
   transition: all var(--transition-fast, 0.15s ease);
 }
 
@@ -799,11 +792,6 @@
 .expand-diagram-btn:hover {
   background: var(--color-gray-100, #f1f5f9);
   color: var(--text-primary, #2c3e50);
-}
-
-.collapse-diagram-btn fa-icon,
-.expand-diagram-btn fa-icon {
-  font-size: 12px;
 }
 
 /* Hide scrollbar but keep functionality */

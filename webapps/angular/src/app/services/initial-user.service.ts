@@ -97,11 +97,11 @@ export class InitialUserService {
     // First GET request to ensure we have an up-to-date CSRF cookie
     return this.csrfService.refreshToken().pipe(
       switchMap(() => {
-        return this.http.post<void>(
+        return this.http.post(
           `${this.setupUrl}/${this.engine}/user/create`,
           request,
-          { headers: this.csrfService.buildHeaders(), withCredentials: true }
-        );
+          { headers: this.csrfService.buildHeaders(), withCredentials: true, responseType: 'text' }
+        ).pipe(map(() => void 0));
       }),
       catchError(error => {
         console.error('Failed to create initial user:', error);

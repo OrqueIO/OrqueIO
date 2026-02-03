@@ -17,7 +17,8 @@ import {
   faAnglesLeft,
   faAnglesRight,
   faSitemap,
-  faSearch
+  faSearch,
+  faCheckCircle
 } from '@fortawesome/free-solid-svg-icons';
 import { forkJoin } from 'rxjs';
 
@@ -65,6 +66,7 @@ export class DecisionListComponent implements OnInit, OnDestroy {
   faAnglesRight = faAnglesRight;
   faSitemap = faSitemap;
   faSearch = faSearch;
+  faCheckCircle = faCheckCircle;
 
   breadcrumbs: BreadcrumbItem[] = [
     { translateKey: 'cockpit.menu.decisions' }
@@ -91,8 +93,9 @@ export class DecisionListComponent implements OnInit, OnDestroy {
 
   // Table columns
   columns = [
+    { id: 'key', label: 'cockpit.decisions.columns.key', sortable: true },
     { id: 'name', label: 'cockpit.decisions.columns.name', sortable: true },
-    { id: 'tenantId', label: 'cockpit.decisions.columns.tenantId', sortable: true },
+    { id: 'tenantId', label: 'cockpit.decisions.columns.tenant', sortable: true },
     { id: 'decisionRequirementsDefinitionKey', label: 'cockpit.decisions.columns.drd', sortable: true }
   ];
 
@@ -126,7 +129,7 @@ export class DecisionListComponent implements OnInit, OnDestroy {
     localStorage.setItem('sortDecDefTable', JSON.stringify(this.sortConfig));
   }
 
-  private loadDecisionDefinitions(): void {
+  loadDecisionDefinitions(): void {
     this.loading = true;
 
     const countRequest = this.cockpitService.getDecisionDefinitionsCount();

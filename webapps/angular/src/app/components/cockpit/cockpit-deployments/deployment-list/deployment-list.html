@@ -159,13 +159,18 @@
                 <app-cmmn-viewer [xml]="resourceContent"></app-cmmn-viewer>
               </div>
 
+              <!-- DMN Viewer -->
+              <div class="dmn-container" *ngIf="!loadingContent && isDmnResource(selectedResource.name) && resourceContent">
+                <app-dmn-viewer [xml]="resourceContent"></app-dmn-viewer>
+              </div>
+
               <!-- Image viewer -->
               <div class="image-container" *ngIf="!loadingContent && isImageResource(selectedResource.name)">
                 <img [src]="getImageUrl(selectedResource)" [alt]="selectedResource.name" />
               </div>
 
               <!-- Code/XML viewer -->
-              <div class="code-container" *ngIf="!loadingContent && !isBpmnResource(selectedResource.name) && !isCmmnResource(selectedResource.name) && !isImageResource(selectedResource.name) && resourceContent">
+              <div class="code-container" *ngIf="!loadingContent && !isBpmnResource(selectedResource.name) && !isCmmnResource(selectedResource.name) && !isDmnResource(selectedResource.name) && !isImageResource(selectedResource.name) && resourceContent">
                 <pre><code>{{ resourceContent }}</code></pre>
               </div>
             </div>
