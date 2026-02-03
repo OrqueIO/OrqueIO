@@ -5259,7 +5259,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 ===========================================================================================
 
 ===========================================================================================
-crelt@1.0.6
+crelt@ 1.0.7-SNAPSHOT
 git+https://github.com/marijnh/crelt.git
 Licensed under MIT
 Notice file:
@@ -8238,7 +8238,7 @@ SOFTWARE.
 ===========================================================================================
 
 ===========================================================================================
-side-channel@1.0.6
+side-channel@ 1.0.7-SNAPSHOT
 git+https://github.com/ljharb/side-channel.git
 Licensed under MIT
 Notice file:
