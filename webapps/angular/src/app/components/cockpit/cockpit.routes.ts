@@ -43,7 +43,7 @@ export const COCKPIT_ROUTES: Routes = [
       provideEffects(DashboardEffects, ProcessesEffects, DecisionsEffects, TasksEffects, BatchEffects)
     ],
     children: [
-      { path: '', component: CockpitDashboardComponent, title: 'PAGE_TITLE_COCKPIT' },
+      { path: '', component: CockpitDashboardComponent, pathMatch: 'full', title: 'PAGE_TITLE_COCKPIT' },
       { path: 'processes', component: ProcessDefinitionsComponent, title: 'PAGE_TITLE_COCKPIT_PROCESSES' },
       { path: 'processes/:key/instances', component: ProcessListComponent, title: 'PAGE_TITLE_COCKPIT_PROCESS_INSTANCES' },
       { path: 'processes/instance/:id', component: ProcessDetailComponent, title: 'PAGE_TITLE_COCKPIT_PROCESS_DETAIL' },

@@ -1,3 +1,9 @@
+/* =====================================================
+   DECISION LIST - MODERN UI DESIGN
+   Matches process-definitions table style
+   Uses global design tokens from styles.css
+   ===================================================== */
+
 :host {
   display: flex;
   flex-direction: column;
@@ -6,6 +12,10 @@
   min-height: 0;
   overflow: hidden;
 }
+
+/* =====================================================
+   BASE LAYOUT
+   ===================================================== */
 
 .cockpit-layout {
   display: flex;
@@ -25,15 +35,18 @@
 }
 
 .page-content {
-  padding: var(--space-6);
+  padding: 1.5rem;
   flex: 1;
   display: flex;
   flex-direction: column;
   min-height: 0;
-  overflow: auto;
+  overflow: hidden;
 }
 
-/* Toolbar */
+/* =====================================================
+   TOOLBAR - Using unified design tokens
+   ===================================================== */
+
 .toolbar {
   display: flex;
   justify-content: space-between;
@@ -43,7 +56,10 @@
   flex-shrink: 0;
 }
 
-/* Search Bar */
+/* =====================================================
+   SEARCH BAR - Unified search input
+   ===================================================== */
+
 .search-bar {
   flex: 1;
   max-width: 400px;
@@ -92,35 +108,23 @@
   box-shadow: var(--shadow-focus);
 }
 
-/* Section - Unified section style */
-.decisions-section {
-  background: var(--bg-card);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
-  border: 1px solid var(--border-color-light);
-  overflow: hidden;
-}
+/* =====================================================
+   RESULTS INFO - Unified results info (matches section header)
+   ===================================================== */
 
-.section-inner {
-  padding: 0;
-}
-
-.section-header {
+.results-info {
   display: flex;
   align-items: center;
   padding: var(--space-4) var(--space-5);
-  background: var(--color-gray-50);
-  border-bottom: 1px solid var(--border-color);
   margin-bottom: 0;
+  background: var(--color-gray-50);
+  border: 1px solid var(--border-color-light);
+  border-bottom: none;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  flex-shrink: 0;
 }
 
-.section-header.header-empty {
-  padding: var(--space-8) var(--space-5);
-  text-align: center;
-  justify-content: center;
-}
-
-.section-title {
+.results-title {
   margin: 0;
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-semibold);
@@ -128,42 +132,49 @@
   line-height: 1.4;
 }
 
-/* Table - Unified table styles */
+/* =====================================================
+   TABLE CONTAINER - Unified table styles
+   ===================================================== */
+
 .table-container {
+  background: var(--bg-card);
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-color-light);
+  border-top: 1px solid var(--border-color);
   overflow: auto;
-  /* Show exactly 6 rows + header: header ~44px + 6 rows × ~48px = ~332px */
+  /* Adaptive height: fills available space but never exceeds 340px */
+  flex: 1;
   max-height: 340px;
   min-height: 0;
-  background: var(--bg-card);
-  border-radius: var(--radius-lg);
 }
 
-.decision-table {
+.data-table {
   width: 100%;
   border-collapse: collapse;
   background: var(--bg-card);
 }
 
-.decision-table thead {
+.data-table thead {
   background: var(--color-gray-50);
-  border-bottom: 1px solid var(--border-color);
   position: sticky;
   top: 0;
   z-index: var(--z-sticky);
 }
 
-.decision-table th {
+.data-table th {
   padding: var(--space-3) var(--space-4);
   text-align: left;
-  font-size: var(--font-size-xs);
   font-weight: var(--font-weight-semibold);
   color: var(--text-secondary);
+  border-bottom: 1px solid var(--border-color);
+  font-size: var(--font-size-xs);
   text-transform: uppercase;
   letter-spacing: 0.05em;
   white-space: nowrap;
-  border-bottom: 1px solid var(--border-color);
 }
 
+/* Sortable Header */
 .sortable-header {
   cursor: pointer;
   user-select: none;
@@ -202,58 +213,124 @@
 .sort-icon.active {
   color: var(--color-primary);
   opacity: 1;
-  font-size: var(--font-size-sm);
 }
 
-.decision-table tbody tr {
+.data-table td {
+  padding: var(--space-3) var(--space-4);
   border-bottom: 1px solid var(--border-color-light);
+  vertical-align: middle;
+  font-size: var(--font-size-base);
+  color: var(--text-primary);
+}
+
+.definition-row {
   transition: background-color var(--transition-fast);
 }
 
-.decision-table tbody tr:last-child {
-  border-bottom: none;
-}
-
-.decision-table tbody tr:hover {
+.definition-row:hover {
   background: var(--color-gray-50);
 }
 
-.decision-table td {
-  padding: var(--space-3) var(--space-4);
-  font-size: var(--font-size-base);
-  color: var(--text-primary);
-  vertical-align: middle;
+/* =====================================================
+   COLUMN STYLES
+   ===================================================== */
+
+.col-state {
+  width: 70px;
+  text-align: center;
 }
 
-.name-cell {
+.col-key {
+  min-width: 180px;
+}
+
+.col-name {
   min-width: 200px;
 }
 
-.decision-link {
+.col-tenant {
+  width: 120px;
+}
+
+.col-drd {
+  min-width: 180px;
+}
+
+.col-actions {
+  width: 80px;
+  text-align: center;
+}
+
+/* =====================================================
+   UTILITY CLASSES
+   ===================================================== */
+
+.mono {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+}
+
+.null-value {
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* =====================================================
+   STATE INDICATOR
+   ===================================================== */
+
+.state-indicator {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  font-size: 0.75rem;
+  transition: transform var(--transition-fast);
+}
+
+.state-indicator.state-ok {
+  color: var(--color-success);
+  background: var(--color-success-bg);
+}
+
+.state-indicator.state-running {
+  color: var(--color-primary);
+  background: var(--color-primary-bg);
+}
+
+.state-indicator.state-error {
+  color: var(--color-danger);
+  background: var(--color-danger-bg);
+}
+
+/* =====================================================
+   DEFINITION LINK
+   ===================================================== */
+
+.definition-link {
   color: var(--text-primary);
   text-decoration: none;
   font-weight: var(--font-weight-normal);
   font-size: var(--font-size-base);
   transition: color var(--transition-fast);
+  cursor: pointer;
 }
 
-.decision-link:hover {
-  color: var(--text-primary);
+.definition-link:hover {
+  color: var(--color-primary);
   text-decoration: none;
 }
 
-.tenant-cell {
-  min-width: 120px;
-}
-
-.tenant-id {
+.definition-link.mono {
+  font-family: var(--font-family-mono);
   font-size: var(--font-size-base);
-  color: var(--text-primary);
 }
 
-.drd-cell {
-  min-width: 200px;
-}
+/* =====================================================
+   DRD LINK
+   ===================================================== */
 
 .drd-link {
   display: inline-flex;
@@ -267,123 +344,100 @@
 }
 
 .drd-link:hover {
-  color: var(--text-primary);
+  color: var(--color-primary);
   text-decoration: none;
 }
 
 .drd-icon {
   font-size: var(--font-size-base);
-  color: var(--text-primary);
-}
-
-.null-value {
-  color: var(--text-muted);
-  font-style: italic;
-}
-
-/* Pagination - Unified pagination */
-.pagination-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: var(--space-4) var(--space-5);
-  margin-top: 0;
-  border-top: 1px solid var(--border-color);
-  background: var(--color-gray-50);
-  gap: var(--space-4);
-  flex-wrap: wrap;
-}
-
-.pagination-info {
-  font-size: var(--font-size-base);
-  color: var(--text-secondary);
-}
-
-.pagination-controls {
-  display: flex;
-  align-items: center;
-  gap: var(--space-1);
-}
-
-.pagination-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
-  background: var(--bg-card);
-  color: var(--text-primary);
-  font-size: var(--font-size-sm);
-  cursor: pointer;
-  transition: all var(--transition-fast);
-}
-
-.pagination-btn:hover:not(:disabled) {
-  background: var(--color-gray-50);
-  border-color: var(--color-primary);
   color: var(--color-primary);
 }
 
-.pagination-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
+/* =====================================================
+   ACTION BUTTON
+   ===================================================== */
 
-.page-indicator {
-  padding: 0 var(--space-3);
-  font-size: var(--font-size-base);
-  color: var(--text-primary);
-}
-
-.page-size-selector {
-  display: flex;
+.action-btn {
+  display: inline-flex;
   align-items: center;
-  gap: var(--space-2);
-  font-size: var(--font-size-base);
-  color: var(--text-secondary);
-}
-
-.page-size-selector select {
-  padding: 0.375rem var(--space-3);
-  border: 1px solid var(--border-color);
+  justify-content: center;
+  width: 34px;
+  height: 34px;
   border-radius: var(--radius-md);
-  background: var(--bg-card);
-  font-size: var(--font-size-base);
-  color: var(--text-primary);
-  cursor: pointer;
+  color: var(--text-muted);
+  background: var(--color-gray-100);
+  text-decoration: none;
+  transition: all var(--transition-fast);
+  font-size: 0.875rem;
 }
 
-.page-size-selector select:focus {
-  outline: none;
-  border-color: var(--color-primary);
-  box-shadow: var(--shadow-focus);
+.action-btn:hover {
+  background: var(--color-primary);
+  color: var(--text-inverse);
+  transform: scale(1.05);
 }
 
-/* States */
-.loading-state,
+/* =====================================================
+   LOADING STATE
+   ===================================================== */
+
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem;
+  color: var(--text-secondary);
+  gap: 1rem;
+  font-size: 0.9375rem;
+  flex: 1;
+}
+
+.loading-state fa-icon {
+  font-size: 2rem;
+  color: var(--color-primary);
+}
+
+/* =====================================================
+   EMPTY STATE
+   ===================================================== */
+
 .empty-state {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: var(--space-12);
+  padding: 4rem;
   color: var(--text-secondary);
-  gap: var(--space-3);
+  flex: 1;
+  background: var(--bg-card);
+  border-radius: var(--radius-xl);
+  border: 2px dashed var(--border-color);
 }
 
-.empty-state fa-icon {
+.empty-icon {
   font-size: 3rem;
   color: var(--color-gray-300);
+  margin-bottom: 1rem;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .page-content {
-    padding: var(--space-4);
-  }
+.empty-state p {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--text-muted);
+}
 
+/* =====================================================
+   RESPONSIVE DESIGN
+   ===================================================== */
+
+@media (max-width: 992px) {
+  .page-content {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
   .toolbar {
     flex-direction: column;
     align-items: stretch;
@@ -397,30 +451,55 @@
     max-width: 100%;
   }
 
-  .section-inner {
-    padding: var(--space-4);
+  .data-table {
+    min-width: 700px;
   }
 
-  .pagination-container {
-    flex-direction: column;
-    align-items: stretch;
-    text-align: center;
+  .table-container {
+    overflow-x: auto;
+  }
+}
+
+/* =====================================================
+   ACCESSIBILITY
+   ===================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition-duration: 0.01ms !important;
   }
 
-  .pagination-controls {
-    justify-content: center;
+  .action-btn:hover {
+    transform: none;
   }
+}
 
-  .page-size-selector {
-    justify-content: center;
-  }
+.search-input:focus-visible,
+.definition-link:focus-visible,
+.action-btn:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
 
-  .decision-table {
-    font-size: var(--font-size-sm);
-  }
+/* =====================================================
+   SCROLLBAR STYLING
+   ===================================================== */
 
-  .decision-table th,
-  .decision-table td {
-    padding: 0.625rem var(--space-3);
-  }
+.table-container::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.table-container::-webkit-scrollbar-track {
+  background: var(--color-gray-100);
+  border-radius: 4px;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+  background: var(--color-gray-300);
+  border-radius: 4px;
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+  background: var(--color-gray-400);
 }

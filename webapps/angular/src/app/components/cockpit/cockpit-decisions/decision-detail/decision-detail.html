@@ -111,10 +111,14 @@
         <!-- Main Content -->
         <div class="decision-content">
           <!-- DMN Table Viewer -->
-          <div class="dmn-table-container" *ngIf="dmnXml && decisionDefinition">
+          <div class="dmn-table-container" [class.fullscreen]="isDmnExpanded" *ngIf="dmnXml && decisionDefinition">
+            <div class="fullscreen-backdrop" *ngIf="isDmnExpanded" (click)="toggleDmnExpand()"></div>
             <app-dmn-viewer
               [xml]="dmnXml"
               [decisionId]="decisionDefinition.key"
+              [showExpandButton]="true"
+              [isExpanded]="isDmnExpanded"
+              (expandToggle)="toggleDmnExpand()"
             ></app-dmn-viewer>
           </div>
 

@@ -488,6 +488,9 @@
   "cockpit.processDetail.userTasks.taskId": "Task ID",
   "cockpit.processDetail.userTasks.manageGroups": "Manage Group Identity Links",
   "cockpit.processDetail.userTasks.manageUsers": "Manage User Identity Links",
+  "cockpit.processDetail.userTasks.searchUser": "Search user...",
+
+  "common.noUsersFound": "No users found",
 
   "cockpit.processDetail.calledInstances.activity": "Activity",
   "cockpit.processDetail.calledInstances.businessKey": "Business Key",
@@ -515,9 +518,15 @@
   "cockpit.decisions.of": "of",
   "cockpit.decisions.pageSize": "Page size",
   "cockpit.decisions.searchPlaceholder": "Search decisions...",
+  "cockpit.decisions.noMatchingDefinitions": "No matching decision definitions",
+  "cockpit.decisions.viewDefinition": "View decision definition",
+  "cockpit.decisions.columns.state": "State",
+  "cockpit.decisions.columns.key": "Key",
   "cockpit.decisions.columns.name": "Name",
+  "cockpit.decisions.columns.tenant": "Tenant",
   "cockpit.decisions.columns.tenantId": "Tenant ID",
   "cockpit.decisions.columns.drd": "DRD",
+  "cockpit.decisions.columns.actions": "Actions",
 
   "cockpit.decisionDetail.tabs.info": "Information",
   "cockpit.decisionDetail.tabs.instances": "Evaluation History",
@@ -1567,5 +1576,9 @@
   "LIMITED_ACCESS_CONTACT_ADMIN": "Contact Administrator",
   "LIMITED_ACCESS_NO_APPS": "No applications available",
   "LIMITED_ACCESS_APPS_HINT": "Your account doesn't have access to any applications yet. Please contact your administrator to request the necessary permissions.",
-  "NO_APPS_AVAILABLE": "No applications available"
+  "NO_APPS_AVAILABLE": "No applications available",
+
+  "header.apps.tasklist": "Tasklist",
+  "header.apps.cockpit": "Cockpit",
+  "header.apps.admin": "Admin"
 }

@@ -418,9 +418,15 @@
   "cockpit.decisions.of": "sur",
   "cockpit.decisions.pageSize": "Taille de page",
   "cockpit.decisions.searchPlaceholder": "Rechercher des décisions...",
+  "cockpit.decisions.noMatchingDefinitions": "Aucune définition de décision correspondante",
+  "cockpit.decisions.viewDefinition": "Voir la définition de décision",
+  "cockpit.decisions.columns.state": "État",
+  "cockpit.decisions.columns.key": "Clé",
   "cockpit.decisions.columns.name": "Nom",
+  "cockpit.decisions.columns.tenant": "Tenant",
   "cockpit.decisions.columns.tenantId": "ID Tenant",
   "cockpit.decisions.columns.drd": "DRD",
+  "cockpit.decisions.columns.actions": "Actions",
 
   "cockpit.decisionDetail.tabs.info": "Informations",
   "cockpit.decisionDetail.tabs.instances": "Historique d'évaluation",
@@ -1018,6 +1024,9 @@
   "cockpit.processDetail.userTasks.taskId": "ID Tâche",
   "cockpit.processDetail.userTasks.manageGroups": "Gérer les liens d'identité de groupe",
   "cockpit.processDetail.userTasks.manageUsers": "Gérer les liens d'identité utilisateur",
+  "cockpit.processDetail.userTasks.searchUser": "Rechercher un utilisateur...",
+
+  "common.noUsersFound": "Aucun utilisateur trouvé",
 
   "cockpit.processDetail.calledInstances.activity": "Activité",
   "cockpit.processDetail.calledInstances.businessKey": "Clé métier",
@@ -1538,5 +1547,9 @@
   "LIMITED_ACCESS_CONTACT_ADMIN": "Contacter l'administrateur",
   "LIMITED_ACCESS_NO_APPS": "Aucune application disponible",
   "LIMITED_ACCESS_APPS_HINT": "Votre compte n'a pas encore accès à des applications. Veuillez contacter votre administrateur pour demander les permissions nécessaires.",
-  "NO_APPS_AVAILABLE": "Aucune application disponible"
+  "NO_APPS_AVAILABLE": "Aucune application disponible",
+
+  "header.apps.tasklist": "Liste de tâches",
+  "header.apps.cockpit": "Cockpit",
+  "header.apps.admin": "Admin"
 }

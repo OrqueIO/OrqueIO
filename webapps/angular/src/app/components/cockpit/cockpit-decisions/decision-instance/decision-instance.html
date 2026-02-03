@@ -126,13 +126,17 @@
         <!-- Main Content -->
         <div class="instance-content">
           <!-- DMN Table with highlighted rules and real values -->
-          <div class="dmn-table-container" *ngIf="dmnXml">
+          <div class="dmn-table-container" [class.fullscreen]="isDmnExpanded" *ngIf="dmnXml">
+            <div class="fullscreen-backdrop" *ngIf="isDmnExpanded" (click)="toggleDmnExpand()"></div>
             <app-dmn-viewer
               [xml]="dmnXml"
               [decisionId]="decisionInstance.decisionDefinitionKey"
               [highlightedRules]="highlightedRules"
               [inputs]="inputs"
               [outputs]="outputs"
+              [showExpandButton]="true"
+              [isExpanded]="isDmnExpanded"
+              (expandToggle)="toggleDmnExpand()"
             ></app-dmn-viewer>
           </div>
 

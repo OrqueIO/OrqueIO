@@ -65,6 +65,7 @@ public class ProcessEnginesFilter extends AbstractTemplateFilter {
   public static final Pattern APP_PREFIX_PATTERN = Pattern.compile("/app(/.*)?");
 
   // Pattern to match legacy AngularJS URLs: /app/{appName}/{engineName}/...
+  // The engineName must be a valid process engine name (typically "default")
   public static final Pattern LEGACY_APP_PATTERN = Pattern.compile(
     "/app/(cockpit|admin|tasklist|welcome)/([\\w-]+)?/?(.*)?"
   );
@@ -72,6 +73,17 @@ public class ProcessEnginesFilter extends AbstractTemplateFilter {
   // Pattern to match static assets (should be served directly, not as SPA)
   public static final Pattern STATIC_ASSET_PATTERN = Pattern.compile(
     ".*\\.(js|css|ico|png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot|map|json|webp|avif)$"
+  );
+
+  // Known Angular routes that should NOT be treated as legacy engine names
+  // These are the sub-routes within each app module
+  private static final Set<String> ANGULAR_ROUTES = Set.of(
+    // Cockpit routes
+    "processes", "decisions", "decision-instance", "tasks", "batch", "deployments",
+    // Admin routes
+    "users", "groups", "tenants", "authorizations", "system",
+    // Common routes
+    "profile", "login", "setup", "access-denied"
   );
 
   protected final CockpitRuntimeDelegate cockpitRuntimeDelegate;
@@ -117,7 +129,10 @@ public class ProcessEnginesFilter extends AbstractTemplateFilter {
       String rest = legacyMatcher.group(3);
 
       // If there's an engine name (like "default"), it's a legacy URL
-      if (engineName != null && !engineName.isEmpty() && !isStaticAsset(engineName)) {
+      // But skip if it's a known Angular route (not a legacy engine name)
+      if (engineName != null && !engineName.isEmpty()
+          && !isStaticAsset(engineName)
+          && !isAngularRoute(engineName)) {
         String redirectPath = buildAngularRedirectPath(appName, rest, contextPath, applicationPath);
         response.sendRedirect(redirectPath);
         return;
@@ -165,6 +180,14 @@ public class ProcessEnginesFilter extends AbstractTemplateFilter {
    */
   protected boolean isStaticAsset(String value) {
     return STATIC_ASSET_PATTERN.matcher(value).matches();
+  }
+
+  /**
+   * Checks if the given string is a known Angular route.
+   * These routes should not be treated as legacy engine names.
+   */
+  protected boolean isAngularRoute(String value) {
+    return ANGULAR_ROUTES.contains(value);
   }
 
   /**

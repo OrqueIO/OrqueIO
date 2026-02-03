@@ -4,6 +4,7 @@
       titleKey="cockpit.decisions.title"
       [breadcrumbs]="breadcrumbs"
       [showRefresh]="true"
+      (refresh)="loadDecisionDefinitions()"
     ></app-cockpit-header>
 
     <div class="page-content">
@@ -23,132 +24,145 @@
         </div>
       </div>
 
+      <!-- Results info -->
+      <header class="results-info">
+        <h1 class="results-title" *ngIf="!loading && filteredDefinitions.length > 0">
+          {{ searchQuery ? filteredDefinitions.length : totalCount }} {{ totalCount === 1 ? ('cockpit.decisions.tableDeployed' | translate) : ('cockpit.decisions.tablesDeployed' | translate) }}
+        </h1>
+        <h1 class="results-title" *ngIf="!loading && filteredDefinitions.length === 0 && decisionDefinitions.length > 0">
+          {{ 'cockpit.decisions.noMatchingDefinitions' | translate }}
+        </h1>
+        <h1 class="results-title" *ngIf="!loading && decisionDefinitions.length === 0">
+          {{ 'cockpit.decisions.noDecisions' | translate }}
+        </h1>
+        <h1 class="results-title" *ngIf="loading">
+          {{ 'common.loading' | translate }}...
+        </h1>
+      </header>
+
+      <!-- Decision definitions table -->
+      <div class="table-container" *ngIf="!loading && filteredDefinitions.length > 0">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th class="col-state">{{ 'cockpit.decisions.columns.state' | translate }}</th>
+              <th
+                class="col-key sortable-header"
+                [class.sorted]="sortConfig.sortBy === 'key'"
+                (click)="onSort('key')"
+              >
+                <span class="header-content">
+                  {{ 'cockpit.decisions.columns.key' | translate }}
+                  <fa-icon
+                    [icon]="getSortIcon('key')"
+                    class="sort-icon"
+                    [class.active]="sortConfig.sortBy === 'key'"
+                  ></fa-icon>
+                </span>
+              </th>
+              <th
+                class="col-name sortable-header"
+                [class.sorted]="sortConfig.sortBy === 'name'"
+                (click)="onSort('name')"
+              >
+                <span class="header-content">
+                  {{ 'cockpit.decisions.columns.name' | translate }}
+                  <fa-icon
+                    [icon]="getSortIcon('name')"
+                    class="sort-icon"
+                    [class.active]="sortConfig.sortBy === 'name'"
+                  ></fa-icon>
+                </span>
+              </th>
+              <th
+                class="col-tenant sortable-header"
+                [class.sorted]="sortConfig.sortBy === 'tenantId'"
+                (click)="onSort('tenantId')"
+              >
+                <span class="header-content">
+                  {{ 'cockpit.decisions.columns.tenant' | translate }}
+                  <fa-icon
+                    [icon]="getSortIcon('tenantId')"
+                    class="sort-icon"
+                    [class.active]="sortConfig.sortBy === 'tenantId'"
+                  ></fa-icon>
+                </span>
+              </th>
+              <th
+                class="col-drd sortable-header"
+                [class.sorted]="sortConfig.sortBy === 'decisionRequirementsDefinitionKey'"
+                (click)="onSort('decisionRequirementsDefinitionKey')"
+              >
+                <span class="header-content">
+                  {{ 'cockpit.decisions.columns.drd' | translate }}
+                  <fa-icon
+                    [icon]="getSortIcon('decisionRequirementsDefinitionKey')"
+                    class="sort-icon"
+                    [class.active]="sortConfig.sortBy === 'decisionRequirementsDefinitionKey'"
+                  ></fa-icon>
+                </span>
+              </th>
+              <th class="col-actions">{{ 'cockpit.decisions.columns.actions' | translate }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let decision of filteredDefinitions" class="definition-row">
+              <td class="col-state">
+                <span class="state-indicator state-ok">
+                  <fa-icon [icon]="faCheckCircle"></fa-icon>
+                </span>
+              </td>
+              <td class="col-key">
+                <a [routerLink]="['/cockpit/decisions', decision.id]" class="definition-link mono">
+                  {{ decision.key }}
+                </a>
+              </td>
+              <td class="col-name">
+                <a [routerLink]="['/cockpit/decisions', decision.id]" class="definition-link" *ngIf="decision.name && decision.name !== decision.key">
+                  {{ decision.name }}
+                </a>
+                <span class="null-value" *ngIf="!decision.name || decision.name === decision.key">-</span>
+              </td>
+              <td class="col-tenant">
+                <span *ngIf="decision.tenantId">{{ decision.tenantId }}</span>
+                <span class="null-value" *ngIf="!decision.tenantId">-</span>
+              </td>
+              <td class="col-drd">
+                <a
+                  *ngIf="hasDrd(decision)"
+                  [routerLink]="['/cockpit/decision-requirement', getDrdId(decision)]"
+                  class="drd-link"
+                >
+                  <fa-icon [icon]="faSitemap" class="drd-icon"></fa-icon>
+                  {{ getDrdName(decision) }}
+                </a>
+                <span *ngIf="!hasDrd(decision)" class="null-value">-</span>
+              </td>
+              <td class="col-actions">
+                <a
+                  [routerLink]="['/cockpit/decisions', decision.id]"
+                  class="action-btn"
+                  [title]="'cockpit.decisions.viewDefinition' | translate"
+                >
+                  <fa-icon [icon]="faEye"></fa-icon>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
       <!-- Loading state -->
       <div class="loading-state" *ngIf="loading">
         <fa-icon [icon]="faSpinner" animation="spin"></fa-icon>
         <span>{{ 'common.loading' | translate }}</span>
       </div>
 
-      <!-- Content -->
-      <ng-container *ngIf="!loading">
-        <!-- Section Header with Count -->
-        <section class="decisions-section">
-          <div class="section-inner">
-            <header class="section-header" *ngIf="totalCount > 0">
-              <h1 class="section-title">
-                {{ totalCount }} {{ totalCount === 1 ? ('cockpit.decisions.tableDeployed' | translate) : ('cockpit.decisions.tablesDeployed' | translate) }}
-              </h1>
-            </header>
-
-            <header class="section-header header-empty" *ngIf="totalCount === 0">
-              <h1 class="section-title">{{ 'cockpit.decisions.noDecisions' | translate }}</h1>
-            </header>
-
-            <!-- Decision Definitions Table -->
-            <div class="table-container" *ngIf="totalCount > 0">
-              <table class="decision-table cam-table">
-                <thead>
-                  <tr>
-                    <th
-                      *ngFor="let column of columns"
-                      class="sortable-header"
-                      [class.sorted]="sortConfig.sortBy === column.id"
-                      (click)="onSort(column.id)"
-                    >
-                      <span class="header-content">
-                        {{ column.label | translate }}
-                        <fa-icon
-                          [icon]="getSortIcon(column.id)"
-                          class="sort-icon"
-                          [class.active]="sortConfig.sortBy === column.id"
-                        ></fa-icon>
-                      </span>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let decision of filteredDefinitions">
-                    <td class="name-cell">
-                      <a [routerLink]="['/cockpit/decisions', decision.id]" class="decision-link">
-                        {{ getDisplayName(decision) }}
-                      </a>
-                    </td>
-                    <td class="tenant-cell">
-                      <span *ngIf="decision.tenantId" class="tenant-id">{{ decision.tenantId }}</span>
-                      <span *ngIf="!decision.tenantId" class="null-value">-</span>
-                    </td>
-                    <td class="drd-cell">
-                      <a
-                        *ngIf="hasDrd(decision)"
-                        [routerLink]="['/cockpit/decision-requirement', getDrdId(decision)]"
-                        class="drd-link"
-                      >
-                        <fa-icon [icon]="faSitemap" class="drd-icon"></fa-icon>
-                        {{ getDrdName(decision) }}
-                      </a>
-                      <span *ngIf="!hasDrd(decision)" class="null-value">-</span>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-            <!-- Pagination -->
-            <div class="pagination-container" *ngIf="totalCount > pageSize">
-              <div class="pagination-info">
-                <span>{{ 'cockpit.decisions.showing' | translate }} {{ startIndex }}-{{ endIndex }} {{ 'cockpit.decisions.of' | translate }} {{ totalCount }}</span>
-              </div>
-
-              <div class="pagination-controls">
-                <button
-                  class="pagination-btn"
-                  [disabled]="currentPage === 1"
-                  (click)="onPageChange(1)"
-                  [title]="'cockpit.pagination.first' | translate"
-                >
-                  <fa-icon [icon]="faAnglesLeft"></fa-icon>
-                </button>
-                <button
-                  class="pagination-btn"
-                  [disabled]="currentPage === 1"
-                  (click)="onPageChange(currentPage - 1)"
-                  [title]="'cockpit.pagination.previous' | translate"
-                >
-                  <fa-icon [icon]="faChevronLeft"></fa-icon>
-                </button>
-
-                <span class="page-indicator">
-                  {{ 'cockpit.pagination.page' | translate }} {{ currentPage }} {{ 'cockpit.pagination.of' | translate }} {{ totalPages }}
-                </span>
-
-                <button
-                  class="pagination-btn"
-                  [disabled]="currentPage === totalPages"
-                  (click)="onPageChange(currentPage + 1)"
-                  [title]="'cockpit.pagination.next' | translate"
-                >
-                  <fa-icon [icon]="faChevronRight"></fa-icon>
-                </button>
-                <button
-                  class="pagination-btn"
-                  [disabled]="currentPage === totalPages"
-                  (click)="onPageChange(totalPages)"
-                  [title]="'cockpit.pagination.last' | translate"
-                >
-                  <fa-icon [icon]="faAnglesRight"></fa-icon>
-                </button>
-              </div>
-
-              <div class="page-size-selector">
-                <label>{{ 'cockpit.decisions.pageSize' | translate }}:</label>
-                <select [(ngModel)]="pageSize" (ngModelChange)="onPageSizeChange()">
-                  <option *ngFor="let size of pageSizeOptions" [value]="size">{{ size }}</option>
-                </select>
-              </div>
-            </div>
-          </div>
-        </section>
-      </ng-container>
+      <!-- Empty state -->
+      <div class="empty-state" *ngIf="!loading && decisionDefinitions.length === 0">
+        <fa-icon [icon]="faTable" class="empty-icon"></fa-icon>
+        <p>{{ 'cockpit.decisions.noDecisions' | translate }}</p>
+      </div>
     </div>
   </main>
 </div>

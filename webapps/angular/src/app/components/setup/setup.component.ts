@@ -1,44 +1,17 @@
-/*
- * Copyright 2026 OrqueIO (https://www.orqueio.io/).
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at:
- *
- *     https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-import { Component, OnInit, OnDestroy, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { Subject, debounceTime, distinctUntilChanged, takeUntil } from 'rxjs';
 import { InitialUserService, UserProfile } from '../../services/initial-user.service';
+import { OAuth2ProviderService } from '../../services/oauth2-provider.service';
 import { NotificationsService } from '../../services/notifications.service';
 import { TranslateService } from '../../i18n/translate.service';
 import { TranslatePipe } from '../../i18n/translate.pipe';
 
 type SetupStatus = 'FORM' | 'LOADING' | 'SUCCESS';
 
-/**
- * Setup component for creating the initial administrator account.
- *
- * This page is displayed when no admin user exists in the system.
- * It allows creating the first admin user with:
- * - Username (required)
- * - Password with policy validation (required)
- * - First name (required)
- * - Last name (required)
- * - Email (optional)
- *
- * After successful creation, displays a success message with link to login.
- */
+
 @Component({
   selector: 'app-setup',
   standalone: true,
@@ -64,8 +37,10 @@ export class SetupComponent implements OnInit, OnDestroy {
   private fb = inject(FormBuilder);
   private router = inject(Router);
   private initialUserService = inject(InitialUserService);
+  private oauth2ProviderService = inject(OAuth2ProviderService);
   private notifications = inject(NotificationsService);
   private translateService = inject(TranslateService);
+  private cdr = inject(ChangeDetectorRef);
 
   ngOnInit(): void {
     this.setupForm = this.fb.group({
@@ -150,11 +125,13 @@ export class SetupComponent implements OnInit, OnDestroy {
           this.passwordValid = response.valid;
           this.passwordValidating = false;
           this.passwordValidationError = null;
+          this.cdr.detectChanges();
         },
         error: () => {
           // On error, assume password is valid (let server validate on submit)
           this.passwordValid = true;
           this.passwordValidating = false;
+          this.cdr.detectChanges();
         }
       });
   }
@@ -224,7 +201,10 @@ export class SetupComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => {
+          // Clear OAuth2 cache so login page fetches fresh setupRequired status
+          this.oauth2ProviderService.clearCache();
           this.status = 'SUCCESS';
+          this.cdr.detectChanges();
         },
         error: (error) => {
           this.status = 'FORM';
@@ -237,6 +217,7 @@ export class SetupComponent implements OnInit, OnDestroy {
             status: this.translateService.instant('NOTIFICATIONS_STATUS_ERROR'),
             message
           });
+          this.cdr.detectChanges();
         }
       });
   }

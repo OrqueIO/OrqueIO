@@ -185,36 +185,44 @@
           <!-- Instances table section (hidden when diagram maximized, expanded when table maximized) -->
           <section class="instances-section" *ngIf="!diagramMaximized">
             <!-- Process Definition Tabs -->
-            <nav class="process-tabs">
-              <a
-                class="process-tab"
-                [class.active]="activeTab === 'instances'"
-                (click)="switchTab('instances')"
-              >
-                {{ 'cockpit.processes.tabs.processInstances' | translate }}
-              </a>
-              <a
-                class="process-tab"
-                [class.active]="activeTab === 'incidents'"
-                (click)="switchTab('incidents')"
-              >
-                {{ 'cockpit.processes.tabs.incidents' | translate }}
-              </a>
-              <a
-                class="process-tab"
-                [class.active]="activeTab === 'called-definitions'"
-                (click)="switchTab('called-definitions')"
-              >
-                {{ 'cockpit.processes.tabs.calledProcessDefinitions' | translate }}
-              </a>
-              <a
-                class="process-tab"
-                [class.active]="activeTab === 'job-definitions'"
-                (click)="switchTab('job-definitions')"
-              >
-                {{ 'cockpit.processes.tabs.jobDefinitions' | translate }}
-              </a>
-            </nav>
+            <div class="process-tabs-container">
+              <nav class="process-tabs">
+                <a
+                  class="process-tab"
+                  [class.active]="activeTab === 'instances'"
+                  (click)="switchTab('instances')"
+                >
+                  {{ 'cockpit.processes.tabs.processInstances' | translate }}
+                </a>
+                <a
+                  class="process-tab"
+                  [class.active]="activeTab === 'incidents'"
+                  (click)="switchTab('incidents')"
+                >
+                  {{ 'cockpit.processes.tabs.incidents' | translate }}
+                </a>
+                <a
+                  class="process-tab"
+                  [class.active]="activeTab === 'called-definitions'"
+                  (click)="switchTab('called-definitions')"
+                >
+                  {{ 'cockpit.processes.tabs.calledProcessDefinitions' | translate }}
+                </a>
+                <a
+                  class="process-tab"
+                  [class.active]="activeTab === 'job-definitions'"
+                  (click)="switchTab('job-definitions')"
+                >
+                  {{ 'cockpit.processes.tabs.jobDefinitions' | translate }}
+                </a>
+              </nav>
+              <button class="tabs-expand-btn"
+                      (click)="toggleTableMaximize()"
+                      type="button"
+                      [title]="tableMaximized ? ('cockpit.processDetail.showDiagram' | translate) : ('cockpit.processDetail.hideDiagram' | translate)">
+                <fa-icon [icon]="tableMaximized ? faChevronDown : faChevronUp"></fa-icon>
+              </button>
+            </div>
 
             <!-- Tab Content: Process Instances -->
             <ng-container *ngIf="activeTab === 'instances'">
@@ -254,15 +262,6 @@
                   <select [(ngModel)]="pageSize" (change)="onPageSizeChange()">
                     <option *ngFor="let size of pageSizeOptions" [value]="size">{{ size }}</option>
                   </select>
-                </div>
-
-                <!-- Expand/Collapse table button -->
-                <div class="toolbar-actions">
-                  <a class="expand-table-btn"
-                     (click)="toggleTableMaximize()"
-                     [title]="tableMaximized ? ('cockpit.processDetail.showDiagram' | translate) : ('cockpit.processDetail.hideDiagram' | translate)">
-                    <fa-icon [icon]="tableMaximized ? faChevronDown : faChevronUp"></fa-icon>
-                  </a>
                 </div>
               </div>
 
