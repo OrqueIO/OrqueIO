@@ -8,12 +8,12 @@
   <parent>
     <groupId>io.orqueio.bpm.quarkus</groupId>
     <artifactId>orqueio-bpm-quarkus-engine-parent</artifactId>
-    <version>1.0.7-SNAPSHOT-SNAPSHOT</version>
+    <version>1.0.7-SNAPSHOT</version>
   </parent>
   <description>orqueio-bpm-quarkus-engine</description>
   <groupId>io.orqueio.bpm.quarkus</groupId>
   <artifactId>orqueio-bpm-quarkus-engine</artifactId>
-  <version>1.0.7-SNAPSHOT-SNAPSHOT</version>
+  <version>1.0.7-SNAPSHOT</version>
   <name>Orque IO Platform - Quarkus Extension - Engine - Runtime</name>
   <packaging>jar</packaging>
   <dependencies>
