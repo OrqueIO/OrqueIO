@@ -32,8 +32,14 @@ export class App implements OnInit {
   }
 
   onLogout(): void {
-    this.authService.clearSsoMarker();
-    sessionStorage.clear();
-    window.location.href = '/logout';
+    this.authService.smartLogout().subscribe({
+      next: () => {
+        this.router.navigate(['/login']);
+      },
+      error: () => {
+        // Even on error, navigate to login page
+        this.router.navigate(['/login']);
+      }
+    });
   }
 }
