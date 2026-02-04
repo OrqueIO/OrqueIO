@@ -53,11 +53,9 @@ export class AuthService {
   private authChannel: BroadcastChannel | null = null;
   private readonly AUTH_CHANNEL_NAME = 'orqueio_auth_sync';
 
-  // SECURITY: Authentication is NOT persisted in localStorage
-  // This follows the AngularJS pattern where auth is only kept in memory ($rootScope)
-  // On page refresh, the backend is always consulted to validate the session
-  // This prevents client-side manipulation of authorization data
+
   private readonly LEGACY_AUTH_STORAGE_KEY = 'orqueio_auth';
+  private readonly SESSION_ACTIVE_KEY = 'orqueio_session_active';
 
   private readonly baseUrl = '/orqueio/api/admin/auth/user';
   private readonly engineUrl = '/orqueio/api/engine/engine';
@@ -102,6 +100,7 @@ export class AuthService {
 
         if (type === 'logout' || type === 'session_expired') {
           // Clear local authentication state without making API call
+          this.clearSessionMarker();
           this.authenticationSubject.next(null);
           this.authCheckPending = null;
           this.authInitialized = false;
@@ -112,6 +111,7 @@ export class AuthService {
           }
         } else if (type === 'login' && data) {
           // Update local authentication state (in memory only)
+          this.setSessionMarker();
           this.authenticationSubject.next(data);
           this.authInitialized = true;
           this.emit('authentication.login.success', data);
@@ -123,6 +123,7 @@ export class AuthService {
         if (event.key === this.AUTH_CHANNEL_NAME) {
           const message = event.newValue ? JSON.parse(event.newValue) : null;
           if (message?.type === 'logout' || message?.type === 'session_expired') {
+            this.clearSessionMarker();
             this.authenticationSubject.next(null);
             this.authCheckPending = null;
             this.authInitialized = false;
@@ -160,6 +161,7 @@ export class AuthService {
   handleSessionExpired(): void {
     // Only broadcast if we were previously authenticated
     if (this.currentAuthentication) {
+      this.clearSessionMarker();
       this.updateAuthentication(null); // This also clears localStorage
       this.authCheckPending = null;
       this.emit('authentication.login.required');
@@ -199,6 +201,7 @@ export class AuthService {
       }),
       map(response => this.parseResponse(response)),
       tap(authentication => {
+        this.setSessionMarker();
         this.updateAuthentication(authentication);
         this.emit('authentication.login.success', authentication);
         // Notify other tabs about login
@@ -231,6 +234,7 @@ export class AuthService {
         );
       }),
       tap(() => {
+        this.clearSessionMarker();
         this.updateAuthentication(null);
         this.emit('authentication.logout.success');
         // Notify other tabs about logout
@@ -244,19 +248,6 @@ export class AuthService {
     );
   }
 
-  /**
-   * Get current authentication status.
-   *
-   * SECURITY: This method always validates with the backend on first call.
-   * Unlike the previous implementation, we do NOT restore from localStorage.
-   * This follows the AngularJS pattern where authentication is verified
-   * with the server on every page load.
-   *
-   * Flow:
-   * 1. If already verified with backend in this session, return cached auth
-   * 2. If a verification request is pending, return that same Observable (deduplication)
-   * 3. Otherwise, validate with backend and cache the result
-   */
   getAuthentication(): Observable<Authentication | null> {
     // If we already have backend-verified authentication in this session, return it
     if (this.authInitialized && this.currentAuthentication) {
@@ -268,16 +259,27 @@ export class AuthService {
       return this.authCheckPending;
     }
 
-    // Always verify with backend - no localStorage shortcuts
+    // Check if we might have an active session (user logged in previously in this browser session)
+    // If no session marker exists, assume not authenticated to avoid 404 errors
+    if (!this.hasActiveSessionMarker()) {
+      this.authInitialized = true;
+      return of(null);
+    }
+
+    // Verify with backend only if session marker exists
     this.authCheckPending = this.http.get<LoginResponse>(`${this.baseUrl}/${this.engine}`, { withCredentials: true }).pipe(
       map(response => this.parseResponse(response)),
       tap(authentication => {
         this.authInitialized = true;
         this.updateAuthentication(authentication);
+        if (!authentication) {
+          this.clearSessionMarker();
+        }
       }),
       catchError(() => {
         this.authInitialized = true;
         this.updateAuthentication(null);
+        this.clearSessionMarker();
         return of(null);
       }),
       shareReplay(1),
@@ -290,6 +292,39 @@ export class AuthService {
     );
 
     return this.authCheckPending;
+  }
+
+  /**
+   * Check if there might be an active session (user logged in during this browser session)
+   */
+  private hasActiveSessionMarker(): boolean {
+    try {
+      return sessionStorage.getItem(this.SESSION_ACTIVE_KEY) === 'true';
+    } catch {
+      return false;
+    }
+  }
+
+  /**
+   * Set the session marker when user logs in
+   */
+  private setSessionMarker(): void {
+    try {
+      sessionStorage.setItem(this.SESSION_ACTIVE_KEY, 'true');
+    } catch {
+      // sessionStorage might be disabled
+    }
+  }
+
+  /**
+   * Clear the session marker on logout or session expiry
+   */
+  private clearSessionMarker(): void {
+    try {
+      sessionStorage.removeItem(this.SESSION_ACTIVE_KEY);
+    } catch {
+      // sessionStorage might be disabled
+    }
   }
 
   /**
@@ -449,21 +484,7 @@ export class AuthService {
     return sessionStorage.getItem(this.RETURN_URL_KEY) !== null;
   }
 
-  /**
-   * Performs SSO logout by redirecting to the backend logout endpoint.
-   *
-   * ⚠️ WARNING: This method is deprecated and should not be used directly.
-   * Use smartLogout() instead.
-   *
-   * PROBLEM: The /logout endpoint only exists when OAuth2 is configured.
-   * If OAuth2 is not configured, this will result in a 404 error.
-   *
-   * The Spring Security logout endpoint (/orqueio/logout) is configured in
-   * OrqueioSpringSecurityOAuth2AutoConfiguration, which is conditional on
-   * OAuth2 clients being configured.
-   *
-   * @deprecated Use smartLogout() instead, which uses the REST API logout
-   */
+
   ssoLogout(): void {
     console.warn('ssoLogout() is deprecated - use smartLogout() instead');
     this.updateAuthentication(null);
@@ -473,18 +494,8 @@ export class AuthService {
     window.location.href = this.getSsoLogoutUrl();
   }
 
-  /**
-   * Gets the SSO logout URL.
-   *
-   * ⚠️ WARNING: This URL may not exist if OAuth2 is not configured.
-   * Returns: /orqueio/logout (or app-root/logout)
-   *
-   * @deprecated This endpoint is conditional - use REST logout instead
-   */
   private getSsoLogoutUrl(): string {
-    const baseElement = document.querySelector('base');
-    const appRoot = baseElement?.getAttribute('app-root') || '/orqueio';
-    return appRoot + '/logout';
+    return '/logout';
   }
 
   /**
@@ -511,6 +522,7 @@ export class AuthService {
    */
   markSsoLogin(): void {
     sessionStorage.setItem(this.SSO_LOGIN_KEY, 'true');
+    this.setSessionMarker(); // Also mark session as potentially active for auth checks
   }
 
   /**
@@ -528,11 +540,24 @@ export class AuthService {
     sessionStorage.removeItem(this.SSO_LOGIN_KEY);
   }
 
-  /**
-   * Simple logout - exactly like AngularJS implementation
-   * Just calls the REST logout endpoint
-   */
+
   smartLogout(): Observable<void> {
+    // Check if this is an SSO session
+    if (this.isSsoSession()) {
+      this.clearSessionMarker();
+      this.updateAuthentication(null);
+      this.emit('authentication.logout.success');
+      this.broadcastAuthEvent('logout');
+      this.clearSsoMarker();
+
+      // Redirect to SSO logout endpoint (this will cause page navigation)
+      window.location.href = this.getSsoLogoutUrl();
+
+      // Return an observable that never completes (page will redirect)
+      return new Observable<void>(() => {});
+    }
+
+    // For non-SSO users, use the REST API logout
     return this.logout().pipe(
       tap(() => {
         this.clearSsoMarker();

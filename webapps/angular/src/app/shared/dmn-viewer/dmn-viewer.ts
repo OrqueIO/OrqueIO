@@ -693,12 +693,17 @@ export class DmnViewerComponent implements OnInit, OnDestroy, OnChanges, AfterVi
   // Public method to fit the viewport
   fitViewport(): void {
     if (this.dmnViewer) {
-      const activeViewer = this.dmnViewer.getActiveViewer();
-      if (activeViewer) {
-        const canvas = activeViewer.get('canvas');
-        if (canvas && typeof canvas.zoom === 'function') {
-          canvas.zoom('fit-viewport', 'auto');
+      try {
+        const activeViewer = this.dmnViewer.getActiveViewer();
+        if (activeViewer && typeof activeViewer.get === 'function') {
+          // Only DRD views have a canvas - decision tables don't
+          const canvas = activeViewer.get('canvas', false);
+          if (canvas && typeof canvas.zoom === 'function') {
+            canvas.zoom('fit-viewport', 'auto');
+          }
         }
+      } catch {
+        // Canvas not available for this view type (e.g., decision tables)
       }
     }
   }

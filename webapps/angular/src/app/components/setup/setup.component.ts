@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, inject, ChangeDetectorRef } from '@angula
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { Subject, debounceTime, distinctUntilChanged, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { InitialUserService, UserProfile } from '../../services/initial-user.service';
 import { OAuth2ProviderService } from '../../services/oauth2-provider.service';
 import { NotificationsService } from '../../services/notifications.service';
@@ -32,7 +32,6 @@ export class SetupComponent implements OnInit, OnDestroy {
   passwordValidationError: string | null = null;
 
   private destroy$ = new Subject<void>();
-  private passwordValidation$ = new Subject<string>();
 
   private fb = inject(FormBuilder);
   private router = inject(Router);
@@ -86,54 +85,11 @@ export class SetupComponent implements OnInit, OnDestroy {
     return null;
   }
 
-  /**
-   * Setup password validation against server policy with debounce
-   */
+
   private setupPasswordValidation(): void {
-    this.passwordValidation$.pipe(
-      debounceTime(500),
-      distinctUntilChanged(),
-      takeUntil(this.destroy$)
-    ).subscribe(password => {
-      if (password && password.length > 0) {
-        this.validatePasswordOnServer(password);
-      } else {
-        this.passwordValid = true;
-        this.passwordValidating = false;
-      }
-    });
-
-    // Listen to password changes
-    this.setupForm.get('password')?.valueChanges
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(value => {
-        this.passwordValidating = true;
-        this.passwordValidation$.next(value);
-      });
-  }
-
-  /**
-   * Validates password against server policy
-   */
-  private validatePasswordOnServer(password: string): void {
-    const profile = this.buildProfile();
-
-    this.initialUserService.validatePassword(password, profile)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (response) => {
-          this.passwordValid = response.valid;
-          this.passwordValidating = false;
-          this.passwordValidationError = null;
-          this.cdr.detectChanges();
-        },
-        error: () => {
-          // On error, assume password is valid (let server validate on submit)
-          this.passwordValid = true;
-          this.passwordValidating = false;
-          this.cdr.detectChanges();
-        }
-      });
+    // No client-side validation - server validates on submit
+    this.passwordValid = true;
+    this.passwordValidating = false;
   }
 
   /**

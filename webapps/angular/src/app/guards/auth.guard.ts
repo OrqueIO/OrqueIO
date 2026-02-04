@@ -11,6 +11,11 @@ export const authGuard: CanActivateFn = (route: ActivatedRouteSnapshot, state: R
   const authService = inject(AuthService);
   const router = inject(Router);
 
+  // If we already have cached authentication, allow access without HTTP call
+  if (authService.currentAuthentication) {
+    return true;
+  }
+
   return authService.getAuthentication().pipe(
     take(1),
     map(auth => {

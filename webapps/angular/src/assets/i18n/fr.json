@@ -39,7 +39,7 @@
   "CANCEL": "Annuler",
   "LOADING": "Chargement...",
   "CONTACT": "Contact",
-  "ALL_RIGHTS_RESERVED": "© 2025 OrqueIO. Tous droits réservés.",
+  "ALL_RIGHTS_RESERVED": "© {{year}} OrqueIO. Tous droits réservés.",
 
   "ERROR_CONNECTION": "Impossible de se connecter au serveur. Veuillez vérifier votre connexion.",
   "ERROR_SERVER": "Erreur interne du serveur. Veuillez réessayer plus tard.",

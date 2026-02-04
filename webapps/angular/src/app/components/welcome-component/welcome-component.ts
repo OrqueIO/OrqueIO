@@ -115,11 +115,7 @@ export class WelcomeComponent implements OnInit {
     this.filterApps();
   }
 
-  /**
-   * Filters apps based on user permissions.
-   * Only shows apps that the user is authorized to access.
-   * Also checks for "Limited Access" mode (no app permissions).
-   */
+  
   private filterApps(): void {
     this.apps = this.allApps.filter(app =>
       this.permissionService.canAccessApp(app.appId)
@@ -130,16 +126,14 @@ export class WelcomeComponent implements OnInit {
   }
 
   private loadEngineStatus(): void {
-    forkJoin({
-      health: this.systemService.getSystemHealth(),
-      telemetry: this.systemService.getTelemetryData()
-    })
+    // Only call health endpoint - telemetry requires admin permissions
+    this.systemService.getSystemHealth()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: ({ health, telemetry }) => {
+        next: (health) => {
           this.engineStatus = {
             isActive: health.status === 'running',
-            version: health.version || telemetry.product?.version || 'unknown',
+            version: health.version || 'unknown',
             environment: this.detectEnvironment()
           };
         },
