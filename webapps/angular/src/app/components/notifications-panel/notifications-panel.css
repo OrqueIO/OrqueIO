@@ -1,27 +1,66 @@
+/* =====================================================
+   NOTIFICATIONS PANEL - CONTAINER
+   ===================================================== */
+
 .notifications-panel {
   position: fixed;
-  bottom: 20px;
-  right: 30px;
+  bottom: 60px;
+  right: 24px;
   z-index: 1060;
   max-height: 70%;
   max-width: 400px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 10px;
 }
 
-.alert {
+/* Scrollbar */
+.notifications-panel::-webkit-scrollbar {
+  width: 4px;
+}
+
+.notifications-panel::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.notifications-panel::-webkit-scrollbar-thumb {
+  background-color: var(--color-gray-300, rgba(0, 0, 0, 0.15));
+  border-radius: 2px;
+}
+
+/* =====================================================
+   NOTIFICATION CARD
+   ===================================================== */
+
+.notification {
   position: relative;
-  padding: 0.875rem 2.5rem 0.875rem 1rem;
-  border-radius: 4px;
-  font-size: 0.875rem;
-  animation: slideIn 0.3s ease-out;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  min-width: 280px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--bg-card, #ffffff);
+  border: 1px solid var(--border-color-light, #f3f4f6);
+  border-radius: var(--radius-lg, 8px);
+  box-shadow: var(--shadow-lg, 0 4px 12px rgba(0, 0, 0, 0.08));
+  min-width: 300px;
+  overflow: hidden;
+  animation: notifSlideIn 0.3s ease-out;
 }
 
-@keyframes slideIn {
+/* Left accent border (like stat-cards) */
+.notification::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--notif-accent);
+  border-radius: var(--radius-lg, 8px) 0 0 var(--radius-lg, 8px);
+}
+
+@keyframes notifSlideIn {
   from {
     opacity: 0;
     transform: translateX(100%);
@@ -32,100 +71,157 @@
   }
 }
 
-.close-btn {
-  position: absolute;
-  top: 0.5rem;
-  right: 0.75rem;
-  background: transparent;
-  border: none;
-  font-size: 1.25rem;
-  font-weight: bold;
-  cursor: pointer;
-  opacity: 0.5;
-  line-height: 1;
-  padding: 0;
-  transition: opacity 0.15s;
+/* =====================================================
+   NOTIFICATION CONTENT
+   ===================================================== */
+
+.notification__content {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
 }
 
-.close-btn:hover {
-  opacity: 0.8;
+/* Icon wrapper (like stat-card__icon-wrapper) */
+.notification__icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: var(--notif-bg);
+  border-radius: var(--radius-sm, 4px);
+  flex-shrink: 0;
 }
 
-.status {
+.notification__icon {
+  font-size: 16px;
+  color: var(--notif-accent);
+}
+
+/* Text */
+.notification__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  padding-top: 2px;
+}
+
+.notification__status {
+  font-size: var(--font-size-sm, 13px);
   font-weight: 600;
+  color: var(--text-primary, #111827);
+  line-height: var(--line-height-snug, 1.25);
 }
 
-.message {
+.notification__message {
   display: block;
-  margin-top: 0.25rem;
+  font-size: var(--font-size-sm, 13px);
+  color: var(--text-secondary, #6b7280);
+  line-height: var(--line-height-normal, 1.5);
   white-space: pre-wrap;
   word-break: break-word;
 }
 
-/* Alert variants */
-.alert-info {
-  background-color: #eff6ff;
-  border: 1px solid #bfdbfe;
-  color: #1e40af;
-}
+/* =====================================================
+   CLOSE BUTTON
+   ===================================================== */
 
-.alert-info .close-btn {
-  color: #1e40af;
-}
-
-.alert-success {
-  background-color: #f0fdf4;
-  border: 1px solid #bbf7d0;
-  color: #166534;
-}
-
-.alert-success .close-btn {
-  color: #166534;
-}
-
-.alert-warning {
-  background-color: #fffbeb;
-  border: 1px solid #fde68a;
-  color: #92400e;
-}
-
-.alert-warning .close-btn {
-  color: #92400e;
-}
-
-.alert-danger {
-  background-color: #fef2f2;
-  border: 1px solid #fecaca;
-  color: #991b1b;
-}
-
-.alert-danger .close-btn {
-  color: #991b1b;
-}
-
-/* Scrollbar styling */
-.notifications-panel::-webkit-scrollbar {
-  width: 6px;
-}
-
-.notifications-panel::-webkit-scrollbar-track {
+.notification__close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
   background: transparent;
+  border-radius: var(--radius-sm, 4px);
+  color: var(--color-gray-400, #9ca3af);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background-color 150ms ease, color 150ms ease;
 }
 
-.notifications-panel::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 0, 0, 0.2);
-  border-radius: 3px;
+.notification__close:hover {
+  background: var(--color-gray-100, #f3f4f6);
+  color: var(--color-gray-600, #4b5563);
 }
+
+/* =====================================================
+   PROGRESS BAR
+   ===================================================== */
+
+.notification__progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--notif-accent);
+  opacity: 0.3;
+  transform-origin: left;
+  animation: countdown var(--duration) linear forwards;
+  border-radius: 0 0 0 var(--radius-lg, 8px);
+}
+
+@keyframes countdown {
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(0);
+  }
+}
+
+/* =====================================================
+   COLOR VARIANTS
+   ===================================================== */
+
+.notification--success {
+  --notif-accent: var(--color-success, #10b981);
+  --notif-bg: var(--color-success-bg, rgba(16, 185, 129, 0.1));
+}
+
+.notification--info {
+  --notif-accent: var(--color-info, #3b82f6);
+  --notif-bg: var(--color-info-bg, rgba(59, 130, 246, 0.1));
+}
+
+.notification--warning {
+  --notif-accent: var(--color-warning, #f59e0b);
+  --notif-bg: var(--color-warning-bg, rgba(245, 158, 11, 0.1));
+}
+
+.notification--danger {
+  --notif-accent: var(--color-danger, #dc2626);
+  --notif-bg: var(--color-danger-bg, rgba(220, 38, 38, 0.1));
+}
+
+/* =====================================================
+   RESPONSIVE
+   ===================================================== */
 
 @media (max-width: 480px) {
   .notifications-panel {
-    left: 1rem;
-    right: 1rem;
-    bottom: 1rem;
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
     max-width: none;
   }
 
-  .alert {
+  .notification {
     min-width: auto;
+  }
+
+  .notification__icon-wrapper {
+    width: 32px;
+    height: 32px;
+  }
+
+  .notification__icon {
+    font-size: 14px;
   }
 }

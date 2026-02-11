@@ -54,6 +54,9 @@
   <button class="btn-icon" (click)="editUser(user, $event)" [title]="'admin.users.edit' | translate">
     <fa-icon [icon]="faPen"></fa-icon>
   </button>
+  <button class="btn-icon btn-icon--danger" (click)="deleteUser(user, $event)" [title]="'admin.users.delete' | translate">
+    <fa-icon [icon]="faTrash"></fa-icon>
+  </button>
 </ng-template>
 
 <!-- Create User Dialog -->
@@ -62,3 +65,14 @@
   (created)="onUserCreated()"
   (cancel)="onCreateDialogCancel()">
 </app-user-create-dialog>
+
+<!-- Delete User Confirmation -->
+<app-confirm-dialog
+  *ngIf="showDeleteConfirm"
+  title="admin.users.deleteConfirmTitle"
+  [message]="'admin.users.deleteConfirmMessage' | translate: { userId: userToDelete?.id || '' }"
+  confirmLabel="DELETE"
+  confirmButtonClass="btn-danger"
+  (confirm)="confirmDelete()"
+  (cancel)="cancelDelete()">
+</app-confirm-dialog>

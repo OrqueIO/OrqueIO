@@ -11,5 +11,5 @@ import { TranslatePipe } from '../../i18n/translate.pipe';
 })
 export class FooterComponent {
   currentYear = new Date().getFullYear();
-  contactEmail = 'contact@orqueio.com';
+  contactEmail = 'contact@orqueio.io';
 }

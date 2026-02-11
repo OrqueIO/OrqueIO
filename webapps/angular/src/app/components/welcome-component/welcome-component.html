@@ -52,7 +52,7 @@
         </div>
       } @else {
         <!-- Normal view with apps -->
-        <div class="cards-grid">
+        <div class="cards-grid" [ngClass]="'cards-count-' + apps.length">
           @for (app of apps; track app.route) {
             <a [routerLink]="app.route" class="app-card" [style.--accent-color]="app.accentColor">
               <div class="card-accent-bar"></div>

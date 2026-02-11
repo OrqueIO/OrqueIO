@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { TranslateService } from '../i18n/translate.service';
 
 export type NotificationType = 'info' | 'success' | 'warning' | 'danger' | 'error';
 
@@ -19,6 +20,8 @@ export class NotificationsService {
   private notificationsSubject = new BehaviorSubject<Notification[]>([]);
   public notifications$: Observable<Notification[]> = this.notificationsSubject.asObservable();
 
+  constructor(private translate: TranslateService) {}
+
   private generateId(): string {
     return Math.random().toString(36).substring(2, 11);
   }
@@ -36,11 +39,14 @@ export class NotificationsService {
   add(notification: Omit<Notification, 'id'>): void {
     const notifications = [...this.notificationsSubject.value];
 
+    const translatedStatus = this.translate.instant(notification.status);
+    const wasTranslated = translatedStatus !== notification.status;
+
     const newNotification: Notification = {
       ...notification,
       id: this.generateId(),
-      status: this.escapeHtml(notification.status),
-      message: notification.message ? this.escapeHtml(notification.message) : undefined
+      status: this.escapeHtml(translatedStatus),
+      message: wasTranslated ? undefined : (notification.message ? this.escapeHtml(notification.message) : undefined)
     };
 
     // Handle exclusive notifications

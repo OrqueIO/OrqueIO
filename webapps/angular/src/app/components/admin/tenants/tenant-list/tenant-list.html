@@ -54,6 +54,9 @@
   <button class="btn-icon" (click)="editTenant(tenant, $event)" [title]="'admin.users.edit' | translate">
     <fa-icon [icon]="faPen"></fa-icon>
   </button>
+  <button class="btn-icon btn-icon--danger" (click)="deleteTenant(tenant, $event)" [title]="'admin.tenants.delete' | translate">
+    <fa-icon [icon]="faTrash"></fa-icon>
+  </button>
 </ng-template>
 
 <!-- Create Tenant Dialog -->
@@ -62,3 +65,14 @@
   (created)="onTenantCreated()"
   (cancel)="onCreateDialogCancel()">
 </app-tenant-create-dialog>
+
+<!-- Delete Tenant Confirmation -->
+<app-confirm-dialog
+  *ngIf="showDeleteConfirm"
+  title="admin.tenants.deleteConfirmTitle"
+  [message]="'admin.tenants.deleteConfirmMessage' | translate: { tenantId: tenantToDelete?.id || '' }"
+  confirmLabel="DELETE"
+  confirmButtonClass="btn-danger"
+  (confirm)="confirmDelete()"
+  (cancel)="cancelDelete()">
+</app-confirm-dialog>

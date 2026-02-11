@@ -312,6 +312,11 @@
   background: rgba(255, 255, 255, 0.15);
 }
 
+.version-selector select option {
+  color: #333;
+  background: #fff;
+}
+
 /* =====================================================
    MAIN LAYOUT: SIDEBAR + CONTENT
    ===================================================== */

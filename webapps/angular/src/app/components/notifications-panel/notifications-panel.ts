@@ -1,12 +1,14 @@
 import { Component, OnInit, OnDestroy, Input, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { IconDefinition, faCheckCircle, faTimesCircle, faExclamationTriangle, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { NotificationsService, Notification, NotificationType } from '../../services/notifications.service';
 
 @Component({
   selector: 'app-notifications-panel',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FontAwesomeModule],
   templateUrl: './notifications-panel.html',
   styleUrls: ['./notifications-panel.css']
 })
@@ -16,6 +18,14 @@ export class NotificationsPanelComponent implements OnInit, OnDestroy {
   notifications: Notification[] = [];
   private subscription?: Subscription;
   private cdr = inject(ChangeDetectorRef);
+
+  private iconMap: Record<string, IconDefinition> = {
+    success: faCheckCircle,
+    info: faInfoCircle,
+    warning: faExclamationTriangle,
+    danger: faTimesCircle,
+    error: faTimesCircle
+  };
 
   constructor(private notificationsService: NotificationsService) {}
 
@@ -38,9 +48,13 @@ export class NotificationsPanelComponent implements OnInit, OnDestroy {
     this.notificationsService.remove(notification.id);
   }
 
-  getNotificationClass(notification: Notification): string {
+  getTypeClass(notification: Notification): string {
     const type = notification.type === 'error' ? 'danger' : notification.type;
-    return `alert-${type}`;
+    return `notification--${type}`;
+  }
+
+  getIcon(notification: Notification): IconDefinition {
+    return this.iconMap[notification.type] || faInfoCircle;
   }
 
   trackByNotification(index: number, notification: Notification): string {

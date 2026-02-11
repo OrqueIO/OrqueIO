@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faPlus, faPen } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { AdminPageHeaderComponent } from '../../../../shared/admin-page-header/admin-page-header';
 import { DataTableComponent, ColumnDef, SortEvent } from '../../../../shared/data-table/data-table';
 import { PaginationComponent, PageChangeEvent } from '../../../../shared/pagination/pagination';
@@ -14,6 +14,7 @@ import { GroupService } from '../../../../services/admin/group.service';
 import { NotificationsService } from '../../../../services/notifications.service';
 import { Group } from '../../../../models/admin/group.model';
 import { GroupQueryParams } from '../../../../models/admin/query-params.model';
+import { ConfirmDialogComponent } from '../../../../shared/confirm-dialog/confirm-dialog';
 import { GroupCreateDialogComponent } from '../group-create-dialog/group-create-dialog';
 
 @Component({
@@ -28,7 +29,8 @@ import { GroupCreateDialogComponent } from '../group-create-dialog/group-create-
     PaginationComponent,
     SearchBarComponent,
     TranslatePipe,
-    GroupCreateDialogComponent
+    GroupCreateDialogComponent,
+    ConfirmDialogComponent
   ],
   templateUrl: './group-list.html',
   styleUrls: ['./group-list.css']
@@ -46,6 +48,10 @@ export class GroupListComponent implements OnInit {
   // Icons
   faPlus = faPlus;
   faPen = faPen;
+  faTrash = faTrash;
+
+  showDeleteConfirm = false;
+  groupToDelete: Group | null = null;
 
   allGroups: Group[] = [];
   groups: Group[] = [];
@@ -169,6 +175,42 @@ export class GroupListComponent implements OnInit {
   editGroup(group: Group, event: Event): void {
     event.stopPropagation();
     this.router.navigate(['/admin/groups', group.id]);
+  }
+
+  deleteGroup(group: Group, event: Event): void {
+    event.stopPropagation();
+    this.groupToDelete = group;
+    this.showDeleteConfirm = true;
+    this.cdr.markForCheck();
+  }
+
+  confirmDelete(): void {
+    if (!this.groupToDelete) return;
+    this.showDeleteConfirm = false;
+    const groupId = this.groupToDelete.id;
+
+    this.groupService.deleteGroup(groupId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.notifications.addSuccess('admin.groups.groupDeleted', 'Group deleted successfully');
+          this.groupToDelete = null;
+          this.loadGroups();
+        },
+        error: () => {
+          this.groupToDelete = null;
+          this.notifications.addError({
+            status: this.translateService.instant('admin.groups.deleteError'),
+            message: this.translateService.instant('admin.groups.deleteError')
+          });
+        }
+      });
+  }
+
+  cancelDelete(): void {
+    this.showDeleteConfirm = false;
+    this.groupToDelete = null;
+    this.cdr.markForCheck();
   }
 
   refresh(): void {
