@@ -267,11 +267,9 @@ export class TaskMetaComponent implements OnInit, OnChanges {
     }
 
     if (this.task.processInstanceId) {
-      // Format: /cockpit/processes/instance/{id}
-      return `/cockpit/processes/instance/${this.task.processInstanceId}`;
+      return `/orqueio/app/cockpit/processes/instance/${this.task.processInstanceId}`;
     } else if (this.task.caseInstanceId) {
-      // Format: /cockpit/cases/instance/{id}
-      return `/cockpit/cases/instance/${this.task.caseInstanceId}`;
+      return `/orqueio/app/cockpit/cases/instance/${this.task.caseInstanceId}`;
     }
 
     // Standalone task - no link

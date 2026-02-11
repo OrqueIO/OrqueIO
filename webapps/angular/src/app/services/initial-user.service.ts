@@ -159,15 +159,7 @@ export class InitialUserService {
    * @returns Observable of boolean indicating if setup is available
    */
   isSetupAvailable(): Observable<boolean> {
-    return this.http.get<{ setupRequired: boolean }>(
-      '/orqueio/api/oauth2/setup-required',
-      { withCredentials: true }
-    ).pipe(
-      map(response => response.setupRequired === true),
-      catchError(() => {
-        // On error, assume setup is not available
-        return of(false);
-      })
-    );
+    // OAuth2 not configured - skip the HTTP call to avoid 404 errors
+    return of(false);
   }
 }

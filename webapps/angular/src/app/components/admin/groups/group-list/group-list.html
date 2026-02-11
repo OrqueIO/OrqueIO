@@ -54,6 +54,9 @@
   <button class="btn-icon" (click)="editGroup(group, $event)" [title]="'admin.users.edit' | translate">
     <fa-icon [icon]="faPen"></fa-icon>
   </button>
+  <button class="btn-icon btn-icon--danger" (click)="deleteGroup(group, $event)" [title]="'admin.groups.delete' | translate">
+    <fa-icon [icon]="faTrash"></fa-icon>
+  </button>
 </ng-template>
 
 <!-- Create Group Dialog -->
@@ -62,3 +65,14 @@
   (created)="onGroupCreated()"
   (cancel)="onCreateDialogCancel()">
 </app-group-create-dialog>
+
+<!-- Delete Group Confirmation -->
+<app-confirm-dialog
+  *ngIf="showDeleteConfirm"
+  title="admin.groups.deleteConfirmTitle"
+  [message]="'admin.groups.deleteConfirmMessage' | translate: { groupId: groupToDelete?.id || '' }"
+  confirmLabel="DELETE"
+  confirmButtonClass="btn-danger"
+  (confirm)="confirmDelete()"
+  (cancel)="cancelDelete()">
+</app-confirm-dialog>

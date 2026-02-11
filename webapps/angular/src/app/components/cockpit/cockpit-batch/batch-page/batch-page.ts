@@ -7,6 +7,7 @@ import { DestroyRef } from '@angular/core';
 
 import { COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS } from '../../../../shared/cockpit-menu';
 import { NavMenuService } from '../../../../services/nav-menu.service';
+import { CockpitHeaderComponent, BreadcrumbItem } from '../../../../shared/cockpit-header/cockpit-header';
 import { BatchRuntimeListComponent } from '../batch-runtime-list/batch-runtime-list';
 import { BatchHistoryListComponent } from '../batch-history-list/batch-history-list';
 import { BatchDetailComponent } from '../batch-detail/batch-detail';
@@ -19,6 +20,7 @@ import * as BatchSelectors from '../../../../store/cockpit/batch/batch.selectors
   standalone: true,
   imports: [
     CommonModule,
+    CockpitHeaderComponent,
     BatchRuntimeListComponent,
     BatchHistoryListComponent,
     BatchDetailComponent
@@ -33,6 +35,10 @@ export class BatchPageComponent implements OnInit, OnDestroy {
   private router = inject(Router);
   private destroyRef = inject(DestroyRef);
   private navMenuService = inject(NavMenuService);
+
+  breadcrumbs: BreadcrumbItem[] = [
+    { translateKey: 'cockpit.menu.batches' }
+  ];
 
   // Selectors
   selectedBatch$ = this.store.select(BatchSelectors.selectSelectedBatch);

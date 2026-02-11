@@ -196,6 +196,7 @@ export class ProcessListComponent implements OnInit, OnDestroy {
       .subscribe(params => {
         this.processDefinitionKey = params['key'];
         if (this.processDefinitionKey) {
+          this.currentPage = 1;
           this.loadProcessDefinition();
           this.loadProcessDefinitionVersions();
           this.loadProcessInstances();

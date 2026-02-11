@@ -224,7 +224,7 @@ export class DecisionInstanceComponent implements OnInit, OnDestroy {
 
   getDrdUrl(): string {
     if (!this.decisionInstance?.decisionRequirementsDefinitionId) return '#';
-    return `/cockpit/decision-requirement/${this.decisionInstance.decisionRequirementsDefinitionId}`;
+    return `/cockpit/decisions/${this.decisionInstance.decisionDefinitionId}`;
   }
 
   get inputs(): DecisionInput[] {

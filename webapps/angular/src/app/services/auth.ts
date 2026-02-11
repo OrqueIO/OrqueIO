@@ -259,27 +259,19 @@ export class AuthService {
       return this.authCheckPending;
     }
 
-    // Check if we might have an active session (user logged in previously in this browser session)
-    // If no session marker exists, assume not authenticated to avoid 404 errors
-    if (!this.hasActiveSessionMarker()) {
-      this.authInitialized = true;
-      return of(null);
-    }
-
-    // Verify with backend only if session marker exists
+    // Always verify with backend when no in-memory auth exists.
+    // This ensures new tabs can restore the session via the shared HTTP cookie (JSESSIONID).
+    // The backend returns 404 if not authenticated, which is handled gracefully.
     this.authCheckPending = this.http.get<LoginResponse>(`${this.baseUrl}/${this.engine}`, { withCredentials: true }).pipe(
       map(response => this.parseResponse(response)),
       tap(authentication => {
         this.authInitialized = true;
+        this.setSessionMarker();
         this.updateAuthentication(authentication);
-        if (!authentication) {
-          this.clearSessionMarker();
-        }
       }),
       catchError(() => {
         this.authInitialized = true;
         this.updateAuthentication(null);
-        this.clearSessionMarker();
         return of(null);
       }),
       shareReplay(1),
@@ -295,24 +287,26 @@ export class AuthService {
   }
 
   /**
-   * Check if there might be an active session (user logged in during this browser session)
+   * Check if there might be an active session (user logged in during this browser session).
+   * Uses localStorage so the marker is shared across all tabs in the same browser.
    */
   private hasActiveSessionMarker(): boolean {
     try {
-      return sessionStorage.getItem(this.SESSION_ACTIVE_KEY) === 'true';
+      return localStorage.getItem(this.SESSION_ACTIVE_KEY) === 'true';
     } catch {
       return false;
     }
   }
 
   /**
-   * Set the session marker when user logs in
+   * Set the session marker when user logs in.
+   * Uses localStorage so new tabs can detect the active session.
    */
   private setSessionMarker(): void {
     try {
-      sessionStorage.setItem(this.SESSION_ACTIVE_KEY, 'true');
+      localStorage.setItem(this.SESSION_ACTIVE_KEY, 'true');
     } catch {
-      // sessionStorage might be disabled
+      // localStorage might be disabled
     }
   }
 
@@ -321,9 +315,9 @@ export class AuthService {
    */
   private clearSessionMarker(): void {
     try {
-      sessionStorage.removeItem(this.SESSION_ACTIVE_KEY);
+      localStorage.removeItem(this.SESSION_ACTIVE_KEY);
     } catch {
-      // sessionStorage might be disabled
+      // localStorage might be disabled
     }
   }
 

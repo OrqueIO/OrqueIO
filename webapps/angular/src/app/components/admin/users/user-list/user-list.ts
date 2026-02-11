@@ -5,13 +5,18 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Store } from '@ngrx/store';
 import { Observable, map, tap } from 'rxjs';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faPlus, faPen } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { AdminPageHeaderComponent } from '../../../../shared/admin-page-header/admin-page-header';
 import { DataTableComponent, ColumnDef, SortEvent } from '../../../../shared/data-table/data-table';
 import { PaginationComponent, PageChangeEvent } from '../../../../shared/pagination/pagination';
 import { SearchBarComponent } from '../../../../shared/search-bar/search-bar';
+import { ConfirmDialogComponent } from '../../../../shared/confirm-dialog/confirm-dialog';
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
+import { TranslateService } from '../../../../i18n/translate.service';
 import { UserCreateDialogComponent } from '../user-create-dialog/user-create-dialog';
+import { UserService } from '../../../../services/admin/user.service';
+import { NotificationsService } from '../../../../services/notifications.service';
+import { AuthService } from '../../../../services/auth';
 import { User } from '../../../../models/admin/user.model';
 import { UserQueryParams } from '../../../../models/admin/query-params.model';
 import * as UsersActions from '../../../../store/admin/users/users.actions';
@@ -29,7 +34,8 @@ import * as UsersSelectors from '../../../../store/admin/users/users.selectors';
     PaginationComponent,
     SearchBarComponent,
     TranslatePipe,
-    UserCreateDialogComponent
+    UserCreateDialogComponent,
+    ConfirmDialogComponent
   ],
   templateUrl: './user-list.html',
   styleUrls: ['./user-list.css'],
@@ -40,14 +46,21 @@ export class UserListComponent implements OnInit {
   private router = inject(Router);
   private store = inject(Store);
   private cdr = inject(ChangeDetectorRef);
+  private userService = inject(UserService);
+  private notifications = inject(NotificationsService);
+  private translateService = inject(TranslateService);
+  private authService = inject(AuthService);
 
   @ViewChild('actionsTemplate', { static: true }) actionsTemplate!: TemplateRef<any>;
 
   // Icons
   faPlus = faPlus;
   faPen = faPen;
+  faTrash = faTrash;
 
   showCreateDialog = false;
+  showDeleteConfirm = false;
+  userToDelete: User | null = null;
 
   // Observables from store
   allUsers$: Observable<User[]> = this.store.select(UsersSelectors.selectAllUsers);
@@ -182,6 +195,53 @@ export class UserListComponent implements OnInit {
   editUser(user: User, event: Event): void {
     event.stopPropagation();
     this.router.navigate(['/admin/users', user.id]);
+  }
+
+  deleteUser(user: User, event: Event): void {
+    event.stopPropagation();
+    this.userToDelete = user;
+    this.showDeleteConfirm = true;
+    this.cdr.markForCheck();
+  }
+
+  confirmDelete(): void {
+    if (!this.userToDelete) return;
+    this.showDeleteConfirm = false;
+    const userId = this.userToDelete.id;
+    const currentUser = this.authService.currentAuthentication;
+    const isSelfDeletion = currentUser?.name === userId;
+
+    this.userService.deleteUser(userId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.notifications.addSuccess('admin.users.userDeleted', 'User deleted successfully');
+          this.userToDelete = null;
+          if (isSelfDeletion) {
+            this.authService.smartLogout()
+              .pipe(takeUntilDestroyed(this.destroyRef))
+              .subscribe({
+                next: () => this.router.navigate(['/login']),
+                error: () => this.router.navigate(['/login'])
+              });
+          } else {
+            this.loadUsers();
+          }
+        },
+        error: () => {
+          this.userToDelete = null;
+          this.notifications.addError({
+            status: this.translateService.instant('admin.users.deleteError'),
+            message: this.translateService.instant('admin.users.deleteError')
+          });
+        }
+      });
+  }
+
+  cancelDelete(): void {
+    this.showDeleteConfirm = false;
+    this.userToDelete = null;
+    this.cdr.markForCheck();
   }
 
   refresh(): void {

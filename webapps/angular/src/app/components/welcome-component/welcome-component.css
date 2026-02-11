@@ -188,13 +188,25 @@
   border-radius: 2px;
 }
 
-/* ===== CARDS GRID - Fills remaining space ===== */
+/* ===== CARDS GRID - Adapts to number of apps ===== */
 .cards-grid {
   flex: 1;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
   gap: 16px;
   min-height: 0;
+}
+
+.cards-grid.cards-count-1 {
+  grid-template-columns: 1fr;
+  max-width: 420px;
+}
+
+.cards-grid.cards-count-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.cards-grid.cards-count-3 {
+  grid-template-columns: repeat(3, 1fr);
 }
 
 /* ===== APP CARD - Full height of grid cell ===== */
@@ -419,6 +431,7 @@
   .cards-grid {
     grid-template-columns: 1fr;
     gap: 10px;
+    max-width: none;
   }
 
   .app-card {

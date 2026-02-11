@@ -41,14 +41,43 @@
         <label for="taskAssignee" class="form-label">
           {{ 'tasklist.assignee' | translate }}
         </label>
-        <input
-          type="text"
-          id="taskAssignee"
-          name="taskAssignee"
-          class="form-input"
-          [(ngModel)]="task.assignee"
-          [placeholder]="'tasklist.assigneePlaceholder' | translate"
-          [disabled]="submitting">
+        <div class="input-wrapper">
+          <input
+            type="text"
+            id="taskAssignee"
+            name="taskAssignee"
+            class="form-input"
+            [(ngModel)]="task.assignee"
+            [placeholder]="'tasklist.assigneePlaceholder' | translate"
+            (input)="onAssigneeInput()"
+            (focus)="onAssigneeFocus()"
+            (blur)="onAssigneeBlur()"
+            (keydown)="onAssigneeKeyDown($event)"
+            autocomplete="off"
+            [disabled]="submitting">
+          <span class="input-loading" *ngIf="loadingUsers">
+            <span class="spinner-small"></span>
+          </span>
+
+          <!-- Assignee Suggestions Dropdown -->
+          <div class="suggestions-dropdown" *ngIf="showAssigneeSuggestions && userSuggestions.length > 0">
+            <div *ngFor="let user of userSuggestions; let i = index"
+                 class="suggestion-item"
+                 [class.selected]="i === assigneeSelectedIndex"
+                 (mousedown)="selectAssignee(user)">
+              <span class="suggestion-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
+                  <circle cx="12" cy="7" r="4"/>
+                </svg>
+              </span>
+              <div class="suggestion-info">
+                <span class="suggestion-name">{{ getUserDisplayName(user) }}</span>
+                <span class="suggestion-id" *ngIf="getUserDisplayName(user) !== user.id">{{ user.id }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Tenant ID -->
@@ -56,14 +85,43 @@
         <label for="taskTenantId" class="form-label">
           {{ 'tasklist.tenantId' | translate }}
         </label>
-        <input
-          type="text"
-          id="taskTenantId"
-          name="taskTenantId"
-          class="form-input"
-          [(ngModel)]="task.tenantId"
-          [placeholder]="'tasklist.tenantIdPlaceholder' | translate"
-          [disabled]="submitting">
+        <div class="input-wrapper">
+          <input
+            type="text"
+            id="taskTenantId"
+            name="taskTenantId"
+            class="form-input"
+            [(ngModel)]="task.tenantId"
+            [placeholder]="'tasklist.tenantIdPlaceholder' | translate"
+            (input)="onTenantInput()"
+            (focus)="onTenantFocus()"
+            (blur)="onTenantBlur()"
+            (keydown)="onTenantKeyDown($event)"
+            autocomplete="off"
+            [disabled]="submitting">
+          <span class="input-loading" *ngIf="loadingTenants">
+            <span class="spinner-small"></span>
+          </span>
+
+          <!-- Tenant Suggestions Dropdown -->
+          <div class="suggestions-dropdown" *ngIf="showTenantSuggestions && tenantSuggestions.length > 0">
+            <div *ngFor="let tenant of tenantSuggestions; let i = index"
+                 class="suggestion-item"
+                 [class.selected]="i === tenantSelectedIndex"
+                 (mousedown)="selectTenant(tenant)">
+              <span class="suggestion-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+                  <polyline points="9 22 9 12 15 12 15 22"/>
+                </svg>
+              </span>
+              <div class="suggestion-info">
+                <span class="suggestion-name">{{ getTenantDisplayName(tenant) }}</span>
+                <span class="suggestion-id" *ngIf="getTenantDisplayName(tenant) !== tenant.id">{{ tenant.id }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Description -->

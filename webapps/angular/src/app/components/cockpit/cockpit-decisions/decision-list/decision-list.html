@@ -130,7 +130,7 @@
               <td class="col-drd">
                 <a
                   *ngIf="hasDrd(decision)"
-                  [routerLink]="['/cockpit/decision-requirement', getDrdId(decision)]"
+                  [routerLink]="['/cockpit/decisions', decision.id]"
                   class="drd-link"
                 >
                   <fa-icon [icon]="faSitemap" class="drd-icon"></fa-icon>
