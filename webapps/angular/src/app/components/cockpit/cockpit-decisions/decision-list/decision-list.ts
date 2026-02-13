@@ -20,7 +20,8 @@ import {
   faSearch,
   faCheckCircle
 } from '@fortawesome/free-solid-svg-icons';
-import { forkJoin } from 'rxjs';
+import { forkJoin, Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 import { CockpitHeaderComponent, BreadcrumbItem } from '../../../../shared/cockpit-header/cockpit-header';
 import { COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS } from '../../../../shared/cockpit-menu';
@@ -77,8 +78,9 @@ export class DecisionListComponent implements OnInit, OnDestroy {
   filteredDefinitions: DecisionDefinition[] = [];
   totalCount = 0;
 
-  // Search
+  // Search (server-side via nameLike / keyLike)
   searchQuery = '';
+  private searchSubject = new Subject<string>();
 
   // Pagination
   currentPage = 1;
@@ -105,18 +107,32 @@ export class DecisionListComponent implements OnInit, OnDestroy {
     this.navMenuService.setMenuItems(COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS);
     this.loadSortConfig();
     this.loadDecisionDefinitions();
+
+    // Debounce server-side search to avoid hammering the API on every keystroke
+    this.searchSubject.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(() => {
+      this.currentPage = 1;
+      this.loadDecisionDefinitions();
+    });
   }
 
   ngOnDestroy(): void {
     this.navMenuService.clearMenuItems();
   }
 
+  private readonly validSortColumns = ['key', 'name', 'tenantId', 'decisionRequirementsDefinitionKey'];
+
   private loadSortConfig(): void {
     const saved = localStorage.getItem('sortDecDefTable');
     if (saved) {
       try {
         const config = JSON.parse(saved);
-        if (config.sortBy && config.sortOrder) {
+        if (config.sortBy && config.sortOrder
+            && this.validSortColumns.includes(config.sortBy)
+            && (config.sortOrder === 'asc' || config.sortOrder === 'desc')) {
           this.sortConfig = config;
         }
       } catch {
@@ -132,13 +148,19 @@ export class DecisionListComponent implements OnInit, OnDestroy {
   loadDecisionDefinitions(): void {
     this.loading = true;
 
-    const countRequest = this.cockpitService.getDecisionDefinitionsCount();
+    // Server-side filter: use nameLike only (API ANDs all params, no native OR support).
+    // Key / tenantId matches are handled by a complementary client-side pass below.
+    const searchTerm = this.searchQuery.trim();
+    const nameLike = searchTerm ? `%${searchTerm}%` : undefined;
+
+    const countRequest = this.cockpitService.getDecisionDefinitionsCount(nameLike);
     const dataRequest = this.cockpitService.getDecisionDefinitionsPaginated({
       firstResult: (this.currentPage - 1) * this.pageSize,
       maxResults: this.pageSize,
       sortBy: this.sortConfig.sortBy,
       sortOrder: this.sortConfig.sortOrder,
-      latestVersion: true
+      latestVersion: true,
+      nameLike
     });
 
     forkJoin({ count: countRequest, data: dataRequest })
@@ -147,7 +169,7 @@ export class DecisionListComponent implements OnInit, OnDestroy {
         next: ({ count, data }) => {
           this.totalCount = count;
           this.decisionDefinitions = data;
-          this.applyFilter();
+          this.applyClientFilter();
           this.loading = false;
           this.cdr.detectChanges();
         },
@@ -158,23 +180,26 @@ export class DecisionListComponent implements OnInit, OnDestroy {
       });
   }
 
-  applyFilter(): void {
-    if (!this.searchQuery.trim()) {
-      this.filteredDefinitions = [...this.decisionDefinitions];
-    } else {
-      const query = this.searchQuery.toLowerCase();
-      this.filteredDefinitions = this.decisionDefinitions.filter(def => {
-        const name = (def.name || '').toLowerCase();
-        const key = (def.key || '').toLowerCase();
-        const tenant = (def.tenantId || '').toLowerCase();
-        return name.includes(query) || key.includes(query) || tenant.includes(query);
-      });
+  /**
+   * Complementary client-side filter on the already-loaded page.
+   * Catches key / tenantId matches that nameLike alone cannot cover.
+   */
+  private applyClientFilter(): void {
+    const searchTerm = this.searchQuery.trim().toLowerCase();
+    if (!searchTerm) {
+      this.filteredDefinitions = this.decisionDefinitions;
+      return;
     }
+    this.filteredDefinitions = this.decisionDefinitions.filter(def => {
+      const name = (def.name || '').toLowerCase();
+      const key  = (def.key || '').toLowerCase();
+      const tenant = (def.tenantId || '').toLowerCase();
+      return name.includes(searchTerm) || key.includes(searchTerm) || tenant.includes(searchTerm);
+    });
   }
 
   onSearchChange(): void {
-    this.applyFilter();
-    this.cdr.detectChanges();
+    this.searchSubject.next(this.searchQuery);
   }
 
   onSort(columnId: string): void {

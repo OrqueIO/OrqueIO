@@ -786,8 +786,8 @@ export class CockpitService {
   /**
    * @deprecated Use DecisionService.getDecisionDefinitionsCount() directly
    */
-  getDecisionDefinitionsCount(): Observable<number> {
-    return this.decisionService.getDecisionDefinitionsCount();
+  getDecisionDefinitionsCount(nameLike?: string): Observable<number> {
+    return this.decisionService.getDecisionDefinitionsCount(true, nameLike);
   }
 
   /**
@@ -799,6 +799,8 @@ export class CockpitService {
     sortBy?: string;
     sortOrder?: 'asc' | 'desc';
     latestVersion?: boolean;
+    nameLike?: string;
+    keyLike?: string;
   }): Observable<DecisionDefinition[]> {
     return this.decisionService.getDecisionDefinitionsPaginated(params);
   }

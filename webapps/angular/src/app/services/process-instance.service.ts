@@ -252,7 +252,7 @@ export class ProcessInstanceService {
       }
     }
 
-    const maxResults = params?.maxResults ?? 100;
+    const maxResults = Math.min(params?.maxResults ?? 100, ProcessInstanceService.MAX_RESULTS_CAP);
     httpParams = httpParams.set('maxResults', maxResults.toString());
 
     return this.http.get<ProcessInstance[]>(`${this.historyUrl}/process-instance`, { params: httpParams })
@@ -298,11 +298,14 @@ export class ProcessInstanceService {
   /**
    * Query process instances with POST (supports complex filters)
    */
+  private static readonly MAX_RESULTS_CAP = 10000;
+
   queryProcessInstances(body: any, firstResult = 0, maxResults = 100): Observable<ProcessInstance[]> {
+    const cappedMax = Math.min(maxResults, ProcessInstanceService.MAX_RESULTS_CAP);
     return this.http.post<ProcessInstance[]>(
       `${this.historyUrl}/process-instance`,
       body,
-      { params: { firstResult: firstResult.toString(), maxResults: maxResults.toString() } }
+      { params: { firstResult: firstResult.toString(), maxResults: cappedMax.toString() } }
     ).pipe(catchError(() => of([])));
   }
 

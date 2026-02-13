@@ -187,10 +187,16 @@ export class DecisionService {
   /**
    * Get decision definitions count
    */
-  getDecisionDefinitionsCount(latestVersion = true): Observable<number> {
+  getDecisionDefinitionsCount(latestVersion = true, nameLike?: string, keyLike?: string): Observable<number> {
     const params: Record<string, string> = {};
     if (latestVersion) {
       params['latestVersion'] = 'true';
+    }
+    if (nameLike) {
+      params['nameLike'] = nameLike;
+    }
+    if (keyLike) {
+      params['keyLike'] = keyLike;
     }
     return this.http.get<{ count: number }>(`${this.baseUrl}/decision-definition/count`, { params })
       .pipe(
@@ -208,6 +214,8 @@ export class DecisionService {
     sortBy?: string;
     sortOrder?: 'asc' | 'desc';
     latestVersion?: boolean;
+    nameLike?: string;
+    keyLike?: string;
   }): Observable<DecisionDefinition[]> {
     let httpParams = new HttpParams();
     if (params.firstResult !== undefined) {
@@ -224,6 +232,12 @@ export class DecisionService {
     }
     if (params.latestVersion !== false) {
       httpParams = httpParams.set('latestVersion', 'true');
+    }
+    if (params.nameLike) {
+      httpParams = httpParams.set('nameLike', params.nameLike);
+    }
+    if (params.keyLike) {
+      httpParams = httpParams.set('keyLike', params.keyLike);
     }
     return this.http.get<DecisionDefinition[]>(`${this.baseUrl}/decision-definition`, { params: httpParams })
       .pipe(catchError(() => of([])));

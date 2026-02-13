@@ -315,6 +315,13 @@ export class ProcessListComponent implements OnInit, OnDestroy {
     this.cdr.markForCheck();
 
     const queryBody = this.buildQueryBody();
+
+    if (this.filterErrors.length > 0) {
+      this.loading = false;
+      this.cdr.markForCheck();
+      return;
+    }
+
     const firstResult = (this.currentPage - 1) * this.pageSize;
 
     // Load count, instances and incidents in parallel
@@ -347,7 +354,11 @@ export class ProcessListComponent implements OnInit, OnDestroy {
       });
   }
 
+  filterErrors: string[] = [];
+
   buildQueryBody(): any {
+    this.filterErrors = [];
+
     const body: any = {
       sorting: [{
         sortBy: this.sortConfig.column,
@@ -362,10 +373,11 @@ export class ProcessListComponent implements OnInit, OnDestroy {
       body.processDefinitionId = this.selectedVersion;
     }
 
-    // Business key filter
+    // Business key filter — escape SQL wildcard characters before wrapping
     if (this.filters.businessKey.trim()) {
       if (this.filters.businessKeyOperator === 'like') {
-        body.processInstanceBusinessKeyLike = `%${this.filters.businessKey}%`;
+        const escaped = this.filters.businessKey.replace(/[%_]/g, '\\$&');
+        body.processInstanceBusinessKeyLike = `%${escaped}%`;
       } else {
         body.processInstanceBusinessKey = this.filters.businessKey;
       }
@@ -376,18 +388,46 @@ export class ProcessListComponent implements OnInit, OnDestroy {
       body.activeActivityIdIn = this.filters.activityIds.split(',').map(s => s.trim()).filter(s => s);
     }
 
-    // Date filters
+    // Date filters — validate coherence and guard against invalid dates
     if (this.filters.startedAfter) {
-      body.startedAfter = new Date(this.filters.startedAfter).toISOString();
+      const d = new Date(this.filters.startedAfter);
+      if (!isNaN(d.getTime())) {
+        body.startedAfter = d.toISOString();
+      } else {
+        this.filterErrors.push('Invalid "Started after" date');
+      }
     }
     if (this.filters.startedBefore) {
-      body.startedBefore = new Date(this.filters.startedBefore).toISOString();
+      const d = new Date(this.filters.startedBefore);
+      if (!isNaN(d.getTime())) {
+        body.startedBefore = d.toISOString();
+      } else {
+        this.filterErrors.push('Invalid "Started before" date');
+      }
     }
     if (this.filters.finishedAfter) {
-      body.finishedAfter = new Date(this.filters.finishedAfter).toISOString();
+      const d = new Date(this.filters.finishedAfter);
+      if (!isNaN(d.getTime())) {
+        body.finishedAfter = d.toISOString();
+      } else {
+        this.filterErrors.push('Invalid "Finished after" date');
+      }
     }
     if (this.filters.finishedBefore) {
-      body.finishedBefore = new Date(this.filters.finishedBefore).toISOString();
+      const d = new Date(this.filters.finishedBefore);
+      if (!isNaN(d.getTime())) {
+        body.finishedBefore = d.toISOString();
+      } else {
+        this.filterErrors.push('Invalid "Finished before" date');
+      }
+    }
+
+    // Validate date range coherence
+    if (body.startedAfter && body.startedBefore && body.startedAfter >= body.startedBefore) {
+      this.filterErrors.push('"Started after" must be before "Started before"');
+    }
+    if (body.finishedAfter && body.finishedBefore && body.finishedAfter >= body.finishedBefore) {
+      this.filterErrors.push('"Finished after" must be before "Finished before"');
     }
 
     // State filter
@@ -406,6 +446,7 @@ export class ProcessListComponent implements OnInit, OnDestroy {
         break;
       case 'terminated':
         body.externallyTerminated = true;
+        body.finished = true;
         break;
     }
 
@@ -414,11 +455,24 @@ export class ProcessListComponent implements OnInit, OnDestroy {
       body.withIncidents = true;
     }
 
-    // Variable filter
+    // Variable filter — coerce value to number for numeric operators
     if (this.filters.variableName.trim() && this.filters.variableValue.trim()) {
+      let value: any = this.filters.variableValue;
+      const numericOperators = ['gt', 'lt', 'gteq', 'lteq'];
+      if (numericOperators.includes(this.filters.variableOperator)) {
+        const parsed = Number(value);
+        if (!isNaN(parsed)) {
+          value = parsed;
+        }
+      } else if (this.filters.variableOperator === 'eq' || this.filters.variableOperator === 'neq') {
+        const parsed = Number(value);
+        if (!isNaN(parsed) && value.trim() !== '') {
+          value = parsed;
+        }
+      }
       body.variables = [{
         name: this.filters.variableName,
-        value: this.filters.variableValue,
+        value,
         operator: this.filters.variableOperator
       }];
     }
