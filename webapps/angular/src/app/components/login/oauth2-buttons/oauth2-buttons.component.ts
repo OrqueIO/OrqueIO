@@ -61,7 +61,7 @@ export class OAuth2ButtonsComponent implements OnInit, OnDestroy {
   private readonly DEMO_MODE = false;
 
   /** Disable OAuth2 - set to true to skip OAuth2 provider loading (avoids 404 errors when not configured) */
-  private readonly DISABLE_OAUTH2 = true;
+  private readonly DISABLE_OAUTH2 = false;
 
   private subscription?: Subscription;
   private oauth2Service = inject(OAuth2ProviderService);
