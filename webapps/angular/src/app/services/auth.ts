@@ -261,12 +261,14 @@ export class AuthService {
 
     // Always verify with backend when no in-memory auth exists.
     // This ensures new tabs can restore the session via the shared HTTP cookie (JSESSIONID).
-    // The backend returns 404 if not authenticated, which is handled gracefully.
+    // The backend returns 200 with empty body if not authenticated, or 200 with user data if authenticated.
     this.authCheckPending = this.http.get<LoginResponse>(`${this.baseUrl}/${this.engine}`, { withCredentials: true }).pipe(
-      map(response => this.parseResponse(response)),
+      map(response => response ? this.parseResponse(response) : null),
       tap(authentication => {
         this.authInitialized = true;
-        this.setSessionMarker();
+        if (authentication) {
+          this.setSessionMarker();
+        }
         this.updateAuthentication(authentication);
       }),
       catchError(() => {

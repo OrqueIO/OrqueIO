@@ -7,7 +7,6 @@ import { AuthService } from '../services/auth';
 // URLs where errors are expected and should be handled silently
 // These are optional endpoints that may not exist depending on configuration
 const SILENT_ERROR_URLS = [
-  '/api/admin/auth/user/',      // Auth check - fails when not logged in
   '/api/oauth2/setup-required', // OAuth2 setup check - fails if OAuth2 not configured
   '/api/oauth2/providers',      // OAuth2 providers - fails if OAuth2 not configured
   '/api/admin/setup/',          // Setup check - fails with 403 if already configured

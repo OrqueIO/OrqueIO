@@ -83,11 +83,13 @@ export class FilterModalComponent implements OnInit {
   ];
 
   // Operator options per criterion type
+  // Number operators restricted to what Camunda Task API supports for priority
+  // (eq → priority, gteq → minPriority, lteq → maxPriority)
   operatorOptions: Record<string, { value: string; label: string }[]> = {
     string: [
       { value: 'eq', label: '=' },
-      { value: 'neq', label: '!=' },
-      { value: 'like', label: 'like' }
+      { value: 'like', label: 'like' },
+      { value: 'notLike', label: 'not like' }
     ],
     date: [
       { value: 'before', label: 'before' },
@@ -95,10 +97,7 @@ export class FilterModalComponent implements OnInit {
     ],
     number: [
       { value: 'eq', label: '=' },
-      { value: 'neq', label: '!=' },
-      { value: 'gt', label: '>' },
       { value: 'gteq', label: '>=' },
-      { value: 'lt', label: '<' },
       { value: 'lteq', label: '<=' }
     ]
   };
@@ -122,18 +121,73 @@ export class FilterModalComponent implements OnInit {
       // Parse existing criteria from query
       this.parseCriteriaFromQuery(this.filter.query);
 
-      // TODO: Parse permissions from filter
-      // TODO: Parse variables from filter properties
+      // Parse permissions from filter (authorization links)
+      this.parsePermissionsFromFilter(this.filter);
+
+      // Parse variables from filter properties
+      this.parseVariablesFromFilter(this.filter);
     } else {
       this.resetForm();
     }
   }
+
+  private parsePermissionsFromFilter(filter: TaskFilter): void {
+    this.permissions = [];
+    const auth = (filter as any).authorized;
+    if (auth && Array.isArray(auth)) {
+      auth.forEach((entry: any) => {
+        if (entry.type === 'global' || entry.type === '*') {
+          this.permissions.push({ type: 'global' });
+        } else if (entry.userId) {
+          this.permissions.push({ type: 'user', id: entry.userId, name: entry.userId });
+        } else if (entry.groupId) {
+          this.permissions.push({ type: 'group', id: entry.groupId, name: entry.groupId });
+        }
+      });
+    }
+  }
+
+  private parseVariablesFromFilter(filter: TaskFilter): void {
+    this.variables = [];
+    const vars = filter.properties?.variables;
+    if (vars && Array.isArray(vars)) {
+      vars.forEach(v => {
+        this.variables.push({
+          name: v.name,
+          label: v.label || v.name
+        });
+      });
+    }
+  }
+
+  /** Operator suffixes used by the Camunda task filter query API */
+  private static readonly OPERATOR_SUFFIXES: Record<string, string> = {
+    Like: 'like',
+    NotLike: 'notLike',
+    Before: 'before',
+    After: 'after',
+    Expression: 'eq'
+  };
+
+  /** Reverse map: Camunda priority keys → criterion key + operator */
+  private static readonly PRIORITY_REVERSE_MAP: Record<string, { key: string; operator: string }> = {
+    minPriority: { key: 'priority', operator: 'gteq' },
+    maxPriority: { key: 'priority', operator: 'lteq' }
+  };
 
   private parseCriteriaFromQuery(query: Record<string, any>): void {
     if (!query) return;
 
     this.selectedCriteria = [];
     this.selectedBooleanCriteria = [];
+
+    // Build a set of all known criterion keys for quick lookup
+    const allCriterionKeys = new Set<string>();
+    for (const group of this.filterCriteria) {
+      for (const opt of group.options) {
+        allCriterionKeys.add(opt.key);
+      }
+    }
 
     // Map query properties to criteria
     Object.entries(query).forEach(([key, value]) => {
@@ -145,16 +199,39 @@ export class FilterModalComponent implements OnInit {
         return;
       }
 
-      // Find matching criterion
-      for (const group of this.filterCriteria) {
-        const criterion = group.options.find(opt => opt.key === key);
-        if (criterion) {
-          this.selectedCriteria.push({
-            key,
-            operator: 'eq',
-            value: String(value)
-          });
-          break;
+      // Check for special Camunda priority keys (minPriority / maxPriority)
+      const priorityMapping = FilterModalComponent.PRIORITY_REVERSE_MAP[key];
+      if (priorityMapping) {
+        this.selectedCriteria.push({
+          key: priorityMapping.key,
+          operator: priorityMapping.operator,
+          value: String(value)
+        });
+        return;
+      }
+
+      // Direct match — operator is 'eq'
+      if (allCriterionKeys.has(key)) {
+        this.selectedCriteria.push({
+          key,
+          operator: 'eq',
+          value: String(value)
+        });
+        return;
+      }
+
+      // Try to detect operator suffix (e.g. assigneeLike → assignee + like)
+      for (const [suffix, operator] of Object.entries(FilterModalComponent.OPERATOR_SUFFIXES)) {
+        if (key.endsWith(suffix)) {
+          const baseKey = key.slice(0, -suffix.length);
+          if (allCriterionKeys.has(baseKey)) {
+            this.selectedCriteria.push({
+              key: baseKey,
+              operator,
+              value: String(value)
+            });
+            return;
+          }
         }
       }
     });
@@ -208,11 +285,29 @@ export class FilterModalComponent implements OnInit {
     return this.operatorOptions['string'];
   }
 
+  /** Pairs of mutually exclusive boolean criteria */
+  private static readonly EXCLUSIVE_PAIRS: Record<string, string> = {
+    withCandidateGroups: 'withoutCandidateGroups',
+    withoutCandidateGroups: 'withCandidateGroups',
+    withCandidateUsers: 'withoutCandidateUsers',
+    withoutCandidateUsers: 'withCandidateUsers',
+    active: 'suspended',
+    suspended: 'active'
+  };
+
   toggleBooleanCriterion(key: string): void {
     const index = this.selectedBooleanCriteria.indexOf(key);
     if (index >= 0) {
       this.selectedBooleanCriteria.splice(index, 1);
     } else {
+      // Remove mutually exclusive counterpart before adding
+      const opposite = FilterModalComponent.EXCLUSIVE_PAIRS[key];
+      if (opposite) {
+        const oppositeIndex = this.selectedBooleanCriteria.indexOf(opposite);
+        if (oppositeIndex >= 0) {
+          this.selectedBooleanCriteria.splice(oppositeIndex, 1);
+        }
+      }
       this.selectedBooleanCriteria.push(key);
     }
   }
@@ -255,19 +350,51 @@ export class FilterModalComponent implements OnInit {
     this.variables.splice(index, 1);
   }
 
+  /** Standard suffix mapping for string / date operators */
+  private static readonly OPERATOR_TO_SUFFIX: Record<string, string> = {
+    eq: '',
+    like: 'Like',
+    notLike: 'NotLike',
+    before: 'Before',
+    after: 'After'
+  };
+
+  /**
+   * Priority uses dedicated Camunda keys instead of generic suffixes:
+   *   gteq → minPriority,  lteq → maxPriority,  eq → priority
+   */
+  private static readonly PRIORITY_OPERATOR_MAP: Record<string, string> = {
+    eq: 'priority',
+    gteq: 'minPriority',
+    lteq: 'maxPriority'
+  };
+
+  /**
+   * Build the Camunda-compatible query key for a given criterion + operator.
+   */
+  private buildQueryKey(criterionKey: string, operator: string): string {
+    // Priority field has special Camunda keys
+    if (criterionKey === 'priority') {
+      return FilterModalComponent.PRIORITY_OPERATOR_MAP[operator] || 'priority';
+    }
+    const suffix = FilterModalComponent.OPERATOR_TO_SUFFIX[operator] ?? '';
+    return criterionKey + suffix;
+  }
+
   // Form actions
   onSave(): void {
     if (!this.filterName.trim()) {
       return;
     }
 
-    // Build query from criteria
+    // Build query from criteria using Camunda-compatible keys
     const query: Record<string, any> = {};
 
-    // Add regular criteria
     this.selectedCriteria.forEach(criterion => {
       if (criterion.key && criterion.value) {
-        query[criterion.key] = criterion.value;
+        const queryKey = this.buildQueryKey(criterion.key, criterion.operator);
+        const value = criterion.key === 'priority' ? Number(criterion.value) || 0 : criterion.value;
+        query[queryKey] = value;
       }
     });
 
