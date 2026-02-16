@@ -168,7 +168,7 @@ export class ProcessDefinitionService {
    */
   getProcessDefinitionVersions(key: string): Observable<ProcessDefinition[]> {
     return this.http.get<ProcessDefinition[]>(`${this.baseUrl}/process-definition`, {
-      params: { key, sortBy: 'version', sortOrder: 'desc' }
+      params: { key, sortBy: 'version', sortOrder: 'desc', firstResult: '0', maxResults: '1000' }
     }).pipe(catchError(() => of([])));
   }
 
