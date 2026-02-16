@@ -88,28 +88,53 @@
               <input type="datetime-local" [(ngModel)]="filters.finishedBefore" />
             </div>
 
-            <!-- Variable filter -->
+            <!-- Variable filters (multiple) -->
             <div class="filter-group">
               <label>{{ 'cockpit.processes.filters.variable' | translate }}</label>
-              <input
-                type="text"
-                [(ngModel)]="filters.variableName"
-                [placeholder]="'cockpit.processes.filters.variableName' | translate"
-              />
-              <div class="variable-row">
-                <select [(ngModel)]="filters.variableOperator" class="variable-operator">
-                  <option value="eq">=</option>
-                  <option value="neq">≠</option>
-                  <option value="gt">&gt;</option>
-                  <option value="lt">&lt;</option>
-                  <option value="like">~</option>
-                </select>
+              <div class="variable-filter-item" *ngFor="let variable of filters.variables; let i = index">
                 <input
                   type="text"
-                  [(ngModel)]="filters.variableValue"
-                  [placeholder]="'cockpit.processes.filters.variableValue' | translate"
-                  class="variable-value"
+                  [(ngModel)]="variable.name"
+                  [placeholder]="'cockpit.processes.filters.variableName' | translate"
                 />
+                <div class="variable-row">
+                  <select [(ngModel)]="variable.operator" class="variable-operator">
+                    <option value="eq">=</option>
+                    <option value="neq">&#x2260;</option>
+                    <option value="gt">&gt;</option>
+                    <option value="gteq">&#x2265;</option>
+                    <option value="lt">&lt;</option>
+                    <option value="lteq">&#x2264;</option>
+                    <option value="like">~</option>
+                  </select>
+                  <input
+                    type="text"
+                    [(ngModel)]="variable.value"
+                    [placeholder]="'cockpit.processes.filters.variableValue' | translate"
+                    class="variable-value"
+                  />
+                  <button
+                    *ngIf="filters.variables.length > 1"
+                    class="btn-icon-remove"
+                    (click)="removeVariableFilter(i)"
+                    type="button"
+                    title="Remove"
+                  >
+                    <fa-icon [icon]="faTimes"></fa-icon>
+                  </button>
+                </div>
+              </div>
+              <button class="btn-add-variable" (click)="addVariableFilter()" type="button">
+                <fa-icon [icon]="faPlus"></fa-icon>
+                {{ 'cockpit.processes.filters.addVariable' | translate }}
+              </button>
+            </div>
+
+            <!-- Filter errors -->
+            <div class="filter-errors" *ngIf="filterErrors.length > 0">
+              <div class="filter-error" *ngFor="let error of filterErrors">
+                <fa-icon [icon]="faExclamationTriangle"></fa-icon>
+                {{ error }}
               </div>
             </div>
 

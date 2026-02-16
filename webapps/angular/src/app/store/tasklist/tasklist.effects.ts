@@ -17,7 +17,8 @@ import {
   SearchQuery,
   EXPRESSION_REGEX,
   EXPRESSION_SUPPORTED_FIELDS,
-  ISO_DATE_REGEX
+  ISO_DATE_REGEX,
+  DATE_BASE_MAP
 } from '../../models/tasklist';
 import { TaskQueryParams, VariableFilter } from '../../models/tasklist';
 
@@ -64,6 +65,31 @@ export class TasklistEffects {
 
 
   private sanitizeProperty(key: string, operator: string, value: string): string {
+    // Special case for priority: use dedicated Camunda keys
+    if (key === 'priority') {
+      if (operator === 'gteq') return 'minPriority';
+      if (operator === 'lteq') return 'maxPriority';
+      return 'priority';
+    }
+
+    // followUpBeforeOrNotExistent is a direct API key
+    if (key === 'followUpBeforeOrNotExistent') {
+      if (EXPRESSION_REGEX.test(value)) {
+        return key + 'Expression';
+      }
+      return key;
+    }
+
+    // Date fields: Camunda API uses dueBefore/dueAfter, not dueDateBefore/dueDateAfter
+    const dateBase = DATE_BASE_MAP[key];
+    if (dateBase && ['before', 'after'].includes(operator.toLowerCase())) {
+      let out = dateBase + operator.charAt(0).toUpperCase() + operator.slice(1).toLowerCase();
+      if (EXPRESSION_REGEX.test(value) && EXPRESSION_SUPPORTED_FIELDS.includes(key)) {
+        out += 'Expression';
+      }
+      return out;
+    }
+
     let out = key;
 
     // Add operator suffix for certain operators
@@ -74,11 +100,6 @@ export class TasklistEffects {
     // Add Expression suffix for expression values on supported fields
     if (EXPRESSION_REGEX.test(value) && EXPRESSION_SUPPORTED_FIELDS.includes(key)) {
       out += 'Expression';
-    }
-
-    // Special case for priority
-    if (key === 'priority' && operator !== 'eq') {
-      out = operator + 'Priority';
     }
 
     return out;

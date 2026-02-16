@@ -298,9 +298,7 @@ export class ProcessDistributionChartComponent implements OnInit, OnDestroy {
   }
 
   navigateToProcess(processKey: string): void {
-    this.router.navigate(['/cockpit/processes'], {
-      queryParams: { processKey }
-    });
+    this.router.navigate(['/cockpit/processes', processKey, 'instances']);
   }
 
   private resetHoverState(): void {
