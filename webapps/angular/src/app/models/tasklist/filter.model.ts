@@ -143,9 +143,15 @@ export const EXPRESSION_SUPPORTED_FIELDS = [
   'assignee',
   'owner',
   'candidateGroup',
+  'candidateGroups',
   'candidateUser',
   'involvedUser',
-  'processInstanceBusinessKey'
+  'processInstanceBusinessKey',
+  'processInstanceBusinessKeyLike',
+  'dueDate',
+  'followUpDate',
+  'createdDate',
+  'followUpBeforeOrNotExistent'
 ];
 
 /**
@@ -157,6 +163,17 @@ export const EXPRESSION_REGEX = /^[\s]*([#$])\{/;
  * Regex for ISO 8601 date format
  */
 export const ISO_DATE_REGEX = /^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(|\.[0-9]{0,4})$/;
+
+/**
+ * Date criteria base-name mapping.
+ * The Camunda REST API uses dueBefore / dueAfter (not dueDateBefore / dueDateAfter).
+ * This map strips the "Date" suffix before appending the operator suffix.
+ */
+export const DATE_BASE_MAP: Record<string, string> = {
+  dueDate: 'due',
+  followUpDate: 'followUp',
+  createdDate: 'created'
+};
 
 // ==================== SEARCH CRITERIA ====================
 
@@ -185,12 +202,19 @@ export const FILTER_CRITERIA: FilterCriteria[] = [
     groupKey: 'filter.criteria.task',
     options: [
       { key: 'name', labelKey: 'filter.criterion.name', type: 'string' },
+      { key: 'description', labelKey: 'filter.criterion.description', type: 'string' },
       { key: 'taskDefinitionKey', labelKey: 'filter.criterion.taskDefinitionKey', type: 'string' },
       { key: 'priority', labelKey: 'filter.criterion.priority', type: 'number' },
-      { key: 'delegationState', labelKey: 'filter.criterion.delegationState', type: 'string' },
-      { key: 'dueDate', labelKey: 'filter.criterion.dueDate', type: 'date' },
-      { key: 'followUpDate', labelKey: 'filter.criterion.followUpDate', type: 'date' },
-      { key: 'createdDate', labelKey: 'filter.criterion.createdDate', type: 'date' }
+      { key: 'delegationState', labelKey: 'filter.criterion.delegationState', type: 'string' }
+    ]
+  },
+  {
+    groupKey: 'filter.criteria.dates',
+    options: [
+      { key: 'createdDate', labelKey: 'filter.criterion.createdDate', type: 'date', expressionSupport: true },
+      { key: 'dueDate', labelKey: 'filter.criterion.dueDate', type: 'date', expressionSupport: true },
+      { key: 'followUpDate', labelKey: 'filter.criterion.followUpDate', type: 'date', expressionSupport: true },
+      { key: 'followUpBeforeOrNotExistent', labelKey: 'filter.criterion.followUpBeforeOrNotExistent', type: 'date', expressionSupport: true }
     ]
   },
   {
@@ -198,6 +222,7 @@ export const FILTER_CRITERIA: FilterCriteria[] = [
     options: [
       { key: 'assignee', labelKey: 'filter.criterion.assignee', type: 'string', expressionSupport: true },
       { key: 'candidateGroup', labelKey: 'filter.criterion.candidateGroup', type: 'string', expressionSupport: true },
+      { key: 'candidateGroups', labelKey: 'filter.criterion.candidateGroups', type: 'string', expressionSupport: true },
       { key: 'candidateUser', labelKey: 'filter.criterion.candidateUser', type: 'string', expressionSupport: true },
       { key: 'involvedUser', labelKey: 'filter.criterion.involvedUser', type: 'string', expressionSupport: true },
       { key: 'owner', labelKey: 'filter.criterion.owner', type: 'string', expressionSupport: true }
@@ -210,15 +235,26 @@ export const FILTER_CRITERIA: FilterCriteria[] = [
       { key: 'taskVariables', labelKey: 'filter.criterion.taskVariables', type: 'string', variableType: 'taskVariables' },
       { key: 'caseInstanceVariables', labelKey: 'filter.criterion.caseInstanceVariables', type: 'string', variableType: 'caseInstanceVariables' }
     ]
+  },
+  {
+    groupKey: 'filter.criteria.other',
+    options: [
+      { key: 'tenantIdIn', labelKey: 'filter.criterion.tenantIdIn', type: 'string' },
+      { key: 'activityInstanceIdIn', labelKey: 'filter.criterion.activityInstanceIdIn', type: 'string' },
+      { key: 'executionId', labelKey: 'filter.criterion.executionId', type: 'string' }
+    ]
   }
 ];
 
 export const BOOLEAN_CRITERIA: BooleanCriterion[] = [
+  { key: 'assigned', labelKey: 'filter.criterion.assigned' },
   { key: 'unassigned', labelKey: 'filter.criterion.unassigned' },
   { key: 'withCandidateGroups', labelKey: 'filter.criterion.withCandidateGroups' },
   { key: 'withoutCandidateGroups', labelKey: 'filter.criterion.withoutCandidateGroups' },
   { key: 'withCandidateUsers', labelKey: 'filter.criterion.withCandidateUsers' },
   { key: 'withoutCandidateUsers', labelKey: 'filter.criterion.withoutCandidateUsers' },
+  { key: 'withoutDueDate', labelKey: 'filter.criterion.withoutDueDate' },
+  { key: 'withoutTenantId', labelKey: 'filter.criterion.withoutTenantId' },
   { key: 'active', labelKey: 'filter.criterion.active' },
   { key: 'suspended', labelKey: 'filter.criterion.suspended' }
 ];

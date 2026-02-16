@@ -456,9 +456,6 @@
 
 /* Table Header */
 .variables-table thead {
-  position: sticky;
-  top: 0;
-  z-index: 10;
   background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
 }
 

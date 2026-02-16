@@ -47,6 +47,12 @@ interface SortConfig {
   direction: 'asc' | 'desc';
 }
 
+interface VariableFilter {
+  name: string;
+  value: string;
+  operator: 'eq' | 'neq' | 'gt' | 'gteq' | 'lt' | 'lteq' | 'like';
+}
+
 interface FilterState {
   businessKey: string;
   businessKeyOperator: 'eq' | 'like';
@@ -57,9 +63,7 @@ interface FilterState {
   finishedBefore: string;
   state: 'all' | 'active' | 'suspended' | 'completed' | 'terminated';
   withIncidents: boolean;
-  variableName: string;
-  variableValue: string;
-  variableOperator: 'eq' | 'neq' | 'gt' | 'lt' | 'like';
+  variables: VariableFilter[];
 }
 
 @Component({
@@ -158,9 +162,7 @@ export class ProcessListComponent implements OnInit, OnDestroy {
     finishedBefore: '',
     state: 'all',
     withIncidents: false,
-    variableName: '',
-    variableValue: '',
-    variableOperator: 'eq'
+    variables: [{ name: '', value: '', operator: 'eq' }]
   };
 
   // Sorting
@@ -389,37 +391,26 @@ export class ProcessListComponent implements OnInit, OnDestroy {
     }
 
     // Date filters — validate coherence and guard against invalid dates
+    // Format: yyyy-MM-ddTHH:mm:ss.SSS+0000 (Camunda expected format with timezone offset)
     if (this.filters.startedAfter) {
-      const d = new Date(this.filters.startedAfter);
-      if (!isNaN(d.getTime())) {
-        body.startedAfter = d.toISOString();
-      } else {
-        this.filterErrors.push('Invalid "Started after" date');
-      }
+      const formatted = this.formatDateForApi(this.filters.startedAfter);
+      if (formatted) { body.startedAfter = formatted; }
+      else { this.filterErrors.push('Invalid "Started after" date'); }
     }
     if (this.filters.startedBefore) {
-      const d = new Date(this.filters.startedBefore);
-      if (!isNaN(d.getTime())) {
-        body.startedBefore = d.toISOString();
-      } else {
-        this.filterErrors.push('Invalid "Started before" date');
-      }
+      const formatted = this.formatDateForApi(this.filters.startedBefore);
+      if (formatted) { body.startedBefore = formatted; }
+      else { this.filterErrors.push('Invalid "Started before" date'); }
     }
     if (this.filters.finishedAfter) {
-      const d = new Date(this.filters.finishedAfter);
-      if (!isNaN(d.getTime())) {
-        body.finishedAfter = d.toISOString();
-      } else {
-        this.filterErrors.push('Invalid "Finished after" date');
-      }
+      const formatted = this.formatDateForApi(this.filters.finishedAfter);
+      if (formatted) { body.finishedAfter = formatted; }
+      else { this.filterErrors.push('Invalid "Finished after" date'); }
     }
     if (this.filters.finishedBefore) {
-      const d = new Date(this.filters.finishedBefore);
-      if (!isNaN(d.getTime())) {
-        body.finishedBefore = d.toISOString();
-      } else {
-        this.filterErrors.push('Invalid "Finished before" date');
-      }
+      const formatted = this.formatDateForApi(this.filters.finishedBefore);
+      if (formatted) { body.finishedBefore = formatted; }
+      else { this.filterErrors.push('Invalid "Finished before" date'); }
     }
 
     // Validate date range coherence
@@ -455,29 +446,85 @@ export class ProcessListComponent implements OnInit, OnDestroy {
       body.withIncidents = true;
     }
 
-    // Variable filter — coerce value to number for numeric operators
-    if (this.filters.variableName.trim() && this.filters.variableValue.trim()) {
-      let value: any = this.filters.variableValue;
-      const numericOperators = ['gt', 'lt', 'gteq', 'lteq'];
-      if (numericOperators.includes(this.filters.variableOperator)) {
-        const parsed = Number(value);
-        if (!isNaN(parsed)) {
-          value = parsed;
-        }
-      } else if (this.filters.variableOperator === 'eq' || this.filters.variableOperator === 'neq') {
-        const parsed = Number(value);
-        if (!isNaN(parsed) && value.trim() !== '') {
-          value = parsed;
-        }
-      }
-      body.variables = [{
-        name: this.filters.variableName,
-        value,
-        operator: this.filters.variableOperator
-      }];
+    // Variable filters — support multiple variables with type coercion
+    const variables: any[] = [];
+    for (const v of this.filters.variables) {
+      if (!v.name.trim() || !v.value.trim()) continue;
+      const value = this.parseVariableValue(v.value, v.operator);
+      variables.push({ name: v.name, value, operator: v.operator });
+    }
+    if (variables.length > 0) {
+      body.variables = variables;
     }
 
     return body;
+  }
+
+  /**
+   * Format a date string from datetime-local input to Camunda API format.
+   * Camunda expects: yyyy-MM-ddTHH:mm:ss.SSS+0000 (with timezone offset)
+   * Legacy uses moment.js format 'YYYY-MM-DDTHH:mm:ss.SSSZZ'
+   */
+  private formatDateForApi(dateStr: string): string | null {
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return null;
+    const offset = -d.getTimezoneOffset();
+    const sign = offset >= 0 ? '+' : '-';
+    const absOff = Math.abs(offset);
+    const hh = String(Math.floor(absOff / 60)).padStart(2, '0');
+    const mm = String(absOff % 60).padStart(2, '0');
+    const year = d.getFullYear();
+    const mon = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    const hrs = String(d.getHours()).padStart(2, '0');
+    const min = String(d.getMinutes()).padStart(2, '0');
+    const sec = String(d.getSeconds()).padStart(2, '0');
+    const ms = String(d.getMilliseconds()).padStart(3, '0');
+    return `${year}-${mon}-${day}T${hrs}:${min}:${sec}.${ms}${sign}${hh}${mm}`;
+  }
+
+  /**
+   * Parse a variable value string into the appropriate type.
+   * Matches Legacy behavior: auto-detects numbers, booleans, null.
+   * For 'like' operator, wraps value with % if no wildcards are present.
+   */
+  private parseVariableValue(raw: string, operator: string): any {
+    let value: string = raw;
+
+    // Like operator: auto-wrap with % if no wildcards present
+    if (operator === 'like') {
+      if (!value.includes('%')) {
+        value = `%${value}%`;
+      }
+      return value;
+    }
+
+    // Boolean detection
+    if (value.toLowerCase() === 'true') return true;
+    if (value.toLowerCase() === 'false') return false;
+
+    // Null detection
+    if (value === 'NULL') return null;
+
+    // Number detection
+    const trimmed = value.trim();
+    if (trimmed !== '') {
+      const parsed = Number(trimmed);
+      if (!isNaN(parsed)) return parsed;
+    }
+
+    return value;
+  }
+
+  addVariableFilter(): void {
+    this.filters.variables.push({ name: '', value: '', operator: 'eq' });
+  }
+
+  removeVariableFilter(index: number): void {
+    this.filters.variables.splice(index, 1);
+    if (this.filters.variables.length === 0) {
+      this.filters.variables.push({ name: '', value: '', operator: 'eq' });
+    }
   }
 
   updateActiveFiltersCount(): void {
@@ -490,7 +537,7 @@ export class ProcessListComponent implements OnInit, OnDestroy {
     if (this.filters.finishedBefore) count++;
     if (this.filters.state !== 'all') count++;
     if (this.filters.withIncidents) count++;
-    if (this.filters.variableName.trim() && this.filters.variableValue.trim()) count++;
+    count += this.filters.variables.filter(v => v.name.trim() && v.value.trim()).length;
     this.activeFiltersCount = count;
   }
 
@@ -510,9 +557,7 @@ export class ProcessListComponent implements OnInit, OnDestroy {
       finishedBefore: '',
       state: 'all',
       withIncidents: false,
-      variableName: '',
-      variableValue: '',
-      variableOperator: 'eq'
+      variables: [{ name: '', value: '', operator: 'eq' }]
     };
     this.currentPage = 1;
     this.loadProcessInstances();

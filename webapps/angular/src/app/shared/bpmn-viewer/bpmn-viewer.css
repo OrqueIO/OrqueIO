@@ -161,16 +161,19 @@
   stroke-width: 2px !important;
 }
 
-/* Selected activity (purple border with glow) */
+/* Selected activity */
 :host ::ng-deep .selected .djs-visual > :nth-child(1) {
-  stroke: #8b5cf6 !important;
-  stroke-width: 3px !important;
+  stroke: #1e40af !important;
+  stroke-width: 2px !important;
 }
 
 :host ::ng-deep .selected .djs-outline {
-  stroke: #8b5cf6 !important;
-  stroke-width: 2px !important;
-  opacity: 0.5;
+  visibility: visible !important;
+  stroke: #3b82f6 !important;
+  stroke-width: 1.5px !important;
+  opacity: 0.3;
+  fill: #3b82f6 !important;
+  fill-opacity: 0.05 !important;
 }
 
 /* Activity Badges (Overlays) */
