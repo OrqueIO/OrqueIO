@@ -4908,7 +4908,7 @@ THE SOFTWARE.
 ===========================================================================================
 
 ===========================================================================================
-call-bind@1.0.7-SNAPSHOT
+call-bind@1.0.7
 git+https://github.com/ljharb/call-bind.git
 Licensed under MIT
 Notice file:
@@ -5259,7 +5259,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 ===========================================================================================
 
 ===========================================================================================
-crelt@ 1.0.7-SNAPSHOT
+crelt@ 1.0.7
 git+https://github.com/marijnh/crelt.git
 Licensed under MIT
 Notice file:
@@ -8238,7 +8238,7 @@ SOFTWARE.
 ===========================================================================================
 
 ===========================================================================================
-side-channel@ 1.0.7-SNAPSHOT
+side-channel@ 1.0.7
 git+https://github.com/ljharb/side-channel.git
 Licensed under MIT
 Notice file:
