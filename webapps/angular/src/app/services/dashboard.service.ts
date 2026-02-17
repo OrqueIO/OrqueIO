@@ -150,25 +150,36 @@ export class DashboardService {
   }
 
   /**
-   * Get count of running (active) process instances
+   * Get count of running (active) process instances.
+   * Uses /process-definition/statistics and aggregates instances across all
+   * definitions (matching legacy behavior).
    */
   getRunningProcessCount(): Observable<number> {
-    return this.http.get<{ count: number }>(`${this.baseUrl}/process-instance/count`)
-      .pipe(
-        map(res => res.count),
-        catchError(() => of(0))
-      );
+    return this.http.get<ProcessDefinitionStatistics[]>(
+      `${this.baseUrl}/process-definition/statistics`,
+      { params: { rootIncidents: 'true' } }
+    ).pipe(
+      map(stats => stats.reduce((sum, s) => sum + s.instances, 0)),
+      catchError(() => of(0))
+    );
   }
 
   /**
-   * Get count of open incidents
+   * Get count of open incidents.
+   * Uses /process-definition/statistics?rootIncidents=true and sums root
+   * incident counts across all definitions (matching legacy behavior).
    */
   getOpenIncidentsCount(): Observable<number> {
-    return this.http.get<{ count: number }>(`${this.baseUrl}/incident/count`)
-      .pipe(
-        map(res => res.count),
-        catchError(() => of(0))
-      );
+    return this.http.get<ProcessDefinitionStatistics[]>(
+      `${this.baseUrl}/process-definition/statistics`,
+      { params: { rootIncidents: 'true' } }
+    ).pipe(
+      map(stats => stats.reduce((sum, s) => {
+        const incidentCount = s.incidents?.reduce((iSum, inc) => iSum + inc.incidentCount, 0) || 0;
+        return sum + incidentCount;
+      }, 0)),
+      catchError(() => of(0))
+    );
   }
 
   /**
@@ -286,10 +297,10 @@ export class DashboardService {
    */
   getTaskStatsForChart(): Observable<TaskStats> {
     return forkJoin({
-      assigned: this.getTasksCount({ assigned: true }),
-      unassigned: this.getTasksCount({ unassigned: true, withCandidateGroups: true }),
-      withCandidateGroups: this.getTasksCount({ unassigned: true, withCandidateGroups: true }),
-      withoutCandidateGroups: this.getTasksCount({ unassigned: true, withoutCandidateGroups: true })
+      assigned: this.getTasksCount({ unfinished: true, assigned: true }),
+      unassigned: this.getTasksCount({ unfinished: true, unassigned: true, withCandidateGroups: true }),
+      withCandidateGroups: this.getTasksCount({ unfinished: true, unassigned: true, withCandidateGroups: true }),
+      withoutCandidateGroups: this.getTasksCount({ unfinished: true, unassigned: true, withoutCandidateGroups: true })
     });
   }
 
@@ -297,12 +308,14 @@ export class DashboardService {
    * Get tasks count with optional filters
    */
   private getTasksCount(params: {
+    unfinished?: boolean;
     assigned?: boolean;
     unassigned?: boolean;
     withCandidateGroups?: boolean;
     withoutCandidateGroups?: boolean;
   }): Observable<number> {
     let httpParams = new HttpParams();
+    if (params.unfinished) httpParams = httpParams.set('unfinished', 'true');
     if (params.assigned) httpParams = httpParams.set('assigned', 'true');
     if (params.unassigned) httpParams = httpParams.set('unassigned', 'true');
     if (params.withCandidateGroups) httpParams = httpParams.set('withCandidateGroups', 'true');
