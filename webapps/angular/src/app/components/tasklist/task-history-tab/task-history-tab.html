@@ -1,0 +1,120 @@
+<!-- Add Comment Form -->
+<div class="add-comment-section">
+  <div class="comment-form">
+    <textarea
+      [(ngModel)]="newComment"
+      [placeholder]="'tasklist.history.addCommentPlaceholder' | translate"
+      rows="2"
+      class="comment-input"
+      (keydown.control.enter)="addComment()">
+    </textarea>
+    <button
+      class="btn btn-primary btn-sm"
+      (click)="addComment()"
+      [disabled]="!newComment.trim() || addingComment">
+      <span class="spinner-small" *ngIf="addingComment"></span>
+      {{ 'tasklist.addComment' | translate }}
+    </button>
+  </div>
+</div>
+
+<!-- Empty State -->
+<div class="empty-state" *ngIf="days.length === 0">
+  <span class="empty-icon">
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <circle cx="12" cy="12" r="10"/>
+      <polyline points="12 6 12 12 16 14"/>
+    </svg>
+  </span>
+  <p>{{ 'tasklist.noHistory' | translate }}</p>
+</div>
+
+<!-- History List -->
+<div class="history-list" *ngIf="days.length > 0">
+  <div class="history-day" *ngFor="let day of days; trackBy: trackByDate">
+    <!-- Day Badge (like AngularJS) -->
+    <div class="date-badge">
+      <span class="day-number">{{ day.dayNumber }}</span>
+      <span class="month-name">{{ day.monthName }}</span>
+      <span class="year">{{ day.year }}</span>
+    </div>
+
+    <!-- Day Events -->
+    <div class="day-events">
+      <div class="event-item"
+           *ngFor="let event of day.events; trackBy: trackByEvent"
+           [class.comment]="event.isComment">
+
+        <!-- Event Meta (Time & User) -->
+        <div class="event-meta">
+          <span class="event-time"
+                [appTooltip]="formatFullDateTime(event.time)"
+                tooltipPlacement="left">
+            {{ formatTime(event.time) }}
+          </span>
+          <span class="event-user"
+                *ngIf="event.userId"
+                [appTooltip]="event.userId"
+                tooltipPlacement="top">
+            {{ event.userId }}
+          </span>
+        </div>
+
+        <!-- Event Content -->
+        <div class="event-content">
+          <!-- Event Header -->
+          <h4 class="event-type">
+            {{ getOperationLabel(event.type) | translate }}
+          </h4>
+
+          <!-- Event Body -->
+          <div class="event-body">
+            <!-- Comment Message (with nl2br) -->
+            <div class="comment-message"
+                 *ngIf="event.isComment && event.message"
+                 [innerHTML]="event.message | nl2br">
+            </div>
+
+            <!-- Sub Events (Property Changes) -->
+            <div class="sub-events" *ngIf="event.subEvents && event.subEvents.length > 0 && event.type !== 'Comment'">
+              <div class="sub-event" *ngFor="let sub of event.subEvents">
+                <h5 class="property-name">{{ getPropertyLabel(sub.property || '') }}</h5>
+
+                <div class="property-values">
+                  <!-- New Value -->
+                  <div class="new-value" *ngIf="sub.newValue">
+                    <ng-container *ngIf="sub.propertyIsDate">
+                      {{ +sub.newValue | camDate:'short' }}
+                    </ng-container>
+                    <ng-container *ngIf="!sub.propertyIsDate">
+                      {{ sub.newValue }}
+                    </ng-container>
+                  </div>
+
+                  <!-- Original Value -->
+                  <div class="original-value" *ngIf="sub.orgValue">
+                    <ng-container *ngIf="sub.propertyIsDate">
+                      {{ +sub.orgValue | camDate:'short' }}
+                    </ng-container>
+                    <ng-container *ngIf="!sub.propertyIsDate">
+                      {{ sub.orgValue }}
+                    </ng-container>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Pagination -->
+<app-pagination
+  *ngIf="totalItems > pageSize"
+  [current]="currentPage"
+  [size]="pageSize"
+  [total]="totalItems"
+  (pageChange)="onPageChange($event)">
+</app-pagination>

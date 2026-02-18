@@ -1,0 +1,78 @@
+<div class="admin-layout">
+  <main class="admin-main">
+    <app-admin-page-header
+      [breadcrumbs]="[{ label: 'Tenants', translateKey: 'admin.dashboard.tenants' }]"
+      [showRefresh]="true"
+      (refresh)="refresh()">
+    </app-admin-page-header>
+
+    <div class="page-content">
+      <!-- Toolbar with search and create button -->
+      <div class="toolbar">
+        <app-search-bar
+          placeholderKey="admin.tenants.searchPlaceholder"
+          (search)="onSearch($event)">
+        </app-search-bar>
+        <button class="btn-create" (click)="onCreateTenant()">
+          <fa-icon [icon]="faPlus"></fa-icon>
+          <span>{{ 'admin.tenants.createTenant' | translate }}</span>
+        </button>
+      </div>
+
+      <!-- Results info -->
+      <header class="results-info">
+        <h2 class="results-title">
+          {{ totalTenants }} {{ 'admin.tenants.title' | translate | lowercase }}
+        </h2>
+      </header>
+
+      <!-- Data table -->
+      <app-data-table
+        [columns]="columns"
+        [data]="tenants"
+        [loading]="loading"
+        [sortBy]="sortBy"
+        [sortOrder]="sortOrder"
+        emptyMessageKey="admin.tenants.noTenants"
+        (sortChange)="onSort($event)"
+        (rowClick)="onRowClick($event)">
+      </app-data-table>
+
+      <!-- Pagination -->
+      <app-pagination
+        [current]="currentPage"
+        [size]="pageSize"
+        [total]="totalTenants"
+        (pageChange)="onPageChange($event)">
+      </app-pagination>
+    </div>
+  </main>
+</div>
+
+<!-- Actions template -->
+<ng-template #actionsTemplate let-tenant>
+  <button class="btn-icon" (click)="editTenant(tenant, $event)" [title]="'admin.users.edit' | translate">
+    <fa-icon [icon]="faPen"></fa-icon>
+  </button>
+  <button class="btn-icon btn-icon--danger" (click)="deleteTenant(tenant, $event)" [title]="'admin.tenants.delete' | translate">
+    <fa-icon [icon]="faTrash"></fa-icon>
+  </button>
+</ng-template>
+
+<!-- Create Tenant Dialog -->
+<app-tenant-create-dialog
+  *ngIf="showCreateDialog"
+  (created)="onTenantCreated()"
+  (cancel)="onCreateDialogCancel()">
+</app-tenant-create-dialog>
+
+<!-- Delete Tenant Confirmation -->
+<app-confirm-dialog
+  *ngIf="showDeleteConfirm"
+  title="admin.tenants.deleteConfirmTitle"
+  [message]="'admin.tenants.deleteConfirmMessage' | translate: { tenantId: tenantToDelete?.id || '' }"
+  confirmLabel="DELETE"
+  confirmButtonClass="btn-danger"
+  (confirm)="confirmDelete()"
+  (cancel)="cancelDelete()">
+</app-confirm-dialog>

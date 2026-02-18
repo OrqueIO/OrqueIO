@@ -1,0 +1,62 @@
+{
+  "name": "orque-io-angular",
+  "version": "2.0.2",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve",
+    "build": "ng build",
+    "watch": "ng build --watch --configuration development",
+    "test": "ng test",
+    "xlts-install": "npm install",
+    "license-check": "echo 'Skipping license check'"
+  },
+  "prettier": {
+    "printWidth": 100,
+    "singleQuote": true,
+    "overrides": [
+      {
+        "files": "*.html",
+        "options": {
+          "parser": "angular"
+        }
+      }
+    ]
+  },
+  "private": true,
+  "packageManager": "npm@11.6.2",
+  "dependencies": {
+    "@angular/animations": "^21.0.2",
+    "@angular/common": "^21.0.0",
+    "@angular/compiler": "^21.0.0",
+    "@angular/core": "^21.0.0",
+    "@angular/forms": "^21.0.0",
+    "@angular/platform-browser": "^21.0.0",
+    "@angular/router": "^21.0.0",
+    "@bpmn-io/dmn-migrate": "^0.6.0",
+    "@fortawesome/angular-fontawesome": "^4.0.0",
+    "@fortawesome/fontawesome-svg-core": "^7.1.0",
+    "@fortawesome/free-brands-svg-icons": "^7.1.0",
+    "@fortawesome/free-regular-svg-icons": "^7.1.0",
+    "@fortawesome/free-solid-svg-icons": "^7.1.0",
+    "@ngrx/effects": "^21.0.0",
+    "@ngrx/entity": "^21.0.0",
+    "@ngrx/store": "^21.0.0",
+    "@ngrx/store-devtools": "^21.0.0",
+    "bpmn-js": "^16.5.0",
+    "chart.js": "^4.5.1",
+    "cmmn-js": "^0.20.0",
+    "dmn-js": "^17.5.0",
+    "dmn-js-decision-table": "^17.5.0",
+    "dmn-js-shared": "^17.5.0",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.3.0"
+  },
+  "devDependencies": {
+    "@angular/build": "^21.0.1",
+    "@angular/cli": "^21.0.1",
+    "@angular/compiler-cli": "^21.0.0",
+    "jsdom": "^27.1.0",
+    "typescript": "~5.9.2",
+    "vitest": "^4.0.8"
+  }
+}
