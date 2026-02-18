@@ -1,1 +1,3 @@
-webapps/angular/node/node_modules
+node/
+dist/
+.angular/
