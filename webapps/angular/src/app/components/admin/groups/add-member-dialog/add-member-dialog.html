@@ -1,0 +1,58 @@
+<div class="modal-backdrop" (click)="onBackdropClick($event)">
+  <div class="modal-container modal-sm" role="dialog" aria-modal="true">
+    <div class="modal-header">
+      <h3 class="modal-title">{{ 'admin.groups.addMember' | translate }}</h3>
+    </div>
+
+    <div class="modal-body">
+      <div class="search-box">
+        <input
+          type="text"
+          class="modal-input"
+          [(ngModel)]="searchTerm"
+          (input)="onSearchChange()"
+          [placeholder]="'admin.groups.searchUsers' | translate" />
+      </div>
+
+      <div class="items-list" *ngIf="!loading">
+        <div
+          *ngFor="let user of filteredUsers"
+          class="item"
+          [class.selected]="selectedUserId === user.id"
+          (click)="selectUser(user.id)">
+          <div class="item-id">{{ user.id }}</div>
+          <div class="item-name" *ngIf="user.firstName || user.lastName">
+            {{ user.firstName }} {{ user.lastName }}
+          </div>
+          <div class="item-email" *ngIf="user.email">{{ user.email }}</div>
+        </div>
+
+        <div class="empty-message" *ngIf="filteredUsers.length === 0">
+          {{ 'admin.groups.noAvailableUsers' | translate }}
+        </div>
+      </div>
+
+      <div class="loading-state" *ngIf="loading">
+        {{ 'LOADING' | translate }}...
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="modal-btn modal-btn-secondary"
+        (click)="onCancel()"
+        [disabled]="saving">
+        {{ 'CANCEL' | translate }}
+      </button>
+      <button
+        type="button"
+        class="modal-btn modal-btn-primary"
+        (click)="onSubmit()"
+        [disabled]="!selectedUserId || saving">
+        <span *ngIf="saving">{{ 'ADDING' | translate }}...</span>
+        <span *ngIf="!saving">{{ 'ADD' | translate }}</span>
+      </button>
+    </div>
+  </div>
+</div>

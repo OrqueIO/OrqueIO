@@ -1,0 +1,116 @@
+<div class="modal-backdrop" (click)="onBackdropClick($event)">
+  <div class="modal-container" role="dialog" aria-modal="true">
+    <div class="modal-header">
+      <h3 class="modal-title">{{ 'admin.users.createUser' | translate }}</h3>
+    </div>
+
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+      <div class="modal-body">
+        <div class="modal-form-section">
+          <h4 class="modal-section-title">{{ 'admin.users.account' | translate }}</h4>
+
+          <div class="modal-form-group">
+            <label for="userId">{{ 'admin.users.id' | translate }} <span class="required">*</span></label>
+            <input
+              id="userId"
+              type="text"
+              formControlName="id"
+              class="modal-input"
+              [class.is-invalid]="idError"
+              (keydown.enter)="$event.preventDefault(); focusNext('password')" />
+            <span *ngIf="idError" class="modal-error">
+              {{ idError | translate }}
+            </span>
+          </div>
+
+          <div class="modal-form-group">
+            <label for="password">{{ 'admin.users.password' | translate }} <span class="required">*</span></label>
+            <input
+              id="password"
+              type="password"
+              formControlName="password"
+              class="modal-input"
+              [class.is-invalid]="passwordError"
+              (keydown.enter)="$event.preventDefault(); focusNext('password2')" />
+            <span *ngIf="passwordError" class="modal-error">
+              {{ passwordError | translate }}
+            </span>
+          </div>
+
+          <div class="modal-form-group">
+            <label for="password2">{{ 'admin.users.confirmPassword' | translate }} <span class="required">*</span></label>
+            <input
+              id="password2"
+              type="password"
+              formControlName="password2"
+              class="modal-input"
+              [class.is-invalid]="userForm.hasError('passwordMismatch') && userForm.get('password2')?.touched"
+              (keydown.enter)="$event.preventDefault(); focusNext('firstName')" />
+            <span *ngIf="userForm.hasError('passwordMismatch') && userForm.get('password2')?.touched" class="modal-error">
+              {{ 'admin.users.passwordsNotEqual' | translate }}
+            </span>
+          </div>
+        </div>
+
+        <div class="modal-form-section">
+          <h4 class="modal-section-title">{{ 'admin.users.profile' | translate }}</h4>
+
+          <div class="modal-form-group">
+            <label for="firstName">{{ 'admin.users.firstName' | translate }} <span class="required">*</span></label>
+            <input
+              id="firstName"
+              type="text"
+              formControlName="firstName"
+              class="modal-input"
+              [class.is-invalid]="userForm.get('firstName')?.invalid && userForm.get('firstName')?.touched"
+              (keydown.enter)="$event.preventDefault(); focusNext('lastName')" />
+            <span *ngIf="userForm.get('firstName')?.hasError('required') && userForm.get('firstName')?.touched" class="modal-error">
+              {{ 'admin.users.firstNameRequired' | translate }}
+            </span>
+          </div>
+
+          <div class="modal-form-group">
+            <label for="lastName">{{ 'admin.users.lastName' | translate }} <span class="required">*</span></label>
+            <input
+              id="lastName"
+              type="text"
+              formControlName="lastName"
+              class="modal-input"
+              [class.is-invalid]="userForm.get('lastName')?.invalid && userForm.get('lastName')?.touched"
+              (keydown.enter)="$event.preventDefault(); focusNext('email')" />
+            <span *ngIf="userForm.get('lastName')?.hasError('required') && userForm.get('lastName')?.touched" class="modal-error">
+              {{ 'admin.users.lastNameRequired' | translate }}
+            </span>
+          </div>
+
+          <div class="modal-form-group">
+            <label for="email">{{ 'admin.users.email' | translate }}</label>
+            <input
+              id="email"
+              type="text"
+              formControlName="email"
+              class="modal-input"
+              (keydown.enter)="$event.preventDefault(); onSubmit()" />
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="modal-btn modal-btn-secondary"
+          (click)="onCancel()"
+          [disabled]="saving">
+          {{ 'CANCEL' | translate }}
+        </button>
+        <button
+          type="submit"
+          class="modal-btn modal-btn-primary"
+          [disabled]="!userForm.valid || saving">
+          <span *ngIf="saving">{{ 'CREATING' | translate }}...</span>
+          <span *ngIf="!saving">{{ 'admin.users.createNewUser' | translate }}</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

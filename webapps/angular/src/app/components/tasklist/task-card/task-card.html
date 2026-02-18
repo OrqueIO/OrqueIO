@@ -1,0 +1,61 @@
+<div class="task-card-content">
+  <!-- Loading -->
+  <div class="loading" *ngIf="loading">
+    <span class="spinner"></span>
+  </div>
+
+  <!-- Variables -->
+  <div class="variables-list" *ngIf="!loading && variables.length > 0">
+    <div class="variable-item" *ngFor="let variable of variables">
+      <span class="variable-type"
+            [appTooltip]="getTypeLabel(variable.type)"
+            tooltipPlacement="left">
+        {{ getTypeIcon(variable.type) }}
+      </span>
+      <span class="variable-name"
+            [appTooltip]="variable.name"
+            tooltipPlacement="top">
+        {{ variable.label || variable.name }}
+      </span>
+      <span class="variable-value"
+            [class.null-value]="variable.value === null || variable.value === undefined"
+            [appTooltip]="formatValue(variable)"
+            tooltipPlacement="right">
+        {{ formatValue(variable) }}
+      </span>
+    </div>
+  </div>
+
+  <!-- No Variables -->
+  <div class="no-variables" *ngIf="!loading && variables.length === 0">
+    <span class="info-text">{{ 'tasklist.noVariables' | translate }}</span>
+  </div>
+
+  <!-- Task Info -->
+  <div class="task-info">
+    <div class="info-row" *ngIf="task.taskDefinitionKey">
+      <span class="info-label">{{ 'tasklist.taskDefinitionKey' | translate }}:</span>
+      <span class="info-value">{{ task.taskDefinitionKey }}</span>
+    </div>
+    <div class="info-row" *ngIf="task.processInstanceId">
+      <span class="info-label">{{ 'tasklist.processInstanceId' | translate }}:</span>
+      <a class="info-value link"
+         [href]="'/cockpit/#/process-instance/' + task.processInstanceId"
+         target="_blank">
+        {{ task.processInstanceId }}
+      </a>
+    </div>
+    <div class="info-row" *ngIf="task.caseInstanceId">
+      <span class="info-label">{{ 'tasklist.caseInstanceId' | translate }}:</span>
+      <a class="info-value link"
+         [href]="'/cockpit/#/case-instance/' + task.caseInstanceId"
+         target="_blank">
+        {{ task.caseInstanceId }}
+      </a>
+    </div>
+    <div class="info-row" *ngIf="task.tenantId">
+      <span class="info-label">{{ 'tasklist.tenantId' | translate }}:</span>
+      <span class="info-value">{{ task.tenantId }}</span>
+    </div>
+  </div>
+</div>

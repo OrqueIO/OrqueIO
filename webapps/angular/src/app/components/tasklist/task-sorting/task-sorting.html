@@ -1,0 +1,117 @@
+<!-- Sorting Trigger Button -->
+<div class="sorting-trigger">
+  <button class="sort-btn" (click)="toggleDropdown()" type="button">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <line x1="4" y1="6" x2="16" y2="6"/>
+      <line x1="4" y1="12" x2="12" y2="12"/>
+      <line x1="4" y1="18" x2="8" y2="18"/>
+      <polyline points="15 15 18 18 21 15"/>
+      <line x1="18" y1="18" x2="18" y2="9"/>
+    </svg>
+    <span class="sort-label">{{ 'sorting.sort' | translate }}</span>
+    <span class="sort-count" *ngIf="sorting.length > 0">({{ sorting.length }})</span>
+  </button>
+</div>
+
+<!-- Sorting Dropdown -->
+<div class="sorting-dropdown" *ngIf="isOpen">
+  <div class="dropdown-backdrop" (click)="onBackdropClick()"></div>
+
+  <div class="dropdown-content">
+    <!-- Header -->
+    <div class="dropdown-header">
+      <h4 class="dropdown-title">{{ 'sorting.title' | translate }}</h4>
+      <div class="header-actions">
+        <button class="text-btn" (click)="resetToDefault()" type="button">
+          {{ 'sorting.reset' | translate }}
+        </button>
+        <button class="text-btn" (click)="clearAll()" *ngIf="sorting.length > 0" type="button">
+          {{ 'sorting.clearAll' | translate }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Active Sort Levels -->
+    <div class="sort-levels" *ngIf="sorting.length > 0">
+      <div class="sort-level" *ngFor="let sort of sorting; let i = index">
+        <div class="level-info">
+          <span class="level-number">{{ i + 1 }}.</span>
+          <span class="level-label">{{ getSortLabel(sort.sortBy) | translate }}</span>
+        </div>
+
+        <div class="level-actions">
+          <!-- Order Toggle -->
+          <button class="order-btn"
+                  (click)="toggleSortOrder(i)"
+                  [title]="(sort.sortOrder === 'asc' ? 'sorting.ascending' : 'sorting.descending') | translate"
+                  type="button">
+            <svg *ngIf="sort.sortOrder === 'asc'" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="18 15 12 9 6 15"/>
+            </svg>
+            <svg *ngIf="sort.sortOrder === 'desc'" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </button>
+
+          <!-- Move Up -->
+          <button class="move-btn"
+                  (click)="moveSortLevel(i, 'up')"
+                  [disabled]="i === 0"
+                  [title]="'sorting.moveUp' | translate"
+                  type="button">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="18 15 12 9 6 15"/>
+            </svg>
+          </button>
+
+          <!-- Move Down -->
+          <button class="move-btn"
+                  (click)="moveSortLevel(i, 'down')"
+                  [disabled]="i === sorting.length - 1"
+                  [title]="'sorting.moveDown' | translate"
+                  type="button">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </button>
+
+          <!-- Remove -->
+          <button class="remove-btn"
+                  (click)="removeSortLevel(i)"
+                  [title]="'sorting.remove' | translate"
+                  type="button">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- No Sort Levels -->
+    <div class="no-sort" *ngIf="sorting.length === 0">
+      <p>{{ 'sorting.noSorting' | translate }}</p>
+    </div>
+
+    <!-- Add Sort Level -->
+    <div class="add-sort" *ngIf="availableOptions.length > 0">
+      <label class="add-label">{{ 'sorting.addLevel' | translate }}:</label>
+      <select class="sort-select" (change)="addSortLevel($any($event.target).value); $any($event.target).value = ''">
+        <option value="">{{ 'sorting.selectField' | translate }}</option>
+        <optgroup *ngFor="let group of sortGroups" [label]="group.groupKey | translate">
+          <option *ngFor="let opt of group.options"
+                  [value]="opt.key"
+                  [disabled]="isSortKeyUsed(opt.key)">
+            {{ opt.labelKey | translate }}
+          </option>
+        </optgroup>
+      </select>
+    </div>
+
+    <!-- Help Text -->
+    <div class="sort-help">
+      <p>{{ 'sorting.help' | translate }}</p>
+    </div>
+  </div>
+</div>

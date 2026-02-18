@@ -5,12 +5,12 @@
     <groupId>io.orqueio.bpm</groupId>
     <artifactId>orqueio-database-settings</artifactId>
     <relativePath>../database</relativePath>
-    <version>2.0.1</version>
+    <version>2.0.2</version>
   </parent>
   <description>io.orqueio.bpm.dmn</description>
   <groupId>io.orqueio.bpm.dmn</groupId>
   <artifactId>orqueio-engine-dmn-root</artifactId>
-  <version>2.0.1</version>
+  <version>2.0.2</version>
   <name>orqueio DMN - engine - root</name>
   <inceptionYear>2015</inceptionYear>
   <packaging>pom</packaging>

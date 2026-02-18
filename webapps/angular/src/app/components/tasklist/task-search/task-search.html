@@ -1,0 +1,140 @@
+<!-- Search Container -->
+<div class="search-container">
+  <!-- OR/AND Mode Toggle -->
+  <button class="mode-toggle"
+          [class.active]="matchAny"
+          (click)="toggleMatchAny()"
+          [title]="(matchAny ? 'search.mode.or.active' : 'search.mode.and.active') | translate"
+          type="button">
+    {{ matchAny ? 'OR' : 'AND' }}
+  </button>
+
+  <!-- Pills Area -->
+  <div class="pills-wrapper">
+    <!-- Existing Pills -->
+    <div class="pill"
+         *ngFor="let pill of pills"
+         [class.editing]="editingPill?.id === pill.id"
+         [class.variable-pill]="pill.variableType"
+         (click)="editPill(pill)">
+      <span class="pill-type" *ngIf="pill.variableType">
+        {{ pill.variableType === 'processVariables' ? 'PV' : pill.variableType === 'taskVariables' ? 'TV' : 'CV' }}
+      </span>
+      <span class="pill-label">{{ getPillDisplayLabel(pill) | translate }}</span>
+      <span class="pill-operator">{{ getOperatorLabel(pill.operator) }}</span>
+      <span class="pill-value">{{ pill.value }}</span>
+      <button class="pill-remove"
+              (click)="dispatchRemovePill(pill.id); $event.stopPropagation()"
+              type="button">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Pending Criterion Indicator -->
+    <div class="pending-pill" *ngIf="pendingCriterion">
+      <span class="pill-type" *ngIf="pendingCriterion.variableType">
+        {{ pendingCriterion.variableType === 'processVariables' ? 'PV' : pendingCriterion.variableType === 'taskVariables' ? 'TV' : 'CV' }}
+      </span>
+      <span class="pill-label">
+        {{ pendingVariableName || (pendingCriterion.label | translate) }}
+      </span>
+      <span class="pill-operator" *ngIf="pendingOperator">{{ getOperatorLabel(pendingOperator) }}</span>
+    </div>
+
+    <!-- Variable Name Input -->
+    <input #variableNameInput
+           *ngIf="inputMode === 'variableName'"
+           type="text"
+           class="search-input variable-name-input"
+           [(ngModel)]="pendingVariableName"
+           (keydown)="onKeyDown($event)"
+           (keydown.enter)="confirmVariableName()"
+           [placeholder]="'search.enterVariableName' | translate"
+           autocomplete="off">
+
+    <!-- Search Input -->
+    <input #searchInput
+           *ngIf="inputMode !== 'variableName'"
+           type="text"
+           class="search-input"
+           [(ngModel)]="searchText"
+           (input)="onInputChange()"
+           (focus)="onInputFocus()"
+           (blur)="onInputBlur()"
+           (keydown)="onKeyDown($event)"
+           [placeholder]="getPlaceholder() | translate"
+           autocomplete="off">
+  </div>
+
+  <!-- Clear Button -->
+  <button class="clear-btn"
+          *ngIf="pills.length > 0"
+          (click)="clearAll()"
+          [title]="'search.clearAll' | translate"
+          type="button">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <line x1="18" y1="6" x2="6" y2="18"/>
+      <line x1="6" y1="6" x2="18" y2="18"/>
+    </svg>
+  </button>
+
+  <!-- Search Icon -->
+  <div class="search-icon">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="11" cy="11" r="8"/>
+      <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+    </svg>
+  </div>
+</div>
+
+<!-- Operator Selection -->
+<div class="operator-dropdown" *ngIf="inputMode === 'operator' && pendingCriterion">
+  <span class="dropdown-label">{{ 'search.selectOperator' | translate }}:</span>
+  <div class="operator-options">
+    <button *ngFor="let op of getOperatorsForType(pendingCriterion.type)"
+            class="operator-btn"
+            (click)="selectOperator(op.value)"
+            type="button">
+      {{ op.label }}
+    </button>
+  </div>
+</div>
+
+<!-- Expression Support Hint -->
+<div class="expression-hint" *ngIf="inputMode === 'value' && isExpressionSupported(pendingCriterion)">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <circle cx="12" cy="12" r="10"/>
+    <path d="M12 16v-4"/>
+    <path d="M12 8h.01"/>
+  </svg>
+  <span>{{ 'search.expressionHint' | translate }}</span>
+</div>
+
+<!-- Suggestions Dropdown -->
+<div class="suggestions-dropdown" *ngIf="showSuggestions && filteredSuggestions.length > 0">
+  <div *ngFor="let suggestion of filteredSuggestions; let i = index"
+       class="suggestion-item"
+       [class.selected]="i === selectedSuggestionIndex"
+       [class.variable-suggestion]="suggestion.variableType"
+       (click)="selectSuggestion(suggestion)">
+    <div class="suggestion-content">
+      <span class="suggestion-type" *ngIf="suggestion.variableType">
+        {{ suggestion.variableType === 'processVariables' ? 'Process' : suggestion.variableType === 'taskVariables' ? 'Task' : 'Case' }}
+      </span>
+      <span class="suggestion-label">{{ suggestion.label | translate }}</span>
+      <span class="suggestion-variable-name" *ngIf="suggestion.variableName">({{ suggestion.variableName }})</span>
+    </div>
+    <span class="suggestion-key">{{ suggestion.key }}</span>
+  </div>
+</div>
+
+<!-- Help Text -->
+<div class="search-help" *ngIf="pills.length === 0 && !pendingCriterion">
+  <span>{{ 'search.help' | translate }}</span>
+  <span class="mode-hint">
+    {{ (matchAny ? 'search.mode.or.hint' : 'search.mode.and.hint') | translate }}
+  </span>
+</div>

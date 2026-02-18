@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#1E3A5F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Admin - Configuration & User Management (Light Mode) -->
+  <!-- Primary: Deep Blue #1E3A5F | Accent: Amber #F59E0B -->
+
+  <circle cx="9" cy="7" r="4" />
+  <path d="M2 21v-2a4 4 0 014-4h6" />
+
+  <circle cx="17" cy="17" r="3" stroke="#F59E0B" />
+  <path d="M17 14v-0.5" stroke="#F59E0B" />
+  <path d="M17 20v0.5" stroke="#F59E0B" />
+  <path d="M14 17h-0.5" stroke="#F59E0B" />
+  <path d="M20 17h0.5" stroke="#F59E0B" />
+  <path d="M14.9 14.9l-0.4-0.4" stroke="#F59E0B" />
+  <path d="M19.1 19.1l0.4 0.4" stroke="#F59E0B" />
+  <path d="M14.9 19.1l-0.4 0.4" stroke="#F59E0B" />
+  <path d="M19.1 14.9l0.4-0.4" stroke="#F59E0B" />
+</svg>
