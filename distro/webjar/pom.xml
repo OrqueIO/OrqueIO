@@ -7,11 +7,11 @@
     <groupId>io.orqueio.bpm</groupId>
     <artifactId>orqueio-parent</artifactId>
     <relativePath>../../parent</relativePath>
-    <version>2.0.1</version>
+    <version>2.0.2</version>
   </parent>
 <description>orqueio-webapp-webjar</description>
   <groupId>io.orqueio.bpm.webapp</groupId>
-  <version>2.0.1</version>
+  <version>2.0.2</version>
   <artifactId>orqueio-webapp-webjar</artifactId>
   <packaging>jar</packaging>
 
@@ -86,7 +86,6 @@
               <target>
                 <move file="${project.build.outputDirectory}/META-INF/resources/webjars/orqueio/WEB-INF/securityFilterRules.json" todir="${project.build.outputDirectory}/META-INF/resources/webjars/orqueio/" />
                 <delete dir="${project.build.outputDirectory}/META-INF/resources/webjars/orqueio/WEB-INF" />
-                <move file="${project.build.outputDirectory}/META-INF/resources/webjars/orqueio/plugin" tofile="${project.build.outputDirectory}/META-INF/resources/plugin" verbose="true" />
                 <!-- add orqueio-welcome page -->
                 <copy todir="${project.build.outputDirectory}/META-INF/resources/orqueio-welcome/">
                   <fileset dir="../orqueio-welcome/" />

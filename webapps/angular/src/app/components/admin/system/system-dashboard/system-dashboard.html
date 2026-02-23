@@ -1,0 +1,44 @@
+<div class="admin-layout">
+  <main class="admin-main">
+    <!-- Page Header - Full width -->
+    <app-admin-page-header
+      [breadcrumbs]="[{ label: 'System', translateKey: 'admin.dashboard.system' }]"
+      [showRefresh]="true"
+      (refresh)="refresh()">
+      <!-- Engine Selector in header actions -->
+      <div class="engine-selector" *ngIf="engines.length > 1">
+        <label for="engineSelect">
+          <fa-icon [icon]="faExchangeAlt"></fa-icon>
+          {{ 'admin.system.engine' | translate }}:
+        </label>
+        <select id="engineSelect" [value]="currentEngine" (change)="onEngineChange($event)">
+          <option *ngFor="let engine of engines" [value]="engine.name">
+            {{ engine.name }}
+          </option>
+        </select>
+      </div>
+    </app-admin-page-header>
+
+    <!-- Content with Sidebar -->
+    <div class="page-content-with-sidebar">
+      <!-- Sidebar Navigation -->
+      <aside class="system-sidebar">
+        <nav class="system-nav">
+          <ul>
+            <li *ngFor="let section of sections" routerLinkActive="active">
+              <a [routerLink]="section.route" routerLinkActive="active-link">
+                <fa-icon [icon]="section.icon" class="nav-icon"></fa-icon>
+                <span class="nav-label">{{ section.labelKey | translate }}</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </aside>
+
+      <!-- Main Content Area -->
+      <div class="system-main">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  </main>
+</div>

@@ -1,0 +1,191 @@
+<div class="login-page">
+  <div class="login-card">
+    <!-- Left panel - Branding -->
+    <aside class="login-branding">
+      <div class="branding-content">
+        <img src="images/orqueio.png" alt="OrqueIO" class="branding-logo" />
+        <h1 class="branding-title">{{ 'SETUP_WELCOME' | translate }}</h1>
+        <p class="branding-subtitle" [innerHTML]="'BRANDING_SUBTITLE' | translate"></p>
+
+        <div class="branding-features">
+          <div class="feature-item">
+            <span class="feature-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                <polyline points="22 4 12 14.01 9 11.01"/>
+              </svg>
+            </span>
+            <span>{{ 'SETUP_FEATURE_1' | translate }}</span>
+          </div>
+          <div class="feature-item">
+            <span class="feature-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+              </svg>
+            </span>
+            <span>{{ 'SETUP_FEATURE_2' | translate }}</span>
+          </div>
+          <div class="feature-item">
+            <span class="feature-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                <path d="M2 17l10 5 10-5"/>
+                <path d="M2 12l10 5 10-5"/>
+              </svg>
+            </span>
+            <span>{{ 'SETUP_FEATURE_3' | translate }}</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Right panel - Form -->
+    <main class="login-form-panel">
+      <!-- Message area with reserved space -->
+      <div class="message-area">
+        <!-- First Login Info Box -->
+        @if (showFirstLogin) {
+          <div class="first-login-box">
+            <button type="button" class="close-btn" (click)="dismissFirstLogin()">&times;</button>
+            <strong class="first-login-heading">{{ 'FIRST_LOGIN_HEADING' | translate }}</strong>
+            <p class="first-login-message">{{ 'FIRST_LOGIN_INFO' | translate }}</p>
+          </div>
+        }
+
+        <!-- Error box for login failures -->
+        @if (status === 'ERROR') {
+          <div class="error-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="12" y1="8" x2="12" y2="12"/>
+              <line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+            <div class="error-content">
+              <div class="error-title">{{ 'PAGE_LOGIN_FAILED' | translate }}</div>
+              <div class="error-detail">{{ 'PAGE_LOGIN_ERROR_MSG' | translate }}</div>
+            </div>
+          </div>
+        }
+      </div>
+
+      <!-- Form -->
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <!-- Username -->
+        <div class="form-group">
+          <label class="form-label" for="username">{{ 'PAGE_LOGIN_USERNAME' | translate }}</label>
+          <input
+            id="username"
+            type="text"
+            formControlName="username"
+            class="form-input"
+            [class.error]="username?.invalid && username?.touched"
+            [placeholder]="'PAGE_LOGIN_USERNAME_PLACEHOLDER' | translate"
+            autocomplete="username"
+            (keydown.enter)="onUsernameEnter($event, passwordInput)"
+          />
+          <div class="error-space">
+            @if (username?.invalid && username?.touched) {
+              <div class="error-message">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="12" y1="8" x2="12" y2="12"/>
+                  <line x1="12" y1="16" x2="12.01" y2="16"/>
+                </svg>
+                @if (username?.errors?.['required']) {
+                  <span>{{ 'VALIDATION_REQUIRED_USERNAME' | translate }}</span>
+                }
+                @if (username?.errors?.['minlength']) {
+                  <span>{{ 'VALIDATION_MINLENGTH_USERNAME' | translate }}</span>
+                }
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- Password -->
+        <div class="form-group">
+          <label class="form-label" for="password">{{ 'PAGE_LOGIN_PASSWORD' | translate }}</label>
+          <div class="password-wrapper">
+            <input
+              #passwordInput
+              id="password"
+              [type]="showPassword ? 'text' : 'password'"
+              formControlName="password"
+              class="form-input"
+              [class.error]="password?.invalid && password?.touched"
+              [placeholder]="'PAGE_LOGIN_PASSWORD_PLACEHOLDER' | translate"
+              autocomplete="current-password"
+            />
+            <button
+              type="button"
+              class="password-toggle"
+              tabindex="0"
+              (click)="togglePasswordVisibility()"
+              [disabled]="status === 'LOADING'"
+              [attr.aria-label]="showPassword ? ('PASSWORD_HIDE' | translate) : ('PASSWORD_SHOW' | translate)"
+              [attr.title]="showPassword ? ('PASSWORD_HIDE' | translate) : ('PASSWORD_SHOW' | translate)"
+            >
+              @if (!showPassword) {
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                  <circle cx="12" cy="12" r="3"/>
+                </svg>
+              } @else {
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+                  <line x1="1" y1="1" x2="23" y2="23"/>
+                </svg>
+              }
+            </button>
+          </div>
+          <div class="error-space">
+            @if (password?.invalid && password?.touched) {
+              <div class="error-message">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="12" y1="8" x2="12" y2="12"/>
+                  <line x1="12" y1="16" x2="12.01" y2="16"/>
+                </svg>
+                @if (password?.errors?.['required']) {
+                  <span>{{ 'VALIDATION_REQUIRED_PASSWORD' | translate }}</span>
+                }
+                @if (password?.errors?.['minlength']) {
+                  <span>{{ 'VALIDATION_MINLENGTH_PASSWORD' | translate }}</span>
+                }
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <button
+          type="submit"
+          class="btn-submit"
+          [disabled]="status === 'LOADING'"
+        >
+          @if (status === 'LOADING') {
+            <svg class="spinner" width="16" height="16" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" fill="none" opacity="0.25"/>
+              <path d="M12 2a10 10 0 0 1 10 10" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round"/>
+            </svg>
+            <span>{{ 'PAGE_LOGIN_SIGNING_IN' | translate }}</span>
+          } @else {
+            <span>{{ 'PAGE_LOGIN_SIGN_IN_ACTION' | translate }}</span>
+          }
+        </button>
+      </form>
+
+      <!-- OAuth2/SSO Login Buttons (dynamically loaded from backend) -->
+      <app-oauth2-buttons></app-oauth2-buttons>
+
+      <!-- Signup link (only shown when no admin exists) -->
+      @if (showSetupLink) {
+        <div class="signup-link-container">
+          <span class="signup-text">{{ 'PAGE_LOGIN_NO_ACCOUNT' | translate }}</span>
+          <a routerLink="/setup" class="signup-link">{{ 'PAGE_LOGIN_CREATE_ACCOUNT' | translate }}</a>
+        </div>
+      }
+    </main>
+  </div>
+</div>

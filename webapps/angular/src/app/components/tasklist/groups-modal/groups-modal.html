@@ -1,0 +1,131 @@
+<!-- Modal Backdrop -->
+<div class="modal-backdrop" *ngIf="isOpen" (click)="onBackdropClick($event)">
+  <div class="modal-container">
+    <!-- Modal Header -->
+    <div class="modal-header">
+      <h2 class="modal-title">{{ 'groups.title' | translate }}</h2>
+      <button class="close-btn" (click)="onClose()" [title]="'common.close' | translate">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Modal Body -->
+    <div class="modal-body">
+      <p class="task-info">
+        {{ 'groups.taskLabel' | translate }}: <strong>{{ taskName }}</strong>
+      </p>
+
+      <p class="section-description">{{ 'groups.description' | translate }}</p>
+
+      <!-- Current Groups -->
+      <div class="groups-list">
+        <div class="group-item" *ngFor="let group of groups" [class.new]="group.isNew">
+          <span class="group-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 00-3-3.87"/>
+              <path d="M16 3.13a4 4 0 010 7.75"/>
+            </svg>
+          </span>
+          <span class="group-name">{{ group.name }}</span>
+          <span class="new-badge" *ngIf="group.isNew">{{ 'groups.new' | translate }}</span>
+          <button class="remove-btn"
+                  (click)="removeGroup(group.id)"
+                  [title]="'groups.remove' | translate"
+                  type="button">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Empty State -->
+        <div class="empty-state" *ngIf="groups.length === 0">
+          <span class="empty-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+              <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 00-3-3.87"/>
+              <path d="M16 3.13a4 4 0 010 7.75"/>
+            </svg>
+          </span>
+          <p>{{ 'groups.noGroups' | translate }}</p>
+        </div>
+      </div>
+
+      <!-- Add Group -->
+      <div class="add-group-section">
+        <label for="newGroupId">{{ 'groups.addGroup' | translate }}</label>
+        <div class="add-group-form">
+          <div class="autocomplete-container">
+            <input type="text"
+                   id="newGroupId"
+                   [(ngModel)]="newGroupId"
+                   (input)="onSearchInput()"
+                   (keydown)="onKeyDown($event)"
+                   (blur)="hideSuggestions()"
+                   (focus)="onSearchInput()"
+                   [placeholder]="'groups.groupPlaceholder' | translate"
+                   class="form-input"
+                   [disabled]="validating"
+                   autocomplete="off">
+
+            <!-- Loading indicator -->
+            <span class="search-spinner" *ngIf="isSearching">
+              <span class="spinner small"></span>
+            </span>
+
+            <!-- Dropdown suggestions -->
+            <div class="suggestions-dropdown" *ngIf="showSuggestions && suggestions.length > 0">
+              <div class="suggestion-item"
+                   *ngFor="let suggestion of suggestions"
+                   (mousedown)="selectGroup(suggestion)">
+                <span class="suggestion-icon">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+                    <circle cx="9" cy="7" r="4"/>
+                    <path d="M23 21v-2a4 4 0 00-3-3.87"/>
+                    <path d="M16 3.13a4 4 0 010 7.75"/>
+                  </svg>
+                </span>
+                <span class="suggestion-name">{{ suggestion.name || suggestion.id }}</span>
+                <span class="suggestion-id" *ngIf="suggestion.name && suggestion.name !== suggestion.id">({{ suggestion.id }})</span>
+              </div>
+            </div>
+          </div>
+
+          <button class="btn btn-primary"
+                  (click)="addGroup()"
+                  [disabled]="!newGroupId.trim() || validating"
+                  type="button">
+            <span class="spinner small" *ngIf="validating"></span>
+            {{ 'common.add' | translate }}
+          </button>
+        </div>
+
+        <!-- Error Message -->
+        <p class="error-message" *ngIf="errorMessage">
+          {{ errorMessage | translate }}
+        </p>
+      </div>
+    </div>
+
+    <!-- Modal Footer -->
+    <div class="modal-footer">
+      <button class="btn btn-secondary" (click)="onClose()" type="button">
+        {{ 'common.cancel' | translate }}
+      </button>
+      <button class="btn btn-primary"
+              (click)="onSave()"
+              [disabled]="!hasChanges"
+              type="button">
+        {{ 'common.save' | translate }}
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,179 @@
+<div class="cockpit-layout">
+  <main class="cockpit-main">
+    <app-cockpit-header
+      titleKey="cockpit.processes.deployedDefinitions"
+      [breadcrumbs]="breadcrumbs"
+      [showRefresh]="true"
+      (refresh)="loadProcessDefinitions()"
+    ></app-cockpit-header>
+
+    <div class="page-content">
+      <!-- Toolbar with search -->
+      <div class="toolbar">
+        <div class="search-bar">
+          <div class="search-input-wrapper">
+            <fa-icon [icon]="faSearch" class="search-icon"></fa-icon>
+            <input
+              type="text"
+              class="search-input"
+              [placeholder]="'cockpit.processes.searchPlaceholder' | translate"
+              [(ngModel)]="searchQuery"
+              (input)="onSearchChange()"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Results info -->
+      <header class="results-info">
+        <h1 class="results-title" *ngIf="!loading && filteredDefinitions.length > 0">
+          {{ searchQuery ? filteredDefinitions.length : totalCount }} {{ 'cockpit.processes.definitionsFound' | translate }}
+        </h1>
+        <h1 class="results-title" *ngIf="!loading && filteredDefinitions.length === 0 && processDefinitions.length > 0">
+          {{ 'cockpit.processes.noMatchingDefinitions' | translate }}
+        </h1>
+        <h1 class="results-title" *ngIf="!loading && processDefinitions.length === 0">
+          {{ 'cockpit.processes.noDeployedDefinitions' | translate }}
+        </h1>
+      </header>
+
+      <!-- Process definitions table -->
+      <div class="table-container" *ngIf="!loading && filteredDefinitions.length > 0">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th class="col-state">{{ 'cockpit.processes.columns.state' | translate }}</th>
+              <th
+                class="col-incidents sortable-header"
+                [class.sorted]="sortConfig.sortBy === 'incidents'"
+                (click)="onSort('incidents')"
+              >
+                <span class="header-content">
+                  {{ 'cockpit.processes.columns.incidents' | translate }}
+                  <fa-icon
+                    [icon]="getSortIcon('incidents')"
+                    class="sort-icon"
+                    [class.active]="sortConfig.sortBy === 'incidents'"
+                  ></fa-icon>
+                </span>
+              </th>
+              <th
+                class="col-instances sortable-header"
+                [class.sorted]="sortConfig.sortBy === 'instances'"
+                (click)="onSort('instances')"
+              >
+                <span class="header-content">
+                  {{ 'cockpit.processes.columns.runningInstances' | translate }}
+                  <fa-icon
+                    [icon]="getSortIcon('instances')"
+                    class="sort-icon"
+                    [class.active]="sortConfig.sortBy === 'instances'"
+                  ></fa-icon>
+                </span>
+              </th>
+              <th
+                class="col-key sortable-header"
+                [class.sorted]="sortConfig.sortBy === 'key'"
+                (click)="onSort('key')"
+              >
+                <span class="header-content">
+                  {{ 'cockpit.processes.columns.key' | translate }}
+                  <fa-icon
+                    [icon]="getSortIcon('key')"
+                    class="sort-icon"
+                    [class.active]="sortConfig.sortBy === 'key'"
+                  ></fa-icon>
+                </span>
+              </th>
+              <th
+                class="col-name sortable-header"
+                [class.sorted]="sortConfig.sortBy === 'name'"
+                (click)="onSort('name')"
+              >
+                <span class="header-content">
+                  {{ 'cockpit.processes.columns.name' | translate }}
+                  <fa-icon
+                    [icon]="getSortIcon('name')"
+                    class="sort-icon"
+                    [class.active]="sortConfig.sortBy === 'name'"
+                  ></fa-icon>
+                </span>
+              </th>
+              <th
+                class="col-tenant sortable-header"
+                [class.sorted]="sortConfig.sortBy === 'tenant'"
+                (click)="onSort('tenant')"
+              >
+                <span class="header-content">
+                  {{ 'cockpit.processes.columns.tenant' | translate }}
+                  <fa-icon
+                    [icon]="getSortIcon('tenant')"
+                    class="sort-icon"
+                    [class.active]="sortConfig.sortBy === 'tenant'"
+                  ></fa-icon>
+                </span>
+              </th>
+              <th class="col-actions">{{ 'cockpit.processes.columns.actions' | translate }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let def of filteredDefinitions" class="definition-row">
+              <td class="col-state">
+                <span class="state-indicator" [ngClass]="getStateClass(def)">
+                  <fa-icon [icon]="getStateIcon(def)"></fa-icon>
+                </span>
+              </td>
+              <td class="col-incidents">
+                <span class="incidents-count" [class.has-incidents]="getTotalIncidents(def) > 0">
+                  <fa-icon *ngIf="getTotalIncidents(def) > 0" [icon]="faExclamationTriangle"></fa-icon>
+                  {{ getTotalIncidents(def) }}
+                </span>
+              </td>
+              <td class="col-instances">
+                <span class="instances-count" [class.has-instances]="def.instances > 0">
+                  {{ def.instances }}
+                </span>
+              </td>
+              <td class="col-key">
+                <a [routerLink]="['/cockpit/processes', getDefinitionKey(def), 'instances']" class="definition-link mono" appClipboard [appClipboard]="getDefinitionKey(def)">
+                  {{ getDefinitionKey(def) }}
+                </a>
+              </td>
+              <td class="col-name">
+                <a [routerLink]="['/cockpit/processes', getDefinitionKey(def), 'instances']" class="definition-link" *ngIf="getDefinitionName(def) !== getDefinitionKey(def)">
+                  {{ getDefinitionName(def) }}
+                </a>
+                <span class="null-value" *ngIf="getDefinitionName(def) === getDefinitionKey(def)">-</span>
+              </td>
+              <td class="col-tenant">
+                <span *ngIf="def.tenantId">{{ def.tenantId }}</span>
+                <span class="null-value" *ngIf="!def.tenantId">-</span>
+              </td>
+              <td class="col-actions">
+                <a
+                  [routerLink]="['/cockpit/processes', getDefinitionKey(def), 'instances']"
+                  class="action-btn"
+                  [title]="'cockpit.processes.viewInstances' | translate"
+                >
+                  <fa-icon [icon]="faEye"></fa-icon>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Loading state -->
+      <div class="loading-state" *ngIf="loading">
+        <fa-icon [icon]="faSpinner" animation="spin"></fa-icon>
+        <span>{{ 'common.loading' | translate }}</span>
+      </div>
+
+      <!-- Empty state -->
+      <div class="empty-state" *ngIf="!loading && processDefinitions.length === 0">
+        <fa-icon [icon]="faCogs" class="empty-icon"></fa-icon>
+        <p>{{ 'cockpit.processes.noDeployedDefinitions' | translate }}</p>
+      </div>
+    </div>
+  </main>
+</div>

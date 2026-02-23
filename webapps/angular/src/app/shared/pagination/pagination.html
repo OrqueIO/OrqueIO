@@ -1,0 +1,31 @@
+<footer class="pagination-footer">
+  <span class="pagination-summary">
+    {{ 'SHOWING' | translate }} {{ startIndex }}-{{ endIndex }} {{ 'OF' | translate }} {{ total }}
+  </span>
+
+  <nav class="pagination-nav" aria-label="Pagination">
+    <button
+      type="button"
+      class="btn-page btn-prev"
+      [disabled]="!hasPrevious"
+      (click)="previousPage()"
+      aria-label="Previous page">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="15 18 9 12 15 6"></polyline>
+      </svg>
+    </button>
+
+    <span class="page-indicator">{{ current }} / {{ totalPages }}</span>
+
+    <button
+      type="button"
+      class="btn-page btn-next"
+      [disabled]="!hasNext"
+      (click)="nextPage()"
+      aria-label="Next page">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="9 18 15 12 9 6"></polyline>
+      </svg>
+    </button>
+  </nav>
+</footer>

@@ -1,0 +1,763 @@
+<div class="ctn-fixed-view">
+  <!-- Loading state -->
+  <div class="loading-overlay" *ngIf="loading">
+    <fa-icon [icon]="faSpinner" animation="spin"></fa-icon>
+    <span>{{ 'common.loading' | translate }}</span>
+  </div>
+
+  <!-- Not found state -->
+  <div class="not-found" *ngIf="!loading && !processInstance">
+    <fa-icon [icon]="faExclamationTriangle"></fa-icon>
+    <p>{{ 'cockpit.processDetail.notFound' | translate }}</p>
+    <a [routerLink]="['/cockpit/processes']" class="back-link">
+      {{ 'cockpit.processDetail.backToProcesses' | translate }}
+    </a>
+  </div>
+
+  <!-- Header - Outside content container, at the top (hidden when diagram maximized) -->
+  <app-cockpit-header
+    *ngIf="!loading && processInstance && !diagramMaximized"
+    [title]="processDefinition?.name || processInstance.processDefinitionKey || ''"
+    [breadcrumbs]="breadcrumbs"
+    [showRefresh]="true"
+    (refresh)="loadProcessData()"
+  ></app-cockpit-header>
+
+  <!-- Unified toolbar: sidebar tabs + process info + actions -->
+  <div class="ctn-unified-toolbar" *ngIf="!loading && processInstance && !diagramMaximized">
+    <!-- Left: Sidebar tabs -->
+    <div class="toolbar-section toolbar-tabs-section">
+      <ul class="toolbar-tabs">
+        <li [class.active]="sidebarTab === 'info'">
+          <a (click)="sidebarTab = 'info'">{{ 'cockpit.processDetail.sidebarTabs.info' | translate }}</a>
+        </li>
+        <li [class.active]="sidebarTab === 'filter'">
+          <a (click)="sidebarTab = 'filter'">{{ 'cockpit.processDetail.sidebarTabs.filter' | translate }}</a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Center: Process title -->
+    <div class="toolbar-section toolbar-title-section">
+      <fa-icon [icon]="faSitemap" class="title-icon"></fa-icon>
+      <h1>{{ processDefinition?.name || processInstance.processDefinitionKey }}</h1>
+      <span class="definition-key">{{ processInstance.processDefinitionKey }}</span>
+    </div>
+
+    <!-- Right: Actions -->
+    <div class="toolbar-section toolbar-actions-section">
+      <div class="toolbar-actions" *ngIf="isProcessRunning()">
+        <!-- Cancel Instance -->
+        <button class="toolbar-btn danger"
+                (click)="showCancelDialog = true"
+                [disabled]="actionInProgress"
+                [title]="'cockpit.processDetail.actions.cancel' | translate">
+          <fa-icon [icon]="faTimes"></fa-icon>
+        </button>
+
+        <!-- Suspend/Resume Instance -->
+        <button class="toolbar-btn warning"
+                *ngIf="processInstance.state === 'ACTIVE'"
+                (click)="showSuspendDialog = true"
+                [disabled]="actionInProgress"
+                [title]="'cockpit.processDetail.actions.suspend' | translate">
+          <fa-icon [icon]="faPause"></fa-icon>
+        </button>
+        <button class="toolbar-btn success"
+                *ngIf="processInstance.state === 'SUSPENDED'"
+                (click)="resumeInstance()"
+                [disabled]="actionInProgress"
+                [title]="'cockpit.processDetail.actions.resume' | translate">
+          <fa-icon [icon]="faPlay"></fa-icon>
+        </button>
+
+        <!-- Add Variable -->
+        <button class="toolbar-btn"
+                (click)="startAddVariable()"
+                [disabled]="actionInProgress"
+                [title]="'cockpit.processDetail.actions.addVariable' | translate">
+          <fa-icon [icon]="faPlus"></fa-icon>
+        </button>
+
+        <!-- Retry Failed Jobs -->
+        <button class="toolbar-btn warning has-badge"
+                *ngIf="hasFailedJobs()"
+                (click)="retryAllJobs()"
+                [disabled]="actionInProgress"
+                [title]="'cockpit.processDetail.actions.retryJobs' | translate">
+          <fa-icon [icon]="faRedo"></fa-icon>
+          <span class="badge">{{ getFailedJobsCount() }}</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main content container (sidebar + content area) -->
+  <div class="ctn-content-container" *ngIf="!loading && processInstance" [class.diagram-fullscreen]="diagramMaximized">
+    <!-- Sidebar (hidden when diagram maximized) -->
+    <div class="ctn-column ctn-sidebar ctn-scroll" *ngIf="!diagramMaximized">
+
+      <!-- Info Tab Content -->
+      <div class="tab-content" *ngIf="sidebarTab === 'info'">
+        <dl class="process-information">
+          <!-- Instance ID -->
+          <dt appClipboard [appClipboard]="processInstance.id">
+            <span [title]="'cockpit.processDetail.tooltip.instanceId' | translate">
+              {{ 'cockpit.processDetail.instanceId' | translate }}
+            </span>
+          </dt>
+          <dd class="instance-id">{{ processInstance.id }}</dd>
+
+          <!-- Business Key -->
+          <dt *ngIf="processInstance.businessKey"
+              appClipboard [appClipboard]="processInstance.businessKey">
+            <span [title]="'cockpit.processDetail.tooltip.businessKey' | translate">
+              {{ 'cockpit.processDetail.businessKey' | translate }}
+            </span>
+          </dt>
+          <dd *ngIf="processInstance.businessKey" class="business-key">
+            {{ processInstance.businessKey }}
+          </dd>
+          <dt *ngIf="!processInstance.businessKey">
+            <span [title]="'cockpit.processDetail.tooltip.businessKey' | translate">
+              {{ 'cockpit.processDetail.businessKey' | translate }}
+            </span>
+          </dt>
+          <dd *ngIf="!processInstance.businessKey" class="business-key">
+            <span class="null-value">null</span>
+          </dd>
+
+          <!-- Definition Version -->
+          <dt>{{ 'cockpit.processDetail.definitionVersion' | translate }}</dt>
+          <dd class="definition-version">
+            {{ processDefinition?.version || '-' }}
+          </dd>
+
+          <!-- Definition ID -->
+          <dt appClipboard [appClipboard]="processDefinition?.id || ''">
+            {{ 'cockpit.processDetail.definitionId' | translate }}
+          </dt>
+          <dd class="definition-id">
+            <a [routerLink]="['/cockpit/processes', processInstance.processDefinitionKey, 'instances']">
+              {{ processDefinition?.id || processInstance.processDefinitionId }}
+            </a>
+          </dd>
+
+          <!-- Definition Key -->
+          <dt appClipboard [appClipboard]="processInstance.processDefinitionKey">
+            {{ 'cockpit.processDetail.definitionKey' | translate }}
+          </dt>
+          <dd class="definition-key">{{ processInstance.processDefinitionKey }}</dd>
+
+          <!-- Definition Name -->
+          <dt>{{ 'cockpit.processDetail.definitionName' | translate }}</dt>
+          <dd class="definition-name">
+            {{ processDefinition?.name || '-' }}
+          </dd>
+
+          <!-- Tenant ID -->
+          <dt *ngIf="processInstance.tenantId"
+              appClipboard [appClipboard]="processInstance.tenantId">
+            {{ 'cockpit.processDetail.tenant' | translate }}
+          </dt>
+          <dd *ngIf="processInstance.tenantId" class="tenant-id">
+            {{ processInstance.tenantId }}
+          </dd>
+          <dt *ngIf="!processInstance.tenantId">
+            {{ 'cockpit.processDetail.tenant' | translate }}
+          </dt>
+          <dd *ngIf="!processInstance.tenantId" class="tenant-id">
+            <span class="null-value">null</span>
+          </dd>
+
+          <!-- Deployment ID -->
+          <dt appClipboard [appClipboard]="processDefinition?.deploymentId || ''">
+            {{ 'cockpit.processDetail.deploymentId' | translate }}
+          </dt>
+          <dd class="deployment-id">
+            {{ processDefinition?.deploymentId || '-' }}
+          </dd>
+
+          <!-- Super Process Instance ID -->
+          <dt *ngIf="superProcessInstance"
+              appClipboard [appClipboard]="superProcessInstance.id">
+            {{ 'cockpit.processDetail.superProcess' | translate }}
+          </dt>
+          <dd *ngIf="superProcessInstance" class="super-process-instance-id">
+            <a [routerLink]="['/cockpit/processes/instance', superProcessInstance.id]">
+              {{ superProcessInstance.id }}
+            </a>
+          </dd>
+          <dt *ngIf="!superProcessInstance">
+            {{ 'cockpit.processDetail.superProcess' | translate }}
+          </dt>
+          <dd *ngIf="!superProcessInstance" class="super-process-instance-id">
+            <span class="null-value">null</span>
+          </dd>
+        </dl>
+      </div>
+
+      <!-- Filter Tab Content -->
+      <div class="tab-content filters" *ngIf="sidebarTab === 'filter'">
+        <h5>
+          {{ 'cockpit.processDetail.activityFilter' | translate }}
+          <fa-icon [icon]="faInfoCircle"
+                   class="info-icon"
+                   [title]="'cockpit.processDetail.tooltip.activityInstanceTree' | translate">
+          </fa-icon>
+        </h5>
+
+        <!-- Quick filter -->
+        <div class="quick-filter">
+          <input type="text"
+                 [(ngModel)]="activityFilter"
+                 [placeholder]="'cockpit.processDetail.filterPlaceholder' | translate" />
+        </div>
+
+        <!-- Filter selection info -->
+        <div class="filter-selection" *ngIf="selectedActivityIds.length > 0">
+          <button class="btn-clear-selection" (click)="clearActivitySelection()">
+            <fa-icon [icon]="faTimes"></fa-icon>
+          </button>
+          <span>
+            {{ selectedActivityIds.length }}
+            {{ selectedActivityIds.length === 1 ?
+               ('cockpit.processDetail.activitySelected' | translate) :
+               ('cockpit.processDetail.activitiesSelected' | translate) }}
+          </span>
+        </div>
+
+        <!-- Activity Instance Tree -->
+        <div class="filter instance-tree">
+          <app-activity-instance-tree
+            [activityTree]="activityTree"
+            [activities]="activities"
+            [selectedActivityId]="selectedActivityId"
+            [selectedActivityIds]="selectedActivityIds"
+            [filter]="activityFilter"
+            [stateFilter]="activityStateFilter"
+            (activitySelect)="handleActivityInstanceSelection($event.id, $event.activityId, $event.event)"
+            (activityHover)="onActivityHover($event)"
+          ></app-activity-instance-tree>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main content area -->
+    <div class="ctn-column ctn-content">
+
+      <!-- Content top pane - Diagram -->
+      <div class="ctn-row ctn-content-top"
+           [class.collapsed]="diagramCollapsed"
+           [class.maximized]="diagramMaximized">
+
+        <div class="diagram-container">
+          <div class="diagram-loading" *ngIf="loadingDiagram">
+            <fa-icon [icon]="faSpinner" animation="spin"></fa-icon>
+            <span>{{ 'common.loading' | translate }}</span>
+          </div>
+
+          <app-bpmn-viewer
+            *ngIf="!loadingDiagram && bpmnXml"
+            [xml]="bpmnXml"
+            [runningActivities]="runningActivityIds"
+            [activityBadges]="activityBadges"
+            [selectedActivity]="selectedActivityId"
+            [highlightedActivities]="selectedActivityIds"
+            [showExpandButton]="true"
+            [isExpanded]="diagramMaximized"
+            (elementClick)="handleBpmnElementSelection($event)"
+            (elementHover)="onDiagramElementHover($event)"
+            (expandToggle)="toggleDiagramMaximize()"
+          ></app-bpmn-viewer>
+
+          <div class="empty-diagram" *ngIf="!loadingDiagram && !bpmnXml">
+            <fa-icon [icon]="faExclamationTriangle"></fa-icon>
+            <p>{{ 'cockpit.processDetail.noDiagram' | translate }}</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Content bottom pane - Tabs -->
+      <div class="ctn-row ctn-content-bottom ctn-tabbed"
+           [class.hidden]="diagramMaximized">
+
+        <!-- Tabs header -->
+        <div class="tabs-header">
+          <ul class="nav nav-tabs">
+            <li *ngFor="let tab of tabs"
+                [class.active]="activeTab === tab.id"
+                (click)="setActiveTab(tab.id)">
+              <a>
+                {{ tab.labelKey | translate }}
+                <span *ngIf="getTabBadgeCount(tab)"
+                      class="badge"
+                      [class.badge-warning]="tab.id === 'incidents'">
+                  {{ getTabBadgeCount(tab) }}
+                </span>
+              </a>
+            </li>
+          </ul>
+          <button class="collapse-diagram-btn"
+                  (click)="toggleDiagramCollapse()"
+                  type="button"
+                  [title]="diagramCollapsed ? ('cockpit.processDetail.showDiagram' | translate) : ('cockpit.processDetail.hideDiagram' | translate)">
+            <fa-icon [icon]="diagramCollapsed ? faChevronDown : faChevronUp"></fa-icon>
+          </button>
+        </div>
+
+        <!-- Tab content -->
+        <div class="tab-content-area">
+
+          <!-- Variables Tab -->
+          <div class="tab-pane" *ngIf="activeTab === 'variables'">
+            <!-- Search/criteria filter -->
+            <app-search-widget
+              [searchTypes]="variableSearchTypes"
+              [placeholder]="'cockpit.processDetail.variables.addCriteria' | translate"
+              [storageKey]="'process-detail-variables-search'"
+              (searchChange)="onVariableSearchChange($event)">
+            </app-search-widget>
+
+            <!-- Add variable form -->
+            <div class="add-variable-form" *ngIf="showAddVariable">
+              <div class="form-inline">
+                <div class="form-group">
+                  <label>{{ 'cockpit.processDetail.variables.name' | translate }}</label>
+                  <input type="text"
+                         class="form-control"
+                         [(ngModel)]="newVariable.name"
+                         placeholder="Name" />
+                </div>
+                <div class="form-group">
+                  <label>{{ 'cockpit.processDetail.variables.type' | translate }}</label>
+                  <select class="form-control" [(ngModel)]="newVariable.type">
+                    <option *ngFor="let type of variableTypes" [value]="type">{{ type }}</option>
+                  </select>
+                </div>
+                <div class="form-group value-group">
+                  <label>{{ 'cockpit.processDetail.variables.value' | translate }}</label>
+                  <textarea class="form-control"
+                            [(ngModel)]="newVariable.value"
+                            [rows]="newVariable.type === 'Json' || newVariable.type === 'Object' ? 3 : 1"
+                            placeholder="Value"></textarea>
+                </div>
+              </div>
+              <div class="form-actions">
+                <button class="btn btn-default" (click)="cancelAddVariable()">
+                  {{ 'common.cancel' | translate }}
+                </button>
+                <button class="btn btn-primary"
+                        (click)="saveNewVariable()"
+                        [disabled]="!newVariable.name.trim()">
+                  {{ 'common.save' | translate }}
+                </button>
+              </div>
+            </div>
+
+            <!-- Variables table -->
+            <div class="table-scroll-wrapper">
+              <table class="cam-table" *ngIf="filteredVariables.length > 0">
+                <thead>
+                  <tr>
+                    <th class="col-name sortable" (click)="sortVariables('name')">
+                      {{ 'cockpit.processDetail.variables.name' | translate }}
+                      <span class="sort-indicator" *ngIf="variableSortBy === 'name'">
+                        {{ variableSortOrder === 'asc' ? '▲' : '▼' }}
+                      </span>
+                    </th>
+                    <th class="col-type sortable" (click)="sortVariables('type')">
+                      {{ 'cockpit.processDetail.variables.type' | translate }}
+                      <span class="sort-indicator" *ngIf="variableSortBy === 'type'">
+                        {{ variableSortOrder === 'asc' ? '▲' : '▼' }}
+                      </span>
+                    </th>
+                    <th class="col-value">{{ 'cockpit.processDetail.variables.value' | translate }}</th>
+                    <th class="col-scope">{{ 'cockpit.processDetail.variables.scope' | translate }}</th>
+                    <th class="actions" *ngIf="isProcessRunning()"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let variable of filteredVariables">
+                    <td class="variable-name">{{ variable.name }}</td>
+                    <td>
+                      <span class="variable-type-badge"
+                            [ngClass]="'type-' + variable.type.toLowerCase()">
+                        {{ variable.type }}
+                      </span>
+                    </td>
+                    <td class="variable-value">
+                      <ng-container *ngIf="editingVariable?.name !== variable.name">
+                        <span class="value-text"
+                              *ngIf="variable.value !== null && variable.value !== undefined"
+                              [title]="formatValue(variable.value)">
+                          {{ formatValue(variable.value) }}
+                        </span>
+                        <span class="value-null" *ngIf="variable.value === null || variable.value === undefined">
+                          null
+                        </span>
+                      </ng-container>
+                      <div class="inline-edit" *ngIf="editingVariable?.name === variable.name">
+                        <textarea class="form-control"
+                                  [(ngModel)]="editingVariable!.value"
+                                  [rows]="editingVariable!.type === 'Json' || editingVariable!.type === 'Object' ? 3 : 1">
+                        </textarea>
+                        <div class="inline-edit-actions">
+                          <button class="btn btn-xs btn-primary" (click)="saveEditVariable()">
+                            <fa-icon [icon]="faCheck"></fa-icon>
+                          </button>
+                          <button class="btn btn-xs btn-default" (click)="cancelEditVariable()">
+                            <fa-icon [icon]="faTimes"></fa-icon>
+                          </button>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="variable-scope">
+                      <a *ngIf="getVariableScope(variable)"
+                         class="scope-badge"
+                         (click)="navigateToScope(variable)"
+                         [title]="getVariableScopeTooltip(variable)">
+                        <fa-icon [icon]="faInfoCircle" class="scope-icon"></fa-icon>
+                        <span class="scope-text">{{ getVariableScope(variable) }}</span>
+                      </a>
+                      <span *ngIf="!getVariableScope(variable)" class="null-value">-</span>
+                    </td>
+                    <td class="actions" *ngIf="isProcessRunning()">
+                      <div class="btn-group" *ngIf="editingVariable?.name !== variable.name">
+                        <button class="btn btn-xs btn-default"
+                                (click)="startEditVariable(variable)"
+                                [title]="'cockpit.processDetail.actions.edit' | translate">
+                          <fa-icon [icon]="faEdit"></fa-icon>
+                        </button>
+                        <button class="btn btn-xs btn-default"
+                                (click)="deleteVariable(variable.name)"
+                                [title]="'cockpit.processDetail.actions.delete' | translate">
+                          <fa-icon [icon]="faTrash"></fa-icon>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <div class="no-data" *ngIf="filteredVariables.length === 0 && variables.length > 0">
+                <fa-icon [icon]="faInfoCircle" style="font-size: 1.5rem; opacity: 0.5;"></fa-icon>
+                {{ 'cockpit.processDetail.variables.noMatchingVariables' | translate }}
+              </div>
+              <div class="no-data" *ngIf="variables.length === 0">
+                <fa-icon [icon]="faInfoCircle" style="font-size: 1.5rem; opacity: 0.5;"></fa-icon>
+                {{ 'cockpit.processDetail.noVariables' | translate }}
+              </div>
+            </div>
+          </div>
+
+          <!-- Incidents Tab -->
+          <div class="tab-pane incidents-tab" *ngIf="activeTab === 'incidents'">
+            <div class="table-scroll-wrapper">
+              <table class="cam-table" *ngIf="incidents.length > 0">
+                <thead>
+                  <tr>
+                    <th>{{ 'cockpit.processDetail.incidents.type' | translate }}</th>
+                    <th>{{ 'cockpit.processDetail.incidents.message' | translate }}</th>
+                    <th>{{ 'cockpit.processDetail.incidents.activity' | translate }}</th>
+                    <th>{{ 'cockpit.processDetail.incidents.createTime' | translate }}</th>
+                    <th class="actions" *ngIf="isProcessRunning()"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let incident of incidents">
+                    <td class="incident-type">
+                      <fa-icon [icon]="faExclamationTriangle" class="incident-icon"></fa-icon>
+                      {{ incident.incidentType }}
+                    </td>
+                    <td class="incident-message">
+                      <span [title]="incident.incidentMessage">{{ incident.incidentMessage }}</span>
+                    </td>
+                    <td class="incident-activity">
+                      <a (click)="selectActivity(incident.activityId)" class="activity-link">
+                        {{ incident.activityId }}
+                      </a>
+                    </td>
+                    <td class="incident-time">{{ formatDate(incident.createTime) }}</td>
+                    <td class="actions" *ngIf="isProcessRunning()">
+                      <button class="btn btn-xs btn-default"
+                              *ngIf="incident.incidentType === 'failedJob'"
+                              (click)="retryIncident(incident)"
+                              [title]="'cockpit.processDetail.actions.retry' | translate">
+                        <fa-icon [icon]="faRedo"></fa-icon>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <div class="no-data no-incidents" *ngIf="incidents.length === 0">
+                <fa-icon [icon]="faCheckCircle" class="success-icon"></fa-icon>
+                {{ 'cockpit.processDetail.noIncidents' | translate }}
+              </div>
+            </div>
+          </div>
+
+          <!-- Called Process Instances Tab -->
+          <div class="tab-pane" *ngIf="activeTab === 'calledInstances'">
+            <div class="table-scroll-wrapper">
+              <table class="cam-table" *ngIf="calledInstances.length > 0">
+                <thead>
+                  <tr>
+                    <th>{{ 'cockpit.processDetail.calledInstances.state' | translate }}</th>
+                    <th>{{ 'cockpit.processDetail.calledInstances.id' | translate }}</th>
+                    <th>{{ 'cockpit.processDetail.calledInstances.definition' | translate }}</th>
+                    <th>{{ 'cockpit.processDetail.calledInstances.activity' | translate }}</th>
+                    <th>{{ 'cockpit.processDetail.calledInstances.businessKey' | translate }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let instance of calledInstances">
+                    <td class="instance-state">
+                      <span class="state-indicator" [ngClass]="getStateClass(instance.state)">
+                        <fa-icon [icon]="getStateIcon(instance.state)"></fa-icon>
+                      </span>
+                    </td>
+                    <td class="instance-id">
+                      <a [routerLink]="['/cockpit/processes/instance', instance.id]">
+                        {{ instance.id }}
+                      </a>
+                    </td>
+                    <td class="instance-definition">
+                      {{ instance.processDefinitionName || instance.processDefinitionKey }}
+                    </td>
+                    <td class="instance-activity">
+                      {{ instance.activityId || '-' }}
+                    </td>
+                    <td class="instance-business-key">
+                      {{ instance.businessKey || '-' }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <div class="no-data" *ngIf="calledInstances.length === 0">
+                {{ 'cockpit.processDetail.noCalledInstances' | translate }}
+              </div>
+            </div>
+          </div>
+
+          <!-- User Tasks Tab -->
+          <div class="tab-pane" *ngIf="activeTab === 'userTasks'">
+            <div class="table-scroll-wrapper">
+              <table class="cam-table" *ngIf="userTasks.length > 0">
+                <thead>
+                  <tr>
+                    <th>{{ 'cockpit.processDetail.userTasks.activity' | translate }}</th>
+                    <th>{{ 'cockpit.processDetail.userTasks.assignee' | translate }}</th>
+                    <th>{{ 'cockpit.processDetail.userTasks.owner' | translate }}</th>
+                    <th>{{ 'cockpit.processDetail.userTasks.created' | translate }}</th>
+                    <th>{{ 'cockpit.processDetail.userTasks.due' | translate }}</th>
+                    <th>{{ 'cockpit.processDetail.userTasks.followUp' | translate }}</th>
+                    <th>{{ 'cockpit.processDetail.userTasks.priority' | translate }}</th>
+                    <th>{{ 'cockpit.processDetail.userTasks.delegationState' | translate }}</th>
+                    <th>{{ 'cockpit.processDetail.userTasks.taskId' | translate }}</th>
+                    <th class="actions"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let task of userTasks">
+                    <td class="task-activity">{{ task.name }}</td>
+                    <td class="task-assignee">
+                      <ng-container *ngIf="editingTaskAssignee !== task.id">
+                        <span *ngIf="task.assignee">{{ task.assignee }}</span>
+                        <span *ngIf="!task.assignee" class="null-value">-</span>
+                        <button class="btn btn-xs btn-link"
+                                *ngIf="isProcessRunning()"
+                                (click)="startEditTaskAssignee(task)">
+                          <fa-icon [icon]="faEdit"></fa-icon>
+                        </button>
+                      </ng-container>
+                      <div class="inline-edit" *ngIf="editingTaskAssignee === task.id">
+                        <app-user-autocomplete
+                          [initialValue]="editingTaskAssigneeValue"
+                          [placeholder]="'cockpit.processDetail.userTasks.searchUser' | translate"
+                          (userSelected)="onTaskAssigneeSelected(task, $event)"
+                          (cancelled)="cancelEditTaskAssignee()"
+                        ></app-user-autocomplete>
+                      </div>
+                    </td>
+                    <td class="task-owner">{{ task.owner || '-' }}</td>
+                    <td class="task-created">{{ formatDate(task.created) }}</td>
+                    <td class="task-due">{{ formatDate(task.due) }}</td>
+                    <td class="task-followup">{{ formatDate(task.followUp) }}</td>
+                    <td class="task-priority">{{ task.priority }}</td>
+                    <td class="task-delegation">{{ task.delegationState || '-' }}</td>
+                    <td class="task-id">
+                      <a [href]="getTasklistUrl(task)" target="_blank" class="task-link">
+                        {{ task.id }}
+                      </a>
+                    </td>
+                    <td class="actions">
+                      <div class="btn-group">
+                        <button class="btn btn-xs btn-default"
+                                [title]="'cockpit.processDetail.userTasks.manageGroups' | translate"
+                                (click)="openIdentityLinksModal(task, 'group')">
+                          <fa-icon [icon]="faUsers"></fa-icon>
+                        </button>
+                        <button class="btn btn-xs btn-default"
+                                [title]="'cockpit.processDetail.userTasks.manageUsers' | translate"
+                                (click)="openIdentityLinksModal(task, 'user')">
+                          <fa-icon [icon]="faUser"></fa-icon>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <div class="no-data" *ngIf="userTasks.length === 0">
+                {{ 'cockpit.processDetail.noUserTasks' | translate }}
+              </div>
+            </div>
+          </div>
+
+          <!-- Jobs Tab -->
+          <div class="tab-pane" *ngIf="activeTab === 'jobs'">
+            <div class="table-scroll-wrapper">
+              <table class="cam-table" *ngIf="jobs.length > 0">
+                <thead>
+                  <tr>
+                    <th>{{ 'cockpit.processDetail.jobs.id' | translate }}</th>
+                    <th>{{ 'cockpit.processDetail.jobs.dueDate' | translate }}</th>
+                    <th>{{ 'cockpit.processDetail.jobs.createTime' | translate }}</th>
+                    <th>{{ 'cockpit.processDetail.jobs.retries' | translate }}</th>
+                    <th>{{ 'cockpit.processDetail.jobs.activity' | translate }}</th>
+                    <th>{{ 'cockpit.processDetail.jobs.failedActivityId' | translate }}</th>
+                    <th class="actions"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let job of jobs" [class.failed]="job.retries === 0">
+                    <td class="job-id">{{ job.id }}</td>
+                    <td class="job-due-date">{{ formatDate(job.dueDate) }}</td>
+                    <td class="job-create-time">{{ formatDate(job.createTime) }}</td>
+                    <td class="job-retries">
+                      <span [class.retries-zero]="job.retries === 0">{{ job.retries }}</span>
+                    </td>
+                    <td class="job-activity">
+                      <a *ngIf="job.activityId"
+                         (click)="selectActivity(job.activityId)"
+                         class="activity-link">
+                        {{ job.activityId }}
+                      </a>
+                      <span *ngIf="!job.activityId">-</span>
+                    </td>
+                    <td class="job-failed-activity">{{ job.failedActivityId || '-' }}</td>
+                    <td class="actions">
+                      <div class="btn-group">
+                        <!-- Resume/Suspend -->
+                        <button class="btn btn-xs btn-default"
+                                *ngIf="job.suspended"
+                                (click)="resumeJob(job)"
+                                [title]="'cockpit.processDetail.jobs.resume' | translate">
+                          <fa-icon [icon]="faPlay"></fa-icon>
+                        </button>
+                        <button class="btn btn-xs btn-default"
+                                *ngIf="!job.suspended && isProcessRunning()"
+                                (click)="suspendJob(job)"
+                                [title]="'cockpit.processDetail.jobs.suspend' | translate">
+                          <fa-icon [icon]="faPause"></fa-icon>
+                        </button>
+                        <!-- Recalculate due date -->
+                        <button class="btn btn-xs btn-default"
+                                *ngIf="isProcessRunning()"
+                                (click)="recalculateJobDueDate(job)"
+                                [title]="'cockpit.processDetail.jobs.recalculateDueDate' | translate">
+                          <fa-icon [icon]="faClock"></fa-icon>
+                        </button>
+                        <!-- Retry -->
+                        <button class="btn btn-xs btn-default"
+                                *ngIf="job.retries === 0"
+                                (click)="retryJob(job.id)"
+                                [title]="'cockpit.processDetail.actions.retry' | translate">
+                          <fa-icon [icon]="faRedo"></fa-icon>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <div class="no-data" *ngIf="jobs.length === 0">
+                {{ 'cockpit.processDetail.noJobs' | translate }}
+              </div>
+            </div>
+          </div>
+
+          <!-- External Tasks Tab -->
+          <div class="tab-pane" *ngIf="activeTab === 'externalTasks'">
+            <div class="table-scroll-wrapper">
+              <table class="cam-table" *ngIf="externalTasks.length > 0">
+                <thead>
+                  <tr>
+                    <th>{{ 'cockpit.processDetail.externalTasks.id' | translate }}</th>
+                    <th>{{ 'cockpit.processDetail.externalTasks.activity' | translate }}</th>
+                    <th>{{ 'cockpit.processDetail.externalTasks.retries' | translate }}</th>
+                    <th>{{ 'cockpit.processDetail.externalTasks.workerId' | translate }}</th>
+                    <th>{{ 'cockpit.processDetail.externalTasks.lockExpiration' | translate }}</th>
+                    <th>{{ 'cockpit.processDetail.externalTasks.topic' | translate }}</th>
+                    <th>{{ 'cockpit.processDetail.externalTasks.priority' | translate }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let task of externalTasks">
+                    <td class="external-task-id">{{ task.id }}</td>
+                    <td class="external-task-activity">
+                      <a (click)="selectActivity(task.activityId)" class="activity-link">
+                        {{ task.activityId }}
+                      </a>
+                    </td>
+                    <td class="external-task-retries">{{ task.retries }}</td>
+                    <td class="external-task-worker">{{ task.workerId || '-' }}</td>
+                    <td class="external-task-lock">{{ formatDate(task.lockExpirationTime) }}</td>
+                    <td class="external-task-topic">{{ task.topicName }}</td>
+                    <td class="external-task-priority">{{ task.priority }}</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <div class="no-data" *ngIf="externalTasks.length === 0">
+                {{ 'cockpit.processDetail.noExternalTasks' | translate }}
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cancel Dialog -->
+  <app-confirm-dialog
+    *ngIf="showCancelDialog"
+    [title]="'cockpit.processDetail.dialogs.cancelTitle' | translate"
+    [message]="'cockpit.processDetail.dialogs.cancelMessage' | translate"
+    [confirmLabel]="'cockpit.processDetail.actions.cancel' | translate"
+    [cancelLabel]="'common.cancel' | translate"
+    [isDanger]="true"
+    [showInput]="true"
+    [inputLabel]="'cockpit.processDetail.dialogs.cancelReason' | translate"
+    [(inputValue)]="cancelReason"
+    (confirm)="cancelInstance()"
+    (cancel)="showCancelDialog = false"
+  ></app-confirm-dialog>
+
+  <!-- Suspend Dialog -->
+  <app-confirm-dialog
+    *ngIf="showSuspendDialog"
+    [title]="'cockpit.processDetail.dialogs.suspendTitle' | translate"
+    [message]="'cockpit.processDetail.dialogs.suspendMessage' | translate"
+    [confirmLabel]="'cockpit.processDetail.actions.suspend' | translate"
+    [cancelLabel]="'common.cancel' | translate"
+    [isDanger]="false"
+    (confirm)="suspendInstance()"
+    (cancel)="showSuspendDialog = false"
+  ></app-confirm-dialog>
+</div>

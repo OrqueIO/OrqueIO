@@ -1,0 +1,424 @@
+/* ==========================================================
+   TASK LIST COMPONENT - Camunda 8 / Material Design Style
+   ========================================================== */
+
+/* Host element - CRITICAL for proper height inheritance */
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  min-height: 0;  /* Essential for flex children to scroll */
+  overflow: hidden;
+}
+
+/* Main container */
+.task-list-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;  /* Fill available space */
+  height: 100%;
+  width: 100%;
+  min-height: 0;  /* Critical for nested flex scrolling */
+  background: #f8fafc;
+  overflow: hidden;
+}
+
+/* ==================== PAGINATION HEADER ==================== */
+.task-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+  flex-shrink: 0;
+}
+
+.pagination-info {
+  font-size: 13px;
+  color: #64748b;
+  font-weight: 400;
+}
+
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pagination-page {
+  font-size: 13px;
+  font-weight: 500;
+  color: #334155;
+  min-width: 56px;
+  text-align: center;
+  padding: 0 8px;
+}
+
+.btn-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-nav:hover:not(:disabled) {
+  border-color: #3b82f6;
+  color: #3b82f6;
+  background: #eff6ff;
+}
+
+.btn-nav:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ==================== SCROLL AREA ==================== */
+.task-scroll-area {
+  flex: 1;
+  min-height: 0;  /* CRITICAL: Forces flex to calculate proper height for scrolling */
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 12px;
+  position: relative;  /* For loading overlay positioning */
+
+  /* Modern thin scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148, 163, 184, 0.4) transparent;
+}
+
+.task-scroll-area::-webkit-scrollbar {
+  width: 6px;
+}
+
+.task-scroll-area::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.4);
+  border-radius: 3px;
+}
+
+.task-scroll-area::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.6);
+}
+
+.task-scroll-area::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* ==================== EMPTY/LOADING STATES ==================== */
+.empty-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  color: #64748b;
+  font-size: 14px;
+  gap: 16px;
+  height: 100%;
+}
+
+.empty-message.error {
+  color: #dc2626;
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #e2e8f0;
+  border-top-color: #3b82f6;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loading-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.85);
+  z-index: 10;
+  backdrop-filter: blur(2px);
+}
+
+/* ==================== TASK CARD ==================== */
+.task-card {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  background: #ffffff;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+.task-card:last-child {
+  margin-bottom: 0;
+}
+
+.task-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.04);
+  transform: translateY(-1px);
+}
+
+/* Selected Task - Clear visual distinction */
+.task-card.selected {
+  background: linear-gradient(to right, #eff6ff, #ffffff);
+  border-color: #3b82f6;
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.15), 0 2px 4px rgba(59, 130, 246, 0.1);
+}
+
+.task-card.selected .task-priority-bar {
+  width: 5px;
+  background: linear-gradient(180deg, #3b82f6 0%, #60a5fa 100%) !important;
+}
+
+/* ==================== PRIORITY BAR (Accent Bar) ==================== */
+.task-priority-bar {
+  width: 4px;
+  flex-shrink: 0;
+  background: #e2e8f0;
+  transition: all 0.2s ease;
+  border-radius: 4px 0 0 4px;
+}
+
+.task-priority-bar.high {
+  background: linear-gradient(180deg, #ef4444 0%, #f87171 100%);
+}
+
+.task-priority-bar.normal {
+  background: linear-gradient(180deg, #3b82f6 0%, #60a5fa 100%);
+}
+
+.task-priority-bar.low {
+  background: linear-gradient(180deg, #22c55e 0%, #4ade80 100%);
+}
+
+/* ==================== TASK CONTENT ==================== */
+.task-content {
+  flex: 1;
+  padding: 14px 16px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Header Row - Task Name + Badge */
+.task-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.task-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1e293b;
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+  min-width: 0;
+}
+
+.task-card:hover .task-name {
+  color: #3b82f6;
+}
+
+.task-card.selected .task-name {
+  color: #1d4ed8;
+  font-weight: 600;
+}
+
+/* Priority Badge - Soft background, right aligned */
+.priority-badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 16px;
+  background: #f1f5f9;
+  color: #64748b;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.priority-badge.high {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.priority-badge.normal {
+  background: #eff6ff;
+  color: #3b82f6;
+}
+
+.priority-badge.low {
+  background: #f0fdf4;
+  color: #16a34a;
+}
+
+/* Process Name - Secondary info */
+.task-process {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #64748b;
+  overflow: hidden;
+}
+
+.task-process svg {
+  flex-shrink: 0;
+  opacity: 0.5;
+}
+
+.task-process span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Metadata Row - Muted smaller text */
+.task-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 4px;
+}
+
+.meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+.meta-item svg {
+  flex-shrink: 0;
+  opacity: 0.6;
+  width: 14px;
+  height: 14px;
+}
+
+.meta-item.assignee {
+  color: #3b82f6;
+  font-weight: 500;
+}
+
+.meta-item.assignee svg {
+  opacity: 0.8;
+}
+
+.meta-item.due-date {
+  color: #64748b;
+}
+
+.meta-item.due-date.overdue {
+  color: #dc2626;
+}
+
+.meta-item.due-date.overdue svg {
+  color: #dc2626;
+  opacity: 1;
+}
+
+.meta-item.created {
+  color: #94a3b8;
+}
+
+/* ==================== EXPAND BUTTON ==================== */
+.btn-expand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  flex-shrink: 0;
+  border: none;
+  background: transparent;
+  color: #cbd5e1;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  opacity: 0;
+  margin-right: 4px;
+}
+
+.task-card:hover .btn-expand {
+  opacity: 1;
+  color: #94a3b8;
+}
+
+.btn-expand:hover {
+  color: #3b82f6;
+  background: #eff6ff;
+  border-radius: 6px;
+}
+
+.task-card.expanded .btn-expand {
+  opacity: 1;
+  color: #3b82f6;
+}
+
+/* ==================== FOCUS STATES (Accessibility) ==================== */
+.task-card:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+.btn-nav:focus-visible,
+.btn-expand:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* ==================== EXPANDED CONTENT ==================== */
+.task-expanded-content {
+  width: 100%;
+  flex-basis: 100%;
+  padding: 0 16px 14px 20px;
+  border-top: 1px solid #e2e8f0;
+  margin-top: 0;
+  background: #fafbfc;
+  animation: expandContent 0.2s ease;
+}
+
+@keyframes expandContent {
+  from {
+    opacity: 0;
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 500px;
+  }
+}
+
+.task-card.expanded {
+  border-color: #e2e8f0;
+}
+
+.task-card.expanded .task-priority-bar {
+  align-self: flex-start;
+  height: auto;
+  min-height: 100%;
+}

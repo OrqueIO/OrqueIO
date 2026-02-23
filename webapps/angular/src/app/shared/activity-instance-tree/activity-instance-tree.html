@@ -1,0 +1,63 @@
+<div class="activity-tree">
+  <ng-container *ngIf="treeNodes.length > 0; else emptyState">
+    <ng-container *ngFor="let node of treeNodes">
+      <ng-container *ngTemplateOutlet="treeNodeTemplate; context: { node: node, level: 0 }"></ng-container>
+    </ng-container>
+  </ng-container>
+
+  <ng-template #emptyState>
+    <div class="empty-state">
+      <span>No activities</span>
+    </div>
+  </ng-template>
+</div>
+
+<!-- Recursive tree node template -->
+<ng-template #treeNodeTemplate let-node="node" let-level="level">
+  <div
+    class="tree-node"
+    [class.selected]="isSelected(node)"
+    [class.has-children]="node.children.length > 0"
+    [style.padding-left.px]="level * 20 + 8"
+    (click)="selectActivity(node, $event)"
+    (mouseenter)="onMouseEnter(node)"
+    (mouseleave)="onMouseLeave()"
+  >
+    <!-- Expand/collapse toggle -->
+    <button
+      *ngIf="node.children.length > 0"
+      class="expand-btn"
+      (click)="toggleExpand(node, $event)"
+    >
+      <fa-icon [icon]="node.expanded ? faChevronDown : faChevronRight"></fa-icon>
+    </button>
+    <span *ngIf="node.children.length === 0" class="expand-placeholder"></span>
+
+    <!-- State indicator -->
+    <span class="state-indicator" [ngClass]="getStateClass(node.state)">
+      <fa-icon [icon]="getStateIcon(node.state)" [animation]="node.state === 'running' ? 'spin' : undefined"></fa-icon>
+    </span>
+
+    <!-- Activity icon -->
+    <span class="activity-icon">
+      <fa-icon [icon]="getActivityIcon(node.activityType)"></fa-icon>
+    </span>
+
+    <!-- Activity name -->
+    <span class="activity-name">
+      {{ node.activityName || node.activityId }}
+    </span>
+
+    <!-- Incident indicator -->
+    <span *ngIf="node.hasIncidents" class="incident-indicator" title="Has incidents">
+      <fa-icon [icon]="faExclamationTriangle"></fa-icon>
+    </span>
+  </div>
+
+  <!-- Children -->
+  <ng-container *ngIf="node.expanded && node.children.length > 0">
+    <ng-container *ngFor="let child of node.children">
+      <ng-container *ngTemplateOutlet="treeNodeTemplate; context: { node: child, level: level + 1 }"></ng-container>
+    </ng-container>
+  </ng-container>
+</ng-template>

@@ -1,0 +1,120 @@
+/* Group List - Unified with Cockpit Design */
+
+:host {
+  display: block;
+  height: 100%;
+  overflow: auto;
+}
+
+/* Admin Layout */
+.admin-layout {
+  min-height: 100%;
+  background: var(--bg-page);
+}
+
+.admin-main {
+  display: block;
+}
+
+.page-content {
+  padding: var(--space-6);
+}
+
+/* Header sticky */
+app-admin-page-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--bg-page);
+}
+
+/* Toolbar */
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-4);
+  gap: var(--space-4);
+  flex-shrink: 0;
+}
+
+/* Results Info */
+.results-info {
+  display: flex;
+  align-items: center;
+  padding: var(--space-4) var(--space-5);
+  margin-bottom: 0;
+  background: var(--color-gray-50);
+  border: 1px solid var(--border-color-light);
+  border-bottom: none;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  flex-shrink: 0;
+}
+
+.results-title {
+  margin: 0;
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  line-height: 1.4;
+}
+
+/* Create Button */
+.btn-create {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+  color: var(--text-inverse);
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  box-shadow: var(--shadow-sm);
+  white-space: nowrap;
+}
+
+.btn-create:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+/* Action Icon Button */
+.btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  background: var(--color-gray-100);
+  color: var(--text-secondary);
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.btn-icon:hover {
+  background: var(--color-primary);
+  color: var(--text-inverse);
+}
+
+.btn-icon--danger:hover {
+  background: var(--color-danger, #dc2626);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .page-content {
+    padding: var(--space-4);
+  }
+
+  .toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

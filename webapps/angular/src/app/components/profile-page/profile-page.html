@@ -1,0 +1,241 @@
+<div class="profile-layout" *ngIf="!loading">
+  <main class="profile-main">
+    <!-- Page Header -->
+    <header class="page-header">
+      <div class="header-left">
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <ol class="breadcrumb-list">
+            <li class="breadcrumb-item">
+              <a routerLink="/" class="breadcrumb-link">
+                <fa-icon [icon]="faHome"></fa-icon>
+              </a>
+            </li>
+            <li class="breadcrumb-separator">
+              <fa-icon [icon]="faChevronRight"></fa-icon>
+            </li>
+            <li class="breadcrumb-item active">
+              <span class="breadcrumb-text">{{ 'MY_PROFILE' | translate }}</span>
+            </li>
+          </ol>
+        </nav>
+
+        <!-- User Info -->
+        <div class="user-info-header">
+          <div class="user-avatar">
+            {{ getInitials() }}
+          </div>
+          <div class="user-details">
+            <h1 class="user-name">{{ getFullName() }}</h1>
+            <span class="user-email" *ngIf="email">{{ email }}</span>
+            <span class="user-id" *ngIf="!email">{{ userId }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button class="action-btn" (click)="refresh()" [title]="'common.refresh' | translate">
+          <fa-icon [icon]="faSync"></fa-icon>
+        </button>
+      </div>
+    </header>
+
+    <div class="page-content">
+      <!-- Main Layout -->
+      <div class="main-layout">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+          <nav class="nav-menu">
+            <button
+              class="nav-item"
+              [class.active]="activeSection === 'profile'"
+              (click)="setActiveSection('profile')">
+              <span class="nav-icon">
+                <fa-icon [icon]="faUser"></fa-icon>
+              </span>
+              <span class="nav-label">{{ 'profile.nav.info' | translate }}</span>
+            </button>
+            <button
+              class="nav-item"
+              [class.active]="activeSection === 'security'"
+              (click)="setActiveSection('security')">
+              <span class="nav-icon">
+                <fa-icon [icon]="faShield"></fa-icon>
+              </span>
+              <span class="nav-label">{{ 'profile.nav.security' | translate }}</span>
+            </button>
+          </nav>
+
+          <!-- Logout in Sidebar -->
+          <div class="sidebar-footer">
+            <button class="nav-item danger" (click)="logout()">
+              <span class="nav-icon">
+                <fa-icon [icon]="faSignOut"></fa-icon>
+              </span>
+              <span class="nav-label">{{ 'LOGOUT' | translate }}</span>
+            </button>
+          </div>
+        </aside>
+
+        <!-- Content Area -->
+        <main class="content-area">
+          <!-- Profile Section -->
+          <section *ngIf="activeSection === 'profile'" class="section" [@fadeIn]>
+            <div class="section-card">
+              <div class="card-header">
+                <div class="card-title">
+                  <h2>{{ 'profile.personalInfo' | translate }}</h2>
+                  <p>{{ 'profile.personalInfoDesc' | translate }}</p>
+                </div>
+              </div>
+              <div class="card-body">
+                <form [formGroup]="profileForm" (ngSubmit)="saveProfile()">
+                  <div class="form-grid">
+                    <div class="form-field">
+                      <label for="firstName">{{ 'profile.firstName' | translate }}</label>
+                      <input
+                        id="firstName"
+                        type="text"
+                        formControlName="firstName"
+                        [class.saving]="savingProfile" />
+                    </div>
+                    <div class="form-field">
+                      <label for="lastName">{{ 'profile.lastName' | translate }}</label>
+                      <input
+                        id="lastName"
+                        type="text"
+                        formControlName="lastName"
+                        [class.saving]="savingProfile" />
+                    </div>
+                  </div>
+                  <div class="form-field">
+                    <label for="email">{{ 'profile.email' | translate }}</label>
+                    <input
+                      id="email"
+                      type="email"
+                      formControlName="email"
+                      [class.invalid]="profileForm.get('email')?.invalid && profileForm.get('email')?.touched"
+                      [class.saving]="savingProfile" />
+                    <span class="field-error" *ngIf="profileForm.get('email')?.invalid && profileForm.get('email')?.touched">
+                      {{ 'profile.invalidEmail' | translate }}
+                    </span>
+                  </div>
+                  <div class="form-field readonly">
+                    <label>{{ 'profile.userId' | translate }}</label>
+                    <div class="readonly-value">{{ userId }}</div>
+                    <span class="field-hint">{{ 'profile.userIdHint' | translate }}</span>
+                  </div>
+                  <div class="card-actions">
+                    <button
+                      type="button"
+                      class="btn btn-secondary"
+                      (click)="resetProfileForm()"
+                      [disabled]="!profileForm.dirty || savingProfile">
+                      {{ 'CANCEL' | translate }}
+                    </button>
+                    <button
+                      type="submit"
+                      class="btn btn-primary"
+                      [disabled]="!profileForm.dirty || !profileForm.valid || savingProfile">
+                      <span class="btn-content" [class.hidden]="savingProfile">
+                        <fa-icon [icon]="faSave"></fa-icon>
+                        {{ 'SAVE_CHANGES' | translate }}
+                      </span>
+                      <span class="btn-loader" *ngIf="savingProfile">
+                        <span class="spinner-small"></span>
+                        {{ 'SAVING' | translate }}...
+                      </span>
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </section>
+
+          <!-- Security Section -->
+          <section *ngIf="activeSection === 'security'" class="section" [@fadeIn]>
+            <!-- Password Card -->
+            <div class="section-card">
+              <div class="card-header">
+                <div class="card-title">
+                  <h2>{{ 'profile.changePassword' | translate }}</h2>
+                  <p>{{ 'profile.changePasswordDesc' | translate }}</p>
+                </div>
+              </div>
+              <div class="card-body">
+                <form [formGroup]="passwordForm" (ngSubmit)="updatePassword()">
+                  <div class="form-field">
+                    <label for="currentPassword">{{ 'profile.currentPassword' | translate }}</label>
+                    <input
+                      id="currentPassword"
+                      type="password"
+                      formControlName="currentPassword"
+                      autocomplete="current-password" />
+                    <span class="field-hint">{{ 'profile.currentPasswordHint' | translate }}</span>
+                  </div>
+                  <div class="form-divider"></div>
+                  <div class="form-grid">
+                    <div class="form-field">
+                      <label for="newPassword">{{ 'profile.newPassword' | translate }}</label>
+                      <input
+                        id="newPassword"
+                        type="password"
+                        formControlName="newPassword"
+                        autocomplete="new-password"
+                        [class.invalid]="passwordForm.get('newPassword')?.invalid && passwordForm.get('newPassword')?.touched" />
+                      <span class="field-error" *ngIf="passwordForm.get('newPassword')?.hasError('minlength') && passwordForm.get('newPassword')?.touched">
+                        {{ 'profile.passwordMinLength' | translate }}
+                      </span>
+                    </div>
+                    <div class="form-field">
+                      <label for="confirmPassword">{{ 'profile.confirmPassword' | translate }}</label>
+                      <input
+                        id="confirmPassword"
+                        type="password"
+                        formControlName="confirmPassword"
+                        autocomplete="new-password"
+                        [class.invalid]="passwordForm.hasError('passwordMismatch') && passwordForm.get('confirmPassword')?.touched" />
+                      <span class="field-error" *ngIf="passwordForm.hasError('passwordMismatch') && passwordForm.get('confirmPassword')?.touched">
+                        {{ 'profile.passwordsNotMatch' | translate }}
+                      </span>
+                    </div>
+                  </div>
+                  <div class="card-actions">
+                    <button
+                      type="button"
+                      class="btn btn-secondary"
+                      (click)="passwordForm.reset()"
+                      [disabled]="!passwordForm.dirty || savingPassword">
+                      {{ 'CANCEL' | translate }}
+                    </button>
+                    <button
+                      type="submit"
+                      class="btn btn-primary"
+                      [disabled]="!passwordForm.valid || savingPassword">
+                      <span class="btn-content" [class.hidden]="savingPassword">
+                        <fa-icon [icon]="faShield"></fa-icon>
+                        {{ 'profile.updatePassword' | translate }}
+                      </span>
+                      <span class="btn-loader" *ngIf="savingPassword">
+                        <span class="spinner-small"></span>
+                        {{ 'UPDATING' | translate }}...
+                      </span>
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </section>
+        </main>
+      </div>
+      <!-- End Main Layout -->
+    </div>
+    <!-- End Page Content -->
+  </main>
+</div>
+
+<!-- Loading State -->
+<div class="page-loading" *ngIf="loading">
+  <div class="loader"></div>
+  <p>{{ 'LOADING' | translate }}...</p>
+</div>

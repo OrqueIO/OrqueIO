@@ -1,0 +1,37 @@
+<div class="modal-overlay" *ngIf="isOpen" (click)="onOverlayClick($event)">
+  <div class="modal-container">
+    <header class="modal-header">
+      <h2 class="modal-title">{{ 'tasklist.keyboardShortcuts' | translate }}</h2>
+      <button class="btn-close" (click)="onClose()" type="button">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 6L6 18M6 6l12 12"/>
+        </svg>
+      </button>
+    </header>
+
+    <div class="modal-body">
+      <table class="shortcuts-table">
+        <thead>
+          <tr>
+            <th>{{ 'tasklist.shortcutKey' | translate }}</th>
+            <th>{{ 'tasklist.shortcutDescription' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let shortcut of shortcuts">
+            <td>
+              <kbd class="shortcut-key">{{ shortcut.key }}</kbd>
+            </td>
+            <td class="shortcut-description">{{ shortcut.description | translate }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <footer class="modal-footer">
+      <button class="btn btn-secondary" (click)="onClose()" type="button">
+        {{ 'common.close' | translate }}
+      </button>
+    </footer>
+  </div>
+</div>

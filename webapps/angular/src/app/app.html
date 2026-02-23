@@ -1,0 +1,8 @@
+<div class="app-container">
+  <app-navbar [showAuth]="true" (logoutClick)="onLogout()"></app-navbar>
+  <main class="main-content">
+    <router-outlet />
+  </main>
+  <app-footer />
+  <app-notifications-panel></app-notifications-panel>
+</div>
