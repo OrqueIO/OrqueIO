@@ -9,11 +9,11 @@ import {
   filtersAdapter
 } from './tasklist.state';
 
-// ==================== FEATURE SELECTOR ====================
+//  FEATURE SELECTOR 
 
 export const selectTasklistState = createFeatureSelector<TasklistState>('tasklist');
 
-// ==================== TASKS SELECTORS ====================
+//  TASKS SELECTORS 
 
 export const selectTasksState = createSelector(
   selectTasklistState,
@@ -83,7 +83,7 @@ export const selectTasksSorting = createSelector(
   (params) => params.sorting || []
 );
 
-// ==================== FILTERS SELECTORS ====================
+//  FILTERS SELECTORS 
 
 export const selectFiltersState = createSelector(
   selectTasklistState,
@@ -93,7 +93,7 @@ export const selectFiltersState = createSelector(
 const { selectAll: selectAllFiltersFromAdapter, selectEntities: selectFilterEntitiesFromAdapter } =
   filtersAdapter.getSelectors();
 
-// Filters sorted by priority (ascending - lower priority number comes first)
+// Filters sorted by priority 
 export const selectAllFilters = createSelector(
   selectFiltersState,
   (state) => {
@@ -142,7 +142,7 @@ export const selectCanCreateFilter = createSelector(
   (state) => state.canCreate
 );
 
-// ==================== TASK DETAIL SELECTORS ====================
+//  TASK DETAIL SELECTORS 
 
 export const selectTaskDetailState = createSelector(
   selectTasklistState,
@@ -184,13 +184,13 @@ export const selectTaskDetailError = createSelector(
   (state) => state.error
 );
 
-// Error type selector (AngularJS parity - TASK_NOT_EXIST, INSTANCE_SUSPENDED)
+// Error type selector 
 export const selectTaskDetailErrorType = createSelector(
   selectTaskDetailState,
   (state) => state.errorType
 );
 
-// Instance suspended selector (AngularJS parity)
+// Instance suspended selector 
 export const selectInstanceSuspended = createSelector(
   selectTaskDetailState,
   (state) => state.instanceSuspended
@@ -212,14 +212,13 @@ export const selectTaskCandidateUsers = createSelector(
   (links) => links.filter(l => l.type === 'candidate' && l.userId)
 );
 
-// Check if task actions should be disabled (suspended or no task)
 export const selectTaskActionsDisabled = createSelector(
   selectTaskDetail,
   selectInstanceSuspended,
   (task, suspended) => !task || suspended
 );
 
-// ==================== UI SELECTORS ====================
+//  UI SELECTORS 
 
 export const selectUIState = createSelector(
   selectTasklistState,
@@ -241,7 +240,7 @@ export const selectDetailCollapsed = createSelector(
   (state) => state.detailCollapsed
 );
 
-// Column maximize selector (AngularJS parity)
+// Column maximize selector 
 export const selectMaximizedColumn = createSelector(
   selectUIState,
   (state) => state.maximizedColumn
@@ -257,19 +256,25 @@ export const selectSearchPills = createSelector(
   (state) => state.searchPills
 );
 
-// OR query mode selector (AngularJS matchAny)
+// OR query mode selector 
 export const selectMatchAny = createSelector(
   selectUIState,
   (state) => state.matchAny
 );
 
-// Check if search is active (has pills)
+// Check if search is active 
 export const selectIsSearchActive = createSelector(
   selectSearchPills,
   (pills) => pills.length > 0
 );
 
-// ==================== COMBINED SELECTORS ====================
+// Filter variables selector for search suggestions
+export const selectFilterVariables = createSelector(
+  selectSelectedFilter,
+  (filter) => filter?.properties?.variables || []
+);
+
+//  COMBINED SELECTORS 
 
 export const selectTasklistViewModel = createSelector(
   selectAllTasks,
@@ -287,8 +292,11 @@ export const selectTasklistViewModel = createSelector(
   selectMaximizedColumn,
   selectSearchPills,
   selectMatchAny,
+  selectFilterVariables,
+  selectSelectedFilter,
   (tasks, total, loading, selectedTaskId, page, pageSize, filters, selectedFilterId, filterCount,
-   filtersCollapsed, listCollapsed, detailCollapsed, maximizedColumn, searchPills, matchAny) => ({
+   filtersCollapsed, listCollapsed, detailCollapsed, maximizedColumn, searchPills, matchAny,
+   filterVariables, selectedFilter) => ({
     tasks,
     total,
     loading,
@@ -303,12 +311,8 @@ export const selectTasklistViewModel = createSelector(
     detailCollapsed,
     maximizedColumn,
     searchPills,
-    matchAny
+    matchAny,
+    filterVariables,
+    showUndefinedVariable: selectedFilter?.properties?.showUndefinedVariable ?? false
   })
-);
-
-// Filter variables selector for search suggestions (AngularJS parity)
-export const selectFilterVariables = createSelector(
-  selectSelectedFilter,
-  (filter) => filter?.properties?.variables || []
 );

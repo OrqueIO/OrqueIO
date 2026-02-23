@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, catchError } from 'rxjs/operators';
 import { AdminService } from './admin.service';
 import { Tenant, CreateTenantRequest } from '../../models/admin/tenant.model';
 import { TenantQueryParams, PaginatedResponse } from '../../models/admin/query-params.model';
@@ -12,11 +12,31 @@ export class TenantService extends AdminService {
   private readonly tenantUrl = `${this.engineUrl}/tenant`;
 
   /**
+   * Encode tenant ID for URL (handles special characters)
+   */
+  private encodeTenantId(tenantId: string): string {
+    return encodeURIComponent(tenantId);
+  }
+
+  /**
    * Get list of tenants
+   * Includes LDAP fallback: if sorting fails, retry without sort params
    */
   getTenants(queryParams?: TenantQueryParams): Observable<Tenant[]> {
     const params = this.buildParams({ maxResults: 1000, ...queryParams });
-    return this.get<Tenant[]>(this.tenantUrl, params);
+    return this.get<Tenant[]>(this.tenantUrl, params).pipe(
+      catchError(error => {
+        // LDAP fallback: if sorting fails (often with LDAP), retry without sort params
+        if (queryParams?.sortBy || queryParams?.sortOrder) {
+          const fallbackParams = { ...queryParams };
+          delete fallbackParams.sortBy;
+          delete fallbackParams.sortOrder;
+          const paramsWithoutSort = this.buildParams({ maxResults: 1000, ...fallbackParams });
+          return this.get<Tenant[]>(this.tenantUrl, paramsWithoutSort);
+        }
+        throw error;
+      })
+    );
   }
 
   /**
@@ -33,7 +53,7 @@ export class TenantService extends AdminService {
    * Get tenant by ID
    */
   getTenant(tenantId: string): Observable<Tenant> {
-    return this.get<Tenant>(`${this.tenantUrl}/${tenantId}`);
+    return this.get<Tenant>(`${this.tenantUrl}/${this.encodeTenantId(tenantId)}`);
   }
 
   /**
@@ -47,42 +67,42 @@ export class TenantService extends AdminService {
    * Update tenant
    */
   updateTenant(tenantId: string, tenant: Partial<Tenant>): Observable<void> {
-    return this.put<void>(`${this.tenantUrl}/${tenantId}`, tenant);
+    return this.put<void>(`${this.tenantUrl}/${this.encodeTenantId(tenantId)}`, tenant);
   }
 
   /**
    * Delete tenant
    */
   deleteTenant(tenantId: string): Observable<void> {
-    return this.delete<void>(`${this.tenantUrl}/${tenantId}`);
+    return this.delete<void>(`${this.tenantUrl}/${this.encodeTenantId(tenantId)}`);
   }
 
   /**
    * Add user to tenant
    */
   addUserToTenant(tenantId: string, userId: string): Observable<void> {
-    return this.put<void>(`${this.tenantUrl}/${tenantId}/user-members/${userId}`, {});
+    return this.put<void>(`${this.tenantUrl}/${this.encodeTenantId(tenantId)}/user-members/${encodeURIComponent(userId)}`, {});
   }
 
   /**
    * Remove user from tenant
    */
   removeUserFromTenant(tenantId: string, userId: string): Observable<void> {
-    return this.delete<void>(`${this.tenantUrl}/${tenantId}/user-members/${userId}`);
+    return this.delete<void>(`${this.tenantUrl}/${this.encodeTenantId(tenantId)}/user-members/${encodeURIComponent(userId)}`);
   }
 
   /**
    * Add group to tenant
    */
   addGroupToTenant(tenantId: string, groupId: string): Observable<void> {
-    return this.put<void>(`${this.tenantUrl}/${tenantId}/group-members/${groupId}`, {});
+    return this.put<void>(`${this.tenantUrl}/${this.encodeTenantId(tenantId)}/group-members/${encodeURIComponent(groupId)}`, {});
   }
 
   /**
    * Remove group from tenant
    */
   removeGroupFromTenant(tenantId: string, groupId: string): Observable<void> {
-    return this.delete<void>(`${this.tenantUrl}/${tenantId}/group-members/${groupId}`);
+    return this.delete<void>(`${this.tenantUrl}/${this.encodeTenantId(tenantId)}/group-members/${encodeURIComponent(groupId)}`);
   }
 
   /**

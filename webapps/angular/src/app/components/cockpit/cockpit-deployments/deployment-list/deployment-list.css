@@ -428,6 +428,17 @@
   display: block;
 }
 
+.dmn-container {
+  width: 100%;
+  height: 100%;
+}
+
+.dmn-container app-dmn-viewer {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
 .image-container {
   width: 100%;
   height: 100%;

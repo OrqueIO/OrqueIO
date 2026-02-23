@@ -1,4 +1,5 @@
 import { Injectable, inject } from '@angular/core';
+import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { of, forkJoin } from 'rxjs';
@@ -16,7 +17,8 @@ import {
   SearchQuery,
   EXPRESSION_REGEX,
   EXPRESSION_SUPPORTED_FIELDS,
-  ISO_DATE_REGEX
+  ISO_DATE_REGEX,
+  DATE_BASE_MAP
 } from '../../models/tasklist';
 import { TaskQueryParams, VariableFilter } from '../../models/tasklist';
 
@@ -24,14 +26,11 @@ import { TaskQueryParams, VariableFilter } from '../../models/tasklist';
 export class TasklistEffects {
   private readonly actions$ = inject(Actions);
   private readonly store = inject(Store);
+  private readonly router = inject(Router);
   private readonly tasklistService = inject(TasklistService);
 
-  // ==================== SEARCH QUERY BUILDER (matching AngularJS) ====================
+  //  SEARCH QUERY BUILDER 
 
-  /**
-   * Parse value matching AngularJS parseValue function
-   * Handles type coercion: number, boolean, null, quoted strings
-   */
   private parseValue(value: string, enforceString = false): any {
     if (enforceString) {
       return '' + value;
@@ -42,41 +41,55 @@ export class TasklistEffects {
     if (value === 'true') return true;
     if (value === 'false') return false;
     if (value === 'NULL') return null;
-    // Handle quoted strings
     if (value.indexOf("'") === 0 && value.lastIndexOf("'") === value.length - 1) {
       return value.substr(1, value.length - 2);
     }
     return value;
   }
 
-  /**
-   * Sanitize value matching AngularJS sanitizeValue function
-   * Auto-wraps LIKE queries with %, handles IN operator, parses dates
-   */
+
   private sanitizeValue(value: string, operator: string, allowDates = true): any {
-    // Regex for escaped wildcards
     const specialWildCardCharExp = /(\\%)|(\\_)/g;
     const wildCardExp = /(%)|(_)/;
 
     if ((operator.toLowerCase() === 'like' || operator.toLowerCase() === 'notlike') &&
         !wildCardExp.test(value.replace(specialWildCardCharExp, ''))) {
-      // Auto-wrap with % for like queries (matching AngularJS)
       return '%' + value + '%';
     } else if (operator === 'in') {
-      // Split by comma for IN operator
       return value.split(',').map(v => v.trim());
     } else if (allowDates && ISO_DATE_REGEX.test(value)) {
-      // Parse ISO date
       return new Date(value).toISOString();
     }
     return value;
   }
 
-  /**
-   * Sanitize property name matching AngularJS sanitizeProperty function
-   * Handles Like/Before/After suffixes and Expression support
-   */
+
   private sanitizeProperty(key: string, operator: string, value: string): string {
+    // Special case for priority: use dedicated Camunda keys
+    if (key === 'priority') {
+      if (operator === 'gteq') return 'minPriority';
+      if (operator === 'lteq') return 'maxPriority';
+      return 'priority';
+    }
+
+    // followUpBeforeOrNotExistent is a direct API key
+    if (key === 'followUpBeforeOrNotExistent') {
+      if (EXPRESSION_REGEX.test(value)) {
+        return key + 'Expression';
+      }
+      return key;
+    }
+
+    // Date fields: Camunda API uses dueBefore/dueAfter, not dueDateBefore/dueDateAfter
+    const dateBase = DATE_BASE_MAP[key];
+    if (dateBase && ['before', 'after'].includes(operator.toLowerCase())) {
+      let out = dateBase + operator.charAt(0).toUpperCase() + operator.slice(1).toLowerCase();
+      if (EXPRESSION_REGEX.test(value) && EXPRESSION_SUPPORTED_FIELDS.includes(key)) {
+        out += 'Expression';
+      }
+      return out;
+    }
+
     let out = key;
 
     // Add operator suffix for certain operators
@@ -89,17 +102,10 @@ export class TasklistEffects {
       out += 'Expression';
     }
 
-    // Special case for priority
-    if (key === 'priority' && operator !== 'eq') {
-      out = operator + 'Priority';
-    }
-
     return out;
   }
 
-  /**
-   * Build search query from pills matching AngularJS cam-tasklist-search-plugin
-   */
+
   private buildSearchQuery(pills: SearchPill[], matchAny: boolean): SearchQuery {
     const baseQuery: SearchQuery = {};
     let targetQuery: SearchQuery;
@@ -121,7 +127,6 @@ export class TasklistEffects {
       const parsedValue = this.parseValue(pill.value, pill.type === 'string');
       const sanitizedValue = this.sanitizeValue(String(parsedValue), pill.operator);
 
-      // Variable searches
       if (pill.variableType && pill.variableName) {
         const varArray = targetQuery[pill.variableType] as VariableFilter[];
         if (varArray) {
@@ -132,13 +137,11 @@ export class TasklistEffects {
           });
         }
       } else {
-        // Direct property search
         const propertyKey = this.sanitizeProperty(pill.key, pill.operator, String(parsedValue));
         targetQuery[propertyKey] = sanitizedValue;
       }
     }
 
-    // Clean up empty arrays
     if (!matchAny) {
       if ((baseQuery.processVariables as any[])?.length === 0) delete baseQuery.processVariables;
       if ((baseQuery.taskVariables as any[])?.length === 0) delete baseQuery.taskVariables;
@@ -148,7 +151,7 @@ export class TasklistEffects {
     return baseQuery;
   }
 
-  // ==================== TASKS EFFECTS ====================
+  //  TASKS EFFECTS 
 
   loadTasks$ = createEffect(() =>
     this.actions$.pipe(
@@ -160,24 +163,21 @@ export class TasklistEffects {
         this.store.select(selectMatchAny)
       ),
       switchMap(([_, queryParams, filterId, searchPills, matchAny]) => {
-        // Build search query from pills (matching AngularJS)
         const searchQuery = searchPills.length > 0
           ? this.buildSearchQuery(searchPills, matchAny)
           : {};
 
-        // Merge search query with query params
         const combinedParams: TaskQueryParams = {
           ...queryParams,
           ...searchQuery
         };
 
         if (filterId) {
-          // Load tasks from filter with search query
           return forkJoin({
             tasks: this.tasklistService.executeFilter(filterId, {
               firstResult: queryParams.firstResult,
               maxResults: queryParams.maxResults,
-              ...searchQuery // Include search in filter execution
+              ...searchQuery 
             }),
             count: this.tasklistService.executeFilterCount(filterId, searchQuery)
           }).pipe(
@@ -189,7 +189,6 @@ export class TasklistEffects {
             )
           );
         } else {
-          // Load tasks with combined query params
           return forkJoin({
             result: this.tasklistService.getTasks(combinedParams),
             count: this.tasklistService.getTasksCount(combinedParams)
@@ -275,13 +274,43 @@ export class TasklistEffects {
         this.tasklistService.completeTask(taskId, variables).pipe(
           map(() => TasksActions.completeTaskSuccess({ taskId })),
           catchError(error => {
-            // Extract actual error message from server response
             const errorMessage = error.error?.message || error.error?.errorMessage || error.message || 'Failed to complete task';
             return of(TasksActions.completeTaskFailure({ taskId, error: errorMessage }));
           })
         )
       )
     )
+  );
+
+  refreshAfterComplete$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(TasksActions.completeTaskSuccess, TasksActions.completeTaskFailure),
+      map(() => TasksActions.refreshTasks())
+    )
+  );
+
+  clearSelectionAfterComplete$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(TasksActions.completeTaskSuccess),
+      switchMap(() => [
+        TasksActions.clearSelection(),
+        TaskDetailActions.clearTaskDetail()
+      ])
+    )
+  );
+
+  updateUrlAfterComplete$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(TasksActions.completeTaskSuccess),
+      tap(() => {
+        // Get current URL and remove task-related params
+        const urlTree = this.router.parseUrl(this.router.url);
+        delete urlTree.queryParams['task'];
+        delete urlTree.queryParams['detailsTab'];
+        this.router.navigateByUrl(urlTree, { replaceUrl: true });
+      })
+    ),
+    { dispatch: false }
   );
 
   setAssignee$ = createEffect(() =>
@@ -339,7 +368,7 @@ export class TasklistEffects {
     )
   );
 
-  // ==================== FILTERS EFFECTS ====================
+  //  FILTERS EFFECTS 
 
   loadFilters$ = createEffect(() =>
     this.actions$.pipe(
@@ -423,7 +452,7 @@ export class TasklistEffects {
     )
   );
 
-  // ==================== TASK DETAIL EFFECTS ====================
+  //  TASK DETAIL EFFECTS 
 
   loadTaskDetail$ = createEffect(() =>
     this.actions$.pipe(

@@ -10,23 +10,23 @@ import {
   ElementRef,
   ViewChild,
   inject,
-  ChangeDetectorRef
+  ChangeDetectorRef,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subject, fromEvent, interval, takeUntil } from 'rxjs';
 import { TranslatePipe } from '../../../i18n/translate.pipe';
-import { TimeAgoPipe, CamDatePipe } from '../../../pipes';
-import { Task, TaskSorting } from '../../../models/tasklist';
-import { PaginationComponent, PageChangeEvent } from '../../../shared/pagination/pagination';
+import { TimeAgoPipe } from '../../../pipes';
+import { Task, TaskSorting, FilterVariable } from '../../../models/tasklist';
 import { TaskCardComponent } from '../task-card/task-card';
-import { TooltipDirective } from '../../../shared/tooltip/tooltip.directive';
 
 @Component({
   selector: 'app-task-list',
   standalone: true,
-  imports: [CommonModule, TranslatePipe, TimeAgoPipe, CamDatePipe, TooltipDirective, PaginationComponent, TaskCardComponent],
+  imports: [CommonModule, TranslatePipe, TimeAgoPipe, TaskCardComponent],
   templateUrl: './task-list.html',
-  styleUrl: './task-list.css'
+  styleUrl: './task-list.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
   private readonly cdr = inject(ChangeDetectorRef);
@@ -42,6 +42,8 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
   @Input() page = 1;
   @Input() pageSize = 15;
   @Input() sorting: TaskSorting[] = [{ sortBy: 'created', sortOrder: 'desc' }];
+  @Input() filterVariables: FilterVariable[] = [];
+  @Input() showUndefinedVariable = false;
 
   @Output() taskSelect = new EventEmitter<string>();
   @Output() pageChange = new EventEmitter<number>();
@@ -50,6 +52,35 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
 
   expandedTasks: Set<string> = new Set();
   now = new Date();
+
+  get totalPages(): number {
+    return Math.ceil(this.total / this.pageSize) || 1;
+  }
+
+  get startIndex(): number {
+    return this.total > 0 ? (this.page - 1) * this.pageSize + 1 : 0;
+  }
+
+  get endIndex(): number {
+    return Math.min(this.page * this.pageSize, this.total);
+  }
+
+  get canGoPrevious(): boolean {
+    return this.page > 1;
+  }
+
+  get canGoNext(): boolean {
+    return this.page < this.totalPages;
+  }
+
+  goToPage(pageNum: number): void {
+    if (pageNum >= 1 && pageNum <= this.totalPages && pageNum !== this.page) {
+      this.pageChange.emit(pageNum);
+      if (this.taskListContainer?.nativeElement) {
+        this.taskListContainer.nativeElement.scrollTop = 0;
+      }
+    }
+  }
 
   ngOnInit(): void {
     // Listen for keyboard navigation events
@@ -95,16 +126,22 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
   toggleExpand(event: Event, task: Task): void {
     event.stopPropagation();
 
-    if (this.expandedTasks.has(task.id)) {
-      this.expandedTasks.delete(task.id);
+    // Create a new Set to ensure Angular detects the change
+    const newExpandedTasks = new Set(this.expandedTasks);
+
+    if (newExpandedTasks.has(task.id)) {
+      newExpandedTasks.delete(task.id);
       this.taskExpand.emit({ taskId: task.id, expanded: false });
     } else {
-      this.expandedTasks.add(task.id);
+      newExpandedTasks.add(task.id);
       this.taskExpand.emit({ taskId: task.id, expanded: true });
     }
+
+    this.expandedTasks = newExpandedTasks;
+    this.cdr.detectChanges();
   }
 
-  onPageChange(event: PageChangeEvent): void {
+  onPageChange(event: { current: number }): void {
     this.pageChange.emit(event.current);
     // Scroll to top of list
     if (this.taskListContainer?.nativeElement) {

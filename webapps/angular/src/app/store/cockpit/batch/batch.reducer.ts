@@ -5,9 +5,9 @@ import * as BatchActions from './batch.actions';
 export const batchReducer = createReducer(
   initialBatchState,
 
-  // ============================================
+  
   // RUNTIME BATCHES
-  // ============================================
+  
 
   on(BatchActions.loadRuntimeBatches, (state): BatchState => ({
     ...state,
@@ -63,9 +63,9 @@ export const batchReducer = createReducer(
     }
   })),
 
-  // ============================================
+  
   // HISTORY BATCHES
-  // ============================================
+  
 
   on(BatchActions.loadHistoryBatches, (state): BatchState => ({
     ...state,
@@ -119,9 +119,9 @@ export const batchReducer = createReducer(
     }
   })),
 
-  // ============================================
+  
   // BATCH DETAILS (Selection)
-  // ============================================
+  
 
   on(BatchActions.loadBatchDetails, (state, { batchType }): BatchState => ({
     ...state,
@@ -177,9 +177,9 @@ export const batchReducer = createReducer(
     }
   })),
 
-  // ============================================
+  
   // BATCH ACTIONS
-  // ============================================
+  
 
   on(BatchActions.toggleBatchSuspension, (state): BatchState => ({
     ...state,
@@ -219,9 +219,9 @@ export const batchReducer = createReducer(
     error
   })),
 
-  // ============================================
+  
   // FAILED JOBS
-  // ============================================
+  
 
   on(BatchActions.loadFailedJobs, (state): BatchState => ({
     ...state,
@@ -266,9 +266,9 @@ export const batchReducer = createReducer(
     }
   })),
 
-  // ============================================
+  
   // JOB ACTIONS (no state changes, handled by effects)
-  // ============================================
+  
 
   on(BatchActions.retryJobFailure, (state, { error }): BatchState => ({
     ...state,
@@ -285,9 +285,9 @@ export const batchReducer = createReducer(
     error
   })),
 
-  // ============================================
+  
   // POLLING
-  // ============================================
+  
 
   on(BatchActions.startPolling, (state): BatchState => ({
     ...state,
@@ -299,9 +299,9 @@ export const batchReducer = createReducer(
     pollingEnabled: false
   })),
 
-  // ============================================
+  
   // GLOBAL
-  // ============================================
+  
 
   on(BatchActions.clearError, (state): BatchState => ({
     ...state,

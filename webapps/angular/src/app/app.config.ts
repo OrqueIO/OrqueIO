@@ -1,5 +1,5 @@
 import { ApplicationConfig, provideBrowserGlobalErrorListeners, APP_INITIALIZER, isDevMode } from '@angular/core';
-import { provideRouter, withRouterConfig } from '@angular/router';
+import { provideRouter, withRouterConfig, TitleStrategy, withPreloading, PreloadAllModules } from '@angular/router';
 import { provideHttpClient, withXsrfConfiguration, withInterceptors } from '@angular/common/http';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideStore } from '@ngrx/store';
@@ -9,25 +9,7 @@ import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { routes } from './app.routes';
 import { TranslateService } from './i18n/translate.service';
 import { errorInterceptor } from './interceptors/error.interceptor';
-
-// Admin State
-import { adminReducers } from './store/admin';
-import { UsersEffects } from './store/admin/users/users.effects';
-import { AuthorizationsEffects } from './store/admin/authorizations/authorizations.effects';
-import { TenantsEffects } from './store/admin/tenants/tenants.effects';
-import { SystemEffects } from './store/admin/system/system.effects';
-
-// Cockpit State
-import { cockpitReducers } from './store/cockpit';
-import { DashboardEffects } from './store/cockpit/dashboard/dashboard.effects';
-import { ProcessesEffects } from './store/cockpit/processes/processes.effects';
-import { DecisionsEffects } from './store/cockpit/decisions/decisions.effects';
-import { TasksEffects } from './store/cockpit/tasks/tasks.effects';
-import { BatchEffects } from './store/cockpit/batch/batch.effects';
-
-// Tasklist State
-import { tasklistReducer } from './store/tasklist/tasklist.reducer';
-import { TasklistEffects } from './store/tasklist/tasklist.effects';
+import { PageTitleStrategy } from './services/page-title.strategy';
 
 function initializeTranslations(translateService: TranslateService) {
   return () => translateService.loadLanguage(translateService.currentLang);
@@ -41,7 +23,8 @@ export const appConfig: ApplicationConfig = {
       routes,
       withRouterConfig({
         onSameUrlNavigation: 'reload'
-      })
+      }),
+      withPreloading(PreloadAllModules)
     ),
     provideHttpClient(
       withXsrfConfiguration({
@@ -50,26 +33,8 @@ export const appConfig: ApplicationConfig = {
       }),
       withInterceptors([errorInterceptor])
     ),
-    provideStore({
-      ...adminReducers,
-      ...cockpitReducers,
-      tasklist: tasklistReducer
-    }),
-    provideEffects([
-      // Admin Effects
-      UsersEffects,
-      AuthorizationsEffects,
-      TenantsEffects,
-      SystemEffects,
-      // Cockpit Effects
-      DashboardEffects,
-      ProcessesEffects,
-      DecisionsEffects,
-      TasksEffects,
-      BatchEffects,
-      // Tasklist Effects
-      TasklistEffects
-    ]),
+    provideStore({}),
+    provideEffects([]),
     provideStoreDevtools({
       maxAge: 25,
       logOnly: !isDevMode(),
@@ -83,6 +48,10 @@ export const appConfig: ApplicationConfig = {
       useFactory: initializeTranslations,
       deps: [TranslateService],
       multi: true
+    },
+    {
+      provide: TitleStrategy,
+      useClass: PageTitleStrategy
     }
   ]
 };

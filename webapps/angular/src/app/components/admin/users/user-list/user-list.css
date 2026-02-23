@@ -103,6 +103,10 @@ app-admin-page-header {
   color: var(--text-inverse);
 }
 
+.btn-icon--danger:hover {
+  background: var(--color-danger, #dc2626);
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .page-content {

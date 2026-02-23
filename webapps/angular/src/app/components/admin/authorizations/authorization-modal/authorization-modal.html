@@ -40,18 +40,39 @@
             <button
               type="button"
               class="identity-toggle"
-              [disabled]="isGlobalType"
+              [disabled]="isGlobalType || isEditMode"
               (click)="toggleIdentityType()"
               [title]="identityType === 'user' ? ('AUTHORIZATION_USER' | translate) : ('AUTHORIZATION_GROUP' | translate)">
               <fa-icon [icon]="identityType === 'user' ? faUser : faUsers"></fa-icon>
             </button>
 
-            <input
-              type="text"
-              formControlName="identityId"
-              class="form-input identity-input"
-              [placeholder]="(identityType === 'user' ? 'AUTHORIZATION_USER_ID_PLACEHOLDER' : 'AUTHORIZATION_GROUP_ID_PLACEHOLDER') | translate"
-              [disabled]="isGlobalType">
+            <div class="autocomplete-container">
+              <input
+                type="text"
+                formControlName="identityId"
+                class="form-input identity-input"
+                [placeholder]="(identityType === 'user' ? 'AUTHORIZATION_USER_ID_PLACEHOLDER' : 'AUTHORIZATION_GROUP_ID_PLACEHOLDER') | translate"
+                (input)="onIdentityInput($event)"
+                (blur)="hideSuggestions()"
+                (focus)="onIdentityInput($event)"
+                autocomplete="off">
+
+              <!-- Loading indicator -->
+              <div class="autocomplete-loading" *ngIf="isLoadingSuggestions">
+                <span class="spinner-small"></span>
+              </div>
+
+              <!-- Suggestions dropdown -->
+              <ul class="autocomplete-suggestions" *ngIf="showSuggestions && suggestions.length > 0">
+                <li
+                  *ngFor="let suggestion of suggestions"
+                  class="suggestion-item"
+                  (mousedown)="selectSuggestion(suggestion)">
+                  <fa-icon [icon]="identityType === 'user' ? faUser : faUsers" class="suggestion-icon"></fa-icon>
+                  <span>{{ suggestion.label }}</span>
+                </li>
+              </ul>
+            </div>
           </div>
 
           <!-- User warning -->

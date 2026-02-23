@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnChanges, SimpleChanges, inject } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, SimpleChanges, inject, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslatePipe } from '../../../i18n/translate.pipe';
 import { TooltipDirective } from '../../../shared/tooltip/tooltip.directive';
@@ -17,10 +17,12 @@ interface TaskVariable {
   standalone: true,
   imports: [CommonModule, TranslatePipe, TooltipDirective],
   templateUrl: './task-card.html',
-  styleUrl: './task-card.css'
+  styleUrl: './task-card.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TaskCardComponent implements OnInit, OnChanges {
   private readonly tasklistService = inject(TasklistService);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   @Input() task!: Task;
   @Input() filterVariables: FilterVariable[] = [];
@@ -53,10 +55,12 @@ export class TaskCardComponent implements OnInit, OnChanges {
         next: (vars: Record<string, any>) => {
           this.variables = this.processVariables(vars, this.filterVariables);
           this.loading = false;
+          this.cdr.detectChanges();
         },
         error: () => {
           this.variables = [];
           this.loading = false;
+          this.cdr.detectChanges();
         }
       });
     } else {
@@ -70,10 +74,12 @@ export class TaskCardComponent implements OnInit, OnChanges {
             label: name
           }));
           this.loading = false;
+          this.cdr.detectChanges();
         },
         error: () => {
           this.variables = [];
           this.loading = false;
+          this.cdr.detectChanges();
         }
       });
     }

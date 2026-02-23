@@ -142,7 +142,8 @@
   border: 1px solid var(--border-color-light);
   border-top: 1px solid var(--border-color);
   overflow: auto;
-  /* Show exactly 6 rows + header: header ~44px + 6 rows × ~48px = ~332px */
+  /* Adaptive height: fills available space but never exceeds 340px */
+  flex: 1;
   max-height: 340px;
   min-height: 0;
 }
@@ -315,10 +316,11 @@
   font-weight: var(--font-weight-normal);
   font-size: var(--font-size-base);
   transition: color var(--transition-fast);
+  cursor: pointer;
 }
 
 .definition-link:hover {
-  color: var(--text-primary);
+  color: var(--color-primary);
   text-decoration: none;
 }
 

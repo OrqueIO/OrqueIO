@@ -5,9 +5,9 @@ import * as DashboardActions from './dashboard.actions';
 export const dashboardReducer = createReducer(
   initialDashboardState,
 
-  // ============================================
+  
   // Load Dashboard Stats (existing)
-  // ============================================
+  
 
   on(DashboardActions.loadDashboardStats, (state) => ({
     ...state,
@@ -35,9 +35,9 @@ export const dashboardReducer = createReducer(
     error: null
   })),
 
-  // ============================================
+  
   // Task Stats Chart
-  // ============================================
+  
 
   on(DashboardActions.loadTaskStats, (state) => ({
     ...state,
@@ -67,9 +67,9 @@ export const dashboardReducer = createReducer(
     }
   })),
 
-  // ============================================
+  
   // Incidents by Process Chart
-  // ============================================
+  
 
   on(DashboardActions.loadIncidentsByProcess, (state) => ({
     ...state,
@@ -99,9 +99,9 @@ export const dashboardReducer = createReducer(
     }
   })),
 
-  // ============================================
+  
   // Timeline Chart
-  // ============================================
+  
 
   on(DashboardActions.loadTimeline, (state) => ({
     ...state,
@@ -140,9 +140,9 @@ export const dashboardReducer = createReducer(
     }
   })),
 
-  // ============================================
+  
   // Process Distribution Chart
-  // ============================================
+  
 
   on(DashboardActions.loadProcessDistribution, (state) => ({
     ...state,
@@ -172,9 +172,9 @@ export const dashboardReducer = createReducer(
     }
   })),
 
-  // ============================================
+  
   // Tasks by Group Chart
-  // ============================================
+  
 
   on(DashboardActions.loadTasksByGroup, (state) => ({
     ...state,
@@ -204,9 +204,9 @@ export const dashboardReducer = createReducer(
     }
   })),
 
-  // ============================================
+  
   // Charts Configuration
-  // ============================================
+  
 
   on(DashboardActions.setAutoRefresh, (state, { enabled }) => ({
     ...state,

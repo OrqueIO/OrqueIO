@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit, OnChanges, OnDestroy, SimpleChanges, inject, HostListener, ElementRef, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnChanges, OnDestroy, SimpleChanges, inject, HostListener, ElementRef, ViewChild, ChangeDetectorRef, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
@@ -7,6 +7,9 @@ import { Subject, takeUntil, filter } from 'rxjs';
 import { TranslatePipe } from '../../../i18n/translate.pipe';
 import { Task, TaskForm } from '../../../models/tasklist';
 import { TasklistService } from '../../../services/tasklist/tasklist.service';
+import { CamFormService, CamFormInstance } from '../../../services/tasklist/cam-form.service';
+import { FormStateStorageService, StoredVariable } from '../../../services/tasklist/form-state-storage.service';
+import { FormValidationService, ValidationErrors } from '../../../services/tasklist/form-validation.service';
 import { TasksActions } from '../../../store/tasklist';
 
 interface FormVariable {
@@ -40,14 +43,18 @@ type FormType = 'embedded' | 'orqueio-forms' | 'external' | 'generic';
   templateUrl: './task-form-tab.html',
   styleUrl: './task-form-tab.css'
 })
-export class TaskFormTabComponent implements OnInit, OnChanges, OnDestroy {
+export class TaskFormTabComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit {
   private readonly tasklistService = inject(TasklistService);
+  private readonly camFormService = inject(CamFormService);
+  private readonly formStateStorage = inject(FormStateStorageService);
+  private readonly formValidation = inject(FormValidationService);
   private readonly sanitizer = inject(DomSanitizer);
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly actions$ = inject(Actions);
   private readonly destroy$ = new Subject<void>();
 
   @ViewChild('formContainer') formContainer!: ElementRef;
+  @ViewChild('embeddedFormContainer') embeddedFormContainer!: ElementRef;
 
   @Input() task!: Task;
   @Input() form: TaskForm | null = null;
@@ -56,9 +63,6 @@ export class TaskFormTabComponent implements OnInit, OnChanges, OnDestroy {
 
   @Output() complete = new EventEmitter<Record<string, any>>();
   @Output() save = new EventEmitter<Record<string, any>>();
-
-  // LocalStorage key prefix for form state recovery (matches AngularJS camFormStateToLocal)
-  private readonly STORAGE_KEY_PREFIX = 'orqueio:task-form:';
 
   loading = false;
   loadingError: string | null = null;
@@ -73,6 +77,11 @@ export class TaskFormTabComponent implements OnInit, OnChanges, OnDestroy {
 
   // Form type detection
   formType: FormType = 'generic';
+
+  // CamForm instance for embedded forms (matches AngularJS CamForm SDK)
+  camFormInstance: CamFormInstance | null = null;
+  camFormLoading = false;
+  camFormError: string | null = null;
 
   // Options (would come from configuration)
   hideCompleteButton = false;
@@ -109,13 +118,32 @@ export class TaskFormTabComponent implements OnInit, OnChanges, OnDestroy {
     });
   }
 
+  ngAfterViewInit(): void {
+    // Initialize CamForm if embedded form
+    if (this.isEmbeddedForm() && this.embeddedFormContainer) {
+      this.initializeCamForm();
+    }
+  }
+
   ngOnDestroy(): void {
+    // Cleanup CamForm instance
+    if (this.camFormInstance && this.task?.id) {
+      this.camFormService.destroyInstance(this.task.id);
+    }
     this.destroy$.next();
     this.destroy$.complete();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['task'] && !changes['task'].firstChange) {
+      const previousTask = changes['task'].previousValue;
+
+      // Cleanup previous CamForm instance
+      if (this.camFormInstance && previousTask?.id) {
+        this.camFormService.destroyInstance(previousTask.id);
+        this.camFormInstance = null;
+      }
+
       // Save current form state before switching tasks
       if (this.isDirty && this.variables.length > 0) {
         this.saveToLocalStorage();
@@ -129,12 +157,23 @@ export class TaskFormTabComponent implements OnInit, OnChanges, OnDestroy {
       this.hasBeenRestoredFromStorage = false;
       this.completeError = null; // Clear error when switching tasks
       this.submitting = false;
+      this.camFormError = null;
 
       // Try to restore from localStorage for new task
       this.restoreFromLocalStorage();
+
+      // Initialize CamForm if embedded form type
+      if (this.isEmbeddedForm()) {
+        // Use setTimeout to allow the view to update first
+        setTimeout(() => this.initializeCamForm(), 0);
+      }
     }
     if (changes['form'] && !changes['form'].firstChange) {
       this.detectFormType();
+      // Re-initialize CamForm if form type changed to embedded
+      if (this.isEmbeddedForm()) {
+        setTimeout(() => this.initializeCamForm(), 0);
+      }
     }
     if (changes['isAssignee'] || changes['actionsDisabled']) {
       this.updateOptions();
@@ -166,8 +205,8 @@ export class TaskFormTabComponent implements OnInit, OnChanges, OnDestroy {
       return;
     }
 
-    // Check for embedded forms
-    if (key.startsWith('embedded:') || key.startsWith('app:')) {
+    // Check for embedded forms (including deployment: which uses embedded form loading)
+    if (key.startsWith('embedded:') || key.startsWith('app:') || key.startsWith('deployment:')) {
       this.formType = 'embedded';
       return;
     }
@@ -188,6 +227,106 @@ export class TaskFormTabComponent implements OnInit, OnChanges, OnDestroy {
     this.disableAddVariableButton = !this.isAssignee || this.actionsDisabled;
     // Hide save button for generic forms (only show for embedded/external)
     this.hideSaveButton = this.formType === 'generic';
+  }
+
+  // ==================== CamForm SDK Integration ====================
+  // Matches AngularJS cam-tasklist-form-embedded.js behavior
+
+  /**
+   * Initialize CamForm for embedded forms
+   * This replicates the AngularJS CamForm SDK functionality
+   */
+  private initializeCamForm(): void {
+    if (!this.task?.id || !this.embeddedFormContainer?.nativeElement) {
+      return;
+    }
+
+    const formUrl = this.getEmbeddedFormUrl();
+    if (!formUrl) {
+      this.camFormError = 'No form URL available';
+      return;
+    }
+
+    this.camFormLoading = true;
+    this.camFormError = null;
+    this.cdr.detectChanges();
+
+    this.camFormService.initializeForm({
+      taskId: this.task.id,
+      formUrl: formUrl,
+      containerElement: this.embeddedFormContainer.nativeElement,
+      urlParams: {
+        taskId: this.task.id
+      }
+    }).pipe(
+      takeUntil(this.destroy$)
+    ).subscribe({
+      next: (instance) => {
+        this.camFormInstance = instance;
+        this.camFormLoading = false;
+
+        if (instance.error) {
+          this.camFormError = instance.error;
+        } else {
+          // Update dirty state from CamForm
+          this.isDirty = instance.isDirty;
+          // Update validation state
+          this.disableCompleteButton = !instance.isValid || !this.isAssignee || this.actionsDisabled;
+        }
+
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        this.camFormLoading = false;
+        this.camFormError = err.message || 'Failed to load embedded form';
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  /**
+   * Handle CamForm submission for embedded forms
+   */
+  private submitCamForm(): void {
+    if (!this.camFormInstance || !this.task?.id) {
+      return;
+    }
+
+    this.submitting = true;
+    this.completeError = null;
+
+    this.camFormService.submitForm(this.camFormInstance, this.task.id).pipe(
+      takeUntil(this.destroy$)
+    ).subscribe({
+      next: () => {
+        this.submitting = false;
+        this.isDirty = false;
+        // Emit complete event to parent
+        const variables = this.camFormService.parseVariablesForSubmission(this.camFormInstance!);
+        this.complete.emit(variables);
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        this.submitting = false;
+        this.completeError = err.message || 'Failed to submit form';
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  /**
+   * Handle CamForm save for embedded forms
+   */
+  private saveCamForm(): void {
+    if (!this.camFormInstance || !this.task?.id) {
+      return;
+    }
+
+    this.saving = true;
+    this.camFormService.storeToStorage(this.task.id, this.camFormInstance);
+    this.saving = false;
+    this.isDirty = false;
+    this.cdr.detectChanges();
   }
 
   // Types that have fixedName=true (cannot be deleted) - matches AngularJS behavior
@@ -271,33 +410,7 @@ export class TaskFormTabComponent implements OnInit, OnChanges, OnDestroy {
     const variable = this.variables[index];
     if (!variable) return;
 
-    variable.errors = {};
-
-    // Skip validation for loaded variables with fixedName
-    if (variable.fixedName && variable.originalValue !== undefined) {
-      return;
-    }
-
-    // Validate name
-    if (variable.name && variable.name.trim() !== '') {
-      if (!/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(variable.name)) {
-        variable.errors.name = 'tasklist.validation.nameInvalid';
-      } else {
-        // Check for duplicates
-        const duplicateIndex = this.variables.findIndex((v, i) => i !== index && v.name === variable.name);
-        if (duplicateIndex !== -1) {
-          variable.errors.name = 'tasklist.validation.nameDuplicate';
-        }
-      }
-    }
-
-    // Validate value based on type
-    if (variable.type && variable.value !== undefined && variable.value !== null && variable.value !== '') {
-      const valueError = this.validateValueForType(variable.value, variable.type);
-      if (valueError) {
-        variable.errors.value = valueError;
-      }
-    }
+    variable.errors = this.formValidation.validateSingle(variable, this.variables, index);
   }
 
   private checkDirty(): boolean {
@@ -307,6 +420,12 @@ export class TaskFormTabComponent implements OnInit, OnChanges, OnDestroy {
   onSave(): void {
     if (this.saving || this.disableForm) return;
 
+    // Handle CamForm (embedded) save
+    if (this.isEmbeddedForm() && this.camFormInstance) {
+      this.saveCamForm();
+      return;
+    }
+
     // Validate before saving
     if (!this.validateVariables()) {
       this.cdr.detectChanges();
@@ -314,13 +433,40 @@ export class TaskFormTabComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     this.saving = true;
-    const variables = this.buildVariablesObject();
 
+    // Use async method if there are file variables
+    if (this.hasFileVariables()) {
+      this.saveWithFiles();
+    } else {
+      const variables = this.buildVariablesObject();
+      this.submitSave(variables);
+    }
+  }
+
+  private async saveWithFiles(): Promise<void> {
+    try {
+      const variables = await this.buildVariablesObjectAsync();
+      this.submitSave(variables);
+    } catch (error: any) {
+      console.error('Failed to process files:', error);
+      this.completeError = error.message || 'Failed to process file upload';
+      this.saving = false;
+      this.cdr.detectChanges();
+    }
+  }
+
+  private submitSave(variables: Record<string, any>): void {
     // Save variables to task
     this.tasklistService.submitTaskForm(this.task.id, variables).subscribe({
       next: () => {
         // Update original values
-        this.variables.forEach(v => v.originalValue = v.value);
+        this.variables.forEach(v => {
+          v.originalValue = v.value;
+          // Clear file after successful upload
+          if (v.type === 'File') {
+            v.file = undefined;
+          }
+        });
         this.isDirty = false;
         this.saving = false;
         this.hasBeenRestoredFromStorage = false;
@@ -339,6 +485,12 @@ export class TaskFormTabComponent implements OnInit, OnChanges, OnDestroy {
   onComplete(): void {
     if (this.submitting || this.disableCompleteButton) return;
 
+    // Handle CamForm (embedded) submission
+    if (this.isEmbeddedForm() && this.camFormInstance) {
+      this.submitCamForm();
+      return;
+    }
+
     // Validate before completing
     if (!this.validateVariables()) {
       this.cdr.detectChanges();
@@ -346,9 +498,29 @@ export class TaskFormTabComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     this.submitting = true;
-    const variables = this.buildVariablesObject();
-    this.clearLocalStorage(); // Clear saved state on complete
-    this.complete.emit(variables);
+    this.completeError = null;
+
+    // Use async method if there are file variables
+    if (this.hasFileVariables()) {
+      this.completeWithFiles();
+    } else {
+      const variables = this.buildVariablesObject();
+      this.clearLocalStorage(); // Clear saved state on complete
+      this.complete.emit(variables);
+    }
+  }
+
+  private async completeWithFiles(): Promise<void> {
+    try {
+      const variables = await this.buildVariablesObjectAsync();
+      this.clearLocalStorage(); // Clear saved state on complete
+      this.complete.emit(variables);
+    } catch (error: any) {
+      console.error('Failed to process files:', error);
+      this.completeError = error.message || 'Failed to process file upload';
+      this.submitting = false;
+      this.cdr.detectChanges();
+    }
   }
 
   /**
@@ -356,85 +528,19 @@ export class TaskFormTabComponent implements OnInit, OnChanges, OnDestroy {
    * @returns true if all variables are valid, false otherwise
    */
   private validateVariables(): boolean {
-    let isValid = true;
-    const variableNames = new Set<string>();
-
-    for (const variable of this.variables) {
-      variable.errors = {};
-
-      // Skip validation for loaded variables with fixedName (they're already valid)
-      if (variable.fixedName && variable.originalValue !== undefined) {
-        continue;
-      }
-
-      // Validate name (required for new variables)
-      if (!variable.name || variable.name.trim() === '') {
-        variable.errors.name = 'tasklist.validation.nameRequired';
-        isValid = false;
-      } else if (!/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(variable.name)) {
-        // Variable name must be a valid identifier
-        variable.errors.name = 'tasklist.validation.nameInvalid';
-        isValid = false;
-      } else if (variableNames.has(variable.name)) {
-        // Check for duplicate names
-        variable.errors.name = 'tasklist.validation.nameDuplicate';
-        isValid = false;
-      }
-
-      if (variable.name) {
-        variableNames.add(variable.name);
-      }
-
-      // Validate type (required)
-      if (!variable.type) {
-        variable.errors.type = 'tasklist.validation.typeRequired';
-        isValid = false;
-      }
-
-      // Validate value based on type
-      if (variable.type && variable.value !== undefined && variable.value !== null && variable.value !== '') {
-        const valueError = this.validateValueForType(variable.value, variable.type);
-        if (valueError) {
-          variable.errors.value = valueError;
-          isValid = false;
-        }
-      }
-    }
-
-    return isValid;
-  }
-
-  /**
-   * Validates a value for a specific type
-   */
-  private validateValueForType(value: any, type: string): string | null {
-    switch (type) {
-      case 'Integer':
-      case 'Long':
-      case 'Short':
-        if (value !== '' && !Number.isInteger(Number(value))) {
-          return 'tasklist.validation.integerRequired';
-        }
-        break;
-      case 'Double':
-        if (value !== '' && isNaN(Number(value))) {
-          return 'tasklist.validation.numberRequired';
-        }
-        break;
-      case 'Date':
-        if (value !== '' && isNaN(Date.parse(value))) {
-          return 'tasklist.validation.dateInvalid';
-        }
-        break;
-    }
-    return null;
+    const result = this.formValidation.validateAll(this.variables);
+    // Update variables with errors from validation
+    this.variables.forEach((v, i) => {
+      v.errors = result.variables[i]?.errors;
+    });
+    return result.isValid;
   }
 
   /**
    * Check if form has any validation errors
    */
   hasValidationErrors(): boolean {
-    return this.variables.some(v => v.errors && (v.errors.name || v.errors.type || v.errors.value));
+    return this.formValidation.hasAnyErrors(this.variables);
   }
 
   /**
@@ -448,13 +554,129 @@ export class TaskFormTabComponent implements OnInit, OnChanges, OnDestroy {
 
   private buildVariablesObject(): Record<string, any> {
     const variables: Record<string, any> = {};
+
     for (const v of this.variables) {
-      variables[v.name] = {
+      // Skip File types without files - they're handled separately
+      if (v.type === 'File' && !v.file) {
+        continue;
+      }
+
+      // Skip Object types with Java serialization (ENGINE-17007 security restriction)
+      // Java-serialized objects are read-only and cannot be modified from forms
+      if (v.type === 'Object' && v.valueInfo?.serializationDataFormat === 'application/x-java-serialized-object') {
+        continue;
+      }
+
+      const varData: { value: any; type: string; valueInfo?: any } = {
         value: v.value,
         type: v.type
       };
+
+      // Add valueInfo for Object types (only JSON-serialized)
+      if (v.type === 'Object' && v.valueInfo) {
+        varData.valueInfo = v.valueInfo;
+      }
+
+      variables[v.name] = varData;
     }
+
     return variables;
+  }
+
+  /**
+   * Build variables object with file conversion (async)
+   * Matches AngularJS transformFiles() behavior
+   */
+  private async buildVariablesObjectAsync(): Promise<Record<string, any>> {
+    const variables: Record<string, any> = {};
+
+    for (const v of this.variables) {
+      // Skip File types without files
+      if (v.type === 'File' && !v.file) {
+        continue;
+      }
+
+      // Skip Object types with Java serialization (ENGINE-17007 security restriction)
+      // Java-serialized objects are read-only and cannot be modified from forms
+      if (v.type === 'Object' && v.valueInfo?.serializationDataFormat === 'application/x-java-serialized-object') {
+        continue;
+      }
+
+      const varData: { value: any; type: string; valueInfo?: any } = {
+        value: v.value,
+        type: v.type
+      };
+
+      // Handle File type with uploaded file
+      if (v.type === 'File' && v.file) {
+        try {
+          const base64Value = await this.fileToBase64(v.file);
+          varData.value = base64Value;
+          varData.valueInfo = {
+            filename: v.file.name,
+            mimeType: v.file.type || 'application/octet-stream'
+          };
+        } catch (error) {
+          console.error(`Failed to convert file ${v.name}:`, error);
+          continue;
+        }
+      }
+
+      // Add valueInfo for Object types (only JSON-serialized)
+      if (v.type === 'Object' && v.valueInfo) {
+        varData.valueInfo = v.valueInfo;
+      }
+
+      variables[v.name] = varData;
+    }
+
+    return variables;
+  }
+
+  /**
+   * Convert File to base64 string
+   * Matches AngularJS FileReader logic in transformFiles()
+   */
+  private fileToBase64(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+      // Check max file size (5MB default, like AngularJS)
+      const maxSize = 5000000; // 5MB
+      if (file.size > maxSize) {
+        reject(new Error(`File size exceeds maximum of ${this.bytesToSize(maxSize)}`));
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const arrayBuffer = reader.result as ArrayBuffer;
+        const bytes = new Uint8Array(arrayBuffer);
+        let binary = '';
+        for (let i = 0; i < bytes.length; i++) {
+          binary += String.fromCharCode(bytes[i]);
+        }
+        resolve(btoa(binary));
+      };
+      reader.onerror = () => reject(new Error('Failed to read file'));
+      reader.readAsArrayBuffer(file);
+    });
+  }
+
+  /**
+   * Format bytes to human readable size
+   */
+  private bytesToSize(bytes: number): string {
+    if (bytes === 0) return '0 Byte';
+    const k = 1000;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return (bytes / Math.pow(k, i)).toFixed(2) + ' ' + sizes[i];
+  }
+
+  /**
+   * Check if form has file variables that need uploading
+   */
+  private hasFileVariables(): boolean {
+    return this.variables.some(v => v.type === 'File' && v.file);
   }
 
   addVariable(): void {
@@ -533,28 +755,41 @@ export class TaskFormTabComponent implements OnInit, OnChanges, OnDestroy {
       return null;
     }
 
-    // Handle embedded: prefix
-    if (this.form.key.startsWith('embedded:')) {
-      return this.form.key.substring('embedded:'.length);
+    let key = this.form.key;
+    const keyLower = key.toLowerCase();
+
+    // Handle embedded: prefix (strip it first, then process remaining key)
+    if (keyLower.startsWith('embedded:')) {
+      key = key.substring('embedded:'.length);
     }
 
-    // Handle app: prefix
-    if (this.form.key.startsWith('app:')) {
-      return this.form.key.substring('app:'.length);
+    // Handle deployment: prefix - use the engine API deployed-form endpoint
+    // This matches AngularJS behavior in cam-tasklist-form.js
+    if (key.toLowerCase().startsWith('deployment:')) {
+      return `/orqueio/api/engine/engine/default/task/${this.task.id}/deployed-form`;
+    }
+
+    // Handle app: prefix - combine with contextPath
+    if (key.toLowerCase().startsWith('app:')) {
+      const formPath = key.substring('app:'.length);
+      if (this.form.contextPath) {
+        return `${this.form.contextPath}/${formPath}`.replace(/\/+/g, '/');
+      }
+      return formPath;
     }
 
     // Handle orqueio: prefix
-    if (this.form.key.startsWith('orqueio:')) {
-      const formKey = this.form.key.substring('orqueio:'.length);
+    if (key.toLowerCase().startsWith('orqueio:')) {
+      const formKey = key.substring('orqueio:'.length);
       return `/orqueio/forms/${formKey}?taskId=${this.task.id}`;
     }
 
-    // Combine contextPath and key for deployment forms
+    // Combine contextPath and key for other deployment forms
     if (this.form.contextPath) {
-      return `${this.form.contextPath}/${this.form.key}`;
+      return `${this.form.contextPath}/${key}`.replace(/\/+/g, '/');
     }
 
-    return this.form.key;
+    return key;
   }
 
   getEmbeddedFormUrl(): string | null {
@@ -600,78 +835,37 @@ export class TaskFormTabComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   // ==================== LocalStorage Form State Recovery ====================
-  // Matches AngularJS camFormStateToLocal behavior
-
-  /**
-   * Get the localStorage key for the current task
-   */
-  private getStorageKey(): string | null {
-    if (!this.task?.id) return null;
-    return `${this.STORAGE_KEY_PREFIX}${this.task.id}`;
-  }
+  // Delegates to FormStateStorageService
 
   /**
    * Save form state to localStorage (called when switching tasks or on window unload)
    */
   private saveToLocalStorage(): void {
-    const key = this.getStorageKey();
-    if (!key || this.variables.length === 0) return;
-
-    try {
-      const state = {
-        variables: this.variables.map(v => ({
-          name: v.name,
-          type: v.type,
-          value: v.value,
-          valueInfo: v.valueInfo
-        })),
-        timestamp: Date.now()
-      };
-      localStorage.setItem(key, JSON.stringify(state));
-    } catch (e) {
-      // localStorage might be full or disabled - ignore
-      console.warn('Could not save form state to localStorage:', e);
-    }
+    if (!this.task?.id || this.variables.length === 0) return;
+    this.formStateStorage.saveState(this.task.id, this.variables as StoredVariable[]);
   }
 
   /**
    * Restore form state from localStorage (called on task change)
    */
   private restoreFromLocalStorage(): void {
-    const key = this.getStorageKey();
-    if (!key) return;
+    if (!this.task?.id) return;
 
-    try {
-      const stored = localStorage.getItem(key);
-      if (!stored) return;
-
-      const state = JSON.parse(stored);
-
-      // Check if stored state is too old (e.g., > 24 hours)
-      const MAX_AGE = 24 * 60 * 60 * 1000; // 24 hours in ms
-      if (state.timestamp && (Date.now() - state.timestamp) > MAX_AGE) {
-        localStorage.removeItem(key);
-        return;
-      }
-
-      if (state.variables && Array.isArray(state.variables) && state.variables.length > 0) {
-        this.variables = state.variables.map((v: any) => ({
-          name: v.name,
-          type: v.type,
-          value: v.value,
-          valueInfo: v.valueInfo,
-          // Variables restored from storage are treated as new/manually added
-          originalValue: undefined,
-          fixedName: false
-        }));
-        this.variablesLoaded = true;
-        this.isDirty = true;
-        this.hasBeenRestoredFromStorage = true;
-        this.cdr.detectChanges();
-      }
-    } catch (e) {
-      // Invalid JSON or other error - ignore
-      console.warn('Could not restore form state from localStorage:', e);
+    const state = this.formStateStorage.restoreState(this.task.id);
+    if (state) {
+      this.variables = state.variables.map(v => ({
+        name: v.name,
+        type: v.type,
+        value: v.value,
+        valueInfo: v.valueInfo,
+        // Variables restored from storage are treated as new/manually added
+        originalValue: undefined,
+        fixedName: false
+      }));
+      this.variablesLoaded = true;
+      this.isDirty = true;
+      this.hasBeenRestoredFromStorage = true;
+      this.cdr.detectChanges();
     }
   }
 
@@ -679,13 +873,8 @@ export class TaskFormTabComponent implements OnInit, OnChanges, OnDestroy {
    * Clear stored form state (called after successful save/complete)
    */
   private clearLocalStorage(): void {
-    const key = this.getStorageKey();
-    if (key) {
-      try {
-        localStorage.removeItem(key);
-      } catch (e) {
-        // Ignore
-      }
+    if (this.task?.id) {
+      this.formStateStorage.clearState(this.task.id);
     }
   }
 

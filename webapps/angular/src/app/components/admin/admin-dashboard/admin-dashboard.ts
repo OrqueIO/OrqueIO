@@ -65,7 +65,6 @@ export class AdminDashboardComponent implements OnInit {
   private authorizationService = inject(AuthorizationService);
   private authService = inject(AuthService);
 
-  // Icons
   faUsers = faUsers;
   faUsersCog = faUsersCog;
   faBuilding = faBuilding;
@@ -83,11 +82,9 @@ export class AdminDashboardComponent implements OnInit {
   faArrowRight = faArrowRight;
   faSearch = faSearch;
 
-  // State
   isRefreshing = false;
   currentUserId = '';
 
-  // Dialogs
   showCreateUserDialog = false;
   showCreateGroupDialog = false;
   showCreateTenantDialog = false;
@@ -133,12 +130,11 @@ export class AdminDashboardComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(auth => {
         this.currentUserId = auth?.name || '';
-        this.cdr.detectChanges();
+        this.cdr.markForCheck();
       });
   }
 
   private loadDashboardStats(): void {
-    // Load users count
     this.userService.getUsersCount()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
@@ -146,16 +142,15 @@ export class AdminDashboardComponent implements OnInit {
           this.stats[0].count = count;
           this.stats[0].loading = false;
           this.checkRefreshComplete();
-          this.cdr.detectChanges();
+          this.cdr.markForCheck();
         },
         error: () => {
           this.stats[0].loading = false;
           this.checkRefreshComplete();
-          this.cdr.detectChanges();
+          this.cdr.markForCheck();
         }
       });
 
-    // Load groups count
     this.groupService.getGroupsCount()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
@@ -163,16 +158,15 @@ export class AdminDashboardComponent implements OnInit {
           this.stats[1].count = count;
           this.stats[1].loading = false;
           this.checkRefreshComplete();
-          this.cdr.detectChanges();
+          this.cdr.markForCheck();
         },
         error: () => {
           this.stats[1].loading = false;
           this.checkRefreshComplete();
-          this.cdr.detectChanges();
+          this.cdr.markForCheck();
         }
       });
 
-    // Load tenants count
     this.tenantService.getTenantsCount()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
@@ -180,16 +174,15 @@ export class AdminDashboardComponent implements OnInit {
           this.stats[2].count = count;
           this.stats[2].loading = false;
           this.checkRefreshComplete();
-          this.cdr.detectChanges();
+          this.cdr.markForCheck();
         },
         error: () => {
           this.stats[2].loading = false;
           this.checkRefreshComplete();
-          this.cdr.detectChanges();
+          this.cdr.markForCheck();
         }
       });
 
-    // Load authorizations count
     this.authorizationService.getAuthorizationsCount()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
@@ -197,12 +190,12 @@ export class AdminDashboardComponent implements OnInit {
           this.stats[3].count = count;
           this.stats[3].loading = false;
           this.checkRefreshComplete();
-          this.cdr.detectChanges();
+          this.cdr.markForCheck();
         },
         error: () => {
           this.stats[3].loading = false;
           this.checkRefreshComplete();
-          this.cdr.detectChanges();
+          this.cdr.markForCheck();
         }
       });
   }
@@ -219,15 +212,14 @@ export class AdminDashboardComponent implements OnInit {
     this.loadDashboardStats();
   }
 
-  // User dialog
   openCreateUserDialog(): void {
     this.showCreateUserDialog = true;
-    this.cdr.detectChanges();
+    this.cdr.markForCheck();
   }
 
   closeCreateUserDialog(): void {
     this.showCreateUserDialog = false;
-    this.cdr.detectChanges();
+    this.cdr.markForCheck();
   }
 
   onUserCreated(): void {
@@ -235,15 +227,14 @@ export class AdminDashboardComponent implements OnInit {
     this.refresh();
   }
 
-  // Group dialog
   openCreateGroupDialog(): void {
     this.showCreateGroupDialog = true;
-    this.cdr.detectChanges();
+    this.cdr.markForCheck();
   }
 
   closeCreateGroupDialog(): void {
     this.showCreateGroupDialog = false;
-    this.cdr.detectChanges();
+    this.cdr.markForCheck();
   }
 
   onGroupCreated(): void {
@@ -251,15 +242,14 @@ export class AdminDashboardComponent implements OnInit {
     this.refresh();
   }
 
-  // Tenant dialog
   openCreateTenantDialog(): void {
     this.showCreateTenantDialog = true;
-    this.cdr.detectChanges();
+    this.cdr.markForCheck();
   }
 
   closeCreateTenantDialog(): void {
     this.showCreateTenantDialog = false;
-    this.cdr.detectChanges();
+    this.cdr.markForCheck();
   }
 
   onTenantCreated(): void {

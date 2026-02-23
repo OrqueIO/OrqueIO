@@ -1,13 +1,13 @@
 <div class="modal-backdrop" (click)="onBackdropClick($event)">
   <div class="modal-container modal-sm" role="dialog" aria-modal="true">
     <div class="modal-header" [class.modal-header-danger]="isDanger">
-      <h3 class="modal-title">{{ title }}</h3>
+      <h3 class="modal-title">{{ title | translate }}</h3>
     </div>
     <div class="modal-body">
-      <p>{{ message }}</p>
+      <p>{{ message | translate }}</p>
 
       <div class="modal-form-group" *ngIf="showInput">
-        <label *ngIf="inputLabel">{{ inputLabel }}</label>
+        <label *ngIf="inputLabel">{{ inputLabel | translate }}</label>
         <input
           type="text"
           class="modal-input"
@@ -21,14 +21,14 @@
         type="button"
         class="modal-btn modal-btn-secondary"
         (click)="onCancel()">
-        {{ cancelLabel }}
+        {{ cancelLabel | translate }}
       </button>
       <button
         type="button"
         class="modal-btn"
         [ngClass]="isDanger ? 'modal-btn-danger' : 'modal-btn-primary'"
         (click)="onConfirm()">
-        {{ confirmLabel }}
+        {{ confirmLabel | translate }}
       </button>
     </div>
   </div>

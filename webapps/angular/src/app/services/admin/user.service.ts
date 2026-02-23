@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { map, catchError, switchMap } from 'rxjs/operators';
 import { AdminService } from './admin.service';
 import { User, UserProfile, UserCredentials, CreateUserRequest } from '../../models/admin/user.model';
 import { UserQueryParams, PaginatedResponse } from '../../models/admin/query-params.model';
@@ -13,10 +13,23 @@ export class UserService extends AdminService {
 
   /**
    * Get list of users with pagination
+   * Includes LDAP fallback: if sorting fails, retry without sort params
    */
   getUsers(queryParams?: UserQueryParams): Observable<User[]> {
     const params = this.buildParams({ maxResults: 1000, ...queryParams });
-    return this.get<User[]>(this.userUrl, params);
+    return this.get<User[]>(this.userUrl, params).pipe(
+      catchError(error => {
+        // LDAP fallback: if sorting fails (often with LDAP), retry without sort params
+        if (queryParams?.sortBy || queryParams?.sortOrder) {
+          const fallbackParams = { ...queryParams };
+          delete fallbackParams.sortBy;
+          delete fallbackParams.sortOrder;
+          const paramsWithoutSort = this.buildParams({ maxResults: 1000, ...fallbackParams });
+          return this.get<User[]>(this.userUrl, paramsWithoutSort);
+        }
+        throw error;
+      })
+    );
   }
 
   /**
@@ -30,10 +43,17 @@ export class UserService extends AdminService {
   }
 
   /**
+   * Encode user ID for URL (handles special characters)
+   */
+  private encodeUserId(userId: string): string {
+    return encodeURIComponent(userId);
+  }
+
+  /**
    * Get user profile
    */
   getUserProfile(userId: string): Observable<UserProfile> {
-    return this.get<UserProfile>(`${this.userUrl}/${userId}/profile`);
+    return this.get<UserProfile>(`${this.userUrl}/${this.encodeUserId(userId)}/profile`);
   }
 
   /**
@@ -57,28 +77,28 @@ export class UserService extends AdminService {
    * Update user profile
    */
   updateUserProfile(userId: string, profile: Partial<UserProfile>): Observable<void> {
-    return this.put<void>(`${this.userUrl}/${userId}/profile`, profile);
+    return this.put<void>(`${this.userUrl}/${this.encodeUserId(userId)}/profile`, profile);
   }
 
   /**
    * Update user credentials
    */
   updateUserCredentials(userId: string, credentials: UserCredentials): Observable<void> {
-    return this.put<void>(`${this.userUrl}/${userId}/credentials`, credentials);
+    return this.put<void>(`${this.userUrl}/${this.encodeUserId(userId)}/credentials`, credentials);
   }
 
   /**
    * Delete user
    */
   deleteUser(userId: string): Observable<void> {
-    return this.delete<void>(`${this.userUrl}/${userId}`);
+    return this.delete<void>(`${this.userUrl}/${this.encodeUserId(userId)}`);
   }
 
   /**
    * Unlock user
    */
   unlockUser(userId: string): Observable<void> {
-    return this.post<void>(`${this.userUrl}/${userId}/unlock`, {});
+    return this.post<void>(`${this.userUrl}/${this.encodeUserId(userId)}/unlock`, {});
   }
 
   /**

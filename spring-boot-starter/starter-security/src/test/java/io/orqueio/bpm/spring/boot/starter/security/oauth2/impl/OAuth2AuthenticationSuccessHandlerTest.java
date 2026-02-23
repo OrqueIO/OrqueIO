@@ -46,7 +46,7 @@ public class OAuth2AuthenticationSuccessHandlerTest {
   @Before
   public void setUp() {
     userSynchronizer = mock(OAuth2UserSynchronizer.class);
-    handler = new OAuth2AuthenticationSuccessHandler(userSynchronizer);
+    handler = new OAuth2AuthenticationSuccessHandler(userSynchronizer, "/orqueio/app/");
     request = mock(HttpServletRequest.class);
     response = mock(HttpServletResponse.class);
     redirectStrategy = mock(RedirectStrategy.class);

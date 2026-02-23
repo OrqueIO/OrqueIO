@@ -124,7 +124,9 @@ public class OrqueioSpringSecurityOAuth2AutoConfiguration {
   @Bean
   protected OAuth2AuthenticationSuccessHandler oauth2AuthenticationSuccessHandler(OAuth2UserSynchronizer synchronizer) {
     logger.debug("Registering OAuth2AuthenticationSuccessHandler");
-    return new OAuth2AuthenticationSuccessHandler(synchronizer);
+    // Default redirect URL after successful OAuth2 login (when no saved request exists)
+    String defaultTargetUrl = webappPath + "/app/";
+    return new OAuth2AuthenticationSuccessHandler(synchronizer, defaultTargetUrl);
   }
 
   @Bean

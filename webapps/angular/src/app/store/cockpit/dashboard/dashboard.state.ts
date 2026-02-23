@@ -9,9 +9,9 @@ import {
   TimelinePeriod
 } from '../../../models/cockpit/dashboard-charts.model';
 
-// ============================================
+
 // Charts State
-// ============================================
+
 
 export interface ChartsState {
   // Task statistics chart data
@@ -73,17 +73,17 @@ export const initialChartsState: ChartsState = {
   refreshInterval: 30000
 };
 
-// ============================================
+
 // Main Dashboard State
-// ============================================
+
 
 export interface DashboardState {
-  // Basic stats (existing)
+  // Basic stats
   stats: DashboardStats | null;
   loading: boolean;
   error: any;
 
-  // Charts state (new)
+  // Charts state
   charts: ChartsState;
 }
 

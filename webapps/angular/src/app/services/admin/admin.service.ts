@@ -1,6 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { CsrfTokenService } from '../csrf-token.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,37 +10,17 @@ export class AdminService {
   protected readonly baseUrl = '/orqueio/api/engine/engine';
   protected readonly engine = 'default';
   protected readonly engineUrl = `${this.baseUrl}/${this.engine}`;
+  protected readonly csrfService = inject(CsrfTokenService);
 
   constructor(protected http: HttpClient) {}
-
-  /**
-   * Get CSRF token from cookie
-   */
-  protected getCsrfTokenFromCookie(): string | null {
-    const name = 'XSRF-TOKEN=';
-    const cookies = document.cookie.split(';');
-    for (let cookie of cookies) {
-      cookie = cookie.trim();
-      if (cookie.startsWith(name)) {
-        return cookie.substring(name.length);
-      }
-    }
-    return null;
-  }
 
   /**
    * Build headers with CSRF token
    */
   protected buildHeaders(contentType = true): HttpHeaders {
-    let headers = new HttpHeaders();
-    if (contentType) {
-      headers = headers.set('Content-Type', 'application/json');
-    }
-    const csrfToken = this.getCsrfTokenFromCookie();
-    if (csrfToken) {
-      headers = headers.set('X-XSRF-TOKEN', csrfToken);
-    }
-    return headers;
+    return contentType
+      ? this.csrfService.buildHeaders()
+      : this.csrfService.buildHeadersWithoutContentType();
   }
 
   /**

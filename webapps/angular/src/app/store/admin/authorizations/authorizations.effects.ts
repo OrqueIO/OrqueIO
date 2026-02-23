@@ -5,6 +5,7 @@ import { of } from 'rxjs';
 import { map, catchError, switchMap, withLatestFrom } from 'rxjs/operators';
 import { AuthorizationService } from '../../../services/admin/authorization.service';
 import { NotificationsService } from '../../../services/notifications.service';
+import { normalizeAuthorization } from '../../../models/admin/authorization.model';
 import * as AuthorizationsActions from './authorizations.actions';
 import { selectAuthorizationsQueryParams } from './authorizations.selectors';
 
@@ -23,7 +24,7 @@ export class AuthorizationsEffects {
         const queryParams = params || storeParams;
         return this.authorizationService.getAuthorizationsWithCount(queryParams).pipe(
           map(response => AuthorizationsActions.loadAuthorizationsSuccess({
-            authorizations: response.data,
+            authorizations: response.data.map(normalizeAuthorization),
             total: response.total
           })),
           catchError(error => {
@@ -48,12 +49,19 @@ export class AuthorizationsEffects {
               'admin.authorizations.created',
               'Authorization created successfully'
             );
-            return AuthorizationsActions.createAuthorizationSuccess({ authorization: createdAuth });
+            return AuthorizationsActions.createAuthorizationSuccess({ authorization: normalizeAuthorization(createdAuth) });
           }),
           catchError(error => {
+            const errorMessage = error?.error?.message || error?.message || '';
+            const isDuplicate = errorMessage.includes('Unique index') ||
+                               errorMessage.includes('primary key violation') ||
+                               error?.status === 500 && errorMessage.includes('ACT_UNIQ_AUTH');
+
             this.notifications.addError({
-              status: 'admin.authorizations.createError',
-              message: 'Failed to create authorization'
+              status: isDuplicate ? 'admin.authorizations.duplicate' : 'admin.authorizations.createError',
+              message: isDuplicate
+                ? 'An authorization with this combination already exists'
+                : 'Failed to create authorization'
             });
             return of(AuthorizationsActions.createAuthorizationFailure({ error }));
           })
@@ -73,7 +81,7 @@ export class AuthorizationsEffects {
               'admin.authorizations.updated',
               'Authorization updated successfully'
             );
-            return AuthorizationsActions.updateAuthorizationSuccess({ authorization });
+            return AuthorizationsActions.updateAuthorizationSuccess({ authorization: normalizeAuthorization(authorization) });
           }),
           catchError(error => {
             this.notifications.addError({
@@ -111,7 +119,6 @@ export class AuthorizationsEffects {
     )
   );
 
-  // Reload authorizations when resource type changes
   setSelectedResourceType$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthorizationsActions.setSelectedResourceType),

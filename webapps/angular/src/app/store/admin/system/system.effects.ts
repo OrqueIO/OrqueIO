@@ -21,9 +21,7 @@ export class SystemEffects {
   private notifications = inject(NotificationsService);
   private store = inject(Store);
 
-  // =====================
   // Process Engines
-  // =====================
 
   loadEngines$ = createEffect(() =>
     this.actions$.pipe(
@@ -53,9 +51,7 @@ export class SystemEffects {
     { dispatch: false }
   );
 
-  // =====================
   // Engine Info
-  // =====================
 
   loadEngineInfo$ = createEffect(() =>
     this.actions$.pipe(
@@ -75,9 +71,7 @@ export class SystemEffects {
     )
   );
 
-  // =====================
   // Job Executor
-  // =====================
 
   loadJobExecutorStatus$ = createEffect(() =>
     this.actions$.pipe(
@@ -147,9 +141,7 @@ export class SystemEffects {
     )
   );
 
-  // =====================
   // Metrics
-  // =====================
 
   loadMonthlyMetrics$ = createEffect(() =>
     this.actions$.pipe(
@@ -165,21 +157,18 @@ export class SystemEffects {
         }
 
         return forkJoin([
-          // Load regular metrics (non-TU)
           this.systemService.getAggregatedMetrics({
             subscriptionStartDate: startDate,
             groupBy: 'month',
             metrics: requestMetrics.join(','),
             startDate: prevSubStart
           }),
-          // Load TU metrics for current subscription year
           this.systemService.getAggregatedMetrics({
             subscriptionStartDate: startDate,
             groupBy: 'month',
             metrics: METRIC_KEYS.TU,
             startDate: curSubStart
           }),
-          // Load TU metrics for previous subscription year
           this.systemService.getAggregatedMetrics({
             subscriptionStartDate: startDate,
             groupBy: 'month',
@@ -223,9 +212,7 @@ export class SystemEffects {
     )
   );
 
-  // =====================
   // Telemetry
-  // =====================
 
   loadTelemetryData$ = createEffect(() =>
     this.actions$.pipe(
@@ -242,9 +229,7 @@ export class SystemEffects {
     )
   );
 
-  // =====================
   // Helper Methods
-  // =====================
 
   private calculateActiveYear(startDateStr: string): Date {
     const startDate = new Date(startDateStr);
@@ -306,7 +291,6 @@ export class SystemEffects {
     const day = startDate.getDate();
     const activeMonth = this.calculateActiveMonth(startDateStr);
 
-    // Pre-fill last 24 months
     let month = new Date(activeMonth);
     for (let i = 0; i < 24; i++) {
       const label = this.createGroupLabel(month.getFullYear(), month.getMonth() + 1, day);
@@ -323,7 +307,6 @@ export class SystemEffects {
       month.setMonth(month.getMonth() - 1);
     }
 
-    // Fill with actual data
     for (const metric of rawMetrics) {
       const label = this.createGroupLabel(
         metric.subscriptionYear,
@@ -339,11 +322,9 @@ export class SystemEffects {
       }
     }
 
-    // Convert to array and sort descending
     const metricsArray = Object.values(metricsMap)
       .sort((a, b) => b.label.localeCompare(a.label));
 
-    // Accumulate TU metrics within each subscription year
     for (let i = metricsArray.length - 1; i >= 0; i--) {
       const metric = metricsArray[i];
       if (i - 1 >= 0) {
@@ -358,7 +339,6 @@ export class SystemEffects {
       }
     }
 
-    // Return only the last 12 months
     return metricsArray.slice(0, 12);
   }
 
@@ -389,7 +369,6 @@ export class SystemEffects {
       };
     }
 
-    // Sort descending by year
     return Object.values(metricsMap).sort((a, b) => b.label.localeCompare(a.label));
   }
 

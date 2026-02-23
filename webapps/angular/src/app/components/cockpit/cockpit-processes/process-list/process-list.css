@@ -42,6 +42,195 @@
 }
 
 /* =====================================================
+   PROCESS TABS NAVIGATION
+   ===================================================== */
+
+.process-tabs-container {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+}
+
+.process-tabs {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  padding: 0 1rem;
+  flex-shrink: 0;
+}
+
+.tabs-expand-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  padding: 0;
+  color: var(--text-muted);
+  background: transparent;
+  border: none;
+  border-left: 1px solid var(--border-color);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.tabs-expand-btn:hover {
+  background: var(--color-gray-100);
+  color: var(--text-primary);
+}
+
+.process-tab {
+  position: relative;
+  padding: 0.625rem 1rem;
+  font-size: 0.8125rem;
+  font-weight: 400;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+  white-space: nowrap;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  cursor: pointer;
+}
+
+.process-tab:hover {
+  color: var(--text-primary);
+}
+
+.process-tab.active {
+  color: var(--color-primary);
+  font-weight: 500;
+  border-bottom-color: var(--color-primary);
+}
+
+.tab-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 200px;
+}
+
+.tab-content .table-container {
+  flex: 1;
+  overflow: auto;
+}
+
+.incident-type {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  background: var(--color-danger-bg);
+  color: var(--color-danger);
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.incident-type-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--color-danger);
+  font-weight: 500;
+}
+
+.incident-icon {
+  color: var(--color-danger);
+}
+
+.activity-link {
+  color: var(--color-primary);
+  text-decoration: none;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.activity-link:hover {
+  text-decoration: underline;
+}
+
+.incident-message {
+  max-width: 400px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mono {
+  font-family: var(--font-family-mono);
+  font-size: 0.75rem;
+}
+
+.tab-toolbar {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background: var(--color-gray-50);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.results-count {
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.definition-link {
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.definition-link:hover {
+  text-decoration: underline;
+}
+
+.definition-key {
+  display: block;
+  font-size: 0.6875rem;
+  color: var(--text-muted);
+  margin-top: 0.125rem;
+}
+
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.action-btn:hover {
+  background: var(--color-primary-bg);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.state-info {
+  background: var(--color-info-bg);
+  color: var(--color-info);
+}
+
+.state-warning {
+  background: var(--color-warning-bg);
+  color: var(--color-warning);
+}
+
+.state-error {
+  background: var(--color-danger-bg);
+  color: var(--color-danger);
+}
+
+/* =====================================================
    DEFINITION INFO (in section header)
    ===================================================== */
 
@@ -121,6 +310,11 @@
   outline: none;
   border-color: rgba(255, 255, 255, 0.4);
   background: rgba(255, 255, 255, 0.15);
+}
+
+.version-selector select option {
+  color: #333;
+  background: #fff;
 }
 
 /* =====================================================
@@ -250,10 +444,22 @@
   cursor: pointer;
 }
 
+.variable-filter-item {
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-color-light);
+}
+
+.variable-filter-item:last-of-type {
+  border-bottom: none;
+  margin-bottom: 0.25rem;
+}
+
 .variable-row {
   display: flex;
   gap: 0.5rem;
   margin-top: 0.375rem;
+  align-items: center;
 }
 
 .variable-operator {
@@ -264,6 +470,61 @@
 
 .variable-value {
   flex: 1;
+}
+
+.filter-errors {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-top: 0.5rem;
+}
+
+.filter-error {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.5rem;
+  background: rgba(220, 53, 69, 0.08);
+  border: 1px solid rgba(220, 53, 69, 0.25);
+  border-radius: 4px;
+  color: var(--color-danger, #dc3545);
+  font-size: 0.75rem;
+  line-height: 1.3;
+}
+
+.btn-icon-remove {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.btn-icon-remove:hover {
+  color: var(--color-danger, #dc3545);
+  background: rgba(220, 53, 69, 0.1);
+}
+
+.btn-add-variable {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0;
+  border: none;
+  background: none;
+  color: var(--color-primary);
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.btn-add-variable:hover {
+  text-decoration: underline;
 }
 
 .filter-actions {
@@ -338,14 +599,13 @@
    ===================================================== */
 
 .diagram-section {
-  height: 55%;
+  flex: 1.2;
   min-height: 200px;
   background: var(--bg-card);
   border-bottom: 1px solid var(--border-color);
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  flex-shrink: 0;
 }
 
 .section-header {
@@ -411,36 +671,31 @@
   width: 100%;
 }
 
+/* Table fullscreen mode (hide diagram, sidebar, header) */
+.cockpit-layout.table-fullscreen .content-area {
+  width: 100%;
+}
+
+.cockpit-layout.table-fullscreen .instances-section {
+  height: 100%;
+  flex: 1;
+}
+
 .diagram-section.maximized {
   height: 100%;
   flex: 1;
   border-bottom: none;
 }
 
-/* Diagram collapsed mode (only header visible) */
+/* Diagram collapsed mode (completely hidden) */
 .diagram-section.collapsed {
-  height: auto;
-  min-height: auto;
-  flex: none;
-  border-bottom: none;
-}
-
-.diagram-section.collapsed .section-header {
-  padding: 0.5rem 1rem;
-}
-
-.diagram-section.collapsed .section-title {
   display: none;
-}
-
-.diagram-section.collapsed .definition-info {
-  flex: 1;
 }
 
 /* Table expanded mode */
 .content-area.table-expanded .instances-section {
   flex: 1;
-  height: auto;
+  height: 100%;
 }
 
 .diagram-loading {
@@ -466,7 +721,7 @@
    ===================================================== */
 
 .instances-section {
-  height: 45%;
+  flex: 1;
   min-height: 150px;
   display: flex;
   flex-direction: column;
@@ -489,6 +744,47 @@
   font-size: 0.8125rem;
   color: var(--text-secondary);
   font-weight: 500;
+}
+
+/* Compact Pagination */
+.compact-pagination {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.pagination-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.pagination-nav:hover:not(:disabled) {
+  background: var(--color-gray-100);
+  border-color: var(--color-gray-300);
+  color: var(--text-primary);
+}
+
+.pagination-nav:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pagination-current {
+  font-size: 0.8125rem;
+  color: var(--text-primary);
+  font-weight: 500;
+  min-width: 50px;
+  text-align: center;
 }
 
 .page-size-selector {
@@ -876,11 +1172,11 @@
   }
 
   .diagram-section {
-    height: 45%;
+    flex: 1;
   }
 
   .instances-section {
-    height: 55%;
+    flex: 1.2;
   }
 }
 

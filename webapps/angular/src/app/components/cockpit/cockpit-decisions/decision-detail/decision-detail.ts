@@ -98,6 +98,7 @@ export class DecisionDetailComponent implements OnInit, OnDestroy {
 
   activeTab: TabType = 'instances';
   versionDropdownOpen = false;
+  isDmnExpanded = false;
 
   breadcrumbs: BreadcrumbItem[] = [];
 
@@ -335,7 +336,7 @@ export class DecisionDetailComponent implements OnInit, OnDestroy {
   }
 
   getProcessDefinitionUrl(instance: DecisionInstance): string {
-    if (!instance.processDefinitionId) return '#';
+    if (!instance.processDefinitionKey) return '#';
     return `/cockpit/processes/${instance.processDefinitionKey}/instances`;
   }
 
@@ -347,5 +348,10 @@ export class DecisionDetailComponent implements OnInit, OnDestroy {
   truncateId(id: string, length: number = 8): string {
     if (id.length <= length) return id;
     return id.substring(0, length) + '...';
+  }
+
+  toggleDmnExpand(): void {
+    this.isDmnExpanded = !this.isDmnExpanded;
+    this.cdr.detectChanges();
   }
 }

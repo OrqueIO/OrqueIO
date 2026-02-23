@@ -2,14 +2,68 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, of, forkJoin } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
+import {
+  DashboardService,
+  DashboardStats,
+  DashboardChartsData,
+  ProcessStats,
+  TaskStats,
+  IncidentByType,
+  IncidentByProcess,
+  TimelineDataPoint,
+  ProcessDistributionItem,
+  TasksByGroup
+} from './dashboard.service';
+import {
+  ProcessDefinitionService,
+  ProcessDefinition as PDProcessDefinition,
+  ProcessDefinitionStatistics as PDStatistics,
+  ActivityStatistics as PDActivityStatistics,
+  CalledProcessDefinition as PDCalledProcessDefinition,
+  JobDefinition as PDJobDefinition,
+  Incident as PDIncident
+} from './process-definition.service';
+import {
+  ProcessInstanceService,
+  ProcessInstance as PIProcessInstance,
+  ProcessInstanceDetail as PIProcessInstanceDetail,
+  Variable as PIVariable,
+  Activity as PIActivity,
+  ActivityInstanceTree as PIActivityInstanceTree,
+  Job as PIJob,
+  ExternalTask as PIExternalTask,
+  UserTask as PIUserTask
+} from './process-instance.service';
+import {
+  DecisionService,
+  DecisionDefinition as DDecisionDefinition,
+  DecisionInstance as DDecisionInstance
+} from './decision.service';
+import {
+  DeploymentService,
+  Deployment as DDeployment,
+  DeploymentResource as DDeploymentResource,
+  DeploymentQueryParams as DDeploymentQueryParams,
+  DeleteDeploymentOptions
+} from './deployment.service';
+
+// Re-export types for backward compatibility
+// New code should import directly from the respective services
+
+// Dashboard types - using export type for isolatedModules compatibility
+export type {
+  DashboardStats,
+  DashboardChartsData,
+  ProcessStats,
+  TaskStats,
+  IncidentByType,
+  IncidentByProcess,
+  TimelineDataPoint,
+  ProcessDistributionItem,
+  TasksByGroup
+} from './dashboard.service';
 
 // Interfaces pour les types de données
-export interface DashboardStats {
-  runningProcessInstances: number;
-  openIncidents: number;
-  openTasks: number;
-  deployedDefinitions: number;
-}
 
 export interface ProcessDefinition {
   id: string;
@@ -179,6 +233,31 @@ export interface Job {
   jobType?: string;
 }
 
+// Job Definition interface
+export interface JobDefinition {
+  id: string;
+  processDefinitionId: string;
+  processDefinitionKey: string;
+  activityId: string;
+  jobType: string;
+  jobConfiguration?: string;
+  suspended: boolean;
+  overridingJobPriority?: number;
+  tenantId?: string;
+  deploymentId?: string;
+}
+
+// Called Process Definition (for Call Activities)
+export interface CalledProcessDefinition {
+  id: string;
+  key: string;
+  name?: string;
+  version: number;
+  calledFromActivityIds: string[];
+  callingProcessDefinitionId: string;
+  state?: 'running' | 'referenced' | 'running-and-referenced';
+}
+
 // User Task for User Tasks tab
 export interface UserTask {
   id: string;
@@ -288,14 +367,14 @@ export interface DecisionInstance {
 
 export interface DecisionInput {
   clauseId: string;
-  clauseName: string;
+  clauseName?: string;
   type: string;
   value: any;
 }
 
 export interface DecisionOutput {
   clauseId: string;
-  clauseName: string;
+  clauseName?: string;
   ruleId: string;
   ruleOrder: number;
   type: string;
@@ -437,6 +516,16 @@ export interface DeploymentQueryParams {
   maxResults?: number;
 }
 
+/**
+ * @deprecated This service is being refactored. Use the specialized services directly:
+ * - DashboardService for dashboard statistics and charts
+ * - ProcessDefinitionService for process definitions, BPMN XML, statistics
+ * - ProcessInstanceService for process instances, variables, activities
+ * - DecisionService for decision definitions and instances
+ * - DeploymentService for deployments and resources
+ *
+ * This service remains for backward compatibility and delegates to the new services.
+ */
 @Injectable({
   providedIn: 'root'
 })
@@ -444,361 +533,317 @@ export class CockpitService {
   private readonly baseUrl = '/orqueio/api/engine/engine/default';
   private readonly historyUrl = `${this.baseUrl}/history`;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private dashboardService: DashboardService,
+    private processDefinitionService: ProcessDefinitionService,
+    private processInstanceService: ProcessInstanceService,
+    private decisionService: DecisionService,
+    private deploymentService: DeploymentService
+  ) {}
 
-  // Dashboard Statistics
+  // ============================================
+  // Dashboard Statistics (delegated to DashboardService)
+  // ============================================
+
+  /**
+   * Get main dashboard statistics
+   * @deprecated Use DashboardService.getDashboardStats() directly for new code
+   */
   getDashboardStats(): Observable<DashboardStats> {
-    return forkJoin({
-      runningProcessInstances: this.getRunningProcessCount(),
-      openIncidents: this.getOpenIncidentsCount(),
-      openTasks: this.getOpenTasksCount(),
-      deployedDefinitions: this.getDeployedDefinitionsCount()
-    });
+    return this.dashboardService.getDashboardStats();
   }
 
-  private getRunningProcessCount(): Observable<number> {
-    return this.http.get<{ count: number }>(`${this.baseUrl}/process-instance/count`)
-      .pipe(
-        map(res => res.count),
-        catchError(() => of(0))
-      );
+  /**
+   * Get count of running process instances
+   * @deprecated Use DashboardService.getRunningProcessCount() directly for new code
+   */
+  getRunningProcessCount(): Observable<number> {
+    return this.dashboardService.getRunningProcessCount();
   }
 
-  private getOpenIncidentsCount(): Observable<number> {
-    return this.http.get<{ count: number }>(`${this.baseUrl}/incident/count`)
-      .pipe(
-        map(res => res.count),
-        catchError(() => of(0))
-      );
+  /**
+   * Get count of open incidents
+   * @deprecated Use DashboardService.getOpenIncidentsCount() directly for new code
+   */
+  getOpenIncidentsCount(): Observable<number> {
+    return this.dashboardService.getOpenIncidentsCount();
   }
 
-  private getOpenTasksCount(): Observable<number> {
-    return this.http.get<{ count: number }>(`${this.baseUrl}/task/count`)
-      .pipe(
-        map(res => res.count),
-        catchError(() => of(0))
-      );
+  /**
+   * Get count of open tasks
+   * @deprecated Use DashboardService.getOpenTasksCount() directly for new code
+   */
+  getOpenTasksCount(): Observable<number> {
+    return this.dashboardService.getOpenTasksCount();
   }
 
-  private getDeployedDefinitionsCount(): Observable<number> {
-    return this.http.get<{ count: number }>(`${this.baseUrl}/process-definition/count`)
-      .pipe(
-        map(res => res.count),
-        catchError(() => of(0))
-      );
+  /**
+   * Get count of deployed definitions
+   * @deprecated Use DashboardService.getDeployedDefinitionsCount() directly for new code
+   */
+  getDeployedDefinitionsCount(): Observable<number> {
+    return this.dashboardService.getDeployedDefinitionsCount();
   }
 
-  // Public count methods for dashboard
+  /**
+   * Get count of process definitions (latest versions only)
+   * @deprecated Use DashboardService.getProcessDefinitionsCount() directly for new code
+   */
   getProcessDefinitionsCount(): Observable<number> {
-    return this.http.get<{ count: number }>(`${this.baseUrl}/process-definition/count`, {
-      params: { latestVersion: 'true' }
-    }).pipe(
-      map(res => res.count),
-      catchError(() => of(0))
-    );
+    return this.dashboardService.getProcessDefinitionsCount();
   }
 
+  /**
+   * Get count of case definitions (latest versions only)
+   * @deprecated Use DashboardService.getCaseDefinitionsCount() directly for new code
+   */
   getCaseDefinitionsCount(): Observable<number> {
-    return this.http.get<{ count: number }>(`${this.baseUrl}/case-definition/count`, {
-      params: { latestVersion: 'true' }
-    }).pipe(
-      map(res => res.count),
-      catchError(() => of(0))
-    );
+    return this.dashboardService.getCaseDefinitionsCount();
   }
 
+  /**
+   * Get count of deployments
+   * @deprecated Use DashboardService.getDeploymentsCount() directly for new code
+   */
   getDeploymentsCount(): Observable<number> {
-    return this.http.get<{ count: number }>(`${this.baseUrl}/deployment/count`)
-      .pipe(
-        map(res => res.count),
-        catchError(() => of(0))
-      );
+    return this.dashboardService.getDeploymentsCount();
   }
 
-  // Process Definitions
+  // ============================================
+  // Process Definitions (delegated to ProcessDefinitionService)
+  // ============================================
+
+  /**
+   * @deprecated Use ProcessDefinitionService.getProcessDefinitions() directly
+   */
   getProcessDefinitions(maxResults: number = 1000): Observable<ProcessDefinition[]> {
-    return this.http.get<ProcessDefinition[]>(`${this.baseUrl}/process-definition`, {
-      params: { latestVersion: 'true', sortBy: 'name', sortOrder: 'asc', maxResults: maxResults.toString() }
-    }).pipe(catchError(() => of([])));
+    return this.processDefinitionService.getProcessDefinitions(maxResults);
   }
 
+  /**
+   * @deprecated Use ProcessDefinitionService.getProcessDefinition() directly
+   */
   getProcessDefinition(id: string): Observable<ProcessDefinition | null> {
-    return this.http.get<ProcessDefinition>(`${this.baseUrl}/process-definition/${id}`)
-      .pipe(catchError(() => of(null)));
+    return this.processDefinitionService.getProcessDefinition(id);
   }
 
+  /**
+   * @deprecated Use ProcessDefinitionService.getProcessDefinitionByKey() directly
+   */
   getProcessDefinitionByKey(key: string): Observable<ProcessDefinition | null> {
-    return this.http.get<ProcessDefinition>(`${this.baseUrl}/process-definition/key/${key}`)
-      .pipe(catchError(() => of(null)));
+    return this.processDefinitionService.getProcessDefinitionByKey(key);
   }
 
-  // Get process definitions with running instances count and incidents
+  /**
+   * @deprecated Use ProcessDefinitionService.getProcessDefinitionsWithStatistics() directly
+   */
   getProcessDefinitionsWithStatistics(includeIncidents = true): Observable<ProcessDefinitionStatistics[]> {
-    let params = new HttpParams();
-    if (includeIncidents) {
-      params = params.set('incidents', 'true');
-    }
-    return this.http.get<ProcessDefinitionStatistics[]>(
-      `${this.baseUrl}/process-definition/statistics`,
-      { params }
-    ).pipe(
-      map(stats => {
-        // Aggregate statistics by process definition key (combine all versions)
-        const aggregatedMap = new Map<string, ProcessDefinitionStatistics>();
-
-        stats.forEach(stat => {
-          const key = stat.definition?.key || stat.id;
-          const existing = aggregatedMap.get(key);
-
-          if (existing) {
-            // Aggregate instances and incidents
-            existing.instances += stat.instances;
-            existing.failedJobs += stat.failedJobs;
-            // Merge incidents
-            stat.incidents?.forEach(incident => {
-              const existingIncident = existing.incidents.find(i => i.incidentType === incident.incidentType);
-              if (existingIncident) {
-                existingIncident.incidentCount += incident.incidentCount;
-              } else {
-                existing.incidents.push({ ...incident });
-              }
-            });
-          } else {
-            aggregatedMap.set(key, {
-              ...stat,
-              incidents: stat.incidents ? [...stat.incidents] : []
-            });
-          }
-        });
-
-        // Sort by name
-        return Array.from(aggregatedMap.values()).sort((a, b) => {
-          const nameA = a.definition?.name || a.definition?.key || '';
-          const nameB = b.definition?.name || b.definition?.key || '';
-          return nameA.localeCompare(nameB);
-        });
-      }),
-      catchError(() => of([]))
-    );
+    return this.processDefinitionService.getProcessDefinitionsWithStatistics(includeIncidents);
   }
 
-  // Get running instances count for a specific process definition key
+  /**
+   * @deprecated Use ProcessDefinitionService.getRunningInstancesCount() directly
+   */
   getRunningInstancesCount(processDefinitionKey: string): Observable<number> {
-    return this.http.get<{ count: number }>(`${this.baseUrl}/process-instance/count`, {
-      params: { processDefinitionKey }
-    }).pipe(
-      map(res => res.count),
-      catchError(() => of(0))
-    );
+    return this.processDefinitionService.getRunningInstancesCount(processDefinitionKey);
   }
 
+  /**
+   * @deprecated Use ProcessDefinitionService.getBpmn20Xml() directly
+   */
   getBpmn20Xml(processDefinitionId: string): Observable<{ bpmn20Xml: string } | null> {
-    return this.http.get<{ bpmn20Xml: string }>(`${this.baseUrl}/process-definition/${processDefinitionId}/xml`)
-      .pipe(catchError(() => of(null)));
+    return this.processDefinitionService.getBpmn20Xml(processDefinitionId);
   }
 
-  // Activity Statistics for process definition (shows instance counts per activity)
+  /**
+   * @deprecated Use ProcessDefinitionService.getActivityStatistics() directly
+   */
   getActivityStatistics(processDefinitionId: string, includeIncidents = true): Observable<ActivityStatistics[]> {
-    let params = new HttpParams();
-    if (includeIncidents) {
-      params = params.set('incidents', 'true');
-    }
-    return this.http.get<ActivityStatistics[]>(
-      `${this.baseUrl}/process-definition/${processDefinitionId}/statistics`,
-      { params }
-    ).pipe(catchError(() => of([])));
+    return this.processDefinitionService.getActivityStatistics(processDefinitionId, includeIncidents);
   }
 
-  // Runtime activity instance tree for a running process instance
+  /**
+   * @deprecated Use ProcessDefinitionService.getIncidentsByProcessDefinitionKey() directly
+   */
+  getIncidentsByProcessDefinitionKey(processDefinitionKey: string, maxResults = 1000): Observable<Incident[]> {
+    return this.processDefinitionService.getIncidentsByProcessDefinitionKey(processDefinitionKey, maxResults);
+  }
+
+  /**
+   * @deprecated Use ProcessDefinitionService.getIncidentsByProcessDefinitionId() directly
+   */
+  getIncidentsByProcessDefinitionId(processDefinitionId: string, maxResults = 1000): Observable<Incident[]> {
+    return this.processDefinitionService.getIncidentsByProcessDefinitionId(processDefinitionId, maxResults);
+  }
+
+  /**
+   * @deprecated Use ProcessDefinitionService.getJobDefinitionsByProcessDefinitionKey() directly
+   */
+  getJobDefinitionsByProcessDefinitionKey(processDefinitionKey: string, firstResult = 0, maxResults = 50): Observable<{ jobDefinitions: JobDefinition[]; count: number }> {
+    return this.processDefinitionService.getJobDefinitionsByProcessDefinitionKey(processDefinitionKey, firstResult, maxResults);
+  }
+
+  /**
+   * @deprecated Use ProcessDefinitionService.getJobDefinitionsByProcessDefinitionId() directly
+   */
+  getJobDefinitionsByProcessDefinitionId(processDefinitionId: string, firstResult = 0, maxResults = 50): Observable<{ jobDefinitions: JobDefinition[]; count: number }> {
+    return this.processDefinitionService.getJobDefinitionsByProcessDefinitionId(processDefinitionId, firstResult, maxResults);
+  }
+
+  /**
+   * @deprecated Use ProcessDefinitionService.updateJobDefinitionSuspensionState() directly
+   */
+  updateJobDefinitionSuspensionState(jobDefinitionId: string, suspended: boolean): Observable<void> {
+    return this.processDefinitionService.updateJobDefinitionSuspensionState(jobDefinitionId, suspended);
+  }
+
+  /**
+   * @deprecated Use ProcessDefinitionService.getCalledProcessDefinitions() directly
+   */
+  getCalledProcessDefinitions(processDefinitionId: string): Observable<CalledProcessDefinition[]> {
+    return this.processDefinitionService.getCalledProcessDefinitions(processDefinitionId);
+  }
+
+  // ============================================
+  // Process Instances (delegated to ProcessInstanceService)
+  // ============================================
+
+  /**
+   * @deprecated Use ProcessInstanceService.getActivityInstanceTree() directly
+   */
   getActivityInstanceTree(processInstanceId: string): Observable<ActivityInstanceTree | null> {
-    return this.http.get<ActivityInstanceTree>(
-      `${this.baseUrl}/process-instance/${processInstanceId}/activity-instances`
-    ).pipe(catchError(() => of(null)));
+    return this.processInstanceService.getActivityInstanceTree(processInstanceId);
   }
 
-  // Process Instances
+  /**
+   * @deprecated Use ProcessInstanceService.getProcessInstances() directly
+   */
   getProcessInstances(params?: ProcessQueryParams): Observable<ProcessInstance[]> {
-    let httpParams = new HttpParams();
-
-    if (params) {
-      if (params.processDefinitionKey) {
-        httpParams = httpParams.set('processDefinitionKey', params.processDefinitionKey);
-      }
-      if (params.startedAfter) {
-        httpParams = httpParams.set('startedAfter', params.startedAfter);
-      }
-      if (params.startedBefore) {
-        httpParams = httpParams.set('startedBefore', params.startedBefore);
-      }
-      if (params.firstResult !== undefined) {
-        httpParams = httpParams.set('firstResult', params.firstResult.toString());
-      }
-      if (params.sortBy) {
-        httpParams = httpParams.set('sortBy', params.sortBy);
-        if (params.sortOrder) {
-          httpParams = httpParams.set('sortOrder', params.sortOrder);
-        }
-      }
-    }
-
-    // Always set maxResults to avoid "unbound results" error
-    const maxResults = params?.maxResults ?? 100;
-    httpParams = httpParams.set('maxResults', maxResults.toString());
-
-    return this.http.get<ProcessInstance[]>(`${this.historyUrl}/process-instance`, { params: httpParams })
-      .pipe(catchError(() => of([])));
+    return this.processInstanceService.getProcessInstances(params);
   }
 
+  /**
+   * @deprecated Use ProcessInstanceService.getProcessInstancesCount() directly
+   */
   getProcessInstancesCount(params?: ProcessQueryParams): Observable<number> {
-    let httpParams = new HttpParams();
-
-    if (params) {
-      if (params.processDefinitionKey) {
-        httpParams = httpParams.set('processDefinitionKey', params.processDefinitionKey);
-      }
-      if (params.startedAfter) {
-        httpParams = httpParams.set('startedAfter', params.startedAfter);
-      }
-      if (params.startedBefore) {
-        httpParams = httpParams.set('startedBefore', params.startedBefore);
-      }
-    }
-
-    return this.http.get<{ count: number }>(`${this.historyUrl}/process-instance/count`, { params: httpParams })
-      .pipe(
-        map(res => res.count),
-        catchError(() => of(0))
-      );
+    return this.processInstanceService.getProcessInstancesCount(params);
   }
 
+  /**
+   * @deprecated Use ProcessInstanceService.getProcessInstance() directly
+   */
   getProcessInstance(id: string): Observable<ProcessInstanceDetail | null> {
-    return this.http.get<ProcessInstanceDetail>(`${this.historyUrl}/process-instance/${id}`)
-      .pipe(catchError(() => of(null)));
+    return this.processInstanceService.getProcessInstance(id);
   }
 
+  /**
+   * @deprecated Use ProcessInstanceService.getProcessInstanceVariables() directly
+   */
   getProcessInstanceVariables(id: string, maxResults: number = 1000): Observable<Variable[]> {
-    return this.http.get<Variable[]>(`${this.historyUrl}/variable-instance`, {
-      params: { processInstanceId: id, maxResults: maxResults.toString() }
-    }).pipe(catchError(() => of([])));
+    return this.processInstanceService.getProcessInstanceVariables(id, maxResults);
   }
 
+  /**
+   * @deprecated Use ProcessInstanceService.getProcessInstanceActivities() directly
+   */
   getProcessInstanceActivities(id: string, maxResults: number = 1000): Observable<Activity[]> {
-    return this.http.get<Activity[]>(`${this.historyUrl}/activity-instance`, {
-      params: { processInstanceId: id, sortBy: 'startTime', sortOrder: 'desc', maxResults: maxResults.toString() }
-    }).pipe(catchError(() => of([])));
+    return this.processInstanceService.getProcessInstanceActivities(id, maxResults);
   }
 
+  /**
+   * @deprecated Use ProcessInstanceService.getProcessInstanceIncidents() directly
+   */
   getProcessInstanceIncidents(id: string, maxResults: number = 1000): Observable<Incident[]> {
-    return this.http.get<Incident[]>(`${this.baseUrl}/incident`, {
-      params: { processInstanceId: id, maxResults: maxResults.toString() }
-    }).pipe(catchError(() => of([])));
+    return this.processInstanceService.getProcessInstanceIncidents(id, maxResults);
   }
 
   // ============================================
-  // Decision Definitions
+  // Decision Definitions (delegated to DecisionService)
   // ============================================
 
+  /**
+   * @deprecated Use DecisionService.getDecisionDefinitions() directly
+   */
   getDecisionDefinitions(maxResults: number = 1000): Observable<DecisionDefinition[]> {
-    return this.http.get<DecisionDefinition[]>(`${this.baseUrl}/decision-definition`, {
-      params: { latestVersion: 'true', sortBy: 'name', sortOrder: 'asc', maxResults: maxResults.toString() }
-    }).pipe(catchError(() => of([])));
+    return this.decisionService.getDecisionDefinitions(maxResults);
   }
 
+  /**
+   * @deprecated Use DecisionService.getDecisionDefinition() directly
+   */
   getDecisionDefinition(id: string): Observable<DecisionDefinition | null> {
-    return this.http.get<DecisionDefinition>(`${this.baseUrl}/decision-definition/${id}`)
-      .pipe(catchError(() => of(null)));
+    return this.decisionService.getDecisionDefinition(id);
   }
 
-  // Get all versions of a decision definition by key
+  /**
+   * @deprecated Use DecisionService.getDecisionDefinitionVersions() directly
+   */
   getDecisionDefinitionVersions(key: string, tenantId?: string): Observable<DecisionDefinition[]> {
-    let params: any = { key, sortBy: 'version', sortOrder: 'desc', maxResults: '100' };
-    if (tenantId) {
-      params.tenantIdIn = tenantId;
-    } else {
-      params.withoutTenantId = 'true';
-    }
-    return this.http.get<DecisionDefinition[]>(`${this.baseUrl}/decision-definition`, { params })
-      .pipe(catchError(() => of([])));
+    return this.decisionService.getDecisionDefinitionVersions(key, tenantId);
   }
 
-  // Get decision definitions count
-  getDecisionDefinitionsCount(): Observable<number> {
-    return this.http.get<{ count: number }>(`${this.baseUrl}/decision-definition/count`, {
-      params: { latestVersion: 'true' }
-    }).pipe(
-      map(res => res.count),
-      catchError(() => of(0))
-    );
+  /**
+   * @deprecated Use DecisionService.getDecisionDefinitionsCount() directly
+   */
+  getDecisionDefinitionsCount(nameLike?: string): Observable<number> {
+    return this.decisionService.getDecisionDefinitionsCount(true, nameLike);
   }
 
-  // Get decision definitions with pagination and sorting (for table view)
+  /**
+   * @deprecated Use DecisionService.getDecisionDefinitionsPaginated() directly
+   */
   getDecisionDefinitionsPaginated(params: {
     firstResult?: number;
     maxResults?: number;
     sortBy?: string;
     sortOrder?: 'asc' | 'desc';
     latestVersion?: boolean;
+    nameLike?: string;
+    keyLike?: string;
   }): Observable<DecisionDefinition[]> {
-    let httpParams = new HttpParams();
-    if (params.firstResult !== undefined) {
-      httpParams = httpParams.set('firstResult', params.firstResult.toString());
-    }
-    if (params.maxResults !== undefined) {
-      httpParams = httpParams.set('maxResults', params.maxResults.toString());
-    }
-    if (params.sortBy) {
-      httpParams = httpParams.set('sortBy', params.sortBy);
-      if (params.sortOrder) {
-        httpParams = httpParams.set('sortOrder', params.sortOrder);
-      }
-    }
-    if (params.latestVersion !== false) {
-      httpParams = httpParams.set('latestVersion', 'true');
-    }
-    return this.http.get<DecisionDefinition[]>(`${this.baseUrl}/decision-definition`, { params: httpParams })
-      .pipe(catchError(() => of([])));
+    return this.decisionService.getDecisionDefinitionsPaginated(params);
   }
 
-  // Get DMN XML for a decision definition
+  /**
+   * @deprecated Use DecisionService.getDecisionXml() directly
+   */
   getDecisionXml(decisionDefinitionId: string): Observable<{ id: string; dmnXml: string } | null> {
-    return this.http.get<{ id: string; dmnXml: string }>(`${this.baseUrl}/decision-definition/${decisionDefinitionId}/xml`)
-      .pipe(catchError(() => of(null)));
+    return this.decisionService.getDecisionXml(decisionDefinitionId);
   }
 
   // ============================================
-  // Decision Requirements Definition (DRD)
+  // Decision Requirements Definition (DRD) (delegated to DecisionService)
   // ============================================
 
+  /**
+   * @deprecated Use DecisionService.getDecisionRequirementsDefinitions() directly
+   */
   getDecisionRequirementsDefinitions(maxResults: number = 1000): Observable<any[]> {
-    return this.http.get<any[]>(`${this.baseUrl}/decision-requirements-definition`, {
-      params: { latestVersion: 'true', sortBy: 'name', sortOrder: 'asc', maxResults: maxResults.toString() }
-    }).pipe(catchError(() => of([])));
+    return this.decisionService.getDecisionRequirementsDefinitions(maxResults);
   }
 
+  /**
+   * @deprecated Use DecisionService.getDecisionRequirementsDefinition() directly
+   */
   getDecisionRequirementsDefinition(id: string): Observable<any | null> {
-    return this.http.get<any>(`${this.baseUrl}/decision-requirements-definition/${id}`)
-      .pipe(catchError(() => of(null)));
+    return this.decisionService.getDecisionRequirementsDefinition(id);
   }
 
   // ============================================
-  // Decision Instances
+  // Decision Instances (delegated to DecisionService)
   // ============================================
 
+  /**
+   * @deprecated Use DecisionService.getDecisionInstances() directly
+   */
   getDecisionInstances(definitionId?: string, maxResults: number = 100): Observable<DecisionInstance[]> {
-    let httpParams = new HttpParams()
-      .set('sortBy', 'evaluationTime')
-      .set('sortOrder', 'desc')
-      .set('maxResults', maxResults.toString());
-
-    if (definitionId) {
-      httpParams = httpParams.set('decisionDefinitionId', definitionId);
-    }
-
-    return this.http.get<DecisionInstance[]>(`${this.historyUrl}/decision-instance`, { params: httpParams })
-      .pipe(catchError(() => of([])));
+    return this.decisionService.getDecisionInstances(definitionId, maxResults);
   }
 
-  // Get decision instances with advanced filtering (for table view)
+  /**
+   * @deprecated Use DecisionService.getDecisionInstancesPaginated() directly
+   */
   getDecisionInstancesPaginated(params: {
     decisionDefinitionId?: string;
     decisionDefinitionKey?: string;
@@ -819,94 +864,21 @@ export class CockpitService {
     includeInputs?: boolean;
     includeOutputs?: boolean;
   }): Observable<DecisionInstance[]> {
-    let httpParams = new HttpParams();
-
-    if (params.decisionDefinitionId) {
-      httpParams = httpParams.set('decisionDefinitionId', params.decisionDefinitionId);
-    }
-    if (params.decisionDefinitionKey) {
-      httpParams = httpParams.set('decisionDefinitionKey', params.decisionDefinitionKey);
-    }
-    if (params.processDefinitionId) {
-      httpParams = httpParams.set('processDefinitionId', params.processDefinitionId);
-    }
-    if (params.processDefinitionKey) {
-      httpParams = httpParams.set('processDefinitionKey', params.processDefinitionKey);
-    }
-    if (params.processInstanceId) {
-      httpParams = httpParams.set('processInstanceId', params.processInstanceId);
-    }
-    if (params.caseDefinitionId) {
-      httpParams = httpParams.set('caseDefinitionId', params.caseDefinitionId);
-    }
-    if (params.caseDefinitionKey) {
-      httpParams = httpParams.set('caseDefinitionKey', params.caseDefinitionKey);
-    }
-    if (params.caseInstanceId) {
-      httpParams = httpParams.set('caseInstanceId', params.caseInstanceId);
-    }
-    if (params.activityIdIn?.length) {
-      httpParams = httpParams.set('activityIdIn', params.activityIdIn.join(','));
-    }
-    if (params.activityInstanceIdIn?.length) {
-      httpParams = httpParams.set('activityInstanceIdIn', params.activityInstanceIdIn.join(','));
-    }
-    if (params.evaluatedBefore) {
-      httpParams = httpParams.set('evaluatedBefore', params.evaluatedBefore);
-    }
-    if (params.evaluatedAfter) {
-      httpParams = httpParams.set('evaluatedAfter', params.evaluatedAfter);
-    }
-    if (params.firstResult !== undefined) {
-      httpParams = httpParams.set('firstResult', params.firstResult.toString());
-    }
-    if (params.maxResults !== undefined) {
-      httpParams = httpParams.set('maxResults', params.maxResults.toString());
-    }
-    if (params.sortBy) {
-      httpParams = httpParams.set('sortBy', params.sortBy);
-      if (params.sortOrder) {
-        httpParams = httpParams.set('sortOrder', params.sortOrder);
-      }
-    }
-    if (params.includeInputs) {
-      httpParams = httpParams.set('includeInputs', 'true');
-    }
-    if (params.includeOutputs) {
-      httpParams = httpParams.set('includeOutputs', 'true');
-    }
-
-    return this.http.get<DecisionInstance[]>(`${this.historyUrl}/decision-instance`, { params: httpParams })
-      .pipe(catchError(() => of([])));
+    return this.decisionService.getDecisionInstancesPaginated(params);
   }
 
-  // Get decision instances count
+  /**
+   * @deprecated Use DecisionService.getDecisionInstancesCount() directly
+   */
   getDecisionInstancesCount(decisionDefinitionId?: string): Observable<number> {
-    let httpParams = new HttpParams();
-    if (decisionDefinitionId) {
-      httpParams = httpParams.set('decisionDefinitionId', decisionDefinitionId);
-    }
-    return this.http.get<{ count: number }>(`${this.historyUrl}/decision-instance/count`, { params: httpParams })
-      .pipe(
-        map(res => res.count),
-        catchError(() => of(0))
-      );
+    return this.decisionService.getDecisionInstancesCount(decisionDefinitionId);
   }
 
+  /**
+   * @deprecated Use DecisionService.getDecisionInstance() directly
+   */
   getDecisionInstance(id: string): Observable<DecisionInstance | null> {
-    return this.http.get<DecisionInstance[]>(`${this.historyUrl}/decision-instance`, {
-      params: {
-        decisionInstanceId: id,
-        includeInputs: 'true',
-        includeOutputs: 'true',
-        disableBinaryFetching: 'true',
-        disableCustomObjectDeserialization: 'true',
-        maxResults: '1'
-      }
-    }).pipe(
-      map(results => results.length > 0 ? results[0] : null),
-      catchError(() => of(null))
-    );
+    return this.decisionService.getDecisionInstance(id);
   }
 
   // Tasks
@@ -970,292 +942,263 @@ export class CockpitService {
   }
 
   // ============================================
-  // Process Definition Versions
+  // Process Definition Versions (delegated to ProcessDefinitionService)
   // ============================================
 
-  // Get all versions of a process definition by key
+  /**
+   * @deprecated Use ProcessDefinitionService.getProcessDefinitionVersions() directly
+   */
   getProcessDefinitionVersions(key: string): Observable<ProcessDefinition[]> {
-    return this.http.get<ProcessDefinition[]>(`${this.baseUrl}/process-definition`, {
-      params: { key, sortBy: 'version', sortOrder: 'desc', maxResults: '100' }
-    }).pipe(catchError(() => of([])));
+    return this.processDefinitionService.getProcessDefinitionVersions(key);
   }
 
-  // Get process definitions with statistics (not aggregated - per version)
+  /**
+   * @deprecated Use ProcessDefinitionService.getProcessDefinitionsStatisticsRaw() directly
+   */
   getProcessDefinitionsStatisticsRaw(includeIncidents = true): Observable<ProcessDefinitionStatistics[]> {
-    let params = new HttpParams();
-    if (includeIncidents) {
-      params = params.set('incidents', 'true');
-    }
-    return this.http.get<ProcessDefinitionStatistics[]>(
-      `${this.baseUrl}/process-definition/statistics`,
-      { params }
-    ).pipe(catchError(() => of([])));
+    return this.processDefinitionService.getProcessDefinitionsStatisticsRaw(includeIncidents);
   }
 
   // ============================================
-  // Jobs
+  // Jobs (delegated to ProcessInstanceService)
   // ============================================
 
-  // Get jobs for a process instance
+  /**
+   * @deprecated Use ProcessInstanceService.getJobsByProcessInstance() directly
+   */
   getJobsByProcessInstance(processInstanceId: string, maxResults = 100): Observable<Job[]> {
-    return this.http.get<Job[]>(`${this.baseUrl}/job`, {
-      params: { processInstanceId, maxResults: maxResults.toString() }
-    }).pipe(catchError(() => of([])));
+    return this.processInstanceService.getJobsByProcessInstance(processInstanceId, maxResults);
   }
 
-  // Get job by ID
+  /**
+   * @deprecated Use ProcessInstanceService.getJob() directly
+   */
   getJob(id: string): Observable<Job | null> {
-    return this.http.get<Job>(`${this.baseUrl}/job/${id}`)
-      .pipe(catchError(() => of(null)));
+    return this.processInstanceService.getJob(id);
   }
 
-  // Retry a failed job
+  /**
+   * @deprecated Use ProcessInstanceService.retryJob() directly
+   */
   retryJob(jobId: string, retries: number = 1): Observable<void> {
-    return this.http.put<void>(`${this.baseUrl}/job/${jobId}/retries`, { retries })
-      .pipe(catchError(() => of(void 0)));
+    return this.processInstanceService.retryJob(jobId, retries);
   }
 
-  // Set job retries in bulk
+  /**
+   * @deprecated Use ProcessInstanceService.setJobRetriesByProcessInstance() directly
+   */
   setJobRetriesByProcessInstance(processInstanceId: string, retries: number): Observable<void> {
-    return this.http.post<void>(`${this.baseUrl}/job/retries`, {
-      processInstances: [processInstanceId],
-      retries
-    }).pipe(catchError(() => of(void 0)));
+    return this.processInstanceService.setJobRetriesByProcessInstance(processInstanceId, retries);
   }
 
-  // Suspend a job
+  /**
+   * @deprecated Use ProcessInstanceService.suspendJob() directly
+   */
   suspendJob(jobId: string): Observable<void> {
-    return this.http.put<void>(`${this.baseUrl}/job/${jobId}/suspended`, { suspended: true })
-      .pipe(catchError(() => of(void 0)));
+    return this.processInstanceService.suspendJob(jobId);
   }
 
-  // Resume a job
+  /**
+   * @deprecated Use ProcessInstanceService.resumeJob() directly
+   */
   resumeJob(jobId: string): Observable<void> {
-    return this.http.put<void>(`${this.baseUrl}/job/${jobId}/suspended`, { suspended: false })
-      .pipe(catchError(() => of(void 0)));
+    return this.processInstanceService.resumeJob(jobId);
   }
 
-  // Recalculate job due date
+  /**
+   * @deprecated Use ProcessInstanceService.recalculateJobDueDate() directly
+   */
   recalculateJobDueDate(jobId: string, creationDateBased = false): Observable<void> {
-    let httpParams = new HttpParams();
-    if (creationDateBased) {
-      httpParams = httpParams.set('creationDateBased', 'true');
-    }
-    return this.http.post<void>(`${this.baseUrl}/job/${jobId}/duedate/recalculate`, null, { params: httpParams })
-      .pipe(catchError(() => of(void 0)));
+    return this.processInstanceService.recalculateJobDueDate(jobId, creationDateBased);
   }
 
   // ============================================
-  // User Tasks
+  // User Tasks (delegated to ProcessInstanceService)
   // ============================================
 
-  // Get user tasks for a process instance
+  /**
+   * @deprecated Use ProcessInstanceService.getUserTasksByProcessInstance() directly
+   */
   getUserTasksByProcessInstance(processInstanceId: string, maxResults = 100): Observable<UserTask[]> {
-    return this.http.get<UserTask[]>(`${this.baseUrl}/task`, {
-      params: { processInstanceId, maxResults: maxResults.toString() }
-    }).pipe(catchError(() => of([])));
+    return this.processInstanceService.getUserTasksByProcessInstance(processInstanceId, maxResults);
   }
 
-  // Get history user tasks for a process instance
+  /**
+   * @deprecated Use ProcessInstanceService.getHistoryUserTasksByProcessInstance() directly
+   */
   getHistoryUserTasksByProcessInstance(processInstanceId: string, maxResults = 100): Observable<UserTask[]> {
-    return this.http.get<any[]>(`${this.historyUrl}/task`, {
-      params: { processInstanceId, maxResults: maxResults.toString(), sortBy: 'startTime', sortOrder: 'desc' }
-    }).pipe(
-      map(tasks => tasks.map(t => ({
-        ...t,
-        created: t.startTime
-      }))),
-      catchError(() => of([]))
-    );
+    return this.processInstanceService.getHistoryUserTasksByProcessInstance(processInstanceId, maxResults);
   }
 
-  // Set task assignee
+  /**
+   * @deprecated Use ProcessInstanceService.setTaskAssignee() directly
+   */
   setTaskAssignee(taskId: string, userId: string | null): Observable<void> {
-    return this.http.post<void>(`${this.baseUrl}/task/${taskId}/assignee`, { userId })
-      .pipe(catchError(() => of(void 0)));
+    return this.processInstanceService.setTaskAssignee(taskId, userId);
   }
 
-  // Set task owner
+  /**
+   * @deprecated Use ProcessInstanceService.setTaskOwner() directly
+   */
   setTaskOwner(taskId: string, userId: string | null): Observable<void> {
-    return this.http.post<void>(`${this.baseUrl}/task/${taskId}/owner`, { userId })
-      .pipe(catchError(() => of(void 0)));
+    return this.processInstanceService.setTaskOwner(taskId, userId);
   }
 
-  // Get task identity links (candidate users/groups)
+  /**
+   * @deprecated Use ProcessInstanceService.getTaskIdentityLinks() directly
+   */
   getTaskIdentityLinks(taskId: string): Observable<any[]> {
-    return this.http.get<any[]>(`${this.baseUrl}/task/${taskId}/identity-links`)
-      .pipe(catchError(() => of([])));
+    return this.processInstanceService.getTaskIdentityLinks(taskId);
   }
 
-  // Add task identity link
+  /**
+   * @deprecated Use ProcessInstanceService.addTaskIdentityLink() directly
+   */
   addTaskIdentityLink(taskId: string, userId: string | null, groupId: string | null, type: string): Observable<void> {
-    return this.http.post<void>(`${this.baseUrl}/task/${taskId}/identity-links`, { userId, groupId, type })
-      .pipe(catchError(() => of(void 0)));
+    return this.processInstanceService.addTaskIdentityLink(taskId, userId, groupId, type);
   }
 
-  // Delete task identity link
+  /**
+   * @deprecated Use ProcessInstanceService.deleteTaskIdentityLink() directly
+   */
   deleteTaskIdentityLink(taskId: string, userId: string | null, groupId: string | null, type: string): Observable<void> {
-    return this.http.post<void>(`${this.baseUrl}/task/${taskId}/identity-links/delete`, { userId, groupId, type })
-      .pipe(catchError(() => of(void 0)));
+    return this.processInstanceService.deleteTaskIdentityLink(taskId, userId, groupId, type);
   }
 
   // ============================================
-  // Called Process Instances (Sub-processes)
+  // Called Process Instances (delegated to ProcessInstanceService)
   // ============================================
 
-  // Get called process instances (sub-processes) for a process instance
+  /**
+   * @deprecated Use ProcessInstanceService.getCalledProcessInstances() directly
+   */
   getCalledProcessInstances(superProcessInstanceId: string, maxResults = 100): Observable<ProcessInstance[]> {
-    return this.http.get<ProcessInstance[]>(`${this.historyUrl}/process-instance`, {
-      params: { superProcessInstanceId, maxResults: maxResults.toString(), sortBy: 'startTime', sortOrder: 'desc' }
-    }).pipe(catchError(() => of([])));
+    return this.processInstanceService.getCalledProcessInstances(superProcessInstanceId, maxResults);
   }
 
-  // Get super (parent) process instance
+  /**
+   * @deprecated Use ProcessInstanceService.getSuperProcessInstance() directly
+   */
   getSuperProcessInstance(processInstanceId: string): Observable<ProcessInstance | null> {
-    return this.getProcessInstance(processInstanceId).pipe(
-      map(instance => {
-        if (instance?.superProcessInstanceId) {
-          return instance;
-        }
-        return null;
-      }),
-      catchError(() => of(null))
-    );
+    return this.processInstanceService.getSuperProcessInstance(processInstanceId);
   }
 
   // ============================================
-  // External Tasks
+  // External Tasks (delegated to ProcessInstanceService)
   // ============================================
 
-  // Get external tasks for a process instance
+  /**
+   * @deprecated Use ProcessInstanceService.getExternalTasksByProcessInstance() directly
+   */
   getExternalTasksByProcessInstance(processInstanceId: string, maxResults = 100): Observable<ExternalTask[]> {
-    return this.http.get<ExternalTask[]>(`${this.baseUrl}/external-task`, {
-      params: { processInstanceId, maxResults: maxResults.toString() }
-    }).pipe(catchError(() => of([])));
+    return this.processInstanceService.getExternalTasksByProcessInstance(processInstanceId, maxResults);
   }
 
-  // Retry external task
+  /**
+   * @deprecated Use ProcessInstanceService.retryExternalTask() directly
+   */
   retryExternalTask(externalTaskId: string): Observable<void> {
-    return this.http.post<void>(`${this.baseUrl}/external-task/${externalTaskId}/retries`, { retries: 1 })
-      .pipe(catchError(() => of(void 0)));
+    return this.processInstanceService.retryExternalTask(externalTaskId);
   }
 
-  // Set external task retries in bulk for a process instance
+  /**
+   * @deprecated Use ProcessInstanceService.setExternalTaskRetriesByProcessInstance() directly
+   */
   setExternalTaskRetriesByProcessInstance(processInstanceId: string, retries: number): Observable<void> {
-    return this.http.put<void>(`${this.baseUrl}/external-task/retries`, {
-      processInstanceId,
-      retries
-    }).pipe(catchError(() => of(void 0)));
+    return this.processInstanceService.setExternalTaskRetriesByProcessInstance(processInstanceId, retries);
   }
 
   // ============================================
-  // Process Instance Actions
+  // Process Instance Actions (delegated to ProcessInstanceService)
   // ============================================
 
-  // Cancel a process instance
+  /**
+   * @deprecated Use ProcessInstanceService.cancelProcessInstance() directly
+   */
   cancelProcessInstance(processInstanceId: string, deleteReason?: string): Observable<void> {
-    const params: any = {};
-    if (deleteReason) {
-      params.deleteReason = deleteReason;
-    }
-    return this.http.delete<void>(`${this.baseUrl}/process-instance/${processInstanceId}`, { params })
-      .pipe(catchError(() => of(void 0)));
+    return this.processInstanceService.cancelProcessInstance(processInstanceId, deleteReason);
   }
 
-  // Suspend a process instance
+  /**
+   * @deprecated Use ProcessInstanceService.suspendProcessInstance() directly
+   */
   suspendProcessInstance(processInstanceId: string): Observable<void> {
-    return this.http.put<void>(
-      `${this.baseUrl}/process-instance/${processInstanceId}/suspended`,
-      { suspended: true }
-    ).pipe(catchError(() => of(void 0)));
+    return this.processInstanceService.suspendProcessInstance(processInstanceId);
   }
 
-  // Resume (activate) a process instance
+  /**
+   * @deprecated Use ProcessInstanceService.resumeProcessInstance() directly
+   */
   resumeProcessInstance(processInstanceId: string): Observable<void> {
-    return this.http.put<void>(
-      `${this.baseUrl}/process-instance/${processInstanceId}/suspended`,
-      { suspended: false }
-    ).pipe(catchError(() => of(void 0)));
+    return this.processInstanceService.resumeProcessInstance(processInstanceId);
   }
 
-  // Suspend all instances of a process definition
+  /**
+   * @deprecated Use ProcessDefinitionService.suspendProcessDefinition() directly
+   */
   suspendProcessDefinition(processDefinitionId: string, includeInstances = true): Observable<void> {
-    return this.http.put<void>(
-      `${this.baseUrl}/process-definition/${processDefinitionId}/suspended`,
-      { suspended: true, includeProcessInstances: includeInstances }
-    ).pipe(catchError(() => of(void 0)));
+    return this.processDefinitionService.suspendProcessDefinition(processDefinitionId, includeInstances);
   }
 
-  // Resume all instances of a process definition
+  /**
+   * @deprecated Use ProcessDefinitionService.activateProcessDefinition() directly
+   */
   resumeProcessDefinition(processDefinitionId: string, includeInstances = true): Observable<void> {
-    return this.http.put<void>(
-      `${this.baseUrl}/process-definition/${processDefinitionId}/suspended`,
-      { suspended: false, includeProcessInstances: includeInstances }
-    ).pipe(catchError(() => of(void 0)));
+    return this.processDefinitionService.activateProcessDefinition(processDefinitionId, includeInstances);
   }
 
   // ============================================
-  // Variables Management
+  // Variables Management (delegated to ProcessInstanceService)
   // ============================================
 
-  // Set a variable on a process instance
+  /**
+   * @deprecated Use ProcessInstanceService.setProcessInstanceVariable() directly
+   */
   setProcessInstanceVariable(processInstanceId: string, variableName: string, value: any, type: string): Observable<void> {
-    return this.http.put<void>(
-      `${this.baseUrl}/process-instance/${processInstanceId}/variables/${variableName}`,
-      { value, type }
-    ).pipe(catchError(() => of(void 0)));
+    return this.processInstanceService.setProcessInstanceVariable(processInstanceId, variableName, value, type);
   }
 
-  // Delete a variable from a process instance
+  /**
+   * @deprecated Use ProcessInstanceService.deleteProcessInstanceVariable() directly
+   */
   deleteProcessInstanceVariable(processInstanceId: string, variableName: string): Observable<void> {
-    return this.http.delete<void>(
-      `${this.baseUrl}/process-instance/${processInstanceId}/variables/${variableName}`
-    ).pipe(catchError(() => of(void 0)));
+    return this.processInstanceService.deleteProcessInstanceVariable(processInstanceId, variableName);
   }
 
-  // Set multiple variables at once
+  /**
+   * @deprecated Use ProcessInstanceService.setProcessInstanceVariables() directly
+   */
   setProcessInstanceVariables(processInstanceId: string, modifications: Record<string, { value: any; type: string }>): Observable<void> {
-    return this.http.post<void>(
-      `${this.baseUrl}/process-instance/${processInstanceId}/variables`,
-      { modifications }
-    ).pipe(catchError(() => of(void 0)));
+    return this.processInstanceService.setProcessInstanceVariables(processInstanceId, modifications);
   }
 
   // ============================================
-  // Enhanced Process Instance Filtering (POST)
+  // Enhanced Process Instance Filtering (delegated to ProcessInstanceService)
   // ============================================
 
-  // Query process instances with POST (supports complex filters)
+  /**
+   * @deprecated Use ProcessInstanceService.queryProcessInstances() directly
+   */
   queryProcessInstances(body: any, firstResult = 0, maxResults = 100): Observable<ProcessInstance[]> {
-    return this.http.post<ProcessInstance[]>(
-      `${this.historyUrl}/process-instance`,
-      body,
-      { params: { firstResult: firstResult.toString(), maxResults: maxResults.toString() } }
-    ).pipe(catchError(() => of([])));
+    return this.processInstanceService.queryProcessInstances(body, firstResult, maxResults);
   }
 
-  // Count process instances with POST (supports complex filters)
+  /**
+   * @deprecated Use ProcessInstanceService.queryProcessInstancesCount() directly
+   */
   queryProcessInstancesCount(body: any): Observable<number> {
-    // Remove sorting from count query - count endpoint doesn't support it
-    const { sorting, ...countBody } = body || {};
-    return this.http.post<{ count: number }>(
-      `${this.historyUrl}/process-instance/count`,
-      countBody
-    ).pipe(
-      map(res => res.count),
-      catchError(() => of(0))
-    );
+    return this.processInstanceService.queryProcessInstancesCount(body);
   }
 
   // ============================================
-  // History Incidents
+  // History Incidents (delegated to ProcessInstanceService)
   // ============================================
 
-  // Get history incidents for a process instance
+  /**
+   * @deprecated Use ProcessInstanceService.getHistoryIncidents() directly
+   */
   getHistoryIncidents(processInstanceId: string, maxResults = 100): Observable<Incident[]> {
-    return this.http.get<Incident[]>(`${this.historyUrl}/incident`, {
-      params: { processInstanceId, maxResults: maxResults.toString(), sortBy: 'createTime', sortOrder: 'desc' }
-    }).pipe(catchError(() => of([])));
+    return this.processInstanceService.getHistoryIncidents(processInstanceId, maxResults);
   }
 
   // ============================================
@@ -1419,440 +1362,181 @@ export class CockpitService {
   }
 
   // ============================================
-  // Dashboard Charts API Methods
+  // Dashboard Charts API Methods (delegated to DashboardService)
   // ============================================
 
   /**
    * Get count of suspended process instances
+   * @deprecated Use DashboardService.getSuspendedProcessCount() directly for new code
    */
   getSuspendedProcessCount(): Observable<number> {
-    return this.http.get<{ count: number }>(`${this.baseUrl}/process-instance/count`, {
-      params: { suspended: 'true' }
-    }).pipe(
-      map(res => res.count),
-      catchError(() => of(0))
-    );
+    return this.dashboardService.getSuspendedProcessCount();
   }
 
   /**
    * Get count of finished process instances (from history)
+   * @deprecated Use DashboardService.getFinishedProcessCount() directly for new code
    */
   getFinishedProcessCount(params?: {
     finishedAfter?: string;
     finishedBefore?: string;
   }): Observable<number> {
-    let httpParams = new HttpParams().set('finished', 'true');
-    if (params?.finishedAfter) {
-      httpParams = httpParams.set('finishedAfter', params.finishedAfter);
-    }
-    if (params?.finishedBefore) {
-      httpParams = httpParams.set('finishedBefore', params.finishedBefore);
-    }
-    return this.http.get<{ count: number }>(`${this.historyUrl}/process-instance/count`, {
-      params: httpParams
-    }).pipe(
-      map(res => res.count),
-      catchError(() => of(0))
-    );
+    return this.dashboardService.getFinishedProcessCount(params);
   }
 
   /**
    * Get process stats for charts (active, suspended, completed)
+   * @deprecated Use DashboardService.getProcessStatsForChart() directly for new code
    */
-  getProcessStatsForChart(): Observable<{
-    active: number;
-    suspended: number;
-    completed: number;
-  }> {
-    return forkJoin({
-      active: this.getRunningProcessCount(),
-      suspended: this.getSuspendedProcessCount(),
-      completed: this.getFinishedProcessCount()
-    });
+  getProcessStatsForChart(): Observable<ProcessStats> {
+    return this.dashboardService.getProcessStatsForChart();
   }
 
   /**
-   * Get task stats for charts (assigned, with candidate groups, without)
-   * Categories are mutually exclusive to match AngularJS behavior:
-   * - assigned: tasks assigned to a specific user
-   * - unassigned: unassigned tasks that have candidate groups (assigned to a group)
-   * - withoutCandidateGroups: unassigned tasks without any candidate groups
+   * Get task stats for charts
+   * @deprecated Use DashboardService.getTaskStatsForChart() directly for new code
    */
-  getTaskStatsForChart(): Observable<{
-    assigned: number;
-    unassigned: number;
-    withCandidateGroups: number;
-    withoutCandidateGroups: number;
-  }> {
-    return forkJoin({
-      // Tasks assigned to a specific user
-      assigned: this.getTasksCountWithParams({ assigned: true }),
-      // Unassigned tasks with candidate groups (assigned to a group)
-      unassigned: this.getTasksCountWithParams({ unassigned: true, withCandidateGroups: true }),
-      // Keep for compatibility
-      withCandidateGroups: this.getTasksCountWithParams({ unassigned: true, withCandidateGroups: true }),
-      // Unassigned tasks without any candidate groups (completely unassigned)
-      withoutCandidateGroups: this.getTasksCountWithParams({ unassigned: true, withoutCandidateGroups: true })
-    });
+  getTaskStatsForChart(): Observable<TaskStats> {
+    return this.dashboardService.getTaskStatsForChart();
   }
 
   /**
    * Get incidents grouped by type
+   * @deprecated Use DashboardService.getIncidentsByType() directly for new code
    */
-  getIncidentsByType(): Observable<{ type: string; count: number }[]> {
-    return this.http.get<Incident[]>(`${this.baseUrl}/incident`, {
-      params: { maxResults: '10000' }
-    }).pipe(
-      map(incidents => {
-        const grouped = incidents.reduce((acc, inc) => {
-          const type = inc.incidentType || 'unknown';
-          acc[type] = (acc[type] || 0) + 1;
-          return acc;
-        }, {} as Record<string, number>);
-
-        return Object.entries(grouped)
-          .map(([type, count]) => ({ type, count }))
-          .sort((a, b) => b.count - a.count);
-      }),
-      catchError(() => of([]))
-    );
+  getIncidentsByType(): Observable<IncidentByType[]> {
+    return this.dashboardService.getIncidentsByType();
   }
 
   /**
    * Get incidents aggregated by process definition
-   * Uses /process-definition/statistics?rootIncidents=true to match AngularJS behavior
-   * This only counts ROOT incidents (where incident.id = incident.rootCauseIncidentId)
+   * @deprecated Use DashboardService.getIncidentsByProcess() directly for new code
    */
-  getIncidentsByProcess(): Observable<{
-    processKey: string;
-    processName: string;
-    incidentCount: number;
-    instances: number;
-  }[]> {
-    // Use the same endpoint as AngularJS: /process-definition/statistics?rootIncidents=true
-    return this.http.get<ProcessDefinitionStatistics[]>(
-      `${this.baseUrl}/process-definition/statistics`,
-      { params: { rootIncidents: 'true' } }
-    ).pipe(
-      map(stats => {
-        // Aggregate by process key (combine all versions)
-        const aggregatedMap = new Map<string, {
-          key: string;
-          name: string;
-          incidentCount: number;
-          instances: number;
-        }>();
-
-        stats.forEach(stat => {
-          const key = stat.definition?.key || stat.id;
-          const name = stat.definition?.name || stat.definition?.key || stat.id;
-          const incidentCount = stat.incidents?.reduce((sum, inc) => sum + inc.incidentCount, 0) || 0;
-
-          if (incidentCount > 0) {
-            const existing = aggregatedMap.get(key);
-            if (existing) {
-              existing.incidentCount += incidentCount;
-              existing.instances += stat.instances;
-            } else {
-              aggregatedMap.set(key, {
-                key,
-                name,
-                incidentCount,
-                instances: stat.instances
-              });
-            }
-          }
-        });
-
-        const result = Array.from(aggregatedMap.values())
-          .map(item => ({
-            processKey: item.key,
-            processName: item.name,
-            incidentCount: item.incidentCount,
-            instances: item.instances
-          }))
-          .sort((a, b) => b.incidentCount - a.incidentCount);
-
-        return result;
-      }),
-      catchError((err) => {
-        console.error('[CockpitService] Error fetching incidents:', err);
-        return of([]);
-      })
-    );
+  getIncidentsByProcess(): Observable<IncidentByProcess[]> {
+    return this.dashboardService.getIncidentsByProcess();
   }
 
   /**
    * Get process instances timeline data for a given number of days
+   * @deprecated Use DashboardService.getProcessInstancesTimeline() directly for new code
    */
-  getProcessInstancesTimeline(days: number): Observable<{
-    date: string;
-    started: number;
-    completed: number;
-  }[]> {
-    const results: Observable<{ date: string; started: number; completed: number }>[] = [];
-    const today = new Date();
-
-    for (let i = days - 1; i >= 0; i--) {
-      const date = new Date(today);
-      date.setDate(date.getDate() - i);
-      date.setHours(0, 0, 0, 0);
-
-      const dateStr = date.toISOString().split('T')[0];
-      const startOfDay = `${dateStr}T00:00:00.000+0000`;
-      const endOfDay = `${dateStr}T23:59:59.999+0000`;
-
-      results.push(
-        forkJoin({
-          started: this.getProcessInstancesCount({
-            startedAfter: startOfDay,
-            startedBefore: endOfDay
-          }),
-          completed: this.getFinishedProcessCount({
-            finishedAfter: startOfDay,
-            finishedBefore: endOfDay
-          })
-        }).pipe(
-          map(r => ({ date: dateStr, ...r }))
-        )
-      );
-    }
-
-    return forkJoin(results);
+  getProcessInstancesTimeline(days: number): Observable<TimelineDataPoint[]> {
+    return this.dashboardService.getProcessInstancesTimeline(days);
   }
 
   /**
    * Get process distribution (instances per process definition)
+   * @deprecated Use DashboardService.getProcessDistribution() directly for new code
    */
-  getProcessDistribution(): Observable<{
-    key: string;
-    name: string;
-    instanceCount: number;
-    percentage: number;
-  }[]> {
-    return this.getProcessDefinitionsWithStatistics(false).pipe(
-      map(stats => {
-        const totalInstances = stats.reduce((sum, s) => sum + s.instances, 0);
-
-        return stats
-          .filter(s => s.instances > 0)
-          .map(s => ({
-            key: s.definition?.key || s.id,
-            name: s.definition?.name || s.definition?.key || s.id,
-            instanceCount: s.instances,
-            percentage: totalInstances > 0 ? (s.instances / totalInstances) * 100 : 0
-          }))
-          .sort((a, b) => b.instanceCount - a.instanceCount);
-      }),
-      catchError(() => of([]))
-    );
+  getProcessDistribution(): Observable<ProcessDistributionItem[]> {
+    return this.dashboardService.getProcessDistribution();
   }
 
   /**
    * Get tasks grouped by candidate group with group names
+   * @deprecated Use DashboardService.getTasksByGroupWithNames() directly for new code
    */
-  getTasksByGroupWithNames(): Observable<{
-    groupId: string;
-    groupName: string;
-    taskCount: number;
-  }[]> {
-    return this.getTaskCountByCandidateGroup().pipe(
-      map(groups => {
-        // Filter out null group names and map to required format
-        return groups
-          .filter(g => g.groupName !== null)
-          .map(g => ({
-            groupId: g.id || g.groupName || 'unknown',
-            groupName: g.groupName || 'Unknown Group',
-            taskCount: g.taskCount
-          }))
-          .sort((a, b) => b.taskCount - a.taskCount);
-      }),
-      catchError(() => of([]))
-    );
+  getTasksByGroupWithNames(): Observable<TasksByGroup[]> {
+    return this.dashboardService.getTasksByGroupWithNames();
   }
 
   /**
    * Get all dashboard charts data in a single call
+   * @deprecated Use DashboardService.getDashboardChartsData() directly for new code
    */
-  getDashboardChartsData(): Observable<{
-    processStats: { active: number; suspended: number; completed: number };
-    taskStats: { assigned: number; unassigned: number; withCandidateGroups: number; withoutCandidateGroups: number };
-    incidentsByType: { type: string; count: number }[];
-    incidentsByProcess: { processKey: string; processName: string; incidentCount: number; instances: number }[];
-    tasksByGroup: { groupId: string; groupName: string; taskCount: number }[];
-    processDistribution: { key: string; name: string; instanceCount: number; percentage: number }[];
-  }> {
-    return forkJoin({
-      processStats: this.getProcessStatsForChart(),
-      taskStats: this.getTaskStatsForChart(),
-      incidentsByType: this.getIncidentsByType(),
-      incidentsByProcess: this.getIncidentsByProcess(),
-      tasksByGroup: this.getTasksByGroupWithNames(),
-      processDistribution: this.getProcessDistribution()
-    });
+  getDashboardChartsData(): Observable<DashboardChartsData> {
+    return this.dashboardService.getDashboardChartsData();
   }
 
   // ============================================
-  // Deployments API
+  // Deployments API (delegated to DeploymentService)
   // ============================================
 
   /**
-   * Get deployments with optional filtering and pagination
+   * @deprecated Use DeploymentService.getDeployments() directly
    */
   getDeployments(params?: DeploymentQueryParams): Observable<Deployment[]> {
-    let httpParams = new HttpParams();
-
-    if (params?.id) httpParams = httpParams.set('id', params.id);
-    if (params?.name) httpParams = httpParams.set('name', params.name);
-    if (params?.nameLike) httpParams = httpParams.set('nameLike', params.nameLike);
-    if (params?.source) httpParams = httpParams.set('source', params.source);
-    if (params?.withoutSource) httpParams = httpParams.set('withoutSource', 'true');
-    if (params?.tenantIdIn?.length) httpParams = httpParams.set('tenantIdIn', params.tenantIdIn.join(','));
-    if (params?.withoutTenantId) httpParams = httpParams.set('withoutTenantId', 'true');
-    if (params?.deploymentBefore) httpParams = httpParams.set('before', params.deploymentBefore);
-    if (params?.deploymentAfter) httpParams = httpParams.set('after', params.deploymentAfter);
-    if (params?.sortBy) {
-      httpParams = httpParams.set('sortBy', params.sortBy);
-      if (params?.sortOrder) httpParams = httpParams.set('sortOrder', params.sortOrder);
-    }
-    if (params?.firstResult !== undefined) httpParams = httpParams.set('firstResult', params.firstResult.toString());
-
-    const maxResults = params?.maxResults ?? 50;
-    httpParams = httpParams.set('maxResults', maxResults.toString());
-
-    return this.http.get<Deployment[]>(`${this.baseUrl}/deployment`, { params: httpParams })
-      .pipe(catchError(() => of([])));
+    return this.deploymentService.getDeployments(params);
   }
 
   /**
-   * Get deployments count with optional filtering
+   * @deprecated Use DeploymentService.getDeploymentsCount() directly
    */
   getDeploymentsCountWithParams(params?: DeploymentQueryParams): Observable<number> {
-    let httpParams = new HttpParams();
-
-    if (params?.id) httpParams = httpParams.set('id', params.id);
-    if (params?.name) httpParams = httpParams.set('name', params.name);
-    if (params?.nameLike) httpParams = httpParams.set('nameLike', params.nameLike);
-    if (params?.source) httpParams = httpParams.set('source', params.source);
-    if (params?.withoutSource) httpParams = httpParams.set('withoutSource', 'true');
-    if (params?.tenantIdIn?.length) httpParams = httpParams.set('tenantIdIn', params.tenantIdIn.join(','));
-    if (params?.withoutTenantId) httpParams = httpParams.set('withoutTenantId', 'true');
-    if (params?.deploymentBefore) httpParams = httpParams.set('before', params.deploymentBefore);
-    if (params?.deploymentAfter) httpParams = httpParams.set('after', params.deploymentAfter);
-
-    return this.http.get<{ count: number }>(`${this.baseUrl}/deployment/count`, { params: httpParams })
-      .pipe(
-        map(res => res.count),
-        catchError(() => of(0))
-      );
+    return this.deploymentService.getDeploymentsCount(params);
   }
 
   /**
-   * Delete a deployment with optional cascade and skip options
+   * @deprecated Use DeploymentService.deleteDeployment() directly
    */
-  deleteDeployment(id: string, options?: {
-    cascade?: boolean;
-    skipCustomListeners?: boolean;
-    skipIoMappings?: boolean;
-  }): Observable<void> {
-    let httpParams = new HttpParams();
-
-    if (options?.cascade) httpParams = httpParams.set('cascade', 'true');
-    if (options?.skipCustomListeners) httpParams = httpParams.set('skipCustomListeners', 'true');
-    if (options?.skipIoMappings) httpParams = httpParams.set('skipIoMappings', 'true');
-
-    return this.http.delete<void>(`${this.baseUrl}/deployment/${id}`, { params: httpParams })
-      .pipe(catchError((err) => {
-        throw err;
-      }));
+  deleteDeployment(id: string, options?: DeleteDeploymentOptions): Observable<void> {
+    return this.deploymentService.deleteDeployment(id, options);
   }
 
   /**
-   * Get process instance count by deployment ID
+   * @deprecated Use DeploymentService.getProcessInstanceCountByDeployment() directly
    */
   getProcessInstanceCountByDeployment(deploymentId: string): Observable<number> {
-    return this.http.get<{ count: number }>(`${this.baseUrl}/process-instance/count`, {
-      params: { deploymentId }
-    }).pipe(
-      map(res => res.count),
-      catchError(() => of(0))
-    );
+    return this.deploymentService.getProcessInstanceCountByDeployment(deploymentId);
   }
 
   /**
-   * Get case instance count by deployment ID
+   * @deprecated Use DeploymentService.getCaseInstanceCountByDeployment() directly
    */
   getCaseInstanceCountByDeployment(deploymentId: string): Observable<number> {
-    return this.http.get<{ count: number }>(`${this.baseUrl}/case-instance/count`, {
-      params: { deploymentId }
-    }).pipe(
-      map(res => res.count),
-      catchError(() => of(0))
-    );
+    return this.deploymentService.getCaseInstanceCountByDeployment(deploymentId);
   }
 
   // ============================================
-  // Deployment Resources API
+  // Deployment Resources API (delegated to DeploymentService)
   // ============================================
 
   /**
-   * Get all resources for a deployment
+   * @deprecated Use DeploymentService.getDeploymentResources() directly
    */
   getDeploymentResources(deploymentId: string): Observable<DeploymentResource[]> {
-    return this.http.get<DeploymentResource[]>(`${this.baseUrl}/deployment/${deploymentId}/resources`)
-      .pipe(catchError(() => of([])));
+    return this.deploymentService.getDeploymentResources(deploymentId);
   }
 
   /**
-   * Get a specific resource data (binary)
+   * @deprecated Use DeploymentService.getDeploymentResourceData() directly
    */
   getDeploymentResourceData(deploymentId: string, resourceId: string): Observable<Blob> {
-    return this.http.get(`${this.baseUrl}/deployment/${deploymentId}/resources/${resourceId}/data`, {
-      responseType: 'blob'
-    }).pipe(catchError(() => of(new Blob())));
+    return this.deploymentService.getDeploymentResourceData(deploymentId, resourceId);
   }
 
   /**
-   * Get resource data as text (for BPMN XML, etc.)
+   * @deprecated Use DeploymentService.getDeploymentResourceText() directly
    */
   getDeploymentResourceText(deploymentId: string, resourceId: string): Observable<string> {
-    return this.http.get(`${this.baseUrl}/deployment/${deploymentId}/resources/${resourceId}/data`, {
-      responseType: 'text'
-    }).pipe(catchError(() => of('')));
+    return this.deploymentService.getDeploymentResourceText(deploymentId, resourceId);
   }
 
   /**
-   * Get process definitions for a deployment
+   * @deprecated Use DeploymentService.getProcessDefinitionsByDeployment() directly
    */
   getProcessDefinitionsByDeployment(deploymentId: string): Observable<ProcessDefinition[]> {
-    return this.http.get<ProcessDefinition[]>(`${this.baseUrl}/process-definition`, {
-      params: { deploymentId, maxResults: '1000' }
-    }).pipe(catchError(() => of([])));
+    return this.deploymentService.getProcessDefinitionsByDeployment(deploymentId);
   }
 
   /**
-   * Get decision definitions for a deployment
+   * @deprecated Use DeploymentService.getDecisionDefinitionsByDeployment() directly
    */
   getDecisionDefinitionsByDeployment(deploymentId: string): Observable<DecisionDefinition[]> {
-    return this.http.get<DecisionDefinition[]>(`${this.baseUrl}/decision-definition`, {
-      params: { deploymentId, maxResults: '1000' }
-    }).pipe(catchError(() => of([])));
+    return this.deploymentService.getDecisionDefinitionsByDeployment(deploymentId);
   }
 
   /**
-   * Get case definitions for a deployment
+   * @deprecated Use DeploymentService.getCaseDefinitionsByDeployment() directly
    */
   getCaseDefinitionsByDeployment(deploymentId: string): Observable<any[]> {
-    return this.http.get<any[]>(`${this.baseUrl}/case-definition`, {
-      params: { deploymentId, maxResults: '1000' }
-    }).pipe(catchError(() => of([])));
+    return this.deploymentService.getCaseDefinitionsByDeployment(deploymentId);
   }
 
   /**
-   * Get URL for downloading a resource
+   * @deprecated Use DeploymentService.getResourceDownloadUrl() directly
    */
   getResourceDownloadUrl(deploymentId: string, resourceId: string): string {
-    return `${this.baseUrl}/deployment/${deploymentId}/resources/${resourceId}/data`;
+    return this.deploymentService.getResourceDownloadUrl(deploymentId, resourceId);
   }
 }

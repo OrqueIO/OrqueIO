@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, DestroyRef, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, inject, DestroyRef, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -43,7 +43,8 @@ import { AdminPageHeaderComponent } from '../../../../shared/admin-page-header/a
         animate('200ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
       ])
     ])
-  ]
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GroupDetailComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
@@ -120,14 +121,14 @@ export class GroupDetailComponent implements OnInit {
             type: group.type
           });
           this.loading = false;
-          this.cdr.detectChanges();
+          this.cdr.markForCheck();
         },
-        error: () => {
+        error: (err) => {
           this.loading = false;
-          this.cdr.detectChanges();
+          this.cdr.markForCheck();
           this.notifications.addError({
             status: this.translateService.instant('admin.groups.loadError'),
-            message: this.translateService.instant('admin.groups.loadError')
+            message: this.extractErrorMessage(err) || this.translateService.instant('admin.groups.loadError')
           });
           this.router.navigate(['/admin/groups']);
         }
@@ -139,8 +140,9 @@ export class GroupDetailComponent implements OnInit {
 
     this.savingGroup = true;
     const updates = {
-      name: this.groupForm.value.name,
-      type: this.groupForm.value.type
+      id: this.groupId,
+      name: this.groupForm.value.name || '',
+      type: this.groupForm.value.type || ''
     };
 
     this.groupService.updateGroup(this.groupId, updates)
@@ -151,13 +153,13 @@ export class GroupDetailComponent implements OnInit {
           this.notifications.addSuccess('admin.groups.groupUpdated', 'Group updated successfully');
           this.loadGroup();
         },
-        error: () => {
+        error: (err) => {
           this.savingGroup = false;
           this.notifications.addError({
             status: this.translateService.instant('admin.groups.updateError'),
-            message: this.translateService.instant('admin.groups.updateError')
+            message: this.extractErrorMessage(err) || this.translateService.instant('admin.groups.updateError')
           });
-          this.cdr.detectChanges();
+          this.cdr.markForCheck();
         }
       });
   }
@@ -186,10 +188,10 @@ export class GroupDetailComponent implements OnInit {
           this.notifications.addSuccess('admin.groups.groupDeleted', 'Group deleted successfully');
           this.router.navigate(['/admin/groups']);
         },
-        error: () => {
+        error: (err) => {
           this.notifications.addError({
             status: this.translateService.instant('admin.groups.deleteError'),
-            message: this.translateService.instant('admin.groups.deleteError')
+            message: this.extractErrorMessage(err) || this.translateService.instant('admin.groups.deleteError')
           });
         }
       });
@@ -201,6 +203,7 @@ export class GroupDetailComponent implements OnInit {
 
   setActiveSection(section: 'info' | 'members' | 'tenants'): void {
     this.activeSection = section;
+    this.cdr.markForCheck();
     if (section === 'members' && this.groupMembers.length === 0) {
       this.loadMembers();
     } else if (section === 'tenants' && this.groupTenants.length === 0) {
@@ -225,11 +228,11 @@ export class GroupDetailComponent implements OnInit {
         next: members => {
           this.groupMembers = members;
           this.loadingMembers = false;
-          this.cdr.detectChanges();
+          this.cdr.markForCheck();
         },
         error: () => {
           this.loadingMembers = false;
-          this.cdr.detectChanges();
+          this.cdr.markForCheck();
         }
       });
   }
@@ -242,11 +245,11 @@ export class GroupDetailComponent implements OnInit {
         next: tenants => {
           this.groupTenants = tenants;
           this.loadingTenants = false;
-          this.cdr.detectChanges();
+          this.cdr.markForCheck();
         },
         error: () => {
           this.loadingTenants = false;
-          this.cdr.detectChanges();
+          this.cdr.markForCheck();
         }
       });
   }
@@ -258,15 +261,18 @@ export class GroupDetailComponent implements OnInit {
   // Member management
   openAddMemberDialog(): void {
     this.showAddMemberDialog = true;
+    this.cdr.markForCheck();
   }
 
   onMemberAdded(): void {
     this.showAddMemberDialog = false;
+    this.cdr.markForCheck();
     this.loadMembers();
   }
 
   cancelAddMember(): void {
     this.showAddMemberDialog = false;
+    this.cdr.markForCheck();
   }
 
   confirmRemoveMember(member: User): void {
@@ -292,7 +298,7 @@ export class GroupDetailComponent implements OnInit {
           this.memberToRemove = null;
           this.notifications.addError({
             status: this.translateService.instant('admin.groups.memberRemoveError'),
-            message: err?.error?.message || this.translateService.instant('admin.groups.memberRemoveError')
+            message: this.extractErrorMessage(err) || this.translateService.instant('admin.groups.memberRemoveError')
           });
         }
       });
@@ -310,15 +316,18 @@ export class GroupDetailComponent implements OnInit {
   // Tenant management
   openAddTenantDialog(): void {
     this.showAddTenantDialog = true;
+    this.cdr.markForCheck();
   }
 
   onTenantAdded(): void {
     this.showAddTenantDialog = false;
+    this.cdr.markForCheck();
     this.loadTenants();
   }
 
   cancelAddTenant(): void {
     this.showAddTenantDialog = false;
+    this.cdr.markForCheck();
   }
 
   confirmRemoveTenant(tenant: Tenant): void {
@@ -344,7 +353,7 @@ export class GroupDetailComponent implements OnInit {
           this.tenantToRemove = null;
           this.notifications.addError({
             status: this.translateService.instant('admin.groups.tenantRemoveError'),
-            message: err?.error?.message || this.translateService.instant('admin.groups.tenantRemoveError')
+            message: this.extractErrorMessage(err) || this.translateService.instant('admin.groups.tenantRemoveError')
           });
         }
       });
@@ -357,5 +366,18 @@ export class GroupDetailComponent implements OnInit {
 
   get excludeTenantIds(): string[] {
     return this.groupTenants.map(t => t.id);
+  }
+
+  /**
+   * Extract error message from API error response
+   */
+  private extractErrorMessage(err: any): string | null {
+    if (!err) return null;
+    // Try different error response formats
+    if (err.error?.message) return err.error.message;
+    if (err.error?.error?.message) return err.error.error.message;
+    if (err.message) return err.message;
+    if (typeof err.error === 'string') return err.error;
+    return null;
   }
 }

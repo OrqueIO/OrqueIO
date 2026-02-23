@@ -1,15 +1,15 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { DashboardState } from './dashboard.state';
 
-// ============================================
+
 // Feature Selector
-// ============================================
+
 
 export const selectDashboardState = createFeatureSelector<DashboardState>('cockpitDashboard');
 
-// ============================================
-// Basic Stats Selectors (existing)
-// ============================================
+
+// Basic Stats Selectors
+
 
 export const selectDashboardStats = createSelector(
   selectDashboardState,
@@ -26,18 +26,18 @@ export const selectDashboardError = createSelector(
   (state) => state.error
 );
 
-// ============================================
+
 // Charts State Selector
-// ============================================
+
 
 export const selectChartsState = createSelector(
   selectDashboardState,
   (state) => state.charts
 );
 
-// ============================================
+
 // Task Stats Selectors
-// ============================================
+
 
 export const selectTaskStats = createSelector(
   selectChartsState,
@@ -60,9 +60,9 @@ export const selectTaskStatsTotal = createSelector(
   (stats) => stats ? stats.assigned + stats.unassigned : 0
 );
 
-// ============================================
+
 // Incidents by Process Selectors
-// ============================================
+
 
 export const selectIncidentsByProcess = createSelector(
   selectChartsState,
@@ -87,9 +87,9 @@ export const selectTopProcessesByIncidents = createSelector(
     .slice(0, 10)
 );
 
-// ============================================
+
 // Timeline Selectors
-// ============================================
+
 
 export const selectTimeline = createSelector(
   selectChartsState,
@@ -121,9 +121,9 @@ export const selectTimelineTotals = createSelector(
   })
 );
 
-// ============================================
+
 // Process Distribution Selectors
-// ============================================
+
 
 export const selectProcessDistribution = createSelector(
   selectChartsState,
@@ -148,9 +148,9 @@ export const selectTopProcessesByInstances = createSelector(
     .slice(0, 10)
 );
 
-// ============================================
+
 // Tasks by Group Selectors
-// ============================================
+
 
 export const selectTasksByGroup = createSelector(
   selectChartsState,
@@ -175,9 +175,9 @@ export const selectTopGroupsByTasks = createSelector(
     .slice(0, 10)
 );
 
-// ============================================
+
 // Charts Configuration Selectors
-// ============================================
+
 
 export const selectAutoRefreshEnabled = createSelector(
   selectChartsState,
@@ -194,9 +194,9 @@ export const selectLastRefresh = createSelector(
   (charts) => charts.lastRefresh
 );
 
-// ============================================
+
 // Global Loading Selectors
-// ============================================
+
 
 export const selectAnyChartLoading = createSelector(
   selectChartsState,

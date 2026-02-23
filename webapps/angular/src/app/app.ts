@@ -32,10 +32,14 @@ export class App implements OnInit {
   }
 
   onLogout(): void {
-    this.authService.logout()
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => {
+    this.authService.smartLogout().subscribe({
+      next: () => {
         this.router.navigate(['/login']);
-      });
+      },
+      error: () => {
+        // Even on error, navigate to login page
+        this.router.navigate(['/login']);
+      }
+    });
   }
 }

@@ -1,8 +1,9 @@
-import { Component, Input, Output, EventEmitter, OnInit, inject, DestroyRef, HostListener } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, inject, DestroyRef, HostListener, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
+import { TranslateService } from '../../../../i18n/translate.service';
 import { UserService } from '../../../../services/admin/user.service';
 import { GroupService } from '../../../../services/admin/group.service';
 import { NotificationsService } from '../../../../services/notifications.service';
@@ -17,9 +18,11 @@ import { User } from '../../../../models/admin/user.model';
 })
 export class AddMemberDialogComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
+  private cdr = inject(ChangeDetectorRef);
   private userService = inject(UserService);
   private groupService = inject(GroupService);
   private notifications = inject(NotificationsService);
+  private translateService = inject(TranslateService);
 
   @Input() groupId!: string;
   @Input() excludeUserIds: string[] = [];
@@ -53,9 +56,11 @@ export class AddMemberDialogComponent implements OnInit {
           this.availableUsers = users.filter(u => !this.excludeUserIds.includes(u.id));
           this.filteredUsers = [...this.availableUsers];
           this.loading = false;
+          this.cdr.markForCheck();
         },
         error: () => {
           this.loading = false;
+          this.cdr.markForCheck();
         }
       });
   }
@@ -73,6 +78,15 @@ export class AddMemberDialogComponent implements OnInit {
   onSubmit(): void {
     if (!this.selectedUserId || this.saving) return;
 
+    // Double-check for duplicate membership (defensive check)
+    if (this.excludeUserIds.includes(this.selectedUserId)) {
+      this.notifications.addError({
+        status: this.translateService.instant('admin.groups.memberAddError'),
+        message: this.translateService.instant('admin.groups.memberAlreadyExists') || 'User is already a member of this group'
+      });
+      return;
+    }
+
     this.saving = true;
 
     this.groupService.addUserToGroup(this.groupId, this.selectedUserId)
@@ -84,12 +98,25 @@ export class AddMemberDialogComponent implements OnInit {
         },
         error: (err) => {
           this.saving = false;
+          this.cdr.markForCheck();
           this.notifications.addError({
-            status: 'admin.groups.memberAddError',
-            message: err?.error?.message || 'Failed to add user to group'
+            status: this.translateService.instant('admin.groups.memberAddError'),
+            message: this.extractErrorMessage(err) || this.translateService.instant('admin.groups.memberAddError')
           });
         }
       });
+  }
+
+  /**
+   * Extract error message from API error response
+   */
+  private extractErrorMessage(err: any): string | null {
+    if (!err) return null;
+    if (err.error?.message) return err.error.message;
+    if (err.error?.error?.message) return err.error.error.message;
+    if (err.message) return err.message;
+    if (typeof err.error === 'string') return err.error;
+    return null;
   }
 
   onCancel(): void {

@@ -5,9 +5,7 @@ import * as SystemActions from './system.actions';
 export const systemReducer = createReducer(
   initialSystemState,
 
-  // =====================
   // Process Engines
-  // =====================
 
   on(SystemActions.loadEngines, (state) => ({
     ...state,
@@ -33,9 +31,7 @@ export const systemReducer = createReducer(
     currentEngine: engineName
   })),
 
-  // =====================
   // Engine Info
-  // =====================
 
   on(SystemActions.loadEngineInfo, (state) => ({
     ...state,
@@ -56,9 +52,7 @@ export const systemReducer = createReducer(
     error
   })),
 
-  // =====================
   // Job Executor
-  // =====================
 
   on(SystemActions.loadJobExecutorStatus, (state) => ({
     ...state,
@@ -111,9 +105,7 @@ export const systemReducer = createReducer(
     error
   })),
 
-  // =====================
   // Metrics
-  // =====================
 
   on(SystemActions.loadMonthlyMetrics, (state, { startDate, displayLegacy }) => ({
     ...state,
@@ -166,9 +158,7 @@ export const systemReducer = createReducer(
     displayLegacyMetrics: display
   })),
 
-  // =====================
   // Telemetry
-  // =====================
 
   on(SystemActions.loadTelemetryData, (state) => ({
     ...state,
@@ -189,9 +179,7 @@ export const systemReducer = createReducer(
     telemetryError: error
   })),
 
-  // =====================
   // Reset
-  // =====================
 
   on(SystemActions.resetSystemState, () => initialSystemState)
 );

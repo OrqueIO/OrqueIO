@@ -110,19 +110,4 @@ export class CamDateFormatService {
   getFormat(variant: string): Intl.DateTimeFormatOptions {
     return this.formats[variant] || this.formats['normal'];
   }
-
-  /**
-   * Set custom format for a variant
-   * Equivalent to AngularJS camDateFormatProvider.setDateFormat()
-   */
-  setFormat(variant: string, format: Intl.DateTimeFormatOptions): void {
-    this.formats[variant] = format;
-  }
-
-  /**
-   * Get all available format variants
-   */
-  getAvailableFormats(): string[] {
-    return Object.keys(this.formats);
-  }
 }

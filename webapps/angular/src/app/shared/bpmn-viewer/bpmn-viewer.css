@@ -10,9 +10,7 @@
   width: 100%;
   height: 100%;
   min-height: 200px;
-  background: #fafafa;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
+  background: transparent;
   overflow: hidden;
 }
 
@@ -136,9 +134,7 @@
   font-weight: bold;
 }
 
-/* ========================================
-   BPMN Element Markers & Highlights
-   ======================================== */
+/* BPMN Element Markers & Highlights */
 
 /* Running activity marker (green animated border) */
 :host ::ng-deep .running .djs-visual > :nth-child(1) {
@@ -165,21 +161,22 @@
   stroke-width: 2px !important;
 }
 
-/* Selected activity (purple border with glow) */
+/* Selected activity */
 :host ::ng-deep .selected .djs-visual > :nth-child(1) {
-  stroke: #8b5cf6 !important;
-  stroke-width: 3px !important;
+  stroke: #1e40af !important;
+  stroke-width: 2px !important;
 }
 
 :host ::ng-deep .selected .djs-outline {
-  stroke: #8b5cf6 !important;
-  stroke-width: 2px !important;
-  opacity: 0.5;
+  visibility: visible !important;
+  stroke: #3b82f6 !important;
+  stroke-width: 1.5px !important;
+  opacity: 0.3;
+  fill: #3b82f6 !important;
+  fill-opacity: 0.05 !important;
 }
 
-/* ========================================
-   Activity Badges (Overlays)
-   ======================================== */
+/* Activity Badges (Overlays) */
 
 :host ::ng-deep .bpmn-badge {
   display: flex;
@@ -211,9 +208,7 @@
   background: #ef4444;
 }
 
-/* ========================================
-   Hide BPMN.js default elements
-   ======================================== */
+/* Hide BPMN.js default elements */
 
 :host ::ng-deep .djs-palette {
   display: none;
@@ -223,9 +218,7 @@
   display: none;
 }
 
-/* ========================================
-   Hover state for clickable elements
-   ======================================== */
+/* Hover state for clickable elements */
 
 :host ::ng-deep .djs-element:not(.djs-connection):hover .djs-outline {
   visibility: visible !important;

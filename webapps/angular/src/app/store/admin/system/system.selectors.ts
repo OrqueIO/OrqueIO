@@ -3,9 +3,9 @@ import { SystemState } from './system.state';
 
 export const selectSystemState = createFeatureSelector<SystemState>('system');
 
-// =====================
+
 // Process Engines
-// =====================
+
 
 export const selectEngines = createSelector(
   selectSystemState,
@@ -22,9 +22,9 @@ export const selectEngineInfo = createSelector(
   (state) => state.engineInfo
 );
 
-// =====================
+
 // Job Executor
-// =====================
+
 
 export const selectJobExecutor = createSelector(
   selectSystemState,
@@ -41,9 +41,9 @@ export const selectJobExecutorActive = createSelector(
   (jobExecutor) => jobExecutor?.active ?? false
 );
 
-// =====================
+
 // Metrics
-// =====================
+
 
 export const selectMonthlyMetrics = createSelector(
   selectSystemState,
@@ -91,9 +91,9 @@ export const selectMonthlyMetricsForChart = createSelector(
   (metrics) => [...metrics].reverse()
 );
 
-// =====================
+
 // Telemetry
-// =====================
+
 
 export const selectTelemetryData = createSelector(
   selectSystemState,
@@ -110,9 +110,9 @@ export const selectTelemetryError = createSelector(
   (state) => state.telemetryError
 );
 
-// =====================
+
 // General
-// =====================
+
 
 export const selectLoading = createSelector(
   selectSystemState,

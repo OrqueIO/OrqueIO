@@ -86,6 +86,50 @@ declare module 'dmn-js/lib/Viewer' {
   export default DmnViewer;
 }
 
+declare module 'dmn-js/lib/NavigatedViewer' {
+  interface DmnNavigatedViewerOptions {
+    container?: HTMLElement;
+    common?: {
+      keyboard?: {
+        bindTo?: Document | HTMLElement;
+      };
+    };
+    drd?: {
+      additionalModules?: any[];
+    };
+    decisionTable?: {
+      additionalModules?: any[];
+    };
+    literalExpression?: {
+      additionalModules?: any[];
+    };
+  }
+
+  interface DmnView {
+    element: {
+      id: string;
+      name?: string;
+    };
+    type: string;
+  }
+
+  interface ImportResult {
+    warnings: string[];
+  }
+
+  class DmnNavigatedViewer {
+    constructor(options?: DmnNavigatedViewerOptions);
+    importXML(xml: string): Promise<ImportResult>;
+    getActiveView(): DmnView | null;
+    getViews(): DmnView[];
+    open(view: DmnView): Promise<void>;
+    getActiveViewer(): any;
+    destroy(): void;
+  }
+
+  export default DmnNavigatedViewer;
+}
+
 declare module '@bpmn-io/dmn-migrate' {
   export function migrateDiagram(xml: string): Promise<string>;
 }

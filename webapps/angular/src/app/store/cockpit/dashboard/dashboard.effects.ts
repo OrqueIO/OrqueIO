@@ -3,7 +3,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { of } from 'rxjs';
 import { map, catchError, switchMap, withLatestFrom } from 'rxjs/operators';
-import { CockpitService } from '../../../services/cockpit.service';
+import { DashboardService } from '../../../services/dashboard.service';
 import { TimelinePeriod } from '../../../models/cockpit/dashboard-charts.model';
 import * as DashboardActions from './dashboard.actions';
 import * as DashboardSelectors from './dashboard.selectors';
@@ -12,17 +12,17 @@ import * as DashboardSelectors from './dashboard.selectors';
 export class DashboardEffects {
   private actions$ = inject(Actions);
   private store = inject(Store);
-  private cockpitService = inject(CockpitService);
+  private dashboardService = inject(DashboardService);
 
-  // ============================================
-  // Basic Dashboard Stats Effects (existing)
-  // ============================================
+  
+  // Basic Dashboard Stats Effects 
+  
 
   loadDashboardStats$ = createEffect(() =>
     this.actions$.pipe(
       ofType(DashboardActions.loadDashboardStats, DashboardActions.refreshDashboard),
       switchMap(() =>
-        this.cockpitService.getDashboardStats().pipe(
+        this.dashboardService.getDashboardStats().pipe(
           map(stats => DashboardActions.loadDashboardStatsSuccess({ stats })),
           catchError(error => of(DashboardActions.loadDashboardStatsFailure({ error })))
         )
@@ -30,9 +30,9 @@ export class DashboardEffects {
     )
   );
 
-  // ============================================
+  
   // Load All Charts Data Effect
-  // ============================================
+  
 
   loadAllChartsData$ = createEffect(() =>
     this.actions$.pipe(
@@ -49,15 +49,15 @@ export class DashboardEffects {
     )
   );
 
-  // ============================================
+  
   // Task Stats Chart Effect
-  // ============================================
+  
 
   loadTaskStats$ = createEffect(() =>
     this.actions$.pipe(
       ofType(DashboardActions.loadTaskStats),
       switchMap(() =>
-        this.cockpitService.getTaskStatsForChart().pipe(
+        this.dashboardService.getTaskStatsForChart().pipe(
           map(taskStats => DashboardActions.loadTaskStatsSuccess({ taskStats })),
           catchError(error => of(DashboardActions.loadTaskStatsFailure({
             error: error?.message || 'Failed to load task stats'
@@ -67,15 +67,15 @@ export class DashboardEffects {
     )
   );
 
-  // ============================================
+  
   // Incidents by Process Chart Effect
-  // ============================================
+  
 
   loadIncidentsByProcess$ = createEffect(() =>
     this.actions$.pipe(
       ofType(DashboardActions.loadIncidentsByProcess),
       switchMap(() =>
-        this.cockpitService.getIncidentsByProcess().pipe(
+        this.dashboardService.getIncidentsByProcess().pipe(
           map(incidentsByProcess => DashboardActions.loadIncidentsByProcessSuccess({ incidentsByProcess })),
           catchError(error => of(DashboardActions.loadIncidentsByProcessFailure({
             error: error?.message || 'Failed to load incidents by process'
@@ -85,16 +85,16 @@ export class DashboardEffects {
     )
   );
 
-  // ============================================
+  
   // Timeline Chart Effect
-  // ============================================
+  
 
   loadTimeline$ = createEffect(() =>
     this.actions$.pipe(
       ofType(DashboardActions.loadTimeline),
       switchMap(({ period }) => {
         const days = this.getPeriodDays(period);
-        return this.cockpitService.getProcessInstancesTimeline(days).pipe(
+        return this.dashboardService.getProcessInstancesTimeline(days).pipe(
           map(timeline => DashboardActions.loadTimelineSuccess({ timeline, period })),
           catchError(error => of(DashboardActions.loadTimelineFailure({
             error: error?.message || 'Failed to load timeline data'
@@ -112,15 +112,15 @@ export class DashboardEffects {
     )
   );
 
-  // ============================================
+  
   // Process Distribution Chart Effect
-  // ============================================
+  
 
   loadProcessDistribution$ = createEffect(() =>
     this.actions$.pipe(
       ofType(DashboardActions.loadProcessDistribution),
       switchMap(() =>
-        this.cockpitService.getProcessDistribution().pipe(
+        this.dashboardService.getProcessDistribution().pipe(
           map(processDistribution => DashboardActions.loadProcessDistributionSuccess({ processDistribution })),
           catchError(error => of(DashboardActions.loadProcessDistributionFailure({
             error: error?.message || 'Failed to load process distribution'
@@ -130,15 +130,15 @@ export class DashboardEffects {
     )
   );
 
-  // ============================================
+  
   // Tasks by Group Chart Effect
-  // ============================================
+  
 
   loadTasksByGroup$ = createEffect(() =>
     this.actions$.pipe(
       ofType(DashboardActions.loadTasksByGroup),
       switchMap(() =>
-        this.cockpitService.getTasksByGroupWithNames().pipe(
+        this.dashboardService.getTasksByGroupWithNames().pipe(
           map(tasksByGroup => DashboardActions.loadTasksByGroupSuccess({ tasksByGroup })),
           catchError(error => of(DashboardActions.loadTasksByGroupFailure({
             error: error?.message || 'Failed to load tasks by group'
@@ -148,9 +148,9 @@ export class DashboardEffects {
     )
   );
 
-  // ============================================
+  
   // Helper Methods
-  // ============================================
+  
 
   private getPeriodDays(period: TimelinePeriod): number {
     switch (period) {

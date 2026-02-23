@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, DestroyRef, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, inject, DestroyRef, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -8,6 +8,7 @@ import { faSave, faTrash, faArrowLeft, faPlus, faUnlock, faTimes, faUsers, faBui
 import { trigger, transition, style, animate } from '@angular/animations';
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
 import { TranslateService } from '../../../../i18n/translate.service';
+import { AuthService } from '../../../../services/auth';
 import { UserService } from '../../../../services/admin/user.service';
 import { GroupService } from '../../../../services/admin/group.service';
 import { TenantService } from '../../../../services/admin/tenant.service';
@@ -41,7 +42,8 @@ import { Tenant } from '../../../../models/admin/tenant.model';
         animate('200ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
       ])
     ])
-  ]
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UserDetailComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
@@ -49,6 +51,7 @@ export class UserDetailComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private fb = inject(FormBuilder);
+  private authService = inject(AuthService);
   private userService = inject(UserService);
   private groupService = inject(GroupService);
   private tenantService = inject(TenantService);
@@ -109,7 +112,7 @@ export class UserDetailComponent implements OnInit {
 
     this.credentialsForm = this.fb.group({
       authenticatedUserPassword: ['', Validators.required],
-      password: ['', [Validators.required, Validators.minLength(8)]],
+      password: ['', Validators.required],
       password2: ['', Validators.required]
     }, { validators: this.passwordMatchValidator });
   }
@@ -133,11 +136,11 @@ export class UserDetailComponent implements OnInit {
             email: user.email
           });
           this.loading = false;
-          this.cdr.detectChanges();
+          this.cdr.markForCheck();
         },
         error: () => {
           this.loading = false;
-          this.cdr.detectChanges();
+          this.cdr.markForCheck();
           this.notifications.addError({
             status: this.translateService.instant('admin.users.loadError'),
             message: this.translateService.instant('admin.users.loadError')
@@ -151,7 +154,12 @@ export class UserDetailComponent implements OnInit {
     if (!this.profileForm.valid || this.savingProfile) return;
 
     this.savingProfile = true;
-    const updates = this.profileForm.value;
+    const updates = {
+      id: this.userId,
+      firstName: this.profileForm.value.firstName || '',
+      lastName: this.profileForm.value.lastName || '',
+      email: this.profileForm.value.email || ''
+    };
     this.userService.updateUserProfile(this.userId, updates)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
@@ -166,7 +174,7 @@ export class UserDetailComponent implements OnInit {
             status: this.translateService.instant('admin.users.updateError'),
             message: this.translateService.instant('admin.users.updateError')
           });
-          this.cdr.detectChanges();
+          this.cdr.markForCheck();
         }
       });
   }
@@ -197,7 +205,7 @@ export class UserDetailComponent implements OnInit {
           this.savingPassword = false;
           this.notifications.addSuccess('admin.users.passwordUpdated', 'Password updated successfully');
           this.credentialsForm.reset();
-          this.cdr.detectChanges();
+          this.cdr.markForCheck();
         },
         error: () => {
           this.savingPassword = false;
@@ -205,7 +213,7 @@ export class UserDetailComponent implements OnInit {
             status: this.translateService.instant('admin.users.passwordUpdateError'),
             message: this.translateService.instant('admin.users.passwordUpdateError')
           });
-          this.cdr.detectChanges();
+          this.cdr.markForCheck();
         }
       });
   }
@@ -217,12 +225,32 @@ export class UserDetailComponent implements OnInit {
 
   confirmDelete(): void {
     this.showDeleteConfirm = false;
+    const currentUser = this.authService.currentAuthentication;
+    const isSelfDeletion = currentUser?.name === this.userId;
+
     this.userService.deleteUser(this.userId)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
           this.notifications.addSuccess('admin.users.userDeleted', 'User deleted successfully');
-          this.router.navigate(['/admin/users']);
+
+          // If user deleted their own account, logout from all engines
+          if (isSelfDeletion) {
+            // Use smartLogout to handle both SSO and regular logout
+            this.authService.smartLogout()
+              .pipe(takeUntilDestroyed(this.destroyRef))
+              .subscribe({
+                next: () => {
+                  this.router.navigate(['/login']);
+                },
+                error: () => {
+                  // Force redirect to login even if logout fails
+                  this.router.navigate(['/login']);
+                }
+              });
+          } else {
+            this.router.navigate(['/admin/users']);
+          }
         },
         error: () => {
           this.notifications.addError({
@@ -248,7 +276,7 @@ export class UserDetailComponent implements OnInit {
         next: () => {
           this.unlocking = false;
           this.notifications.addSuccess('admin.users.userUnlocked', 'User unlocked successfully');
-          this.cdr.detectChanges();
+          this.cdr.markForCheck();
         },
         error: (err) => {
           this.unlocking = false;
@@ -256,13 +284,14 @@ export class UserDetailComponent implements OnInit {
             status: 'admin.users.unlockError',
             message: err?.error?.message || 'Failed to unlock user'
           });
-          this.cdr.detectChanges();
+          this.cdr.markForCheck();
         }
       });
   }
 
   setActiveSection(section: 'profile' | 'security' | 'memberships'): void {
     this.activeSection = section;
+    this.cdr.markForCheck();
     if (section === 'memberships') {
       if (this.userGroups.length === 0) {
         this.loadGroups();
@@ -291,11 +320,11 @@ export class UserDetailComponent implements OnInit {
         next: groups => {
           this.userGroups = groups;
           this.loadingGroups = false;
-          this.cdr.detectChanges();
+          this.cdr.markForCheck();
         },
         error: () => {
           this.loadingGroups = false;
-          this.cdr.detectChanges();
+          this.cdr.markForCheck();
         }
       });
   }
@@ -308,11 +337,11 @@ export class UserDetailComponent implements OnInit {
         next: tenants => {
           this.userTenants = tenants;
           this.loadingTenants = false;
-          this.cdr.detectChanges();
+          this.cdr.markForCheck();
         },
         error: () => {
           this.loadingTenants = false;
-          this.cdr.detectChanges();
+          this.cdr.markForCheck();
         }
       });
   }

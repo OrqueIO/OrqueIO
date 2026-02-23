@@ -63,8 +63,8 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
   private overlays: any = null;
   private isViewerReady = false;
   private badgeOverlayIds: Map<string, string[]> = new Map();
-  private currentXml: string | null = null; // Track loaded XML to avoid re-import
-  private needsZoomFit = false; // Track if zoom fit is pending
+  private currentXml: string | null = null; 
+  private needsZoomFit = false; 
   private resizeTimeout: ReturnType<typeof setTimeout> | null = null;
 
   loading = true;
@@ -72,7 +72,6 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
 
   @HostListener('window:resize')
   onWindowResize(): void {
-    // Debounce resize events to avoid excessive recalculations
     if (this.resizeTimeout) {
       clearTimeout(this.resizeTimeout);
     }
@@ -87,7 +86,6 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['xml'] && this.xml && this.isViewerReady) {
-      // Only reload if XML actually changed
       if (this.xml !== this.currentXml) {
         this.loadDiagram();
       }
@@ -181,7 +179,6 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
           this.safeZoomFit(canvas);
           this.needsZoomFit = false;
         } catch (e) {
-          // Retry on failure
           if (retryCount < maxRetries) {
             setTimeout(() => {
               this.scheduleFitToViewport(retryCount + 1);
@@ -189,7 +186,6 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
           }
         }
       } else if (retryCount < maxRetries) {
-        // Container not visible yet, retry after a delay
         setTimeout(() => {
           this.scheduleFitToViewport(retryCount + 1);
         }, retryDelay);
@@ -413,32 +409,21 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
     }
   }
 
-  /**
-   * Call this when the container size changes (e.g., expand/collapse)
-   * Notifies BPMN.js of the size change and re-fits the diagram
-   */
   resize(): void {
     if (!this.viewer) return;
 
-    // Small delay to ensure DOM has updated with new dimensions
     requestAnimationFrame(() => {
       if (!this.viewer || !this.isContainerVisible()) return;
 
       try {
         const canvas = this.viewer.get('canvas');
-        // Notify BPMN.js that container size changed
         canvas.resized();
-        // Re-fit diagram to new viewport
         this.safeZoomFit(canvas);
       } catch (e) {
-        // Ignore zoom errors when container dimensions are invalid
       }
     });
   }
 
-  /**
-   * Call this when the container becomes visible to fit the diagram
-   */
   onContainerVisible(): void {
     if (this.needsZoomFit && this.viewer && this.isContainerVisible()) {
       try {
@@ -446,24 +431,19 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
         this.safeZoomFit(canvas);
         this.needsZoomFit = false;
       } catch (e) {
-        // Retry later if zoom fails
       }
     }
   }
 
-  /**
-   * Safely zoom to fit viewport, handling edge cases where dimensions are invalid
-   */
+
   private safeZoomFit(canvas: any): void {
     try {
-      // Check if canvas has valid inner/outer viewbox before zooming
       const viewbox = canvas.viewbox();
       if (viewbox && isFinite(viewbox.width) && isFinite(viewbox.height) &&
           viewbox.width > 0 && viewbox.height > 0) {
-        canvas.zoom('fit-viewport');
+        canvas.zoom('fit-viewport', 'auto');
       }
     } catch (e) {
-      // Silently ignore zoom errors
     }
   }
 

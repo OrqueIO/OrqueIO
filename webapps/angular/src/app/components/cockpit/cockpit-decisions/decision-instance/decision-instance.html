@@ -74,7 +74,7 @@
               <fa-icon [icon]="isCopied('deployment') ? faCheck : faCopy" class="copy-icon" [class.copied]="isCopied('deployment')"></fa-icon>
             </dt>
             <dd *ngIf="decisionDefinition?.deploymentId">
-              <a [href]="getDeploymentUrl()" class="link-value mono">{{ decisionDefinition!.deploymentId }}</a>
+              <a [routerLink]="['/cockpit/repository']" [queryParams]="{deployment: decisionDefinition!.deploymentId}" class="link-value mono">{{ decisionDefinition!.deploymentId }}</a>
             </dd>
 
             <!-- Process Instance ID -->
@@ -83,7 +83,7 @@
               <fa-icon [icon]="isCopied('processInst') ? faCheck : faCopy" class="copy-icon" [class.copied]="isCopied('processInst')"></fa-icon>
             </dt>
             <dd *ngIf="decisionInstance.processInstanceId">
-              <a [href]="getProcessInstanceUrl()" class="link-value mono">{{ decisionInstance.processInstanceId }}</a>
+              <a [routerLink]="['/cockpit/processes/instance', decisionInstance.processInstanceId]" class="link-value mono">{{ decisionInstance.processInstanceId }}</a>
             </dd>
             <dt *ngIf="!decisionInstance.processInstanceId">{{ 'cockpit.decisionInstance.processInstanceId' | translate }}</dt>
             <dd *ngIf="!decisionInstance.processInstanceId"><span class="null-value">null</span></dd>
@@ -94,7 +94,7 @@
               <fa-icon [icon]="isCopied('caseInst') ? faCheck : faCopy" class="copy-icon" [class.copied]="isCopied('caseInst')"></fa-icon>
             </dt>
             <dd *ngIf="decisionInstance.caseInstanceId">
-              <a [href]="getCaseInstanceUrl()" class="link-value mono">{{ decisionInstance.caseInstanceId }}</a>
+              <a [routerLink]="['/cockpit/case/instance', decisionInstance.caseInstanceId]" class="link-value mono">{{ decisionInstance.caseInstanceId }}</a>
             </dd>
             <dt *ngIf="!decisionInstance.caseInstanceId && !decisionInstance.processInstanceId">{{ 'cockpit.decisionInstance.caseInstanceId' | translate }}</dt>
             <dd *ngIf="!decisionInstance.caseInstanceId && !decisionInstance.processInstanceId"><span class="null-value">null</span></dd>
@@ -112,7 +112,7 @@
               <fa-icon [icon]="isCopied('drd') ? faCheck : faCopy" class="copy-icon" [class.copied]="isCopied('drd')"></fa-icon>
             </dt>
             <dd *ngIf="decisionInstance.decisionRequirementsDefinitionId">
-              <a [href]="getDrdUrl()" class="link-value mono">{{ decisionInstance.decisionRequirementsDefinitionId }}</a>
+              <a [routerLink]="['/cockpit/decisions', decisionInstance.decisionDefinitionId]" class="link-value mono">{{ decisionInstance.decisionRequirementsDefinitionId }}</a>
             </dd>
             <dt *ngIf="!decisionInstance.decisionRequirementsDefinitionId">{{ 'cockpit.decisionInstance.drdId' | translate }}</dt>
             <dd *ngIf="!decisionInstance.decisionRequirementsDefinitionId"><span class="null-value">null</span></dd>
@@ -126,13 +126,17 @@
         <!-- Main Content -->
         <div class="instance-content">
           <!-- DMN Table with highlighted rules and real values -->
-          <div class="dmn-table-container" *ngIf="dmnXml">
+          <div class="dmn-table-container" [class.fullscreen]="isDmnExpanded" *ngIf="dmnXml">
+            <div class="fullscreen-backdrop" *ngIf="isDmnExpanded" (click)="toggleDmnExpand()"></div>
             <app-dmn-viewer
               [xml]="dmnXml"
               [decisionId]="decisionInstance.decisionDefinitionKey"
               [highlightedRules]="highlightedRules"
               [inputs]="inputs"
               [outputs]="outputs"
+              [showExpandButton]="true"
+              [isExpanded]="isDmnExpanded"
+              (expandToggle)="toggleDmnExpand()"
             ></app-dmn-viewer>
           </div>
 

@@ -1,8 +1,9 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Injector, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, throwError, Subject } from 'rxjs';
-import { map, catchError, switchMap, tap, shareReplay, finalize } from 'rxjs/operators';
+import { map, catchError, switchMap, tap, shareReplay, finalize, take } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { CsrfTokenService } from './csrf-token.service';
 
 // Authentication event types 
 export type AuthEventType =
@@ -42,34 +43,131 @@ export class AuthService {
   private authenticationSubject = new BehaviorSubject<Authentication | null>(null);
   public authentication$ = this.authenticationSubject.asObservable();
   private authCheckPending: Observable<Authentication | null> | null = null;
+  private authInitialized = false;
 
   // Authentication events
   private authEventsSubject = new Subject<AuthEvent>();
   public authEvents$ = this.authEventsSubject.asObservable();
+
+  // Cross-tab synchronization channel
+  private authChannel: BroadcastChannel | null = null;
+  private readonly AUTH_CHANNEL_NAME = 'orqueio_auth_sync';
+
+
+  private readonly LEGACY_AUTH_STORAGE_KEY = 'orqueio_auth';
+  private readonly SESSION_ACTIVE_KEY = 'orqueio_session_active';
 
   private readonly baseUrl = '/orqueio/api/admin/auth/user';
   private readonly engineUrl = '/orqueio/api/engine/engine';
   private readonly appName = 'welcome';
   private readonly engine = 'default';
 
+  private csrfService = inject(CsrfTokenService);
+
   constructor(
     private http: HttpClient,
-    private router: Router
-  ) {}
+    private router: Router,
+    private injector: Injector
+  ) {
+    this.initCrossTabSync();
+    // Clean up any legacy localStorage data from previous versions
+    this.clearLegacyStorage();
+  }
 
   /**
-   * Get CSRF token from cookie
+   * Clear any legacy authentication data from localStorage.
+   * This ensures we don't have stale/manipulable data persisted.
    */
-  private getCsrfTokenFromCookie(): string | null {
-    const name = 'XSRF-TOKEN=';
-    const cookies = document.cookie.split(';');
-    for (let cookie of cookies) {
-      cookie = cookie.trim();
-      if (cookie.startsWith(name)) {
-        return cookie.substring(name.length);
-      }
+  private clearLegacyStorage(): void {
+    try {
+      localStorage.removeItem(this.LEGACY_AUTH_STORAGE_KEY);
+    } catch (e) {
+      // localStorage might be disabled - ignore
     }
-    return null;
+  }
+
+  /**
+   * Initialize cross-tab authentication synchronization.
+   * When a user logs out in one tab, all other tabs are notified and redirected to login.
+   */
+  private initCrossTabSync(): void {
+    // Check if BroadcastChannel is supported
+    if (typeof BroadcastChannel !== 'undefined') {
+      this.authChannel = new BroadcastChannel(this.AUTH_CHANNEL_NAME);
+
+      this.authChannel.onmessage = (event) => {
+        const { type, data } = event.data;
+
+        if (type === 'logout' || type === 'session_expired') {
+          // Clear local authentication state without making API call
+          this.clearSessionMarker();
+          this.authenticationSubject.next(null);
+          this.authCheckPending = null;
+          this.authInitialized = false;
+          this.emit('authentication.logout.success');
+          // Redirect to login page if not already there
+          if (!this.router.url.startsWith('/login')) {
+            this.router.navigate(['/login']);
+          }
+        } else if (type === 'login' && data) {
+          // Update local authentication state (in memory only)
+          this.setSessionMarker();
+          this.authenticationSubject.next(data);
+          this.authInitialized = true;
+          this.emit('authentication.login.success', data);
+        }
+      };
+    } else {
+      // Fallback to localStorage events for older browsers (for cross-tab sync only)
+      window.addEventListener('storage', (event) => {
+        if (event.key === this.AUTH_CHANNEL_NAME) {
+          const message = event.newValue ? JSON.parse(event.newValue) : null;
+          if (message?.type === 'logout' || message?.type === 'session_expired') {
+            this.clearSessionMarker();
+            this.authenticationSubject.next(null);
+            this.authCheckPending = null;
+            this.authInitialized = false;
+            this.emit('authentication.logout.success');
+            if (!this.router.url.startsWith('/login')) {
+              this.router.navigate(['/login']);
+            }
+          }
+        }
+      });
+    }
+  }
+
+  /**
+   * Broadcast authentication event to other tabs.
+   */
+  private broadcastAuthEvent(type: 'login' | 'logout' | 'session_expired', data?: Authentication | null): void {
+    const message = { type, data, timestamp: Date.now() };
+
+    if (this.authChannel) {
+      this.authChannel.postMessage(message);
+    } else {
+      // Fallback to localStorage
+      localStorage.setItem(this.AUTH_CHANNEL_NAME, JSON.stringify(message));
+      // Clean up immediately (we just need the storage event to fire)
+      localStorage.removeItem(this.AUTH_CHANNEL_NAME);
+    }
+  }
+
+  /**
+   * Handle session expired event (401 error).
+   * Clears local state and notifies other tabs.
+   * Called by the error interceptor when a 401 is received.
+   */
+  handleSessionExpired(): void {
+    // Only broadcast if we were previously authenticated
+    if (this.currentAuthentication) {
+      this.clearSessionMarker();
+      this.updateAuthentication(null); // This also clears localStorage
+      this.authCheckPending = null;
+      this.emit('authentication.login.required');
+      // Notify other tabs about session expiration
+      this.broadcastAuthEvent('session_expired');
+    }
   }
 
   get currentAuthentication(): Authentication | null {
@@ -84,29 +182,15 @@ export class AuthService {
    * Login into the application with the given credentials
    */
   login(username: string, password: string): Observable<Authentication> {
-    console.log('=== LOGIN ATTEMPT ===');
-    console.log('Username:', username);
-
     const formData = new URLSearchParams();
     formData.set('username', username);
     formData.set('password', password);
 
     // First GET request to ensure we have an up-to-date CSRF cookie
-    return this.http.get(this.engineUrl, { withCredentials: true }).pipe(
+    return this.csrfService.refreshToken().pipe(
       switchMap(() => {
-        // Get CSRF token from cookie (set by the GET request)
-        const csrfToken = this.getCsrfTokenFromCookie();
-        console.log('CSRF Token from cookie:', csrfToken);
-
-        // Build headers with CSRF token
-        let headers = new HttpHeaders({
-          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-        });
-        if (csrfToken) {
-          headers = headers.set('X-XSRF-TOKEN', csrfToken);
-        }
-
-        console.log('Sending login request to:', `${this.baseUrl}/${this.engine}/login/${this.appName}`);
+        // Build headers with CSRF token for form-urlencoded content
+        const headers = this.csrfService.buildHeaders('application/x-www-form-urlencoded;charset=UTF-8');
 
         // Then perform the login POST request
         return this.http.post<LoginResponse>(
@@ -115,17 +199,13 @@ export class AuthService {
           { headers, withCredentials: true }
         );
       }),
-      tap(response => {
-        console.log('=== LOGIN RESPONSE ===');
-        console.log('Response:', response);
-      }),
       map(response => this.parseResponse(response)),
       tap(authentication => {
-        console.log('=== LOGIN SUCCESS ===');
-        console.log('User:', authentication.name);
-        console.log('Authorized Apps:', authentication.authorizedApps);
+        this.setSessionMarker();
         this.updateAuthentication(authentication);
         this.emit('authentication.login.success', authentication);
+        // Notify other tabs about login
+        this.broadcastAuthEvent('login', authentication);
       }),
       // Refresh CSRF token after successful login
       switchMap(authentication => {
@@ -134,9 +214,6 @@ export class AuthService {
         );
       }),
       catchError(error => {
-        console.log('=== LOGIN ERROR ===');
-        console.log('Status:', error.status);
-        console.log('Error:', error);
         this.emit('authentication.login.failure', null, error);
         return throwError(() => this.parseError(error));
       })
@@ -148,27 +225,21 @@ export class AuthService {
    */
   logout(): Observable<void> {
     // First GET request to get CSRF token
-    return this.http.get(this.engineUrl, { withCredentials: true }).pipe(
+    return this.csrfService.refreshToken().pipe(
       switchMap(() => {
-        // Get CSRF token from cookie
-        const csrfToken = this.getCsrfTokenFromCookie();
-        console.log('Logout CSRF Token from cookie:', csrfToken);
-
-        let headers = new HttpHeaders();
-        if (csrfToken) {
-          headers = headers.set('X-XSRF-TOKEN', csrfToken);
-        }
-
         return this.http.post<void>(
           `${this.baseUrl}/${this.engine}/logout`,
           {},
-          { headers, withCredentials: true }
+          { headers: this.csrfService.buildHeadersWithoutContentType(), withCredentials: true }
         );
       }),
       tap(() => {
+        this.clearSessionMarker();
         this.updateAuthentication(null);
         this.emit('authentication.logout.success');
-        this.router.navigate(['/login']);
+        // Notify other tabs about logout
+        this.broadcastAuthEvent('logout');
+        // Note: Navigation is handled by the component calling this method
       }),
       catchError(error => {
         this.emit('authentication.logout.failure', null, error);
@@ -177,32 +248,37 @@ export class AuthService {
     );
   }
 
-  /**
-   * Get current authentication status
-   */
   getAuthentication(): Observable<Authentication | null> {
-    // Si on a déjà vérifié et qu'on a une authentification, retourner la valeur en cache
-    if (this.currentAuthentication) {
+    // If we already have backend-verified authentication in this session, return it
+    if (this.authInitialized && this.currentAuthentication) {
       return of(this.currentAuthentication);
     }
 
-    // Si une requête est déjà en cours, retourner la même Observable
+    // If a verification request is already pending, return the same Observable
     if (this.authCheckPending) {
       return this.authCheckPending;
     }
 
-    // Créer une nouvelle requête avec shareReplay pour partager le résultat
+    // Always verify with backend when no in-memory auth exists.
+    // This ensures new tabs can restore the session via the shared HTTP cookie (JSESSIONID).
+    // The backend returns 200 with empty body if not authenticated, or 200 with user data if authenticated.
     this.authCheckPending = this.http.get<LoginResponse>(`${this.baseUrl}/${this.engine}`, { withCredentials: true }).pipe(
-      map(response => this.parseResponse(response)),
+      map(response => response ? this.parseResponse(response) : null),
       tap(authentication => {
+        this.authInitialized = true;
+        if (authentication) {
+          this.setSessionMarker();
+        }
         this.updateAuthentication(authentication);
       }),
       catchError(() => {
+        this.authInitialized = true;
+        this.updateAuthentication(null);
         return of(null);
       }),
       shareReplay(1),
       finalize(() => {
-        // Réinitialiser après un court délai pour permettre les futures vérifications
+        // Reset after a short delay to allow future verifications
         setTimeout(() => {
           this.authCheckPending = null;
         }, 100);
@@ -210,6 +286,51 @@ export class AuthService {
     );
 
     return this.authCheckPending;
+  }
+
+  /**
+   * Check if there might be an active session (user logged in during this browser session).
+   * Uses localStorage so the marker is shared across all tabs in the same browser.
+   */
+  private hasActiveSessionMarker(): boolean {
+    try {
+      return localStorage.getItem(this.SESSION_ACTIVE_KEY) === 'true';
+    } catch {
+      return false;
+    }
+  }
+
+  /**
+   * Set the session marker when user logs in.
+   * Uses localStorage so new tabs can detect the active session.
+   */
+  private setSessionMarker(): void {
+    try {
+      localStorage.setItem(this.SESSION_ACTIVE_KEY, 'true');
+    } catch {
+      // localStorage might be disabled
+    }
+  }
+
+  /**
+   * Clear the session marker on logout or session expiry
+   */
+  private clearSessionMarker(): void {
+    try {
+      localStorage.removeItem(this.SESSION_ACTIVE_KEY);
+    } catch {
+      // localStorage might be disabled
+    }
+  }
+
+  /**
+   * Force re-verification with backend.
+   * Useful when you suspect the session state might have changed.
+   */
+  revalidateAuthentication(): Observable<Authentication | null> {
+    this.authInitialized = false;
+    this.authCheckPending = null;
+    return this.getAuthentication();
   }
 
   /**
@@ -225,20 +346,12 @@ export class AuthService {
    * Update user profile
    */
   updateProfile(updates: ProfileUpdate): Observable<Authentication> {
-    return this.http.get(this.engineUrl, { withCredentials: true }).pipe(
+    return this.csrfService.refreshToken().pipe(
       switchMap(() => {
-        const csrfToken = this.getCsrfTokenFromCookie();
-        let headers = new HttpHeaders({
-          'Content-Type': 'application/json'
-        });
-        if (csrfToken) {
-          headers = headers.set('X-XSRF-TOKEN', csrfToken);
-        }
-
         return this.http.put<LoginResponse>(
           `${this.baseUrl}/${this.engine}/profile`,
           updates,
-          { headers, withCredentials: true }
+          { headers: this.csrfService.buildHeaders(), withCredentials: true }
         );
       }),
       map(response => this.parseResponse(response)),
@@ -260,23 +373,15 @@ export class AuthService {
       return throwError(() => 'User not authenticated');
     }
 
-    return this.http.get(this.engineUrl, { withCredentials: true }).pipe(
+    return this.csrfService.refreshToken().pipe(
       switchMap(() => {
-        const csrfToken = this.getCsrfTokenFromCookie();
-        let headers = new HttpHeaders({
-          'Content-Type': 'application/json'
-        });
-        if (csrfToken) {
-          headers = headers.set('X-XSRF-TOKEN', csrfToken);
-        }
-
         return this.http.put<void>(
-          `/orqueio/api/user/${userId}/credentials`,
+          `${this.engineUrl}/${this.engine}/user/${userId}/credentials`,
           {
             authenticatedUserPassword: currentPassword,
             password: newPassword
           },
-          { headers, withCredentials: true }
+          { headers: this.csrfService.buildHeaders(), withCredentials: true }
         );
       }),
       catchError(error => {
@@ -286,13 +391,15 @@ export class AuthService {
   }
 
   /**
-   * Update authentication state
+   * Update authentication state (in memory only - no localStorage persistence).
+   * This follows the AngularJS pattern for security.
    */
   private updateAuthentication(authentication: Authentication | null): void {
     this.authenticationSubject.next(authentication);
     // Clear pending check when explicitly setting authentication (e.g., logout)
     if (authentication === null) {
       this.authCheckPending = null;
+      this.authInitialized = false;
     }
     this.emit('authentication.changed', authentication);
   }
@@ -337,7 +444,120 @@ export class AuthService {
       message = error.error?.message || 'An error occurred during login.';
     }
 
-    console.log('Error message:', message);
     return message;
+  }
+
+  // ==================== SSO Methods ====================
+
+  private readonly RETURN_URL_KEY = 'orqueio_return_url';
+  private readonly SSO_LOGIN_KEY = 'orqueio_sso_login';
+
+  /**
+   * Saves the current or specified URL for post-login redirect.
+   * Used before redirecting to OAuth2 provider.
+   */
+  saveReturnUrl(url?: string): void {
+    const urlToSave = url || this.router.url;
+    if (urlToSave && urlToSave !== '/login' && !urlToSave.startsWith('/login?')) {
+      sessionStorage.setItem(this.RETURN_URL_KEY, urlToSave);
+    }
+  }
+
+  /**
+   * Retrieves and removes the saved return URL.
+   * Used after successful OAuth2 login.
+   */
+  consumeReturnUrl(): string {
+    const url = sessionStorage.getItem(this.RETURN_URL_KEY);
+    sessionStorage.removeItem(this.RETURN_URL_KEY);
+    return url || '/';
+  }
+
+  /**
+   * Checks if there is a saved return URL.
+   */
+  hasReturnUrl(): boolean {
+    return sessionStorage.getItem(this.RETURN_URL_KEY) !== null;
+  }
+
+
+  ssoLogout(): void {
+    console.warn('ssoLogout() is deprecated - use smartLogout() instead');
+    this.updateAuthentication(null);
+    this.emit('authentication.logout.success');
+    // Notify other tabs about logout
+    this.broadcastAuthEvent('logout');
+    window.location.href = this.getSsoLogoutUrl();
+  }
+
+  private getSsoLogoutUrl(): string {
+    return '/logout';
+  }
+
+  /**
+   * Checks if the current URL contains an OAuth2 error parameter.
+   */
+  checkOAuth2Error(): boolean {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('oauth2_error') === 'true';
+  }
+
+  /**
+   * Clears the OAuth2 error parameter from the URL.
+   */
+  clearOAuth2Error(): void {
+    if (this.checkOAuth2Error()) {
+      const cleanUrl = window.location.pathname + window.location.hash;
+      window.history.replaceState({}, document.title, cleanUrl);
+    }
+  }
+
+  /**
+   * Marks the current session as SSO-authenticated.
+   * Called when user logs in via OAuth2 provider.
+   */
+  markSsoLogin(): void {
+    sessionStorage.setItem(this.SSO_LOGIN_KEY, 'true');
+    this.setSessionMarker(); // Also mark session as potentially active for auth checks
+  }
+
+  /**
+   * Checks if the current session was authenticated via SSO.
+   */
+  isSsoSession(): boolean {
+    return sessionStorage.getItem(this.SSO_LOGIN_KEY) === 'true';
+  }
+
+  /**
+   * Clears the SSO login marker.
+   * Called during logout.
+   */
+  clearSsoMarker(): void {
+    sessionStorage.removeItem(this.SSO_LOGIN_KEY);
+  }
+
+
+  smartLogout(): Observable<void> {
+    // Check if this is an SSO session
+    if (this.isSsoSession()) {
+      this.clearSessionMarker();
+      this.updateAuthentication(null);
+      this.emit('authentication.logout.success');
+      this.broadcastAuthEvent('logout');
+      this.clearSsoMarker();
+
+      // Redirect to SSO logout endpoint (this will cause page navigation)
+      window.location.href = this.getSsoLogoutUrl();
+
+      // Return an observable that never completes (page will redirect)
+      return new Observable<void>(() => {});
+    }
+
+    // For non-SSO users, use the REST API logout
+    return this.logout().pipe(
+      tap(() => {
+        this.clearSsoMarker();
+      })
+    );
   }
 }

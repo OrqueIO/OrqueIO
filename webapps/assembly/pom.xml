@@ -6,13 +6,13 @@
   <parent>
     <groupId>io.orqueio.bpm.webapp</groupId>
     <artifactId>orqueio-webapp-root</artifactId>
-    <version>1.0.6</version>
+    <version>1.0.7</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
   <description>orqueio-webapp</description>
   <groupId>io.orqueio.bpm.webapp</groupId>
   <artifactId>orqueio-webapp</artifactId>
-  <version>1.0.6</version>
+  <version>1.0.7</version>
   <packaging>war</packaging>
 
 
@@ -172,23 +172,7 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-resources-plugin</artifactId>
         <executions>
-          <execution>
-            <id>copy-resources-assembly</id>
-            <phase>prepare-package</phase>
-            <goals>
-              <goal>copy-resources</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${basedir}/target/webapp</outputDirectory>
-              <resources>
-                <resource>
-                  <directory>${basedir}/../frontend/target/webapp</directory>
-                  <filtering>false</filtering>
-                </resource>
-              </resources>
-            </configuration>
-          </execution>
-          <!-- Copy Angular 21 build output to app/angular/ -->
+          <!-- Copy Angular build output to app/ -->
           <execution>
             <id>copy-angular-resources</id>
             <phase>prepare-package</phase>
@@ -196,7 +180,7 @@
               <goal>copy-resources</goal>
             </goals>
             <configuration>
-              <outputDirectory>${basedir}/target/webapp/app/angular</outputDirectory>
+              <outputDirectory>${basedir}/target/webapp/app</outputDirectory>
               <resources>
                 <resource>
                   <directory>${basedir}/../angular/dist/OrqueIO-angular/browser</directory>

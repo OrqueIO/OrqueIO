@@ -59,12 +59,12 @@ export class AddMembershipDialogComponent implements OnInit {
             this.availableItems = groups.filter(g => !this.excludeIds.includes(g.id));
             this.filteredItems = [...this.availableItems];
             this.loading = false;
-            this.cdr.detectChanges();
+            this.cdr.markForCheck();
           },
           error: (err) => {
             console.error('Error loading groups:', err);
             this.loading = false;
-            this.cdr.detectChanges();
+            this.cdr.markForCheck();
           }
         });
     } else {
@@ -75,12 +75,12 @@ export class AddMembershipDialogComponent implements OnInit {
             this.availableItems = tenants.filter(t => !this.excludeIds.includes(t.id));
             this.filteredItems = [...this.availableItems];
             this.loading = false;
-            this.cdr.detectChanges();
+            this.cdr.markForCheck();
           },
           error: (err) => {
             console.error('Error loading tenants:', err);
             this.loading = false;
-            this.cdr.detectChanges();
+            this.cdr.markForCheck();
           }
         });
     }

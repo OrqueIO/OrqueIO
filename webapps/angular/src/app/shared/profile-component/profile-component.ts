@@ -159,14 +159,18 @@ export class ProfileComponent implements OnInit {
 
   signOut(): void {
     this.isLoggingOut = true;
-    this.authService.logout()
+    // Use smartLogout to handle both SSO and regular logout
+    // Note: For SSO, this will redirect before the observable completes
+    this.authService.smartLogout()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
           this.router.navigate(['/login']);
         },
         error: () => {
+          // On error, still try to navigate to login
           this.isLoggingOut = false;
+          this.router.navigate(['/login']);
         }
       });
   }

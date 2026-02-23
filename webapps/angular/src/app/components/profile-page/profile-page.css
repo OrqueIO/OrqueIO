@@ -3,6 +3,7 @@
   display: block;
   height: 100%;
   overflow: auto;
+  font-family: 'Roboto', sans-serif;
 }
 
 /* Profile Layout */
@@ -208,6 +209,7 @@
   transition: all 0.2s ease;
   text-align: left;
   color: var(--text-secondary, #6b7280);
+  font-family: 'Roboto', sans-serif;
   font-size: 14px;
   font-weight: 500;
 }

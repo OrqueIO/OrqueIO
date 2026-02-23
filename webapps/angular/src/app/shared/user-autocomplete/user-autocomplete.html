@@ -1,0 +1,80 @@
+<div class="user-autocomplete">
+  <div class="input-wrapper">
+    <fa-icon [icon]="faSearch" class="search-icon"></fa-icon>
+    <input
+      type="text"
+      class="form-control"
+      [(ngModel)]="searchTerm"
+      (ngModelChange)="onSearchChange($event)"
+      (focus)="onInputFocus()"
+      (keydown)="onKeyDown($event)"
+      [placeholder]="placeholder"
+      autocomplete="off"
+    />
+    <fa-icon
+      *ngIf="loading"
+      [icon]="faSpinner"
+      animation="spin"
+      class="loading-icon"
+    ></fa-icon>
+    <button
+      *ngIf="searchTerm && !loading && allowClear"
+      type="button"
+      class="clear-btn"
+      (click)="clearSelection()"
+    >
+      <fa-icon [icon]="faTimes"></fa-icon>
+    </button>
+  </div>
+
+  <!-- Dropdown list -->
+  <div class="dropdown-menu" *ngIf="showDropdown && (users.length > 0 || noResults)">
+    <!-- User results -->
+    <div
+      *ngFor="let user of users; let i = index"
+      class="dropdown-item"
+      [class.highlighted]="i === highlightedIndex"
+      [class.selected]="selectedUser?.id === user.id"
+      (click)="selectUser(user)"
+      (mouseenter)="highlightedIndex = i"
+    >
+      <fa-icon [icon]="faUser" class="user-icon"></fa-icon>
+      <div class="user-info">
+        <span class="user-id">{{ user.id }}</span>
+        <span class="user-name" *ngIf="user.firstName || user.lastName">
+          {{ user.firstName }} {{ user.lastName }}
+        </span>
+        <span class="user-email" *ngIf="user.email">{{ user.email }}</span>
+      </div>
+      <fa-icon
+        *ngIf="selectedUser?.id === user.id"
+        [icon]="faCheck"
+        class="check-icon"
+      ></fa-icon>
+    </div>
+
+    <!-- No results -->
+    <div class="dropdown-item no-results" *ngIf="noResults">
+      <span>{{ 'common.noUsersFound' | translate }}</span>
+    </div>
+  </div>
+
+  <!-- Action buttons -->
+  <div class="action-buttons">
+    <button
+      type="button"
+      class="btn btn-xs btn-primary"
+      [disabled]="!isValid"
+      (click)="confirm()"
+    >
+      <fa-icon [icon]="faCheck"></fa-icon>
+    </button>
+    <button
+      type="button"
+      class="btn btn-xs btn-default"
+      (click)="cancel()"
+    >
+      <fa-icon [icon]="faTimes"></fa-icon>
+    </button>
+  </div>
+</div>

@@ -1,9 +1,14 @@
-import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges, HostListener } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges, HostListener, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faUser, faUsers, faTimes, faCheck, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
+import { Subject, debounceTime, distinctUntilChanged, takeUntil, switchMap, of } from 'rxjs';
+import { UserService } from '../../../../services/admin/user.service';
+import { GroupService } from '../../../../services/admin/group.service';
+import { User } from '../../../../models/admin/user.model';
+import { Group } from '../../../../models/admin/group.model';
 import {
   Authorization,
   CreateAuthorizationRequest,
@@ -21,7 +26,7 @@ import {
   templateUrl: './authorization-modal.html',
   styleUrls: ['./authorization-modal.css']
 })
-export class AuthorizationModalComponent implements OnInit, OnChanges {
+export class AuthorizationModalComponent implements OnInit, OnChanges, OnDestroy {
   @Input() authorization: Authorization | null = null;
   @Input() resourceType!: number;
   @Input() availablePermissions: string[] = [];
@@ -55,10 +60,27 @@ export class AuthorizationModalComponent implements OnInit, OnChanges {
   // Show permissions dropdown
   showPermissionsDropdown = false;
 
-  constructor(private fb: FormBuilder) {}
+  // Autocomplete
+  suggestions: Array<{ id: string; label: string }> = [];
+  showSuggestions = false;
+  isLoadingSuggestions = false;
+  private searchSubject = new Subject<string>();
+  private destroy$ = new Subject<void>();
+
+  constructor(
+    private fb: FormBuilder,
+    private userService: UserService,
+    private groupService: GroupService
+  ) {}
 
   ngOnInit(): void {
     this.initForm();
+    this.setupAutocomplete();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -91,14 +113,28 @@ export class AuthorizationModalComponent implements OnInit, OnChanges {
       resourceId: [auth?.resourceId || '*', Validators.required]
     });
 
-    // Update identity validation when type changes
+    // Update identity control state when type changes
     this.form.get('type')?.valueChanges.subscribe((type) => {
+      const identityControl = this.form.get('identityId');
       if (type === AUTHORIZATION_TYPE.GLOBAL) {
-        this.form.get('identityId')?.setValue('*');
+        identityControl?.setValue('*');
+        identityControl?.disable();
         this.identityType = 'user';
+      } else {
+        identityControl?.enable();
       }
-      this.form.get('identityId')?.updateValueAndValidity();
+      identityControl?.updateValueAndValidity();
     });
+
+    // Set initial disabled state based on current type
+    if (auth?.type === AUTHORIZATION_TYPE.GLOBAL) {
+      this.form.get('identityId')?.disable();
+    }
+
+    // Disable type field in edit mode (type cannot be changed after creation)
+    if (auth?.id) {
+      this.form.get('type')?.disable();
+    }
   }
 
   private identityRequiredValidator(control: any): { [key: string]: boolean } | null {
@@ -138,6 +174,66 @@ export class AuthorizationModalComponent implements OnInit, OnChanges {
   toggleIdentityType(): void {
     this.identityType = this.identityType === 'user' ? 'group' : 'user';
     this.form.get('identityId')?.setValue('');
+    this.suggestions = [];
+    this.showSuggestions = false;
+  }
+
+  private setupAutocomplete(): void {
+    this.searchSubject.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      takeUntil(this.destroy$),
+      switchMap(searchTerm => {
+        if (!searchTerm || searchTerm.length < 1) {
+          return of([]);
+        }
+        this.isLoadingSuggestions = true;
+        if (this.identityType === 'user') {
+          return this.userService.getUsers({ idLike: `%${searchTerm}%`, maxResults: 10 });
+        } else {
+          return this.groupService.getGroups({ idLike: `%${searchTerm}%`, maxResults: 10 });
+        }
+      })
+    ).subscribe({
+      next: (results) => {
+        this.isLoadingSuggestions = false;
+        if (this.identityType === 'user') {
+          this.suggestions = (results as User[]).map(u => ({
+            id: u.id,
+            label: u.firstName && u.lastName ? `${u.id} (${u.firstName} ${u.lastName})` : u.id
+          }));
+        } else {
+          this.suggestions = (results as Group[]).map(g => ({
+            id: g.id,
+            label: g.name ? `${g.id} (${g.name})` : g.id
+          }));
+        }
+        this.showSuggestions = this.suggestions.length > 0;
+      },
+      error: () => {
+        this.isLoadingSuggestions = false;
+        this.suggestions = [];
+        this.showSuggestions = false;
+      }
+    });
+  }
+
+  onIdentityInput(event: Event): void {
+    const value = (event.target as HTMLInputElement).value;
+    this.searchSubject.next(value);
+  }
+
+  selectSuggestion(suggestion: { id: string; label: string }): void {
+    this.form.get('identityId')?.setValue(suggestion.id);
+    this.showSuggestions = false;
+    this.suggestions = [];
+  }
+
+  hideSuggestions(): void {
+    // Delay to allow click on suggestion
+    setTimeout(() => {
+      this.showSuggestions = false;
+    }, 200);
   }
 
   togglePermission(permission: string): void {
@@ -201,20 +297,25 @@ export class AuthorizationModalComponent implements OnInit, OnChanges {
       return;
     }
 
-    const formValue = this.form.value;
+    // Use getRawValue() to include disabled controls (identityId when GLOBAL)
+    const formValue = this.form.getRawValue();
+    // Ensure type is a number (select might return string in some cases)
+    const typeValue = typeof formValue.type === 'string' ? parseInt(formValue.type, 10) : formValue.type;
     const request: CreateAuthorizationRequest = {
-      type: formValue.type,
+      type: typeValue as AuthorizationType,
       resourceType: this.resourceType as ResourceType,
       resourceId: formValue.resourceId,
       permissions: Array.from(this.selectedPermissions)
     };
 
-    if (!this.isGlobalType) {
-      if (this.identityType === 'user') {
-        request.userId = formValue.identityId;
-      } else {
-        request.groupId = formValue.identityId;
-      }
+    // For GLOBAL type, set userId to '*' (matching AngularJS behavior)
+    // Otherwise, set the appropriate identity field
+    if (this.isGlobalType) {
+      request.userId = '*';
+    } else if (this.identityType === 'user') {
+      request.userId = formValue.identityId;
+    } else {
+      request.groupId = formValue.identityId;
     }
 
     this.save.emit(request);

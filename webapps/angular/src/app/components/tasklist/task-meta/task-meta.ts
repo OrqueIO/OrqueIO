@@ -106,13 +106,21 @@ export class TaskMetaComponent implements OnInit, OnChanges {
 
   saveFollowUpDate(): void {
     this.editingFollowUp = false;
-    const isoDate = this.fromDatetimeLocal(this.followUpValue);
-    this.taskUpdate.emit({ followUp: isoDate });
+    const followUpIso = this.fromDatetimeLocal(this.followUpValue);
+    // Include both dates to ensure neither is lost during update
+    this.taskUpdate.emit({
+      followUp: followUpIso,
+      due: this.task.due || null
+    });
   }
 
   resetFollowUpDate(): void {
     this.followUpValue = null;
-    this.taskUpdate.emit({ followUp: undefined });
+    // Include both dates to ensure due date is preserved
+    this.taskUpdate.emit({
+      followUp: null,
+      due: this.task.due || null
+    });
   }
 
   // ==================== Due Date ====================
@@ -129,13 +137,21 @@ export class TaskMetaComponent implements OnInit, OnChanges {
 
   saveDueDate(): void {
     this.editingDueDate = false;
-    const isoDate = this.fromDatetimeLocal(this.dueDateValue);
-    this.taskUpdate.emit({ due: isoDate });
+    const dueIso = this.fromDatetimeLocal(this.dueDateValue);
+    // Include both dates to ensure neither is lost during update
+    this.taskUpdate.emit({
+      due: dueIso,
+      followUp: this.task.followUp || null
+    });
   }
 
   resetDueDate(): void {
     this.dueDateValue = null;
-    this.taskUpdate.emit({ due: undefined });
+    // Include both dates to ensure followUp date is preserved
+    this.taskUpdate.emit({
+      due: null,
+      followUp: this.task.followUp || null
+    });
   }
 
   // ==================== Assignee ====================
@@ -238,6 +254,52 @@ export class TaskMetaComponent implements OnInit, OnChanges {
 
   openGroupsModal(): void {
     this.groupsEdit.emit();
+  }
+
+  // ==================== Cockpit Link (matches AngularJS setLink function) ====================
+
+  /**
+   * Get Cockpit link for the task's process/case instance
+   */
+  getCockpitInstanceLink(): string | null {
+    if (!this.task) {
+      return null;
+    }
+
+    if (this.task.processInstanceId) {
+      return `/orqueio/app/cockpit/processes/instance/${this.task.processInstanceId}`;
+    } else if (this.task.caseInstanceId) {
+      return `/orqueio/app/cockpit/cases/instance/${this.task.caseInstanceId}`;
+    }
+
+    // Standalone task - no link
+    return null;
+  }
+
+  /**
+   * Check if task has a process or case instance (i.e., is not standalone)
+   */
+  hasInstance(): boolean {
+    return !!(this.task?.processInstanceId || this.task?.caseInstanceId);
+  }
+
+  /**
+   * Get instance type label for display
+   */
+  getInstanceTypeLabel(): string {
+    if (this.task?.processInstanceId) {
+      return 'Process Instance';
+    } else if (this.task?.caseInstanceId) {
+      return 'Case Instance';
+    }
+    return 'Standalone Task';
+  }
+
+  /**
+   * Get instance ID for display
+   */
+  getInstanceId(): string | null {
+    return this.task?.processInstanceId || this.task?.caseInstanceId || null;
   }
 
   // ==================== Helpers ====================

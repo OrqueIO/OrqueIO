@@ -10,13 +10,12 @@ import {
   SimpleChanges,
   ViewChild,
   AfterViewInit,
-  ChangeDetectorRef
+  ChangeDetectorRef,
+  HostListener
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-// Import dmn-js Viewer (read-only mode)
-import DmnViewer from 'dmn-js/lib/Viewer';
-// Import DMN migration utility for older DMN versions
+import DmnViewer from 'dmn-js/lib/NavigatedViewer';
 import { migrateDiagram } from '@bpmn-io/dmn-migrate';
 
 // Interface for decision input/output values
@@ -37,6 +36,15 @@ export interface DecisionVariable {
   template: `
     <div class="dmn-viewer-wrapper">
       <div class="dmn-viewer-container" [class.loading]="loading">
+        <!-- Expand button (top-right) -->
+        <button type="button" class="expand-btn" *ngIf="showExpandButton" (click)="expandToggle.emit()" [title]="isExpanded ? 'Restore' : 'Fullscreen'">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="15 3 21 3 21 9"></polyline>
+            <polyline points="9 21 3 21 3 15"></polyline>
+            <polyline points="21 15 21 21 15 21"></polyline>
+            <polyline points="3 9 3 3 9 3"></polyline>
+          </svg>
+        </button>
         <div class="dmn-canvas" #dmnCanvas></div>
         <div class="loading-overlay" *ngIf="loading">
           <span class="loading-text">Loading DMN...</span>
@@ -48,23 +56,83 @@ export interface DecisionVariable {
     </div>
   `,
   styles: [`
+    :host {
+      display: flex;
+      flex: 1;
+      width: 100%;
+      height: 100%;
+    }
+
     .dmn-viewer-wrapper {
       width: 100%;
+      height: 100%;
+      flex: 1;
       background: #fff;
       border-radius: 8px;
-      overflow: hidden;
+      overflow: auto;
+      display: flex;
+      align-items: stretch;
+      justify-content: stretch;
     }
 
     .dmn-viewer-container {
       width: 100%;
+      height: 100%;
+      flex: 1;
       min-height: 300px;
       position: relative;
       background: #fff;
+      overflow: auto;
+      display: flex;
+      flex-direction: column;
     }
 
     .dmn-canvas {
       width: 100%;
+      height: 100%;
+      flex: 1;
       min-height: 300px;
+      overflow: hidden;
+    }
+
+    /* Expand Button (top-right) */
+    .expand-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 20;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      color: #374151;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .expand-btn svg {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+    }
+
+    .expand-btn:hover {
+      background: #f3f4f6;
+      color: #1f2937;
+    }
+
+    .expand-btn:focus {
+      outline: none;
+      background: #e5e7eb;
+    }
+
+    .expand-btn:active {
+      background: #d1d5db;
     }
 
     .loading-overlay,
@@ -100,29 +168,67 @@ export interface DecisionVariable {
 
     /* Decision Table Container */
     :host ::ng-deep .dmn-decision-table-container {
-      width: 100%;
+      margin: 16px;
       overflow: auto;
+      width: calc(100% - 32px);
     }
 
     :host ::ng-deep .tjs-container {
       min-height: 200px;
       overflow: auto;
+      margin: 0;
+      width: 100%;
     }
 
-    /* Table styling */
-    :host ::ng-deep .tjs-table {
+    /* DRD Container - Enable pan/drag */
+    :host ::ng-deep .dmn-drd-container {
+      width: 100% !important;
+      height: 100% !important;
+      overflow: hidden !important;
+    }
+
+    :host ::ng-deep .dmn-drd-container .djs-container {
+      width: 100% !important;
+      height: 100% !important;
+      cursor: grab !important;
+    }
+
+    :host ::ng-deep .dmn-drd-container .djs-container:active {
+      cursor: grabbing !important;
+    }
+
+    :host ::ng-deep .djs-container svg {
       width: 100%;
+      height: 100%;
+    }
+
+    /* Ensure canvas layer receives mouse events */
+    :host ::ng-deep .djs-overlay-container,
+    :host ::ng-deep .djs-drag-active {
+      cursor: grabbing !important;
+    }
+
+    /* Table styling - fill available width */
+    :host ::ng-deep .tjs-table {
+      width: 100% !important;
       border-collapse: collapse;
       font-size: 13px;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      table-layout: fixed;
     }
 
     :host ::ng-deep .tjs-table th,
     :host ::ng-deep .tjs-table td {
       border: 1px solid #ccd1d5;
-      padding: 8px 12px;
+      padding: 10px 16px;
       text-align: left;
       vertical-align: middle;
+    }
+
+    /* Input/output columns take more space */
+    :host ::ng-deep .tjs-table .input-cell,
+    :host ::ng-deep .tjs-table .output-cell {
+      min-width: 180px;
     }
 
     :host ::ng-deep .tjs-table thead th {
@@ -189,13 +295,51 @@ export interface DecisionVariable {
     :host ::ng-deep .tjs-add-rule,
     :host ::ng-deep .tjs-add-clause,
     :host ::ng-deep .tjs-controls,
-    :host ::ng-deep .dmn-definitions-bar,
     :host ::ng-deep .dmn-icon-plus,
     :host ::ng-deep .add-rule,
     :host ::ng-deep .add-input,
     :host ::ng-deep .add-output,
     :host ::ng-deep .context-menu {
       display: none !important;
+    }
+
+    /* View DRD button styling */
+    :host ::ng-deep .dmn-definitions-bar {
+      display: flex;
+      justify-content: flex-end;
+      padding: 8px 12px;
+      background: #f8f9fa;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    :host ::ng-deep .dmn-definitions-bar .view-drd-button,
+    :host ::ng-deep .dmn-definitions-bar button {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 1px 3px rgba(59, 130, 246, 0.3);
+    }
+
+    :host ::ng-deep .dmn-definitions-bar .view-drd-button:hover,
+    :host ::ng-deep .dmn-definitions-bar button:hover {
+      background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+      transform: translateY(-1px);
+    }
+
+    :host ::ng-deep .dmn-definitions-bar .view-drd-button:active,
+    :host ::ng-deep .dmn-definitions-bar button:active {
+      transform: translateY(0);
+      box-shadow: 0 1px 3px rgba(59, 130, 246, 0.3);
     }
 
     /* Remove edit cursors */
@@ -220,50 +364,71 @@ export interface DecisionVariable {
       width: 40px;
     }
 
-    /* Annotations column */
+    /* Annotations column - neutral when empty */
     :host ::ng-deep .tjs-table .annotation {
-      background: #fefce8;
+      background: #fafafa;
       font-style: italic;
+      color: #9ca3af;
+      width: 80px;
+      min-width: 60px;
+      max-width: 120px;
+      text-align: center;
+    }
+
+    /* Only highlight annotation cells with actual content */
+    :host ::ng-deep .tjs-table td.annotation:not(:empty) {
+      background: #fefce8;
       color: #78716c;
+    }
+
+    /* Style for empty annotation cells */
+    :host ::ng-deep .tjs-table td.annotation:empty,
+    :host ::ng-deep .tjs-table td.annotation:has(> :only-child:empty) {
+      background: #fafafa;
+      color: #d1d5db;
     }
 
     /* Decision Table Properties Header (Name + Hit Policy) */
     :host ::ng-deep .decision-table-properties {
       display: flex;
       align-items: center;
-      padding: 12px 16px;
+      justify-content: space-between;
+      padding: 16px 20px;
       border: 1px solid #d1d5db;
       border-bottom: none;
-      background: #fff;
+      background: linear-gradient(to bottom, #fff, #f9fafb);
     }
 
     :host ::ng-deep .decision-table-name {
-      font-size: 18px;
-      font-weight: 400;
-      color: #1f2937;
+      font-size: 20px;
+      font-weight: 600;
+      color: #111827;
       margin: 0;
       flex-grow: 1;
+      letter-spacing: -0.01em;
     }
 
     :host ::ng-deep .decision-table-header-separator {
-      display: block;
-      height: 24px;
-      border-left: 1px solid #d1d5db;
-      margin: 0 16px;
+      display: none;
     }
 
     :host ::ng-deep .hit-policy {
-      display: flex;
+      display: inline-flex;
       align-items: center;
-      font-size: 14px;
-      font-weight: 400;
-      color: #374151;
+      font-size: 12px;
+      font-weight: 500;
+      color: #6b7280;
+      background: #f3f4f6;
+      padding: 6px 12px;
+      border-radius: 6px;
+      border: 1px solid #e5e7eb;
     }
 
     :host ::ng-deep .hit-policy-explanation {
-      margin-left: 6px;
-      color: #9ca3af;
-      font-size: 14px;
+      margin-left: 4px;
+      color: #3b82f6;
+      font-size: 12px;
+      font-weight: 600;
     }
   `]
 })
@@ -276,8 +441,12 @@ export class DmnViewerComponent implements OnInit, OnDestroy, OnChanges, AfterVi
   @Input() inputs: DecisionVariable[] = [];
   @Input() outputs: DecisionVariable[] = [];
 
+  @Input() showExpandButton = false;
+  @Input() isExpanded = false;
+
   @Output() loaded = new EventEmitter<void>();
   @Output() loadError = new EventEmitter<string | null>();
+  @Output() expandToggle = new EventEmitter<void>();
 
   loading = true;
   error: string | null = null;
@@ -382,6 +551,8 @@ export class DmnViewerComponent implements OnInit, OnDestroy, OnChanges, AfterVi
       setTimeout(() => {
         this.applyHighlighting();
         this.injectRealValues();
+        // Fit the DRD to viewport after loading
+        this.fitViewport();
         this.loaded.emit();
       }, 100);
 
@@ -522,12 +693,17 @@ export class DmnViewerComponent implements OnInit, OnDestroy, OnChanges, AfterVi
   // Public method to fit the viewport
   fitViewport(): void {
     if (this.dmnViewer) {
-      const activeViewer = this.dmnViewer.getActiveViewer();
-      if (activeViewer) {
-        const canvas = activeViewer.get('canvas');
-        if (canvas && typeof canvas.zoom === 'function') {
-          canvas.zoom('fit-viewport', 'auto');
+      try {
+        const activeViewer = this.dmnViewer.getActiveViewer();
+        if (activeViewer && typeof activeViewer.get === 'function') {
+          // Only DRD views have a canvas - decision tables don't
+          const canvas = activeViewer.get('canvas', false);
+          if (canvas && typeof canvas.zoom === 'function') {
+            canvas.zoom('fit-viewport', 'auto');
+          }
         }
+      } catch {
+        // Canvas not available for this view type (e.g., decision tables)
       }
     }
   }

@@ -5,6 +5,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { forkJoin } from 'rxjs';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { AuthService } from '../../services/auth';
+import { PermissionService } from '../../services/permission.service';
 import { SystemService } from '../../services/admin/system.service';
 import { TranslatePipe } from '../../i18n/translate.pipe';
 import { TranslateService, Language } from '../../i18n/translate.service';
@@ -17,10 +18,13 @@ import {
   faCogs,
   faCheckCircle,
   faExclamationTriangle,
-  faLayerGroup
+  faLayerGroup,
+  faLock,
+  faEnvelope
 } from '@fortawesome/free-solid-svg-icons';
 
 interface App {
+  appId: string;  // App identifier for permission check
   icon: string;
   titleKey: string;
   subtitleKey: string;
@@ -66,11 +70,18 @@ export class WelcomeComponent implements OnInit {
   faCheckCircle = faCheckCircle;
   faExclamationTriangle = faExclamationTriangle;
   faLayerGroup = faLayerGroup;
+  faLock = faLock;
+  faEnvelope = faEnvelope;
 
   userName = '';
   currentLang: Language = 'fr';
 
+  // Limited Access mode flag - true when user is authenticated but has no app permissions
+  isLimitedAccess = false;
+
   private destroyRef = inject(DestroyRef);
+
+  private permissionService = inject(PermissionService);
 
   constructor(
     private authService: AuthService,
@@ -83,6 +94,8 @@ export class WelcomeComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(auth => {
         this.userName = auth?.name || this.translateService.instant('GUEST');
+        // Re-filter apps when authentication changes
+        this.filterApps();
       });
 
     this.translateService.currentLang$
@@ -91,20 +104,36 @@ export class WelcomeComponent implements OnInit {
         this.currentLang = lang;
       });
 
+    // Re-filter apps when permissions change
+    this.permissionService.permissionsChanged$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.filterApps();
+      });
+
     this.loadEngineStatus();
+    this.filterApps();
+  }
+
+  
+  private filterApps(): void {
+    this.apps = this.allApps.filter(app =>
+      this.permissionService.canAccessApp(app.appId)
+    );
+
+    // Check for Limited Access mode
+    this.isLimitedAccess = this.permissionService.isLimitedAccess();
   }
 
   private loadEngineStatus(): void {
-    forkJoin({
-      health: this.systemService.getSystemHealth(),
-      telemetry: this.systemService.getTelemetryData()
-    })
+    // Only call health endpoint - telemetry requires admin permissions
+    this.systemService.getSystemHealth()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: ({ health, telemetry }) => {
+        next: (health) => {
           this.engineStatus = {
             isActive: health.status === 'running',
-            version: health.version || telemetry.product?.version || 'unknown',
+            version: health.version || 'unknown',
             environment: this.detectEnvironment()
           };
         },
@@ -145,9 +174,10 @@ export class WelcomeComponent implements OnInit {
     environment: '...'
   };
 
-  // Apps with modern icons and accent colors
-  apps: App[] = [
+  // Apps with modern icons and accent colors (filtered by permissions)
+  private allApps: App[] = [
     {
+      appId: 'cockpit',
       icon: 'images/icons/cockpit-icon.svg',
       titleKey: 'APP_COCKPIT_TITLE',
       subtitleKey: 'APP_COCKPIT_SUBTITLE',
@@ -156,6 +186,7 @@ export class WelcomeComponent implements OnInit {
       accentColor: '#3b82f6'
     },
     {
+      appId: 'tasklist',
       icon: 'images/icons/tasklist-icon.svg',
       titleKey: 'APP_TASKLIST_TITLE',
       subtitleKey: 'APP_TASKLIST_SUBTITLE',
@@ -164,6 +195,7 @@ export class WelcomeComponent implements OnInit {
       accentColor: '#10b981'
     },
     {
+      appId: 'admin',
       icon: 'images/icons/admin-icon.svg',
       titleKey: 'APP_ADMIN_TITLE',
       subtitleKey: 'APP_ADMIN_SUBTITLE',
@@ -172,6 +204,9 @@ export class WelcomeComponent implements OnInit {
       accentColor: '#8b5cf6'
     }
   ];
+
+  // Filtered apps based on user permissions
+  apps: App[] = [];
 
   // Quick statistics (can be connected to real data)
   quickStats: QuickStat[] = [

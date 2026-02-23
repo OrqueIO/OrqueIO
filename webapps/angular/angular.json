@@ -18,6 +18,11 @@
           "options": {
             "browser": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
+            "allowedCommonJsDependencies": [
+              "cmmn-js",
+              "escape-html",
+              "selection-update"
+            ],
             "assets": [
               {
                 "glob": "**/*",
@@ -41,17 +46,23 @@
           },
           "configurations": {
             "production": {
-              "baseHref": "/orqueio/app/angular/",
+              "baseHref": "/orqueio/app/",
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ],
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2MB",
-                  "maximumError": "3MB"
+                  "maximumWarning": "3.5MB",
+                  "maximumError": "5MB"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "24kB",
-                  "maximumError": "32kB"
+                  "maximumWarning": "32kB",
+                  "maximumError": "50kB"
                 }
               ],
               "outputHashing": "all"

@@ -4,7 +4,7 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angula
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faUser, faShield, faSave, faSignOutAlt, faHome, faChevronRight, faSync } from '@fortawesome/free-solid-svg-icons';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { TranslatePipe } from '../../i18n/translate.pipe';
 import { TranslateService } from '../../i18n/translate.service';
@@ -37,6 +37,7 @@ export class ProfilePageComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
   private cdr = inject(ChangeDetectorRef);
   private fb = inject(FormBuilder);
+  private router = inject(Router);
   private authService = inject(AuthService);
   private userService = inject(UserService);
   private notifications = inject(NotificationsService);
@@ -83,7 +84,7 @@ export class ProfilePageComponent implements OnInit {
 
     this.passwordForm = this.fb.group({
       currentPassword: ['', Validators.required],
-      newPassword: ['', [Validators.required, Validators.minLength(8)]],
+      newPassword: ['', Validators.required],
       confirmPassword: ['', Validators.required]
     }, { validators: this.passwordMatchValidator });
   }
@@ -138,7 +139,12 @@ export class ProfilePageComponent implements OnInit {
     if (!this.profileForm.valid || this.savingProfile) return;
 
     this.savingProfile = true;
-    const updates = this.profileForm.value;
+    const updates = {
+      id: this.userId,
+      firstName: this.profileForm.value.firstName || '',
+      lastName: this.profileForm.value.lastName || '',
+      email: this.profileForm.value.email || ''
+    };
 
     this.userService.updateUserProfile(this.userId, updates)
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -199,7 +205,10 @@ export class ProfilePageComponent implements OnInit {
   }
 
   logout(): void {
-    this.authService.logout().subscribe();
+    this.authService.smartLogout().subscribe({
+      next: () => this.router.navigate(['/login']),
+      error: () => this.router.navigate(['/login'])
+    });
   }
 
   refresh(): void {

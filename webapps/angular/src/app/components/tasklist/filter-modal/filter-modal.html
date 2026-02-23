@@ -160,6 +160,14 @@
             </svg>
             {{ 'filter.addCriterion' | translate }}
           </button>
+
+          <!-- Include Assigned Tasks (visible when candidateGroup/candidateGroups/candidateUser is selected) -->
+          <div class="form-group checkbox-group" *ngIf="showIncludeAssignedTasks" style="margin-top: 12px;">
+            <label class="checkbox-label">
+              <input type="checkbox" [(ngModel)]="includeAssignedTasks">
+              <span>{{ 'filter.includeAssignedTasks' | translate }}</span>
+            </label>
+          </div>
         </div>
       </div>
 
@@ -231,6 +239,14 @@
 
         <div class="accordion-content" *ngIf="isSectionExpanded('variables')">
           <p class="section-description">{{ 'filter.variablesDescription' | translate }}</p>
+
+          <!-- Show Undefined Variables -->
+          <div class="form-group checkbox-group" style="margin-bottom: 12px;">
+            <label class="checkbox-label">
+              <input type="checkbox" [(ngModel)]="showUndefinedVariable">
+              <span>{{ 'filter.showUndefinedVariable' | translate }}</span>
+            </label>
+          </div>
 
           <!-- Existing Variables -->
           <div class="variables-list">

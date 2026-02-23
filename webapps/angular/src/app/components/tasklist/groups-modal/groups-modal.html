@@ -62,13 +62,43 @@
       <div class="add-group-section">
         <label for="newGroupId">{{ 'groups.addGroup' | translate }}</label>
         <div class="add-group-form">
-          <input type="text"
-                 id="newGroupId"
-                 [(ngModel)]="newGroupId"
-                 (keydown)="onKeyDown($event)"
-                 [placeholder]="'groups.groupPlaceholder' | translate"
-                 class="form-input"
-                 [disabled]="validating">
+          <div class="autocomplete-container">
+            <input type="text"
+                   id="newGroupId"
+                   [(ngModel)]="newGroupId"
+                   (input)="onSearchInput()"
+                   (keydown)="onKeyDown($event)"
+                   (blur)="hideSuggestions()"
+                   (focus)="onSearchInput()"
+                   [placeholder]="'groups.groupPlaceholder' | translate"
+                   class="form-input"
+                   [disabled]="validating"
+                   autocomplete="off">
+
+            <!-- Loading indicator -->
+            <span class="search-spinner" *ngIf="isSearching">
+              <span class="spinner small"></span>
+            </span>
+
+            <!-- Dropdown suggestions -->
+            <div class="suggestions-dropdown" *ngIf="showSuggestions && suggestions.length > 0">
+              <div class="suggestion-item"
+                   *ngFor="let suggestion of suggestions"
+                   (mousedown)="selectGroup(suggestion)">
+                <span class="suggestion-icon">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+                    <circle cx="9" cy="7" r="4"/>
+                    <path d="M23 21v-2a4 4 0 00-3-3.87"/>
+                    <path d="M16 3.13a4 4 0 010 7.75"/>
+                  </svg>
+                </span>
+                <span class="suggestion-name">{{ suggestion.name || suggestion.id }}</span>
+                <span class="suggestion-id" *ngIf="suggestion.name && suggestion.name !== suggestion.id">({{ suggestion.id }})</span>
+              </div>
+            </div>
+          </div>
+
           <button class="btn btn-primary"
                   (click)="addGroup()"
                   [disabled]="!newGroupId.trim() || validating"

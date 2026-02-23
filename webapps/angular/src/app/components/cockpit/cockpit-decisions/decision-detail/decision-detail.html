@@ -90,7 +90,7 @@
               <fa-icon [icon]="isCopied('deployment') ? faCheck : faCopy" class="copy-icon" [class.copied]="isCopied('deployment')"></fa-icon>
             </dt>
             <dd class="deployment-id">
-              <a [href]="getDeploymentUrl()" class="link-value mono">{{ decisionDefinition.deploymentId }}</a>
+              <a [routerLink]="['/cockpit/repository']" [queryParams]="{deployment: decisionDefinition.deploymentId}" class="link-value mono">{{ decisionDefinition.deploymentId }}</a>
             </dd>
 
             <!-- Decision Requirements Definition (DRD) -->
@@ -99,7 +99,7 @@
               <fa-icon [icon]="isCopied('drd') ? faCheck : faCopy" class="copy-icon" [class.copied]="isCopied('drd')"></fa-icon>
             </dt>
             <dd *ngIf="decisionDefinition.decisionRequirementsDefinitionId" class="drd-id">
-              <a [routerLink]="['/cockpit/decision-requirement', decisionDefinition.decisionRequirementsDefinitionId]" class="link-value mono">
+              <a [routerLink]="['/cockpit/decisions', decisionDefinition.id]" class="link-value mono">
                 {{ decisionDefinition.decisionRequirementsDefinitionId }}
               </a>
             </dd>
@@ -111,10 +111,14 @@
         <!-- Main Content -->
         <div class="decision-content">
           <!-- DMN Table Viewer -->
-          <div class="dmn-table-container" *ngIf="dmnXml && decisionDefinition">
+          <div class="dmn-table-container" [class.fullscreen]="isDmnExpanded" *ngIf="dmnXml && decisionDefinition">
+            <div class="fullscreen-backdrop" *ngIf="isDmnExpanded" (click)="toggleDmnExpand()"></div>
             <app-dmn-viewer
               [xml]="dmnXml"
               [decisionId]="decisionDefinition.key"
+              [showExpandButton]="true"
+              [isExpanded]="isDmnExpanded"
+              (expandToggle)="toggleDmnExpand()"
             ></app-dmn-viewer>
           </div>
 
@@ -173,7 +177,7 @@
                           {{ formatDate(instance.evaluationTime) }}
                         </td>
                         <td class="process-def-cell">
-                          <a *ngIf="instance.processDefinitionKey" [href]="getProcessDefinitionUrl(instance)" class="process-link">
+                          <a *ngIf="instance.processDefinitionKey" [routerLink]="['/cockpit/processes', instance.processDefinitionKey, 'instances']" class="process-link">
                             {{ instance.processDefinitionKey }}
                           </a>
                           <span *ngIf="!instance.processDefinitionKey && instance.caseDefinitionKey">
@@ -182,7 +186,7 @@
                           <span *ngIf="!instance.processDefinitionKey && !instance.caseDefinitionKey" class="null-value">-</span>
                         </td>
                         <td class="process-instance-cell">
-                          <a *ngIf="instance.processInstanceId" [href]="getProcessInstanceUrl(instance)" class="process-link" [title]="instance.processInstanceId">
+                          <a *ngIf="instance.processInstanceId" [routerLink]="['/cockpit/processes/instance', instance.processInstanceId]" class="process-link" [title]="instance.processInstanceId">
                             {{ truncateId(instance.processInstanceId, 8) }}
                           </a>
                           <span *ngIf="!instance.processInstanceId && instance.caseInstanceId" [title]="instance.caseInstanceId">

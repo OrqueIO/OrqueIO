@@ -188,13 +188,25 @@
   border-radius: 2px;
 }
 
-/* ===== CARDS GRID - Fills remaining space ===== */
+/* ===== CARDS GRID - Adapts to number of apps ===== */
 .cards-grid {
   flex: 1;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
   gap: 16px;
   min-height: 0;
+}
+
+.cards-grid.cards-count-1 {
+  grid-template-columns: 1fr;
+  max-width: 420px;
+}
+
+.cards-grid.cards-count-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.cards-grid.cards-count-3 {
+  grid-template-columns: repeat(3, 1fr);
 }
 
 /* ===== APP CARD - Full height of grid cell ===== */
@@ -419,6 +431,7 @@
   .cards-grid {
     grid-template-columns: 1fr;
     gap: 10px;
+    max-width: none;
   }
 
   .app-card {
@@ -488,5 +501,166 @@
   * {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+/* ===== LIMITED ACCESS BANNER ===== */
+.limited-access-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  border-bottom: 1px solid #f59e0b;
+  padding: 1rem 1.5rem;
+  flex-shrink: 0;
+}
+
+.limited-access-content {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.limited-access-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: rgba(245, 158, 11, 0.2);
+  border-radius: 50%;
+  color: #b45309;
+  font-size: 1.1rem;
+}
+
+.limited-access-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.limited-access-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #92400e;
+  margin: 0;
+}
+
+.limited-access-message {
+  font-size: 0.85rem;
+  color: #a16207;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.limited-access-action {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 100px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #92400e;
+  white-space: nowrap;
+}
+
+.contact-icon {
+  font-size: 0.9rem;
+}
+
+/* ===== NO APPS CONTAINER (Limited Access) ===== */
+.no-apps-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 2rem;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  border: 2px dashed var(--border-color);
+  text-align: center;
+}
+
+.no-apps-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+  border-radius: 50%;
+  color: var(--text-muted);
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.no-apps-message {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 0.5rem;
+}
+
+.no-apps-submessage {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin: 0;
+  max-width: 400px;
+  line-height: 1.5;
+}
+
+/* ===== RESPONSIVE - LIMITED ACCESS ===== */
+@media (max-width: 768px) {
+  .limited-access-banner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 1rem;
+  }
+
+  .limited-access-content {
+    gap: 0.75rem;
+  }
+
+  .limited-access-icon {
+    width: 36px;
+    height: 36px;
+    font-size: 1rem;
+  }
+
+  .limited-access-title {
+    font-size: 0.9rem;
+  }
+
+  .limited-access-message {
+    font-size: 0.8rem;
+  }
+
+  .limited-access-action {
+    width: 100%;
+    justify-content: center;
+    padding: 0.6rem 1rem;
+  }
+
+  .no-apps-container {
+    padding: 2rem 1rem;
+  }
+
+  .no-apps-icon {
+    width: 60px;
+    height: 60px;
+    font-size: 1.5rem;
+  }
+
+  .no-apps-message {
+    font-size: 1rem;
+  }
+
+  .no-apps-submessage {
+    font-size: 0.85rem;
   }
 }

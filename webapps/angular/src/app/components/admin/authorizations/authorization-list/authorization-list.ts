@@ -94,28 +94,28 @@ export class AuthorizationListComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(authorizations => {
         this.authorizations = authorizations;
-        this.cdr.detectChanges();
+        this.cdr.markForCheck();
       });
 
     this.store.select(AuthorizationsSelectors.selectAuthorizationsLoading)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(loading => {
         this.loading = loading;
-        this.cdr.detectChanges();
+        this.cdr.markForCheck();
       });
 
     this.store.select(AuthorizationsSelectors.selectAuthorizationsTotal)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(total => {
         this.total = total;
-        this.cdr.detectChanges();
+        this.cdr.markForCheck();
       });
 
     this.store.select(AuthorizationsSelectors.selectSelectedResourceType)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(resourceType => {
         this.selectedResourceType = resourceType;
-        this.cdr.detectChanges();
+        this.cdr.markForCheck();
       });
 
     // Check for resource type in query params
@@ -191,16 +191,26 @@ export class AuthorizationListComponent implements OnInit {
 
   onSaveAuthorization(request: CreateAuthorizationRequest): void {
     if (this.selectedAuthorization?.id) {
-      // Update existing
+      // Update existing - Camunda API requires full authorization object
+      // Only include userId OR groupId (not both) - matching AngularJS behavior
+      const updates: any = {
+        id: this.selectedAuthorization.id,
+        type: request.type,
+        resourceType: this.selectedResourceType as ResourceType,
+        resourceId: request.resourceId,
+        permissions: request.permissions
+      };
+
+      // Add only the relevant identity field (userId or groupId, not both)
+      if (request.userId) {
+        updates.userId = request.userId;
+      } else if (request.groupId) {
+        updates.groupId = request.groupId;
+      }
+
       this.store.dispatch(AuthorizationsActions.updateAuthorization({
         authorizationId: this.selectedAuthorization.id,
-        updates: {
-          type: request.type,
-          resourceId: request.resourceId,
-          permissions: request.permissions,
-          userId: request.userId,
-          groupId: request.groupId
-        }
+        updates
       }));
     } else {
       // Create new

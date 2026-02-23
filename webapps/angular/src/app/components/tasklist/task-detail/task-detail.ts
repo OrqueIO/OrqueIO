@@ -1,7 +1,7 @@
-import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, OnChanges, SimpleChanges, inject, NgZone } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, OnChanges, SimpleChanges, inject, NgZone, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Store } from '@ngrx/store';
-import { Subject, takeUntil, fromEvent, interval, switchMap, filter } from 'rxjs';
+import { Subject, takeUntil, take, fromEvent, interval, switchMap, filter, forkJoin, of, catchError } from 'rxjs';
 import { TranslatePipe } from '../../../i18n/translate.pipe';
 import { Task, IdentityLink } from '../../../models/tasklist';
 import { AuthService } from '../../../services/auth';
@@ -52,13 +52,15 @@ interface Tab {
     GroupsModalComponent
   ],
   templateUrl: './task-detail.html',
-  styleUrl: './task-detail.css'
+  styleUrl: './task-detail.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TaskDetailComponent implements OnInit, OnDestroy, OnChanges {
   private readonly store = inject(Store);
   private readonly authService = inject(AuthService);
   private readonly tasklistService = inject(TasklistService);
   private readonly ngZone = inject(NgZone);
+  private readonly cdr = inject(ChangeDetectorRef);
   private readonly destroy$ = new Subject<void>();
 
   @Input() task!: Task;
@@ -120,11 +122,13 @@ export class TaskDetailComponent implements OnInit, OnDestroy, OnChanges {
       if (errorType === 'TASK_NOT_EXIST') {
         this.taskExists = false;
       }
+      this.cdr.markForCheck();
     });
 
     // Subscribe to instance suspended state
     this.instanceSuspended$.pipe(takeUntil(this.destroy$)).subscribe(suspended => {
       this.instanceSuspended = suspended;
+      this.cdr.markForCheck();
     });
 
     // Setup periodic task existence check
@@ -175,6 +179,7 @@ export class TaskDetailComponent implements OnInit, OnDestroy, OnChanges {
         this.ngZone.run(() => {
           this.taskExists = false;
           this.taskRemoved.emit(this.task.id);
+          this.cdr.markForCheck();
         });
       }
     });
@@ -232,42 +237,71 @@ export class TaskDetailComponent implements OnInit, OnDestroy, OnChanges {
   // ==================== Groups Modal ====================
 
   openGroupsModal(): void {
-    // Get current identity links from store
-    this.identityLinks$.pipe(
-      takeUntil(this.destroy$)
-    ).subscribe(links => {
+    // Get current identity links from store (take(1) for single value)
+    this.identityLinks$.pipe(take(1)).subscribe(links => {
       this.currentIdentityLinks = links;
-    }).unsubscribe();
+    });
     this.showGroupsModal = true;
+    this.cdr.markForCheck();
   }
 
   closeGroupsModal(): void {
     this.showGroupsModal = false;
+    this.cdr.markForCheck();
   }
 
   onGroupsUpdate(changes: { added: string[]; removed: string[] }): void {
     if (!this.task) return;
 
-    // Add new groups
+    const taskId = this.task.id;
+    const operations: ReturnType<typeof this.tasklistService.addIdentityLink>[] = [];
+
+    // Add new groups - each operation handles its own error
     for (const groupId of changes.added) {
-      this.tasklistService.addIdentityLink(this.task.id, {
-        groupId,
-        type: 'candidate'
-      }).subscribe();
+      operations.push(
+        this.tasklistService.addIdentityLink(taskId, {
+          groupId,
+          type: 'candidate'
+        }).pipe(
+          catchError(err => {
+            console.error(`Failed to add group ${groupId}:`, err);
+            return of(void 0); // Continue with other operations
+          })
+        )
+      );
     }
 
-    // Remove groups
+    // Remove groups - each operation handles its own error
     for (const groupId of changes.removed) {
-      this.tasklistService.deleteIdentityLink(this.task.id, {
-        groupId,
-        type: 'candidate'
-      }).subscribe();
+      operations.push(
+        this.tasklistService.deleteIdentityLink(taskId, {
+          groupId,
+          type: 'candidate'
+        }).pipe(
+          catchError(err => {
+            console.error(`Failed to remove group ${groupId}:`, err);
+            return of(void 0); // Continue with other operations
+          })
+        )
+      );
     }
 
     this.closeGroupsModal();
 
-    // Emit action to refresh identity links
-    this.taskAction.emit({ type: 'refreshIdentityLinks', taskId: this.task.id });
+    // Wait for all operations to complete before refreshing
+    if (operations.length > 0) {
+      forkJoin(operations).subscribe({
+        next: () => {
+          // Emit action to refresh identity links after all operations complete
+          this.taskAction.emit({ type: 'refreshIdentityLinks', taskId });
+        },
+        error: (err) => {
+          console.error('Failed to update identity links:', err);
+          // Still refresh to show current state
+          this.taskAction.emit({ type: 'refreshIdentityLinks', taskId });
+        }
+      });
+    }
   }
 
   // ==================== Helpers ====================
@@ -306,10 +340,10 @@ export class TaskDetailComponent implements OnInit, OnDestroy, OnChanges {
 
   getInstanceLink(): string | null {
     if (this.task.processInstanceId) {
-      return `/cockpit/processes/instance/${this.task.processInstanceId}`;
+      return `/orqueio/app/cockpit/processes/instance/${this.task.processInstanceId}`;
     }
     if (this.task.caseInstanceId) {
-      return `/cockpit/cases/instance/${this.task.caseInstanceId}`;
+      return `/orqueio/app/cockpit/cases/instance/${this.task.caseInstanceId}`;
     }
     return null;
   }
@@ -354,5 +388,6 @@ export class TaskDetailComponent implements OnInit, OnDestroy, OnChanges {
   onDiagramExpandToggle(expanded: boolean): void {
     this.diagramExpanded = expanded;
     this.diagramExpand.emit(expanded);
+    this.cdr.markForCheck();
   }
 }

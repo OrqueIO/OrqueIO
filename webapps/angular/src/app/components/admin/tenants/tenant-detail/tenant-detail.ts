@@ -84,6 +84,8 @@ export class TenantDetailComponent implements OnInit {
   // Add User/Group dialogs
   showAddUserDialog: boolean = false;
   showAddGroupDialog: boolean = false;
+  allAvailableUsers: User[] = [];
+  allAvailableGroups: Group[] = [];
   availableUsers: User[] = [];
   availableGroups: Group[] = [];
   userSearchTerm: string = '';
@@ -123,14 +125,14 @@ export class TenantDetailComponent implements OnInit {
             name: tenant.name
           });
           this.loading = false;
-          this.cdr.detectChanges();
+          this.cdr.markForCheck();
         },
-        error: () => {
+        error: (err) => {
           this.loading = false;
-          this.cdr.detectChanges();
+          this.cdr.markForCheck();
           this.notifications.addError({
             status: this.translateService.instant('admin.tenants.loadError'),
-            message: this.translateService.instant('admin.tenants.loadError')
+            message: this.extractErrorMessage(err) || this.translateService.instant('admin.tenants.loadError')
           });
           this.router.navigate(['/admin/tenants']);
         }
@@ -142,7 +144,8 @@ export class TenantDetailComponent implements OnInit {
 
     this.savingTenant = true;
     const updates = {
-      name: this.tenantForm.value.name
+      id: this.tenantId,
+      name: this.tenantForm.value.name || ''
     };
 
     this.tenantService.updateTenant(this.tenantId, updates)
@@ -153,13 +156,13 @@ export class TenantDetailComponent implements OnInit {
           this.notifications.addSuccess('admin.tenants.tenantUpdated', 'Tenant updated successfully');
           this.loadTenant();
         },
-        error: () => {
+        error: (err) => {
           this.savingTenant = false;
           this.notifications.addError({
             status: this.translateService.instant('admin.tenants.updateError'),
-            message: this.translateService.instant('admin.tenants.updateError')
+            message: this.extractErrorMessage(err) || this.translateService.instant('admin.tenants.updateError')
           });
-          this.cdr.detectChanges();
+          this.cdr.markForCheck();
         }
       });
   }
@@ -187,10 +190,10 @@ export class TenantDetailComponent implements OnInit {
           this.notifications.addSuccess('admin.tenants.tenantDeleted', 'Tenant deleted successfully');
           this.router.navigate(['/admin/tenants']);
         },
-        error: () => {
+        error: (err) => {
           this.notifications.addError({
             status: this.translateService.instant('admin.tenants.deleteError'),
-            message: this.translateService.instant('admin.tenants.deleteError')
+            message: this.extractErrorMessage(err) || this.translateService.instant('admin.tenants.deleteError')
           });
         }
       });
@@ -202,6 +205,7 @@ export class TenantDetailComponent implements OnInit {
 
   setActiveSection(section: 'info' | 'users' | 'groups'): void {
     this.activeSection = section;
+    this.cdr.markForCheck();
     if (section === 'users' && this.tenantUsers.length === 0) {
       this.loadUsers();
     } else if (section === 'groups' && this.tenantGroups.length === 0) {
@@ -226,11 +230,11 @@ export class TenantDetailComponent implements OnInit {
         next: users => {
           this.tenantUsers = users;
           this.loadingUsers = false;
-          this.cdr.detectChanges();
+          this.cdr.markForCheck();
         },
         error: () => {
           this.loadingUsers = false;
-          this.cdr.detectChanges();
+          this.cdr.markForCheck();
         }
       });
   }
@@ -243,11 +247,11 @@ export class TenantDetailComponent implements OnInit {
         next: groups => {
           this.tenantGroups = groups;
           this.loadingGroups = false;
-          this.cdr.detectChanges();
+          this.cdr.markForCheck();
         },
         error: () => {
           this.loadingGroups = false;
-          this.cdr.detectChanges();
+          this.cdr.markForCheck();
         }
       });
   }
@@ -260,35 +264,46 @@ export class TenantDetailComponent implements OnInit {
   openAddUserDialog(): void {
     this.showAddUserDialog = true;
     this.userSearchTerm = '';
+    this.cdr.markForCheck();
     this.loadAvailableUsers();
   }
 
   closeAddUserDialog(): void {
     this.showAddUserDialog = false;
     this.availableUsers = [];
+    this.cdr.markForCheck();
   }
 
   loadAvailableUsers(): void {
     this.loadingAvailableUsers = true;
+    this.cdr.markForCheck();
     const existingUserIds = this.tenantUsers.map(u => u.id);
 
-    this.userService.getUsers({ id: this.userSearchTerm || undefined })
+    this.userService.getUsers({ maxResults: 1000 })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: users => {
-          this.availableUsers = users.filter(u => !existingUserIds.includes(u.id));
+          this.allAvailableUsers = users.filter(u => !existingUserIds.includes(u.id));
+          this.availableUsers = [...this.allAvailableUsers];
           this.loadingAvailableUsers = false;
-          this.cdr.detectChanges();
+          this.cdr.markForCheck();
         },
         error: () => {
           this.loadingAvailableUsers = false;
-          this.cdr.detectChanges();
+          this.cdr.markForCheck();
         }
       });
   }
 
   onUserSearch(): void {
-    this.loadAvailableUsers();
+    const term = this.userSearchTerm.toLowerCase();
+    this.availableUsers = this.allAvailableUsers.filter(user =>
+      user.id.toLowerCase().includes(term) ||
+      (user.firstName && user.firstName.toLowerCase().includes(term)) ||
+      (user.lastName && user.lastName.toLowerCase().includes(term)) ||
+      (user.email && user.email.toLowerCase().includes(term))
+    );
+    this.cdr.markForCheck();
   }
 
   addUser(user: User): void {
@@ -299,12 +314,12 @@ export class TenantDetailComponent implements OnInit {
           this.notifications.addSuccess('admin.tenants.userAdded', 'User added to tenant');
           this.tenantUsers = [...this.tenantUsers, user];
           this.availableUsers = this.availableUsers.filter(u => u.id !== user.id);
-          this.cdr.detectChanges();
+          this.cdr.markForCheck();
         },
-        error: () => {
+        error: (err) => {
           this.notifications.addError({
             status: this.translateService.instant('admin.tenants.userAddError'),
-            message: this.translateService.instant('admin.tenants.userAddError')
+            message: this.extractErrorMessage(err) || this.translateService.instant('admin.tenants.userAddError')
           });
         }
       });
@@ -328,12 +343,12 @@ export class TenantDetailComponent implements OnInit {
           this.notifications.addSuccess('admin.tenants.userRemoved', 'User removed from tenant');
           this.tenantUsers = this.tenantUsers.filter(u => u.id !== userId);
           this.userToRemove = null;
-          this.cdr.detectChanges();
+          this.cdr.markForCheck();
         },
-        error: () => {
+        error: (err) => {
           this.notifications.addError({
             status: this.translateService.instant('admin.tenants.userRemoveError'),
-            message: this.translateService.instant('admin.tenants.userRemoveError')
+            message: this.extractErrorMessage(err) || this.translateService.instant('admin.tenants.userRemoveError')
           });
           this.userToRemove = null;
         }
@@ -349,35 +364,44 @@ export class TenantDetailComponent implements OnInit {
   openAddGroupDialog(): void {
     this.showAddGroupDialog = true;
     this.groupSearchTerm = '';
+    this.cdr.markForCheck();
     this.loadAvailableGroups();
   }
 
   closeAddGroupDialog(): void {
     this.showAddGroupDialog = false;
     this.availableGroups = [];
+    this.cdr.markForCheck();
   }
 
   loadAvailableGroups(): void {
     this.loadingAvailableGroups = true;
+    this.cdr.markForCheck();
     const existingGroupIds = this.tenantGroups.map(g => g.id);
 
-    this.groupService.getGroups({ id: this.groupSearchTerm || undefined })
+    this.groupService.getGroups({ maxResults: 1000 })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: groups => {
-          this.availableGroups = groups.filter(g => !existingGroupIds.includes(g.id));
+          this.allAvailableGroups = groups.filter(g => !existingGroupIds.includes(g.id));
+          this.availableGroups = [...this.allAvailableGroups];
           this.loadingAvailableGroups = false;
-          this.cdr.detectChanges();
+          this.cdr.markForCheck();
         },
         error: () => {
           this.loadingAvailableGroups = false;
-          this.cdr.detectChanges();
+          this.cdr.markForCheck();
         }
       });
   }
 
   onGroupSearch(): void {
-    this.loadAvailableGroups();
+    const term = this.groupSearchTerm.toLowerCase();
+    this.availableGroups = this.allAvailableGroups.filter(group =>
+      group.id.toLowerCase().includes(term) ||
+      (group.name && group.name.toLowerCase().includes(term))
+    );
+    this.cdr.markForCheck();
   }
 
   addGroup(group: Group): void {
@@ -388,12 +412,12 @@ export class TenantDetailComponent implements OnInit {
           this.notifications.addSuccess('admin.tenants.groupAdded', 'Group added to tenant');
           this.tenantGroups = [...this.tenantGroups, group];
           this.availableGroups = this.availableGroups.filter(g => g.id !== group.id);
-          this.cdr.detectChanges();
+          this.cdr.markForCheck();
         },
-        error: () => {
+        error: (err) => {
           this.notifications.addError({
             status: this.translateService.instant('admin.tenants.groupAddError'),
-            message: this.translateService.instant('admin.tenants.groupAddError')
+            message: this.extractErrorMessage(err) || this.translateService.instant('admin.tenants.groupAddError')
           });
         }
       });
@@ -417,12 +441,12 @@ export class TenantDetailComponent implements OnInit {
           this.notifications.addSuccess('admin.tenants.groupRemoved', 'Group removed from tenant');
           this.tenantGroups = this.tenantGroups.filter(g => g.id !== groupId);
           this.groupToRemove = null;
-          this.cdr.detectChanges();
+          this.cdr.markForCheck();
         },
-        error: () => {
+        error: (err) => {
           this.notifications.addError({
             status: this.translateService.instant('admin.tenants.groupRemoveError'),
-            message: this.translateService.instant('admin.tenants.groupRemoveError')
+            message: this.extractErrorMessage(err) || this.translateService.instant('admin.tenants.groupRemoveError')
           });
           this.groupToRemove = null;
         }
@@ -432,5 +456,17 @@ export class TenantDetailComponent implements OnInit {
   cancelRemoveGroup(): void {
     this.showRemoveGroupConfirm = false;
     this.groupToRemove = null;
+  }
+
+  /**
+   * Extract error message from API error response
+   */
+  private extractErrorMessage(err: any): string | null {
+    if (!err) return null;
+    if (err.error?.message) return err.error.message;
+    if (err.error?.error?.message) return err.error.error.message;
+    if (err.message) return err.message;
+    if (typeof err.error === 'string') return err.error;
+    return null;
   }
 }

@@ -15,7 +15,7 @@ export class ClipboardDirective implements OnDestroy {
     private renderer: Renderer2
   ) {
     // Add copy cursor style
-    this.renderer.setStyle(this.el.nativeElement, 'cursor', 'copy');
+    this.renderer.setStyle(this.el.nativeElement, 'cursor', 'pointer');
   }
 
   @HostListener('click', ['$event'])

@@ -1,10 +1,10 @@
-import { Component, EventEmitter, Input, Output, OnInit, OnChanges, SimpleChanges, inject } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnInit, OnChanges, SimpleChanges, inject, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TranslatePipe } from '../../../i18n/translate.pipe';
 import { TasklistService } from '../../../services/tasklist/tasklist.service';
-import { IdentityLink } from '../../../models/tasklist/task.model';
-import { catchError, of } from 'rxjs';
+import { IdentityLink, GroupRef } from '../../../models/tasklist/task.model';
+import { catchError, of, Subject, debounceTime, distinctUntilChanged, switchMap, takeUntil } from 'rxjs';
 
 interface GroupItem {
   id: string;
@@ -20,7 +20,7 @@ interface GroupItem {
   templateUrl: './groups-modal.html',
   styleUrl: './groups-modal.css'
 })
-export class GroupsModalComponent implements OnInit, OnChanges {
+export class GroupsModalComponent implements OnInit, OnChanges, OnDestroy {
   @Input() isOpen = false;
   @Input() taskId = '';
   @Input() taskName = '';
@@ -30,20 +30,66 @@ export class GroupsModalComponent implements OnInit, OnChanges {
   @Output() close = new EventEmitter<void>();
 
   private tasklistService = inject(TasklistService);
+  private cdr = inject(ChangeDetectorRef);
 
   groups: GroupItem[] = [];
   newGroupId = '';
   validating = false;
   errorMessage = '';
 
+  // Autocomplete
+  suggestions: GroupRef[] = [];
+  showSuggestions = false;
+  isSearching = false;
+  private searchSubject = new Subject<string>();
+  private destroy$ = new Subject<void>();
+
   private originalGroupIds = new Set<string>();
 
   ngOnInit(): void {
     this.initializeGroups();
+    this.setupSearchSubscription();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  private setupSearchSubscription(): void {
+    this.searchSubject.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      switchMap(term => {
+        if (!term || term.length < 1) {
+          return of([]);
+        }
+        this.isSearching = true;
+        return this.tasklistService.searchGroups({ name: term, maxResults: 10 }).pipe(
+          catchError(() => of([]))
+        );
+      }),
+      takeUntil(this.destroy$)
+    ).subscribe(results => {
+      // Filter out groups already added
+      const existingIds = new Set(this.groups.map(g => g.id));
+      this.suggestions = results.filter(g => !existingIds.has(g.id));
+      this.isSearching = false;
+      this.showSuggestions = this.suggestions.length > 0;
+      this.cdr.detectChanges();
+    });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['identityLinks'] || changes['isOpen']) {
+    // Only reinitialize when the modal opens (isOpen changes from false to true)
+    // This prevents resetting user's pending changes if identityLinks updates while modal is open
+    if (changes['isOpen']) {
+      if (this.isOpen && !changes['isOpen'].previousValue) {
+        // Modal just opened
+        this.initializeGroups();
+      }
+    } else if (changes['identityLinks'] && !this.isOpen) {
+      // Update groups only when modal is closed
       this.initializeGroups();
     }
   }
@@ -64,7 +110,39 @@ export class GroupsModalComponent implements OnInit, OnChanges {
     this.newGroupId = '';
   }
 
-  async addGroup(): Promise<void> {
+  onSearchInput(): void {
+    this.errorMessage = '';
+    this.searchSubject.next(this.newGroupId.trim());
+  }
+
+  selectGroup(group: GroupRef): void {
+    // Check if already exists
+    if (this.groups.some(g => g.id === group.id)) {
+      this.errorMessage = 'groups.alreadyExists';
+      return;
+    }
+
+    this.groups = [...this.groups, {
+      id: group.id,
+      name: group.name || group.id,
+      type: 'candidate',
+      isNew: true
+    }];
+    this.newGroupId = '';
+    this.showSuggestions = false;
+    this.suggestions = [];
+    this.cdr.detectChanges();
+  }
+
+  hideSuggestions(): void {
+    // Delay to allow click on suggestion to register
+    setTimeout(() => {
+      this.showSuggestions = false;
+      this.cdr.detectChanges();
+    }, 200);
+  }
+
+  addGroup(): void {
     const groupId = this.newGroupId.trim();
 
     if (!groupId) {
@@ -79,47 +157,58 @@ export class GroupsModalComponent implements OnInit, OnChanges {
 
     this.validating = true;
     this.errorMessage = '';
+    this.showSuggestions = false;
 
-    try {
-      const valid = await this.tasklistService.validateGroup(groupId)
-        .pipe(catchError(() => of(true))) // Default to true if validation fails
-        .toPromise();
-
-      if (valid) {
-        this.groups.push({
-          id: groupId,
-          name: groupId,
-          type: 'candidate',
-          isNew: true
-        });
-        this.newGroupId = '';
-      } else {
-        this.errorMessage = 'groups.groupNotFound';
-      }
-    } catch (error) {
-      this.errorMessage = 'groups.validationError';
-    } finally {
-      this.validating = false;
-    }
+    this.tasklistService.validateGroup(groupId)
+      .pipe(catchError(() => of(true))) // Default to true if validation fails
+      .subscribe({
+        next: (valid) => {
+          if (valid) {
+            this.groups = [...this.groups, {
+              id: groupId,
+              name: groupId,
+              type: 'candidate',
+              isNew: true
+            }];
+            this.newGroupId = '';
+            this.suggestions = [];
+          } else {
+            this.errorMessage = 'groups.groupNotFound';
+          }
+          this.validating = false;
+          this.cdr.detectChanges();
+        },
+        error: () => {
+          this.errorMessage = 'groups.validationError';
+          this.validating = false;
+          this.cdr.detectChanges();
+        }
+      });
   }
 
   removeGroup(groupId: string): void {
     this.groups = this.groups.filter(g => g.id !== groupId);
+    this.cdr.detectChanges();
   }
 
   onSave(): void {
     const currentGroupIds = new Set(this.groups.map(g => g.id));
 
-    // Find added groups
+    // Find added groups (groups in current state but not in original)
     const added = this.groups
       .filter(g => !this.originalGroupIds.has(g.id))
       .map(g => g.id);
 
-    // Find removed groups
+    // Find removed groups (groups in original but not in current state)
     const removed = Array.from(this.originalGroupIds)
       .filter(id => !currentGroupIds.has(id));
 
-    this.update.emit({ added, removed });
+    if (added.length > 0 || removed.length > 0) {
+      this.update.emit({ added, removed });
+    } else {
+      // No changes, just close
+      this.close.emit();
+    }
   }
 
   onClose(): void {
