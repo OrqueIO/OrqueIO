@@ -4,13 +4,13 @@
   <parent>
     <groupId>io.orqueio.bpm</groupId>
     <artifactId>orqueio-root</artifactId>
-    <version>2.0.1</version>
+    <version>2.0.2</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
   <groupId>io.orqueio.bpm</groupId>
   <artifactId>orqueio-parent</artifactId>
-  <version>2.0.1</version>
+  <version>2.0.2</version>
   <name>Orque IO Platform - Parent Pom</name>
   <inceptionYear>2013</inceptionYear>
   <packaging>pom</packaging>
@@ -23,7 +23,7 @@
     <version.quarkus>3.27.0.CR1</version.quarkus>
     <version.spring.framework>5.3.39</version.spring.framework>
     <version.spring.framework6>6.2.11</version.spring.framework6>
-    <version.spring-boot>4.0.1</version.spring-boot>
+    <version.spring-boot>4.0.2</version.spring-boot>
     <version.resteasy>3.15.6.Final</version.resteasy>
     <version.jersey2>2.34</version.jersey2>
     <!-- use minimum version of resteasy and jersey -->
@@ -79,7 +79,7 @@
     <version.jakarta-ee-spec>10.0.0</version.jakarta-ee-spec>
 
     <version.eirslett.frontend.maven.plugin>1.12.1</version.eirslett.frontend.maven.plugin>
-    <version.nodejs>20.14.0</version.nodejs>
+    <version.nodejs>20.19.0</version.nodejs>
     <version.npm>10.7.0</version.npm>
 
     <!-- OSGi bundles properties -->

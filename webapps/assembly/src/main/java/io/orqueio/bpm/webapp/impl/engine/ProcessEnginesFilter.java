@@ -18,8 +18,6 @@ package io.orqueio.bpm.webapp.impl.engine;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.Collections;
-import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -30,77 +28,73 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import io.orqueio.bpm.admin.Admin;
-import io.orqueio.bpm.admin.AdminRuntimeDelegate;
 import io.orqueio.bpm.cockpit.Cockpit;
 import io.orqueio.bpm.cockpit.CockpitRuntimeDelegate;
 import io.orqueio.bpm.engine.ProcessEngine;
 import io.orqueio.bpm.engine.authorization.Groups;
 import io.orqueio.bpm.engine.rest.util.WebApplicationUtil;
-import io.orqueio.bpm.tasklist.Tasklist;
-import io.orqueio.bpm.tasklist.TasklistRuntimeDelegate;
-import io.orqueio.bpm.webapp.impl.security.filter.headersec.provider.impl.ContentSecurityPolicyProvider;
 import io.orqueio.bpm.webapp.impl.util.ServletContextUtil;
 import io.orqueio.bpm.webapp.impl.IllegalWebAppConfigurationException;
 import io.orqueio.bpm.webapp.impl.filter.AbstractTemplateFilter;
 import io.orqueio.bpm.webapp.impl.security.SecurityActions;
 import io.orqueio.bpm.webapp.impl.security.SecurityActions.SecurityAction;
-import io.orqueio.bpm.webapp.plugin.spi.AppPlugin;
-import io.orqueio.bpm.welcome.Welcome;
-import io.orqueio.bpm.welcome.WelcomeRuntimeDelegate;
 
 /**
+ * Filter that serves the Angular SPA frontend.
+ *
+ * This filter handles:
+ * - SPA fallback: All /app/* routes return index.html for Angular routing
+ * - Legacy redirects: Old AngularJS URLs redirect to new Angular routes
+ * - Static assets: JS, CSS, images are served directly
+ * - API passthrough: /api/* requests are passed to the filter chain
  *
  * @author nico.rehwaldt
  * @author Daniel Meyer
  * @author Roman Smirnov
  * @author Sebastian Stamm
- *
  */
 public class ProcessEnginesFilter extends AbstractTemplateFilter {
 
+  // Legacy AngularJS app names (for redirect handling)
   protected static final String COCKPIT_APP_NAME = "cockpit";
   protected static final String ADMIN_APP_NAME = "admin";
   protected static final String TASKLIST_APP_NAME = "tasklist";
   protected static final String WELCOME_APP_NAME = "welcome";
 
-  protected static final String DEFAULT_APP = WELCOME_APP_NAME;
-  protected static final String INDEX_PAGE = "index.html";
+  // Pattern to match /app/* routes
+  public static final Pattern APP_PREFIX_PATTERN = Pattern.compile("/app(/.*)?");
 
-  protected static final String SETUP_PAGE = "setup/";
+  // Pattern to match legacy AngularJS URLs: /app/{appName}/{engineName}/...
+  // The engineName must be a valid process engine name (typically "default")
+  public static final Pattern LEGACY_APP_PATTERN = Pattern.compile(
+    "/app/(cockpit|admin|tasklist|welcome)/([\\w-]+)?/?(.*)?"
+  );
 
-  public static final String APP_ROOT_PLACEHOLDER = "$APP_ROOT";
-  public static final String BASE_PLACEHOLDER = "$BASE";
+  // Pattern to match static assets (should be served directly, not as SPA)
+  public static final Pattern STATIC_ASSET_PATTERN = Pattern.compile(
+    ".*\\.(js|css|ico|png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot|map|json|webp|avif)$"
+  );
 
-  public static final String PLUGIN_DEPENDENCIES_PLACEHOLDER = "$PLUGIN_DEPENDENCIES";
-  public static final String PLUGIN_PACKAGES_PLACEHOLDER = "$PLUGIN_PACKAGES";
-  public static final String CSP_NONCE_PLACEHOLDER = "$CSP_NONCE";
-
-  public static Pattern APP_PREFIX_PATTERN = Pattern.compile("/app/(?:([\\w-]+?)/(?:(index\\.html|[\\w-]+)?/?([^?]*)?)?)?");
+  // Known Angular routes that should NOT be treated as legacy engine names
+  // These are the sub-routes within each app module
+  private static final Set<String> ANGULAR_ROUTES = Set.of(
+    // Cockpit routes
+    "processes", "decisions", "decision-instance", "tasks", "batch", "deployments",
+    // Admin routes
+    "users", "groups", "tenants", "authorizations", "system",
+    // Common routes
+    "profile", "login", "setup", "access-denied"
+  );
 
   protected final CockpitRuntimeDelegate cockpitRuntimeDelegate;
-  protected final AdminRuntimeDelegate adminRuntimeDelegate;
-  protected final TasklistRuntimeDelegate tasklistRuntimeDelegate;
-  protected final WelcomeRuntimeDelegate welcomeRuntimeDelegate;
-
-  // accepts two times the plugin name
-  protected final String pluginPackageFormat;
-
-  // accepts two times the plugin name
-  protected final String pluginDependencyFormat;
 
   public ProcessEnginesFilter() {
     this.cockpitRuntimeDelegate = Cockpit.getRuntimeDelegate();
-    this.adminRuntimeDelegate = Admin.getRuntimeDelegate();
-    this.tasklistRuntimeDelegate = Tasklist.getRuntimeDelegate();
-    this.welcomeRuntimeDelegate = Welcome.getRuntimeDelegate();
-    this.pluginPackageFormat = "{ name: '%s-plugin-%s', " +
-      "location: '%s%s/api/%s/plugin/%s/static/app', main: 'plugin.js' }";
-    this.pluginDependencyFormat = "{ ngModuleName: '%s.plugin.%s', requirePackageName: '%s-plugin-%s' }";
   }
 
   @Override
-  protected void applyFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
+  protected void applyFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+      throws IOException, ServletException {
 
     String contextPath = request.getContextPath();
     String requestUri = request.getRequestURI().substring(contextPath.length());
@@ -113,122 +107,141 @@ public class ProcessEnginesFilter extends AbstractTemplateFilter {
       requestUri = requestUri.substring(applicationPathLength);
     }
 
-    Matcher uriMatcher = APP_PREFIX_PATTERN.matcher(requestUri);
-
-    if (uriMatcher.matches()) {
-      String appName = uriMatcher.group(1);
-      String engineName = uriMatcher.group(2);
-      String pageUri = uriMatcher.group(3);
-
-      // this happens on weblogic - /app/cockpit/index.html
-      if (INDEX_PAGE.equals(engineName)) {
-        engineName = null;
-      }
-
-      if (pageUri == null || pageUri.isEmpty() || SETUP_PAGE.equals(pageUri)) {
-        serveIndexPage(appName, engineName, pageUri, applicationPath,
-          contextPath, request, response);
-        return;
-      }
-
-      if (INDEX_PAGE.equals(pageUri)) {
-        response.sendRedirect(String.format("%s%s/app/%s/%s/", contextPath, applicationPath,
-          appName, engineName));
-        return;
-      }
-
-      if (pageUri.endsWith(".html")) {
-        serveTemplate(requestUri, appName, pageUri, applicationPath, request, response, chain);
-        return;
-      }
-
+    // 1. Handle root access - redirect to /app/
+    if (requestUri.isEmpty() || requestUri.equals("/")) {
+      response.sendRedirect(String.format("%s%s/app/", contextPath, applicationPath));
+      return;
     }
 
-    chain.doFilter(request, response);
+    // 2. Check if this is a /app/* request
+    Matcher appMatcher = APP_PREFIX_PATTERN.matcher(requestUri);
+    if (!appMatcher.matches()) {
+      // Not an app request, pass through
+      chain.doFilter(request, response);
+      return;
+    }
+
+    // 3. Handle legacy AngularJS URLs with redirects
+    Matcher legacyMatcher = LEGACY_APP_PATTERN.matcher(requestUri);
+    if (legacyMatcher.matches()) {
+      String appName = legacyMatcher.group(1);
+      String engineName = legacyMatcher.group(2);
+      String rest = legacyMatcher.group(3);
+
+      // If there's an engine name (like "default"), it's a legacy URL
+      // But skip if it's a known Angular route (not a legacy engine name)
+      if (engineName != null && !engineName.isEmpty()
+          && !isStaticAsset(engineName)
+          && !isAngularRoute(engineName)) {
+        String redirectPath = buildAngularRedirectPath(appName, rest, contextPath, applicationPath);
+        response.sendRedirect(redirectPath);
+        return;
+      }
+    }
+
+    // 4. Serve static assets directly
+    if (STATIC_ASSET_PATTERN.matcher(requestUri).matches()) {
+      chain.doFilter(request, response);
+      return;
+    }
+
+    // 5. SPA Fallback: Serve index.html for all other /app/* routes
+    serveAngularIndex(applicationPath, contextPath, response, servletContext);
   }
 
-  protected void serveIndexPage(String appName,
-                                String engineName,
-                                String pageUri,
-                                String applicationPath,
-                                String contextPath,
-                                HttpServletRequest request,
-                                HttpServletResponse response) throws IOException, ServletException {
+  /**
+   * Builds the redirect path from legacy AngularJS URL to Angular route.
+   */
+  protected String buildAngularRedirectPath(String appName, String rest,
+                                            String contextPath, String applicationPath) {
+    StringBuilder path = new StringBuilder();
+    path.append(contextPath).append(applicationPath).append("/app/");
 
-    // access to /
-    if (appName == null) {
-
-      // redirect to {defaultApp}/{defaultEngineName}
-      response.sendRedirect(String.format("%s%s/app/%s/%s/", contextPath, applicationPath,
-        DEFAULT_APP, getDefaultEngineName()));
-    } else
-
-    // access to /app/
-    // redirect to /app/{defaultEngineName}/
-    if (engineName == null) {
-      // redirect to {defaultApp}/{defaultEngineName}
-      response.sendRedirect(String.format("%s%s/app/%s/%s/", contextPath, applicationPath,
-        appName, getDefaultEngineName()));
+    // Map legacy app names to Angular routes
+    if (WELCOME_APP_NAME.equals(appName)) {
+      // Welcome app goes to root
+      // /app/welcome/default/ -> /app/
     } else {
-
-      // access to /app/{engineName}/
-      boolean setupPage = SETUP_PAGE.equals(pageUri);
-
-      if (setupPage) {
-        if (needsInitialUser(engineName)) {
-          serveIndexPage(appName, engineName, applicationPath, contextPath, response, request.getServletContext());
-        } else {
-          response.sendRedirect(String.format("%s%s/app/%s/%s/", contextPath, applicationPath,
-            appName, engineName));
-        }
-      } else {
-        serveIndexPage(appName, engineName, applicationPath, contextPath, response, request.getServletContext());
-      }
+      // Other apps keep their name
+      // /app/cockpit/default/ -> /app/cockpit/
+      path.append(appName).append("/");
     }
+
+    // Append remaining path if any
+    if (rest != null && !rest.isEmpty() && !rest.equals("index.html")) {
+      path.append(rest);
+    }
+
+    return path.toString();
   }
 
+  /**
+   * Checks if the given string looks like a static asset filename.
+   */
+  protected boolean isStaticAsset(String value) {
+    return STATIC_ASSET_PATTERN.matcher(value).matches();
+  }
+
+  /**
+   * Checks if the given string is a known Angular route.
+   * These routes should not be treated as legacy engine names.
+   */
+  protected boolean isAngularRoute(String value) {
+    return ANGULAR_ROUTES.contains(value);
+  }
+
+  /**
+   * Serves the Angular index.html file.
+   * Angular handles all routing client-side, so we just return the index.html
+   * without any placeholder substitution (Angular doesn't need it).
+   */
+  protected void serveAngularIndex(String applicationPath,
+                                   String contextPath,
+                                   HttpServletResponse response,
+                                   ServletContext servletContext) throws IOException {
+
+    // Set telemetry for the webapp
+    setWebappInTelemetry(getDefaultEngineName(), "angular", servletContext);
+
+    // Read Angular's index.html
+    String data = getWebResourceContents("/app/index.html");
+
+    if (data == null) {
+      response.sendError(HttpServletResponse.SC_NOT_FOUND, "Angular index.html not found");
+      return;
+    }
+
+    response.setContentLength(data.getBytes(StandardCharsets.UTF_8).length);
+    response.setContentType("text/html");
+    response.setCharacterEncoding("UTF-8");
+
+    response.getWriter().append(data);
+  }
+
+  /**
+   * Gets the default process engine name.
+   */
   protected String getDefaultEngineName() {
     CockpitRuntimeDelegate runtimeDelegate = Cockpit.getRuntimeDelegate();
 
     Set<String> processEngineNames = runtimeDelegate.getProcessEngineNames();
-    if(processEngineNames.isEmpty()) {
-      throw new IllegalWebAppConfigurationException("No process engine found. orqueio Webapp cannot work without a process engine. ");
-
+    if (processEngineNames.isEmpty()) {
+      throw new IllegalWebAppConfigurationException(
+        "No process engine found. Orqueio Webapp cannot work without a process engine.");
     } else {
       ProcessEngine defaultProcessEngine = runtimeDelegate.getDefaultProcessEngine();
-      if(defaultProcessEngine != null) {
+      if (defaultProcessEngine != null) {
         return defaultProcessEngine.getName();
-
       } else {
         return processEngineNames.iterator().next();
-
       }
     }
   }
 
-  protected void serveTemplate(String requestUri,
-                               String appName,
-                               String pageUri,
-                               String applicationPath,
-                               HttpServletRequest request,
-                               HttpServletResponse response,
-                               FilterChain chain) throws IOException, ServletException {
-
-    if (hasWebResource(requestUri)) {
-
-      chain.doFilter(request, response);
-    } else {
-
-      String cleanAppUri = String.format("%s/app/%s/%s", applicationPath, appName, pageUri);
-
-      if (hasWebResource(cleanAppUri)) {
-        request.getRequestDispatcher(cleanAppUri).forward(request, response);
-      } else {
-        chain.doFilter(request, response);
-      }
-    }
-  }
-
+  /**
+   * Checks if an initial admin user needs to be created.
+   * This is used for the setup flow.
+   */
   protected boolean needsInitialUser(String engineName) throws IOException, ServletException {
     final ProcessEngine processEngine = Cockpit.getProcessEngine(engineName);
     if (processEngine == null) {
@@ -237,9 +250,7 @@ public class ProcessEnginesFilter extends AbstractTemplateFilter {
 
     if (processEngine.getIdentityService().isReadOnly()) {
       return false;
-
     } else {
-
       return SecurityActions.runWithoutAuthentication(new SecurityAction<Boolean>() {
         public Boolean execute() {
           return processEngine.getIdentityService()
@@ -247,109 +258,16 @@ public class ProcessEnginesFilter extends AbstractTemplateFilter {
               .memberOfGroup(Groups.ORQUEIO_ADMIN).count() == 0;
         }
       }, processEngine);
-
     }
-
   }
 
-  protected void serveIndexPage(String appName,
-                                String engineName,
-                                String applicationPath,
-                                String contextPath,
-                                HttpServletResponse response,
-                                ServletContext servletContext) throws IOException {
-    setWebappInTelemetry(engineName, appName, servletContext);
-    String data = getWebResourceContents("/app/" + appName + "/index.html");
-    final String cspNonce = (String) servletContext.getAttribute(ContentSecurityPolicyProvider.ATTR_CSP_FILTER_NONCE);
-
-    data = replacePlaceholder(data, appName, engineName, applicationPath, contextPath, cspNonce);
-
-    response.setContentLength(data.getBytes(StandardCharsets.UTF_8).length);
-    response.setContentType("text/html");
-
-    response.getWriter().append(data);
-  }
-
+  /**
+   * Sets telemetry data for the webapp.
+   */
   protected void setWebappInTelemetry(String engineName, String appName, ServletContext servletContext) {
     if (!ServletContextUtil.isTelemetryDataSentAlready(appName, engineName, servletContext) &&
         WebApplicationUtil.setWebapp(engineName, appName)) {
       ServletContextUtil.setTelemetryDataSent(appName, engineName, servletContext);
-    }
-  }
-
-  protected String replacePlaceholder(String data,
-                                      String appName,
-                                      String engineName,
-                                      String applicationPath,
-                                      String contextPath,
-                                      String cspNonce) {
-    return data.replace(APP_ROOT_PLACEHOLDER, contextPath + applicationPath)
-               .replace(BASE_PLACEHOLDER, String.format("%s%s/app/%s/%s/", contextPath,
-                 applicationPath, appName, engineName))
-               .replace(PLUGIN_PACKAGES_PLACEHOLDER, createPluginPackagesStr(appName,
-                 applicationPath, contextPath))
-               .replace(PLUGIN_DEPENDENCIES_PLACEHOLDER, createPluginDependenciesStr(appName))
-               .replace(CSP_NONCE_PLACEHOLDER, cspNonce == null ? "" : String.format("nonce=\"%s\"", cspNonce));
-  }
-
-  protected <T extends AppPlugin> CharSequence createPluginPackagesStr(String appName,
-                                                                       String applicationPath,
-                                                                       String contextPath) {
-    final List<T> plugins = getPlugins(appName);
-
-    StringBuilder builder = new StringBuilder();
-
-    for (T plugin : plugins) {
-      if (builder.length() > 0) {
-        builder.append(", ").append("\n");
-      }
-
-      String pluginId = plugin.getId();
-      String definition = String.format(pluginPackageFormat, appName, pluginId, contextPath,
-        applicationPath, appName, pluginId);
-
-      builder.append(definition);
-    }
-
-    return "[" + builder.toString() + "]";
-  }
-
-  protected <T extends AppPlugin> CharSequence createPluginDependenciesStr(String appName) {
-    final List<T> plugins = getPlugins(appName);
-
-    StringBuilder builder = new StringBuilder();
-
-    for (T plugin : plugins) {
-      if (builder.length() > 0) {
-        builder.append(", ").append("\n");
-      }
-
-      String pluginId = plugin.getId();
-      String definition = String.format(pluginDependencyFormat, appName, pluginId, appName, pluginId);
-
-      builder.append(definition);
-    }
-
-    return "[" + builder.toString() + "]";
-  }
-
-  @SuppressWarnings("unchecked")
-  protected <T extends AppPlugin> List<T> getPlugins(String appName) {
-    if (COCKPIT_APP_NAME.equals(appName)) {
-      return (List<T>) cockpitRuntimeDelegate.getAppPluginRegistry().getPlugins();
-
-    } else if (ADMIN_APP_NAME.equals(appName)) {
-      return (List<T>) adminRuntimeDelegate.getAppPluginRegistry().getPlugins();
-
-    } else if (TASKLIST_APP_NAME.equals(appName)) {
-        return (List<T>) tasklistRuntimeDelegate.getAppPluginRegistry().getPlugins();
-
-    } else if (WELCOME_APP_NAME.equals(appName)) {
-      return (List<T>) welcomeRuntimeDelegate.getAppPluginRegistry().getPlugins();
-
-    } else {
-      return Collections.emptyList();
-
     }
   }
 

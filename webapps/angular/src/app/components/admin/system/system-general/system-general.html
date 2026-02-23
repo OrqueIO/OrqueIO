@@ -1,0 +1,13 @@
+<!-- System General Settings - matches original implementation -->
+<div class="system-general">
+  <h3>{{ 'admin.system.generalSettings' | translate }}</h3>
+
+  <div class="alert alert-success d-flex align-items-center">
+    <fa-icon [icon]="faThumbsUp" class="me-2"></fa-icon>
+    <div>
+      <strong>{{ 'admin.system.processEngine' | translate }}</strong>
+      <code class="mx-2">{{ processEngineName }}</code>
+      {{ 'admin.system.processRunning' | translate }}
+    </div>
+  </div>
+</div>

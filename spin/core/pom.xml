@@ -6,13 +6,13 @@
   <parent>
     <groupId>io.orqueio.spin</groupId>
     <artifactId>orqueio-spin-root</artifactId>
-    <version>2.0.1</version>
+    <version>2.0.2</version>
   </parent>
   <description>orqueio-spin-core</description>
   <groupId>io.orqueio.spin</groupId>
   <artifactId>orqueio-spin-core</artifactId>
   <name>Orque IO Spin - core</name>
-  <version>2.0.1</version>
+  <version>2.0.2</version>
   <packaging>jar</packaging>
 
   <dependencies>

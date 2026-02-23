@@ -1,0 +1,64 @@
+/* Tooltip styles - to be imported in global styles */
+.app-tooltip {
+  position: absolute;
+  z-index: 10000;
+  padding: 6px 10px;
+  background-color: #333;
+  color: #fff;
+  font-size: 12px;
+  line-height: 1.4;
+  border-radius: 4px;
+  white-space: nowrap;
+  max-width: 300px;
+  word-wrap: break-word;
+  opacity: 0;
+  transition: opacity 0.15s ease-in-out;
+  pointer-events: none;
+}
+
+.app-tooltip.visible {
+  opacity: 1;
+}
+
+.app-tooltip .tooltip-arrow {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border: 6px solid transparent;
+}
+
+/* Top placement */
+.app-tooltip.tooltip-top .tooltip-arrow {
+  bottom: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-top-color: #333;
+}
+
+/* Bottom placement */
+.app-tooltip.tooltip-bottom .tooltip-arrow {
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-bottom-color: #333;
+}
+
+/* Left placement */
+.app-tooltip.tooltip-left .tooltip-arrow {
+  right: -12px;
+  top: 50%;
+  transform: translateY(-50%);
+  border-left-color: #333;
+}
+
+/* Right placement */
+.app-tooltip.tooltip-right .tooltip-arrow {
+  left: -12px;
+  top: 50%;
+  transform: translateY(-50%);
+  border-right-color: #333;
+}
+
+.app-tooltip .tooltip-text {
+  white-space: pre-wrap;
+}

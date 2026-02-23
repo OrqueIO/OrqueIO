@@ -1,0 +1,58 @@
+<header class="admin-page-header">
+  <div class="header-content">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <ol class="breadcrumb-list">
+        <li class="breadcrumb-item app-menu-container">
+          <!-- Home icon with dropdown -->
+          <button
+            class="app-menu-trigger"
+            (click)="toggleAppMenu($event)"
+            [class.active]="appMenuOpen"
+            [attr.aria-expanded]="appMenuOpen"
+            aria-haspopup="true"
+          >
+            <fa-icon [icon]="faHome" class="home-icon"></fa-icon>
+            <fa-icon
+              *ngIf="hasMultipleApps"
+              [icon]="faChevronDown"
+              class="dropdown-indicator"
+              [class.open]="appMenuOpen"
+            ></fa-icon>
+          </button>
+
+          <!-- Dropdown menu -->
+          <div class="app-menu-dropdown" *ngIf="appMenuOpen && hasMultipleApps">
+            <ul class="app-menu-list">
+              <li *ngFor="let app of visibleApps" class="app-menu-item">
+                <a (click)="navigateToApp(app)" class="app-menu-link">
+                  <fa-icon [icon]="app.icon" class="app-icon" [style.color]="app.color"></fa-icon>
+                  <span class="app-label">{{ app.labelKey | translate }}</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </li>
+        <ng-container *ngFor="let item of breadcrumbs; let last = last">
+          <li class="breadcrumb-separator">
+            <fa-icon [icon]="faChevronRight"></fa-icon>
+          </li>
+          <li class="breadcrumb-item" [class.active]="last">
+            <a *ngIf="item.route && !last" [routerLink]="item.route" class="breadcrumb-link">
+              {{ item.translateKey ? (item.translateKey | translate) : item.label }}
+            </a>
+            <span *ngIf="!item.route || last" class="breadcrumb-text">
+              {{ item.translateKey ? (item.translateKey | translate) : item.label }}
+            </span>
+          </li>
+        </ng-container>
+      </ol>
+    </nav>
+  </div>
+
+  <div class="header-actions">
+    <ng-content></ng-content>
+    <button *ngIf="showRefresh" class="action-btn" (click)="onRefresh()" [title]="'common.refresh' | translate">
+      <fa-icon [icon]="faRefresh"></fa-icon>
+    </button>
+  </div>
+</header>

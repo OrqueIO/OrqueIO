@@ -1,0 +1,21 @@
+<div class="admin-header">
+  <h1 class="admin-title">{{ titleKey | translate }}</h1>
+
+  <div class="admin-actions">
+    <button
+      *ngIf="showRefreshButton"
+      class="btn btn-secondary"
+      (click)="onRefresh()">
+      <fa-icon [icon]="faSync"></fa-icon>
+      {{ 'REFRESH' | translate }}
+    </button>
+
+    <button
+      *ngIf="showCreateButton"
+      class="btn btn-primary"
+      (click)="onCreate()">
+      <fa-icon [icon]="faPlus"></fa-icon>
+      {{ createButtonLabelKey | translate }}
+    </button>
+  </div>
+</div>

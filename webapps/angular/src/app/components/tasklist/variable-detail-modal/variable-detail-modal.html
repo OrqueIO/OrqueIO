@@ -1,0 +1,90 @@
+<div class="modal-backdrop" *ngIf="isOpen" (click)="onBackdropClick($event)">
+  <div class="modal-container" role="dialog" aria-modal="true">
+    <!-- Header -->
+    <header class="modal-header">
+      <h3 class="modal-title">
+        {{ 'tasklist.variableDetail.title' | translate }}
+        <code class="variable-name">{{ variable?.name }}</code>
+      </h3>
+      <button class="btn-close" (click)="closeModal()" [attr.aria-label]="'common.close' | translate">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </header>
+
+    <!-- Body -->
+    <div class="modal-body">
+      <!-- Value Info Section -->
+      <div class="info-section" *ngIf="isObjectType">
+        <h4 class="section-title">{{ 'tasklist.variableDetail.valueInfo' | translate }}</h4>
+
+        <div class="info-row">
+          <span class="info-label">{{ 'tasklist.variableDetail.objectType' | translate }}:</span>
+          <code class="info-value">{{ objectTypeName }}</code>
+        </div>
+
+        <div class="info-row">
+          <span class="info-label">{{ 'tasklist.variableDetail.serializationFormat' | translate }}:</span>
+          <code class="info-value">{{ serializationFormat }}</code>
+        </div>
+      </div>
+
+      <!-- Simple Value Info -->
+      <div class="info-section" *ngIf="!isObjectType">
+        <div class="info-row">
+          <span class="info-label">{{ 'tasklist.variableDetail.type' | translate }}:</span>
+          <code class="info-value">{{ variable?.type }}</code>
+        </div>
+      </div>
+
+      <!-- Value Section -->
+      <div class="value-section">
+        <h4 class="section-title">{{ 'tasklist.variableDetail.value' | translate }}</h4>
+
+        <!-- Tabs for Object type -->
+        <ul class="nav-tabs" *ngIf="isObjectType">
+          <li [class.active]="selectedTab === 'serialized'">
+            <a href="javascript:void(0)" (click)="selectTab('serialized')">
+              {{ 'tasklist.variableDetail.serialized' | translate }}
+            </a>
+          </li>
+          <li [class.active]="selectedTab === 'deserialized'">
+            <a href="javascript:void(0)" (click)="selectTab('deserialized')">
+              {{ 'tasklist.variableDetail.deserialized' | translate }}
+            </a>
+          </li>
+        </ul>
+
+        <!-- Loading indicator -->
+        <div class="loading-indicator" *ngIf="loading && selectedTab === 'deserialized'">
+          <span class="spinner"></span>
+          {{ 'common.loading' | translate }}
+        </div>
+
+        <!-- Deserialization Error -->
+        <div class="alert alert-warning" *ngIf="selectedTab === 'deserialized' && deserializationError && !loading">
+          <strong>{{ 'tasklist.variableDetail.deserializationError' | translate }}:</strong>
+          {{ deserializationError }}
+        </div>
+
+        <!-- Value Textarea -->
+        <textarea
+          *ngIf="!loading || selectedTab === 'serialized'"
+          class="value-textarea"
+          [value]="displayValue"
+          readonly
+          rows="12">
+        </textarea>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="modal-footer">
+      <button class="btn btn-secondary" (click)="closeModal()">
+        {{ 'common.close' | translate }}
+      </button>
+    </footer>
+  </div>
+</div>
