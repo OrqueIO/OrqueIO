@@ -21,9 +21,8 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static io.orqueio.bpm.webapp.impl.security.filter.headersec.provider.impl.ContentSecurityPolicyProvider.HEADER_DEFAULT_VALUE;
+import static io.orqueio.bpm.webapp.impl.security.filter.headersec.provider.impl.ContentSecurityPolicyProvider.HEADER_ANGULAR_VALUE;
 import static io.orqueio.bpm.webapp.impl.security.filter.headersec.provider.impl.ContentSecurityPolicyProvider.HEADER_NAME;
-import static io.orqueio.bpm.webapp.impl.security.filter.headersec.provider.impl.ContentSecurityPolicyProvider.HEADER_NONCE_PLACEHOLDER;
 
 public class ContentSecurityPolicyTest {
 
@@ -38,9 +37,8 @@ public class ContentSecurityPolicyTest {
     // when
     headerRule.performRequest();
 
-    // then
-    String expectedHeaderPattern = HEADER_DEFAULT_VALUE.replace(HEADER_NONCE_PLACEHOLDER, "'nonce-([-_a-zA-Z\\d]*)'");
-    assertThat(headerRule.getHeader(HEADER_NAME)).matches(expectedHeaderPattern);
+    // then - Angular CSP is the default (no nonce)
+    assertThat(headerRule.getHeader(HEADER_NAME)).isEqualTo(HEADER_ANGULAR_VALUE);
   }
 
   @Test
