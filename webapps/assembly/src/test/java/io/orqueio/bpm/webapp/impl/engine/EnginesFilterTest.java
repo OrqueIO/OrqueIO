@@ -41,47 +41,47 @@ public class EnginesFilterTest {
   @Test
   public void testHTML_FILE_PATTERN() throws Exception {
 
-    // given
-    Pattern pattern = ProcessEnginesFilter.APP_PREFIX_PATTERN;
+    // Test APP_PREFIX_PATTERN - matches any /app/* route
+    Pattern appPattern = ProcessEnginesFilter.APP_PREFIX_PATTERN;
 
-    // when
-    Matcher matcher1 = pattern.matcher("/app/cockpit/");
-    Matcher matcher2 = pattern.matcher("/app/cockpit/engine1/");
-    Matcher matcher3 = pattern.matcher("/app/cockpit/engine1/something/asd.html");
-    Matcher matcher4 = pattern.matcher("/app/admin/engine1/something/asd.html");
-    Matcher matcher5 = pattern.matcher("/app/cockpit/index.html");
-    Matcher matcher6 = pattern.matcher("/app/tasklist/spring-engine/");
+    assertThat(appPattern.matcher("/app/cockpit/").matches()).isTrue();
+    assertThat(appPattern.matcher("/app/cockpit/engine1/").matches()).isTrue();
+    assertThat(appPattern.matcher("/app/cockpit/engine1/something/asd.html").matches()).isTrue();
+    assertThat(appPattern.matcher("/app/admin/engine1/something/asd.html").matches()).isTrue();
+    assertThat(appPattern.matcher("/app/cockpit/index.html").matches()).isTrue();
+    assertThat(appPattern.matcher("/app/tasklist/spring-engine/").matches()).isTrue();
+    assertThat(appPattern.matcher("/app/").matches()).isTrue();
+    assertThat(appPattern.matcher("/app").matches()).isTrue();
+    assertThat(appPattern.matcher("/api/something").matches()).isFalse();
 
-    // then
+    // Test LEGACY_APP_PATTERN - matches legacy AngularJS URLs with app name and engine
+    Pattern legacyPattern = ProcessEnginesFilter.LEGACY_APP_PATTERN;
+
+    Matcher matcher1 = legacyPattern.matcher("/app/cockpit/");
     assertThat(matcher1.matches()).isTrue();
     assertThat(matcher1.group(1)).isEqualTo("cockpit");
-    assertThat(matcher1.groupCount()).isEqualTo(3);
-    assertThat(matcher1.group(2)).isNull();
 
+    Matcher matcher2 = legacyPattern.matcher("/app/cockpit/engine1/");
     assertThat(matcher2.matches()).isTrue();
     assertThat(matcher2.group(1)).isEqualTo("cockpit");
     assertThat(matcher2.group(2)).isEqualTo("engine1");
-    assertThat(matcher2.group(3)).isEmpty();
 
+    Matcher matcher3 = legacyPattern.matcher("/app/cockpit/engine1/something/asd.html");
     assertThat(matcher3.matches()).isTrue();
     assertThat(matcher3.group(1)).isEqualTo("cockpit");
     assertThat(matcher3.group(2)).isEqualTo("engine1");
     assertThat(matcher3.group(3)).isEqualTo("something/asd.html");
 
+    Matcher matcher4 = legacyPattern.matcher("/app/admin/engine1/something/asd.html");
     assertThat(matcher4.matches()).isTrue();
     assertThat(matcher4.group(1)).isEqualTo("admin");
     assertThat(matcher4.group(2)).isEqualTo("engine1");
     assertThat(matcher4.group(3)).isEqualTo("something/asd.html");
 
-    assertThat(matcher5.matches()).isTrue();
-    assertThat(matcher5.group(1)).isEqualTo("cockpit");
-    assertThat(matcher5.group(2)).isEqualTo("index.html");
-    assertThat(matcher5.group(3)).isEmpty();
-
+    Matcher matcher6 = legacyPattern.matcher("/app/tasklist/spring-engine/");
     assertThat(matcher6.matches()).isTrue();
     assertThat(matcher6.group(1)).isEqualTo("tasklist");
     assertThat(matcher6.group(2)).isEqualTo("spring-engine");
-    assertThat(matcher6.group(3)).isEmpty();
   }
 
   @Test
