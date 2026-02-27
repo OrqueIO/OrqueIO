@@ -53,6 +53,9 @@ public class ResourceLoadingProcessEnginesFilter extends ProcessEnginesFilter im
         response.sendRedirect(String.format("%s%s/app/%s/", contextPath, applicationPath, DEFAULT_REDIRECT_APP));
         return;
       }
+      // index redirect disabled at root - pass through to default Spring handler
+      chain.doFilter(request, response);
+      return;
     }
 
     super.applyFilter(request, response, chain);
@@ -106,8 +109,8 @@ public class ResourceLoadingProcessEnginesFilter extends ProcessEnginesFilter im
    * @return the webappProperty
    */
   public WebappProperty getWebappProperty() {
-        return webappProperty;
-    }
+    return webappProperty;
+  }
 
   /**
    * @param webappProperty
