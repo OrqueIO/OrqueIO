@@ -55,6 +55,6 @@ public class ResourceLoadingProcessEnginesAppPathRootIndexRedirectTest {
 
     // then
     // the request should have been redirected to Tasklist
-    assertThat(con.getURL().toString()).isEqualTo("http://localhost:" + port + "/app/tasklist/default/");
+    assertThat(con.getURL().toString()).isEqualTo("http://localhost:" + port + "/app/tasklist/");
   }
 }
