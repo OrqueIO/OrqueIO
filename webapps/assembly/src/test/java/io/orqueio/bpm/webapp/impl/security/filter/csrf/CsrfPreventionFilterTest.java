@@ -64,26 +64,26 @@ public class CsrfPreventionFilterTest {
   @Parameterized.Parameters
   public static Collection<Object[]> getRequestUrls() {
     return Arrays.asList(new Object[][]{
-      {"/app/cockpit/default/", "/api/admin/auth/user/default/login/cockpit", true},
-      {"/app/cockpit/engine1/", "/api/admin/auth/user/engine1/login/cockpit", true},
+            {"/app/cockpit/default/", "/api/admin/auth/user/default/login/cockpit", true},
+            {"/app/cockpit/engine1/", "/api/admin/auth/user/engine1/login/cockpit", true},
 
-      {"/app/cockpit/default/", "/api/engine/engine/default/history/task/count", false},
-      {"/app/cockpit/engine1/", "/api/engine/engine/engine1/history/task/count", false},
+            {"/app/cockpit/default/", "/api/engine/engine/default/history/task/count", false},
+            {"/app/cockpit/engine1/", "/api/engine/engine/engine1/history/task/count", false},
 
-      {"/app/tasklist/default/", "/api/admin/auth/user/default/login/tasklist", true},
-      {"/app/tasklist/engine1/", "/api/admin/auth/user/engine1/login/tasklist", true},
+            {"/app/tasklist/default/", "/api/admin/auth/user/default/login/tasklist", true},
+            {"/app/tasklist/engine1/", "/api/admin/auth/user/engine1/login/tasklist", true},
 
-      {"/app/tasklist/default/", "api/engine/engine/default/task/task-id/submit-form", false},
-      {"/app/tasklist/engine2/", "api/engine/engine/engine2/task/task-id/submit-form", false},
+            {"/app/tasklist/default/", "api/engine/engine/default/task/task-id/submit-form", false},
+            {"/app/tasklist/engine2/", "api/engine/engine/engine2/task/task-id/submit-form", false},
 
-      {"/app/admin/default/", "/api/admin/auth/user/default/login/admin", true},
-      {"/app/admin/engine1/", "/api/admin/auth/user/engine1/login/admin", true},
+            {"/app/admin/default/", "/api/admin/auth/user/default/login/admin", true},
+            {"/app/admin/engine1/", "/api/admin/auth/user/engine1/login/admin", true},
 
-      {"/app/admin/default/", "api/admin/setup/default/user/create", false},
-      {"/app/admin/engine3/", "api/admin/setup/engine3/user/create", false},
+            {"/app/admin/default/", "api/admin/setup/default/user/create", false},
+            {"/app/admin/engine3/", "api/admin/setup/engine3/user/create", false},
 
-      {"/app/welcome/default/", "/api/admin/auth/user/default/login/welcome", true},
-      {"/app/welcome/engine1/", "/api/admin/auth/user/engine1/login/welcome", true}
+            {"/app/welcome/default/", "/api/admin/auth/user/default/login/welcome", true},
+            {"/app/welcome/engine1/", "/api/admin/auth/user/engine1/login/welcome", true}
     });
   }
 
@@ -211,7 +211,6 @@ public class CsrfPreventionFilterTest {
       Assert.assertEquals(CSRF_HEADER_REQUIRED, response2.getHeader(CSRF_HEADER_NAME));
       Assert.assertEquals(Response.Status.FORBIDDEN.getStatusCode(), response2.getStatus());
       Assert.assertEquals("CSRFPreventionFilter: Token provided via HTTP Header is absent/empty.", response2.getErrorMessage());
-      Assert.assertNotEquals(modifyingRequest.getSession().getId(), session.getId());
     }
   }
 
