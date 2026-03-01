@@ -20,7 +20,7 @@
 var Base = require('./../base');
 
 module.exports = Base.extend({
-  url: '/orqueio/app/tasklist/default/#/',
+  url: '/orqueio/app/tasklist/#/',
 
   header: function() {
     return element(by.css('[cam-widget-header]'));
