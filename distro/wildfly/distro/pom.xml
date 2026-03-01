@@ -4,7 +4,7 @@
   <parent>
     <groupId>io.orqueio.bpm.wildfly</groupId>
     <artifactId>orqueio-wildfly</artifactId>
-    <version>2.0.2</version>
+    <version>2.0.3</version>
   </parent>
 
   <artifactId>orqueio-bpm-wildfly</artifactId>
