@@ -46,7 +46,7 @@
     <skip-zip-frontend-sources>false</skip-zip-frontend-sources>
   </properties>
 
-<dependencyManagement>
+  <dependencyManagement>
     <dependencies>
       <dependency>
         <groupId>io.orqueio.bpm</groupId>

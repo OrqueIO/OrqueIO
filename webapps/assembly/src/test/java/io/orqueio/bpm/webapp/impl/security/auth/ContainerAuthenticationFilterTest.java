@@ -113,12 +113,12 @@ public class ContainerAuthenticationFilterTest {
         {"/api/cockpit/plugin/some-plugin/default/process-instance", "default", true, false},
         {"/api/cockpit/plugin/some-plugin/static/process-instance", null, true, false},
 
-        {"/app/tasklist/", "default", false, true},
+        {"/app/tasklist/default/", "default", false, true},
         {"/app/tasklist/engine2/", "engine2", false, true},
         {"/api/tasklist/plugin/some-plugin/default/process-instance", "default", false, true},
         {"/api/tasklist/plugin/some-plugin/static/process-instance", null, false, false},
 
-        {"/app/tasklist/", "default", true, false},
+        {"/app/tasklist/default/", "default", true, false},
         {"/app/tasklist/engine2/", "engine2", true, false},
         {"/api/tasklist/plugin/some-plugin/default/process-instance", "default", true, false},
         {"/api/tasklist/plugin/some-plugin/static/process-instance", null, true, false},

@@ -46,7 +46,7 @@ public interface CockpitPlugin extends AppPlugin {
    * <p>
    *
    * Inside the plugin the queries may be executed via the {@link io.orqueio.bpm.cockpit.db.QueryService} that may be obtained through
-   * {@link io.orqueio.bpm.cockpit.Cockpit#getQueryService(java.lang.String) }.
+   * {@link io.orqueio.bpm.cockpit.Cockpit#getQueryService(String) }.
    *
    * @return the list of additional mapping files
    */

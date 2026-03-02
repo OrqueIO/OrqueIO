@@ -6,9 +6,7 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test",
-    "xlts-install": "npm install",
-    "license-check": "echo 'Skipping license check'"
+    "test": "ng test"
   },
   "prettier": {
     "printWidth": 100,

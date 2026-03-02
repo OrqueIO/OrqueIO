@@ -135,7 +135,7 @@
     </dependency>
   </dependencies>
 
-<build>
+  <build>
     <finalName>orqueio-webapp-jakarta</finalName>
 
     <plugins>

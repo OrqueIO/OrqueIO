@@ -70,10 +70,10 @@ public class CsrfPreventionFilterTest {
             {"/app/cockpit/default/", "/api/engine/engine/default/history/task/count", false},
             {"/app/cockpit/engine1/", "/api/engine/engine/engine1/history/task/count", false},
 
-            {"/app/tasklist/", "/api/admin/auth/user/default/login/tasklist", true},
+            {"/app/tasklist/default/", "/api/admin/auth/user/default/login/tasklist", true},
             {"/app/tasklist/engine1/", "/api/admin/auth/user/engine1/login/tasklist", true},
 
-            {"/app/tasklist/", "api/engine/engine/default/task/task-id/submit-form", false},
+            {"/app/tasklist/default/", "api/engine/engine/default/task/task-id/submit-form", false},
             {"/app/tasklist/engine2/", "api/engine/engine/engine2/task/task-id/submit-form", false},
 
             {"/app/admin/default/", "/api/admin/auth/user/default/login/admin", true},
