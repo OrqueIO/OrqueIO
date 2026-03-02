@@ -320,7 +320,7 @@ public class SecurityFilterRulesTest {
       @Override
       public void run() {
         Authorization authorization =
-          getAuthorization("GET", applicationPath + "/app/tasklist/");
+          getAuthorization("GET", applicationPath + "/app/tasklist/default/");
 
         assertThat(authorization.isGranted()).isTrue();
         assertThat(authorization.isAuthenticated()).isTrue();
