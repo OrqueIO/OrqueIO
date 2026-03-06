@@ -11,19 +11,20 @@
   </formats>
   <baseDirectory>orqueio-webapp-frontend-sources</baseDirectory>
   <fileSets>
-    <!-- Angular frontend code -->
+    <!-- Only respect frontend code -->
     <fileSet>
       <outputDirectory>/</outputDirectory>
-      <directory>../angular</directory>
+      <directory>../frontend</directory>
 
       <excludes>
-        <!-- Exclude build artifacts and dependencies -->
+        <!-- These excludes are only needed to speed up the build locally (when the folders are already dirty);
+        with a clean copy of the repo (e.g., on Jenkins) these folders should not exist -->
         <exclude>**/node_modules/**</exclude>
-        <exclude>**/node/**</exclude>
-        <exclude>**/.angular/**</exclude>
-        <exclude>**/dist/**</exclude>
         <exclude>**/.idea/**</exclude>
         <exclude>**/.settings/**</exclude>
+        <exclude>**/dist/**</exclude>
+        <exclude>orqueio-commons-ui/cache/**</exclude>
+        <exclude>ui/cockpit/build/**</exclude>
       </excludes>
     </fileSet>
   </fileSets>

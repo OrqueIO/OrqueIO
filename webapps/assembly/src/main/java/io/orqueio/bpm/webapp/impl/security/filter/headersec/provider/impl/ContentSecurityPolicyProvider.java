@@ -28,8 +28,6 @@ public class ContentSecurityPolicyProvider extends HeaderSecurityProvider {
 
   public static final String HEADER_NAME = "Content-Security-Policy";
   public static final String HEADER_NONCE_PLACEHOLDER = "$NONCE";
-
-  // CSP for legacy AngularJS pages (with nonce)
   public static final String HEADER_DEFAULT_VALUE = ""
     + "base-uri 'self';"
     + "script-src " + HEADER_NONCE_PLACEHOLDER + " 'strict-dynamic' 'unsafe-eval' https: 'self' 'unsafe-inline';"
@@ -41,19 +39,6 @@ public class ContentSecurityPolicyProvider extends HeaderSecurityProvider {
     + "frame-ancestors 'none';"
     + "object-src 'none';"
     + "sandbox allow-forms allow-scripts allow-same-origin allow-popups allow-downloads";
-
-  // CSP for Angular SPA (no nonce required)
-  public static final String HEADER_ANGULAR_VALUE = ""
-    + "base-uri 'self';"
-    + "script-src 'self' 'unsafe-inline' 'unsafe-eval';"
-    + "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;"
-    + "font-src 'self' https://fonts.gstatic.com data:;"
-    + "default-src 'self';"
-    + "img-src 'self' data: blob:;"
-    + "connect-src 'self';"
-    + "form-action 'self';"
-    + "frame-ancestors 'none';"
-    + "object-src 'none'";
 
   public static final String DISABLED_PARAM = "contentSecurityPolicyDisabled";
   public static final String VALUE_PARAM = "contentSecurityPolicyValue";
@@ -86,8 +71,7 @@ public class ContentSecurityPolicyProvider extends HeaderSecurityProvider {
       setValue(value);
 
     } else {
-      // Use Angular-compatible CSP by default (no nonce required)
-      setValue(HEADER_ANGULAR_VALUE);
+      setValue(HEADER_DEFAULT_VALUE);
 
     }
   }
@@ -105,14 +89,9 @@ public class ContentSecurityPolicyProvider extends HeaderSecurityProvider {
 
   @Override
   public String getHeaderValue(final ServletContext servletContext) {
-    // Check if the CSP contains nonce placeholder (legacy AngularJS)
-    if (value.contains(HEADER_NONCE_PLACEHOLDER)) {
-      final String nonce = generateNonce();
-      servletContext.setAttribute(ATTR_CSP_FILTER_NONCE, nonce);
-      return value.replaceAll("\\" + HEADER_NONCE_PLACEHOLDER, String.format("'nonce-%s'", nonce));
-    }
-    // Angular CSP - no nonce needed
-    return value;
+    final String nonce = generateNonce();
+    servletContext.setAttribute(ATTR_CSP_FILTER_NONCE, nonce);
+    return value.replaceAll("\\" + HEADER_NONCE_PLACEHOLDER, String.format("'nonce-%s'", nonce));
   }
 
   protected String generateNonce() {

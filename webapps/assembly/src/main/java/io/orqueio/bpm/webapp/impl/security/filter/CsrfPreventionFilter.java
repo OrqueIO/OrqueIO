@@ -191,16 +191,12 @@ public class CsrfPreventionFilter implements Filter {
     boolean isValid = true;
 
     if (isBlank(tokenHeader)) {
-      // Regenerate CSRF token instead of invalidating the entire session.
-      // Session invalidation would destroy auth state across all browser tabs.
-      session.removeAttribute(CsrfConstants.CSRF_TOKEN_SESSION_ATTR_NAME);
+      session.invalidate();
       response.setHeader(CsrfConstants.CSRF_TOKEN_HEADER_NAME, CsrfConstants.CSRF_TOKEN_HEADER_REQUIRED);
       response.sendError(getDenyStatus(), "CSRFPreventionFilter: Token provided via HTTP Header is absent/empty.");
       isValid = false;
     } else if (isBlank(tokenSession) || !tokenSession.equals(tokenHeader)) {
-      // Regenerate CSRF token instead of invalidating the entire session.
-      // This allows the client to retry with a fresh token on the next GET request.
-      session.removeAttribute(CsrfConstants.CSRF_TOKEN_SESSION_ATTR_NAME);
+      session.invalidate();
       response.sendError(getDenyStatus(), "CSRFPreventionFilter: Invalid HTTP Header Token.");
       isValid = false;
     }

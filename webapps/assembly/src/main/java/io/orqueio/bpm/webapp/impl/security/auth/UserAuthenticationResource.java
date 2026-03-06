@@ -60,13 +60,13 @@ public class UserAuthenticationResource {
     Authentications allAuthentications = Authentications.getCurrent();
 
     if (allAuthentications == null) {
-      return Response.ok().build();
+      return notFound();
     }
 
     Authentication engineAuth = allAuthentications.getAuthenticationForProcessEngine(engineName);
 
     if (engineAuth == null) {
-      return Response.ok().build();
+      return notFound();
     } else {
       return Response.ok(AuthenticationDto.fromAuthentication(engineAuth)).build();
     }

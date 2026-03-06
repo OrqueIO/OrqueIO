@@ -6,13 +6,13 @@
   <parent>
     <groupId>io.orqueio.bpm</groupId>
     <artifactId>orqueio-database-settings</artifactId>
-    <version>2.0.2</version>
+    <version>2.0.1</version>
     <relativePath>../database</relativePath>
   </parent>
   <description>orqueio-webapp-root</description>
   <artifactId>orqueio-webapp-root</artifactId>
   <groupId>io.orqueio.bpm.webapp</groupId>
-  <version>2.0.2</version>
+  <version>2.0.1</version>
   <packaging>pom</packaging>
 
 
@@ -46,7 +46,7 @@
     <skip-zip-frontend-sources>false</skip-zip-frontend-sources>
   </properties>
 
-<dependencyManagement>
+  <dependencyManagement>
     <dependencies>
       <dependency>
         <groupId>io.orqueio.bpm</groupId>
@@ -148,37 +148,29 @@
         <configuration>
           <filesets>
             <fileset>
-              <directory>./angular/dist</directory>
-            </fileset>
-            <fileset>
-              <directory>./angular/.angular</directory>
+              <directory>./frontend/target</directory>
             </fileset>
           </filesets>
         </configuration>
       </plugin>
-      <!-- Angular Frontend Build -->
       <plugin>
         <groupId>com.github.eirslett</groupId>
         <artifactId>frontend-maven-plugin</artifactId>
         <inherited>false</inherited>
         <configuration>
-          <workingDirectory>./angular</workingDirectory>
-          <installDirectory>./angular</installDirectory>
+          <workingDirectory>./frontend</workingDirectory>
+          <outputdir>${project.build.directory}/webapp</outputdir>
           <skip>${skip.frontend.build}</skip>
         </configuration>
         <executions>
           <execution>
-            <id>install-node-and-npm</id>
+            <id>install node and npm</id>
             <goals>
               <goal>install-node-and-npm</goal>
             </goals>
-            <configuration>
-              <nodeVersion>v22.16.0</nodeVersion>
-              <npmVersion>10.9.2</npmVersion>
-            </configuration>
           </execution>
           <execution>
-            <id>npm-ci</id>
+            <id>npm ci</id>
             <goals>
               <goal>npm</goal>
             </goals>
@@ -188,7 +180,27 @@
             </configuration>
           </execution>
           <execution>
-            <id>npm-build</id>
+            <id>Install HeroDevs XLTS dependencies</id>
+            <goals>
+              <goal>npm</goal>
+            </goals>
+            <phase>generate-resources</phase>
+            <configuration>
+              <arguments>run xlts-install</arguments>
+            </configuration>
+          </execution>
+          <execution>
+            <id>License check</id>
+            <goals>
+              <goal>npm</goal>
+            </goals>
+            <phase>generate-resources</phase>
+            <configuration>
+              <arguments>run license-check</arguments>
+            </configuration>
+          </execution>
+          <execution>
+            <id>Build</id>
             <goals>
               <goal>npm</goal>
             </goals>
