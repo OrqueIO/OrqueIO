@@ -20,7 +20,8 @@ import jakarta.servlet.Filter;
 import io.orqueio.bpm.engine.rest.impl.FetchAndLockContextListener;
 import io.orqueio.bpm.engine.rest.security.auth.ProcessEngineAuthenticationFilter;
 import io.orqueio.bpm.spring.boot.starter.OrqueioBpmAutoConfiguration;
-import org.glassfish.jersey.server.ResourceConfig;
+import io.orqueio.bpm.spring.boot.starter.property.OrqueioBpmProperties;
+import org.glassfish.jersey.servlet.ServletContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,6 +29,8 @@ import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
+import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -41,18 +44,34 @@ public class OrqueioBpmRestJerseyAutoConfiguration {
   private String restApiPath;
 
   @Bean
-  public ResourceConfig jerseyResourceConfig() {
+  @ConditionalOnMissingBean(OrqueioJerseyResourceConfig.class)
+  public OrqueioJerseyResourceConfig jerseyResourceConfig() {
     return new OrqueioJerseyResourceConfig();
   }
 
   @Bean
-  public FetchAndLockContextListener getFetchAndLockContextListener() {
-    return new FetchAndLockContextListener();
+  public ServletRegistrationBean<ServletContainer> jerseyServlet(OrqueioJerseyResourceConfig resourceConfig) {
+    String path = restApiPath.endsWith("/*") ? restApiPath : restApiPath + "/*";
+    logger.info("Registering Jersey servlet at path: {}", path);
+    ServletRegistrationBean<ServletContainer> registration =
+        new ServletRegistrationBean<>(new ServletContainer(resourceConfig), path);
+    registration.setName("jerseyServlet");
+    registration.setLoadOnStartup(1);
+    registration.setAsyncSupported(true);
+    return registration;
   }
 
   @Bean
-  public FetchAndLockContextListener fetchAndLockContextListener() {
-    return new FetchAndLockContextListener();
+  public ServletListenerRegistrationBean<FetchAndLockContextListener> fetchAndLockContextListener() {
+    ServletListenerRegistrationBean<FetchAndLockContextListener> registration = new ServletListenerRegistrationBean<>();
+    registration.setListener(new FetchAndLockContextListener());
+    return registration;
+  }
+
+  @Bean
+  public OrqueioBpmRestInitializer orqueioBpmRestInitializer(OrqueioBpmProperties props) {
+    String path = restApiPath.endsWith("/*") ? restApiPath : restApiPath + "/*";
+    return new OrqueioBpmRestInitializer(path, props);
   }
 
   @Bean
@@ -66,7 +85,6 @@ public class OrqueioBpmRestJerseyAutoConfiguration {
     registration.setFilter(new ProcessEngineAuthenticationFilter());
     registration.setOrder(1);
 
-    // Ensure the path ends with /* for filter matching
     String restApiPathPattern = restApiPath.endsWith("/*") ? restApiPath : restApiPath + "/*";
 
     registration.addUrlPatterns(restApiPathPattern);
