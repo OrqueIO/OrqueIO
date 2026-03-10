@@ -18,7 +18,6 @@ package io.orqueio.bpm.spring.boot.starter.rest;
 
 import jakarta.ws.rs.ApplicationPath;
 import io.orqueio.bpm.engine.rest.impl.OrqueioRestResources;
-import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.InitializingBean;
@@ -39,7 +38,6 @@ public class OrqueioJerseyResourceConfig extends ResourceConfig implements Initi
 
     this.registerClasses(OrqueioRestResources.getResourceClasses());
     this.registerClasses(OrqueioRestResources.getConfigurationClasses());
-    this.register(JacksonFeature.class);
 
     log.info("Finished configuring orqueio rest api.");
   }
