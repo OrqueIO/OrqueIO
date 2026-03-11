@@ -15,6 +15,7 @@ OrqueIO is a flexible framework for workflow and process automation. Its core is
 
 - [Components](#components)
 - [Authentication & SSO](#authentication--sso)
+- [Frontend - Angular 21](#frontend---angular-21)
 - [Architecture](#architecture)
 - [Getting Started](#getting-started)
 - [Contributing](#contributing)
@@ -60,6 +61,43 @@ OrqueIO supports Single Sign-On (SSO) with the following identity providers:
 | GitHub            | Available |
 | Okta              | Available |
 | Auth0             | Available |
+
+---
+
+## Frontend - Angular 21
+
+The OrqueIO web applications (Cockpit, Admin, Tasklist) are built with **Angular 21**.
+
+### Prerequisites
+
+- **Node.js** >= 22
+- **npm** >= 10
+
+### Key Features
+
+- **Standalone Components** - The application uses Angular's standalone component architecture, removing the need for NgModules.
+- **Signal-based Reactivity** - Leverages Angular Signals for efficient state management and change detection.
+- **Built-in Control Flow** - Uses `@if`, `@for`, and `@switch` template syntax instead of structural directives.
+- **Zoneless Change Detection** - Runs without Zone.js for improved performance.
+- **esbuild** - Uses the esbuild-based build system for fast compilation and bundling.
+
+### Development
+
+```bash
+cd webapps/frontend
+npm install
+npm start
+```
+
+The development server runs at `http://localhost:4200` with hot module replacement enabled.
+
+### Build
+
+```bash
+npm run build
+```
+
+The production build outputs to `dist/` with optimized bundles.
 
 ---
 
