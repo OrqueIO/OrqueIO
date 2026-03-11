@@ -1,67 +1,466 @@
-# orqueio-bpm-spring-boot-starter
+= OrqueIO Platform - Spring Boot Starter
+:toc: macro
+:toclevels: 3
+:icons: font
 
 [cols="a,a,a,a"]
 ,====
-// mvn travis
-image::https://travis-ci.io/orqueio/orqueio-bpm-spring-boot-starter.svg?branch=master[link="https://travis-ci.io/orqueio/orqueio-bpm-spring-boot-starter"]
 // license
 image::https://img.shields.io/badge/License-Apache%202.0-blue.svg[link="./LICENSE"]
 // mvn central
 image::https://maven-badges.herokuapp.com/maven-central/io.orqueio.bpm.springboot/orqueio-bpm-spring-boot-starter/badge.svg[link="https://maven-badges.herokuapp.com/maven-central/io.orqueio.bpm.springboot/orqueio-bpm-spring-boot-starter"]
-// openhub
-image::https://www.openhub.net/p/orqueio-bpm-spring-boot-starter/widgets/project_thin_badge.gif[link="https://www.openhub.net/p/orqueio-bpm-spring-boot-starter"]
+// java version
+image::https://img.shields.io/badge/Java-21+-green.svg[Java 21+]
+// spring boot version
+image::https://img.shields.io/badge/Spring%20Boot-4.x-brightgreen.svg[Spring Boot 4.x]
 ,====
 
-This project provides Spring Boot starters that allow you to integrate the Orqueio Platform into your Spring Boot applications.
+This project provides Spring Boot starters that allow you to integrate the Orque IO Platform into your Spring Boot applications.
 
 Please check out the https://docs.orqueio.io/manual/develop/user-guide/spring-boot-integration/[Documentation],
 the https://docs.orqueio.io/get-started/spring-boot/[Getting Started Guide] and
 the https://github.com/orqueio/orqueio-bpm-examples/tree/master/spring-boot-starter[Examples].
 
-## Resources
+toc::[]
 
-* https://github.com/OrqueIO/OrqueIO/issues - if you have an idea for a new feature or want to file a bug ... this is the place to go.
-* https://github.com/orqueio/orqueio-bpm-spring-boot-starter/blob/master/.github/CONTRIBUTING.md[Contributing] - check this if you want to contribute
+== Overview
 
-## Resources for versions older than 2.3.0
+The Orque IO Spring Boot Starter provides:
 
-Before version 2.2.0, the project existed as a community extension. Therefore the resources were located in different paths. You can find all the links below.
+* *Auto-configuration* of the process engine with sensible defaults
+* *REST API* integration via Jersey 3.1.x (Jakarta EE)
+* *Actuator support* with health indicators
+* *Spring Events* integration for process lifecycle
+* *External Task Client* for distributed workflows
 
-* https://github.com/orqueio/orqueio-bpm-spring-boot-starter/issues[Issue Tracker] - please DON'T create new issues here.
+== Modules
+
+[cols="1,3"]
+|===
+| Module | Description
+
+| `orqueio-bpm-spring-boot-starter`
+| Core auto-configuration for the process engine
+
+| `orqueio-bpm-spring-boot-starter-rest`
+| REST API endpoint integration (Jersey 3.1.x)
+
+| `orqueio-bpm-spring-boot-starter-security`
+| Security configuration and authentication
+
+| `orqueio-bpm-spring-boot-starter-webapp`
+| Web application (Cockpit, Tasklist, Admin)
+
+| `orqueio-bpm-spring-boot-starter-webapp-core`
+| Core web application components
+
+| `orqueio-bpm-spring-boot-starter-test`
+| Testing utilities and helpers
+
+| `orqueio-bpm-spring-boot-starter-client-spring`
+| External Task Client for Spring
+
+| `orqueio-bpm-spring-boot-starter-client-spring-boot`
+| External Task Client with auto-configuration
+|===
+
+== Requirements
+
+* Java 21 or higher
+* Spring Boot 4.x
+* Maven or Gradle
+
+== Getting Started
+
+=== Maven
+
+Add the dependency to your `pom.xml`:
+
+[source,xml]
+----
+<dependency>
+    <groupId>io.orqueio.bpm.springboot</groupId>
+    <artifactId>orqueio-bpm-spring-boot-starter</artifactId>
+    <version>2.0.3</version>
+</dependency>
+----
+
+For REST API support:
+
+[source,xml]
+----
+<dependency>
+    <groupId>io.orqueio.bpm.springboot</groupId>
+    <artifactId>orqueio-bpm-spring-boot-starter-rest</artifactId>
+    <version>2.0.3</version>
+</dependency>
+----
+
+=== Gradle
+
+[source,groovy]
+----
+implementation 'io.orqueio.bpm.springboot:orqueio-bpm-spring-boot-starter:2.0.3'
+----
+
+=== Minimal Application
+
+[source,java]
+----
+@SpringBootApplication
+public class MyProcessApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(MyProcessApplication.class, args);
+    }
+}
+----
+
+Place your BPMN files in `src/main/resources` and they will be auto-deployed.
+
+== Configuration
+
+All properties use the prefix `orqueio.bpm`.
+
+NOTE: The prefix `camunda.bpm` is also supported for backward compatibility.
+
+=== Core Properties
+
+[cols="2,1,3"]
+|===
+| Property | Default | Description
+
+| `orqueio.bpm.enabled`
+| `true`
+| Enable/disable the starter
+
+| `orqueio.bpm.process-engine-name`
+| `default`
+| Name of the process engine
+
+| `orqueio.bpm.history-level`
+| `full`
+| History level (`none`, `activity`, `audit`, `full`, `auto`)
+
+| `orqueio.bpm.auto-deployment-enabled`
+| `true`
+| Auto-deploy process definitions
+
+| `orqueio.bpm.default-serialization-format`
+| `application/json`
+| Default format for variable serialization
+
+| `orqueio.bpm.id-generator`
+| `strong`
+| ID generator strategy (`strong`, `simple`, `prefixed`)
+
+| `orqueio.bpm.default-number-of-retries`
+| `3`
+| Default retry count for failed jobs
+|===
+
+=== Database Properties
+
+[cols="2,1,3"]
+|===
+| Property | Default | Description
+
+| `orqueio.bpm.database.schema-update`
+| `true`
+| Auto-update database schema
+
+| `orqueio.bpm.database.type`
+| Auto-detected
+| Database type (h2, mysql, postgresql, etc.)
+
+| `orqueio.bpm.database.table-prefix`
+| -
+| Prefix for database tables
+|===
+
+=== Job Execution Properties
+
+[cols="2,1,3"]
+|===
+| Property | Default | Description
+
+| `orqueio.bpm.job-execution.enabled`
+| `true`
+| Enable async job executor
+
+| `orqueio.bpm.job-execution.core-pool-size`
+| `3`
+| Core thread pool size
+
+| `orqueio.bpm.job-execution.max-pool-size`
+| `10`
+| Maximum thread pool size
+
+| `orqueio.bpm.job-execution.queue-capacity`
+| `3`
+| Job queue capacity
+|===
+
+=== REST API Properties
+
+[cols="2,1,3"]
+|===
+| Property | Default | Description
+
+| `orqueio.bpm.rest.enabled`
+| `true`
+| Enable REST API
+
+| `orqueio.bpm.rest.path`
+| `/engine-rest`
+| Base path for REST endpoints
+
+| `orqueio.bpm.rest.authentication.enabled`
+| `false`
+| Enable HTTP Basic authentication
+|===
+
+=== Authorization Properties
+
+[cols="2,1,3"]
+|===
+| Property | Default | Description
+
+| `orqueio.bpm.authorization.enabled`
+| `false`
+| Enable authorization checks
+
+| `orqueio.bpm.authorization.enabled-for-custom-code`
+| `false`
+| Authorization for custom code
+|===
+
+=== Admin User Properties
+
+[cols="2,1,3"]
+|===
+| Property | Default | Description
+
+| `orqueio.bpm.admin-user.id`
+| -
+| Admin user ID (auto-creates user if set)
+
+| `orqueio.bpm.admin-user.password`
+| -
+| Admin user password
+
+| `orqueio.bpm.admin-user.first-name`
+| -
+| Admin user first name
+
+| `orqueio.bpm.admin-user.last-name`
+| -
+| Admin user last name
+|===
+
+=== Example Configuration
+
+[source,yaml]
+----
+orqueio:
+  bpm:
+    process-engine-name: myEngine
+    history-level: audit
+    auto-deployment-enabled: true
+    admin-user:
+      id: admin
+      password: admin
+      first-name: Admin
+      last-name: User
+    database:
+      schema-update: true
+    job-execution:
+      enabled: true
+      core-pool-size: 5
+      max-pool-size: 15
+    rest:
+      enabled: true
+      path: /api/engine
+    authorization:
+      enabled: true
+
+management:
+  health:
+    orqueio:
+      enabled: true
+----
+
+== Features
+
+=== Process Application Annotation
+
+Use `@EnableProcessApplication` to leverage `META-INF/processes.xml` for deployment:
+
+[source,java]
+----
+@SpringBootApplication
+@EnableProcessApplication
+public class MyProcessApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(MyProcessApplication.class, args);
+    }
+}
+----
+
+=== Spring Events
+
+The starter publishes Spring events for process lifecycle:
+
+[source,java]
+----
+@Component
+public class ProcessEventListener {
+
+    @EventListener
+    public void onProcessApplicationStarted(ProcessApplicationStartedEvent event) {
+        // Handle process application start
+    }
+
+    @EventListener
+    public void onPostDeploy(PostDeployEvent event) {
+        // Handle deployment completion
+    }
+}
+----
+
+Available events:
+
+* `ProcessApplicationStartedEvent`
+* `ProcessApplicationStoppedEvent`
+* `PostDeployEvent`
+* `PreUndeployEvent`
+* `ExecutionEvent`
+
+=== Actuator Health Indicators
+
+When Spring Boot Actuator is present, health indicators are available:
+
+[source,yaml]
+----
+management:
+  endpoint:
+    health:
+      show-details: always
+  health:
+    orqueio:
+      enabled: true
+----
+
+Provides health checks for:
+
+* Process Engine availability
+* Job Executor status
+
+=== Custom Process Engine Plugins
+
+Extend `SpringBootProcessEnginePlugin` to customize the engine:
+
+[source,java]
+----
+@Component
+@Order(Ordering.DEFAULT_ORDER + 1)
+public class CustomPlugin extends SpringBootProcessEnginePlugin {
+
+    @Override
+    public void preInit(SpringProcessEngineConfiguration config) {
+        // Customize before initialization
+    }
+
+    @Override
+    public void postInit(SpringProcessEngineConfiguration config) {
+        // Customize after initialization
+    }
+}
+----
+
+=== External Task Client
+
+For distributed task handling:
+
+[source,xml]
+----
+<dependency>
+    <groupId>io.orqueio.bpm.springboot</groupId>
+    <artifactId>orqueio-bpm-spring-boot-starter-client-spring-boot</artifactId>
+    <version>2.0.3</version>
+</dependency>
+----
+
+[source,java]
+----
+@ExternalTaskSubscription("myTopic")
+@Component
+public class MyTaskHandler implements ExternalTaskHandler {
+
+    @Override
+    public void execute(ExternalTask task, ExternalTaskService service) {
+        // Handle the task
+        service.complete(task);
+    }
+}
+----
+
+== REST API
+
+The REST API is available at the configured path (default: `/engine-rest`).
+
+Common endpoints:
+
+* `GET /engine-rest/engine` - List engines
+* `GET /engine-rest/process-definition` - List process definitions
+* `POST /engine-rest/process-definition/{id}/start` - Start process instance
+* `GET /engine-rest/task` - List tasks
+* `POST /engine-rest/task/{id}/complete` - Complete task
+* `GET /engine-rest/external-task` - List external tasks
+
+== Resources
+
+* https://github.com/OrqueIO/OrqueIO/issues[Issue Tracker] - If you have an idea for a new feature or want to file a bug, this is the place to go.
+* https://github.com/orqueio/orqueio/blob/master/.github/CONTRIBUTING.md[Contributing] - Check this if you want to contribute.
+
+== Resources for Versions Older Than 2.3.0
+
+Before version 2.3.0, the project existed as a community extension. Therefore the resources were located in different paths. You can find all the links below.
+
+* https://github.com/orqueio/orqueio-bpm-spring-boot-starter/issues[Issue Tracker] - Please DON'T create new issues here.
 * https://github.com/orqueio/orqueio-bpm-spring-boot-starter/blob/2.2.0/docs/src/main/asciidoc/index.adoc[Documentation]
 
-### 2.x
+=== 2.x
 
 * https://github.com/orqueio/orqueio-bpm-spring-boot-starter/milestone/8?closed=1[Release Notes 2.2.0]
 * https://github.com/orqueio/orqueio-bpm-spring-boot-starter/milestone/10?closed=1[Release Notes 2.1.2]
 * https://github.com/orqueio/orqueio-bpm-spring-boot-starter/milestone/6?closed=1[Release Notes 2.1.0]
 * https://github.com/orqueio/orqueio-bpm-spring-boot-starter/milestone/3?closed=1[Release Notes 2.0.0]
 
-### 1.3.0
+=== 1.3.0
 
 * https://github.com/orqueio/orqueio-bpm-spring-boot-starter/milestone/4?closed=1[Release Notes 1.3.0]
 
-#### Migration hints from < 1.3.0 to >= 1.3.0
+==== Migration Hints from < 1.3.0 to >= 1.3.0
 
 [IMPORTANT]
-We have decided to refactor the configuration mechanism. Especially, we removed the  `io.orqueio.bpm.spring.boot.starter.configuration.OrqueioConfiguration` interface. For now, each configuration is a `io.orqueio.bpm.engine.impl.cfg.ProcessEnginePlugin`. With this it is possible to hook into `preInit`, `postInit` and `postProcessEngineBuild`, which supports more complex situations.
+We have decided to refactor the configuration mechanism. Especially, we removed the `io.orqueio.bpm.spring.boot.starter.configuration.OrqueioConfiguration` interface. For now, each configuration is a `io.orqueio.bpm.engine.impl.cfg.ProcessEnginePlugin`. With this it is possible to hook into `preInit`, `postInit` and `postProcessEngineBuild`, which supports more complex situations.
 If you have implemented a `OrqueioConfiguration`, you have to switch to `ProcessEnginePlugin` (and its `preInit` method). You can also extend your configuration from `io.orqueio.bpm.spring.boot.starter.configuration.impl.AbstractOrqueioConfiguration` to avoid a cast to `SpringProcessEngineConfiguration`.
 
-### 1.2.1
+=== 1.2.1
 
 * https://github.com/orqueio/orqueio-bpm-spring-boot-starter/milestone/5?closed=1[Release Notes 1.2.1]
 * https://blog.orqueio.io/post/2016/06/orqueio-spring-boot-1.2.0-released/[Blog Article for release 1.2.0]
 
-## Credits
+== Credits
 
-The Orqueio Spring Boot Starter project used to be the community extension, created and supported by
+The OrqueIO Spring Boot Starter project used to be the community extension, created and supported by:
 
-*  _https://github.com/osteinhauer[Oliver Steinhauer]_
-*  _https://github.com/jangalinski[Jan Galinski]_
-*  _https://github.com/hawky-4s-[Christian Lipphardt]_
+* _https://github.com/osteinhauer[Oliver Steinhauer]_
+* _https://github.com/jangalinski[Jan Galinski]_
+* _https://github.com/hawky-4s-[Christian Lipphardt]_
 
-Starting from version 2.3.0 it was adopted as part of the Orqueio Platform.
+Starting from version 2.3.0 it was adopted as part of the OrqueIO Platform.
 
-## License
+== License
 
-* The source files in this repository are made available under the link:./LICENSE[Apache License, Version 2.0].
+The source files in this repository are made available under the link:./LICENSE[Apache License, Version 2.0].
