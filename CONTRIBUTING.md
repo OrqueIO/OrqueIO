@@ -2,64 +2,48 @@
 
 We welcome contributions of all kinds to the OrqueIO project. Whether you want to report a bug, request a feature, improve documentation, or contribute code, your efforts help make OrqueIO better for everyone.
 
-* [Ways to contribute](#ways-to-contribute)
-* [Browse our issues](#browse-our-issues)
-* [Build from source](#build-from-source)
-* [Create a pull request](#create-a-pull-request)
-* [Contribution checklist](#contribution-checklist)
-* [Commit message conventions](#commit-message-conventions)
-* [License headers](#license-headers)
-* [Review process](#review-process)
+---
+
+## Table of Contents
+
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Build from Source](#build-from-source)
+- [How to Contribute](#how-to-contribute)
+  - [Report Bugs or Request Features](#report-bugs-or-request-features)
+  - [Contribute Code](#contribute-code)
+  - [Browse Issues](#browse-issues)
+- [Development Workflow](#development-workflow)
+  - [Fork and Clone](#fork-and-clone)
+  - [Create a Pull Request](#create-a-pull-request)
+  - [Contribution Checklist](#contribution-checklist)
+- [Conventions](#conventions)
+  - [Commit Message Format](#commit-message-format)
+  - [License Headers](#license-headers)
+- [Review Process](#review-process)
 
 ---
 
-## Ways to contribute
+## Getting Started
 
-There are several ways you can contribute to OrqueIO:
+### Prerequisites
 
-### File bugs or feature requests
+| Tool    | Version |
+|---------|---------|
+| Java    | 17+     |
+| Maven   | 3.9+    |
+| Node.js | 22+ (for web applications) |
+| npm     | 10+     |
 
-If you find a bug or would like to request a new feature:
+### Build from Source
 
-* First, [search existing issues](https://github.com/Orqueio/Orqueio/issues) to see if it is already tracked.
-* If not, [create a new issue](https://github.com/Orqueio/Orqueio/issues/new/choose).
-
-When filing an issue, please include:
-
-* A clear description of the problem or request.
-* Steps to reproduce (for bugs).
-* The environment (e.g., OrqueIO version, modules used).
-* Code examples or configuration snippets where applicable.
-
-### Contribute code
-
-You can contribute code that fixes bugs, adds features, or improves existing functionality. The process is:
-
-1. Pick an issue to work on from our [issue tracker](https://github.com/Orqueio/Orqueio/issues).
-2. Leave a comment to indicate you are working on it (to avoid duplication).
-3. Implement your changes and check them against our [contribution checklist](#contribution-checklist).
-4. [Open a pull request](#create-a-pull-request) — you may open it early for feedback, even before the work is complete.
-
----
-
-## Browse our issues
-
-All development work and requests are tracked in [GitHub Issues](https://github.com/Orqueio/Orqueio/issues).
-We use labels to organize issues by type, scope, and priority.
-
----
-
-## Build from source
-
-OrqueIO uses **Maven** for build and dependency management. To build the project:
+Build all modules and run unit tests:
 
 ```bash
 mvn clean install
 ```
 
-This will build all modules and run unit tests. You can also run the command in a specific module directory to build only that module.
-
-Some modules may require Node.js (e.g., for web applications). To skip building those, run:
+To skip web application modules (if you don't have Node.js):
 
 ```bash
 mvn clean install -pl '!webapps,!webapps/assembly,!webapps/assembly-jakarta'
@@ -67,31 +51,71 @@ mvn clean install -pl '!webapps,!webapps/assembly,!webapps/assembly-jakarta'
 
 ---
 
-## Create a pull request
+## How to Contribute
 
-To submit your work:
+### Report Bugs or Request Features
 
-1. [Fork the OrqueIO repository](https://docs.github.com/en/get-started/quickstart/fork-a-repo).
-2. Push your changes to a branch in your fork.
-3. [Open a pull request](https://docs.github.com/en/pull-requests) to the `main` branch of OrqueIO.
-4. Reference the issue you are addressing in the pull request description.
+1. [Search existing issues](https://github.com/Orqueio/Orqueio/issues) to check if it is already tracked.
+2. If not, [create a new issue](https://github.com/Orqueio/Orqueio/issues/new/choose).
+
+When filing an issue, please include:
+
+- A clear description of the problem or request.
+- Steps to reproduce (for bugs).
+- The environment (OrqueIO version, modules used).
+- Code examples or configuration snippets where applicable.
+
+### Contribute Code
+
+1. Pick an issue from the [issue tracker](https://github.com/Orqueio/Orqueio/issues).
+2. Leave a comment to indicate you are working on it (to avoid duplication).
+3. Implement your changes following the [contribution checklist](#contribution-checklist).
+4. [Open a pull request](#create-a-pull-request) — you may open it early for feedback, even before the work is complete.
+
+### Browse Issues
+
+All work is tracked in [GitHub Issues](https://github.com/Orqueio/Orqueio/issues). We use labels to organize issues by type, scope, and priority.
 
 ---
 
-## Contribution checklist
+## Development Workflow
 
-Before submitting your pull request:
+### Fork and Clone
 
-* Code follows our style conventions.
-* Tests are included for new functionality and bug fixes.
-* Commit messages follow our [conventions](#commit-message-conventions).
-* Files contain the proper [license header](#license-headers).
+```bash
+# 1. Fork the repository on GitHub
+# 2. Clone your fork
+git clone https://github.com/<your-username>/OrqueIO.git
+cd OrqueIO
+
+# 3. Add the upstream remote
+git remote add upstream https://github.com/Orqueio/OrqueIO.git
+```
+
+### Create a Pull Request
+
+1. Create a feature branch from `main`.
+2. Push your changes to your fork.
+3. [Open a pull request](https://docs.github.com/en/pull-requests) targeting the `main` branch.
+4. Reference the related issue in the PR description.
+
+### Contribution Checklist
+
+Before submitting your pull request, verify that:
+
+- [ ] Code follows the project's style conventions.
+- [ ] Tests are included for new functionality and bug fixes.
+- [ ] All existing tests pass (`mvn clean install`).
+- [ ] Commit messages follow the [conventions](#commit-message-format).
+- [ ] Source files contain the proper [license header](#license-headers).
 
 ---
 
-## Commit message conventions
+## Conventions
 
-We follow a structured format:
+### Commit Message Format
+
+We follow a structured commit message format:
 
 ```
 <type>(<scope>): <subject>
@@ -101,17 +125,17 @@ We follow a structured format:
 <footer>
 ```
 
-**Types**:
+| Type       | Description              |
+|------------|--------------------------|
+| `feat`     | New feature              |
+| `fix`      | Bug fix                  |
+| `docs`     | Documentation changes    |
+| `style`    | Formatting changes       |
+| `refactor` | Code refactoring         |
+| `test`     | Adding or updating tests |
+| `chore`    | Maintenance tasks        |
 
-* `feat` – New feature
-* `fix` – Bug fix
-* `docs` – Documentation changes
-* `style` – Formatting changes
-* `refactor` – Code refactoring
-* `test` – Adding or updating tests
-* `chore` – Maintenance tasks
-
-**Example**:
+**Example:**
 
 ```
 feat(engine): support BPMN error handling
@@ -122,9 +146,7 @@ feat(engine): support BPMN error handling
 related to #123
 ```
 
----
-
-## License headers
+### License Headers
 
 Each source file must include the Apache 2.0 license header:
 
@@ -145,10 +167,12 @@ limitations under the License.
 
 ---
 
-## Review process
+## Review Process
 
-* New pull requests are reviewed regularly by the maintainers.
-* A reviewer will provide feedback and request changes if necessary.
-* Once approved, the contribution will be merged into the main branch and included in the next release.
+- New pull requests are reviewed regularly by the maintainers.
+- A reviewer will provide feedback and request changes if necessary.
+- Once approved, the contribution will be merged into the main branch and included in the next release.
 
-Thank you for contributing to OrqueIO. Your efforts help improve the platform for the entire community.
+---
+
+Thank you for contributing to OrqueIO!
