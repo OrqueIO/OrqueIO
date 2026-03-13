@@ -1,14 +1,18 @@
-
-==================
+# OrqueIO DMN Engine
 
 Lightweight Execution Engine for DMN (Decision Model and Notation) written in Java.
 
 <p>
-  <a href="http://orqueio.io/">Home</a> |
-  <a href="https://github.com/OrqueIO/OrqueIO/issues">Issues</a> |
+  <a href="https://www.orqueio.io/">Home</a> |
+  <a href="https://docs.orqueio.io/">Documentation</a> |
+  <a href="https://github.com/OrqueIO/OrqueIO/issues">Issues</a>
 </p>
 
 The Decision Engine can be used seamlessly in combination with BPMN and CMMN or standalone.
+
+## Requirements
+
+* Java 21 or higher
 
 ## Standalone Usage
 
@@ -30,12 +34,14 @@ public class DmnApp {
   public static void main(String[] args) {
 
     // configure and build the DMN engine
-    DmnEngine dmnEngine = DmnEngineConfiguration.createDefaultDmnEngineConfiguration().buildEngine();
+    DmnEngine dmnEngine = DmnEngineConfiguration
+        .createDefaultDmnEngineConfiguration()
+        .buildEngine();
 
     // parse a decision
     DmnDecision decision = dmnEngine.parseDecision("orderDecision", "CheckOrder.dmn");
 
-    Map<String, Object> data = new HashMap<String, Object>();
+    Map<String, Object> data = new HashMap<>();
     data.put("status", "gold");
     data.put("sum", 354.12d);
 
@@ -50,16 +56,17 @@ public class DmnApp {
 ## Use DMN Engine for implementing a BPMN Business Rule Task
 
 Add the following Maven Coordinates to your project:
+
 ```xml
 <dependency>
   <groupId>io.orqueio.bpm</groupId>
   <artifactId>orqueio-engine</artifactId>
-  <version>${version.orqueio}</versions>
+  <version>${version.orqueio}</version>
 </dependency>
 <dependency>
   <groupId>com.h2database</groupId>
   <artifactId>h2</artifactId>
-  <version>1.3.168</version>
+  <version>2.3.232</version>
   <scope>test</scope>
 </dependency>
 ```
@@ -68,12 +75,13 @@ Next, reference a DMN decision from a BPMN Business Rule Task:
 
 ```xml
 <bpmn:businessRuleTask id="assignApprover"
-  camunda:decisionRef="invoice-assign-approver"
-  camunda:resultVariable="approverGroups"
+  orqueio:decisionRef="invoice-assign-approver"
+  orqueio:resultVariable="approverGroups"
   name="Assign Approver Group(s)">
 </bpmn:businessRuleTask>
 ```
-The `camunda:decisionRef` attribute references the id of the decision in the DMN file:
+
+The `orqueio:decisionRef` attribute references the id of the decision in the DMN file:
 
 ```xml
 <dmn:decision id="invoice-assign-approver" name="Assign Approver">
@@ -88,8 +96,9 @@ public class App {
 
   public static void main(String[] args) {
 
-    ProcessEngine processEngine = ProcessEngineConfiguration.createStandaloneInMemProcessEngineConfiguration()
-      .buildProcessEngine();
+    ProcessEngine processEngine = ProcessEngineConfiguration
+        .createStandaloneInMemProcessEngineConfiguration()
+        .buildProcessEngine();
 
     try {
       processEngine.getRepositoryService()
@@ -101,7 +110,7 @@ public class App {
 
       processEngine.getRuntimeService()
         .startProcessInstanceByKey("invoice", createVariables()
-            .putValue("invoceNumber", "2323"));
+            .putValue("invoiceNumber", "2323"));
     }
     finally {
       processEngine.close();
@@ -109,3 +118,7 @@ public class App {
   }
 }
 ```
+
+## License
+
+The source files in this repository are made available under the [Apache License Version 2.0](../LICENSE).
