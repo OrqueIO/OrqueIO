@@ -1,160 +1,110 @@
-# Orqueio Webapp
+# OrqueIO Platform - Webapps
 
-This is the Orqueio Platform web application source.
-Clean, package and install it via [Maven](https://maven.apache.org/).
+<p>
+  <a href="https://www.orqueio.io/">Home</a> |
+  <a href="https://docs.orqueio.io/">Documentation</a> |
+  <a href="https://github.com/OrqueIO/OrqueIO/issues">Issues</a>
+</p>
 
-## Structure of this project
+Web applications for the OrqueIO BPM Platform, providing administration, process monitoring, and task management interfaces.
 
-The structure is as follows:
+## Requirements
 
-* `assembly` - Java sources and tests for the Orqueio web application based on `javax` namespace.
-* `assembly-jakarta` - Java sources and tests for the Orqueio web application based on `jakarta` namespace.
-  * This module is created from the `assembly` module via code transformation.
-* `frontend` - HTML, CSS and Javascript sources as well as Plugins and tests for the Orqueio webapplications Cockpit, Tasklist and Admin.
+* Java 21 or higher
+* Node.js >= 22 and npm
+* Maven
 
-## FRONTEND
+## Project Structure
 
-### UI
+| Module               | Description                                                                 |
+|----------------------|-----------------------------------------------------------------------------|
+| `assembly`           | Java backend (WAR) for the web applications using the `javax` namespace     |
+| `assembly-jakarta`   | Java backend (WAR) using the `jakarta` namespace (generated from `assembly` via code transformation) |
+| `angular`            | Angular 21 frontend application (TypeScript, NgRx, Chart.js)               |
 
-There are 3 web applications available for the Orqueio Platform :
+## Web Applications
 
-* __cockpit__: an administration interface for processes and decisions
-* __tasklist__: provides an interface to process user tasks
-* __admin__: is used to administer users, groups and their authorizations
+The platform provides 4 web applications:
 
-The webapps above are relying on 2 libraries:
+* **Cockpit** - Administration interface for processes, decisions, and incidents
+* **Tasklist** - Interface for managing and completing user tasks
+* **Admin** - User, group, tenant, and authorization management
+* **Welcome** - Landing page and navigation hub
 
-* __orqueio-bpm-sdk-js__: provides tools for developers who want interact with the platform using Javascript
-* __orqueio-commons-ui__: is a set of shared scripts, templates and assets, used in the different webapps
+## Technology Stack
 
+### Backend
+* JAX-RS 2.1 (REST API)
+* Jackson (JSON serialization)
+* Jetty 9.4 (javax) / Jetty 11 (jakarta)
+* RESTEasy 6.2.x (Jakarta)
+* MyBatis 3.5.x (persistence)
 
-#### Plugins
+### Frontend
+* Angular 21 with TypeScript 5.9
+* NgRx 21 (state management)
+* RxJS 7.8
+* Chart.js (data visualization)
+* bpmn.js / cmmn.js / dmn.js (process modeling)
+* FontAwesome 7
 
-Parts of the web applications can be extended using plugins.
+## Getting Started
 
-See [plugin development guide](http://docs.orqueio.io/latest/real-life/how-to/#cockpit-how-to-develop-a-cockpit-plugin) for details.
+### Build
 
-#### Translations
-
-English and german translations are located in the `ui/<app>/client/locales` folders.  
-Translations for other languages are available in the [orqueio-7-webapp-translations](https://github.com/orqueio-community-hub/orqueio-7-webapp-translations) repository.
-
-### Libraries
-
-#### [orqueio-bpm-sdk-js](https://github.com/orqueio/orqueio-bpm-platform/tree/master/webapps/frontend/orqueio-bpm-sdk-js)
-
-Has tools to work with the REST API and forms (included transitively via orqueio-commons-ui).
-
-#### [orqueio-commons-ui](https://github.com/orqueio/orqueio-bpm-platform/tree/master/webapps/frontend/orqueio-commons-ui)
-
-Contains resources like images, [`.less`](http://lesscss.org) stylesheets as well as some [angular.js](http://angularjs.org) modules.
-
-### Prerequisite
-
-You need [node.js](http://nodejs.org) >= 17 and npm.
-
-### Setup
-
-#### Adjusting Maven Settings
-
-See https://github.com/orqueio/orqueio-bpm-platform/blob/master/CONTRIBUTING.md#build-from-source
-
-#### Using Webpack
-
-Build the web apps using Webpack:
+Clean, package, and install via Maven:
 
 ```sh
-# cd <path to your workspace>
-git clone git@github.com:orqueio/orqueio-bpm-platform.git
-cd orqueio-bpm-platform/webapps/frontend
+cd orqueio-bpm-platform/webapps
+mvn clean install
+```
+
+### Development Mode
+
+Start the Angular frontend:
+
+```sh
+cd orqueio-bpm-platform/webapps/angular
 npm install
 npm start
 ```
 
-To start the server in development mode, call
+In a separate terminal, start the backend server:
 
 ```sh
 cd orqueio-bpm-platform/webapps/assembly
 mvn jetty:run -Pdevelop
 ```
 
-The webapps are then available pointing a browser at [http://localhost:8080](http://localhost:8080). To login as an admin user, use `jonny1` as username and password.
+The application is available at [http://localhost:8080/orqueio](http://localhost:8080/orqueio).
+Use `jonny1` / `jonny1` to log in as admin.
 
-You can now start developing using the `npm run start` command in the frontend directory.
+#### Jakarta Variant
 
-##### Jakarta Webapps
-
-In order to run the Jakarta Webapps start Jetty the same way from the `assembly-jakarta` folder
+To run with Jakarta EE support, use the `assembly-jakarta` module instead:
 
 ```sh
-cd orqueio-bpm-platform/webapps/assembly
+cd orqueio-bpm-platform/webapps/assembly-jakarta
 mvn jetty:run -Pdevelop
-npm run start
 ```
 
-#### Extended Support libraries from HeroDevs
+### Adjusting Maven Settings
 
-##### AngularJS
-Since December 31, 2021, AngularJS is no longer officially supported by the original maintainers (Google). We replaced the official AngularJS libraries with the ones from [HeroDevs](https://www.herodevs.com/) to ensure that our used libraries stay secure and supported. We include the AngularJS libraries from HeroDevs in our Community Edition releases from 7.18.0-alpha2 on.
+See the [contribution guide](https://github.com/orqueio/orqueio-bpm-platform/blob/master/CONTRIBUTING.md#build-from-source) for Maven configuration details.
 
-**Heads-up:** If you build the Webapps from source code, the build includes the no longer maintained AngularJS libraries in version 1.8.2 unless you have access to the HeroDevs registry and configure it as shown below.
+## Plugins
 
-##### Bootstrap
-Since December 31, 2021, the legacy Bootstrap 3 library is no longer officially supported by the original maintainers (twbs Bootstrap). We replaced the official Bootstrap 3 libraries with the ones from [HeroDevs](https://www.herodevs.com/) to ensure that our used libraries stay secure and supported. We include the Bootstrap 3 libraries from HeroDevs in our Community Edition releases from 7.23.0-alpha2 on.
+The web applications support extension through plugins. See the [plugin development guide](https://docs.orqueio.io/latest/real-life/how-to/#cockpit-how-to-develop-a-cockpit-plugin) for details.
 
-**Heads-up:** If you build the Webapps from source code, the build includes the no longer maintained Bootstrap 3 libraries in version 3.4.1 unless you have access to the HeroDevs registry and configure it as shown below.
+## Browser Support
 
-#### angular-ui-bootstrap
-The angular-ui-bootstrap project is no longer being maintained. We replaced the official angular-ui-bootstrap libraries with the ones from [HeroDevs](https://www.herodevs.com/) to ensure that our used libraries stay secure and supported. We include the angular-ui-bootstrap libraries from HeroDevs in our Community Edition releases from 7.23.0-alpha2 on.
-
-**Heads-up:** If you build the Webapps from source code, the build includes the no longer maintained angular-ui-bootstrap libraries in version 2.5.6 unless you have access to the HeroDevs registry and configure it as shown below.
-
-#### angular-translate
-Since 2024-01-15 the angular-translate project has been archived. We replaced the official angular-translate libraries with the ones from [HeroDevs](https://www.herodevs.com/) to ensure that our used libraries stay secure and supported. We include the angular-translate libraries from HeroDevs in our Community Edition releases from 7.23.0-alpha2 on.
-
-**Heads-up:** If you build the Webapps from source code, the build includes the no longer maintained angular-translate libraries in version 2.19.0 unless you have access to the HeroDevs registry and configure it as shown below.
-
-#### angular-moment
-The angular-moment project has been archived on Nov 30, 2021. We replaced the official angular-moment libraries with the ones from [HeroDevs](https://www.herodevs.com/) to ensure that our used libraries stay secure and supported. We include the angular-moment libraries from HeroDevs in our Community Edition releases from 7.23.0-alpha2 on.
-
-**Heads-up:** If you build the Webapps from source code, the build includes the no longer maintained angular-moment libraries in version 1.3.0 unless you have access to the HeroDevs registry and configure it as shown below.
-
-##### Configure the HeroDevs registry
-To enable pulling the HeroDevs extended support libraries while building the Webapps, please configure the npm registry. Add the HeroDevs npm registry by replacing the variables `${HERODEVS_REGISTRY}` and `${HERODEVS_AUTH_TOKEN}` in the following commands and execute the commands in your terminal.
-
-Commands to configure the HeroDevs npm registry:
-
-```
-npm set @neverendingsupport:registry=https://${HERODEVS_REGISTRY}/
-npm set //${HERODEVS_REGISTRY}/:_authToken ${HERODEVS_AUTH_TOKEN}
-```
-
-Alternatively, you can set the following environment variables:
-
-```sh
-export HERODEVS_REGISTRY = "example.com" # Hostname without protocol (e.g., "https://"), leading or trailing slashes
-export HERODEVS_AUTH_TOKEN = "abc..."    # Token to authenticate against the registry
-```
-
-You receive the information about the registry and the auth token directly from XLTS.dev.
-
-## Browsers support
-
-The supported browsers are:
-
-- Chrome Latest
-- Firefox Latest
-- Edge Latest
+* Chrome (latest)
+* Firefox (latest)
+* Edge (latest)
 
 ## Contributing
 
-Have a look at our [contribution guide](https://github.com/orqueio/orqueio-bpm-platform/blob/master/CONTRIBUTING.md) for how to contribute to this repository.
-
-
-## Help and support
-
-* [Documentation](http://docs.orqueio.io/)
-* [Stackoverflow](https://stackoverflow.com/questions/tagged/orqueio)
+See the [contribution guide](https://github.com/orqueio/orqueio-bpm-platform/blob/master/CONTRIBUTING.md).
 
 ## License
 
