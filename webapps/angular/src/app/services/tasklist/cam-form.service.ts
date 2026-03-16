@@ -69,7 +69,7 @@ export interface CamFormInstance {
  * - Submitting forms to the Camunda API
  * - Local storage persistence for form state
  *
- * @see /webapps/frontend/orqueio-bpm-sdk-js/lib/forms/orqueio-form.js
+ * @see /webapps/angular/src/app/services/tasklist/cam-form.service.ts
  */
 @Injectable({
   providedIn: 'root'

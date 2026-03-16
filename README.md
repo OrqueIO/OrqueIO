@@ -84,7 +84,7 @@ The OrqueIO web applications (Cockpit, Admin, Tasklist) are built with **Angular
 ### Development
 
 ```bash
-cd webapps/frontend
+cd webapps/angular
 npm install
 npm start
 ```
