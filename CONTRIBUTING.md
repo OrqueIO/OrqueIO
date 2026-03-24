@@ -94,9 +94,9 @@ git remote add upstream https://github.com/Orqueio/OrqueIO.git
 
 ### Create a Pull Request
 
-1. Create a feature branch from `main`.
+1. Create a feature branch from `master`.
 2. Push your changes to your fork.
-3. [Open a pull request](https://docs.github.com/en/pull-requests) targeting the `main` branch.
+3. [Open a pull request](https://docs.github.com/en/pull-requests) targeting the `master` branch.
 4. Reference the related issue in the PR description.
 
 ### Contribution Checklist
@@ -171,7 +171,7 @@ limitations under the License.
 
 - New pull requests are reviewed regularly by the maintainers.
 - A reviewer will provide feedback and request changes if necessary.
-- Once approved, the contribution will be merged into the main branch and included in the next release.
+- Once approved, the contribution will be merged into the master branch and included in the next release.
 
 ---
 
