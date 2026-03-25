@@ -1,6 +1,6 @@
 # OrqueIO - The Open Source BPMN Platform
 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.orqueio.bpm/orqueio-parent/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.orqueio.bpm/orqueio-parent) [![orqueio manual](https://img.shields.io/badge/manual-latest-brown.svg)](https://docs.orqueio.io) [![License](https://img.shields.io/github/license/orqueio/orqueio?color=blue&logo=apache)](https://github.com/orqueio/orqueio/blob/master/LICENSE)
+[![Maven Central Version](https://img.shields.io/maven-central/v/io.orqueio.bpm/orqueio-parent?label=Maven%20Central)](https://central.sonatype.com/artifact/io.orqueio.bpm/orqueio-parent) [![orqueio manual](https://img.shields.io/badge/manual-latest-brown.svg)](https://docs.orqueio.io) [![License](https://img.shields.io/github/license/orqueio/orqueio?color=blue&logo=apache)](https://github.com/orqueio/orqueio/blob/master/LICENSE)
 
 OrqueIO is a flexible framework for workflow and process automation. Its core is a native BPMN 2.0 process engine that runs inside the Java Virtual Machine. It can be embedded inside any Java application and any Runtime Container. It integrates with Java EE 6 and is a perfect match for the Spring Framework. On top of the process engine, you can choose from a stack of tools for human workflow management, operations and monitoring.
 
