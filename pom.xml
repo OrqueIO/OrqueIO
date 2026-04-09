@@ -20,7 +20,7 @@
 
     <!-- These properties are used in both the BOM as well as orqueio-parent and subprojects -->
     <version.mybatis>3.5.15</version.mybatis>
-    <version.joda-time>2.12.5</version.joda-time>
+    <version.joda-time>2.14.1</version.joda-time>
     <version.uuid-generator>4.3.0</version.uuid-generator>
     <version.feel-scala>1.19.3</version.feel-scala>
     <maven.compiler.source>21</maven.compiler.source>
