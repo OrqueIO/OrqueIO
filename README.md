@@ -133,6 +133,11 @@ Most of the components that make up the platform can be completely embedded insi
 
 ---
 
+## Prerequisites
+
+- **Java** >= 21 (JDK)
+- **Maven** >= 3.6
+
 ## Getting Started
 
 ```bash
