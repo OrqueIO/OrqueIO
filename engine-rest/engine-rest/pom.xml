@@ -18,7 +18,7 @@
 
   <properties>
     <!-- pin tomcat version for engine-rest -->
-    <version.tomcat>7.0.50</version.tomcat>
+    <version.tomcat>9.0.118</version.tomcat>
     <rest.http.port>38080</rest.http.port>
     <javax.activation.version>1.1.1</javax.activation.version>
   </properties>
@@ -251,12 +251,6 @@
       <scope>test</scope>
     </dependency>
 
-    <dependency>
-      <groupId>org.apache.tomcat.embed</groupId>
-      <artifactId>tomcat-embed-logging-juli</artifactId>
-      <version>${version.tomcat}</version>
-      <scope>test</scope>
-    </dependency>
 
     <dependency>
       <groupId>org.assertj</groupId>
