@@ -1,6 +1,6 @@
 # Orqueio Platform Quarkus Extensions
 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.orqueio.bpm.quarkus/orqueio.-bpm-quarkus-engine/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.orqueio.bpm.quarkus/orqueio.-bpm-quarkus-engine) [![orqueio. manual latest](https://img.shields.io/badge/manual-latest-brown.svg)](https://docs.orqueio.io/manual/develop/user-guide/quarkus-integration/)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.orqueio.bpm.quarkus/orqueio-bpm-quarkus-engine/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.orqueio.bpm.quarkus/orqueio-bpm-quarkus-engine) [![orqueio manual latest](https://img.shields.io/badge/manual-latest-brown.svg)](https://docs.orqueio.io/manual/develop/user-guide/quarkus-integration/)
 
 This sub-project provides Orque IO Platform Quarkus Extensions that allow you to add behavior to your Quarkus 
 application by adding dependencies to the classpath.
