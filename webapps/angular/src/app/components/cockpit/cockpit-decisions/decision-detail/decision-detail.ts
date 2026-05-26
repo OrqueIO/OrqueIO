@@ -15,6 +15,7 @@ import {
   faCopy,
   faCheck,
   faChevronDown,
+  faChevronUp,
   faSort,
   faSortUp,
   faSortDown,
@@ -76,6 +77,7 @@ export class DecisionDetailComponent implements OnInit, OnDestroy {
   faCopy = faCopy;
   faCheck = faCheck;
   faChevronDown = faChevronDown;
+  faChevronUp = faChevronUp;
   faSort = faSort;
   faSortUp = faSortUp;
   faSortDown = faSortDown;
@@ -99,6 +101,7 @@ export class DecisionDetailComponent implements OnInit, OnDestroy {
   activeTab: TabType = 'instances';
   versionDropdownOpen = false;
   isDmnExpanded = false;
+  tableMaximized = false;
 
   breadcrumbs: BreadcrumbItem[] = [];
 
@@ -116,7 +119,7 @@ export class DecisionDetailComponent implements OnInit, OnDestroy {
 
   // Instances table columns
   instanceColumns = [
-    { id: 'id', label: 'cockpit.decisionDetail.instances.id', sortable: true },
+    { id: 'id', label: 'cockpit.decisionDetail.instances.id', sortable: false },
     { id: 'evaluationTime', label: 'cockpit.decisionDetail.instances.evaluationTime', sortable: true },
     { id: 'processDefinitionKey', label: 'cockpit.decisionDetail.instances.processDefKey', sortable: false },
     { id: 'processInstanceId', label: 'cockpit.decisionDetail.instances.processInstanceId', sortable: false },
@@ -153,13 +156,21 @@ export class DecisionDetailComponent implements OnInit, OnDestroy {
     this.navMenuService.clearMenuItems();
   }
 
+  private readonly validSortByValues = [
+    'evaluationTime', 'decisionDefinitionId', 'decisionDefinitionKey',
+    'decisionDefinitionName', 'processDefinitionId', 'processInstanceId'
+  ];
+
   private loadInstancesSortConfig(): void {
     const saved = localStorage.getItem('sortDecInstTable');
     if (saved) {
       try {
         const config = JSON.parse(saved);
-        if (config.sortBy && config.sortOrder) {
+        if (config.sortBy && config.sortOrder && this.validSortByValues.includes(config.sortBy)) {
           this.instancesSortConfig = config;
+        } else {
+          // Valeur invalide (ex: 'id') → réinitialiser avec le défaut
+          localStorage.removeItem('sortDecInstTable');
         }
       } catch {
         // Use default
@@ -353,5 +364,19 @@ export class DecisionDetailComponent implements OnInit, OnDestroy {
   toggleDmnExpand(): void {
     this.isDmnExpanded = !this.isDmnExpanded;
     this.cdr.detectChanges();
+  }
+
+  toggleTableMaximize(): void {
+    this.tableMaximized = !this.tableMaximized;
+    this.cdr.detectChanges();
+  }
+
+  onVersionSelectChange(event: Event): void {
+    const select = event.target as HTMLSelectElement;
+    const selectedId = select.value;
+    const version = this.allVersions.find(v => v.id === selectedId);
+    if (version) {
+      this.selectVersion(version);
+    }
   }
 }

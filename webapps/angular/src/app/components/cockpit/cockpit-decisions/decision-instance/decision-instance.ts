@@ -14,7 +14,9 @@ import {
   faUpload,
   faExternalLinkAlt,
   faClock,
-  faSitemap
+  faSitemap,
+  faChevronUp,
+  faChevronDown
 } from '@fortawesome/free-solid-svg-icons';
 
 import { CockpitHeaderComponent, BreadcrumbItem } from '../../../../shared/cockpit-header/cockpit-header';
@@ -62,6 +64,8 @@ export class DecisionInstanceComponent implements OnInit, OnDestroy {
   faExternalLinkAlt = faExternalLinkAlt;
   faClock = faClock;
   faSitemap = faSitemap;
+  faChevronUp = faChevronUp;
+  faChevronDown = faChevronDown;
 
   instanceId = '';
   loading = true;
@@ -72,6 +76,7 @@ export class DecisionInstanceComponent implements OnInit, OnDestroy {
   activeTab: TabType = 'inputs';
   breadcrumbs: BreadcrumbItem[] = [];
   isDmnExpanded = false;
+  diagramCollapsed = false;
 
   // Clipboard
   copiedField: string | null = null;
@@ -245,6 +250,11 @@ export class DecisionInstanceComponent implements OnInit, OnDestroy {
 
   toggleDmnExpand(): void {
     this.isDmnExpanded = !this.isDmnExpanded;
+    this.cdr.detectChanges();
+  }
+
+  toggleDiagramCollapse(): void {
+    this.diagramCollapsed = !this.diagramCollapsed;
     this.cdr.detectChanges();
   }
 }

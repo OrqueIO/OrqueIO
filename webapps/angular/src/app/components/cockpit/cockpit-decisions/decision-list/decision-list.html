@@ -25,18 +25,15 @@
       </div>
 
       <!-- Results info -->
-      <header class="results-info">
-        <h1 class="results-title" *ngIf="!loading && filteredDefinitions.length > 0">
+      <header class="results-info" *ngIf="!loading">
+        <h1 class="results-title" *ngIf="filteredDefinitions.length > 0">
           {{ searchQuery ? filteredDefinitions.length : totalCount }} {{ totalCount === 1 ? ('cockpit.decisions.tableDeployed' | translate) : ('cockpit.decisions.tablesDeployed' | translate) }}
         </h1>
-        <h1 class="results-title" *ngIf="!loading && filteredDefinitions.length === 0 && decisionDefinitions.length > 0">
+        <h1 class="results-title" *ngIf="filteredDefinitions.length === 0 && decisionDefinitions.length > 0">
           {{ 'cockpit.decisions.noMatchingDefinitions' | translate }}
         </h1>
-        <h1 class="results-title" *ngIf="!loading && decisionDefinitions.length === 0">
+        <h1 class="results-title" *ngIf="decisionDefinitions.length === 0">
           {{ 'cockpit.decisions.noDecisions' | translate }}
-        </h1>
-        <h1 class="results-title" *ngIf="loading">
-          {{ 'common.loading' | translate }}...
         </h1>
       </header>
 
@@ -130,7 +127,7 @@
               <td class="col-drd">
                 <a
                   *ngIf="hasDrd(decision)"
-                  [routerLink]="['/cockpit/decisions', decision.id]"
+                  [routerLink]="['/cockpit/drd', getDrdId(decision)]"
                   class="drd-link"
                 >
                   <fa-icon [icon]="faSitemap" class="drd-icon"></fa-icon>

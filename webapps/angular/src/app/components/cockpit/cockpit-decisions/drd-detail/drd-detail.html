@@ -1,0 +1,112 @@
+<div class="cockpit-layout">
+  <main class="cockpit-main">
+    <app-cockpit-header
+      [title]="drd?.name || drd?.key || drdId"
+      [breadcrumbs]="breadcrumbs"
+      [showRefresh]="true"
+    ></app-cockpit-header>
+
+    <div class="page-content">
+      <!-- Loading -->
+      <div class="loading-state" *ngIf="loading">
+        <fa-icon [icon]="faSpinner" animation="spin"></fa-icon>
+        <span>{{ 'common.loading' | translate }}</span>
+      </div>
+
+      <!-- Content -->
+      <div class="drd-page-layout" *ngIf="!loading && drd">
+        <!-- Sidebar -->
+        <aside class="drd-sidebar">
+          <dl class="drd-info-list">
+
+            <!-- ID -->
+            <dt class="copyable" (click)="copyToClipboard(drd!.id, 'id')">
+              {{ 'cockpit.decisionDetail.id' | translate }}
+              <fa-icon [icon]="isCopied('id') ? faCheck : faCopy" class="copy-icon" [class.copied]="isCopied('id')"></fa-icon>
+            </dt>
+            <dd class="mono">{{ drd!.id }}</dd>
+
+            <!-- Key -->
+            <dt class="copyable" (click)="copyToClipboard(drd!.key, 'key')">
+              {{ 'cockpit.decisionDetail.key' | translate }}
+              <fa-icon [icon]="isCopied('key') ? faCheck : faCopy" class="copy-icon" [class.copied]="isCopied('key')"></fa-icon>
+            </dt>
+            <dd class="mono">{{ drd!.key }}</dd>
+
+            <!-- Name -->
+            <dt>{{ 'cockpit.decisionDetail.name' | translate }}</dt>
+            <dd>
+              <span *ngIf="drd!.name">{{ drd!.name }}</span>
+              <span *ngIf="!drd!.name" class="null-value">null</span>
+            </dd>
+
+            <!-- Version -->
+            <dt>{{ 'cockpit.decisionDetail.definitionVersion' | translate }}</dt>
+            <dd>{{ drd!.version }}</dd>
+
+            <!-- Tenant ID -->
+            <dt>{{ 'cockpit.decisionDetail.tenantId' | translate }}</dt>
+            <dd>
+              <span *ngIf="drd!.tenantId" class="mono">{{ drd!.tenantId }}</span>
+              <span *ngIf="!drd!.tenantId" class="null-value">null</span>
+            </dd>
+
+            <!-- Deployment ID -->
+            <dt class="copyable" (click)="copyToClipboard(drd!.deploymentId, 'deployment')">
+              {{ 'cockpit.decisionDetail.deploymentId' | translate }}
+              <fa-icon [icon]="isCopied('deployment') ? faCheck : faCopy" class="copy-icon" [class.copied]="isCopied('deployment')"></fa-icon>
+            </dt>
+            <dd>
+              <a [routerLink]="['/cockpit/deployments']"
+                 [queryParams]="{id: drd!.deploymentId}"
+                 class="link-value mono">
+                {{ drd!.deploymentId }}
+              </a>
+            </dd>
+
+          </dl>
+
+          <!-- Member decisions -->
+          <div class="member-decisions" *ngIf="memberDecisions.length > 0">
+            <h4 class="member-decisions__title">
+              <fa-icon [icon]="faTable"></fa-icon>
+              {{ 'cockpit.drd.memberDecisions' | translate }}
+            </h4>
+            <ul class="member-decisions__list">
+              <li *ngFor="let decision of memberDecisions">
+                <a [routerLink]="['/cockpit/decisions', decision.id]" class="member-link">
+                  <span class="member-name">{{ decision.name || decision.key }}</span>
+                  <span class="member-key mono" *ngIf="decision.name && decision.name !== decision.key">{{ decision.key }}</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </aside>
+
+        <!-- DRD Viewer -->
+        <div class="drd-content">
+          <div class="drd-viewer-container" [class.fullscreen]="isDrdExpanded" *ngIf="drdXml">
+            <div class="fullscreen-backdrop" *ngIf="isDrdExpanded" (click)="toggleDrdExpand()"></div>
+            <app-dmn-viewer
+              [xml]="drdXml"
+              [showExpandButton]="true"
+              [isExpanded]="isDrdExpanded"
+              (expandToggle)="toggleDrdExpand()"
+            ></app-dmn-viewer>
+          </div>
+
+          <div class="empty-state" *ngIf="!drdXml">
+            <fa-icon [icon]="faSitemap"></fa-icon>
+            <p>{{ 'cockpit.drd.noXml' | translate }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Not found -->
+      <div class="empty-state" *ngIf="!loading && !drd">
+        <fa-icon [icon]="faSitemap"></fa-icon>
+        <p>{{ 'cockpit.drd.notFound' | translate }}</p>
+      </div>
+    </div>
+  </main>
+</div>

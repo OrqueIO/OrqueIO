@@ -8,6 +8,7 @@ import { ProcessDetailComponent } from './cockpit-processes/process-detail/proce
 import { DecisionListComponent } from './cockpit-decisions/decision-list/decision-list';
 import { DecisionDetailComponent } from './cockpit-decisions/decision-detail/decision-detail';
 import { DecisionInstanceComponent } from './cockpit-decisions/decision-instance/decision-instance';
+import { DrdDetailComponent } from './cockpit-decisions/drd-detail/drd-detail';
 import { TaskDashboardComponent } from './cockpit-tasks/task-dashboard/task-dashboard';
 import { BatchPageComponent } from './cockpit-batch/batch-page/batch-page';
 import { DeploymentListComponent } from './cockpit-deployments/deployment-list/deployment-list';
@@ -50,6 +51,7 @@ export const COCKPIT_ROUTES: Routes = [
       { path: 'decisions', component: DecisionListComponent, title: 'PAGE_TITLE_COCKPIT_DECISIONS' },
       { path: 'decisions/:id', component: DecisionDetailComponent, title: 'PAGE_TITLE_COCKPIT_DECISION_DETAIL' },
       { path: 'decision-instance/:id', component: DecisionInstanceComponent, title: 'PAGE_TITLE_COCKPIT_DECISION_INSTANCE' },
+      { path: 'drd/:id', component: DrdDetailComponent, title: 'PAGE_TITLE_COCKPIT_DRD_DETAIL' },
       { path: 'tasks', component: TaskDashboardComponent, title: 'PAGE_TITLE_COCKPIT_TASKS' },
       { path: 'batch', component: BatchPageComponent, title: 'PAGE_TITLE_COCKPIT_BATCH' },
       { path: 'deployments', component: DeploymentListComponent, title: 'PAGE_TITLE_COCKPIT_DEPLOYMENTS' }
