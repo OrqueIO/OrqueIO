@@ -184,7 +184,7 @@
             </goals>
             <phase>generate-resources</phase>
             <configuration>
-              <arguments>ci</arguments>
+              <arguments>ci --legacy-peer-deps</arguments>
             </configuration>
           </execution>
           <execution>
