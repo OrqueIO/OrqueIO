@@ -75,4 +75,36 @@ public class EnsureUtilTest {
       // happy path
     }
   }
+
+  @Test
+  public void ensureNotNullExceptionMessageContainsParameterName() {
+    try {
+      EnsureUtil.ensureNotNull("myParam", null);
+      fail("Expected: IllegalArgumentException");
+    } catch (IllegalArgumentException e) {
+      assertThat(e.getMessage()).contains("myParam");
+    }
+  }
+
+  @Test
+  public void ensureParameterInstanceOfSupertype() {
+    Object string = "string";
+
+    try {
+      CharSequence result = EnsureUtil.ensureParamInstanceOf("string", string, CharSequence.class);
+      assertThat(result).isInstanceOf(CharSequence.class);
+    } catch (IllegalArgumentException e) {
+      fail("Not expected the following exception: ", e);
+    }
+  }
+
+  @Test
+  public void ensureNotNullWithDifferentTypes() {
+    try {
+      EnsureUtil.ensureNotNull("intParam", 42);
+      EnsureUtil.ensureNotNull("listParam", java.util.Collections.emptyList());
+    } catch (IllegalArgumentException e) {
+      fail("Not expected the following exception: ", e);
+    }
+  }
 }
