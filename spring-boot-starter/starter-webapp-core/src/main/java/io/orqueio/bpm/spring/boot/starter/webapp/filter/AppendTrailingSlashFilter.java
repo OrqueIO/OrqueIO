@@ -37,7 +37,11 @@ public class AppendTrailingSlashFilter implements Filter {
   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
       throws IOException, ServletException {
     String requestURI = ((HttpServletRequest) request).getRequestURI();
-    ((HttpServletResponse) response).sendRedirect(requestURI + "/");
+      if (requestURI != null && requestURI.startsWith("/") && !requestURI.contains("://")) {
+          ((HttpServletResponse) response).sendRedirect(requestURI + "/");
+      } else {
+          chain.doFilter(request, response);
+      }
   }
 
 }
