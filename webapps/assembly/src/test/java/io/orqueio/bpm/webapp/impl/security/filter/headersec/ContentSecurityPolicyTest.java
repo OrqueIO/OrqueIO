@@ -75,7 +75,7 @@ public class ContentSecurityPolicyTest {
 
     // then
     assertThat(headerRule.getHeader(HEADER_NAME))
-      .isEqualTo("base-uri 'self'; default-src 'self' 'unsafe-inline'; img-src 'self' data:; block-all-mixed-content");
+            .isEqualTo("base-uri 'self'; default-src 'self' 'unsafe-inline'; img-src 'self' data:; block-all-mixed-content");
   }
 
 }

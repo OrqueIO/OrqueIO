@@ -7,14 +7,14 @@
 <packaging>jar</packaging>
   <name>Orque IO Platform - engine</name>
   <groupId>io.orqueio.bpm</groupId>
-  <version>1.0.7</version>
+  <version>1.0.8</version>
   <artifactId>orqueio-engine</artifactId>
 
   <parent>
     <groupId>io.orqueio.bpm</groupId>
     <artifactId>orqueio-database-settings</artifactId>
     <relativePath>../database</relativePath>
-    <version>1.0.7</version>
+    <version>1.0.8</version>
   </parent>
 
   <dependencyManagement>

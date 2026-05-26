@@ -53,6 +53,6 @@ public class ResourceLoadingProcessEnginesAppPathOrqueioTest {
 
     // then
     // the request should have been redirected to Tasklist
-    assertThat(con.getURL().toString()).isEqualTo("http://localhost:" + port + "/orqueio/app/tasklist/default/");
+    assertThat(con.getURL().toString()).isEqualTo("http://localhost:" + port + "/orqueio/app/tasklist/");
   }
 }
