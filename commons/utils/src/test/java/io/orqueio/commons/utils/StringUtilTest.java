@@ -86,4 +86,31 @@ public class StringUtilTest {
       "Caused by: java.lang.NullPointerException: This shouldn't have been empty");
   }
 
+  @Test
+  public void testIsExpressionWithWhitespaceOnly() {
+    assertThat(isExpression("   ")).isFalse();
+    assertThat(isExpression("\t")).isFalse();
+    assertThat(isExpression("\n")).isFalse();
+  }
+
+  @Test
+  public void testJoinWithSingleElement() {
+    assertThat(join(",", "only")).isEqualTo("only");
+  }
+
+  @Test
+  public void testJoinWithEmptyParts() {
+    assertThat(join(",")).isEqualTo("");
+  }
+
+  @Test
+  public void testSplitWithEmptyString() {
+    assertThat(split("", ",")).hasSize(1).containsExactly("");
+  }
+
+  @Test
+  public void testDefaultStringWithSpaces() {
+    assertThat(defaultString("  ")).isEqualTo("  ");
+  }
+
 }
