@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, DestroyRef, inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { RouterModule, ActivatedRoute } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
@@ -92,6 +92,10 @@ export class DeploymentListComponent implements OnInit, OnDestroy {
   private navMenuService = inject(NavMenuService);
   private cockpitService = inject(CockpitService);
   private cdr = inject(ChangeDetectorRef);
+  private route = inject(ActivatedRoute);
+
+  /** ID de déploiement passé via query param (?id=...) — appliqué comme filtre direct */
+  private deploymentIdFilter: string | null = null;
 
   // Icons
   faSpinner = faSpinner;
@@ -170,6 +174,13 @@ export class DeploymentListComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.navMenuService.setMenuItems(COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS);
     this.loadSavedPreferences();
+
+    // Lire le query param ?id= (deep-link depuis decision-detail / process-detail)
+    const idParam = this.route.snapshot.queryParamMap.get('id');
+    if (idParam) {
+      this.deploymentIdFilter = idParam;
+    }
+
     this.loadDeployments();
   }
 
@@ -244,6 +255,12 @@ export class DeploymentListComponent implements OnInit, OnDestroy {
       sortBy: this.sortConfig.column,
       sortOrder: this.sortConfig.direction
     };
+
+    // Filtre direct par ID (deep-link depuis decision-detail, process-detail, etc.)
+    if (this.deploymentIdFilter) {
+      params.id = this.deploymentIdFilter;
+      return params; // ID seul suffit — les autres filtres sont ignorés
+    }
 
     // Name filter
     if (this.filters.name.trim()) {

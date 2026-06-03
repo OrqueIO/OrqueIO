@@ -1,0 +1,326 @@
+/* =====================================================
+   DRD DETAIL - reprend le style de decision-detail
+   ===================================================== */
+
+:host {
+  --primary-color: #b5152b;
+  --accent-color: #155cb5;
+  --accent-hover: #104a8e;
+  --success-color: #27ae60;
+  --text-primary: #2c3e50;
+  --text-secondary: #6c757d;
+  --text-muted: #95a5a6;
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8f9fa;
+  --border-color: #e1e5e9;
+  --border-light: #f0f2f4;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --transition-fast: 0.15s ease;
+
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  max-height: 100%;
+  overflow: hidden;
+}
+
+.cockpit-layout {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  height: 100%;
+  min-height: 0;
+  max-height: 100%;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
+  overflow: hidden;
+}
+
+.cockpit-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.page-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* =====================================================
+   Layout
+   ===================================================== */
+
+.drd-page-layout {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* =====================================================
+   Sidebar — identique à decision-detail
+   ===================================================== */
+
+.drd-sidebar {
+  width: 280px;
+  min-width: 280px;
+  max-width: 280px;
+  background: var(--bg-primary);
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.drd-info-list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 14px;
+  margin: 0;
+}
+
+.drd-info-list::-webkit-scrollbar { width: 6px; }
+.drd-info-list::-webkit-scrollbar-track { background: transparent; }
+.drd-info-list::-webkit-scrollbar-thumb { background: #ddd; border-radius: 3px; }
+
+.drd-info-list dt {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin-top: 14px;
+  padding: 4px 0;
+  cursor: pointer;
+  transition: color var(--transition-fast);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.drd-info-list dt::before {
+  content: '';
+  width: 3px;
+  height: 12px;
+  background: var(--border-color);
+  border-radius: 2px;
+  transition: background var(--transition-fast);
+}
+
+.drd-info-list dt:first-child { margin-top: 0; }
+.drd-info-list dt:hover { color: var(--accent-color); }
+.drd-info-list dt:hover::before { background: var(--accent-color); }
+.drd-info-list dt.copyable { cursor: pointer; }
+
+.copy-icon {
+  font-size: 0.6rem;
+  opacity: 0.5;
+  transition: all var(--transition-fast);
+  margin-left: auto;
+}
+
+.drd-info-list dt.copyable:hover .copy-icon { opacity: 1; color: var(--accent-color); }
+.copy-icon.copied { color: var(--success-color); opacity: 1; }
+
+.drd-info-list dd {
+  font-size: 12px;
+  color: var(--text-primary);
+  margin: 5px 0 0 7px;
+  word-break: break-all;
+  padding: 6px 10px;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-sm);
+  border-left: 2px solid transparent;
+  transition: all var(--transition-fast);
+}
+
+.drd-info-list dd:hover {
+  background: rgba(21, 92, 181, 0.1);
+  border-left-color: var(--accent-color);
+}
+
+.drd-info-list dd.mono {
+  font-family: 'SF Mono', 'Consolas', monospace;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.null-value {
+  color: var(--text-muted);
+  font-style: italic;
+  font-size: 10px;
+}
+
+.link-value {
+  color: var(--accent-color);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.link-value:hover { text-decoration: underline; color: var(--accent-hover); }
+.link-value.mono { font-family: 'SF Mono', 'Consolas', monospace; font-size: 11px; }
+
+/* Member decisions list */
+.member-decisions {
+  padding: 14px;
+  border-top: 1px solid var(--border-light);
+  flex-shrink: 0;
+}
+
+.member-decisions__title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin: 0 0 10px 0;
+}
+
+.member-decisions__title fa-icon {
+  color: var(--accent-color);
+  font-size: 11px;
+}
+
+.member-decisions__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.member-link {
+  display: flex;
+  flex-direction: column;
+  padding: 6px 10px;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-sm);
+  border-left: 2px solid var(--border-light);
+  text-decoration: none;
+  transition: all var(--transition-fast);
+}
+
+.member-link:hover {
+  background: rgba(21, 92, 181, 0.08);
+  border-left-color: var(--accent-color);
+}
+
+.member-name {
+  font-size: 12px;
+  color: var(--accent-color);
+  font-weight: 500;
+}
+
+.member-key {
+  font-family: 'SF Mono', 'Consolas', monospace;
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-top: 1px;
+}
+
+/* =====================================================
+   DRD Viewer — identique à dmn-table-container
+   ===================================================== */
+
+.drd-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+  background: var(--bg-primary);
+}
+
+.drd-viewer-container {
+  position: relative;
+  flex: 1;
+  min-height: 150px;
+  background: linear-gradient(135deg, #fafbfc 0%, #f0f2f5 100%);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.drd-viewer-container app-dmn-viewer {
+  display: block;
+  width: 100%;
+  height: 100%;
+  flex: 1;
+}
+
+/* Fullscreen */
+.drd-viewer-container.fullscreen {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  width: 100vw; height: 100vh;
+  z-index: 9999;
+  border-radius: 0;
+  background: #fff;
+  animation: fullscreenIn 0.3s ease;
+}
+
+.fullscreen-backdrop {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: -1;
+}
+
+@keyframes fullscreenIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* =====================================================
+   States
+   ===================================================== */
+
+.loading-state,
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  color: var(--text-secondary);
+  gap: 0.75rem;
+  font-size: 0.875rem;
+  flex: 1;
+  text-align: center;
+}
+
+.loading-state fa-icon,
+.empty-state fa-icon { font-size: 2rem; color: #ddd; }
+.empty-state p { margin: 0; color: var(--text-muted); }
+
+/* =====================================================
+   Responsive
+   ===================================================== */
+
+@media (max-width: 992px) {
+  .drd-page-layout { flex-direction: column; }
+
+  .drd-sidebar {
+    width: 100%; min-width: 100%; max-width: 100%;
+    max-height: 280px;
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition-duration: 0.01ms !important; }
+}
