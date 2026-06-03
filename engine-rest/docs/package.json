@@ -1,13 +1,14 @@
 {
   "name": "docs",
-  "version": " 1.0.8",
+  "version": " 1.0.9",
   "private": true,
   "scripts": {
     "build": "node build"
   },
   "dependencies": {
-    "redoc": "2.5.0",
     "react": "19.1.0",
-    "react-dom": "19.1.0"
+    "react-dom": "19.1.0",
+    "redoc": "2.5.0",
+    "styled-components": "^6.4.2"
   }
 }

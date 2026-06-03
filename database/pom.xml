@@ -6,9 +6,9 @@
     <groupId>io.orqueio.bpm</groupId>
     <artifactId>orqueio-parent</artifactId>
     <relativePath>../parent</relativePath>
-    <version>1.0.8</version>
+    <version>1.0.9</version>
   </parent>
-  <version>1.0.8</version>
+  <version>1.0.9</version>
   <description>orqueio-database-settings</description>
   <groupId>io.orqueio.bpm</groupId>
   <artifactId>orqueio-database-settings</artifactId>
@@ -27,7 +27,7 @@
     <version.sqlserver>8.4.1.jre8</version.sqlserver>
     <version.db2-11.5>11.5.0.0</version.db2-11.5>
     <version.db2>${version.db2-11.5}</version.db2>
-    <version.postgresql>42.5.5</version.postgresql>
+    <version.postgresql>42.7.11</version.postgresql>
     <version.liquibase>4.8.0</version.liquibase>
 
     <!-- needed for sql script and backward compatibility checks -->

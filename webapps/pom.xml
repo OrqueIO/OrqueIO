@@ -6,13 +6,13 @@
   <parent>
     <groupId>io.orqueio.bpm</groupId>
     <artifactId>orqueio-database-settings</artifactId>
-    <version>1.0.8</version>
+    <version>1.0.9</version>
     <relativePath>../database</relativePath>
   </parent>
   <description>orqueio-webapp-root</description>
   <artifactId>orqueio-webapp-root</artifactId>
   <groupId>io.orqueio.bpm.webapp</groupId>
-  <version>1.0.8</version>
+  <version>1.0.9</version>
   <packaging>pom</packaging>
 
 
@@ -184,7 +184,7 @@
             </goals>
             <phase>generate-resources</phase>
             <configuration>
-              <arguments>ci</arguments>
+              <arguments>ci --legacy-peer-deps</arguments>
             </configuration>
           </execution>
           <execution>
