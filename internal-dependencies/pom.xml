@@ -250,9 +250,9 @@
       </dependency>
 
       <dependency>
-        <groupId>org.jboss.spec.javax.servlet</groupId>
-        <artifactId>jboss-servlet-api_3.0_spec</artifactId>
-        <version>1.0.2.Final</version>
+        <groupId>org.apache.tomcat</groupId>
+        <artifactId>tomcat-servlet-api</artifactId>
+        <version>9.0.118</version>
       </dependency>
 
       <dependency>
