@@ -1,4 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
 <Context antiJARLocking="true" antiResourceLocking="true">
-
+  <!-- Use parent-first classloader delegation to avoid Jersey classloader conflicts with Tomcat 9 -->
+  <Loader delegate="true" />
 </Context>
