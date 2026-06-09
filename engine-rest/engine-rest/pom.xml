@@ -75,10 +75,11 @@
     </dependency>
 
     <!-- provided deps -->
+    <!-- Use Tomcat's servlet API to avoid classloader conflicts in tests -->
     <dependency>
-      <groupId>org.jboss.spec.javax.servlet</groupId>
-      <artifactId>jboss-servlet-api_3.0_spec</artifactId>
-      <version>1.0.2.Final</version>
+      <groupId>org.apache.tomcat</groupId>
+      <artifactId>tomcat-servlet-api</artifactId>
+      <version>${version.tomcat}</version>
       <scope>provided</scope>
     </dependency>
 
@@ -164,7 +165,7 @@
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-      <version>5.10.0</version>
+      <version>5.14.2</version>
       <scope>test</scope>
       <exclusions>
         <exclusion>

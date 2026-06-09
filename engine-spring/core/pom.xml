@@ -72,9 +72,11 @@
     </dependency>
     
     <!-- servlet API -->
+    <!-- Use Tomcat's servlet API to avoid classloader conflicts -->
     <dependency>
-      <groupId>org.jboss.spec.javax.servlet</groupId>
-      <artifactId>jboss-servlet-api_3.0_spec</artifactId>
+      <groupId>org.apache.tomcat</groupId>
+      <artifactId>tomcat-servlet-api</artifactId>
+      <version>9.0.118</version>
       <scope>provided</scope>
     </dependency>
     
