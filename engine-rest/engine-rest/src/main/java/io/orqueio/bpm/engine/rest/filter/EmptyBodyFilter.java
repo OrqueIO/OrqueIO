@@ -40,9 +40,30 @@ public class EmptyBodyFilter extends AbstractEmptyBodyFilter {
 
           final InputStream inputStream = getRequestBody(isBodyEmpty, requestBody);
 
+          boolean finished = false;
+
+          @Override
+          public boolean isFinished() {
+             return this.finished;
+          }
+
+          @Override
+          public boolean isReady() {
+            return true;
+          }
+
+          @Override
+          public void setReadListener(final ReadListener readListener) {
+            throw new UnsupportedOperationException();
+          }
+
           @Override
           public int read() throws IOException {
-            return inputStream.read();
+            int data = inputStream.read();
+              if (data == -1) {
+                  this.finished = true;
+              }
+              return data;
           }
 
           @Override
