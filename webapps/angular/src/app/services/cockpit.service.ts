@@ -1083,6 +1083,21 @@ export class CockpitService {
     return this.processInstanceService.getSuperProcessInstance(processInstanceId);
   }
 
+  /**
+   * Get called process instances filtered by call activity ID
+   */
+  getCalledProcessInstancesByActivity(
+    superProcessInstanceId: string,
+    activityId: string,
+    maxResults = 10
+  ): Observable<ProcessInstance[]> {
+    return this.processInstanceService.getCalledProcessInstancesByActivity(
+      superProcessInstanceId,
+      activityId,
+      maxResults
+    );
+  }
+
   // ============================================
   // External Tasks (delegated to ProcessInstanceService)
   // ============================================

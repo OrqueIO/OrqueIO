@@ -27,7 +27,9 @@ import {
   faChevronDown,
   faExpand,
   faCompress,
-  faSitemap
+  faSitemap,
+  faArrowUp,
+  faShare
 } from '@fortawesome/free-solid-svg-icons';
 import { forkJoin } from 'rxjs';
 
@@ -120,6 +122,8 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
   faExpand = faExpand;
   faCompress = faCompress;
   faSitemap = faSitemap;
+  faArrowUp = faArrowUp;
+  faShare = faShare;
 
   processId = '';
   loading = true;
@@ -569,6 +573,54 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
 
   onDiagramElementHover(_element: BpmnElement | null): void {
     // Could add hover feedback here
+  }
+
+  // Call Activity Navigation
+  navigateToCalledInstance(callActivityId: string): void {
+    if (!this.processInstance) return;
+
+    console.log('Call Activity clicked:', callActivityId);
+    console.log('All called instances:', this.calledInstances);
+
+    // In Camunda, when a Call Activity creates a child process instance,
+    // we need to query the historic activity instances to find which Call Activity
+    // created which child instance. The ProcessInstance itself doesn't contain the activityId.
+    // For now, if there's only one called instance, navigate to it.
+    // Otherwise, we need to query the backend for the correct mapping.
+
+    if (this.calledInstances.length === 0) {
+      alert('No called process instance found. This process has not called any sub-processes.');
+      return;
+    }
+
+    if (this.calledInstances.length === 1) {
+      // Only one called instance, navigate to it
+      const targetInstance = this.calledInstances[0];
+      this.router.navigate(['/cockpit/processes/instance', targetInstance.id]);
+      return;
+    }
+
+    // Multiple called instances - need to query backend to find the correct one
+    // Use the new API method that filters by activityId
+    this.cockpitService.getCalledProcessInstancesByActivity(
+      this.processId,
+      callActivityId,
+      10
+    ).pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (instances) => {
+          console.log('Instances matching activity:', instances);
+          if (instances.length === 0) {
+            alert('No called process instance found for this call activity. The activity may not have been executed yet, or the instance may have been deleted.');
+            return;
+          }
+          // Navigate to the first matching instance
+          this.router.navigate(['/cockpit/processes/instance', instances[0].id]);
+        },
+        error: () => {
+          alert('Error loading called process instance. Please try again.');
+        }
+      });
   }
 
   // Actions
