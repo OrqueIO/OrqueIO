@@ -654,7 +654,7 @@ export class ProcessInstanceService {
   ): Observable<ProcessInstance[]> {
     // Query historic activity instances to find the Call Activity execution
     // that matches this activityId and get its calledProcessInstanceId
-    return this.http.get<any[]>(`${this.historyUrl}/activity-instance`, {
+    return this.http.get<Activity[]>(`${this.historyUrl}/activity-instance`, {
       params: {
         processInstanceId: superProcessInstanceId,
         activityId,
@@ -662,7 +662,7 @@ export class ProcessInstanceService {
         maxResults: maxResults.toString()
       }
     }).pipe(
-      map((activityInstances: any[]) => {
+      map((activityInstances: Activity[]) => {
         // Extract the calledProcessInstanceId from each Call Activity execution
         const calledInstanceIds = activityInstances
           .filter(ai => ai.calledProcessInstanceId)
@@ -678,6 +678,31 @@ export class ProcessInstanceService {
         return calledInstanceIds.map(id => ({ id } as ProcessInstance));
       }),
       catchError(() => of([]))
+    );
+  }
+
+  /**
+   * Get Call Activity to called process instance ID mapping for a process instance
+   * Returns a map of activityId -> calledProcessInstanceId
+   */
+  getCallActivityMapping(processInstanceId: string): Observable<Map<string, string>> {
+    return this.http.get<Activity[]>(`${this.historyUrl}/activity-instance`, {
+      params: {
+        processInstanceId,
+        maxResults: '1000' // Limit to prevent unbound queries
+      }
+    }).pipe(
+      map((activities: Activity[]) => {
+        const mapping = new Map<string, string>();
+        activities.forEach(activity => {
+          // Only include activities that have called a process instance
+          if (activity.activityId && activity.calledProcessInstanceId) {
+            mapping.set(activity.activityId, activity.calledProcessInstanceId);
+          }
+        });
+        return mapping;
+      }),
+      catchError(() => of(new Map()))
     );
   }
 
