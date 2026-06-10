@@ -184,8 +184,11 @@
             {{ 'cockpit.processDetail.superProcess' | translate }}
           </dt>
           <dd *ngIf="superProcessInstance" class="super-process-instance-id">
-            <a [routerLink]="['/cockpit/processes/instance', superProcessInstance.id]">
-              {{ superProcessInstance.id }}
+            <a [routerLink]="['/cockpit/processes/instance', superProcessInstance.id]"
+               class="parent-process-link"
+               [title]="'cockpit.processDetail.calledBy' | translate">
+              <fa-icon [icon]="faArrowUp" class="parent-icon"></fa-icon>
+              {{ 'cockpit.processDetail.calledBy' | translate }}: {{ superProcessInstance.id }}
             </a>
           </dd>
           <dt *ngIf="!superProcessInstance">
@@ -266,9 +269,11 @@
             [highlightedActivities]="selectedActivityIds"
             [showExpandButton]="true"
             [isExpanded]="diagramMaximized"
+            [enableCallActivityNavigation]="true"
             (elementClick)="handleBpmnElementSelection($event)"
             (elementHover)="onDiagramElementHover($event)"
             (expandToggle)="toggleDiagramMaximize()"
+            (callActivityClick)="navigateToCalledInstance($event)"
           ></app-bpmn-viewer>
 
           <div class="empty-diagram" *ngIf="!loadingDiagram && !bpmnXml">
