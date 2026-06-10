@@ -54,6 +54,7 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
   @Input() showFocusButton = false;
   @Input() focusElementId: string | null | undefined = null;
   @Input() enableCallActivityNavigation = false;
+  @Input() callActivityIdsWithInstances: Set<string> = new Set();
 
   @Output() elementClick = new EventEmitter<BpmnElement>();
   @Output() elementHover = new EventEmitter<BpmnElement | null>();
@@ -113,6 +114,9 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
       } else {
         this.clearCallActivityOverlays();
       }
+    }
+    if (changes['callActivityIdsWithInstances'] && this.isViewerReady && this.currentXml && this.enableCallActivityNavigation) {
+      this.addCallActivityOverlays();
     }
   }
 
@@ -420,6 +424,9 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
 
     elementRegistry.forEach((element: any) => {
       if (element.type !== 'bpmn:CallActivity') return;
+
+      // Only show overlay if this Call Activity has called instances
+      if (!this.callActivityIdsWithInstances.has(element.id)) return;
 
       const btn = document.createElement('button');
       btn.className = 'bjs-drilldown bpmn-call-activity-overlay';
