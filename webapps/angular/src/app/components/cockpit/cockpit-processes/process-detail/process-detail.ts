@@ -28,8 +28,7 @@ import {
   faExpand,
   faCompress,
   faSitemap,
-  faArrowUp,
-  faShare
+  faArrowUp
 } from '@fortawesome/free-solid-svg-icons';
 import { forkJoin } from 'rxjs';
 
@@ -123,7 +122,6 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
   faCompress = faCompress;
   faSitemap = faSitemap;
   faArrowUp = faArrowUp;
-  faShare = faShare;
 
   processId = '';
   loading = true;
@@ -579,9 +577,6 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
   navigateToCalledInstance(callActivityId: string): void {
     if (!this.processInstance) return;
 
-    console.log('Call Activity clicked:', callActivityId);
-    console.log('All called instances:', this.calledInstances);
-
     // In Camunda, when a Call Activity creates a child process instance,
     // we need to query the historic activity instances to find which Call Activity
     // created which child instance. The ProcessInstance itself doesn't contain the activityId.
@@ -609,7 +604,6 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
     ).pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (instances) => {
-          console.log('Instances matching activity:', instances);
           if (instances.length === 0) {
             alert('No called process instance found for this call activity. The activity may not have been executed yet, or the instance may have been deleted.');
             return;
