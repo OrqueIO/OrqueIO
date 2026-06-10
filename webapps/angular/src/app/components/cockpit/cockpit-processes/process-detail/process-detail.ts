@@ -142,12 +142,23 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
   userTasks: UserTask[] = [];
   externalTasks: ExternalTask[] = [];
   calledInstances: ProcessInstance[] = [];
-  callActivityMapping: Map<string, string> = new Map(); // activityId -> calledProcessInstanceId
+  callActivityMapping: Map<string, string[]> = new Map(); // activityId -> calledProcessInstanceIds[]
+  filteredCallActivityId: string | null = null;
   bpmnXml: string | null = null;
 
   // Computed property for Call Activities with instances
   get callActivityIdsWithInstances(): Set<string> {
     return new Set(this.callActivityMapping.keys());
+  }
+
+  // Filtered called instances for display
+  get displayedCalledInstances(): ProcessInstance[] {
+    if (!this.filteredCallActivityId) {
+      return this.calledInstances;
+    }
+    return this.calledInstances.filter(
+      instance => instance.activityId === this.filteredCallActivityId
+    );
   }
   activityTree: ActivityInstanceTree | null = null;
   activityStatistics: ActivityStatistics[] = [];
@@ -593,11 +604,25 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
 
   // Call Activity Navigation
   navigateToCalledInstance(callActivityId: string): void {
-    // The icon only appears if the Call Activity has a called instance in the mapping
-    const calledInstanceId = this.callActivityMapping.get(callActivityId);
+    // The icon only appears if the Call Activity has called instances in the mapping
+    const calledInstanceIds = this.callActivityMapping.get(callActivityId);
 
-    if (calledInstanceId) {
-      this.router.navigate(['/cockpit/processes/instance', calledInstanceId]);
+    if (!calledInstanceIds || calledInstanceIds.length === 0) return;
+
+    if (calledInstanceIds.length === 1) {
+      // Single instance: navigate directly
+      this.router.navigate(['/cockpit/processes/instance', calledInstanceIds[0]]);
+    } else {
+      // Multiple instances: show filtered called instances tab
+      this.filteredCallActivityId = callActivityId;
+      this.activeTab = 'calledInstances';
+      this.cdr.markForCheck();
+
+      // Scroll to tabs section
+      setTimeout(() => {
+        const tabsElement = document.querySelector('.ctn-content-bottom');
+        tabsElement?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 100);
     }
   }
 
