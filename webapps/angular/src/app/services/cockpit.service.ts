@@ -1098,6 +1098,13 @@ export class CockpitService {
     );
   }
 
+  /**
+   * Get Call Activity to called process instance ID mapping
+   */
+  getCallActivityMapping(processInstanceId: string): Observable<Map<string, string>> {
+    return this.processInstanceService.getCallActivityMapping(processInstanceId);
+  }
+
   // ============================================
   // External Tasks (delegated to ProcessInstanceService)
   // ============================================
