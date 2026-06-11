@@ -156,9 +156,8 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
     if (!this.filteredCallActivityId) {
       return this.calledInstances;
     }
-    return this.calledInstances.filter(
-      instance => instance.activityId === this.filteredCallActivityId
-    );
+    const filteredIds = new Set(this.callActivityMapping.get(this.filteredCallActivityId) ?? []);
+    return this.calledInstances.filter(instance => filteredIds.has(instance.id));
   }
   activityTree: ActivityInstanceTree | null = null;
   activityStatistics: ActivityStatistics[] = [];
@@ -250,7 +249,7 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
     this.tabs = [
       { id: 'variables', labelKey: 'cockpit.processDetail.tabs.variables', badgeCount: () => this.variables.length },
       { id: 'incidents', labelKey: 'cockpit.processDetail.tabs.incidents', badgeCount: () => this.incidents.length },
-      { id: 'calledInstances', labelKey: 'cockpit.processDetail.tabs.calledInstances', badgeCount: () => this.calledInstances.length },
+      { id: 'calledInstances', labelKey: 'cockpit.processDetail.tabs.calledInstances', badgeCount: () => this.displayedCalledInstances.length },
       { id: 'userTasks', labelKey: 'cockpit.processDetail.tabs.userTasks', badgeCount: () => this.userTasks.length },
       { id: 'jobs', labelKey: 'cockpit.processDetail.tabs.jobs', badgeCount: () => this.jobs.length },
       { id: 'externalTasks', labelKey: 'cockpit.processDetail.tabs.externalTasks', badgeCount: () => this.externalTasks.length }
