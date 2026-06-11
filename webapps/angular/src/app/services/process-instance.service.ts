@@ -654,7 +654,7 @@ export class ProcessInstanceService {
   ): Observable<ProcessInstance[]> {
     // Query historic activity instances to find the Call Activity execution
     // that matches this activityId and get its calledProcessInstanceId
-    return this.http.get<any[]>(`${this.historyUrl}/activity-instance`, {
+    return this.http.get<Activity[]>(`${this.historyUrl}/activity-instance`, {
       params: {
         processInstanceId: superProcessInstanceId,
         activityId,
