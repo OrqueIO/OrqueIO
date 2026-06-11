@@ -270,6 +270,7 @@
             [showExpandButton]="true"
             [isExpanded]="diagramMaximized"
             [enableCallActivityNavigation]="true"
+            [callActivityIdsWithInstances]="callActivityIdsWithInstances"
             (elementClick)="handleBpmnElementSelection($event)"
             (elementHover)="onDiagramElementHover($event)"
             (expandToggle)="toggleDiagramMaximize()"
