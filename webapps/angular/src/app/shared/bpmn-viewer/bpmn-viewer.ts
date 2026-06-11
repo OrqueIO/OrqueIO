@@ -438,7 +438,7 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
         });
         this.callActivityOverlayIds.push(id);
       } catch (e) {
-        console.warn('Could not add overlay to', element.id, e);
+        console.warn('Could not add Call Activity overlay to', element.id, e);
       }
     });
   }
