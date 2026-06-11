@@ -575,46 +575,11 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
 
   // Call Activity Navigation
   navigateToCalledInstance(callActivityId: string): void {
-    if (!this.processInstance) return;
-
-    // In Camunda, when a Call Activity creates a child process instance,
-    // we need to query the historic activity instances to find which Call Activity
-    // created which child instance. The ProcessInstance itself doesn't contain the activityId.
-    // For now, if there's only one called instance, navigate to it.
-    // Otherwise, we need to query the backend for the correct mapping.
-
-    if (this.calledInstances.length === 0) {
-      alert('No called process instance found. This process has not called any sub-processes.');
-      return;
+    // The icon only appears if the Call Activity has a called instance in the mapping
+    const calledInstanceId = this.callActivityMapping.get(callActivityId);
+    if (calledInstanceId) {
+      this.router.navigate(['/cockpit/processes/instance', calledInstanceId]);
     }
-
-    if (this.calledInstances.length === 1) {
-      // Only one called instance, navigate to it
-      const targetInstance = this.calledInstances[0];
-      this.router.navigate(['/cockpit/processes/instance', targetInstance.id]);
-      return;
-    }
-
-    // Multiple called instances - need to query backend to find the correct one
-    // Use the new API method that filters by activityId
-    this.cockpitService.getCalledProcessInstancesByActivity(
-      this.processId,
-      callActivityId,
-      10
-    ).pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (instances) => {
-          if (instances.length === 0) {
-            alert('No called process instance found for this call activity. The activity may not have been executed yet, or the instance may have been deleted.');
-            return;
-          }
-          // Navigate to the first matching instance
-          this.router.navigate(['/cockpit/processes/instance', instances[0].id]);
-        },
-        error: () => {
-          alert('Error loading called process instance. Please try again.');
-        }
-      });
   }
 
   // Actions
