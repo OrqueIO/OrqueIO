@@ -323,6 +323,7 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
           }
 
           // Load called instances and Call Activity mapping
+          this.loadCalledInstances();
           this.loadCallActivityMapping();
         },
         error: () => {
