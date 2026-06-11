@@ -416,6 +416,7 @@
 
   "cockpit.processDetail.tenant": "Tenant",
   "cockpit.processDetail.superProcess": "Parent Process",
+  "cockpit.processDetail.calledBy": "Called by",
   "cockpit.processDetail.startedBy": "Started By",
   "cockpit.processDetail.expand": "Expand",
   "cockpit.processDetail.collapse": "Collapse",

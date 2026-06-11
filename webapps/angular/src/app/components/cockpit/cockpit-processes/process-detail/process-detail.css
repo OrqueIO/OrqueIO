@@ -503,6 +503,30 @@
   color: var(--accent-hover);
 }
 
+/* Parent Process Link (Call Activity Navigation) */
+.parent-process-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 500;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  background: rgba(21, 92, 181, 0.08);
+  transition: all var(--transition-fast);
+}
+
+.parent-process-link:hover {
+  background: var(--accent-color);
+  color: #fff !important;
+  text-decoration: none;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(21, 92, 181, 0.2);
+}
+
+.parent-icon {
+  font-size: 12px;
+}
+
 .null-value {
   color: var(--text-muted);
   font-style: italic;
