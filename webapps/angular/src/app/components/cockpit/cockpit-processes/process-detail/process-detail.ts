@@ -142,7 +142,13 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
   userTasks: UserTask[] = [];
   externalTasks: ExternalTask[] = [];
   calledInstances: ProcessInstance[] = [];
+  callActivityMapping: Map<string, string> = new Map();
   bpmnXml: string | null = null;
+
+  // Computed property for Call Activities with instances
+  get callActivityIdsWithInstances(): Set<string> {
+    return new Set(this.callActivityMapping.keys());
+  }
   activityTree: ActivityInstanceTree | null = null;
   activityStatistics: ActivityStatistics[] = [];
 
@@ -291,8 +297,8 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
             this.loadSuperProcessInstance(instance.superProcessInstanceId);
           }
 
-          // Load called instances
-          this.loadCalledInstances();
+          // Load called instances and Call Activity mapping
+          this.loadCallActivityMapping();
         },
         error: () => {
           this.loading = false;
@@ -469,6 +475,18 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (instances) => {
           this.calledInstances = instances;
+          this.cdr.markForCheck();
+        }
+      });
+  }
+
+
+  private loadCallActivityMapping(): void {
+    this.cockpitService.getCallActivityMapping(this.processId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (mapping) => {
+          this.callActivityMapping = mapping;
           this.cdr.markForCheck();
         }
       });
