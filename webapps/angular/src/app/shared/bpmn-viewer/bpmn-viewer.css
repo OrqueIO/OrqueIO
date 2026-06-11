@@ -137,12 +137,12 @@
 /* BPMN Element Markers & Highlights */
 
 /* Running activity marker (green animated border) */
-:host ::ng-deep .running .djs-visual > :nth-child(1) {
+.running .djs-visual > :nth-child(1) {
   stroke: #22c55e !important;
   stroke-width: 3px !important;
 }
 
-:host ::ng-deep .running .djs-outline {
+.running .djs-outline {
   stroke: #22c55e !important;
   stroke-width: 2px !important;
   stroke-dasharray: 4 2;
@@ -156,18 +156,18 @@
 }
 
 /* Highlighted activity (blue border) */
-:host ::ng-deep .highlight .djs-visual > :nth-child(1) {
+.highlight .djs-visual > :nth-child(1) {
   stroke: #3b82f6 !important;
   stroke-width: 2px !important;
 }
 
 /* Selected activity */
-:host ::ng-deep .selected .djs-visual > :nth-child(1) {
+.selected .djs-visual > :nth-child(1) {
   stroke: #1e40af !important;
   stroke-width: 2px !important;
 }
 
-:host ::ng-deep .selected .djs-outline {
+.selected .djs-outline {
   visibility: visible !important;
   stroke: #3b82f6 !important;
   stroke-width: 1.5px !important;
@@ -178,7 +178,7 @@
 
 /* Activity Badges (Overlays) */
 
-:host ::ng-deep .bpmn-badge {
+.bpmn-badge {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -194,33 +194,56 @@
   cursor: default;
 }
 
-:host ::ng-deep .bpmn-badge span {
+.bpmn-badge span {
   line-height: 1;
 }
 
 /* Instance count badge (blue) */
-:host ::ng-deep .bpmn-badge-instances {
+.bpmn-badge-instances {
   background: #3b82f6;
 }
 
 /* Incident count badge (red) */
-:host ::ng-deep .bpmn-badge-incidents {
+.bpmn-badge-incidents {
   background: #ef4444;
+}
+
+/* Call Activity Navigation Overlay - Using bpmn-js drilldown style */
+.bpmn-call-activity-overlay {
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  margin-left: -20px;
+  cursor: pointer;
+  border: none;
+  border-radius: 2px;
+  outline: none;
+  fill: white;
+  background-color: hsl(205, 100%, 50%);
+  pointer-events: auto;
+}
+
+.bpmn-call-activity-overlay:hover {
+  background-color: hsl(205, 100%, 45%);
+}
+
+.bpmn-call-activity-overlay svg {
+  display: block;
 }
 
 /* Hide BPMN.js default elements */
 
-:host ::ng-deep .djs-palette {
+.djs-palette {
   display: none;
 }
 
-:host ::ng-deep .bjs-powered-by {
+.bjs-powered-by {
   display: none;
 }
 
 /* Hover state for clickable elements */
 
-:host ::ng-deep .djs-element:not(.djs-connection):hover .djs-outline {
+.djs-element:not(.djs-connection):hover .djs-outline {
   visibility: visible !important;
   stroke: #667eea !important;
   stroke-width: 1px !important;

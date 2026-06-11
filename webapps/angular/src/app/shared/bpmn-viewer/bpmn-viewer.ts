@@ -11,6 +11,7 @@ import {
   AfterViewInit,
   HostListener,
   ChangeDetectorRef,
+  ViewEncapsulation,
   inject
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -35,7 +36,8 @@ export interface BpmnElement {
   standalone: true,
   imports: [CommonModule],
   templateUrl: './bpmn-viewer.html',
-  styleUrls: ['./bpmn-viewer.css']
+  styleUrls: ['./bpmn-viewer.css'],
+  encapsulation: ViewEncapsulation.None
 })
 export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy {
   private cdr = inject(ChangeDetectorRef);
@@ -51,6 +53,8 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
   @Input() isExpanded = false;
   @Input() showFocusButton = false;
   @Input() focusElementId: string | null | undefined = null;
+  @Input() enableCallActivityNavigation = false;
+  @Input() callActivityIdsWithInstances: Set<string> = new Set();
 
   @Output() elementClick = new EventEmitter<BpmnElement>();
   @Output() elementHover = new EventEmitter<BpmnElement | null>();
@@ -58,13 +62,15 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
   @Output() error = new EventEmitter<Error>();
   @Output() expandToggle = new EventEmitter<void>();
   @Output() focusClick = new EventEmitter<void>();
+  @Output() callActivityClick = new EventEmitter<string>();
 
   private viewer: any = null;
   private overlays: any = null;
   private isViewerReady = false;
   private badgeOverlayIds: Map<string, string[]> = new Map();
-  private currentXml: string | null = null; 
-  private needsZoomFit = false; 
+  private callActivityOverlayIds: string[] = [];
+  private currentXml: string | null = null;
+  private needsZoomFit = false;
   private resizeTimeout: ReturnType<typeof setTimeout> | null = null;
 
   loading = true;
@@ -102,6 +108,16 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
     if (changes['selectedActivity'] && this.isViewerReady && this.currentXml) {
       this.updateSelection();
     }
+    if (changes['enableCallActivityNavigation'] && this.isViewerReady && this.currentXml) {
+      if (this.enableCallActivityNavigation) {
+        this.addCallActivityOverlays();
+      } else {
+        this.clearCallActivityOverlays();
+      }
+    }
+    if (changes['callActivityIdsWithInstances'] && this.isViewerReady && this.currentXml && this.enableCallActivityNavigation) {
+      this.addCallActivityOverlays();
+    }
   }
 
   ngOnDestroy(): void {
@@ -125,6 +141,17 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
 
     // Register event handlers
     const eventBus = this.viewer.get('eventBus');
+
+    // Wire import.done to apply all visual updates AFTER diagram is loaded
+    eventBus.on('import.done', () => {
+      this.updateHighlights();
+      this.updateRunningMarkers();
+      this.updateBadges();
+      this.updateSelection();
+      if (this.enableCallActivityNavigation) {
+        this.addCallActivityOverlays();
+      }
+    });
 
     eventBus.on('element.click', (event: any) => {
       const element = event.element;
@@ -205,7 +232,7 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
 
     this.loading = true;
     this.errorMessage = null;
-    this.clearAllOverlays();
+    this.cdr.detectChanges();
 
     try {
       const result = await this.viewer.importXML(this.xml);
@@ -217,22 +244,18 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
         console.warn('BPMN import warnings:', result.warnings);
       }
 
-      // Fit diagram to viewport - use requestAnimationFrame to ensure DOM is fully rendered
+      // Fit diagram to viewport
       this.needsZoomFit = true;
       this.scheduleFitToViewport();
-
-      // Apply all visual states
-      this.updateHighlights();
-      this.updateRunningMarkers();
-      this.updateBadges();
-      this.updateSelection();
 
       this.loading = false;
       this.cdr.detectChanges();
       this.viewerReady.emit();
+
+      // Visual updates are now triggered by import.done event
     } catch (err: any) {
       this.loading = false;
-      this.currentXml = null; // Reset on error
+      this.currentXml = null;
       this.errorMessage = err.message || 'Failed to load BPMN diagram';
       this.cdr.detectChanges();
       this.error.emit(err);
@@ -306,7 +329,7 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
     }
   }
 
-  private clearAllOverlays(): void {
+  private clearBadgeOverlays(): void {
     this.badgeOverlayIds.forEach((ids) => {
       ids.forEach(id => {
         try {
@@ -319,11 +342,27 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
     this.badgeOverlayIds.clear();
   }
 
+  private clearCallActivityOverlays(): void {
+    this.callActivityOverlayIds.forEach(id => {
+      try {
+        this.overlays?.remove(id);
+      } catch (e) {
+        // Overlay might already be removed
+      }
+    });
+    this.callActivityOverlayIds = [];
+  }
+
+  private clearAllOverlays(): void {
+    this.clearBadgeOverlays();
+    this.clearCallActivityOverlays();
+  }
+
   private updateBadges(): void {
     if (!this.viewer || !this.overlays) return;
 
-    // Clear existing badges
-    this.clearAllOverlays();
+    // Clear existing badges only (not Call Activity overlays)
+    this.clearBadgeOverlays();
 
     const elementRegistry = this.viewer.get('elementRegistry');
 
@@ -372,6 +411,41 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
 
       if (overlayIds.length > 0) {
         this.badgeOverlayIds.set(badge.activityId, overlayIds);
+      }
+    });
+  }
+
+  private addCallActivityOverlays(): void {
+    if (!this.viewer || !this.overlays || !this.enableCallActivityNavigation) return;
+
+    this.clearCallActivityOverlays();
+
+    const elementRegistry = this.viewer.get('elementRegistry');
+
+    elementRegistry.forEach((element: any) => {
+      if (element.type !== 'bpmn:CallActivity') return;
+
+      // Only show overlay if this Call Activity has called instances
+      if (!this.callActivityIdsWithInstances.has(element.id)) return;
+
+      const btn = document.createElement('button');
+      btn.className = 'bjs-drilldown bpmn-call-activity-overlay';
+      btn.title = 'Navigate to called process instance';
+      btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4.81801948,3.50735931 L10.4996894,9.1896894 L10.5,4 L12,4 L12,12 L4,12 L4,10.5 L9.6896894,10.4996894 L3.75735931,4.56801948 C3.46446609,4.27512627 3.46446609,3.80025253 3.75735931,3.50735931 C4.05025253,3.21446609 4.52512627,3.21446609 4.81801948,3.50735931 Z"/></svg>';
+
+      btn.addEventListener('click', (e: Event) => {
+        e.stopPropagation();
+        this.callActivityClick.emit(element.id);
+      });
+
+      try {
+        const id = this.overlays.add(element.id, {
+          position: { bottom: -7, right: -8 },
+          html: btn
+        });
+        this.callActivityOverlayIds.push(id);
+      } catch (e) {
+        console.warn('Could not add Call Activity overlay to', element.id, e);
       }
     });
   }
