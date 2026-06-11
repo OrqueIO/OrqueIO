@@ -682,10 +682,11 @@ export class ProcessInstanceService {
   }
 
   /**
-   * Get Call Activity to called process instance ID mapping for a process instance
-   * Returns a map of activityId -> calledProcessInstanceId
+   * Get Call Activity to called process instance IDs mapping for a process instance
+   * Returns a map of activityId -> calledProcessInstanceIds[]
+   * Supports Call Activities that call multiple instances (e.g., in loops, parallel flows)
    */
-  getCallActivityMapping(processInstanceId: string): Observable<Map<string, string>> {
+  getCallActivityMapping(processInstanceId: string): Observable<Map<string, string[]>> {
     return this.http.get<Activity[]>(`${this.historyUrl}/activity-instance`, {
       params: {
         processInstanceId,
@@ -693,11 +694,13 @@ export class ProcessInstanceService {
       }
     }).pipe(
       map((activities: Activity[]) => {
-        const mapping = new Map<string, string>();
+        const mapping = new Map<string, string[]>();
         activities.forEach(activity => {
           // Only include activities that have called a process instance
           if (activity.activityId && activity.calledProcessInstanceId) {
-            mapping.set(activity.activityId, activity.calledProcessInstanceId);
+            const existing = mapping.get(activity.activityId) || [];
+            existing.push(activity.calledProcessInstanceId);
+            mapping.set(activity.activityId, existing);
           }
         });
         return mapping;

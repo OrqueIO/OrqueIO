@@ -507,8 +507,18 @@
 
           <!-- Called Process Instances Tab -->
           <div class="tab-pane" *ngIf="activeTab === 'calledInstances'">
-            <div class="table-scroll-wrapper">
-              <table class="cam-table" *ngIf="calledInstances.length > 0">
+              <!-- Filter indicator -->
+              <div class="filter-indicator" *ngIf="filteredCallActivityId">
+              <span class="filter-text">
+                Filtered by Call Activity: <strong>{{ filteredCallActivityId }}</strong>
+              </span>
+                  <button class="btn btn-xs btn-default" (click)="filteredCallActivityId = null">
+                      Clear filter
+                  </button>
+              </div>
+
+              <div class="table-scroll-wrapper">
+              <table class="cam-table" *ngIf="displayedCalledInstances.length > 0">
                 <thead>
                   <tr>
                     <th>{{ 'cockpit.processDetail.calledInstances.state' | translate }}</th>
@@ -519,7 +529,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let instance of calledInstances">
+                  <tr *ngFor="let instance of displayedCalledInstances">
                     <td class="instance-state">
                       <span class="state-indicator" [ngClass]="getStateClass(instance.state)">
                         <fa-icon [icon]="getStateIcon(instance.state)"></fa-icon>
@@ -543,8 +553,8 @@
                 </tbody>
               </table>
 
-              <div class="no-data" *ngIf="calledInstances.length === 0">
-                {{ 'cockpit.processDetail.noCalledInstances' | translate }}
+              <div class="no-data" *ngIf="displayedCalledInstances.length === 0">
+                {{ filteredCallActivityId ? 'No instances found for this Call Activity' : ('cockpit.processDetail.noCalledInstances' | translate) }}
               </div>
             </div>
           </div>

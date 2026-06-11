@@ -1099,9 +1099,9 @@ export class CockpitService {
   }
 
   /**
-   * Get Call Activity to called process instance ID mapping
+   * Get Call Activity to called process instance IDs mapping
    */
-  getCallActivityMapping(processInstanceId: string): Observable<Map<string, string>> {
+  getCallActivityMapping(processInstanceId: string): Observable<Map<string, string[]>> {
     return this.processInstanceService.getCallActivityMapping(processInstanceId);
   }
 
