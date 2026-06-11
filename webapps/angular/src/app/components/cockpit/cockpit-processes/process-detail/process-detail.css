@@ -697,7 +697,7 @@
   background: var(--bg-page, #f4f7fb);
   border-bottom: 1px solid var(--border-color, #dce6f5);
   box-shadow: 0 1px 0 0 rgba(0, 102, 204, 0.06);
-  font-size: 0.775rem;
+  font-size: 0.8375rem;
   font-weight: 500;
   overflow: hidden;
 }
