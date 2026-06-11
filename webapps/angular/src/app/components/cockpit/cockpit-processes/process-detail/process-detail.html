@@ -254,6 +254,23 @@
            [class.collapsed]="diagramCollapsed"
            [class.maximized]="diagramMaximized">
 
+        <!-- Breadcrumb — visible only when navigated here via drilldown AND current process is a subprocess -->
+        <div class="process-breadcrumb"
+             *ngIf="fromProcess && processInstance?.superProcessInstanceId">
+          <fa-icon [icon]="faArrowUp" class="breadcrumb-up-icon"></fa-icon>
+          <a [routerLink]="['/cockpit/processes/instance', fromProcess.id]"
+             [queryParams]="{}"
+             class="breadcrumb-parent-name"
+             [title]="fromProcess.id">
+            {{ fromProcess.processDefinitionName || fromProcess.processDefinitionKey }}
+          </a>
+          <span class="breadcrumb-separator">›</span>
+          <span class="breadcrumb-current"
+                [title]="processDefinition?.name || processDefinition?.key">
+            {{ processDefinition?.name || processDefinition?.key }}
+          </span>
+        </div>
+
         <div class="diagram-container">
           <div class="diagram-loading" *ngIf="loadingDiagram">
             <fa-icon [icon]="faSpinner" animation="spin"></fa-icon>
@@ -526,7 +543,8 @@
                       </span>
                     </td>
                     <td class="instance-id">
-                      <a [routerLink]="['/cockpit/processes/instance', instance.id]">
+                      <a [routerLink]="['/cockpit/processes/instance', instance.id]"
+                         [queryParams]="{ from: processId }">
                         {{ instance.id }}
                       </a>
                     </td>
