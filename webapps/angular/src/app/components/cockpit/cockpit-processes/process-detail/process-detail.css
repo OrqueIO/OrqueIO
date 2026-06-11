@@ -727,7 +727,7 @@
 
 
 .breadcrumb-separator {
-  color: var(--border-color, #aac4e8);
+  color: var(--text-muted, #6b7280);
   font-size: 0.95rem;
   line-height: 1;
   flex-shrink: 0;
