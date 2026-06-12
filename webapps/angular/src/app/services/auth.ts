@@ -491,9 +491,12 @@ export class AuthService {
     window.location.href = this.getSsoLogoutUrl();
   }
 
-  private getSsoLogoutUrl(): string {
-    return '/logout';
-  }
+private getSsoLogoutUrl(): string {
+  const contextPath = (window as any).__ORQUEIO_BASE__
+    ? (window as any).__ORQUEIO_BASE__.replace('/orqueio', '')
+    : '';
+  return contextPath + '/logout';
+}
 
   /**
    * Checks if the current URL contains an OAuth2 error parameter.
