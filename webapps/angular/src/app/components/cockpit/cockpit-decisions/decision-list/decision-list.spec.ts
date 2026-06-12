@@ -193,8 +193,8 @@ describe('DecisionListComponent', () => {
     });
 
     it('should restore valid sort config from localStorage', () => {
-      localStorage.setItem('sortDecDefTable', JSON.stringify({ sortBy: 'tenantId', sortOrder: 'desc' }));
       createComponent();
+      localStorage.setItem('sortDecDefTable', JSON.stringify({ sortBy: 'tenantId', sortOrder: 'desc' }));
       component.ngOnInit();
       expect(component.sortConfig.sortBy).toBe('tenantId');
       expect(component.sortConfig.sortOrder).toBe('desc');

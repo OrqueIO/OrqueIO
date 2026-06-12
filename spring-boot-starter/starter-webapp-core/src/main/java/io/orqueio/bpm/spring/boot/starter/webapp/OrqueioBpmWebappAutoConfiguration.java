@@ -82,7 +82,9 @@ public class OrqueioBpmWebappAutoConfiguration implements WebMvcConfigurer {
     registry.addResourceHandler(applicationPath + "/api/**")
         .addResourceLocations("classpath:/api/");
     registry.addResourceHandler(applicationPath + "/app/**")
-        .addResourceLocations(classpath + "/app/");
+        .addResourceLocations(classpath + "/app/")
+        .resourceChain(false)
+        .addTransformer(new BaseHrefTransformer(applicationPath));
     registry.addResourceHandler(applicationPath + "/assets/**")
         .addResourceLocations(classpath + "/assets/");
      registry.addResourceHandler(applicationPath + "/favicon.ico")

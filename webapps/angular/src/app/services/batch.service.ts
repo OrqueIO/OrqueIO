@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, forkJoin, of } from 'rxjs';
 import { map, catchError, switchMap } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 import {
   BatchStatistics,
   HistoryBatch,
@@ -24,7 +25,7 @@ interface UserProfile {
   providedIn: 'root'
 })
 export class BatchService {
-  private readonly baseUrl = '/orqueio/api/engine/engine/default';
+  private readonly baseUrl = environment.engineUrl + '/default';
 
   constructor(private http: HttpClient) {}
 

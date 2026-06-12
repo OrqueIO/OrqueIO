@@ -20,13 +20,14 @@ import {
   TaskFilter,
   FilterAuthorization
 } from '../../models/tasklist/filter.model';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TasklistService {
   private readonly http = inject(HttpClient);
-  private readonly baseUrl = '/orqueio/api/engine/engine/default';
+  private readonly baseUrl = environment.engineUrl + '/default';
 
   // ==================== TASK API ====================
 
