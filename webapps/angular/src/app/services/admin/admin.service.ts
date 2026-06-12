@@ -2,12 +2,13 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CsrfTokenService } from '../csrf-token.service';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AdminService {
-  protected readonly baseUrl = '/orqueio/api/engine/engine';
+  protected readonly baseUrl = environment.engineUrl;
   protected readonly engine = 'default';
   protected readonly engineUrl = `${this.baseUrl}/${this.engine}`;
   protected readonly csrfService = inject(CsrfTokenService);
