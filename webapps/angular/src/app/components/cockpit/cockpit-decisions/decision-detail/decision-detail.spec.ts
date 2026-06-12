@@ -266,11 +266,11 @@ describe('DecisionDetailComponent', () => {
     });
 
     it('should restore sort config from localStorage', () => {
-      localStorage.setItem('sortDecInstTable', JSON.stringify({ sortBy: 'id', sortOrder: 'asc' }));
       createComponent();
+      localStorage.setItem('sortDecInstTable', JSON.stringify({ sortBy: 'evaluationTime', sortOrder: 'asc' }));
       component.ngOnInit();
       routeParams$.next({ id: 'dd-1' });
-      expect(component.instancesSortConfig.sortBy).toBe('id');
+      expect(component.instancesSortConfig.sortBy).toBe('evaluationTime');
       expect(component.instancesSortConfig.sortOrder).toBe('asc');
     });
 
@@ -331,7 +331,6 @@ describe('DecisionDetailComponent', () => {
     });
 
     it('should reload instances on page change', () => {
-      createComponent();
       component.ngOnInit();
       routeParams$.next({ id: 'dd-1' });
       const callsBefore = cockpitService.getDecisionInstancesPaginated.mock.calls.length;
@@ -340,7 +339,6 @@ describe('DecisionDetailComponent', () => {
     });
 
     it('should ignore invalid page change', () => {
-      createComponent();
       component.ngOnInit();
       routeParams$.next({ id: 'dd-1' });
       const callsBefore = cockpitService.getDecisionInstancesPaginated.mock.calls.length;
@@ -349,7 +347,6 @@ describe('DecisionDetailComponent', () => {
     });
 
     it('should reset to page 1 on page size change', () => {
-      createComponent();
       component.ngOnInit();
       routeParams$.next({ id: 'dd-1' });
       component.instancesCurrentPage = 3;

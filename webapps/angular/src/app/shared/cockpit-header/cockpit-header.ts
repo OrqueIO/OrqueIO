@@ -136,6 +136,7 @@ export class CockpitHeaderComponent {
 
   private getCurrentApp(): string {
     const url = this.router.url;
+    if (!url) return '';
     if (url.startsWith('/tasklist')) return 'tasklist';
     if (url.startsWith('/cockpit')) return 'cockpit';
     if (url.startsWith('/admin')) return 'admin';
