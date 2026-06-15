@@ -179,4 +179,14 @@ public class ChangedAppPathIT {
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
   }
 
+  @Test
+  public void shouldRewriteBaseHrefWithApplicationPath() {
+    // when
+    ResponseEntity<String> response = restClient.getForEntity(MY_APP_PATH + "/app/index.html", String.class);
+
+    // then
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    assertThat(response.getBody()).contains("<base href=\"" + MY_APP_PATH + "/app/\">");
+  }
+
 }
