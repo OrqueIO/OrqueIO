@@ -339,11 +339,12 @@ export class TaskDetailComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   getInstanceLink(): string | null {
+    const base = (window as any).__ORQUEIO_BASE__ || '/orqueio';
     if (this.task.processInstanceId) {
-      return `/orqueio/app/cockpit/processes/instance/${this.task.processInstanceId}`;
+      return `${base}/app/cockpit/processes/instance/${this.task.processInstanceId}`;
     }
     if (this.task.caseInstanceId) {
-      return `/orqueio/app/cockpit/cases/instance/${this.task.caseInstanceId}`;
+      return `${base}/app/cockpit/cases/instance/${this.task.caseInstanceId}`;
     }
     return null;
   }
