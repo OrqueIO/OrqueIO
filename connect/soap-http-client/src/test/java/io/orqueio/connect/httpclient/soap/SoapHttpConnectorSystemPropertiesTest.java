@@ -44,11 +44,9 @@ import org.junit.Test;
  */
 public class SoapHttpConnectorSystemPropertiesTest {
 
-  public static final int PORT = 51234;
-
   @Rule
   public WireMockRule wireMockRule = new WireMockRule(
-      WireMockConfiguration.wireMockConfig().port(PORT));
+      WireMockConfiguration.wireMockConfig().dynamicPort());
 
   protected Set<String> updatedSystemProperties;
 
@@ -83,7 +81,7 @@ public class SoapHttpConnectorSystemPropertiesTest {
     SoapHttpConnector customConnector = new SoapHttpConnectorImpl();
 
     // when
-    customConnector.createRequest().url("http://localhost:" + PORT).payload("test").execute();
+    customConnector.createRequest().url("http://localhost:" + wireMockRule.port()).payload("test").execute();
 
     // then
     verify(postRequestedFor(urlEqualTo("/")).withHeader(HttpHeaders.USER_AGENT, equalTo("foo")));

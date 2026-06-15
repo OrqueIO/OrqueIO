@@ -45,11 +45,9 @@ public class HttpRequestConfigTest {
 
   public static final String EXAMPLE_URL = "http://orqueio.io/example";
 
-  public static final int PORT = 51234;
-
   @Rule
   public WireMockRule wireMockRule = new WireMockRule(
-          WireMockConfiguration.wireMockConfig().port(PORT));
+          WireMockConfiguration.wireMockConfig().dynamicPort());
 
   protected HttpConnector connector;
 
@@ -344,7 +342,7 @@ public class HttpRequestConfigTest {
       wireMockRule.stubFor(get(urlEqualTo("/")).willReturn(aResponse().withFixedDelay(1000).withStatus(200)));
 
       // when
-      connector.createRequest().url("http://localhost:" + PORT).get()
+      connector.createRequest().url("http://localhost:" + wireMockRule.port()).get()
           .configOption(RequestConfigOption.RESPONSE_TIMEOUT.getName(), Timeout.ofMilliseconds(100))
           .execute();
       fail("No exception thrown");
