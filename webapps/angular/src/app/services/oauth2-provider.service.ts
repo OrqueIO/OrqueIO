@@ -18,6 +18,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of, forkJoin } from 'rxjs';
 import { map, catchError, shareReplay } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 
 /**
  * Represents an OAuth2/OIDC provider configured in the backend
@@ -69,8 +70,8 @@ export interface OAuth2State {
   providedIn: 'root'
 })
 export class OAuth2ProviderService {
-  private readonly providersUrl = '/orqueio/api/oauth2/providers';
-  private readonly setupRequiredUrl = '/orqueio/api/oauth2/setup-required';
+  private readonly providersUrl = environment.oauth2Url + '/providers';
+  private readonly setupRequiredUrl = environment.oauth2Url + '/setup-required';
 
   /** Cached observable for providers - shared across subscribers */
   private providersCache$: Observable<OAuth2Provider[]> | null = null;
@@ -167,6 +168,7 @@ export class OAuth2ProviderService {
   getLoginUrl(provider: OAuth2Provider): string {
     // The loginUrl from backend is already in the correct format
     // e.g., '/oauth2/authorization/keycloak'
-    return provider.loginUrl;
+    const base = (window as any).__ORQUEIO_BASE__ || '';
+    return base + provider.loginUrl;
   }
 }
