@@ -19,6 +19,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, throwError, of } from 'rxjs';
 import { switchMap, catchError, map } from 'rxjs/operators';
 import { CsrfTokenService } from './csrf-token.service';
+import { environment } from '../../environments/environment';
 
 /**
  * User profile for initial admin creation
@@ -81,7 +82,7 @@ export interface PasswordValidationResponse {
   providedIn: 'root'
 })
 export class InitialUserService {
-  private readonly setupUrl = '/orqueio/api/admin/setup';
+  private readonly setupUrl = environment.apiUrl + '/admin/setup';
   private readonly engine = 'default';
 
   private http = inject(HttpClient);

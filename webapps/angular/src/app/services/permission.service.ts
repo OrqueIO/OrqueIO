@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable, of, Subject, firstValueFrom, forkJoin } fr
 import { map, catchError, tap, shareReplay, takeUntil } from 'rxjs/operators';
 import { AuthService } from './auth';
 import { RESOURCE_TYPE, ResourceType } from '../models/admin/authorization.model';
+import { environment } from '../../environments/environment';
 
 /**
  * Resource name mapping for API calls
@@ -68,7 +69,7 @@ export interface BulkPermissionResult {
   providedIn: 'root'
 })
 export class PermissionService implements OnDestroy {
-  private readonly engineUrl = '/orqueio/api/engine/engine/default';
+  private readonly engineUrl = environment.engineUrl + '/default';
   private readonly authorizationUrl = `${this.engineUrl}/authorization`;
 
   // Permission cache with TTL
