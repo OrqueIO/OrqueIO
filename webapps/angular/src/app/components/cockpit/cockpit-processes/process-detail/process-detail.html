@@ -253,15 +253,15 @@
       <div class="ctn-row ctn-content-top"
            [class.collapsed]="diagramCollapsed"
            [class.maximized]="diagramMaximized">
-          <!-- Breadcrumb — visible only when navigated here via drilldown AND current process is a subprocess -->
+          <!-- Breadcrumb — visible whenever this instance has a parent (superProcessInstanceId),
+               regardless of how the page was reached (?from=, direct URL, or back navigation). -->
           <div class="process-breadcrumb"
-               *ngIf="fromProcess && processInstance && processInstance.superProcessInstanceId">
+               *ngIf="superProcessInstance && processInstance">
               <fa-icon [icon]="faArrowUp" class="breadcrumb-up-icon"></fa-icon>
-              <a [routerLink]="['/cockpit/processes/instance', fromProcess.id]"
-                 [queryParams]="{}"
+              <a [routerLink]="['/cockpit/processes/instance', superProcessInstance.id]"
                  class="breadcrumb-parent-name"
-                 [title]="fromProcess.id">
-                  {{ fromProcess.processDefinitionName || fromProcess.processDefinitionKey }}
+                 [title]="superProcessInstance.id">
+                  {{ superProcessInstance.processDefinitionName || superProcessInstance.processDefinitionKey }}
               </a>
               <span class="breadcrumb-separator">›</span>
               <span class="breadcrumb-current"
