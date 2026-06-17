@@ -213,7 +213,7 @@ public class ProcessEnginesFilter extends AbstractTemplateFilter {
     data = data.replaceFirst("<base href=\"[^\"]*\">", "<base href=\"" + baseHref + "\">");
 
     String apiBase = contextPath + applicationPath;
-    String script = "<script>window.__ORQUEIO_BASE__='" + apiBase + "';</script>";
+    String script = "<script>window.__ORQUEIO_BASE__='" + apiBase + "';window.__ORQUEIO_CONTEXT_PATH__='" + contextPath + "';</script>";
     data = data.replace("</head>", script + "\n</head>");
     response.setContentLength(data.getBytes(StandardCharsets.UTF_8).length);
     response.setContentType("text/html");
