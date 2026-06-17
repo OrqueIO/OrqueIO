@@ -492,9 +492,7 @@ export class AuthService {
   }
 
   private getSsoLogoutUrl(): string {
-    const contextPath = (window as any).__ORQUEIO_BASE__
-      ? (window as any).__ORQUEIO_BASE__.replace('/orqueio', '')
-      : '';
+    const contextPath = (window as any).__ORQUEIO_CONTEXT_PATH__ || '';
     return contextPath + '/logout';
   }
 

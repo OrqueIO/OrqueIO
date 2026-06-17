@@ -184,10 +184,7 @@ export class OAuth2ButtonsComponent implements OnInit, OnDestroy {
       loginPath = `/oauth2/authorization/${provider.id}`;
     }
 
-    // Include context-path if present
-    const contextPath = (window as any).__ORQUEIO_BASE__
-      ? new URL((window as any).__ORQUEIO_BASE__, window.location.origin).pathname.replace(/\/orqueio$/, '')
-      : '';
+    const contextPath = (window as any).__ORQUEIO_CONTEXT_PATH__ || '';
 
     const baseUrl = window.location.origin + contextPath + loginPath;
     const separator = baseUrl.includes('?') ? '&' : '?';

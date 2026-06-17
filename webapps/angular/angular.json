@@ -46,7 +46,6 @@
           },
           "configurations": {
             "production": {
-              "baseHref": "/orqueio/app/",
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
