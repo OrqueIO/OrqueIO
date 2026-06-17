@@ -46,13 +46,13 @@ public class ResourceLoadingProcessEnginesAppPathOrqueioIndexRedirectTest {
   public int port;
 
   @Test
-  public void shouldRedirectRequestToTasklist_contextRoot() {
+  public void shouldRedirectRequestToAppRoot_contextRoot() {
     // when
     // send GET request to /orqueio
     HttpURLConnection con = rule.performRequest("http://localhost:" + port + "/orqueio");
 
     // then
-    // the request should have been redirected to Tasklist
-    assertThat(con.getURL().toString()).isEqualTo("http://localhost:" + port + "/orqueio/app/tasklist/");
+    // the request should have been redirected to the app root
+    assertThat(con.getURL().toString()).isEqualTo("http://localhost:" + port + "/orqueio/app/");
   }
 }
