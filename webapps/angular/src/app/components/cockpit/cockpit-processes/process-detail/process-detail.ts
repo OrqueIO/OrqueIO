@@ -291,6 +291,9 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
     this.activityTree = null;
     this.activityStatistics = [];
     this.superProcessInstance = null;
+    this.calledInstances = [];
+    this.callActivityMapping = new Map();
+    this.filteredCallActivityId = null;
     this.cdr.markForCheck();
 
     // Load process instance
@@ -322,15 +325,16 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
             this.loadSuperProcessInstance(instance.superProcessInstanceId, this.processId);
           }
 
-          // Load called instances and Call Activity mapping
-          this.loadCalledInstances();
-          this.loadCallActivityMapping();
         },
         error: () => {
           this.loading = false;
           this.cdr.markForCheck();
         }
       });
+
+    // Load called instances and call activity mapping in parallel with other data
+    this.loadCalledInstances();
+    this.loadCallActivityMapping();
 
     // Load variables
     this.cockpitService.getProcessInstanceVariables(this.processId)
