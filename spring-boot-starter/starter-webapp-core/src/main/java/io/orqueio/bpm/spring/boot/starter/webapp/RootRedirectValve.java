@@ -33,6 +33,7 @@ public class RootRedirectValve extends ValveBase {
   private final String targetPath;
 
   public RootRedirectValve(String targetPath) {
+    super(true);
     this.targetPath = targetPath;
   }
 
