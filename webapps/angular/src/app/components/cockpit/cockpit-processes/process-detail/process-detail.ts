@@ -125,6 +125,7 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
 
   processId = '';
   loading = true;
+  transitioning = false;
   loadingDiagram = false;
   actionInProgress = false;
 
@@ -286,14 +287,21 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
   }
 
   loadProcessData(): void {
-    this.loading = true;
-    this.bpmnXml = null;
-    this.activityTree = null;
-    this.activityStatistics = [];
+    const isInitialLoad = this.processInstance === null;
+    this.loading = isInitialLoad;
+    this.transitioning = !isInitialLoad;
+    // Reset navigation-specific state on every load
     this.superProcessInstance = null;
     this.calledInstances = [];
     this.callActivityMapping = new Map();
     this.filteredCallActivityId = null;
+    // Keep bpmnXml, activityTree, activityStatistics in place during transition
+    // so the existing diagram remains visible while new data loads
+    if (isInitialLoad) {
+      this.bpmnXml = null;
+      this.activityTree = null;
+      this.activityStatistics = [];
+    }
     this.cdr.markForCheck();
 
     // Load process instance
@@ -303,6 +311,7 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
         next: (instance) => {
           this.processInstance = instance;
           this.loading = false;
+          this.transitioning = false;
           this.updateBreadcrumbs();
           this.cdr.markForCheck();
 
@@ -328,6 +337,7 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
         },
         error: () => {
           this.loading = false;
+          this.transitioning = false;
           this.cdr.markForCheck();
         }
       });

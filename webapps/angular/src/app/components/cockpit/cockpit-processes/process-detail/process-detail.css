@@ -66,6 +66,22 @@
    Loading and Error States
    ======================================== */
 
+.transition-progress-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary-color) 0%, transparent 100%);
+  animation: progress-slide 1.2s ease-in-out infinite;
+  z-index: 10;
+}
+
+@keyframes progress-slide {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
 .loading-overlay {
   position: absolute;
   top: 0;
