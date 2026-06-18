@@ -21,6 +21,7 @@ import io.orqueio.bpm.engine.rest.impl.FetchAndLockContextListener;
 import io.orqueio.bpm.engine.rest.security.auth.ProcessEngineAuthenticationFilter;
 import io.orqueio.bpm.spring.boot.starter.OrqueioBpmAutoConfiguration;
 import io.orqueio.bpm.spring.boot.starter.property.OrqueioBpmProperties;
+import org.glassfish.jersey.servlet.ServletContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
@@ -30,6 +31,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.jersey.JerseyAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.servlet.JerseyApplicationPath;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 
 @AutoConfigureBefore({ JerseyAutoConfiguration.class })
@@ -42,6 +44,19 @@ public class OrqueioBpmRestJerseyAutoConfiguration {
   @ConditionalOnMissingBean(OrqueioJerseyResourceConfig.class)
   public OrqueioJerseyResourceConfig createRestConfig() {
     return new OrqueioJerseyResourceConfig();
+  }
+
+  @Bean(name = "jerseyServletRegistration")
+  @ConditionalOnMissingBean(name = "jerseyServletRegistration")
+  @ConditionalOnProperty(prefix = "spring.jersey", name = "type", havingValue = "servlet", matchIfMissing = true)
+  public ServletRegistrationBean<ServletContainer> jerseyServletRegistration(
+      OrqueioJerseyResourceConfig config, JerseyApplicationPath applicationPath) {
+    ServletRegistrationBean<ServletContainer> registration = new ServletRegistrationBean<>(
+        new ServletContainer(config), applicationPath.getUrlMapping());
+    registration.setName(config.getClass().getName());
+    registration.setAsyncSupported(true);
+    registration.setLoadOnStartup(0);
+    return registration;
   }
 
   @Bean
@@ -68,6 +83,7 @@ public class OrqueioBpmRestJerseyAutoConfiguration {
 
     String restApiPathPattern = applicationPath.getUrlMapping();
     registration.addUrlPatterns(restApiPathPattern);
+    registration.setAsyncSupported(true);
     logger.info("REST API authentication filter registered for pattern: {}", restApiPathPattern);
 
     registration.addInitParameter("authentication-provider",
