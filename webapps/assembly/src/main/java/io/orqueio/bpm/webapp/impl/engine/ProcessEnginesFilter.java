@@ -205,12 +205,16 @@ public class ProcessEnginesFilter extends AbstractTemplateFilter {
 
     // Read Angular's index.html
     String data = getWebResourceContents("/app/index.html");
-
     if (data == null) {
       response.sendError(HttpServletResponse.SC_NOT_FOUND, "Angular index.html not found");
       return;
     }
+    String baseHref = contextPath + applicationPath + "/app/";
+    data = data.replaceFirst("<base href=\"[^\"]*\">", "<base href=\"" + baseHref + "\">");
 
+    String apiBase = contextPath + applicationPath;
+    String script = "<script>window.__ORQUEIO_BASE__='" + apiBase + "';window.__ORQUEIO_CONTEXT_PATH__='" + contextPath + "';</script>";
+    data = data.replace("</head>", script + "\n</head>");
     response.setContentLength(data.getBytes(StandardCharsets.UTF_8).length);
     response.setContentType("text/html");
     response.setCharacterEncoding("UTF-8");
