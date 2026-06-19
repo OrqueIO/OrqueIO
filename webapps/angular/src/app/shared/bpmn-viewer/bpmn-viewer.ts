@@ -180,6 +180,14 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
       this.elementHover.emit(null);
     });
 
+    // Re-center diagram on collapsed subprocess drilldown navigation.
+    // bpmn-js fires root.set when the canvas root changes (drill-in or drill-out)
+    // without re-importing XML, so importXML / ngOnChanges never trigger the fit.
+    eventBus.on('root.set', () => {
+      this.needsZoomFit = true;
+      this.scheduleFitToViewport();
+    });
+
     this.isViewerReady = true;
 
     if (this.xml) {
@@ -204,6 +212,7 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
       if (this.isContainerVisible()) {
         try {
           const canvas = this.viewer.get('canvas');
+          canvas.resized();
           this.safeZoomFit(canvas);
           this.needsZoomFit = false;
         } catch (e) {
