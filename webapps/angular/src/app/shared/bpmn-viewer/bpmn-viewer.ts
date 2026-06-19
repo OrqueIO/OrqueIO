@@ -15,6 +15,8 @@ import {
   inject
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faArrowUp } from '@fortawesome/free-solid-svg-icons';
 
 // @ts-ignore - bpmn-js doesn't have types
 import NavigatedViewer from 'bpmn-js/lib/NavigatedViewer';
@@ -34,7 +36,7 @@ export interface BpmnElement {
 @Component({
   selector: 'app-bpmn-viewer',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FontAwesomeModule],
   templateUrl: './bpmn-viewer.html',
   styleUrls: ['./bpmn-viewer.css'],
   encapsulation: ViewEncapsulation.None
@@ -72,8 +74,12 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
   private currentXml: string | null = null;
   private needsZoomFit = false;
   private resizeTimeout: ReturnType<typeof setTimeout> | null = null;
+  private subprocessStack: { id: string; name: string; element: any }[] = [];
+  private currentRootElement: any = null;
 
+  faArrowUp = faArrowUp;
   loading = true;
+  subprocessBreadcrumb: string[] = [];
   errorMessage: string | null = null;
 
   @HostListener('window:resize')
@@ -183,7 +189,8 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
     // Re-center diagram on collapsed subprocess drilldown navigation.
     // bpmn-js fires root.set when the canvas root changes (drill-in or drill-out)
     // without re-importing XML, so importXML / ngOnChanges never trigger the fit.
-    eventBus.on('root.set', () => {
+    eventBus.on('root.set', (event: any) => {
+      this.updateSubprocessStack(event.element);
       this.needsZoomFit = true;
       this.scheduleFitToViewport();
     });
@@ -242,6 +249,9 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
 
     this.loading = true;
     this.errorMessage = null;
+    this.subprocessStack = [];
+    this.currentRootElement = null;
+    this.subprocessBreadcrumb = [];
     this.cdr.detectChanges();
 
     try {
@@ -469,6 +479,37 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
     });
   }
 
+  private getElementDisplayName(element: any): string {
+    if (element.businessObject?.name) return element.businessObject.name;
+    const id = element.id || '';
+    return id.endsWith('_plane') ? id.slice(0, -6) : id;
+  }
+
+  private updateSubprocessStack(element: any): void {
+    if (!element) return;
+
+    if (element.type === 'bpmn:Process') {
+      this.subprocessStack = [];
+    } else {
+      const existingIndex = this.subprocessStack.findIndex(item => item.id === element.id);
+      if (existingIndex >= 0) {
+        this.subprocessStack = this.subprocessStack.slice(0, existingIndex);
+      } else if (this.currentRootElement) {
+        const name = this.getElementDisplayName(this.currentRootElement);
+        this.subprocessStack.push({ id: this.currentRootElement.id, name, element: this.currentRootElement });
+      }
+    }
+
+    this.currentRootElement = element;
+
+    if (this.subprocessStack.length === 0) {
+      this.subprocessBreadcrumb = [];
+    } else {
+      const currentName = this.getElementDisplayName(element);
+      this.subprocessBreadcrumb = [...this.subprocessStack.map(item => item.name), currentName];
+    }
+  }
+
   private destroyViewer(): void {
     if (this.viewer) {
       this.clearAllOverlays();
@@ -481,6 +522,13 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
   }
 
   // Public methods for external control
+  navigateToSubprocessLevel(index: number): void {
+    const item = this.subprocessStack[index];
+    if (!item || !this.viewer) return;
+    const canvas = this.viewer.get('canvas');
+    canvas.setRootElement(item.element);
+  }
+
   zoomIn(): void {
     if (this.viewer) {
       const canvas = this.viewer.get('canvas');
