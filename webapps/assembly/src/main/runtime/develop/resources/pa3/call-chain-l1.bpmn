@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
+                   xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                   xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+                   xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+                   xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+                   xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd"
+                   id="PurchaseRequest_def" targetNamespace="http://activiti.org/bpmn">
+  <bpmn2:process id="PurchaseRequest" name="Purchase Request"
+                 isExecutable="true" camunda:historyTimeToLive="P180D">
+    <bpmn2:startEvent id="Start_1" name="Purchase Need Identified">
+      <bpmn2:outgoing>Flow_1</bpmn2:outgoing>
+    </bpmn2:startEvent>
+    <bpmn2:callActivity id="CA_1" name="Select Vendor" calledElement="VendorSelection">
+      <bpmn2:incoming>Flow_1</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_2</bpmn2:outgoing>
+    </bpmn2:callActivity>
+    <bpmn2:sequenceFlow id="Flow_1" sourceRef="Start_1" targetRef="CA_1"/>
+    <bpmn2:sequenceFlow id="Flow_2" sourceRef="CA_1"    targetRef="End_1"/>
+    <bpmn2:endEvent id="End_1" name="Request Submitted">
+      <bpmn2:incoming>Flow_2</bpmn2:incoming>
+    </bpmn2:endEvent>
+  </bpmn2:process>
+
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="PurchaseRequest">
+      <bpmndi:BPMNShape id="Start_1_di" bpmnElement="Start_1">
+        <dc:Bounds x="150.0" y="237.0" width="36.0" height="36.0"/>
+        <bpmndi:BPMNLabel><dc:Bounds x="120.0" y="280.0" width="96.0" height="27.0"/></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="CA_1_di" bpmnElement="CA_1" isExpanded="true">
+        <dc:Bounds x="240.0" y="215.0" width="120.0" height="80.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_1_di" bpmnElement="End_1">
+        <dc:Bounds x="420.0" y="237.0" width="36.0" height="36.0"/>
+        <bpmndi:BPMNLabel><dc:Bounds x="398.0" y="280.0" width="80.0" height="27.0"/></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1_di" bpmnElement="Flow_1">
+        <di:waypoint xsi:type="dc:Point" x="186.0" y="255.0"/>
+        <di:waypoint xsi:type="dc:Point" x="240.0" y="255.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_2_di" bpmnElement="Flow_2">
+        <di:waypoint xsi:type="dc:Point" x="360.0" y="255.0"/>
+        <di:waypoint xsi:type="dc:Point" x="420.0" y="255.0"/>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn2:definitions>

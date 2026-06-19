@@ -125,6 +125,7 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
 
   processId = '';
   loading = true;
+  transitioning = false;
   loadingDiagram = false;
   actionInProgress = false;
 
@@ -135,6 +136,8 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
   processInstance: ProcessInstanceDetail | null = null;
   processDefinition: ProcessDefinition | null = null;
   superProcessInstance: ProcessInstance | null = null;
+  fromProcess: ProcessInstance | null = null;
+  fromProcessId: string | null = null;
   variables: Variable[] = [];
   activities: Activity[] = [];
   incidents: Incident[] = [];
@@ -265,6 +268,18 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
         this.processId = params['id'];
         this.loadProcessData();
       });
+
+     this.route.queryParams
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe(params => {
+          const fromId: string | null = params['from'] || null;
+          this.fromProcessId = fromId;
+          this.fromProcess = null;
+          if (fromId) {
+            this.loadFromProcess(fromId);
+          }
+          this.cdr.markForCheck();
+        });
   }
 
   ngOnDestroy(): void {
@@ -272,10 +287,21 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
   }
 
   loadProcessData(): void {
-    this.loading = true;
-    this.bpmnXml = null;
-    this.activityTree = null;
-    this.activityStatistics = [];
+    const isInitialLoad = this.processInstance === null;
+    this.loading = isInitialLoad;
+    this.transitioning = !isInitialLoad;
+    // Reset navigation-specific state on every load
+    this.superProcessInstance = null;
+    this.calledInstances = [];
+    this.callActivityMapping = new Map();
+    this.filteredCallActivityId = null;
+    // Keep bpmnXml, activityTree, activityStatistics in place during transition
+    // so the existing diagram remains visible while new data loads
+    if (isInitialLoad) {
+      this.bpmnXml = null;
+      this.activityTree = null;
+      this.activityStatistics = [];
+    }
     this.cdr.markForCheck();
 
     // Load process instance
@@ -285,6 +311,7 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
         next: (instance) => {
           this.processInstance = instance;
           this.loading = false;
+          this.transitioning = false;
           this.updateBreadcrumbs();
           this.cdr.markForCheck();
 
@@ -304,17 +331,20 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
 
           // Load super process instance if this is a sub-process
           if (instance?.superProcessInstanceId) {
-            this.loadSuperProcessInstance(instance.superProcessInstanceId);
+            this.loadSuperProcessInstance(instance.superProcessInstanceId, this.processId);
           }
 
-          // Load called instances and Call Activity mapping
-          this.loadCallActivityMapping();
         },
         error: () => {
           this.loading = false;
+          this.transitioning = false;
           this.cdr.markForCheck();
         }
       });
+
+    // Load called instances and call activity mapping in parallel with other data
+    this.loadCalledInstances();
+    this.loadCallActivityMapping();
 
     // Load variables
     this.cockpitService.getProcessInstanceVariables(this.processId)
@@ -502,13 +532,30 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
       });
   }
 
-  private loadSuperProcessInstance(superProcessInstanceId: string): void {
+  private loadFromProcess(fromProcessId: string): void {
+    this.cockpitService.getProcessInstance(fromProcessId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (instance) => {
+          if (this.fromProcessId === fromProcessId) {
+            this.fromProcess = instance;
+            this.cdr.markForCheck();
+          }
+        }
+      });
+  }
+
+  private loadSuperProcessInstance(superProcessInstanceId: string, forProcessId: string): void {
     this.cockpitService.getProcessInstance(superProcessInstanceId)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (instance) => {
-          this.superProcessInstance = instance;
-          this.cdr.markForCheck();
+          // Guard: processId is updated synchronously on route change, so this
+          // correctly rejects stale responses from a previous child page navigation
+          if (this.processId === forProcessId) {
+            this.superProcessInstance = instance;
+            this.cdr.markForCheck();
+          }
         }
       });
   }
@@ -608,8 +655,10 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
     if (!calledInstanceIds || calledInstanceIds.length === 0) return;
 
     if (calledInstanceIds.length === 1) {
-      // Single instance: navigate directly
-      this.router.navigate(['/cockpit/processes/instance', calledInstanceIds[0]]);
+      // Single instance: navigate directly, passing current process as breadcrumb origin
+      this.router.navigate(['/cockpit/processes/instance', calledInstanceIds[0]], {
+        queryParams: { from: this.processId }
+      });
     } else {
       // Multiple instances: show filtered called instances tab
       this.filteredCallActivityId = callActivityId;

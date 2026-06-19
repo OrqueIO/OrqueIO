@@ -208,7 +208,7 @@
   background: #ef4444;
 }
 
-/* Call Activity Navigation Overlay - Using bpmn-js drilldown style */
+/* Call Activity Navigation Overlay */
 .bpmn-call-activity-overlay {
   width: 20px;
   height: 20px;
@@ -216,19 +216,17 @@
   margin-left: -20px;
   cursor: pointer;
   border: none;
-  border-radius: 2px;
+  border-radius: 4px;
   outline: none;
-  fill: white;
   background-color: hsl(205, 100%, 50%);
   pointer-events: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .bpmn-call-activity-overlay:hover {
   background-color: hsl(205, 100%, 45%);
-}
-
-.bpmn-call-activity-overlay svg {
-  display: block;
 }
 
 /* Hide BPMN.js default elements */

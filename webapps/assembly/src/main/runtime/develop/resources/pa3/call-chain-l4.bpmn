@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
+                   xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                   xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+                   xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+                   xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+                   xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd"
+                   id="ContractManagement_def" targetNamespace="http://activiti.org/bpmn">
+  <bpmn2:process id="ContractManagement" name="Contract Management"
+                 isExecutable="true" camunda:historyTimeToLive="P180D">
+    <bpmn2:startEvent id="Start_4" name="Contract Negotiation Started">
+      <bpmn2:outgoing>Flow_1</bpmn2:outgoing>
+    </bpmn2:startEvent>
+    <bpmn2:callActivity id="CA_4" name="Verify Goods Receipt" calledElement="GoodsReceiptVerification">
+      <bpmn2:incoming>Flow_1</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_2</bpmn2:outgoing>
+    </bpmn2:callActivity>
+    <bpmn2:sequenceFlow id="Flow_1" sourceRef="Start_4" targetRef="CA_4"/>
+    <bpmn2:sequenceFlow id="Flow_2" sourceRef="CA_4"    targetRef="End_4"/>
+    <bpmn2:endEvent id="End_4" name="Contract Signed">
+      <bpmn2:incoming>Flow_2</bpmn2:incoming>
+    </bpmn2:endEvent>
+  </bpmn2:process>
+
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="ContractManagement">
+      <bpmndi:BPMNShape id="Start_4_di" bpmnElement="Start_4">
+        <dc:Bounds x="150.0" y="237.0" width="36.0" height="36.0"/>
+        <bpmndi:BPMNLabel><dc:Bounds x="110.0" y="280.0" width="116.0" height="27.0"/></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="CA_4_di" bpmnElement="CA_4" isExpanded="true">
+        <dc:Bounds x="240.0" y="215.0" width="120.0" height="80.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_4_di" bpmnElement="End_4">
+        <dc:Bounds x="420.0" y="237.0" width="36.0" height="36.0"/>
+        <bpmndi:BPMNLabel><dc:Bounds x="402.0" y="280.0" width="72.0" height="27.0"/></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1_di" bpmnElement="Flow_1">
+        <di:waypoint xsi:type="dc:Point" x="186.0" y="255.0"/>
+        <di:waypoint xsi:type="dc:Point" x="240.0" y="255.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_2_di" bpmnElement="Flow_2">
+        <di:waypoint xsi:type="dc:Point" x="360.0" y="255.0"/>
+        <di:waypoint xsi:type="dc:Point" x="420.0" y="255.0"/>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn2:definitions>
