@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.orqueio.bpm</groupId>
   <artifactId>orqueio-engine-rest-core</artifactId>
-  <version>1.0.9</version>
+  <version>1.0.10</version>
   <name>Orque IO Platform - engine - REST</name>
   <packaging>jar</packaging>
   <description>orqueio-engine-rest-core</description>
@@ -13,7 +13,7 @@
     <groupId>io.orqueio.bpm</groupId>
     <artifactId>orqueio-engine-rest-root</artifactId>
     <relativePath>../pom.xml</relativePath>
-    <version>1.0.9</version>
+    <version>1.0.10</version>
   </parent>
 
   <properties>
@@ -76,9 +76,9 @@
 
     <!-- provided deps -->
     <dependency>
-      <groupId>org.jboss.spec.javax.servlet</groupId>
-      <artifactId>jboss-servlet-api_3.0_spec</artifactId>
-      <version>1.0.2.Final</version>
+      <groupId>org.apache.tomcat</groupId>
+      <artifactId>tomcat-servlet-api</artifactId>
+      <version>${version.tomcat}</version>
       <scope>provided</scope>
     </dependency>
 
@@ -164,7 +164,7 @@
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-      <version>5.10.0</version>
+      <version>5.14.2</version>
       <scope>test</scope>
       <exclusions>
         <exclusion>

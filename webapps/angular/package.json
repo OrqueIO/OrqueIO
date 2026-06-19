@@ -1,6 +1,6 @@
 {
   "name": "orque-io-angular",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -56,6 +56,10 @@
     "@angular/compiler-cli": "^21.2.14",
     "jsdom": "^27.1.0",
     "typescript": "~5.9.2",
-    "vitest": "^4.0.8"
+    "vitest": "^4.1.0"
+  },
+  "overrides": {
+    "postcss": ">=8.5.10",
+    "picomatch": ">=2.3.2"
   }
 }
