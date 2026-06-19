@@ -208,6 +208,26 @@
   background: #ef4444;
 }
 
+/* Collapsed Subprocess Drilldown Overlay */
+.bpmn-subprocess-drilldown {
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+  outline: none;
+  background-color: #0095ff;
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bpmn-subprocess-drilldown:hover {
+  background-color: hsl(205, 100%, 45%);
+}
+
 /* Call Activity Navigation Overlay */
 .bpmn-call-activity-overlay {
   width: 20px;
