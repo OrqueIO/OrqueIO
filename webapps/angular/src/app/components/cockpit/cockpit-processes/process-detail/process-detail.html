@@ -1,9 +1,12 @@
 <div class="ctn-fixed-view">
-  <!-- Loading state -->
+  <!-- Initial loading state (no data yet) -->
   <div class="loading-overlay" *ngIf="loading">
     <fa-icon [icon]="faSpinner" animation="spin"></fa-icon>
     <span>{{ 'common.loading' | translate }}</span>
   </div>
+
+  <!-- Transition progress bar (navigating between instances — keeps current view visible) -->
+  <div class="transition-progress-bar" *ngIf="transitioning"></div>
 
   <!-- Not found state -->
   <div class="not-found" *ngIf="!loading && !processInstance">
@@ -184,8 +187,11 @@
             {{ 'cockpit.processDetail.superProcess' | translate }}
           </dt>
           <dd *ngIf="superProcessInstance" class="super-process-instance-id">
-            <a [routerLink]="['/cockpit/processes/instance', superProcessInstance.id]">
-              {{ superProcessInstance.id }}
+            <a [routerLink]="['/cockpit/processes/instance', superProcessInstance.id]"
+               class="parent-process-link"
+               [title]="'cockpit.processDetail.calledBy' | translate">
+              <fa-icon [icon]="faArrowUp" class="parent-icon"></fa-icon>
+              {{ 'cockpit.processDetail.calledBy' | translate }}: {{ superProcessInstance.id }}
             </a>
           </dd>
           <dt *ngIf="!superProcessInstance">
@@ -250,6 +256,22 @@
       <div class="ctn-row ctn-content-top"
            [class.collapsed]="diagramCollapsed"
            [class.maximized]="diagramMaximized">
+          <!-- Breadcrumb — visible whenever this instance has a parent (superProcessInstanceId),
+               regardless of how the page was reached (?from=, direct URL, or back navigation). -->
+          <div class="process-breadcrumb"
+               *ngIf="superProcessInstance && processInstance">
+              <fa-icon [icon]="faArrowUp" class="breadcrumb-up-icon"></fa-icon>
+              <a [routerLink]="['/cockpit/processes/instance', superProcessInstance.id]"
+                 class="breadcrumb-parent-name"
+                 [title]="superProcessInstance.id">
+                  {{ superProcessInstance.processDefinitionName || superProcessInstance.processDefinitionKey }}
+              </a>
+              <span class="breadcrumb-separator">›</span>
+              <span class="breadcrumb-current"
+                    [title]="processDefinition?.name || processDefinition?.key">
+            {{ processDefinition?.name || processDefinition?.key }}
+          </span>
+          </div>
 
         <div class="diagram-container">
           <div class="diagram-loading" *ngIf="loadingDiagram">
@@ -266,9 +288,12 @@
             [highlightedActivities]="selectedActivityIds"
             [showExpandButton]="true"
             [isExpanded]="diagramMaximized"
+            [enableCallActivityNavigation]="true"
+            [callActivityIdsWithInstances]="callActivityIdsWithInstances"
             (elementClick)="handleBpmnElementSelection($event)"
             (elementHover)="onDiagramElementHover($event)"
             (expandToggle)="toggleDiagramMaximize()"
+            (callActivityClick)="navigateToCalledInstance($event)"
           ></app-bpmn-viewer>
 
           <div class="empty-diagram" *ngIf="!loadingDiagram && !bpmnXml">
@@ -501,8 +526,8 @@
 
           <!-- Called Process Instances Tab -->
           <div class="tab-pane" *ngIf="activeTab === 'calledInstances'">
-            <div class="table-scroll-wrapper">
-              <table class="cam-table" *ngIf="calledInstances.length > 0">
+              <div class="table-scroll-wrapper">
+              <table class="cam-table" *ngIf="displayedCalledInstances.length > 0">
                 <thead>
                   <tr>
                     <th>{{ 'cockpit.processDetail.calledInstances.state' | translate }}</th>
@@ -513,14 +538,15 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let instance of calledInstances">
+                  <tr *ngFor="let instance of displayedCalledInstances">
                     <td class="instance-state">
                       <span class="state-indicator" [ngClass]="getStateClass(instance.state)">
                         <fa-icon [icon]="getStateIcon(instance.state)"></fa-icon>
                       </span>
                     </td>
                     <td class="instance-id">
-                      <a [routerLink]="['/cockpit/processes/instance', instance.id]">
+                      <a [routerLink]="['/cockpit/processes/instance', instance.id]"
+                         [queryParams]="{ from: processId }">
                         {{ instance.id }}
                       </a>
                     </td>
@@ -537,8 +563,8 @@
                 </tbody>
               </table>
 
-              <div class="no-data" *ngIf="calledInstances.length === 0">
-                {{ 'cockpit.processDetail.noCalledInstances' | translate }}
+              <div class="no-data" *ngIf="displayedCalledInstances.length === 0">
+                 {{ 'cockpit.processDetail.noCalledInstances' | translate }}
               </div>
             </div>
           </div>
