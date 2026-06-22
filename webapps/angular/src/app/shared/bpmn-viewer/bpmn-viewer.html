@@ -1,4 +1,31 @@
 <div class="bpmn-viewer-container">
+  <!-- Subprocess drilldown breadcrumb -->
+  <div class="process-breadcrumb" *ngIf="subprocessBreadcrumb.length > 0">
+    <fa-icon [icon]="faArrowUp" class="breadcrumb-up-icon"></fa-icon>
+    <ng-container *ngFor="let item of visibleBreadcrumbItems; let last = last">
+      <!-- Navigable parent level -->
+      <button *ngIf="!item.isEllipsis && item.index !== null"
+              type="button" class="breadcrumb-parent-name"
+              [title]="item.name"
+              (click)="navigateToSubprocessLevel(item.index!)">{{ item.name }}</button>
+      <!-- Left ellipsis — shifts window left (reveals earlier levels) -->
+      <button *ngIf="item.isEllipsis" type="button"
+              class="breadcrumb-parent-name breadcrumb-ellipsis-btn"
+              title="Afficher les niveaux précédents"
+              (click)="shiftWindowLeft()">…</button>
+      <!-- Right ellipsis — shifts window right (reveals later levels) -->
+      <button *ngIf="item.isRightEllipsis" type="button"
+              class="breadcrumb-parent-name breadcrumb-ellipsis-btn"
+              title="Afficher les niveaux suivants"
+              (click)="shiftWindowRight()">…</button>
+      <!-- Current (non-navigable) level -->
+      <span *ngIf="!item.isEllipsis && !item.isRightEllipsis && item.index === null"
+            class="breadcrumb-current" [title]="item.name">{{ item.name }}</span>
+      <!-- Separator between levels -->
+      <span *ngIf="!last" class="breadcrumb-separator">›</span>
+    </ng-container>
+  </div>
+
   <!-- Zoom controls -->
   <div class="zoom-controls">
     <button type="button" class="zoom-btn" *ngIf="showExpandButton" (click)="expandToggle.emit()" [title]="isExpanded ? 'Restore' : 'Expand'">
