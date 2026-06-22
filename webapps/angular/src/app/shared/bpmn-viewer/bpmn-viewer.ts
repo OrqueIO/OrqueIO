@@ -80,7 +80,31 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
   faArrowUp = faArrowUp;
   loading = true;
   subprocessBreadcrumb: string[] = [];
+  private windowStart = 0;
   errorMessage: string | null = null;
+
+  get visibleBreadcrumbItems(): Array<{ name: string; index: number | null; isEllipsis: boolean; isRightEllipsis?: boolean }> {
+    const items = this.subprocessBreadcrumb;
+    const n = items.length;
+    if (n <= 5) {
+      return items.map((name, i) => ({ name, index: i < n - 1 ? i : null, isEllipsis: false }));
+    }
+    const winEnd = Math.min(this.windowStart + 2, n - 2);
+    const result: Array<{ name: string; index: number | null; isEllipsis: boolean; isRightEllipsis?: boolean }> = [
+      { name: items[0], index: 0, isEllipsis: false },
+    ];
+    if (this.windowStart > 1) {
+      result.push({ name: '…', index: null, isEllipsis: true });
+    }
+    for (let i = this.windowStart; i <= winEnd; i++) {
+      result.push({ name: items[i], index: i, isEllipsis: false });
+    }
+    if (winEnd < n - 2) {
+      result.push({ name: '…', index: null, isEllipsis: false, isRightEllipsis: true });
+    }
+    result.push({ name: items[n - 1], index: null, isEllipsis: false });
+    return result;
+  }
 
   @HostListener('window:resize')
   onWindowResize(): void {
@@ -252,6 +276,7 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
     this.subprocessStack = [];
     this.currentRootElement = null;
     this.subprocessBreadcrumb = [];
+    this.windowStart = 0;
     this.cdr.detectChanges();
 
     try {
@@ -504,9 +529,12 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
 
     if (this.subprocessStack.length === 0) {
       this.subprocessBreadcrumb = [];
+      this.windowStart = 0;
     } else {
       const currentName = this.getElementDisplayName(element);
       this.subprocessBreadcrumb = [...this.subprocessStack.map(item => item.name), currentName];
+      const n = this.subprocessBreadcrumb.length;
+      this.windowStart = n > 5 ? Math.max(1, n - 3) : 0;
     }
   }
 
@@ -527,6 +555,15 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
     if (!item || !this.viewer) return;
     const canvas = this.viewer.get('canvas');
     canvas.setRootElement(item.element);
+  }
+
+  shiftWindowLeft(): void {
+    this.windowStart = Math.max(1, this.windowStart - 3);
+  }
+
+  shiftWindowRight(): void {
+    const n = this.subprocessBreadcrumb.length;
+    this.windowStart = Math.min(n - 4, this.windowStart + 3);
   }
 
   zoomIn(): void {
