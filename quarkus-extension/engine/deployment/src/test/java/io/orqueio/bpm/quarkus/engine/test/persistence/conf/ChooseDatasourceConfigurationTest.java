@@ -35,7 +35,7 @@ public class ChooseDatasourceConfigurationTest {
   @RegisterExtension
   static QuarkusUnitTest unitTest = new ProcessEngineAwareExtension()
       .withConfigurationResource("io/orqueio/bpm/quarkus/engine/test/persistence/conf/multiple-datasources-application.properties")
-      .overrideConfigKey("quarkus.orqueio..datasource", "secondary")
+      .overrideConfigKey("quarkus.orqueio.datasource", "secondary")
       .setArchiveProducer(() -> ShrinkWrap.create(JavaArchive.class));
 
   @Inject
