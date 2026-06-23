@@ -45,6 +45,16 @@ import org.eclipse.microprofile.context.ManagedExecutor;
 @Recorder
 public class OrqueioEngineRecorder {
 
+  private final RuntimeValue<OrqueioEngineConfig> configRuntimeValue;
+
+  public OrqueioEngineRecorder(RuntimeValue<OrqueioEngineConfig> configRuntimeValue) {
+    this.configRuntimeValue = configRuntimeValue;
+  }
+
+  private OrqueioEngineConfig config() {
+    return configRuntimeValue.getValue();
+  }
+
   public void configureProcessEngineCdiBeans(BeanContainer beanContainer) {
 
     if (BeanManagerLookup.localInstance == null) {
@@ -52,11 +62,12 @@ public class OrqueioEngineRecorder {
     }
   }
 
-  public RuntimeValue<ProcessEngineConfigurationImpl> createProcessEngineConfiguration(BeanContainer beanContainer,
-                                                                                       OrqueioEngineConfig config) {
+  public RuntimeValue<ProcessEngineConfigurationImpl> createProcessEngineConfiguration(BeanContainer beanContainer) {
 
     QuarkusProcessEngineConfiguration configuration = getBeanFromContainer(QuarkusProcessEngineConfiguration.class,
         beanContainer);
+
+    OrqueioEngineConfig config = config();
 
     // apply properties from config before any other configuration.
     PropertyHelper.applyProperties(configuration, config.genericConfig(), PropertyHelper.KEBAB_CASE);

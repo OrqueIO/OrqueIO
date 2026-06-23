@@ -40,7 +40,6 @@ import io.orqueio.bpm.engine.cdi.impl.ProcessVariableMap;
 import io.orqueio.bpm.engine.cdi.impl.context.DefaultContextAssociationManager;
 import io.orqueio.bpm.engine.cdi.impl.context.RequestScopedAssociation;
 import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import io.orqueio.bpm.quarkus.engine.extension.OrqueioEngineConfig;
 import io.orqueio.bpm.quarkus.engine.extension.QuarkusProcessEngineConfiguration;
 import io.orqueio.bpm.quarkus.engine.extension.impl.OrqueioEngineRecorder;
 import io.orqueio.bpm.quarkus.engine.extension.impl.InjectableBusinessProcessContext;
@@ -96,13 +95,12 @@ public class OrqueioEngineProcessor {
   @Record(RUNTIME_INIT)
   protected void processEngineConfiguration(OrqueioEngineRecorder recorder,
                                             BeanContainerBuildItem beanContainerBuildItem,
-                                            OrqueioEngineConfig orqueioEngineConfig,
                                             BuildProducer<ProcessEngineConfigurationBuildItem> configurationProducer) {
 
     BeanContainer beanContainer = beanContainerBuildItem.getValue();
     recorder.configureProcessEngineCdiBeans(beanContainer);
     RuntimeValue<ProcessEngineConfigurationImpl> processEngineConfiguration =
-        recorder.createProcessEngineConfiguration(beanContainer, orqueioEngineConfig);
+        recorder.createProcessEngineConfiguration(beanContainer);
     configurationProducer.produce(new ProcessEngineConfigurationBuildItem(processEngineConfiguration));
   }
 
