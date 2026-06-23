@@ -104,7 +104,7 @@ public class CdiProcessEngineTestCase {
         bean.destroy();
       } catch (UnsupportedOperationException ignored) {
         // Eagerly destroying InjectableBusinessProcessContext is unsupported
-        // See https://jira.orqueio..com/browse/CAM-13755
+        // See https://jira.orqueio.com/browse/CAM-13755
       }
     });
 

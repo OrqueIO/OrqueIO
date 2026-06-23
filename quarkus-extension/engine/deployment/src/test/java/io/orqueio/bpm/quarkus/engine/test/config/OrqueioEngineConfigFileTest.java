@@ -70,7 +70,7 @@ public class OrqueioEngineConfigFileTest {
     assertThat(config.jobExecutor().threadPool().maxPoolSize()).isEqualTo(12);
     assertThat(config.jobExecutor().threadPool().queueSize()).isEqualTo(5);
     // assert correct datasource
-    assertThat(config.datasource()).hasValue("orqueio.");
+    assertThat(config.datasource()).hasValue("orqueio");
     assertThat(configuration.getDataSource().getConnection()).asString().contains("h2:mem:camunda.");
   }
 }
