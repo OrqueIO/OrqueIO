@@ -26,8 +26,23 @@ import io.orqueio.bpm.impl.juel.jakarta.el.ELResolver;
 
 
 /**
- * Resolver wrapping an instance of javax.el.ELResolver obtained from the
- * {@link BeanManager}. Allows the process engine to resolve Cdi-Beans.
+ * Resolves CDI beans referenced as the root of an EL expression, e.g. the
+ * {@code bean} in <code>${bean.method(execution)}</code>.
+ *
+ * <p>This resolver only resolves the <em>root</em> bean name, via
+ * {@link ProgrammaticBeanLookup} (which uses {@link BeanManager#getBeans} and is
+ * supported by every CDI container, including CDI Lite runtimes such as Quarkus
+ * ArC). It intentionally does <em>not</em> delegate to
+ * {@link BeanManager#getELResolver()}: that method is optional under CDI Lite,
+ * and Quarkus ArC throws {@link UnsupportedOperationException} for it, which
+ * previously made every {@code ${bean.method(...)}} expression fail at runtime
+ * under Quarkus. The delegation is also unnecessary: property access and method
+ * invocation on the resolved bean are handled by the {@code ArrayELResolver},
+ * {@code ListELResolver}, {@code MapELResolver} and {@code BeanELResolver} that
+ * {@code CdiExpressionManager} already adds to the resolver chain after this
+ * one. Dropping it is therefore behaviourally equivalent on a full CDI container
+ * (Weld already routed method invocation through a {@code BeanELResolver}) while
+ * also working under CDI Lite.
  *
  * @author Daniel Meyer
  */
@@ -37,58 +52,62 @@ public class CdiResolver extends ELResolver {
     return BeanManagerLookup.getBeanManager();
   }
 
-  protected javax.el.ELResolver getWrappedResolver() {
-    BeanManager beanManager = getBeanManager();
-    javax.el.ELResolver resolver = beanManager.getELResolver();
-    return resolver;
-  }
-
-  @Override
-  public Class< ? > getCommonPropertyType(ELContext context, Object base) {
-    return getWrappedResolver().getCommonPropertyType(wrapContext(context), base);
-  }
-
-  @Override
-  public Iterator<FeatureDescriptor> getFeatureDescriptors(ELContext context, Object base) {
-    return getWrappedResolver().getFeatureDescriptors(wrapContext(context), base);
-  }
-
-  @Override
-  public Class< ? > getType(ELContext context, Object base, Object property) {
-    return getWrappedResolver().getType(wrapContext(context), base, property);
-  }
-
   @Override
   public Object getValue(ELContext context, Object base, Object property) {
     //we need to resolve a bean only for the first "member" of expression, e.g. bean.property1.property2
-    if (base == null) {
+    if (base == null && property != null) {
       Object result = ProgrammaticBeanLookup.lookup(property.toString(), getBeanManager());
       if (result != null) {
         context.setPropertyResolved(true);
       }
       return result;
-    } else {
-      return null;
     }
+    return null;
+  }
+
+  @Override
+  public Class< ? > getType(ELContext context, Object base, Object property) {
+    if (base == null && property != null) {
+      Object result = ProgrammaticBeanLookup.lookup(property.toString(), getBeanManager());
+      if (result != null) {
+        context.setPropertyResolved(true);
+        return result.getClass();
+      }
+    }
+    return null;
   }
 
   @Override
   public boolean isReadOnly(ELContext context, Object base, Object property) {
-    return getWrappedResolver().isReadOnly(wrapContext(context), base, property);
+    // a CDI bean resolved by name cannot be reassigned through that name
+    if (base == null && property != null
+        && ProgrammaticBeanLookup.lookup(property.toString(), getBeanManager()) != null) {
+      context.setPropertyResolved(true);
+      return true;
+    }
+    return false;
   }
 
   @Override
   public void setValue(ELContext context, Object base, Object property, Object value) {
-    getWrappedResolver().setValue(wrapContext(context), base, property, value);
+    // assigning to a CDI bean root is not supported; left to the rest of the chain
   }
 
   @Override
   public Object invoke(ELContext context, Object base, Object method, java.lang.Class< ? >[] paramTypes, Object[] params) {
-    return getWrappedResolver().invoke(wrapContext(context), base, method, paramTypes, params);
+    // method invocation happens on the already-resolved base and is handled by the
+    // BeanELResolver further down the CdiExpressionManager chain
+    return null;
   }
 
-  protected javax.el.ELContext wrapContext(ELContext context) {
-    return new ElContextDelegate(context, getWrappedResolver());
+  @Override
+  public Class< ? > getCommonPropertyType(ELContext context, Object base) {
+    return base == null ? Object.class : null;
+  }
+
+  @Override
+  public Iterator<FeatureDescriptor> getFeatureDescriptors(ELContext context, Object base) {
+    return null;
   }
 
 }
