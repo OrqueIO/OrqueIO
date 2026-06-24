@@ -42,11 +42,32 @@
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <executions>
+          <!-- Create the main JAR early so shade can consume it before the test phase -->
+          <execution>
+            <id>pre-shade-jar</id>
+            <phase>process-test-classes</phase>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+          <!-- Disable the default package-phase jar; maven-jar-plugin 3.4+ rejects
+               replacing an artifact that shade already set at process-test-classes -->
+          <execution>
+            <id>default-jar</id>
+            <phase>none</phase>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-source-plugin</artifactId>
         <executions>
+          <!-- Create sources JAR at the same early phase so shade-early can process it -->
           <execution>
             <id>attach-sources</id>
-            <phase>package</phase>
+            <phase>process-test-classes</phase>
             <goals>
               <goal>jar-no-fork</goal>
             </goals>
@@ -57,14 +78,17 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
         <executions>
+          <!-- Shade early so the shaded JAR is available to reactor dependents during mvn test -->
           <execution>
-            <phase>package</phase>
+            <id>shade-early</id>
+            <phase>process-test-classes</phase>
             <goals>
               <goal>shade</goal>
             </goals>
             <configuration>
-              <promoteTransitiveDependencies>true</promoteTransitiveDependencies>
+              <createSourcesJar>true</createSourcesJar>
               <shadeSourcesContent>true</shadeSourcesContent>
+              <promoteTransitiveDependencies>true</promoteTransitiveDependencies>
               <artifactSet>
                 <includes>
                   <include>jakarta.el:jakarta.el-api</include>
@@ -77,6 +101,11 @@
                 </relocation>
               </relocations>
             </configuration>
+          </execution>
+          <!-- Disable the inherited package-phase shade to prevent double-shading -->
+          <execution>
+            <id>default</id>
+            <phase>none</phase>
           </execution>
         </executions>
       </plugin>

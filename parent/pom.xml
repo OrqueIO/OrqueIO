@@ -23,7 +23,7 @@
     <version.quarkus>3.27.0.CR1</version.quarkus>
     <version.spring.framework>5.3.39</version.spring.framework>
     <version.spring.framework6>6.2.11</version.spring.framework6>
-    <version.spring-boot>4.0.6</version.spring-boot>
+    <version.spring-boot>4.1.0</version.spring-boot>
     <version.resteasy>3.15.6.Final</version.resteasy>
     <version.jersey2>2.34</version.jersey2>
     <version.jersey3>3.1.10</version.jersey3>
@@ -191,6 +191,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-shade-plugin</artifactId>
+          <version>3.5.3</version>
           <configuration>
             <createSourcesJar>true</createSourcesJar>
           </configuration>

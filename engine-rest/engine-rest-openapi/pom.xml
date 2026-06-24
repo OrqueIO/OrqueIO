@@ -124,6 +124,24 @@
   <build>
     <plugins>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>pre-package-jar</id>
+            <phase>process-test-classes</phase>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+          <!-- maven-jar-plugin 3.4+ rejects replacing an artifact already set at process-test-classes -->
+          <execution>
+            <id>default-jar</id>
+            <phase>none</phase>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>exec-maven-plugin</artifactId>
         <executions>
