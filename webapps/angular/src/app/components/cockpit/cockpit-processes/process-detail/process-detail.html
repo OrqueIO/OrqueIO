@@ -1,9 +1,12 @@
 <div class="ctn-fixed-view">
-  <!-- Loading state -->
+  <!-- Initial loading state (no data yet) -->
   <div class="loading-overlay" *ngIf="loading">
     <fa-icon [icon]="faSpinner" animation="spin"></fa-icon>
     <span>{{ 'common.loading' | translate }}</span>
   </div>
+
+  <!-- Transition progress bar (navigating between instances — keeps current view visible) -->
+  <div class="transition-progress-bar" *ngIf="transitioning"></div>
 
   <!-- Not found state -->
   <div class="not-found" *ngIf="!loading && !processInstance">
@@ -253,6 +256,22 @@
       <div class="ctn-row ctn-content-top"
            [class.collapsed]="diagramCollapsed"
            [class.maximized]="diagramMaximized">
+          <!-- Breadcrumb — visible whenever this instance has a parent (superProcessInstanceId),
+               regardless of how the page was reached (?from=, direct URL, or back navigation). -->
+          <div class="process-breadcrumb"
+               *ngIf="superProcessInstance && processInstance">
+              <fa-icon [icon]="faArrowUp" class="breadcrumb-up-icon"></fa-icon>
+              <a [routerLink]="['/cockpit/processes/instance', superProcessInstance.id]"
+                 class="breadcrumb-parent-name"
+                 [title]="superProcessInstance.id">
+                  {{ superProcessInstance.processDefinitionName || superProcessInstance.processDefinitionKey }}
+              </a>
+              <span class="breadcrumb-separator">›</span>
+              <span class="breadcrumb-current"
+                    [title]="processDefinition?.name || processDefinition?.key">
+            {{ processDefinition?.name || processDefinition?.key }}
+          </span>
+          </div>
 
         <div class="diagram-container">
           <div class="diagram-loading" *ngIf="loadingDiagram">
@@ -526,7 +545,8 @@
                       </span>
                     </td>
                     <td class="instance-id">
-                      <a [routerLink]="['/cockpit/processes/instance', instance.id]">
+                      <a [routerLink]="['/cockpit/processes/instance', instance.id]"
+                         [queryParams]="{ from: processId }">
                         {{ instance.id }}
                       </a>
                     </td>
