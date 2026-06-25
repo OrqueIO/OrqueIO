@@ -334,8 +334,6 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
             this.loadSuperProcessInstance(instance.superProcessInstanceId, this.processId);
           }
 
-          // Load called instances and Call Activity mapping
-          this.loadCallActivityMapping();
         },
         error: () => {
           this.loading = false;
@@ -534,7 +532,20 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
       });
   }
 
-  private loadSuperProcessInstance(superProcessInstanceId: string): void {
+  private loadFromProcess(fromProcessId: string): void {
+    this.cockpitService.getProcessInstance(fromProcessId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (instance) => {
+          if (this.fromProcessId === fromProcessId) {
+            this.fromProcess = instance;
+            this.cdr.markForCheck();
+          }
+        }
+      });
+  }
+
+  private loadSuperProcessInstance(superProcessInstanceId: string, forProcessId: string): void {
     this.cockpitService.getProcessInstance(superProcessInstanceId)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
@@ -644,8 +655,10 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
     if (!calledInstanceIds || calledInstanceIds.length === 0) return;
 
     if (calledInstanceIds.length === 1) {
-      // Single instance: navigate directly
-      this.router.navigate(['/cockpit/processes/instance', calledInstanceIds[0]]);
+      // Single instance: navigate directly, passing current process as breadcrumb origin
+      this.router.navigate(['/cockpit/processes/instance', calledInstanceIds[0]], {
+        queryParams: { from: this.processId }
+      });
     } else {
       // Multiple instances: show filtered called instances tab
       this.filteredCallActivityId = callActivityId;
