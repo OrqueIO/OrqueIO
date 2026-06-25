@@ -27,7 +27,8 @@ import {
   faChevronDown,
   faExpand,
   faCompress,
-  faSitemap
+  faSitemap,
+  faArrowUp
 } from '@fortawesome/free-solid-svg-icons';
 import { forkJoin } from 'rxjs';
 
@@ -120,6 +121,7 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
   faExpand = faExpand;
   faCompress = faCompress;
   faSitemap = faSitemap;
+  faArrowUp = faArrowUp;
 
   processId = '';
   loading = true;
@@ -140,7 +142,23 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
   userTasks: UserTask[] = [];
   externalTasks: ExternalTask[] = [];
   calledInstances: ProcessInstance[] = [];
+  callActivityMapping: Map<string, string[]> = new Map(); // activityId -> calledProcessInstanceIds[]
+  filteredCallActivityId: string | null = null;
   bpmnXml: string | null = null;
+
+  // Computed property for Call Activities with instances
+  get callActivityIdsWithInstances(): Set<string> {
+    return new Set(this.callActivityMapping.keys());
+  }
+
+  // Filtered called instances for display
+  get displayedCalledInstances(): ProcessInstance[] {
+    if (!this.filteredCallActivityId) {
+      return this.calledInstances;
+    }
+    const filteredIds = new Set(this.callActivityMapping.get(this.filteredCallActivityId) ?? []);
+    return this.calledInstances.filter(instance => filteredIds.has(instance.id));
+  }
   activityTree: ActivityInstanceTree | null = null;
   activityStatistics: ActivityStatistics[] = [];
 
@@ -231,7 +249,7 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
     this.tabs = [
       { id: 'variables', labelKey: 'cockpit.processDetail.tabs.variables', badgeCount: () => this.variables.length },
       { id: 'incidents', labelKey: 'cockpit.processDetail.tabs.incidents', badgeCount: () => this.incidents.length },
-      { id: 'calledInstances', labelKey: 'cockpit.processDetail.tabs.calledInstances', badgeCount: () => this.calledInstances.length },
+      { id: 'calledInstances', labelKey: 'cockpit.processDetail.tabs.calledInstances', badgeCount: () => this.displayedCalledInstances.length },
       { id: 'userTasks', labelKey: 'cockpit.processDetail.tabs.userTasks', badgeCount: () => this.userTasks.length },
       { id: 'jobs', labelKey: 'cockpit.processDetail.tabs.jobs', badgeCount: () => this.jobs.length },
       { id: 'externalTasks', labelKey: 'cockpit.processDetail.tabs.externalTasks', badgeCount: () => this.externalTasks.length }
@@ -289,8 +307,8 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
             this.loadSuperProcessInstance(instance.superProcessInstanceId);
           }
 
-          // Load called instances
-          this.loadCalledInstances();
+          // Load called instances and Call Activity mapping
+          this.loadCallActivityMapping();
         },
         error: () => {
           this.loading = false;
@@ -472,6 +490,18 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
       });
   }
 
+
+  private loadCallActivityMapping(): void {
+    this.cockpitService.getCallActivityMapping(this.processId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (mapping) => {
+          this.callActivityMapping = mapping;
+          this.cdr.markForCheck();
+        }
+      });
+  }
+
   private loadSuperProcessInstance(superProcessInstanceId: string): void {
     this.cockpitService.getProcessInstance(superProcessInstanceId)
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -569,6 +599,29 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
 
   onDiagramElementHover(_element: BpmnElement | null): void {
     // Could add hover feedback here
+  }
+
+  // Call Activity Navigation
+  navigateToCalledInstance(callActivityId: string): void {
+    // The icon only appears if the Call Activity has called instances in the mapping
+    const calledInstanceIds = this.callActivityMapping.get(callActivityId);
+    if (!calledInstanceIds || calledInstanceIds.length === 0) return;
+
+    if (calledInstanceIds.length === 1) {
+      // Single instance: navigate directly
+      this.router.navigate(['/cockpit/processes/instance', calledInstanceIds[0]]);
+    } else {
+      // Multiple instances: show filtered called instances tab
+      this.filteredCallActivityId = callActivityId;
+      this.activeTab = 'calledInstances';
+      this.cdr.markForCheck();
+
+      // Scroll to tabs section
+      setTimeout(() => {
+        const tabsElement = document.querySelector('.ctn-content-bottom');
+        tabsElement?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 100);
+    }
   }
 
   // Actions
