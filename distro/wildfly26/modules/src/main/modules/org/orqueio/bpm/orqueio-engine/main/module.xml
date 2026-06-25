@@ -1,0 +1,42 @@
+<module xmlns="urn:jboss:module:1.0" name="io.orqueio.bpm.orqueio-engine">
+  <resources>
+    <resource-root path="orqueio-engine-@project.version@.jar" />
+  </resources>
+
+  <dependencies>
+
+    <module name="javax.api" />
+    <module name="javax.transaction.api"/>
+    <module name="javax.enterprise.api" />
+    <module name="javax.inject.api" />
+    <module name="javax.ejb.api" />
+    <module name="javax.xml.bind.api" />
+    <module name="javax.servlet.api" />
+
+    <module name="org.jboss.vfs" />
+    <module name="org.slf4j" />
+
+    <module name="org.mybatis.mybatis" />
+    <module name="com.fasterxml.uuid.java-uuid-generator"/>
+    <module name="org.joda.time" slot="2.1" />
+    <module name="org.apache.groovy.groovy-all" services="import"/>
+    <module name="org.graalvm.js.js-scriptengine" services="import"/>
+
+    <module name="sun.jdk" services="import"/>
+
+    <module name="io.orqueio.bpm.model.orqueio-xml-model" />
+    <module name="io.orqueio.bpm.model.orqueio-bpmn-model" />
+    <module name="io.orqueio.bpm.model.orqueio-cmmn-model" />
+    <module name="io.orqueio.bpm.model.orqueio-dmn-model" />
+
+    <module name="io.orqueio.commons.orqueio-commons-logging" />
+    <module name="io.orqueio.commons.orqueio-commons-utils" />
+    <module name="io.orqueio.commons.orqueio-commons-typed-values" export="true" />
+    <module name="io.orqueio.template-engines.orqueio-template-engines-freemarker" services="import" />
+    <module name="io.orqueio.spin.orqueio-spin-core" services="import"/>
+
+    <module name="io.orqueio.bpm.dmn.orqueio-engine-dmn" />
+    <module name="io.orqueio.bpm.juel.orqueio-juel" services="import"/>
+
+  </dependencies>
+</module>

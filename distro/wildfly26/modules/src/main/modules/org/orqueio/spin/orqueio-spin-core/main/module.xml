@@ -1,0 +1,12 @@
+<module xmlns="urn:jboss:module:1.0" name="io.orqueio.spin.orqueio-spin-core">
+  <resources>
+    <resource-root path="orqueio-spin-core-@project.version@.jar" />
+  </resources>
+
+  <dependencies>
+    <module name="javax.api"/>
+    <module name="io.orqueio.commons.orqueio-commons-logging" />
+    <module name="io.orqueio.commons.orqueio-commons-utils" />
+    <module name="io.orqueio.commons.orqueio-commons-typed-values" />
+  </dependencies>
+</module>

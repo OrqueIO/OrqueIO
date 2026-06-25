@@ -1,0 +1,22 @@
+<module xmlns="urn:jboss:module:1.0" name="io.orqueio.bpm.orqueio-engine-plugin-spin">
+  <resources>
+    <resource-root path="orqueio-engine-plugin-spin-@project.version@.jar" />
+  </resources>
+
+  <dependencies>
+
+    <module name="java.base" />
+    <module name="org.joda.time" slot="2.1" />
+
+    <module name="io.orqueio.commons.orqueio-commons-typed-values" />
+    <module name="io.orqueio.commons.orqueio-commons-logging" />
+    <module name="io.orqueio.bpm.orqueio-engine" />
+
+    <module name="io.orqueio.spin.orqueio-spin-core" />
+    <module name="io.orqueio.spin.orqueio-spin-dataformat-json-jackson" services="import" />
+    <module name="io.orqueio.spin.orqueio-spin-dataformat-xml-dom-jakarta" services="import" />
+
+    <module name="io.orqueio.bpm.dmn.orqueio-engine-feel-scala" />
+    <module name="io.orqueio.feel.feel-engine" />
+  </dependencies>
+</module>
