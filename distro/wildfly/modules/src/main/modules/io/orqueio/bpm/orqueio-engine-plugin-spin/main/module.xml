@@ -10,13 +10,11 @@
 
     <module name="io.orqueio.commons.orqueio-commons-typed-values" />
     <module name="io.orqueio.commons.orqueio-commons-logging" />
+    <module name="io.orqueio.feel.feel-engine" />
     <module name="io.orqueio.bpm.orqueio-engine" />
 
     <module name="io.orqueio.spin.orqueio-spin-core" />
     <module name="io.orqueio.spin.orqueio-spin-dataformat-json-jackson" services="import" />
     <module name="io.orqueio.spin.orqueio-spin-dataformat-xml-dom-jakarta" services="import" />
-
-    <module name="io.orqueio.bpm.dmn.orqueio-engine-feel-scala" />
-    <module name="io.orqueio.feel.feel-engine" />
   </dependencies>
 </module>
