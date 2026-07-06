@@ -19,6 +19,7 @@ package io.orqueio.bpm.engine.cdi.impl.annotation;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 
+import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
@@ -30,10 +31,11 @@ import io.orqueio.bpm.engine.cdi.annotation.CompleteTask;
 
 /**
  * {@link Interceptor} for handling the {@link CompleteTask}-Annotation
- * 
+ *
  * @author Daniel Meyer
  */
 @Interceptor
+@Priority(Interceptor.Priority.APPLICATION)
 @CompleteTask
 public class CompleteTaskInterceptor implements Serializable {
 
