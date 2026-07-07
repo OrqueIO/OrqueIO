@@ -37,17 +37,15 @@
       <version>4.3.0</version>
     </dependency>
 
-    <!-- Quarkus dependencies -->
+    <!-- Quarkus dependencies (versions managed by quarkus-bom via quarkus-extension/pom.xml) -->
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-arc</artifactId>
-      <version>3.20.0</version>
     </dependency>
 
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-agroal</artifactId>
-      <version>3.20.0</version>
     </dependency>
 
   </dependencies>
