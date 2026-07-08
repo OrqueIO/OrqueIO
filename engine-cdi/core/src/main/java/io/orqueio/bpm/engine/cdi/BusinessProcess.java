@@ -20,6 +20,7 @@ import java.io.Serializable;
 import java.util.Map;
 
 import javax.enterprise.context.Conversation;
+import javax.enterprise.context.Dependent;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
@@ -82,6 +83,7 @@ import io.orqueio.bpm.engine.variable.value.TypedValue;
  * @author Daniel Meyer
  * @author Falko Menge
  */
+@Dependent
 @Named
 public class BusinessProcess implements Serializable {
 
