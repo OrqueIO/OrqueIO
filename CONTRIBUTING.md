@@ -37,15 +37,20 @@ We welcome contributions of all kinds to the OrqueIO project. Whether you want t
 
 ### Build from Source
 
-Build all modules and run unit tests:
+The `juel` module is intentionally excluded from the main Maven reactor (see [#188](https://github.com/OrqueIO/OrqueIO/issues/188) — Quarkus workspace VerifyError). It must be installed into the local `.m2` cache before the main build, otherwise modules that depend on `orqueio-juel` (e.g. `engine-dmn/feel-juel`) will fail to resolve.
 
 ```bash
+# Step 1 — install juel into local .m2 (required once per new SNAPSHOT version)
+mvn install -pl juel -DskipTests
+
+# Step 2 — build all modules and run unit tests
 mvn clean install
 ```
 
 To skip web application modules (if you don't have Node.js):
 
 ```bash
+mvn install -pl juel -DskipTests
 mvn clean install -pl '!webapps,!webapps/assembly,!webapps/assembly-jakarta'
 ```
 
