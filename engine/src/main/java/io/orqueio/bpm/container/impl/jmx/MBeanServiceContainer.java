@@ -26,6 +26,7 @@ import java.util.Stack;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.management.InstanceAlreadyExistsException;
+import javax.management.InstanceNotFoundException;
 import javax.management.MBeanServer;
 import javax.management.ObjectName;
 
@@ -126,9 +127,10 @@ public class MBeanServiceContainer implements PlatformServiceContainer {
     ObjectName serviceName = getObjectName(name);
 
     final PlatformService<Object> service = getService(serviceName);
+    final boolean wasInJvm = mBeanServer.isRegistered(serviceName);
 
     if (service == null) {
-      if (mBeanServer.isRegistered(serviceName)) {
+      if (wasInJvm) {
         // Stale entry in the JVM MBeanServer from a previous container lifecycle
         // (Quarkus live-reload or dev+test running simultaneously in the same JVM).
         // Unregister it so the next startService() can succeed.
@@ -138,20 +140,25 @@ public class MBeanServiceContainer implements PlatformServiceContainer {
         }
         return;
       }
+      // Truly unknown service — this is a caller error, not a cleanup scenario.
       throw new ProcessEngineException("Cannot stop service " + serviceName + ": no such service registered.");
     }
 
     try {
-      // call the service-provided stop behavior
       service.stop(this);
     } finally {
-      // always unregister, even if the stop method throws an exception.
-      try {
-        mBeanServer.unregisterMBean(serviceName);
-        servicesByName.remove(serviceName);
-      }
-      catch (Throwable t) {
-        throw LOG.exceptionWhileUnregisteringService(serviceName.getCanonicalName(), t);
+      // Remove from local map unconditionally before attempting JVM unregistration.
+      // This ensures a failed unregisterMBean() call cannot leave a stale local entry
+      // that would block the next startService() (ENGINE-08037 chain failure on live-reload).
+      servicesByName.remove(serviceName);
+      if (wasInJvm) {
+        try {
+          mBeanServer.unregisterMBean(serviceName);
+        } catch (InstanceNotFoundException ignored) {
+          // MBean was already removed by another Quarkus context lifecycle — safe to ignore.
+        } catch (Throwable t) {
+          throw LOG.exceptionWhileUnregisteringService(serviceName.getCanonicalName(), t);
+        }
       }
     }
 
