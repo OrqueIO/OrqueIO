@@ -548,6 +548,17 @@
         <artifactId>maven-jar-plugin</artifactId>
         <executions>
           <execution>
+            <id>default-jar</id>
+            <phase>none</phase>
+          </execution>
+          <execution>
+            <id>create-jar-compile-phase</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+          <execution>
             <goals>
               <goal>test-jar</goal>
             </goals>
