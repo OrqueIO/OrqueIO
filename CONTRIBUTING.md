@@ -41,7 +41,7 @@ The `juel` module is intentionally excluded from the main Maven reactor (see [#1
 
 ```bash
 # Step 1 — install juel into local .m2 (required once per new SNAPSHOT version)
-mvn install -pl juel -DskipTests
+mvn -f juel/pom.xml install -DskipTests
 
 # Step 2 — build all modules and run unit tests
 mvn clean install
@@ -50,7 +50,7 @@ mvn clean install
 To skip web application modules (if you don't have Node.js):
 
 ```bash
-mvn install -pl juel -DskipTests
+mvn -f juel/pom.xml install -DskipTests
 mvn clean install -pl '!webapps,!webapps/assembly,!webapps/assembly-jakarta'
 ```
 
