@@ -25,6 +25,7 @@ import java.util.Set;
 import java.util.Stack;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.management.InstanceAlreadyExistsException;
 import javax.management.MBeanServer;
 import javax.management.ObjectName;
 
@@ -77,7 +78,15 @@ public class MBeanServiceContainer implements PlatformServiceContainer {
     service.start(this);
 
     try {
-      beanServer.registerMBean(service, serviceName);
+      try {
+        beanServer.registerMBean(service, serviceName);
+      } catch (InstanceAlreadyExistsException e) {
+        // A previous container lifecycle (Quarkus live-reload or dev+test running in the same JVM)
+        // left an orphaned MBean in the JVM MBeanServer that was never cleaned up.
+        // Evict the stale entry and retry registration once.
+        beanServer.unregisterMBean(serviceName);
+        beanServer.registerMBean(service, serviceName);
+      }
       servicesByName.put(serviceName, service);
 
       Stack<DeploymentOperation> currentOperationContext = activeDeploymentOperations.get();
@@ -118,7 +127,19 @@ public class MBeanServiceContainer implements PlatformServiceContainer {
 
     final PlatformService<Object> service = getService(serviceName);
 
-    ensureNotNull("Cannot stop service " + serviceName + ": no such service registered", "service", service);
+    if (service == null) {
+      if (mBeanServer.isRegistered(serviceName)) {
+        // Stale entry in the JVM MBeanServer from a previous container lifecycle
+        // (Quarkus live-reload or dev+test running simultaneously in the same JVM).
+        // Unregister it so the next startService() can succeed.
+        try {
+          mBeanServer.unregisterMBean(serviceName);
+        } catch (Throwable ignored) {
+        }
+        return;
+      }
+      throw new ProcessEngineException("Cannot stop service " + serviceName + ": no such service registered.");
+    }
 
     try {
       // call the service-provided stop behavior
