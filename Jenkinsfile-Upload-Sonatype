@@ -24,7 +24,7 @@ pipeline {
                 // juel is intentionally excluded from the Maven reactor (see #188 —
                 // Quarkus workspace VerifyError). It must be installed into .m2
                 // before the main build for each new SNAPSHOT version.
-                sh "mvn install -pl juel -DskipTests"
+                sh "mvn -f juel/pom.xml install -DskipTests"
                 sh "mvn clean install -DskipTests"
                 sh "mvn clean deploy  -X -Pcentral-sonatype-publish -DskipTests"
             }
