@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, DestroyRef, inject, ChangeDetectionStrategy, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, ActivatedRoute } from '@angular/router';
+import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -40,7 +40,7 @@ import { COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS } from '../../../../shared/
 import { CockpitService, ProcessInstance, ProcessDefinition, ProcessQueryParams, ActivityStatistics, Incident, JobDefinition, CalledProcessDefinition } from '../../../../services/cockpit.service';
 import { NavMenuService } from '../../../../services/nav-menu.service';
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
-import { BpmnViewerComponent, ActivityBadge } from '../../../../shared/bpmn-viewer/bpmn-viewer';
+import { BpmnViewerComponent, ActivityBadge, CallActivityClickEvent } from '../../../../shared/bpmn-viewer/bpmn-viewer';
 
 interface SortConfig {
   column: string;
@@ -86,6 +86,7 @@ export class ProcessListComponent implements OnInit, OnDestroy {
   private destroyRef = inject(DestroyRef);
   private navMenuService = inject(NavMenuService);
   private cockpitService = inject(CockpitService);
+  private router = inject(Router);
   private route = inject(ActivatedRoute);
   private cdr = inject(ChangeDetectorRef);
 
@@ -912,6 +913,24 @@ export class ProcessListComponent implements OnInit, OnDestroy {
         error: () => {
           this.calledProcessDefinitionsLoading = false;
           this.cdr.markForCheck();
+        }
+      });
+  }
+
+  navigateToCalledDefinition(event: CallActivityClickEvent): void {
+    const { callActivityId, calledElement } = event;
+    if (!calledElement) return;
+
+    this.cockpitService.getProcessDefinitionByKey(calledElement)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(definition => {
+        if (definition?.key) {
+          this.router.navigate(['/cockpit/processes', definition.key, 'definition']);
+        } else {
+          this.bpmnViewer?.showCallActivityError(
+            callActivityId,
+            `Process definition '${calledElement}' not found`
+          );
         }
       });
   }

@@ -197,7 +197,9 @@
                 [activityBadges]="activityBadges"
                 [showExpandButton]="true"
                 [isExpanded]="diagramMaximized"
+                [enableCallActivityNavigation]="true"
                 (expandToggle)="toggleDiagramMaximize()"
+                (callActivityClick)="navigateToCalledDefinition($event)"
               ></app-bpmn-viewer>
 
               <div class="empty-state" *ngIf="!loadingDiagram && !bpmnXml">
