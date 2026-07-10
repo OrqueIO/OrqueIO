@@ -673,8 +673,8 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
       this.cockpitService.getProcessDefinitionByKey(calledElement)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe(definition => {
-          if (definition?.key) {
-            this.router.navigate(['/cockpit/processes', definition.key, 'definition']);
+          if (definition) {
+            this.router.navigate(['/cockpit/processes', calledElement, 'definition']);
           } else {
             this.bpmnViewer?.showCallActivityError(
               callActivityId,
