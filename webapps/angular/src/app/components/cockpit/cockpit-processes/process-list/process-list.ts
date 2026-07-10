@@ -199,27 +199,31 @@ export class ProcessListComponent implements OnInit, OnDestroy {
     this.navMenuService.setMenuItems(COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS);
     this.loadSavedPreferences();
 
-    // Subscribe to queryParams first so parentDefinitionKey is set before loadProcessDefinition runs
-    this.route.queryParams
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(queryParams => {
-        this.parentDefinitionKey = queryParams['from'] || null;
-        this.parentDefinitionName = queryParams['fromName'] || null;
-        if (this.processDefinition) {
-          this.buildBreadcrumbs();
-        }
-      });
-
-    // Get the process definition key from route params
+    // Read both params and queryParams atomically: the snapshot is updated before
+    // the params observable fires, so snapshot.queryParams always reflects the
+    // current navigation — no stale-value race with a separate queryParams subscription.
     this.route.params
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(params => {
-        this.processDefinitionKey = params['key'];
-        if (this.processDefinitionKey) {
+        const newKey = params['key'];
+        if (!newKey) return;
+
+        // Snapshot is already current for this navigation
+        const fromKey: string | null = this.route.snapshot.queryParams['from'] || null;
+        const fromName: string | null = this.route.snapshot.queryParams['fromName'] || null;
+
+        this.parentDefinitionKey = fromKey;
+        this.parentDefinitionName = fromName;
+
+        if (newKey !== this.processDefinitionKey) {
+          this.processDefinitionKey = newKey;
+          this.processDefinition = null;
           this.currentPage = 1;
           this.loadProcessDefinition();
           this.loadProcessDefinitionVersions();
           this.loadProcessInstances();
+        } else if (this.processDefinition) {
+          this.buildBreadcrumbs();
         }
       });
   }
@@ -256,10 +260,12 @@ export class ProcessListComponent implements OnInit, OnDestroy {
   }
 
   loadProcessDefinition(): void {
+    const requestedForKey = this.processDefinitionKey;
     this.cockpitService.getProcessDefinitionByKey(this.processDefinitionKey)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (definition) => {
+          if (requestedForKey !== this.processDefinitionKey) return;
           this.processDefinition = definition;
           // Initialize selectedVersion to the latest version (current definition ID)
           if (definition?.id) {
@@ -278,11 +284,14 @@ export class ProcessListComponent implements OnInit, OnDestroy {
   }
 
   private loadParentDefinitionFromInstance(superProcessInstanceId: string): void {
+    const requestedForKey = this.processDefinitionKey;
     this.cockpitService.getProcessInstance(superProcessInstanceId)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (parentInstance) => {
-          if (parentInstance && !this.parentDefinitionKey) {
+          if (requestedForKey !== this.processDefinitionKey) return;
+          if (parentInstance && !this.parentDefinitionKey &&
+              parentInstance.processDefinitionKey !== this.processDefinitionKey) {
             this.parentDefinitionKey = parentInstance.processDefinitionKey;
             this.parentDefinitionName = parentInstance.processDefinitionName || parentInstance.processDefinitionKey;
             this.buildBreadcrumbs();
@@ -293,21 +302,10 @@ export class ProcessListComponent implements OnInit, OnDestroy {
 
   private buildBreadcrumbs(): void {
     const name = this.processDefinition?.name || this.processDefinitionKey;
-    if (this.parentDefinitionKey) {
-      this.breadcrumbs = [
-        { label: 'Processes', translateKey: 'cockpit.menu.processes', route: '/cockpit/processes' },
-        {
-          label: this.parentDefinitionName || this.parentDefinitionKey || undefined,
-          route: `/cockpit/processes/${this.parentDefinitionKey}/definition`
-        },
-        { label: name }
-      ];
-    } else {
-      this.breadcrumbs = [
-        { label: 'Processes', translateKey: 'cockpit.menu.processes', route: '/cockpit/processes' },
-        { label: name }
-      ];
-    }
+    this.breadcrumbs = [
+      { label: 'Processes', translateKey: 'cockpit.menu.processes', route: '/cockpit/processes' },
+      { label: name }
+    ];
     this.cdr.markForCheck();
   }
 
@@ -380,6 +378,7 @@ export class ProcessListComponent implements OnInit, OnDestroy {
       ? this.cockpitService.getIncidentsByProcessDefinitionKey(this.processDefinitionKey)
       : this.cockpitService.getIncidentsByProcessDefinitionId(this.selectedVersion);
 
+    const requestedForKey = this.processDefinitionKey;
     forkJoin({
       count: this.cockpitService.queryProcessInstancesCount(queryBody),
       instances: this.cockpitService.queryProcessInstances(queryBody, firstResult, this.pageSize),
@@ -387,6 +386,7 @@ export class ProcessListComponent implements OnInit, OnDestroy {
     }).pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: ({ count, instances, incidents }) => {
+          if (requestedForKey !== this.processDefinitionKey) return;
           this.totalCount = count;
           // Associate incidents with process instances
           this.processInstances = instances.map(instance => {
