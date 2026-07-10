@@ -359,7 +359,9 @@
                       </span>
                     </td>
                     <td class="id-cell">
-                      <a [routerLink]="['/cockpit/processes/instance', instance.id]" class="instance-link">
+                      <a [routerLink]="['/cockpit/processes/instance', instance.id]"
+                         [queryParams]="instance.superProcessInstanceId ? { from: instance.superProcessInstanceId } : null"
+                         class="instance-link">
                         {{ instance.id }}
                       </a>
                       <span class="super-process-link" *ngIf="instance.superProcessInstanceId">
@@ -373,6 +375,7 @@
                     <td>
                       <a
                         [routerLink]="['/cockpit/processes/instance', instance.id]"
+                        [queryParams]="instance.superProcessInstanceId ? { from: instance.superProcessInstanceId } : null"
                         class="action-link"
                         [title]="'cockpit.processes.viewDetails' | translate"
                       >

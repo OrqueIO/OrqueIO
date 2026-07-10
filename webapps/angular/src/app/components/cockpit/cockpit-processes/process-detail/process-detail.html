@@ -256,15 +256,16 @@
       <div class="ctn-row ctn-content-top"
            [class.collapsed]="diagramCollapsed"
            [class.maximized]="diagramMaximized">
-          <!-- Breadcrumb — visible whenever this instance has a parent (superProcessInstanceId),
-               regardless of how the page was reached (?from=, direct URL, or back navigation). -->
+          <!-- Breadcrumb: condition uses processInstance.superProcessInstanceId (from child's own
+               API response) so it works on direct URL access without needing to load the parent
+               first. Parent name resolves asynchronously via parentInstance when available. -->
           <div class="process-breadcrumb"
-               *ngIf="superProcessInstance && processInstance">
+               *ngIf="processInstance?.superProcessInstanceId as superPId">
               <fa-icon [icon]="faArrowUp" class="breadcrumb-up-icon"></fa-icon>
-              <a [routerLink]="['/cockpit/processes/instance', superProcessInstance.id]"
+              <a [routerLink]="['/cockpit/processes/instance', superPId]"
                  class="breadcrumb-parent-name"
-                 [title]="superProcessInstance.id">
-                  {{ superProcessInstance.processDefinitionName || superProcessInstance.processDefinitionKey }}
+                 [title]="superPId">
+                  {{ parentInstance?.processDefinitionName || parentInstance?.processDefinitionKey || superPId }}
               </a>
               <span class="breadcrumb-separator">›</span>
               <span class="breadcrumb-current"

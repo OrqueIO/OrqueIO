@@ -137,6 +137,11 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
   processDefinition: ProcessDefinition | null = null;
   superProcessInstance: ProcessInstance | null = null;
   fromProcess: ProcessInstance | null = null;
+
+  /** First available parent: authoritative API result, then navigation-context fallback. */
+  get parentInstance(): ProcessInstance | null {
+    return this.superProcessInstance ?? this.fromProcess;
+  }
   fromProcessId: string | null = null;
   variables: Variable[] = [];
   activities: Activity[] = [];
@@ -332,6 +337,10 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
           // Load super process instance if this is a sub-process
           if (instance?.superProcessInstanceId) {
             this.loadSuperProcessInstance(instance.superProcessInstanceId, this.processId);
+          } else if (this.fromProcessId) {
+            // Fallback: API didn't return superProcessInstanceId but user navigated
+            // from a parent via ?from=parentId — use that ID to load the parent instance
+            this.loadSuperProcessInstance(this.fromProcessId, this.processId);
           }
 
         },

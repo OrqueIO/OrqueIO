@@ -277,6 +277,20 @@ export class ProcessListComponent implements OnInit, OnDestroy {
       });
   }
 
+  private loadParentDefinitionFromInstance(superProcessInstanceId: string): void {
+    this.cockpitService.getProcessInstance(superProcessInstanceId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (parentInstance) => {
+          if (parentInstance && !this.parentDefinitionKey) {
+            this.parentDefinitionKey = parentInstance.processDefinitionKey;
+            this.parentDefinitionName = parentInstance.processDefinitionName || parentInstance.processDefinitionKey;
+            this.buildBreadcrumbs();
+          }
+        }
+      });
+  }
+
   private buildBreadcrumbs(): void {
     const name = this.processDefinition?.name || this.processDefinitionKey;
     if (this.parentDefinitionKey) {
@@ -382,6 +396,15 @@ export class ProcessListComponent implements OnInit, OnDestroy {
           this.loading = false;
           this.updateActiveFiltersCount();
           this.cdr.markForCheck();
+
+          // Mirror instance-view logic: if no parent context from URL, derive it from
+          // the first loaded instance that has a superProcessInstanceId
+          if (!this.parentDefinitionKey) {
+            const instanceWithParent = this.processInstances.find(i => i.superProcessInstanceId);
+            if (instanceWithParent?.superProcessInstanceId) {
+              this.loadParentDefinitionFromInstance(instanceWithParent.superProcessInstanceId);
+            }
+          }
         },
         error: () => {
           this.loading = false;
