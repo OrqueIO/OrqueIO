@@ -31,7 +31,8 @@ import {
   faCompress,
   faPlus,
   faMinus,
-  faSync
+  faSync,
+  faArrowUp
 } from '@fortawesome/free-solid-svg-icons';
 import { forkJoin } from 'rxjs';
 
@@ -121,12 +122,17 @@ export class ProcessListComponent implements OnInit, OnDestroy {
   faPlus = faPlus;
   faMinus = faMinus;
   faSync = faSync;
+  faArrowUp = faArrowUp;
 
   @ViewChild('bpmnViewer') bpmnViewer!: BpmnViewerComponent;
 
   breadcrumbs: BreadcrumbItem[] = [
     { translateKey: 'cockpit.menu.processes', route: '/cockpit/processes' }
   ];
+
+  // Parent definition context for breadcrumb (set when navigating from a calling definition)
+  parentDefinitionKey: string | null = null;
+  parentDefinitionName: string | null = null;
 
   // Process definition info
   processDefinitionKey = '';
@@ -193,6 +199,17 @@ export class ProcessListComponent implements OnInit, OnDestroy {
     this.navMenuService.setMenuItems(COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS);
     this.loadSavedPreferences();
 
+    // Subscribe to queryParams first so parentDefinitionKey is set before loadProcessDefinition runs
+    this.route.queryParams
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(queryParams => {
+        this.parentDefinitionKey = queryParams['from'] || null;
+        this.parentDefinitionName = queryParams['fromName'] || null;
+        if (this.processDefinition) {
+          this.buildBreadcrumbs();
+        }
+      });
+
     // Get the process definition key from route params
     this.route.params
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -248,11 +265,7 @@ export class ProcessListComponent implements OnInit, OnDestroy {
           if (definition?.id) {
             this.selectedVersion = definition.id;
           }
-          const name = definition?.name || this.processDefinitionKey;
-          this.breadcrumbs = [
-            { label: 'Processes', translateKey: 'cockpit.menu.processes', route: '/cockpit/processes' },
-            { label: name }
-          ];
+          this.buildBreadcrumbs();
           this.cdr.markForCheck();
 
           // Load BPMN diagram
@@ -262,6 +275,26 @@ export class ProcessListComponent implements OnInit, OnDestroy {
           }
         }
       });
+  }
+
+  private buildBreadcrumbs(): void {
+    const name = this.processDefinition?.name || this.processDefinitionKey;
+    if (this.parentDefinitionKey) {
+      this.breadcrumbs = [
+        { label: 'Processes', translateKey: 'cockpit.menu.processes', route: '/cockpit/processes' },
+        {
+          label: this.parentDefinitionName || this.parentDefinitionKey || undefined,
+          route: `/cockpit/processes/${this.parentDefinitionKey}/definition`
+        },
+        { label: name }
+      ];
+    } else {
+      this.breadcrumbs = [
+        { label: 'Processes', translateKey: 'cockpit.menu.processes', route: '/cockpit/processes' },
+        { label: name }
+      ];
+    }
+    this.cdr.markForCheck();
   }
 
   loadBpmnDiagram(definitionId: string): void {
@@ -925,7 +958,12 @@ export class ProcessListComponent implements OnInit, OnDestroy {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(definition => {
         if (definition) {
-          this.router.navigate(['/cockpit/processes', calledElement, 'definition']);
+          this.router.navigate(['/cockpit/processes', calledElement, 'definition'], {
+            queryParams: {
+              from: this.processDefinitionKey,
+              fromName: this.processDefinition?.name || this.processDefinitionKey
+            }
+          });
         } else {
           this.bpmnViewer?.showCallActivityError(
             callActivityId,
