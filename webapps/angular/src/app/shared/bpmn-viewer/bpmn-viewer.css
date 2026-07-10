@@ -229,6 +229,30 @@
   background-color: hsl(205, 100%, 45%);
 }
 
+.bpmn-call-activity-overlay--expression {
+  background-color: #999999;
+  cursor: not-allowed;
+  pointer-events: auto;
+}
+
+.bpmn-call-activity-overlay--expression:hover {
+  background-color: #999999;
+}
+
+.bpmn-call-activity-error {
+  background-color: #fee2e2;
+  border: 1px solid #ef4444;
+  border-radius: 4px;
+  color: #b91c1c;
+  font-size: 11px;
+  line-height: 1.4;
+  padding: 3px 8px;
+  pointer-events: none;
+  white-space: nowrap;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+}
+
+
 /* Hide BPMN.js default elements */
 
 .djs-palette {
