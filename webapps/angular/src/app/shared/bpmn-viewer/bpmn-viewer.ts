@@ -431,22 +431,24 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
       const hasInstances = this.callActivityIdsWithInstances.has(element.id);
       const calledElement: string | null = element.businessObject?.calledElement ?? null;
 
-      // Rule 1: empty, absent, or null → no icon
-      if (!calledElement) return;
+      // Rule 1: no calledElement and no instances → no icon
+      if (!calledElement && !hasInstances) return;
 
-      const isExpression = calledElement.includes('${') || calledElement.includes('#{');
+      // Rule 2: EL expression with no instances → gray, non-clickable
+      // When instances exist, the icon is always clickable (navigation uses the instance ID, not calledElement)
+      const isExpression = !hasInstances && calledElement !== null &&
+        (calledElement.includes('${') || calledElement.includes('#{'));
 
       const btn = document.createElement('button');
       const svgIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 16 16"><path fill="white" fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"/></svg>';
       btn.innerHTML = svgIcon;
 
       if (isExpression) {
-        // Rule 2: EL expression → gray, non-clickable
         btn.className = 'bjs-drilldown bpmn-call-activity-overlay bpmn-call-activity-overlay--expression';
         btn.title = 'Navigation unavailable: calledElement is a dynamic expression';
         btn.disabled = true;
       } else {
-        // Rule 3: static reference → blue, clickable
+        // Rule 3: static reference or has instances → blue, clickable
         btn.className = 'bjs-drilldown bpmn-call-activity-overlay';
         btn.title = hasInstances ? 'Show Called Process Instances' : 'Go to Called Process Definition';
         btn.addEventListener('click', (e: Event) => {

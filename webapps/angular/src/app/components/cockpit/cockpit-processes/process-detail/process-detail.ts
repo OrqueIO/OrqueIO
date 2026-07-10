@@ -49,7 +49,7 @@ import {
   ExternalTask
 } from '../../../../services/cockpit.service';
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
-import { BpmnViewerComponent, ActivityBadge, BpmnElement } from '../../../../shared/bpmn-viewer/bpmn-viewer';
+import { BpmnViewerComponent, ActivityBadge, BpmnElement, CallActivityClickEvent } from '../../../../shared/bpmn-viewer/bpmn-viewer';
 import { ActivityInstanceTreeComponent } from '../../../../shared/activity-instance-tree/activity-instance-tree';
 import { ConfirmDialogComponent } from '../../../../shared/confirm-dialog/confirm-dialog';
 import { ClipboardDirective } from '../../../../shared/clipboard-directive/clipboard.directive';
@@ -649,27 +649,39 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
   }
 
   // Call Activity Navigation
-  navigateToCalledInstance(callActivityId: string): void {
-    // The icon only appears if the Call Activity has called instances in the mapping
+  navigateToCalledInstance(event: CallActivityClickEvent): void {
+    const { callActivityId, calledElement } = event;
     const calledInstanceIds = this.callActivityMapping.get(callActivityId);
-    if (!calledInstanceIds || calledInstanceIds.length === 0) return;
 
-    if (calledInstanceIds.length === 1) {
-      // Single instance: navigate directly, passing current process as breadcrumb origin
-      this.router.navigate(['/cockpit/processes/instance', calledInstanceIds[0]], {
-        queryParams: { from: this.processId }
-      });
-    } else {
-      // Multiple instances: show filtered called instances tab
-      this.filteredCallActivityId = callActivityId;
-      this.activeTab = 'calledInstances';
-      this.cdr.markForCheck();
-
-      // Scroll to tabs section
-      setTimeout(() => {
-        const tabsElement = document.querySelector('.ctn-content-bottom');
-        tabsElement?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      }, 100);
+    if (calledInstanceIds && calledInstanceIds.length > 0) {
+      if (calledInstanceIds.length === 1) {
+        this.router.navigate(['/cockpit/processes/instance', calledInstanceIds[0]], {
+          queryParams: { from: this.processId }
+        });
+      } else {
+        // Multiple instances: show filtered called instances tab
+        this.filteredCallActivityId = callActivityId;
+        this.activeTab = 'calledInstances';
+        this.cdr.markForCheck();
+        setTimeout(() => {
+          const tabsElement = document.querySelector('.ctn-content-bottom');
+          tabsElement?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 100);
+      }
+    } else if (calledElement) {
+      // No instances yet: navigate to the called process definition
+      this.cockpitService.getProcessDefinitionByKey(calledElement)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe(definition => {
+          if (definition?.key) {
+            this.router.navigate(['/cockpit/processes', definition.key, 'definition']);
+          } else {
+            this.bpmnViewer?.showCallActivityError(
+              callActivityId,
+              `Process definition '${calledElement}' not found`
+            );
+          }
+        });
     }
   }
 
