@@ -138,9 +138,9 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
   superProcessInstance: ProcessInstance | null = null;
   fromProcess: ProcessInstance | null = null;
 
-  /** First available parent: authoritative API result, then navigation-context fallback. */
+  /** Navigation context takes priority; API parent is the fallback for direct URL access. */
   get parentInstance(): ProcessInstance | null {
-    return this.superProcessInstance ?? this.fromProcess;
+    return this.fromProcess ?? this.superProcessInstance;
   }
   fromProcessId: string | null = null;
   variables: Variable[] = [];
@@ -267,24 +267,22 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.navMenuService.setMenuItems(COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS);
 
+    // route.params emits only when THIS component's route params change.
+    // snapshot.queryParams is atomically updated before params fires, so reading
+    // it here always gives the current ?from= value without a separate subscription
+    // that would race against loadProcessData().
     this.route.params
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(params => {
+        const fromId: string | null = this.route.snapshot.queryParams['from'] || null;
         this.processId = params['id'];
+        this.fromProcessId = fromId;
+        this.fromProcess = null;
+        if (fromId) {
+          this.loadFromProcess(fromId);
+        }
         this.loadProcessData();
       });
-
-     this.route.queryParams
-        .pipe(takeUntilDestroyed(this.destroyRef))
-        .subscribe(params => {
-          const fromId: string | null = params['from'] || null;
-          this.fromProcessId = fromId;
-          this.fromProcess = null;
-          if (fromId) {
-            this.loadFromProcess(fromId);
-          }
-          this.cdr.markForCheck();
-        });
   }
 
   ngOnDestroy(): void {
@@ -678,12 +676,21 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
         }, 100);
       }
     } else if (calledElement) {
-      // No instances yet: navigate to the called process definition
+      // No instances yet: navigate to the called process definition.
+      // Capture synchronously so the async HTTP response gets the correct parent context.
+      const fromKey = this.processDefinition?.key || this.processInstance?.processDefinitionKey || '';
+      const fromName = this.processDefinition?.name || fromKey;
+      // Pass fromInstance so the definition page can propagate the navigation
+      // context to its instance links — users clicking an instance from there
+      // will land with ?from=<this instance id> and see the correct breadcrumb.
+      const fromInstance = this.processId;
       this.cockpitService.getProcessDefinitionByKey(calledElement)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe(definition => {
           if (definition) {
-            this.router.navigate(['/cockpit/processes', calledElement, 'definition']);
+            this.router.navigate(['/cockpit/processes', calledElement, 'definition'], {
+              queryParams: { from: fromKey, fromName, fromInstance }
+            });
           } else {
             this.bpmnViewer?.showCallActivityError(
               callActivityId,

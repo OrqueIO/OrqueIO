@@ -360,7 +360,7 @@
                     </td>
                     <td class="id-cell">
                       <a [routerLink]="['/cockpit/processes/instance', instance.id]"
-                         [queryParams]="instance.superProcessInstanceId ? { from: instance.superProcessInstanceId } : null"
+                         [queryParams]="parentInstanceId ? { from: parentInstanceId } : null"
                          class="instance-link">
                         {{ instance.id }}
                       </a>
@@ -375,7 +375,7 @@
                     <td>
                       <a
                         [routerLink]="['/cockpit/processes/instance', instance.id]"
-                        [queryParams]="instance.superProcessInstanceId ? { from: instance.superProcessInstanceId } : null"
+                        [queryParams]="parentInstanceId ? { from: parentInstanceId } : null"
                         class="action-link"
                         [title]="'cockpit.processes.viewDetails' | translate"
                       >

@@ -133,6 +133,8 @@ export class ProcessListComponent implements OnInit, OnDestroy {
   // Parent definition context for breadcrumb (set when navigating from a calling definition)
   parentDefinitionKey: string | null = null;
   parentDefinitionName: string | null = null;
+  // Parent instance ID for navigation context (set when navigating from a calling instance)
+  parentInstanceId: string | null = null;
 
   // Process definition info
   processDefinitionKey = '';
@@ -199,21 +201,23 @@ export class ProcessListComponent implements OnInit, OnDestroy {
     this.navMenuService.setMenuItems(COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS);
     this.loadSavedPreferences();
 
-    // Read both params and queryParams atomically: the snapshot is updated before
-    // the params observable fires, so snapshot.queryParams always reflects the
-    // current navigation — no stale-value race with a separate queryParams subscription.
+    // route.params emits only when THIS component's route params change — it never
+    // fires for navigations to unrelated routes (instance view, process list, etc.),
+    // which prevents stale-snapshot processing. snapshot.queryParams is atomically
+    // updated before params fires, so reading it here always gives current values.
     this.route.params
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(params => {
         const newKey = params['key'];
         if (!newKey) return;
 
-        // Snapshot is already current for this navigation
         const fromKey: string | null = this.route.snapshot.queryParams['from'] || null;
         const fromName: string | null = this.route.snapshot.queryParams['fromName'] || null;
+        const fromInstance: string | null = this.route.snapshot.queryParams['fromInstance'] || null;
 
         this.parentDefinitionKey = fromKey;
         this.parentDefinitionName = fromName;
+        this.parentInstanceId = fromInstance;
 
         if (newKey !== this.processDefinitionKey) {
           this.processDefinitionKey = newKey;
@@ -278,23 +282,6 @@ export class ProcessListComponent implements OnInit, OnDestroy {
           if (definition?.id) {
             this.loadBpmnDiagram(definition.id);
             this.loadActivityStatistics(definition.id);
-          }
-        }
-      });
-  }
-
-  private loadParentDefinitionFromInstance(superProcessInstanceId: string): void {
-    const requestedForKey = this.processDefinitionKey;
-    this.cockpitService.getProcessInstance(superProcessInstanceId)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (parentInstance) => {
-          if (requestedForKey !== this.processDefinitionKey) return;
-          if (parentInstance && !this.parentDefinitionKey &&
-              parentInstance.processDefinitionKey !== this.processDefinitionKey) {
-            this.parentDefinitionKey = parentInstance.processDefinitionKey;
-            this.parentDefinitionName = parentInstance.processDefinitionName || parentInstance.processDefinitionKey;
-            this.buildBreadcrumbs();
           }
         }
       });
@@ -396,15 +383,6 @@ export class ProcessListComponent implements OnInit, OnDestroy {
           this.loading = false;
           this.updateActiveFiltersCount();
           this.cdr.markForCheck();
-
-          // Mirror instance-view logic: if no parent context from URL, derive it from
-          // the first loaded instance that has a superProcessInstanceId
-          if (!this.parentDefinitionKey) {
-            const instanceWithParent = this.processInstances.find(i => i.superProcessInstanceId);
-            if (instanceWithParent?.superProcessInstanceId) {
-              this.loadParentDefinitionFromInstance(instanceWithParent.superProcessInstanceId);
-            }
-          }
         },
         error: () => {
           this.loading = false;
@@ -977,15 +955,17 @@ export class ProcessListComponent implements OnInit, OnDestroy {
     const { callActivityId, calledElement } = event;
     if (!calledElement) return;
 
+    // Capture synchronously at click time — processDefinitionKey must not be read
+    // inside the async subscribe callback or it may reflect a later navigation.
+    const fromKey = this.processDefinitionKey;
+    const fromName = this.processDefinition?.name || this.processDefinitionKey;
+
     this.cockpitService.getProcessDefinitionByKey(calledElement)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(definition => {
         if (definition) {
           this.router.navigate(['/cockpit/processes', calledElement, 'definition'], {
-            queryParams: {
-              from: this.processDefinitionKey,
-              fromName: this.processDefinition?.name || this.processDefinitionKey
-            }
+            queryParams: { from: fromKey, fromName }
           });
         } else {
           this.bpmnViewer?.showCallActivityError(
