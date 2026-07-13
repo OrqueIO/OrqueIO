@@ -77,6 +77,7 @@
         <module>model-api</module>
         <module>engine-dmn</module>
         <module>connect</module>
+        <module>juel</module>
         <module>spin</module>
         <module>commons</module>
         <module>freemarker-template-engine</module>
@@ -327,6 +328,7 @@
 
         <module>engine-dmn</module>
         <module>connect</module>
+        <module>juel</module>
         <module>spin</module>
         <module>commons</module>
         <module>freemarker-template-engine</module>
