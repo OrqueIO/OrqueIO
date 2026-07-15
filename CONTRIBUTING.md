@@ -37,9 +37,8 @@ We welcome contributions of all kinds to the OrqueIO project. Whether you want t
 
 ### Build from Source
 
-Build all modules and run unit tests:
-
 ```bash
+# Build all modules and run unit tests
 mvn clean install
 ```
 

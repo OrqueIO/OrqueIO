@@ -45,6 +45,16 @@ import org.eclipse.microprofile.context.ManagedExecutor;
 @Recorder
 public class OrqueioEngineRecorder {
 
+  private final RuntimeValue<OrqueioEngineConfig> configRuntimeValue;
+
+  public OrqueioEngineRecorder(RuntimeValue<OrqueioEngineConfig> configRuntimeValue) {
+    this.configRuntimeValue = configRuntimeValue;
+  }
+
+  private OrqueioEngineConfig config() {
+    return configRuntimeValue.getValue();
+  }
+
   public void configureProcessEngineCdiBeans(BeanContainer beanContainer) {
 
     if (BeanManagerLookup.localInstance == null) {
@@ -52,11 +62,12 @@ public class OrqueioEngineRecorder {
     }
   }
 
-  public RuntimeValue<ProcessEngineConfigurationImpl> createProcessEngineConfiguration(BeanContainer beanContainer,
-                                                                                       OrqueioEngineConfig config) {
+  public RuntimeValue<ProcessEngineConfigurationImpl> createProcessEngineConfiguration(BeanContainer beanContainer) {
 
     QuarkusProcessEngineConfiguration configuration = getBeanFromContainer(QuarkusProcessEngineConfiguration.class,
         beanContainer);
+
+    OrqueioEngineConfig config = config();
 
     // apply properties from config before any other configuration.
     PropertyHelper.applyProperties(configuration, config.genericConfig(), PropertyHelper.KEBAB_CASE);
@@ -101,9 +112,18 @@ public class OrqueioEngineRecorder {
     ProcessEngineConfigurationImpl configuration = configurationRuntimeValue.getValue();
     ProcessEngine processEngine = configuration.buildProcessEngine();
 
-    // register process engine with the runtime container delegate
     RuntimeContainerDelegate runtimeContainerDelegate = RuntimeContainerDelegate.INSTANCE.get();
-    runtimeContainerDelegate.registerProcessEngine(processEngine);
+    try {
+      runtimeContainerDelegate.registerProcessEngine(processEngine);
+    } catch (Exception e) {
+      // Registration failed. Close the engine to stop the already-started JobExecutor
+      // and prevent an orphan thread.
+      try {
+        processEngine.close();
+      } catch (Exception ignored) {
+      }
+      throw e;
+    }
 
     return new RuntimeValue<>(processEngine);
   }
@@ -122,13 +142,11 @@ public class OrqueioEngineRecorder {
     shutdownContext.addShutdownTask(() -> {
       ProcessEngine engine = processEngine.getValue();
 
-      // shutdown the JobExecutor
       ProcessEngineConfigurationImpl configuration
           = (ProcessEngineConfigurationImpl) engine.getProcessEngineConfiguration();
       JobExecutor executor = configuration.getJobExecutor();
       executor.shutdown();
 
-      // deregister the Process Engine from the runtime container delegate
       RuntimeContainerDelegate runtimeContainerDelegate = RuntimeContainerDelegate.INSTANCE.get();
       runtimeContainerDelegate.unregisterProcessEngine(engine);
 

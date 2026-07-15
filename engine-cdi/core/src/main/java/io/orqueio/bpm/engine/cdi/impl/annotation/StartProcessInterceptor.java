@@ -21,6 +21,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
+import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
@@ -40,6 +41,7 @@ import io.orqueio.bpm.engine.variable.impl.VariableMapImpl;
  * @author Daniel Meyer
  */
 @Interceptor
+@Priority(Interceptor.Priority.APPLICATION)
 @StartProcess("")
 public class StartProcessInterceptor implements Serializable {
 
