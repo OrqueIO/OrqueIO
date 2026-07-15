@@ -1214,6 +1214,63 @@
 }
 
 /* =====================================================
+   PARENT DEFINITION BREADCRUMB
+   ===================================================== */
+
+.process-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+  padding: 8px 16px;
+  background: var(--bg-page, #f4f7fb);
+  border-bottom: 1px solid var(--border-color, #dce6f5);
+  box-shadow: 0 1px 0 0 rgba(0, 102, 204, 0.06);
+  font-size: 0.8375rem;
+  font-weight: 500;
+  overflow: hidden;
+}
+
+.breadcrumb-up-icon {
+  font-size: 0.68rem;
+  color: #b5152b;
+  margin-right: 2px;
+  flex-shrink: 0;
+  opacity: 0.85;
+}
+
+.breadcrumb-parent-name {
+  color: #b5152b;
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 180px;
+  transition: color 0.13s ease;
+}
+
+.breadcrumb-parent-name:hover {
+  color: #8f1022;
+  text-decoration: underline;
+}
+
+.breadcrumb-separator {
+  color: var(--text-muted, #6b7280);
+  font-size: 0.95rem;
+  line-height: 1;
+  flex-shrink: 0;
+  padding: 0 4px;
+  user-select: none;
+}
+
+.breadcrumb-current {
+  color: var(--text-secondary, #4b5563);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* =====================================================
    ACCESSIBILITY
    ===================================================== */
 

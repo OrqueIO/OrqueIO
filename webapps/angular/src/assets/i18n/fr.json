@@ -1547,6 +1547,7 @@
   "PAGE_TITLE_COCKPIT": "Cockpit",
   "PAGE_TITLE_COCKPIT_PROCESSES": "Processus",
   "PAGE_TITLE_COCKPIT_PROCESS_INSTANCES": "Instances de processus",
+  "PAGE_TITLE_COCKPIT_PROCESS_DEFINITION": "Définition du processus",
   "PAGE_TITLE_COCKPIT_PROCESS_DETAIL": "Détail du processus",
   "PAGE_TITLE_COCKPIT_DECISIONS": "Décisions",
   "PAGE_TITLE_COCKPIT_DECISION_DETAIL": "Détail de la décision",

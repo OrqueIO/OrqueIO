@@ -33,6 +33,11 @@ export interface BpmnElement {
   name?: string;
 }
 
+export interface CallActivityClickEvent {
+  callActivityId: string;
+  calledElement: string | null;
+}
+
 @Component({
   selector: 'app-bpmn-viewer',
   standalone: true,
@@ -64,13 +69,14 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
   @Output() error = new EventEmitter<Error>();
   @Output() expandToggle = new EventEmitter<void>();
   @Output() focusClick = new EventEmitter<void>();
-  @Output() callActivityClick = new EventEmitter<string>();
+  @Output() callActivityClick = new EventEmitter<CallActivityClickEvent>();
 
   private viewer: any = null;
   private overlays: any = null;
   private isViewerReady = false;
   private badgeOverlayIds: Map<string, string[]> = new Map();
   private callActivityOverlayIds: string[] = [];
+  private callActivityErrorOverlayIds: string[] = [];
   private currentXml: string | null = null;
   private needsZoomFit = false;
   private resizeTimeout: ReturnType<typeof setTimeout> | null = null;
@@ -388,14 +394,11 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
   }
 
   private clearCallActivityOverlays(): void {
-    this.callActivityOverlayIds.forEach(id => {
-      try {
-        this.overlays?.remove(id);
-      } catch (e) {
-        // Overlay might already be removed
-      }
+    [...this.callActivityOverlayIds, ...this.callActivityErrorOverlayIds].forEach(id => {
+      try { this.overlays?.remove(id); } catch (_) {}
     });
     this.callActivityOverlayIds = [];
+    this.callActivityErrorOverlayIds = [];
   }
 
   private clearAllOverlays(): void {
@@ -479,18 +482,34 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
     elementRegistry.forEach((element: any) => {
       if (element.type !== 'bpmn:CallActivity') return;
 
-      // Only show overlay if this Call Activity has called instances
-      if (!this.callActivityIdsWithInstances.has(element.id)) return;
+      const hasInstances = this.callActivityIdsWithInstances.has(element.id);
+      const calledElement: string | null = element.businessObject?.calledElement ?? null;
+
+      // Rule 1: no calledElement and no instances → no icon
+      if (!calledElement && !hasInstances) return;
+
+      // Rule 2: EL expression with no instances → gray, non-clickable
+      // When instances exist, the icon is always clickable (navigation uses the instance ID, not calledElement)
+      const isExpression = !hasInstances && calledElement !== null &&
+        (calledElement.includes('${') || calledElement.includes('#{'));
 
       const btn = document.createElement('button');
-      btn.className = 'bjs-drilldown bpmn-call-activity-overlay';
-      btn.title = 'Show Called Process Instances';
-      btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 16 16"><path fill="white" fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"/></svg>';
+      const svgIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 16 16"><path fill="white" fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"/></svg>';
+      btn.innerHTML = svgIcon;
 
-      btn.addEventListener('click', (e: Event) => {
-        e.stopPropagation();
-        this.callActivityClick.emit(element.id);
-      });
+      if (isExpression) {
+        btn.className = 'bjs-drilldown bpmn-call-activity-overlay bpmn-call-activity-overlay--expression';
+        btn.title = 'Navigation unavailable: calledElement is a dynamic expression';
+        btn.disabled = true;
+      } else {
+        // Rule 3: static reference or has instances → blue, clickable
+        btn.className = 'bjs-drilldown bpmn-call-activity-overlay';
+        btn.title = hasInstances ? 'Show Called Process Instances' : 'Go to Called Process Definition';
+        btn.addEventListener('click', (e: Event) => {
+          e.stopPropagation();
+          this.callActivityClick.emit({ callActivityId: element.id, calledElement });
+        });
+      }
 
       try {
         const id = this.overlays.add(element.id, {
@@ -504,6 +523,28 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
     });
   }
 
+  showCallActivityError(activityId: string, message: string): void {
+    if (!this.overlays) return;
+
+    const container = document.createElement('div');
+    container.className = 'bpmn-call-activity-error';
+    container.textContent = message;
+
+    try {
+      const overlayId = this.overlays.add(activityId, {
+        position: { bottom: -38, left: 0 },
+        html: container
+      });
+      this.callActivityErrorOverlayIds.push(overlayId);
+
+      setTimeout(() => {
+        try { this.overlays?.remove(overlayId); } catch (_) {}
+        this.callActivityErrorOverlayIds = this.callActivityErrorOverlayIds.filter(id => id !== overlayId);
+      }, 3000);
+    } catch (e) {
+      console.warn('Could not add error overlay to', activityId, e);
+    }
+  }
   private getElementDisplayName(element: any): string {
     if (element.businessObject?.name) return element.businessObject.name;
     const id = element.id || '';
