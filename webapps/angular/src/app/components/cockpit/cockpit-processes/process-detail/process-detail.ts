@@ -1113,10 +1113,10 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
     }
   }
 
-  getTasklistUrl(task: UserTask): string {
-    // Returns URL to Angular tasklist for this task
-    return `/orqueio/app/tasklist?task=${task.id}`;
-  }
+getTasklistUrl(task: UserTask): string {
+  const base = (window as any).__ORQUEIO_BASE__ || '/orqueio';
+  return `${base}/app/tasklist?task=${task.id}`;
+}
 
   openIdentityLinksModal(task: UserTask, type: 'user' | 'group'): void {
     // TODO: Implement identity links modal

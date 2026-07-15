@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, switchMap } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 /**
  * CsrfTokenService - Central service for CSRF token management.
@@ -19,7 +20,7 @@ import { Observable, switchMap } from 'rxjs';
 export class CsrfTokenService {
   private readonly CSRF_COOKIE_NAME = 'XSRF-TOKEN';
   private readonly CSRF_HEADER_NAME = 'X-XSRF-TOKEN';
-  private readonly ENGINE_URL = '/orqueio/api/engine/engine';
+  private readonly ENGINE_URL = environment.engineUrl;
 
   constructor(private http: HttpClient) {}
 

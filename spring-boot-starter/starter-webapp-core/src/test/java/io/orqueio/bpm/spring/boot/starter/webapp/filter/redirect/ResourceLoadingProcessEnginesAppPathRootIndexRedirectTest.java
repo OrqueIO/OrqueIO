@@ -48,13 +48,13 @@ public class ResourceLoadingProcessEnginesAppPathRootIndexRedirectTest {
   public int port;
 
   @Test
-  public void shouldRedirectToTasklist() throws IOException {
+  public void shouldRedirectToAppRoot() throws IOException {
     // when
     // send GET request to /
     HttpURLConnection con = rule.performRequest("http://localhost:" + port + "/");
 
     // then
-    // the request should have been redirected to Tasklist
-    assertThat(con.getURL().toString()).isEqualTo("http://localhost:" + port + "/app/tasklist/");
+    // the request should have been redirected to the app root
+    assertThat(con.getURL().toString()).isEqualTo("http://localhost:" + port + "/app/");
   }
 }

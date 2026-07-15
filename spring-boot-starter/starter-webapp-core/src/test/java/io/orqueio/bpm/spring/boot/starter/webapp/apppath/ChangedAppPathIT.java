@@ -167,6 +167,16 @@ public class ChangedAppPathIT {
             .exchange()
             .expectStatus().isOk();
     }
+
+    @Test
+    public void shouldRewriteBaseHrefWithApplicationPath() {
+        webClient.get()
+            .uri(MY_APP_PATH + "/app/index.html")
+            .exchange()
+            .expectStatus().isOk()
+            .expectBody(String.class)
+            .value(body -> assertThat(body).contains("<base href=\"" + MY_APP_PATH + "/app/\">"));
+    }
 }
 
 

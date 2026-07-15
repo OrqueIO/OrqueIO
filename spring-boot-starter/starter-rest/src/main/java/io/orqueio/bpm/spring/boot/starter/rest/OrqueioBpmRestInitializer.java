@@ -81,14 +81,18 @@ public class OrqueioBpmRestInitializer implements ServletContextInitializer {
     FilterRegistration filterRegistration = servletContext.getFilterRegistration(filterName);
 
     if (filterRegistration == null) {
-      filterRegistration = servletContext.addFilter(filterName, filterClass);
-      filterRegistration.addMappingForUrlPatterns(DISPATCHER_TYPES, true, urlPatterns);
+      FilterRegistration.Dynamic dynamicRegistration = servletContext.addFilter(filterName, filterClass);
+      dynamicRegistration.setAsyncSupported(true);
+      dynamicRegistration.addMappingForUrlPatterns(DISPATCHER_TYPES, true, urlPatterns);
 
       if (initParameters != null) {
-        filterRegistration.setInitParameters(initParameters);
+        dynamicRegistration.setInitParameters(initParameters);
       }
 
       log.debug("Filter {} for URL {} registered.", filterName, urlPatterns);
+      filterRegistration = dynamicRegistration;
+    } else if (filterRegistration instanceof FilterRegistration.Dynamic) {
+      ((FilterRegistration.Dynamic) filterRegistration).setAsyncSupported(true);
     }
 
     return filterRegistration;

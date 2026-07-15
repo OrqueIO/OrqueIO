@@ -3,6 +3,7 @@ import { HttpParams } from '@angular/common/http';
 import { Observable, BehaviorSubject, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { AdminService } from './admin.service';
+import { environment } from '../../../environments/environment';
 import {
   ProcessEngine,
   ProcessEngineInfo,
@@ -17,7 +18,7 @@ import {
   providedIn: 'root'
 })
 export class SystemService extends AdminService {
-  private readonly pluginUrl = '/orqueio/api/admin/plugin/adminPlugins';
+  private readonly pluginUrl = environment.adminUrl + '/plugin/adminPlugins';
 
   // Current engine subject for engine switching
   private currentEngineSubject = new BehaviorSubject<string>('default');
