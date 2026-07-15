@@ -587,6 +587,11 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
     this.resizeDiagramAfterTransition();
   }
 
+  onBpmnViewerReady(): void {
+    // Run in a fresh macrotask so Angular CD and browser layout are fully settled
+    setTimeout(() => this.bpmnViewer?.resize());
+  }
+
   private resizeDiagramAfterTransition(): void {
     // Wait for CSS transition (0.3s) to complete before resizing
     setTimeout(() => {

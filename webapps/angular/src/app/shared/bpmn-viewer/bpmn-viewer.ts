@@ -15,6 +15,8 @@ import {
   inject
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faArrowUp } from '@fortawesome/free-solid-svg-icons';
 
 // @ts-ignore - bpmn-js doesn't have types
 import NavigatedViewer from 'bpmn-js/lib/NavigatedViewer';
@@ -39,7 +41,7 @@ export interface CallActivityClickEvent {
 @Component({
   selector: 'app-bpmn-viewer',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FontAwesomeModule],
   templateUrl: './bpmn-viewer.html',
   styleUrls: ['./bpmn-viewer.css'],
   encapsulation: ViewEncapsulation.None
@@ -78,9 +80,37 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
   private currentXml: string | null = null;
   private needsZoomFit = false;
   private resizeTimeout: ReturnType<typeof setTimeout> | null = null;
+  private subprocessStack: { id: string; name: string; element: any }[] = [];
+  private currentRootElement: any = null;
 
+  faArrowUp = faArrowUp;
   loading = true;
+  subprocessBreadcrumb: string[] = [];
+  private windowStart = 0;
   errorMessage: string | null = null;
+
+  get visibleBreadcrumbItems(): Array<{ name: string; index: number | null; isEllipsis: boolean; isRightEllipsis?: boolean }> {
+    const items = this.subprocessBreadcrumb;
+    const n = items.length;
+    if (n <= 5) {
+      return items.map((name, i) => ({ name, index: i < n - 1 ? i : null, isEllipsis: false }));
+    }
+    const winEnd = Math.min(this.windowStart + 2, n - 2);
+    const result: Array<{ name: string; index: number | null; isEllipsis: boolean; isRightEllipsis?: boolean }> = [
+      { name: items[0], index: 0, isEllipsis: false },
+    ];
+    if (this.windowStart > 1) {
+      result.push({ name: '…', index: null, isEllipsis: true });
+    }
+    for (let i = this.windowStart; i <= winEnd; i++) {
+      result.push({ name: items[i], index: i, isEllipsis: false });
+    }
+    if (winEnd < n - 2) {
+      result.push({ name: '…', index: null, isEllipsis: false, isRightEllipsis: true });
+    }
+    result.push({ name: items[n - 1], index: null, isEllipsis: false });
+    return result;
+  }
 
   @HostListener('window:resize')
   onWindowResize(): void {
@@ -157,6 +187,7 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
       if (this.enableCallActivityNavigation) {
         this.addCallActivityOverlays();
       }
+      this.styleCollapsedSubprocessOverlays();
     });
 
     eventBus.on('element.click', (event: any) => {
@@ -185,6 +216,15 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
       this.elementHover.emit(null);
     });
 
+    // Re-center diagram on collapsed subprocess drilldown navigation.
+    // bpmn-js fires root.set when the canvas root changes (drill-in or drill-out)
+    // without re-importing XML, so importXML / ngOnChanges never trigger the fit.
+    eventBus.on('root.set', (event: any) => {
+      this.updateSubprocessStack(event.element);
+      this.needsZoomFit = true;
+      this.scheduleFitToViewport();
+    });
+
     this.isViewerReady = true;
 
     if (this.xml) {
@@ -209,6 +249,7 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
       if (this.isContainerVisible()) {
         try {
           const canvas = this.viewer.get('canvas');
+          canvas.resized();
           this.safeZoomFit(canvas);
           this.needsZoomFit = false;
         } catch (e) {
@@ -238,6 +279,10 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
 
     this.loading = true;
     this.errorMessage = null;
+    this.subprocessStack = [];
+    this.currentRootElement = null;
+    this.subprocessBreadcrumb = [];
+    this.windowStart = 0;
     this.cdr.detectChanges();
 
     try {
@@ -418,6 +463,15 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
     });
   }
 
+  private styleCollapsedSubprocessOverlays(): void {
+    const container = this.canvasRef.nativeElement;
+    const arrowSvg = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 16 16"><path fill="white" fill-rule="evenodd" d="M4.81801948,3.50735931 L10.4996894,9.1896894 L10.5,4 L12,4 L12,12 L4,12 L4,10.5 L9.6896894,10.4996894 L3.75735931,4.56801948 C3.46446609,4.27512627 3.46446609,3.80025253 3.75735931,3.50735931 C4.05025253,3.21446609 4.52512627,3.21446609 4.81801948,3.50735931 Z"/></svg>';
+    container.querySelectorAll<HTMLButtonElement>('.bjs-drilldown:not(.bpmn-call-activity-overlay)').forEach(btn => {
+      btn.classList.add('bpmn-subprocess-drilldown');
+      btn.innerHTML = arrowSvg;
+    });
+  }
+
   private addCallActivityOverlays(): void {
     if (!this.viewer || !this.overlays || !this.enableCallActivityNavigation) return;
 
@@ -491,6 +545,39 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
       console.warn('Could not add error overlay to', activityId, e);
     }
   }
+  private getElementDisplayName(element: any): string {
+    if (element.businessObject?.name) return element.businessObject.name;
+    const id = element.id || '';
+    return id.endsWith('_plane') ? id.slice(0, -6) : id;
+  }
+
+  private updateSubprocessStack(element: any): void {
+    if (!element) return;
+
+    if (element.type === 'bpmn:Process') {
+      this.subprocessStack = [];
+    } else {
+      const existingIndex = this.subprocessStack.findIndex(item => item.id === element.id);
+      if (existingIndex >= 0) {
+        this.subprocessStack = this.subprocessStack.slice(0, existingIndex);
+      } else if (this.currentRootElement) {
+        const name = this.getElementDisplayName(this.currentRootElement);
+        this.subprocessStack.push({ id: this.currentRootElement.id, name, element: this.currentRootElement });
+      }
+    }
+
+    this.currentRootElement = element;
+
+    if (this.subprocessStack.length === 0) {
+      this.subprocessBreadcrumb = [];
+      this.windowStart = 0;
+    } else {
+      const currentName = this.getElementDisplayName(element);
+      this.subprocessBreadcrumb = [...this.subprocessStack.map(item => item.name), currentName];
+      const n = this.subprocessBreadcrumb.length;
+      this.windowStart = n > 5 ? Math.max(1, n - 3) : 0;
+    }
+  }
 
   private destroyViewer(): void {
     if (this.viewer) {
@@ -504,6 +591,22 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
   }
 
   // Public methods for external control
+  navigateToSubprocessLevel(index: number): void {
+    const item = this.subprocessStack[index];
+    if (!item || !this.viewer) return;
+    const canvas = this.viewer.get('canvas');
+    canvas.setRootElement(item.element);
+  }
+
+  shiftWindowLeft(): void {
+    this.windowStart = Math.max(1, this.windowStart - 3);
+  }
+
+  shiftWindowRight(): void {
+    const n = this.subprocessBreadcrumb.length;
+    this.windowStart = Math.min(n - 4, this.windowStart + 3);
+  }
+
   zoomIn(): void {
     if (this.viewer) {
       const canvas = this.viewer.get('canvas');

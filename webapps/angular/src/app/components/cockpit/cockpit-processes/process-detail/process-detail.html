@@ -295,6 +295,7 @@
             (elementHover)="onDiagramElementHover($event)"
             (expandToggle)="toggleDiagramMaximize()"
             (callActivityClick)="navigateToCalledInstance($event)"
+            (viewerReady)="onBpmnViewerReady()"
           ></app-bpmn-viewer>
 
           <div class="empty-diagram" *ngIf="!loadingDiagram && !bpmnXml">
