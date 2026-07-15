@@ -49,7 +49,7 @@ import {
   ExternalTask
 } from '../../../../services/cockpit.service';
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
-import { BpmnViewerComponent, ActivityBadge, BpmnElement } from '../../../../shared/bpmn-viewer/bpmn-viewer';
+import { BpmnViewerComponent, ActivityBadge, BpmnElement, CallActivityClickEvent } from '../../../../shared/bpmn-viewer/bpmn-viewer';
 import { ActivityInstanceTreeComponent } from '../../../../shared/activity-instance-tree/activity-instance-tree';
 import { ConfirmDialogComponent } from '../../../../shared/confirm-dialog/confirm-dialog';
 import { ClipboardDirective } from '../../../../shared/clipboard-directive/clipboard.directive';
@@ -137,6 +137,11 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
   processDefinition: ProcessDefinition | null = null;
   superProcessInstance: ProcessInstance | null = null;
   fromProcess: ProcessInstance | null = null;
+
+  /** Navigation context takes priority; API parent is the fallback for direct URL access. */
+  get parentInstance(): ProcessInstance | null {
+    return this.fromProcess ?? this.superProcessInstance;
+  }
   fromProcessId: string | null = null;
   variables: Variable[] = [];
   activities: Activity[] = [];
@@ -262,24 +267,22 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.navMenuService.setMenuItems(COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS);
 
+    // route.params emits only when THIS component's route params change.
+    // snapshot.queryParams is atomically updated before params fires, so reading
+    // it here always gives the current ?from= value without a separate subscription
+    // that would race against loadProcessData().
     this.route.params
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(params => {
+        const fromId: string | null = this.route.snapshot.queryParams['from'] || null;
         this.processId = params['id'];
+        this.fromProcessId = fromId;
+        this.fromProcess = null;
+        if (fromId) {
+          this.loadFromProcess(fromId);
+        }
         this.loadProcessData();
       });
-
-     this.route.queryParams
-        .pipe(takeUntilDestroyed(this.destroyRef))
-        .subscribe(params => {
-          const fromId: string | null = params['from'] || null;
-          this.fromProcessId = fromId;
-          this.fromProcess = null;
-          if (fromId) {
-            this.loadFromProcess(fromId);
-          }
-          this.cdr.markForCheck();
-        });
   }
 
   ngOnDestroy(): void {
@@ -332,6 +335,10 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
           // Load super process instance if this is a sub-process
           if (instance?.superProcessInstanceId) {
             this.loadSuperProcessInstance(instance.superProcessInstanceId, this.processId);
+          } else if (this.fromProcessId) {
+            // Fallback: API didn't return superProcessInstanceId but user navigated
+            // from a parent via ?from=parentId — use that ID to load the parent instance
+            this.loadSuperProcessInstance(this.fromProcessId, this.processId);
           }
 
         },
@@ -654,27 +661,48 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
   }
 
   // Call Activity Navigation
-  navigateToCalledInstance(callActivityId: string): void {
-    // The icon only appears if the Call Activity has called instances in the mapping
+  navigateToCalledInstance(event: CallActivityClickEvent): void {
+    const { callActivityId, calledElement } = event;
     const calledInstanceIds = this.callActivityMapping.get(callActivityId);
-    if (!calledInstanceIds || calledInstanceIds.length === 0) return;
 
-    if (calledInstanceIds.length === 1) {
-      // Single instance: navigate directly, passing current process as breadcrumb origin
-      this.router.navigate(['/cockpit/processes/instance', calledInstanceIds[0]], {
-        queryParams: { from: this.processId }
-      });
-    } else {
-      // Multiple instances: show filtered called instances tab
-      this.filteredCallActivityId = callActivityId;
-      this.activeTab = 'calledInstances';
-      this.cdr.markForCheck();
-
-      // Scroll to tabs section
-      setTimeout(() => {
-        const tabsElement = document.querySelector('.ctn-content-bottom');
-        tabsElement?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      }, 100);
+    if (calledInstanceIds && calledInstanceIds.length > 0) {
+      if (calledInstanceIds.length === 1) {
+        this.router.navigate(['/cockpit/processes/instance', calledInstanceIds[0]], {
+          queryParams: { from: this.processId }
+        });
+      } else {
+        // Multiple instances: show filtered called instances tab
+        this.filteredCallActivityId = callActivityId;
+        this.activeTab = 'calledInstances';
+        this.cdr.markForCheck();
+        setTimeout(() => {
+          const tabsElement = document.querySelector('.ctn-content-bottom');
+          tabsElement?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 100);
+      }
+    } else if (calledElement) {
+      // No instances yet: navigate to the called process definition.
+      // Capture synchronously so the async HTTP response gets the correct parent context.
+      const fromKey = this.processDefinition?.key || this.processInstance?.processDefinitionKey || '';
+      const fromName = this.processDefinition?.name || fromKey;
+      // Pass fromInstance so the definition page can propagate the navigation
+      // context to its instance links — users clicking an instance from there
+      // will land with ?from=<this instance id> and see the correct breadcrumb.
+      const fromInstance = this.processId;
+      this.cockpitService.getProcessDefinitionByKey(calledElement)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe(definition => {
+          if (definition) {
+            this.router.navigate(['/cockpit/processes', calledElement, 'definition'], {
+              queryParams: { from: fromKey, fromName, fromInstance }
+            });
+          } else {
+            this.bpmnViewer?.showCallActivityError(
+              callActivityId,
+              `Process definition '${calledElement}' not found`
+            );
+          }
+        });
     }
   }
 

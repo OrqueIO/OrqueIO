@@ -256,15 +256,16 @@
       <div class="ctn-row ctn-content-top"
            [class.collapsed]="diagramCollapsed"
            [class.maximized]="diagramMaximized">
-          <!-- Breadcrumb — visible whenever this instance has a parent (superProcessInstanceId),
-               regardless of how the page was reached (?from=, direct URL, or back navigation). -->
+          <!-- Breadcrumb: driven by parentInstance which prioritises navigation context
+               (?from= param) over the API superProcessInstanceId, so the breadcrumb
+               reflects where the user navigated from when available. -->
           <div class="process-breadcrumb"
-               *ngIf="superProcessInstance && processInstance">
+               *ngIf="parentInstance as parent">
               <fa-icon [icon]="faArrowUp" class="breadcrumb-up-icon"></fa-icon>
-              <a [routerLink]="['/cockpit/processes/instance', superProcessInstance.id]"
+              <a [routerLink]="['/cockpit/processes/instance', parent.id]"
                  class="breadcrumb-parent-name"
-                 [title]="superProcessInstance.id">
-                  {{ superProcessInstance.processDefinitionName || superProcessInstance.processDefinitionKey }}
+                 [title]="parent.id">
+                  {{ parent.processDefinitionName || parent.processDefinitionKey || parent.id }}
               </a>
               <span class="breadcrumb-separator">›</span>
               <span class="breadcrumb-current"

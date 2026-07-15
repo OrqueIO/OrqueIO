@@ -154,8 +154,10 @@
 
         <!-- Right content area -->
         <div class="content-area" [class.fullscreen]="diagramMaximized" [class.table-expanded]="tableMaximized">
+
           <!-- BPMN Diagram section -->
           <section class="diagram-section" [class.maximized]="diagramMaximized" [class.collapsed]="tableMaximized">
+
             <div class="section-header" *ngIf="!diagramMaximized">
               <div class="section-title">
                 <fa-icon [icon]="faProjectDiagram"></fa-icon>
@@ -184,6 +186,22 @@
               </div>
             </div>
 
+            <!-- Parent definition breadcrumb — below section-header, above BPMN diagram -->
+            <div class="process-breadcrumb"
+                 *ngIf="parentDefinitionKey && processDefinition && !diagramMaximized">
+              <fa-icon [icon]="faArrowUp" class="breadcrumb-up-icon"></fa-icon>
+              <a [routerLink]="['/cockpit/processes', parentDefinitionKey, 'definition']"
+                 class="breadcrumb-parent-name"
+                 [title]="parentDefinitionKey">
+                {{ parentDefinitionName || parentDefinitionKey }}
+              </a>
+              <span class="breadcrumb-separator">›</span>
+              <span class="breadcrumb-current"
+                    [title]="processDefinition.name || processDefinition.key">
+                {{ processDefinition.name || processDefinition.key }}
+              </span>
+            </div>
+
             <div class="diagram-container" *ngIf="!tableMaximized">
               <div class="diagram-loading" *ngIf="loadingDiagram">
                 <fa-icon [icon]="faSpinner" animation="spin"></fa-icon>
@@ -197,7 +215,9 @@
                 [activityBadges]="activityBadges"
                 [showExpandButton]="true"
                 [isExpanded]="diagramMaximized"
+                [enableCallActivityNavigation]="true"
                 (expandToggle)="toggleDiagramMaximize()"
+                (callActivityClick)="navigateToCalledDefinition($event)"
               ></app-bpmn-viewer>
 
               <div class="empty-state" *ngIf="!loadingDiagram && !bpmnXml">
@@ -339,7 +359,9 @@
                       </span>
                     </td>
                     <td class="id-cell">
-                      <a [routerLink]="['/cockpit/processes/instance', instance.id]" class="instance-link">
+                      <a [routerLink]="['/cockpit/processes/instance', instance.id]"
+                         [queryParams]="parentInstanceId ? { from: parentInstanceId } : null"
+                         class="instance-link">
                         {{ instance.id }}
                       </a>
                       <span class="super-process-link" *ngIf="instance.superProcessInstanceId">
@@ -353,6 +375,7 @@
                     <td>
                       <a
                         [routerLink]="['/cockpit/processes/instance', instance.id]"
+                        [queryParams]="parentInstanceId ? { from: parentInstanceId } : null"
                         class="action-link"
                         [title]="'cockpit.processes.viewDetails' | translate"
                       >

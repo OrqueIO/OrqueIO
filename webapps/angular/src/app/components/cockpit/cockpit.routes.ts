@@ -47,6 +47,7 @@ export const COCKPIT_ROUTES: Routes = [
       { path: '', component: CockpitDashboardComponent, pathMatch: 'full', title: 'PAGE_TITLE_COCKPIT' },
       { path: 'processes', component: ProcessDefinitionsComponent, title: 'PAGE_TITLE_COCKPIT_PROCESSES' },
       { path: 'processes/:key/instances', component: ProcessListComponent, title: 'PAGE_TITLE_COCKPIT_PROCESS_INSTANCES' },
+      { path: 'processes/:key/definition', component: ProcessListComponent, title: 'PAGE_TITLE_COCKPIT_PROCESS_DEFINITION' },
       { path: 'processes/instance/:id', component: ProcessDetailComponent, title: 'PAGE_TITLE_COCKPIT_PROCESS_DETAIL' },
       { path: 'decisions', component: DecisionListComponent, title: 'PAGE_TITLE_COCKPIT_DECISIONS' },
       { path: 'decisions/:id', component: DecisionDetailComponent, title: 'PAGE_TITLE_COCKPIT_DECISION_DETAIL' },
