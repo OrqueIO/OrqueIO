@@ -191,6 +191,7 @@
                  *ngIf="parentDefinitionKey && processDefinition && !diagramMaximized">
               <fa-icon [icon]="faArrowUp" class="breadcrumb-up-icon"></fa-icon>
               <a [routerLink]="['/cockpit/processes', parentDefinitionKey, 'definition']"
+                 [queryParams]="parentBreadcrumbQueryParams"
                  class="breadcrumb-parent-name"
                  [title]="parentDefinitionKey">
                 {{ parentDefinitionName || parentDefinitionKey }}
