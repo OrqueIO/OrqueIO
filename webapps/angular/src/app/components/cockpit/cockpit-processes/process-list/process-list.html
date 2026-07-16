@@ -361,7 +361,7 @@
                     </td>
                     <td class="id-cell">
                       <a [routerLink]="['/cockpit/processes/instance', instance.id]"
-                         [queryParams]="parentInstanceId ? { from: parentInstanceId } : null"
+                         [queryParams]="instanceLinkQueryParams"
                          class="instance-link">
                         {{ instance.id }}
                       </a>
@@ -376,7 +376,7 @@
                     <td>
                       <a
                         [routerLink]="['/cockpit/processes/instance', instance.id]"
-                        [queryParams]="parentInstanceId ? { from: parentInstanceId } : null"
+                        [queryParams]="instanceLinkQueryParams"
                         class="action-link"
                         [title]="'cockpit.processes.viewDetails' | translate"
                       >

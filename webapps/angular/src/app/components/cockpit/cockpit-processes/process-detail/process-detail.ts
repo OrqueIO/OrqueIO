@@ -143,6 +143,10 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
     return this.fromProcess ?? this.superProcessInstance;
   }
   fromProcessId: string | null = null;
+  // Definition navigation context — set when arriving from a definition view via call activity navigation
+  fromDefKey: string | null = null;
+  fromDefName: string | null = null;
+  fromDefAncestors: Array<{ key: string; name: string }> = [];
   variables: Variable[] = [];
   activities: Activity[] = [];
   incidents: Incident[] = [];
@@ -278,6 +282,13 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
         this.processId = params['id'];
         this.fromProcessId = fromId;
         this.fromProcess = null;
+        this.fromDefKey = this.route.snapshot.queryParams['fromDef'] || null;
+        this.fromDefName = this.route.snapshot.queryParams['fromDefName'] || null;
+        try {
+          this.fromDefAncestors = JSON.parse(this.route.snapshot.queryParams['fromDefAncestors'] || '[]');
+        } catch {
+          this.fromDefAncestors = [];
+        }
         if (fromId) {
           this.loadFromProcess(fromId);
         }
@@ -287,6 +298,16 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.navMenuService.clearMenuItems();
+  }
+
+  // Query params for the parent definition breadcrumb link — restores full ancestor context
+  get parentDefinitionBreadcrumbQueryParams(): Record<string, string> | null {
+    if (!this.fromDefAncestors.length) return null;
+    const grandparent = this.fromDefAncestors[this.fromDefAncestors.length - 1];
+    const remaining = this.fromDefAncestors.slice(0, -1);
+    const params: Record<string, string> = { from: grandparent.key, fromName: grandparent.name };
+    if (remaining.length > 0) params['ancestors'] = JSON.stringify(remaining);
+    return params;
   }
 
   loadProcessData(): void {
