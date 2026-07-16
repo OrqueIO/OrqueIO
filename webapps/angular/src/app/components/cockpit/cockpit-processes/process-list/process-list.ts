@@ -133,8 +133,6 @@ export class ProcessListComponent implements OnInit, OnDestroy {
   // Parent definition context for breadcrumb (set when navigating from a calling definition)
   parentDefinitionKey: string | null = null;
   parentDefinitionName: string | null = null;
-  // Full ancestor chain above the parent — used to restore back-navigation context at any depth
-  definitionAncestors: Array<{ key: string; name: string }> = [];
   // Parent instance ID for navigation context (set when navigating from a calling instance)
   parentInstanceId: string | null = null;
 
@@ -216,16 +214,10 @@ export class ProcessListComponent implements OnInit, OnDestroy {
         const fromKey: string | null = this.route.snapshot.queryParams['from'] || null;
         const fromName: string | null = this.route.snapshot.queryParams['fromName'] || null;
         const fromInstance: string | null = this.route.snapshot.queryParams['fromInstance'] || null;
-        const ancestorsParam: string | null = this.route.snapshot.queryParams['ancestors'] || null;
 
         this.parentDefinitionKey = fromKey;
         this.parentDefinitionName = fromName;
         this.parentInstanceId = fromInstance;
-        try {
-          this.definitionAncestors = ancestorsParam ? JSON.parse(ancestorsParam) : [];
-        } catch {
-          this.definitionAncestors = [];
-        }
 
         if (newKey !== this.processDefinitionKey) {
           this.processDefinitionKey = newKey;
@@ -302,18 +294,6 @@ export class ProcessListComponent implements OnInit, OnDestroy {
       { label: name }
     ];
     this.cdr.markForCheck();
-  }
-
-  // Query params to attach to the breadcrumb parent link so back-navigation restores full context
-  get parentBreadcrumbQueryParams(): Record<string, string> | null {
-    if (!this.definitionAncestors.length) return null;
-    const grandparent = this.definitionAncestors[this.definitionAncestors.length - 1];
-    const remainingAncestors = this.definitionAncestors.slice(0, -1);
-    const params: Record<string, string> = { from: grandparent.key, fromName: grandparent.name };
-    if (remainingAncestors.length > 0) {
-      params['ancestors'] = JSON.stringify(remainingAncestors);
-    }
-    return params;
   }
 
   loadBpmnDiagram(definitionId: string): void {
@@ -980,20 +960,13 @@ export class ProcessListComponent implements OnInit, OnDestroy {
     const fromKey = this.processDefinitionKey;
     const fromName = this.processDefinition?.name || this.processDefinitionKey;
 
-    // Build new ancestor chain: all current ancestors + current parent (if any)
-    const newAncestors = this.parentDefinitionKey
-      ? [...this.definitionAncestors, { key: this.parentDefinitionKey, name: this.parentDefinitionName || this.parentDefinitionKey }]
-      : [...this.definitionAncestors];
-
     this.cockpitService.getProcessDefinitionByKey(calledElement)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(definition => {
         if (definition) {
-          const queryParams: Record<string, string> = { from: fromKey, fromName };
-          if (newAncestors.length > 0) {
-            queryParams['ancestors'] = JSON.stringify(newAncestors);
-          }
-          this.router.navigate(['/cockpit/processes', calledElement, 'definition'], { queryParams });
+          this.router.navigate(['/cockpit/processes', calledElement, 'definition'], {
+            queryParams: { from: fromKey, fromName }
+          });
         } else {
           this.bpmnViewer?.showCallActivityError(
             callActivityId,
