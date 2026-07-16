@@ -304,20 +304,6 @@ export class ProcessListComponent implements OnInit, OnDestroy {
     this.cdr.markForCheck();
   }
 
-  // Query params for instance links — carries definition navigation context into instance view
-  get instanceLinkQueryParams(): Record<string, string> | null {
-    const params: Record<string, string> = {};
-    if (this.parentInstanceId) params['from'] = this.parentInstanceId;
-    if (this.parentDefinitionKey) {
-      params['fromDef'] = this.parentDefinitionKey;
-      if (this.parentDefinitionName) params['fromDefName'] = this.parentDefinitionName;
-      if (this.definitionAncestors.length > 0) {
-        params['fromDefAncestors'] = JSON.stringify(this.definitionAncestors);
-      }
-    }
-    return Object.keys(params).length > 0 ? params : null;
-  }
-
   // Query params to attach to the breadcrumb parent link so back-navigation restores full context
   get parentBreadcrumbQueryParams(): Record<string, string> | null {
     if (!this.definitionAncestors.length) return null;
