@@ -274,24 +274,6 @@
           </span>
           </div>
 
-          <!-- Definition navigation context breadcrumb — shown when no instance parent but user
-               navigated here from a definition view via call activity navigation -->
-          <div class="process-breadcrumb"
-               *ngIf="fromDefKey && processDefinition && !parentInstance">
-            <fa-icon [icon]="faArrowUp" class="breadcrumb-up-icon"></fa-icon>
-            <a [routerLink]="['/cockpit/processes', fromDefKey, 'definition']"
-               [queryParams]="parentDefinitionBreadcrumbQueryParams"
-               class="breadcrumb-parent-name"
-               [title]="fromDefKey">
-              {{ fromDefName || fromDefKey }}
-            </a>
-            <span class="breadcrumb-separator">›</span>
-            <span class="breadcrumb-current"
-                  [title]="processDefinition?.name || processDefinition?.key">
-              {{ processDefinition?.name || processDefinition?.key }}
-            </span>
-          </div>
-
         <div class="diagram-container">
           <div class="diagram-loading" *ngIf="loadingDiagram">
             <fa-icon [icon]="faSpinner" animation="spin"></fa-icon>

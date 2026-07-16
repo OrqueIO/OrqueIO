@@ -554,7 +554,7 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
   private updateSubprocessStack(element: any): void {
     if (!element) return;
 
-    if (element.type === 'bpmn:Process' || element.type === 'bpmn:Collaboration') {
+    if (element.type === 'bpmn:Process') {
       this.subprocessStack = [];
     } else {
       const existingIndex = this.subprocessStack.findIndex(item => item.id === element.id);
