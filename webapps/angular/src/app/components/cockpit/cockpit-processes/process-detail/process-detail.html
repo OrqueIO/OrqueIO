@@ -256,16 +256,15 @@
       <div class="ctn-row ctn-content-top"
            [class.collapsed]="diagramCollapsed"
            [class.maximized]="diagramMaximized">
-          <!-- Breadcrumb: driven by parentInstance which prioritises navigation context
-               (?from= param) over the API superProcessInstanceId, so the breadcrumb
-               reflects where the user navigated from when available. -->
+          <!-- Instance breadcrumb: shown when navigating from a specific parent instance,
+               or as API fallback when there is no definition navigation context. -->
           <div class="process-breadcrumb"
-               *ngIf="parentInstance as parent">
+               *ngIf="parentInstance && (!fromDefKey || fromProcessId)">
               <fa-icon [icon]="faArrowUp" class="breadcrumb-up-icon"></fa-icon>
-              <a [routerLink]="['/cockpit/processes/instance', parent.id]"
+              <a [routerLink]="['/cockpit/processes/instance', parentInstance.id]"
                  class="breadcrumb-parent-name"
-                 [title]="parent.id">
-                  {{ parent.processDefinitionName || parent.processDefinitionKey || parent.id }}
+                 [title]="parentInstance.id">
+                  {{ parentInstance.processDefinitionName || parentInstance.processDefinitionKey || parentInstance.id }}
               </a>
               <span class="breadcrumb-separator">›</span>
               <span class="breadcrumb-current"
@@ -274,10 +273,10 @@
           </span>
           </div>
 
-          <!-- Definition navigation context breadcrumb — shown when no instance parent but user
-               navigated here from a definition view via call activity navigation -->
+          <!-- Definition breadcrumb: shown when navigating here from a definition view,
+               takes priority over the API superProcessInstance when no fromProcessId is set. -->
           <div class="process-breadcrumb"
-               *ngIf="fromDefKey && processDefinition && !parentInstance">
+               *ngIf="fromDefKey && processDefinition && !fromProcessId">
             <fa-icon [icon]="faArrowUp" class="breadcrumb-up-icon"></fa-icon>
             <a [routerLink]="['/cockpit/processes', fromDefKey, 'definition']"
                [queryParams]="parentDefinitionBreadcrumbQueryParams"
@@ -287,8 +286,8 @@
             </a>
             <span class="breadcrumb-separator">›</span>
             <span class="breadcrumb-current"
-                  [title]="processDefinition?.name || processDefinition?.key">
-              {{ processDefinition?.name || processDefinition?.key }}
+                  [title]="processDefinition.name || processDefinition.key">
+              {{ processDefinition.name || processDefinition.key }}
             </span>
           </div>
 

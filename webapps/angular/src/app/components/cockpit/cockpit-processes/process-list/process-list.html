@@ -495,7 +495,9 @@
                   <tbody>
                     <tr *ngFor="let calledDef of calledProcessDefinitions">
                       <td>
-                        <a [routerLink]="['/cockpit/processes', calledDef.key, 'instances']" class="definition-link">
+                        <a [routerLink]="['/cockpit/processes', calledDef.key, 'definition']"
+                           [queryParams]="getCalledDefNavParams()"
+                           class="definition-link">
                           {{ calledDef.name || calledDef.key }}
                         </a>
                         <span class="definition-key mono" *ngIf="calledDef.name">{{ calledDef.key }}</span>
@@ -512,7 +514,8 @@
                       </td>
                       <td>
                         <a
-                          [routerLink]="['/cockpit/processes', calledDef.key, 'instances']"
+                          [routerLink]="['/cockpit/processes', calledDef.key, 'definition']"
+                          [queryParams]="getCalledDefNavParams()"
                           class="action-link"
                           [title]="'cockpit.processes.viewInstances' | translate"
                         >
