@@ -28,8 +28,9 @@ body.dashboard {
 }
 
 .navbar-brand .logo {
+  height: 36px;
+  width: auto;
   margin-right: 5px;
-  fill: #666;
 }
 
 section .inner {
