@@ -985,6 +985,20 @@ export class ProcessListComponent implements OnInit, OnDestroy {
       });
   }
 
+  // Query params for "Called Process Definitions" tab links — same ancestor chain logic as BPMN diagram navigation
+  getCalledDefNavParams(): Record<string, string> {
+    const fromKey = this.processDefinitionKey;
+    const fromName = this.processDefinition?.name || this.processDefinitionKey;
+    const newAncestors = this.parentDefinitionKey
+      ? [...this.definitionAncestors, { key: this.parentDefinitionKey, name: this.parentDefinitionName || this.parentDefinitionKey }]
+      : [...this.definitionAncestors];
+    const params: Record<string, string> = { from: fromKey, fromName };
+    if (newAncestors.length > 0) {
+      params['ancestors'] = JSON.stringify(newAncestors);
+    }
+    return params;
+  }
+
   navigateToCalledDefinition(event: CallActivityClickEvent): void {
     const { callActivityId, calledElement } = event;
     if (!calledElement) return;
