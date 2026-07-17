@@ -1,0 +1,13 @@
+<module xmlns="urn:jboss:module:1.0" name="io.orqueio.bpm.model.orqueio-cmmn-model">
+  <resources>
+    <resource-root path="orqueio-cmmn-model-@project.version@.jar" />
+  </resources>
+
+  <dependencies>
+
+    <module name="java.base" />
+    <module name="java.xml" />
+    <module name="io.orqueio.bpm.model.orqueio-xml-model" />
+
+  </dependencies>
+</module>

@@ -1,0 +1,12 @@
+<module xmlns="urn:jboss:module:1.0" name="io.orqueio.commons.orqueio-commons-typed-values">
+  <resources>
+    <resource-root path="orqueio-commons-typed-values-@project.version@.jar" />
+  </resources>
+
+  <dependencies>
+    <module name="javax.api"/>
+    
+    <module name="io.orqueio.commons.orqueio-commons-utils" />
+    
+  </dependencies>
+</module>

@@ -267,9 +267,11 @@ export class TaskMetaComponent implements OnInit, OnChanges {
     }
 
     if (this.task.processInstanceId) {
-      return `/orqueio/app/cockpit/processes/instance/${this.task.processInstanceId}`;
+      const base = (window as any).__ORQUEIO_BASE__ || '/orqueio';
+      return `${base}/app/cockpit/processes/instance/${this.task.processInstanceId}`;
     } else if (this.task.caseInstanceId) {
-      return `/orqueio/app/cockpit/cases/instance/${this.task.caseInstanceId}`;
+      const base = (window as any).__ORQUEIO_BASE__ || '/orqueio';
+      return `${base}/app/cockpit/cases/instance/${this.task.caseInstanceId}`;
     }
 
     // Standalone task - no link

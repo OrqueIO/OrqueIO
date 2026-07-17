@@ -178,20 +178,16 @@ export class OAuth2ButtonsComponent implements OnInit, OnDestroy {
    * This ensures users must enter credentials even if they have an active IdP session,
    * allowing account switching after logout.
    */
-  getLoginUrl(provider: OAuth2Provider): string {
-    // Use provider.loginUrl if it contains the provider ID, otherwise construct it
-    let loginPath = provider.loginUrl;
-    if (!loginPath || !loginPath.includes(provider.id)) {
-      // Fallback: construct the URL using the provider ID
-      loginPath = `/oauth2/authorization/${provider.id}`;
-    }
-
-    // OAuth2 endpoints are at the server root (no /orqueio prefix)
-    const baseUrl = window.location.origin + loginPath;
-
-    // Add prompt=login to force re-authentication at the identity provider
-    // This prevents automatic login when IdP session is still active
-    const separator = baseUrl.includes('?') ? '&' : '?';
-    return `${baseUrl}${separator}prompt=login`;
+getLoginUrl(provider: OAuth2Provider): string {
+  let loginPath = provider.loginUrl;
+  if (!loginPath || !loginPath.includes(provider.id)) {
+    loginPath = `/oauth2/authorization/${provider.id}`;
   }
+
+  const contextPath = (window as any).__ORQUEIO_CONTEXT_PATH__ || '';
+
+  const baseUrl = window.location.origin + contextPath + loginPath;
+  const separator = baseUrl.includes('?') ? '&' : '?';
+  return `${baseUrl}${separator}prompt=login`;
+}
 }

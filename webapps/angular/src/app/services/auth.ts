@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable, of, throwError, Subject } from 'rxjs';
 import { map, catchError, switchMap, tap, shareReplay, finalize, take } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { CsrfTokenService } from './csrf-token.service';
+import { environment } from '../../environments/environment';
 
 // Authentication event types 
 export type AuthEventType =
@@ -57,8 +58,8 @@ export class AuthService {
   private readonly LEGACY_AUTH_STORAGE_KEY = 'orqueio_auth';
   private readonly SESSION_ACTIVE_KEY = 'orqueio_session_active';
 
-  private readonly baseUrl = '/orqueio/api/admin/auth/user';
-  private readonly engineUrl = '/orqueio/api/engine/engine';
+  private readonly baseUrl = environment.authUrl;
+  private readonly engineUrl = environment.engineUrl;
   private readonly appName = 'welcome';
   private readonly engine = 'default';
 
@@ -490,9 +491,10 @@ export class AuthService {
     window.location.href = this.getSsoLogoutUrl();
   }
 
-  private getSsoLogoutUrl(): string {
-    return '/logout';
-  }
+private getSsoLogoutUrl(): string {
+  const contextPath = (window as any).__ORQUEIO_CONTEXT_PATH__ || '';
+  return contextPath + '/logout';
+}
 
   /**
    * Checks if the current URL contains an OAuth2 error parameter.

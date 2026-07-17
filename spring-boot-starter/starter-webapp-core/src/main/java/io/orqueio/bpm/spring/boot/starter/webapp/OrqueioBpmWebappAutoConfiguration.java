@@ -23,10 +23,14 @@ import io.orqueio.bpm.spring.boot.starter.webapp.filter.LazyDelegateFilter.InitH
 import io.orqueio.bpm.spring.boot.starter.webapp.filter.LazyInitRegistration;
 import io.orqueio.bpm.spring.boot.starter.webapp.filter.ResourceLoaderDependingFilter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
+import org.springframework.boot.tomcat.servlet.TomcatServletWebServerFactory;
+import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ResourceLoader;
@@ -82,7 +86,9 @@ public class OrqueioBpmWebappAutoConfiguration implements WebMvcConfigurer {
     registry.addResourceHandler(applicationPath + "/api/**")
         .addResourceLocations("classpath:/api/");
     registry.addResourceHandler(applicationPath + "/app/**")
-        .addResourceLocations(classpath + "/app/");
+        .addResourceLocations(classpath + "/app/")
+        .resourceChain(false)
+        .addTransformer(new BaseHrefTransformer(applicationPath));
     registry.addResourceHandler(applicationPath + "/assets/**")
         .addResourceLocations(classpath + "/assets/");
      registry.addResourceHandler(applicationPath + "/favicon.ico")
@@ -98,6 +104,28 @@ public class OrqueioBpmWebappAutoConfiguration implements WebMvcConfigurer {
       String applicationPath = webapp.getApplicationPath();
       registry.addRedirectViewController("/", applicationPath + "/app/");
     }
+  }
+
+  /**
+   * When server.servlet.context-path is set to a non-root value (e.g. /my-app), requests
+   * to http://localhost:8080/ never reach the Spring application — Tomcat handles them at
+   * the ROOT context level and returns 404. This valve intercepts at the Tomcat Engine
+   * level (before context routing) and redirects / to the correct application URL.
+   */
+  @Bean
+  @ConditionalOnClass(TomcatServletWebServerFactory.class)
+  public WebServerFactoryCustomizer<TomcatServletWebServerFactory> rootContextRedirectCustomizer(
+      @Value("${server.servlet.context-path:}") String contextPath) {
+    return factory -> {
+      WebappProperty webapp = properties.getWebapp();
+      if (webapp.isIndexRedirectEnabled()
+          && contextPath != null
+          && !contextPath.isEmpty()
+          && !"/".equals(contextPath)) {
+        String target = contextPath + webapp.getApplicationPath() + "/app/";
+        factory.addEngineValves(new RootRedirectValve(target));
+      }
+    };
   }
 
 }
