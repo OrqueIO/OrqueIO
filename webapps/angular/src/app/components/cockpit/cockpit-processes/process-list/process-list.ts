@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, DestroyRef, inject, ChangeDetectionStrategy, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, ActivatedRoute } from '@angular/router';
+import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -31,7 +31,8 @@ import {
   faCompress,
   faPlus,
   faMinus,
-  faSync
+  faSync,
+  faArrowUp
 } from '@fortawesome/free-solid-svg-icons';
 import { forkJoin } from 'rxjs';
 
@@ -40,7 +41,7 @@ import { COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS } from '../../../../shared/
 import { CockpitService, ProcessInstance, ProcessDefinition, ProcessQueryParams, ActivityStatistics, Incident, JobDefinition, CalledProcessDefinition } from '../../../../services/cockpit.service';
 import { NavMenuService } from '../../../../services/nav-menu.service';
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
-import { BpmnViewerComponent, ActivityBadge } from '../../../../shared/bpmn-viewer/bpmn-viewer';
+import { BpmnViewerComponent, ActivityBadge, CallActivityClickEvent } from '../../../../shared/bpmn-viewer/bpmn-viewer';
 
 interface SortConfig {
   column: string;
@@ -86,6 +87,7 @@ export class ProcessListComponent implements OnInit, OnDestroy {
   private destroyRef = inject(DestroyRef);
   private navMenuService = inject(NavMenuService);
   private cockpitService = inject(CockpitService);
+  private router = inject(Router);
   private route = inject(ActivatedRoute);
   private cdr = inject(ChangeDetectorRef);
 
@@ -120,12 +122,21 @@ export class ProcessListComponent implements OnInit, OnDestroy {
   faPlus = faPlus;
   faMinus = faMinus;
   faSync = faSync;
+  faArrowUp = faArrowUp;
 
   @ViewChild('bpmnViewer') bpmnViewer!: BpmnViewerComponent;
 
   breadcrumbs: BreadcrumbItem[] = [
     { translateKey: 'cockpit.menu.processes', route: '/cockpit/processes' }
   ];
+
+  // Parent definition context for breadcrumb (set when navigating from a calling definition)
+  parentDefinitionKey: string | null = null;
+  parentDefinitionName: string | null = null;
+  // Full ancestor chain above the parent — used to restore back-navigation context at any depth
+  definitionAncestors: Array<{ key: string; name: string }> = [];
+  // Parent instance ID for navigation context (set when navigating from a calling instance)
+  parentInstanceId: string | null = null;
 
   // Process definition info
   processDefinitionKey = '';
@@ -192,16 +203,39 @@ export class ProcessListComponent implements OnInit, OnDestroy {
     this.navMenuService.setMenuItems(COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS);
     this.loadSavedPreferences();
 
-    // Get the process definition key from route params
+    // route.params emits only when THIS component's route params change — it never
+    // fires for navigations to unrelated routes (instance view, process list, etc.),
+    // which prevents stale-snapshot processing. snapshot.queryParams is atomically
+    // updated before params fires, so reading it here always gives current values.
     this.route.params
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(params => {
-        this.processDefinitionKey = params['key'];
-        if (this.processDefinitionKey) {
+        const newKey = params['key'];
+        if (!newKey) return;
+
+        const fromKey: string | null = this.route.snapshot.queryParams['from'] || null;
+        const fromName: string | null = this.route.snapshot.queryParams['fromName'] || null;
+        const fromInstance: string | null = this.route.snapshot.queryParams['fromInstance'] || null;
+        const ancestorsParam: string | null = this.route.snapshot.queryParams['ancestors'] || null;
+
+        this.parentDefinitionKey = fromKey;
+        this.parentDefinitionName = fromName;
+        this.parentInstanceId = fromInstance;
+        try {
+          this.definitionAncestors = ancestorsParam ? JSON.parse(ancestorsParam) : [];
+        } catch {
+          this.definitionAncestors = [];
+        }
+
+        if (newKey !== this.processDefinitionKey) {
+          this.processDefinitionKey = newKey;
+          this.processDefinition = null;
           this.currentPage = 1;
           this.loadProcessDefinition();
           this.loadProcessDefinitionVersions();
           this.loadProcessInstances();
+        } else if (this.processDefinition) {
+          this.buildBreadcrumbs();
         }
       });
   }
@@ -238,20 +272,18 @@ export class ProcessListComponent implements OnInit, OnDestroy {
   }
 
   loadProcessDefinition(): void {
+    const requestedForKey = this.processDefinitionKey;
     this.cockpitService.getProcessDefinitionByKey(this.processDefinitionKey)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (definition) => {
+          if (requestedForKey !== this.processDefinitionKey) return;
           this.processDefinition = definition;
           // Initialize selectedVersion to the latest version (current definition ID)
           if (definition?.id) {
             this.selectedVersion = definition.id;
           }
-          const name = definition?.name || this.processDefinitionKey;
-          this.breadcrumbs = [
-            { label: 'Processes', translateKey: 'cockpit.menu.processes', route: '/cockpit/processes' },
-            { label: name }
-          ];
+          this.buildBreadcrumbs();
           this.cdr.markForCheck();
 
           // Load BPMN diagram
@@ -261,6 +293,27 @@ export class ProcessListComponent implements OnInit, OnDestroy {
           }
         }
       });
+  }
+
+  private buildBreadcrumbs(): void {
+    const name = this.processDefinition?.name || this.processDefinitionKey;
+    this.breadcrumbs = [
+      { label: 'Processes', translateKey: 'cockpit.menu.processes', route: '/cockpit/processes' },
+      { label: name }
+    ];
+    this.cdr.markForCheck();
+  }
+
+  // Query params to attach to the breadcrumb parent link so back-navigation restores full context
+  get parentBreadcrumbQueryParams(): Record<string, string> | null {
+    if (!this.definitionAncestors.length) return null;
+    const grandparent = this.definitionAncestors[this.definitionAncestors.length - 1];
+    const remainingAncestors = this.definitionAncestors.slice(0, -1);
+    const params: Record<string, string> = { from: grandparent.key, fromName: grandparent.name };
+    if (remainingAncestors.length > 0) {
+      params['ancestors'] = JSON.stringify(remainingAncestors);
+    }
+    return params;
   }
 
   loadBpmnDiagram(definitionId: string): void {
@@ -332,6 +385,7 @@ export class ProcessListComponent implements OnInit, OnDestroy {
       ? this.cockpitService.getIncidentsByProcessDefinitionKey(this.processDefinitionKey)
       : this.cockpitService.getIncidentsByProcessDefinitionId(this.selectedVersion);
 
+    const requestedForKey = this.processDefinitionKey;
     forkJoin({
       count: this.cockpitService.queryProcessInstancesCount(queryBody),
       instances: this.cockpitService.queryProcessInstances(queryBody, firstResult, this.pageSize),
@@ -339,6 +393,7 @@ export class ProcessListComponent implements OnInit, OnDestroy {
     }).pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: ({ count, instances, incidents }) => {
+          if (requestedForKey !== this.processDefinitionKey) return;
           this.totalCount = count;
           // Associate incidents with process instances
           this.processInstances = instances.map(instance => {
@@ -912,6 +967,38 @@ export class ProcessListComponent implements OnInit, OnDestroy {
         error: () => {
           this.calledProcessDefinitionsLoading = false;
           this.cdr.markForCheck();
+        }
+      });
+  }
+
+  navigateToCalledDefinition(event: CallActivityClickEvent): void {
+    const { callActivityId, calledElement } = event;
+    if (!calledElement) return;
+
+    // Capture synchronously at click time — processDefinitionKey must not be read
+    // inside the async subscribe callback or it may reflect a later navigation.
+    const fromKey = this.processDefinitionKey;
+    const fromName = this.processDefinition?.name || this.processDefinitionKey;
+
+    // Build new ancestor chain: all current ancestors + current parent (if any)
+    const newAncestors = this.parentDefinitionKey
+      ? [...this.definitionAncestors, { key: this.parentDefinitionKey, name: this.parentDefinitionName || this.parentDefinitionKey }]
+      : [...this.definitionAncestors];
+
+    this.cockpitService.getProcessDefinitionByKey(calledElement)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(definition => {
+        if (definition) {
+          const queryParams: Record<string, string> = { from: fromKey, fromName };
+          if (newAncestors.length > 0) {
+            queryParams['ancestors'] = JSON.stringify(newAncestors);
+          }
+          this.router.navigate(['/cockpit/processes', calledElement, 'definition'], { queryParams });
+        } else {
+          this.bpmnViewer?.showCallActivityError(
+            callActivityId,
+            `Process definition '${calledElement}' not found`
+          );
         }
       });
   }

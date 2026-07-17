@@ -1,9 +1,12 @@
 <div class="ctn-fixed-view">
-  <!-- Loading state -->
+  <!-- Initial loading state (no data yet) -->
   <div class="loading-overlay" *ngIf="loading">
     <fa-icon [icon]="faSpinner" animation="spin"></fa-icon>
     <span>{{ 'common.loading' | translate }}</span>
   </div>
+
+  <!-- Transition progress bar (navigating between instances — keeps current view visible) -->
+  <div class="transition-progress-bar" *ngIf="transitioning"></div>
 
   <!-- Not found state -->
   <div class="not-found" *ngIf="!loading && !processInstance">
@@ -253,6 +256,23 @@
       <div class="ctn-row ctn-content-top"
            [class.collapsed]="diagramCollapsed"
            [class.maximized]="diagramMaximized">
+          <!-- Breadcrumb: driven by parentInstance which prioritises navigation context
+               (?from= param) over the API superProcessInstanceId, so the breadcrumb
+               reflects where the user navigated from when available. -->
+          <div class="process-breadcrumb"
+               *ngIf="parentInstance as parent">
+              <fa-icon [icon]="faArrowUp" class="breadcrumb-up-icon"></fa-icon>
+              <a [routerLink]="['/cockpit/processes/instance', parent.id]"
+                 class="breadcrumb-parent-name"
+                 [title]="parent.id">
+                  {{ parent.processDefinitionName || parent.processDefinitionKey || parent.id }}
+              </a>
+              <span class="breadcrumb-separator">›</span>
+              <span class="breadcrumb-current"
+                    [title]="processDefinition?.name || processDefinition?.key">
+            {{ processDefinition?.name || processDefinition?.key }}
+          </span>
+          </div>
 
         <div class="diagram-container">
           <div class="diagram-loading" *ngIf="loadingDiagram">
@@ -275,6 +295,7 @@
             (elementHover)="onDiagramElementHover($event)"
             (expandToggle)="toggleDiagramMaximize()"
             (callActivityClick)="navigateToCalledInstance($event)"
+            (viewerReady)="onBpmnViewerReady()"
           ></app-bpmn-viewer>
 
           <div class="empty-diagram" *ngIf="!loadingDiagram && !bpmnXml">
@@ -526,7 +547,8 @@
                       </span>
                     </td>
                     <td class="instance-id">
-                      <a [routerLink]="['/cockpit/processes/instance', instance.id]">
+                      <a [routerLink]="['/cockpit/processes/instance', instance.id]"
+                         [queryParams]="{ from: processId }">
                         {{ instance.id }}
                       </a>
                     </td>

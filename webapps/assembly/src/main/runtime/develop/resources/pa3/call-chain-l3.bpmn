@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
+                   xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                   xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+                   xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+                   xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+                   xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd"
+                   id="PurchaseOrderApproval_def" targetNamespace="http://activiti.org/bpmn">
+  <!--
+    Level 3 of the P2P chain.
+    Demonstrates a parallel multi-instance Call Activity inside a chain level:
+      1. CA_DeptReview spawns 3 simultaneous DepartmentApprovalReview instances.
+         Each instance pauses at its UserTask — all 3 are visible in the cockpit
+         and each shows a breadcrumb back to this process.
+      2. Once all 3 reviews complete, the flow continues to ContractManagement (L4).
+  -->
+  <bpmn2:process id="PurchaseOrderApproval" name="Purchase Order Approval"
+                 isExecutable="true" camunda:historyTimeToLive="P180D">
+
+    <bpmn2:startEvent id="Start_3" name="Order Submitted for Approval">
+      <bpmn2:outgoing>Flow_3a</bpmn2:outgoing>
+    </bpmn2:startEvent>
+
+    <!-- Parallel multi-instance: spawns 3 child instances of DepartmentApprovalReview -->
+    <bpmn2:callActivity id="CA_DeptReview" name="Collect Department Approvals"
+                        calledElement="DepartmentApprovalReview">
+      <bpmn2:incoming>Flow_3a</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_3b</bpmn2:outgoing>
+      <bpmn2:multiInstanceLoopCharacteristics isSequential="false">
+        <bpmn2:loopCardinality xsi:type="bpmn2:tFormalExpression">3</bpmn2:loopCardinality>
+      </bpmn2:multiInstanceLoopCharacteristics>
+    </bpmn2:callActivity>
+
+    <!-- Chain continues to L4 once all 3 department reviews are done -->
+    <bpmn2:callActivity id="CA_3" name="Manage Contract" calledElement="ContractManagement">
+      <bpmn2:incoming>Flow_3b</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_3c</bpmn2:outgoing>
+    </bpmn2:callActivity>
+
+    <bpmn2:sequenceFlow id="Flow_3a" sourceRef="Start_3"     targetRef="CA_DeptReview"/>
+    <bpmn2:sequenceFlow id="Flow_3b" sourceRef="CA_DeptReview" targetRef="CA_3"/>
+    <bpmn2:sequenceFlow id="Flow_3c" sourceRef="CA_3"        targetRef="End_3"/>
+
+    <bpmn2:endEvent id="End_3" name="Purchase Order Approved">
+      <bpmn2:incoming>Flow_3c</bpmn2:incoming>
+    </bpmn2:endEvent>
+
+  </bpmn2:process>
+
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="PurchaseOrderApproval">
+
+      <bpmndi:BPMNShape id="Start_3_di" bpmnElement="Start_3">
+        <dc:Bounds x="150" y="237" width="36" height="36"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="110" y="280" width="116" height="27"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="CA_DeptReview_di" bpmnElement="CA_DeptReview" isExpanded="true">
+        <dc:Bounds x="240" y="215" width="120" height="80"/>
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="CA_3_di" bpmnElement="CA_3" isExpanded="true">
+        <dc:Bounds x="410" y="215" width="120" height="80"/>
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="End_3_di" bpmnElement="End_3">
+        <dc:Bounds x="582" y="237" width="36" height="36"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="550" y="280" width="100" height="27"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNEdge id="Flow_3a_di" bpmnElement="Flow_3a">
+        <di:waypoint xsi:type="dc:Point" x="186" y="255"/>
+        <di:waypoint xsi:type="dc:Point" x="240" y="255"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_3b_di" bpmnElement="Flow_3b">
+        <di:waypoint xsi:type="dc:Point" x="360" y="255"/>
+        <di:waypoint xsi:type="dc:Point" x="410" y="255"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_3c_di" bpmnElement="Flow_3c">
+        <di:waypoint xsi:type="dc:Point" x="530" y="255"/>
+        <di:waypoint xsi:type="dc:Point" x="582" y="255"/>
+      </bpmndi:BPMNEdge>
+
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn2:definitions>

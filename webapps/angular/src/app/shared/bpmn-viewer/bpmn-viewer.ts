@@ -15,6 +15,8 @@ import {
   inject
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faArrowUp } from '@fortawesome/free-solid-svg-icons';
 
 // @ts-ignore - bpmn-js doesn't have types
 import NavigatedViewer from 'bpmn-js/lib/NavigatedViewer';
@@ -31,10 +33,15 @@ export interface BpmnElement {
   name?: string;
 }
 
+export interface CallActivityClickEvent {
+  callActivityId: string;
+  calledElement: string | null;
+}
+
 @Component({
   selector: 'app-bpmn-viewer',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FontAwesomeModule],
   templateUrl: './bpmn-viewer.html',
   styleUrls: ['./bpmn-viewer.css'],
   encapsulation: ViewEncapsulation.None
@@ -62,19 +69,48 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
   @Output() error = new EventEmitter<Error>();
   @Output() expandToggle = new EventEmitter<void>();
   @Output() focusClick = new EventEmitter<void>();
-  @Output() callActivityClick = new EventEmitter<string>();
+  @Output() callActivityClick = new EventEmitter<CallActivityClickEvent>();
 
   private viewer: any = null;
   private overlays: any = null;
   private isViewerReady = false;
   private badgeOverlayIds: Map<string, string[]> = new Map();
   private callActivityOverlayIds: string[] = [];
+  private callActivityErrorOverlayIds: string[] = [];
   private currentXml: string | null = null;
   private needsZoomFit = false;
   private resizeTimeout: ReturnType<typeof setTimeout> | null = null;
+  private subprocessStack: { id: string; name: string; element: any }[] = [];
+  private currentRootElement: any = null;
 
+  faArrowUp = faArrowUp;
   loading = true;
+  subprocessBreadcrumb: string[] = [];
+  private windowStart = 0;
   errorMessage: string | null = null;
+
+  get visibleBreadcrumbItems(): Array<{ name: string; index: number | null; isEllipsis: boolean; isRightEllipsis?: boolean }> {
+    const items = this.subprocessBreadcrumb;
+    const n = items.length;
+    if (n <= 5) {
+      return items.map((name, i) => ({ name, index: i < n - 1 ? i : null, isEllipsis: false }));
+    }
+    const winEnd = Math.min(this.windowStart + 2, n - 2);
+    const result: Array<{ name: string; index: number | null; isEllipsis: boolean; isRightEllipsis?: boolean }> = [
+      { name: items[0], index: 0, isEllipsis: false },
+    ];
+    if (this.windowStart > 1) {
+      result.push({ name: '…', index: null, isEllipsis: true });
+    }
+    for (let i = this.windowStart; i <= winEnd; i++) {
+      result.push({ name: items[i], index: i, isEllipsis: false });
+    }
+    if (winEnd < n - 2) {
+      result.push({ name: '…', index: null, isEllipsis: false, isRightEllipsis: true });
+    }
+    result.push({ name: items[n - 1], index: null, isEllipsis: false });
+    return result;
+  }
 
   @HostListener('window:resize')
   onWindowResize(): void {
@@ -151,6 +187,7 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
       if (this.enableCallActivityNavigation) {
         this.addCallActivityOverlays();
       }
+      this.styleCollapsedSubprocessOverlays();
     });
 
     eventBus.on('element.click', (event: any) => {
@@ -179,6 +216,15 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
       this.elementHover.emit(null);
     });
 
+    // Re-center diagram on collapsed subprocess drilldown navigation.
+    // bpmn-js fires root.set when the canvas root changes (drill-in or drill-out)
+    // without re-importing XML, so importXML / ngOnChanges never trigger the fit.
+    eventBus.on('root.set', (event: any) => {
+      this.updateSubprocessStack(event.element);
+      this.needsZoomFit = true;
+      this.scheduleFitToViewport();
+    });
+
     this.isViewerReady = true;
 
     if (this.xml) {
@@ -203,6 +249,7 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
       if (this.isContainerVisible()) {
         try {
           const canvas = this.viewer.get('canvas');
+          canvas.resized();
           this.safeZoomFit(canvas);
           this.needsZoomFit = false;
         } catch (e) {
@@ -232,6 +279,10 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
 
     this.loading = true;
     this.errorMessage = null;
+    this.subprocessStack = [];
+    this.currentRootElement = null;
+    this.subprocessBreadcrumb = [];
+    this.windowStart = 0;
     this.cdr.detectChanges();
 
     try {
@@ -343,14 +394,11 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
   }
 
   private clearCallActivityOverlays(): void {
-    this.callActivityOverlayIds.forEach(id => {
-      try {
-        this.overlays?.remove(id);
-      } catch (e) {
-        // Overlay might already be removed
-      }
+    [...this.callActivityOverlayIds, ...this.callActivityErrorOverlayIds].forEach(id => {
+      try { this.overlays?.remove(id); } catch (_) {}
     });
     this.callActivityOverlayIds = [];
+    this.callActivityErrorOverlayIds = [];
   }
 
   private clearAllOverlays(): void {
@@ -415,6 +463,15 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
     });
   }
 
+  private styleCollapsedSubprocessOverlays(): void {
+    const container = this.canvasRef.nativeElement;
+    const arrowSvg = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 16 16"><path fill="white" fill-rule="evenodd" d="M4.81801948,3.50735931 L10.4996894,9.1896894 L10.5,4 L12,4 L12,12 L4,12 L4,10.5 L9.6896894,10.4996894 L3.75735931,4.56801948 C3.46446609,4.27512627 3.46446609,3.80025253 3.75735931,3.50735931 C4.05025253,3.21446609 4.52512627,3.21446609 4.81801948,3.50735931 Z"/></svg>';
+    container.querySelectorAll<HTMLButtonElement>('.bjs-drilldown:not(.bpmn-call-activity-overlay)').forEach(btn => {
+      btn.classList.add('bpmn-subprocess-drilldown');
+      btn.innerHTML = arrowSvg;
+    });
+  }
+
   private addCallActivityOverlays(): void {
     if (!this.viewer || !this.overlays || !this.enableCallActivityNavigation) return;
 
@@ -425,18 +482,34 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
     elementRegistry.forEach((element: any) => {
       if (element.type !== 'bpmn:CallActivity') return;
 
-      // Only show overlay if this Call Activity has called instances
-      if (!this.callActivityIdsWithInstances.has(element.id)) return;
+      const hasInstances = this.callActivityIdsWithInstances.has(element.id);
+      const calledElement: string | null = element.businessObject?.calledElement ?? null;
+
+      // Rule 1: no calledElement and no instances → no icon
+      if (!calledElement && !hasInstances) return;
+
+      // Rule 2: EL expression with no instances → gray, non-clickable
+      // When instances exist, the icon is always clickable (navigation uses the instance ID, not calledElement)
+      const isExpression = !hasInstances && calledElement !== null &&
+        (calledElement.includes('${') || calledElement.includes('#{'));
 
       const btn = document.createElement('button');
-      btn.className = 'bjs-drilldown bpmn-call-activity-overlay';
-      btn.title = 'Navigate to called process instance';
-      btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4.81801948,3.50735931 L10.4996894,9.1896894 L10.5,4 L12,4 L12,12 L4,12 L4,10.5 L9.6896894,10.4996894 L3.75735931,4.56801948 C3.46446609,4.27512627 3.46446609,3.80025253 3.75735931,3.50735931 C4.05025253,3.21446609 4.52512627,3.21446609 4.81801948,3.50735931 Z"/></svg>';
+      const svgIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 16 16"><path fill="white" fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"/></svg>';
+      btn.innerHTML = svgIcon;
 
-      btn.addEventListener('click', (e: Event) => {
-        e.stopPropagation();
-        this.callActivityClick.emit(element.id);
-      });
+      if (isExpression) {
+        btn.className = 'bjs-drilldown bpmn-call-activity-overlay bpmn-call-activity-overlay--expression';
+        btn.title = 'Navigation unavailable: calledElement is a dynamic expression';
+        btn.disabled = true;
+      } else {
+        // Rule 3: static reference or has instances → blue, clickable
+        btn.className = 'bjs-drilldown bpmn-call-activity-overlay';
+        btn.title = hasInstances ? 'Show Called Process Instances' : 'Go to Called Process Definition';
+        btn.addEventListener('click', (e: Event) => {
+          e.stopPropagation();
+          this.callActivityClick.emit({ callActivityId: element.id, calledElement });
+        });
+      }
 
       try {
         const id = this.overlays.add(element.id, {
@@ -448,6 +521,62 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
         console.warn('Could not add Call Activity overlay to', element.id, e);
       }
     });
+  }
+
+  showCallActivityError(activityId: string, message: string): void {
+    if (!this.overlays) return;
+
+    const container = document.createElement('div');
+    container.className = 'bpmn-call-activity-error';
+    container.textContent = message;
+
+    try {
+      const overlayId = this.overlays.add(activityId, {
+        position: { bottom: -38, left: 0 },
+        html: container
+      });
+      this.callActivityErrorOverlayIds.push(overlayId);
+
+      setTimeout(() => {
+        try { this.overlays?.remove(overlayId); } catch (_) {}
+        this.callActivityErrorOverlayIds = this.callActivityErrorOverlayIds.filter(id => id !== overlayId);
+      }, 3000);
+    } catch (e) {
+      console.warn('Could not add error overlay to', activityId, e);
+    }
+  }
+  private getElementDisplayName(element: any): string {
+    if (element.businessObject?.name) return element.businessObject.name;
+    const id = element.id || '';
+    return id.endsWith('_plane') ? id.slice(0, -6) : id;
+  }
+
+  private updateSubprocessStack(element: any): void {
+    if (!element) return;
+
+    if (element.type === 'bpmn:Process') {
+      this.subprocessStack = [];
+    } else {
+      const existingIndex = this.subprocessStack.findIndex(item => item.id === element.id);
+      if (existingIndex >= 0) {
+        this.subprocessStack = this.subprocessStack.slice(0, existingIndex);
+      } else if (this.currentRootElement) {
+        const name = this.getElementDisplayName(this.currentRootElement);
+        this.subprocessStack.push({ id: this.currentRootElement.id, name, element: this.currentRootElement });
+      }
+    }
+
+    this.currentRootElement = element;
+
+    if (this.subprocessStack.length === 0) {
+      this.subprocessBreadcrumb = [];
+      this.windowStart = 0;
+    } else {
+      const currentName = this.getElementDisplayName(element);
+      this.subprocessBreadcrumb = [...this.subprocessStack.map(item => item.name), currentName];
+      const n = this.subprocessBreadcrumb.length;
+      this.windowStart = n > 5 ? Math.max(1, n - 3) : 0;
+    }
   }
 
   private destroyViewer(): void {
@@ -462,6 +591,22 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
   }
 
   // Public methods for external control
+  navigateToSubprocessLevel(index: number): void {
+    const item = this.subprocessStack[index];
+    if (!item || !this.viewer) return;
+    const canvas = this.viewer.get('canvas');
+    canvas.setRootElement(item.element);
+  }
+
+  shiftWindowLeft(): void {
+    this.windowStart = Math.max(1, this.windowStart - 3);
+  }
+
+  shiftWindowRight(): void {
+    const n = this.subprocessBreadcrumb.length;
+    this.windowStart = Math.min(n - 4, this.windowStart + 3);
+  }
+
   zoomIn(): void {
     if (this.viewer) {
       const canvas = this.viewer.get('canvas');

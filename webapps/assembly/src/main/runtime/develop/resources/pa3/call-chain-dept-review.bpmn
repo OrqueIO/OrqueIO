@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
+                   xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                   xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+                   xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+                   xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+                   xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd"
+                   id="DepartmentApprovalReview_def" targetNamespace="http://activiti.org/bpmn">
+  <!--
+    Called by PurchaseOrderApproval (L3) as a parallel multi-instance CA (x3).
+    The UserTask keeps each of the 3 instances alive so they are all visible
+    simultaneously in the cockpit with a breadcrumb back to PurchaseOrderApproval.
+  -->
+  <bpmn2:process id="DepartmentApprovalReview" name="Department Approval Review"
+                 isExecutable="true" camunda:historyTimeToLive="P180D">
+
+    <bpmn2:startEvent id="Start_DAR" name="Review Assigned">
+      <bpmn2:outgoing>Flow_DAR1</bpmn2:outgoing>
+    </bpmn2:startEvent>
+
+    <bpmn2:userTask id="UserTask_DAR" name="Validate Purchase Allocation">
+      <bpmn2:incoming>Flow_DAR1</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_DAR2</bpmn2:outgoing>
+    </bpmn2:userTask>
+
+    <bpmn2:sequenceFlow id="Flow_DAR1" sourceRef="Start_DAR"    targetRef="UserTask_DAR"/>
+    <bpmn2:sequenceFlow id="Flow_DAR2" sourceRef="UserTask_DAR" targetRef="End_DAR"/>
+
+    <bpmn2:endEvent id="End_DAR" name="Approval Submitted">
+      <bpmn2:incoming>Flow_DAR2</bpmn2:incoming>
+    </bpmn2:endEvent>
+
+  </bpmn2:process>
+
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="DepartmentApprovalReview">
+
+      <bpmndi:BPMNShape id="Start_DAR_di" bpmnElement="Start_DAR">
+        <dc:Bounds x="152" y="237" width="36" height="36"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="136" y="280" width="68" height="27"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="UserTask_DAR_di" bpmnElement="UserTask_DAR">
+        <dc:Bounds x="240" y="215" width="150" height="80"/>
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="End_DAR_di" bpmnElement="End_DAR">
+        <dc:Bounds x="442" y="237" width="36" height="36"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="418" y="280" width="84" height="27"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNEdge id="Flow_DAR1_di" bpmnElement="Flow_DAR1">
+        <di:waypoint xsi:type="dc:Point" x="188" y="255"/>
+        <di:waypoint xsi:type="dc:Point" x="240" y="255"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_DAR2_di" bpmnElement="Flow_DAR2">
+        <di:waypoint xsi:type="dc:Point" x="390" y="255"/>
+        <di:waypoint xsi:type="dc:Point" x="442" y="255"/>
+      </bpmndi:BPMNEdge>
+
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn2:definitions>
