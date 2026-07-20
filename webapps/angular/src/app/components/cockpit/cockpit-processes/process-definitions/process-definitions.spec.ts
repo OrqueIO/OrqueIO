@@ -16,87 +16,87 @@ import { NavMenuService } from '../../../../services/nav-menu.service';
 import { initTestEnvironment } from '../../../../testing/test-utils';
 
 // ============================================================
-// Helper: call CockpitService.buildGlobalSearchPayload without
+// Helper: call CockpitService.buildPayloadVariants without
 // Angular DI — it's a pure function with no injected calls.
 // ============================================================
 const realSvc = Object.create(CockpitService.prototype) as CockpitService;
 
 // ============================================================
-// buildGlobalSearchPayload — service-level unit tests
+// buildPayloadVariants — service-level unit tests
 // ============================================================
-describe('CockpitService.buildGlobalSearchPayload', () => {
+describe('CockpitService.buildPayloadVariants', () => {
   beforeAll(() => { initTestEnvironment(); });
 
-  it('should put a single business key in orQueries as a LIKE pattern', () => {
+  it('should put a single business key in a payload as a LIKE pattern (no orQueries)', () => {
     const filters: MultiValueFilter[] = [{ field: 'businessKey', values: ['BK-001'] }];
-    const payload = realSvc.buildGlobalSearchPayload(filters);
-    expect(payload.orQueries).toHaveLength(1);
-    expect(payload.orQueries[0].processInstanceBusinessKeyLike).toBe('%BK-001%');
-    expect(payload.processInstanceBusinessKeyLike).toBeUndefined();
-    expect(payload.processInstanceBusinessKeyIn).toBeUndefined();
+    const [p] = realSvc.buildPayloadVariants(filters);
+    expect(p.processInstanceBusinessKeyLike).toBe('%BK-001%');
+    expect(p.orQueries).toBeUndefined();
+    expect(p.processInstanceBusinessKeyIn).toBeUndefined();
   });
 
-  it('should put multiple business keys in orQueries as separate LIKE patterns (OR semantics)', () => {
+  it('should produce 2 payload variants for 2 business keys (OR via separate calls)', () => {
     const filters: MultiValueFilter[] = [{ field: 'businessKey', values: ['BK-001', 'BK-002'] }];
-    const payload = realSvc.buildGlobalSearchPayload(filters);
-    expect(payload.orQueries).toHaveLength(2);
-    expect(payload.orQueries[0].processInstanceBusinessKeyLike).toBe('%BK-001%');
-    expect(payload.orQueries[1].processInstanceBusinessKeyLike).toBe('%BK-002%');
-    expect(payload.processInstanceBusinessKeyIn).toBeUndefined();
+    const ps = realSvc.buildPayloadVariants(filters);
+    expect(ps.length).toBe(2);
+    expect(ps[0].processInstanceBusinessKeyLike).toBe('%BK-001%');
+    expect(ps[1].processInstanceBusinessKeyLike).toBe('%BK-002%');
+    expect(ps[0].processInstanceBusinessKeyIn).toBeUndefined();
+    expect(ps[0].orQueries).toBeUndefined();
   });
 
-  it('should create one orQueries entry per value for a variable filter (OR between values)', () => {
+  it('should produce one payload variant per value for a variable filter (OR via separate calls)', () => {
     const filters: MultiValueFilter[] = [{
       field: 'variable', values: ['1', '23'],
       variableName: 'orderId', variableOperator: 'eq'
     }];
-    const payload = realSvc.buildGlobalSearchPayload(filters);
-    expect(payload.orQueries).toBeDefined();
-    expect(payload.orQueries.length).toBe(2);
-    expect(payload.orQueries[0].variables[0]).toEqual({ name: 'orderId', operator: 'eq', value: 1 });
-    expect(payload.orQueries[1].variables[0]).toEqual({ name: 'orderId', operator: 'eq', value: 23 });
+    const ps = realSvc.buildPayloadVariants(filters);
+    expect(ps.length).toBe(2);
+    expect(ps[0].variables[0]).toEqual({ name: 'orderId', operator: 'eq', value: 1 });
+    expect(ps[1].variables[0]).toEqual({ name: 'orderId', operator: 'eq', value: 23 });
+    expect(ps[0].orQueries).toBeUndefined();
   });
 
-  it('should create 3 separate orQueries entries for a 3-value variable filter', () => {
+  it('should produce 3 payload variants for a 3-value variable filter', () => {
     const filters: MultiValueFilter[] = [{
       field: 'variable', values: ['100', '200', '300'],
       variableName: 'amount', variableOperator: 'eq'
     }];
-    const payload = realSvc.buildGlobalSearchPayload(filters);
-    expect(payload.orQueries.length).toBe(3);
-    expect(payload.orQueries[0].variables[0]).toEqual({ name: 'amount', operator: 'eq', value: 100 });
-    expect(payload.orQueries[1].variables[0]).toEqual({ name: 'amount', operator: 'eq', value: 200 });
-    expect(payload.orQueries[2].variables[0]).toEqual({ name: 'amount', operator: 'eq', value: 300 });
+    const ps = realSvc.buildPayloadVariants(filters);
+    expect(ps.length).toBe(3);
+    expect(ps[0].variables[0]).toEqual({ name: 'amount', operator: 'eq', value: 100 });
+    expect(ps[1].variables[0]).toEqual({ name: 'amount', operator: 'eq', value: 200 });
+    expect(ps[2].variables[0]).toEqual({ name: 'amount', operator: 'eq', value: 300 });
   });
 
-  it('should cross-product two variable pills: N×M orQueries entries each carrying one condition per pill', () => {
-    // orderId=[1,23] × status=[active] → 2×1=2 combos, AND'd within each entry
+  it('should cross-product two variable pills: N×M payload variants each carrying one condition per pill', () => {
+    // orderId=[1,23] × status=[active] → 2×1=2 variants, each payload AND's both conditions
     const filters: MultiValueFilter[] = [
       { field: 'variable', values: ['1', '23'], variableName: 'orderId', variableOperator: 'eq' },
       { field: 'variable', values: ['active'], variableName: 'status', variableOperator: 'eq' }
     ];
-    const payload = realSvc.buildGlobalSearchPayload(filters);
-    expect(payload.orQueries.length).toBe(2);
-    expect(payload.orQueries[0].variables).toEqual([
+    const ps = realSvc.buildPayloadVariants(filters);
+    expect(ps.length).toBe(2);
+    expect(ps[0].variables).toEqual([
       { name: 'orderId', operator: 'eq', value: 1 },
       { name: 'status',  operator: 'eq', value: 'active' }
     ]);
-    expect(payload.orQueries[1].variables).toEqual([
+    expect(ps[1].variables).toEqual([
       { name: 'orderId', operator: 'eq', value: 23 },
       { name: 'status',  operator: 'eq', value: 'active' }
     ]);
   });
 
-  // ── parseVariableValue type coercion in buildGlobalSearchPayload ──────────
+  // ── parseVariableValue type coercion in buildPayloadVariants ──────────
 
   it('should send 20.5 as a number (not a string) for a float variable value', () => {
     const filters: MultiValueFilter[] = [{
       field: 'variable', values: ['20.5'],
       variableName: 'amount', variableOperator: 'eq'
     }];
-    const payload = realSvc.buildGlobalSearchPayload(filters);
-    expect(payload.orQueries[0].variables[0].value).toBe(20.5);
-    expect(typeof payload.orQueries[0].variables[0].value).toBe('number');
+    const [p] = realSvc.buildPayloadVariants(filters);
+    expect(p.variables[0].value).toBe(20.5);
+    expect(typeof p.variables[0].value).toBe('number');
   });
 
   it('should send each numeric value as a number for a multi-value variable filter', () => {
@@ -104,16 +104,16 @@ describe('CockpitService.buildGlobalSearchPayload', () => {
       field: 'variable', values: ['20.5', '30'],
       variableName: 'amount', variableOperator: 'eq'
     }];
-    const payload = realSvc.buildGlobalSearchPayload(filters);
-    expect(payload.orQueries[0].variables[0].value).toBe(20.5);
-    expect(payload.orQueries[1].variables[0].value).toBe(30);
+    const ps = realSvc.buildPayloadVariants(filters);
+    expect(ps[0].variables[0].value).toBe(20.5);
+    expect(ps[1].variables[0].value).toBe(30);
   });
 
   it('should send true/false as booleans for boolean variable values', () => {
     const f1: MultiValueFilter[] = [{ field: 'variable', values: ['true'],  variableName: 'flag', variableOperator: 'eq' }];
     const f2: MultiValueFilter[] = [{ field: 'variable', values: ['false'], variableName: 'flag', variableOperator: 'eq' }];
-    expect(realSvc.buildGlobalSearchPayload(f1).orQueries[0].variables[0].value).toBe(true);
-    expect(realSvc.buildGlobalSearchPayload(f2).orQueries[0].variables[0].value).toBe(false);
+    expect(realSvc.buildPayloadVariants(f1)[0].variables[0].value).toBe(true);
+    expect(realSvc.buildPayloadVariants(f2)[0].variables[0].value).toBe(false);
   });
 
   it('should send null for NULL variable value', () => {
@@ -121,8 +121,8 @@ describe('CockpitService.buildGlobalSearchPayload', () => {
       field: 'variable', values: ['NULL'],
       variableName: 'x', variableOperator: 'eq'
     }];
-    const payload = realSvc.buildGlobalSearchPayload(filters);
-    expect(payload.orQueries[0].variables[0].value).toBeNull();
+    const [p] = realSvc.buildPayloadVariants(filters);
+    expect(p.variables[0].value).toBeNull();
   });
 
   it('should auto-wrap like value with % for variable operator like', () => {
@@ -130,81 +130,79 @@ describe('CockpitService.buildGlobalSearchPayload', () => {
       field: 'variable', values: ['invoice'],
       variableName: 'name', variableOperator: 'like'
     }];
-    const payload = realSvc.buildGlobalSearchPayload(filters);
-    expect(payload.orQueries[0].variables[0].value).toBe('%invoice%');
+    const [p] = realSvc.buildPayloadVariants(filters);
+    expect(p.variables[0].value).toBe('%invoice%');
   });
 
   it('should set active=true and unfinished=true for state=active', () => {
     const filters: MultiValueFilter[] = [{ field: 'state', values: ['active'] }];
-    const payload = realSvc.buildGlobalSearchPayload(filters);
-    expect(payload.active).toBe(true);
-    expect(payload.unfinished).toBe(true);
+    const [p] = realSvc.buildPayloadVariants(filters);
+    expect(p.active).toBe(true);
+    expect(p.unfinished).toBe(true);
   });
 
   it('should set completed=true and finished=true for state=completed', () => {
     const filters: MultiValueFilter[] = [{ field: 'state', values: ['completed'] }];
-    const payload = realSvc.buildGlobalSearchPayload(filters);
-    expect(payload.completed).toBe(true);
-    expect(payload.finished).toBe(true);
+    const [p] = realSvc.buildPayloadVariants(filters);
+    expect(p.completed).toBe(true);
+    expect(p.finished).toBe(true);
   });
 
   it('should set externallyTerminated=true and finished=true for state=terminated', () => {
     const filters: MultiValueFilter[] = [{ field: 'state', values: ['terminated'] }];
-    const payload = realSvc.buildGlobalSearchPayload(filters);
-    expect(payload.externallyTerminated).toBe(true);
-    expect(payload.finished).toBe(true);
+    const [p] = realSvc.buildPayloadVariants(filters);
+    expect(p.externallyTerminated).toBe(true);
+    expect(p.finished).toBe(true);
   });
 
   it('should set withIncidents=true for withIncidents filter', () => {
     const filters: MultiValueFilter[] = [{ field: 'withIncidents', values: [] }];
-    const payload = realSvc.buildGlobalSearchPayload(filters);
-    expect(payload.withIncidents).toBe(true);
+    const [p] = realSvc.buildPayloadVariants(filters);
+    expect(p.withIncidents).toBe(true);
   });
 
   it('should set processInstanceIds array for instanceId filter', () => {
     const filters: MultiValueFilter[] = [{ field: 'instanceId', values: ['inst-1', 'inst-2'] }];
-    const payload = realSvc.buildGlobalSearchPayload(filters);
-    expect(payload.processInstanceIds).toEqual(['inst-1', 'inst-2']);
+    const [p] = realSvc.buildPayloadVariants(filters);
+    expect(p.processInstanceIds).toEqual(['inst-1', 'inst-2']);
   });
 
   it('should set startedAfter from filter', () => {
     const filters: MultiValueFilter[] = [{ field: 'startedAfter', values: ['2024-01-01T00:00:00.000+0000'] }];
-    const payload = realSvc.buildGlobalSearchPayload(filters);
-    expect(payload.startedAfter).toBe('2024-01-01T00:00:00.000+0000');
+    const [p] = realSvc.buildPayloadVariants(filters);
+    expect(p.startedAfter).toBe('2024-01-01T00:00:00.000+0000');
   });
 
   it('should set variableNamesIgnoreCase and variableValuesIgnoreCase when true', () => {
-    const payload = realSvc.buildGlobalSearchPayload([], true, true);
-    expect(payload.variableNamesIgnoreCase).toBe(true);
-    expect(payload.variableValuesIgnoreCase).toBe(true);
+    const [p] = realSvc.buildPayloadVariants([], true, true);
+    expect(p.variableNamesIgnoreCase).toBe(true);
+    expect(p.variableValuesIgnoreCase).toBe(true);
   });
 
   it('should not include variableIgnoreCase flags when both are false', () => {
-    const payload = realSvc.buildGlobalSearchPayload([], false, false);
-    expect(payload.variableNamesIgnoreCase).toBeUndefined();
-    expect(payload.variableValuesIgnoreCase).toBeUndefined();
+    const [p] = realSvc.buildPayloadVariants([], false, false);
+    expect(p.variableNamesIgnoreCase).toBeUndefined();
+    expect(p.variableValuesIgnoreCase).toBeUndefined();
   });
 
-  it('should combine multiple filter types in one payload', () => {
-    // businessKey=[BK-001,BK-002] × variable amount=[42] → 2×1=2 cross-product entries
-    // each entry carries BOTH bk AND variable so Camunda AND's them within the entry
+  it('should combine multiple filter types: cross-product of bk values × variable values', () => {
+    // businessKey=[BK-001,BK-002] × variable amount=[42] → 2×1=2 variants
     const filters: MultiValueFilter[] = [
       { field: 'businessKey', values: ['BK-001', 'BK-002'] },
       { field: 'state', values: ['active'] },
       { field: 'withIncidents', values: [] },
       { field: 'variable', values: ['42'], variableName: 'amount', variableOperator: 'gt' }
     ];
-    const payload = realSvc.buildGlobalSearchPayload(filters);
-    expect(payload.processInstanceBusinessKeyIn).toBeUndefined();
-    expect(payload.processInstanceBusinessKeyLike).toBeUndefined();
-    expect(payload.active).toBe(true);
-    expect(payload.withIncidents).toBe(true);
-    // cross-product: 2 bk × 1 variable = 2 orQueries entries, each with bk + variable
-    expect(payload.orQueries.length).toBe(2);
-    expect(payload.orQueries[0].processInstanceBusinessKeyLike).toBe('%BK-001%');
-    expect(payload.orQueries[0].variables[0]).toEqual({ name: 'amount', operator: 'gt', value: 42 });
-    expect(payload.orQueries[1].processInstanceBusinessKeyLike).toBe('%BK-002%');
-    expect(payload.orQueries[1].variables[0]).toEqual({ name: 'amount', operator: 'gt', value: 42 });
+    const ps = realSvc.buildPayloadVariants(filters);
+    expect(ps[0].processInstanceBusinessKeyIn).toBeUndefined();
+    expect(ps[0].active).toBe(true);
+    expect(ps[0].withIncidents).toBe(true);
+    expect(ps.length).toBe(2);
+    expect(ps[0].processInstanceBusinessKeyLike).toBe('%BK-001%');
+    expect(ps[0].variables[0]).toEqual({ name: 'amount', operator: 'gt', value: 42 });
+    expect(ps[0].orQueries).toBeUndefined();
+    expect(ps[1].processInstanceBusinessKeyLike).toBe('%BK-002%');
+    expect(ps[1].variables[0]).toEqual({ name: 'amount', operator: 'gt', value: 42 });
   });
 
   it('should pass the like operator through to the variable query payload', () => {
@@ -212,16 +210,17 @@ describe('CockpitService.buildGlobalSearchPayload', () => {
       field: 'variable', values: ['%partial%'],
       variableName: 'name', variableOperator: 'like'
     }];
-    const payload = realSvc.buildGlobalSearchPayload(filters);
-    expect(payload.orQueries.length).toBe(1);
-    expect(payload.orQueries[0].variables[0].operator).toBe('like');
-    expect(payload.orQueries[0].variables[0].value).toBe('%partial%');
+    const ps = realSvc.buildPayloadVariants(filters);
+    expect(ps.length).toBe(1);
+    expect(ps[0].variables[0].operator).toBe('like');
+    expect(ps[0].variables[0].value).toBe('%partial%');
   });
 
-  it('should not add orQueries when no variable filter is present', () => {
+  it('should not add variables or orQueries when no variable filter is present', () => {
     const filters: MultiValueFilter[] = [{ field: 'withIncidents', values: [] }];
-    const payload = realSvc.buildGlobalSearchPayload(filters);
-    expect(payload.orQueries).toBeUndefined();
+    const [p] = realSvc.buildPayloadVariants(filters);
+    expect(p.variables).toBeUndefined();
+    expect(p.orQueries).toBeUndefined();
   });
 
   it('should default variable operator to eq when not provided', () => {
@@ -229,8 +228,8 @@ describe('CockpitService.buildGlobalSearchPayload', () => {
       field: 'variable', values: ['hello'],
       variableName: 'myVar'
     }];
-    const payload = realSvc.buildGlobalSearchPayload(filters);
-    expect(payload.orQueries[0].variables[0].operator).toBe('eq');
+    const [p] = realSvc.buildPayloadVariants(filters);
+    expect(p.variables[0].operator).toBe('eq');
   });
 
   // ── variable operator API name mapping ────────────────────────────────────
@@ -240,10 +239,10 @@ describe('CockpitService.buildGlobalSearchPayload', () => {
       field: 'variable', values: ['20'],
       variableName: 'amount', variableOperator: 'like'
     }];
-    const payload = realSvc.buildGlobalSearchPayload(filters);
-    expect(payload.orQueries[0].variables[0].operator).toBe('like');
-    expect(payload.orQueries[0].variables[0].operator).not.toBe('~');
-    expect(payload.orQueries[0].variables[0].value).toBe('%20%');
+    const [p] = realSvc.buildPayloadVariants(filters);
+    expect(p.variables[0].operator).toBe('like');
+    expect(p.variables[0].operator).not.toBe('~');
+    expect(p.variables[0].value).toBe('%20%');
   });
 
   it('should send correct API operator names for all 7 operator options', () => {
@@ -256,50 +255,48 @@ describe('CockpitService.buildGlobalSearchPayload', () => {
         field: 'variable', values: ['test'],
         variableName: 'x', variableOperator: uiValue as any
       }];
-      const payload = realSvc.buildGlobalSearchPayload(filters);
-      expect(payload.orQueries[0].variables[0].operator).toBe(apiName);
+      const [p] = realSvc.buildPayloadVariants(filters);
+      expect(p.variables[0].operator).toBe(apiName);
     });
   });
 
-  it('should produce 2 orQueries with %abc% and %def% for a multi-value like filter', () => {
+  it('should produce 2 payload variants with %abc% and %def% for a multi-value like filter', () => {
     const filters: MultiValueFilter[] = [{
       field: 'variable', values: ['abc', 'def'],
       variableName: 'name', variableOperator: 'like'
     }];
-    const payload = realSvc.buildGlobalSearchPayload(filters);
-    expect(payload.orQueries).toHaveLength(2);
-    expect(payload.orQueries[0].variables[0]).toEqual({ name: 'name', operator: 'like', value: '%abc%' });
-    expect(payload.orQueries[1].variables[0]).toEqual({ name: 'name', operator: 'like', value: '%def%' });
+    const ps = realSvc.buildPayloadVariants(filters);
+    expect(ps).toHaveLength(2);
+    expect(ps[0].variables[0]).toEqual({ name: 'name', operator: 'like', value: '%abc%' });
+    expect(ps[1].variables[0]).toEqual({ name: 'name', operator: 'like', value: '%def%' });
   });
 
-  it('should set variableValuesIgnoreCase=true inside the orQuery for a like operator', () => {
+  it('should set variableValuesIgnoreCase=true on the payload for a like operator', () => {
     const filters: MultiValueFilter[] = [{
       field: 'variable', values: ['pizza'],
       variableName: 'dish', variableOperator: 'like'
     }];
-    const payload = realSvc.buildGlobalSearchPayload(filters);
-    // Flag must be on the orQuery entry itself — top-level flag does not apply to orQuery variables
-    expect(payload.orQueries[0].variableValuesIgnoreCase).toBe(true);
-    expect(payload.variableValuesIgnoreCase).toBeUndefined();
+    const [p] = realSvc.buildPayloadVariants(filters);
+    // Top-level flag applies to top-level variables (no orQueries used)
+    expect(p.variableValuesIgnoreCase).toBe(true);
   });
 
-  it('should NOT set variableValuesIgnoreCase inside orQuery for non-like operators', () => {
+  it('should NOT set variableValuesIgnoreCase for non-like operators', () => {
     const filters: MultiValueFilter[] = [{
       field: 'variable', values: ['pizza'],
       variableName: 'dish', variableOperator: 'eq'
     }];
-    const payload = realSvc.buildGlobalSearchPayload(filters);
-    expect(payload.orQueries[0].variableValuesIgnoreCase).toBeUndefined();
-    expect(payload.variableValuesIgnoreCase).toBeUndefined();
+    const [p] = realSvc.buildPayloadVariants(filters);
+    expect(p.variableValuesIgnoreCase).toBeUndefined();
   });
 
-  it('should set variableValuesIgnoreCase inside orQuery when the checkbox flag is true', () => {
+  it('should set variableValuesIgnoreCase on the payload when the checkbox flag is true', () => {
     const filters: MultiValueFilter[] = [{
       field: 'variable', values: ['hello'],
       variableName: 'x', variableOperator: 'eq'
     }];
-    const payload = realSvc.buildGlobalSearchPayload(filters, false, true);
-    expect(payload.orQueries[0].variableValuesIgnoreCase).toBe(true);
+    const [p] = realSvc.buildPayloadVariants(filters, false, true);
+    expect(p.variableValuesIgnoreCase).toBe(true);
   });
 });
 
@@ -719,11 +716,11 @@ describe('ProcessDefinitionsComponent', () => {
       expect(component.activeEditorType).toBeNull();
       expect(component.pendingValues.length).toBe(0);
 
-      const payload = realSvc.buildGlobalSearchPayload(component.activePills);
-      expect(payload.orQueries.length).toBe(3);
-      expect(payload.orQueries[0].variables[0]).toEqual({ name: 'amount', operator: 'eq', value: 100 });
-      expect(payload.orQueries[1].variables[0]).toEqual({ name: 'amount', operator: 'eq', value: 200 });
-      expect(payload.orQueries[2].variables[0]).toEqual({ name: 'amount', operator: 'eq', value: 300 });
+      const ps = realSvc.buildPayloadVariants(component.activePills);
+      expect(ps.length).toBe(3);
+      expect(ps[0].variables[0]).toEqual({ name: 'amount', operator: 'eq', value: 100 });
+      expect(ps[1].variables[0]).toEqual({ name: 'amount', operator: 'eq', value: 200 });
+      expect(ps[2].variables[0]).toEqual({ name: 'amount', operator: 'eq', value: 300 });
     });
   });
 
@@ -771,8 +768,8 @@ describe('ProcessDefinitionsComponent', () => {
       ];
       const bodies = (realSvc as any).buildPerStateBodies(filters, statePill, false, false);
       expect(bodies.length).toBe(2);
-      expect(bodies[0].orQueries[0].processInstanceBusinessKeyLike).toBe('%BK-001%');
-      expect(bodies[1].orQueries[0].processInstanceBusinessKeyLike).toBe('%BK-001%');
+      expect(bodies[0].processInstanceBusinessKeyLike).toBe('%BK-001%');
+      expect(bodies[1].processInstanceBusinessKeyLike).toBe('%BK-001%');
     });
 
     it('should not add a state pill when no state is selected (add mode)', () => {
@@ -794,10 +791,10 @@ describe('ProcessDefinitionsComponent', () => {
 
     it('should still use top-level fields for single state (backward compat)', () => {
       const pill: MultiValueFilter = { field: 'state', values: ['active'] };
-      const payload = realSvc.buildGlobalSearchPayload([pill]);
-      expect(payload.active).toBe(true);
-      expect(payload.unfinished).toBe(true);
-      expect(payload.orQueries).toBeUndefined();
+      const [p] = realSvc.buildPayloadVariants([pill]);
+      expect(p.active).toBe(true);
+      expect(p.unfinished).toBe(true);
+      expect(p.orQueries).toBeUndefined();
     });
 
     it('should toggle state value on and off', () => {
@@ -900,7 +897,7 @@ describe('ProcessDefinitionsComponent', () => {
       component.confirmCriterion();
       expect(component.activePills[0].values).toEqual(['active', 'suspended']);
       expect(component.getPillLabel(component.activePills[0])).toBe('State: Active, Suspended');
-      // Multi-state uses buildPerStateBodies (separate calls), not buildGlobalSearchPayload
+      // Multi-state uses buildPerStateBodies (separate calls), not buildPayloadVariants
       const statePill = component.activePills[0];
       const bodies = (realSvc as any).buildPerStateBodies([statePill], statePill, false, false);
       expect(bodies.length).toBe(2);
