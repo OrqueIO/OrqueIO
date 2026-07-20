@@ -8,172 +8,642 @@
     ></app-cockpit-header>
 
     <div class="page-content">
-      <!-- Toolbar with search -->
-      <div class="toolbar">
-        <div class="search-bar">
-          <div class="search-input-wrapper">
-            <fa-icon [icon]="faSearch" class="search-icon"></fa-icon>
-            <input
-              type="text"
-              class="search-input"
-              [placeholder]="'cockpit.processes.searchPlaceholder' | translate"
-              [(ngModel)]="searchQuery"
-              (input)="onSearchChange()"
-            />
+
+      <!-- =====================================================
+           GLOBAL SEARCH PANEL
+           ===================================================== -->
+      <div class="panel-card search-panel-card">
+        <div class="panel-header-bar">
+          <fa-icon [icon]="faFilter" class="panel-header-icon"></fa-icon>
+          <span class="panel-header-title">{{ 'cockpit.processes.globalSearch.title' | translate }}</span>
+          <span class="pill-count-badge" *ngIf="activePills.length > 0">{{ activePills.length }}</span>
+        </div>
+
+        <div class="panel-body">
+
+          <!-- Pills row + Add criteria -->
+          <div class="pills-area">
+            <div class="pills-row">
+              <div class="pill" *ngFor="let pill of activePills; let i = index">
+                <span class="pill-text">{{ getPillLabel(pill) }}</span>
+                <button class="pill-remove" (click)="removePill(i)" type="button" title="Remove">
+                  <fa-icon [icon]="faTimes"></fa-icon>
+                </button>
+              </div>
+
+              <div class="criteria-dropdown-wrapper">
+                <button class="btn-add-criteria" (click)="toggleCriteriaDropdown($event)" type="button">
+                  <fa-icon [icon]="faPlus"></fa-icon>
+                  {{ 'cockpit.processes.globalSearch.addCriteria' | translate }}
+                </button>
+                <div class="criteria-dropdown" *ngIf="showCriteriaDropdown" role="menu">
+
+                  <!-- Dropdown header -->
+                  <div class="criteria-dropdown-header">
+                    <fa-icon [icon]="faFilter" class="criteria-dropdown-header-icon"></fa-icon>
+                    <span class="criteria-dropdown-header-title">Add filter criteria</span>
+                  </div>
+
+                  <!-- Group: Instance -->
+                  <div class="criteria-group">
+                    <div class="criteria-group-label">Instance</div>
+
+                    <button class="criteria-option" (click)="selectCriteriaType('businessKey')" type="button" role="menuitem">
+                      <span class="criteria-icon-wrap criteria-icon-wrap--blue">
+                        <fa-icon [icon]="faKey"></fa-icon>
+                      </span>
+                      <span class="criteria-option-body">
+                        <span class="criteria-option-name">{{ 'cockpit.processes.filters.businessKey' | translate }}</span>
+                        <span class="criteria-option-desc">Filter by process business key</span>
+                      </span>
+                    </button>
+
+                    <button class="criteria-option" (click)="selectCriteriaType('instanceId')" type="button" role="menuitem">
+                      <span class="criteria-icon-wrap criteria-icon-wrap--violet">
+                        <fa-icon [icon]="faHashtag"></fa-icon>
+                      </span>
+                      <span class="criteria-option-body">
+                        <span class="criteria-option-name">{{ 'cockpit.processes.filters.instanceId' | translate }}</span>
+                        <span class="criteria-option-desc">Filter by instance identifier</span>
+                      </span>
+                    </button>
+
+                    <button class="criteria-option" (click)="selectCriteriaType('state')" type="button" role="menuitem">
+                      <span class="criteria-icon-wrap criteria-icon-wrap--emerald">
+                        <fa-icon [icon]="faCircleDot"></fa-icon>
+                      </span>
+                      <span class="criteria-option-body">
+                        <span class="criteria-option-name">{{ 'cockpit.processes.filters.state' | translate }}</span>
+                        <span class="criteria-option-desc">Active, suspended, completed…</span>
+                      </span>
+                    </button>
+
+                    <button class="criteria-option" (click)="selectCriteriaType('withIncidents')" type="button" role="menuitem">
+                      <span class="criteria-icon-wrap criteria-icon-wrap--amber">
+                        <fa-icon [icon]="faExclamationTriangle"></fa-icon>
+                      </span>
+                      <span class="criteria-option-body">
+                        <span class="criteria-option-name">{{ 'cockpit.processes.filters.withIncidents' | translate }}</span>
+                        <span class="criteria-option-desc">Show instances with open incidents</span>
+                      </span>
+                    </button>
+                  </div>
+
+                  <div class="criteria-separator"></div>
+
+                  <!-- Group: Dates -->
+                  <div class="criteria-group">
+                    <div class="criteria-group-label">Dates</div>
+
+                    <button class="criteria-option" (click)="selectCriteriaType('startedAfter')" type="button" role="menuitem">
+                      <span class="criteria-icon-wrap criteria-icon-wrap--teal">
+                        <fa-icon [icon]="faCalendarAlt"></fa-icon>
+                      </span>
+                      <span class="criteria-option-body">
+                        <span class="criteria-option-name">{{ 'cockpit.processes.filters.startedAfter' | translate }}</span>
+                        <span class="criteria-option-desc">Started after a given date</span>
+                      </span>
+                    </button>
+
+                    <button class="criteria-option" (click)="selectCriteriaType('startedBefore')" type="button" role="menuitem">
+                      <span class="criteria-icon-wrap criteria-icon-wrap--teal">
+                        <fa-icon [icon]="faCalendarAlt"></fa-icon>
+                      </span>
+                      <span class="criteria-option-body">
+                        <span class="criteria-option-name">{{ 'cockpit.processes.filters.startedBefore' | translate }}</span>
+                        <span class="criteria-option-desc">Started before a given date</span>
+                      </span>
+                    </button>
+
+                    <button class="criteria-option" (click)="selectCriteriaType('finishedAfter')" type="button" role="menuitem">
+                      <span class="criteria-icon-wrap criteria-icon-wrap--slate">
+                        <fa-icon [icon]="faCalendarAlt"></fa-icon>
+                      </span>
+                      <span class="criteria-option-body">
+                        <span class="criteria-option-name">{{ 'cockpit.processes.filters.finishedAfter' | translate }}</span>
+                        <span class="criteria-option-desc">Finished after a given date</span>
+                      </span>
+                    </button>
+
+                    <button class="criteria-option" (click)="selectCriteriaType('finishedBefore')" type="button" role="menuitem">
+                      <span class="criteria-icon-wrap criteria-icon-wrap--slate">
+                        <fa-icon [icon]="faCalendarAlt"></fa-icon>
+                      </span>
+                      <span class="criteria-option-body">
+                        <span class="criteria-option-name">{{ 'cockpit.processes.filters.finishedBefore' | translate }}</span>
+                        <span class="criteria-option-desc">Finished before a given date</span>
+                      </span>
+                    </button>
+                  </div>
+
+                  <div class="criteria-separator"></div>
+
+                  <!-- Group: Variables -->
+                  <div class="criteria-group">
+                    <div class="criteria-group-label">Variables</div>
+
+                    <button class="criteria-option" (click)="selectCriteriaType('variable')" type="button" role="menuitem">
+                      <span class="criteria-icon-wrap criteria-icon-wrap--indigo">
+                        <fa-icon [icon]="faCode"></fa-icon>
+                      </span>
+                      <span class="criteria-option-body">
+                        <span class="criteria-option-name">{{ 'cockpit.processes.filters.variable' | translate }}</span>
+                        <span class="criteria-option-desc">Match by variable name and value</span>
+                      </span>
+                    </button>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+            <!-- Criterion editor -->
+            <div class="criterion-editor" *ngIf="activeEditorType">
+
+              <!-- Business Key / Instance ID -->
+              <ng-container *ngIf="activeEditorType === 'businessKey' || activeEditorType === 'instanceId'">
+                <div class="editor-row">
+                  <div class="pending-tags" *ngIf="pendingValues.length > 0">
+                    <span class="pending-tag" *ngFor="let v of pendingValues; let vi = index">
+                      {{ v }}
+                      <button class="tag-remove" (click)="removePendingValue(vi)" type="button">×</button>
+                    </span>
+                  </div>
+                  <input
+                    type="text"
+                    class="editor-input"
+                    [(ngModel)]="pendingInputText"
+                    [placeholder]="'cockpit.processes.globalSearch.valuePlaceholder' | translate"
+                    (keydown)="onPendingInputKeydown($event)"
+                    (paste)="onPendingInputPaste($event)"
+                    autofocus
+                  />
+                </div>
+              </ng-container>
+
+              <!-- State -->
+              <ng-container *ngIf="activeEditorType === 'state'">
+                <div class="state-dropdown-wrapper">
+
+                  <!-- Trigger -->
+                  <button class="state-dropdown-trigger"
+                          [class.state-dropdown-trigger--open]="showStateDropdown"
+                          (click)="toggleStateDropdown($event)"
+                          type="button">
+                    <span class="state-trigger-dot"
+                          [class.state-trigger-dot--active]="pendingStateValue === 'active'"
+                          [class.state-trigger-dot--suspended]="pendingStateValue === 'suspended'"
+                          [class.state-trigger-dot--completed]="pendingStateValue === 'completed'"
+                          [class.state-trigger-dot--terminated]="pendingStateValue === 'terminated'">
+                    </span>
+                    <span class="state-trigger-label">
+                      <ng-container *ngIf="pendingStateValue === 'active'">{{ 'cockpit.processes.filters.stateActive' | translate }}</ng-container>
+                      <ng-container *ngIf="pendingStateValue === 'suspended'">{{ 'cockpit.processes.filters.stateSuspended' | translate }}</ng-container>
+                      <ng-container *ngIf="pendingStateValue === 'completed'">{{ 'cockpit.processes.filters.stateCompleted' | translate }}</ng-container>
+                      <ng-container *ngIf="pendingStateValue === 'terminated'">{{ 'cockpit.processes.filters.stateTerminated' | translate }}</ng-container>
+                    </span>
+                    <fa-icon [icon]="faChevronDown" class="state-trigger-chevron"
+                             [class.state-trigger-chevron--open]="showStateDropdown"></fa-icon>
+                  </button>
+
+                  <!-- Dropdown list -->
+                  <div class="state-dropdown" *ngIf="showStateDropdown" role="listbox">
+
+                    <button class="state-option state-option--active"
+                            [class.state-option--selected]="pendingStateValue === 'active'"
+                            (click)="selectState('active', $event)"
+                            type="button" role="option">
+                      <span class="state-option-icon-wrap">
+                        <fa-icon [icon]="faPlayCircle"></fa-icon>
+                      </span>
+                      <span class="state-option-label">{{ 'cockpit.processes.filters.stateActive' | translate }}</span>
+                      <fa-icon [icon]="faCheck" class="state-option-check" *ngIf="pendingStateValue === 'active'"></fa-icon>
+                    </button>
+
+                    <button class="state-option state-option--suspended"
+                            [class.state-option--selected]="pendingStateValue === 'suspended'"
+                            (click)="selectState('suspended', $event)"
+                            type="button" role="option">
+                      <span class="state-option-icon-wrap">
+                        <fa-icon [icon]="faPauseCircle"></fa-icon>
+                      </span>
+                      <span class="state-option-label">{{ 'cockpit.processes.filters.stateSuspended' | translate }}</span>
+                      <fa-icon [icon]="faCheck" class="state-option-check" *ngIf="pendingStateValue === 'suspended'"></fa-icon>
+                    </button>
+
+                    <button class="state-option state-option--completed"
+                            [class.state-option--selected]="pendingStateValue === 'completed'"
+                            (click)="selectState('completed', $event)"
+                            type="button" role="option">
+                      <span class="state-option-icon-wrap">
+                        <fa-icon [icon]="faCheckCircle"></fa-icon>
+                      </span>
+                      <span class="state-option-label">{{ 'cockpit.processes.filters.stateCompleted' | translate }}</span>
+                      <fa-icon [icon]="faCheck" class="state-option-check" *ngIf="pendingStateValue === 'completed'"></fa-icon>
+                    </button>
+
+                    <button class="state-option state-option--terminated"
+                            [class.state-option--selected]="pendingStateValue === 'terminated'"
+                            (click)="selectState('terminated', $event)"
+                            type="button" role="option">
+                      <span class="state-option-icon-wrap">
+                        <fa-icon [icon]="faTimesCircle"></fa-icon>
+                      </span>
+                      <span class="state-option-label">{{ 'cockpit.processes.filters.stateTerminated' | translate }}</span>
+                      <fa-icon [icon]="faCheck" class="state-option-check" *ngIf="pendingStateValue === 'terminated'"></fa-icon>
+                    </button>
+
+                  </div>
+                </div>
+              </ng-container>
+
+              <!-- Date filters -->
+              <ng-container *ngIf="activeEditorType === 'startedAfter' || activeEditorType === 'startedBefore' || activeEditorType === 'finishedAfter' || activeEditorType === 'finishedBefore'">
+                <div class="editor-row">
+                  <input type="datetime-local" class="editor-input" [(ngModel)]="pendingDateValue" />
+                </div>
+              </ng-container>
+
+              <!-- Variable -->
+              <ng-container *ngIf="activeEditorType === 'variable'">
+                <div class="editor-row editor-row--variable">
+                  <input
+                    type="text"
+                    class="editor-input editor-input--name"
+                    [(ngModel)]="pendingVariableName"
+                    [placeholder]="'cockpit.processes.filters.variableName' | translate"
+                  />
+                  <select [(ngModel)]="pendingVariableOperator" class="editor-select editor-select--operator">
+                    <option value="eq">=</option>
+                    <option value="neq">&#x2260;</option>
+                    <option value="gt">&gt;</option>
+                    <option value="gteq">&#x2265;</option>
+                    <option value="lt">&lt;</option>
+                    <option value="lteq">&#x2264;</option>
+                    <option value="like">~</option>
+                  </select>
+                  <div class="editor-values-col">
+                    <div class="pending-tags" *ngIf="pendingValues.length > 0">
+                      <span class="pending-tag" *ngFor="let v of pendingValues; let vi = index">
+                        {{ v }}
+                        <button class="tag-remove" (click)="removePendingValue(vi)" type="button">×</button>
+                      </span>
+                    </div>
+                    <input
+                      type="text"
+                      class="editor-input"
+                      [(ngModel)]="pendingInputText"
+                      [placeholder]="'cockpit.processes.filters.variableValue' | translate"
+                      (keydown)="onPendingInputKeydown($event)"
+                      (paste)="onPendingInputPaste($event)"
+                    />
+                  </div>
+                </div>
+              </ng-container>
+
+              <div class="editor-actions">
+                <button class="btn-editor-confirm" (click)="confirmCriterion()" type="button">
+                  {{ 'cockpit.processes.filters.apply' | translate }}
+                </button>
+                <button class="btn-editor-cancel" (click)="cancelCriterion()" type="button">
+                  {{ 'common.cancel' | translate }}
+                </button>
+              </div>
+            </div>
+
+            <!-- Variable case-sensitivity options -->
+            <div class="case-options" *ngIf="hasVariableFilter()">
+              <span class="case-options-label">{{ 'cockpit.processes.globalSearch.ignoreCase.label' | translate }}</span>
+              <label class="case-option">
+                <input type="checkbox" [(ngModel)]="variableNamesIgnoreCase" />
+                {{ 'cockpit.processes.globalSearch.ignoreCase.name' | translate }}
+              </label>
+              <label class="case-option">
+                <input type="checkbox" [(ngModel)]="variableValuesIgnoreCase" />
+                {{ 'cockpit.processes.globalSearch.ignoreCase.value' | translate }}
+              </label>
+            </div>
+          </div>
+
+          <!-- Search / Clear actions -->
+          <div class="search-panel-actions">
+            <button
+              class="btn-search"
+              (click)="executeSearch()"
+              [disabled]="activePills.length === 0"
+              type="button"
+            >
+              <fa-icon [icon]="faSearch"></fa-icon>
+              {{ 'cockpit.processes.globalSearch.searchBtn' | translate }}
+            </button>
+            <button
+              class="btn-search-clear"
+              *ngIf="activePills.length > 0 || searchExecuted"
+              (click)="clearSearch()"
+              type="button"
+              title="Reset filters"
+            >
+              <fa-icon [icon]="faRotateLeft"></fa-icon>
+              {{ 'cockpit.processes.globalSearch.clearBtn' | translate }}
+            </button>
+          </div>
+
+          <!-- Results section (only after a search) -->
+          <ng-container *ngIf="searchExecuted">
+
+            <!-- Loading -->
+            <div class="loading-state" *ngIf="searchLoading">
+              <fa-icon [icon]="faSpinner" animation="spin"></fa-icon>
+              <span>{{ 'common.loading' | translate }}</span>
+            </div>
+
+            <!-- Error state -->
+            <div class="search-empty-state" *ngIf="!searchLoading && searchError">
+              <fa-icon [icon]="faSearch" class="search-empty-icon"></fa-icon>
+              <p>{{ 'cockpit.processes.searchError' | translate }}</p>
+            </div>
+
+            <!-- No results -->
+            <div class="search-empty-state" *ngIf="!searchLoading && !searchError && searchResults.length === 0 && searchExecuted">
+              <fa-icon [icon]="faSearch" class="search-empty-icon"></fa-icon>
+              <p>{{ 'cockpit.processes.noProcessInstances' | translate }}</p>
+            </div>
+
+            <!-- Results table -->
+            <ng-container *ngIf="!searchLoading && searchResults.length > 0">
+
+              <!-- Toolbar: count + pagination + page size -->
+              <div class="search-toolbar">
+                <span class="results-info">
+                  {{ 'cockpit.processes.showing' | translate }} {{ searchStartIndex }} - {{ searchEndIndex }}
+                  {{ 'cockpit.processes.of' | translate }} {{ searchResultsCount }}
+                </span>
+                <div class="compact-pagination" *ngIf="searchTotalPages > 1">
+                  <button
+                    class="pagination-nav"
+                    [disabled]="searchCurrentPage === 1"
+                    (click)="onSearchPageChange(searchCurrentPage - 1)"
+                  >
+                    <fa-icon [icon]="faChevronLeft"></fa-icon>
+                  </button>
+                  <span class="pagination-current">{{ searchCurrentPage }} / {{ searchTotalPages }}</span>
+                  <button
+                    class="pagination-nav"
+                    [disabled]="searchCurrentPage === searchTotalPages"
+                    (click)="onSearchPageChange(searchCurrentPage + 1)"
+                  >
+                    <fa-icon [icon]="faChevronRight"></fa-icon>
+                  </button>
+                </div>
+                <div class="page-size-selector">
+                  <select [(ngModel)]="searchPageSize" (change)="onSearchPageSizeChange()">
+                    <option *ngFor="let size of searchPageSizeOptions" [value]="size">{{ size }}</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Table -->
+              <div class="search-table-container">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th class="col-state">{{ 'cockpit.processes.columns.state' | translate }}</th>
+                      <th class="col-id">{{ 'cockpit.processes.columns.id' | translate }}</th>
+                      <th class="col-definition">{{ 'cockpit.processes.columns.definition' | translate }}</th>
+                      <th class="col-businesskey">{{ 'cockpit.processes.columns.businessKey' | translate }}</th>
+                      <th class="col-starttime">{{ 'cockpit.processes.columns.startTime' | translate }}</th>
+                      <th class="col-endtime">{{ 'cockpit.processes.columns.endTime' | translate }}</th>
+                      <th class="col-actions">{{ 'cockpit.processes.columns.actions' | translate }}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let instance of searchResults" class="result-row">
+                      <td class="col-state">
+                        <span class="state-badge" [ngClass]="getInstanceStateClass(instance)">
+                          <fa-icon [icon]="getInstanceStateIcon(instance)"></fa-icon>
+                          {{ getInstanceStateLabel(instance) }}
+                        </span>
+                      </td>
+                      <td class="col-id">
+                        <a
+                          [routerLink]="['/cockpit/processes/instance', instance.id]"
+                          class="instance-link mono"
+                          [title]="instance.id"
+                        >{{ instance.id }}</a>
+                      </td>
+                      <td class="col-definition">
+                        <a
+                          *ngIf="instance.processDefinitionKey"
+                          [routerLink]="['/cockpit/processes', instance.processDefinitionKey, 'definition']"
+                          class="definition-link"
+                        >{{ instance.processDefinitionName || instance.processDefinitionKey }}</a>
+                        <span
+                          class="definition-version"
+                          *ngIf="extractVersionNumber(instance.processDefinitionId) !== null"
+                        >v{{ extractVersionNumber(instance.processDefinitionId) }}</span>
+                      </td>
+                      <td class="col-businesskey">{{ instance.businessKey || '-' }}</td>
+                      <td class="col-starttime">{{ formatDate(instance.startTime) }}</td>
+                      <td class="col-endtime">{{ formatDate(instance.endTime!) }}</td>
+                      <td class="col-actions">
+                        <a
+                          [routerLink]="['/cockpit/processes/instance', instance.id]"
+                          class="action-btn"
+                          [title]="'cockpit.processes.viewDetails' | translate"
+                        >
+                          <fa-icon [icon]="faEye"></fa-icon>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+            </ng-container>
+          </ng-container>
+
+        </div>
+      </div>
+
+      <!-- =====================================================
+           PROCESS DEFINITIONS PANEL (existing, unchanged)
+           ===================================================== -->
+      <div class="panel-card definitions-panel-card">
+        <div class="panel-header-bar">
+          <fa-icon [icon]="faCogs" class="panel-header-icon"></fa-icon>
+          <span class="panel-header-title">{{ 'cockpit.processes.deployedDefinitions' | translate }}</span>
+        </div>
+
+        <div class="panel-body">
+          <!-- Toolbar with search -->
+          <div class="toolbar">
+            <div class="search-bar">
+              <div class="search-input-wrapper">
+                <fa-icon [icon]="faSearch" class="search-icon"></fa-icon>
+                <input
+                  type="text"
+                  class="search-input"
+                  [placeholder]="'cockpit.processes.searchPlaceholder' | translate"
+                  [(ngModel)]="searchQuery"
+                  (input)="onSearchChange()"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Results info -->
+          <header class="results-info-header">
+            <h1 class="results-title" *ngIf="!loading && filteredDefinitions.length > 0">
+              {{ searchQuery ? filteredDefinitions.length : totalCount }} {{ 'cockpit.processes.definitionsFound' | translate }}
+            </h1>
+            <h1 class="results-title" *ngIf="!loading && filteredDefinitions.length === 0 && processDefinitions.length > 0">
+              {{ 'cockpit.processes.noMatchingDefinitions' | translate }}
+            </h1>
+            <h1 class="results-title" *ngIf="!loading && processDefinitions.length === 0">
+              {{ 'cockpit.processes.noDeployedDefinitions' | translate }}
+            </h1>
+          </header>
+
+          <!-- Process definitions table -->
+          <div class="table-container" *ngIf="!loading && filteredDefinitions.length > 0">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th class="col-state">{{ 'cockpit.processes.columns.state' | translate }}</th>
+                  <th
+                    class="col-incidents sortable-header"
+                    [class.sorted]="sortConfig.sortBy === 'incidents'"
+                    (click)="onSort('incidents')"
+                  >
+                    <span class="header-content">
+                      {{ 'cockpit.processes.columns.incidents' | translate }}
+                      <fa-icon
+                        [icon]="getSortIcon('incidents')"
+                        class="sort-icon"
+                        [class.active]="sortConfig.sortBy === 'incidents'"
+                      ></fa-icon>
+                    </span>
+                  </th>
+                  <th
+                    class="col-instances sortable-header"
+                    [class.sorted]="sortConfig.sortBy === 'instances'"
+                    (click)="onSort('instances')"
+                  >
+                    <span class="header-content">
+                      {{ 'cockpit.processes.columns.runningInstances' | translate }}
+                      <fa-icon
+                        [icon]="getSortIcon('instances')"
+                        class="sort-icon"
+                        [class.active]="sortConfig.sortBy === 'instances'"
+                      ></fa-icon>
+                    </span>
+                  </th>
+                  <th
+                    class="col-key sortable-header"
+                    [class.sorted]="sortConfig.sortBy === 'key'"
+                    (click)="onSort('key')"
+                  >
+                    <span class="header-content">
+                      {{ 'cockpit.processes.columns.key' | translate }}
+                      <fa-icon
+                        [icon]="getSortIcon('key')"
+                        class="sort-icon"
+                        [class.active]="sortConfig.sortBy === 'key'"
+                      ></fa-icon>
+                    </span>
+                  </th>
+                  <th
+                    class="col-name sortable-header"
+                    [class.sorted]="sortConfig.sortBy === 'name'"
+                    (click)="onSort('name')"
+                  >
+                    <span class="header-content">
+                      {{ 'cockpit.processes.columns.name' | translate }}
+                      <fa-icon
+                        [icon]="getSortIcon('name')"
+                        class="sort-icon"
+                        [class.active]="sortConfig.sortBy === 'name'"
+                      ></fa-icon>
+                    </span>
+                  </th>
+                  <th
+                    class="col-tenant sortable-header"
+                    [class.sorted]="sortConfig.sortBy === 'tenant'"
+                    (click)="onSort('tenant')"
+                  >
+                    <span class="header-content">
+                      {{ 'cockpit.processes.columns.tenant' | translate }}
+                      <fa-icon
+                        [icon]="getSortIcon('tenant')"
+                        class="sort-icon"
+                        [class.active]="sortConfig.sortBy === 'tenant'"
+                      ></fa-icon>
+                    </span>
+                  </th>
+                  <th class="col-actions">{{ 'cockpit.processes.columns.actions' | translate }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let def of filteredDefinitions" class="definition-row">
+                  <td class="col-state">
+                    <span class="state-indicator" [ngClass]="getStateClass(def)">
+                      <fa-icon [icon]="getStateIcon(def)"></fa-icon>
+                    </span>
+                  </td>
+                  <td class="col-incidents">
+                    <span class="incidents-count" [class.has-incidents]="getTotalIncidents(def) > 0">
+                      <fa-icon *ngIf="getTotalIncidents(def) > 0" [icon]="faExclamationTriangle"></fa-icon>
+                      {{ getTotalIncidents(def) }}
+                    </span>
+                  </td>
+                  <td class="col-instances">
+                    <span class="instances-count" [class.has-instances]="def.instances > 0">
+                      {{ def.instances }}
+                    </span>
+                  </td>
+                  <td class="col-key">
+                    <a [routerLink]="['/cockpit/processes', getDefinitionKey(def), 'instances']" class="definition-link mono" appClipboard [appClipboard]="getDefinitionKey(def)">
+                      {{ getDefinitionKey(def) }}
+                    </a>
+                  </td>
+                  <td class="col-name">
+                    <a [routerLink]="['/cockpit/processes', getDefinitionKey(def), 'instances']" class="definition-link" *ngIf="getDefinitionName(def) !== getDefinitionKey(def)">
+                      {{ getDefinitionName(def) }}
+                    </a>
+                    <span class="null-value" *ngIf="getDefinitionName(def) === getDefinitionKey(def)">-</span>
+                  </td>
+                  <td class="col-tenant">
+                    <span *ngIf="def.tenantId">{{ def.tenantId }}</span>
+                    <span class="null-value" *ngIf="!def.tenantId">-</span>
+                  </td>
+                  <td class="col-actions">
+                    <a
+                      [routerLink]="['/cockpit/processes', getDefinitionKey(def), 'instances']"
+                      class="action-btn"
+                      [title]="'cockpit.processes.viewInstances' | translate"
+                    >
+                      <fa-icon [icon]="faEye"></fa-icon>
+                    </a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Loading state -->
+          <div class="loading-state" *ngIf="loading">
+            <fa-icon [icon]="faSpinner" animation="spin"></fa-icon>
+            <span>{{ 'common.loading' | translate }}</span>
+          </div>
+
+          <!-- Empty state -->
+          <div class="empty-state" *ngIf="!loading && processDefinitions.length === 0">
+            <fa-icon [icon]="faCogs" class="empty-icon"></fa-icon>
+            <p>{{ 'cockpit.processes.noDeployedDefinitions' | translate }}</p>
           </div>
         </div>
       </div>
 
-      <!-- Results info -->
-      <header class="results-info">
-        <h1 class="results-title" *ngIf="!loading && filteredDefinitions.length > 0">
-          {{ searchQuery ? filteredDefinitions.length : totalCount }} {{ 'cockpit.processes.definitionsFound' | translate }}
-        </h1>
-        <h1 class="results-title" *ngIf="!loading && filteredDefinitions.length === 0 && processDefinitions.length > 0">
-          {{ 'cockpit.processes.noMatchingDefinitions' | translate }}
-        </h1>
-        <h1 class="results-title" *ngIf="!loading && processDefinitions.length === 0">
-          {{ 'cockpit.processes.noDeployedDefinitions' | translate }}
-        </h1>
-      </header>
-
-      <!-- Process definitions table -->
-      <div class="table-container" *ngIf="!loading && filteredDefinitions.length > 0">
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th class="col-state">{{ 'cockpit.processes.columns.state' | translate }}</th>
-              <th
-                class="col-incidents sortable-header"
-                [class.sorted]="sortConfig.sortBy === 'incidents'"
-                (click)="onSort('incidents')"
-              >
-                <span class="header-content">
-                  {{ 'cockpit.processes.columns.incidents' | translate }}
-                  <fa-icon
-                    [icon]="getSortIcon('incidents')"
-                    class="sort-icon"
-                    [class.active]="sortConfig.sortBy === 'incidents'"
-                  ></fa-icon>
-                </span>
-              </th>
-              <th
-                class="col-instances sortable-header"
-                [class.sorted]="sortConfig.sortBy === 'instances'"
-                (click)="onSort('instances')"
-              >
-                <span class="header-content">
-                  {{ 'cockpit.processes.columns.runningInstances' | translate }}
-                  <fa-icon
-                    [icon]="getSortIcon('instances')"
-                    class="sort-icon"
-                    [class.active]="sortConfig.sortBy === 'instances'"
-                  ></fa-icon>
-                </span>
-              </th>
-              <th
-                class="col-key sortable-header"
-                [class.sorted]="sortConfig.sortBy === 'key'"
-                (click)="onSort('key')"
-              >
-                <span class="header-content">
-                  {{ 'cockpit.processes.columns.key' | translate }}
-                  <fa-icon
-                    [icon]="getSortIcon('key')"
-                    class="sort-icon"
-                    [class.active]="sortConfig.sortBy === 'key'"
-                  ></fa-icon>
-                </span>
-              </th>
-              <th
-                class="col-name sortable-header"
-                [class.sorted]="sortConfig.sortBy === 'name'"
-                (click)="onSort('name')"
-              >
-                <span class="header-content">
-                  {{ 'cockpit.processes.columns.name' | translate }}
-                  <fa-icon
-                    [icon]="getSortIcon('name')"
-                    class="sort-icon"
-                    [class.active]="sortConfig.sortBy === 'name'"
-                  ></fa-icon>
-                </span>
-              </th>
-              <th
-                class="col-tenant sortable-header"
-                [class.sorted]="sortConfig.sortBy === 'tenant'"
-                (click)="onSort('tenant')"
-              >
-                <span class="header-content">
-                  {{ 'cockpit.processes.columns.tenant' | translate }}
-                  <fa-icon
-                    [icon]="getSortIcon('tenant')"
-                    class="sort-icon"
-                    [class.active]="sortConfig.sortBy === 'tenant'"
-                  ></fa-icon>
-                </span>
-              </th>
-              <th class="col-actions">{{ 'cockpit.processes.columns.actions' | translate }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let def of filteredDefinitions" class="definition-row">
-              <td class="col-state">
-                <span class="state-indicator" [ngClass]="getStateClass(def)">
-                  <fa-icon [icon]="getStateIcon(def)"></fa-icon>
-                </span>
-              </td>
-              <td class="col-incidents">
-                <span class="incidents-count" [class.has-incidents]="getTotalIncidents(def) > 0">
-                  <fa-icon *ngIf="getTotalIncidents(def) > 0" [icon]="faExclamationTriangle"></fa-icon>
-                  {{ getTotalIncidents(def) }}
-                </span>
-              </td>
-              <td class="col-instances">
-                <span class="instances-count" [class.has-instances]="def.instances > 0">
-                  {{ def.instances }}
-                </span>
-              </td>
-              <td class="col-key">
-                <a [routerLink]="['/cockpit/processes', getDefinitionKey(def), 'instances']" class="definition-link mono" appClipboard [appClipboard]="getDefinitionKey(def)">
-                  {{ getDefinitionKey(def) }}
-                </a>
-              </td>
-              <td class="col-name">
-                <a [routerLink]="['/cockpit/processes', getDefinitionKey(def), 'instances']" class="definition-link" *ngIf="getDefinitionName(def) !== getDefinitionKey(def)">
-                  {{ getDefinitionName(def) }}
-                </a>
-                <span class="null-value" *ngIf="getDefinitionName(def) === getDefinitionKey(def)">-</span>
-              </td>
-              <td class="col-tenant">
-                <span *ngIf="def.tenantId">{{ def.tenantId }}</span>
-                <span class="null-value" *ngIf="!def.tenantId">-</span>
-              </td>
-              <td class="col-actions">
-                <a
-                  [routerLink]="['/cockpit/processes', getDefinitionKey(def), 'instances']"
-                  class="action-btn"
-                  [title]="'cockpit.processes.viewInstances' | translate"
-                >
-                  <fa-icon [icon]="faEye"></fa-icon>
-                </a>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <!-- Loading state -->
-      <div class="loading-state" *ngIf="loading">
-        <fa-icon [icon]="faSpinner" animation="spin"></fa-icon>
-        <span>{{ 'common.loading' | translate }}</span>
-      </div>
-
-      <!-- Empty state -->
-      <div class="empty-state" *ngIf="!loading && processDefinitions.length === 0">
-        <fa-icon [icon]="faCogs" class="empty-icon"></fa-icon>
-        <p>{{ 'cockpit.processes.noDeployedDefinitions' | translate }}</p>
-      </div>
     </div>
   </main>
 </div>

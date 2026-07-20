@@ -435,6 +435,18 @@ export interface VariableQueryParam {
   value: any;
 }
 
+export type GlobalSearchField =
+  | 'businessKey' | 'instanceId' | 'state' | 'withIncidents'
+  | 'startedAfter' | 'startedBefore' | 'finishedAfter' | 'finishedBefore'
+  | 'variable';
+
+export interface MultiValueFilter {
+  field: GlobalSearchField;
+  values: string[];
+  variableName?: string;
+  variableOperator?: 'eq' | 'neq' | 'gt' | 'gteq' | 'lt' | 'lteq' | 'like';
+}
+
 export interface TaskQueryParams {
   assignee?: string;
   assigneeLike?: string;
@@ -1210,6 +1222,96 @@ export class CockpitService {
    * @deprecated Use ProcessInstanceService.queryProcessInstancesCount() directly
    */
   queryProcessInstancesCount(body: any): Observable<number> {
+    return this.processInstanceService.queryProcessInstancesCount(body);
+  }
+
+  buildGlobalSearchPayload(
+    filters: MultiValueFilter[],
+    variableNamesIgnoreCase = false,
+    variableValuesIgnoreCase = false
+  ): any {
+    const body: any = {};
+    const orQueriesList: any[] = [];
+
+    for (const filter of filters) {
+      switch (filter.field) {
+        case 'businessKey':
+          if (filter.values.length === 1) {
+            body.processInstanceBusinessKeyLike = `%${filter.values[0]}%`;
+          } else if (filter.values.length > 1) {
+            body.processInstanceBusinessKeyIn = filter.values;
+          }
+          break;
+        case 'instanceId':
+          if (filter.values.length > 0) {
+            body.processInstanceIds = filter.values;
+          }
+          break;
+        case 'state':
+          if (filter.values[0]) {
+            switch (filter.values[0]) {
+              case 'active':     body.active = true; body.unfinished = true; break;
+              case 'suspended':  body.suspended = true; body.unfinished = true; break;
+              case 'completed':  body.completed = true; body.finished = true; break;
+              case 'terminated': body.externallyTerminated = true; body.finished = true; break;
+            }
+          }
+          break;
+        case 'withIncidents':
+          body.withIncidents = true;
+          break;
+        case 'startedAfter':
+          if (filter.values[0]) body.startedAfter = filter.values[0];
+          break;
+        case 'startedBefore':
+          if (filter.values[0]) body.startedBefore = filter.values[0];
+          break;
+        case 'finishedAfter':
+          if (filter.values[0]) body.finishedAfter = filter.values[0];
+          break;
+        case 'finishedBefore':
+          if (filter.values[0]) body.finishedBefore = filter.values[0];
+          break;
+        case 'variable':
+          if (filter.variableName && filter.values.length > 0) {
+            filter.values.forEach(v => {
+              orQueriesList.push({
+                variables: [{
+                  name: filter.variableName,
+                  operator: filter.variableOperator || 'eq',
+                  value: v
+                }]
+              });
+            });
+          }
+          break;
+      }
+    }
+
+    if (orQueriesList.length > 0) body.orQueries = orQueriesList;
+    if (variableNamesIgnoreCase) body.variableNamesIgnoreCase = true;
+    if (variableValuesIgnoreCase) body.variableValuesIgnoreCase = true;
+
+    return body;
+  }
+
+  searchProcessInstancesGlobal(
+    filters: MultiValueFilter[],
+    variableNamesIgnoreCase = false,
+    variableValuesIgnoreCase = false,
+    firstResult = 0,
+    maxResults = 20
+  ): Observable<ProcessInstance[]> {
+    const body = this.buildGlobalSearchPayload(filters, variableNamesIgnoreCase, variableValuesIgnoreCase);
+    return this.processInstanceService.queryProcessInstances(body, firstResult, maxResults);
+  }
+
+  searchProcessInstancesGlobalCount(
+    filters: MultiValueFilter[],
+    variableNamesIgnoreCase = false,
+    variableValuesIgnoreCase = false
+  ): Observable<number> {
+    const body = this.buildGlobalSearchPayload(filters, variableNamesIgnoreCase, variableValuesIgnoreCase);
     return this.processInstanceService.queryProcessInstancesCount(body);
   }
 
