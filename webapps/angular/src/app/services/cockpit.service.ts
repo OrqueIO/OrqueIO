@@ -447,6 +447,27 @@ export interface MultiValueFilter {
   variableOperator?: 'eq' | 'neq' | 'gt' | 'gteq' | 'lt' | 'lteq' | 'like';
 }
 
+/**
+ * Converts a raw string value entered by the user into the correct JS type
+ * before sending it to the Camunda variable-search API.
+ * Camunda compares by strict type: a Double stored as 20.5 never matches the
+ * string "20.5", so we must send 20.5 (number) instead.
+ */
+export function parseVariableValue(raw: string, operator: string): any {
+  if (operator === 'like') {
+    return raw.includes('%') ? raw : `%${raw}%`;
+  }
+  if (raw.toLowerCase() === 'true')  return true;
+  if (raw.toLowerCase() === 'false') return false;
+  if (raw === 'NULL') return null;
+  const trimmed = raw.trim();
+  if (trimmed !== '') {
+    const n = Number(trimmed);
+    if (!isNaN(n)) return n;
+  }
+  return raw;
+}
+
 export interface TaskQueryParams {
   assignee?: string;
   assigneeLike?: string;
@@ -1231,24 +1252,33 @@ export class CockpitService {
     variableValuesIgnoreCase = false
   ): any {
     const body: any = {};
-    const orQueriesList: any[] = [];
+
+    // OR dimensions: each dimension holds the alternatives for one "OR slot".
+    // Dimensions are AND'd with each other via the cross-product; items within
+    // a single dimension are OR'd.
+    //
+    // businessKey values → one dimension (each LIKE pattern is one alternative)
+    // each variable pill  → one dimension (each chip value is one alternative)
+    //
+    // Cross-product: for each combination (one item per dimension) we emit one
+    // orQuery entry carrying all picked items as AND'd conditions. Camunda then
+    // OR's the orQuery entries, giving: (bk1 OR bk2) AND (varA OR varB) AND …
+    const bkPatterns: string[] = [];
+    interface VarGroup { conds: { name: string; operator: string; value: any }[]; vvIgnoreCase: boolean; }
+    const varGroups: VarGroup[] = [];
 
     for (const filter of filters) {
       switch (filter.field) {
         case 'businessKey':
-          if (filter.values.length === 1) {
-            body.processInstanceBusinessKeyLike = `%${filter.values[0]}%`;
-          } else if (filter.values.length > 1) {
-            body.processInstanceBusinessKeyIn = filter.values;
-          }
+          filter.values.forEach(v => {
+            bkPatterns.push(`%${v.replace(/[%_]/g, '\\$&')}%`);
+          });
           break;
         case 'instanceId':
-          if (filter.values.length > 0) {
-            body.processInstanceIds = filter.values;
-          }
+          if (filter.values.length > 0) body.processInstanceIds = filter.values;
           break;
         case 'state':
-          if (filter.values[0]) {
+          if (filter.values.length === 1) {
             switch (filter.values[0]) {
               case 'active':     body.active = true; body.unfinished = true; break;
               case 'suspended':  body.suspended = true; body.unfinished = true; break;
@@ -1256,6 +1286,7 @@ export class CockpitService {
               case 'terminated': body.externallyTerminated = true; body.finished = true; break;
             }
           }
+          // Multi-state handled by searchPerState()/countPerState()
           break;
         case 'withIncidents':
           body.withIncidents = true;
@@ -1274,21 +1305,61 @@ export class CockpitService {
           break;
         case 'variable':
           if (filter.variableName && filter.values.length > 0) {
-            filter.values.forEach(v => {
-              orQueriesList.push({
-                variables: [{
-                  name: filter.variableName,
-                  operator: filter.variableOperator || 'eq',
-                  value: v
-                }]
-              });
+            const op = filter.variableOperator || 'eq';
+            varGroups.push({
+              conds: filter.values.map(v => ({
+                name: filter.variableName as string,
+                operator: op,
+                value: parseVariableValue(v, op)
+              })),
+              // variableValuesIgnoreCase must live inside each orQuery entry —
+              // Camunda ignores the top-level flag for orQuery-scoped variables.
+              vvIgnoreCase: op === 'like' || variableValuesIgnoreCase
             });
           }
           break;
       }
     }
 
-    if (orQueriesList.length > 0) body.orQueries = orQueriesList;
+    // Build OR dimensions: [bkDim?, varDim0?, varDim1?, …]
+    type BkItem  = { kind: 'bk';  pattern: string };
+    type VarItem = { kind: 'var'; cond: { name: string; operator: string; value: any }; vvIgnoreCase: boolean };
+    const dimensions: Array<Array<BkItem | VarItem>> = [];
+
+    if (bkPatterns.length > 0) {
+      dimensions.push(bkPatterns.map(p => ({ kind: 'bk' as const, pattern: p })));
+    }
+    for (const g of varGroups) {
+      dimensions.push(g.conds.map(c => ({ kind: 'var' as const, cond: c, vvIgnoreCase: g.vvIgnoreCase })));
+    }
+
+    if (dimensions.length > 0) {
+      const combos = dimensions.reduce<Array<Array<BkItem | VarItem>>>(
+        (acc, dim) => acc.flatMap(combo => dim.map(item => [...combo, item])),
+        [[]]
+      );
+
+      body.orQueries = combos.map(combo => {
+        const orQuery: any = {};
+        let vvIgnore = false;
+        const variables: any[] = [];
+        for (const item of combo) {
+          if (item.kind === 'bk') {
+            orQuery.processInstanceBusinessKeyLike = item.pattern;
+          } else {
+            variables.push(item.cond);
+            if (item.vvIgnoreCase) vvIgnore = true;
+          }
+        }
+        if (variables.length > 0) {
+          orQuery.variables = variables;
+          if (vvIgnore) orQuery.variableValuesIgnoreCase = true;
+          if (variableNamesIgnoreCase) orQuery.variableNamesIgnoreCase = true;
+        }
+        return orQuery;
+      });
+    }
+
     if (variableNamesIgnoreCase) body.variableNamesIgnoreCase = true;
     if (variableValuesIgnoreCase) body.variableValuesIgnoreCase = true;
 
@@ -1302,6 +1373,10 @@ export class CockpitService {
     firstResult = 0,
     maxResults = 20
   ): Observable<ProcessInstance[]> {
+    const statePill = filters.find(f => f.field === 'state');
+    if (statePill && statePill.values.length > 1) {
+      return this.searchPerState(filters, statePill, variableNamesIgnoreCase, variableValuesIgnoreCase, firstResult, maxResults);
+    }
     const body = this.buildGlobalSearchPayload(filters, variableNamesIgnoreCase, variableValuesIgnoreCase);
     return this.processInstanceService.queryProcessInstances(body, firstResult, maxResults);
   }
@@ -1311,8 +1386,81 @@ export class CockpitService {
     variableNamesIgnoreCase = false,
     variableValuesIgnoreCase = false
   ): Observable<number> {
+    const statePill = filters.find(f => f.field === 'state');
+    if (statePill && statePill.values.length > 1) {
+      return this.countPerState(filters, statePill, variableNamesIgnoreCase, variableValuesIgnoreCase);
+    }
     const body = this.buildGlobalSearchPayload(filters, variableNamesIgnoreCase, variableValuesIgnoreCase);
     return this.processInstanceService.queryProcessInstancesCount(body);
+  }
+
+  // Returns the state-specific body fragments (flags only, no other criteria)
+  private stateBodyFragment(stateVal: string): Record<string, boolean>[] {
+    switch (stateVal) {
+      case 'active':    return [{ active: true, unfinished: true }];
+      case 'suspended': return [{ suspended: true, unfinished: true }];
+      case 'completed': return [{ completed: true, finished: true }];
+      case 'terminated': return [
+        // An instance is terminated either externally (API cancel) or internally (process flow)
+        { externallyTerminated: true, finished: true },
+        { internallyTerminated: true, finished: true }
+      ];
+      default: return [];
+    }
+  }
+
+  // Build one request body per state value, each a copy of the non-state base body
+  // plus the state-specific flags. No orQueries across states — avoids Camunda's
+  // finished/unfinished flag hoisting which makes cross-group queries return 0 results.
+  private buildPerStateBodies(
+    filters: MultiValueFilter[],
+    statePill: MultiValueFilter,
+    variableNamesIgnoreCase: boolean,
+    variableValuesIgnoreCase: boolean
+  ): any[] {
+    const otherFilters = filters.filter(f => f.field !== 'state');
+    const base = this.buildGlobalSearchPayload(otherFilters, variableNamesIgnoreCase, variableValuesIgnoreCase);
+    return statePill.values.flatMap(
+      stateVal => this.stateBodyFragment(stateVal).map(flags => ({ ...base, ...flags }))
+    );
+  }
+
+  private searchPerState(
+    filters: MultiValueFilter[],
+    statePill: MultiValueFilter,
+    variableNamesIgnoreCase: boolean,
+    variableValuesIgnoreCase: boolean,
+    firstResult: number,
+    maxResults: number
+  ): Observable<ProcessInstance[]> {
+    const bodies = this.buildPerStateBodies(filters, statePill, variableNamesIgnoreCase, variableValuesIgnoreCase);
+    return forkJoin(
+      bodies.map(body => this.processInstanceService.queryProcessInstances(body, 0, 2000))
+    ).pipe(
+      map(resultArrays => {
+        const seen = new Set<string>();
+        const merged: ProcessInstance[] = [];
+        for (const arr of resultArrays) {
+          for (const inst of arr) {
+            if (inst.id && !seen.has(inst.id)) { seen.add(inst.id); merged.push(inst); }
+          }
+        }
+        merged.sort((a, b) => new Date(b.startTime).getTime() - new Date(a.startTime).getTime());
+        return merged.slice(firstResult, firstResult + maxResults);
+      })
+    );
+  }
+
+  private countPerState(
+    filters: MultiValueFilter[],
+    statePill: MultiValueFilter,
+    variableNamesIgnoreCase: boolean,
+    variableValuesIgnoreCase: boolean
+  ): Observable<number> {
+    const bodies = this.buildPerStateBodies(filters, statePill, variableNamesIgnoreCase, variableValuesIgnoreCase);
+    return forkJoin(
+      bodies.map(body => this.processInstanceService.queryProcessInstancesCount(body))
+    ).pipe(map(counts => counts.reduce((sum, c) => sum + c, 0)));
   }
 
   // ============================================

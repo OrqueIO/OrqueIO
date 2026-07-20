@@ -3,8 +3,8 @@ import 'zone.js/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { provideRouter } from '@angular/router';
-import { of, throwError } from 'rxjs';
+import { provideRouter, Router, ActivatedRoute } from '@angular/router';
+import { of, throwError, lastValueFrom } from 'rxjs';
 import { ProcessDefinitionsComponent } from './process-definitions';
 import {
   CockpitService,
@@ -27,19 +27,22 @@ const realSvc = Object.create(CockpitService.prototype) as CockpitService;
 describe('CockpitService.buildGlobalSearchPayload', () => {
   beforeAll(() => { initTestEnvironment(); });
 
-  it('should use processInstanceBusinessKeyLike with wildcard wrapping for a single business key', () => {
+  it('should put a single business key in orQueries as a LIKE pattern', () => {
     const filters: MultiValueFilter[] = [{ field: 'businessKey', values: ['BK-001'] }];
     const payload = realSvc.buildGlobalSearchPayload(filters);
-    expect(payload.processInstanceBusinessKeyLike).toBe('%BK-001%');
-    expect(payload.processInstanceBusinessKey).toBeUndefined();
+    expect(payload.orQueries).toHaveLength(1);
+    expect(payload.orQueries[0].processInstanceBusinessKeyLike).toBe('%BK-001%');
+    expect(payload.processInstanceBusinessKeyLike).toBeUndefined();
     expect(payload.processInstanceBusinessKeyIn).toBeUndefined();
   });
 
-  it('should set processInstanceBusinessKeyIn for multiple business keys', () => {
+  it('should put multiple business keys in orQueries as separate LIKE patterns (OR semantics)', () => {
     const filters: MultiValueFilter[] = [{ field: 'businessKey', values: ['BK-001', 'BK-002'] }];
     const payload = realSvc.buildGlobalSearchPayload(filters);
-    expect(payload.processInstanceBusinessKeyIn).toEqual(['BK-001', 'BK-002']);
-    expect(payload.processInstanceBusinessKey).toBeUndefined();
+    expect(payload.orQueries).toHaveLength(2);
+    expect(payload.orQueries[0].processInstanceBusinessKeyLike).toBe('%BK-001%');
+    expect(payload.orQueries[1].processInstanceBusinessKeyLike).toBe('%BK-002%');
+    expect(payload.processInstanceBusinessKeyIn).toBeUndefined();
   });
 
   it('should create one orQueries entry per value for a variable filter (OR between values)', () => {
@@ -50,8 +53,8 @@ describe('CockpitService.buildGlobalSearchPayload', () => {
     const payload = realSvc.buildGlobalSearchPayload(filters);
     expect(payload.orQueries).toBeDefined();
     expect(payload.orQueries.length).toBe(2);
-    expect(payload.orQueries[0].variables[0]).toEqual({ name: 'orderId', operator: 'eq', value: '1' });
-    expect(payload.orQueries[1].variables[0]).toEqual({ name: 'orderId', operator: 'eq', value: '23' });
+    expect(payload.orQueries[0].variables[0]).toEqual({ name: 'orderId', operator: 'eq', value: 1 });
+    expect(payload.orQueries[1].variables[0]).toEqual({ name: 'orderId', operator: 'eq', value: 23 });
   });
 
   it('should create 3 separate orQueries entries for a 3-value variable filter', () => {
@@ -61,21 +64,74 @@ describe('CockpitService.buildGlobalSearchPayload', () => {
     }];
     const payload = realSvc.buildGlobalSearchPayload(filters);
     expect(payload.orQueries.length).toBe(3);
-    expect(payload.orQueries[0].variables[0]).toEqual({ name: 'amount', operator: 'eq', value: '100' });
-    expect(payload.orQueries[1].variables[0]).toEqual({ name: 'amount', operator: 'eq', value: '200' });
-    expect(payload.orQueries[2].variables[0]).toEqual({ name: 'amount', operator: 'eq', value: '300' });
+    expect(payload.orQueries[0].variables[0]).toEqual({ name: 'amount', operator: 'eq', value: 100 });
+    expect(payload.orQueries[1].variables[0]).toEqual({ name: 'amount', operator: 'eq', value: 200 });
+    expect(payload.orQueries[2].variables[0]).toEqual({ name: 'amount', operator: 'eq', value: 300 });
   });
 
-  it('should create N+M orQueries entries for two variable pills with N and M values', () => {
+  it('should cross-product two variable pills: N×M orQueries entries each carrying one condition per pill', () => {
+    // orderId=[1,23] × status=[active] → 2×1=2 combos, AND'd within each entry
     const filters: MultiValueFilter[] = [
       { field: 'variable', values: ['1', '23'], variableName: 'orderId', variableOperator: 'eq' },
       { field: 'variable', values: ['active'], variableName: 'status', variableOperator: 'eq' }
     ];
     const payload = realSvc.buildGlobalSearchPayload(filters);
-    expect(payload.orQueries.length).toBe(3);
-    expect(payload.orQueries[0].variables[0]).toEqual({ name: 'orderId', operator: 'eq', value: '1' });
-    expect(payload.orQueries[1].variables[0]).toEqual({ name: 'orderId', operator: 'eq', value: '23' });
-    expect(payload.orQueries[2].variables[0]).toEqual({ name: 'status', operator: 'eq', value: 'active' });
+    expect(payload.orQueries.length).toBe(2);
+    expect(payload.orQueries[0].variables).toEqual([
+      { name: 'orderId', operator: 'eq', value: 1 },
+      { name: 'status',  operator: 'eq', value: 'active' }
+    ]);
+    expect(payload.orQueries[1].variables).toEqual([
+      { name: 'orderId', operator: 'eq', value: 23 },
+      { name: 'status',  operator: 'eq', value: 'active' }
+    ]);
+  });
+
+  // ── parseVariableValue type coercion in buildGlobalSearchPayload ──────────
+
+  it('should send 20.5 as a number (not a string) for a float variable value', () => {
+    const filters: MultiValueFilter[] = [{
+      field: 'variable', values: ['20.5'],
+      variableName: 'amount', variableOperator: 'eq'
+    }];
+    const payload = realSvc.buildGlobalSearchPayload(filters);
+    expect(payload.orQueries[0].variables[0].value).toBe(20.5);
+    expect(typeof payload.orQueries[0].variables[0].value).toBe('number');
+  });
+
+  it('should send each numeric value as a number for a multi-value variable filter', () => {
+    const filters: MultiValueFilter[] = [{
+      field: 'variable', values: ['20.5', '30'],
+      variableName: 'amount', variableOperator: 'eq'
+    }];
+    const payload = realSvc.buildGlobalSearchPayload(filters);
+    expect(payload.orQueries[0].variables[0].value).toBe(20.5);
+    expect(payload.orQueries[1].variables[0].value).toBe(30);
+  });
+
+  it('should send true/false as booleans for boolean variable values', () => {
+    const f1: MultiValueFilter[] = [{ field: 'variable', values: ['true'],  variableName: 'flag', variableOperator: 'eq' }];
+    const f2: MultiValueFilter[] = [{ field: 'variable', values: ['false'], variableName: 'flag', variableOperator: 'eq' }];
+    expect(realSvc.buildGlobalSearchPayload(f1).orQueries[0].variables[0].value).toBe(true);
+    expect(realSvc.buildGlobalSearchPayload(f2).orQueries[0].variables[0].value).toBe(false);
+  });
+
+  it('should send null for NULL variable value', () => {
+    const filters: MultiValueFilter[] = [{
+      field: 'variable', values: ['NULL'],
+      variableName: 'x', variableOperator: 'eq'
+    }];
+    const payload = realSvc.buildGlobalSearchPayload(filters);
+    expect(payload.orQueries[0].variables[0].value).toBeNull();
+  });
+
+  it('should auto-wrap like value with % for variable operator like', () => {
+    const filters: MultiValueFilter[] = [{
+      field: 'variable', values: ['invoice'],
+      variableName: 'name', variableOperator: 'like'
+    }];
+    const payload = realSvc.buildGlobalSearchPayload(filters);
+    expect(payload.orQueries[0].variables[0].value).toBe('%invoice%');
   });
 
   it('should set active=true and unfinished=true for state=active', () => {
@@ -130,6 +186,8 @@ describe('CockpitService.buildGlobalSearchPayload', () => {
   });
 
   it('should combine multiple filter types in one payload', () => {
+    // businessKey=[BK-001,BK-002] × variable amount=[42] → 2×1=2 cross-product entries
+    // each entry carries BOTH bk AND variable so Camunda AND's them within the entry
     const filters: MultiValueFilter[] = [
       { field: 'businessKey', values: ['BK-001', 'BK-002'] },
       { field: 'state', values: ['active'] },
@@ -137,14 +195,16 @@ describe('CockpitService.buildGlobalSearchPayload', () => {
       { field: 'variable', values: ['42'], variableName: 'amount', variableOperator: 'gt' }
     ];
     const payload = realSvc.buildGlobalSearchPayload(filters);
-    // multi-value businessKey stays as exact IN (no wildcard wrapping for arrays)
-    expect(payload.processInstanceBusinessKeyIn).toEqual(['BK-001', 'BK-002']);
+    expect(payload.processInstanceBusinessKeyIn).toBeUndefined();
     expect(payload.processInstanceBusinessKeyLike).toBeUndefined();
     expect(payload.active).toBe(true);
     expect(payload.withIncidents).toBe(true);
-    // single variable value → 1 orQueries entry
-    expect(payload.orQueries.length).toBe(1);
-    expect(payload.orQueries[0].variables[0]).toEqual({ name: 'amount', operator: 'gt', value: '42' });
+    // cross-product: 2 bk × 1 variable = 2 orQueries entries, each with bk + variable
+    expect(payload.orQueries.length).toBe(2);
+    expect(payload.orQueries[0].processInstanceBusinessKeyLike).toBe('%BK-001%');
+    expect(payload.orQueries[0].variables[0]).toEqual({ name: 'amount', operator: 'gt', value: 42 });
+    expect(payload.orQueries[1].processInstanceBusinessKeyLike).toBe('%BK-002%');
+    expect(payload.orQueries[1].variables[0]).toEqual({ name: 'amount', operator: 'gt', value: 42 });
   });
 
   it('should pass the like operator through to the variable query payload', () => {
@@ -171,6 +231,75 @@ describe('CockpitService.buildGlobalSearchPayload', () => {
     }];
     const payload = realSvc.buildGlobalSearchPayload(filters);
     expect(payload.orQueries[0].variables[0].operator).toBe('eq');
+  });
+
+  // ── variable operator API name mapping ────────────────────────────────────
+
+  it('should send operator "like" (never "~") and value "%20%" for amount ~ 20', () => {
+    const filters: MultiValueFilter[] = [{
+      field: 'variable', values: ['20'],
+      variableName: 'amount', variableOperator: 'like'
+    }];
+    const payload = realSvc.buildGlobalSearchPayload(filters);
+    expect(payload.orQueries[0].variables[0].operator).toBe('like');
+    expect(payload.orQueries[0].variables[0].operator).not.toBe('~');
+    expect(payload.orQueries[0].variables[0].value).toBe('%20%');
+  });
+
+  it('should send correct API operator names for all 7 operator options', () => {
+    const ops: Array<[string, string]> = [
+      ['eq', 'eq'], ['neq', 'neq'], ['gt', 'gt'], ['gteq', 'gteq'],
+      ['lt', 'lt'], ['lteq', 'lteq'], ['like', 'like'],
+    ];
+    ops.forEach(([uiValue, apiName]) => {
+      const filters: MultiValueFilter[] = [{
+        field: 'variable', values: ['test'],
+        variableName: 'x', variableOperator: uiValue as any
+      }];
+      const payload = realSvc.buildGlobalSearchPayload(filters);
+      expect(payload.orQueries[0].variables[0].operator).toBe(apiName);
+    });
+  });
+
+  it('should produce 2 orQueries with %abc% and %def% for a multi-value like filter', () => {
+    const filters: MultiValueFilter[] = [{
+      field: 'variable', values: ['abc', 'def'],
+      variableName: 'name', variableOperator: 'like'
+    }];
+    const payload = realSvc.buildGlobalSearchPayload(filters);
+    expect(payload.orQueries).toHaveLength(2);
+    expect(payload.orQueries[0].variables[0]).toEqual({ name: 'name', operator: 'like', value: '%abc%' });
+    expect(payload.orQueries[1].variables[0]).toEqual({ name: 'name', operator: 'like', value: '%def%' });
+  });
+
+  it('should set variableValuesIgnoreCase=true inside the orQuery for a like operator', () => {
+    const filters: MultiValueFilter[] = [{
+      field: 'variable', values: ['pizza'],
+      variableName: 'dish', variableOperator: 'like'
+    }];
+    const payload = realSvc.buildGlobalSearchPayload(filters);
+    // Flag must be on the orQuery entry itself — top-level flag does not apply to orQuery variables
+    expect(payload.orQueries[0].variableValuesIgnoreCase).toBe(true);
+    expect(payload.variableValuesIgnoreCase).toBeUndefined();
+  });
+
+  it('should NOT set variableValuesIgnoreCase inside orQuery for non-like operators', () => {
+    const filters: MultiValueFilter[] = [{
+      field: 'variable', values: ['pizza'],
+      variableName: 'dish', variableOperator: 'eq'
+    }];
+    const payload = realSvc.buildGlobalSearchPayload(filters);
+    expect(payload.orQueries[0].variableValuesIgnoreCase).toBeUndefined();
+    expect(payload.variableValuesIgnoreCase).toBeUndefined();
+  });
+
+  it('should set variableValuesIgnoreCase inside orQuery when the checkbox flag is true', () => {
+    const filters: MultiValueFilter[] = [{
+      field: 'variable', values: ['hello'],
+      variableName: 'x', variableOperator: 'eq'
+    }];
+    const payload = realSvc.buildGlobalSearchPayload(filters, false, true);
+    expect(payload.orQueries[0].variableValuesIgnoreCase).toBe(true);
   });
 });
 
@@ -485,10 +614,9 @@ describe('ProcessDefinitionsComponent', () => {
       expect(component.activeEditorType).toBeNull();
     });
 
-    it('should not add pill when pendingValues is empty and input is blank', () => {
+    it('should not add pill when pendingValues is empty', () => {
       component.selectCriteriaType('businessKey');
       component.pendingValues = [];
-      component.pendingInputText = '';
       component.confirmCriterion();
       expect(component.activePills.length).toBe(0);
     });
@@ -536,7 +664,7 @@ describe('ProcessDefinitionsComponent', () => {
 
     it('should add state pill', () => {
       component.selectCriteriaType('state');
-      component.pendingStateValue = 'completed';
+      component.pendingStateValues = ['completed'];
       component.confirmCriterion();
       expect(component.activePills.length).toBe(1);
       expect(component.activePills[0].field).toBe('state');
@@ -553,7 +681,7 @@ describe('ProcessDefinitionsComponent', () => {
 
       // Second criterion: state — must NOT overwrite first pill
       component.selectCriteriaType('state');
-      component.pendingStateValue = 'active';
+      component.pendingStateValues = ['active'];
       component.confirmCriterion();
       expect(component.activePills.length).toBe(2);
       expect(component.activePills[0].field).toBe('businessKey');
@@ -571,60 +699,323 @@ describe('ProcessDefinitionsComponent', () => {
       expect(component.activePills[0].field).toBe('businessKey');
       expect(component.activePills[1].field).toBe('withIncidents');
     });
+
+    it('should confirm a 3-value variable pill (values set by child via two-way binding) and produce 3 orQueries entries', () => {
+      component.selectCriteriaType('variable');
+      component.pendingVariableName = 'amount';
+      component.pendingVariableOperator = 'eq';
+
+      // Simulate the child chip-input emitting 3 values via the [(values)] two-way binding
+      component.pendingValues = ['100', '200', '300'];
+      expect(component.pendingValues).toEqual(['100', '200', '300']);
+
+      component.confirmCriterion();
+
+      expect(component.activePills.length).toBe(1);
+      const pill = component.activePills[0];
+      expect(pill.values).toEqual(['100', '200', '300']);
+      expect(pill.variableName).toBe('amount');
+      expect(component.getPillLabel(pill)).toBe('amount = 100, 200, 300');
+      expect(component.activeEditorType).toBeNull();
+      expect(component.pendingValues.length).toBe(0);
+
+      const payload = realSvc.buildGlobalSearchPayload(component.activePills);
+      expect(payload.orQueries.length).toBe(3);
+      expect(payload.orQueries[0].variables[0]).toEqual({ name: 'amount', operator: 'eq', value: 100 });
+      expect(payload.orQueries[1].variables[0]).toEqual({ name: 'amount', operator: 'eq', value: 200 });
+      expect(payload.orQueries[2].variables[0]).toEqual({ name: 'amount', operator: 'eq', value: 300 });
+    });
+  });
+
+  // ===========================
+  // Global Search — state multi-select
+  // ===========================
+
+  describe('state multi-select', () => {
+    beforeEach(() => { fixture.detectChanges(); });
+
+    it('should add a state pill with two selected states', () => {
+      component.selectCriteriaType('state');
+      component.pendingStateValues = ['active', 'suspended'];
+      component.confirmCriterion();
+      expect(component.activePills.length).toBe(1);
+      expect(component.activePills[0].values).toEqual(['active', 'suspended']);
+      expect(component.getPillLabel(component.activePills[0])).toBe('State: Active, Suspended');
+    });
+
+    it('should generate one body per state for active + completed via buildPerStateBodies', () => {
+      const statePill: MultiValueFilter = { field: 'state', values: ['active', 'completed'] };
+      const bodies = (realSvc as any).buildPerStateBodies([statePill], statePill, false, false);
+      expect(bodies.length).toBe(2);
+      expect(bodies[0]).toEqual({ active: true, unfinished: true });
+      expect(bodies[1]).toEqual({ completed: true, finished: true });
+      // No cross-state flags that would cause Camunda to AND finished+unfinished
+    });
+
+    it('should NOT combine active + terminated in one request — produces 3 separate bodies (regression)', () => {
+      // active → 1 body, terminated → 2 bodies (externallyTerminated + internallyTerminated)
+      const statePill: MultiValueFilter = { field: 'state', values: ['active', 'terminated'] };
+      const bodies = (realSvc as any).buildPerStateBodies([statePill], statePill, false, false);
+      expect(bodies.length).toBe(3);
+      expect(bodies[0]).toEqual({ active: true, unfinished: true });
+      expect(bodies[1]).toEqual({ externallyTerminated: true, finished: true });
+      expect(bodies[2]).toEqual({ internallyTerminated: true, finished: true });
+      // Each body has only one state's flags → no impossible finished+unfinished conflict
+    });
+
+    it('should preserve non-state filter criteria in every per-state body', () => {
+      const statePill: MultiValueFilter = { field: 'state', values: ['active', 'suspended'] };
+      const filters: MultiValueFilter[] = [
+        statePill,
+        { field: 'businessKey', values: ['BK-001'] }
+      ];
+      const bodies = (realSvc as any).buildPerStateBodies(filters, statePill, false, false);
+      expect(bodies.length).toBe(2);
+      expect(bodies[0].orQueries[0].processInstanceBusinessKeyLike).toBe('%BK-001%');
+      expect(bodies[1].orQueries[0].processInstanceBusinessKeyLike).toBe('%BK-001%');
+    });
+
+    it('should not add a state pill when no state is selected (add mode)', () => {
+      component.selectCriteriaType('state');
+      component.pendingStateValues = [];
+      component.confirmCriterion();
+      expect(component.activePills.length).toBe(0);
+    });
+
+    it('should remove the state pill when all states deselected and confirmed in edit mode', () => {
+      component.activePills = [{ field: 'state', values: ['active'] }];
+      component.startEditPill(0, new MouseEvent('click'));
+      component.pendingStateValues = [];   // deselect all
+      component.confirmCriterion();
+      expect(component.activePills.length).toBe(0);
+      expect(component.editingPillIndex).toBeNull();
+      expect(component.activeEditorType).toBeNull();
+    });
+
+    it('should still use top-level fields for single state (backward compat)', () => {
+      const pill: MultiValueFilter = { field: 'state', values: ['active'] };
+      const payload = realSvc.buildGlobalSearchPayload([pill]);
+      expect(payload.active).toBe(true);
+      expect(payload.unfinished).toBe(true);
+      expect(payload.orQueries).toBeUndefined();
+    });
+
+    it('should toggle state value on and off', () => {
+      component.selectCriteriaType('state');
+      component.toggleStateValue('active');
+      expect(component.pendingStateValues).toEqual(['active']);
+      component.toggleStateValue('active');
+      expect(component.pendingStateValues).toEqual([]);
+    });
+
+    it('searchPerState should sort merged results by startTime desc so all states appear on page 1', async () => {
+      // active query returns instances at Jan-10 and Jan-08; completed query returns Jan-09
+      // Without sort: active-1, active-2, completed-1 — with maxResults=2 page 1 never shows completed-1
+      // With sort:    active-1(Jan-10), completed-1(Jan-09), active-2(Jan-08) — correct interleaving
+      (realSvc as any).processInstanceService = {
+        queryProcessInstances: (body: any) => {
+          if (body.active) {
+            return of<ProcessInstance[]>([
+              { id: 'active-1', processDefinitionId: '', processDefinitionKey: '', startTime: '2024-01-10T00:00:00.000Z', state: 'ACTIVE' as const },
+              { id: 'active-2', processDefinitionId: '', processDefinitionKey: '', startTime: '2024-01-08T00:00:00.000Z', state: 'ACTIVE' as const },
+            ]);
+          }
+          return of<ProcessInstance[]>([
+            { id: 'completed-1', processDefinitionId: '', processDefinitionKey: '', startTime: '2024-01-09T00:00:00.000Z', state: 'COMPLETED' as const },
+          ]);
+        }
+      };
+      const statePill: MultiValueFilter = { field: 'state', values: ['active', 'completed'] };
+      const results = await lastValueFrom<ProcessInstance[]>(
+        (realSvc as any).searchPerState([statePill], statePill, false, false, 0, 2)
+      );
+      // Page 1 with maxResults=2: should show the 2 most recent = active-1(Jan-10) + completed-1(Jan-09)
+      expect(results.length).toBe(2);
+      expect(results[0].id).toBe('active-1');
+      expect(results[1].id).toBe('completed-1');
+    });
+  });
+
+  // ===========================
+  // Global Search — pill editing
+  // ===========================
+
+  describe('pill editing', () => {
+    beforeEach(() => { fixture.detectChanges(); });
+
+    it('should open editor pre-filled with businessKey pill values on startEditPill', () => {
+      component.activePills = [{ field: 'businessKey', values: ['BK-001', 'BK-002'] }];
+      component.startEditPill(0, new MouseEvent('click'));
+      expect(component.activeEditorType).toBe('businessKey');
+      expect(component.editingPillIndex).toBe(0);
+      expect(component.pendingValues).toEqual(['BK-001', 'BK-002']);
+    });
+
+    it('should open editor pre-filled with state pill values on startEditPill', () => {
+      component.activePills = [{ field: 'state', values: ['active', 'completed'] }];
+      component.startEditPill(0, new MouseEvent('click'));
+      expect(component.activeEditorType).toBe('state');
+      expect(component.editingPillIndex).toBe(0);
+      expect(component.pendingStateValues).toEqual(['active', 'completed']);
+    });
+
+    it('should update the pill in place on confirmCriterion when editing', () => {
+      component.activePills = [
+        { field: 'businessKey', values: ['BK-001'] },
+        { field: 'state', values: ['active'] }
+      ];
+      component.startEditPill(0, new MouseEvent('click'));
+      component.pendingValues = ['BK-001', 'BK-999'];
+      component.confirmCriterion();
+
+      expect(component.activePills.length).toBe(2);
+      expect(component.activePills[0].values).toEqual(['BK-001', 'BK-999']);
+      expect(component.activePills[1].field).toBe('state');
+      expect(component.editingPillIndex).toBeNull();
+    });
+
+    it('should not add a duplicate pill when editing and confirming', () => {
+      component.activePills = [{ field: 'businessKey', values: ['BK-001'] }];
+      component.startEditPill(0, new MouseEvent('click'));
+      component.pendingValues = ['BK-NEW'];
+      component.confirmCriterion();
+      expect(component.activePills.length).toBe(1);
+      expect(component.activePills[0].values).toEqual(['BK-NEW']);
+    });
+
+    it('should leave pill unchanged on cancelCriterion when editing', () => {
+      component.activePills = [{ field: 'businessKey', values: ['BK-ORIG'] }];
+      component.startEditPill(0, new MouseEvent('click'));
+      component.pendingValues = ['BK-MODIFIED'];
+      component.cancelCriterion();
+      expect(component.activePills[0].values).toEqual(['BK-ORIG']);
+      expect(component.editingPillIndex).toBeNull();
+      expect(component.activeEditorType).toBeNull();
+    });
+
+    it('should update state pill values on confirm when editing', () => {
+      component.activePills = [{ field: 'state', values: ['active'] }];
+      component.startEditPill(0, new MouseEvent('click'));
+      component.pendingStateValues = ['active', 'suspended'];
+      component.confirmCriterion();
+      expect(component.activePills[0].values).toEqual(['active', 'suspended']);
+      expect(component.getPillLabel(component.activePills[0])).toBe('State: Active, Suspended');
+      // Multi-state uses buildPerStateBodies (separate calls), not buildGlobalSearchPayload
+      const statePill = component.activePills[0];
+      const bodies = (realSvc as any).buildPerStateBodies([statePill], statePill, false, false);
+      expect(bodies.length).toBe(2);
+      expect(bodies[0]).toEqual({ active: true, unfinished: true });
+      expect(bodies[1]).toEqual({ suspended: true, unfinished: true });
+    });
+  });
+
+  // ===========================
+  // Global Search — Enter key shortcut
+  // ===========================
+
+  describe('Enter key shortcut', () => {
+    beforeEach(() => { fixture.detectChanges(); });
+
+    it('should confirm businessKey criterion via emptyEnter (chip added then Enter on empty input)', () => {
+      // Simulates: user types 'BK-001' → Enter (chip created) → Enter again (input empty → emptyEnter fires)
+      component.selectCriteriaType('businessKey');
+      component.pendingValues = ['BK-001']; // chip was already created on first Enter
+      component.confirmCriterion();         // emptyEnter calls confirmCriterion()
+      expect(component.activePills.length).toBe(1);
+      expect(component.activePills[0].field).toBe('businessKey');
+      expect(component.activePills[0].values).toEqual(['BK-001']);
+      expect(component.activeEditorType).toBeNull();
+    });
+
+    it('should confirm state criterion when keydown Enter is dispatched on state body', () => {
+      component.selectCriteriaType('state');
+      component.toggleStateValue('active');
+      fixture.detectChanges();
+
+      const stateBody: HTMLElement = fixture.nativeElement.querySelector('.editor-popover-body--state');
+      expect(stateBody).toBeTruthy();
+      stateBody.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+      fixture.detectChanges();
+
+      expect(component.activePills.length).toBe(1);
+      expect(component.activePills[0].field).toBe('state');
+      expect(component.activePills[0].values).toEqual(['active']);
+      expect(component.activeEditorType).toBeNull();
+    });
+
+    it('should also work when editing an existing state pill via Enter', () => {
+      component.activePills = [{ field: 'state', values: ['active'] }];
+      component.startEditPill(0, new MouseEvent('click'));
+      component.toggleStateValue('completed');
+      fixture.detectChanges();
+
+      const stateBody: HTMLElement = fixture.nativeElement.querySelector('.editor-popover-body--state');
+      expect(stateBody).toBeTruthy();
+      stateBody.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+      fixture.detectChanges();
+
+      expect(component.activePills[0].values).toEqual(['active', 'completed']);
+      expect(component.editingPillIndex).toBeNull();
+      expect(component.activeEditorType).toBeNull();
+    });
+
+    it('should confirm criterion when Enter pressed on body div after focus has left the chip input (blur scenario)', () => {
+      // Simulates: user typed 'BK-001', clicked elsewhere in popover → blur fired → chip created
+      // Now focus is NOT in the chip text input → Enter on body div must confirm the criterion
+      component.selectCriteriaType('businessKey');
+      component.pendingValues = ['BK-001']; // reflects state after chip input's onBlur created the chip
+      fixture.detectChanges();
+
+      // Dispatch Enter directly on the body div (not on the chip input's internal <input>)
+      // This matches the real user scenario: focus is on the popover background, not inside the chip input
+      const bodyDiv: HTMLElement = fixture.nativeElement.querySelector('.editor-popover-body');
+      expect(bodyDiv).toBeTruthy();
+      bodyDiv.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+      fixture.detectChanges();
+
+      expect(component.activePills.length).toBe(1);
+      expect(component.activePills[0].field).toBe('businessKey');
+      expect(component.activePills[0].values).toEqual(['BK-001']);
+      expect(component.activeEditorType).toBeNull();
+    });
+
+    it('should trigger executeSearch when Enter is pressed anywhere (no popover open)', () => {
+      component.activePills = [
+        { field: 'businessKey', values: ['BK-001'] },
+        { field: 'state', values: ['active'] },
+      ];
+      fixture.detectChanges();
+
+      // Simulate focus on document.body (typical state after popover closes) pressing Enter
+      document.body.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+      fixture.detectChanges();
+
+      expect(cockpitService.searchProcessInstancesGlobal).toHaveBeenCalled();
+    });
+
+    it('should NOT trigger executeSearch when Enter is pressed while a popover is open', () => {
+      component.selectCriteriaType('businessKey');
+      component.pendingValues = ['BK-001'];
+      fixture.detectChanges();
+
+      // Enter inside the popover confirms the criterion via its own handler + stops propagation
+      const bodyDiv: HTMLElement = fixture.nativeElement.querySelector('.editor-popover-body');
+      bodyDiv.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+      fixture.detectChanges();
+
+      // Criterion confirmed — pill added
+      expect(component.activePills.length).toBe(1);
+      expect(component.activeEditorType).toBeNull();
+      // Search was NOT triggered by the panel-level handler
+      expect(cockpitService.searchProcessInstancesGlobal).not.toHaveBeenCalled();
+    });
   });
 
   // ===========================
   // Global Search — paste split
   // ===========================
 
-  describe('paste split', () => {
-    beforeEach(() => { fixture.detectChanges(); });
-
-    it('should split pasted comma-separated values into pendingValues', () => {
-      component.selectCriteriaType('businessKey');
-      const pasteEvent = {
-        preventDefault: vi.fn(),
-        clipboardData: { getData: vi.fn().mockReturnValue('val1, val2, val3') }
-      } as any as ClipboardEvent;
-      component.onPendingInputPaste(pasteEvent);
-      expect(component.pendingValues).toEqual(['val1', 'val2', 'val3']);
-      expect(component.pendingInputText).toBe('');
-    });
-
-    it('should deduplicate pasted values against existing pendingValues', () => {
-      component.pendingValues = ['val1'];
-      const pasteEvent = {
-        preventDefault: vi.fn(),
-        clipboardData: { getData: vi.fn().mockReturnValue('val1, val2') }
-      } as any as ClipboardEvent;
-      component.onPendingInputPaste(pasteEvent);
-      expect(component.pendingValues).toEqual(['val1', 'val2']);
-    });
-
-    it('should filter out empty parts from pasted text', () => {
-      const pasteEvent = {
-        preventDefault: vi.fn(),
-        clipboardData: { getData: vi.fn().mockReturnValue('val1,,val2,  ') }
-      } as any as ClipboardEvent;
-      component.onPendingInputPaste(pasteEvent);
-      expect(component.pendingValues).toEqual(['val1', 'val2']);
-    });
-
-    it('should add pending value on Enter key', () => {
-      component.pendingInputText = 'myValue';
-      const event = { key: 'Enter', preventDefault: vi.fn() } as any as KeyboardEvent;
-      component.onPendingInputKeydown(event);
-      expect(component.pendingValues).toContain('myValue');
-      expect(component.pendingInputText).toBe('');
-    });
-
-    it('should not add a duplicate pending value', () => {
-      component.pendingValues = ['existing'];
-      component.pendingInputText = 'existing';
-      component.addPendingValue();
-      expect(component.pendingValues.length).toBe(1);
-    });
-  });
+  // paste / Enter / dedup behaviours are tested in MultiValueChipInputComponent spec
 
   // ===========================
   // Global Search — executeSearch
@@ -770,9 +1161,14 @@ describe('ProcessDefinitionsComponent', () => {
       expect(component.getPillLabel(pill)).toBe('orderId = 1, 23');
     });
 
-    it('should return correct label for state pill', () => {
+    it('should return correct label for state pill (single value)', () => {
       const pill: MultiValueFilter = { field: 'state', values: ['completed'] };
       expect(component.getPillLabel(pill)).toBe('State: Completed');
+    });
+
+    it('should return correct label for state pill (multiple values)', () => {
+      const pill: MultiValueFilter = { field: 'state', values: ['active', 'suspended'] };
+      expect(component.getPillLabel(pill)).toBe('State: Active, Suspended');
     });
 
     it('should return correct label for instanceId pill', () => {
@@ -865,5 +1261,207 @@ describe('ProcessDefinitionsComponent', () => {
     it('should return null for non-numeric version segment', () => {
       expect(component.extractVersionNumber('key:notANumber:id')).toBeNull();
     });
+  });
+
+  // ===========================
+  // URL and localStorage persistence
+  // ===========================
+
+  describe('URL and localStorage persistence', () => {
+    let router: Router;
+
+    beforeEach(() => {
+      fixture.detectChanges();
+      router = TestBed.inject(Router);
+      vi.spyOn(router, 'navigate').mockResolvedValue(true);
+      localStorage.removeItem('globalSearchPreferences');
+    });
+
+    it('should write pills as JSON criteria query param when a criterion is confirmed', () => {
+      component.selectCriteriaType('businessKey');
+      component.pendingValues = ['BK-001', 'BK-002'];
+      component.confirmCriterion();
+
+      component.selectCriteriaType('state');
+      component.toggleStateValue('active');
+      component.toggleStateValue('completed');
+      component.confirmCriterion();
+
+      const calls = (router.navigate as ReturnType<typeof vi.spyOn>).mock.calls;
+      const lastArgs = calls[calls.length - 1];
+      const pills = JSON.parse(lastArgs[1].queryParams.criteria);
+      expect(pills).toHaveLength(2);
+      expect(pills[0]).toMatchObject({ field: 'businessKey', values: ['BK-001', 'BK-002'] });
+      expect(pills[1]).toMatchObject({ field: 'state', values: ['active', 'completed'] });
+      expect(lastArgs[1].replaceUrl).toBe(true);
+      expect(lastArgs[1].queryParamsHandling).toBe('merge');
+    });
+
+    it('should set criteria to null in URL when clearSearch is called', () => {
+      component.activePills = [{ field: 'withIncidents', values: [] }];
+      component.clearSearch();
+
+      const calls = (router.navigate as ReturnType<typeof vi.spyOn>).mock.calls;
+      const lastArgs = calls[calls.length - 1];
+      expect(lastArgs[1].queryParams.criteria).toBeNull();
+    });
+
+    it('should remove a pill from the URL when removePill is called', () => {
+      component.activePills = [
+        { field: 'businessKey', values: ['BK-001'] },
+        { field: 'state', values: ['active'] },
+      ];
+      component.removePill(0);
+
+      const calls = (router.navigate as ReturnType<typeof vi.spyOn>).mock.calls;
+      const lastArgs = calls[calls.length - 1];
+      const pills = JSON.parse(lastArgs[1].queryParams.criteria);
+      expect(pills).toHaveLength(1);
+      expect(pills[0].field).toBe('state');
+    });
+
+    it('should persist page size in localStorage when onSearchPageSizeChange is called', () => {
+      component.activePills = [{ field: 'withIncidents', values: [] }];
+      component.searchPageSize = 50;
+      component.onSearchPageSizeChange();
+
+      const saved = JSON.parse(localStorage.getItem('globalSearchPreferences')!);
+      expect(saved.pageSize).toBe(50);
+    });
+
+    it('should restore page size from localStorage when a new component instance is created', () => {
+      localStorage.setItem('globalSearchPreferences', JSON.stringify({ pageSize: 100 }));
+
+      const fixture2 = TestBed.createComponent(ProcessDefinitionsComponent);
+      fixture2.detectChanges();
+
+      expect(fixture2.componentInstance.searchPageSize).toBe(100);
+      fixture2.destroy();
+    });
+  });
+});
+
+// ============================================================
+// ProcessDefinitionsComponent — restore criteria from URL
+// Tests ngOnInit reading queryParams and auto-running search
+// ============================================================
+
+describe('ProcessDefinitionsComponent — restore criteria from URL', () => {
+  let fixture: ComponentFixture<ProcessDefinitionsComponent>;
+  let component: ProcessDefinitionsComponent;
+  let cockpitService: any;
+
+  const restoredPills: MultiValueFilter[] = [
+    { field: 'businessKey', values: ['BK-001', 'BK-002'] },
+    { field: 'state', values: ['active', 'completed'] },
+  ];
+
+  beforeAll(() => { initTestEnvironment(); });
+
+  beforeEach(async () => {
+    cockpitService = {
+      getProcessDefinitionsWithStatistics: vi.fn().mockReturnValue(of([])),
+      getProcessDefinitionsCount: vi.fn().mockReturnValue(of(0)),
+      searchProcessInstancesGlobal: vi.fn().mockReturnValue(of([])),
+      searchProcessInstancesGlobalCount: vi.fn().mockReturnValue(of(0)),
+      queryProcessInstances: vi.fn().mockReturnValue(of([])),
+    };
+
+    await TestBed.configureTestingModule({
+      imports: [ProcessDefinitionsComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: CockpitService, useValue: cockpitService },
+        { provide: NavMenuService, useValue: { setMenuItems: vi.fn(), clearMenuItems: vi.fn() } },
+        {
+          provide: ActivatedRoute,
+          useValue: { snapshot: { queryParams: { criteria: JSON.stringify(restoredPills) } } },
+        },
+      ],
+    }).compileComponents();
+
+    // Prevent router.navigate from erroring with mock ActivatedRoute
+    const router = TestBed.inject(Router);
+    vi.spyOn(router, 'navigate').mockResolvedValue(true);
+
+    fixture = TestBed.createComponent(ProcessDefinitionsComponent);
+    component = fixture.componentInstance;
+  });
+
+  it('should restore activePills from URL criteria param on init', () => {
+    fixture.detectChanges();
+
+    expect(component.activePills).toHaveLength(2);
+    expect(component.activePills[0]).toMatchObject({ field: 'businessKey', values: ['BK-001', 'BK-002'] });
+    expect(component.activePills[1]).toMatchObject({ field: 'state', values: ['active', 'completed'] });
+  });
+
+  it('should automatically run search with the restored criteria', () => {
+    fixture.detectChanges();
+
+    expect(cockpitService.searchProcessInstancesGlobal).toHaveBeenCalled();
+    expect(component.searchExecuted).toBe(true);
+  });
+
+  it('should not set ignore-case flags when they are absent from URL params', () => {
+    fixture.detectChanges();
+
+    // The beforeEach setup uses criteria-only params (no vnIgnoreCase/vvIgnoreCase)
+    expect(component.variableNamesIgnoreCase).toBe(false);
+    expect(component.variableValuesIgnoreCase).toBe(false);
+  });
+});
+
+// ============================================================
+// ProcessDefinitionsComponent — restore ignore-case flags from URL
+// ============================================================
+
+describe('ProcessDefinitionsComponent — restore ignore-case flags from URL', () => {
+  beforeAll(() => { initTestEnvironment(); });
+
+  beforeEach(async () => {
+    const cockpitSvc = {
+      getProcessDefinitionsWithStatistics: vi.fn().mockReturnValue(of([])),
+      getProcessDefinitionsCount: vi.fn().mockReturnValue(of(0)),
+      searchProcessInstancesGlobal: vi.fn().mockReturnValue(of([])),
+      searchProcessInstancesGlobalCount: vi.fn().mockReturnValue(of(0)),
+      queryProcessInstances: vi.fn().mockReturnValue(of([])),
+    };
+
+    await TestBed.configureTestingModule({
+      imports: [ProcessDefinitionsComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: CockpitService, useValue: cockpitSvc },
+        { provide: NavMenuService, useValue: { setMenuItems: vi.fn(), clearMenuItems: vi.fn() } },
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: {
+              queryParams: {
+                criteria: JSON.stringify([{ field: 'withIncidents', values: [] }]),
+                vnIgnoreCase: 'true',
+                vvIgnoreCase: 'true',
+              },
+            },
+          },
+        },
+      ],
+    }).compileComponents();
+
+    vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
+  });
+
+  it('should restore vnIgnoreCase and vvIgnoreCase flags from URL params', () => {
+    const f = TestBed.createComponent(ProcessDefinitionsComponent);
+    f.detectChanges();
+
+    expect(f.componentInstance.variableNamesIgnoreCase).toBe(true);
+    expect(f.componentInstance.variableValuesIgnoreCase).toBe(true);
+    f.destroy();
   });
 });

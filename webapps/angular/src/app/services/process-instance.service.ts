@@ -307,7 +307,7 @@ export class ProcessInstanceService {
       `${this.historyUrl}/process-instance`,
       body,
       { params: { firstResult: firstResult.toString(), maxResults: cappedMax.toString() } }
-    ).pipe(catchError(() => of([])));
+    ).pipe(catchError(err => { console.error('[ProcessInstance] query error:', err); return of([]); }));
   }
 
   /**

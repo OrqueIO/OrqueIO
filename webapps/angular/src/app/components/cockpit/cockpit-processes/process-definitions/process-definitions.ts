@@ -3,7 +3,7 @@ import {
   ChangeDetectionStrategy, ChangeDetectorRef, HostListener
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { forkJoin } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -35,6 +35,7 @@ import {
 import { NavMenuService } from '../../../../services/nav-menu.service';
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
 import { ClipboardDirective } from '../../../../shared/clipboard-directive/clipboard.directive';
+import { MultiValueChipInputComponent } from '../../../../shared/multi-value-chip-input/multi-value-chip-input';
 
 @Component({
   selector: 'app-process-definitions',
@@ -46,7 +47,8 @@ import { ClipboardDirective } from '../../../../shared/clipboard-directive/clipb
     FontAwesomeModule,
     CockpitHeaderComponent,
     TranslatePipe,
-    ClipboardDirective
+    ClipboardDirective,
+    MultiValueChipInputComponent
   ],
   templateUrl: './process-definitions.html',
   styleUrls: ['./process-definitions.css'],
@@ -57,6 +59,8 @@ export class ProcessDefinitionsComponent implements OnInit, OnDestroy {
   private navMenuService = inject(NavMenuService);
   private cockpitService = inject(CockpitService);
   private cdr = inject(ChangeDetectorRef);
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
 
   // Icons
   faSpinner = faSpinner;
@@ -99,22 +103,22 @@ export class ProcessDefinitionsComponent implements OnInit, OnDestroy {
   searchQuery = '';
   sortConfig: SortConfig = { sortBy: 'name', sortOrder: 'asc' };
   private readonly SORT_CONFIG_KEY = 'cockpit.processes.sortConfig';
+  private readonly GLOBAL_SEARCH_PREFS_KEY = 'globalSearchPreferences';
 
   // ===========================
   // Global Search state
   // ===========================
   showCriteriaDropdown = false;
-  showStateDropdown = false;
   activeEditorType: GlobalSearchField | null = null;
   activePills: MultiValueFilter[] = [];
 
   // Criterion editor inputs
   pendingValues: string[] = [];
-  pendingInputText = '';
   pendingVariableName = '';
   pendingVariableOperator: VariableOperator = 'eq';
-  pendingStateValue = 'active';
+  pendingStateValues: string[] = [];
   pendingDateValue = '';
+  editingPillIndex: number | null = null;
 
   // Case-sensitivity options (variable filters)
   variableNamesIgnoreCase = false;
@@ -135,6 +139,8 @@ export class ProcessDefinitionsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.navMenuService.setMenuItems(COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS);
     this.loadSortConfig();
+    this.loadPageSize();
+    this.loadFromUrl();
     this.loadProcessDefinitions();
   }
 
@@ -160,6 +166,50 @@ export class ProcessDefinitionsComponent implements OnInit, OnDestroy {
 
   private saveSortConfig(): void {
     localStorage.setItem(this.SORT_CONFIG_KEY, JSON.stringify(this.sortConfig));
+  }
+
+  private loadPageSize(): void {
+    const saved = localStorage.getItem(this.GLOBAL_SEARCH_PREFS_KEY);
+    if (saved) {
+      try {
+        const prefs = JSON.parse(saved);
+        if (this.searchPageSizeOptions.includes(prefs.pageSize)) {
+          this.searchPageSize = prefs.pageSize;
+        }
+      } catch { /* use default */ }
+    }
+  }
+
+  private savePageSize(): void {
+    localStorage.setItem(this.GLOBAL_SEARCH_PREFS_KEY, JSON.stringify({ pageSize: this.searchPageSize }));
+  }
+
+  private loadFromUrl(): void {
+    const params = this.route.snapshot.queryParams;
+    const criteriaJson: string | null = params['criteria'] ?? null;
+    if (!criteriaJson) return;
+    try {
+      const pills = JSON.parse(criteriaJson) as MultiValueFilter[];
+      if (!Array.isArray(pills) || pills.length === 0) return;
+      this.activePills = pills;
+      this.variableNamesIgnoreCase = params['vnIgnoreCase'] === 'true';
+      this.variableValuesIgnoreCase = params['vvIgnoreCase'] === 'true';
+      this.cdr.markForCheck();
+      this.executeSearch();
+    } catch { /* ignore malformed criteria */ }
+  }
+
+  private syncCriteriaToUrl(): void {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        criteria: this.activePills.length > 0 ? JSON.stringify(this.activePills) : null,
+        vnIgnoreCase: this.variableNamesIgnoreCase ? 'true' : null,
+        vvIgnoreCase: this.variableValuesIgnoreCase ? 'true' : null,
+      },
+      queryParamsHandling: 'merge',
+      replaceUrl: true,
+    });
   }
 
   onSort(columnId: string): void {
@@ -289,13 +339,22 @@ export class ProcessDefinitionsComponent implements OnInit, OnDestroy {
   onDocumentClick(event: Event): void {
     const target = event.target as HTMLElement;
     let changed = false;
-    if (!target.closest('.criteria-dropdown-wrapper') && this.showCriteriaDropdown) {
-      this.showCriteriaDropdown = false;
-      changed = true;
-    }
-    if (!target.closest('.state-dropdown-wrapper') && this.showStateDropdown) {
-      this.showStateDropdown = false;
-      changed = true;
+    if (this.editingPillIndex !== null) {
+      if (!target.closest('.pill-wrapper')) {
+        this.editingPillIndex = null;
+        this.activeEditorType = null;
+        this.pendingValues = [];
+        changed = true;
+      }
+    } else {
+      if (!target.closest('.criteria-dropdown-wrapper')) {
+        if (this.showCriteriaDropdown) { this.showCriteriaDropdown = false; changed = true; }
+        if (this.activeEditorType) {
+          this.activeEditorType = null;
+          this.pendingValues = [];
+          changed = true;
+        }
+      }
     }
     if (changed) this.cdr.markForCheck();
   }
@@ -303,27 +362,25 @@ export class ProcessDefinitionsComponent implements OnInit, OnDestroy {
   @HostListener('document:keydown.escape')
   onEscapeKey(): void {
     let changed = false;
-    if (this.showCriteriaDropdown) { this.showCriteriaDropdown = false; changed = true; }
-    if (this.showStateDropdown)    { this.showStateDropdown = false;    changed = true; }
+    if (this.activeEditorType) {
+      this.activeEditorType = null;
+      this.pendingValues = [];
+      this.editingPillIndex = null;
+      changed = true;
+    } else if (this.showCriteriaDropdown) {
+      this.showCriteriaDropdown = false;
+      changed = true;
+    }
     if (changed) this.cdr.markForCheck();
   }
 
   toggleCriteriaDropdown(event: Event): void {
     event.stopPropagation();
+    if (this.activeEditorType) {
+      this.activeEditorType = null;
+      this.pendingValues = [];
+    }
     this.showCriteriaDropdown = !this.showCriteriaDropdown;
-    this.cdr.markForCheck();
-  }
-
-  toggleStateDropdown(event: Event): void {
-    event.stopPropagation();
-    this.showStateDropdown = !this.showStateDropdown;
-    this.cdr.markForCheck();
-  }
-
-  selectState(value: string, event: Event): void {
-    event.stopPropagation();
-    this.pendingStateValue = value;
-    this.showStateDropdown = false;
     this.cdr.markForCheck();
   }
 
@@ -334,49 +391,59 @@ export class ProcessDefinitionsComponent implements OnInit, OnDestroy {
       if (!this.activePills.some(p => p.field === 'withIncidents')) {
         this.activePills = [...this.activePills, { field: 'withIncidents', values: [] }];
         this.cdr.markForCheck();
+        this.syncCriteriaToUrl();
       }
       return;
     }
 
     this.activeEditorType = type;
     this.pendingValues = [];
-    this.pendingInputText = '';
     this.pendingVariableName = '';
     this.pendingVariableOperator = 'eq';
-    this.pendingStateValue = 'active';
+    this.pendingStateValues = [];
     this.pendingDateValue = '';
     this.cdr.markForCheck();
   }
 
-  onPendingInputKeydown(event: KeyboardEvent): void {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      this.addPendingValue();
+  toggleStateValue(value: string): void {
+    if (this.pendingStateValues.includes(value)) {
+      this.pendingStateValues = this.pendingStateValues.filter(v => v !== value);
+    } else {
+      this.pendingStateValues = [...this.pendingStateValues, value];
     }
-  }
-
-  onPendingInputPaste(event: ClipboardEvent): void {
-    event.preventDefault();
-    const text = event.clipboardData?.getData('text') || '';
-    const parts = text.split(',').map(s => s.trim()).filter(s => s);
-    const current = new Set(this.pendingValues);
-    parts.forEach(p => current.add(p));
-    this.pendingValues = Array.from(current);
-    this.pendingInputText = '';
     this.cdr.markForCheck();
   }
 
-  addPendingValue(): void {
-    const val = this.pendingInputText.trim();
-    if (val && !this.pendingValues.includes(val)) {
-      this.pendingValues = [...this.pendingValues, val];
-    }
-    this.pendingInputText = '';
-    this.cdr.markForCheck();
-  }
+  startEditPill(index: number, event: Event): void {
+    event.stopPropagation();
+    const pill = this.activePills[index];
+    this.showCriteriaDropdown = false;
+    this.editingPillIndex = index;
+    this.activeEditorType = pill.field as GlobalSearchField;
+    this.pendingValues = [];
+    this.pendingStateValues = [];
 
-  removePendingValue(index: number): void {
-    this.pendingValues = this.pendingValues.filter((_, i) => i !== index);
+    switch (pill.field) {
+      case 'businessKey':
+      case 'instanceId':
+        this.pendingValues = [...pill.values];
+        break;
+      case 'state':
+        this.pendingStateValues = [...pill.values];
+        break;
+      case 'variable':
+        this.pendingValues = [...pill.values];
+        this.pendingVariableName = pill.variableName || '';
+        this.pendingVariableOperator = pill.variableOperator || 'eq';
+        break;
+      case 'startedAfter':
+      case 'startedBefore':
+      case 'finishedAfter':
+      case 'finishedBefore':
+        this.pendingDateValue = pill.values[0] || '';
+        break;
+    }
+
     this.cdr.markForCheck();
   }
 
@@ -388,13 +455,22 @@ export class ProcessDefinitionsComponent implements OnInit, OnDestroy {
     switch (type) {
       case 'businessKey':
       case 'instanceId':
-        this.addPendingValue();
         if (this.pendingValues.length === 0) return;
         pill = { field: type, values: [...this.pendingValues] };
         break;
       case 'state':
-        if (!this.pendingStateValue) return;
-        pill = { field: 'state', values: [this.pendingStateValue] };
+        if (this.pendingStateValues.length === 0) {
+          if (this.editingPillIndex !== null) {
+            const idx = this.editingPillIndex;
+            this.activePills = this.activePills.filter((_, i) => i !== idx);
+            this.editingPillIndex = null;
+            this.activeEditorType = null;
+            this.cdr.markForCheck();
+            this.syncCriteriaToUrl();
+          }
+          return;
+        }
+        pill = { field: 'state', values: [...this.pendingStateValues] };
         break;
       case 'startedAfter':
       case 'startedBefore':
@@ -407,7 +483,6 @@ export class ProcessDefinitionsComponent implements OnInit, OnDestroy {
         break;
       }
       case 'variable':
-        this.addPendingValue();
         if (!this.pendingVariableName.trim() || this.pendingValues.length === 0) return;
         pill = {
           field: 'variable',
@@ -419,32 +494,39 @@ export class ProcessDefinitionsComponent implements OnInit, OnDestroy {
     }
 
     if (pill) {
-      this.activePills = [...this.activePills, pill];
+      if (this.editingPillIndex !== null) {
+        const idx = this.editingPillIndex;
+        this.activePills = this.activePills.map((p, i) => i === idx ? pill! : p);
+        this.editingPillIndex = null;
+      } else {
+        this.activePills = [...this.activePills, pill];
+      }
       this.activeEditorType = null;
       this.pendingValues = [];
-      this.pendingInputText = '';
       this.cdr.markForCheck();
+      this.syncCriteriaToUrl();
     }
   }
 
   cancelCriterion(): void {
     this.activeEditorType = null;
     this.pendingValues = [];
-    this.pendingInputText = '';
-    this.showStateDropdown = false;
+    this.pendingStateValues = [];
+    this.editingPillIndex = null;
     this.cdr.markForCheck();
   }
 
   removePill(index: number): void {
     this.activePills = this.activePills.filter((_, i) => i !== index);
     this.cdr.markForCheck();
+    this.syncCriteriaToUrl();
   }
 
   getPillLabel(pill: MultiValueFilter): string {
     switch (pill.field) {
       case 'businessKey':    return `Business Key: ${pill.values.join(', ')}`;
       case 'instanceId':     return `Instance ID: ${pill.values.join(', ')}`;
-      case 'state':          return `State: ${this.getStateDisplayLabel(pill.values[0])}`;
+      case 'state':          return `State: ${pill.values.map(v => this.getStateDisplayLabel(v)).join(', ')}`;
       case 'withIncidents':  return 'With incidents';
       case 'startedAfter':   return `Started after: ${this.formatDisplayDate(pill.values[0])}`;
       case 'startedBefore':  return `Started before: ${this.formatDisplayDate(pill.values[0])}`;
@@ -458,8 +540,40 @@ export class ProcessDefinitionsComponent implements OnInit, OnDestroy {
     }
   }
 
+  getPillIcon(pill: MultiValueFilter): any {
+    switch (pill.field) {
+      case 'businessKey':     return this.faKey;
+      case 'instanceId':      return this.faHashtag;
+      case 'state':           return this.faCircleDot;
+      case 'withIncidents':   return this.faExclamationTriangle;
+      case 'startedAfter':
+      case 'startedBefore':
+      case 'finishedAfter':
+      case 'finishedBefore':  return this.faCalendarAlt;
+      case 'variable':        return this.faCode;
+      default:                return this.faFilter;
+    }
+  }
+
+  getEditorIcon(): any {
+    return this.activeEditorType
+      ? this.getPillIcon({ field: this.activeEditorType, values: [] })
+      : this.faFilter;
+  }
+
   hasVariableFilter(): boolean {
     return this.activePills.some(p => p.field === 'variable');
+  }
+
+  @HostListener('document:keydown.enter', ['$event'])
+  onDocumentEnter(event: Event): void {
+    // Popovers call stopPropagation at .criterion-editor-popover level, so events from inside
+    // an open popover never reach the document — confirmCriterion() handles them instead.
+    // State guard is double-safety for edge cases (e.g., Enter on a button opening a popover).
+    if (this.activeEditorType !== null || this.editingPillIndex !== null) return;
+    // Buttons fire executeSearch via their own click — skip to avoid double-call.
+    if ((event.target as HTMLElement).tagName === 'BUTTON') return;
+    this.executeSearch();
   }
 
   executeSearch(): void {
@@ -545,8 +659,8 @@ export class ProcessDefinitionsComponent implements OnInit, OnDestroy {
     this.variableNamesIgnoreCase = false;
     this.variableValuesIgnoreCase = false;
     this.pendingValues = [];
-    this.pendingInputText = '';
     this.cdr.markForCheck();
+    this.syncCriteriaToUrl();
   }
 
   get searchTotalPages(): number {
@@ -572,6 +686,7 @@ export class ProcessDefinitionsComponent implements OnInit, OnDestroy {
   onSearchPageSizeChange(): void {
     this.searchCurrentPage = 1;
     this.searchLoading = true;
+    this.savePageSize();
     this.cdr.markForCheck();
     this.loadSearchResults();
   }

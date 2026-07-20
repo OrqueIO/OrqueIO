@@ -50,8 +50,8 @@
 .panel-card {
   background: var(--bg-card);
   border: 1px solid var(--border-color-light);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
@@ -64,7 +64,7 @@
   padding: var(--space-3) var(--space-5);
   background: var(--color-gray-50);
   border-bottom: 1px solid var(--border-color-light);
-  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
   flex-shrink: 0;
 }
 
@@ -130,6 +130,12 @@
   color: var(--color-primary);
   font-weight: var(--font-weight-medium);
   max-width: 360px;
+}
+
+.pill-icon {
+  font-size: 0.6rem;
+  flex-shrink: 0;
+  opacity: 0.85;
 }
 
 .pill-text {
@@ -522,17 +528,132 @@
 .state-option--terminated.state-option--selected{ background: rgba(239, 68,  68,  0.05); }
 
 /* =====================================================
-   CRITERION EDITOR
+   CRITERION EDITOR POPOVER
    ===================================================== */
 
-.criterion-editor {
+.criterion-editor-popover {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: var(--z-fixed, 500);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.04),
+    0 8px 32px rgba(0, 0, 0, 0.14),
+    0 2px 8px  rgba(0, 0, 0, 0.08);
+  width: 280px;
+  overflow: visible;
+  animation: criteriaDropdownIn 180ms cubic-bezier(0.16, 1, 0.3, 1);
+  transform-origin: top left;
+}
+
+.editor-popover-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
   padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--border-color-light);
   background: var(--color-gray-50);
-  border: 1px solid var(--border-color-light);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+}
+
+.editor-popover-icon {
+  font-size: 0.75rem;
+  flex-shrink: 0;
+}
+
+.editor-popover-icon--businessKey    { color: #2563eb; }
+.editor-popover-icon--instanceId     { color: #7c3aed; }
+.editor-popover-icon--state          { color: #059669; }
+.editor-popover-icon--withIncidents  { color: #d97706; }
+.editor-popover-icon--startedAfter,
+.editor-popover-icon--startedBefore  { color: #0d9488; }
+.editor-popover-icon--finishedAfter,
+.editor-popover-icon--finishedBefore { color: #475569; }
+.editor-popover-icon--variable       { color: #6366f1; }
+
+.editor-popover-title {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.editor-popover-body {
+  padding: var(--space-3) var(--space-4);
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
+  gap: var(--space-2);
+}
+
+.editor-popover-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3) var(--space-3);
+}
+
+.btn-editor-confirm-icon,
+.btn-editor-cancel-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.btn-editor-confirm-icon {
+  background: var(--color-primary);
+  color: var(--text-inverse);
+  border: none;
+}
+
+.btn-editor-confirm-icon:hover {
+  background: var(--color-primary-dark);
+  transform: scale(1.05);
+}
+
+.btn-editor-cancel-icon {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.btn-editor-cancel-icon:hover {
+  background: var(--color-gray-100);
+  border-color: var(--color-gray-300);
+  color: var(--text-primary);
+}
+
+/* Full-width state trigger inside the popover */
+.criterion-editor-popover .state-dropdown-wrapper {
+  display: block;
+}
+
+.criterion-editor-popover .state-dropdown-trigger {
+  width: 100%;
+  min-width: unset;
+  box-sizing: border-box;
+}
+
+/* Column layout for variable editor — fits 280px popover width */
+.criterion-editor-popover .editor-row--variable {
+  flex-direction: column;
+}
+
+.criterion-editor-popover .editor-input--name {
+  max-width: 100%;
 }
 
 .editor-row {
@@ -598,80 +719,13 @@
   gap: var(--space-2);
 }
 
-/* Pending value tags inside editor */
-.pending-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-1);
+.editor-hint {
+  margin: var(--space-1) 0 0;
+  font-size: 0.72rem;
+  color: var(--color-text-muted, #888);
+  font-style: italic;
 }
 
-.pending-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 2px 8px;
-  background: var(--color-primary-bg);
-  border: 1px solid var(--color-primary);
-  border-radius: var(--radius-full);
-  font-size: var(--font-size-xs);
-  color: var(--color-primary);
-  font-weight: var(--font-weight-medium);
-}
-
-.tag-remove {
-  border: none;
-  background: none;
-  color: var(--color-primary);
-  cursor: pointer;
-  padding: 0;
-  font-size: 0.75rem;
-  line-height: 1;
-  display: inline-flex;
-  align-items: center;
-}
-
-.tag-remove:hover {
-  color: var(--color-danger);
-}
-
-.editor-actions {
-  display: flex;
-  gap: var(--space-2);
-}
-
-.btn-editor-confirm,
-.btn-editor-cancel {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  padding: var(--space-2) var(--space-4);
-  border-radius: var(--radius-md);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-semibold);
-  cursor: pointer;
-  transition: all var(--transition-fast);
-  border: none;
-}
-
-.btn-editor-confirm {
-  background: var(--color-primary);
-  color: var(--text-inverse);
-}
-
-.btn-editor-confirm:hover {
-  background: var(--color-primary-dark);
-}
-
-.btn-editor-cancel {
-  background: var(--bg-card);
-  border: 1px solid var(--border-color);
-  color: var(--text-secondary);
-}
-
-.btn-editor-cancel:hover {
-  background: var(--color-gray-100);
-  color: var(--text-primary);
-}
 
 /* =====================================================
    CASE-SENSITIVITY OPTIONS
@@ -1310,6 +1364,136 @@
   margin: 0;
   font-size: 1rem;
   color: var(--text-muted);
+}
+
+/* Pill as an editable element */
+.pill-wrapper {
+  position: relative;
+}
+
+.pill-text-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  line-height: inherit;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pill-text-btn:hover {
+  text-decoration: underline;
+}
+
+/* State premium checklist */
+.state-popover-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px var(--space-4) 4px;
+}
+
+.state-popover-label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.state-popover-clear {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-size: var(--font-size-xs);
+  color: var(--color-primary);
+  font-weight: 500;
+}
+
+.state-popover-clear:hover {
+  text-decoration: underline;
+}
+
+.editor-popover-body--state {
+  padding: var(--space-2);
+}
+
+.state-checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.state-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 7px var(--space-3);
+  border-radius: 8px;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  width: 100%;
+  text-align: left;
+  transition: background var(--transition-fast);
+}
+
+.state-row:hover {
+  background: var(--color-gray-50);
+}
+
+.state-row--selected {
+  background: var(--color-gray-50);
+}
+
+.state-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.state-dot--active     { background-color: var(--color-success); }
+.state-dot--suspended  { background-color: var(--color-warning); }
+.state-dot--completed  { background-color: var(--color-primary); }
+.state-dot--terminated { background-color: var(--color-danger); }
+
+.state-row-label {
+  flex: 1;
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}
+
+.state-row-label.is-selected {
+  color: var(--text-primary);
+}
+
+.state-row-check {
+  font-size: 0.7rem;
+  color: var(--color-primary);
+  flex-shrink: 0;
+}
+
+/* Actions footer: state mode adds top separator and counter on the left */
+.editor-popover-actions--state {
+  border-top: 0.5px solid var(--border-color);
+  justify-content: space-between;
+  align-items: center;
+}
+
+.state-count-label {
+  font-size: 11.5px;
+  color: var(--text-muted);
+}
+
+.editor-actions-btns {
+  display: flex;
+  gap: var(--space-2);
 }
 
 /* =====================================================

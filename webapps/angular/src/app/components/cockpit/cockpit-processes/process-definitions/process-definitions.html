@@ -24,11 +24,20 @@
           <!-- Pills row + Add criteria -->
           <div class="pills-area">
             <div class="pills-row">
-              <div class="pill" *ngFor="let pill of activePills; let i = index">
-                <span class="pill-text">{{ getPillLabel(pill) }}</span>
-                <button class="pill-remove" (click)="removePill(i)" type="button" title="Remove">
-                  <fa-icon [icon]="faTimes"></fa-icon>
-                </button>
+              <div class="pill-wrapper" *ngFor="let pill of activePills; let i = index">
+                <div class="pill">
+                  <fa-icon [icon]="getPillIcon(pill)" class="pill-icon"></fa-icon>
+                  <button class="pill-text-btn" (click)="startEditPill(i, $event)" type="button" title="Edit">
+                    {{ getPillLabel(pill) }}
+                  </button>
+                  <button class="pill-remove" (click)="removePill(i)" type="button" title="Remove">
+                    <fa-icon [icon]="faTimes"></fa-icon>
+                  </button>
+                </div>
+                <div class="criterion-editor-popover" *ngIf="editingPillIndex === i" role="dialog" aria-modal="true"
+                     (keydown.enter)="$event.stopPropagation()">
+                  <ng-container *ngTemplateOutlet="editorPopoverContent"></ng-container>
+                </div>
               </div>
 
               <div class="criteria-dropdown-wrapper">
@@ -154,162 +163,129 @@
                   </div>
 
                 </div>
+
+              <!-- Criterion editor popover — anchored below "Add criteria" button -->
+              <div class="criterion-editor-popover" *ngIf="activeEditorType && editingPillIndex === null" role="dialog" aria-modal="true"
+                   (keydown.enter)="$event.stopPropagation()">
+                <ng-container *ngTemplateOutlet="editorPopoverContent"></ng-container>
               </div>
             </div>
+          </div>
 
-            <!-- Criterion editor -->
-            <div class="criterion-editor" *ngIf="activeEditorType">
+<ng-template #editorPopoverContent>
+  <div class="editor-popover-header" *ngIf="activeEditorType !== 'state'">
+    <fa-icon [icon]="getEditorIcon()" class="editor-popover-icon editor-popover-icon--{{ activeEditorType }}"></fa-icon>
+    <span class="editor-popover-title">{{ ('cockpit.processes.filters.' + activeEditorType) | translate }}</span>
+  </div>
+  <div class="state-popover-header" *ngIf="activeEditorType === 'state'">
+    <span class="state-popover-label">STATE</span>
+    <button class="state-popover-clear" (click)="pendingStateValues = []" type="button">Clear</button>
+  </div>
 
-              <!-- Business Key / Instance ID -->
-              <ng-container *ngIf="activeEditorType === 'businessKey' || activeEditorType === 'instanceId'">
-                <div class="editor-row">
-                  <div class="pending-tags" *ngIf="pendingValues.length > 0">
-                    <span class="pending-tag" *ngFor="let v of pendingValues; let vi = index">
-                      {{ v }}
-                      <button class="tag-remove" (click)="removePendingValue(vi)" type="button">×</button>
-                    </span>
-                  </div>
-                  <input
-                    type="text"
-                    class="editor-input"
-                    [(ngModel)]="pendingInputText"
-                    [placeholder]="'cockpit.processes.globalSearch.valuePlaceholder' | translate"
-                    (keydown)="onPendingInputKeydown($event)"
-                    (paste)="onPendingInputPaste($event)"
-                    autofocus
-                  />
-                </div>
-              </ng-container>
+  <!-- Business Key / Instance ID -->
+  <div class="editor-popover-body" *ngIf="activeEditorType === 'businessKey' || activeEditorType === 'instanceId'"
+       (keydown.enter)="confirmCriterion()">
+    <app-multi-value-chip-input
+      [(values)]="pendingValues"
+      [placeholder]="'cockpit.processes.globalSearch.valuePlaceholder' | translate"
+      [autofocus]="true"
+      (emptyEnter)="confirmCriterion()"
+      (keydown.enter)="$event.stopPropagation()"
+    ></app-multi-value-chip-input>
+  </div>
 
-              <!-- State -->
-              <ng-container *ngIf="activeEditorType === 'state'">
-                <div class="state-dropdown-wrapper">
+  <!-- State -->
+  <div class="editor-popover-body editor-popover-body--state" *ngIf="activeEditorType === 'state'"
+       (keydown.enter)="$event.preventDefault(); confirmCriterion()">
+    <div class="state-checklist">
+      <button class="state-row" [class.state-row--selected]="pendingStateValues.includes('active')"
+              (click)="toggleStateValue('active')" type="button">
+        <span class="state-dot state-dot--active"></span>
+        <span class="state-row-label" [class.is-selected]="pendingStateValues.includes('active')">
+          {{ 'cockpit.processes.filters.stateActive' | translate }}
+        </span>
+        <fa-icon *ngIf="pendingStateValues.includes('active')" [icon]="faCheck" class="state-row-check"></fa-icon>
+      </button>
+      <button class="state-row" [class.state-row--selected]="pendingStateValues.includes('suspended')"
+              (click)="toggleStateValue('suspended')" type="button">
+        <span class="state-dot state-dot--suspended"></span>
+        <span class="state-row-label" [class.is-selected]="pendingStateValues.includes('suspended')">
+          {{ 'cockpit.processes.filters.stateSuspended' | translate }}
+        </span>
+        <fa-icon *ngIf="pendingStateValues.includes('suspended')" [icon]="faCheck" class="state-row-check"></fa-icon>
+      </button>
+      <button class="state-row" [class.state-row--selected]="pendingStateValues.includes('completed')"
+              (click)="toggleStateValue('completed')" type="button">
+        <span class="state-dot state-dot--completed"></span>
+        <span class="state-row-label" [class.is-selected]="pendingStateValues.includes('completed')">
+          {{ 'cockpit.processes.filters.stateCompleted' | translate }}
+        </span>
+        <fa-icon *ngIf="pendingStateValues.includes('completed')" [icon]="faCheck" class="state-row-check"></fa-icon>
+      </button>
+      <button class="state-row" [class.state-row--selected]="pendingStateValues.includes('terminated')"
+              (click)="toggleStateValue('terminated')" type="button">
+        <span class="state-dot state-dot--terminated"></span>
+        <span class="state-row-label" [class.is-selected]="pendingStateValues.includes('terminated')">
+          {{ 'cockpit.processes.filters.stateTerminated' | translate }}
+        </span>
+        <fa-icon *ngIf="pendingStateValues.includes('terminated')" [icon]="faCheck" class="state-row-check"></fa-icon>
+      </button>
+    </div>
+  </div>
 
-                  <!-- Trigger -->
-                  <button class="state-dropdown-trigger"
-                          [class.state-dropdown-trigger--open]="showStateDropdown"
-                          (click)="toggleStateDropdown($event)"
-                          type="button">
-                    <span class="state-trigger-dot"
-                          [class.state-trigger-dot--active]="pendingStateValue === 'active'"
-                          [class.state-trigger-dot--suspended]="pendingStateValue === 'suspended'"
-                          [class.state-trigger-dot--completed]="pendingStateValue === 'completed'"
-                          [class.state-trigger-dot--terminated]="pendingStateValue === 'terminated'">
-                    </span>
-                    <span class="state-trigger-label">
-                      <ng-container *ngIf="pendingStateValue === 'active'">{{ 'cockpit.processes.filters.stateActive' | translate }}</ng-container>
-                      <ng-container *ngIf="pendingStateValue === 'suspended'">{{ 'cockpit.processes.filters.stateSuspended' | translate }}</ng-container>
-                      <ng-container *ngIf="pendingStateValue === 'completed'">{{ 'cockpit.processes.filters.stateCompleted' | translate }}</ng-container>
-                      <ng-container *ngIf="pendingStateValue === 'terminated'">{{ 'cockpit.processes.filters.stateTerminated' | translate }}</ng-container>
-                    </span>
-                    <fa-icon [icon]="faChevronDown" class="state-trigger-chevron"
-                             [class.state-trigger-chevron--open]="showStateDropdown"></fa-icon>
-                  </button>
+  <!-- Date filters -->
+  <div class="editor-popover-body" *ngIf="activeEditorType === 'startedAfter' || activeEditorType === 'startedBefore' || activeEditorType === 'finishedAfter' || activeEditorType === 'finishedBefore'">
+    <input type="datetime-local" class="editor-input" [(ngModel)]="pendingDateValue" />
+  </div>
 
-                  <!-- Dropdown list -->
-                  <div class="state-dropdown" *ngIf="showStateDropdown" role="listbox">
+  <!-- Variable -->
+  <div class="editor-popover-body" *ngIf="activeEditorType === 'variable'"
+       (keydown.enter)="confirmCriterion()">
+    <div class="editor-row editor-row--variable">
+      <input
+        type="text"
+        class="editor-input editor-input--name"
+        [(ngModel)]="pendingVariableName"
+        [placeholder]="'cockpit.processes.filters.variableName' | translate"
+      />
+      <select [(ngModel)]="pendingVariableOperator" class="editor-select editor-select--operator">
+        <option value="eq">=</option>
+        <option value="neq">&#x2260;</option>
+        <option value="gt">&gt;</option>
+        <option value="gteq">&#x2265;</option>
+        <option value="lt">&lt;</option>
+        <option value="lteq">&#x2264;</option>
+        <option value="like">~</option>
+      </select>
+      <div class="editor-values-col">
+        <app-multi-value-chip-input
+          [(values)]="pendingValues"
+          [placeholder]="'cockpit.processes.filters.variableValue' | translate"
+          (emptyEnter)="confirmCriterion()"
+          (keydown.enter)="$event.stopPropagation()"
+        ></app-multi-value-chip-input>
+      </div>
+    </div>
+    <p class="editor-hint" *ngIf="pendingVariableOperator === 'like'">
+      ~ only works reliably on text variables
+    </p>
+  </div>
 
-                    <button class="state-option state-option--active"
-                            [class.state-option--selected]="pendingStateValue === 'active'"
-                            (click)="selectState('active', $event)"
-                            type="button" role="option">
-                      <span class="state-option-icon-wrap">
-                        <fa-icon [icon]="faPlayCircle"></fa-icon>
-                      </span>
-                      <span class="state-option-label">{{ 'cockpit.processes.filters.stateActive' | translate }}</span>
-                      <fa-icon [icon]="faCheck" class="state-option-check" *ngIf="pendingStateValue === 'active'"></fa-icon>
-                    </button>
-
-                    <button class="state-option state-option--suspended"
-                            [class.state-option--selected]="pendingStateValue === 'suspended'"
-                            (click)="selectState('suspended', $event)"
-                            type="button" role="option">
-                      <span class="state-option-icon-wrap">
-                        <fa-icon [icon]="faPauseCircle"></fa-icon>
-                      </span>
-                      <span class="state-option-label">{{ 'cockpit.processes.filters.stateSuspended' | translate }}</span>
-                      <fa-icon [icon]="faCheck" class="state-option-check" *ngIf="pendingStateValue === 'suspended'"></fa-icon>
-                    </button>
-
-                    <button class="state-option state-option--completed"
-                            [class.state-option--selected]="pendingStateValue === 'completed'"
-                            (click)="selectState('completed', $event)"
-                            type="button" role="option">
-                      <span class="state-option-icon-wrap">
-                        <fa-icon [icon]="faCheckCircle"></fa-icon>
-                      </span>
-                      <span class="state-option-label">{{ 'cockpit.processes.filters.stateCompleted' | translate }}</span>
-                      <fa-icon [icon]="faCheck" class="state-option-check" *ngIf="pendingStateValue === 'completed'"></fa-icon>
-                    </button>
-
-                    <button class="state-option state-option--terminated"
-                            [class.state-option--selected]="pendingStateValue === 'terminated'"
-                            (click)="selectState('terminated', $event)"
-                            type="button" role="option">
-                      <span class="state-option-icon-wrap">
-                        <fa-icon [icon]="faTimesCircle"></fa-icon>
-                      </span>
-                      <span class="state-option-label">{{ 'cockpit.processes.filters.stateTerminated' | translate }}</span>
-                      <fa-icon [icon]="faCheck" class="state-option-check" *ngIf="pendingStateValue === 'terminated'"></fa-icon>
-                    </button>
-
-                  </div>
-                </div>
-              </ng-container>
-
-              <!-- Date filters -->
-              <ng-container *ngIf="activeEditorType === 'startedAfter' || activeEditorType === 'startedBefore' || activeEditorType === 'finishedAfter' || activeEditorType === 'finishedBefore'">
-                <div class="editor-row">
-                  <input type="datetime-local" class="editor-input" [(ngModel)]="pendingDateValue" />
-                </div>
-              </ng-container>
-
-              <!-- Variable -->
-              <ng-container *ngIf="activeEditorType === 'variable'">
-                <div class="editor-row editor-row--variable">
-                  <input
-                    type="text"
-                    class="editor-input editor-input--name"
-                    [(ngModel)]="pendingVariableName"
-                    [placeholder]="'cockpit.processes.filters.variableName' | translate"
-                  />
-                  <select [(ngModel)]="pendingVariableOperator" class="editor-select editor-select--operator">
-                    <option value="eq">=</option>
-                    <option value="neq">&#x2260;</option>
-                    <option value="gt">&gt;</option>
-                    <option value="gteq">&#x2265;</option>
-                    <option value="lt">&lt;</option>
-                    <option value="lteq">&#x2264;</option>
-                    <option value="like">~</option>
-                  </select>
-                  <div class="editor-values-col">
-                    <div class="pending-tags" *ngIf="pendingValues.length > 0">
-                      <span class="pending-tag" *ngFor="let v of pendingValues; let vi = index">
-                        {{ v }}
-                        <button class="tag-remove" (click)="removePendingValue(vi)" type="button">×</button>
-                      </span>
-                    </div>
-                    <input
-                      type="text"
-                      class="editor-input"
-                      [(ngModel)]="pendingInputText"
-                      [placeholder]="'cockpit.processes.filters.variableValue' | translate"
-                      (keydown)="onPendingInputKeydown($event)"
-                      (paste)="onPendingInputPaste($event)"
-                    />
-                  </div>
-                </div>
-              </ng-container>
-
-              <div class="editor-actions">
-                <button class="btn-editor-confirm" (click)="confirmCriterion()" type="button">
-                  {{ 'cockpit.processes.filters.apply' | translate }}
-                </button>
-                <button class="btn-editor-cancel" (click)="cancelCriterion()" type="button">
-                  {{ 'common.cancel' | translate }}
-                </button>
-              </div>
-            </div>
+  <div class="editor-popover-actions" [class.editor-popover-actions--state]="activeEditorType === 'state'">
+    <span class="state-count-label" *ngIf="activeEditorType === 'state'">
+      {{ pendingStateValues.length }} selected
+    </span>
+    <div class="editor-actions-btns">
+      <button class="btn-editor-cancel-icon" (click)="cancelCriterion()" type="button" title="Cancel (Esc)">
+        <fa-icon [icon]="faTimes"></fa-icon>
+      </button>
+      <button class="btn-editor-confirm-icon" (click)="confirmCriterion()" type="button" title="Apply"
+              [disabled]="activeEditorType === 'state' && pendingStateValues.length === 0 && editingPillIndex === null">
+        <fa-icon [icon]="faCheck"></fa-icon>
+      </button>
+    </div>
+  </div>
+</ng-template>
 
             <!-- Variable case-sensitivity options -->
             <div class="case-options" *ngIf="hasVariableFilter()">
