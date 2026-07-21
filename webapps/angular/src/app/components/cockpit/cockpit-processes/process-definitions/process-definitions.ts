@@ -29,6 +29,12 @@ interface PendingVariableLine {
   values: string[];
 }
 
+interface VariableConflictInfo {
+  name: string;
+  type: 'generic' | 'impossible';
+  detail: string;
+}
+
 import { CockpitHeaderComponent, BreadcrumbItem } from '../../../../shared/cockpit-header/cockpit-header';
 import { COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS } from '../../../../shared/cockpit-menu';
 import {
@@ -699,19 +705,77 @@ export class ProcessDefinitionsComponent implements OnInit, OnDestroy {
     return this.pendingVariableLines.filter(l => l.name.trim() && l.values.length > 0).length;
   }
 
-  get variableNameConflicts(): string[] {
-    const nameOps = new Map<string, Set<string>>();
+  get variableConflicts(): VariableConflictInfo[] {
+    const nameLines = new Map<string, PendingVariableLine[]>();
     for (const line of this.pendingVariableLines) {
       const name = line.name.trim().toLowerCase();
       if (!name) continue;
-      if (!nameOps.has(name)) nameOps.set(name, new Set());
-      nameOps.get(name)!.add(line.operator);
+      if (!nameLines.has(name)) nameLines.set(name, []);
+      nameLines.get(name)!.push(line);
     }
-    const conflicts: string[] = [];
-    for (const [name, ops] of nameOps) {
-      if (ops.size > 1) conflicts.push(name);
+    const conflicts: VariableConflictInfo[] = [];
+    for (const [name, lines] of nameLines) {
+      const ops = new Set(lines.map(l => l.operator));
+      if (ops.size <= 1) continue;
+
+      const numericOps = new Set<VariableOperator>(['eq', 'neq', 'gt', 'gteq', 'lt', 'lteq']);
+      const allNumericOps = lines.every(l => numericOps.has(l.operator));
+      const allNumericValues = lines.every(l => {
+        if (l.values.length !== 1) return false;
+        const n = Number(l.values[0].trim());
+        return l.values[0].trim() !== '' && !isNaN(n);
+      });
+
+      if (allNumericOps && allNumericValues) {
+        const conditions = lines.map(l => ({ op: l.operator, val: Number(l.values[0].trim()) }));
+        if (!this.conditionsIntersect(conditions)) {
+          const detail = conditions
+            .map(c => `${this.getOperatorLabel(c.op as VariableOperator)} ${c.val}`)
+            .join(' and ');
+          conflicts.push({ name, type: 'impossible', detail });
+        }
+      } else {
+        conflicts.push({ name, type: 'generic', detail: '' });
+      }
     }
     return conflicts;
+  }
+
+  private conditionsIntersect(conditions: Array<{ op: string; val: number }>): boolean {
+    let lo = -Infinity, hi = Infinity;
+    let loStrict = false, hiStrict = false;
+    const eqs: number[] = [], neqs: number[] = [];
+
+    for (const { op, val } of conditions) {
+      if (op === 'gt') {
+        if (val > lo || (val === lo && !loStrict)) { lo = val; loStrict = true; }
+      } else if (op === 'gteq') {
+        if (val > lo) { lo = val; loStrict = false; }
+      } else if (op === 'lt') {
+        if (val < hi || (val === hi && !hiStrict)) { hi = val; hiStrict = true; }
+      } else if (op === 'lteq') {
+        if (val < hi) { hi = val; hiStrict = false; }
+      } else if (op === 'eq') {
+        eqs.push(val);
+      } else if (op === 'neq') {
+        neqs.push(val);
+      }
+    }
+
+    if (lo > hi) return false;
+    if (lo === hi && (loStrict || hiStrict)) return false;
+
+    if (eqs.length > 0) {
+      const firstEq = eqs[0];
+      if (eqs.some(v => v !== firstEq)) return false;
+      if (firstEq < lo || (firstEq === lo && loStrict)) return false;
+      if (firstEq > hi || (firstEq === hi && hiStrict)) return false;
+      if (neqs.includes(firstEq)) return false;
+    }
+
+    if (lo === hi && !loStrict && !hiStrict && neqs.includes(lo)) return false;
+
+    return true;
   }
 
   removePill(index: number): void {

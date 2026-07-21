@@ -353,11 +353,17 @@
         </p>
       </ng-container>
     </div>
-    <div class="variable-conflict-warning" *ngIf="variableNameConflicts.length > 0">
+    <div *ngFor="let conflict of variableConflicts"
+         class="variable-conflict-warning"
+         [class.variable-conflict-warning--impossible]="conflict.type === 'impossible'">
       <fa-icon [icon]="faExclamationTriangle" class="variable-conflict-icon"></fa-icon>
-      <span>
-        <strong>{{ variableNameConflicts.join(', ') }}</strong>
-        used more than once with different operators — results may be empty if conditions conflict
+      <span *ngIf="conflict.type === 'impossible'">
+        <strong>{{ conflict.name }}</strong>
+        {{ 'cockpit.processes.globalSearch.conflictImpossible' | translate }}: {{ conflict.detail }}
+      </span>
+      <span *ngIf="conflict.type === 'generic'">
+        <strong>{{ conflict.name }}</strong>
+        {{ 'cockpit.processes.globalSearch.conflictGeneric' | translate }}
       </span>
     </div>
   </div>

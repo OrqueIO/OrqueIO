@@ -1385,24 +1385,23 @@ describe('ProcessDefinitionsComponent', () => {
   });
 
   // ===========================
-  // variableNameConflicts getter
+  // variableConflicts getter
   // ===========================
 
-  describe('variableNameConflicts getter', () => {
+  describe('variableConflicts getter', () => {
     beforeEach(() => { fixture.detectChanges(); });
 
-    it('should return conflicting name when two lines share the same name but different operators', () => {
+    it('should return no conflict when valid range: gteq 2 and lt 100', () => {
       component.selectCriteriaType('variables');
-      component.pendingVariableLines[0].name = 'orderId';
-      component.pendingVariableLines[0].operator = 'eq';
-      component.pendingVariableLines[0].values = ['1'];
+      component.pendingVariableLines[0].name = 'amount';
+      component.pendingVariableLines[0].operator = 'gteq';
+      component.pendingVariableLines[0].values = ['2'];
       component.addVariableLine();
-      component.pendingVariableLines[1].name = 'orderId';
-      component.pendingVariableLines[1].operator = 'gteq';
-      component.pendingVariableLines[1].values = ['0'];
-      const conflicts = component.variableNameConflicts;
-      expect(conflicts.length).toBe(1);
-      expect(conflicts[0]).toBe('orderid');
+      component.pendingVariableLines[1].name = 'amount';
+      component.pendingVariableLines[1].operator = 'lt';
+      component.pendingVariableLines[1].values = ['100'];
+      const conflicts = component.variableConflicts;
+      expect(conflicts.length).toBe(0);
     });
 
     it('should return no conflicts when two lines share the same name AND same operator', () => {
@@ -1414,8 +1413,68 @@ describe('ProcessDefinitionsComponent', () => {
       component.pendingVariableLines[1].name = 'orderId';
       component.pendingVariableLines[1].operator = 'eq';
       component.pendingVariableLines[1].values = ['2'];
-      const conflicts = component.variableNameConflicts;
+      const conflicts = component.variableConflicts;
       expect(conflicts.length).toBe(0);
+    });
+
+    it('should return impossible conflict when gteq 10 and lteq 5', () => {
+      component.selectCriteriaType('variables');
+      component.pendingVariableLines[0].name = 'score';
+      component.pendingVariableLines[0].operator = 'gteq';
+      component.pendingVariableLines[0].values = ['10'];
+      component.addVariableLine();
+      component.pendingVariableLines[1].name = 'score';
+      component.pendingVariableLines[1].operator = 'lteq';
+      component.pendingVariableLines[1].values = ['5'];
+      const conflicts = component.variableConflicts;
+      expect(conflicts.length).toBe(1);
+      expect(conflicts[0].name).toBe('score');
+      expect(conflicts[0].type).toBe('impossible');
+      expect(conflicts[0].detail).toContain('≥ 10');
+      expect(conflicts[0].detail).toContain('≤ 5');
+    });
+
+    it('should return impossible conflict when gt 5 and lt 5 (strict bounds exclude each other)', () => {
+      component.selectCriteriaType('variables');
+      component.pendingVariableLines[0].name = 'qty';
+      component.pendingVariableLines[0].operator = 'gt';
+      component.pendingVariableLines[0].values = ['5'];
+      component.addVariableLine();
+      component.pendingVariableLines[1].name = 'qty';
+      component.pendingVariableLines[1].operator = 'lt';
+      component.pendingVariableLines[1].values = ['5'];
+      const conflicts = component.variableConflicts;
+      expect(conflicts.length).toBe(1);
+      expect(conflicts[0].type).toBe('impossible');
+    });
+
+    it('should return generic conflict when like operator is involved', () => {
+      component.selectCriteriaType('variables');
+      component.pendingVariableLines[0].name = 'label';
+      component.pendingVariableLines[0].operator = 'like';
+      component.pendingVariableLines[0].values = ['foo'];
+      component.addVariableLine();
+      component.pendingVariableLines[1].name = 'label';
+      component.pendingVariableLines[1].operator = 'eq';
+      component.pendingVariableLines[1].values = ['bar'];
+      const conflicts = component.variableConflicts;
+      expect(conflicts.length).toBe(1);
+      expect(conflicts[0].name).toBe('label');
+      expect(conflicts[0].type).toBe('generic');
+    });
+
+    it('should return generic conflict when value is non-numeric for a comparison operator', () => {
+      component.selectCriteriaType('variables');
+      component.pendingVariableLines[0].name = 'invoiceNumber';
+      component.pendingVariableLines[0].operator = 'gteq';
+      component.pendingVariableLines[0].values = ['tg'];
+      component.addVariableLine();
+      component.pendingVariableLines[1].name = 'invoiceNumber';
+      component.pendingVariableLines[1].operator = 'lt';
+      component.pendingVariableLines[1].values = ['100'];
+      const conflicts = component.variableConflicts;
+      expect(conflicts.length).toBe(1);
+      expect(conflicts[0].type).toBe('generic');
     });
   });
 

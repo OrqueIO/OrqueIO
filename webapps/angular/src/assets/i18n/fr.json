@@ -336,6 +336,8 @@
   "cockpit.processes.globalSearch.chipInputHint": "Virgule, Entrée ou clic ailleurs pour valider · coller une liste fonctionne aussi",
   "cockpit.processes.globalSearch.likeHint": "Fonctionne uniquement sur les variables texte — sans effet sur les variables numériques",
   "cockpit.processes.globalSearch.comparisonValueError": "Valeur numérique requise pour cet opérateur",
+  "cockpit.processes.globalSearch.conflictImpossible": "est impossible — aucune valeur ne peut satisfaire",
+  "cockpit.processes.globalSearch.conflictGeneric": "utilisé avec des opérateurs différents — les résultats peuvent être vides si les conditions sont contradictoires",
   "cockpit.processes.globalSearch.ignoreCase.label": "Pour les variables, ignorer la casse du",
   "cockpit.processes.globalSearch.ignoreCase.name": "nom",
   "cockpit.processes.globalSearch.ignoreCase.value": "valeur",

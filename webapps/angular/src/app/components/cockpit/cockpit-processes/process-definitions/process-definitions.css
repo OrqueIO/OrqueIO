@@ -1730,6 +1730,16 @@
   color: var(--color-warning, #f59e0b);
 }
 
+.variable-conflict-warning--impossible {
+  border-top-color: var(--color-error-border, #ef4444);
+  background: var(--color-error-bg, rgba(239,68,68,0.08));
+  color: var(--color-error-text, #7f1d1d);
+}
+
+.variable-conflict-warning--impossible .variable-conflict-icon {
+  color: var(--color-error, #ef4444);
+}
+
 /* ===================================================
    CUSTOM OPERATOR DROPDOWN (Variables popover)
    Mirrors the State checklist style — single-select
