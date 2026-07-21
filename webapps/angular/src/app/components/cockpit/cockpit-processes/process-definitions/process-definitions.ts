@@ -47,6 +47,8 @@ import {
 } from '../../../../services/cockpit.service';
 import { NavMenuService } from '../../../../services/nav-menu.service';
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
+import { TranslateService } from '../../../../i18n/translate.service';
+import { dateRangeConflicts } from '../../../../utils/search-validation';
 import { ClipboardDirective } from '../../../../shared/clipboard-directive/clipboard.directive';
 import { MultiValueChipInputComponent } from '../../../../shared/multi-value-chip-input/multi-value-chip-input';
 
@@ -74,6 +76,7 @@ export class ProcessDefinitionsComponent implements OnInit, OnDestroy {
   private cdr = inject(ChangeDetectorRef);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
+  private translateService = inject(TranslateService);
 
   // Icons
   faSpinner = faSpinner;
@@ -705,6 +708,26 @@ export class ProcessDefinitionsComponent implements OnInit, OnDestroy {
     return this.pendingVariableLines.filter(l => l.name.trim() && l.values.length > 0).length;
   }
 
+  get startedDateConflict(): boolean {
+    const after  = this.activePills.find(p => p.field === 'startedAfter')?.values[0];
+    const before = this.activePills.find(p => p.field === 'startedBefore')?.values[0];
+    return dateRangeConflicts(after, before);
+  }
+
+  get finishedDateConflict(): boolean {
+    const after  = this.activePills.find(p => p.field === 'finishedAfter')?.values[0];
+    const before = this.activePills.find(p => p.field === 'finishedBefore')?.values[0];
+    return dateRangeConflicts(after, before);
+  }
+
+  get incidentsWithTerminalStateConflict(): boolean {
+    if (!this.activePills.some(p => p.field === 'withIncidents')) return false;
+    const statePill = this.activePills.find(p => p.field === 'state');
+    if (!statePill || statePill.values.length === 0) return false;
+    const activeStates = new Set(['active', 'suspended']);
+    return !statePill.values.some(v => activeStates.has(v));
+  }
+
   get variableConflicts(): VariableConflictInfo[] {
     const nameLines = new Map<string, PendingVariableLine[]>();
     for (const line of this.pendingVariableLines) {
@@ -785,18 +808,19 @@ export class ProcessDefinitionsComponent implements OnInit, OnDestroy {
   }
 
   getPillLabel(pill: MultiValueFilter): string {
+    const t = (key: string, p?: Record<string, string>) => this.translateService.instant(key, p);
     switch (pill.field) {
-      case 'businessKey':    return `Business Key: ${pill.values.join(', ')}`;
-      case 'instanceId':     return `Instance ID: ${pill.values.join(', ')}`;
-      case 'state':          return `State: ${pill.values.map(v => this.getStateDisplayLabel(v)).join(', ')}`;
-      case 'withIncidents':  return 'With incidents';
-      case 'startedAfter':   return `Started after: ${this.formatDisplayDate(pill.values[0])}`;
-      case 'startedBefore':  return `Started before: ${this.formatDisplayDate(pill.values[0])}`;
-      case 'finishedAfter':  return `Finished after: ${this.formatDisplayDate(pill.values[0])}`;
-      case 'finishedBefore': return `Finished before: ${this.formatDisplayDate(pill.values[0])}`;
+      case 'businessKey':    return t('cockpit.processes.globalSearch.pill.businessKey', { value: pill.values.join(', ') });
+      case 'instanceId':     return t('cockpit.processes.globalSearch.pill.instanceId', { value: pill.values.join(', ') });
+      case 'state':          return t('cockpit.processes.globalSearch.pill.state', { value: pill.values.map(v => this.getStateDisplayLabel(v)).join(', ') });
+      case 'withIncidents':  return t('cockpit.processes.globalSearch.pill.withIncidents');
+      case 'startedAfter':   return t('cockpit.processes.globalSearch.pill.startedAfter', { value: this.formatDisplayDate(pill.values[0]) });
+      case 'startedBefore':  return t('cockpit.processes.globalSearch.pill.startedBefore', { value: this.formatDisplayDate(pill.values[0]) });
+      case 'finishedAfter':  return t('cockpit.processes.globalSearch.pill.finishedAfter', { value: this.formatDisplayDate(pill.values[0]) });
+      case 'finishedBefore': return t('cockpit.processes.globalSearch.pill.finishedBefore', { value: this.formatDisplayDate(pill.values[0]) });
       case 'variables': {
         const n = pill.variableLines?.filter(l => l.variableName).length ?? 0;
-        return `Variables (${n})`;
+        return t('cockpit.processes.globalSearch.pill.variables', { count: String(n) });
       }
       case 'variable': {
         const op = this.getOperatorLabel(pill.variableOperator || 'eq');
@@ -983,12 +1007,13 @@ export class ProcessDefinitionsComponent implements OnInit, OnDestroy {
   }
 
   getInstanceStateLabel(instance: ProcessInstance): string {
+    const t = (key: string) => this.translateService.instant(key);
     switch (this.computeInstanceState(instance)) {
-      case 'running':    return 'Running';
-      case 'suspended':  return 'Suspended';
-      case 'completed':  return 'Completed';
-      case 'terminated': return 'Terminated';
-      case 'incidents':  return 'Incidents';
+      case 'running':    return t('cockpit.processes.globalSearch.instanceStateRunning');
+      case 'suspended':  return t('cockpit.processes.filters.stateSuspended');
+      case 'completed':  return t('cockpit.processes.filters.stateCompleted');
+      case 'terminated': return t('cockpit.processes.filters.stateTerminated');
+      case 'incidents':  return t('cockpit.processes.globalSearch.instanceStateWithIncidents');
       default:           return '';
     }
   }
@@ -1017,10 +1042,14 @@ export class ProcessDefinitionsComponent implements OnInit, OnDestroy {
   }
 
   private getStateDisplayLabel(state: string): string {
-    const labels: Record<string, string> = {
-      active: 'Active', suspended: 'Suspended', completed: 'Completed', terminated: 'Terminated'
+    const keyMap: Record<string, string> = {
+      active: 'cockpit.processes.filters.stateActive',
+      suspended: 'cockpit.processes.filters.stateSuspended',
+      completed: 'cockpit.processes.filters.stateCompleted',
+      terminated: 'cockpit.processes.filters.stateTerminated'
     };
-    return labels[state] || state;
+    const key = keyMap[state];
+    return key ? this.translateService.instant(key) : state;
   }
 
   getOperatorLabel(op: VariableOperator): string {

@@ -27,10 +27,10 @@
               <div class="pill-wrapper" *ngFor="let pill of activePills; let i = index">
                 <div class="pill">
                   <fa-icon [icon]="getPillIcon(pill)" class="pill-icon"></fa-icon>
-                  <button class="pill-text-btn" (click)="startEditPill(i, $event)" type="button" title="Edit">
+                  <button class="pill-text-btn" (click)="startEditPill(i, $event)" type="button" [title]="'cockpit.processes.globalSearch.editCriteria' | translate">
                     {{ getPillLabel(pill) }}
                   </button>
-                  <button class="pill-remove" (click)="removePill(i)" type="button" title="Remove">
+                  <button class="pill-remove" (click)="removePill(i)" type="button" [title]="'common.remove' | translate">
                     <fa-icon [icon]="faTimes"></fa-icon>
                   </button>
                 </div>
@@ -53,12 +53,12 @@
                   <!-- Dropdown header -->
                   <div class="criteria-dropdown-header">
                     <fa-icon [icon]="faFilter" class="criteria-dropdown-header-icon"></fa-icon>
-                    <span class="criteria-dropdown-header-title">Add filter criteria</span>
+                    <span class="criteria-dropdown-header-title">{{ 'cockpit.processes.globalSearch.dropdownTitle' | translate }}</span>
                   </div>
 
                   <!-- Group: Instance -->
                   <div class="criteria-group">
-                    <div class="criteria-group-label">Instance</div>
+                    <div class="criteria-group-label">{{ 'cockpit.processes.globalSearch.groupInstance' | translate }}</div>
 
                     <button class="criteria-option" (click)="selectCriteriaType('businessKey')" type="button" role="menuitem">
                       <span class="criteria-icon-wrap criteria-icon-wrap--blue">
@@ -66,7 +66,7 @@
                       </span>
                       <span class="criteria-option-body">
                         <span class="criteria-option-name">{{ 'cockpit.processes.filters.businessKey' | translate }}</span>
-                        <span class="criteria-option-desc">Filter by process business key</span>
+                        <span class="criteria-option-desc">{{ 'cockpit.processes.globalSearch.desc.businessKey' | translate }}</span>
                       </span>
                     </button>
 
@@ -76,7 +76,7 @@
                       </span>
                       <span class="criteria-option-body">
                         <span class="criteria-option-name">{{ 'cockpit.processes.filters.instanceId' | translate }}</span>
-                        <span class="criteria-option-desc">Filter by instance identifier</span>
+                        <span class="criteria-option-desc">{{ 'cockpit.processes.globalSearch.desc.instanceId' | translate }}</span>
                       </span>
                     </button>
 
@@ -86,7 +86,7 @@
                       </span>
                       <span class="criteria-option-body">
                         <span class="criteria-option-name">{{ 'cockpit.processes.filters.state' | translate }}</span>
-                        <span class="criteria-option-desc">Active, suspended, completed…</span>
+                        <span class="criteria-option-desc">{{ 'cockpit.processes.globalSearch.desc.state' | translate }}</span>
                       </span>
                     </button>
 
@@ -96,7 +96,7 @@
                       </span>
                       <span class="criteria-option-body">
                         <span class="criteria-option-name">{{ 'cockpit.processes.filters.withIncidents' | translate }}</span>
-                        <span class="criteria-option-desc">Show instances with open incidents</span>
+                        <span class="criteria-option-desc">{{ 'cockpit.processes.globalSearch.desc.withIncidents' | translate }}</span>
                       </span>
                     </button>
                   </div>
@@ -105,7 +105,7 @@
 
                   <!-- Group: Dates -->
                   <div class="criteria-group">
-                    <div class="criteria-group-label">Dates</div>
+                    <div class="criteria-group-label">{{ 'cockpit.processes.globalSearch.groupDates' | translate }}</div>
 
                     <button class="criteria-option" (click)="selectCriteriaType('startedAfter')" type="button" role="menuitem">
                       <span class="criteria-icon-wrap criteria-icon-wrap--teal">
@@ -113,7 +113,7 @@
                       </span>
                       <span class="criteria-option-body">
                         <span class="criteria-option-name">{{ 'cockpit.processes.filters.startedAfter' | translate }}</span>
-                        <span class="criteria-option-desc">Started after a given date</span>
+                        <span class="criteria-option-desc">{{ 'cockpit.processes.globalSearch.desc.startedAfter' | translate }}</span>
                       </span>
                     </button>
 
@@ -123,7 +123,7 @@
                       </span>
                       <span class="criteria-option-body">
                         <span class="criteria-option-name">{{ 'cockpit.processes.filters.startedBefore' | translate }}</span>
-                        <span class="criteria-option-desc">Started before a given date</span>
+                        <span class="criteria-option-desc">{{ 'cockpit.processes.globalSearch.desc.startedBefore' | translate }}</span>
                       </span>
                     </button>
 
@@ -133,7 +133,7 @@
                       </span>
                       <span class="criteria-option-body">
                         <span class="criteria-option-name">{{ 'cockpit.processes.filters.finishedAfter' | translate }}</span>
-                        <span class="criteria-option-desc">Finished after a given date</span>
+                        <span class="criteria-option-desc">{{ 'cockpit.processes.globalSearch.desc.finishedAfter' | translate }}</span>
                       </span>
                     </button>
 
@@ -143,7 +143,7 @@
                       </span>
                       <span class="criteria-option-body">
                         <span class="criteria-option-name">{{ 'cockpit.processes.filters.finishedBefore' | translate }}</span>
-                        <span class="criteria-option-desc">Finished before a given date</span>
+                        <span class="criteria-option-desc">{{ 'cockpit.processes.globalSearch.desc.finishedBefore' | translate }}</span>
                       </span>
                     </button>
                   </div>
@@ -152,15 +152,15 @@
 
                   <!-- Group: Variables -->
                   <div class="criteria-group">
-                    <div class="criteria-group-label">Variables</div>
+                    <div class="criteria-group-label">{{ 'cockpit.processes.filters.variable' | translate }}</div>
 
                     <button class="criteria-option" (click)="selectCriteriaType('variables')" type="button" role="menuitem">
                       <span class="criteria-icon-wrap criteria-icon-wrap--indigo">
                         <fa-icon [icon]="faCode"></fa-icon>
                       </span>
                       <span class="criteria-option-body">
-                        <span class="criteria-option-name">Variables</span>
-                        <span class="criteria-option-desc">Match by variable name and value</span>
+                        <span class="criteria-option-name">{{ 'cockpit.processes.filters.variable' | translate }}</span>
+                        <span class="criteria-option-desc">{{ 'cockpit.processes.globalSearch.desc.variables' | translate }}</span>
                       </span>
                     </button>
                   </div>
@@ -184,16 +184,16 @@
     <span class="editor-popover-title">{{ ('cockpit.processes.filters.' + activeEditorType) | translate }}</span>
   </div>
   <div class="state-popover-header" *ngIf="activeEditorType === 'state'">
-    <span class="state-popover-label">STATE</span>
-    <button class="state-popover-clear" (click)="pendingStateValues = []" type="button">Clear</button>
+    <span class="state-popover-label">{{ 'cockpit.processes.filters.state' | translate }}</span>
+    <button class="state-popover-clear" (click)="pendingStateValues = []" type="button">{{ 'cockpit.processes.globalSearch.clearBtn' | translate }}</button>
   </div>
   <div class="variables-popover-header" *ngIf="activeEditorType === 'variables'">
     <div class="variables-popover-title-row">
       <fa-icon [icon]="faCode" class="editor-popover-icon editor-popover-icon--variables"></fa-icon>
-      <span class="editor-popover-title">Variables</span>
+      <span class="editor-popover-title">{{ 'cockpit.processes.filters.variable' | translate }}</span>
     </div>
     <button class="btn-add-variable" (click)="addVariableLine()" type="button">
-      <fa-icon [icon]="faPlus"></fa-icon> Add variable
+      <fa-icon [icon]="faPlus"></fa-icon> {{ 'cockpit.processes.filters.addVariable' | translate }}
     </button>
   </div>
   <p class="variables-popover-hint" *ngIf="activeEditorType === 'variables'">
@@ -285,7 +285,7 @@
       </div>
     </div>
     <p class="editor-hint" *ngIf="pendingVariableOperator === 'like'">
-      ~ only works reliably on text variables
+      {{ 'cockpit.processes.globalSearch.likeHint' | translate }}
     </p>
   </div>
 
@@ -299,7 +299,7 @@
             type="text"
             class="editor-input editor-input--name"
             [(ngModel)]="line.name"
-            placeholder="Name"
+            [placeholder]="'cockpit.processes.filters.variableName' | translate"
           />
           <!-- Custom operator dropdown (single-select, styled like State checklist) -->
           <div class="op-dropdown-wrapper">
@@ -330,7 +330,7 @@
               (valuesChange)="onVariableLineValuesChange(i, $event)"
               (emptyEnter)="confirmCriterion()"
               (keydown.enter)="$event.stopPropagation()"
-              placeholder="Value"
+              [placeholder]="'cockpit.processes.filters.variableValue' | translate"
             ></app-multi-value-chip-input>
             <input
               *ngIf="!isMultiValueOperator(line.operator)"
@@ -339,10 +339,10 @@
               [class.editor-input--error]="isComparisonValueInvalid(line)"
               [value]="line.values[0] ?? ''"
               (input)="onVariableLineSingleValueChange(i, $event)"
-              placeholder="Value"
+              [placeholder]="'cockpit.processes.filters.variableValue' | translate"
             />
           </div>
-          <button class="btn-remove-line" (click)="removeVariableLine(i)" type="button" title="Remove variable">
+          <button class="btn-remove-line" (click)="removeVariableLine(i)" type="button" [title]="'cockpit.processes.globalSearch.removeVariable' | translate">
             <fa-icon [icon]="faTimes"></fa-icon>
           </button>
         </div>
@@ -373,16 +373,16 @@
 
   <div class="editor-popover-actions" [class.editor-popover-actions--state]="activeEditorType === 'state' || activeEditorType === 'variables'">
     <span class="state-count-label" *ngIf="activeEditorType === 'state'">
-      {{ pendingStateValues.length }} selected
+      {{ pendingStateValues.length }} {{ 'cockpit.processes.globalSearch.selected' | translate }}
     </span>
     <span class="state-count-label" *ngIf="activeEditorType === 'variables'">
-      {{ validVariableLineCount }} variables
+      {{ validVariableLineCount }} {{ 'cockpit.processes.globalSearch.variablesWord' | translate }}
     </span>
     <div class="editor-actions-btns">
-      <button class="btn-editor-cancel-icon" (click)="cancelCriterion()" type="button" title="Cancel (Esc)">
+      <button class="btn-editor-cancel-icon" (click)="cancelCriterion()" type="button" [title]="'cockpit.processes.globalSearch.cancelAction' | translate">
         <fa-icon [icon]="faTimes"></fa-icon>
       </button>
-      <button class="btn-editor-confirm-icon" (click)="confirmCriterion()" type="button" title="Apply"
+      <button class="btn-editor-confirm-icon" (click)="confirmCriterion()" type="button" [title]="'cockpit.processes.globalSearch.applyAction' | translate"
               [disabled]="(activeEditorType === 'state' && pendingStateValues.length === 0 && editingPillIndex === null) ||
                           (activeEditorType === 'variables' && validVariableLineCount === 0 && editingPillIndex === null) ||
                           (activeEditorType === 'variables' && hasInvalidVariableValues)">
@@ -406,6 +406,20 @@
             </div>
           </div>
 
+          <!-- Cross-criteria conflict warnings -->
+          <div *ngIf="startedDateConflict" class="variable-conflict-warning variable-conflict-warning--impossible">
+            <fa-icon [icon]="faExclamationTriangle" class="variable-conflict-icon"></fa-icon>
+            <span>{{ 'cockpit.processes.globalSearch.dateConflictStarted' | translate }}</span>
+          </div>
+          <div *ngIf="finishedDateConflict" class="variable-conflict-warning variable-conflict-warning--impossible">
+            <fa-icon [icon]="faExclamationTriangle" class="variable-conflict-icon"></fa-icon>
+            <span>{{ 'cockpit.processes.globalSearch.dateConflictFinished' | translate }}</span>
+          </div>
+          <div *ngIf="incidentsWithTerminalStateConflict" class="variable-conflict-warning">
+            <fa-icon [icon]="faExclamationTriangle" class="variable-conflict-icon"></fa-icon>
+            <span>{{ 'cockpit.processes.globalSearch.incidentsTerminalConflict' | translate }}</span>
+          </div>
+
           <!-- Search / Clear actions -->
           <div class="search-panel-actions">
             <button
@@ -422,7 +436,7 @@
               *ngIf="activePills.length > 0 || searchExecuted"
               (click)="clearSearch()"
               type="button"
-              title="Reset filters"
+              [title]="'cockpit.processes.globalSearch.resetFilters' | translate"
             >
               <fa-icon [icon]="faRotateLeft"></fa-icon>
               {{ 'cockpit.processes.globalSearch.clearBtn' | translate }}

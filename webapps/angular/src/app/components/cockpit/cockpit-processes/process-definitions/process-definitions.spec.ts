@@ -13,9 +13,30 @@ import {
   MultiValueFilter
 } from '../../../../services/cockpit.service';
 import { NavMenuService } from '../../../../services/nav-menu.service';
+import { TranslateService } from '../../../../i18n/translate.service';
 import { initTestEnvironment } from '../../../../testing/test-utils';
 import { By } from '@angular/platform-browser';
 import { MultiValueChipInputComponent } from '../../../../shared/multi-value-chip-input/multi-value-chip-input';
+
+const TEST_EN_TRANSLATIONS: Record<string, string> = {
+  'cockpit.processes.globalSearch.pill.businessKey': 'Business Key: {{value}}',
+  'cockpit.processes.globalSearch.pill.instanceId': 'Instance ID: {{value}}',
+  'cockpit.processes.globalSearch.pill.state': 'State: {{value}}',
+  'cockpit.processes.globalSearch.pill.withIncidents': 'With incidents',
+  'cockpit.processes.globalSearch.pill.startedAfter': 'Started after: {{value}}',
+  'cockpit.processes.globalSearch.pill.startedBefore': 'Started before: {{value}}',
+  'cockpit.processes.globalSearch.pill.finishedAfter': 'Finished after: {{value}}',
+  'cockpit.processes.globalSearch.pill.finishedBefore': 'Finished before: {{value}}',
+  'cockpit.processes.globalSearch.pill.variables': 'Variables ({{count}})',
+  'cockpit.processes.filters.stateActive': 'Active',
+  'cockpit.processes.filters.stateSuspended': 'Suspended',
+  'cockpit.processes.filters.stateCompleted': 'Completed',
+  'cockpit.processes.filters.stateTerminated': 'Terminated',
+  'cockpit.processes.globalSearch.instanceStateRunning': 'Running',
+  'cockpit.processes.globalSearch.instanceStateWithIncidents': 'Incidents',
+  'cockpit.processes.globalSearch.selected': 'selected',
+  'cockpit.processes.globalSearch.variablesWord': 'variables',
+};
 
 // ============================================================
 // Helper: call CockpitService.buildPayloadVariants without
@@ -400,6 +421,7 @@ describe('ProcessDefinitionsComponent', () => {
   let fixture: ComponentFixture<ProcessDefinitionsComponent>;
   let cockpitService: any;
   let navMenuService: any;
+  let translateService: TranslateService;
 
   const mockStats: ProcessDefinitionStatistics[] = [
     {
@@ -462,6 +484,9 @@ describe('ProcessDefinitionsComponent', () => {
 
     fixture = TestBed.createComponent(ProcessDefinitionsComponent);
     component = fixture.componentInstance;
+
+    translateService = TestBed.inject(TranslateService);
+    (translateService as any).translations = { en: TEST_EN_TRANSLATIONS };
   });
 
   afterEach(() => {
@@ -1870,6 +1895,95 @@ describe('ProcessDefinitionsComponent', () => {
     it('should return correct label for instanceId pill', () => {
       const pill: MultiValueFilter = { field: 'instanceId', values: ['inst-1'] };
       expect(component.getPillLabel(pill)).toBe('Instance ID: inst-1');
+    });
+  });
+
+  // ===========================
+  // Cross-criteria conflict getters
+  // ===========================
+
+  describe('startedDateConflict', () => {
+    it('should be true when startedAfter is later than startedBefore', () => {
+      component.activePills = [
+        { field: 'startedAfter',  values: ['2026-07-21T00:00:00.000+0000'] },
+        { field: 'startedBefore', values: ['2026-07-20T00:00:00.000+0000'] },
+      ];
+      expect(component.startedDateConflict).toBe(true);
+    });
+
+    it('should be false when startedAfter is earlier than startedBefore', () => {
+      component.activePills = [
+        { field: 'startedAfter',  values: ['2026-07-19T00:00:00.000+0000'] },
+        { field: 'startedBefore', values: ['2026-07-21T00:00:00.000+0000'] },
+      ];
+      expect(component.startedDateConflict).toBe(false);
+    });
+
+    it('should be false when only one of the pair is present', () => {
+      component.activePills = [{ field: 'startedAfter', values: ['2026-07-21T00:00:00.000+0000'] }];
+      expect(component.startedDateConflict).toBe(false);
+    });
+  });
+
+  describe('finishedDateConflict', () => {
+    it('should be true when finishedAfter is later than finishedBefore', () => {
+      component.activePills = [
+        { field: 'finishedAfter',  values: ['2026-07-21T00:00:00.000+0000'] },
+        { field: 'finishedBefore', values: ['2026-07-20T00:00:00.000+0000'] },
+      ];
+      expect(component.finishedDateConflict).toBe(true);
+    });
+
+    it('should be false when finishedAfter is earlier than finishedBefore', () => {
+      component.activePills = [
+        { field: 'finishedAfter',  values: ['2026-07-18T00:00:00.000+0000'] },
+        { field: 'finishedBefore', values: ['2026-07-21T00:00:00.000+0000'] },
+      ];
+      expect(component.finishedDateConflict).toBe(false);
+    });
+  });
+
+  describe('incidentsWithTerminalStateConflict', () => {
+    it('should be true when withIncidents + only terminal states selected', () => {
+      component.activePills = [
+        { field: 'withIncidents', values: [] },
+        { field: 'state', values: ['completed'] },
+      ];
+      expect(component.incidentsWithTerminalStateConflict).toBe(true);
+    });
+
+    it('should be true when withIncidents + completed and terminated (no active/suspended)', () => {
+      component.activePills = [
+        { field: 'withIncidents', values: [] },
+        { field: 'state', values: ['completed', 'terminated'] },
+      ];
+      expect(component.incidentsWithTerminalStateConflict).toBe(true);
+    });
+
+    it('should be false when withIncidents + state includes Active', () => {
+      component.activePills = [
+        { field: 'withIncidents', values: [] },
+        { field: 'state', values: ['active', 'completed'] },
+      ];
+      expect(component.incidentsWithTerminalStateConflict).toBe(false);
+    });
+
+    it('should be false when withIncidents + state includes Suspended', () => {
+      component.activePills = [
+        { field: 'withIncidents', values: [] },
+        { field: 'state', values: ['suspended', 'terminated'] },
+      ];
+      expect(component.incidentsWithTerminalStateConflict).toBe(false);
+    });
+
+    it('should be false when withIncidents but no State pill', () => {
+      component.activePills = [{ field: 'withIncidents', values: [] }];
+      expect(component.incidentsWithTerminalStateConflict).toBe(false);
+    });
+
+    it('should be false when State pill is terminal-only but no withIncidents pill', () => {
+      component.activePills = [{ field: 'state', values: ['completed', 'terminated'] }];
+      expect(component.incidentsWithTerminalStateConflict).toBe(false);
     });
   });
 
