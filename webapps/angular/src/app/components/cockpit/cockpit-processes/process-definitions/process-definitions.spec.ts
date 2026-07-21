@@ -907,6 +907,57 @@ describe('ProcessDefinitionsComponent', () => {
   });
 
   // ===========================
+  // Click outside popover
+  // ===========================
+
+  describe('click outside popover', () => {
+    beforeEach(() => { fixture.detectChanges(); });
+
+    const outsideClick = (comp: ProcessDefinitionsComponent) =>
+      comp.onDocumentClick({ target: document.createElement('div') } as any as Event);
+
+    it('should remove a state pill when all states are deselected and user clicks outside', () => {
+      component.activePills = [{ field: 'state', values: ['active'] }];
+      component.startEditPill(0, new MouseEvent('click'));
+      component.pendingStateValues = []; // simulate unchecking all states
+      outsideClick(component);
+      expect(component.activePills.length).toBe(0);
+      expect(component.editingPillIndex).toBeNull();
+      expect(component.activeEditorType).toBeNull();
+    });
+
+    it('should confirm a new instanceId criterion when the user clicks outside with a pending value', () => {
+      component.selectCriteriaType('instanceId');
+      component.pendingValues = ['inst-abc']; // blur already ran and added the chip
+      outsideClick(component);
+      expect(component.activePills.length).toBe(1);
+      expect(component.activePills[0].field).toBe('instanceId');
+      expect(component.activePills[0].values).toEqual(['inst-abc']);
+      expect(component.activeEditorType).toBeNull();
+    });
+
+    it('should leave a pill unchanged when the user clicks ✕ (cancel stays cancel, not affected by outside-click change)', () => {
+      component.activePills = [{ field: 'businessKey', values: ['BK-ORIG'] }];
+      component.startEditPill(0, new MouseEvent('click'));
+      component.pendingValues = ['BK-MODIFIED'];
+      component.cancelCriterion(); // explicit cancel via ✕
+      expect(component.activePills[0].values).toEqual(['BK-ORIG']);
+      expect(component.editingPillIndex).toBeNull();
+      expect(component.activeEditorType).toBeNull();
+    });
+
+    it('should update a pill with new values when the user clicks outside an editing popover', () => {
+      component.activePills = [{ field: 'businessKey', values: ['BK-ORIG'] }];
+      component.startEditPill(0, new MouseEvent('click'));
+      component.pendingValues = ['BK-UPDATED'];
+      outsideClick(component);
+      expect(component.activePills[0].values).toEqual(['BK-UPDATED']);
+      expect(component.editingPillIndex).toBeNull();
+      expect(component.activeEditorType).toBeNull();
+    });
+  });
+
+  // ===========================
   // Global Search — Enter key shortcut
   // ===========================
 

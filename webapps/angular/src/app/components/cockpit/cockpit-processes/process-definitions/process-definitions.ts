@@ -338,25 +338,23 @@ export class ProcessDefinitionsComponent implements OnInit, OnDestroy {
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: Event): void {
     const target = event.target as HTMLElement;
-    let changed = false;
     if (this.editingPillIndex !== null) {
       if (!target.closest('.pill-wrapper')) {
-        this.editingPillIndex = null;
-        this.activeEditorType = null;
-        this.pendingValues = [];
-        changed = true;
+        this.confirmCriterion();
+        if (this.activeEditorType) this.cancelCriterion();
       }
     } else {
       if (!target.closest('.criteria-dropdown-wrapper')) {
-        if (this.showCriteriaDropdown) { this.showCriteriaDropdown = false; changed = true; }
+        if (this.showCriteriaDropdown) {
+          this.showCriteriaDropdown = false;
+          this.cdr.markForCheck();
+        }
         if (this.activeEditorType) {
-          this.activeEditorType = null;
-          this.pendingValues = [];
-          changed = true;
+          this.confirmCriterion();
+          if (this.activeEditorType) this.cancelCriterion();
         }
       }
     }
-    if (changed) this.cdr.markForCheck();
   }
 
   @HostListener('document:keydown.escape')
