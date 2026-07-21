@@ -435,6 +435,46 @@ export interface VariableQueryParam {
   value: any;
 }
 
+export interface VariableLine {
+  variableName: string;
+  variableOperator: 'eq' | 'neq' | 'gt' | 'gteq' | 'lt' | 'lteq' | 'like';
+  values: string[];
+}
+
+export type GlobalSearchField =
+  | 'businessKey' | 'instanceId' | 'state' | 'withIncidents'
+  | 'startedAfter' | 'startedBefore' | 'finishedAfter' | 'finishedBefore'
+  | 'variable' | 'variables';
+
+export interface MultiValueFilter {
+  field: GlobalSearchField;
+  values: string[];
+  variableName?: string;
+  variableOperator?: 'eq' | 'neq' | 'gt' | 'gteq' | 'lt' | 'lteq' | 'like';
+  variableLines?: VariableLine[];
+}
+
+/**
+ * Converts a raw string value entered by the user into the correct JS type
+ * before sending it to the Camunda variable-search API.
+ * Camunda compares by strict type: a Double stored as 20.5 never matches the
+ * string "20.5", so we must send 20.5 (number) instead.
+ */
+export function parseVariableValue(raw: string, operator: string): any {
+  if (operator === 'like') {
+    return raw.includes('%') ? raw : `%${raw}%`;
+  }
+  if (raw.toLowerCase() === 'true')  return true;
+  if (raw.toLowerCase() === 'false') return false;
+  if (raw === 'NULL') return null;
+  const trimmed = raw.trim();
+  if (trimmed !== '') {
+    const n = Number(trimmed);
+    if (!isNaN(n)) return n;
+  }
+  return raw;
+}
+
 export interface TaskQueryParams {
   assignee?: string;
   assigneeLike?: string;
@@ -1211,6 +1251,255 @@ export class CockpitService {
    */
   queryProcessInstancesCount(body: any): Observable<number> {
     return this.processInstanceService.queryProcessInstancesCount(body);
+  }
+
+  buildPayloadVariants(
+    filters: MultiValueFilter[],
+    variableNamesIgnoreCase = false,
+    variableValuesIgnoreCase = false
+  ): any[] {
+    const base: any = {};
+    const bkValues: string[] = [];
+    interface VarPill { name: string; op: string; values: string[]; vvIgnoreCase: boolean; }
+    const varPills: VarPill[] = [];
+
+    for (const filter of filters) {
+      switch (filter.field) {
+        case 'businessKey':
+          filter.values.forEach(v => bkValues.push(v));
+          break;
+        case 'instanceId':
+          if (filter.values.length > 0) base.processInstanceIds = filter.values;
+          break;
+        case 'state':
+          if (filter.values.length === 1) {
+            switch (filter.values[0]) {
+              case 'active':     base.active = true; base.unfinished = true; break;
+              case 'suspended':  base.suspended = true; base.unfinished = true; break;
+              case 'completed':  base.completed = true; base.finished = true; break;
+              case 'terminated': base.externallyTerminated = true; base.finished = true; break;
+            }
+          }
+          break;
+        case 'withIncidents':
+          base.withIncidents = true;
+          break;
+        case 'startedAfter':
+          if (filter.values[0]) base.startedAfter = filter.values[0];
+          break;
+        case 'startedBefore':
+          if (filter.values[0]) base.startedBefore = filter.values[0];
+          break;
+        case 'finishedAfter':
+          if (filter.values[0]) base.finishedAfter = filter.values[0];
+          break;
+        case 'finishedBefore':
+          if (filter.values[0]) base.finishedBefore = filter.values[0];
+          break;
+        case 'variable':
+          if (filter.variableName && filter.values.length > 0) {
+            const op = filter.variableOperator || 'eq';
+            varPills.push({
+              name: filter.variableName,
+              op,
+              values: filter.values,
+              vvIgnoreCase: op === 'like' || variableValuesIgnoreCase
+            });
+          }
+          break;
+        case 'variables':
+          if (filter.variableLines) {
+            const grouped = new Map<string, { name: string; op: string; values: string[]; vvIgnoreCase: boolean }>();
+            for (const line of filter.variableLines) {
+              if (!line.variableName || line.values.length === 0) continue;
+              const op = line.variableOperator || 'eq';
+              const key = `${line.variableName}::${op}`;
+              if (grouped.has(key)) {
+                const g = grouped.get(key)!;
+                for (const v of line.values) {
+                  if (!g.values.includes(v)) g.values.push(v);
+                }
+              } else {
+                grouped.set(key, {
+                  name: line.variableName,
+                  op,
+                  values: [...line.values],
+                  vvIgnoreCase: op === 'like' || variableValuesIgnoreCase
+                });
+              }
+            }
+            for (const g of grouped.values()) {
+              varPills.push(g);
+            }
+          }
+          break;
+      }
+    }
+
+    if (variableNamesIgnoreCase) base.variableNamesIgnoreCase = true;
+    if (variableValuesIgnoreCase) base.variableValuesIgnoreCase = true;
+
+    // Dimensions: bk values (or [null]) × each variable pill's values
+    const bkDim: Array<string | null> = bkValues.length > 0 ? bkValues : [null];
+    const varDims = varPills.map(p =>
+      p.values.map(v => ({ name: p.name, op: p.op, rawValue: v, vvIgnoreCase: p.vvIgnoreCase }))
+    );
+
+    const allDims: any[][] = [bkDim, ...varDims];
+    const combos = allDims.reduce<any[][]>(
+      (acc, dim) => acc.flatMap(combo => dim.map((item: any) => [...combo, item])),
+      [[]]
+    );
+
+    return combos.map(combo => {
+      const body = { ...base };
+      const bk = combo[0] as string | null;
+      const varItems = combo.slice(1) as Array<{ name: string; op: string; rawValue: string; vvIgnoreCase: boolean }>;
+
+      if (bk !== null) {
+        body.processInstanceBusinessKeyLike = `%${bk.replace(/[%_]/g, '\\$&')}%`;
+      }
+
+      if (varItems.length > 0) {
+        body.variables = varItems.map(item => ({
+          name: item.name,
+          operator: item.op,
+          value: parseVariableValue(item.rawValue, item.op)
+        }));
+        if (varItems.some(item => item.vvIgnoreCase)) {
+          body.variableValuesIgnoreCase = true;
+        }
+      }
+
+      return body;
+    });
+  }
+
+  searchProcessInstancesGlobal(
+    filters: MultiValueFilter[],
+    variableNamesIgnoreCase = false,
+    variableValuesIgnoreCase = false,
+    firstResult = 0,
+    maxResults = 20
+  ): Observable<ProcessInstance[]> {
+    const statePill = filters.find(f => f.field === 'state');
+    if (statePill && statePill.values.length > 1) {
+      return this.searchPerState(filters, statePill, variableNamesIgnoreCase, variableValuesIgnoreCase, firstResult, maxResults);
+    }
+    const variants = this.buildPayloadVariants(filters, variableNamesIgnoreCase, variableValuesIgnoreCase);
+    if (variants.length === 1) {
+      return this.processInstanceService.queryProcessInstances(variants[0], firstResult, maxResults);
+    }
+    return forkJoin(
+      variants.map(body => this.processInstanceService.queryProcessInstances(body, 0, 2000))
+    ).pipe(
+      map(resultArrays => {
+        const seen = new Set<string>();
+        const merged: ProcessInstance[] = [];
+        for (const arr of resultArrays) {
+          for (const inst of arr) {
+            if (inst.id && !seen.has(inst.id)) { seen.add(inst.id); merged.push(inst); }
+          }
+        }
+        merged.sort((a, b) => new Date(b.startTime).getTime() - new Date(a.startTime).getTime());
+        return merged.slice(firstResult, firstResult + maxResults);
+      })
+    );
+  }
+
+  searchProcessInstancesGlobalCount(
+    filters: MultiValueFilter[],
+    variableNamesIgnoreCase = false,
+    variableValuesIgnoreCase = false
+  ): Observable<number> {
+    const statePill = filters.find(f => f.field === 'state');
+    if (statePill && statePill.values.length > 1) {
+      return this.countPerState(filters, statePill, variableNamesIgnoreCase, variableValuesIgnoreCase);
+    }
+    const variants = this.buildPayloadVariants(filters, variableNamesIgnoreCase, variableValuesIgnoreCase);
+    if (variants.length === 1) {
+      return this.processInstanceService.queryProcessInstancesCount(variants[0]);
+    }
+    return forkJoin(
+      variants.map(body => this.processInstanceService.queryProcessInstances(body, 0, 2000))
+    ).pipe(
+      map(resultArrays => {
+        const seen = new Set<string>();
+        resultArrays.flat().forEach(inst => { if (inst.id) seen.add(inst.id); });
+        return seen.size;
+      })
+    );
+  }
+
+  // Returns the state-specific body fragments (flags only, no other criteria)
+  private stateBodyFragment(stateVal: string): Record<string, boolean>[] {
+    switch (stateVal) {
+      case 'active':    return [{ active: true, unfinished: true }];
+      case 'suspended': return [{ suspended: true, unfinished: true }];
+      case 'completed': return [{ completed: true, finished: true }];
+      case 'terminated': return [
+        // An instance is terminated either externally (API cancel) or internally (process flow)
+        { externallyTerminated: true, finished: true },
+        { internallyTerminated: true, finished: true }
+      ];
+      default: return [];
+    }
+  }
+
+  // Build one request body per state value, each a copy of the non-state base body
+  // plus the state-specific flags. No orQueries across states — avoids Camunda's
+  // finished/unfinished flag hoisting which makes cross-group queries return 0 results.
+  private buildPerStateBodies(
+    filters: MultiValueFilter[],
+    statePill: MultiValueFilter,
+    variableNamesIgnoreCase: boolean,
+    variableValuesIgnoreCase: boolean
+  ): any[] {
+    const otherFilters = filters.filter(f => f.field !== 'state');
+    const baseVariants = this.buildPayloadVariants(otherFilters, variableNamesIgnoreCase, variableValuesIgnoreCase);
+    return statePill.values.flatMap(
+      stateVal => this.stateBodyFragment(stateVal).flatMap(
+        flags => baseVariants.map(variant => ({ ...variant, ...flags }))
+      )
+    );
+  }
+
+  private searchPerState(
+    filters: MultiValueFilter[],
+    statePill: MultiValueFilter,
+    variableNamesIgnoreCase: boolean,
+    variableValuesIgnoreCase: boolean,
+    firstResult: number,
+    maxResults: number
+  ): Observable<ProcessInstance[]> {
+    const bodies = this.buildPerStateBodies(filters, statePill, variableNamesIgnoreCase, variableValuesIgnoreCase);
+    return forkJoin(
+      bodies.map(body => this.processInstanceService.queryProcessInstances(body, 0, 2000))
+    ).pipe(
+      map(resultArrays => {
+        const seen = new Set<string>();
+        const merged: ProcessInstance[] = [];
+        for (const arr of resultArrays) {
+          for (const inst of arr) {
+            if (inst.id && !seen.has(inst.id)) { seen.add(inst.id); merged.push(inst); }
+          }
+        }
+        merged.sort((a, b) => new Date(b.startTime).getTime() - new Date(a.startTime).getTime());
+        return merged.slice(firstResult, firstResult + maxResults);
+      })
+    );
+  }
+
+  private countPerState(
+    filters: MultiValueFilter[],
+    statePill: MultiValueFilter,
+    variableNamesIgnoreCase: boolean,
+    variableValuesIgnoreCase: boolean
+  ): Observable<number> {
+    const bodies = this.buildPerStateBodies(filters, statePill, variableNamesIgnoreCase, variableValuesIgnoreCase);
+    return forkJoin(
+      bodies.map(body => this.processInstanceService.queryProcessInstancesCount(body))
+    ).pipe(map(counts => counts.reduce((sum, c) => sum + c, 0)));
   }
 
   // ============================================
