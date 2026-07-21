@@ -34,7 +34,9 @@
                     <fa-icon [icon]="faTimes"></fa-icon>
                   </button>
                 </div>
-                <div class="criterion-editor-popover" *ngIf="editingPillIndex === i" role="dialog" aria-modal="true"
+                <div class="criterion-editor-popover"
+                     [class.criterion-editor-popover--variables]="activeEditorType === 'variables'"
+                     *ngIf="editingPillIndex === i" role="dialog" aria-modal="true"
                      (keydown.enter)="$event.stopPropagation()">
                   <ng-container *ngTemplateOutlet="editorPopoverContent"></ng-container>
                 </div>
@@ -151,12 +153,12 @@
                   <div class="criteria-group">
                     <div class="criteria-group-label">Variables</div>
 
-                    <button class="criteria-option" (click)="selectCriteriaType('variable')" type="button" role="menuitem">
+                    <button class="criteria-option" (click)="selectCriteriaType('variables')" type="button" role="menuitem">
                       <span class="criteria-icon-wrap criteria-icon-wrap--indigo">
                         <fa-icon [icon]="faCode"></fa-icon>
                       </span>
                       <span class="criteria-option-body">
-                        <span class="criteria-option-name">{{ 'cockpit.processes.filters.variable' | translate }}</span>
+                        <span class="criteria-option-name">Variables</span>
                         <span class="criteria-option-desc">Match by variable name and value</span>
                       </span>
                     </button>
@@ -165,7 +167,9 @@
                 </div>
 
               <!-- Criterion editor popover — anchored below "Add criteria" button -->
-              <div class="criterion-editor-popover" *ngIf="activeEditorType && editingPillIndex === null" role="dialog" aria-modal="true"
+              <div class="criterion-editor-popover"
+                   [class.criterion-editor-popover--variables]="activeEditorType === 'variables'"
+                   *ngIf="activeEditorType && editingPillIndex === null" role="dialog" aria-modal="true"
                    (keydown.enter)="$event.stopPropagation()">
                 <ng-container *ngTemplateOutlet="editorPopoverContent"></ng-container>
               </div>
@@ -173,7 +177,7 @@
           </div>
 
 <ng-template #editorPopoverContent>
-  <div class="editor-popover-header" *ngIf="activeEditorType !== 'state'">
+  <div class="editor-popover-header" *ngIf="activeEditorType !== 'state' && activeEditorType !== 'variables'">
     <fa-icon [icon]="getEditorIcon()" class="editor-popover-icon editor-popover-icon--{{ activeEditorType }}"></fa-icon>
     <span class="editor-popover-title">{{ ('cockpit.processes.filters.' + activeEditorType) | translate }}</span>
   </div>
@@ -181,6 +185,18 @@
     <span class="state-popover-label">STATE</span>
     <button class="state-popover-clear" (click)="pendingStateValues = []" type="button">Clear</button>
   </div>
+  <div class="variables-popover-header" *ngIf="activeEditorType === 'variables'">
+    <div class="variables-popover-title-row">
+      <fa-icon [icon]="faCode" class="editor-popover-icon editor-popover-icon--variables"></fa-icon>
+      <span class="editor-popover-title">Variables</span>
+    </div>
+    <button class="btn-add-variable" (click)="addVariableLine()" type="button">
+      <fa-icon [icon]="faPlus"></fa-icon> Add variable
+    </button>
+  </div>
+  <p class="variables-popover-hint" *ngIf="activeEditorType === 'variables'">
+    {{ 'cockpit.processes.globalSearch.chipInputHint' | translate }}
+  </p>
 
   <!-- Business Key / Instance ID -->
   <div class="editor-popover-body" *ngIf="activeEditorType === 'businessKey' || activeEditorType === 'instanceId'"
@@ -238,7 +254,7 @@
     <input type="datetime-local" class="editor-input" [(ngModel)]="pendingDateValue" />
   </div>
 
-  <!-- Variable -->
+  <!-- Variable (legacy single-variable — kept for backward compat with URL-stored criteria) -->
   <div class="editor-popover-body" *ngIf="activeEditorType === 'variable'"
        (keydown.enter)="confirmCriterion()">
     <div class="editor-row editor-row--variable">
@@ -271,16 +287,54 @@
     </p>
   </div>
 
-  <div class="editor-popover-actions" [class.editor-popover-actions--state]="activeEditorType === 'state'">
+  <!-- Variables (grouped multi-line) -->
+  <div class="editor-popover-body editor-popover-body--variables" *ngIf="activeEditorType === 'variables'">
+    <div class="variable-lines-list">
+      <div *ngFor="let line of pendingVariableLines; let i = index; trackBy: trackVariableLine"
+           class="variable-line">
+        <input
+          type="text"
+          class="editor-input editor-input--name"
+          [(ngModel)]="line.name"
+          placeholder="Name"
+        />
+        <select [(ngModel)]="line.operator" class="editor-select editor-select--operator">
+          <option value="eq">=</option>
+          <option value="neq">&#x2260;</option>
+          <option value="gt">&gt;</option>
+          <option value="gteq">&#x2265;</option>
+          <option value="lt">&lt;</option>
+          <option value="lteq">&#x2264;</option>
+          <option value="like">~</option>
+        </select>
+        <div class="editor-values-col">
+          <app-multi-value-chip-input
+            [values]="line.values"
+            (valuesChange)="onVariableLineValuesChange(i, $event)"
+            placeholder="Value"
+          ></app-multi-value-chip-input>
+        </div>
+        <button class="btn-remove-line" (click)="removeVariableLine(i)" type="button" title="Remove variable">
+          <fa-icon [icon]="faTimes"></fa-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="editor-popover-actions" [class.editor-popover-actions--state]="activeEditorType === 'state' || activeEditorType === 'variables'">
     <span class="state-count-label" *ngIf="activeEditorType === 'state'">
       {{ pendingStateValues.length }} selected
+    </span>
+    <span class="state-count-label" *ngIf="activeEditorType === 'variables'">
+      {{ validVariableLineCount }} variables
     </span>
     <div class="editor-actions-btns">
       <button class="btn-editor-cancel-icon" (click)="cancelCriterion()" type="button" title="Cancel (Esc)">
         <fa-icon [icon]="faTimes"></fa-icon>
       </button>
       <button class="btn-editor-confirm-icon" (click)="confirmCriterion()" type="button" title="Apply"
-              [disabled]="activeEditorType === 'state' && pendingStateValues.length === 0 && editingPillIndex === null">
+              [disabled]="(activeEditorType === 'state' && pendingStateValues.length === 0 && editingPillIndex === null) ||
+                          (activeEditorType === 'variables' && validVariableLineCount === 0 && editingPillIndex === null)">
         <fa-icon [icon]="faCheck"></fa-icon>
       </button>
     </div>

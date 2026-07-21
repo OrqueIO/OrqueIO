@@ -435,16 +435,23 @@ export interface VariableQueryParam {
   value: any;
 }
 
+export interface VariableLine {
+  variableName: string;
+  variableOperator: 'eq' | 'neq' | 'gt' | 'gteq' | 'lt' | 'lteq' | 'like';
+  values: string[];
+}
+
 export type GlobalSearchField =
   | 'businessKey' | 'instanceId' | 'state' | 'withIncidents'
   | 'startedAfter' | 'startedBefore' | 'finishedAfter' | 'finishedBefore'
-  | 'variable';
+  | 'variable' | 'variables';
 
 export interface MultiValueFilter {
   field: GlobalSearchField;
   values: string[];
   variableName?: string;
   variableOperator?: 'eq' | 'neq' | 'gt' | 'gteq' | 'lt' | 'lteq' | 'like';
+  variableLines?: VariableLine[];
 }
 
 /**
@@ -1298,6 +1305,21 @@ export class CockpitService {
               values: filter.values,
               vvIgnoreCase: op === 'like' || variableValuesIgnoreCase
             });
+          }
+          break;
+        case 'variables':
+          if (filter.variableLines) {
+            for (const line of filter.variableLines) {
+              if (line.variableName && line.values.length > 0) {
+                const op = line.variableOperator || 'eq';
+                varPills.push({
+                  name: line.variableName,
+                  op,
+                  values: line.values,
+                  vvIgnoreCase: op === 'like' || variableValuesIgnoreCase
+                });
+              }
+            }
           }
           break;
       }

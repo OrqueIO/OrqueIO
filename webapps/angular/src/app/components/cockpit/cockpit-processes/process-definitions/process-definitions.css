@@ -549,6 +549,11 @@
   transform-origin: top left;
 }
 
+/* Variables popover needs more width for 3 fields side by side */
+.criterion-editor-popover--variables {
+  width: 440px;
+}
+
 .editor-popover-header {
   display: flex;
   align-items: center;
@@ -573,6 +578,7 @@
 .editor-popover-icon--finishedAfter,
 .editor-popover-icon--finishedBefore { color: #475569; }
 .editor-popover-icon--variable       { color: #6366f1; }
+.editor-popover-icon--variables      { color: #6366f1; }
 
 .editor-popover-title {
   font-size: var(--font-size-xs);
@@ -1513,6 +1519,12 @@
   .search-table-container { overflow-x: auto; }
   .editor-row--variable { flex-direction: column; }
   .editor-input--name { max-width: 100%; }
+  /* Flip variables popover right-aligned on narrow screens */
+  .criterion-editor-popover--variables {
+    left: auto;
+    right: 0;
+    width: min(440px, calc(100vw - 20px));
+  }
 }
 
 /* =====================================================
@@ -1562,4 +1574,127 @@
 .search-table-container::-webkit-scrollbar-thumb:hover,
 .page-content::-webkit-scrollbar-thumb:hover {
   background: var(--color-gray-400);
+}
+
+/* ── Variables multi-line popover ──────────────────────────────── */
+
+.variables-popover-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-3) var(--space-3) var(--space-2);
+  gap: var(--space-2);
+  border-bottom: 1px solid var(--border-color-light);
+  background: var(--color-gray-50);
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+}
+
+.variables-popover-title-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.btn-add-variable {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 3px 8px;
+  border: 1px solid var(--color-primary, #6366f1);
+  border-radius: var(--radius-sm, 4px);
+  background: transparent;
+  color: var(--color-primary, #6366f1);
+  font-size: 0.78rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.btn-add-variable:hover {
+  background: var(--color-hover-bg, rgba(0,0,0,0.05));
+  border-color: var(--color-accent, #6366f1);
+}
+
+.editor-popover-body--variables {
+  padding: 0;
+  max-height: 300px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.variable-lines-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.variable-line {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 0.5px solid var(--border);
+  overflow: hidden;
+}
+
+/* Override global min-width so each element can shrink to fit the 440px popover */
+.variable-line .editor-input {
+  min-width: 0;
+}
+
+.variable-line .editor-input--name {
+  flex: 1.2;
+  min-width: 0;
+  max-width: none;
+}
+
+.variable-line .editor-values-col {
+  flex: 1.6;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.variable-line:last-child {
+  border-bottom: none;
+}
+
+.btn-remove-line {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--color-text-muted, #888);
+  cursor: pointer;
+  border-radius: var(--radius-sm, 4px);
+  transition: background 0.15s, color 0.15s;
+}
+
+.btn-remove-line:hover {
+  background: var(--color-error-bg, rgba(220,38,38,0.08));
+  color: var(--color-error, #dc2626);
+}
+
+/* Single hint displayed once below the header — hides per-line repetition */
+.variables-popover-hint {
+  margin: 0;
+  padding: var(--space-1) var(--space-3) var(--space-2);
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  background: var(--color-gray-50);
+  border-bottom: 1px solid var(--border-color-light);
+}
+
+/* ::ng-deep pierces child encapsulation to suppress the per-line chip hint */
+.variable-line ::ng-deep .chip-input-hint {
+  display: none;
+}
+
+/* Cap chip area at ~2 rows; extra chips scroll inside the box */
+.variable-line ::ng-deep .chip-input-container {
+  max-height: 80px;
+  overflow-y: auto;
 }

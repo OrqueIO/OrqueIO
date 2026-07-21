@@ -23,6 +23,12 @@ interface SortConfig {
 
 type VariableOperator = 'eq' | 'neq' | 'gt' | 'gteq' | 'lt' | 'lteq' | 'like';
 
+interface PendingVariableLine {
+  name: string;
+  operator: VariableOperator;
+  values: string[];
+}
+
 import { CockpitHeaderComponent, BreadcrumbItem } from '../../../../shared/cockpit-header/cockpit-header';
 import { COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS } from '../../../../shared/cockpit-menu';
 import {
@@ -30,7 +36,8 @@ import {
   ProcessDefinitionStatistics,
   ProcessInstance,
   MultiValueFilter,
-  GlobalSearchField
+  GlobalSearchField,
+  VariableLine
 } from '../../../../services/cockpit.service';
 import { NavMenuService } from '../../../../services/nav-menu.service';
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
@@ -118,6 +125,7 @@ export class ProcessDefinitionsComponent implements OnInit, OnDestroy {
   pendingVariableOperator: VariableOperator = 'eq';
   pendingStateValues: string[] = [];
   pendingDateValue = '';
+  pendingVariableLines: PendingVariableLine[] = [];
   editingPillIndex: number | null = null;
 
   // Case-sensitivity options (variable filters)
@@ -400,6 +408,9 @@ export class ProcessDefinitionsComponent implements OnInit, OnDestroy {
     this.pendingVariableOperator = 'eq';
     this.pendingStateValues = [];
     this.pendingDateValue = '';
+    this.pendingVariableLines = type === 'variables'
+      ? [{ name: '', operator: 'eq', values: [] }]
+      : [];
     this.cdr.markForCheck();
   }
 
@@ -433,6 +444,13 @@ export class ProcessDefinitionsComponent implements OnInit, OnDestroy {
         this.pendingValues = [...pill.values];
         this.pendingVariableName = pill.variableName || '';
         this.pendingVariableOperator = pill.variableOperator || 'eq';
+        break;
+      case 'variables':
+        this.pendingVariableLines = (pill.variableLines ?? []).map(l => ({
+          name: l.variableName,
+          operator: (l.variableOperator || 'eq') as VariableOperator,
+          values: [...l.values]
+        }));
         break;
       case 'startedAfter':
       case 'startedBefore':
@@ -489,6 +507,24 @@ export class ProcessDefinitionsComponent implements OnInit, OnDestroy {
           variableOperator: this.pendingVariableOperator
         };
         break;
+      case 'variables': {
+        const validLines: VariableLine[] = this.pendingVariableLines
+          .filter(l => l.name.trim() && l.values.length > 0)
+          .map(l => ({ variableName: l.name.trim(), variableOperator: l.operator, values: [...l.values] }));
+        if (validLines.length === 0) {
+          if (this.editingPillIndex !== null) {
+            const idx = this.editingPillIndex;
+            this.activePills = this.activePills.filter((_, i) => i !== idx);
+            this.editingPillIndex = null;
+            this.activeEditorType = null;
+            this.cdr.markForCheck();
+            this.syncCriteriaToUrl();
+          }
+          return;
+        }
+        pill = { field: 'variables', values: [], variableLines: validLines };
+        break;
+      }
     }
 
     if (pill) {
@@ -510,8 +546,32 @@ export class ProcessDefinitionsComponent implements OnInit, OnDestroy {
     this.activeEditorType = null;
     this.pendingValues = [];
     this.pendingStateValues = [];
+    this.pendingVariableLines = [];
     this.editingPillIndex = null;
     this.cdr.markForCheck();
+  }
+
+  addVariableLine(): void {
+    this.pendingVariableLines = [...this.pendingVariableLines, { name: '', operator: 'eq', values: [] }];
+    this.cdr.markForCheck();
+  }
+
+  removeVariableLine(index: number): void {
+    this.pendingVariableLines = this.pendingVariableLines.filter((_, i) => i !== index);
+    this.cdr.markForCheck();
+  }
+
+  onVariableLineValuesChange(index: number, values: string[]): void {
+    this.pendingVariableLines[index].values = values;
+    this.cdr.markForCheck();
+  }
+
+  trackVariableLine(index: number): number {
+    return index;
+  }
+
+  get validVariableLineCount(): number {
+    return this.pendingVariableLines.filter(l => l.name.trim() && l.values.length > 0).length;
   }
 
   removePill(index: number): void {
@@ -530,6 +590,10 @@ export class ProcessDefinitionsComponent implements OnInit, OnDestroy {
       case 'startedBefore':  return `Started before: ${this.formatDisplayDate(pill.values[0])}`;
       case 'finishedAfter':  return `Finished after: ${this.formatDisplayDate(pill.values[0])}`;
       case 'finishedBefore': return `Finished before: ${this.formatDisplayDate(pill.values[0])}`;
+      case 'variables': {
+        const n = pill.variableLines?.filter(l => l.variableName).length ?? 0;
+        return `Variables (${n})`;
+      }
       case 'variable': {
         const op = this.getOperatorLabel(pill.variableOperator || 'eq');
         return `${pill.variableName} ${op} ${pill.values.join(', ')}`;
@@ -560,7 +624,7 @@ export class ProcessDefinitionsComponent implements OnInit, OnDestroy {
   }
 
   hasVariableFilter(): boolean {
-    return this.activePills.some(p => p.field === 'variable');
+    return this.activePills.some(p => p.field === 'variable' || p.field === 'variables');
   }
 
   @HostListener('document:keydown.enter', ['$event'])

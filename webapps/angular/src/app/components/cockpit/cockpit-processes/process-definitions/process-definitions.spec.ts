@@ -87,6 +87,39 @@ describe('CockpitService.buildPayloadVariants', () => {
     ]);
   });
 
+  it('should AND two different variable lines and OR multiple values within each line (grouped variables pill)', () => {
+    // creditor=[pizza,sushi] × invoiceCategory=[food,beverage] → 2×2=4 variants
+    // Semantics: (creditor=pizza OR creditor=sushi) AND (invoiceCategory=food OR invoiceCategory=beverage)
+    // Each payload carries one value per variable → AND between variables, OR achieved via union of payloads
+    const filters: MultiValueFilter[] = [{
+      field: 'variables',
+      values: [],
+      variableLines: [
+        { variableName: 'creditor',        variableOperator: 'eq', values: ['pizza', 'sushi'] },
+        { variableName: 'invoiceCategory', variableOperator: 'eq', values: ['food', 'beverage'] }
+      ]
+    }];
+    const ps = realSvc.buildPayloadVariants(filters);
+    expect(ps.length).toBe(4);
+    expect(ps[0].variables).toEqual([
+      { name: 'creditor',        operator: 'eq', value: 'pizza' },
+      { name: 'invoiceCategory', operator: 'eq', value: 'food' }
+    ]);
+    expect(ps[1].variables).toEqual([
+      { name: 'creditor',        operator: 'eq', value: 'pizza' },
+      { name: 'invoiceCategory', operator: 'eq', value: 'beverage' }
+    ]);
+    expect(ps[2].variables).toEqual([
+      { name: 'creditor',        operator: 'eq', value: 'sushi' },
+      { name: 'invoiceCategory', operator: 'eq', value: 'food' }
+    ]);
+    expect(ps[3].variables).toEqual([
+      { name: 'creditor',        operator: 'eq', value: 'sushi' },
+      { name: 'invoiceCategory', operator: 'eq', value: 'beverage' }
+    ]);
+    expect(ps[0].orQueries).toBeUndefined();
+  });
+
   // ── parseVariableValue type coercion in buildPayloadVariants ──────────
 
   it('should send 20.5 as a number (not a string) for a float variable value', () => {
@@ -1183,6 +1216,114 @@ describe('ProcessDefinitionsComponent', () => {
     it('should return true when at least one variable pill exists', () => {
       component.activePills = [{ field: 'variable', values: ['1'], variableName: 'x', variableOperator: 'eq' }];
       expect(component.hasVariableFilter()).toBe(true);
+    });
+
+    it('should return true when a grouped variables pill exists', () => {
+      component.activePills = [{ field: 'variables', values: [], variableLines: [{ variableName: 'x', variableOperator: 'eq', values: ['v'] }] }];
+      expect(component.hasVariableFilter()).toBe(true);
+    });
+  });
+
+  // ===========================
+  // Grouped Variables criterion
+  // ===========================
+
+  describe('grouped variables criterion', () => {
+    beforeEach(() => { fixture.detectChanges(); });
+
+    it('should create a single Variables (2) pill when 2 variables are added in the same popover', () => {
+      component.selectCriteriaType('variables');
+      component.pendingVariableLines[0].name = 'orderId';
+      component.pendingVariableLines[0].values = ['123'];
+      component.addVariableLine();
+      component.pendingVariableLines[1].name = 'status';
+      component.pendingVariableLines[1].values = ['active'];
+      component.confirmCriterion();
+      expect(component.activePills.length).toBe(1);
+      expect(component.activePills[0].field).toBe('variables');
+      expect(component.getPillLabel(component.activePills[0])).toBe('Variables (2)');
+    });
+
+    it('should add new empty lines without closing the popover when addVariableLine is called twice', () => {
+      component.selectCriteriaType('variables');
+      expect(component.pendingVariableLines.length).toBe(1); // starts with 1 empty line
+      component.addVariableLine();
+      component.addVariableLine();
+      expect(component.pendingVariableLines.length).toBe(3);
+      expect(component.pendingVariableLines[1].name).toBe('');
+      expect(component.pendingVariableLines[2].name).toBe('');
+      expect(component.activeEditorType).toBe('variables'); // popover still open
+    });
+
+    it('should remove only the targeted line when removeVariableLine is called', () => {
+      component.selectCriteriaType('variables');
+      component.pendingVariableLines[0].name = 'orderId';
+      component.pendingVariableLines[0].values = ['123'];
+      component.addVariableLine();
+      component.pendingVariableLines[1].name = 'status';
+      component.pendingVariableLines[1].values = ['active'];
+      component.addVariableLine();
+      component.pendingVariableLines[2].name = 'amount';
+      component.pendingVariableLines[2].values = ['42'];
+      component.removeVariableLine(1); // remove 'status'
+      expect(component.pendingVariableLines.length).toBe(2);
+      expect(component.pendingVariableLines[0].name).toBe('orderId');
+      expect(component.pendingVariableLines[1].name).toBe('amount');
+    });
+
+    it('should ignore empty lines when confirming — only valid lines are stored', () => {
+      component.selectCriteriaType('variables');
+      component.pendingVariableLines[0].name = 'orderId';
+      component.pendingVariableLines[0].values = ['123'];
+      component.addVariableLine(); // 2nd line left empty (no name, no values)
+      component.confirmCriterion();
+      expect(component.activePills.length).toBe(1);
+      expect(component.activePills[0].variableLines?.length).toBe(1);
+      expect(component.activePills[0].variableLines?.[0].variableName).toBe('orderId');
+    });
+
+    it('should remove the Variables pill entirely when all lines are cleared then confirmed', () => {
+      component.activePills = [{
+        field: 'variables', values: [],
+        variableLines: [{ variableName: 'orderId', variableOperator: 'eq', values: ['123'] }]
+      }];
+      component.startEditPill(0, new MouseEvent('click'));
+      component.pendingVariableLines = []; // clear all lines
+      component.confirmCriterion();
+      expect(component.activePills.length).toBe(0);
+      expect(component.editingPillIndex).toBeNull();
+    });
+
+    it('should reopen pre-filled with all variable lines when an existing Variables pill is clicked', () => {
+      component.activePills = [{
+        field: 'variables', values: [],
+        variableLines: [
+          { variableName: 'orderId', variableOperator: 'eq', values: ['123'] },
+          { variableName: 'status', variableOperator: 'like', values: ['act'] }
+        ]
+      }];
+      component.startEditPill(0, new MouseEvent('click'));
+      expect(component.editingPillIndex).toBe(0);
+      expect(component.activeEditorType).toBe('variables');
+      expect(component.pendingVariableLines.length).toBe(2);
+      expect(component.pendingVariableLines[0].name).toBe('orderId');
+      expect(component.pendingVariableLines[0].values).toEqual(['123']);
+      expect(component.pendingVariableLines[1].name).toBe('status');
+      expect(component.pendingVariableLines[1].operator).toBe('like');
+      // Confirm after editing does not duplicate the pill
+      component.pendingVariableLines[0].values = ['456'];
+      component.confirmCriterion();
+      expect(component.activePills.length).toBe(1);
+      expect(component.activePills[0].variableLines?.[0].values).toEqual(['456']);
+    });
+
+    it('should apply criterion-editor-popover--variables class to the popover when variables editor is open', () => {
+      fixture.detectChanges();
+      component.selectCriteriaType('variables');
+      fixture.detectChanges();
+      const popoverEl = fixture.nativeElement.querySelector('.criterion-editor-popover');
+      expect(popoverEl).toBeTruthy();
+      expect(popoverEl.classList.contains('criterion-editor-popover--variables')).toBe(true);
     });
   });
 
