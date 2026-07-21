@@ -290,7 +290,8 @@
   </div>
 
   <!-- Variables (grouped multi-line) -->
-  <div class="editor-popover-body editor-popover-body--variables" *ngIf="activeEditorType === 'variables'">
+  <div class="editor-popover-body editor-popover-body--variables" *ngIf="activeEditorType === 'variables'"
+       (keydown.enter)="confirmCriterion()">
     <div class="variable-lines-list" (scroll)="closeOperatorMenu()">
       <ng-container *ngFor="let line of pendingVariableLines; let i = index; trackBy: trackVariableLine">
         <div class="variable-line">
@@ -327,6 +328,8 @@
               *ngIf="isMultiValueOperator(line.operator)"
               [values]="line.values"
               (valuesChange)="onVariableLineValuesChange(i, $event)"
+              (emptyEnter)="confirmCriterion()"
+              (keydown.enter)="$event.stopPropagation()"
               placeholder="Value"
             ></app-multi-value-chip-input>
             <input

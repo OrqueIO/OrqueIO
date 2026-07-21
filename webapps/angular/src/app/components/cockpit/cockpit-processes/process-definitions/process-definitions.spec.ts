@@ -14,6 +14,8 @@ import {
 } from '../../../../services/cockpit.service';
 import { NavMenuService } from '../../../../services/nav-menu.service';
 import { initTestEnvironment } from '../../../../testing/test-utils';
+import { By } from '@angular/platform-browser';
+import { MultiValueChipInputComponent } from '../../../../shared/multi-value-chip-input/multi-value-chip-input';
 
 // ============================================================
 // Helper: call CockpitService.buildPayloadVariants without
@@ -1146,6 +1148,94 @@ describe('ProcessDefinitionsComponent', () => {
       expect(component.activeEditorType).toBeNull();
       // Search was NOT triggered by the panel-level handler
       expect(cockpitService.searchProcessInstancesGlobal).not.toHaveBeenCalled();
+    });
+  });
+
+  // ===========================
+  // Variables popover — keyboard & click-outside
+  // ===========================
+
+  describe('Variables popover — keyboard & click-outside behavior', () => {
+    beforeEach(() => { fixture.detectChanges(); });
+
+    const outsideClick = (comp: ProcessDefinitionsComponent) =>
+      comp.onDocumentClick({ target: document.createElement('div') } as any as Event);
+
+    it('should create a Variables pill when clicking outside the open popover with a valid line', () => {
+      component.selectCriteriaType('variables');
+      component.pendingVariableLines[0].name = 'amount';
+      component.pendingVariableLines[0].operator = 'eq';
+      component.pendingVariableLines[0].values = ['100'];
+
+      outsideClick(component);
+
+      expect(component.activePills.length).toBe(1);
+      expect(component.activePills[0].field).toBe('variables');
+      expect(component.activePills[0].variableLines).toHaveLength(1);
+      expect(component.activePills[0].variableLines![0].variableName).toBe('amount');
+      expect(component.activePills[0].variableLines![0].values).toEqual(['100']);
+      expect(component.activeEditorType).toBeNull();
+    });
+
+    it('should confirm Variables criterion when Enter is pressed in a name input (2 valid lines)', () => {
+      component.selectCriteriaType('variables');
+      component.pendingVariableLines[0].name = 'price';
+      component.pendingVariableLines[0].values = ['50'];
+      component.addVariableLine();
+      component.pendingVariableLines[1].name = 'qty';
+      component.pendingVariableLines[1].values = ['10'];
+      fixture.detectChanges();
+
+      const nameInput: HTMLElement = fixture.nativeElement.querySelector('.editor-input--name');
+      nameInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+      fixture.detectChanges();
+
+      expect(component.activePills.length).toBe(1);
+      expect(component.activePills[0].field).toBe('variables');
+      expect(component.activePills[0].variableLines).toHaveLength(2);
+      expect(component.activeEditorType).toBeNull();
+    });
+
+    it('should flush chip currentInput to values when clicking outside (blur fires before click)', () => {
+      component.selectCriteriaType('variables');
+      component.pendingVariableLines[0].name = 'tag';
+      fixture.detectChanges();
+
+      // Simulate user typing in chip input without confirming with Enter
+      const chipDe = fixture.debugElement.query(By.directive(MultiValueChipInputComponent));
+      const chipComp = chipDe.componentInstance as MultiValueChipInputComponent;
+      chipComp.currentInput = 'pending-value';
+
+      // Browser fires blur before click; onBlur calls addCurrentInput which emits valuesChange
+      chipComp.onBlur();
+
+      outsideClick(component);
+
+      expect(component.activePills.length).toBe(1);
+      expect(component.activePills[0].variableLines![0].values).toContain('pending-value');
+      expect(component.activeEditorType).toBeNull();
+    });
+
+    it('should not modify an existing Variables pill when ✕ is clicked after editing', () => {
+      component.activePills = [{
+        field: 'variables',
+        values: [],
+        variableLines: [{ variableName: 'amount', variableOperator: 'eq', values: ['500'] }]
+      }];
+      component.startEditPill(0, new MouseEvent('click'));
+      // Modify pending state during editing session
+      component.pendingVariableLines[0].values = ['999'];
+      component.addVariableLine();
+      component.pendingVariableLines[1].name = 'qty';
+      component.pendingVariableLines[1].values = ['5'];
+
+      component.cancelCriterion();
+
+      expect(component.activePills.length).toBe(1);
+      expect(component.activePills[0].variableLines).toHaveLength(1);
+      expect(component.activePills[0].variableLines![0].values).toEqual(['500']);
+      expect(component.editingPillIndex).toBeNull();
+      expect(component.activeEditorType).toBeNull();
     });
   });
 
