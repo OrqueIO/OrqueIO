@@ -506,7 +506,7 @@ export class ProcessDefinitionsComponent implements OnInit, OnDestroy {
       case 'startedBefore':
       case 'finishedAfter':
       case 'finishedBefore':
-        this.pendingDateValue = pill.values[0] || '';
+        this.pendingDateValue = this.extractDateOnly(pill.values[0] || '');
         break;
     }
   }
@@ -542,7 +542,8 @@ export class ProcessDefinitionsComponent implements OnInit, OnDestroy {
       case 'finishedAfter':
       case 'finishedBefore': {
         if (!this.pendingDateValue) return;
-        const formatted = this.formatDateForApi(this.pendingDateValue);
+        const endOfDay = type === 'startedBefore' || type === 'finishedBefore';
+        const formatted = this.formatDateForApi(this.pendingDateValue, endOfDay);
         if (!formatted) return;
         pill = { field: type, values: [formatted] };
         break;
@@ -1059,8 +1060,12 @@ export class ProcessDefinitionsComponent implements OnInit, OnDestroy {
     return ops[op] || '=';
   }
 
-  formatDateForApi(dateStr: string): string | null {
-    const d = new Date(dateStr);
+  formatDateForApi(dateStr: string, endOfDay = false): string | null {
+    // Accept both "YYYY-MM-DD" (from type="date") and full ISO strings
+    const withTime = dateStr.length === 10
+      ? `${dateStr}${endOfDay ? 'T23:59:59' : 'T00:00:00'}`
+      : dateStr;
+    const d = new Date(withTime);
     if (isNaN(d.getTime())) return null;
     const offset = -d.getTimezoneOffset();
     const sign = offset >= 0 ? '+' : '-';
@@ -1074,6 +1079,11 @@ export class ProcessDefinitionsComponent implements OnInit, OnDestroy {
     const min = String(d.getMinutes()).padStart(2, '0');
     const sec = String(d.getSeconds()).padStart(2, '0');
     return `${year}-${mon}-${day}T${hrs}:${min}:${sec}.000${sign}${hh}${mm}`;
+  }
+
+  private extractDateOnly(isoStr: string): string {
+    const match = isoStr.match(/^(\d{4}-\d{2}-\d{2})/);
+    return match ? match[1] : '';
   }
 
   private formatDisplayDate(isoStr: string): string {

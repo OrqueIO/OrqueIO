@@ -253,7 +253,7 @@
 
   <!-- Date filters -->
   <div class="editor-popover-body" *ngIf="activeEditorType === 'startedAfter' || activeEditorType === 'startedBefore' || activeEditorType === 'finishedAfter' || activeEditorType === 'finishedBefore'">
-    <input type="datetime-local" class="editor-input" [(ngModel)]="pendingDateValue" />
+    <input type="date" class="editor-input" [(ngModel)]="pendingDateValue" />
   </div>
 
   <!-- Variable (legacy single-variable — kept for backward compat with URL-stored criteria) -->

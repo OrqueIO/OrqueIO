@@ -1988,6 +1988,49 @@ describe('ProcessDefinitionsComponent', () => {
   });
 
   // ===========================
+  // Date input type & payload time completion
+  // ===========================
+
+  describe('date criteria — type="date" and time completion', () => {
+    it('should use type="date" (not datetime-local) in the date editor popover', () => {
+      component.selectCriteriaType('startedAfter');
+      fixture.detectChanges();
+      const input = fixture.nativeElement.querySelector('input[type="date"]');
+      expect(input).not.toBeNull();
+      const datetimeInput = fixture.nativeElement.querySelector('input[type="datetime-local"]');
+      expect(datetimeInput).toBeNull();
+    });
+
+    it('should store T00:00:00 for a startedAfter date (start of day)', () => {
+      component.selectCriteriaType('startedAfter');
+      component.pendingDateValue = '2026-07-21';
+      component.confirmCriterion();
+      expect(component.activePills.length).toBe(1);
+      expect(component.activePills[0].values[0]).toContain('T00:00:00');
+    });
+
+    it('should store T23:59:59 for a finishedBefore date (end of day)', () => {
+      component.selectCriteriaType('finishedBefore');
+      component.pendingDateValue = '2026-07-20';
+      component.confirmCriterion();
+      expect(component.activePills.length).toBe(1);
+      expect(component.activePills[0].values[0]).toContain('T23:59:59');
+    });
+
+    it('should pre-fill pendingDateValue with the stored date when editing an existing date pill', () => {
+      // Create a startedAfter pill
+      component.selectCriteriaType('startedAfter');
+      component.pendingDateValue = '2026-07-21';
+      component.confirmCriterion();
+      expect(component.activePills.length).toBe(1);
+
+      // Re-open the pill for editing
+      component.startEditPill(0, new MouseEvent('click'));
+      expect(component.pendingDateValue).toBe('2026-07-21');
+    });
+  });
+
+  // ===========================
   // Instance state helpers
   // ===========================
 
