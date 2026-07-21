@@ -609,6 +609,21 @@ export class ProcessDefinitionsComponent implements OnInit, OnDestroy {
     return this.pendingVariableLines.filter(l => l.name.trim() && l.values.length > 0).length;
   }
 
+  get variableNameConflicts(): string[] {
+    const nameOps = new Map<string, Set<string>>();
+    for (const line of this.pendingVariableLines) {
+      const name = line.name.trim().toLowerCase();
+      if (!name) continue;
+      if (!nameOps.has(name)) nameOps.set(name, new Set());
+      nameOps.get(name)!.add(line.operator);
+    }
+    const conflicts: string[] = [];
+    for (const [name, ops] of nameOps) {
+      if (ops.size > 1) conflicts.push(name);
+    }
+    return conflicts;
+  }
+
   removePill(index: number): void {
     this.activePills = this.activePills.filter((_, i) => i !== index);
     this.cdr.markForCheck();

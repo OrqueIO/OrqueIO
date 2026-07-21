@@ -331,6 +331,63 @@ describe('CockpitService.buildPayloadVariants', () => {
     const [p] = realSvc.buildPayloadVariants(filters, false, true);
     expect(p.variableValuesIgnoreCase).toBe(true);
   });
+
+  // ── same-variable-name OR merging ────────────────────────────────────────
+
+  it('same name+op → values merged (OR semantics): 2 payloads, not 4', () => {
+    // Two lines: orderId=1 and orderId=2 (same name, same op)
+    // → merged into one varPill with values [1,2] → cross-product gives 2 payloads
+    const filters: MultiValueFilter[] = [{
+      field: 'variables',
+      values: [],
+      variableLines: [
+        { variableName: 'orderId', variableOperator: 'eq', values: ['1'] },
+        { variableName: 'orderId', variableOperator: 'eq', values: ['2'] }
+      ]
+    }];
+    const ps = realSvc.buildPayloadVariants(filters);
+    expect(ps.length).toBe(2);
+    expect(ps[0].variables).toEqual([{ name: 'orderId', operator: 'eq', value: 1 }]);
+    expect(ps[1].variables).toEqual([{ name: 'orderId', operator: 'eq', value: 2 }]);
+  });
+
+  it('same name diff op → AND semantics: kept as separate varPills, 1 payload', () => {
+    // orderId=1 AND orderId>0 (same name, different op) → two separate varPills → 1 payload
+    const filters: MultiValueFilter[] = [{
+      field: 'variables',
+      values: [],
+      variableLines: [
+        { variableName: 'orderId', variableOperator: 'eq',  values: ['1'] },
+        { variableName: 'orderId', variableOperator: 'gteq', values: ['0'] }
+      ]
+    }];
+    const ps = realSvc.buildPayloadVariants(filters);
+    expect(ps.length).toBe(1);
+    expect(ps[0].variables).toEqual([
+      { name: 'orderId', operator: 'eq',  value: 1 },
+      { name: 'orderId', operator: 'gteq', value: 0 }
+    ]);
+  });
+
+  it('3 lines: two share name+op (merged), one different op (separate) → 2 payloads', () => {
+    // orderId=1, orderId=2 → merged; orderId>0 → separate → cross-product 2×1=2 payloads
+    const filters: MultiValueFilter[] = [{
+      field: 'variables',
+      values: [],
+      variableLines: [
+        { variableName: 'orderId', variableOperator: 'eq',   values: ['1'] },
+        { variableName: 'orderId', variableOperator: 'eq',   values: ['2'] },
+        { variableName: 'orderId', variableOperator: 'gteq', values: ['0'] }
+      ]
+    }];
+    const ps = realSvc.buildPayloadVariants(filters);
+    expect(ps.length).toBe(2);
+    // Both payloads carry the gteq constraint AND one of the eq values
+    expect(ps[0].variables).toContainEqual({ name: 'orderId', operator: 'eq',   value: 1 });
+    expect(ps[0].variables).toContainEqual({ name: 'orderId', operator: 'gteq', value: 0 });
+    expect(ps[1].variables).toContainEqual({ name: 'orderId', operator: 'eq',   value: 2 });
+    expect(ps[1].variables).toContainEqual({ name: 'orderId', operator: 'gteq', value: 0 });
+  });
 });
 
 // ============================================================
@@ -1324,6 +1381,41 @@ describe('ProcessDefinitionsComponent', () => {
       const popoverEl = fixture.nativeElement.querySelector('.criterion-editor-popover');
       expect(popoverEl).toBeTruthy();
       expect(popoverEl.classList.contains('criterion-editor-popover--variables')).toBe(true);
+    });
+  });
+
+  // ===========================
+  // variableNameConflicts getter
+  // ===========================
+
+  describe('variableNameConflicts getter', () => {
+    beforeEach(() => { fixture.detectChanges(); });
+
+    it('should return conflicting name when two lines share the same name but different operators', () => {
+      component.selectCriteriaType('variables');
+      component.pendingVariableLines[0].name = 'orderId';
+      component.pendingVariableLines[0].operator = 'eq';
+      component.pendingVariableLines[0].values = ['1'];
+      component.addVariableLine();
+      component.pendingVariableLines[1].name = 'orderId';
+      component.pendingVariableLines[1].operator = 'gteq';
+      component.pendingVariableLines[1].values = ['0'];
+      const conflicts = component.variableNameConflicts;
+      expect(conflicts.length).toBe(1);
+      expect(conflicts[0]).toBe('orderid');
+    });
+
+    it('should return no conflicts when two lines share the same name AND same operator', () => {
+      component.selectCriteriaType('variables');
+      component.pendingVariableLines[0].name = 'orderId';
+      component.pendingVariableLines[0].operator = 'eq';
+      component.pendingVariableLines[0].values = ['1'];
+      component.addVariableLine();
+      component.pendingVariableLines[1].name = 'orderId';
+      component.pendingVariableLines[1].operator = 'eq';
+      component.pendingVariableLines[1].values = ['2'];
+      const conflicts = component.variableNameConflicts;
+      expect(conflicts.length).toBe(0);
     });
   });
 

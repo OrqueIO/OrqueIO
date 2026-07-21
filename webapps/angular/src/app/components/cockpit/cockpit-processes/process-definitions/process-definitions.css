@@ -1706,3 +1706,24 @@
   max-height: 80px;
   overflow-y: auto;
 }
+
+/* Warning shown when the same variable name appears with different operators */
+.variable-conflict-warning {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2, 6px);
+  padding: var(--space-2) var(--space-3);
+  margin: var(--space-2) var(--space-3) 0;
+  border-top: 1px solid var(--color-warning-border, #f59e0b);
+  background: var(--color-warning-bg, rgba(245,158,11,0.08));
+  border-radius: 4px;
+  font-size: 0.72rem;
+  color: var(--color-warning-text, #92400e);
+  line-height: 1.4;
+}
+
+.variable-conflict-icon {
+  flex-shrink: 0;
+  margin-top: 1px;
+  color: var(--color-warning, #f59e0b);
+}

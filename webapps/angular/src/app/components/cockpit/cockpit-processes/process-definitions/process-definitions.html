@@ -321,6 +321,13 @@
         </button>
       </div>
     </div>
+    <div class="variable-conflict-warning" *ngIf="variableNameConflicts.length > 0">
+      <fa-icon [icon]="faExclamationTriangle" class="variable-conflict-icon"></fa-icon>
+      <span>
+        <strong>{{ variableNameConflicts.join(', ') }}</strong>
+        used more than once with different operators — results may be empty if conditions conflict
+      </span>
+    </div>
   </div>
 
   <div class="editor-popover-actions" [class.editor-popover-actions--state]="activeEditorType === 'state' || activeEditorType === 'variables'">

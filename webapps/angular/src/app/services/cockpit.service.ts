@@ -1309,16 +1309,27 @@ export class CockpitService {
           break;
         case 'variables':
           if (filter.variableLines) {
+            const grouped = new Map<string, { name: string; op: string; values: string[]; vvIgnoreCase: boolean }>();
             for (const line of filter.variableLines) {
-              if (line.variableName && line.values.length > 0) {
-                const op = line.variableOperator || 'eq';
-                varPills.push({
+              if (!line.variableName || line.values.length === 0) continue;
+              const op = line.variableOperator || 'eq';
+              const key = `${line.variableName}::${op}`;
+              if (grouped.has(key)) {
+                const g = grouped.get(key)!;
+                for (const v of line.values) {
+                  if (!g.values.includes(v)) g.values.push(v);
+                }
+              } else {
+                grouped.set(key, {
                   name: line.variableName,
                   op,
-                  values: line.values,
+                  values: [...line.values],
                   vvIgnoreCase: op === 'like' || variableValuesIgnoreCase
                 });
               }
+            }
+            for (const g of grouped.values()) {
+              varPills.push(g);
             }
           }
           break;
