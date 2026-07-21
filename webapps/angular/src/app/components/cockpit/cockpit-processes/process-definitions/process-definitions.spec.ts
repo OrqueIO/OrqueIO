@@ -1328,6 +1328,66 @@ describe('ProcessDefinitionsComponent', () => {
   });
 
   // ===========================
+  // Bug fixes: no duplicate pills
+  // ===========================
+
+  describe('selectCriteriaType — no duplicate pills', () => {
+    beforeEach(() => { fixture.detectChanges(); });
+
+    it('should not create a duplicate State pill — redirects to existing pill editor', () => {
+      component.selectCriteriaType('state');
+      component.pendingStateValues = ['active'];
+      component.confirmCriterion();
+      expect(component.activePills.length).toBe(1);
+      // Select state again from "Add criteria"
+      component.selectCriteriaType('state');
+      expect(component.activePills.length).toBe(1);
+      expect(component.editingPillIndex).toBe(0);
+      expect(component.activeEditorType).toBe('state');
+      expect(component.pendingStateValues).toEqual(['active']);
+    });
+
+    it('should not create a duplicate Variables pill — redirects to existing pill editor', () => {
+      component.selectCriteriaType('variables');
+      component.pendingVariableLines[0].name = 'orderId';
+      component.pendingVariableLines[0].values = ['123'];
+      component.confirmCriterion();
+      expect(component.activePills.length).toBe(1);
+      // Select variables again from "Add criteria"
+      component.selectCriteriaType('variables');
+      expect(component.activePills.length).toBe(1);
+      expect(component.editingPillIndex).toBe(0);
+      expect(component.activeEditorType).toBe('variables');
+      expect(component.pendingVariableLines.length).toBe(1);
+      expect(component.pendingVariableLines[0].name).toBe('orderId');
+    });
+  });
+
+  // ===========================
+  // Bug fixes: popover flip (viewport overflow)
+  // ===========================
+
+  describe('checkPopoverPosition — viewport overflow detection', () => {
+    beforeEach(() => { fixture.detectChanges(); });
+
+    it('should set popoverFlipped=true when popover right edge exceeds viewport width', () => {
+      component.popoverFlipped = false;
+      const fakeEl = { getBoundingClientRect: () => ({ right: 1100 } as DOMRect) } as HTMLElement;
+      Object.defineProperty(window, 'innerWidth', { value: 1024, configurable: true, writable: true });
+      component.checkPopoverPosition(fakeEl);
+      expect(component.popoverFlipped).toBe(true);
+    });
+
+    it('should set popoverFlipped=false when popover fits within viewport', () => {
+      component.popoverFlipped = true;
+      const fakeEl = { getBoundingClientRect: () => ({ right: 700 } as DOMRect) } as HTMLElement;
+      Object.defineProperty(window, 'innerWidth', { value: 1024, configurable: true, writable: true });
+      component.checkPopoverPosition(fakeEl);
+      expect(component.popoverFlipped).toBe(false);
+    });
+  });
+
+  // ===========================
   // Global Search — getPillLabel
   // ===========================
 

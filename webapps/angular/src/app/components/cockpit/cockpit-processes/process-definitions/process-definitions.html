@@ -36,6 +36,7 @@
                 </div>
                 <div class="criterion-editor-popover"
                      [class.criterion-editor-popover--variables]="activeEditorType === 'variables'"
+                     [class.criterion-editor-popover--flip]="popoverFlipped"
                      *ngIf="editingPillIndex === i" role="dialog" aria-modal="true"
                      (keydown.enter)="$event.stopPropagation()">
                   <ng-container *ngTemplateOutlet="editorPopoverContent"></ng-container>
@@ -169,6 +170,7 @@
               <!-- Criterion editor popover — anchored below "Add criteria" button -->
               <div class="criterion-editor-popover"
                    [class.criterion-editor-popover--variables]="activeEditorType === 'variables'"
+                   [class.criterion-editor-popover--flip]="popoverFlipped"
                    *ngIf="activeEditorType && editingPillIndex === null" role="dialog" aria-modal="true"
                    (keydown.enter)="$event.stopPropagation()">
                 <ng-container *ngTemplateOutlet="editorPopoverContent"></ng-container>

@@ -131,6 +131,7 @@ export class ProcessDefinitionsComponent implements OnInit, OnDestroy {
   // Case-sensitivity options (variable filters)
   variableNamesIgnoreCase = false;
   variableValuesIgnoreCase = false;
+  popoverFlipped = false;
 
   // Search results
   searchResults: ProcessInstance[] = [];
@@ -347,7 +348,7 @@ export class ProcessDefinitionsComponent implements OnInit, OnDestroy {
   onDocumentClick(event: Event): void {
     const target = event.target as HTMLElement;
     if (this.editingPillIndex !== null) {
-      if (!target.closest('.pill-wrapper')) {
+      if (!target.closest('.pill-wrapper') && !target.closest('.criteria-dropdown-wrapper')) {
         this.confirmCriterion();
         if (this.activeEditorType) this.cancelCriterion();
       }
@@ -402,6 +403,17 @@ export class ProcessDefinitionsComponent implements OnInit, OnDestroy {
       return;
     }
 
+    // If a pill of this type already exists, reopen its editor instead of creating a duplicate
+    const existingIndex = this.activePills.findIndex(p => p.field === type);
+    if (existingIndex !== -1) {
+      this.editingPillIndex = existingIndex;
+      this.activeEditorType = this.activePills[existingIndex].field as GlobalSearchField;
+      this.populatePendingFromPill(this.activePills[existingIndex]);
+      this.cdr.markForCheck();
+      this.schedulePositionCheck();
+      return;
+    }
+
     this.activeEditorType = type;
     this.pendingValues = [];
     this.pendingVariableName = '';
@@ -412,6 +424,7 @@ export class ProcessDefinitionsComponent implements OnInit, OnDestroy {
       ? [{ name: '', operator: 'eq', values: [] }]
       : [];
     this.cdr.markForCheck();
+    this.schedulePositionCheck();
   }
 
   toggleStateValue(value: string): void {
@@ -425,13 +438,18 @@ export class ProcessDefinitionsComponent implements OnInit, OnDestroy {
 
   startEditPill(index: number, event: Event): void {
     event.stopPropagation();
-    const pill = this.activePills[index];
     this.showCriteriaDropdown = false;
     this.editingPillIndex = index;
-    this.activeEditorType = pill.field as GlobalSearchField;
+    this.activeEditorType = this.activePills[index].field as GlobalSearchField;
+    this.populatePendingFromPill(this.activePills[index]);
+    this.cdr.markForCheck();
+    this.schedulePositionCheck();
+  }
+
+  private populatePendingFromPill(pill: MultiValueFilter): void {
     this.pendingValues = [];
     this.pendingStateValues = [];
-
+    this.pendingVariableLines = [];
     switch (pill.field) {
       case 'businessKey':
       case 'instanceId':
@@ -459,8 +477,6 @@ export class ProcessDefinitionsComponent implements OnInit, OnDestroy {
         this.pendingDateValue = pill.values[0] || '';
         break;
     }
-
-    this.cdr.markForCheck();
   }
 
   confirmCriterion(): void {
@@ -481,6 +497,7 @@ export class ProcessDefinitionsComponent implements OnInit, OnDestroy {
             this.activePills = this.activePills.filter((_, i) => i !== idx);
             this.editingPillIndex = null;
             this.activeEditorType = null;
+            this.popoverFlipped = false;
             this.cdr.markForCheck();
             this.syncCriteriaToUrl();
           }
@@ -517,6 +534,7 @@ export class ProcessDefinitionsComponent implements OnInit, OnDestroy {
             this.activePills = this.activePills.filter((_, i) => i !== idx);
             this.editingPillIndex = null;
             this.activeEditorType = null;
+            this.popoverFlipped = false;
             this.cdr.markForCheck();
             this.syncCriteriaToUrl();
           }
@@ -537,6 +555,7 @@ export class ProcessDefinitionsComponent implements OnInit, OnDestroy {
       }
       this.activeEditorType = null;
       this.pendingValues = [];
+      this.popoverFlipped = false;
       this.cdr.markForCheck();
       this.syncCriteriaToUrl();
     }
@@ -548,7 +567,23 @@ export class ProcessDefinitionsComponent implements OnInit, OnDestroy {
     this.pendingStateValues = [];
     this.pendingVariableLines = [];
     this.editingPillIndex = null;
+    this.popoverFlipped = false;
     this.cdr.markForCheck();
+  }
+
+  checkPopoverPosition(el?: HTMLElement): void {
+    const popover = el ?? (document.querySelector('.criterion-editor-popover') as HTMLElement);
+    if (!popover) { this.popoverFlipped = false; return; }
+    const rect = popover.getBoundingClientRect();
+    const overflows = rect.right > window.innerWidth - 8;
+    if (overflows !== this.popoverFlipped) {
+      this.popoverFlipped = overflows;
+      this.cdr.markForCheck();
+    }
+  }
+
+  private schedulePositionCheck(): void {
+    setTimeout(() => this.checkPopoverPosition(), 0);
   }
 
   addVariableLine(): void {

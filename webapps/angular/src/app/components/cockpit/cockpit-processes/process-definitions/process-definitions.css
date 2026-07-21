@@ -544,6 +544,7 @@
     0 8px 32px rgba(0, 0, 0, 0.14),
     0 2px 8px  rgba(0, 0, 0, 0.08);
   width: 280px;
+  max-width: calc(100vw - 16px);
   overflow: visible;
   animation: criteriaDropdownIn 180ms cubic-bezier(0.16, 1, 0.3, 1);
   transform-origin: top left;
@@ -552,6 +553,13 @@
 /* Variables popover needs more width for 3 fields side by side */
 .criterion-editor-popover--variables {
   width: 440px;
+}
+
+/* Flip to right-aligned when left-aligned would overflow the viewport */
+.criterion-editor-popover--flip {
+  left: auto;
+  right: 0;
+  transform-origin: top right;
 }
 
 .editor-popover-header {
