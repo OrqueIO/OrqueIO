@@ -1240,6 +1240,67 @@ describe('ProcessDefinitionsComponent', () => {
   });
 
   // ===========================
+  // Variables popover — Enter key edge cases (bugs 1 & 2)
+  // ===========================
+
+  describe('Variables popover — Enter key edge cases', () => {
+    beforeEach(() => { fixture.detectChanges(); });
+
+    it('should create a chip and keep the popover open when Enter is pressed in a chip input with text', () => {
+      component.selectCriteriaType('variables');
+      component.pendingVariableLines[0].name = 'amount';
+      fixture.detectChanges();
+
+      const chipDe = fixture.debugElement.query(By.directive(MultiValueChipInputComponent));
+      const chipComp = chipDe.componentInstance as MultiValueChipInputComponent;
+      chipComp.currentInput = 'hello';
+
+      chipComp.onKeydown(new KeyboardEvent('keydown', { key: 'Enter' }));
+
+      expect(component.activeEditorType).toBe('variables'); // popover still open
+      expect(chipComp.values).toContain('hello');           // chip was created
+      expect(component.activePills.length).toBe(0);         // no pill confirmed yet
+    });
+
+    it('should confirm criterion when Enter is pressed with focus outside the Variables popover (empty area click)', () => {
+      component.selectCriteriaType('variables');
+      component.pendingVariableLines[0].name = 'amount';
+      component.pendingVariableLines[0].values = ['100'];
+      fixture.detectChanges();
+
+      // Simulate focus on document.body (e.g. user clicked on an empty area of the popover card)
+      document.body.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+      fixture.detectChanges();
+
+      expect(component.activePills.length).toBe(1);
+      expect(component.activePills[0].field).toBe('variables');
+      expect(component.activeEditorType).toBeNull();
+    });
+  });
+
+  // ===========================
+  // Search loading state (bug 3)
+  // ===========================
+
+  describe('search loading state — OnPush re-render after API response', () => {
+    beforeEach(() => { fixture.detectChanges(); });
+
+    it('should set searchLoading to false and show results after executeSearch resolves, without extra user interaction', () => {
+      component.activePills = [{ field: 'withIncidents', values: [] }];
+      fixture.detectChanges();
+
+      component.executeSearch();
+      fixture.detectChanges(); // single detectChanges — no extra click required
+
+      expect(component.searchLoading).toBe(false);
+      expect(component.searchResults.length).toBeGreaterThan(0);
+
+      const loadingEl: HTMLElement | null = fixture.nativeElement.querySelector('.loading-state');
+      expect(loadingEl).toBeNull(); // spinner is gone
+    });
+  });
+
+  // ===========================
   // Global Search — paste split
   // ===========================
 

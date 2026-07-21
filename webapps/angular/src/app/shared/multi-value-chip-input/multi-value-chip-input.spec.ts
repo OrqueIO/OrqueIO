@@ -55,13 +55,13 @@ describe('MultiValueChipInputComponent', () => {
     expect(component.values).toEqual([]);
   });
 
-  it('should emit emptyEnter after adding a chip via Enter (so a single press confirms)', () => {
+  it('should NOT emit emptyEnter when Enter is pressed with text — chip created, popover stays open', () => {
     let count = 0;
     component.emptyEnter.subscribe(() => count++);
     component.currentInput = 'abc';
     component.onKeydown(new KeyboardEvent('keydown', { key: 'Enter' }));
     expect(component.values).toEqual(['abc']);
-    expect(count).toBe(1);
+    expect(count).toBe(0);
   });
 
   // ── 2. Comma key adds chip, comma does not appear in chip or input ───────

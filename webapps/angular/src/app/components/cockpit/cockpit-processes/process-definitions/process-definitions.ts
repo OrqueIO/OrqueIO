@@ -833,12 +833,14 @@ export class ProcessDefinitionsComponent implements OnInit, OnDestroy {
 
   @HostListener('document:keydown.enter', ['$event'])
   onDocumentEnter(event: Event): void {
-    // Popovers call stopPropagation at .criterion-editor-popover level, so events from inside
-    // an open popover never reach the document — confirmCriterion() handles them instead.
-    // State guard is double-safety for edge cases (e.g., Enter on a button opening a popover).
-    if (this.activeEditorType !== null || this.editingPillIndex !== null) return;
-    // Buttons fire executeSearch via their own click — skip to avoid double-call.
+    // criterion-editor-popover calls stopPropagation, so Enter events originating inside
+    // the popover never reach here. Enter arriving here from outside (e.g. focus on
+    // document.body after clicking on an empty area of the card) should confirm the popover.
     if ((event.target as HTMLElement).tagName === 'BUTTON') return;
+    if (this.activeEditorType !== null || this.editingPillIndex !== null) {
+      this.confirmCriterion();
+      return;
+    }
     this.executeSearch();
   }
 
@@ -879,12 +881,12 @@ export class ProcessDefinitionsComponent implements OnInit, OnDestroy {
             const start = (this.searchCurrentPage - 1) * this.searchPageSize;
             this.searchResults = filtered.slice(start, start + this.searchPageSize);
             this.searchLoading = false;
-            this.cdr.markForCheck();
+            this.cdr.detectChanges();
           },
           error: () => {
             this.searchLoading = false;
             this.searchError = true;
-            this.cdr.markForCheck();
+            this.cdr.detectChanges();
           }
         });
     } else {
@@ -903,12 +905,12 @@ export class ProcessDefinitionsComponent implements OnInit, OnDestroy {
             this.searchResults = results;
             this.searchResultsCount = count;
             this.searchLoading = false;
-            this.cdr.markForCheck();
+            this.cdr.detectChanges();
           },
           error: () => {
             this.searchLoading = false;
             this.searchError = true;
-            this.cdr.markForCheck();
+            this.cdr.detectChanges();
           }
         });
     }

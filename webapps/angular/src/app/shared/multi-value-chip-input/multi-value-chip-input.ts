@@ -36,10 +36,12 @@ export class MultiValueChipInputComponent implements AfterViewInit {
   onKeydown(event: KeyboardEvent): void {
     if (event.key === 'Enter') {
       event.preventDefault();
-      // Add whatever is in the input (no-op if empty), then always confirm.
-      // Comma is the separator for adding multiple chips without confirming.
+
+      const hadInput = this.currentInput.trim() !== '';
       this.addCurrentInput();
-      this.emptyEnter.emit();
+      if (!hadInput) {
+        this.emptyEnter.emit();
+      }
     } else if (event.key === ',') {
       event.preventDefault();
       this.addCurrentInput();
