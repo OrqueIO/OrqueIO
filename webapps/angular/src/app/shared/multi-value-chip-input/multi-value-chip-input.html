@@ -1,0 +1,17 @@
+<div class="chip-input-container">
+  <span class="chip" *ngFor="let v of values; let i = index">
+    {{ v }}
+    <button class="chip-remove" (click)="removeValue(i)" type="button" aria-label="Remove">×</button>
+  </span>
+  <input
+    #inputEl
+    type="text"
+    class="chip-input"
+    [(ngModel)]="currentInput"
+    [placeholder]="placeholder"
+    (keydown)="onKeydown($event)"
+    (blur)="onBlur()"
+    (paste)="onPaste($event)"
+  />
+</div>
+<span class="chip-input-hint">{{ 'cockpit.processes.globalSearch.chipInputHint' | translate }}</span>

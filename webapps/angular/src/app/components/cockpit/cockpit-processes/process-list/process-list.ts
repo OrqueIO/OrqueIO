@@ -38,7 +38,7 @@ import { forkJoin } from 'rxjs';
 
 import { CockpitHeaderComponent, BreadcrumbItem } from '../../../../shared/cockpit-header/cockpit-header';
 import { COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS } from '../../../../shared/cockpit-menu';
-import { CockpitService, ProcessInstance, ProcessDefinition, ProcessQueryParams, ActivityStatistics, Incident, JobDefinition, CalledProcessDefinition } from '../../../../services/cockpit.service';
+import { CockpitService, ProcessInstance, ProcessDefinition, ProcessQueryParams, ActivityStatistics, Incident, JobDefinition, CalledProcessDefinition, parseVariableValue } from '../../../../services/cockpit.service';
 import { NavMenuService } from '../../../../services/nav-menu.service';
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
 import { BpmnViewerComponent, ActivityBadge, CallActivityClickEvent } from '../../../../shared/bpmn-viewer/bpmn-viewer';
@@ -519,7 +519,7 @@ export class ProcessListComponent implements OnInit, OnDestroy {
     const variables: any[] = [];
     for (const v of this.filters.variables) {
       if (!v.name.trim() || !v.value.trim()) continue;
-      const value = this.parseVariableValue(v.value, v.operator);
+      const value = parseVariableValue(v.value, v.operator);
       variables.push({ name: v.name, value, operator: v.operator });
     }
     if (variables.length > 0) {
@@ -550,39 +550,6 @@ export class ProcessListComponent implements OnInit, OnDestroy {
     const sec = String(d.getSeconds()).padStart(2, '0');
     const ms = String(d.getMilliseconds()).padStart(3, '0');
     return `${year}-${mon}-${day}T${hrs}:${min}:${sec}.${ms}${sign}${hh}${mm}`;
-  }
-
-  /**
-   * Parse a variable value string into the appropriate type.
-   * Matches Legacy behavior: auto-detects numbers, booleans, null.
-   * For 'like' operator, wraps value with % if no wildcards are present.
-   */
-  private parseVariableValue(raw: string, operator: string): any {
-    let value: string = raw;
-
-    // Like operator: auto-wrap with % if no wildcards present
-    if (operator === 'like') {
-      if (!value.includes('%')) {
-        value = `%${value}%`;
-      }
-      return value;
-    }
-
-    // Boolean detection
-    if (value.toLowerCase() === 'true') return true;
-    if (value.toLowerCase() === 'false') return false;
-
-    // Null detection
-    if (value === 'NULL') return null;
-
-    // Number detection
-    const trimmed = value.trim();
-    if (trimmed !== '') {
-      const parsed = Number(trimmed);
-      if (!isNaN(parsed)) return parsed;
-    }
-
-    return value;
   }
 
   addVariableFilter(): void {
