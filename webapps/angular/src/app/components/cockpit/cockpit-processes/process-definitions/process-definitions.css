@@ -1625,14 +1625,15 @@
 
 .editor-popover-body--variables {
   padding: 0;
-  max-height: 300px;
-  overflow-y: auto;
-  overflow-x: hidden;
+  /* No overflow here — op-menu uses position:absolute and must not be clipped */
 }
 
 .variable-lines-list {
   display: flex;
   flex-direction: column;
+  max-height: 280px;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .variable-line {
@@ -1661,7 +1662,8 @@
   overflow: hidden;
 }
 
-.variable-line:last-child {
+/* :last-of-type instead of :last-child because ng-container *ngFor may add <p> siblings */
+.variable-line:last-of-type {
   border-bottom: none;
 }
 
@@ -1726,4 +1728,140 @@
   flex-shrink: 0;
   margin-top: 1px;
   color: var(--color-warning, #f59e0b);
+}
+
+/* ===================================================
+   CUSTOM OPERATOR DROPDOWN (Variables popover)
+   Mirrors the State checklist style — single-select
+   =================================================== */
+
+.op-dropdown-wrapper {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.op-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  width: 72px;
+  padding: var(--space-1) var(--space-2);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+  font-family: var(--font-mono, monospace);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  white-space: nowrap;
+}
+
+.op-trigger:hover,
+.op-trigger--open {
+  border-color: var(--color-primary);
+  background: var(--color-gray-50);
+}
+
+.op-trigger-caret {
+  font-size: 0.6rem;
+  color: var(--text-muted);
+  transition: transform 0.15s;
+}
+
+.op-trigger--open .op-trigger-caret {
+  transform: rotate(180deg);
+}
+
+.op-menu {
+  /* position:fixed + inline top/left from getBoundingClientRect() bypasses overflow:auto clipping */
+  position: fixed;
+  z-index: 600;
+  min-width: 170px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md, 0 4px 12px rgba(0,0,0,0.12));
+  padding: var(--space-1);
+}
+
+.op-menu-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  padding: 6px var(--space-3);
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.12s;
+}
+
+.op-menu-row:hover {
+  background: var(--color-gray-50);
+}
+
+.op-menu-row--selected {
+  background: var(--color-gray-50);
+}
+
+.op-menu-symbol {
+  font-family: var(--font-mono, monospace);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-primary);
+  width: 16px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.op-menu-name {
+  flex: 1;
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}
+
+.op-menu-row--selected .op-menu-name {
+  color: var(--text-primary);
+}
+
+.op-menu-check {
+  font-size: 0.65rem;
+  color: var(--color-primary);
+  flex-shrink: 0;
+}
+
+/* Single-value input for comparison operators (>, ≥, <, ≤) */
+.editor-input--value-single {
+  width: 100%;
+  min-width: 0;
+}
+
+.editor-input--error {
+  border-color: var(--color-error, #dc2626) !important;
+}
+
+.editor-input--error:focus {
+  box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.2);
+}
+
+/* Non-numeric value error — shown below the variable line, aligned under the value column */
+.variable-value-error {
+  margin: 0;
+  padding: 2px var(--space-3) var(--space-2) calc(var(--space-3) + 72px + var(--space-2));
+  font-size: 0.68rem;
+  color: var(--color-error, #dc2626);
+  background: var(--bg-card);
+}
+
+/* Like-operator contextual hint — shown below the line, not globally */
+.variable-like-hint {
+  margin: 0;
+  padding: 2px var(--space-3) var(--space-2) calc(var(--space-3) + 72px + var(--space-2));
+  font-size: 0.68rem;
+  font-style: italic;
+  color: var(--text-muted);
+  background: var(--bg-card);
 }

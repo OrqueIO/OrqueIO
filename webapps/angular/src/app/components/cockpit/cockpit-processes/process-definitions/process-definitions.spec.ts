@@ -1420,6 +1420,151 @@ describe('ProcessDefinitionsComponent', () => {
   });
 
   // ===========================
+  // Operator dropdown UX
+  // ===========================
+
+  describe('operator dropdown — custom single-select', () => {
+    beforeEach(() => { fixture.detectChanges(); });
+
+    it('isMultiValueOperator returns false for comparison operators (>, ≥, <, ≤)', () => {
+      expect(component.isMultiValueOperator('gt')).toBe(false);
+      expect(component.isMultiValueOperator('gteq')).toBe(false);
+      expect(component.isMultiValueOperator('lt')).toBe(false);
+      expect(component.isMultiValueOperator('lteq')).toBe(false);
+    });
+
+    it('isMultiValueOperator returns true for eq, neq, like', () => {
+      expect(component.isMultiValueOperator('eq')).toBe(true);
+      expect(component.isMultiValueOperator('neq')).toBe(true);
+      expect(component.isMultiValueOperator('like')).toBe(true);
+    });
+
+    it('switching eq→gt with 2 chips keeps only the first value', () => {
+      component.selectCriteriaType('variables');
+      component.pendingVariableLines[0].operator = 'eq';
+      component.pendingVariableLines[0].values = ['alpha', 'beta'];
+      component.selectOperator(0, 'gt');
+      expect(component.pendingVariableLines[0].operator).toBe('gt');
+      expect(component.pendingVariableLines[0].values).toEqual(['alpha']);
+    });
+
+    it('switching gt→eq with a single value preserves the value as a chip', () => {
+      component.selectCriteriaType('variables');
+      component.pendingVariableLines[0].operator = 'gt';
+      component.pendingVariableLines[0].values = ['42'];
+      component.selectOperator(0, 'eq');
+      expect(component.pendingVariableLines[0].operator).toBe('eq');
+      expect(component.pendingVariableLines[0].values).toEqual(['42']);
+    });
+
+    it('variable-like-hint appears when operator is like and disappears when changed', () => {
+      component.selectCriteriaType('variables');
+      component.selectOperator(0, 'like');
+      fixture.detectChanges();
+      expect(fixture.nativeElement.querySelector('.variable-like-hint')).toBeTruthy();
+
+      component.selectOperator(0, 'eq');
+      fixture.detectChanges();
+      expect(fixture.nativeElement.querySelector('.variable-like-hint')).toBeNull();
+    });
+
+    it('opening the operator menu renders all 7 operator rows (none clipped by overflow)', () => {
+      component.selectCriteriaType('variables');
+      fixture.detectChanges();
+      // Use a stub element — JSDOM getBoundingClientRect() returns zeros, which is fine:
+      // spaceBelow = innerHeight(768) - bottom(0) = 768 >= estimatedMenuHeight → opens below
+      const stubTrigger = document.createElement('button');
+      component.toggleOperatorMenu(0, stubTrigger);
+      fixture.detectChanges();
+      const rows = fixture.nativeElement.querySelectorAll('.op-menu-row');
+      expect(rows.length).toBe(7);
+      // Verify all operator symbols are present
+      const symbols = Array.from(rows as NodeListOf<HTMLElement>).map(
+        r => r.querySelector('.op-menu-symbol')?.textContent?.trim()
+      );
+      expect(symbols).toEqual(['=', '≠', '>', '≥', '<', '≤', '~']);
+    });
+  });
+
+  // ===========================
+  // Comparison value validation
+  // ===========================
+
+  describe('comparison value validation', () => {
+    beforeEach(() => { fixture.detectChanges(); });
+
+    it('isComparisonValueInvalid returns true for gteq with non-numeric value', () => {
+      component.selectCriteriaType('variables');
+      component.selectOperator(0, 'gteq');
+      component.pendingVariableLines[0].values = ['tg'];
+      expect(component.isComparisonValueInvalid(component.pendingVariableLines[0])).toBe(true);
+    });
+
+    it('isComparisonValueInvalid returns false for gteq with a valid number', () => {
+      component.selectCriteriaType('variables');
+      component.selectOperator(0, 'gteq');
+      component.pendingVariableLines[0].values = ['42'];
+      expect(component.isComparisonValueInvalid(component.pendingVariableLines[0])).toBe(false);
+    });
+
+    it('isComparisonValueInvalid returns false for eq with non-numeric value (multi-value op)', () => {
+      component.selectCriteriaType('variables');
+      component.pendingVariableLines[0].operator = 'eq';
+      component.pendingVariableLines[0].values = ['tg'];
+      expect(component.isComparisonValueInvalid(component.pendingVariableLines[0])).toBe(false);
+    });
+
+    it('isComparisonValueInvalid returns false when value is empty (not yet entered)', () => {
+      component.selectCriteriaType('variables');
+      component.selectOperator(0, 'gt');
+      component.pendingVariableLines[0].values = [];
+      expect(component.isComparisonValueInvalid(component.pendingVariableLines[0])).toBe(false);
+    });
+
+    it('hasInvalidVariableValues is true when any comparison line has non-numeric value', () => {
+      component.selectCriteriaType('variables');
+      component.selectOperator(0, 'gteq');
+      component.pendingVariableLines[0].name = 'invoiceNumber';
+      component.pendingVariableLines[0].values = ['tg'];
+      expect(component.hasInvalidVariableValues).toBe(true);
+    });
+
+    it('confirm button is disabled when a comparison line has a non-numeric value', () => {
+      component.selectCriteriaType('variables');
+      component.selectOperator(0, 'gteq');
+      component.pendingVariableLines[0].name = 'invoiceNumber';
+      component.pendingVariableLines[0].values = ['tg'];
+      fixture.detectChanges();
+      const confirmBtn = fixture.nativeElement.querySelector('.btn-editor-confirm-icon');
+      expect(confirmBtn.disabled).toBe(true);
+    });
+
+    it('variable-value-error message is shown in the DOM when value is non-numeric for comparison op', () => {
+      component.selectCriteriaType('variables');
+      component.selectOperator(0, 'gt');
+      component.pendingVariableLines[0].name = 'amount';
+      component.pendingVariableLines[0].values = ['abc'];
+      fixture.detectChanges();
+      expect(fixture.nativeElement.querySelector('.variable-value-error')).toBeTruthy();
+    });
+
+    it('variable-value-error message disappears when value is corrected to a number', () => {
+      component.selectCriteriaType('variables');
+      component.selectOperator(0, 'gt');
+      component.pendingVariableLines[0].name = 'amount';
+      component.pendingVariableLines[0].values = ['abc'];
+      fixture.detectChanges();
+      expect(fixture.nativeElement.querySelector('.variable-value-error')).toBeTruthy();
+
+      // Use the component method so markForCheck() is called and OnPush re-renders
+      const fakeEvt = { target: { value: '100' } } as unknown as Event;
+      component.onVariableLineSingleValueChange(0, fakeEvt);
+      fixture.detectChanges();
+      expect(fixture.nativeElement.querySelector('.variable-value-error')).toBeNull();
+    });
+  });
+
+  // ===========================
   // Bug fixes: no duplicate pills
   // ===========================
 

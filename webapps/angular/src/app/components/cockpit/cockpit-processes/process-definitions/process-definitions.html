@@ -291,35 +291,67 @@
 
   <!-- Variables (grouped multi-line) -->
   <div class="editor-popover-body editor-popover-body--variables" *ngIf="activeEditorType === 'variables'">
-    <div class="variable-lines-list">
-      <div *ngFor="let line of pendingVariableLines; let i = index; trackBy: trackVariableLine"
-           class="variable-line">
-        <input
-          type="text"
-          class="editor-input editor-input--name"
-          [(ngModel)]="line.name"
-          placeholder="Name"
-        />
-        <select [(ngModel)]="line.operator" class="editor-select editor-select--operator">
-          <option value="eq">=</option>
-          <option value="neq">&#x2260;</option>
-          <option value="gt">&gt;</option>
-          <option value="gteq">&#x2265;</option>
-          <option value="lt">&lt;</option>
-          <option value="lteq">&#x2264;</option>
-          <option value="like">~</option>
-        </select>
-        <div class="editor-values-col">
-          <app-multi-value-chip-input
-            [values]="line.values"
-            (valuesChange)="onVariableLineValuesChange(i, $event)"
-            placeholder="Value"
-          ></app-multi-value-chip-input>
+    <div class="variable-lines-list" (scroll)="closeOperatorMenu()">
+      <ng-container *ngFor="let line of pendingVariableLines; let i = index; trackBy: trackVariableLine">
+        <div class="variable-line">
+          <input
+            type="text"
+            class="editor-input editor-input--name"
+            [(ngModel)]="line.name"
+            placeholder="Name"
+          />
+          <!-- Custom operator dropdown (single-select, styled like State checklist) -->
+          <div class="op-dropdown-wrapper">
+            <button class="op-trigger" #opTrigger (click)="toggleOperatorMenu(i, opTrigger)" type="button"
+                    [class.op-trigger--open]="openOperatorMenuIndex === i">
+              {{ getOperatorLabel(line.operator) }}
+              <fa-icon [icon]="faChevronDown" class="op-trigger-caret"></fa-icon>
+            </button>
+            <!-- position:fixed via inline styles so overflow:auto on .variable-lines-list cannot clip it -->
+            <div class="op-menu" *ngIf="openOperatorMenuIndex === i && opMenuPosition"
+                 [style.top.px]="opMenuPosition!.top"
+                 [style.left.px]="opMenuPosition!.left"
+                 [style.min-width.px]="opMenuPosition!.minWidth">
+              <button *ngFor="let op of variableOperators"
+                      class="op-menu-row" [class.op-menu-row--selected]="line.operator === op.value"
+                      (click)="selectOperator(i, op.value)" type="button">
+                <span class="op-menu-symbol">{{ op.label }}</span>
+                <span class="op-menu-name">{{ op.name }}</span>
+                <fa-icon *ngIf="line.operator === op.value" [icon]="faCheck" class="op-menu-check"></fa-icon>
+              </button>
+            </div>
+          </div>
+          <!-- Value zone: chips for eq/neq/like, single input for comparison operators -->
+          <div class="editor-values-col">
+            <app-multi-value-chip-input
+              *ngIf="isMultiValueOperator(line.operator)"
+              [values]="line.values"
+              (valuesChange)="onVariableLineValuesChange(i, $event)"
+              placeholder="Value"
+            ></app-multi-value-chip-input>
+            <input
+              *ngIf="!isMultiValueOperator(line.operator)"
+              type="text"
+              class="editor-input editor-input--value-single"
+              [class.editor-input--error]="isComparisonValueInvalid(line)"
+              [value]="line.values[0] ?? ''"
+              (input)="onVariableLineSingleValueChange(i, $event)"
+              placeholder="Value"
+            />
+          </div>
+          <button class="btn-remove-line" (click)="removeVariableLine(i)" type="button" title="Remove variable">
+            <fa-icon [icon]="faTimes"></fa-icon>
+          </button>
         </div>
-        <button class="btn-remove-line" (click)="removeVariableLine(i)" type="button" title="Remove variable">
-          <fa-icon [icon]="faTimes"></fa-icon>
-        </button>
-      </div>
+        <!-- Contextual hint shown only when ~ (like) is active for this line -->
+        <p class="variable-like-hint" *ngIf="line.operator === 'like'">
+          {{ 'cockpit.processes.globalSearch.likeHint' | translate }}
+        </p>
+        <!-- Validation error: non-numeric value with a comparison operator -->
+        <p class="variable-value-error" *ngIf="isComparisonValueInvalid(line)">
+          {{ 'cockpit.processes.globalSearch.comparisonValueError' | translate }}
+        </p>
+      </ng-container>
     </div>
     <div class="variable-conflict-warning" *ngIf="variableNameConflicts.length > 0">
       <fa-icon [icon]="faExclamationTriangle" class="variable-conflict-icon"></fa-icon>
@@ -343,7 +375,8 @@
       </button>
       <button class="btn-editor-confirm-icon" (click)="confirmCriterion()" type="button" title="Apply"
               [disabled]="(activeEditorType === 'state' && pendingStateValues.length === 0 && editingPillIndex === null) ||
-                          (activeEditorType === 'variables' && validVariableLineCount === 0 && editingPillIndex === null)">
+                          (activeEditorType === 'variables' && validVariableLineCount === 0 && editingPillIndex === null) ||
+                          (activeEditorType === 'variables' && hasInvalidVariableValues)">
         <fa-icon [icon]="faCheck"></fa-icon>
       </button>
     </div>

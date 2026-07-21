@@ -334,6 +334,8 @@
   "cockpit.processes.globalSearch.clearBtn": "Effacer",
   "cockpit.processes.globalSearch.valuePlaceholder": "Entrer une valeur...",
   "cockpit.processes.globalSearch.chipInputHint": "Virgule, Entrée ou clic ailleurs pour valider · coller une liste fonctionne aussi",
+  "cockpit.processes.globalSearch.likeHint": "Fonctionne uniquement sur les variables texte — sans effet sur les variables numériques",
+  "cockpit.processes.globalSearch.comparisonValueError": "Valeur numérique requise pour cet opérateur",
   "cockpit.processes.globalSearch.ignoreCase.label": "Pour les variables, ignorer la casse du",
   "cockpit.processes.globalSearch.ignoreCase.name": "nom",
   "cockpit.processes.globalSearch.ignoreCase.value": "valeur",

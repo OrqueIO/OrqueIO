@@ -337,6 +337,8 @@
   "cockpit.processes.globalSearch.clearBtn": "Clear",
   "cockpit.processes.globalSearch.valuePlaceholder": "Enter value...",
   "cockpit.processes.globalSearch.chipInputHint": "Comma, Enter or click outside to confirm · paste a list works too",
+  "cockpit.processes.globalSearch.likeHint": "Works best on text variables — has no effect on number variables",
+  "cockpit.processes.globalSearch.comparisonValueError": "Must be a number for this operator",
   "cockpit.processes.globalSearch.ignoreCase.label": "For variables, ignore case of",
   "cockpit.processes.globalSearch.ignoreCase.name": "name",
   "cockpit.processes.globalSearch.ignoreCase.value": "value",

@@ -127,11 +127,24 @@ export class ProcessDefinitionsComponent implements OnInit, OnDestroy {
   pendingDateValue = '';
   pendingVariableLines: PendingVariableLine[] = [];
   editingPillIndex: number | null = null;
+  openOperatorMenuIndex: number | null = null;
+  opMenuPosition: { top: number; left: number; minWidth: number } | null = null;
 
   // Case-sensitivity options (variable filters)
   variableNamesIgnoreCase = false;
   variableValuesIgnoreCase = false;
   popoverFlipped = false;
+
+  // Operator options for the custom dropdown in the Variables popover
+  readonly variableOperators: { value: VariableOperator; label: string; name: string }[] = [
+    { value: 'eq',   label: '=',  name: 'equals' },
+    { value: 'neq',  label: '≠',  name: 'not equals' },
+    { value: 'gt',   label: '>',  name: 'greater than' },
+    { value: 'gteq', label: '≥',  name: 'greater or equal' },
+    { value: 'lt',   label: '<',  name: 'less than' },
+    { value: 'lteq', label: '≤',  name: 'less or equal' },
+    { value: 'like', label: '~',  name: 'like' },
+  ];
 
   // Search results
   searchResults: ProcessInstance[] = [];
@@ -347,6 +360,12 @@ export class ProcessDefinitionsComponent implements OnInit, OnDestroy {
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: Event): void {
     const target = event.target as HTMLElement;
+    // Close the operator dropdown when clicking outside its wrapper
+    if (this.openOperatorMenuIndex !== null && !target.closest('.op-dropdown-wrapper')) {
+      this.openOperatorMenuIndex = null;
+      this.opMenuPosition = null;
+      this.cdr.markForCheck();
+    }
     if (this.editingPillIndex !== null) {
       if (!target.closest('.pill-wrapper') && !target.closest('.criteria-dropdown-wrapper')) {
         this.confirmCriterion();
@@ -369,7 +388,11 @@ export class ProcessDefinitionsComponent implements OnInit, OnDestroy {
   @HostListener('document:keydown.escape')
   onEscapeKey(): void {
     let changed = false;
-    if (this.activeEditorType) {
+    if (this.openOperatorMenuIndex !== null) {
+      this.openOperatorMenuIndex = null;
+      this.opMenuPosition = null;
+      changed = true;
+    } else if (this.activeEditorType) {
       this.activeEditorType = null;
       this.pendingValues = [];
       this.editingPillIndex = null;
@@ -567,6 +590,8 @@ export class ProcessDefinitionsComponent implements OnInit, OnDestroy {
     this.pendingStateValues = [];
     this.pendingVariableLines = [];
     this.editingPillIndex = null;
+    this.openOperatorMenuIndex = null;
+    this.opMenuPosition = null;
     this.popoverFlipped = false;
     this.cdr.markForCheck();
   }
@@ -603,6 +628,71 @@ export class ProcessDefinitionsComponent implements OnInit, OnDestroy {
 
   trackVariableLine(index: number): number {
     return index;
+  }
+
+  isMultiValueOperator(op: VariableOperator): boolean {
+    return op === 'eq' || op === 'neq' || op === 'like';
+  }
+
+  isComparisonValueInvalid(line: PendingVariableLine): boolean {
+    if (this.isMultiValueOperator(line.operator)) return false;
+    if (line.values.length === 0 || line.values[0].trim() === '') return false;
+    return isNaN(Number(line.values[0].trim()));
+  }
+
+  get hasInvalidVariableValues(): boolean {
+    return this.pendingVariableLines.some(l => this.isComparisonValueInvalid(l));
+  }
+
+  toggleOperatorMenu(index: number, trigger: HTMLElement): void {
+    if (this.openOperatorMenuIndex === index) {
+      this.openOperatorMenuIndex = null;
+      this.opMenuPosition = null;
+      this.cdr.markForCheck();
+      return;
+    }
+    const rect = trigger.getBoundingClientRect();
+    // Estimate menu height (7 items × 34px + 12px padding) to decide open-below vs open-above
+    const estimatedMenuHeight = 7 * 34 + 12;
+    const spaceBelow = window.innerHeight - rect.bottom;
+    const top = spaceBelow >= estimatedMenuHeight
+      ? rect.bottom + 4
+      : Math.max(4, rect.top - estimatedMenuHeight - 4);
+    this.opMenuPosition = {
+      top,
+      left: rect.left,
+      minWidth: Math.max(rect.width, 170),
+    };
+    this.openOperatorMenuIndex = index;
+    this.cdr.markForCheck();
+  }
+
+  closeOperatorMenu(): void {
+    if (this.openOperatorMenuIndex !== null) {
+      this.openOperatorMenuIndex = null;
+      this.opMenuPosition = null;
+      this.cdr.markForCheck();
+    }
+  }
+
+  selectOperator(index: number, op: VariableOperator): void {
+    const line = this.pendingVariableLines[index];
+    const wasMulti = this.isMultiValueOperator(line.operator);
+    const willBeMulti = this.isMultiValueOperator(op);
+    // Switching from multi-value (eq/neq/like) to comparison (>/≥/</≤): keep only first value
+    const values = (wasMulti && !willBeMulti && line.values.length > 1)
+      ? [line.values[0]]
+      : line.values;
+    this.pendingVariableLines[index] = { ...line, operator: op, values };
+    this.openOperatorMenuIndex = null;
+    this.opMenuPosition = null;
+    this.cdr.markForCheck();
+  }
+
+  onVariableLineSingleValueChange(index: number, event: Event): void {
+    const value = (event.target as HTMLInputElement).value;
+    this.pendingVariableLines[index].values = value.trim() ? [value] : [];
+    this.cdr.markForCheck();
   }
 
   get validVariableLineCount(): number {
@@ -867,7 +957,7 @@ export class ProcessDefinitionsComponent implements OnInit, OnDestroy {
     return labels[state] || state;
   }
 
-  private getOperatorLabel(op: VariableOperator): string {
+  getOperatorLabel(op: VariableOperator): string {
     const ops: Record<VariableOperator, string> = {
       eq: '=', neq: '≠', gt: '>', gteq: '≥', lt: '<', lteq: '≤', like: '~'
     };
