@@ -377,6 +377,8 @@
   "cockpit.processes.globalSearch.dateConflictStarted": "\"Started after\" is later than \"Started before\" — no instances can match",
   "cockpit.processes.globalSearch.dateConflictFinished": "\"Finished after\" is later than \"Finished before\" — no instances can match",
   "cockpit.processes.globalSearch.incidentsTerminalConflict": "\"With incidents only\" rarely matches completed/terminated instances — consider including Active or Suspended states",
+  "cockpit.processes.globalSearch.noSearchYet": "No search run yet",
+  "cockpit.processes.globalSearch.noSearchYetHint": "Add criteria and click Search to find process instances",
   "cockpit.processes.tabs.processInstances": "Process Instances",
   "cockpit.processes.tabs.incidents": "Incidents",
   "cockpit.processes.tabs.calledProcessDefinitions": "Called Process Definitions",
