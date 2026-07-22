@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, firstValueFrom } from 'rxjs';
 
@@ -15,13 +16,18 @@ export class TranslateService {
   private currentLangSubject: BehaviorSubject<Language>;
   public currentLang$: Observable<Language>;
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient,
+    @Inject(DOCUMENT) private document: Document
+  ) {
     const savedLang = this.getSavedLanguage();
     this.currentLangSubject = new BehaviorSubject<Language>(savedLang);
     this.currentLang$ = this.currentLangSubject.asObservable();
-
-    // Load the initial language
-    this.loadLanguage(savedLang);
+    // Initial load is handled exclusively by APP_INITIALIZER (app.config.ts).
+    // Do NOT call loadLanguage() here: if en.json is in the browser HTTP cache,
+    // this fire-and-forget call could resolve before APP_INITIALIZER runs,
+    // set loadedLanguages early, and cause APP_INITIALIZER's loadLanguage()
+    // guard to short-circuit — rendering the app with stale cached translations.
   }
 
   private getSavedLanguage(): Language {
@@ -47,8 +53,9 @@ export class TranslateService {
     }
 
     try {
+      const url = new URL(`assets/i18n/${lang}.json`, this.document.baseURI).href;
       const translations = await firstValueFrom(
-        this.http.get<{ [key: string]: string }>(`assets/i18n/${lang}.json`)
+        this.http.get<{ [key: string]: string }>(url)
       );
       this.translations[lang] = translations;
       this.loadedLanguages.add(lang);
