@@ -1244,16 +1244,32 @@
   color: var(--color-error, #dc2626);
 }
 
-.variables-popover-hint {
-  margin: 0;
+.chip-input-hint-block {
+  margin-top: 7px;
   padding: var(--space-1) var(--space-3) var(--space-2);
-  font-size: 0.72rem;
-  color: var(--text-secondary);
   background: var(--color-gray-50);
-  border-bottom: 1px solid var(--border-color-light);
+  border-top: 1px solid var(--border-color-light);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
-.variable-line ::ng-deep .chip-input-hint {
+.chip-hint-main {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.chip-hint-tip {
+  margin: 0;
+  font-size: 0.65rem;
+  color: var(--text-muted);
+}
+
+/* Suppress built-in chip-input-hint — custom two-line block shown externally */
+.variable-line ::ng-deep .chip-input-hint,
+.editor-popover-body ::ng-deep .chip-input-hint {
   display: none;
 }
 
