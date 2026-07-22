@@ -16,6 +16,7 @@ export interface NavMenuItem {
   label: string;
   route: string;
   exact?: boolean;
+  subItems?: NavMenuItem[];
 }
 
 @Component({
@@ -37,6 +38,7 @@ export class NavbarComponent implements OnInit {
   navActions: NavAction[] = [];
   moreMenuItems: NavMenuItem[] = [];
   moreMenuOpen = false;
+  openSubMenuLabel: string | null = null;
 
   // Icons
   faUser = faUser;
@@ -103,6 +105,9 @@ export class NavbarComponent implements OnInit {
     if (!target.closest('.more-dropdown')) {
       this.moreMenuOpen = false;
     }
+    if (!target.closest('.sub-dropdown')) {
+      this.openSubMenuLabel = null;
+    }
   }
 
   toggleMoreMenu(event: Event): void {
@@ -112,6 +117,15 @@ export class NavbarComponent implements OnInit {
 
   closeMoreMenu(): void {
     this.moreMenuOpen = false;
+  }
+
+  toggleSubMenu(item: NavMenuItem, event: Event): void {
+    event.stopPropagation();
+    this.openSubMenuLabel = this.openSubMenuLabel === item.label ? null : item.label;
+  }
+
+  closeSubMenu(): void {
+    this.openSubMenuLabel = null;
   }
 
   onActionClick(action: NavAction): void {

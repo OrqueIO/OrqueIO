@@ -381,6 +381,8 @@
   "cockpit.processes.tabs.incidents": "Incidents",
   "cockpit.processes.tabs.calledProcessDefinitions": "Called Process Definitions",
   "cockpit.processes.tabs.jobDefinitions": "Job Definitions",
+  "cockpit.processes.tabs.definitions": "Definitions",
+  "cockpit.processes.tabs.searchInstances": "Search Instances",
   "cockpit.incidents.columns.state": "State",
   "cockpit.incidents.columns.type": "Type",
   "cockpit.incidents.columns.message": "Message",

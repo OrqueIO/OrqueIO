@@ -378,6 +378,8 @@
   "cockpit.processes.tabs.incidents": "Incidents",
   "cockpit.processes.tabs.calledProcessDefinitions": "Définitions de processus appelées",
   "cockpit.processes.tabs.jobDefinitions": "Définitions de jobs",
+  "cockpit.processes.tabs.definitions": "Définitions",
+  "cockpit.processes.tabs.searchInstances": "Rechercher des instances",
   "cockpit.incidents.columns.state": "État",
   "cockpit.incidents.columns.type": "Type",
   "cockpit.incidents.columns.message": "Message",

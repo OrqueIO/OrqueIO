@@ -92,6 +92,85 @@
   opacity: 1;
 }
 
+/* Sub-dropdown (split: nav link + chevron toggle) */
+.sub-dropdown {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+}
+
+.sub-main-link {
+  padding-right: 0.375rem;
+  border-radius: 6px 0 0 6px;
+}
+
+.sub-chevron-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.375rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: #4b5563;
+  border-radius: 0 6px 6px 0;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.sub-chevron-btn:hover {
+  color: #1f2937;
+  background: #f3f4f6;
+}
+
+.sub-chevron-btn.open {
+  background: #f3f4f6;
+  color: #1f2937;
+}
+
+.sub-chevron-btn .chevron {
+  font-size: 0.625rem;
+  transition: transform 0.2s ease;
+  opacity: 0.7;
+}
+
+.sub-chevron-btn .chevron.rotated {
+  transform: rotate(180deg);
+}
+
+/* Active-group: unified active state — label + chevron in one block */
+.sub-dropdown.active-group {
+  background: #eff6ff;
+  border-radius: 6px;
+}
+
+/* Suppress the link's own active background; container handles it */
+.sub-dropdown.active-group .sub-main-link.active {
+  background: transparent;
+}
+
+/* Suppress the link's ::after underline; move it to the container */
+.sub-dropdown.active-group .sub-main-link.active::after {
+  display: none;
+}
+
+.sub-dropdown.active-group::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 24px;
+  height: 2px;
+  background: #3b82f6;
+  border-radius: 2px;
+}
+
+/* Chevron adopts the active blue to match the label */
+.sub-dropdown.active-group .sub-chevron-btn {
+  color: #3b82f6;
+}
+
 /* More Dropdown */
 .more-dropdown {
   position: relative;

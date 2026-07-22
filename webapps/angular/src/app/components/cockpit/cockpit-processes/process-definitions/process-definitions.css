@@ -44,6 +44,45 @@
 }
 
 /* =====================================================
+   TAB BAR
+   ===================================================== */
+
+.processes-tabs-bar {
+  flex-shrink: 0;
+  padding: 0 1.5rem;
+  border-bottom: 1px solid var(--border-color-light);
+  background: var(--bg-card);
+}
+
+.process-tabs {
+  display: flex;
+  gap: 0;
+}
+
+.process-tab {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.65rem 1.25rem;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-secondary);
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  transition: color var(--transition-fast), border-color var(--transition-fast);
+  white-space: nowrap;
+}
+
+.process-tab:hover {
+  color: var(--text-primary);
+}
+
+.process-tab.active {
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* =====================================================
    PANEL CARDS (both search and definitions share this)
    ===================================================== */
 
