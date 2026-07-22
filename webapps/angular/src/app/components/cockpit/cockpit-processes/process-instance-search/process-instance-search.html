@@ -22,12 +22,8 @@
       </nav>
     </div>
 
-    <div class="page-content">
-
-      <!-- =====================================================
-           GLOBAL SEARCH PANEL
-           ===================================================== -->
-      <div class="panel-card search-panel-card">
+    <div class="tab-content">
+      <div class="criteria-zone">
         <div class="panel-header-bar">
           <fa-icon [icon]="faFilter" class="panel-header-icon"></fa-icon>
           <span class="panel-header-title">{{ 'cockpit.processes.globalSearch.title' | translate }}</span>
@@ -458,8 +454,18 @@
             </button>
           </div>
 
-          <!-- Results section (only after a search) -->
-          <ng-container *ngIf="searchExecuted">
+        </div>
+      </div>
+
+      <!-- Initial empty state: shown before first search -->
+      <div class="search-initial-state" *ngIf="!searchExecuted">
+        <fa-icon [icon]="faSearch" class="search-initial-icon"></fa-icon>
+        <p class="search-initial-title">{{ 'cockpit.processes.globalSearch.noSearchYet' | translate }}</p>
+        <p class="search-initial-hint">{{ 'cockpit.processes.globalSearch.noSearchYetHint' | translate }}</p>
+      </div>
+
+      <!-- Results section (only after a search) -->
+      <ng-container *ngIf="searchExecuted">
 
             <!-- Loading -->
             <div class="loading-state" *ngIf="searchLoading">
@@ -571,9 +577,6 @@
 
             </ng-container>
           </ng-container>
-
-        </div>
-      </div>
 
     </div>
   </main>

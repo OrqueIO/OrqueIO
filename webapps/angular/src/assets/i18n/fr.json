@@ -374,6 +374,8 @@
   "cockpit.processes.globalSearch.dateConflictStarted": "\"Démarré après\" est postérieur à \"Démarré avant\" — aucune instance ne peut correspondre",
   "cockpit.processes.globalSearch.dateConflictFinished": "\"Terminé après\" est postérieur à \"Terminé avant\" — aucune instance ne peut correspondre",
   "cockpit.processes.globalSearch.incidentsTerminalConflict": "\"Avec incidents uniquement\" correspond rarement aux instances terminées — envisagez d'inclure des états Actif ou Suspendu",
+  "cockpit.processes.globalSearch.noSearchYet": "Aucune recherche effectuée",
+  "cockpit.processes.globalSearch.noSearchYetHint": "Ajoutez des critères et cliquez sur Rechercher pour trouver des instances de processus",
   "cockpit.processes.tabs.processInstances": "Instances de processus",
   "cockpit.processes.tabs.incidents": "Incidents",
   "cockpit.processes.tabs.calledProcessDefinitions": "Définitions de processus appelées",

@@ -33,14 +33,14 @@
   overflow: hidden;
 }
 
-.page-content {
-  padding: 1.5rem;
+.tab-content {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
   min-height: 0;
   overflow: auto;
+  padding: 1.5rem;
+  gap: 1.5rem;
 }
 
 /* =====================================================
@@ -82,19 +82,6 @@
   font-weight: var(--font-weight-semibold);
 }
 
-/* =====================================================
-   PANEL CARDS (both search and definitions share this)
-   ===================================================== */
-
-.panel-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border-color-light);
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-lg);
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-}
 
 .panel-header-bar {
   display: flex;
@@ -103,7 +90,6 @@
   padding: var(--space-3) var(--space-5);
   background: var(--color-gray-50);
   border-bottom: 1px solid var(--border-color-light);
-  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
   flex-shrink: 0;
 }
 
@@ -137,6 +123,19 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
+}
+
+.criteria-zone {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color-light);
+  border-radius: var(--radius-xl);
+  flex-shrink: 0;
+}
+
+.criteria-zone .panel-header-bar {
+  background: var(--bg-card);
+  border-bottom: none;
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
 }
 
 /* =====================================================
@@ -1203,6 +1202,7 @@
   border-bottom: none;
   border-radius: var(--radius-md) var(--radius-md) 0 0;
   flex-shrink: 0;
+  margin: 0 var(--space-5);
 }
 
 .results-title {
@@ -1225,6 +1225,7 @@
   border-top: 1px solid var(--border-color);
   overflow: auto;
   max-height: 340px;
+  margin: 0 var(--space-5);
 }
 
 /* =====================================================
@@ -1553,10 +1554,6 @@
    RESPONSIVE
    ===================================================== */
 
-@media (max-width: 992px) {
-  .page-content { padding: 1rem; }
-}
-
 @media (max-width: 768px) {
   .toolbar { flex-direction: column; align-items: stretch; }
   .search-bar { max-width: 100%; }
@@ -1598,28 +1595,28 @@
 
 .table-container::-webkit-scrollbar,
 .search-table-container::-webkit-scrollbar,
-.page-content::-webkit-scrollbar {
+.tab-content::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 
 .table-container::-webkit-scrollbar-track,
 .search-table-container::-webkit-scrollbar-track,
-.page-content::-webkit-scrollbar-track {
+.tab-content::-webkit-scrollbar-track {
   background: var(--color-gray-100);
   border-radius: 4px;
 }
 
 .table-container::-webkit-scrollbar-thumb,
 .search-table-container::-webkit-scrollbar-thumb,
-.page-content::-webkit-scrollbar-thumb {
+.tab-content::-webkit-scrollbar-thumb {
   background: var(--color-gray-300);
   border-radius: 4px;
 }
 
 .table-container::-webkit-scrollbar-thumb:hover,
 .search-table-container::-webkit-scrollbar-thumb:hover,
-.page-content::-webkit-scrollbar-thumb:hover {
+.tab-content::-webkit-scrollbar-thumb:hover {
   background: var(--color-gray-400);
 }
 
