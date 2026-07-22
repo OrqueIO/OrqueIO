@@ -4,7 +4,9 @@ import {
   faTable,
   faTasks,
   faLayerGroup,
-  faBox
+  faBox,
+  faCogs,
+  faSearch
 } from '@fortawesome/free-solid-svg-icons';
 import { NavMenuItem } from './navbar/navbar';
 
@@ -19,7 +21,21 @@ export const COCKPIT_MENU_ITEMS: NavMenuItem[] = [
     icon: faProjectDiagram,
     label: 'cockpit.menu.processes',
     route: '/cockpit/processes',
-    exact: false
+    exact: false,
+    subItems: [
+      {
+        icon: faCogs,
+        label: 'cockpit.processes.tabs.definitions',
+        route: '/cockpit/processes/definitions',
+        exact: true
+      },
+      {
+        icon: faSearch,
+        label: 'cockpit.processes.tabs.searchInstances',
+        route: '/cockpit/processes/search',
+        exact: true
+      }
+    ]
   },
   {
     icon: faTable,
