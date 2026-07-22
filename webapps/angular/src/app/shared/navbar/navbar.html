@@ -6,16 +6,54 @@
 
     <!-- Menu Items -->
     <div class="navbar-menu" *ngIf="menuItems.length > 0 || moreMenuItems.length > 0">
-      <a
-        *ngFor="let item of menuItems"
-        [routerLink]="item.route"
-        routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: item.exact ?? false }"
-        class="menu-item"
-      >
-        <fa-icon [icon]="item.icon" class="menu-icon"></fa-icon>
-        <span class="menu-label">{{ item.label | translate }}</span>
-      </a>
+      <ng-container *ngFor="let item of menuItems">
+        <!-- Regular menu item (no sub-items) -->
+        <a
+          *ngIf="!item.subItems?.length"
+          [routerLink]="item.route"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: item.exact ?? false }"
+          class="menu-item"
+        >
+          <fa-icon [icon]="item.icon" class="menu-icon"></fa-icon>
+          <span class="menu-label">{{ item.label | translate }}</span>
+        </a>
+
+        <!-- Menu item with sub-dropdown (split: main link + chevron button) -->
+        <div *ngIf="item.subItems?.length" class="sub-dropdown" routerLinkActive="active-group">
+          <a
+            [routerLink]="item.route"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: item.exact ?? false }"
+            class="menu-item sub-main-link"
+          >
+            <fa-icon [icon]="item.icon" class="menu-icon"></fa-icon>
+            <span class="menu-label">{{ item.label | translate }}</span>
+          </a>
+          <button
+            type="button"
+            class="sub-chevron-btn"
+            [class.open]="openSubMenuLabel === item.label"
+            (click)="toggleSubMenu(item, $event)"
+            [attr.aria-expanded]="openSubMenuLabel === item.label"
+          >
+            <fa-icon [icon]="faChevronDown" class="chevron" [class.rotated]="openSubMenuLabel === item.label"></fa-icon>
+          </button>
+          <div class="more-menu" *ngIf="openSubMenuLabel === item.label">
+            <a
+              *ngFor="let sub of item.subItems"
+              [routerLink]="sub.route"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: sub.exact ?? false }"
+              class="more-menu-item"
+              (click)="closeSubMenu()"
+            >
+              <fa-icon [icon]="sub.icon" class="menu-icon"></fa-icon>
+              <span class="menu-label">{{ sub.label | translate }}</span>
+            </a>
+          </div>
+        </div>
+      </ng-container>
 
       <!-- More Dropdown -->
       <div class="more-dropdown" *ngIf="moreMenuItems.length > 0">
