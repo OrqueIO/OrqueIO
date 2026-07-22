@@ -3,6 +3,7 @@ import { provideState } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
 import { CockpitDashboardComponent } from './cockpit-dashboard/cockpit-dashboard';
 import { ProcessDefinitionsComponent } from './cockpit-processes/process-definitions/process-definitions';
+import { ProcessInstanceSearchComponent } from './cockpit-processes/process-instance-search/process-instance-search';
 import { ProcessListComponent } from './cockpit-processes/process-list/process-list';
 import { ProcessDetailComponent } from './cockpit-processes/process-detail/process-detail';
 import { DecisionListComponent } from './cockpit-decisions/decision-list/decision-list';
@@ -45,7 +46,9 @@ export const COCKPIT_ROUTES: Routes = [
     ],
     children: [
       { path: '', component: CockpitDashboardComponent, pathMatch: 'full', title: 'PAGE_TITLE_COCKPIT' },
-      { path: 'processes', component: ProcessDefinitionsComponent, title: 'PAGE_TITLE_COCKPIT_PROCESSES' },
+      { path: 'processes', redirectTo: 'processes/definitions', pathMatch: 'full' },
+      { path: 'processes/definitions', component: ProcessDefinitionsComponent, title: 'PAGE_TITLE_COCKPIT_PROCESSES' },
+      { path: 'processes/search', component: ProcessInstanceSearchComponent, title: 'PAGE_TITLE_COCKPIT_PROCESSES' },
       { path: 'processes/:key/instances', component: ProcessListComponent, title: 'PAGE_TITLE_COCKPIT_PROCESS_INSTANCES' },
       { path: 'processes/:key/definition', component: ProcessListComponent, title: 'PAGE_TITLE_COCKPIT_PROCESS_DEFINITION' },
       { path: 'processes/instance/:id', component: ProcessDetailComponent, title: 'PAGE_TITLE_COCKPIT_PROCESS_DETAIL' },
