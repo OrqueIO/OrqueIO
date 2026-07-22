@@ -12,13 +12,13 @@
         <a class="process-tab"
            routerLink="/cockpit/processes/definitions"
            routerLinkActive="active"
-           [routerLinkActiveOptions]="{exact: true}">
+           [routerLinkActiveOptions]="{paths: 'exact', queryParams: 'ignored', fragment: 'ignored', matrixParams: 'ignored'}">
           {{ 'cockpit.processes.tabs.definitions' | translate }}
         </a>
         <a class="process-tab"
            routerLink="/cockpit/processes/search"
            routerLinkActive="active"
-           [routerLinkActiveOptions]="{exact: true}">
+           [routerLinkActiveOptions]="{paths: 'exact', queryParams: 'ignored', fragment: 'ignored', matrixParams: 'ignored'}">
           {{ 'cockpit.processes.tabs.searchInstances' | translate }}
         </a>
       </nav>
