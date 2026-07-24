@@ -577,6 +577,11 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
       const n = this.subprocessBreadcrumb.length;
       this.windowStart = n > 5 ? Math.max(1, n - 3) : 0;
     }
+
+    // bpmn-js fires root.set via its own EventBus (not a zone.js-patched DOM event),
+    // so Angular's OnPush parent is never marked dirty automatically.
+    // detectChanges() bypasses the parent check and re-renders this component immediately.
+    this.cdr.detectChanges();
   }
 
   private destroyViewer(): void {
