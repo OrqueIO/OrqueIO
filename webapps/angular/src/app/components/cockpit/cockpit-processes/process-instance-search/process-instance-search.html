@@ -10,24 +10,20 @@
         <a class="process-tab"
            routerLink="/cockpit/processes/definitions"
            routerLinkActive="active"
-           [routerLinkActiveOptions]="{exact: true}">
+           [routerLinkActiveOptions]="{paths: 'exact', queryParams: 'ignored', fragment: 'ignored', matrixParams: 'ignored'}">
           {{ 'cockpit.processes.tabs.definitions' | translate }}
         </a>
         <a class="process-tab"
            routerLink="/cockpit/processes/search"
            routerLinkActive="active"
-           [routerLinkActiveOptions]="{exact: true}">
+           [routerLinkActiveOptions]="{paths: 'exact', queryParams: 'ignored', fragment: 'ignored', matrixParams: 'ignored'}">
           {{ 'cockpit.processes.tabs.searchInstances' | translate }}
         </a>
       </nav>
     </div>
 
-    <div class="page-content">
-
-      <!-- =====================================================
-           GLOBAL SEARCH PANEL
-           ===================================================== -->
-      <div class="panel-card search-panel-card">
+    <div class="tab-content">
+      <div class="criteria-zone">
         <div class="panel-header-bar">
           <fa-icon [icon]="faFilter" class="panel-header-icon"></fa-icon>
           <span class="panel-header-title">{{ 'cockpit.processes.globalSearch.title' | translate }}</span>
@@ -211,10 +207,6 @@
       <fa-icon [icon]="faPlus"></fa-icon> {{ 'cockpit.processes.filters.addVariable' | translate }}
     </button>
   </div>
-  <p class="variables-popover-hint" *ngIf="activeEditorType === 'variables'">
-    {{ 'cockpit.processes.globalSearch.chipInputHint' | translate }}
-  </p>
-
   <!-- Business Key / Instance ID -->
   <div class="editor-popover-body" *ngIf="activeEditorType === 'businessKey' || activeEditorType === 'instanceId'"
        (keydown.enter)="confirmCriterion()">
@@ -386,6 +378,11 @@
     </div>
   </div>
 
+  <div class="chip-input-hint-block"
+       *ngIf="activeEditorType === 'businessKey' || activeEditorType === 'instanceId' || activeEditorType === 'variables'">
+    <p class="chip-hint-main">{{ 'cockpit.processes.globalSearch.chipInputHint' | translate }}</p>
+    <p class="chip-hint-tip">{{ 'cockpit.processes.globalSearch.chipInputHintTip' | translate }}</p>
+  </div>
   <div class="editor-popover-actions" [class.editor-popover-actions--state]="activeEditorType === 'state' || activeEditorType === 'variables'">
     <span class="state-count-label" *ngIf="activeEditorType === 'state'">
       {{ pendingStateValues.length }} {{ 'cockpit.processes.globalSearch.selected' | translate }}
@@ -458,8 +455,18 @@
             </button>
           </div>
 
-          <!-- Results section (only after a search) -->
-          <ng-container *ngIf="searchExecuted">
+        </div>
+      </div>
+
+      <!-- Initial empty state: shown before first search -->
+      <div class="search-initial-state" *ngIf="!searchExecuted">
+        <fa-icon [icon]="faSearch" class="search-initial-icon"></fa-icon>
+        <p class="search-initial-title">{{ 'cockpit.processes.globalSearch.noSearchYet' | translate }}</p>
+        <p class="search-initial-hint">{{ 'cockpit.processes.globalSearch.noSearchYetHint' | translate }}</p>
+      </div>
+
+      <!-- Results section (only after a search) -->
+      <ng-container *ngIf="searchExecuted">
 
             <!-- Loading -->
             <div class="loading-state" *ngIf="searchLoading">
@@ -571,9 +578,6 @@
 
             </ng-container>
           </ng-container>
-
-        </div>
-      </div>
 
     </div>
   </main>

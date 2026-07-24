@@ -12,24 +12,20 @@
         <a class="process-tab"
            routerLink="/cockpit/processes/definitions"
            routerLinkActive="active"
-           [routerLinkActiveOptions]="{exact: true}">
+           [routerLinkActiveOptions]="{paths: 'exact', queryParams: 'ignored', fragment: 'ignored', matrixParams: 'ignored'}">
           {{ 'cockpit.processes.tabs.definitions' | translate }}
         </a>
         <a class="process-tab"
            routerLink="/cockpit/processes/search"
            routerLinkActive="active"
-           [routerLinkActiveOptions]="{exact: true}">
+           [routerLinkActiveOptions]="{paths: 'exact', queryParams: 'ignored', fragment: 'ignored', matrixParams: 'ignored'}">
           {{ 'cockpit.processes.tabs.searchInstances' | translate }}
         </a>
       </nav>
     </div>
 
-    <div class="page-content">
-
-      <!-- =====================================================
-           PROCESS DEFINITIONS PANEL
-           ===================================================== -->
-      <div class="panel-card definitions-panel-card">
+    <div class="tab-content">
+      <div class="criteria-zone">
         <div class="panel-header-bar">
           <fa-icon [icon]="faCogs" class="panel-header-icon"></fa-icon>
           <span class="panel-header-title">{{ 'cockpit.processes.deployedDefinitions' | translate }}</span>
@@ -51,6 +47,8 @@
               </div>
             </div>
           </div>
+        </div>
+      </div>
 
           <!-- Results info -->
           <header class="results-info-header">
@@ -202,8 +200,6 @@
             <fa-icon [icon]="faCogs" class="empty-icon"></fa-icon>
             <p>{{ 'cockpit.processes.noDeployedDefinitions' | translate }}</p>
           </div>
-        </div>
-      </div>
 
     </div>
   </main>
