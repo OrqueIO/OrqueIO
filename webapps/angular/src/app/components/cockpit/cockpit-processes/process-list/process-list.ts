@@ -41,7 +41,7 @@ import { COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS } from '../../../../shared/
 import { CockpitService, ProcessInstance, ProcessDefinition, ProcessQueryParams, ActivityStatistics, Incident, JobDefinition, CalledProcessDefinition, parseVariableValue } from '../../../../services/cockpit.service';
 import { NavMenuService } from '../../../../services/nav-menu.service';
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
-import { BpmnViewerComponent, ActivityBadge, CallActivityClickEvent, ParentBreadcrumb } from '../../../../shared/bpmn-viewer/bpmn-viewer';
+import { BpmnViewerComponent, ActivityBadge, CallActivityClickEvent, ParentBreadcrumb, EXPAND_DIAGRAM_STATE_KEY } from '../../../../shared/bpmn-viewer/bpmn-viewer';
 
 interface SortConfig {
   column: string;
@@ -203,12 +203,6 @@ export class ProcessListComponent implements OnInit, OnDestroy {
     this.navMenuService.setMenuItems(COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS);
     this.loadSavedPreferences();
 
-    // Restore expand state when navigating here from an expanded process-detail
-    // (Angular stores [state] binding from routerLink in window.history.state)
-    if ((window.history.state as any)?.['expandDiagram'] === true) {
-      this.diagramMaximized = true;
-    }
-
     // route.params emits only when THIS component's route params change — it never
     // fires for navigations to unrelated routes (instance view, process list, etc.),
     // which prevents stale-snapshot processing. snapshot.queryParams is atomically
@@ -216,6 +210,10 @@ export class ProcessListComponent implements OnInit, OnDestroy {
     this.route.params
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(params => {
+        // Restore expand state on every navigation — must be here, not ngOnInit,
+        // because Angular reuses the same component instance for the same route
+        // and ngOnInit only runs once.
+        this.diagramMaximized = (window.history.state as any)?.[EXPAND_DIAGRAM_STATE_KEY] === true;
         const newKey = params['key'];
         if (!newKey) return;
 
@@ -1006,7 +1004,7 @@ export class ProcessListComponent implements OnInit, OnDestroy {
           }
           this.router.navigate(['/cockpit/processes', calledElement, 'definition'], {
             queryParams,
-            state: { expandDiagram: this.diagramMaximized }
+            state: { [EXPAND_DIAGRAM_STATE_KEY]: this.diagramMaximized }
           });
         } else {
           this.bpmnViewer?.showCallActivityError(

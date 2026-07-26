@@ -3,7 +3,7 @@
   <div class="process-breadcrumb" *ngIf="parentBreadcrumb">
     <a [routerLink]="parentBreadcrumb.link"
        [queryParams]="parentBreadcrumb.queryParams"
-       [state]="{ expandDiagram: isExpanded }"
+       [state]="expandState"
        class="breadcrumb-parent-name"
        [title]="parentBreadcrumb.label">
       <fa-icon [icon]="faArrowUp" class="breadcrumb-up-icon"></fa-icon>{{ parentBreadcrumb.label }}</a>

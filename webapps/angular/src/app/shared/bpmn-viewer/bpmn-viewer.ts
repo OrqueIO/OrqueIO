@@ -19,6 +19,8 @@ import { RouterModule } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faArrowUp } from '@fortawesome/free-solid-svg-icons';
 
+export const EXPAND_DIAGRAM_STATE_KEY = 'expandDiagram' as const;
+
 export interface ParentBreadcrumb {
   link: any[];
   queryParams?: Record<string, string> | null;
@@ -71,6 +73,10 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
   @Input() enableCallActivityNavigation = false;
   @Input() callActivityIdsWithInstances: Set<string> = new Set();
   @Input() parentBreadcrumb: ParentBreadcrumb | null = null;
+
+  get expandState(): Record<string, boolean> {
+    return { [EXPAND_DIAGRAM_STATE_KEY]: this.isExpanded };
+  }
 
   @Output() elementClick = new EventEmitter<BpmnElement>();
   @Output() elementHover = new EventEmitter<BpmnElement | null>();
