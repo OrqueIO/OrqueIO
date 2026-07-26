@@ -49,7 +49,7 @@ import {
   ExternalTask
 } from '../../../../services/cockpit.service';
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
-import { BpmnViewerComponent, ActivityBadge, BpmnElement, CallActivityClickEvent } from '../../../../shared/bpmn-viewer/bpmn-viewer';
+import { BpmnViewerComponent, ActivityBadge, BpmnElement, CallActivityClickEvent, ParentBreadcrumb } from '../../../../shared/bpmn-viewer/bpmn-viewer';
 import { ActivityInstanceTreeComponent } from '../../../../shared/activity-instance-tree/activity-instance-tree';
 import { ConfirmDialogComponent } from '../../../../shared/confirm-dialog/confirm-dialog';
 import { ClipboardDirective } from '../../../../shared/clipboard-directive/clipboard.directive';
@@ -142,6 +142,26 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
   get parentInstance(): ProcessInstance | null {
     return this.fromProcess ?? this.superProcessInstance;
   }
+
+  get activeParentBreadcrumb(): ParentBreadcrumb | null {
+    if (this.parentInstance && (!this.fromDefKey || this.fromProcessId)) {
+      return {
+        link: ['/cockpit/processes/instance', this.parentInstance.id],
+        label: this.parentInstance.processDefinitionName || this.parentInstance.processDefinitionKey || this.parentInstance.id,
+        currentLabel: this.processDefinition?.name || this.processDefinition?.key || ''
+      };
+    }
+    if (this.fromDefKey && this.processDefinition && !this.fromProcessId) {
+      return {
+        link: ['/cockpit/processes', this.fromDefKey, 'definition'],
+        queryParams: this.parentDefinitionBreadcrumbQueryParams ?? undefined,
+        label: this.fromDefName || this.fromDefKey,
+        currentLabel: this.processDefinition.name || this.processDefinition.key
+      };
+    }
+    return null;
+  }
+
   fromProcessId: string | null = null;
   // Definition navigation context — set when arriving from a definition view via call activity navigation
   fromDefKey: string | null = null;
@@ -270,6 +290,11 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.navMenuService.setMenuItems(COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS);
+
+    // Restore expand state when navigating here from an expanded view
+    if ((window.history.state as any)?.['expandDiagram'] === true) {
+      this.diagramMaximized = true;
+    }
 
     // route.params emits only when THIS component's route params change.
     // snapshot.queryParams is atomically updated before params fires, so reading
@@ -715,7 +740,8 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
         .subscribe(definition => {
           if (definition) {
             this.router.navigate(['/cockpit/processes', calledElement, 'definition'], {
-              queryParams: { from: fromKey, fromName, fromInstance }
+              queryParams: { from: fromKey, fromName, fromInstance },
+              state: { expandDiagram: this.diagramMaximized }
             });
           } else {
             this.bpmnViewer?.showCallActivityError(

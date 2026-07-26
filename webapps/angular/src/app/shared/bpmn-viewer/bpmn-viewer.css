@@ -17,10 +17,16 @@
   overflow: hidden;
 }
 
-.bpmn-canvas {
+.canvas-area {
   flex: 1;
   min-height: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.bpmn-canvas {
   width: 100%;
+  height: 100%;
 }
 
 /* Subprocess drilldown breadcrumb — same visual design as the call activity breadcrumb */

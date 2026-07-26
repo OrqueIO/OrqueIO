@@ -256,41 +256,6 @@
       <div class="ctn-row ctn-content-top"
            [class.collapsed]="diagramCollapsed"
            [class.maximized]="diagramMaximized">
-          <!-- Instance breadcrumb: shown when navigating from a specific parent instance,
-               or as API fallback when there is no definition navigation context. -->
-          <div class="process-breadcrumb"
-               *ngIf="parentInstance && (!fromDefKey || fromProcessId)">
-              <fa-icon [icon]="faArrowUp" class="breadcrumb-up-icon"></fa-icon>
-              <a [routerLink]="['/cockpit/processes/instance', parentInstance.id]"
-                 class="breadcrumb-parent-name"
-                 [title]="parentInstance.id">
-                  {{ parentInstance.processDefinitionName || parentInstance.processDefinitionKey || parentInstance.id }}
-              </a>
-              <span class="breadcrumb-separator">›</span>
-              <span class="breadcrumb-current"
-                    [title]="processDefinition?.name || processDefinition?.key">
-            {{ processDefinition?.name || processDefinition?.key }}
-          </span>
-          </div>
-
-          <!-- Definition breadcrumb: shown when navigating here from a definition view,
-               takes priority over the API superProcessInstance when no fromProcessId is set. -->
-          <div class="process-breadcrumb"
-               *ngIf="fromDefKey && processDefinition && !fromProcessId">
-            <fa-icon [icon]="faArrowUp" class="breadcrumb-up-icon"></fa-icon>
-            <a [routerLink]="['/cockpit/processes', fromDefKey, 'definition']"
-               [queryParams]="parentDefinitionBreadcrumbQueryParams"
-               class="breadcrumb-parent-name"
-               [title]="fromDefKey">
-              {{ fromDefName || fromDefKey }}
-            </a>
-            <span class="breadcrumb-separator">›</span>
-            <span class="breadcrumb-current"
-                  [title]="processDefinition.name || processDefinition.key">
-              {{ processDefinition.name || processDefinition.key }}
-            </span>
-          </div>
-
         <div class="diagram-container">
           <div class="diagram-loading" *ngIf="loadingDiagram">
             <fa-icon [icon]="faSpinner" animation="spin"></fa-icon>
@@ -306,6 +271,7 @@
             [highlightedActivities]="selectedActivityIds"
             [showExpandButton]="true"
             [isExpanded]="diagramMaximized"
+            [parentBreadcrumb]="activeParentBreadcrumb"
             [enableCallActivityNavigation]="true"
             [callActivityIdsWithInstances]="callActivityIdsWithInstances"
             (elementClick)="handleBpmnElementSelection($event)"
