@@ -344,7 +344,7 @@
               type="text"
               class="editor-input editor-input--value-single"
               [class.editor-input--error]="isComparisonValueInvalid(line)"
-              [value]="line.values[0] ?? ''"
+              [value]="line.values.at(0) ?? ''"
               (input)="onVariableLineSingleValueChange(i, $event)"
               [placeholder]="'cockpit.processes.filters.variableValue' | translate"
             />
