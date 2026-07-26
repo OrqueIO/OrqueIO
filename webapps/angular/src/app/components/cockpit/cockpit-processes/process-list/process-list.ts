@@ -41,7 +41,7 @@ import { COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS } from '../../../../shared/
 import { CockpitService, ProcessInstance, ProcessDefinition, ProcessQueryParams, ActivityStatistics, Incident, JobDefinition, CalledProcessDefinition, parseVariableValue } from '../../../../services/cockpit.service';
 import { NavMenuService } from '../../../../services/nav-menu.service';
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
-import { BpmnViewerComponent, ActivityBadge, CallActivityClickEvent } from '../../../../shared/bpmn-viewer/bpmn-viewer';
+import { BpmnViewerComponent, ActivityBadge, CallActivityClickEvent, ParentBreadcrumb } from '../../../../shared/bpmn-viewer/bpmn-viewer';
 
 interface SortConfig {
   column: string;
@@ -203,6 +203,12 @@ export class ProcessListComponent implements OnInit, OnDestroy {
     this.navMenuService.setMenuItems(COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS);
     this.loadSavedPreferences();
 
+    // Restore expand state when navigating here from an expanded process-detail
+    // (Angular stores [state] binding from routerLink in window.history.state)
+    if ((window.history.state as any)?.['expandDiagram'] === true) {
+      this.diagramMaximized = true;
+    }
+
     // route.params emits only when THIS component's route params change — it never
     // fires for navigations to unrelated routes (instance view, process list, etc.),
     // which prevents stale-snapshot processing. snapshot.queryParams is atomically
@@ -328,6 +334,16 @@ export class ProcessListComponent implements OnInit, OnDestroy {
       params['ancestors'] = JSON.stringify(remainingAncestors);
     }
     return params;
+  }
+
+  get activeParentBreadcrumb(): ParentBreadcrumb | null {
+    if (!this.parentDefinitionKey || !this.processDefinition) return null;
+    return {
+      link: ['/cockpit/processes', this.parentDefinitionKey, 'definition'],
+      queryParams: this.parentBreadcrumbQueryParams ?? undefined,
+      label: this.parentDefinitionName || this.parentDefinitionKey,
+      currentLabel: this.processDefinition.name || this.processDefinition.key
+    };
   }
 
   loadBpmnDiagram(definitionId: string): void {
@@ -988,7 +1004,10 @@ export class ProcessListComponent implements OnInit, OnDestroy {
           if (newAncestors.length > 0) {
             queryParams['ancestors'] = JSON.stringify(newAncestors);
           }
-          this.router.navigate(['/cockpit/processes', calledElement, 'definition'], { queryParams });
+          this.router.navigate(['/cockpit/processes', calledElement, 'definition'], {
+            queryParams,
+            state: { expandDiagram: this.diagramMaximized }
+          });
         } else {
           this.bpmnViewer?.showCallActivityError(
             callActivityId,

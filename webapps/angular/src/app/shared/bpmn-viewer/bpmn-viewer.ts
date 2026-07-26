@@ -15,8 +15,16 @@ import {
   inject
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faArrowUp } from '@fortawesome/free-solid-svg-icons';
+
+export interface ParentBreadcrumb {
+  link: any[];
+  queryParams?: Record<string, string> | null;
+  label: string;
+  currentLabel: string;
+}
 
 // @ts-ignore - bpmn-js doesn't have types
 import NavigatedViewer from 'bpmn-js/lib/NavigatedViewer';
@@ -41,7 +49,7 @@ export interface CallActivityClickEvent {
 @Component({
   selector: 'app-bpmn-viewer',
   standalone: true,
-  imports: [CommonModule, FontAwesomeModule],
+  imports: [CommonModule, RouterModule, FontAwesomeModule],
   templateUrl: './bpmn-viewer.html',
   styleUrls: ['./bpmn-viewer.css'],
   encapsulation: ViewEncapsulation.None
@@ -62,6 +70,7 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
   @Input() focusElementId: string | null | undefined = null;
   @Input() enableCallActivityNavigation = false;
   @Input() callActivityIdsWithInstances: Set<string> = new Set();
+  @Input() parentBreadcrumb: ParentBreadcrumb | null = null;
 
   @Output() elementClick = new EventEmitter<BpmnElement>();
   @Output() elementHover = new EventEmitter<BpmnElement | null>();
