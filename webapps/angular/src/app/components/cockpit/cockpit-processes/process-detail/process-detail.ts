@@ -49,7 +49,7 @@ import {
   ExternalTask
 } from '../../../../services/cockpit.service';
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
-import { BpmnViewerComponent, ActivityBadge, BpmnElement, CallActivityClickEvent, ParentBreadcrumb } from '../../../../shared/bpmn-viewer/bpmn-viewer';
+import { BpmnViewerComponent, ActivityBadge, BpmnElement, CallActivityClickEvent, ParentBreadcrumb, EXPAND_DIAGRAM_STATE_KEY } from '../../../../shared/bpmn-viewer/bpmn-viewer';
 import { ActivityInstanceTreeComponent } from '../../../../shared/activity-instance-tree/activity-instance-tree';
 import { ConfirmDialogComponent } from '../../../../shared/confirm-dialog/confirm-dialog';
 import { ClipboardDirective } from '../../../../shared/clipboard-directive/clipboard.directive';
@@ -144,11 +144,11 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
   }
 
   get activeParentBreadcrumb(): ParentBreadcrumb | null {
-    if (this.parentInstance && (!this.fromDefKey || this.fromProcessId)) {
+    if (this.parentInstance && (!this.fromDefKey || this.fromProcessId) && this.processDefinition) {
       return {
         link: ['/cockpit/processes/instance', this.parentInstance.id],
         label: this.parentInstance.processDefinitionName || this.parentInstance.processDefinitionKey || this.parentInstance.id,
-        currentLabel: this.processDefinition?.name || this.processDefinition?.key || ''
+        currentLabel: this.processDefinition.name || this.processDefinition.key
       };
     }
     if (this.fromDefKey && this.processDefinition && !this.fromProcessId) {
@@ -291,11 +291,6 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.navMenuService.setMenuItems(COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS);
 
-    // Restore expand state when navigating here from an expanded view
-    if ((window.history.state as any)?.['expandDiagram'] === true) {
-      this.diagramMaximized = true;
-    }
-
     // route.params emits only when THIS component's route params change.
     // snapshot.queryParams is atomically updated before params fires, so reading
     // it here always gives the current ?from= value without a separate subscription
@@ -303,6 +298,10 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
     this.route.params
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(params => {
+        // Restore expand state on every navigation — must be here, not ngOnInit,
+        // because Angular reuses the same component instance for the same route
+        // and ngOnInit only runs once.
+        this.diagramMaximized = (window.history.state as any)?.[EXPAND_DIAGRAM_STATE_KEY] === true;
         const fromId: string | null = this.route.snapshot.queryParams['from'] || null;
         this.processId = params['id'];
         this.fromProcessId = fromId;
@@ -714,7 +713,8 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
     if (calledInstanceIds && calledInstanceIds.length > 0) {
       if (calledInstanceIds.length === 1) {
         this.router.navigate(['/cockpit/processes/instance', calledInstanceIds[0]], {
-          queryParams: { from: this.processId }
+          queryParams: { from: this.processId },
+          state: { [EXPAND_DIAGRAM_STATE_KEY]: this.diagramMaximized }
         });
       } else {
         // Multiple instances: show filtered called instances tab
@@ -741,7 +741,7 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
           if (definition) {
             this.router.navigate(['/cockpit/processes', calledElement, 'definition'], {
               queryParams: { from: fromKey, fromName, fromInstance },
-              state: { expandDiagram: this.diagramMaximized }
+              state: { [EXPAND_DIAGRAM_STATE_KEY]: this.diagramMaximized }
             });
           } else {
             this.bpmnViewer?.showCallActivityError(
