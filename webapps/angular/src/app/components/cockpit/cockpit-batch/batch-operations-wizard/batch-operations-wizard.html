@@ -71,7 +71,15 @@
         <!-- Table + pagination (pagination is sibling of scroll container, not child) -->
         <ng-container *ngIf="!instancesLoading && instances.length > 0">
 
-          <!-- Barre select-all — au-dessus du tableau, reste visible pendant le scroll interne -->
+          <!-- Pagination + select-all — au-dessus du tableau -->
+          <app-pagination
+            [current]="instancesPage"
+            [size]="instancesPageSize"
+            [total]="instancesTotal"
+            [showSizeSelector]="true"
+            (pageChange)="onInstancesPageChange($event)">
+          </app-pagination>
+
           <div class="select-all-bar">
             <label class="select-all-label">
               <input type="checkbox"
@@ -112,17 +120,6 @@
             </table>
           </div>
 
-          <p class="page-note">
-            <fa-icon [icon]="faInfoCircle"></fa-icon>
-            {{ 'cockpit.batchOps.suspend.selectAllPageNote' | translate }}
-          </p>
-
-          <app-pagination
-            [current]="instancesPage"
-            [size]="instancesPageSize"
-            [total]="instancesTotal"
-            (pageChange)="onInstancesPageChange($event)">
-          </app-pagination>
         </ng-container>
 
       </ng-container>

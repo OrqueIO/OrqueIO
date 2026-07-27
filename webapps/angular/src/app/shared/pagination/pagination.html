@@ -28,4 +28,13 @@
       </svg>
     </button>
   </nav>
+
+  <select
+    *ngIf="showSizeSelector"
+    class="page-size-select"
+    [value]="size"
+    (change)="changePageSize($event)"
+    aria-label="Page size">
+    <option *ngFor="let s of availableSizes" [value]="s">{{ s }}</option>
+  </select>
 </footer>
