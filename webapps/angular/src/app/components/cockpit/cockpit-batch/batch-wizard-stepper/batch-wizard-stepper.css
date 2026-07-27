@@ -1,0 +1,67 @@
+.wizard-stepper {
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--space-8);
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-shrink: 0;
+}
+
+.step__circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid var(--border-color);
+  background: var(--bg-card);
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  transition: background var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+}
+
+.step--active .step__circle {
+  border-color: var(--color-primary);
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.step--done .step__circle {
+  border-color: var(--color-success, #16a34a);
+  background: var(--color-success, #16a34a);
+  color: #fff;
+}
+
+.step__label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.step--active .step__label {
+  color: var(--text-primary);
+  font-weight: var(--font-weight-semibold);
+}
+
+.step--done .step__label {
+  color: var(--text-secondary);
+}
+
+.step-connector {
+  flex: 1;
+  height: 2px;
+  background: var(--border-color);
+  margin: 0 var(--space-3);
+  transition: background var(--transition-fast);
+}
+
+.step-connector--done {
+  background: var(--color-success, #16a34a);
+}

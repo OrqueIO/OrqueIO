@@ -1,0 +1,456 @@
+import {
+  Component, OnInit, OnDestroy,
+  ChangeDetectionStrategy, ChangeDetectorRef,
+  DestroyRef, inject
+} from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { forkJoin } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import {
+  faPauseCircle, faPlayCircle, faTrash, faSpinner,
+  faCheckCircle, faTimesCircle, faExclamationTriangle,
+  faChevronDown, faChevronUp, faInfoCircle,
+  faDatabase, faSyncAlt, faCodeBranch, faClock, faTag, faEnvelope
+} from '@fortawesome/free-solid-svg-icons';
+
+import { CockpitHeaderComponent, BreadcrumbItem } from '../../../../shared/cockpit-header/cockpit-header';
+import { COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS } from '../../../../shared/cockpit-menu';
+import { NavMenuService } from '../../../../services/nav-menu.service';
+import { ProcessInstanceService, ProcessInstance } from '../../../../services/process-instance.service';
+import { TranslatePipe } from '../../../../i18n/translate.pipe';
+import { CamDatePipe } from '../../../../pipes';
+import { PaginationComponent, PageChangeEvent } from '../../../../shared/pagination/pagination';
+import { MultiValueChipInputComponent } from '../../../../shared/multi-value-chip-input/multi-value-chip-input';
+import { BatchWizardStepperComponent, WizardStep } from '../batch-wizard-stepper/batch-wizard-stepper';
+import { BatchOperationListComponent, BatchOperationDef } from '../batch-operation-list/batch-operation-list';
+import { environment } from '../../../../../environments/environment';
+
+type InstanceStatus = 'pending' | 'success' | 'error';
+
+interface InstanceResult {
+  id: string;
+  businessKey?: string;
+  definitionKey?: string;
+  status: InstanceStatus;
+  error?: string;
+}
+
+const BATCH_OPERATIONS: BatchOperationDef[] = [
+  {
+    id: 'suspend',
+    labelKey: 'cockpit.batchOps.suspend.label',
+    descKey: 'cockpit.batchOps.suspend.desc',
+    icon: faPauseCircle,
+    badgeClass: 'badge--amber',
+    available: true,
+    actionBtnKey: 'cockpit.batchOps.suspend.actionBtn'
+  },
+  {
+    id: 'activate',
+    labelKey: 'cockpit.batchOps.activate.label',
+    descKey: 'cockpit.batchOps.activate.desc',
+    icon: faPlayCircle,
+    badgeClass: 'badge--green',
+    available: false
+  },
+  {
+    id: 'delete-running',
+    labelKey: 'cockpit.batchOps.deleteRunning.label',
+    descKey: 'cockpit.batchOps.deleteRunning.desc',
+    icon: faTrash,
+    badgeClass: 'badge--red',
+    available: false
+  },
+  {
+    id: 'delete-finished',
+    labelKey: 'cockpit.batchOps.deleteFinished.label',
+    descKey: 'cockpit.batchOps.deleteFinished.desc',
+    icon: faTrash,
+    badgeClass: 'badge--red',
+    available: false
+  },
+  {
+    id: 'delete-decision',
+    labelKey: 'cockpit.batchOps.deleteDecision.label',
+    descKey: 'cockpit.batchOps.deleteDecision.desc',
+    icon: faDatabase,
+    badgeClass: 'badge--red',
+    available: false
+  },
+  {
+    id: 'set-retries-jobs',
+    labelKey: 'cockpit.batchOps.setRetriesJobs.label',
+    descKey: 'cockpit.batchOps.setRetriesJobs.desc',
+    icon: faSyncAlt,
+    badgeClass: 'badge--blue',
+    available: false
+  },
+  {
+    id: 'set-retries-external',
+    labelKey: 'cockpit.batchOps.setRetriesExternal.label',
+    descKey: 'cockpit.batchOps.setRetriesExternal.desc',
+    icon: faSyncAlt,
+    badgeClass: 'badge--blue',
+    available: false
+  },
+  {
+    id: 'set-variables',
+    labelKey: 'cockpit.batchOps.setVariables.label',
+    descKey: 'cockpit.batchOps.setVariables.desc',
+    icon: faTag,
+    badgeClass: 'badge--purple',
+    available: false
+  },
+  {
+    id: 'correlate',
+    labelKey: 'cockpit.batchOps.correlate.label',
+    descKey: 'cockpit.batchOps.correlate.desc',
+    icon: faEnvelope,
+    badgeClass: 'badge--blue',
+    available: false
+  },
+  {
+    id: 'migrate',
+    labelKey: 'cockpit.batchOps.migrate.label',
+    descKey: 'cockpit.batchOps.migrate.desc',
+    icon: faCodeBranch,
+    badgeClass: 'badge--purple',
+    available: false
+  },
+  {
+    id: 'removal-time-process',
+    labelKey: 'cockpit.batchOps.removalTimeProcess.label',
+    descKey: 'cockpit.batchOps.removalTimeProcess.desc',
+    icon: faClock,
+    badgeClass: 'badge--gray',
+    available: false
+  },
+  {
+    id: 'removal-time-decision',
+    labelKey: 'cockpit.batchOps.removalTimeDecision.label',
+    descKey: 'cockpit.batchOps.removalTimeDecision.desc',
+    icon: faClock,
+    badgeClass: 'badge--gray',
+    available: false
+  },
+  {
+    id: 'removal-time-batch',
+    labelKey: 'cockpit.batchOps.removalTimeBatch.label',
+    descKey: 'cockpit.batchOps.removalTimeBatch.desc',
+    icon: faClock,
+    badgeClass: 'badge--gray',
+    available: false
+  }
+];
+
+@Component({
+  selector: 'app-batch-operations-wizard',
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterModule,
+    FormsModule,
+    FontAwesomeModule,
+    CockpitHeaderComponent,
+    TranslatePipe,
+    CamDatePipe,
+    PaginationComponent,
+    MultiValueChipInputComponent,
+    BatchWizardStepperComponent,
+    BatchOperationListComponent
+  ],
+  templateUrl: './batch-operations-wizard.html',
+  styleUrl: './batch-operations-wizard.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
+  private navMenuService = inject(NavMenuService);
+  private processInstanceService = inject(ProcessInstanceService);
+  private cdr = inject(ChangeDetectorRef);
+  private destroyRef = inject(DestroyRef);
+
+  faSpinner = faSpinner;
+  faCheckCircle = faCheckCircle;
+  faTimesCircle = faTimesCircle;
+  faExclamationTriangle = faExclamationTriangle;
+  faChevronDown = faChevronDown;
+  faChevronUp = faChevronUp;
+  faInfoCircle = faInfoCircle;
+
+  breadcrumbs: BreadcrumbItem[] = [
+    { translateKey: 'cockpit.menu.batchOperations' }
+  ];
+
+  wizardSteps: WizardStep[] = [
+    { number: 1, labelKey: 'cockpit.batchOps.stepper.define' },
+    { number: 2, labelKey: 'cockpit.batchOps.stepper.confirm' },
+    { number: 3, labelKey: 'cockpit.batchOps.stepper.results' }
+  ];
+
+  operations: BatchOperationDef[] = BATCH_OPERATIONS;
+
+  // ── Wizard state ──────────────────────────────────────────────────────────
+  currentStep: 1 | 2 | 3 = 1;
+  selectedOperationId: string | null = null;
+
+  // Step 1 – Suspend form (instances mode)
+  mode: 'instances' | 'query' = 'instances';
+
+  // Server-side paginated instance list
+  instances: ProcessInstance[] = [];      // current page only
+  instancesTotal: number = 0;            // total matching count from API
+  instancesLoading = false;
+  instancesPage = 1;
+  instancesPageSize = 10;
+
+  // Filter chips (passed as processInstanceIds to API)
+  filterChips: string[] = [];
+
+  // Metadata cache: accumulates instances seen on any browsed page for step-3 display
+  private knownInstances = new Map<string, ProcessInstance>();
+
+  // Checked rows (persists across pages)
+  selectedIds = new Set<string>();
+
+  // Step 2
+  showTechnicalDetails = false;
+
+  // Step 3
+  executing = false;
+  instanceResults: InstanceResult[] = [];
+
+  // ── Lifecycle ─────────────────────────────────────────────────────────────
+  ngOnInit(): void {
+    this.navMenuService.setMenuItems(COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS);
+  }
+
+  ngOnDestroy(): void {
+    this.navMenuService.clearMenuItems();
+  }
+
+  // ── Step 1 ────────────────────────────────────────────────────────────────
+  onOperationSelect(id: string): void {
+    if (this.selectedOperationId === id) return;
+    this.selectedOperationId = id;
+    this.resetForm();
+    if (id === 'suspend') {
+      this.loadInstances();
+    }
+    this.cdr.markForCheck();
+  }
+
+  onClearOperation(): void {
+    this.selectedOperationId = null;
+    this.resetForm();
+    this.cdr.markForCheck();
+  }
+
+  setMode(m: 'instances' | 'query'): void {
+    if (this.mode === m) return;
+    this.mode = m;
+    this.selectedIds = new Set();
+    this.cdr.markForCheck();
+  }
+
+  private resetForm(): void {
+    this.mode = 'instances';
+    this.filterChips = [];
+    this.instances = [];
+    this.instancesTotal = 0;
+    this.knownInstances = new Map();
+    this.instancesPage = 1;
+    this.selectedIds = new Set();
+  }
+
+  private buildQueryBody(): any {
+    const body: any = { active: true };
+    if (this.filterChips.length > 0) {
+      body.processInstanceIds = this.filterChips;
+    }
+    return body;
+  }
+
+  private loadInstances(): void {
+    this.instancesLoading = true;
+    this.cdr.markForCheck();
+
+    const body = this.buildQueryBody();
+    const firstResult = (this.instancesPage - 1) * this.instancesPageSize;
+
+    forkJoin({
+      results: this.processInstanceService.queryProcessInstances(body, firstResult, this.instancesPageSize),
+      count: this.processInstanceService.queryProcessInstancesCount(body)
+    }).pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: ({ results, count }) => {
+          this.instances = results;
+          // Ensure total is never below the loaded page count (guards against a silent count-API failure)
+          this.instancesTotal = Math.max(count, results.length);
+          results.forEach(i => this.knownInstances.set(i.id, i));
+          this.instancesLoading = false;
+          this.cdr.detectChanges();
+        },
+        error: () => {
+          this.instances = [];
+          this.instancesTotal = 0;
+          this.instancesLoading = false;
+          this.cdr.detectChanges();
+        }
+      });
+  }
+
+  onFilterChange(chips: string[]): void {
+    this.filterChips = chips;
+    this.instancesPage = 1;
+    this.selectedIds = new Set();
+    this.loadInstances();
+  }
+
+  toggleInstance(id: string): void {
+    const next = new Set(this.selectedIds);
+    if (next.has(id)) {
+      next.delete(id);
+    } else {
+      next.add(id);
+    }
+    this.selectedIds = next;
+    this.cdr.markForCheck();
+  }
+
+  isSelected(id: string): boolean {
+    return this.selectedIds.has(id);
+  }
+
+  get isAllOnPageSelected(): boolean {
+    return this.instances.length > 0 && this.instances.every(i => this.selectedIds.has(i.id));
+  }
+
+  get isIndeterminate(): boolean {
+    const count = this.instances.filter(i => this.selectedIds.has(i.id)).length;
+    return count > 0 && count < this.instances.length;
+  }
+
+  toggleSelectAll(): void {
+    const next = new Set(this.selectedIds);
+    if (this.isAllOnPageSelected) {
+      this.instances.forEach(i => next.delete(i.id));
+    } else {
+      this.instances.forEach(i => next.add(i.id));
+    }
+    this.selectedIds = next;
+    this.cdr.markForCheck();
+  }
+
+  get selectedOperation(): BatchOperationDef | undefined {
+    return this.selectedOperationId
+      ? this.operations.find(op => op.id === this.selectedOperationId)
+      : undefined;
+  }
+
+  get canContinue(): boolean {
+    return this.mode === 'instances' ? this.selectedIds.size > 0 : false;
+  }
+
+  onInstancesPageChange(event: PageChangeEvent): void {
+    this.instancesPage = event.current;
+    this.instancesPageSize = event.size;
+    this.loadInstances();
+  }
+
+  continue(): void {
+    if (!this.canContinue) return;
+    this.currentStep = 2;
+    this.showTechnicalDetails = false;
+    window.scrollTo(0, 0);
+    this.cdr.markForCheck();
+  }
+
+  // ── Step 2 ────────────────────────────────────────────────────────────────
+  get selectedCount(): number {
+    return this.selectedIds.size;
+  }
+
+  get confirmPayloadJson(): string {
+    return JSON.stringify({ processInstanceIds: [...this.selectedIds], suspended: true }, null, 2);
+  }
+
+  get confirmEndpoint(): string {
+    return `PUT ${environment.engineUrl}/default/process-instance/{id}/suspended`;
+  }
+
+  toggleTechnicalDetails(): void {
+    this.showTechnicalDetails = !this.showTechnicalDetails;
+    this.cdr.markForCheck();
+  }
+
+  back(): void {
+    if (this.currentStep > 1) {
+      this.currentStep = (this.currentStep - 1) as 1 | 2;
+      window.scrollTo(0, 0);
+      this.cdr.markForCheck();
+    }
+  }
+
+  // ── Step 3 ────────────────────────────────────────────────────────────────
+  execute(): void {
+    if (this.executing) return;
+    this.executing = true;
+    this.currentStep = 3;
+
+    const ids = [...this.selectedIds];
+    this.instanceResults = ids.map(id => {
+      const inst = this.knownInstances.get(id);
+      return {
+        id,
+        businessKey: inst?.businessKey,
+        definitionKey: inst?.processDefinitionName || inst?.processDefinitionKey || inst?.processDefinitionId,
+        status: 'pending' as InstanceStatus
+      };
+    });
+
+    window.scrollTo(0, 0);
+    this.cdr.markForCheck();
+
+    const calls = ids.map(id => this.processInstanceService.suspendInstanceWithResult(id));
+
+    forkJoin(calls).pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(results => {
+        const resultMap = new Map(results.map(r => [r.id, r]));
+        this.instanceResults = this.instanceResults.map(r => {
+          const res = resultMap.get(r.id);
+          return res
+            ? { ...r, status: (res.success ? 'success' : 'error') as InstanceStatus, error: res.error }
+            : r;
+        });
+        this.executing = false;
+        this.cdr.markForCheck();
+      });
+  }
+
+  get successCount(): number { return this.instanceResults.filter(r => r.status === 'success').length; }
+  get errorCount(): number   { return this.instanceResults.filter(r => r.status === 'error').length; }
+
+  reset(): void {
+    this.currentStep = 1;
+    this.selectedOperationId = null;
+    this.resetForm();
+    this.instanceResults = [];
+    this.executing = false;
+    this.showTechnicalDetails = false;
+    window.scrollTo(0, 0);
+    this.cdr.markForCheck();
+  }
+
+  getResultStatusIcon(status: InstanceStatus): any {
+    if (status === 'success') return this.faCheckCircle;
+    if (status === 'error') return this.faTimesCircle;
+    return this.faSpinner;
+  }
+
+  getDefinitionDisplay(inst: ProcessInstance): string {
+    return inst.processDefinitionName || inst.processDefinitionKey || inst.processDefinitionId;
+  }
+}

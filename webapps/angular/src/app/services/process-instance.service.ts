@@ -447,6 +447,24 @@ export class ProcessInstanceService {
   }
 
   /**
+   * Suspend with per-instance result tracking (used by batch operations wizard).
+   * Unlike suspendProcessInstance(), errors are surfaced rather than swallowed.
+   */
+  suspendInstanceWithResult(id: string): Observable<{ id: string; success: boolean; error?: string }> {
+    return this.http.put<void>(
+      `${this.baseUrl}/process-instance/${id}/suspended`,
+      { suspended: true }
+    ).pipe(
+      map(() => ({ id, success: true })),
+      catchError(err => of({
+        id,
+        success: false,
+        error: (err?.error?.message as string | undefined) ?? (err?.message as string | undefined) ?? 'Suspension failed'
+      }))
+    );
+  }
+
+  /**
    * Resume (activate) a process instance
    */
   resumeProcessInstance(processInstanceId: string): Observable<void> {
