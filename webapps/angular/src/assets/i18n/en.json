@@ -1571,6 +1571,7 @@
   "cockpit.batchOps.suspend.onlyRunningNote": "Only running instances can be suspended",
   "cockpit.batchOps.suspend.searchPlaceholder": "Filter by instance ID",
   "cockpit.batchOps.suspend.selectAllPageNote": "Select all applies to this page only",
+  "cockpit.batchOps.suspend.selectAllOnPage": "Select all {{count}} rows on this page",
   "cockpit.batchOps.suspend.noInstances": "No running instances found",
   "cockpit.batchOps.suspend.colId": "Instance ID",
   "cockpit.batchOps.suspend.colBusinessKey": "Business Key",

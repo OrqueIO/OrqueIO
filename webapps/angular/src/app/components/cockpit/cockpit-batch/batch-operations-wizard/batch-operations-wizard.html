@@ -70,16 +70,23 @@
 
         <!-- Table + pagination (pagination is sibling of scroll container, not child) -->
         <ng-container *ngIf="!instancesLoading && instances.length > 0">
+
+          <!-- Barre select-all — au-dessus du tableau, reste visible pendant le scroll interne -->
+          <div class="select-all-bar">
+            <label class="select-all-label">
+              <input type="checkbox"
+                     [checked]="isAllOnPageSelected"
+                     [indeterminate]="isIndeterminate"
+                     (change)="toggleSelectAll()">
+              <span>{{ 'cockpit.batchOps.suspend.selectAllOnPage' | translate: { count: instances.length.toString() } }}</span>
+            </label>
+          </div>
+
           <div class="table-container">
             <table class="instances-table">
               <thead>
                 <tr>
-                  <th class="col-check">
-                    <input type="checkbox"
-                           [checked]="isAllOnPageSelected"
-                           [indeterminate]="isIndeterminate"
-                           (change)="toggleSelectAll()">
-                  </th>
+                  <th class="col-check"></th>
                   <th>{{ 'cockpit.batchOps.suspend.colId' | translate }}</th>
                   <th>{{ 'cockpit.batchOps.suspend.colBusinessKey' | translate }}</th>
                   <th>{{ 'cockpit.batchOps.suspend.colDefinition' | translate }}</th>

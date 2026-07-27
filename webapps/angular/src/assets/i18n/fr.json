@@ -1553,6 +1553,7 @@
   "cockpit.batchOps.suspend.onlyRunningNote": "Seules les instances en cours d’exécution peuvent être suspendues",
   "cockpit.batchOps.suspend.searchPlaceholder": "Filtrer par ID d'instance",
   "cockpit.batchOps.suspend.selectAllPageNote": "Tout sélectionner ne s'applique qu'à cette page",
+  "cockpit.batchOps.suspend.selectAllOnPage": "Sélectionner les {{count}} lignes de cette page",
   "cockpit.batchOps.suspend.noInstances": "Aucune instance en cours trouvée",
   "cockpit.batchOps.suspend.colId": "ID instance",
   "cockpit.batchOps.suspend.colBusinessKey": "Clé métier",
