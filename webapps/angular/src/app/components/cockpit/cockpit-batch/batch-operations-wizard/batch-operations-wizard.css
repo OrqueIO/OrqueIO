@@ -199,6 +199,72 @@
   white-space: nowrap;
 }
 
+/* ── Table column widths ────────────────────────────────────────────────── */
+.col-state      { width: 110px; }
+.col-id         { min-width: 260px; }
+.col-definition { min-width: 120px; }
+.col-businesskey{ min-width: 120px; }
+.col-starttime  { width: 150px; }
+.col-endtime    { width: 150px; }
+.col-actions    { width: 56px; text-align: center; }
+
+/* ── State badge ────────────────────────────────────────────────────────── */
+.state-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.625rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.state-badge fa-icon { font-size: 0.625rem; }
+
+.state-active     { background: var(--color-success-bg); color: var(--color-success); }
+.state-suspended  { background: var(--color-warning-bg); color: var(--color-warning); }
+.state-completed  { background: var(--color-info-bg);    color: var(--color-info);    }
+.state-terminated { background: var(--color-danger-bg);  color: var(--color-danger);  }
+.state-error      { background: var(--color-danger-bg);  color: var(--color-danger);  }
+
+/* ── Instance ID link ───────────────────────────────────────────────────── */
+.instance-link {
+  color: var(--color-primary);
+  text-decoration: none;
+  font-size: var(--font-size-sm);
+  transition: color var(--transition-fast);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 240px;
+  display: block;
+}
+
+.instance-link:hover {
+  text-decoration: underline;
+}
+
+/* ── Actions eye button ─────────────────────────────────────────────────── */
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+  font-size: 0.875rem;
+  text-decoration: none;
+}
+
+.action-btn:hover {
+  background: var(--color-primary);
+  color: var(--text-inverse);
+}
+
 /* ── Page-only note ─────────────────────────────────────────────────────── */
 .page-note {
   display: flex;

@@ -12,7 +12,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
   faPauseCircle, faPlayCircle, faTrash, faSpinner,
   faCheckCircle, faTimesCircle, faExclamationTriangle,
-  faChevronDown, faChevronUp, faInfoCircle,
+  faChevronDown, faChevronUp, faInfoCircle, faEye,
   faDatabase, faSyncAlt, faCodeBranch, faClock, faTag, faEnvelope
 } from '@fortawesome/free-solid-svg-icons';
 
@@ -21,6 +21,7 @@ import { COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS } from '../../../../shared/
 import { NavMenuService } from '../../../../services/nav-menu.service';
 import { ProcessInstanceService, ProcessInstance } from '../../../../services/process-instance.service';
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
+import { TranslateService } from '../../../../i18n/translate.service';
 import { CamDatePipe } from '../../../../pipes';
 import { PaginationComponent, PageChangeEvent } from '../../../../shared/pagination/pagination';
 import { MultiValueChipInputComponent } from '../../../../shared/multi-value-chip-input/multi-value-chip-input';
@@ -171,6 +172,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
   private processInstanceService = inject(ProcessInstanceService);
   private cdr = inject(ChangeDetectorRef);
   private destroyRef = inject(DestroyRef);
+  private translateService = inject(TranslateService);
 
   faSpinner = faSpinner;
   faCheckCircle = faCheckCircle;
@@ -179,6 +181,9 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
   faChevronDown = faChevronDown;
   faChevronUp = faChevronUp;
   faInfoCircle = faInfoCircle;
+  faEye = faEye;
+  faPlayCircle = faPlayCircle;
+  faPauseCircle = faPauseCircle;
 
   breadcrumbs: BreadcrumbItem[] = [
     { translateKey: 'cockpit.menu.batchOperations' }
@@ -452,5 +457,48 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
 
   getDefinitionDisplay(inst: ProcessInstance): string {
     return inst.processDefinitionName || inst.processDefinitionKey || inst.processDefinitionId;
+  }
+
+  // ── State badge helpers (mirrors process-instance-search) ──────────────────
+  getInstanceStateClass(inst: ProcessInstance): string {
+    switch (this.computeInstanceState(inst)) {
+      case 'running':    return 'state-active';
+      case 'suspended':  return 'state-suspended';
+      case 'completed':  return 'state-completed';
+      case 'terminated': return 'state-terminated';
+      case 'incidents':  return 'state-error';
+      default:           return '';
+    }
+  }
+
+  getInstanceStateIcon(inst: ProcessInstance): any {
+    switch (this.computeInstanceState(inst)) {
+      case 'running':    return this.faPlayCircle;
+      case 'suspended':  return this.faPauseCircle;
+      case 'completed':  return this.faCheckCircle;
+      case 'terminated': return this.faTimesCircle;
+      case 'incidents':  return this.faExclamationTriangle;
+      default:           return this.faPlayCircle;
+    }
+  }
+
+  getInstanceStateLabel(inst: ProcessInstance): string {
+    const t = (key: string) => this.translateService.instant(key);
+    switch (this.computeInstanceState(inst)) {
+      case 'running':    return t('cockpit.processes.globalSearch.instanceStateRunning');
+      case 'suspended':  return t('cockpit.processes.filters.stateSuspended');
+      case 'completed':  return t('cockpit.processes.filters.stateCompleted');
+      case 'terminated': return t('cockpit.processes.filters.stateTerminated');
+      case 'incidents':  return t('cockpit.processes.globalSearch.instanceStateWithIncidents');
+      default:           return '';
+    }
+  }
+
+  private computeInstanceState(inst: ProcessInstance): string {
+    if (inst.state === 'SUSPENDED') return 'suspended';
+    if (inst.state === 'COMPLETED') return 'completed';
+    if (inst.state === 'EXTERNALLY_TERMINATED' || inst.state === 'INTERNALLY_TERMINATED') return 'terminated';
+    if (inst.incidents && inst.incidents.length > 0) return 'incidents';
+    return 'running';
   }
 }

@@ -109,10 +109,13 @@
               <thead>
                 <tr>
                   <th class="col-check"></th>
-                  <th>{{ 'cockpit.batchOps.suspend.colId' | translate }}</th>
-                  <th>{{ 'cockpit.batchOps.suspend.colBusinessKey' | translate }}</th>
-                  <th>{{ 'cockpit.batchOps.suspend.colDefinition' | translate }}</th>
-                  <th>{{ 'cockpit.batchOps.suspend.colStartTime' | translate }}</th>
+                  <th class="col-state">{{ 'cockpit.processes.columns.state' | translate }}</th>
+                  <th class="col-id">{{ 'cockpit.processes.columns.id' | translate }}</th>
+                  <th class="col-definition">{{ 'cockpit.processes.columns.definition' | translate }}</th>
+                  <th class="col-businesskey">{{ 'cockpit.processes.columns.businessKey' | translate }}</th>
+                  <th class="col-starttime">{{ 'cockpit.processes.columns.startTime' | translate }}</th>
+                  <th class="col-endtime">{{ 'cockpit.processes.columns.endTime' | translate }}</th>
+                  <th class="col-actions">{{ 'cockpit.processes.columns.actions' | translate }}</th>
                 </tr>
               </thead>
               <tbody>
@@ -125,10 +128,28 @@
                            (change)="toggleInstance(inst.id)"
                            (click)="$event.stopPropagation()">
                   </td>
-                  <td class="cell-mono">{{ inst.id }}</td>
-                  <td>{{ inst.businessKey || '—' }}</td>
-                  <td>{{ getDefinitionDisplay(inst) }}</td>
-                  <td class="cell-nowrap">{{ inst.startTime | camDate }}</td>
+                  <td class="col-state">
+                    <span class="state-badge" [ngClass]="getInstanceStateClass(inst)">
+                      <fa-icon [icon]="getInstanceStateIcon(inst)"></fa-icon>
+                      {{ getInstanceStateLabel(inst) }}
+                    </span>
+                  </td>
+                  <td class="col-id" (click)="$event.stopPropagation()">
+                    <a [routerLink]="['/cockpit/processes/instance', inst.id]"
+                       class="instance-link mono"
+                       [title]="inst.id">{{ inst.id }}</a>
+                  </td>
+                  <td class="col-definition">{{ getDefinitionDisplay(inst) }}</td>
+                  <td class="col-businesskey">{{ inst.businessKey || '—' }}</td>
+                  <td class="col-starttime cell-nowrap">{{ inst.startTime | camDate }}</td>
+                  <td class="col-endtime cell-nowrap">{{ (inst.endTime | camDate) || '—' }}</td>
+                  <td class="col-actions" (click)="$event.stopPropagation()">
+                    <a [routerLink]="['/cockpit/processes/instance', inst.id]"
+                       class="action-btn"
+                       [title]="'cockpit.processes.viewDetails' | translate">
+                      <fa-icon [icon]="faEye"></fa-icon>
+                    </a>
+                  </td>
                 </tr>
               </tbody>
             </table>
