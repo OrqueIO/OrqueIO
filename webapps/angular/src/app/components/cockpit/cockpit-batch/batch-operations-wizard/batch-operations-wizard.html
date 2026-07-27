@@ -23,39 +23,62 @@
     </app-batch-operation-list>
 
     <!-- ─── Suspend form (shown when "suspend" is selected) ──────────── -->
-    <div *ngIf="selectedOperationId === 'suspend'" class="operation-form">
+    <div *ngIf="selectedOperationId === 'suspend'" class="operation-steps">
 
-      <!-- Mode toggle -->
-      <div class="mode-toggle" role="group">
-        <button type="button"
-                class="mode-btn"
-                [class.mode-btn--active]="mode === 'instances'"
-                (click)="setMode('instances')">
-          {{ 'cockpit.batchOps.suspend.modeInstances' | translate }}
-        </button>
-        <button type="button"
-                class="mode-btn"
-                [class.mode-btn--active]="mode === 'query'"
-                (click)="setMode('query')">
-          {{ 'cockpit.batchOps.suspend.modeQuery' | translate }}
-        </button>
-      </div>
+      <!-- ── Carte 1 : Définition de la requête ────────────────────── -->
+      <div class="operation-card">
 
-      <!-- ── Instances mode ──────────────────────────────────────────── -->
-      <ng-container *ngIf="mode === 'instances'">
-
-        <!-- Info note -->
-        <div class="info-note">
-          <fa-icon [icon]="faInfoCircle"></fa-icon>
-          <span>{{ 'cockpit.batchOps.suspend.onlyRunningNote' | translate }}</span>
+        <!-- Mode toggle -->
+        <div class="mode-toggle" role="group">
+          <button type="button"
+                  class="mode-btn"
+                  [class.mode-btn--active]="mode === 'instances'"
+                  (click)="setMode('instances')">
+            {{ 'cockpit.batchOps.suspend.modeInstances' | translate }}
+          </button>
+          <button type="button"
+                  class="mode-btn"
+                  [class.mode-btn--active]="mode === 'query'"
+                  (click)="setMode('query')">
+            {{ 'cockpit.batchOps.suspend.modeQuery' | translate }}
+          </button>
         </div>
 
-        <!-- Multi-value chip filter (reuses ORQ-301 component) -->
-        <app-multi-value-chip-input
-          [values]="filterChips"
-          [placeholder]="'cockpit.batchOps.suspend.searchPlaceholder' | translate"
-          (valuesChange)="onFilterChange($event)">
-        </app-multi-value-chip-input>
+        <!-- Instances mode : info + filtre -->
+        <ng-container *ngIf="mode === 'instances'">
+          <div class="info-note">
+            <fa-icon [icon]="faInfoCircle"></fa-icon>
+            <span>{{ 'cockpit.batchOps.suspend.onlyRunningNote' | translate }}</span>
+          </div>
+          <app-multi-value-chip-input
+            [values]="filterChips"
+            [placeholder]="'cockpit.batchOps.suspend.searchPlaceholder' | translate"
+            (valuesChange)="onFilterChange($event)">
+          </app-multi-value-chip-input>
+        </ng-container>
+
+        <!-- Query mode : placeholder -->
+        <ng-container *ngIf="mode === 'query'">
+          <div class="query-placeholder">
+            <p>{{ 'cockpit.batchOps.suspend.queryPlaceholder' | translate }}</p>
+          </div>
+        </ng-container>
+
+      </div>
+      <!-- /carte 1 -->
+
+      <!-- ── Bande pagination : séparateur visuel entre carte filtre et tableau -->
+      <app-pagination
+        *ngIf="mode === 'instances' && !instancesLoading && instances.length > 0"
+        [current]="instancesPage"
+        [size]="instancesPageSize"
+        [total]="instancesTotal"
+        [showSizeSelector]="true"
+        (pageChange)="onInstancesPageChange($event)">
+      </app-pagination>
+
+      <!-- ── Carte 2 : Résultats et sélection (instances mode uniquement) -->
+      <div *ngIf="mode === 'instances'" class="operation-card">
 
         <!-- Loading -->
         <div *ngIf="instancesLoading" class="loading-state">
@@ -68,17 +91,8 @@
           {{ 'cockpit.batchOps.suspend.noInstances' | translate }}
         </div>
 
-        <!-- Table + pagination (pagination is sibling of scroll container, not child) -->
+        <!-- Select-all + tableau -->
         <ng-container *ngIf="!instancesLoading && instances.length > 0">
-
-          <!-- Pagination + select-all — au-dessus du tableau -->
-          <app-pagination
-            [current]="instancesPage"
-            [size]="instancesPageSize"
-            [total]="instancesTotal"
-            [showSizeSelector]="true"
-            (pageChange)="onInstancesPageChange($event)">
-          </app-pagination>
 
           <div class="select-all-bar">
             <label class="select-all-label">
@@ -122,31 +136,25 @@
 
         </ng-container>
 
-      </ng-container>
-
-      <!-- ── Query mode ──────────────────────────────────────────────── -->
-      <ng-container *ngIf="mode === 'query'">
-        <div class="query-placeholder">
-          <p>{{ 'cockpit.batchOps.suspend.queryPlaceholder' | translate }}</p>
+        <!-- Action bar -->
+        <div class="step-footer">
+          <span class="selection-count"
+                [class.selection-count--empty]="selectedIds.size === 0">
+            {{ 'cockpit.batchOps.selectedCount' | translate: { count: selectedIds.size.toString() } }}
+          </span>
+          <button type="button"
+                  class="btn-primary"
+                  [disabled]="!canContinue"
+                  (click)="continue()">
+            {{ (selectedOperation?.actionBtnKey ?? 'cockpit.batchOps.continue') | translate: { count: selectedIds.size.toString() } }}
+          </button>
         </div>
-      </ng-container>
 
-      <!-- ── Action bar (shared across modes) ──────────────────────── -->
-      <div class="step-footer">
-        <span class="selection-count"
-              [class.selection-count--empty]="selectedIds.size === 0">
-          {{ 'cockpit.batchOps.selectedCount' | translate: { count: selectedIds.size.toString() } }}
-        </span>
-        <button type="button"
-                class="btn-primary"
-                [disabled]="!canContinue"
-                (click)="continue()">
-          {{ (selectedOperation?.actionBtnKey ?? 'cockpit.batchOps.continue') | translate: { count: selectedIds.size.toString() } }}
-        </button>
       </div>
+      <!-- /carte 2 -->
 
     </div>
-    <!-- /operation-form -->
+    <!-- /operation-steps -->
   </div>
   <!-- /step 1 -->
 

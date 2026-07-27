@@ -29,8 +29,14 @@
   color: var(--text-primary);
 }
 
-/* ── Operation form card ─────────────────────────────────────────────────── */
-.operation-form {
+/* ── Deux cartes de l'opération ──────────────────────────────────────────── */
+.operation-steps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.operation-card {
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
@@ -207,7 +213,7 @@
 app-pagination {
   display: block;
   padding: var(--space-3) var(--space-4);
-  border-top: 1px solid var(--border-color-light);
+  background: var(--bg-page);
 }
 
 /* ── Step footer / action bar ────────────────────────────────────────────── */
