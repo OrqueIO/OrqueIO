@@ -6,7 +6,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { forkJoin } from 'rxjs';
+import { forkJoin, Subject, switchMap, catchError, EMPTY } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
@@ -217,6 +217,8 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
   // Metadata cache: accumulates instances seen on any browsed page for step-3 display
   private knownInstances = new Map<string, ProcessInstance>();
 
+  private readonly instanceLoad$ = new Subject<void>();
+
   // Checked rows (persists across pages)
   selectedIds = new Set<string>();
 
@@ -230,6 +232,32 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
   // ── Lifecycle ─────────────────────────────────────────────────────────────
   ngOnInit(): void {
     this.navMenuService.setMenuItems(COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS);
+
+    this.instanceLoad$.pipe(
+      switchMap(() => {
+        const body = this.buildQueryBody();
+        const firstResult = (this.instancesPage - 1) * this.instancesPageSize;
+        return forkJoin({
+          results: this.processInstanceService.queryProcessInstances(body, firstResult, this.instancesPageSize),
+          count:   this.processInstanceService.queryProcessInstancesCount(body)
+        }).pipe(
+          catchError(() => {
+            this.instances = [];
+            this.instancesTotal = 0;
+            this.instancesLoading = false;
+            this.cdr.markForCheck();
+            return EMPTY;
+          })
+        );
+      }),
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(({ results, count }) => {
+      this.instances = results;
+      this.instancesTotal = Math.max(count, results.length);
+      results.forEach(i => this.knownInstances.set(i.id, i));
+      this.instancesLoading = false;
+      this.cdr.markForCheck();
+    });
   }
 
   ngOnDestroy(): void {
@@ -281,30 +309,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
   private loadInstances(): void {
     this.instancesLoading = true;
     this.cdr.markForCheck();
-
-    const body = this.buildQueryBody();
-    const firstResult = (this.instancesPage - 1) * this.instancesPageSize;
-
-    forkJoin({
-      results: this.processInstanceService.queryProcessInstances(body, firstResult, this.instancesPageSize),
-      count: this.processInstanceService.queryProcessInstancesCount(body)
-    }).pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: ({ results, count }) => {
-          this.instances = results;
-          // Ensure total is never below the loaded page count (guards against a silent count-API failure)
-          this.instancesTotal = Math.max(count, results.length);
-          results.forEach(i => this.knownInstances.set(i.id, i));
-          this.instancesLoading = false;
-          this.cdr.detectChanges();
-        },
-        error: () => {
-          this.instances = [];
-          this.instancesTotal = 0;
-          this.instancesLoading = false;
-          this.cdr.detectChanges();
-        }
-      });
+    this.instanceLoad$.next();
   }
 
   onFilterChange(chips: string[]): void {
