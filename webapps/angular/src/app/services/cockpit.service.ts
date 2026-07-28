@@ -1420,15 +1420,43 @@ export class CockpitService {
     if (variants.length === 1) {
       return this.processInstanceService.queryProcessInstancesCount(variants[0]);
     }
-    return forkJoin(
-      variants.map(body => this.processInstanceService.queryProcessInstances(body, 0, 2000))
-    ).pipe(
-      map(resultArrays => {
-        const seen = new Set<string>();
-        resultArrays.flat().forEach(inst => { if (inst.id) seen.add(inst.id); });
-        return seen.size;
-      })
-    );
+    // Multiple variants: businessKey/variable LIKE — one count call via orQueries.
+    // Camunda's /history/process-instance/count accepts orQueries; the engine deduplicates
+    // matching instances, so no client-side Set dedup or full-instance fetch is needed.
+    // Scalar base conditions (dates, withIncidents, etc.) are hoisted to root —
+    // Camunda silently ignores date-range fields inside orQuery entries.
+    const { rootConditions, orQueryEntries } = this.splitForOrQuery(variants);
+    return this.processInstanceService.queryProcessInstancesCount({ ...rootConditions, orQueries: orQueryEntries });
+  }
+
+  // Separates baseVariants into root-level conditions (must not be inside orQuery entries)
+  // and per-variant OR-able conditions.
+  //
+  // Two distinct Camunda 7 behaviors drive this split:
+  //
+  // 1. Date-range fields (finishedAfter, startedAfter, finishedBefore, startedBefore):
+  //    silently ignored when placed inside orQuery entries — must be at request root.
+  //
+  // 2. processInstanceIds: supported inside orQuery entries and must STAY there.
+  //    When processInstanceIds is placed at root alongside orQueries, Camunda returns
+  //    0 results (the ID and BK constraints do not combine correctly in that layout).
+  //    Keeping processInstanceIds inside each orQuery entry alongside the BK pattern
+  //    produces the correct: (id ∈ IDs AND BK '%a%') OR (id ∈ IDs AND BK '%b%') OR …
+  private splitForOrQuery(baseVariants: any[]): { rootConditions: any; orQueryEntries: any[] } {
+    const OR_ABLE = new Set(['processInstanceBusinessKeyLike', 'variables', 'processInstanceIds']);
+    const rootConditions: any = {};
+    const orQueryEntries = baseVariants.map(variant => {
+      const orEntry: any = {};
+      for (const [key, val] of Object.entries(variant)) {
+        if (OR_ABLE.has(key)) {
+          orEntry[key] = val;
+        } else {
+          rootConditions[key] = val;
+        }
+      }
+      return orEntry;
+    });
+    return { rootConditions, orQueryEntries };
   }
 
   // Returns the state-specific body fragments (flags only, no other criteria)
@@ -1472,22 +1500,56 @@ export class CockpitService {
     firstResult: number,
     maxResults: number
   ): Observable<ProcessInstance[]> {
-    const bodies = this.buildPerStateBodies(filters, statePill, variableNamesIgnoreCase, variableValuesIgnoreCase);
-    return forkJoin(
-      bodies.map(body => this.processInstanceService.queryProcessInstances(body, 0, 2000))
-    ).pipe(
-      map(resultArrays => {
-        const seen = new Set<string>();
-        const merged: ProcessInstance[] = [];
-        for (const arr of resultArrays) {
-          for (const inst of arr) {
-            if (inst.id && !seen.has(inst.id)) { seen.add(inst.id); merged.push(inst); }
-          }
+    const otherFilters = filters.filter(f => f.field !== 'state');
+    const baseVariants = this.buildPayloadVariants(otherFilters, variableNamesIgnoreCase, variableValuesIgnoreCase);
+
+    // Shared post-fetch step: dedup by id, sort by startTime desc, slice the page.
+    const mergeSortSlice = (resultArrays: ProcessInstance[][]): ProcessInstance[] => {
+      const seen = new Set<string>();
+      const merged: ProcessInstance[] = [];
+      for (const arr of resultArrays) {
+        for (const inst of arr) {
+          if (inst.id && !seen.has(inst.id)) { seen.add(inst.id); merged.push(inst); }
         }
-        merged.sort((a, b) => new Date(b.startTime).getTime() - new Date(a.startTime).getTime());
-        return merged.slice(firstResult, firstResult + maxResults);
-      })
+      }
+      merged.sort((a, b) => new Date(b.startTime).getTime() - new Date(a.startTime).getTime());
+      return merged.slice(firstResult, firstResult + maxResults);
+    };
+
+    if (baseVariants.length === 1) {
+      // Single base variant: unchanged path — one flat request per state fragment.
+      return forkJoin(
+        this.buildPerStateBodies(filters, statePill, variableNamesIgnoreCase, variableValuesIgnoreCase)
+          .map(body => this.processInstanceService.queryProcessInstances(body, 0, 2000))
+      ).pipe(map(mergeSortSlice));
+    }
+
+    // baseVariants > 1: combine BK/variable variants via orQueries, one request per
+    // state fragment (state flags at top level to avoid Camunda's finished/unfinished
+    // flag hoisting). This reduces N×M HTTP calls to N calls.
+    //
+    // Pagination strategy: fetch `needed = firstResult + maxResults` items per fragment,
+    // pre-sorted by the API (sorting param). Correctness guarantee: even if all items
+    // of the requested page come from one state fragment, fetching `needed` from each
+    // guarantees coverage. In-memory merge+sort+slice then selects the exact page.
+    // Limit: works for all pages where firstResult+maxResults ≤ MAX_RESULTS_CAP (10 000).
+    const needed = firstResult + maxResults;
+    // Scalar base conditions (dates, withIncidents, etc.) must be at the request root —
+    // Camunda silently ignores date-range fields inside orQuery entries.
+    const { rootConditions: listRoot, orQueryEntries: listEntries } = this.splitForOrQuery(baseVariants);
+    const stateGroups = statePill.values.flatMap(
+      stateVal => this.stateBodyFragment(stateVal).map(
+        flags => ({
+          ...flags,
+          ...listRoot,
+          orQueries: listEntries,
+          sorting: [{ sortBy: 'startTime', sortOrder: 'desc' }],
+        })
+      )
     );
+    return forkJoin(
+      stateGroups.map(body => this.processInstanceService.queryProcessInstances(body, 0, needed))
+    ).pipe(map(mergeSortSlice));
   }
 
   private countPerState(
@@ -1496,9 +1558,39 @@ export class CockpitService {
     variableNamesIgnoreCase: boolean,
     variableValuesIgnoreCase: boolean
   ): Observable<number> {
-    const bodies = this.buildPerStateBodies(filters, statePill, variableNamesIgnoreCase, variableValuesIgnoreCase);
+    const otherFilters = filters.filter(f => f.field !== 'state');
+    const baseVariants = this.buildPayloadVariants(otherFilters, variableNamesIgnoreCase, variableValuesIgnoreCase);
+
+    if (baseVariants.length === 1) {
+      // Single base variant → state is the only split dimension, mutually exclusive per
+      // instance. No cross-variant LIKE overlap → sum queryProcessInstancesCount directly.
+      const bodies = statePill.values.flatMap(
+        stateVal => this.stateBodyFragment(stateVal).flatMap(
+          flags => baseVariants.map(variant => ({ ...variant, ...flags }))
+        )
+      );
+      return forkJoin(
+        bodies.map(body => this.processInstanceService.queryProcessInstancesCount(body))
+      ).pipe(map(counts => counts.reduce((sum, c) => sum + c, 0)));
+    }
+
+    // baseVariants > 1: businessKey or variable uses LIKE → combine via orQueries so
+    // the engine computes the union in a single call; each matching instance is counted
+    // exactly once by the database, no client-side dedup or full-instance fetch needed.
+    // State flags stay at the top level (not inside orQueries) to avoid Camunda's
+    // finished/unfinished flag hoisting that makes cross-state orQueries return 0.
+    // Scalar base conditions (dates, withIncidents, etc.) are also hoisted to root —
+    // Camunda silently ignores date-range fields inside orQuery entries.
+    // One queryProcessInstancesCount call per state fragment; fragments are mutually
+    // exclusive (one state per instance) so summing is correct.
+    const { rootConditions: countRoot, orQueryEntries: countEntries } = this.splitForOrQuery(baseVariants);
+    const stateGroups = statePill.values.flatMap(
+      stateVal => this.stateBodyFragment(stateVal).map(
+        flags => ({ ...flags, ...countRoot, orQueries: countEntries })
+      )
+    );
     return forkJoin(
-      bodies.map(body => this.processInstanceService.queryProcessInstancesCount(body))
+      stateGroups.map(body => this.processInstanceService.queryProcessInstancesCount(body))
     ).pipe(map(counts => counts.reduce((sum, c) => sum + c, 0)));
   }
 

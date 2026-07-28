@@ -697,61 +697,30 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
   }
 
   private loadSearchResults(): void {
-    const instanceIdPill = this.activePills.find(p => p.field === 'instanceId');
-    const apiPills = instanceIdPill
-      ? this.activePills.filter(p => p.field !== 'instanceId')
-      : this.activePills;
+    const firstResult = (this.searchCurrentPage - 1) * this.searchPageSize;
 
-    if (instanceIdPill) {
-      const fetch$ = apiPills.length > 0
-        ? this.cockpitService.searchProcessInstancesGlobal(
-            apiPills, this.variableNamesIgnoreCase, this.variableValuesIgnoreCase, 0, 2000
-          )
-        : this.cockpitService.queryProcessInstances({}, 0, 2000);
-
-      fetch$
-        .pipe(takeUntilDestroyed(this.destroyRef))
-        .subscribe({
-          next: results => {
-            const terms = instanceIdPill.values.map(t => t.toLowerCase());
-            const filtered = results.filter(r => r.id && terms.some(t => r.id.toLowerCase().includes(t)));
-            this.searchResultsCount = filtered.length;
-            const start = (this.searchCurrentPage - 1) * this.searchPageSize;
-            this.searchResults = filtered.slice(start, start + this.searchPageSize);
-            this.searchLoading = false;
-            this.cdr.detectChanges();
-          },
-          error: () => {
-            this.searchLoading = false;
-            this.searchError = true;
-            this.cdr.detectChanges();
-          }
-        });
-    } else {
-      const firstResult = (this.searchCurrentPage - 1) * this.searchPageSize;
-      forkJoin({
-        results: this.cockpitService.searchProcessInstancesGlobal(
-          apiPills, this.variableNamesIgnoreCase, this.variableValuesIgnoreCase,
-          firstResult, this.searchPageSize
-        ),
-        count: this.cockpitService.searchProcessInstancesGlobalCount(
-          apiPills, this.variableNamesIgnoreCase, this.variableValuesIgnoreCase
-        )
-      }).pipe(takeUntilDestroyed(this.destroyRef))
-        .subscribe({
-          next: ({ results, count }) => {
-            this.searchResults = results;
-            this.searchResultsCount = count;
-            this.searchLoading = false;
-            this.cdr.detectChanges();
-          },
-          error: () => {
-            this.searchLoading = false;
-            this.searchError = true;
-            this.cdr.detectChanges();
-          }
-        });
-    }
+    forkJoin({
+      results: this.cockpitService.searchProcessInstancesGlobal(
+        this.activePills, this.variableNamesIgnoreCase, this.variableValuesIgnoreCase,
+        firstResult, this.searchPageSize
+      ),
+      count: this.cockpitService.searchProcessInstancesGlobalCount(
+        this.activePills, this.variableNamesIgnoreCase, this.variableValuesIgnoreCase
+      )
+    }).pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: ({ results, count }) => {
+          this.searchResults = results;
+          this.searchResultsCount = count;
+          this.searchLoading = false;
+          this.cdr.detectChanges();
+        },
+        error: () => {
+          this.searchLoading = false;
+          this.searchError = true;
+          this.cdr.detectChanges();
+        }
+      });
   }
 
   clearSearch(): void {
