@@ -20,11 +20,12 @@ import { CockpitHeaderComponent, BreadcrumbItem } from '../../../../shared/cockp
 import { COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS } from '../../../../shared/cockpit-menu';
 import { NavMenuService } from '../../../../services/nav-menu.service';
 import { ProcessInstanceService, ProcessInstance } from '../../../../services/process-instance.service';
+import { CockpitService, MultiValueFilter } from '../../../../services/cockpit.service';
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
 import { TranslateService } from '../../../../i18n/translate.service';
 import { CamDatePipe } from '../../../../pipes';
 import { PaginationComponent, PageChangeEvent } from '../../../../shared/pagination/pagination';
-import { MultiValueChipInputComponent } from '../../../../shared/multi-value-chip-input/multi-value-chip-input';
+import { InstanceFilterPanelComponent, FilterPanelChange } from '../../../../shared/instance-filter-panel/instance-filter-panel';
 import { BatchWizardStepperComponent, WizardStep } from '../batch-wizard-stepper/batch-wizard-stepper';
 import { BatchOperationListComponent, BatchOperationDef } from '../batch-operation-list/batch-operation-list';
 import { environment } from '../../../../../environments/environment';
@@ -159,7 +160,7 @@ const BATCH_OPERATIONS: BatchOperationDef[] = [
     TranslatePipe,
     CamDatePipe,
     PaginationComponent,
-    MultiValueChipInputComponent,
+    InstanceFilterPanelComponent,
     BatchWizardStepperComponent,
     BatchOperationListComponent
   ],
@@ -170,6 +171,7 @@ const BATCH_OPERATIONS: BatchOperationDef[] = [
 export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
   private navMenuService = inject(NavMenuService);
   private processInstanceService = inject(ProcessInstanceService);
+  private cockpitService = inject(CockpitService);
   private cdr = inject(ChangeDetectorRef);
   private destroyRef = inject(DestroyRef);
   private translateService = inject(TranslateService);
@@ -211,8 +213,10 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
   instancesPage = 1;
   instancesPageSize = 10;
 
-  // Filter chips (passed as processInstanceIds to API)
-  filterChips: string[] = [];
+  // Filter criteria from the instance-filter-panel
+  filterCriteria: MultiValueFilter[] = [];
+  vnIgnoreCase = false;
+  vvIgnoreCase = false;
 
   // Metadata cache: accumulates instances seen on any browsed page for step-3 display
   private knownInstances = new Map<string, ProcessInstance>();
@@ -235,11 +239,16 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
 
     this.instanceLoad$.pipe(
       switchMap(() => {
-        const body = this.buildQueryBody();
+        const criteria: MultiValueFilter[] = [
+          { field: 'state', values: ['active'] },
+          ...this.filterCriteria
+        ];
         const firstResult = (this.instancesPage - 1) * this.instancesPageSize;
         return forkJoin({
-          results: this.processInstanceService.queryProcessInstances(body, firstResult, this.instancesPageSize),
-          count:   this.processInstanceService.queryProcessInstancesCount(body)
+          results: this.cockpitService.searchProcessInstancesGlobal(
+            criteria, this.vnIgnoreCase, this.vvIgnoreCase, firstResult, this.instancesPageSize),
+          count: this.cockpitService.searchProcessInstancesGlobalCount(
+            criteria, this.vnIgnoreCase, this.vvIgnoreCase)
         }).pipe(
           catchError(() => {
             this.instances = [];
@@ -290,20 +299,14 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
 
   private resetForm(): void {
     this.mode = 'instances';
-    this.filterChips = [];
+    this.filterCriteria = [];
+    this.vnIgnoreCase = false;
+    this.vvIgnoreCase = false;
     this.instances = [];
     this.instancesTotal = 0;
     this.knownInstances = new Map();
     this.instancesPage = 1;
     this.selectedIds = new Set();
-  }
-
-  private buildQueryBody(): any {
-    const body: any = { active: true };
-    if (this.filterChips.length > 0) {
-      body.processInstanceIds = this.filterChips;
-    }
-    return body;
   }
 
   private loadInstances(): void {
@@ -312,8 +315,10 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     this.instanceLoad$.next();
   }
 
-  onFilterChange(chips: string[]): void {
-    this.filterChips = chips;
+  onFilterChange(event: FilterPanelChange): void {
+    this.filterCriteria = event.criteria;
+    this.vnIgnoreCase = event.vnIgnoreCase;
+    this.vvIgnoreCase = event.vvIgnoreCase;
     this.instancesPage = 1;
     this.selectedIds = new Set();
     this.loadInstances();

@@ -50,11 +50,10 @@
             <fa-icon [icon]="faInfoCircle"></fa-icon>
             <span>{{ 'cockpit.batchOps.suspend.onlyRunningNote' | translate }}</span>
           </div>
-          <app-multi-value-chip-input
-            [values]="filterChips"
-            [placeholder]="'cockpit.batchOps.suspend.searchPlaceholder' | translate"
-            (valuesChange)="onFilterChange($event)">
-          </app-multi-value-chip-input>
+          <app-instance-filter-panel
+            [lockedState]="'active'"
+            (criteriaChange)="onFilterChange($event)">
+          </app-instance-filter-panel>
         </ng-container>
 
         <!-- Query mode : placeholder -->
