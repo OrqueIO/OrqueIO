@@ -608,8 +608,13 @@
   align-items: flex-start;
   gap: var(--space-2);
   padding: var(--space-2) var(--space-3);
-  border-bottom: 0.5px solid var(--border);
   overflow: hidden;
+}
+
+.variable-line + .variable-line,
+.variable-like-hint + .variable-line,
+.variable-value-error + .variable-line {
+  border-top: 0.5px solid var(--border);
 }
 
 .variable-line .editor-input {
@@ -626,10 +631,6 @@
   flex: 1.6;
   min-width: 0;
   overflow: hidden;
-}
-
-.variable-line:last-of-type {
-  border-bottom: none;
 }
 
 .btn-remove-line {
@@ -697,11 +698,12 @@
 
 .variable-like-hint {
   margin: 0;
-  padding: 2px var(--space-3) var(--space-2) calc(var(--space-3) + 72px + var(--space-2));
+  padding: var(--space-1) var(--space-3) var(--space-2);
   font-size: 0.68rem;
   font-style: italic;
   color: var(--text-muted);
   background: var(--bg-card);
+  text-align: center;
 }
 
 /* ── Conflict warnings ──────────────────────────────────────────────────────── */
