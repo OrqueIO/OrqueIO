@@ -30,6 +30,55 @@
   color: var(--text-primary);
 }
 
+/* ── Step 1 hero (initial state, no operation selected) ─────────────────── */
+.step1-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-4);
+  max-width: 800px;
+  width: 100%;
+  margin: var(--space-8) auto 0;
+}
+
+.step1-hero__badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-lg);
+  background: var(--bg-accent, rgba(99, 102, 241, 0.1));
+  color: var(--color-primary);
+  font-size: 1.5rem;
+}
+
+.step1-hero__title {
+  margin: 0;
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+}
+
+.step1-hero__intro {
+  margin: 0;
+  max-width: 90%;
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.step1-hero app-batch-operation-list {
+  width: 100%;
+}
+
+.step1-ops-count {
+  margin: 0;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
 /* ── Deux cartes de l'opération ──────────────────────────────────────────── */
 .operation-steps {
   display: flex;

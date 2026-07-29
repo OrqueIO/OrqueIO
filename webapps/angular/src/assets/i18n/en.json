@@ -1557,6 +1557,8 @@
   "cockpit.menu.batchOperations": "Batch Operations",
   "PAGE_TITLE_COCKPIT_BATCH_OPS": "Batch Operations",
   "cockpit.batchOps.step1.title": "Select an operation",
+  "cockpit.batchOps.step1.intro": "Run an action across many process instances at once. Suspend, activate, delete, and more. No API calls needed.",
+  "cockpit.batchOps.step1.opsCount": "{{count}} operations available",
   "cockpit.batchOps.step1.selectPlaceholder": "Select an operation...",
   "cockpit.batchOps.stepper.define": "Define operation",
   "cockpit.batchOps.stepper.confirm": "Confirm",

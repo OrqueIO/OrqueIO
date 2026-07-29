@@ -177,6 +177,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
   faEye = faEye;
   faPlayCircle = faPlayCircle;
   faPauseCircle = faPauseCircle;
+  faCodeBranch = faCodeBranch;
 
   breadcrumbs: BreadcrumbItem[] = [
     { translateKey: 'cockpit.menu.batchOperations' }

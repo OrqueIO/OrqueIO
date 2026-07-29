@@ -56,6 +56,8 @@ const OPERATIONS_KEYS = [
 
 const STEP1_KEYS = [
   'cockpit.batchOps.step1.title',
+  'cockpit.batchOps.step1.intro',
+  'cockpit.batchOps.step1.opsCount',
   'cockpit.batchOps.suspend.modeInstances',
   'cockpit.batchOps.suspend.modeQuery',
   'cockpit.batchOps.suspend.onlyRunningNote',

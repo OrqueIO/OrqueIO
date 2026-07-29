@@ -12,15 +12,40 @@
   <!-- STEP 1 – Define operation                                           -->
   <!-- ─────────────────────────────────────────────────────────────────── -->
   <div *ngIf="currentStep === 1" class="wizard-step">
-    <h2 class="step-title">{{ 'cockpit.batchOps.step1.title' | translate }}</h2>
 
-    <!-- Operation list (generic, reusable) -->
-    <app-batch-operation-list
-      [operations]="operations"
-      [selectedId]="selectedOperationId"
-      (operationSelect)="onOperationSelect($event)"
-      (clearSelection)="onClearOperation()">
-    </app-batch-operation-list>
+    <!-- Hero wrapper: centered column when nothing is selected, plain when selected -->
+    <div [class.step1-hero]="!selectedOperationId">
+
+      <!-- Icon badge — initial state only -->
+      <div *ngIf="!selectedOperationId" class="step1-hero__badge">
+        <fa-icon [icon]="faCodeBranch"></fa-icon>
+      </div>
+
+      <!-- Title -->
+      <h2 [class.step-title]="!!selectedOperationId"
+          [class.step1-hero__title]="!selectedOperationId">
+        {{ 'cockpit.batchOps.step1.title' | translate }}
+      </h2>
+
+      <!-- Intro text — initial state only -->
+      <p *ngIf="!selectedOperationId" class="step1-hero__intro">
+        {{ 'cockpit.batchOps.step1.intro' | translate }}
+      </p>
+
+      <!-- Operation list (generic, reusable) -->
+      <app-batch-operation-list
+        [operations]="operations"
+        [selectedId]="selectedOperationId"
+        (operationSelect)="onOperationSelect($event)"
+        (clearSelection)="onClearOperation()">
+      </app-batch-operation-list>
+
+      <!-- Operations count — initial state only -->
+      <p *ngIf="!selectedOperationId" class="step1-ops-count">
+        {{ 'cockpit.batchOps.step1.opsCount' | translate: { count: operations.length.toString() } }}
+      </p>
+
+    </div>
 
     <!-- ─── Suspend form (shown when "suspend" is selected) ──────────── -->
     <div *ngIf="selectedOperationId === 'suspend'" class="operation-steps">

@@ -51,8 +51,9 @@ export class BatchPageComponent implements OnInit, OnDestroy {
     // Start polling for batch updates
     this.store.dispatch(BatchActions.startPolling());
 
-    // Load batches
+    // Load batches (runtime + history on page entry)
     this.store.dispatch(BatchActions.loadRuntimeBatches());
+    this.store.dispatch(BatchActions.enableHistoryLoading());
 
     // Watch for route query params (details & type)
     this.route.queryParams.pipe(
