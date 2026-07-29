@@ -217,13 +217,14 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
   filterCriteria: MultiValueFilter[] = [];
   vnIgnoreCase = false;
   vvIgnoreCase = false;
+  hasActiveCriteria = false;
 
   // Metadata cache: accumulates instances seen on any browsed page for step-3 display
   private knownInstances = new Map<string, ProcessInstance>();
 
   private readonly instanceLoad$ = new Subject<void>();
 
-  // Checked rows (persists across pages)
+  // Checked rows (persists across pages — instances mode only)
   selectedIds = new Set<string>();
 
   // Step 2
@@ -232,6 +233,8 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
   // Step 3
   executing = false;
   instanceResults: InstanceResult[] = [];
+  batchId: string | null = null;
+  batchError = false;
 
   // ── Lifecycle ─────────────────────────────────────────────────────────────
   ngOnInit(): void {
@@ -302,11 +305,16 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     this.filterCriteria = [];
     this.vnIgnoreCase = false;
     this.vvIgnoreCase = false;
+    this.hasActiveCriteria = false;
     this.instances = [];
     this.instancesTotal = 0;
     this.knownInstances = new Map();
     this.instancesPage = 1;
     this.selectedIds = new Set();
+  }
+
+  onRowClick(id: string): void {
+    if (this.mode === 'instances') this.toggleInstance(id);
   }
 
   private loadInstances(): void {
@@ -319,6 +327,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     this.filterCriteria = event.criteria;
     this.vnIgnoreCase = event.vnIgnoreCase;
     this.vvIgnoreCase = event.vvIgnoreCase;
+    this.hasActiveCriteria = event.criteria.length > 0;
     this.instancesPage = 1;
     this.selectedIds = new Set();
     this.loadInstances();
@@ -366,7 +375,8 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
   }
 
   get canContinue(): boolean {
-    return this.mode === 'instances' ? this.selectedIds.size > 0 : false;
+    if (this.mode === 'instances') return this.selectedIds.size > 0;
+    return this.hasActiveCriteria;
   }
 
   onInstancesPageChange(event: PageChangeEvent): void {
@@ -385,16 +395,61 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
   }
 
   // ── Step 2 ────────────────────────────────────────────────────────────────
+
+  /** Approximate count shown in the Confirm step summary. */
   get selectedCount(): number {
-    return this.selectedIds.size;
+    return this.mode === 'instances' ? this.selectedIds.size : this.instancesTotal;
   }
 
   get confirmPayloadJson(): string {
-    return JSON.stringify({ processInstanceIds: [...this.selectedIds], suspended: true }, null, 2);
+    if (this.mode === 'instances') {
+      return JSON.stringify({ suspended: true, processInstanceIds: [...this.selectedIds] }, null, 2);
+    }
+    return JSON.stringify({ suspended: true, historicProcessInstanceQuery: this.buildHistoricQueryForBatch() }, null, 2);
   }
 
   get confirmEndpoint(): string {
-    return `PUT ${environment.engineUrl}/default/process-instance/{id}/suspended`;
+    if (this.mode === 'instances') {
+      return `PUT ${environment.engineUrl}/default/process-instance/{id}/suspended`;
+    }
+    return `POST ${environment.engineUrl}/default/process-instance/suspended-async`;
+  }
+
+  /**
+   * Builds the historicProcessInstanceQuery payload sent to the batch async
+   * endpoint in Query mode. Constructed from the same this.filterCriteria that
+   * drives searchProcessInstancesGlobalCount() — same source of truth, no
+   * divergence (guard against Camunda issue #4910).
+   */
+  buildHistoricQueryForBatch(): Record<string, unknown> {
+    const query: Record<string, unknown> = { active: true, unfinished: true };
+    for (const f of this.filterCriteria) {
+      switch (f.field) {
+        case 'instanceId':
+          if (f.values.length === 1) query['processInstanceId'] = f.values[0];
+          else query['processInstanceIdIn'] = f.values;
+          break;
+        case 'businessKey':
+          query['processInstanceBusinessKeyLike'] = `%${f.values[0]}%`;
+          break;
+        case 'startedAfter':  query['startedAfter']  = f.values[0]; break;
+        case 'startedBefore': query['startedBefore'] = f.values[0]; break;
+        case 'finishedAfter':  query['finishedAfter']  = f.values[0]; break;
+        case 'finishedBefore': query['finishedBefore'] = f.values[0]; break;
+        case 'variables':
+          if (f.variableLines?.length) {
+            query['variables'] = f.variableLines.map(l => ({
+              name: l.variableName,
+              operator: l.variableOperator,
+              value: l.values[0] ?? ''
+            }));
+          }
+          break;
+      }
+    }
+    if (this.vnIgnoreCase) query['variableNamesIgnoreCase'] = true;
+    if (this.vvIgnoreCase) query['variableValuesIgnoreCase'] = true;
+    return query;
   }
 
   toggleTechnicalDetails(): void {
@@ -415,35 +470,53 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     if (this.executing) return;
     this.executing = true;
     this.currentStep = 3;
-
-    const ids = [...this.selectedIds];
-    this.instanceResults = ids.map(id => {
-      const inst = this.knownInstances.get(id);
-      return {
-        id,
-        businessKey: inst?.businessKey,
-        definitionKey: inst?.processDefinitionName || inst?.processDefinitionKey || inst?.processDefinitionId,
-        status: 'pending' as InstanceStatus
-      };
-    });
-
     window.scrollTo(0, 0);
     this.cdr.markForCheck();
 
-    const calls = ids.map(id => this.processInstanceService.suspendInstanceWithResult(id));
-
-    forkJoin(calls).pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(results => {
-        const resultMap = new Map(results.map(r => [r.id, r]));
-        this.instanceResults = this.instanceResults.map(r => {
-          const res = resultMap.get(r.id);
-          return res
-            ? { ...r, status: (res.success ? 'success' : 'error') as InstanceStatus, error: res.error }
-            : r;
-        });
-        this.executing = false;
-        this.cdr.markForCheck();
+    if (this.mode === 'instances') {
+      const ids = [...this.selectedIds];
+      this.instanceResults = ids.map(id => {
+        const inst = this.knownInstances.get(id);
+        return {
+          id,
+          businessKey: inst?.businessKey,
+          definitionKey: inst?.processDefinitionName || inst?.processDefinitionKey || inst?.processDefinitionId,
+          status: 'pending' as InstanceStatus
+        };
       });
+      this.cdr.markForCheck();
+
+      forkJoin(ids.map(id => this.processInstanceService.suspendInstanceWithResult(id)))
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe(results => {
+          const resultMap = new Map(results.map(r => [r.id, r]));
+          this.instanceResults = this.instanceResults.map(r => {
+            const res = resultMap.get(r.id);
+            return res
+              ? { ...r, status: (res.success ? 'success' : 'error') as InstanceStatus, error: res.error }
+              : r;
+          });
+          this.executing = false;
+          this.cdr.markForCheck();
+        });
+    } else {
+      this.processInstanceService.suspendInstancesAsync({
+        suspended: true,
+        historicProcessInstanceQuery: this.buildHistoricQueryForBatch()
+      }).pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: batch => {
+            this.batchId = batch.id;
+            this.executing = false;
+            this.cdr.markForCheck();
+          },
+          error: () => {
+            this.batchError = true;
+            this.executing = false;
+            this.cdr.markForCheck();
+          }
+        });
+    }
   }
 
   get successCount(): number { return this.instanceResults.filter(r => r.status === 'success').length; }
@@ -454,6 +527,8 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     this.selectedOperationId = null;
     this.resetForm();
     this.instanceResults = [];
+    this.batchId = null;
+    this.batchError = false;
     this.executing = false;
     this.showTechnicalDetails = false;
     window.scrollTo(0, 0);

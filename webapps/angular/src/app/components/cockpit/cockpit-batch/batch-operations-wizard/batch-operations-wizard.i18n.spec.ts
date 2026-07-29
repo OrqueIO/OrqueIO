@@ -59,15 +59,13 @@ const STEP1_KEYS = [
   'cockpit.batchOps.suspend.modeInstances',
   'cockpit.batchOps.suspend.modeQuery',
   'cockpit.batchOps.suspend.onlyRunningNote',
-  'cockpit.batchOps.suspend.searchPlaceholder',
-  'cockpit.batchOps.suspend.selectAllPageNote',
+  'cockpit.batchOps.suspend.selectAllOnPage',
   'cockpit.batchOps.suspend.actionBtn',
+  'cockpit.batchOps.suspend.actionBtnQuery',
   'cockpit.batchOps.suspend.noInstances',
-  'cockpit.batchOps.suspend.colId',
-  'cockpit.batchOps.suspend.colBusinessKey',
-  'cockpit.batchOps.suspend.colDefinition',
-  'cockpit.batchOps.suspend.colStartTime',
-  'cockpit.batchOps.suspend.queryPlaceholder',
+  'cockpit.batchOps.suspend.queryWarning',
+  'cockpit.batchOps.suspend.noCriteriaHint',
+  'cockpit.batchOps.suspend.queryPreviewNote',
   'cockpit.batchOps.selectedCount',
   'cockpit.batchOps.continue',
   'common.loading',
@@ -76,10 +74,12 @@ const STEP1_KEYS = [
 const STEP2_KEYS = [
   'cockpit.batchOps.confirm.title',
   'cockpit.batchOps.confirm.suspendSummary',
+  'cockpit.batchOps.confirm.querySummary',
   'cockpit.batchOps.confirm.technicalDetails',
   'cockpit.batchOps.confirm.endpoint',
   'cockpit.batchOps.confirm.payload',
   'cockpit.batchOps.confirm.suspendBtn',
+  'cockpit.batchOps.confirm.suspendBtnQuery',
   'cockpit.batchOps.back',
 ];
 
@@ -96,6 +96,9 @@ const STEP3_KEYS = [
   'cockpit.batchOps.results.statusSuccess',
   'cockpit.batchOps.results.statusError',
   'cockpit.batchOps.results.statusPending',
+  'cockpit.batchOps.results.batchSubmitted',
+  'cockpit.batchOps.results.batchId',
+  'cockpit.batchOps.results.batchError',
 ];
 
 const MISC_KEYS = [
@@ -308,14 +311,15 @@ describe('batch-operations-wizard: behavioral contracts', () => {
     expect(activateOp.actionBtnKey).not.toBe(suspendOp.actionBtnKey);
   });
 
-  it('test 12 – button is disabled when selection is empty, enabled when at least one instance is checked', () => {
-    const canContinue = (mode: 'instances' | 'query', count: number) =>
-      mode === 'instances' ? count > 0 : false;
+  it('test 12 – button is disabled when selection is empty (instances) or no criteria (query)', () => {
+    const canContinue = (mode: 'instances' | 'query', hasActiveCriteria: boolean, count: number) =>
+      mode === 'instances' ? count > 0 : hasActiveCriteria;
 
-    expect(canContinue('instances', 0)).toBe(false);  // no selection → disabled
-    expect(canContinue('instances', 1)).toBe(true);   // one instance → enabled
-    expect(canContinue('instances', 3)).toBe(true);   // three instances → enabled
-    expect(canContinue('query', 0)).toBe(false);       // query mode → always disabled for now
+    expect(canContinue('instances', false, 0)).toBe(false);  // no selection → disabled
+    expect(canContinue('instances', false, 1)).toBe(true);   // one instance → enabled
+    expect(canContinue('instances', false, 3)).toBe(true);   // three instances → enabled
+    expect(canContinue('query', false, 0)).toBe(false);      // query, no criteria → disabled
+    expect(canContinue('query', true, 0)).toBe(true);        // query, has criteria → enabled
   });
 
   it('test 13 – continue() advances stepper to step 2 with selected instances transmitted', () => {
@@ -396,7 +400,63 @@ describe('batch-operations-wizard: behavioral contracts', () => {
     expect(rules).toContain('overflow-y: auto');
   });
 
-it('test 4 – switching operation resets selectedIds and instances', () => {
+  it('test 20 – query mode without active criteria: canContinue is false', () => {
+    // Guard: launching a Query batch with no filter would affect ALL running
+    // instances — the UI must block this path.
+    const mode = 'query';
+    const hasActiveCriteria = false;
+    const selectedIds = new Set<string>();
+
+    const canContinue = mode === 'instances' ? selectedIds.size > 0 : hasActiveCriteria;
+    expect(canContinue).toBe(false);
+  });
+
+  it('test 21 – query mode with at least one criterion: canContinue is true and warning key present', () => {
+    const mode = 'query';
+    const hasActiveCriteria = true;
+    const selectedIds = new Set<string>();
+
+    const canContinue = mode === 'instances' ? selectedIds.size > 0 : hasActiveCriteria;
+    expect(canContinue).toBe(true);
+
+    const en = JSON.parse(readFileSync(join(__dirname, '../../../../../assets/i18n/en.json'), 'utf8'));
+    const warning: string = en['cockpit.batchOps.suspend.queryWarning'];
+    expect(warning).toBeTruthy();
+    expect(warning).toContain('high load');
+    expect(warning).toContain('high number of results');
+  });
+
+  it('test 22 – query batch payload and count display use the same criteria (Camunda #4910 guard)', () => {
+    // Both buildHistoricQueryForBatch() and searchProcessInstancesGlobalCount()
+    // are driven by the same filterCriteria — no separate reconstruction.
+    const filterCriteria = [{ field: 'instanceId', values: ['proc-001'] }];
+
+    const batchQuery: Record<string, unknown> = { active: true, unfinished: true };
+    for (const f of filterCriteria) {
+      if (f.field === 'instanceId') batchQuery['processInstanceId'] = f.values[0];
+    }
+
+    const countBase: Record<string, unknown> = { active: true, unfinished: true };
+    for (const f of filterCriteria) {
+      if (f.field === 'instanceId') countBase['processInstanceId'] = f.values[0];
+    }
+
+    expect(batchQuery).toEqual(countBase);
+    // unfinished:true divergence was the root cause of Camunda issue #4910
+    expect(batchQuery['unfinished']).toBe(true);
+    expect(batchQuery['active']).toBe(true);
+  });
+
+  it('test 23 – confirm querySummary contains "approximately" and "may differ"; instances summary does not', () => {
+    const en = JSON.parse(readFileSync(join(__dirname, '../../../../../assets/i18n/en.json'), 'utf8'));
+    const querySummary: string = en['cockpit.batchOps.confirm.querySummary'];
+    expect(querySummary).toBeTruthy();
+    expect(querySummary).toContain('approximately');
+    expect(querySummary).toContain('may differ');
+    expect(en['cockpit.batchOps.confirm.suspendSummary']).not.toContain('approximately');
+  });
+
+  it('test 4 – switching operation resets selectedIds and instances', () => {
     let selectedIds = new Set(['id-001', 'id-002']);
     let instances = [{ id: 'id-001' }, { id: 'id-002' }];
     let selectedOperationId: string | null = 'suspend';

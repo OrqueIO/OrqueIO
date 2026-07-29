@@ -90,6 +90,43 @@
   color: #2563eb;
 }
 
+/* ── Query mode warning (Camunda 7.18 mandatory notice) ─────────────────── */
+.query-warning {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  color: #92400e;
+}
+
+/* ── No-criteria hint (query mode, no active filter) ────────────────────── */
+.no-criteria-hint {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--font-size-sm);
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* ── Query preview note (read-only table header) ────────────────────────── */
+.query-preview-note {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  background: rgba(59, 130, 246, 0.04);
+  border: 1px solid rgba(59, 130, 246, 0.15);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}
+
 /* ── Loading / empty states ─────────────────────────────────────────────── */
 .loading-state,
 .empty-state {
