@@ -284,9 +284,6 @@ app-pagination {
 
 /* ── Step footer / action bar ────────────────────────────────────────────── */
 .step-footer {
-  position: sticky;
-  bottom: 0;
-  z-index: 2;
   display: flex;
   align-items: center;
   gap: var(--space-3);
