@@ -57,7 +57,7 @@ export const COCKPIT_MORE_MENU_ITEMS: NavMenuItem[] = [
     icon: faLayerGroup,
     label: 'cockpit.menu.batches',
     route: '/cockpit/batch',
-    exact: false
+    exact: true
   },
   {
     icon: faWrench,
