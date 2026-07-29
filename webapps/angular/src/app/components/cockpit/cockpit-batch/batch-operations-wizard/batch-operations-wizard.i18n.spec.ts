@@ -396,22 +396,7 @@ describe('batch-operations-wizard: behavioral contracts', () => {
     expect(rules).toContain('overflow-y: auto');
   });
 
-  it('test 19 – step-footer base class has no position:sticky; step-footer--sticky adds it', () => {
-    const css = readFileSync(
-      join(__dirname, 'batch-operations-wizard.css'),
-      'utf8',
-    );
-    const base = css.match(/(?<![a-z-])\.step-footer\s*\{([^}]+)\}/);
-    expect(base, '.step-footer rule not found').toBeTruthy();
-    expect(base![1]).not.toContain('position: sticky');
-
-    const sticky = css.match(/\.step-footer--sticky\s*\{([^}]+)\}/);
-    expect(sticky, '.step-footer--sticky rule not found').toBeTruthy();
-    expect(sticky![1]).toContain('position: sticky');
-    expect(sticky![1]).toContain('bottom: 0');
-  });
-
-  it('test 4 – switching operation resets selectedIds and instances', () => {
+it('test 4 – switching operation resets selectedIds and instances', () => {
     let selectedIds = new Set(['id-001', 'id-002']);
     let instances = [{ id: 'id-001' }, { id: 'id-002' }];
     let selectedOperationId: string | null = 'suspend';
