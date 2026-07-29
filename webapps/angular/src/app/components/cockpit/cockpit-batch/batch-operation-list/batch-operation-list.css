@@ -9,6 +9,10 @@
   position: relative;
 }
 
+:host:has(.op-dropdown) {
+  padding-bottom: 276px; /* = max-height(260) + gap(6) + marge(10) */
+}
+
 /* ── Trigger ─────────────────────────────────────────────────────────────── */
 .op-trigger {
   display: flex;
@@ -31,7 +35,7 @@
 .op-trigger--open {
   border-color: var(--color-primary);
   box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.15);
-  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  border-radius: var(--radius-md);
 }
 
 .op-info {
@@ -76,16 +80,15 @@
 /* ── Dropdown overlay ────────────────────────────────────────────────────── */
 .op-dropdown {
   position: absolute;
-  top: 100%;
+  top: calc(100% + 6px);
   left: 0;
   right: 0;
   background: var(--bg-card);
   border: 1px solid var(--color-primary);
-  border-top: none;
-  border-radius: 0 0 var(--radius-md) var(--radius-md);
+  border-radius: var(--radius-md);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
   z-index: 100;
-  max-height: 300px;
+  max-height: min(260px, calc(100vh - 380px));
   overflow-y: auto;
 }
 
