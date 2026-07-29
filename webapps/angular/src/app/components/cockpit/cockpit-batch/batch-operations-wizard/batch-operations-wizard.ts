@@ -30,15 +30,6 @@ import { BatchWizardStepperComponent, WizardStep } from '../batch-wizard-stepper
 import { BatchOperationListComponent, BatchOperationDef } from '../batch-operation-list/batch-operation-list';
 import { environment } from '../../../../../environments/environment';
 
-type InstanceStatus = 'pending' | 'success' | 'error';
-
-interface InstanceResult {
-  id: string;
-  businessKey?: string;
-  definitionKey?: string;
-  status: InstanceStatus;
-  error?: string;
-}
 
 const BATCH_OPERATIONS: BatchOperationDef[] = [
   {
@@ -232,7 +223,6 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
 
   // Step 3
   executing = false;
-  instanceResults: InstanceResult[] = [];
   batchId: string | null = null;
   batchError = false;
 
@@ -409,9 +399,6 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
   }
 
   get confirmEndpoint(): string {
-    if (this.mode === 'instances') {
-      return `PUT ${environment.engineUrl}/default/process-instance/{id}/suspended`;
-    }
     return `POST ${environment.engineUrl}/default/process-instance/suspended-async`;
   }
 
@@ -473,72 +460,36 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     window.scrollTo(0, 0);
     this.cdr.markForCheck();
 
-    if (this.mode === 'instances') {
-      const ids = [...this.selectedIds];
-      this.instanceResults = ids.map(id => {
-        const inst = this.knownInstances.get(id);
-        return {
-          id,
-          businessKey: inst?.businessKey,
-          definitionKey: inst?.processDefinitionName || inst?.processDefinitionKey || inst?.processDefinitionId,
-          status: 'pending' as InstanceStatus
-        };
-      });
-      this.cdr.markForCheck();
+    const payload = this.mode === 'instances'
+      ? { suspended: true, processInstanceIds: [...this.selectedIds] }
+      : { suspended: true, historicProcessInstanceQuery: this.buildHistoricQueryForBatch() };
 
-      forkJoin(ids.map(id => this.processInstanceService.suspendInstanceWithResult(id)))
-        .pipe(takeUntilDestroyed(this.destroyRef))
-        .subscribe(results => {
-          const resultMap = new Map(results.map(r => [r.id, r]));
-          this.instanceResults = this.instanceResults.map(r => {
-            const res = resultMap.get(r.id);
-            return res
-              ? { ...r, status: (res.success ? 'success' : 'error') as InstanceStatus, error: res.error }
-              : r;
-          });
+    this.processInstanceService.suspendInstancesAsync(payload)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: batch => {
+          this.batchId = batch.id;
           this.executing = false;
           this.cdr.markForCheck();
-        });
-    } else {
-      this.processInstanceService.suspendInstancesAsync({
-        suspended: true,
-        historicProcessInstanceQuery: this.buildHistoricQueryForBatch()
-      }).pipe(takeUntilDestroyed(this.destroyRef))
-        .subscribe({
-          next: batch => {
-            this.batchId = batch.id;
-            this.executing = false;
-            this.cdr.markForCheck();
-          },
-          error: () => {
-            this.batchError = true;
-            this.executing = false;
-            this.cdr.markForCheck();
-          }
-        });
-    }
+        },
+        error: () => {
+          this.batchError = true;
+          this.executing = false;
+          this.cdr.markForCheck();
+        }
+      });
   }
-
-  get successCount(): number { return this.instanceResults.filter(r => r.status === 'success').length; }
-  get errorCount(): number   { return this.instanceResults.filter(r => r.status === 'error').length; }
 
   reset(): void {
     this.currentStep = 1;
     this.selectedOperationId = null;
     this.resetForm();
-    this.instanceResults = [];
     this.batchId = null;
     this.batchError = false;
     this.executing = false;
     this.showTechnicalDetails = false;
     window.scrollTo(0, 0);
     this.cdr.markForCheck();
-  }
-
-  getResultStatusIcon(status: InstanceStatus): any {
-    if (status === 'success') return this.faCheckCircle;
-    if (status === 'error') return this.faTimesCircle;
-    return this.faSpinner;
   }
 
   getDefinitionDisplay(inst: ProcessInstance): string {

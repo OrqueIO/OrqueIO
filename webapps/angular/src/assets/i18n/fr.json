@@ -1594,18 +1594,10 @@
   "cockpit.batchOps.confirm.querySummary": "Vous êtes sur le point de suspendre toutes les instances correspondant à vos critères de recherche (environ {{count}} au dernier comptage — le nombre exact peut différer lors de l'exécution).",
   "cockpit.batchOps.confirm.suspendBtnQuery": "Suspendre toutes les instances correspondantes",
   "cockpit.batchOps.results.title": "Résultats de l’opération",
-  "cockpit.batchOps.results.processing": "Traitement de {{count}} instance(s) en cours...",
-  "cockpit.batchOps.results.summary": "{{success}} sur {{total}} instance(s) suspendue(s) avec succès.",
-  "cockpit.batchOps.results.batchSubmitted": "L'opération batch a été soumise avec succès. Camunda va traiter les instances de manière asynchrone.",
-  "cockpit.batchOps.results.batchId": "ID du batch : {{id}}",
+  "cockpit.batchOps.results.processing": "Soumission de l'opération batch en cours...",
+  "cockpit.batchOps.results.batchSubmitted": "L'opération batch a été soumise avec succès. Le moteur va traiter les instances de manière asynchrone.",
+  "cockpit.batchOps.results.batchId": "ID du batch : {{id}}",
   "cockpit.batchOps.results.batchError": "Échec de la soumission de l'opération batch.",
   "cockpit.batchOps.results.newOperation": "Nouvelle opération",
-  "cockpit.batchOps.results.viewBatches": "Voir le suivi des lots",
-  "cockpit.batchOps.results.colInstanceId": "ID instance",
-  "cockpit.batchOps.results.colDefinition": "Définition de processus",
-  "cockpit.batchOps.results.colStatus": "Statut",
-  "cockpit.batchOps.results.colError": "Erreur",
-  "cockpit.batchOps.results.statusSuccess": "Suspendu",
-  "cockpit.batchOps.results.statusError": "Échec",
-  "cockpit.batchOps.results.statusPending": "En cours..."
+  "cockpit.batchOps.results.viewBatches": "Voir le suivi des lots"
 }

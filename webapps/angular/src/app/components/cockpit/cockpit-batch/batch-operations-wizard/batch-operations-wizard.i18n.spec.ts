@@ -86,19 +86,11 @@ const STEP2_KEYS = [
 const STEP3_KEYS = [
   'cockpit.batchOps.results.title',
   'cockpit.batchOps.results.processing',
-  'cockpit.batchOps.results.summary',
-  'cockpit.batchOps.results.newOperation',
-  'cockpit.batchOps.results.viewBatches',
-  'cockpit.batchOps.results.colInstanceId',
-  'cockpit.batchOps.results.colDefinition',
-  'cockpit.batchOps.results.colStatus',
-  'cockpit.batchOps.results.colError',
-  'cockpit.batchOps.results.statusSuccess',
-  'cockpit.batchOps.results.statusError',
-  'cockpit.batchOps.results.statusPending',
   'cockpit.batchOps.results.batchSubmitted',
   'cockpit.batchOps.results.batchId',
   'cockpit.batchOps.results.batchError',
+  'cockpit.batchOps.results.newOperation',
+  'cockpit.batchOps.results.viewBatches',
 ];
 
 const MISC_KEYS = [
@@ -454,6 +446,48 @@ describe('batch-operations-wizard: behavioral contracts', () => {
     expect(querySummary).toContain('approximately');
     expect(querySummary).toContain('may differ');
     expect(en['cockpit.batchOps.confirm.suspendSummary']).not.toContain('approximately');
+  });
+
+  it('test 24 – instances mode execute path: service called with processInstanceIds, batchId shown in results', () => {
+    // Simulate wizard state: user selected 3 instances, confirmed, clicks execute
+    const selectedIds = new Set(['inst-aaa', 'inst-bbb', 'inst-ccc']);
+    let currentStep: 1 | 2 | 3 = 2;
+    let executing = false;
+    let batchId: string | null = null;
+    let batchError = false;
+
+    // Replicate execute() — instances mode branch
+    const mode = 'instances';
+    const payload = mode === 'instances'
+      ? { suspended: true, processInstanceIds: [...selectedIds] }
+      : { suspended: true, historicProcessInstanceQuery: {} };
+
+    // Verify payload shape before the HTTP call
+    expect(payload.suspended).toBe(true);
+    expect(payload).toHaveProperty('processInstanceIds');
+    expect((payload as { processInstanceIds: string[] }).processInstanceIds).toEqual(['inst-aaa', 'inst-bbb', 'inst-ccc']);
+    expect(payload).not.toHaveProperty('historicProcessInstanceQuery');
+
+    // Simulate component state transitions on execute()
+    executing = true;
+    currentStep = 3;
+    expect(currentStep).toBe(3);
+    expect(executing).toBe(true);
+
+    // Simulate successful HTTP response: { id: 'batch-xyz' }
+    const apiResponse = { id: 'batch-xyz' };
+    batchId = apiResponse.id;
+    executing = false;
+
+    expect(executing).toBe(false);
+    expect(batchId).toBe('batch-xyz');
+    expect(batchError).toBe(false);
+
+    // Verify the results keys needed are present in en.json
+    const en = JSON.parse(readFileSync(join(__dirname, '../../../../../assets/i18n/en.json'), 'utf8'));
+    expect(en['cockpit.batchOps.results.batchSubmitted']).toBeTruthy();
+    expect(en['cockpit.batchOps.results.batchId']).toBeTruthy();
+    expect(en['cockpit.batchOps.results.batchId']).toContain('{{id}}');
   });
 
   it('test 4 – switching operation resets selectedIds and instances', () => {

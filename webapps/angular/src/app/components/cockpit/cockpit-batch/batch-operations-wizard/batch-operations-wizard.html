@@ -260,58 +260,11 @@
     <!-- Executing spinner -->
     <div *ngIf="executing" class="results-progress">
       <fa-icon [icon]="faSpinner" [animation]="'spin'" size="2x"></fa-icon>
-      <span>{{ 'cockpit.batchOps.results.processing' | translate: { count: instanceResults.length.toString() } }}</span>
+      <span>{{ 'cockpit.batchOps.results.processing' | translate }}</span>
     </div>
 
-    <!-- ── Instances mode results ─────────────────────────────────────────── -->
-    <ng-container *ngIf="!executing && mode === 'instances'">
-
-      <div class="results-summary"
-           [class.results-summary--success]="errorCount === 0"
-           [class.results-summary--partial]="errorCount > 0 && successCount > 0"
-           [class.results-summary--error]="successCount === 0 && errorCount > 0">
-        <fa-icon [icon]="errorCount === 0 ? faCheckCircle : (successCount === 0 ? faTimesCircle : faExclamationTriangle)">
-        </fa-icon>
-        <span>{{ 'cockpit.batchOps.results.summary' | translate: { success: successCount.toString(), total: instanceResults.length.toString() } }}</span>
-      </div>
-
-      <div class="table-container">
-        <table class="instances-table">
-          <thead>
-            <tr>
-              <th>{{ 'cockpit.batchOps.results.colInstanceId' | translate }}</th>
-              <th>{{ 'cockpit.batchOps.results.colDefinition' | translate }}</th>
-              <th>{{ 'cockpit.batchOps.results.colStatus' | translate }}</th>
-              <th>{{ 'cockpit.batchOps.results.colError' | translate }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let r of instanceResults">
-              <td class="cell-mono">{{ r.id }}</td>
-              <td>{{ r.definitionKey || '—' }}</td>
-              <td>
-                <span class="result-status"
-                      [class.result-status--success]="r.status === 'success'"
-                      [class.result-status--error]="r.status === 'error'"
-                      [class.result-status--pending]="r.status === 'pending'">
-                  <fa-icon [icon]="getResultStatusIcon(r.status)"
-                           [animation]="r.status === 'pending' ? 'spin' : undefined">
-                  </fa-icon>
-                  <span *ngIf="r.status === 'success'">{{ 'cockpit.batchOps.results.statusSuccess' | translate }}</span>
-                  <span *ngIf="r.status === 'error'">{{ 'cockpit.batchOps.results.statusError' | translate }}</span>
-                  <span *ngIf="r.status === 'pending'">{{ 'cockpit.batchOps.results.statusPending' | translate }}</span>
-                </span>
-              </td>
-              <td class="cell-error">{{ r.error || '—' }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-    </ng-container>
-
-    <!-- ── Query mode results ─────────────────────────────────────────────── -->
-    <ng-container *ngIf="!executing && mode === 'query'">
+    <!-- ── Batch results (both modes) ────────────────────────────────────── -->
+    <ng-container *ngIf="!executing">
 
       <div class="results-summary"
            [class.results-summary--success]="!batchError"
