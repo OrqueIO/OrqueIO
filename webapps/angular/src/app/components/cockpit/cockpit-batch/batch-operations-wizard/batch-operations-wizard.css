@@ -12,6 +12,7 @@
 .wizard-page {
   padding: var(--space-6);
   flex: 1;
+  min-height: 0;
   overflow-y: auto;
 }
 
@@ -287,11 +288,15 @@ app-pagination {
   display: flex;
   align-items: center;
   gap: var(--space-3);
-  padding: var(--space-4) var(--space-5);
-  margin: 0 calc(-1 * var(--space-5)) calc(-1 * var(--space-5));
-  background: var(--bg-card);
+  padding: var(--space-4) 0;
   border-top: 1px solid var(--border-color-light);
-  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+}
+
+.step-footer--sticky {
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  justify-content: flex-end;
 }
 
 .selection-count {

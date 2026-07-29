@@ -156,22 +156,26 @@
 
         </ng-container>
 
-        <!-- Action bar -->
+        <!-- Compteur — lié à la card, scroll avec la liste -->
         <div class="step-footer">
           <span class="selection-count"
                 [class.selection-count--empty]="selectedIds.size === 0">
             {{ 'cockpit.batchOps.selectedCount' | translate: { count: selectedIds.size.toString() } }}
           </span>
-          <button type="button"
-                  class="btn-primary"
-                  [disabled]="!canContinue"
-                  (click)="continue()">
-            {{ (selectedOperation?.actionBtnKey ?? 'cockpit.batchOps.continue') | translate: { count: selectedIds.size.toString() } }}
-          </button>
         </div>
 
       </div>
       <!-- /carte 2 -->
+
+      <!-- Bouton d'action — séparé de la card, fixé en bas de la zone scroll -->
+      <div *ngIf="mode === 'instances'" class="step-footer step-footer--sticky">
+        <button type="button"
+                class="btn-primary"
+                [disabled]="!canContinue"
+                (click)="continue()">
+          {{ (selectedOperation?.actionBtnKey ?? 'cockpit.batchOps.continue') | translate: { count: selectedIds.size.toString() } }}
+        </button>
+      </div>
 
     </div>
     <!-- /operation-steps -->
