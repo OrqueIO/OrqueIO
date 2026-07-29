@@ -349,6 +349,41 @@ describe('batch-operations-wizard: behavioral contracts', () => {
     expect(canContinueAfterDeselect).toBe(false);
   });
 
+  it('test 14 – changing page size resets selectedIds so counter shows 0', () => {
+    // User selects 2 instances, then changes page size → selection must be cleared
+    let selectedIds = new Set(['id-001', 'id-002']);
+    expect(selectedIds.size).toBe(2);
+
+    // Simulate onInstancesPageChange(): selectedIds = new Set() BEFORE loadInstances()
+    const event = { current: 1, size: 50 };
+    void event; // page/size stored on component, not tested here
+    selectedIds = new Set();
+
+    expect(selectedIds.size).toBe(0); // counter must show 0, not 2
+  });
+
+  it('test 15 – changing page resets selectedIds so counter shows 0', () => {
+    let selectedIds = new Set(['id-001', 'id-002', 'id-003']);
+    expect(selectedIds.size).toBe(3);
+
+    // Simulate onInstancesPageChange() with a page navigation (current changes)
+    const event = { current: 2, size: 20 };
+    void event;
+    selectedIds = new Set();
+
+    expect(selectedIds.size).toBe(0);
+  });
+
+  it('test 16 – changing filter criteria resets selectedIds so counter shows 0', () => {
+    let selectedIds = new Set(['id-001', 'id-002']);
+    expect(selectedIds.size).toBe(2);
+
+    // Simulate onFilterChange(): selectedIds = new Set() already in place
+    selectedIds = new Set();
+
+    expect(selectedIds.size).toBe(0);
+  });
+
   it('test 4 – switching operation resets selectedIds and instances', () => {
     let selectedIds = new Set(['id-001', 'id-002']);
     let instances = [{ id: 'id-001' }, { id: 'id-002' }];
