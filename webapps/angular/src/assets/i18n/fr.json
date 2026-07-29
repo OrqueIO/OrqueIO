@@ -1577,7 +1577,7 @@
   "cockpit.batchOps.suspend.noInstances": "Aucune instance en cours trouvée",
   "cockpit.batchOps.suspend.queryWarning": "La sélection de toutes les instances peut créer une charge importante sur la base de données et le serveur d’exécution si la requête retourne un grand nombre de résultats.",
   "cockpit.batchOps.suspend.noCriteriaHint": "Ajoutez au moins un critère de recherche pour activer le mode Requête.",
-  "cockpit.batchOps.suspend.queryPreviewNote": "Aperçu — le tableau affiche les instances qui seraient affectées. Les cases à cocher sont désactivées en mode Requête.",
+  "cockpit.batchOps.suspend.queryPreviewNote": "Aperçu. Le tableau affiche les instances qui seraient affectées. Les cases à cocher sont désactivées en mode Requête.",
   "cockpit.batchOps.suspend.actionBtn": "Suspendre {{count}} instances",
   "cockpit.batchOps.suspend.actionBtnQuery": "Suspendre toutes les instances correspondantes",
   "cockpit.batchOps.activate.label": "Activer des instances de processus",

@@ -373,7 +373,6 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
   onInstancesPageChange(event: PageChangeEvent): void {
     this.instancesPage = event.current;
     this.instancesPageSize = event.size;
-    this.selectedIds = new Set();
     this.loadInstances();
   }
 

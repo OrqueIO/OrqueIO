@@ -1595,7 +1595,7 @@
   "cockpit.batchOps.suspend.noInstances": "No running instances found",
   "cockpit.batchOps.suspend.queryWarning": "Selecting all instances might create a high load on the database and application runtime/server if the query has a high number of results.",
   "cockpit.batchOps.suspend.noCriteriaHint": "Add at least one search criterion to enable Query mode.",
-  "cockpit.batchOps.suspend.queryPreviewNote": "Preview — the table shows instances that would be affected. Selection checkboxes are disabled in Query mode.",
+  "cockpit.batchOps.suspend.queryPreviewNote": "Preview. The table shows instances that would be affected. Selection checkboxes are disabled in Query mode.",
   "cockpit.batchOps.suspend.actionBtn": "Suspend {{count}} instances",
   "cockpit.batchOps.suspend.actionBtnQuery": "Suspend all matching instances",
   "cockpit.batchOps.activate.label": "Activate process instances",
