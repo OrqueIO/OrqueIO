@@ -101,6 +101,10 @@
                      (change)="toggleSelectAll()">
               <span>{{ 'cockpit.batchOps.suspend.selectAllOnPage' | translate: { count: instances.length.toString() } }}</span>
             </label>
+            <span class="selection-count"
+                  [class.selection-count--empty]="selectedIds.size === 0">
+              {{ 'cockpit.batchOps.selectedCount' | translate: { count: selectedIds.size.toString() } }}
+            </span>
           </div>
 
           <div class="table-container">
@@ -155,14 +159,6 @@
           </div>
 
         </ng-container>
-
-        <!-- Compteur — lié à la card, scroll avec la liste -->
-        <div class="step-footer">
-          <span class="selection-count"
-                [class.selection-count--empty]="selectedIds.size === 0">
-            {{ 'cockpit.batchOps.selectedCount' | translate: { count: selectedIds.size.toString() } }}
-          </span>
-        </div>
 
       </div>
       <!-- /carte 2 -->

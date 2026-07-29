@@ -300,7 +300,7 @@ app-pagination {
 }
 
 .selection-count {
-  flex: 1;
+  margin-left: auto;
   font-size: var(--font-size-sm);
   color: var(--text-secondary);
   font-weight: var(--font-weight-medium);
