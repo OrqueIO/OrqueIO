@@ -135,8 +135,8 @@
 .table-container {
   overflow-x: auto;
   overflow-y: auto;
-  /* adaptatif : ~8 lignes visibles sur 1440×900, scroll interne pour le reste */
-  max-height: calc(100vh - 500px);
+  /* adaptatif : ~6 lignes visibles minimum, scroll interne pour le reste */
+  max-height: calc(100vh - 350px);
   border: 1px solid var(--border-color-light);
   border-radius: var(--radius-md);
 }
