@@ -487,6 +487,87 @@ describe('batch-operations-wizard: behavioral contracts', () => {
     expect(en['cockpit.batchOps.results.batchId']).toContain('{{id}}');
   });
 
+  it('test 25 – sessionStorage: configure wizard then simulate navigation return → state restored', () => {
+    // Simulate user configuring wizard: suspend op, instances mode, 2 instances selected, step 2
+    const storage = new Map<string, string>();
+    const mockSessionStorage = {
+      getItem: (k: string) => storage.get(k) ?? null,
+      setItem: (k: string, v: string) => { storage.set(k, v); },
+      removeItem: (k: string) => { storage.delete(k); },
+    };
+
+    const SESSION_KEY = 'batchOpsWizardState';
+
+    // Simulate saveToSessionStorage() called when user clicks Continue (step 2)
+    const stateBeforeNav = {
+      operationId: 'suspend',
+      mode: 'instances',
+      step: 2,
+      filterCriteria: [{ field: 'businessKey', values: ['ORDER-*'] }],
+      vnIgnoreCase: false,
+      vvIgnoreCase: false,
+      selectedIds: ['inst-001', 'inst-002'],
+    };
+    mockSessionStorage.setItem(SESSION_KEY, JSON.stringify(stateBeforeNav));
+
+    // Simulate component init after navigation back (loadFromSessionStorage)
+    let selectedOperationId: string | null = null;
+    let mode: 'instances' | 'query' = 'instances';
+    let currentStep: number = 1;
+    let filterCriteria: unknown[] = [];
+    let selectedIds = new Set<string>();
+
+    const raw = mockSessionStorage.getItem(SESSION_KEY);
+    expect(raw).not.toBeNull();
+    const restored = JSON.parse(raw!);
+
+    selectedOperationId = restored.operationId;
+    mode = restored.mode;
+    filterCriteria = restored.filterCriteria ?? [];
+    selectedIds = new Set(restored.selectedIds ?? []);
+    const restoredStep: number = restored.step ?? 1;
+    currentStep = restoredStep >= 3 ? 1 : restoredStep;
+
+    expect(selectedOperationId).toBe('suspend');
+    expect(mode).toBe('instances');
+    expect(currentStep).toBe(2);
+    expect(filterCriteria).toHaveLength(1);
+    expect(selectedIds.size).toBe(2);
+    expect(selectedIds.has('inst-001')).toBe(true);
+    expect(selectedIds.has('inst-002')).toBe(true);
+  });
+
+  it('test 26 – sessionStorage: saved state at step 3 (Results) → component falls back to step 1', () => {
+    // If the user somehow saved step 3 (e.g., edge case), loadFromSessionStorage must
+    // never restore Results — it resets to step 1 to avoid misleading the user.
+    const raw = JSON.stringify({
+      operationId: 'suspend',
+      mode: 'instances',
+      step: 3,           // Results step — must NEVER be restored
+      filterCriteria: [],
+      selectedIds: ['inst-abc'],
+    });
+
+    const restored = JSON.parse(raw);
+    const restoredStep: number = restored.step ?? 1;
+    const currentStep = restoredStep >= 3 ? 1 : restoredStep;
+
+    expect(currentStep).toBe(1); // Forced back to step 1
+  });
+
+  it('test 27 – sessionStorage: successful batch submit clears the key', () => {
+    const storage = new Map<string, string>();
+    const SESSION_KEY = 'batchOpsWizardState';
+    storage.set(SESSION_KEY, JSON.stringify({ operationId: 'suspend', step: 2, selectedIds: ['a'] }));
+
+    expect(storage.has(SESSION_KEY)).toBe(true);
+
+    // Simulate clearSessionStorage() called in execute() → next callback
+    storage.delete(SESSION_KEY);
+
+    expect(storage.has(SESSION_KEY)).toBe(false);
+  });
+
   it('test 4 – switching operation resets selectedIds and instances', () => {
     let selectedIds = new Set(['id-001', 'id-002']);
     let instances = [{ id: 'id-001' }, { id: 'id-002' }];

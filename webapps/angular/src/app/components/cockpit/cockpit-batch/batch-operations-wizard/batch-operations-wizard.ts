@@ -139,6 +139,16 @@ const BATCH_OPERATIONS: BatchOperationDef[] = [
   }
 ];
 
+interface WizardPersistedState {
+  operationId: string | null;
+  mode: 'instances' | 'query';
+  step: 1 | 2;
+  filterCriteria: MultiValueFilter[];
+  vnIgnoreCase: boolean;
+  vvIgnoreCase: boolean;
+  selectedIds: string[];
+}
+
 @Component({
   selector: 'app-batch-operations-wizard',
   standalone: true,
@@ -190,6 +200,8 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
   ];
 
   operations: BatchOperationDef[] = BATCH_OPERATIONS;
+
+  private readonly SESSION_KEY = 'batchOpsWizardState';
 
   // ── Wizard state ──────────────────────────────────────────────────────────
   currentStep: 1 | 2 | 3 = 1;
@@ -261,6 +273,8 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
       this.instancesLoading = false;
       this.cdr.markForCheck();
     });
+
+    this.loadFromSessionStorage();
   }
 
   ngOnDestroy(): void {
@@ -276,12 +290,14 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
       this.loadInstances();
     }
     this.cdr.markForCheck();
+    this.saveToSessionStorage();
   }
 
   onClearOperation(): void {
     this.selectedOperationId = null;
     this.resetForm();
     this.cdr.markForCheck();
+    this.saveToSessionStorage();
   }
 
   setMode(m: 'instances' | 'query'): void {
@@ -289,6 +305,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     this.mode = m;
     this.selectedIds = new Set();
     this.cdr.markForCheck();
+    this.saveToSessionStorage();
   }
 
   private resetForm(): void {
@@ -322,6 +339,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     this.instancesPage = 1;
     this.selectedIds = new Set();
     this.loadInstances();
+    this.saveToSessionStorage();
   }
 
   toggleInstance(id: string): void {
@@ -333,6 +351,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     }
     this.selectedIds = next;
     this.cdr.markForCheck();
+    this.saveToSessionStorage();
   }
 
   isSelected(id: string): boolean {
@@ -357,6 +376,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     }
     this.selectedIds = next;
     this.cdr.markForCheck();
+    this.saveToSessionStorage();
   }
 
   get selectedOperation(): BatchOperationDef | undefined {
@@ -382,6 +402,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     this.showTechnicalDetails = false;
     window.scrollTo(0, 0);
     this.cdr.markForCheck();
+    this.saveToSessionStorage();
   }
 
   // ── Step 2 ────────────────────────────────────────────────────────────────
@@ -449,6 +470,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
       this.currentStep = (this.currentStep - 1) as 1 | 2;
       window.scrollTo(0, 0);
       this.cdr.markForCheck();
+      this.saveToSessionStorage();
     }
   }
 
@@ -470,6 +492,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
         next: batch => {
           this.batchId = batch.id;
           this.executing = false;
+          this.clearSessionStorage();
           this.cdr.markForCheck();
         },
         error: () => {
@@ -481,6 +504,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
   }
 
   reset(): void {
+    this.clearSessionStorage();
     this.currentStep = 1;
     this.selectedOperationId = null;
     this.resetForm();
@@ -490,6 +514,59 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     this.showTechnicalDetails = false;
     window.scrollTo(0, 0);
     this.cdr.markForCheck();
+  }
+
+  private saveToSessionStorage(): void {
+    if (this.currentStep === 3) return;
+    try {
+      const state: WizardPersistedState = {
+        operationId: this.selectedOperationId,
+        mode: this.mode,
+        step: this.currentStep as 1 | 2,
+        filterCriteria: this.filterCriteria,
+        vnIgnoreCase: this.vnIgnoreCase,
+        vvIgnoreCase: this.vvIgnoreCase,
+        selectedIds: [...this.selectedIds]
+      };
+      sessionStorage.setItem(this.SESSION_KEY, JSON.stringify(state));
+    } catch {
+      // sessionStorage unavailable — degrade silently
+    }
+  }
+
+  private clearSessionStorage(): void {
+    try {
+      sessionStorage.removeItem(this.SESSION_KEY);
+    } catch {
+      // ignore
+    }
+  }
+
+  private loadFromSessionStorage(): void {
+    try {
+      const raw = sessionStorage.getItem(this.SESSION_KEY);
+      if (!raw) return;
+      const state: WizardPersistedState = JSON.parse(raw);
+      if (!state?.operationId) return;
+
+      this.selectedOperationId = state.operationId;
+      this.mode = state.mode ?? 'instances';
+      this.filterCriteria = state.filterCriteria ?? [];
+      this.vnIgnoreCase = state.vnIgnoreCase ?? false;
+      this.vvIgnoreCase = state.vvIgnoreCase ?? false;
+      this.hasActiveCriteria = this.filterCriteria.length > 0;
+      this.selectedIds = new Set(state.selectedIds ?? []);
+      // Never restore Results step — step 3 means a batch was submitted
+      const restoredStep: number = state.step ?? 1;
+      this.currentStep = restoredStep >= 3 ? 1 : restoredStep as 1 | 2;
+
+      if (this.currentStep === 1 && this.selectedOperationId === 'suspend') {
+        this.loadInstances();
+      }
+      this.cdr.markForCheck();
+    } catch {
+      // Corrupt data or sessionStorage unavailable — degrade silently
+    }
   }
 
   getDefinitionDisplay(inst: ProcessInstance): string {
