@@ -161,4 +161,5 @@ describe('i18n coverage: batch view module', () => {
     const missing = BATCH_TYPE_LABEL_KEYS.filter(k => !fr[k]);
     expect(missing, `Missing batch type label keys in fr.json: ${missing.join(', ')}`).toHaveLength(0);
   });
+
 });

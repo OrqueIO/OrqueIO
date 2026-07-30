@@ -7,7 +7,8 @@ import {
   faPause,
   faPlay,
   faRedo,
-  faTrash
+  faTrash,
+  faInfoCircle
 } from '@fortawesome/free-solid-svg-icons';
 
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
@@ -41,6 +42,7 @@ export class BatchDetailComponent {
 
   // Icons
   faSpinner = faSpinner;
+  faInfoCircle = faInfoCircle;
   faPause = faPause;
   faPlay = faPlay;
   faRedo = faRedo;

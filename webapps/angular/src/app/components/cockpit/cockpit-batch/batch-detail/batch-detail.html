@@ -28,6 +28,7 @@
           <!-- Header -->
           <div class="detail-header">
             <h3 class="detail-title">
+              <fa-icon [icon]="faInfoCircle"></fa-icon>
               <span *ngIf="data.type === 'history'">{{ 'BATCHES_PROGRESS_COMPLETED' | translate }}</span>
               <span *ngIf="data.type === 'runtime'">{{ 'BATCHES_PROGRESS_IN_PROGRESS' | translate }}</span>
               {{ 'BATCHES_PROGRESS_BATCH_DETAILS' | translate }}
@@ -67,7 +68,7 @@
             </div>
           </div>
 
-          <!-- Properties table -->
+          <!-- Batch properties — independent scrollable section -->
           <div class="properties-section">
             <table class="properties-table">
               <thead>
@@ -98,10 +99,8 @@
             </table>
           </div>
 
-          <!-- Failed Jobs (runtime only) -->
-          <ng-container *ngIf="data.type === 'runtime'">
-            <app-batch-jobs-list></app-batch-jobs-list>
-          </ng-container>
+          <!-- Failed Jobs — independent scrollable section -->
+          <app-batch-jobs-list></app-batch-jobs-list>
 
           <!-- Delete confirmation modal -->
           <app-confirm-dialog
