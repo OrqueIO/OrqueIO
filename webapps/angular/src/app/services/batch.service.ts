@@ -112,8 +112,6 @@ export class BatchService {
     return this.http.get<HistoryBatch[]>(
       `${this.baseUrl}/history/batch`,
       { params: httpParams }
-    ).pipe(
-      catchError(() => of([]))
     );
   }
 

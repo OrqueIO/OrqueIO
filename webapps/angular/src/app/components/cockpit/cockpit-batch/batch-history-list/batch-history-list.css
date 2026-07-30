@@ -48,6 +48,11 @@
   min-height: 0;
 }
 
+app-pagination {
+  height: 48px;
+  flex-shrink: 0;
+}
+
 .batch-table thead th {
   position: sticky;
   top: 0;
