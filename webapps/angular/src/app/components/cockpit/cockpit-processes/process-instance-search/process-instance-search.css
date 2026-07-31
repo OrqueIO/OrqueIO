@@ -1421,11 +1421,21 @@
   .search-table-container { overflow-x: auto; }
   .editor-row--variable { flex-direction: column; }
   .editor-input--name { max-width: 100%; }
+  /* Prevent dropdown from escaping viewport on tablets */
+  .criteria-dropdown { max-width: calc(100vw - 16px); }
   .criterion-editor-popover--variables {
     left: auto;
     right: 0;
     width: min(440px, calc(100vw - 20px));
   }
+}
+
+@media (max-width: 480px) {
+  /* Tighter padding on small phones */
+  .tab-content { padding: var(--space-3); gap: var(--space-3); }
+  .search-table-container { margin: 0 var(--space-3); }
+  /* Base popover also constrained on very narrow screens */
+  .criterion-editor-popover { width: min(280px, calc(100vw - 20px)); }
 }
 
 /* =====================================================
