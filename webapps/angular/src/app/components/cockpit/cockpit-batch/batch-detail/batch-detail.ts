@@ -56,6 +56,7 @@ export class BatchDetailComponent {
   isSuspended$ = this.store.select(BatchSelectors.selectIsSuspended);
   hasFailedJobs$ = this.store.select(BatchSelectors.selectHasFailedJobs);
   batchJobDefinitionId$ = this.store.select(BatchSelectors.selectBatchJobDefinitionId);
+  users$ = this.store.select(BatchSelectors.selectRuntimeUsers);
 
   // Delete modal state
   showDeleteModal = false;
@@ -120,5 +121,14 @@ export class BatchDetailComponent {
 
   isRuntimeBatch(batch: any): batch is BatchStatistics {
     return 'suspended' in batch;
+  }
+
+  getUserName(batch: any, users: Record<string, any> | null): string {
+    if (!batch?.createUserId) return '-';
+    if (!users) return batch.createUserId;
+    const user = users[batch.createUserId];
+    if (!user) return batch.createUserId;
+    const fullName = [user.firstName, user.lastName].filter(Boolean).join(' ');
+    return fullName || user.id;
   }
 }

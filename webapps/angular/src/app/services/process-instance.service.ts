@@ -476,7 +476,7 @@ export class ProcessInstanceService {
    */
   getJobsByProcessInstance(processInstanceId: string, maxResults = 100): Observable<Job[]> {
     return this.http.get<Job[]>(`${this.baseUrl}/job`, {
-      params: { processInstanceId, maxResults: maxResults.toString() }
+      params: { processInstanceId, firstResult: '0', maxResults: maxResults.toString() }
     }).pipe(catchError(() => of([])));
   }
 

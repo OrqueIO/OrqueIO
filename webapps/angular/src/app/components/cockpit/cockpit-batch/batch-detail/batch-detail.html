@@ -22,7 +22,8 @@
         batch: batch$ | async,
         type: type$ | async,
         isSuspended: isSuspended$ | async,
-        hasFailedJobs: hasFailedJobs$ | async
+        hasFailedJobs: hasFailedJobs$ | async,
+        users: users$ | async
       } as data">
         <ng-container *ngIf="data.batch">
           <!-- Header -->
@@ -80,16 +81,22 @@
               <tbody>
                 <ng-container *ngFor="let key of detailKeys">
                   <tr *ngIf="shouldShowKey(data.batch, key)" [class]="key">
-                    <td class="prop-name">{{ key }}</td>
+                    <td class="prop-name">
+                      <ng-container *ngIf="key === 'createUserId'">{{ 'BATCHES_PROGRESS_USER' | translate }}</ng-container>
+                      <ng-container *ngIf="key !== 'createUserId'">{{ key }}</ng-container>
+                    </td>
                     <td class="prop-value">
-                      <ng-container *ngIf="!isTimeKey(key)">
+                      <ng-container *ngIf="key === 'createUserId'">
+                        {{ getUserName(data.batch, data.users) }}
+                      </ng-container>
+                      <ng-container *ngIf="key !== 'createUserId' && !isTimeKey(key)">
                         {{ getBatchValue(data.batch, key) }}
                         <span *ngIf="key === 'remainingJobs' && isRuntimeBatch(data.batch) && data.batch.failedJobs > 0"
                               class="failed-note">
                           ({{ data.batch.failedJobs }} {{ 'BATCHES_PROGRESS_FAILED_LABEL' | translate }})
                         </span>
                       </ng-container>
-                      <ng-container *ngIf="isTimeKey(key)">
+                      <ng-container *ngIf="key !== 'createUserId' && isTimeKey(key)">
                         {{ getBatchValue(data.batch, key) | camDate }}
                       </ng-container>
                     </td>

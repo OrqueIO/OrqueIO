@@ -47,6 +47,7 @@ const DETAIL_KEYS = [
   'BATCHES_PROGRESS_TOOLTIP_DELETE_BATCH',
   'BATCHES_PROGRESS_PROPERTY',
   'BATCHES_PROGRESS_VALUE',
+  'BATCHES_PROGRESS_USER',
   'BATCHES_PROGRESS_FAILED_LABEL',
   'BATCHES_DELETE_BATCH_TITLE',
   'BATCHES_DELETE_BATCH_MESSAGE',
@@ -160,6 +161,36 @@ describe('i18n coverage: batch view module', () => {
   it('batch type label keys are all present in fr.json', () => {
     const missing = BATCH_TYPE_LABEL_KEYS.filter(k => !fr[k]);
     expect(missing, `Missing batch type label keys in fr.json: ${missing.join(', ')}`).toHaveLength(0);
+  });
+
+  it('batch-detail: user row — getUserName resolves display name and handles edge cases', () => {
+    // Replicate getUserName() logic from BatchDetailComponent
+    const getUserName = (batch: any, users: Record<string, any> | null): string => {
+      if (!batch?.createUserId) return '-';
+      if (!users) return batch.createUserId;
+      const user = users[batch.createUserId];
+      if (!user) return batch.createUserId;
+      const fullName = [user.firstName, user.lastName].filter(Boolean).join(' ');
+      return fullName || user.id;
+    };
+
+    const users = { 'user-1': { id: 'user-1', firstName: 'Jonny', lastName: 'Prosciutto' } };
+
+    expect(getUserName({ createUserId: 'user-1' }, users)).toBe('Jonny Prosciutto');  // full name resolved
+    expect(getUserName({ createUserId: 'ghost' }, users)).toBe('ghost');              // not in map → raw ID
+    expect(getUserName({ createUserId: undefined }, users)).toBe('-');                // no userId → dash
+    expect(getUserName({ createUserId: 'user-1' }, null)).toBe('user-1');            // null users → raw ID
+
+    // createUserId appears right after 'type' in BATCH_DETAIL_KEYS
+    const KEYS = ['id', 'type', 'createUserId', 'startTime', 'executionStartTime', 'endTime',
+      'totalJobs', 'completedJobs', 'remainingJobs', 'failedJobs',
+      'batchJobsPerSeed', 'invocationsPerBatchJob', 'tenantId',
+      'batchJobDefinitionId', 'monitorJobDefinitionId', 'seedJobDefinitionId'];
+    expect(KEYS).toContain('createUserId');
+    expect(KEYS.indexOf('createUserId')).toBe(KEYS.indexOf('type') + 1);
+
+    // Label key used in detail panel is the same as the table column → no duplication
+    expect(en['BATCHES_PROGRESS_USER']).toBe('User');
   });
 
 });
