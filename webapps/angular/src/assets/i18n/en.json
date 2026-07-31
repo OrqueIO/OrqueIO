@@ -36,7 +36,7 @@
   "LOADING": "Loading...",
   "ERROR_LOADING_DATA": "Error loading data",
   "CONTACT": "Contact",
-  "ALL_RIGHTS_RESERVED": "Â© {{year}} OrqueIO. All rights reserved.",
+  "ALL_RIGHTS_RESERVED": "© {{year}} OrqueIO. All rights reserved.",
   "ERROR_CONNECTION": "Unable to connect to the server. Please check your connection.",
   "ERROR_SERVER": "Internal server error. Please try again later.",
   "ERROR_GENERIC": "An error occurred during login.",
