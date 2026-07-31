@@ -66,7 +66,6 @@ const STEP1_KEYS = [
   'cockpit.batchOps.suspend.actionBtnQuery',
   'cockpit.batchOps.suspend.noInstances',
   'cockpit.batchOps.suspend.queryWarning',
-  'cockpit.batchOps.suspend.noCriteriaHint',
   'cockpit.batchOps.suspend.queryPreviewNote',
   'cockpit.batchOps.selectedCount',
   'cockpit.batchOps.continue',
@@ -305,15 +304,15 @@ describe('batch-operations-wizard: behavioral contracts', () => {
     expect(activateOp.actionBtnKey).not.toBe(suspendOp.actionBtnKey);
   });
 
-  it('test 12 – button is disabled when selection is empty (instances) or no criteria (query)', () => {
-    const canContinue = (mode: 'instances' | 'query', hasActiveCriteria: boolean, count: number) =>
-      mode === 'instances' ? count > 0 : hasActiveCriteria;
+  it('test 12 – button is disabled only when instances mode has no selection; query mode is always enabled', () => {
+    const canContinue = (mode: 'instances' | 'query', count: number) =>
+      mode === 'instances' ? count > 0 : true; // query: no minimum criteria
 
-    expect(canContinue('instances', false, 0)).toBe(false);  // no selection → disabled
-    expect(canContinue('instances', false, 1)).toBe(true);   // one instance → enabled
-    expect(canContinue('instances', false, 3)).toBe(true);   // three instances → enabled
-    expect(canContinue('query', false, 0)).toBe(false);      // query, no criteria → disabled
-    expect(canContinue('query', true, 0)).toBe(true);        // query, has criteria → enabled
+    expect(canContinue('instances', 0)).toBe(false);  // no selection → disabled
+    expect(canContinue('instances', 1)).toBe(true);   // one instance → enabled
+    expect(canContinue('instances', 3)).toBe(true);   // three instances → enabled
+    expect(canContinue('query', 0)).toBe(true);       // query, no criteria → enabled (targets all)
+    expect(canContinue('query', 0)).toBe(true);       // query, with criteria → enabled
   });
 
   it('test 13 – continue() advances stepper to step 2 with selected instances transmitted', () => {
@@ -389,23 +388,22 @@ describe('batch-operations-wizard: behavioral contracts', () => {
     expect(rules).toContain('overflow-y: auto');
   });
 
-  it('test 20 – query mode without active criteria: canContinue is false', () => {
-    // Guard: launching a Query batch with no filter would affect ALL running
-    // instances — the UI must block this path.
+  it('test 20 – query mode without active criteria: canContinue is true (targets all matching instances)', () => {
+    // Aligned with Camunda 7 EE behavior (CAM-6695): an empty query is valid and
+    // targets all instances matching the operation state (e.g. all Running for Suspend).
+    // The warning banner is the only guard — the button is never blocked.
     const mode = 'query';
-    const hasActiveCriteria = false;
     const selectedIds = new Set<string>();
 
-    const canContinue = mode === 'instances' ? selectedIds.size > 0 : hasActiveCriteria;
-    expect(canContinue).toBe(false);
+    const canContinue = mode === 'instances' ? selectedIds.size > 0 : true;
+    expect(canContinue).toBe(true);
   });
 
   it('test 21 – query mode with at least one criterion: canContinue is true and warning key present', () => {
     const mode = 'query';
-    const hasActiveCriteria = true;
     const selectedIds = new Set<string>();
 
-    const canContinue = mode === 'instances' ? selectedIds.size > 0 : hasActiveCriteria;
+    const canContinue = mode === 'instances' ? selectedIds.size > 0 : true;
     expect(canContinue).toBe(true);
 
     const en = JSON.parse(readFileSync(join(__dirname, '../../../../../assets/i18n/en.json'), 'utf8'));
@@ -485,6 +483,46 @@ describe('batch-operations-wizard: behavioral contracts', () => {
     expect(en['cockpit.batchOps.results.batchSubmitted']).toBeTruthy();
     expect(en['cockpit.batchOps.results.batchId']).toBeTruthy();
     expect(en['cockpit.batchOps.results.batchId']).toContain('{{id}}');
+  });
+
+  it('test 28 – query mode, no criteria: canContinue is true (Continue button active)', () => {
+    // Camunda 7 EE alignment (CAM-6695): empty query is valid — targets all running instances.
+    const mode: 'instances' | 'query' = 'query';
+    const filterCriteria: unknown[] = []; // no criteria added
+
+    const canContinue = mode === 'instances' ? false : true;
+    expect(canContinue).toBe(true);
+    expect(filterCriteria).toHaveLength(0); // no criteria — intentional
+  });
+
+  it('test 29 – query warning key is present and non-empty regardless of criteria count', () => {
+    // The warning is the only user-facing guard in query mode. It must always be present.
+    const en = JSON.parse(readFileSync(join(__dirname, '../../../../../assets/i18n/en.json'), 'utf8'));
+    const warning: string = en['cockpit.batchOps.suspend.queryWarning'];
+    expect(warning).toBeTruthy();
+    expect(warning.length).toBeGreaterThan(0);
+    // noCriteriaHint is removed from the template — only the warning remains
+    expect(en['cockpit.batchOps.suspend.queryWarning']).toContain('high load');
+  });
+
+  it('test 30 – buildHistoricQueryForBatch with empty criteria returns valid base query (no error)', () => {
+    // Empty filterCriteria → query = { active: true, unfinished: true }
+    // This is a valid payload: Camunda returns count of all running instances.
+    const filterCriteria: unknown[] = [];
+    const vnIgnoreCase = false;
+    const vvIgnoreCase = false;
+
+    // Replicate buildHistoricQueryForBatch() logic
+    const query: Record<string, unknown> = { active: true, unfinished: true };
+    for (const f of filterCriteria) { void f; } // no-op loop
+    if (vnIgnoreCase) query['variableNamesIgnoreCase'] = true;
+    if (vvIgnoreCase) query['variableValuesIgnoreCase'] = true;
+
+    expect(query).toEqual({ active: true, unfinished: true }); // no extra keys added
+    expect(query['active']).toBe(true);
+    expect(query['unfinished']).toBe(true);
+    // No 0-count, no error: empty query targets all running instances
+    expect(Object.keys(query).length).toBe(2);
   });
 
   it('test 25 – sessionStorage: configure wizard then simulate navigation return → state restored', () => {

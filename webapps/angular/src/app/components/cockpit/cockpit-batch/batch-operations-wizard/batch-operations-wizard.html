@@ -87,16 +87,9 @@
           (criteriaChange)="onFilterChange($event)">
         </app-instance-filter-panel>
 
-        <!-- No-criteria hint — query mode, no active filter -->
-        <div *ngIf="mode === 'query' && !hasActiveCriteria" class="no-criteria-hint">
-          <fa-icon [icon]="faInfoCircle"></fa-icon>
-          <span>{{ 'cockpit.batchOps.suspend.noCriteriaHint' | translate }}</span>
-        </div>
-
       </div>
       <!-- /carte 1 -->
 
-      <!-- ── Bande pagination : séparateur visuel entre carte filtre et tableau -->
       <app-pagination
         *ngIf="!instancesLoading && instances.length > 0"
         [current]="instancesPage"

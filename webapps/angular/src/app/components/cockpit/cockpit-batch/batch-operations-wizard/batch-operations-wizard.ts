@@ -387,7 +387,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
 
   get canContinue(): boolean {
     if (this.mode === 'instances') return this.selectedIds.size > 0;
-    return this.hasActiveCriteria;
+    return true;
   }
 
   onInstancesPageChange(event: PageChangeEvent): void {
