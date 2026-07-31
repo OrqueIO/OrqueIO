@@ -28,6 +28,7 @@ import { KeyboardShortcutsModalComponent } from '../keyboard-shortcuts-modal/key
 import { CreateTaskModalComponent } from '../create-task-modal/create-task-modal';
 import { TaskFilter } from '../../../models/tasklist/filter.model';
 import { NavActionsService } from '../../../services/nav-actions.service';
+import { CockpitHeaderComponent } from '../../../shared/cockpit-header/cockpit-header';
 
 // Auto-refresh interval in milliseconds (10 seconds like AngularJS)
 const AUTO_REFRESH_INTERVAL = 10000;
@@ -39,6 +40,7 @@ const AUTO_REFRESH_INTERVAL = 10000;
     CommonModule,
     RouterModule,
     TranslatePipe,
+    CockpitHeaderComponent,
     TaskFiltersComponent,
     TaskListComponent,
     TaskDetailComponent,
