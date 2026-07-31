@@ -1,5 +1,8 @@
 <div class="batch-history-list">
-  <h3 class="section-title">{{ 'BATCHES_PROGRESS_END' | translate }}</h3>
+  <h3 class="section-title">
+    <fa-icon [icon]="faHistory"></fa-icon>
+    {{ 'BATCHES_PROGRESS_END' | translate }}
+  </h3>
 
   <ng-container *ngIf="shouldLoad$ | async; else loadButton">
     <ng-container *ngIf="loading$ | async as loading">

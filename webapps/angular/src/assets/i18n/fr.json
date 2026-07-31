@@ -19,18 +19,14 @@
   "PAGE_LOGIN_SSO_WITH": "Se connecter avec {{provider}}",
   "PAGE_LOGIN_SSO_DISABLED_SETUP": "La connexion SSO est désactivée jusqu'à la création d'un compte administrateur",
   "PAGE_LOGIN_SSO_SETUP_HINT": "Créez d'abord un compte administrateur pour activer la connexion SSO",
-
   "VALIDATION_REQUIRED_USERNAME": "Le nom d'utilisateur est requis",
   "VALIDATION_MINLENGTH_USERNAME": "Minimum 3 caractères requis",
   "VALIDATION_REQUIRED_PASSWORD": "Le mot de passe est requis",
   "VALIDATION_MINLENGTH_PASSWORD": "Minimum 3 caractères requis",
-
   "FIRST_LOGIN_HEADING": "Bienvenue sur OrqueIO !",
   "FIRST_LOGIN_INFO": "C'est votre première connexion. Prenez un moment pour découvrir les fonctionnalités disponibles.",
-
   "LOGOUT": "Déconnexion",
   "HOME": "Accueil",
-
   "APP_NAME": "OrqueIO",
   "CLOSE": "Fermer",
   "BACK": "Retour",
@@ -38,36 +34,30 @@
   "SAVING": "Enregistrement...",
   "CANCEL": "Annuler",
   "LOADING": "Chargement...",
+  "ERROR_LOADING_DATA": "Erreur lors du chargement des données",
   "CONTACT": "Contact",
   "ALL_RIGHTS_RESERVED": "© {{year}} OrqueIO. Tous droits réservés.",
-
   "ERROR_CONNECTION": "Impossible de se connecter au serveur. Veuillez vérifier votre connexion.",
   "ERROR_SERVER": "Erreur interne du serveur. Veuillez réessayer plus tard.",
   "ERROR_GENERIC": "Une erreur s'est produite lors de la connexion.",
-
   "SOCIAL_LOGIN_NOT_CONFIGURED": "{{provider}} n'est pas configuré. Contactez votre administrateur.",
-
   "PROVIDER_GOOGLE": "Google",
   "PROVIDER_GOOGLE_OAUTH": "Google OAuth",
   "PROVIDER_KEYCLOAK": "Keycloak",
   "PROVIDER_AUTH0": "Auth0",
   "PROVIDER_OKTA": "Okta",
   "PROVIDER_AZURE_AD": "Azure AD",
-
   "WELCOME_BACK": "Bon retour",
   "WELCOME_MESSAGE": "Vous êtes dans votre compte OrqueIO ! N'hésitez pas à explorer la plateforme à travers nos différentes applications.",
   "YOUR_APPS": "VOS APPLICATIONS",
   "APPS_COUNT": "{{count}} applications",
   "RESOURCES": "RESSOURCES",
-
   "GUEST": "Invité",
-
   "ENV_LOCAL": "Local",
   "ENV_DEVELOPMENT": "Développement",
   "ENV_STAGING": "Pré-production",
   "ENV_TESTING": "Test",
   "ENV_PRODUCTION": "Production",
-
   "APP_COCKPIT_TITLE": "Cockpit",
   "APP_COCKPIT_SUBTITLE": "Tableau de bord",
   "APP_COCKPIT_DESC": "Surveillez et gérez vos processus métier en temps réel.",
@@ -77,14 +67,12 @@
   "APP_ADMIN_TITLE": "Admin",
   "APP_ADMIN_SUBTITLE": "Administration",
   "APP_ADMIN_DESC": "Configurez et administrez votre environnement OrqueIO.",
-
   "RESOURCE_DOCS_TITLE": "Documentation",
   "RESOURCE_DOCS_DESC": "Accédez à la documentation complète et aux guides.",
   "RESOURCE_LEARN_TITLE": "Apprendre",
   "RESOURCE_LEARN_DESC": "Tutoriels et ressources d'apprentissage.",
   "RESOURCE_SOURCE_TITLE": "Code source",
   "RESOURCE_SOURCE_DESC": "Explorez le code source et contribuez.",
-
   "MY_PROFILE": "Mon Profil",
   "PROFILE_FULL_NAME": "Nom complet",
   "PROFILE_EMAIL": "Email",
@@ -101,7 +89,6 @@
   "PROFILE_UPDATE_SUCCESS": "Profil mis à jour avec succès",
   "PROFILE_UPDATE_ERROR": "Erreur lors de la mise à jour du profil",
   "PROFILE_AVATAR_COMING_SOON": "La modification de l'avatar sera disponible prochainement",
-
   "profile.nav.info": "Informations",
   "profile.nav.security": "Sécurité",
   "profile.personalInfo": "Informations personnelles",
@@ -125,7 +112,6 @@
   "profile.updateError": "Erreur lors de la mise à jour du profil",
   "profile.passwordUpdated": "Mot de passe mis à jour avec succès",
   "profile.passwordUpdateError": "Erreur lors de la mise à jour du mot de passe",
-
   "common.loading": "Chargement...",
   "common.refresh": "Actualiser",
   "common.save": "Enregistrer",
@@ -134,7 +120,6 @@
   "common.add": "Ajouter",
   "common.remove": "Retirer",
   "common.copyToClipboard": "Copier dans le presse-papier",
-
   "cockpit.backToHome": "Retour à l'accueil",
   "cockpit.menu.dashboard": "Tableau de bord",
   "cockpit.menu.processes": "Processus",
@@ -143,7 +128,6 @@
   "cockpit.menu.more": "Plus",
   "cockpit.menu.batches": "Lots",
   "cockpit.menu.deployments": "Déploiements",
-
   "cockpit.deployments.title": "Déploiements",
   "cockpit.deployments.filters": "Filtres",
   "cockpit.deployments.filters.name": "Nom",
@@ -203,7 +187,6 @@
   "cockpit.deployments.instances": "Instances",
   "cockpit.deployments.noDefinitions": "Aucune définition trouvée",
   "cockpit.deployments.selectDeployment": "Sélectionnez un déploiement pour voir ses ressources",
-
   "admin.backToHome": "Retour à l'accueil",
   "admin.menu.dashboard": "Tableau de bord",
   "admin.menu.users": "Utilisateurs",
@@ -211,7 +194,6 @@
   "admin.menu.tenants": "Tenants",
   "admin.menu.authorizations": "Autorisations",
   "admin.menu.system": "Système",
-
   "cockpit.dashboard.title": "Tableau de bord",
   "cockpit.dashboard.runningProcesses": "Processus en cours",
   "cockpit.dashboard.openIncidents": "Incidents ouverts",
@@ -230,7 +212,6 @@
   "cockpit.dashboard.viewAllProcesses": "Voir toutes les instances de processus",
   "cockpit.dashboard.viewAllDecisions": "Voir toutes les définitions de décision",
   "cockpit.dashboard.viewAllTasks": "Voir toutes les tâches ouvertes",
-
   "cockpit.charts.noData": "Aucune donnée disponible",
   "cockpit.charts.processInstances.title": "Instances de processus",
   "cockpit.charts.processInstances.active": "Actives",
@@ -266,7 +247,6 @@
   "cockpit.charts.incidentsByType.noIncidents": "Aucun incident ouvert",
   "cockpit.charts.incidentsByProcess.title": "Incidents par processus",
   "cockpit.charts.incidentsByProcess.noIncidents": "Aucun incident de processus",
-
   "cockpit.processes.title": "Instances de processus",
   "cockpit.processes.deployedDefinitions": "Définitions de processus déployées",
   "cockpit.processes.instances": "Instances de processus",
@@ -296,7 +276,6 @@
   "cockpit.processes.columns.endTime": "Date de fin",
   "cockpit.processes.columns.actions": "Actions",
   "cockpit.processes.columns.tenant": "Tenant",
-
   "cockpit.processes.version": "Version",
   "cockpit.processes.allVersions": "Toutes les versions",
   "cockpit.processes.viewMode.list": "Vue liste",
@@ -335,7 +314,7 @@
   "cockpit.processes.globalSearch.valuePlaceholder": "Entrer une valeur...",
   "cockpit.processes.globalSearch.chipInputHint": "Appuyez sur Entrée ou virgule pour ajouter une valeur",
   "cockpit.processes.globalSearch.chipInputHintTip": "Astuce : collez une liste séparée par des virgules pour en ajouter plusieurs à la fois",
-  "cockpit.processes.globalSearch.likeHint": "Fonctionne uniquement sur les variables texte — sans effet sur les variables numériques",
+  "cockpit.processes.globalSearch.likeHint": "L'opérateur Like fonctionne mieux sur les variables texte. Il n'a aucun effet sur les variables numériques.",
   "cockpit.processes.globalSearch.comparisonValueError": "Valeur numérique requise pour cet opérateur",
   "cockpit.processes.globalSearch.conflictImpossible": "est impossible — aucune valeur ne peut satisfaire",
   "cockpit.processes.globalSearch.conflictGeneric": "utilisé avec des opérateurs différents — les résultats peuvent être vides si les conditions sont contradictoires",
@@ -391,7 +370,6 @@
   "cockpit.incidents.columns.actions": "Actions",
   "cockpit.incidents.noIncidents": "Aucun incident - Tout fonctionne correctement",
   "cockpit.incidents.found": "incidents trouvés",
-
   "cockpit.calledDefinitions.columns.key": "Clé",
   "cockpit.calledDefinitions.columns.name": "Définition de processus",
   "cockpit.calledDefinitions.columns.state": "État",
@@ -399,7 +377,6 @@
   "cockpit.calledDefinitions.columns.actions": "Actions",
   "cockpit.calledDefinitions.noCalledDefinitions": "Aucune définition de processus appelée",
   "cockpit.calledDefinitions.found": "définitions de processus appelées trouvées",
-
   "cockpit.jobDefinitions.columns.state": "État",
   "cockpit.jobDefinitions.columns.activity": "Activité",
   "cockpit.jobDefinitions.columns.type": "Type",
@@ -410,12 +387,10 @@
   "cockpit.jobDefinitions.found": "définitions de job trouvées",
   "cockpit.jobDefinitions.suspend": "Suspendre la définition de job",
   "cockpit.jobDefinitions.activate": "Activer la définition de job",
-
   "cockpit.pagination.first": "Première page",
   "cockpit.pagination.previous": "Page précédente",
   "cockpit.pagination.next": "Page suivante",
   "cockpit.pagination.last": "Dernière page",
-
   "cockpit.processDetail.tabs.diagram": "Diagramme",
   "cockpit.processDetail.tabs.info": "Informations",
   "cockpit.processDetail.tabs.variables": "Variables",
@@ -464,7 +439,6 @@
   "cockpit.processDetail.incidents.activity": "Activité",
   "cockpit.processDetail.incidents.message": "Message",
   "cockpit.processDetail.incidents.createTime": "Créé le",
-
   "cockpit.decisions.title": "Définitions de décision",
   "cockpit.decisions.tableDeployed": "Table de décision déployée",
   "cockpit.decisions.tablesDeployed": "Tables de décision déployées",
@@ -482,7 +456,6 @@
   "cockpit.decisions.columns.tenantId": "ID Tenant",
   "cockpit.decisions.columns.drd": "DRD",
   "cockpit.decisions.columns.actions": "Actions",
-
   "cockpit.decisionDetail.tabs.info": "Informations",
   "cockpit.decisionDetail.tabs.instances": "Historique d'évaluation",
   "cockpit.decisionDetail.key": "Clé",
@@ -509,7 +482,6 @@
   "cockpit.decisionDetail.instances.activityId": "ID Activité",
   "cockpit.decisionDetail.instances.inputs": "Entrées",
   "cockpit.decisionDetail.instances.outputs": "Sorties",
-
   "cockpit.decisionInstance.title": "Instance de décision",
   "cockpit.decisionInstance.instanceId": "ID Instance",
   "cockpit.decisionInstance.evaluationTime": "Date d'évaluation",
@@ -541,7 +513,6 @@
   "cockpit.decisionInstance.noInputs": "Aucune valeur d'entrée",
   "cockpit.decisionInstance.noOutputs": "Aucune valeur de sortie",
   "cockpit.decisionInstance.notFound": "Instance de décision non trouvée",
-
   "cockpit.tasks.title": "Tâches humaines",
   "cockpit.tasks.assignee": "Assigné à",
   "cockpit.tasks.filterByAssignee": "Filtrer par assigné...",
@@ -595,8 +566,6 @@
   "cockpit.tasks.filters.createdBefore": "Créée avant",
   "cockpit.tasks.filters.dueAfter": "Échéance après",
   "cockpit.tasks.filters.dueBefore": "Échéance avant",
-  "cockpit.tasks.pageSize": "Taille de page",
-
   "cockpit.taskDashboard.title": "Tâches humaines",
   "cockpit.taskDashboard.assignmentByType": "Assignation des tâches par type",
   "cockpit.taskDashboard.assignmentByGroup": "Assignation des tâches par groupe",
@@ -610,10 +579,8 @@
   "cockpit.taskDashboard.noGroups": "Aucune tâche assignée aux groupes",
   "cockpit.taskDashboard.legendInfo": "C'est le nombre de tâches ouvertes assignées aux groupes. Une tâche peut apparaître dans plusieurs groupes.",
   "cockpit.taskDashboard.searchTasks": "Rechercher des tâches",
-
   "cockpit.pagination.page": "Page",
   "cockpit.pagination.of": "sur",
-
   "admin.dashboard.breadcrumb": "Tableau de bord",
   "admin.dashboard.title": "Administration",
   "admin.dashboard.subtitle": "Gérer les utilisateurs, groupes, tenants et autorisations",
@@ -643,7 +610,6 @@
   "admin.dashboard.createFirstGroup": "Créer le premier groupe",
   "admin.dashboard.noTenantsYet": "Aucun tenant configuré",
   "admin.dashboard.createFirstTenant": "Créer le premier tenant",
-
   "admin.system.title": "Paramètres système",
   "admin.system.general": "Général",
   "admin.system.metrics": "Métriques d'exécution",
@@ -713,7 +679,6 @@
   "admin.system.rawData": "Données brutes (JSON)",
   "admin.system.copyAll": "Copier toutes les données dans le presse-papiers",
   "admin.system.copy": "Copier",
-
   "admin.users.title": "Gestion des utilisateurs",
   "admin.users.createUser": "Créer un utilisateur",
   "admin.users.id": "ID Utilisateur",
@@ -805,7 +770,6 @@
   "admin.users.noGroupsAssigned": "Aucun groupe assigné à cet utilisateur",
   "admin.users.noTenantsAssigned": "Aucun tenant assigné à cet utilisateur",
   "admin.users.deleteAccount": "Supprimer le compte",
-
   "admin.groups.title": "Gestion des groupes",
   "admin.groups.createGroup": "Créer un groupe",
   "admin.groups.id": "ID Groupe",
@@ -862,7 +826,6 @@
   "admin.groups.idHint": "L'identifiant unique ne peut pas être modifié",
   "admin.groups.deleteGroup": "Supprimer le groupe",
   "admin.groups.defaultType": "Groupe standard",
-
   "admin.tenants.title": "Gestion des tenants",
   "admin.tenants.createTenant": "Créer un tenant",
   "admin.tenants.id": "ID Tenant",
@@ -916,7 +879,6 @@
   "admin.tenants.tenantGroupsDesc": "Gérez les groupes appartenant à ce tenant",
   "admin.tenants.idHint": "L'identifiant unique ne peut pas être modifié",
   "admin.tenants.deleteTenant": "Supprimer le tenant",
-
   "CREATE": "Créer",
   "CREATING": "Création en cours",
   "REFRESH": "Actualiser",
@@ -939,7 +901,6 @@
   "SAVE_CHANGES": "Enregistrer les modifications",
   "UPDATING": "Mise à jour",
   "PROCESSING": "Traitement",
-
   "admin.authorizations.title": "Gestion des autorisations",
   "admin.authorizations.loadError": "Échec du chargement des autorisations",
   "admin.authorizations.created": "Autorisation créée avec succès",
@@ -948,7 +909,6 @@
   "admin.authorizations.updateError": "Échec de la mise à jour de l'autorisation",
   "admin.authorizations.deleted": "Autorisation supprimée avec succès",
   "admin.authorizations.deleteError": "Échec de la suppression de l'autorisation",
-
   "AUTHORIZATION_AUTHORIZATIONS": "Autorisations",
   "AUTHORIZATION_CREATE_NEW_AUTHORIZATION": "Créer une autorisation",
   "AUTHORIZATION_EDIT": "Modifier",
@@ -957,7 +917,6 @@
   "AUTHORIZATION_CONFIRM_DELETE_MESSAGE": "Êtes-vous sûr de vouloir supprimer cette autorisation ? Cette action est irréversible.",
   "AUTHORIZATION_DUPLICATE_ERROR": "Une autorisation avec cette combinaison (type, identité, ressource) existe déjà.",
   "AUTHORIZATION_NO_AUTHORIZATIONS": "Aucune autorisation trouvée pour ce type de ressource.",
-
   "AUTHORIZATION_TYPE": "Type",
   "AUTHORIZATION_IDENTITY": "Identité",
   "AUTHORIZATION_PERMISSIONS": "Permissions",
@@ -968,11 +927,9 @@
   "AUTHORIZATION_RESOURCE_ID_REQUIRED": "L'ID de ressource est requis",
   "AUTHORIZATION_ACTIONS": "Actions",
   "AUTHORIZATION_RESOURCE_TYPES": "Types de ressources",
-
   "AUTHORIZATION_GLOBAL": "GLOBAL",
   "AUTHORIZATION_ALLOW": "AUTORISER",
   "AUTHORIZATION_DENY": "REFUSER",
-
   "AUTHORIZATION_USER": "Utilisateur",
   "AUTHORIZATION_GROUP": "Groupe",
   "AUTHORIZATION_ALL_USERS": "Tous les utilisateurs",
@@ -980,14 +937,10 @@
   "AUTHORIZATION_GROUP_ID_PLACEHOLDER": "Entrez l'ID groupe",
   "AUTHORIZATION_IDENTITY_REQUIRED": "L'identité est requise pour les autorisations non globales",
   "AUTHORIZATION_USER_WARNING": "Les autorisations basées sur l'utilisateur peuvent affecter les performances",
-
   "AUTHORIZATION_PERMISSIONS_REQUIRED": "Au moins une permission est requise",
   "AUTHORIZATION_SELECT_ALL": "Tout sélectionner",
   "AUTHORIZATION_CLEAR_ALL": "Tout effacer",
-
   "AUTHORIZATION_APPLICATION": "Application",
-  "AUTHORIZATION_USER": "Utilisateur",
-  "AUTHORIZATION_GROUP": "Groupe",
   "AUTHORIZATION_GROUP_MEMBERSHIP": "Appartenance au groupe",
   "AUTHORIZATION_AUTHORIZATION": "Autorisation",
   "AUTHORIZATION_FILTER": "Filtre",
@@ -1004,28 +957,23 @@
   "AUTHORIZATION_HISTORIC_TASK": "Tâche historique",
   "AUTHORIZATION_HISTORIC_PROCESS_INSTANCE": "Instance de processus historique",
   "AUTHORIZATION_SYSTEM": "Système",
-
   "CONFIRM_DIALOG_TITLE": "Confirmer",
   "CONFIRM_DIALOG_MESSAGE": "Êtes-vous sûr de vouloir continuer ?",
   "CONFIRM_DIALOG_CONFIRM": "Confirmer",
   "CONFIRM_DIALOG_CANCEL": "Annuler",
-
   "cockpit.processDetail.tenant": "Tenant",
   "cockpit.processDetail.superProcess": "Processus parent",
   "cockpit.processDetail.startedBy": "Démarré par",
   "cockpit.processDetail.expand": "Développer",
   "cockpit.processDetail.collapse": "Réduire",
   "cockpit.processDetail.viewDetails": "Voir les détails",
-
   "cockpit.processDetail.actions": "Actions",
   "cockpit.processDetail.actions.suspend": "Suspendre",
   "cockpit.processDetail.actions.resume": "Reprendre",
   "cockpit.processDetail.actions.cancel": "Annuler",
   "cockpit.processDetail.actions.retry": "Réessayer",
   "cockpit.processDetail.actions.retryJobs": "Réessayer les jobs échoués",
-
   "cockpit.processDetail.variables.add": "Ajouter une variable",
-
   "cockpit.processDetail.jobs.id": "ID Job",
   "cockpit.processDetail.jobs.type": "Type",
   "cockpit.processDetail.jobs.dueDate": "Date d'échéance",
@@ -1035,7 +983,6 @@
   "cockpit.processDetail.jobs.failed": "Échoué",
   "cockpit.processDetail.jobs.pending": "En attente",
   "cockpit.processDetail.noJobs": "Aucun job trouvé",
-
   "cockpit.processDetail.userTasks.name": "Nom de la tâche",
   "cockpit.processDetail.userTasks.assignee": "Assigné à",
   "cockpit.processDetail.userTasks.created": "Créé le",
@@ -1043,41 +990,33 @@
   "cockpit.processDetail.userTasks.priority": "Priorité",
   "cockpit.processDetail.userTasks.unassigned": "Non assigné",
   "cockpit.processDetail.noUserTasks": "Aucune tâche utilisateur trouvée",
-
   "cockpit.processDetail.calledInstances.definition": "Définition",
   "cockpit.processDetail.calledInstances.id": "ID Instance",
   "cockpit.processDetail.calledInstances.state": "État",
   "cockpit.processDetail.calledInstances.startTime": "Date de début",
   "cockpit.processDetail.noCalledInstances": "Aucune instance appelée (sous-processus) trouvée",
   "cockpit.processDetail.noExternalTasks": "Aucune tâche externe trouvée",
-
   "cockpit.processDetail.sidebarTabs.info": "Informations",
   "cockpit.processDetail.sidebarTabs.filter": "Filtre",
-
   "cockpit.processDetail.tooltip.instanceId": "Identifiant unique de cette instance de processus dans la base de données",
   "cockpit.processDetail.tooltip.businessKey": "Clé métier associée à cette instance de processus",
   "cockpit.processDetail.tooltip.activityInstanceTree": "Cliquez pour sélectionner les instances d'activité. Maintenez Ctrl/Cmd pour la multi-sélection.",
-
   "cockpit.processDetail.backToProcesses": "Retour aux processus",
   "cockpit.processDetail.actions.addVariable": "Ajouter une variable",
   "cockpit.processDetail.actions.edit": "Modifier",
   "cockpit.processDetail.actions.delete": "Supprimer",
-
   "cockpit.processDetail.showDiagram": "Afficher le diagramme",
   "cockpit.processDetail.hideDiagram": "Masquer le diagramme",
   "cockpit.processDetail.maximizeDiagram": "Agrandir le diagramme",
   "cockpit.processDetail.restoreDiagram": "Restaurer le diagramme",
-
   "cockpit.processDetail.activitySelected": "activité sélectionnée",
   "cockpit.processDetail.activitiesSelected": "activités sélectionnées",
-
   "cockpit.processDetail.jobs.createTime": "Créé le",
   "cockpit.processDetail.jobs.activity": "Activité",
   "cockpit.processDetail.jobs.failedActivityId": "Activité en échec",
   "cockpit.processDetail.jobs.resume": "Reprendre le job",
   "cockpit.processDetail.jobs.suspend": "Suspendre le job",
   "cockpit.processDetail.jobs.recalculateDueDate": "Recalculer la date d'échéance",
-
   "cockpit.processDetail.userTasks.activity": "Activité",
   "cockpit.processDetail.userTasks.owner": "Propriétaire",
   "cockpit.processDetail.userTasks.followUp": "Suivi",
@@ -1086,12 +1025,9 @@
   "cockpit.processDetail.userTasks.manageGroups": "Gérer les liens d'identité de groupe",
   "cockpit.processDetail.userTasks.manageUsers": "Gérer les liens d'identité utilisateur",
   "cockpit.processDetail.userTasks.searchUser": "Rechercher un utilisateur...",
-
   "common.noUsersFound": "Aucun utilisateur trouvé",
-
   "cockpit.processDetail.calledInstances.activity": "Activité",
   "cockpit.processDetail.calledInstances.businessKey": "Clé métier",
-
   "cockpit.processDetail.externalTasks.id": "ID Tâche externe",
   "cockpit.processDetail.externalTasks.activity": "Activité",
   "cockpit.processDetail.externalTasks.retries": "Tentatives",
@@ -1099,16 +1035,12 @@
   "cockpit.processDetail.externalTasks.lockExpiration": "Expiration du verrou",
   "cockpit.processDetail.externalTasks.topic": "Topic",
   "cockpit.processDetail.externalTasks.priority": "Priorité",
-
   "cockpit.processDetail.dialogs.suspendTitle": "Suspendre l'instance de processus",
   "cockpit.processDetail.dialogs.suspendMessage": "Êtes-vous sûr de vouloir suspendre cette instance de processus ?",
-
   "cockpit.processDetail.dialogs.cancelTitle": "Annuler l'instance de processus",
   "cockpit.processDetail.dialogs.cancelMessage": "Êtes-vous sûr de vouloir annuler cette instance de processus ? Cette action est irréversible.",
   "cockpit.processDetail.dialogs.cancelReason": "Raison (optionnel)",
-
   "common.delete": "Supprimer",
-
   "tasklist.title": "Liste des tâches",
   "tasklist.filters": "Filtres",
   "tasklist.createFilter": "Créer un filtre",
@@ -1121,13 +1053,11 @@
   "tasklist.taskHasBeenRemoved": "Cette tâche a été supprimée. Elle a été complétée par un autre utilisateur ou supprimée.",
   "tasklist.closeTask": "Fermer",
   "tasklist.returnToList": "Retour à la liste",
-
   "tasklist.tabs.form": "Formulaire",
   "tasklist.tabs.history": "Historique",
   "tasklist.tabs.diagram": "Diagramme",
   "tasklist.tabs.description": "Description",
   "tasklist.tabs.variables": "Variables",
-
   "tasklist.meta.created": "Créée le",
   "tasklist.meta.due": "Échéance",
   "tasklist.meta.followUp": "Suivi",
@@ -1136,21 +1066,18 @@
   "tasklist.meta.unassigned": "Non assigné",
   "tasklist.meta.none": "Aucun",
   "tasklist.meta.overdue": "En retard",
-
   "tasklist.priority.high": "Priorité haute",
   "tasklist.priority.medium": "Priorité moyenne",
   "tasklist.priority.low": "Priorité basse",
-
   "tasklist.claim": "Réclamer",
   "tasklist.unclaim": "Libérer",
   "tasklist.complete": "Terminer",
   "tasklist.setAssignee": "Assigner",
   "tasklist.delegate": "Déléguer",
   "tasklist.addComment": "Ajouter un commentaire",
-  "tasklist.setDueDate": "Définir l'échéance",
+  "tasklist.setDueDate": "Définir la date d'échéance",
   "tasklist.setFollowUp": "Définir le suivi",
   "tasklist.moreActions": "Plus d'actions",
-
   "tasklist.maximize": "Agrandir",
   "tasklist.restore": "Restaurer",
   "tasklist.expandDiagram": "Agrandir le diagramme",
@@ -1163,7 +1090,6 @@
   "tasklist.noDescription": "Aucune description disponible",
   "tasklist.noFormAvailable": "Aucun formulaire disponible pour cette tâche",
   "tasklist.completeTask": "Terminer la tâche",
-
   "tasklist.history.title": "Historique",
   "tasklist.history.today": "Aujourd'hui",
   "tasklist.history.yesterday": "Hier",
@@ -1173,14 +1099,12 @@
   "tasklist.history.addCommentPlaceholder": "Écrire un commentaire...",
   "tasklist.history.commentRequired": "Veuillez saisir un commentaire",
   "tasklist.history.submit": "Envoyer",
-
   "tasklist.notifications.claimed": "Tâche réclamée avec succès",
   "tasklist.notifications.unclaimed": "Tâche libérée avec succès",
   "tasklist.notifications.completed": "Tâche terminée avec succès",
   "tasklist.notifications.assigneeUpdated": "Assignation mise à jour avec succès",
   "tasklist.notifications.commentAdded": "Commentaire ajouté avec succès",
   "tasklist.notifications.error": "Une erreur s'est produite",
-
   "filter.title": "Filtre",
   "filter.createFilter": "Créer un filtre",
   "filter.editFilter": "Modifier le filtre",
@@ -1209,7 +1133,6 @@
   "filter.variablesDescription": "Sélectionner les variables à afficher comme colonnes dans la liste des tâches",
   "filter.variableName": "Nom de la variable",
   "filter.variableLabel": "Libellé de la colonne",
-
   "filter.criteria.task": "Propriétés de la tâche",
   "filter.criteria.process": "Propriétés du processus",
   "filter.criteria.case": "Propriétés du cas",
@@ -1218,7 +1141,6 @@
   "filter.criteria.variables": "Recherche de variables",
   "filter.criteria.other": "Autres",
   "filter.criteria.filterVariables": "Variables du filtre",
-
   "filter.criterion.name": "Nom de la tâche",
   "filter.criterion.nameExpression": "Nom de la tâche (Expression)",
   "filter.criterion.assignee": "Assigné à",
@@ -1267,14 +1189,12 @@
   "filter.criterion.withoutTenantId": "Sans locataire",
   "filter.criterion.active": "Actives uniquement",
   "filter.criterion.suspended": "Suspendues uniquement",
-
   "search.placeholder": "Rechercher des tâches...",
   "search.selectCriterion": "Sélectionner un critère de recherche",
   "search.selectOperator": "Sélectionner l'opérateur",
   "search.enterValue": "Entrer la valeur",
   "search.clearAll": "Tout effacer",
   "search.help": "Tapez pour rechercher ou cliquez pour sélectionner un critère",
-
   "sorting.sort": "Trier",
   "sorting.title": "Tri",
   "sorting.reset": "Réinitialiser",
@@ -1288,12 +1208,10 @@
   "sorting.moveDown": "Descendre",
   "sorting.remove": "Supprimer",
   "sorting.help": "Glisser pour réorganiser. Le premier niveau est le tri principal.",
-
   "sorting.taskProperties": "Propriétés de la tâche",
   "sorting.processProperties": "Propriétés du processus",
   "sorting.caseProperties": "Propriétés du cas",
   "sorting.other": "Autre",
-
   "sorting.created": "Date de création",
   "sorting.dueDate": "Date d'échéance",
   "sorting.followUpDate": "Date de suivi",
@@ -1312,7 +1230,6 @@
   "sorting.caseExecutionId": "ID Exécution de cas",
   "sorting.taskDefinitionKey": "Clé de définition de tâche",
   "sorting.tenantId": "ID Tenant",
-
   "delegate.title": "Déléguer la tâche",
   "delegate.taskLabel": "Tâche",
   "delegate.selectUser": "Sélectionner un utilisateur",
@@ -1322,7 +1239,6 @@
   "delegate.userRequired": "Veuillez entrer un ID utilisateur",
   "delegate.userNotFound": "Utilisateur non trouvé",
   "delegate.validationError": "Erreur lors de la validation de l'utilisateur",
-
   "groups.title": "Gérer les groupes",
   "groups.taskLabel": "Tâche",
   "groups.description": "Gérer les groupes candidats pour cette tâche. Les utilisateurs de ces groupes peuvent réclamer la tâche.",
@@ -1334,11 +1250,9 @@
   "groups.alreadyExists": "Le groupe existe déjà",
   "groups.groupNotFound": "Groupe non trouvé",
   "groups.validationError": "Erreur lors de la validation du groupe",
-
   "global": "Global",
   "user": "Utilisateur",
   "group": "Groupe",
-
   "tasklist.due": "Échéance",
   "tasklist.followUp": "Suivi",
   "tasklist.created": "Créé",
@@ -1378,7 +1292,6 @@
   "tasklist.dueDate": "Date d'échéance",
   "tasklist.setFollowUpDate": "Définir la date de suivi",
   "tasklist.resetFollowUpDate": "Effacer la date de suivi",
-  "tasklist.setDueDate": "Définir la date d'échéance",
   "tasklist.resetDueDate": "Effacer la date d'échéance",
   "tasklist.groups": "Groupes",
   "tasklist.addGroups": "Ajouter des groupes",
@@ -1423,7 +1336,6 @@
   "tasklist.loadMore": "Charger plus",
   "tasklist.loadAll": "Tout charger",
   "tasklist.remaining": "restantes",
-
   "tasklist.validation.nameRequired": "Le nom de la variable est requis",
   "tasklist.validation.nameInvalid": "Nom invalide (utilisez lettres, chiffres, underscore)",
   "tasklist.validation.nameDuplicate": "Ce nom de variable existe déjà",
@@ -1431,7 +1343,6 @@
   "tasklist.validation.integerRequired": "Doit être un entier",
   "tasklist.validation.numberRequired": "Doit être un nombre",
   "tasklist.validation.dateInvalid": "Format de date invalide",
-
   "tasklist.createTask": "Créer une tâche",
   "tasklist.keyboardShortcuts": "Raccourcis clavier",
   "tasklist.shortcutKey": "Touche",
@@ -1443,18 +1354,14 @@
   "tasklist.description": "Description",
   "tasklist.descriptionPlaceholder": "Entrer la description (optionnel)",
   "tasklist.priorityHint": "0-100, valeur plus élevée = priorité plus haute",
-
   "common.create": "Créer",
   "common.creating": "Création en cours...",
-
   "SHORTCUT_CLAIM_TASK": "réclame la tâche actuellement sélectionnée",
   "SHORTCUT_FOCUS_FILTER": "place le focus sur le premier filtre de la liste",
   "SHORTCUT_FOCUS_TASK": "place le focus sur la première tâche de la liste",
   "SHORTCUT_FOCUS_FORM": "place le focus sur le premier champ de saisie du formulaire",
   "SHORTCUT_START_PROCESS": "ouvre la fenêtre de démarrage de processus",
-
   "filter.autoRefreshEnabled": "L'actualisation automatique est activée pour ce filtre",
-
   "CLAIMED": "Réclamée",
   "UNCLAIMED": "Libérée",
   "COMPLETED": "Terminée",
@@ -1471,7 +1378,6 @@
   "CANDIDATE_USER_REMOVED": "Utilisateur candidat retiré",
   "CANDIDATE_GROUP_REMOVED": "Groupe candidat retiré",
   "COMMENT": "Commentaire",
-
   "OPEN": "Ouvrir",
   "ENGINE_ACTIVE": "Moteur actif",
   "ENGINE_INACTIVE": "Moteur inactif",
@@ -1479,7 +1385,6 @@
   "TASKS_COMPLETED": "Tâches terminées",
   "OPEN_INCIDENTS": "Incidents ouverts",
   "DEPLOYMENTS": "Déploiements",
-
   "BATCHES_TITLE": "Opérations par lots",
   "BATCHES_RUNTIME": "Lots en cours",
   "BATCHES_HISTORY": "Historique des lots",
@@ -1518,18 +1423,49 @@
   "BATCHES_CONFIRM_DELETE": "Êtes-vous sûr de vouloir supprimer ce lot ?",
   "BATCHES_CONFIRM_SUSPEND": "Êtes-vous sûr de vouloir suspendre ce lot ?",
   "BATCHES_CONFIRM_RESUME": "Êtes-vous sûr de vouloir reprendre ce lot ?",
-
   "BATCHES_PROGRESS_IN": "Lots en cours",
   "BATCHES_PROGRESS_NO_RUNNING": "Aucun lot en cours d'exécution",
   "BATCHES_PROGRESS_END": "Lots terminés",
   "BATCHES_LOAD_ENDED": "Charger les lots terminés",
-
+  "BATCHES_PROGRESS_TYPE": "Type",
+  "BATCHES_PROGRESS_USER": "Utilisateur",
+  "BATCHES_PROGRESS_START_TIME": "Heure de début",
+  "BATCHES_PROGRESS_END_TIME": "Heure de fin",
+  "BATCHES_PROGRESS_FAIL_JOBS": "Jobs échoués",
+  "BATCHES_PROGRESS_PROGRESS": "Progression",
+  "BATCHES_PROGRESS_NO_FINISHED": "Aucun lot terminé",
+  "BATCHES_PROGRESS_COMPLETED": "Terminé",
+  "BATCHES_PROGRESS_IN_PROGRESS": "En cours",
+  "BATCHES_PROGRESS_BATCH_DETAILS": "Détails du lot",
+  "BATCHES_PROGRESS_TOOLTIP_ACTIVATE_BATCH": "Activer le lot",
+  "BATCHES_PROGRESS_TOOLTIP_SUSPEND_BATCH": "Suspendre le lot",
+  "BATCHES_PROGRESS_TOOLTIP_INCREMENT_NUMBER": "Incrémenter le nombre de tentatives",
+  "BATCHES_PROGRESS_TOOLTIP_DELETE_BATCH": "Supprimer le lot",
+  "BATCHES_PROGRESS_PROPERTY": "Propriété",
+  "BATCHES_PROGRESS_VALUE": "Valeur",
+  "BATCHES_PROGRESS_FAILED_LABEL": "échoué(s)",
+  "BATCHES_DELETE_BATCH_TITLE": "Supprimer le lot",
+  "BATCHES_DELETE_BATCH_MESSAGE": "Êtes-vous sûr de vouloir supprimer ce lot ? Cette action est irréversible.",
+  "BATCHES_HISTORY_ALL_TYPES": "Tous les types",
+  "BATCHES_DURATION": "Durée",
+  "BATCHES_FILTER_TYPE": "Filtrer par type",
+  "BATCHES_TECHNICAL_DETAILS": "Afficher les détails techniques",
+  "BATCH_TYPE_MIGRATION": "Migration d'instances",
+  "BATCH_TYPE_MODIFICATION": "Modification d'instances",
+  "BATCH_TYPE_DELETION": "Suppression d'instances",
+  "BATCH_TYPE_SUSPENSION": "Suspension d'instances",
+  "BATCH_TYPE_SET_JOB_RETRIES": "Définir les tentatives de job",
+  "BATCH_TYPE_SET_EXTERNAL_TASK_RETRIES": "Définir les tentatives de tâche externe",
+  "BATCH_TYPE_SET_REMOVAL_TIME": "Définir le temps de suppression",
+  "BATCH_TYPE_DECISION_SET_REMOVAL_TIME": "Définir le temps de suppression (décisions)",
+  "BATCH_TYPE_BATCH_SET_REMOVAL_TIME": "Définir le temps de suppression (lots)",
+  "BATCH_TYPE_SET_VARIABLES": "Définir les variables",
+  "BATCH_TYPE_CORRELATE_MESSAGE": "Corréler un message",
   "BATCH_DELETE_ERROR": "Échec de la suppression du lot",
   "JOB_RETRY_ERROR": "Échec de la relance du job",
   "JOB_RETRY_ALL_ERROR": "Échec de la relance de tous les jobs",
   "JOB_DELETE_ERROR": "Échec de la suppression du job",
   "NOTIFICATIONS_STATUS_ERROR": "Erreur",
-
   "DATA_TYPE_STRING": "String",
   "DATA_TYPE_INTEGER": "Integer",
   "DATA_TYPE_LONG": "Long",
@@ -1538,13 +1474,10 @@
   "DATA_TYPE_DATE": "Date",
   "DATA_TYPE_OBJECT": "Object",
   "DATA_TYPE_FILE": "File",
-
   "CHART_STARTED": "Démarrés",
   "CHART_COMPLETED": "Terminés",
-
   "COLUMN_KEY": "Clé",
   "COLUMN_VERSION": "Version",
-
   "SETUP_WELCOME": "Bienvenue sur OrqueIO",
   "SETUP_BRANDING_SUBTITLE": "Créez votre compte admin<br>pour orchestrer vos processus.",
   "SETUP_FEATURE_1": "Conception visuelle",
@@ -1583,16 +1516,13 @@
   "SETUP_BACK_TO_LOGIN": "Se connecter",
   "SETUP_COULD_NOT_CREATE_USER": "Impossible de créer l'utilisateur initial.",
   "SETUP_PASSWORD_VALIDATING": "Validation du mot de passe...",
-
   "BRANDING_TITLE": "OrqueIO",
   "BRANDING_SUBTITLE": "Simplifiez vos opérations.<br>Automatisez en confiance.",
   "FEATURE_WORKFLOW": "Automatisez les workflows complexes",
   "FEATURE_DASHBOARD": "Tableau de bord en temps réel",
   "FEATURE_COLLABORATION": "Outils de collaboration d'équipe",
-
   "PASSWORD_SHOW": "Afficher le mot de passe",
   "PASSWORD_HIDE": "Masquer le mot de passe",
-
   "PAGE_TITLE_HOME": "Accueil",
   "PAGE_TITLE_LOGIN": "Connexion",
   "PAGE_TITLE_SETUP": "Configuration",
@@ -1621,7 +1551,6 @@
   "PAGE_TITLE_ADMIN_SYSTEM_METRICS": "Métriques d'exécution",
   "PAGE_TITLE_ADMIN_SYSTEM_DIAGNOSTICS": "Diagnostics",
   "PAGE_TITLE_ACCESS_DENIED": "Accès refusé",
-
   "ACCESS_DENIED_TITLE": "Accès refusé",
   "ACCESS_DENIED_SUBTITLE": "Vous n'avez pas la permission d'accéder à cette page.",
   "ACCESS_DENIED_APP_REASON": "Vous devez avoir accès à l'application '{{app}}' pour afficher cette page.",
@@ -1633,15 +1562,79 @@
   "ACCESS_DENIED_GO_BACK": "Retour",
   "ACCESS_DENIED_WRONG_ACCOUNT": "Connecté avec le mauvais compte ?",
   "ACCESS_DENIED_LOGOUT": "Se déconnecter et essayer un autre compte",
-
   "LIMITED_ACCESS_TITLE": "Accès Limité",
   "LIMITED_ACCESS_MESSAGE": "Vous avez actuellement accès uniquement à la page d'accueil. Pour accéder à Cockpit ou Tasklist, veuillez contacter votre administrateur pour demander des permissions supplémentaires.",
   "LIMITED_ACCESS_CONTACT_ADMIN": "Contacter l'administrateur",
   "LIMITED_ACCESS_NO_APPS": "Aucune application disponible",
   "LIMITED_ACCESS_APPS_HINT": "Votre compte n'a pas encore accès à des applications. Veuillez contacter votre administrateur pour demander les permissions nécessaires.",
   "NO_APPS_AVAILABLE": "Aucune application disponible",
-
   "header.apps.tasklist": "Liste de tâches",
   "header.apps.cockpit": "Cockpit",
-  "header.apps.admin": "Admin"
+  "header.apps.admin": "Admin",
+  "cockpit.menu.batchOperations": "Opérations par lot",
+  "PAGE_TITLE_COCKPIT_BATCH_OPS": "Opérations par lot",
+  "cockpit.batchOps.step1.title": "Sélectionner une opération",
+  "cockpit.batchOps.step1.intro": "Exécutez une action sur de nombreuses instances de processus en une seule fois. Suspension, activation, suppression et plus encore. Aucun appel API nécessaire.",
+  "cockpit.batchOps.step1.opsCount": "{{count}} opérations disponibles",
+  "cockpit.batchOps.step1.selectPlaceholder": "Sélectionner une opération...",
+  "cockpit.batchOps.stepper.define": "Définir l’opération",
+  "cockpit.batchOps.stepper.confirm": "Confirmer",
+  "cockpit.batchOps.stepper.results": "Résultats",
+  "cockpit.batchOps.operationList.comingSoon": "Bientôt disponible",
+  "cockpit.batchOps.operationList.showMore": "Afficher {{count}} opérations supplémentaires",
+  "cockpit.batchOps.operationList.showLess": "Afficher moins",
+  "cockpit.batchOps.suspend.label": "Suspendre les instances en cours",
+  "cockpit.batchOps.suspend.desc": "Mettre en pause temporairement une ou plusieurs instances en cours",
+  "cockpit.batchOps.suspend.modeInstances": "Instances",
+  "cockpit.batchOps.suspend.modeQuery": "Requête",
+  "cockpit.batchOps.suspend.onlyRunningNote": "Seules les instances en cours d’exécution peuvent être suspendues",
+  "cockpit.batchOps.suspend.selectAllOnPage": "Sélectionner les {{count}} lignes de cette page",
+  "cockpit.batchOps.suspend.noInstances": "Aucune instance en cours trouvée",
+  "cockpit.batchOps.suspend.queryWarning": "La sélection de toutes les instances peut créer une charge importante sur la base de données et le serveur d’exécution si la requête retourne un grand nombre de résultats.",
+  "cockpit.batchOps.suspend.noCriteriaHint": "Ajoutez au moins un critère de recherche pour activer le mode Requête.",
+  "cockpit.batchOps.suspend.queryPreviewNote": "Aperçu. Le tableau affiche les instances qui seraient affectées. Les cases à cocher sont désactivées en mode Requête.",
+  "cockpit.batchOps.suspend.actionBtn": "Suspendre {{count}} instances",
+  "cockpit.batchOps.suspend.actionBtnQuery": "Suspendre toutes les instances correspondantes",
+  "cockpit.batchOps.activate.label": "Activer des instances de processus",
+  "cockpit.batchOps.activate.desc": "Reprendre les instances de processus suspendues",
+  "cockpit.batchOps.deleteRunning.label": "Supprimer les instances en cours",
+  "cockpit.batchOps.deleteRunning.desc": "Supprimer définitivement une ou plusieurs instances en cours",
+  "cockpit.batchOps.deleteFinished.label": "Supprimer les instances terminées",
+  "cockpit.batchOps.deleteFinished.desc": "Supprimer les instances de processus terminées de l’historique",
+  "cockpit.batchOps.deleteDecision.label": "Supprimer les instances de décision",
+  "cockpit.batchOps.deleteDecision.desc": "Supprimer les instances de décision terminées de l’historique",
+  "cockpit.batchOps.setRetriesJobs.label": "Définir les tentatives de jobs",
+  "cockpit.batchOps.setRetriesJobs.desc": "Configurer le nombre de tentatives pour les jobs échoués",
+  "cockpit.batchOps.setRetriesExternal.label": "Définir les tentatives de tâches externes",
+  "cockpit.batchOps.setRetriesExternal.desc": "Configurer le nombre de tentatives pour les tâches externes échouées",
+  "cockpit.batchOps.setVariables.label": "Définir des variables",
+  "cockpit.batchOps.setVariables.desc": "Mettre à jour les valeurs de variables de processus en masse",
+  "cockpit.batchOps.correlate.label": "Corréler un message",
+  "cockpit.batchOps.correlate.desc": "Envoyer un événement de message aux instances correspondantes",
+  "cockpit.batchOps.migrate.label": "Déplacer des instances",
+  "cockpit.batchOps.migrate.desc": "Migrer des instances vers une autre version de processus",
+  "cockpit.batchOps.removalTimeProcess.label": "Définir le délai de suppression (processus)",
+  "cockpit.batchOps.removalTimeProcess.desc": "Configurer quand les données historiques de processus sont supprimées",
+  "cockpit.batchOps.removalTimeDecision.label": "Définir le délai de suppression (décisions)",
+  "cockpit.batchOps.removalTimeDecision.desc": "Configurer quand les données historiques de décision sont supprimées",
+  "cockpit.batchOps.removalTimeBatch.label": "Définir le délai de suppression (lots)",
+  "cockpit.batchOps.removalTimeBatch.desc": "Configurer quand les données historiques de lot sont supprimées",
+  "cockpit.batchOps.selectedCount": "{{count}} instance(s) sélectionnée(s)",
+  "cockpit.batchOps.continue": "Continuer",
+  "cockpit.batchOps.back": "Retour",
+  "cockpit.batchOps.confirm.title": "Confirmer l’opération",
+  "cockpit.batchOps.confirm.suspendSummary": "Vous êtes sur le point de suspendre {{count}} instance(s).",
+  "cockpit.batchOps.confirm.technicalDetails": "Afficher les détails techniques",
+  "cockpit.batchOps.confirm.endpoint": "Endpoint",
+  "cockpit.batchOps.confirm.payload": "Payload",
+  "cockpit.batchOps.confirm.suspendBtn": "Suspendre {{count}} instances",
+  "cockpit.batchOps.confirm.querySummary": "Vous êtes sur le point de suspendre toutes les instances correspondant à vos critères de recherche (environ {{count}} au dernier comptage — le nombre exact peut différer lors de l'exécution).",
+  "cockpit.batchOps.confirm.suspendBtnQuery": "Suspendre toutes les instances correspondantes",
+  "cockpit.batchOps.results.title": "Résultats de l’opération",
+  "cockpit.batchOps.results.processing": "Soumission de l'opération batch en cours...",
+  "cockpit.batchOps.results.batchSubmitted": "L'opération batch a été soumise avec succès. Le moteur va traiter les instances de manière asynchrone.",
+  "cockpit.batchOps.results.batchId": "ID du batch : {{id}}",
+  "cockpit.batchOps.results.batchError": "Échec de la soumission de l'opération batch.",
+  "cockpit.batchOps.results.newOperation": "Nouvelle opération",
+  "cockpit.batchOps.results.viewBatches": "Voir le suivi des lots"
 }

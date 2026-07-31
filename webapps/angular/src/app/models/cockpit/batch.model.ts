@@ -182,6 +182,7 @@ export const BATCH_TYPE_LABELS: Record<string, string> = {
 export const BATCH_DETAIL_KEYS = [
   'id',
   'type',
+  'createUserId',
   'startTime',
   'executionStartTime',
   'endTime',

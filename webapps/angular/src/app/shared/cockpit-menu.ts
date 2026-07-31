@@ -6,7 +6,8 @@ import {
   faLayerGroup,
   faBox,
   faCogs,
-  faSearch
+  faSearch,
+  faWrench
 } from '@fortawesome/free-solid-svg-icons';
 import { NavMenuItem } from './navbar/navbar';
 
@@ -56,6 +57,12 @@ export const COCKPIT_MORE_MENU_ITEMS: NavMenuItem[] = [
     icon: faLayerGroup,
     label: 'cockpit.menu.batches',
     route: '/cockpit/batch',
+    exact: true
+  },
+  {
+    icon: faWrench,
+    label: 'cockpit.menu.batchOperations',
+    route: '/cockpit/batch/operations',
     exact: false
   },
   {
