@@ -69,7 +69,6 @@ describe('NavbarComponent – Processes sub-dropdown', () => {
     fixture.detectChanges();
   });
 
-  // ── 1. Clicking the chevron opens the dropdown ─────────────────────────────
 
   it('should open the Processes sub-menu when the chevron is toggled', () => {
     const event = new MouseEvent('click');
@@ -82,7 +81,6 @@ describe('NavbarComponent – Processes sub-dropdown', () => {
     expect(event.stopPropagation).toHaveBeenCalled();
   });
 
-  // ── 2. Clicking a sub-item closes the dropdown ─────────────────────────────
 
   it('should close the Processes sub-menu when a sub-item is selected', () => {
     component.openSubMenuLabel = 'cockpit.menu.processes';
@@ -92,7 +90,6 @@ describe('NavbarComponent – Processes sub-dropdown', () => {
     expect(component.openSubMenuLabel).toBeNull();
   });
 
-  // ── 3. Clicking outside the .sub-dropdown closes the dropdown ──────────────
 
   it('should close the Processes sub-menu on click outside .sub-dropdown', () => {
     component.openSubMenuLabel = 'cockpit.menu.processes';
@@ -109,7 +106,31 @@ describe('NavbarComponent – Processes sub-dropdown', () => {
     document.body.removeChild(outsideEl);
   });
 
-  // ── Bonus: click inside .sub-dropdown does NOT close the dropdown ───────────
+
+  it('should close the Processes sub-menu when the More menu is opened', () => {
+    component.openSubMenuLabel = 'cockpit.menu.processes';
+    component.moreMenuOpen = false;
+    const event = new MouseEvent('click');
+    vi.spyOn(event, 'stopPropagation');
+
+    component.toggleMoreMenu(event);
+
+    expect(component.moreMenuOpen).toBe(true);
+    expect(component.openSubMenuLabel).toBeNull();
+  });
+
+  it('should close the More menu when the Processes sub-menu is opened', () => {
+    component.moreMenuOpen = true;
+    component.openSubMenuLabel = null;
+    const event = new MouseEvent('click');
+    vi.spyOn(event, 'stopPropagation');
+
+    component.toggleSubMenu(processesItem, event);
+
+    expect(component.openSubMenuLabel).toBe('cockpit.menu.processes');
+    expect(component.moreMenuOpen).toBe(false);
+  });
+
 
   it('should keep the Processes sub-menu open on click inside .sub-dropdown', () => {
     component.openSubMenuLabel = 'cockpit.menu.processes';
