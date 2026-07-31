@@ -1287,6 +1287,8 @@
   "tasklist.addFilter": "Ajouter un filtre",
   "tasklist.filtersLoadError": "Échec du chargement des filtres",
   "tasklist.filterDetails": "Modifier le filtre",
+  "tasklist.searchFilters": "Rechercher un filtre...",
+  "tasklist.noFiltersMatchSearch": "Aucun filtre ne correspond à votre recherche",
   "tasklist.createFilterHint": "Créer un nouveau filtre pour organiser vos tâches",
   "tasklist.followUpDate": "Date de suivi",
   "tasklist.dueDate": "Date d'échéance",
