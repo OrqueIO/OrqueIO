@@ -21,6 +21,7 @@ export class PaginationComponent {
   @Input() total: number = 0;
   @Input() availableSizes: number[] = [10, 25, 50, 100];
   @Input() compact: boolean = false;
+  @Input() showSizeSelector: boolean = false;
 
   @Output() pageChange = new EventEmitter<PageChangeEvent>();
 

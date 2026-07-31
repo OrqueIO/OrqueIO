@@ -305,6 +305,34 @@ describe('CockpitService — countPerState (via searchProcessInstancesGlobalCoun
   });
 });
 
+
+describe('CockpitService — multi-BK single-state list path (searchProcessInstancesGlobal)', () => {
+
+  // ── fetch limit is firstResult+maxResults, not 2000 ─────────────────────────
+  it('passes firstResult+maxResults as fetch limit (not 2000) for multi-BK single state', async () => {
+    const queryInstances = vi.fn().mockReturnValue(of([]));
+
+    const svc = makeService({
+      queryProcessInstances: queryInstances,
+      queryProcessInstancesCount: vi.fn(),
+    });
+
+    const filters: MultiValueFilter[] = [
+      { field: 'state',       values: ['active'] },
+      { field: 'businessKey', values: ['a', 'b'] },
+    ];
+
+    await lastValueFrom(svc.searchProcessInstancesGlobal(filters, false, false, 40, 20));
+
+    expect(queryInstances).toHaveBeenCalledTimes(2);  // 1 state × 2 BK
+    for (const [, callFirstResult, callMaxResults] of queryInstances.mock.calls) {
+      expect(callFirstResult).toBe(0);
+      expect(callMaxResults).toBe(60);      // needed = 40 + 20
+      expect(callMaxResults).not.toBe(2000);
+    }
+  });
+});
+
 // ─── searchPerState — called via searchProcessInstancesGlobal ────────────────
 //
 // searchPerState sends one queryProcessInstances call per state_fragment × variant.

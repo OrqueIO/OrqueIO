@@ -1390,21 +1390,10 @@ export class CockpitService {
     if (variants.length === 1) {
       return this.processInstanceService.queryProcessInstances(variants[0], firstResult, maxResults);
     }
+    const needed = firstResult + maxResults;
     return forkJoin(
-      variants.map(body => this.processInstanceService.queryProcessInstances(body, 0, 2000))
-    ).pipe(
-      map(resultArrays => {
-        const seen = new Set<string>();
-        const merged: ProcessInstance[] = [];
-        for (const arr of resultArrays) {
-          for (const inst of arr) {
-            if (inst.id && !seen.has(inst.id)) { seen.add(inst.id); merged.push(inst); }
-          }
-        }
-        merged.sort((a, b) => new Date(b.startTime).getTime() - new Date(a.startTime).getTime());
-        return merged.slice(firstResult, firstResult + maxResults);
-      })
-    );
+      variants.map(body => this.processInstanceService.queryProcessInstances(body, 0, needed))
+    ).pipe(map(resultArrays => this.mergeSortSlice(resultArrays, firstResult, maxResults)));
   }
 
   searchProcessInstancesGlobalCount(
@@ -1481,19 +1470,19 @@ export class CockpitService {
     return forkJoin(
       this.buildPerStateBodies(filters, statePill, variableNamesIgnoreCase, variableValuesIgnoreCase)
         .map(body => this.processInstanceService.queryProcessInstances(body, 0, needed))
-    ).pipe(
-      map((resultArrays: ProcessInstance[][]) => {
-        const seen = new Set<string>();
-        const merged: ProcessInstance[] = [];
-        for (const arr of resultArrays) {
-          for (const inst of arr) {
-            if (inst.id && !seen.has(inst.id)) { seen.add(inst.id); merged.push(inst); }
-          }
-        }
-        merged.sort((a, b) => new Date(b.startTime).getTime() - new Date(a.startTime).getTime());
-        return merged.slice(firstResult, firstResult + maxResults);
-      })
-    );
+    ).pipe(map(resultArrays => this.mergeSortSlice(resultArrays, firstResult, maxResults)));
+  }
+
+  private mergeSortSlice(resultArrays: ProcessInstance[][], firstResult: number, maxResults: number): ProcessInstance[] {
+    const seen = new Set<string>();
+    const merged: ProcessInstance[] = [];
+    for (const arr of resultArrays) {
+      for (const inst of arr) {
+        if (inst.id && !seen.has(inst.id)) { seen.add(inst.id); merged.push(inst); }
+      }
+    }
+    merged.sort((a, b) => new Date(b.startTime).getTime() - new Date(a.startTime).getTime());
+    return merged.slice(firstResult, firstResult + maxResults);
   }
 
   // One queryProcessInstancesCount call per state_fragment × variant body.

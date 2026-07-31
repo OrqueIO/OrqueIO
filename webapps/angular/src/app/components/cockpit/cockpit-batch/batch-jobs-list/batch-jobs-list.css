@@ -1,4 +1,15 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  padding-top: var(--space-4);
+  background: var(--bg-page);
+}
+
 .batch-jobs-list {
+  flex: 1;
+  min-height: 0;
   background: var(--bg-card);
   border-radius: var(--radius-lg);
   border: 1px solid var(--border-color-light);
@@ -11,14 +22,12 @@
   display: flex;
   align-items: center;
   gap: var(--space-2);
-  padding: var(--space-3) var(--space-4);
-  border-bottom: 1px solid var(--border-color-light);
-  background: var(--color-gray-50);
+  padding: var(--space-5) var(--space-5) var(--space-4);
 }
 
 .list-title {
   margin: 0;
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-lg);
   font-weight: var(--font-weight-semibold);
   color: var(--text-primary);
   display: flex;

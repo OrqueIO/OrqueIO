@@ -112,8 +112,6 @@ export class BatchService {
     return this.http.get<HistoryBatch[]>(
       `${this.baseUrl}/history/batch`,
       { params: httpParams }
-    ).pipe(
-      catchError(() => of([]))
     );
   }
 
@@ -160,17 +158,21 @@ export class BatchService {
    * Get failed jobs for a batch
    */
   getFailedJobs(jobDefinitionId: string, params: JobQueryParams = {}): Observable<BatchJob[]> {
+    const { firstResult = 0, maxResults = 10, sorting } = params;
     const body = {
       jobDefinitionId,
       withException: true,
       noRetriesLeft: true,
-      sorting: params.sorting || [{ sortBy: 'jobId', sortOrder: 'asc' }],
-      ...params
+      sorting: sorting || [{ sortBy: 'jobId', sortOrder: 'asc' }],
     };
+    const httpParams = new HttpParams()
+      .set('firstResult', String(firstResult))
+      .set('maxResults', String(maxResults));
 
     return this.http.post<BatchJob[]>(
       `${this.baseUrl}/job`,
-      body
+      body,
+      { params: httpParams }
     ).pipe(
       catchError(() => of([]))
     );

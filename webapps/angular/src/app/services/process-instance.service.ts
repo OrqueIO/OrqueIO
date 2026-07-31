@@ -446,6 +446,17 @@ export class ProcessInstanceService {
     ).pipe(catchError(() => of(void 0)));
   }
 
+  suspendInstancesAsync(payload: {
+    suspended: boolean;
+    processInstanceIds?: string[];
+    historicProcessInstanceQuery?: Record<string, unknown>;
+  }): Observable<{ id: string }> {
+    return this.http.post<{ id: string }>(
+      `${this.baseUrl}/process-instance/suspended-async`,
+      payload
+    );
+  }
+
   /**
    * Resume (activate) a process instance
    */
@@ -465,7 +476,7 @@ export class ProcessInstanceService {
    */
   getJobsByProcessInstance(processInstanceId: string, maxResults = 100): Observable<Job[]> {
     return this.http.get<Job[]>(`${this.baseUrl}/job`, {
-      params: { processInstanceId, maxResults: maxResults.toString() }
+      params: { processInstanceId, firstResult: '0', maxResults: maxResults.toString() }
     }).pipe(catchError(() => of([])));
   }
 

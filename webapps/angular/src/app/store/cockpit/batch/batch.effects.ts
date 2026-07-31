@@ -130,14 +130,12 @@ export class BatchEffects {
     )
   );
 
-  // Load failed jobs after batch details loaded (runtime only)
   loadJobsAfterDetails$ = createEffect(() =>
     this.actions$.pipe(
       ofType(BatchActions.loadBatchDetailsSuccess),
-      filter(({ batchType }) => batchType === 'runtime'),
       map(({ batch }) => {
-        const runtimeBatch = batch as BatchStatistics;
-        return BatchActions.loadFailedJobs({ jobDefinitionId: runtimeBatch.batchJobDefinitionId });
+        const b = batch as BatchStatistics;
+        return BatchActions.loadFailedJobs({ jobDefinitionId: b.batchJobDefinitionId });
       })
     )
   );

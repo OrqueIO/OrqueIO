@@ -1,5 +1,8 @@
 <div class="batch-runtime-list">
-  <h3 class="section-title">{{ 'BATCHES_PROGRESS_IN' | translate }}</h3>
+  <h3 class="section-title">
+    <fa-icon [icon]="faPlay"></fa-icon>
+    {{ 'BATCHES_PROGRESS_IN' | translate }}
+  </h3>
 
   <!-- Loading state -->
   <ng-container *ngIf="loading$ | async as loading">

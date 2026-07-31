@@ -1,0 +1,314 @@
+<app-cockpit-header [breadcrumbs]="breadcrumbs"></app-cockpit-header>
+
+<div class="wizard-page">
+
+  <!-- Stepper -->
+  <app-batch-wizard-stepper
+    [steps]="wizardSteps"
+    [currentStep]="currentStep">
+  </app-batch-wizard-stepper>
+
+  <!-- ─────────────────────────────────────────────────────────────────── -->
+  <!-- STEP 1 – Define operation                                           -->
+  <!-- ─────────────────────────────────────────────────────────────────── -->
+  <div *ngIf="currentStep === 1" class="wizard-step">
+
+    <!-- Hero wrapper: centered column when nothing is selected, plain when selected -->
+    <div [class.step1-hero]="!selectedOperationId">
+
+      <!-- Icon badge — initial state only -->
+      <div *ngIf="!selectedOperationId" class="step1-hero__badge">
+        <fa-icon [icon]="faCodeBranch"></fa-icon>
+      </div>
+
+      <!-- Title -->
+      <h2 [class.step-title]="!!selectedOperationId"
+          [class.step1-hero__title]="!selectedOperationId">
+        {{ 'cockpit.batchOps.step1.title' | translate }}
+      </h2>
+
+      <!-- Intro text — initial state only -->
+      <p *ngIf="!selectedOperationId" class="step1-hero__intro">
+        {{ 'cockpit.batchOps.step1.intro' | translate }}
+      </p>
+
+      <!-- Operation list (generic, reusable) -->
+      <app-batch-operation-list
+        [operations]="operations"
+        [selectedId]="selectedOperationId"
+        (operationSelect)="onOperationSelect($event)"
+        (clearSelection)="onClearOperation()">
+      </app-batch-operation-list>
+
+      <!-- Operations count — initial state only -->
+      <p *ngIf="!selectedOperationId" class="step1-ops-count">
+        {{ 'cockpit.batchOps.step1.opsCount' | translate: { count: operations.length.toString() } }}
+      </p>
+
+    </div>
+
+    <!-- ─── Suspend form (shown when "suspend" is selected) ──────────── -->
+    <div *ngIf="selectedOperationId === 'suspend'" class="operation-steps">
+
+      <!-- ── Carte 1 : Définition de la requête ────────────────────── -->
+      <div class="operation-card">
+
+        <!-- Mode toggle -->
+        <div class="mode-toggle" role="group">
+          <button type="button"
+                  class="mode-btn"
+                  [class.mode-btn--active]="mode === 'instances'"
+                  (click)="setMode('instances')">
+            {{ 'cockpit.batchOps.suspend.modeInstances' | translate }}
+          </button>
+          <button type="button"
+                  class="mode-btn"
+                  [class.mode-btn--active]="mode === 'query'"
+                  (click)="setMode('query')">
+            {{ 'cockpit.batchOps.suspend.modeQuery' | translate }}
+          </button>
+        </div>
+
+        <!-- Info note — instances mode only -->
+        <div *ngIf="mode === 'instances'" class="info-note">
+          <fa-icon [icon]="faInfoCircle"></fa-icon>
+          <span>{{ 'cockpit.batchOps.suspend.onlyRunningNote' | translate }}</span>
+        </div>
+
+        <!-- Query warning — required by Camunda 7.18 spec -->
+        <div *ngIf="mode === 'query'" class="query-warning">
+          <fa-icon [icon]="faExclamationTriangle"></fa-icon>
+          <span>{{ 'cockpit.batchOps.suspend.queryWarning' | translate }}</span>
+        </div>
+
+        <!-- Filter panel — both modes -->
+        <app-instance-filter-panel
+          [lockedState]="'active'"
+          (criteriaChange)="onFilterChange($event)">
+        </app-instance-filter-panel>
+
+      </div>
+      <!-- /carte 1 -->
+
+      <app-pagination
+        *ngIf="!instancesLoading && instances.length > 0"
+        [current]="instancesPage"
+        [size]="instancesPageSize"
+        [total]="instancesTotal"
+        [showSizeSelector]="true"
+        (pageChange)="onInstancesPageChange($event)">
+      </app-pagination>
+
+      <!-- ── Carte 2 : Aperçu instances (instances mode = sélection, query mode = lecture seule) -->
+      <div class="operation-card">
+
+        <!-- Loading -->
+        <div *ngIf="instancesLoading" class="loading-state">
+          <fa-icon [icon]="faSpinner" [animation]="'spin'"></fa-icon>
+          <span>{{ 'common.loading' | translate }}</span>
+        </div>
+
+        <!-- Empty -->
+        <div *ngIf="!instancesLoading && instances.length === 0" class="empty-state">
+          {{ 'cockpit.batchOps.suspend.noInstances' | translate }}
+        </div>
+
+        <ng-container *ngIf="!instancesLoading && instances.length > 0">
+
+          <!-- Select-all bar — instances mode only -->
+          <div *ngIf="mode === 'instances'" class="select-all-bar">
+            <label class="select-all-label">
+              <input type="checkbox"
+                     [checked]="isAllOnPageSelected"
+                     [indeterminate]="isIndeterminate"
+                     (change)="toggleSelectAll()">
+              <span>{{ 'cockpit.batchOps.suspend.selectAllOnPage' | translate: { count: instances.length.toString() } }}</span>
+            </label>
+            <span class="selection-count"
+                  [class.selection-count--empty]="selectedIds.size === 0">
+              {{ 'cockpit.batchOps.selectedCount' | translate: { count: selectedIds.size.toString() } }}
+            </span>
+          </div>
+
+          <!-- Query preview note -->
+          <div *ngIf="mode === 'query'" class="query-preview-note">
+            <fa-icon [icon]="faInfoCircle"></fa-icon>
+            <span>{{ 'cockpit.batchOps.suspend.queryPreviewNote' | translate }}</span>
+          </div>
+
+          <div class="table-container">
+            <table class="instances-table">
+              <thead>
+                <tr>
+                  <th *ngIf="mode === 'instances'" class="col-check"></th>
+                  <th class="col-state">{{ 'cockpit.processes.columns.state' | translate }}</th>
+                  <th class="col-id">{{ 'cockpit.processes.columns.id' | translate }}</th>
+                  <th class="col-definition">{{ 'cockpit.processes.columns.definition' | translate }}</th>
+                  <th class="col-businesskey">{{ 'cockpit.processes.columns.businessKey' | translate }}</th>
+                  <th class="col-starttime">{{ 'cockpit.processes.columns.startTime' | translate }}</th>
+                  <th class="col-endtime">{{ 'cockpit.processes.columns.endTime' | translate }}</th>
+                  <th class="col-actions">{{ 'cockpit.processes.columns.actions' | translate }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let inst of instances"
+                    [class.row--selected]="mode === 'instances' && isSelected(inst.id)"
+                    [style.cursor]="mode === 'instances' ? 'pointer' : 'default'"
+                    (click)="onRowClick(inst.id)">
+                  <td *ngIf="mode === 'instances'" class="col-check"
+                      (click)="$event.stopPropagation(); toggleInstance(inst.id)">
+                    <input type="checkbox"
+                           [checked]="isSelected(inst.id)"
+                           (change)="toggleInstance(inst.id)"
+                           (click)="$event.stopPropagation()">
+                  </td>
+                  <td class="col-state">
+                    <span class="state-badge" [ngClass]="getInstanceStateClass(inst)">
+                      <fa-icon [icon]="getInstanceStateIcon(inst)"></fa-icon>
+                      {{ getInstanceStateLabel(inst) }}
+                    </span>
+                  </td>
+                  <td class="col-id" (click)="$event.stopPropagation()">
+                    <a [routerLink]="['/cockpit/processes/instance', inst.id]"
+                       class="instance-link mono"
+                       [title]="inst.id">{{ inst.id }}</a>
+                  </td>
+                  <td class="col-definition">{{ getDefinitionDisplay(inst) }}</td>
+                  <td class="col-businesskey">{{ inst.businessKey || '—' }}</td>
+                  <td class="col-starttime cell-nowrap">{{ inst.startTime | camDate }}</td>
+                  <td class="col-endtime cell-nowrap">{{ (inst.endTime | camDate) || '—' }}</td>
+                  <td class="col-actions" (click)="$event.stopPropagation()">
+                    <a [routerLink]="['/cockpit/processes/instance', inst.id]"
+                       class="action-btn"
+                       [title]="'cockpit.processes.viewDetails' | translate">
+                      <fa-icon [icon]="faEye"></fa-icon>
+                    </a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+        </ng-container>
+
+      </div>
+      <!-- /carte 2 -->
+
+      <!-- Bouton d'action -->
+      <div class="step-footer">
+        <button *ngIf="mode === 'instances'"
+                type="button" class="btn-primary"
+                [disabled]="!canContinue"
+                (click)="continue()">
+          {{ (selectedOperation?.actionBtnKey ?? 'cockpit.batchOps.continue') | translate: { count: selectedIds.size.toString() } }}
+        </button>
+        <button *ngIf="mode === 'query'"
+                type="button" class="btn-primary"
+                [disabled]="!canContinue"
+                (click)="continue()">
+          {{ 'cockpit.batchOps.suspend.actionBtnQuery' | translate }}
+        </button>
+      </div>
+
+    </div>
+    <!-- /operation-steps -->
+  </div>
+  <!-- /step 1 -->
+
+
+  <!-- ─────────────────────────────────────────────────────────────────── -->
+  <!-- STEP 2 – Confirm                                                    -->
+  <!-- ─────────────────────────────────────────────────────────────────── -->
+  <div *ngIf="currentStep === 2" class="wizard-step">
+    <h2 class="step-title">{{ 'cockpit.batchOps.confirm.title' | translate }}</h2>
+
+    <div class="confirm-card">
+      <p class="confirm-summary">
+        <ng-container *ngIf="mode === 'instances'">
+          {{ 'cockpit.batchOps.confirm.suspendSummary' | translate: { count: selectedCount.toString() } }}
+        </ng-container>
+        <ng-container *ngIf="mode === 'query'">
+          {{ 'cockpit.batchOps.confirm.querySummary' | translate: { count: selectedCount.toString() } }}
+        </ng-container>
+      </p>
+
+      <!-- Technical details (collapsible) -->
+      <div class="technical-details">
+        <button type="button"
+                class="tech-toggle"
+                (click)="toggleTechnicalDetails()">
+          <fa-icon [icon]="showTechnicalDetails ? faChevronUp : faChevronDown"></fa-icon>
+          {{ 'cockpit.batchOps.confirm.technicalDetails' | translate }}
+        </button>
+
+        <div *ngIf="showTechnicalDetails" class="tech-content">
+          <div class="tech-row">
+            <span class="tech-label">{{ 'cockpit.batchOps.confirm.endpoint' | translate }}</span>
+            <code class="tech-value">{{ confirmEndpoint }}</code>
+          </div>
+          <div class="tech-row">
+            <span class="tech-label">{{ 'cockpit.batchOps.confirm.payload' | translate }}</span>
+            <pre class="tech-value">{{ confirmPayloadJson }}</pre>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="step-footer">
+      <button type="button" class="btn-secondary" (click)="back()">
+        {{ 'cockpit.batchOps.back' | translate }}
+      </button>
+      <button *ngIf="mode === 'instances'" type="button" class="btn-danger" (click)="execute()">
+        {{ 'cockpit.batchOps.confirm.suspendBtn' | translate: { count: selectedCount.toString() } }}
+      </button>
+      <button *ngIf="mode === 'query'" type="button" class="btn-danger" (click)="execute()">
+        {{ 'cockpit.batchOps.confirm.suspendBtnQuery' | translate }}
+      </button>
+    </div>
+  </div>
+  <!-- /step 2 -->
+
+
+  <!-- ─────────────────────────────────────────────────────────────────── -->
+  <!-- STEP 3 – Results                                                    -->
+  <!-- ─────────────────────────────────────────────────────────────────── -->
+  <div *ngIf="currentStep === 3" class="wizard-step">
+    <h2 class="step-title">{{ 'cockpit.batchOps.results.title' | translate }}</h2>
+
+    <!-- Executing spinner -->
+    <div *ngIf="executing" class="results-progress">
+      <fa-icon [icon]="faSpinner" [animation]="'spin'" size="2x"></fa-icon>
+      <span>{{ 'cockpit.batchOps.results.processing' | translate }}</span>
+    </div>
+
+    <!-- ── Batch results (both modes) ────────────────────────────────────── -->
+    <ng-container *ngIf="!executing">
+
+      <div class="results-summary"
+           [class.results-summary--success]="!batchError"
+           [class.results-summary--error]="batchError">
+        <fa-icon [icon]="batchError ? faTimesCircle : faCheckCircle"></fa-icon>
+        <span *ngIf="!batchError">{{ 'cockpit.batchOps.results.batchSubmitted' | translate }}</span>
+        <span *ngIf="batchError">{{ 'cockpit.batchOps.results.batchError' | translate }}</span>
+      </div>
+
+      <p *ngIf="batchId" class="page-note">
+        {{ 'cockpit.batchOps.results.batchId' | translate: { id: batchId } }}
+      </p>
+
+    </ng-container>
+
+    <!-- Actions -->
+    <div class="step-footer" *ngIf="!executing">
+      <button type="button" class="btn-secondary" (click)="reset()">
+        {{ 'cockpit.batchOps.results.newOperation' | translate }}
+      </button>
+      <a routerLink="/cockpit/batch" class="btn-link">
+        {{ 'cockpit.batchOps.results.viewBatches' | translate }}
+      </a>
+    </div>
+  </div>
+  <!-- /step 3 -->
+
+</div>
+<!-- /wizard-page -->

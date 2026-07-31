@@ -2,7 +2,7 @@ import { Component, Output, EventEmitter, inject, ChangeDetectionStrategy } from
 import { CommonModule } from '@angular/common';
 import { Store } from '@ngrx/store';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faSpinner, faSort, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
+import { faSpinner, faSort, faSortUp, faSortDown, faPlay } from '@fortawesome/free-solid-svg-icons';
 
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
 import { CamDatePipe } from '../../../../pipes';
@@ -27,6 +27,7 @@ export class BatchRuntimeListComponent {
 
   // Icons
   faSpinner = faSpinner;
+  faPlay = faPlay;
   faSort = faSort;
   faSortUp = faSortUp;
   faSortDown = faSortDown;

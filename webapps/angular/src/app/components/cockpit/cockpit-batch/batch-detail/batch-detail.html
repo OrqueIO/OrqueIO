@@ -22,12 +22,14 @@
         batch: batch$ | async,
         type: type$ | async,
         isSuspended: isSuspended$ | async,
-        hasFailedJobs: hasFailedJobs$ | async
+        hasFailedJobs: hasFailedJobs$ | async,
+        users: users$ | async
       } as data">
         <ng-container *ngIf="data.batch">
           <!-- Header -->
           <div class="detail-header">
             <h3 class="detail-title">
+              <fa-icon [icon]="faInfoCircle"></fa-icon>
               <span *ngIf="data.type === 'history'">{{ 'BATCHES_PROGRESS_COMPLETED' | translate }}</span>
               <span *ngIf="data.type === 'runtime'">{{ 'BATCHES_PROGRESS_IN_PROGRESS' | translate }}</span>
               {{ 'BATCHES_PROGRESS_BATCH_DETAILS' | translate }}
@@ -67,7 +69,7 @@
             </div>
           </div>
 
-          <!-- Properties table -->
+          <!-- Batch properties — independent scrollable section -->
           <div class="properties-section">
             <table class="properties-table">
               <thead>
@@ -79,16 +81,22 @@
               <tbody>
                 <ng-container *ngFor="let key of detailKeys">
                   <tr *ngIf="shouldShowKey(data.batch, key)" [class]="key">
-                    <td class="prop-name">{{ key }}</td>
+                    <td class="prop-name">
+                      <ng-container *ngIf="key === 'createUserId'">{{ 'BATCHES_PROGRESS_USER' | translate }}</ng-container>
+                      <ng-container *ngIf="key !== 'createUserId'">{{ key }}</ng-container>
+                    </td>
                     <td class="prop-value">
-                      <ng-container *ngIf="!isTimeKey(key)">
+                      <ng-container *ngIf="key === 'createUserId'">
+                        {{ getUserName(data.batch, data.users) }}
+                      </ng-container>
+                      <ng-container *ngIf="key !== 'createUserId' && !isTimeKey(key)">
                         {{ getBatchValue(data.batch, key) }}
                         <span *ngIf="key === 'remainingJobs' && isRuntimeBatch(data.batch) && data.batch.failedJobs > 0"
                               class="failed-note">
                           ({{ data.batch.failedJobs }} {{ 'BATCHES_PROGRESS_FAILED_LABEL' | translate }})
                         </span>
                       </ng-container>
-                      <ng-container *ngIf="isTimeKey(key)">
+                      <ng-container *ngIf="key !== 'createUserId' && isTimeKey(key)">
                         {{ getBatchValue(data.batch, key) | camDate }}
                       </ng-container>
                     </td>
@@ -98,10 +106,8 @@
             </table>
           </div>
 
-          <!-- Failed Jobs (runtime only) -->
-          <ng-container *ngIf="data.type === 'runtime'">
-            <app-batch-jobs-list></app-batch-jobs-list>
-          </ng-container>
+          <!-- Failed Jobs — independent scrollable section -->
+          <app-batch-jobs-list></app-batch-jobs-list>
 
           <!-- Delete confirmation modal -->
           <app-confirm-dialog

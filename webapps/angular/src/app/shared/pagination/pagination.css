@@ -10,7 +10,7 @@
   justify-content: space-between;
   height: 100%;
   padding: 0 12px;
-  background-color: #ffffff;
+  background-color: transparent;
   box-sizing: border-box;
 }
 
@@ -72,4 +72,27 @@
 .btn-page svg {
   display: block;
   flex-shrink: 0;
+}
+
+.page-size-select {
+  height: 28px;
+  padding: 0 6px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  background-color: #fff;
+  color: #64748b;
+  font-size: 12px;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.page-size-select:hover {
+  border-color: #6366f1;
+  color: #6366f1;
+}
+
+.page-size-select:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.15);
 }
