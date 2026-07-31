@@ -33,13 +33,24 @@
 
 /* Responsive */
 @media (max-width: 1200px) {
+  :host {
+    overflow-y: auto;
+  }
+
   .batch-page {
     grid-template-columns: 1fr;
-    grid-template-rows: 1fr 1fr;
+    grid-template-rows: auto;
+    height: auto;
+    flex-shrink: 0;
   }
 
   .batch-lists {
-    max-height: 50vh;
+    height: 520px;
+    max-height: none;
+  }
+
+  .batch-detail-panel {
+    height: 400px;
   }
 }
 
