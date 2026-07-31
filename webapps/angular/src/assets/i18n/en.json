@@ -1305,6 +1305,8 @@
   "tasklist.addFilter": "Add Filter",
   "tasklist.filtersLoadError": "Failed to load filters",
   "tasklist.filterDetails": "Edit filter",
+  "tasklist.searchFilters": "Search filters...",
+  "tasklist.noFiltersMatchSearch": "No filters match your search",
   "tasklist.createFilterHint": "Create a new filter to organize your tasks",
   "tasklist.followUpDate": "Follow-up Date",
   "tasklist.dueDate": "Due Date",

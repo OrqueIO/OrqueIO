@@ -5,7 +5,12 @@
          [class.maximized]="vm.maximizedColumn === 'filters'"
          [class.minimized]="vm.maximizedColumn && vm.maximizedColumn !== 'filters'">
     <header class="column-header">
-      <h3 class="column-title">{{ 'tasklist.filters' | translate }}</h3>
+      <div class="header-content">
+        <h3 class="column-title">{{ 'tasklist.filters' | translate }}</h3>
+        <span class="task-count" *ngIf="vm.filters.length > 0">
+          ({{ vm.filters.length }})
+        </span>
+      </div>
       <div class="column-header-actions">
         <!-- Maximize/Restore Button -->
         <button class="btn-maximize"

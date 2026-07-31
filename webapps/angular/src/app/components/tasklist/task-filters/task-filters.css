@@ -94,6 +94,44 @@
   line-height: 1.5;
 }
 
+/* ==================== SEARCH INPUT ==================== */
+.filter-search {
+  padding: 8px 12px 4px;
+}
+
+.filter-search-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 5px 10px;
+  font-size: 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  background: #f8fafc;
+  color: #334155;
+  outline: none;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.filter-search-input:focus {
+  border-color: #93c5fd;
+  background: #ffffff;
+}
+
+.filter-search-input::placeholder {
+  color: #94a3b8;
+}
+
+.search-empty-state {
+  padding: 20px 16px;
+  text-align: center;
+  color: #94a3b8;
+  font-size: 12px;
+}
+
+.search-empty-state p {
+  margin: 0;
+}
+
 /* ==================== FILTERS LIST ==================== */
 .filters-list {
   flex: 1;
