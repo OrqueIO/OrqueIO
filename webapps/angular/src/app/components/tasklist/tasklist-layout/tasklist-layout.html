@@ -1,3 +1,7 @@
+<app-cockpit-header
+  [breadcrumbs]="[{ translateKey: 'header.apps.tasklist' }]">
+</app-cockpit-header>
+
 <div class="tasklist-container" *ngIf="vm$ | async as vm">
   <!-- Filters Column -->
   <aside class="filters-column"
