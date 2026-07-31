@@ -67,3 +67,11 @@
 .step-connector--done {
   background: var(--color-success, #16a34a);
 }
+
+/* ── Responsive stepper ─────────────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  /* Hide text labels — keep numbered circles only */
+  .step__label { display: none; }
+  /* Reduce bottom margin so the page has more room */
+  .wizard-stepper { margin-bottom: var(--space-5); }
+}
