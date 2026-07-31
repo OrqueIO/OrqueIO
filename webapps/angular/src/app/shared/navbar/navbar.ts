@@ -113,6 +113,7 @@ export class NavbarComponent implements OnInit {
   toggleMoreMenu(event: Event): void {
     event.stopPropagation();
     this.moreMenuOpen = !this.moreMenuOpen;
+    this.openSubMenuLabel = null;
   }
 
   closeMoreMenu(): void {
@@ -122,6 +123,7 @@ export class NavbarComponent implements OnInit {
   toggleSubMenu(item: NavMenuItem, event: Event): void {
     event.stopPropagation();
     this.openSubMenuLabel = this.openSubMenuLabel === item.label ? null : item.label;
+    this.moreMenuOpen = false;
   }
 
   closeSubMenu(): void {
