@@ -525,6 +525,10 @@
   .menu-label {
     display: none;
   }
+
+  .more-menu .menu-label {
+    display: inline;
+  }
 }
 
 @media (max-width: 640px) {
