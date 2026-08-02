@@ -1,7 +1,7 @@
 :host {
   display: flex;
   flex-direction: column;
-  flex: 1;
+  flex: 3;
   min-height: 0;
   padding-top: var(--space-4);
   background: var(--bg-page);
@@ -69,7 +69,12 @@
 .jobs-table {
   width: 100%;
   border-collapse: collapse;
+  table-layout: fixed;
 }
+
+/* ID and Actions: fixed px; Exception fills all remaining space (no rule = auto) */
+.jobs-table th:nth-child(1) { width: 200px; }  /* Job ID — fixed */
+.jobs-table th:nth-child(3) { width: 130px; }  /* Actions — fixed, non-compressible */
 
 .jobs-table th {
   position: sticky;
@@ -115,6 +120,10 @@
   background: var(--color-gray-50);
 }
 
+.job-id {
+  overflow: hidden;
+}
+
 .job-id code {
   font-family: var(--font-mono);
   font-size: var(--font-size-xs);
@@ -122,21 +131,34 @@
   background: var(--color-primary-bg);
   padding: var(--space-1) var(--space-2);
   border-radius: var(--radius-sm);
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  box-sizing: border-box;
+  vertical-align: middle;
 }
 
 .job-exception {
-  max-width: 400px;
+  overflow: hidden;
+}
+
+.exception-inner {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
 }
 
 .exception-preview {
   color: var(--color-danger);
   font-size: var(--font-size-xs);
-  display: inline-block;
-  max-width: 350px;
+  flex: 1;
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  vertical-align: middle;
 }
 
 .stacktrace-link {
@@ -182,6 +204,53 @@
 .btn-delete:hover {
   background: var(--color-danger-bg);
   color: var(--color-danger);
+}
+
+.btn-stacktrace:hover,
+.btn-stacktrace.active {
+  background: var(--color-primary-bg);
+  color: var(--color-primary);
+}
+
+.btn-force-failure-wrapper {
+  display: inline-flex;
+}
+
+.btn-force-failure:not(:disabled):hover {
+  background: var(--color-warning-bg, #fef3c7);
+  color: var(--color-warning, #d97706);
+}
+
+.btn-force-failure:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.stacktrace-row td {
+  padding: 0;
+  border-bottom: 2px solid var(--border-color);
+}
+
+.stacktrace-loading {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  color: var(--text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.stacktrace-content {
+  margin: 0;
+  padding: var(--space-4);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  color: var(--color-gray-100, #f3f4f6);
+  background: var(--color-gray-900, #111827);
+  white-space: pre-wrap;
+  word-break: break-all;
+  max-height: 260px;
+  overflow-y: auto;
 }
 
 /* Pagination spacing */

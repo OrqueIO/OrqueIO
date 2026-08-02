@@ -46,40 +46,46 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let job of data.jobs; trackBy: trackByJobId">
-              <td class="job-id">
-                <code>{{ job.id }}</code>
-              </td>
-              <td class="job-exception">
-                <span class="exception-preview"
-                      [appTooltip]="job.exceptionMessage || ''"
-                      tooltipPosition="top">
-                  {{ getExceptionPreview(job) }}
-                </span>
-                <a *ngIf="job.exceptionMessage"
-                   [href]="getStacktraceUrl(job)"
-                   target="_blank"
-                   class="stacktrace-link"
-                   [appTooltip]="'BATCHES_VIEW_STACKTRACE' | translate"
-                   tooltipPosition="top">
-                  <fa-icon [icon]="faExternalLinkAlt"></fa-icon>
-                </a>
-              </td>
-              <td class="job-actions">
-                <button class="btn-action btn-retry"
-                        (click)="onRetryJob(job)"
-                        [appTooltip]="'BATCHES_RETRY_JOB' | translate"
+            <ng-container *ngFor="let job of data.jobs; trackBy: trackByJobId">
+              <tr>
+                <td class="job-id">
+                  <code [title]="job.id">{{ job.id }}</code>
+                </td>
+                <td class="job-exception">
+                  <div class="exception-inner">
+                    <span class="exception-preview"
+                          [appTooltip]="job.exceptionMessage || ''"
+                          tooltipPosition="top">
+                      {{ getExceptionPreview(job) }}
+                    </span>
+                  </div>
+                </td>
+                <td class="job-actions">
+                  <button class="btn-action btn-retry"
+                          (click)="onRetryJob(job)"
+                          [appTooltip]="'BATCHES_RETRY_JOB' | translate"
+                          tooltipPosition="top">
+                    <fa-icon [icon]="faRedo"></fa-icon>
+                  </button>
+                  <button class="btn-action btn-delete"
+                          (click)="onDeleteJob(job)"
+                          [appTooltip]="'BATCHES_DELETE_JOB' | translate"
+                          tooltipPosition="top">
+                    <fa-icon [icon]="faTrash"></fa-icon>
+                  </button>
+                  <span class="btn-force-failure-wrapper"
+                        [appTooltip]="(job.exceptionMessage ? 'BATCHES_FORCE_JOB_FAILURE' : 'BATCHES_FORCE_JOB_FAILURE_DISABLED') | translate"
                         tooltipPosition="top">
-                  <fa-icon [icon]="faRedo"></fa-icon>
-                </button>
-                <button class="btn-action btn-delete"
-                        (click)="onDeleteJob(job)"
-                        [appTooltip]="'BATCHES_DELETE_JOB' | translate"
-                        tooltipPosition="top">
-                  <fa-icon [icon]="faTrash"></fa-icon>
-                </button>
-              </td>
-            </tr>
+                    <button class="btn-action btn-force-failure"
+                            [disabled]="!job.exceptionMessage"
+                            (click)="onForceJobFailure(job)">
+                      <fa-icon [icon]="faExclamationTriangle"></fa-icon>
+                    </button>
+                  </span>
+                </td>
+              </tr>
+
+            </ng-container>
           </tbody>
         </table>
       </div>
