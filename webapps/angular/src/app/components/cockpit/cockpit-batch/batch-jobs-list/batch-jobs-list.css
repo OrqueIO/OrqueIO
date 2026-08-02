@@ -72,9 +72,8 @@
   table-layout: fixed;
 }
 
-/* ID and Actions: fixed px; Exception fills all remaining space (no rule = auto) */
-.jobs-table th:nth-child(1) { width: 200px; }  /* Job ID — fixed */
-.jobs-table th:nth-child(3) { width: 130px; }  /* Actions — fixed, non-compressible */
+.jobs-table th:nth-child(1) { width: 260px; }
+.jobs-table th:nth-child(3) { width: 90px; min-width: 80px; }
 
 .jobs-table th {
   position: sticky;
