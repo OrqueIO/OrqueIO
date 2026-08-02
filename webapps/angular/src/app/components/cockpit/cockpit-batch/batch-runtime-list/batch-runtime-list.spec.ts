@@ -103,4 +103,33 @@ describe('BatchRuntimeListComponent — DOM rendering', () => {
     expect(el.querySelector('.empty-state'), '.empty-state must be absent').toBeNull();
     expect(el.querySelector('.loading-state'), '.loading-state must be absent').toBeNull();
   });
+
+  it('batch-link and batch-type cells expose full value as appTooltip', async () => {
+    const batch = makeBatch('uuid-full-id-1234');
+    (batch as any).type = 'aMigrationTypeLong';
+
+    store.overrideSelector(BatchSelectors.selectRuntimeBatches, [batch as any]);
+    store.overrideSelector(BatchSelectors.selectRuntimeCount, 1);
+    store.overrideSelector(BatchSelectors.selectRuntimeLoading, 'LOADED');
+    store.overrideSelector(BatchSelectors.selectRuntimeCurrentPage, 1);
+    store.overrideSelector(BatchSelectors.selectRuntimePageSize, 10);
+    store.overrideSelector(BatchSelectors.selectRuntimeSorting, { sortBy: 'batchId', sortOrder: 'asc' });
+    store.overrideSelector(BatchSelectors.selectRuntimeUsers, {});
+    store.overrideSelector(BatchSelectors.selectSelectedBatch, null);
+    store.refreshState();
+
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    const el: HTMLElement = fixture.nativeElement;
+
+    const link = el.querySelector('.batch-link');
+    expect(link?.getAttribute('ng-reflect-app-tooltip'), 'batch-link must expose full id as tooltip').toBe('uuid-full-id-1234');
+    expect(link?.getAttribute('ng-reflect-tooltip-only-if-truncated'), 'batch-link tooltip must be conditional on truncation').toBe('true');
+
+    const typeCell = el.querySelector('.batch-type');
+    expect(typeCell?.getAttribute('ng-reflect-app-tooltip'), 'batch-type must expose full type as tooltip').toBe('aMigrationTypeLong');
+    expect(typeCell?.getAttribute('ng-reflect-tooltip-only-if-truncated'), 'batch-type tooltip must be conditional on truncation').toBe('true');
+  });
 });

@@ -26,6 +26,7 @@ export class TooltipDirective implements OnDestroy, OnChanges {
   @Input() tooltipPlacement: 'top' | 'bottom' | 'left' | 'right' = 'top';
   @Input() tooltipDelay: number = 200;
   @Input() tooltipVariant: 'default' | 'danger' | 'success' | 'warning' | 'primary' = 'default';
+  @Input() tooltipOnlyIfTruncated: boolean = false;
 
   @HostBinding('attr.aria-label')
   get ariaLabelAttr(): string | null {
@@ -99,10 +100,16 @@ export class TooltipDirective implements OnDestroy, OnChanges {
     }
 
     if (!this.tooltipText) return;
+    if (this.tooltipOnlyIfTruncated && !this.isContentTruncated()) return;
 
     this.showTimeout = setTimeout(() => {
       this.showTooltip();
     }, this.tooltipDelay);
+  }
+
+  private isContentTruncated(): boolean {
+    const el = this.el.nativeElement as HTMLElement;
+    return el.scrollWidth > el.clientWidth;
   }
 
   private scheduleHide(): void {

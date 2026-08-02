@@ -7,6 +7,7 @@ import { faSpinner, faSort, faSortUp, faSortDown, faHistory } from '@fortawesome
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
 import { CamDatePipe } from '../../../../pipes';
 import { PaginationComponent, PageChangeEvent } from '../../../../shared/pagination/pagination';
+import { TooltipDirective } from '../../../../shared/tooltip/tooltip.directive';
 import { HistoryBatch, BatchSorting } from '../../../../models/cockpit/batch.model';
 
 import * as BatchActions from '../../../../store/cockpit/batch/batch.actions';
@@ -15,7 +16,7 @@ import * as BatchSelectors from '../../../../store/cockpit/batch/batch.selectors
 @Component({
   selector: 'app-batch-history-list',
   standalone: true,
-  imports: [CommonModule, FontAwesomeModule, TranslatePipe, CamDatePipe, PaginationComponent],
+  imports: [CommonModule, FontAwesomeModule, TranslatePipe, CamDatePipe, PaginationComponent, TooltipDirective],
   templateUrl: './batch-history-list.html',
   styleUrl: './batch-history-list.css',
   changeDetection: ChangeDetectionStrategy.OnPush

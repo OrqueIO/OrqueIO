@@ -50,9 +50,15 @@
                   [class.selected]="isSelected(batch, data.selectedBatch)"
                   (click)="onBatchClick(batch)">
                 <td class="batch-id">
-                  <a class="batch-link">{{ batch.id }}</a>
+                  <a class="batch-link"
+                     [appTooltip]="batch.id"
+                     tooltipPosition="top"
+                     [tooltipOnlyIfTruncated]="true">{{ batch.id }}</a>
                 </td>
-                <td class="batch-type">{{ batch.type }}</td>
+                <td class="batch-type"
+                    [appTooltip]="batch.type"
+                    tooltipPosition="top"
+                    [tooltipOnlyIfTruncated]="true">{{ batch.type }}</td>
                 <td class="batch-user">{{ getUserName(batch, data.users!) }}</td>
                 <td class="batch-time">{{ batch.startTime | camDate }}</td>
                 <td class="batch-failed">{{ batch.failedJobs }}</td>

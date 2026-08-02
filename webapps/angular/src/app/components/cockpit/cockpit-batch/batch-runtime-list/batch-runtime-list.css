@@ -107,11 +107,16 @@
 .batch-id {
   font-family: var(--font-mono);
   font-size: var(--font-size-xs);
+  max-width: 140px;
 }
 
 .batch-link {
   color: var(--color-primary);
   text-decoration: none;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .batch-link:hover {
