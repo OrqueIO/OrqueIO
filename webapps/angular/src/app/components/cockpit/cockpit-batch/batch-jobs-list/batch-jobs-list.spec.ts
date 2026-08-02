@@ -113,4 +113,27 @@ describe('BatchJobsListComponent — DOM rendering', () => {
 
     expect(el.querySelector('.btn-force-failure-wrapper'), 'Force failure button must be absent').toBeNull();
   });
+
+  it('exception preview shows full message without JS truncation and tooltip is conditional on truncation', async () => {
+    const longMessage = 'x'.repeat(125);
+    const mockJob = { id: 'job-1', exceptionMessage: longMessage };
+    store.overrideSelector(BatchSelectors.selectFailedJobs, [mockJob as any]);
+    store.overrideSelector(BatchSelectors.selectJobsCount, 1);
+    store.overrideSelector(BatchSelectors.selectJobsLoading, 'LOADED');
+    store.overrideSelector(BatchSelectors.selectJobsCurrentPage, 1);
+    store.overrideSelector(BatchSelectors.selectJobsPageSize, 10);
+    store.overrideSelector(BatchSelectors.selectJobsSorting, { sortBy: 'jobId', sortOrder: 'asc' });
+    store.refreshState();
+
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    const el: HTMLElement = fixture.nativeElement;
+    const preview = el.querySelector('.exception-preview');
+
+    expect(preview?.textContent?.trim(), 'full message must be rendered, not JS-truncated').toBe(longMessage);
+    expect(preview?.getAttribute('ng-reflect-app-tooltip'), 'tooltip must carry the full message').toBe(longMessage);
+    expect(preview?.getAttribute('ng-reflect-tooltip-only-if-truncated'), 'tooltip must be conditional on visual truncation').toBe('true');
+  });
 });

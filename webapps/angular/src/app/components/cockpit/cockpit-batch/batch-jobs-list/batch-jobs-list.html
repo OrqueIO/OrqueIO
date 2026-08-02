@@ -55,8 +55,9 @@
                   <div class="exception-inner">
                     <span class="exception-preview"
                           [appTooltip]="job.exceptionMessage || ''"
-                          tooltipPosition="top">
-                      {{ getExceptionPreview(job) }}
+                          tooltipPosition="top"
+                          [tooltipOnlyIfTruncated]="true">
+                      {{ job.exceptionMessage || '-' }}
                     </span>
                   </div>
                 </td>

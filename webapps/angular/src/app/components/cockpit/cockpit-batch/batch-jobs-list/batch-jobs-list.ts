@@ -87,13 +87,6 @@ export class BatchJobsListComponent {
     return this.batchService.getJobStacktraceUrl(job.id);
   }
 
-  getExceptionPreview(job: BatchJob): string {
-    if (!job.exceptionMessage) return '-';
-    return job.exceptionMessage.length > 120
-      ? job.exceptionMessage.substring(0, 120) + '…'
-      : job.exceptionMessage;
-  }
-
   getSortIcon(column: { key: string }, sorting: BatchSorting): any {
     if (sorting.sortBy !== column.key) return this.faSort;
     return sorting.sortOrder === 'asc' ? this.faSortUp : this.faSortDown;
