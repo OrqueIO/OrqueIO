@@ -1,7 +1,7 @@
 import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
-import { describe, it, expect, beforeAll, beforeEach } from 'vitest';
+import { describe, it, expect, beforeAll, beforeEach, vi } from 'vitest';
 import { of } from 'rxjs';
 
 import { initTestEnvironment } from '../../../../testing/test-utils';
@@ -135,5 +135,85 @@ describe('BatchJobsListComponent — DOM rendering', () => {
     expect(preview?.textContent?.trim(), 'full message must be rendered, not JS-truncated').toBe(longMessage);
     expect(preview?.getAttribute('ng-reflect-app-tooltip'), 'tooltip must carry the full message').toBe(longMessage);
     expect(preview?.getAttribute('ng-reflect-tooltip-only-if-truncated'), 'tooltip must be conditional on visual truncation').toBe('true');
+  });
+
+  it('clicking Delete opens confirmation modal without dispatching deleteJob', async () => {
+    const mockJob = { id: 'job-1', exceptionMessage: 'NullPointerException' };
+    store.overrideSelector(BatchSelectors.selectFailedJobs, [mockJob as any]);
+    store.overrideSelector(BatchSelectors.selectJobsCount, 1);
+    store.overrideSelector(BatchSelectors.selectJobsLoading, 'LOADED');
+    store.overrideSelector(BatchSelectors.selectJobsCurrentPage, 1);
+    store.overrideSelector(BatchSelectors.selectJobsPageSize, 10);
+    store.overrideSelector(BatchSelectors.selectJobsSorting, { sortBy: 'jobId', sortOrder: 'asc' });
+    store.refreshState();
+
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    const dispatchSpy = vi.spyOn(store, 'dispatch');
+    const el: HTMLElement = fixture.nativeElement;
+
+    (el.querySelector('.btn-delete') as HTMLElement).click();
+    fixture.detectChanges();
+
+    expect(el.querySelector('app-confirm-dialog'), 'confirmation dialog must appear').not.toBeNull();
+    expect(dispatchSpy).not.toHaveBeenCalled();
+  });
+
+  it('confirming delete dispatches deleteJob with the correct jobId', async () => {
+    const mockJob = { id: 'job-1', exceptionMessage: 'NullPointerException' };
+    store.overrideSelector(BatchSelectors.selectFailedJobs, [mockJob as any]);
+    store.overrideSelector(BatchSelectors.selectJobsCount, 1);
+    store.overrideSelector(BatchSelectors.selectJobsLoading, 'LOADED');
+    store.overrideSelector(BatchSelectors.selectJobsCurrentPage, 1);
+    store.overrideSelector(BatchSelectors.selectJobsPageSize, 10);
+    store.overrideSelector(BatchSelectors.selectJobsSorting, { sortBy: 'jobId', sortOrder: 'asc' });
+    store.refreshState();
+
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    const dispatchSpy = vi.spyOn(store, 'dispatch');
+    const component = fixture.componentInstance;
+
+    (fixture.nativeElement.querySelector('.btn-delete') as HTMLElement).click();
+    fixture.detectChanges();
+
+    component.onDeleteJobConfirm();
+    fixture.detectChanges();
+
+    expect(dispatchSpy).toHaveBeenCalledWith(
+      expect.objectContaining({ jobId: 'job-1' })
+    );
+    expect(fixture.nativeElement.querySelector('app-confirm-dialog'), 'dialog must close after confirm').toBeNull();
+  });
+
+  it('cancelling delete closes modal without dispatching any action', async () => {
+    const mockJob = { id: 'job-1', exceptionMessage: 'NullPointerException' };
+    store.overrideSelector(BatchSelectors.selectFailedJobs, [mockJob as any]);
+    store.overrideSelector(BatchSelectors.selectJobsCount, 1);
+    store.overrideSelector(BatchSelectors.selectJobsLoading, 'LOADED');
+    store.overrideSelector(BatchSelectors.selectJobsCurrentPage, 1);
+    store.overrideSelector(BatchSelectors.selectJobsPageSize, 10);
+    store.overrideSelector(BatchSelectors.selectJobsSorting, { sortBy: 'jobId', sortOrder: 'asc' });
+    store.refreshState();
+
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    (fixture.nativeElement.querySelector('.btn-delete') as HTMLElement).click();
+    fixture.detectChanges();
+
+    const dispatchSpy = vi.spyOn(store, 'dispatch');
+    const component = fixture.componentInstance;
+
+    component.onDeleteJobCancel();
+    fixture.detectChanges();
+
+    expect(dispatchSpy).not.toHaveBeenCalled();
+    expect(fixture.nativeElement.querySelector('app-confirm-dialog'), 'dialog must close after cancel').toBeNull();
   });
 });

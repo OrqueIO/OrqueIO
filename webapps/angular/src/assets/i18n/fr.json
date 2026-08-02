@@ -1419,6 +1419,7 @@
   "BATCHES_DELETE": "Supprimer",
   "BATCHES_RETRY_JOB": "Réessayer le job",
   "BATCHES_DELETE_JOB": "Supprimer le job",
+  "BATCHES_DELETE_JOB_MESSAGE": "Êtes-vous sûr de vouloir supprimer ce job ? Cette action est irréversible.",
   "BATCHES_VIEW_STACKTRACE": "Voir la trace",
   "BATCHES_CONFIRM_DELETE": "Êtes-vous sûr de vouloir supprimer ce lot ?",
   "BATCHES_CONFIRM_SUSPEND": "Êtes-vous sûr de vouloir suspendre ce lot ?",

@@ -15,6 +15,7 @@ import {
 
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
 import { TooltipDirective } from '../../../../shared/tooltip/tooltip.directive';
+import { ConfirmDialogComponent } from '../../../../shared/confirm-dialog/confirm-dialog';
 import { PaginationComponent, PageChangeEvent } from '../../../../shared/pagination/pagination';
 import { BatchJob, BatchSorting } from '../../../../models/cockpit/batch.model';
 import { BatchService } from '../../../../services/batch.service';
@@ -25,7 +26,7 @@ import * as BatchSelectors from '../../../../store/cockpit/batch/batch.selectors
 @Component({
   selector: 'app-batch-jobs-list',
   standalone: true,
-  imports: [CommonModule, FontAwesomeModule, TranslatePipe, TooltipDirective, PaginationComponent],
+  imports: [CommonModule, FontAwesomeModule, TranslatePipe, TooltipDirective, ConfirmDialogComponent, PaginationComponent],
   templateUrl: './batch-jobs-list.html',
   styleUrl: './batch-jobs-list.css',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -75,12 +76,28 @@ export class BatchJobsListComponent {
     this.store.dispatch(BatchActions.setJobsPage({ page: event.current }));
   }
 
+  showDeleteJobModal = false;
+  jobPendingDelete: BatchJob | null = null;
+
   onRetryJob(job: BatchJob): void {
     this.store.dispatch(BatchActions.retryJob({ jobId: job.id }));
   }
 
-  onDeleteJob(job: BatchJob): void {
-    this.store.dispatch(BatchActions.deleteJob({ jobId: job.id }));
+  onDeleteClick(job: BatchJob): void {
+    this.jobPendingDelete = job;
+    this.showDeleteJobModal = true;
+  }
+
+  onDeleteJobConfirm(): void {
+    if (!this.jobPendingDelete) return;
+    this.store.dispatch(BatchActions.deleteJob({ jobId: this.jobPendingDelete.id }));
+    this.showDeleteJobModal = false;
+    this.jobPendingDelete = null;
+  }
+
+  onDeleteJobCancel(): void {
+    this.showDeleteJobModal = false;
+    this.jobPendingDelete = null;
   }
 
   getStacktraceUrl(job: BatchJob): string {

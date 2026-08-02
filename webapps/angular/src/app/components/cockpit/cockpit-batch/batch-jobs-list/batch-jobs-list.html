@@ -69,7 +69,7 @@
                     <fa-icon [icon]="faRedo"></fa-icon>
                   </button>
                   <button class="btn-action btn-delete"
-                          (click)="onDeleteJob(job)"
+                          (click)="onDeleteClick(job)"
                           [appTooltip]="'BATCHES_DELETE_JOB' | translate"
                           tooltipVariant="danger">
                     <fa-icon [icon]="faTrash"></fa-icon>
@@ -91,4 +91,15 @@
       </app-pagination>
     </ng-container>
   </div>
+
+<app-confirm-dialog
+  *ngIf="showDeleteJobModal"
+  [title]="'BATCHES_DELETE_JOB' | translate"
+  [message]="'BATCHES_DELETE_JOB_MESSAGE' | translate"
+  [confirmLabel]="'DELETE' | translate"
+  [cancelLabel]="'CANCEL' | translate"
+  [isDanger]="true"
+  (confirm)="onDeleteJobConfirm()"
+  (cancel)="onDeleteJobCancel()">
+</app-confirm-dialog>
 </section>
