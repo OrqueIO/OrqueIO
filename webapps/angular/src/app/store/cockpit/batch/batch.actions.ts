@@ -208,6 +208,7 @@ export const deleteJobFailure = createAction(
   props<{ error: string }>()
 );
 
+  '[Batch] Force Job Failure',
 
 // POLLING
 

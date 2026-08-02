@@ -79,6 +79,7 @@
 .jobs-table th {
   position: sticky;
   top: 0;
+  z-index: 2;
   background: var(--color-gray-50);
   padding: var(--space-2) var(--space-3);
   text-align: left;
@@ -186,7 +187,7 @@
   border: none;
   border-radius: var(--radius-sm);
   background: transparent;
-  color: var(--text-secondary);
+  color: var(--color-gray-500);
   cursor: pointer;
   transition: all var(--transition-fast);
 }
