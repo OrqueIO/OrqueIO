@@ -88,4 +88,29 @@ describe('BatchJobsListComponent — DOM rendering', () => {
     expect(rows.length).toBe(1);
     expect(rows[0].querySelector('.job-id code')!.textContent).toBe('job-1');
   });
+
+  it('action buttons (retry, delete) each have a non-empty aria-label tooltip', async () => {
+    const mockJob = { id: 'job-1', exceptionMessage: 'NullPointerException' };
+    store.overrideSelector(BatchSelectors.selectFailedJobs, [mockJob as any]);
+    store.overrideSelector(BatchSelectors.selectJobsCount, 1);
+    store.overrideSelector(BatchSelectors.selectJobsLoading, 'LOADED');
+    store.overrideSelector(BatchSelectors.selectJobsCurrentPage, 1);
+    store.overrideSelector(BatchSelectors.selectJobsPageSize, 10);
+    store.overrideSelector(BatchSelectors.selectJobsSorting, { sortBy: 'jobId', sortOrder: 'asc' });
+    store.refreshState();
+
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    const el: HTMLElement = fixture.nativeElement;
+
+    const retryBtn = el.querySelector('.btn-retry');
+    expect(retryBtn?.getAttribute('aria-label'), 'Retry button must have a title').toBe('BATCHES_RETRY_JOB');
+
+    const deleteBtn = el.querySelector('.btn-delete');
+    expect(deleteBtn?.getAttribute('aria-label'), 'Delete button must have a title').toBe('BATCHES_DELETE_JOB');
+
+    expect(el.querySelector('.btn-force-failure-wrapper'), 'Force failure button must be absent').toBeNull();
+  });
 });

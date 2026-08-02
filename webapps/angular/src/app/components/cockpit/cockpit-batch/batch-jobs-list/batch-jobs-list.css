@@ -213,19 +213,6 @@
   color: var(--color-primary);
 }
 
-.btn-force-failure-wrapper {
-  display: inline-flex;
-}
-
-.btn-force-failure:not(:disabled):hover {
-  background: var(--color-warning-bg, #fef3c7);
-  color: var(--color-warning, #d97706);
-}
-
-.btn-force-failure:disabled {
-  opacity: 0.35;
-  cursor: not-allowed;
-}
 
 .stacktrace-row td {
   padding: 0;

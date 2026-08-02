@@ -64,24 +64,15 @@
                   <button class="btn-action btn-retry"
                           (click)="onRetryJob(job)"
                           [appTooltip]="'BATCHES_RETRY_JOB' | translate"
-                          tooltipPosition="top">
+                          tooltipVariant="success">
                     <fa-icon [icon]="faRedo"></fa-icon>
                   </button>
                   <button class="btn-action btn-delete"
                           (click)="onDeleteJob(job)"
                           [appTooltip]="'BATCHES_DELETE_JOB' | translate"
-                          tooltipPosition="top">
+                          tooltipVariant="danger">
                     <fa-icon [icon]="faTrash"></fa-icon>
                   </button>
-                  <span class="btn-force-failure-wrapper"
-                        [appTooltip]="(job.exceptionMessage ? 'BATCHES_FORCE_JOB_FAILURE' : 'BATCHES_FORCE_JOB_FAILURE_DISABLED') | translate"
-                        tooltipPosition="top">
-                    <button class="btn-action btn-force-failure"
-                            [disabled]="!job.exceptionMessage"
-                            (click)="onForceJobFailure(job)">
-                      <fa-icon [icon]="faExclamationTriangle"></fa-icon>
-                    </button>
-                  </span>
                 </td>
               </tr>
 
