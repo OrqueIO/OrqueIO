@@ -158,20 +158,15 @@ export class BatchService {
    * Get failed jobs for a batch
    */
   getFailedJobs(jobDefinitionId: string, params: JobQueryParams = {}): Observable<BatchJob[]> {
-    const { firstResult = 0, maxResults = 10, sorting } = params;
-    const body = {
-      jobDefinitionId,
-      withException: true,
-      noRetriesLeft: true,
-      sorting: sorting || [{ sortBy: 'jobId', sortOrder: 'asc' }],
-    };
+    const { firstResult = 0, maxResults = 10 } = params;
     const httpParams = new HttpParams()
+      .set('jobDefinitionId', jobDefinitionId)
+      .set('noRetriesLeft', 'true')
       .set('firstResult', String(firstResult))
       .set('maxResults', String(maxResults));
 
-    return this.http.post<BatchJob[]>(
+    return this.http.get<BatchJob[]>(
       `${this.baseUrl}/job`,
-      body,
       { params: httpParams }
     ).pipe(
       catchError(() => of([]))
@@ -184,7 +179,6 @@ export class BatchService {
   getFailedJobsCount(jobDefinitionId: string): Observable<number> {
     const body = {
       jobDefinitionId,
-      withException: true,
       noRetriesLeft: true
     };
 
@@ -226,9 +220,6 @@ export class BatchService {
     );
   }
 
-  /**
-   * Get job stacktrace URL
-   */
   getJobStacktraceUrl(jobId: string): string {
     return `${this.baseUrl}/job/${jobId}/stacktrace`;
   }

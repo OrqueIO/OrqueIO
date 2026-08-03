@@ -1,64 +1,103 @@
-/* Tooltip styles - to be imported in global styles */
+/* ===== Custom Tooltip — Colored Variants ===== */
+
 .app-tooltip {
-  position: absolute;
-  z-index: 10000;
-  padding: 6px 10px;
-  background-color: #333;
-  color: #fff;
+  position: fixed;
+  z-index: var(--z-tooltip, 10000);
+  padding: 5px 10px;
+  border-radius: 6px;
   font-size: 12px;
+  font-weight: 500;
   line-height: 1.4;
-  border-radius: 4px;
   white-space: nowrap;
-  max-width: 300px;
-  word-wrap: break-word;
   opacity: 0;
   transition: opacity 0.15s ease-in-out;
   pointer-events: none;
+
+  /* CSS custom properties — cascade to .tooltip-arrow child */
+  --_bg:     #f3f4f6;
+  --_color:  #374151;
+  --_border: rgba(0, 0, 0, 0.12);
+
+  background: var(--_bg);
+  color: var(--_color);
+  border: 1px solid var(--_border);
 }
 
-.app-tooltip.visible {
-  opacity: 1;
+.app-tooltip.visible { opacity: 1; }
+
+/* ---- Color variants ---- */
+.app-tooltip.tooltip-danger {
+  --_bg:     var(--color-danger-bg, #fee2e2);
+  --_color:  #991b1b;
+  --_border: rgba(220, 38, 38, 0.3);
 }
 
+.app-tooltip.tooltip-success {
+  --_bg:     var(--color-success-bg, #d1fae5);
+  --_color:  #065f46;
+  --_border: rgba(16, 185, 129, 0.3);
+}
+
+.app-tooltip.tooltip-warning {
+  --_bg:     var(--color-warning-bg, #fef3c7);
+  --_color:  #78350f;
+  --_border: rgba(245, 158, 11, 0.3);
+}
+
+.app-tooltip.tooltip-primary {
+  --_bg:     var(--color-primary-bg, #dbeafe);
+  --_color:  #1d4ed8;
+  --_border: rgba(37, 99, 235, 0.25);
+}
+
+/* ---- Arrow (rotated square, inherits bg/border via CSS vars) ---- */
 .app-tooltip .tooltip-arrow {
   position: absolute;
-  width: 0;
-  height: 0;
-  border: 6px solid transparent;
+  width: 8px;
+  height: 8px;
+  background: var(--_bg);
 }
 
-/* Top placement */
+/* Top: tooltip above element, arrow at bottom pointing down */
 .app-tooltip.tooltip-top .tooltip-arrow {
-  bottom: -12px;
+  bottom: -4px;
   left: 50%;
-  transform: translateX(-50%);
-  border-top-color: #333;
+  margin-left: -4px;
+  transform: rotate(45deg);
+  border-right: 1px solid var(--_border);
+  border-bottom: 1px solid var(--_border);
 }
 
-/* Bottom placement */
+/* Bottom: tooltip below element, arrow at top pointing up */
 .app-tooltip.tooltip-bottom .tooltip-arrow {
-  top: -12px;
+  top: -4px;
   left: 50%;
-  transform: translateX(-50%);
-  border-bottom-color: #333;
+  margin-left: -4px;
+  transform: rotate(45deg);
+  border-left: 1px solid var(--_border);
+  border-top: 1px solid var(--_border);
 }
 
-/* Left placement */
+/* Left: tooltip to the left, arrow at right pointing right */
 .app-tooltip.tooltip-left .tooltip-arrow {
-  right: -12px;
+  right: -4px;
   top: 50%;
-  transform: translateY(-50%);
-  border-left-color: #333;
+  margin-top: -4px;
+  transform: rotate(45deg);
+  border-right: 1px solid var(--_border);
+  border-top: 1px solid var(--_border);
 }
 
-/* Right placement */
+/* Right: tooltip to the right, arrow at left pointing left */
 .app-tooltip.tooltip-right .tooltip-arrow {
-  left: -12px;
+  left: -4px;
   top: 50%;
-  transform: translateY(-50%);
-  border-right-color: #333;
+  margin-top: -4px;
+  transform: rotate(45deg);
+  border-left: 1px solid var(--_border);
+  border-bottom: 1px solid var(--_border);
 }
 
 .app-tooltip .tooltip-text {
-  white-space: pre-wrap;
+  white-space: nowrap;
 }

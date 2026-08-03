@@ -9,7 +9,7 @@
 
 .batch-page {
   display: grid;
-  grid-template-columns: 3fr 2fr;
+  grid-template-columns: 4fr 3fr;
   gap: var(--space-6);
   height: 100%;
   padding: var(--space-6);

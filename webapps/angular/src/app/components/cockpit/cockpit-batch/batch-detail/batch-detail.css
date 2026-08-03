@@ -81,7 +81,7 @@
 }
 
 .properties-section {
-  flex: 2;
+  flex: 4;
   min-height: 0;
   overflow-y: auto;
   padding: var(--space-4) var(--space-5);

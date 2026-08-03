@@ -7,6 +7,7 @@ import { faSpinner, faSort, faSortUp, faSortDown, faPlay } from '@fortawesome/fr
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
 import { CamDatePipe } from '../../../../pipes';
 import { PaginationComponent, PageChangeEvent } from '../../../../shared/pagination/pagination';
+import { TooltipDirective } from '../../../../shared/tooltip/tooltip.directive';
 import { BatchStatistics, BatchSorting } from '../../../../models/cockpit/batch.model';
 
 import * as BatchActions from '../../../../store/cockpit/batch/batch.actions';
@@ -15,7 +16,7 @@ import * as BatchSelectors from '../../../../store/cockpit/batch/batch.selectors
 @Component({
   selector: 'app-batch-runtime-list',
   standalone: true,
-  imports: [CommonModule, FontAwesomeModule, TranslatePipe, CamDatePipe, PaginationComponent],
+  imports: [CommonModule, FontAwesomeModule, TranslatePipe, CamDatePipe, PaginationComponent, TooltipDirective],
   templateUrl: './batch-runtime-list.html',
   styleUrl: './batch-runtime-list.css',
   changeDetection: ChangeDetectionStrategy.OnPush
