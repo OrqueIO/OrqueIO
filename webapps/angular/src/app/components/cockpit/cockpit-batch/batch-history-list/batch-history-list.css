@@ -120,6 +120,10 @@ app-pagination {
 .batch-link {
   color: var(--color-primary);
   text-decoration: none;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .batch-link:hover {

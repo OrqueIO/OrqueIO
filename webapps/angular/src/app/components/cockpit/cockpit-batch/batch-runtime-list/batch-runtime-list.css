@@ -1,8 +1,21 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  flex: 0 1 auto;
+  min-height: 0;
+  max-height: 300px;
+}
+
 .batch-runtime-list {
   background: var(--bg-card);
   border-radius: var(--radius-lg);
   border: 1px solid var(--border-color-light);
   padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .section-title {
@@ -28,6 +41,9 @@
 
 .table-container {
   overflow-x: auto;
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
 }
 
 .batch-table {
@@ -91,11 +107,16 @@
 .batch-id {
   font-family: var(--font-mono);
   font-size: var(--font-size-xs);
+  max-width: 140px;
 }
 
 .batch-link {
   color: var(--color-primary);
   text-decoration: none;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .batch-link:hover {
