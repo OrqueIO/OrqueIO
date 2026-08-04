@@ -95,6 +95,9 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
   private currentXml: string | null = null;
   private needsZoomFit = false;
   private resizeTimeout: ReturnType<typeof setTimeout> | null = null;
+  private activeRunningMarkers = new Set<string>();
+  private activeHighlightMarkers = new Set<string>();
+  private activeSelectionMarker: string | null = null;
   private subprocessStack: { id: string; name: string; element: any }[] = [];
   private currentRootElement: any = null;
 
@@ -298,6 +301,9 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
     this.currentRootElement = null;
     this.subprocessBreadcrumb = [];
     this.windowStart = 0;
+    this.activeRunningMarkers.clear();
+    this.activeHighlightMarkers.clear();
+    this.activeSelectionMarker = null;
     this.cdr.detectChanges();
 
     try {
@@ -331,66 +337,63 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
 
   private updateHighlights(): void {
     if (!this.viewer) return;
+    if (this.activeHighlightMarkers.size === 0 && this.highlightedActivities.length === 0) return;
 
     const canvas = this.viewer.get('canvas');
     const elementRegistry = this.viewer.get('elementRegistry');
 
-    // Remove existing highlights
-    elementRegistry.forEach((element: any) => {
-      if (element.businessObject) {
-        canvas.removeMarker(element.id, 'highlight');
-      }
+    this.activeHighlightMarkers.forEach(id => {
+      try { canvas.removeMarker(id, 'highlight'); } catch (_) {}
     });
+    this.activeHighlightMarkers.clear();
 
-    // Add highlights
     this.highlightedActivities.forEach(activityId => {
       const element = elementRegistry.get(activityId);
       if (element) {
         canvas.addMarker(activityId, 'highlight');
+        this.activeHighlightMarkers.add(activityId);
       }
     });
   }
 
   private updateRunningMarkers(): void {
     if (!this.viewer) return;
+    if (this.activeRunningMarkers.size === 0 && this.runningActivities.length === 0) return;
 
     const canvas = this.viewer.get('canvas');
     const elementRegistry = this.viewer.get('elementRegistry');
 
-    // Remove existing running markers
-    elementRegistry.forEach((element: any) => {
-      if (element.businessObject) {
-        canvas.removeMarker(element.id, 'running');
-      }
+    this.activeRunningMarkers.forEach(id => {
+      try { canvas.removeMarker(id, 'running'); } catch (_) {}
     });
+    this.activeRunningMarkers.clear();
 
-    // Add running markers
     this.runningActivities.forEach(activityId => {
       const element = elementRegistry.get(activityId);
       if (element) {
         canvas.addMarker(activityId, 'running');
+        this.activeRunningMarkers.add(activityId);
       }
     });
   }
 
   private updateSelection(): void {
     if (!this.viewer) return;
+    if (this.activeSelectionMarker === null && !this.selectedActivity) return;
 
     const canvas = this.viewer.get('canvas');
     const elementRegistry = this.viewer.get('elementRegistry');
 
-    // Remove existing selection
-    elementRegistry.forEach((element: any) => {
-      if (element.businessObject) {
-        canvas.removeMarker(element.id, 'selected');
-      }
-    });
+    if (this.activeSelectionMarker !== null) {
+      try { canvas.removeMarker(this.activeSelectionMarker, 'selected'); } catch (_) {}
+      this.activeSelectionMarker = null;
+    }
 
-    // Add selection marker
     if (this.selectedActivity) {
       const element = elementRegistry.get(this.selectedActivity);
       if (element) {
         canvas.addMarker(this.selectedActivity, 'selected');
+        this.activeSelectionMarker = this.selectedActivity;
       }
     }
   }

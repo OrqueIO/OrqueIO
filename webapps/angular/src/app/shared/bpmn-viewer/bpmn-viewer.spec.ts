@@ -14,14 +14,21 @@ vi.mock('bpmn-js/lib/NavigatedViewer', () => {
     const canvas = {
       resized: noop,
       zoom: noop,
+      addMarker: vi.fn(),
+      removeMarker: vi.fn(),
       viewbox: vi.fn().mockReturnValue({ inner: { x: 0, y: 0, width: 800, height: 600 } }),
       setRootElement: noop,
+    };
+    const elementRegistry = {
+      forEach: vi.fn(),
+      get: vi.fn().mockReturnValue(null),
     };
     const overlays = { add: vi.fn().mockReturnValue('ov-id'), remove: noop, clear: noop };
     const zoomScroll = { zoom: noop };
     this.get = vi.fn().mockImplementation((module: string) => {
       if (module === 'eventBus') return eventBus;
       if (module === 'canvas') return canvas;
+      if (module === 'elementRegistry') return elementRegistry;
       if (module === 'overlays') return overlays;
       if (module === 'zoomScroll') return zoomScroll;
       return null;
@@ -30,6 +37,128 @@ vi.mock('bpmn-js/lib/NavigatedViewer', () => {
     this.destroy = noop;
   }
   return { default: MockNavigatedViewer };
+});
+
+describe('BpmnViewerComponent — marker short-circuit optimization', () => {
+  beforeAll(() => initTestEnvironment());
+
+  let comp: any;
+  let canvas: any;
+  let elementRegistry: any;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [BpmnViewerComponent],
+    }).compileComponents();
+
+    const fixture = TestBed.createComponent(BpmnViewerComponent);
+    comp = fixture.componentInstance as any;
+    fixture.detectChanges(); // triggers ngAfterViewInit → initViewer
+
+    canvas = comp.viewer.get('canvas');
+    elementRegistry = comp.viewer.get('elementRegistry');
+  });
+
+  afterEach(() => vi.clearAllMocks());
+
+  describe('updateRunningMarkers', () => {
+    it('skips canvas and elementRegistry entirely when no markers active and no new ones incoming', () => {
+      // Initial state: activeRunningMarkers is empty (new Set()), runningActivities defaults to []
+      comp.updateRunningMarkers();
+
+      expect(elementRegistry.get).not.toHaveBeenCalled();
+      expect(canvas.removeMarker).not.toHaveBeenCalled();
+      expect(canvas.addMarker).not.toHaveBeenCalled();
+    });
+
+    it('removes tracked markers when transitioning from active instances to zero', () => {
+      comp.activeRunningMarkers = new Set(['task1', 'task2']);
+      comp.runningActivities = [];
+
+      comp.updateRunningMarkers();
+
+      expect(canvas.removeMarker).toHaveBeenCalledWith('task1', 'running');
+      expect(canvas.removeMarker).toHaveBeenCalledWith('task2', 'running');
+      expect(canvas.addMarker).not.toHaveBeenCalled();
+      expect(comp.activeRunningMarkers.size).toBe(0);
+    });
+
+    it('adds markers for new active activities and tracks them', () => {
+      elementRegistry.get.mockReturnValue({ id: 'placeholder' });
+      comp.runningActivities = ['task1', 'task2'];
+
+      comp.updateRunningMarkers();
+
+      expect(canvas.addMarker).toHaveBeenCalledWith('task1', 'running');
+      expect(canvas.addMarker).toHaveBeenCalledWith('task2', 'running');
+      expect(comp.activeRunningMarkers.has('task1')).toBe(true);
+      expect(comp.activeRunningMarkers.has('task2')).toBe(true);
+    });
+
+    it('removes old markers and adds new ones when active set changes', () => {
+      // Start with task1 active
+      elementRegistry.get.mockReturnValue({ id: 'placeholder' });
+      comp.activeRunningMarkers = new Set(['task1']);
+      comp.runningActivities = ['task2'];
+
+      comp.updateRunningMarkers();
+
+      expect(canvas.removeMarker).toHaveBeenCalledWith('task1', 'running');
+      expect(canvas.addMarker).toHaveBeenCalledWith('task2', 'running');
+      expect(comp.activeRunningMarkers.has('task1')).toBe(false);
+      expect(comp.activeRunningMarkers.has('task2')).toBe(true);
+    });
+  });
+
+  describe('updateHighlights', () => {
+    it('skips canvas and elementRegistry entirely when no highlights active and none incoming', () => {
+      comp.updateHighlights();
+
+      expect(elementRegistry.get).not.toHaveBeenCalled();
+      expect(canvas.removeMarker).not.toHaveBeenCalled();
+      expect(canvas.addMarker).not.toHaveBeenCalled();
+    });
+
+    it('removes tracked highlights when clearing to empty', () => {
+      comp.activeHighlightMarkers = new Set(['step1']);
+      comp.highlightedActivities = [];
+
+      comp.updateHighlights();
+
+      expect(canvas.removeMarker).toHaveBeenCalledWith('step1', 'highlight');
+      expect(comp.activeHighlightMarkers.size).toBe(0);
+    });
+  });
+
+  describe('updateSelection', () => {
+    it('skips canvas and elementRegistry entirely when nothing selected and nothing was selected', () => {
+      comp.updateSelection();
+
+      expect(elementRegistry.get).not.toHaveBeenCalled();
+      expect(canvas.removeMarker).not.toHaveBeenCalled();
+      expect(canvas.addMarker).not.toHaveBeenCalled();
+    });
+
+    it('removes previous selection marker when deselecting', () => {
+      comp.activeSelectionMarker = 'task1';
+      comp.selectedActivity = null;
+
+      comp.updateSelection();
+
+      expect(canvas.removeMarker).toHaveBeenCalledWith('task1', 'selected');
+      expect(comp.activeSelectionMarker).toBeNull();
+    });
+
+    it('tracks the newly selected activity', () => {
+      elementRegistry.get.mockReturnValue({ id: 'task1' });
+      comp.selectedActivity = 'task1';
+
+      comp.updateSelection();
+
+      expect(canvas.addMarker).toHaveBeenCalledWith('task1', 'selected');
+      expect(comp.activeSelectionMarker).toBe('task1');
+    });
+  });
 });
 
 describe('BpmnViewerComponent — subprocess breadcrumb', () => {
