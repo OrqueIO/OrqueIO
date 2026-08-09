@@ -9,7 +9,8 @@ import {
   withLatestFrom,
   filter,
   takeUntil,
-  exhaustMap
+  exhaustMap,
+  pairwise
 } from 'rxjs/operators';
 
 import { BatchService } from '../../../services/batch.service';
@@ -127,6 +128,16 @@ export class BatchEffects {
     this.actions$.pipe(
       ofType(BatchActions.switchToHistory),
       map(({ id }) => BatchActions.loadBatchDetails({ id, batchType: 'history' }))
+    )
+  );
+
+  detectBatchCompletion$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(BatchActions.loadRuntimeBatchesSuccess),
+      map(({ count }) => count),
+      pairwise(),
+      filter(([prevCount, currCount]) => currCount < prevCount),
+      map(() => BatchActions.loadHistoryBatches())
     )
   );
 
@@ -333,7 +344,6 @@ export class BatchEffects {
       exhaustMap(([_, batch, selectionType, jobsCount]) => {
         const actions: any[] = [BatchActions.loadRuntimeBatches()];
 
-        // Also refresh selection if it's a runtime batch with no failed jobs
         if (batch && selectionType === 'runtime' && jobsCount === 0) {
           actions.push(BatchActions.loadBatchDetails({ id: batch.id, batchType: 'runtime' }));
         }
