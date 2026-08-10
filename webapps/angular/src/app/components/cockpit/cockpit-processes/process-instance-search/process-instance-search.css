@@ -955,8 +955,9 @@
   border: 1px solid var(--border-color-light);
   border-radius: var(--radius-md);
   overflow: auto;
-  max-height: 400px;
+  max-height: 520px;
   margin: 0 var(--space-5);
+  flex-shrink: 0;
 }
 
 /* =====================================================
